@@ -1,0 +1,20 @@
+os:
+  - linux
+sudo: false
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - libstdc++6
+      - fonts-droid
+before_script:
+  - git clone https://github.com/flutter/flutter.git -b master --depth 1
+  - ./flutter/bin/flutter doctor
+script:
+  - ./flutter/bin/flutter test --coverage --coverage-path=lcov.info
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+cache:
+  directories:
+    - $HOME/.pub-cache

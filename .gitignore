@@ -1,0 +1,15 @@
+.DS_Store
+.atom/
+.idea
+.packages
+.dart_tool/
+.pub/
+build/
+ios/
+android/
+packages
+pubspec.lock
+.flutter-plugins
+*.iml
+/coverage/
+*.log

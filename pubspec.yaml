@@ -1,0 +1,17 @@
+name: bloc
+description: a package to help implement the bloc pattern.
+version: 0.1.0
+author: felix.angelov <felangelov@gmail.com>
+homepage: https://github.com/felangel/bloc
+
+environment:
+  sdk: ">=2.0.0"
+
+dependencies:
+  rxdart: ">=0.18.1 <1.0.0"
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter 
