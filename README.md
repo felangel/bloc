@@ -1,5 +1,5 @@
 # bloc
-[![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc)
+[![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc) [![codecov](https://codecov.io/gh/felangel/bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
 
 A package that allow you to easily implement the [bloc pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
 
