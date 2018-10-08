@@ -80,6 +80,8 @@ class EventB {}
 class EventC {}
 
 class ComplexBloc extends Bloc<ComplexState> {
+  ComplexState get initialState => ComplexStateA();
+
   @override
   Stream<ComplexState> mapEventToState(event) {
     if (event is EventA) {
@@ -113,18 +115,22 @@ void main() {
         simpleBloc.dispose();
       });
 
+      test('initialState returns null when not implemented', () {
+        expect(simpleBloc.initialState, null);
+      });
+
       test('should map single event to correct state', () {
         expectLater(simpleBloc.state, emitsInOrder(['data']));
 
-        simpleBloc.event.add('event');
+        simpleBloc.dispatch('event');
       });
 
       test('should map multiple events to correct states', () {
         expectLater(simpleBloc.state, emitsInOrder(['data', 'data', 'data']));
 
-        simpleBloc.event.add('event1');
-        simpleBloc.event.add('event2');
-        simpleBloc.event.add('event3');
+        simpleBloc.dispatch('event1');
+        simpleBloc.dispatch('event2');
+        simpleBloc.dispatch('event3');
       });
     });
 
@@ -144,10 +150,14 @@ void main() {
         complexBloc.dispose();
       });
 
+      test('initialState returns ComplexStateA', () {
+        expect(complexBloc.initialState, ComplexStateA());
+      });
+
       test('should map single event to correct state', () {
         expectLater(complexBloc.state, emitsInOrder([ComplexStateA()]));
 
-        complexBloc.event.add(EventA());
+        complexBloc.dispatch(EventA());
       });
 
       test('should map multiple events to correct states', () {
@@ -163,10 +173,10 @@ void main() {
           ),
         );
 
-        complexBloc.event.add(EventA());
-        complexBloc.event.add(EventB());
-        complexBloc.event.add(EventC());
-        complexBloc.event.add(Error());
+        complexBloc.dispatch(EventA());
+        complexBloc.dispatch(EventB());
+        complexBloc.dispatch(EventC());
+        complexBloc.dispatch(Error());
       });
     });
   });

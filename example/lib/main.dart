@@ -5,33 +5,24 @@ import 'package:bloc/bloc.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return MyAppState();
-  }
-}
-
-class MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget {
   final ThemeBloc _themeBloc = ThemeBloc();
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      initialData: _themeBloc.initialData,
-      stream: _themeBloc.state,
+    return BlocBuilder(
+      bloc: _themeBloc,
       builder: ((
         BuildContext context,
-        AsyncSnapshot<ThemeData> snapshot,
+        ThemeData theme,
       ) {
-        final _theme = snapshot.data;
-        final IconData icon = (_theme == ThemeData.light())
+        final IconData icon = (theme == ThemeData.light())
             ? Icons.brightness_4
             : Icons.brightness_7;
 
         return MaterialApp(
           title: 'Flutter Demo',
-          theme: _theme,
+          theme: theme,
           home: Scaffold(
             appBar: AppBar(title: Text('ThemeBloc Demo')),
             body: ListView(
@@ -40,7 +31,7 @@ class MyAppState extends State<MyApp> {
                   leading: Icon(icon),
                   title: Text('Dark Theme'),
                   trailing: Switch(
-                    value: _theme == ThemeData.dark(),
+                    value: theme == ThemeData.dark(),
                     onChanged: (value) => _themeBloc.toggleTheme(),
                   ),
                 ),
@@ -50,12 +41,6 @@ class MyAppState extends State<MyApp> {
         );
       }),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _themeBloc.dispose();
   }
 }
 
@@ -71,14 +56,14 @@ class ThemeBloc extends Bloc<ThemeData> {
   void toggleTheme() {
     if (_currentTheme == ThemeData.light()) {
       _currentTheme = ThemeData.dark();
-      event.add(SetDarkTheme());
+      dispatch(SetDarkTheme());
     } else {
       _currentTheme = ThemeData.light();
-      event.add(SetLightTheme());
+      dispatch(SetLightTheme());
     }
   }
 
-  ThemeData get initialData => _currentTheme;
+  ThemeData get initialState => _currentTheme;
 
   @override
   Stream<ThemeData> mapEventToState(event) async* {

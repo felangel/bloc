@@ -7,7 +7,10 @@ abstract class Bloc<T> {
   Stream<T> _stateSubject;
 
   Stream<T> get state => _stateSubject;
-  Sink<dynamic> get event => _eventSubject.sink;
+
+  dispatch(dynamic event) {
+    _eventSubject.sink.add(event);
+  }
 
   Bloc() {
     _stateSubject = _eventSubject.switchMap((event) {
@@ -18,6 +21,8 @@ abstract class Bloc<T> {
   dispose() {
     _eventSubject.close();
   }
+
+  T get initialState => null;
 
   Stream<T> mapEventToState(event);
 }
