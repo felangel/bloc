@@ -41,7 +41,7 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 For simplicity we can create a Bloc that always returns a stream of static strings in response to any event. That would look something like:
 
 ```dart
-class SimpleBloc extends Bloc<String> {
+class SimpleBloc extends Bloc<dynamic, String> {
   @override
   Stream<String> mapEventToState(event) async* {
     yield 'data';
@@ -140,7 +140,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   @override
-  Stream<LoginState> mapEventToState(event) async* {
+  Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is LoginButtonPressed) {
       yield LoginState.loading();
 

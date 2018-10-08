@@ -13,3 +13,6 @@
   Added Support for Stream Transformation
     * Includes `Stream<E> transform(Stream<E> events)`
     * Updates to Documentation
+  
+# 0.2.1
+  Minor Updates to Documentation.
