@@ -1,4 +1,4 @@
-# <img src='./doc/assets/bloc_logo_full.png' height='60' alt='Redux Logo' aria-label='redux.js.org' />
+# <img src="https://raw.githubusercontent.com/felangel/bloc/master/doc/assets/bloc_logo_full.png" height="60" alt="Bloc Architecture" />
 
 [![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc) [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
 
@@ -8,7 +8,7 @@ This package is built to work with [RxDart.dart](https://pub.dartlang.org/packag
 
 ## Bloc
 
-<img src='./doc/assets/bloc_architecture.png'/>
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/doc/assets/bloc_architecture.png" alt="Bloc Architecture" />
 
 The goal of this package is to make it easy to implement the `Bloc` Design Pattern (Business Logic Component).
 
@@ -211,7 +211,7 @@ Now that we have the `LoginBloc` lets take a look at how to use `BlocBuilder` to
   }
 ```
 
-At this point we have sucessfully separated our presentational layer from our business logic layer. Notice that the `LoginForm` widget knows nothing about what happens when a user taps the button. The form simply tells the `LoginBloc` that the user has pressed the button via `dispatch`. From that point, the `LoginBloc` tells the LoginForm to be in the loading state and proceeds to authenticate the user. If the user is successfully authenticated, the `LoginBloc` tells the `LoginForm` to be in the  `LoginSuccess` state. If authentication failed, the `LoginBloc` tells the `LoginForm` to be in the `LoginError` state.
+At this point we have sucessfully separated our presentational layer from our business logic layer. Notice that the `LoginForm` widget knows nothing about what happens when a user taps the button. The form simply tells the `LoginBloc` that the user has pressed the button via `dispatch`. From that point, the `LoginBloc` tells the LoginForm to be in the loading state and proceeds to authenticate the user. If the user is successfully authenticated, the `LoginBloc` tells the `LoginForm` to be in the `LoginSuccess` state. If authentication failed, the `LoginBloc` tells the `LoginForm` to be in the `LoginError` state.
 
 ## Dart Versions
 
