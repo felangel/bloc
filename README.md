@@ -1,4 +1,4 @@
-# <img src='./docs/assets/bloc_logo_full.png' height='60' alt='Redux Logo' aria-label='redux.js.org' />
+# <img src='./doc/assets/bloc_logo_full.png' height='60' alt='Redux Logo' aria-label='redux.js.org' />
 
 [![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc) [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
 
@@ -8,7 +8,7 @@ This package is built to work with [RxDart.dart](https://pub.dartlang.org/packag
 
 ## Bloc
 
-<img src='./docs/assets/bloc_architecture.png'/>
+<img src='./doc/assets/bloc_architecture.png'/>
 
 The goal of this package is to make it easy to implement the `Bloc` Design Pattern (Business Logic Component).
 
