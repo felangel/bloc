@@ -5,3 +5,6 @@
 
 # 0.1.1
   Minor Updates to Documentation.
+
+# 0.1.2
+  Additional Minor Updates to Documentation.
