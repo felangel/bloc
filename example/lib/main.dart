@@ -44,11 +44,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class SetDarkTheme {}
+abstract class ThemeEvent {}
 
-class SetLightTheme {}
+class SetDarkTheme extends ThemeEvent {}
 
-class ThemeBloc extends Bloc<ThemeData> {
+class SetLightTheme extends ThemeEvent {}
+
+class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
   final ThemeData _darkTheme = ThemeData.dark();
   final ThemeData _lightTheme = ThemeData.light();
   ThemeData _currentTheme = ThemeData.light();

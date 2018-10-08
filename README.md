@@ -24,11 +24,13 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 ## Bloc Interface
 
-**mapEventToState** is a method that **must be implemented** when a class extends `Bloc`. The function takes a single argument, event. `mapEventToState` is called whenever an event is fired by the presentation layer. `mapEventToState` must convert that event into a state and return the state in the form of a `Stream` so that it can be consumed by the presentation layer.
+**mapEventToState** is a method that **must be implemented** when a class extends `Bloc`. The function takes a single argument, event. `mapEventToState` is called whenever an event is `dispatched` by the presentation layer. `mapEventToState` must convert that event into a state and return the state in the form of a `Stream` so that it can be consumed by the presentation layer.
 
 **dispatch** is a method that takes an `event` and triggers `mapEventToState`. `dispatch` maybe be called from the presentation layer or from within the Bloc (see examples) and notifies the Bloc of a new `event`.
 
 **initialState** is the state before any events have been processed (before `mapEventToState` has ever been called). `initialState` is an optional getter. If unimplemented, initialState will be `null`.
+
+**transform** is a method that can be overridden to transform the `Stream<Event>` before `mapEventToState` is called. This allows for operations like `distinct()` and `debounce()` to be used.
 
 ## Bloc Widgets
 
@@ -112,7 +114,9 @@ class LoginState {
 Next we need to define the different events that our Bloc will respond to. Again, for simplicity, let's say there is just a single event we will handle: `LoginButtonPressed`.
 
 ```dart
-class LoginButtonPressed {
+abstract class LoginEvent {}
+
+class LoginButtonPressed extends LoginEvent {
   final String username;
   final String password;
 
@@ -123,7 +127,7 @@ class LoginButtonPressed {
 Now that we've identified our `states` and `events`, our `LoginBloc` should look something like:
 
 ```dart
-class LoginBloc extends Bloc<LoginState> {
+class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginState get initialState => LoginState.initial();
 
   void onLoginButtonPressed({String username, String password}) {

@@ -4,7 +4,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:test/test.dart';
 import 'package:bloc/bloc.dart';
 
-class SimpleBloc extends Bloc<String> {
+class SimpleBloc extends Bloc<dynamic, String> {
   @override
   Stream<String> mapEventToState(event) {
     return Observable.just('data');
@@ -73,14 +73,60 @@ class ComplexStateUnknown extends ComplexState {
   int get hashCode => 3;
 }
 
-class EventA {}
+abstract class BlocEvent {}
 
-class EventB {}
+class EventA extends BlocEvent {
+  @override
+  bool operator ==(
+    Object other,
+  ) =>
+      identical(
+        this,
+        other,
+      ) ||
+      other is EventA && runtimeType == other.runtimeType;
 
-class EventC {}
+  @override
+  int get hashCode => 4;
+}
 
-class ComplexBloc extends Bloc<ComplexState> {
+class EventB extends BlocEvent {
+  @override
+  bool operator ==(
+    Object other,
+  ) =>
+      identical(
+        this,
+        other,
+      ) ||
+      other is EventB && runtimeType == other.runtimeType;
+
+  @override
+  int get hashCode => 5;
+}
+
+class EventC extends BlocEvent {
+  @override
+  bool operator ==(
+    Object other,
+  ) =>
+      identical(
+        this,
+        other,
+      ) ||
+      other is EventC && runtimeType == other.runtimeType;
+
+  @override
+  int get hashCode => 6;
+}
+
+class ComplexBloc extends Bloc<BlocEvent, ComplexState> {
   ComplexState get initialState => ComplexStateA();
+
+  @override
+  Stream<BlocEvent> transform(Stream<BlocEvent> events) {
+    return events.distinct();
+  }
 
   @override
   Stream<ComplexState> mapEventToState(event) {
@@ -90,10 +136,7 @@ class ComplexBloc extends Bloc<ComplexState> {
     if (event is EventB) {
       return Observable.just(ComplexStateB());
     }
-    if (event is EventC) {
-      return Observable.just(ComplexStateC());
-    }
-    return Observable.just(ComplexStateUnknown());
+    return Observable.just(ComplexStateC());
   }
 }
 
@@ -168,15 +211,14 @@ void main() {
               ComplexStateA(),
               ComplexStateB(),
               ComplexStateC(),
-              ComplexStateUnknown(),
             ],
           ),
         );
 
         complexBloc.dispatch(EventA());
+        complexBloc.dispatch(EventA());
         complexBloc.dispatch(EventB());
         complexBloc.dispatch(EventC());
-        complexBloc.dispatch(Error());
       });
     });
   });

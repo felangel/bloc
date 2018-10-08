@@ -2,27 +2,27 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 
-abstract class Bloc<T> {
-  final _eventSubject = PublishSubject<dynamic>();
-  Stream<T> _stateSubject;
+abstract class Bloc<E, S> {
+  final _eventSubject = PublishSubject<E>();
+  Stream<S> _stateSubject;
 
-  Stream<T> get state => _stateSubject;
+  Stream<S> get state => _stateSubject;
+  S get initialState => null;
 
-  dispatch(dynamic event) {
+  Bloc() {
+    _stateSubject = (transform(_eventSubject) as Observable<E>)
+        .switchMap((E event) => mapEventToState(event));
+  }
+
+  dispatch(E event) {
     _eventSubject.sink.add(event);
   }
 
-  Bloc() {
-    _stateSubject = _eventSubject.switchMap((event) {
-      return mapEventToState(event);
-    });
-  }
+  Stream<E> transform(Stream<E> events) => events;
 
   dispose() {
     _eventSubject.close();
   }
 
-  T get initialState => null;
-
-  Stream<T> mapEventToState(event);
+  Stream<S> mapEventToState(E event);
 }

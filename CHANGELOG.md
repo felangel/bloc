@@ -8,3 +8,8 @@
 
 # 0.1.2
   Additional Minor Updates to Documentation.
+
+# 0.1.3
+  Added Support for Stream Transformation
+    * Includes `Stream<E> transform(Stream<E> events)`
+    * Updates to Documentation

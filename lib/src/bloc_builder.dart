@@ -2,11 +2,11 @@ import 'package:flutter/widgets.dart';
 
 import 'package:bloc/bloc.dart';
 
-typedef BlocWidgetBuilder<T>(BuildContext context, T state);
+typedef BlocWidgetBuilder<S>(BuildContext context, S state);
 
-class BlocBuilder<T> extends StatefulWidget {
+class BlocBuilder<S> extends StatefulWidget {
   final Bloc bloc;
-  final BlocWidgetBuilder<T> builder;
+  final BlocWidgetBuilder<S> builder;
 
   const BlocBuilder({Key key, @required this.bloc, @required this.builder})
       : assert(bloc != null),
@@ -17,18 +17,18 @@ class BlocBuilder<T> extends StatefulWidget {
   State<StatefulWidget> createState() => BlocBuilderState(bloc, builder);
 }
 
-class BlocBuilderState<T> extends State<BlocBuilder<T>> {
+class BlocBuilderState<S> extends State<BlocBuilder<S>> {
   final Bloc bloc;
-  final BlocWidgetBuilder<T> builder;
+  final BlocWidgetBuilder<S> builder;
 
   BlocBuilderState(this.bloc, this.builder);
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<T>(
+    return StreamBuilder<S>(
       initialData: bloc.initialState,
       stream: bloc.state,
-      builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<S> snapshot) {
         return builder(context, snapshot.data);
       },
     );
