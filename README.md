@@ -1,6 +1,6 @@
 # <img src='./docs/assets/bloc_logo_full.png' height='60' alt='Redux Logo' aria-label='redux.js.org' />
 
-[![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/Bloc) [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/Bloc)
+[![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc) [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
 
 A dart package that helps implement the [Bloc pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
 
