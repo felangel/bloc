@@ -14,13 +14,13 @@ abstract class Bloc<E, S> {
         .switchMap((E event) => mapEventToState(event));
   }
 
-  dispatch(E event) {
+  void dispatch(E event) {
     _eventSubject.sink.add(event);
   }
 
   Stream<E> transform(Stream<E> events) => events;
 
-  dispose() {
+  void dispose() {
     _eventSubject.close();
   }
 

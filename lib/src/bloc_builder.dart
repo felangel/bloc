@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 typedef BlocWidgetBuilder<S>(BuildContext context, S state);
 
 class BlocBuilder<S> extends StatefulWidget {
-  final Bloc bloc;
+  final Bloc<dynamic, S> bloc;
   final BlocWidgetBuilder<S> builder;
 
   const BlocBuilder({Key key, @required this.bloc, @required this.builder})
@@ -18,7 +18,7 @@ class BlocBuilder<S> extends StatefulWidget {
 }
 
 class BlocBuilderState<S> extends State<BlocBuilder<S>> {
-  final Bloc bloc;
+  final Bloc<dynamic, S> bloc;
   final BlocWidgetBuilder<S> builder;
 
   BlocBuilderState(this.bloc, this.builder);
@@ -29,7 +29,7 @@ class BlocBuilderState<S> extends State<BlocBuilder<S>> {
       initialData: bloc.initialState,
       stream: bloc.state,
       builder: (BuildContext context, AsyncSnapshot<S> snapshot) {
-        return builder(context, snapshot.data);
+        return builder(context, snapshot.data) as Widget;
       },
     );
   }

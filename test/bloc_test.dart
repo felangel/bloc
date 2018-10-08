@@ -6,7 +6,7 @@ import 'package:bloc/bloc.dart';
 
 class SimpleBloc extends Bloc<dynamic, String> {
   @override
-  Stream<String> mapEventToState(event) {
+  Stream<String> mapEventToState(dynamic event) {
     return Observable.just('data');
   }
 }
@@ -150,9 +150,11 @@ void main() {
       });
 
       test('dispose does not emit new states over the state stream', () {
+        final List<String> expected = [];
+
         expectLater(
           simpleBloc.state,
-          emitsInOrder([]),
+          emitsInOrder(expected),
         );
 
         simpleBloc.dispose();
@@ -163,13 +165,17 @@ void main() {
       });
 
       test('should map single event to correct state', () {
-        expectLater(simpleBloc.state, emitsInOrder(['data']));
+        final List<String> expected = ['data'];
+
+        expectLater(simpleBloc.state, emitsInOrder(expected));
 
         simpleBloc.dispatch('event');
       });
 
       test('should map multiple events to correct states', () {
-        expectLater(simpleBloc.state, emitsInOrder(['data', 'data', 'data']));
+        final List<String> expected = ['data', 'data', 'data'];
+
+        expectLater(simpleBloc.state, emitsInOrder(expected));
 
         simpleBloc.dispatch('event1');
         simpleBloc.dispatch('event2');
@@ -185,9 +191,11 @@ void main() {
       });
 
       test('dispose does not emit new states over the state stream', () {
+        final List<String> expected = [];
+
         expectLater(
           complexBloc.state,
-          emitsInOrder([]),
+          emitsInOrder(expected),
         );
 
         complexBloc.dispose();
@@ -198,21 +206,23 @@ void main() {
       });
 
       test('should map single event to correct state', () {
-        expectLater(complexBloc.state, emitsInOrder([ComplexStateA()]));
+        final List<ComplexState> expected = [ComplexStateA()];
+
+        expectLater(complexBloc.state, emitsInOrder(expected));
 
         complexBloc.dispatch(EventA());
       });
 
       test('should map multiple events to correct states', () {
+        final List<ComplexState> expected = [
+          ComplexStateA(),
+          ComplexStateB(),
+          ComplexStateC(),
+        ];
+
         expectLater(
           complexBloc.state,
-          emitsInOrder(
-            [
-              ComplexStateA(),
-              ComplexStateB(),
-              ComplexStateC(),
-            ],
-          ),
+          emitsInOrder(expected),
         );
 
         complexBloc.dispatch(EventA());

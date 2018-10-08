@@ -14,7 +14,7 @@ class MyAppNoBloc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
+    return BlocBuilder<ThemeData>(
       bloc: null,
       builder: null,
     );
