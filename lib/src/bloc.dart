@@ -19,7 +19,7 @@ abstract class Bloc<E, S> {
   }
 
   /// Takes an event and triggers `mapEventToState`.
-  /// `Dispatch` maybe be called from the presentation layer or from within the Bloc.
+  /// `Dispatch` may be called from the presentation layer or from within the Bloc.
   /// `Dispatch` notifies the [Bloc] of a new event.
   void dispatch(E event) {
     _eventSubject.sink.add(event);
