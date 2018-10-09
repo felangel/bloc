@@ -58,7 +58,7 @@ For simplicity, let's say we only have 4 states:
 
 - `initial`
 - `loading`
-- `error`
+- `failure`
 - `success`
 
 ```dart
@@ -76,39 +76,39 @@ class LoginState {
   });
 
   factory LoginState.initial() {
-    return LoginState({
+    return LoginState(
       isLoading: false,
       isLoginButtonEnabled: true,
       error: '',
       token: '',
-    });
+    );
   }
 
   factory LoginState.loading() {
-    return LoginState({
+    return LoginState(
       isLoading: true,
       isLoginButtonEnabled: false,
       error: '',
       token: '',
-    });
+    );
   }
 
-  factory LoginState.error(String error) {
-    return LoginState({
+  factory LoginState.failure(String error) {
+    return LoginState(
       isLoading: false,
       isLoginButtonEnabled: true,
       error: error,
       token: '',
-    });
+    );
   }
 
   factory LoginState.success(String token) {
-    return LoginState({
+    return LoginState(
       isLoading: false,
       isLoginButtonEnabled: true,
       error: '',
       token: token,
-    });
+    );
   }
 }
 ```
@@ -122,7 +122,7 @@ class LoginButtonPressed extends LoginEvent {
   final String username;
   final String password;
 
-  const LoginButtonPressed({@required this.username, @required this.password});
+  LoginButtonPressed({@required this.username, @required this.password});
 }
 ```
 
@@ -186,9 +186,11 @@ Now that we have the `LoginBloc` lets take a look at how to use `BlocBuilder` to
                   loginState.error,
                 ),
                 TextFormField(
+                  decoration: InputDecoration(labelText: 'username'),
                   controller: usernameController,
                 ),
                 TextFormField(
+                  decoration: InputDecoration(labelText: 'password'),
                   controller: passwordController,
                   obscureText: true,
                 ),
@@ -199,9 +201,8 @@ Now that we have the `LoginBloc` lets take a look at how to use `BlocBuilder` to
                   child: Text('Login'),
                 ),
                 Container(
-                  child: loginState.isLoading
-                      ? CircularProgressIndicator()
-                      : null,
+                  child:
+                      loginState.isLoading ? CircularProgressIndicator() : null,
                 ),
               ],
             ),
