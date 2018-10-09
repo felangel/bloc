@@ -36,7 +36,7 @@ class BlocBuilderState<S> extends State<BlocBuilder<S>> {
 
   @override
   void dispose() {
-    super.dispose();
     bloc.dispose();
+    super.dispose();
   }
 }
