@@ -7,6 +7,7 @@
 build/
 ios/
 android/
+doc/api/
 packages
 pubspec.lock
 .flutter-plugins
