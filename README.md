@@ -150,7 +150,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         final token = await _authenticate(event.username, event.password);
         yield LoginState.success(token);
       } catch (error) {
-        yield LoginState.error(error.toString());
+        yield LoginState.failure(error.toString());
       }
     }
   }
