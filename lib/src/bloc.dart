@@ -5,17 +5,19 @@ import 'package:rxdart/rxdart.dart';
 /// Takes a [Stream] of events as input
 /// and transforms them into a [Stream] of states as output.
 abstract class Bloc<E, S> {
-  final _eventSubject = PublishSubject<E>();
-  Stream<S> _stateSubject;
+  final PublishSubject<E> _eventSubject = PublishSubject<E>();
 
+  final BehaviorSubject<S> _stateSubject = BehaviorSubject<S>();
+
+  /// Returns [Stream] of states.
+  /// Consumed by [BlocBuilder].
   Stream<S> get state => _stateSubject;
 
   /// Returns the state before any events have been `dispatched`.
   S get initialState => null;
 
   Bloc() {
-    _stateSubject = (transform(_eventSubject) as Observable<E>)
-        .switchMap((E event) => mapEventToState(event));
+    _bindStateSubject();
   }
 
   /// Takes an event and triggers `mapEventToState`.
@@ -29,6 +31,7 @@ abstract class Bloc<E, S> {
   /// This is automatically handled by [BlocBuilder].
   void dispose() {
     _eventSubject.close();
+    _stateSubject.close();
   }
 
   /// Transform the `Stream<Event>` before `mapEventToState` is called.
@@ -36,9 +39,21 @@ abstract class Bloc<E, S> {
   Stream<E> transform(Stream<E> events) => events;
 
   /// Must be implemented when a class extends Bloc.
-  /// Takes a single argument, `event`.
+  /// Takes the current `state` and incoming `event` as arguments.
   /// `mapEventToState` is called whenever an event is dispatched by the presentation layer.
-  /// `mapEventToState` must convert that event into a state and return the state
-  /// in the form of a [Stream] so that it can be consumed by the presentation layer.
-  Stream<S> mapEventToState(E event);
+  /// `mapEventToState` must convert that event, along with the current state, into a new state
+  /// and return the new state in the form of a [Stream] which is consumed by the presentation layer.
+  Stream<S> mapEventToState(S state, E event);
+
+  void _bindStateSubject() {
+    (transform(_eventSubject) as Observable<E>)
+        .concatMap(
+      (E event) => mapEventToState(_stateSubject.value ?? initialState, event),
+    )
+        .forEach(
+      (S state) {
+        _stateSubject.add(state);
+      },
+    );
+  }
 }

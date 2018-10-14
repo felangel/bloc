@@ -5,34 +5,48 @@ import 'package:bloc/bloc.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  final ThemeBloc _themeBloc = ThemeBloc();
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => MyAppState();
+}
+
+class MyAppState extends State<MyApp> {
+  final CounterBloc _counterBloc = CounterBloc();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-      bloc: _themeBloc,
+      bloc: _counterBloc,
       builder: ((
         BuildContext context,
-        ThemeData theme,
+        int count,
       ) {
-        final IconData icon = (theme == ThemeData.light())
-            ? Icons.brightness_4
-            : Icons.brightness_7;
-
         return MaterialApp(
           title: 'Flutter Demo',
-          theme: theme,
           home: Scaffold(
-            appBar: AppBar(title: Text('ThemeBloc Demo')),
-            body: ListView(
-              children: [
-                ListTile(
-                  leading: Icon(icon),
-                  title: Text('Dark Theme'),
-                  trailing: Switch(
-                    value: theme == ThemeData.dark(),
-                    onChanged: (value) => _themeBloc.toggleTheme(),
+            appBar: AppBar(title: Text('Counter')),
+            body: Center(
+              child: Text(
+                '$count',
+                style: TextStyle(fontSize: 24.0),
+              ),
+            ),
+            floatingActionButton: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5.0),
+                  child: FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: _counterBloc.increment,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5.0),
+                  child: FloatingActionButton(
+                    child: Icon(Icons.remove),
+                    onPressed: _counterBloc.decrement,
                   ),
                 ),
               ],
@@ -44,35 +58,30 @@ class MyApp extends StatelessWidget {
   }
 }
 
-abstract class ThemeEvent {}
+abstract class CounterEvent {}
 
-class SetDarkTheme extends ThemeEvent {}
+class IncrementCounter extends CounterEvent {}
 
-class SetLightTheme extends ThemeEvent {}
+class DecrementCounter extends CounterEvent {}
 
-class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
-  final ThemeData _darkTheme = ThemeData.dark();
-  final ThemeData _lightTheme = ThemeData.light();
-  ThemeData _currentTheme = ThemeData.light();
+class CounterBloc extends Bloc<CounterEvent, int> {
+  int get initialState => 0;
 
-  void toggleTheme() {
-    if (_currentTheme == ThemeData.light()) {
-      _currentTheme = ThemeData.dark();
-      dispatch(SetDarkTheme());
-    } else {
-      _currentTheme = ThemeData.light();
-      dispatch(SetLightTheme());
-    }
+  void increment() {
+    dispatch(IncrementCounter());
   }
 
-  ThemeData get initialState => _currentTheme;
+  void decrement() {
+    dispatch(DecrementCounter());
+  }
 
   @override
-  Stream<ThemeData> mapEventToState(event) async* {
-    if (event is SetDarkTheme) {
-      yield _darkTheme;
-    } else {
-      yield _lightTheme;
+  Stream<int> mapEventToState(int state, CounterEvent event) async* {
+    if (event is IncrementCounter) {
+      yield state + 1;
+    }
+    if (event is DecrementCounter) {
+      yield state - 1;
     }
   }
 }
