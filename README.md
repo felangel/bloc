@@ -26,7 +26,7 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 ## Bloc Interface
 
-**mapEventToState** is a method that **must be implemented** when a class extends `Bloc`. The function takes a single argument, event. `mapEventToState` is called whenever an event is `dispatched` by the presentation layer. `mapEventToState` must convert that event into a state and return the state in the form of a `Stream` so that it can be consumed by the presentation layer.
+**mapEventToState** is a method that **must be implemented** when a class extends `Bloc`. The function takes two arguments: state and event. `mapEventToState` is called whenever an event is `dispatched` by the presentation layer. `mapEventToState` must convert that event, along with the current state, into a new state and return the new state in the form of a `Stream` which is consumed by the presentation layer.
 
 **dispatch** is a method that takes an `event` and triggers `mapEventToState`. `dispatch` may be called from the presentation layer or from within the Bloc (see examples) and notifies the Bloc of a new `event`.
 
@@ -45,7 +45,7 @@ For simplicity we can create a Bloc that always returns a stream of static strin
 ```dart
 class SimpleBloc extends Bloc<dynamic, String> {
   @override
-  Stream<String> mapEventToState(event) async* {
+  Stream<String> mapEventToState(String state, dynamic event) async* {
     yield 'data';
   }
 }
@@ -142,7 +142,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   @override
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
+  Stream<LoginState> mapEventToState(LoginState state, LoginEvent event) async* {
     if (event is LoginButtonPressed) {
       yield LoginState.loading();
 
@@ -228,7 +228,7 @@ At this point we have sucessfully separated our presentational layer from our bu
 
 ## Examples
 
-- [Simple Theme Example](https://github.com/felangel/Bloc/tree/master/example) - an example of how to create a `ThemeBloc` to manage dynamically changing the theme of your flutter app.
+- [Simple Counter Example](https://github.com/felangel/Bloc/tree/master/example) - an example of how to create a `CounterBloc` to implement the classic Flutter Counter app.
 
 ### Contributors
 

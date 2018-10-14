@@ -6,7 +6,7 @@ import 'package:bloc/bloc.dart';
 
 class SimpleBloc extends Bloc<dynamic, String> {
   @override
-  Stream<String> mapEventToState(dynamic event) {
+  Stream<String> mapEventToState(String state, dynamic event) {
     return Observable.just('data');
   }
 }
@@ -129,7 +129,7 @@ class ComplexBloc extends Bloc<BlocEvent, ComplexState> {
   }
 
   @override
-  Stream<ComplexState> mapEventToState(event) {
+  Stream<ComplexState> mapEventToState(ComplexState state, BlocEvent event) {
     if (event is EventA) {
       return Observable.just(ComplexStateA());
     }
@@ -137,6 +137,52 @@ class ComplexBloc extends Bloc<BlocEvent, ComplexState> {
       return Observable.just(ComplexStateB());
     }
     return Observable.just(ComplexStateC());
+  }
+}
+
+abstract class CounterEvent {}
+
+class IncrementCounter extends CounterEvent {
+  @override
+  bool operator ==(
+    Object other,
+  ) =>
+      identical(
+        this,
+        other,
+      ) ||
+      other is IncrementCounter && runtimeType == other.runtimeType;
+
+  @override
+  int get hashCode => 7;
+}
+
+class DecrementCounter extends CounterEvent {
+  @override
+  bool operator ==(
+    Object other,
+  ) =>
+      identical(
+        this,
+        other,
+      ) ||
+      other is DecrementCounter && runtimeType == other.runtimeType;
+
+  @override
+  int get hashCode => 8;
+}
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  int get initialState => 0;
+
+  @override
+  Stream<int> mapEventToState(int state, CounterEvent event) async* {
+    if (event is IncrementCounter) {
+      yield state + 1;
+    }
+    if (event is DecrementCounter) {
+      yield state - 1;
+    }
   }
 }
 
@@ -229,6 +275,48 @@ void main() {
         complexBloc.dispatch(EventA());
         complexBloc.dispatch(EventB());
         complexBloc.dispatch(EventC());
+      });
+    });
+
+    group('CounterBloc', () {
+      CounterBloc counterBloc;
+
+      setUp(() {
+        counterBloc = CounterBloc();
+      });
+
+      test('initial state is 0', () {
+        expect(counterBloc.initialState, 0);
+      });
+
+      test('single IncrementCounter event updates state to 1', () {
+        final List<int> expected = [
+          1,
+        ];
+
+        expectLater(
+          counterBloc.state,
+          emitsInOrder(expected),
+        );
+
+        counterBloc.dispatch(IncrementCounter());
+      });
+
+      test('multiple IncrementCounter event updates state to 3', () {
+        final List<int> expected = [
+          1,
+          2,
+          3,
+        ];
+
+        expectLater(
+          counterBloc.state,
+          emitsInOrder(expected),
+        );
+
+        counterBloc.dispatch(IncrementCounter());
+        counterBloc.dispatch(IncrementCounter());
+        counterBloc.dispatch(IncrementCounter());
       });
     });
   });

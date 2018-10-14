@@ -39,3 +39,11 @@ Additional Minor Updates to Documentation.
 # 0.2.5
 
 Additional Minor Updates to Documentation.
+
+# 0.3.0
+
+Updated `mapEventToState` to take current state as an argument.
+
+- `Stream<S> mapEventToState(E event)` -> `Stream<S> mapEventToState(S state, E event)`
+- Updates to Documentation.
+- Updates to Example.

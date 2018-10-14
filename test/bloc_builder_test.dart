@@ -75,7 +75,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
   ThemeData get initialState => _lightTheme;
 
   @override
-  Stream<ThemeData> mapEventToState(event) async* {
+  Stream<ThemeData> mapEventToState(ThemeData state, ThemeEvent event) async* {
     if (event is SetDarkTheme) {
       yield _darkTheme;
     } else {
