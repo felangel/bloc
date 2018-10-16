@@ -138,6 +138,17 @@ class ComplexBloc extends Bloc<BlocEvent, ComplexState> {
     }
     return Observable.just(ComplexStateC());
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ComplexBloc &&
+          runtimeType == other.runtimeType &&
+          initialState == other.initialState;
+
+  @override
+  int get hashCode =>
+      initialState.hashCode ^ mapEventToState.hashCode ^ transform.hashCode;
 }
 
 abstract class CounterEvent {}
@@ -184,6 +195,17 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       yield state - 1;
     }
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CounterBloc &&
+          runtimeType == other.runtimeType &&
+          initialState == other.initialState;
+
+  @override
+  int get hashCode =>
+      initialState.hashCode ^ mapEventToState.hashCode ^ transform.hashCode;
 }
 
 void main() {
@@ -317,6 +339,22 @@ void main() {
         counterBloc.dispatch(IncrementCounter());
         counterBloc.dispatch(IncrementCounter());
         counterBloc.dispatch(IncrementCounter());
+      });
+    });
+
+    group('== operator', () {
+      test('returns true for the same two CounterBlocs', () {
+        final CounterBloc _blocA = CounterBloc();
+        final CounterBloc _blocB = CounterBloc();
+
+        expect(_blocA == _blocB, true);
+      });
+
+      test('returns false for the two different Blocs', () {
+        final CounterBloc _blocA = CounterBloc();
+        final ComplexBloc _blocB = ComplexBloc();
+
+        expect(_blocA == _blocB, false);
       });
     });
   });
