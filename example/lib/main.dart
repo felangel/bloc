@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
 import 'package:bloc/bloc.dart';
 
 void main() => runApp(MyApp());
@@ -15,45 +16,54 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _counterBloc,
-      builder: ((
-        BuildContext context,
-        int count,
-      ) {
-        return MaterialApp(
-          title: 'Flutter Demo',
-          home: Scaffold(
-            appBar: AppBar(title: Text('Counter')),
-            body: Center(
-              child: Text(
-                '$count',
-                style: TextStyle(fontSize: 24.0),
-              ),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      home: BlocProvider(
+        bloc: _counterBloc,
+        child: CounterPage(),
+      ),
+    );
+  }
+}
+
+class CounterPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final CounterBloc _counterBloc = BlocProvider.of(context) as CounterBloc;
+
+    return Scaffold(
+      appBar: AppBar(title: Text('Counter')),
+      body: BlocBuilder<CounterEvent, int>(
+        bloc: _counterBloc,
+        builder: (BuildContext context, int count) {
+          return Center(
+            child: Text(
+              '$count',
+              style: TextStyle(fontSize: 24.0),
             ),
-            floatingActionButton: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5.0),
-                  child: FloatingActionButton(
-                    child: Icon(Icons.add),
-                    onPressed: _counterBloc.increment,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5.0),
-                  child: FloatingActionButton(
-                    child: Icon(Icons.remove),
-                    onPressed: _counterBloc.decrement,
-                  ),
-                ),
-              ],
+          );
+        },
+      ),
+      floatingActionButton: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: _counterBloc.increment,
             ),
           ),
-        );
-      }),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: FloatingActionButton(
+              child: Icon(Icons.remove),
+              onPressed: _counterBloc.decrement,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -38,6 +38,8 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **BlocBuilder** is a Flutter widget which requires a `Bloc` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed.
 
+**BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of(context)`. It is used as a DI widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
+
 ## Usage
 
 For simplicity we can create a Bloc that always returns a stream of static strings in response to any event. That would look something like:

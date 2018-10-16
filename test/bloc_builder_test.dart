@@ -1,20 +1,12 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bloc/bloc.dart';
 
 class MyAppNoBloc extends StatelessWidget {
-  final ThemeBloc _themeBloc;
-
-  MyAppNoBloc({Key key, @required ThemeBloc themeBloc})
-      : _themeBloc = themeBloc,
-        super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeData>(
+    return BlocBuilder<ThemeEvent, ThemeData>(
       bloc: null,
       builder: null,
     );
@@ -88,12 +80,8 @@ void main() {
   group('BlocBuilder', () {
     testWidgets('throws if initialized with null bloc and builder',
         (WidgetTester tester) async {
-      final ThemeBloc _themeBloc = ThemeBloc();
-
       await tester.pumpWidget(
-        MyAppNoBloc(
-          themeBloc: _themeBloc,
-        ),
+        MyAppNoBloc(),
       );
       expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
