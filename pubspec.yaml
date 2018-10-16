@@ -1,6 +1,6 @@
 name: bloc
 description: The goal of this package is to make it easy to implement the BLoC Design Pattern (Business Logic Component).
-version: 0.3.0
+version: 0.4.0
 author: felix.angelov <felangelov@gmail.com>
 homepage: https://github.com/felangel/bloc
 

@@ -47,3 +47,11 @@ Updated `mapEventToState` to take current state as an argument.
 - `Stream<S> mapEventToState(E event)` -> `Stream<S> mapEventToState(S state, E event)`
 - Updates to Documentation.
 - Updates to Example.
+
+# 0.4.0
+
+Added `BlocProvider`.
+
+- `BlocProvider.of(context)`
+- Updates to Documentation.
+- Updates to Example.
