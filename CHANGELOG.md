@@ -55,3 +55,7 @@ Added `BlocProvider`.
 - `BlocProvider.of(context)`
 - Updates to Documentation.
 - Updates to Example.
+
+# 0.4.1
+
+Minor Updates to Documentation.
