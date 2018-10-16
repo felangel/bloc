@@ -172,7 +172,7 @@ Now that we have the `LoginBloc` lets take a look at how to use `BlocBuilder` to
 
     @override
     Widget build(BuildContext context) {
-      return BlocBuilder<LoginState>(
+      return BlocBuilder<LoginEvent, LoginState>(
         bloc: loginBloc,
         builder: (
           BuildContext context,

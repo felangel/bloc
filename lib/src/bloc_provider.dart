@@ -6,7 +6,7 @@ import 'package:bloc/bloc.dart';
 /// It is used as a DI widget so that a single instance of a bloc can be provided
 /// to multiple widgets within a subtree.
 class BlocProvider extends InheritedWidget {
-  /// The Bloc which is made be made available throughout the subtree
+  /// The Bloc which is to be made available throughout the subtree
   final Bloc bloc;
 
   BlocProvider({
