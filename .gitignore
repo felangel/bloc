@@ -9,11 +9,11 @@ build/
 ios/
 android/
 doc/api/
-packages
 pubspec.lock
 .flutter-plugins
 *.iml
-/coverage/
+coverage/
+.test_coverage.dart
 *.log
 !example/ios/
 !example/android/
