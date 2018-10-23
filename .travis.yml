@@ -1,6 +1,9 @@
+language: dart
 os:
   - linux
 sudo: false
+dart:
+- 2.0.0-dev.69.1
 addons:
   apt:
     sources:
@@ -12,7 +15,12 @@ before_script:
   - git clone https://github.com/flutter/flutter.git -b master --depth 1
   - ./flutter/bin/flutter doctor
 script:
-  - ./flutter/bin/flutter test --coverage --coverage-path=lcov.info
+  - cd packages/bloc
+  - pub get
+  - pub run test_coverage
+  - cp coverage/lcov.info ../../bloc.lcov
+  - cd ../flutter_bloc
+  - ../../flutter/bin/flutter test --coverage --coverage-path=../../flutter_bloc.lcov
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 cache:
