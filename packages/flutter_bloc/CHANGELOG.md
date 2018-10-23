@@ -4,3 +4,7 @@ Initial Version of the library.
 
 - Includes the ability to connect presentation layer to `Bloc` by using the `BlocBuilder` Widget.
 - Includes `BlocProvider`, a DI widget that allows a single instance of a bloc to be provided to multiple widgets within a subtree.
+
+# 0.1.1
+
+Minor Updates to Documentation

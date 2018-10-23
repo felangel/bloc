@@ -63,3 +63,11 @@ Minor Updates to Documentation.
 # 0.4.2
 
 Additional minor Updates to Documentation.
+
+# 0.5.0
+
+Moved Flutter Widgets to flutter_bloc package
+
+# 0.5.1
+
+Minor Updates to Documentation

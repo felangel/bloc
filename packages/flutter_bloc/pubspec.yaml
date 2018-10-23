@@ -1,16 +1,15 @@
 name: flutter_bloc
 description: Flutter Widgets that make it easy to implement the BLoC Design Pattern (Business Logic Component). Built to be used with the bloc package.
-version: 0.1.0
+version: 0.1.1
 author: felix.angelov <felangelov@gmail.com>
-homepage: https://github.com/felangel/bloc/packages/flutter_bloc
+homepage: https://github.com/felangel/bloc/tree/master/packages/flutter_bloc
 
 environment:
   sdk: ">=2.0.0-dev.28.0 <3.0.0"
 
 dependencies:
   rxdart: ">=0.18.1 <1.0.0"
-  bloc:
-    path: ../bloc
+  bloc: ^0.5.0
   flutter:
     sdk: flutter
 
