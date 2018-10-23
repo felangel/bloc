@@ -5,9 +5,9 @@ import 'package:bloc/bloc.dart';
 /// A Flutter widget which provides a bloc to its children via `BlocProvider.of(context)`.
 /// It is used as a DI widget so that a single instance of a bloc can be provided
 /// to multiple widgets within a subtree.
-class BlocProvider extends InheritedWidget {
+class BlocProvider<T extends Bloc<dynamic, dynamic>> extends InheritedWidget {
   /// The Bloc which is to be made available throughout the subtree
-  final Bloc bloc;
+  final T bloc;
 
   BlocProvider({
     Key key,
@@ -24,6 +24,10 @@ class BlocProvider extends InheritedWidget {
 
   /// Method that allows widgets to access the bloc as long as their `BuildContext`
   /// contains a `BlocProvider` instance.
-  static Bloc of(BuildContext context) =>
-      (context.inheritFromWidgetOfExactType(BlocProvider) as BlocProvider).bloc;
+  static B of<B extends Bloc<dynamic, dynamic>>(BuildContext context) {
+    Type typeOf<B>() => B;
+    BlocProvider<B> provider =
+        context.ancestorWidgetOfExactType(typeOf<BlocProvider<B>>());
+    return provider.bloc;
+  }
 }

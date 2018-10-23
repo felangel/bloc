@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class MyAppNoBloc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocProvider<Bloc>(
       bloc: null,
       child: Container(),
     );
@@ -17,10 +17,10 @@ class MyAppNoBloc extends StatelessWidget {
 }
 
 class MyApp extends StatelessWidget {
-  final Bloc _bloc;
+  final CounterBloc _bloc;
   final Widget _child;
 
-  const MyApp({Key key, @required Bloc bloc, @required Widget child})
+  const MyApp({Key key, @required CounterBloc bloc, @required Widget child})
       : _bloc = bloc,
         _child = child,
         super(key: key);
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocProvider(
+      home: BlocProvider<CounterBloc>(
         bloc: _bloc,
         child: _child,
       ),
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    CounterBloc _counterBloc = BlocProvider.of(context) as CounterBloc;
+    CounterBloc _counterBloc = BlocProvider.of<CounterBloc>(context);
     assert(_counterBloc != null);
 
     return Scaffold(

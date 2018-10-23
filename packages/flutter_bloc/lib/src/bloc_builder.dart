@@ -11,7 +11,7 @@ typedef Widget BlocWidgetBuilder<E, S>(BuildContext context, S state);
 /// [BlocBuilder] handles building the widget in response to new states.
 /// BlocBuilder analagous to [StreamBuilder] but has simplified API
 /// to reduce the amount of boilerplate code needed.
-class BlocBuilder<E, S> extends StatefulWidget {
+class BlocBuilder<E, S> extends StatelessWidget {
   final Bloc<E, S> bloc;
   final BlocWidgetBuilder<E, S> builder;
 
@@ -19,16 +19,6 @@ class BlocBuilder<E, S> extends StatefulWidget {
       : assert(bloc != null),
         assert(builder != null),
         super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _BlocBuilderState<E, S>(bloc, builder);
-}
-
-class _BlocBuilderState<E, S> extends State<BlocBuilder<E, S>> {
-  final Bloc<dynamic, S> bloc;
-  final BlocWidgetBuilder<E, S> builder;
-
-  _BlocBuilderState(this.bloc, this.builder);
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +29,5 @@ class _BlocBuilderState<E, S> extends State<BlocBuilder<E, S>> {
         return builder(context, snapshot.data);
       },
     );
-  }
-
-  @override
-  void dispose() {
-    bloc.dispose();
-    super.dispose();
   }
 }
