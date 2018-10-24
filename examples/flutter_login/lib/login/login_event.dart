@@ -14,4 +14,4 @@ class LoginButtonPressed extends LoginEvent {
   });
 }
 
-class LoginSuccess extends LoginEvent {}
+class LoggedIn extends LoginEvent {}

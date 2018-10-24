@@ -18,7 +18,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void onLoginSuccess() {
-    dispatch(LoginSuccess());
+    dispatch(LoggedIn());
   }
 
   @override
@@ -30,8 +30,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginState.loading();
 
       try {
-        final _token = await _authenticate(
-            username: event.username, password: event.password);
+        final _token = await _getToken(
+          username: event.username,
+          password: event.password,
+        );
 
         yield LoginState.success(_token);
       } catch (error) {
@@ -39,12 +41,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     }
 
-    if (event is LoginSuccess) {
+    if (event is LoggedIn) {
       yield LoginState.initial();
     }
   }
 
-  Future<String> _authenticate({
+  Future<String> _getToken({
     @required String username,
     @required String password,
   }) async {

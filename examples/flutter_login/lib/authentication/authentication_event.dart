@@ -2,12 +2,12 @@ import 'package:meta/meta.dart';
 
 abstract class AuthenticationEvent {}
 
-class AppStart extends AuthenticationEvent {}
+class AppStarted extends AuthenticationEvent {}
 
-class AuthenticationSuccess extends AuthenticationEvent {
+class LoggedIn extends AuthenticationEvent {
   final String token;
 
-  AuthenticationSuccess({@required this.token});
+  LoggedIn({@required this.token});
 }
 
-class LogoutPressed extends AuthenticationEvent {}
+class LoggedOut extends AuthenticationEvent {}

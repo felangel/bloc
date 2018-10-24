@@ -8,15 +8,15 @@ import 'package:flutter_login/authentication/authentication.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   void onAppStart() {
-    dispatch(AppStart());
+    dispatch(AppStarted());
   }
 
-  void onAuthenticationSuccess({@required String token}) {
-    dispatch(AuthenticationSuccess(token: token));
+  void onLogin({@required String token}) {
+    dispatch(LoggedIn(token: token));
   }
 
-  void onLogoutPressed() {
-    dispatch(LogoutPressed());
+  void onLogout() {
+    dispatch(LoggedOut());
   }
 
   @override
@@ -25,55 +25,45 @@ class AuthenticationBloc
   @override
   Stream<AuthenticationState> mapEventToState(
       AuthenticationState state, AuthenticationEvent event) async* {
-    if (event is AppStart) {
-      try {
-        final hasToken = await _hasToken();
-        if (hasToken == false) {
-          throw Exception('unauthenticated');
-        }
-        yield state.copyWith(isAuthenticated: true, isInitializing: false);
-      } catch (error) {
-        yield state.copyWith(isAuthenticated: false, isInitializing: false);
+    if (event is AppStarted) {
+      final bool hasToken = await _hasToken();
+
+      if (hasToken) {
+        yield AuthenticationState.authenticated();
+      } else {
+        yield AuthenticationState.unauthenticated();
       }
     }
 
-    if (event is AuthenticationSuccess) {
+    if (event is LoggedIn) {
       yield state.copyWith(isLoading: true);
 
-      try {
-        await _persistToken(event.token);
-        yield state.copyWith(isAuthenticated: true);
-      } catch (error) {
-        yield state.copyWith(isAuthenticated: false);
-      }
+      await _persistToken(event.token);
+      yield AuthenticationState.authenticated();
     }
 
-    if (event is LogoutPressed) {
+    if (event is LoggedOut) {
       yield state.copyWith(isLoading: true);
 
-      try {
-        await _deleteToken();
-        yield state.copyWith(isAuthenticated: false);
-      } catch (error) {
-        // handle error
-      }
+      await _deleteToken();
+      yield AuthenticationState.unauthenticated();
     }
   }
 
   Future<void> _deleteToken() async {
-    // delete from keystore/keychain
+    /// delete from keystore/keychain
     await Future.delayed(Duration(seconds: 1));
     return;
   }
 
   Future<void> _persistToken(String token) async {
-    // write to keystore/keychain
+    /// write to keystore/keychain
     await Future.delayed(Duration(seconds: 1));
     return;
   }
 
   Future<bool> _hasToken() async {
-    // read from keystore/keychain
+    /// read from keystore/keychain
     await Future.delayed(Duration(seconds: 1));
     return false;
   }

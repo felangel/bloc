@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
 
 class AuthenticationState {
-  final bool isLoading;
   final bool isInitializing;
+  final bool isLoading;
   final bool isAuthenticated;
 
   const AuthenticationState({
@@ -13,7 +13,26 @@ class AuthenticationState {
 
   factory AuthenticationState.initializing() {
     return AuthenticationState(
-        isInitializing: true, isAuthenticated: false, isLoading: false);
+      isInitializing: true,
+      isAuthenticated: false,
+      isLoading: false,
+    );
+  }
+
+  factory AuthenticationState.authenticated() {
+    return AuthenticationState(
+      isInitializing: false,
+      isAuthenticated: true,
+      isLoading: false,
+    );
+  }
+
+  factory AuthenticationState.unauthenticated() {
+    return AuthenticationState(
+      isInitializing: false,
+      isAuthenticated: false,
+      isLoading: false,
+    );
   }
 
   AuthenticationState copyWith({
@@ -27,4 +46,8 @@ class AuthenticationState {
       isLoading: isLoading ?? this.isLoading,
     );
   }
+
+  @override
+  String toString() =>
+      'AuthenticationState { isInitializing: $isInitializing, isLoading: $isLoading, isAuthenticated: $isAuthenticated }';
 }

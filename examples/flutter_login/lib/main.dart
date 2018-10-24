@@ -18,15 +18,12 @@ void main() {
 class App extends StatelessWidget {
   final AuthenticationBloc authenticationBloc;
 
-  const App({
-    Key key,
-    @required this.authenticationBloc,
-  }) : super(key: key);
+  App({Key key, @required this.authenticationBloc}) : super(key: key) {
+    authenticationBloc.onAppStart();
+  }
 
   @override
   Widget build(BuildContext context) {
-    authenticationBloc.onAppStart();
-
     return BlocProvider<AuthenticationBloc>(
       bloc: authenticationBloc,
       child: MaterialApp(
@@ -38,20 +35,20 @@ class App extends StatelessWidget {
   Widget _rootPage() {
     return BlocBuilder<AuthenticationEvent, AuthenticationState>(
       bloc: authenticationBloc,
-      builder: (BuildContext context, AuthenticationState authState) {
+      builder: (BuildContext context, AuthenticationState state) {
         List<Widget> _widgets = [];
 
-        if (authState.isAuthenticated) {
+        if (state.isAuthenticated) {
           _widgets.add(HomePage());
         } else {
           _widgets.add(LoginPage());
         }
 
-        if (authState.isInitializing) {
+        if (state.isInitializing) {
           _widgets.add(SplashPage());
         }
 
-        if (authState.isLoading) {
+        if (state.isLoading) {
           _widgets.add(_loadingIndicator());
         }
 
