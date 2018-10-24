@@ -71,3 +71,7 @@ Moved Flutter Widgets to flutter_bloc package
 # 0.5.1
 
 Minor Updates to Documentation
+
+# 0.5.2
+
+Additional minor Updates to Documentation.

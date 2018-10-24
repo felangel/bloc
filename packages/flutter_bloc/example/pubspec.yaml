@@ -8,3 +8,6 @@ environment:
 dependencies:
   flutter_bloc:
     path: ../
+
+flutter:
+  uses-material-design: true

@@ -19,7 +19,7 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: BlocProvider(
+      home: BlocProvider<CounterBloc>(
         bloc: _counterBloc,
         child: CounterPage(),
       ),
@@ -30,7 +30,7 @@ class MyAppState extends State<MyApp> {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final CounterBloc _counterBloc = BlocProvider.of(context) as CounterBloc;
+    final CounterBloc _counterBloc = BlocProvider.of<CounterBloc>(context);
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),

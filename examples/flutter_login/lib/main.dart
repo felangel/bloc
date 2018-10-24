@@ -8,22 +8,18 @@ import 'package:flutter_login/login/login.dart';
 import 'package:flutter_login/home/home.dart';
 
 void main() {
-  final loginBloc = LoginBloc();
   final authenticationBloc = AuthenticationBloc();
 
   runApp(App(
-    loginBloc: loginBloc,
     authenticationBloc: authenticationBloc,
   ));
 }
 
 class App extends StatelessWidget {
-  final LoginBloc loginBloc;
   final AuthenticationBloc authenticationBloc;
 
   const App({
     Key key,
-    @required this.loginBloc,
     @required this.authenticationBloc,
   }) : super(key: key);
 
@@ -48,7 +44,7 @@ class App extends StatelessWidget {
         if (authState.isAuthenticated) {
           _widgets.add(HomePage());
         } else {
-          _widgets.add(_loginPage());
+          _widgets.add(LoginPage());
         }
 
         if (authState.isInitializing) {
@@ -66,19 +62,12 @@ class App extends StatelessWidget {
     );
   }
 
-  Widget _loginPage() {
-    return BlocProvider<LoginBloc>(
-      bloc: loginBloc,
-      child: LoginPage(),
-    );
-  }
-
   Widget _loadingIndicator() {
     return Stack(
-      children: [
+      children: <Widget>[
         Opacity(
           opacity: 0.3,
-          child: const ModalBarrier(dismissible: false, color: Colors.grey),
+          child: ModalBarrier(dismissible: false, color: Colors.grey),
         ),
         Center(
           child: CircularProgressIndicator(),

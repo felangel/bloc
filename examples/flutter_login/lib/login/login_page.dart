@@ -5,7 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_login/login/login.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  State<LoginPage> createState() => LoginPageState();
+}
+
+class LoginPageState extends State<LoginPage> {
+  final LoginBloc _loginBloc = LoginBloc();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,8 +21,14 @@ class LoginPage extends StatelessWidget {
       ),
       body: LoginForm(
         authBloc: BlocProvider.of<AuthenticationBloc>(context),
-        loginBloc: BlocProvider.of<LoginBloc>(context),
+        loginBloc: _loginBloc,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _loginBloc.dispose();
+    super.dispose();
   }
 }
