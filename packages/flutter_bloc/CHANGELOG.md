@@ -15,8 +15,12 @@ Updates to `BlocBuilder` and `BlocProvider`
 
 - `BlocBuilder` does not automatically dispose a `Bloc`. Developers are now responsible for determining when to call `Bloc.dispose()`
 - `BlocProvider` support for `of(context)` with generics
-    - Support for multiple nested `BlocProviders` with different Bloc Types.
+  - Support for multiple nested `BlocProviders` with different Bloc Types.
 
 # 0.2.1
 
 Minor Updates to Documentation
+
+# 0.3.0
+
+Updated to `bloc: ^0.6.0`

@@ -101,6 +101,9 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 class SimpleBloc extends Bloc<dynamic, String> {
   @override
+  String get initialState => '';
+
+  @override
   Stream<String> mapEventToState(String state, dynamic event) async* {
     yield 'state';
   }

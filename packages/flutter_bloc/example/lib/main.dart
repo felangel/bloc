@@ -71,19 +71,31 @@ class CounterPage extends StatelessWidget {
 
 abstract class CounterEvent {}
 
-class IncrementCounter extends CounterEvent {}
+class IncrementCounter extends CounterEvent {
+  @override
+  String toString() => 'IncrementCounter';
+}
 
-class DecrementCounter extends CounterEvent {}
+class DecrementCounter extends CounterEvent {
+  @override
+  String toString() => 'DecrementCounter';
+}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  int get initialState => 0;
-
   void increment() {
     dispatch(IncrementCounter());
   }
 
   void decrement() {
     dispatch(DecrementCounter());
+  }
+
+  @override
+  int get initialState => 0;
+
+  @override
+  void onTransition(Transition<CounterEvent, int> transition) {
+    print(transition.toString());
   }
 
   @override
