@@ -7,7 +7,7 @@
 
 ---
 
-A collection of packages that helps implement the [Bloc pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
+A collection of packages that help implement the [Bloc pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
 
 | Package | Pub |
 |--------|-----|
