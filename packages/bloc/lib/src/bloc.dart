@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 
+import 'package:bloc/bloc.dart';
+
 /// Takes a [Stream] of events as input
 /// and transforms them into a [Stream] of states as output.
 abstract class Bloc<E, S> {
@@ -14,11 +16,17 @@ abstract class Bloc<E, S> {
   Stream<S> get state => _stateSubject;
 
   /// Returns the state before any events have been `dispatched`.
-  S get initialState => null;
+  S get initialState;
 
   Bloc() {
     _bindStateSubject();
   }
+
+  /// Called whenever a transition occurs with the given [Transition].
+  /// A [Transition] occurs when a new [Event] is dispatched and `mapEventToState` executed.
+  /// `onTransition` is called before a [Bloc]'s state has been updated.
+  /// A great spot to add logging/analytics.
+  void onTransition(Transition<E, S> transition) => null;
 
   /// Takes an event and triggers `mapEventToState`.
   /// `Dispatch` may be called from the presentation layer or from within the Bloc.
@@ -46,13 +54,23 @@ abstract class Bloc<E, S> {
   Stream<S> mapEventToState(S state, E event);
 
   void _bindStateSubject() {
-    (transform(_eventSubject) as Observable<E>)
-        .concatMap(
-      (E event) => mapEventToState(_stateSubject.value ?? initialState, event),
-    )
-        .forEach(
-      (S state) {
-        _stateSubject.add(state);
+    E currentEvent;
+    S currentState;
+
+    (transform(_eventSubject) as Observable<E>).concatMap((E event) {
+      currentEvent = event;
+      currentState = _stateSubject.value ?? initialState;
+      return mapEventToState(currentState, event);
+    }).forEach(
+      (S nextState) {
+        onTransition(
+          Transition(
+            currentState: currentState,
+            event: currentEvent,
+            nextState: nextState,
+          ),
+        );
+        _stateSubject.add(nextState);
       },
     );
   }

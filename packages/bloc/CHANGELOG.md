@@ -75,3 +75,10 @@ Minor Updates to Documentation
 # 0.5.2
 
 Additional minor Updates to Documentation.
+
+# 0.6.0
+
+`Transitions` and `initialState` updates.
+
+- Added `Transition`s and `onTransition`
+- Made `initialState` required

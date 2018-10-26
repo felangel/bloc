@@ -26,15 +26,19 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **States** are the output of a Bloc. Presentation components can listen to the stream of states and redraw portions of themselves based on the given state (see `BlocBuilder` for more details).
 
+**Transitions** occur when an `Event` is `dispatched` after `mapEventToState` has been called but before the `Bloc`'s state has been updated. A `Transition` consists of the currentState, the event which was dispatched, and the nextState.
+
 ## Bloc Interface
+
+**initialState** is the state before any events have been processed (before `mapEventToState` has ever been called). `initialState` **must be implemented**.
 
 **mapEventToState** is a method that **must be implemented** when a class extends `Bloc`. The function takes two arguments: state and event. `mapEventToState` is called whenever an event is `dispatched` by the presentation layer. `mapEventToState` must convert that event, along with the current state, into a new state and return the new state in the form of a `Stream` which is consumed by the presentation layer.
 
 **dispatch** is a method that takes an `event` and triggers `mapEventToState`. `dispatch` may be called from the presentation layer or from within the Bloc (see examples) and notifies the Bloc of a new `event`.
 
-**initialState** is the state before any events have been processed (before `mapEventToState` has ever been called). `initialState` is an optional getter. If unimplemented, initialState will be `null`.
-
 **transform** is a method that can be overridden to transform the `Stream<Event>` before `mapEventToState` is called. This allows for operations like `distinct()` and `debounce()` to be used.
+
+**onTransition** is a method that can be overridden to handle whenever a `Transition` occurs. A `Transition` occurs when a new `Event` is dispatched and `mapEventToState` is called. `onTransition` is called before a `Bloc`'s state has been updated. **It is a great place to add logging/analytics**.
 
 ## Usage
 
@@ -42,6 +46,9 @@ For simplicity we can create a Bloc that always returns a stream of static strin
 
 ```dart
 class SimpleBloc extends Bloc<dynamic, String> {
+  @override
+  String get initialState => '';
+
   @override
   Stream<String> mapEventToState(String state, dynamic event) async* {
     yield 'data';

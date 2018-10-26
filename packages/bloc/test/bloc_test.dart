@@ -6,6 +6,9 @@ import 'package:bloc/bloc.dart';
 
 class SimpleBloc extends Bloc<dynamic, String> {
   @override
+  String get initialState => '';
+
+  @override
   Stream<String> mapEventToState(String state, dynamic event) {
     return Observable.just('data');
   }
@@ -166,6 +169,8 @@ class IncrementCounter extends CounterEvent {
 
   @override
   int get hashCode => 7;
+
+  String toString() => 'IncrementCounter';
 }
 
 class DecrementCounter extends CounterEvent {
@@ -181,10 +186,19 @@ class DecrementCounter extends CounterEvent {
 
   @override
   int get hashCode => 8;
+
+  @override
+  String toString() => 'DecrementCounter';
 }
+
+typedef OnTransitionCallback = Function(Transition<CounterEvent, int>);
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   int get initialState => 0;
+
+  final OnTransitionCallback onTransitionCallback;
+
+  CounterBloc([this.onTransitionCallback]);
 
   @override
   Stream<int> mapEventToState(int state, CounterEvent event) async* {
@@ -194,6 +208,11 @@ class CounterBloc extends Bloc<CounterEvent, int> {
     if (event is DecrementCounter) {
       yield state - 1;
     }
+  }
+
+  @override
+  void onTransition(Transition<CounterEvent, int> transition) {
+    onTransitionCallback(transition);
   }
 
   @override
@@ -228,8 +247,8 @@ void main() {
         simpleBloc.dispose();
       });
 
-      test('initialState returns null when not implemented', () {
-        expect(simpleBloc.initialState, null);
+      test('initialState returns correct value', () {
+        expect(simpleBloc.initialState, '');
       });
 
       test('should map single event to correct state', () {
@@ -302,24 +321,36 @@ void main() {
 
     group('CounterBloc', () {
       CounterBloc counterBloc;
+      List<String> transitions;
+
+      final OnTransitionCallback onTransitionCallback = (transition) {
+        transitions.add(transition.toString());
+      };
 
       setUp(() {
-        counterBloc = CounterBloc();
+        transitions = [];
+        counterBloc = CounterBloc(onTransitionCallback);
       });
 
       test('initial state is 0', () {
         expect(counterBloc.initialState, 0);
+        expect(transitions.isEmpty, true);
       });
 
       test('single IncrementCounter event updates state to 1', () {
         final List<int> expected = [
           1,
         ];
+        final expectedTransitions = [
+          'Transition { currentState: 0, event: IncrementCounter, nextState: 1 }'
+        ];
 
         expectLater(
           counterBloc.state,
           emitsInOrder(expected),
-        );
+        ).then((dynamic _) {
+          expectLater(transitions, expectedTransitions);
+        });
 
         counterBloc.dispatch(IncrementCounter());
       });
@@ -330,11 +361,18 @@ void main() {
           2,
           3,
         ];
+        final expectedTransitions = [
+          'Transition { currentState: 0, event: IncrementCounter, nextState: 1 }',
+          'Transition { currentState: 1, event: IncrementCounter, nextState: 2 }',
+          'Transition { currentState: 2, event: IncrementCounter, nextState: 3 }',
+        ];
 
         expectLater(
           counterBloc.state,
           emitsInOrder(expected),
-        );
+        ).then((dynamic _) {
+          expect(transitions, expectedTransitions);
+        });
 
         counterBloc.dispatch(IncrementCounter());
         counterBloc.dispatch(IncrementCounter());

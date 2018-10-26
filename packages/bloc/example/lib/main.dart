@@ -4,13 +4,17 @@ import 'package:bloc/bloc.dart';
 
 abstract class CounterEvent {}
 
-class IncrementCounter extends CounterEvent {}
+class IncrementCounter extends CounterEvent {
+  @override
+  String toString() => 'IncrementCounter';
+}
 
-class DecrementCounter extends CounterEvent {}
+class DecrementCounter extends CounterEvent {
+  @override
+  String toString() => 'DecrementCounter';
+}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  int get initialState => 0;
-
   void increment() {
     dispatch(IncrementCounter());
   }
@@ -20,13 +24,23 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 
   @override
-  Stream<int> mapEventToState(int state, CounterEvent event) async* {
-    print('event: ${event.runtimeType}');
+  int get initialState => 0;
 
+  @override
+  void onTransition(Transition<CounterEvent, int> transition) {
+    print(transition.toString());
+  }
+
+  @override
+  Stream<int> mapEventToState(int state, CounterEvent event) async* {
     if (event is IncrementCounter) {
+      /// Simulating Network Latency etc...
+      await Future<void>.delayed(Duration(seconds: 1));
       yield state + 1;
     }
     if (event is DecrementCounter) {
+      /// Simulating Network Latency etc...
+      await Future<void>.delayed(Duration(milliseconds: 500));
       yield state - 1;
     }
   }
@@ -35,29 +49,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 void main() async {
   final counterBloc = CounterBloc();
 
-  counterBloc.state.listen((state) {
-    print('state: ${state.toString()}');
-  });
-
-  print('initialState: ${counterBloc.initialState}');
-
   // Increment Phase
   counterBloc.dispatch(IncrementCounter());
-  await Future<void>.delayed(Duration(seconds: 1));
-
   counterBloc.dispatch(IncrementCounter());
-  await Future<void>.delayed(Duration(seconds: 1));
-
   counterBloc.dispatch(IncrementCounter());
-  await Future<void>.delayed(Duration(seconds: 1));
 
   // Decrement Phase
   counterBloc.dispatch(DecrementCounter());
-  await Future<void>.delayed(Duration(seconds: 1));
-
   counterBloc.dispatch(DecrementCounter());
-  await Future<void>.delayed(Duration(seconds: 1));
-
   counterBloc.dispatch(DecrementCounter());
-  await Future<void>.delayed(Duration(seconds: 1));
 }
