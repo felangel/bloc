@@ -6,8 +6,8 @@
 .dart_tool/
 .pub/
 build/
-ios/
-android/
+packages/**/ios/
+packages/**/android/
 doc/api/
 pubspec.lock
 .flutter-plugins
