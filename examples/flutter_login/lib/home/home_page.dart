@@ -7,7 +7,7 @@ import 'package:flutter_login/authentication/authentication.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final AuthenticationBloc _authenticationBloc =
+    final AuthenticationBloc authenticationBloc =
         BlocProvider.of<AuthenticationBloc>(context);
 
     return Scaffold(
@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
             child: RaisedButton(
           child: Text('logout'),
           onPressed: () {
-            _authenticationBloc.onLogout();
+            authenticationBloc.onLogout();
           },
         )),
       ),

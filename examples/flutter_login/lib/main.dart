@@ -8,24 +8,31 @@ import 'package:flutter_login/login/login.dart';
 import 'package:flutter_login/home/home.dart';
 
 void main() {
-  final authenticationBloc = AuthenticationBloc();
-
-  runApp(App(
-    authenticationBloc: authenticationBloc,
-  ));
+  runApp(App());
 }
 
-class App extends StatelessWidget {
-  final AuthenticationBloc authenticationBloc;
+class App extends StatefulWidget {
+  @override
+  State<App> createState() => AppState();
+}
 
-  App({Key key, @required this.authenticationBloc}) : super(key: key) {
-    authenticationBloc.onAppStart();
+class AppState extends State<App> {
+  final AuthenticationBloc _authenticationBloc = AuthenticationBloc();
+
+  AppState() {
+    _authenticationBloc.onAppStart();
+  }
+
+  @override
+  void dispose() {
+    _authenticationBloc.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AuthenticationBloc>(
-      bloc: authenticationBloc,
+      bloc: _authenticationBloc,
       child: MaterialApp(
         home: _rootPage(),
       ),
@@ -34,26 +41,26 @@ class App extends StatelessWidget {
 
   Widget _rootPage() {
     return BlocBuilder<AuthenticationEvent, AuthenticationState>(
-      bloc: authenticationBloc,
+      bloc: _authenticationBloc,
       builder: (BuildContext context, AuthenticationState state) {
-        List<Widget> _widgets = [];
+        List<Widget> widgets = [];
 
         if (state.isAuthenticated) {
-          _widgets.add(HomePage());
+          widgets.add(HomePage());
         } else {
-          _widgets.add(LoginPage());
+          widgets.add(LoginPage());
         }
 
         if (state.isInitializing) {
-          _widgets.add(SplashPage());
+          widgets.add(SplashPage());
         }
 
         if (state.isLoading) {
-          _widgets.add(_loadingIndicator());
+          widgets.add(_loadingIndicator());
         }
 
         return Stack(
-          children: _widgets,
+          children: widgets,
         );
       },
     );

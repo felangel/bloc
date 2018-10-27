@@ -6,46 +6,49 @@ import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_login/login/login.dart';
 
 class LoginForm extends StatefulWidget {
-  final LoginBloc loginBloc;
-  final AuthenticationBloc authBloc;
+  final LoginBloc _loginBloc;
+  final AuthenticationBloc _authBloc;
 
   LoginForm({
     Key key,
-    @required this.loginBloc,
-    @required this.authBloc,
-  }) : super(key: key);
+    @required LoginBloc loginBloc,
+    @required AuthenticationBloc authBloc,
+  })  : _loginBloc = loginBloc,
+        _authBloc = authBloc,
+        super(key: key);
 
   @override
   State<LoginForm> createState() {
     return LoginFormState(
-      loginBloc: loginBloc,
-      authBloc: authBloc,
+      loginBloc: _loginBloc,
+      authBloc: _authBloc,
     );
   }
 }
 
 class LoginFormState extends State<LoginForm> {
-  final LoginBloc loginBloc;
-  final AuthenticationBloc authBloc;
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+  final LoginBloc _loginBloc;
+  final AuthenticationBloc _authBloc;
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   LoginFormState({
-    @required this.loginBloc,
-    @required this.authBloc,
-  });
+    @required LoginBloc loginBloc,
+    @required AuthenticationBloc authBloc,
+  })  : _loginBloc = loginBloc,
+        _authBloc = authBloc;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginEvent, LoginState>(
-      bloc: loginBloc,
+      bloc: _loginBloc,
       builder: (
         BuildContext context,
         LoginState loginState,
       ) {
         if (_loginSucceeded(loginState)) {
-          authBloc.onLogin(token: loginState.token);
-          loginBloc.onLoginSuccess();
+          _authBloc.onLogin(token: loginState.token);
+          _loginBloc.onLoginSuccess();
         }
 
         if (_loginFailed(loginState)) {
@@ -70,11 +73,11 @@ class LoginFormState extends State<LoginForm> {
         children: [
           TextFormField(
             decoration: InputDecoration(labelText: 'username'),
-            controller: usernameController,
+            controller: _usernameController,
           ),
           TextFormField(
             decoration: InputDecoration(labelText: 'password'),
-            controller: passwordController,
+            controller: _passwordController,
             obscureText: true,
           ),
           RaisedButton(
@@ -100,9 +103,9 @@ class LoginFormState extends State<LoginForm> {
   }
 
   _onLoginButtonPressed() {
-    loginBloc.onLoginButtonPressed(
-      username: usernameController.text,
-      password: passwordController.text,
+    _loginBloc.onLoginButtonPressed(
+      username: _usernameController.text,
+      password: _passwordController.text,
     );
   }
 }
