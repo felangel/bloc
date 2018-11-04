@@ -1,10 +1,12 @@
 language: dart
 os:
   - linux
-sudo: false
+sudo: required
+dist: trusty
 dart:
 - 2.0.0-dev.69.5
 addons:
+  chrome: stable
   apt:
     sources:
       - ubuntu-toolchain-r-test

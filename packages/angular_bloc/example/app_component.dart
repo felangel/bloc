@@ -8,7 +8,7 @@ import 'package:bloc/bloc.dart';
 
 @Component(
   selector: 'my-app',
-  templateUrl: '<counter-page></counter-page>',
+  template: '<counter-page></counter-page>',
   directives: [CounterPageComponent],
 )
 class AppComponent {}
