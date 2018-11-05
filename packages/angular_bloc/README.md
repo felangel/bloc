@@ -22,7 +22,7 @@ Lets take a look at how to use `BlocPipe` to hook up a `CounterPage` html templa
 
 counter_page_component.html
 ```html
-  <div class="counter-page-container">
+<div class="counter-page-container">
     <h1>Counter App</h1>
     <h2>Current Count: {{ counterBloc | bloc }}</h2>
     <material-fab class="counter-fab-button" (trigger)="increment()">+</material-fab>
@@ -77,7 +77,7 @@ At this point we have sucessfully separated our presentational layer from our bu
 
 ## Examples
 
-- [Simple Counter Example](https://github.com/felangel/Bloc/tree/master/packages/angular_bloc/example) - an complete example of how to create a `CounterBloc` and hook it up to an AngularDart app.
+- [Simple Counter Example](https://github.com/felangel/Bloc/tree/master/packages/angular_bloc/example) - a complete example of how to create a `CounterBloc` and hook it up to an AngularDart app.
 
 ### Contributors
 

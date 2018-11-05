@@ -36,7 +36,9 @@ The goal of this package is to make it easy to separate _presentation_ from _bus
 
 - [Simple Counter Example](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example) - an example of how to create a `CounterBloc` to implement the classic Flutter Counter app.
 - [Login Flow Example](https://github.com/felangel/Bloc/tree/master/examples/flutter_login) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a Login Flow.
-- [AngularDart Counter Example](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - an example of how to use a `CounterBloc` in an AngularDart app.
+
+### Web
+- [Counter Example](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - an example of how to use a `CounterBloc` in an AngularDart app.
 
 ## Articles
 
