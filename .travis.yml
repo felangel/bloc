@@ -1,10 +1,12 @@
 language: dart
 os:
   - linux
-sudo: false
+sudo: required
+dist: trusty
 dart:
-- 2.0.0-dev.69.1
+- 2.0.0-dev.69.5
 addons:
+  chrome: stable
   apt:
     sources:
       - ubuntu-toolchain-r-test
@@ -19,6 +21,11 @@ script:
   - pub get
   - pub run test_coverage
   - cp coverage/lcov.info ../../bloc.lcov
+  - cd ../angular_bloc
+  - pub get
+  - pub global activate webdev
+  - webdev build
+  - pub run build_runner test --fail-on-severe
   - cd ../flutter_bloc
   - ../../flutter/bin/flutter test --coverage --coverage-path=../../flutter_bloc.lcov
 after_success:

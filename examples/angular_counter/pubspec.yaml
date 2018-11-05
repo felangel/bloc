@@ -1,0 +1,22 @@
+name: angular_counter
+description: A web app that uses AngularDart Components
+# version: 1.0.0
+# homepage: https://www.example.com
+# author: Felix Angelov <email@example.com>
+
+environment:
+  sdk: '>=2.0.0 <3.0.0'
+
+dependencies:
+  angular: ^5.0.0
+  angular_components: ^0.9.0
+  bloc: ^0.6.0
+  angular_bloc:
+    path: ../../packages/angular_bloc
+
+dev_dependencies:
+  angular_test: ^2.0.0
+  build_runner: ^0.10.0
+  build_test: ^0.10.2
+  build_web_compilers: ^0.4.0
+  test: ^1.0.0
