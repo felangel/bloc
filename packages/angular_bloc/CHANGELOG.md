@@ -2,4 +2,4 @@
 
 Initial Version of the library.
 
-- Includes the ability to connect presentation layer to `Bloc` by using the `BlocPipe` Widget.
+- Includes the ability to connect presentation layer to `Bloc` by using the `BlocPipe` Component.
