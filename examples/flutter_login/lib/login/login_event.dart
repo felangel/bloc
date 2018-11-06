@@ -12,6 +12,17 @@ class LoginButtonPressed extends LoginEvent {
     @required this.username,
     @required this.password,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LoginButtonPressed &&
+          runtimeType == other.runtimeType &&
+          username == other.username &&
+          password == other.password;
+
+  @override
+  int get hashCode => username.hashCode ^ password.hashCode;
 }
 
 class LoggedIn extends LoginEvent {}

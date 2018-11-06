@@ -50,6 +50,28 @@ class LoginState {
   }
 
   @override
+  bool operator ==(
+    Object other,
+  ) =>
+      identical(
+        this,
+        other,
+      ) ||
+      other is LoginState &&
+          runtimeType == other.runtimeType &&
+          isLoading == other.isLoading &&
+          isLoginButtonEnabled == other.isLoginButtonEnabled &&
+          error == other.error &&
+          token == other.token;
+
+  @override
+  int get hashCode =>
+      isLoading.hashCode ^
+      isLoginButtonEnabled.hashCode ^
+      error.hashCode ^
+      token.hashCode;
+
+  @override
   String toString() =>
       'LoginState { isLoading: $isLoading, isLoginButtonEnabled: $isLoginButtonEnabled, error: $error, token: $token }';
 }

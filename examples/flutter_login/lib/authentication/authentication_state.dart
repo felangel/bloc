@@ -48,6 +48,24 @@ class AuthenticationState {
   }
 
   @override
+  bool operator ==(
+    Object other,
+  ) =>
+      identical(
+        this,
+        other,
+      ) ||
+      other is AuthenticationState &&
+          runtimeType == other.runtimeType &&
+          isInitializing == other.isInitializing &&
+          isAuthenticated == other.isAuthenticated &&
+          isLoading == other.isLoading;
+
+  @override
+  int get hashCode =>
+      isInitializing.hashCode ^ isAuthenticated.hashCode ^ isLoading.hashCode;
+
+  @override
   String toString() =>
       'AuthenticationState { isInitializing: $isInitializing, isLoading: $isLoading, isAuthenticated: $isAuthenticated }';
 }
