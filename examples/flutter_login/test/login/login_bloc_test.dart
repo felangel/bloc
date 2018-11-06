@@ -21,7 +21,7 @@ void main() {
     loginBloc.dispose();
   });
 
-  group('onLoginButtonClicked', () {
+  group('LoginButtonPressed', () {
     test('emits token on success', () {
       final expectedResponse = [
         LoginState.loading(),
