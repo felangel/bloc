@@ -10,15 +10,13 @@ import './counter_bloc.dart';
   templateUrl: 'counter_page_component.html',
   styleUrls: ['counter_page_component.css'],
   directives: [MaterialFabComponent],
+  providers: [ClassProvider(CounterBloc)],
   pipes: [BlocPipe],
 )
-class CounterPageComponent implements OnInit, OnDestroy {
-  CounterBloc counterBloc;
+class CounterPageComponent implements OnDestroy {
+  final CounterBloc counterBloc;
 
-  @override
-  void ngOnInit() {
-    counterBloc = CounterBloc();
-  }
+  CounterPageComponent(this.counterBloc) {}
 
   @override
   void ngOnDestroy() {

@@ -39,6 +39,7 @@ The goal of this package is to make it easy to separate _presentation_ from _bus
 
 ### Web
 - [Counter Example](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - an example of how to use a `CounterBloc` in an AngularDart app.
+- [Github Search](https://github.com/felangel/Bloc/tree/master/examples/angular_github_search) - an example of how to create a Github Search Application using the `bloc` and `angular_bloc` packages.
 
 ## Articles
 
