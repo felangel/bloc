@@ -7,3 +7,7 @@ Initial Version of the library.
 # 0.1.1
 
 Minor Updates to Documentation
+
+# 0.1.2
+
+Minor Updates to Documentation
