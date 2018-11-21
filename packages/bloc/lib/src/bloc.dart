@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
-
 import 'package:bloc/bloc.dart';
 
 /// Takes a [Stream] of events as input
@@ -63,13 +62,13 @@ abstract class Bloc<E, S> {
       return mapEventToState(currentState, event);
     }).forEach(
       (S nextState) {
-        onTransition(
-          Transition(
-            currentState: currentState,
-            event: currentEvent,
-            nextState: nextState,
-          ),
+        final transition = Transition(
+          currentState: currentState,
+          event: currentEvent,
+          nextState: nextState,
         );
+        BlocSupervisor().delegate?.onTransition(transition);
+        onTransition(transition);
         _stateSubject.add(nextState);
       },
     );

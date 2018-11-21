@@ -1,239 +1,23 @@
-import 'dart:async';
-
-import 'package:rxdart/rxdart.dart';
 import 'package:test/test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:bloc/bloc.dart';
 
-class SimpleBloc extends Bloc<dynamic, String> {
-  @override
-  String get initialState => '';
+import './helpers/helpers.dart';
 
-  @override
-  Stream<String> mapEventToState(String state, dynamic event) {
-    return Observable.just('data');
-  }
-}
-
-abstract class ComplexState {}
-
-class ComplexStateA extends ComplexState {
-  @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is ComplexStateA && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => 0;
-}
-
-class ComplexStateB extends ComplexState {
-  @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is ComplexStateB && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => 1;
-}
-
-class ComplexStateC extends ComplexState {
-  @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is ComplexStateC && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => 2;
-}
-
-class ComplexStateUnknown extends ComplexState {
-  @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is ComplexStateUnknown && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => 3;
-}
-
-abstract class BlocEvent {}
-
-class EventA extends BlocEvent {
-  @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is EventA && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => 4;
-}
-
-class EventB extends BlocEvent {
-  @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is EventB && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => 5;
-}
-
-class EventC extends BlocEvent {
-  @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is EventC && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => 6;
-}
-
-class ComplexBloc extends Bloc<BlocEvent, ComplexState> {
-  ComplexState get initialState => ComplexStateA();
-
-  @override
-  Stream<BlocEvent> transform(Stream<BlocEvent> events) {
-    return events.distinct();
-  }
-
-  @override
-  Stream<ComplexState> mapEventToState(ComplexState state, BlocEvent event) {
-    if (event is EventA) {
-      return Observable.just(ComplexStateA());
-    }
-    if (event is EventB) {
-      return Observable.just(ComplexStateB());
-    }
-    return Observable.just(ComplexStateC());
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ComplexBloc &&
-          runtimeType == other.runtimeType &&
-          initialState == other.initialState;
-
-  @override
-  int get hashCode =>
-      initialState.hashCode ^ mapEventToState.hashCode ^ transform.hashCode;
-}
-
-abstract class CounterEvent {}
-
-class IncrementCounter extends CounterEvent {
-  @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is IncrementCounter && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => 7;
-
-  String toString() => 'IncrementCounter';
-}
-
-class DecrementCounter extends CounterEvent {
-  @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is DecrementCounter && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => 8;
-
-  @override
-  String toString() => 'DecrementCounter';
-}
-
-typedef OnTransitionCallback = Function(Transition<CounterEvent, int>);
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-  int get initialState => 0;
-
-  final OnTransitionCallback onTransitionCallback;
-
-  CounterBloc([this.onTransitionCallback]);
-
-  @override
-  Stream<int> mapEventToState(int state, CounterEvent event) async* {
-    if (event is IncrementCounter) {
-      yield state + 1;
-    }
-    if (event is DecrementCounter) {
-      yield state - 1;
-    }
-  }
-
-  @override
-  void onTransition(Transition<CounterEvent, int> transition) {
-    onTransitionCallback(transition);
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is CounterBloc &&
-          runtimeType == other.runtimeType &&
-          initialState == other.initialState;
-
-  @override
-  int get hashCode =>
-      initialState.hashCode ^ mapEventToState.hashCode ^ transform.hashCode;
-}
+class MockBlocDelegate extends Mock implements BlocDelegate {}
 
 void main() {
   group('Bloc Tests', () {
     group('Simple Bloc', () {
       SimpleBloc simpleBloc;
+      MockBlocDelegate delegate;
 
       setUp(() {
         simpleBloc = SimpleBloc();
+        delegate = MockBlocDelegate();
+        when(delegate.onTransition(any)).thenReturn(null);
+
+        BlocSupervisor().delegate = delegate;
       });
 
       test('dispose does not emit new states over the state stream', () {
@@ -254,7 +38,17 @@ void main() {
       test('should map single event to correct state', () {
         final List<String> expected = ['data'];
 
-        expectLater(simpleBloc.state, emitsInOrder(expected));
+        expectLater(simpleBloc.state, emitsInOrder(expected)).then((dynamic _) {
+          verify(
+            delegate.onTransition(
+              Transition<dynamic, String>(
+                currentState: '',
+                event: 'event',
+                nextState: 'data',
+              ),
+            ),
+          ).called(1);
+        });
 
         simpleBloc.dispatch('event');
       });
@@ -262,7 +56,35 @@ void main() {
       test('should map multiple events to correct states', () {
         final List<String> expected = ['data', 'data', 'data'];
 
-        expectLater(simpleBloc.state, emitsInOrder(expected));
+        expectLater(simpleBloc.state, emitsInOrder(expected)).then((dynamic _) {
+          verify(
+            delegate.onTransition(
+              Transition<dynamic, String>(
+                currentState: '',
+                event: 'event1',
+                nextState: 'data',
+              ),
+            ),
+          ).called(1);
+          verify(
+            delegate.onTransition(
+              Transition<dynamic, String>(
+                currentState: 'data',
+                event: 'event2',
+                nextState: 'data',
+              ),
+            ),
+          ).called(1);
+          verify(
+            delegate.onTransition(
+              Transition<dynamic, String>(
+                currentState: 'data',
+                event: 'event3',
+                nextState: 'data',
+              ),
+            ),
+          ).called(1);
+        });
 
         simpleBloc.dispatch('event1');
         simpleBloc.dispatch('event2');
@@ -272,9 +94,14 @@ void main() {
 
     group('Complex Bloc', () {
       ComplexBloc complexBloc;
+      MockBlocDelegate delegate;
 
       setUp(() {
         complexBloc = ComplexBloc();
+        delegate = MockBlocDelegate();
+        when(delegate.onTransition(any)).thenReturn(null);
+
+        BlocSupervisor().delegate = delegate;
       });
 
       test('dispose does not emit new states over the state stream', () {
@@ -295,7 +122,18 @@ void main() {
       test('should map single event to correct state', () {
         final List<ComplexState> expected = [ComplexStateA()];
 
-        expectLater(complexBloc.state, emitsInOrder(expected));
+        expectLater(complexBloc.state, emitsInOrder(expected))
+            .then((dynamic _) {
+          verify(
+            delegate.onTransition(
+              Transition<BlocEvent, ComplexState>(
+                currentState: ComplexStateA(),
+                event: EventA(),
+                nextState: ComplexStateA(),
+              ),
+            ),
+          ).called(1);
+        });
 
         complexBloc.dispatch(EventA());
       });
@@ -310,7 +148,35 @@ void main() {
         expectLater(
           complexBloc.state,
           emitsInOrder(expected),
-        );
+        ).then((dynamic _) {
+          verify(
+            delegate.onTransition(
+              Transition<BlocEvent, ComplexState>(
+                currentState: ComplexStateA(),
+                event: EventA(),
+                nextState: ComplexStateA(),
+              ),
+            ),
+          ).called(1);
+          verify(
+            delegate.onTransition(
+              Transition<BlocEvent, ComplexState>(
+                currentState: ComplexStateA(),
+                event: EventB(),
+                nextState: ComplexStateB(),
+              ),
+            ),
+          ).called(1);
+          verify(
+            delegate.onTransition(
+              Transition<BlocEvent, ComplexState>(
+                currentState: ComplexStateB(),
+                event: EventC(),
+                nextState: ComplexStateC(),
+              ),
+            ),
+          ).called(1);
+        });
 
         complexBloc.dispatch(EventA());
         complexBloc.dispatch(EventA());
@@ -321,6 +187,7 @@ void main() {
 
     group('CounterBloc', () {
       CounterBloc counterBloc;
+      MockBlocDelegate delegate;
       List<String> transitions;
 
       final OnTransitionCallback onTransitionCallback = (transition) {
@@ -330,6 +197,10 @@ void main() {
       setUp(() {
         transitions = [];
         counterBloc = CounterBloc(onTransitionCallback);
+        delegate = MockBlocDelegate();
+        when(delegate.onTransition(any)).thenReturn(null);
+
+        BlocSupervisor().delegate = delegate;
       });
 
       test('initial state is 0', () {
@@ -337,12 +208,12 @@ void main() {
         expect(transitions.isEmpty, true);
       });
 
-      test('single IncrementCounter event updates state to 1', () {
+      test('single Increment event updates state to 1', () {
         final List<int> expected = [
           1,
         ];
         final expectedTransitions = [
-          'Transition { currentState: 0, event: IncrementCounter, nextState: 1 }'
+          'Transition { currentState: 0, event: Increment, nextState: 1 }'
         ];
 
         expectLater(
@@ -350,21 +221,30 @@ void main() {
           emitsInOrder(expected),
         ).then((dynamic _) {
           expectLater(transitions, expectedTransitions);
+          verify(
+            delegate.onTransition(
+              Transition<CounterEvent, int>(
+                currentState: 0,
+                event: Increment(),
+                nextState: 1,
+              ),
+            ),
+          ).called(1);
         });
 
-        counterBloc.dispatch(IncrementCounter());
+        counterBloc.dispatch(Increment());
       });
 
-      test('multiple IncrementCounter event updates state to 3', () {
+      test('multiple Increment event updates state to 3', () {
         final List<int> expected = [
           1,
           2,
           3,
         ];
         final expectedTransitions = [
-          'Transition { currentState: 0, event: IncrementCounter, nextState: 1 }',
-          'Transition { currentState: 1, event: IncrementCounter, nextState: 2 }',
-          'Transition { currentState: 2, event: IncrementCounter, nextState: 3 }',
+          'Transition { currentState: 0, event: Increment, nextState: 1 }',
+          'Transition { currentState: 1, event: Increment, nextState: 2 }',
+          'Transition { currentState: 2, event: Increment, nextState: 3 }',
         ];
 
         expectLater(
@@ -372,11 +252,38 @@ void main() {
           emitsInOrder(expected),
         ).then((dynamic _) {
           expect(transitions, expectedTransitions);
+          verify(
+            delegate.onTransition(
+              Transition<CounterEvent, int>(
+                currentState: 0,
+                event: Increment(),
+                nextState: 1,
+              ),
+            ),
+          ).called(1);
+          verify(
+            delegate.onTransition(
+              Transition<CounterEvent, int>(
+                currentState: 1,
+                event: Increment(),
+                nextState: 2,
+              ),
+            ),
+          ).called(1);
+          verify(
+            delegate.onTransition(
+              Transition<CounterEvent, int>(
+                currentState: 2,
+                event: Increment(),
+                nextState: 3,
+              ),
+            ),
+          ).called(1);
         });
 
-        counterBloc.dispatch(IncrementCounter());
-        counterBloc.dispatch(IncrementCounter());
-        counterBloc.dispatch(IncrementCounter());
+        counterBloc.dispatch(Increment());
+        counterBloc.dispatch(Increment());
+        counterBloc.dispatch(Increment());
       });
     });
 

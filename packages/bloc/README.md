@@ -28,6 +28,10 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **Transitions** occur when an `Event` is `dispatched` after `mapEventToState` has been called but before the `Bloc`'s state has been updated. A `Transition` consists of the currentState, the event which was dispatched, and the nextState.
 
+**BlocSupervisor** oversees `Bloc`s and delegates to `BlocDelegate`.
+
+**BlocDelegate** handles events from all `Bloc`s which are delegated by the `BlocSupervisor`. Can be used to observe all `Bloc` `Transition`s. **It is a great way to handle logging/analytics universally**.
+
 ## Bloc Interface
 
 **initialState** is the state before any events have been processed (before `mapEventToState` has ever been called). `initialState` **must be implemented**.
@@ -38,11 +42,15 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **transform** is a method that can be overridden to transform the `Stream<Event>` before `mapEventToState` is called. This allows for operations like `distinct()` and `debounce()` to be used.
 
-**onTransition** is a method that can be overridden to handle whenever a `Transition` occurs. A `Transition` occurs when a new `Event` is dispatched and `mapEventToState` is called. `onTransition` is called before a `Bloc`'s state has been updated. **It is a great place to add logging/analytics**.
+**onTransition** is a method that can be overridden to handle whenever a `Transition` occurs. A `Transition` occurs when a new `Event` is dispatched and `mapEventToState` is called. `onTransition` is called before a `Bloc`'s state has been updated. **It is a great place to add bloc-specific logging/analytics**.
+
+## BlocDelegate Interface
+
+**onTransition** is a method that can be implemented to handle whenever a `Transition` occurs from **any** `Bloc`. **It is a great place to add universal logging/analytics**.
 
 ## Usage
 
-For simplicity we can create a Bloc that always returns a stream of static strings in response to any event. That would look something like:
+For simplicity we can create a `Bloc` that always returns a stream of static strings in response to any event. That would look something like:
 
 ```dart
 class SimpleBloc extends Bloc<dynamic, String> {
@@ -161,6 +169,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 }
 ```
+
+As our app grows and relies on multiple `Bloc`s, it becomes useful to see the `Transitions` for all `Bloc`s. This can easily be achieved by implementing a `BlocDelegate`.
+
+```dart
+class SimpleBlocDelegate implements BlocDelegate {
+  @override
+  void onTransition(Transition transition) {
+    print(transition.toString());
+  }
+}
+```
+
+Now that we have our `SimpleBlocDelegate`, we just need to tell the `BlocSupervisor` to use our delegate in our `main.dart`.
+
+```dart
+void main() {
+  BlocSupervisor().delegate = SimpleBlocDelegate();
+}
+```
+
+At this point, all `Bloc` `Transitions` will be reported to the `SimpleBlocDelegate`.
 
 ## Dart Versions
 
