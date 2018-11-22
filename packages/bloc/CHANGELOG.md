@@ -82,3 +82,10 @@ Additional minor Updates to Documentation.
 
 - Added `Transition`s and `onTransition`
 - Made `initialState` required
+
+# 0.7.0
+
+Added `BlocSupervisor` and `BlocDelegate`.
+
+- `BlocSupervisor` notifies `BlocDelegate` of `Transitions`
+- `BlocDelegate` exposes `onTransition` which is invoked for all `Bloc` `Transitions`.
