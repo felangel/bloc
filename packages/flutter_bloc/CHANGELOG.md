@@ -28,3 +28,7 @@ Updated to `bloc: ^0.6.0`
 # 0.3.1
 
 Minor Updates to Documentation
+
+# 0.4.0
+
+Updated to `bloc: ^0.7.0`

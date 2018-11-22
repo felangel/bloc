@@ -5,7 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() => runApp(MyApp());
+class SimpleBlocDelegate extends BlocDelegate {
+  @override
+  void onTransition(Transition transition) {
+    print(transition.toString());
+  }
+}
+
+void main() {
+  BlocSupervisor().delegate = SimpleBlocDelegate();
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -53,14 +63,18 @@ class CounterPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: Icon(Icons.add),
-              onPressed: _counterBloc.increment,
+              onPressed: () {
+                _counterBloc.dispatch(Increment());
+              },
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: Icon(Icons.remove),
-              onPressed: _counterBloc.decrement,
+              onPressed: () {
+                _counterBloc.dispatch(Decrement());
+              },
             ),
           ),
         ],
@@ -71,39 +85,26 @@ class CounterPage extends StatelessWidget {
 
 abstract class CounterEvent {}
 
-class IncrementCounter extends CounterEvent {
+class Increment extends CounterEvent {
   @override
-  String toString() => 'IncrementCounter';
+  String toString() => 'Increment';
 }
 
-class DecrementCounter extends CounterEvent {
+class Decrement extends CounterEvent {
   @override
-  String toString() => 'DecrementCounter';
+  String toString() => 'Decrement';
 }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  void increment() {
-    dispatch(IncrementCounter());
-  }
-
-  void decrement() {
-    dispatch(DecrementCounter());
-  }
-
   @override
   int get initialState => 0;
 
   @override
-  void onTransition(Transition<CounterEvent, int> transition) {
-    print(transition.toString());
-  }
-
-  @override
   Stream<int> mapEventToState(int state, CounterEvent event) async* {
-    if (event is IncrementCounter) {
+    if (event is Increment) {
       yield state + 1;
     }
-    if (event is DecrementCounter) {
+    if (event is Decrement) {
       yield state - 1;
     }
   }
