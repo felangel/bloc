@@ -19,11 +19,6 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   int get initialState => 0;
 
   @override
-  void onTransition(Transition<CounterEvent, int> transition) {
-    print(transition.toString());
-  }
-
-  @override
   Stream<int> mapEventToState(int state, CounterEvent event) async* {
     if (event is Increment) {
       yield state + 1;

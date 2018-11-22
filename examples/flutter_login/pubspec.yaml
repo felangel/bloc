@@ -8,7 +8,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.3.0
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
 
 dev_dependencies:
   flutter_test:

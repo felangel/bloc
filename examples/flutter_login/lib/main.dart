@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_login/authentication/authentication.dart';
@@ -7,7 +8,15 @@ import 'package:flutter_login/splash/splash.dart';
 import 'package:flutter_login/login/login.dart';
 import 'package:flutter_login/home/home.dart';
 
+class SimpleBlocDelegate extends BlocDelegate {
+  @override
+  void onTransition(Transition transition) {
+    print(transition.toString());
+  }
+}
+
 void main() {
+  BlocSupervisor().delegate = SimpleBlocDelegate();
   runApp(App());
 }
 
