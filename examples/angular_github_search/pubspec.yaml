@@ -10,7 +10,8 @@ environment:
 dependencies:
   angular: ^5.0.0
   angular_components: ^0.9.0
-  angular_bloc: ^0.1.0
+  angular_bloc:
+    path: ../../packages/angular_bloc
 
 dev_dependencies:
   angular_test: ^2.0.0
