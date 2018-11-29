@@ -1,0 +1,21 @@
+name: flutter_infinite_list
+description: A new Flutter project.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  bloc: 0.7.0
+  flutter_bloc: 0.4.1
+  http: 0.12.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
