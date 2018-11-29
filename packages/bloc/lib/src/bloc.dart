@@ -8,7 +8,7 @@ import 'package:bloc/bloc.dart';
 abstract class Bloc<E, S> {
   final PublishSubject<E> _eventSubject = PublishSubject<E>();
 
-  final BehaviorSubject<S> _stateSubject = BehaviorSubject<S>();
+  BehaviorSubject<S> _stateSubject;
 
   /// Returns [Stream] of states.
   /// Consumed by [BlocBuilder].
@@ -18,6 +18,7 @@ abstract class Bloc<E, S> {
   S get initialState;
 
   Bloc() {
+    _stateSubject = BehaviorSubject<S>(seedValue: initialState);
     _bindStateSubject();
   }
 
@@ -58,7 +59,7 @@ abstract class Bloc<E, S> {
 
     (transform(_eventSubject) as Observable<E>).concatMap((E event) {
       currentEvent = event;
-      currentState = _stateSubject.value ?? initialState;
+      currentState = _stateSubject.value;
       return mapEventToState(currentState, event);
     }).forEach(
       (S nextState) {

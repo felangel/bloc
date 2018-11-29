@@ -89,3 +89,9 @@ Added `BlocSupervisor` and `BlocDelegate`.
 
 - `BlocSupervisor` notifies `BlocDelegate` of `Transitions`
 - `BlocDelegate` exposes `onTransition` which is invoked for all `Bloc` `Transitions`.
+
+# 0.7.1
+
+Improvements to `Bloc` usage in pure Dart applications.
+
+- `Bloc` state is seeded with `initialState` automatically

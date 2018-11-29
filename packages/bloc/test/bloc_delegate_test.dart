@@ -11,7 +11,10 @@ void main() {
     test('is called when delegate is provided', () {
       final delegate = MockBlocDelegate();
       final complexBloc = ComplexBloc();
-      final List<ComplexState> expectedStateAfterEventB = [ComplexStateB()];
+      final List<ComplexState> expectedStateAfterEventB = [
+        ComplexStateA(),
+        ComplexStateB(),
+      ];
       BlocSupervisor().delegate = delegate;
       when(delegate.onTransition(any)).thenReturn(null);
 
@@ -37,8 +40,14 @@ void main() {
       final delegate = MockBlocDelegate();
       final complexBlocA = ComplexBloc();
       final complexBlocB = ComplexBloc();
-      final List<ComplexState> expectedStateAfterEventB = [ComplexStateB()];
-      final List<ComplexState> expectedStateAfterEventC = [ComplexStateC()];
+      final List<ComplexState> expectedStateAfterEventB = [
+        ComplexStateA(),
+        ComplexStateB()
+      ];
+      final List<ComplexState> expectedStateAfterEventC = [
+        ComplexStateA(),
+        ComplexStateC()
+      ];
       BlocSupervisor().delegate = delegate;
       when(delegate.onTransition(any)).thenReturn(null);
 
@@ -79,7 +88,10 @@ void main() {
     test('is not called when delegate is not provided', () {
       final delegate = MockBlocDelegate();
       final complexBloc = ComplexBloc();
-      final List<ComplexState> expectedStateAfterEventB = [ComplexStateB()];
+      final List<ComplexState> expectedStateAfterEventB = [
+        ComplexStateA(),
+        ComplexStateB()
+      ];
       BlocSupervisor().delegate = null;
       when(delegate.onTransition(any)).thenReturn(null);
 

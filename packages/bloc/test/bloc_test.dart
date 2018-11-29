@@ -21,7 +21,7 @@ void main() {
       });
 
       test('dispose does not emit new states over the state stream', () {
-        final List<String> expected = [];
+        final List<String> expected = [''];
 
         expectLater(
           simpleBloc.state,
@@ -35,8 +35,14 @@ void main() {
         expect(simpleBloc.initialState, '');
       });
 
+      test('state should equal initial state before any events are dispatched',
+          () async {
+        final initialState = await simpleBloc.state.first;
+        expect(initialState, simpleBloc.initialState);
+      });
+
       test('should map single event to correct state', () {
-        final List<String> expected = ['data'];
+        final List<String> expected = ['', 'data'];
 
         expectLater(simpleBloc.state, emitsInOrder(expected)).then((dynamic _) {
           verify(
@@ -54,7 +60,7 @@ void main() {
       });
 
       test('should map multiple events to correct states', () {
-        final List<String> expected = ['data', 'data', 'data'];
+        final List<String> expected = ['', 'data', 'data', 'data'];
 
         expectLater(simpleBloc.state, emitsInOrder(expected)).then((dynamic _) {
           verify(
@@ -105,7 +111,7 @@ void main() {
       });
 
       test('dispose does not emit new states over the state stream', () {
-        final List<String> expected = [];
+        final List<ComplexState> expected = [];
 
         expectLater(
           complexBloc.state,
@@ -119,8 +125,17 @@ void main() {
         expect(complexBloc.initialState, ComplexStateA());
       });
 
+      test('state should equal initial state before any events are dispatched',
+          () async {
+        final initialState = await complexBloc.state.first;
+        expect(initialState, complexBloc.initialState);
+      });
+
       test('should map single event to correct state', () {
-        final List<ComplexState> expected = [ComplexStateA()];
+        final List<ComplexState> expected = [
+          ComplexStateA(),
+          ComplexStateA(),
+        ];
 
         expectLater(complexBloc.state, emitsInOrder(expected))
             .then((dynamic _) {
@@ -140,6 +155,7 @@ void main() {
 
       test('should map multiple events to correct states', () {
         final List<ComplexState> expected = [
+          ComplexStateA(),
           ComplexStateA(),
           ComplexStateB(),
           ComplexStateC(),
@@ -179,8 +195,9 @@ void main() {
         });
 
         complexBloc.dispatch(EventA());
-        complexBloc.dispatch(EventA());
         complexBloc.dispatch(EventB());
+        complexBloc.dispatch(EventB());
+        complexBloc.dispatch(EventC());
         complexBloc.dispatch(EventC());
       });
     });
@@ -208,10 +225,14 @@ void main() {
         expect(transitions.isEmpty, true);
       });
 
+      test('state should equal initial state before any events are dispatched',
+          () async {
+        final initialState = await counterBloc.state.first;
+        expect(initialState, counterBloc.initialState);
+      });
+
       test('single Increment event updates state to 1', () {
-        final List<int> expected = [
-          1,
-        ];
+        final List<int> expected = [0, 1];
         final expectedTransitions = [
           'Transition { currentState: 0, event: Increment, nextState: 1 }'
         ];
@@ -236,11 +257,7 @@ void main() {
       });
 
       test('multiple Increment event updates state to 3', () {
-        final List<int> expected = [
-          1,
-          2,
-          3,
-        ];
+        final List<int> expected = [0, 1, 2, 3];
         final expectedTransitions = [
           'Transition { currentState: 0, event: Increment, nextState: 1 }',
           'Transition { currentState: 1, event: Increment, nextState: 2 }',
