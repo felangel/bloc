@@ -6,16 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MyAppNoBloc extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider<Bloc>(
-      bloc: null,
-      child: Container(),
-    );
-  }
-}
-
 class MyApp extends StatelessWidget {
   final CounterBloc _bloc;
   final Widget _child;
@@ -111,32 +101,33 @@ class SimpleBloc extends Bloc<dynamic, String> {
 
 void main() {
   group('BlocProvider', () {
-    testWidgets('throws if initialized with no bloc',
+    testWidgets('throws if initialized with no bloc and no child',
         (WidgetTester tester) async {
-      await tester.pumpWidget(MyAppNoBloc());
+      await tester.pumpWidget(MyApp(
+        bloc: null,
+        child: null,
+      ));
       expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
 
-    testWidgets(
-        'updateShouldNotify should return false when blocs are the same',
+    testWidgets('throws if initialized with no bloc',
         (WidgetTester tester) async {
-      final _blocProviderA =
-          BlocProvider(bloc: CounterBloc(), child: Container());
-      final _blocProviderB =
-          BlocProvider(bloc: CounterBloc(), child: Container());
-
-      expect(_blocProviderB.updateShouldNotify(_blocProviderA), false);
+      final CounterPage _child = CounterPage();
+      await tester.pumpWidget(MyApp(
+        bloc: null,
+        child: _child,
+      ));
+      expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
 
-    testWidgets(
-        'updateShouldNotify should return true when blocs are different',
+    testWidgets('throws if initialized with no child',
         (WidgetTester tester) async {
-      final _blocProviderA =
-          BlocProvider(bloc: CounterBloc(), child: Container());
-      final _blocProviderB =
-          BlocProvider(bloc: SimpleBloc(), child: Container());
-
-      expect(_blocProviderB.updateShouldNotify(_blocProviderA), true);
+      final CounterBloc _bloc = CounterBloc();
+      await tester.pumpWidget(MyApp(
+        bloc: _bloc,
+        child: null,
+      ));
+      expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
 
     testWidgets('passes bloc to children', (WidgetTester tester) async {
