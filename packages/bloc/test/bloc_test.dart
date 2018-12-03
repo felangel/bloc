@@ -141,16 +141,16 @@ void main() {
             .then((dynamic _) {
           verify(
             delegate.onTransition(
-              Transition<BlocEvent, ComplexState>(
+              Transition<ComplexEvent, ComplexState>(
                 currentState: ComplexStateA(),
-                event: EventA(),
+                event: ComplexEventA(),
                 nextState: ComplexStateA(),
               ),
             ),
           ).called(1);
         });
 
-        complexBloc.dispatch(EventA());
+        complexBloc.dispatch(ComplexEventA());
       });
 
       test('should map multiple events to correct states', () {
@@ -167,38 +167,38 @@ void main() {
         ).then((dynamic _) {
           verify(
             delegate.onTransition(
-              Transition<BlocEvent, ComplexState>(
+              Transition<ComplexEvent, ComplexState>(
                 currentState: ComplexStateA(),
-                event: EventA(),
+                event: ComplexEventA(),
                 nextState: ComplexStateA(),
               ),
             ),
           ).called(1);
           verify(
             delegate.onTransition(
-              Transition<BlocEvent, ComplexState>(
+              Transition<ComplexEvent, ComplexState>(
                 currentState: ComplexStateA(),
-                event: EventB(),
+                event: ComplexEventB(),
                 nextState: ComplexStateB(),
               ),
             ),
           ).called(1);
           verify(
             delegate.onTransition(
-              Transition<BlocEvent, ComplexState>(
+              Transition<ComplexEvent, ComplexState>(
                 currentState: ComplexStateB(),
-                event: EventC(),
+                event: ComplexEventC(),
                 nextState: ComplexStateC(),
               ),
             ),
           ).called(1);
         });
 
-        complexBloc.dispatch(EventA());
-        complexBloc.dispatch(EventB());
-        complexBloc.dispatch(EventB());
-        complexBloc.dispatch(EventC());
-        complexBloc.dispatch(EventC());
+        complexBloc.dispatch(ComplexEventA());
+        complexBloc.dispatch(ComplexEventB());
+        complexBloc.dispatch(ComplexEventB());
+        complexBloc.dispatch(ComplexEventC());
+        complexBloc.dispatch(ComplexEventC());
       });
     });
 
@@ -301,6 +301,87 @@ void main() {
         counterBloc.dispatch(Increment());
         counterBloc.dispatch(Increment());
         counterBloc.dispatch(Increment());
+      });
+    });
+
+    group('Async Bloc', () {
+      AsyncBloc asyncBloc;
+      MockBlocDelegate delegate;
+
+      setUp(() {
+        asyncBloc = AsyncBloc();
+        delegate = MockBlocDelegate();
+        when(delegate.onTransition(any)).thenReturn(null);
+
+        BlocSupervisor().delegate = delegate;
+      });
+
+      test('dispose does not emit new states over the state stream', () {
+        final List<ComplexState> expected = [];
+
+        expectLater(
+          asyncBloc.state,
+          emitsInOrder(expected),
+        );
+
+        asyncBloc.dispose();
+      });
+
+      test('initialState returns correct initial state', () {
+        expect(asyncBloc.initialState, AsyncState.initial());
+      });
+
+      test('state should equal initial state before any events are dispatched',
+          () async {
+        final initialState = await asyncBloc.state.first;
+        expect(initialState, asyncBloc.initialState);
+      });
+
+      test('should map single event to correct state', () {
+        final List<AsyncState> expected = [
+          AsyncState(isLoading: false, hasError: false, isSuccess: false),
+          AsyncState(isLoading: true, hasError: false, isSuccess: false),
+          AsyncState(isLoading: false, hasError: false, isSuccess: true),
+        ];
+
+        expectLater(asyncBloc.state, emitsInOrder(expected)).then((dynamic _) {
+          verify(
+            delegate.onTransition(
+              Transition<AsyncEvent, AsyncState>(
+                currentState: AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+                event: AsyncEvent(),
+                nextState: AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+              ),
+            ),
+          ).called(1);
+          verify(
+            delegate.onTransition(
+              Transition<AsyncEvent, AsyncState>(
+                currentState: AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+                event: AsyncEvent(),
+                nextState: AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: true,
+                ),
+              ),
+            ),
+          ).called(1);
+        });
+
+        asyncBloc.dispatch(AsyncEvent());
       });
     });
 
