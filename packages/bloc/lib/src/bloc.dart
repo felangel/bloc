@@ -55,16 +55,14 @@ abstract class Bloc<E, S> {
 
   void _bindStateSubject() {
     E currentEvent;
-    S currentState;
 
     (transform(_eventSubject) as Observable<E>).concatMap((E event) {
       currentEvent = event;
-      currentState = _stateSubject.value;
-      return mapEventToState(currentState, event);
+      return mapEventToState(_stateSubject.value, event);
     }).forEach(
       (S nextState) {
         final transition = Transition(
-          currentState: currentState,
+          currentState: _stateSubject.value,
           event: currentEvent,
           nextState: nextState,
         );

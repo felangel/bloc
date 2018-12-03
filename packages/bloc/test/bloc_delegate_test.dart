@@ -24,16 +24,16 @@ void main() {
       ).then((dynamic _) {
         verify(
           delegate.onTransition(
-            Transition<BlocEvent, ComplexState>(
+            Transition<ComplexEvent, ComplexState>(
               currentState: ComplexStateA(),
-              event: EventB(),
+              event: ComplexEventB(),
               nextState: ComplexStateB(),
             ),
           ),
         ).called(1);
       });
 
-      complexBloc.dispatch(EventB());
+      complexBloc.dispatch(ComplexEventB());
     });
 
     test('is called when delegate is provided for multiple blocs', () {
@@ -57,9 +57,9 @@ void main() {
       ).then((dynamic _) {
         verify(
           delegate.onTransition(
-            Transition<BlocEvent, ComplexState>(
+            Transition<ComplexEvent, ComplexState>(
               currentState: ComplexStateA(),
-              event: EventB(),
+              event: ComplexEventB(),
               nextState: ComplexStateB(),
             ),
           ),
@@ -72,17 +72,17 @@ void main() {
       ).then((dynamic _) {
         verify(
           delegate.onTransition(
-            Transition<BlocEvent, ComplexState>(
+            Transition<ComplexEvent, ComplexState>(
               currentState: ComplexStateA(),
-              event: EventC(),
+              event: ComplexEventC(),
               nextState: ComplexStateC(),
             ),
           ),
         ).called(1);
       });
 
-      complexBlocA.dispatch(EventB());
-      complexBlocB.dispatch(EventC());
+      complexBlocA.dispatch(ComplexEventB());
+      complexBlocB.dispatch(ComplexEventC());
     });
 
     test('is not called when delegate is not provided', () {
@@ -101,16 +101,16 @@ void main() {
       ).then((dynamic _) {
         verifyNever(
           delegate.onTransition(
-            Transition<BlocEvent, ComplexState>(
+            Transition<ComplexEvent, ComplexState>(
               currentState: ComplexStateA(),
-              event: EventB(),
+              event: ComplexEventB(),
               nextState: ComplexStateB(),
             ),
           ),
         );
       });
 
-      complexBloc.dispatch(EventB());
+      complexBloc.dispatch(ComplexEventB());
     });
   });
 }
