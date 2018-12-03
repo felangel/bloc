@@ -95,3 +95,9 @@ Added `BlocSupervisor` and `BlocDelegate`.
 Improvements to `Bloc` usage in pure Dart applications.
 
 - `Bloc` state is seeded with `initialState` automatically
+
+# 0.7.2
+
+`Transition` Fix
+
+- `Bloc` with `mapEventToState` which returns multiple states per event will now correctly report the `Transitions`.
