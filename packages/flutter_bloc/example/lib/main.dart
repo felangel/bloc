@@ -35,6 +35,12 @@ class MyAppState extends State<MyApp> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _counterBloc.dispose();
+    super.dispose();
+  }
 }
 
 class CounterPage extends StatelessWidget {
