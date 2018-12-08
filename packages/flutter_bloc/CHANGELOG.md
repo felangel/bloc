@@ -40,3 +40,7 @@ Minor Updates to Documentation
 # 0.4.2
 
 `BlocProvider` performance improvements
+
+# 0.4.3
+
+`BlocBuilder` performance improvements
