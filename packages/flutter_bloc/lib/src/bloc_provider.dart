@@ -28,6 +28,15 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatelessWidget {
   static T of<T extends Bloc<dynamic, dynamic>>(BuildContext context) {
     BlocProvider<T> provider =
         context.ancestorWidgetOfExactType(_typeOf<BlocProvider<T>>());
+    if (provider == null) {
+      throw FlutterError(
+          'BlocProvider.of() called with a context that does not contain a Bloc of type $T.\n'
+          'No ancestor could be found starting from the context that was passed '
+          'to BlocProvider.of<$T>(). This can happen '
+          'if the context you use comes from a widget above the BlocProvider.\n'
+          'The context used was:\n'
+          '  $context');
+    }
     return provider.bloc;
   }
 
