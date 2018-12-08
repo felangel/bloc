@@ -99,7 +99,7 @@ void main() {
       test('should request a change detection check upon receiving a new value',
           () async {
         pipe.transform(bloc);
-        bloc.dispatch(Increment());        
+        bloc.dispatch(Increment());
         Timer(const Duration(milliseconds: 10), expectAsync0(() {
           verify(ref.markForCheck()).called(2);
         }));
