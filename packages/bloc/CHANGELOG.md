@@ -101,3 +101,7 @@ Improvements to `Bloc` usage in pure Dart applications.
 `Transition` Fix
 
 - `Bloc` with `mapEventToState` which returns multiple states per event will now correctly report the `Transitions`.
+
+# 0.7.3
+
+Minor Updates to Documentation
