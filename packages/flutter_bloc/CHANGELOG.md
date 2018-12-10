@@ -52,3 +52,9 @@ Minor updates to documentation and improved error reporting in `BlocProvider`
 # 0.4.5
 
 Additional Minor Updates to Documentation
+
+# 0.4.6
+
+Bug Fixes
+
+- Fixed bug where `BlocBuilder` would return initial state instead of the latest state
