@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
+import 'package:rxdart/rxdart.dart';
 import 'package:bloc/bloc.dart';
 
 /// A function that will be run which takes the [BuildContext] and state
@@ -50,10 +51,12 @@ class _BlocBuilderBaseState<E, S> extends State<BlocBuilderBase<E, S>> {
   StreamSubscription<S> _subscription;
   S _state;
 
+  S get currentState => (widget.bloc.state as BehaviorSubject<S>).value;
+
   @override
   void initState() {
     super.initState();
-    _state = widget.bloc.initialState;
+    _state = currentState;
     _subscribe();
   }
 
@@ -63,7 +66,7 @@ class _BlocBuilderBaseState<E, S> extends State<BlocBuilderBase<E, S>> {
     if (oldWidget.bloc.state != widget.bloc.state) {
       if (_subscription != null) {
         _unsubscribe();
-        _state = widget.bloc.initialState;
+        _state = currentState;
       }
       _subscribe();
     }

@@ -307,5 +307,30 @@ void main() {
       expect(_materialApp.theme, ThemeData.light());
       expect(numBuilds, 3);
     });
+
+    testWidgets('shows latest state instead of initial state',
+        (WidgetTester tester) async {
+      final ThemeBloc _themeBloc = ThemeBloc();
+      _themeBloc.dispatch(SetDarkTheme());
+      await tester.pumpAndSettle();
+
+      int numBuilds = 0;
+      await tester.pumpWidget(
+        MyApp(
+          themeBloc: _themeBloc,
+          onBuild: () {
+            numBuilds++;
+          },
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      MaterialApp _materialApp =
+          find.byKey(Key('material_app')).evaluate().first.widget;
+
+      expect(_materialApp.theme, ThemeData.dark());
+      expect(numBuilds, 1);
+    });
   });
 }
