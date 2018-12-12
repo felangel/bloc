@@ -105,3 +105,11 @@ Improvements to `Bloc` usage in pure Dart applications.
 # 0.7.3
 
 Minor Updates to Documentation
+
+# 0.7.4
+
+Updated `mapEventToState` parameter name
+
+- `Stream<S> mapEventToState(S state, E event)` -> `Stream<S> mapEventToState(S currentState, E event)`
+- Updates to Documentation.
+- Updates to Example.
