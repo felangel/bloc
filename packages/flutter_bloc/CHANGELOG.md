@@ -58,3 +58,7 @@ Additional Minor Updates to Documentation
 Bug Fixes
 
 - Fixed bug where `BlocBuilder` would return initial state instead of the latest state
+
+# 0.4.7
+
+Minor Updates to Documentation and Examples
