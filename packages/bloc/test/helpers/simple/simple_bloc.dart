@@ -6,7 +6,7 @@ class SimpleBloc extends Bloc<dynamic, String> {
   String get initialState => '';
 
   @override
-  Stream<String> mapEventToState(String state, dynamic event) {
+  Stream<String> mapEventToState(String currentState, dynamic event) {
     return Observable.just('data');
   }
 }

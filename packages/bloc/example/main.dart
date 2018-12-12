@@ -17,16 +17,16 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   int get initialState => 0;
 
   @override
-  Stream<int> mapEventToState(int state, CounterEvent event) async* {
+  Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
     if (event is Increment) {
       /// Simulating Network Latency
       await Future<void>.delayed(Duration(seconds: 1));
-      yield state + 1;
+      yield currentState + 1;
     }
     if (event is Decrement) {
       /// Simulating Network Latency
       await Future<void>.delayed(Duration(milliseconds: 500));
-      yield state - 1;
+      yield currentState - 1;
     }
   }
 }
