@@ -35,12 +35,12 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 
   @override
-  Stream<int> mapEventToState(int state, CounterEvent event) async* {
+  Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
     if (event is Increment) {
-      yield state + 1;
+      yield currentState + 1;
     }
     if (event is Decrement) {
-      yield state - 1;
+      yield currentState - 1;
     }
   }
 }
