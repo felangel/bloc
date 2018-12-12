@@ -24,7 +24,7 @@ class AuthenticationBloc
 
   @override
   Stream<AuthenticationState> mapEventToState(
-      AuthenticationState state, AuthenticationEvent event) async* {
+      AuthenticationState currentState, AuthenticationEvent event) async* {
     if (event is AppStarted) {
       final bool hasToken = await _hasToken();
 
@@ -36,14 +36,14 @@ class AuthenticationBloc
     }
 
     if (event is LoggedIn) {
-      yield state.copyWith(isLoading: true);
+      yield currentState.copyWith(isLoading: true);
 
       await _persistToken(event.token);
       yield AuthenticationState.authenticated();
     }
 
     if (event is LoggedOut) {
-      yield state.copyWith(isLoading: true);
+      yield currentState.copyWith(isLoading: true);
 
       await _deleteToken();
       yield AuthenticationState.unauthenticated();

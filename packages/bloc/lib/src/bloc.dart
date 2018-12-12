@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:bloc/bloc.dart';
 
-/// Takes a [Stream] of events as input
-/// and transforms them into a [Stream] of states as output.
+/// Takes a [Stream] of [E] events as input
+/// and transforms them into a [Stream] of [S] states as output.
 abstract class Bloc<E, S> {
   final PublishSubject<E> _eventSubject = PublishSubject<E>();
 
@@ -51,7 +51,7 @@ abstract class Bloc<E, S> {
   /// `mapEventToState` is called whenever an event is dispatched by the presentation layer.
   /// `mapEventToState` must convert that event, along with the current state, into a new state
   /// and return the new state in the form of a [Stream] which is consumed by the presentation layer.
-  Stream<S> mapEventToState(S state, E event);
+  Stream<S> mapEventToState(S currentState, E event);
 
   void _bindStateSubject() {
     E currentEvent;

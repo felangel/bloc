@@ -59,7 +59,7 @@ class SimpleBloc extends Bloc<dynamic, String> {
   String get initialState => '';
 
   @override
-  Stream<String> mapEventToState(String state, dynamic event) async* {
+  Stream<String> mapEventToState(String currentState, dynamic event) async* {
     yield 'data';
   }
 }
@@ -156,7 +156,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   @override
-  Stream<LoginState> mapEventToState(LoginState state, LoginEvent event) async* {
+  Stream<LoginState> mapEventToState(LoginState currentState, LoginEvent event) async* {
     if (event is LoginButtonPressed) {
       yield LoginState.loading();
 
