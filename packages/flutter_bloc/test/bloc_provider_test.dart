@@ -29,7 +29,83 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class MyStatefulApp extends StatefulWidget {
+  final Widget child;
+
+  const MyStatefulApp({
+    Key key,
+    @required this.child,
+  }) : super(key: key);
+
+  @override
+  _MyStatefulAppState createState() => _MyStatefulAppState();
+}
+
+class _MyStatefulAppState extends State<MyStatefulApp> {
+  CounterBloc bloc;
+
+  @override
+  void initState() {
+    bloc = CounterBloc();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: BlocProvider<CounterBloc>(
+        bloc: bloc,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Counter'),
+            actions: <Widget>[
+              IconButton(
+                key: Key('iconButtonKey'),
+                icon: Icon(Icons.edit),
+                tooltip: 'Change State',
+                onPressed: () {
+                  setState(() {
+                    bloc = CounterBloc();
+                  });
+                },
+              )
+            ],
+          ),
+          body: widget.child,
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
+}
+
+class MyAppNoProvider extends StatelessWidget {
+  final Widget _child;
+
+  const MyAppNoProvider({
+    Key key,
+    @required Widget child,
+  })  : _child = child,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: _child,
+    );
+  }
+}
+
 class CounterPage extends StatelessWidget {
+  final Function onBuild;
+
+  const CounterPage({Key key, this.onBuild}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     CounterBloc _counterBloc = BlocProvider.of<CounterBloc>(context);
@@ -40,30 +116,9 @@ class CounterPage extends StatelessWidget {
       body: BlocBuilder<CounterEvent, int>(
         bloc: _counterBloc,
         builder: (BuildContext context, int count) {
-          return Center(
-            child: Text(
-              '$count',
-              key: Key('counter_text'),
-              style: TextStyle(fontSize: 24.0),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class CounterPageWithMissingBlocProvider extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    CounterBloc _counterBloc = BlocProvider.of<Bloc>(context);
-    assert(_counterBloc != null);
-
-    return Scaffold(
-      appBar: AppBar(title: Text('Counter')),
-      body: BlocBuilder<CounterEvent, int>(
-        bloc: _counterBloc,
-        builder: (BuildContext context, int count) {
+          if (onBuild != null) {
+            onBuild();
+          }
           return Center(
             child: Text(
               '$count',
@@ -175,22 +230,37 @@ void main() {
     testWidgets(
         'should throw FlutterError if BlocProvider is not found in current context',
         (WidgetTester tester) async {
-      final CounterBloc _bloc = CounterBloc();
-      final Widget _child = CounterPageWithMissingBlocProvider();
-      await tester.pumpWidget(MyApp(
-        bloc: _bloc,
+      final Widget _child = CounterPage();
+      await tester.pumpWidget(MyAppNoProvider(
         child: _child,
       ));
       final dynamic exception = tester.takeException();
       final expectedMessage =
-          'BlocProvider.of() called with a context that does not contain a Bloc of type Bloc<dynamic, dynamic>.\n'
+          'BlocProvider.of() called with a context that does not contain a Bloc of type CounterBloc.\n'
           'No ancestor could be found starting from the context that was passed '
-          'to BlocProvider.of<Bloc<dynamic, dynamic>>(). This can happen '
+          'to BlocProvider.of<CounterBloc>(). This can happen '
           'if the context you use comes from a widget above the BlocProvider.\n'
           'The context used was:\n'
-          '  CounterPageWithMissingBlocProvider(dirty)';
+          '  CounterPage(dirty)';
       expect(exception is FlutterError, true);
       expect(exception.message, expectedMessage);
+    });
+
+    testWidgets(
+        'should not rebuild widgets that inherited the bloc if the bloc is changed',
+        (WidgetTester tester) async {
+      int numBuilds = 0;
+      final Widget _child = CounterPage(
+        onBuild: () {
+          numBuilds++;
+        },
+      );
+      await tester.pumpWidget(MyStatefulApp(
+        child: _child,
+      ));
+      await tester.tap(find.byKey(Key('iconButtonKey')));
+      await tester.pumpAndSettle();
+      expect(numBuilds, 1);
     });
   });
 }
