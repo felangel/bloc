@@ -62,3 +62,7 @@ Bug Fixes
 # 0.4.7
 
 Minor Updates to Documentation and Examples
+
+# 0.4.8
+
+Additional `BlocProvider` performance improvements

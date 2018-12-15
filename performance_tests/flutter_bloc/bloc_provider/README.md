@@ -16,10 +16,12 @@ flutter drive --target=test_driver/main.dart --driver=test_driver/driver/bloc_pr
 
 **I + I**: `InheritedWidget` + `inheritFromWidgetOfExactType`
 
-|                  | I + A   | S + A  | I + I  |
-|------------------|---------|--------|--------|
-| Avg Frame (ms)   | 1.363   | 1.159  | 1.446  |
-| Worst Frame (ms) | 12.157  | 9.967  | 10.348 |
+**SF + I**: `StatefulWidget` + `InheritedWidget` + `ancestorInheritedElementForWidgetOfExactType`
+
+|                  | I + A   | S + A  | I + I  | SF + I |
+|------------------|---------|--------|--------|--------|
+| Avg Frame (ms)   | 1.363   | 1.159  | 1.446  | 1.145  |
+| Worst Frame (ms) | 12.157  | 9.967  | 10.348 | 8.350  |
 
 **Average across 10 runs*
 
