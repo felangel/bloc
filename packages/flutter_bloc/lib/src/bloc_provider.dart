@@ -67,5 +67,5 @@ class _BlocProviderInherited<T extends Bloc<dynamic, dynamic>>
   final T bloc;
 
   @override
-  bool updateShouldNotify(_BlocProviderInherited oldWidget) => false;
+  bool updateShouldNotify(_BlocProviderInherited oldWidget) => oldWidget.bloc != bloc;
 }
