@@ -1,12 +1,12 @@
 import 'package:meta/meta.dart';
 
-/// Occurs when an `Event` is `dispatched` after `mapEventToState` has been called
-/// but before the `Bloc`'s state has been updated.
-/// A `Transition` consists of the currentState, the event which was dispatched, and the nextState.
-class Transition<E, S> {
-  final S currentState;
-  final E event;
-  final S nextState;
+/// Occurs when an [Event] is `dispatched` after `mapEventToState` has been called
+/// but before the [Bloc]'s [State] has been updated.
+/// A [Transition] consists of the `currentState`, the `event` which was `dispatched`, and the `nextState`.
+class Transition<Event, State> {
+  final State currentState;
+  final Event event;
+  final State nextState;
 
   const Transition({
     @required this.currentState,
@@ -19,7 +19,7 @@ class Transition<E, S> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Transition<E, S> &&
+      other is Transition<Event, State> &&
           runtimeType == other.runtimeType &&
           currentState == other.currentState &&
           event == other.event &&
@@ -31,5 +31,5 @@ class Transition<E, S> {
 
   @override
   String toString() =>
-      'Transition { currentState: ${currentState.toString()}, event: ${event.toString()}, nextState: ${nextState.toString()} }';
+      'Transition { currentState: $currentState, event: $event, nextState: $nextState }';
 }

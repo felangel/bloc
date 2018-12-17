@@ -35,6 +35,10 @@ void main() {
         expect(simpleBloc.initialState, '');
       });
 
+      test('currentState returns correct value initially', () {
+        expect(simpleBloc.currentState, '');
+      });
+
       test('state should equal initial state before any events are dispatched',
           () async {
         final initialState = await simpleBloc.state.first;
@@ -54,6 +58,7 @@ void main() {
               ),
             ),
           ).called(1);
+          expect(simpleBloc.currentState, 'data');
         });
 
         simpleBloc.dispatch('event');
@@ -90,6 +95,7 @@ void main() {
               ),
             ),
           ).called(1);
+          expect(simpleBloc.currentState, 'data');
         });
 
         simpleBloc.dispatch('event1');
@@ -125,6 +131,10 @@ void main() {
         expect(complexBloc.initialState, ComplexStateA());
       });
 
+      test('currentState returns correct value initially', () {
+        expect(complexBloc.currentState, ComplexStateA());
+      });
+
       test('state should equal initial state before any events are dispatched',
           () async {
         final initialState = await complexBloc.state.first;
@@ -148,6 +158,7 @@ void main() {
               ),
             ),
           ).called(1);
+          expect(complexBloc.currentState, ComplexStateA());
         });
 
         complexBloc.dispatch(ComplexEventA());
@@ -192,6 +203,7 @@ void main() {
               ),
             ),
           ).called(1);
+          expect(complexBloc.currentState, ComplexStateC());
         });
 
         complexBloc.dispatch(ComplexEventA());
@@ -225,6 +237,10 @@ void main() {
         expect(transitions.isEmpty, true);
       });
 
+      test('currentState returns correct value initially', () {
+        expect(counterBloc.currentState, 0);
+      });
+
       test('state should equal initial state before any events are dispatched',
           () async {
         final initialState = await counterBloc.state.first;
@@ -251,6 +267,7 @@ void main() {
               ),
             ),
           ).called(1);
+          expect(counterBloc.currentState, 1);
         });
 
         counterBloc.dispatch(Increment());
@@ -296,6 +313,7 @@ void main() {
               ),
             ),
           ).called(1);
+          expect(counterBloc.currentState, 3);
         });
 
         counterBloc.dispatch(Increment());
@@ -329,6 +347,10 @@ void main() {
 
       test('initialState returns correct initial state', () {
         expect(asyncBloc.initialState, AsyncState.initial());
+      });
+
+      test('currentState returns correct value initially', () {
+        expect(asyncBloc.currentState, AsyncState.initial());
       });
 
       test('state should equal initial state before any events are dispatched',
@@ -379,6 +401,14 @@ void main() {
               ),
             ),
           ).called(1);
+          expect(
+            asyncBloc.currentState,
+            AsyncState(
+              isLoading: false,
+              hasError: false,
+              isSuccess: true,
+            ),
+          );
         });
 
         asyncBloc.dispatch(AsyncEvent());
