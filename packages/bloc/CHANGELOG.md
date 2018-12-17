@@ -113,3 +113,9 @@ Updated `mapEventToState` parameter name
 - `Stream<S> mapEventToState(S state, E event)` -> `Stream<S> mapEventToState(S currentState, E event)`
 - Updates to Documentation.
 - Updates to Example.
+
+# 0.7.5
+
+Exposed `currentState` in `Bloc`
+
+- Updates to Documentation.
