@@ -66,3 +66,10 @@ Minor Updates to Documentation and Examples
 # 0.4.8
 
 Additional `BlocProvider` performance improvements
+
+# 0.4.9
+
+Additional `BlocBuilder` enhancements
+
+- `BlocBuilder` no longer has a dependency on `RxDart`
+- Using `bloc: ">=0.7.5 <0.8.0"`
