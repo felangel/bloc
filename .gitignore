@@ -15,5 +15,5 @@ pubspec.lock
 coverage/
 .test_coverage.dart
 *.log
-!example/ios/
-!example/android/
+!packages/**/example/ios/
+!packages/**/example/android/
