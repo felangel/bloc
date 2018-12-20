@@ -1,16 +1,8 @@
 - Introduction
-  - [Overview](README.md)
-  - [Quick Start](quickstart.md)
-
-- Core Concepts
+  - [Getting Started](gettingstarted.md)
+  - [Why Bloc?](whybloc.md)
+  - [Core Concepts](coreconcepts.md)
   - [Architecture](architecture.md)
-  - [Events](events.md)
-  - [States](states.md)
-  - [Transitions](transitions.md)
-  - [Blocs](blocs.md)
-
-- Basic Tutorial
-  - [Overview](basicoverview.md)
 
 - API Reference
   - [bloc](blocapi.md)

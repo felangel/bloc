@@ -1,13 +1,11 @@
 # Architecture
 
-> A Bloc takes a stream of events as input and transforms them into a stream of states as output.
+![Bloc Architecture](assets/bloc_architecture.png);
 
-In order to understand how a Bloc works, we'll take the example of a Timer application.
+Using Bloc allows us to separate our application into three layers:
 
-We can split the timer application into two parts:
-- UI (user interface)
+- Presentation
 - Logic
+- Data
 
-For the sake of simplicity, our UI will be extremely simple: we're just going to print to the console.
-
-Regarding the logic, we're going to need to make a 
+This separation is super useful when it comes to testing and reusing components.
