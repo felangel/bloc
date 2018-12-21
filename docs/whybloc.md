@@ -1,6 +1,6 @@
 # Why Bloc?
 
-> Bloc makes it easy to separate presentation from business logic, facilitating _testability_, _reusability_, and _efficiency_.
+> Bloc makes it easy to separate presentation from business logic, making your code _fast_, _easy to test_, and _reusable_.
 
 When building production quality applications, managing state becomes critical.
 

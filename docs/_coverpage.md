@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_logo_full.png" height="60" alt="Bloc" /><small>0.7.5</small>
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_logo_full.png" height="60" alt="Bloc" /><small>0.7.7</small>
 
 [![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
@@ -10,7 +10,7 @@
 
 - Simple & Lightweight
 - Highly Testable
-- For Dart, Flutter & AngularDart
+- For Dart, Flutter, and AngularDart
 
 [GitHub](https://github.com/felangel/bloc/)
 [Get Started](gettingstarted.md)
