@@ -80,7 +80,7 @@ class _BlocBuilderBaseState<E, S> extends State<BlocBuilderBase<E, S>> {
 
   void _subscribe() {
     if (widget.bloc.state != null) {
-      _subscription = widget.bloc.state.distinct().skip(1).listen((S state) {
+      _subscription = widget.bloc.state.skip(1).listen((S state) {
         setState(() {
           _state = state;
         });
