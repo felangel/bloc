@@ -7,7 +7,7 @@ import 'package:bloc/bloc.dart';
 /// A function that will be run which takes the [BuildContext] and state
 /// and is responsible for returning a [Widget] which is to be rendered.
 /// This is analogous to the `builder` function in [StreamBuilder].
-typedef Widget BlocWidgetBuilder<S>(BuildContext context, S state);
+typedef BlocWidgetBuilder<S> = Widget Function(BuildContext context, S state);
 
 /// A Flutter widget which requires a [Bloc] and a [BlocWidgetBuilder] `builder` function.
 /// [BlocBuilder] handles building the widget in response to new states.
