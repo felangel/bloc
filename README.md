@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/doc/assets/bloc_logo_full.png" height="60" alt="Bloc" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_logo_full.png" height="60" alt="Bloc" />
 
 [![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
@@ -18,7 +18,7 @@ A collection of packages that help implement the [Bloc pattern](https://www.yout
 
 ## Overview
 
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/doc/assets/bloc_architecture.png" alt="Bloc Architecture" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
 
 The goal of this package is to make it easy to separate _presentation_ from _business logic_, facilitating testability and reusability.
 

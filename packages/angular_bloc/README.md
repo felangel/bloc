@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/doc/assets/angular_bloc_logo_full.png" height="60" alt="Angular Bloc Package" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/angular_bloc_logo_full.png" height="60" alt="Angular Bloc Package" />
 
 [![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
