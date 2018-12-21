@@ -81,3 +81,7 @@ Additional `BlocBuilder` enhancements
 - `BlocBuilder` no longer filters out States giving developers full control
 
 Minor Updates to Documentation and Examples
+
+# 0.4.11
+
+Additional Minor Updates to Documentation
