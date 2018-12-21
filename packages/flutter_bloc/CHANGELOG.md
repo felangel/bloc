@@ -73,3 +73,11 @@ Additional `BlocBuilder` enhancements
 
 - `BlocBuilder` no longer has a dependency on `RxDart`
 - Using `bloc: ">=0.7.5 <0.8.0"`
+
+# 0.4.10
+
+Additional `BlocBuilder` enhancements
+
+- `BlocBuilder` no longer filters out States giving developers full control
+
+Minor Updates to Documentation and Examples
