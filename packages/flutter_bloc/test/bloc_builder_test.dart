@@ -206,30 +206,6 @@ void main() {
       expect(numBuilds, 2);
     });
 
-    testWidgets('does not build unnecessarily', (WidgetTester tester) async {
-      final ThemeBloc _themeBloc = ThemeBloc();
-      int numBuilds = 0;
-      await tester.pumpWidget(
-        MyApp(
-          themeBloc: _themeBloc,
-          onBuild: () {
-            numBuilds++;
-          },
-        ),
-      );
-
-      _themeBloc.dispatch(SetLightTheme());
-      _themeBloc.dispatch(SetLightTheme());
-
-      await tester.pumpAndSettle();
-
-      MaterialApp _materialApp =
-          find.byKey(Key('material_app')).evaluate().first.widget;
-
-      expect(_materialApp.theme, ThemeData.light());
-      expect(numBuilds, 1);
-    });
-
     testWidgets(
         'updates when the bloc is changed at runtime to a different bloc and unsubscribes from old bloc',
         (WidgetTester tester) async {
