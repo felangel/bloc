@@ -119,3 +119,7 @@ Updated `mapEventToState` parameter name
 Exposed `currentState` in `Bloc`
 
 - Updates to Documentation.
+
+# 0.7.6
+
+Minor Updates to Documentation
