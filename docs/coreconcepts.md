@@ -64,7 +64,7 @@ Bloc is built on top of [RxDart](https://pub.dartlang.org/packages/rxdart); howe
 
 In order to use Bloc, it is criticial to have a solid understanding of `Streams` and how they work.
 
-> If you're unfamiliar with `Streams` just think of a pipe with water running through it. The `Stream` is the pipe and the asynchronous data is the water.
+> If you're unfamiliar with `Streams` just think of a pipe with water flowing through it. The pipe is the `Stream` and the water is the asynchronous data.
 
 We can create a `Stream` in Dart by writing an `async*` function.
 
@@ -78,7 +78,9 @@ Stream<int> countStream(int max) async* {
 
 By marking a function as `async*` we are able to use the `yield` keyword and return a `Stream` of data. In the above example, we are returning a `Stream` of integers up to the `max` integer parameter.
 
-We can consume the above `Stream` in several ways. If we wanted to write a function to return the sum of a `Stream` of integers it could looks something like:
+Every time we `yield` in an `async*` function we are pushing that piece of data through the `Stream`.
+
+We can consume the above `Stream` in several ways. If we wanted to write a function to return the sum of a `Stream` of integers it could look something like:
 
 ```dart
 Future<int> sumStream(Stream<int> stream) async {
@@ -107,7 +109,7 @@ void main() async {
 
 ## Blocs
 
-> A Bloc (Business Logic Component) is a component which converts a `Stream` of incoming `Events` into a `Stream` of outgoing `States`.
+> A Bloc (Business Logic Component) is a component which converts a `Stream` of incoming `Events` into a `Stream` of outgoing `States`. Think of a Bloc as being the "brains" described above.
 
 > Every Bloc must extend the base `Bloc` class which is part of the core bloc package.
 
@@ -130,7 +132,7 @@ In this case, we want our counter to start at `0`.
 int get initialState => 0;
 ```
 
-> Every Bloc must implement a function called `mapEventToState`. The function takes two arguments: `currentState` and `event` and must convert that `event`, along with the `currentState`, into a `Stream` of states which is consumed by the presentation layer.
+> Every Bloc must implement a function called `mapEventToState`. The function takes two arguments: `currentState` and `event` and must return a `Stream` of new `states` which is consumed by the presentation layer.
 
 ```dart
 @override
@@ -197,7 +199,7 @@ The `Transitions` in the above code snippet would be
 
 Unfortunately, in the current state we won't be able to see any of these transitions unless we override `onTransition`.
 
-> `onTransition` is a method that can be overridden to handle every local `Transition`. `onTransition` is called before a Bloc's `state` has been updated.
+> `onTransition` is a method that can be overridden to handle every local Bloc `Transition`. `onTransition` is called just before a Bloc's `state` has been updated.
 
 ?> **Tip**: `onTransition` is a great place to add bloc-specific logging/analytics.
 
@@ -223,3 +225,35 @@ class Decrement extends CounterEvent {
     String toString() => 'Decrement';
 }
 ```
+
+## BlocDelegate
+
+One added bonus of using Bloc is that we can have access to all `Transitions` in one place. Even though in this application we only have one Bloc, it's fairly common in larger applications to have many Blocs managing different parts of the application's state.
+
+If we want to be able to do something in response to all `Transitions` we can simply create our own `BlocDelegate`.
+
+```dart
+class SimpleBlocDelegate extends BlocDelegate {
+  @override
+  void onTransition(Transition transition) {
+    print(transition.toString());
+  }
+}
+```
+
+?> **Note**: All we need to do is extend `BlocDelegate` and override the `onTransition` method.
+
+In order to tell Bloc to use our `SimpleBlocDelegate`, we just need to tweak our `main` function.
+
+```dart
+void main() {
+  BlocSupervisor().delegate = SimpleBlocDelegate();
+  CounterBloc bloc = CounterBloc();
+
+  for (int i = 0; i < 3; i++) {
+    bloc.dispatch(Increment());
+  }
+}
+```
+
+?> **Note**: `BlocSupervisor` is a singleton which oversees all Blocs and delegates responsibilities to the `BlocDelegate`.

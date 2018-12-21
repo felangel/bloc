@@ -1,1 +1,3 @@
-# Angular Bloc API
+# Angular Bloc API Reference
+
+## BlocPipe
