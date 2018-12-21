@@ -6,49 +6,34 @@ import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_login/login/login.dart';
 
 class LoginForm extends StatefulWidget {
-  final LoginBloc _loginBloc;
-  final AuthenticationBloc _authBloc;
+  final LoginBloc loginBloc;
+  final AuthenticationBloc authBloc;
 
   LoginForm({
     Key key,
-    @required LoginBloc loginBloc,
-    @required AuthenticationBloc authBloc,
-  })  : _loginBloc = loginBloc,
-        _authBloc = authBloc,
-        super(key: key);
+    @required this.loginBloc,
+    @required this.authBloc,
+  }) : super(key: key);
 
   @override
-  State<LoginForm> createState() {
-    return LoginFormState(
-      loginBloc: _loginBloc,
-      authBloc: _authBloc,
-    );
-  }
+  State<LoginForm> createState() => LoginFormState();
 }
 
 class LoginFormState extends State<LoginForm> {
-  final LoginBloc _loginBloc;
-  final AuthenticationBloc _authBloc;
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  LoginFormState({
-    @required LoginBloc loginBloc,
-    @required AuthenticationBloc authBloc,
-  })  : _loginBloc = loginBloc,
-        _authBloc = authBloc;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginEvent, LoginState>(
-      bloc: _loginBloc,
+      bloc: widget.loginBloc,
       builder: (
         BuildContext context,
         LoginState loginState,
       ) {
         if (_loginSucceeded(loginState)) {
-          _authBloc.onLogin(token: loginState.token);
-          _loginBloc.onLoginSuccess();
+          widget.authBloc.dispatch(Login(token: loginState.token));
+          widget.loginBloc.dispatch(LoggedIn());
         }
 
         if (_loginFailed(loginState)) {
@@ -103,9 +88,9 @@ class LoginFormState extends State<LoginForm> {
   }
 
   _onLoginButtonPressed() {
-    _loginBloc.onLoginButtonPressed(
+    widget.loginBloc.dispatch(LoginButtonPressed(
       username: _usernameController.text,
       password: _passwordController.text,
-    );
+    ));
   }
 }

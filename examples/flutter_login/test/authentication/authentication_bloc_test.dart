@@ -22,8 +22,9 @@ void main() {
   });
 
   group('AppStarted', () {
-    test('emits AuthenticationState.unauthenticated() for invalid token', () {
+    test('emits [initializing, unauthenticated] for invalid token', () {
       final expectedResponse = [
+        AuthenticationState.initializing(),
         AuthenticationState.unauthenticated(),
       ];
 
@@ -32,13 +33,15 @@ void main() {
         emitsInOrder(expectedResponse),
       );
 
-      authenticationBloc.dispatch(AppStarted());
+      authenticationBloc.dispatch(AppStart());
     });
   });
 
   group('LoggedIn', () {
-    test('emits [loading, authenticated] when token is persisted', () {
+    test('emits [initializing, loading, authenticated] when token is persisted',
+        () {
       final expectedResponse = [
+        AuthenticationState.initializing(),
         AuthenticationState.initializing().copyWith(isLoading: true),
         AuthenticationState.authenticated(),
       ];
@@ -48,15 +51,17 @@ void main() {
         emitsInOrder(expectedResponse),
       );
 
-      authenticationBloc.dispatch(LoggedIn(
+      authenticationBloc.dispatch(Login(
         token: 'instance.token',
       ));
     });
   });
 
   group('LoggedOut', () {
-    test('emits [loading, unauthenticated] when token is deleted', () {
+    test('emits [initializing, loading, unauthenticated] when token is deleted',
+        () {
       final expectedResponse = [
+        AuthenticationState.initializing(),
         AuthenticationState.initializing().copyWith(isLoading: true),
         AuthenticationState.unauthenticated(),
       ];
@@ -66,7 +71,7 @@ void main() {
         emitsInOrder(expectedResponse),
       );
 
-      authenticationBloc.dispatch(LoggedOut());
+      authenticationBloc.dispatch(Logout());
     });
   });
 }

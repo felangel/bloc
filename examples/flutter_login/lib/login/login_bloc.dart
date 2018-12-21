@@ -8,19 +8,6 @@ import 'package:flutter_login/login/login.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginState get initialState => LoginState.initial();
 
-  void onLoginButtonPressed({String username, String password}) {
-    dispatch(
-      LoginButtonPressed(
-        username: username,
-        password: password,
-      ),
-    );
-  }
-
-  void onLoginSuccess() {
-    dispatch(LoggedIn());
-  }
-
   @override
   Stream<LoginState> mapEventToState(
     LoginState currentState,

@@ -24,6 +24,7 @@ void main() {
   group('LoginButtonPressed', () {
     test('emits token on success', () {
       final expectedResponse = [
+        LoginState.initial(),
         LoginState.loading(),
         LoginState.success('token'),
       ];

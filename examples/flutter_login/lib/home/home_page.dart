@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
             child: RaisedButton(
           child: Text('logout'),
           onPressed: () {
-            authenticationBloc.onLogout();
+            authenticationBloc.dispatch(Logout());
           },
         )),
       ),
