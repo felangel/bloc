@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Bloc</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="bloc package documentation" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css" />
+  </head>
+  <body>
+    <div id="app">Please wait...</div>
+    <script>
+      window.$docsify = {
+        name: "Bloc",
+        repo: "https://github.com/felangel/bloc",
+        loadSidebar: true,
+        coverpage: true,
+        onlyCover: true,
+        auto2top: true,
+        autoHeader: false,
+        subMaxLevel: 3,
+        maxLevel: 4,
+        search: {
+          paths: "auto",
+          placeholder: "Search",
+          noData: "No Results.",
+          depth: 6,
+        }
+      };
+      if (typeof navigator.serviceWorker !== "undefined") {
+        navigator.serviceWorker.register("sw.js");
+      }
+    </script>
+    <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+    <script src="//unpkg.com/docsify/lib/plugins/search.min.js"></script>
+    <script src="//unpkg.com/docsify-pagination/dist/docsify-pagination.min.js"></script>
+    <script src="//unpkg.com/prismjs/components/prism-dart.min.js"></script>
+    <script src="//unpkg.com/prismjs/components/prism-yaml.min.js"></script>
+    <script src="//unpkg.com/prismjs/components/prism-json.min.js"></script>
+    <script src="//unpkg.com/docsify-copy-code"></script>
+  </body>
+</html>
