@@ -23,6 +23,7 @@ A collection of packages that help implement the [Bloc pattern](https://www.yout
 The goal of this package is to make it easy to separate _presentation_ from _business logic_, facilitating testability and reusability.
 
 ## Documentation
+- [Official Documentation](https://felangel.github.io/bloc)
 - [Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/bloc/README.md)
 - [Flutter Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/README.md)
 - [Angular Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/angular_bloc/README.md)
