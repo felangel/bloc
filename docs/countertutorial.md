@@ -2,6 +2,45 @@
 
 > In the following tutorial, we're going to build a Counter in Flutter using the Bloc library.
 
+## Setup
+
+We'll start off by creating a brand new Flutter project
+
+```bash
+flutter create flutter_counter
+```
+
+We can then go ahead and replace the contents of `pubspec.yaml` with
+
+```yaml
+name: flutter_counter
+description: A new Flutter project.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  bloc: ^0.7.7
+  flutter_bloc: ^0.4.11
+  meta: ^1.1.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+```
+
+and then install all of our dependencies
+
+```bash
+flutter packages get
+```
+
 Our counter app is just going to have two buttons to increment/decrement the counter value and a `Text` widget to display the current value. Let's get started designing the `CounterEvents`.
 
 ## Counter Events

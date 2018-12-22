@@ -23,8 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^0.7.5
-  flutter_bloc: ^0.4.9
+  bloc: ^0.7.7
+  flutter_bloc: ^0.4.11
   meta: ^1.1.6
 
 dev_dependencies:
@@ -767,7 +767,7 @@ class LoginFormState extends State<LoginForm> {
 
 There’s not much else going on in the `LoginForm` widget so let's move on to creating our loading indicator.
 
-## Login Indicator
+## Loading Indicator
 
 ```dart
 import 'package:flutter/material.dart';
