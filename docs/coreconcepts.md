@@ -49,7 +49,11 @@ As a user interacts with our counter app they will trigger `Increment` and `Decr
 For example, if a user opened our app and tapped the increment button once we would see the following `Transition`.
 
 ```json
-{ "currentState": 0, "event": "Increment", "nextState": 1 }
+{
+    "currentState": 0,
+    "event": "Increment",
+    "nextState": 1
+}
 ```
 
 Because every state change is recorded, we are able to very easily instrument our applications and track all user interactions & state changes in one place. In addition, this makes things like time-travel debugging possible.
@@ -192,9 +196,21 @@ void main() {
 The `Transitions` in the above code snippet would be
 
 ```json
-{ "currentState": 0, "event": "Increment", "nextState": 1 }
-{ "currentState": 1, "event": "Increment", "nextState": 2 }
-{ "currentState": 2, "event": "Increment", "nextState": 3 }
+{
+    "currentState": 0,
+    "event": "Increment",
+    "nextState": 1
+}
+{
+    "currentState": 1,
+    "event": "Increment",
+    "nextState": 2
+}
+{
+    "currentState": 2,
+    "event": "Increment",
+    "nextState": 3
+}
 ```
 
 Unfortunately, in the current state we won't be able to see any of these transitions unless we override `onTransition`.
