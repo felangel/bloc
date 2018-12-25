@@ -179,3 +179,5 @@ class CounterPage extends StatelessWidget {
 ?> **Note**: We are using the `BlocBuilder` widget from `flutter_bloc` in order to rebuild out UI in response to state changes (changes in the counter value).
 
 That's it! We've separated our presentation layer from our business logic layer. Our `CounterPage` has no idea what happens when a user presses a button; it just dispatches an event to notify the `CounterBloc`. Furthermore, our `CounterBloc` has no idea what is happening with the state (counter value); it's simply converting the `CounterEvents` into integers.
+
+The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example).

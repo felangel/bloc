@@ -1,12 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:mockito/mockito.dart';
+import 'package:user_repository/user_repository.dart';
+
 import 'package:flutter_login/authentication/authentication.dart';
+
+class MockUserRepository extends Mock implements UserRepository {}
 
 void main() {
   AuthenticationBloc authenticationBloc;
+  MockUserRepository userRepository;
 
   setUp(() {
-    authenticationBloc = AuthenticationBloc();
+    userRepository = MockUserRepository();
+    authenticationBloc = AuthenticationBloc(userRepository: userRepository);
   });
 
   test('initial state is correct', () {
@@ -27,6 +34,8 @@ void main() {
         AuthenticationState.initializing(),
         AuthenticationState.unauthenticated(),
       ];
+
+      when(userRepository.hasToken()).thenAnswer((_) => Future.value(false));
 
       expectLater(
         authenticationBloc.state,

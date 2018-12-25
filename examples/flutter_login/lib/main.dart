@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:user_repository/user_repository.dart';
 
 import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_login/splash/splash.dart';
@@ -27,10 +28,14 @@ class App extends StatefulWidget {
 }
 
 class AppState extends State<App> {
-  final AuthenticationBloc _authenticationBloc = AuthenticationBloc();
+  AuthenticationBloc _authenticationBloc;
+  final UserRepository _userRepository = UserRepository();
 
-  AppState() {
+  @override
+  void initState() {
+    _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
     _authenticationBloc.dispatch(AppStart());
+    super.initState();
   }
 
   @override
@@ -52,7 +57,9 @@ class AppState extends State<App> {
             if (state.isAuthenticated) {
               widgets.add(HomePage());
             } else {
-              widgets.add(LoginPage());
+              widgets.add(LoginPage(
+                userRepository: _userRepository,
+              ));
             }
 
             if (state.isInitializing) {

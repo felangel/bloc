@@ -1,0 +1,9 @@
+name: user_repository
+description: UserRepository example for flutter_login.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  meta: ^1.1.6

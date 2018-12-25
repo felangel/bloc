@@ -634,7 +634,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  final LoginBloc _loginBloc = LoginBloc(userRepository: widget.userRepository);
+  LoginBloc _loginBloc;
+
+  @override
+  void initState() {
+    _loginBloc = LoginBloc(userRepository: widget.userRepository);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -815,11 +821,13 @@ class App extends StatefulWidget {
 
 class AppState extends State<App> {
   final UserRepository _userRepository = UserRepository();
-  final AuthenticationBloc _authenticationBloc =
-    AuthenticationBloc(userRepository: _userRepository);
+  AuthenticationBloc _authenticationBloc;
 
-  AppState() {
+  @override
+  void initState() {
+    _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
     _authenticationBloc.dispatch(AppStart());
+    super.initState();
   }
 
   @override
@@ -872,3 +880,5 @@ Now `BlocProvider.of<AuthenticationBloc>(context)` in our `HomePage` and `LoginP
 Since we wrapped our `MaterialApp` within a `BlocProvider<AuthenticationBloc>` we can access the instance of our `AuthenticationBloc` by using the `BlocProvider.of<AuthenticationBloc>(BuildContext context)` static method from anywhere in the subtree.
 
 At this point we have a pretty solid login implementation and we have decoupled our presentation layer from the business logic layer by using Bloc.
+
+The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_login).

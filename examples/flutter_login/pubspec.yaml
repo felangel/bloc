@@ -10,10 +10,13 @@ dependencies:
     sdk: flutter
   flutter_bloc:
     path: ../../packages/flutter_bloc
+  user_repository:
+    path: user_repository
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mockito: ^4.0.0
 
 flutter:
   uses-material-design: true
