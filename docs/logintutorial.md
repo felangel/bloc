@@ -873,7 +873,7 @@ class AppState extends State<App> {
 
 ?> **Note**: Again, we are using `BlocBuilder` in order to react to changes in `AuthenticationState` so that we can show the user either the `SplashPage`, `LoginPage`, or `HomePage` based on the current `AuthenticationState`.
 
-?> **Note**: Our app has an injected `AuthenticationBloc` which is makes available to the entire widget tree by using the `BlocProvider` widget. `BlocProvider` is a Flutter widget which provides a bloc to its children via `BlocProvider.of(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
+?> **Note**: Our app has an injected `AuthenticationBloc` which it makes available to the entire widget subtree by using the `BlocProvider` widget. `BlocProvider` is a Flutter widget which provides a bloc to its children via `BlocProvider.of(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
 
 Now `BlocProvider.of<AuthenticationBloc>(context)` in our `HomePage` and `LoginPage` widget should make sense.
 
