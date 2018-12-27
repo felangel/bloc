@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:bloc/bloc.dart';
@@ -7,7 +8,9 @@ import 'package:flutter_infinite_list/bloc/bloc.dart';
 import 'package:flutter_infinite_list/models/models.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
-  final http.Client _httpClient = http.Client();
+  final http.Client httpClient;
+
+  PostBloc({@required this.httpClient});
 
   @override
   Stream<PostEvent> transform(Stream<PostEvent> events) {
@@ -35,7 +38,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   }
 
   Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
-    final response = await _httpClient.get(
+    final response = await httpClient.get(
         'https://jsonplaceholder.typicode.com/posts?_start=$startIndex&_limit=$limit');
     if (response.statusCode == 200) {
       final data = json.decode(response.body) as List;

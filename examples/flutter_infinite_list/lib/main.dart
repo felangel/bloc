@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_infinite_list/bloc/bloc.dart';
@@ -19,23 +20,23 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('Posts'),
         ),
-        body: MyHomePage(),
+        body: HomePage(),
       ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   final _scrollController = ScrollController();
-  final PostBloc _postBloc = PostBloc();
+  final PostBloc _postBloc = PostBloc(httpClient: http.Client());
   final _scrollThreshold = 200.0;
 
-  _MyHomePageState() {
+  _HomePageState() {
     _scrollController.addListener(_onScroll);
     _postBloc.dispatch(Fetch());
   }
@@ -63,8 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return ListView.builder(
           itemBuilder: (BuildContext context, int index) {
             return index >= state.posts.length
-                ? _bottomLoader()
-                : _postWidget(state.posts[index]);
+                ? BottomLoader()
+                : PostWidget(post: state.posts[index]);
           },
           itemCount:
               state.hasReachedMax ? state.posts.length : state.posts.length + 1,
@@ -87,28 +88,42 @@ class _MyHomePageState extends State<MyHomePage> {
       _postBloc.dispatch(Fetch());
     }
   }
+}
 
-  Widget _postWidget(Post post) => ListTile(
-        leading: Text(
-          post.id.toString(),
-          style: TextStyle(fontSize: 10.0),
-        ),
-        title: Text('${post.title}'),
-        isThreeLine: true,
-        subtitle: Text(post.body),
-        dense: true,
-      );
-
-  Widget _bottomLoader() => Container(
-        alignment: Alignment.center,
-        child: Center(
-          child: SizedBox(
-            width: 33,
-            height: 33,
-            child: CircularProgressIndicator(
-              strokeWidth: 1.5,
-            ),
+class BottomLoader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: Center(
+        child: SizedBox(
+          width: 33,
+          height: 33,
+          child: CircularProgressIndicator(
+            strokeWidth: 1.5,
           ),
         ),
-      );
+      ),
+    );
+  }
+}
+
+class PostWidget extends StatelessWidget {
+  final Post post;
+
+  const PostWidget({Key key, @required this.post}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Text(
+        post.id.toString(),
+        style: TextStyle(fontSize: 10.0),
+      ),
+      title: Text('${post.title}'),
+      isThreeLine: true,
+      subtitle: Text(post.body),
+      dense: true,
+    );
+  }
 }

@@ -56,7 +56,7 @@ class PostState {
 
   @override
   String toString() =>
-      'PostState { isInitializing: $isInitializing, posts: ${posts.length.toString()}, isError: $isError, hasReachedMax: $hasReachedMax }';
+      'PostState { isInitializing: $isInitializing, posts: ${posts.length}, isError: $isError, hasReachedMax: $hasReachedMax }';
 
   @override
   bool operator ==(Object other) =>
@@ -65,9 +65,13 @@ class PostState {
           runtimeType == other.runtimeType &&
           isInitializing == other.isInitializing &&
           posts == other.posts &&
-          isError == other.isError;
+          isError == other.isError &&
+          hasReachedMax == other.hasReachedMax;
 
   @override
   int get hashCode =>
-      isInitializing.hashCode ^ posts.hashCode ^ isError.hashCode;
+      isInitializing.hashCode ^
+      posts.hashCode ^
+      isError.hashCode ^
+      hasReachedMax.hashCode;
 }
