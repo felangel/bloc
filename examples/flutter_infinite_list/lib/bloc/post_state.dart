@@ -1,77 +1,72 @@
 import 'package:flutter_infinite_list/models/models.dart';
 
-class PostState {
-  final bool isInitializing;
+abstract class PostState {}
+
+class PostUninitialized extends PostState {
+  @override
+  String toString() => 'PostUninitialized';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PostUninitialized && runtimeType == other.runtimeType;
+  @override
+  int get hashCode => runtimeType.hashCode;
+}
+
+class PostInitialized extends PostState {
   final List<Post> posts;
-  final bool isError;
+  final bool hasError;
   final bool hasReachedMax;
 
-  PostState({
-    this.isError,
-    this.isInitializing,
+  PostInitialized({
+    this.hasError,
     this.posts,
     this.hasReachedMax,
   });
 
-  factory PostState.initial() {
-    return PostState(
-      isInitializing: true,
-      posts: [],
-      isError: false,
-      hasReachedMax: false,
-    );
-  }
-
-  factory PostState.success(List<Post> posts) {
-    return PostState(
-      isInitializing: false,
+  factory PostInitialized.success(List<Post> posts) {
+    return PostInitialized(
       posts: posts,
-      isError: false,
+      hasError: false,
       hasReachedMax: false,
     );
   }
 
-  factory PostState.failure() {
-    return PostState(
-      isInitializing: false,
+  factory PostInitialized.failure() {
+    return PostInitialized(
       posts: [],
-      isError: true,
+      hasError: true,
       hasReachedMax: false,
     );
   }
 
-  PostState copyWith({
-    bool isInitializing,
+  PostInitialized copyWith({
     List<Post> posts,
-    bool isError,
+    bool hasError,
     bool hasReachedMax,
   }) {
-    return PostState(
-      isInitializing: isInitializing ?? this.isInitializing,
+    return PostInitialized(
       posts: posts ?? this.posts,
-      isError: isError ?? this.isError,
+      hasError: hasError ?? this.hasError,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
 
   @override
   String toString() =>
-      'PostState { isInitializing: $isInitializing, posts: ${posts.length}, isError: $isError, hasReachedMax: $hasReachedMax }';
+      'PostInitialized { posts: ${posts.length}, hasError: $hasError, hasReachedMax: $hasReachedMax }';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PostState &&
+      other is PostInitialized &&
           runtimeType == other.runtimeType &&
-          isInitializing == other.isInitializing &&
           posts == other.posts &&
-          isError == other.isError &&
+          hasError == other.hasError &&
           hasReachedMax == other.hasReachedMax;
 
   @override
   int get hashCode =>
-      isInitializing.hashCode ^
-      posts.hashCode ^
-      isError.hashCode ^
-      hasReachedMax.hashCode;
+      posts.hashCode ^ hasError.hashCode ^ hasReachedMax.hashCode;
 }

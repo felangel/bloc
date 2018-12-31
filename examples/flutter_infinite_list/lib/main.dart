@@ -46,31 +46,34 @@ class _HomePageState extends State<HomePage> {
     return BlocBuilder(
       bloc: _postBloc,
       builder: (BuildContext context, PostState state) {
-        if (state.isInitializing) {
+        if (state is PostUninitialized) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-        if (state.isError) {
-          return Center(
-            child: Text('failed to fetch posts'),
+        if (state is PostInitialized) {
+          if (state.hasError) {
+            return Center(
+              child: Text('failed to fetch posts'),
+            );
+          }
+          if (state.posts.isEmpty) {
+            return Center(
+              child: Text('no posts'),
+            );
+          }
+          return ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              return index >= state.posts.length
+                  ? BottomLoader()
+                  : PostWidget(post: state.posts[index]);
+            },
+            itemCount: state.hasReachedMax
+                ? state.posts.length
+                : state.posts.length + 1,
+            controller: _scrollController,
           );
         }
-        if (state.posts.isEmpty) {
-          return Center(
-            child: Text('no posts'),
-          );
-        }
-        return ListView.builder(
-          itemBuilder: (BuildContext context, int index) {
-            return index >= state.posts.length
-                ? BottomLoader()
-                : PostWidget(post: state.posts[index]);
-          },
-          itemCount:
-              state.hasReachedMax ? state.posts.length : state.posts.length + 1,
-          controller: _scrollController,
-        );
       },
     );
   }
