@@ -17,7 +17,7 @@ void main() {
   });
 
   test('initial state is correct', () {
-    expect(authenticationBloc.initialState, AuthenticationState.initializing());
+    expect(authenticationBloc.initialState, AuthenticationUninitialized());
   });
 
   test('dispose does not emit new states', () {
@@ -29,10 +29,10 @@ void main() {
   });
 
   group('AppStarted', () {
-    test('emits [initializing, unauthenticated] for invalid token', () {
+    test('emits [uninitialized, unauthenticated] for invalid token', () {
       final expectedResponse = [
-        AuthenticationState.initializing(),
-        AuthenticationState.unauthenticated(),
+        AuthenticationUninitialized(),
+        AuthenticationInitialized.unauthenticated(),
       ];
 
       when(userRepository.hasToken()).thenAnswer((_) => Future.value(false));
@@ -47,12 +47,13 @@ void main() {
   });
 
   group('LoggedIn', () {
-    test('emits [initializing, loading, authenticated] when token is persisted',
+    test(
+        'emits [uninitialized, loading, authenticated] when token is persisted',
         () {
       final expectedResponse = [
-        AuthenticationState.initializing(),
-        AuthenticationState.initializing().copyWith(isLoading: true),
-        AuthenticationState.authenticated(),
+        AuthenticationUninitialized(),
+        AuthenticationInitialized(isLoading: true, isAuthenticated: false),
+        AuthenticationInitialized.authenticated(),
       ];
 
       expectLater(
@@ -67,12 +68,13 @@ void main() {
   });
 
   group('LoggedOut', () {
-    test('emits [initializing, loading, unauthenticated] when token is deleted',
+    test(
+        'emits [uninitialized, loading, unauthenticated] when token is deleted',
         () {
       final expectedResponse = [
-        AuthenticationState.initializing(),
-        AuthenticationState.initializing().copyWith(isLoading: true),
-        AuthenticationState.unauthenticated(),
+        AuthenticationUninitialized(),
+        AuthenticationInitialized(isLoading: true, isAuthenticated: true),
+        AuthenticationInitialized.unauthenticated(),
       ];
 
       expectLater(

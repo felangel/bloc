@@ -53,21 +53,20 @@ class AppState extends State<App> {
           bloc: _authenticationBloc,
           builder: (BuildContext context, AuthenticationState state) {
             List<Widget> widgets = [];
-
-            if (state.isAuthenticated) {
-              widgets.add(HomePage());
-            } else {
-              widgets.add(LoginPage(
-                userRepository: _userRepository,
-              ));
-            }
-
-            if (state.isInitializing) {
+            if (state is AuthenticationUninitialized) {
               widgets.add(SplashPage());
             }
-
-            if (state.isLoading) {
-              widgets.add(LoadingIndicator());
+            if (state is AuthenticationInitialized) {
+              if (state.isAuthenticated) {
+                widgets.add(HomePage());
+              } else {
+                widgets.add(LoginPage(
+                  userRepository: _userRepository,
+                ));
+              }
+              if (state.isLoading) {
+                widgets.add(LoadingIndicator());
+              }
             }
 
             return Stack(
