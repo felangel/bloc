@@ -83,19 +83,19 @@ Next, we’re going to need to determine how we’re going to manage the state o
 
 At a high level, we’re going to need to manage the user’s Authentication State. A user's authentication state can be one of the following:
 
-- initializing - waiting to see if the user is authenticated or not on app start.
-- loading - waiting to validate credentials and/or persist a token
-- authenticated - successfully authenticated
-- unauthenticated - not authenticate
+- uninitialized - waiting to see if the user is authenticated or not on app start.
+- initialized + loading - waiting to validate credentials and/or persist a token
+- initialized + authenticated - successfully authenticated
+- initialized + unauthenticated - not authenticated
 
 Each of these states will have an implication on what the user sees.
 
 For example:
 
-- if the authentication state was initializing, the user might be seeing a splash screen.
-- if the authentication state was loading, the user might be seeing a progress indicator.
-- if the authentication state was authenticated, the user might see a home screen.
-- if the authentication state was unauthenticated, the user might see a login form.
+- if the authentication state was uninitialized, the user might be seeing a splash screen.
+- if the authentication state was initialized but loading, the user might be seeing a progress indicator.
+- if the authentication state was initialized and authenticated, the user might see a home screen.
+- if the authentication state was initialized and unauthenticated, the user might see a login form.
 
 > It's critical to identify what the different states are going to be before diving into the implementation.
 
@@ -104,50 +104,46 @@ Now that we have our authentication states identified, we can implement our `Aut
 ```dart
 import 'package:meta/meta.dart';
 
-class AuthenticationState {
-  final bool isInitializing;
+abstract class AuthenticationState {}
+
+class AuthenticationUninitialized extends AuthenticationState {
+  @override
+  bool operator ==(
+    Object other,
+  ) =>
+      identical(
+        this,
+        other,
+      ) ||
+      other is AuthenticationUninitialized && runtimeType == other.runtimeType;
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() => 'AuthenticationUninitialized';
+}
+
+class AuthenticationInitialized extends AuthenticationState {
   final bool isLoading;
   final bool isAuthenticated;
 
-  const AuthenticationState({
-    @required this.isInitializing,
+  AuthenticationInitialized({
     @required this.isLoading,
     @required this.isAuthenticated,
   });
 
-  factory AuthenticationState.initializing() {
-    return AuthenticationState(
-      isInitializing: true,
-      isAuthenticated: false,
-      isLoading: false,
-    );
-  }
-
-  factory AuthenticationState.authenticated() {
-    return AuthenticationState(
-      isInitializing: false,
+  factory AuthenticationInitialized.authenticated() {
+    return AuthenticationInitialized(
       isAuthenticated: true,
       isLoading: false,
     );
   }
 
-  factory AuthenticationState.unauthenticated() {
-    return AuthenticationState(
-      isInitializing: false,
+  factory AuthenticationInitialized.unauthenticated() {
+    return AuthenticationInitialized(
       isAuthenticated: false,
       isLoading: false,
-    );
-  }
-
-  AuthenticationState copyWith({
-    bool isInitializing,
-    bool isAuthenticated,
-    bool isLoading,
-  }) {
-    return AuthenticationState(
-      isInitializing: isInitializing ?? this.isInitializing,
-      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
-      isLoading: isLoading ?? this.isLoading,
     );
   }
 
@@ -159,33 +155,27 @@ class AuthenticationState {
         this,
         other,
       ) ||
-      other is AuthenticationState &&
+      other is AuthenticationInitialized &&
           runtimeType == other.runtimeType &&
-          isInitializing == other.isInitializing &&
           isAuthenticated == other.isAuthenticated &&
           isLoading == other.isLoading;
 
   @override
-  int get hashCode =>
-      isInitializing.hashCode ^ isAuthenticated.hashCode ^ isLoading.hashCode;
+  int get hashCode => isAuthenticated.hashCode ^ isLoading.hashCode;
 
   @override
   String toString() =>
-      'AuthenticationState { isInitializing: $isInitializing, isLoading: $isLoading, isAuthenticated: $isAuthenticated }';
+      'AuthenticationInitialized { isLoading: $isLoading, isAuthenticated: $isAuthenticated }';
 }
 ```
-
-`isInitializing` corresponds to whether or not the application needs to check for an existing user.
 
 `isAuthenticated` corresponds to whether or not the current user is authenticated.
 
 `isLoading` corresponds to whether or not the application displays a loading indicator.
 
-?> **Note**: the `factory` pattern is used for convenience and readability. Instead of manually creating an instance of `AuthenticationState` we can simply write `AuthenticationState.initializing()`.
+?> **Note**: the `factory` pattern is used for convenience and readability. Instead of manually creating an instance of `AuthenticationState` we can simply write `AuthenticationState.authenticated()`.
 
 ?> **Note**: `==` and `hashCode` are overridden in order to be able to compare two instances of `AuthenticationState`. By default, `==` returns true only if the two objects are the same instance.
-
-?> **Note**: `copyWith` is implemented so that we can copy an instance of `AuthenticationState` and update zero or more properties conveniently.
 
 ?> **Note**: `toString` is overridden to make it easier to read an `AuthenticationState` when printing it to the console or in `Transitions`.
 
@@ -270,11 +260,11 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
 ?> **Note**: Our `AuthenticationBloc` has a dependency on the `UserRepository`.
 
-We can start by overriding `initialState` since we have already defined our initial `AuthenticationState`.
+We can start by overriding `initialState` to the `AuthenticationUninitialized()` state.
 
 ```dart
 @override
-AuthenticationState get initialState => AuthenticationState.initializing();
+AuthenticationState get initialState => AuthenticationUninitialized();
 ```
 
 Now all that's left is to implement `mapEventToState`.
@@ -288,27 +278,25 @@ Stream<AuthenticationState> mapEventToState(
   if (event is AppStart) {
     final bool hasToken = await userRepository.hasToken();
     if (hasToken) {
-      yield AuthenticationState.authenticated();
+      yield AuthenticationInitialized.authenticated();
     } else {
-      yield AuthenticationState.unauthenticated();
+      yield AuthenticationInitialized.unauthenticated();
     }
   }
 
   if (event is Login) {
-    yield currentState.copyWith(isLoading: true);
+    yield AuthenticationInitialized(isAuthenticated: false, isLoading: true);
     await userRepository.persistToken(event.token);
-    yield AuthenticationState.authenticated();
+    yield AuthenticationInitialized.authenticated();
   }
 
   if (event is Logout) {
-    yield currentState.copyWith(isLoading: true);
+    yield AuthenticationInitialized(isAuthenticated: true, isLoading: true);
     await userRepository.deleteToken();
-    yield AuthenticationState.unauthenticated();
+    yield AuthenticationInitialized.unauthenticated();
   }
 }
 ```
-
-?> **Note**: We are using the `copyWith` method to set `isLoading` while leaving the remaining properties untouched.
 
 Great! Our final `AuthenticationBloc` should look like
 
@@ -321,13 +309,15 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_login/user_repository/user_repository.dart';
 import 'package:flutter_login/authentication/authentication.dart';
 
-class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
+class AuthenticationBloc
+    extends Bloc<AuthenticationEvent, AuthenticationState> {
   final UserRepository userRepository;
 
-  AuthenticationBloc({@required this.userRepository}): assert(userRepository != null);
+  AuthenticationBloc({@required this.userRepository})
+    : assert(userRepository != null);
 
   @override
-  AuthenticationState get initialState => AuthenticationState.initializing();
+  AuthenticationState get initialState => AuthenticationUninitialized();
 
   @override
   Stream<AuthenticationState> mapEventToState(
@@ -336,23 +326,24 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   ) async* {
     if (event is AppStart) {
       final bool hasToken = await userRepository.hasToken();
+
       if (hasToken) {
-        yield AuthenticationState.authenticated();
+        yield AuthenticationInitialized.authenticated();
       } else {
-        yield AuthenticationState.unauthenticated();
+        yield AuthenticationInitialized.unauthenticated();
       }
     }
 
     if (event is Login) {
-      yield currentState.copyWith(isLoading: true);
+      yield AuthenticationInitialized(isAuthenticated: false, isLoading: true);
       await userRepository.persistToken(event.token);
-      yield AuthenticationState.authenticated();
+      yield AuthenticationInitialized.authenticated();
     }
 
     if (event is Logout) {
-      yield currentState.copyWith(isLoading: true);
+      yield AuthenticationInitialized(isAuthenticated: true, isLoading: true);
       await userRepository.deleteToken();
-      yield AuthenticationState.unauthenticated();
+      yield AuthenticationInitialized.unauthenticated();
     }
   }
 }
@@ -846,18 +837,22 @@ class AppState extends State<App> {
           builder: (BuildContext context, AuthenticationState state) {
             List<Widget> widgets = [];
 
-            if (state.isAuthenticated) {
-              widgets.add(HomePage());
-            } else {
-              widgets.add(LoginPage(userRepository: _userRepository));
-            }
-
-            if (state.isInitializing) {
+            if (state is AuthenticationUninitialized) {
               widgets.add(SplashPage());
             }
+            if (state is AuthenticationInitialized) {
 
-            if (state.isLoading) {
-              widgets.add(LoadingIndicator());
+              if (state.isAuthenticated) {
+                widgets.add(HomePage());
+              } else {
+                widgets.add(LoginPage(
+                  userRepository: _userRepository,
+                ));
+              }
+
+              if (state.isLoading) {
+                widgets.add(LoadingIndicator());
+              }
             }
 
             return Stack(

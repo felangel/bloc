@@ -1,49 +1,45 @@
 import 'package:meta/meta.dart';
 
-class AuthenticationState {
-  final bool isInitializing;
+abstract class AuthenticationState {}
+
+class AuthenticationUninitialized extends AuthenticationState {
+  @override
+  bool operator ==(
+    Object other,
+  ) =>
+      identical(
+        this,
+        other,
+      ) ||
+      other is AuthenticationUninitialized && runtimeType == other.runtimeType;
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() => 'AuthenticationUninitialized';
+}
+
+class AuthenticationInitialized extends AuthenticationState {
   final bool isLoading;
   final bool isAuthenticated;
 
-  const AuthenticationState({
-    @required this.isInitializing,
+  AuthenticationInitialized({
     @required this.isLoading,
     @required this.isAuthenticated,
   });
 
-  factory AuthenticationState.initializing() {
-    return AuthenticationState(
-      isInitializing: true,
-      isAuthenticated: false,
-      isLoading: false,
-    );
-  }
-
-  factory AuthenticationState.authenticated() {
-    return AuthenticationState(
-      isInitializing: false,
+  factory AuthenticationInitialized.authenticated() {
+    return AuthenticationInitialized(
       isAuthenticated: true,
       isLoading: false,
     );
   }
 
-  factory AuthenticationState.unauthenticated() {
-    return AuthenticationState(
-      isInitializing: false,
+  factory AuthenticationInitialized.unauthenticated() {
+    return AuthenticationInitialized(
       isAuthenticated: false,
       isLoading: false,
-    );
-  }
-
-  AuthenticationState copyWith({
-    bool isInitializing,
-    bool isAuthenticated,
-    bool isLoading,
-  }) {
-    return AuthenticationState(
-      isInitializing: isInitializing ?? this.isInitializing,
-      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
-      isLoading: isLoading ?? this.isLoading,
     );
   }
 
@@ -55,17 +51,15 @@ class AuthenticationState {
         this,
         other,
       ) ||
-      other is AuthenticationState &&
+      other is AuthenticationInitialized &&
           runtimeType == other.runtimeType &&
-          isInitializing == other.isInitializing &&
           isAuthenticated == other.isAuthenticated &&
           isLoading == other.isLoading;
 
   @override
-  int get hashCode =>
-      isInitializing.hashCode ^ isAuthenticated.hashCode ^ isLoading.hashCode;
+  int get hashCode => isAuthenticated.hashCode ^ isLoading.hashCode;
 
   @override
   String toString() =>
-      'AuthenticationState { isInitializing: $isInitializing, isLoading: $isLoading, isAuthenticated: $isAuthenticated }';
+      'AuthenticationInitialized { isLoading: $isLoading, isAuthenticated: $isAuthenticated }';
 }
