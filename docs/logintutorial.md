@@ -806,16 +806,21 @@ import 'package:flutter_login/common/common.dart';
 void main() => runApp(App());
 
 class App extends StatefulWidget {
+  final UserRepository userRepository;
+
+  App({Key key, this.userRepository}) : super(key: key);
+
   @override
   State<App> createState() => AppState();
 }
 
 class AppState extends State<App> {
-  final UserRepository _userRepository = UserRepository();
+  UserRepository _userRepository;
   AuthenticationBloc _authenticationBloc;
 
   @override
   void initState() {
+    _userRepository = widget.userRepository ?? UserRepository();
     _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
     _authenticationBloc.dispatch(AppStart());
     super.initState();
