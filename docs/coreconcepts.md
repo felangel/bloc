@@ -10,7 +10,7 @@ In the upcoming sections, we're going to discuss each of them in detail as well 
 
 > Events are the input to a Bloc. They are commonly user interactions such as button presses or lifecycle events like page loads.
 
-When designing an app we need step back and define how users will interact with it. In the context of our counter app we will have two buttons to increment and decrement our counter.
+When designing an app we need to step back and define how users will interact with it. In the context of our counter app we will have two buttons to increment and decrement our counter.
 
 When a user taps on one of these buttons, something needs to happen to notify the "brains" of our app so that it can respond to the user's input; this is where events come into play.
 
