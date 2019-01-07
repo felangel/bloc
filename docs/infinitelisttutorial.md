@@ -26,6 +26,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: 0.4.11
   http: 0.12.0
+  equatable: 0.1.1
 
 dev_dependencies:
   flutter_test:
@@ -75,27 +76,17 @@ Great, now that we know what our data is going to look like, let’s create the 
 Create `post.dart` and let’s get to work creating the model of our Post object.
 
 ```dart
-class Post {
+import 'package:equatable/equatable.dart';
+
+class Post extends Equatable {
   final int id;
   final String title;
   final String body;
 
-  const Post({this.id, this.title, this.body});
+  const Post({this.id, this.title, this.body}) : super([id, title, body]);
 
   @override
   String toString() => 'Post { id: $id }';
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Post &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          title == other.title &&
-          body == other.body;
-
-  @override
-  int get hashCode => id.hashCode ^ title.hashCode ^ body.hashCode;
 }
 ```
 
@@ -103,7 +94,7 @@ class Post {
 
 ?> We override the `toString` function in order to have a custom string representation of our `Post` for later.
 
-?> We override the `==` operator as well as `hashCode` so that we can compare `Posts`; by default, the equality operator returns true if and only if this and other are the same object.
+?> We extend [`Equatable`](https://pub.dartlang.org/packages/equatable) so that we can compare `Posts`; by default, the equality operator returns true if and only if this and other are the same instance.
 
 Now that we have our `Post` object model, let’s start working on the Business Logic Component (bloc).
 
@@ -116,23 +107,17 @@ At a high level, it will be responding to user input (scrolling) and fetching mo
 Our `PostBloc` will only be responding to a single event; `Fetch` which will be dispatched by the presentation layer whenever it needs more Posts to present. Since our `Fetch` event is a type of `PostEvent` we can create `post_event.dart` and implement the event like so.
 
 ```dart
-abstract class PostEvent {}
+import 'package:equatable/equatable.dart';
+
+abstract class PostEvent extends Equatable {}
 
 class Fetch extends PostEvent {
   @override
   String toString() => 'Fetch';
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Fetch && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => runtimeType.hashCode;
 }
 ```
 
-?> Again, we are overriding `toString` for an easier to read string representation of our event along with `==` and `hashCode` so that we can compare instances for equality.
+?> Again, we are overriding `toString` for an easier to read string representation of our event. Again, we are extending [`Equatable`](https://pub.dartlang.org/packages/equatable) so that we can compare instances for equality.
 
 To recap, our `PostBloc` will be receiving `PostEvents` and converting them to `PostStates`. We have defined all of our `PostEvents` (Fetch) so next let’s define our `PostState`.
 
@@ -150,20 +135,17 @@ Our presentation layer will need to have several pieces of information in order 
 We can now create `post_state.dart` and implement it like so.
 
 ```dart
+import 'package:equatable/equatable.dart';
+
 import 'package:flutter_infinite_list/models/models.dart';
 
-abstract class PostState {}
+abstract class PostState extends Equatable {
+  PostState([Iterable props]) : super(props);
+}
 
 class PostUninitialized extends PostState {
   @override
   String toString() => 'PostUninitialized';
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PostUninitialized && runtimeType == other.runtimeType;
-  @override
-  int get hashCode => runtimeType.hashCode;
 }
 
 class PostInitialized extends PostState {
@@ -175,7 +157,7 @@ class PostInitialized extends PostState {
     this.hasError,
     this.posts,
     this.hasReachedMax,
-  });
+  }) : super([hasError, posts, hasReachedMax]);
 
   factory PostInitialized.success(List<Post> posts) {
     return PostInitialized(
@@ -208,19 +190,6 @@ class PostInitialized extends PostState {
   @override
   String toString() =>
       'PostInitialized { posts: ${posts.length}, hasError: $hasError, hasReachedMax: $hasReachedMax }';
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PostInitialized &&
-          runtimeType == other.runtimeType &&
-          posts == other.posts &&
-          hasError == other.hasError &&
-          hasReachedMax == other.hasReachedMax;
-
-  @override
-  int get hashCode =>
-      posts.hashCode ^ hasError.hashCode ^ hasReachedMax.hashCode;
 }
 ```
 

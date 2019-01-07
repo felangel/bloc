@@ -26,6 +26,7 @@ dependencies:
   bloc: ^0.7.7
   flutter_bloc: ^0.4.11
   meta: ^1.1.6
+  equatable: ^0.1.1
 
 dev_dependencies:
   flutter_test:
@@ -103,23 +104,13 @@ Now that we have our authentication states identified, we can implement our `Aut
 
 ```dart
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class AuthenticationState {}
+abstract class AuthenticationState extends Equatable {
+  AuthenticationState([Iterable props]) : super(props);
+}
 
 class AuthenticationUninitialized extends AuthenticationState {
-  @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is AuthenticationUninitialized && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
   @override
   String toString() => 'AuthenticationUninitialized';
 }
@@ -131,7 +122,7 @@ class AuthenticationInitialized extends AuthenticationState {
   AuthenticationInitialized({
     @required this.isLoading,
     @required this.isAuthenticated,
-  });
+  }) : super([isLoading, isAuthenticated]);
 
   factory AuthenticationInitialized.authenticated() {
     return AuthenticationInitialized(
@@ -148,22 +139,6 @@ class AuthenticationInitialized extends AuthenticationState {
   }
 
   @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is AuthenticationInitialized &&
-          runtimeType == other.runtimeType &&
-          isAuthenticated == other.isAuthenticated &&
-          isLoading == other.isLoading;
-
-  @override
-  int get hashCode => isAuthenticated.hashCode ^ isLoading.hashCode;
-
-  @override
   String toString() =>
       'AuthenticationInitialized { isLoading: $isLoading, isAuthenticated: $isAuthenticated }';
 }
@@ -175,7 +150,7 @@ class AuthenticationInitialized extends AuthenticationState {
 
 ?> **Note**: the `factory` pattern is used for convenience and readability. Instead of manually creating an instance of `AuthenticationState` we can simply write `AuthenticationState.authenticated()`.
 
-?> **Note**: `==` and `hashCode` are overridden in order to be able to compare two instances of `AuthenticationState`. By default, `==` returns true only if the two objects are the same instance.
+?> **Note**: The [`equatable`](https://pub.dartlang.org/packages/equatable) package is used in order to be able to compare two instances of `AuthenticationState`. By default, `==` returns true only if the two objects are the same instance.
 
 ?> **Note**: `toString` is overridden to make it easier to read an `AuthenticationState` when printing it to the console or in `Transitions`.
 
@@ -193,18 +168,13 @@ We will need:
 
 ```dart
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class AuthenticationEvent {}
+abstract class AuthenticationEvent extends Equatable {
+  AuthenticationEvent([Iterable props]) : super(props);
+}
 
 class AppStart extends AuthenticationEvent {
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is AppStart && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
   @override
   String toString() => 'AppStart';
 }
@@ -212,31 +182,13 @@ class AppStart extends AuthenticationEvent {
 class Login extends AuthenticationEvent {
   final String token;
 
-  Login({@required this.token});
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Login &&
-          runtimeType == other.runtimeType &&
-          token == other.token;
-
-  @override
-  int get hashCode => token.hashCode;
+  Login({@required this.token}) : super([token]);
 
   @override
   String toString() => 'Login { token: $token }';
 }
 
 class Logout extends AuthenticationEvent {
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Logout && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
   @override
   String toString() => 'Logout';
 }
@@ -419,8 +371,9 @@ Just like we did for the `AuthenticationBloc`, we will need to define the `Login
 
 ```dart
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-class LoginState {
+class LoginState extends Equatable {
   final bool isLoading;
   final bool isLoginButtonEnabled;
   final String error;
@@ -431,7 +384,7 @@ class LoginState {
     @required this.isLoginButtonEnabled,
     @required this.error,
     @required this.token,
-  });
+  }) : super([isLoading, isLoginButtonEnabled, error, token]);
 
   factory LoginState.initial() {
     return LoginState(
@@ -470,28 +423,6 @@ class LoginState {
   }
 
   @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is LoginState &&
-          runtimeType == other.runtimeType &&
-          isLoading == other.isLoading &&
-          isLoginButtonEnabled == other.isLoginButtonEnabled &&
-          error == other.error &&
-          token == other.token;
-
-  @override
-  int get hashCode =>
-      isLoading.hashCode ^
-      isLoginButtonEnabled.hashCode ^
-      error.hashCode ^
-      token.hashCode;
-
-  @override
   String toString() =>
       'LoginState { isLoading: $isLoading, isLoginButtonEnabled: $isLoginButtonEnabled, error: $error, token: $token }';
 }
@@ -510,11 +441,14 @@ Now that we have the `LoginState` defined let’s take a look at the `LoginEvent
 ## Login Events
 
 ```dart
-import 'package:meta/meta.dart';
-
 import 'package:flutter/widgets.dart';
 
-abstract class LoginEvent {}
+import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
+
+abstract class LoginEvent extends Equatable {
+  LoginEvent([Iterable props]) : super(props);
+}
 
 class LoginButtonPressed extends LoginEvent {
   final String username;
@@ -523,18 +457,7 @@ class LoginButtonPressed extends LoginEvent {
   LoginButtonPressed({
     @required this.username,
     @required this.password,
-  });
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is LoginButtonPressed &&
-          runtimeType == other.runtimeType &&
-          username == other.username &&
-          password == other.password;
-
-  @override
-  int get hashCode => username.hashCode ^ password.hashCode;
+  }) : super([username, password]);
 
   @override
   String toString() => 'LoginButtonPressed { username: $username, password: $password }';
