@@ -1,8 +1,11 @@
-import 'package:meta/meta.dart';
-
 import 'package:flutter/widgets.dart';
 
-abstract class LoginEvent {}
+import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
+
+abstract class LoginEvent extends Equatable {
+  LoginEvent([Iterable props]) : super(props);
+}
 
 class LoginButtonPressed extends LoginEvent {
   final String username;
@@ -11,18 +14,7 @@ class LoginButtonPressed extends LoginEvent {
   LoginButtonPressed({
     @required this.username,
     @required this.password,
-  });
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is LoginButtonPressed &&
-          runtimeType == other.runtimeType &&
-          username == other.username &&
-          password == other.password;
-
-  @override
-  int get hashCode => username.hashCode ^ password.hashCode;
+  }) : super([username, password]);
 }
 
 class LoggedIn extends LoginEvent {}

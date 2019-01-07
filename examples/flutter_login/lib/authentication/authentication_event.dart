@@ -1,16 +1,11 @@
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class AuthenticationEvent {}
+abstract class AuthenticationEvent extends Equatable {
+  AuthenticationEvent([Iterable props]) : super(props);
+}
 
 class AppStart extends AuthenticationEvent {
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is AppStart && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
   @override
   String toString() => 'AppStart';
 }
@@ -18,31 +13,13 @@ class AppStart extends AuthenticationEvent {
 class Login extends AuthenticationEvent {
   final String token;
 
-  Login({@required this.token});
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Login &&
-          runtimeType == other.runtimeType &&
-          token == other.token;
-
-  @override
-  int get hashCode => token.hashCode;
+  Login({@required this.token}) : super([token]);
 
   @override
   String toString() => 'Login { token: $token }';
 }
 
 class Logout extends AuthenticationEvent {
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Logout && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
   @override
   String toString() => 'Logout';
 }

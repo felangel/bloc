@@ -1,17 +1,18 @@
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-class LoginState {
+class LoginState extends Equatable {
   final bool isLoading;
   final bool isLoginButtonEnabled;
   final String error;
   final String token;
 
-  const LoginState({
+  LoginState({
     @required this.isLoading,
     @required this.isLoginButtonEnabled,
     @required this.error,
     @required this.token,
-  });
+  }) : super([isLoading, isLoginButtonEnabled, error, token]);
 
   factory LoginState.initial() {
     return LoginState(
@@ -48,28 +49,6 @@ class LoginState {
       token: token,
     );
   }
-
-  @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is LoginState &&
-          runtimeType == other.runtimeType &&
-          isLoading == other.isLoading &&
-          isLoginButtonEnabled == other.isLoginButtonEnabled &&
-          error == other.error &&
-          token == other.token;
-
-  @override
-  int get hashCode =>
-      isLoading.hashCode ^
-      isLoginButtonEnabled.hashCode ^
-      error.hashCode ^
-      token.hashCode;
 
   @override
   String toString() =>

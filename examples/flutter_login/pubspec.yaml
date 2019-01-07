@@ -12,6 +12,7 @@ dependencies:
     path: ../../packages/flutter_bloc
   user_repository:
     path: user_repository
+  equatable: 0.1.1
 
 dev_dependencies:
   flutter_test:

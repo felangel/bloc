@@ -1,17 +1,14 @@
+import 'package:equatable/equatable.dart';
+
 import 'package:flutter_infinite_list/models/models.dart';
 
-abstract class PostState {}
+abstract class PostState extends Equatable {
+  PostState([Iterable props]) : super(props);
+}
 
 class PostUninitialized extends PostState {
   @override
   String toString() => 'PostUninitialized';
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PostUninitialized && runtimeType == other.runtimeType;
-  @override
-  int get hashCode => runtimeType.hashCode;
 }
 
 class PostInitialized extends PostState {
@@ -23,7 +20,7 @@ class PostInitialized extends PostState {
     this.hasError,
     this.posts,
     this.hasReachedMax,
-  });
+  }) : super([posts, hasError, hasReachedMax]);
 
   factory PostInitialized.success(List<Post> posts) {
     return PostInitialized(
@@ -56,17 +53,4 @@ class PostInitialized extends PostState {
   @override
   String toString() =>
       'PostInitialized { posts: ${posts.length}, hasError: $hasError, hasReachedMax: $hasReachedMax }';
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PostInitialized &&
-          runtimeType == other.runtimeType &&
-          posts == other.posts &&
-          hasError == other.hasError &&
-          hasReachedMax == other.hasReachedMax;
-
-  @override
-  int get hashCode =>
-      posts.hashCode ^ hasError.hashCode ^ hasReachedMax.hashCode;
 }

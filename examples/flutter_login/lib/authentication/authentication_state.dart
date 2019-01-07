@@ -1,21 +1,11 @@
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class AuthenticationState {}
+abstract class AuthenticationState extends Equatable {
+  AuthenticationState([Iterable props]) : super(props);
+}
 
 class AuthenticationUninitialized extends AuthenticationState {
-  @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is AuthenticationUninitialized && runtimeType == other.runtimeType;
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
   @override
   String toString() => 'AuthenticationUninitialized';
 }
@@ -27,7 +17,7 @@ class AuthenticationInitialized extends AuthenticationState {
   AuthenticationInitialized({
     @required this.isLoading,
     @required this.isAuthenticated,
-  });
+  }) : super([isLoading, isAuthenticated]);
 
   factory AuthenticationInitialized.authenticated() {
     return AuthenticationInitialized(
@@ -42,22 +32,6 @@ class AuthenticationInitialized extends AuthenticationState {
       isLoading: false,
     );
   }
-
-  @override
-  bool operator ==(
-    Object other,
-  ) =>
-      identical(
-        this,
-        other,
-      ) ||
-      other is AuthenticationInitialized &&
-          runtimeType == other.runtimeType &&
-          isAuthenticated == other.isAuthenticated &&
-          isLoading == other.isLoading;
-
-  @override
-  int get hashCode => isAuthenticated.hashCode ^ isLoading.hashCode;
 
   @override
   String toString() =>
