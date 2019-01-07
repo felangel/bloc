@@ -9,7 +9,7 @@
 
 ---
 
-A dart package that helps implement the [Bloc pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
+A dart package that helps implement the [BLoC pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
 
 This package is built to work with [RxDart.dart](https://pub.dartlang.org/packages/rxdart) 0.18.1+.
 
@@ -17,9 +17,9 @@ This package is built to work with [RxDart.dart](https://pub.dartlang.org/packag
 
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
 
-The goal of this package is to make it easy to implement the `Bloc` Design Pattern (Business Logic Component).
+The goal of this package is to make it easy to implement the `BLoC` Design Pattern (Business Logic Component).
 
-This design pattern helps to separate _presentation_ from _business logic_. Following the Bloc pattern facilitates testability and reusability. This package abstracts reactive aspects of the pattern allowing developers to focus on converting events into states.
+This design pattern helps to separate _presentation_ from _business logic_. Following the BLoC pattern facilitates testability and reusability. This package abstracts reactive aspects of the pattern allowing developers to focus on converting events into states.
 
 ## Glossary
 

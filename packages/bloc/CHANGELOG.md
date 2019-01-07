@@ -127,3 +127,7 @@ Minor Updates to Documentation
 # 0.7.7
 
 Additional Minor Updates to Documentation
+
+# 0.7.8
+
+Additional Minor Updates to Documentation
