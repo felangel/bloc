@@ -9,7 +9,7 @@
 
 ---
 
-A Flutter package that helps implement the [Bloc pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
+A Flutter package that helps implement the [BLoC pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
 
 This package is built to work with [bloc](https://pub.dartlang.org/packages/bloc).
 

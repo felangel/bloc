@@ -85,3 +85,7 @@ Minor Updates to Documentation and Examples
 # 0.4.11
 
 Additional Minor Updates to Documentation
+
+# 0.4.12
+
+Additional Minor Updates to Documentation
