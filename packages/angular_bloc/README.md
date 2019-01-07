@@ -9,7 +9,7 @@
 
 ---
 
-An Angular package that helps implement the [Bloc pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
+An Angular package that helps implement the [BLoC pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
 
 This package is built to work with [bloc](https://pub.dartlang.org/packages/bloc).
 
@@ -22,16 +22,22 @@ This package is built to work with [bloc](https://pub.dartlang.org/packages/bloc
 Lets take a look at how to use `BlocPipe` to hook up a `CounterPage` html template to a `CounterBloc`.
 
 counter_page_component.html
+
 ```html
 <div class="counter-page-container">
-    <h1>Counter App</h1>
-    <h2>Current Count: {{ counterBloc | bloc }}</h2>
-    <material-fab class="counter-fab-button" (trigger)="increment()">+</material-fab>
-    <material-fab class="counter-fab-button" (trigger)="decrement()">-</material-fab>
+  <h1>Counter App</h1>
+  <h2>Current Count: {{ counterBloc | bloc }}</h2>
+  <material-fab class="counter-fab-button" (trigger)="increment()"
+    >+</material-fab
+  >
+  <material-fab class="counter-fab-button" (trigger)="decrement()"
+    >-</material-fab
+  >
 </div>
 ```
 
 counter_page_component.dart
+
 ```dart
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
