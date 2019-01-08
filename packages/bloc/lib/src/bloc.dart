@@ -11,7 +11,7 @@ abstract class Bloc<Event, State> {
   BehaviorSubject<State> _stateSubject;
 
   /// Returns [Stream] of [State]s.
-  /// Consumed by [BlocBuilder].
+  /// Consumed by the presentation layer.
   Stream<State> get state => _stateSubject.stream;
 
   /// Returns the [State] before any [Event]s have been `dispatched`.
@@ -63,6 +63,7 @@ abstract class Bloc<Event, State> {
       return mapEventToState(_stateSubject.value, event);
     }).forEach(
       (State nextState) {
+        if (currentState == nextState) return;
         final transition = Transition(
           currentState: _stateSubject.value,
           event: currentEvent,
