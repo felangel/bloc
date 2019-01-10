@@ -65,7 +65,7 @@ void main() {
       });
 
       test('should map multiple events to correct states', () {
-        final List<String> expected = ['', 'data', 'data', 'data'];
+        final List<String> expected = ['', 'data'];
 
         expectLater(simpleBloc.state, emitsInOrder(expected)).then((dynamic _) {
           verify(
@@ -73,24 +73,6 @@ void main() {
               Transition<dynamic, String>(
                 currentState: '',
                 event: 'event1',
-                nextState: 'data',
-              ),
-            ),
-          ).called(1);
-          verify(
-            delegate.onTransition(
-              Transition<dynamic, String>(
-                currentState: 'data',
-                event: 'event2',
-                nextState: 'data',
-              ),
-            ),
-          ).called(1);
-          verify(
-            delegate.onTransition(
-              Transition<dynamic, String>(
-                currentState: 'data',
-                event: 'event3',
                 nextState: 'data',
               ),
             ),
@@ -144,7 +126,7 @@ void main() {
       test('should map single event to correct state', () {
         final List<ComplexState> expected = [
           ComplexStateA(),
-          ComplexStateA(),
+          ComplexStateB(),
         ];
 
         expectLater(complexBloc.state, emitsInOrder(expected))
@@ -153,20 +135,19 @@ void main() {
             delegate.onTransition(
               Transition<ComplexEvent, ComplexState>(
                 currentState: ComplexStateA(),
-                event: ComplexEventA(),
-                nextState: ComplexStateA(),
+                event: ComplexEventB(),
+                nextState: ComplexStateB(),
               ),
             ),
           ).called(1);
-          expect(complexBloc.currentState, ComplexStateA());
+          expect(complexBloc.currentState, ComplexStateB());
         });
 
-        complexBloc.dispatch(ComplexEventA());
+        complexBloc.dispatch(ComplexEventB());
       });
 
       test('should map multiple events to correct states', () {
         final List<ComplexState> expected = [
-          ComplexStateA(),
           ComplexStateA(),
           ComplexStateB(),
           ComplexStateC(),
@@ -176,15 +157,6 @@ void main() {
           complexBloc.state,
           emitsInOrder(expected),
         ).then((dynamic _) {
-          verify(
-            delegate.onTransition(
-              Transition<ComplexEvent, ComplexState>(
-                currentState: ComplexStateA(),
-                event: ComplexEventA(),
-                nextState: ComplexStateA(),
-              ),
-            ),
-          ).called(1);
           verify(
             delegate.onTransition(
               Transition<ComplexEvent, ComplexState>(
