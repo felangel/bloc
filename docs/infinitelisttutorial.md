@@ -24,9 +24,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: 0.4.11
-  http: 0.12.0
-  equatable: 0.1.1
+  flutter_bloc: ^0.5.0
+  http: ^0.12.0
+  equatable: ^0.1.6
 
 dev_dependencies:
   flutter_test:

@@ -177,6 +177,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
+!> Blocs will ignore duplicate states. If a Bloc yields `State state` where `currentState == state`, then no transition will occur and no change will be made to the `Stream<State>`.
+
 At this point, you're probably wondering _"How do I notify a Bloc of an event?"_.
 
 > Every Bloc has a `dispatch` method. `Dispatch` takes an `event` and triggers `mapEventToState`. `Dispatch` may be called from the presentation layer or from within the Bloc and notifies the Bloc of a new `event`.
