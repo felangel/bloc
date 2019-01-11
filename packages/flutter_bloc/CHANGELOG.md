@@ -89,3 +89,7 @@ Additional Minor Updates to Documentation
 # 0.4.12
 
 Additional Minor Updates to Documentation
+
+# 0.5.0
+
+Updated to `bloc: ^0.8.0`
