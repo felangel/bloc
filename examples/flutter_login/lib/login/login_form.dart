@@ -31,11 +31,6 @@ class LoginFormState extends State<LoginForm> {
         BuildContext context,
         LoginState loginState,
       ) {
-        if (_loginSucceeded(loginState)) {
-          widget.authBloc.dispatch(Login(token: loginState.token));
-          widget.loginBloc.dispatch(LoggedIn());
-        }
-
         if (_loginFailed(loginState)) {
           _onWidgetDidBuild(() {
             Scaffold.of(context).showSnackBar(
@@ -47,38 +42,35 @@ class LoginFormState extends State<LoginForm> {
           });
         }
 
-        return _form(loginState);
+        return Form(
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: 'username'),
+                controller: _usernameController,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'password'),
+                controller: _passwordController,
+                obscureText: true,
+              ),
+              RaisedButton(
+                onPressed: loginState.isLoginButtonEnabled
+                    ? _onLoginButtonPressed
+                    : null,
+                child: Text('Login'),
+              ),
+              Container(
+                child:
+                    loginState.isLoading ? CircularProgressIndicator() : null,
+              ),
+            ],
+          ),
+        );
       },
     );
   }
 
-  Widget _form(LoginState loginState) {
-    return Form(
-      child: Column(
-        children: [
-          TextFormField(
-            decoration: InputDecoration(labelText: 'username'),
-            controller: _usernameController,
-          ),
-          TextFormField(
-            decoration: InputDecoration(labelText: 'password'),
-            controller: _passwordController,
-            obscureText: true,
-          ),
-          RaisedButton(
-            onPressed:
-                loginState.isLoginButtonEnabled ? _onLoginButtonPressed : null,
-            child: Text('Login'),
-          ),
-          Container(
-            child: loginState.isLoading ? CircularProgressIndicator() : null,
-          ),
-        ],
-      ),
-    );
-  }
-
-  bool _loginSucceeded(LoginState state) => state.token.isNotEmpty;
   bool _loginFailed(LoginState state) => state.error.isNotEmpty;
 
   void _onWidgetDidBuild(Function callback) {

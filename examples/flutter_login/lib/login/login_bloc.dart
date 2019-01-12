@@ -4,12 +4,18 @@ import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:user_repository/user_repository.dart';
 
+import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_login/login/login.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserRepository userRepository;
+  final AuthenticationBloc authenticationBloc;
 
-  LoginBloc({@required this.userRepository}) : assert(userRepository != null);
+  LoginBloc({
+    @required this.userRepository,
+    @required this.authenticationBloc,
+  })  : assert(userRepository != null),
+        assert(authenticationBloc != null);
 
   LoginState get initialState => LoginState.initial();
 
@@ -27,14 +33,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           password: event.password,
         );
 
-        yield LoginState.success(token);
+        authenticationBloc.dispatch(Login(token: token));
+        yield LoginState.initial();
       } catch (error) {
         yield LoginState.failure(error.toString());
       }
-    }
-
-    if (event is LoggedIn) {
-      yield LoginState.initial();
     }
   }
 }

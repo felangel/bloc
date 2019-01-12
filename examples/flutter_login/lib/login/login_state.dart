@@ -5,21 +5,18 @@ class LoginState extends Equatable {
   final bool isLoading;
   final bool isLoginButtonEnabled;
   final String error;
-  final String token;
 
   LoginState({
     @required this.isLoading,
     @required this.isLoginButtonEnabled,
     @required this.error,
-    @required this.token,
-  }) : super([isLoading, isLoginButtonEnabled, error, token]);
+  }) : super([isLoading, isLoginButtonEnabled, error]);
 
   factory LoginState.initial() {
     return LoginState(
       isLoading: false,
       isLoginButtonEnabled: true,
       error: '',
-      token: '',
     );
   }
 
@@ -28,7 +25,6 @@ class LoginState extends Equatable {
       isLoading: true,
       isLoginButtonEnabled: false,
       error: '',
-      token: '',
     );
   }
 
@@ -37,20 +33,10 @@ class LoginState extends Equatable {
       isLoading: false,
       isLoginButtonEnabled: true,
       error: error,
-      token: '',
-    );
-  }
-
-  factory LoginState.success(String token) {
-    return LoginState(
-      isLoading: false,
-      isLoginButtonEnabled: true,
-      error: '',
-      token: token,
     );
   }
 
   @override
   String toString() =>
-      'LoginState { isLoading: $isLoading, isLoginButtonEnabled: $isLoginButtonEnabled, error: $error, token: $token }';
+      'LoginState { isLoading: $isLoading, isLoginButtonEnabled: $isLoginButtonEnabled, error: $error }';
 }
