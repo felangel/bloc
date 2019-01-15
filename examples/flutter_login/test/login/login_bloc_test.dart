@@ -3,21 +3,29 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:user_repository/user_repository.dart';
 
+import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_login/login/login.dart';
 
 class MockUserRepository extends Mock implements UserRepository {}
 
+class MockAuthenticationBloc extends Mock implements AuthenticationBloc {}
+
 void main() {
   LoginBloc loginBloc;
   MockUserRepository userRepository;
+  MockAuthenticationBloc authenticationBloc;
 
   setUp(() {
     userRepository = MockUserRepository();
-    loginBloc = LoginBloc(userRepository: userRepository);
+    authenticationBloc = MockAuthenticationBloc();
+    loginBloc = LoginBloc(
+      userRepository: userRepository,
+      authenticationBloc: authenticationBloc,
+    );
   });
 
   test('initial state is correct', () {
-    expect(LoginState.initial(), loginBloc.initialState);
+    expect(LoginInitial(), loginBloc.initialState);
   });
 
   test('dispose does not emit new states', () {
@@ -31,9 +39,9 @@ void main() {
   group('LoginButtonPressed', () {
     test('emits token on success', () {
       final expectedResponse = [
-        LoginState.initial(),
-        LoginState.loading(),
-        LoginState.success('token'),
+        LoginInitial(),
+        LoginLoading(),
+        LoginInitial(),
       ];
 
       when(userRepository.authenticate(
@@ -44,7 +52,9 @@ void main() {
       expectLater(
         loginBloc.state,
         emitsInOrder(expectedResponse),
-      );
+      ).then((_) {
+        verify(authenticationBloc.dispatch(LoggedIn(token: 'token'))).called(1);
+      });
 
       loginBloc.dispatch(LoginButtonPressed(
         username: 'valid.username',

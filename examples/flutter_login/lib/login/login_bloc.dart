@@ -17,7 +17,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   })  : assert(userRepository != null),
         assert(authenticationBloc != null);
 
-  LoginState get initialState => LoginState.initial();
+  LoginState get initialState => LoginInitial();
 
   @override
   Stream<LoginState> mapEventToState(
@@ -25,7 +25,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginEvent event,
   ) async* {
     if (event is LoginButtonPressed) {
-      yield LoginState.loading();
+      yield LoginLoading();
 
       try {
         final token = await userRepository.authenticate(
@@ -33,10 +33,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           password: event.password,
         );
 
-        authenticationBloc.dispatch(Login(token: token));
-        yield LoginState.initial();
+        authenticationBloc.dispatch(LoggedIn(token: token));
+        yield LoginInitial();
       } catch (error) {
-        yield LoginState.failure(error.toString());
+        yield LoginFailure(error: error.toString());
       }
     }
   }

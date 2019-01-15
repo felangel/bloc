@@ -29,13 +29,13 @@ class LoginFormState extends State<LoginForm> {
       bloc: widget.loginBloc,
       builder: (
         BuildContext context,
-        LoginState loginState,
+        LoginState state,
       ) {
-        if (_loginFailed(loginState)) {
+        if (state is LoginFailure) {
           _onWidgetDidBuild(() {
             Scaffold.of(context).showSnackBar(
               SnackBar(
-                content: Text('${loginState.error}'),
+                content: Text('${state.error}'),
                 backgroundColor: Colors.red,
               ),
             );
@@ -55,14 +55,13 @@ class LoginFormState extends State<LoginForm> {
                 obscureText: true,
               ),
               RaisedButton(
-                onPressed: loginState.isLoginButtonEnabled
-                    ? _onLoginButtonPressed
-                    : null,
+                onPressed:
+                    state is! LoginLoading ? _onLoginButtonPressed : null,
                 child: Text('Login'),
               ),
               Container(
                 child:
-                    loginState.isLoading ? CircularProgressIndicator() : null,
+                    state is LoginLoading ? CircularProgressIndicator() : null,
               ),
             ],
           ),
@@ -70,8 +69,6 @@ class LoginFormState extends State<LoginForm> {
       },
     );
   }
-
-  bool _loginFailed(LoginState state) => state.error.isNotEmpty;
 
   void _onWidgetDidBuild(Function callback) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
