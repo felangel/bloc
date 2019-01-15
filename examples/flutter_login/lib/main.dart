@@ -39,7 +39,7 @@ class AppState extends State<App> {
   void initState() {
     _userRepository = widget.userRepository ?? UserRepository();
     _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
-    _authenticationBloc.dispatch(AppStart());
+    _authenticationBloc.dispatch(AppStarted());
     super.initState();
   }
 
@@ -57,26 +57,20 @@ class AppState extends State<App> {
         home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
           bloc: _authenticationBloc,
           builder: (BuildContext context, AuthenticationState state) {
-            List<Widget> widgets = [];
             if (state is AuthenticationUninitialized) {
-              widgets.add(SplashPage());
+              return SplashPage();
             }
-            if (state is AuthenticationInitialized) {
-              if (state.isAuthenticated) {
-                widgets.add(HomePage());
-              } else {
-                widgets.add(LoginPage(
-                  userRepository: _userRepository,
-                ));
-              }
-              if (state.isLoading) {
-                widgets.add(LoadingIndicator());
-              }
+            if (state is AuthenticationAuthenticated) {
+              return HomePage();
             }
-
-            return Stack(
-              children: widgets,
-            );
+            if (state is AuthenticationUnauthenticated) {
+              return LoginPage(
+                userRepository: _userRepository,
+              );
+            }
+            if (state is AuthenticationLoading) {
+              return LoadingIndicator();
+            }
           },
         ),
       ),

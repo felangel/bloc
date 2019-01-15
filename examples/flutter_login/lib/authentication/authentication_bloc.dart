@@ -21,26 +21,26 @@ class AuthenticationBloc
     AuthenticationState currentState,
     AuthenticationEvent event,
   ) async* {
-    if (event is AppStart) {
+    if (event is AppStarted) {
       final bool hasToken = await userRepository.hasToken();
 
       if (hasToken) {
-        yield AuthenticationInitialized.authenticated();
+        yield AuthenticationAuthenticated();
       } else {
-        yield AuthenticationInitialized.unauthenticated();
+        yield AuthenticationUnauthenticated();
       }
     }
 
-    if (event is Login) {
-      yield AuthenticationInitialized(isAuthenticated: false, isLoading: true);
+    if (event is LoggedIn) {
+      yield AuthenticationLoading();
       await userRepository.persistToken(event.token);
-      yield AuthenticationInitialized.authenticated();
+      yield AuthenticationAuthenticated();
     }
 
-    if (event is Logout) {
-      yield AuthenticationInitialized(isAuthenticated: true, isLoading: true);
+    if (event is LoggedOut) {
+      yield AuthenticationLoading();
       await userRepository.deleteToken();
-      yield AuthenticationInitialized.unauthenticated();
+      yield AuthenticationUnauthenticated();
     }
   }
 }

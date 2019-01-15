@@ -32,7 +32,7 @@ void main() {
     test('emits [uninitialized, unauthenticated] for invalid token', () {
       final expectedResponse = [
         AuthenticationUninitialized(),
-        AuthenticationInitialized.unauthenticated(),
+        AuthenticationUnauthenticated()
       ];
 
       when(userRepository.hasToken()).thenAnswer((_) => Future.value(false));
@@ -42,7 +42,7 @@ void main() {
         emitsInOrder(expectedResponse),
       );
 
-      authenticationBloc.dispatch(AppStart());
+      authenticationBloc.dispatch(AppStarted());
     });
   });
 
@@ -52,8 +52,8 @@ void main() {
         () {
       final expectedResponse = [
         AuthenticationUninitialized(),
-        AuthenticationInitialized(isLoading: true, isAuthenticated: false),
-        AuthenticationInitialized.authenticated(),
+        AuthenticationLoading(),
+        AuthenticationAuthenticated(),
       ];
 
       expectLater(
@@ -61,7 +61,7 @@ void main() {
         emitsInOrder(expectedResponse),
       );
 
-      authenticationBloc.dispatch(Login(
+      authenticationBloc.dispatch(LoggedIn(
         token: 'instance.token',
       ));
     });
@@ -73,8 +73,8 @@ void main() {
         () {
       final expectedResponse = [
         AuthenticationUninitialized(),
-        AuthenticationInitialized(isLoading: true, isAuthenticated: true),
-        AuthenticationInitialized.unauthenticated(),
+        AuthenticationLoading(),
+        AuthenticationUnauthenticated(),
       ];
 
       expectLater(
@@ -82,7 +82,7 @@ void main() {
         emitsInOrder(expectedResponse),
       );
 
-      authenticationBloc.dispatch(Logout());
+      authenticationBloc.dispatch(LoggedOut());
     });
   });
 }

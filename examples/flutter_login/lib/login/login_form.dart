@@ -29,57 +29,46 @@ class LoginFormState extends State<LoginForm> {
       bloc: widget.loginBloc,
       builder: (
         BuildContext context,
-        LoginState loginState,
+        LoginState state,
       ) {
-        if (_loginSucceeded(loginState)) {
-          widget.authBloc.dispatch(Login(token: loginState.token));
-          widget.loginBloc.dispatch(LoggedIn());
-        }
-
-        if (_loginFailed(loginState)) {
+        if (state is LoginFailure) {
           _onWidgetDidBuild(() {
             Scaffold.of(context).showSnackBar(
               SnackBar(
-                content: Text('${loginState.error}'),
+                content: Text('${state.error}'),
                 backgroundColor: Colors.red,
               ),
             );
           });
         }
 
-        return _form(loginState);
+        return Form(
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: 'username'),
+                controller: _usernameController,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'password'),
+                controller: _passwordController,
+                obscureText: true,
+              ),
+              RaisedButton(
+                onPressed:
+                    state is! LoginLoading ? _onLoginButtonPressed : null,
+                child: Text('Login'),
+              ),
+              Container(
+                child:
+                    state is LoginLoading ? CircularProgressIndicator() : null,
+              ),
+            ],
+          ),
+        );
       },
     );
   }
-
-  Widget _form(LoginState loginState) {
-    return Form(
-      child: Column(
-        children: [
-          TextFormField(
-            decoration: InputDecoration(labelText: 'username'),
-            controller: _usernameController,
-          ),
-          TextFormField(
-            decoration: InputDecoration(labelText: 'password'),
-            controller: _passwordController,
-            obscureText: true,
-          ),
-          RaisedButton(
-            onPressed:
-                loginState.isLoginButtonEnabled ? _onLoginButtonPressed : null,
-            child: Text('Login'),
-          ),
-          Container(
-            child: loginState.isLoading ? CircularProgressIndicator() : null,
-          ),
-        ],
-      ),
-    );
-  }
-
-  bool _loginSucceeded(LoginState state) => state.token.isNotEmpty;
-  bool _loginFailed(LoginState state) => state.error.isNotEmpty;
 
   void _onWidgetDidBuild(Function callback) {
     WidgetsBinding.instance.addPostFrameCallback((_) {

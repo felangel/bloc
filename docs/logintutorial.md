@@ -85,76 +85,52 @@ Next, we’re going to need to determine how we’re going to manage the state o
 At a high level, we’re going to need to manage the user’s Authentication State. A user's authentication state can be one of the following:
 
 - uninitialized - waiting to see if the user is authenticated or not on app start.
-- initialized + loading - waiting to validate credentials and/or persist a token
-- initialized + authenticated - successfully authenticated
-- initialized + unauthenticated - not authenticated
+- loading - waiting to persist/delete a token
+- authenticated - successfully authenticated
+- unauthenticated - not authenticated
 
 Each of these states will have an implication on what the user sees.
 
 For example:
 
 - if the authentication state was uninitialized, the user might be seeing a splash screen.
-- if the authentication state was initialized but loading, the user might be seeing a progress indicator.
-- if the authentication state was initialized and authenticated, the user might see a home screen.
-- if the authentication state was initialized and unauthenticated, the user might see a login form.
+- if the authentication state was loading, the user might be seeing a progress indicator.
+- if the authentication state was authenticated, the user might see a home screen.
+- if the authentication state was unauthenticated, the user might see a login form.
 
 > It's critical to identify what the different states are going to be before diving into the implementation.
 
 Now that we have our authentication states identified, we can implement our `AuthenticationState` class.
 
 ```dart
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-abstract class AuthenticationState extends Equatable {
-  AuthenticationState([Iterable props]) : super(props);
-}
+abstract class AuthenticationState extends Equatable {}
 
 class AuthenticationUninitialized extends AuthenticationState {
   @override
   String toString() => 'AuthenticationUninitialized';
 }
 
-class AuthenticationInitialized extends AuthenticationState {
-  final bool isLoading;
-  final bool isAuthenticated;
-
-  AuthenticationInitialized({
-    @required this.isLoading,
-    @required this.isAuthenticated,
-  }) : super([isLoading, isAuthenticated]);
-
-  factory AuthenticationInitialized.authenticated() {
-    return AuthenticationInitialized(
-      isAuthenticated: true,
-      isLoading: false,
-    );
-  }
-
-  factory AuthenticationInitialized.unauthenticated() {
-    return AuthenticationInitialized(
-      isAuthenticated: false,
-      isLoading: false,
-    );
-  }
-
+class AuthenticationAuthenticated extends AuthenticationState {
   @override
-  String toString() =>
-      'AuthenticationInitialized { isLoading: $isLoading, isAuthenticated: $isAuthenticated }';
+  String toString() => 'AuthenticationAuthenticated';
+}
+
+class AuthenticationUnauthenticated extends AuthenticationState {
+  @override
+  String toString() => 'AuthenticationUnauthenticated';
+}
+
+class AuthenticationLoading extends AuthenticationState {
+  @override
+  String toString() => 'AuthenticationLoading';
 }
 ```
-
-`isAuthenticated` corresponds to whether or not the current user is authenticated.
-
-`isLoading` corresponds to whether or not the application displays a loading indicator.
-
-?> **Note**: the `factory` pattern is used for convenience and readability. Instead of manually creating an instance of `AuthenticationState` we can simply write `AuthenticationState.authenticated()`.
 
 ?> **Note**: The [`equatable`](https://pub.dartlang.org/packages/equatable) package is used in order to be able to compare two instances of `AuthenticationState`. By default, `==` returns true only if the two objects are the same instance.
 
 ?> **Note**: `toString` is overridden to make it easier to read an `AuthenticationState` when printing it to the console or in `Transitions`.
-
-?> **Note**: the `meta` package is used to annotate the `AuthenticationState` parameters as `@required`. This will cause the dart analyzer to warn developers if they don't provide the required parameters.
 
 ## Authentication Events
 
@@ -162,37 +138,39 @@ Now that we have our `AuthenticationState` defined we need to define the `Authen
 
 We will need:
 
-- an `AppStart` event to notify the bloc that it needs to check if the user is currently authenticated or not.
-- a `Login` event to notify the bloc that the user has successfully logged in.
-- a `Logout` event to notify the bloc that the user has successfully logged out.
+- an `AppStarted` event to notify the bloc that it needs to check if the user is currently authenticated or not.
+- a `LoggedIn` event to notify the bloc that the user has successfully logged in.
+- a `LoggedOut` event to notify the bloc that the user has successfully logged out.
 
 ```dart
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class AuthenticationEvent extends Equatable {
-  AuthenticationEvent([Iterable props]) : super(props);
+  AuthenticationEvent([List props = const []]) : super(props);
 }
 
-class AppStart extends AuthenticationEvent {
+class AppStarted extends AuthenticationEvent {
   @override
-  String toString() => 'AppStart';
+  String toString() => 'AppStarted';
 }
 
-class Login extends AuthenticationEvent {
+class LoggedIn extends AuthenticationEvent {
   final String token;
 
-  Login({@required this.token}) : super([token]);
+  LoggedIn({@required this.token}) : super([token]);
 
   @override
-  String toString() => 'Login { token: $token }';
+  String toString() => 'LoggedIn { token: $token }';
 }
 
-class Logout extends AuthenticationEvent {
+class LoggedOut extends AuthenticationEvent {
   @override
-  String toString() => 'Logout';
+  String toString() => 'LoggedOut';
 }
 ```
+
+?> **Note**: the `meta` package is used to annotate the `AuthenticationEvent` parameters as `@required`. This will cause the dart analyzer to warn developers if they don't provide the required parameters.
 
 ## Authentication Bloc
 
@@ -227,25 +205,26 @@ Stream<AuthenticationState> mapEventToState(
   AuthenticationState currentState,
   AuthenticationEvent event,
 ) async* {
-  if (event is AppStart) {
+  if (event is AppStarted) {
     final bool hasToken = await userRepository.hasToken();
+
     if (hasToken) {
-      yield AuthenticationInitialized.authenticated();
+      yield AuthenticationAuthenticated();
     } else {
-      yield AuthenticationInitialized.unauthenticated();
+      yield AuthenticationUnauthenticated();
     }
   }
 
-  if (event is Login) {
-    yield AuthenticationInitialized(isAuthenticated: false, isLoading: true);
+  if (event is LoggedIn) {
+    yield AuthenticationLoading();
     await userRepository.persistToken(event.token);
-    yield AuthenticationInitialized.authenticated();
+    yield AuthenticationAuthenticated();
   }
 
-  if (event is Logout) {
-    yield AuthenticationInitialized(isAuthenticated: true, isLoading: true);
+  if (event is LoggedOut) {
+    yield AuthenticationLoading();
     await userRepository.deleteToken();
-    yield AuthenticationInitialized.unauthenticated();
+    yield AuthenticationUnauthenticated();
   }
 }
 ```
@@ -257,8 +236,8 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
+import 'package:user_repository/user_repository.dart';
 
-import 'package:flutter_login/user_repository/user_repository.dart';
 import 'package:flutter_login/authentication/authentication.dart';
 
 class AuthenticationBloc
@@ -266,7 +245,7 @@ class AuthenticationBloc
   final UserRepository userRepository;
 
   AuthenticationBloc({@required this.userRepository})
-    : assert(userRepository != null);
+      : assert(userRepository != null);
 
   @override
   AuthenticationState get initialState => AuthenticationUninitialized();
@@ -276,26 +255,26 @@ class AuthenticationBloc
     AuthenticationState currentState,
     AuthenticationEvent event,
   ) async* {
-    if (event is AppStart) {
+    if (event is AppStarted) {
       final bool hasToken = await userRepository.hasToken();
 
       if (hasToken) {
-        yield AuthenticationInitialized.authenticated();
+        yield AuthenticationAuthenticated();
       } else {
-        yield AuthenticationInitialized.unauthenticated();
+        yield AuthenticationUnauthenticated();
       }
     }
 
-    if (event is Login) {
-      yield AuthenticationInitialized(isAuthenticated: false, isLoading: true);
+    if (event is LoggedIn) {
+      yield AuthenticationLoading();
       await userRepository.persistToken(event.token);
-      yield AuthenticationInitialized.authenticated();
+      yield AuthenticationAuthenticated();
     }
 
-    if (event is Logout) {
-      yield AuthenticationInitialized(isAuthenticated: true, isLoading: true);
+    if (event is LoggedOut) {
+      yield AuthenticationLoading();
       await userRepository.deleteToken();
-      yield AuthenticationInitialized.unauthenticated();
+      yield AuthenticationUnauthenticated();
     }
   }
 }
@@ -348,7 +327,7 @@ class HomePage extends StatelessWidget {
             child: RaisedButton(
           child: Text('logout'),
           onPressed: () {
-            authenticationBloc.dispatch(Logout());
+            authenticationBloc.dispatch(LoggedOut());
           },
         )),
       ),
@@ -359,7 +338,7 @@ class HomePage extends StatelessWidget {
 
 ?> **Note**: This is the first class in which we are using `flutter_bloc`. We will get into `BlocProvider.of<AuthenticationBloc>(context)` shortly but for now just know that it allows our `HomePage` to access our `AuthenticationBloc`.
 
-?> **Note**: We are dispatching a `Logout` event to our `AuthenticationBloc` when a user pressed the logout button.
+?> **Note**: We are dispatching a `LoggedOut` event to our `AuthenticationBloc` when a user pressed the logout button.
 
 Next up, we need to create a `LoginPage` and `LoginForm`.
 
@@ -373,68 +352,35 @@ Just like we did for the `AuthenticationBloc`, we will need to define the `Login
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-class LoginState extends Equatable {
-  final bool isLoading;
-  final bool isLoginButtonEnabled;
+abstract class LoginState extends Equatable {
+  LoginState([List props = const []]) : super(props);
+}
+
+class LoginInitial extends LoginState {
+  @override
+  String toString() => 'LoginInitial';
+}
+
+class LoginLoading extends LoginState {
+  @override
+  String toString() => 'LoginLoading';
+}
+
+class LoginFailure extends LoginState {
   final String error;
-  final String token;
 
-  const LoginState({
-    @required this.isLoading,
-    @required this.isLoginButtonEnabled,
-    @required this.error,
-    @required this.token,
-  }) : super([isLoading, isLoginButtonEnabled, error, token]);
-
-  factory LoginState.initial() {
-    return LoginState(
-      isLoading: false,
-      isLoginButtonEnabled: true,
-      error: '',
-      token: '',
-    );
-  }
-
-  factory LoginState.loading() {
-    return LoginState(
-      isLoading: true,
-      isLoginButtonEnabled: false,
-      error: '',
-      token: '',
-    );
-  }
-
-  factory LoginState.failure(String error) {
-    return LoginState(
-      isLoading: false,
-      isLoginButtonEnabled: true,
-      error: error,
-      token: '',
-    );
-  }
-
-  factory LoginState.success(String token) {
-    return LoginState(
-      isLoading: false,
-      isLoginButtonEnabled: true,
-      error: '',
-      token: token,
-    );
-  }
+  LoginFailure({@required this.error}) : super([error]);
 
   @override
-  String toString() =>
-      'LoginState { isLoading: $isLoading, isLoginButtonEnabled: $isLoginButtonEnabled, error: $error, token: $token }';
+  String toString() => 'LoginFailure { error: $error }';
 }
 ```
 
-`isLoading` corresponds to whether or not we show a loading indicator while trying to process the entered username/password.
+`LoginInitial` is the initial state of the LoginForm.
 
-`isLoginButtonEnabled` corresponds to whether or not the user can tap the login button.
+`LoginLoading` is the state of the LoginForm when we are validating credentials
 
-`error` corresponds to any errors encountered during the login process.
-
-`token` corresponds to the user’s token.
+`LoginFailure` is the state of the LoginForm when a login attempt has failed.
 
 Now that we have the `LoginState` defined let’s take a look at the `LoginEvent` class.
 
@@ -447,7 +393,7 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class LoginEvent extends Equatable {
-  LoginEvent([Iterable props]) : super(props);
+  LoginEvent([List props = const []]) : super(props);
 }
 
 class LoginButtonPressed extends LoginEvent {
@@ -460,18 +406,12 @@ class LoginButtonPressed extends LoginEvent {
   }) : super([username, password]);
 
   @override
-  String toString() => 'LoginButtonPressed { username: $username, password: $password }';
-}
-
-class LoggedIn extends LoginEvent {
-  @override
-  String toString() => 'LoggedIn';
+  String toString() =>
+      'LoginButtonPressed { username: $username, password: $password }';
 }
 ```
 
 `LoginButtonPressed` will be dispatched when a user pressed the login button. It will notify the `LoginBloc` that it needs to request a token for the given credentials.
-
-`LoggedIn` will be dispatched when a user has successfully retrieved a token. It will notify the `LoginBloc` that it needs to reset the `LoginState`.
 
 We can now implement our `LoginBloc`.
 
@@ -482,17 +422,22 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
+import 'package:user_repository/user_repository.dart';
 
-import 'package:flutter_login/user_repository/user_repository.dart';
+import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_login/login/login.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserRepository userRepository;
+  final AuthenticationBloc authenticationBloc;
 
-  LoginBloc({@required this.userRepository}): assert(userRepository != null);
+  LoginBloc({
+    @required this.userRepository,
+    @required this.authenticationBloc,
+  })  : assert(userRepository != null),
+        assert(authenticationBloc != null);
 
-  @override
-  LoginState get initialState => LoginState.initial();
+  LoginState get initialState => LoginInitial();
 
   @override
   Stream<LoginState> mapEventToState(
@@ -500,7 +445,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginEvent event,
   ) async* {
     if (event is LoginButtonPressed) {
-      yield LoginState.loading();
+      yield LoginLoading();
 
       try {
         final token = await userRepository.authenticate(
@@ -508,20 +453,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           password: event.password,
         );
 
-        yield LoginState.success(token);
+        authenticationBloc.dispatch(LoggedIn(token: token));
+        yield LoginInitial();
       } catch (error) {
-        yield LoginState.failure(error.toString());
+        yield LoginFailure(error: error.toString());
       }
-    }
-
-    if (event is LoggedIn) {
-      yield LoginState.initial();
     }
   }
 }
 ```
 
 ?> **Note**: `LoginBloc` has a dependency on `UserRepository` in order to authenticate a user given a username and password.
+
+?> **Note**: `LoginBloc` has a dependency on `AuthenticationBloc` in order to update the AuthenticationState when a user has entered valid credentials.
 
 Now that we have our `LoginBloc` we can start working on `LoginPage` and `LoginForm`.
 
@@ -619,18 +563,13 @@ class LoginFormState extends State<LoginForm> {
       bloc: widget.loginBloc,
       builder: (
         BuildContext context,
-        LoginState loginState,
+        LoginState state,
       ) {
-        if (_loginSucceeded(loginState)) {
-          widget.authBloc.dispatch(Login(token: loginState.token));
-          widget.loginBloc.dispatch(LoggedIn());
-        }
-
-        if (_loginFailed(loginState)) {
+        if (state is LoginFailure) {
           _onWidgetDidBuild(() {
             Scaffold.of(context).showSnackBar(
               SnackBar(
-                content: Text('${loginState.error}'),
+                content: Text('${state.error}'),
                 backgroundColor: Colors.red,
               ),
             );
@@ -651,11 +590,12 @@ class LoginFormState extends State<LoginForm> {
               ),
               RaisedButton(
                 onPressed:
-                    loginState.isLoginButtonEnabled ? _onLoginButtonPressed : null,
+                    state is! LoginLoading ? _onLoginButtonPressed : null,
                 child: Text('Login'),
               ),
               Container(
-                child: loginState.isLoading ? CircularProgressIndicator() : null,
+                child:
+                    state is LoginLoading ? CircularProgressIndicator() : null,
               ),
             ],
           ),
@@ -663,10 +603,6 @@ class LoginFormState extends State<LoginForm> {
       },
     );
   }
-
-  bool _loginSucceeded(LoginState state) => state.token.isNotEmpty;
-
-  bool _loginFailed(LoginState state) => state.error.isNotEmpty;
 
   void _onWidgetDidBuild(Function callback) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -694,19 +630,9 @@ import 'package:flutter/material.dart';
 
 class LoadingIndicator extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Opacity(
-          opacity: 0.3,
-          child: ModalBarrier(dismissible: false, color: Colors.grey),
-        ),
-        Center(
-          child: CircularProgressIndicator(),
-        ),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => Center(
+        child: CircularProgressIndicator(),
+      );
 }
 ```
 
@@ -717,16 +643,27 @@ Now it’s finally time to put it all together and create our main App widget in
 ```dart
 import 'package:flutter/material.dart';
 
+import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:user_repository/user_repository.dart';
 
-import 'package:flutter_login/user_repository/user_repository.dart';
 import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_login/splash/splash.dart';
 import 'package:flutter_login/login/login.dart';
 import 'package:flutter_login/home/home.dart';
 import 'package:flutter_login/common/common.dart';
 
-void main() => runApp(App());
+class SimpleBlocDelegate extends BlocDelegate {
+  @override
+  void onTransition(Transition transition) {
+    print(transition.toString());
+  }
+}
+
+void main() {
+  BlocSupervisor().delegate = SimpleBlocDelegate();
+  runApp(App());
+}
 
 class App extends StatefulWidget {
   final UserRepository userRepository;
@@ -738,14 +675,14 @@ class App extends StatefulWidget {
 }
 
 class AppState extends State<App> {
-  UserRepository _userRepository;
   AuthenticationBloc _authenticationBloc;
+  UserRepository _userRepository;
 
   @override
   void initState() {
     _userRepository = widget.userRepository ?? UserRepository();
     _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
-    _authenticationBloc.dispatch(AppStart());
+    _authenticationBloc.dispatch(AppStarted());
     super.initState();
   }
 
@@ -763,29 +700,20 @@ class AppState extends State<App> {
         home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
           bloc: _authenticationBloc,
           builder: (BuildContext context, AuthenticationState state) {
-            List<Widget> widgets = [];
-
             if (state is AuthenticationUninitialized) {
-              widgets.add(SplashPage());
+              return SplashPage();
             }
-            if (state is AuthenticationInitialized) {
-
-              if (state.isAuthenticated) {
-                widgets.add(HomePage());
-              } else {
-                widgets.add(LoginPage(
-                  userRepository: _userRepository,
-                ));
-              }
-
-              if (state.isLoading) {
-                widgets.add(LoadingIndicator());
-              }
+            if (state is AuthenticationAuthenticated) {
+              return HomePage();
             }
-
-            return Stack(
-              children: widgets,
-            );
+            if (state is AuthenticationUnauthenticated) {
+              return LoginPage(
+                userRepository: _userRepository,
+              );
+            }
+            if (state is AuthenticationLoading) {
+              return LoadingIndicator();
+            }
           },
         ),
       ),
@@ -794,7 +722,7 @@ class AppState extends State<App> {
 }
 ```
 
-?> **Note**: Again, we are using `BlocBuilder` in order to react to changes in `AuthenticationState` so that we can show the user either the `SplashPage`, `LoginPage`, or `HomePage` based on the current `AuthenticationState`.
+?> **Note**: Again, we are using `BlocBuilder` in order to react to changes in `AuthenticationState` so that we can show the user either the `SplashPage`, `LoginPage`, `HomePage`, or `LoadingIndicator` based on the current `AuthenticationState`.
 
 ?> **Note**: Our app has an injected `AuthenticationBloc` which it makes available to the entire widget subtree by using the `BlocProvider` widget. `BlocProvider` is a Flutter widget which provides a bloc to its children via `BlocProvider.of(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
 

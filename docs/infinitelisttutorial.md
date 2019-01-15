@@ -140,7 +140,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_infinite_list/models/models.dart';
 
 abstract class PostState extends Equatable {
-  PostState([Iterable props]) : super(props);
+  PostState([List props = const []]) : super(props);
 }
 
 class PostUninitialized extends PostState {
