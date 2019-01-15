@@ -51,12 +51,12 @@ class _HomePageState extends State<HomePage> {
             child: CircularProgressIndicator(),
           );
         }
-        if (state is PostInitialized) {
-          if (state.hasError) {
-            return Center(
-              child: Text('failed to fetch posts'),
-            );
-          }
+        if (state is PostError) {
+          return Center(
+            child: Text('failed to fetch posts'),
+          );
+        }
+        if (state is PostLoaded) {
           if (state.posts.isEmpty) {
             return Center(
               child: Text('no posts'),

@@ -127,10 +127,10 @@ Our presentation layer will need to have several pieces of information in order 
 
 - `PostUninitialized`- will tell the presentation layer it needs to render a loading indicator while the initial batch of posts are loaded
 
-- `PostInitialized`- will tell the presentation layer it has content to render
+- `PostLoaded`- will tell the presentation layer it has content to render
   - `posts`- will be the `List<Post>` which will be displayed
-  - `hasError`- will tell the presentation layer whether or not an error has occurred while fetching posts
   - `hasReachedMax`- will tell the presentation layer whether or not it has reach the maximum number of posts
+- `PostError`- will tell the presentation layer that an error has occurred while fetching posts
 
 We can now create `post_state.dart` and implement it like so.
 
@@ -148,54 +148,37 @@ class PostUninitialized extends PostState {
   String toString() => 'PostUninitialized';
 }
 
-class PostInitialized extends PostState {
+class PostError extends PostState {
+  @override
+  String toString() => 'PostError';
+}
+
+class PostLoaded extends PostState {
   final List<Post> posts;
-  final bool hasError;
   final bool hasReachedMax;
 
-  PostInitialized({
-    this.hasError,
+  PostLoaded({
     this.posts,
     this.hasReachedMax,
-  }) : super([hasError, posts, hasReachedMax]);
+  }) : super([posts, hasReachedMax]);
 
-  factory PostInitialized.success(List<Post> posts) {
-    return PostInitialized(
-      posts: posts,
-      hasError: false,
-      hasReachedMax: false,
-    );
-  }
-
-  factory PostInitialized.failure() {
-    return PostInitialized(
-      posts: [],
-      hasError: true,
-      hasReachedMax: false,
-    );
-  }
-
-  PostInitialized copyWith({
+  PostLoaded copyWith({
     List<Post> posts,
-    bool hasError,
     bool hasReachedMax,
   }) {
-    return PostInitialized(
+    return PostLoaded(
       posts: posts ?? this.posts,
-      hasError: hasError ?? this.hasError,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
 
   @override
   String toString() =>
-      'PostInitialized { posts: ${posts.length}, hasError: $hasError, hasReachedMax: $hasReachedMax }';
+      'PostLoaded { posts: ${posts.length}, hasReachedMax: $hasReachedMax }';
 }
 ```
 
-?> We use the factory pattern for convenience and readability; instead of manually creating instances of PostState, we can use the different factories like: `PostInitialized.failure()`.
-
-?> We implemented `copyWith` so that we can copy an instance of `PostInitialized` and update zero or more properties conveniently (this will come in handy later ).
+?> We implemented `copyWith` so that we can copy an instance of `PostLoaded` and update zero or more properties conveniently (this will come in handy later ).
 
 Now that we have our `Events` and `States` implemented, we can create our `PostBloc`.
 
@@ -251,22 +234,23 @@ Stream<PostState> mapEventToState(currentState, event) async* {
     try {
       if (currentState is PostUninitialized) {
         final posts = await _fetchPosts(0, 20);
-        yield PostInitialized.success(posts);
+        yield PostLoaded(posts: posts, hasReachedMax: false);
       }
-      if (currentState is PostInitialized) {
+      if (currentState is PostLoaded) {
         final posts = await _fetchPosts(currentState.posts.length, 20);
         yield posts.isEmpty
             ? currentState.copyWith(hasReachedMax: true)
-            : PostInitialized.success(currentState.posts + posts);
+            : PostLoaded(
+                posts: currentState.posts + posts, hasReachedMax: false);
       }
     } catch (_) {
-      yield PostInitialized.failure();
+      yield PostError();
     }
   }
 }
 
 bool _hasReachedMax(PostState state) =>
-  state is PostInitialized && state.hasReachedMax;
+    state is PostLoaded && state.hasReachedMax;
 
 Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
   final response = await httpClient.get(
@@ -292,9 +276,9 @@ Now every time a `PostEvent` is dispatched, if it is a `Fetch` event and if our 
 
 The API will return an empty array if we try to fetch beyond the max posts (100) so if we get back an empty array, our bloc will `yield` the currentState except we will set `hasReachedMax` to true.
 
-If we cannot retrieve the posts, we throw an exception and `yield` `PostState.failure()`.
+If we cannot retrieve the posts, we throw an exception and `yield` `PostError()`.
 
-If we can retrieve the posts, we return `PostState.success()` which takes the entire list of posts.
+If we can retrieve the posts, we return `PostLoaded()` which takes the entire list of posts.
 
 One optimization we can make is to `debounce` the `Events` in order to prevent spamming our API unnecessarily. We can do this by overriding the `transform` method in our `PostBloc`.
 
@@ -340,22 +324,23 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       try {
         if (currentState is PostUninitialized) {
           final posts = await _fetchPosts(0, 20);
-          yield PostInitialized.success(posts);
+          yield PostLoaded(posts: posts, hasReachedMax: false);
         }
-        if (currentState is PostInitialized) {
+        if (currentState is PostLoaded) {
           final posts = await _fetchPosts(currentState.posts.length, 20);
           yield posts.isEmpty
               ? currentState.copyWith(hasReachedMax: true)
-              : PostInitialized.success(currentState.posts + posts);
+              : PostLoaded(
+                  posts: currentState.posts + posts, hasReachedMax: false);
         }
       } catch (_) {
-        yield PostInitialized.failure();
+        yield PostError();
       }
     }
   }
 
   bool _hasReachedMax(PostState state) =>
-      state is PostInitialized && state.hasReachedMax;
+      state is PostLoaded && state.hasReachedMax;
 
   Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
     final response = await httpClient.get(
@@ -433,12 +418,12 @@ class _HomePageState extends State<HomePage> {
             child: CircularProgressIndicator(),
           );
         }
-        if (state is PostInitialized) {
-          if (state.hasError) {
-            return Center(
-              child: Text('failed to fetch posts'),
-            );
-          }
+        if (state is PostError) {
+          return Center(
+            child: Text('failed to fetch posts'),
+          );
+        }
+        if (state is PostLoaded) {
           if (state.posts.isEmpty) {
             return Center(
               child: Text('no posts'),
