@@ -11,46 +11,31 @@ class PostUninitialized extends PostState {
   String toString() => 'PostUninitialized';
 }
 
-class PostInitialized extends PostState {
+class PostError extends PostState {
+  @override
+  String toString() => 'PostError';
+}
+
+class PostLoaded extends PostState {
   final List<Post> posts;
-  final bool hasError;
   final bool hasReachedMax;
 
-  PostInitialized({
-    this.hasError,
+  PostLoaded({
     this.posts,
     this.hasReachedMax,
-  }) : super([posts, hasError, hasReachedMax]);
+  }) : super([posts, hasReachedMax]);
 
-  factory PostInitialized.success(List<Post> posts) {
-    return PostInitialized(
-      posts: posts,
-      hasError: false,
-      hasReachedMax: false,
-    );
-  }
-
-  factory PostInitialized.failure() {
-    return PostInitialized(
-      posts: [],
-      hasError: true,
-      hasReachedMax: false,
-    );
-  }
-
-  PostInitialized copyWith({
+  PostLoaded copyWith({
     List<Post> posts,
-    bool hasError,
     bool hasReachedMax,
   }) {
-    return PostInitialized(
+    return PostLoaded(
       posts: posts ?? this.posts,
-      hasError: hasError ?? this.hasError,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
 
   @override
   String toString() =>
-      'PostInitialized { posts: ${posts.length}, hasError: $hasError, hasReachedMax: $hasReachedMax }';
+      'PostLoaded { posts: ${posts.length}, hasReachedMax: $hasReachedMax }';
 }
