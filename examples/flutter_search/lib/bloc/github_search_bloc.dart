@@ -1,11 +1,6 @@
-import 'dart:convert';
-
-import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:http/http.dart' as http;
 import 'package:bloc/bloc.dart';
 import '../bloc/bloc.dart';
-import '../models/models.dart';
 import '../github_service/github_service.dart';
 
 class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {

@@ -16,10 +16,7 @@ class SearchApp extends StatelessWidget {
       title: 'Search for articles',
       home: Scaffold(
         appBar: AppBar(title: Text("Enter a search term")),
-        body: SearchForm(
-          githubSearchBloc: GithubSearchBloc(
-              GithubService(GithubCache(), GithubClient(http.Client()))),
-        ),
+        body: SearchForm(),
       ),
     );
   }
@@ -27,11 +24,6 @@ class SearchApp extends StatelessWidget {
 
 // Define a Custom Form Widget
 class SearchForm extends StatefulWidget {
-  final GithubSearchBloc githubSearchBloc;
-  SearchForm({
-    Key key,
-    @required this.githubSearchBloc,
-  }) : super(key: key);
   @override
   _SearchFormState createState() => _SearchFormState();
 }
@@ -42,73 +34,67 @@ class _SearchFormState extends State<SearchForm> {
   // Create a text controller. We will use it to retrieve the current value
   // of the TextField!
   final _textController = TextEditingController();
-  GithubSearchBloc _githubSearchBloc;
 
-  // _SearchFormState() {
-  //   _textController.addListener(_onTextChanged(""));
-  //   //_githubSearchBloc.dispatch(TextChanged());
-  // }
+  final GithubSearchBloc _githubSearchBloc = GithubSearchBloc(
+      GithubService(GithubCache(), GithubClient(http.Client())));
 
-  @override
-  void initState() {
-    _githubSearchBloc = widget.githubSearchBloc;
-    // _textController.addListener(_onTextChanged(""));
-    _githubSearchBloc.onTextChanged("");
-    super.initState();
+  _SearchFormState() {
+    _githubSearchBloc.dispatch(TextChanged(text: ""));
   }
 
   @override
   void dispose() {
     // Clean up the controller when the Widget is removed from the Widget tree
     // This also removes the _printLatestValue listener
-    _textController.dispose();
     _githubSearchBloc.dispose();
     super.dispose();
   }
 
-  _onTextChanged() {
-    _githubSearchBloc.onTextChanged(_textController.text);
-    //_textController.clear();
-  }
+  // _onTextChanged() {
+  //   final text = _textController.text;
+  //   _githubSearchBloc.dispatch(TextChanged(text: text));
+  // }
 
   @override
   Widget build(BuildContext context) {
-    //return scaffold appbar
+    TextField textField = TextField(
+      controller: _textController,
+      onChanged: (text) {
+        _githubSearchBloc.dispatch(TextChanged(text: text));
+      },
+      decoration: InputDecoration(
+          border: InputBorder.none, hintText: 'Please enter a search term'),
+    );
+
     return BlocBuilder<GithubSearchEvent, GithubSearchState>(
-      bloc: widget.githubSearchBloc,
+      bloc: _githubSearchBloc,
       builder: (BuildContext context, GithubSearchState state) {
-        print(state);
         if (state.noTerm) {
-          return TextField(
-            controller: _textController,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Please enter a search term'),
-          );
+          return textField;
         }
         if (state.isLoading) {
-          return _buildTextField(
-              state: state,
+          return _buildTextFieldChild(
+              textField: textField,
               child: Center(
                 child: CircularProgressIndicator(),
               ));
         }
 
         if (!state.result.isPopulated) {
-          return _buildTextField(
-            state: state,
+          return _buildTextFieldChild(
+            textField: textField,
             child: Text("No results"),
           );
         }
 
         if (state.isError) {
-          return _buildTextField(
-              state: state, child: Text("Error: Rate Limit Exceeded"));
+          return _buildTextFieldChild(
+              textField: textField, child: Text("Error: Rate Limit Exceeded"));
         }
 
         if (state.result.isPopulated) {
-          return _buildTextField(
-              state: state,
+          return _buildTextFieldChild(
+              textField: textField,
               child: ListView.builder(
                 itemBuilder: (BuildContext context, int index) {
                   return index <= state.result.items.length
@@ -122,19 +108,11 @@ class _SearchFormState extends State<SearchForm> {
     );
   }
 
-  Widget _buildTextField({Widget child, GithubSearchState state}) {
-    print(state.result.items);
-    return Row(
-      children: <Widget>[
-        TextField(
-          controller: _textController,
-          onChanged: _onTextChanged(),
-          decoration: InputDecoration(
-              border: InputBorder.none, hintText: 'Please enter a search term'),
-        ),
-        child,
-      ],
+  Widget _buildTextFieldChild({Widget child, TextField textField}) {
+    Widget textFieldAndChild = Row(
+      children: <Widget>[textField, child],
     );
+    return textFieldAndChild;
   }
 }
 
