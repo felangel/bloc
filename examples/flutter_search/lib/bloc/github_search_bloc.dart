@@ -33,20 +33,22 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
       GithubSearchState state, GithubSearchEvent event) async* {
     if (event is TextChanged) {
       final String term = event.text;
-      print(term);
+      print("Search query : $term");
       if (term.isEmpty) {
         print("term is Empty");
         yield GithubSearchState.initial();
+        print("Initial State $state");
       } else {
         print("term is not empty");
         yield GithubSearchState.loading();
+        print("Loading State $state");
 
         try {
           final results = await githubService.search(term);
           print("Results fetched $results.items.toString()");
           List<SearchResultItem> searchResultItems = results.items;
           yield GithubSearchState.success(searchResultItems);
-          print("Results yielded but no items $state");
+          print("Success state $state");
         } catch (_) {
           yield GithubSearchState.error();
         }

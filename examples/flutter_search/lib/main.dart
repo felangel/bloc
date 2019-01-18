@@ -79,6 +79,7 @@ class _SearchFormState extends State<SearchForm> {
               child: ListView.builder(
                   itemCount: state.result.items.length,
                   itemBuilder: (BuildContext context, int index) {
+                    print("From widget ${state.result.items[index].full_name}");
                     return ListTile(
                       title: Text("${state.result.items[index].full_name}"),
                     );
