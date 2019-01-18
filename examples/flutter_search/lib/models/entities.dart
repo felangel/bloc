@@ -36,6 +36,9 @@ class GithubUser extends Equatable {
       avatar_url: json['avatar_url'] as String,
     );
   }
+
+  @override
+  String toString() => 'GithubUser { login: $login, avatar_url: $avatar_url }';
 }
 
 class SearchResultItem extends Equatable {
@@ -52,6 +55,10 @@ class SearchResultItem extends Equatable {
       owner: GithubUser.fromJson(json['owner']),
     );
   }
+
+  @override
+  String toString() =>
+      'SearchResultItem { full_name: $full_name, html_url: $html_url, owner: ${owner.toString()}';
 }
 
 class SearchResultError extends Equatable {

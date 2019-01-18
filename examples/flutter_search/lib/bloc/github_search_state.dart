@@ -45,12 +45,16 @@ class GithubSearchState extends SearchState {
     );
   }
 
-  factory GithubSearchState.success(SearchResult result) {
+  factory GithubSearchState.success(List<SearchResultItem> searchResultItems) {
     return GithubSearchState(
-      isLoading: false,
+      isLoading: true,
       isError: false,
       noTerm: false,
-      result: result,
+      result: SearchResult(
+        isEmpty: searchResultItems.length <= 0,
+        isPopulated: searchResultItems.length >= 0,
+        items: searchResultItems,
+      ),
     );
   }
 

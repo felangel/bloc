@@ -2,6 +2,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:bloc/bloc.dart';
 import '../bloc/bloc.dart';
 import '../github_service/github_service.dart';
+import '../models/models.dart';
 
 class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   final GithubService githubService;
@@ -42,7 +43,9 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
 
         try {
           final results = await githubService.search(term);
-          yield GithubSearchState.success(results);
+          print(results.items.toString());
+          List<SearchResultItem> searchResultItems = results.items;
+          yield GithubSearchState.success(searchResultItems);
         } catch (_) {
           yield GithubSearchState.error();
         }

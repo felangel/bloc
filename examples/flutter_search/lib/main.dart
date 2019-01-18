@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -50,11 +49,6 @@ class _SearchFormState extends State<SearchForm> {
     super.dispose();
   }
 
-  // _onTextChanged() {
-  //   final text = _textController.text;
-  //   _githubSearchBloc.dispatch(TextChanged(text: text));
-  // }
-
   @override
   Widget build(BuildContext context) {
     TextField textField = TextField(
@@ -73,6 +67,7 @@ class _SearchFormState extends State<SearchForm> {
           return textField;
         }
         if (state.isLoading) {
+          print("state is loading");
           return _buildTextFieldChild(
               textField: textField,
               child: Center(
@@ -81,6 +76,7 @@ class _SearchFormState extends State<SearchForm> {
         }
 
         if (!state.result.isPopulated) {
+          print("state is not Populated");
           return _buildTextFieldChild(
             textField: textField,
             child: Text("No results"),
@@ -88,18 +84,19 @@ class _SearchFormState extends State<SearchForm> {
         }
 
         if (state.isError) {
+          print("state is Error");
           return _buildTextFieldChild(
               textField: textField, child: Text("Error: Rate Limit Exceeded"));
         }
 
         if (state.result.isPopulated) {
+          print("state result is populated");
           return _buildTextFieldChild(
               textField: textField,
               child: ListView.builder(
                 itemBuilder: (BuildContext context, int index) {
-                  return index <= state.result.items.length
-                      ? CircularProgressIndicator()
-                      : SearchResultItemWidget(item: state.result.items[index]);
+                  return SearchResultItemWidget(
+                      item: state.result.items[index]);
                 },
                 itemCount: state.result.items.length,
               ));
@@ -124,6 +121,7 @@ class SearchResultItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Print item $item.full_name");
     return ListTile(
       leading: CircleAvatar(
         child: Image.network(item?.owner.avatar_url),
