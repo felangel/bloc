@@ -30,6 +30,7 @@ class SearchForm extends StatefulWidget {
 // Define a corresponding State class. This class will hold the data related to
 // our Form.
 class _SearchFormState extends State<SearchForm> {
+  final items = List<String>.generate(10000, (i) => "Item $i");
   // Create a text controller. We will use it to retrieve the current value
   // of the TextField!
   final _textController = TextEditingController();
@@ -51,56 +52,34 @@ class _SearchFormState extends State<SearchForm> {
 
   @override
   Widget build(BuildContext context) {
-    TextField textField = TextField(
-      controller: _textController,
-      onChanged: (text) {
-        _githubSearchBloc.dispatch(TextChanged(text: text));
-      },
-      decoration: InputDecoration(
-          border: InputBorder.none, hintText: 'Please enter a search term'),
-    );
-
     return BlocBuilder<GithubSearchEvent, GithubSearchState>(
       bloc: _githubSearchBloc,
       builder: (BuildContext context, GithubSearchState state) {
-        if (state.noTerm) {
-          return textField;
-        }
-        if (state.isLoading) {
-          print("state is loading");
-          return _buildTextFieldChild(
-              textField: textField,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ));
-        }
-
-        if (!state.result.isPopulated) {
-          print("state is not Populated");
-          return _buildTextFieldChild(
-            textField: textField,
-            child: Text("No results"),
-          );
-        }
-
-        if (state.isError) {
-          print("state is Error");
-          return _buildTextFieldChild(
-              textField: textField, child: Text("Error: Rate Limit Exceeded"));
-        }
-
-        if (state.result.isPopulated) {
-          print("state result is populated");
-          return _buildTextFieldChild(
-              textField: textField,
+        return Column(
+          children: <Widget>[
+            Padding(
+              padding: new EdgeInsets.only(top: 20.0),
+            ),
+            TextField(
+              controller: _textController,
+              onChanged: (text) {
+                _githubSearchBloc.dispatch(TextChanged(text: text));
+              },
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Please enter a search term'),
+            ),
+            Expanded(
               child: ListView.builder(
-                itemBuilder: (BuildContext context, int index) {
-                  return SearchResultItemWidget(
-                      item: state.result.items[index]);
-                },
-                itemCount: state.result.items.length,
-              ));
-        }
+                  itemCount: state.result.items.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: Text("${state.result.items[index].full_name}"),
+                    );
+                  }),
+            )
+          ],
+        );
       },
     );
   }
@@ -121,12 +100,12 @@ class SearchResultItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Print item $item.full_name");
+    //print("Print item $item.full_name");
     return ListTile(
       leading: CircleAvatar(
-        child: Image.network(item?.owner.avatar_url),
+        child: Image.network("$item?.owner.avatar_url"),
       ),
-      title: Text(item.full_name),
+      title: Text("$item.full_name"),
     );
   }
 }

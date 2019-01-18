@@ -43,7 +43,7 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
 
         try {
           final results = await githubService.search(term);
-          print(results.items.toString());
+          //print(results.items.toString());
           List<SearchResultItem> searchResultItems = results.items;
           yield GithubSearchState.success(searchResultItems);
         } catch (_) {

@@ -47,7 +47,7 @@ class GithubSearchState extends SearchState {
 
   factory GithubSearchState.success(List<SearchResultItem> searchResultItems) {
     return GithubSearchState(
-      isLoading: true,
+      isLoading: false,
       isError: false,
       noTerm: false,
       result: SearchResult(
