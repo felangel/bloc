@@ -45,7 +45,17 @@ class GithubSearchState extends SearchState {
     );
   }
 
+  // factory GithubSearchState.success(SearchResult result) {
+  //   return GithubSearchState(
+  //     isLoading: false,
+  //     isError: false,
+  //     noTerm: false,
+  //     result: result,
+  //   );
+  // }
+
   factory GithubSearchState.success(List<SearchResultItem> searchResultItems) {
+    print("Results from factory $searchResultItems");
     return GithubSearchState(
       isLoading: false,
       isError: false,

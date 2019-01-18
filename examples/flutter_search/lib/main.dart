@@ -30,7 +30,7 @@ class SearchForm extends StatefulWidget {
 // Define a corresponding State class. This class will hold the data related to
 // our Form.
 class _SearchFormState extends State<SearchForm> {
-  final items = List<String>.generate(10000, (i) => "Item $i");
+  //final items = List<String>.generate(10000, (i) => "Item $i");
   // Create a text controller. We will use it to retrieve the current value
   // of the TextField!
   final _textController = TextEditingController();
@@ -38,8 +38,11 @@ class _SearchFormState extends State<SearchForm> {
   final GithubSearchBloc _githubSearchBloc = GithubSearchBloc(
       GithubService(GithubCache(), GithubClient(http.Client())));
 
-  _SearchFormState() {
+  @override
+  void initState() {
     _githubSearchBloc.dispatch(TextChanged(text: ""));
+
+    super.initState();
   }
 
   @override
@@ -55,6 +58,9 @@ class _SearchFormState extends State<SearchForm> {
     return BlocBuilder<GithubSearchEvent, GithubSearchState>(
       bloc: _githubSearchBloc,
       builder: (BuildContext context, GithubSearchState state) {
+        if (!state.noTerm) {
+          print(state.noTerm);
+        }
         return Column(
           children: <Widget>[
             Padding(
@@ -100,7 +106,6 @@ class SearchResultItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //print("Print item $item.full_name");
     return ListTile(
       leading: CircleAvatar(
         child: Image.network("$item?.owner.avatar_url"),
