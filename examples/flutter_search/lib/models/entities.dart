@@ -27,40 +27,40 @@ class SearchResult extends Equatable {
 
 class GithubUser extends Equatable {
   final String login;
-  final String avatar_url;
+  final String avatarUrl;
 
-  GithubUser({this.login, this.avatar_url}) : super([login, avatar_url]);
+  GithubUser({this.login, this.avatarUrl}) : super([login, avatarUrl]);
 
   static GithubUser fromJson(dynamic json) {
     return GithubUser(
       login: json['login'] as String,
-      avatar_url: json['avatar_url'] as String,
+      avatarUrl: json['avatar_url'] as String,
     );
   }
 
   @override
-  String toString() => 'GithubUser { login: $login, avatar_url: $avatar_url }';
+  String toString() => 'GithubUser { login: $login, avatar_url: $avatarUrl }';
 }
 
 class SearchResultItem extends Equatable {
-  final String full_name;
-  final String html_url;
+  final String fullName;
+  final String htmlUrl;
   final GithubUser owner;
 
-  SearchResultItem({this.full_name, this.html_url, this.owner})
-      : super([full_name, html_url, owner]);
+  SearchResultItem({this.fullName, this.htmlUrl, this.owner})
+      : super([fullName, htmlUrl, owner]);
 
   static SearchResultItem fromJson(dynamic json) {
     return SearchResultItem(
-      full_name: json['full_name'] as String,
-      html_url: json['html_url'] as String,
+      fullName: json['full_name'] as String,
+      htmlUrl: json['html_url'] as String,
       owner: GithubUser.fromJson(json['owner']),
     );
   }
 
   @override
   String toString() =>
-      'SearchResultItem { full_name: $full_name, html_url: $html_url, owner: ${owner.toString()}';
+      'SearchResultItem { full_name: $fullName, html_url: $htmlUrl, owner: ${owner.toString()}';
 }
 
 class SearchResultError extends Equatable {

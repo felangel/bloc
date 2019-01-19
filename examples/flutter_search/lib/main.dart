@@ -37,9 +37,10 @@ class _SearchFormState extends State<SearchForm> {
   final GithubSearchBloc _githubSearchBloc = GithubSearchBloc(
       GithubService(GithubCache(), GithubClient(http.Client())));
 
+  Widget result;
+
   @override
   void initState() {
-    _githubSearchBloc.dispatch(TextChanged(text: ""));
     super.initState();
   }
 
@@ -56,45 +57,62 @@ class _SearchFormState extends State<SearchForm> {
     return BlocBuilder<GithubSearchEvent, GithubSearchState>(
       bloc: _githubSearchBloc,
       builder: (BuildContext context, GithubSearchState state) {
+        Padding padding = Padding(
+          padding: EdgeInsets.only(top: 20.0),
+        );
+        TextField textField = TextField(
+          controller: _textController,
+          onChanged: (text) {
+            _githubSearchBloc.dispatch(TextChanged(text: text));
+          },
+          decoration: InputDecoration(
+              border: InputBorder.none, hintText: 'Please enter a search term'),
+        );
+
+        if (state.isLoading) {
+          return Column(
+            children: <Widget>[
+              padding,
+              textField,
+              CircularProgressIndicator(),
+            ],
+          );
+        }
+
+        if (state.isError) {
+          return Column(
+            children: <Widget>[
+              padding,
+              textField,
+              Text("Limit exceeded"),
+            ],
+          );
+        }
+
+        if (!state.result.isPopulated || state.result.isEmpty) {
+          return Column(
+            children: <Widget>[
+              padding,
+              textField,
+              Text("No results"),
+            ],
+          );
+        }
         return Column(
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: 20.0),
+            padding,
+            textField,
+            Expanded(
+              child: ListView.builder(
+                  itemCount: state.result.items.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return SearchResultItemWidget(
+                        item: state.result.items[index]);
+                  }),
             ),
-            TextField(
-              controller: _textController,
-              onChanged: (text) {
-                _githubSearchBloc.dispatch(TextChanged(text: text));
-              },
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Please enter a search term'),
-            ),
-            _buildResult(state)
           ],
         );
       },
-    );
-  }
-
-  Widget _buildResult(GithubSearchState state) {
-    if (state.isLoading) {
-      return CircularProgressIndicator();
-    }
-
-    if (state.isError) {
-      return Text("Limit exceeded");
-    }
-
-    if (!state.result.isPopulated || state.result.isEmpty) {
-      return Text("No results");
-    }
-    return Expanded(
-      child: ListView.builder(
-          itemCount: state.result.items.length,
-          itemBuilder: (BuildContext context, int index) {
-            return SearchResultItemWidget(item: state.result.items[index]);
-          }),
     );
   }
 }
@@ -109,9 +127,9 @@ class SearchResultItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        child: Image.network(item?.owner.avatar_url),
+        child: Image.network(item?.owner.avatarUrl),
       ),
-      title: Text(item.full_name),
+      title: Text(item.fullName),
     );
   }
 }
