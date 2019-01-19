@@ -11,14 +11,10 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
 
   GithubSearchBloc(this.githubService);
 
-  void onTextChanged(String text) {
-    dispatch(TextChanged(text: text));
-  }
-
   @override
   Stream<GithubSearchEvent> transform(Stream<GithubSearchEvent> events) {
-    return (events as Observable).debounce(Duration(milliseconds: 300))
-        as Stream<GithubSearchEvent>;
+    return (events as Observable<GithubSearchEvent>)
+        .debounce(Duration(milliseconds: 300));
   }
 
   @override
@@ -28,23 +24,25 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   }
 
   @override
-  GithubSearchState get initialState => GithubSearchState.initial();
+  GithubSearchState get initialState => SearchStateEmpty();
 
   @override
   Stream<GithubSearchState> mapEventToState(
-      GithubSearchState currentState, GithubSearchEvent event) async* {
+    GithubSearchState currentState,
+    GithubSearchEvent event,
+  ) async* {
     if (event is TextChanged) {
       final String term = event.text;
       if (term.isEmpty) {
-        yield GithubSearchState.initial();
+        yield SearchStateEmpty();
       } else {
-        yield GithubSearchState.loading();
+        yield SearchStateLoading();
 
         try {
           final results = await githubService.search(term);
-          yield GithubSearchState.success(results);
+          yield SearchStateSuccess(results.items);
         } catch (_) {
-          yield GithubSearchState.error();
+          yield SearchStateError();
         }
       }
     }

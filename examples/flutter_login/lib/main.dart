@@ -19,25 +19,24 @@ class SimpleBlocDelegate extends BlocDelegate {
 
 void main() {
   BlocSupervisor().delegate = SimpleBlocDelegate();
-  runApp(App());
+  runApp(App(userRepository: UserRepository()));
 }
 
 class App extends StatefulWidget {
   final UserRepository userRepository;
 
-  App({Key key, this.userRepository}) : super(key: key);
+  App({Key key, @required this.userRepository}) : super(key: key);
 
   @override
-  State<App> createState() => AppState();
+  State<App> createState() => _AppState();
 }
 
-class AppState extends State<App> {
+class _AppState extends State<App> {
   AuthenticationBloc _authenticationBloc;
-  UserRepository _userRepository;
+  UserRepository get _userRepository => widget.userRepository;
 
   @override
   void initState() {
-    _userRepository = widget.userRepository ?? UserRepository();
     _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
     _authenticationBloc.dispatch(AppStarted());
     super.initState();
@@ -64,9 +63,7 @@ class AppState extends State<App> {
               return HomePage();
             }
             if (state is AuthenticationUnauthenticated) {
-              return LoginPage(
-                userRepository: _userRepository,
-              );
+              return LoginPage(userRepository: _userRepository);
             }
             if (state is AuthenticationLoading) {
               return LoadingIndicator();
