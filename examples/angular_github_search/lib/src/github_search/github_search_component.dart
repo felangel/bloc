@@ -24,4 +24,8 @@ class GithubSearchComponent {
       GithubClient(BrowserClient()),
     ),
   );
+
+  void onTextChanged(String text) {
+    githubSearchBloc.dispatch(TextChanged(text: text));
+  }
 }

@@ -1,52 +1,42 @@
 class SearchResult {
   final List<SearchResultItem> items;
-  final bool isPopulated;
-  final bool isEmpty;
 
-  SearchResult({this.items, this.isPopulated, this.isEmpty});
+  SearchResult({this.items});
 
   static SearchResult fromJson(Map<String, dynamic> json) {
     final items = (json['items'] as List<dynamic>)
         .map((dynamic item) =>
             SearchResultItem.fromJson(item as Map<String, dynamic>))
         .toList();
-    return SearchResult(
-      items: items,
-      isPopulated: items.isNotEmpty,
-      isEmpty: items.isEmpty,
-    );
+    return SearchResult(items: items);
   }
-
-  @override
-  String toString() =>
-      'SearchResult { items: ${items.toString()}, isPopulated: $isPopulated, isEmpty: $isEmpty }';
 }
 
 class GithubUser {
   final String login;
-  final String avatar_url;
+  final String avatarUrl;
 
-  GithubUser({this.login, this.avatar_url});
+  GithubUser({this.login, this.avatarUrl});
 
   static GithubUser fromJson(dynamic json) {
     return GithubUser(
       login: json['login'] as String,
-      avatar_url: json['avatar_url'] as String,
+      avatarUrl: json['avatar_url'] as String,
     );
   }
 }
 
 class SearchResultItem {
-  final String full_name;
-  final String html_url;
+  final String fullName;
+  final String htmlUrl;
   final GithubUser owner;
 
-  SearchResultItem({this.full_name, this.html_url, this.owner});
+  SearchResultItem({this.fullName, this.htmlUrl, this.owner});
 
   static SearchResultItem fromJson(dynamic json) {
     return SearchResultItem(
-      full_name: json['full_name'] as String,
-      html_url: json['html_url'] as String,
+      fullName: json['full_name'] as String,
+      htmlUrl: json['html_url'] as String,
       owner: GithubUser.fromJson(json['owner']),
     );
   }
