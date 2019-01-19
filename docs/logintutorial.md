@@ -494,17 +494,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  LoginBloc loginBloc;
-  AuthenticationBloc authenticationBloc;
+  LoginBloc _loginBloc;
+  AuthenticationBloc _authenticationBloc;
 
-  UserRepository get userRepository => widget.userRepository;
+  UserRepository get _userRepository => widget.userRepository;
 
   @override
   void initState() {
-    authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
-    loginBloc = LoginBloc(
-      userRepository: userRepository,
-      authenticationBloc: authenticationBloc,
+    _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    _loginBloc = LoginBloc(
+      userRepository: _userRepository,
+      authenticationBloc: _authenticationBloc,
     );
     super.initState();
   }
@@ -516,15 +516,15 @@ class _LoginPageState extends State<LoginPage> {
         title: Text('Login'),
       ),
       body: LoginForm(
-        authenticationBloc: authenticationBloc,
-        loginBloc: loginBloc,
+        authenticationBloc: _authenticationBloc,
+        loginBloc: _loginBloc,
       ),
     );
   }
 
   @override
   void dispose() {
-    loginBloc.dispose();
+    _loginBloc.dispose();
     super.dispose();
   }
 }
@@ -563,15 +563,15 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  LoginBloc get loginBloc => widget.loginBloc;
+  LoginBloc get _loginBloc => widget.loginBloc;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginEvent, LoginState>(
-      bloc: loginBloc,
+      bloc: _loginBloc,
       builder: (
         BuildContext context,
         LoginState state,
@@ -592,11 +592,11 @@ class _LoginFormState extends State<LoginForm> {
             children: [
               TextFormField(
                 decoration: InputDecoration(labelText: 'username'),
-                controller: usernameController,
+                controller: _usernameController,
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'password'),
-                controller: passwordController,
+                controller: _passwordController,
                 obscureText: true,
               ),
               RaisedButton(
@@ -622,9 +622,9 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   _onLoginButtonPressed() {
-    loginBloc.dispatch(LoginButtonPressed(
-      username: usernameController.text,
-      password: passwordController.text,
+    _loginBloc.dispatch(LoginButtonPressed(
+      username: _usernameController.text,
+      password: _passwordController.text,
     ));
   }
 }

@@ -20,15 +20,15 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  LoginBloc get loginBloc => widget.loginBloc;
+  LoginBloc get _loginBloc => widget.loginBloc;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginEvent, LoginState>(
-      bloc: loginBloc,
+      bloc: _loginBloc,
       builder: (
         BuildContext context,
         LoginState state,
@@ -49,11 +49,11 @@ class _LoginFormState extends State<LoginForm> {
             children: [
               TextFormField(
                 decoration: InputDecoration(labelText: 'username'),
-                controller: usernameController,
+                controller: _usernameController,
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'password'),
-                controller: passwordController,
+                controller: _passwordController,
                 obscureText: true,
               ),
               RaisedButton(
@@ -79,9 +79,9 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   _onLoginButtonPressed() {
-    loginBloc.dispatch(LoginButtonPressed(
-      username: usernameController.text,
-      password: passwordController.text,
+    _loginBloc.dispatch(LoginButtonPressed(
+      username: _usernameController.text,
+      password: _passwordController.text,
     ));
   }
 }

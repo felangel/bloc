@@ -32,29 +32,29 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  AuthenticationBloc authenticationBloc;
-  UserRepository get userRepository => widget.userRepository;
+  AuthenticationBloc _authenticationBloc;
+  UserRepository get _userRepository => widget.userRepository;
 
   @override
   void initState() {
-    authenticationBloc = AuthenticationBloc(userRepository: userRepository);
-    authenticationBloc.dispatch(AppStarted());
+    _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
+    _authenticationBloc.dispatch(AppStarted());
     super.initState();
   }
 
   @override
   void dispose() {
-    authenticationBloc.dispose();
+    _authenticationBloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AuthenticationBloc>(
-      bloc: authenticationBloc,
+      bloc: _authenticationBloc,
       child: MaterialApp(
         home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
-          bloc: authenticationBloc,
+          bloc: _authenticationBloc,
           builder: (BuildContext context, AuthenticationState state) {
             if (state is AuthenticationUninitialized) {
               return SplashPage();
@@ -63,7 +63,7 @@ class _AppState extends State<App> {
               return HomePage();
             }
             if (state is AuthenticationUnauthenticated) {
-              return LoginPage(userRepository: userRepository);
+              return LoginPage(userRepository: _userRepository);
             }
             if (state is AuthenticationLoading) {
               return LoadingIndicator();

@@ -18,17 +18,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  LoginBloc loginBloc;
-  AuthenticationBloc authenticationBloc;
+  LoginBloc _loginBloc;
+  AuthenticationBloc _authenticationBloc;
 
-  UserRepository get userRepository => widget.userRepository;
+  UserRepository get _userRepository => widget.userRepository;
 
   @override
   void initState() {
-    authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
-    loginBloc = LoginBloc(
-      userRepository: userRepository,
-      authenticationBloc: authenticationBloc,
+    _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    _loginBloc = LoginBloc(
+      userRepository: _userRepository,
+      authenticationBloc: _authenticationBloc,
     );
     super.initState();
   }
@@ -40,15 +40,15 @@ class _LoginPageState extends State<LoginPage> {
         title: Text('Login'),
       ),
       body: LoginForm(
-        authenticationBloc: authenticationBloc,
-        loginBloc: loginBloc,
+        authenticationBloc: _authenticationBloc,
+        loginBloc: _loginBloc,
       ),
     );
   }
 
   @override
   void dispose() {
-    loginBloc.dispose();
+    _loginBloc.dispose();
     super.dispose();
   }
 }
