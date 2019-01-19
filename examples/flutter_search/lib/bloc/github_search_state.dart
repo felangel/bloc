@@ -45,25 +45,14 @@ class GithubSearchState extends SearchState {
     );
   }
 
-  // factory GithubSearchState.success(SearchResult result) {
-  //   print("Results from factory ${result.items}");
-  //   return GithubSearchState(
-  //     isLoading: false,
-  //     isError: false,
-  //     noTerm: false,
-  //     result: result,
-  //   );
-  // }
-
   factory GithubSearchState.success(List<SearchResultItem> searchResultItems) {
-    print("Results from factory $searchResultItems");
     return new GithubSearchState(
       isLoading: false,
       isError: false,
       noTerm: false,
       result: SearchResult(
-        isEmpty: searchResultItems.length <= 0,
-        isPopulated: searchResultItems.length >= 0,
+        isEmpty: searchResultItems.length == 0,
+        isPopulated: searchResultItems.length != 0,
         items: searchResultItems,
       ),
     );
@@ -86,40 +75,3 @@ class GithubSearchState extends SearchState {
   String toString() =>
       'GithubSearchState { isLoading: $isLoading, isError: $isError, noTerm: $noTerm, result: ${result.toString()} }';
 }
-
-// abstract class PostState extends Equatable {
-//   PostState([List props = const []]) : super(props);
-// }
-
-// class PostUninitialized extends PostState {
-//   @override
-//   String toString() => 'PostUninitialized';
-// }
-
-// class PostError extends PostState {
-//   @override
-//   String toString() => 'PostError';
-// }
-
-// class PostLoaded extends PostState {
-//   final List<Post> posts;
-//   // final bool hasReachedMax;
-
-//   PostLoaded({
-//     this.posts,
-//     //this.hasReachedMax,
-//   }) : super([posts]);
-
-//   // PostLoaded copyWith({
-//   //   List<Post> posts,
-//   //   //bool hasReachedMax,
-//   // }) {
-//   //   return PostLoaded(
-//   //     posts: posts ?? this.posts,
-//   //   );
-//   // }
-
-//   @override
-//   String toString() =>
-//       'PostLoaded { posts: ${posts.length}}';
-// }

@@ -40,7 +40,6 @@ class _SearchFormState extends State<SearchForm> {
   @override
   void initState() {
     _githubSearchBloc.dispatch(TextChanged(text: ""));
-
     super.initState();
   }
 
@@ -57,13 +56,10 @@ class _SearchFormState extends State<SearchForm> {
     return BlocBuilder<GithubSearchEvent, GithubSearchState>(
       bloc: _githubSearchBloc,
       builder: (BuildContext context, GithubSearchState state) {
-        if (!state.noTerm) {
-          print(state.noTerm);
-        }
         return Column(
           children: <Widget>[
             Padding(
-              padding: new EdgeInsets.only(top: 20.0),
+              padding: EdgeInsets.only(top: 20.0),
             ),
             TextField(
               controller: _textController,
@@ -74,26 +70,32 @@ class _SearchFormState extends State<SearchForm> {
                   border: InputBorder.none,
                   hintText: 'Please enter a search term'),
             ),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: state.result.items.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    print("From widget ${state.result.items[index].full_name}");
-                    return SearchResultItemWidget(
-                        item: state.result.items[index]);
-                  }),
-            )
+            _buildResult(state)
           ],
         );
       },
     );
   }
 
-  Widget _buildTextFieldChild({Widget child, TextField textField}) {
-    Widget textFieldAndChild = Row(
-      children: <Widget>[textField, child],
+  Widget _buildResult(GithubSearchState state) {
+    if (state.isLoading) {
+      return CircularProgressIndicator();
+    }
+
+    if (state.isError) {
+      return Text("Limit exceeded");
+    }
+
+    if (!state.result.isPopulated || state.result.isEmpty) {
+      return Text("No results");
+    }
+    return Expanded(
+      child: ListView.builder(
+          itemCount: state.result.items.length,
+          itemBuilder: (BuildContext context, int index) {
+            return SearchResultItemWidget(item: state.result.items[index]);
+          }),
     );
-    return textFieldAndChild;
   }
 }
 

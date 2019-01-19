@@ -15,6 +15,7 @@ class GithubService {
 
   Future<SearchResult> search(String term) async {
     if (cache.contains(term)) {
+      print("Result returned from cache");
       return cache.get(term);
     } else {
       final result = await client.search(term);
