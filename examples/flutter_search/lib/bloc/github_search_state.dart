@@ -17,7 +17,7 @@ class GithubSearchState extends SearchState {
     this.isError,
     this.noTerm,
     this.result,
-  });
+  }) : super([isLoading, isError, noTerm, result]);
 
   factory GithubSearchState.initial() {
     return GithubSearchState(

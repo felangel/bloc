@@ -30,7 +30,6 @@ class SearchForm extends StatefulWidget {
 // Define a corresponding State class. This class will hold the data related to
 // our Form.
 class _SearchFormState extends State<SearchForm> {
-  //final items = List<String>.generate(10000, (i) => "Item $i");
   // Create a text controller. We will use it to retrieve the current value
   // of the TextField!
   final _textController = TextEditingController();
@@ -80,9 +79,8 @@ class _SearchFormState extends State<SearchForm> {
                   itemCount: state.result.items.length,
                   itemBuilder: (BuildContext context, int index) {
                     print("From widget ${state.result.items[index].full_name}");
-                    return ListTile(
-                      title: Text("${state.result.items[index].full_name}"),
-                    );
+                    return SearchResultItemWidget(
+                        item: state.result.items[index]);
                   }),
             )
           ],
@@ -109,9 +107,9 @@ class SearchResultItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        child: Image.network("$item?.owner.avatar_url"),
+        child: Image.network(item?.owner.avatar_url),
       ),
-      title: Text("$item.full_name"),
+      title: Text(item.full_name),
     );
   }
 }

@@ -5,7 +5,8 @@ class SearchResult extends Equatable {
   final bool isPopulated;
   final bool isEmpty;
 
-  SearchResult({this.items, this.isPopulated, this.isEmpty});
+  SearchResult({this.items, this.isPopulated, this.isEmpty})
+      : super([items, isPopulated, isEmpty]);
 
   static SearchResult fromJson(Map<String, dynamic> json) {
     final items = (json['items'] as List<dynamic>)
@@ -28,7 +29,7 @@ class GithubUser extends Equatable {
   final String login;
   final String avatar_url;
 
-  GithubUser({this.login, this.avatar_url});
+  GithubUser({this.login, this.avatar_url}) : super([login, avatar_url]);
 
   static GithubUser fromJson(dynamic json) {
     return GithubUser(
@@ -46,7 +47,8 @@ class SearchResultItem extends Equatable {
   final String html_url;
   final GithubUser owner;
 
-  SearchResultItem({this.full_name, this.html_url, this.owner});
+  SearchResultItem({this.full_name, this.html_url, this.owner})
+      : super([full_name, html_url, owner]);
 
   static SearchResultItem fromJson(dynamic json) {
     return SearchResultItem(
@@ -64,7 +66,7 @@ class SearchResultItem extends Equatable {
 class SearchResultError extends Equatable {
   final String message;
 
-  SearchResultError({this.message});
+  SearchResultError({this.message}) : super([message]);
 
   static SearchResultError fromJson(dynamic json) {
     return SearchResultError(
