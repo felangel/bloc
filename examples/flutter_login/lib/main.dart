@@ -19,43 +19,42 @@ class SimpleBlocDelegate extends BlocDelegate {
 
 void main() {
   BlocSupervisor().delegate = SimpleBlocDelegate();
-  runApp(App());
+  runApp(App(userRepository: UserRepository()));
 }
 
 class App extends StatefulWidget {
   final UserRepository userRepository;
 
-  App({Key key, this.userRepository}) : super(key: key);
+  App({Key key, @required this.userRepository}) : super(key: key);
 
   @override
-  State<App> createState() => AppState();
+  State<App> createState() => _AppState();
 }
 
-class AppState extends State<App> {
-  AuthenticationBloc _authenticationBloc;
-  UserRepository _userRepository;
+class _AppState extends State<App> {
+  AuthenticationBloc authenticationBloc;
+  UserRepository get userRepository => widget.userRepository;
 
   @override
   void initState() {
-    _userRepository = widget.userRepository ?? UserRepository();
-    _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
-    _authenticationBloc.dispatch(AppStarted());
+    authenticationBloc = AuthenticationBloc(userRepository: userRepository);
+    authenticationBloc.dispatch(AppStarted());
     super.initState();
   }
 
   @override
   void dispose() {
-    _authenticationBloc.dispose();
+    authenticationBloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AuthenticationBloc>(
-      bloc: _authenticationBloc,
+      bloc: authenticationBloc,
       child: MaterialApp(
         home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
-          bloc: _authenticationBloc,
+          bloc: authenticationBloc,
           builder: (BuildContext context, AuthenticationState state) {
             if (state is AuthenticationUninitialized) {
               return SplashPage();
@@ -64,9 +63,7 @@ class AppState extends State<App> {
               return HomePage();
             }
             if (state is AuthenticationUnauthenticated) {
-              return LoginPage(
-                userRepository: _userRepository,
-              );
+              return LoginPage(userRepository: userRepository);
             }
             if (state is AuthenticationLoading) {
               return LoadingIndicator();

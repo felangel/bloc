@@ -7,26 +7,28 @@ import 'package:flutter_login/login/login.dart';
 
 class LoginForm extends StatefulWidget {
   final LoginBloc loginBloc;
-  final AuthenticationBloc authBloc;
+  final AuthenticationBloc authenticationBloc;
 
   LoginForm({
     Key key,
     @required this.loginBloc,
-    @required this.authBloc,
+    @required this.authenticationBloc,
   }) : super(key: key);
 
   @override
-  State<LoginForm> createState() => LoginFormState();
+  State<LoginForm> createState() => _LoginFormState();
 }
 
-class LoginFormState extends State<LoginForm> {
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+class _LoginFormState extends State<LoginForm> {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  LoginBloc get loginBloc => widget.loginBloc;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginEvent, LoginState>(
-      bloc: widget.loginBloc,
+      bloc: loginBloc,
       builder: (
         BuildContext context,
         LoginState state,
@@ -47,11 +49,11 @@ class LoginFormState extends State<LoginForm> {
             children: [
               TextFormField(
                 decoration: InputDecoration(labelText: 'username'),
-                controller: _usernameController,
+                controller: usernameController,
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'password'),
-                controller: _passwordController,
+                controller: passwordController,
                 obscureText: true,
               ),
               RaisedButton(
@@ -77,9 +79,9 @@ class LoginFormState extends State<LoginForm> {
   }
 
   _onLoginButtonPressed() {
-    widget.loginBloc.dispatch(LoginButtonPressed(
-      username: _usernameController.text,
-      password: _passwordController.text,
+    loginBloc.dispatch(LoginButtonPressed(
+      username: usernameController.text,
+      password: passwordController.text,
     ));
   }
 }
