@@ -1,4 +1,4 @@
-package com.example.flutterinfinitelist;
+package com.example.fluttersearch;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
