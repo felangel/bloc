@@ -1,4 +1,4 @@
-# flutter_search
+# flutter_github_search
 
 A new Flutter project.
 

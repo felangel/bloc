@@ -1,4 +1,4 @@
-package com.example.fluttersearch;
+package com.example.fluttergithubsearch;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
