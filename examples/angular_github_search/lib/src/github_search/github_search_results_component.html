@@ -1,30 +1,28 @@
 <div *ngIf="state != null" class="mw10">
-  <div *ngIf="state.noTerm" class="tc">
+  <div *ngIf="isEmpty" class="tc">
     <material-icon icon="info" class="light-blue"></material-icon>
     <p>Please enter a term to begin</p>
   </div>
-  <div *ngIf="state.isLoading" class="tc">
-    <material-spinner></material-spinner>
-  </div>
-  <div *ngIf="!state.result.isPopulated" class="tc">
-    <material-icon icon="warning" class="light-yellow"></material-icon>
-    <p>No Results</p>
-  </div>
-  <div *ngIf="state.isError" class="tc">
+  <div *ngIf="isLoading" class="tc"><material-spinner></material-spinner></div>
+  <div *ngIf="isError" class="tc">
     <material-icon icon="error" class="light-red"></material-icon>
     <p>Error: Rate Limit Exceeded</p>
   </div>
-  <div *ngIf="state.result.isPopulated">
+  <div *ngIf="isSuccess">
+    <div *ngIf="items.length == 0" class="tc">
+      <material-icon icon="warning" class="light-yellow"></material-icon>
+      <p>No Results</p>
+    </div>
     <ul class="list pa0 ma0">
-      <li *ngFor="let item of state.result.items" class="pa2 cf">
+      <li *ngFor="let item of items" class="pa2 cf">
         <div class="fl w-10 h-auto">
-          <img class="br-100" src="{{item?.owner.avatar_url}}" />
+          <img class="br-100" src="{{ item?.owner.avatarUrl }}" />
         </div>
         <div class="fl w-90 ph3">
-          <h1 class="f5 ma0">{{ item.full_name }}</h1>
+          <h1 class="f5 ma0">{{ item.fullName }}</h1>
           <p>
-            <a href="{{item?.html_url}}" class="light-blue" target="_blank">{{
-              item?.html_url
+            <a href="{{ item?.htmlUrl }}" class="light-blue" target="_blank">{{
+              item?.htmlUrl
             }}</a>
           </p>
         </div>

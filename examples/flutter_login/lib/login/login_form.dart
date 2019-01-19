@@ -7,26 +7,28 @@ import 'package:flutter_login/login/login.dart';
 
 class LoginForm extends StatefulWidget {
   final LoginBloc loginBloc;
-  final AuthenticationBloc authBloc;
+  final AuthenticationBloc authenticationBloc;
 
   LoginForm({
     Key key,
     @required this.loginBloc,
-    @required this.authBloc,
+    @required this.authenticationBloc,
   }) : super(key: key);
 
   @override
-  State<LoginForm> createState() => LoginFormState();
+  State<LoginForm> createState() => _LoginFormState();
 }
 
-class LoginFormState extends State<LoginForm> {
+class _LoginFormState extends State<LoginForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  LoginBloc get _loginBloc => widget.loginBloc;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginEvent, LoginState>(
-      bloc: widget.loginBloc,
+      bloc: _loginBloc,
       builder: (
         BuildContext context,
         LoginState state,
@@ -77,7 +79,7 @@ class LoginFormState extends State<LoginForm> {
   }
 
   _onLoginButtonPressed() {
-    widget.loginBloc.dispatch(LoginButtonPressed(
+    _loginBloc.dispatch(LoginButtonPressed(
       username: _usernameController.text,
       password: _passwordController.text,
     ));

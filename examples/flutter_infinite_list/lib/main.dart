@@ -8,10 +8,10 @@ import 'package:flutter_infinite_list/models/models.dart';
 
 void main() {
   BlocSupervisor().delegate = SimpleBlocDelegate();
-  runApp(MyApp());
+  runApp(App());
 }
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -120,10 +120,10 @@ class PostWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Text(
-        post.id.toString(),
+        '${post.id}',
         style: TextStyle(fontSize: 10.0),
       ),
-      title: Text('${post.title}'),
+      title: Text(post.title),
       isThreeLine: true,
       subtitle: Text(post.body),
       dense: true,

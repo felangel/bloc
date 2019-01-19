@@ -477,26 +477,35 @@ The `LoginPage` widget will serve as our container widget and will provide the n
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:user_repository/user_repository.dart';
 
-import 'package:flutter_login/user_repository/user_repository.dart';
 import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_login/login/login.dart';
 
 class LoginPage extends StatefulWidget {
   final UserRepository userRepository;
 
-  LoginPage({Key key, @required this.userRepository}): assert(userRepository != null), super(key: key);
+  LoginPage({Key key, @required this.userRepository})
+      : assert(userRepository != null),
+        super(key: key);
 
   @override
-  State<LoginPage> createState() => LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> {
   LoginBloc _loginBloc;
+  AuthenticationBloc _authenticationBloc;
+
+  UserRepository get _userRepository => widget.userRepository;
 
   @override
   void initState() {
-    _loginBloc = LoginBloc(userRepository: widget.userRepository);
+    _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    _loginBloc = LoginBloc(
+      userRepository: _userRepository,
+      authenticationBloc: _authenticationBloc,
+    );
     super.initState();
   }
 
@@ -507,7 +516,7 @@ class LoginPageState extends State<LoginPage> {
         title: Text('Login'),
       ),
       body: LoginForm(
-        authBloc: BlocProvider.of<AuthenticationBloc>(context),
+        authenticationBloc: _authenticationBloc,
         loginBloc: _loginBloc,
       ),
     );
@@ -541,26 +550,28 @@ import 'package:flutter_login/login/login.dart';
 
 class LoginForm extends StatefulWidget {
   final LoginBloc loginBloc;
-  final AuthenticationBloc authBloc;
+  final AuthenticationBloc authenticationBloc;
 
   LoginForm({
     Key key,
     @required this.loginBloc,
-    @required this.authBloc,
+    @required this.authenticationBloc,
   }) : super(key: key);
 
   @override
-  State<LoginForm> createState() => LoginFormState();
+  State<LoginForm> createState() => _LoginFormState();
 }
 
-class LoginFormState extends State<LoginForm> {
+class _LoginFormState extends State<LoginForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  LoginBloc get _loginBloc => widget.loginBloc;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginEvent, LoginState>(
-      bloc: widget.loginBloc,
+      bloc: _loginBloc,
       builder: (
         BuildContext context,
         LoginState state,
@@ -611,7 +622,7 @@ class LoginFormState extends State<LoginForm> {
   }
 
   _onLoginButtonPressed() {
-    widget.loginBloc.dispatch(LoginButtonPressed(
+    _loginBloc.dispatch(LoginButtonPressed(
       username: _usernameController.text,
       password: _passwordController.text,
     ));
@@ -662,43 +673,42 @@ class SimpleBlocDelegate extends BlocDelegate {
 
 void main() {
   BlocSupervisor().delegate = SimpleBlocDelegate();
-  runApp(App());
+  runApp(App(userRepository: UserRepository()));
 }
 
 class App extends StatefulWidget {
   final UserRepository userRepository;
 
-  App({Key key, this.userRepository}) : super(key: key);
+  App({Key key, @required this.userRepository}) : super(key: key);
 
   @override
-  State<App> createState() => AppState();
+  State<App> createState() => _AppState();
 }
 
-class AppState extends State<App> {
-  AuthenticationBloc _authenticationBloc;
-  UserRepository _userRepository;
+class _AppState extends State<App> {
+  AuthenticationBloc authenticationBloc;
+  UserRepository get userRepository => widget.userRepository;
 
   @override
   void initState() {
-    _userRepository = widget.userRepository ?? UserRepository();
-    _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
-    _authenticationBloc.dispatch(AppStarted());
+    authenticationBloc = AuthenticationBloc(userRepository: userRepository);
+    authenticationBloc.dispatch(AppStarted());
     super.initState();
   }
 
   @override
   void dispose() {
-    _authenticationBloc.dispose();
+    authenticationBloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AuthenticationBloc>(
-      bloc: _authenticationBloc,
+      bloc: authenticationBloc,
       child: MaterialApp(
         home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
-          bloc: _authenticationBloc,
+          bloc: authenticationBloc,
           builder: (BuildContext context, AuthenticationState state) {
             if (state is AuthenticationUninitialized) {
               return SplashPage();
@@ -707,9 +717,7 @@ class AppState extends State<App> {
               return HomePage();
             }
             if (state is AuthenticationUnauthenticated) {
-              return LoginPage(
-                userRepository: _userRepository,
-              );
+              return LoginPage(userRepository: userRepository);
             }
             if (state is AuthenticationLoading) {
               return LoadingIndicator();

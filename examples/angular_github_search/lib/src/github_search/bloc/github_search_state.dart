@@ -1,67 +1,31 @@
+import 'package:equatable/equatable.dart';
+
 import 'package:angular_github_search/src/github_service/models/models.dart';
 
-class GithubSearchState {
-  final bool isLoading;
-  final bool isError;
-  final bool noTerm;
-  final SearchResult result;
+abstract class GithubSearchState extends Equatable {
+  GithubSearchState([List props = const []]) : super(props);
+}
 
-  GithubSearchState({
-    this.isLoading,
-    this.isError,
-    this.noTerm,
-    this.result,
-  });
+class SearchStateEmpty extends GithubSearchState {
+  @override
+  String toString() => 'SearchStateEmpty';
+}
 
-  factory GithubSearchState.initial() {
-    return GithubSearchState(
-      isLoading: false,
-      isError: false,
-      noTerm: true,
-      result: SearchResult(
-        isEmpty: true,
-        isPopulated: true,
-        items: [],
-      ),
-    );
-  }
+class SearchStateLoading extends GithubSearchState {
+  @override
+  String toString() => 'SearchStateLoading';
+}
 
-  factory GithubSearchState.loading() {
-    return GithubSearchState(
-      isLoading: true,
-      isError: false,
-      noTerm: false,
-      result: SearchResult(
-        isEmpty: true,
-        isPopulated: true,
-        items: [],
-      ),
-    );
-  }
+class SearchStateSuccess extends GithubSearchState {
+  final List<SearchResultItem> items;
 
-  factory GithubSearchState.success(SearchResult result) {
-    return GithubSearchState(
-      isLoading: false,
-      isError: false,
-      noTerm: false,
-      result: result,
-    );
-  }
-
-  factory GithubSearchState.error() {
-    return GithubSearchState(
-      isLoading: false,
-      isError: true,
-      noTerm: false,
-      result: SearchResult(
-        isEmpty: true,
-        isPopulated: true,
-        items: [],
-      ),
-    );
-  }
+  SearchStateSuccess(this.items) : super([items]);
 
   @override
-  String toString() =>
-      'GithubSearchState { isLoading: $isLoading, isError: $isError, noTerm: $noTerm, result: ${result.toString()} }';
+  String toString() => 'SearchStateSuccess { items: ${items.length} }';
+}
+
+class SearchStateError extends GithubSearchState {
+  @override
+  String toString() => 'SearchStateError';
 }
