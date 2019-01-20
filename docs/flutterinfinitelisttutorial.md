@@ -1,4 +1,4 @@
-# Infinite List Tutorial
+# Flutter Infinite List Tutorial
 
 > In this tutorial, we’re going to be implementing an app which fetches data over the network and loads it as a user scrolls using Flutter and the bloc library.
 
