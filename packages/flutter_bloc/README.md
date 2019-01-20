@@ -95,6 +95,7 @@ At this point we have sucessfully separated our presentational layer from our bu
 - [Simple Counter Example](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example) - an example of how to create a `CounterBloc` to implement the classic Flutter Counter app.
 - [Login Flow Example](https://github.com/felangel/Bloc/tree/master/examples/flutter_login) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a Login Flow.
 - [Infinite List Example](https://github.com/felangel/Bloc/tree/master/examples/flutter_infinite_list) - an example of how to use the `bloc` and `flutter_bloc` packages to implement an infinite scrolling list.
+- [Github Search](https://github.com/felangel/Bloc/tree/master/examples/github_search/flutter_github_search) - an example of how to create a Github Search Application using the `bloc` and `flutter_bloc` packages.
 
 ### Contributors
 

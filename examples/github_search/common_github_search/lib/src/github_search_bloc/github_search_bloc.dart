@@ -13,7 +13,7 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   @override
   Stream<GithubSearchEvent> transform(Stream<GithubSearchEvent> events) {
     return (events as Observable<GithubSearchEvent>)
-        .debounce(Duration(milliseconds: 300));
+        .debounce(Duration(milliseconds: 500));
   }
 
   @override
@@ -32,13 +32,16 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   ) async* {
     if (event is TextChanged) {
       final String searchTerm = event.text;
-      yield searchTerm.isEmpty ? SearchStateEmpty() : SearchStateLoading();
-
-      try {
-        final results = await githubRepository.search(searchTerm);
-        yield SearchStateSuccess(results.items);
-      } catch (_) {
-        yield SearchStateError();
+      if (searchTerm.isEmpty) {
+        yield SearchStateEmpty();
+      } else {
+        yield SearchStateLoading();
+        try {
+          final results = await githubRepository.search(searchTerm);
+          yield SearchStateSuccess(results.items);
+        } catch (_) {
+          yield SearchStateError();
+        }
       }
     }
   }
