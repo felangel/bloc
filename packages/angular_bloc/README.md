@@ -85,7 +85,7 @@ At this point we have sucessfully separated our presentational layer from our bu
 ## Examples
 
 - [Simple Counter Example](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - a complete example of how to create a `CounterBloc` and hook it up to an AngularDart app.
-- [Github Search](https://github.com/felangel/Bloc/tree/master/examples/angular_github_search) - an example of how to create a Github Search Application using the `bloc` and `angular_bloc` packages.
+- [Github Search](https://github.com/felangel/Bloc/tree/master/examples/github_search/angular_github_search) - an example of how to create a Github Search Application using the `bloc` and `angular_bloc` packages.
 
 ### Contributors
 

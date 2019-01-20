@@ -1,0 +1,11 @@
+name: common_github_search
+description: Shared Code between AngularDart and Flutter
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  bloc:  ^0.8.0
+  equatable: 0.1.6
+  http: 0.12.0
