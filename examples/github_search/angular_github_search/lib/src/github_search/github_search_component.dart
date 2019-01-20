@@ -19,7 +19,7 @@ import 'package:angular_github_search/src/github_search/github_search.dart';
 )
 class GithubSearchComponent {
   final GithubSearchBloc githubSearchBloc = GithubSearchBloc(
-    GithubService(
+    GithubRepository(
       GithubCache(),
       GithubClient(BrowserClient()),
     ),

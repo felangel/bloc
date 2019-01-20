@@ -1,4 +1,4 @@
-import 'package:common_github_search/src/github_service/models/models.dart';
+import 'package:common_github_search/src/github_repository/models/models.dart';
 
 class GithubCache {
   final _cache = <String, SearchResult>{};

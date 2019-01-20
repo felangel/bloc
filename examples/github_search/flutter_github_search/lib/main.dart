@@ -29,7 +29,7 @@ class _SearchFormState extends State<SearchForm> {
   final _textController = TextEditingController();
 
   final GithubSearchBloc _githubSearchBloc = GithubSearchBloc(
-    GithubService(
+    GithubRepository(
       GithubCache(),
       GithubClient(http.Client()),
     ),

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../github_service/models/models.dart';
+import '../github_repository/models/models.dart';
 
 abstract class GithubSearchState extends Equatable {
   GithubSearchState([List props = const []]) : super(props);

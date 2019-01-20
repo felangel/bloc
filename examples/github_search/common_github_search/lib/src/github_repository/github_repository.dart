@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:common_github_search/src/github_service/models/models.dart';
-import 'package:common_github_search/src/github_service/github_cache.dart';
-import 'package:common_github_search/src/github_service/github_client.dart';
+import 'package:common_github_search/src/github_repository/models/models.dart';
+import 'package:common_github_search/src/github_repository/github_cache.dart';
+import 'package:common_github_search/src/github_repository/github_client.dart';
 
-class GithubService {
+class GithubRepository {
   final GithubCache cache;
   final GithubClient client;
 
-  GithubService(this.cache, this.client);
+  GithubRepository(this.cache, this.client);
 
   Future<SearchResult> search(String term) async {
     if (cache.contains(term)) {

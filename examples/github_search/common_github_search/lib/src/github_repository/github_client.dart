@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import '../github_service/models/models.dart';
+import '../github_repository/models/models.dart';
 import 'package:http/http.dart' as http;
 
 class GithubClient {

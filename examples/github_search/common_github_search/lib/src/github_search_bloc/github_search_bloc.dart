@@ -1,14 +1,14 @@
 import 'dart:async';
-import 'package:rxdart/rxdart.dart';
 
+import 'package:rxdart/rxdart.dart';
 import 'package:bloc/bloc.dart';
 
 import 'package:common_github_search/common_github_search.dart';
 
 class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
-  final GithubService githubService;
+  final GithubRepository githubRepository;
 
-  GithubSearchBloc(this.githubService);
+  GithubSearchBloc(this.githubRepository);
 
   @override
   Stream<GithubSearchEvent> transform(Stream<GithubSearchEvent> events) {
@@ -31,18 +31,14 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
     GithubSearchEvent event,
   ) async* {
     if (event is TextChanged) {
-      final String term = event.text;
-      if (term.isEmpty) {
-        yield SearchStateEmpty();
-      } else {
-        yield SearchStateLoading();
+      final String searchTerm = event.text;
+      yield searchTerm.isEmpty ? SearchStateEmpty() : SearchStateLoading();
 
-        try {
-          final results = await githubService.search(term);
-          yield SearchStateSuccess(results.items);
-        } catch (_) {
-          yield SearchStateError();
-        }
+      try {
+        final results = await githubRepository.search(searchTerm);
+        yield SearchStateSuccess(results.items);
+      } catch (_) {
+        yield SearchStateError();
       }
     }
   }
