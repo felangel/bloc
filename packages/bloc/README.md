@@ -11,7 +11,7 @@
 
 A dart package that helps implement the [BLoC pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
 
-This package is built to work with [RxDart.dart](https://pub.dartlang.org/packages/rxdart) 0.18.1+.
+This package is built to work with [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc) and [angular_bloc](https://pub.dartlang.org/packages/angular_bloc).
 
 ## Overview
 
@@ -51,127 +51,54 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 ## Usage
 
-For simplicity we can create a `Bloc` that always returns a stream of static strings in response to any event. That would look something like:
+For simplicity we can create a `CounterBloc` like:
 
 ```dart
-class SimpleBloc extends Bloc<dynamic, String> {
+class CounterBloc extends Bloc<CounterEvent, int> {
   @override
-  String get initialState => '';
-
-  @override
-  Stream<String> mapEventToState(String currentState, dynamic event) async* {
-    yield 'data';
-  }
-}
-```
-
-That isn't a very realistic use-case so let's take something more practical like a login flow.
-
-We're going to need to define what our different `LoginStates` are going to be.
-For simplicity, let's say we only have 4 states:
-
-- `initial`
-- `loading`
-- `failure`
-- `success`
-
-```dart
-class LoginState {
-  final bool isLoading;
-  final bool isLoginButtonEnabled;
-  final String error;
-  final String token;
-
-  const LoginState({
-    @required this.isLoading,
-    @required this.isLoginButtonEnabled,
-    @required this.error,
-    @required this.token,
-  });
-
-  factory LoginState.initial() {
-    return LoginState(
-      isLoading: false,
-      isLoginButtonEnabled: true,
-      error: '',
-      token: '',
-    );
-  }
-
-  factory LoginState.loading() {
-    return LoginState(
-      isLoading: true,
-      isLoginButtonEnabled: false,
-      error: '',
-      token: '',
-    );
-  }
-
-  factory LoginState.failure(String error) {
-    return LoginState(
-      isLoading: false,
-      isLoginButtonEnabled: true,
-      error: error,
-      token: '',
-    );
-  }
-
-  factory LoginState.success(String token) {
-    return LoginState(
-      isLoading: false,
-      isLoginButtonEnabled: true,
-      error: '',
-      token: token,
-    );
-  }
-}
-```
-
-Next we need to define the different events that our Bloc will respond to. Again, for simplicity, let's say there is just a single event we will handle: `LoginButtonPressed`.
-
-```dart
-abstract class LoginEvent {}
-
-class LoginButtonPressed extends LoginEvent {
-  final String username;
-  final String password;
-
-  LoginButtonPressed({@required this.username, @required this.password});
-}
-```
-
-Now that we've identified our `states` and `events`, our `LoginBloc` should look something like:
-
-```dart
-class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginState get initialState => LoginState.initial();
-
-  void onLoginButtonPressed({String username, String password}) {
-    dispatch(
-      LoginButtonPressed(
-        username: username,
-        password: password,
-      ),
-    );
-  }
+  int get initialState => 0;
 
   @override
-  Stream<LoginState> mapEventToState(LoginState currentState, LoginEvent event) async* {
-    if (event is LoginButtonPressed) {
-      yield LoginState.loading();
-
-      try {
-        final token = await _authenticate(event.username, event.password);
-        yield LoginState.success(token);
-      } catch (error) {
-        yield LoginState.failure(error.toString());
-      }
+  Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
+    if (event is Increment) {
+      yield currentState + 1;
+    }
+    if (event is Decrement) {
+      yield currentState - 1;
     }
   }
 }
 ```
 
-As our app grows and relies on multiple `Bloc`s, it becomes useful to see the `Transitions` for all `Bloc`s. This can easily be achieved by implementing a `BlocDelegate`.
+Our `CounterBloc` converts `CounterEvents` to integers.
+
+As a result, we need to define our `CounterEvent` like:
+
+```dart
+abstract class CounterEvent {}
+
+class Increment extends CounterEvent {}
+
+class Decrement extends CounterEvent {}
+```
+
+Then we can dispatch events to our bloc like so:
+
+```dart
+void main() {
+  final counterBloc = CounterBloc();
+
+  counterBloc.dispatch(Increment());
+  counterBloc.dispatch(Increment());
+  counterBloc.dispatch(Increment());
+
+  counterBloc.dispatch(Decrement());
+  counterBloc.dispatch(Decrement());
+  counterBloc.dispatch(Decrement());
+}
+```
+
+As our app grows and relies on multiple `Blocs`, it becomes useful to see the `Transitions` for all `Blocs`. This can easily be achieved by implementing a `BlocDelegate`.
 
 ```dart
 class SimpleBlocDelegate implements BlocDelegate {
@@ -187,19 +114,24 @@ Now that we have our `SimpleBlocDelegate`, we just need to tell the `BlocSupervi
 ```dart
 void main() {
   BlocSupervisor().delegate = SimpleBlocDelegate();
+
+  final counterBloc = CounterBloc();
+
+  counterBloc.dispatch(Increment()); // { currentState: 0, event: Increment, nextState: 1 }
+  counterBloc.dispatch(Increment()); // { currentState: 1, event: Increment, nextState: 2 }
+  counterBloc.dispatch(Increment()); // { currentState: 2, event: Increment, nextState: 3 }
+
+  counterBloc.dispatch(Decrement()); // { currentState: 3, event: Decrement, nextState: 2 }
+  counterBloc.dispatch(Decrement()); // { currentState: 2, event: Decrement, nextState: 1 }
+  counterBloc.dispatch(Decrement()); // { currentState: 1, event: Decrement, nextState: 0 }
 }
 ```
 
-At this point, all `Bloc` `Transitions` will be reported to the `SimpleBlocDelegate`.
+At this point, all `Bloc` `Transitions` will be reported to the `SimpleBlocDelegate` and we can see them in the console after running our app.
 
 ## Dart Versions
 
 - Dart 2: >= 2.0.0
-
-## Examples
-
-- [Simple Counter Example](https://github.com/felangel/Bloc/tree/master/packages/bloc/example) - an example of how to create a `CounterBloc` (pure dart)
-- [Login Flow Example](https://github.com/felangel/Bloc/tree/master/examples/flutter_login) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a Login Flow.
 
 ### Contributors
 

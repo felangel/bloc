@@ -21,70 +21,57 @@ This package is built to work with [bloc](https://pub.dartlang.org/packages/bloc
 
 ## Usage
 
-Lets take a look at how to use `BlocBuilder` to hook up a `LoginForm` widget to a `LoginBloc`.
+Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
 
 ```dart
-  class LoginForm extends StatelessWidget {
-    final LoginBloc loginBloc;
-    final usernameController = TextEditingController();
-    final passwordController = TextEditingController();
+class CounterPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final CounterBloc _counterBloc = BlocProvider.of<CounterBloc>(context);
 
-    const LoginForm({Key key, @required this.loginBloc}): super(key: key);
-
-    @override
-    Widget build(BuildContext context) {
-      return BlocBuilder<LoginEvent, LoginState>(
-        bloc: loginBloc,
-        builder: (
-          BuildContext context,
-          LoginState loginState,
-        ) {
-          if (loginState.token.isNotEmpty) {
-            // user is authenticated do something...
-          }
-
-          return Form(
-            child: Column(
-              children: [
-                Text(
-                  loginState.error,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'username'),
-                  controller: usernameController,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'password'),
-                  controller: passwordController,
-                  obscureText: true,
-                ),
-                RaisedButton(
-                  onPressed: loginState.isLoginButtonEnabled
-                      ? _onLoginButtonPressed
-                      : null,
-                  child: Text('Login'),
-                ),
-                Container(
-                  child:
-                      loginState.isLoading ? CircularProgressIndicator() : null,
-                ),
-              ],
+    return Scaffold(
+      appBar: AppBar(title: Text('Counter')),
+      body: BlocBuilder<CounterEvent, int>(
+        bloc: _counterBloc,
+        builder: (BuildContext context, int count) {
+          return Center(
+            child: Text(
+              '$count',
+              style: TextStyle(fontSize: 24.0),
             ),
           );
         },
-      );
-    }
-
-    _onLoginButtonPressed() {
-      loginBloc.onLoginButtonPressed(
-        username: usernameController.text,
-        password: passwordController.text,
-      );
-    }
+      ),
+      floatingActionButton: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {
+                _counterBloc.dispatch(Increment());
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: FloatingActionButton(
+              child: Icon(Icons.remove),
+              onPressed: () {
+                _counterBloc.dispatch(Decrement());
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
+}
 ```
 
-At this point we have sucessfully separated our presentational layer from our business logic layer. Notice that the `LoginForm` widget knows nothing about what happens when a user taps the button. The form simply tells the `LoginBloc` that the user has pressed the button.
+At this point we have sucessfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The form simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
 
 ## Dart Versions
 

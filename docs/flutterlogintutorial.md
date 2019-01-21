@@ -387,8 +387,6 @@ Now that we have the `LoginState` defined let’s take a look at the `LoginEvent
 ## Login Events
 
 ```dart
-import 'package:flutter/widgets.dart';
-
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 

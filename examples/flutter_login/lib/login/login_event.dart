@@ -1,5 +1,3 @@
-import 'package:flutter/widgets.dart';
-
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
