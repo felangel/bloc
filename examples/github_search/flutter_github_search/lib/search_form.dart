@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:common_github_search/common_github_search.dart';
 
 class SearchForm extends StatefulWidget {
+  final GithubRepository githubRepository;
+
+  const SearchForm({
+    Key key,
+    @required this.githubRepository,
+  }) : super(key: key);
+
   @override
   _SearchFormState createState() => _SearchFormState();
 }
 
 class _SearchFormState extends State<SearchForm> {
-  final GithubSearchBloc _githubSearchBloc = GithubSearchBloc(
-    GithubRepository(
-      GithubCache(),
-      GithubClient(http.Client()),
-    ),
-  );
+  GithubSearchBloc _githubSearchBloc;
 
   @override
   void initState() {
+    _githubSearchBloc = GithubSearchBloc(
+      githubRepository: widget.githubRepository,
+    );
     super.initState();
   }
 
@@ -67,8 +71,8 @@ class _SearchBarState extends State<_SearchBar> {
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.search),
         suffixIcon: GestureDetector(
-          child: Icon(Icons.close),
-          onTap: _onCloseTapped,
+          child: Icon(Icons.clear),
+          onTap: _onClearTapped,
         ),
         border: InputBorder.none,
         hintText: 'Enter a search term',
@@ -76,7 +80,7 @@ class _SearchBarState extends State<_SearchBar> {
     );
   }
 
-  void _onCloseTapped() {
+  void _onClearTapped() {
     _textController.text = '';
     githubSearchBloc.dispatch(TextChanged(text: ''));
   }
@@ -99,7 +103,7 @@ class _SearchBody extends StatelessWidget {
           return CircularProgressIndicator();
         }
         if (state is SearchStateError) {
-          return Text('Error: Rate Limit Exceeded');
+          return Text(state.error);
         }
         if (state is SearchStateSuccess) {
           return state.items.isEmpty
@@ -121,17 +125,16 @@ class _SearchResults extends StatelessWidget {
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (BuildContext context, int index) {
-        return _SearchResultItemWidget(item: items[index]);
+        return _SearchResultItem(item: items[index]);
       },
     );
   }
 }
 
-class _SearchResultItemWidget extends StatelessWidget {
+class _SearchResultItem extends StatelessWidget {
   final SearchResultItem item;
 
-  const _SearchResultItemWidget({Key key, @required this.item})
-      : super(key: key);
+  const _SearchResultItem({Key key, @required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

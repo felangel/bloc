@@ -14,6 +14,8 @@
     - [Infinite List](flutterinfinitelisttutorial.md)
   - AngularDart
     - [Counter](angularcountertutorial.md)
+  - Flutter + AngularDart
+    - [Github Search](flutterangulargithubsearch.md)
 
 - API Reference
 

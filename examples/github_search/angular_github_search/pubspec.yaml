@@ -1,8 +1,5 @@
 name: angular_github_search
 description: A web app that uses AngularDart Components
-# version: 1.0.0
-# homepage: https://www.example.com
-# author: Felix Angelov <email@example.com>
 
 environment:
   sdk: '>=2.0.0 <3.0.0'
@@ -10,8 +7,7 @@ environment:
 dependencies:
   angular: ^5.0.0
   angular_components: ^0.9.0
-  angular_bloc:
-    path: ../../../packages/angular_bloc
+  angular_bloc: ^0.3.0
   common_github_search:
     path: ../common_github_search  
 

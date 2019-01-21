@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../github_repository/models/models.dart';
+import 'package:common_github_search/common_github_search.dart';
 
 abstract class GithubSearchState extends Equatable {
   GithubSearchState([List props = const []]) : super(props);
@@ -26,6 +26,10 @@ class SearchStateSuccess extends GithubSearchState {
 }
 
 class SearchStateError extends GithubSearchState {
+  final String error;
+
+  SearchStateError(this.error) : super([error]);
+
   @override
   String toString() => 'SearchStateError';
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:bloc/bloc.dart';
 
@@ -8,7 +9,7 @@ import 'package:common_github_search/common_github_search.dart';
 class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   final GithubRepository githubRepository;
 
-  GithubSearchBloc(this.githubRepository);
+  GithubSearchBloc({@required this.githubRepository});
 
   @override
   Stream<GithubSearchEvent> transform(Stream<GithubSearchEvent> events) {
@@ -39,8 +40,10 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
         try {
           final results = await githubRepository.search(searchTerm);
           yield SearchStateSuccess(results.items);
-        } catch (_) {
-          yield SearchStateError();
+        } catch (error) {
+          yield error is SearchResultError
+              ? SearchStateError(error.message)
+              : SearchStateError('something went wrong');
         }
       }
     }

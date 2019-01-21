@@ -1,21 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
 
-import '../github_repository/models/models.dart';
 import 'package:http/http.dart' as http;
+import 'package:common_github_search/common_github_search.dart';
 
 class GithubClient {
   final String baseUrl;
-  final http.Client client;
+  final http.Client httpClient;
 
-  GithubClient(
-    http.Client client, {
+  GithubClient({
+    http.Client httpClient,
     this.baseUrl = "https://api.github.com/search/repositories?q=",
-  }) : this.client = client ?? http.Client();
+  }) : this.httpClient = httpClient ?? http.Client();
 
-  /// Search Github for repositories using the given term
   Future<SearchResult> search(String term) async {
-    final response = await client.get(Uri.parse("$baseUrl$term"));
+    final response = await httpClient.get(Uri.parse("$baseUrl$term"));
     final results = json.decode(response.body);
 
     if (response.statusCode == 200) {
