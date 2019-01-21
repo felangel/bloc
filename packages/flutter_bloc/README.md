@@ -71,7 +71,7 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-At this point we have sucessfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The form simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
+At this point we have sucessfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
 
 ## Dart Versions
 

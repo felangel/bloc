@@ -133,6 +133,10 @@ At this point, all `Bloc` `Transitions` will be reported to the `SimpleBlocDeleg
 
 - Dart 2: >= 2.0.0
 
+## Examples
+
+- [Simple Counter Example](https://github.com/felangel/Bloc/tree/master/packages/bloc/example) - an example of how to create a `CounterBloc` in a pure Dart app.
+
 ### Contributors
 
 - [Felix Angelov](https://github.com/felangel)
