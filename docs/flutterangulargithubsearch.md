@@ -158,7 +158,7 @@ class GithubUser {
 }
 ```
 
-At this point we have finished implementing `SearchResult` and it's dependencies so next we'll move onto `SearchResultError`.
+At this point we have finished implementing `SearchResult` and its dependencies so next we'll move onto `SearchResultError`.
 
 #### Search Result Error Model
 
@@ -202,7 +202,7 @@ class GithubCache {
 }
 ```
 
-Now, we're ready to create our `GithubRepository`!
+Now we're ready to create our `GithubRepository`!
 
 ### Github Repository
 
@@ -505,7 +505,7 @@ Next, we'll implement `_SearchBar`.
 
 ### Search Bar
 
-> `SearchBar` is also going to be a `StatefulWidget` because it will need to maintain it's own `TextController` so that we can keep track of what a user has entered as input.
+> `SearchBar` is also going to be a `StatefulWidget` because it will need to maintain its own `TextController` so that we can keep track of what a user has entered as input.
 
 ```dart
 class _SearchBar extends StatefulWidget {
