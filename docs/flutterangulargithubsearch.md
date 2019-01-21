@@ -1,10 +1,10 @@
 # Flutter + AngularDart Github Search Tutorial
 
-> In the following tutorial, we're going to build a Github Search app in Flutter and AngularDart to demonstrate how we can share the business logic between the two projects.
+> In the following tutorial, we're going to build a Github Search app in Flutter and AngularDart to demonstrate how we can share the data and business logic layers between the two projects.
 
 ## Common Github Search Library
 
-> The Common Github Search library which will contain models, the data provider, the repository, as well as the bloc that will be shared between AngularDart and Flutter.
+> The Common Github Search library will contain models, the data provider, the repository, as well as the bloc that will be shared between AngularDart and Flutter.
 
 ### Setup
 
@@ -233,7 +233,7 @@ class GithubRepository {
 }
 ```
 
-?> **Note:** The `GithubRepository` has a dependency on the `GithubCache` and the `GithubClient` and abstracts the underlying implementation.
+?> **Note:** The `GithubRepository` has a dependency on the `GithubCache` and the `GithubClient` and abstracts the underlying implementation. Our application never has to know about how the data is being retrieved or where it's coming from since it shouldn't care. We can change how the repository works at any time and as long as we don't change the interface we shouldn't need to change any client code.
 
 At this point, we've completed the data provider layer and the repository layer so we're ready to move on to the business logic layer.
 
@@ -395,7 +395,7 @@ Next, we'll work on the Flutter implementation.
 
 ### Setup
 
-We need to start by creating a new flutter project in our `github_search` directory at the same level as `common_github_search`.
+We need to start by creating a new Flutter project in our `github_search` directory at the same level as `common_github_search`.
 
 ```bash
 flutter create flutter_github_search
@@ -622,7 +622,7 @@ It's time to implement `_SearchResultItem`.
 
 ### Search Result Item
 
-> `SearchResultItem` is a `StatelessWidget` and is reponsible for rendering the information for a single search result. It is also responsible for handling user interaction and navigating to the repository url on a user tap.
+> `SearchResultItem` is a `StatelessWidget` and is responsible for rendering the information for a single search result. It is also responsible for handling user interaction and navigating to the repository url on a user tap.
 
 ```dart
 class _SearchResultItem extends StatelessWidget {
@@ -900,7 +900,7 @@ dev_dependencies:
 
 Just like in our Flutter app, we're going to need to create a `SearchForm` with a `SearchBar` and `SearchBody` component.
 
-> Our `SearchForm` component will implement `OnInit` and `OnDestroy` because it will need to create and dispose of a GithubSearchBloc.
+> Our `SearchForm` component will implement `OnInit` and `OnDestroy` because it will need to create and dispose of a `GithubSearchBloc`.
 
 - `SearchBar` will be responsible for taking user input.
 - `SearchBody` will be responsible for displaying search results, loading indicators, and errors.
@@ -947,6 +947,16 @@ class SearchFormComponent implements OnInit, OnDestroy {
 ?> **Note:** The `GithubRepository` is injected into the `SearchFormComponent`.
 
 ?> **Note:** The `GithubSearchBloc` is created and disposed by the `SearchFormComponent`.
+
+Our template (`github_search_form_component.html`) will look like:
+
+```html
+<div>
+  <h1>Github Search</h1>
+  <github-search-bar [githubSearchBloc]="githubSearchBloc"></github-search-bar>
+  <github-search-body [state]="githubSearchBloc | bloc"></github-search-body>
+</div>
+```
 
 Next, we'll implement the `SearchBar` Component.
 
@@ -1060,7 +1070,7 @@ If our state `isSuccess` we render `SearchResults` which we will implement next.
 
 ### Search Results
 
-> SearchResults is a component which takes a `List<SearchResultItem>` and displays them as a list of `SearchResultItems`.
+> `SearchResults` is a component which takes a `List<SearchResultItem>` and displays them as a list of `SearchResultItems`.
 
 Create `github_search_results_component.dart`
 
@@ -1097,7 +1107,7 @@ It's time to implement `SearchResultItem`.
 
 ### Search Result Item
 
-> `SearchResultItem` is a component that is reponsible for rendering the information for a single search result. It is also responsible for handling user interaction and navigating to the repository url on a user tap.
+> `SearchResultItem` is a component that is responsible for rendering the information for a single search result. It is also responsible for handling user interaction and navigating to the repository url on a user tap.
 
 Create `github_search_result_item_component.dart`.
 
@@ -1134,7 +1144,7 @@ and the corresponding template in `github_search_result_item_component.html`.
 
 ### Putting it all together
 
-We have all of our components and now it's time to put them all together in our `app.component.dart`.
+We have all of our components and now it's time to put them all together in our `app_component.dart`.
 
 ```dart
 import 'package:angular/angular.dart';
