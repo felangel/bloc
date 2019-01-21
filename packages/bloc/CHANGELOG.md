@@ -135,3 +135,7 @@ Additional Minor Updates to Documentation
 # 0.8.0
 
 Blocs ignore duplicate states
+
+# 0.8.1
+
+Minor Updates to Documentation
