@@ -97,3 +97,7 @@ Updated to `bloc: ^0.8.0`
 # 0.5.1
 
 `BlocProvider` performance improvements
+
+# 0.5.2
+
+Minor Updates to Documentation
