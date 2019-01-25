@@ -4,6 +4,10 @@ Sample project which illustrates how to setup a Flutter and AngularDart project 
 
 ## Quick Start
 
+_Make sure you have the [Dart SDK](https://www.dartlang.org/tools/sdk) installed before proceeding._
+
+Make sure you have [Flutter](https://flutter.io/docs/get-started/install) installed before proceeding.
+
 Open this project in your editor of choice (VSCode is recommended).
 
 ### Setup
@@ -11,29 +15,59 @@ Open this project in your editor of choice (VSCode is recommended).
 1. Install dependencies for `common_github_search`:
 
    ```bash
-   cd common_github_search && pub get && cd ../
+   # change directories into common_github_search
+   cd common_github_search
+
+   # install dependencies
+   pub get
+
+   # change directories back out to the root directory
+   cd ../
    ```
 
 2. Install dependencies for `flutter_github_search`
 
    ```bash
-   cd flutter_github_search && flutter packages get && cd ../
+   # change directories into flutter_github_search
+   cd flutter_github_search
+
+   # install dependencies
+   flutter packages get
+
+   # change directories back out to the root directory
+   cd ../
    ```
 
 3. Install dependencies for `angular_github_search`
 
    ```bash
-   cd angular_github_search && pub get && cd ../
+   # change directories into flutter_github_search
+   cd angular_github_search
+
+   # install dependencies
+   pub get
+
+   # change directories into flutter_github_search
+   cd ../
    ```
 
 ### Run Flutter
 
 ```bash
-cd flutter_github_search && flutter run
+# change directories into flutter_github_search
+cd flutter_github_search
+
+# run the flutter project
+flutter run
 ```
 
 ### Run AngularDart
 
 ```bash
-cd angular_github_search && webdev serve
+
+# change directories into angular_github_search
+cd angular_github_search
+
+# run the angular project
+webdev serve
 ```
