@@ -60,11 +60,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
-    if (event is Increment) {
-      yield currentState + 1;
-    }
-    if (event is Decrement) {
-      yield currentState - 1;
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
     }
   }
 }
@@ -75,11 +77,7 @@ Our `CounterBloc` converts `CounterEvents` to integers.
 As a result, we need to define our `CounterEvent` like:
 
 ```dart
-abstract class CounterEvent {}
-
-class Increment extends CounterEvent {}
-
-class Decrement extends CounterEvent {}
+enum CounterEvent { increment, decrement }
 ```
 
 Then we can dispatch events to our bloc like so:
@@ -88,13 +86,13 @@ Then we can dispatch events to our bloc like so:
 void main() {
   final counterBloc = CounterBloc();
 
-  counterBloc.dispatch(Increment());
-  counterBloc.dispatch(Increment());
-  counterBloc.dispatch(Increment());
+  counterBloc.dispatch(CounterEvent.increment);
+  counterBloc.dispatch(CounterEvent.increment);
+  counterBloc.dispatch(CounterEvent.increment);
 
-  counterBloc.dispatch(Decrement());
-  counterBloc.dispatch(Decrement());
-  counterBloc.dispatch(Decrement());
+  counterBloc.dispatch(CounterEvent.decrement);
+  counterBloc.dispatch(CounterEvent.decrement);
+  counterBloc.dispatch(CounterEvent.decrement);
 }
 ```
 
@@ -104,7 +102,7 @@ As our app grows and relies on multiple `Blocs`, it becomes useful to see the `T
 class SimpleBlocDelegate implements BlocDelegate {
   @override
   void onTransition(Transition transition) {
-    print(transition.toString());
+    print(transition);
   }
 }
 ```
@@ -117,13 +115,13 @@ void main() {
 
   final counterBloc = CounterBloc();
 
-  counterBloc.dispatch(Increment()); // { currentState: 0, event: Increment, nextState: 1 }
-  counterBloc.dispatch(Increment()); // { currentState: 1, event: Increment, nextState: 2 }
-  counterBloc.dispatch(Increment()); // { currentState: 2, event: Increment, nextState: 3 }
+  counterBloc.dispatch(CounterEvent.increment); // { currentState: 0, event: CounterEvent.increment, nextState: 1 }
+  counterBloc.dispatch(CounterEvent.increment); // { currentState: 1, event: CounterEvent.increment, nextState: 2 }
+  counterBloc.dispatch(CounterEvent.increment); // { currentState: 2, event: CounterEvent.increment, nextState: 3 }
 
-  counterBloc.dispatch(Decrement()); // { currentState: 3, event: Decrement, nextState: 2 }
-  counterBloc.dispatch(Decrement()); // { currentState: 2, event: Decrement, nextState: 1 }
-  counterBloc.dispatch(Decrement()); // { currentState: 1, event: Decrement, nextState: 0 }
+  counterBloc.dispatch(CounterEvent.decrement); // { currentState: 3, event: CounterEvent.decrement, nextState: 2 }
+  counterBloc.dispatch(CounterEvent.decrement); // { currentState: 2, event: CounterEvent.decrement, nextState: 1 }
+  counterBloc.dispatch(CounterEvent.decrement); // { currentState: 1, event: CounterEvent.decrement, nextState: 0 }
 }
 ```
 

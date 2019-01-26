@@ -1,16 +1,6 @@
 import 'package:bloc/bloc.dart';
 
-abstract class CounterEvent {}
-
-class Increment extends CounterEvent {
-  @override
-  String toString() => 'Increment';
-}
-
-class Decrement extends CounterEvent {
-  @override
-  String toString() => 'Decrement';
-}
+enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   @override
@@ -18,15 +8,17 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
-    if (event is Increment) {
-      /// Simulating Network Latency
-      await Future<void>.delayed(Duration(seconds: 1));
-      yield currentState + 1;
-    }
-    if (event is Decrement) {
-      /// Simulating Network Latency
-      await Future<void>.delayed(Duration(milliseconds: 500));
-      yield currentState - 1;
+    switch (event) {
+      case CounterEvent.decrement:
+        // Simulating Network Latency
+        await Future<void>.delayed(Duration(seconds: 1));
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        // Simulating Network Latency
+        await Future<void>.delayed(Duration(milliseconds: 500));
+        yield currentState + 1;
+        break;
     }
   }
 }
@@ -34,7 +26,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 class SimpleBlocDelegate implements BlocDelegate {
   @override
   void onTransition(Transition transition) {
-    print(transition.toString());
+    print(transition);
   }
 }
 
@@ -43,11 +35,11 @@ void main() {
 
   final counterBloc = CounterBloc();
 
-  counterBloc.dispatch(Increment());
-  counterBloc.dispatch(Increment());
-  counterBloc.dispatch(Increment());
+  counterBloc.dispatch(CounterEvent.increment);
+  counterBloc.dispatch(CounterEvent.increment);
+  counterBloc.dispatch(CounterEvent.increment);
 
-  counterBloc.dispatch(Decrement());
-  counterBloc.dispatch(Decrement());
-  counterBloc.dispatch(Decrement());
+  counterBloc.dispatch(CounterEvent.decrement);
+  counterBloc.dispatch(CounterEvent.decrement);
+  counterBloc.dispatch(CounterEvent.decrement);
 }
