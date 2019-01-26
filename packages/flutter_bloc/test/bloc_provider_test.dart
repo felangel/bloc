@@ -132,30 +132,20 @@ class CounterPage extends StatelessWidget {
   }
 }
 
-abstract class CounterEvent {}
-
-class IncrementCounter extends CounterEvent {}
-
-class DecrementCounter extends CounterEvent {}
+enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   int get initialState => 0;
 
-  void increment() {
-    dispatch(IncrementCounter());
-  }
-
-  void decrement() {
-    dispatch(DecrementCounter());
-  }
-
   @override
   Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
-    if (event is IncrementCounter) {
-      yield currentState + 1;
-    }
-    if (event is DecrementCounter) {
-      yield currentState - 1;
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState + 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState - 1;
+        break;
     }
   }
 

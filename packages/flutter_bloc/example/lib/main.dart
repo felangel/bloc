@@ -8,21 +8,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Transition transition) {
-    print(transition.toString());
+    print(transition);
   }
 }
 
 void main() {
   BlocSupervisor().delegate = SimpleBlocDelegate();
-  runApp(MyApp());
+  runApp(App());
 }
 
-class MyApp extends StatefulWidget {
+class App extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => MyAppState();
+  State<StatefulWidget> createState() => _AppState();
 }
 
-class MyAppState extends State<MyApp> {
+class _AppState extends State<App> {
   final CounterBloc _counterBloc = CounterBloc();
 
   @override
@@ -70,7 +70,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                _counterBloc.dispatch(Increment());
+                _counterBloc.dispatch(CounterEvent.increment);
               },
             ),
           ),
@@ -79,7 +79,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.remove),
               onPressed: () {
-                _counterBloc.dispatch(Decrement());
+                _counterBloc.dispatch(CounterEvent.decrement);
               },
             ),
           ),
@@ -89,17 +89,7 @@ class CounterPage extends StatelessWidget {
   }
 }
 
-abstract class CounterEvent {}
-
-class Increment extends CounterEvent {
-  @override
-  String toString() => 'Increment';
-}
-
-class Decrement extends CounterEvent {
-  @override
-  String toString() => 'Decrement';
-}
+enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   @override
@@ -107,11 +97,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
-    if (event is Increment) {
-      yield currentState + 1;
-    }
-    if (event is Decrement) {
-      yield currentState - 1;
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
     }
   }
 }
