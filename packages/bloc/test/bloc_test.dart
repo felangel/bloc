@@ -222,7 +222,7 @@ void main() {
       test('single Increment event updates state to 1', () {
         final List<int> expected = [0, 1];
         final expectedTransitions = [
-          'Transition { currentState: 0, event: Increment, nextState: 1 }'
+          'Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }'
         ];
 
         expectLater(
@@ -234,7 +234,7 @@ void main() {
             delegate.onTransition(
               Transition<CounterEvent, int>(
                 currentState: 0,
-                event: Increment(),
+                event: CounterEvent.increment,
                 nextState: 1,
               ),
             ),
@@ -242,15 +242,15 @@ void main() {
           expect(counterBloc.currentState, 1);
         });
 
-        counterBloc.dispatch(Increment());
+        counterBloc.dispatch(CounterEvent.increment);
       });
 
       test('multiple Increment event updates state to 3', () {
         final List<int> expected = [0, 1, 2, 3];
         final expectedTransitions = [
-          'Transition { currentState: 0, event: Increment, nextState: 1 }',
-          'Transition { currentState: 1, event: Increment, nextState: 2 }',
-          'Transition { currentState: 2, event: Increment, nextState: 3 }',
+          'Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }',
+          'Transition { currentState: 1, event: CounterEvent.increment, nextState: 2 }',
+          'Transition { currentState: 2, event: CounterEvent.increment, nextState: 3 }',
         ];
 
         expectLater(
@@ -262,7 +262,7 @@ void main() {
             delegate.onTransition(
               Transition<CounterEvent, int>(
                 currentState: 0,
-                event: Increment(),
+                event: CounterEvent.increment,
                 nextState: 1,
               ),
             ),
@@ -271,7 +271,7 @@ void main() {
             delegate.onTransition(
               Transition<CounterEvent, int>(
                 currentState: 1,
-                event: Increment(),
+                event: CounterEvent.increment,
                 nextState: 2,
               ),
             ),
@@ -280,7 +280,7 @@ void main() {
             delegate.onTransition(
               Transition<CounterEvent, int>(
                 currentState: 2,
-                event: Increment(),
+                event: CounterEvent.increment,
                 nextState: 3,
               ),
             ),
@@ -288,9 +288,9 @@ void main() {
           expect(counterBloc.currentState, 3);
         });
 
-        counterBloc.dispatch(Increment());
-        counterBloc.dispatch(Increment());
-        counterBloc.dispatch(Increment());
+        counterBloc.dispatch(CounterEvent.increment);
+        counterBloc.dispatch(CounterEvent.increment);
+        counterBloc.dispatch(CounterEvent.increment);
       });
     });
 

@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 
-import './counter.dart';
-
 typedef OnTransitionCallback = Function(Transition<CounterEvent, int>);
+
+enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   int get initialState => 0;
@@ -13,11 +13,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
-    if (event is Increment) {
-      yield currentState + 1;
-    }
-    if (event is Decrement) {
-      yield currentState - 1;
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
     }
   }
 
