@@ -13,17 +13,7 @@ import 'package:bloc/bloc.dart';
 )
 class AppComponent {}
 
-abstract class CounterEvent {}
-
-class Increment extends CounterEvent {
-  @override
-  String toString() => 'Increment';
-}
-
-class Decrement extends CounterEvent {
-  @override
-  String toString() => 'Decrement';
-}
+enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   @override
@@ -31,16 +21,18 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   void onTransition(Transition<CounterEvent, int> transition) {
-    print(transition.toString());
+    print(transition);
   }
 
   @override
   Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
-    if (event is Increment) {
-      yield currentState + 1;
-    }
-    if (event is Decrement) {
-      yield currentState - 1;
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
     }
   }
 }
@@ -68,10 +60,10 @@ class CounterPageComponent implements OnInit, OnDestroy {
   }
 
   void increment() {
-    counterBloc.dispatch(Increment());
+    counterBloc.dispatch(CounterEvent.increment);
   }
 
   void decrement() {
-    counterBloc.dispatch(Decrement());
+    counterBloc.dispatch(CounterEvent.decrement);
   }
 }

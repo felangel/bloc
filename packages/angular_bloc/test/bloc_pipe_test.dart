@@ -11,17 +11,7 @@ import 'package:bloc/bloc.dart';
 
 class MockChangeDetectorRef extends Mock implements ChangeDetectorRef {}
 
-abstract class CounterEvent {}
-
-class Increment extends CounterEvent {
-  @override
-  String toString() => 'Increment';
-}
-
-class Decrement extends CounterEvent {
-  @override
-  String toString() => 'Decrement';
-}
+enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   @override
@@ -29,11 +19,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
-    if (event is Increment) {
-      yield currentState + 1;
-    }
-    if (event is Decrement) {
-      yield currentState - 1;
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
     }
   }
 }
@@ -56,7 +48,7 @@ void main() {
       });
       test('should return the latest available value', () async {
         pipe.transform(bloc);
-        bloc.dispatch(Increment());
+        bloc.dispatch(CounterEvent.increment);
         Timer.run(expectAsync0(() {
           final dynamic res = pipe.transform(bloc);
           expect(res, 1);
@@ -67,7 +59,7 @@ void main() {
           'should return same value when nothing has changed '
           'since the last call', () async {
         pipe.transform(bloc);
-        bloc.dispatch(Increment());
+        bloc.dispatch(CounterEvent.increment);
         Timer.run(expectAsync0(() {
           pipe.transform(bloc);
           expect(pipe.transform(bloc), 1);
@@ -81,7 +73,7 @@ void main() {
         var newBloc = CounterBloc();
         expect(pipe.transform(newBloc), 0);
         // this should not affect the pipe
-        bloc.dispatch(Increment());
+        bloc.dispatch(CounterEvent.increment);
         Timer.run(expectAsync0(() {
           expect(pipe.transform(newBloc), 0);
         }));
@@ -91,7 +83,7 @@ void main() {
         // See https://github.com/dart-lang/angular2/issues/260
         final _bloc = CounterBloc();
         expect(pipe.transform(_bloc), 0);
-        _bloc.dispatch(Increment());
+        _bloc.dispatch(CounterEvent.increment);
         Timer.run(expectAsync0(() {
           expect(pipe.transform(_bloc), 1);
         }));
@@ -99,7 +91,7 @@ void main() {
       test('should request a change detection check upon receiving a new value',
           () async {
         pipe.transform(bloc);
-        bloc.dispatch(Increment());
+        bloc.dispatch(CounterEvent.increment);
         Timer(const Duration(milliseconds: 10), expectAsync0(() {
           verify(ref.markForCheck()).called(2);
         }));
@@ -113,7 +105,7 @@ void main() {
       test('should dispose of the existing subscription', () async {
         pipe.transform(bloc);
         pipe.ngOnDestroy();
-        bloc.dispatch(Increment());
+        bloc.dispatch(CounterEvent.increment);
         Timer.run(expectAsync0(() {
           expect(pipe.transform(bloc), 0);
         }));
