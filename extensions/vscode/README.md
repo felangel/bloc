@@ -1,7 +1,5 @@
 # Bloc Code
 
-https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc
-
 [![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
 
