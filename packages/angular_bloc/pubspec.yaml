@@ -1,6 +1,6 @@
 name: angular_bloc
 description: Angular Components that make it easy to implement the BLoC (Business Logic Component) design pattern. Built to be used with the bloc package.
-version: 0.3.1
+version: 0.3.2
 author: felix.angelov <felangelov@gmail.com>
 homepage: https://felangel.github.io/bloc
 
