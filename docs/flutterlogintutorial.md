@@ -4,6 +4,8 @@
 
 > In the following tutorial, we're going to build a Login Flow in Flutter using the Bloc library.
 
+![demo](./assets/gifs/flutter_login.gif)
+
 ## Setup
 
 We'll start off by creating a brand new Flutter project

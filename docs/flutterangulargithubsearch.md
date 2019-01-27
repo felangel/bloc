@@ -4,6 +4,10 @@
 
 > In the following tutorial, we're going to build a Github Search app in Flutter and AngularDart to demonstrate how we can share the data and business logic layers between the two projects.
 
+![demo](./assets/gifs/flutter_github_search.gif)
+
+![demo](./assets/gifs/angular_github_search.gif)
+
 ## Common Github Search Library
 
 > The Common Github Search library will contain models, the data provider, the repository, as well as the bloc that will be shared between AngularDart and Flutter.

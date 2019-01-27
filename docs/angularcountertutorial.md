@@ -4,6 +4,8 @@
 
 > In the following tutorial, we're going to build a Counter in AngularDart using the Bloc library.
 
+![demo](./assets/gifs/angular_counter.gif)
+
 ## Setup
 
 We'll start off by creating a brand new AngularDart project with [stagehand](https://github.com/dart-lang/stagehand).
