@@ -5,7 +5,7 @@ import 'package:angular_counter/app_component.template.dart' as ng;
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Transition transition) {
-    print(transition.toString());
+    print(transition);
   }
 }
 

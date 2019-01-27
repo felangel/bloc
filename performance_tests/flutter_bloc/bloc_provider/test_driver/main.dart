@@ -42,7 +42,7 @@ class App extends StatelessWidget {
               key: Key('counter_increment'),
               child: Icon(Icons.add),
               onPressed: () {
-                _counterBloc.dispatch(Increment());
+                _counterBloc.dispatch(CounterEvent.increment);
               },
             ),
           ),
@@ -52,7 +52,7 @@ class App extends StatelessWidget {
               key: Key('counter_decrement'),
               child: Icon(Icons.remove),
               onPressed: () {
-                _counterBloc.dispatch(Decrement());
+                _counterBloc.dispatch(CounterEvent.decrement);
               },
             ),
           ),

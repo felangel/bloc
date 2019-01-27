@@ -20,7 +20,7 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   @override
   void onTransition(
       Transition<GithubSearchEvent, GithubSearchState> transition) {
-    print(transition.toString());
+    print(transition);
   }
 
   @override
