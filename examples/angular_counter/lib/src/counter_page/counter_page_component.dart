@@ -24,10 +24,10 @@ class CounterPageComponent implements OnDestroy {
   }
 
   void increment() {
-    counterBloc.dispatch(Increment());
+    counterBloc.dispatch(CounterEvent.increment);
   }
 
   void decrement() {
-    counterBloc.dispatch(Decrement());
+    counterBloc.dispatch(CounterEvent.decrement);
   }
 }

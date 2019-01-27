@@ -13,7 +13,7 @@ import 'package:flutter_login/common/common.dart';
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Transition transition) {
-    print(transition.toString());
+    print(transition);
   }
 }
 
