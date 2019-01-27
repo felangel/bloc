@@ -25,4 +25,4 @@ Bloc Code can be installed from the [VSCode Marketplace](https://marketplace.vis
 
 In a `.dart` file activate the snippet by typing `bloc` and hitting enter to select the bloc snippet. Then you can name you bloc class and fill in the signature and implementation details by tabbing
 
-![demo](./assets/snippets-usage.gif)
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/snippets-usage.gif)
