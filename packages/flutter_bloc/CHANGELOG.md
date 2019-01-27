@@ -101,3 +101,7 @@ Updated to `bloc: ^0.8.0`
 # 0.5.2
 
 Minor Updates to Documentation
+
+# 0.5.3
+
+Additional Minor Updates to Documentation
