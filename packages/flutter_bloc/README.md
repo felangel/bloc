@@ -23,6 +23,31 @@ This package is built to work with [bloc](https://pub.dartlang.org/packages/bloc
 
 Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
 
+`counter_bloc.dart`
+
+```dart
+enum CounterEvent { increment, decrement }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  @override
+  int get initialState => 0;
+
+  @override
+  Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
+    }
+  }
+}
+```
+
+`counter_page.dart`
+
 ```dart
 class CounterPage extends StatelessWidget {
   @override
@@ -51,7 +76,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                _counterBloc.dispatch(Increment());
+                _counterBloc.dispatch(CounterEvent.increment);
               },
             ),
           ),
@@ -60,7 +85,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.remove),
               onPressed: () {
-                _counterBloc.dispatch(Decrement());
+                _counterBloc.dispatch(CounterEvent.decrement);
               },
             ),
           ),
@@ -71,7 +96,7 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-At this point we have sucessfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
+At this point we have successfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
 
 ## Dart Versions
 
