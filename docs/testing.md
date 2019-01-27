@@ -7,17 +7,21 @@ For the sake of simplicity, let's write tests for the `CounterBloc` we created i
 To recap, the `CounterBloc` implementation looks like
 
 ```dart
+enum CounterEvent { increment, decrement
+}
 class CounterBloc extends Bloc<CounterEvent, int> {
   @override
   int get initialState => 0;
 
   @override
   Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
-    if (event is Increment) {
-      yield currentState + 1;
-    }
-    if (event is Decrement) {
-      yield currentState - 1;
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
     }
   }
 }
@@ -91,7 +95,7 @@ test('single Increment event updates state to 1', () {
         emitsInOrder(expected),
     );
 
-    counterBloc.dispatch(Increment());
+    counterBloc.dispatch(CounterEvent.increment);
 });
 
 test('single Decrement event updates state to -1', () {
@@ -102,7 +106,7 @@ test('single Decrement event updates state to -1', () {
         emitsInOrder(expected),
     );
 
-    counterBloc.dispatch(Decrement());
+    counterBloc.dispatch(CounterEvent.decrement);
 });
 ```
 

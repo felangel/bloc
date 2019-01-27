@@ -99,7 +99,7 @@ class CounterPageComponent implements OnInit, OnDestroy {
 }
 ```
 
-At this point we have sucessfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` component knows nothing about what happens when a user taps the button. The component simply tells the `CounterBloc` that the user has pressed the increment/decrement button.
+At this point we have successfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` component knows nothing about what happens when a user taps the button. The component simply tells the `CounterBloc` that the user has pressed the increment/decrement button.
 
 ## Dart Versions
 

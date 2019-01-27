@@ -1,6 +1,10 @@
 # Flutter Counter Tutorial
 
+![beginner](https://img.shields.io/badge/level-beginner-green.svg)
+
 > In the following tutorial, we're going to build a Counter in Flutter using the Bloc library.
+
+![demo](./assets/gifs/flutter_counter.gif)
 
 ## Setup
 
@@ -46,17 +50,7 @@ Our counter app is just going to have two buttons to increment/decrement the cou
 ## Counter Events
 
 ```dart
-abstract class CounterEvent {}
-
-class Increment extends CounterEvent {
-  @override
-  String toString() => 'Increment';
-}
-
-class Decrement extends CounterEvent {
-  @override
-  String toString() => 'Decrement';
-}
+enum CounterEvent { increment, decrement }
 ```
 
 ## Counter States
@@ -72,11 +66,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
-    if (event is Increment) {
-      yield currentState + 1;
-    }
-    if (event is Decrement) {
-      yield currentState - 1;
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
     }
   }
 }
@@ -154,7 +150,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                _counterBloc.dispatch(Increment());
+                _counterBloc.dispatch(CounterEvent.increment);
               },
             ),
           ),
@@ -163,7 +159,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.remove),
               onPressed: () {
-                _counterBloc.dispatch(Decrement());
+                _counterBloc.dispatch(CounterEvent.decrement);
               },
             ),
           ),

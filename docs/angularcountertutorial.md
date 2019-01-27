@@ -1,5 +1,7 @@
 # AngularDart Counter Tutorial
 
+![beginner](https://img.shields.io/badge/level-beginner-green.svg)
+
 > In the following tutorial, we're going to build a Counter in AngularDart using the Bloc library.
 
 ## Setup
@@ -45,17 +47,7 @@ Our counter app is just going to have two buttons to increment/decrement the cou
 ## Counter Events
 
 ```dart
-abstract class CounterEvent {}
-
-class Increment extends CounterEvent {
-  @override
-  String toString() => 'Increment';
-}
-
-class Decrement extends CounterEvent {
-  @override
-  String toString() => 'Decrement';
-}
+enum CounterEvent { increment, decrement }
 ```
 
 ## Counter States
@@ -71,11 +63,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
-    if (event is Increment) {
-      yield currentState + 1;
-    }
-    if (event is Decrement) {
-      yield currentState - 1;
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
     }
   }
 }
@@ -141,11 +135,11 @@ class CounterPageComponent implements OnDestroy {
   }
 
   void increment() {
-    counterBloc.dispatch(Increment());
+    counterBloc.dispatch(CounterEvent.increment);
   }
 
   void decrement() {
-    counterBloc.dispatch(Decrement());
+    counterBloc.dispatch(CounterEvent.decrement);
   }
 }
 ```

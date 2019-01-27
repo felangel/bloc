@@ -17,14 +17,10 @@ When a user taps on one of these buttons, something needs to happen to notify th
 We need to be able to notify our application's "brains" of both an increment and a decrement so we need to define these events.
 
 ```dart
-abstract class CounterEvent {}
-
-class Increment extends CounterEvent {}
-
-class Decrement extends CounterEvent {}
+enum CounterEvent { increment, decrement }
 ```
 
-The `Increment` and `Decrement` events are related because they both are coupled to the counter functionality. In order to represent that relationship, we create a base class called `CounterEvent`.
+In this case, we can represent the events using an `enum` but for more complex cases it might be necessary to use a `class`.
 
 At this point we have defined our first event! Notice that we have not used Bloc in any way so far and there is no magic happening; it's just plain Dart code.
 
@@ -32,7 +28,7 @@ At this point we have defined our first event! Notice that we have not used Bloc
 
 > States are the output of a Bloc and represent a part of your application's state. UI components can be notified of states and redraw portions of themselves based on the current state.
 
-So far, we've defined the two events that our app will be responding to: `Increment` and `Decrement`.
+So far, we've defined the two events that our app will be responding to: `CounterEvent.increment` and `CounterEvent.decrement`.
 
 Now we need to define how to represent the state of our application.
 
@@ -50,9 +46,9 @@ For example, if a user opened our app and tapped the increment button once we wo
 
 ```json
 {
-    "currentState": 0,
-    "event": "Increment",
-    "nextState": 1
+  "currentState": 0,
+  "event": "CounterEvent.increment",
+  "nextState": 1
 }
 ```
 
@@ -141,11 +137,13 @@ int get initialState => 0;
 ```dart
 @override
 Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
-    if (event is Increment) {
-        yield currentState + 1;
-    }
-    if (event is Decrement) {
+    switch (event) {
+      case CounterEvent.decrement:
         yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
     }
 }
 ```
@@ -155,11 +153,7 @@ At this point, we have a fully functioning `CounterBloc`.
 ```dart
 import 'package:bloc/bloc.dart';
 
-abstract class CounterEvent {}
-
-class Increment extends CounterEvent {}
-
-class Decrement extends CounterEvent {}
+enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   @override
@@ -167,11 +161,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
-    if (event is Increment) {
-      yield currentState + 1;
-    }
-    if (event is Decrement) {
-      yield currentState - 1;
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
     }
   }
 }
@@ -190,7 +186,7 @@ void main() {
     CounterBloc bloc = CounterBloc();
 
     for (int i = 0; i < 3; i++) {
-        bloc.dispatch(Increment());
+        bloc.dispatch(CounterEvent.increment);
     }
 }
 ```
@@ -200,17 +196,17 @@ The `Transitions` in the above code snippet would be
 ```json
 {
     "currentState": 0,
-    "event": "Increment",
+    "event": "CounterEvent.increment",
     "nextState": 1
 }
 {
     "currentState": 1,
-    "event": "Increment",
+    "event": "CounterEvent.increment",
     "nextState": 2
 }
 {
     "currentState": 2,
-    "event": "Increment",
+    "event": "CounterEvent.increment",
     "nextState": 3
 }
 ```
@@ -230,20 +226,6 @@ void onTransition(Transition<CounterEvent, int> transition) {
 
 Now that we've overridden `onTransition` we can do whatever we'd like whenever a `Transition` occurs.
 
-If you're following along, you might notice that the `Transitions` printed aren't very easy to read, particulary the `CounterEvent`. In order to resolve this we need to override `toString()` in our `Increment` and `Decrement` classes.
-
-```dart
-class Increment extends CounterEvent {
-    @override
-    String toString() => 'Increment';
-}
-
-class Decrement extends CounterEvent {
-    @override
-    String toString() => 'Decrement';
-}
-```
-
 ## BlocDelegate
 
 One added bonus of using Bloc is that we can have access to all `Transitions` in one place. Even though in this application we only have one Bloc, it's fairly common in larger applications to have many Blocs managing different parts of the application's state.
@@ -254,7 +236,7 @@ If we want to be able to do something in response to all `Transitions` we can si
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Transition transition) {
-    print(transition.toString());
+    print(transition);
   }
 }
 ```
@@ -269,7 +251,7 @@ void main() {
   CounterBloc bloc = CounterBloc();
 
   for (int i = 0; i < 3; i++) {
-    bloc.dispatch(Increment());
+    bloc.dispatch(CounterEvent.increment);
   }
 }
 ```

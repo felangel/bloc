@@ -1,5 +1,7 @@
 # Flutter + AngularDart Github Search Tutorial
 
+![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+
 > In the following tutorial, we're going to build a Github Search app in Flutter and AngularDart to demonstrate how we can share the data and business logic layers between the two projects.
 
 ## Common Github Search Library
@@ -347,7 +349,7 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   @override
   void onTransition(
       Transition<GithubSearchEvent, GithubSearchState> transition) {
-    print(transition.toString());
+    print(transition);
   }
 
   @override
