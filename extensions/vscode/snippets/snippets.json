@@ -1,0 +1,17 @@
+{
+  "bloc": {
+    "scope": "dart",
+    "prefix": "bloc",
+    "body": [
+      "import 'package:bloc/bloc.dart';\n",
+      "class ${1:MyBloc} extends Bloc<${2:MyEvent}, ${3:MyState}> {",
+      "\t@override",
+      "\t${3:MyState} get initialState => ${4:// TODO: implement initialState};\n",
+      "\t@override",
+      "\tStream<${3:MyState}> mapEventToState(${3:MyState} currentState, ${2:MyEvent} event) async* {",
+      "\t\t${5:// TODO: implement mapEventToState}",
+      "\t}",
+      "}"
+    ]
+  }
+}

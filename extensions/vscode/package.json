@@ -1,0 +1,36 @@
+{
+  "name": "bloc",
+  "displayName": "bloc",
+  "description": "code snippets for the dart bloc library",
+  "version": "0.1.0",
+  "publisher": "FelixAngelov",
+  "bugs": {
+    "url": "https://github.com/felangel/bloc/issues",
+    "email": "felangelov@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/felangel/bloc"
+  },
+  "homepage": "https://felangel.github.io/bloc",
+  "engines": {
+    "vscode": "^1.30.0"
+  },
+  "categories": [
+    "Snippets"
+  ],
+  "keywords": [
+    "dart",
+    "flutter",
+    "bloc"
+  ],
+  "icon": "assets/logo.png",
+  "contributes": {
+    "snippets": [
+      {
+        "language": "dart",
+        "path": "./snippets/snippets.json"
+      }
+    ]
+  }
+}
