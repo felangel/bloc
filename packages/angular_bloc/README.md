@@ -21,7 +21,30 @@ This package is built to work with [bloc](https://pub.dartlang.org/packages/bloc
 
 Lets take a look at how to use `BlocPipe` to hook up a `CounterPage` html template to a `CounterBloc`.
 
-counter_page_component.html
+`counter_bloc.dart`
+
+```dart
+enum CounterEvent { increment, decrement }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  @override
+  int get initialState => 0;
+
+  @override
+  Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
+    }
+  }
+}
+```
+
+`counter_page_component.html`
 
 ```html
 <div class="counter-page-container">
@@ -36,7 +59,7 @@ counter_page_component.html
 </div>
 ```
 
-counter_page_component.dart
+`counter_page_component.dart`
 
 ```dart
 import 'package:angular/angular.dart';
@@ -67,11 +90,11 @@ class CounterPageComponent implements OnInit, OnDestroy {
   }
 
   void increment() {
-    counterBloc.dispatch(Increment());
+    counterBloc.dispatch(CounterEvent.increment);
   }
 
   void decrement() {
-    counterBloc.dispatch(Decrement());
+    counterBloc.dispatch(CounterEvent.decrement);
   }
 }
 ```
