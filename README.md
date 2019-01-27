@@ -55,6 +55,11 @@ The goal of this package is to make it easy to separate _presentation_ from _bus
 - [unit testing with bloc](https://medium.com/@felangelov/unit-testing-with-bloc-b94de9655d86) - How to unit test the blocs created in the flutter login tutorial.
 - [flutter infinite list tutorial with flutter_bloc package](https://medium.com/flutter-community/flutter-infinite-list-tutorial-with-flutter-bloc-2fc7a272ec67) - How to create an infinite list using the bloc and flutter_bloc packages.
 - [code sharing with bloc](https://medium.com/flutter-community/code-sharing-with-bloc-b867302c18ef) - How to share code between a mobile application written with Flutter and a web application written with AngularDart.
+
+## Extensions
+
+- [Bloc Code](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) - Bloc Code extends VSCode with support for the Bloc library and provides tools for effectively creating Blocs for both Flutter and AngularDart apps.
+
 ## Contributors
 
 - [Felix Angelov](https://github.com/felangel)
