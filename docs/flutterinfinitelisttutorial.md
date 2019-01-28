@@ -108,7 +108,7 @@ Before we dive into the implementation, we need to define what our `PostBloc` is
 
 At a high level, it will be responding to user input (scrolling) and fetching more posts in order for the presentation layer to display them. Let’s start by creating our `Event`.
 
-Our `PostBloc` will only be responding to a single event; `Fetch` which will be dispatched by the presentation layer whenever it needs more Posts to present. Since our `Fetch` event is a type of `PostEvent` we can create `post_event.dart` and implement the event like so.
+Our `PostBloc` will only be responding to a single event; `Fetch` which will be dispatched by the presentation layer whenever it needs more Posts to present. Since our `Fetch` event is a type of `PostEvent` we can create `bloc/post_event.dart` and implement the event like so.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -136,12 +136,12 @@ Our presentation layer will need to have several pieces of information in order 
   - `hasReachedMax`- will tell the presentation layer whether or not it has reach the maximum number of posts
 - `PostError`- will tell the presentation layer that an error has occurred while fetching posts
 
-We can now create `post_state.dart` and implement it like so.
+We can now create `bloc/post_state.dart` and implement it like so.
 
 ```dart
 import 'package:equatable/equatable.dart';
 
-import 'package:flutter_infinite_list/models/models.dart';
+import 'package:flutter_infinite_list/post.dart';
 
 abstract class PostState extends Equatable {
   PostState([List props = const []]) : super(props);
@@ -186,6 +186,13 @@ class PostLoaded extends PostState {
 
 Now that we have our `Events` and `States` implemented, we can create our `PostBloc`.
 
+To make it convenient to import our states and events with a single import we can create `bloc/bloc.dart` which exports them all (we'll add our `post_bloc.dart` export in the next section).
+
+```dart
+export './post_event.dart';
+export './post_state.dart';
+```
+
 ## Post Bloc
 
 For simplicity, our `PostBloc` will have a direct dependency on an `http client`; however, in a production application you might want instead inject an api client and use the repository pattern [docs](./architecture.md).
@@ -198,7 +205,7 @@ import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_infinite_list/bloc/bloc.dart';
-import 'package:flutter_infinite_list/models/models.dart';
+import 'package:flutter_infinite_list/post.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   final http.Client httpClient;
@@ -305,8 +312,9 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:bloc/bloc.dart';
+
+import 'package:flutter_infinite_list/post.dart';
 import 'package:flutter_infinite_list/bloc/bloc.dart';
-import 'package:flutter_infinite_list/models/models.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   final http.Client httpClient;
@@ -363,6 +371,14 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
   }
 }
+```
+
+Don't forget to update `bloc/bloc.dart` to include our `PostBloc`!
+
+```dart
+export './post_bloc.dart';
+export './post_event.dart';
+export './post_state.dart';
 ```
 
 Great! Now that we’ve finished implementing the business logic all that’s left to do is implement the presentation layer.
