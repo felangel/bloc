@@ -87,7 +87,7 @@ class Post extends Equatable {
   final String title;
   final String body;
 
-  const Post({this.id, this.title, this.body}) : super([id, title, body]);
+  Post({this.id, this.title, this.body}) : super([id, title, body]);
 
   @override
   String toString() => 'Post { id: $id }';
