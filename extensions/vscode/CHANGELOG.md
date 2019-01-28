@@ -11,3 +11,7 @@ Minor Documentation Updates
 # 0.1.2
 
 Minor Documentation Updates
+
+# 0.1.3
+
+Minor Documentation Updates
