@@ -172,7 +172,7 @@ class CounterPage extends StatelessWidget {
 
 ?> **Note**: We are able to access the `CounterBloc` instance using `BlocProvider.of<CounterBloc>(context)` because we wrapped our `CounterPage` in a `BlocProvider`.
 
-?> **Note**: We are using the `BlocBuilder` widget from `flutter_bloc` in order to rebuild out UI in response to state changes (changes in the counter value).
+?> **Note**: We are using the `BlocBuilder` widget from `flutter_bloc` in order to rebuild our UI in response to state changes (changes in the counter value).
 
 That's it! We've separated our presentation layer from our business logic layer. Our `CounterPage` has no idea what happens when a user presses a button; it just dispatches an event to notify the `CounterBloc`. Furthermore, our `CounterBloc` has no idea what is happening with the state (counter value); it's simply converting the `CounterEvents` into integers.
 
