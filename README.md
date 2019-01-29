@@ -58,7 +58,7 @@ The goal of this package is to make it easy to separate _presentation_ from _bus
 
 ## Extensions
 
-- [Bloc Code](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) - Bloc Code extends VSCode with support for the Bloc library and provides tools for effectively creating Blocs for both Flutter and AngularDart apps.
+- [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) - extends VSCode with support for the Bloc library and provides tools for effectively creating Blocs for both Flutter and AngularDart apps.
 
 ## Contributors
 

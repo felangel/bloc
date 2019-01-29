@@ -7,8 +7,8 @@ For the sake of simplicity, let's write tests for the `CounterBloc` we created i
 To recap, the `CounterBloc` implementation looks like
 
 ```dart
-enum CounterEvent { increment, decrement
-}
+enum CounterEvent { increment, decrement }
+
 class CounterBloc extends Bloc<CounterEvent, int> {
   @override
   int get initialState => 0;
