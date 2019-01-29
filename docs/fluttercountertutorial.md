@@ -85,7 +85,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 Now that we have our `CounterBloc` fully implemented, we can get started creating our Flutter application.
 
 ```dart
-void main() => runApp(MyApp();
+void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
   @override
