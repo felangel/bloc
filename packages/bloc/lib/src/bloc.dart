@@ -58,7 +58,7 @@ abstract class Bloc<Event, State> {
   void _bindStateSubject() {
     Event currentEvent;
 
-    (transform(_eventSubject) as Observable<Event>).concatMap((Event event) {
+    transform(_eventSubject).asyncExpand((Event event) {
       currentEvent = event;
       return mapEventToState(_stateSubject.value, event);
     }).forEach(
