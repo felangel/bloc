@@ -43,9 +43,12 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
     ThemeState theme;
     switch (condition) {
       case WeatherCondition.clear:
+      case WeatherCondition.lightCloud:
         theme = ThemeState(
-          theme: ThemeData.light(),
-          color: Colors.lightBlue,
+          theme: ThemeData(
+            primaryColor: Colors.orangeAccent,
+          ),
+          color: Colors.yellow,
         );
         break;
       case WeatherCondition.hail:
@@ -59,10 +62,9 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
         );
         break;
       case WeatherCondition.heavyCloud:
-      case WeatherCondition.lightCloud:
         theme = ThemeState(
           theme: ThemeData(
-            primaryColor: Colors.black,
+            primaryColor: Colors.blueGrey,
           ),
           color: Colors.grey,
         );

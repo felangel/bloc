@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:flutter_weather/settings_bloc.dart';
 import 'package:flutter_weather/theme_bloc.dart';
 import 'package:flutter_weather/weather_bloc.dart';
 import 'package:flutter_weather/weather.dart';
@@ -29,22 +30,26 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   ThemeBloc _themeBloc = ThemeBloc();
+  SettingsBloc _settingsBloc = SettingsBloc();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       bloc: _themeBloc,
-      child: BlocBuilder(
-        bloc: _themeBloc,
-        builder: (BuildContext context, ThemeState themeState) {
-          return MaterialApp(
-            title: 'Flutter Demo',
-            theme: themeState.theme,
-            home: WeatherPage(
-              httpClient: http.Client(),
-            ),
-          );
-        },
+      child: BlocProvider(
+        bloc: _settingsBloc,
+        child: BlocBuilder(
+          bloc: _themeBloc,
+          builder: (_, ThemeState themeState) {
+            return MaterialApp(
+              title: 'Flutter Demo',
+              theme: themeState.theme,
+              home: WeatherPage(
+                httpClient: http.Client(),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -52,6 +57,7 @@ class _AppState extends State<App> {
   @override
   void dispose() {
     _themeBloc.dispose();
+    _settingsBloc.dispose();
     super.dispose();
   }
 }
@@ -80,8 +86,19 @@ class _WeatherPageState extends State<WeatherPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Weather App'),
+        title: Text('Flutter Weather'),
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Settings(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () async {
@@ -101,7 +118,7 @@ class _WeatherPageState extends State<WeatherPage> {
       body: Center(
         child: BlocBuilder(
           bloc: _weatherBloc,
-          builder: (BuildContext context, WeatherState state) {
+          builder: (_, WeatherState state) {
             if (state is WeatherEmpty) {
               return Center(child: Text('Please Select a Location'));
             }
@@ -109,14 +126,16 @@ class _WeatherPageState extends State<WeatherPage> {
               return Center(child: CircularProgressIndicator());
             }
             if (state is WeatherLoaded) {
-              _refreshCompleter?.complete();
-              _refreshCompleter = Completer();
               final weather = state.weather;
               final themeBloc = BlocProvider.of<ThemeBloc>(context);
               themeBloc.dispatch(WeatherChanged(condition: weather.condition));
+
+              _refreshCompleter?.complete();
+              _refreshCompleter = Completer();
+
               return BlocBuilder(
                 bloc: themeBloc,
-                builder: (BuildContext context, ThemeState themeState) {
+                builder: (_, ThemeState themeState) {
                   return Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -132,8 +151,9 @@ class _WeatherPageState extends State<WeatherPage> {
                     ),
                     child: RefreshIndicator(
                       onRefresh: () {
-                        _weatherBloc
-                            .dispatch(RefreshWeather(state.weather.locationId));
+                        _weatherBloc.dispatch(
+                          RefreshWeather(state.weather.locationId),
+                        );
                         return _refreshCompleter.future;
                       },
                       child: ListView(
@@ -163,7 +183,10 @@ class _WeatherPageState extends State<WeatherPage> {
               );
             }
             if (state is WeatherError) {
-              return Text('Something went wrong!');
+              return Text(
+                'Something went wrong!',
+                style: TextStyle(color: Colors.red),
+              );
             }
           },
         ),
@@ -188,7 +211,7 @@ class LastUpdated extends StatelessWidget {
     return Text(
       'Updated: ${TimeOfDay.fromDateTime(dateTime).format(context)}',
       style: TextStyle(
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: FontWeight.w200,
         color: Colors.white,
       ),
@@ -216,22 +239,61 @@ class Location extends StatelessWidget {
 
 class Temperature extends StatelessWidget {
   final double temperature;
+  final double low;
+  final double high;
+  final TemperatureUnits units;
 
-  Temperature({Key key, this.temperature}) : super(key: key);
-
-  int get fahrenheit => ((temperature * 9 / 5) + 32).round();
+  Temperature({
+    Key key,
+    this.temperature,
+    this.low,
+    this.high,
+    this.units,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      '$fahrenheit °F',
-      style: TextStyle(
-        fontSize: 32,
-        fontWeight: FontWeight.w200,
-        color: Colors.white,
-      ),
+    return Row(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(right: 20.0),
+          child: Text(
+            '${_formattedTemperature(temperature)}°',
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        Column(
+          children: [
+            Text(
+              'max: ${_formattedTemperature(high)}°',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w100,
+                color: Colors.white,
+              ),
+            ),
+            Text(
+              'min: ${_formattedTemperature(low)}°',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w100,
+                color: Colors.white,
+              ),
+            )
+          ],
+        )
+      ],
     );
   }
+
+  int _toFahrenheit(double celsius) => ((celsius * 9 / 5) + 32).round();
+
+  int _formattedTemperature(double t) =>
+      units == TemperatureUnits.fahrenheit ? _toFahrenheit(t) : t.round();
 }
 
 class CombinedWeatherTemperature extends StatelessWidget {
@@ -263,8 +325,16 @@ class CombinedWeatherTemperature extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.all(20.0),
-              child: Temperature(
-                temperature: weather.temp,
+              child: BlocBuilder(
+                bloc: BlocProvider.of<SettingsBloc>(context),
+                builder: (_, SettingsState state) {
+                  return Temperature(
+                    temperature: weather.temp,
+                    high: weather.maxTemp,
+                    low: weather.minTemp,
+                    units: state.temperatureUnits,
+                  );
+                },
               ),
             ),
           ],
@@ -298,7 +368,7 @@ class WeatherConditions extends StatelessWidget {
       case WeatherCondition.sleet:
         image = Image.asset('assets/snow.png');
         break;
-      case WeatherCondition.heavyCloud:      
+      case WeatherCondition.heavyCloud:
         image = Image.asset('assets/cloudy.png');
         break;
       case WeatherCondition.heavyRain:
@@ -354,6 +424,37 @@ class _CitySelectionState extends State<CitySelection> {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class Settings extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final settingsBloc = BlocProvider.of<SettingsBloc>(context);
+    return Scaffold(
+      appBar: AppBar(title: Text('Settings')),
+      body: ListView(
+        children: <Widget>[
+          BlocBuilder(
+              bloc: settingsBloc,
+              builder: (_, SettingsState state) {
+                return ListTile(
+                  title: Text(
+                    'Temperature Units',
+                  ),
+                  isThreeLine: true,
+                  subtitle:
+                      Text('Use metric measurements for temperature units.'),
+                  trailing: Switch(
+                    value: state.temperatureUnits == TemperatureUnits.celsius,
+                    onChanged: (_) =>
+                        settingsBloc.dispatch(TemperatureUnitsToggled()),
+                  ),
+                );
+              }),
+        ],
       ),
     );
   }

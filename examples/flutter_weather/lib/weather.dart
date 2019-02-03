@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+enum TemperatureUnits { fahrenheit, celsius }
+
 enum WeatherCondition {
   snow,
   sleet,
