@@ -9,7 +9,7 @@
 
 ---
 
-An Angular package that helps implement the [BLoC pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
+An Angular package that helps implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
 
 This package is built to work with [bloc](https://pub.dartlang.org/packages/bloc).
 
@@ -107,7 +107,7 @@ At this point we have successfully separated our presentational layer from our b
 
 ## Examples
 
-- [Simple Counter Example](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - a complete example of how to create a `CounterBloc` and hook it up to an AngularDart app.
+- [Counter](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - a complete example of how to create a `CounterBloc` and hook it up to an AngularDart app.
 - [Github Search](https://github.com/felangel/Bloc/tree/master/examples/github_search/angular_github_search) - an example of how to create a Github Search Application using the `bloc` and `angular_bloc` packages.
 
 ### Contributors

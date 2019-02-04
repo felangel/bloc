@@ -9,7 +9,7 @@
 
 ---
 
-A Flutter package that helps implement the [BLoC pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
+A Flutter package that helps implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
 
 This package is built to work with [bloc](https://pub.dartlang.org/packages/bloc).
 
@@ -104,9 +104,9 @@ At this point we have successfully separated our presentational layer from our b
 
 ## Examples
 
-- [Simple Counter Example](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example) - an example of how to create a `CounterBloc` to implement the classic Flutter Counter app.
-- [Login Flow Example](https://github.com/felangel/Bloc/tree/master/examples/flutter_login) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a Login Flow.
-- [Infinite List Example](https://github.com/felangel/Bloc/tree/master/examples/flutter_infinite_list) - an example of how to use the `bloc` and `flutter_bloc` packages to implement an infinite scrolling list.
+- [Counter](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example) - an example of how to create a `CounterBloc` to implement the classic Flutter Counter app.
+- [Login Flow](https://github.com/felangel/Bloc/tree/master/examples/flutter_login) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a Login Flow.
+- [Infinite List](https://github.com/felangel/Bloc/tree/master/examples/flutter_infinite_list) - an example of how to use the `bloc` and `flutter_bloc` packages to implement an infinite scrolling list.
 - [Github Search](https://github.com/felangel/Bloc/tree/master/examples/github_search/flutter_github_search) - an example of how to create a Github Search Application using the `bloc` and `flutter_bloc` packages.
 - [Weather](https://github.com/felangel/bloc/tree/master/examples/flutter_weather) - an example of how to create a Weather Application using the `bloc` and `flutter_bloc` packages. The app uses a `RefreshIndicator` to implement "pull-to-refresh" as well as dynamic theming.
 

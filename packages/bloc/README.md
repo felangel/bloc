@@ -9,7 +9,7 @@
 
 ---
 
-A dart package that helps implement the [BLoC pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
+A dart package that helps implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
 
 This package is built to work with [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc) and [angular_bloc](https://pub.dartlang.org/packages/angular_bloc).
 
@@ -133,7 +133,7 @@ At this point, all `Bloc` `Transitions` will be reported to the `SimpleBlocDeleg
 
 ## Examples
 
-- [Simple Counter Example](https://github.com/felangel/Bloc/tree/master/packages/bloc/example) - an example of how to create a `CounterBloc` in a pure Dart app.
+- [Counter](https://github.com/felangel/Bloc/tree/master/packages/bloc/example) - an example of how to create a `CounterBloc` in a pure Dart app.
 
 ### Contributors
 

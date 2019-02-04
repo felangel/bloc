@@ -8,7 +8,7 @@
 
 ---
 
-A collection of packages that help implement the [BLoC pattern](https://www.youtube.com/watch?v=fahC3ky_zW0).
+A collection of packages that help implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
 
 | Package                                  | Pub                                                                                                             |
 | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
@@ -32,18 +32,18 @@ The goal of this package is to make it easy to separate _presentation_ from _bus
 
 ### Dart
 
-- [Simple Counter Example](https://github.com/felangel/Bloc/tree/master/packages/bloc/example) - an example of how to create a `CounterBloc` (pure dart).
+- [Counter](https://github.com/felangel/Bloc/tree/master/packages/bloc/example) - an example of how to create a `CounterBloc` (pure dart).
 
 ### Flutter
 
-- [Simple Counter](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example) - an example of how to create a `CounterBloc` to implement the classic Flutter Counter app.
-- [Login Flow Example](https://github.com/felangel/Bloc/tree/master/examples/flutter_login) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a Login Flow.
+- [Counter](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example) - an example of how to create a `CounterBloc` to implement the classic Flutter Counter app.
+- [Login Flow](https://github.com/felangel/Bloc/tree/master/examples/flutter_login) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a Login Flow.
 - [Infinite List](https://github.com/felangel/Bloc/tree/master/examples/flutter_infinite_list) - an example of how to use the `bloc` and `flutter_bloc` packages to implement an infinite scrolling list.
 - [Github Search](https://github.com/felangel/Bloc/tree/master/examples/github_search/flutter_github_search) - an example of how to create a Github Search Application using the `bloc` and `flutter_bloc` packages.
 - [Weather](https://github.com/felangel/bloc/tree/master/examples/flutter_weather) - an example of how to create a Weather Application using the `bloc` and `flutter_bloc` packages. The app uses a `RefreshIndicator` to implement "pull-to-refresh" as well as dynamic theming.
 
 ### Web
-- [Counter Example](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - an example of how to use a `CounterBloc` in an AngularDart app.
+- [Counter](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - an example of how to use a `CounterBloc` in an AngularDart app.
 - [Github Search](https://github.com/felangel/Bloc/tree/master/examples/github_search/angular_github_search) - an example of how to create a Github Search Application using the `bloc` and `angular_bloc` packages.
 
 ### Flutter + Web
