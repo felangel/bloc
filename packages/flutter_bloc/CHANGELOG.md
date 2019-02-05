@@ -105,3 +105,7 @@ Minor Updates to Documentation
 # 0.5.3
 
 Additional Minor Updates to Documentation
+
+# 0.5.4
+
+Additional Minor Updates to Documentation
