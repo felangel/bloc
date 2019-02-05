@@ -47,3 +47,7 @@ Minor Updates to Documentation
 # 0.3.2
 
 Additional Minor Updates to Documentation
+
+# 0.3.3
+
+Additional Minor Updates to Documentation
