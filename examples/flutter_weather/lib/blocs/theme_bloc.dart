@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
+import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:flutter_weather/weather.dart';
+import 'package:flutter_weather/models/models.dart';
 
 class ThemeState extends Equatable {
   final ThemeData theme;
   final MaterialColor color;
 
-  ThemeState({this.theme, this.color}) : super([theme, color]);
+  ThemeState({@required this.theme, @required this.color})
+      : assert(theme != null),
+        assert(color != null),
+        super([theme, color]);
 }
 
 abstract class ThemeEvent extends Equatable {

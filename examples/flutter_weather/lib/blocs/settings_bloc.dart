@@ -1,7 +1,8 @@
+import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:flutter_weather/weather.dart';
+import 'package:flutter_weather/models/models.dart';
 
 abstract class SettingsEvent extends Equatable {}
 
@@ -10,7 +11,9 @@ class TemperatureUnitsToggled extends SettingsEvent {}
 class SettingsState extends Equatable {
   final TemperatureUnits temperatureUnits;
 
-  SettingsState({this.temperatureUnits}) : super([temperatureUnits]);
+  SettingsState({@required this.temperatureUnits})
+      : assert(temperatureUnits != null),
+        super([temperatureUnits]);
 }
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
