@@ -16,6 +16,34 @@ A collection of packages that help implement the [BLoC pattern](https://www.didi
 | [flutter_bloc](./packages/flutter_bloc/) | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dartlang.org/packages/flutter_bloc) |
 | [angular_bloc](./packages/angular_bloc/) | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dartlang.org/packages/angular_bloc) |
 
+<div style="text-align: center"><table><tr>
+  <td style="text-align: center">
+  <a href="#">
+    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_counter.gif" width="200"/></a>
+</td>
+<td style="text-align: center">
+  <a href="#">
+<img src="https://felangel.github.io/bloc/assets/gifs/flutter_login.gif" width="200" />
+  </a>
+</td>
+<td style="text-align: center">
+  <a href="#">
+<img src="https://felangel.github.io/bloc/assets/gifs/flutter_infinite_list.gif" width="200"/>
+  </a>
+</td>
+<td style="text-align: center">
+  <a href="#">
+    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_github_search.gif" width="200"/>
+  </a>
+</td>
+</td>
+  <td style="text-align: center">
+  <a href="#">
+    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_weather.gif" width="200"/>
+  </a>
+</td>
+</tr></table></div>
+
 ## Overview
 
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
