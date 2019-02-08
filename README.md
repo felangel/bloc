@@ -16,29 +16,31 @@ A collection of packages that help implement the [BLoC pattern](https://www.didi
 | [flutter_bloc](./packages/flutter_bloc/) | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dartlang.org/packages/flutter_bloc) |
 | [angular_bloc](./packages/angular_bloc/) | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dartlang.org/packages/angular_bloc) |
 
+## Showcase
+
 <div style="text-align: center"><table><tr>
   <td style="text-align: center">
-  <a href="#">
+  <a href="https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example">
     <img src="https://felangel.github.io/bloc/assets/gifs/flutter_counter.gif" width="200"/></a>
 </td>
 <td style="text-align: center">
-  <a href="#">
+  <a href="https://github.com/felangel/Bloc/tree/master/examples/flutter_login">
 <img src="https://felangel.github.io/bloc/assets/gifs/flutter_login.gif" width="200" />
   </a>
 </td>
 <td style="text-align: center">
-  <a href="#">
+  <a href="https://github.com/felangel/Bloc/tree/master/examples/flutter_infinite_list">
 <img src="https://felangel.github.io/bloc/assets/gifs/flutter_infinite_list.gif" width="200"/>
   </a>
 </td>
 <td style="text-align: center">
-  <a href="#">
+  <a href="https://github.com/felangel/Bloc/tree/master/examples/github_search/flutter_github_search">
     <img src="https://felangel.github.io/bloc/assets/gifs/flutter_github_search.gif" width="200"/>
   </a>
 </td>
 </td>
   <td style="text-align: center">
-  <a href="#">
+  <a href="https://github.com/felangel/bloc/tree/master/examples/flutter_weather">
     <img src="https://felangel.github.io/bloc/assets/gifs/flutter_weather.gif" width="200"/>
   </a>
 </td>
