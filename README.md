@@ -8,7 +8,8 @@
 
 ---
 
-A collection of packages that help implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+A predictable state management library that helps implement the [BLoC design pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+
 
 | Package                                  | Pub                                                                                                             |
 | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
@@ -16,41 +17,11 @@ A collection of packages that help implement the [BLoC pattern](https://www.didi
 | [flutter_bloc](./packages/flutter_bloc/) | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dartlang.org/packages/flutter_bloc) |
 | [angular_bloc](./packages/angular_bloc/) | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dartlang.org/packages/angular_bloc) |
 
-## Showcase
-
-<div style="text-align: center"><table><tr>
-  <td style="text-align: center">
-  <a href="https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example">
-    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_counter.gif" width="200"/></a>
-</td>
-<td style="text-align: center">
-  <a href="https://github.com/felangel/Bloc/tree/master/examples/flutter_login">
-<img src="https://felangel.github.io/bloc/assets/gifs/flutter_login.gif" width="200" />
-  </a>
-</td>
-<td style="text-align: center">
-  <a href="https://github.com/felangel/Bloc/tree/master/examples/flutter_infinite_list">
-<img src="https://felangel.github.io/bloc/assets/gifs/flutter_infinite_list.gif" width="200"/>
-  </a>
-</td>
-<td style="text-align: center">
-  <a href="https://github.com/felangel/Bloc/tree/master/examples/github_search/flutter_github_search">
-    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_github_search.gif" width="200"/>
-  </a>
-</td>
-</td>
-  <td style="text-align: center">
-  <a href="https://github.com/felangel/bloc/tree/master/examples/flutter_weather">
-    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_weather.gif" width="200"/>
-  </a>
-</td>
-</tr></table></div>
-
 ## Overview
 
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
 
-The goal of this package is to make it easy to separate _presentation_ from _business logic_, facilitating testability and reusability.
+The goal of this library is to make it easy to separate _presentation_ from _business logic_, facilitating testability and reusability.
 
 ## Documentation
 - [Official Documentation](https://felangel.github.io/bloc)
@@ -59,6 +30,38 @@ The goal of this package is to make it easy to separate _presentation_ from _bus
 - [Angular Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/angular_bloc/README.md)
 
 ## Examples
+
+<div style="text-align: center">
+    <table>
+        <tr>
+            <td style="text-align: center">
+                <a href="https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_counter.gif" width="200"/>
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a href="https://github.com/felangel/Bloc/tree/master/examples/flutter_login">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_login.gif" width="200" />
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a href="https://github.com/felangel/Bloc/tree/master/examples/flutter_infinite_list">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_infinite_list.gif" width="200"/>
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a href="https://github.com/felangel/Bloc/tree/master/examples/github_search/flutter_github_search">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_github_search.gif" width="200"/>
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a href="https://github.com/felangel/bloc/tree/master/examples/flutter_weather">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_weather.gif" width="200"/>
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
 
 ### Dart
 
@@ -94,3 +97,4 @@ The goal of this package is to make it easy to separate _presentation_ from _bus
 ## Contributors
 
 - [Felix Angelov](https://github.com/felangel)
+****
