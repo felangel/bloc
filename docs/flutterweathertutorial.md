@@ -450,9 +450,9 @@ class WeatherRepository {
 
 Awesome! We are now ready to move up to the business logic layer and start building our `WeatherBloc`.
 
-## Weather Bloc
+## Business Logic (Bloc)
 
-> Our `WeatherBloc` is responsible for recieving `WeatherEvents` and converting them into `WeatherStates`. It will have a dependency on `WeatherRepository` so that it can retrieve the `Weather` when a user inputs a city of their choice.
+> Our `WeatherBloc` is responsible for receiving `WeatherEvents` and converting them into `WeatherStates`. It will have a dependency on `WeatherRepository` so that it can retrieve the `Weather` when a user inputs a city of their choice.
 
 Before jumping into the Bloc we need to define what events our `WeatherBloc` will be handling as well as how we are going to represent our `WeatherState`.
 
@@ -518,7 +518,7 @@ class WeatherError extends WeatherState {}
 
 Now that we have our `Events` and our `States` defined and implemented we are ready to make our `WeatherBloc`.
 
-### Bloc
+### Weather Bloc
 
 > Our `WeatherBloc` is very straightforward. To recap, it converts `WeatherEvents` into `WeatherStates` and has a dependency on the `WeatherRepository`.
 
