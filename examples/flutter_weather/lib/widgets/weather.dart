@@ -38,7 +38,7 @@ class _WeatherState extends State<Weather> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.settings),
-            onPressed: () async {
+            onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(

@@ -10,7 +10,8 @@ class GradientContainer extends StatelessWidget {
     Key key,
     @required this.color,
     @required this.child,
-  }) : assert(color != null, child != null);
+  })  : assert(color != null, child != null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {

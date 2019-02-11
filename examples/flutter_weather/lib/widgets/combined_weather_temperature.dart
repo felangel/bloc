@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_weather/blocs/blocs.dart';
@@ -11,19 +12,12 @@ class CombinedWeatherTemperature extends StatelessWidget {
 
   CombinedWeatherTemperature({
     Key key,
-    this.weather,
-  }) : super(key: key);
+    @required this.weather,
+  })  : assert(weather != null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Text text = Text(
-      weather.formattedCondition,
-      style: TextStyle(
-        fontSize: 30,
-        fontWeight: FontWeight.w200,
-        color: Colors.white,
-      ),
-    );
     return Column(
       children: [
         Row(
@@ -49,7 +43,16 @@ class CombinedWeatherTemperature extends StatelessWidget {
             ),
           ],
         ),
-        Center(child: text),
+        Center(
+          child: Text(
+            weather.formattedCondition,
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.w200,
+              color: Colors.white,
+            ),
+          ),
+        ),
       ],
     );
   }

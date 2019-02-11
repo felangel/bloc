@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:meta/meta.dart';
+
 class LastUpdated extends StatelessWidget {
   final DateTime dateTime;
 
-  LastUpdated({Key key, this.dateTime}) : super(key: key);
+  LastUpdated({Key key, @required this.dateTime})
+      : assert(dateTime != null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {

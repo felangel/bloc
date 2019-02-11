@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
+import 'package:meta/meta.dart';
+
 import 'package:flutter_weather/models/models.dart';
 
 class WeatherConditions extends StatelessWidget {
   final WeatherCondition condition;
 
-  WeatherConditions({Key key, this.condition}) : super(key: key);
+  WeatherConditions({Key key, @required this.condition})
+      : assert(condition != null),
+        super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    Image image = _mapConditionToImage(condition);
-    return image;
-  }
+  Widget build(BuildContext context) => _mapConditionToImage(condition);
 
   Image _mapConditionToImage(WeatherCondition condition) {
     Image image;

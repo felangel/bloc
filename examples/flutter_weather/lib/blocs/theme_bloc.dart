@@ -23,7 +23,9 @@ abstract class ThemeEvent extends Equatable {
 class WeatherChanged extends ThemeEvent {
   final WeatherCondition condition;
 
-  WeatherChanged({this.condition}) : super([condition]);
+  WeatherChanged({@required this.condition})
+      : assert(condition != null),
+        super([condition]);
 }
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {

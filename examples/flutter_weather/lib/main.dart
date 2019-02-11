@@ -51,7 +51,7 @@ class _AppState extends State<App> {
           bloc: _themeBloc,
           builder: (_, ThemeState themeState) {
             return MaterialApp(
-              title: 'Flutter Demo',
+              title: 'Flutter Weather',
               theme: themeState.theme,
               home: Weather(
                 weatherRepository: widget.weatherRepository,

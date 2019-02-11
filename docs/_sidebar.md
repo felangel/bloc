@@ -12,6 +12,7 @@
     - [Counter](fluttercountertutorial.md)
     - [Infinite List](flutterinfinitelisttutorial.md)
     - [Login](flutterlogintutorial.md)
+    - [Weather](flutterweathertutorial.md)
   - AngularDart
     - [Counter](angularcountertutorial.md)
   - Flutter + AngularDart

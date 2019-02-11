@@ -2,11 +2,11 @@ import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:flutter_weather/models/models.dart';
-
 abstract class SettingsEvent extends Equatable {}
 
 class TemperatureUnitsToggled extends SettingsEvent {}
+
+enum TemperatureUnits { fahrenheit, celsius }
 
 class SettingsState extends Equatable {
   final TemperatureUnits temperatureUnits;
