@@ -35,27 +35,27 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
     <table>
         <tr>
             <td style="text-align: center">
-                <a href="https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example">
+                <a href="https://felangel.github.io/bloc/#/fluttercountertutorial">
                     <img src="https://felangel.github.io/bloc/assets/gifs/flutter_counter.gif" width="200"/>
                 </a>
-            </td>
+            </td>            
             <td style="text-align: center">
-                <a href="https://github.com/felangel/Bloc/tree/master/examples/flutter_login">
-                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_login.gif" width="200" />
-                </a>
-            </td>
-            <td style="text-align: center">
-                <a href="https://github.com/felangel/Bloc/tree/master/examples/flutter_infinite_list">
+                <a href="https://felangel.github.io/bloc/#/flutterinfinitelisttutorial">
                     <img src="https://felangel.github.io/bloc/assets/gifs/flutter_infinite_list.gif" width="200"/>
                 </a>
             </td>
             <td style="text-align: center">
-                <a href="https://github.com/felangel/Bloc/tree/master/examples/github_search/flutter_github_search">
+                <a href="https://felangel.github.io/bloc/#/flutterlogintutorial">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_login.gif" width="200" />
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a href="https://felangel.github.io/bloc/#/flutterangulargithubsearch">
                     <img src="https://felangel.github.io/bloc/assets/gifs/flutter_github_search.gif" width="200"/>
                 </a>
             </td>
             <td style="text-align: center">
-                <a href="https://github.com/felangel/bloc/tree/master/examples/flutter_weather">
+                <a href="https://felangel.github.io/bloc/#/flutterweathertutorial">
                     <img src="https://felangel.github.io/bloc/assets/gifs/flutter_weather.gif" width="200"/>
                 </a>
             </td>
