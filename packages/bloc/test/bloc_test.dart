@@ -402,5 +402,17 @@ void main() {
         expect(_blocA == _blocB, false);
       });
     });
+
+    group('Exception', () {
+      test('does not break stream', () {
+        final List<int> expected = [0, -1];
+        final CounterExceptionBloc _bloc = CounterExceptionBloc();
+
+        expectLater(_bloc.state, emitsInOrder(expected));
+
+        _bloc.dispatch(CounterEvent.increment);
+        _bloc.dispatch(CounterEvent.decrement);
+      });
+    });
   });
 }

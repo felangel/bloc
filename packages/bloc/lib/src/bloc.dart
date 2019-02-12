@@ -60,7 +60,8 @@ abstract class Bloc<Event, State> {
 
     transform(_eventSubject).asyncExpand((Event event) {
       currentEvent = event;
-      return mapEventToState(_stateSubject.value, event);
+      return mapEventToState(_stateSubject.value, event)
+          .handleError((dynamic _) => null);
     }).forEach(
       (State nextState) {
         if (currentState == nextState) return;
