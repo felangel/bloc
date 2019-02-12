@@ -1,6 +1,6 @@
-import 'package:test/test.dart';
 import 'package:bloc/bloc.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
 import './helpers/helpers.dart';
 
@@ -111,6 +111,24 @@ void main() {
       });
 
       complexBloc.dispatch(ComplexEventB());
+    });
+  });
+
+  group('onError', () {
+    test('listens to errors', () {
+      var errorHandled = false;
+
+      final delegate = MockBlocDelegate();
+      final CounterExceptionBloc _bloc = CounterExceptionBloc();
+      BlocSupervisor().delegate = delegate;
+      when(delegate.onError(any, any))
+          .thenAnswer((dynamic _) => errorHandled = true);
+
+      _bloc.dispatch(CounterEvent.increment);
+
+      expectLater(_bloc.state, emitsInOrder(<int>[0])).then((dynamic _) {
+        expect(errorHandled, isTrue);
+      });
     });
   });
 }

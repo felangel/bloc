@@ -28,6 +28,11 @@ class SimpleBlocDelegate implements BlocDelegate {
   void onTransition(Transition transition) {
     print(transition);
   }
+
+  @override
+  void onError(Object error, StackTrace stacktrace) {
+    print(error);
+  }
 }
 
 void main() {
