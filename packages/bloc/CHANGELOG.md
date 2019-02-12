@@ -147,3 +147,7 @@ Additional Minor Updates to Documentation
 # 0.8.3
 
 Minor Internal Improvements and Documentation Updates
+
+# 0.8.4
+
+Blocs handle exceptions thrown in `mapEventToState` and documentation updates.
