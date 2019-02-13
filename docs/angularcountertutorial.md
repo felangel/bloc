@@ -28,7 +28,7 @@ environment:
 dependencies:
   angular: ^5.0.0
   angular_components: ^0.9.0
-  angular_bloc: ^0.3.0
+  angular_bloc: ^0.4.0
 
 dev_dependencies:
   angular_test: ^2.0.0
