@@ -421,7 +421,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.5.0
+  flutter_bloc: ^0.6.0
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search
@@ -890,7 +890,7 @@ environment:
 dependencies:
   angular: ^5.0.0
   angular_components: ^0.9.0
-  angular_bloc: ^0.3.0
+  angular_bloc: ^0.4.0
   common_github_search:
     path: ../common_github_search
 
