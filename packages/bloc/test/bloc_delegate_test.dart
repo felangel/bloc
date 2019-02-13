@@ -115,20 +115,21 @@ void main() {
   });
 
   group('onError', () {
-    test('listens to errors', () {
+    test('is called on bloc exception', () {
       var errorHandled = false;
 
       final delegate = MockBlocDelegate();
       final CounterExceptionBloc _bloc = CounterExceptionBloc();
       BlocSupervisor().delegate = delegate;
+
       when(delegate.onError(any, any))
           .thenAnswer((dynamic _) => errorHandled = true);
-
-      _bloc.dispatch(CounterEvent.increment);
 
       expectLater(_bloc.state, emitsInOrder(<int>[0])).then((dynamic _) {
         expect(errorHandled, isTrue);
       });
+
+      _bloc.dispatch(CounterEvent.increment);
     });
   });
 }

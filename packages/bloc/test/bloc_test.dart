@@ -415,23 +415,24 @@ void main() {
         _bloc.dispatch(CounterEvent.decrement);
       });
 
-      test('can be handled via onError', () {
+      test('triggers onError', () {
         final exception = Exception('fatal exception');
         Object expectedError;
         StackTrace expectedStacktrace;
 
-        final OnErrorBloc _bloc =
-            OnErrorBloc(exception, (Object error, StackTrace stacktrace) {
-          expectedError = error;
-          expectedStacktrace = stacktrace;
-        });
-
-        _bloc.dispatch(CounterEvent.increment);
+        final OnErrorBloc _bloc = OnErrorBloc(
+            exception: exception,
+            onErrorCallback: (Object error, StackTrace stacktrace) {
+              expectedError = error;
+              expectedStacktrace = stacktrace;
+            });
 
         expectLater(_bloc.state, emitsInOrder(<int>[0])).then((dynamic _) {
           expect(expectedError, exception);
           expect(expectedStacktrace, isNotNull);
         });
+
+        _bloc.dispatch(CounterEvent.increment);
       });
     });
   });

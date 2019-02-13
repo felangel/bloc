@@ -31,7 +31,7 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **BlocSupervisor** oversees `Bloc`s and delegates to `BlocDelegate`.
 
-**BlocDelegate** handles events from all `Bloc`s which are delegated by the `BlocSupervisor`. Can be used to observe all `Bloc` `Transition`s. **It is a great way to handle logging/analytics universally**.
+**BlocDelegate** handles events from all `Bloc`s which are delegated by the `BlocSupervisor`. Can be used to intercept all `Bloc` `Transition`s and all `Bloc` errors. **It is a great way to handle logging/analytics as well as error handling universally**.
 
 ## Bloc Interface
 
@@ -45,9 +45,13 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **onTransition** is a method that can be overridden to handle whenever a `Transition` occurs. A `Transition` occurs when a new `Event` is dispatched and `mapEventToState` is called. `onTransition` is called before a `Bloc`'s state has been updated. **It is a great place to add bloc-specific logging/analytics**.
 
+**onError** is a method that can be overridden to handle whenever an `Exception` is thrown. By default all exceptions will be ignored and `Bloc` functionality will be unaffected. **It is a great place to add bloc-specific error handling**.
+
 ## BlocDelegate Interface
 
-**onTransition** is a method that can be implemented to handle whenever a `Transition` occurs from **any** `Bloc`. **It is a great place to add universal logging/analytics**.
+**onTransition** is a method that can be overridden to handle whenever a `Transition` occurs in **any** `Bloc`. **It is a great place to add universal logging/analytics**.
+
+**onError** is a method that can be overriden to handle whenever an `Exception` is thrown from **any** `Bloc`. **It is a great place to add universal error handling**.
 
 ## Usage
 
@@ -99,7 +103,7 @@ void main() {
 As our app grows and relies on multiple `Blocs`, it becomes useful to see the `Transitions` for all `Blocs`. This can easily be achieved by implementing a `BlocDelegate`.
 
 ```dart
-class SimpleBlocDelegate implements BlocDelegate {
+class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Transition transition) {
     print(transition);
@@ -126,6 +130,24 @@ void main() {
 ```
 
 At this point, all `Bloc` `Transitions` will be reported to the `SimpleBlocDelegate` and we can see them in the console after running our app.
+
+If we want to be able to handle any `Exceptions` that might be thrown in `mapEventToState` we can also override `onError` in our `SimpleBlocDelegate`.
+
+```dart
+class SimpleBlocDelegate extends BlocDelegate {
+  @override
+  void onTransition(Transition transition) {
+    print(transition);
+  }
+
+  @override
+  void onError(Object error, StackTrace stacktrace) {
+    print('$error, $stacktrace');
+  }
+}
+```
+
+At this point, all `Bloc` exceptions will also be reported to the `SimpleBlocDelegate` and we can see them in the console.
 
 ## Dart Versions
 

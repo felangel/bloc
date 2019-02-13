@@ -226,6 +226,23 @@ void onTransition(Transition<CounterEvent, int> transition) {
 
 Now that we've overridden `onTransition` we can do whatever we'd like whenever a `Transition` occurs.
 
+Just like we can handle `Transitions` at the bloc level, we can also handle `Exceptions`.
+
+> `onError` is a method that can be overriden to handle every local Bloc `Exception`. By default all exceptions will be ignored and `Bloc` functionality will be unaffected. 
+ 
+?> **Note**: The stack trace argument may be `null` if this state stream received an error without a stack trace.
+
+?> **Tip**: `onError` is a great place to add bloc-specific error handling.
+
+```dart
+@override
+void onError(Object error, StackTrace stackTrace) {
+  print('$error, $stackTrace');
+}
+```
+
+Now that we've overridden `onError` we can do whatever we'd like whenever an `Exception` is thrown.
+
 ## BlocDelegate
 
 One added bonus of using Bloc is that we can have access to all `Transitions` in one place. Even though in this application we only have one Bloc, it's fairly common in larger applications to have many Blocs managing different parts of the application's state.
@@ -252,6 +269,22 @@ void main() {
 
   for (int i = 0; i < 3; i++) {
     bloc.dispatch(CounterEvent.increment);
+  }
+}
+```
+
+If we want to be able to do something in response to all `Exceptions` thrown in `mapEventToState`, we can also override the `onError` method in our `SimpleBlocDelegate`.
+
+```dart
+class SimpleBlocDelegate extends BlocDelegate {
+  @override
+  void onTransition(Transition transition) {
+    print(transition);
+  }
+
+  @override
+  void onError(Object error, StackTrace stacktrace) {
+    print('$error, $stacktrace');
   }
 }
 ```

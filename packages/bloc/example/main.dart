@@ -19,11 +19,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
         await Future<void>.delayed(Duration(milliseconds: 500));
         yield currentState + 1;
         break;
+      default:
+        throw Exception('unhandled event: $event');
     }
   }
 }
 
-class SimpleBlocDelegate implements BlocDelegate {
+class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Transition transition) {
     print(transition);
@@ -46,5 +48,11 @@ void main() {
 
   counterBloc.dispatch(CounterEvent.decrement);
   counterBloc.dispatch(CounterEvent.decrement);
+  counterBloc.dispatch(CounterEvent.decrement);
+
+  counterBloc.dispatch(null); // Triggers Exception
+
+  // The exception triggers `SimpleBlocDelegate.onError` but does not impact bloc functionality.
+  counterBloc.dispatch(CounterEvent.increment);
   counterBloc.dispatch(CounterEvent.decrement);
 }

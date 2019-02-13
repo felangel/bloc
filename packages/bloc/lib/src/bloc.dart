@@ -31,6 +31,12 @@ abstract class Bloc<Event, State> {
   /// A great spot to add logging/analytics.
   void onTransition(Transition<Event, State> transition) => null;
 
+  /// Called whenever an [Exception] is thrown within `mapEventToState`.
+  /// By default all exceptions will be ignored and [Bloc] functionality will be unaffected.
+  /// The stacktrace argument may be `null` if the state stream received an error without a [StackTrace].
+  /// A great spot to handle exceptions at the individual [Bloc] level.
+  void onError(Object error, StackTrace stacktrace) => null;
+
   /// Takes an [Event] and triggers `mapEventToState`.
   /// `Dispatch` may be called from the presentation layer or from within the [Bloc].
   /// `Dispatch` notifies the [Bloc] of a new [Event].
@@ -55,17 +61,15 @@ abstract class Bloc<Event, State> {
   /// and return the new [State] in the form of a [Stream] which is consumed by the presentation layer.
   Stream<State> mapEventToState(State currentState, Event event);
 
-  // If the bloc throws an exception while processing an event, you can hook into it by overriding
-  // this method.
-  void onError(Object error, StackTrace stacktrace) => null;
-
   void _bindStateSubject() {
     Event currentEvent;
 
     transform(_eventSubject).asyncExpand((Event event) {
       currentEvent = event;
-      return mapEventToState(_stateSubject.value, event)
-          .handleError((Object error, StackTrace stacktrace) {
+      return mapEventToState(
+        _stateSubject.value,
+        event,
+      ).handleError((Object error, StackTrace stacktrace) {
         onError(error, stacktrace);
         BlocSupervisor().delegate?.onError(error, stacktrace);
       });
