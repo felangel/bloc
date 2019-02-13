@@ -38,7 +38,7 @@ environment:
 
 dependencies:
   meta: ^1.1.7
-  bloc: ^0.8.0
+  bloc: ^0.9.0
   equatable: ^0.1.0
   http: ^0.12.0
 ```
