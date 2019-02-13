@@ -151,3 +151,10 @@ Minor Internal Improvements and Documentation Updates
 # 0.8.4
 
 Blocs handle exceptions thrown in `mapEventToState` and documentation updates.
+
+# 0.9.0
+
+`Bloc` and `BlocDelegate` Error Handling
+
+- Added `onError` to `Bloc` for local error handling.
+- Added `onError` to `BlocDelegate` for global error handling.
