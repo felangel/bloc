@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:rxdart/rxdart.dart';
 import 'package:bloc/bloc.dart';
+import 'package:rxdart/rxdart.dart';
 
 /// Takes a [Stream] of [Event]s as input
 /// and transforms them into a [Stream] of [State]s as output.
@@ -55,13 +55,20 @@ abstract class Bloc<Event, State> {
   /// and return the new [State] in the form of a [Stream] which is consumed by the presentation layer.
   Stream<State> mapEventToState(State currentState, Event event);
 
+  // If the bloc throws an exception while processing an event, you can hook into it by overriding
+  // this method.
+  void onError(Object error, StackTrace stacktrace) => null;
+
   void _bindStateSubject() {
     Event currentEvent;
 
     transform(_eventSubject).asyncExpand((Event event) {
       currentEvent = event;
       return mapEventToState(_stateSubject.value, event)
-          .handleError((dynamic _) => null);
+          .handleError((Object error, StackTrace stacktrace) {
+        onError(error, stacktrace);
+        BlocSupervisor().delegate?.onError(error, stacktrace);
+      });
     }).forEach(
       (State nextState) {
         if (currentState == nextState) return;

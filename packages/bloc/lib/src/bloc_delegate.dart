@@ -8,4 +8,7 @@ abstract class BlocDelegate {
   /// `onTransition` is called before a [Bloc]'s state has been updated.
   /// A great spot to add universal logging/analytics.
   void onTransition(Transition transition);
+
+  // Called whenever there's an exception thrown
+  void onError(Object error, StackTrace stacktrace) => null;
 }
