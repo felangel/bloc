@@ -116,7 +116,7 @@ void main() {
 
   group('onError', () {
     test('is called on bloc exception', () {
-      var errorHandled = false;
+      bool errorHandled = false;
 
       final delegate = MockBlocDelegate();
       final CounterExceptionBloc _bloc = CounterExceptionBloc();
