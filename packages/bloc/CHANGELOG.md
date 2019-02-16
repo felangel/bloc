@@ -1,110 +1,47 @@
-# 0.1.0
+# 0.9.0
 
-Initial Version of the library.
+`Bloc` and `BlocDelegate` Error Handling
 
-- Includes the ability to create a custom Bloc by extending `Bloc` class.
-- Includes the ability to connect presentation layer to `Bloc` by using the `BlocBuilder` Widget.
+- Added `onError` to `Bloc` for local error handling.
+- Added `onError` to `BlocDelegate` for global error handling.
 
-# 0.1.1
+# 0.8.4
 
-Minor Updates to Documentation.
+Blocs handle exceptions thrown in `mapEventToState` and documentation updates.
 
-# 0.1.2
+# 0.8.3
 
-Additional Minor Updates to Documentation.
+Minor Internal Improvements and Documentation Updates
 
-# 0.2.0
+# 0.8.2
 
-Added Support for Stream Transformation
+Additional Minor Updates to Documentation
 
-- Includes `Stream<E> transform(Stream<E> events)`
-- Updates to Documentation
-
-# 0.2.1
-
-Minor Updates to Documentation.
-
-# 0.2.2
-
-Additional Minor Updates to Documentation.
-
-# 0.2.3
-
-Additional Minor Updates to Documentation.
-
-# 0.2.4
-
-Additional Minor Updates to Documentation.
-
-# 0.2.5
-
-Additional Minor Updates to Documentation.
-
-# 0.3.0
-
-Updated `mapEventToState` to take current state as an argument.
-
-- `Stream<S> mapEventToState(E event)` -> `Stream<S> mapEventToState(S state, E event)`
-- Updates to Documentation.
-- Updates to Example.
-
-# 0.4.0
-
-Added `BlocProvider`.
-
-- `BlocProvider.of(context)`
-- Updates to Documentation.
-- Updates to Example.
-
-# 0.4.1
-
-Minor Updates to Documentation.
-
-# 0.4.2
-
-Additional minor Updates to Documentation.
-
-# 0.5.0
-
-Moved Flutter Widgets to flutter_bloc package
-
-# 0.5.1
+# 0.8.1
 
 Minor Updates to Documentation
 
-# 0.5.2
+# 0.8.0
 
-Additional minor Updates to Documentation.
+Blocs ignore duplicate states
 
-# 0.6.0
+# 0.7.8
 
-`Transitions` and `initialState` updates.
+Additional Minor Updates to Documentation
 
-- Added `Transition`s and `onTransition`
-- Made `initialState` required
+# 0.7.7
 
-# 0.7.0
+Additional Minor Updates to Documentation
 
-Added `BlocSupervisor` and `BlocDelegate`.
-
-- `BlocSupervisor` notifies `BlocDelegate` of `Transitions`
-- `BlocDelegate` exposes `onTransition` which is invoked for all `Bloc` `Transitions`.
-
-# 0.7.1
-
-Improvements to `Bloc` usage in pure Dart applications.
-
-- `Bloc` state is seeded with `initialState` automatically
-
-# 0.7.2
-
-`Transition` Fix
-
-- `Bloc` with `mapEventToState` which returns multiple states per event will now correctly report the `Transitions`.
-
-# 0.7.3
+# 0.7.6
 
 Minor Updates to Documentation
+
+# 0.7.5
+
+Exposed `currentState` in `Bloc`
+
+- Updates to Documentation.
 
 # 0.7.4
 
@@ -114,47 +51,102 @@ Updated `mapEventToState` parameter name
 - Updates to Documentation.
 - Updates to Example.
 
-# 0.7.5
+# 0.7.3
 
-Exposed `currentState` in `Bloc`
+Minor Updates to Documentation
 
+# 0.7.2
+
+`Transition` Fix
+
+- `Bloc` with `mapEventToState` which returns multiple states per event will now correctly report the `Transitions`.
+
+# 0.7.1
+
+Improvements to `Bloc` usage in pure Dart applications.
+
+- `Bloc` state is seeded with `initialState` automatically
+
+# 0.7.0
+
+Added `BlocSupervisor` and `BlocDelegate`.
+
+- `BlocSupervisor` notifies `BlocDelegate` of `Transitions`
+- `BlocDelegate` exposes `onTransition` which is invoked for all `Bloc` `Transitions`.
+
+# 0.6.0
+
+`Transitions` and `initialState` updates.
+
+- Added `Transition`s and `onTransition`
+- Made `initialState` required
+
+# 0.5.2
+
+Additional minor Updates to Documentation.
+
+# 0.5.1
+
+Minor Updates to Documentation
+
+# 0.5.0
+
+Moved Flutter Widgets to flutter_bloc package
+
+# 0.4.2
+
+Additional minor Updates to Documentation.
+
+# 0.4.1
+
+Minor Updates to Documentation.
+
+# 0.3.0
+
+Updated `mapEventToState` to take current state as an argument.
+
+- `Stream<S> mapEventToState(E event)` -> `Stream<S> mapEventToState(S state, E event)`
 - Updates to Documentation.
+- Updates to Example.
 
-# 0.7.6
+# 0.2.5
 
-Minor Updates to Documentation
+Additional Minor Updates to Documentation.
 
-# 0.7.7
+# 0.2.4
 
-Additional Minor Updates to Documentation
+Additional Minor Updates to Documentation.
 
-# 0.7.8
+# 0.2.3
 
-Additional Minor Updates to Documentation
+Additional Minor Updates to Documentation.
 
-# 0.8.0
+# 0.2.2
 
-Blocs ignore duplicate states
+Additional Minor Updates to Documentation.
 
-# 0.8.1
+# 0.2.1
 
-Minor Updates to Documentation
+Minor Updates to Documentation.
 
-# 0.8.2
+# 0.2.0
 
-Additional Minor Updates to Documentation
+Added Support for Stream Transformation
 
-# 0.8.3
+- Includes `Stream<E> transform(Stream<E> events)`
+- Updates to Documentation
 
-Minor Internal Improvements and Documentation Updates
+# 0.1.2
 
-# 0.8.4
+Additional Minor Updates to Documentation.
 
-Blocs handle exceptions thrown in `mapEventToState` and documentation updates.
+# 0.1.1
 
-# 0.9.0
+Minor Updates to Documentation.
 
-`Bloc` and `BlocDelegate` Error Handling
+# 0.1.0
 
-- Added `onError` to `Bloc` for local error handling.
-- Added `onError` to `BlocDelegate` for global error handling.
+Initial Version of the library.
+
+- Includes the ability to create a custom Bloc by extending `Bloc` class.
+- Includes the ability to connect presentation layer to `Bloc` by using the `BlocBuilder` Widget.
