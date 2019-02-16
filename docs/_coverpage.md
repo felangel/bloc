@@ -3,7 +3,6 @@
 <a class="github-button" href="https://github.com/felangel/bloc" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star felangel/bloc on GitHub">Star</a>
 <a class="github-button" href="https://github.com/felangel/bloc/fork" data-icon="octicon-repo-forked" data-size="large" data-show-count="true" aria-label="Fork felangel/bloc on GitHub">Fork</a>
 <a class="github-button" href="https://github.com/felangel/bloc/issues" data-icon="octicon-issue-opened" data-size="large" data-show-count="true" aria-label="Issue felangel/bloc on GitHub">Issue</a>
-<a class="github-button" href="https://github.com/felangel" data-size="large" data-show-count="true" aria-label="Follow @felangel on GitHub">Follow</a>
 
 [![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
