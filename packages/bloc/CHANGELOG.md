@@ -101,6 +101,14 @@ Additional minor Updates to Documentation.
 
 Minor Updates to Documentation.
 
+# 0.4.0
+
+Added `BlocProvider`.
+
+- `BlocProvider.of(context)`
+- Updates to Documentation.
+- Updates to Example.
+
 # 0.3.0
 
 Updated `mapEventToState` to take current state as an argument.
