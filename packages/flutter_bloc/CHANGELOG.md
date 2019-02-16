@@ -1,3 +1,7 @@
+# 0.6.2
+
+Additional Minor Updates to Documentation
+
 # 0.6.1
 
 Minor Updates to Documentation
