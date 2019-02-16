@@ -159,6 +159,6 @@ At this point, all `Bloc` exceptions will also be reported to the `SimpleBlocDel
 
 - [Counter](https://github.com/felangel/Bloc/tree/master/packages/bloc/example) - an example of how to create a `CounterBloc` in a pure Dart app.
 
-### Contributors
+### Maintainers
 
 - [Felix Angelov](https://github.com/felangel)

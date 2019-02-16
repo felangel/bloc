@@ -1,3 +1,7 @@
+# 0.9.2
+
+Additional Minor Updates to Documentation
+
 # 0.9.1
 
 Minor Updates to Documentation
