@@ -96,7 +96,6 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 
 - [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) - extends VSCode with support for the Bloc library and provides tools for effectively creating Blocs for both Flutter and AngularDart apps.
 
-## Contributors
+## Maintainers
 
 - [Felix Angelov](https://github.com/felangel)
-****
