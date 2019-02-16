@@ -1,26 +1,28 @@
-# 0.1.0
+# 0.4.0
 
-Initial Version of the library.
+Updated to `bloc: ^0.9.0`
 
-- Includes the ability to connect presentation layer to `Bloc` by using the `BlocPipe` Component.
+# 0.3.3
 
-# 0.1.1
+Additional Minor Updates to Documentation
 
-Minor Updates to Documentation
+# 0.3.2
 
-# 0.1.2
+Additional Minor Updates to Documentation
 
-Minor Updates to Documentation
-
-# 0.2.0
-
-Updated to `bloc: ^0.7.0`
-
-# 0.2.1
+# 0.3.1
 
 Minor Updates to Documentation
 
-# 0.2.2
+# 0.3.0
+
+Updated to `bloc: ^0.8.0`
+
+# 0.2.5
+
+Additional Minor Updates to Documentation
+
+# 0.2.4
 
 Additional Minor Updates to Documentation
 
@@ -28,30 +30,28 @@ Additional Minor Updates to Documentation
 
 Updates to Documentation and Examples
 
-# 0.2.4
+# 0.2.2
 
 Additional Minor Updates to Documentation
 
-# 0.2.5
-
-Additional Minor Updates to Documentation
-
-# 0.3.0
-
-Updated to `bloc: ^0.8.0`
-
-# 0.3.1
+# 0.2.1
 
 Minor Updates to Documentation
 
-# 0.3.2
+# 0.2.0
 
-Additional Minor Updates to Documentation
+Updated to `bloc: ^0.7.0`
 
-# 0.3.3
+# 0.1.2
 
-Additional Minor Updates to Documentation
+Minor Updates to Documentation
 
-# 0.4.0
+# 0.1.1
 
-Updated to `bloc: ^0.9.0`
+Minor Updates to Documentation
+
+# 0.1.0
+
+Initial Version of the library.
+
+- Includes the ability to connect presentation layer to `Bloc` by using the `BlocPipe` Component.
