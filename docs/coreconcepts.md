@@ -8,7 +8,7 @@ In the upcoming sections, we're going to discuss each of them in detail as well 
 
 ## Events
 
-> Events are the input to a Bloc. They are commonly user interactions such as button presses or lifecycle events like page loads.
+> Events are the input to a Bloc. They are commonly dispatched in response to user interactions such as button presses or lifecycle events like page loads.
 
 When designing an app we need to step back and define how users will interact with it. In the context of our counter app we will have two buttons to increment and decrement our counter.
 
