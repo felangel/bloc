@@ -8,7 +8,7 @@ environment:
   sdk: ">=2.0.0-dev.28.0 <3.0.0"
 
 dependencies:  
-  bloc: "^0.9.0"
+  bloc: ^0.9.0
   flutter:
     sdk: flutter
 
