@@ -1,3 +1,7 @@
+# 0.9.3
+
+Restrict `rxdart` to `">=0.18.1 <0.21.0"` due to breaking changes.
+
 # 0.9.2
 
 Additional Minor Updates to Documentation
