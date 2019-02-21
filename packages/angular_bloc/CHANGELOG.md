@@ -1,6 +1,6 @@
 # 0.4.3
 
-Updated to `bloc:^0.9.3` and Minor Updates to Documentatio
+Updated to `bloc:^0.9.3` and Minor Updates to Documentation
 
 # 0.4.2
 
