@@ -8,8 +8,11 @@ environment:
   sdk: ">=2.0.0-dev.28.0 <3.0.0"
 
 dependencies:
-  angular: ^5.0.0
+  angular: ^5.0.0  
   bloc: ^0.9.3
+
+dependency_overrides:
+  package_resolver: 1.0.6
 
 dev_dependencies:
   test: ">=1.3.0 <2.0.0"

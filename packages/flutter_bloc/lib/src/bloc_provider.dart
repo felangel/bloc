@@ -15,9 +15,8 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends InheritedWidget {
   BlocProvider({
     Key key,
     @required this.bloc,
-    @required this.child,
+    this.child,
   })  : assert(bloc != null),
-        assert(child != null),
         super(key: key);
 
   /// Method that allows widgets to access the bloc as long as their `BuildContext`
@@ -29,14 +28,27 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends InheritedWidget {
 
     if (provider == null) {
       throw FlutterError(
-          'BlocProvider.of() called with a context that does not contain a Bloc of type $T.\n'
-          'No ancestor could be found starting from the context that was passed '
-          'to BlocProvider.of<$T>(). This can happen '
-          'if the context you use comes from a widget above the BlocProvider.\n'
-          'The context used was:\n'
-          '  $context');
+        """
+        BlocProvider.of() called with a context that does not contain a Bloc of type $T.
+        No ancestor could be found starting from the context that was passed to BlocProvider.of<$T>().
+        This can happen if the context you use comes from a widget above the BlocProvider.
+        This can also happen if you used BlocProviderTree and didn\'t explicity provide 
+        the BlocProvider types: BlocProvider(bloc: $T()) instead of BlocProvider<$T>(bloc: $T()).
+        The context used was: $context
+        """,
+      );
     }
     return provider?.bloc;
+  }
+
+  /// Clone the current [BlocProvider] with a new child [Widget].
+  /// All other values, including [Key] and [Bloc] are preserved.
+  BlocProvider<T> copyWith(Widget child) {
+    return BlocProvider<T>(
+      key: key,
+      bloc: bloc,
+      child: child,
+    );
   }
 
   /// Necessary to obtain generic [Type]

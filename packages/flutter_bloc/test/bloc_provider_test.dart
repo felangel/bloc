@@ -225,13 +225,14 @@ void main() {
         child: _child,
       ));
       final dynamic exception = tester.takeException();
-      final expectedMessage =
-          'BlocProvider.of() called with a context that does not contain a Bloc of type CounterBloc.\n'
-          'No ancestor could be found starting from the context that was passed '
-          'to BlocProvider.of<CounterBloc>(). This can happen '
-          'if the context you use comes from a widget above the BlocProvider.\n'
-          'The context used was:\n'
-          '  CounterPage(dirty)';
+      final expectedMessage = """
+        BlocProvider.of() called with a context that does not contain a Bloc of type CounterBloc.
+        No ancestor could be found starting from the context that was passed to BlocProvider.of<CounterBloc>().
+        This can happen if the context you use comes from a widget above the BlocProvider.
+        This can also happen if you used BlocProviderTree and didn\'t explicity provide 
+        the BlocProvider types: BlocProvider(bloc: CounterBloc()) instead of BlocProvider<CounterBloc>(bloc: CounterBloc()).
+        The context used was: CounterPage(dirty)
+        """;
       expect(exception is FlutterError, true);
       expect(exception.message, expectedMessage);
     });

@@ -19,7 +19,59 @@ This package is built to work with [bloc](https://pub.dartlang.org/packages/bloc
 
 **BlocBuilder** is a Flutter widget which requires a `Bloc` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed.
 
-**BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of(context)`. It is used as a DI widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
+```dart
+BlocBuilder(
+  bloc: BlocA(),
+  builder: (context, state) {
+    // return widget here based on BlocA's state
+  }
+)
+```
+
+**BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a DI widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
+
+```dart
+BlocProvider(
+  bloc: BlocA(),
+  child: ChildA(),
+);
+```
+
+then from `ChildA` we can retrieve `BlocA` with:
+
+```dart
+BlocProvider.of<BlocA>(context)
+```
+
+**BlocProviderTree** is a Flutter widget that merges multiple `BlocProvider` widgets into one.
+`BlocProviderTree` improves the readability and eliminates the need to nest multiple `BlocProviders`.
+By using `BlocProviderTree` we can go from:
+
+```dart
+BlocProvider<BlocA>(
+   bloc: BlocA(),
+   child: BlocProvider<BlocB>(
+     bloc: BlocB(),
+     child: BlocProvider<BlocC>(
+       value: BlocC(),
+       child: ChildA(),
+     )
+   )
+ )
+ ```
+
+to:
+
+```dart
+BlocProviderTree(
+  blocProviders: [
+    BlocProvider<BlocA>(bloc: BlocA()),
+    BlocProvider<BlocB>(bloc: BlocB()),
+    BlocProvider<BlocC>(bloc: BlocC()),
+  ],
+  child: ChildA(),
+)
+```
 
 ## Usage
 
