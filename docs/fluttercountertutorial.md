@@ -28,7 +28,7 @@ dependencies:
   flutter:
     sdk: flutter
   bloc: ^0.9.0
-  flutter_bloc: ^0.6.0
+  flutter_bloc: ^0.7.0
   meta: ^1.1.6
 
 dev_dependencies:

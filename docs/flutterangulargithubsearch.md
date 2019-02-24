@@ -39,7 +39,7 @@ environment:
 dependencies:
   meta: ^1.1.7
   bloc: ^0.9.0
-  equatable: ^0.1.0
+  equatable: ^0.2.0
   http: ^0.12.0
 ```
 
@@ -421,7 +421,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.6.0
+  flutter_bloc: ^0.7.0
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search

@@ -8,5 +8,5 @@ environment:
 dependencies:
   meta: ^1.1.6
   bloc: ^0.9.0
-  equatable: ^0.1.0
+  equatable: ^0.2.0
   http: ^0.12.0
