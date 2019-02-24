@@ -23,6 +23,7 @@ script:
   - cp coverage/lcov.info ../../bloc.lcov
   - cd ../angular_bloc
   - pub get
+  - pub upgrade
   - pub global activate webdev
   - webdev build
   - pub run build_runner test --fail-on-severe

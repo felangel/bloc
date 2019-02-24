@@ -1,33 +1,44 @@
-import 'dart:async';
-
+import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
-
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bloc/bloc.dart';
 
-class SimpleBlocDelegate extends BlocDelegate {
+class MyAppNoBlocProvidersNoChild extends StatelessWidget {
   @override
-  void onTransition(Transition transition) {
-    print(transition);
+  Widget build(BuildContext context) {
+    return BlocProviderTree(
+      blocProviders: null,
+      child: null,
+    );
   }
+}
 
+class MyAppNoBlocProviders extends StatelessWidget {
   @override
-  void onError(Object error, StackTrace stacktrace) {
-    print(error);
+  Widget build(BuildContext context) {
+    return BlocProviderTree(
+      blocProviders: null,
+      child: Container(),
+    );
   }
 }
 
-void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
-  runApp(App());
-}
-
-class App extends StatefulWidget {
+class MyAppNoChild extends StatelessWidget {
   @override
-  State<StatefulWidget> createState() => _AppState();
+  Widget build(BuildContext context) {
+    return BlocProviderTree(
+      blocProviders: [],
+      child: null,
+    );
+  }
 }
 
-class _AppState extends State<App> {
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final CounterBloc _counterBloc = CounterBloc();
   final ThemeBloc _themeBloc = ThemeBloc();
 
@@ -73,6 +84,7 @@ class CounterPage extends StatelessWidget {
           return Center(
             child: Text(
               '$count',
+              key: Key('counter_text'),
               style: TextStyle(fontSize: 24.0),
             ),
           );
@@ -153,4 +165,36 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
         break;
     }
   }
+}
+
+void main() {
+  group('BlocProviderTree', () {
+    testWidgets('throws if initialized with no BlocProviders and no child',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(MyAppNoBlocProvidersNoChild());
+      expect(tester.takeException(), isInstanceOf<AssertionError>());
+    });
+
+    testWidgets('throws if initialized with no bloc',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(MyAppNoBlocProviders());
+      expect(tester.takeException(), isInstanceOf<AssertionError>());
+    });
+
+    testWidgets('throws if initialized with no child',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(MyAppNoChild());
+      expect(tester.takeException(), isInstanceOf<AssertionError>());
+    });
+
+    testWidgets('passes blocs to children', (WidgetTester tester) async {
+      await tester.pumpWidget(MyApp());
+
+      final Finder _counterFinder = find.byKey((Key('counter_text')));
+      expect(_counterFinder, findsOneWidget);
+
+      final Text _counterText = _counterFinder.evaluate().first.widget;
+      expect(_counterText.data, '0');
+    });
+  });
 }
