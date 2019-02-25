@@ -176,8 +176,11 @@ void main() {
         ),
       );
 
-      MaterialApp _materialApp =
-          find.byKey(Key('material_app')).evaluate().first.widget;
+      MaterialApp _materialApp = find
+          .byKey(Key('material_app'))
+          .evaluate()
+          .first
+          .widget as MaterialApp;
       expect(_materialApp.theme, ThemeData.light());
       expect(numBuilds, 1);
     });
@@ -199,8 +202,11 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      MaterialApp _materialApp =
-          find.byKey(Key('material_app')).evaluate().first.widget;
+      MaterialApp _materialApp = find
+          .byKey(Key('material_app'))
+          .evaluate()
+          .first
+          .widget as MaterialApp;
 
       expect(_materialApp.theme, ThemeData.dark());
       expect(numBuilds, 2);
@@ -222,8 +228,11 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      MaterialApp _materialApp =
-          find.byKey(Key('material_app')).evaluate().first.widget;
+      MaterialApp _materialApp = find
+          .byKey(Key('material_app'))
+          .evaluate()
+          .first
+          .widget as MaterialApp;
 
       expect(_materialApp.theme, ThemeData.light());
       expect(numBuilds, 1);
@@ -263,8 +272,11 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      MaterialApp _materialApp =
-          find.byKey(Key('material_app')).evaluate().first.widget;
+      MaterialApp _materialApp = find
+          .byKey(Key('material_app'))
+          .evaluate()
+          .first
+          .widget as MaterialApp;
 
       expect(_materialApp.theme, ThemeData.dark());
       expect(numBuilds, 1);
@@ -306,8 +318,11 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      MaterialApp _materialApp =
-          find.byKey(Key('material_app')).evaluate().first.widget;
+      MaterialApp _materialApp = find
+          .byKey(Key('material_app'))
+          .evaluate()
+          .first
+          .widget as MaterialApp;
 
       expect(_materialApp.theme, ThemeData.dark());
       expect(numBuilds, 1);

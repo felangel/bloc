@@ -213,7 +213,7 @@ void main() {
       final Finder _counterFinder = find.byKey((Key('counter_text')));
       expect(_counterFinder, findsOneWidget);
 
-      final Text _counterText = _counterFinder.evaluate().first.widget;
+      final Text _counterText = _counterFinder.evaluate().first.widget as Text;
       expect(_counterText.data, '0');
     });
 

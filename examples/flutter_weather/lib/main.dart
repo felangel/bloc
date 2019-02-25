@@ -48,22 +48,22 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      bloc: _themeBloc,
-      child: BlocProvider(
-        bloc: _settingsBloc,
-        child: BlocBuilder(
-          bloc: _themeBloc,
-          builder: (_, ThemeState themeState) {
-            return MaterialApp(
-              title: 'Flutter Weather',
-              theme: themeState.theme,
-              home: Weather(
-                weatherRepository: widget.weatherRepository,
-              ),
-            );
-          },
-        ),
+    return BlocProviderTree(
+      blocProviders: [
+        BlocProvider<ThemeBloc>(bloc: _themeBloc),
+        BlocProvider<SettingsBloc>(bloc: _settingsBloc),
+      ],
+      child: BlocBuilder(
+        bloc: _themeBloc,
+        builder: (_, ThemeState themeState) {
+          return MaterialApp(
+            title: 'Flutter Weather',
+            theme: themeState.theme,
+            home: Weather(
+              weatherRepository: widget.weatherRepository,
+            ),
+          );
+        },
       ),
     );
   }

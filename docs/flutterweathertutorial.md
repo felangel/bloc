@@ -1660,22 +1660,22 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      bloc: _themeBloc,
-      child: BlocProvider(
-        bloc: _settingsBloc,
-        child: BlocBuilder(
-          bloc: _themeBloc,
-          builder: (_, ThemeState themeState) {
-            return MaterialApp(
-              title: 'Flutter Demo',
-              theme: themeState.theme,
-              home: Weather(
-                weatherRepository: widget.weatherRepository,
-              ),
-            );
-          },
-        ),
+    return BlocProviderTree(
+      blocProviders: [
+        BlocProvider<ThemeBloc>(bloc: _themeBloc),
+        BlocProvider<SettingsBloc>(bloc: _settingsBloc),
+      ],
+      child: BlocBuilder(
+        bloc: _themeBloc,
+        builder: (_, ThemeState themeState) {
+          return MaterialApp(
+            title: 'Flutter Weather',
+            theme: themeState.theme,
+            home: Weather(
+              weatherRepository: widget.weatherRepository,
+            ),
+          );
+        },
       ),
     );
   }
@@ -1689,7 +1689,7 @@ class _AppState extends State<App> {
 }
 ```
 
-Again, we're making `SettingsBloc` globally accessible using `BlocProvider` and we are also disposing it in the `dispose` override.
+Again, we're making `SettingsBloc` globally accessible using `BlocProvider` and we are also disposing it in the `dispose` override. This time, however, since we are exposing more than one Bloc using `BlocProvider` at the same level we can eliminate some nesting by using the `BlocProviderTree` widget.
 
 Now we need to create our `Settings` widget from which users can toggle the units.
 

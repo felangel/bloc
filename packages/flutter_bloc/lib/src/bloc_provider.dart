@@ -23,8 +23,9 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends InheritedWidget {
   /// contains a `BlocProvider` instance.
   static T of<T extends Bloc<dynamic, dynamic>>(BuildContext context) {
     final type = _typeOf<BlocProvider<T>>();
-    final BlocProvider<T> provider =
-        context.ancestorInheritedElementForWidgetOfExactType(type)?.widget;
+    final BlocProvider<T> provider = context
+        .ancestorInheritedElementForWidgetOfExactType(type)
+        ?.widget as BlocProvider<T>;
 
     if (provider == null) {
       throw FlutterError(
