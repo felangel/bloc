@@ -163,6 +163,7 @@ At this point we have successfully separated our presentational layer from our b
 - [Login Flow](https://felangel.github.io/bloc/#/flutterlogintutorial) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a Login Flow.
 - [Github Search](https://felangel.github.io/bloc/#/flutterangulargithubsearch) - an example of how to create a Github Search Application using the `bloc` and `flutter_bloc` packages.
 - [Weather](https://felangel.github.io/bloc/#/flutterweathertutorial) - an example of how to create a Weather Application using the `bloc` and `flutter_bloc` packages. The app uses a `RefreshIndicator` to implement "pull-to-refresh" as well as dynamic theming.
+- [Todos](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library) - an example of how to create a Todos Application using the `bloc` and `flutter_bloc` packages.
 
 ### Maintainers
 
