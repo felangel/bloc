@@ -22,7 +22,11 @@ Bloc extends [VSCode](https://code.visualstudio.com/) with support for the [Bloc
 
 Bloc can be installed from the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) or by [searching within VSCode](https://code.visualstudio.com/docs/editor/extension-gallery#_search-for-an-extension).
 
-## Usage
+## New Bloc Command Usage
+
+TODO
+
+## Snippets Usage
 
 In a `.dart` file activate the snippet by typing `bloc` and hitting enter to select the bloc snippet. Then you can name you bloc class and fill in the signature and implementation details by tabbing
 

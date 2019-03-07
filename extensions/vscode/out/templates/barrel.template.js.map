@@ -1,0 +1,1 @@
+{"version":3,"file":"barrel.template.js","sourceRoot":"","sources":["../../src/templates/barrel.template.ts"],"names":[],"mappings":";;AAAA,0CAA0C;AAE1C,SAAgB,iBAAiB,CAAC,QAAgB;IAChD,MAAM,iBAAiB,GAAG,UAAU,CAAC,SAAS,CAAC,QAAQ,CAAC,WAAW,EAAE,CAAC,CAAC;IACvE,OAAO,WAAW,iBAAiB;UAC3B,iBAAiB;UACjB,iBAAiB;CAC1B,CAAC;AACF,CAAC;AAND,8CAMC"}
