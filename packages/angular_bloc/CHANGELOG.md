@@ -1,3 +1,7 @@
+# 0.4.5
+
+Override package_resolver version
+
 # 0.4.4
 
 Additional Minor Updates to Documentation
