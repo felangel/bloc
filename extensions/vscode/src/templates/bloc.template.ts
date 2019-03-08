@@ -17,8 +17,7 @@ class ${pascalCaseBlocName}Bloc extends Bloc<${blocEvent}, ${blocState}> {
     ${blocState} currentState,
     ${blocEvent} event,
   ) async* {
-    // TODO: Replace with custom logic
-    yield currentState;
+    // TODO: Add Logic
   }
 }
 `;

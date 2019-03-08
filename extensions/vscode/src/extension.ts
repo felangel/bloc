@@ -8,9 +8,10 @@ import {
   InputBoxOptions,
   OpenDialogOptions,
   QuickPickOptions,
+  Uri,
   window
 } from "vscode";
-import { existsSync, writeFile } from "fs";
+import { existsSync, lstatSync, writeFile } from "fs";
 import {
   getBarrelTemplate,
   getBlocEventTemplate,
@@ -19,28 +20,38 @@ import {
 } from "./templates";
 
 export function activate(_context: ExtensionContext) {
-  commands.registerCommand("extension.new-bloc", async () => {
+  commands.registerCommand("extension.new-bloc", async (uri: Uri) => {
     const blocName = await promptForBlocName();
     if (_.isNil(blocName) || blocName.trim() === "") {
       window.showErrorMessage("The bloc name must not be empty");
       return;
     }
 
-    const targetDirectory = await promptForTargetDirectory();
-    if (_.isNil(targetDirectory)) {
-      window.showErrorMessage("Please select a valid directory");
-      return;
+    let targetDirectory;
+    if (_.isNil(_.get(uri, "fsPath")) || !lstatSync(uri.fsPath).isDirectory()) {
+      targetDirectory = await promptForTargetDirectory();
+      if (_.isNil(targetDirectory)) {
+        window.showErrorMessage("Please select a valid directory");
+        return;
+      }
+    } else {
+      targetDirectory = uri.fsPath;
     }
-    const useEquatable = (await promptForUseEquatable()) === "yes";
-    const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
 
+    const useEquatable =
+      (await promptForUseEquatable()) === "yes (recommended)";
+
+    const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
     try {
       await generateBlocCode(blocName, targetDirectory, useEquatable);
       window.showInformationMessage(
         `Successfully Generated ${pascalCaseBlocName} Bloc`
       );
     } catch (error) {
-      window.showErrorMessage(`Failed to Generate ${pascalCaseBlocName} Bloc`);
+      window.showErrorMessage(
+        `Failed to Generate ${pascalCaseBlocName} Bloc
+        ${JSON.stringify(error)}`
+      );
     }
   });
 }
@@ -54,9 +65,11 @@ function promptForBlocName(): Thenable<string | undefined> {
 }
 
 function promptForUseEquatable(): Thenable<string | undefined> {
-  const useEquatablePromptValues: string[] = ["yes", "no"];
+  const useEquatablePromptValues: string[] = ["yes (recommended)", "no"];
   const useEquatablePromptOptions: QuickPickOptions = {
-    placeHolder: "Do you want to use the Equatable Package in this Bloc?"
+    placeHolder:
+      "Do you want to use the Equatable Package in this bloc to override equality comparisons?",
+    canPickMany: false
   };
   return window.showQuickPick(
     useEquatablePromptValues,
