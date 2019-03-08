@@ -1,8 +1,8 @@
 {
   "name": "bloc",
   "displayName": "bloc",
-  "description": "code snippets for the dart bloc library",
-  "version": "0.1.3",
+  "description": "support for the bloc library and provides tools for effectively creating blocs for both Flutter and AngularDart apps.",
+  "version": "0.2.0-rc.1",
   "publisher": "FelixAngelov",
   "bugs": {
     "url": "https://github.com/felangel/bloc/issues",
@@ -14,23 +14,70 @@
   },
   "homepage": "https://felangel.github.io/bloc",
   "engines": {
-    "vscode": "^1.30.0"
+    "vscode": "^1.31.0"
   },
   "categories": [
-    "Snippets"
+    "Snippets",
+    "Programming Languages"
   ],
   "keywords": [
     "dart",
     "flutter",
-    "bloc"
+    "angulardart",
+    "bloc",
+    "state-management"
   ],
   "icon": "assets/logo.png",
+  "activationEvents": [
+    "onCommand:extension.new-bloc"
+  ],
+  "main": "./out/extension.js",
   "contributes": {
+    "commands": [
+      {
+        "command": "extension.new-bloc",
+        "title": "Bloc: New Bloc",
+        "icon": "assets/logo.png"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "extension.new-bloc",
+          "group": "blocGroup@1",
+          "when": "explorerResourceIsFolder"
+        }
+      ]
+    },
     "snippets": [
       {
         "language": "dart",
         "path": "./snippets/snippets.json"
       }
     ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "@types/change-case": "^2.3.1",
+    "@types/lodash": "^4.14.121",
+    "@types/mkdirp": "^0.5.2",
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^8.10.25",
+    "@types/rimraf": "^2.0.2",
+    "tslint": "^5.8.0",
+    "typescript": "^3.1.4",
+    "vscode": "^1.1.25"
+  },
+  "dependencies": {
+    "change-case": "^3.1.0",
+    "lodash": "^4.17.11",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.3"
   }
 }
