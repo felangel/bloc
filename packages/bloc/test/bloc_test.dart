@@ -415,7 +415,7 @@ void main() {
         _bloc.dispatch(CounterEvent.decrement);
       });
 
-      test('triggers onError', () {
+      test('triggers onError from mapEventToState', () {
         final exception = Exception('fatal exception');
         Object expectedError;
         StackTrace expectedStacktrace;
@@ -432,6 +432,33 @@ void main() {
           expect(expectedStacktrace, isNotNull);
         });
 
+        _bloc.dispatch(CounterEvent.increment);
+      });
+
+      test('triggers onError from dispatch', () {
+        Object capturedError;
+        StackTrace capturedStacktrace;
+        final CounterBloc _bloc = CounterBloc(
+          null,
+          (Object error, StackTrace stacktrace) {
+            capturedError = error;
+            capturedStacktrace = stacktrace;
+          },
+        );
+
+        expectLater(_bloc.state, emitsInOrder(<int>[0])).then((dynamic _) {
+          expect(
+            capturedError,
+            isStateError,
+          );
+          expect(
+            (capturedError as StateError).message,
+            'Cannot add new events after calling close',
+          );
+          expect(capturedStacktrace, isNull);
+        });
+
+        _bloc.dispose();
         _bloc.dispatch(CounterEvent.increment);
       });
     });

@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 
 typedef OnTransitionCallback = Function(Transition<CounterEvent, int>);
+typedef OnErrorCallback = Function(Object error, StackTrace stacktrace);
 
 enum CounterEvent { increment, decrement }
 
@@ -8,8 +9,9 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   int get initialState => 0;
 
   final OnTransitionCallback onTransitionCallback;
+  final OnErrorCallback onErrorCallback;
 
-  CounterBloc([this.onTransitionCallback]);
+  CounterBloc([this.onTransitionCallback, this.onErrorCallback]);
 
   @override
   Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
@@ -26,6 +28,11 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   @override
   void onTransition(Transition<CounterEvent, int> transition) {
     onTransitionCallback(transition);
+  }
+
+  @override
+  void onError(Object error, StackTrace stacktrace) {
+    onErrorCallback(error, stacktrace);
   }
 
   @override
