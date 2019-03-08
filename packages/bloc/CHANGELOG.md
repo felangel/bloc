@@ -1,3 +1,7 @@
+# 0.9.5
+
+Minor Enhancements to Code Style and Documentation.
+
 # 0.9.4
 
 Calls to `dispatch` after after `dispose` has been called trigger `onError` in the `Bloc` and `BlocDelegate`.
