@@ -22,7 +22,19 @@ Bloc extends [VSCode](https://code.visualstudio.com/) with support for the [Bloc
 
 Bloc can be installed from the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) or by [searching within VSCode](https://code.visualstudio.com/docs/editor/extension-gallery#_search-for-an-extension).
 
-## Usage
+## New Bloc Command Usage
+
+The New Bloc Command allows you to create a Bloc and the Events/States so that all that's left to do is implement your logic in `mapEventToState`.
+
+You can active the command by launching the command palette (View -> Command Palette) and running "Bloc: New Bloc".
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-1.gif)
+
+Or you can right click on the directory in which you'd like to create the bloc and select the "Bloc: New Bloc" command from the context menu.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-2.gif)
+
+## Snippets Usage
 
 In a `.dart` file activate the snippet by typing `bloc` and hitting enter to select the bloc snippet. Then you can name you bloc class and fill in the signature and implementation details by tabbing
 
