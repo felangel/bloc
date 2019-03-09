@@ -1,3 +1,7 @@
+# 0.3.0
+
+Added Snippets for `BlocBuilder`, `BlocProvider`, and `BlocProviderTree`
+
 # 0.2.1
 
 Update `Equatable` usage to be "advanced"

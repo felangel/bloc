@@ -36,6 +36,26 @@ Or you can right click on the directory in which you'd like to create the bloc a
 
 ## Snippets Usage
 
-In a `.dart` file activate the snippet by typing `bloc` and hitting enter to select the bloc snippet. Then you can name you bloc class and fill in the signature and implementation details by tabbing
+### Bloc
 
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/snippets-usage.gif)
+In a `.dart` file activate the snippet by typing `bloc` and hitting enter. Then you can name the bloc class and fill in the signature and implementation details by tabbing.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloc-snippet-usage.gif)
+
+### BlocBuilder
+
+In a `.dart` file activate the snippet by typing `blocbuilder` and hitting enter. Then you can fill in the implementation details by tabbing.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocbuilder-snippet-usage.gif)
+
+### BlocProvider
+
+In a `.dart` file activate the snippet by typing `blocprovider` and hitting enter. Then you can fill in the implementation details by tabbing.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovider-snippet-usage.gif)
+
+### BlocProviderTree
+
+In a `.dart` file activate the snippet by typing `blocprovidertree` and hitting enter. Then you can fill in the implementation details by tabbing.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovidertree-snippet-usage.gif)

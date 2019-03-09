@@ -8,10 +8,48 @@
       "\t@override",
       "\t${3:MyState} get initialState => ${4:// TODO: implement initialState};\n",
       "\t@override",
-      "\tStream<${3:MyState}> mapEventToState(${3:MyState} currentState, ${2:MyEvent} event) async* {",
+      "\tStream<${3:MyState}> mapEventToState(",
+      "\t\t${3:MyState} currentState,",
+      "\t\t${2:MyEvent} event,",
+      "\t) async* {",
       "\t\t${5:// TODO: implement mapEventToState}",
       "\t}",
       "}"
+    ]
+  },
+  "blocbuilder": {
+    "scope": "dart",
+    "prefix": "blocbuilder",
+    "body": [
+      "BlocBuilder(",
+      "\tbloc: ${1:MyBloc},",
+      "\tbuilder: (BuildContext context, ${2:MyState} state) {",
+      "\t\treturn ${3:Container();}",
+      "\t},",
+      ");"
+    ]
+  },
+  "blocprovider": {
+    "scope": "dart",
+    "prefix": "blocprovider",
+    "body": [
+      "BlocProvider(",
+      "\tbloc: ${1:MyBloc},",
+      "\tchild: ${2:Container()},",
+      ");"
+    ]
+  },
+  "blocprovidertree": {
+    "scope": "dart",
+    "prefix": "blocprovidertree",
+    "body": [
+      "BlocProviderTree(",
+      "\tblocProviders: [",
+      "\t\tBlocProvider<${1:MyBloc}>(bloc: ${3:_myBloc}),",
+      "\t\tBlocProvider<${4:MyOtherBloc}>(bloc: ${5:_myOtherBloc}),",
+      "\t],",
+      "\tchild: ${6:Container()},",
+      ");"
     ]
   }
 }
