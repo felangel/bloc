@@ -24,7 +24,15 @@ Bloc can be installed from the [VSCode Marketplace](https://marketplace.visualst
 
 ## New Bloc Command Usage
 
-TODO
+The New Bloc Command allows you to create a Bloc and the Events/States so that all that's left to do is implement your logic in `mapEventToState`.
+
+You can active the command by launching the command palette (View -> Command Palette) and running "Bloc: New Bloc".
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-1.gif)
+
+Or you can right click on the directory in which you'd like to create the bloc and select the "Bloc: New Bloc" command from the context menu.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-2.gif)
 
 ## Snippets Usage
 
