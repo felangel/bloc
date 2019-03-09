@@ -1,3 +1,11 @@
+# 0.2.1
+
+Update `Equatable` usage to be "advanced"
+
+# 0.2.0
+
+Updated to include "Bloc: New Bloc" to generate full bloc directory structure.
+
 # 0.1.3
 
 Minor Documentation Updates

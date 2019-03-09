@@ -38,8 +38,7 @@ export function activate(_context: ExtensionContext) {
       targetDirectory = uri.fsPath;
     }
 
-    const useEquatable =
-      (await promptForUseEquatable()) === "yes (recommended)";
+    const useEquatable = (await promptForUseEquatable()) === "yes (advanced)";
 
     const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
     try {
@@ -65,7 +64,7 @@ function promptForBlocName(): Thenable<string | undefined> {
 }
 
 function promptForUseEquatable(): Thenable<string | undefined> {
-  const useEquatablePromptValues: string[] = ["yes (recommended)", "no"];
+  const useEquatablePromptValues: string[] = ["no (default)", "yes (advanced)"];
   const useEquatablePromptOptions: QuickPickOptions = {
     placeHolder:
       "Do you want to use the Equatable Package in this bloc to override equality comparisons?",
