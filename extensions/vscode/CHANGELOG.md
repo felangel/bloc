@@ -1,3 +1,7 @@
+# 0.3.1
+
+Added Snippet for `BlocDelegate`
+
 # 0.3.0
 
 Added Snippets for `BlocBuilder`, `BlocProvider`, and `BlocProviderTree`

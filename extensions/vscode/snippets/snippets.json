@@ -51,5 +51,22 @@
       "\tchild: ${6:Container()},",
       ");"
     ]
+  },
+  "blocdelegate": {
+    "scope": "dart",
+    "prefix": "blocdelegate",
+    "body": [
+      "import 'package:bloc/bloc.dart';\n",
+      "class ${1:MyBlocDelegate} extends BlocDelegate {",
+      "\t@override",
+      "\tvoid onError(Object error, StackTrace stacktrace) {",
+      "\t\t${2:// TODO: implement onError}",
+      "\t}\n",
+      "\t@override",
+      "\tvoid onTransition(Transition transition) {",
+      "\t\t${3:// TODO: implement onTransition}",
+      "\t}",
+      "}"
+    ]
   }
 }
