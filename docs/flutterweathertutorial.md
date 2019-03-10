@@ -1477,17 +1477,6 @@ class _WeatherState extends State<Weather> {
         title: Text('Flutter Weather'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Settings(),
-                ),
-              );
-            },
-          ),
-          IconButton(
             icon: Icon(Icons.search),
             onPressed: () async {
               final city = await Navigator.push(
