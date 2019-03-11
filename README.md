@@ -51,6 +51,8 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
                     <img src="https://felangel.github.io/bloc/assets/gifs/flutter_login.gif" width="200" />
                 </a>
             </td>
+        </tr>
+        <tr>
             <td style="text-align: center">
                 <a href="https://felangel.github.io/bloc/#/flutterangulargithubsearch">
                     <img src="https://felangel.github.io/bloc/assets/gifs/flutter_github_search.gif" width="200"/>
@@ -59,6 +61,11 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
             <td style="text-align: center">
                 <a href="https://felangel.github.io/bloc/#/flutterweathertutorial">
                     <img src="https://felangel.github.io/bloc/assets/gifs/flutter_weather.gif" width="200"/>
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a href="https://github.com/felangel/Bloc/tree/master/examples/flutter_todos">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_todos.gif" width="200"/>
                 </a>
             </td>
         </tr>
@@ -76,7 +83,7 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [Login Flow](https://felangel.github.io/bloc/#/flutterlogintutorial) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a Login Flow.
 - [Github Search](https://felangel.github.io/bloc/#/flutterangulargithubsearch) - an example of how to create a Github Search Application using the `bloc` and `flutter_bloc` packages.
 - [Weather](https://felangel.github.io/bloc/#/flutterweathertutorial) - an example of how to create a Weather Application using the `bloc` and `flutter_bloc` packages. The app uses a `RefreshIndicator` to implement "pull-to-refresh" as well as dynamic theming.
-- [Todos](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library) - an example of how to create a Todos Application using the `bloc` and `flutter_bloc` packages.
+- [Todos](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos) - an example of how to create a Todos Application using the `bloc` and `flutter_bloc` packages.
 
 ### Web
 - [Counter](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - an example of how to use a `CounterBloc` in an AngularDart app.
