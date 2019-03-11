@@ -14,10 +14,10 @@ void main() {
   // We can set the BlocSupervisor's delegate to an instance of `SimpleBlocDelegate`.
   // This will allow us to handle all transitions and errors in SimpleBlocDelegate.
   BlocSupervisor().delegate = SimpleBlocDelegate();
-  runApp(BlocApp());
+  runApp(TodosApp());
 }
 
-class BlocApp extends StatelessWidget {
+class TodosApp extends StatelessWidget {
   final todosBloc = TodosBloc(
     todosRepository: const TodosRepositoryFlutter(
       fileStorage: const FileStorage(

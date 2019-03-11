@@ -25,7 +25,9 @@ class FilterButton extends StatelessWidget {
             onSelected: (filter) {
               filteredTodosBloc.dispatch(UpdateFilter(filter));
             },
-            activeFilter: state.activeFilter,
+            activeFilter: state is FilteredTodosLoaded
+                ? state.activeFilter
+                : VisibilityFilter.all,
             activeStyle: activeStyle,
             defaultStyle: defaultStyle,
           );
