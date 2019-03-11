@@ -1,7 +1,3 @@
-// Copyright 2018 The Flutter Architecture Sample Authors. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found
-// in the LICENSE file.
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,7 +38,7 @@ class DetailsScreen extends StatelessWidget {
             ],
           ),
           body: todo == null
-              ? Container(key: BlocLibraryKeys.emptyDetailsContainer)
+              ? Container(key: FlutterTodosKeys.emptyDetailsContainer)
               : Padding(
                   padding: EdgeInsets.all(16.0),
                   child: ListView(
@@ -53,7 +49,7 @@ class DetailsScreen extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(right: 8.0),
                             child: Checkbox(
-                                key: BlocLibraryKeys.detailsScreenCheckBox,
+                                key: FlutterTodosKeys.detailsScreenCheckBox,
                                 value: todo.complete,
                                 onChanged: (_) {
                                   todosBloc.dispatch(

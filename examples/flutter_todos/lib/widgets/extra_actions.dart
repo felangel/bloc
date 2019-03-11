@@ -1,7 +1,3 @@
-// Copyright 2018 The Flutter Architecture Sample Authors. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found
-// in the LICENSE file.
-
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -25,7 +21,7 @@ class ExtraActions extends StatelessWidget {
               .todos
               .every((todo) => todo.complete);
           return PopupMenuButton<ExtraAction>(
-            key: BlocLibraryKeys.extraActionsPopupMenuButton,
+            key: FlutterTodosKeys.extraActionsPopupMenuButton,
             onSelected: (action) {
               switch (action) {
                 case ExtraAction.clearCompleted:
@@ -57,7 +53,7 @@ class ExtraActions extends StatelessWidget {
                 ],
           );
         }
-        return Container(key: BlocLibraryKeys.extraActionsEmptyContainer);
+        return Container(key: FlutterTodosKeys.extraActionsEmptyContainer);
       },
     );
   }
