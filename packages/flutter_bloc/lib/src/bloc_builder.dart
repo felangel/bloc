@@ -17,11 +17,12 @@ typedef BlocWidgetBuilder<S> = Widget Function(BuildContext context, S state);
 class BlocBuilder<E, S> extends BlocBuilderBase<E, S> {
   final Bloc<E, S> bloc;
   final BlocWidgetBuilder<S> builder;
+  final bool(S, S) stateChanged;
 
-  const BlocBuilder({Key key, @required this.bloc, @required this.builder})
+  const BlocBuilder({Key key, @required this.bloc, @required this.builder, this.stateChanged})
       : assert(bloc != null),
         assert(builder != null),
-        super(key: key, bloc: bloc);
+        super(key: key, bloc: bloc, stateChanged: stateChanged);
 
   @override
   Widget build(BuildContext context, S state) => builder(context, state);
@@ -34,10 +35,11 @@ class BlocBuilder<E, S> extends BlocBuilderBase<E, S> {
 /// so far. The type of the state and how it is updated with each interaction
 /// is defined by sub-classes.
 abstract class BlocBuilderBase<E, S> extends StatefulWidget {
-  const BlocBuilderBase({Key key, this.bloc}) : super(key: key);
+  const BlocBuilderBase({Key key, this.bloc, this.stateChanged}) : super(key: key);
 
   /// The [Bloc] that the [BlocBuilderBase] will interact with.
   final Bloc<E, S> bloc;
+  final bool(S, S) stateChanged;
 
   /// Returns a [Widget] based on the [BuildContext] and current [state].
   Widget build(BuildContext context, S state);
@@ -49,18 +51,20 @@ abstract class BlocBuilderBase<E, S> extends StatefulWidget {
 class _BlocBuilderBaseState<E, S> extends State<BlocBuilderBase<E, S>> {
   StreamSubscription<S> _subscription;
   S _state;
+  bool(S, S) _blocChanged = (oldState, newState) => oldState != newState;
 
   @override
   void initState() {
     super.initState();
     _state = widget.bloc.currentState;
+    _blocChanged = widget.bloc.stateChanged ?? _blocChanged;
     _subscribe();
   }
 
   @override
   void didUpdateWidget(BlocBuilderBase<E, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.bloc.state != widget.bloc.state) {
+    if _blocChanged(oldWidget.bloc.state, widget.bloc.state) {
       if (_subscription != null) {
         _unsubscribe();
         _state = widget.bloc.currentState;
