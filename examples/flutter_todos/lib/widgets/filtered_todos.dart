@@ -21,18 +21,17 @@ class FilteredTodos extends StatelessWidget {
       bloc: filteredTodosBloc,
       builder: (
         BuildContext context,
-        FilteredTodosState filteredTodosState,
+        FilteredTodosState state,
       ) {
-        if (todosBloc.currentState is TodosLoading) {
+        if (state is FilteredTodosLoading) {
           return LoadingIndicator(key: ArchSampleKeys.todosLoading);
-        } else if (todosBloc.currentState is TodosLoaded) {
-          final todos = filteredTodosState.filteredTodos;
+        } else if (state is FilteredTodosLoaded) {
+          final todos = state.filteredTodos;
           return ListView.builder(
             key: ArchSampleKeys.todoList,
             itemCount: todos.length,
             itemBuilder: (BuildContext context, int index) {
               final todo = todos[index];
-
               return TodoItem(
                 todo: todo,
                 onDismissed: (direction) {
