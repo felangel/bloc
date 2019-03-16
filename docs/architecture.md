@@ -77,20 +77,21 @@ class BusinessLogicComponent extends Bloc {
 }
 ```
 
-## Bloc State Subscription
+## Bloc-to-Bloc Communication
 
-> ​Bloc state subscription is a practice used to allow Bloc to react to state changes happened in other bloc.
+> ​Every bloc has a state stream which other blocs can subscribe to in order to react to changes within the bloc.
 
-Inside the same Business Logic Layer, some Blocs may need to communicate with each other. in this case `state.listen` can be used to get notified when bloc state changes.
+Blocs can have dependencies on other blocs in order to react to their state changes. In the following example, `MyBloc` has a dependency on `OtherBloc` and can `dispatch` events in response to state changes in `OtherBloc`. The `StreamSubscription` is closed in the `dispose` override in `MyBloc` in order to avoid memory leaks.
 
 ```dart
-class BusinessLogicComponent extends Bloc {
-  final OtherBusinessLogicComponent otherBloc;
+class MyBloc extends Bloc<dynamic, dynamic> {
+  final OtherBloc otherBloc;
   StreamSubscription otherBlocSubscription;
 
-  BusinessLogicComponent({@required this.otherBloc}) {
+  MyBloc(this.otherBloc) {
     otherBlocSubscription = otherBloc.state.listen((state) {
-        // react to state change happened in other Bloc
+        // React to state changes here.
+        // Dispatch events here to trigger changes in MyBloc.
     });
   }
 
