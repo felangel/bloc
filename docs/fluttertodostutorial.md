@@ -14,7 +14,7 @@ We'll start off by creating a brand new Flutter project
 flutter create flutter_todos
 ```
 
-We can then go ahead and replace the contents of `pubspec.yaml` with
+We can then replace the contents of `pubspec.yaml` with
 
 ```yaml
 name: flutter_todos
@@ -48,7 +48,7 @@ flutter:
   uses-material-design: true
 ```
 
-and then install all of our dependencies
+and then install all of the dependencies
 
 ```bash
 flutter packages get
@@ -349,7 +349,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 }
 ```
 
-!> When we yield a state in the private `mapEventToState` handlers, we are always yielding a new state instead of mutating the `currentState`. This is because every time we yield, bloc will compare the `currentState` to the `nextState` and will only trigger a state change (`transition`) if the two states are **not equal**. If we just mutating and yielding the same instance of state, then `currentState == nextState` would evaluate to true and no state change would occur.
+!> When we yield a state in the private `mapEventToState` handlers, we are always yielding a new state instead of mutating the `currentState`. This is because every time we yield, bloc will compare the `currentState` to the `nextState` and will only trigger a state change (`transition`) if the two states are **not equal**. If we just mutate and yield the same instance of state, then `currentState == nextState` would evaluate to true and no state change would occur.
 
 Our `TodosBloc` will have a dependency on the `TodosRepository` so that it can load and save todos. It will have an initial state of `TodosLoading` and defines the private handlers for each of the events. Whenever the `TodosBloc` changes the list of todos it calls the `saveTodos` method in the `TodosRepository` in order to keep everything persisted locally.
 
@@ -377,7 +377,7 @@ Before we start defining and implementing the `TodosStates`, we will need to imp
 - `active` - only show Todos which have not been completed
 - `completed` only show Todos which have been completed
 
-We can create `models/visbility_filter.dart` and define our filter as an enum:
+We can create `models/visibility_filter.dart` and define our filter as an enum:
 
 ```dart
 enum VisibilityFilter { all, active, completed }
@@ -467,7 +467,7 @@ We're ready to implement our `FilteredTodosBloc` next!
 
 ### Bloc
 
-Our `FilteredTodosBloc` will be similar to our `TodosBloc`; however, instead of having a dependency on the `TodosRepository`, it will have a dependency on the `TodosBloc` itself. This will allow the `FilteredTodosBloc` to update it's state in response to state changes in the `TodosBloc`.
+Our `FilteredTodosBloc` will be similar to our `TodosBloc`; however, instead of having a dependency on the `TodosRepository`, it will have a dependency on the `TodosBloc` itself. This will allow the `FilteredTodosBloc` to update its state in response to state changes in the `TodosBloc`.
 
 Create `blocs/filtered_todos/filtered_todos_bloc.dart` and let's get started.
 
@@ -654,7 +654,7 @@ Now we're ready to implement our `StatsBloc` which will look very similar to the
 
 ### Bloc
 
-Our `StatsBloc` will have a dependency on the `TodosBloc` itself which will allow it to update it's state in response to state changes in the `TodosBloc`.
+Our `StatsBloc` will have a dependency on the `TodosBloc` itself which will allow it to update its state in response to state changes in the `TodosBloc`.
 
 Create `blocs/stats/stats_bloc.dart` and let's get started.
 
@@ -829,7 +829,7 @@ Up next, we'll focus on implementing the major screens in our Todos application.
 
 ### Home Screen
 
-> Our `HomeScreen` will be responsible for creating the `Scaffold` of our application. It will maintain the `AppBar`, `BottomNavigationBar`, as well as the `Stats`/`FilteredTodos` widgets (based on the current tab).
+> Our `HomeScreen` will be responsible for creating the `Scaffold` of our application. It will maintain the `AppBar`, `BottomNavigationBar`, as well as the `Stats`/`FilteredTodos` widgets (depending on the active tab).
 
 Let's create a new directory called `screens` where we will put all of our new screen widgets and then create `screens/home_screen.dart`.
 
@@ -950,13 +950,13 @@ BlocProvider<TabBloc>(
 );
 ```
 
-You can see how using `BlocProviderTree` helps reduce the levels of nesting and makes the code easier to read.
+You can see how using `BlocProviderTree` helps reduce the levels of nesting and makes the code easier to read and maintain.
 
 Next, we'll implement the `DetailsScreen`.
 
 ### Details Screen
 
-> The `DetailsScreen` is a screen which displays the full details of the selected todo and allow the user to either edit or delete the todo.
+> The `DetailsScreen` displays the full details of the selected todo and allows the user to either edit or delete the todo.
 
 Create `screens/details_screen.dart` and let's build it.
 
@@ -1097,7 +1097,7 @@ There is also another `FloatingActionButton` which navigates the user to the `Ad
 
 ### Add/Edit Screen
 
-> The `AddEditScreen` widget is a widget that allows the user to either create a new todo or update an existing todo based on the `isEditing` flag that is passed via the constructor.
+> The `AddEditScreen` widget allows the user to either create a new todo or update an existing todo based on the `isEditing` flag that is passed via the constructor.
 
 Create `screens/add_edit_screen.dart` and let's have a look at the implementation.
 
