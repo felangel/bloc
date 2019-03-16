@@ -1,3 +1,7 @@
+# 0.3.2
+
+Added `@immutable` decorator to bloc events and states
+
 # 0.3.1
 
 Added Snippet for `BlocDelegate`

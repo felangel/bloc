@@ -12,7 +12,9 @@ export function getBlocEventTemplate(
 function getEquatableBlocEventTemplate(blocName: string): string {
   const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
   return `import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
+@immutable
 abstract class ${pascalCaseBlocName}Event extends Equatable {
   ${pascalCaseBlocName}Event([List props = const []]) : super(props);
 }
@@ -21,6 +23,9 @@ abstract class ${pascalCaseBlocName}Event extends Equatable {
 
 function getDefaultBlocEventTemplate(blocName: string): string {
   const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
-  return `abstract class ${pascalCaseBlocName}Event {}
+  return `import 'package:meta/meta.dart';
+
+@immutable
+abstract class ${pascalCaseBlocName}Event {}
 `;
 }
