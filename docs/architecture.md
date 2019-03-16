@@ -77,6 +77,31 @@ class BusinessLogicComponent extends Bloc {
 }
 ```
 
+## Bloc State Subscription
+
+> ​Bloc state subscription is a practice used to allow Bloc to react to state changes happened in other bloc.
+
+Inside the same Business Logic Layer, some Blocs may need to communicate with each other. in this case `state.listen` can be used to get notified when bloc state changes.
+
+```dart
+class BusinessLogicComponent extends Bloc {
+  final OtherBusinessLogicComponent otherBloc;
+  StreamSubscription otherBlocSubscription;
+
+  BusinessLogicComponent({@required this.otherBloc}) {
+    otherBlocSubscription = otherBloc.state.listen((state) {
+        // react to state change happened in other Bloc
+    });
+  }
+
+  @override
+  void dispose() {
+    otherBlocSubscription.cancel();
+    super.dispose();
+  }
+}
+```
+
 ## Presentation Layer
 
 > The presentation layer's responsibility is to figure out how to render itself based on one or more bloc states. In addition, it should handle user input and application lifecycle events.
