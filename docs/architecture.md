@@ -77,14 +77,14 @@ class BusinessLogicComponent extends Bloc {
 }
 ```
 
-## Bloc-to-Bloc Communication
+### Bloc-to-Bloc Communication
 
 > ​Every bloc has a state stream which other blocs can subscribe to in order to react to changes within the bloc.
 
 Blocs can have dependencies on other blocs in order to react to their state changes. In the following example, `MyBloc` has a dependency on `OtherBloc` and can `dispatch` events in response to state changes in `OtherBloc`. The `StreamSubscription` is closed in the `dispose` override in `MyBloc` in order to avoid memory leaks.
 
 ```dart
-class MyBloc extends Bloc<dynamic, dynamic> {
+class MyBloc extends Bloc {
   final OtherBloc otherBloc;
   StreamSubscription otherBlocSubscription;
 
