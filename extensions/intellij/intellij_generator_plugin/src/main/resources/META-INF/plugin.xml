@@ -1,0 +1,28 @@
+<idea-plugin>
+    <id>com.bloc.intellij_generator_plugin</id>
+    <name>Bloc Code Generator</name>
+    <vendor email="jcocaramos@gmail.com">Bloc</vendor>
+
+    <description>
+        <![CDATA[
+            IntelliJ and Android Studio code generator plugin for the Bloc pattern
+        ]]>
+    </description>
+
+    <actions>
+        <group
+                description="Bloc architecture templates"
+                popup="true"
+                id="BlocActionGroup"
+                text="Bloc Generator">
+            <add-to-group
+                    group-id="NewGroup"
+                    relative-to-action="NewGroup"
+                    anchor="after"/>
+            <action class="com.bloc.intellij_generator_plugin.action.GenerateBlocAction"
+                    description="Generate a new Bloc"
+                    id="GenerateBlocId"
+                    text="New Bloc"/>
+        </group>
+    </actions>
+</idea-plugin>

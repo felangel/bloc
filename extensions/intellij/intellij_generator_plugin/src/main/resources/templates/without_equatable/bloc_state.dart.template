@@ -1,0 +1,6 @@
+import 'package:meta/meta.dart';
+
+@immutable
+abstract class ${bloc_camel_case}State {}
+
+class Initial${bloc_camel_case}State extends ${bloc_camel_case}State {}
