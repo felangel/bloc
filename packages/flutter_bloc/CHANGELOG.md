@@ -1,3 +1,7 @@
+# 0.7.1
+
+Minor Updates to Documentation.
+
 # 0.7.0
 
 Added `BlocProviderTree` and Documentation Updates

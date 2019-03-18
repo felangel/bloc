@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
@@ -7,7 +8,7 @@ import 'package:flutter_weather/models/models.dart';
 
 class WeatherApiClient {
   static const baseUrl = 'https://www.metaweather.com';
-  final http.Client httpClient;  
+  final http.Client httpClient;
 
   WeatherApiClient({@required this.httpClient}) : assert(httpClient != null);
 

@@ -77,6 +77,32 @@ class BusinessLogicComponent extends Bloc {
 }
 ```
 
+### Bloc-to-Bloc Communication
+
+> ​Every bloc has a state stream which other blocs can subscribe to in order to react to changes within the bloc.
+
+Blocs can have dependencies on other blocs in order to react to their state changes. In the following example, `MyBloc` has a dependency on `OtherBloc` and can `dispatch` events in response to state changes in `OtherBloc`. The `StreamSubscription` is closed in the `dispose` override in `MyBloc` in order to avoid memory leaks.
+
+```dart
+class MyBloc extends Bloc {
+  final OtherBloc otherBloc;
+  StreamSubscription otherBlocSubscription;
+
+  MyBloc(this.otherBloc) {
+    otherBlocSubscription = otherBloc.state.listen((state) {
+        // React to state changes here.
+        // Dispatch events here to trigger changes in MyBloc.
+    });
+  }
+
+  @override
+  void dispose() {
+    otherBlocSubscription.cancel();
+    super.dispose();
+  }
+}
+```
+
 ## Presentation Layer
 
 > The presentation layer's responsibility is to figure out how to render itself based on one or more bloc states. In addition, it should handle user input and application lifecycle events.

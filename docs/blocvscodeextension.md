@@ -2,15 +2,16 @@
 
 [![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
+[![Star on GitHub](https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=Stars)](https://github.com/felangel/bloc)
 
 [![Version](https://vsmarketplacebadge.apphb.com/version-short/FelixAngelov.bloc.svg)](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
 [![Install](https://vsmarketplacebadge.apphb.com/installs-short/FelixAngelov.bloc.svg)](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
 [![Ratings](https://vsmarketplacebadge.apphb.com/rating-short/FelixAngelov.bloc.svg)](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
-[![Flutter.io](https://img.shields.io/badge/Flutter-Website-rgb(94%2C201%2C248).svg)](https://flutter.io/docs/development/data-and-backend/state-mgmt/options#bloc--rx)
-[![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-turquoise.svg?longCache=true)](https://github.com/Solido/awesome-flutter)
-[![Star on GitHub](https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=violet&label=Stars)](https://github.com/felangel/bloc)
-[![Gitter](https://img.shields.io/badge/gitter-chat-yellow.svg)](https://gitter.im/bloc_package/Lobby)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Flutter.io](https://img.shields.io/badge/Flutter-Website-deepskyblue.svg)](https://flutter.io/docs/development/data-and-backend/state-mgmt/options#bloc--rx)
+[![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true)](https://github.com/Solido/awesome-flutter#bloc)
+[![Flutter Samples](https://img.shields.io/badge/Flutter-Samples-teal.svg?longCache=true)](http://fluttersamples.com)
+[![Gitter](https://img.shields.io/badge/gitter-chat-hotpink.svg)](https://gitter.im/bloc_package/Lobby)
+[![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
@@ -22,8 +23,46 @@ Bloc extends [VSCode](https://code.visualstudio.com/) with support for the [Bloc
 
 Bloc can be installed from the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) or by [searching within VSCode](https://code.visualstudio.com/docs/editor/extension-gallery#_search-for-an-extension).
 
-## Usage
+## New Bloc Command Usage
 
-In a `.dart` file activate the snippet by typing `bloc` and hitting enter to select the bloc snippet. Then you can name you bloc class and fill in the signature and implementation details by tabbing
+The New Bloc Command allows you to create a Bloc and the Events/States so that all that's left to do is implement your logic in `mapEventToState`.
 
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/snippets-usage.gif)
+You can active the command by launching the command palette (View -> Command Palette) and running "Bloc: New Bloc".
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-1.gif)
+
+Or you can right click on the directory in which you'd like to create the bloc and select the "Bloc: New Bloc" command from the context menu.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-2.gif)
+
+## Snippets Usage
+
+### Bloc
+
+In a `.dart` file activate the snippet by typing `bloc` and hitting enter. Then you can name the bloc class and fill in the signature and implementation details by tabbing.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloc-snippet-usage.gif)
+
+### BlocBuilder
+
+In a `.dart` file activate the snippet by typing `blocbuilder` and hitting enter. Then you can fill in the implementation details by tabbing.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocbuilder-snippet-usage.gif)
+
+### BlocProvider
+
+In a `.dart` file activate the snippet by typing `blocprovider` and hitting enter. Then you can fill in the implementation details by tabbing.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovider-snippet-usage.gif)
+
+### BlocProviderTree
+
+In a `.dart` file activate the snippet by typing `blocprovidertree` and hitting enter. Then you can fill in the implementation details by tabbing.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovidertree-snippet-usage.gif)
+
+### BlocDelegate
+
+In a `.dart` file activate the snippet by typing `blocdelegate` and hitting enter. Then you can fill in the implementation details by tabbing.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocdelegate-snippet-usage.gif)

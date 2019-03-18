@@ -11,5 +11,5 @@ class BlocSupervisor {
     return _singleton;
   }
 
-  BlocSupervisor._internal() {}
+  BlocSupervisor._internal();
 }

@@ -40,8 +40,15 @@ abstract class Bloc<Event, State> {
   /// Takes an [Event] and triggers `mapEventToState`.
   /// `Dispatch` may be called from the presentation layer or from within the [Bloc].
   /// `Dispatch` notifies the [Bloc] of a new [Event].
+  /// If `dispose` has already been called, any subsequent calls to `dispatch` will
+  /// be delegated to the `onError` method which can be overriden at the [Bloc]
+  /// as well as the [BlocDelegate] level.
   void dispatch(Event event) {
-    _eventSubject.sink.add(event);
+    try {
+      _eventSubject.sink.add(event);
+    } catch (error) {
+      _handleError(error);
+    }
   }
 
   /// Closes the [Event] and [State] [Stream]s.
@@ -67,17 +74,14 @@ abstract class Bloc<Event, State> {
     transform(_eventSubject).asyncExpand((Event event) {
       currentEvent = event;
       return mapEventToState(
-        _stateSubject.value,
+        currentState,
         event,
-      ).handleError((Object error, StackTrace stacktrace) {
-        onError(error, stacktrace);
-        BlocSupervisor().delegate?.onError(error, stacktrace);
-      });
+      ).handleError(_handleError);
     }).forEach(
       (State nextState) {
         if (currentState == nextState) return;
         final transition = Transition(
-          currentState: _stateSubject.value,
+          currentState: currentState,
           event: currentEvent,
           nextState: nextState,
         );
@@ -86,5 +90,10 @@ abstract class Bloc<Event, State> {
         _stateSubject.add(nextState);
       },
     );
+  }
+
+  void _handleError(Object error, [StackTrace stacktrace]) {
+    onError(error, stacktrace);
+    BlocSupervisor().delegate?.onError(error, stacktrace);
   }
 }
