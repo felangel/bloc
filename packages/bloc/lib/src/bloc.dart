@@ -21,7 +21,7 @@ abstract class Bloc<Event, State> {
   State get currentState => _stateSubject.value;
 
   Bloc() {
-    _stateSubject = BehaviorSubject<State>(seedValue: initialState);
+    _stateSubject = BehaviorSubject<State>.seeded(initialState);
     _bindStateSubject();
   }
 
