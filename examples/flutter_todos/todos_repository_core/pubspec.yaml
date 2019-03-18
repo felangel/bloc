@@ -1,0 +1,11 @@
+name: todos_repository_core
+description: An app-agnostic data source that can be used by all implementations
+
+environment:
+  sdk: '>=2.0.0 <3.0.0'
+
+dependencies:
+  meta:
+
+dev_dependencies:
+  mockito: ^3.0.0
