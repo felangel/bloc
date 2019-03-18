@@ -9,24 +9,13 @@ dependencies:
   equatable: ^0.2.0
   flutter_bloc:
     path: ../../packages/flutter_bloc
+  todos_app_core:
+    path: ./todos_app_core
+  todos_repository_core:
+    path: ./todos_repository_core
+  todos_repository_simple:
+    path: ./todos_repository_simple
   flutter:
     sdk: flutter
-
-dependency_overrides:
-  todos_app_core:
-    git:
-      url: https://github.com/brianegan/flutter_architecture_samples
-      path: todos_app_core
-      ref: 0d047565ea5bf28c2b2cbdd7a7d9a9d14fff6945
-  todos_repository_core:
-    git:
-      url: https://github.com/brianegan/flutter_architecture_samples
-      path: todos_repository_core
-      ref: 0d047565ea5bf28c2b2cbdd7a7d9a9d14fff6945
-  todos_repository_simple:
-    git:
-      url: https://github.com/brianegan/flutter_architecture_samples
-      path: todos_repository_simple
-      ref: 0d047565ea5bf28c2b2cbdd7a7d9a9d14fff6945
 flutter:
   uses-material-design: true
