@@ -26,7 +26,7 @@ environment:
 dependencies:
   meta: ">=1.1.0 <2.0.0"
   equatable: ^0.2.0
-  flutter_bloc: ^0.7.0
+  flutter_bloc: ^0.8.0
   todos_app_core:
     path: ./todos_app_core
   todos_repository_core:
