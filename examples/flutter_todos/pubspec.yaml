@@ -8,14 +8,25 @@ dependencies:
   meta: ">=1.1.0 <2.0.0"
   equatable: ^0.2.0
   flutter_bloc:
-    path: ../../packages/flutter_bloc
-  todos_app_core:
-    path: ./todos_app_core
-  todos_repository_core:
-    path: ./todos_repository_core
-  todos_repository_simple:
-    path: ./todos_repository_simple
+    path: ../../packages/flutter_bloc  
   flutter:
     sdk: flutter
+
+dependency_overrides:
+  todos_app_core:
+    git:
+      url: https://github.com/felangel/flutter_architecture_samples
+      path: todos_app_core
+      ref: expose-repositories
+  todos_repository_core:
+    git:
+      url: https://github.com/felangel/flutter_architecture_samples
+      path: todos_repository_core
+      ref: expose-repositories
+  todos_repository_simple:
+    git:
+      url: https://github.com/felangel/flutter_architecture_samples
+      path: todos_repository_simple
+      ref: expose-repositories
 flutter:
   uses-material-design: true
