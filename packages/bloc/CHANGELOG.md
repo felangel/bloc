@@ -1,6 +1,6 @@
 # 0.10.0
 
-Updated to `RxDart ^0.21.0` and Documentation Updates
+Updated to `rxdart ^0.21.0` and Documentation Updates
 
 # 0.9.5
 
@@ -8,7 +8,7 @@ Minor Enhancements to Code Style and Documentation.
 
 # 0.9.4
 
-Calls to `dispatch` after after `dispose` has been called trigger `onError` in the `Bloc` and `BlocDelegate`.
+Calls to `dispatch` after `dispose` has been called trigger `onError` in the `Bloc` and `BlocDelegate`.
 
 # 0.9.3
 
