@@ -1,3 +1,7 @@
+# 0.10.0
+
+Updated to `RxDart ^0.21.0` and Documentation Updates
+
 # 0.9.5
 
 Minor Enhancements to Code Style and Documentation.
