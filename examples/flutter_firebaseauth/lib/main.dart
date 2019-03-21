@@ -35,10 +35,11 @@ class _AppState extends State<App> {
 
   @override
   void initState() {
-    _firebaseAuthService = FirebaseAuthService();
-    _authenticationBloc = AuthenticationBloc(firebaseAuthService:_firebaseAuthService);
-    _authenticationBloc.dispatch(AppStarted());
     super.initState();
+    _firebaseAuthService = FirebaseAuthService();
+    _authenticationBloc =
+        AuthenticationBloc(firebaseAuthService: _firebaseAuthService);
+    _authenticationBloc.dispatch(AppStarted());
   }
 
   @override
@@ -59,11 +60,8 @@ class _AppState extends State<App> {
         home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
           bloc: _authenticationBloc,
           builder: (BuildContext context, AuthenticationState state) {
-            if (state is AuthenticationUninitialized) {
-              return LoadingIndicator();
-            }
             if (state is AuthenticationAuthenticated) {
-              return HomePage(userState: state);
+              return HomePage(currentUser: state.user);
             }
             if (state is AuthenticationUnauthenticated) {
               return LoginPage();
@@ -80,7 +78,9 @@ class _AppState extends State<App> {
 
 class LoadingIndicator extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => Center(
-        child: CircularProgressIndicator(),
-      );
+  Widget build(BuildContext context) {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
 }

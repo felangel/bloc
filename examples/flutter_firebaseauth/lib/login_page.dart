@@ -27,8 +27,7 @@ class LoginPage extends StatelessWidget {
             onPressed: () async {
               final AuthenticationBloc authenticationBloc =
                   BlocProvider.of<AuthenticationBloc>(context);
-              authenticationBloc.dispatch(LogIn());
-              print("SignIn pressed");
+              authenticationBloc.dispatch(Login());
             }),
       ),
     );

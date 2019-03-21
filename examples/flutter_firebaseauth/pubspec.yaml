@@ -10,7 +10,8 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^0.1.2
-  flutter_bloc: any
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
   equatable: ^0.2.0
 
   google_sign_in: ^4.0.1+1
@@ -22,5 +23,4 @@ dev_dependencies:
   mockito: ^4.0.0
 
 flutter:
-
   uses-material-design: true

@@ -9,12 +9,12 @@ class AppStarted extends AuthenticationEvent {
   String toString() => 'AppStarted';
 }
 
-class LogIn extends AuthenticationEvent {
+class Login extends AuthenticationEvent {
   @override
   String toString() => 'LoggedIn';
 }
 
-class LogOut extends AuthenticationEvent {
+class Logout extends AuthenticationEvent {
   @override
   String toString() => 'LoggedOut';
 }

@@ -21,7 +21,7 @@ void main() {
   });
 
   test('initial state is correct', () {
-    expect(authenticationBloc.initialState, AuthenticationUninitialized());
+    expect(authenticationBloc.initialState, AuthenticationLoading());
   });
 
   test('dispose does not emit new states', () {
@@ -34,10 +34,10 @@ void main() {
 
   group('AppStarted', () {
     test(
-        'emits [uninitialized, unauthenticated] when user is not signed in initially',
+        'emits [loading, unauthenticated] when user is not signed in initially',
         () {
       final expectedResponse = [
-        AuthenticationUninitialized(),
+        AuthenticationLoading(),
         AuthenticationUnauthenticated(),
       ];
 
@@ -52,12 +52,10 @@ void main() {
       authenticationBloc.dispatch(AppStarted());
     });
 
-    test(
-        'emits [uninitialized, authenticated] when user is signed in initially',
-        () {
+    test('emits [loading, authenticated] when user is signed in initially', () {
       final expectedResponse = [
-        AuthenticationUninitialized(),
-        AuthenticationAuthenticated(),
+        AuthenticationLoading(),
+        AuthenticationAuthenticated(user: mockFirebaseUser),
       ];
 
       when(mockFirebaseAuthService.getInitialSignInState())
@@ -73,35 +71,31 @@ void main() {
   });
 
   group('LogIn', () {
-    test(
-        'emits [uninitialized, loading, unauthenticated] when login is pressed and failed',
+    test('emits [loading, unauthenticated] when login is pressed and failed',
         () {
       final expectedResponse = [
-        AuthenticationUninitialized(),
         AuthenticationLoading(),
         AuthenticationUnauthenticated(),
       ];
 
-      when(mockFirebaseAuthService.sigInWithGoogle()).thenAnswer((_) => null);
+      when(mockFirebaseAuthService.signInWithGoogle()).thenAnswer((_) => null);
 
       expectLater(
         authenticationBloc.state,
         emitsInOrder(expectedResponse),
       );
 
-      authenticationBloc.dispatch(LogIn());
+      authenticationBloc.dispatch(Login());
     });
 
-    test(
-        'emits [uninitialized, loading, authenticated] when login is pressed and successful',
+    test('emits [loading, authenticated] when login is pressed and successful',
         () {
       final expectedResponse = [
-        AuthenticationUninitialized(),
         AuthenticationLoading(),
-        AuthenticationAuthenticated(),
+        AuthenticationAuthenticated(user: mockFirebaseUser),
       ];
 
-      when(mockFirebaseAuthService.sigInWithGoogle())
+      when(mockFirebaseAuthService.signInWithGoogle())
           .thenAnswer((_) => Future<MockFirebaseUser>.value(mockFirebaseUser));
 
       expectLater(
@@ -109,15 +103,13 @@ void main() {
         emitsInOrder(expectedResponse),
       );
 
-      authenticationBloc.dispatch(LogIn());
+      authenticationBloc.dispatch(Login());
     });
   });
 
   group('LogOut', () {
-    test('emits [uninitialized, loading, unauthenticated] when user signout',
-        () {
+    test('emits [loading, unauthenticated] when user signout', () {
       final expectedResponse = [
-        AuthenticationUninitialized(),
         AuthenticationLoading(),
         AuthenticationUnauthenticated(),
       ];
@@ -127,7 +119,7 @@ void main() {
         emitsInOrder(expectedResponse),
       );
 
-      authenticationBloc.dispatch(LogOut());
+      authenticationBloc.dispatch(Logout());
     });
   });
 }
