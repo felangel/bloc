@@ -1,0 +1,1 @@
+enum HomeTab { chat, profile }
