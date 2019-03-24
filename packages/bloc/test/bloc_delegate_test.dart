@@ -8,6 +8,10 @@ class MockBlocDelegate extends Mock implements BlocDelegate {}
 
 void main() {
   group('onTransition', () {
+    test('returns null on base delegate', () {
+      BlocDelegate().onTransition(null);
+    });
+
     test('is called when delegate is provided', () {
       final delegate = MockBlocDelegate();
       final complexBloc = ComplexBloc();
@@ -115,6 +119,10 @@ void main() {
   });
 
   group('onError', () {
+    test('returns null on base delegate', () {
+      BlocDelegate().onError(null, null);
+    });
+
     test('is called on bloc exception', () {
       bool errorHandled = false;
 

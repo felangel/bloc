@@ -40,7 +40,7 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **initialState** is the state before any events have been processed (before `mapEventToState` has ever been called). `initialState` **must be implemented**.
 
-**mapEventToState** is a method that **must be implemented** when a class extends `Bloc`. The function takes two arguments: state and event. `mapEventToState` is called whenever an event is `dispatched` by the presentation layer. `mapEventToState` must convert that event, along with the current state, into a new state and return the new state in the form of a `Stream` which is consumed by the presentation layer.
+**mapEventToState** is a method that **must be implemented** when a class extends `Bloc`. The function takes the incoming event as an argument. `mapEventToState` is called whenever an event is `dispatched` by the presentation layer. `mapEventToState` must convert that event into a new state and return the new state in the form of a `Stream` which is consumed by the presentation layer.
 
 **dispatch** is a method that takes an `event` and triggers `mapEventToState`. `dispatch` may be called from the presentation layer or from within the Bloc (see examples) and notifies the Bloc of a new `event`.
 
@@ -66,7 +66,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   int get initialState => 0;
 
   @override
-  Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
+  Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
         yield currentState - 1;

@@ -1,3 +1,10 @@
+# 0.11.0
+
+Update `mapEventToState` to remove unnecessary argument for `currentState`
+- `Stream<S> mapEventToState(S currentState, E event)` -> `Stream<S> mapEventToState(E event)`
+- Documentation Updates
+- Example Updates
+
 # 0.10.0
 
 Updated to `rxdart ^0.21.0` and Documentation Updates

@@ -9,10 +9,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   AsyncState get initialState => AsyncState.initial();
 
   @override
-  Stream<AsyncState> mapEventToState(
-    AsyncState currentState,
-    AsyncEvent event,
-  ) async* {
+  Stream<AsyncState> mapEventToState(AsyncEvent event) async* {
     yield currentState.copyWith(isLoading: true);
     await Future<void>.delayed(Duration(milliseconds: 500));
     yield currentState.copyWith(isLoading: false, isSuccess: true);
