@@ -27,8 +27,8 @@ environment:
 
 dependencies:
   flutter:
-    sdk: flutter  
-  flutter_bloc: ^0.8.0
+    sdk: flutter
+  flutter_bloc: ^0.9.0
   http: ^0.12.0
   equatable: ^0.2.0
 
@@ -55,6 +55,7 @@ flutter packages get
 For this application we'll be hitting the [metaweather API](https://www.metaweather.com).
 
 We'll be focusing on two endpoints:
+
 - `/api/location/search/?query=$city` to get a locationId for a given city name
 - `/api/location/$locationId` to get the weather for a given locationId
 
@@ -375,6 +376,7 @@ Next, we need to build our `WeatherApiClient` which will be responsible for maki
 > The `WeatherApiClient` is the lowest layer in our application architecture (the data provider). It's only responsibility is to fetch data directly from our API.
 
 As we mentioned earlier, we are going to be hitting two endpoints so our `WeatherApiClient` needs to expose two public methods:
+
 - `getLocationId(String city)`
 - `fetchWeather(int locationId)`
 
@@ -390,7 +392,7 @@ import 'package:flutter_weather/models/models.dart';
 
 class WeatherApiClient {
   static const baseUrl = 'https://www.metaweather.com';
-  final http.Client httpClient;  
+  final http.Client httpClient;
 
   WeatherApiClient({@required this.httpClient}) : assert(httpClient != null);
 
@@ -484,6 +486,7 @@ Whenever a user inputs a city, we will `dispatch` a `FetchWeather` event with th
 ### Weather State
 
 For the current application, we will have 4 possible states:
+
 - `WeatherEmpty` - our initial state which will have no weather data because the user has not yet selected a city
 - `WeatherLoading` - a state which will occur while we are fetching the weather for a given city
 - `WeatherLoaded` - a state which will occur if we were able to successfully fetch weather for a given city.
@@ -541,10 +544,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   WeatherState get initialState => WeatherEmpty();
 
   @override
-  Stream<WeatherState> mapEventToState(
-    WeatherState currentState,
-    WeatherEvent event,
-  ) async* {
+  Stream<WeatherState> mapEventToState(WeatherEvent event) async* {
     if (event is FetchWeather) {
       yield WeatherLoading();
       try {
@@ -587,7 +587,7 @@ Next, we're going to set our delegate in our `main` function like so:
 
 ```dart
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();  
+  BlocSupervisor().delegate = SimpleBlocDelegate();
 }
 ```
 
@@ -743,7 +743,7 @@ class _WeatherState extends State<Weather> {
 }
 ```
 
-All that's happening in this widget is we're using `BlocBuilder` with our `WeatherBloc` in order to rebuild our UI based on state changes in our `WeatherBloc`. 
+All that's happening in this widget is we're using `BlocBuilder` with our `WeatherBloc` in order to rebuild our UI based on state changes in our `WeatherBloc`.
 
 You'll notice that we are referencing a `Location`, `LastUpdated`, and `CombinedWeatherTemperature` widget which we will create in the following sections.
 
@@ -888,7 +888,7 @@ class WeatherConditions extends StatelessWidget {
         super(key: key);
 
   @override
-  Widget build(BuildContext context) => _mapConditionToImage(condition);    
+  Widget build(BuildContext context) => _mapConditionToImage(condition);
 
   Image _mapConditionToImage(WeatherCondition condition) {
     Image image;
@@ -1038,7 +1038,7 @@ class _CitySelectionState extends State<CitySelection> {
 }
 ```
 
-It needs to be a `StatefulWidget` because it has to maintain a `TextController`. 
+It needs to be a `StatefulWidget` because it has to maintain a `TextController`.
 
 ?> **Note:** When we press the search button we use `Navigator.pop` and pass the current text from our `TextController` back to the previous view.
 
@@ -1077,10 +1077,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   WeatherState get initialState => WeatherEmpty();
 
   @override
-  Stream<WeatherState> mapEventToState(
-    WeatherState currentState,
-    WeatherEvent event,
-  ) async* {
+  Stream<WeatherState> mapEventToState(WeatherEvent event) async* {
     if (event is FetchWeather) {
       yield WeatherLoading();
       try {
@@ -1143,7 +1140,7 @@ class _WeatherState extends State<Weather> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Weather'),
-        actions: <Widget>[          
+        actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () async {
@@ -1171,7 +1168,7 @@ class _WeatherState extends State<Weather> {
               return Center(child: CircularProgressIndicator());
             }
             if (state is WeatherLoaded) {
-              final weather = state.weather;              
+              final weather = state.weather;
 
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
@@ -1277,10 +1274,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
       );
 
   @override
-  Stream<ThemeState> mapEventToState(
-    ThemeState currentState,
-    ThemeEvent event,
-  ) async* {
+  Stream<ThemeState> mapEventToState(ThemeEvent event) async* {
     if (event is WeatherChanged) {
       yield _mapWeatherConditionToThemeData(event.condition);
     }
@@ -1365,7 +1359,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  ThemeBloc _themeBloc = ThemeBloc();  
+  ThemeBloc _themeBloc = ThemeBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -1388,7 +1382,7 @@ class _AppState extends State<App> {
 
   @override
   void dispose() {
-    _themeBloc.dispose();    
+    _themeBloc.dispose();
     super.dispose();
   }
 }
@@ -1611,10 +1605,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       SettingsState(temperatureUnits: TemperatureUnits.celsius);
 
   @override
-  Stream<SettingsState> mapEventToState(
-    SettingsState currentState,
-    SettingsEvent event,
-  ) async* {
+  Stream<SettingsState> mapEventToState(SettingsEvent event) async* {
     if (event is TemperatureUnitsToggled) {
       yield SettingsState(
         temperatureUnits:

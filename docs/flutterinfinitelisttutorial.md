@@ -28,7 +28,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.8.0
+  flutter_bloc: ^0.9.0
   http: ^0.12.0
   equatable: ^0.2.0
 
@@ -217,10 +217,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   PostState get initialState => null;
 
   @override
-  Stream<PostState> mapEventToState(
-    PostState currentState,
-    PostEvent event,
-  ) async* {
+  Stream<PostState> mapEventToState(PostEvent event) async* {
     // TODO: implement mapEventToState
     yield null;
   }
@@ -240,19 +237,23 @@ Next, we need to implement `mapEventToState` which will be fired every time a `P
 
 ```dart
 @override
-Stream<PostState> mapEventToState(currentState, event) async* {
+Stream<PostState> mapEventToState(PostEvent event) async* {
   if (event is Fetch && !_hasReachedMax(currentState)) {
     try {
       if (currentState is PostUninitialized) {
         final posts = await _fetchPosts(0, 20);
         yield PostLoaded(posts: posts, hasReachedMax: false);
+        return;
       }
       if (currentState is PostLoaded) {
-        final posts = await _fetchPosts(currentState.posts.length, 20);
+        final posts =
+            await _fetchPosts((currentState as PostLoaded).posts.length, 20);
         yield posts.isEmpty
-            ? currentState.copyWith(hasReachedMax: true)
+            ? (currentState as PostLoaded).copyWith(hasReachedMax: true)
             : PostLoaded(
-                posts: currentState.posts + posts, hasReachedMax: false);
+                posts: (currentState as PostLoaded).posts + posts,
+                hasReachedMax: false,
+              );
       }
     } catch (_) {
       yield PostError();
@@ -331,7 +332,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   get initialState => PostUninitialized();
 
   @override
-  Stream<PostState> mapEventToState(currentState, event) async* {
+  Stream<PostState> mapEventToState(event) async* {
     if (event is Fetch && !_hasReachedMax(currentState)) {
       try {
         if (currentState is PostUninitialized) {

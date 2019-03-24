@@ -361,7 +361,6 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
 
   @override
   Stream<GithubSearchState> mapEventToState(
-    GithubSearchState currentState,
     GithubSearchEvent event,
   ) async* {
     if (event is TextChanged) {
@@ -421,7 +420,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.8.0
+  flutter_bloc: ^0.9.0
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search

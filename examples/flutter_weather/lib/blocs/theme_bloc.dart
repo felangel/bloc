@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:meta/meta.dart';
@@ -36,10 +38,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
       );
 
   @override
-  Stream<ThemeState> mapEventToState(
-    ThemeState currentState,
-    ThemeEvent event,
-  ) async* {
+  Stream<ThemeState> mapEventToState(ThemeEvent event) async* {
     if (event is WeatherChanged) {
       yield _mapWeatherConditionToThemeData(event.condition);
     }

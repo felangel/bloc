@@ -7,10 +7,7 @@ class TabBloc extends Bloc<TabEvent, HomeTab> {
   HomeTab get initialState => HomeTab.chat;
 
   @override
-  Stream<HomeTab> mapEventToState(
-    HomeTab currentState,
-    TabEvent event,
-  ) async* {
+  Stream<HomeTab> mapEventToState(TabEvent event) async* {
     if (event is UpdateTab) {
       yield event.activeTab;
     }

@@ -27,7 +27,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.8.0
+  flutter_bloc: ^0.9.0
   meta: ^1.1.6
 
 dev_dependencies:
@@ -64,7 +64,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   int get initialState => 0;
 
   @override
-  Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
+  Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
         yield currentState - 1;

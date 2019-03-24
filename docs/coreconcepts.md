@@ -132,11 +132,11 @@ In this case, we want our counter to start at `0`.
 int get initialState => 0;
 ```
 
-> Every Bloc must implement a function called `mapEventToState`. The function takes two arguments: `currentState` and `event` and must return a `Stream` of new `states` which is consumed by the presentation layer.
+> Every Bloc must implement a function called `mapEventToState`. The function takes the incoming `event` as an argument and must return a `Stream` of new `states` which is consumed by the presentation layer.
 
 ```dart
 @override
-Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
+Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
         yield currentState - 1;
@@ -160,7 +160,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   int get initialState => 0;
 
   @override
-  Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
+  Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
         yield currentState - 1;
@@ -228,8 +228,8 @@ Now that we've overridden `onTransition` we can do whatever we'd like whenever a
 
 Just like we can handle `Transitions` at the bloc level, we can also handle `Exceptions`.
 
-> `onError` is a method that can be overriden to handle every local Bloc `Exception`. By default all exceptions will be ignored and `Bloc` functionality will be unaffected. 
- 
+> `onError` is a method that can be overriden to handle every local Bloc `Exception`. By default all exceptions will be ignored and `Bloc` functionality will be unaffected.
+
 ?> **Note**: The stacktrace argument may be `null` if the state stream received an error without a `StackTrace`.
 
 ?> **Tip**: `onError` is a great place to add bloc-specific error handling.

@@ -14,22 +14,19 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   TodosState get initialState => TodosLoading();
 
   @override
-  Stream<TodosState> mapEventToState(
-    TodosState currentState,
-    TodosEvent event,
-  ) async* {
+  Stream<TodosState> mapEventToState(TodosEvent event) async* {
     if (event is LoadTodos) {
       yield* _mapLoadTodosToState();
     } else if (event is AddTodo) {
-      yield* _mapAddTodoToState(currentState, event);
+      yield* _mapAddTodoToState(event);
     } else if (event is UpdateTodo) {
-      yield* _mapUpdateTodoToState(currentState, event);
+      yield* _mapUpdateTodoToState(event);
     } else if (event is DeleteTodo) {
-      yield* _mapDeleteTodoToState(currentState, event);
+      yield* _mapDeleteTodoToState(event);
     } else if (event is ToggleAll) {
-      yield* _mapToggleAllToState(currentState);
+      yield* _mapToggleAllToState();
     } else if (event is ClearCompleted) {
-      yield* _mapClearCompletedToState(currentState);
+      yield* _mapClearCompletedToState();
     }
   }
 
@@ -44,24 +41,19 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapAddTodoToState(
-    TodosState currentState,
-    AddTodo event,
-  ) async* {
+  Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
     if (currentState is TodosLoaded) {
-      final List<Todo> updatedTodos = List.from(currentState.todos)
-        ..add(event.todo);
+      final List<Todo> updatedTodos =
+          List.from((currentState as TodosLoaded).todos)..add(event.todo);
       yield TodosLoaded(updatedTodos);
       _saveTodos(updatedTodos);
     }
   }
 
-  Stream<TodosState> _mapUpdateTodoToState(
-    TodosState currentState,
-    UpdateTodo event,
-  ) async* {
+  Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
     if (currentState is TodosLoaded) {
-      final List<Todo> updatedTodos = currentState.todos.map((todo) {
+      final List<Todo> updatedTodos =
+          (currentState as TodosLoaded).todos.map((todo) {
         return todo.id == event.updatedTodo.id ? event.updatedTodo : todo;
       }).toList();
       yield TodosLoaded(updatedTodos);
@@ -69,22 +61,23 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapDeleteTodoToState(
-    TodosState currentState,
-    DeleteTodo event,
-  ) async* {
+  Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
     if (currentState is TodosLoaded) {
-      final updatedTodos =
-          currentState.todos.where((todo) => todo.id != event.todo.id).toList();
+      final updatedTodos = (currentState as TodosLoaded)
+          .todos
+          .where((todo) => todo.id != event.todo.id)
+          .toList();
       yield TodosLoaded(updatedTodos);
       _saveTodos(updatedTodos);
     }
   }
 
-  Stream<TodosState> _mapToggleAllToState(TodosState currentState) async* {
+  Stream<TodosState> _mapToggleAllToState() async* {
     if (currentState is TodosLoaded) {
-      final allComplete = currentState.todos.every((todo) => todo.complete);
-      final List<Todo> updatedTodos = currentState.todos
+      final allComplete =
+          (currentState as TodosLoaded).todos.every((todo) => todo.complete);
+      final List<Todo> updatedTodos = (currentState as TodosLoaded)
+          .todos
           .map((todo) => todo.copyWith(complete: !allComplete))
           .toList();
       yield TodosLoaded(updatedTodos);
@@ -92,10 +85,12 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapClearCompletedToState(TodosState currentState) async* {
+  Stream<TodosState> _mapClearCompletedToState() async* {
     if (currentState is TodosLoaded) {
-      final List<Todo> updatedTodos =
-          currentState.todos.where((todo) => !todo.complete).toList();
+      final List<Todo> updatedTodos = (currentState as TodosLoaded)
+          .todos
+          .where((todo) => !todo.complete)
+          .toList();
       yield TodosLoaded(updatedTodos);
       _saveTodos(updatedTodos);
     }
