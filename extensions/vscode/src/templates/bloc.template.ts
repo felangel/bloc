@@ -14,7 +14,6 @@ class ${pascalCaseBlocName}Bloc extends Bloc<${blocEvent}, ${blocState}> {
 
   @override
   Stream<${blocState}> mapEventToState(
-    ${blocState} currentState,
     ${blocEvent} event,
   ) async* {
     // TODO: Add Logic
