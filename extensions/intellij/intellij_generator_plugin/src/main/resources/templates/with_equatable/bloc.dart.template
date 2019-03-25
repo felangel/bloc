@@ -8,7 +8,6 @@ class ${bloc_camel_case}Bloc extends Bloc<${bloc_camel_case}Event, ${bloc_camel_
 
   @override
   Stream<${bloc_camel_case}State> mapEventToState(
-    ${bloc_camel_case}State currentState,
     ${bloc_camel_case}Event event,
   ) async* {
     // TODO: Add Logic
