@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.bloc'
-version '1.0'
+version '1.1'
 
 sourceCompatibility = 1.8
 
@@ -30,5 +30,6 @@ intellij {
 patchPluginXml {
     changeNotes """
       * v1.0 - Initial release
+      * v1.1 - Removed currentState from mapEventToState method
       """
 }
