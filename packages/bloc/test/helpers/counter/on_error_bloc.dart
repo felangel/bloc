@@ -19,7 +19,7 @@ class OnErrorBloc extends Bloc<CounterEvent, int> {
   }
 
   @override
-  Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
+  Stream<int> mapEventToState(CounterEvent event) async* {
     throw exception;
   }
 }

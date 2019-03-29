@@ -22,6 +22,7 @@
 - Tools
 
   - Extensions
+    - [IntelliJ](blocintellijextension.md)
     - [VSCode](blocvscodeextension.md)
 
 - API Reference

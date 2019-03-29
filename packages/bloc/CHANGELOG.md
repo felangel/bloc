@@ -1,10 +1,21 @@
+# 0.11.0
+
+Update `mapEventToState` to remove unnecessary argument for `currentState`
+- `Stream<S> mapEventToState(S currentState, E event)` -> `Stream<S> mapEventToState(E event)`
+- Documentation Updates
+- Example Updates
+
+# 0.10.0
+
+Updated to `rxdart ^0.21.0` and Documentation Updates
+
 # 0.9.5
 
 Minor Enhancements to Code Style and Documentation.
 
 # 0.9.4
 
-Calls to `dispatch` after after `dispose` has been called trigger `onError` in the `Bloc` and `BlocDelegate`.
+Calls to `dispatch` after `dispose` has been called trigger `onError` in the `Bloc` and `BlocDelegate`.
 
 # 0.9.3
 

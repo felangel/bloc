@@ -69,7 +69,7 @@ Think of the bloc layer as the bridge between the user interface (presentation l
 class BusinessLogicComponent extends Bloc {
     final Repository repository;
 
-    Stream mapEventToState(currentState, event) async* {
+    Stream mapEventToState(event) async* {
         if (event is AppStarted) {
             yield await repository.getAllDataThatMeetsRequirements();
         }

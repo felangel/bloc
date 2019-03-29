@@ -28,7 +28,7 @@ environment:
 dependencies:
   angular: ^5.0.0
   angular_components: ^0.9.0
-  angular_bloc: ^0.4.0
+  angular_bloc: ^0.5.0
 
 dev_dependencies:
   angular_test: ^2.0.0
@@ -64,7 +64,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   int get initialState => 0;
 
   @override
-  Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
+  Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
         yield currentState - 1;

@@ -136,7 +136,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   int get initialState => 0;
 
   @override
-  Stream<int> mapEventToState(int currentState, CounterEvent event) async* {
+  Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
         yield currentState - 1;
@@ -155,10 +155,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
   ThemeData get initialState => ThemeData.light();
 
   @override
-  Stream<ThemeData> mapEventToState(
-    ThemeData currentState,
-    ThemeEvent event,
-  ) async* {
+  Stream<ThemeData> mapEventToState(ThemeEvent event) async* {
     switch (event) {
       case ThemeEvent.toggle:
         yield currentState == ThemeData.dark()

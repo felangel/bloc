@@ -1,3 +1,7 @@
+# 0.4.0
+
+Support for `bloc v0.11.0`
+
 # 0.3.2
 
 Added `@immutable` decorator to bloc events and states

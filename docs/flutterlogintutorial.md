@@ -27,8 +27,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^0.9.0
-  flutter_bloc: ^0.7.0
+  flutter_bloc: ^0.9.0
   meta: ^1.1.6
   equatable: ^0.2.0
 
@@ -206,7 +205,6 @@ Now all that's left is to implement `mapEventToState`.
 ```dart
 @override
 Stream<AuthenticationState> mapEventToState(
-  AuthenticationState currentState,
   AuthenticationEvent event,
 ) async* {
   if (event is AppStarted) {
@@ -256,7 +254,6 @@ class AuthenticationBloc
 
   @override
   Stream<AuthenticationState> mapEventToState(
-    AuthenticationState currentState,
     AuthenticationEvent event,
   ) async* {
     if (event is AppStarted) {
@@ -442,10 +439,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginState get initialState => LoginInitial();
 
   @override
-  Stream<LoginState> mapEventToState(
-    LoginState currentState,
-    LoginEvent event,
-  ) async* {
+  Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is LoginButtonPressed) {
       yield LoginLoading();
 

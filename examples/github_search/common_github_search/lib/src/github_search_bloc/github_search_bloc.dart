@@ -27,10 +27,7 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   GithubSearchState get initialState => SearchStateEmpty();
 
   @override
-  Stream<GithubSearchState> mapEventToState(
-    GithubSearchState currentState,
-    GithubSearchEvent event,
-  ) async* {
+  Stream<GithubSearchState> mapEventToState(GithubSearchEvent event) async* {
     if (event is TextChanged) {
       final String searchTerm = event.text;
       if (searchTerm.isEmpty) {

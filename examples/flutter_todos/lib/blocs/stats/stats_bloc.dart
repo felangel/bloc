@@ -19,10 +19,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   StatsState get initialState => StatsLoading();
 
   @override
-  Stream<StatsState> mapEventToState(
-    StatsState currentState,
-    StatsEvent event,
-  ) async* {
+  Stream<StatsState> mapEventToState(StatsEvent event) async* {
     if (event is UpdateStats) {
       int numActive =
           event.todos.where((todo) => !todo.complete).toList().length;

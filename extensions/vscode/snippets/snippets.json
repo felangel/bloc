@@ -9,7 +9,6 @@
       "\t${3:MyState} get initialState => ${4:// TODO: implement initialState};\n",
       "\t@override",
       "\tStream<${3:MyState}> mapEventToState(",
-      "\t\t${3:MyState} currentState,",
       "\t\t${2:MyEvent} event,",
       "\t) async* {",
       "\t\t${5:// TODO: implement mapEventToState}",

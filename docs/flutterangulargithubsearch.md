@@ -38,7 +38,7 @@ environment:
 
 dependencies:
   meta: ^1.1.7
-  bloc: ^0.9.0
+  bloc: ^0.11.0
   equatable: ^0.2.0
   http: ^0.12.0
 ```
@@ -361,7 +361,6 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
 
   @override
   Stream<GithubSearchState> mapEventToState(
-    GithubSearchState currentState,
     GithubSearchEvent event,
   ) async* {
     if (event is TextChanged) {
@@ -421,7 +420,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.7.0
+  flutter_bloc: ^0.9.0
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search
@@ -890,7 +889,7 @@ environment:
 dependencies:
   angular: ^5.0.0
   angular_components: ^0.9.0
-  angular_bloc: ^0.4.0
+  angular_bloc: ^0.5.0
   common_github_search:
     path: ../common_github_search
 

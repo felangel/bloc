@@ -14,10 +14,7 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
   }
 
   @override
-  Stream<ComplexState> mapEventToState(
-    ComplexState currentState,
-    ComplexEvent event,
-  ) {
+  Stream<ComplexState> mapEventToState(ComplexEvent event) {
     if (event is ComplexEventA) {
       return Observable.just(ComplexStateA());
     }

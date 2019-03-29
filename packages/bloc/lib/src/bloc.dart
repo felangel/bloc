@@ -62,21 +62,18 @@ abstract class Bloc<Event, State> {
   Stream<Event> transform(Stream<Event> events) => events;
 
   /// Must be implemented when a class extends [Bloc].
-  /// Takes the current `state` and incoming `event` as arguments.
+  /// Takes the incoming `event` as the argument.
   /// `mapEventToState` is called whenever an [Event] is `dispatched` by the presentation layer.
-  /// `mapEventToState` must convert that [Event], along with the current [State], into a new [State]
+  /// `mapEventToState` must convert that [Event] into a new [State]
   /// and return the new [State] in the form of a [Stream] which is consumed by the presentation layer.
-  Stream<State> mapEventToState(State currentState, Event event);
+  Stream<State> mapEventToState(Event event);
 
   void _bindStateSubject() {
     Event currentEvent;
 
     transform(_eventSubject).asyncExpand((Event event) {
       currentEvent = event;
-      return mapEventToState(
-        currentState,
-        event,
-      ).handleError(_handleError);
+      return mapEventToState(currentEvent).handleError(_handleError);
     }).forEach(
       (State nextState) {
         if (currentState == nextState) return;

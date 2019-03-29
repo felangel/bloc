@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -22,10 +24,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       SettingsState(temperatureUnits: TemperatureUnits.celsius);
 
   @override
-  Stream<SettingsState> mapEventToState(
-    SettingsState currentState,
-    SettingsEvent event,
-  ) async* {
+  Stream<SettingsState> mapEventToState(SettingsEvent event) async* {
     if (event is TemperatureUnitsToggled) {
       yield SettingsState(
         temperatureUnits:
