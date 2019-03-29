@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// Takes a [Stream] of [Event]s as input
@@ -52,6 +53,7 @@ abstract class Bloc<Event, State> {
   }
 
   /// Closes the [Event] and [State] [Stream]s.
+  @mustCallSuper
   void dispose() {
     _eventSubject.close();
     _stateSubject.close();
