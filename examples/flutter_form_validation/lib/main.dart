@@ -134,7 +134,6 @@ class SuccessDialog extends StatelessWidget {
             ],
           ),
           RaisedButton(
-            key: Key('profileForm_backToLogin_raisedButton'),
             child: Text('OK'),
             onPressed: onDismissed,
           ),
