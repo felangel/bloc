@@ -1,3 +1,10 @@
+# 0.4.1
+
+Added Snippets for:
+
+- `BlocEvent`
+- `BlocState`
+
 # 0.4.0
 
 Support for `bloc v0.11.0`

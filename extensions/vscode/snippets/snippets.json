@@ -3,10 +3,12 @@
     "scope": "dart",
     "prefix": "bloc",
     "body": [
-      "import 'package:bloc/bloc.dart';\n",
+      "import 'package:bloc/bloc.dart';",
+      "",
       "class ${1:MyBloc} extends Bloc<${2:MyEvent}, ${3:MyState}> {",
       "\t@override",
-      "\t${3:MyState} get initialState => ${4:// TODO: implement initialState};\n",
+      "\t${3:MyState} get initialState => ${4:// TODO: implement initialState};",
+      "",
       "\t@override",
       "\tStream<${3:MyState}> mapEventToState(",
       "\t\t${2:MyEvent} event,",
@@ -25,7 +27,7 @@
       "\tbuilder: (BuildContext context, ${2:MyState} state) {",
       "\t\treturn ${3:Container();}",
       "\t},",
-      ");"
+      ")"
     ]
   },
   "blocprovider": {
@@ -35,7 +37,7 @@
       "BlocProvider(",
       "\tbloc: ${1:MyBloc},",
       "\tchild: ${2:Container()},",
-      ");"
+      ")"
     ]
   },
   "blocprovidertree": {
@@ -48,19 +50,21 @@
       "\t\tBlocProvider<${4:MyOtherBloc}>(bloc: ${5:_myOtherBloc}),",
       "\t],",
       "\tchild: ${6:Container()},",
-      ");"
+      ")"
     ]
   },
   "blocdelegate": {
     "scope": "dart",
     "prefix": "blocdelegate",
     "body": [
-      "import 'package:bloc/bloc.dart';\n",
+      "import 'package:bloc/bloc.dart';",
+      "",
       "class ${1:MyBlocDelegate} extends BlocDelegate {",
       "\t@override",
       "\tvoid onError(Object error, StackTrace stacktrace) {",
       "\t\t${2:// TODO: implement onError}",
-      "\t}\n",
+      "\t}",
+      "",
       "\t@override",
       "\tvoid onTransition(Transition transition) {",
       "\t\t${3:// TODO: implement onTransition}",
@@ -68,7 +72,7 @@
       "}"
     ]
   },
-  "Bloc State": {
+  "blocstate": {
     "scope": "dart",
     "prefix": "blocstate",
     "body": [
@@ -81,7 +85,7 @@
       "}"
     ]
   },
-  "Bloc Event": {
+  "blocevent": {
     "scope": "dart",
     "prefix": "blocevent",
     "body": [
