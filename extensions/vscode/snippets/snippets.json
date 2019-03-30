@@ -67,5 +67,31 @@
       "\t}",
       "}"
     ]
+  },
+  "Bloc State": {
+    "scope": "dart",
+    "prefix": "blocstate",
+    "body": [
+      "import 'package:equatable/equatable.dart';",
+      "import 'package:meta/meta.dart';",
+      "",
+      "@immutable",
+      "abstract class $1State extends Equatable {",
+      "\t$1State([List props = const []]) : super(props);",
+      "}"
+    ]
+  },
+  "Bloc Event": {
+    "scope": "dart",
+    "prefix": "blocevent",
+    "body": [
+      "import 'package:equatable/equatable.dart';",
+      "import 'package:meta/meta.dart';",
+      "",
+      "@immutable",
+      "abstract class $1Event extends Equatable {",
+      "\t$1Event([List props = const []]) : super(props);",
+      "}"
+    ]
   }
 }
