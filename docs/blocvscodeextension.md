@@ -43,6 +43,18 @@ In a `.dart` file activate the snippet by typing `bloc` and hitting enter. Then 
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloc-snippet-usage.gif)
 
+### BlocEvent
+
+In a `.dart` file activate the snippet by typing `blocevent` and hitting enter. Then you can name the event class and fill in the signature and implementation details by tabbing.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocevent-snippet-usage.gif)
+
+### BlocState
+
+In a `.dart` file activate the snippet by typing `blocstate` and hitting enter. Then you can name the state class and fill in the signature and implementation details by tabbing.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocstate-snippet-usage.gif)
+
 ### BlocBuilder
 
 In a `.dart` file activate the snippet by typing `blocbuilder` and hitting enter. Then you can fill in the implementation details by tabbing.
