@@ -1,6 +1,11 @@
+# 0.11.1
+
+Added `dispose` mustCallSuper and Documentation Updates
+
 # 0.11.0
 
 Update `mapEventToState` to remove unnecessary argument for `currentState`
+
 - `Stream<S> mapEventToState(S currentState, E event)` -> `Stream<S> mapEventToState(E event)`
 - Documentation Updates
 - Example Updates
