@@ -8,11 +8,7 @@ class TickerBloc extends Bloc<TickerEvent, TickerState> {
   StreamSubscription subscription;
 
   TickerBloc(this.ticker) {
-    subscription = ticker.tick().listen((tick) {
-      final t = Tick(tick);
-      print('Tick is $t');
-      dispatch(t);
-    });
+    subscription = ticker.tick().listen((tick) => dispatch(Tick(tick)));
   }
 
   @override
