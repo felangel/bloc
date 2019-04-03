@@ -12,12 +12,6 @@ class TickerBloc extends Bloc<TickerEvent, TickerState> {
   }
 
   @override
-  void onTransition(Transition<TickerEvent, TickerState> transition) {
-    super.onTransition(transition);
-    print(transition);
-  }
-
-  @override
   void dispose() {
     subscription.cancel();
     super.dispose();
