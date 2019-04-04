@@ -1,7 +1,6 @@
 name: flutter_bloc_with_stream
 description: A new Flutter project.
 
-# The following defines the version and build number for your application.
 version: 1.0.0+1
 
 environment:
@@ -9,10 +8,9 @@ environment:
 
 dependencies:
   flutter:
-    sdk: flutter  
+    sdk: flutter
   flutter_bloc:
     path: ../../packages/flutter_bloc
-  http: 0.12.0
   equatable: ^0.2.0
 
 dev_dependencies:

@@ -6,10 +6,10 @@ abstract class TickerState extends Equatable {
   TickerState([List props = const []]) : super(props);
 }
 
-class InitialTickerState extends TickerState {}
+class Initial extends TickerState {}
 
-class TickUpdate extends TickerState {
+class Update extends TickerState {
   final int count;
 
-  TickUpdate(this.count) : super([count]);
+  Update(this.count) : super([count]);
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'ticker/ticker.dart';
-import 'bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc_with_stream/bloc/bloc.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,37 +10,38 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Ticker _ticker;
+  TickerBloc _tickerBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _ticker = Ticker();
+    _tickerBloc = TickerBloc(_ticker);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final ticker = Ticker();
-    final tickerBloc = TickerBloc(ticker);
-    return BlocBuilder(
-      bloc: tickerBloc,
-      builder: (BuildContext context, TickerState state) {
-        if (state is InitialTickerState) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(widget.title),
-            ),
-            body: Center(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Flutter Bloc with Streams'),
+      ),
+      body: BlocBuilder(
+        bloc: _tickerBloc,
+        builder: (BuildContext context, TickerState state) {
+          if (state is Initial) {
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -49,31 +50,32 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                tickerBloc.dispatch(StartTicker());
-              },
-              tooltip: 'Start',
-              child: Icon(Icons.watch),
-            ),
-          );
-        } else if (state is TickUpdate) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(widget.title),
-            ),
-            body: Center(
+            );
+          } else if (state is Update) {
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('Tick #${state.count}'),
                 ],
               ),
-            ),
-          );
-        }
-      },
+            );
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _tickerBloc.dispatch(StartTicker());
+        },
+        tooltip: 'Start',
+        child: Icon(Icons.timer),
+      ),
     );
+  }
+
+  @override
+  void dispose() {
+    _tickerBloc.dispose();
+    super.dispose();
   }
 }

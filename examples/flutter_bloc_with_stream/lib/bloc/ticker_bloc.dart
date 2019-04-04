@@ -7,23 +7,25 @@ class TickerBloc extends Bloc<TickerEvent, TickerState> {
   final Ticker ticker;
   StreamSubscription subscription;
 
-  TickerBloc(this.ticker) {
-    subscription = ticker.tick().listen((tick) => dispatch(Tick(tick)));
+  TickerBloc(this.ticker);
+
+  @override
+  TickerState get initialState => Initial();
+
+  @override
+  Stream<TickerState> mapEventToState(TickerEvent event) async* {
+    if (event is StartTicker) {
+      subscription?.cancel();
+      subscription = ticker.tick().listen((tick) => dispatch(Tick(tick)));
+    }
+    if (event is Tick) {
+      yield Update(event.tickCount);
+    }
   }
 
   @override
   void dispose() {
     subscription.cancel();
     super.dispose();
-  }
-
-  @override
-  TickerState get initialState => InitialTickerState();
-
-  @override
-  Stream<TickerState> mapEventToState(TickerEvent event) async* {
-    if (event is Tick) {
-      yield TickUpdate(event.tickCount);
-    }
   }
 }
