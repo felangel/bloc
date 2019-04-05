@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.bloc'
-version '1.1'
+version '1.2'
 
 sourceCompatibility = 1.8
 
@@ -24,12 +24,11 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
-intellij {
-    version '2018.2.7'
-}
+
 patchPluginXml {
     changeNotes """
       * v1.0 - Initial release
       * v1.1 - Removed currentState from mapEventToState method
+      * v1.2 - Support for IntelliJ 2019
       """
 }
