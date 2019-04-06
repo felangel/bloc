@@ -109,6 +109,7 @@ As our app grows and relies on multiple `Blocs`, it becomes useful to see the `T
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Transition transition) {
+    super.onTransition(transition);
     print(transition);
   }
 }
@@ -140,11 +141,13 @@ If we want to be able to handle any `Exceptions` that might be thrown in `mapEve
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Transition transition) {
+    super.onTransition(transition);
     print(transition);
   }
 
   @override
   void onError(Object error, StackTrace stacktrace) {
+    super.onError(error, stacktrace);
     print('$error, $stacktrace');
   }
 }
