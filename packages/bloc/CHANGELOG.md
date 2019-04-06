@@ -1,3 +1,7 @@
+# 0.11.2
+
+Added `BlocDelegate` `onError` and `onTransition` mustCallSuper and Documentation Updates
+
 # 0.11.1
 
 Added `dispose` mustCallSuper and Documentation Updates
