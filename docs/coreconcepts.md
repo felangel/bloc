@@ -220,6 +220,7 @@ Unfortunately, in the current state we won't be able to see any of these transit
 ```dart
 @override
 void onTransition(Transition<CounterEvent, int> transition) {
+    super.onTransition(transition);
     print(transition);
 }
 ```
@@ -253,6 +254,7 @@ If we want to be able to do something in response to all `Transitions` we can si
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Transition transition) {
+    super.onTransition(transition);
     print(transition);
   }
 }
@@ -279,11 +281,13 @@ If we want to be able to do something in response to all `Exceptions` thrown in 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Transition transition) {
+    super.onTransition(transition);
     print(transition);
   }
 
   @override
   void onError(Object error, StackTrace stacktrace) {
+    super.onError(error, stacktrace);
     print('$error, $stacktrace');
   }
 }
