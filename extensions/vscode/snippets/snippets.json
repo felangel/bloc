@@ -62,11 +62,13 @@
       "class ${1:MyBlocDelegate} extends BlocDelegate {",
       "\t@override",
       "\tvoid onError(Object error, StackTrace stacktrace) {",
+      "\t\tsuper.onError(error, stacktrace);",
       "\t\t${2:// TODO: implement onError}",
       "\t}",
       "",
       "\t@override",
       "\tvoid onTransition(Transition transition) {",
+      "\t\tsuper.onTransition(transition);",
       "\t\t${3:// TODO: implement onTransition}",
       "\t}",
       "}"

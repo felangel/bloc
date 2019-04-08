@@ -1,3 +1,7 @@
+# 0.4.2
+
+Update BlocDelegate Snippet to include calls to `super`
+
 # 0.4.1
 
 Added Snippets for:
