@@ -18,7 +18,9 @@ This package is built to work with [bloc](https://pub.dartlang.org/packages/bloc
 
 ## Bloc Widgets
 
-**BlocBuilder** is a Flutter widget which requires a `Bloc` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed.
+**BlocBuilder** is a Flutter widget which requires a `Bloc` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed. The `builder` function will potentially be called many times and should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that returns a widget in response to the state.
+
+See `BlocListener` if you want to "do" anything in response to state changes such as navigation, showing a dialog, etc...
 
 ```dart
 BlocBuilder(
@@ -71,6 +73,38 @@ BlocProviderTree(
     BlocProvider<BlocC>(bloc: BlocC()),
   ],
   child: ChildA(),
+)
+```
+
+**BlocListener** is a Flutter widget which takes a `Bloc` and a `BlocWidgetListener` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
+
+`listener` is only called once for each state change unlike `builder` in `BlocBuilder` and is a `void` function.
+
+```dart
+BlocListener(
+  bloc: _bloc,
+  listener: (context, state) {
+    if (state is Success) {
+      Navigator.of(context).pushNamed('/details');
+    }
+  },
+  child: BlocBuilder(
+    bloc: _bloc,
+    builder: (context, state) {
+      if (state is Initial) {
+        return Text('Press the Button');
+      }
+      if (state is Loading) {
+        return CircularProgressIndicator();
+      }
+      if (state is Success) {
+        return Text('Success');
+      }
+      if (state is Failure) {
+        return Text('Failure');
+      }
+    },
+  }
 )
 ```
 

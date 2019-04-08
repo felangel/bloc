@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:bloc/bloc.dart';
 
-/// A function that will be run which takes the [BuildContext] and state
+/// Signature for the builder function which takes the [BuildContext] and state
 /// and is responsible for returning a [Widget] which is to be rendered.
 /// This is analogous to the `builder` function in [StreamBuilder].
 typedef BlocWidgetBuilder<S> = Widget Function(BuildContext context, S state);
@@ -15,11 +15,20 @@ typedef BlocWidgetBuilder<S> = Widget Function(BuildContext context, S state);
 /// to reduce the amount of boilerplate code needed
 /// as well as bloc-specific performance improvements.
 class BlocBuilder<E, S> extends BlocBuilderBase<E, S> {
+  /// The [Bloc] that the [BlocBuilder] will interact with.
   final Bloc<E, S> bloc;
+
+  /// The builder function which will be invoked on each widget build.
+  /// The builder takes the [BuildContext] and current bloc state and
+  /// must return a [Widget].
+  /// This is analogous to the `builder` function in [StreamBuilder].
   final BlocWidgetBuilder<S> builder;
 
-  const BlocBuilder({Key key, @required this.bloc, @required this.builder})
-      : assert(bloc != null),
+  const BlocBuilder({
+    Key key,
+    @required this.bloc,
+    @required this.builder,
+  })  : assert(bloc != null),
         assert(builder != null),
         super(key: key, bloc: bloc);
 

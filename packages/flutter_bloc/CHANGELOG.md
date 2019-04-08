@@ -1,3 +1,7 @@
+# 0.10.0
+
+Added `BlocListener` and Documentation Updates
+
 # 0.9.1
 
 Minor Updates to Documentation.
