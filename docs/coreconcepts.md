@@ -220,7 +220,6 @@ Unfortunately, in the current state we won't be able to see any of these transit
 ```dart
 @override
 void onTransition(Transition<CounterEvent, int> transition) {
-    super.onTransition(transition);
     print(transition);
 }
 ```

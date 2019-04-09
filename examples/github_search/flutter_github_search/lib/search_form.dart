@@ -21,10 +21,10 @@ class _SearchFormState extends State<SearchForm> {
 
   @override
   void initState() {
+    super.initState();
     _githubSearchBloc = GithubSearchBloc(
       githubRepository: widget.githubRepository,
     );
-    super.initState();
   }
 
   @override
