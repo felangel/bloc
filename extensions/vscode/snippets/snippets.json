@@ -30,6 +30,19 @@
       ")"
     ]
   },
+  "bloclistener": {
+    "scope": "dart",
+    "prefix": "bloclistener",
+    "body": [
+      "BlocListener(",
+      "\tbloc: ${1:MyBloc},",
+      "\tlistener: (BuildContext context, ${2:MyState} state) {",
+      "\t\t${3:// TODO: implement listener}",
+      "\t},",
+      "\tchild: ${4:Container()}",
+      ")"
+    ]
+  },
   "blocprovider": {
     "scope": "dart",
     "prefix": "blocprovider",

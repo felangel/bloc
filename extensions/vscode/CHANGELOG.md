@@ -1,3 +1,9 @@
+# 0.5.0
+
+Added Snippets for:
+
+- `BlocListener`
+
 # 0.4.2
 
 Update BlocDelegate Snippet to include calls to `super`
