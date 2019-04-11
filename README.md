@@ -13,7 +13,6 @@
 
 A predictable state management library that helps implement the [BLoC design pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
 
-
 | Package                                                                            | Pub                                                                                                             |
 | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | [bloc](https://github.com/felangel/bloc/tree/master/packages/bloc)                 | [![pub package](https://img.shields.io/pub/v/bloc.svg)](https://pub.dartlang.org/packages/bloc)                 |
@@ -27,6 +26,7 @@ A predictable state management library that helps implement the [BLoC design pat
 The goal of this library is to make it easy to separate _presentation_ from _business logic_, facilitating testability and reusability.
 
 ## Documentation
+
 - [Official Documentation](https://felangel.github.io/bloc)
 - [Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/bloc/README.md)
 - [Flutter Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/README.md)
@@ -90,10 +90,12 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [Todos](https://felangel.github.io/bloc/#/fluttertodostutorial) - an example of how to create a Todos Application using the `bloc` and `flutter_bloc` packages.
 
 ### Web
+
 - [Counter](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - an example of how to use a `CounterBloc` in an AngularDart app.
 - [Github Search](https://github.com/felangel/Bloc/tree/master/examples/github_search/angular_github_search) - an example of how to create a Github Search Application using the `bloc` and `angular_bloc` packages.
 
 ### Flutter + Web
+
 - [Github Search](https://github.com/felangel/Bloc/tree/master/examples/github_search) - an example of how to create a Github Search Application and share code between Flutter and AngularDart.
 
 ## Articles
@@ -115,7 +117,12 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 
 Learn more at the following links, which have been contributed by the community.
 
+### Packages
+
+- [Flutter Bloc Extensions](https://pub.dartlang.org/packages/flutter_bloc_extensions) - Collection of helper widgets built on top of `flutter_bloc`, by [Ondřej Kunc](https://github.com/OndrejKunc).
+
 ### Video Tutorials
+
 - [Flutter Bloc Library Tutorial](https://www.youtube.com/watch?v=LeLrsnHeCZY) - Introduction to the Bloc Library, by [Reso Coder](https://resocoder.com).
 - [Flutter Youtube Search](https://www.youtube.com/watch?v=BJY8nuYUM7M) - How to build a Youtube Search app which interacts with an API using the bloc and flutter_bloc packages, by [Reso Coder](https://resocoder.com).
 - [State Management Foundation](https://www.youtube.com/watch?v=S2KmxzgsTwk&t=731s) - Introduction to state management using the flutter_bloc package, by [Techie Blossom](https://techieblossom.com).

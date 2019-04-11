@@ -27,8 +27,12 @@
 - Tools
 
   - Extensions
+
     - [IntelliJ](blocintellijextension.md)
     - [VSCode](blocvscodeextension.md)
+
+  - Packages
+    - [flutter_bloc_extensions](https://pub.dartlang.org/packages/flutter_bloc_extensions)
 
 - API Reference
 
