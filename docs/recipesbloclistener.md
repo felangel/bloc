@@ -139,10 +139,10 @@ class Home extends StatelessWidget {
 }
 ```
 
-?> We use the `BlocListener` widget in order to **DO** things in response to state changes in our `DataBloc`.
+?> We use the `BlocListener` widget in order to **DO THINGS** in response to state changes in our `DataBloc`.
 
-?> We use the `BlocBuilder` widget in order to **RENDER** widgets in response to state changes in our `DataBloc`.
+?> We use the `BlocBuilder` widget in order to **RENDER WIDGETS** in response to state changes in our `DataBloc`.
 
-!> We should **NEVER** "do" things in response to state changes in the `builder` method of `BlocBuilder` because that method can be called many times by the Flutter framework. The `builder` method should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that just returns a widget in response to the state of the bloc.
+!> We should **NEVER** "do things" in response to state changes in the `builder` method of `BlocBuilder` because that method can be called many times by the Flutter framework. The `builder` method should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that just returns a widget in response to the state of the bloc.
 
 The full source for this recipe can be found [here](https://gist.github.com/felangel/1e5b2c25b263ad1aa7bbed75d8c76c44).
