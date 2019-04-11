@@ -19,6 +19,11 @@
   - Flutter + AngularDart
     - [Github Search](flutterangulargithubsearch.md)
 
+- Recipes
+
+  - Flutter
+    - [BlocListener](recipesbloclistener.md)
+
 - Tools
 
   - Extensions
