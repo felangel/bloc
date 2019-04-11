@@ -1,3 +1,7 @@
+# 0.10.1
+
+Invoke `BlocWidgetListener` on initial state and Documentation Updates
+
 # 0.10.0
 
 Added `BlocListener` and Documentation Updates

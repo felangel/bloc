@@ -19,7 +19,7 @@ class BlocListener<E, S> extends BlocListenerBase<E, S> {
   /// Whenever the bloc's state changes, `listener` will be invoked.
   final Bloc<E, S> bloc;
 
-  /// The [BlocWidgetListener] which will be called on every state change.
+  /// The [BlocWidgetListener] which will be called on every state change (including the `initialState`).
   /// This listener should be used for any code which needs to execute
   /// in response to a state change (`Transition`).
   /// The state will be the `nextState` for the most recent `Transition`.
