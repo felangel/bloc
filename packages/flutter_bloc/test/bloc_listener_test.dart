@@ -149,7 +149,7 @@ void main() {
       expect(find.byKey(targetKey), findsOneWidget);
     });
 
-    testWidgets('calls listener on single state change',
+    testWidgets('calls listener on every state change, including initial',
         (WidgetTester tester) async {
       int latestState;
       int listenerCallCount = 0;
@@ -167,7 +167,7 @@ void main() {
       );
       counterBloc.dispatch(CounterEvent.increment);
       expectLater(counterBloc.state, emitsInOrder(expectedStates)).then((_) {
-        expect(listenerCallCount, 1);
+        expect(listenerCallCount, 2);
         expect(latestState, 1);
       });
     });
@@ -191,7 +191,7 @@ void main() {
       counterBloc.dispatch(CounterEvent.increment);
       counterBloc.dispatch(CounterEvent.increment);
       expectLater(counterBloc.state, emitsInOrder(expectedStates)).then((_) {
-        expect(listenerCallCount, 2);
+        expect(listenerCallCount, 3);
         expect(latestState, 2);
       });
     });
@@ -214,19 +214,19 @@ void main() {
 
       await tester.tap(incrementFinder);
       await tester.pumpAndSettle();
-      expect(listenerCallCount, 1);
+      expect(listenerCallCount, 2);
       expect(latestState, 1);
 
       await tester.tap(incrementFinder);
       await tester.pumpAndSettle();
-      expect(listenerCallCount, 2);
+      expect(listenerCallCount, 3);
       expect(latestState, 2);
 
       await tester.tap(resetBlocFinder);
       await tester.pumpAndSettle();
       await tester.tap(incrementFinder);
       await tester.pumpAndSettle();
-      expect(listenerCallCount, 3);
+      expect(listenerCallCount, 5);
       expect(latestState, 1);
     });
 
@@ -248,19 +248,19 @@ void main() {
 
       await tester.tap(incrementFinder);
       await tester.pumpAndSettle();
-      expect(listenerCallCount, 1);
+      expect(listenerCallCount, 2);
       expect(latestState, 1);
 
       await tester.tap(incrementFinder);
       await tester.pumpAndSettle();
-      expect(listenerCallCount, 2);
+      expect(listenerCallCount, 3);
       expect(latestState, 2);
 
       await tester.tap(noopBlocFinder);
       await tester.pumpAndSettle();
       await tester.tap(incrementFinder);
       await tester.pumpAndSettle();
-      expect(listenerCallCount, 3);
+      expect(listenerCallCount, 4);
       expect(latestState, 3);
     });
   });

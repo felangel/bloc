@@ -101,7 +101,7 @@ class _BlocListenerBaseState<E, S> extends State<BlocListenerBase<E, S>> {
 
   void _subscribe() {
     if (widget.bloc.state != null) {
-      _subscription = widget.bloc.state.skip(1).listen((S state) {
+      _subscription = widget.bloc.state.listen((S state) {
         widget.listener.call(context, state);
       });
     }
