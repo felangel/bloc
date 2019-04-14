@@ -1,16 +1,16 @@
 # flutter_firebase_authentication
 
-A new Flutter project.
+Example Flutter app built with `flutter_bloc` to implement authentication using Firebase.
+
+## Features
+
+- Sign in with Google
+- Sign up with email and password
+- Sign in with email and password
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+1. Replace `GoogleService-Info.plist` with your own
+2. Update `info.plist`
+   1. paste-the-reversed-client-id-from-googleservice-info.plist-here
+3. `flutter run`
