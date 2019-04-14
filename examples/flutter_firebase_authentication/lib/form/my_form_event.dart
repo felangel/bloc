@@ -2,11 +2,11 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-abstract class FormEvent extends Equatable {
-  FormEvent([List props = const []]) : super(props);
+abstract class MyFormEvent extends Equatable {
+  MyFormEvent([List props = const []]) : super(props);
 }
 
-class EmailChanged extends FormEvent {
+class EmailChanged extends MyFormEvent {
   final String email;
 
   EmailChanged({@required this.email}) : super([email]);
@@ -15,7 +15,7 @@ class EmailChanged extends FormEvent {
   String toString() => 'EmailChanged { email :$email }';
 }
 
-class PasswordChanged extends FormEvent {
+class PasswordChanged extends MyFormEvent {
   final String password;
 
   PasswordChanged({@required this.password}) : super([password]);
@@ -24,7 +24,7 @@ class PasswordChanged extends FormEvent {
   String toString() => 'PasswordChanged { password: $password }';
 }
 
-class Submitted extends FormEvent {
+class Submitted extends MyFormEvent {
   final String email;
   final String password;
 

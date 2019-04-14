@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:flutter_firebase_authentication/form/form.dart';
 
-abstract class LoginEvent extends FormEvent {}
+abstract class LoginEvent extends MyFormEvent {}
 
 class LoginWithGooglePressed extends LoginEvent {
   @override

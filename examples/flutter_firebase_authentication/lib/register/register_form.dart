@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide FormState;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_authentication/register/register.dart';
 import 'package:flutter_firebase_authentication/form/form.dart';
@@ -10,6 +10,10 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  bool get isPopulated =>
+      _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+
   RegisterBloc _registerBloc;
 
   @override
@@ -24,11 +28,11 @@ class _RegisterFormState extends State<RegisterForm> {
   Widget build(BuildContext context) {
     return BlocListener(
       bloc: _registerBloc,
-      listener: (BuildContext context, FormState state) {
-        if (state is Editing && state.submittedSuccessfully) {
+      listener: (BuildContext context, MyFormState state) {
+        if (state.isSuccess) {
           Navigator.of(context).pop();
         }
-        if (state is Editing && state.hasError) {
+        if (state.isFailure) {
           Scaffold.of(context).showSnackBar(SnackBar(
             content: Text('Registration Failure'),
             backgroundColor: Colors.red,
@@ -37,7 +41,7 @@ class _RegisterFormState extends State<RegisterForm> {
       },
       child: BlocBuilder(
         bloc: _registerBloc,
-        builder: (BuildContext context, FormState state) {
+        builder: (BuildContext context, MyFormState state) {
           return Form(
             child: Column(
               children: <Widget>[
@@ -47,12 +51,10 @@ class _RegisterFormState extends State<RegisterForm> {
                     icon: Icon(Icons.email),
                     labelText: 'Email',
                   ),
-                  autovalidate: true,
                   autocorrect: false,
+                  autovalidate: true,
                   validator: (_) {
-                    return state is Editing && !state.isEmailValid
-                        ? 'Invalid Email'
-                        : null;
+                    return !state.isEmailValid ? 'Invalid Email' : null;
                   },
                 ),
                 TextFormField(
@@ -62,18 +64,18 @@ class _RegisterFormState extends State<RegisterForm> {
                     labelText: 'Password',
                   ),
                   obscureText: true,
-                  autovalidate: true,
                   autocorrect: false,
+                  autovalidate: true,
                   validator: (_) {
-                    return state is Editing && !state.isPasswordValid
-                        ? 'Invalid Password'
-                        : null;
+                    return !state.isPasswordValid ? 'Invalid Password' : null;
                   },
                 ),
-                state is Editing && state.isSubmitting
+                state.isSubmitting
                     ? CircularProgressIndicator()
                     : RaisedButton(
-                        onPressed: state is Editing && state.isFormValid
+                        onPressed: state.isEmailValid &&
+                                state.isPasswordValid &&
+                                isPopulated
                             ? _onFormSubmitted
                             : null,
                         child: Text('Sign Up'),
