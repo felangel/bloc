@@ -19,16 +19,11 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   final UserRepository _userRepository = UserRepository();
   AuthenticationBloc _authenticationBloc;
-  LoginBloc _loginBloc;
 
   @override
   void initState() {
     super.initState();
     _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
-    _loginBloc = LoginBloc(
-      userRepository: _userRepository,
-      authenticationBloc: _authenticationBloc,
-    );
     _authenticationBloc.dispatch(AppStarted());
   }
 
@@ -44,7 +39,7 @@ class _AppState extends State<App> {
               return SplashScreen();
             }
             if (state is Unauthenticated) {
-              return LoginScreen(loginBloc: _loginBloc);
+              return LoginScreen(userRepository: _userRepository);
             }
             if (state is Authenticated) {
               return HomeScreen(name: state.displayName);
@@ -58,7 +53,6 @@ class _AppState extends State<App> {
   @override
   void dispose() {
     _authenticationBloc.dispose();
-    _loginBloc.dispose();
     super.dispose();
   }
 }

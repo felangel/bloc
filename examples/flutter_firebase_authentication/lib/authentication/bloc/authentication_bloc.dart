@@ -20,13 +20,10 @@ class AuthenticationBloc
   ) async* {
     if (event is AppStarted) {
       yield* _mapAppStartedToState();
-    }
-    if (event is Login) {
-      final name = await _userRepository.getUser();
-      yield Authenticated(name);
-    }
-    if (event is Logout) {
-      yield* _mapLogoutToState();
+    } else if (event is LoggedIn) {
+      yield* _mapLoggedInToState();
+    } else if (event is LoggedOut) {
+      yield* _mapLoggedOutToState();
     }
   }
 
@@ -44,8 +41,12 @@ class AuthenticationBloc
     }
   }
 
-  Stream<AuthenticationState> _mapLogoutToState() async* {
-    await _userRepository.signOut();
+  Stream<AuthenticationState> _mapLoggedInToState() async* {
+    yield Authenticated(await _userRepository.getUser());
+  }
+
+  Stream<AuthenticationState> _mapLoggedOutToState() async* {
     yield Unauthenticated();
+    _userRepository.signOut();
   }
 }
