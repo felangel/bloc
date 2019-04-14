@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide FormState;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_authentication/form/form.dart';
 import 'package:flutter_firebase_authentication/login/login.dart';
@@ -10,6 +10,10 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  bool get isPopulated =>
+      _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+
   LoginBloc _loginBloc;
 
   @override
@@ -24,8 +28,8 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return BlocListener(
       bloc: _loginBloc,
-      listener: (BuildContext context, FormState state) {
-        if (state is Editing && state.hasError) {
+      listener: (BuildContext context, MyFormState state) {
+        if (state.isFailure) {
           Scaffold.of(context).showSnackBar(SnackBar(
             content: Text('Login Failure'),
             backgroundColor: Colors.red,
@@ -34,7 +38,7 @@ class _LoginFormState extends State<LoginForm> {
       },
       child: BlocBuilder(
         bloc: _loginBloc,
-        builder: (BuildContext context, FormState state) {
+        builder: (BuildContext context, MyFormState state) {
           return Form(
             child: Column(
               children: <Widget>[
@@ -47,9 +51,7 @@ class _LoginFormState extends State<LoginForm> {
                   autovalidate: true,
                   autocorrect: false,
                   validator: (_) {
-                    return state is Editing && !state.isEmailValid
-                        ? 'email cannot be empty'
-                        : null;
+                    return !state.isEmailValid ? 'Invalid Email' : null;
                   },
                 ),
                 TextFormField(
@@ -62,15 +64,15 @@ class _LoginFormState extends State<LoginForm> {
                   autovalidate: true,
                   autocorrect: false,
                   validator: (_) {
-                    return state is Editing && !state.isPasswordValid
-                        ? 'password cannot be empty'
-                        : null;
+                    return !state.isPasswordValid ? 'Invalid Password' : null;
                   },
                 ),
-                state is Editing && state.isSubmitting
+                state.isSubmitting
                     ? CircularProgressIndicator()
                     : RaisedButton(
-                        onPressed: state is Editing && state.isFormValid
+                        onPressed: state.isEmailValid &&
+                                state.isPasswordValid &&
+                                isPopulated
                             ? _onFormSubmitted
                             : null,
                         child: Text('Login'),

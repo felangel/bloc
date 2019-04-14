@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:flutter_firebase_authentication/login/login.dart';
 import 'package:flutter_firebase_authentication/form/form.dart';
 import 'package:flutter_firebase_authentication/authentication/authentication.dart';
+import 'package:flutter_firebase_authentication/validators/validators.dart';
 
-class LoginBloc extends Bloc<FormEvent, FormState> {
+class LoginBloc extends Bloc<MyFormEvent, MyFormState> {
   UserRepository _userRepository;
   AuthenticationBloc _authenticationBloc;
 
@@ -18,10 +20,22 @@ class LoginBloc extends Bloc<FormEvent, FormState> {
         _authenticationBloc = authenticationBloc;
 
   @override
-  FormState get initialState => Initial();
+  MyFormState get initialState => MyFormState.empty();
 
   @override
-  Stream<FormState> mapEventToState(FormEvent event) async* {
+  Stream<MyFormEvent> transform(Stream<MyFormEvent> events) {
+    final observableStream = events as Observable<MyFormEvent>;
+    final nonDebounceStream = observableStream.where((event) {
+      return (event is! EmailChanged && event is! PasswordChanged);
+    });
+    final debounceStream = (observableStream).where((event) {
+      return (event is EmailChanged || event is PasswordChanged);
+    }).debounce(Duration(milliseconds: 300));
+    return nonDebounceStream.mergeWith([debounceStream]);
+  }
+
+  @override
+  Stream<MyFormState> mapEventToState(MyFormEvent event) async* {
     if (event is EmailChanged) {
       yield* _mapEmailChangedToState(event.email);
     } else if (event is PasswordChanged) {
@@ -36,53 +50,39 @@ class LoginBloc extends Bloc<FormEvent, FormState> {
     }
   }
 
-  Stream<FormState> _mapEmailChangedToState(String email) async* {
-    if (currentState is! Editing) {
-      yield Editing.empty().copyWith(
-        isEmailValid: email.isNotEmpty,
-      );
-    } else {
-      yield (currentState as Editing).update(
-        isEmailValid: email.isNotEmpty,
-      );
-    }
+  Stream<MyFormState> _mapEmailChangedToState(String email) async* {
+    yield currentState.update(
+      isEmailValid: Validators.isValidEmail(email),
+    );
   }
 
-  Stream<FormState> _mapPasswordChangedToState(
-    String password,
-  ) async* {
-    if (currentState is! Editing) {
-      yield Editing.empty().copyWith(
-        isPasswordValid: password.isNotEmpty,
-      );
-    } else {
-      yield (currentState as Editing).update(
-        isPasswordValid: password.isNotEmpty,
-      );
-    }
+  Stream<MyFormState> _mapPasswordChangedToState(String password) async* {
+    yield currentState.update(
+      isPasswordValid: Validators.isValidPassword(password),
+    );
   }
 
-  Stream<FormState> _mapLoginWithGooglePressedToState() async* {
+  Stream<MyFormState> _mapLoginWithGooglePressedToState() async* {
     try {
       await _userRepository.signInWithGoogle();
       _authenticationBloc.dispatch(LoggedIn());
-      yield Editing.success();
+      yield MyFormState.success();
     } catch (_) {
-      yield Editing.failure();
+      yield MyFormState.failure();
     }
   }
 
-  Stream<FormState> _mapLoginWithCredentialsPressedToState({
+  Stream<MyFormState> _mapLoginWithCredentialsPressedToState({
     String email,
     String password,
   }) async* {
-    yield Editing.loading();
+    yield MyFormState.loading();
     try {
       await _userRepository.signInWithCredentials(email, password);
       _authenticationBloc.dispatch(LoggedIn());
-      yield Editing.success();
+      yield MyFormState.success();
     } catch (_) {
-      yield Editing.failure();
+      yield MyFormState.failure();
     }
   }
 }
