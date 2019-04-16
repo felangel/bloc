@@ -84,7 +84,7 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [Bloc with Stream](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - an example of how to hook up a `bloc` to a `Stream` and update the UI in response to data from the `Stream`.
 - [Infinite List](https://felangel.github.io/bloc/#/flutterinfinitelisttutorial) - an example of how to use the `bloc` and `flutter_bloc` packages to implement an infinite scrolling list.
 - [Login Flow](https://felangel.github.io/bloc/#/flutterlogintutorial) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a Login Flow.
-- [Firebase Authentication](https://github.com/felangel/bloc/tree/master/examples/flutter_firebase_authentication) - an example of how to use the `bloc` and `flutter_bloc` packages to authenticate users via Firebase.
+- [Firebase Login](https://github.com/felangel/bloc/tree/master/examples/flutter_firebase_login) - an example of how to use the `bloc` and `flutter_bloc` packages to implement login via Firebase.
 - [Github Search](https://felangel.github.io/bloc/#/flutterangulargithubsearch) - an example of how to create a Github Search Application using the `bloc` and `flutter_bloc` packages.
 - [Weather](https://felangel.github.io/bloc/#/flutterweathertutorial) - an example of how to create a Weather Application using the `bloc` and `flutter_bloc` packages. The app uses a `RefreshIndicator` to implement "pull-to-refresh" as well as dynamic theming.
 - [Todos](https://felangel.github.io/bloc/#/fluttertodostutorial) - an example of how to create a Todos Application using the `bloc` and `flutter_bloc` packages.
