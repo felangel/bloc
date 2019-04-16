@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_firebase_authentication/user_repository/user_repository.dart';
 import 'package:flutter_firebase_authentication/form/form.dart';
 import 'package:flutter_firebase_authentication/login/login.dart';
 
 class LoginForm extends StatefulWidget {
+  final UserRepository _userRepository;
+
+  LoginForm({Key key, @required UserRepository userRepository})
+      : assert(userRepository != null),
+        _userRepository = userRepository,
+        super(key: key);
+
   State<LoginForm> createState() => _LoginFormState();
 }
 
@@ -11,8 +19,14 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  UserRepository get _userRepository => widget._userRepository;
+
   bool get isPopulated =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+
+  bool isLoginButtonEnabled(MyFormState state) {
+    return state.isFormValid && isPopulated && !state.isSubmitting;
+  }
 
   LoginBloc _loginBloc;
 
@@ -30,54 +44,85 @@ class _LoginFormState extends State<LoginForm> {
       bloc: _loginBloc,
       listener: (BuildContext context, MyFormState state) {
         if (state.isFailure) {
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('Login Failure'),
-            backgroundColor: Colors.red,
-          ));
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text('Login Failure'),
+                backgroundColor: Colors.red,
+              ),
+            );
+        }
+        if (state.isSubmitting) {
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Logging In...'),
+                    CircularProgressIndicator(),
+                  ],
+                ),
+              ),
+            );
         }
       },
       child: BlocBuilder(
         bloc: _loginBloc,
         builder: (BuildContext context, MyFormState state) {
-          return Form(
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.email),
-                    labelText: 'Email',
+          return Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Form(
+              child: ListView(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Image.asset('assets/flutter_logo.png', height: 200),
                   ),
-                  autovalidate: true,
-                  autocorrect: false,
-                  validator: (_) {
-                    return !state.isEmailValid ? 'Invalid Email' : null;
-                  },
-                ),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.lock),
-                    labelText: 'Password',
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.email),
+                      labelText: 'Email',
+                    ),
+                    autovalidate: true,
+                    autocorrect: false,
+                    validator: (_) {
+                      return !state.isEmailValid ? 'Invalid Email' : null;
+                    },
                   ),
-                  obscureText: true,
-                  autovalidate: true,
-                  autocorrect: false,
-                  validator: (_) {
-                    return !state.isPasswordValid ? 'Invalid Password' : null;
-                  },
-                ),
-                state.isSubmitting
-                    ? CircularProgressIndicator()
-                    : RaisedButton(
-                        onPressed: state.isEmailValid &&
-                                state.isPasswordValid &&
-                                isPopulated
-                            ? _onFormSubmitted
-                            : null,
-                        child: Text('Login'),
-                      )
-              ],
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.lock),
+                      labelText: 'Password',
+                    ),
+                    obscureText: true,
+                    autovalidate: true,
+                    autocorrect: false,
+                    validator: (_) {
+                      return !state.isPasswordValid ? 'Invalid Password' : null;
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        LoginButton(
+                          onPressed: isLoginButtonEnabled(state)
+                              ? _onFormSubmitted
+                              : null,
+                        ),
+                        GoogleLoginButton(),
+                        CreateAccountButton(userRepository: _userRepository),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

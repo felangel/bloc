@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_authentication/authentication/authentication.dart';
+import 'package:flutter_firebase_authentication/user_repository/user_repository.dart';
 import 'package:flutter_firebase_authentication/register/register.dart';
 
 class RegisterScreen extends StatefulWidget {

@@ -5,6 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:flutter_firebase_authentication/login/login.dart';
 import 'package:flutter_firebase_authentication/form/form.dart';
 import 'package:flutter_firebase_authentication/authentication/authentication.dart';
+import 'package:flutter_firebase_authentication/user_repository/user_repository.dart';
 import 'package:flutter_firebase_authentication/validators/validators.dart';
 
 class LoginBloc extends Bloc<MyFormEvent, MyFormState> {
@@ -28,7 +29,7 @@ class LoginBloc extends Bloc<MyFormEvent, MyFormState> {
     final nonDebounceStream = observableStream.where((event) {
       return (event is! EmailChanged && event is! PasswordChanged);
     });
-    final debounceStream = (observableStream).where((event) {
+    final debounceStream = observableStream.where((event) {
       return (event is EmailChanged || event is PasswordChanged);
     }).debounce(Duration(milliseconds: 300));
     return nonDebounceStream.mergeWith([debounceStream]);

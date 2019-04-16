@@ -16,7 +16,7 @@ class GoogleLoginButton extends StatelessWidget {
           LoginWithGooglePressed(),
         );
       },
-      label: Text('Sign in', style: TextStyle(color: Colors.white)),
+      label: Text('Sign in with Google', style: TextStyle(color: Colors.white)),
       color: Colors.redAccent,
     );
   }

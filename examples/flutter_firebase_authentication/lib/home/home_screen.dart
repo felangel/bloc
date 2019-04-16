@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_authentication/home/home.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_firebase_authentication/authentication/authentication.dart';
 
 class HomeScreen extends StatelessWidget {
   final String name;
@@ -11,12 +12,21 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              BlocProvider.of<AuthenticationBloc>(context).dispatch(
+                LoggedOut(),
+              );
+            },
+          )
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Center(child: Text('Welcome $name!')),
-          Center(child: LogoutButton()),
         ],
       ),
     );

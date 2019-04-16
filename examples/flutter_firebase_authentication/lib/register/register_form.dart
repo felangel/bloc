@@ -14,6 +14,10 @@ class _RegisterFormState extends State<RegisterForm> {
   bool get isPopulated =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
+  bool isRegisterButtonEnabled(MyFormState state) {
+    return state.isFormValid && isPopulated && !state.isSubmitting;
+  }
+
   RegisterBloc _registerBloc;
 
   @override
@@ -29,58 +33,81 @@ class _RegisterFormState extends State<RegisterForm> {
     return BlocListener(
       bloc: _registerBloc,
       listener: (BuildContext context, MyFormState state) {
+        if (state.isSubmitting) {
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Registering...'),
+                    CircularProgressIndicator(),
+                  ],
+                ),
+              ),
+            );
+        }
         if (state.isSuccess) {
           Navigator.of(context).pop();
         }
         if (state.isFailure) {
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('Registration Failure'),
-            backgroundColor: Colors.red,
-          ));
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Registration Failure'),
+                    Icon(Icons.error),
+                  ],
+                ),
+                backgroundColor: Colors.red,
+              ),
+            );
         }
       },
       child: BlocBuilder(
         bloc: _registerBloc,
         builder: (BuildContext context, MyFormState state) {
-          return Form(
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.email),
-                    labelText: 'Email',
+          return Padding(
+            padding: EdgeInsets.all(20),
+            child: Form(
+              child: ListView(
+                children: <Widget>[
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.email),
+                      labelText: 'Email',
+                    ),
+                    autocorrect: false,
+                    autovalidate: true,
+                    validator: (_) {
+                      return !state.isEmailValid ? 'Invalid Email' : null;
+                    },
                   ),
-                  autocorrect: false,
-                  autovalidate: true,
-                  validator: (_) {
-                    return !state.isEmailValid ? 'Invalid Email' : null;
-                  },
-                ),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.lock),
-                    labelText: 'Password',
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.lock),
+                      labelText: 'Password',
+                    ),
+                    obscureText: true,
+                    autocorrect: false,
+                    autovalidate: true,
+                    validator: (_) {
+                      return !state.isPasswordValid ? 'Invalid Password' : null;
+                    },
                   ),
-                  obscureText: true,
-                  autocorrect: false,
-                  autovalidate: true,
-                  validator: (_) {
-                    return !state.isPasswordValid ? 'Invalid Password' : null;
-                  },
-                ),
-                state.isSubmitting
-                    ? CircularProgressIndicator()
-                    : RaisedButton(
-                        onPressed: state.isEmailValid &&
-                                state.isPasswordValid &&
-                                isPopulated
-                            ? _onFormSubmitted
-                            : null,
-                        child: Text('Sign Up'),
-                      ),
-              ],
+                  RegisterButton(
+                    onPressed: isRegisterButtonEnabled(state)
+                        ? _onFormSubmitted
+                        : null,
+                  ),
+                ],
+              ),
             ),
           );
         },

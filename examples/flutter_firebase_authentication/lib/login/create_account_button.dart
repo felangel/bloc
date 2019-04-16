@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_authentication/authentication/authentication.dart';
+import 'package:flutter_firebase_authentication/user_repository/user_repository.dart';
 import 'package:flutter_firebase_authentication/register/register.dart';
 
 class CreateAccountButton extends StatelessWidget {
@@ -15,7 +15,6 @@ class CreateAccountButton extends StatelessWidget {
     return FlatButton(
       child: Text(
         'Create an Account',
-        style: TextStyle(decoration: TextDecoration.underline),
       ),
       onPressed: () {
         Navigator.of(context).push(

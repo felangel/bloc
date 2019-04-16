@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_authentication/authentication/authentication.dart';
+import 'package:flutter_firebase_authentication/user_repository/user_repository.dart';
 import 'package:flutter_firebase_authentication/login/login.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -34,13 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(title: Text('Login')),
       body: BlocProvider<LoginBloc>(
         bloc: _loginBloc,
-        child: Column(
-          children: [
-            LoginForm(),
-            GoogleLoginButton(),
-            CreateAccountButton(userRepository: _userRepository),
-          ],
-        ),
+        child: LoginForm(userRepository: _userRepository),
       ),
     );
   }
