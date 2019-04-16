@@ -3,9 +3,9 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter_firebase_authentication/authentication/authentication.dart';
-import 'package:flutter_firebase_authentication/user_repository/user_repository.dart';
-import 'package:flutter_firebase_authentication/form/form.dart';
-import 'package:flutter_firebase_authentication/validators/validators.dart';
+import 'package:flutter_firebase_authentication/user_repository.dart';
+import 'package:flutter_firebase_authentication/forms/forms.dart';
+import 'package:flutter_firebase_authentication/validators.dart';
 
 class RegisterBloc extends Bloc<MyFormEvent, MyFormState> {
   final UserRepository _userRepository;

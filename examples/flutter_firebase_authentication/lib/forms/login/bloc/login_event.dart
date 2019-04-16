@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:flutter_firebase_authentication/form/form.dart';
+import 'package:flutter_firebase_authentication/forms/forms.dart';
 
 abstract class LoginEvent extends MyFormEvent {}
 

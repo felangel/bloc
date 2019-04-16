@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_authentication/authentication/authentication.dart';
-import 'package:flutter_firebase_authentication/user_repository/user_repository.dart';
-import 'package:flutter_firebase_authentication/login/login.dart';
+import 'package:flutter_firebase_authentication/user_repository.dart';
+import 'package:flutter_firebase_authentication/forms/forms.dart';
 
 class LoginScreen extends StatefulWidget {
   final UserRepository _userRepository;
