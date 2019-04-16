@@ -47,7 +47,10 @@ class _LoginFormState extends State<LoginForm> {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                content: Text('Login Failure'),
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [Text('Login Failure'), Icon(Icons.error)],
+                ),
                 backgroundColor: Colors.red,
               ),
             );
