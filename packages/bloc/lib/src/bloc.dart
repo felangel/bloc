@@ -59,9 +59,40 @@ abstract class Bloc<Event, State> {
     _stateSubject.close();
   }
 
-  /// Transform the `Stream<Event>` before `mapEventToState` is called.
-  /// This allows for operations like `distinct()`, `debounce()`, etc... to be applied.
-  Stream<Event> transform(Stream<Event> events) => events;
+  /// Transforms the `Stream<Event>` along with a `next` function into a `Stream<State>`.
+  /// Events that should be processed by `mapEventToState` need to be passed to `next`.
+  /// By default `asyncExpand` is used to ensure all events are processed in the order
+  /// in which they are received. You can override `transform` for advanced usage
+  /// in order to manipulate the frequency and specificity with which `mapEventToState`
+  /// is called as well as which events are processed.
+  ///
+  /// For example, if you only want `mapEventToState` to be called on the most recent
+  /// event you can use `switchMap` instead of `asyncExpand`.
+  ///
+  /// ```dart
+  /// @override
+  /// Stream<State> transform(events, next) {
+  ///   return (events as Observable<Event>).switchMap(next);
+  /// }
+  /// ```
+  ///
+  /// Alternatively, if you only want `mapEventToState` to be called for distinct events:
+  ///
+  /// ```dart
+  /// @override
+  /// Stream<State> transform(events, next) {
+  ///   return super.transform(
+  ///     (events as Observable<Event>).distinct(),
+  ///     next,
+  ///   );
+  /// }
+  /// ```
+  Stream<State> transform(
+    Stream<Event> events,
+    Stream<State> next(Event event),
+  ) {
+    return events.asyncExpand(next);
+  }
 
   /// Must be implemented when a class extends [Bloc].
   /// Takes the incoming `event` as the argument.
@@ -73,7 +104,7 @@ abstract class Bloc<Event, State> {
   void _bindStateSubject() {
     Event currentEvent;
 
-    transform(_eventSubject).asyncExpand((Event event) {
+    transform(_eventSubject, (Event event) {
       currentEvent = event;
       return mapEventToState(currentEvent).handleError(_handleError);
     }).forEach(

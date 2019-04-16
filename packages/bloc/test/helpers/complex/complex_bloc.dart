@@ -9,8 +9,11 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
   ComplexState get initialState => ComplexStateA();
 
   @override
-  Stream<ComplexEvent> transform(Stream<ComplexEvent> events) {
-    return events.distinct();
+  Stream<ComplexState> transform(Stream<ComplexEvent> events, next) {
+    return super.transform(
+      (events as Observable<ComplexEvent>).distinct(),
+      next,
+    );
   }
 
   @override
