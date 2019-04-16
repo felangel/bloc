@@ -44,7 +44,7 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **dispatch** is a method that takes an `event` and triggers `mapEventToState`. `dispatch` may be called from the presentation layer or from within the Bloc (see examples) and notifies the Bloc of a new `event`.
 
-**transform** is a method that can be overridden to transform the `Stream<Event>` before `mapEventToState` is called. This allows for operations like `distinct()` and `debounce()` to be used.
+**transform** is a method that transforms the `Stream<Event>` along with a `next` function into a `Stream<State>`. Events that should be processed by `mapEventToState` need to be passed to `next`. **By default `asyncExpand` is used to ensure all events are processed in the order in which they are received**. You can override `transform` for advanced usage in order to manipulate the frequency and specificity with which `mapEventToState` is called as well as which events are processed.
 
 **onTransition** is a method that can be overridden to handle whenever a `Transition` occurs. A `Transition` occurs when a new `Event` is dispatched and `mapEventToState` is called. `onTransition` is called before a `Bloc`'s state has been updated. **It is a great place to add bloc-specific logging/analytics**.
 
