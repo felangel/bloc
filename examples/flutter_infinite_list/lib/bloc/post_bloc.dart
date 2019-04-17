@@ -14,9 +14,16 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({@required this.httpClient});
 
   @override
-  Stream<PostEvent> transform(Stream<PostEvent> events) {
-    return (events as Observable<PostEvent>)
-        .debounce(Duration(milliseconds: 500));
+  Stream<PostState> transform(
+    Stream<PostEvent> events,
+    Stream<PostState> Function(PostEvent event) next,
+  ) {
+    return super.transform(
+      (events as Observable<PostEvent>).debounce(
+        Duration(milliseconds: 500),
+      ),
+      next,
+    );
   }
 
   @override

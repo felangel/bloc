@@ -345,9 +345,16 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   GithubSearchBloc({@required this.githubRepository});
 
   @override
-  Stream<GithubSearchEvent> transform(Stream<GithubSearchEvent> events) {
-    return (events as Observable<GithubSearchEvent>)
-        .debounce(Duration(milliseconds: 500));
+  Stream<GithubSearchState> transform(
+    Stream<GithubSearchEvent> events,
+    Stream<GithubSearchState> Function(GithubSearchEvent event) next,
+  ) {
+    return super.transform(
+      (events as Observable<GithubSearchEvent>).debounce(
+        Duration(milliseconds: 500),
+      ),
+      next,
+    );
   }
 
   @override
@@ -420,7 +427,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.10.0
+  flutter_bloc: ^0.11.0
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search

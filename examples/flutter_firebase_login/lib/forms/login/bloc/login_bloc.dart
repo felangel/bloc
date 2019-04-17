@@ -23,7 +23,10 @@ class LoginBloc extends Bloc<MyFormEvent, MyFormState> {
   MyFormState get initialState => MyFormState.empty();
 
   @override
-  Stream<MyFormEvent> transform(Stream<MyFormEvent> events) {
+  Stream<MyFormState> transform(
+    Stream<MyFormEvent> events,
+    Stream<MyFormState> Function(MyFormEvent event) next,
+  ) {
     final observableStream = events as Observable<MyFormEvent>;
     final nonDebounceStream = observableStream.where((event) {
       return (event is! EmailChanged && event is! PasswordChanged);
@@ -31,7 +34,7 @@ class LoginBloc extends Bloc<MyFormEvent, MyFormState> {
     final debounceStream = observableStream.where((event) {
       return (event is EmailChanged || event is PasswordChanged);
     }).debounce(Duration(milliseconds: 300));
-    return nonDebounceStream.mergeWith([debounceStream]);
+    return super.transform(nonDebounceStream.mergeWith([debounceStream]), next);
   }
 
   @override
