@@ -39,8 +39,7 @@ class GenerateBlocAction : AnAction(), GenerateBlocDialog.Listener {
         e.dataContext.let {
             this.dataContext = it
             val presentation = e.presentation
-            val available = isAvailable(dataContext)
-            presentation.isEnabled = available
+            presentation.isEnabled = true
         }
     }
 
@@ -57,32 +56,6 @@ class GenerateBlocAction : AnAction(), GenerateBlocDialog.Listener {
                 "Generate a new Bloc",
                 null
             )
-        }
-    }
-
-    private fun isAvailable(dataContext: DataContext): Boolean {
-        val project = CommonDataKeys.PROJECT.getData(dataContext)
-        val view = LangDataKeys.IDE_VIEW.getData(dataContext)
-        return if (project == null || view == null || view.directories.isEmpty()) {
-            false
-        } else {
-            val projectFileIndex = ProjectRootManager.getInstance(project).fileIndex
-            view.directories.forEach { directory ->
-                if (projectFileIndex.isUnderSourceRootOfType(directory.virtualFile, JavaModuleSourceRootTypes.SOURCES) && packageExists(directory)) {
-                    return true
-                }
-            }
-            false
-        }
-    }
-
-    private fun packageExists(directory: PsiDirectory): Boolean {
-        val pkg = JavaDirectoryService.getInstance().getPackage(directory)
-        return if (pkg == null) {
-            false
-        } else {
-            val name = pkg.qualifiedName
-            name.isEmpty() || PsiNameHelper.getInstance(directory.project).isQualifiedName(name)
         }
     }
 
