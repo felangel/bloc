@@ -1,3 +1,7 @@
+# 0.12.0
+
+Updated `transform` to enable advanced event filtering and processing and Documentation Updates.
+
 # 0.11.2
 
 Added `BlocDelegate` `onError` and `onTransition` mustCallSuper and Documentation Updates
