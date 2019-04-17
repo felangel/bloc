@@ -112,7 +112,7 @@ BlocListener(
 
 Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
 
-`counter_bloc.dart`
+### counter_bloc.dart
 
 ```dart
 enum CounterEvent { increment, decrement }
@@ -135,7 +135,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-`counter_page.dart`
+### counter_page.dart
 
 ```dart
 class CounterPage extends StatelessWidget {

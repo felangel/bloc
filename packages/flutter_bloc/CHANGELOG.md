@@ -1,3 +1,7 @@
+# 0.11.1
+
+Broaden Dart version range and Minor Documentation Updates
+
 # 0.11.0
 
 Updated to `bloc: ^0.12.0` and Documentation Updates
