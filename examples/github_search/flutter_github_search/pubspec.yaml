@@ -9,7 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter  
-  flutter_bloc: ^0.10.0
+  flutter_bloc:
+    path: ../../../packages/flutter_bloc
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search

@@ -1,3 +1,7 @@
+# 0.11.0
+
+Updated to `bloc: ^0.12.0` and Documentation Updates
+
 # 0.10.1
 
 Invoke `BlocWidgetListener` on initial state and Documentation Updates
