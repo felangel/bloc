@@ -12,14 +12,22 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   GithubSearchBloc({@required this.githubRepository});
 
   @override
-  Stream<GithubSearchEvent> transform(Stream<GithubSearchEvent> events) {
-    return (events as Observable<GithubSearchEvent>)
-        .debounce(Duration(milliseconds: 500));
+  Stream<GithubSearchState> transform(
+    Stream<GithubSearchEvent> events,
+    Stream<GithubSearchState> Function(GithubSearchEvent event) next,
+  ) {
+    return super.transform(
+      (events as Observable<GithubSearchEvent>).debounce(
+        Duration(milliseconds: 500),
+      ),
+      next,
+    );
   }
 
   @override
   void onTransition(
-      Transition<GithubSearchEvent, GithubSearchState> transition) {
+    Transition<GithubSearchEvent, GithubSearchState> transition,
+  ) {
     print(transition);
   }
 
