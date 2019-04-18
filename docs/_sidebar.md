@@ -14,6 +14,7 @@
     - [Login](flutterlogintutorial.md)
     - [Weather](flutterweathertutorial.md)
     - [Todos](fluttertodostutorial.md)
+    - [Firebase Login](flutterfirebaselogintutorial.md)
   - AngularDart
     - [Counter](angularcountertutorial.md)
   - Flutter + AngularDart

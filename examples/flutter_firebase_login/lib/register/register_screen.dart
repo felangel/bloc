@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication/authentication.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
-import 'package:flutter_firebase_login/forms/forms.dart';
+import 'package:flutter_firebase_login/register/register.dart';
 
 class RegisterScreen extends StatefulWidget {
   final UserRepository _userRepository;
@@ -22,7 +21,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void initState() {
     super.initState();
     _registerBloc = RegisterBloc(
-      authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
       userRepository: widget._userRepository,
     );
   }

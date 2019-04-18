@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 @immutable
-class MyFormState {
+class LoginState {
   final bool isEmailValid;
   final bool isPasswordValid;
   final bool isSubmitting;
@@ -10,7 +10,7 @@ class MyFormState {
 
   bool get isFormValid => isEmailValid && isPasswordValid;
 
-  MyFormState({
+  LoginState({
     @required this.isEmailValid,
     @required this.isPasswordValid,
     @required this.isSubmitting,
@@ -18,8 +18,8 @@ class MyFormState {
     @required this.isFailure,
   });
 
-  factory MyFormState.empty() {
-    return MyFormState(
+  factory LoginState.empty() {
+    return LoginState(
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: false,
@@ -28,8 +28,8 @@ class MyFormState {
     );
   }
 
-  factory MyFormState.loading() {
-    return MyFormState(
+  factory LoginState.loading() {
+    return LoginState(
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: true,
@@ -38,8 +38,8 @@ class MyFormState {
     );
   }
 
-  factory MyFormState.failure() {
-    return MyFormState(
+  factory LoginState.failure() {
+    return LoginState(
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: false,
@@ -48,8 +48,8 @@ class MyFormState {
     );
   }
 
-  factory MyFormState.success() {
-    return MyFormState(
+  factory LoginState.success() {
+    return LoginState(
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: false,
@@ -58,7 +58,7 @@ class MyFormState {
     );
   }
 
-  MyFormState update({
+  LoginState update({
     bool isEmailValid,
     bool isPasswordValid,
   }) {
@@ -71,7 +71,7 @@ class MyFormState {
     );
   }
 
-  MyFormState copyWith({
+  LoginState copyWith({
     bool isEmailValid,
     bool isPasswordValid,
     bool isSubmitEnabled,
@@ -79,7 +79,7 @@ class MyFormState {
     bool isSuccess,
     bool isFailure,
   }) {
-    return MyFormState(
+    return LoginState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
       isPasswordValid: isPasswordValid ?? this.isPasswordValid,
       isSubmitting: isSubmitting ?? this.isSubmitting,
@@ -90,7 +90,7 @@ class MyFormState {
 
   @override
   String toString() {
-    return '''MyFormState {
+    return '''LoginState {
       isEmailValid: $isEmailValid,
       isPasswordValid: $isPasswordValid,      
       isSubmitting: $isSubmitting,
