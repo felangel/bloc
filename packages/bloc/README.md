@@ -50,6 +50,8 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **onError** is a method that can be overridden to handle whenever an `Exception` is thrown. By default all exceptions will be ignored and `Bloc` functionality will be unaffected. **It is a great place to add bloc-specific error handling**.
 
+**dispose** is a method that closes the `event` and `state` streams. `Dispose` should be called when a `Bloc` is no longer needed. Once `dispose` is called, `events` that are `dispatched` will not be processed and will result in an error being passed to `onError`.
+
 ## BlocDelegate Interface
 
 **onTransition** is a method that can be overridden to handle whenever a `Transition` occurs in **any** `Bloc`. **It is a great place to add universal logging/analytics**.

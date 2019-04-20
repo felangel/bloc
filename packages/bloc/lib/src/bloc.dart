@@ -53,6 +53,9 @@ abstract class Bloc<Event, State> {
   }
 
   /// Closes the [Event] and [State] [Stream]s.
+  /// This method should be called when a [Bloc] is no longer needed.
+  /// Once `dispose` is called, events that are `dispatched` will not be
+  /// processed and will result in an error being passed to `onError`.
   @mustCallSuper
   void dispose() {
     _eventSubject.close();
