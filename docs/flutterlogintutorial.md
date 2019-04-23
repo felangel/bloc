@@ -1,6 +1,6 @@
 # Flutter Login Tutorial
 
-![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+![intermediate](https://img.shields.io/badge/level-intermediate-orange.svg)
 
 > In the following tutorial, we're going to build a Login Flow in Flutter using the Bloc library.
 
