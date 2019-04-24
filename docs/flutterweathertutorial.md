@@ -42,7 +42,7 @@ flutter:
     - assets/
 ```
 
-?> **Note:** We are going to use custom assets in our project so we include the entire assets directory.
+?> **Note:** We are going to add some assets (icons for weather types) in our app, so we need to include the assets folder in the pubspec.yaml. Please go ahead and create an *assets* folder in the root of the project.
 
 and then install all of our dependencies
 
@@ -252,15 +252,29 @@ Navigate to [https://www.metaweather.com/api/location/44418](https://www.metawea
 
 Great, now that we know what our data is going to look like, let’s create the necessary data models.
 
-## Data Model
+## Creating Our Weather Data Model
 
 Even though the weather API returns weather for multiple days, for simplicity, we're only going to worry about today's weather.
 
-We are going to extract a subset of the data from the API and create a `Weather` model which will look something like:
+Let's start off by creating a folder for our models **`lib/models`** and create a file in there called **`weather.dart`** which will hold our data model for our **`Weather`** class. Next inside of `lib/models` create a file called `models.dart` which is our barrel file where we export all models from.
+
+#### Imports
+
+First off we need to import our dependencies for our class. At the top of `weather.dart` go ahead and add:
 
 ```dart
 import 'package:equatable/equatable.dart';
+```
 
+- `equatable`: Package that allows comparisons between objects without having to override the `==` operator
+
+#### Create WeatherCondition Enum
+
+Next we are going to create an enumerator for all our possible weather conditions. On the next line, let's add the enum.
+
+*These conditions come from the definition of the [metaweather API](https://www.metaweather.com/api/)*
+
+```dart
 enum WeatherCondition {
   snow,
   sleet,
@@ -274,7 +288,13 @@ enum WeatherCondition {
   clear,
   unknown
 }
+```
 
+#### Create Weather Model
+
+Next we need to create a class to be our defined data model for the weather object returned from the API. We are going to extract a subset of the data from the API and create a `Weather` model. Go ahead and add this to the `weather.dart` file below the `WeatherCondition` enum.
+
+```dart
 class Weather extends Equatable {
   final WeatherCondition condition;
   final String formattedCondition;
@@ -367,11 +387,17 @@ class Weather extends Equatable {
 
 ?> We extend [`Equatable`](https://pub.dartlang.org/packages/equatable) so that we can compare `Weather` instances. By default, the equality operator returns true if and only if this and other are the same instance.
 
-There's not much happening here; we are just defining our `Weather` data model and implementing a `fromJson` method so that we can create a `Weather` instance from the API response body.
+There's not much happening here; we are just defining our `Weather` data model and implementing a `fromJson` method so that we can create a `Weather` instance from the API response body and creating a method that maps the raw string to a `WeatherCondition` in our enum.
 
-Next, we need to build our `WeatherApiClient` which will be responsible for making http requests to the weather API.
+#### Export in Barrel
+
+Now we need to export this class in our barrel file. Open up `lib/models/models.dart` and add the following line of code:
+
+```export 'weather.dart';```
 
 ## Data Provider
+
+Next, we need to build our `WeatherApiClient` which will be responsible for making http requests to the weather API.
 
 > The `WeatherApiClient` is the lowest layer in our application architecture (the data provider). It's only responsibility is to fetch data directly from our API.
 
@@ -380,54 +406,108 @@ As we mentioned earlier, we are going to be hitting two endpoints so our `Weathe
 - `getLocationId(String city)`
 - `fetchWeather(int locationId)`
 
-It should look something like this:
+#### Creating our Weather API Client
+
+This layer of our application is called the repository layer, so let's go ahead and create a folder for our repositories. Inside of `lib/` create a folder called `repositories` and then create a file called `weather_api_client.dart`.
+
+#### Adding a Barrel
+
+Same as we did with our models, let's create a barrel file for our repositories. Inside of `lib/repositories` go ahead and add a file called `repositories.dart` and leave it blank for now.
+
+- `models`: Lastly, we import our `Weather` model we created earlier.
+
+#### Create Our WeatherApiClient class
+
+Let's create a class. Go ahead and add this:
 
 ```dart
-import 'dart:convert';
-
-import 'package:meta/meta.dart';
-import 'package:http/http.dart' as http;
-
-import 'package:flutter_weather/models/models.dart';
-
 class WeatherApiClient {
   static const baseUrl = 'https://www.metaweather.com';
   final http.Client httpClient;
 
-  WeatherApiClient({@required this.httpClient}) : assert(httpClient != null);
-
-  Future<int> getLocationId(String city) async {
-    final locationUrl = '$baseUrl/api/location/search/?query=$city';
-    final locationResponse = await this.httpClient.get(locationUrl);
-    if (locationResponse.statusCode != 200) {
-      throw Exception('error getting locationId for city');
-    }
-
-    final locationJson = jsonDecode(locationResponse.body) as List;
-    return (locationJson.first)['woeid'];
-  }
-
-  Future<Weather> fetchWeather(int locationId) async {
-    final weatherUrl = '$baseUrl/api/location/$locationId';
-    final weatherResponse = await this.httpClient.get(weatherUrl);
-
-    if (weatherResponse.statusCode != 200) {
-      throw Exception('error getting weather for location');
-    }
-
-    final weatherJson = jsonDecode(weatherResponse.body);
-    return Weather.fromJson(weatherJson);
-  }
+  WeatherApiClient({
+    @required this.httpClient,
+  }) : assert(httpClient != null);
 }
 ```
 
-?> **Note:** Our `WeatherApiClient` has an `httpClient` injected via the constructor and it handles making the network request and serializing the response json into the respective data model.
+Here we are creating a constant for our base URL and instantiating our http client. Then we are creating our Constructor and requiring that we inject an instance of httpClient. You'll see some missing dependencies. Let's go ahead and add them to the top of the file:
 
-We've got our `DataProvider` done so it's time to move up to the next layer of our app's architecture: the repository layer.
+```dart
+import 'package:meta/meta.dart';
+import 'package:http/http.dart' as http;
+```
+
+- `meta`: Defines annotations that can be used by the tools that are shipped with the Dart SDK.
+- `http`: A composable, Future-based library for making HTTP requests.
+
+#### Add getLocationId Method
+
+Now let's add our first public method, which will get the locationId for a given city. Below the constructor, go ahead and add:
+
+```dart
+Future<int> getLocationId(String city) async {
+  final locationUrl = '$baseUrl/api/location/search/?query=$city';
+  final locationResponse = await this.httpClient.get(locationUrl);
+  if (locationResponse.statusCode != 200) {
+    throw Exception('error getting locationId for city');
+  }
+
+  final locationJson = jsonDecode(locationResponse.body) as List;
+  return (locationJson.first)['woeid'];
+}
+```
+
+Here we are just making a simple HTTP request and then decoding the response as a list. Speaking of decoding, you'll see `jsonDecode` is a function from a dependency we need to import. So let's go ahead nad do that now. At the top of the file by the other imports go ahead and add:
+
+```dart
+import 'dart:convert';
+```
+
+- `dart:convert`: Encoder/Decoder for converting between different data representations, including JSON and UTF-8.
+
+#### Add fetchWeather Method
+
+Next up let's add our other method to hit the metaweather API. This one will get the weather for a city given it's locationId. Below the `getLocationId` method we just implemented, let's go ahead and add this:
+
+```dart
+Future<Weather> fetchWeather(int locationId) async {
+  final weatherUrl = '$baseUrl/api/location/$locationId';
+  final weatherResponse = await this.httpClient.get(weatherUrl);
+
+  if (weatherResponse.statusCode != 200) {
+    throw Exception('error getting weather for location');
+  }
+
+  final weatherJson = jsonDecode(weatherResponse.body);
+  return Weather.fromJson(weatherJson);
+}
+```
+
+Here again we are just making a simple HTTP request and decoding the response into JSON. You'll notice we again need to import a dependency, this time our `Weather` model. At the top of the file, go ahead and import it like so:
+
+```dart
+import 'package:flutter_weather/models/models.dart';
+```
+
+#### Export WeatherApiClient
+
+Now that we have our class created with our two methods, let's go ahead and export it in the barrel file. Inside of `repositories.dart` go ahead and add:
+
+`export 'weather_api_client.dart';`
+
+#### What next
+
+
+We've got our `DataProvider` done so it's time to move up to the next layer of our app's architecture: the **repository layer**.
 
 ## Repository
 
 > The `WeatherRepository` serves as an abstraction between the client code and the data provider so that as a developer working on features, you don't have to know where the data is coming from. Our `WeatherRepository` will have a dependency on our `WeatherApiClient` that we just created and it will expose a single public method called, you guessed it, `getWeather(String city)`. No one needs to know that under the hood we need to make two API calls (one for locationId and one for weather) because no one really cares. All we care about is getting the `Weather` for a given city.
+
+#### Creating Our Weather Repository
+
+This file can live in our repository folder. So go ahead and create a file called `weather_repository.dart` and open it up.
 
 Our `WeatherRepository` is quite simple and should look something like this:
 
@@ -450,17 +530,27 @@ class WeatherRepository {
 }
 ```
 
+#### Export WeatherRepository in Barrel
+
+Go ahead and open up `repositories.dart` and export this like so:
+
+`export 'weather_repository.dart';`
+
 Awesome! We are now ready to move up to the business logic layer and start building our `WeatherBloc`.
 
 ## Business Logic (Bloc)
 
 > Our `WeatherBloc` is responsible for receiving `WeatherEvents` and converting them into `WeatherStates`. It will have a dependency on `WeatherRepository` so that it can retrieve the `Weather` when a user inputs a city of their choice.
 
-Before jumping into the Bloc we need to define what events our `WeatherBloc` will be handling as well as how we are going to represent our `WeatherState`.
+#### Creating Our First Bloc
 
-### Weather Event
+We will create a few Blocs during this tutorial, so lets create a folder inside of `lib` called `blocs`. Again since we will have multiple blocs, let's first create a barrel file called `blocs.dart` inside our `blocs` folder.
 
-For simplicity, we're going to start off by having a single event called `FetchWeather`.
+Before jumping into the Bloc we need to define what events our `WeatherBloc` will be handling as well as how we are going to represent our `WeatherState`. To keep our files small, we will separate `event` `state` and `bloc` into three files.
+
+#### Weather Event
+
+Let's create a file called `weather_event.dart` inside of the `blocs` folder. For simplicity, we're going to start off by having a single event called `FetchWeather`.
 
 We can define it like:
 
@@ -481,9 +571,15 @@ class FetchWeather extends WeatherEvent {
 }
 ```
 
-Whenever a user inputs a city, we will `dispatch` a `FetchWeather` event with the given city and our bloc will responsible for figuring out what the weather is there and returning a new `WeatherState`.
+Whenever a user inputs a city, we will `dispatch` a `FetchWeather` event with the given city and our bloc will be responsible for figuring out what the weather is there and returning a new `WeatherState`.
 
-### Weather State
+Then let's export the class in our barrel file. Inside of `blocs.dart` please add:
+
+`export 'weather_event.dart';`
+
+#### Weather State
+
+Next up let's create our `state` file. Inside of the `blocs` folder go ahead and create a file named `weather_state.dart` where our `weatherState` will live.
 
 For the current application, we will have 4 possible states:
 
@@ -519,13 +615,19 @@ class WeatherLoaded extends WeatherState {
 class WeatherError extends WeatherState {}
 ```
 
+Then let's export this class in our barrel file. Inside of `blocs.dart` go ahead and add:
+
+`export 'weather_state.dart';`
+
 Now that we have our `Events` and our `States` defined and implemented we are ready to make our `WeatherBloc`.
 
-### Weather Bloc
+#### Weather Bloc
 
 > Our `WeatherBloc` is very straightforward. To recap, it converts `WeatherEvents` into `WeatherStates` and has a dependency on the `WeatherRepository`.
 
 ?> **Tip:** Check out the [Bloc VSCode Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) in order to take advantage of the bloc snippets and even further improve your efficiency and development speed.
+
+Go ahead and create a file inside of the `blocs` folder called `weather_bloc.dart` and add the following:
 
 ```dart
 import 'package:meta/meta.dart';
@@ -533,6 +635,7 @@ import 'package:bloc/bloc.dart';
 
 import 'package:flutter_weather/repositories/repositories.dart';
 import 'package:flutter_weather/models/models.dart';
+import 'package:flutter_weather/blocs/blocs.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final WeatherRepository weatherRepository;
@@ -564,13 +667,17 @@ Since we are only handling the `FetchWeather` event all we need to do is `yield`
 
 If we are able to successfully retrieve the weather we then `yield` a `WeatherLoaded` state and if we are unable to retrieve the weather, we `yield` a `WeatherError` state.
 
+Now export this class in `blocs.dart`:
+
+`export 'weather_bloc.dart';`
+
 That's all there is to it! Now we're ready to move on to the final layer: the presentation layer.
 
 ## Presentation
 
 ### Setup
 
-As you've probably already seen in other tutorials, we're going to create a `SimpleBlocDelegate` so that we can see all state transitions in our application.
+As you've probably already seen in other tutorials, we're going to create a `SimpleBlocDelegate` so that we can see all state transitions in our application. Let's go ahead and add this to our `main.dart` file above the `main()` function. Then go ahead and delete all the code below `main`
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -589,12 +696,16 @@ Next, we're going to set our delegate in our `main` function like so:
 ```dart
 void main() {
   BlocSupervisor().delegate = SimpleBlocDelegate();
+  runApp(App());
 }
 ```
 
-Lastly, we need to create our `WeatherRepository` and inject it into our `App` widget.
+Lastly, we need to create our `WeatherRepository` and inject it into our `App` widget (which we will create in the next step).
 
 ```dart
+import 'package:flutter_weather/repositories/repositories.dart';
+import 'package:http/http.dart' as http;
+
 void main() {
   BlocSupervisor().delegate = SimpleBlocDelegate();
 
@@ -608,9 +719,9 @@ void main() {
 }
 ```
 
-### App
+### App Widget
 
-Our `App` widget is going to start off as a `StatelessWidget` which has the `WeatherRepository` injected and builds the `MaterialApp` with our `Weather` widget.
+Our `App` widget is going to start off as a `StatelessWidget` which has the `WeatherRepository` injected and builds the `MaterialApp` with our `Weather` widget (which we will create in the next step).
 
 ```dart
 class App extends StatelessWidget {
@@ -634,11 +745,13 @@ class App extends StatelessWidget {
 
 ### Weather
 
+Now we need to create our `Weather` Widget. Go ahead and make a folder called `widgets` inside of `lib` and create a barrel file inside called `widgets.dart`. Next create a file called `weather.dart`.
+
 > Our Weather Widget will be a `StatefulWidget` responsible for creating and disposing a `WeatherBloc`.
 
-```dart
-import 'dart:async';
+#### Creating Our Stateful Widget
 
+```dart
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -746,16 +859,18 @@ class _WeatherState extends State<Weather> {
 
 All that's happening in this widget is we're using `BlocBuilder` with our `WeatherBloc` in order to rebuild our UI based on state changes in our `WeatherBloc`.
 
-You'll notice that we are referencing a `Location`, `LastUpdated`, and `CombinedWeatherTemperature` widget which we will create in the following sections.
+Go ahead and export `Weather` in the `widgets.dart` file.
 
-### Location
+You'll notice that we are referencing a `CitySelection`, `Location`, `LastUpdated`, and `CombinedWeatherTemperature` widget which we will create in the following sections.
+
+### Location Widget
+
+Go ahead and create a file called `location.dart` inside of the `widgets` folder.
 
 > Our `Location` widget is simple; it displays the current location.
 
 ```dart
 import 'package:flutter/material.dart';
-
-import 'package:meta/meta.dart';
 
 class Location extends StatelessWidget {
   final String location;
@@ -778,14 +893,16 @@ class Location extends StatelessWidget {
 }
 ```
 
+Make sure to export this in the `widgets.dart` file.
+
 ### Last Updated
+
+Next up create a `last_updated.dart` file inside the `widgets` folder.
 
 > Our `LastUpdated` widget is also super simple; it displays the last updated time so that users know how fresh the weather data is.
 
 ```dart
 import 'package:flutter/material.dart';
-
-import 'package:meta/meta.dart';
 
 class LastUpdated extends StatelessWidget {
   final DateTime dateTime;
@@ -808,16 +925,18 @@ class LastUpdated extends StatelessWidget {
 }
 ```
 
+Make sure to export this in the `widgets.dart` file.
+
 ?> **Note:** We are using [`TimeOfDay`](https://docs.flutter.io/flutter/material/TimeOfDay-class.html) to format the `DateTime` into a more human-readable format.
 
 ### Combined Weather Temperature
+
+Next up create a `combined_weather_temperature.dart` file inside the `widgets` folder.
 
 > The `CombinedWeatherTemperature` widget is a compositional widget which displays the current weather along with the temperature. We are still going to modularize the `Temperature` and `WeatherConditions` widgets so that they can all be reused.
 
 ```dart
 import 'package:flutter/material.dart';
-
-import 'package:meta/meta.dart';
 
 import 'package:flutter_weather/models/models.dart' as model;
 import 'package:flutter_weather/widgets/widgets.dart';
@@ -868,16 +987,18 @@ class CombinedWeatherTemperature extends StatelessWidget {
 }
 ```
 
+Make sure to export this in the `widgets.dart` file.
+
 ?> **Note:** We are using two unimplemented widgets: `WeatherConditions` and `Temperature` which we will create next.
 
 ### Weather Conditions
+
+Next up create a `weather_conditions.dart` file inside the `widgets` folder.
 
 > Our `WeatherConditions` widget will be responsible for displaying the current weather conditions (clear, showers, thunderstorms, etc...) along with a matching icon.
 
 ```dart
 import 'package:flutter/material.dart';
-
-import 'package:meta/meta.dart';
 
 import 'package:flutter_weather/models/models.dart';
 
@@ -923,9 +1044,15 @@ class WeatherConditions extends StatelessWidget {
 }
 ```
 
+Here you can see we are using some assets. Please download them from [here](https://github.com/felangel/bloc/tree/master/examples/flutter_weather/assets) and add them to the `assets/` directory we created at the beginning of the project.
+
+Make sure to export this in the `widgets.dart` file.
+
 ?> **Tip:** Check out [icons8](https://icons8.com/icon/set/weather/office) for the assets used in this tutorial.
 
 ### Temperature
+
+Next up create a `temperature.dart` file inside the `widgets` folder.
 
 > Our `Temperature` widget will be responsible for displaying the average, min, and max temperatures.
 
@@ -987,9 +1114,11 @@ class Temperature extends StatelessWidget {
 }
 ```
 
-The last thing we need to implement to have a functional app is out `CitySelection` widget which allows users to type in the name a city.
+Make sure to export this in the `widgets.dart` file.
 
 ### City Selection
+
+The last thing we need to implement to have a functional app is out `CitySelection` widget which allows users to type in the name a city. Go ahead and create a `city_selection.dart` file inside the `widgets` folder.
 
 > The `CitySelection` widget will allow users to input a city name and pass the selected city back to the `App` widget.
 
@@ -1043,8 +1172,17 @@ It needs to be a `StatefulWidget` because it has to maintain a `TextController`.
 
 ?> **Note:** When we press the search button we use `Navigator.pop` and pass the current text from our `TextController` back to the previous view.
 
-At this point we have a fully functioning weather app but upon running it you'll notice it has a few problems:
+Make sure to export this in the `widgets.dart` file.
 
+## Run the App
+
+Now that we have created all our widgets, let's go back to the `main.dart` file. You'll see we need to import our `Weather` widget, so go ahead and add this line up top.
+
+`import 'package:flutter_weather/widgets/widgets.dart';`
+
+Then you can go ahead and run the app with `flutter run` in the terminal. Go ahead and select a city and you'll notice it has a few problems:
+
+- The background is white and so is the text making it very hard to read
 - We have no way to refresh the weather data after it is fetched
 - The UI is very plain
 - Everything is in Celsius and we have no way to change the units
@@ -1053,7 +1191,7 @@ Let's address these problems and take our Weather App to the next level!
 
 ## Pull-To-Refresh
 
-> In order to support pull-to-refresh we will need to update our `WeatherBloc` to handle a second event: `RefreshWeather`.
+> In order to support pull-to-refresh we will need to update our `WeatherEvent` to handle a second event: `RefreshWeather`. Go ahead and add the following code to `blocs/weather_event.dart`
 
 ```dart
 class RefreshWeather extends WeatherEvent {
@@ -1065,66 +1203,31 @@ class RefreshWeather extends WeatherEvent {
 }
 ```
 
-Next, we need to update our `mapEventToState` to handle a `RefreshWeather` event.
+Next, we need to update our `mapEventToState` inside of `weather_bloc.dart` to handle a `RefreshWeather` event. Go ahead and add this `if` statement below the existing one.
 
 ```dart
-class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
-  final WeatherRepository weatherRepository;
-
-  WeatherBloc({@required this.weatherRepository})
-      : assert(weatherRepository != null);
-
-  @override
-  WeatherState get initialState => WeatherEmpty();
-
-  @override
-  Stream<WeatherState> mapEventToState(WeatherEvent event) async* {
-    if (event is FetchWeather) {
-      yield WeatherLoading();
-      try {
-        final Weather weather = await weatherRepository.getWeather(event.city);
-        yield WeatherLoaded(weather: weather);
-      } catch (_) {
-        yield WeatherError();
-      }
-    }
-
-    if (event is RefreshWeather) {
-      try {
-        final Weather weather = await weatherRepository.getWeather(event.city);
-        yield WeatherLoaded(weather: weather);
-      } catch (_) {
-        yield currentState;
-      }
-    }
+if (event is RefreshWeather) {
+  try {
+    final Weather weather = await weatherRepository.getWeather(event.city);
+    yield WeatherLoaded(weather: weather);
+  } catch (_) {
+    yield currentState;
   }
 }
 ```
 
-Lastly, we need to update our presentation layer to use a `RefreshIndicator` widget.
+Here we are just creating a new event that will ask our weatherRepository to make an API call to get the weather for the city.
+
+Lastly, we need to update our presentation layer to use a `RefreshIndicator` widget. Let's go ahead and modify our `Weather` widget in `widgets/weather.dart`. There are a few things we need to do.
+
+- Import `async` to the `weather.dart` file to handle `Future`
+
+`import 'dart:async';`
+
+
+- Add a Completer
 
 ```dart
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:flutter_weather/widgets/widgets.dart';
-import 'package:flutter_weather/repositories/repositories.dart';
-import 'package:flutter_weather/blocs/blocs.dart';
-
-class Weather extends StatefulWidget {
-  final WeatherRepository weatherRepository;
-
-  Weather({Key key, @required this.weatherRepository})
-      : assert(weatherRepository != null),
-        super(key: key);
-
-  @override
-  State<Weather> createState() => _WeatherState();
-}
-
 class _WeatherState extends State<Weather> {
   WeatherBloc _weatherBloc;
   Completer<void> _refreshCompleter;
@@ -1135,98 +1238,46 @@ class _WeatherState extends State<Weather> {
     _refreshCompleter = Completer<void>();
     _weatherBloc = WeatherBloc(weatherRepository: widget.weatherRepository);
   }
+  ...
+```
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter Weather'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () async {
-              final city = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CitySelection(),
-                ),
-              );
-              if (city != null) {
-                _weatherBloc.dispatch(FetchWeather(city: city));
-              }
-            },
-          )
-        ],
-      ),
-      body: Center(
-        child: BlocBuilder(
-          bloc: _weatherBloc,
-          builder: (_, WeatherState state) {
-            if (state is WeatherEmpty) {
-              return Center(child: Text('Please Select a Location'));
-            }
-            if (state is WeatherLoading) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (state is WeatherLoaded) {
-              final weather = state.weather;
+- Inside the widgets `build` method, let's wrap the `ListView` in a `RefreshIndicator` widget like so. Then return the `_refreshCompleter.future;` when the `onRefresh` callback happens.
 
-              _refreshCompleter?.complete();
-              _refreshCompleter = Completer();
-
-              return RefreshIndicator(
-                onRefresh: () {
-                  _weatherBloc.dispatch(
-                    RefreshWeather(city: state.weather.location),
-                  );
-                  return _refreshCompleter.future;
-                },
-                child: ListView(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 100.0),
-                      child: Center(
-                        child: Location(location: weather.location),
-                      ),
-                    ),
-                    Center(
-                      child: LastUpdated(dateTime: weather.lastUpdated),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 50.0),
-                      child: Center(
-                        child: CombinedWeatherTemperature(
-                          weather: weather,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-            if (state is WeatherError) {
-              return Text(
-                'Something went wrong!',
-                style: TextStyle(color: Colors.red),
-              );
-            }
-          },
+```dart
+return RefreshIndicator(
+  onRefresh: () {
+    _weatherBloc.dispatch(
+      RefreshWeather(city: state.weather.location),
+    );
+    return _refreshCompleter.future;
+  },
+  child: ListView(
+    children: <Widget>[
+      Padding(
+        padding: EdgeInsets.only(top: 100.0),
+        child: Center(
+          child: Location(location: weather.location),
         ),
       ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _weatherBloc.dispose();
-    super.dispose();
-  }
-}
+      Center(
+        child: LastUpdated(dateTime: weather.lastUpdated),
+      ),
+      Padding(
+        padding: EdgeInsets.symmetric(vertical: 50.0),
+        child: Center(
+          child: CombinedWeatherTemperature(
+            weather: weather,
+          ),
+        ),
+      ),
+    ],
+  ),
+);
 ```
 
 In order to use the `RefreshIndicator` we had to create a [`Completer`](https://api.dartlang.org/stable/2.1.0/dart-async/Completer-class.html) which allows us to produce a `Future` which we can complete at a later time.
 
-That's it! We now have solved problem #1 and users can refresh the weather by pulling down.
+That's it! We now have solved problem #1 and users can refresh the weather by pulling down. Feel free to run `flutter run` again and try refreshing the weather.
 
 Next, let's tackle the plain looking UI by creating a `ThemeBloc`.
 
