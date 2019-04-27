@@ -1,4 +1,4 @@
-# Flutter Login Tutorial
+# Flutter Firebase Login Tutorial
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
@@ -58,7 +58,7 @@ The last thing we need to do is follow the [firebase_auth usage instructions](ht
 
 ## User Repository
 
-Just like in the [flutter login tutorial](./flutterlogintutorial.md), we're going to need to create our `UserRepository` which will be responsible for abstracting the underlying implementation for how we authenticate and retreive user information.
+Just like in the [flutter login tutorial](./flutterlogintutorial.md), we're going to need to create our `UserRepository` which will be responsible for abstracting the underlying implementation for how we authenticate and retrieve user information.
 
 Let's create `user_repository.dart` and get started.
 
@@ -80,7 +80,7 @@ class UserRepository {
 
 ?> **Note:** If `FirebaseAuth` and/or `GoogleSignIn` are not injected into the `UserRepository`, then we instantiate them internally. This allows us to be able to inject mock instances so that we can easily test the `UserRepository`.
 
-The first method we're going to implement we will call `signInWithGoogle` which will authenticate the user using the `GoogleSignIn` package.
+The first method we're going to implement we will call `signInWithGoogle` and it will authenticate the user using the `GoogleSignIn` package.
 
 ```dart
 Future<FirebaseUser> signInWithGoogle() async {
@@ -272,7 +272,7 @@ class Unauthenticated extends AuthenticationState {
 
 ?> **Note**: `toString` is overridden to make it easier to read an `AuthenticationState` when printing it to the console or in `Transitions`.
 
-!> Since we're using `Equatable` in order to allow us to compare different instances of `AuthenticationState` we need to pass any properties to the superclass. Without `super([displayName])`, we will not be able to properly compare different instances of `Authenticated`.
+!> Since we're using `Equatable` to allow us to compare different instances of `AuthenticationState` we need to pass any properties to the superclass. Without `super([displayName])`, we will not be able to properly compare different instances of `Authenticated`.
 
 ## Authentication Events
 
@@ -392,7 +392,7 @@ Stream<AuthenticationState> _mapLoggedOutToState() async* {
 }
 ```
 
-We created separate private helper functions to convert each `AuthenticationEvent` into the propert `AuthenticationState` in order to keep `mapEventToState` clean and easy to read.
+We created separate private helper functions to convert each `AuthenticationEvent` into the proper `AuthenticationState` in order to keep `mapEventToState` clean and easy to read.
 
 ?> **Note:** We are using `yield*` (yield-each) in `mapEventToState` to separate the event handlers into their own functions. `yield*` inserts all the elements of the subsequence into the sequence currently being constructed, as if we had an individual yield for each element.
 
@@ -868,6 +868,8 @@ class LoginState {
   }
 }
 ```
+
+The states we're representing are:
 
 `empty` is the initial state of the LoginForm.
 
@@ -1603,7 +1605,7 @@ class Submitted extends RegisterEvent {
 }
 ```
 
-**Note:** Again, the `RegisterEvent` implementation looks very similar to the `LoginEvent` implementation but since the two are separate features we're keeping them independent in this example.
+?> **Note:** Again, the `RegisterEvent` implementation looks very similar to the `LoginEvent` implementation but since the two are separate features we're keeping them independent in this example.
 
 ## Register Barrel File
 
@@ -1912,7 +1914,7 @@ class _RegisterFormState extends State<RegisterForm> {
 }
 ```
 
-Again, we need to manage `TextEdittingControllers` for the text input so our `RegisterForm` needs to be a `StatefulWidget`. In addition, we are using `BlocListener` again in order to execute one-time actions in response to state changes such as showing `SnackBar` when the registration is pending or fails. We are also dispatching the `LoggedIn` event to the `AuthenticationBloc` if the registration was a success so that we can immediately log the user in.
+Again, we need to manage `TextEditingControllers` for the text input so our `RegisterForm` needs to be a `StatefulWidget`. In addition, we are using `BlocListener` again in order to execute one-time actions in response to state changes such as showing `SnackBar` when the registration is pending or fails. We are also dispatching the `LoggedIn` event to the `AuthenticationBloc` if the registration was a success so that we can immediately log the user in.
 
 ?> **Note:** We're using `BlocBuilder` in order to make our UI respond to changes in the `RegisterBloc` state.
 
