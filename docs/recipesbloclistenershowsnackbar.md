@@ -1,4 +1,4 @@
-# Recipes: BlocListener
+# Recipes: Show SnackBar with BlocListener
 
 > In this recipe, we're going to take a look at how to use `BlocListener` to show a `SnackBar` in response to a state change in a bloc.
 
