@@ -27,7 +27,7 @@ Bloc can be installed from the [VSCode Marketplace](https://marketplace.visualst
 
 The New Bloc Command allows you to create a Bloc and the Events/States so that all that's left to do is implement your logic in `mapEventToState`.
 
-You can active the command by launching the command palette (View -> Command Palette) and running "Bloc: New Bloc".
+You can activate the command by launching the command palette (View -> Command Palette) and running "Bloc: New Bloc".
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-1.gif)
 
@@ -81,6 +81,6 @@ In a `.dart` file activate the snippet by typing `blocprovidertree` and hitting 
 
 ### BlocDelegate
 
-In a `.dart` file activate the snippet by typing `blocdelegate` and hitting enter. Then you can fill in the implementation details by tabbing.
+In a `.dart` file, activate the snippet by typing `blocdelegate` and hitting enter. Then you can fill in the implementation details by tabbing.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocdelegate-snippet-usage.gif)
