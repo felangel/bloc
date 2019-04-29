@@ -24,6 +24,7 @@
 
   - Flutter
     - [Show SnackBar](recipesfluttershowsnackbar.md)
+    - [Navigation](recipesflutternavigation.md)
 
 - Tools
 
