@@ -2,7 +2,7 @@
 
 > In this recipe, we're going to take a look at how to use `BlocListener` to show a `SnackBar` in response to a state change in a bloc.
 
-![demo](./assets/gifs/recipes_bloclistener.gif)
+![demo](./assets/gifs/recipes_flutter_snack_bar.gif)
 
 ## Bloc
 

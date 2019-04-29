@@ -23,8 +23,7 @@
 - Recipes
 
   - Flutter
-    - BlocListener
-      - [Show SnackBar](recipesbloclistenershowsnackbar.md)
+    - [Show SnackBar](recipesfluttershowsnackbar.md)
 
 - Tools
 
