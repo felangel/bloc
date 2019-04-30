@@ -60,7 +60,7 @@ class BlocListenerTree extends StatelessWidget {
   /// This [Widget] will be a direct descendent of the last [BlocListener] in `blocListeners`.
   final Widget child;
 
-  BlocListenerTree({
+  const BlocListenerTree({
     Key key,
     @required this.blocListeners,
     @required this.child,
