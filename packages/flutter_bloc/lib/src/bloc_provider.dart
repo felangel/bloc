@@ -17,7 +17,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends InheritedWidget {
     @required this.bloc,
     this.child,
   })  : assert(bloc != null),
-        super(key: key);
+        super(key: key, child: child);
 
   /// Method that allows widgets to access the bloc as long as their `BuildContext`
   /// contains a `BlocProvider` instance.

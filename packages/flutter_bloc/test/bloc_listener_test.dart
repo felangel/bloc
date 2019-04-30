@@ -119,22 +119,6 @@ void main() {
       }
     });
 
-    testWidgets('throws if initialized with null child',
-        (WidgetTester tester) async {
-      try {
-        await tester.pumpWidget(
-          BlocListener(
-            bloc: CounterBloc(),
-            listener: (BuildContext context, int state) {},
-            child: null,
-          ),
-        );
-        fail('should throw AssertionError');
-      } catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
     testWidgets('renders child properly', (WidgetTester tester) async {
       final targetKey = Key('bloc_listener_container');
       await tester.pumpWidget(
