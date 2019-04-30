@@ -48,8 +48,8 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
                 </a>
             </td>
             <td style="text-align: center">
-                <a href="https://felangel.github.io/bloc/#/flutterlogintutorial">
-                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_login.gif" width="200" />
+                <a href="https://felangel.github.io/bloc/#/flutterfirebaselogintutorial">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_firebase_login.gif" width="200" />
                 </a>
             </td>
         </tr>
