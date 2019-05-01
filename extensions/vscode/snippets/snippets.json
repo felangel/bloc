@@ -43,6 +43,29 @@
       ")"
     ]
   },
+  "bloclistenertree": {
+    "scope": "dart",
+    "prefix": "bloclistenertree",
+    "body": [
+      "BlocListenerTree(",
+      "\tblocListeners: [",
+      "\t\tBlocListener<${1:MyEvent}, ${2:MyState}>(",
+      "\t\t\tbloc: ${3:_myBloc},",
+      "\t\t\tlistener: (BuildContext context, ${2:MyState} state) {",
+      "\t\t\t\t${4:// TODO: implement listener}",
+      "\t\t\t},",
+      "\t\t),",
+      "\t\tBlocListener<${5:MyOtherEvent}, ${6:MyOtherState}>(",
+      "\t\t\tbloc: ${7:_myOtherBloc},",
+      "\t\t\tlistener: (BuildContext context, ${6:MyOtherState} state) {",
+      "\t\t\t\t${8:// TODO: implement listener}",
+      "\t\t\t},",
+      "\t\t),",
+      "\t],",
+      "\tchild: ${9:Container()},",
+      ")"
+    ]
+  },
   "blocprovider": {
     "scope": "dart",
     "prefix": "blocprovider",

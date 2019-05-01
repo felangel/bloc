@@ -1,3 +1,9 @@
+# 0.6.0
+
+Added Snippets for:
+
+- `BlocListenerTree`
+
 # 0.5.0
 
 Added Snippets for:

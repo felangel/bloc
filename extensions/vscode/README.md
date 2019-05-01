@@ -67,6 +67,12 @@ In a `.dart` file activate the snippet by typing `bloclistener` and hitting ente
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloclistener-snippet-usage.gif)
 
+### BlocListenerTree
+
+In a `.dart` file activate the snippet by typing `bloclistenertree` and hitting enter. Then you can fill in the implementation details by tabbing.
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloclistenertree-snippet-usage.gif)
+
 ### BlocProvider
 
 In a `.dart` file activate the snippet by typing `blocprovider` and hitting enter. Then you can fill in the implementation details by tabbing.
