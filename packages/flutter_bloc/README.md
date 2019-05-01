@@ -52,15 +52,15 @@ By using `BlocProviderTree` we can go from:
 
 ```dart
 BlocProvider<BlocA>(
-   bloc: BlocA(),
-   child: BlocProvider<BlocB>(
-     bloc: BlocB(),
-     child: BlocProvider<BlocC>(
-       value: BlocC(),
-       child: ChildA(),
-     )
-   )
- )
+  bloc: BlocA(),
+  child: BlocProvider<BlocB>(
+    bloc: BlocB(),
+    child: BlocProvider<BlocC>(
+      value: BlocC(),
+      child: ChildA(),
+    )
+  )
+)
 ```
 
 to:
@@ -105,6 +105,48 @@ BlocListener(
       }
     },
   }
+)
+```
+
+**BlocListenerTree** is a Flutter widget that merges multiple `BlocListener` widgets into one.
+`BlocListenerTree` improves the readability and eliminates the need to nest multiple `BlocListener`.
+By using `BlocListenerTree` we can go from:
+
+```dart
+BlocListener<BlocAEvent, BlocAState>(
+  bloc: BlocA(),
+  listener: (BuildContext context, BlocAState state) {},
+  child: BlocListener<BlocBEvent, BlocBState>(
+    bloc: BlocB(),
+    listener: (BuildContext context, BlocBState state) {},
+    child: BlocListener<BlocCEvent, BlocCState>(
+      bloc: BlocC(),
+      listener: (BuildContext context, BlocCState state) {},
+      child: ChildA(),
+    ),
+  ),
+)
+```
+
+to:
+
+```dart
+BlocListenerTree(
+  blocListeners: [
+    BlocListener<BlocAEvent, BlocAState>(
+      bloc: BlocA(),
+      listener: (BuildContext context, BlocAState state) {},
+    ),
+    BlocListener<BlocBEvent, BlocBState>(
+      bloc: BlocB(),
+      listener: (BuildContext context, BlocBState state) {},
+    ),
+    BlocListener<BlocCEvent, BlocCState>(
+      bloc: BlocC(),
+      listener: (BuildContext context, BlocCState state) {},
+    ),
+  ],
+  child: ChildA(),
 )
 ```
 
@@ -198,7 +240,7 @@ At this point we have successfully separated our presentational layer from our b
 - [Bloc with Stream](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - an example of how to hook up a `bloc` to a `Stream` and update the UI in response to data from the `Stream`.
 - [Infinite List](https://felangel.github.io/bloc/#/flutterinfinitelisttutorial) - an example of how to use the `bloc` and `flutter_bloc` packages to implement an infinite scrolling list.
 - [Login Flow](https://felangel.github.io/bloc/#/flutterlogintutorial) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a Login Flow.
-- [Firebase Login](https://github.com/felangel/bloc/tree/master/examples/flutter_firebase_login) - an example of how to use the `bloc` and `flutter_bloc` packages to implement login via Firebase.
+- [Firebase Login](https://felangel.github.io/bloc/#/flutterfirebaselogintutorial) - an example of how to use the `bloc` and `flutter_bloc` packages to implement login via Firebase.
 - [Github Search](https://felangel.github.io/bloc/#/flutterangulargithubsearch) - an example of how to create a Github Search Application using the `bloc` and `flutter_bloc` packages.
 - [Weather](https://felangel.github.io/bloc/#/flutterweathertutorial) - an example of how to create a Weather Application using the `bloc` and `flutter_bloc` packages. The app uses a `RefreshIndicator` to implement "pull-to-refresh" as well as dynamic theming.
 - [Todos](https://felangel.github.io/bloc/#/fluttertodostutorial) - an example of how to create a Todos Application using the `bloc` and `flutter_bloc` packages.

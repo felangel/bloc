@@ -1,3 +1,7 @@
+# 0.12.0
+
+Added `BlocListenerTree` and Documentation Updates
+
 # 0.11.1
 
 Broaden Dart version range and Minor Documentation Updates
