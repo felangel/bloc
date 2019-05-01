@@ -109,7 +109,7 @@ BlocListener(
 ```
 
 **BlocListenerTree** is a Flutter widget that merges multiple `BlocListener` widgets into one.
-`BlocListenerTree` improves the readability and eliminates the need to nest multiple `BlocListener`.
+`BlocListenerTree` improves the readability and eliminates the need to nest multiple `BlocListeners`.
 By using `BlocListenerTree` we can go from:
 
 ```dart
