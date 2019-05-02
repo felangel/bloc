@@ -1,3 +1,7 @@
+# 0.6.1
+
+Bloc generation does not overwrite existing bloc files; it attempts to merge instead.
+
 # 0.6.0
 
 Added Snippets for:

@@ -2,7 +2,7 @@
   "name": "bloc",
   "displayName": "bloc",
   "description": "Support for the bloc library and provides tools for effectively creating blocs for both Flutter and AngularDart apps.",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "publisher": "FelixAngelov",
   "bugs": {
     "url": "https://github.com/felangel/bloc/issues",
@@ -72,12 +72,11 @@
     "@types/rimraf": "^2.0.2",
     "tslint": "^5.8.0",
     "typescript": "^3.1.4",
-    "vscode": "^1.1.25"
+    "vscode": "^1.1.33"
   },
   "dependencies": {
     "change-case": "^3.1.0",
     "lodash": "^4.17.11",
-    "mkdirp": "^0.5.1",
-    "rimraf": "^2.6.3"
+    "mkdirp": "^0.5.1"
   }
 }
