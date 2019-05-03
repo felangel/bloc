@@ -13,6 +13,7 @@ mixin EventProviderBloc<TInEvent, TOutEvent, TState> on Bloc<TInEvent, TState> {
 
   @protected
   void emitEvent(TOutEvent event) {
+    BlocSupervisor().delegate?.onEmitEvent(event);
     onEmitEvent(event);
     _outEventSubject.sink.add(event);
   }
