@@ -11,6 +11,13 @@ class BlocDelegate {
   @mustCallSuper
   void onTransition(Transition transition) => null;
 
+  /// Called whenever an event is emitted using [EventProviderBloc].
+  /// Events are emitted when `_mapEventToState` calls `emitEvent()` with an [Event].
+  /// `onEmitEvent` is called before any listener receves the event.
+  /// A great spot to add universal logging/analytics.
+  @mustCallSuper
+  void onEmitEvent(dynamic event) => null;
+
   /// Called whenever an [Exception] is thrown within `mapEventToState` for any [Bloc].
   /// The stacktrace argument may be `null` if the state stream received an error without a [StackTrace].
   /// A great spot to add universal error handling.
