@@ -1,3 +1,7 @@
+# 0.13.0
+
+Updated to `bloc: ^0.13.0` and Documentation Updates
+
 # 0.12.0
 
 Added `BlocListenerTree` and Documentation Updates
