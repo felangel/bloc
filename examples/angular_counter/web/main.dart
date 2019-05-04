@@ -4,14 +4,20 @@ import 'package:angular_counter/app_component.template.dart' as ng;
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
-  void onTransition(Transition transition) {
-    super.onTransition(transition);
+  void onEvent(Bloc bloc, Object event) {
+    super.onEvent(bloc, event);
+    print(event);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
     print(transition);
   }
 
   @override
-  void onError(Object error, StackTrace stacktrace) {
-    super.onError(error, stacktrace);
+  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
+    super.onError(bloc, error, stacktrace);
     print(error);
   }
 }
