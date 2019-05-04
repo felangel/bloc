@@ -11,8 +11,12 @@ abstract class Bloc<Event, State> {
 
   BehaviorSubject<State> _stateSubject;
 
+  /// Returns [Stream] of [Event]s.
+  /// When an [Event] is dispatched, it is added to the [Stream].
+  Stream<Event> get event => _eventSubject.stream;
+
   /// Returns [Stream] of [State]s.
-  /// Consumed by the presentation layer.
+  /// Usually consumed by the presentation layer.
   Stream<State> get state => _stateSubject.stream;
 
   /// Returns the [State] before any [Event]s have been `dispatched`.
