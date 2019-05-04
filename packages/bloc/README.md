@@ -110,8 +110,8 @@ As our app grows and relies on multiple `Blocs`, it becomes useful to see the `T
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
   @override
-  void onTransition(Transition transition) {
-    super.onTransition(transition);
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
     print(transition);
   }
 }
@@ -142,14 +142,14 @@ If we want to be able to handle any `Exceptions` that might be thrown in `mapEve
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
   @override
-  void onTransition(Transition transition) {
-    super.onTransition(transition);
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
     print(transition);
   }
 
   @override
-  void onError(Object error, StackTrace stacktrace) {
-    super.onError(error, stacktrace);
+  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
+    super.onError(bloc, error, stacktrace);
     print('$error, $stacktrace');
   }
 }
