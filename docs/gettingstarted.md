@@ -31,8 +31,8 @@ For an [AngularDart](https://webdev.dartlang.org/angular) application, we also n
 
 ```yaml
 dependencies:
-  bloc: ^0.12.0
-  angular_bloc: ^0.7.0
+  bloc: ^0.13.0
+  angular_bloc: ^0.8.0
 ```
 
 Next we need to install bloc.
