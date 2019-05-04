@@ -219,14 +219,23 @@ void main() {
       CounterBloc counterBloc;
       MockBlocDelegate delegate;
       List<String> transitions;
+      List<CounterEvent> events;
+
+      final OnEventCallback onEventCallback = (event) {
+        events.add(event);
+      };
 
       final OnTransitionCallback onTransitionCallback = (transition) {
         transitions.add(transition.toString());
       };
 
       setUp(() {
+        events = [];
         transitions = [];
-        counterBloc = CounterBloc(onTransitionCallback);
+        counterBloc = CounterBloc(
+          onEventCallback: onEventCallback,
+          onTransitionCallback: onTransitionCallback,
+        );
         delegate = MockBlocDelegate();
         when(delegate.onTransition(any, any)).thenReturn(null);
 
@@ -235,6 +244,7 @@ void main() {
 
       test('initial state is 0', () {
         expect(counterBloc.initialState, 0);
+        expect(events.isEmpty, true);
         expect(transitions.isEmpty, true);
       });
 
@@ -263,6 +273,7 @@ void main() {
           counterBloc.state,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
+          expectLater(events, expectedEvents);
           expectLater(transitions, expectedTransitions);
           verify(
             delegate.onTransition(
@@ -301,6 +312,7 @@ void main() {
           counterBloc.state,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
+          expectLater(events, expectedEvents);
           expect(transitions, expectedTransitions);
           verify(
             delegate.onTransition(
@@ -516,8 +528,7 @@ void main() {
         Object capturedError;
         StackTrace capturedStacktrace;
         final CounterBloc _bloc = CounterBloc(
-          null,
-          (Object error, StackTrace stacktrace) {
+          onErrorCallback: (Object error, StackTrace stacktrace) {
             capturedError = error;
             capturedStacktrace = stacktrace;
           },
