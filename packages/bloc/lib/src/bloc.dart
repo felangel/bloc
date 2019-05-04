@@ -30,10 +30,14 @@ abstract class Bloc<Event, State> {
     _bindStateSubject();
   }
 
+  /// Called whenever an [Event] is dispatched to the [Bloc].
+  /// A great spot to add logging/analytics at the individual [Bloc] level.
+  void onEvent(Event event) => null;
+
   /// Called whenever a [Transition] occurs with the given [Transition].
   /// A [Transition] occurs when a new [Event] is dispatched and `mapEventToState` executed.
   /// `onTransition` is called before a [Bloc]'s [State] has been updated.
-  /// A great spot to add logging/analytics.
+  /// A great spot to add logging/analytics at the individual [Bloc] level.
   void onTransition(Transition<Event, State> transition) => null;
 
   /// Called whenever an [Exception] is thrown within `mapEventToState`.
@@ -50,6 +54,8 @@ abstract class Bloc<Event, State> {
   /// as well as the [BlocDelegate] level.
   void dispatch(Event event) {
     try {
+      BlocSupervisor().delegate?.onEvent(this, event);
+      onEvent(event);
       _eventSubject.sink.add(event);
     } catch (error) {
       _handleError(error);
@@ -132,7 +138,7 @@ abstract class Bloc<Event, State> {
   }
 
   void _handleError(Object error, [StackTrace stacktrace]) {
-    onError(error, stacktrace);
     BlocSupervisor().delegate?.onError(this, error, stacktrace);
+    onError(error, stacktrace);
   }
 }
