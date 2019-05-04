@@ -56,6 +56,8 @@ abstract class Bloc<Event, State> {
   /// This method should be called when a [Bloc] is no longer needed.
   /// Once `dispose` is called, events that are `dispatched` will not be
   /// processed and will result in an error being passed to `onError`.
+  /// In addition, if `dispose` is called while [Event]s are still being processed,
+  /// any [State]s yielded after are ignored and will not result in a [Transition].
   @mustCallSuper
   void dispose() {
     _eventSubject.close();
@@ -112,7 +114,7 @@ abstract class Bloc<Event, State> {
       return mapEventToState(currentEvent).handleError(_handleError);
     }).forEach(
       (State nextState) {
-        if (currentState == nextState) return;
+        if (currentState == nextState || _stateSubject.isClosed) return;
         final transition = Transition(
           currentState: currentState,
           event: currentEvent,

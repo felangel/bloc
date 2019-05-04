@@ -100,7 +100,7 @@ void main() {
       });
 
       test('dispose does not emit new states over the state stream', () {
-        final List<ComplexState> expected = [];
+        final List<ComplexState> expected = [ComplexStateA()];
 
         expectLater(
           complexBloc.state,
@@ -308,7 +308,7 @@ void main() {
       });
 
       test('dispose does not emit new states over the state stream', () {
-        final List<ComplexState> expected = [];
+        final List<AsyncState> expected = [AsyncState.initial()];
 
         expectLater(
           asyncBloc.state,
@@ -316,6 +316,22 @@ void main() {
         );
 
         asyncBloc.dispose();
+      });
+
+      test(
+          'dispose while events are pending does not emit new states or trigger onError',
+          () {
+        final List<AsyncState> expected = [AsyncState.initial()];
+
+        expectLater(
+          asyncBloc.state,
+          emitsInOrder(expected),
+        );
+
+        asyncBloc.dispatch(AsyncEvent());
+        asyncBloc.dispose();
+
+        verifyNever(delegate.onError(any, any));
       });
 
       test('initialState returns correct initial state', () {
