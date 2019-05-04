@@ -34,7 +34,7 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **BlocSupervisor** oversees `Bloc`s and delegates to `BlocDelegate`.
 
-**BlocDelegate** handles events from all `Bloc`s which are delegated by the `BlocSupervisor`. Can be used to intercept all `Bloc` `Transition`s and all `Bloc` errors. **It is a great way to handle logging/analytics as well as error handling universally**.
+**BlocDelegate** handles events from all `Bloc`s which are delegated by the `BlocSupervisor`. Can be used to intercept all `Bloc` events, transitions, and errors. **It is a great way to handle logging/analytics as well as error handling universally**.
 
 ## Bloc Interface
 
