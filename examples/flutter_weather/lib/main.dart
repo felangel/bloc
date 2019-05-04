@@ -10,14 +10,20 @@ import 'package:flutter_weather/blocs/blocs.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
-  onTransition(Transition transition) {
-    super.onTransition(transition);
+  void onEvent(Bloc bloc, Object event) {
+    super.onEvent(bloc, event);
+    print(event);
+  }
+
+  @override
+  onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
     print(transition);
   }
 
   @override
-  void onError(Object error, StackTrace stacktrace) {
-    super.onError(error, stacktrace);
+  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
+    super.onError(bloc, error, stacktrace);
     print(error);
   }
 }

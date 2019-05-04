@@ -31,7 +31,7 @@ dependencies:
   cloud_firestore: ^0.9.7
   firebase_auth: ^0.8.1+4
   google_sign_in: ^4.0.1+1
-  flutter_bloc: ^0.12.0
+  flutter_bloc: ^0.13.0
   equatable: ^0.2.0
   meta: ^1.1.6
   font_awesome_flutter: ^8.4.0
@@ -538,14 +538,20 @@ import 'package:bloc/bloc.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
-  void onError(Object error, StackTrace stacktrace) {
-    super.onError(error, stacktrace);
+  void onEvent(Bloc bloc, Object event) {
+    super.onEvent(bloc, event);
+    print(event);
+  }
+
+  @override
+  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
+    super.onError(bloc, error, stacktrace);
     print(error);
   }
 
   @override
-  void onTransition(Transition transition) {
-    super.onTransition(transition);
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
     print(transition);
   }
 }
@@ -1003,7 +1009,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
     final debounceStream = observableStream.where((event) {
       return (event is EmailChanged || event is PasswordChanged);
-    }).debounce(Duration(milliseconds: 300));
+    }).debounceTime(Duration(milliseconds: 300));
     return super.transform(nonDebounceStream.mergeWith([debounceStream]), next);
   }
 
@@ -1653,7 +1659,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     });
     final debounceStream = observableStream.where((event) {
       return (event is EmailChanged || event is PasswordChanged);
-    }).debounce(Duration(milliseconds: 300));
+    }).debounceTime(Duration(milliseconds: 300));
     return super.transform(nonDebounceStream.mergeWith([debounceStream]), next);
   }
 

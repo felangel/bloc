@@ -252,8 +252,8 @@ If we want to be able to do something in response to all `Transitions` we can si
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
   @override
-  void onTransition(Transition transition) {
-    super.onTransition(transition);
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
     print(transition);
   }
 }
@@ -274,13 +274,37 @@ void main() {
 }
 ```
 
-If we want to be able to do something in response to all `Exceptions` thrown in `mapEventToState`, we can also override the `onError` method in our `SimpleBlocDelegate`.
+If we want to be able to do something in response to all `Events` dispatched, we can also override the `onEvent` method in our `SimpleBlocDelegate`.
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
   @override
-  void onTransition(Transition transition) {
-    super.onTransition(transition);
+  void onEvent(Bloc bloc, Object event) {
+    super.onEvent(bloc, event);
+    print(event);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    print(transition);
+  }
+}
+```
+
+If we want to be able to do something in response to all `Exceptions` thrown in a Bloc, we can also override the `onError` method in our `SimpleBlocDelegate`.
+
+```dart
+class SimpleBlocDelegate extends BlocDelegate {
+  @override
+  void onEvent(Bloc bloc, Object event) {
+    super.onEvent(bloc, event);
+    print(event);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
     print(transition);
   }
 

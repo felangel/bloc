@@ -28,7 +28,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.12.0
+  flutter_bloc: ^0.13.0
   http: ^0.12.0
   equatable: ^0.2.0
 
@@ -294,7 +294,7 @@ If we can retrieve the posts, we return `PostLoaded()` which takes the entire li
 
 One optimization we can make is to `debounce` the `Events` in order to prevent spamming our API unnecessarily. We can do this by overriding the `transform` method in our `PostBloc`.
 
-?> **Note:** Overriding transform allows us to transform the Stream<Event> before mapEventToState is called. This allows for operations like distinct(), debounce(), etc... to be applied.
+?> **Note:** Overriding transform allows us to transform the Stream<Event> before mapEventToState is called. This allows for operations like distinct(), debounceTime(), etc... to be applied.
 
 ```dart
 @override
@@ -303,7 +303,7 @@ Stream<PostState> transform(
   Stream<PostState> Function(PostEvent event) next,
 ) {
   return super.transform(
-    (events as Observable<PostEvent>).debounce(
+    (events as Observable<PostEvent>).debounceTime(
       Duration(milliseconds: 500),
     ),
     next,
@@ -335,7 +335,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     Stream<PostState> Function(PostEvent event) next,
   ) {
     return super.transform(
-      (events as Observable<PostEvent>).debounce(
+      (events as Observable<PostEvent>).debounceTime(
         Duration(milliseconds: 500),
       ),
       next,
@@ -567,8 +567,8 @@ import 'package:bloc/bloc.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
-  void onTransition(Transition transition) {
-    super.onTransition(transition);
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
     print(transition);
   }
 }
