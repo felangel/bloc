@@ -124,7 +124,7 @@ abstract class Bloc<Event, State> {
           event: currentEvent,
           nextState: nextState,
         );
-        BlocSupervisor().delegate?.onTransition(transition);
+        BlocSupervisor().delegate?.onTransition(this, transition);
         onTransition(transition);
         _stateSubject.add(nextState);
       },
@@ -133,6 +133,6 @@ abstract class Bloc<Event, State> {
 
   void _handleError(Object error, [StackTrace stacktrace]) {
     onError(error, stacktrace);
-    BlocSupervisor().delegate?.onError(error, stacktrace);
+    BlocSupervisor().delegate?.onError(this, error, stacktrace);
   }
 }

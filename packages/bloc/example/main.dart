@@ -29,15 +29,15 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
-  void onTransition(Transition transition) {
-    super.onTransition(transition);
-    print(transition);
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    print('bloc: ${bloc.runtimeType}, transition: $transition');
   }
 
   @override
-  void onError(Object error, StackTrace stacktrace) {
-    super.onError(error, stacktrace);
-    print(error);
+  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
+    super.onError(bloc, error, stacktrace);
+    print('bloc: ${bloc.runtimeType}, error: $error');
   }
 }
 
