@@ -1,3 +1,7 @@
+# 0.6.2
+
+Updated `BlocDelegate` snippet to support changes in bloc `v0.13.0`
+
 # 0.6.1
 
 Bloc generation does not overwrite existing bloc files; it attempts to merge instead.
