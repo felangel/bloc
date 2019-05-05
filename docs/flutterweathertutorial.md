@@ -511,6 +511,8 @@ This file can live in our repository folder. So go ahead and create a file calle
 Our `WeatherRepository` is quite simple and should look something like this:
 
 ```dart
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 
 import 'package:flutter_weather/repositories/weather_api_client.dart';
