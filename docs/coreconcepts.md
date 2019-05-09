@@ -310,7 +310,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 
   @override
   void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(error, stacktrace);
+    super.onError(bloc, error, stacktrace);
     print('$error, $stacktrace');
   }
 }
