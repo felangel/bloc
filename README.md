@@ -122,6 +122,8 @@ Learn more at the following links, which have been contributed by the community.
 
 - [Flutter Bloc Extensions](https://pub.dartlang.org/packages/flutter_bloc_extensions) - Collection of helper widgets built on top of `flutter_bloc`, by [Ondřej Kunc](https://github.com/OndrejKunc).
 
+- [Bloc Code Generator](https://pub.dev/packages/bloc_code_generator) - A code generator that makes working with bloc easier, by [Adson Leal](https://github.com/adsonpleal).
+
 ### Video Tutorials
 
 - [Flutter Bloc Library Tutorial](https://www.youtube.com/watch?v=LeLrsnHeCZY) - Introduction to the Bloc Library, by [Reso Coder](https://resocoder.com).
