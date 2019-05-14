@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter_web/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// A Flutter [Widget] that merges multiple [BlocListener] widgets into one widget tree.
