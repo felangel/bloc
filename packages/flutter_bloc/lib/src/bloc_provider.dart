@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 import 'package:provider/provider.dart';
+=======
+import 'package:flutter_web/widgets.dart';
+
+>>>>>>> flutter_web compatibility
 import 'package:bloc/bloc.dart';
 
 class BlocProvider<T extends Bloc<dynamic, dynamic>> extends Provider<T> {

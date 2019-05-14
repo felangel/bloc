@@ -10,12 +10,22 @@ environment:
   sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
   bloc: ^0.14.0
-  provider: ^3.0.0
+  provider:
+    git:
+      url: https://github.com/felangel/provider
+      path: packages/provider
+      ref: flutter_web
   meta: ^1.1.6
+  flutter_web: any
+  flutter_web_ui: any
 
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
+dependency_overrides:
+  flutter_web:
+    git:
+      url: https://github.com/flutter/flutter_web
+      path: packages/flutter_web
+  flutter_web_ui:
+    git:
+      url: https://github.com/flutter/flutter_web
+      path: packages/flutter_web_ui
