@@ -30,9 +30,7 @@ class ListBloc extends Bloc<ListEvent, ListState> {
       if (listState is Loaded) {
         final List<Item> updatedItems =
             List<Item>.from(listState.items).map((Item item) {
-          return item.id == event.id
-              ? item.copyWith(isDeleting: true)
-              : item.copyWith();
+          return item.id == event.id ? item.copyWith(isDeleting: true) : item;
         }).toList();
         yield Loaded(items: updatedItems);
         repository.deleteItem(event.id).listen((id) {
