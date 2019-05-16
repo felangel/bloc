@@ -30,6 +30,12 @@ public class GenerateBlocDialog extends DialogWrapper {
         this.listener.onGenerateBlocClicked(blocNameTextField.getText(), useEquatableCheckbox.isSelected());
     }
 
+    @Nullable
+    @Override
+    public JComponent getPreferredFocusedComponent() {
+        return blocNameTextField;
+    }
+
     public interface Listener {
         void onGenerateBlocClicked(String blocName, boolean shouldUseEquatable);
     }
