@@ -54,7 +54,7 @@ abstract class Bloc<Event, State> {
   /// as well as the [BlocDelegate] level.
   void dispatch(Event event) {
     try {
-      BlocSupervisor().delegate?.onEvent(this, event);
+      BlocSupervisor.delegate.onEvent(this, event);
       onEvent(event);
       _eventSubject.sink.add(event);
     } catch (error) {
@@ -130,7 +130,7 @@ abstract class Bloc<Event, State> {
           event: currentEvent,
           nextState: nextState,
         );
-        BlocSupervisor().delegate?.onTransition(this, transition);
+        BlocSupervisor.delegate.onTransition(this, transition);
         onTransition(transition);
         _stateSubject.add(nextState);
       },
@@ -138,7 +138,7 @@ abstract class Bloc<Event, State> {
   }
 
   void _handleError(Object error, [StackTrace stacktrace]) {
-    BlocSupervisor().delegate?.onError(this, error, stacktrace);
+    BlocSupervisor.delegate.onError(this, error, stacktrace);
     onError(error, stacktrace);
   }
 }

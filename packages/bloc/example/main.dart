@@ -48,7 +48,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
 
   final counterBloc = CounterBloc();
 

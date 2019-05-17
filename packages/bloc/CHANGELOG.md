@@ -1,3 +1,9 @@
+# 0.14.0
+
+`BlocDelegate` initialization improvements and Documentation Updates.
+
+- `BlocSupervisor().delegate = ...` is now `BlocSupervisor.delegate = ...` ([#304](https://github.com/felangel/bloc/issues/304)).
+
 # 0.13.0
 
 `Bloc` and `BlocDelegate` Improvements, new Features, and Documentation Updates.
