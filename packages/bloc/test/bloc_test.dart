@@ -18,7 +18,7 @@ void main() {
         delegate = MockBlocDelegate();
         when(delegate.onTransition(any, any)).thenReturn(null);
 
-        BlocSupervisor().delegate = delegate;
+        BlocSupervisor.delegate = delegate;
       });
 
       test('dispose does not emit new states over the state stream', () {
@@ -106,7 +106,7 @@ void main() {
         delegate = MockBlocDelegate();
         when(delegate.onTransition(any, any)).thenReturn(null);
 
-        BlocSupervisor().delegate = delegate;
+        BlocSupervisor.delegate = delegate;
       });
 
       test('dispose does not emit new states over the state stream', () {
@@ -239,7 +239,7 @@ void main() {
         delegate = MockBlocDelegate();
         when(delegate.onTransition(any, any)).thenReturn(null);
 
-        BlocSupervisor().delegate = delegate;
+        BlocSupervisor.delegate = delegate;
       });
 
       test('initial state is 0', () {
@@ -362,7 +362,7 @@ void main() {
         delegate = MockBlocDelegate();
         when(delegate.onTransition(any, any)).thenReturn(null);
 
-        BlocSupervisor().delegate = delegate;
+        BlocSupervisor.delegate = delegate;
       });
 
       test('dispose does not emit new states over the state stream', () {

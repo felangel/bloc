@@ -5,13 +5,23 @@ import 'package:bloc/bloc.dart';
 class MockBlocDelegate extends Mock implements BlocDelegate {}
 
 void main() {
-  test('BlocSupervisor should be a singleton', () {
-    final MockBlocDelegate delegate = MockBlocDelegate();
-    final BlocSupervisor supervisorA = BlocSupervisor();
-    final BlocSupervisor supervisorB = BlocSupervisor();
+  test('BlocSupervisor should have a default BlocDelegate singleton', () {
+    expect(BlocSupervisor.delegate, isNotNull);
+    expect(BlocSupervisor.delegate is BlocDelegate, isTrue);
+  });
 
-    supervisorA.delegate = delegate;
+  test(
+      'BlocSupervisor should have a correct BlocDelegate singleton when explicity set',
+      () {
+    final delegate = MockBlocDelegate();
+    BlocSupervisor.delegate = delegate;
+    expect(BlocSupervisor.delegate, delegate);
+  });
 
-    expect(supervisorA.delegate, supervisorB.delegate);
+  test(
+      'BlocSupervisor should use default BlocDelegate singleton when explicity set to null',
+      () {
+    BlocSupervisor.delegate = null;
+    expect(BlocSupervisor.delegate, isNotNull);
   });
 }

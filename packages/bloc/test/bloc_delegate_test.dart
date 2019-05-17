@@ -19,7 +19,7 @@ void main() {
         ComplexStateA(),
         ComplexStateB(),
       ];
-      BlocSupervisor().delegate = delegate;
+      BlocSupervisor.delegate = delegate;
       when(delegate.onEvent(any, any)).thenReturn(null);
 
       expectLater(
@@ -49,7 +49,7 @@ void main() {
         ComplexStateA(),
         ComplexStateC()
       ];
-      BlocSupervisor().delegate = delegate;
+      BlocSupervisor.delegate = delegate;
       when(delegate.onEvent(any, any)).thenReturn(null);
 
       expectLater(
@@ -87,7 +87,7 @@ void main() {
         ComplexStateA(),
         ComplexStateB()
       ];
-      BlocSupervisor().delegate = null;
+      BlocSupervisor.delegate = null;
       when(delegate.onEvent(any, any)).thenReturn(null);
 
       expectLater(
@@ -117,7 +117,7 @@ void main() {
         ComplexStateA(),
         ComplexStateB(),
       ];
-      BlocSupervisor().delegate = delegate;
+      BlocSupervisor.delegate = delegate;
       when(delegate.onTransition(any, any)).thenReturn(null);
 
       expectLater(
@@ -151,7 +151,7 @@ void main() {
         ComplexStateA(),
         ComplexStateC()
       ];
-      BlocSupervisor().delegate = delegate;
+      BlocSupervisor.delegate = delegate;
       when(delegate.onTransition(any, any)).thenReturn(null);
 
       expectLater(
@@ -197,7 +197,7 @@ void main() {
         ComplexStateA(),
         ComplexStateB()
       ];
-      BlocSupervisor().delegate = null;
+      BlocSupervisor.delegate = null;
       when(delegate.onTransition(any, any)).thenReturn(null);
 
       expectLater(
@@ -231,7 +231,7 @@ void main() {
 
       final delegate = MockBlocDelegate();
       final CounterExceptionBloc _bloc = CounterExceptionBloc();
-      BlocSupervisor().delegate = delegate;
+      BlocSupervisor.delegate = delegate;
 
       when(delegate.onError(any, any, any)).thenAnswer((Invocation invocation) {
         blocWithError = invocation.positionalArguments[0] as Bloc;
