@@ -1,4 +1,4 @@
 import 'package:meta/meta.dart';
 
 @immutable
-abstract class ${bloc_camel_case}Event {}
+abstract class ${bloc_pascal_case}Event {}

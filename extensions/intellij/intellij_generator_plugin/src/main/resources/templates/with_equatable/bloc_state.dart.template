@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-abstract class ${bloc_camel_case}State extends Equatable {
-  ${bloc_camel_case}State([List props = const []]) : super(props);
+abstract class ${bloc_pascal_case}State extends Equatable {
+  ${bloc_pascal_case}State([List props = const []]) : super(props);
 }
 
-class Initial${bloc_camel_case}State extends ${bloc_camel_case}State {}
+class Initial${bloc_pascal_case}State extends ${bloc_pascal_case}State {}

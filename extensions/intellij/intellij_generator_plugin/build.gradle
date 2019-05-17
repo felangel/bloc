@@ -21,12 +21,16 @@ intellij {
 }
 
 repositories {
+    maven {
+        url "https://dl.bintray.com/fleshgrinder/com.fleshgrinder.kotlin"
+    }
     mavenCentral()
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation "com.fleshgrinder.kotlin:case-format:0.1.0"
 }
 
 compileKotlin {
