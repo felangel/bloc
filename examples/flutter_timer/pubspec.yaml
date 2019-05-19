@@ -1,0 +1,19 @@
+name: flutter_timer
+description: A new Flutter project.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.2.2 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
+  equatable: ^0.2.0
+  wave: ^0.0.8
+
+    
+flutter:
+  uses-material-design: true
