@@ -6,7 +6,7 @@ import 'package:flutter_timer/ticker.dart';
 
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
   final Ticker _ticker;
-  final int duration = 60;
+  final int _duration = 60;
 
   StreamSubscription<int> _tickerSubscription;
 
@@ -15,7 +15,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
         _ticker = ticker;
 
   @override
-  TimerState get initialState => Ready(duration);
+  TimerState get initialState => Ready(_duration);
 
   @override
   void onTransition(Transition<TimerEvent, TimerState> transition) {
@@ -74,7 +74,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 
   Stream<TimerState> _mapResetToState(Reset reset) async* {
     _tickerSubscription?.cancel();
-    yield Ready(duration);
+    yield Ready(_duration);
   }
 
   Stream<TimerState> _mapTickToState(Tick tick) async* {
