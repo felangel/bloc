@@ -1,6 +1,5 @@
 package com.bloc.intellij_generator_plugin.generator
 
-import com.google.common.base.CaseFormat
 import com.google.common.io.CharStreams
 import com.fleshgrinder.extensions.kotlin.*
 import org.apache.commons.lang.text.StrSubstitutor
