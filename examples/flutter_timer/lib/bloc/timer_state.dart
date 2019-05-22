@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 @immutable
 abstract class TimerState extends Equatable {
   final int duration;
+
   TimerState(this.duration, [List props = const []])
       : super([duration]..addAll(props));
 }
