@@ -125,7 +125,7 @@ Now that we have our `SimpleBlocDelegate`, we just need to tell the `BlocSupervi
 
 ```dart
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
 
   final counterBloc = CounterBloc();
 
@@ -168,7 +168,7 @@ class SimpleBlocDelegate extends BlocDelegate {
     super.onEvent(bloc, event);
     print(event);
   }
-  
+
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
