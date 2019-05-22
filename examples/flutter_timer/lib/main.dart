@@ -38,7 +38,10 @@ class _MyAppState extends State<MyApp> {
 }
 
 class Timer extends StatelessWidget {
-  static const TextStyle timerTextStyle = TextStyle(fontSize: 60);
+  static const TextStyle timerTextStyle = TextStyle(
+    fontSize: 60,
+    fontWeight: FontWeight.bold,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +74,7 @@ class Timer extends StatelessWidget {
                       ),
                     ),
                   ),
-                  ActionButtons(),
+                  Actions(),
                 ],
               );
             },
@@ -82,7 +85,7 @@ class Timer extends StatelessWidget {
   }
 }
 
-class ActionButtons extends StatelessWidget {
+class Actions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -99,42 +102,41 @@ class ActionButtons extends StatelessWidget {
     final TimerState state = timerBloc.currentState;
     if (state is Ready) {
       return [
-        PlayButton(onPressed: () {
-          timerBloc.dispatch(
-            Start(duration: state.duration),
-          );
-        })
+        FloatingActionButton(
+          child: Icon(Icons.play_arrow),
+          onPressed: () => timerBloc.dispatch(Start(duration: state.duration)),
+        ),
       ];
     }
     if (state is Running) {
       return [
-        PauseButton(onPressed: () {
-          timerBloc.dispatch(Pause());
-        }),
-        ResetButton(onPressed: () {
-          timerBloc.dispatch(Reset());
-        })
+        FloatingActionButton(
+          child: Icon(Icons.pause),
+          onPressed: () => timerBloc.dispatch(Pause()),
+        ),
+        FloatingActionButton(
+          child: Icon(Icons.replay),
+          onPressed: () => timerBloc.dispatch(Reset()),
+        ),
       ];
     }
     if (state is Paused) {
       return [
-        PlayButton(onPressed: () {
-          timerBloc.dispatch(Resume());
-        }),
-        ResetButton(onPressed: () {
-          timerBloc.dispatch(Reset());
-        })
+        FloatingActionButton(
+          child: Icon(Icons.play_arrow),
+          onPressed: () => timerBloc.dispatch(Resume()),
+        ),
+        FloatingActionButton(
+          child: Icon(Icons.replay),
+          onPressed: () => timerBloc.dispatch(Reset()),
+        ),
       ];
     }
     if (state is Finished) {
       return [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ResetButton(onPressed: () {
-              timerBloc.dispatch(Reset());
-            })
-          ],
+        FloatingActionButton(
+          child: Icon(Icons.replay),
+          onPressed: () => timerBloc.dispatch(Reset()),
         ),
       ];
     }
@@ -165,55 +167,13 @@ class Background extends StatelessWidget {
           ],
         ],
         durations: [19440, 10800, 6000],
-        heightPercentages: [0.0, 0.0, 0.0],
+        heightPercentages: [0.03, 0.01, 0.02],
         gradientBegin: Alignment.bottomCenter,
         gradientEnd: Alignment.topCenter,
       ),
       size: Size(double.infinity, double.infinity),
-      waveAmplitude: 20,
+      waveAmplitude: 25,
       backgroundColor: Colors.blue[50],
-    );
-  }
-}
-
-class PauseButton extends StatelessWidget {
-  final VoidCallback onPressed;
-
-  const PauseButton({Key key, @required this.onPressed}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      child: Icon(Icons.pause),
-      onPressed: onPressed,
-    );
-  }
-}
-
-class PlayButton extends StatelessWidget {
-  final VoidCallback onPressed;
-
-  const PlayButton({Key key, @required this.onPressed}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      child: Icon(Icons.play_arrow),
-      onPressed: onPressed,
-    );
-  }
-}
-
-class ResetButton extends StatelessWidget {
-  final VoidCallback onPressed;
-
-  const ResetButton({Key key, @required this.onPressed}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      child: Icon(Icons.replay),
-      onPressed: onPressed,
     );
   }
 }

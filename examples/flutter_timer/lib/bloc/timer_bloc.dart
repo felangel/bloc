@@ -27,9 +27,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   Stream<TimerState> mapEventToState(
     TimerEvent event,
   ) async* {
-    if (event is DurationChanged) {
-      yield* _mapDurationChangedToState(event);
-    } else if (event is Start) {
+    if (event is Start) {
       yield* _mapStartToState(event);
     } else if (event is Pause) {
       yield* _mapPauseToState(event);
@@ -40,11 +38,6 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     } else if (event is Tick) {
       yield* _mapTickToState(event);
     }
-  }
-
-  Stream<TimerState> _mapDurationChangedToState(
-      DurationChanged durationChanged) async* {
-    yield Ready(durationChanged.duration);
   }
 
   Stream<TimerState> _mapStartToState(Start start) async* {
