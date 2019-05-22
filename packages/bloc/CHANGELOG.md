@@ -1,3 +1,7 @@
+# 0.14.1
+
+Internal `BlocDelegate` update and Documentation Updates.
+
 # 0.14.0
 
 `BlocDelegate` initialization improvements and Documentation Updates.

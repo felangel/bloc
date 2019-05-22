@@ -13,7 +13,7 @@ class BlocSupervisor {
   static BlocDelegate get delegate => _instance._delegate;
 
   /// [BlocDelegate] setter which sets the singleton [BlocSupervisor] instance's [BlocDelegate].
-  static void set delegate(BlocDelegate d) {
+  static set delegate(BlocDelegate d) {
     _instance._delegate = d ?? BlocDelegate();
   }
 }
