@@ -26,7 +26,7 @@ environment:
 dependencies:
   meta: ">=1.1.0 <2.0.0"
   equatable: ^0.2.0
-  flutter_bloc: ^0.13.0
+  flutter_bloc: ^0.14.0
   flutter:
     sdk: flutter
 
@@ -1759,7 +1759,7 @@ Let's create `main.dart` and our `TodosApp` widget. We need to create a `main` f
 
 ```dart
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(TodosApp());
 }
 ```
@@ -1836,7 +1836,7 @@ import 'package:flutter_todos/models/models.dart';
 import 'package:flutter_todos/screens/screens.dart';
 
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(TodosApp());
 }
 

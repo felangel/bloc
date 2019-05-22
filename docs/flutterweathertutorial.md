@@ -28,7 +28,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.13.0
+  flutter_bloc: ^0.14.0
   http: ^0.12.0
   equatable: ^0.2.0
 
@@ -696,7 +696,7 @@ Next, we're going to set our delegate in our `main` function like so:
 
 ```dart
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(App());
 }
 ```
@@ -708,7 +708,7 @@ import 'package:flutter_weather/repositories/repositories.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
 
   final WeatherRepository weatherRepository = WeatherRepository(
     weatherApiClient: WeatherApiClient(

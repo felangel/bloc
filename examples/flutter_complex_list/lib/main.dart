@@ -7,7 +7,7 @@ import 'package:flutter_complex_list/models/models.dart';
 import 'package:flutter_complex_list/repository.dart';
 
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(App());
 }
 

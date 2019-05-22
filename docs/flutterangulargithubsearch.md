@@ -896,7 +896,7 @@ environment:
 dependencies:
   angular: ^5.0.0
   angular_components: ^0.9.0
-  angular_bloc: ^0.8.0
+  angular_bloc: ^0.9.0
   common_github_search:
     path: ../common_github_search
 

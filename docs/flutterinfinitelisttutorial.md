@@ -28,7 +28,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.13.0
+  flutter_bloc: ^0.14.0
   http: ^0.12.0
   equatable: ^0.2.0
 
@@ -580,7 +580,7 @@ In order to tell Bloc to use our `SimpleBlocDelegate`, we just need to tweak our
 
 ```dart
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(MyApp());
 }
 ```

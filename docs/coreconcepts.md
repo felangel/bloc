@@ -265,7 +265,7 @@ In order to tell Bloc to use our `SimpleBlocDelegate`, we just need to tweak our
 
 ```dart
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   CounterBloc bloc = CounterBloc();
 
   for (int i = 0; i < 3; i++) {

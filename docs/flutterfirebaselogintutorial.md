@@ -31,7 +31,7 @@ dependencies:
   cloud_firestore: ^0.9.7
   firebase_auth: ^0.8.1+4
   google_sign_in: ^4.0.1+1
-  flutter_bloc: ^0.13.0
+  flutter_bloc: ^0.14.0
   equatable: ^0.2.0
   meta: ^1.1.6
   font_awesome_flutter: ^8.4.0
@@ -563,7 +563,7 @@ Now we can hook up our `BlocDelegate` in our `main.dart`.
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
 main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(App());
 }
 ```
@@ -601,7 +601,7 @@ import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
 main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(App());
 }
 
@@ -706,7 +706,7 @@ import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
 main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(App());
 }
 
@@ -1969,7 +1969,7 @@ import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
 main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(App());
 }
 

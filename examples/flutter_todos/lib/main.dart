@@ -13,7 +13,7 @@ void main() {
   // BlocSupervisor oversees Blocs and delegates to BlocDelegate.
   // We can set the BlocSupervisor's delegate to an instance of `SimpleBlocDelegate`.
   // This will allow us to handle all transitions and errors in SimpleBlocDelegate.
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(TodosApp());
 }
 

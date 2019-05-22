@@ -27,7 +27,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.13.0
+  flutter_bloc: ^0.14.0
   meta: ^1.1.6
   equatable: ^0.2.0
 
@@ -669,7 +669,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(App(userRepository: UserRepository()));
 }
 

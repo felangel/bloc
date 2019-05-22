@@ -31,7 +31,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(App(userRepository: UserRepository()));
 }
 

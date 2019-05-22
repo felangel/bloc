@@ -35,7 +35,7 @@ void main() {
     ),
   );
 
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(App(weatherRepository: weatherRepository));
 }
 

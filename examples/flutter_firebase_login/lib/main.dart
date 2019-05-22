@@ -9,7 +9,7 @@ import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
 main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(App());
 }
 
