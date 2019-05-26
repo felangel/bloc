@@ -1,0 +1,16 @@
+name: example
+description: A new Flutter project.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^0.14.0
+  hydrated_bloc:
+    path: ../
+
+flutter:
+  uses-material-design: true
