@@ -139,7 +139,7 @@ class CounterBloc extends HydratedBloc<CounterEvent, CounterState> {
   fromJson(String source) {
     try {
       final dynamic j = json.decode(source);
-      return CounterState(j['value']);
+      return CounterState(j['value'] as int);
     } catch (_) {
       return null;
     }

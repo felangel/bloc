@@ -10,7 +10,8 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^0.14.0
   hydrated_bloc:
-    path: ../
+    git:
+      url: https://github.com/felangel/hydrated_bloc    
 
 flutter:
   uses-material-design: true
