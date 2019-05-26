@@ -9,6 +9,11 @@ import 'package:bloc/bloc.dart';
 /// This is analogous to the `builder` function in [StreamBuilder].
 typedef BlocWidgetBuilder<S> = Widget Function(BuildContext context, S state);
 
+/// Signature for the condition function which takes the previous state and the current state
+/// and is responsible for returning a `bool` which determines whether or not to rebuild
+/// `BlocBuilder` with the current state.
+typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
+
 /// A Flutter widget which requires a [Bloc] and a [BlocWidgetBuilder] `builder` function.
 /// [BlocBuilder] handles building the widget in response to new states.
 /// BlocBuilder analogous to [StreamBuilder] but has simplified API
@@ -18,16 +23,23 @@ class BlocBuilder<E, S> extends BlocBuilderBase<E, S> {
   /// The [Bloc] that the [BlocBuilder] will interact with.
   final Bloc<E, S> bloc;
 
-  /// The builder function which will be invoked on each widget build.
-  /// The builder takes the [BuildContext] and current bloc state and
+  /// The `builder` function which will be invoked on each widget build.
+  /// The `builder` takes the [BuildContext] and current bloc state and
   /// must return a [Widget].
   /// This is analogous to the `builder` function in [StreamBuilder].
   final BlocWidgetBuilder<S> builder;
+
+  /// The `condition` function will be invoked on each bloc state change.
+  /// The `condition` takes the previous state and current state and must return a `bool`
+  /// which determines whether or not the `builder` function will be invoked.
+  /// `condition` is optional and if it isn't implemented, it will default to return `true`.
+  final BlocBuilderCondition<S> condition;
 
   const BlocBuilder({
     Key key,
     @required this.bloc,
     @required this.builder,
+    this.condition,
   })  : assert(bloc != null),
         assert(builder != null),
         super(key: key, bloc: bloc);
@@ -43,10 +55,13 @@ class BlocBuilder<E, S> extends BlocBuilderBase<E, S> {
 /// so far. The type of the state and how it is updated with each interaction
 /// is defined by sub-classes.
 abstract class BlocBuilderBase<E, S> extends StatefulWidget {
-  const BlocBuilderBase({Key key, this.bloc}) : super(key: key);
+  const BlocBuilderBase({Key key, this.bloc, this.condition}) : super(key: key);
 
   /// The [Bloc] that the [BlocBuilderBase] will interact with.
   final Bloc<E, S> bloc;
+
+  /// The [BlocBuilderCondition] that the [BlocBuilderBase] will invoke.
+  final BlocBuilderCondition<S> condition;
 
   /// Returns a [Widget] based on the [BuildContext] and current [state].
   Widget build(BuildContext context, S state);
@@ -57,6 +72,7 @@ abstract class BlocBuilderBase<E, S> extends StatefulWidget {
 
 class _BlocBuilderBaseState<E, S> extends State<BlocBuilderBase<E, S>> {
   StreamSubscription<S> _subscription;
+  S _previousState;
   S _state;
 
   @override
@@ -72,6 +88,7 @@ class _BlocBuilderBaseState<E, S> extends State<BlocBuilderBase<E, S>> {
     if (oldWidget.bloc.state != widget.bloc.state) {
       if (_subscription != null) {
         _unsubscribe();
+        _previousState = null;
         _state = widget.bloc.currentState;
       }
       _subscribe();
@@ -90,9 +107,12 @@ class _BlocBuilderBaseState<E, S> extends State<BlocBuilderBase<E, S>> {
   void _subscribe() {
     if (widget.bloc.state != null) {
       _subscription = widget.bloc.state.skip(1).listen((S state) {
-        setState(() {
-          _state = state;
-        });
+        if (widget.condition?.call(_previousState, state) ?? true) {
+          setState(() {
+            _state = state;
+          });
+        }
+        _previousState = state;
       });
     }
   }
