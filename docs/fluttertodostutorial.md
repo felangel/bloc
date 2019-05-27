@@ -76,6 +76,7 @@ class FlutterTodosKeys {
   static final emptyStatsContainer = const Key('__emptyStatsContainer__');
   static final emptyDetailsContainer = const Key('__emptyDetailsContainer__');
   static final detailsScreenCheckBox = const Key('__detailsScreenCheckBox__');
+}
 ```
 
 We will reference these keys throughout the rest of the tutorial.
