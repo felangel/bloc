@@ -80,7 +80,7 @@ class FlutterTodosKeys {
 
 We will reference these keys throughout the rest of the tutorial.
 
->? **Note:** You can check out the integration tests for the application [here](https://github.com/brianegan/flutter_architecture_samples/tree/master/integration_tests). You can also check out unit and widget tests [here](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library/test).
+?> **Note:** You can check out the integration tests for the application [here](https://github.com/brianegan/flutter_architecture_samples/tree/master/integration_tests). You can also check out unit and widget tests [here](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library/test).
 
 ## Localization
 
@@ -1394,7 +1394,7 @@ The rest of the implementation is pure Flutter and there isn't much going on so 
 
 Since this widget doesn't care about the filters it will interact with the `TodosBloc` instead of the `FilteredTodosBloc`.
 
-Let's create the `ExtraAction` models in `models/extra_action.dart`.
+Let's create the `ExtraAction` model in `models/extra_action.dart`.
 
 ```dart
 enum ExtraAction { toggleAllComplete, clearCompleted }
