@@ -31,6 +31,21 @@ BlocBuilder(
 )
 ```
 
+If you want fine-grained control over when the builder function is called you can provide an optional `condition` to `BlocBuilder`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `builder` will be called with `currentState` and the widget will rebuild. If `condition` returns false, `builder` will not be called with `currentState` and no rebuild will occur.
+
+```dart
+BlocBuilder(
+  bloc: BlocA(),
+  condition: (previousState, currentState) {
+    // return true/false to determine whether or not
+    // to rebuild the widget with currentState
+  },
+  builder: (context, state) {
+    // return widget here based on BlocA's state
+  }
+)
+```
+
 **BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a DI widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
 
 ```dart

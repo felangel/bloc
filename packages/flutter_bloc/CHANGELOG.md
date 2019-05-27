@@ -1,3 +1,7 @@
+# 0.15.0
+
+Added optional `condition` to `BlocBuilder` to control widget rebuilds ([#315](https://github.com/felangel/bloc/issues/315)) and Documentation Updates
+
 # 0.14.0
 
 Updated to `bloc: ^0.14.0` and Documentation Updates
