@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Implementation of `HydratedBlocStorage` which uses `SharedPreferences`
+/// to persist and retrieve state changes from the local device.
 class HydratedBlocSharedPreferences implements HydratedBlocStorage {
   SharedPreferences _prefs;
 

@@ -3,15 +3,15 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  bloc: ^0.14.0
   flutter_bloc: ^0.14.0
   hydrated_bloc:
-    git:
-      url: https://github.com/felangel/hydrated_bloc    
+    path: ../
 
 flutter:
   uses-material-design: true

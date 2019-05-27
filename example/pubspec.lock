@@ -2,7 +2,7 @@
 # See https://www.dartlang.org/tools/pub/glossary#lockfile
 packages:
   bloc:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: bloc
       url: "https://pub.dartlang.org"
@@ -30,12 +30,10 @@ packages:
   hydrated_bloc:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "97f167ee615632aa1f7bc19efe9c7b8d55564c30"
-      url: "https://github.com/felangel/hydrated_bloc"
-    source: git
-    version: "0.0.1"
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.2"
   meta:
     dependency: transitive
     description:

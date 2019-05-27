@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
+/// A specialized `BlocDelegate` which handles persisting state changes
+/// transparently and asynchronously.
 class HydratedBlocDelegate extends BlocDelegate {
+  /// Instance of `HydratedBlocState` used to persist states.
   HydratedBlocStorage storage;
 
   HydratedBlocDelegate(this.storage);
