@@ -58,6 +58,69 @@ flutter packages get
 
 ?> **Note:** We're overriding some dependencies because we're going to be reusing them from [Brian Egan's Flutter Architecture Samples](https://github.com/brianegan/flutter_architecture_samples).
 
+## App Keys
+
+Before we jump into the application code, let's create `flutter_todos_keys.dart`. This file will contain keys which we will use to uniquely identify important widgets. We can later write tests that find widgets based on keys.
+
+```dart
+import 'package:flutter/widgets.dart';
+
+class FlutterTodosKeys {
+  static final extraActionsPopupMenuButton =
+      const Key('__extraActionsPopupMenuButton__');
+  static final extraActionsEmptyContainer =
+      const Key('__extraActionsEmptyContainer__');
+  static final filteredTodosEmptyContainer =
+      const Key('__filteredTodosEmptyContainer__');
+  static final statsLoadingIndicator = const Key('__statsLoadingIndicator__');
+  static final emptyStatsContainer = const Key('__emptyStatsContainer__');
+  static final emptyDetailsContainer = const Key('__emptyDetailsContainer__');
+  static final detailsScreenCheckBox = const Key('__detailsScreenCheckBox__');
+```
+
+We will reference these keys throughout the rest of the tutorial.
+
+>? **Note:** You can check out the integration tests for the application [here](https://github.com/brianegan/flutter_architecture_samples/tree/master/integration_tests). You can also check out unit and widget tests [here](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library/test).
+
+## Localization
+
+One last concept that we will touch on before going into the application itself is localization. Create `localization.dart` and we'll create the foundation for multi-language support.
+
+```dart
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
+class FlutterBlocLocalizations {
+  static FlutterBlocLocalizations of(BuildContext context) {
+    return Localizations.of<FlutterBlocLocalizations>(
+      context,
+      FlutterBlocLocalizations,
+    );
+  }
+
+  String get appTitle => "Flutter Todos";
+}
+
+class FlutterBlocLocalizationsDelegate
+    extends LocalizationsDelegate<FlutterBlocLocalizations> {
+  @override
+  Future<FlutterBlocLocalizations> load(Locale locale) =>
+      Future(() => FlutterBlocLocalizations());
+
+  @override
+  bool shouldReload(FlutterBlocLocalizationsDelegate old) => false;
+
+  @override
+  bool isSupported(Locale locale) =>
+      locale.languageCode.toLowerCase().contains("en");
+}
+```
+
+We can now import and provide our `FlutterBlocLocalizationsDelegate` to our `MaterialApp` (later in this tutorial).
+
+For more information on localization check out the [official flutter docs](https://flutter.dev/docs/development/accessibility-and-localization/internationalization).
+
 ## Todos Repository
 
 In this tutorial we're not going to go into the implementation details of the `TodosRepository` because it was implemented by [Brian Egan](https://github.com/brianegan) and is shared among all of the [Todo Architecture Samples](https://github.com/brianegan/flutter_architecture_samples). At a high level, the `TodosRepository` will expose a method to `loadTodos` and to `saveTodos`. That's pretty much all we need to know so for the rest of the tutorial we'll focus on the Bloc and Presentation layers.
@@ -1331,7 +1394,15 @@ The rest of the implementation is pure Flutter and there isn't much going on so 
 
 Since this widget doesn't care about the filters it will interact with the `TodosBloc` instead of the `FilteredTodosBloc`.
 
-Let's create `widgets/extra_actions.dart` and implement it.
+Let's create the `ExtraAction` models in `models/extra_action.dart`.
+
+```dart
+enum ExtraAction { toggleAllComplete, clearCompleted }
+```
+
+And don't forget to export it from the `models/models.dart` barrel file.
+
+Next, let's create `widgets/extra_actions.dart` and implement it.
 
 ```dart
 import 'package:flutter/material.dart';
