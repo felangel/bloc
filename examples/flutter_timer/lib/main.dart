@@ -51,33 +51,39 @@ class Timer extends StatelessWidget {
       body: Stack(
         children: [
           Background(),
-          BlocBuilder(
-            bloc: _timerBloc,
-            builder: (BuildContext context, TimerState state) {
-              final String minutesStr = ((state.duration / 60) % 60)
-                  .floor()
-                  .toString()
-                  .padLeft(2, '0');
-              final String secondsStr =
-                  (state.duration % 60).floor().toString().padLeft(2, '0');
-
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 100.0),
-                    child: Center(
-                      child: Text(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 100.0),
+                child: Center(
+                  child: BlocBuilder(
+                    bloc: _timerBloc,
+                    builder: (context, state) {
+                      final String minutesStr = ((state.duration / 60) % 60)
+                          .floor()
+                          .toString()
+                          .padLeft(2, '0');
+                      final String secondsStr = (state.duration % 60)
+                          .floor()
+                          .toString()
+                          .padLeft(2, '0');
+                      return Text(
                         '$minutesStr:$secondsStr',
                         style: Timer.timerTextStyle,
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                  Actions(),
-                ],
-              );
-            },
+                ),
+              ),
+              BlocBuilder(
+                condition: (previousState, currentState) =>
+                    currentState.runtimeType != previousState.runtimeType,
+                bloc: _timerBloc,
+                builder: (context, state) => Actions(),
+              ),
+            ],
           ),
         ],
       ),

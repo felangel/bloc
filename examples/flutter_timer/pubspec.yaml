@@ -14,6 +14,5 @@ dependencies:
   equatable: ^0.2.0
   wave: ^0.0.8
 
-    
 flutter:
   uses-material-design: true
