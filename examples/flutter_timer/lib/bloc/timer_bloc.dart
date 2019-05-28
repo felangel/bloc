@@ -40,8 +40,15 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     }
   }
 
+  @override
+  void dispose() {
+    _tickerSubscription?.cancel();
+    super.dispose();
+  }
+
   Stream<TimerState> _mapStartToState(Start start) async* {
     yield Running(start.duration);
+    _tickerSubscription?.cancel();
     _tickerSubscription = _ticker.tick(ticks: start.duration).listen(
       (duration) {
         dispatch(Tick(duration: duration));
