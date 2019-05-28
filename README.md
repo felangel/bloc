@@ -1,6 +1,6 @@
 # Hydrated Bloc
 
-[![Pub](https://img.shields.io/pub/v/hydrated_bloc.svg)](https://pub.dartlang.org/packages/hydrateed_bloc)
+[![Pub](https://img.shields.io/pub/v/hydrated_bloc.svg)](https://pub.dartlang.org/packages/hydrated_bloc)
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -92,4 +92,4 @@ class CounterBloc extends HydratedBloc<CounterEvent, CounterState> {
 }
 ```
 
-Now our `CounterBloc` is a `HydratedBloc` and will automatically persist it's state. We can increment the counter value, hot restart, kill the app, etc... and our `CounterBloc` will always retain its state.
+Now our `CounterBloc` is a `HydratedBloc` and will automatically persist its state. We can increment the counter value, hot restart, kill the app, etc... and our `CounterBloc` will always retain its state.
