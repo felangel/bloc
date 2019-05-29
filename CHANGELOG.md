@@ -1,6 +1,6 @@
 # 0.0.3
 
-Added Documentation Updates
+Added `clear` to `HydratedBlocStorage` API and Documentation Updates
 
 # 0.0.2
 
