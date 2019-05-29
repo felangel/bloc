@@ -31,7 +31,7 @@ void main() {
   test('dispose does not emit new states', () {
     expectLater(
       loginBloc.state,
-      emitsInOrder([LoginInitial()]),
+      emitsInOrder([LoginInitial(), emitsDone]),
     );
     loginBloc.dispose();
   });
