@@ -23,7 +23,7 @@ void main() {
 
       test('dispose does not emit new states over the state stream', () {
         final List<String> expectedEvents = [];
-        final List<String> expectedStates = [''];
+        final List<Matcher> expectedStates = [equals(''), emitsDone];
 
         expectLater(simpleBloc.event, emitsInOrder(expectedEvents));
         expectLater(
@@ -111,7 +111,10 @@ void main() {
 
       test('dispose does not emit new states over the state stream', () {
         final List<ComplexEvent> expectedEvents = [];
-        final List<ComplexState> expectedStates = [ComplexStateA()];
+        final List<Matcher> expectedStates = [
+          equals(ComplexStateA()),
+          emitsDone
+        ];
 
         expectLater(complexBloc.event, emitsInOrder(expectedEvents));
         expectLater(
@@ -367,7 +370,10 @@ void main() {
 
       test('dispose does not emit new states over the state stream', () {
         final List<AsyncEvent> expectedEvents = [];
-        final List<AsyncState> expectedStates = [AsyncState.initial()];
+        final List<Matcher> expectedStates = [
+          equals(AsyncState.initial()),
+          emitsDone
+        ];
 
         expectLater(
           asyncBloc.event,
@@ -385,7 +391,10 @@ void main() {
           'dispose while events are pending does not emit new states or trigger onError',
           () {
         final List<AsyncEvent> expectedEvents = [AsyncEvent()];
-        final List<AsyncState> expectedStates = [AsyncState.initial()];
+        final List<Matcher> expectedStates = [
+          equals(AsyncState.initial()),
+          emitsDone
+        ];
 
         expectLater(
           asyncBloc.event,
