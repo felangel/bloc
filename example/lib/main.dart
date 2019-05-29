@@ -103,6 +103,17 @@ class CounterPage extends StatelessWidget {
               },
             ),
           ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: FloatingActionButton(
+              child: Icon(Icons.delete_forever),
+              onPressed: () async {
+                await (BlocSupervisor.delegate as HydratedBlocDelegate)
+                    .storage
+                    .clear();
+              },
+            ),
+          ),
         ],
       ),
     );

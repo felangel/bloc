@@ -29,4 +29,9 @@ class HydratedBlocSharedPreferences implements HydratedBlocStorage {
   void write(String key, String value) {
     _prefs.setString(key, value);
   }
+
+  @override
+  Future<void> clear() async {
+    return await _prefs.clear();
+  }
 }

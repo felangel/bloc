@@ -1,3 +1,7 @@
+# 0.0.3
+
+Added Documentation Updates
+
 # 0.0.2
 
 Documentation Updates
