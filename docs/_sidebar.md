@@ -10,6 +10,7 @@
 
   - Flutter
     - [Counter](fluttercountertutorial.md)
+    - [Timer](fluttertimertutorial.md)
     - [Infinite List](flutterinfinitelisttutorial.md)
     - [Login](flutterlogintutorial.md)
     - [Weather](flutterweathertutorial.md)
