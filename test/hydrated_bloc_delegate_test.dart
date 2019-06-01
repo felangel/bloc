@@ -18,14 +18,16 @@ void main() {
     bloc = MockBloc();
   });
 
-  test('call storage.write when onTransition is called', () {
-    final transition = Transition(
-      currentState: 'currentState',
-      event: 'event',
-      nextState: 'nextState',
-    );
-    when(bloc.toJson('nextState')).thenReturn('nextStateJson');
-    delegate.onTransition(bloc, transition);
-    verify(storage.write('MockBloc', 'nextStateJson')).called(1);
+  group('HydratedBlocDelegate', () {
+    test('should call storage.write when onTransition is called', () {
+      final transition = Transition(
+        currentState: 'currentState',
+        event: 'event',
+        nextState: 'nextState',
+      );
+      when(bloc.toJson('nextState')).thenReturn('nextStateJson');
+      delegate.onTransition(bloc, transition);
+      verify(storage.write('MockBloc', 'nextStateJson')).called(1);
+    });
   });
 }
