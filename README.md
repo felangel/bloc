@@ -1,4 +1,4 @@
-<img src="https://github.com/felangel/hydrated_bloc/raw/master/docs/assets/hydrated_bloc_logo.png" width="100%" alt="logo" />
+<img style="margin-left: auto; margin-right: auto;display: block" src="https://github.com/felangel/hydrated_bloc/raw/master/docs/assets/hydrated_bloc_logo.png" width="60%" alt="logo" />
 <p align="center">
   <a href="https://pub.dartlang.org/packages/hydrated_bloc">
     <img alt="Pub Package" src="https://img.shields.io/pub/v/hydrated_bloc.svg">
