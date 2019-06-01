@@ -4,6 +4,9 @@
   <a href="https://circleci.com/gh/felangel/hydrated_bloc">
     <img alt="Build Status" src="https://circleci.com/gh/felangel/hydrated_bloc.svg?style=shield">
   </a>
+  <a href="https://codecov.io/gh/felangel/hydrated_bloc">
+    <img alt="Code Coverage" src="https://codecov.io/gh/felangel/hydrated_bloc/branch/master/graph/badge.svg" />
+  </a>
   <a href="https://pub.dartlang.org/packages/hydrated_bloc">
     <img alt="Pub Package" src="https://img.shields.io/pub/v/hydrated_bloc.svg">
   </a>

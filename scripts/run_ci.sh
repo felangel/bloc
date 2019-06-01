@@ -18,4 +18,4 @@ else
 fi
 
 # Upload coverage results to codecov.io
-bash <(curl -s https://codecov.io/bash) -c -F .``
+bash <(curl -s https://codecov.io/bash)
