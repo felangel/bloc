@@ -32,6 +32,7 @@ class BlocBuilder<E, S> extends BlocBuilderBase<E, S> {
   /// The `condition` function will be invoked on each bloc state change.
   /// The `condition` takes the previous state and current state and must return a `bool`
   /// which determines whether or not the `builder` function will be invoked.
+  /// The previous state will be initialized to `currentState` when the `BlocBuilder` is initialized.
   /// `condition` is optional and if it isn't implemented, it will default to return `true`.
   final BlocBuilderCondition<S> condition;
 
@@ -78,6 +79,7 @@ class _BlocBuilderBaseState<E, S> extends State<BlocBuilderBase<E, S>> {
   @override
   void initState() {
     super.initState();
+    _previousState = widget.bloc.currentState;
     _state = widget.bloc.currentState;
     _subscribe();
   }
@@ -88,7 +90,7 @@ class _BlocBuilderBaseState<E, S> extends State<BlocBuilderBase<E, S>> {
     if (oldWidget.bloc.state != widget.bloc.state) {
       if (_subscription != null) {
         _unsubscribe();
-        _previousState = null;
+        _previousState = widget.bloc.currentState;
         _state = widget.bloc.currentState;
       }
       _subscribe();
