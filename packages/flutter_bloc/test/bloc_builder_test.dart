@@ -130,7 +130,7 @@ class MyCounterAppState extends State<MyCounterApp> {
             BlocBuilder<CounterEvent, int>(
               bloc: _bloc,
               condition: (previousState, currentState) {
-                return ((previousState ?? 0) + currentState) % 3 == 0;
+                return (previousState + currentState) % 3 == 0;
               },
               builder: (context, count) {
                 return Text('$count', key: Key('myCounterAppTextCondition'));
