@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/felangel/hydrated_bloc/raw/master/docs/assets/hydrated_bloc_logo.png" width="50%" alt="logo" />
+  <img src="https://github.com/felangel/hydrated_bloc/raw/master/doc/assets/hydrated_bloc_logo.png" width="50%" alt="logo" />
   <br/>
   <a href="https://circleci.com/gh/felangel/hydrated_bloc">
     <img alt="Build Status" src="https://circleci.com/gh/felangel/hydrated_bloc.svg?style=shield">
