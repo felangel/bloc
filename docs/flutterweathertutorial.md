@@ -1623,7 +1623,7 @@ class _WeatherState extends State<Weather> {
 
 Since we want to "do something" in response to state changes in our `WeatherBloc`, we are using `BlocListener`. In this case, we are completing and resetting the `Completer` and are also dispatching the `WeatherChanged` event to the `ThemeBloc`.
 
-?> **Tip:** Check out the [BlocListener Recipe](recipesbloclistener.md) for more information about the `BlocListener` widget.
+?> **Tip:** Check out the [SnackBar Recipe](recipesfluttershowsnackbar.md) for more information about the `BlocListener` widget.
 
 We are accessing our `ThemeBloc` via `BlocProvider.of<ThemeBloc>(context)` and are then dispatching a `WeatherChanged` event on each `WeatherLoad`.
 
