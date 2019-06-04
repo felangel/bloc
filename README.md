@@ -25,7 +25,7 @@ An extension to the [bloc state management library](https://github.com/felangel/
 
 ```dart
 class MyHydratedBlocDelegate extends HydratedBlocDelegate {
-  MyHydratedBlocDelegate(HydratedBlocSharedPreferences prefs) : super(prefs);
+  MyHydratedBlocDelegate(HydratedBlocStorage storage) : super(storage);
 
   @override
   void onEvent(Bloc bloc, Object event) {
@@ -51,8 +51,8 @@ class MyHydratedBlocDelegate extends HydratedBlocDelegate {
 
 ```dart
 void main() async {
-  final prefs = await HydratedBlocSharedPreferences.getInstance();
-  BlocSupervisor.delegate = MyHydratedBlocDelegate(prefs);
+  final storage = await HydratedSharedPreferences.getInstance();
+  BlocSupervisor.delegate = MyHydratedBlocDelegate(storage);
   runApp(App());
 }
 ```

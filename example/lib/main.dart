@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class MyHydratedBlocDelegate extends HydratedBlocDelegate {
-  MyHydratedBlocDelegate(HydratedBlocSharedPreferences prefs) : super(prefs);
+  MyHydratedBlocDelegate(HydratedBlocStorage storage) : super(storage);
 
   @override
   void onEvent(Bloc bloc, Object event) {
@@ -30,8 +30,8 @@ class MyHydratedBlocDelegate extends HydratedBlocDelegate {
 }
 
 void main() async {
-  final prefs = await HydratedBlocSharedPreferences.getInstance();
-  BlocSupervisor.delegate = MyHydratedBlocDelegate(prefs);
+  final storage = await HydratedSharedPreferences.getInstance();
+  BlocSupervisor.delegate = MyHydratedBlocDelegate(storage);
   runApp(App());
 }
 

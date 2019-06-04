@@ -1,3 +1,8 @@
+# 0.1.0
+
+- Renamed `HydratedBlocSharedPreferences` to `HydratedSharedPreferences`
+- Documentation Updates
+
 # 0.0.3
 
 Added `clear` to `HydratedBlocStorage` API and Documentation Updates
