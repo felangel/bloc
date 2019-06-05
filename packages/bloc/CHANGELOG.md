@@ -1,3 +1,8 @@
+# 0.14.2
+
+- Deprecated Bloc `event` Stream ([#326](https://github.com/felangel/bloc/issues/326))
+- Documentation Updates
+
 # 0.14.1
 
 Internal `BlocDelegate` update and Documentation Updates.

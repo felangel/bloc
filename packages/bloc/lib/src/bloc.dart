@@ -13,6 +13,9 @@ abstract class Bloc<Event, State> {
 
   /// Returns [Stream] of [Event]s.
   /// When an [Event] is dispatched, it is added to the [Stream].
+  @Deprecated(
+    'Will be removed in v0.15.0. Logic should not be written in response to Events. Please refer to onEvent in the Bloc and BlocDelegate classes for analytics.',
+  )
   Stream<Event> get event => _eventSubject.stream;
 
   /// Returns [Stream] of [State]s.
