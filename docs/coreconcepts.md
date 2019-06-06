@@ -20,7 +20,7 @@ We need to be able to notify our application's "brains" of both an increment and
 enum CounterEvent { increment, decrement }
 ```
 
-In this case, we can represent the events using an `enum` but for more complex cases it might be necessary to use a `class`.
+In this case, we can represent the events using an `enum` but for more complex cases it might be necessary to use a `class` especially if it's necessary to pass information to the bloc.
 
 At this point we have defined our first event! Notice that we have not used Bloc in any way so far and there is no magic happening; it's just plain Dart code.
 
