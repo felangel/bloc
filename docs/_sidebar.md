@@ -26,6 +26,7 @@
   - Flutter
     - [Show SnackBar](recipesfluttershowsnackbar.md)
     - [Navigation](recipesflutternavigation.md)
+    - [Bloc Access](recipesflutterblocaccess.md)
 
 - Tools
 
