@@ -401,6 +401,8 @@ In this case, since our `App` widget is responsible for maintaining our `Counter
 
 The last thing to note is we are wrapping the entire `MaterialApp` in a `BlocProvider` which is the key to making our `CounterBloc` instance globally accessible. Now we can access our `CounterBloc` from anywhere in our application where we have a `BuildContext` using `BlocProvider.of<CounterBloc>(context);`
 
+?> **Note:** This approach still works if you're using a `CupertinoApp` or `WidgetsApp`.
+
 #### CounterPage
 
 ```dart
@@ -460,6 +462,6 @@ class CounterText extends StatelessWidget {
 }
 ```
 
-Nothing new here; the `CounterText` widget is the same as in the first example. It's just a `StatelessWidget` which uses a `BlocBuilder` to re-render when the `CounterBloc` state changes and accessing the global `CounterBloc` instance using `BlocProvider.of<CounterBloc>(context)`.
+Nothing new here; the `CounterText` widget is the same as in the first example. It's just a `StatelessWidget` which uses a `BlocBuilder` to re-render when the `CounterBloc` state changes and accesses the global `CounterBloc` instance using `BlocProvider.of<CounterBloc>(context)`.
 
 That's all there is to it! The full source can be found [here](https://gist.github.com/felangel/be891e73a7c91cdec9e7d5f035a61d5d).
