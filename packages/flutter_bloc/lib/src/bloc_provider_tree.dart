@@ -49,7 +49,7 @@ class BlocProviderTree extends StatelessWidget {
   /// This [Widget] will be a direct descendent of the last [BlocProvider] in `blocProviders`.
   final Widget child;
 
-  BlocProviderTree({
+  const BlocProviderTree({
     Key key,
     @required this.blocProviders,
     @required this.child,

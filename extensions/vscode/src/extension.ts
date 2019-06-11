@@ -1,7 +1,6 @@
 import * as _ from "lodash";
 import * as changeCase from "change-case";
 import * as mkdirp from "mkdirp";
-import * as rimraf from "rimraf";
 import {
   commands,
   ExtensionContext,
@@ -11,7 +10,7 @@ import {
   Uri,
   window
 } from "vscode";
-import { existsSync, lstatSync, writeFile } from "fs";
+import { existsSync, lstatSync, writeFile, appendFile } from "fs";
 import {
   getBarrelTemplate,
   getBlocEventTemplate,
@@ -48,8 +47,8 @@ export function activate(_context: ExtensionContext) {
       );
     } catch (error) {
       window.showErrorMessage(
-        `Failed to Generate ${pascalCaseBlocName} Bloc
-        ${JSON.stringify(error)}`
+        `Error:
+        ${error instanceof Error ? error.message : JSON.stringify(error)}`
       );
     }
   });
@@ -96,29 +95,17 @@ async function generateBlocCode(
   targetDirectory: string,
   useEquatable: boolean
 ) {
-  await createBlocDirectory(targetDirectory);
+  const blocDirectoryPath = `${targetDirectory}/bloc`;
+  if (!existsSync(blocDirectoryPath)) {
+    await createDirectory(blocDirectoryPath);
+  }
+
   await Promise.all([
     createBlocEventTemplate(blocName, targetDirectory, useEquatable),
     createBlocStateTemplate(blocName, targetDirectory, useEquatable),
     createBlocTemplate(blocName, targetDirectory),
     createBarrelTemplate(blocName, targetDirectory)
   ]);
-}
-
-function createBlocDirectory(targetDirectory: string): Promise<void> {
-  const basePath = `${targetDirectory}/bloc`;
-  if (existsSync(basePath)) {
-    rimraf.sync(basePath);
-  }
-
-  return new Promise(async (resolve, reject) => {
-    try {
-      await createDirectory(basePath);
-      return resolve();
-    } catch (error) {
-      return reject(error);
-    }
-  });
 }
 
 function createDirectory(targetDirectory: string): Promise<void> {
@@ -139,6 +126,9 @@ function createBlocEventTemplate(
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
   const targetPath = `${targetDirectory}/bloc/${snakeCaseBlocName}_event.dart`;
+  if (existsSync(targetPath)) {
+    throw Error(`${snakeCaseBlocName}_event.dart already exists`);
+  }
   return new Promise(async (resolve, reject) => {
     writeFile(
       targetPath,
@@ -162,6 +152,9 @@ function createBlocStateTemplate(
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
   const targetPath = `${targetDirectory}/bloc/${snakeCaseBlocName}_state.dart`;
+  if (existsSync(targetPath)) {
+    throw Error(`${snakeCaseBlocName}_state.dart already exists`);
+  }
   return new Promise(async (resolve, reject) => {
     writeFile(
       targetPath,
@@ -181,6 +174,9 @@ function createBlocStateTemplate(
 function createBlocTemplate(blocName: string, targetDirectory: string) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
   const targetPath = `${targetDirectory}/bloc/${snakeCaseBlocName}_bloc.dart`;
+  if (existsSync(targetPath)) {
+    throw Error(`${snakeCaseBlocName}_bloc.dart already exists`);
+  }
   return new Promise(async (resolve, reject) => {
     writeFile(targetPath, getBlocTemplate(blocName), "utf8", error => {
       if (error) {
@@ -194,6 +190,17 @@ function createBlocTemplate(blocName: string, targetDirectory: string) {
 
 function createBarrelTemplate(blocName: string, targetDirectory: string) {
   const targetPath = `${targetDirectory}/bloc/bloc.dart`;
+  if (existsSync(targetPath)) {
+    return new Promise((resolve, reject) => {
+      appendFile(targetPath, getBarrelTemplate(blocName), "utf8", error => {
+        if (error) {
+          reject(error);
+          return;
+        }
+        resolve();
+      });
+    });
+  }
   return new Promise(async (resolve, reject) => {
     writeFile(targetPath, getBarrelTemplate(blocName), "utf8", error => {
       if (error) {

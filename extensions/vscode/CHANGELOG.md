@@ -1,3 +1,34 @@
+# 0.6.2
+
+Updated `BlocDelegate` snippet to support changes in bloc `v0.13.0`
+
+# 0.6.1
+
+Bloc generation does not overwrite existing bloc files; it attempts to merge instead.
+
+# 0.6.0
+
+Added Snippets for:
+
+- `BlocListenerTree`
+
+# 0.5.0
+
+Added Snippets for:
+
+- `BlocListener`
+
+# 0.4.2
+
+Update BlocDelegate Snippet to include calls to `super`
+
+# 0.4.1
+
+Added Snippets for:
+
+- `BlocEvent`
+- `BlocState`
+
 # 0.4.0
 
 Support for `bloc v0.11.0`

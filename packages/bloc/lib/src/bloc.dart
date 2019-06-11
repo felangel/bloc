@@ -11,8 +11,15 @@ abstract class Bloc<Event, State> {
 
   BehaviorSubject<State> _stateSubject;
 
+  /// Returns [Stream] of [Event]s.
+  /// When an [Event] is dispatched, it is added to the [Stream].
+  @Deprecated(
+    'Will be removed in v0.15.0. Logic should not be written in response to Events. Please refer to onEvent in the Bloc and BlocDelegate classes for analytics.',
+  )
+  Stream<Event> get event => _eventSubject.stream;
+
   /// Returns [Stream] of [State]s.
-  /// Consumed by the presentation layer.
+  /// Usually consumed by the presentation layer.
   Stream<State> get state => _stateSubject.stream;
 
   /// Returns the [State] before any [Event]s have been `dispatched`.
@@ -26,10 +33,14 @@ abstract class Bloc<Event, State> {
     _bindStateSubject();
   }
 
+  /// Called whenever an [Event] is dispatched to the [Bloc].
+  /// A great spot to add logging/analytics at the individual [Bloc] level.
+  void onEvent(Event event) => null;
+
   /// Called whenever a [Transition] occurs with the given [Transition].
   /// A [Transition] occurs when a new [Event] is dispatched and `mapEventToState` executed.
   /// `onTransition` is called before a [Bloc]'s [State] has been updated.
-  /// A great spot to add logging/analytics.
+  /// A great spot to add logging/analytics at the individual [Bloc] level.
   void onTransition(Transition<Event, State> transition) => null;
 
   /// Called whenever an [Exception] is thrown within `mapEventToState`.
@@ -46,6 +57,8 @@ abstract class Bloc<Event, State> {
   /// as well as the [BlocDelegate] level.
   void dispatch(Event event) {
     try {
+      BlocSupervisor.delegate.onEvent(this, event);
+      onEvent(event);
       _eventSubject.sink.add(event);
     } catch (error) {
       _handleError(error);
@@ -53,15 +66,54 @@ abstract class Bloc<Event, State> {
   }
 
   /// Closes the [Event] and [State] [Stream]s.
+<<<<<<< HEAD
+=======
+  /// This method should be called when a [Bloc] is no longer needed.
+  /// Once `dispose` is called, events that are `dispatched` will not be
+  /// processed and will result in an error being passed to `onError`.
+  /// In addition, if `dispose` is called while [Event]s are still being processed,
+  /// any [State]s yielded after are ignored and will not result in a [Transition].
+>>>>>>> 31a804bf9397a80eba211653963a96997c5eac5b
   @mustCallSuper
   void dispose() {
     _eventSubject.close();
     _stateSubject.close();
   }
 
-  /// Transform the `Stream<Event>` before `mapEventToState` is called.
-  /// This allows for operations like `distinct()`, `debounce()`, etc... to be applied.
-  Stream<Event> transform(Stream<Event> events) => events;
+  /// Transforms the `Stream<Event>` along with a `next` function into a `Stream<State>`.
+  /// Events that should be processed by `mapEventToState` need to be passed to `next`.
+  /// By default `asyncExpand` is used to ensure all events are processed in the order
+  /// in which they are received. You can override `transform` for advanced usage
+  /// in order to manipulate the frequency and specificity with which `mapEventToState`
+  /// is called as well as which events are processed.
+  ///
+  /// For example, if you only want `mapEventToState` to be called on the most recent
+  /// event you can use `switchMap` instead of `asyncExpand`.
+  ///
+  /// ```dart
+  /// @override
+  /// Stream<State> transform(events, next) {
+  ///   return (events as Observable<Event>).switchMap(next);
+  /// }
+  /// ```
+  ///
+  /// Alternatively, if you only want `mapEventToState` to be called for distinct events:
+  ///
+  /// ```dart
+  /// @override
+  /// Stream<State> transform(events, next) {
+  ///   return super.transform(
+  ///     (events as Observable<Event>).distinct(),
+  ///     next,
+  ///   );
+  /// }
+  /// ```
+  Stream<State> transform(
+    Stream<Event> events,
+    Stream<State> next(Event event),
+  ) {
+    return events.asyncExpand(next);
+  }
 
   /// Must be implemented when a class extends [Bloc].
   /// Takes the incoming `event` as the argument.
@@ -73,18 +125,18 @@ abstract class Bloc<Event, State> {
   void _bindStateSubject() {
     Event currentEvent;
 
-    transform(_eventSubject).asyncExpand((Event event) {
+    transform(_eventSubject, (Event event) {
       currentEvent = event;
       return mapEventToState(currentEvent).handleError(_handleError);
     }).forEach(
       (State nextState) {
-        if (currentState == nextState) return;
+        if (currentState == nextState || _stateSubject.isClosed) return;
         final transition = Transition(
           currentState: currentState,
           event: currentEvent,
           nextState: nextState,
         );
-        BlocSupervisor().delegate?.onTransition(transition);
+        BlocSupervisor.delegate.onTransition(this, transition);
         onTransition(transition);
         _stateSubject.add(nextState);
       },
@@ -92,7 +144,7 @@ abstract class Bloc<Event, State> {
   }
 
   void _handleError(Object error, [StackTrace stacktrace]) {
+    BlocSupervisor.delegate.onError(this, error, stacktrace);
     onError(error, stacktrace);
-    BlocSupervisor().delegate?.onError(error, stacktrace);
   }
 }

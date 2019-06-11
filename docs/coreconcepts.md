@@ -20,7 +20,7 @@ We need to be able to notify our application's "brains" of both an increment and
 enum CounterEvent { increment, decrement }
 ```
 
-In this case, we can represent the events using an `enum` but for more complex cases it might be necessary to use a `class`.
+In this case, we can represent the events using an `enum` but for more complex cases it might be necessary to use a `class` especially if it's necessary to pass information to the bloc.
 
 At this point we have defined our first event! Notice that we have not used Bloc in any way so far and there is no magic happening; it's just plain Dart code.
 
@@ -252,7 +252,8 @@ If we want to be able to do something in response to all `Transitions` we can si
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
   @override
-  void onTransition(Transition transition) {
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
     print(transition);
   }
 }
@@ -264,7 +265,7 @@ In order to tell Bloc to use our `SimpleBlocDelegate`, we just need to tweak our
 
 ```dart
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   CounterBloc bloc = CounterBloc();
 
   for (int i = 0; i < 3; i++) {
@@ -273,17 +274,43 @@ void main() {
 }
 ```
 
-If we want to be able to do something in response to all `Exceptions` thrown in `mapEventToState`, we can also override the `onError` method in our `SimpleBlocDelegate`.
+If we want to be able to do something in response to all `Events` dispatched, we can also override the `onEvent` method in our `SimpleBlocDelegate`.
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
   @override
-  void onTransition(Transition transition) {
+  void onEvent(Bloc bloc, Object event) {
+    super.onEvent(bloc, event);
+    print(event);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    print(transition);
+  }
+}
+```
+
+If we want to be able to do something in response to all `Exceptions` thrown in a Bloc, we can also override the `onError` method in our `SimpleBlocDelegate`.
+
+```dart
+class SimpleBlocDelegate extends BlocDelegate {
+  @override
+  void onEvent(Bloc bloc, Object event) {
+    super.onEvent(bloc, event);
+    print(event);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
     print(transition);
   }
 
   @override
-  void onError(Object error, StackTrace stacktrace) {
+  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
+    super.onError(bloc, error, stacktrace);
     print('$error, $stacktrace');
   }
 }

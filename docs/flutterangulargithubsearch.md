@@ -38,7 +38,7 @@ environment:
 
 dependencies:
   meta: ^1.1.7
-  bloc: ^0.11.0
+  bloc: ^0.12.0
   equatable: ^0.2.0
   http: ^0.12.0
 ```
@@ -345,9 +345,16 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   GithubSearchBloc({@required this.githubRepository});
 
   @override
-  Stream<GithubSearchEvent> transform(Stream<GithubSearchEvent> events) {
-    return (events as Observable<GithubSearchEvent>)
-        .debounce(Duration(milliseconds: 500));
+  Stream<GithubSearchState> transform(
+    Stream<GithubSearchEvent> events,
+    Stream<GithubSearchState> Function(GithubSearchEvent event) next,
+  ) {
+    return super.transform(
+      (events as Observable<GithubSearchEvent>).debounceTime(
+        Duration(milliseconds: 500),
+      ),
+      next,
+    );
   }
 
   @override
@@ -420,7 +427,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.9.0
+  flutter_bloc: ^0.12.0
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search
@@ -478,10 +485,10 @@ class _SearchFormState extends State<SearchForm> {
 
   @override
   void initState() {
+    super.initState();
     _githubSearchBloc = GithubSearchBloc(
       githubRepository: widget.githubRepository,
     );
-    super.initState();
   }
 
   @override
@@ -682,10 +689,10 @@ class _SearchFormState extends State<SearchForm> {
 
   @override
   void initState() {
+    super.initState();
     _githubSearchBloc = GithubSearchBloc(
       githubRepository: widget.githubRepository,
     );
-    super.initState();
   }
 
   @override
@@ -889,7 +896,7 @@ environment:
 dependencies:
   angular: ^5.0.0
   angular_components: ^0.9.0
-  angular_bloc: ^0.5.0
+  angular_bloc: ^0.9.0
   common_github_search:
     path: ../common_github_search
 

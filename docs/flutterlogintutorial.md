@@ -1,6 +1,6 @@
 # Flutter Login Tutorial
 
-![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+![intermediate](https://img.shields.io/badge/level-intermediate-orange.svg)
 
 > In the following tutorial, we're going to build a Login Flow in Flutter using the Bloc library.
 
@@ -27,7 +27,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.9.0
+  flutter_bloc: ^0.14.0
   meta: ^1.1.6
   equatable: ^0.2.0
 
@@ -662,13 +662,14 @@ import 'package:flutter_login/common/common.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
-  void onTransition(Transition transition) {
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
     print(transition);
   }
 }
 
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(App(userRepository: UserRepository()));
 }
 

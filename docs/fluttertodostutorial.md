@@ -26,7 +26,7 @@ environment:
 dependencies:
   meta: ">=1.1.0 <2.0.0"
   equatable: ^0.2.0
-  flutter_bloc: ^0.9.0
+  flutter_bloc: ^0.14.0
   flutter:
     sdk: flutter
 
@@ -57,6 +57,70 @@ flutter packages get
 ```
 
 ?> **Note:** We're overriding some dependencies because we're going to be reusing them from [Brian Egan's Flutter Architecture Samples](https://github.com/brianegan/flutter_architecture_samples).
+
+## App Keys
+
+Before we jump into the application code, let's create `flutter_todos_keys.dart`. This file will contain keys which we will use to uniquely identify important widgets. We can later write tests that find widgets based on keys.
+
+```dart
+import 'package:flutter/widgets.dart';
+
+class FlutterTodosKeys {
+  static final extraActionsPopupMenuButton =
+      const Key('__extraActionsPopupMenuButton__');
+  static final extraActionsEmptyContainer =
+      const Key('__extraActionsEmptyContainer__');
+  static final filteredTodosEmptyContainer =
+      const Key('__filteredTodosEmptyContainer__');
+  static final statsLoadingIndicator = const Key('__statsLoadingIndicator__');
+  static final emptyStatsContainer = const Key('__emptyStatsContainer__');
+  static final emptyDetailsContainer = const Key('__emptyDetailsContainer__');
+  static final detailsScreenCheckBox = const Key('__detailsScreenCheckBox__');
+}
+```
+
+We will reference these keys throughout the rest of the tutorial.
+
+?> **Note:** You can check out the integration tests for the application [here](https://github.com/brianegan/flutter_architecture_samples/tree/master/integration_tests). You can also check out unit and widget tests [here](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library/test).
+
+## Localization
+
+One last concept that we will touch on before going into the application itself is localization. Create `localization.dart` and we'll create the foundation for multi-language support.
+
+```dart
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
+class FlutterBlocLocalizations {
+  static FlutterBlocLocalizations of(BuildContext context) {
+    return Localizations.of<FlutterBlocLocalizations>(
+      context,
+      FlutterBlocLocalizations,
+    );
+  }
+
+  String get appTitle => "Flutter Todos";
+}
+
+class FlutterBlocLocalizationsDelegate
+    extends LocalizationsDelegate<FlutterBlocLocalizations> {
+  @override
+  Future<FlutterBlocLocalizations> load(Locale locale) =>
+      Future(() => FlutterBlocLocalizations());
+
+  @override
+  bool shouldReload(FlutterBlocLocalizationsDelegate old) => false;
+
+  @override
+  bool isSupported(Locale locale) =>
+      locale.languageCode.toLowerCase().contains("en");
+}
+```
+
+We can now import and provide our `FlutterBlocLocalizationsDelegate` to our `MaterialApp` (later in this tutorial).
+
+For more information on localization check out the [official flutter docs](https://flutter.dev/docs/development/accessibility-and-localization/internationalization).
 
 ## Todos Repository
 
@@ -783,12 +847,20 @@ import 'package:bloc/bloc.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
-  void onTransition(Transition transition) {
+  void onEvent(Bloc bloc, Object event) {
+    super.onEvent(bloc, event);
+    print(event);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
     print(transition);
   }
 
   @override
-  void onError(Object error, StackTrace stacktrace) {
+  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
+    super.onError(bloc, error, stacktrace);
     print(error);
   }
 }
@@ -1323,7 +1395,15 @@ The rest of the implementation is pure Flutter and there isn't much going on so 
 
 Since this widget doesn't care about the filters it will interact with the `TodosBloc` instead of the `FilteredTodosBloc`.
 
-Let's create `widgets/extra_actions.dart` and implement it.
+Let's create the `ExtraAction` model in `models/extra_action.dart`.
+
+```dart
+enum ExtraAction { toggleAllComplete, clearCompleted }
+```
+
+And don't forget to export it from the `models/models.dart` barrel file.
+
+Next, let's create `widgets/extra_actions.dart` and implement it.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1751,7 +1831,7 @@ Let's create `main.dart` and our `TodosApp` widget. We need to create a `main` f
 
 ```dart
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(TodosApp());
 }
 ```
@@ -1828,7 +1908,7 @@ import 'package:flutter_todos/models/models.dart';
 import 'package:flutter_todos/screens/screens.dart';
 
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(TodosApp());
 }
 

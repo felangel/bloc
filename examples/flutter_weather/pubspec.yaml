@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   flutter:
-    sdk: flutter  
+    sdk: flutter
   flutter_bloc:
     path: ../../packages/flutter_bloc
   http: 0.12.0

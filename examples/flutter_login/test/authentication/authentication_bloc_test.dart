@@ -23,7 +23,7 @@ void main() {
   test('dispose does not emit new states', () {
     expectLater(
       authenticationBloc.state,
-      emitsInOrder([]),
+      emitsInOrder([AuthenticationUninitialized(), emitsDone]),
     );
     authenticationBloc.dispose();
   });

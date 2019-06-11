@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
 [![Flutter.io](https://img.shields.io/badge/Flutter-Website-deepskyblue.svg)](https://flutter.io/docs/development/data-and-backend/state-mgmt/options#bloc--rx)
-[![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true)](https://github.com/Solido/awesome-flutter#bloc)
+[![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true)](https://github.com/Solido/awesome-flutter#standard)
 [![Flutter Samples](https://img.shields.io/badge/Flutter-Samples-teal.svg?longCache=true)](http://fluttersamples.com)
 [![Star on GitHub](https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=Stars)](https://github.com/felangel/bloc)
 [![Gitter](https://img.shields.io/badge/gitter-chat-hotpink.svg)](https://gitter.im/bloc_package/Lobby)
@@ -18,11 +18,28 @@ This package is built to work with [bloc](https://pub.dartlang.org/packages/bloc
 
 ## Bloc Widgets
 
-**BlocBuilder** is a Flutter widget which requires a `Bloc` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed.
+**BlocBuilder** is a Flutter widget which requires a `Bloc` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed. The `builder` function will potentially be called many times and should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that returns a widget in response to the state.
+
+See `BlocListener` if you want to "do" anything in response to state changes such as navigation, showing a dialog, etc...
 
 ```dart
 BlocBuilder(
   bloc: BlocA(),
+  builder: (context, state) {
+    // return widget here based on BlocA's state
+  }
+)
+```
+
+If you want fine-grained control over when the builder function is called you can provide an optional `condition` to `BlocBuilder`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `builder` will be called with `currentState` and the widget will rebuild. If `condition` returns false, `builder` will not be called with `currentState` and no rebuild will occur.
+
+```dart
+BlocBuilder(
+  bloc: BlocA(),
+  condition: (previousState, currentState) {
+    // return true/false to determine whether or not
+    // to rebuild the widget with currentState
+  },
   builder: (context, state) {
     // return widget here based on BlocA's state
   }
@@ -50,16 +67,16 @@ By using `BlocProviderTree` we can go from:
 
 ```dart
 BlocProvider<BlocA>(
-   bloc: BlocA(),
-   child: BlocProvider<BlocB>(
-     bloc: BlocB(),
-     child: BlocProvider<BlocC>(
-       value: BlocC(),
-       child: ChildA(),
-     )
-   )
- )
- ```
+  bloc: BlocA(),
+  child: BlocProvider<BlocB>(
+    bloc: BlocB(),
+    child: BlocProvider<BlocC>(
+      value: BlocC(),
+      child: ChildA(),
+    )
+  )
+)
+```
 
 to:
 
@@ -74,11 +91,85 @@ BlocProviderTree(
 )
 ```
 
+**BlocListener** is a Flutter widget which takes a `Bloc` and a `BlocWidgetListener` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
+
+`listener` is only called once for each state change (including `initialState`) unlike `builder` in `BlocBuilder` and is a `void` function.
+
+```dart
+BlocListener(
+  bloc: _bloc,
+  listener: (context, state) {
+    if (state is Success) {
+      Navigator.of(context).pushNamed('/details');
+    }
+  },
+  child: BlocBuilder(
+    bloc: _bloc,
+    builder: (context, state) {
+      if (state is Initial) {
+        return Text('Press the Button');
+      }
+      if (state is Loading) {
+        return CircularProgressIndicator();
+      }
+      if (state is Success) {
+        return Text('Success');
+      }
+      if (state is Failure) {
+        return Text('Failure');
+      }
+    },
+  }
+)
+```
+
+**BlocListenerTree** is a Flutter widget that merges multiple `BlocListener` widgets into one.
+`BlocListenerTree` improves the readability and eliminates the need to nest multiple `BlocListeners`.
+By using `BlocListenerTree` we can go from:
+
+```dart
+BlocListener<BlocAEvent, BlocAState>(
+  bloc: BlocA(),
+  listener: (BuildContext context, BlocAState state) {},
+  child: BlocListener<BlocBEvent, BlocBState>(
+    bloc: BlocB(),
+    listener: (BuildContext context, BlocBState state) {},
+    child: BlocListener<BlocCEvent, BlocCState>(
+      bloc: BlocC(),
+      listener: (BuildContext context, BlocCState state) {},
+      child: ChildA(),
+    ),
+  ),
+)
+```
+
+to:
+
+```dart
+BlocListenerTree(
+  blocListeners: [
+    BlocListener<BlocAEvent, BlocAState>(
+      bloc: BlocA(),
+      listener: (BuildContext context, BlocAState state) {},
+    ),
+    BlocListener<BlocBEvent, BlocBState>(
+      bloc: BlocB(),
+      listener: (BuildContext context, BlocBState state) {},
+    ),
+    BlocListener<BlocCEvent, BlocCState>(
+      bloc: BlocC(),
+      listener: (BuildContext context, BlocCState state) {},
+    ),
+  ],
+  child: ChildA(),
+)
+```
+
 ## Usage
 
 Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
 
-`counter_bloc.dart`
+### counter_bloc.dart
 
 ```dart
 enum CounterEvent { increment, decrement }
@@ -101,7 +192,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-`counter_page.dart`
+### counter_page.dart
 
 ```dart
 class CounterPage extends StatelessWidget {
@@ -160,11 +251,15 @@ At this point we have successfully separated our presentational layer from our b
 ## Examples
 
 - [Counter](https://felangel.github.io/bloc/#/fluttercountertutorial) - an example of how to create a `CounterBloc` to implement the classic Flutter Counter app.
+- [Form Validation](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) - an example of how to use the `bloc` and `flutter_bloc` packages to implement form validation.
+- [Bloc with Stream](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - an example of how to hook up a `bloc` to a `Stream` and update the UI in response to data from the `Stream`.
 - [Infinite List](https://felangel.github.io/bloc/#/flutterinfinitelisttutorial) - an example of how to use the `bloc` and `flutter_bloc` packages to implement an infinite scrolling list.
 - [Login Flow](https://felangel.github.io/bloc/#/flutterlogintutorial) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a Login Flow.
+- [Firebase Login](https://felangel.github.io/bloc/#/flutterfirebaselogintutorial) - an example of how to use the `bloc` and `flutter_bloc` packages to implement login via Firebase.
 - [Github Search](https://felangel.github.io/bloc/#/flutterangulargithubsearch) - an example of how to create a Github Search Application using the `bloc` and `flutter_bloc` packages.
 - [Weather](https://felangel.github.io/bloc/#/flutterweathertutorial) - an example of how to create a Weather Application using the `bloc` and `flutter_bloc` packages. The app uses a `RefreshIndicator` to implement "pull-to-refresh" as well as dynamic theming.
-- [Todos](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library) - an example of how to create a Todos Application using the `bloc` and `flutter_bloc` packages.
+- [Todos](https://felangel.github.io/bloc/#/fluttertodostutorial) - an example of how to create a Todos Application using the `bloc` and `flutter_bloc` packages.
+- [Timer](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - an example of how to create a Timer using the `bloc` and `flutter_bloc` packages.
 
 ### Maintainers
 
