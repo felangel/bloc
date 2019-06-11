@@ -35,40 +35,19 @@ class MyAppNoChild extends StatelessWidget {
   }
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final CounterBloc _counterBloc = CounterBloc();
-  final ThemeBloc _themeBloc = ThemeBloc();
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProviderTree(
-      blocProviders: [
-        BlocProvider<CounterBloc>(bloc: _counterBloc),
-        BlocProvider<ThemeBloc>(bloc: _themeBloc)
-      ],
-      child: BlocBuilder(
-        bloc: _themeBloc,
-        builder: (_, ThemeData theme) {
-          return MaterialApp(
-            title: 'Flutter Demo',
-            home: CounterPage(),
-            theme: theme,
-          );
-        },
-      ),
+    return BlocBuilder(
+      bloc: BlocProvider.of<ThemeBloc>(context),
+      builder: (_, ThemeData theme) {
+        return MaterialApp(
+          title: 'Flutter Demo',
+          home: CounterPage(),
+          theme: theme,
+        );
+      },
     );
-  }
-
-  @override
-  void dispose() {
-    _counterBloc.dispose();
-    _themeBloc.dispose();
-    super.dispose();
   }
 }
 
@@ -187,7 +166,15 @@ void main() {
     });
 
     testWidgets('passes blocs to children', (WidgetTester tester) async {
-      await tester.pumpWidget(MyApp());
+      await tester.pumpWidget(
+        BlocProviderTree(
+          blocProviders: [
+            BlocProvider<CounterBloc>(builder: (context) => CounterBloc()),
+            BlocProvider<ThemeBloc>(builder: (context) => ThemeBloc())
+          ],
+          child: MyApp(),
+        ),
+      );
 
       final Finder _counterFinder = find.byKey((Key('counter_text')));
       expect(_counterFinder, findsOneWidget);
