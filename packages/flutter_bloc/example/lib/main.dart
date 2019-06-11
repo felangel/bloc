@@ -27,43 +27,30 @@ class SimpleBlocDelegate extends BlocDelegate {
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(App());
+  runApp(
+    BlocProviderTree(
+      blocProviders: [
+        BlocProvider<CounterBloc>(builder: (context) => CounterBloc()),
+        BlocProvider<ThemeBloc>(builder: (context) => ThemeBloc())
+      ],
+      child: App(),
+    ),
+  );
 }
 
-class App extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  final CounterBloc _counterBloc = CounterBloc();
-  final ThemeBloc _themeBloc = ThemeBloc();
-
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProviderTree(
-      blocProviders: [
-        BlocProvider<CounterBloc>(bloc: _counterBloc),
-        BlocProvider<ThemeBloc>(bloc: _themeBloc)
-      ],
-      child: BlocBuilder(
-        bloc: _themeBloc,
-        builder: (_, ThemeData theme) {
-          return MaterialApp(
-            title: 'Flutter Demo',
-            home: CounterPage(),
-            theme: theme,
-          );
-        },
-      ),
+    return BlocBuilder(
+      bloc: BlocProvider.of<ThemeBloc>(context),
+      builder: (_, ThemeData theme) {
+        return MaterialApp(
+          title: 'Flutter Demo',
+          home: CounterPage(),
+          theme: theme,
+        );
+      },
     );
-  }
-
-  @override
-  void dispose() {
-    _counterBloc.dispose();
-    _themeBloc.dispose();
-    super.dispose();
   }
 }
 

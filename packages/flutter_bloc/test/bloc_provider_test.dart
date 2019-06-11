@@ -7,14 +7,14 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyApp extends StatelessWidget {
-  final CounterBloc _bloc;
+  final CounterBloc Function(BuildContext context) _builder;
   final Widget _child;
 
   const MyApp({
     Key key,
-    @required CounterBloc bloc,
+    @required CounterBloc Function(BuildContext context) builder,
     @required Widget child,
-  })  : _bloc = bloc,
+  })  : _builder = builder,
         _child = child,
         super(key: key);
 
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: BlocProvider<CounterBloc>(
-        bloc: _bloc,
+        builder: _builder,
         child: _child,
       ),
     );
@@ -54,7 +54,7 @@ class _MyStatefulAppState extends State<MyStatefulApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: BlocProvider<CounterBloc>(
-        bloc: bloc,
+        builder: (context) => bloc,
         child: Scaffold(
           appBar: AppBar(
             title: Text('Counter'),
@@ -173,40 +173,44 @@ class SimpleBloc extends Bloc<dynamic, String> {
 
 void main() {
   group('BlocProvider', () {
-    testWidgets('throws if initialized with no bloc and no child',
+    testWidgets('throws if initialized with no builder',
         (WidgetTester tester) async {
       await tester.pumpWidget(MyApp(
-        bloc: null,
-        child: null,
-      ));
-      expect(tester.takeException(), isInstanceOf<AssertionError>());
-    });
-
-    testWidgets('throws if initialized with no bloc',
-        (WidgetTester tester) async {
-      final CounterPage _child = CounterPage();
-      await tester.pumpWidget(MyApp(
-        bloc: null,
-        child: _child,
+        builder: null,
+        child: CounterPage(),
       ));
       expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
 
     testWidgets('throws if initialized with no child',
         (WidgetTester tester) async {
-      final CounterBloc _bloc = CounterBloc();
       await tester.pumpWidget(MyApp(
-        bloc: _bloc,
+        builder: (context) => CounterBloc(),
         child: null,
       ));
       expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
 
+    testWidgets('throws FlutterError if initialized with invalid builder',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(MyApp(
+        builder: (context) => null,
+        child: CounterPage(),
+      ));
+      final dynamic exception = tester.takeException();
+      final String message = """
+        BlocProvider builder did not return a Bloc of type CounterBloc.        
+        This can happen if the builder is not implemented or does not return a Bloc.        
+        """;
+      expect(exception, isInstanceOf<FlutterError>());
+      expect((exception as FlutterError).message, message);
+    });
+
     testWidgets('passes bloc to children', (WidgetTester tester) async {
-      final CounterBloc _bloc = CounterBloc();
+      final _builder = (BuildContext context) => CounterBloc();
       final CounterPage _child = CounterPage();
       await tester.pumpWidget(MyApp(
-        bloc: _bloc,
+        builder: _builder,
         child: _child,
       ));
 
