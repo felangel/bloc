@@ -1,3 +1,7 @@
+# 0.16.0
+
+Update `BlocProvider` to expose `builder` and `dispose` ([#344](https://github.com/felangel/bloc/pull/344) and [#347](https://github.com/felangel/bloc/pull/347)) and Documentation Updates
+
 # 0.15.1
 
 Fix `null` initial `previousState` in `BlocBuilder` `condition` ([#328](https://github.com/felangel/bloc/issues/328)) and Documentation Updates

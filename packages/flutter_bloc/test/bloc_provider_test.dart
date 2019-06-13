@@ -140,14 +140,15 @@ class RoutePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: RaisedButton(
-      key: Key('route_button'),
-      onPressed: () {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute<Widget>(builder: (context) => Container()),
-        );
-      },
-    ));
+      body: RaisedButton(
+        key: Key('route_button'),
+        onPressed: () {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute<Widget>(builder: (context) => Container()),
+          );
+        },
+      ),
+    );
   }
 }
 
