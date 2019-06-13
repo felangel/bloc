@@ -5,7 +5,7 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.0.0-dev.28.0 <3.0.0"
 
-dependencies:  
+dependencies:
   flutter_bloc:
     path: ../../../packages/flutter_bloc
   flutter:

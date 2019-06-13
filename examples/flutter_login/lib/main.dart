@@ -32,57 +32,43 @@ class SimpleBlocDelegate extends BlocDelegate {
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(App(userRepository: UserRepository()));
+  final userRepository = UserRepository();
+  runApp(
+    BlocProvider<AuthenticationBloc>(
+      builder: (context) {
+        return AuthenticationBloc(userRepository: userRepository)
+          ..dispatch(AppStarted());
+      },
+      dispose: (context, bloc) => bloc.dispose(),
+      child: App(userRepository: userRepository),
+    ),
+  );
 }
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   final UserRepository userRepository;
 
   App({Key key, @required this.userRepository}) : super(key: key);
 
   @override
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  AuthenticationBloc _authenticationBloc;
-  UserRepository get _userRepository => widget.userRepository;
-
-  @override
-  void initState() {
-    _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
-    _authenticationBloc.dispatch(AppStarted());
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _authenticationBloc.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthenticationBloc>(
-      bloc: _authenticationBloc,
-      child: MaterialApp(
-        home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
-          bloc: _authenticationBloc,
-          builder: (BuildContext context, AuthenticationState state) {
-            if (state is AuthenticationUninitialized) {
-              return SplashPage();
-            }
-            if (state is AuthenticationAuthenticated) {
-              return HomePage();
-            }
-            if (state is AuthenticationUnauthenticated) {
-              return LoginPage(userRepository: _userRepository);
-            }
-            if (state is AuthenticationLoading) {
-              return LoadingIndicator();
-            }
-          },
-        ),
+    return MaterialApp(
+      home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
+        bloc: BlocProvider.of<AuthenticationBloc>(context),
+        builder: (BuildContext context, AuthenticationState state) {
+          if (state is AuthenticationUninitialized) {
+            return SplashPage();
+          }
+          if (state is AuthenticationAuthenticated) {
+            return HomePage();
+          }
+          if (state is AuthenticationUnauthenticated) {
+            return LoginPage(userRepository: userRepository);
+          }
+          if (state is AuthenticationLoading) {
+            return LoadingIndicator();
+          }
+        },
       ),
     );
   }

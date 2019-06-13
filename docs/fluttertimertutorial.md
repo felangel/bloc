@@ -28,7 +28,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.15.0
+  flutter_bloc: ^0.16.0
   equatable: ^0.2.0
   wave: ^0.0.8
 
@@ -627,13 +627,7 @@ import 'package:flutter_timer/ticker.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final TimerBloc _timerBloc = TimerBloc(ticker: Ticker());
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -644,21 +638,16 @@ class _MyAppState extends State<MyApp> {
       ),
       title: 'Flutter Timer',
       home: BlocProvider(
-        bloc: _timerBloc,
+        builder: (context) => TimerBloc(ticker: Ticker()),
+        dispose: (context, bloc) => bloc.dispose(),
         child: Timer(),
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _timerBloc.dispose();
-    super.dispose();
-  }
 }
 ```
 
-`MyApp` is a `StatefulWidget` because it needs to manage initializing and disposing an instance of `TimerBloc`. In addition, it’s using the `BlocProvider` widget in order to make our `TimerBloc` instance available to the widgets in our subtree.
+`MyApp` is a `StatelessWidget` which will manage initializing and disposing an instance of `TimerBloc`. In addition, it’s using the `BlocProvider` widget in order to make our `TimerBloc` instance available to the widgets in our subtree.
 
 Next, we need to implement our `Timer` widget.
 

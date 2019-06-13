@@ -29,7 +29,8 @@ class App extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Performance Test')),
       body: BlocProvider(
-        bloc: _counterBloc,
+        builder: (context) => _counterBloc,
+        dispose: (context, bloc) => bloc.dispose(),
         child: ChildA(),
       ),
       floatingActionButton: Column(

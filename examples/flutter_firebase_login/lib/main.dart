@@ -8,52 +8,44 @@ import 'package:flutter_firebase_login/login/login.dart';
 import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
-main() {
+void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(App());
+  final UserRepository userRepository = UserRepository();
+  runApp(
+    BlocProvider(
+      builder: (context) => AuthenticationBloc(userRepository: userRepository)
+        ..dispatch(AppStarted()),
+      dispose: (context, bloc) => bloc.dispose(),
+      child: App(userRepository: userRepository),
+    ),
+  );
 }
 
-class App extends StatefulWidget {
-  State<App> createState() => _AppState();
-}
+class App extends StatelessWidget {
+  final UserRepository _userRepository;
 
-class _AppState extends State<App> {
-  final UserRepository _userRepository = UserRepository();
-  AuthenticationBloc _authenticationBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
-    _authenticationBloc.dispatch(AppStarted());
-  }
+  App({Key key, @required UserRepository userRepository})
+      : assert(userRepository != null),
+        _userRepository = userRepository,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      bloc: _authenticationBloc,
-      child: MaterialApp(
-        home: BlocBuilder(
-          bloc: _authenticationBloc,
-          builder: (BuildContext context, AuthenticationState state) {
-            if (state is Uninitialized) {
-              return SplashScreen();
-            }
-            if (state is Unauthenticated) {
-              return LoginScreen(userRepository: _userRepository);
-            }
-            if (state is Authenticated) {
-              return HomeScreen(name: state.displayName);
-            }
-          },
-        ),
+    return MaterialApp(
+      home: BlocBuilder(
+        bloc: BlocProvider.of<AuthenticationBloc>(context),
+        builder: (BuildContext context, AuthenticationState state) {
+          if (state is Uninitialized) {
+            return SplashScreen();
+          }
+          if (state is Unauthenticated) {
+            return LoginScreen(userRepository: _userRepository);
+          }
+          if (state is Authenticated) {
+            return HomeScreen(name: state.displayName);
+          }
+        },
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _authenticationBloc.dispose();
-    super.dispose();
   }
 }

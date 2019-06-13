@@ -5,33 +5,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_weather/widgets/widgets.dart';
-import 'package:flutter_weather/repositories/repositories.dart';
 import 'package:flutter_weather/blocs/blocs.dart';
 
 class Weather extends StatefulWidget {
-  final WeatherRepository weatherRepository;
-
-  Weather({Key key, @required this.weatherRepository})
-      : assert(weatherRepository != null),
-        super(key: key);
-
   @override
   State<Weather> createState() => _WeatherState();
 }
 
 class _WeatherState extends State<Weather> {
-  WeatherBloc _weatherBloc;
   Completer<void> _refreshCompleter;
 
   @override
   void initState() {
     super.initState();
     _refreshCompleter = Completer<void>();
-    _weatherBloc = WeatherBloc(weatherRepository: widget.weatherRepository);
   }
 
   @override
   Widget build(BuildContext context) {
+    final weatherBloc = BlocProvider.of<WeatherBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Weather'),
@@ -57,7 +49,7 @@ class _WeatherState extends State<Weather> {
                 ),
               );
               if (city != null) {
-                _weatherBloc.dispatch(FetchWeather(city: city));
+                weatherBloc.dispatch(FetchWeather(city: city));
               }
             },
           )
@@ -65,7 +57,7 @@ class _WeatherState extends State<Weather> {
       ),
       body: Center(
         child: BlocListener(
-          bloc: _weatherBloc,
+          bloc: weatherBloc,
           listener: (BuildContext context, WeatherState state) {
             if (state is WeatherLoaded) {
               BlocProvider.of<ThemeBloc>(context).dispatch(
@@ -76,7 +68,7 @@ class _WeatherState extends State<Weather> {
             }
           },
           child: BlocBuilder(
-            bloc: _weatherBloc,
+            bloc: weatherBloc,
             builder: (_, WeatherState state) {
               if (state is WeatherEmpty) {
                 return Center(child: Text('Please Select a Location'));
@@ -94,7 +86,7 @@ class _WeatherState extends State<Weather> {
                       color: themeState.color,
                       child: RefreshIndicator(
                         onRefresh: () {
-                          _weatherBloc.dispatch(
+                          weatherBloc.dispatch(
                             RefreshWeather(city: weather.location),
                           );
                           return _refreshCompleter.future;
@@ -136,11 +128,5 @@ class _WeatherState extends State<Weather> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _weatherBloc.dispose();
-    super.dispose();
   }
 }

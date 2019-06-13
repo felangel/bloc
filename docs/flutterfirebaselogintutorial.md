@@ -31,7 +31,7 @@ dependencies:
   cloud_firestore: ^0.9.7
   firebase_auth: ^0.8.1+4
   google_sign_in: ^4.0.1+1
-  flutter_bloc: ^0.14.0
+  flutter_bloc: ^0.16.0
   equatable: ^0.2.0
   meta: ^1.1.6
   font_awesome_flutter: ^8.4.0
@@ -462,15 +462,31 @@ We'll start by removing everything from out `main.dart` and implementing our mai
 
 ```dart
 import 'package:flutter/material.dart';
+import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/user_repository.dart';
 
-main() {
-  runApp(App());
+void main() {
+  final UserRepository userRepository = UserRepository();
+  runApp(
+    BlocProvider(
+      builder: (context) => AuthenticationBloc(userRepository: userRepository)
+        ..dispatch(AppStarted()),
+      dispose: (context, bloc) => bloc.dispose(),
+      child: App(userRepository: userRepository),
+    ),
+  );
 }
 ```
 
+We are wrapping our entire `App` widget in a `BlocProvider` in order to make the `AuthenticationBloc` available to the entire widget tree.
+
+!> Don't forget to always dispose your blocs.
+
 Next we need to implement our `App` widget.
 
-> `App` will be a `StatefulWidget` because it will need to manage our `AuthenticationBloc`.
+> `App` will be a `StatelessWidget` and be responsible for reacting to the `AuthenticationBloc` state and rendering the appropriate widget.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -479,53 +495,43 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 
-main() {
-  runApp(App());
+void main() {
+  final UserRepository userRepository = UserRepository();
+  runApp(
+    BlocProvider(
+      builder: (context) => AuthenticationBloc(userRepository: userRepository)
+        ..dispatch(AppStarted()),
+      dispose: (context, bloc) => bloc.dispose(),
+      child: App(userRepository: userRepository),
+    ),
+  );
 }
 
-class App extends StatefulWidget {
-  State<App> createState() => _AppState();
-}
+class App extends StatelessWidget {
+  final UserRepository _userRepository;
 
-class _AppState extends State<App> {
-  final UserRepository _userRepository = UserRepository();
-  AuthenticationBloc _authenticationBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
-    _authenticationBloc.dispatch(AppStarted());
-  }
+  App({Key key, @required UserRepository userRepository})
+      : assert(userRepository != null),
+        _userRepository = userRepository,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      bloc: _authenticationBloc,
-      child: MaterialApp(
-        home: BlocBuilder(
-          bloc: _authenticationBloc,
-          builder: (BuildContext context, AuthenticationState state) {
-            return Container();
-          },
-        ),
+    return MaterialApp(
+      home: BlocBuilder(
+        bloc: BlocProvider.of<AuthenticationBloc>(context),
+        builder: (BuildContext context, AuthenticationState state) {
+          return Container();
+        },
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _authenticationBloc.dispose();
-    super.dispose();
   }
 }
 ```
 
-We create an instance of `UserRepository` in our `_AppState` class and then inject it into our `AuthenticationBloc` in `initState`. Since we created the `AuthenticationBloc` in `_AppState` we need to clean up after ourselves and dispose of it in `_AppState`.
+We are using `BlocBuilder` in order to render UI based on the `AuthenticationBloc` state.
 
-We are using `BlocProvider` in order to make our `_authenticationBloc` instance available to the entire `Widget` sub-tree. We are also using `BlocBuilder` in order to render UI based on the `_authenticationBloc` state.
-
-So far we don't have any widgets to render but we'll comee back to this once we make our `SplashScreen`, `LoginScreen`, and `HomeScreen`.
+So far we don't have any widgets to render but we'll come back to this once we make our `SplashScreen`, `LoginScreen`, and `HomeScreen`.
 
 ## Bloc Delegate
 
@@ -562,9 +568,17 @@ Now we can hook up our `BlocDelegate` in our `main.dart`.
 ```dart
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
-main() {
+void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(App());
+  final UserRepository userRepository = UserRepository();
+  runApp(
+    BlocProvider(
+      builder: (context) => AuthenticationBloc(userRepository: userRepository)
+        ..dispatch(AppStarted()),
+      dispose: (context, bloc) => bloc.dispose(),
+      child: App(userRepository: userRepository),
+    ),
+  );
 }
 ```
 
@@ -600,48 +614,40 @@ import 'package:flutter_firebase_login/user_repository.dart';
 import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
-main() {
+void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(App());
+  final UserRepository userRepository = UserRepository();
+  runApp(
+    BlocProvider(
+      builder: (context) => AuthenticationBloc(userRepository: userRepository)
+        ..dispatch(AppStarted()),
+      dispose: (context, bloc) => bloc.dispose(),
+      child: App(userRepository: userRepository),
+    ),
+  );
 }
 
-class App extends StatefulWidget {
-  State<App> createState() => _AppState();
-}
+class App extends StatelessWidget {
+  final UserRepository _userRepository;
 
-class _AppState extends State<App> {
-  final UserRepository _userRepository = UserRepository();
-  AuthenticationBloc _authenticationBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
-    _authenticationBloc.dispatch(AppStarted());
-  }
+  App({Key key, @required UserRepository userRepository})
+      : assert(userRepository != null),
+        _userRepository = userRepository,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      bloc: _authenticationBloc,
-      child: MaterialApp(
-        home: BlocBuilder(
-          bloc: _authenticationBloc,
-          builder: (BuildContext context, AuthenticationState state) {
-            if (state is Uninitialized) {
-              return SplashScreen();
-            }
-            return Container();
-          },
-        ),
+    return MaterialApp(
+      home: BlocBuilder(
+        bloc: BlocProvider.of<AuthenticationBloc>(context),
+        builder: (BuildContext context, AuthenticationState state) {
+          if (state is Uninitialized) {
+            return SplashScreen();
+          }
+          return Container();
+        },
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _authenticationBloc.dispose();
-    super.dispose();
   }
 }
 ```
@@ -691,7 +697,7 @@ class HomeScreen extends StatelessWidget {
 }
 ```
 
-`HomeScreen` is a `StatelessWidget` that requires a `name` to be injected so that it can render the welcome message. It also uses `BlocProvider` in order to access the `AuthenticationBloc` via `BuildCOntext` so that when a user pressed the logout button, we can dispatch the `LoggedOut` event.
+`HomeScreen` is a `StatelessWidget` that requires a `name` to be injected so that it can render the welcome message. It also uses `BlocProvider` in order to access the `AuthenticationBloc` via `BuildContext` so that when a user pressed the logout button, we can dispatch the `LoggedOut` event.
 
 Now let's update our `App` to render the `HomeScreen` if the `AuthenticationState` is `Authentication`.
 
@@ -705,50 +711,42 @@ import 'package:flutter_firebase_login/home_screen.dart';
 import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
-main() {
+void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(App());
+  final UserRepository userRepository = UserRepository();
+  runApp(
+    BlocProvider(
+      builder: (context) => AuthenticationBloc(userRepository: userRepository)
+        ..dispatch(AppStarted()),
+      dispose: (context, bloc) => bloc.dispose(),
+      child: App(userRepository: userRepository),
+    ),
+  );
 }
 
-class App extends StatefulWidget {
-  State<App> createState() => _AppState();
-}
+class App extends StatelessWidget {
+  final UserRepository _userRepository;
 
-class _AppState extends State<App> {
-  final UserRepository _userRepository = UserRepository();
-  AuthenticationBloc _authenticationBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
-    _authenticationBloc.dispatch(AppStarted());
-  }
+  App({Key key, @required UserRepository userRepository})
+      : assert(userRepository != null),
+        _userRepository = userRepository,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      bloc: _authenticationBloc,
-      child: MaterialApp(
-        home: BlocBuilder(
-          bloc: _authenticationBloc,
-          builder: (BuildContext context, AuthenticationState state) {
-            if (state is Uninitialized) {
-              return SplashScreen();
-            }
-            if (state is Authenticated) {
-              return HomeScreen(name: state.displayName);
-            }
-          },
-        ),
+    return MaterialApp(
+      home: BlocBuilder(
+        bloc: BlocProvider.of<AuthenticationBloc>(context),
+        builder: (BuildContext context, AuthenticationState state) {
+          if (state is Uninitialized) {
+            return SplashScreen();
+          }
+          if (state is Authenticated) {
+            return HomeScreen(name: state.displayName);
+          }
+        },
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _authenticationBloc.dispose();
-    super.dispose();
   }
 }
 ```
@@ -1106,7 +1104,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 import 'package:flutter_firebase_login/login/login.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   final UserRepository _userRepository;
 
   LoginScreen({Key key, @required UserRepository userRepository})
@@ -1114,42 +1112,22 @@ class LoginScreen extends StatefulWidget {
         _userRepository = userRepository,
         super(key: key);
 
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  LoginBloc _loginBloc;
-
-  UserRepository get _userRepository => widget._userRepository;
-
-  @override
-  void initState() {
-    super.initState();
-    _loginBloc = LoginBloc(
-      userRepository: _userRepository,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Login')),
       body: BlocProvider<LoginBloc>(
-        bloc: _loginBloc,
+        builder: (context) => LoginBloc(userRepository: _userRepository),
+        dispose: (context, bloc) => bloc.dispose(),
         child: LoginForm(userRepository: _userRepository),
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _loginBloc.dispose();
-    super.dispose();
-  }
 }
+
 ```
 
-Again, we are extending `StatefulWidget` so that we can initialize the `LoginBloc` in `initState` and dispose it in the `dispose` override. You'll also notice that we are using `BlocProvider` again in order to make the `_loginBloc` instance available to all widgets within the sub-tree.
+Again, we are extending `StatelessWidget` and using a `BlocProvider` to initialize and dispose the `LoginBloc` as well as to make the `LoginBloc` instance available to all widgets within the sub-tree.
 
 At this point, we need to implement the `LoginForm` widget which will be responsible for displaying the form and submission buttons in order for a user to authenticate his/her self.
 
@@ -1712,7 +1690,7 @@ Now that the `RegisterBloc` is fully functional, we just need to build out the p
 
 ## Register Screen
 
-Similar to the `LoginScreen`, our `RegisterScreen` will be a `StatefulWidget` responsible for initializing and disposing the `RegisterBloc`. It will also provide the Scaffold for the `RegisterForm`.
+Similar to the `LoginScreen`, our `RegisterScreen` will be a `StatelessWidget` responsible for initializing and disposing the `RegisterBloc`. It will also provide the Scaffold for the `RegisterForm`.
 
 Create `register/register_screen.dart` and let's implement it.
 
@@ -1722,7 +1700,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 import 'package:flutter_firebase_login/register/register.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends StatelessWidget {
   final UserRepository _userRepository;
 
   RegisterScreen({Key key, @required UserRepository userRepository})
@@ -1730,39 +1708,21 @@ class RegisterScreen extends StatefulWidget {
         _userRepository = userRepository,
         super(key: key);
 
-  State<RegisterScreen> createState() => _RegisterScreenState();
-}
-
-class _RegisterScreenState extends State<RegisterScreen> {
-  RegisterBloc _registerBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _registerBloc = RegisterBloc(
-      userRepository: widget._userRepository,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Register')),
       body: Center(
         child: BlocProvider<RegisterBloc>(
-          bloc: _registerBloc,
+          builder: (context) => RegisterBloc(userRepository: _userRepository),
+          dispose: (context, bloc) => bloc.dispose(),
           child: RegisterForm(),
         ),
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _registerBloc.dispose();
-    super.dispose();
-  }
 }
+
 ```
 
 ## Register Form
@@ -1968,53 +1928,45 @@ import 'package:flutter_firebase_login/login/login.dart';
 import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
-main() {
+void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(App());
+  final UserRepository userRepository = UserRepository();
+  runApp(
+    BlocProvider(
+      builder: (context) => AuthenticationBloc(userRepository: userRepository)
+        ..dispatch(AppStarted()),
+      dispose: (context, bloc) => bloc.dispose(),
+      child: App(userRepository: userRepository),
+    ),
+  );
 }
 
-class App extends StatefulWidget {
-  State<App> createState() => _AppState();
-}
+class App extends StatelessWidget {
+  final UserRepository _userRepository;
 
-class _AppState extends State<App> {
-  final UserRepository _userRepository = UserRepository();
-  AuthenticationBloc _authenticationBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _authenticationBloc = AuthenticationBloc(userRepository: _userRepository);
-    _authenticationBloc.dispatch(AppStarted());
-  }
+  App({Key key, @required UserRepository userRepository})
+      : assert(userRepository != null),
+        _userRepository = userRepository,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      bloc: _authenticationBloc,
-      child: MaterialApp(
-        home: BlocBuilder(
-          bloc: _authenticationBloc,
-          builder: (BuildContext context, AuthenticationState state) {
-            if (state is Uninitialized) {
-              return SplashScreen();
-            }
-            if (state is Unauthenticated) {
-              return LoginScreen(userRepository: _userRepository);
-            }
-            if (state is Authenticated) {
-              return HomeScreen(name: state.displayName);
-            }
-          },
-        ),
+    return MaterialApp(
+      home: BlocBuilder(
+        bloc: BlocProvider.of<AuthenticationBloc>(context),
+        builder: (BuildContext context, AuthenticationState state) {
+          if (state is Uninitialized) {
+            return SplashScreen();
+          }
+          if (state is Unauthenticated) {
+            return LoginScreen(userRepository: _userRepository);
+          }
+          if (state is Authenticated) {
+            return HomeScreen(name: state.displayName);
+          }
+        },
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _authenticationBloc.dispose();
-    super.dispose();
   }
 }
 ```

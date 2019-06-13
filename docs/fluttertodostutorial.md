@@ -26,7 +26,7 @@ environment:
 dependencies:
   meta: ">=1.1.0 <2.0.0"
   equatable: ^0.2.0
-  flutter_bloc: ^0.14.0
+  flutter_bloc: ^0.16.0
   flutter:
     sdk: flutter
 
@@ -891,8 +891,6 @@ Up next, we'll focus on implementing the major screens in our Todos application.
 
 Let's create a new directory called `screens` where we will put all of our new screen widgets and then create `screens/home_screen.dart`.
 
-Our `HomeScreen` will be a `StatefulWidget` because it will need to create and dispose the `TabBloc`, `FilteredTodosBloc`, and `StatsBloc`.
-
 ```dart
 import 'package:flutter/material.dart';
 import 'package:todos_app_core/todos_app_core.dart';
@@ -902,113 +900,42 @@ import 'package:flutter_todos/widgets/widgets.dart';
 import 'package:flutter_todos/localization.dart';
 import 'package:flutter_todos/models/models.dart';
 
-class HomeScreen extends StatefulWidget {
-  final void Function() onInit;
-
-  HomeScreen({@required this.onInit}) : super(key: ArchSampleKeys.homeScreen);
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final TabBloc _tabBloc = TabBloc();
-  FilteredTodosBloc _filteredTodosBloc;
-  StatsBloc _statsBloc;
-
-  @override
-  void initState() {
-    widget.onInit();
-    _filteredTodosBloc = FilteredTodosBloc(
-      todosBloc: BlocProvider.of<TodosBloc>(context),
-    );
-    _statsBloc = StatsBloc(
-      todosBloc: BlocProvider.of<TodosBloc>(context),
-    );
-    super.initState();
-  }
-
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final tabBloc = BlocProvider.of<TabBloc>(context);
     return BlocBuilder(
-      bloc: _tabBloc,
+      bloc: tabBloc,
       builder: (BuildContext context, AppTab activeTab) {
-        return BlocProviderTree(
-          blocProviders: [
-            BlocProvider<TabBloc>(bloc: _tabBloc),
-            BlocProvider<FilteredTodosBloc>(bloc: _filteredTodosBloc),
-            BlocProvider<StatsBloc>(bloc: _statsBloc),
-          ],
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text(FlutterBlocLocalizations.of(context).appTitle),
-              actions: [
-                FilterButton(visible: activeTab == AppTab.todos),
-                ExtraActions(),
-              ],
-            ),
-            body: activeTab == AppTab.todos ? FilteredTodos() : Stats(),
-            floatingActionButton: FloatingActionButton(
-              key: ArchSampleKeys.addTodoFab,
-              onPressed: () {
-                Navigator.pushNamed(context, ArchSampleRoutes.addTodo);
-              },
-              child: Icon(Icons.add),
-              tooltip: ArchSampleLocalizations.of(context).addTodo,
-            ),
-            bottomNavigationBar: TabSelector(
-              activeTab: activeTab,
-              onTabSelected: (tab) => _tabBloc.dispatch(UpdateTab(tab)),
-            ),
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(FlutterBlocLocalizations.of(context).appTitle),
+            actions: [
+              FilterButton(visible: activeTab == AppTab.todos),
+              ExtraActions(),
+            ],
+          ),
+          body: activeTab == AppTab.todos ? FilteredTodos() : Stats(),
+          floatingActionButton: FloatingActionButton(
+            key: ArchSampleKeys.addTodoFab,
+            onPressed: () {
+              Navigator.pushNamed(context, ArchSampleRoutes.addTodo);
+            },
+            child: Icon(Icons.add),
+            tooltip: ArchSampleLocalizations.of(context).addTodo,
+          ),
+          bottomNavigationBar: TabSelector(
+            activeTab: activeTab,
+            onTabSelected: (tab) => tabBloc.dispatch(UpdateTab(tab)),
           ),
         );
       },
     );
   }
-
-  @override
-  void dispose() {
-    _statsBloc.dispose();
-    _filteredTodosBloc.dispose();
-    _tabBloc.dispose();
-    super.dispose();
-  }
 }
 ```
 
-The `HomeScreen` creates the `TabBloc`, `FilteredTodosBloc`, and `StatsBloc` as part of its state. It uses `BlocProvider.of<TodosBloc>(context)` in order to access the `TodosBloc` which will be made available from our root `TodosApp` widget (we'll get to it later in this tutorial).
-
-Since the `HomeScreen` needs to respond to changes in the `TodosBloc` state, we use `BlocBuilder` in order to build the correct widget based on the current `TodosState`.
-
-The `HomeScreen` also makes the `TabBloc`, `FilteredTodosBloc`, and `StatsBloc` available to the widgets in its subtree by using the `BlocProviderTree` widget from [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc).
-
-```dart
-BlocProviderTree(
-  blocProviders: [
-    BlocProvider<TabBloc>(bloc: _tabBloc),
-    BlocProvider<FilteredTodosBloc>(bloc: _filteredTodosBloc),
-    BlocProvider<StatsBloc>(bloc: _statsBloc),
-  ],
-  child: Scaffold(...),
-);
-```
-
-is equivalent to writing
-
-```dart
-BlocProvider<TabBloc>(
-  bloc: _tabBloc,
-  child: BlocProvider<FilteredTodosBloc>(
-    bloc: _filteredTodosBloc,
-    child: BlocProvider<StatsBloc>(
-      bloc: _statsBloc,
-      child: Scaffold(...),
-    ),
-  ),
-);
-```
-
-You can see how using `BlocProviderTree` helps reduce the levels of nesting and makes the code easier to read and maintain.
+The `HomeScreen` accesses the `TabBloc` using `BlocProvider.of<TabBloc>(context)` which will be made available from our root `TodosApp` widget (we'll get to it later in this tutorial).
 
 Next, we'll implement the `DetailsScreen`.
 
@@ -1832,66 +1759,128 @@ Let's create `main.dart` and our `TodosApp` widget. We need to create a `main` f
 ```dart
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(TodosApp());
+  runApp(
+    BlocProvider(
+      builder: (context) {
+        return TodosBloc(
+          todosRepository: const TodosRepositoryFlutter(
+            fileStorage: const FileStorage(
+              '__flutter_bloc_app__',
+              getApplicationDocumentsDirectory,
+            ),
+          ),
+        )..dispatch(LoadTodos());
+      },
+      dispose: (context, bloc) => bloc.dispose(),
+      child: TodosApp(),
+    ),
+  );
 }
 ```
 
 ?> **Note:** We are setting our BlocSupervisor's delegate to the `SimpleBlocDelegate` we created earlier so that we can hook into all transitions and errors.
 
+?> **Note:** We are also wrapping our `TodosApp` widget in a `BlocProvider` which manages initializing, disposing, and providing the `TodosBloc` to our entire widget tree from [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc). We immediately dispatch the `LoadTodos` event in order to request the latest todos.
+
 Next, let's implement our `TodosApp` widget.
 
 ```dart
 class TodosApp extends StatelessWidget {
-  final todosBloc = TodosBloc(
-    todosRepository: const TodosRepositoryFlutter(
-      fileStorage: const FileStorage(
-        '__flutter_bloc_app__',
-        getApplicationDocumentsDirectory,
-      ),
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      bloc: todosBloc,
-      child: MaterialApp(
-        title: FlutterBlocLocalizations().appTitle,
-        theme: ArchSampleTheme.theme,
-        localizationsDelegates: [
-          ArchSampleLocalizationsDelegate(),
-          FlutterBlocLocalizationsDelegate(),
-        ],
-        routes: {
-          ArchSampleRoutes.home: (context) {
-            return HomeScreen(
-              onInit: () => todosBloc.dispatch(LoadTodos()),
-            );
-          },
-          ArchSampleRoutes.addTodo: (context) {
-            return AddEditScreen(
-              key: ArchSampleKeys.addTodoScreen,
-              onSave: (task, note) {
-                todosBloc.dispatch(
-                  AddTodo(Todo(task, note: note)),
-                );
-              },
-              isEditing: false,
-            );
-          },
+    final todosBloc = BlocProvider.of<TodosBloc>(context);
+    return MaterialApp(
+      title: FlutterBlocLocalizations().appTitle,
+      theme: ArchSampleTheme.theme,
+      localizationsDelegates: [
+        ArchSampleLocalizationsDelegate(),
+        FlutterBlocLocalizationsDelegate(),
+      ],
+      routes: {
+        ArchSampleRoutes.home: (context) {
+          return BlocProviderTree(
+            blocProviders: [
+              BlocProvider<TabBloc>(
+                builder: (context) => TabBloc(),
+                dispose: (context, bloc) => bloc.dispose(),
+              ),
+              BlocProvider<FilteredTodosBloc>(
+                builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
+                dispose: (context, bloc) => bloc.dispose(),
+              ),
+              BlocProvider<StatsBloc>(
+                builder: (context) => StatsBloc(todosBloc: todosBloc),
+                dispose: (context, bloc) => bloc.dispose(),
+              ),
+            ],
+            child: HomeScreen(),
+          );
         },
-      ),
+        ArchSampleRoutes.addTodo: (context) {
+          return AddEditScreen(
+            key: ArchSampleKeys.addTodoScreen,
+            onSave: (task, note) {
+              todosBloc.dispatch(
+                AddTodo(Todo(task, note: note)),
+              );
+            },
+            isEditing: false,
+          );
+        },
+      },
     );
   }
 }
 ```
 
-Our `TodosApp` is a stateless widget which creates a `TodosBloc` and makes it available through the entire application by using the `BlocProvider` widget from [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc).
+Our `TodosApp` is a `StatelessWidget` which accesses the provided `TodosBloc` via the `BuildContext`.
 
 The `TodosApp` has two routes:
 
 - `Home` - which renders a `HomeScreen`
 - `AddTodo` - which renders a `AddEditScreen` with `isEditing` set to `false`.
+
+The `TodosApp` also makes the `TabBloc`, `FilteredTodosBloc`, and `StatsBloc` available to the widgets in its subtree by using the `BlocProviderTree` widget from [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc).
+
+```dart
+BlocProviderTree(
+  blocProviders: [
+    BlocProvider<TabBloc>(
+      builder: (context) => TabBloc(),
+      dispose: (context, bloc) => bloc.dispose(),
+    ),
+    BlocProvider<FilteredTodosBloc>(
+      builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
+      dispose: (context, bloc) => bloc.dispose(),
+    ),
+    BlocProvider<StatsBloc>(
+      builder: (context) => StatsBloc(todosBloc: todosBloc),
+      dispose: (context, bloc) => bloc.dispose(),
+    ),
+  ],
+  child: HomeScreen(),
+);
+```
+
+is equivalent to writing
+
+```dart
+BlocProvider<TabBloc>(
+  builder: (context) => TabBloc(),
+  dispose: (context, bloc) => bloc.dispose(),
+  child: BlocProvider<FilteredTodosBloc>(
+    builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
+    dispose: (context, bloc) => bloc.dispose(),
+    child: BlocProvider<StatsBloc>(
+      builder: (context) => StatsBloc(todosBloc: todosBloc),
+      dispose: (context, bloc) => bloc.dispose(),
+      child: Scaffold(...),
+    ),
+  ),
+);
+```
+
+You can see how using `BlocProviderTree` helps reduce the levels of nesting and makes the code easier to read and maintain.
 
 The entire `main.dart` should look like this:
 
@@ -1908,50 +1897,71 @@ import 'package:flutter_todos/models/models.dart';
 import 'package:flutter_todos/screens/screens.dart';
 
 void main() {
+  // BlocSupervisor oversees Blocs and delegates to BlocDelegate.
+  // We can set the BlocSupervisor's delegate to an instance of `SimpleBlocDelegate`.
+  // This will allow us to handle all transitions and errors in SimpleBlocDelegate.
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(TodosApp());
+  runApp(
+    BlocProvider(
+      builder: (context) {
+        return TodosBloc(
+          todosRepository: const TodosRepositoryFlutter(
+            fileStorage: const FileStorage(
+              '__flutter_bloc_app__',
+              getApplicationDocumentsDirectory,
+            ),
+          ),
+        )..dispatch(LoadTodos());
+      },
+      dispose: (context, bloc) => bloc.dispose(),
+      child: TodosApp(),
+    ),
+  );
 }
 
 class TodosApp extends StatelessWidget {
-  final todosBloc = TodosBloc(
-    todosRepository: const TodosRepositoryFlutter(
-      fileStorage: const FileStorage(
-        '__flutter_bloc_app__',
-        getApplicationDocumentsDirectory,
-      ),
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      bloc: todosBloc,
-      child: MaterialApp(
-        title: FlutterBlocLocalizations().appTitle,
-        theme: ArchSampleTheme.theme,
-        localizationsDelegates: [
-          ArchSampleLocalizationsDelegate(),
-          FlutterBlocLocalizationsDelegate(),
-        ],
-        routes: {
-          ArchSampleRoutes.home: (context) {
-            return HomeScreen(
-              onInit: () => todosBloc.dispatch(LoadTodos()),
-            );
-          },
-          ArchSampleRoutes.addTodo: (context) {
-            return AddEditScreen(
-              key: ArchSampleKeys.addTodoScreen,
-              onSave: (task, note) {
-                todosBloc.dispatch(
-                  AddTodo(Todo(task, note: note)),
-                );
-              },
-              isEditing: false,
-            );
-          },
+    final todosBloc = BlocProvider.of<TodosBloc>(context);
+    return MaterialApp(
+      title: FlutterBlocLocalizations().appTitle,
+      theme: ArchSampleTheme.theme,
+      localizationsDelegates: [
+        ArchSampleLocalizationsDelegate(),
+        FlutterBlocLocalizationsDelegate(),
+      ],
+      routes: {
+        ArchSampleRoutes.home: (context) {
+          return BlocProviderTree(
+            blocProviders: [
+              BlocProvider<TabBloc>(
+                builder: (context) => TabBloc(),
+                dispose: (context, bloc) => bloc.dispose(),
+              ),
+              BlocProvider<FilteredTodosBloc>(
+                builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
+                dispose: (context, bloc) => bloc.dispose(),
+              ),
+              BlocProvider<StatsBloc>(
+                builder: (context) => StatsBloc(todosBloc: todosBloc),
+                dispose: (context, bloc) => bloc.dispose(),
+              ),
+            ],
+            child: HomeScreen(),
+          );
         },
-      ),
+        ArchSampleRoutes.addTodo: (context) {
+          return AddEditScreen(
+            key: ArchSampleKeys.addTodoScreen,
+            onSave: (task, note) {
+              todosBloc.dispatch(
+                AddTodo(Todo(task, note: note)),
+              );
+            },
+            isEditing: false,
+          );
+        },
+      },
     );
   }
 }

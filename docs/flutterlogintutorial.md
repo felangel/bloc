@@ -27,7 +27,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.14.0
+  flutter_bloc: ^0.16.0
   meta: ^1.1.6
   equatable: ^0.2.0
 
@@ -478,7 +478,7 @@ import 'package:user_repository/user_repository.dart';
 import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_login/login/login.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   final UserRepository userRepository;
 
   LoginPage({Key key, @required this.userRepository})
@@ -486,47 +486,27 @@ class LoginPage extends StatefulWidget {
         super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  LoginBloc _loginBloc;
-  AuthenticationBloc _authenticationBloc;
-
-  UserRepository get _userRepository => widget.userRepository;
-
-  @override
-  void initState() {
-    _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
-    _loginBloc = LoginBloc(
-      userRepository: _userRepository,
-      authenticationBloc: _authenticationBloc,
-    );
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
       ),
-      body: LoginForm(
-        authenticationBloc: _authenticationBloc,
-        loginBloc: _loginBloc,
+      body: BlocProvider(
+        builder: (context) {
+          return LoginBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            userRepository: userRepository,
+          );
+        },
+        dispose: (context, bloc) => bloc.dispose(),
+        child: LoginForm(),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _loginBloc.dispose();
-    super.dispose();
   }
 }
 ```
 
-?> **Note**: `LoginPage` is a `StatefulWidget`. The `LoginPage` widget creates the `LoginBloc` as part of its state and handles disposing it.
+?> **Note**: `LoginPage` is a `StatelessWidget`. The `LoginPage` widget uses the `BlocProvider` widget to create, dispose, and provide the `LoginBloc` to the sub-tree.
 
 ?> **Note**: We are using the injected `UserRepository` in order to create our `LoginBloc`.
 
@@ -538,22 +518,10 @@ Next up, let’s go ahead and create our `LoginForm`.
 
 ```dart
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_login/login/login.dart';
 
 class LoginForm extends StatefulWidget {
-  final LoginBloc loginBloc;
-  final AuthenticationBloc authenticationBloc;
-
-  LoginForm({
-    Key key,
-    @required this.loginBloc,
-    @required this.authenticationBloc,
-  }) : super(key: key);
-
   @override
   State<LoginForm> createState() => _LoginFormState();
 }
@@ -562,66 +530,63 @@ class _LoginFormState extends State<LoginForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  LoginBloc get _loginBloc => widget.loginBloc;
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginEvent, LoginState>(
+    final _loginBloc = BlocProvider.of<LoginBloc>(context);
+
+    _onLoginButtonPressed() {
+      _loginBloc.dispatch(LoginButtonPressed(
+        username: _usernameController.text,
+        password: _passwordController.text,
+      ));
+    }
+
+    return BlocListener(
       bloc: _loginBloc,
-      builder: (
-        BuildContext context,
-        LoginState state,
-      ) {
+      listener: (context, state) {
         if (state is LoginFailure) {
-          _onWidgetDidBuild(() {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text('${state.error}'),
-                backgroundColor: Colors.red,
-              ),
-            );
-          });
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${state.error}'),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
-
-        return Form(
-          child: Column(
-            children: [
-              TextFormField(
-                decoration: InputDecoration(labelText: 'username'),
-                controller: _usernameController,
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'password'),
-                controller: _passwordController,
-                obscureText: true,
-              ),
-              RaisedButton(
-                onPressed:
-                    state is! LoginLoading ? _onLoginButtonPressed : null,
-                child: Text('Login'),
-              ),
-              Container(
-                child:
-                    state is LoginLoading ? CircularProgressIndicator() : null,
-              ),
-            ],
-          ),
-        );
       },
+      child: BlocBuilder<LoginEvent, LoginState>(
+        bloc: _loginBloc,
+        builder: (
+          BuildContext context,
+          LoginState state,
+        ) {
+          return Form(
+            child: Column(
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'username'),
+                  controller: _usernameController,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'password'),
+                  controller: _passwordController,
+                  obscureText: true,
+                ),
+                RaisedButton(
+                  onPressed:
+                      state is! LoginLoading ? _onLoginButtonPressed : null,
+                  child: Text('Login'),
+                ),
+                Container(
+                  child: state is LoginLoading
+                      ? CircularProgressIndicator()
+                      : null,
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
-  }
-
-  void _onWidgetDidBuild(Function callback) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      callback();
-    });
-  }
-
-  _onLoginButtonPressed() {
-    _loginBloc.dispatch(LoginButtonPressed(
-      username: _usernameController.text,
-      password: _passwordController.text,
-    ));
   }
 }
 ```
@@ -662,65 +627,63 @@ import 'package:flutter_login/common/common.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
+  void onEvent(Bloc bloc, Object event) {
+    super.onEvent(bloc, event);
+    print(event);
+  }
+
+  @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
     print(transition);
+  }
+
+  @override
+  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
+    super.onError(bloc, error, stacktrace);
+    print(error);
   }
 }
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(App(userRepository: UserRepository()));
+  final userRepository = UserRepository();
+  runApp(
+    BlocProvider<AuthenticationBloc>(
+      builder: (context) {
+        return AuthenticationBloc(userRepository: userRepository)
+          ..dispatch(AppStarted());
+      },
+      dispose: (context, bloc) => bloc.dispose(),
+      child: App(userRepository: userRepository),
+    ),
+  );
 }
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   final UserRepository userRepository;
 
   App({Key key, @required this.userRepository}) : super(key: key);
 
   @override
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  AuthenticationBloc authenticationBloc;
-  UserRepository get userRepository => widget.userRepository;
-
-  @override
-  void initState() {
-    authenticationBloc = AuthenticationBloc(userRepository: userRepository);
-    authenticationBloc.dispatch(AppStarted());
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    authenticationBloc.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthenticationBloc>(
-      bloc: authenticationBloc,
-      child: MaterialApp(
-        home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
-          bloc: authenticationBloc,
-          builder: (BuildContext context, AuthenticationState state) {
-            if (state is AuthenticationUninitialized) {
-              return SplashPage();
-            }
-            if (state is AuthenticationAuthenticated) {
-              return HomePage();
-            }
-            if (state is AuthenticationUnauthenticated) {
-              return LoginPage(userRepository: userRepository);
-            }
-            if (state is AuthenticationLoading) {
-              return LoadingIndicator();
-            }
-          },
-        ),
+    return MaterialApp(
+      home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
+        bloc: BlocProvider.of<AuthenticationBloc>(context),
+        builder: (BuildContext context, AuthenticationState state) {
+          if (state is AuthenticationUninitialized) {
+            return SplashPage();
+          }
+          if (state is AuthenticationAuthenticated) {
+            return HomePage();
+          }
+          if (state is AuthenticationUnauthenticated) {
+            return LoginPage(userRepository: userRepository);
+          }
+          if (state is AuthenticationLoading) {
+            return LoadingIndicator();
+          }
+        },
       ),
     );
   }
@@ -729,11 +692,11 @@ class _AppState extends State<App> {
 
 ?> **Note**: Again, we are using `BlocBuilder` in order to react to changes in `AuthenticationState` so that we can show the user either the `SplashPage`, `LoginPage`, `HomePage`, or `LoadingIndicator` based on the current `AuthenticationState`.
 
-?> **Note**: Our app has an injected `AuthenticationBloc` which it makes available to the entire widget subtree by using the `BlocProvider` widget. `BlocProvider` is a Flutter widget which provides a bloc to its children via `BlocProvider.of(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
+?> **Note**: Our app is wrapped in a `BlocProvider` which makes our instance of `AuthenticationBloc` available to the entire widget subtree. `BlocProvider` is a Flutter widget which provides a bloc to its children via `BlocProvider.of(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
 
 Now `BlocProvider.of<AuthenticationBloc>(context)` in our `HomePage` and `LoginPage` widget should make sense.
 
-Since we wrapped our `MaterialApp` within a `BlocProvider<AuthenticationBloc>` we can access the instance of our `AuthenticationBloc` by using the `BlocProvider.of<AuthenticationBloc>(BuildContext context)` static method from anywhere in the subtree.
+Since we wrapped our `App` within a `BlocProvider<AuthenticationBloc>` we can access the instance of our `AuthenticationBloc` by using the `BlocProvider.of<AuthenticationBloc>(BuildContext context)` static method from anywhere in the subtree.
 
 At this point we have a pretty solid login implementation and we have decoupled our presentation layer from the business logic layer by using Bloc.
 
