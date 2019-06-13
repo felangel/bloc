@@ -8,13 +8,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyApp extends StatelessWidget {
   final CounterBloc Function(BuildContext context) _builder;
+  final void Function(BuildContext context, CounterBloc bloc) _dispose;
   final Widget _child;
 
   const MyApp({
     Key key,
     @required CounterBloc Function(BuildContext context) builder,
+    @required void Function(BuildContext context, CounterBloc bloc) dispose,
     @required Widget child,
   })  : _builder = builder,
+        _dispose = dispose,
         _child = child,
         super(key: key);
 
@@ -23,6 +26,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: BlocProvider<CounterBloc>(
         builder: _builder,
+        dispose: _dispose,
         child: _child,
       ),
     );
@@ -132,6 +136,21 @@ class CounterPage extends StatelessWidget {
   }
 }
 
+class RoutePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: RaisedButton(
+      key: Key('route_button'),
+      onPressed: () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<Widget>(builder: (context) => Container()),
+        );
+      },
+    ));
+  }
+}
+
 enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
@@ -177,6 +196,7 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(MyApp(
         builder: null,
+        dispose: null,
         child: CounterPage(),
       ));
       expect(tester.takeException(), isInstanceOf<AssertionError>());
@@ -186,6 +206,7 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(MyApp(
         builder: (context) => CounterBloc(),
+        dispose: null,
         child: null,
       ));
       expect(tester.takeException(), isInstanceOf<AssertionError>());
@@ -195,13 +216,12 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(MyApp(
         builder: (context) => null,
+        dispose: (context, bloc) => bloc.dispose(),
         child: CounterPage(),
       ));
       final dynamic exception = tester.takeException();
-      final String message = """
-        BlocProvider builder did not return a Bloc of type CounterBloc.        
-        This can happen if the builder is not implemented or does not return a Bloc.        
-        """;
+      final String message =
+          'BlocProvider\'s builder method did not return a Bloc.';
       expect(exception, isInstanceOf<FlutterError>());
       expect((exception as FlutterError).message, message);
     });
@@ -211,6 +231,7 @@ void main() {
       final CounterPage _child = CounterPage();
       await tester.pumpWidget(MyApp(
         builder: _builder,
+        dispose: (context, bloc) => bloc.dispose(),
         child: _child,
       ));
 
@@ -219,6 +240,26 @@ void main() {
 
       final Text _counterText = _counterFinder.evaluate().first.widget as Text;
       expect(_counterText.data, '0');
+    });
+
+    testWidgets('calls dispose on dispose', (WidgetTester tester) async {
+      bool disposeCalled = false;
+      final _builder = (BuildContext context) => CounterBloc();
+      final Widget _child = RoutePage();
+      await tester.pumpWidget(MyApp(
+        builder: _builder,
+        dispose: (context, bloc) => disposeCalled = true,
+        child: _child,
+      ));
+
+      final Finder _routeButtonFinder = find.byKey((Key('route_button')));
+      expect(_routeButtonFinder, findsOneWidget);
+      expect(disposeCalled, false);
+
+      await tester.tap(_routeButtonFinder);
+      await tester.pumpAndSettle();
+
+      expect(disposeCalled, true);
     });
 
     testWidgets(
