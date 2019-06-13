@@ -30,8 +30,14 @@ void main() {
   runApp(
     BlocProviderTree(
       blocProviders: [
-        BlocProvider<CounterBloc>(builder: (context) => CounterBloc()),
-        BlocProvider<ThemeBloc>(builder: (context) => ThemeBloc())
+        BlocProvider<CounterBloc>(
+          builder: (context) => CounterBloc(),
+          dispose: (context, bloc) => bloc.dispose(),
+        ),
+        BlocProvider<ThemeBloc>(
+          builder: (context) => ThemeBloc(),
+          dispose: (context, bloc) => bloc.dispose(),
+        )
       ],
       child: App(),
     ),

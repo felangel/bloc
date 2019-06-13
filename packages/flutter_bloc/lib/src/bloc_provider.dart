@@ -8,13 +8,16 @@ typedef BlocProviderBuilder<T extends Bloc<dynamic, dynamic>> = T Function(
   BuildContext context,
 );
 
+/// Signature for the `dispose` function which takes the [BuildContext] and is invoked
+/// when the `BlocProvider` is disposed.
+typedef BlocProviderDispose<T extends Bloc<dynamic, dynamic>> = void Function(
+  BuildContext context,
+  T bloc,
+);
+
 /// A Flutter widget which provides a bloc to its children via `BlocProvider.of(context)`.
 /// It is used as a DI widget so that a single instance of a bloc can be provided
 /// to multiple widgets within a subtree.
-///
-/// `BlocProvider` automatically calls `dispose` on the [Bloc] therefore
-/// `dispose` should not be manually called unless the bloc is initialized outside
-/// of `BlocProvider`.
 class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget {
   /// The [BlocProviderBuilder] which creates the [Bloc]
   /// that will be made available throughout the subtree.
@@ -23,8 +26,18 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget {
   /// The [Widget] and its descendants which will have access to the [Bloc].
   final Widget child;
 
-  BlocProvider({Key key, @required this.builder, this.child})
-      : assert(builder != null),
+  /// The [BlocProviderDispose] which is called when the `BlocProvider` is disposed.
+  /// In most cases, the provided bloc should be disposed in the `dispose` callback.
+  /// The main exception to the rule is if a `BlocProvider` is used to provide
+  /// an existing bloc to a new route.
+  final BlocProviderDispose<T> dispose;
+
+  BlocProvider({
+    Key key,
+    @required this.builder,
+    this.dispose,
+    this.child,
+  })  : assert(builder != null),
         super(key: key);
 
   @override
@@ -50,7 +63,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget {
         """,
       );
     }
-    return provider?.bloc;
+    return provider.bloc;
   }
 
   /// Necessary to obtain generic [Type]
@@ -75,13 +88,10 @@ class _BlocProviderState<T extends Bloc<dynamic, dynamic>>
   @override
   void initState() {
     super.initState();
-    _bloc = widget.builder?.call(context);
+    _bloc = widget.builder(context);
     if (_bloc == null) {
       throw FlutterError(
-        """
-        BlocProvider builder did not return a Bloc of type $T.        
-        This can happen if the builder is not implemented or does not return a Bloc.        
-        """,
+        'BlocProvider\'s builder method did not return a Bloc.',
       );
     }
   }
@@ -96,7 +106,7 @@ class _BlocProviderState<T extends Bloc<dynamic, dynamic>>
 
   @override
   void dispose() {
-    _bloc.dispose();
+    widget.dispose?.call(context, _bloc);
     super.dispose();
   }
 }
