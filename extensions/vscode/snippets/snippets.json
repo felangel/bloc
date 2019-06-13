@@ -71,7 +71,8 @@
     "prefix": "blocprovider",
     "body": [
       "BlocProvider(",
-      "\tbloc: ${1:MyBloc},",
+      "\tbuilder: (BuildContext context) => ${1:MyBloc}(),",
+      "\tdispose: (BuildContext context, ${1:MyBloc} bloc) => bloc.dispose(),",
       "\tchild: ${2:Container()},",
       ")"
     ]
@@ -82,10 +83,16 @@
     "body": [
       "BlocProviderTree(",
       "\tblocProviders: [",
-      "\t\tBlocProvider<${1:MyBloc}>(bloc: ${3:_myBloc}),",
-      "\t\tBlocProvider<${4:MyOtherBloc}>(bloc: ${5:_myOtherBloc}),",
+      "\t\tBlocProvider<${1:MyBloc}>(",
+      "\t\t\tbuilder: (BuildContext context) => ${1:MyBloc}(),",
+      "\t\t\tdispose: (BuildContext context, ${1:MyBloc} bloc) => bloc.dispose(),",
+      "\t\t),",
+      "\t\tBlocProvider<${2:MyOtherBloc}>(",
+      "\t\t\tbuilder: (BuildContext context) => ${2:MyOtherBloc}(),",
+      "\t\t\tdispose: (BuildContext context, ${2:MyOtherBloc} bloc) => bloc.dispose(),",
+      "\t\t),",
       "\t],",
-      "\tchild: ${6:Container()},",
+      "\tchild: ${3:Container()},",
       ")"
     ]
   },

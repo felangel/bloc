@@ -1,3 +1,12 @@
+# 0.7.0
+
+Update Snippets for:
+
+- `BlocProvider`
+- `BlocProviderTree`
+
+to support changes in flutter_bloc `v0.16.0`
+
 # 0.6.2
 
 Updated `BlocDelegate` snippet to support changes in bloc `v0.13.0`
