@@ -46,12 +46,20 @@ BlocBuilder(
 )
 ```
 
-**BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a DI widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
+**BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a DI widget so that a single instance of a bloc can be provided to multiple widgets within a subtree. By default, `BlocProvider` automatically disposes the provided bloc when the `BlocProvider` widget is disposed. In a few edge cases, such as when using `BlocProvider` to provide an existing bloc to another route, it might be necessary to prevent automatic disposal of the bloc. In those cases, the `dispose` property can be set to `false`.
 
 ```dart
+// Automatically disposes the instance of BlocA
+// Recommended usage for most cases.
 BlocProvider(
   builder: (BuildContext context) => BlocA(),
-  dispose: (BuildContext context, BlocA bloc) => bloc.dispose(),
+  child: ChildA(),
+);
+
+// Does not automatically dispose the instance of BlocA.
+BlocProvider(
+  builder: (BuildContext context) => BlocA(),
+  dispose: false,
   child: ChildA(),
 );
 ```
@@ -69,13 +77,10 @@ By using `BlocProviderTree` we can go from:
 ```dart
 BlocProvider<BlocA>(
   builder: (BuildContext context) => BlocA(),
-  dispose: (BuildContext context, BlocA blocA) => blocA.dispose(),
   child: BlocProvider<BlocB>(
     builder: (BuildContext context) => BlocB(),
-    dispose: (BuildContext context, BlocB blocB) => blocB.dispose(),
     child: BlocProvider<BlocC>(
       builder: (BuildContext context) => BlocC(),
-      dispose: (BuildContext context, BlocC blocC) => blocC.dispose(),
       child: ChildA(),
     )
   )
@@ -89,15 +94,12 @@ BlocProviderTree(
   blocProviders: [
     BlocProvider<BlocA>(
       builder: (BuildContext context) => BlocA(),
-      dispose: (BuildContext context, BlocA blocA) => blocA.dispose(),
     ),
     BlocProvider<BlocB>(
       builder: (BuildContext context) => BlocB(),
-      dispose: (BuildContext context, BlocB blocB) => blocB.dispose(),
     ),
     BlocProvider<BlocC>(
       builder: (BuildContext context) => BlocC(),
-      dispose: (BuildContext context, BlocC blocC) => blocC.dispose(),
     ),
   ],
   child: ChildA(),

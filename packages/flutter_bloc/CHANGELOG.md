@@ -1,3 +1,7 @@
+# 0.17.0
+
+Update `BlocProvider` to automatically `dispose` the provided bloc and Documentation Updates.
+
 # 0.16.0
 
 Update `BlocProvider` to expose `builder` and `dispose` ([#344](https://github.com/felangel/bloc/pull/344) and [#347](https://github.com/felangel/bloc/pull/347)) and Documentation Updates
