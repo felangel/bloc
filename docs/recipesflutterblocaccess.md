@@ -55,39 +55,31 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: CounterPage(),
+      home: BlocProvider(
+        builder: (BuildContext context) => CounterBloc(),
+        dispose: (BuildContext context, CounterBloc bloc) => bloc.dispose(),
+        child: CounterPage(),
+      ),
     );
   }
 }
 ```
 
-There's nothing special about our `App` widget; it's just using a `MaterialApp` and passing our `CounterPage` as the home widget.
+Our `App` widget is a `StatelessWidget` that uses a `MaterialApp` and sets our `CounterPage` as the home widget. The `App` widget is responsible for creating and disposing the `CounterBloc` as well as making it available to the `CounterPage` using a `BlocProvider`.
+
+?> **Note:** When we wrap a widget with `BlocProvider` we can then provide a bloc to all widgets within that subtree. In this case, we can access the `CounterBloc` from within the `CounterPage` widget and any children of the `CounterPage` widget using `BlocProvider.of<CounterBloc>(context)`.
 
 #### CounterPage
 
 ```dart
-class CounterPage extends StatefulWidget {
-  State<CounterPage> createState() => _CounterPageState();
-}
-
-class _CounterPageState extends State<CounterPage> {
-  CounterBloc _counterBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _counterBloc = CounterBloc();
-  }
-
+class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final counterBloc = BlocProvider.of<CounterBloc>(context);
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
-      body: BlocProvider(
-        bloc: _counterBloc,
-        child: Center(
-          child: CounterText(),
-        ),
+      body: Center(
+        child: CounterText(),
       ),
       floatingActionButton: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -98,7 +90,7 @@ class _CounterPageState extends State<CounterPage> {
             child: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                _counterBloc.dispatch(CounterEvent.increment);
+                counterBloc.dispatch(CounterEvent.increment);
               },
             ),
           ),
@@ -107,7 +99,7 @@ class _CounterPageState extends State<CounterPage> {
             child: FloatingActionButton(
               child: Icon(Icons.remove),
               onPressed: () {
-                _counterBloc.dispatch(CounterEvent.decrement);
+                counterBloc.dispatch(CounterEvent.decrement);
               },
             ),
           ),
@@ -115,18 +107,10 @@ class _CounterPageState extends State<CounterPage> {
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _counterBloc.dispose();
-    super.dispose();
-  }
 }
 ```
 
-The `CounterPage` widget is a `StatefulWidget` which is responsible for creating and disposing the `CounterBloc`. It also makes the `CounterBloc` available to the `CounterText` child widget using a `BlocProvider`.
-
-?> **Note:** When we wrap a widget with `BlocProvider` we can then provide a bloc to all widgets within that subtree. In this case, we can access the `CounterBloc` from within the `CounterText` widget and any children of the `CounterText` widget using `BlocProvider.of<CounterBloc>(context)`.
+The `CounterPage` widget is a `StatelessWidget` which is accesses the `CounterBloc` via the `BuildContext`.
 
 #### CounterText
 
@@ -201,7 +185,11 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: CounterPage(),
+      home: BlocProvider(
+        builder: (BuildContext context) => CounterBloc(),
+        dispose: (BuildContext context, CounterBloc bloc) => bloc.dispose(),
+        child: HomePage(),
+      ),
     );
   }
 }
@@ -212,41 +200,27 @@ Again, our `App` widget is the same as before.
 #### HomePage
 
 ```dart
-class HomePage extends StatefulWidget {
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  CounterBloc _counterBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _counterBloc = CounterBloc();
-  }
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final counterBloc = BlocProvider.of<CounterBloc>(context);
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
-      body: BlocProvider(
-        bloc: _counterBloc,
-        child: Center(
-          child: RaisedButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return BlocProvider(
-                      bloc: _counterBloc,
-                      child: CounterPage(),
-                    );
-                  },
-                ),
-              );
-            },
-            child: Text('Counter'),
-          ),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return BlocProvider(
+                    builder: (BuildContext context) => counterBloc,
+                    child: CounterPage(),
+                  );
+                },
+              ),
+            );
+          },
+          child: Text('Counter'),
         ),
       ),
       floatingActionButton: Column(
@@ -259,7 +233,7 @@ class _HomePageState extends State<HomePage> {
               heroTag: 0,
               child: Icon(Icons.add),
               onPressed: () {
-                _counterBloc.dispatch(CounterEvent.increment);
+                counterBloc.dispatch(CounterEvent.increment);
               },
             ),
           ),
@@ -269,7 +243,7 @@ class _HomePageState extends State<HomePage> {
               heroTag: 1,
               child: Icon(Icons.remove),
               onPressed: () {
-                _counterBloc.dispatch(CounterEvent.decrement);
+                counterBloc.dispatch(CounterEvent.decrement);
               },
             ),
           ),
@@ -277,18 +251,14 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _counterBloc.dispose();
-    super.dispose();
-  }
 }
 ```
 
 The `HomePage` is similar to the `CounterPage` in the above example; however, instead of rendering a `CounterText` widget, it renders a `RaisedButton` in the center which allows the user to navigate to a new screen which displays the current count.
 
 When the user taps the `RaisedButton`, we push a new `MaterialPageRoute` and return the `CounterPage`; however, we are wrapping the `CounterPage` in a `BlocProvider` in order to make the current `CounterBloc` instance available on the next page.
+
+!> It is critical that we are not disposing the `CounterBloc` in the second `BlocProvider` because we still need the `CounterBloc` to function in the ancestor widgets. Instead, we simply pass the existing `CounterBloc` to the new page without implementing the `dispose` callback in `BlocProvider` and let the top level `BlocProvider` handle disposing the `CounterBloc` when it is no longer needed.
 
 #### CounterPage
 
@@ -365,41 +335,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() => runApp(App());
 
-class App extends StatefulWidget {
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  CounterBloc _counterBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _counterBloc = CounterBloc();
-  }
-
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      bloc: _counterBloc,
+      builder: (BuildContext context) => CounterBloc(),
+      dispose: (BuildContext context, CounterBloc bloc) => bloc.dispose(),
       child: MaterialApp(
         title: 'Flutter Demo',
         home: CounterPage(),
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _counterBloc.dispose();
-    super.dispose();
-  }
 }
 ```
 
-In this case, since our `App` widget is responsible for maintaining our `CounterBloc` widget, it needs to be a `StatefulWidget`. We can initialize the `CounterBloc` in `initState` and `dispose` it in `dispose`.
+Much like in the local access example above, the `App` manages creating, disposing, and providing the `CounterBloc` to the subtree using `BlocProvider`. The main difference is in this case, `MaterialApp` is a child of `BlocProvider`.
 
-The last thing to note is we are wrapping the entire `MaterialApp` in a `BlocProvider` which is the key to making our `CounterBloc` instance globally accessible. Now we can access our `CounterBloc` from anywhere in our application where we have a `BuildContext` using `BlocProvider.of<CounterBloc>(context);`
+Wrapping the entire `MaterialApp` in a `BlocProvider` is the key to making our `CounterBloc` instance globally accessible. Now we can access our `CounterBloc` from anywhere in our application where we have a `BuildContext` using `BlocProvider.of<CounterBloc>(context);`
 
 ?> **Note:** This approach still works if you're using a `CupertinoApp` or `WidgetsApp`.
 
@@ -444,7 +397,7 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-Our `CounterPage` can now be a `StatelessWidget` because it doesn't need to manage any of its own state. Just as we mentioned above, it uses `BlocProvider.of<CounterBloc>(context)` to access the global instance of the `CounterBloc`.
+Our `CounterPage` is a `StatelessWidget` because it doesn't need to manage any of its own state. Just as we mentioned above, it uses `BlocProvider.of<CounterBloc>(context)` to access the global instance of the `CounterBloc`.
 
 #### CounterText
 
