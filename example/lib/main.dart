@@ -35,31 +35,17 @@ void main() async {
   runApp(App());
 }
 
-class App extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  final CounterBloc _counterBloc = CounterBloc();
-
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProviderTree(
-      blocProviders: [
-        BlocProvider<CounterBloc>(bloc: _counterBloc),
-      ],
+    return BlocProvider<CounterBloc>(
+      builder: (context) => CounterBloc(),
+      dispose: (context, bloc) => bloc.dispose(),
       child: MaterialApp(
         title: 'Flutter Demo',
         home: CounterPage(),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _counterBloc.dispose();
-    super.dispose();
   }
 }
 
