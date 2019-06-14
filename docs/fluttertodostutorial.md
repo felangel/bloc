@@ -26,7 +26,7 @@ environment:
 dependencies:
   meta: ">=1.1.0 <2.0.0"
   equatable: ^0.2.0
-  flutter_bloc: ^0.16.0
+  flutter_bloc: ^0.17.0
   flutter:
     sdk: flutter
 
@@ -1771,7 +1771,6 @@ void main() {
           ),
         )..dispatch(LoadTodos());
       },
-      dispose: (context, bloc) => bloc.dispose(),
       child: TodosApp(),
     ),
   );
@@ -1802,15 +1801,12 @@ class TodosApp extends StatelessWidget {
             blocProviders: [
               BlocProvider<TabBloc>(
                 builder: (context) => TabBloc(),
-                dispose: (context, bloc) => bloc.dispose(),
               ),
               BlocProvider<FilteredTodosBloc>(
                 builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
-                dispose: (context, bloc) => bloc.dispose(),
               ),
               BlocProvider<StatsBloc>(
                 builder: (context) => StatsBloc(todosBloc: todosBloc),
-                dispose: (context, bloc) => bloc.dispose(),
               ),
             ],
             child: HomeScreen(),
@@ -1847,15 +1843,12 @@ BlocProviderTree(
   blocProviders: [
     BlocProvider<TabBloc>(
       builder: (context) => TabBloc(),
-      dispose: (context, bloc) => bloc.dispose(),
     ),
     BlocProvider<FilteredTodosBloc>(
       builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
-      dispose: (context, bloc) => bloc.dispose(),
     ),
     BlocProvider<StatsBloc>(
       builder: (context) => StatsBloc(todosBloc: todosBloc),
-      dispose: (context, bloc) => bloc.dispose(),
     ),
   ],
   child: HomeScreen(),
@@ -1867,13 +1860,10 @@ is equivalent to writing
 ```dart
 BlocProvider<TabBloc>(
   builder: (context) => TabBloc(),
-  dispose: (context, bloc) => bloc.dispose(),
   child: BlocProvider<FilteredTodosBloc>(
     builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
-    dispose: (context, bloc) => bloc.dispose(),
     child: BlocProvider<StatsBloc>(
       builder: (context) => StatsBloc(todosBloc: todosBloc),
-      dispose: (context, bloc) => bloc.dispose(),
       child: Scaffold(...),
     ),
   ),
@@ -1913,7 +1903,6 @@ void main() {
           ),
         )..dispatch(LoadTodos());
       },
-      dispose: (context, bloc) => bloc.dispose(),
       child: TodosApp(),
     ),
   );
@@ -1936,15 +1925,12 @@ class TodosApp extends StatelessWidget {
             blocProviders: [
               BlocProvider<TabBloc>(
                 builder: (context) => TabBloc(),
-                dispose: (context, bloc) => bloc.dispose(),
               ),
               BlocProvider<FilteredTodosBloc>(
                 builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
-                dispose: (context, bloc) => bloc.dispose(),
               ),
               BlocProvider<StatsBloc>(
                 builder: (context) => StatsBloc(todosBloc: todosBloc),
-                dispose: (context, bloc) => bloc.dispose(),
               ),
             ],
             child: HomeScreen(),

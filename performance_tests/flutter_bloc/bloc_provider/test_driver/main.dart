@@ -30,7 +30,6 @@ class App extends StatelessWidget {
       appBar: AppBar(title: Text('Performance Test')),
       body: BlocProvider(
         builder: (context) => _counterBloc,
-        dispose: (context, bloc) => bloc.dispose(),
         child: ChildA(),
       ),
       floatingActionButton: Column(

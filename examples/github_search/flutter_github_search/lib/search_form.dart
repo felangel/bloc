@@ -4,59 +4,35 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:common_github_search/common_github_search.dart';
 
-class SearchForm extends StatefulWidget {
-  final GithubRepository githubRepository;
-
-  const SearchForm({
-    Key key,
-    @required this.githubRepository,
-  }) : super(key: key);
-
-  @override
-  _SearchFormState createState() => _SearchFormState();
-}
-
-class _SearchFormState extends State<SearchForm> {
-  GithubSearchBloc _githubSearchBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _githubSearchBloc = GithubSearchBloc(
-      githubRepository: widget.githubRepository,
-    );
-  }
-
-  @override
-  void dispose() {
-    _githubSearchBloc.dispose();
-    super.dispose();
-  }
-
+class SearchForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
-        _SearchBar(githubSearchBloc: _githubSearchBloc),
-        _SearchBody(githubSearchBloc: _githubSearchBloc)
-      ],
+      children: <Widget>[_SearchBar(), _SearchBody()],
     );
   }
 }
 
 class _SearchBar extends StatefulWidget {
-  final GithubSearchBloc githubSearchBloc;
-
-  _SearchBar({Key key, this.githubSearchBloc}) : super(key: key);
-
   @override
   State<_SearchBar> createState() => _SearchBarState();
 }
 
 class _SearchBarState extends State<_SearchBar> {
   final _textController = TextEditingController();
+  GithubSearchBloc _githubSearchBloc;
 
-  GithubSearchBloc get githubSearchBloc => widget.githubSearchBloc;
+  @override
+  void initState() {
+    super.initState();
+    _githubSearchBloc = BlocProvider.of<GithubSearchBloc>(context);
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +40,7 @@ class _SearchBarState extends State<_SearchBar> {
       controller: _textController,
       autocorrect: false,
       onChanged: (text) {
-        githubSearchBloc.dispatch(
+        _githubSearchBloc.dispatch(
           TextChanged(text: text),
         );
       },
@@ -82,19 +58,15 @@ class _SearchBarState extends State<_SearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    githubSearchBloc.dispatch(TextChanged(text: ''));
+    _githubSearchBloc.dispatch(TextChanged(text: ''));
   }
 }
 
 class _SearchBody extends StatelessWidget {
-  final GithubSearchBloc githubSearchBloc;
-
-  const _SearchBody({Key key, this.githubSearchBloc}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GithubSearchEvent, GithubSearchState>(
-      bloc: githubSearchBloc,
+      bloc: BlocProvider.of<GithubSearchBloc>(context),
       builder: (BuildContext context, GithubSearchState state) {
         if (state is SearchStateEmpty) {
           return Text('Please enter a term to begin');

@@ -10,35 +10,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: MyHomePage(),
+      home: BlocProvider(
+        builder: (context) => TickerBloc(Ticker()),
+        child: MyHomePage(),
+      ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  Ticker _ticker;
-  TickerBloc _tickerBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _ticker = Ticker();
-    _tickerBloc = TickerBloc(_ticker);
-  }
-
+class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final tickerBloc = BlocProvider.of<TickerBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Bloc with Streams'),
       ),
       body: BlocBuilder(
-        bloc: _tickerBloc,
+        bloc: tickerBloc,
         builder: (BuildContext context, TickerState state) {
           if (state is Initial) {
             return Center(
@@ -65,17 +54,11 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _tickerBloc.dispatch(StartTicker());
+          tickerBloc.dispatch(StartTicker());
         },
         tooltip: 'Start',
         child: Icon(Icons.timer),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _tickerBloc.dispose();
-    super.dispose();
   }
 }

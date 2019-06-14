@@ -20,7 +20,11 @@ class App extends StatelessWidget {
         appBar: AppBar(
           title: Text('Posts'),
         ),
-        body: HomePage(),
+        body: BlocProvider(
+          builder: (context) =>
+              PostBloc(httpClient: http.Client())..dispatch(Fetch()),
+          child: HomePage(),
+        ),
       ),
     );
   }
@@ -33,12 +37,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _scrollController = ScrollController();
-  final PostBloc _postBloc = PostBloc(httpClient: http.Client());
   final _scrollThreshold = 200.0;
+  PostBloc _postBloc;
 
-  _HomePageState() {
+  @override
+  void initState() {
+    super.initState();
     _scrollController.addListener(_onScroll);
-    _postBloc.dispatch(Fetch());
+    _postBloc = BlocProvider.of<PostBloc>(context);
   }
 
   @override
@@ -80,7 +86,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    _postBloc.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 

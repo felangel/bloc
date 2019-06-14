@@ -26,7 +26,6 @@ class LoginPage extends StatelessWidget {
             userRepository: userRepository,
           );
         },
-        dispose: (context, bloc) => bloc.dispose(),
         child: LoginForm(),
       ),
     );

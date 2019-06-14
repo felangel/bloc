@@ -27,7 +27,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.16.0
+  flutter_bloc: ^0.17.0
   meta: ^1.1.6
   equatable: ^0.2.0
 
@@ -498,7 +498,6 @@ class LoginPage extends StatelessWidget {
             userRepository: userRepository,
           );
         },
-        dispose: (context, bloc) => bloc.dispose(),
         child: LoginForm(),
       ),
     );
@@ -654,7 +653,6 @@ void main() {
         return AuthenticationBloc(userRepository: userRepository)
           ..dispatch(AppStarted());
       },
-      dispose: (context, bloc) => bloc.dispose(),
       child: App(userRepository: userRepository),
     ),
   );

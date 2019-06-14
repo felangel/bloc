@@ -26,7 +26,6 @@ void main() {
           ),
         )..dispatch(LoadTodos());
       },
-      dispose: (context, bloc) => bloc.dispose(),
       child: TodosApp(),
     ),
   );
@@ -49,15 +48,12 @@ class TodosApp extends StatelessWidget {
             blocProviders: [
               BlocProvider<TabBloc>(
                 builder: (context) => TabBloc(),
-                dispose: (context, bloc) => bloc.dispose(),
               ),
               BlocProvider<FilteredTodosBloc>(
                 builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
-                dispose: (context, bloc) => bloc.dispose(),
               ),
               BlocProvider<StatsBloc>(
                 builder: (context) => StatsBloc(todosBloc: todosBloc),
-                dispose: (context, bloc) => bloc.dispose(),
               ),
             ],
             child: HomeScreen(),

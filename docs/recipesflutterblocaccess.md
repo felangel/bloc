@@ -57,7 +57,6 @@ class App extends StatelessWidget {
       title: 'Flutter Demo',
       home: BlocProvider(
         builder: (BuildContext context) => CounterBloc(),
-        dispose: (BuildContext context, CounterBloc bloc) => bloc.dispose(),
         child: CounterPage(),
       ),
     );
@@ -187,7 +186,6 @@ class App extends StatelessWidget {
       title: 'Flutter Demo',
       home: BlocProvider(
         builder: (BuildContext context) => CounterBloc(),
-        dispose: (BuildContext context, CounterBloc bloc) => bloc.dispose(),
         child: HomePage(),
       ),
     );
@@ -340,7 +338,6 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       builder: (BuildContext context) => CounterBloc(),
-      dispose: (BuildContext context, CounterBloc bloc) => bloc.dispose(),
       child: MaterialApp(
         title: 'Flutter Demo',
         home: CounterPage(),

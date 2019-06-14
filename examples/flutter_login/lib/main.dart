@@ -39,7 +39,6 @@ void main() {
         return AuthenticationBloc(userRepository: userRepository)
           ..dispatch(AppStarted());
       },
-      dispose: (context, bloc) => bloc.dispose(),
       child: App(userRepository: userRepository),
     ),
   );

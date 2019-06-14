@@ -14,7 +14,10 @@ class App extends StatelessWidget {
         appBar: AppBar(title: Text('Flutter Form Validation')),
         body: Padding(
           padding: EdgeInsets.all(20.0),
-          child: MyForm(),
+          child: BlocProvider(
+            builder: (context) => MyFormBloc(),
+            child: MyForm(),
+          ),
         ),
       ),
     );
@@ -26,13 +29,14 @@ class MyForm extends StatefulWidget {
 }
 
 class _MyFormState extends State<MyForm> {
-  final MyFormBloc _myFormBloc = MyFormBloc();
+  MyFormBloc _myFormBloc;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _myFormBloc = BlocProvider.of<MyFormBloc>(context);
     _emailController.addListener(_onEmailChanged);
     _passwordController.addListener(_onPasswordChanged);
   }
@@ -90,7 +94,6 @@ class _MyFormState extends State<MyForm> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _myFormBloc.dispose();
     super.dispose();
   }
 

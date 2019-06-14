@@ -17,7 +17,6 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(title: Text('Login')),
       body: BlocProvider<LoginBloc>(
         builder: (context) => LoginBloc(userRepository: _userRepository),
-        dispose: (context, bloc) => bloc.dispose(),
         child: LoginForm(userRepository: _userRepository),
       ),
     );

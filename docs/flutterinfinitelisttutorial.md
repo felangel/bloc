@@ -28,7 +28,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.16.0
+  flutter_bloc: ^0.17.0
   http: ^0.12.0
   equatable: ^0.2.0
 
@@ -402,8 +402,14 @@ Great! Now that we’ve finished implementing the business logic all that’s le
 
 In our `main.dart` we can start by implementing our main function and calling `runApp` to render our root widget.
 
+In our `App` widget, we use `BlocProvider` to create and provide an instance of `PostBloc` to the subtree. Also, we dispatch a `Fetch` event so that when the app loads, it requests the initial batch of Posts.
+
 ```dart
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:flutter_infinite_list/bloc/bloc.dart';
 
 void main() {
   runApp(App());
@@ -418,7 +424,11 @@ class App extends StatelessWidget {
         appBar: AppBar(
           title: Text('Posts'),
         ),
-        body: HomePage(),
+        body: BlocProvider(
+          builder: (context) =>
+              PostBloc(httpClient: http.Client())..dispatch(Fetch()),
+          child: HomePage(),
+        ),
       ),
     );
   }
@@ -435,12 +445,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _scrollController = ScrollController();
-  final PostBloc _postBloc = PostBloc(httpClient: http.Client());
   final _scrollThreshold = 200.0;
+  PostBloc _postBloc;
 
-  _HomePageState() {
+  @override
+  void initState() {
+    super.initState();
     _scrollController.addListener(_onScroll);
-    _postBloc.dispatch(Fetch());
+    _postBloc = BlocProvider.of<PostBloc>(context);
   }
 
   @override
@@ -482,7 +494,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    _postBloc.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -496,11 +508,11 @@ class _HomePageState extends State<HomePage> {
 }
 ```
 
-?> `HomePage` is a `StatefulWidget` because it will need to maintain a `ScrollController` as well as the `PostBloc`. In the `HomePageState`, we create our instances of `ScrollController` and `PostBloc`. In the constructor, we add a listener to our `ScrollController` so that we can respond to scroll events. Also, in the constructor, we need to dispatch a `Fetch` event so that when the app loads, it requests the initial batch of Posts.
+?> `HomePage` is a `StatefulWidget` because it will need to maintain a `ScrollController`. In `initState`, we add a listener to our `ScrollController` so that we can respond to scroll events. We also access our `PostBloc` instance via `BlocProvider.of<PostBloc>(context)`.
 
-Moving along, our build method returns a `BlocBuilder`. `BlocBuilder` is a Flutter widget from the [flutter_bloc package](https://pub.dartlang.org/packages/flutter_bloc) which handles building a widget in response to new bloc states. Anytime our `PostBloc` state changes, our builder function will be called with the new `PostState`.
+Moving along, our build method returns a `BlocBuilder`. `BlocBuilder` is a Flutter widget from the [flutter_bloc package](https://pub.dartlang.org/packages/flutter_bloc) which handles building a widget in response to new bloc states. Any time our `PostBloc` state changes, our builder function will be called with the new `PostState`.
 
-!> We need to remember to clean up after ourselves and dispose our bloc when our StatefulWidget is disposed.
+!> We need to remember to clean up after ourselves and dispose our `ScrollController` when our StatefulWidget is disposed.
 
 Whenever the user scrolls, we calculate how far away from the bottom of the page the user is and if the distance is ≤ our `_scrollThreshold` we dispatch a `Fetch` event in order to load more posts.
 

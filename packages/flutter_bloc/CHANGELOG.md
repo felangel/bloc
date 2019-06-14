@@ -1,6 +1,6 @@
 # 0.17.0
 
-Update `BlocProvider` to automatically `dispose` the provided bloc and Documentation Updates.
+Update `BlocProvider` to automatically `dispose` the provided bloc ([#349](https://github.com/felangel/bloc/pull/349)) and Documentation Updates.
 
 # 0.16.0
 

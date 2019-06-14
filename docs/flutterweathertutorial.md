@@ -28,7 +28,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.16.0
+  flutter_bloc: ^0.17.0
   http: ^0.12.0
   equatable: ^0.2.0
 
@@ -739,7 +739,6 @@ class App extends StatelessWidget {
       home: BlocProvider(
         builder: (context) =>
             WeatherBloc(weatherRepository: weatherRepository),
-        dispose: (context, bloc) => bloc.dispose(),
         child: Weather(),
       ),
     );
@@ -1393,7 +1392,6 @@ void main() {
   runApp(
     BlocProvider<ThemeBloc>(
       builder: (context) => ThemeBloc(),
-      dispose: (context, bloc) => bloc.dispose(),
       child: App(weatherRepository: weatherRepository),
     ),
   );
@@ -1421,7 +1419,6 @@ class App extends StatelessWidget {
           home: BlocProvider(
             builder: (context) =>
                 WeatherBloc(weatherRepository: weatherRepository),
-            dispose: (context, bloc) => bloc.dispose(),
             child: Weather(),
           ),
         );
@@ -1676,11 +1673,9 @@ void main() {
       blocProviders: [
         BlocProvider<ThemeBloc>(
           builder: (context) => ThemeBloc(),
-          dispose: (context, bloc) => bloc.dispose(),
         ),
         BlocProvider<SettingsBloc>(
           builder: (context) => SettingsBloc(),
-          dispose: (context, bloc) => bloc.dispose(),
         ),
       ],
       child: App(weatherRepository: weatherRepository),

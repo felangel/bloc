@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Timer',
       home: BlocProvider(
         builder: (context) => TimerBloc(ticker: Ticker()),
-        dispose: (context, bloc) => bloc.dispose(),
         child: Timer(),
       ),
     );

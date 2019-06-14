@@ -15,7 +15,6 @@ void main() {
     BlocProvider(
       builder: (context) => AuthenticationBloc(userRepository: userRepository)
         ..dispatch(AppStarted()),
-      dispose: (context, bloc) => bloc.dispose(),
       child: App(userRepository: userRepository),
     ),
   );

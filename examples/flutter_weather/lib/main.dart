@@ -40,11 +40,9 @@ void main() {
       blocProviders: [
         BlocProvider<ThemeBloc>(
           builder: (context) => ThemeBloc(),
-          dispose: (context, bloc) => bloc.dispose(),
         ),
         BlocProvider<SettingsBloc>(
           builder: (context) => SettingsBloc(),
-          dispose: (context, bloc) => bloc.dispose(),
         ),
       ],
       child: App(weatherRepository: weatherRepository),
@@ -70,7 +68,6 @@ class App extends StatelessWidget {
           home: BlocProvider(
             builder: (context) =>
                 WeatherBloc(weatherRepository: weatherRepository),
-            dispose: (context, bloc) => bloc.dispose(),
             child: Weather(),
           ),
         );

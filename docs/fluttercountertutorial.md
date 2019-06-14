@@ -27,7 +27,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.16.0
+  flutter_bloc: ^0.17.0
   meta: ^1.1.6
 
 dev_dependencies:
@@ -86,36 +86,21 @@ Now that we have our `CounterBloc` fully implemented, we can get started creatin
 ```dart
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => MyAppState();
-}
-
-class MyAppState extends State<MyApp> {
-  final CounterBloc _counterBloc = CounterBloc();
-
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       home: BlocProvider<CounterBloc>(
-        bloc: _counterBloc,
+        builder: (context) => CounterBloc(),
         child: CounterPage(),
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _counterBloc.dispose();
-    super.dispose();
-  }
 }
 ```
 
-?> **Note**: Our `MyApp` widget is a `StatefulWidget` so that it can manage creating and disposing the `CounterBloc`.
-
-?> **Note**: We are using the `BlocProvider` widget from `flutter_bloc` in order to make the instance of `CounterBloc` available to the entire subtree (`CounterPage`).
+?> **Note**: We are using the `BlocProvider` widget from `flutter_bloc` in order to make the instance of `CounterBloc` available to the entire subtree (`CounterPage`). `BlocProvider` also handles disposing the `CounterBloc` automatically so we don't need to use a `StatefulWidget`.
 
 ## Counter Page
 

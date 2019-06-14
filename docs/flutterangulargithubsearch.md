@@ -34,11 +34,11 @@ description: Shared Code between AngularDart and Flutter
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
   meta: ^1.1.7
-  bloc: ^0.12.0
+  bloc: ^0.14.0
   equatable: ^0.2.0
   http: ^0.12.0
 ```
@@ -427,7 +427,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.12.0
+  flutter_bloc: ^0.17.0
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search
@@ -459,7 +459,7 @@ We're going to need to create a form with a `SearchBar` and `SearchBody` widget.
 
 Let's create `search_form.dart`.
 
-> Our `SearchForm` will be a `StatefulWidget` because it will need to create and dispose of a `GithubSearchBloc`.
+> Our `SearchForm` will be a `StatelessWidget` which renders the `SearchBar` and `SearchBody` widgets.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -468,50 +468,15 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:common_github_search/common_github_search.dart';
 
-class SearchForm extends StatefulWidget {
-  final GithubRepository githubRepository;
-
-  const SearchForm({
-    Key key,
-    @required this.githubRepository,
-  }) : super(key: key);
-
-  @override
-  _SearchFormState createState() => _SearchFormState();
-}
-
-class _SearchFormState extends State<SearchForm> {
-  GithubSearchBloc _githubSearchBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _githubSearchBloc = GithubSearchBloc(
-      githubRepository: widget.githubRepository,
-    );
-  }
-
-  @override
-  void dispose() {
-    _githubSearchBloc.dispose();
-    super.dispose();
-  }
-
+class SearchForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
-        _SearchBar(githubSearchBloc: _githubSearchBloc),
-        _SearchBody(githubSearchBloc: _githubSearchBloc)
-      ],
+      children: <Widget>[_SearchBar(), _SearchBody()],
     );
   }
 }
 ```
-
-?> **Note:** The `GithubRepository` is injected into the `SearchForm`.
-
-?> **Note:** The `GithubSearchBloc` is created and disposed by the `SearchForm`.
 
 Next, we'll implement `_SearchBar`.
 
@@ -521,18 +486,25 @@ Next, we'll implement `_SearchBar`.
 
 ```dart
 class _SearchBar extends StatefulWidget {
-  final GithubSearchBloc githubSearchBloc;
-
-  _SearchBar({Key key, this.githubSearchBloc}) : super(key: key);
-
   @override
   State<_SearchBar> createState() => _SearchBarState();
 }
 
 class _SearchBarState extends State<_SearchBar> {
   final _textController = TextEditingController();
+  GithubSearchBloc _githubSearchBloc;
 
-  GithubSearchBloc get githubSearchBloc => widget.githubSearchBloc;
+  @override
+  void initState() {
+    super.initState();
+    _githubSearchBloc = BlocProvider.of<GithubSearchBloc>(context);
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -540,7 +512,7 @@ class _SearchBarState extends State<_SearchBar> {
       controller: _textController,
       autocorrect: false,
       onChanged: (text) {
-        githubSearchBloc.dispatch(
+        _githubSearchBloc.dispatch(
           TextChanged(text: text),
         );
       },
@@ -558,12 +530,12 @@ class _SearchBarState extends State<_SearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    githubSearchBloc.dispatch(TextChanged(text: ''));
+    _githubSearchBloc.dispatch(TextChanged(text: ''));
   }
 }
 ```
 
-?> **Note:** `_SearchBar` has a dependency on `GitHubSearchBloc` because it is responsible for notifying the bloc of `TextChanged` events.
+?> **Note:** `_SearchBar` accesses `GitHubSearchBloc` via `BlocProvider.of<GithubSearchBloc>(context)` and notifies the bloc of `TextChanged` events.
 
 We're done with `_SearchBar`, now onto `_SearchBody`.
 
@@ -573,14 +545,10 @@ We're done with `_SearchBar`, now onto `_SearchBody`.
 
 ```dart
 class _SearchBody extends StatelessWidget {
-  final GithubSearchBloc githubSearchBloc;
-
-  const _SearchBody({Key key, this.githubSearchBloc}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GithubSearchEvent, GithubSearchState>(
-      bloc: githubSearchBloc,
+      bloc: BlocProvider.of<GithubSearchBloc>(context),
       builder: (BuildContext context, GithubSearchState state) {
         if (state is SearchStateEmpty) {
           return Text('Please enter a term to begin');
@@ -602,7 +570,7 @@ class _SearchBody extends StatelessWidget {
 }
 ```
 
-?> **Note:** `_SearchBody` has a dependency on `GithubSearchBloc` and uses `BlocBuilder` in order to rebuild in response to state changes.
+?> **Note:** `_SearchBody` also accesses `GithubSearchBloc` via `BlocProvider` and uses `BlocBuilder` in order to rebuild in response to state changes.
 
 If our state is `SearchStateSuccess` we render `_SearchResults` which we will implement next.
 
@@ -672,59 +640,35 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:common_github_search/common_github_search.dart';
 
-class SearchForm extends StatefulWidget {
-  final GithubRepository githubRepository;
-
-  const SearchForm({
-    Key key,
-    @required this.githubRepository,
-  }) : super(key: key);
-
-  @override
-  _SearchFormState createState() => _SearchFormState();
-}
-
-class _SearchFormState extends State<SearchForm> {
-  GithubSearchBloc _githubSearchBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _githubSearchBloc = GithubSearchBloc(
-      githubRepository: widget.githubRepository,
-    );
-  }
-
-  @override
-  void dispose() {
-    _githubSearchBloc.dispose();
-    super.dispose();
-  }
-
+class SearchForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
-        _SearchBar(githubSearchBloc: _githubSearchBloc),
-        _SearchBody(githubSearchBloc: _githubSearchBloc)
-      ],
+      children: <Widget>[_SearchBar(), _SearchBody()],
     );
   }
 }
 
 class _SearchBar extends StatefulWidget {
-  final GithubSearchBloc githubSearchBloc;
-
-  _SearchBar({Key key, this.githubSearchBloc}) : super(key: key);
-
   @override
   State<_SearchBar> createState() => _SearchBarState();
 }
 
 class _SearchBarState extends State<_SearchBar> {
   final _textController = TextEditingController();
+  GithubSearchBloc _githubSearchBloc;
 
-  GithubSearchBloc get githubSearchBloc => widget.githubSearchBloc;
+  @override
+  void initState() {
+    super.initState();
+    _githubSearchBloc = BlocProvider.of<GithubSearchBloc>(context);
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -732,7 +676,7 @@ class _SearchBarState extends State<_SearchBar> {
       controller: _textController,
       autocorrect: false,
       onChanged: (text) {
-        githubSearchBloc.dispatch(
+        _githubSearchBloc.dispatch(
           TextChanged(text: text),
         );
       },
@@ -750,19 +694,15 @@ class _SearchBarState extends State<_SearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    githubSearchBloc.dispatch(TextChanged(text: ''));
+    _githubSearchBloc.dispatch(TextChanged(text: ''));
   }
 }
 
 class _SearchBody extends StatelessWidget {
-  final GithubSearchBloc githubSearchBloc;
-
-  const _SearchBody({Key key, this.githubSearchBloc}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GithubSearchEvent, GithubSearchState>(
-      bloc: githubSearchBloc,
+      bloc: BlocProvider.of<GithubSearchBloc>(context),
       builder: (BuildContext context, GithubSearchState state) {
         if (state is SearchStateEmpty) {
           return Text('Please enter a term to begin');
@@ -827,6 +767,7 @@ Now all that's left to do is implement our main app in `main.dart`.
 import 'package:flutter/material.dart';
 
 import 'package:meta/meta.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:common_github_search/common_github_search.dart';
 import 'package:flutter_github_search/search_form.dart';
 
@@ -853,8 +794,10 @@ class App extends StatelessWidget {
       title: 'Github Search',
       home: Scaffold(
         appBar: AppBar(title: Text('Github Search')),
-        body: SearchForm(
-          githubRepository: githubRepository,
+        body: BlocProvider(
+          builder: (context) =>
+              GithubSearchBloc(githubRepository: githubRepository),
+          child: SearchForm(),
         ),
       ),
     );
@@ -862,7 +805,7 @@ class App extends StatelessWidget {
 }
 ```
 
-?> **Note:** Our `GithubRepository` is created in `main` and injected into our `App`.
+?> **Note:** Our `GithubRepository` is created in `main` and injected into our `App`. Our `SearchForm` is wrapped in a `BlocProvider` which is responsible for initializing, disposing, and making the instance of `GithubSearchBloc` available to the `SearchForm` widget and its children.
 
 That’s all there is to it! We’ve now successfully implemented a github search app in Flutter using the [bloc](https://pub.dartlang.org/packages/bloc) and [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
 

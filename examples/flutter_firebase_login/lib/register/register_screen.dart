@@ -18,7 +18,6 @@ class RegisterScreen extends StatelessWidget {
       body: Center(
         child: BlocProvider<RegisterBloc>(
           builder: (context) => RegisterBloc(userRepository: _userRepository),
-          dispose: (context, bloc) => bloc.dispose(),
           child: RegisterForm(),
         ),
       ),

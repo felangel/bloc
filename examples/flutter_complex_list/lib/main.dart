@@ -20,32 +20,22 @@ class App extends StatelessWidget {
         appBar: AppBar(
           title: Text('Complex List'),
         ),
-        body: HomePage(),
+        body: BlocProvider(
+          builder: (context) =>
+              ListBloc(repository: Repository())..dispatch(Fetch()),
+          child: HomePage(),
+        ),
       ),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final Repository _repository = Repository();
-  ListBloc _listBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _listBloc = ListBloc(repository: _repository);
-    _listBloc.dispatch(Fetch());
-  }
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final listBloc = BlocProvider.of<ListBloc>(context);
     return BlocBuilder(
-      bloc: _listBloc,
+      bloc: listBloc,
       builder: (BuildContext context, ListState state) {
         if (state is Loading) {
           return Center(
@@ -68,7 +58,7 @@ class _HomePageState extends State<HomePage> {
               return ItemTile(
                 item: state.items[index],
                 onDeletePressed: (id) {
-                  _listBloc.dispatch(Delete(id: id));
+                  listBloc.dispatch(Delete(id: id));
                 },
               );
             },
@@ -77,12 +67,6 @@ class _HomePageState extends State<HomePage> {
         }
       },
     );
-  }
-
-  @override
-  void dispose() {
-    _listBloc.dispose();
-    super.dispose();
   }
 }
 
