@@ -68,40 +68,31 @@ Now let's take a look at how to hook up our `MyBloc` to a widget and show a diff
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatefulWidget {
-  @override
-  State<MyApp> createState() => _MyAppState();
+void main() {
+  runApp(
+    BlocProvider(
+      builder: (context) => MyBloc(),
+      child: MyApp(),
+    ),
+  );
 }
 
-class _MyAppState extends State<MyApp> {
-  MyBloc _myBloc = MyBloc();
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<MyBloc>(
-      bloc: _myBloc,
-      child: MaterialApp(
-        home: BlocBuilder<MyEvent, MyState>(
-          bloc: _myBloc,
-          builder: (BuildContext context, MyState state) {
-            if (state is StateA) {
-              return PageA();
-            }
-            if (state is StateB) {
-              return PageB();
-            }
-          },
-        ),
+    return MaterialApp(
+      home: BlocBuilder<MyEvent, MyState>(
+        bloc: BlocProvider.of<MyBloc>(context),
+        builder: (BuildContext context, MyState state) {
+          if (state is StateA) {
+            return PageA();
+          }
+          if (state is StateB) {
+            return PageB();
+          }
+        },
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _myBloc.dispose();
-    super.dispose();
   }
 }
 
@@ -168,34 +159,25 @@ Let's take a look at how to route to a different page based on the state of `MyB
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatefulWidget {
-  @override
-  State<MyApp> createState() => _MyAppState();
+void main() {
+  runApp(
+    BlocProvider(
+      builder: (context) => MyBloc(),
+      child: MyApp(),
+    ),
+  );
 }
 
-class _MyAppState extends State<MyApp> {
-  MyBloc _myBloc = MyBloc();
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<MyBloc>(
-      bloc: _myBloc,
-      child: MaterialApp(
-        routes: {
-          '/': (context) => PageA(),
-          '/pageB': (context) => PageB(),
-        },
-        initialRoute: '/',
-      ),
+    return MaterialApp(
+      routes: {
+        '/': (context) => PageA(),
+        '/pageB': (context) => PageB(),
+      },
+      initialRoute: '/',
     );
-  }
-
-  @override
-  void dispose() {
-    _myBloc.dispose();
-    super.dispose();
   }
 }
 
