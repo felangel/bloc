@@ -1,3 +1,12 @@
+# 0.8.0
+
+Update Snippets for:
+
+- `BlocProvider`
+- `BlocProviderTree`
+
+to support changes in flutter_bloc `v0.17.0`
+
 # 0.7.0
 
 Update Snippets for:
