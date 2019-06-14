@@ -8,16 +8,14 @@ typedef BlocProviderBuilder<T extends Bloc<dynamic, dynamic>> = T Function(
   BuildContext context,
 );
 
-/// Signature for the `dispose` function which takes the [BuildContext] and is invoked
-/// when the `BlocProvider` is disposed.
-typedef BlocProviderDispose<T extends Bloc<dynamic, dynamic>> = void Function(
-  BuildContext context,
-  T bloc,
-);
-
 /// A Flutter widget which provides a bloc to its children via `BlocProvider.of(context)`.
 /// It is used as a DI widget so that a single instance of a bloc can be provided
 /// to multiple widgets within a subtree.
+///
+/// By default, `BlocProvider` automatically disposes the provided bloc when the `BlocProvider`
+/// widget is disposed. In a few edge cases, such as when using `BlocProvider` to provide an
+/// existing bloc to another route, it might be necessary to prevent automatic disposal of the bloc.
+/// In those cases, the `dispose` property can be set to `false`.
 class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget {
   /// The [BlocProviderBuilder] which creates the [Bloc]
   /// that will be made available throughout the subtree.
@@ -26,16 +24,17 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget {
   /// The [Widget] and its descendants which will have access to the [Bloc].
   final Widget child;
 
-  /// The [BlocProviderDispose] which is called when the `BlocProvider` is disposed.
-  /// In most cases, the provided bloc should be disposed in the `dispose` callback.
-  /// The main exception to the rule is if a `BlocProvider` is used to provide
-  /// an existing bloc to a new route.
-  final BlocProviderDispose<T> dispose;
+  /// A `bool` which determines whether or not the [Bloc] should be automatically disposed
+  /// by [BlocProvider].
+  ///
+  /// The default value is `true` and it should only be set to `false` in very few cases
+  /// (such as where the multiple `BlocProviders` are used to provide the same [Bloc] across different routes).
+  final bool dispose;
 
   BlocProvider({
     Key key,
     @required this.builder,
-    this.dispose,
+    this.dispose = true,
     this.child,
   })  : assert(builder != null),
         super(key: key);
@@ -106,7 +105,9 @@ class _BlocProviderState<T extends Bloc<dynamic, dynamic>>
 
   @override
   void dispose() {
-    widget.dispose?.call(context, _bloc);
+    if (widget.dispose ?? true) {
+      _bloc.dispose();
+    }
     super.dispose();
   }
 }
