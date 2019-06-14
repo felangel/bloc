@@ -212,6 +212,7 @@ class HomePage extends StatelessWidget {
                 builder: (context) {
                   return BlocProvider(
                     builder: (BuildContext context) => counterBloc,
+                    dispose: false,
                     child: CounterPage(),
                   );
                 },
@@ -256,7 +257,7 @@ The `HomePage` is similar to the `CounterPage` in the above example; however, in
 
 When the user taps the `RaisedButton`, we push a new `MaterialPageRoute` and return the `CounterPage`; however, we are wrapping the `CounterPage` in a `BlocProvider` in order to make the current `CounterBloc` instance available on the next page.
 
-!> It is critical that we are not disposing the `CounterBloc` in the second `BlocProvider` because we still need the `CounterBloc` to function in the ancestor widgets. Instead, we simply pass the existing `CounterBloc` to the new page without implementing the `dispose` callback in `BlocProvider` and let the top level `BlocProvider` handle disposing the `CounterBloc` when it is no longer needed.
+!> It is critical that we are not disposing the `CounterBloc` in the second `BlocProvider` because we still need the `CounterBloc` to function in the ancestor widgets. Instead, we simply pass the existing `CounterBloc` to the new page and set the `dispose` property in `BlocProvider` to false. This ensures that the top level `BlocProvider` handle disposing the `CounterBloc` when it is no longer needed.
 
 #### CounterPage
 
