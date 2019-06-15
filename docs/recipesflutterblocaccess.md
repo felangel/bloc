@@ -208,7 +208,7 @@ class HomePage extends StatelessWidget {
         child: RaisedButton(
           onPressed: () {
             Navigator.of(context).push(
-              MaterialPageRoute(
+              MaterialPageRoute<CounterPage>(
                 builder: (context) {
                   return BlocProvider(
                     builder: (BuildContext context) => counterBloc,
