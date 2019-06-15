@@ -40,7 +40,6 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<CounterBloc>(
       builder: (context) => CounterBloc(),
-      dispose: (context, bloc) => bloc.dispose(),
       child: MaterialApp(
         title: 'Flutter Demo',
         home: CounterPage(),
@@ -52,12 +51,11 @@ class App extends StatelessWidget {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final CounterBloc _counterBloc = BlocProvider.of<CounterBloc>(context);
-
+    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
       body: BlocBuilder<CounterEvent, CounterState>(
-        bloc: _counterBloc,
+        bloc: counterBloc,
         builder: (BuildContext context, CounterState state) {
           return Center(
             child: Text(
@@ -76,7 +74,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                _counterBloc.dispatch(CounterEvent.increment);
+                counterBloc.dispatch(CounterEvent.increment);
               },
             ),
           ),
@@ -85,7 +83,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.remove),
               onPressed: () {
-                _counterBloc.dispatch(CounterEvent.decrement);
+                counterBloc.dispatch(CounterEvent.decrement);
               },
             ),
           ),

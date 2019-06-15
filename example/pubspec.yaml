@@ -9,7 +9,7 @@ dependencies:
   flutter:
     sdk: flutter
   bloc: ^0.14.0
-  flutter_bloc: ^0.16.0
+  flutter_bloc: ^0.17.0
   hydrated_bloc:
     path: ../
 
