@@ -1,11 +1,23 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 /// A specialized `BlocDelegate` which handles persisting state changes
 /// transparently and asynchronously.
 class HydratedBlocDelegate extends BlocDelegate {
-  /// Instance of `HydratedBlocState` used to persist states.
-  HydratedBlocStorage storage;
+  /// Instance of `HydratedStorage` used to manage persisted states.
+  final HydratedStorage storage;
+
+  /// Builds a new instance of `HydratedBlocDelegate` with the
+  /// default `HydratedBlocStorage`.
+  ///
+  /// This is the recommended way to use a `HydratedBlocDelegate`.
+  /// If you want to customize `HydratedBlocDelegate` you can extend `HydratedBlocDelegate`
+  /// and perform the necessary overrides.
+  static Future<HydratedBlocDelegate> build() async {
+    return HydratedBlocDelegate(await HydratedBlocStorage.getInstance());
+  }
 
   HydratedBlocDelegate(this.storage);
 
@@ -15,7 +27,7 @@ class HydratedBlocDelegate extends BlocDelegate {
     final dynamic state = transition.nextState;
     storage.write(
       bloc.runtimeType.toString(),
-      (bloc as HydratedBloc).toJson(state),
+      json.encode((bloc as HydratedBloc).toJson(state)),
     );
   }
 }

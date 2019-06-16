@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
@@ -7,31 +6,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-class MyHydratedBlocDelegate extends HydratedBlocDelegate {
-  MyHydratedBlocDelegate(HydratedBlocStorage storage) : super(storage);
-
-  @override
-  void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
-    print('${bloc.runtimeType} $event');
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print('${bloc.runtimeType} $transition');
-  }
-
-  @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
-    print('${bloc.runtimeType} $error');
-  }
-}
-
 void main() async {
-  final storage = await HydratedSharedPreferences.getInstance();
-  BlocSupervisor.delegate = MyHydratedBlocDelegate(storage);
+  BlocSupervisor.delegate = await HydratedBlocDelegate.build();
   runApp(App());
 }
 
@@ -110,13 +86,14 @@ class CounterState {
   int value;
 
   CounterState(this.value);
+
+  @override
+  String toString() => 'CounterState { value: $value }';
 }
 
 class CounterBloc extends HydratedBloc<CounterEvent, CounterState> {
   @override
-  CounterState get initialState {
-    return super.initialState ?? CounterState(0);
-  }
+  CounterState get initialState => super.initialState ?? CounterState(0);
 
   @override
   Stream<CounterState> mapEventToState(CounterEvent event) async* {
@@ -131,18 +108,12 @@ class CounterBloc extends HydratedBloc<CounterEvent, CounterState> {
   }
 
   @override
-  fromJson(String source) {
-    try {
-      final dynamic j = json.decode(source);
-      return CounterState(j['value'] as int);
-    } catch (_) {
-      return null;
-    }
+  CounterState fromJson(Map<String, dynamic> source) {
+    return CounterState(source['value'] as int);
   }
 
   @override
-  String toJson(CounterState state) {
-    Map<String, int> j = {'value': state.value};
-    return json.encode(j);
+  Map<String, int> toJson(CounterState state) {
+    return {'value': state.value};
   }
 }

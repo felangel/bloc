@@ -1,3 +1,11 @@
+# 0.2.0
+
+- Upated `HydrateBlocDelegate` to have a static `build`
+- Updated `toJson` and `fromJson` to eliminate the need to call `json.encode` and `json.decode` explicitly.
+- `HydratedBlocSharedPreferences` replaced with `HydratedBlocStorage`
+- Removed dependency on `SharedPreferences`
+- Documentation Updates
+
 # 0.1.0
 
 - Renamed `HydratedBlocSharedPreferences` to `HydratedSharedPreferences`

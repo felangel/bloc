@@ -21,43 +21,16 @@ An extension to the [bloc state management library](https://github.com/felangel/
 
 # Usage
 
-### 1. Extend `HydratedBlocDelegate`
-
-```dart
-class MyHydratedBlocDelegate extends HydratedBlocDelegate {
-  MyHydratedBlocDelegate(HydratedBlocStorage storage) : super(storage);
-
-  @override
-  void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
-    print('${bloc.runtimeType} $event');
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print('${bloc.runtimeType} $transition');
-  }
-
-  @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
-    print('${bloc.runtimeType} $error');
-  }
-}
-```
-
-### 2. Use `HydratedBlocDelegate`
+### 1. Use `HydratedBlocDelegate`
 
 ```dart
 void main() async {
-  final storage = await HydratedSharedPreferences.getInstance();
-  BlocSupervisor.delegate = MyHydratedBlocDelegate(storage);
+  BlocSupervisor.delegate = await HydratedBlocDelegate.build();
   runApp(App());
 }
 ```
 
-### 3. Extend `HydratedBloc`
+### 2. Extend `HydratedBloc`
 
 ```dart
 enum CounterEvent { increment, decrement }
@@ -87,19 +60,13 @@ class CounterBloc extends HydratedBloc<CounterEvent, CounterState> {
   }
 
   @override
-  fromJson(String source) {
-    try {
-      final dynamic j = json.decode(source);
-      return CounterState(j['value']);
-    } catch (_) {
-      return null;
-    }
+  CounterState fromJson(Map<String, dynamic> source) {
+    return CounterState(source['value'] as int);
   }
 
   @override
-  String toJson(CounterState state) {
-    Map<String, int> j = {'value': state.value};
-    return json.encode(j);
+  Map<String, int> toJson(CounterState state) {
+    return {'value': state.value};
   }
 }
 ```

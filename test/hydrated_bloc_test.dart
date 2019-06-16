@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -10,7 +11,7 @@ class MockHydratedBlocDelegate extends Mock implements HydratedBlocDelegate {}
 
 class MyHydratedBloc extends HydratedBloc<int, int> {
   @override
-  int get initialState => super.initialState ?? null;
+  int get initialState => super.initialState ?? 0;
 
   @override
   Stream<int> mapEventToState(int event) {
@@ -18,14 +19,14 @@ class MyHydratedBloc extends HydratedBloc<int, int> {
   }
 
   @override
-  String toJson(int state) {
-    return state.toString();
+  Map<String, int> toJson(int state) {
+    return {'value': state};
   }
 
   @override
-  int fromJson(String json) {
+  int fromJson(dynamic json) {
     try {
-      return int.tryParse(json);
+      return json['value'] as int;
     } catch (_) {
       return null;
     }
@@ -48,16 +49,17 @@ void main() {
   });
 
   group('HydratedBloc', () {
-    test('initialState should return null when fromJson returns null', () {
-      when(storage.read('MyHydratedBloc')).thenReturn(null);
-      expect(bloc.initialState, isNull);
-      verify(storage.read('MyHydratedBloc')).called(2);
+    test('initialState should return 0 when fromJson returns null', () {
+      when<dynamic>(storage.read('MyHydratedBloc')).thenReturn(null);
+      expect(bloc.initialState, 0);
+      verify<dynamic>(storage.read('MyHydratedBloc')).called(2);
     });
 
-    test('initialState should return 101 when fromJson returns "101"', () {
-      when(storage.read('MyHydratedBloc')).thenReturn('101');
+    test('initialState should return 101 when fromJson returns 101', () {
+      when<dynamic>(storage.read('MyHydratedBloc'))
+          .thenReturn(json.encode({'value': 101}));
       expect(bloc.initialState, 101);
-      verify(storage.read('MyHydratedBloc')).called(2);
+      verify<dynamic>(storage.read('MyHydratedBloc')).called(2);
     });
   });
 }
