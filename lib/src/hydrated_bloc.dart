@@ -26,9 +26,14 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
 
   /// Responsible for converting the `Map<String, dynamic>` representation of the bloc state
   /// into a concrete instance of the bloc state.
+  ///
+  /// If `fromJson` throws an `Exception`, `HydratedBloc` will return an `initialState` of `null`
+  /// so it is recommended to set `initialState` in the bloc to `super.initialState() ?? defaultInitialState()`.
   State fromJson(Map<String, dynamic> json);
 
   /// Responsible for converting a concrete instance of the bloc state
   /// into the the `Map<String, dynamic>` representation.
+  ///
+  /// If `toJson` returns `null`, then no state changes will be persisted.
   Map<String, dynamic> toJson(State state);
 }

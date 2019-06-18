@@ -1,3 +1,8 @@
+# 0.2.1
+
+- Bugfix to handle `Blocs` alongside `HydrateBlocs` within the same application.
+- `toJson` can return `null` to avoid persisting the state change
+
 # 0.2.0
 
 - Upated `HydrateBlocDelegate` to have a static `build`

@@ -25,9 +25,14 @@ class HydratedBlocDelegate extends BlocDelegate {
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
     final dynamic state = transition.nextState;
-    storage.write(
-      bloc.runtimeType.toString(),
-      json.encode((bloc as HydratedBloc).toJson(state)),
-    );
+    if (bloc is HydratedBloc) {
+      final stateJson = bloc.toJson(state);
+      if (stateJson != null) {
+        storage.write(
+          bloc.runtimeType.toString(),
+          json.encode(stateJson),
+        );
+      }
+    }
   }
 }
