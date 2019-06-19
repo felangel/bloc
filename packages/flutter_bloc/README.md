@@ -180,6 +180,57 @@ BlocListenerTree(
 )
 ```
 
+**ImmutableProvider** is a Flutter widget which provides a value to its children via `ImmutableProvider.of<T>(context)`. It is used as a DI widget so that a single instance of an immutable value can be provided to multiple widgets within a subtree. `BlocProvider` is built on top of `ImmutableProvider` and should be used to provide blocs whereas `ImmutableProvider` should be used for other values such as repositories.
+
+```dart
+ImmutableProvider(
+  value: Repository(),
+  child: ChildA(),
+);
+```
+
+then from `ChildA` we can retrieve the `Repository` instance with:
+
+```dart
+ImmutableProvider.of<Repository>(context)
+```
+
+**ImmutableProviderTree** is a Flutter widget that merges multiple `ImmutableProvider` widgets into one.
+`ImmutableProviderTree` improves the readability and eliminates the need to nest multiple `ImmutableProviders`.
+By using `ImmutableProviderTree` we can go from:
+
+```dart
+ImmutableProvider<ValueA>(
+  value: ValueA(),
+  child: ImmutableProvider<ValueB>(
+    value: ValueB(),
+    child: ImmutableProvider<ValueC>(
+      value: ValueC(),
+      child: ChildA(),
+    )
+  )
+)
+```
+
+to:
+
+```dart
+ImmutableProviderTree(
+  immutableProviders: [
+    ImmutableProvider<ValueA>(
+      value: ValueA(),
+    ),
+    ImmutableProvider<ValueB>(
+      value: ValueB(),
+    ),
+    ImmutableProvider<ValueC>(
+      value: ValueC(),
+    ),
+  ],
+  child: ChildA(),
+)
+```
+
 ## Usage
 
 Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.

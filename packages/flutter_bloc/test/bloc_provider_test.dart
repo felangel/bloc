@@ -190,16 +190,6 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 }
 
-class SimpleBloc extends Bloc<dynamic, String> {
-  @override
-  String get initialState => '';
-
-  @override
-  Stream<String> mapEventToState(dynamic event) async* {
-    yield 'state';
-  }
-}
-
 void main() {
   group('BlocProvider', () {
     testWidgets('throws if initialized with no builder',
