@@ -123,9 +123,7 @@ Learn more at the following links, which have been contributed by the community.
 ### Packages
 
 - [Hydrated Bloc](https://pub.dev/packages/hydrated_bloc) - An extension to the `bloc` state management library which automatically persists and restores `bloc` states, by [Felix Angelov](https://github.com/felangel).
-
 - [Flutter Bloc Extensions](https://pub.dartlang.org/packages/flutter_bloc_extensions) - Collection of helper widgets built on top of `flutter_bloc`, by [Ondřej Kunc](https://github.com/OndrejKunc).
-
 - [Bloc Code Generator](https://pub.dev/packages/bloc_code_generator) - A code generator that makes working with bloc easier, by [Adson Leal](https://github.com/adsonpleal).
 
 ### Video Tutorials
