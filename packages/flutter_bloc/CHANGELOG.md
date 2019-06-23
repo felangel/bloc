@@ -1,3 +1,7 @@
+# 0.18.1
+
+Minor Documentation Updates
+
 # 0.18.0
 
 Expose `ImmutableProvider` & `ImmutableProviderTree` to enable developers to provide immutable values, such as repositories, throughout the widget tree ([#364](https://github.com/felangel/bloc/pull/364)) and Documentation Updates

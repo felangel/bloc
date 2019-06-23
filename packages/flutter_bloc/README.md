@@ -327,6 +327,47 @@ At this point we have successfully separated our presentational layer from our b
 - [Todos](https://felangel.github.io/bloc/#/fluttertodostutorial) - an example of how to create a Todos Application using the `bloc` and `flutter_bloc` packages.
 - [Timer](https://felangel.github.io/bloc/#/fluttertimertutorial) - an example of how to create a Timer using the `bloc` and `flutter_bloc` packages.
 
+## Gallery
+
+<div style="text-align: center">
+    <table>
+        <tr>
+            <td style="text-align: center">
+                <a href="https://felangel.github.io/bloc/#/fluttercountertutorial">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_counter.gif" width="200"/>
+                </a>
+            </td>            
+            <td style="text-align: center">
+                <a href="https://felangel.github.io/bloc/#/flutterinfinitelisttutorial">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_infinite_list.gif" width="200"/>
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a href="https://felangel.github.io/bloc/#/flutterfirebaselogintutorial">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_firebase_login.gif" width="200" />
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center">
+                <a href="https://felangel.github.io/bloc/#/flutterangulargithubsearch">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_github_search.gif" width="200"/>
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a href="https://felangel.github.io/bloc/#/flutterweathertutorial">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_weather.gif" width="200"/>
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a href="https://felangel.github.io/bloc/#/fluttertodostutorial">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_todos.gif" width="200"/>
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
+
 ### Maintainers
 
 - [Felix Angelov](https://github.com/felangel)
