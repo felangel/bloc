@@ -5,36 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc/bloc.dart';
 
-class MyAppNoBlocProvidersNoChild extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocProviderTree(
-      blocProviders: null,
-      child: null,
-    );
-  }
-}
-
-class MyAppNoBlocProviders extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocProviderTree(
-      blocProviders: null,
-      child: Container(),
-    );
-  }
-}
-
-class MyAppNoChild extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocProviderTree(
-      blocProviders: [],
-      child: null,
-    );
-  }
-}
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -149,20 +119,44 @@ void main() {
   group('BlocProviderTree', () {
     testWidgets('throws if initialized with no BlocProviders and no child',
         (WidgetTester tester) async {
-      await tester.pumpWidget(MyAppNoBlocProvidersNoChild());
-      expect(tester.takeException(), isInstanceOf<AssertionError>());
+      try {
+        await tester.pumpWidget(
+          BlocProviderTree(
+            blocProviders: null,
+            child: null,
+          ),
+        );
+      } catch (error) {
+        expect(error, isAssertionError);
+      }
     });
 
     testWidgets('throws if initialized with no bloc',
         (WidgetTester tester) async {
-      await tester.pumpWidget(MyAppNoBlocProviders());
-      expect(tester.takeException(), isInstanceOf<AssertionError>());
+      try {
+        await tester.pumpWidget(
+          BlocProviderTree(
+            blocProviders: null,
+            child: Container(),
+          ),
+        );
+      } catch (error) {
+        expect(error, isAssertionError);
+      }
     });
 
     testWidgets('throws if initialized with no child',
         (WidgetTester tester) async {
-      await tester.pumpWidget(MyAppNoChild());
-      expect(tester.takeException(), isInstanceOf<AssertionError>());
+      try {
+        await tester.pumpWidget(
+          BlocProviderTree(
+            blocProviders: [],
+            child: null,
+          ),
+        );
+      } catch (error) {
+        expect(error, isAssertionError);
+      }
     });
 
     testWidgets('passes blocs to children', (WidgetTester tester) async {
@@ -176,11 +170,14 @@ void main() {
         ),
       );
 
-      final Finder _counterFinder = find.byKey((Key('counter_text')));
-      expect(_counterFinder, findsOneWidget);
+      final MaterialApp materialApp = tester.widget(find.byType(MaterialApp));
+      expect(materialApp.theme, ThemeData.light());
 
-      final Text _counterText = _counterFinder.evaluate().first.widget as Text;
-      expect(_counterText.data, '0');
+      final Finder counterFinder = find.byKey((Key('counter_text')));
+      expect(counterFinder, findsOneWidget);
+
+      final Text counterText = tester.widget(counterFinder);
+      expect(counterText.data, '0');
     });
   });
 }

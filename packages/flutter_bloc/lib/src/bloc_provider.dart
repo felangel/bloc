@@ -1,6 +1,9 @@
 import 'package:flutter/widgets.dart';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'copyable.dart';
 
 /// Signature for the builder function which takes the [BuildContext]
 /// and is responsible for returning a [Bloc] which is to be provided to the subtree.
@@ -16,7 +19,8 @@ typedef BlocProviderBuilder<T extends Bloc<dynamic, dynamic>> = T Function(
 /// widget is disposed. In a few edge cases, such as when using `BlocProvider` to provide an
 /// existing bloc to another route, it might be necessary to prevent automatic disposal of the bloc.
 /// In those cases, the `dispose` property can be set to `false`.
-class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget {
+class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget
+    with Copyable {
   /// The [BlocProviderBuilder] which creates the [Bloc]
   /// that will be made available throughout the subtree.
   final BlocProviderBuilder<T> builder;
@@ -34,8 +38,8 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget {
   BlocProvider({
     Key key,
     @required this.builder,
-    this.dispose = true,
     this.child,
+    this.dispose = true,
   })  : assert(builder != null),
         super(key: key);
 
@@ -45,12 +49,9 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget {
   /// Method that allows widgets to access the bloc as long as their `BuildContext`
   /// contains a `BlocProvider` instance.
   static T of<T extends Bloc<dynamic, dynamic>>(BuildContext context) {
-    final type = _typeOf<_InheritedBlocProvider<T>>();
-    final _InheritedBlocProvider<T> provider = context
-        .ancestorInheritedElementForWidgetOfExactType(type)
-        ?.widget as _InheritedBlocProvider<T>;
-
-    if (provider == null) {
+    try {
+      return ImmutableProvider.of<T>(context);
+    } on FlutterError catch (_) {
       throw FlutterError(
         """
         BlocProvider.of() called with a context that does not contain a Bloc of type $T.
@@ -62,15 +63,11 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget {
         """,
       );
     }
-    return provider.bloc;
   }
 
-  /// Necessary to obtain generic [Type]
-  /// https://github.com/dart-lang/sdk/issues/11923
-  static Type _typeOf<T>() => T;
-
-  /// Clone the current [BlocProvider] with a new child [Widget].
+  /// Clones the current [BlocProvider] with a new child [Widget].
   /// All other values, including [Key] and [Bloc] are preserved.
+  @override
   BlocProvider<T> copyWith(Widget child) {
     return BlocProvider<T>(
       key: key,
@@ -97,8 +94,8 @@ class _BlocProviderState<T extends Bloc<dynamic, dynamic>>
 
   @override
   Widget build(BuildContext context) {
-    return _InheritedBlocProvider(
-      bloc: _bloc,
+    return ImmutableProvider<T>(
+      value: _bloc,
       child: widget.child,
     );
   }
@@ -110,20 +107,4 @@ class _BlocProviderState<T extends Bloc<dynamic, dynamic>>
     }
     super.dispose();
   }
-}
-
-class _InheritedBlocProvider<T extends Bloc<dynamic, dynamic>>
-    extends InheritedWidget {
-  final T bloc;
-
-  final Widget child;
-
-  _InheritedBlocProvider({
-    Key key,
-    @required this.bloc,
-    this.child,
-  }) : super(key: key, child: child);
-
-  @override
-  bool updateShouldNotify(_InheritedBlocProvider oldWidget) => false;
 }

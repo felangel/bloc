@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 
+import 'copyable.dart';
+
 /// Signature for the listener function which takes the [BuildContext] along with the bloc state
 /// and is responsible for executing in response to state changes.
 typedef BlocWidgetListener<S> = void Function(BuildContext context, S state);
@@ -13,7 +15,7 @@ typedef BlocWidgetListener<S> = void Function(BuildContext context, S state);
 /// such as navigation, showing a [SnackBar], showing a [Dialog], etc...
 /// The `listener` is guaranteed to only be called once for each state change unlike the
 /// `builder` in [BlocBuilder].
-class BlocListener<E, S> extends BlocListenerBase<E, S> {
+class BlocListener<E, S> extends BlocListenerBase<E, S> with Copyable {
   /// The [Bloc] whose state will be listened to.
   /// Whenever the bloc's state changes, `listener` will be invoked.
   final Bloc<E, S> bloc;
@@ -36,9 +38,10 @@ class BlocListener<E, S> extends BlocListenerBase<E, S> {
         assert(listener != null),
         super(key: key, bloc: bloc, listener: listener);
 
-  /// Clone the current [BlocListener] with a new child [Widget].
+  /// Clones the current [BlocListener] with a new child [Widget].
   /// All other values, including [Key], [Bloc] and [BlocWidgetListener] are
   /// preserved.
+  @override
   BlocListener<E, S> copyWith(Widget child) {
     return BlocListener<E, S>(
       key: key,
