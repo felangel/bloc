@@ -1,3 +1,7 @@
+# 0.14.4
+
+Additional Dependency and Documentation Updates.
+
 # 0.14.3
 
 Dependency and Documentation Updates.
