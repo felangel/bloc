@@ -107,12 +107,12 @@ void main() {
       counterBlocB.dispatch(CounterEvent.increment);
 
       expectLater(counterBlocA.state, emitsInOrder(expectedStatesA)).then((_) {
-        expect(listenerCallCountA, 3);
+        expect(listenerCallCountA, 2);
         expect(latestStateA, 2);
       });
 
       expectLater(counterBlocB.state, emitsInOrder(expectedStatesB)).then((_) {
-        expect(listenerCallCountB, 2);
+        expect(listenerCallCountB, 1);
         expect(latestStateB, 1);
       });
     });

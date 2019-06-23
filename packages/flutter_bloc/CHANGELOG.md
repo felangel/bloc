@@ -1,3 +1,7 @@
+# 0.18.2
+
+Fix `BlocListener` bug where `listener` gets called even when no state change occurs ([#368](https://github.com/felangel/bloc/issues/368)).
+
 # 0.18.1
 
 Minor Documentation Updates
