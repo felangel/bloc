@@ -73,6 +73,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget
       key: key,
       builder: builder,
       child: child,
+      dispose: dispose,
     );
   }
 }
