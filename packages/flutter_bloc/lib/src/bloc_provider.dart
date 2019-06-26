@@ -66,7 +66,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget
   }
 
   /// Clones the current [BlocProvider] with a new child [Widget].
-  /// All other values, including [Key] and [Bloc] are preserved.
+  /// All other values, including `key`, `builder` and `dispose` are preserved.
   @override
   BlocProvider<T> copyWith(Widget child) {
     return BlocProvider<T>(

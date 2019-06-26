@@ -39,7 +39,7 @@ class BlocListener<E, S> extends BlocListenerBase<E, S> with Copyable {
         super(key: key, bloc: bloc, listener: listener);
 
   /// Clones the current [BlocListener] with a new child [Widget].
-  /// All other values, including [Key], [Bloc] and [BlocWidgetListener] are
+  /// All other values, including `key`, `bloc` and `listener` are preserved.
   /// preserved.
   @override
   BlocListener<E, S> copyWith(Widget child) {

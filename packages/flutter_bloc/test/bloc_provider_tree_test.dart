@@ -5,6 +5,57 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc/bloc.dart';
 
+class MyAppWithNavigation extends StatelessWidget {
+  final Widget child;
+
+  MyAppWithNavigation({Key key, this.child}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(body: child),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  final VoidCallback onCounterBlocDisposed;
+  final VoidCallback onThemeBlocDisposed;
+  final bool shouldDisposeCounterBloc;
+  final bool shouldDisposeThemeBloc;
+
+  HomePage({
+    Key key,
+    this.onCounterBlocDisposed,
+    this.onThemeBlocDisposed,
+    this.shouldDisposeCounterBloc,
+    this.shouldDisposeThemeBloc,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProviderTree(
+      blocProviders: [
+        BlocProvider<CounterBloc>(
+          builder: (context) => CounterBloc(onDispose: onCounterBlocDisposed),
+          dispose: shouldDisposeCounterBloc,
+        ),
+        BlocProvider<ThemeBloc>(
+          builder: (context) => ThemeBloc(onDispose: onThemeBlocDisposed),
+          dispose: shouldDisposeThemeBloc,
+        )
+      ],
+      child: RaisedButton(
+        key: Key('pop_button'),
+        onPressed: () {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute<Container>(builder: (context) => Container()),
+          );
+        },
+      ),
+    );
+  }
+}
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -25,7 +76,6 @@ class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CounterBloc _counterBloc = BlocProvider.of<CounterBloc>(context);
-    final ThemeBloc _themeBloc = BlocProvider.of<ThemeBloc>(context);
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
@@ -48,27 +98,10 @@ class CounterPage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
-              child: Icon(Icons.add),
+              key: Key('pop_button'),
+              child: Icon(Icons.navigate_next),
               onPressed: () {
-                _counterBloc.dispatch(CounterEvent.increment);
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: Icon(Icons.remove),
-              onPressed: () {
-                _counterBloc.dispatch(CounterEvent.decrement);
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: Icon(Icons.update),
-              onPressed: () {
-                _themeBloc.dispatch(ThemeEvent.toggle);
+                Navigator.of(context).pop();
               },
             ),
           ),
@@ -81,6 +114,10 @@ class CounterPage extends StatelessWidget {
 enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
+  VoidCallback onDispose;
+
+  CounterBloc({this.onDispose});
+
   @override
   int get initialState => 0;
 
@@ -95,11 +132,21 @@ class CounterBloc extends Bloc<CounterEvent, int> {
         break;
     }
   }
+
+  @override
+  void dispose() {
+    this.onDispose?.call();
+    super.dispose();
+  }
 }
 
 enum ThemeEvent { toggle }
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
+  VoidCallback onDispose;
+
+  ThemeBloc({this.onDispose});
+
   @override
   ThemeData get initialState => ThemeData.light();
 
@@ -112,6 +159,12 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
             : ThemeData.dark();
         break;
     }
+  }
+
+  @override
+  void dispose() {
+    this.onDispose?.call();
+    super.dispose();
   }
 }
 
@@ -178,6 +231,63 @@ void main() {
 
       final Text counterText = tester.widget(counterFinder);
       expect(counterText.data, '0');
+    });
+
+    testWidgets('disposes blocs properly', (WidgetTester tester) async {
+      bool counterBlocDisposed = false;
+      bool themeBlocDisposed = false;
+
+      await tester.pumpWidget(
+        MyAppWithNavigation(
+          child: HomePage(
+            onCounterBlocDisposed: () {
+              counterBlocDisposed = true;
+            },
+            onThemeBlocDisposed: () {
+              themeBlocDisposed = true;
+            },
+          ),
+        ),
+      );
+
+      expect(counterBlocDisposed, false);
+      expect(themeBlocDisposed, false);
+
+      await tester.tap(find.byKey(Key('pop_button')));
+      await tester.pumpAndSettle();
+
+      expect(counterBlocDisposed, true);
+      expect(themeBlocDisposed, true);
+    });
+
+    testWidgets('does not disposes blocs if dispose = false',
+        (WidgetTester tester) async {
+      bool counterBlocDisposed = false;
+      bool themeBlocDisposed = false;
+
+      await tester.pumpWidget(
+        MyAppWithNavigation(
+          child: HomePage(
+            onCounterBlocDisposed: () {
+              counterBlocDisposed = true;
+            },
+            shouldDisposeCounterBloc: false,
+            onThemeBlocDisposed: () {
+              themeBlocDisposed = true;
+            },
+            shouldDisposeThemeBloc: false,
+          ),
+        ),
+      );
+
+      expect(counterBlocDisposed, false);
+      expect(themeBlocDisposed, false);
+
+      await tester.tap(find.byKey(Key('pop_button')));
+      await tester.pumpAndSettle();
+
+      expect(counterBlocDisposed, false);
+      expect(themeBlocDisposed, false);
     });
   });
 }
