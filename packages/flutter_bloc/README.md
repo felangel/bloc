@@ -108,7 +108,7 @@ BlocProviderTree(
 
 **BlocListener** is a Flutter widget which takes a `Bloc` and a `BlocWidgetListener` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
 
-`listener` is only called once for each state change (including `initialState`) unlike `builder` in `BlocBuilder` and is a `void` function.
+`listener` is only called once for each state change (**NOT** including `initialState`) unlike `builder` in `BlocBuilder` and is a `void` function.
 
 ```dart
 BlocListener(
