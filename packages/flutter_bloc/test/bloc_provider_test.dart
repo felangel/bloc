@@ -323,9 +323,15 @@ void main() {
       final expectedMessage = """
         BlocProvider.of() called with a context that does not contain a Bloc of type CounterBloc.
         No ancestor could be found starting from the context that was passed to BlocProvider.of<CounterBloc>().
-        This can happen if the context you use comes from a widget above the BlocProvider.
-        This can also happen if you used BlocProviderTree and didn\'t explicity provide 
-        the BlocProvider types: BlocProvider(bloc: CounterBloc()) instead of BlocProvider<CounterBloc>(bloc: CounterBloc()).
+
+        This can happen if:
+        1. The context you used comes from a widget above the BlocProvider.
+        2. You used BlocProviderTree and didn\'t explicity provide 
+        the BlocProvider types.
+
+        Good: BlocProvider<CounterBloc>(builder: (context) => CounterBloc())
+        Bad: BlocProvider(builder: (context) => CounterBloc()).
+
         The context used was: CounterPage(dirty)
         """;
       expect(exception is FlutterError, true);

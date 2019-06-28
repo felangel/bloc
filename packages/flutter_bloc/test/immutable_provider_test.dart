@@ -185,9 +185,15 @@ void main() {
       final expectedMessage = """
         ImmutableProvider.of() called with a context that does not contain a value of type Value.
         No ancestor could be found starting from the context that was passed to ImmutableProvider.of<Value>().
-        This can happen if the context you use comes from a widget above the ImmutableProvider.
-        This can also happen if you used ImmutableProviderTree and didn\'t explicity provide 
-        the ImmutableProvider types: ImmutableProvider(value: Value()) instead of ImmutableProvider<Value>(value: Value()).
+
+        This can happen if:
+        1. The context you used comes from a widget above the ImmutableProvider.
+        2. You used ImmutableProviderTree and didn\'t explicity provide 
+        the ImmutableProvider types.
+
+        Good: ImmutableProvider<Value>(value: Value())
+        Bad: ImmutableProvider(value: Value()).
+
         The context used was: CounterPage(dirty)
         """;
       expect(exception is FlutterError, true);

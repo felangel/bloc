@@ -35,9 +35,15 @@ class ImmutableProvider<T> extends InheritedWidget with Copyable {
         """
         ImmutableProvider.of() called with a context that does not contain a value of type $T.
         No ancestor could be found starting from the context that was passed to ImmutableProvider.of<$T>().
-        This can happen if the context you use comes from a widget above the ImmutableProvider.
-        This can also happen if you used ImmutableProviderTree and didn\'t explicity provide 
-        the ImmutableProvider types: ImmutableProvider(value: $T()) instead of ImmutableProvider<$T>(value: $T()).
+
+        This can happen if:
+        1. The context you used comes from a widget above the ImmutableProvider.
+        2. You used ImmutableProviderTree and didn\'t explicity provide 
+        the ImmutableProvider types.
+
+        Good: ImmutableProvider<$T>(value: $T())
+        Bad: ImmutableProvider(value: $T()).
+
         The context used was: $context
         """,
       );

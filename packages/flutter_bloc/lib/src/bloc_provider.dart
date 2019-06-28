@@ -56,9 +56,15 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget
         """
         BlocProvider.of() called with a context that does not contain a Bloc of type $T.
         No ancestor could be found starting from the context that was passed to BlocProvider.of<$T>().
-        This can happen if the context you use comes from a widget above the BlocProvider.
-        This can also happen if you used BlocProviderTree and didn\'t explicity provide 
-        the BlocProvider types: BlocProvider(bloc: $T()) instead of BlocProvider<$T>(bloc: $T()).
+
+        This can happen if:
+        1. The context you used comes from a widget above the BlocProvider.
+        2. You used BlocProviderTree and didn\'t explicity provide 
+        the BlocProvider types.
+
+        Good: BlocProvider<$T>(builder: (context) => $T())
+        Bad: BlocProvider(builder: (context) => $T()).
+
         The context used was: $context
         """,
       );
