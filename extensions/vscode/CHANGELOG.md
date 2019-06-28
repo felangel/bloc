@@ -1,3 +1,12 @@
+# 0.9.0
+
+Update Snippets for:
+
+- `ImmutableProvider`
+- `ImmutableProviderTree`
+
+to support changes in flutter_bloc `v0.18.0`
+
 # 0.8.0
 
 Update Snippets for:

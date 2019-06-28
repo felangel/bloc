@@ -93,6 +93,33 @@
       ")"
     ]
   },
+  "immutableprovider": {
+    "scope": "dart",
+    "prefix": "immutableprovider",
+    "body": [
+      "ImmutableProvider(",
+      "\tvalue: ${1:myValue},",
+      "\tchild: ${2:Container()},",
+      ")"
+    ]
+  },
+  "immutableprovidertree": {
+    "scope": "dart",
+    "prefix": "immutableprovidertree",
+    "body": [
+      "ImmutableProviderTree(",
+      "\timmutableProviders: [",
+      "\t\tImmutableProvider<${1:MyValue}>(",
+      "\t\t\tvalue: ${2:myValue},",
+      "\t\t),",
+      "\t\tImmutableProvider<${3:MyOtherValue}>(",
+      "\t\t\tvalue: ${4:myOtherValue},",
+      "\t\t),",
+      "\t],",
+      "\tchild: ${5:Container()},",
+      ")"
+    ]
+  },
   "blocdelegate": {
     "scope": "dart",
     "prefix": "blocdelegate",
