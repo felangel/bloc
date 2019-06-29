@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-
+import 'package:flutter_web/material.dart';
 import 'package:meta/meta.dart';
 
 class GradientContainer extends StatelessWidget {

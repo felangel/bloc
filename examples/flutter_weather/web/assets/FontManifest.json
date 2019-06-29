@@ -1,0 +1,26 @@
+[
+    {
+        "family": "MaterialIcons",
+        "fonts": [
+            {
+                "asset": "https://fonts.gstatic.com/s/materialicons/v42/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2"
+            }
+        ]
+    },
+    {
+        "family": "Merriweather",
+        "fonts": [
+            {
+                "asset": "fonts/Merriweather-Bold.ttf"
+            }
+        ]
+    },
+    {
+        "family": "Open Sans",
+        "fonts": [
+            {
+                "asset": "fonts/OpenSans-Regular.ttf"
+            }
+        ]
+    }
+]
