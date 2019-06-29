@@ -2,33 +2,33 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
-
-import 'copyable.dart';
+import 'package:provider/provider.dart';
 
 /// Signature for the listener function which takes the [BuildContext] along with the bloc state
 /// and is responsible for executing in response to state changes.
 typedef BlocWidgetListener<S> = void Function(BuildContext context, S state);
 
-/// A Flutter [Widget] which takes a [Bloc] and a [BlocWidgetListener]
-/// and invokes the listener in response to state changes in the bloc.
-/// It should be used for functionality that needs to occur only in response to a state change
-/// such as navigation, showing a [SnackBar], showing a [Dialog], etc...
-/// The `listener` is guaranteed to only be called once for each state change unlike the
-/// `builder` in [BlocBuilder].
-class BlocListener<E, S> extends BlocListenerBase<E, S> with Copyable {
+class BlocListener<E, S> extends BlocListenerBase<E, S>
+    with SingleChildCloneableWidget {
   /// The [Bloc] whose state will be listened to.
   /// Whenever the bloc's state changes, `listener` will be invoked.
   final Bloc<E, S> bloc;
 
   /// The [BlocWidgetListener] which will be called on every state change (including the `initialState`).
   /// This listener should be used for any code which needs to execute
-  /// in response to a state change (`Transition`).
-  /// The state will be the `nextState` for the most recent `Transition`.
+  /// in response to a state change ([Transition]).
+  /// The state will be the `nextState` for the most recent [Transition].
   final BlocWidgetListener<S> listener;
 
   /// The [Widget] which will be rendered as a descendant of the [BlocListener].
   final Widget child;
 
+  /// Takes a [Bloc] and a [BlocWidgetListener]
+  /// and invokes the listener in response to state changes in the bloc.
+  /// It should be used for functionality that needs to occur only in response to a state change
+  /// such as navigation, showing a [SnackBar], showing a [Dialog], etc...
+  /// The `listener` is guaranteed to only be called once for each state change unlike the
+  /// `builder` in [BlocBuilder].
   const BlocListener({
     Key key,
     @required this.bloc,
@@ -42,7 +42,7 @@ class BlocListener<E, S> extends BlocListenerBase<E, S> with Copyable {
   /// All other values, including `key`, `bloc` and `listener` are preserved.
   /// preserved.
   @override
-  BlocListener<E, S> copyWith(Widget child) {
+  BlocListener<E, S> cloneWithChild(Widget child) {
     return BlocListener<E, S>(
       key: key,
       bloc: bloc,
@@ -55,11 +55,6 @@ class BlocListener<E, S> extends BlocListenerBase<E, S> with Copyable {
   Widget build(BuildContext context) => child;
 }
 
-/// Base class for widgets that listen to state changes in a specified [Bloc].
-///
-/// A [BlocListenerBase] is stateful and maintains the state subscription.
-/// The type of the state and what happens with each state change
-/// is defined by sub-classes.
 abstract class BlocListenerBase<E, S> extends StatefulWidget {
   /// The [Bloc] whose state will be listened to.
   /// Whenever the bloc's state changes, `listener` will be invoked.
@@ -67,10 +62,15 @@ abstract class BlocListenerBase<E, S> extends StatefulWidget {
 
   /// The [BlocWidgetListener] which will be called on every state change.
   /// This listener should be used for any code which needs to execute
-  /// in response to a state change (`Transition`).
-  /// The state will be the `nextState` for the most recent `Transition`.
+  /// in response to a state change ([Transition]).
+  /// The state will be the `nextState` for the most recent [Transition].
   final BlocWidgetListener<S> listener;
 
+  /// Base class for widgets that listen to state changes in a specified [Bloc].
+  ///
+  /// A [BlocListenerBase] is stateful and maintains the state subscription.
+  /// The type of the state and what happens with each state change
+  /// is defined by sub-classes.
   const BlocListenerBase({
     Key key,
     @required this.bloc,
