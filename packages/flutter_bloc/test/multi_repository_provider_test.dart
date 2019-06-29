@@ -15,21 +15,21 @@ class MyApp extends StatelessWidget {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ValueA valueA = ImmutableProvider.of<ValueA>(context);
-    final ValueB valueB = ImmutableProvider.of<ValueB>(context);
+    final RepositoryA repositoryA = RepositoryProvider.of<RepositoryA>(context);
+    final RepositoryB repositoryB = RepositoryProvider.of<RepositoryB>(context);
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
       body: Column(
         children: [
           Text(
-            '${valueA.data}',
-            key: Key('valueA_data'),
+            '${repositoryA.data}',
+            key: Key('RepositoryA_data'),
             style: TextStyle(fontSize: 24.0),
           ),
           Text(
-            '${valueB.data}',
-            key: Key('valueB_data'),
+            '${repositoryB.data}',
+            key: Key('RepositoryB_data'),
             style: TextStyle(fontSize: 24.0),
           ),
         ],
@@ -38,26 +38,27 @@ class CounterPage extends StatelessWidget {
   }
 }
 
-class ValueA {
+class RepositoryA {
   final int data;
 
-  ValueA(this.data);
+  RepositoryA(this.data);
 }
 
-class ValueB {
+class RepositoryB {
   final int data;
 
-  ValueB(this.data);
+  RepositoryB(this.data);
 }
 
 void main() {
-  group('ImmutableProviderTree', () {
-    testWidgets('throws if initialized with no immutableProviders and no child',
+  group('MultiRepositoryProvider', () {
+    testWidgets(
+        'throws if initialized with no RepositoryProviders and no child',
         (WidgetTester tester) async {
       try {
         await tester.pumpWidget(
-          ImmutableProviderTree(
-            immutableProviders: null,
+          MultiRepositoryProvider(
+            providers: null,
             child: null,
           ),
         );
@@ -66,12 +67,12 @@ void main() {
       }
     });
 
-    testWidgets('throws if initialized with no immutableProviders',
+    testWidgets('throws if initialized with no RepositoryProviders',
         (WidgetTester tester) async {
       try {
         await tester.pumpWidget(
-          ImmutableProviderTree(
-            immutableProviders: null,
+          MultiRepositoryProvider(
+            providers: null,
             child: Container(),
           ),
         );
@@ -84,8 +85,8 @@ void main() {
         (WidgetTester tester) async {
       try {
         await tester.pumpWidget(
-          ImmutableProviderTree(
-            immutableProviders: [],
+          MultiRepositoryProvider(
+            providers: [],
             child: null,
           ),
         );
@@ -96,26 +97,28 @@ void main() {
 
     testWidgets('passes values to children', (WidgetTester tester) async {
       await tester.pumpWidget(
-        ImmutableProviderTree(
-          immutableProviders: [
-            ImmutableProvider<ValueA>(value: ValueA(0)),
-            ImmutableProvider<ValueB>(value: ValueB(1)),
+        MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider<RepositoryA>(
+                builder: (context) => RepositoryA(0)),
+            RepositoryProvider<RepositoryB>(
+                builder: (context) => RepositoryB(1)),
           ],
           child: MyApp(),
         ),
       );
 
-      final Finder valueAFinder = find.byKey((Key('valueA_data')));
-      expect(valueAFinder, findsOneWidget);
+      final Finder repositoryAFinder = find.byKey((Key('RepositoryA_data')));
+      expect(repositoryAFinder, findsOneWidget);
 
-      final Text valueAText = tester.widget(valueAFinder);
-      expect(valueAText.data, '0');
+      final Text repositoryAText = tester.widget(repositoryAFinder);
+      expect(repositoryAText.data, '0');
 
-      final Finder valueBFinder = find.byKey((Key('valueB_data')));
-      expect(valueBFinder, findsOneWidget);
+      final Finder repositoryBFinder = find.byKey((Key('RepositoryB_data')));
+      expect(repositoryBFinder, findsOneWidget);
 
-      final Text valueBText = tester.widget(valueBFinder);
-      expect(valueBText.data, '1');
+      final Text repositoryBText = tester.widget(repositoryBFinder);
+      expect(repositoryBText.data, '1');
     });
   });
 }

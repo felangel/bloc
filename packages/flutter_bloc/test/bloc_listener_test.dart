@@ -85,6 +85,34 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+class MyStatelessWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final counterBloc = BlocProvider.of<CounterBloc>(context);
+    return MaterialApp(
+      home: BlocBuilder(
+        bloc: counterBloc,
+        builder: (context, int state) {
+          return Scaffold(
+            body: Column(
+              children: <Widget>[
+                Text('$state'),
+                IconButton(
+                  key: Key('increment'),
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    counterBloc.dispatch(CounterEvent.increment);
+                  },
+                )
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
 void main() {
   group('BlocListener', () {
     testWidgets('throws if initialized with null bloc, listener, and child',
