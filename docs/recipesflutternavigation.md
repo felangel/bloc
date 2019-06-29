@@ -184,8 +184,9 @@ class MyApp extends StatelessWidget {
 class PageA extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final myBloc = BlocProvider.of<MyBloc>(context);
     return BlocListener(
-      bloc: BlocProvider.of<MyBloc>(context),
+      bloc: myBloc,
       listener: (BuildContext context, MyState state) {
         if (state is StateB) {
           Navigator.of(context).pushNamed('/pageB');
@@ -199,7 +200,7 @@ class PageA extends StatelessWidget {
           child: RaisedButton(
             child: Text('Go to PageB'),
             onPressed: () {
-              BlocProvider.of<MyBloc>(context).dispatch(MyEvent.eventB);
+              myBloc.dispatch(MyEvent.eventB);
             },
           ),
         ),
