@@ -135,7 +135,7 @@ Next, we'll take a look at how to provide a bloc across multiple pages/routes.
 
 ## Route Access
 
-> In this example, we're going to use `BlocProvider` to access a bloc across routes.
+> In this example, we're going to use `BlocProvider` to access a bloc across routes. Indeed if you push a new route you  will have a different `BuildContext` which doesn’t have a reference to the previously provided blocs. That's why we'll have to create a new `BlocProvider`.
 
 ### Bloc
 
