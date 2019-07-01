@@ -30,21 +30,33 @@ void main() async {
 }
 ```
 
-### 2. Extend `HydratedBloc`
+### 2. Extend `HydratedBloc` and override initialState, fromJson and toJson methods
 
 ```dart
-enum CounterEvent { increment, decrement }
-
-class CounterState {
-  int value;
-
-  CounterState(this.value);
-}
-
 class CounterBloc extends HydratedBloc<CounterEvent, CounterState> {
+  // You need to update state getter so it will get initialState
+  // from storage when it is already populated/loaded and parsed 
+  // without errors
   @override
   CounterState get initialState {
     return super.initialState ?? CounterState(0);
+  }
+
+  // This method is used to parse state object when retrieving its
+  // saved JSON version from HydratedBloc internal storage.
+  // Internally it is enclosed in try-catch block, so, to avoid
+  // unexpected errors its better to thoroughly test method
+  // somewhere else/enclose whole body and handle exceptions or
+  // errors inside.
+  @override
+  CounterState fromJson(Map<String, dynamic> source) {
+    return CounterState(source['value'] as int);
+  }
+
+  // Method which is used to convert bloc's state into JSON
+  @override
+  Map<String, int> toJson(CounterState state) {
+    return {'value': state.value};
   }
 
   @override
@@ -58,17 +70,16 @@ class CounterBloc extends HydratedBloc<CounterEvent, CounterState> {
         break;
     }
   }
-
-  @override
-  CounterState fromJson(Map<String, dynamic> source) {
-    return CounterState(source['value'] as int);
-  }
-
-  @override
-  Map<String, int> toJson(CounterState state) {
-    return {'value': state.value};
-  }
 }
+
+enum CounterEvent { increment, decrement }
+
+class CounterState {
+  int value;
+
+  CounterState(this.value);
+}
+
 ```
 
 Now our `CounterBloc` is a `HydratedBloc` and will automatically persist its state. We can increment the counter value, hot restart, kill the app, etc... and our `CounterBloc` will always retain its state.
