@@ -887,13 +887,7 @@ import 'package:wave/config.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final TimerBloc _timerBloc = TimerBloc(ticker: Ticker());
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -904,16 +898,10 @@ class _MyAppState extends State<MyApp> {
       ),
       title: 'Flutter Timer',
       home: BlocProvider(
-        bloc: _timerBloc,
+        builder: (context) => TimerBloc(ticker: Ticker()),
         child: Timer(),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _timerBloc.dispose();
-    super.dispose();
   }
 }
 
