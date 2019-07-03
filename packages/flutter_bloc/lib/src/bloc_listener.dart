@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:flutter/widgets.dart';
+
 import 'package:bloc/bloc.dart';
+import 'package:flutter/widgets.dart';
 
 /// Signature for the listener function which takes the [BuildContext] along with the bloc state
 /// and is responsible for executing in response to state changes.
@@ -34,6 +35,18 @@ class BlocListener<E, S> extends BlocListenerBase<E, S> {
   })  : assert(bloc != null),
         assert(listener != null),
         super(key: key, bloc: bloc, listener: listener);
+
+  /// Clones the current [BlocListener] with a new child [Widget].
+  /// All other values, including `key`, `bloc` and `listener` are preserved.
+  /// preserved.
+  BlocListener<E, S> copyWith(Widget child) {
+    return BlocListener<E, S>(
+      key: key,
+      bloc: bloc,
+      listener: listener,
+      child: child,
+    );
+  }
 
   @override
   Widget build(BuildContext context) => child;

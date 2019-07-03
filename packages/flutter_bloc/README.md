@@ -138,9 +138,9 @@ BlocListener(
 )
 ```
 
-**BlocListenerTree** is a Flutter widget that merges multiple `BlocListener` widgets into one.
-`BlocListenerTree` improves the readability and eliminates the need to nest multiple `BlocListeners`.
-By using `BlocListenerTree` we can go from:
+**MutliBlocListener** is a Flutter widget that merges multiple `BlocListener` widgets into one.
+`MutliBlocListener` improves the readability and eliminates the need to nest multiple `BlocListeners`.
+By using `MutliBlocListener` we can go from:
 
 ```dart
 BlocListener<BlocAEvent, BlocAState>(
@@ -161,8 +161,8 @@ BlocListener<BlocAEvent, BlocAState>(
 to:
 
 ```dart
-BlocListenerTree(
-  blocListeners: [
+MutliBlocListener(
+  listeners: [
     BlocListener<BlocAEvent, BlocAState>(
       bloc: BlocA(),
       listener: (BuildContext context, BlocAState state) {},
