@@ -26,7 +26,7 @@ environment:
 dependencies:
   meta: ">=1.1.0 <2.0.0"
   equatable: ^0.2.0
-  flutter_bloc: ^0.18.0
+  flutter_bloc: ^0.19.0
   flutter:
     sdk: flutter
 
@@ -1797,8 +1797,8 @@ class TodosApp extends StatelessWidget {
       ],
       routes: {
         ArchSampleRoutes.home: (context) {
-          return BlocProviderTree(
-            blocProviders: [
+          return MultiBlocProvider(
+            providers: [
               BlocProvider<TabBloc>(
                 builder: (context) => TabBloc(),
               ),
@@ -1836,11 +1836,11 @@ The `TodosApp` has two routes:
 - `Home` - which renders a `HomeScreen`
 - `AddTodo` - which renders a `AddEditScreen` with `isEditing` set to `false`.
 
-The `TodosApp` also makes the `TabBloc`, `FilteredTodosBloc`, and `StatsBloc` available to the widgets in its subtree by using the `BlocProviderTree` widget from [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc).
+The `TodosApp` also makes the `TabBloc`, `FilteredTodosBloc`, and `StatsBloc` available to the widgets in its subtree by using the `MultiBlocProvider` widget from [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc).
 
 ```dart
-BlocProviderTree(
-  blocProviders: [
+MultiBlocProvider(
+  providers: [
     BlocProvider<TabBloc>(
       builder: (context) => TabBloc(),
     ),
@@ -1870,7 +1870,7 @@ BlocProvider<TabBloc>(
 );
 ```
 
-You can see how using `BlocProviderTree` helps reduce the levels of nesting and makes the code easier to read and maintain.
+You can see how using `MultiBlocProvider` helps reduce the levels of nesting and makes the code easier to read and maintain.
 
 The entire `main.dart` should look like this:
 
@@ -1921,8 +1921,8 @@ class TodosApp extends StatelessWidget {
       ],
       routes: {
         ArchSampleRoutes.home: (context) {
-          return BlocProviderTree(
-            blocProviders: [
+          return MultiBlocProvider(
+            providers: [
               BlocProvider<TabBloc>(
                 builder: (context) => TabBloc(),
               ),

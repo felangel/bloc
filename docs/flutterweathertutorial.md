@@ -28,7 +28,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.18.0
+  flutter_bloc: ^0.19.0
   http: ^0.12.0
   equatable: ^0.2.0
 
@@ -1669,8 +1669,8 @@ void main() {
   );
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(
-    BlocProviderTree(
-      blocProviders: [
+    MultiBlocProvider(
+      providers: [
         BlocProvider<ThemeBloc>(
           builder: (context) => ThemeBloc(),
         ),
@@ -1684,7 +1684,7 @@ void main() {
 }
 ```
 
-Again, we're making `SettingsBloc` globally accessible using `BlocProvider` and we are also disposing it in the `dispose` callback. This time, however, since we are exposing more than one Bloc using `BlocProvider` at the same level we can eliminate some nesting by using the `BlocProviderTree` widget.
+Again, we're making `SettingsBloc` globally accessible using `BlocProvider` and we are also disposing it in the `dispose` callback. This time, however, since we are exposing more than one Bloc using `BlocProvider` at the same level we can eliminate some nesting by using the `MultiBlocProvider` widget.
 
 Now we need to create our `Settings` widget from which users can toggle the units.
 

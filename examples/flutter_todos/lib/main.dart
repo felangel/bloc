@@ -44,8 +44,8 @@ class TodosApp extends StatelessWidget {
       ],
       routes: {
         ArchSampleRoutes.home: (context) {
-          return BlocProviderTree(
-            blocProviders: [
+          return MultiBlocProvider(
+            providers: [
               BlocProvider<TabBloc>(
                 builder: (context) => TabBloc(),
               ),
