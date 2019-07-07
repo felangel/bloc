@@ -1,3 +1,7 @@
+# 0.10.1
+
+- Minor Documentation Updates
+
 # 0.10.0
 
 Update Snippets for:
