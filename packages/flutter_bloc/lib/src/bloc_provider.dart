@@ -1,57 +1,69 @@
 import 'package:flutter/widgets.dart';
-
+import 'package:meta/meta.dart';
+import 'package:provider/provider.dart';
 import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'copyable.dart';
-
-/// Signature for the builder function which takes the [BuildContext]
-/// and is responsible for returning a [Bloc] which is to be provided to the subtree.
-typedef BlocProviderBuilder<T extends Bloc<dynamic, dynamic>> = T Function(
-  BuildContext context,
-);
-
-/// A Flutter widget which provides a bloc to its children via `BlocProvider.of(context)`.
-/// It is used as a DI widget so that a single instance of a bloc can be provided
-/// to multiple widgets within a subtree.
-///
-/// By default, `BlocProvider` automatically disposes the provided bloc when the `BlocProvider`
-/// widget is disposed. In a few edge cases, such as when using `BlocProvider` to provide an
-/// existing bloc to another route, it might be necessary to prevent automatic disposal of the bloc.
-/// In those cases, the `dispose` property can be set to `false`.
-class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget
-    with Copyable {
-  /// The [BlocProviderBuilder] which creates the [Bloc]
-  /// that will be made available throughout the subtree.
-  final BlocProviderBuilder<T> builder;
-
-  /// The [Widget] and its descendants which will have access to the [Bloc].
-  final Widget child;
-
-  /// A `bool` which determines whether or not the [Bloc] should be automatically disposed
-  /// by [BlocProvider].
+class BlocProvider<T extends Bloc<dynamic, dynamic>> extends Provider<T> {
+  /// Takes a [ValueBuilder] that is responsible for
+  /// building the bloc and a child which will have access to the bloc via `BlocProvider.of(context)`.
+  /// It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided
+  /// to multiple widgets within a subtree.
   ///
-  /// The default value is `true` and it should only be set to `false` in very few cases
-  /// (such as where the multiple `BlocProviders` are used to provide the same [Bloc] across different routes).
-  final bool dispose;
-
+  /// Automatically handles disposing the bloc when used with a `builder`.
+  ///
+  /// ```dart
+  /// BlocProvider(
+  ///   builder: (BuildContext context) => BlocA(),
+  ///   child: ChildA(),
+  /// );
+  /// ```
   BlocProvider({
     Key key,
-    @required this.builder,
-    this.child,
-    this.dispose = true,
-  })  : assert(builder != null),
-        super(key: key);
+    @required ValueBuilder<T> builder,
+    Widget child,
+  }) : super(
+          key: key,
+          builder: builder,
+          dispose: (_, bloc) => bloc?.dispose(),
+          child: child,
+        );
 
-  @override
-  State<BlocProvider<T>> createState() => _BlocProviderState<T>();
+  /// Takes a `Bloc` and a child which will have access to the bloc via `BlocProvider.of(context)`.
+  /// When `BlocProvider.value` is used, the bloc will not be automatically disposed.
+  /// As a result, `BlocProvider.value` should mainly be used for providing existing blocs
+  /// to new routes.
+  ///
+  /// A new bloc should not be created in `BlocProvider.value`.
+  /// Blocs should always be created using the default constructor within the `builder`.
+  ///
+  /// ```dart
+  /// BlocProvider.value(
+  ///   value: BlocProvider.of<BlocA>(context),
+  ///   child: ScreenA(),
+  /// );
+  BlocProvider.value({
+    Key key,
+    @required T value,
+    Widget child,
+  }) : super.value(
+          key: key,
+          value: value,
+          child: child,
+        );
 
-  /// Method that allows widgets to access the bloc as long as their `BuildContext`
-  /// contains a `BlocProvider` instance.
+  /// Method that allows widgets to access a bloc instance as long as their `BuildContext`
+  /// contains a [BlocProvider] instance.
+  ///
+  /// If we want to access an instance of `BlocA` which was provided higher up in the widget tree
+  /// we can do so via:
+  ///
+  /// ```dart
+  /// BlocProvider.of<BlocA>(context)
+  /// ```
   static T of<T extends Bloc<dynamic, dynamic>>(BuildContext context) {
     try {
-      return ImmutableProvider.of<T>(context);
-    } on FlutterError catch (_) {
+      return Provider.of<T>(context, listen: false);
+    } catch (_) {
       throw FlutterError(
         """
         BlocProvider.of() called with a context that does not contain a Bloc of type $T.
@@ -59,8 +71,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget
 
         This can happen if:
         1. The context you used comes from a widget above the BlocProvider.
-        2. You used BlocProviderTree and didn\'t explicity provide 
-        the BlocProvider types.
+        2. You used MultiBlocProvider and didn\'t explicity provide the BlocProvider types.
 
         Good: BlocProvider<$T>(builder: (context) => $T())
         Bad: BlocProvider(builder: (context) => $T()).
@@ -69,49 +80,5 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends StatefulWidget
         """,
       );
     }
-  }
-
-  /// Clones the current [BlocProvider] with a new child [Widget].
-  /// All other values, including `key`, `builder` and `dispose` are preserved.
-  @override
-  BlocProvider<T> copyWith(Widget child) {
-    return BlocProvider<T>(
-      key: key,
-      builder: builder,
-      child: child,
-      dispose: dispose,
-    );
-  }
-}
-
-class _BlocProviderState<T extends Bloc<dynamic, dynamic>>
-    extends State<BlocProvider<T>> {
-  T _bloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _bloc = widget.builder(context);
-    if (_bloc == null) {
-      throw FlutterError(
-        'BlocProvider\'s builder method did not return a Bloc.',
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ImmutableProvider<T>(
-      value: _bloc,
-      child: widget.child,
-    );
-  }
-
-  @override
-  void dispose() {
-    if (widget.dispose ?? true) {
-      _bloc.dispose();
-    }
-    super.dispose();
   }
 }

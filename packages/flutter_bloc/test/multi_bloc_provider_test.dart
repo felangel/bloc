@@ -20,30 +20,53 @@ class MyAppWithNavigation extends StatelessWidget {
 class HomePage extends StatelessWidget {
   final VoidCallback onCounterBlocDisposed;
   final VoidCallback onThemeBlocDisposed;
-  final bool shouldDisposeCounterBloc;
-  final bool shouldDisposeThemeBloc;
+  final CounterBloc counterBlocValue;
+  final ThemeBloc themeBlocValue;
 
   HomePage({
     Key key,
     this.onCounterBlocDisposed,
     this.onThemeBlocDisposed,
-    this.shouldDisposeCounterBloc,
-    this.shouldDisposeThemeBloc,
+    this.counterBlocValue,
+    this.themeBlocValue,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProviderTree(
-      blocProviders: [
-        BlocProvider<CounterBloc>(
-          builder: (context) => CounterBloc(onDispose: onCounterBlocDisposed),
-          dispose: shouldDisposeCounterBloc,
-        ),
-        BlocProvider<ThemeBloc>(
-          builder: (context) => ThemeBloc(onDispose: onThemeBlocDisposed),
-          dispose: shouldDisposeThemeBloc,
-        )
-      ],
+    getProviders() {
+      final List<BlocProvider> providers = List<BlocProvider>();
+      if (counterBlocValue != null) {
+        providers.add(
+          BlocProvider<CounterBloc>.value(
+            value: counterBlocValue,
+          ),
+        );
+      } else {
+        providers.add(
+          BlocProvider<CounterBloc>(
+            builder: (context) => CounterBloc(onDispose: onCounterBlocDisposed),
+          ),
+        );
+      }
+
+      if (themeBlocValue != null) {
+        providers.add(
+          BlocProvider<ThemeBloc>.value(
+            value: themeBlocValue,
+          ),
+        );
+      } else {
+        providers.add(
+          BlocProvider<ThemeBloc>(
+            builder: (context) => ThemeBloc(onDispose: onThemeBlocDisposed),
+          ),
+        );
+      }
+      return providers;
+    }
+
+    return MultiBlocProvider(
+      providers: getProviders(),
       child: RaisedButton(
         key: Key('pop_button'),
         onPressed: () {
@@ -169,27 +192,13 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
 }
 
 void main() {
-  group('BlocProviderTree', () {
-    testWidgets('throws if initialized with no BlocProviders and no child',
+  group('MultiBlocProvider', () {
+    testWidgets('throws if initialized with no providers',
         (WidgetTester tester) async {
       try {
         await tester.pumpWidget(
-          BlocProviderTree(
-            blocProviders: null,
-            child: null,
-          ),
-        );
-      } catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
-    testWidgets('throws if initialized with no bloc',
-        (WidgetTester tester) async {
-      try {
-        await tester.pumpWidget(
-          BlocProviderTree(
-            blocProviders: null,
+          MultiBlocProvider(
+            providers: null,
             child: Container(),
           ),
         );
@@ -202,8 +211,8 @@ void main() {
         (WidgetTester tester) async {
       try {
         await tester.pumpWidget(
-          BlocProviderTree(
-            blocProviders: [],
+          MultiBlocProvider(
+            providers: [],
             child: null,
           ),
         );
@@ -214,8 +223,8 @@ void main() {
 
     testWidgets('passes blocs to children', (WidgetTester tester) async {
       await tester.pumpWidget(
-        BlocProviderTree(
-          blocProviders: [
+        MultiBlocProvider(
+          providers: [
             BlocProvider<CounterBloc>(builder: (context) => CounterBloc()),
             BlocProvider<ThemeBloc>(builder: (context) => ThemeBloc())
           ],
@@ -233,7 +242,8 @@ void main() {
       expect(counterText.data, '0');
     });
 
-    testWidgets('disposes blocs properly', (WidgetTester tester) async {
+    testWidgets('calls dispose on bloc automatically',
+        (WidgetTester tester) async {
       bool counterBlocDisposed = false;
       bool themeBlocDisposed = false;
 
@@ -260,22 +270,23 @@ void main() {
       expect(themeBlocDisposed, true);
     });
 
-    testWidgets('does not disposes blocs if dispose = false',
+    testWidgets('does not dispose when created using value',
         (WidgetTester tester) async {
       bool counterBlocDisposed = false;
       bool themeBlocDisposed = false;
 
+      final CounterBloc counterBloc = CounterBloc(onDispose: () {
+        counterBlocDisposed = true;
+      });
+      final ThemeBloc themeBloc = ThemeBloc(onDispose: () {
+        themeBlocDisposed = true;
+      });
+
       await tester.pumpWidget(
         MyAppWithNavigation(
           child: HomePage(
-            onCounterBlocDisposed: () {
-              counterBlocDisposed = true;
-            },
-            shouldDisposeCounterBloc: false,
-            onThemeBlocDisposed: () {
-              themeBlocDisposed = true;
-            },
-            shouldDisposeThemeBloc: false,
+            counterBlocValue: counterBloc,
+            themeBlocValue: themeBloc,
           ),
         ),
       );

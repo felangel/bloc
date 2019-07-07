@@ -28,14 +28,14 @@ class SimpleBlocDelegate extends BlocDelegate {
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(
-    BlocProviderTree(
-      blocProviders: [
+    MultiBlocProvider(
+      providers: [
         BlocProvider<CounterBloc>(
           builder: (context) => CounterBloc(),
         ),
         BlocProvider<ThemeBloc>(
           builder: (context) => ThemeBloc(),
-        )
+        ),
       ],
       child: App(),
     ),
