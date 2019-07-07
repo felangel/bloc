@@ -1,3 +1,14 @@
+# 0.10.0
+
+Update Snippets for:
+
+- `RepositoryProvider`
+- `MultiRepositoryProvider`
+- `MultiBlocProvider`
+- `MultiBlocListener`
+
+to support changes in flutter_bloc `v0.19.0`
+
 # 0.9.0
 
 Update Snippets for:

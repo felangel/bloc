@@ -43,12 +43,12 @@
       ")"
     ]
   },
-  "bloclistenertree": {
+  "multibloclistener": {
     "scope": "dart",
-    "prefix": "bloclistenertree",
+    "prefix": "multibloclistener",
     "body": [
-      "BlocListenerTree(",
-      "\tblocListeners: [",
+      "MultiBlocListener(",
+      "\tlisteners: [",
       "\t\tBlocListener<${1:MyEvent}, ${2:MyState}>(",
       "\t\t\tbloc: ${3:_myBloc},",
       "\t\t\tlistener: (BuildContext context, ${2:MyState} state) {",
@@ -76,12 +76,12 @@
       ")"
     ]
   },
-  "blocprovidertree": {
+  "multiblocprovider": {
     "scope": "dart",
-    "prefix": "blocprovidertree",
+    "prefix": "multiblocprovider",
     "body": [
-      "BlocProviderTree(",
-      "\tblocProviders: [",
+      "MultiBlocProvider(",
+      "\tproviders: [",
       "\t\tBlocProvider<${1:MyBloc}>(",
       "\t\t\tbuilder: (BuildContext context) => ${1:MyBloc}(),",
       "\t\t),",
@@ -93,27 +93,27 @@
       ")"
     ]
   },
-  "immutableprovider": {
+  "repositoryprovider": {
     "scope": "dart",
-    "prefix": "immutableprovider",
+    "prefix": "repositoryprovider",
     "body": [
-      "ImmutableProvider(",
-      "\tvalue: ${1:myValue},",
+      "RepositoryProvider(",
+      "\tbuilder: (BuildContext context) => ${1:myValue},",
       "\tchild: ${2:Container()},",
       ")"
     ]
   },
-  "immutableprovidertree": {
+  "multirepositoryprovider": {
     "scope": "dart",
-    "prefix": "immutableprovidertree",
+    "prefix": "multirepositoryprovider",
     "body": [
-      "ImmutableProviderTree(",
-      "\timmutableProviders: [",
-      "\t\tImmutableProvider<${1:MyValue}>(",
-      "\t\t\tvalue: ${2:myValue},",
+      "MultiRepositoryProvider(",
+      "\tproviders: [",
+      "\t\tRepositoryProvider<${1:MyValue}>(",
+      "\t\t\tbuilder: (BuildContext context) => ${2:myValue},",
       "\t\t),",
-      "\t\tImmutableProvider<${3:MyOtherValue}>(",
-      "\t\t\tvalue: ${4:myOtherValue},",
+      "\t\tRepositoryProvider<${3:MyOtherValue}>(",
+      "\t\t\tbuilder: (BuildContext context) => ${4:myOtherValue},",
       "\t\t),",
       "\t],",
       "\tchild: ${5:Container()},",
