@@ -1,3 +1,26 @@
+# 0.19.0
+
+Addresses [#354](https://github.com/felangel/bloc/issues/354)
+
+#### BlocProvider
+
+- Refactor `BlocProvider` to extend `Provider`
+- Rename `BlocProviderTree` to `MultiBlocProvider`
+
+#### ImmutableProvider
+
+- Refactor `ImmutableProvider` to extend `Provider`
+- Rename `ImmutableProvider` to `RepositoryProvider`
+- Rename `ImmutableProviderTree` to `MultiRepositoryProvider`
+
+#### BlocListener
+
+- Rename `BlocListenerTree` to `MultiBlocListener`
+
+#### Documentation
+
+- Inline documentation updates/improvements
+
 # 0.18.3
 
 Fix `BlocProvider` bug where `copyWith` does not preserve `dispose` value ([#376](https://github.com/felangel/bloc/issues/376)).
