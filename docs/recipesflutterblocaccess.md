@@ -210,9 +210,8 @@ class HomePage extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute<CounterPage>(
                 builder: (context) {
-                  return BlocProvider(
-                    builder: (BuildContext context) => counterBloc,
-                    dispose: false,
+                  return BlocProvider.value(
+                    value: counterBloc,
                     child: CounterPage(),
                   );
                 },
