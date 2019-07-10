@@ -24,7 +24,7 @@ See `BlocListener` if you want to "do" anything in response to state changes suc
 
 ```dart
 BlocBuilder(
-  bloc: BlocA(),
+  bloc: BlocProvider.of<BlocA>(context),
   builder: (context, state) {
     // return widget here based on BlocA's state
   }
@@ -35,7 +35,7 @@ If you want fine-grained control over when the builder function is called you ca
 
 ```dart
 BlocBuilder(
-  bloc: BlocA(),
+  bloc: BlocProvider.of<BlocA>(context),
   condition: (previousState, currentState) {
     // return true/false to determine whether or not
     // to rebuild the widget with currentState
@@ -46,33 +46,35 @@ BlocBuilder(
 )
 ```
 
-**BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a DI widget so that a single instance of a bloc can be provided to multiple widgets within a subtree. By default, `BlocProvider` automatically disposes the provided bloc when the `BlocProvider` widget is disposed. In a few edge cases, such as when using `BlocProvider` to provide an existing bloc to another route, it might be necessary to prevent automatic disposal of the bloc. In those cases, the `dispose` property can be set to `false`.
+**BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
+
+In most cases, `BlocProvider` should be used to build new `blocs` which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle disposing the bloc.
 
 ```dart
-// Automatically disposes the instance of BlocA
-// Recommended usage for most cases.
 BlocProvider(
   builder: (BuildContext context) => BlocA(),
-  child: ChildA(),
-);
-
-// Does not automatically dispose the instance of BlocA.
-BlocProvider(
-  builder: (BuildContext context) => BlocA(),
-  dispose: false,
   child: ChildA(),
 );
 ```
 
-then from `ChildA` we can retrieve `BlocA` with:
+In some cases, `BlocProvider` can be used to provide an existing bloc to a new portion of the widget tree. This will be most commonly used when an existing `bloc` needs to be made available to a new route. In this case, `BlocProvider` will not automatically dispose the bloc since it did not create it.
+
+```dart
+BlocProvider.value(
+  value: BlocProvider.of<BlocA>(context),
+  child: ScreenA(),
+);
+```
+
+then from either `ChildA`, or `ScreenA` we can retrieve `BlocA` with:
 
 ```dart
 BlocProvider.of<BlocA>(context)
 ```
 
-**BlocProviderTree** is a Flutter widget that merges multiple `BlocProvider` widgets into one.
-`BlocProviderTree` improves the readability and eliminates the need to nest multiple `BlocProviders`.
-By using `BlocProviderTree` we can go from:
+**MultiBlocProvider** is a Flutter widget that merges multiple `BlocProvider` widgets into one.
+`MultiBlocProvider` improves the readability and eliminates the need to nest multiple `BlocProviders`.
+By using `MultiBlocProvider` we can go from:
 
 ```dart
 BlocProvider<BlocA>(
@@ -90,8 +92,8 @@ BlocProvider<BlocA>(
 to:
 
 ```dart
-BlocProviderTree(
-  blocProviders: [
+MultiBlocProvider(
+  providers: [
     BlocProvider<BlocA>(
       builder: (BuildContext context) => BlocA(),
     ),
@@ -108,7 +110,7 @@ BlocProviderTree(
 
 **BlocListener** is a Flutter widget which takes a `Bloc` and a `BlocWidgetListener` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
 
-`listener` is only called once for each state change (including `initialState`) unlike `builder` in `BlocBuilder` and is a `void` function.
+`listener` is only called once for each state change (**NOT** including `initialState`) unlike `builder` in `BlocBuilder` and is a `void` function.
 
 ```dart
 BlocListener(
@@ -138,9 +140,9 @@ BlocListener(
 )
 ```
 
-**BlocListenerTree** is a Flutter widget that merges multiple `BlocListener` widgets into one.
-`BlocListenerTree` improves the readability and eliminates the need to nest multiple `BlocListeners`.
-By using `BlocListenerTree` we can go from:
+**MultiBlocListener** is a Flutter widget that merges multiple `BlocListener` widgets into one.
+`MultiBlocListener` improves the readability and eliminates the need to nest multiple `BlocListeners`.
+By using `MultiBlocListener` we can go from:
 
 ```dart
 BlocListener<BlocAEvent, BlocAState>(
@@ -161,8 +163,8 @@ BlocListener<BlocAEvent, BlocAState>(
 to:
 
 ```dart
-BlocListenerTree(
-  blocListeners: [
+MultiBlocListener(
+  listeners: [
     BlocListener<BlocAEvent, BlocAState>(
       bloc: BlocA(),
       listener: (BuildContext context, BlocAState state) {},
@@ -174,6 +176,57 @@ BlocListenerTree(
     BlocListener<BlocCEvent, BlocCState>(
       bloc: BlocC(),
       listener: (BuildContext context, BlocCState state) {},
+    ),
+  ],
+  child: ChildA(),
+)
+```
+
+**RepositoryProvider** is a Flutter widget which provides a repository to its children via `RepositoryProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a repository can be provided to multiple widgets within a subtree. `BlocProvider` should be used to provide blocs whereas `RepositoryProvider` should only be used for repositories.
+
+```dart
+RepositoryProvider(
+  builder: (context) => RepositoryA(),
+  child: ChildA(),
+);
+```
+
+then from `ChildA` we can retrieve the `Repository` instance with:
+
+```dart
+RepositoryProvider.of<RepositoryA>(context)
+```
+
+**MultiRepositoryProvider** is a Flutter widget that merges multiple `RepositoryProvider` widgets into one.
+`MultiRepositoryProvider` improves the readability and eliminates the need to nest multiple `RepositoryProvider`.
+By using `MultiRepositoryProvider` we can go from:
+
+```dart
+RepositoryProvider<RepositoryA>(
+  builder: (context) => RepositoryA(),
+  child: RepositoryProvider<RepositoryB>(
+    builder: (context) => RepositoryB(),
+    child: RepositoryProvider<RepositoryC>(
+      builder: (context) => RepositoryC(),
+      child: ChildA(),
+    )
+  )
+)
+```
+
+to:
+
+```dart
+MultiRepositoryProvider(
+  providers: [
+    RepositoryProvider<RepositoryA>(
+      builder: (context) => RepositoryA(),
+    ),
+    RepositoryProvider<RepositoryB>(
+      builder: (context) => RepositoryB(),
+    ),
+    RepositoryProvider<RepositoryC>(
+      builder: (context) => RepositoryC(),
     ),
   ],
   child: ChildA(),
@@ -213,12 +266,12 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final CounterBloc _counterBloc = BlocProvider.of<CounterBloc>(context);
+    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
       body: BlocBuilder<CounterEvent, int>(
-        bloc: _counterBloc,
+        bloc: counterBloc,
         builder: (BuildContext context, int count) {
           return Center(
             child: Text(
@@ -237,7 +290,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                _counterBloc.dispatch(CounterEvent.increment);
+                counterBloc.dispatch(CounterEvent.increment);
               },
             ),
           ),
@@ -246,7 +299,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.remove),
               onPressed: () {
-                _counterBloc.dispatch(CounterEvent.decrement);
+                counterBloc.dispatch(CounterEvent.decrement);
               },
             ),
           ),
@@ -259,9 +312,46 @@ class CounterPage extends StatelessWidget {
 
 At this point we have successfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
 
-## Dart Versions
+## Gallery
 
-- Dart 2: >= 2.0.0
+<div style="text-align: center">
+    <table>
+        <tr>
+            <td style="text-align: center">
+                <a href="https://felangel.github.io/bloc/#/fluttercountertutorial">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_counter.gif" width="200"/>
+                </a>
+            </td>            
+            <td style="text-align: center">
+                <a href="https://felangel.github.io/bloc/#/flutterinfinitelisttutorial">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_infinite_list.gif" width="200"/>
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a href="https://felangel.github.io/bloc/#/flutterfirebaselogintutorial">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_firebase_login.gif" width="200" />
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center">
+                <a href="https://felangel.github.io/bloc/#/flutterangulargithubsearch">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_github_search.gif" width="200"/>
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a href="https://felangel.github.io/bloc/#/flutterweathertutorial">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_weather.gif" width="200"/>
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a href="https://felangel.github.io/bloc/#/fluttertodostutorial">
+                    <img src="https://felangel.github.io/bloc/assets/gifs/flutter_todos.gif" width="200"/>
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
 
 ## Examples
 
@@ -275,6 +365,10 @@ At this point we have successfully separated our presentational layer from our b
 - [Weather](https://felangel.github.io/bloc/#/flutterweathertutorial) - an example of how to create a Weather Application using the `bloc` and `flutter_bloc` packages. The app uses a `RefreshIndicator` to implement "pull-to-refresh" as well as dynamic theming.
 - [Todos](https://felangel.github.io/bloc/#/fluttertodostutorial) - an example of how to create a Todos Application using the `bloc` and `flutter_bloc` packages.
 - [Timer](https://felangel.github.io/bloc/#/fluttertimertutorial) - an example of how to create a Timer using the `bloc` and `flutter_bloc` packages.
+
+## Dart Versions
+
+- Dart 2: >= 2.0.0
 
 ### Maintainers
 

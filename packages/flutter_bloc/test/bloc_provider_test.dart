@@ -8,25 +8,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyApp extends StatelessWidget {
   final CounterBloc Function(BuildContext context) _builder;
-  final bool _dispose;
+  final CounterBloc _value;
   final Widget _child;
 
   const MyApp({
     Key key,
-    @required CounterBloc Function(BuildContext context) builder,
+    CounterBloc Function(BuildContext context) builder,
+    CounterBloc value,
     bool dispose,
     @required Widget child,
   })  : _builder = builder,
-        _dispose = dispose,
+        _value = value,
         _child = child,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (_value != null) {
+      return MaterialApp(
+        home: BlocProvider<CounterBloc>.value(
+          value: _value,
+          child: _child,
+        ),
+      );
+    }
     return MaterialApp(
       home: BlocProvider<CounterBloc>(
         builder: _builder,
-        dispose: _dispose,
         child: _child,
       ),
     );
@@ -190,16 +198,6 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 }
 
-class SimpleBloc extends Bloc<dynamic, String> {
-  @override
-  String get initialState => '';
-
-  @override
-  Stream<String> mapEventToState(dynamic event) async* {
-    yield 'state';
-  }
-}
-
 void main() {
   group('BlocProvider', () {
     testWidgets('throws if initialized with no builder',
@@ -218,19 +216,6 @@ void main() {
         child: null,
       ));
       expect(tester.takeException(), isInstanceOf<AssertionError>());
-    });
-
-    testWidgets('throws FlutterError if initialized with invalid builder',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(MyApp(
-        builder: (context) => null,
-        child: CounterPage(),
-      ));
-      final dynamic exception = tester.takeException();
-      final String message =
-          'BlocProvider\'s builder method did not return a Bloc.';
-      expect(exception, isInstanceOf<FlutterError>());
-      expect((exception as FlutterError).message, message);
     });
 
     testWidgets('passes bloc to children', (WidgetTester tester) async {
@@ -272,42 +257,17 @@ void main() {
       expect(disposeCalled, true);
     });
 
-    testWidgets('calls dispose on bloc when dispose = true',
+    testWidgets('does not dispose when created using value',
         (WidgetTester tester) async {
       bool disposeCalled = false;
-      final _builder = (BuildContext context) => CounterBloc(
-            onDispose: () {
-              disposeCalled = true;
-            },
-          );
+      final _value = CounterBloc(
+        onDispose: () {
+          disposeCalled = true;
+        },
+      );
       final Widget _child = RoutePage();
       await tester.pumpWidget(MyApp(
-        builder: _builder,
-        dispose: true,
-        child: _child,
-      ));
-
-      final Finder _routeButtonFinder = find.byKey((Key('route_button')));
-      expect(_routeButtonFinder, findsOneWidget);
-      expect(disposeCalled, false);
-
-      await tester.tap(_routeButtonFinder);
-      await tester.pumpAndSettle();
-
-      expect(disposeCalled, true);
-    });
-
-    testWidgets('does not dispose when dispose = false',
-        (WidgetTester tester) async {
-      bool disposeCalled = false;
-      final _builder = (BuildContext context) => CounterBloc(
-            onDispose: () {
-              disposeCalled = true;
-            },
-          );
-      final Widget _child = RoutePage();
-      await tester.pumpWidget(MyApp(
-        builder: _builder,
+        value: _value,
         dispose: false,
         child: _child,
       ));
@@ -333,9 +293,14 @@ void main() {
       final expectedMessage = """
         BlocProvider.of() called with a context that does not contain a Bloc of type CounterBloc.
         No ancestor could be found starting from the context that was passed to BlocProvider.of<CounterBloc>().
-        This can happen if the context you use comes from a widget above the BlocProvider.
-        This can also happen if you used BlocProviderTree and didn\'t explicity provide 
-        the BlocProvider types: BlocProvider(bloc: CounterBloc()) instead of BlocProvider<CounterBloc>(bloc: CounterBloc()).
+
+        This can happen if:
+        1. The context you used comes from a widget above the BlocProvider.
+        2. You used MultiBlocProvider and didn\'t explicity provide the BlocProvider types.
+
+        Good: BlocProvider<CounterBloc>(builder: (context) => CounterBloc())
+        Bad: BlocProvider(builder: (context) => CounterBloc()).
+
         The context used was: CounterPage(dirty)
         """;
       expect(exception is FlutterError, true);
