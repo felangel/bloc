@@ -302,7 +302,7 @@ void main() {
         Bad: BlocProvider(builder: (context) => CounterBloc()).
 
         The context used was: CounterPage(dirty)
-        """;
+""";
       expect(exception is FlutterError, true);
       expect(exception.message, expectedMessage);
     });

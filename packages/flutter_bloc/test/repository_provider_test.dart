@@ -221,7 +221,7 @@ void main() {
         Bad: RepositoryProvider(builder: (context) => Repository()).
 
         The context used was: CounterPage(dirty)
-        """;
+""";
       expect(exception is FlutterError, true);
       expect(exception.message, expectedMessage);
     });

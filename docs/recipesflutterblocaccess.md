@@ -210,9 +210,8 @@ class HomePage extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute<CounterPage>(
                 builder: (context) {
-                  return BlocProvider(
-                    builder: (BuildContext context) => counterBloc,
-                    dispose: false,
+                  return BlocProvider.value(
+                    value: counterBloc,
                     child: CounterPage(),
                   );
                 },
@@ -257,7 +256,7 @@ The `HomePage` is similar to the `CounterPage` in the above example; however, in
 
 When the user taps the `RaisedButton`, we push a new `MaterialPageRoute` and return the `CounterPage`; however, we are wrapping the `CounterPage` in a `BlocProvider` in order to make the current `CounterBloc` instance available on the next page.
 
-!> It is critical that we are not disposing the `CounterBloc` in the second `BlocProvider` because we still need the `CounterBloc` to function in the ancestor widgets. Instead, we simply pass the existing `CounterBloc` to the new page and set the `dispose` property in `BlocProvider` to false. This ensures that the top level `BlocProvider` handle disposing the `CounterBloc` when it is no longer needed.
+!> It is critical that we are using `BlocProvider's` value constructor in this case because we are providing an existing instance of `CounterBloc`. The value constructor of `BlocProvider` should be used only in cases where we want to provide an existing bloc to a new subtree. In addition, using the value constructor will not dispose the bloc automatically which, in this case, is what we want (since we still need the `CounterBloc` to function in the ancestor widgets). Instead, we simply pass the existing `CounterBloc` to the new page as an existing value as opposed to in a builder. This ensures that the only top level `BlocProvider` handles disposing the `CounterBloc` when it is no longer needed.
 
 #### CounterPage
 
