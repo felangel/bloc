@@ -36,8 +36,8 @@ void main() {
   );
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(
-    BlocProviderTree(
-      blocProviders: [
+    MultiBlocProvider(
+      providers: [
         BlocProvider<ThemeBloc>(
           builder: (context) => ThemeBloc(),
         ),

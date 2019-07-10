@@ -28,7 +28,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.17.0
+  flutter_bloc: ^0.19.0
   equatable: ^0.2.0
   wave: ^0.0.8
 
@@ -887,13 +887,7 @@ import 'package:wave/config.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final TimerBloc _timerBloc = TimerBloc(ticker: Ticker());
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -904,16 +898,10 @@ class _MyAppState extends State<MyApp> {
       ),
       title: 'Flutter Timer',
       home: BlocProvider(
-        bloc: _timerBloc,
+        builder: (context) => TimerBloc(ticker: Ticker()),
         child: Timer(),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _timerBloc.dispose();
-    super.dispose();
   }
 }
 

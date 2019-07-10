@@ -22,13 +22,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 
 void main() {
-  group('BlocListenerTree', () {
-    testWidgets('throws if initialized with no blocListeners and no child',
+  group('MultiBlocListener', () {
+    testWidgets('throws if initialized with no listeners and no child',
         (WidgetTester tester) async {
       try {
         await tester.pumpWidget(
-          BlocListenerTree(
-            blocListeners: null,
+          MultiBlocListener(
+            listeners: null,
             child: null,
           ),
         );
@@ -37,12 +37,12 @@ void main() {
       }
     });
 
-    testWidgets('throws if initialized with no bloc',
+    testWidgets('throws if initialized with no listeners',
         (WidgetTester tester) async {
       try {
         await tester.pumpWidget(
-          BlocListenerTree(
-            blocListeners: null,
+          MultiBlocListener(
+            listeners: null,
             child: Container(),
           ),
         );
@@ -55,8 +55,8 @@ void main() {
         (WidgetTester tester) async {
       try {
         await tester.pumpWidget(
-          BlocListenerTree(
-            blocListeners: [],
+          MultiBlocListener(
+            listeners: [],
             child: null,
           ),
         );
@@ -78,8 +78,8 @@ void main() {
       final expectedStatesB = [0, 1];
 
       await tester.pumpWidget(
-        BlocListenerTree(
-          blocListeners: [
+        MultiBlocListener(
+          listeners: [
             BlocListener<CounterEvent, int>(
               bloc: counterBlocA,
               listener: (BuildContext context, int state) {
@@ -95,24 +95,24 @@ void main() {
               },
             ),
           ],
-          child: Container(key: Key('bloclistenertree_child')),
+          child: Container(key: Key('multiBlocListener_child')),
         ),
       );
       await tester.pumpAndSettle();
 
-      expect(find.byKey(Key('bloclistenertree_child')), findsOneWidget);
+      expect(find.byKey(Key('multiBlocListener_child')), findsOneWidget);
 
       counterBlocA.dispatch(CounterEvent.increment);
       counterBlocA.dispatch(CounterEvent.increment);
       counterBlocB.dispatch(CounterEvent.increment);
 
       expectLater(counterBlocA.state, emitsInOrder(expectedStatesA)).then((_) {
-        expect(listenerCallCountA, 3);
+        expect(listenerCallCountA, 2);
         expect(latestStateA, 2);
       });
 
       expectLater(counterBlocB.state, emitsInOrder(expectedStatesB)).then((_) {
-        expect(listenerCallCountB, 2);
+        expect(listenerCallCountB, 1);
         expect(latestStateB, 1);
       });
     });

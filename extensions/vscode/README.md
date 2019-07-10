@@ -67,9 +67,9 @@ In a `.dart` file activate the snippet by typing `bloclistener` and hitting ente
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloclistener-snippet-usage.gif)
 
-### BlocListenerTree
+### MultiBlocListener
 
-In a `.dart` file activate the snippet by typing `bloclistenertree` and hitting enter. Then you can fill in the implementation details by tabbing.
+In a `.dart` file activate the snippet by typing `multibloclistener` and hitting enter. Then you can fill in the implementation details by tabbing.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloclistenertree-snippet-usage.gif)
 
@@ -79,9 +79,9 @@ In a `.dart` file activate the snippet by typing `blocprovider` and hitting ente
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovider-snippet-usage.gif)
 
-### BlocProviderTree
+### MultiBlocProvider
 
-In a `.dart` file activate the snippet by typing `blocprovidertree` and hitting enter. Then you can fill in the implementation details by tabbing.
+In a `.dart` file activate the snippet by typing `multiblocprovider` and hitting enter. Then you can fill in the implementation details by tabbing.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovidertree-snippet-usage.gif)
 
