@@ -30,7 +30,7 @@ class HydratedBlocStorage implements HydratedStorage {
       return _instance;
     }
 
-    final Directory directory = await getApplicationDocumentsDirectory();
+    final Directory directory = await getTemporaryDirectory();
     final File file = File('${directory.path}/$_hydratedBlocStorageName');
     Map<String, dynamic> storage = Map<String, dynamic>();
 

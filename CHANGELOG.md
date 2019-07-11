@@ -1,3 +1,8 @@
+# 0.3.0
+
+- Update `HydratedBlocStorage` to use `getTemporaryDirectory` instead of `getApplicationDocumentsDirectory`
+- Documentation Updates
+
 # 0.2.1
 
 - Bugfix to handle `Blocs` alongside `HydrateBlocs` within the same application.
