@@ -140,6 +140,21 @@ BlocListener(
 )
 ```
 
+If you want fine-grained control over when the listener function is called you can provide an optional `condition` to `BlocListener`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `listener` will be called with `currentState`. If `condition` returns false, `listener` will not be called with `currentState`.
+
+```dart
+BlocListener(
+  bloc: BlocProvider.of<BlocA>(context),
+  condition: (previousState, currentState) {
+    // return true/false to determine whether or not
+    // to call listener with currentState
+  },
+  listener: (context, state) {
+    // do stuff here based on BlocA's state
+  }
+)
+```
+
 **MultiBlocListener** is a Flutter widget that merges multiple `BlocListener` widgets into one.
 `MultiBlocListener` improves the readability and eliminates the need to nest multiple `BlocListeners`.
 By using `MultiBlocListener` we can go from:

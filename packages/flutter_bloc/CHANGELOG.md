@@ -1,6 +1,6 @@
 # 0.19.1
 
-Added optional `condition` to `BlocListener` to control listener calls
+Add optional `condition` to `BlocListener` to control listener calls ([#406](https://github.com/felangel/bloc/pull/406)) and Documentation Updates
 
 # 0.19.0
 

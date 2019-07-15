@@ -311,7 +311,7 @@ void main() {
     });
 
     testWidgets(
-        'not call listener when condition return false on single state change',
+        'does not call listener when condition returns false on single state change',
         (WidgetTester tester) async {
       int listenerCallCount = 0;
       final counterBloc = CounterBloc();
@@ -333,7 +333,7 @@ void main() {
     });
 
     testWidgets(
-        'call listener when condition return true on single state change',
+        'calls listener when condition returns true on single state change',
         (WidgetTester tester) async {
       int listenerCallCount = 0;
       final counterBloc = CounterBloc();
@@ -355,7 +355,7 @@ void main() {
     });
 
     testWidgets(
-        'not calls listener when condition return false on multiple state change',
+        'does not call listener when condition returns false on multiple state changes',
         (WidgetTester tester) async {
       int listenerCallCount = 0;
       final counterBloc = CounterBloc();
@@ -380,7 +380,7 @@ void main() {
     });
 
     testWidgets(
-        'calls listener when condition return true on multiple state change',
+        'calls listener when condition returns true on multiple state change',
         (WidgetTester tester) async {
       int listenerCallCount = 0;
       final counterBloc = CounterBloc();

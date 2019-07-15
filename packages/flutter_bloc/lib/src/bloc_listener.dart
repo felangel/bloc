@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 typedef BlocWidgetListener<S> = void Function(BuildContext context, S state);
 
 /// Signature for the condition function which takes the previous state and the current state
-/// and is responsible for returning a `bool` which determines whether or not call [BlocWidgetListener]
+/// and is responsible for returning a `bool` which determines whether or not to call [BlocWidgetListener]
 /// of [BlocListener] with the current state.
 typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 
@@ -30,6 +30,19 @@ class BlocListener<E, S> extends BlocListenerBase<E, S>
   /// which determines whether or not the `listener` function will be invoked.
   /// The previous state will be initialized to `currentState` when the [BlocListener] is initialized.
   /// `condition` is optional and if it isn't implemented, it will default to return `true`.
+  ///
+  /// ```dart
+  /// BlocListener(
+  ///   bloc: BlocProvider.of<BlocA>(context),
+  ///   condition: (previousState, currentState) {
+  ///     // return true/false to determine whether or not
+  ///     // to invoke listener with currentState
+  ///   },
+  ///   listener: (context, state) {
+  ///     // do stuff here based on BlocA's state
+  ///   }
+  ///)
+  /// ```
   final BlocListenerCondition<S> condition;
 
   /// The [Widget] which will be rendered as a descendant of the [BlocListener].

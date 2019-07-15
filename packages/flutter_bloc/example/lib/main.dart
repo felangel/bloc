@@ -61,13 +61,13 @@ class App extends StatelessWidget {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final CounterBloc _counterBloc = BlocProvider.of<CounterBloc>(context);
-    final ThemeBloc _themeBloc = BlocProvider.of<ThemeBloc>(context);
+    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
+    final ThemeBloc themeBloc = BlocProvider.of<ThemeBloc>(context);
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
       body: BlocBuilder<CounterEvent, int>(
-        bloc: _counterBloc,
+        bloc: counterBloc,
         builder: (BuildContext context, int count) {
           return Center(
             child: Text(
@@ -86,7 +86,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                _counterBloc.dispatch(CounterEvent.increment);
+                counterBloc.dispatch(CounterEvent.increment);
               },
             ),
           ),
@@ -95,7 +95,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.remove),
               onPressed: () {
-                _counterBloc.dispatch(CounterEvent.decrement);
+                counterBloc.dispatch(CounterEvent.decrement);
               },
             ),
           ),
@@ -104,7 +104,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.update),
               onPressed: () {
-                _themeBloc.dispatch(ThemeEvent.toggle);
+                themeBloc.dispatch(ThemeEvent.toggle);
               },
             ),
           ),
