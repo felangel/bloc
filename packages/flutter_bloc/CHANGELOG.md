@@ -1,3 +1,7 @@
+# 0.19.1
+
+Added optional `condition` to `BlocListener` to control listener calls
+
 # 0.19.0
 
 Addresses [#354](https://github.com/felangel/bloc/issues/354)

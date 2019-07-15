@@ -8,6 +8,11 @@ import 'package:provider/provider.dart';
 /// and is responsible for executing in response to state changes.
 typedef BlocWidgetListener<S> = void Function(BuildContext context, S state);
 
+/// Signature for the condition function which takes the previous state and the current state
+/// and is responsible for returning a `bool` which determines whether or not call [BlocWidgetListener]
+/// of [BlocListener] with the current state.
+typedef BlocListenerCondition<S> = bool Function(S previous, S current);
+
 class BlocListener<E, S> extends BlocListenerBase<E, S>
     with SingleChildCloneableWidget {
   /// The [Bloc] whose state will be listened to.
@@ -19,6 +24,13 @@ class BlocListener<E, S> extends BlocListenerBase<E, S>
   /// in response to a state change ([Transition]).
   /// The state will be the `nextState` for the most recent [Transition].
   final BlocWidgetListener<S> listener;
+
+  /// The `condition` function will be invoked on each bloc state change.
+  /// The `condition` takes the previous state and current state and must return a `bool`
+  /// which determines whether or not the `listener` function will be invoked.
+  /// The previous state will be initialized to `currentState` when the [BlocListener] is initialized.
+  /// `condition` is optional and if it isn't implemented, it will default to return `true`.
+  final BlocListenerCondition<S> condition;
 
   /// The [Widget] which will be rendered as a descendant of the [BlocListener].
   final Widget child;
@@ -33,10 +45,16 @@ class BlocListener<E, S> extends BlocListenerBase<E, S>
     Key key,
     @required this.bloc,
     @required this.listener,
+    this.condition,
     this.child,
   })  : assert(bloc != null),
         assert(listener != null),
-        super(key: key, bloc: bloc, listener: listener);
+        super(
+          key: key,
+          bloc: bloc,
+          listener: listener,
+          condition: condition,
+        );
 
   /// Clones the current [BlocListener] with a new child [Widget].
   /// All other values, including `key`, `bloc` and `listener` are preserved.
@@ -47,6 +65,7 @@ class BlocListener<E, S> extends BlocListenerBase<E, S>
       key: key,
       bloc: bloc,
       listener: listener,
+      condition: condition,
       child: child,
     );
   }
@@ -66,6 +85,9 @@ abstract class BlocListenerBase<E, S> extends StatefulWidget {
   /// The state will be the `nextState` for the most recent [Transition].
   final BlocWidgetListener<S> listener;
 
+  /// The [BlocListenerCondition] that the [BlocListenerBase] will invoke.
+  final BlocListenerCondition<S> condition;
+
   /// Base class for widgets that listen to state changes in a specified [Bloc].
   ///
   /// A [BlocListenerBase] is stateful and maintains the state subscription.
@@ -75,6 +97,7 @@ abstract class BlocListenerBase<E, S> extends StatefulWidget {
     Key key,
     @required this.bloc,
     @required this.listener,
+    @required this.condition,
   }) : super(key: key);
 
   State<BlocListenerBase<E, S>> createState() => _BlocListenerBaseState<E, S>();
@@ -85,10 +108,12 @@ abstract class BlocListenerBase<E, S> extends StatefulWidget {
 
 class _BlocListenerBaseState<E, S> extends State<BlocListenerBase<E, S>> {
   StreamSubscription<S> _subscription;
+  S _previousState;
 
   @override
   void initState() {
     super.initState();
+    _previousState = widget.bloc.currentState;
     _subscribe();
   }
 
@@ -98,6 +123,7 @@ class _BlocListenerBaseState<E, S> extends State<BlocListenerBase<E, S>> {
     if (oldWidget.bloc.state != widget.bloc.state) {
       if (_subscription != null) {
         _unsubscribe();
+        _previousState = widget.bloc.currentState;
       }
       _subscribe();
     }
@@ -115,7 +141,10 @@ class _BlocListenerBaseState<E, S> extends State<BlocListenerBase<E, S>> {
   void _subscribe() {
     if (widget.bloc.state != null) {
       _subscription = widget.bloc.state.skip(1).listen((S state) {
-        widget.listener.call(context, state);
+        if (widget.condition?.call(_previousState, state) ?? true) {
+          widget.listener(context, state);
+        }
+        _previousState = state;
       });
     }
   }
