@@ -91,7 +91,7 @@ void main() {
         (WidgetTester tester) async {
       try {
         await tester.pumpWidget(
-          BlocListener<dynamic, dynamic>(
+          BlocListener<Bloc, dynamic>(
             bloc: null,
             listener: null,
             child: null,
@@ -107,7 +107,7 @@ void main() {
         (WidgetTester tester) async {
       try {
         await tester.pumpWidget(
-          BlocListener(
+          BlocListener<CounterBloc, int>(
             bloc: CounterBloc(),
             listener: null,
             child: null,
@@ -268,6 +268,37 @@ void main() {
           },
           listener: (BuildContext context, int state) {},
           child: Container(),
+        ),
+      );
+      counterBloc.dispatch(CounterEvent.increment);
+      expectLater(counterBloc.state, emitsInOrder(expectedStates)).then((_) {
+        expect(conditionCallCount, 1);
+        expect(latestPreviousState, 0);
+        expect(latestCurrentState, 1);
+      });
+    });
+
+    testWidgets('infers the bloc from the context if the bloc is not provided',
+        (WidgetTester tester) async {
+      int latestPreviousState;
+      int latestCurrentState;
+      int conditionCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [0, 1];
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: counterBloc,
+          child: BlocListener<CounterBloc, int>(
+            condition: (int previous, int current) {
+              conditionCallCount++;
+              latestPreviousState = previous;
+              latestCurrentState = current;
+
+              return true;
+            },
+            listener: (BuildContext context, int state) {},
+            child: Container(),
+          ),
         ),
       );
       counterBloc.dispatch(CounterEvent.increment);

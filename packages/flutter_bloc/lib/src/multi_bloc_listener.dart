@@ -20,15 +20,12 @@ class MultiBlocListener extends StatelessWidget {
   /// By using [MultiBlocListener] we can go from:
   ///
   /// ```dart
-  /// BlocListener<BlocAEvent, BlocAState>(
-  ///   bloc: BlocA(),
-  ///   listener: (BuildContext context, BlocAState state) {},
-  ///   child: BlocListener<BlocBEvent, BlocBState>(
-  ///     bloc: BlocB(),
-  ///     listener: (BuildContext context, BlocBState state) {},
-  ///     child: BlocListener<BlocCEvent, BlocCState>(
-  ///       bloc: BlocC(),
-  ///       listener: (BuildContext context, BlocCState state) {},
+  /// BlocListener<BlocA, BlocAState>(
+  ///   listener: (context, state) {},
+  ///   child: BlocListener<BlocB, BlocBState>(
+  ///     listener: (context, state) {},
+  ///     child: BlocListener<BlocC, BlocCState>(
+  ///       listener: (context, state) {},
   ///       child: ChildA(),
   ///     ),
   ///   ),
@@ -40,17 +37,14 @@ class MultiBlocListener extends StatelessWidget {
   /// ```dart
   /// MutliBlocListener(
   ///   listeners: [
-  ///     BlocListener<BlocAEvent, BlocAState>(
-  ///       bloc: BlocA(),
-  ///       listener: (BuildContext context, BlocAState state) {},
+  ///     BlocListener<BlocA, BlocAState>(
+  ///       listener: (context, state) {},
   ///     ),
-  ///     BlocListener<BlocBEvent, BlocBState>(
-  ///       bloc: BlocB(),
-  ///       listener: (BuildContext context, BlocBState state) {},
+  ///     BlocListener<BlocB, BlocBState>(
+  ///       listener: (context, state) {},
   ///     ),
-  ///     BlocListener<BlocCEvent, BlocCState>(
-  ///       bloc: BlocC(),
-  ///       listener: (BuildContext context, BlocCState state) {},
+  ///     BlocListener<BlocC, BlocCState>(
+  ///       listener: (context, state) {},
   ///     ),
   ///   ],
   ///   child: ChildA(),

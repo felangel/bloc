@@ -27,33 +27,26 @@ class SimpleBlocDelegate extends BlocDelegate {
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider<CounterBloc>(
-          builder: (context) => CounterBloc(),
-        ),
-        BlocProvider<ThemeBloc>(
-          builder: (context) => ThemeBloc(),
-        ),
-      ],
-      child: App(),
-    ),
-  );
+  runApp(App());
 }
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: BlocProvider.of<ThemeBloc>(context),
-      builder: (_, ThemeData theme) {
-        return MaterialApp(
-          title: 'Flutter Demo',
-          home: CounterPage(),
-          theme: theme,
-        );
-      },
+    return BlocProvider<ThemeBloc>(
+      builder: (context) => ThemeBloc(),
+      child: BlocBuilder<ThemeBloc, ThemeData>(
+        builder: (context, theme) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            home: BlocProvider(
+              builder: (context) => CounterBloc(),
+              child: CounterPage(),
+            ),
+            theme: theme,
+          );
+        },
+      ),
     );
   }
 }
@@ -61,14 +54,13 @@ class App extends StatelessWidget {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
-    final ThemeBloc themeBloc = BlocProvider.of<ThemeBloc>(context);
+    final counterBloc = BlocProvider.of<CounterBloc>(context);
+    final themeBloc = BlocProvider.of<ThemeBloc>(context);
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
-      body: BlocBuilder<CounterEvent, int>(
-        bloc: counterBloc,
-        builder: (BuildContext context, int count) {
+      body: BlocBuilder<CounterBloc, int>(
+        builder: (context, count) {
           return Center(
             child: Text(
               '$count',

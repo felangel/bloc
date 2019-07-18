@@ -127,7 +127,7 @@ class MyCounterAppState extends State<MyCounterApp> {
         key: Key('myCounterApp'),
         body: Column(
           children: <Widget>[
-            BlocBuilder<CounterEvent, int>(
+            BlocBuilder<CounterBloc, int>(
               bloc: _bloc,
               condition: (previousState, currentState) {
                 return (previousState + currentState) % 3 == 0;
@@ -136,7 +136,7 @@ class MyCounterAppState extends State<MyCounterApp> {
                 return Text('$count', key: Key('myCounterAppTextCondition'));
               },
             ),
-            BlocBuilder<CounterEvent, int>(
+            BlocBuilder<CounterBloc, int>(
               bloc: _bloc,
               builder: (context, count) {
                 return Text('$count', key: Key('myCounterAppText'));
@@ -180,7 +180,7 @@ void main() {
         (WidgetTester tester) async {
       try {
         await tester.pumpWidget(
-          BlocBuilder<ThemeEvent, ThemeData>(
+          BlocBuilder<ThemeBloc, ThemeData>(
             bloc: null,
             builder: null,
           ),
@@ -194,7 +194,7 @@ void main() {
         (WidgetTester tester) async {
       try {
         await tester.pumpWidget(
-          BlocBuilder<ThemeEvent, ThemeData>(
+          BlocBuilder<ThemeBloc, ThemeData>(
             bloc: ThemeBloc(),
             builder: null,
           ),
@@ -250,6 +250,53 @@ void main() {
 
       expect(_materialApp.theme, ThemeData.dark());
       expect(numBuilds, 2);
+    });
+
+    testWidgets('infers the bloc from the context if the bloc is not provided',
+        (WidgetTester tester) async {
+      final ThemeBloc themeBloc = ThemeBloc();
+      int numBuilds = 0;
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: themeBloc,
+          child: BlocBuilder<ThemeBloc, ThemeData>(
+            builder: (
+              BuildContext context,
+              ThemeData theme,
+            ) {
+              numBuilds++;
+              return MaterialApp(
+                key: Key('material_app'),
+                theme: theme,
+                home: Container(),
+              );
+            },
+          ),
+        ),
+      );
+
+      themeBloc.dispatch(SetDarkTheme());
+
+      await tester.pumpAndSettle();
+
+      MaterialApp _materialApp = find
+          .byKey(Key('material_app'))
+          .evaluate()
+          .first
+          .widget as MaterialApp;
+
+      expect(_materialApp.theme, ThemeData.dark());
+      expect(numBuilds, 2);
+
+      themeBloc.dispatch(SetLightTheme());
+
+      await tester.pumpAndSettle();
+
+      _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
+          as MaterialApp;
+
+      expect(_materialApp.theme, ThemeData.light());
+      expect(numBuilds, 3);
     });
 
     testWidgets(
