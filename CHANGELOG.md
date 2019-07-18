@@ -1,3 +1,7 @@
+# 0.3.1
+
+- Add guards to `HydratedBlocStorage` to prevent exception if cache is corrupt.
+
 # 0.3.0
 
 - Update `HydratedBlocStorage` to use `getTemporaryDirectory` instead of `getApplicationDocumentsDirectory`

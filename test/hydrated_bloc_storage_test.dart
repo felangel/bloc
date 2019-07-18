@@ -35,6 +35,16 @@ void main() {
         hydratedStorage = await HydratedBlocStorage.getInstance();
         expect(hydratedStorage.read('CounterBloc')['value'] as int, 4);
       });
+
+      test(
+          'returns null value when file exists but contains corrupt json and deletes the file',
+          () async {
+        final file = File('./.hydrated_bloc.json');
+        file.writeAsStringSync("invalid-json");
+        hydratedStorage = await HydratedBlocStorage.getInstance();
+        expect(hydratedStorage.read('CounterBloc'), isNull);
+        expect(file.existsSync(), false);
+      });
     });
 
     group('write', () {
