@@ -2,11 +2,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_firestore_todos/blocs/todos/todos.dart';
-import 'package:flutter_firestore_todos/models/models.dart';
 import 'package:todos_repository/todos_repository.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final TodosRepository todosRepository;
+  StreamSubscription todosSubscription;
 
   TodosBloc({@required this.todosRepository});
 
@@ -27,48 +27,32 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       yield* _mapToggleAllToState();
     } else if (event is ClearCompleted) {
       yield* _mapClearCompletedToState();
+    } else if (event is TodosUpdated) {
+      yield* _mapTodosUpdateToState(event);
     }
   }
 
   Stream<TodosState> _mapLoadTodosToState() async* {
-    try {
-      final todos = await this.todosRepository.loadTodos();
-      yield TodosLoaded(
-        todos.map(Todo.fromEntity).toList(),
-      );
-    } catch (_) {
-      yield TodosNotLoaded();
-    }
+    todosSubscription?.cancel();
+    todosSubscription = todosRepository.todos().listen(
+      (todos) {
+        dispatch(
+          TodosUpdated(todos),
+        );
+      },
+    );
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
-    final state = currentState;
-    if (state is TodosLoaded) {
-      final List<Todo> updatedTodos = List.from(state.todos)..add(event.todo);
-      yield TodosLoaded(updatedTodos);
-      _saveTodos(updatedTodos);
-    }
+    todosRepository.addNewTodo(event.todo);
   }
 
   Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
-    final state = currentState;
-    if (state is TodosLoaded) {
-      final List<Todo> updatedTodos = state.todos.map((todo) {
-        return todo.id == event.updatedTodo.id ? event.updatedTodo : todo;
-      }).toList();
-      yield TodosLoaded(updatedTodos);
-      _saveTodos(updatedTodos);
-    }
+    todosRepository.updateTodo(event.updatedTodo);
   }
 
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
-    final state = currentState;
-    if (state is TodosLoaded) {
-      final updatedTodos =
-          state.todos.where((todo) => todo.id != event.todo.id).toList();
-      yield TodosLoaded(updatedTodos);
-      _saveTodos(updatedTodos);
-    }
+    todosRepository.deleteTodo(event.todo);
   }
 
   Stream<TodosState> _mapToggleAllToState() async* {
@@ -79,7 +63,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
           .map((todo) => todo.copyWith(complete: !allComplete))
           .toList();
       yield TodosLoaded(updatedTodos);
-      _saveTodos(updatedTodos);
     }
   }
 
@@ -89,13 +72,16 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       final List<Todo> updatedTodos =
           state.todos.where((todo) => !todo.complete).toList();
       yield TodosLoaded(updatedTodos);
-      _saveTodos(updatedTodos);
     }
   }
 
-  Future _saveTodos(List<Todo> todos) {
-    return todosRepository.saveTodos(
-      todos.map((todo) => todo.toEntity()).toList(),
-    );
+  Stream<TodosState> _mapTodosUpdateToState(TodosUpdated event) async* {
+    yield TodosLoaded(event.todos);
+  }
+
+  @override
+  void dispose() {
+    todosSubscription?.cancel();
+    super.dispose();
   }
 }

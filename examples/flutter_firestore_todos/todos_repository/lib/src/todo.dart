@@ -1,5 +1,4 @@
 import 'package:meta/meta.dart';
-import 'package:todos_repository/todos_repository.dart';
 
 @immutable
 class Todo {
@@ -10,7 +9,7 @@ class Todo {
 
   Todo(this.task, {this.complete = false, String note = '', String id})
       : this.note = note ?? '',
-        this.id = id ?? Uuid().generateV4();
+        this.id = id;
 
   Todo copyWith({bool complete, String id, String note, String task}) {
     return Todo(
@@ -38,18 +37,5 @@ class Todo {
   @override
   String toString() {
     return 'Todo{complete: $complete, task: $task, note: $note, id: $id}';
-  }
-
-  TodoEntity toEntity() {
-    return TodoEntity(task, id, note, complete);
-  }
-
-  static Todo fromEntity(TodoEntity entity) {
-    return Todo(
-      entity.task,
-      complete: entity.complete ?? false,
-      note: entity.note,
-      id: entity.id ?? Uuid().generateV4(),
-    );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter_firestore_todos/models/models.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 @immutable
 abstract class TodosEvent extends Equatable {
@@ -47,4 +47,13 @@ class ClearCompleted extends TodosEvent {
 class ToggleAll extends TodosEvent {
   @override
   String toString() => 'ToggleAll';
+}
+
+class TodosUpdated extends TodosEvent {
+  final List<Todo> todos;
+
+  TodosUpdated(this.todos);
+
+  @override
+  String toString() => 'TodosUpdated';
 }

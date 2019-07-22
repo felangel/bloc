@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter_firestore_todos/models/models.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 @immutable
 abstract class StatsEvent extends Equatable {

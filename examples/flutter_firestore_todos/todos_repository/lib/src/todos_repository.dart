@@ -5,7 +5,7 @@
 import 'dart:async';
 import 'dart:core';
 
-import 'todo_entity.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 /// A data layer class works with reactive data sources, such as Firebase. This
 /// class emits a Stream of TodoEntities. The data layer of the app.
@@ -17,11 +17,11 @@ import 'todo_entity.dart';
 /// inject the correct implementation depending on the environment, such as
 /// web or Flutter.
 abstract class TodosRepository {
-  Future<void> addNewTodo(TodoEntity todo);
+  Future<void> addNewTodo(Todo todo);
 
-  Future<void> deleteTodo(List<String> idList);
+  Future<void> deleteTodo(Todo todo);
 
-  Stream<List<TodoEntity>> todos();
+  Stream<List<Todo>> todos();
 
-  Future<void> updateTodo(TodoEntity todo);
+  Future<void> updateTodo(Todo todo);
 }

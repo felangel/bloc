@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firestore_todos/models/models.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 class TodoItem extends StatelessWidget {
   final DismissDirectionCallback onDismissed;

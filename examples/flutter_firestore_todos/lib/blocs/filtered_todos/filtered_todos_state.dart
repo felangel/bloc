@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:todos_repository/todos_repository.dart';
 import 'package:flutter_firestore_todos/models/models.dart';
 
 @immutable
