@@ -1,11 +1,13 @@
 # flutter_firestore_todos
 
-A new Flutter project.
+A Flutter example showing how to use flutter_bloc with a firestore backend.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+You will need to follow the firebase setup docs found [here](https://firebase.google.com/docs/flutter/setup#create_firebase_project).
+Once you've downloaded the .json and .plist files run the project.
 
+Here are a few flutter resources.
 A few resources to get you started if this is your first Flutter project:
 
 - [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
