@@ -3,7 +3,6 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todos_repository/todos_repository.dart';
 import 'package:flutter_firestore_todos/blocs/blocs.dart';
-import 'package:flutter_firestore_todos/models/models.dart';
 import 'package:flutter_firestore_todos/screens/screens.dart';
 
 void main() {
