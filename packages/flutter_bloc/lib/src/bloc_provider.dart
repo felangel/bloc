@@ -3,7 +3,11 @@ import 'package:meta/meta.dart';
 import 'package:provider/provider.dart';
 import 'package:bloc/bloc.dart';
 
-class BlocProvider<T extends Bloc<dynamic, dynamic>> extends Provider<T> {
+class BlocProvider<T extends Bloc<dynamic, dynamic>>
+    extends ValueDelegateWidget<T> implements SingleChildCloneableWidget {
+  /// The [Widget] and its descendants which will have access to the [Bloc].
+  final Widget child;
+
   /// Takes a [ValueBuilder] that is responsible for
   /// building the bloc and a child which will have access to the bloc via `BlocProvider.of(context)`.
   /// It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided
@@ -19,12 +23,14 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends Provider<T> {
   /// ```
   BlocProvider({
     Key key,
-    @required ValueBuilder<T> builder,
+    ValueBuilder<T> builder,
     Widget child,
-  }) : super(
+  }) : this._(
           key: key,
-          builder: builder,
-          dispose: (_, bloc) => bloc?.dispose(),
+          delegate: BuilderStateDelegate<T>(
+            builder,
+            dispose: (_, bloc) => bloc?.dispose(),
+          ),
           child: child,
         );
 
@@ -45,11 +51,19 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends Provider<T> {
     Key key,
     @required T value,
     Widget child,
-  }) : super.value(
+  }) : this._(
           key: key,
-          value: value,
+          delegate: SingleValueDelegate<T>(value),
           child: child,
         );
+
+  /// Internal constructor responsible for creating the `BlocProvider`.
+  /// Used by the `BlocProvider` default and `value` constructors.
+  BlocProvider._({
+    Key key,
+    @required ValueStateDelegate<T> delegate,
+    this.child,
+  }) : super(key: key, delegate: delegate);
 
   /// Method that allows widgets to access a bloc instance as long as their `BuildContext`
   /// contains a [BlocProvider] instance.
@@ -80,5 +94,24 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>> extends Provider<T> {
         """,
       );
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InheritedProvider<T>(
+      value: delegate.value,
+      child: Builder(
+        builder: (context) => child,
+      ),
+    );
+  }
+
+  @override
+  BlocProvider<T> cloneWithChild(Widget child) {
+    return BlocProvider<T>._(
+      key: key,
+      delegate: delegate,
+      child: child,
+    );
   }
 }

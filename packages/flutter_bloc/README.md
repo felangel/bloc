@@ -22,9 +22,21 @@ This package is built to work with [bloc](https://pub.dartlang.org/packages/bloc
 
 See `BlocListener` if you want to "do" anything in response to state changes such as navigation, showing a dialog, etc...
 
+If the bloc parameter is omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+
 ```dart
-BlocBuilder(
-  bloc: BlocProvider.of<BlocA>(context),
+BlocBuilder<BlocA, BlocAState>(
+  builder: (context, state) {
+    // return widget here based on BlocA's state
+  }
+)
+```
+
+Only specify the bloc if you wish to provide a bloc that is otherwise not accessible via `BlocProvider` and the current `BuildContext`.
+
+```dart
+BlocBuilder<BlocA, BlocAState>(
+  bloc: blocA,
   builder: (context, state) {
     // return widget here based on BlocA's state
   }
@@ -34,8 +46,7 @@ BlocBuilder(
 If you want fine-grained control over when the builder function is called you can provide an optional `condition` to `BlocBuilder`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `builder` will be called with `currentState` and the widget will rebuild. If `condition` returns false, `builder` will not be called with `currentState` and no rebuild will occur.
 
 ```dart
-BlocBuilder(
-  bloc: BlocProvider.of<BlocA>(context),
+BlocBuilder<BlocA, BlocAState>(
   condition: (previousState, currentState) {
     // return true/false to determine whether or not
     // to rebuild the widget with currentState
@@ -108,34 +119,28 @@ MultiBlocProvider(
 )
 ```
 
-**BlocListener** is a Flutter widget which takes a `Bloc` and a `BlocWidgetListener` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
+**BlocListener** is a Flutter widget which takes a `BlocWidgetListener` and an optional `Bloc` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
 
 `listener` is only called once for each state change (**NOT** including `initialState`) unlike `builder` in `BlocBuilder` and is a `void` function.
 
+If the bloc parameter is omitted, `BlocListener` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+
 ```dart
-BlocListener(
-  bloc: _bloc,
+BlocListener<BlocA, BlocAState>(
   listener: (context, state) {
-    if (state is Success) {
-      Navigator.of(context).pushNamed('/details');
-    }
+    // do stuff here based on BlocA's state
   },
-  child: BlocBuilder(
-    bloc: _bloc,
-    builder: (context, state) {
-      if (state is Initial) {
-        return Text('Press the Button');
-      }
-      if (state is Loading) {
-        return CircularProgressIndicator();
-      }
-      if (state is Success) {
-        return Text('Success');
-      }
-      if (state is Failure) {
-        return Text('Failure');
-      }
-    },
+  child: Container(),
+)
+```
+
+Only specify the bloc if you wish to provide a bloc that is otherwise not accessible via `BlocProvider` and the current `BuildContext`.
+
+```dart
+BlocListener<BlocA, BlocAState>(
+  bloc: blocA,
+  listener: (context, state) {
+    // do stuff here based on BlocA's state
   }
 )
 ```
@@ -143,8 +148,7 @@ BlocListener(
 If you want fine-grained control over when the listener function is called you can provide an optional `condition` to `BlocListener`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `listener` will be called with `currentState`. If `condition` returns false, `listener` will not be called with `currentState`.
 
 ```dart
-BlocListener(
-  bloc: BlocProvider.of<BlocA>(context),
+BlocListener<BlocA, BlocAState>(
   condition: (previousState, currentState) {
     // return true/false to determine whether or not
     // to call listener with currentState
@@ -152,6 +156,7 @@ BlocListener(
   listener: (context, state) {
     // do stuff here based on BlocA's state
   }
+  child: Container(),
 )
 ```
 
@@ -160,15 +165,12 @@ BlocListener(
 By using `MultiBlocListener` we can go from:
 
 ```dart
-BlocListener<BlocAEvent, BlocAState>(
-  bloc: BlocA(),
-  listener: (BuildContext context, BlocAState state) {},
-  child: BlocListener<BlocBEvent, BlocBState>(
-    bloc: BlocB(),
-    listener: (BuildContext context, BlocBState state) {},
-    child: BlocListener<BlocCEvent, BlocCState>(
-      bloc: BlocC(),
-      listener: (BuildContext context, BlocCState state) {},
+BlocListener<BlocA, BlocAState>(
+  listener: (context, state) {},
+  child: BlocListener<BlocB, BlocBState>(
+    listener: (context, state) {},
+    child: BlocListener<BlocC, BlocCState>(
+      listener: (context, state) {},
       child: ChildA(),
     ),
   ),
@@ -180,17 +182,14 @@ to:
 ```dart
 MultiBlocListener(
   listeners: [
-    BlocListener<BlocAEvent, BlocAState>(
-      bloc: BlocA(),
-      listener: (BuildContext context, BlocAState state) {},
+    BlocListener<BlocA, BlocAState>(
+      listener: (context, state) {},
     ),
-    BlocListener<BlocBEvent, BlocBState>(
-      bloc: BlocB(),
-      listener: (BuildContext context, BlocBState state) {},
+    BlocListener<BlocB, BlocBState>(
+      listener: (context, state) {},
     ),
-    BlocListener<BlocCEvent, BlocCState>(
-      bloc: BlocC(),
-      listener: (BuildContext context, BlocCState state) {},
+    BlocListener<BlocC, BlocCState>(
+      listener: (context, state) {},
     ),
   ],
   child: ChildA(),
@@ -285,9 +284,8 @@ class CounterPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
-      body: BlocBuilder<CounterEvent, int>(
-        bloc: counterBloc,
-        builder: (BuildContext context, int count) {
+      body: BlocBuilder<CounterBloc, int>(
+        builder: (context, count) {
           return Center(
             child: Text(
               '$count',

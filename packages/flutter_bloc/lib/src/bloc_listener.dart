@@ -1,7 +1,9 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
+
+import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 /// Signature for the listener function which takes the [BuildContext] along with the bloc state
@@ -13,11 +15,13 @@ typedef BlocWidgetListener<S> = void Function(BuildContext context, S state);
 /// of [BlocListener] with the current state.
 typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 
-class BlocListener<E, S> extends BlocListenerBase<E, S>
+class BlocListener<B extends Bloc<dynamic, S>, S> extends BlocListenerBase<B, S>
     with SingleChildCloneableWidget {
   /// The [Bloc] whose state will be listened to.
   /// Whenever the bloc's state changes, `listener` will be invoked.
-  final Bloc<E, S> bloc;
+  /// If omitted, [BlocListener] will automatically perform a lookup using
+  /// [BlocProvider] and the current [BuildContext]
+  final B bloc;
 
   /// The [BlocWidgetListener] which will be called on every state change (including the `initialState`).
   /// This listener should be used for any code which needs to execute
@@ -32,8 +36,7 @@ class BlocListener<E, S> extends BlocListenerBase<E, S>
   /// `condition` is optional and if it isn't implemented, it will default to return `true`.
   ///
   /// ```dart
-  /// BlocListener(
-  ///   bloc: BlocProvider.of<BlocA>(context),
+  /// BlocListener<BlocA, BlocAState>(
   ///   condition: (previousState, currentState) {
   ///     // return true/false to determine whether or not
   ///     // to invoke listener with currentState
@@ -41,27 +44,51 @@ class BlocListener<E, S> extends BlocListenerBase<E, S>
   ///   listener: (context, state) {
   ///     // do stuff here based on BlocA's state
   ///   }
-  ///)
+  ///   child: Container(),
+  /// )
   /// ```
   final BlocListenerCondition<S> condition;
 
   /// The [Widget] which will be rendered as a descendant of the [BlocListener].
   final Widget child;
 
-  /// Takes a [Bloc] and a [BlocWidgetListener]
+  /// Takes a [BlocWidgetListener] and an optional [Bloc]
   /// and invokes the listener in response to state changes in the bloc.
   /// It should be used for functionality that needs to occur only in response to a state change
   /// such as navigation, showing a [SnackBar], showing a [Dialog], etc...
   /// The `listener` is guaranteed to only be called once for each state change unlike the
   /// `builder` in [BlocBuilder].
+  ///
+  /// If the bloc parameter is omitted, [BlocListener] will automatically perform a lookup using
+  /// [BlocProvider] and the current [BuildContext].
+  ///
+  /// ```dart
+  /// BlocListener<BlocA, BlocAState>(
+  ///   listener: (context, state) {
+  ///     /// do stuff here based on BlocA's state
+  ///   },
+  ///   child: Container(),
+  /// )
+  /// ```
+  /// Only specify the bloc if you wish to provide a bloc that is otherwise
+  /// not accessible via [BlocProvider] and the current [BuildContext].
+  ///
+  /// ```dart
+  /// BlocListener<BlocA, BlocAState>(
+  ///   bloc: blocA,
+  ///   listener: (context, state) {
+  ///     /// do stuff here based on BlocA's state
+  ///   },
+  ///   child: Container(),
+  /// )
+  /// ```
   const BlocListener({
     Key key,
-    @required this.bloc,
     @required this.listener,
+    this.bloc,
     this.condition,
     this.child,
-  })  : assert(bloc != null),
-        assert(listener != null),
+  })  : assert(listener != null),
         super(
           key: key,
           bloc: bloc,
@@ -73,8 +100,8 @@ class BlocListener<E, S> extends BlocListenerBase<E, S>
   /// All other values, including `key`, `bloc` and `listener` are preserved.
   /// preserved.
   @override
-  BlocListener<E, S> cloneWithChild(Widget child) {
-    return BlocListener<E, S>(
+  BlocListener<B, S> cloneWithChild(Widget child) {
+    return BlocListener<B, S>(
       key: key,
       bloc: bloc,
       listener: listener,
@@ -87,10 +114,11 @@ class BlocListener<E, S> extends BlocListenerBase<E, S>
   Widget build(BuildContext context) => child;
 }
 
-abstract class BlocListenerBase<E, S> extends StatefulWidget {
+abstract class BlocListenerBase<B extends Bloc<dynamic, S>, S>
+    extends StatefulWidget {
   /// The [Bloc] whose state will be listened to.
   /// Whenever the bloc's state changes, `listener` will be invoked.
-  final Bloc<E, S> bloc;
+  final B bloc;
 
   /// The [BlocWidgetListener] which will be called on every state change.
   /// This listener should be used for any code which needs to execute
@@ -108,35 +136,42 @@ abstract class BlocListenerBase<E, S> extends StatefulWidget {
   /// is defined by sub-classes.
   const BlocListenerBase({
     Key key,
-    @required this.bloc,
     @required this.listener,
-    @required this.condition,
+    this.bloc,
+    this.condition,
   }) : super(key: key);
 
-  State<BlocListenerBase<E, S>> createState() => _BlocListenerBaseState<E, S>();
+  State<BlocListenerBase<B, S>> createState() => _BlocListenerBaseState<B, S>();
 
   /// Returns a [Widget] based on the [BuildContext].
   Widget build(BuildContext context);
 }
 
-class _BlocListenerBaseState<E, S> extends State<BlocListenerBase<E, S>> {
+class _BlocListenerBaseState<B extends Bloc<dynamic, S>, S>
+    extends State<BlocListenerBase<B, S>> {
   StreamSubscription<S> _subscription;
   S _previousState;
+  B _bloc;
 
   @override
   void initState() {
     super.initState();
-    _previousState = widget.bloc.currentState;
+    _bloc = widget.bloc ?? BlocProvider.of<B>(context);
+    _previousState = _bloc?.currentState;
     _subscribe();
   }
 
   @override
-  void didUpdateWidget(BlocListenerBase<E, S> oldWidget) {
+  void didUpdateWidget(BlocListenerBase<B, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.bloc.state != widget.bloc.state) {
+    final Stream<S> oldState =
+        oldWidget.bloc?.state ?? BlocProvider.of<B>(context).state;
+    final Stream<S> currentState = widget.bloc?.state ?? oldState;
+    if (oldState != currentState) {
       if (_subscription != null) {
         _unsubscribe();
-        _previousState = widget.bloc.currentState;
+        _bloc = widget.bloc ?? BlocProvider.of<B>(context);
+        _previousState = _bloc?.currentState;
       }
       _subscribe();
     }
@@ -152,8 +187,8 @@ class _BlocListenerBaseState<E, S> extends State<BlocListenerBase<E, S>> {
   }
 
   void _subscribe() {
-    if (widget.bloc.state != null) {
-      _subscription = widget.bloc.state.skip(1).listen((S state) {
+    if (_bloc?.state != null) {
+      _subscription = _bloc.state.skip(1).listen((S state) {
         if (widget.condition?.call(_previousState, state) ?? true) {
           widget.listener(context, state);
         }

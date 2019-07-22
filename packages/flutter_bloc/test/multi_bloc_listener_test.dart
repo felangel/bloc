@@ -80,14 +80,14 @@ void main() {
       await tester.pumpWidget(
         MultiBlocListener(
           listeners: [
-            BlocListener<CounterEvent, int>(
+            BlocListener<CounterBloc, int>(
               bloc: counterBlocA,
               listener: (BuildContext context, int state) {
                 listenerCallCountA++;
                 latestStateA = state;
               },
             ),
-            BlocListener<CounterEvent, int>(
+            BlocListener<CounterBloc, int>(
               bloc: counterBlocB,
               listener: (BuildContext context, int state) {
                 listenerCallCountB++;
