@@ -1,5 +1,9 @@
 import 'package:meta/meta.dart';
+<<<<<<< HEAD:examples/flutter_firestore_todos/todos_repository/lib/src/models/todo.dart
 import '../entities/entities.dart';
+=======
+import 'package:todos_repository/todos_repository.dart';
+>>>>>>> 412891a503583b5b9acc39e16dd5964a156ff7c3:examples/flutter_firestore_todos/lib/models/todo.dart
 
 @immutable
 class Todo {
@@ -10,7 +14,11 @@ class Todo {
 
   Todo(this.task, {this.complete = false, String note = '', String id})
       : this.note = note ?? '',
+<<<<<<< HEAD:examples/flutter_firestore_todos/todos_repository/lib/src/models/todo.dart
         this.id = id;
+=======
+        this.id = id ?? Uuid().generateV4();
+>>>>>>> 412891a503583b5b9acc39e16dd5964a156ff7c3:examples/flutter_firestore_todos/lib/models/todo.dart
 
   Todo copyWith({bool complete, String id, String note, String task}) {
     return Todo(

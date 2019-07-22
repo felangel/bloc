@@ -14,7 +14,16 @@ void main() {
     BlocProvider(
       builder: (context) {
         return TodosBloc(
+<<<<<<< HEAD
           todosRepository: FirebaseTodosRepository(),
+=======
+          todosRepository: FirebaseTodosRepository(
+            fileStorage: const FileStorage(
+              '__flutter_bloc_app__',
+              getApplicationDocumentsDirectory,
+            ),
+          ),
+>>>>>>> 412891a503583b5b9acc39e16dd5964a156ff7c3
         )..dispatch(LoadTodos());
       },
       child: TodosApp(),
