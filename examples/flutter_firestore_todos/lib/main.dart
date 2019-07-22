@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todos_repository/todos_repository.dart';
 import 'package:flutter_firestore_todos/blocs/blocs.dart';
 import 'package:flutter_firestore_todos/models/models.dart';
 import 'package:flutter_firestore_todos/screens/screens.dart';
@@ -15,7 +16,7 @@ void main() {
     BlocProvider(
       builder: (context) {
         return TodosBloc(
-          todosRepository: const TodosRepositoryFlutter(
+          todosRepository: FirebaseTodosRepository(
             fileStorage: const FileStorage(
               '__flutter_bloc_app__',
               getApplicationDocumentsDirectory,
