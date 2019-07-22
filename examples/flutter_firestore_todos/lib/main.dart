@@ -1,14 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:bloc/bloc.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_firestore_todos/blocs/blocs.dart';
+import 'package:flutter_firestore_todos/models/models.dart';
+import 'package:flutter_firestore_todos/screens/screens.dart';
 
-void main() => runApp(FirestoreTodos());
+void main() {
+  // BlocSupervisor oversees Blocs and delegates to BlocDelegate.
+  // We can set the BlocSupervisor's delegate to an instance of `SimpleBlocDelegate`.
+  // This will allow us to handle all transitions and errors in SimpleBlocDelegate.
+  BlocSupervisor.delegate = SimpleBlocDelegate();
+  runApp(
+    BlocProvider(
+      builder: (context) {
+        return TodosBloc(
+          todosRepository: const TodosRepositoryFlutter(
+            fileStorage: const FileStorage(
+              '__flutter_bloc_app__',
+              getApplicationDocumentsDirectory,
+            ),
+          ),
+        )..dispatch(LoadTodos());
+      },
+      child: TodosApp(),
+    ),
+  );
+}
 
-class FirestoreTodos extends StatelessWidget {
+class TodosApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final todosBloc = BlocProvider.of<TodosBloc>(context);
     return MaterialApp(
-      home: Scaffold(
-        body: Container(),
-      ),
+      title: 'Firestore Todos',
+      routes: {
+        '/': (context) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<TabBloc>(
+                builder: (context) => TabBloc(),
+              ),
+              BlocProvider<FilteredTodosBloc>(
+                builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
+              ),
+              BlocProvider<StatsBloc>(
+                builder: (context) => StatsBloc(todosBloc: todosBloc),
+              ),
+            ],
+            child: HomeScreen(),
+          );
+        },
+        '/addTodo': (context) {
+          return AddEditScreen(
+            onSave: (task, note) {
+              todosBloc.dispatch(
+                AddTodo(Todo(task, note: note)),
+              );
+            },
+            isEditing: false,
+          );
+        },
+      },
     );
   }
 }
