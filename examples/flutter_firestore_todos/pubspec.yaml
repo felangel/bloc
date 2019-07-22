@@ -13,6 +13,8 @@ dependencies:
     path: ../../packages/flutter_bloc
   todos_repository:
     path: todos_repository
+  user_repository:
+    path: user_repository
   equatable: ^0.3.0
 
 flutter:

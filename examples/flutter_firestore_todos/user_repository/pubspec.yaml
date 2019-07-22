@@ -1,4 +1,4 @@
-name: todos_repository
+name: user_repository
 
 version: 1.0.0+1
 
@@ -8,4 +8,4 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^0.12.7
+  firebase_auth: ^0.11.1+11
