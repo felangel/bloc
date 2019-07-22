@@ -1,9 +1,8 @@
 import 'package:meta/meta.dart';
-import 'package:equatable/equatable.dart';
 import 'package:todos_repository/todos_repository.dart';
 
 @immutable
-class Todo extends Equatable {
+class Todo {
   final bool complete;
   final String id;
   final String note;
@@ -11,8 +10,7 @@ class Todo extends Equatable {
 
   Todo(this.task, {this.complete = false, String note = '', String id})
       : this.note = note ?? '',
-        this.id = id ?? Uuid().generateV4(),
-        super([complete, id, note, task]);
+        this.id = id ?? Uuid().generateV4();
 
   Todo copyWith({bool complete, String id, String note, String task}) {
     return Todo(
@@ -24,8 +22,22 @@ class Todo extends Equatable {
   }
 
   @override
+  int get hashCode =>
+      complete.hashCode ^ task.hashCode ^ note.hashCode ^ id.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Todo &&
+          runtimeType == other.runtimeType &&
+          complete == other.complete &&
+          task == other.task &&
+          note == other.note &&
+          id == other.id;
+
+  @override
   String toString() {
-    return 'Todo { complete: $complete, task: $task, note: $note, id: $id }';
+    return 'Todo{complete: $complete, task: $task, note: $note, id: $id}';
   }
 
   TodoEntity toEntity() {
