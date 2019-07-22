@@ -8,13 +8,10 @@ class ExtraActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final todosBloc = BlocProvider.of<TodosBloc>(context);
-    return BlocBuilder(
-      bloc: todosBloc,
-      builder: (BuildContext context, TodosState state) {
+    return BlocBuilder<TodosBloc, TodosState>(
+      builder: (context, state) {
         if (state is TodosLoaded) {
-          bool allComplete = (todosBloc.currentState as TodosLoaded)
-              .todos
-              .every((todo) => todo.complete);
+          bool allComplete = state.todos.every((todo) => todo.complete);
           return PopupMenuButton<ExtraAction>(
             onSelected: (action) {
               switch (action) {

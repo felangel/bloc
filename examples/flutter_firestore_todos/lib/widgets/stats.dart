@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firestore_todos/blocs/stats/stats.dart';
 import 'package:flutter_firestore_todos/widgets/widgets.dart';
 
 class Stats extends StatelessWidget {
-  Stats({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    final StatsBloc statsBloc = BlocProvider.of<StatsBloc>(context);
-    return BlocBuilder(
-      bloc: statsBloc,
-      builder: (BuildContext context, StatsState state) {
+    return BlocBuilder<StatsBloc, StatsState>(
+      builder: (context, state) {
         if (state is StatsLoading) {
           return LoadingIndicator();
         } else if (state is StatsLoaded) {
@@ -52,9 +47,8 @@ class Stats extends StatelessWidget {
               ],
             ),
           );
-        } else {
-          return Container();
         }
+        return Container();
       },
     );
   }

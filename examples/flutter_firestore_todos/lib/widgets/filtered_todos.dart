@@ -12,21 +12,16 @@ class FilteredTodos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final todosBloc = BlocProvider.of<TodosBloc>(context);
-    final filteredTodosBloc = BlocProvider.of<FilteredTodosBloc>(context);
 
-    return BlocBuilder(
-      bloc: filteredTodosBloc,
-      builder: (
-        BuildContext context,
-        FilteredTodosState state,
-      ) {
+    return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
+      builder: (context, state) {
         if (state is FilteredTodosLoading) {
           return LoadingIndicator();
         } else if (state is FilteredTodosLoaded) {
           final todos = state.filteredTodos;
           return ListView.builder(
             itemCount: todos.length,
-            itemBuilder: (BuildContext context, int index) {
+            itemBuilder: (context, index) {
               final todo = todos[index];
               return TodoItem(
                 todo: todo,

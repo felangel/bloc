@@ -15,27 +15,25 @@ class FilterButton extends StatelessWidget {
         .textTheme
         .body1
         .copyWith(color: Theme.of(context).accentColor);
-    final FilteredTodosBloc filteredTodosBloc =
-        BlocProvider.of<FilteredTodosBloc>(context);
-    return BlocBuilder(
-        bloc: filteredTodosBloc,
-        builder: (BuildContext context, FilteredTodosState state) {
-          final button = _Button(
-            onSelected: (filter) {
-              filteredTodosBloc.dispatch(UpdateFilter(filter));
-            },
-            activeFilter: state is FilteredTodosLoaded
-                ? state.activeFilter
-                : VisibilityFilter.all,
-            activeStyle: activeStyle,
-            defaultStyle: defaultStyle,
-          );
-          return AnimatedOpacity(
-            opacity: visible ? 1.0 : 0.0,
-            duration: Duration(milliseconds: 150),
-            child: visible ? button : IgnorePointer(child: button),
-          );
-        });
+    final filteredTodosBloc = BlocProvider.of<FilteredTodosBloc>(context);
+    return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
+        builder: (context, state) {
+      final button = _Button(
+        onSelected: (filter) {
+          filteredTodosBloc.dispatch(UpdateFilter(filter));
+        },
+        activeFilter: state is FilteredTodosLoaded
+            ? state.activeFilter
+            : VisibilityFilter.all,
+        activeStyle: activeStyle,
+        defaultStyle: defaultStyle,
+      );
+      return AnimatedOpacity(
+        opacity: visible ? 1.0 : 0.0,
+        duration: Duration(milliseconds: 150),
+        child: visible ? button : IgnorePointer(child: button),
+      );
+    });
   }
 }
 
