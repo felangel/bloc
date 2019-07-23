@@ -4,7 +4,7 @@
   - [Why Bloc?](whybloc.md)
   - Core Concepts
     - [bloc](coreconcepts.md)
-    - [flutter_bloc](fluttercoreconcepts.md)
+    - [flutter_bloc](flutterbloccoreconcepts.md)
   - [Architecture](architecture.md)
   - [Testing](testing.md)
 
