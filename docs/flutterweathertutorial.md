@@ -385,7 +385,7 @@ class Weather extends Equatable {
 }
 ```
 
-?> We extend [`Equatable`](https://pub.dartlang.org/packages/equatable) so that we can compare `Weather` instances. By default, the equality operator returns true if and only if this and other are the same instance.
+?> We extend [`Equatable`](https://pub.dev/packages/equatable) so that we can compare `Weather` instances. By default, the equality operator returns true if and only if this and other are the same instance.
 
 There's not much happening here; we are just defining our `Weather` data model and implementing a `fromJson` method so that we can create a `Weather` instance from the API response body and creating a method that maps the raw string to a `WeatherCondition` in our enum.
 
@@ -1994,6 +1994,6 @@ class CombinedWeatherTemperature extends StatelessWidget {
 }
 ```
 
-That’s all there is to it! We’ve now successfully implemented a weather app in flutter using the [bloc](https://pub.dartlang.org/packages/bloc) and [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
+That’s all there is to it! We’ve now successfully implemented a weather app in flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
 
 The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_weather).

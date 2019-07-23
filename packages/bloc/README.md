@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_logo_full.png" height="60" alt="Bloc Package" />
 
-[![Pub](https://img.shields.io/pub/v/bloc.svg)](https://pub.dartlang.org/packages/bloc)
+[![Pub](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)
 [![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
 [![Flutter.io](https://img.shields.io/badge/Flutter-Website-deepskyblue.svg)](https://flutter.io/docs/development/data-and-backend/state-mgmt/options#bloc--rx)
@@ -14,7 +14,7 @@
 
 A dart package that helps implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
 
-This package is built to work with [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc) and [angular_bloc](https://pub.dartlang.org/packages/angular_bloc).
+This package is built to work with [flutter_bloc](https://pub.dev/packages/flutter_bloc) and [angular_bloc](https://pub.dev/packages/angular_bloc).
 
 ## Overview
 

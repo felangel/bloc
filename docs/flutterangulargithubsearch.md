@@ -266,7 +266,7 @@ class TextChanged extends GithubSearchEvent {
 }
 ```
 
-?> **Note:** We extend [`Equatable`](https://pub.dartlang.org/packages/equatable) so that we can compare instances of `GithubSearchEvent`; by default, the equality operator returns true if and only if this and other are the same instance.
+?> **Note:** We extend [`Equatable`](https://pub.dev/packages/equatable) so that we can compare instances of `GithubSearchEvent`; by default, the equality operator returns true if and only if this and other are the same instance.
 
 ### Github Search State
 
@@ -322,7 +322,7 @@ class SearchStateError extends GithubSearchState {
 }
 ```
 
-?> **Note:** We extend [`Equatable`](https://pub.dartlang.org/packages/equatable) so that we can compare instances of `GithubSearchState`; by default, the equality operator returns true if and only if this and other are the same instance.
+?> **Note:** We extend [`Equatable`](https://pub.dev/packages/equatable) so that we can compare instances of `GithubSearchState`; by default, the equality operator returns true if and only if this and other are the same instance.
 
 Now that we have our Events and States implemented, we can create our `GithubSearchBloc`.
 
@@ -627,7 +627,7 @@ class _SearchResultItem extends StatelessWidget {
 }
 ```
 
-?> **Note:** We use the [url_launcher](https://pub.dartlang.org/packages/url_launcher) package to open external urls.
+?> **Note:** We use the [url_launcher](https://pub.dev/packages/url_launcher) package to open external urls.
 
 ### Putting it all together
 
@@ -807,7 +807,7 @@ class App extends StatelessWidget {
 
 ?> **Note:** Our `GithubRepository` is created in `main` and injected into our `App`. Our `SearchForm` is wrapped in a `BlocProvider` which is responsible for initializing, disposing, and making the instance of `GithubSearchBloc` available to the `SearchForm` widget and its children.
 
-That’s all there is to it! We’ve now successfully implemented a github search app in Flutter using the [bloc](https://pub.dartlang.org/packages/bloc) and [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
+That’s all there is to it! We’ve now successfully implemented a github search app in Flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
 
 The full source can be found [here](https://github.com/felangel/Bloc/tree/master/examples/github_search/flutter_github_search).
 

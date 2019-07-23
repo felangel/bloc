@@ -1,4 +1,4 @@
-# Flutter Core Concepts
+# Flutter Bloc Core Concepts
 
 ?> Please make sure to carefully read and understand the following sections before working with [flutter_bloc](https://pub.dev/packages/flutter_bloc).
 

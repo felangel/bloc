@@ -29,7 +29,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 Before we start writing our tests we're going to need to add a testing framework to our dependencies.
 
-We need to add [test](https://pub.dartlang.org/packages/test) to our `pubspec.yaml`.
+We need to add [test](https://pub.dev/packages/test) to our `pubspec.yaml`.
 
 ```yaml
 dev_dependencies:

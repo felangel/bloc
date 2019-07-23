@@ -6,9 +6,9 @@
 
 Bloc consists of several pub packages:
 
-- [bloc](https://pub.dartlang.org/packages/bloc) - Core bloc library
-- [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc) - Powerful Flutter Widgets built to work with bloc in order to build fast, reactive mobile applications.
-- [angular_bloc](https://pub.dartlang.org/packages/angular_bloc) - Powerful Angular Components built to work with bloc in order to build fast, reactive web applications.
+- [bloc](https://pub.dev/packages/bloc) - Core bloc library
+- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Powerful Flutter Widgets built to work with bloc in order to build fast, reactive mobile applications.
+- [angular_bloc](https://pub.dev/packages/angular_bloc) - Powerful Angular Components built to work with bloc in order to build fast, reactive web applications.
 
 ## Installation
 

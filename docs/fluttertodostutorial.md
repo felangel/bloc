@@ -183,7 +183,7 @@ class Todo extends Equatable {
 }
 ```
 
-?> **Note:** We're using the [Equatable](https://pub.dartlang.org/packages/equatable) package so that we can compare instances of `Todos` without having to manually override `==` and `hashCode`.
+?> **Note:** We're using the [Equatable](https://pub.dev/packages/equatable) package so that we can compare instances of `Todos` without having to manually override `==` and `hashCode`.
 
 Next up, we need to create the `TodosState` which our presentation layer will receive.
 
@@ -1768,7 +1768,7 @@ void main() {
 
 ?> **Note:** We are setting our BlocSupervisor's delegate to the `SimpleBlocDelegate` we created earlier so that we can hook into all transitions and errors.
 
-?> **Note:** We are also wrapping our `TodosApp` widget in a `BlocProvider` which manages initializing, disposing, and providing the `TodosBloc` to our entire widget tree from [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc). We immediately dispatch the `LoadTodos` event in order to request the latest todos.
+?> **Note:** We are also wrapping our `TodosApp` widget in a `BlocProvider` which manages initializing, disposing, and providing the `TodosBloc` to our entire widget tree from [flutter_bloc](https://pub.dev/packages/flutter_bloc). We immediately dispatch the `LoadTodos` event in order to request the latest todos.
 
 Next, let's implement our `TodosApp` widget.
 
@@ -1825,7 +1825,7 @@ The `TodosApp` has two routes:
 - `Home` - which renders a `HomeScreen`
 - `AddTodo` - which renders a `AddEditScreen` with `isEditing` set to `false`.
 
-The `TodosApp` also makes the `TabBloc`, `FilteredTodosBloc`, and `StatsBloc` available to the widgets in its subtree by using the `MultiBlocProvider` widget from [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc).
+The `TodosApp` also makes the `TabBloc`, `FilteredTodosBloc`, and `StatsBloc` available to the widgets in its subtree by using the `MultiBlocProvider` widget from [flutter_bloc](https://pub.dev/packages/flutter_bloc).
 
 ```dart
 MultiBlocProvider(
@@ -1942,6 +1942,6 @@ class TodosApp extends StatelessWidget {
 }
 ```
 
-That’s all there is to it! We’ve now successfully implemented a todos app in flutter using the [bloc](https://pub.dartlang.org/packages/bloc) and [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
+That’s all there is to it! We’ve now successfully implemented a todos app in flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
 
 The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos).

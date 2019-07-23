@@ -54,7 +54,7 @@ then install all of the dependencies
 flutter packages get
 ```
 
-The last thing we need to do is follow the [firebase_auth usage instructions](https://pub.dartlang.org/packages/firebase_auth#usage) in order to hook up our application to firebase and enable [google_signin](https://pub.dartlang.org/packages/google_sign_in).
+The last thing we need to do is follow the [firebase_auth usage instructions](https://pub.dev/packages/firebase_auth#usage) in order to hook up our application to firebase and enable [google_signin](https://pub.dev/packages/google_sign_in).
 
 ## User Repository
 
@@ -268,7 +268,7 @@ class Unauthenticated extends AuthenticationState {
 }
 ```
 
-?> **Note**: The [`equatable`](https://pub.dartlang.org/packages/equatable) package is used in order to be able to compare two instances of `AuthenticationState`. By default, `==` returns true only if the two objects are the same instance.
+?> **Note**: The [`equatable`](https://pub.dev/packages/equatable) package is used in order to be able to compare two instances of `AuthenticationState`. By default, `==` returns true only if the two objects are the same instance.
 
 ?> **Note**: `toString` is overridden to make it easier to read an `AuthenticationState` when printing it to the console or in `Transitions`.
 
@@ -1368,7 +1368,7 @@ class GoogleLoginButton extends StatelessWidget {
 
 Again, there's not too much going on here. We have another `StatelessWidget`; however, this time we are not exposing an `onPressed` callback. Instead, we're handling the onPressed internally and dispatching the `LoginWithGooglePressed` event to our `LoginBloc` which will handle the Google Sign In process.
 
-?> **Note:** We're using [font_awesome_flutter](https://pub.dartlang.org/packages/font_awesome_flutter) for the cool google icon.
+?> **Note:** We're using [font_awesome_flutter](https://pub.dev/packages/font_awesome_flutter) for the cool google icon.
 
 ## Create Account Button
 

@@ -98,7 +98,7 @@ class Post extends Equatable {
 
 ?> We override the `toString` function in order to have a custom string representation of our `Post` for later.
 
-?> We extend [`Equatable`](https://pub.dartlang.org/packages/equatable) so that we can compare `Posts`; by default, the equality operator returns true if and only if this and other are the same instance.
+?> We extend [`Equatable`](https://pub.dev/packages/equatable) so that we can compare `Posts`; by default, the equality operator returns true if and only if this and other are the same instance.
 
 Now that we have our `Post` object model, let’s start working on the Business Logic Component (bloc).
 
@@ -121,7 +121,7 @@ class Fetch extends PostEvent {
 }
 ```
 
-?> Again, we are overriding `toString` for an easier to read string representation of our event. Again, we are extending [`Equatable`](https://pub.dartlang.org/packages/equatable) so that we can compare instances for equality.
+?> Again, we are overriding `toString` for an easier to read string representation of our event. Again, we are extending [`Equatable`](https://pub.dev/packages/equatable) so that we can compare instances for equality.
 
 To recap, our `PostBloc` will be receiving `PostEvents` and converting them to `PostStates`. We have defined all of our `PostEvents` (Fetch) so next let’s define our `PostState`.
 
@@ -509,7 +509,7 @@ class _HomePageState extends State<HomePage> {
 
 ?> `HomePage` is a `StatefulWidget` because it will need to maintain a `ScrollController`. In `initState`, we add a listener to our `ScrollController` so that we can respond to scroll events. We also access our `PostBloc` instance via `BlocProvider.of<PostBloc>(context)`.
 
-Moving along, our build method returns a `BlocBuilder`. `BlocBuilder` is a Flutter widget from the [flutter_bloc package](https://pub.dartlang.org/packages/flutter_bloc) which handles building a widget in response to new bloc states. Any time our `PostBloc` state changes, our builder function will be called with the new `PostState`.
+Moving along, our build method returns a `BlocBuilder`. `BlocBuilder` is a Flutter widget from the [flutter_bloc package](https://pub.dev/packages/flutter_bloc) which handles building a widget in response to new bloc states. Any time our `PostBloc` state changes, our builder function will be called with the new `PostState`.
 
 !> We need to remember to clean up after ourselves and dispose our `ScrollController` when our StatefulWidget is disposed.
 
@@ -600,7 +600,7 @@ Now when we run our application, every time a Bloc `Transition` occurs we can se
 
 ?> In practice, you can create different `BlocDelegates` and because every state change is recorded, we are able to very easily instrument our applications and track all user interactions and state changes in one place!
 
-That’s all there is to it! We’ve now successfully implemented an infinite list in flutter using the [bloc](https://pub.dartlang.org/packages/bloc) and [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
+That’s all there is to it! We’ve now successfully implemented an infinite list in flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
 
 Our `HomePage` has no idea where the `Posts` are coming from or how they are being retrieved. Conversely, our `PostBloc` has no idea how the `State` is being rendered, it simply converts events into states.
 

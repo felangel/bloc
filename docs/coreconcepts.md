@@ -1,6 +1,6 @@
 # Core Concepts
 
-?> Please make sure to carefully read and understand the following sections before working with Bloc.
+?> Please make sure to carefully read and understand the following sections before working with [bloc](https://pub.dev/packages/bloc).
 
 There are several core concepts that are critical to understanding how to use Bloc.
 
@@ -60,7 +60,7 @@ Because every state change is recorded, we are able to very easily instrument ou
 
 > A stream is a sequence of asynchronous data.
 
-Bloc is built on top of [RxDart](https://pub.dartlang.org/packages/rxdart); however, it abstracts all of the `RxDart` specific implementation details.
+Bloc is built on top of [RxDart](https://pub.dev/packages/rxdart); however, it abstracts all of the `RxDart` specific implementation details.
 
 In order to use Bloc, it is criticial to have a solid understanding of `Streams` and how they work.
 
