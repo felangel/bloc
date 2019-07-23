@@ -904,9 +904,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tabBloc = BlocProvider.of<TabBloc>(context);
-    return BlocBuilder(
-      bloc: tabBloc,
-      builder: (BuildContext context, AppTab activeTab) {
+    return BlocBuilder<TabBloc, AppTab>(
+      builder: (context, activeTab) {
         return Scaffold(
           appBar: AppBar(
             title: Text(FlutterBlocLocalizations.of(context).appTitle),
@@ -963,8 +962,7 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final todosBloc = BlocProvider.of<TodosBloc>(context);
-    return BlocBuilder(
-      bloc: todosBloc,
+    return BlocBuilder<TodosBloc, TodosState>(
       builder: (BuildContext context, TodosState state) {
         final todo = (state as TodosLoaded)
             .todos
@@ -1232,9 +1230,8 @@ class FilterButton extends StatelessWidget {
         .copyWith(color: Theme.of(context).accentColor);
     final FilteredTodosBloc filteredTodosBloc =
         BlocProvider.of<FilteredTodosBloc>(context);
-    return BlocBuilder(
-        bloc: filteredTodosBloc,
-        builder: (BuildContext context, FilteredTodosState state) {
+    return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
+        builder: (context, state) {
           final button = _Button(
             onSelected: (filter) {
               filteredTodosBloc.dispatch(UpdateFilter(filter));
@@ -1348,9 +1345,8 @@ class ExtraActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final todosBloc = BlocProvider.of<TodosBloc>(context);
-    return BlocBuilder(
-      bloc: todosBloc,
-      builder: (BuildContext context, TodosState state) {
+    return BlocBuilder<TodosBloc, TodosState>(
+      builder: (context, state) {
         if (state is TodosLoaded) {
           bool allComplete = (todosBloc.currentState as TodosLoaded)
               .todos
@@ -1475,15 +1471,10 @@ class FilteredTodos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final todosBloc = BlocProvider.of<TodosBloc>(context);
-    final filteredTodosBloc = BlocProvider.of<FilteredTodosBloc>(context);
     final localizations = ArchSampleLocalizations.of(context);
 
-    return BlocBuilder(
-      bloc: filteredTodosBloc,
-      builder: (
-        BuildContext context,
-        FilteredTodosState state,
-      ) {
+    return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
+      builder: (context, state) {
         if (state is FilteredTodosLoading) {
           return LoadingIndicator(key: ArchSampleKeys.todosLoading);
         } else if (state is FilteredTodosLoaded) {
@@ -1696,11 +1687,9 @@ class Stats extends StatelessWidget {
   Stats({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final StatsBloc statsBloc = BlocProvider.of<StatsBloc>(context);
-    return BlocBuilder(
-      bloc: statsBloc,
-      builder: (BuildContext context, StatsState state) {
+  Widget build(BuildContext context) {    
+    return BlocBuilder<StatsBloc, StatsState>(      
+      builder: (context, state) {
         if (state is StatsLoading) {
           return LoadingIndicator(key: FlutterTodosKeys.statsLoadingIndicator);
         } else if (state is StatsLoaded) {

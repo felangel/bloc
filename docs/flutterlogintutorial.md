@@ -540,8 +540,7 @@ class _LoginFormState extends State<LoginForm> {
       ));
     }
 
-    return BlocListener(
-      bloc: _loginBloc,
+    return BlocListener<LoginBloc, LoginState>(      
       listener: (context, state) {
         if (state is LoginFailure) {
           Scaffold.of(context).showSnackBar(

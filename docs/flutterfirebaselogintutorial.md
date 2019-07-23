@@ -516,9 +516,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocBuilder(
-        bloc: BlocProvider.of<AuthenticationBloc>(context),
-        builder: (BuildContext context, AuthenticationState state) {
+      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
           return Container();
         },
       ),
@@ -634,9 +633,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocBuilder(
-        bloc: BlocProvider.of<AuthenticationBloc>(context),
-        builder: (BuildContext context, AuthenticationState state) {
+      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
           if (state is Uninitialized) {
             return SplashScreen();
           }
@@ -730,9 +728,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocBuilder(
-        bloc: BlocProvider.of<AuthenticationBloc>(context),
-        builder: (BuildContext context, AuthenticationState state) {
+      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
           if (state is Uninitialized) {
             return SplashScreen();
           }
@@ -1172,9 +1169,8 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-      bloc: _loginBloc,
-      listener: (BuildContext context, LoginState state) {
+    return BlocListener<LoginBloc, LoginState>(      
+      listener: (context, state) {
         if (state.isFailure) {
           Scaffold.of(context)
             ..hideCurrentSnackBar()
@@ -1207,9 +1203,8 @@ class _LoginFormState extends State<LoginForm> {
           BlocProvider.of<AuthenticationBloc>(context).dispatch(LoggedIn());
         }
       },
-      child: BlocBuilder(
-        bloc: _loginBloc,
-        builder: (BuildContext context, LoginState state) {
+      child: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
           return Padding(
             padding: EdgeInsets.all(20.0),
             child: Form(
@@ -1757,9 +1752,8 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-      bloc: _registerBloc,
-      listener: (BuildContext context, RegisterState state) {
+    return BlocListener<RegisterBloc, RegisterState>(      
+      listener: (context, state) {
         if (state.isSubmitting) {
           Scaffold.of(context)
             ..hideCurrentSnackBar()
@@ -1796,9 +1790,8 @@ class _RegisterFormState extends State<RegisterForm> {
             );
         }
       },
-      child: BlocBuilder(
-        bloc: _registerBloc,
-        builder: (BuildContext context, RegisterState state) {
+      child: BlocBuilder<RegisterBloc, RegisterState>(
+        builder: (context, state) {
           return Padding(
             padding: EdgeInsets.all(20),
             child: Form(
@@ -1944,9 +1937,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocBuilder(
-        bloc: BlocProvider.of<AuthenticationBloc>(context),
-        builder: (BuildContext context, AuthenticationState state) {
+      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
           if (state is Uninitialized) {
             return SplashScreen();
           }

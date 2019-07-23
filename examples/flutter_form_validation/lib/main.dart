@@ -43,9 +43,8 @@ class _MyFormState extends State<MyForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _myFormBloc,
-      builder: (BuildContext context, MyFormState state) {
+    return BlocBuilder<MyFormBloc, MyFormState>(      
+      builder: (context, state) {
         if (state.formSubmittedSuccessfully) {
           return SuccessDialog(onDismissed: () {
             _emailController.clear();

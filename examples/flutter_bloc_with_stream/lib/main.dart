@@ -26,21 +26,9 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Flutter Bloc with Streams'),
       ),
-      body: BlocBuilder(
-        bloc: tickerBloc,
-        builder: (BuildContext context, TickerState state) {
-          if (state is Initial) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Press the floating button to start',
-                  ),
-                ],
-              ),
-            );
-          } else if (state is Update) {
+      body: BlocBuilder<TickerBloc, TickerState>(
+        builder: (context, state) {
+          if (state is Update) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -50,6 +38,16 @@ class MyHomePage extends StatelessWidget {
               ),
             );
           }
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Press the floating button to start',
+                ),
+              ],
+            ),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(

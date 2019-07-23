@@ -662,8 +662,7 @@ class Timer extends StatelessWidget {
   );
 
   @override
-  Widget build(BuildContext context) {
-    final TimerBloc _timerBloc = BlocProvider.of<TimerBloc>(context);
+  Widget build(BuildContext context) {    
     return Scaffold(
       appBar: AppBar(title: Text('Flutter Timer')),
       body: Column(
@@ -673,8 +672,7 @@ class Timer extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 100.0),
             child: Center(
-              child: BlocBuilder(
-                bloc: _timerBloc,
+              child: BlocBuilder<TimerBloc, TimerState>(
                 builder: (context, state) {
                   final String minutesStr = ((state.duration / 60) % 60)
                       .floor()
@@ -776,8 +774,7 @@ class Timer extends StatelessWidget {
   );
 
   @override
-  Widget build(BuildContext context) {
-    final TimerBloc _timerBloc = BlocProvider.of<TimerBloc>(context);
+  Widget build(BuildContext context) {    
     return Scaffold(
       appBar: AppBar(title: Text('Flutter Timer')),
       body: Column(
@@ -787,8 +784,7 @@ class Timer extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 100.0),
             child: Center(
-              child: BlocBuilder(
-                bloc: _timerBloc,
+              child: BlocBuilder<TimerBloc, TimerState>(                
                 builder: (context, state) {
                   final String minutesStr = ((state.duration / 60) % 60)
                       .floor()
@@ -804,10 +800,9 @@ class Timer extends StatelessWidget {
               ),
             ),
           ),
-          BlocBuilder(
+          BlocBuilder<TimerBloc, TimerState>(
             condition: (previousState, currentState) =>
-                currentState.runtimeType != previousState.runtimeType,
-            bloc: _timerBloc,
+                currentState.runtimeType != previousState.runtimeType,            
             builder: (context, state) => Actions(),
           ),
         ],
@@ -912,8 +907,7 @@ class Timer extends StatelessWidget {
   );
 
   @override
-  Widget build(BuildContext context) {
-    final TimerBloc _timerBloc = BlocProvider.of<TimerBloc>(context);
+  Widget build(BuildContext context) {    
     return Scaffold(
       appBar: AppBar(title: Text('Flutter Timer')),
       body: Stack(
@@ -926,8 +920,7 @@ class Timer extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 100.0),
                 child: Center(
-                  child: BlocBuilder(
-                    bloc: _timerBloc,
+                  child: BlocBuilder<TimerBloc, TimerState>(                    
                     builder: (context, state) {
                       final String minutesStr = ((state.duration / 60) % 60)
                           .floor()
@@ -945,10 +938,9 @@ class Timer extends StatelessWidget {
                   ),
                 ),
               ),
-              BlocBuilder(
+              BlocBuilder<TimerBloc, TimerState>(
                 condition: (previousState, currentState) =>
-                    currentState.runtimeType != previousState.runtimeType,
-                bloc: _timerBloc,
+                    currentState.runtimeType != previousState.runtimeType,                
                 builder: (context, state) => Actions(),
               ),
             ],

@@ -185,8 +185,7 @@ class PageA extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final myBloc = BlocProvider.of<MyBloc>(context);
-    return BlocListener(
-      bloc: myBloc,
+    return BlocListener<MyBloc, MyState>(      
       listener: (BuildContext context, MyState state) {
         if (state is StateB) {
           Navigator.of(context).pushNamed('/pageB');

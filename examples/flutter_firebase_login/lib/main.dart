@@ -31,18 +31,15 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocBuilder(
-        bloc: BlocProvider.of<AuthenticationBloc>(context),
-        builder: (BuildContext context, AuthenticationState state) {
-          if (state is Uninitialized) {
-            return SplashScreen();
-          }
+      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
           if (state is Unauthenticated) {
             return LoginScreen(userRepository: _userRepository);
           }
           if (state is Authenticated) {
             return HomeScreen(name: state.displayName);
           }
+          return SplashScreen();
         },
       ),
     );

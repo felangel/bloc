@@ -15,9 +15,8 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final todosBloc = BlocProvider.of<TodosBloc>(context);
-    return BlocBuilder(
-      bloc: todosBloc,
-      builder: (BuildContext context, TodosState state) {
+    return BlocBuilder<TodosBloc, TodosState>(
+      builder: (context, state) {
         final todo = (state as TodosLoaded)
             .todos
             .firstWhere((todo) => todo.id == id, orElse: () => null);

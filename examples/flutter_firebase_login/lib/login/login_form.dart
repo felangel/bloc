@@ -40,9 +40,8 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-      bloc: _loginBloc,
-      listener: (BuildContext context, LoginState state) {
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
         if (state.isFailure) {
           Scaffold.of(context)
             ..hideCurrentSnackBar()
@@ -75,9 +74,8 @@ class _LoginFormState extends State<LoginForm> {
           BlocProvider.of<AuthenticationBloc>(context).dispatch(LoggedIn());
         }
       },
-      child: BlocBuilder(
-        bloc: _loginBloc,
-        builder: (BuildContext context, LoginState state) {
+      child: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
           return Padding(
             padding: EdgeInsets.all(20.0),
             child: Form(

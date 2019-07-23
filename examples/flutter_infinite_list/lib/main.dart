@@ -49,14 +49,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _postBloc,
-      builder: (BuildContext context, PostState state) {
-        if (state is PostUninitialized) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+    return BlocBuilder<PostBloc, PostState>(
+      builder: (context, state) {
         if (state is PostError) {
           return Center(
             child: Text('failed to fetch posts'),
@@ -80,6 +74,9 @@ class _HomePageState extends State<HomePage> {
             controller: _scrollController,
           );
         }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }

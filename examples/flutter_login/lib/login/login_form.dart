@@ -13,17 +13,16 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _loginBloc = BlocProvider.of<LoginBloc>(context);
+    final loginBloc = BlocProvider.of<LoginBloc>(context);
 
     _onLoginButtonPressed() {
-      _loginBloc.dispatch(LoginButtonPressed(
+      loginBloc.dispatch(LoginButtonPressed(
         username: _usernameController.text,
         password: _passwordController.text,
       ));
     }
 
-    return BlocListener(
-      bloc: _loginBloc,
+    return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is LoginFailure) {
           Scaffold.of(context).showSnackBar(
@@ -34,12 +33,8 @@ class _LoginFormState extends State<LoginForm> {
           );
         }
       },
-      child: BlocBuilder<LoginEvent, LoginState>(
-        bloc: _loginBloc,
-        builder: (
-          BuildContext context,
-          LoginState state,
-        ) {
+      child: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
           return Form(
             child: Column(
               children: [

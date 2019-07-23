@@ -10,9 +10,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tabBloc = BlocProvider.of<TabBloc>(context);
-    return BlocBuilder(
-      bloc: tabBloc,
-      builder: (BuildContext context, AppTab activeTab) {
+    return BlocBuilder<TabBloc, AppTab>(
+      builder: (context, activeTab) {
         return Scaffold(
           appBar: AppBar(
             title: Text(FlutterBlocLocalizations.of(context).appTitle),

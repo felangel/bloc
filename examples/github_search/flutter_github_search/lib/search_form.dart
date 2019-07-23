@@ -65,12 +65,8 @@ class _SearchBarState extends State<_SearchBar> {
 class _SearchBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GithubSearchEvent, GithubSearchState>(
-      bloc: BlocProvider.of<GithubSearchBloc>(context),
-      builder: (BuildContext context, GithubSearchState state) {
-        if (state is SearchStateEmpty) {
-          return Text('Please enter a term to begin');
-        }
+    return BlocBuilder<GithubSearchBloc, GithubSearchState>(
+      builder: (context, state) {
         if (state is SearchStateLoading) {
           return CircularProgressIndicator();
         }
@@ -82,6 +78,7 @@ class _SearchBody extends StatelessWidget {
               ? Text('No Results')
               : Expanded(child: _SearchResults(items: state.items));
         }
+        return Text('Please enter a term to begin');
       },
     );
   }

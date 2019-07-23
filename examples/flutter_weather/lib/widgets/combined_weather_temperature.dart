@@ -29,9 +29,8 @@ class CombinedWeatherTemperature extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.all(20.0),
-              child: BlocBuilder(
-                bloc: BlocProvider.of<SettingsBloc>(context),
-                builder: (_, SettingsState state) {
+              child: BlocBuilder<SettingsBloc, SettingsState>(
+                builder: (context, state) {
                   return Temperature(
                     temperature: weather.temp,
                     high: weather.maxTemp,

@@ -13,9 +13,8 @@ class ExtraActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final todosBloc = BlocProvider.of<TodosBloc>(context);
-    return BlocBuilder(
-      bloc: todosBloc,
-      builder: (BuildContext context, TodosState state) {
+    return BlocBuilder<TodosBloc, TodosState>(
+      builder: (context, state) {
         if (state is TodosLoaded) {
           bool allComplete = (todosBloc.currentState as TodosLoaded)
               .todos
@@ -33,24 +32,23 @@ class ExtraActions extends StatelessWidget {
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuItem<ExtraAction>>[
-                  PopupMenuItem<ExtraAction>(
-                    key: ArchSampleKeys.toggleAll,
-                    value: ExtraAction.toggleAllComplete,
-                    child: Text(
-                      allComplete
-                          ? ArchSampleLocalizations.of(context)
-                              .markAllIncomplete
-                          : ArchSampleLocalizations.of(context).markAllComplete,
-                    ),
-                  ),
-                  PopupMenuItem<ExtraAction>(
-                    key: ArchSampleKeys.clearCompleted,
-                    value: ExtraAction.clearCompleted,
-                    child: Text(
-                      ArchSampleLocalizations.of(context).clearCompleted,
-                    ),
-                  ),
-                ],
+              PopupMenuItem<ExtraAction>(
+                key: ArchSampleKeys.toggleAll,
+                value: ExtraAction.toggleAllComplete,
+                child: Text(
+                  allComplete
+                      ? ArchSampleLocalizations.of(context).markAllIncomplete
+                      : ArchSampleLocalizations.of(context).markAllComplete,
+                ),
+              ),
+              PopupMenuItem<ExtraAction>(
+                key: ArchSampleKeys.clearCompleted,
+                value: ExtraAction.clearCompleted,
+                child: Text(
+                  ArchSampleLocalizations.of(context).clearCompleted,
+                ),
+              ),
+            ],
           );
         }
         return Container(key: FlutterTodosKeys.extraActionsEmptyContainer);

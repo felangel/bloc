@@ -12,23 +12,23 @@ class Settings extends StatelessWidget {
       appBar: AppBar(title: Text('Settings')),
       body: ListView(
         children: <Widget>[
-          BlocBuilder(
-              bloc: settingsBloc,
-              builder: (_, SettingsState state) {
-                return ListTile(
-                  title: Text(
-                    'Temperature Units',
-                  ),
-                  isThreeLine: true,
-                  subtitle:
-                      Text('Use metric measurements for temperature units.'),
-                  trailing: Switch(
-                    value: state.temperatureUnits == TemperatureUnits.celsius,
-                    onChanged: (_) =>
-                        settingsBloc.dispatch(TemperatureUnitsToggled()),
-                  ),
-                );
-              }),
+          BlocBuilder<SettingsBloc, SettingsState>(
+            builder: (context, state) {
+              return ListTile(
+                title: Text(
+                  'Temperature Units',
+                ),
+                isThreeLine: true,
+                subtitle:
+                    Text('Use metric measurements for temperature units.'),
+                trailing: Switch(
+                  value: state.temperatureUnits == TemperatureUnits.celsius,
+                  onChanged: (_) =>
+                      settingsBloc.dispatch(TemperatureUnitsToggled()),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

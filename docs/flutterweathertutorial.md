@@ -787,9 +787,8 @@ class Weather extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: BlocBuilder(
-          bloc: weatherBloc,
-          builder: (_, WeatherState state) {
+        child: BlocBuilder<WeatherBloc, WeatherState>(
+          builder: (context, state) {
             if (state is WeatherEmpty) {
               return Center(child: Text('Please Select a Location'));
             }
@@ -1410,9 +1409,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: BlocProvider.of<ThemeBloc>(context),
-      builder: (_, ThemeState themeState) {
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, themeState) {
         return MaterialApp(
           title: 'Flutter Weather',
           theme: themeState.theme,
@@ -1520,9 +1518,8 @@ class _WeatherState extends State<Weather> {
         ],
       ),
       body: Center(
-        child: BlocListener(
-          bloc: weatherBloc,
-          listener: (BuildContext context, WeatherState state) {
+        child: BlocListener<WeatherBloc, WeatherState>(          
+          listener: (context, state) {
             if (state is WeatherLoaded) {
               BlocProvider.of<ThemeBloc>(context).dispatch(
                 WeatherChanged(condition: state.weather.condition),
@@ -1531,9 +1528,8 @@ class _WeatherState extends State<Weather> {
               _refreshCompleter = Completer();
             }
           },
-          child: BlocBuilder(
-            bloc: weatherBloc,
-            builder: (_, WeatherState state) {
+          child: BlocBuilder<WeatherBloc, WeatherState>(
+            builder: (context, state) {
               if (state is WeatherEmpty) {
                 return Center(child: Text('Please Select a Location'));
               }
@@ -1543,9 +1539,8 @@ class _WeatherState extends State<Weather> {
               if (state is WeatherLoaded) {
                 final weather = state.weather;
 
-                return BlocBuilder(
-                  bloc: BlocProvider.of<ThemeBloc>(context),
-                  builder: (_, ThemeState themeState) {
+                return BlocBuilder<ThemeBloc, ThemeState>(
+                  builder: (context, themeState) {
                     return GradientContainer(
                       color: themeState.color,
                       child: RefreshIndicator(
@@ -1703,9 +1698,8 @@ class Settings extends StatelessWidget {
       appBar: AppBar(title: Text('Settings')),
       body: ListView(
         children: <Widget>[
-          BlocBuilder(
-              bloc: settingsBloc,
-              builder: (_, SettingsState state) {
+          BlocBuilder<SettingsBloc, SettingsState>(
+              builder: (context, state) {
                 return ListTile(
                   title: Text(
                     'Temperature Units',
@@ -1797,9 +1791,8 @@ class _WeatherState extends State<Weather> {
         ],
       ),
       body: Center(
-        child: BlocListener(
-          bloc: weatherBloc,
-          listener: (BuildContext context, WeatherState state) {
+        child: BlocListener<WeatherBloc, WeatherState>(          
+          listener: (context, state) {
             if (state is WeatherLoaded) {
               BlocProvider.of<ThemeBloc>(context).dispatch(
                 WeatherChanged(condition: state.weather.condition),
@@ -1808,9 +1801,8 @@ class _WeatherState extends State<Weather> {
               _refreshCompleter = Completer();
             }
           },
-          child: BlocBuilder(
-            bloc: weatherBloc,
-            builder: (_, WeatherState state) {
+          child: BlocBuilder<WeatherBloc, WeatherState>(
+            builder: (context, state) {
               if (state is WeatherEmpty) {
                 return Center(child: Text('Please Select a Location'));
               }
@@ -1820,9 +1812,8 @@ class _WeatherState extends State<Weather> {
               if (state is WeatherLoaded) {
                 final weather = state.weather;
 
-                return BlocBuilder(
-                  bloc: BlocProvider.of<ThemeBloc>(context),
-                  builder: (_, ThemeState themeState) {
+                return BlocBuilder<ThemeBloc, ThemeState>(
+                  builder: (context, themeState) {
                     return GradientContainer(
                       color: themeState.color,
                       child: RefreshIndicator(
@@ -1974,9 +1965,8 @@ class CombinedWeatherTemperature extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.all(20.0),
-              child: BlocBuilder(
-                bloc: BlocProvider.of<SettingsBloc>(context),
-                builder: (_, SettingsState state) {
+              child: BlocBuilder<SettingsBloc, SettingsState>(
+                builder: (context, state) {
                   return Temperature(
                     temperature: weather.temp,
                     high: weather.maxTemp,

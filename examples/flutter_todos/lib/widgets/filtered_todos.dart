@@ -14,15 +14,10 @@ class FilteredTodos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final todosBloc = BlocProvider.of<TodosBloc>(context);
-    final filteredTodosBloc = BlocProvider.of<FilteredTodosBloc>(context);
     final localizations = ArchSampleLocalizations.of(context);
 
-    return BlocBuilder(
-      bloc: filteredTodosBloc,
-      builder: (
-        BuildContext context,
-        FilteredTodosState state,
-      ) {
+    return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
+      builder: (context, state) {
         if (state is FilteredTodosLoading) {
           return LoadingIndicator(key: ArchSampleKeys.todosLoading);
         } else if (state is FilteredTodosLoaded) {

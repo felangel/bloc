@@ -117,9 +117,8 @@ The `CounterPage` widget is a `StatelessWidget` which is accesses the `CounterBl
 class CounterText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: BlocProvider.of<CounterBloc>(context),
-      builder: (BuildContext context, int count) {
+    return BlocBuilder<CounterBloc, int>(
+      builder: (context, count) {
         return Text('$count');
       },
     );
@@ -268,9 +267,8 @@ class CounterPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Counter'),
       ),
-      body: BlocBuilder(
-        bloc: BlocProvider.of<CounterBloc>(context),
-        builder: (BuildContext context, int count) {
+      body: BlocBuilder<CounterBloc, int>(
+        builder: (context, count) {
           return Center(
             child: Text('$count'),
           );
@@ -402,9 +400,8 @@ Our `CounterPage` is a `StatelessWidget` because it doesn't need to manage any o
 class CounterText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: BlocProvider.of<CounterBloc>(context),
-      builder: (BuildContext context, int count) {
+    return BlocBuilder<CounterBloc, int>(
+      builder: (context, count) {
         return Text('$count');
       },
     );

@@ -56,9 +56,8 @@ class _WeatherState extends State<Weather> {
         ],
       ),
       body: Center(
-        child: BlocListener(
-          bloc: weatherBloc,
-          listener: (BuildContext context, WeatherState state) {
+        child: BlocListener<WeatherBloc, WeatherState>(          
+          listener: (context, state) {
             if (state is WeatherLoaded) {
               BlocProvider.of<ThemeBloc>(context).dispatch(
                 WeatherChanged(condition: state.weather.condition),
@@ -67,21 +66,16 @@ class _WeatherState extends State<Weather> {
               _refreshCompleter = Completer();
             }
           },
-          child: BlocBuilder(
-            bloc: weatherBloc,
-            builder: (_, WeatherState state) {
-              if (state is WeatherEmpty) {
-                return Center(child: Text('Please Select a Location'));
-              }
+          child: BlocBuilder<WeatherBloc, WeatherState>(
+            builder: (context, state) {
               if (state is WeatherLoading) {
                 return Center(child: CircularProgressIndicator());
               }
               if (state is WeatherLoaded) {
                 final weather = state.weather;
 
-                return BlocBuilder(
-                  bloc: BlocProvider.of<ThemeBloc>(context),
-                  builder: (_, ThemeState themeState) {
+                return BlocBuilder<ThemeBloc, ThemeState>(
+                  builder: (context, themeState) {
                     return GradientContainer(
                       color: themeState.color,
                       child: RefreshIndicator(
@@ -123,6 +117,7 @@ class _WeatherState extends State<Weather> {
                   style: TextStyle(color: Colors.red),
                 );
               }
+              return Center(child: Text('Please Select a Location'));
             },
           ),
         ),

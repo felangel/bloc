@@ -30,9 +30,8 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-      bloc: _registerBloc,
-      listener: (BuildContext context, RegisterState state) {
+    return BlocListener<RegisterBloc, RegisterState>(      
+      listener: (context, state) {
         if (state.isSubmitting) {
           Scaffold.of(context)
             ..hideCurrentSnackBar()
@@ -69,9 +68,8 @@ class _RegisterFormState extends State<RegisterForm> {
             );
         }
       },
-      child: BlocBuilder(
-        bloc: _registerBloc,
-        builder: (BuildContext context, RegisterState state) {
+      child: BlocBuilder<RegisterBloc, RegisterState>(
+        builder: (context, state) {
           return Padding(
             padding: EdgeInsets.all(20),
             child: Form(

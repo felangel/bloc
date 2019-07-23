@@ -96,9 +96,8 @@ class Home extends StatelessWidget {
     final dataBloc = BlocProvider.of<DataBloc>(context);
     return Scaffold(
       appBar: AppBar(title: Text('Home')),
-      body: BlocListener(
-        bloc: dataBloc,
-        listener: (BuildContext context, DataState state) {
+      body: BlocListener<DataBloc, DataState>(        
+        listener: (context, state) {
           if (state is Success) {
             Scaffold.of(context).showSnackBar(
               SnackBar(
@@ -108,9 +107,8 @@ class Home extends StatelessWidget {
             );
           }
         },
-        child: BlocBuilder(
-          bloc: dataBloc,
-          builder: (BuildContext context, DataState state) {
+        child: BlocBuilder<DataBloc, DataState>(
+          builder: (context, state) {
             if (state is Initial) {
               return Center(child: Text('Press the Button'));
             }

@@ -34,14 +34,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final listBloc = BlocProvider.of<ListBloc>(context);
-    return BlocBuilder(
-      bloc: listBloc,
-      builder: (BuildContext context, ListState state) {
-        if (state is Loading) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+    return BlocBuilder<ListBloc, ListState>(
+      builder: (context, state) {
         if (state is Failure) {
           return Center(
             child: Text('Oops something went wrong!'),
@@ -65,6 +59,9 @@ class HomePage extends StatelessWidget {
             itemCount: state.items.length,
           );
         }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }

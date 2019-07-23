@@ -457,9 +457,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _postBloc,
-      builder: (BuildContext context, PostState state) {
+    return BlocBuilder<PostBloc, PostState>(
+      builder: (context, state) {
         if (state is PostUninitialized) {
           return Center(
             child: CircularProgressIndicator(),

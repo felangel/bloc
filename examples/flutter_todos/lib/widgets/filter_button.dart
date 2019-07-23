@@ -18,25 +18,24 @@ class FilterButton extends StatelessWidget {
         .copyWith(color: Theme.of(context).accentColor);
     final FilteredTodosBloc filteredTodosBloc =
         BlocProvider.of<FilteredTodosBloc>(context);
-    return BlocBuilder(
-        bloc: filteredTodosBloc,
-        builder: (BuildContext context, FilteredTodosState state) {
-          final button = _Button(
-            onSelected: (filter) {
-              filteredTodosBloc.dispatch(UpdateFilter(filter));
-            },
-            activeFilter: state is FilteredTodosLoaded
-                ? state.activeFilter
-                : VisibilityFilter.all,
-            activeStyle: activeStyle,
-            defaultStyle: defaultStyle,
-          );
-          return AnimatedOpacity(
-            opacity: visible ? 1.0 : 0.0,
-            duration: Duration(milliseconds: 150),
-            child: visible ? button : IgnorePointer(child: button),
-          );
-        });
+    return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
+        builder: (context, state) {
+      final button = _Button(
+        onSelected: (filter) {
+          filteredTodosBloc.dispatch(UpdateFilter(filter));
+        },
+        activeFilter: state is FilteredTodosLoaded
+            ? state.activeFilter
+            : VisibilityFilter.all,
+        activeStyle: activeStyle,
+        defaultStyle: defaultStyle,
+      );
+      return AnimatedOpacity(
+        opacity: visible ? 1.0 : 0.0,
+        duration: Duration(milliseconds: 150),
+        child: visible ? button : IgnorePointer(child: button),
+      );
+    });
   }
 }
 
@@ -61,37 +60,37 @@ class _Button extends StatelessWidget {
       tooltip: ArchSampleLocalizations.of(context).filterTodos,
       onSelected: onSelected,
       itemBuilder: (BuildContext context) => <PopupMenuItem<VisibilityFilter>>[
-            PopupMenuItem<VisibilityFilter>(
-              key: ArchSampleKeys.allFilter,
-              value: VisibilityFilter.all,
-              child: Text(
-                ArchSampleLocalizations.of(context).showAll,
-                style: activeFilter == VisibilityFilter.all
-                    ? activeStyle
-                    : defaultStyle,
-              ),
-            ),
-            PopupMenuItem<VisibilityFilter>(
-              key: ArchSampleKeys.activeFilter,
-              value: VisibilityFilter.active,
-              child: Text(
-                ArchSampleLocalizations.of(context).showActive,
-                style: activeFilter == VisibilityFilter.active
-                    ? activeStyle
-                    : defaultStyle,
-              ),
-            ),
-            PopupMenuItem<VisibilityFilter>(
-              key: ArchSampleKeys.completedFilter,
-              value: VisibilityFilter.completed,
-              child: Text(
-                ArchSampleLocalizations.of(context).showCompleted,
-                style: activeFilter == VisibilityFilter.completed
-                    ? activeStyle
-                    : defaultStyle,
-              ),
-            ),
-          ],
+        PopupMenuItem<VisibilityFilter>(
+          key: ArchSampleKeys.allFilter,
+          value: VisibilityFilter.all,
+          child: Text(
+            ArchSampleLocalizations.of(context).showAll,
+            style: activeFilter == VisibilityFilter.all
+                ? activeStyle
+                : defaultStyle,
+          ),
+        ),
+        PopupMenuItem<VisibilityFilter>(
+          key: ArchSampleKeys.activeFilter,
+          value: VisibilityFilter.active,
+          child: Text(
+            ArchSampleLocalizations.of(context).showActive,
+            style: activeFilter == VisibilityFilter.active
+                ? activeStyle
+                : defaultStyle,
+          ),
+        ),
+        PopupMenuItem<VisibilityFilter>(
+          key: ArchSampleKeys.completedFilter,
+          value: VisibilityFilter.completed,
+          child: Text(
+            ArchSampleLocalizations.of(context).showCompleted,
+            style: activeFilter == VisibilityFilter.completed
+                ? activeStyle
+                : defaultStyle,
+          ),
+        ),
+      ],
       icon: Icon(Icons.filter_list),
     );
   }

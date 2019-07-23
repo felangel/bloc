@@ -52,12 +52,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
-        bloc: BlocProvider.of<AuthenticationBloc>(context),
-        builder: (BuildContext context, AuthenticationState state) {
-          if (state is AuthenticationUninitialized) {
-            return SplashPage();
-          }
+      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
           if (state is AuthenticationAuthenticated) {
             return HomePage();
           }
@@ -67,6 +63,7 @@ class App extends StatelessWidget {
           if (state is AuthenticationLoading) {
             return LoadingIndicator();
           }
+          return SplashPage();
         },
       ),
     );
