@@ -1,3 +1,7 @@
+# 0.11.0
+
+Update Snippets to support changes in flutter_bloc `v0.20.0`
+
 # 0.10.1
 
 - Minor Documentation Updates

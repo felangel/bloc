@@ -22,9 +22,8 @@
     "scope": "dart",
     "prefix": "blocbuilder",
     "body": [
-      "BlocBuilder(",
-      "\tbloc: ${1:MyBloc},",
-      "\tbuilder: (BuildContext context, ${2:MyState} state) {",
+      "BlocBuilder<${1:MyBloc}, ${2:MyState}>(",
+      "\tbuilder: (context, state) {",
       "\t\treturn ${3:Container();}",
       "\t},",
       ")"
@@ -34,9 +33,8 @@
     "scope": "dart",
     "prefix": "bloclistener",
     "body": [
-      "BlocListener(",
-      "\tbloc: ${1:MyBloc},",
-      "\tlistener: (BuildContext context, ${2:MyState} state) {",
+      "BlocListener<${1:MyBloc}, ${2:MyState}>(",
+      "\tlistener: (context, state) {",
       "\t\t${3:// TODO: implement listener}",
       "\t},",
       "\tchild: ${4:Container()}",
@@ -49,20 +47,18 @@
     "body": [
       "MultiBlocListener(",
       "\tlisteners: [",
-      "\t\tBlocListener<${1:MyEvent}, ${2:MyState}>(",
-      "\t\t\tbloc: ${3:_myBloc},",
-      "\t\t\tlistener: (BuildContext context, ${2:MyState} state) {",
-      "\t\t\t\t${4:// TODO: implement listener}",
+      "\t\tBlocListener<${1:MyBloc}, ${2:MyState}>(",
+      "\t\t\tlistener: (context, state) {",
+      "\t\t\t\t${3:// TODO: implement listener}",
       "\t\t\t},",
       "\t\t),",
-      "\t\tBlocListener<${5:MyOtherEvent}, ${6:MyOtherState}>(",
-      "\t\t\tbloc: ${7:_myOtherBloc},",
-      "\t\t\tlistener: (BuildContext context, ${6:MyOtherState} state) {",
-      "\t\t\t\t${8:// TODO: implement listener}",
+      "\t\tBlocListener<${4:MyOtherBloc}, ${5:MyOtherState}>(",
+      "\t\t\tlistener: (context, state) {",
+      "\t\t\t\t${6:// TODO: implement listener}",
       "\t\t\t},",
       "\t\t),",
       "\t],",
-      "\tchild: ${9:Container()},",
+      "\tchild: ${7:Container()},",
       ")"
     ]
   },
@@ -71,7 +67,7 @@
     "prefix": "blocprovider",
     "body": [
       "BlocProvider(",
-      "\tbuilder: (BuildContext context) => ${1:MyBloc}(),",
+      "\tbuilder: (context) => ${1:MyBloc}(),",
       "\tchild: ${2:Container()},",
       ")"
     ]
@@ -83,10 +79,10 @@
       "MultiBlocProvider(",
       "\tproviders: [",
       "\t\tBlocProvider<${1:MyBloc}>(",
-      "\t\t\tbuilder: (BuildContext context) => ${1:MyBloc}(),",
+      "\t\t\tbuilder: (context) => ${1:MyBloc}(),",
       "\t\t),",
       "\t\tBlocProvider<${2:MyOtherBloc}>(",
-      "\t\t\tbuilder: (BuildContext context) => ${2:MyOtherBloc}(),",
+      "\t\t\tbuilder: (context) => ${2:MyOtherBloc}(),",
       "\t\t),",
       "\t],",
       "\tchild: ${3:Container()},",
@@ -98,7 +94,7 @@
     "prefix": "repositoryprovider",
     "body": [
       "RepositoryProvider(",
-      "\tbuilder: (BuildContext context) => ${1:myValue},",
+      "\tbuilder: (context) => ${1:myValue},",
       "\tchild: ${2:Container()},",
       ")"
     ]
@@ -110,10 +106,10 @@
       "MultiRepositoryProvider(",
       "\tproviders: [",
       "\t\tRepositoryProvider<${1:MyValue}>(",
-      "\t\t\tbuilder: (BuildContext context) => ${2:myValue},",
+      "\t\t\tbuilder: (context) => ${2:myValue},",
       "\t\t),",
       "\t\tRepositoryProvider<${3:MyOtherValue}>(",
-      "\t\t\tbuilder: (BuildContext context) => ${4:myOtherValue},",
+      "\t\t\tbuilder: (context) => ${4:myOtherValue},",
       "\t\t),",
       "\t],",
       "\tchild: ${5:Container()},",
