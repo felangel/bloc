@@ -1,6 +1,6 @@
-# flutter_bloc Core Concepts
+# Flutter Core Concepts
 
-?> Please make sure to carefully read and understand the following sections before working with flutter_bloc.
+?> Please make sure to carefully read and understand the following sections before working with [flutter_bloc](https://pub.dev/packages/flutter_bloc).
 
 ## Bloc Widgets
 
