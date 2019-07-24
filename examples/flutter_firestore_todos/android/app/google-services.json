@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "723801655785",
+    "firebase_url": "https://flutter-bloc-todo-app.firebaseio.com",
+    "project_id": "flutter-bloc-todo-app",
+    "storage_bucket": "flutter-bloc-todo-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723801655785:android:da090ee954411a17",
+        "android_client_info": {
+          "package_name": "com.example.flutter_firestore_todos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "723801655785-r140lfqlc5tf6hkm2pulor1emi18cjio.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrp0KZO9FZXMHy7Wn9ovcrC3ze_AoFadU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "723801655785-r140lfqlc5tf6hkm2pulor1emi18cjio.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
