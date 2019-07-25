@@ -9,7 +9,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   StreamSubscription _todosSubscription;
 
   TodosBloc({@required TodosRepository todosRepository})
-      : assert(_todosRepository != null),
+      : assert(todosRepository != null),
         _todosRepository = todosRepository;
 
   @override
