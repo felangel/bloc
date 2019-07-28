@@ -17,38 +17,6 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 
 class BlocListener<B extends Bloc<dynamic, S>, S> extends BlocListenerBase<B, S>
     with SingleChildCloneableWidget {
-  /// The [Bloc] whose state will be listened to.
-  /// Whenever the bloc's state changes, `listener` will be invoked.
-  /// If omitted, [BlocListener] will automatically perform a lookup using
-  /// [BlocProvider] and the current [BuildContext]
-  final B bloc;
-
-  /// The [BlocWidgetListener] which will be called on every state change (including the `initialState`).
-  /// This listener should be used for any code which needs to execute
-  /// in response to a state change ([Transition]).
-  /// The state will be the `nextState` for the most recent [Transition].
-  final BlocWidgetListener<S> listener;
-
-  /// The `condition` function will be invoked on each bloc state change.
-  /// The `condition` takes the previous state and current state and must return a `bool`
-  /// which determines whether or not the `listener` function will be invoked.
-  /// The previous state will be initialized to `currentState` when the [BlocListener] is initialized.
-  /// `condition` is optional and if it isn't implemented, it will default to return `true`.
-  ///
-  /// ```dart
-  /// BlocListener<BlocA, BlocAState>(
-  ///   condition: (previousState, currentState) {
-  ///     // return true/false to determine whether or not
-  ///     // to invoke listener with currentState
-  ///   },
-  ///   listener: (context, state) {
-  ///     // do stuff here based on BlocA's state
-  ///   }
-  ///   child: Container(),
-  /// )
-  /// ```
-  final BlocListenerCondition<S> condition;
-
   /// The [Widget] which will be rendered as a descendant of the [BlocListener].
   final Widget child;
 
@@ -82,17 +50,38 @@ class BlocListener<B extends Bloc<dynamic, S>, S> extends BlocListenerBase<B, S>
   ///   child: Container(),
   /// )
   /// ```
+  ///
+  /// An optional `condition` can be implemented for more granular control
+  /// when `listener` is called.
+  /// The `condition` function will be invoked on each bloc state change.
+  /// The `condition` takes the previous state and current state and must return a `bool`
+  /// which determines whether or not the `listener` function will be invoked.
+  /// The previous state will be initialized to `currentState` when the [BlocListener] is initialized.
+  /// `condition` is optional and if it isn't implemented, it will default to return `true`.
+  ///
+  /// ```dart
+  /// BlocListener<BlocA, BlocAState>(
+  ///   condition: (previousState, currentState) {
+  ///     // return true/false to determine whether or not
+  ///     // to invoke listener with currentState
+  ///   },
+  ///   listener: (context, state) {
+  ///     // do stuff here based on BlocA's state
+  ///   }
+  ///   child: Container(),
+  /// )
+  /// ```
   const BlocListener({
     Key key,
-    @required this.listener,
-    this.bloc,
-    this.condition,
+    @required BlocWidgetListener<S> listener,
+    B bloc,
+    BlocListenerCondition<S> condition,
     this.child,
   })  : assert(listener != null),
         super(
           key: key,
-          bloc: bloc,
           listener: listener,
+          bloc: bloc,
           condition: condition,
         );
 
@@ -127,6 +116,11 @@ abstract class BlocListenerBase<B extends Bloc<dynamic, S>, S>
   final BlocWidgetListener<S> listener;
 
   /// The [BlocListenerCondition] that the [BlocListenerBase] will invoke.
+  /// The `condition` function will be invoked on each bloc state change.
+  /// The `condition` takes the previous state and current state and must return a `bool`
+  /// which determines whether or not the `listener` function will be invoked.
+  /// The previous state will be initialized to `currentState` when the [BlocListenerBase] is initialized.
+  /// `condition` is optional and if it isn't implemented, it will default to return `true`.
   final BlocListenerCondition<S> condition;
 
   /// Base class for widgets that listen to state changes in a specified [Bloc].
@@ -136,7 +130,7 @@ abstract class BlocListenerBase<B extends Bloc<dynamic, S>, S>
   /// is defined by sub-classes.
   const BlocListenerBase({
     Key key,
-    @required this.listener,
+    this.listener,
     this.bloc,
     this.condition,
   }) : super(key: key);

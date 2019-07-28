@@ -16,35 +16,11 @@ typedef BlocWidgetBuilder<S> = Widget Function(BuildContext context, S state);
 typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 
 class BlocBuilder<B extends Bloc<dynamic, S>, S> extends BlocBuilderBase<B, S> {
-  /// The [Bloc] that the [BlocBuilder] will interact with.
-  /// If omitted, [BlocBuilder] will automatically perform a lookup using
-  /// [BlocProvider] and the current [BuildContext].
-  final B bloc;
-
   /// The `builder` function which will be invoked on each widget build.
   /// The `builder` takes the [BuildContext] and current bloc state and
   /// must return a [Widget].
   /// This is analogous to the `builder` function in [StreamBuilder].
   final BlocWidgetBuilder<S> builder;
-
-  /// The `condition` function will be invoked on each bloc state change.
-  /// The `condition` takes the previous state and current state and must return a `bool`
-  /// which determines whether or not the `builder` function will be invoked.
-  /// The previous state will be initialized to `currentState` when the [BlocBuilder] is initialized.
-  /// `condition` is optional and if it isn't implemented, it will default to return `true`.
-  ///
-  /// ```dart
-  /// BlocBuilder<BlocA, BlocAState>(
-  ///   condition: (previousState, currentState) {
-  ///     // return true/false to determine whether or not
-  ///     // to rebuild the widget with currentState
-  ///   },
-  ///   builder: (context, state) {
-  ///     // return widget here based on BlocA's state
-  ///   }
-  ///)
-  /// ```
-  final BlocBuilderCondition<S> condition;
 
   /// [BlocBuilder] handles building a widget in response to new states.
   /// [BlocBuilder] is analogous to [StreamBuilder] but has simplified API
@@ -75,13 +51,33 @@ class BlocBuilder<B extends Bloc<dynamic, S>, S> extends BlocBuilderBase<B, S> {
   ///   }
   /// )
   /// ```
+  ///
+  /// An optional `condition` can be implemented for more granular control
+  /// over how often [BlocBuilder] rebuilds.
+  /// The `condition` function will be invoked on each bloc state change.
+  /// The `condition` takes the previous state and current state and must return a `bool`
+  /// which determines whether or not the `builder` function will be invoked.
+  /// The previous state will be initialized to `currentState` when the [BlocBuilder] is initialized.
+  /// `condition` is optional and if it isn't implemented, it will default to return `true`.
+  ///
+  /// ```dart
+  /// BlocBuilder<BlocA, BlocAState>(
+  ///   condition: (previousState, currentState) {
+  ///     // return true/false to determine whether or not
+  ///     // to rebuild the widget with currentState
+  ///   },
+  ///   builder: (context, state) {
+  ///     // return widget here based on BlocA's state
+  ///   }
+  ///)
+  /// ```
   const BlocBuilder({
     Key key,
     @required this.builder,
-    this.bloc,
-    this.condition,
+    B bloc,
+    BlocBuilderCondition<S> condition,
   })  : assert(builder != null),
-        super(key: key, bloc: bloc);
+        super(key: key, bloc: bloc, condition: condition);
 
   @override
   Widget build(BuildContext context, S state) => builder(context, state);
@@ -98,9 +94,16 @@ abstract class BlocBuilderBase<B extends Bloc<dynamic, S>, S>
   const BlocBuilderBase({Key key, this.bloc, this.condition}) : super(key: key);
 
   /// The [Bloc] that the [BlocBuilderBase] will interact with.
+  /// If omitted, [BlocBuilderBase] will automatically perform a lookup using
+  /// [BlocProvider] and the current [BuildContext].
   final B bloc;
 
   /// The [BlocBuilderCondition] that the [BlocBuilderBase] will invoke.
+  /// The `condition` function will be invoked on each bloc state change.
+  /// The `condition` takes the previous state and current state and must return a `bool`
+  /// which determines whether or not the `builder` function will be invoked.
+  /// The previous state will be initialized to `currentState` when the [BlocBuilderBase] is initialized.
+  /// `condition` is optional and if it isn't implemented, it will default to return `true`.
   final BlocBuilderCondition<S> condition;
 
   /// Returns a [Widget] based on the [BuildContext] and current [state].
