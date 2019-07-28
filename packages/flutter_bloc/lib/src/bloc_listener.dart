@@ -52,7 +52,7 @@ class BlocListener<B extends Bloc<dynamic, S>, S> extends BlocListenerBase<B, S>
   /// ```
   ///
   /// An optional `condition` can be implemented for more granular control
-  /// when `listener` is called.
+  /// over when `listener` is called.
   /// The `condition` function will be invoked on each bloc state change.
   /// The `condition` takes the previous state and current state and must return a `bool`
   /// which determines whether or not the `listener` function will be invoked.
