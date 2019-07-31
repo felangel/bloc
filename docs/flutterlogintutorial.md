@@ -551,7 +551,7 @@ class _LoginFormState extends State<LoginForm> {
           );
         }
       },
-      child: BlocBuilder<LoginEvent, LoginState>(
+      child: BlocBuilder<LoginBloc, LoginState>(
         bloc: _loginBloc,
         builder: (
           BuildContext context,
