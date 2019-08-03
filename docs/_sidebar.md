@@ -18,6 +18,7 @@
     - [Weather](flutterweathertutorial.md)
     - [Todos](fluttertodostutorial.md)
     - [Firebase Login](flutterfirebaselogintutorial.md)
+    - [Firestore Todos](flutterfirestoretodostutorial.md)
   - AngularDart
     - [Counter](angularcountertutorial.md)
   - Flutter + AngularDart

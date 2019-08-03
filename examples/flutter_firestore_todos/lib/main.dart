@@ -7,10 +7,7 @@ import 'package:flutter_firestore_todos/blocs/blocs.dart';
 import 'package:flutter_firestore_todos/screens/screens.dart';
 import 'package:user_repository/user_repository.dart';
 
-void main() async {
-  // BlocSupervisor oversees Blocs and delegates to BlocDelegate.
-  // We can set the BlocSupervisor's delegate to an instance of `SimpleBlocDelegate`.
-  // This will allow us to handle all transitions and errors in SimpleBlocDelegate.
+void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(TodosApp());
 }
@@ -23,7 +20,7 @@ class TodosApp extends StatelessWidget {
         BlocProvider<AuthenticationBloc>(
           builder: (context) {
             return AuthenticationBloc(
-              userRepository: UserRepository(),
+              userRepository: FirebaseUserRepository(),
             )..dispatch(AppStarted());
           },
         ),
