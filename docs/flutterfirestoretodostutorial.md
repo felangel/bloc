@@ -10,7 +10,7 @@ The only things we're going to be refactoring in our existing [todos example](ht
 
 We'll start off in the repository layer with the `TodosRepository`.
 
-## TodosRepository
+## Todos Repository
 
 Create a new package at the root level of our app called `todos_repository`.
 
@@ -35,7 +35,7 @@ Inside our `todos_repository` create the following folder/file structure.
 └── pubspec.yaml
 ```
 
-### Pubspec
+### Dependencies
 
 The `pubspec.yaml` should look like:
 
@@ -211,7 +211,7 @@ class Todo {
 
 ```
 
-### Repository
+### Todos Repository
 
 > `TodosRepository` is our abstract base class which we can extend whenever we want to integrate with a different `TodosProvider`.
 
@@ -281,7 +281,7 @@ class FirebaseTodosRepository implements TodosRepository {
 
 That's it for our `TodosRepository`, next we need to create a simple `UserRepository` to manage authenticating our users.
 
-## UserRepository
+## User Repository
 
 Create a new package at the root level of our app called `useer_repository`.
 
@@ -295,7 +295,7 @@ Inside our `user_repository` create the following folder/file structure.
 └── pubspec.yaml
 ```
 
-### Pubspec
+### Dependencies
 
 The `pubspec.yaml` should look like:
 
@@ -325,7 +325,7 @@ library user_repository;
 export 'src/user_repository.dart';
 ```
 
-### Repository
+### User Repository
 
 > `UserRepository` is our abstract base class which we can extend whenever we want to integrate with a different provider`.
 
@@ -457,7 +457,7 @@ class Unauthenticated extends AuthenticationState {
 }
 ```
 
-### Bloc
+### Authentication Bloc
 
 ```dart
 import 'dart:async';
@@ -616,7 +616,7 @@ Stream<TodosState> _mapLoadTodosToState() async* {
 }
 ```
 
-?> When we load our todos, we are subscribing to the `TodosRepository` and everytime a new todo comes in, we dispatch a `TodosUpdated` event. We then handle all `TodosUpdates` via:
+?> When we load our todos, we are subscribing to the `TodosRepository` and every time a new todo comes in, we dispatch a `TodosUpdated` event. We then handle all `TodosUpdates` via:
 
 ```dart
 Stream<TodosState> _mapTodosUpdateToState(TodosUpdated event) async* {
