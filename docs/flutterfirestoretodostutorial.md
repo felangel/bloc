@@ -58,9 +58,9 @@ dependencies:
 
 ?> **Note:** We can immediately see our `todos_repository` has a dependency on `firebase_core` and `cloud_firestore`.
 
-The `todos_repository.dart` directly inside `lib` should look like:
-
 ### Package Root
+
+The `todos_repository.dart` directly inside `lib` should look like:
 
 ```dart
 library todos_repository;
@@ -315,9 +315,9 @@ dependencies:
 
 ?> **Note:** We can immediately see our `user_repository` has a dependency on `firebase_auth`.
 
-The `user_repository.dart` directly inside `lib` should look like:
-
 ### Package Root
+
+The `user_repository.dart` directly inside `lib` should look like:
 
 ```dart
 library user_repository;
@@ -374,7 +374,9 @@ class FirebaseUserRepository implements UserRepository {
 
 That's it for our `UserRepository`, next we need to setup our Flutter app to use our new repositories.
 
-## Flutter Setup
+## Flutter App
+
+### Setup
 
 Let's create a new Flutter app called `flutter_firestore_todos`. We can replace the contents of the `pubspec.yaml` with the following:
 
@@ -403,13 +405,13 @@ flutter:
 
 ?> **Note:** We're adding our `todos_repository` and `user_repository` as external dependencies.
 
-## Authentication Bloc
+### Authentication Bloc
 
 Since we want to be able to sign in our users, we'll need to create an `AuthenticationBloc`.
 
 ?> If you haven't already checked out the [flutter firebase login tutorial](https://felangel.github.io/bloc/#/flutterfirebaselogintutorial), I highly recommend checking it out now because we're simply going to reuse the same `AuthenticationBloc`.
 
-### Authentication Events
+#### Authentication Events
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -426,7 +428,7 @@ class AppStarted extends AuthenticationEvent {
 }
 ```
 
-### Authentication States
+#### Authentication States
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -457,7 +459,7 @@ class Unauthenticated extends AuthenticationState {
 }
 ```
 
-### Authentication Bloc
+#### Authentication Bloc
 
 ```dart
 import 'dart:async';
@@ -503,7 +505,7 @@ class AuthenticationBloc
 
 Now that our `AuthenticationBloc` is finished, we need to modify the `TodosBloc` from the original [Todos Tutorial](https://felangel.github.io/bloc/#/fluttertodostutorial) to consume the new `TodosRepository`.
 
-## Todos Bloc
+### Todos Bloc
 
 ```dart
 import 'dart:async';
