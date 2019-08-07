@@ -152,7 +152,7 @@
       "",
       "@immutable",
       "abstract class $1State extends Equatable {",
-      "\t$1State([List props = const []]) : super(props);",
+      "\t$1State([List props = const <dynamic>[]]) : super(props);",
       "}"
     ]
   },
@@ -165,7 +165,7 @@
       "",
       "@immutable",
       "abstract class $1Event extends Equatable {",
-      "\t$1Event([List props = const []]) : super(props);",
+      "\t$1Event([List props = const <dynamic>[]]) : super(props);",
       "}"
     ]
   }
