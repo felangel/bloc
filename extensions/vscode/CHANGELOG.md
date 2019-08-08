@@ -1,3 +1,7 @@
+# 0.11.1
+
+`Equatable` enhancement to address `implicit-dynamic` warning ([#463](https://github.com/felangel/bloc/pull/463)).
+
 # 0.11.0
 
 Update Snippets to support changes in flutter_bloc `v0.20.0`
