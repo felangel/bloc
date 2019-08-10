@@ -1,6 +1,6 @@
 name: hydrated_bloc
 description: An extension to the bloc state management library which automatically persists and restores bloc states.
-version: 0.3.1
+version: 0.3.2
 author: Felix Angelov <felangelov@gmail.com>
 homepage: https://github.com/felangel/hydrated_bloc
 
@@ -11,11 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
   bloc: ^0.14.0
-  meta: ^1.1.6
   path_provider: ^1.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   mockito: ^4.0.0
-  flutter_bloc: ^0.19.0
+  flutter_bloc: ^0.20.0

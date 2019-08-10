@@ -1,3 +1,8 @@
+# 0.3.2
+
+- Minor Updates to Package Dependencies
+- Documentation Updates
+
 # 0.3.1
 
 - Add guards to `HydratedBlocStorage` to prevent exception if cache is corrupt.
