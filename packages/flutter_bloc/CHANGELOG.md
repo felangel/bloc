@@ -1,3 +1,8 @@
+# 0.20.1
+
+- Minor Updates to Package Dependencies
+- Documentation Updates
+
 # 0.20.0
 
 - Add Automatic Bloc Lookup to `BlocBuilder` and `BlocListener` ([#415](https://github.com/felangel/bloc/pull/415))
