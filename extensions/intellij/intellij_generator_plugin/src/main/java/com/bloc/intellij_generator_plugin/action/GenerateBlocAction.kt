@@ -61,6 +61,12 @@ class GenerateBlocAction : AnAction(), GenerateBlocDialog.Listener {
 
     private fun createSourceFile(project: Project, generator: Generator, directory: PsiDirectory) {
         val fileName = generator.fileName()
+        val existingPsiFile = directory.findFile(fileName)
+        if (existingPsiFile != null) {
+            val document = PsiDocumentManager.getInstance(project).getDocument(existingPsiFile)
+            document?.insertString(document.textLength, "\n" + generator.generate())
+            return
+        }
         val psiFile = PsiFileFactory.getInstance(project)
             .createFileFromText(fileName, JavaLanguage.INSTANCE, generator.generate())
         directory.add(psiFile)
