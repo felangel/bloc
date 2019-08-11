@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.bloc'
-version '1.4'
+version '1.5'
 
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
@@ -47,5 +47,6 @@ patchPluginXml {
       * v1.2 - Support for IntelliJ 2019
       * v1.3 - Bug Fixes for IntelliJ and Android Studio Compatibility
       * v1.4 - Bug Fixes for Bloc Generator Name (Case Sensitivity)
+      * v1.5 - Fix Overwrite Issue and Updates for implicit-dynamic support with Equatable
       """
 }

@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class ${bloc_pascal_case}State extends Equatable {
-  ${bloc_pascal_case}State([List props = const []]) : super(props);
+  ${bloc_pascal_case}State([List props = const <dynamic>[]]) : super(props);
 }
 
 class Initial${bloc_pascal_case}State extends ${bloc_pascal_case}State {}
