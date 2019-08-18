@@ -12,7 +12,7 @@ class ComplexEventA extends ComplexEvent {
       other is ComplexEventA && runtimeType == other.runtimeType;
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => 0;
 }
 
 class ComplexEventB extends ComplexEvent {
@@ -27,7 +27,7 @@ class ComplexEventB extends ComplexEvent {
       other is ComplexEventB && runtimeType == other.runtimeType;
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => 1;
 }
 
 class ComplexEventC extends ComplexEvent {
@@ -42,5 +42,20 @@ class ComplexEventC extends ComplexEvent {
       other is ComplexEventC && runtimeType == other.runtimeType;
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => 2;
+}
+
+class ComplexEventD extends ComplexEvent {
+  @override
+  bool operator ==(
+    Object other,
+  ) =>
+      identical(
+        this,
+        other,
+      ) ||
+      other is ComplexEventD && runtimeType == other.runtimeType;
+
+  @override
+  int get hashCode => 3;
 }

@@ -1,3 +1,9 @@
+# 0.15.0
+
+- Removed Bloc `event` Stream ([#326](https://github.com/felangel/bloc/issues/326))
+- Renamed `transform` to `transformEvents`
+- Added `transformStates` ([#382](https://github.com/felangel/bloc/issues/382))
+
 # 0.14.4
 
 Additional Dependency and Documentation Updates.

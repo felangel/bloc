@@ -47,10 +47,10 @@ void main() {
           () {
         expect(
           () => Transition<TransitionEvent, TransitionState>(
-                currentState: null,
-                event: SimpleTransitionEvent(),
-                nextState: SimpleTransitionState(),
-              ),
+            currentState: null,
+            event: SimpleTransitionEvent(),
+            nextState: SimpleTransitionState(),
+          ),
           throwsA(
             TypeMatcher<AssertionError>(),
           ),
@@ -61,10 +61,10 @@ void main() {
           () {
         expect(
           () => Transition<TransitionEvent, TransitionState>(
-                currentState: SimpleTransitionState(),
-                event: null,
-                nextState: SimpleTransitionState(),
-              ),
+            currentState: SimpleTransitionState(),
+            event: null,
+            nextState: SimpleTransitionState(),
+          ),
           throwsA(
             TypeMatcher<AssertionError>(),
           ),
@@ -76,10 +76,10 @@ void main() {
           () {
         expect(
           () => Transition<TransitionEvent, TransitionState>(
-                currentState: SimpleTransitionState(),
-                event: SimpleTransitionEvent(),
-                nextState: null,
-              ),
+            currentState: SimpleTransitionState(),
+            event: SimpleTransitionEvent(),
+            nextState: null,
+          ),
           throwsA(
             TypeMatcher<AssertionError>(),
           ),

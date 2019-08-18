@@ -45,7 +45,7 @@ class ComplexStateC extends ComplexState {
   int get hashCode => 2;
 }
 
-class ComplexStateUnknown extends ComplexState {
+class ComplexStateD extends ComplexState {
   @override
   bool operator ==(
     Object other,
@@ -54,7 +54,7 @@ class ComplexStateUnknown extends ComplexState {
         this,
         other,
       ) ||
-      other is ComplexStateUnknown && runtimeType == other.runtimeType;
+      other is ComplexStateD && runtimeType == other.runtimeType;
 
   @override
   int get hashCode => 3;

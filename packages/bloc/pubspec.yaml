@@ -1,6 +1,6 @@
 name: bloc
 description: A predictable state management library that helps implement the BLoC (Business Logic Component) design pattern.
-version: 0.14.4
+version: 0.15.0
 author: Felix Angelov <felangelov@gmail.com>
 repository: https://github.com/felangel/bloc
 issue_tracker: https://github.com/felangel/bloc/issues

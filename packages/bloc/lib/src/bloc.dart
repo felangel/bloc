@@ -11,13 +11,6 @@ abstract class Bloc<Event, State> {
 
   BehaviorSubject<State> _stateSubject;
 
-  /// Returns [Stream] of [Event]s.
-  /// When an [Event] is dispatched, it is added to the [Stream].
-  @Deprecated(
-    'Will be removed in v0.15.0. Logic should not be written in response to Events. Please refer to onEvent in the Bloc and BlocDelegate classes for analytics.',
-  )
-  Stream<Event> get event => _eventSubject.stream;
-
   /// Returns [Stream] of [State]s.
   /// Usually consumed by the presentation layer.
   Stream<State> get state => _stateSubject.stream;
@@ -80,7 +73,7 @@ abstract class Bloc<Event, State> {
   /// Transforms the `Stream<Event>` along with a `next` function into a `Stream<State>`.
   /// Events that should be processed by `mapEventToState` need to be passed to `next`.
   /// By default `asyncExpand` is used to ensure all events are processed in the order
-  /// in which they are received. You can override `transform` for advanced usage
+  /// in which they are received. You can override `transformEvents` for advanced usage
   /// in order to manipulate the frequency and specificity with which `mapEventToState`
   /// is called as well as which events are processed.
   ///
@@ -89,7 +82,7 @@ abstract class Bloc<Event, State> {
   ///
   /// ```dart
   /// @override
-  /// Stream<State> transform(events, next) {
+  /// Stream<State> transformEvents(events, next) {
   ///   return (events as Observable<Event>).switchMap(next);
   /// }
   /// ```
@@ -98,14 +91,14 @@ abstract class Bloc<Event, State> {
   ///
   /// ```dart
   /// @override
-  /// Stream<State> transform(events, next) {
-  ///   return super.transform(
+  /// Stream<State> transformEvents(events, next) {
+  ///   return super.transformEvents(
   ///     (events as Observable<Event>).distinct(),
   ///     next,
   ///   );
   /// }
   /// ```
-  Stream<State> transform(
+  Stream<State> transformEvents(
     Stream<Event> events,
     Stream<State> next(Event event),
   ) {
@@ -119,13 +112,29 @@ abstract class Bloc<Event, State> {
   /// and return the new [State] in the form of a [Stream] which is consumed by the presentation layer.
   Stream<State> mapEventToState(Event event);
 
+  /// Transforms the `Stream<State>` into a new `Stream<State>`.
+  /// By default `transformStates` returns the incoming `Stream<State>`.
+  /// You can override `transformStates` for advanced usage
+  /// in order to manipulate the frequency and specificity at which `transitions` (state changes)
+  /// occur.
+  ///
+  /// For example, if you want to debounce outgoing states:
+  ///
+  /// ```dart
+  /// @override
+  /// Stream<State> transformStates(Stream<State> states) {
+  ///   return (states as Observable<State>).debounceTime(Duration(seconds: 1));
+  /// }
+  /// ```
+  Stream<State> transformStates(Stream<State> states) => states;
+
   void _bindStateSubject() {
     Event currentEvent;
 
-    transform(_eventSubject, (Event event) {
+    transformStates(transformEvents(_eventSubject, (Event event) {
       currentEvent = event;
       return mapEventToState(currentEvent).handleError(_handleError);
-    }).forEach(
+    })).forEach(
       (State nextState) {
         if (currentState == nextState || _stateSubject.isClosed) return;
         final transition = Transition(
