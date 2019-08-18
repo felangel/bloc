@@ -540,7 +540,7 @@ class _LoginFormState extends State<LoginForm> {
       ));
     }
 
-    return BlocListener<LoginBloc, LoginState>(      
+    return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is LoginFailure) {
           Scaffold.of(context).showSnackBar(
@@ -665,9 +665,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
-        bloc: BlocProvider.of<AuthenticationBloc>(context),
-        builder: (BuildContext context, AuthenticationState state) {
+      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
           if (state is AuthenticationUninitialized) {
             return SplashPage();
           }
