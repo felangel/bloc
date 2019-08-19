@@ -35,7 +35,7 @@ void main() async {
 ```dart
 class CounterBloc extends HydratedBloc<CounterEvent, CounterState> {
   // You need to update state getter so it will get initialState
-  // from storage when it is already populated/loaded and parsed 
+  // from storage when it is already populated/loaded and parsed
   // without errors
   @override
   CounterState get initialState {
@@ -83,3 +83,17 @@ class CounterState {
 ```
 
 Now our `CounterBloc` is a `HydratedBloc` and will automatically persist its state. We can increment the counter value, hot restart, kill the app, etc... and our `CounterBloc` will always retain its state.
+
+# How it works
+
+## Overview
+
+`hydrated_bloc` exports a `HydratedStorage` interface which means it can work with any storage provider. Out of the box, it comes with its own implementation: `HydratedBlocStorage`.
+
+`HydratedBlocStorage` is built on top of [path_provider](https://pub.dev/packages/path_provider) for a platform-agnostic storage layer. The out-of-the-box storage implementation reads/writes to file using the `toJson`/`fromJson` methods on `HydratedBloc` and should perform very well for most use-cases (performance reports coming soon).
+
+## Considerations
+
+All data is written to [temporary storage](https://github.com/flutter/plugins/blob/61c39d1e79e8f36030162a5f85fb491c65f4e51c/packages/path_provider/lib/path_provider.dart#L24) which means it can be wiped by the operating system at any point in time. As a result, `hydrated_bloc` is not intended to be used as a persistent database and should be viewed as a cache instead.
+
+In addition, while the `HydratedBlocStorage` client doesn't automatically encrypt/decrypt the data, it is fairly straightforward to implement a custom `HydratedStorage` client which does support encryption.
