@@ -34,29 +34,34 @@ void main() async {
 
 ```dart
 class CounterBloc extends HydratedBloc<CounterEvent, CounterState> {
-  // You need to update state getter so it will get initialState
-  // from storage when it is already populated/loaded and parsed
-  // without errors
+  // Use previously cached initialState if it's available
   @override
   CounterState get initialState {
     return super.initialState ?? CounterState(0);
   }
 
-  // This method is used to parse state object when retrieving its
-  // saved JSON version from HydratedBloc internal storage.
-  // Internally it is enclosed in try-catch block, so, to avoid
-  // unexpected errors its better to thoroughly test method
-  // somewhere else/enclose whole body and handle exceptions or
-  // errors inside.
+  // Called when trying to read cached state from storage.
+  // Be sure to handle any exceptions that can occur and return null
+  // to indicate that there is no cached data.
   @override
   CounterState fromJson(Map<String, dynamic> source) {
-    return CounterState(source['value'] as int);
+    try {
+      return CounterState(source['value'] as int);
+    } catch (_) {
+      return null;
+    }
   }
 
-  // Method which is used to convert bloc's state into JSON
+  // Called on each state change (transition)
+  // If it returns null, then no cache updates will occur.
+  // Otherwise, the returned value will be cached.
   @override
   Map<String, int> toJson(CounterState state) {
-    return {'value': state.value};
+    try {
+      return { 'value': state.value };
+    } catch (_) {
+      return null;
+    }
   }
 
   @override

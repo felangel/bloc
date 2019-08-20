@@ -1,3 +1,8 @@
+# 0.4.0
+
+- Update to bloc `v0.15.0`
+- Documentation Updates
+
 # 0.3.2
 
 - Minor Updates to Package Dependencies
