@@ -1,3 +1,7 @@
+# 0.21.0
+
+Updated to `bloc: ^0.15.0` and Documentation Updates
+
 # 0.20.1
 
 - Minor Updates to Package Dependencies

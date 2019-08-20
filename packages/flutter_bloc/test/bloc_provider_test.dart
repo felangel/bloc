@@ -189,7 +189,9 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   int get hashCode =>
-      initialState.hashCode ^ mapEventToState.hashCode ^ transform.hashCode;
+      initialState.hashCode ^
+      mapEventToState.hashCode ^
+      transformEvents.hashCode;
 
   @override
   void dispose() {
