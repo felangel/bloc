@@ -31,7 +31,7 @@ dependencies:
   cloud_firestore: ^0.9.7
   firebase_auth: ^0.8.1+4
   google_sign_in: ^4.0.1+1
-  flutter_bloc: ^0.20.0
+  flutter_bloc: ^0.21.0
   equatable: ^0.2.0
   meta: ^1.1.6
   font_awesome_flutter: ^8.4.0
@@ -989,7 +989,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginState get initialState => LoginState.empty();
 
   @override
-  Stream<LoginState> transform(
+  Stream<LoginState> transformEvents(
     Stream<LoginEvent> events,
     Stream<LoginState> Function(LoginEvent event) next,
   ) {
@@ -1000,7 +1000,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     final debounceStream = observableStream.where((event) {
       return (event is EmailChanged || event is PasswordChanged);
     }).debounceTime(Duration(milliseconds: 300));
-    return super.transform(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
   }
 
   @override
@@ -1055,7 +1055,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 }
 ```
 
-**Note:** We're overriding `transform` in order to debounce the `EmailChanged` and `PasswordChanged` events so that we give the user some time to stop typing before validating the input.
+**Note:** We're overriding `transformEvents` in order to debounce the `EmailChanged` and `PasswordChanged` events so that we give the user some time to stop typing before validating the input.
 
 We are using a `Validators` class to validate the email and password which we're going to implement next.
 
@@ -1616,7 +1616,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterState get initialState => RegisterState.empty();
 
   @override
-  Stream<RegisterState> transform(
+  Stream<RegisterState> transformEvents(
     Stream<RegisterEvent> events,
     Stream<RegisterState> Function(RegisterEvent event) next,
   ) {
@@ -1627,7 +1627,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     final debounceStream = observableStream.where((event) {
       return (event is EmailChanged || event is PasswordChanged);
     }).debounceTime(Duration(milliseconds: 300));
-    return super.transform(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
   }
 
   @override
@@ -1673,7 +1673,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 }
 ```
 
-Just as before, we need to extend `Bloc`, implement `initialState`, and `mapEventToState`. Optionally, we are overriding `transform` again so that we can give users some time to finish typing before we validate the form.
+Just as before, we need to extend `Bloc`, implement `initialState`, and `mapEventToState`. Optionally, we are overriding `transformEvents` again so that we can give users some time to finish typing before we validate the form.
 
 Now that the `RegisterBloc` is fully functional, we just need to build out the presentation layer.
 

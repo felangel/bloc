@@ -28,7 +28,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.20.0
+  flutter_bloc: ^0.21.0
   equatable: ^0.2.0
   wave: ^0.0.8
 

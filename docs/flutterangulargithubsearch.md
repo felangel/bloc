@@ -38,7 +38,7 @@ environment:
 
 dependencies:
   meta: ^1.1.7
-  bloc: ^0.14.0
+  bloc: ^0.15.0
   equatable: ^0.2.0
   http: ^0.12.0
 ```
@@ -345,11 +345,11 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   GithubSearchBloc({@required this.githubRepository});
 
   @override
-  Stream<GithubSearchState> transform(
+  Stream<GithubSearchState> transformEvents(
     Stream<GithubSearchEvent> events,
     Stream<GithubSearchState> Function(GithubSearchEvent event) next,
   ) {
-    return super.transform(
+    return super.transformEvents(
       (events as Observable<GithubSearchEvent>).debounceTime(
         Duration(milliseconds: 500),
       ),
@@ -392,7 +392,7 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
 
 ?> **Note:** Our `GithubSearchBloc` converts `GithubSearchEvent` to `GithubSearchState` and has a dependency on the `GithubRepository`.
 
-?> **Note:** We override the `transform` method to [debounce](http://reactivex.io/documentation/operators/debounce.html) the `GithubSearchEvents`.
+?> **Note:** We override the `transformEvents` method to [debounce](http://reactivex.io/documentation/operators/debounce.html) the `GithubSearchEvents`.
 
 ?> **Note:** We override `onTransition` so that we can log any time a state change occurs.
 
@@ -427,7 +427,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.20.0
+  flutter_bloc: ^0.21.0
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search
