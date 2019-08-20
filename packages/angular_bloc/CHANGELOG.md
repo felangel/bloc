@@ -1,3 +1,7 @@
+# 0.10.0
+
+Updated to `bloc: ^0.15.0` and Minor Updates to Documentation
+
 # 0.9.0
 
 Updated to `bloc: ^0.14.0` and Minor Updates to Documentation
