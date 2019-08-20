@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -22,10 +24,8 @@ void main() {
       });
 
       test('dispose does not emit new states over the state stream', () {
-        final List<String> expectedEvents = [];
         final List<Matcher> expectedStates = [equals(''), emitsDone];
 
-        expectLater(simpleBloc.event, emitsInOrder(expectedEvents));
         expectLater(
           simpleBloc.state,
           emitsInOrder(expectedStates),
@@ -49,10 +49,8 @@ void main() {
       });
 
       test('should map single event to correct state', () {
-        final List<String> expectedEvents = ['event'];
         final List<String> expectedStates = ['', 'data'];
 
-        expectLater(simpleBloc.event, emitsInOrder(expectedEvents));
         expectLater(simpleBloc.state, emitsInOrder(expectedStates))
             .then((dynamic _) {
           verify(
@@ -72,10 +70,8 @@ void main() {
       });
 
       test('should map multiple events to correct states', () {
-        final List<String> expectedEvents = ['event1', 'event2', 'event3'];
         final List<String> expectedStates = ['', 'data'];
 
-        expectLater(simpleBloc.event, emitsInOrder(expectedEvents));
         expectLater(simpleBloc.state, emitsInOrder(expectedStates))
             .then((dynamic _) {
           verify(
@@ -110,13 +106,11 @@ void main() {
       });
 
       test('dispose does not emit new states over the state stream', () {
-        final List<ComplexEvent> expectedEvents = [];
         final List<Matcher> expectedStates = [
           equals(ComplexStateA()),
           emitsDone
         ];
 
-        expectLater(complexBloc.event, emitsInOrder(expectedEvents));
         expectLater(
           complexBloc.state,
           emitsInOrder(expectedStates),
@@ -140,13 +134,11 @@ void main() {
       });
 
       test('should map single event to correct state', () {
-        final List<ComplexEvent> expectedEvents = [ComplexEventB()];
         final List<ComplexState> expectedStates = [
           ComplexStateA(),
           ComplexStateB(),
         ];
 
-        expectLater(complexBloc.event, emitsInOrder(expectedEvents));
         expectLater(complexBloc.state, emitsInOrder(expectedStates))
             .then((dynamic _) {
           verify(
@@ -165,55 +157,31 @@ void main() {
         complexBloc.dispatch(ComplexEventB());
       });
 
-      test('should map multiple events to correct states', () {
-        final List<ComplexEvent> expectedEvents = [
-          ComplexEventA(),
-          ComplexEventB(),
-          ComplexEventB(),
-          ComplexEventC(),
-          ComplexEventC(),
-        ];
+      test('should map multiple events to correct states', () async {
         final List<ComplexState> expectedStates = [
           ComplexStateA(),
           ComplexStateB(),
+          ComplexStateD(),
+          ComplexStateA(),
           ComplexStateC(),
         ];
 
         expectLater(
-          complexBloc.event,
-          emitsInOrder(expectedEvents),
-        );
-        expectLater(
           complexBloc.state,
           emitsInOrder(expectedStates),
-        ).then((dynamic _) {
-          verify(
-            delegate.onTransition(
-              complexBloc,
-              Transition<ComplexEvent, ComplexState>(
-                currentState: ComplexStateA(),
-                event: ComplexEventB(),
-                nextState: ComplexStateB(),
-              ),
-            ),
-          ).called(1);
-          verify(
-            delegate.onTransition(
-              complexBloc,
-              Transition<ComplexEvent, ComplexState>(
-                currentState: ComplexStateB(),
-                event: ComplexEventC(),
-                nextState: ComplexStateC(),
-              ),
-            ),
-          ).called(1);
-          expect(complexBloc.currentState, ComplexStateC());
-        });
+        );
 
         complexBloc.dispatch(ComplexEventA());
+        await Future<void>.delayed(Duration(milliseconds: 20));
         complexBloc.dispatch(ComplexEventB());
-        complexBloc.dispatch(ComplexEventB());
+        await Future<void>.delayed(Duration(milliseconds: 20));
         complexBloc.dispatch(ComplexEventC());
+        await Future<void>.delayed(Duration(milliseconds: 20));
+        complexBloc.dispatch(ComplexEventD());
+        await Future<void>.delayed(Duration(milliseconds: 200));
+        complexBloc.dispatch(ComplexEventC());
+        complexBloc.dispatch(ComplexEventA());
+        await Future<void>.delayed(Duration(milliseconds: 120));
         complexBloc.dispatch(ComplexEventC());
       });
     });
@@ -262,21 +230,15 @@ void main() {
       });
 
       test('single Increment event updates state to 1', () {
-        final List<CounterEvent> expectedEvents = [CounterEvent.increment];
         final List<int> expectedStates = [0, 1];
         final expectedTransitions = [
           'Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }'
         ];
 
         expectLater(
-          counterBloc.event,
-          emitsInOrder(expectedEvents),
-        );
-        expectLater(
           counterBloc.state,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          expectLater(events, expectedEvents);
           expectLater(transitions, expectedTransitions);
           verify(
             delegate.onTransition(
@@ -295,11 +257,6 @@ void main() {
       });
 
       test('multiple Increment event updates state to 3', () {
-        final List<CounterEvent> expectedEvents = [
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment
-        ];
         final List<int> expectedStates = [0, 1, 2, 3];
         final expectedTransitions = [
           'Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }',
@@ -308,14 +265,9 @@ void main() {
         ];
 
         expectLater(
-          counterBloc.event,
-          emitsInOrder(expectedEvents),
-        );
-        expectLater(
           counterBloc.state,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          expectLater(events, expectedEvents);
           expect(transitions, expectedTransitions);
           verify(
             delegate.onTransition(
@@ -369,16 +321,11 @@ void main() {
       });
 
       test('dispose does not emit new states over the state stream', () {
-        final List<AsyncEvent> expectedEvents = [];
         final List<Matcher> expectedStates = [
           equals(AsyncState.initial()),
           emitsDone
         ];
 
-        expectLater(
-          asyncBloc.event,
-          emitsInOrder(expectedEvents),
-        );
         expectLater(
           asyncBloc.state,
           emitsInOrder(expectedStates),
@@ -390,16 +337,11 @@ void main() {
       test(
           'dispose while events are pending does not emit new states or trigger onError',
           () {
-        final List<AsyncEvent> expectedEvents = [AsyncEvent()];
         final List<Matcher> expectedStates = [
           equals(AsyncState.initial()),
           emitsDone
         ];
 
-        expectLater(
-          asyncBloc.event,
-          emitsInOrder(expectedEvents),
-        );
         expectLater(
           asyncBloc.state,
           emitsInOrder(expectedStates),
@@ -426,14 +368,12 @@ void main() {
       });
 
       test('should map single event to correct state', () {
-        final List<AsyncEvent> expectedEvents = [AsyncEvent()];
         final List<AsyncState> expectedStates = [
           AsyncState(isLoading: false, hasError: false, isSuccess: false),
           AsyncState(isLoading: true, hasError: false, isSuccess: false),
           AsyncState(isLoading: false, hasError: false, isSuccess: true),
         ];
 
-        expectLater(asyncBloc.event, emitsInOrder(expectedEvents));
         expectLater(asyncBloc.state, emitsInOrder(expectedStates))
             .then((dynamic _) {
           verify(
