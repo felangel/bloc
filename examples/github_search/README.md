@@ -36,11 +36,11 @@ Open this project in your editor of choice (VSCode is recommended).
    cd ../
    ```
 
-3. Install dependencies for `angular_github_search`
+3. Install dependencies for `angular`
 
    ```bash
-   # change directories into flutter_github_search
-   cd angular_github_search
+   # change directories into angular
+   cd angular
 
    # install dependencies
    pub get
@@ -63,8 +63,8 @@ flutter run
 
 ```bash
 
-# change directories into angular_github_search
-cd angular_github_search
+# change directories into angular
+cd angular
 
 # run the angular project
 webdev serve
