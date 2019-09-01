@@ -5,8 +5,8 @@ import 'package:common_github_search/common_github_search.dart';
 import 'package:angular_github_search/src/github_search.dart';
 
 @Component(
-  selector: 'github-search-body',
-  templateUrl: 'github_search_body_component.html',
+  selector: 'search-body',
+  templateUrl: 'search_body_component.html',
   directives: [
     coreDirectives,
     MaterialSpinnerComponent,

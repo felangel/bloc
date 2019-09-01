@@ -860,7 +860,7 @@ Just like in our Flutter app, we're going to need to create a `SearchForm` with 
 - `SearchBar` will be responsible for taking user input.
 - `SearchBody` will be responsible for displaying search results, loading indicators, and errors.
 
-Let's create `github_search_form_component.dart.`
+Let's create `search_form_component.dart.`
 
 ```dart
 import 'package:angular/angular.dart';
@@ -870,8 +870,8 @@ import 'package:common_github_search/common_github_search.dart';
 import 'package:angular_github_search/src/github_search.dart';
 
 @Component(
-    selector: 'github-search-form',
-    templateUrl: 'github_search_form_component.html',
+    selector: 'search-form',
+    templateUrl: 'search_form_component.html',
     directives: [
       SearchBarComponent,
       SearchBodyComponent,
@@ -903,13 +903,13 @@ class SearchFormComponent implements OnInit, OnDestroy {
 
 ?> **Note:** The `GithubSearchBloc` is created and disposed by the `SearchFormComponent`.
 
-Our template (`github_search_form_component.html`) will look like:
+Our template (`search_form_component.html`) will look like:
 
 ```html
 <div>
   <h1>Github Search</h1>
-  <github-search-bar [githubSearchBloc]="githubSearchBloc"></github-search-bar>
-  <github-search-body [state]="githubSearchBloc | bloc"></github-search-body>
+  <search-bar [githubSearchBloc]="githubSearchBloc"></search-bar>
+  <search-body [state]="githubSearchBloc | bloc"></search-body>
 </div>
 ```
 
@@ -919,7 +919,7 @@ Next, we'll implement the `SearchBar` Component.
 
 > `SearchBar` is a component which will be responsible for taking in user input and notifying the `GithubSearchBloc` of text changes.
 
-Create `github_search_bar_component.dart`.
+Create `search_bar_component.dart`.
 
 ```dart
 import 'package:angular/angular.dart';
@@ -927,8 +927,8 @@ import 'package:angular/angular.dart';
 import 'package:common_github_search/common_github_search.dart';
 
 @Component(
-  selector: 'github-search-bar',
-  templateUrl: 'github_search_bar_component.html',
+  selector: 'search-bar',
+  templateUrl: 'search_bar_component.html',
 )
 class SearchBarComponent {
   @Input()
@@ -942,7 +942,7 @@ class SearchBarComponent {
 
 ?> **Note:** `SearchBarComponent` has a dependency on `GitHubSearchBloc` because it is responsible for notifying the bloc of `TextChanged` events.
 
-Next, we can create `github_search_bar_component.html`.
+Next, we can create `search_bar_component.html`.
 
 ```html
 <label for="term" class="clip">Enter a search term</label>
@@ -961,7 +961,7 @@ We're done with `SearchBar`, now onto `SearchBody`.
 
 > `SearchBody` is a component which will be responsible for displaying search results, errors, and loading indicators. It will be the consumer of the `GithubSearchBloc`.
 
-Create `github_search_body_component.dart`
+Create `search_body_component.dart`
 
 ```dart
 import 'package:angular/angular.dart';
@@ -971,8 +971,8 @@ import 'package:common_github_search/common_github_search.dart';
 import 'package:angular_github_search/src/github_search.dart';
 
 @Component(
-  selector: 'github-search-body',
-  templateUrl: 'github_search_body_component.html',
+  selector: 'search-body',
+  templateUrl: 'search_body_component.html',
   directives: [
     coreDirectives,
     MaterialSpinnerComponent,
@@ -998,7 +998,7 @@ class SearchBodyComponent {
 
 ?> **Note:** `SearchBodyComponent` has a dependency on `GithubSearchState` which is provided by the `GithubSearchBloc` using the `angular_bloc` bloc pipe.
 
-Create `github_search_body_component.html`
+Create `search_body_component.html`
 
 ```html
 <div *ngIf="state != null" class="mw10">
@@ -1016,7 +1016,7 @@ Create `github_search_body_component.html`
       <material-icon icon="warning" class="light-yellow"></material-icon>
       <p>No Results</p>
     </div>
-    <github-search-results [items]="items"></github-search-results>
+    <search-results [items]="items"></search-results>
   </div>
 </div>
 ```
@@ -1027,7 +1027,7 @@ If our state `isSuccess` we render `SearchResults` which we will implement next.
 
 > `SearchResults` is a component which takes a `List<SearchResultItem>` and displays them as a list of `SearchResultItems`.
 
-Create `github_search_results_component.dart`
+Create `search_results_component.dart`
 
 ```dart
 import 'package:angular/angular.dart';
@@ -1036,8 +1036,8 @@ import 'package:common_github_search/common_github_search.dart';
 import 'package:angular_github_search/src/github_search.dart';
 
 @Component(
-  selector: 'github-search-results',
-  templateUrl: 'github_search_results_component.html',
+  selector: 'search-results',
+  templateUrl: 'search_results_component.html',
   directives: [coreDirectives, SearchResultItemComponent],
 )
 class SearchResultsComponent {
@@ -1046,12 +1046,12 @@ class SearchResultsComponent {
 }
 ```
 
-Next up we'll create `github_search_results_component.html`.
+Next up we'll create `search_results_component.html`.
 
 ```html
 <ul class="list pa0 ma0">
   <li *ngFor="let item of items" class="pa2 cf">
-    <github-search-result-item [item]="item"></github-search-result-item>
+    <search-result-item [item]="item"></search-result-item>
   </li>
 </ul>
 ```
@@ -1064,7 +1064,7 @@ It's time to implement `SearchResultItem`.
 
 > `SearchResultItem` is a component that is responsible for rendering the information for a single search result. It is also responsible for handling user interaction and navigating to the repository url on a user tap.
 
-Create `github_search_result_item_component.dart`.
+Create `search_result_item_component.dart`.
 
 ```dart
 import 'package:angular/angular.dart';
@@ -1072,8 +1072,8 @@ import 'package:angular/angular.dart';
 import 'package:common_github_search/common_github_search.dart';
 
 @Component(
-  selector: 'github-search-result-item',
-  templateUrl: 'github_search_result_item_component.html',
+  selector: 'search-result-item',
+  templateUrl: 'search_result_item_component.html',
 )
 class SearchResultItemComponent {
   @Input()
@@ -1081,7 +1081,7 @@ class SearchResultItemComponent {
 }
 ```
 
-and the corresponding template in `github_search_result_item_component.html`.
+and the corresponding template in `search_result_item_component.html`.
 
 ```html
 <div class="fl w-10 h-auto">
@@ -1110,7 +1110,7 @@ import 'package:angular_github_search/src/github_search.dart';
 @Component(
   selector: 'my-app',
   template:
-      '<github-search-form [githubRepository]="githubRepository"></github-search-form>',
+      '<search-form [githubRepository]="githubRepository"></search-form>',
   directives: [SearchFormComponent],
 )
 class AppComponent {

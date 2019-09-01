@@ -5,8 +5,8 @@ import 'package:common_github_search/common_github_search.dart';
 import 'package:angular_github_search/src/github_search.dart';
 
 @Component(
-    selector: 'github-search-form',
-    templateUrl: 'github_search_form_component.html',
+    selector: 'search-form',
+    templateUrl: 'search_form_component.html',
     directives: [
       SearchBarComponent,
       SearchBodyComponent,

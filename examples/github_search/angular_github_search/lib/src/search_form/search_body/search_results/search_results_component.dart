@@ -4,8 +4,8 @@ import 'package:common_github_search/common_github_search.dart';
 import 'package:angular_github_search/src/github_search.dart';
 
 @Component(
-  selector: 'github-search-results',
-  templateUrl: 'github_search_results_component.html',
+  selector: 'search-results',
+  templateUrl: 'search_results_component.html',
   directives: [coreDirectives, SearchResultItemComponent],
 )
 class SearchResultsComponent {

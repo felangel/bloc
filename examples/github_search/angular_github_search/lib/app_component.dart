@@ -6,7 +6,7 @@ import 'package:angular_github_search/src/github_search.dart';
 @Component(
   selector: 'my-app',
   template:
-      '<github-search-form [githubRepository]="githubRepository"></github-search-form>',
+      '<search-form [githubRepository]="githubRepository"></search-form>',
   directives: [SearchFormComponent],
 )
 class AppComponent {
