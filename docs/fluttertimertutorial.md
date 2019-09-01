@@ -67,13 +67,12 @@ We’ll start off by defining the `TimerStates` which our `TimerBloc` can be in.
 
 Our `TimerBloc` state can be one of the following:
 
-- Ready —ready to start counting down from the specified duration.
-- Running — actively counting down from the specified duration
-- Paused — paused at some remaining duration
-- Finished — completed with a remaining duration of 0
-- Each of these states will have an implication on what the user sees.
+- Ready — ready to start counting down from the specified duration.
+- Running — actively counting down from the specified duration.
+- Paused — paused at some remaining duration.
+- Finished — completed with a remaining duration of 0.
 
-For example:
+Each of these states will have an implication on what the user sees. For example:
 
 - if the state is “ready,” the user will be able to start the timer.
 - if the state is “running,” the user will be able to pause and reset the timer as well as see the remaining duration.
@@ -662,7 +661,7 @@ class Timer extends StatelessWidget {
   );
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Flutter Timer')),
       body: Column(
@@ -774,7 +773,7 @@ class Timer extends StatelessWidget {
   );
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Flutter Timer')),
       body: Column(
@@ -784,7 +783,7 @@ class Timer extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 100.0),
             child: Center(
-              child: BlocBuilder<TimerBloc, TimerState>(                
+              child: BlocBuilder<TimerBloc, TimerState>(
                 builder: (context, state) {
                   final String minutesStr = ((state.duration / 60) % 60)
                       .floor()
@@ -802,7 +801,7 @@ class Timer extends StatelessWidget {
           ),
           BlocBuilder<TimerBloc, TimerState>(
             condition: (previousState, currentState) =>
-                currentState.runtimeType != previousState.runtimeType,            
+                currentState.runtimeType != previousState.runtimeType,
             builder: (context, state) => Actions(),
           ),
         ],
@@ -907,7 +906,7 @@ class Timer extends StatelessWidget {
   );
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Flutter Timer')),
       body: Stack(
@@ -920,7 +919,7 @@ class Timer extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 100.0),
                 child: Center(
-                  child: BlocBuilder<TimerBloc, TimerState>(                    
+                  child: BlocBuilder<TimerBloc, TimerState>(
                     builder: (context, state) {
                       final String minutesStr = ((state.duration / 60) % 60)
                           .floor()
@@ -940,7 +939,7 @@ class Timer extends StatelessWidget {
               ),
               BlocBuilder<TimerBloc, TimerState>(
                 condition: (previousState, currentState) =>
-                    currentState.runtimeType != previousState.runtimeType,                
+                    currentState.runtimeType != previousState.runtimeType,
                 builder: (context, state) => Actions(),
               ),
             ],
