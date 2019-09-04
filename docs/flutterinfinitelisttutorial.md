@@ -511,9 +511,9 @@ class _HomePageState extends State<HomePage> {
 
 Moving along, our build method returns a `BlocBuilder`. `BlocBuilder` is a Flutter widget from the [flutter_bloc package](https://pub.dev/packages/flutter_bloc) which handles building a widget in response to new bloc states. Any time our `PostBloc` state changes, our builder function will be called with the new `PostState`.
 
-!> We need to remember to clean up after ourselves and dispose our `ScrollController` when our StatefulWidget is disposed.
+!> We need to remember to clean up after ourselves and dispose of our `ScrollController` when the StatefulWidget is disposed.
 
-Whenever the user scrolls, we calculate how far away from the bottom of the page the user is and if the distance is ≤ our `_scrollThreshold` we dispatch a `Fetch` event in order to load more posts.
+Whenever the user scrolls, we calculate how far away from the bottom of the page he is and if the distance is ≤ our `_scrollThreshold` we dispatch a `Fetch` event in order to load more posts.
 
 Next, we need to implement our `BottomLoader` widget which will indicate to the user that we are loading more posts.
 
