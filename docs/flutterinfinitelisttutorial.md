@@ -284,9 +284,9 @@ Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
 
 Our `PostBloc` will `yield` whenever there is a new state because it returns a `Stream<PostState>`. Check out [core concepts](https://felangel.github.io/bloc/#/coreconcepts?id=streams) for more information about `Streams` and other core concepts.
 
-Now every time a `PostEvent` is dispatched, if it is a `Fetch` event and if our current state has not reached the max, our `PostBloc` will fetch the next 20 posts.
+Now every time a `PostEvent` is dispatched, if it is a `Fetch` event and there are more posts to fetch, our `PostBloc` will fetch the next 20 posts.
 
-The API will return an empty array if we try to fetch beyond the max posts (100) so if we get back an empty array, our bloc will `yield` the currentState except we will set `hasReachedMax` to true.
+The API will return an empty array if we try to fetch beyond the maximum number of posts (100), so if we get back an empty array, our bloc will `yield` the currentState except we will set `hasReachedMax` to true.
 
 If we cannot retrieve the posts, we throw an exception and `yield` `PostError()`.
 
