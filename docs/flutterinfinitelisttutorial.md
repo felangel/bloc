@@ -133,7 +133,7 @@ Our presentation layer will need to have several pieces of information in order 
 
 - `PostLoaded`- will tell the presentation layer it has content to render
   - `posts`- will be the `List<Post>` which will be displayed
-  - `hasReachedMax`- will tell the presentation layer whether or not it has reach the maximum number of posts
+  - `hasReachedMax`- will tell the presentation layer whether or not it has reached the maximum number of posts
 - `PostError`- will tell the presentation layer that an error has occurred while fetching posts
 
 We can now create `bloc/post_state.dart` and implement it like so.
