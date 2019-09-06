@@ -284,9 +284,9 @@ Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
 
 Our `PostBloc` will `yield` whenever there is a new state because it returns a `Stream<PostState>`. Check out [core concepts](https://felangel.github.io/bloc/#/coreconcepts?id=streams) for more information about `Streams` and other core concepts.
 
-Now every time a `PostEvent` is dispatched, if it is a `Fetch` event and if our current state has not reached the max, our `PostBloc` will fetch the next 20 posts.
+Now every time a `PostEvent` is dispatched, if it is a `Fetch` event and there are more posts to fetch, our `PostBloc` will fetch the next 20 posts.
 
-The API will return an empty array if we try to fetch beyond the max posts (100) so if we get back an empty array, our bloc will `yield` the currentState except we will set `hasReachedMax` to true.
+The API will return an empty array if we try to fetch beyond the maximum number of posts (100), so if we get back an empty array, our bloc will `yield` the currentState except we will set `hasReachedMax` to true.
 
 If we cannot retrieve the posts, we throw an exception and `yield` `PostError()`.
 
@@ -511,9 +511,9 @@ class _HomePageState extends State<HomePage> {
 
 Moving along, our build method returns a `BlocBuilder`. `BlocBuilder` is a Flutter widget from the [flutter_bloc package](https://pub.dev/packages/flutter_bloc) which handles building a widget in response to new bloc states. Any time our `PostBloc` state changes, our builder function will be called with the new `PostState`.
 
-!> We need to remember to clean up after ourselves and dispose our `ScrollController` when our StatefulWidget is disposed.
+!> We need to remember to clean up after ourselves and dispose of our `ScrollController` when the StatefulWidget is disposed.
 
-Whenever the user scrolls, we calculate how far away from the bottom of the page the user is and if the distance is ≤ our `_scrollThreshold` we dispatch a `Fetch` event in order to load more posts.
+Whenever the user scrolls, we calculate how far away from the bottom of the page he is and if the distance is ≤ our `_scrollThreshold` we dispatch a `Fetch` event in order to load more posts.
 
 Next, we need to implement our `BottomLoader` widget which will indicate to the user that we are loading more posts.
 
