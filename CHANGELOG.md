@@ -1,3 +1,8 @@
+# 0.4.1
+
+- Update to support optional `id` in cases where there are multiple instances of the same `HydratedBloc`
+- Documentation Updates
+
 # 0.4.0
 
 - Update to bloc `v0.15.0`

@@ -33,8 +33,38 @@ class MyHydratedBloc extends HydratedBloc<int, int> {
   }
 }
 
+class MyMultiHydratedBloc extends HydratedBloc<int, int> {
+  final String _id;
+
+  MyMultiHydratedBloc(String id) : _id = id;
+
+  @override
+  int get initialState => super.initialState ?? 0;
+
+  @override
+  String get id => _id;
+
+  @override
+  Stream<int> mapEventToState(int event) {
+    return null;
+  }
+
+  @override
+  Map<String, int> toJson(int state) {
+    return {'value': state};
+  }
+
+  @override
+  int fromJson(dynamic json) {
+    try {
+      return json['value'] as int;
+    } catch (_) {
+      return null;
+    }
+  }
+}
+
 void main() {
-  MyHydratedBloc bloc;
   MockHydratedBlocDelegate delegate;
   MockStorage storage;
 
@@ -44,11 +74,15 @@ void main() {
     storage = MockStorage();
 
     when(delegate.storage).thenReturn(storage);
-
-    bloc = MyHydratedBloc();
   });
 
   group('HydratedBloc', () {
+    MyHydratedBloc bloc;
+
+    setUp(() {
+      bloc = MyHydratedBloc();
+    });
+
     test('initialState should return 0 when fromJson returns null', () {
       when<dynamic>(storage.read('MyHydratedBloc')).thenReturn(null);
       expect(bloc.initialState, 0);
@@ -60,6 +94,39 @@ void main() {
           .thenReturn(json.encode({'value': 101}));
       expect(bloc.initialState, 101);
       verify<dynamic>(storage.read('MyHydratedBloc')).called(2);
+    });
+  });
+
+  group('MultiHydratedBloc', () {
+    MyMultiHydratedBloc multiBlocA;
+    MyMultiHydratedBloc multiBlocB;
+
+    setUp(() {
+      multiBlocA = MyMultiHydratedBloc('A');
+      multiBlocB = MyMultiHydratedBloc('B');
+    });
+
+    test('initialState should return 0 when fromJson returns null', () {
+      when<dynamic>(storage.read('MyMultiHydratedBlocA')).thenReturn(null);
+      expect(multiBlocA.initialState, 0);
+      verify<dynamic>(storage.read('MyMultiHydratedBlocA')).called(2);
+
+      when<dynamic>(storage.read('MyMultiHydratedBlocB')).thenReturn(null);
+      expect(multiBlocB.initialState, 0);
+      verify<dynamic>(storage.read('MyMultiHydratedBlocB')).called(2);
+    });
+
+    test('initialState should return 101/102 when fromJson returns 101/102',
+        () {
+      when<dynamic>(storage.read('MyMultiHydratedBlocA'))
+          .thenReturn(json.encode({'value': 101}));
+      expect(multiBlocA.initialState, 101);
+      verify<dynamic>(storage.read('MyMultiHydratedBlocA')).called(2);
+
+      when<dynamic>(storage.read('MyMultiHydratedBlocB'))
+          .thenReturn(json.encode({'value': 102}));
+      expect(multiBlocB.initialState, 102);
+      verify<dynamic>(storage.read('MyMultiHydratedBlocB')).called(2);
     });
   });
 }

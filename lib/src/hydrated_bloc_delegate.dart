@@ -29,7 +29,7 @@ class HydratedBlocDelegate extends BlocDelegate {
       final stateJson = bloc.toJson(state);
       if (stateJson != null) {
         storage.write(
-          bloc.runtimeType.toString(),
+          '${bloc.runtimeType.toString()}${bloc.id}',
           json.encode(stateJson),
         );
       }

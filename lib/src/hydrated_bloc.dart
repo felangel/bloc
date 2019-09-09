@@ -14,15 +14,21 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
   @override
   State get initialState {
     try {
-      return fromJson(
-        json.decode(
-          storage?.read(this.runtimeType.toString()) as String,
-        ) as Map<String, dynamic>,
-      );
+      final jsonString =
+          storage?.read('${this.runtimeType.toString()}$id') as String;
+      return jsonString?.isNotEmpty == true
+          ? fromJson(json.decode(jsonString) as Map<String, dynamic>)
+          : null;
     } catch (_) {
       return null;
     }
   }
+
+  /// `id` is used to uniquely identify multiple instances of the same `HydratedBloc` type.
+  /// In most cases it is not necessary; however, if you wish to intentionally have multiple instances
+  /// of the same `HydratedBloc`, then you must override `id` and return a unique identifier for each
+  /// `HydratedBloc` instance in order to keep the caches independent of each other.
+  String get id => '';
 
   /// Responsible for converting the `Map<String, dynamic>` representation of the bloc state
   /// into a concrete instance of the bloc state.
