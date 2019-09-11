@@ -481,7 +481,7 @@ void main() {
 
 We are wrapping our entire `App` widget in a `BlocProvider` in order to make the `AuthenticationBloc` available to the entire widget tree.
 
-!> Don't forget to always dispose your blocs.
+?> `BlocProvider` also handles disposing the `AuthenticationBloc` automatically so we don't need to do that.
 
 Next we need to implement our `App` widget.
 
