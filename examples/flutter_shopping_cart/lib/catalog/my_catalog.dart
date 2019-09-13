@@ -45,7 +45,7 @@ class _AddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var cartBloc = BlocProvider.of<CartBloc>(context);
+    final cartBloc = BlocProvider.of<CartBloc>(context);
 
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
