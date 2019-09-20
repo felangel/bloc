@@ -70,13 +70,13 @@
     "@types/mocha": "^2.2.42",
     "@types/node": "^8.10.25",
     "@types/rimraf": "^2.0.2",
-    "tslint": "^5.8.0",
-    "typescript": "^3.1.4",
+    "tslint": "^5.12.1",
+    "typescript": "^3.5.1",
     "vscode": "^1.1.33"
   },
   "dependencies": {
     "change-case": "^3.1.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "mkdirp": "^0.5.1"
   }
 }
