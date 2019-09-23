@@ -16,7 +16,7 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class ${pascalCaseBlocName}Event extends Equatable {
-  ${pascalCaseBlocName}Event([List props = const <dynamic>[]]) : super(props);
+  const ${pascalCaseBlocName}Event([List props = const <dynamic>[]]) : super(props);
 }
 `;
 }
