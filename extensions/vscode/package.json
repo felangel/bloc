@@ -68,7 +68,7 @@
     "@types/lodash": "^4.14.121",
     "@types/mkdirp": "^0.5.2",
     "@types/mocha": "^2.2.42",
-    "@types/node": "^8.10.25",
+    "@types/node": "^12.7.8",
     "@types/rimraf": "^2.0.2",
     "tslint": "^5.12.1",
     "typescript": "^3.5.1",
