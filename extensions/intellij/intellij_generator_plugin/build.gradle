@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.bloc'
-version '1.5.1'
+version '1.6.0'
 
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
@@ -49,5 +49,6 @@ patchPluginXml {
       * v1.4 - Bug Fixes for Bloc Generator Name (Case Sensitivity)
       * v1.5 - Fix Overwrite Issue and Updates for implicit-dynamic support with Equatable
       * v1.5.1 - Minor dependency updates
+      * v1.6.0 - Support for Equatable v0.6.0
       """
 }

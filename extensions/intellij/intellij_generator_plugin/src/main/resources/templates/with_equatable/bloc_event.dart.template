@@ -1,7 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 abstract class ${bloc_pascal_case}Event extends Equatable {
-  ${bloc_pascal_case}Event([List props = const <dynamic>[]]) : super(props);
+  const ${bloc_pascal_case}Event();
 }
