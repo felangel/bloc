@@ -12,14 +12,15 @@ export function getBlocStateTemplate(
 function getEquatableBlocStateTemplate(blocName: string): string {
   const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
   return `import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 abstract class ${pascalCaseBlocName}State extends Equatable {
-  ${pascalCaseBlocName}State([List props = const <dynamic>[]]) : super(props);
+  const ${pascalCaseBlocName}State();
 }
 
-class Initial${pascalCaseBlocName}State extends ${pascalCaseBlocName}State {}
+class Initial${pascalCaseBlocName}State extends ${pascalCaseBlocName}State {
+  @override
+  List<Object> get props => [];
+}
 `;
 }
 

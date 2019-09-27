@@ -1,3 +1,7 @@
+# 0.12.0
+
+Update Snippets and New Bloc to support changes in equatable `v0.6.0`
+
 # 0.11.1
 
 `Equatable` enhancement to address `implicit-dynamic` warning ([#463](https://github.com/felangel/bloc/pull/463)).

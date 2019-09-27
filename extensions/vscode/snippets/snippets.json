@@ -148,11 +148,9 @@
     "prefix": "blocstate",
     "body": [
       "import 'package:equatable/equatable.dart';",
-      "import 'package:meta/meta.dart';",
       "",
-      "@immutable",
       "abstract class $1State extends Equatable {",
-      "\t$1State([List props = const <dynamic>[]]) : super(props);",
+      "\tconst $1State();",
       "}"
     ]
   },
@@ -161,11 +159,9 @@
     "prefix": "blocevent",
     "body": [
       "import 'package:equatable/equatable.dart';",
-      "import 'package:meta/meta.dart';",
       "",
-      "@immutable",
       "abstract class $1Event extends Equatable {",
-      "\t$1Event([List props = const <dynamic>[]]) : super(props);",
+      "\tconst $1Event();",
       "}"
     ]
   }
