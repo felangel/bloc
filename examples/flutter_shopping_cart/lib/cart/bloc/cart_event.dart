@@ -4,13 +4,19 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class CartEvent extends Equatable {
-  CartEvent([List props = const <dynamic>[]]) : super(props);
+  const CartEvent();
 }
 
-class LoadCart extends CartEvent {}
+class LoadCart extends CartEvent {
+  @override
+  List<Object> get props => [];
+}
 
 class AddItem extends CartEvent {
   final Item item;
 
-  AddItem(this.item) : super([item]);
+  const AddItem(this.item);
+
+  @override
+  List<Object> get props => [item];
 }

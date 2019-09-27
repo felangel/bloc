@@ -4,15 +4,24 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class CatalogState extends Equatable {
-  CatalogState([List props = const <dynamic>[]]) : super(props);
+  const CatalogState();
 }
 
-class CatalogLoading extends CatalogState {}
+class CatalogLoading extends CatalogState {
+  @override
+  List<Object> get props => [];
+}
 
 class CatalogLoaded extends CatalogState {
   final Catalog catalog;
 
-  CatalogLoaded(this.catalog) : super([catalog]);
+  const CatalogLoaded(this.catalog);
+
+  @override
+  List<Object> get props => [catalog];
 }
 
-class CatalogError extends CatalogState {}
+class CatalogError extends CatalogState {
+  @override
+  List<Object> get props => [];
+}

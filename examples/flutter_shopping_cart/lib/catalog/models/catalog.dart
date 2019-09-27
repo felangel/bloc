@@ -25,4 +25,7 @@ class Catalog extends Equatable {
   Item getById(int id) => Item(id, _itemNames[id % _itemNames.length]);
 
   Item getByPosition(int position) => getById(position);
+
+  @override
+  List<Object> get props => [_itemNames];
 }
