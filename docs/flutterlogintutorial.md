@@ -531,10 +531,10 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _loginBloc = BlocProvider.of<LoginBloc>(context);
+    final loginBloc = BlocProvider.of<LoginBloc>(context);
 
     _onLoginButtonPressed() {
-      _loginBloc.dispatch(LoginButtonPressed(
+      loginBloc.dispatch(LoginButtonPressed(
         username: _usernameController.text,
         password: _passwordController.text,
       ));
@@ -552,11 +552,7 @@ class _LoginFormState extends State<LoginForm> {
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
-        bloc: _loginBloc,
-        builder: (
-          BuildContext context,
-          LoginState state,
-        ) {
+        builder: (context, state) {
           return Form(
             child: Column(
               children: [
