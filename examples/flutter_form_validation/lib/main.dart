@@ -43,7 +43,7 @@ class _MyFormState extends State<MyForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MyFormBloc, MyFormState>(      
+    return BlocBuilder<MyFormBloc, MyFormState>(
       builder: (context, state) {
         if (state.formSubmittedSuccessfully) {
           return SuccessDialog(onDismissed: () {

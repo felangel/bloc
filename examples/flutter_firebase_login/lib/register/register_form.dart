@@ -30,7 +30,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RegisterBloc, RegisterState>(      
+    return BlocListener<RegisterBloc, RegisterState>(
       listener: (context, state) {
         if (state.isSubmitting) {
           Scaffold.of(context)

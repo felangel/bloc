@@ -56,7 +56,7 @@ class _WeatherState extends State<Weather> {
         ],
       ),
       body: Center(
-        child: BlocListener<WeatherBloc, WeatherState>(          
+        child: BlocListener<WeatherBloc, WeatherState>(
           listener: (context, state) {
             if (state is WeatherLoaded) {
               BlocProvider.of<ThemeBloc>(context).dispatch(
