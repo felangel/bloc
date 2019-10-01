@@ -5,7 +5,6 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import './helpers/helpers.dart';
-import 'helpers/counter/on_error_bloc.dart';
 
 class MockBlocDelegate extends Mock implements BlocDelegate {}
 
@@ -458,7 +457,7 @@ void main() {
         Object expectedError;
         StackTrace expectedStacktrace;
 
-        final OnErrorBloc _bloc = OnErrorBloc(
+        final OnExceptionBloc _bloc = OnExceptionBloc(
             exception: exception,
             onErrorCallback: (Object error, StackTrace stacktrace) {
               expectedError = error;
@@ -496,6 +495,38 @@ void main() {
         });
 
         _bloc.dispose();
+        _bloc.dispatch(CounterEvent.increment);
+      });
+    });
+
+    group('Error', () {
+      test('does not break stream', () {
+        final List<int> expected = [0, -1];
+        final CounterErrorBloc _bloc = CounterErrorBloc();
+
+        expectLater(_bloc.state, emitsInOrder(expected));
+
+        _bloc.dispatch(CounterEvent.increment);
+        _bloc.dispatch(CounterEvent.decrement);
+      });
+
+      test('triggers onError from mapEventToState', () {
+        final error = Error();
+        Object expectedError;
+        StackTrace expectedStacktrace;
+
+        final OnErrorBloc _bloc = OnErrorBloc(
+            error: error,
+            onErrorCallback: (Object error, StackTrace stacktrace) {
+              expectedError = error;
+              expectedStacktrace = stacktrace;
+            });
+
+        expectLater(_bloc.state, emitsInOrder(<int>[0])).then((dynamic _) {
+          expect(expectedError, error);
+          expect(expectedStacktrace, isNotNull);
+        });
+
         _bloc.dispatch(CounterEvent.increment);
       });
     });

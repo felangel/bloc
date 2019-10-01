@@ -4,11 +4,11 @@ import 'package:bloc/bloc.dart';
 
 import '../counter/counter_bloc.dart';
 
-class OnErrorBloc extends Bloc<CounterEvent, int> {
+class OnExceptionBloc extends Bloc<CounterEvent, int> {
   final Function onErrorCallback;
-  final Error error;
+  final Exception exception;
 
-  OnErrorBloc({this.error, this.onErrorCallback});
+  OnExceptionBloc({this.exception, this.onErrorCallback});
 
   @override
   int get initialState => 0;
@@ -20,6 +20,6 @@ class OnErrorBloc extends Bloc<CounterEvent, int> {
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
-    throw error;
+    throw exception;
   }
 }
