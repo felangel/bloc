@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import * as changeCase from "change-case";
 import * as mkdirp from "mkdirp";
+
 import {
   commands,
   ExtensionContext,
@@ -17,8 +18,11 @@ import {
   getBlocStateTemplate,
   getBlocTemplate
 } from "./templates";
+import { analyzeDependencies } from "./utils";
 
 export function activate(_context: ExtensionContext) {
+  analyzeDependencies();
+
   commands.registerCommand("extension.new-bloc", async (uri: Uri) => {
     const blocName = await promptForBlocName();
     if (_.isNil(blocName) || blocName.trim() === "") {

@@ -1,3 +1,7 @@
+# 0.12.1
+
+Add detection for out-dated dependencies in workspace.
+
 # 0.12.0
 
 Update Snippets and New Bloc to support changes in equatable `v0.6.0`
