@@ -2,7 +2,8 @@ import * as _ from "lodash";
 
 import * as semver from "semver";
 import { window, env, Uri } from "vscode";
-import { getPubspecDependencies } from ".";
+import { getPubspec } from ".";
+import { updatePubspecDependency } from "./update-pubspec-dependency";
 
 export function analyzeDependencies() {
   const dependenciesToAnalyze = [
@@ -26,7 +27,7 @@ export function analyzeDependencies() {
     { name: "flutter_bloc", version: "^0.21.0", actions: [] }
   ];
 
-  const dependencies = getPubspecDependencies();
+  const dependencies = _.get(getPubspec(), "dependencies", {});
 
   for (let i = 0; i < dependenciesToAnalyze.length; i++) {
     const dependency = dependenciesToAnalyze[i];
@@ -44,9 +45,15 @@ export function analyzeDependencies() {
         window
           .showWarningMessage(
             `This workspace contains an unsupported version of ${dependency.name}. Please update to ${dependency.version}.`,
-            ...dependency.actions.map(action => action.name)
+            ...dependency.actions.map(action => action.name).concat("Update")
           )
           .then(invokedAction => {
+            if (invokedAction === "Update") {
+              return updatePubspecDependency({
+                name: dependency.name,
+                version: dependency.version
+              });
+            }
             const action = dependency.actions.find(
               action => action.name === invokedAction
             );

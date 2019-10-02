@@ -1,6 +1,10 @@
+# 0.12.2
+
+Add Update Action to automatically update outdated dependencies
+
 # 0.12.1
 
-Add detection for out-dated dependencies in workspace.
+Add detection for outdated dependencies in workspace.
 
 # 0.12.0
 
