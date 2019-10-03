@@ -20,14 +20,20 @@
     <div id="app">Please wait...</div>
     <script>
       window.$docsify = {
+        alias: {
+          "/.*/_navbar.md": "/_navbar.md"
+        },
         name: "Bloc",
         repo: "https://github.com/felangel/bloc",
         homepage:
           "https://raw.githubusercontent.com/felangel/bloc/master/README.md",
         loadSidebar: true,
-        coverpage: true,
+        coverpage: ["/", "/ko-kr/"],
+        fallbackLanguages: ["en"],
         auto2top: true,
         autoHeader: false,
+        loadNavbar: true,
+        mergeNavbar: true,
         subMaxLevel: 3,
         maxLevel: 4,
         search: {
