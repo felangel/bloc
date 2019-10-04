@@ -1,3 +1,8 @@
+# 0.5.0
+
+- Support for Desktop ([#18](https://github.com/felangel/hydrated_bloc/pull/18))
+- Documentation and Example Updates
+
 # 0.4.1
 
 - Update to support optional `id` in cases where there are multiple instances of the same `HydratedBloc`
