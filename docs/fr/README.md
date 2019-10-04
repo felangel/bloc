@@ -11,4 +11,4 @@
 
 ---
 
-곧 온다
+Bientôt disponible

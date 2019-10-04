@@ -1,2 +1,4 @@
-- [:us: English](/)
-- [:kr: 한국어](/ko-kr/)
+- Translations
+  - [:us: English](/)
+  - [:fr: French](/fr/)
+  - [:kr: 한국어](/ko-kr/)
