@@ -1,4 +1,5 @@
 - Translations
-  - [:us: English](/)
-  - [:fr: French](/fr/)
-  - [:kr: 한국어](/ko-kr/)
+  - [:us: en-us](/)
+  - [:fr: fr-fr](/fr/)
+  - [:kr: ko-kr](/ko-kr/)
+  - [:brazil: pt-br](/pt-br/)
