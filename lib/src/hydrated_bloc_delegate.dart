@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:platform/platform.dart';
 
 /// A specialized `BlocDelegate` which handles persisting state changes
 /// transparently and asynchronously.
@@ -15,8 +16,10 @@ class HydratedBlocDelegate extends BlocDelegate {
   /// This is the recommended way to use a `HydratedBlocDelegate`.
   /// If you want to customize `HydratedBlocDelegate` you can extend `HydratedBlocDelegate`
   /// and perform the necessary overrides.
-  static Future<HydratedBlocDelegate> build() async {
-    return HydratedBlocDelegate(await HydratedBlocStorage.getInstance());
+  static Future<HydratedBlocDelegate> build([Platform platform]) async {
+    return HydratedBlocDelegate(
+      await HydratedBlocStorage.getInstance(platform),
+    );
   }
 
   HydratedBlocDelegate(this.storage);

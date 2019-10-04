@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' hide Platform;
+import 'package:platform/platform.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Interface which `HydratedBlocDelegate` uses to persist and retrieve
@@ -25,13 +26,15 @@ class HydratedBlocStorage implements HydratedStorage {
   File _file;
 
   /// Returns an instance of `HydratedBlocStorage`.
-  static Future<HydratedBlocStorage> getInstance() async {
+  static Future<HydratedBlocStorage> getInstance([
+    Platform platform = const LocalPlatform(),
+  ]) async {
     if (_instance != null) {
       return _instance;
     }
 
-    final Directory directory = await getTemporaryDirectory();
-    final File file = File('${directory.path}/$_hydratedBlocStorageName');
+    final Directory directory = await _getDocumentDir(platform);
+    final File file = _getFilePath(directory);
     Map<String, dynamic> storage = Map<String, dynamic>();
 
     if (await file.exists()) {
@@ -66,5 +69,18 @@ class HydratedBlocStorage implements HydratedStorage {
     _storage = Map<String, dynamic>();
     _instance = null;
     return await _file.exists() ? await _file.delete() : null;
+  }
+
+  static Future<Directory> _getDocumentDir(Platform platform) async {
+    if (platform.isMacOS || platform.isLinux) {
+      return Directory('${platform.environment['HOME']}/.config');
+    } else if (platform.isWindows) {
+      return Directory('${platform.environment['UserProfile']}\\.config');
+    }
+    return await getTemporaryDirectory();
+  }
+
+  static File _getFilePath(Directory directory) {
+    return File('${directory.path}/$_hydratedBlocStorageName');
   }
 }

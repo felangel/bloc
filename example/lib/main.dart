@@ -6,6 +6,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
+import 'plugins/desktop/desktop.dart';
+
 void main() async {
   // https://github.com/flutter/flutter/pull/38464
   // Changes in Flutter v1.9.4 require you to call WidgetsFlutterBinding.ensureInitialized()
@@ -13,6 +15,7 @@ void main() async {
   // As a result, you may have to uncomment the following line if you're using Flutter >=1.9.4.
   //
   // WidgetsFlutterBinding.ensureInitialized();
+  setTargetPlatformForDesktop();
   BlocSupervisor.delegate = await HydratedBlocDelegate.build();
   runApp(App());
 }
@@ -76,6 +79,7 @@ class CounterPage extends StatelessWidget {
                 await (BlocSupervisor.delegate as HydratedBlocDelegate)
                     .storage
                     .clear();
+                counterBloc.dispatch(CounterEvent.reset);
               },
             ),
           ),
@@ -85,7 +89,7 @@ class CounterPage extends StatelessWidget {
   }
 }
 
-enum CounterEvent { increment, decrement }
+enum CounterEvent { increment, decrement, reset }
 
 class CounterState {
   int value;
@@ -108,6 +112,9 @@ class CounterBloc extends HydratedBloc<CounterEvent, CounterState> {
         break;
       case CounterEvent.increment:
         yield CounterState(currentState.value + 1);
+        break;
+      case CounterEvent.reset:
+        yield CounterState(0);
         break;
     }
   }

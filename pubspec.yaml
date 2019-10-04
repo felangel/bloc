@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   bloc: ^0.15.0
   path_provider: ^1.1.0
+  platform: ^2.2.1
 
 dev_dependencies:
   flutter_test:
