@@ -76,9 +76,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.delete_forever),
               onPressed: () async {
-                await (BlocSupervisor.delegate as HydratedBlocDelegate)
-                    .storage
-                    .clear();
+                await counterBloc.clear();
                 counterBloc.dispatch(CounterEvent.reset);
               },
             ),

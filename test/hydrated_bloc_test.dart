@@ -95,6 +95,13 @@ void main() {
       expect(bloc.initialState, 101);
       verify<dynamic>(storage.read('MyHydratedBloc')).called(2);
     });
+
+    group('clear', () {
+      test('calls delete on storage', () async {
+        await bloc.clear();
+        verify(storage.delete('MyHydratedBloc')).called(1);
+      });
+    });
   });
 
   group('MultiHydratedBloc', () {
@@ -127,6 +134,17 @@ void main() {
           .thenReturn(json.encode({'value': 102}));
       expect(multiBlocB.initialState, 102);
       verify<dynamic>(storage.read('MyMultiHydratedBlocB')).called(2);
+    });
+
+    group('clear', () {
+      test('calls delete on storage', () async {
+        await multiBlocA.clear();
+        verify(storage.delete('MyMultiHydratedBlocA')).called(1);
+        verifyNever(storage.delete('MyMultiHydratedBlocB'));
+
+        await multiBlocB.clear();
+        verify(storage.delete('MyMultiHydratedBlocB')).called(1);
+      });
     });
   });
 }

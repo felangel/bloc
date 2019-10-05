@@ -128,9 +128,7 @@ void main() {
         hydratedStorage = await HydratedBlocStorage.getInstance(
           FakePlatform(operatingSystem: 'ios'),
         );
-        await Future.wait(<Future<void>>[
-          hydratedStorage.write('CounterBloc', json.encode({"value": 4})),
-        ]);
+        await hydratedStorage.write('CounterBloc', json.encode({"value": 4}));
 
         expect(hydratedStorage.read('CounterBloc'), '{"value":4}');
       });
@@ -141,15 +139,37 @@ void main() {
         hydratedStorage = await HydratedBlocStorage.getInstance(
           FakePlatform(operatingSystem: 'ios'),
         );
-        await Future.wait(<Future<void>>[
-          hydratedStorage.write('CounterBloc', json.encode({"value": 4})),
-        ]);
+        await hydratedStorage.write('CounterBloc', json.encode({"value": 4}));
 
         expect(hydratedStorage.read('CounterBloc'), '{"value":4}');
         await hydratedStorage.clear();
         expect(hydratedStorage.read('CounterBloc'), isNull);
         final file = File('./.hydrated_bloc.json');
         expect(file.existsSync(), false);
+      });
+    });
+
+    group('delete', () {
+      test('does nothing for non-existing key value pair', () async {
+        hydratedStorage = await HydratedBlocStorage.getInstance(
+          FakePlatform(operatingSystem: 'ios'),
+        );
+
+        expect(hydratedStorage.read('CounterBloc'), null);
+        await hydratedStorage.delete('CounterBloc');
+        expect(hydratedStorage.read('CounterBloc'), isNull);
+      });
+
+      test('deletes existing key value pair', () async {
+        hydratedStorage = await HydratedBlocStorage.getInstance(
+          FakePlatform(operatingSystem: 'ios'),
+        );
+        await hydratedStorage.write('CounterBloc', json.encode({"value": 4}));
+
+        expect(hydratedStorage.read('CounterBloc'), '{"value":4}');
+
+        await hydratedStorage.delete('CounterBloc');
+        expect(hydratedStorage.read('CounterBloc'), isNull);
       });
     });
   });

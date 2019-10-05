@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -7,7 +8,7 @@ import 'package:bloc/bloc.dart';
 /// based on the persisted state. This allows state to be persisted
 /// across hot restarts as well as complete app restarts.
 abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
-  final HydratedStorage storage =
+  final HydratedStorage _storage =
       (BlocSupervisor.delegate as HydratedBlocDelegate).storage;
 
   @mustCallSuper
@@ -15,7 +16,7 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
   State get initialState {
     try {
       final jsonString =
-          storage?.read('${this.runtimeType.toString()}$id') as String;
+          _storage?.read('${runtimeType.toString()}$id') as String;
       return jsonString?.isNotEmpty == true
           ? fromJson(json.decode(jsonString) as Map<String, dynamic>)
           : null;
@@ -29,6 +30,11 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
   /// of the same `HydratedBloc`, then you must override `id` and return a unique identifier for each
   /// `HydratedBloc` instance in order to keep the caches independent of each other.
   String get id => '';
+
+  /// `clear` is used to wipe or invalidate the cache of a `HydratedBloc`.
+  /// Calling `clear` will delete the cached state of the bloc
+  /// but will not modify the current state of the bloc.
+  Future<void> clear() => _storage.delete('${runtimeType.toString()}$id');
 
   /// Responsible for converting the `Map<String, dynamic>` representation of the bloc state
   /// into a concrete instance of the bloc state.

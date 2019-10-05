@@ -1,3 +1,8 @@
+# 0.6.0
+
+- Support clearing individual `HydratedBloc` caches ([#21](https://github.com/felangel/hydrated_bloc/issues/21))
+- Documentation and Example Updates
+
 # 0.5.0
 
 - Support for Desktop ([#18](https://github.com/felangel/hydrated_bloc/pull/18))

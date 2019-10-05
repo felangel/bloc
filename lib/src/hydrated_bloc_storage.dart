@@ -13,6 +13,9 @@ abstract class HydratedStorage {
   /// Persists key value pair
   Future<void> write(String key, dynamic value);
 
+  /// Deletes key value pair
+  Future<void> delete(String key);
+
   /// Clears all key value pairs from storage
   Future<void> clear();
 }
@@ -62,6 +65,12 @@ class HydratedBlocStorage implements HydratedStorage {
     _storage[key] = value;
     await _file.writeAsString(json.encode(_storage));
     return _storage[key] = value;
+  }
+
+  @override
+  Future<void> delete(String key) async {
+    _storage[key] = null;
+    return await _file.writeAsString(json.encode(_storage));
   }
 
   @override
