@@ -23,7 +23,7 @@ Uma biblioteca previsível de gerenciamento de estado que ajuda a implementar o 
 
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
 
-O objetivo dessa biblioteca é tornar fácil separatar _apresentação_ da _lógica de negócio_, facilitando a testabilidade e reusabilidade.
+O objetivo dessa biblioteca é tornar fácil separar _apresentação_ da _lógica de negócio_, facilitando a testabilidade e reusabilidade.
 
 ## Documentação
 
