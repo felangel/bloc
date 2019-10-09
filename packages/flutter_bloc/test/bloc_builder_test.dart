@@ -468,4 +468,259 @@ void main() {
       expect(conditionalCounterText4.data, '2');
     });
   });
+
+  group('BlocBuilder2', () {
+    testWidgets('renders properly', (tester) async {
+      final blocA = CounterBloc();
+      final blocB = CounterBloc();
+      await tester.pumpWidget(
+        BlocBuilder2<CounterBloc, int, CounterBloc, int>(
+          blocA: blocA,
+          blocB: blocB,
+          builder: (context, stateA, stateB) => Container(
+            key: Key('__${stateA}_${stateB}__'),
+          ),
+        ),
+      );
+      expect(find.byKey(Key('__0_0__')), findsOneWidget);
+    });
+  });
+
+  group('BlocBuilder3', () {
+    testWidgets('renders properly', (tester) async {
+      final blocA = CounterBloc();
+      final blocB = CounterBloc();
+      final blocC = CounterBloc();
+      await tester.pumpWidget(
+        BlocBuilder3<CounterBloc, int, CounterBloc, int, CounterBloc, int>(
+          blocA: blocA,
+          blocB: blocB,
+          blocC: blocC,
+          builder: (context, stateA, stateB, stateC) => Container(
+            key: Key('__${stateA}_${stateB}_${stateC}__'),
+          ),
+        ),
+      );
+      expect(find.byKey(Key('__0_0_0__')), findsOneWidget);
+    });
+  });
+
+  group('BlocBuilder4', () {
+    testWidgets('renders properly', (tester) async {
+      final blocA = CounterBloc();
+      final blocB = CounterBloc();
+      final blocC = CounterBloc();
+      final blocD = CounterBloc();
+      await tester.pumpWidget(
+        BlocBuilder4<CounterBloc, int, CounterBloc, int, CounterBloc, int,
+            CounterBloc, int>(
+          blocA: blocA,
+          blocB: blocB,
+          blocC: blocC,
+          blocD: blocD,
+          builder: (context, stateA, stateB, stateC, stateD) => Container(
+            key: Key('__${stateA}_${stateB}_${stateC}_${stateD}__'),
+          ),
+        ),
+      );
+      expect(find.byKey(Key('__0_0_0_0__')), findsOneWidget);
+    });
+  });
+
+  group('BlocBuilder5', () {
+    testWidgets('renders properly', (tester) async {
+      final blocA = CounterBloc();
+      final blocB = CounterBloc();
+      final blocC = CounterBloc();
+      final blocD = CounterBloc();
+      final blocE = CounterBloc();
+      await tester.pumpWidget(
+        BlocBuilder5<CounterBloc, int, CounterBloc, int, CounterBloc, int,
+            CounterBloc, int, CounterBloc, int>(
+          blocA: blocA,
+          blocB: blocB,
+          blocC: blocC,
+          blocD: blocD,
+          blocE: blocE,
+          builder: (context, stateA, stateB, stateC, stateD, stateE) =>
+              Container(
+            key: Key('__${stateA}_${stateB}_${stateC}_${stateD}_${stateE}__'),
+          ),
+        ),
+      );
+      expect(find.byKey(Key('__0_0_0_0_0__')), findsOneWidget);
+    });
+  });
+
+  group('BlocBuilder6', () {
+    testWidgets('renders properly', (tester) async {
+      final blocA = CounterBloc();
+      final blocB = CounterBloc();
+      final blocC = CounterBloc();
+      final blocD = CounterBloc();
+      final blocE = CounterBloc();
+      final blocF = CounterBloc();
+      await tester.pumpWidget(
+        BlocBuilder6<CounterBloc, int, CounterBloc, int, CounterBloc, int,
+            CounterBloc, int, CounterBloc, int, CounterBloc, int>(
+          blocA: blocA,
+          blocB: blocB,
+          blocC: blocC,
+          blocD: blocD,
+          blocE: blocE,
+          blocF: blocF,
+          builder: (context, stateA, stateB, stateC, stateD, stateE, stateF) =>
+              Container(
+            key: Key(
+                '__${stateA}_${stateB}_${stateC}_${stateD}_${stateE}_${stateF}__'),
+          ),
+        ),
+      );
+      expect(find.byKey(Key('__0_0_0_0_0_0__')), findsOneWidget);
+    });
+  });
+
+  group('BlocBuilder7', () {
+    testWidgets('renders properly', (tester) async {
+      final blocA = CounterBloc();
+      final blocB = CounterBloc();
+      final blocC = CounterBloc();
+      final blocD = CounterBloc();
+      final blocE = CounterBloc();
+      final blocF = CounterBloc();
+      final blocG = CounterBloc();
+      await tester.pumpWidget(
+        BlocBuilder7<
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int>(
+          blocA: blocA,
+          blocB: blocB,
+          blocC: blocC,
+          blocD: blocD,
+          blocE: blocE,
+          blocF: blocF,
+          blocG: blocG,
+          builder: (context, stateA, stateB, stateC, stateD, stateE, stateF,
+                  stateG) =>
+              Container(
+            key: Key(
+                '__${stateA}_${stateB}_${stateC}_${stateD}_${stateE}_${stateF}_${stateG}__'),
+          ),
+        ),
+      );
+      expect(find.byKey(Key('__0_0_0_0_0_0_0__')), findsOneWidget);
+    });
+  });
+
+  group('BlocBuilder8', () {
+    testWidgets('renders properly', (tester) async {
+      final blocA = CounterBloc();
+      final blocB = CounterBloc();
+      final blocC = CounterBloc();
+      final blocD = CounterBloc();
+      final blocE = CounterBloc();
+      final blocF = CounterBloc();
+      final blocG = CounterBloc();
+      final blocH = CounterBloc();
+      await tester.pumpWidget(
+        BlocBuilder8<
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int>(
+          blocA: blocA,
+          blocB: blocB,
+          blocC: blocC,
+          blocD: blocD,
+          blocE: blocE,
+          blocF: blocF,
+          blocG: blocG,
+          blocH: blocH,
+          builder: (context, stateA, stateB, stateC, stateD, stateE, stateF,
+                  stateG, stateH) =>
+              Container(
+            key: Key(
+                '__${stateA}_${stateB}_${stateC}_${stateD}_${stateE}_${stateF}_${stateG}_${stateH}__'),
+          ),
+        ),
+      );
+      expect(find.byKey(Key('__0_0_0_0_0_0_0_0__')), findsOneWidget);
+    });
+  });
+
+  group('BlocBuilder9', () {
+    testWidgets('renders properly', (tester) async {
+      final blocA = CounterBloc();
+      final blocB = CounterBloc();
+      final blocC = CounterBloc();
+      final blocD = CounterBloc();
+      final blocE = CounterBloc();
+      final blocF = CounterBloc();
+      final blocG = CounterBloc();
+      final blocH = CounterBloc();
+      final blocI = CounterBloc();
+      await tester.pumpWidget(
+        BlocBuilder9<
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int,
+            CounterBloc,
+            int>(
+          blocA: blocA,
+          blocB: blocB,
+          blocC: blocC,
+          blocD: blocD,
+          blocE: blocE,
+          blocF: blocF,
+          blocG: blocG,
+          blocH: blocH,
+          blocI: blocI,
+          builder: (context, stateA, stateB, stateC, stateD, stateE, stateF,
+                  stateG, stateH, stateI) =>
+              Container(
+            key: Key(
+                '__${stateA}_${stateB}_${stateC}_${stateD}_${stateE}_${stateF}_${stateG}_${stateH}_${stateI}__'),
+          ),
+        ),
+      );
+      expect(find.byKey(Key('__0_0_0_0_0_0_0_0_0__')), findsOneWidget);
+    });
+  });
 }
