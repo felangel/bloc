@@ -1,3 +1,7 @@
+# 0.15.1
+
+- Deprecated `state` in favor of `stream` ([#558](https://github.com/felangel/bloc/issues/558))
+
 # 0.15.0
 
 - Removed Bloc `event` Stream ([#326](https://github.com/felangel/bloc/issues/326))

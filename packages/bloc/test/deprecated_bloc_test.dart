@@ -26,7 +26,7 @@ void main() {
         final List<Matcher> expectedStates = [equals(''), emitsDone];
 
         expectLater(
-          simpleBloc.stream,
+          simpleBloc.state,
           emitsInOrder(expectedStates),
         );
 
@@ -43,14 +43,14 @@ void main() {
 
       test('state should equal initial state before any events are dispatched',
           () async {
-        final initialState = await simpleBloc.stream.first;
+        final initialState = await simpleBloc.state.first;
         expect(initialState, simpleBloc.initialState);
       });
 
       test('should map single event to correct state', () {
         final List<String> expectedStates = ['', 'data'];
 
-        expectLater(simpleBloc.stream, emitsInOrder(expectedStates))
+        expectLater(simpleBloc.state, emitsInOrder(expectedStates))
             .then((dynamic _) {
           verify(
             delegate.onTransition(
@@ -71,7 +71,7 @@ void main() {
       test('should map multiple events to correct states', () {
         final List<String> expectedStates = ['', 'data'];
 
-        expectLater(simpleBloc.stream, emitsInOrder(expectedStates))
+        expectLater(simpleBloc.state, emitsInOrder(expectedStates))
             .then((dynamic _) {
           verify(
             delegate.onTransition(
@@ -111,7 +111,7 @@ void main() {
         ];
 
         expectLater(
-          complexBloc.stream,
+          complexBloc.state,
           emitsInOrder(expectedStates),
         );
 
@@ -128,7 +128,7 @@ void main() {
 
       test('state should equal initial state before any events are dispatched',
           () async {
-        final initialState = await complexBloc.stream.first;
+        final initialState = await complexBloc.state.first;
         expect(initialState, complexBloc.initialState);
       });
 
@@ -138,7 +138,7 @@ void main() {
           ComplexStateB(),
         ];
 
-        expectLater(complexBloc.stream, emitsInOrder(expectedStates))
+        expectLater(complexBloc.state, emitsInOrder(expectedStates))
             .then((dynamic _) {
           verify(
             delegate.onTransition(
@@ -166,7 +166,7 @@ void main() {
         ];
 
         expectLater(
-          complexBloc.stream,
+          complexBloc.state,
           emitsInOrder(expectedStates),
         );
 
@@ -224,7 +224,7 @@ void main() {
 
       test('state should equal initial state before any events are dispatched',
           () async {
-        final initialState = await counterBloc.stream.first;
+        final initialState = await counterBloc.state.first;
         expect(initialState, counterBloc.initialState);
       });
 
@@ -235,7 +235,7 @@ void main() {
         ];
 
         expectLater(
-          counterBloc.stream,
+          counterBloc.state,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expectLater(transitions, expectedTransitions);
@@ -264,7 +264,7 @@ void main() {
         ];
 
         expectLater(
-          counterBloc.stream,
+          counterBloc.state,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expect(transitions, expectedTransitions);
@@ -326,7 +326,7 @@ void main() {
         ];
 
         expectLater(
-          asyncBloc.stream,
+          asyncBloc.state,
           emitsInOrder(expectedStates),
         );
 
@@ -342,7 +342,7 @@ void main() {
         ];
 
         expectLater(
-          asyncBloc.stream,
+          asyncBloc.state,
           emitsInOrder(expectedStates),
         );
 
@@ -362,7 +362,7 @@ void main() {
 
       test('state should equal initial state before any events are dispatched',
           () async {
-        final initialState = await asyncBloc.stream.first;
+        final initialState = await asyncBloc.state.first;
         expect(initialState, asyncBloc.initialState);
       });
 
@@ -373,7 +373,7 @@ void main() {
           AsyncState(isLoading: false, hasError: false, isSuccess: true),
         ];
 
-        expectLater(asyncBloc.stream, emitsInOrder(expectedStates))
+        expectLater(asyncBloc.state, emitsInOrder(expectedStates))
             .then((dynamic _) {
           verify(
             delegate.onTransition(
@@ -446,7 +446,7 @@ void main() {
         final List<int> expected = [0, -1];
         final CounterExceptionBloc _bloc = CounterExceptionBloc();
 
-        expectLater(_bloc.stream, emitsInOrder(expected));
+        expectLater(_bloc.state, emitsInOrder(expected));
 
         _bloc.dispatch(CounterEvent.increment);
         _bloc.dispatch(CounterEvent.decrement);
@@ -464,7 +464,7 @@ void main() {
               expectedStacktrace = stacktrace;
             });
 
-        expectLater(_bloc.stream, emitsInOrder(<int>[0])).then((dynamic _) {
+        expectLater(_bloc.state, emitsInOrder(<int>[0])).then((dynamic _) {
           expect(expectedError, exception);
           expect(expectedStacktrace, isNotNull);
         });
@@ -482,7 +482,7 @@ void main() {
           },
         );
 
-        expectLater(_bloc.stream, emitsInOrder(<int>[0])).then((dynamic _) {
+        expectLater(_bloc.state, emitsInOrder(<int>[0])).then((dynamic _) {
           expect(
             capturedError,
             isStateError,
@@ -504,7 +504,7 @@ void main() {
         final List<int> expected = [0, -1];
         final CounterErrorBloc _bloc = CounterErrorBloc();
 
-        expectLater(_bloc.stream, emitsInOrder(expected));
+        expectLater(_bloc.state, emitsInOrder(expected));
 
         _bloc.dispatch(CounterEvent.increment);
         _bloc.dispatch(CounterEvent.decrement);
@@ -522,7 +522,7 @@ void main() {
               expectedStacktrace = stacktrace;
             });
 
-        expectLater(_bloc.stream, emitsInOrder(<int>[0])).then((dynamic _) {
+        expectLater(_bloc.state, emitsInOrder(<int>[0])).then((dynamic _) {
           expect(expectedError, error);
           expect(expectedStacktrace, isNotNull);
         });

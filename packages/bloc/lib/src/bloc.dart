@@ -11,9 +11,19 @@ abstract class Bloc<Event, State> {
 
   BehaviorSubject<State> _stateSubject;
 
+  /// `Deprecated`, please use `stream` instead.
+  /// `state` will be removed in 0.16.0 (https://github.com/felangel/bloc/issues/558)
+  ///
   /// Returns [Stream] of [State]s.
   /// Usually consumed by the presentation layer.
+  @Deprecated(
+    'Please use stream instead. Will be removed in v0.16.0 (https://github.com/felangel/bloc/issues/558)',
+  )
   Stream<State> get state => _stateSubject.stream;
+
+  /// Returns [Stream] of [State]s.
+  /// Usually consumed by the presentation layer.
+  Stream<State> get stream => _stateSubject.stream;
 
   /// Returns the [State] before any [Event]s have been `dispatched`.
   State get initialState;
