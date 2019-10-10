@@ -547,7 +547,7 @@ We're done with `_SearchBar`, now onto `_SearchBody`.
 class _SearchBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GithubSearchEvent, GithubSearchState>(
+    return BlocBuilder<GithubSearchBloc, GithubSearchState>(
       bloc: BlocProvider.of<GithubSearchBloc>(context),
       builder: (BuildContext context, GithubSearchState state) {
         if (state is SearchStateEmpty) {
@@ -701,7 +701,7 @@ class _SearchBarState extends State<_SearchBar> {
 class _SearchBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GithubSearchEvent, GithubSearchState>(
+    return BlocBuilder<GithubSearchBloc, GithubSearchState>(
       bloc: BlocProvider.of<GithubSearchBloc>(context),
       builder: (BuildContext context, GithubSearchState state) {
         if (state is SearchStateEmpty) {
