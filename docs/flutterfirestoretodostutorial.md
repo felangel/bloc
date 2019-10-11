@@ -283,7 +283,7 @@ That's it for our `TodosRepository`, next we need to create a simple `UserReposi
 
 ## User Repository
 
-Create a new package at the root level of our app called `useer_repository`.
+Create a new package at the root level of our app called `user_repository`.
 
 Inside our `user_repository` create the following folder/file structure.
 
