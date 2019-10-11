@@ -27,8 +27,6 @@ Inside our `todos_repository` create the following folder/file structure.
 │   │   ├── models
 │   │   │   ├── models.dart
 │   │   │   └── todo.dart
-│   │   ├── todo.dart
-│   │   ├── todo_entity.dart
 │   │   ├── todos_repository.dart
 │   │   └── firebase_todos_repository.dart
 │   └── todos_repository.dart
