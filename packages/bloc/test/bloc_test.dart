@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:mockito/mockito.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:test/test.dart';
 
 import './helpers/helpers.dart';
@@ -382,6 +383,21 @@ void main() {
           () async {
         final initialState = await asyncBloc.first;
         expect(initialState, asyncBloc.initialState);
+      });
+
+      test('flush awaits for all emited events to complete', () async {
+        final List<AsyncState> expectedStates = [
+          AsyncState(isLoading: false, hasError: false, isSuccess: false),
+          AsyncState(isLoading: true, hasError: false, isSuccess: false),
+          AsyncState(isLoading: false, hasError: false, isSuccess: true),
+        ];
+        final replay = ReplaySubject<AsyncState>();
+        asyncBloc.pipe(replay.sink);
+
+        asyncBloc.add(AsyncEvent());
+
+        await asyncBloc.flushAndClose();
+        expect(replay.values, expectedStates);
       });
 
       test('should map single event to correct state', () {

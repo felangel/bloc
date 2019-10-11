@@ -86,6 +86,11 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     _stateSubject.close();
   }
 
+  @visibleForTesting
+  Future<dynamic> flushAndClose() {
+    return _eventSubject.sink.close().whenComplete(() => close());
+  }
+
   /// Transforms the `Stream<Event>` along with a `next` function into a `Stream<State>`.
   /// Events that should be processed by `mapEventToState` need to be passed to `next`.
   /// By default `asyncExpand` is used to ensure all events are processed in the order
