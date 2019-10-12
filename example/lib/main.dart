@@ -12,9 +12,8 @@ void main() async {
   // https://github.com/flutter/flutter/pull/38464
   // Changes in Flutter v1.9.4 require you to call WidgetsFlutterBinding.ensureInitialized()
   // before using any plugins if the code is executed before runApp.
-  // As a result, you may have to uncomment the following line if you're using Flutter >=1.9.4.
-  //
-  // WidgetsFlutterBinding.ensureInitialized();
+  // As a result, you will need the following line if you're using Flutter >=1.9.4.
+  WidgetsFlutterBinding.ensureInitialized();
   setTargetPlatformForDesktop();
   BlocSupervisor.delegate = await HydratedBlocDelegate.build();
   runApp(App());

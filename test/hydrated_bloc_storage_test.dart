@@ -1,11 +1,13 @@
-import 'dart:io' hide Platform;
+import 'dart:io';
 import 'dart:convert';
-import 'package:platform/platform.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   group('HydratedBlocStorage', () {
     const MethodChannel channel =
         MethodChannel('plugins.flutter.io/path_provider');
@@ -29,85 +31,13 @@ void main() {
         );
       });
 
-      test('returns correct value when file exists on iOS', () async {
+      test('returns correct value when file exists', () async {
         final file = File('./.hydrated_bloc.json');
         file.writeAsStringSync(json.encode({
           "CounterBloc": {"value": 4}
         }));
-        hydratedStorage = await HydratedBlocStorage.getInstance(
-          FakePlatform(operatingSystem: 'ios'),
-        );
+        hydratedStorage = await HydratedBlocStorage.getInstance();
         expect(hydratedStorage.read('CounterBloc')['value'] as int, 4);
-      });
-
-      test('returns correct value when file exists on Android', () async {
-        final file = File('./.hydrated_bloc.json');
-        file.writeAsStringSync(json.encode({
-          "CounterBloc": {"value": 4}
-        }));
-        hydratedStorage = await HydratedBlocStorage.getInstance(
-          FakePlatform(operatingSystem: 'android'),
-        );
-        expect(hydratedStorage.read('CounterBloc')['value'] as int, 4);
-      });
-
-      test('returns correct value when file exists on Fuchsia', () async {
-        final file = File('./.hydrated_bloc.json');
-        file.writeAsStringSync(json.encode({
-          "CounterBloc": {"value": 4}
-        }));
-        hydratedStorage = await HydratedBlocStorage.getInstance(
-          FakePlatform(operatingSystem: 'fuchsia'),
-        );
-        expect(hydratedStorage.read('CounterBloc')['value'] as int, 4);
-      });
-
-      test('returns correct value when file exists on Windows', () async {
-        final file = File('.\\.config/.hydrated_bloc.json')
-          ..createSync(recursive: true);
-        file.writeAsStringSync(json.encode({
-          "CounterBloc": {"value": 4}
-        }));
-        hydratedStorage = await HydratedBlocStorage.getInstance(
-          FakePlatform(
-            operatingSystem: 'windows',
-            environment: {'UserProfile': '.'},
-          ),
-        );
-        expect(hydratedStorage.read('CounterBloc')['value'] as int, 4);
-        file.deleteSync();
-      });
-
-      test('returns correct value when file exists on MacOS', () async {
-        final file = File('./.config/.hydrated_bloc.json')
-          ..createSync(recursive: true);
-        file.writeAsStringSync(json.encode({
-          "CounterBloc": {"value": 4}
-        }));
-        hydratedStorage = await HydratedBlocStorage.getInstance(
-          FakePlatform(
-            operatingSystem: 'macos',
-            environment: {'HOME': '.'},
-          ),
-        );
-        expect(hydratedStorage.read('CounterBloc')['value'] as int, 4);
-        file.deleteSync();
-      });
-
-      test('returns correct value when file exists on Linux', () async {
-        final file = File('./.config/.hydrated_bloc.json')
-          ..createSync(recursive: true);
-        file.writeAsStringSync(json.encode({
-          "CounterBloc": {"value": 4}
-        }));
-        hydratedStorage = await HydratedBlocStorage.getInstance(
-          FakePlatform(
-            operatingSystem: 'linux',
-            environment: {'HOME': '.'},
-          ),
-        );
-        expect(hydratedStorage.read('CounterBloc')['value'] as int, 4);
-        file.deleteSync();
       });
 
       test(
@@ -115,9 +45,7 @@ void main() {
           () async {
         final file = File('./.hydrated_bloc.json');
         file.writeAsStringSync("invalid-json");
-        hydratedStorage = await HydratedBlocStorage.getInstance(
-          FakePlatform(operatingSystem: 'ios'),
-        );
+        hydratedStorage = await HydratedBlocStorage.getInstance();
         expect(hydratedStorage.read('CounterBloc'), isNull);
         expect(file.existsSync(), false);
       });
@@ -125,9 +53,7 @@ void main() {
 
     group('write', () {
       test('writes to file', () async {
-        hydratedStorage = await HydratedBlocStorage.getInstance(
-          FakePlatform(operatingSystem: 'ios'),
-        );
+        hydratedStorage = await HydratedBlocStorage.getInstance();
         await hydratedStorage.write('CounterBloc', json.encode({"value": 4}));
 
         expect(hydratedStorage.read('CounterBloc'), '{"value":4}');
@@ -136,9 +62,7 @@ void main() {
 
     group('clear', () {
       test('calls deletes file, clears storage, and resets instance', () async {
-        hydratedStorage = await HydratedBlocStorage.getInstance(
-          FakePlatform(operatingSystem: 'ios'),
-        );
+        hydratedStorage = await HydratedBlocStorage.getInstance();
         await hydratedStorage.write('CounterBloc', json.encode({"value": 4}));
 
         expect(hydratedStorage.read('CounterBloc'), '{"value":4}');
@@ -151,9 +75,7 @@ void main() {
 
     group('delete', () {
       test('does nothing for non-existing key value pair', () async {
-        hydratedStorage = await HydratedBlocStorage.getInstance(
-          FakePlatform(operatingSystem: 'ios'),
-        );
+        hydratedStorage = await HydratedBlocStorage.getInstance();
 
         expect(hydratedStorage.read('CounterBloc'), null);
         await hydratedStorage.delete('CounterBloc');
@@ -161,9 +83,7 @@ void main() {
       });
 
       test('deletes existing key value pair', () async {
-        hydratedStorage = await HydratedBlocStorage.getInstance(
-          FakePlatform(operatingSystem: 'ios'),
-        );
+        hydratedStorage = await HydratedBlocStorage.getInstance();
         await hydratedStorage.write('CounterBloc', json.encode({"value": 4}));
 
         expect(hydratedStorage.read('CounterBloc'), '{"value":4}');

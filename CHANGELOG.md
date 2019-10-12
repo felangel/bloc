@@ -1,3 +1,8 @@
+# 0.7.0
+
+- Desktop support via [path_provider_fde](https://github.com/google/flutter-desktop-embedding/tree/master/plugins/flutter_plugins/path_provider_fde).
+- Documentation and Example Updates
+
 # 0.6.0
 
 - Support clearing individual `HydratedBloc` caches ([#21](https://github.com/felangel/hydrated_bloc/issues/21))
