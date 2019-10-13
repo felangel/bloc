@@ -18,7 +18,7 @@ abstract class Bloc<Event, State> extends Stream<State> {
   State get initialState;
 
   /// Returns whether the `Stream<State>` is a broadcast stream.
-  bool get isBroadcast => _stateSubject.stream.isBroadcast;
+  bool get isBroadcast => _stateSubject.isBroadcast;
 
   Bloc() {
     _stateSubject = BehaviorSubject<State>.seeded(initialState);
@@ -34,22 +34,11 @@ abstract class Bloc<Event, State> extends Stream<State> {
     void onDone(),
     bool cancelOnError,
   }) {
-    return _stateSubject.stream.listen(
+    return _stateSubject.listen(
       onData,
       onError: onError,
       onDone: onDone,
       cancelOnError: cancelOnError,
-    );
-  }
-
-  /// Returns a multi-subscription stream that produces the same events as this.
-  Stream<State> asBroadcastStream({
-    void onListen(StreamSubscription<State> subscription),
-    void onCancel(StreamSubscription<State> subscription),
-  }) {
-    return _stateSubject.stream.asBroadcastStream(
-      onListen: onListen,
-      onCancel: onCancel,
     );
   }
 

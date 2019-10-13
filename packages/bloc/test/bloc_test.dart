@@ -98,10 +98,6 @@ void main() {
       test('isBroadcast returns true', () {
         expect(simpleBloc.isBroadcast, isTrue);
       });
-
-      test('asBroadcastStream returns a broadcastStream', () {
-        expect(simpleBloc.asBroadcastStream().isBroadcast, isTrue);
-      });
     });
 
     group('Complex Bloc', () {
@@ -200,10 +196,6 @@ void main() {
 
       test('isBroadcast returns true', () {
         expect(complexBloc.isBroadcast, isTrue);
-      });
-
-      test('asBroadcastStream returns a broadcastStream', () {
-        expect(complexBloc.asBroadcastStream().isBroadcast, isTrue);
       });
     });
 
@@ -331,10 +323,6 @@ void main() {
       test('isBroadcast returns true', () {
         expect(counterBloc.isBroadcast, isTrue);
       });
-
-      test('asBroadcastStream returns a broadcastStream', () {
-        expect(counterBloc.asBroadcastStream().isBroadcast, isTrue);
-      });
     });
 
     group('Async Bloc', () {
@@ -458,10 +446,6 @@ void main() {
 
       test('isBroadcast returns true', () {
         expect(asyncBloc.isBroadcast, isTrue);
-      });
-
-      test('asBroadcastStream returns a broadcastStream', () {
-        expect(asyncBloc.asBroadcastStream().isBroadcast, isTrue);
       });
     });
 
