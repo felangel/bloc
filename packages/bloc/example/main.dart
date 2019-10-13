@@ -14,12 +14,12 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       case CounterEvent.decrement:
         // Simulating Network Latency
         await Future<void>.delayed(Duration(seconds: 1));
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
         // Simulating Network Latency
         await Future<void>.delayed(Duration(milliseconds: 500));
-        yield currentState + 1;
+        yield state + 1;
         break;
       default:
         throw Exception('unhandled event: $event');
