@@ -1,21 +1,22 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:todos_repository/todos_repository.dart';
 
-@immutable
 abstract class TodosEvent extends Equatable {
-  TodosEvent([List props = const []]) : super(props);
+  const TodosEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
-class LoadTodos extends TodosEvent {
-  @override
-  String toString() => 'LoadTodos';
-}
+class LoadTodos extends TodosEvent {}
 
 class AddTodo extends TodosEvent {
   final Todo todo;
 
-  AddTodo(this.todo) : super([todo]);
+  const AddTodo(this.todo);
+
+  @override
+  List<Object> get props => [todo];
 
   @override
   String toString() => 'AddTodo { todo: $todo }';
@@ -24,7 +25,10 @@ class AddTodo extends TodosEvent {
 class UpdateTodo extends TodosEvent {
   final Todo updatedTodo;
 
-  UpdateTodo(this.updatedTodo) : super([updatedTodo]);
+  const UpdateTodo(this.updatedTodo);
+
+  @override
+  List<Object> get props => [updatedTodo];
 
   @override
   String toString() => 'UpdateTodo { updatedTodo: $updatedTodo }';
@@ -33,27 +37,24 @@ class UpdateTodo extends TodosEvent {
 class DeleteTodo extends TodosEvent {
   final Todo todo;
 
-  DeleteTodo(this.todo) : super([todo]);
+  const DeleteTodo(this.todo);
+
+  @override
+  List<Object> get props => [todo];
 
   @override
   String toString() => 'DeleteTodo { todo: $todo }';
 }
 
-class ClearCompleted extends TodosEvent {
-  @override
-  String toString() => 'ClearCompleted';
-}
+class ClearCompleted extends TodosEvent {}
 
-class ToggleAll extends TodosEvent {
-  @override
-  String toString() => 'ToggleAll';
-}
+class ToggleAll extends TodosEvent {}
 
 class TodosUpdated extends TodosEvent {
   final List<Todo> todos;
 
-  TodosUpdated(this.todos);
+  const TodosUpdated(this.todos);
 
   @override
-  String toString() => 'TodosUpdated';
+  List<Object> get props => [todos];
 }

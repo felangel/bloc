@@ -29,7 +29,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^0.21.0
   meta: ^1.1.6
-  equatable: ^0.2.0
+  equatable: ^0.6.0
 
 dev_dependencies:
   flutter_test:
@@ -108,32 +108,21 @@ Now that we have our authentication states identified, we can implement our `Aut
 ```dart
 import 'package:equatable/equatable.dart';
 
-abstract class AuthenticationState extends Equatable {}
-
-class AuthenticationUninitialized extends AuthenticationState {
+abstract class AuthenticationState extends Equatable {
   @override
-  String toString() => 'AuthenticationUninitialized';
+  List<Object> get props => [];
 }
 
-class AuthenticationAuthenticated extends AuthenticationState {
-  @override
-  String toString() => 'AuthenticationAuthenticated';
-}
+class AuthenticationUninitialized extends AuthenticationState {}
 
-class AuthenticationUnauthenticated extends AuthenticationState {
-  @override
-  String toString() => 'AuthenticationUnauthenticated';
-}
+class AuthenticationAuthenticated extends AuthenticationState {}
 
-class AuthenticationLoading extends AuthenticationState {
-  @override
-  String toString() => 'AuthenticationLoading';
-}
+class AuthenticationUnauthenticated extends AuthenticationState {}
+
+class AuthenticationLoading extends AuthenticationState {}
 ```
 
 ?> **Note**: The [`equatable`](https://pub.dev/packages/equatable) package is used in order to be able to compare two instances of `AuthenticationState`. By default, `==` returns true only if the two objects are the same instance.
-
-?> **Note**: `toString` is overridden to make it easier to read an `AuthenticationState` when printing it to the console or in `Transitions`.
 
 ## Authentication Events
 
@@ -150,27 +139,27 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class AuthenticationEvent extends Equatable {
-  AuthenticationEvent([List props = const []]) : super(props);
+  const AuthenticationEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
-class AppStarted extends AuthenticationEvent {
-  @override
-  String toString() => 'AppStarted';
-}
+class AppStarted extends AuthenticationEvent {}
 
 class LoggedIn extends AuthenticationEvent {
   final String token;
 
-  LoggedIn({@required this.token}) : super([token]);
+  const LoggedIn({@required this.token});
+
+  @override
+  List<Object> get props => [token];
 
   @override
   String toString() => 'LoggedIn { token: $token }';
 }
 
-class LoggedOut extends AuthenticationEvent {
-  @override
-  String toString() => 'LoggedOut';
-}
+class LoggedOut extends AuthenticationEvent {}
 ```
 
 ?> **Note**: the `meta` package is used to annotate the `AuthenticationEvent` parameters as `@required`. This will cause the dart analyzer to warn developers if they don't provide the required parameters.
@@ -354,23 +343,23 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class LoginState extends Equatable {
-  LoginState([List props = const []]) : super(props);
+  const LoginState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class LoginInitial extends LoginState {
-  @override
-  String toString() => 'LoginInitial';
-}
+class LoginInitial extends LoginState {}
 
-class LoginLoading extends LoginState {
-  @override
-  String toString() => 'LoginLoading';
-}
+class LoginLoading extends LoginState {}
 
 class LoginFailure extends LoginState {
   final String error;
 
-  LoginFailure({@required this.error}) : super([error]);
+  const LoginFailure({@required this.error});
+
+  @override
+  List<Object> get props => [error];
 
   @override
   String toString() => 'LoginFailure { error: $error }';
@@ -392,17 +381,20 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class LoginEvent extends Equatable {
-  LoginEvent([List props = const []]) : super(props);
+  const LoginEvent();
 }
 
 class LoginButtonPressed extends LoginEvent {
   final String username;
   final String password;
 
-  LoginButtonPressed({
+  const LoginButtonPressed({
     @required this.username,
     @required this.password,
-  }) : super([username, password]);
+  });
+
+  @override
+  List<Object> get props => [username, password];
 
   @override
   String toString() =>

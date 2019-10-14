@@ -6,11 +6,11 @@ class Item extends Equatable {
   final String value;
   final bool isDeleting;
 
-  Item({
+  const Item({
     @required this.id,
     @required this.value,
     this.isDeleting = false,
-  }) : super([id, value, isDeleting]);
+  });
 
   Item copyWith({
     String id,
@@ -23,6 +23,9 @@ class Item extends Equatable {
       isDeleting: isDeleting ?? this.isDeleting,
     );
   }
+
+  @override
+  List<Object> get props => [id, value, isDeleting];
 
   @override
   String toString() =>

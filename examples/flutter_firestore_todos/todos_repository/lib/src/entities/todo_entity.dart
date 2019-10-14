@@ -11,7 +11,7 @@ class TodoEntity extends Equatable {
   final String note;
   final String task;
 
-  TodoEntity(this.task, this.id, this.note, this.complete);
+  const TodoEntity(this.task, this.id, this.note, this.complete);
 
   Map<String, Object> toJson() {
     return {
@@ -23,8 +23,11 @@ class TodoEntity extends Equatable {
   }
 
   @override
+  List<Object> get props => [complete, id, note, task];
+
+  @override
   String toString() {
-    return 'TodoEntity{complete: $complete, task: $task, note: $note, id: $id}';
+    return 'TodoEntity { complete: $complete, task: $task, note: $note, id: $id }';
   }
 
   static TodoEntity fromJson(Map<String, Object> json) {

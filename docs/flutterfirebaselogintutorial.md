@@ -32,7 +32,7 @@ dependencies:
   firebase_auth: ^0.8.1+4
   google_sign_in: ^4.0.1+1
   flutter_bloc: ^0.21.0
-  equatable: ^0.2.0
+  equatable: ^0.6.0
   meta: ^1.1.6
   font_awesome_flutter: ^8.4.0
 
@@ -241,38 +241,36 @@ Create a folder/directory called `authentication_bloc` and we can create our aut
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 abstract class AuthenticationState extends Equatable {
-  AuthenticationState([List props = const []]) : super(props);
+  const AuthenticationState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class Uninitialized extends AuthenticationState {
-  @override
-  String toString() => 'Uninitialized';
-}
+class Uninitialized extends AuthenticationState {}
 
 class Authenticated extends AuthenticationState {
   final String displayName;
 
-  Authenticated(this.displayName) : super([displayName]);
+  const Authenticated(this.displayName);
+
+  @override
+  List<Object> get props => [displayName];
 
   @override
   String toString() => 'Authenticated { displayName: $displayName }';
 }
 
-class Unauthenticated extends AuthenticationState {
-  @override
-  String toString() => 'Unauthenticated';
-}
+class Unauthenticated extends AuthenticationState {}
 ```
 
 ?> **Note**: The [`equatable`](https://pub.dev/packages/equatable) package is used in order to be able to compare two instances of `AuthenticationState`. By default, `==` returns true only if the two objects are the same instance.
 
 ?> **Note**: `toString` is overridden to make it easier to read an `AuthenticationState` when printing it to the console or in `Transitions`.
 
-!> Since we're using `Equatable` to allow us to compare different instances of `AuthenticationState` we need to pass any properties to the superclass. Without `super([displayName])`, we will not be able to properly compare different instances of `Authenticated`.
+!> Since we're using `Equatable` to allow us to compare different instances of `AuthenticationState` we need to pass any properties to the superclass. Without `List<Object> get props => [displayName]`, we will not be able to properly compare different instances of `Authenticated`.
 
 ## Authentication Events
 
@@ -286,27 +284,19 @@ We will need:
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 abstract class AuthenticationEvent extends Equatable {
-  AuthenticationEvent([List props = const []]) : super(props);
+  const AuthenticationEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
-class AppStarted extends AuthenticationEvent {
-  @override
-  String toString() => 'AppStarted';
-}
+class AppStarted extends AuthenticationEvent {}
 
-class LoggedIn extends AuthenticationEvent {
-  @override
-  String toString() => 'LoggedIn';
-}
+class LoggedIn extends AuthenticationEvent {}
 
-class LoggedOut extends AuthenticationEvent {
-  @override
-  String toString() => 'LoggedOut';
-}
+class LoggedOut extends AuthenticationEvent {}
 ```
 
 ## Authentication Barrel File
@@ -887,15 +877,20 @@ Open up `login/bloc/login_event.dart` and let's define and implement our events.
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-@immutable
 abstract class LoginEvent extends Equatable {
-  LoginEvent([List props = const []]) : super(props);
+  const LoginEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class EmailChanged extends LoginEvent {
   final String email;
 
-  EmailChanged({@required this.email}) : super([email]);
+  const EmailChanged({@required this.email});
+
+  @override
+  List<Object> get props => [email];
 
   @override
   String toString() => 'EmailChanged { email :$email }';
@@ -904,7 +899,10 @@ class EmailChanged extends LoginEvent {
 class PasswordChanged extends LoginEvent {
   final String password;
 
-  PasswordChanged({@required this.password}) : super([password]);
+  const PasswordChanged({@required this.password});
+
+  @override
+  List<Object> get props => [password];
 
   @override
   String toString() => 'PasswordChanged { password: $password }';
@@ -914,8 +912,13 @@ class Submitted extends LoginEvent {
   final String email;
   final String password;
 
-  Submitted({@required this.email, @required this.password})
-      : super([email, password]);
+  const Submitted({
+    @required this.email,
+    @required this.password,
+  });
+
+  @override
+  List<Object> get props => [email, password];
 
   @override
   String toString() {
@@ -923,17 +926,19 @@ class Submitted extends LoginEvent {
   }
 }
 
-class LoginWithGooglePressed extends LoginEvent {
-  @override
-  String toString() => 'LoginWithGooglePressed';
-}
+class LoginWithGooglePressed extends LoginEvent {}
 
 class LoginWithCredentialsPressed extends LoginEvent {
   final String email;
   final String password;
 
-  LoginWithCredentialsPressed({@required this.email, @required this.password})
-      : super([email, password]);
+  const LoginWithCredentialsPressed({
+    @required this.email,
+    @required this.password,
+  });
+
+  @override
+  List<Object> get props => [email, password];
 
   @override
   String toString() {
@@ -1169,7 +1174,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBloc, LoginState>(      
+    return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.isFailure) {
           Scaffold.of(context)
@@ -1541,15 +1546,20 @@ Open up `register/bloc/register_event.dart` and let's implement our events.
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-@immutable
 abstract class RegisterEvent extends Equatable {
-  RegisterEvent([List props = const []]) : super(props);
+  const RegisterEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class EmailChanged extends RegisterEvent {
   final String email;
 
-  EmailChanged({@required this.email}) : super([email]);
+  const EmailChanged({@required this.email});
+
+  @override
+  List<Object> get props => [email];
 
   @override
   String toString() => 'EmailChanged { email :$email }';
@@ -1558,7 +1568,10 @@ class EmailChanged extends RegisterEvent {
 class PasswordChanged extends RegisterEvent {
   final String password;
 
-  PasswordChanged({@required this.password}) : super([password]);
+  const PasswordChanged({@required this.password});
+
+  @override
+  List<Object> get props => [password];
 
   @override
   String toString() => 'PasswordChanged { password: $password }';
@@ -1568,8 +1581,13 @@ class Submitted extends RegisterEvent {
   final String email;
   final String password;
 
-  Submitted({@required this.email, @required this.password})
-      : super([email, password]);
+  const Submitted({
+    @required this.email,
+    @required this.password,
+  });
+
+  @override
+  List<Object> get props => [email, password];
 
   @override
   String toString() {
@@ -1752,7 +1770,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RegisterBloc, RegisterState>(      
+    return BlocListener<RegisterBloc, RegisterState>(
       listener: (context, state) {
         if (state.isSubmitting) {
           Scaffold.of(context)

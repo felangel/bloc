@@ -30,7 +30,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^0.21.0
   http: ^0.12.0
-  equatable: ^0.2.0
+  equatable: ^0.6.0
 
 dev_dependencies:
   flutter_test:
@@ -87,7 +87,10 @@ class Post extends Equatable {
   final String title;
   final String body;
 
-  Post({this.id, this.title, this.body}) : super([id, title, body]);
+  const Post({this.id, this.title, this.body});
+
+  @override
+  List<Object> get props => [id, title, body];
 
   @override
   String toString() => 'Post { id: $id }';
@@ -113,12 +116,12 @@ Our `PostBloc` will only be responding to a single event; `Fetch` which will be 
 ```dart
 import 'package:equatable/equatable.dart';
 
-abstract class PostEvent extends Equatable {}
-
-class Fetch extends PostEvent {
+abstract class PostEvent extends Equatable {
   @override
-  String toString() => 'Fetch';
+  List<Object> get props => [];
 }
+
+class Fetch extends PostEvent {}
 ```
 
 ?> Again, we are overriding `toString` for an easier to read string representation of our event. Again, we are extending [`Equatable`](https://pub.dev/packages/equatable) so that we can compare instances for equality.
@@ -141,30 +144,27 @@ We can now create `bloc/post_state.dart` and implement it like so.
 ```dart
 import 'package:equatable/equatable.dart';
 
-import 'package:flutter_infinite_list/post.dart';
+import 'package:flutter_infinite_list/models/models.dart';
 
 abstract class PostState extends Equatable {
-  PostState([List props = const []]) : super(props);
+  const PostState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class PostUninitialized extends PostState {
-  @override
-  String toString() => 'PostUninitialized';
-}
+class PostUninitialized extends PostState {}
 
-class PostError extends PostState {
-  @override
-  String toString() => 'PostError';
-}
+class PostError extends PostState {}
 
 class PostLoaded extends PostState {
   final List<Post> posts;
   final bool hasReachedMax;
 
-  PostLoaded({
+  const PostLoaded({
     this.posts,
     this.hasReachedMax,
-  }) : super([posts, hasReachedMax]);
+  });
 
   PostLoaded copyWith({
     List<Post> posts,
@@ -175,6 +175,9 @@ class PostLoaded extends PostState {
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
+
+  @override
+  List<Object> get props => [posts, hasReachedMax];
 
   @override
   String toString() =>

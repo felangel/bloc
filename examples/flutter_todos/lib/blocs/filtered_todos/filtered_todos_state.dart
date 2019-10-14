@@ -1,23 +1,26 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class FilteredTodosState extends Equatable {
-  FilteredTodosState([List props = const []]) : super(props);
+  const FilteredTodosState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class FilteredTodosLoading extends FilteredTodosState {
-  @override
-  String toString() => 'FilteredTodosLoading';
-}
+class FilteredTodosLoading extends FilteredTodosState {}
 
 class FilteredTodosLoaded extends FilteredTodosState {
   final List<Todo> filteredTodos;
   final VisibilityFilter activeFilter;
 
-  FilteredTodosLoaded(this.filteredTodos, this.activeFilter)
-      : super([filteredTodos, activeFilter]);
+  const FilteredTodosLoaded(
+    this.filteredTodos,
+    this.activeFilter,
+  );
+
+  @override
+  List<Object> get props => [filteredTodos, activeFilter];
 
   @override
   String toString() {

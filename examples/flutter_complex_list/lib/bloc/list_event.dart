@@ -1,20 +1,22 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-@immutable
 abstract class ListEvent extends Equatable {
-  ListEvent([List props = const []]) : super(props);
+  const ListEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
-class Fetch extends ListEvent {
-  @override
-  String toString() => 'Fetch';
-}
+class Fetch extends ListEvent {}
 
 class Delete extends ListEvent {
   final String id;
 
-  Delete({@required this.id}) : super([id]);
+  const Delete({@required this.id});
+
+  @override
+  List<Object> get props => [id];
 
   @override
   String toString() => 'Delete { id: $id }';
@@ -23,7 +25,10 @@ class Delete extends ListEvent {
 class Deleted extends ListEvent {
   final String id;
 
-  Deleted({@required this.id}) : super([id]);
+  const Deleted({@required this.id});
+
+  @override
+  List<Object> get props => [id];
 
   @override
   String toString() => 'Deleted { id: $id }';

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_firestore_todos/blocs/blocs.dart';
 

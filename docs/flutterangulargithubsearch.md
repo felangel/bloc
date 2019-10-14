@@ -39,7 +39,7 @@ environment:
 dependencies:
   meta: ^1.1.7
   bloc: ^0.15.0
-  equatable: ^0.2.0
+  equatable: ^0.6.0
   http: ^0.12.0
 ```
 
@@ -253,13 +253,16 @@ Create `github_search_event.dart`.
 import 'package:equatable/equatable.dart';
 
 abstract class GithubSearchEvent extends Equatable {
-  GithubSearchEvent([List props = const []]) : super(props);
+  const GithubSearchEvent();
 }
 
 class TextChanged extends GithubSearchEvent {
   final String text;
 
-  TextChanged({this.text}) : super([text]);
+  const TextChanged({this.text});
+
+  @override
+  List<Object> get props => [text];
 
   @override
   String toString() => 'TextChanged { text: $text }';
@@ -290,23 +293,23 @@ import 'package:equatable/equatable.dart';
 import 'package:common_github_search/common_github_search.dart';
 
 abstract class GithubSearchState extends Equatable {
-  GithubSearchState([List props = const []]) : super(props);
+  const GithubSearchState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class SearchStateEmpty extends GithubSearchState {
-  @override
-  String toString() => 'SearchStateEmpty';
-}
+class SearchStateEmpty extends GithubSearchState {}
 
-class SearchStateLoading extends GithubSearchState {
-  @override
-  String toString() => 'SearchStateLoading';
-}
+class SearchStateLoading extends GithubSearchState {}
 
 class SearchStateSuccess extends GithubSearchState {
   final List<SearchResultItem> items;
 
-  SearchStateSuccess(this.items) : super([items]);
+  const SearchStateSuccess(this.items);
+
+  @override
+  List<Object> get props => [items];
 
   @override
   String toString() => 'SearchStateSuccess { items: ${items.length} }';
@@ -315,10 +318,10 @@ class SearchStateSuccess extends GithubSearchState {
 class SearchStateError extends GithubSearchState {
   final String error;
 
-  SearchStateError(this.error) : super([error]);
+  const SearchStateError(this.error);
 
   @override
-  String toString() => 'SearchStateError';
+  List<Object> get props => [error];
 }
 ```
 

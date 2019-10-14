@@ -50,7 +50,7 @@ dependencies:
     sdk: flutter
   cloud_firestore: ^0.12.7
   rxdart: ^0.22.0
-  equatable: ^0.3.0
+  equatable: ^0.6.0
   firebase_core: ^0.4.0+7
 ```
 
@@ -85,6 +85,10 @@ Our `TodoEntity` is the representation of our `Todo` inside Firestore.
 Create `todo_entity.dart` and let's implement it.
 
 ```dart
+// Copyright 2018 The Flutter Architecture Sample Authors. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found
+// in the LICENSE file.
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
@@ -94,16 +98,19 @@ class TodoEntity extends Equatable {
   final String note;
   final String task;
 
-  TodoEntity(this.task, this.id, this.note, this.complete);
+  const TodoEntity(this.task, this.id, this.note, this.complete);
 
   Map<String, Object> toJson() {
     return {
-      'complete': complete,
-      'task': task,
-      'note': note,
-      'id': id,
+      "complete": complete,
+      "task": task,
+      "note": note,
+      "id": id,
     };
   }
+
+  @override
+  List<Object> get props => [complete, id, note, task];
 
   @override
   String toString() {
@@ -112,10 +119,10 @@ class TodoEntity extends Equatable {
 
   static TodoEntity fromJson(Map<String, Object> json) {
     return TodoEntity(
-      json['task'] as String,
-      json['id'] as String,
-      json['note'] as String,
-      json['complete'] as bool,
+      json["task"] as String,
+      json["id"] as String,
+      json["note"] as String,
+      json["complete"] as bool,
     );
   }
 
@@ -130,9 +137,9 @@ class TodoEntity extends Equatable {
 
   Map<String, Object> toDocument() {
     return {
-      'complete': complete,
-      'task': task,
-      'note': note,
+      "complete": complete,
+      "task": task,
+      "note": note,
     };
   }
 }
@@ -413,16 +420,12 @@ Since we want to be able to sign in our users, we'll need to create an `Authenti
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
-abstract class AuthenticationEvent extends Equatable {
-  AuthenticationEvent([List props = const []]) : super(props);
-}
+abstract class AuthenticationEvent extends Equatable {}
 
 class AppStarted extends AuthenticationEvent {
   @override
-  String toString() => 'AppStarted';
+  List<Object> get props => [];
 }
 ```
 
@@ -430,31 +433,29 @@ class AppStarted extends AuthenticationEvent {
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 abstract class AuthenticationState extends Equatable {
-  AuthenticationState([List props = const []]) : super(props);
+  const AuthenticationState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class Uninitialized extends AuthenticationState {
-  @override
-  String toString() => 'Uninitialized';
-}
+class Uninitialized extends AuthenticationState {}
 
 class Authenticated extends AuthenticationState {
   final String userId;
 
-  Authenticated(this.userId) : super([userId]);
+  const Authenticated(this.userId);
+
+  @override
+  List<Object> get props => [userId];
 
   @override
   String toString() => 'Authenticated { userId: $userId }';
 }
 
-class Unauthenticated extends AuthenticationState {
-  @override
-  String toString() => 'Unauthenticated';
-}
+class Unauthenticated extends AuthenticationState {}
 ```
 
 #### Authentication Bloc

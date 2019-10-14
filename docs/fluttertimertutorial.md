@@ -29,7 +29,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^0.21.0
-  equatable: ^0.2.0
+  equatable: ^0.6.0
   wave: ^0.0.8
 
 flutter:
@@ -85,42 +85,39 @@ In order to keep all of our bloc files together, let’s create a bloc directory
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 abstract class TimerState extends Equatable {
   final int duration;
 
-  TimerState(this.duration, [List props = const []])
-      : super([duration]..addAll(props));
+  const TimerState(this.duration);
+
+  @override
+  List<Object> get props => [duration];
 }
 
 class Ready extends TimerState {
-  Ready(int duration) : super(duration);
+  const Ready(int duration) : super(duration);
 
   @override
   String toString() => 'Ready { duration: $duration }';
 }
 
 class Paused extends TimerState {
-  Paused(int duration) : super(duration);
+  const Paused(int duration) : super(duration);
 
   @override
   String toString() => 'Paused { duration: $duration }';
 }
 
 class Running extends TimerState {
-  Running(int duration) : super(duration);
+  const Running(int duration) : super(duration);
 
   @override
   String toString() => 'Running { duration: $duration }';
 }
 
 class Finished extends TimerState {
-  Finished() : super(0);
-
-  @override
-  String toString() => 'Finished';
+  const Finished() : super(0);
 }
 ```
 
@@ -144,39 +141,35 @@ If you didn’t use the [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bl
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-@immutable
 abstract class TimerEvent extends Equatable {
-  TimerEvent([List props = const []]) : super(props);
+  const TimerEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class Start extends TimerEvent {
   final int duration;
 
-  Start({@required this.duration}) : super([duration]);
+  const Start({@required this.duration});
 
   @override
   String toString() => "Start { duration: $duration }";
 }
 
-class Pause extends TimerEvent {
-  @override
-  String toString() => "Pause";
-}
+class Pause extends TimerEvent {}
 
-class Resume extends TimerEvent {
-  @override
-  String toString() => "Resume";
-}
+class Resume extends TimerEvent {}
 
-class Reset extends TimerEvent {
-  @override
-  String toString() => "Reset";
-}
+class Reset extends TimerEvent {}
 
 class Tick extends TimerEvent {
   final int duration;
 
-  Tick({@required this.duration}) : super([duration]);
+  const Tick({@required this.duration});
+
+  @override
+  List<Object> get props => [duration];
 
   @override
   String toString() => "Tick { duration: $duration }";
