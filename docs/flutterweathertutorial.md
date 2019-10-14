@@ -23,14 +23,14 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^0.21.0
   http: ^0.12.0
-  equatable: ^0.2.0
+  equatable: ^0.6.0
 
 dev_dependencies:
   flutter_test:
@@ -306,7 +306,7 @@ class Weather extends Equatable {
   final DateTime lastUpdated;
   final String location;
 
-  Weather({
+  const Weather({
     this.condition,
     this.formattedCondition,
     this.minTemp,
@@ -316,17 +316,20 @@ class Weather extends Equatable {
     this.created,
     this.lastUpdated,
     this.location,
-  }) : super([
-          condition,
-          formattedCondition,
-          minTemp,
-          temp,
-          maxTemp,
-          locationId,
-          created,
-          lastUpdated,
-          location,
-        ]);
+  });
+
+  @override
+  List<Object> get props => [
+        condition,
+        formattedCondition,
+        minTemp,
+        temp,
+        maxTemp,
+        locationId,
+        created,
+        lastUpdated,
+        location,
+      ];
 
   static Weather fromJson(dynamic json) {
     final consolidatedWeather = json['consolidated_weather'][0];
@@ -560,15 +563,16 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class WeatherEvent extends Equatable {
-  WeatherEvent([List props = const []]) : super(props);
+  const WeatherEvent();
 }
 
 class FetchWeather extends WeatherEvent {
   final String city;
 
-  FetchWeather({@required this.city})
-      : assert(city != null),
-        super([city]);
+  const FetchWeather({@required this.city}) : assert(city != null);
+
+  @override
+  List<Object> get props => [city];
 }
 ```
 
@@ -598,7 +602,10 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_weather/models/models.dart';
 
 abstract class WeatherState extends Equatable {
-  WeatherState([List props = const []]) : super(props);
+  const WeatherState();
+
+  @override
+  List<Object> get props => [];
 }
 
 class WeatherEmpty extends WeatherState {}
@@ -608,9 +615,10 @@ class WeatherLoading extends WeatherState {}
 class WeatherLoaded extends WeatherState {
   final Weather weather;
 
-  WeatherLoaded({@required this.weather})
-      : assert(weather != null),
-        super([weather]);
+  const WeatherLoaded({@required this.weather}) : assert(weather != null);
+
+  @override
+  List<Object> get props => [weather];
 }
 
 class WeatherError extends WeatherState {}
@@ -1174,9 +1182,10 @@ Let's address these problems and take our Weather App to the next level!
 class RefreshWeather extends WeatherEvent {
   final String city;
 
-  RefreshWeather({@required this.city})
-      : assert(city != null),
-        super([city]);
+  const RefreshWeather({@required this.city}) : assert(city != null);
+
+  @override
+  List<Object> get props => [city];
 }
 ```
 
@@ -1273,15 +1282,16 @@ Our `ThemeEvents` are going to consist of a single event called `WeatherChanged`
 
 ```dart
 abstract class ThemeEvent extends Equatable {
-  ThemeEvent([List props = const []]) : super(props);
+  const ThemeEvent();
 }
 
 class WeatherChanged extends ThemeEvent {
   final WeatherCondition condition;
 
-  WeatherChanged({@required this.condition})
-      : assert(condition != null),
-        super([condition]);
+  const WeatherChanged({@required this.condition}) : assert(condition != null);
+
+  @override
+  List<Object> get props => [condition];
 }
 ```
 
@@ -1292,10 +1302,12 @@ class ThemeState extends Equatable {
   final ThemeData theme;
   final MaterialColor color;
 
-  ThemeState({@required this.theme, @required this.color})
+  const ThemeState({@required this.theme, @required this.color})
       : assert(theme != null),
-        assert(color != null),
-        super([theme, color]);
+        assert(color != null);
+
+  @override
+  List<Object> get props => [theme, color];
 }
 ```
 
@@ -1518,7 +1530,7 @@ class _WeatherState extends State<Weather> {
         ],
       ),
       body: Center(
-        child: BlocListener<WeatherBloc, WeatherState>(          
+        child: BlocListener<WeatherBloc, WeatherState>(
           listener: (context, state) {
             if (state is WeatherLoaded) {
               BlocProvider.of<ThemeBloc>(context).dispatch(
@@ -1612,7 +1624,10 @@ Our `SettingsEvents` will consist of a single event: `TemperatureUnitsToggled`.
 ```dart
 abstract class SettingsEvent extends Equatable {}
 
-class TemperatureUnitsToggled extends SettingsEvent {}
+class TemperatureUnitsToggled extends SettingsEvent {
+  @override
+  List<Object> get props => [];
+}
 ```
 
 Our `SettingsState` will simply consist of the current `TemperatureUnits`.
@@ -1623,9 +1638,11 @@ enum TemperatureUnits { fahrenheit, celsius }
 class SettingsState extends Equatable {
   final TemperatureUnits temperatureUnits;
 
-  SettingsState({@required this.temperatureUnits})
-      : assert(temperatureUnits != null),
-        super([temperatureUnits]);
+  const SettingsState({@required this.temperatureUnits})
+      : assert(temperatureUnits != null);
+
+  @override
+  List<Object> get props => [temperatureUnits];
 }
 ```
 
@@ -1791,7 +1808,7 @@ class _WeatherState extends State<Weather> {
         ],
       ),
       body: Center(
-        child: BlocListener<WeatherBloc, WeatherState>(          
+        child: BlocListener<WeatherBloc, WeatherState>(
           listener: (context, state) {
             if (state is WeatherLoaded) {
               BlocProvider.of<ThemeBloc>(context).dispatch(
