@@ -87,22 +87,11 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   }
 
   @Deprecated('Please use add instead.')
-  void dispatch(Event event) {
-    try {
-      BlocSupervisor.delegate.onEvent(this, event);
-      onEvent(event);
-      _eventSubject.sink.add(event);
-    } catch (error) {
-      _handleError(error);
-    }
-  }
+  void dispatch(Event event) => add(event);
 
   @Deprecated('Please use close instead.')
   @mustCallSuper
-  void dispose() {
-    _eventSubject.close();
-    _stateSubject.close();
-  }
+  void dispose() => close();
 
   /// Transforms the `Stream<Event>` along with a `next` function into a `Stream<State>`.
   /// Events that should be processed by `mapEventToState` need to be passed to `next`.
