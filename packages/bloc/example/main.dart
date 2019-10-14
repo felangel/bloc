@@ -52,17 +52,17 @@ void main() {
 
   final counterBloc = CounterBloc();
 
-  counterBloc.dispatch(CounterEvent.increment);
-  counterBloc.dispatch(CounterEvent.increment);
-  counterBloc.dispatch(CounterEvent.increment);
+  counterBloc.add(CounterEvent.increment);
+  counterBloc.add(CounterEvent.increment);
+  counterBloc.add(CounterEvent.increment);
 
-  counterBloc.dispatch(CounterEvent.decrement);
-  counterBloc.dispatch(CounterEvent.decrement);
-  counterBloc.dispatch(CounterEvent.decrement);
+  counterBloc.add(CounterEvent.decrement);
+  counterBloc.add(CounterEvent.decrement);
+  counterBloc.add(CounterEvent.decrement);
 
-  counterBloc.dispatch(null); // Triggers Exception
+  counterBloc.add(null); // Triggers Exception
 
   // The exception triggers `SimpleBlocDelegate.onError` but does not impact bloc functionality.
-  counterBloc.dispatch(CounterEvent.increment);
-  counterBloc.dispatch(CounterEvent.decrement);
+  counterBloc.add(CounterEvent.increment);
+  counterBloc.add(CounterEvent.decrement);
 }

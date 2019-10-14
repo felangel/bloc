@@ -26,11 +26,11 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 ## Glossary
 
-**Events** are the input to a Bloc. They are commonly UI events such as button presses. `Events` are `dispatched` and then converted to `States`.
+**Events** are the input to a Bloc. They are commonly UI events such as button presses. `Events` are `added` to the Bloc and then converted to `States`.
 
 **States** are the output of a Bloc. Presentation components can listen to the stream of states and redraw portions of themselves based on the given state (see `BlocBuilder` for more details).
 
-**Transitions** occur when an `Event` is `dispatched` after `mapEventToState` has been called but before the `Bloc`'s state has been updated. A `Transition` consists of the currentState, the event which was dispatched, and the nextState.
+**Transitions** occur when an `Event` is `added` after `mapEventToState` has been called but before the `Bloc`'s state has been updated. A `Transition` consists of the currentState, the event which was added, and the nextState.
 
 **BlocSupervisor** oversees `Bloc`s and delegates to `BlocDelegate`.
 
@@ -40,25 +40,25 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **initialState** is the state before any events have been processed (before `mapEventToState` has ever been called). `initialState` **must be implemented**.
 
-**mapEventToState** is a method that **must be implemented** when a class extends `Bloc`. The function takes the incoming event as an argument. `mapEventToState` is called whenever an event is `dispatched` by the presentation layer. `mapEventToState` must convert that event into a new state and return the new state in the form of a `Stream` which is consumed by the presentation layer.
+**mapEventToState** is a method that **must be implemented** when a class extends `Bloc`. The function takes the incoming event as an argument. `mapEventToState` is called whenever an event is `added` by the presentation layer. `mapEventToState` must convert that event into a new state and return the new state in the form of a `Stream` which is consumed by the presentation layer.
 
-**dispatch** is a method that takes an `event` and triggers `mapEventToState`. `dispatch` may be called from the presentation layer or from within the Bloc (see examples) and notifies the Bloc of a new `event`.
+**add** is a method that takes an `event` and triggers `mapEventToState`. `add` may be called from the presentation layer or from within the Bloc (see examples) and notifies the Bloc of a new `event`.
 
 **transformEvents** is a method that transforms the `Stream<Event>` along with a `next` function into a `Stream<State>`. Events that should be processed by `mapEventToState` need to be passed to `next`. **By default `asyncExpand` is used to ensure all events are processed in the order in which they are received**. You can override `transformEvents` for advanced usage in order to manipulate the frequency and specificity with which `mapEventToState` is called as well as which events are processed.
 
 **transformStates** is a method that transforms the `Stream<State>` into a new `Stream<State>`. By default `transformStates` returns the incoming `Stream<State>`. You can override `transformStates` for advanced usage in order to manipulate the frequency and specificity at which `transitions` (state changes) occur.
 
-**onEvent** is a method that can be overridden to handle whenever an `Event` is dispatched. **It is a great place to add bloc-specific logging/analytics**.
+**onEvent** is a method that can be overridden to handle whenever an `Event` is added. **It is a great place to add bloc-specific logging/analytics**.
 
-**onTransition** is a method that can be overridden to handle whenever a `Transition` occurs. A `Transition` occurs when a new `Event` is dispatched and `mapEventToState` is called. `onTransition` is called before a `Bloc`'s state has been updated. **It is a great place to add bloc-specific logging/analytics**.
+**onTransition** is a method that can be overridden to handle whenever a `Transition` occurs. A `Transition` occurs when a new `Event` is added and `mapEventToState` is called. `onTransition` is called before a `Bloc`'s state has been updated. **It is a great place to add bloc-specific logging/analytics**.
 
 **onError** is a method that can be overridden to handle whenever an `Exception` is thrown. By default all exceptions will be ignored and `Bloc` functionality will be unaffected. **It is a great place to add bloc-specific error handling**.
 
-**dispose** is a method that closes the `event` and `state` streams. `Dispose` should be called when a `Bloc` is no longer needed. Once `dispose` is called, `events` that are `dispatched` will not be processed and will result in an error being passed to `onError`. In addition, if `dispose` is called while `events` are still being processed, any `states` yielded after are ignored and will not result in a `Transition`.
+**close** is a method that closes the `event` and `state` streams. `close` should be called when a `Bloc` is no longer needed. Once `close` is called, `events` that are `added` will not be processed and will result in an error being passed to `onError`. In addition, if `close` is called while `events` are still being processed, any `states` yielded after are ignored and will not result in a `Transition`.
 
 ## BlocDelegate Interface
 
-**onEvent** is a method that can be overridden to handle whenever an `Event` is dispatched to **any** `Bloc`. **It is a great place to add universal logging/analytics**.
+**onEvent** is a method that can be overridden to handle whenever an `Event` is added to **any** `Bloc`. **It is a great place to add universal logging/analytics**.
 
 **onTransition** is a method that can be overridden to handle whenever a `Transition` occurs in **any** `Bloc`. **It is a great place to add universal logging/analytics**.
 
@@ -95,19 +95,19 @@ As a result, we need to define our `CounterEvent` like:
 enum CounterEvent { increment, decrement }
 ```
 
-Then we can dispatch events to our bloc like so:
+Then we can add events to our bloc like so:
 
 ```dart
 void main() {
   final counterBloc = CounterBloc();
 
-  counterBloc.dispatch(CounterEvent.increment);
-  counterBloc.dispatch(CounterEvent.increment);
-  counterBloc.dispatch(CounterEvent.increment);
+  counterBloc.add(CounterEvent.increment);
+  counterBloc.add(CounterEvent.increment);
+  counterBloc.add(CounterEvent.increment);
 
-  counterBloc.dispatch(CounterEvent.decrement);
-  counterBloc.dispatch(CounterEvent.decrement);
-  counterBloc.dispatch(CounterEvent.decrement);
+  counterBloc.add(CounterEvent.decrement);
+  counterBloc.add(CounterEvent.decrement);
+  counterBloc.add(CounterEvent.decrement);
 }
 ```
 
@@ -131,19 +131,19 @@ void main() {
 
   final counterBloc = CounterBloc();
 
-  counterBloc.dispatch(CounterEvent.increment); // { currentState: 0, event: CounterEvent.increment, nextState: 1 }
-  counterBloc.dispatch(CounterEvent.increment); // { currentState: 1, event: CounterEvent.increment, nextState: 2 }
-  counterBloc.dispatch(CounterEvent.increment); // { currentState: 2, event: CounterEvent.increment, nextState: 3 }
+  counterBloc.add(CounterEvent.increment); // { currentState: 0, event: CounterEvent.increment, nextState: 1 }
+  counterBloc.add(CounterEvent.increment); // { currentState: 1, event: CounterEvent.increment, nextState: 2 }
+  counterBloc.add(CounterEvent.increment); // { currentState: 2, event: CounterEvent.increment, nextState: 3 }
 
-  counterBloc.dispatch(CounterEvent.decrement); // { currentState: 3, event: CounterEvent.decrement, nextState: 2 }
-  counterBloc.dispatch(CounterEvent.decrement); // { currentState: 2, event: CounterEvent.decrement, nextState: 1 }
-  counterBloc.dispatch(CounterEvent.decrement); // { currentState: 1, event: CounterEvent.decrement, nextState: 0 }
+  counterBloc.add(CounterEvent.decrement); // { currentState: 3, event: CounterEvent.decrement, nextState: 2 }
+  counterBloc.add(CounterEvent.decrement); // { currentState: 2, event: CounterEvent.decrement, nextState: 1 }
+  counterBloc.add(CounterEvent.decrement); // { currentState: 1, event: CounterEvent.decrement, nextState: 0 }
 }
 ```
 
 At this point, all `Bloc` `Transitions` will be reported to the `SimpleBlocDelegate` and we can see them in the console after running our app.
 
-If we want to be able to handle any incoming `Events` that are dispatched to a `Bloc` we can also override `onEvent` in our `SimpleBlocDelegate`.
+If we want to be able to handle any incoming `Events` that are added to a `Bloc` we can also override `onEvent` in our `SimpleBlocDelegate`.
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {

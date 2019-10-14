@@ -34,7 +34,7 @@ void main() {
         ).called(1);
       });
 
-      complexBloc.dispatch(ComplexEventB());
+      complexBloc.add(ComplexEventB());
     });
 
     test('is called when delegate is provided for multiple blocs', () {
@@ -76,8 +76,8 @@ void main() {
         ).called(1);
       });
 
-      complexBlocA.dispatch(ComplexEventB());
-      complexBlocB.dispatch(ComplexEventC());
+      complexBlocA.add(ComplexEventB());
+      complexBlocB.add(ComplexEventC());
     });
 
     test('is not called when delegate is not provided', () {
@@ -102,7 +102,7 @@ void main() {
         );
       });
 
-      complexBloc.dispatch(ComplexEventB());
+      complexBloc.add(ComplexEventB());
     });
   });
   group('onTransition', () {
@@ -136,7 +136,7 @@ void main() {
         ).called(1);
       });
 
-      complexBloc.dispatch(ComplexEventB());
+      complexBloc.add(ComplexEventB());
     });
 
     test('is called when delegate is provided for multiple blocs', () {
@@ -186,8 +186,8 @@ void main() {
         ).called(1);
       });
 
-      complexBlocA.dispatch(ComplexEventB());
-      complexBlocB.dispatch(ComplexEventC());
+      complexBlocA.add(ComplexEventB());
+      complexBlocB.add(ComplexEventC());
     });
 
     test('is not called when delegate is not provided', () {
@@ -216,7 +216,7 @@ void main() {
         );
       });
 
-      complexBloc.dispatch(ComplexEventB());
+      complexBloc.add(ComplexEventB());
     });
   });
 
@@ -246,7 +246,7 @@ void main() {
         expect(blocWithError, _bloc);
       });
 
-      _bloc.dispatch(CounterEvent.increment);
+      _bloc.add(CounterEvent.increment);
     });
   });
 }
