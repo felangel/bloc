@@ -1,22 +1,14 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 abstract class AuthenticationEvent extends Equatable {
-  AuthenticationEvent([List props = const []]) : super(props);
+  const AuthenticationEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
-class AppStarted extends AuthenticationEvent {
-  @override
-  String toString() => 'AppStarted';
-}
+class AppStarted extends AuthenticationEvent {}
 
-class LoggedIn extends AuthenticationEvent {
-  @override
-  String toString() => 'LoggedIn';
-}
+class LoggedIn extends AuthenticationEvent {}
 
-class LoggedOut extends AuthenticationEvent {
-  @override
-  String toString() => 'LoggedOut';
-}
+class LoggedOut extends AuthenticationEvent {}
