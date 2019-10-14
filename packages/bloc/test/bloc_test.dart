@@ -26,7 +26,7 @@ void main() {
         final List<Matcher> expectedStates = [equals(''), emitsDone];
 
         expectLater(
-          simpleBloc.state,
+          simpleBloc,
           emitsInOrder(expectedStates),
         );
 
@@ -37,21 +37,23 @@ void main() {
         expect(simpleBloc.initialState, '');
       });
 
-      test('currentState returns correct value initially', () {
-        expect(simpleBloc.currentState, '');
+      test('state returns correct value initially', () {
+        expect(simpleBloc.state, '');
       });
 
       test('state should equal initial state before any events are dispatched',
           () async {
-        final initialState = await simpleBloc.state.first;
+        final initialState = await simpleBloc.first;
         expect(initialState, simpleBloc.initialState);
       });
 
       test('should map single event to correct state', () {
         final List<String> expectedStates = ['', 'data'];
 
-        expectLater(simpleBloc.state, emitsInOrder(expectedStates))
-            .then((dynamic _) {
+        expectLater(
+          simpleBloc,
+          emitsInOrder(expectedStates),
+        ).then((dynamic _) {
           verify(
             delegate.onTransition(
               simpleBloc,
@@ -62,7 +64,7 @@ void main() {
               ),
             ),
           ).called(1);
-          expect(simpleBloc.currentState, 'data');
+          expect(simpleBloc.state, 'data');
         });
 
         simpleBloc.dispatch('event');
@@ -71,8 +73,10 @@ void main() {
       test('should map multiple events to correct states', () {
         final List<String> expectedStates = ['', 'data'];
 
-        expectLater(simpleBloc.state, emitsInOrder(expectedStates))
-            .then((dynamic _) {
+        expectLater(
+          simpleBloc,
+          emitsInOrder(expectedStates),
+        ).then((dynamic _) {
           verify(
             delegate.onTransition(
               simpleBloc,
@@ -83,12 +87,16 @@ void main() {
               ),
             ),
           ).called(1);
-          expect(simpleBloc.currentState, 'data');
+          expect(simpleBloc.state, 'data');
         });
 
         simpleBloc.dispatch('event1');
         simpleBloc.dispatch('event2');
         simpleBloc.dispatch('event3');
+      });
+
+      test('isBroadcast returns true', () {
+        expect(simpleBloc.isBroadcast, isTrue);
       });
     });
 
@@ -111,7 +119,7 @@ void main() {
         ];
 
         expectLater(
-          complexBloc.state,
+          complexBloc,
           emitsInOrder(expectedStates),
         );
 
@@ -122,13 +130,13 @@ void main() {
         expect(complexBloc.initialState, ComplexStateA());
       });
 
-      test('currentState returns correct value initially', () {
-        expect(complexBloc.currentState, ComplexStateA());
+      test('state returns correct value initially', () {
+        expect(complexBloc.state, ComplexStateA());
       });
 
       test('state should equal initial state before any events are dispatched',
           () async {
-        final initialState = await complexBloc.state.first;
+        final initialState = await complexBloc.first;
         expect(initialState, complexBloc.initialState);
       });
 
@@ -138,8 +146,10 @@ void main() {
           ComplexStateB(),
         ];
 
-        expectLater(complexBloc.state, emitsInOrder(expectedStates))
-            .then((dynamic _) {
+        expectLater(
+          complexBloc,
+          emitsInOrder(expectedStates),
+        ).then((dynamic _) {
           verify(
             delegate.onTransition(
               complexBloc,
@@ -150,7 +160,7 @@ void main() {
               ),
             ),
           ).called(1);
-          expect(complexBloc.currentState, ComplexStateB());
+          expect(complexBloc.state, ComplexStateB());
         });
 
         complexBloc.dispatch(ComplexEventB());
@@ -166,7 +176,7 @@ void main() {
         ];
 
         expectLater(
-          complexBloc.state,
+          complexBloc,
           emitsInOrder(expectedStates),
         );
 
@@ -182,6 +192,10 @@ void main() {
         complexBloc.dispatch(ComplexEventA());
         await Future<void>.delayed(Duration(milliseconds: 120));
         complexBloc.dispatch(ComplexEventC());
+      });
+
+      test('isBroadcast returns true', () {
+        expect(complexBloc.isBroadcast, isTrue);
       });
     });
 
@@ -218,13 +232,13 @@ void main() {
         expect(transitions.isEmpty, true);
       });
 
-      test('currentState returns correct value initially', () {
-        expect(counterBloc.currentState, 0);
+      test('state returns correct value initially', () {
+        expect(counterBloc.state, 0);
       });
 
       test('state should equal initial state before any events are dispatched',
           () async {
-        final initialState = await counterBloc.state.first;
+        final initialState = await counterBloc.first;
         expect(initialState, counterBloc.initialState);
       });
 
@@ -235,7 +249,7 @@ void main() {
         ];
 
         expectLater(
-          counterBloc.state,
+          counterBloc,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expectLater(transitions, expectedTransitions);
@@ -249,7 +263,7 @@ void main() {
               ),
             ),
           ).called(1);
-          expect(counterBloc.currentState, 1);
+          expect(counterBloc.state, 1);
         });
 
         counterBloc.dispatch(CounterEvent.increment);
@@ -264,7 +278,7 @@ void main() {
         ];
 
         expectLater(
-          counterBloc.state,
+          counterBloc,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expect(transitions, expectedTransitions);
@@ -298,12 +312,16 @@ void main() {
               ),
             ),
           ).called(1);
-          expect(counterBloc.currentState, 3);
+          expect(counterBloc.state, 3);
         });
 
         counterBloc.dispatch(CounterEvent.increment);
         counterBloc.dispatch(CounterEvent.increment);
         counterBloc.dispatch(CounterEvent.increment);
+      });
+
+      test('isBroadcast returns true', () {
+        expect(counterBloc.isBroadcast, isTrue);
       });
     });
 
@@ -326,7 +344,7 @@ void main() {
         ];
 
         expectLater(
-          asyncBloc.state,
+          asyncBloc,
           emitsInOrder(expectedStates),
         );
 
@@ -342,7 +360,7 @@ void main() {
         ];
 
         expectLater(
-          asyncBloc.state,
+          asyncBloc,
           emitsInOrder(expectedStates),
         );
 
@@ -356,13 +374,13 @@ void main() {
         expect(asyncBloc.initialState, AsyncState.initial());
       });
 
-      test('currentState returns correct value initially', () {
-        expect(asyncBloc.currentState, AsyncState.initial());
+      test('state returns correct value initially', () {
+        expect(asyncBloc.state, AsyncState.initial());
       });
 
       test('state should equal initial state before any events are dispatched',
           () async {
-        final initialState = await asyncBloc.state.first;
+        final initialState = await asyncBloc.first;
         expect(initialState, asyncBloc.initialState);
       });
 
@@ -373,8 +391,10 @@ void main() {
           AsyncState(isLoading: false, hasError: false, isSuccess: true),
         ];
 
-        expectLater(asyncBloc.state, emitsInOrder(expectedStates))
-            .then((dynamic _) {
+        expectLater(
+          asyncBloc,
+          emitsInOrder(expectedStates),
+        ).then((dynamic _) {
           verify(
             delegate.onTransition(
               asyncBloc,
@@ -412,7 +432,7 @@ void main() {
             ),
           ).called(1);
           expect(
-            asyncBloc.currentState,
+            asyncBloc.state,
             AsyncState(
               isLoading: false,
               hasError: false,
@@ -422,6 +442,10 @@ void main() {
         });
 
         asyncBloc.dispatch(AsyncEvent());
+      });
+
+      test('isBroadcast returns true', () {
+        expect(asyncBloc.isBroadcast, isTrue);
       });
     });
 
@@ -446,7 +470,7 @@ void main() {
         final List<int> expected = [0, -1];
         final CounterExceptionBloc _bloc = CounterExceptionBloc();
 
-        expectLater(_bloc.state, emitsInOrder(expected));
+        expectLater(_bloc, emitsInOrder(expected));
 
         _bloc.dispatch(CounterEvent.increment);
         _bloc.dispatch(CounterEvent.decrement);
@@ -464,7 +488,10 @@ void main() {
               expectedStacktrace = stacktrace;
             });
 
-        expectLater(_bloc.state, emitsInOrder(<int>[0])).then((dynamic _) {
+        expectLater(
+          _bloc,
+          emitsInOrder(<int>[0]),
+        ).then((dynamic _) {
           expect(expectedError, exception);
           expect(expectedStacktrace, isNotNull);
         });
@@ -482,7 +509,10 @@ void main() {
           },
         );
 
-        expectLater(_bloc.state, emitsInOrder(<int>[0])).then((dynamic _) {
+        expectLater(
+          _bloc,
+          emitsInOrder(<int>[0]),
+        ).then((dynamic _) {
           expect(
             capturedError,
             isStateError,
@@ -504,7 +534,7 @@ void main() {
         final List<int> expected = [0, -1];
         final CounterErrorBloc _bloc = CounterErrorBloc();
 
-        expectLater(_bloc.state, emitsInOrder(expected));
+        expectLater(_bloc, emitsInOrder(expected));
 
         _bloc.dispatch(CounterEvent.increment);
         _bloc.dispatch(CounterEvent.decrement);
@@ -522,7 +552,10 @@ void main() {
               expectedStacktrace = stacktrace;
             });
 
-        expectLater(_bloc.state, emitsInOrder(<int>[0])).then((dynamic _) {
+        expectLater(
+          _bloc,
+          emitsInOrder(<int>[0]),
+        ).then((dynamic _) {
           expect(expectedError, error);
           expect(expectedStacktrace, isNotNull);
         });

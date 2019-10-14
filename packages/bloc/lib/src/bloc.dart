@@ -6,24 +6,40 @@ import 'package:rxdart/rxdart.dart';
 
 /// Takes a [Stream] of [Event]s as input
 /// and transforms them into a [Stream] of [State]s as output.
-abstract class Bloc<Event, State> {
+abstract class Bloc<Event, State> extends Stream<State> {
   final PublishSubject<Event> _eventSubject = PublishSubject<Event>();
 
   BehaviorSubject<State> _stateSubject;
 
-  /// Returns [Stream] of [State]s.
-  /// Usually consumed by the presentation layer.
-  Stream<State> get state => _stateSubject.stream;
+  /// Returns the current [State] of the [Bloc].
+  State get state => _stateSubject.value;
 
   /// Returns the [State] before any [Event]s have been `dispatched`.
   State get initialState;
 
-  /// Returns the current [State] of the [Bloc].
-  State get currentState => _stateSubject.value;
+  /// Returns whether the `Stream<State>` is a broadcast stream.
+  bool get isBroadcast => _stateSubject.isBroadcast;
 
   Bloc() {
     _stateSubject = BehaviorSubject<State>.seeded(initialState);
     _bindStateSubject();
+  }
+
+  /// Adds a subscription to the `Stream<State>`.
+  /// Returns a [StreamSubscription] which handles events from the `Stream<State>`
+  /// using the provided [onData], [onError] and [onDone] handlers.
+  StreamSubscription<State> listen(
+    void onData(State value), {
+    Function onError,
+    void onDone(),
+    bool cancelOnError,
+  }) {
+    return _stateSubject.listen(
+      onData,
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
   }
 
   /// Called whenever an [Event] is dispatched to the [Bloc].
@@ -136,9 +152,9 @@ abstract class Bloc<Event, State> {
       return mapEventToState(currentEvent).handleError(_handleError);
     })).forEach(
       (State nextState) {
-        if (currentState == nextState || _stateSubject.isClosed) return;
+        if (state == nextState || _stateSubject.isClosed) return;
         final transition = Transition(
-          currentState: currentState,
+          currentState: state,
           event: currentEvent,
           nextState: nextState,
         );

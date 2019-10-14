@@ -23,7 +23,7 @@ void main() {
       when(delegate.onEvent(any, any)).thenReturn(null);
 
       expectLater(
-        complexBloc.state,
+        complexBloc,
         emitsInOrder(expectedStateAfterEventB),
       ).then((dynamic _) {
         verify(
@@ -53,7 +53,7 @@ void main() {
       when(delegate.onEvent(any, any)).thenReturn(null);
 
       expectLater(
-        complexBlocA.state,
+        complexBlocA,
         emitsInOrder(expectedStateAfterEventB),
       ).then((dynamic _) {
         verify(
@@ -65,7 +65,7 @@ void main() {
       });
 
       expectLater(
-        complexBlocB.state,
+        complexBlocB,
         emitsInOrder(expectedStateAfterEventC),
       ).then((dynamic _) {
         verify(
@@ -91,7 +91,7 @@ void main() {
       when(delegate.onEvent(any, any)).thenReturn(null);
 
       expectLater(
-        complexBloc.state,
+        complexBloc,
         emitsInOrder(expectedStateAfterEventB),
       ).then((dynamic _) {
         verifyNever(
@@ -121,7 +121,7 @@ void main() {
       when(delegate.onTransition(any, any)).thenReturn(null);
 
       expectLater(
-        complexBloc.state,
+        complexBloc,
         emitsInOrder(expectedStateAfterEventB),
       ).then((dynamic _) {
         verify(
@@ -155,7 +155,7 @@ void main() {
       when(delegate.onTransition(any, any)).thenReturn(null);
 
       expectLater(
-        complexBlocA.state,
+        complexBlocA,
         emitsInOrder(expectedStateAfterEventB),
       ).then((dynamic _) {
         verify(
@@ -171,7 +171,7 @@ void main() {
       });
 
       expectLater(
-        complexBlocB.state,
+        complexBlocB,
         emitsInOrder(expectedStateAfterEventC),
       ).then((dynamic _) {
         verify(
@@ -201,7 +201,7 @@ void main() {
       when(delegate.onTransition(any, any)).thenReturn(null);
 
       expectLater(
-        complexBloc.state,
+        complexBloc,
         emitsInOrder(expectedStateAfterEventB),
       ).then((dynamic _) {
         verifyNever(
@@ -238,7 +238,10 @@ void main() {
         errorHandled = true;
       });
 
-      expectLater(_bloc.state, emitsInOrder(<int>[0])).then((dynamic _) {
+      expectLater(
+        _bloc,
+        emitsInOrder(<int>[0]),
+      ).then((dynamic _) {
         expect(errorHandled, isTrue);
         expect(blocWithError, _bloc);
       });
