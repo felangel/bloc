@@ -72,7 +72,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
         return true;
       } else if (filter == VisibilityFilter.active) {
         return !todo.complete;
-      } else if (filter == VisibilityFilter.completed) {
+      } else {
         return todo.complete;
       }
     }).toList();

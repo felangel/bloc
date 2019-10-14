@@ -25,7 +25,7 @@ environment:
 
 dependencies:
   meta: ">=1.1.0 <2.0.0"
-  equatable: ^0.2.0
+  equatable: ^0.6.0
   flutter_bloc: ^0.21.0
   flutter:
     sdk: flutter
@@ -138,21 +138,22 @@ Let's create a `models` directory and create `todo.dart`.
 
 ```dart
 import 'package:todos_app_core/todos_app_core.dart';
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:todos_repository_core/todos_repository_core.dart';
 
-@immutable
 class Todo extends Equatable {
   final bool complete;
   final String id;
   final String note;
   final String task;
 
-  Todo(this.task, {this.complete = false, String note = '', String id})
-      : this.note = note ?? '',
-        this.id = id ?? Uuid().generateV4(),
-        super([complete, id, note, task]);
+  Todo(
+    this.task, {
+    this.complete = false,
+    String note = '',
+    String id,
+  })  : this.note = note ?? '',
+        this.id = id ?? Uuid().generateV4();
 
   Todo copyWith({bool complete, String id, String note, String task}) {
     return Todo(
@@ -162,6 +163,9 @@ class Todo extends Equatable {
       note: note ?? this.note,
     );
   }
+
+  @override
+  List<Object> get props => [complete, id, note, task];
 
   @override
   String toString() {
@@ -199,35 +203,31 @@ The three states we will implement are:
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class TodosState extends Equatable {
-  TodosState([List props = const []]) : super(props);
+  const TodosState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class TodosLoading extends TodosState {
-  @override
-  String toString() => 'TodosLoading';
-}
+class TodosLoading extends TodosState {}
 
 class TodosLoaded extends TodosState {
   final List<Todo> todos;
 
-  TodosLoaded([this.todos = const []]) : super([todos]);
+  const TodosLoaded([this.todos = const []]);
+
+  @override
+  List<Object> get props => [todos];
 
   @override
   String toString() => 'TodosLoaded { todos: $todos }';
 }
 
-class TodosNotLoaded extends TodosState {
-  @override
-  String toString() => 'TodosNotLoaded';
-}
+class TodosNotLoaded extends TodosState {}
 ```
-
-?> **Note:** We are annotating our base `TodosState` with the [immutable](https://docs.flutter.io/flutter/meta/immutable-constant.html) decorator so that we can indicate that all `TodosStates` cannot be changed.
 
 Next, let's implement the events we will need to handle.
 
@@ -246,23 +246,24 @@ Create `blocs/todos/todos_event.dart` and let's implement the events we describe
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class TodosEvent extends Equatable {
-  TodosEvent([List props = const []]) : super(props);
+  const TodosEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
-class LoadTodos extends TodosEvent {
-  @override
-  String toString() => 'LoadTodos';
-}
+class LoadTodos extends TodosEvent {}
 
 class AddTodo extends TodosEvent {
   final Todo todo;
 
-  AddTodo(this.todo) : super([todo]);
+  const AddTodo(this.todo);
+
+  @override
+  List<Object> get props => [todo];
 
   @override
   String toString() => 'AddTodo { todo: $todo }';
@@ -271,7 +272,10 @@ class AddTodo extends TodosEvent {
 class UpdateTodo extends TodosEvent {
   final Todo updatedTodo;
 
-  UpdateTodo(this.updatedTodo) : super([updatedTodo]);
+  const UpdateTodo(this.updatedTodo);
+
+  @override
+  List<Object> get props => [updatedTodo];
 
   @override
   String toString() => 'UpdateTodo { updatedTodo: $updatedTodo }';
@@ -280,21 +284,18 @@ class UpdateTodo extends TodosEvent {
 class DeleteTodo extends TodosEvent {
   final Todo todo;
 
-  DeleteTodo(this.todo) : super([todo]);
+  const DeleteTodo(this.todo);
+
+  @override
+  List<Object> get props => [todo];
 
   @override
   String toString() => 'DeleteTodo { todo: $todo }';
 }
 
-class ClearCompleted extends TodosEvent {
-  @override
-  String toString() => 'ClearCompleted';
-}
+class ClearCompleted extends TodosEvent {}
 
-class ToggleAll extends TodosEvent {
-  @override
-  String toString() => 'ToggleAll';
-}
+class ToggleAll extends TodosEvent {}
 ```
 
 Now that we have our `TodosStates` and `TodosEvents` implemented we can implement our `TodosBloc`.
@@ -457,25 +458,28 @@ Let's create `blocs/filtered_todos/filtered_todos_state.dart` and implement the 
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class FilteredTodosState extends Equatable {
-  FilteredTodosState([List props = const []]) : super(props);
+  const FilteredTodosState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class FilteredTodosLoading extends FilteredTodosState {
-  @override
-  String toString() => 'FilteredTodosLoading';
-}
+class FilteredTodosLoading extends FilteredTodosState {}
 
 class FilteredTodosLoaded extends FilteredTodosState {
   final List<Todo> filteredTodos;
   final VisibilityFilter activeFilter;
 
-  FilteredTodosLoaded(this.filteredTodos, this.activeFilter)
-      : super([filteredTodos, activeFilter]);
+  const FilteredTodosLoaded(
+    this.filteredTodos,
+    this.activeFilter,
+  );
+
+  @override
+  List<Object> get props => [filteredTodos, activeFilter];
 
   @override
   String toString() {
@@ -497,18 +501,19 @@ Create `blocs/filtered_todos/filtered_todos_event.dart` and let's implement the 
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class FilteredTodosEvent extends Equatable {
-  FilteredTodosEvent([List props = const []]) : super(props);
+  const FilteredTodosEvent();
 }
 
 class UpdateFilter extends FilteredTodosEvent {
   final VisibilityFilter filter;
 
-  UpdateFilter(this.filter) : super([filter]);
+  const UpdateFilter(this.filter);
+
+  @override
+  List<Object> get props => [filter];
 
   @override
   String toString() => 'UpdateFilter { filter: $filter }';
@@ -517,7 +522,10 @@ class UpdateFilter extends FilteredTodosEvent {
 class UpdateTodos extends FilteredTodosEvent {
   final List<Todo> todos;
 
-  UpdateTodos(this.todos) : super([todos]);
+  const UpdateTodos(this.todos);
+
+  @override
+  List<Object> get props => [todos];
 
   @override
   String toString() => 'UpdateTodos { todos: $todos }';
@@ -607,7 +615,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
         return true;
       } else if (filter == VisibilityFilter.active) {
         return !todo.complete;
-      } else if (filter == VisibilityFilter.completed) {
+      } else {
         return todo.complete;
       }
     }).toList();
@@ -652,24 +660,24 @@ Create `blocs/stats/stats_state.dart` and let's implement our `StatsState`.
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 abstract class StatsState extends Equatable {
-  StatsState([List props = const []]) : super(props);
+  const StatsState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class StatsLoading extends StatsState {
-  @override
-  String toString() => 'StatsLoading';
-}
+class StatsLoading extends StatsState {}
 
 class StatsLoaded extends StatsState {
   final int numActive;
   final int numCompleted;
 
-  StatsLoaded(this.numActive, this.numCompleted)
-      : super([numActive, numCompleted]);
+  const StatsLoaded(this.numActive, this.numCompleted);
+
+  @override
+  List<Object> get props => [numActive, numCompleted];
 
   @override
   String toString() {
@@ -688,18 +696,19 @@ Create `blocs/stats/states_event.dart` and let's implement it.
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class StatsEvent extends Equatable {
-  StatsEvent([List props = const []]) : super(props);
+  const StatsEvent();
 }
 
 class UpdateStats extends StatsEvent {
   final List<Todo> todos;
 
-  UpdateStats(this.todos) : super([todos]);
+  const UpdateStats(this.todos);
+
+  @override
+  List<Object> get props => [todos];
 
   @override
   String toString() => 'UpdateStats { todos: $todos }';
@@ -782,18 +791,19 @@ Create `blocs/tab/tab_event.dart`:
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class TabEvent extends Equatable {
-  TabEvent([List props = const []]) : super(props);
+  const TabEvent();
 }
 
 class UpdateTab extends TabEvent {
   final AppTab tab;
 
-  UpdateTab(this.tab) : super([tab]);
+  const UpdateTab(this.tab);
+
+  @override
+  List<Object> get props => [tab];
 
   @override
   String toString() => 'UpdateTab { tab: $tab }';
@@ -1687,8 +1697,8 @@ class Stats extends StatelessWidget {
   Stats({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {    
-    return BlocBuilder<StatsBloc, StatsState>(      
+  Widget build(BuildContext context) {
+    return BlocBuilder<StatsBloc, StatsState>(
       builder: (context, state) {
         if (state is StatsLoading) {
           return LoadingIndicator(key: FlutterTodosKeys.statsLoadingIndicator);
