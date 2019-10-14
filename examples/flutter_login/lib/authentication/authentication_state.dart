@@ -1,23 +1,14 @@
 import 'package:equatable/equatable.dart';
 
-abstract class AuthenticationState extends Equatable {}
-
-class AuthenticationUninitialized extends AuthenticationState {
+abstract class AuthenticationState extends Equatable {
   @override
-  String toString() => 'AuthenticationUninitialized';
+  List<Object> get props => [];
 }
 
-class AuthenticationAuthenticated extends AuthenticationState {
-  @override
-  String toString() => 'AuthenticationAuthenticated';
-}
+class AuthenticationUninitialized extends AuthenticationState {}
 
-class AuthenticationUnauthenticated extends AuthenticationState {
-  @override
-  String toString() => 'AuthenticationUnauthenticated';
-}
+class AuthenticationAuthenticated extends AuthenticationState {}
 
-class AuthenticationLoading extends AuthenticationState {
-  @override
-  String toString() => 'AuthenticationLoading';
-}
+class AuthenticationUnauthenticated extends AuthenticationState {}
+
+class AuthenticationLoading extends AuthenticationState {}
