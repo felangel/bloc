@@ -1,16 +1,18 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+
 import 'package:flutter_firestore_todos/models/models.dart';
 
-@immutable
 abstract class TabEvent extends Equatable {
-  TabEvent([List props = const []]) : super(props);
+  const TabEvent();
 }
 
 class UpdateTab extends TabEvent {
   final AppTab tab;
 
-  UpdateTab(this.tab) : super([tab]);
+  const UpdateTab(this.tab);
+
+  @override
+  List<Object> get props => [tab];
 
   @override
   String toString() => 'UpdateTab { tab: $tab }';
