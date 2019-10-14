@@ -6,7 +6,7 @@ import 'package:rxdart/rxdart.dart';
 
 /// Takes a [Stream] of [Event]s as input
 /// and transforms them into a [Stream] of [State]s as output.
-abstract class Bloc<Event, State> extends Stream<State> {
+abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   final PublishSubject<Event> _eventSubject = PublishSubject<Event>();
 
   BehaviorSubject<State> _stateSubject;
@@ -58,13 +58,12 @@ abstract class Bloc<Event, State> extends Stream<State> {
   /// A great spot to handle exceptions at the individual [Bloc] level.
   void onError(Object error, StackTrace stacktrace) => null;
 
-  /// Takes an [Event] and triggers `mapEventToState`.
-  /// `Dispatch` may be called from the presentation layer or from within the [Bloc].
-  /// `Dispatch` notifies the [Bloc] of a new [Event].
-  /// If `dispose` has already been called, any subsequent calls to `dispatch` will
+  /// Notifies the [Bloc] of a new [Event] which triggers `mapEventToState`.
+  /// If `close` has already been called, any subsequent calls to `add` will
   /// be delegated to the `onError` method which can be overriden at the [Bloc]
   /// as well as the [BlocDelegate] level.
-  void dispatch(Event event) {
+  @override
+  void add(Event event) {
     try {
       BlocSupervisor.delegate.onEvent(this, event);
       onEvent(event);
@@ -76,15 +75,23 @@ abstract class Bloc<Event, State> extends Stream<State> {
 
   /// Closes the [Event] and [State] [Stream]s.
   /// This method should be called when a [Bloc] is no longer needed.
-  /// Once `dispose` is called, events that are `dispatched` will not be
+  /// Once `close` is called, events that are `added` will not be
   /// processed and will result in an error being passed to `onError`.
-  /// In addition, if `dispose` is called while [Event]s are still being processed,
+  /// In addition, if `close` is called while [Event]s are still being processed,
   /// any [State]s yielded after are ignored and will not result in a [Transition].
+  @override
   @mustCallSuper
-  void dispose() {
+  void close() {
     _eventSubject.close();
     _stateSubject.close();
   }
+
+  @Deprecated('Please use add instead.')
+  void dispatch(Event event) => add(event);
+
+  @Deprecated('Please use close instead.')
+  @mustCallSuper
+  void dispose() => close();
 
   /// Transforms the `Stream<Event>` along with a `next` function into a `Stream<State>`.
   /// Events that should be processed by `mapEventToState` need to be passed to `next`.

@@ -22,7 +22,7 @@ void main() {
         BlocSupervisor.delegate = delegate;
       });
 
-      test('close does not emit new states over the state stream', () {
+      test('dispose does not emit new states over the state stream', () {
         final List<Matcher> expectedStates = [equals(''), emitsDone];
 
         expectLater(
@@ -30,7 +30,7 @@ void main() {
           emitsInOrder(expectedStates),
         );
 
-        simpleBloc.close();
+        simpleBloc.dispose();
       });
 
       test('initialState returns correct value', () {
@@ -41,7 +41,7 @@ void main() {
         expect(simpleBloc.state, '');
       });
 
-      test('state should equal initial state before any events are added',
+      test('state should equal initial state before any events are dispatched',
           () async {
         final initialState = await simpleBloc.first;
         expect(initialState, simpleBloc.initialState);
@@ -67,7 +67,7 @@ void main() {
           expect(simpleBloc.state, 'data');
         });
 
-        simpleBloc.add('event');
+        simpleBloc.dispatch('event');
       });
 
       test('should map multiple events to correct states', () {
@@ -90,9 +90,9 @@ void main() {
           expect(simpleBloc.state, 'data');
         });
 
-        simpleBloc.add('event1');
-        simpleBloc.add('event2');
-        simpleBloc.add('event3');
+        simpleBloc.dispatch('event1');
+        simpleBloc.dispatch('event2');
+        simpleBloc.dispatch('event3');
       });
 
       test('isBroadcast returns true', () {
@@ -112,7 +112,7 @@ void main() {
         BlocSupervisor.delegate = delegate;
       });
 
-      test('close does not emit new states over the state stream', () {
+      test('dispose does not emit new states over the state stream', () {
         final List<Matcher> expectedStates = [
           equals(ComplexStateA()),
           emitsDone
@@ -123,7 +123,7 @@ void main() {
           emitsInOrder(expectedStates),
         );
 
-        complexBloc.close();
+        complexBloc.dispose();
       });
 
       test('initialState returns ComplexStateA', () {
@@ -134,7 +134,7 @@ void main() {
         expect(complexBloc.state, ComplexStateA());
       });
 
-      test('state should equal initial state before any events are added',
+      test('state should equal initial state before any events are dispatched',
           () async {
         final initialState = await complexBloc.first;
         expect(initialState, complexBloc.initialState);
@@ -163,7 +163,7 @@ void main() {
           expect(complexBloc.state, ComplexStateB());
         });
 
-        complexBloc.add(ComplexEventB());
+        complexBloc.dispatch(ComplexEventB());
       });
 
       test('should map multiple events to correct states', () async {
@@ -180,18 +180,18 @@ void main() {
           emitsInOrder(expectedStates),
         );
 
-        complexBloc.add(ComplexEventA());
+        complexBloc.dispatch(ComplexEventA());
         await Future<void>.delayed(Duration(milliseconds: 20));
-        complexBloc.add(ComplexEventB());
+        complexBloc.dispatch(ComplexEventB());
         await Future<void>.delayed(Duration(milliseconds: 20));
-        complexBloc.add(ComplexEventC());
+        complexBloc.dispatch(ComplexEventC());
         await Future<void>.delayed(Duration(milliseconds: 20));
-        complexBloc.add(ComplexEventD());
+        complexBloc.dispatch(ComplexEventD());
         await Future<void>.delayed(Duration(milliseconds: 200));
-        complexBloc.add(ComplexEventC());
-        complexBloc.add(ComplexEventA());
+        complexBloc.dispatch(ComplexEventC());
+        complexBloc.dispatch(ComplexEventA());
         await Future<void>.delayed(Duration(milliseconds: 120));
-        complexBloc.add(ComplexEventC());
+        complexBloc.dispatch(ComplexEventC());
       });
 
       test('isBroadcast returns true', () {
@@ -236,7 +236,7 @@ void main() {
         expect(counterBloc.state, 0);
       });
 
-      test('state should equal initial state before any events are added',
+      test('state should equal initial state before any events are dispatched',
           () async {
         final initialState = await counterBloc.first;
         expect(initialState, counterBloc.initialState);
@@ -266,7 +266,7 @@ void main() {
           expect(counterBloc.state, 1);
         });
 
-        counterBloc.add(CounterEvent.increment);
+        counterBloc.dispatch(CounterEvent.increment);
       });
 
       test('multiple Increment event updates state to 3', () {
@@ -315,9 +315,9 @@ void main() {
           expect(counterBloc.state, 3);
         });
 
-        counterBloc.add(CounterEvent.increment);
-        counterBloc.add(CounterEvent.increment);
-        counterBloc.add(CounterEvent.increment);
+        counterBloc.dispatch(CounterEvent.increment);
+        counterBloc.dispatch(CounterEvent.increment);
+        counterBloc.dispatch(CounterEvent.increment);
       });
 
       test('isBroadcast returns true', () {
@@ -337,7 +337,7 @@ void main() {
         BlocSupervisor.delegate = delegate;
       });
 
-      test('close does not emit new states over the state stream', () {
+      test('dispose does not emit new states over the state stream', () {
         final List<Matcher> expectedStates = [
           equals(AsyncState.initial()),
           emitsDone
@@ -348,11 +348,11 @@ void main() {
           emitsInOrder(expectedStates),
         );
 
-        asyncBloc.close();
+        asyncBloc.dispose();
       });
 
       test(
-          'close while events are pending does not emit new states or trigger onError',
+          'dispose while events are pending does not emit new states or trigger onError',
           () {
         final List<Matcher> expectedStates = [
           equals(AsyncState.initial()),
@@ -364,8 +364,8 @@ void main() {
           emitsInOrder(expectedStates),
         );
 
-        asyncBloc.add(AsyncEvent());
-        asyncBloc.close();
+        asyncBloc.dispatch(AsyncEvent());
+        asyncBloc.dispose();
 
         verifyNever(delegate.onError(any, any, any));
       });
@@ -378,7 +378,7 @@ void main() {
         expect(asyncBloc.state, AsyncState.initial());
       });
 
-      test('state should equal initial state before any events are added',
+      test('state should equal initial state before any events are dispatched',
           () async {
         final initialState = await asyncBloc.first;
         expect(initialState, asyncBloc.initialState);
@@ -441,7 +441,7 @@ void main() {
           );
         });
 
-        asyncBloc.add(AsyncEvent());
+        asyncBloc.dispatch(AsyncEvent());
       });
 
       test('isBroadcast returns true', () {
@@ -472,8 +472,8 @@ void main() {
 
         expectLater(_bloc, emitsInOrder(expected));
 
-        _bloc.add(CounterEvent.increment);
-        _bloc.add(CounterEvent.decrement);
+        _bloc.dispatch(CounterEvent.increment);
+        _bloc.dispatch(CounterEvent.decrement);
       });
 
       test('triggers onError from mapEventToState', () {
@@ -496,10 +496,10 @@ void main() {
           expect(expectedStacktrace, isNotNull);
         });
 
-        _bloc.add(CounterEvent.increment);
+        _bloc.dispatch(CounterEvent.increment);
       });
 
-      test('triggers onError from add', () {
+      test('triggers onError from dispatch', () {
         Object capturedError;
         StackTrace capturedStacktrace;
         final CounterBloc _bloc = CounterBloc(
@@ -524,8 +524,8 @@ void main() {
           expect(capturedStacktrace, isNull);
         });
 
-        _bloc.close();
-        _bloc.add(CounterEvent.increment);
+        _bloc.dispose();
+        _bloc.dispatch(CounterEvent.increment);
       });
     });
 
@@ -536,8 +536,8 @@ void main() {
 
         expectLater(_bloc, emitsInOrder(expected));
 
-        _bloc.add(CounterEvent.increment);
-        _bloc.add(CounterEvent.decrement);
+        _bloc.dispatch(CounterEvent.increment);
+        _bloc.dispatch(CounterEvent.decrement);
       });
 
       test('triggers onError from mapEventToState', () {
@@ -560,7 +560,7 @@ void main() {
           expect(expectedStacktrace, isNotNull);
         });
 
-        _bloc.add(CounterEvent.increment);
+        _bloc.dispatch(CounterEvent.increment);
       });
     });
   });
