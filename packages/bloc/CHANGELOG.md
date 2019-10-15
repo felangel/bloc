@@ -1,3 +1,7 @@
+# 0.16.1
+
+- Minor Documentation Updates
+
 # 0.16.0
 
 - Bloc extends `Stream<State>` ([#558](https://github.com/felangel/bloc/issues/558))
