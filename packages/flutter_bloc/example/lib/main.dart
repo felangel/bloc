@@ -78,7 +78,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                counterBloc.dispatch(CounterEvent.increment);
+                counterBloc.add(CounterEvent.increment);
               },
             ),
           ),
@@ -87,7 +87,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.remove),
               onPressed: () {
-                counterBloc.dispatch(CounterEvent.decrement);
+                counterBloc.add(CounterEvent.decrement);
               },
             ),
           ),
@@ -96,7 +96,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.update),
               onPressed: () {
-                themeBloc.dispatch(ThemeEvent.toggle);
+                themeBloc.add(ThemeEvent.toggle);
               },
             ),
           ),
@@ -116,10 +116,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
@@ -135,9 +135,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
   Stream<ThemeData> mapEventToState(ThemeEvent event) async* {
     switch (event) {
       case ThemeEvent.toggle:
-        yield currentState == ThemeData.dark()
-            ? ThemeData.light()
-            : ThemeData.dark();
+        yield state == ThemeData.dark() ? ThemeData.light() : ThemeData.dark();
         break;
     }
   }

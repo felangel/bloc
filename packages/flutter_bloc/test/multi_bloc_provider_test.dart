@@ -18,15 +18,15 @@ class MyAppWithNavigation extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  final VoidCallback onCounterBlocDisposed;
-  final VoidCallback onThemeBlocDisposed;
+  final VoidCallback onCounterBlocClosed;
+  final VoidCallback onThemeBlocClosed;
   final CounterBloc counterBlocValue;
   final ThemeBloc themeBlocValue;
 
   HomePage({
     Key key,
-    this.onCounterBlocDisposed,
-    this.onThemeBlocDisposed,
+    this.onCounterBlocClosed,
+    this.onThemeBlocClosed,
     this.counterBlocValue,
     this.themeBlocValue,
   }) : super(key: key);
@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
       } else {
         providers.add(
           BlocProvider<CounterBloc>(
-            builder: (context) => CounterBloc(onDispose: onCounterBlocDisposed),
+            builder: (context) => CounterBloc(onClose: onCounterBlocClosed),
           ),
         );
       }
@@ -58,7 +58,7 @@ class HomePage extends StatelessWidget {
       } else {
         providers.add(
           BlocProvider<ThemeBloc>(
-            builder: (context) => ThemeBloc(onDispose: onThemeBlocDisposed),
+            builder: (context) => ThemeBloc(onClose: onThemeBlocClosed),
           ),
         );
       }
@@ -137,9 +137,9 @@ class CounterPage extends StatelessWidget {
 enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  VoidCallback onDispose;
+  VoidCallback onClose;
 
-  CounterBloc({this.onDispose});
+  CounterBloc({this.onClose});
 
   @override
   int get initialState => 0;
@@ -148,27 +148,27 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
 
   @override
-  void dispose() {
-    this.onDispose?.call();
-    super.dispose();
+  void close() {
+    this.onClose?.call();
+    super.close();
   }
 }
 
 enum ThemeEvent { toggle }
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
-  VoidCallback onDispose;
+  VoidCallback onClose;
 
-  ThemeBloc({this.onDispose});
+  ThemeBloc({this.onClose});
 
   @override
   ThemeData get initialState => ThemeData.light();
@@ -177,17 +177,15 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
   Stream<ThemeData> mapEventToState(ThemeEvent event) async* {
     switch (event) {
       case ThemeEvent.toggle:
-        yield currentState == ThemeData.dark()
-            ? ThemeData.light()
-            : ThemeData.dark();
+        yield state == ThemeData.dark() ? ThemeData.light() : ThemeData.dark();
         break;
     }
   }
 
   @override
-  void dispose() {
-    this.onDispose?.call();
-    super.dispose();
+  void close() {
+    this.onClose?.call();
+    super.close();
   }
 }
 
@@ -242,44 +240,44 @@ void main() {
       expect(counterText.data, '0');
     });
 
-    testWidgets('calls dispose on bloc automatically',
+    testWidgets('calls close on bloc automatically',
         (WidgetTester tester) async {
-      bool counterBlocDisposed = false;
-      bool themeBlocDisposed = false;
+      bool counterBlocClosed = false;
+      bool themeBlocClosed = false;
 
       await tester.pumpWidget(
         MyAppWithNavigation(
           child: HomePage(
-            onCounterBlocDisposed: () {
-              counterBlocDisposed = true;
+            onCounterBlocClosed: () {
+              counterBlocClosed = true;
             },
-            onThemeBlocDisposed: () {
-              themeBlocDisposed = true;
+            onThemeBlocClosed: () {
+              themeBlocClosed = true;
             },
           ),
         ),
       );
 
-      expect(counterBlocDisposed, false);
-      expect(themeBlocDisposed, false);
+      expect(counterBlocClosed, false);
+      expect(themeBlocClosed, false);
 
       await tester.tap(find.byKey(Key('pop_button')));
       await tester.pumpAndSettle();
 
-      expect(counterBlocDisposed, true);
-      expect(themeBlocDisposed, true);
+      expect(counterBlocClosed, true);
+      expect(themeBlocClosed, true);
     });
 
-    testWidgets('does not dispose when created using value',
+    testWidgets('does not close when created using value',
         (WidgetTester tester) async {
-      bool counterBlocDisposed = false;
-      bool themeBlocDisposed = false;
+      bool counterBlocClosed = false;
+      bool themeBlocClosed = false;
 
-      final CounterBloc counterBloc = CounterBloc(onDispose: () {
-        counterBlocDisposed = true;
+      final CounterBloc counterBloc = CounterBloc(onClose: () {
+        counterBlocClosed = true;
       });
-      final ThemeBloc themeBloc = ThemeBloc(onDispose: () {
-        themeBlocDisposed = true;
+      final ThemeBloc themeBloc = ThemeBloc(onClose: () {
+        themeBlocClosed = true;
       });
 
       await tester.pumpWidget(
@@ -291,14 +289,14 @@ void main() {
         ),
       );
 
-      expect(counterBlocDisposed, false);
-      expect(themeBlocDisposed, false);
+      expect(counterBlocClosed, false);
+      expect(themeBlocClosed, false);
 
       await tester.tap(find.byKey(Key('pop_button')));
       await tester.pumpAndSettle();
 
-      expect(counterBlocDisposed, false);
-      expect(themeBlocDisposed, false);
+      expect(counterBlocClosed, false);
+      expect(themeBlocClosed, false);
     });
   });
 }

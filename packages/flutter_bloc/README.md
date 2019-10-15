@@ -43,13 +43,13 @@ BlocBuilder<BlocA, BlocAState>(
 )
 ```
 
-If you want fine-grained control over when the builder function is called you can provide an optional `condition` to `BlocBuilder`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `builder` will be called with `currentState` and the widget will rebuild. If `condition` returns false, `builder` will not be called with `currentState` and no rebuild will occur.
+If you want fine-grained control over when the builder function is called you can provide an optional `condition` to `BlocBuilder`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `builder` will be called with `state` and the widget will rebuild. If `condition` returns false, `builder` will not be called with `state` and no rebuild will occur.
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
-  condition: (previousState, currentState) {
+  condition: (previousState, state) {
     // return true/false to determine whether or not
-    // to rebuild the widget with currentState
+    // to rebuild the widget with state
   },
   builder: (context, state) {
     // return widget here based on BlocA's state
@@ -59,7 +59,7 @@ BlocBuilder<BlocA, BlocAState>(
 
 **BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
 
-In most cases, `BlocProvider` should be used to build new `blocs` which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle disposing the bloc.
+In most cases, `BlocProvider` should be used to build new `blocs` which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle closing the bloc.
 
 ```dart
 BlocProvider(
@@ -68,7 +68,7 @@ BlocProvider(
 );
 ```
 
-In some cases, `BlocProvider` can be used to provide an existing bloc to a new portion of the widget tree. This will be most commonly used when an existing `bloc` needs to be made available to a new route. In this case, `BlocProvider` will not automatically dispose the bloc since it did not create it.
+In some cases, `BlocProvider` can be used to provide an existing bloc to a new portion of the widget tree. This will be most commonly used when an existing `bloc` needs to be made available to a new route. In this case, `BlocProvider` will not automatically close the bloc since it did not create it.
 
 ```dart
 BlocProvider.value(
@@ -145,13 +145,13 @@ BlocListener<BlocA, BlocAState>(
 )
 ```
 
-If you want fine-grained control over when the listener function is called you can provide an optional `condition` to `BlocListener`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `listener` will be called with `currentState`. If `condition` returns false, `listener` will not be called with `currentState`.
+If you want fine-grained control over when the listener function is called you can provide an optional `condition` to `BlocListener`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `listener` will be called with `state`. If `condition` returns false, `listener` will not be called with `state`.
 
 ```dart
 BlocListener<BlocA, BlocAState>(
-  condition: (previousState, currentState) {
+  condition: (previousState, state) {
     // return true/false to determine whether or not
-    // to call listener with currentState
+    // to call listener with state
   },
   listener: (context, state) {
     // do stuff here based on BlocA's state
@@ -264,10 +264,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
@@ -303,7 +303,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                counterBloc.dispatch(CounterEvent.increment);
+                counterBloc.add(CounterEvent.increment);
               },
             ),
           ),
@@ -312,7 +312,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.remove),
               onPressed: () {
-                counterBloc.dispatch(CounterEvent.decrement);
+                counterBloc.add(CounterEvent.decrement);
               },
             ),
           ),

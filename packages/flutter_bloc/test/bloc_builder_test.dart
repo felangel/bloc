@@ -129,8 +129,8 @@ class MyCounterAppState extends State<MyCounterApp> {
           children: <Widget>[
             BlocBuilder<CounterBloc, int>(
               bloc: _bloc,
-              condition: (previousState, currentState) {
-                return (previousState + currentState) % 3 == 0;
+              condition: (previousState, state) {
+                return (previousState + state) % 3 == 0;
               },
               builder: (context, count) {
                 return Text('$count', key: Key('myCounterAppTextCondition'));
@@ -145,7 +145,7 @@ class MyCounterAppState extends State<MyCounterApp> {
             RaisedButton(
               key: Key('myCounterAppIncrementButton'),
               onPressed: () {
-                _bloc.dispatch(CounterEvent.increment);
+                _bloc.add(CounterEvent.increment);
               },
             )
           ],
@@ -165,10 +165,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
@@ -238,7 +238,7 @@ void main() {
         ),
       );
 
-      _themeBloc.dispatch(SetDarkTheme());
+      _themeBloc.add(SetDarkTheme());
 
       await tester.pumpAndSettle();
 
@@ -275,7 +275,7 @@ void main() {
         ),
       );
 
-      themeBloc.dispatch(SetDarkTheme());
+      themeBloc.add(SetDarkTheme());
 
       await tester.pumpAndSettle();
 
@@ -288,7 +288,7 @@ void main() {
       expect(_materialApp.theme, ThemeData.dark());
       expect(numBuilds, 2);
 
-      themeBloc.dispatch(SetLightTheme());
+      themeBloc.add(SetLightTheme());
 
       await tester.pumpAndSettle();
 
@@ -333,7 +333,7 @@ void main() {
       expect(_materialApp.theme, ThemeData.dark());
       expect(numBuilds, 2);
 
-      _themeBloc.dispatch(SetLightTheme());
+      _themeBloc.add(SetLightTheme());
       await tester.pumpAndSettle();
 
       _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
@@ -377,7 +377,7 @@ void main() {
       expect(_materialApp.theme, ThemeData.dark());
       expect(numBuilds, 2);
 
-      _themeBloc.dispatch(SetLightTheme());
+      _themeBloc.add(SetLightTheme());
       await tester.pumpAndSettle();
 
       _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
@@ -390,7 +390,7 @@ void main() {
     testWidgets('shows latest state instead of initial state',
         (WidgetTester tester) async {
       final ThemeBloc _themeBloc = ThemeBloc();
-      _themeBloc.dispatch(SetDarkTheme());
+      _themeBloc.add(SetDarkTheme());
       await tester.pumpAndSettle();
 
       int numBuilds = 0;

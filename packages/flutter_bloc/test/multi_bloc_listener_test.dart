@@ -15,7 +15,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
@@ -102,16 +102,16 @@ void main() {
 
       expect(find.byKey(Key('multiBlocListener_child')), findsOneWidget);
 
-      counterBlocA.dispatch(CounterEvent.increment);
-      counterBlocA.dispatch(CounterEvent.increment);
-      counterBlocB.dispatch(CounterEvent.increment);
+      counterBlocA.add(CounterEvent.increment);
+      counterBlocA.add(CounterEvent.increment);
+      counterBlocB.add(CounterEvent.increment);
 
-      expectLater(counterBlocA.state, emitsInOrder(expectedStatesA)).then((_) {
+      expectLater(counterBlocA, emitsInOrder(expectedStatesA)).then((_) {
         expect(listenerCallCountA, 2);
         expect(latestStateA, 2);
       });
 
-      expectLater(counterBlocB.state, emitsInOrder(expectedStatesB)).then((_) {
+      expectLater(counterBlocB, emitsInOrder(expectedStatesB)).then((_) {
         expect(listenerCallCountB, 1);
         expect(latestStateB, 1);
       });

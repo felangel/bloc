@@ -16,7 +16,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                 key: Key('bloc_listener_increment_button'),
                 child: Text('Increment Bloc'),
                 onPressed: () {
-                  _counterBloc.dispatch(CounterEvent.increment);
+                  _counterBloc.add(CounterEvent.increment);
                 },
               ),
             ],
@@ -149,8 +149,8 @@ void main() {
           child: Container(),
         ),
       );
-      counterBloc.dispatch(CounterEvent.increment);
-      expectLater(counterBloc.state, emitsInOrder(expectedStates)).then((_) {
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
         expect(listenerCallCount, 1);
         expect(latestState, 1);
       });
@@ -172,9 +172,9 @@ void main() {
           child: Container(),
         ),
       );
-      counterBloc.dispatch(CounterEvent.increment);
-      counterBloc.dispatch(CounterEvent.increment);
-      expectLater(counterBloc.state, emitsInOrder(expectedStates)).then((_) {
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
         expect(listenerCallCount, 2);
         expect(latestState, 2);
       });
@@ -252,17 +252,17 @@ void main() {
         'calls condition on single state change with correct previous and current states',
         (WidgetTester tester) async {
       int latestPreviousState;
-      int latestCurrentState;
+      int latestState;
       int conditionCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1];
       await tester.pumpWidget(
         BlocListener(
           bloc: counterBloc,
-          condition: (int previous, int current) {
+          condition: (int previous, int state) {
             conditionCallCount++;
             latestPreviousState = previous;
-            latestCurrentState = current;
+            latestState = state;
 
             return true;
           },
@@ -270,18 +270,18 @@ void main() {
           child: Container(),
         ),
       );
-      counterBloc.dispatch(CounterEvent.increment);
-      expectLater(counterBloc.state, emitsInOrder(expectedStates)).then((_) {
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
         expect(conditionCallCount, 1);
         expect(latestPreviousState, 0);
-        expect(latestCurrentState, 1);
+        expect(latestState, 1);
       });
     });
 
     testWidgets('infers the bloc from the context if the bloc is not provided',
         (WidgetTester tester) async {
       int latestPreviousState;
-      int latestCurrentState;
+      int latestState;
       int conditionCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1];
@@ -289,10 +289,10 @@ void main() {
         BlocProvider.value(
           value: counterBloc,
           child: BlocListener<CounterBloc, int>(
-            condition: (int previous, int current) {
+            condition: (int previous, int state) {
               conditionCallCount++;
               latestPreviousState = previous;
-              latestCurrentState = current;
+              latestState = state;
 
               return true;
             },
@@ -301,11 +301,11 @@ void main() {
           ),
         ),
       );
-      counterBloc.dispatch(CounterEvent.increment);
-      expectLater(counterBloc.state, emitsInOrder(expectedStates)).then((_) {
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
         expect(conditionCallCount, 1);
         expect(latestPreviousState, 0);
-        expect(latestCurrentState, 1);
+        expect(latestState, 1);
       });
     });
 
@@ -313,17 +313,17 @@ void main() {
         'calls condition on multiple state change with correct previous and current states',
         (WidgetTester tester) async {
       int latestPreviousState;
-      int latestCurrentState;
+      int latestState;
       int conditionCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1, 2];
       await tester.pumpWidget(
         BlocListener(
           bloc: counterBloc,
-          condition: (int previous, int current) {
+          condition: (int previous, int state) {
             conditionCallCount++;
             latestPreviousState = previous;
-            latestCurrentState = current;
+            latestState = state;
 
             return true;
           },
@@ -331,13 +331,13 @@ void main() {
           child: Container(),
         ),
       );
-      counterBloc.dispatch(CounterEvent.increment);
-      counterBloc.dispatch(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
 
-      expectLater(counterBloc.state, emitsInOrder(expectedStates)).then((_) {
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
         expect(conditionCallCount, 2);
         expect(latestPreviousState, 1);
-        expect(latestCurrentState, 2);
+        expect(latestState, 2);
       });
     });
 
@@ -350,15 +350,15 @@ void main() {
       await tester.pumpWidget(
         BlocListener(
           bloc: counterBloc,
-          condition: (int previous, int current) => false,
+          condition: (int previous, int state) => false,
           listener: (BuildContext context, int state) {
             listenerCallCount++;
           },
           child: Container(),
         ),
       );
-      counterBloc.dispatch(CounterEvent.increment);
-      expectLater(counterBloc.state, emitsInOrder(expectedStates)).then((_) {
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
         expect(listenerCallCount, 0);
       });
     });
@@ -372,15 +372,15 @@ void main() {
       await tester.pumpWidget(
         BlocListener(
           bloc: counterBloc,
-          condition: (int previous, int current) => true,
+          condition: (int previous, int state) => true,
           listener: (BuildContext context, int state) {
             listenerCallCount++;
           },
           child: Container(),
         ),
       );
-      counterBloc.dispatch(CounterEvent.increment);
-      expectLater(counterBloc.state, emitsInOrder(expectedStates)).then((_) {
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
         expect(listenerCallCount, 1);
       });
     });
@@ -394,18 +394,18 @@ void main() {
       await tester.pumpWidget(
         BlocListener(
           bloc: counterBloc,
-          condition: (int previous, int current) => false,
+          condition: (int previous, int state) => false,
           listener: (BuildContext context, int state) {
             listenerCallCount++;
           },
           child: Container(),
         ),
       );
-      counterBloc.dispatch(CounterEvent.increment);
-      counterBloc.dispatch(CounterEvent.increment);
-      counterBloc.dispatch(CounterEvent.increment);
-      counterBloc.dispatch(CounterEvent.increment);
-      expectLater(counterBloc.state, emitsInOrder(expectedStates)).then((_) {
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
         expect(listenerCallCount, 0);
       });
     });
@@ -419,18 +419,18 @@ void main() {
       await tester.pumpWidget(
         BlocListener(
           bloc: counterBloc,
-          condition: (int previous, int current) => true,
+          condition: (int previous, int state) => true,
           listener: (BuildContext context, int state) {
             listenerCallCount++;
           },
           child: Container(),
         ),
       );
-      counterBloc.dispatch(CounterEvent.increment);
-      counterBloc.dispatch(CounterEvent.increment);
-      counterBloc.dispatch(CounterEvent.increment);
-      counterBloc.dispatch(CounterEvent.increment);
-      expectLater(counterBloc.state, emitsInOrder(expectedStates)).then((_) {
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
         expect(listenerCallCount, 4);
       });
     });
