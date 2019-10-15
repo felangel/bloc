@@ -57,14 +57,14 @@ class BlocBuilder<B extends Bloc<dynamic, S>, S> extends BlocBuilderBase<B, S> {
   /// The `condition` function will be invoked on each bloc state change.
   /// The `condition` takes the previous state and current state and must return a `bool`
   /// which determines whether or not the `builder` function will be invoked.
-  /// The previous state will be initialized to `currentState` when the [BlocBuilder] is initialized.
+  /// The previous state will be initialized to `state` when the [BlocBuilder] is initialized.
   /// `condition` is optional and if it isn't implemented, it will default to return `true`.
   ///
   /// ```dart
   /// BlocBuilder<BlocA, BlocAState>(
-  ///   condition: (previousState, currentState) {
+  ///   condition: (previousState, state) {
   ///     // return true/false to determine whether or not
-  ///     // to rebuild the widget with currentState
+  ///     // to rebuild the widget with state
   ///   },
   ///   builder: (context, state) {
   ///     // return widget here based on BlocA's state
@@ -102,7 +102,7 @@ abstract class BlocBuilderBase<B extends Bloc<dynamic, S>, S>
   /// The `condition` function will be invoked on each bloc state change.
   /// The `condition` takes the previous state and current state and must return a `bool`
   /// which determines whether or not the `builder` function will be invoked.
-  /// The previous state will be initialized to `currentState` when the [BlocBuilderBase] is initialized.
+  /// The previous state will be initialized to `state` when the [BlocBuilderBase] is initialized.
   /// `condition` is optional and if it isn't implemented, it will default to return `true`.
   final BlocBuilderCondition<S> condition;
 
@@ -124,23 +124,22 @@ class _BlocBuilderBaseState<B extends Bloc<dynamic, S>, S>
   void initState() {
     super.initState();
     _bloc = widget.bloc ?? BlocProvider.of<B>(context);
-    _previousState = _bloc?.currentState;
-    _state = _bloc?.currentState;
+    _previousState = _bloc?.state;
+    _state = _bloc?.state;
     _subscribe();
   }
 
   @override
   void didUpdateWidget(BlocBuilderBase<B, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final Stream<S> oldState =
-        oldWidget.bloc?.state ?? BlocProvider.of<B>(context).state;
-    final Stream<S> currentState = widget.bloc?.state ?? oldState;
+    final Stream<S> oldState = oldWidget.bloc ?? BlocProvider.of<B>(context);
+    final Stream<S> currentState = widget.bloc ?? oldState;
     if (oldState != currentState) {
       if (_subscription != null) {
         _unsubscribe();
         _bloc = widget.bloc ?? BlocProvider.of<B>(context);
-        _previousState = _bloc?.currentState;
-        _state = _bloc?.currentState;
+        _previousState = _bloc?.state;
+        _state = _bloc?.state;
       }
       _subscribe();
     }
@@ -157,7 +156,7 @@ class _BlocBuilderBaseState<B extends Bloc<dynamic, S>, S>
 
   void _subscribe() {
     if (_bloc?.state != null) {
-      _subscription = _bloc.state.skip(1).listen((S state) {
+      _subscription = _bloc.skip(1).listen((S state) {
         if (widget.condition?.call(_previousState, state) ?? true) {
           setState(() {
             _state = state;
