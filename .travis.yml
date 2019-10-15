@@ -4,7 +4,7 @@ os:
 sudo: required
 dist: trusty
 dart:
-- 2.1.0
+  - 2.1.0
 addons:
   chrome: stable
   apt:
@@ -21,6 +21,10 @@ script:
   - pub get
   - pub run test_coverage
   - cp coverage/lcov.info ../../bloc.lcov
+  - cd ../bloc_test
+  - pub get
+  - pub run test_coverage
+  - cp coverage/lcov.info ../../bloc_test.lcov
   - cd ../angular_bloc
   - pub get
   - pub upgrade
