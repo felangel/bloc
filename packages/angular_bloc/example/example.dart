@@ -28,10 +28,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
@@ -56,14 +56,14 @@ class CounterPageComponent implements OnInit, OnDestroy {
 
   @override
   void ngOnDestroy() {
-    counterBloc.dispose();
+    counterBloc.close();
   }
 
   void increment() {
-    counterBloc.dispatch(CounterEvent.increment);
+    counterBloc.add(CounterEvent.increment);
   }
 
   void decrement() {
-    counterBloc.dispatch(CounterEvent.decrement);
+    counterBloc.add(CounterEvent.decrement);
   }
 }

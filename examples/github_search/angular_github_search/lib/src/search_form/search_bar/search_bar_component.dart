@@ -11,6 +11,6 @@ class SearchBarComponent {
   GithubSearchBloc githubSearchBloc;
 
   void onTextChanged(String text) {
-    githubSearchBloc.dispatch(TextChanged(text: text));
+    githubSearchBloc.add(TextChanged(text: text));
   }
 }
