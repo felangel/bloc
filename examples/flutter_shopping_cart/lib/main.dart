@@ -16,10 +16,10 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<CatalogBloc>(
-          builder: (context) => CatalogBloc()..dispatch(LoadCatalog()),
+          builder: (context) => CatalogBloc()..add(LoadCatalog()),
         ),
         BlocProvider<CartBloc>(
-          builder: (context) => CartBloc()..dispatch(LoadCart()),
+          builder: (context) => CartBloc()..add(LoadCart()),
         ),
       ],
       child: MaterialApp(
