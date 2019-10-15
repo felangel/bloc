@@ -8,8 +8,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^0.15.0
-  flutter_bloc: ^0.21.0
+  bloc: ^0.16.0
+  flutter_bloc: ^0.22.0
   hydrated_bloc:
     path: ../
   path_provider_fde:

@@ -7,7 +7,7 @@ packages:
       name: bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.0"
+    version: "0.16.0"
   collection:
     dependency: transitive
     description:
@@ -26,14 +26,14 @@ packages:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.21.0"
+    version: "0.22.0"
   hydrated_bloc:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.7.0"
+    version: "0.8.0"
   meta:
     dependency: transitive
     description:

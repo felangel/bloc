@@ -74,10 +74,10 @@ class CounterBloc extends HydratedBloc<CounterEvent, CounterState> {
   Stream<CounterState> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield CounterState(currentState.value - 1);
+        yield CounterState(state.value - 1);
         break;
       case CounterEvent.increment:
-        yield CounterState(currentState.value + 1);
+        yield CounterState(state.value + 1);
         break;
     }
   }

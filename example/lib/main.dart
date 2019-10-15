@@ -57,7 +57,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                counterBloc.dispatch(CounterEvent.increment);
+                counterBloc.add(CounterEvent.increment);
               },
             ),
           ),
@@ -66,7 +66,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.remove),
               onPressed: () {
-                counterBloc.dispatch(CounterEvent.decrement);
+                counterBloc.add(CounterEvent.decrement);
               },
             ),
           ),
@@ -76,7 +76,7 @@ class CounterPage extends StatelessWidget {
               child: Icon(Icons.delete_forever),
               onPressed: () async {
                 await counterBloc.clear();
-                counterBloc.dispatch(CounterEvent.reset);
+                counterBloc.add(CounterEvent.reset);
               },
             ),
           ),
@@ -105,10 +105,10 @@ class CounterBloc extends HydratedBloc<CounterEvent, CounterState> {
   Stream<CounterState> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield CounterState(currentState.value - 1);
+        yield CounterState(state.value - 1);
         break;
       case CounterEvent.increment:
-        yield CounterState(currentState.value + 1);
+        yield CounterState(state.value + 1);
         break;
       case CounterEvent.reset:
         yield CounterState(0);
