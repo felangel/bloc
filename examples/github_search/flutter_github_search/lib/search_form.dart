@@ -40,7 +40,7 @@ class _SearchBarState extends State<_SearchBar> {
       controller: _textController,
       autocorrect: false,
       onChanged: (text) {
-        _githubSearchBloc.dispatch(
+        _githubSearchBloc.add(
           TextChanged(text: text),
         );
       },
@@ -58,7 +58,7 @@ class _SearchBarState extends State<_SearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    _githubSearchBloc.dispatch(TextChanged(text: ''));
+    _githubSearchBloc.add(TextChanged(text: ''));
   }
 }
 

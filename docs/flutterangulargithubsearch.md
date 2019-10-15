@@ -515,7 +515,7 @@ class _SearchBarState extends State<_SearchBar> {
       controller: _textController,
       autocorrect: false,
       onChanged: (text) {
-        _githubSearchBloc.dispatch(
+        _githubSearchBloc.add(
           TextChanged(text: text),
         );
       },
@@ -533,7 +533,7 @@ class _SearchBarState extends State<_SearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    _githubSearchBloc.dispatch(TextChanged(text: ''));
+    _githubSearchBloc.add(TextChanged(text: ''));
   }
 }
 ```
@@ -679,7 +679,7 @@ class _SearchBarState extends State<_SearchBar> {
       controller: _textController,
       autocorrect: false,
       onChanged: (text) {
-        _githubSearchBloc.dispatch(
+        _githubSearchBloc.add(
           TextChanged(text: text),
         );
       },
@@ -697,7 +697,7 @@ class _SearchBarState extends State<_SearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    _githubSearchBloc.dispatch(TextChanged(text: ''));
+    _githubSearchBloc.add(TextChanged(text: ''));
   }
 }
 
@@ -808,7 +808,7 @@ class App extends StatelessWidget {
 }
 ```
 
-?> **Note:** Our `GithubRepository` is created in `main` and injected into our `App`. Our `SearchForm` is wrapped in a `BlocProvider` which is responsible for initializing, disposing, and making the instance of `GithubSearchBloc` available to the `SearchForm` widget and its children.
+?> **Note:** Our `GithubRepository` is created in `main` and injected into our `App`. Our `SearchForm` is wrapped in a `BlocProvider` which is responsible for initializing, closing, and making the instance of `GithubSearchBloc` available to the `SearchForm` widget and its children.
 
 That’s all there is to it! We’ve now successfully implemented a github search app in Flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
 
@@ -938,7 +938,7 @@ class SearchBarComponent {
   GithubSearchBloc githubSearchBloc;
 
   void onTextChanged(String text) {
-    githubSearchBloc.dispatch(TextChanged(text: text));
+    githubSearchBloc.add(TextChanged(text: text));
   }
 }
 ```
