@@ -67,10 +67,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
@@ -133,22 +133,22 @@ class CounterPageComponent implements OnDestroy {
 
   @override
   void ngOnDestroy() {
-    counterBloc.dispose();
+    counterBloc.close();
   }
 
   void increment() {
-    counterBloc.dispatch(CounterEvent.increment);
+    counterBloc.add(CounterEvent.increment);
   }
 
   void decrement() {
-    counterBloc.dispatch(CounterEvent.decrement);
+    counterBloc.add(CounterEvent.decrement);
   }
 }
 ```
 
 ?> **Note**: We are able to access the `CounterBloc` instance using AngularDart's dependency injection system. Because we have registered it as a `Provider`, AngularDart can properly resolve `CounterBloc`.
 
-?> **Note**: We are disposing the `CounterBloc` in `ngOnDestroy`.
+?> **Note**: We are closing the `CounterBloc` in `ngOnDestroy`.
 
 ?> **Note**: We are importing the `BlocPipe` so that we can use it in our template.
 
@@ -169,7 +169,7 @@ Lastly, our `counter_page_component.html` should look like:
 
 ?> **Note**: We are using the `BlocPipe` so that we can display our counterBloc state as it is updated.
 
-That's it! We've separated our presentation layer from our business logic layer. Our `CounterPageComponent` has no idea what happens when a user presses a button; it just dispatches an event to notify the `CounterBloc`. Furthermore, our `CounterBloc` has no idea what is happening with the state (counter value); it's simply converting the `CounterEvents` into integers.
+That's it! We've separated our presentation layer from our business logic layer. Our `CounterPageComponent` has no idea what happens when a user presses a button; it just adds an event to notify the `CounterBloc`. Furthermore, our `CounterBloc` has no idea what is happening with the state (counter value); it's simply converting the `CounterEvents` into integers.
 
 We can run our app with `webdev serve` and can view it [locally](http://localhost:8080).
 

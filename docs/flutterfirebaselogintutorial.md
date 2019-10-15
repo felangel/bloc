@@ -471,7 +471,7 @@ void main() {
 
 We are wrapping our entire `App` widget in a `BlocProvider` in order to make the `AuthenticationBloc` available to the entire widget tree.
 
-?> `BlocProvider` also handles disposing the `AuthenticationBloc` automatically so we don't need to do that.
+?> `BlocProvider` also handles closing the `AuthenticationBloc` automatically so we don't need to do that.
 
 Next we need to implement our `App` widget.
 
@@ -636,7 +636,7 @@ class App extends StatelessWidget {
 }
 ```
 
-Now whenever our `AuthenticationBloc` has a `currentState` of `Uninitialized` we will render our `SplashScreen` widget!
+Now whenever our `AuthenticationBloc` has a `state` of `Uninitialized` we will render our `SplashScreen` widget!
 
 ## Home Screen
 
@@ -1091,7 +1091,7 @@ There's nothing special going on here. It's just some plain old Dart code which 
 
 ## Login Screen
 
-Now that we're finished the `LoginBloc` it's time to create our `LoginScreen` widget which will be responsible for creating and disposing the `LoginBloc` as well as providing the Scaffold for our `LoginForm` widget.
+Now that we're finished the `LoginBloc` it's time to create our `LoginScreen` widget which will be responsible for creating and closing the `LoginBloc` as well as providing the Scaffold for our `LoginForm` widget.
 
 Create `login/login_screen.dart` and let's implement it.
 
@@ -1123,7 +1123,7 @@ class LoginScreen extends StatelessWidget {
 
 ```
 
-Again, we are extending `StatelessWidget` and using a `BlocProvider` to initialize and dispose the `LoginBloc` as well as to make the `LoginBloc` instance available to all widgets within the sub-tree.
+Again, we are extending `StatelessWidget` and using a `BlocProvider` to initialize and close the `LoginBloc` as well as to make the `LoginBloc` instance available to all widgets within the sub-tree.
 
 At this point, we need to implement the `LoginForm` widget which will be responsible for displaying the form and submission buttons in order for a user to authenticate his/her self.
 
@@ -1697,7 +1697,7 @@ Now that the `RegisterBloc` is fully functional, we just need to build out the p
 
 ## Register Screen
 
-Similar to the `LoginScreen`, our `RegisterScreen` will be a `StatelessWidget` responsible for initializing and disposing the `RegisterBloc`. It will also provide the Scaffold for the `RegisterForm`.
+Similar to the `LoginScreen`, our `RegisterScreen` will be a `StatelessWidget` responsible for initializing and closing the `RegisterBloc`. It will also provide the Scaffold for the `RegisterForm`.
 
 Create `register/register_screen.dart` and let's implement it.
 

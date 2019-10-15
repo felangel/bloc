@@ -858,7 +858,7 @@ dev_dependencies:
 
 Just like in our Flutter app, we're going to need to create a `SearchForm` with a `SearchBar` and `SearchBody` component.
 
-> Our `SearchForm` component will implement `OnInit` and `OnDestroy` because it will need to create and dispose of a `GithubSearchBloc`.
+> Our `SearchForm` component will implement `OnInit` and `OnDestroy` because it will need to create and close a `GithubSearchBloc`.
 
 - `SearchBar` will be responsible for taking user input.
 - `SearchBody` will be responsible for displaying search results, loading indicators, and errors.
@@ -897,14 +897,14 @@ class SearchFormComponent implements OnInit, OnDestroy {
 
   @override
   void ngOnDestroy() {
-    githubSearchBloc.dispose();
+    githubSearchBloc.close();
   }
 }
 ```
 
 ?> **Note:** The `GithubRepository` is injected into the `SearchFormComponent`.
 
-?> **Note:** The `GithubSearchBloc` is created and disposed by the `SearchFormComponent`.
+?> **Note:** The `GithubSearchBloc` is created and closed by the `SearchFormComponent`.
 
 Our template (`search_form_component.html`) will look like:
 
