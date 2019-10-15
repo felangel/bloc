@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
 
-/// Occurs when an [Event] is `dispatched` after `mapEventToState` has been called
+/// Occurs when an [Event] is `added` after `mapEventToState` has been called
 /// but before the [Bloc]'s [State] has been updated.
-/// A [Transition] consists of the `currentState`, the `event` which was `dispatched`, and the `nextState`.
+/// A [Transition] consists of the `currentState`, the `event` which was `added`, and the `nextState`.
 class Transition<Event, State> {
   final State currentState;
   final Event event;

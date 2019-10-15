@@ -14,7 +14,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// Returns the current [State] of the [Bloc].
   State get state => _stateSubject.value;
 
-  /// Returns the [State] before any [Event]s have been `dispatched`.
+  /// Returns the [State] before any [Event]s have been `added`.
   State get initialState;
 
   /// Returns whether the `Stream<State>` is a broadcast stream.
@@ -42,12 +42,12 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     );
   }
 
-  /// Called whenever an [Event] is dispatched to the [Bloc].
+  /// Called whenever an [Event] is `added` to the [Bloc].
   /// A great spot to add logging/analytics at the individual [Bloc] level.
   void onEvent(Event event) => null;
 
   /// Called whenever a [Transition] occurs with the given [Transition].
-  /// A [Transition] occurs when a new [Event] is dispatched and `mapEventToState` executed.
+  /// A [Transition] occurs when a new [Event] is `added` and `mapEventToState` executed.
   /// `onTransition` is called before a [Bloc]'s [State] has been updated.
   /// A great spot to add logging/analytics at the individual [Bloc] level.
   void onTransition(Transition<Event, State> transition) => null;
@@ -130,9 +130,9 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
 
   /// Must be implemented when a class extends [Bloc].
   /// Takes the incoming `event` as the argument.
-  /// `mapEventToState` is called whenever an [Event] is `dispatched` by the presentation layer.
+  /// `mapEventToState` is called whenever an [Event] is `added`.
   /// `mapEventToState` must convert that [Event] into a new [State]
-  /// and return the new [State] in the form of a [Stream] which is consumed by the presentation layer.
+  /// and return the new [State] in the form of a [Stream].
   Stream<State> mapEventToState(Event event);
 
   /// Transforms the `Stream<State>` into a new `Stream<State>`.

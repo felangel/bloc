@@ -1,3 +1,13 @@
+# 0.16.0
+
+- Bloc extends `Stream<State>` ([#558](https://github.com/felangel/bloc/issues/558))
+  - `bloc.state.listen` -> `bloc.listen`
+  - `bloc.currentState` -> `bloc.state`
+- Bloc implements `Sink<Event>` ([#558](https://github.com/felangel/bloc/issues/558))
+  - `dispatch` deprecated in favor of `add`
+  - `dispose` deprecated in favor of `close`
+- Documentation and Example Updates
+
 # 0.15.0
 
 - Removed Bloc `event` Stream ([#326](https://github.com/felangel/bloc/issues/326))
