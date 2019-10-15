@@ -49,7 +49,7 @@ class _MyFormState extends State<MyForm> {
           return SuccessDialog(onDismissed: () {
             _emailController.clear();
             _passwordController.clear();
-            _myFormBloc.dispatch(FormReset());
+            _myFormBloc.add(FormReset());
           });
         }
         return Form(
@@ -97,15 +97,15 @@ class _MyFormState extends State<MyForm> {
   }
 
   void _onEmailChanged() {
-    _myFormBloc.dispatch(EmailChanged(email: _emailController.text));
+    _myFormBloc.add(EmailChanged(email: _emailController.text));
   }
 
   void _onPasswordChanged() {
-    _myFormBloc.dispatch(PasswordChanged(password: _passwordController.text));
+    _myFormBloc.add(PasswordChanged(password: _passwordController.text));
   }
 
   void _onSubmitPressed() {
-    _myFormBloc.dispatch(FormSubmitted());
+    _myFormBloc.add(FormSubmitted());
   }
 }
 
