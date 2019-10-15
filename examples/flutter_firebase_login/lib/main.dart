@@ -13,8 +13,8 @@ void main() {
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
-      builder: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..dispatch(AppStarted()),
+      builder: (context) =>
+          AuthenticationBloc(userRepository: userRepository)..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
   );

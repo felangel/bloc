@@ -26,7 +26,7 @@ class ListBloc extends Bloc<ListEvent, ListState> {
       }
     }
     if (event is Delete) {
-      final listState = currentState;
+      final listState = state;
       if (listState is Loaded) {
         final List<Item> updatedItems =
             List<Item>.from(listState.items).map((Item item) {
@@ -34,12 +34,12 @@ class ListBloc extends Bloc<ListEvent, ListState> {
         }).toList();
         yield Loaded(items: updatedItems);
         repository.deleteItem(event.id).listen((id) {
-          dispatch(Deleted(id: id));
+          add(Deleted(id: id));
         });
       }
     }
     if (event is Deleted) {
-      final listState = currentState;
+      final listState = state;
       if (listState is Loaded) {
         final List<Item> updatedItems = List<Item>.from(listState.items)
           ..removeWhere((item) => item.id == event.id);

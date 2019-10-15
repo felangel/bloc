@@ -303,7 +303,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                counterBloc.dispatch(CounterEvent.increment);
+                counterBloc.add(CounterEvent.increment);
               },
             ),
           ),
@@ -312,7 +312,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.remove),
               onPressed: () {
-                counterBloc.dispatch(CounterEvent.decrement);
+                counterBloc.add(CounterEvent.decrement);
               },
             ),
           ),

@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   flutter_bloc:
     path: ../../packages/flutter_bloc
-  http: 0.12.0
+  http: ^0.12.0
   equatable: ^0.6.0
 
 dev_dependencies:

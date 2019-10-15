@@ -13,18 +13,18 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   FilteredTodosBloc({@required TodosBloc todosBloc})
       : assert(todosBloc != null),
         _todosBloc = todosBloc {
-    _todosSubscription = todosBloc.state.listen((state) {
+    _todosSubscription = todosBloc.listen((state) {
       if (state is TodosLoaded) {
-        dispatch(UpdateTodos((todosBloc.currentState as TodosLoaded).todos));
+        add(UpdateTodos((todosBloc.state as TodosLoaded).todos));
       }
     });
   }
 
   @override
   FilteredTodosState get initialState {
-    final state = _todosBloc.currentState;
-    return state is TodosLoaded
-        ? FilteredTodosLoaded(state.todos, VisibilityFilter.all)
+    final currentState = _todosBloc.state;
+    return currentState is TodosLoaded
+        ? FilteredTodosLoaded(currentState.todos, VisibilityFilter.all)
         : FilteredTodosLoading();
   }
 
@@ -40,10 +40,10 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   Stream<FilteredTodosState> _mapUpdateFilterToState(
     UpdateFilter event,
   ) async* {
-    final state = _todosBloc.currentState;
-    if (state is TodosLoaded) {
+    final currentState = _todosBloc.state;
+    if (currentState is TodosLoaded) {
       yield FilteredTodosLoaded(
-        _mapTodosToFilteredTodos(state.todos, event.filter),
+        _mapTodosToFilteredTodos(currentState.todos, event.filter),
         event.filter,
       );
     }
@@ -52,12 +52,12 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   Stream<FilteredTodosState> _mapTodosUpdatedToState(
     UpdateTodos event,
   ) async* {
-    final visibilityFilter = currentState is FilteredTodosLoaded
-        ? (currentState as FilteredTodosLoaded).activeFilter
+    final visibilityFilter = state is FilteredTodosLoaded
+        ? (state as FilteredTodosLoaded).activeFilter
         : VisibilityFilter.all;
     yield FilteredTodosLoaded(
       _mapTodosToFilteredTodos(
-        (_todosBloc.currentState as TodosLoaded).todos,
+        (_todosBloc.state as TodosLoaded).todos,
         visibilityFilter,
       ),
       visibilityFilter,
@@ -78,8 +78,8 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   }
 
   @override
-  void dispose() {
+  void close() {
     _todosSubscription?.cancel();
-    super.dispose();
+    super.close();
   }
 }

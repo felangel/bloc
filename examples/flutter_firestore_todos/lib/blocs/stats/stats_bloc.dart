@@ -6,9 +6,9 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   StreamSubscription _todosSubscription;
 
   StatsBloc({TodosBloc todosBloc}) : assert(todosBloc != null) {
-    _todosSubscription = todosBloc.state.listen((state) {
+    _todosSubscription = todosBloc.listen((state) {
       if (state is TodosLoaded) {
-        dispatch(UpdateStats(state.todos));
+        add(UpdateStats(state.todos));
       }
     });
   }
@@ -28,8 +28,8 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   }
 
   @override
-  void dispose() {
+  void close() {
     _todosSubscription?.cancel();
-    super.dispose();
+    super.close();
   }
 }

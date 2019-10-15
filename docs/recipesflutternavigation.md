@@ -106,7 +106,7 @@ class PageA extends StatelessWidget {
         child: RaisedButton(
           child: Text('Go to PageB'),
           onPressed: () {
-            BlocProvider.of<MyBloc>(context).dispatch(MyEvent.eventB);
+            BlocProvider.of<MyBloc>(context).add(MyEvent.eventB);
           },
         ),
       ),
@@ -125,7 +125,7 @@ class PageB extends StatelessWidget {
         child: RaisedButton(
           child: Text('Go to PageA'),
           onPressed: () {
-            BlocProvider.of<MyBloc>(context).dispatch(MyEvent.eventA);
+            BlocProvider.of<MyBloc>(context).add(MyEvent.eventA);
           },
         ),
       ),
@@ -198,7 +198,7 @@ class PageA extends StatelessWidget {
           child: RaisedButton(
             child: Text('Go to PageB'),
             onPressed: () {
-              myBloc.dispatch(MyEvent.eventB);
+              myBloc.add(MyEvent.eventB);
             },
           ),
         ),
@@ -229,6 +229,6 @@ class PageB extends StatelessWidget {
 
 ?> We use the `BlocListener` widget in order to push a new route in response to state changes in our `MyBloc`.
 
-!> For the sake of this example we are dispatching an event just for navigation. In a real application, you should not create explicit navigation events. If there is no "business logic" necessary in order to trigger navigation you should always directly navigate in response to user input (in the `onPressed` callback, etc...). Only navigate in response to state changes if some "business logic" is required in order to determine where to navigate.
+!> For the sake of this example we are adding an event just for navigation. In a real application, you should not create explicit navigation events. If there is no "business logic" necessary in order to trigger navigation you should always directly navigate in response to user input (in the `onPressed` callback, etc...). Only navigate in response to state changes if some "business logic" is required in order to determine where to navigate.
 
 The full source for this recipe can be found [here](https://gist.github.com/felangel/6bcd4be10c046ceb33eecfeb380135dd).

@@ -28,7 +28,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.21.0
+  flutter_bloc: ^0.22.0
   http: ^0.12.0
   equatable: ^0.6.0
 
@@ -576,7 +576,7 @@ class FetchWeather extends WeatherEvent {
 }
 ```
 
-Whenever a user inputs a city, we will `dispatch` a `FetchWeather` event with the given city and our bloc will be responsible for figuring out what the weather is there and returning a new `WeatherState`.
+Whenever a user inputs a city, we will `add` a `FetchWeather` event with the given city and our bloc will be responsible for figuring out what the weather is there and returning a new `WeatherState`.
 
 Then let's export the class in our barrel file. Inside of `blocs.dart` please add:
 
@@ -730,7 +730,7 @@ void main() {
 
 ### App Widget
 
-Our `App` widget is going to start off as a `StatelessWidget` which has the `WeatherRepository` injected and builds the `MaterialApp` with our `Weather` widget (which we will create in the next step). We are using the `BlocProvider` widget to create an instance of our `WeatherBloc` and make it available to the `Weather` widget and its children. In addition, the `BlocProvider` manages building and disposing the `WeatherBloc`.
+Our `App` widget is going to start off as a `StatelessWidget` which has the `WeatherRepository` injected and builds the `MaterialApp` with our `Weather` widget (which we will create in the next step). We are using the `BlocProvider` widget to create an instance of our `WeatherBloc` and make it available to the `Weather` widget and its children. In addition, the `BlocProvider` manages building and closing the `WeatherBloc`.
 
 ```dart
 class App extends StatelessWidget {
@@ -773,7 +773,6 @@ import 'package:flutter_weather/blocs/blocs.dart';
 class Weather extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final weatherBloc = BlocProvider.of<WeatherBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Weather'),
@@ -788,7 +787,8 @@ class Weather extends StatelessWidget {
                 ),
               );
               if (city != null) {
-                weatherBloc.dispatch(FetchWeather(city: city));
+                BlocProvider.of<WeatherBloc>(context)
+                    .add(FetchWeather(city: city));
               }
             },
           )
@@ -1197,7 +1197,7 @@ if (event is RefreshWeather) {
     final Weather weather = await weatherRepository.getWeather(event.city);
     yield WeatherLoaded(weather: weather);
   } catch (_) {
-    yield currentState;
+    yield state;
   }
 }
 ```
@@ -1239,7 +1239,7 @@ Since our `Weather` widget will need to maintain an instance of a `Completer`, w
 ```dart
 return RefreshIndicator(
   onRefresh: () {
-    weatherBloc.dispatch(
+    BlocProvider.of<WeatherBloc>(context).add(
       RefreshWeather(city: state.weather.location),
     );
     return _refreshCompleter.future;
@@ -1278,7 +1278,7 @@ Next, let's tackle the plain looking UI by creating a `ThemeBloc`.
 
 > Our `ThemeBloc` is going to be responsible for converting `ThemeEvents` into `ThemeStates`.
 
-Our `ThemeEvents` are going to consist of a single event called `WeatherChanged` which will be dispatched whenever the weather conditions we are displaying have changed.
+Our `ThemeEvents` are going to consist of a single event called `WeatherChanged` which will be added whenever the weather conditions we are displaying have changed.
 
 ```dart
 abstract class ThemeEvent extends Equatable {
@@ -1523,7 +1523,8 @@ class _WeatherState extends State<Weather> {
                 ),
               );
               if (city != null) {
-                weatherBloc.dispatch(FetchWeather(city: city));
+                BlocProvider.of<WeatherBloc>(context)
+                    .add(FetchWeather(city: city));
               }
             },
           )
@@ -1533,7 +1534,7 @@ class _WeatherState extends State<Weather> {
         child: BlocListener<WeatherBloc, WeatherState>(
           listener: (context, state) {
             if (state is WeatherLoaded) {
-              BlocProvider.of<ThemeBloc>(context).dispatch(
+              BlocProvider.of<ThemeBloc>(context).add(
                 WeatherChanged(condition: state.weather.condition),
               );
               _refreshCompleter?.complete();
@@ -1557,7 +1558,7 @@ class _WeatherState extends State<Weather> {
                       color: themeState.color,
                       child: RefreshIndicator(
                         onRefresh: () {
-                          weatherBloc.dispatch(
+                          BlocProvider.of<WeatherBloc>(context).add(
                             RefreshWeather(city: weather.location),
                           );
                           return _refreshCompleter.future;
@@ -1603,11 +1604,11 @@ class _WeatherState extends State<Weather> {
 }
 ```
 
-Since we want to "do something" in response to state changes in our `WeatherBloc`, we are using `BlocListener`. In this case, we are completing and resetting the `Completer` and are also dispatching the `WeatherChanged` event to the `ThemeBloc`.
+Since we want to "do something" in response to state changes in our `WeatherBloc`, we are using `BlocListener`. In this case, we are completing and resetting the `Completer` and are also adding the `WeatherChanged` event to the `ThemeBloc`.
 
 ?> **Tip:** Check out the [SnackBar Recipe](recipesfluttershowsnackbar.md) for more information about the `BlocListener` widget.
 
-We are accessing our `ThemeBloc` via `BlocProvider.of<ThemeBloc>(context)` and are then dispatching a `WeatherChanged` event on each `WeatherLoad`.
+We are accessing our `ThemeBloc` via `BlocProvider.of<ThemeBloc>(context)` and are then adding a `WeatherChanged` event on each `WeatherLoad`.
 
 We also wrapped our `GradientContainer` widget with a `BlocBuilder` of `ThemeBloc` so that we can rebuild the `GradientContainer` and it's children in response to `ThemeState` changes.
 
@@ -1658,17 +1659,16 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   Stream<SettingsState> mapEventToState(SettingsEvent event) async* {
     if (event is TemperatureUnitsToggled) {
       yield SettingsState(
-        temperatureUnits:
-            currentState.temperatureUnits == TemperatureUnits.celsius
-                ? TemperatureUnits.fahrenheit
-                : TemperatureUnits.celsius,
+        temperatureUnits: state.temperatureUnits == TemperatureUnits.celsius
+            ? TemperatureUnits.fahrenheit
+            : TemperatureUnits.celsius,
       );
     }
   }
 }
 ```
 
-All we're doing is using `fahrenheit` if `TemperatureUnitsToggled` is dispatched and the current units are `celsius` and vice versa.
+All we're doing is using `fahrenheit` if `TemperatureUnitsToggled` is added and the current units are `celsius` and vice versa.
 
 Now we need to provide our `SettingsBloc` to our `App` widget in `main.dart`.
 
@@ -1696,7 +1696,7 @@ void main() {
 }
 ```
 
-Again, we're making `SettingsBloc` globally accessible using `BlocProvider` and we are also disposing it in the `dispose` callback. This time, however, since we are exposing more than one Bloc using `BlocProvider` at the same level we can eliminate some nesting by using the `MultiBlocProvider` widget.
+Again, we're making `SettingsBloc` globally accessible using `BlocProvider` and we are also closing it in the `close` callback. This time, however, since we are exposing more than one Bloc using `BlocProvider` at the same level we can eliminate some nesting by using the `MultiBlocProvider` widget.
 
 Now we need to create our `Settings` widget from which users can toggle the units.
 
@@ -1726,8 +1726,8 @@ class Settings extends StatelessWidget {
                       Text('Use metric measurements for temperature units.'),
                   trailing: Switch(
                     value: state.temperatureUnits == TemperatureUnits.celsius,
-                    onChanged: (_) =>
-                        settingsBloc.dispatch(TemperatureUnitsToggled()),
+                    onChanged: (_) => BlocProvider.of<SettingsBloc>(context)
+                        .add(TemperatureUnitsToggled()),
                   ),
                 );
               }),
@@ -1742,7 +1742,7 @@ We're using `BlocProvider` to access the `SettingsBloc` via the `BuildContext` a
 
 Our UI consists of a `ListView` with a single `ListTile` which contains a `Switch` that users can toggle to select celsius vs. fahrenheit.
 
-?> **Note:** In the switch's `onChanged` method we dispatch a `TemperatureUnitsToggled` event to notify the `SettingsBloc` that the temperature units have changed.
+?> **Note:** In the switch's `onChanged` method we add a `TemperatureUnitsToggled` event to notify the `SettingsBloc` that the temperature units have changed.
 
 Next, we need to allow users to get to the `Settings` widget from our `Weather` widget.
 
@@ -1801,7 +1801,8 @@ class _WeatherState extends State<Weather> {
                 ),
               );
               if (city != null) {
-                weatherBloc.dispatch(FetchWeather(city: city));
+                BlocProvider.of<WeatherBloc>(context)
+                    .add(FetchWeather(city: city));
               }
             },
           )
@@ -1811,7 +1812,7 @@ class _WeatherState extends State<Weather> {
         child: BlocListener<WeatherBloc, WeatherState>(
           listener: (context, state) {
             if (state is WeatherLoaded) {
-              BlocProvider.of<ThemeBloc>(context).dispatch(
+              BlocProvider.of<ThemeBloc>(context).add(
                 WeatherChanged(condition: state.weather.condition),
               );
               _refreshCompleter?.complete();
@@ -1835,7 +1836,7 @@ class _WeatherState extends State<Weather> {
                       color: themeState.color,
                       child: RefreshIndicator(
                         onRefresh: () {
-                          weatherBloc.dispatch(
+                          BlocProvider.of<WeatherBloc>(context).add(
                             RefreshWeather(city: weather.location),
                           );
                           return _refreshCompleter.future;

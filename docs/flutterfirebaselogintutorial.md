@@ -23,7 +23,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -31,7 +31,7 @@ dependencies:
   cloud_firestore: ^0.9.7
   firebase_auth: ^0.8.1+4
   google_sign_in: ^4.0.1+1
-  flutter_bloc: ^0.21.0
+  flutter_bloc: ^0.22.0
   equatable: ^0.6.0
   meta: ^1.1.6
   font_awesome_flutter: ^8.4.0
@@ -462,7 +462,7 @@ void main() {
   runApp(
     BlocProvider(
       builder: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..dispatch(AppStarted()),
+        ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
   );
@@ -489,7 +489,7 @@ void main() {
   runApp(
     BlocProvider(
       builder: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..dispatch(AppStarted()),
+        ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
   );
@@ -561,7 +561,7 @@ void main() {
   runApp(
     BlocProvider(
       builder: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..dispatch(AppStarted()),
+        ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
   );
@@ -606,7 +606,7 @@ void main() {
   runApp(
     BlocProvider(
       builder: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..dispatch(AppStarted()),
+        ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
   );
@@ -663,7 +663,7 @@ class HomeScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.exit_to_app),
             onPressed: () {
-              BlocProvider.of<AuthenticationBloc>(context).dispatch(
+              BlocProvider.of<AuthenticationBloc>(context).add(
                 LoggedOut(),
               );
             },
@@ -681,7 +681,7 @@ class HomeScreen extends StatelessWidget {
 }
 ```
 
-`HomeScreen` is a `StatelessWidget` that requires a `name` to be injected so that it can render the welcome message. It also uses `BlocProvider` in order to access the `AuthenticationBloc` via `BuildContext` so that when a user pressed the logout button, we can dispatch the `LoggedOut` event.
+`HomeScreen` is a `StatelessWidget` that requires a `name` to be injected so that it can render the welcome message. It also uses `BlocProvider` in order to access the `AuthenticationBloc` via `BuildContext` so that when a user pressed the logout button, we can add the `LoggedOut` event.
 
 Now let's update our `App` to render the `HomeScreen` if the `AuthenticationState` is `Authentication`.
 
@@ -701,7 +701,7 @@ void main() {
   runApp(
     BlocProvider(
       builder: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..dispatch(AppStarted()),
+        ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
   );
@@ -1025,13 +1025,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Stream<LoginState> _mapEmailChangedToState(String email) async* {
-    yield currentState.update(
+    yield state.update(
       isEmailValid: Validators.isValidEmail(email),
     );
   }
 
   Stream<LoginState> _mapPasswordChangedToState(String password) async* {
-    yield currentState.update(
+    yield state.update(
       isPasswordValid: Validators.isValidPassword(password),
     );
   }
@@ -1205,7 +1205,7 @@ class _LoginFormState extends State<LoginForm> {
             );
         }
         if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context).dispatch(LoggedIn());
+          BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -1276,19 +1276,19 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _onEmailChanged() {
-    _loginBloc.dispatch(
+    _loginBloc.add(
       EmailChanged(email: _emailController.text),
     );
   }
 
   void _onPasswordChanged() {
-    _loginBloc.dispatch(
+    _loginBloc.add(
       PasswordChanged(password: _passwordController.text),
     );
   }
 
   void _onFormSubmitted() {
-    _loginBloc.dispatch(
+    _loginBloc.add(
       LoginWithCredentialsPressed(
         email: _emailController.text,
         password: _passwordController.text,
@@ -1306,7 +1306,7 @@ We use a `BlocListener` widget in order to execute one-time actions in response 
 
 We use a `BlocBuilder` widget in order to rebuild the UI in response to different `LoginStates`.
 
-Whenever the email or password changes, we dispatch an event to the `LoginBloc` in order for it to validate the current form state and return the new form state.
+Whenever the email or password changes, we add an event to the `LoginBloc` in order for it to validate the current form state and return the new form state.
 
 ?> **Note:** We're using `Image.asset` to load the flutter logo from our assets directory.
 
@@ -1360,7 +1360,7 @@ class GoogleLoginButton extends StatelessWidget {
       ),
       icon: Icon(FontAwesomeIcons.google, color: Colors.white),
       onPressed: () {
-        BlocProvider.of<LoginBloc>(context).dispatch(
+        BlocProvider.of<LoginBloc>(context).add(
           LoginWithGooglePressed(),
         );
       },
@@ -1371,7 +1371,7 @@ class GoogleLoginButton extends StatelessWidget {
 }
 ```
 
-Again, there's not too much going on here. We have another `StatelessWidget`; however, this time we are not exposing an `onPressed` callback. Instead, we're handling the onPressed internally and dispatching the `LoginWithGooglePressed` event to our `LoginBloc` which will handle the Google Sign In process.
+Again, there's not too much going on here. We have another `StatelessWidget`; however, this time we are not exposing an `onPressed` callback. Instead, we're handling the onPressed internally and adding the `LoginWithGooglePressed` event to our `LoginBloc` which will handle the Google Sign In process.
 
 ?> **Note:** We're using [font_awesome_flutter](https://pub.dev/packages/font_awesome_flutter) for the cool google icon.
 
@@ -1662,13 +1662,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   Stream<RegisterState> _mapEmailChangedToState(String email) async* {
-    yield currentState.update(
+    yield state.update(
       isEmailValid: Validators.isValidEmail(email),
     );
   }
 
   Stream<RegisterState> _mapPasswordChangedToState(String password) async* {
-    yield currentState.update(
+    yield state.update(
       isPasswordValid: Validators.isValidPassword(password),
     );
   }
@@ -1788,7 +1788,7 @@ class _RegisterFormState extends State<RegisterForm> {
             );
         }
         if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context).dispatch(LoggedIn());
+          BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
           Navigator.of(context).pop();
         }
         if (state.isFailure) {
@@ -1862,19 +1862,19 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   void _onEmailChanged() {
-    _registerBloc.dispatch(
+    _registerBloc.add(
       EmailChanged(email: _emailController.text),
     );
   }
 
   void _onPasswordChanged() {
-    _registerBloc.dispatch(
+    _registerBloc.add(
       PasswordChanged(password: _passwordController.text),
     );
   }
 
   void _onFormSubmitted() {
-    _registerBloc.dispatch(
+    _registerBloc.add(
       Submitted(
         email: _emailController.text,
         password: _passwordController.text,
@@ -1884,7 +1884,7 @@ class _RegisterFormState extends State<RegisterForm> {
 }
 ```
 
-Again, we need to manage `TextEditingControllers` for the text input so our `RegisterForm` needs to be a `StatefulWidget`. In addition, we are using `BlocListener` again in order to execute one-time actions in response to state changes such as showing `SnackBar` when the registration is pending or fails. We are also dispatching the `LoggedIn` event to the `AuthenticationBloc` if the registration was a success so that we can immediately log the user in.
+Again, we need to manage `TextEditingControllers` for the text input so our `RegisterForm` needs to be a `StatefulWidget`. In addition, we are using `BlocListener` again in order to execute one-time actions in response to state changes such as showing `SnackBar` when the registration is pending or fails. We are also adding the `LoggedIn` event to the `AuthenticationBloc` if the registration was a success so that we can immediately log the user in.
 
 ?> **Note:** We're using `BlocBuilder` in order to make our UI respond to changes in the `RegisterBloc` state.
 
@@ -1938,7 +1938,7 @@ void main() {
   runApp(
     BlocProvider(
       builder: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..dispatch(AppStarted()),
+        ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
   );

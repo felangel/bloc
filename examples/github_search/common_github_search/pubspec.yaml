@@ -7,6 +7,6 @@ environment:
 
 dependencies:
   meta: ^1.1.6
-  bloc: ^0.15.0
+  bloc: ^0.16.0
   equatable: ^0.6.0
   http: ^0.12.0

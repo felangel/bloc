@@ -28,11 +28,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }
 
   Stream<CartState> _mapAddItemToState(AddItem event) async* {
-    final state = currentState;
-    if (state is CartLoaded) {
+    final currentState = state;
+    if (currentState is CartLoaded) {
       try {
         yield CartLoaded(
-          items: List.from(state.items)..add(event.item),
+          items: List.from(currentState.items)..add(event.item),
         );
       } catch (_) {
         yield CartError();

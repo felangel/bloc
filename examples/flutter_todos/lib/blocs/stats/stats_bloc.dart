@@ -8,9 +8,9 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   StreamSubscription todosSubscription;
 
   StatsBloc({@required this.todosBloc}) {
-    todosSubscription = todosBloc.state.listen((state) {
+    todosSubscription = todosBloc.listen((state) {
       if (state is TodosLoaded) {
-        dispatch(UpdateStats(state.todos));
+        add(UpdateStats(state.todos));
       }
     });
   }
@@ -30,8 +30,8 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   }
 
   @override
-  void dispose() {
+  void close() {
     todosSubscription.cancel();
-    super.dispose();
+    super.close();
   }
 }

@@ -397,7 +397,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.21.0
+  flutter_bloc: ^0.22.0
   todos_repository:
     path: todos_repository
   user_repository:
@@ -546,12 +546,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   Stream<TodosState> _mapLoadTodosToState() async* {
     _todosSubscription?.cancel();
     _todosSubscription = _todosRepository.todos().listen(
-      (todos) {
-        dispatch(
-          TodosUpdated(todos),
+          (todos) => add(TodosUpdated(todos)),
         );
-      },
-    );
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
@@ -567,10 +563,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapToggleAllToState() async* {
-    final state = currentState;
-    if (state is TodosLoaded) {
-      final allComplete = state.todos.every((todo) => todo.complete);
-      final List<Todo> updatedTodos = state.todos
+    final currentState = state;
+    if (currentState is TodosLoaded) {
+      final allComplete = currentState.todos.every((todo) => todo.complete);
+      final List<Todo> updatedTodos = currentState.todos
           .map((todo) => todo.copyWith(complete: !allComplete))
           .toList();
       updatedTodos.forEach((updatedTodo) {
@@ -580,10 +576,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapClearCompletedToState() async* {
-    final state = currentState;
-    if (state is TodosLoaded) {
+    final currentState = state;
+    if (currentState is TodosLoaded) {
       final List<Todo> completedTodos =
-          state.todos.where((todo) => todo.complete).toList();
+          currentState.todos.where((todo) => todo.complete).toList();
       completedTodos.forEach((completedTodo) {
         _todosRepository.deleteTodo(completedTodo);
       });
@@ -595,9 +591,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   @override
-  void dispose() {
+  void close() {
     _todosSubscription?.cancel();
-    super.dispose();
+    super.close();
   }
 }
 ```
@@ -608,16 +604,12 @@ The main difference between our new `TodosBloc` and the original one is in the n
 Stream<TodosState> _mapLoadTodosToState() async* {
   _todosSubscription?.cancel();
   _todosSubscription = _todosRepository.todos().listen(
-    (todos) {
-      dispatch(
-        TodosUpdated(todos),
-      );
-    },
-  );
+      (todos) => add(TodosUpdated(todos)),
+    );
 }
 ```
 
-?> When we load our todos, we are subscribing to the `TodosRepository` and every time a new todo comes in, we dispatch a `TodosUpdated` event. We then handle all `TodosUpdates` via:
+?> When we load our todos, we are subscribing to the `TodosRepository` and every time a new todo comes in, we add a `TodosUpdated` event. We then handle all `TodosUpdates` via:
 
 ```dart
 Stream<TodosState> _mapTodosUpdateToState(TodosUpdated event) async* {
@@ -653,14 +645,14 @@ class TodosApp extends StatelessWidget {
           builder: (context) {
             return AuthenticationBloc(
               userRepository: FirebaseUserRepository(),
-            )..dispatch(AppStarted());
+            )..add(AppStarted());
           },
         ),
         BlocProvider<TodosBloc>(
           builder: (context) {
             return TodosBloc(
               todosRepository: FirebaseTodosRepository(),
-            )..dispatch(LoadTodos());
+            )..add(LoadTodos());
           },
         )
       ],
@@ -671,18 +663,20 @@ class TodosApp extends StatelessWidget {
             return BlocBuilder<AuthenticationBloc, AuthenticationState>(
               builder: (context, state) {
                 if (state is Authenticated) {
-                  final todosBloc = BlocProvider.of<TodosBloc>(context);
                   return MultiBlocProvider(
                     providers: [
                       BlocProvider<TabBloc>(
                         builder: (context) => TabBloc(),
                       ),
                       BlocProvider<FilteredTodosBloc>(
-                        builder: (context) =>
-                            FilteredTodosBloc(todosBloc: todosBloc),
+                        builder: (context) => FilteredTodosBloc(
+                          todosBloc: BlocProvider.of<TodosBloc>(context),
+                        ),
                       ),
                       BlocProvider<StatsBloc>(
-                        builder: (context) => StatsBloc(todosBloc: todosBloc),
+                        builder: (context) => StatsBloc(
+                          todosBloc: BlocProvider.of<TodosBloc>(context),
+                        ),
                       ),
                     ],
                     child: HomeScreen(),
@@ -698,10 +692,9 @@ class TodosApp extends StatelessWidget {
             );
           },
           '/addTodo': (context) {
-            final todosBloc = BlocProvider.of<TodosBloc>(context);
             return AddEditScreen(
               onSave: (task, note) {
-                todosBloc.dispatch(
+                BlocProvider.of<TodosBloc>(context).add(
                   AddTodo(Todo(task, note: note)),
                 );
               },

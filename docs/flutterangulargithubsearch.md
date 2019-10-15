@@ -38,7 +38,7 @@ environment:
 
 dependencies:
   meta: ^1.1.7
-  bloc: ^0.15.0
+  bloc: ^0.16.0
   equatable: ^0.6.0
   http: ^0.12.0
 ```
@@ -425,12 +425,12 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.21.0
+  flutter_bloc: ^0.22.0
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search

@@ -89,7 +89,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                counterBloc.dispatch(CounterEvent.increment);
+                counterBloc.add(CounterEvent.increment);
               },
             ),
           ),
@@ -98,7 +98,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.remove),
               onPressed: () {
-                counterBloc.dispatch(CounterEvent.decrement);
+                counterBloc.add(CounterEvent.decrement);
               },
             ),
           ),
@@ -230,7 +230,7 @@ class HomePage extends StatelessWidget {
               heroTag: 0,
               child: Icon(Icons.add),
               onPressed: () {
-                counterBloc.dispatch(CounterEvent.increment);
+                counterBloc.add(CounterEvent.increment);
               },
             ),
           ),
@@ -240,7 +240,7 @@ class HomePage extends StatelessWidget {
               heroTag: 1,
               child: Icon(Icons.remove),
               onPressed: () {
-                counterBloc.dispatch(CounterEvent.decrement);
+                counterBloc.add(CounterEvent.decrement);
               },
             ),
           ),
@@ -255,7 +255,7 @@ The `HomePage` is similar to the `CounterPage` in the above example; however, in
 
 When the user taps the `RaisedButton`, we push a new `MaterialPageRoute` and return the `CounterPage`; however, we are wrapping the `CounterPage` in a `BlocProvider` in order to make the current `CounterBloc` instance available on the next page.
 
-!> It is critical that we are using `BlocProvider's` value constructor in this case because we are providing an existing instance of `CounterBloc`. The value constructor of `BlocProvider` should be used only in cases where we want to provide an existing bloc to a new subtree. In addition, using the value constructor will not dispose the bloc automatically which, in this case, is what we want (since we still need the `CounterBloc` to function in the ancestor widgets). Instead, we simply pass the existing `CounterBloc` to the new page as an existing value as opposed to in a builder. This ensures that the only top level `BlocProvider` handles disposing the `CounterBloc` when it is no longer needed.
+!> It is critical that we are using `BlocProvider's` value constructor in this case because we are providing an existing instance of `CounterBloc`. The value constructor of `BlocProvider` should be used only in cases where we want to provide an existing bloc to a new subtree. In addition, using the value constructor will not close the bloc automatically which, in this case, is what we want (since we still need the `CounterBloc` to function in the ancestor widgets). Instead, we simply pass the existing `CounterBloc` to the new page as an existing value as opposed to in a builder. This ensures that the only top level `BlocProvider` handles closing the `CounterBloc` when it is no longer needed.
 
 #### CounterPage
 
@@ -345,7 +345,7 @@ class App extends StatelessWidget {
 }
 ```
 
-Much like in the local access example above, the `App` manages creating, disposing, and providing the `CounterBloc` to the subtree using `BlocProvider`. The main difference is in this case, `MaterialApp` is a child of `BlocProvider`.
+Much like in the local access example above, the `App` manages creating, closing, and providing the `CounterBloc` to the subtree using `BlocProvider`. The main difference is in this case, `MaterialApp` is a child of `BlocProvider`.
 
 Wrapping the entire `MaterialApp` in a `BlocProvider` is the key to making our `CounterBloc` instance globally accessible. Now we can access our `CounterBloc` from anywhere in our application where we have a `BuildContext` using `BlocProvider.of<CounterBloc>(context);`
 
@@ -372,7 +372,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                counterBloc.dispatch(CounterEvent.increment);
+                counterBloc.add(CounterEvent.increment);
               },
             ),
           ),
@@ -381,7 +381,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.remove),
               onPressed: () {
-                counterBloc.dispatch(CounterEvent.decrement);
+                counterBloc.add(CounterEvent.decrement);
               },
             ),
           ),

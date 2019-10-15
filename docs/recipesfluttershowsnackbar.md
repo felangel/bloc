@@ -25,7 +25,7 @@ class FetchData extends DataEvent {}
 
 Our `DataBloc` can have one of three different `DataStates`:
 
-- `Initial` - the initial state before any events are dispatched
+- `Initial` - the initial state before any events are added
 - `Loading` - the state of the bloc while it is asynchronously "fetching data"
 - `Success` - the state of the bloc when it has successfully "fetched data"
 
@@ -96,7 +96,7 @@ class Home extends StatelessWidget {
     final dataBloc = BlocProvider.of<DataBloc>(context);
     return Scaffold(
       appBar: AppBar(title: Text('Home')),
-      body: BlocListener<DataBloc, DataState>(        
+      body: BlocListener<DataBloc, DataState>(
         listener: (context, state) {
           if (state is Success) {
             Scaffold.of(context).showSnackBar(
@@ -128,7 +128,7 @@ class Home extends StatelessWidget {
           FloatingActionButton(
             child: Icon(Icons.play_arrow),
             onPressed: () {
-              dataBloc.dispatch(FetchData());
+              dataBloc.add(FetchData());
             },
           ),
         ],

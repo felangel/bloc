@@ -22,12 +22,12 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.21.0
+  flutter_bloc: ^0.22.0
   meta: ^1.1.6
   equatable: ^0.6.0
 
@@ -305,9 +305,6 @@ import 'package:flutter_login/authentication/authentication.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final AuthenticationBloc authenticationBloc =
-        BlocProvider.of<AuthenticationBloc>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
@@ -317,7 +314,7 @@ class HomePage extends StatelessWidget {
             child: RaisedButton(
           child: Text('logout'),
           onPressed: () {
-            authenticationBloc.dispatch(LoggedOut());
+            BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
           },
         )),
       ),
@@ -328,7 +325,7 @@ class HomePage extends StatelessWidget {
 
 ?> **Note**: This is the first class in which we are using `flutter_bloc`. We will get into `BlocProvider.of<AuthenticationBloc>(context)` shortly but for now just know that it allows our `HomePage` to access our `AuthenticationBloc`.
 
-?> **Note**: We are dispatching a `LoggedOut` event to our `AuthenticationBloc` when a user pressed the logout button.
+?> **Note**: We are adding a `LoggedOut` event to our `AuthenticationBloc` when a user pressed the logout button.
 
 Next up, we need to create a `LoginPage` and `LoginForm`.
 
@@ -402,7 +399,7 @@ class LoginButtonPressed extends LoginEvent {
 }
 ```
 
-`LoginButtonPressed` will be dispatched when a user pressed the login button. It will notify the `LoginBloc` that it needs to request a token for the given credentials.
+`LoginButtonPressed` will be added when a user pressed the login button. It will notify the `LoginBloc` that it needs to request a token for the given credentials.
 
 We can now implement our `LoginBloc`.
 
@@ -441,7 +438,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           password: event.password,
         );
 
-        authenticationBloc.dispatch(LoggedIn(token: token));
+        authenticationBloc.add(LoggedIn(token: token));
         yield LoginInitial();
       } catch (error) {
         yield LoginFailure(error: error.toString());
@@ -497,7 +494,7 @@ class LoginPage extends StatelessWidget {
 }
 ```
 
-?> **Note**: `LoginPage` is a `StatelessWidget`. The `LoginPage` widget uses the `BlocProvider` widget to create, dispose, and provide the `LoginBloc` to the sub-tree.
+?> **Note**: `LoginPage` is a `StatelessWidget`. The `LoginPage` widget uses the `BlocProvider` widget to create, close, and provide the `LoginBloc` to the sub-tree.
 
 ?> **Note**: We are using the injected `UserRepository` in order to create our `LoginBloc`.
 
@@ -523,13 +520,13 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final loginBloc = BlocProvider.of<LoginBloc>(context);
-
     _onLoginButtonPressed() {
-      loginBloc.dispatch(LoginButtonPressed(
-        username: _usernameController.text,
-        password: _passwordController.text,
-      ));
+      BlocProvider.of<LoginBloc>(context).add(
+        LoginButtonPressed(
+          username: _usernameController.text,
+          password: _passwordController.text,
+        ),
+      );
     }
 
     return BlocListener<LoginBloc, LoginState>(
@@ -638,7 +635,7 @@ void main() {
     BlocProvider<AuthenticationBloc>(
       builder: (context) {
         return AuthenticationBloc(userRepository: userRepository)
-          ..dispatch(AppStarted());
+          ..add(AppStarted());
       },
       child: App(userRepository: userRepository),
     ),

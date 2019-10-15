@@ -86,7 +86,7 @@ class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
 
 > ​Every bloc has a state stream which other blocs can subscribe to in order to react to changes within the bloc.
 
-Blocs can have dependencies on other blocs in order to react to their state changes. In the following example, `MyBloc` has a dependency on `OtherBloc` and can `dispatch` events in response to state changes in `OtherBloc`. The `StreamSubscription` is closed in the `dispose` override in `MyBloc` in order to avoid memory leaks.
+Blocs can have dependencies on other blocs in order to react to their state changes. In the following example, `MyBloc` has a dependency on `OtherBloc` and can `add` events in response to state changes in `OtherBloc`. The `StreamSubscription` is closed in the `close` override in `MyBloc` in order to avoid memory leaks.
 
 ```dart
 class MyBloc extends Bloc {
@@ -94,16 +94,16 @@ class MyBloc extends Bloc {
   StreamSubscription otherBlocSubscription;
 
   MyBloc(this.otherBloc) {
-    otherBlocSubscription = otherBloc.state.listen((state) {
+    otherBlocSubscription = otherBloc.listen((state) {
         // React to state changes here.
-        // Dispatch events here to trigger changes in MyBloc.
+        // Add events here to trigger changes in MyBloc.
     });
   }
 
   @override
-  void dispose() {
+  void close() {
     otherBlocSubscription.cancel();
-    super.dispose();
+    super.close();
   }
 }
 ```
@@ -114,7 +114,7 @@ class MyBloc extends Bloc {
 
 Most applications flows will start with a `AppStart` event which triggers the application to fetch some data to present to the user.
 
-In this scenario, the presentation layer would dispatch an `AppStart` event.
+In this scenario, the presentation layer would add an `AppStart` event.
 
 In addition, the presentation layer will have to figure out what to render on the screen based on the state from the bloc layer.
 
@@ -123,7 +123,7 @@ class PresentationComponent {
     final Bloc bloc;
 
     PresentationComponent() {
-        bloc.dispatch(AppStarted());
+        bloc.add(AppStarted());
     }
 
     build() {

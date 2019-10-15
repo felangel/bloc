@@ -16,15 +16,15 @@ The first thing we need to do is add the bloc package to our `pubspec.yaml` as a
 
 ```yaml
 dependencies:
-  bloc: ^0.15.0
+  bloc: ^0.16.0
 ```
 
 For a [Flutter](https://flutter.io) application, we also need to add the flutter_bloc package to our `pubspec.yaml` as a dependency.
 
 ```yaml
 dependencies:
-  bloc: ^0.15.0
-  flutter_bloc: ^0.21.0
+  bloc: ^0.16.0
+  flutter_bloc: ^0.22.0
 ```
 
 For an [AngularDart](https://webdev.dartlang.org/angular) application, we also need to add the angular_bloc package to our `pubspec.yaml` as a dependency.

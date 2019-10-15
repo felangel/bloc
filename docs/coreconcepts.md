@@ -8,7 +8,7 @@ In the upcoming sections, we're going to discuss each of them in detail as well 
 
 ## Events
 
-> Events are the input to a Bloc. They are commonly dispatched in response to user interactions such as button presses or lifecycle events like page loads.
+> Events are the input to a Bloc. They are commonly added in response to user interactions such as button presses or lifecycle events like page loads.
 
 When designing an app we need to step back and define how users will interact with it. In the context of our counter app we will have two buttons to increment and decrement our counter.
 
@@ -177,7 +177,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 At this point, you're probably wondering _"How do I notify a Bloc of an event?"_.
 
-> Every Bloc has a `dispatch` method. `Dispatch` takes an `event` and triggers `mapEventToState`. `Dispatch` may be called from the presentation layer or from within the Bloc and notifies the Bloc of a new `event`.
+> Every Bloc has a `add` method. `Add` takes an `event` and triggers `mapEventToState`. `Add` may be called from the presentation layer or from within the Bloc and notifies the Bloc of a new `event`.
 
 We can create a simple application which counts from 0 to 3.
 
@@ -186,7 +186,7 @@ void main() {
     CounterBloc bloc = CounterBloc();
 
     for (int i = 0; i < 3; i++) {
-        bloc.dispatch(CounterEvent.increment);
+        bloc.add(CounterEvent.increment);
     }
 }
 ```
@@ -269,12 +269,12 @@ void main() {
   CounterBloc bloc = CounterBloc();
 
   for (int i = 0; i < 3; i++) {
-    bloc.dispatch(CounterEvent.increment);
+    bloc.add(CounterEvent.increment);
   }
 }
 ```
 
-If we want to be able to do something in response to all `Events` dispatched, we can also override the `onEvent` method in our `SimpleBlocDelegate`.
+If we want to be able to do something in response to all `Events` added, we can also override the `onEvent` method in our `SimpleBlocDelegate`.
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
