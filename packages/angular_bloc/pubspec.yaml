@@ -1,6 +1,6 @@
 name: angular_bloc
 description: Angular Components that make it easy to implement the BLoC (Business Logic Component) design pattern. Built to be used with the bloc state management package.
-version: 0.10.0
+version: 0.11.0
 author: Felix Angelov <felangelov@gmail.com>
 repository: https://github.com/felangel/bloc
 issue_tracker: https://github.com/felangel/bloc/issues
@@ -11,7 +11,7 @@ environment:
 
 dependencies:
   angular: ^5.0.0
-  bloc: ^0.15.0
+  bloc: ^0.16.0
 
 dependency_overrides:
   package_resolver: 1.0.6

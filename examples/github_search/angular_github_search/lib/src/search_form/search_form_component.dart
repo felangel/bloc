@@ -29,6 +29,6 @@ class SearchFormComponent implements OnInit, OnDestroy {
 
   @override
   void ngOnDestroy() {
-    githubSearchBloc.dispose();
+    githubSearchBloc.close();
   }
 }

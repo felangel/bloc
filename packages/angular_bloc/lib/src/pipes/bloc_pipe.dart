@@ -38,7 +38,7 @@ class BlocPipe implements OnDestroy, PipeTransform {
 
   void _subscribe(Bloc bloc) {
     _bloc = bloc;
-    _subscription = bloc.state.listen(
+    _subscription = bloc.listen(
         (Object value) => _updateLatestValue(bloc, value),
         onError: (dynamic e) => throw e);
   }
