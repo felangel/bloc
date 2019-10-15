@@ -16,7 +16,7 @@ class TickerBloc extends Bloc<TickerEvent, TickerState> {
   Stream<TickerState> mapEventToState(TickerEvent event) async* {
     if (event is StartTicker) {
       subscription?.cancel();
-      subscription = ticker.tick().listen((tick) => dispatch(Tick(tick)));
+      subscription = ticker.tick().listen((tick) => add(Tick(tick)));
     }
     if (event is Tick) {
       yield Update(event.tickCount);
@@ -24,8 +24,8 @@ class TickerBloc extends Bloc<TickerEvent, TickerState> {
   }
 
   @override
-  void dispose() {
+  void close() {
     subscription.cancel();
-    super.dispose();
+    super.close();
   }
 }
