@@ -9,6 +9,15 @@ class MockCounterBloc extends Mock implements CounterBloc {}
 
 void main() {
   group('whenListen', () {
+    test('can mock the stream of a single bloc with an empty Stream', () {
+      final counterBloc = MockCounterBloc();
+      whenListen(counterBloc, Stream<int>.empty());
+      expectLater(
+        counterBloc,
+        emitsInOrder(<int>[]),
+      );
+    });
+
     test('can mock the stream of a single bloc', () {
       final counterBloc = MockCounterBloc();
       whenListen(counterBloc, Stream.fromIterable([0, 1, 2, 3]));
