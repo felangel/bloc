@@ -180,7 +180,7 @@ class _BlocListenerBaseState<B extends Bloc<dynamic, S>, S>
   }
 
   void _subscribe() {
-    if (_bloc?.state != null) {
+    if (_bloc != null) {
       _subscription = _bloc.skip(1).listen((S state) {
         if (widget.condition?.call(_previousState, state) ?? true) {
           widget.listener(context, state);
