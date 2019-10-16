@@ -1,3 +1,7 @@
+# 0.2.0
+
+`whenListen` handles internal `skip` from `BlocBuilder` and `BlocListener`
+
 # 0.1.0
 
 Initial Version of the library.

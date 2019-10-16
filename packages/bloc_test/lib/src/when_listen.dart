@@ -29,6 +29,11 @@ void whenListen<Event, State>(
   Bloc<Event, State> bloc,
   Stream<State> stream,
 ) {
+  when(bloc.skip(any)).thenAnswer(
+    (Invocation invocation) =>
+        stream.skip(invocation.positionalArguments.first as int),
+  );
+
   when(bloc.listen(
     any,
     onError: captureAnyNamed('onError'),
