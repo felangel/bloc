@@ -29,6 +29,23 @@ void main() {
       );
     });
 
+    test('can mock the stream of a single bloc as broadcast stream', () {
+      final counterBloc = MockCounterBloc();
+      whenListen(counterBloc, Stream.fromIterable([0, 1, 2, 3]));
+      expectLater(
+        counterBloc,
+        emitsInOrder(
+          <Matcher>[equals(0), equals(1), equals(2), equals(3), emitsDone],
+        ),
+      );
+      expectLater(
+        counterBloc,
+        emitsInOrder(
+          <Matcher>[equals(0), equals(1), equals(2), equals(3), emitsDone],
+        ),
+      );
+    });
+
     test('can mock the stream of a single bloc with skip(1)', () {
       final counterBloc = MockCounterBloc();
       whenListen(counterBloc, Stream.fromIterable([0, 1, 2, 3]));

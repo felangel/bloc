@@ -29,9 +29,10 @@ void whenListen<Event, State>(
   Bloc<Event, State> bloc,
   Stream<State> stream,
 ) {
+  final broadcastStream = stream.asBroadcastStream();
   when(bloc.skip(any)).thenAnswer(
     (Invocation invocation) =>
-        stream.skip(invocation.positionalArguments.first as int),
+        broadcastStream.skip(invocation.positionalArguments.first as int),
   );
 
   when(bloc.listen(
@@ -40,7 +41,7 @@ void whenListen<Event, State>(
     onDone: captureAnyNamed('onDone'),
     cancelOnError: captureAnyNamed('cancelOnError'),
   )).thenAnswer((Invocation invocation) {
-    return stream.listen(
+    return broadcastStream.listen(
       invocation.positionalArguments.first as Function(State),
       onError: invocation.namedArguments[Symbol('onError')] as Function,
       onDone: invocation.namedArguments[Symbol('onDone')] as void Function(),

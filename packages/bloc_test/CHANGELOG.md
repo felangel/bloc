@@ -1,3 +1,7 @@
+# 0.2.1
+
+`whenListen` automatically converts `Stream` to `BroadcastStream`
+
 # 0.2.0
 
 `whenListen` handles internal `skip` from `BlocBuilder` and `BlocListener`
