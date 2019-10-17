@@ -2,7 +2,7 @@
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-> In the following tutorial, we're going to build a reactive Todos App which hooks up to Firestore. We're going to be building on top of the [flutter todos](https://felangel.github.io/bloc/#/fluttertodostutorial) example so we won't go into the UI since it will all be the same.
+> In the following tutorial, we're going to build a reactive Todos App which hooks up to Firestore. We're going to be building on top of the [flutter todos](https://bloclibrary.dev/#/fluttertodostutorial) example so we won't go into the UI since it will all be the same.
 
 ![demo](./assets/gifs/flutter_firestore_todos.gif)
 
@@ -414,7 +414,7 @@ flutter:
 
 Since we want to be able to sign in our users, we'll need to create an `AuthenticationBloc`.
 
-?> If you haven't already checked out the [flutter firebase login tutorial](https://felangel.github.io/bloc/#/flutterfirebaselogintutorial), I highly recommend checking it out now because we're simply going to reuse the same `AuthenticationBloc`.
+?> If you haven't already checked out the [flutter firebase login tutorial](https://bloclibrary.dev/#/flutterfirebaselogintutorial), I highly recommend checking it out now because we're simply going to reuse the same `AuthenticationBloc`.
 
 #### Authentication Events
 
@@ -502,7 +502,7 @@ class AuthenticationBloc
 }
 ```
 
-Now that our `AuthenticationBloc` is finished, we need to modify the `TodosBloc` from the original [Todos Tutorial](https://felangel.github.io/bloc/#/fluttertodostutorial) to consume the new `TodosRepository`.
+Now that our `AuthenticationBloc` is finished, we need to modify the `TodosBloc` from the original [Todos Tutorial](https://bloclibrary.dev/#/fluttertodostutorial) to consume the new `TodosRepository`.
 
 ### Todos Bloc
 

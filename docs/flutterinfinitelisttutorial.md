@@ -286,7 +286,7 @@ Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
 }
 ```
 
-Our `PostBloc` will `yield` whenever there is a new state because it returns a `Stream<PostState>`. Check out [core concepts](https://felangel.github.io/bloc/#/coreconcepts?id=streams) for more information about `Streams` and other core concepts.
+Our `PostBloc` will `yield` whenever there is a new state because it returns a `Stream<PostState>`. Check out [core concepts](https://bloclibrary.dev/#/coreconcepts?id=streams) for more information about `Streams` and other core concepts.
 
 Now every time a `PostEvent` is added, if it is a `Fetch` event and there are more posts to fetch, our `PostBloc` will fetch the next 20 posts.
 

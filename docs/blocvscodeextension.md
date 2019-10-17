@@ -17,7 +17,7 @@
 
 ## Introduction
 
-Bloc extends [VSCode](https://code.visualstudio.com/) with support for the [Bloc](https://felangel.github.io/bloc) library and provides tools for effectively creating Blocs for both [Flutter](https://flutter.io/) and [AngularDart](https://webdev.dartlang.org) apps.
+Bloc extends [VSCode](https://code.visualstudio.com/) with support for the [Bloc](https://bloclibrary.dev) library and provides tools for effectively creating Blocs for both [Flutter](https://flutter.io/) and [AngularDart](https://webdev.dartlang.org) apps.
 
 ## Installation
 
