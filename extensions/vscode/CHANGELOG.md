@@ -1,3 +1,7 @@
+# 0.13.0
+
+Update Snippets to support changes in bloc `v0.16.0`
+
 # 0.12.2
 
 Add Update Action to automatically update outdated dependencies

@@ -2,7 +2,7 @@
   "name": "bloc",
   "displayName": "bloc",
   "description": "Support for the bloc library and provides tools for effectively creating blocs for both Flutter and AngularDart apps.",
-  "version": "0.12.2",
+  "version": "0.13.0",
   "publisher": "FelixAngelov",
   "bugs": {
     "url": "https://github.com/felangel/bloc/issues",
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/felangel/bloc"
   },
-  "homepage": "https://felangel.github.io/bloc",
+  "homepage": "https://bloclibrary.dev",
   "engines": {
     "vscode": "^1.31.0"
   },

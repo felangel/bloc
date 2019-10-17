@@ -23,8 +23,8 @@ export function analyzeDependencies() {
         }
       ]
     },
-    { name: "bloc", version: "^0.15.0", actions: [] },
-    { name: "flutter_bloc", version: "^0.21.0", actions: [] }
+    { name: "bloc", version: "^0.16.1", actions: [] },
+    { name: "flutter_bloc", version: "^0.22.1", actions: [] }
   ];
 
   const dependencies = _.get(getPubspec(), "dependencies", {});
