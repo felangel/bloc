@@ -1,3 +1,8 @@
+# 1.0.0
+
+- `dispatch` and `dispose` removed
+- Documentation Updates
+
 # 0.16.1
 
 - Minor Documentation Updates
