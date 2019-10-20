@@ -8,10 +8,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^0.16.0
-  flutter_bloc: ^0.22.0
   hydrated_bloc:
     path: ../
+  flutter_bloc: ^1.0.0
   path_provider_fde:
     git:
       url: https://github.com/google/flutter-desktop-embedding
