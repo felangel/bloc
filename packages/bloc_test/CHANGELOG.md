@@ -1,3 +1,7 @@
+# 1.0.0
+
+Updated to `bloc: ^1.0.0` and Documentation Updates
+
 # 0.2.1
 
 `whenListen` automatically converts `Stream` to `BroadcastStream`
