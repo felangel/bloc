@@ -1,3 +1,8 @@
+# 1.0.0
+
+- Update to bloc `v1.0.0`
+- Documentation Updates
+
 # 0.8.0
 
 - Update to bloc `v0.16.0`
