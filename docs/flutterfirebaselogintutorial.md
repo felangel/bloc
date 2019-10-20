@@ -458,6 +458,7 @@ import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
@@ -470,6 +471,8 @@ void main() {
 ```
 
 We are wrapping our entire `App` widget in a `BlocProvider` in order to make the `AuthenticationBloc` available to the entire widget tree.
+
+?> `WidgetsFlutterBinding.ensureInitialized()` is required in Flutter v1.9.4+ before using any plugins if the code is executed before runApp.
 
 ?> `BlocProvider` also handles closing the `AuthenticationBloc` automatically so we don't need to do that.
 
@@ -485,6 +488,7 @@ import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
@@ -556,6 +560,7 @@ Now we can hook up our `BlocDelegate` in our `main.dart`.
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
   runApp(
@@ -601,6 +606,7 @@ import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
   runApp(
@@ -696,6 +702,7 @@ import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
   runApp(
@@ -1933,6 +1940,7 @@ import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
   runApp(
