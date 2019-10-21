@@ -9,7 +9,7 @@ export function analyzeDependencies() {
   const dependenciesToAnalyze = [
     {
       name: "equatable",
-      version: "^0.6.0",
+      version: "^0.6.1",
       actions: [
         {
           name: "Open Migration Guide",
@@ -23,8 +23,10 @@ export function analyzeDependencies() {
         }
       ]
     },
-    { name: "bloc", version: "^0.16.1", actions: [] },
-    { name: "flutter_bloc", version: "^0.22.1", actions: [] }
+    { name: "bloc", version: "^1.0.0", actions: [] },
+    { name: "bloc_test", version: "^1.0.0", actions: [] },
+    { name: "flutter_bloc", version: "^1.0.0", actions: [] },
+    { name: "angular_bloc", version: "^1.0.0", actions: [] }
   ];
 
   const dependencies = _.get(getPubspec(), "dependencies", {});
