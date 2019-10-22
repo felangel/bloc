@@ -13,6 +13,7 @@ If you’re only fixing a bug, it’s fine to submit a pull request right away b
 ## Creating a Pull Request
 
 Before creating a pull request please:
+
 1. Fork the repository and create your branch from `master`.
 2. Install all dependencies (`flutter packages get` or `pub get`).
 3. Squash your commits and ensure you have a meaningful commit message.
@@ -25,6 +26,20 @@ Before creating a pull request please:
 10. Verify that all status checks are passing.
 
 While the prerequisites above must be satisfied prior to having your pull request reviewed, the reviewer(s) may ask you to complete additional design work, tests, or other changes before your pull request can be ultimately accepted.
+
+## Contributing to Documentation
+
+If you would like to contribute to the [documentation](https://bloclibrary.dev) please follow the same process for "Creating a Pull Request" and double check that your changes look good by running the docs locally.
+
+```sh
+# change directories into docs
+cd ./docs
+
+# run a local http server on port 8080
+python -m SimpleHTTPServer 8080 .
+
+# navigate to http://localhost:8080
+```
 
 ## Getting in Touch
 
