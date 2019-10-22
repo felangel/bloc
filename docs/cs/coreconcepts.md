@@ -46,7 +46,7 @@ Později si ukážeme složitější ukázky stavu, ale v tomto případně je p
 
 > Změna z jednoho stavu na jiný se nazývá přechod. Přechod se skládá z aktuálního stavu, události a dalšího stavu.
 
-Jak uživatel interaguje s naší aplikací počítadla, spustí události `Increment` a `Decrement`, které aktualizují stav počítadla. Všechny tyto změny stavu mohou být popsány jako série `Transitions`.
+Jak uživatel interaguje s naší aplikací počítadla, spustí události `Increment` a `Decrement`, které aktualizují stav počítadla. Všechny tyto změny stavu mohou být popsány jako série `Transitionů`.
 
 Například, pokud uživatel otevře naší aplikaci a jednou klepne na tlačítko inkrementace, uvidíme následující `Transition`.
 
@@ -62,15 +62,15 @@ Jelikož je každá změna stavu zaznamenávána, jsme schopni jednoduše zpraco
 
 ## Streamy
 
-?> Pro více informací o `Streams` se podívejte na oficiální [Dart dokumentaci](https://www.dartlang.org/tutorials/language/streams).
+?> Pro více informací o `Streamech` se podívejte na oficiální [Dart dokumentaci](https://www.dartlang.org/tutorials/language/streams).
 
 > Stream je sekvence asynchroních dat.
 
 Bloc je postavený nad [RxDart](https://pub.dev/packages/rxdart), avšak abstrahuje všechny specifické `RxDart` implementační detaily.
 
-Aby bylo možné používat Bloc, je nutné mít dobrou znalost o `Streams` a jak fungují.
+Aby bylo možné používat Bloc, je nutné mít dobrou znalost o `Streamech` a jak fungují.
 
-> Pokud nemáte s `Streams` zkušenosti, představte si potrubí s vodou, které jím protéká. Potrubí je `Stream` a voda jsou asynchronní data.
+> Pokud nemáte se `Streamy` zkušenosti, představte si potrubí s vodou, které jím protéká. Potrubí je `Stream` a voda jsou asynchronní data.
 
 `Stream` můžeme v Dartu vytvořit pomocí `async*` funkce.
 
@@ -86,7 +86,7 @@ Pokud nějakou funkci označíme jako `async*`, můžeme používat klíčové s
 
 Pokaždé když použijeme `yield` v `async*` funkci, protlačíme daný kus dat skrz `Stream`.
 
-Výše uvedený `Stream` můžeme zpracovat několika způsoby. Pokud bychom chtěli napsat funkci, která vrací součet `Stream` celých čísel, vypadalo by to nějak takto:
+Výše uvedený `Stream` můžeme zpracovat několika způsoby. Pokud bychom chtěli napsat funkci, která vrací součet `Streamu` celých čísel, vypadalo by to nějak takto:
 
 ```dart
 Future<int> sumStream(Stream<int> stream) async {
@@ -113,11 +113,11 @@ void main() async {
 }
 ```
 
-## Bloc
+## Blocy
 
-> A Bloc (Business Logic Component) is a component which converts a `Stream` of incoming `Events` into a `Stream` of outgoing `States`. Think of a Bloc as being the "brains" described above.
+> Bloc (Business Logic Component) je komponenta, která konvertuje `Stream` příchozích `Eventů` na `Stream` odchozích `Stavů`. Přemýšlejte o Blocu jako o "mozku" popisovaném výše.
 
-> Every Bloc must extend the base `Bloc` class which is part of the core bloc package.
+> Každý Bloc musí rozšiřovat základní třídu `Bloc`, který je součástí základního balíčku bloc.
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -127,18 +127,18 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-In the above code snippet, we are declaring our `CounterBloc` as a Bloc which converts `CounterEvents` into `ints`.
+V úryvku kódu výše deklarujeme náš `CounterBloc` jako Bloc, který konvertuje `CounterEventy` na `inty` (celá čísla).
 
-> Every Bloc must define an initial state which is the state before any events have been recieved.
+> Každý Bloc musí definovat výchozí hodnotu, která je stavem předtím, než byla přijmuta jakákoli událost.
 
-In this case, we want our counter to start at `0`.
+V tomto případě chceme, aby naše počítadlo začínalo na `0`.
 
 ```dart
 @override
 int get initialState => 0;
 ```
 
-> Every Bloc must implement a function called `mapEventToState`. The function takes the incoming `event` as an argument and must return a `Stream` of new `states` which is consumed by the presentation layer. We can access the current bloc state at any time using the `state` property.
+> Každý Bloc musí implementovat funkci nazývanou `mapEventToState`. Tato funkce přijímá jako argument příchozí `událost` a musí vracet `Stream` nových `stavů`, který je využíván prezenční vrstvou. Můžeme přistoupit ke konkrétnímu stavu blocu v jakémkoli čase pomocí vlastnosti `state`.
 
 ```dart
 @override
@@ -154,7 +154,7 @@ Stream<int> mapEventToState(CounterEvent event) async* {
 }
 ```
 
-At this point, we have a fully functioning `CounterBloc`.
+V tomto bodě máme plně funkční `CounterBloc`.
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -179,13 +179,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-!> Blocs will ignore duplicate states. If a Bloc yields `State nextState` where `state == nextState`, then no transition will occur and no change will be made to the `Stream<State>`.
+!> Blocy budou ignorovat duplikátní stavy. Pokud Blok přidá stav `State nextState` kde `state == nextState`, nevyvolá se žádný přechod a nebude provedena žádná změna `Stream<State>`.
 
-At this point, you're probably wondering _"How do I notify a Bloc of an event?"_.
+V tomto bodě si asi říkáte _"Jak upozorním Bloc na událost?"_.
 
-> Every Bloc has a `add` method. `Add` takes an `event` and triggers `mapEventToState`. `Add` may be called from the presentation layer or from within the Bloc and notifies the Bloc of a new `event`.
+> Každý Bloc má metodu `add`. `Add` přijímá `událost` a spouští `mapEventToState`. `Add` může být volána z prezenční vrstvy nebo zevnitř Blocu a upozorní Bloc na novou `událost`.
 
-We can create a simple application which counts from 0 to 3.
+Můžeme vytvořit jednoduchou aplikaci, která počítá od 0 do 3.
 
 ```dart
 void main() {
@@ -197,7 +197,7 @@ void main() {
 }
 ```
 
-The `Transitions` in the above code snippet would be
+`Transitiony` ve výše zmíněném úryvku kódu bude následující:
 
 ```json
 {
@@ -217,11 +217,11 @@ The `Transitions` in the above code snippet would be
 }
 ```
 
-Unfortunately, in the current state we won't be able to see any of these transitions unless we override `onTransition`.
+Naneštěstí, v aktuálním stavu nebudeme schopni vidět žádný z těchto přechodů, dokud nepřepíšeme `onTransition`.
 
-> `onTransition` is a method that can be overridden to handle every local Bloc `Transition`. `onTransition` is called just before a Bloc's `state` has been updated.
+> `onTransition` je metoda, který může být přepsána ke zpracování každého lokálního `Transitionu` Blocu. `onTransition` je zavolána těsně před tím, než byl `stav` Blocu aktualizován.
 
-?> **Tip**: `onTransition` is a great place to add bloc-specific logging/analytics.
+?> **Tip**: `onTransition` je skvělé místo pro přidání specifického logování/analytiky pro daný bloc.
 
 ```dart
 @override
@@ -230,15 +230,15 @@ void onTransition(Transition<CounterEvent, int> transition) {
 }
 ```
 
-Now that we've overridden `onTransition` we can do whatever we'd like whenever a `Transition` occurs.
+Nyní, když jsme přepsali `onTransition` můžeme dělat cokoli chceme kdykoli se objeví `Transition`.
 
-Just like we can handle `Transitions` at the bloc level, we can also handle `Exceptions`.
+Stejně jako můžeme zpracovat `Transitiony` na úrovni blocu, můžeme také zpracovat `Exceptiony` (vyjímky).
 
-> `onError` is a method that can be overriden to handle every local Bloc `Exception`. By default all exceptions will be ignored and `Bloc` functionality will be unaffected.
+> `onError` je metoda, která může být přepsána ke zpracování lokálního `Exceptionu` Blocu. Defaultně jsou všechny vyjímky ignorovány a funkčnost `Bloc` bude nedotčena.
 
-?> **Note**: The stacktrace argument may be `null` if the state stream received an error without a `StackTrace`.
+?> **Poznámka**: Argument stacktrace může být `null` pokud stav streamu přijal error bez `StackTrace`.
 
-?> **Tip**: `onError` is a great place to add bloc-specific error handling.
+?> **Tip**: `onError` je skvělé místo na zpracování errorů specifických pro daný bloc.
 
 ```dart
 @override
@@ -247,13 +247,13 @@ void onError(Object error, StackTrace stackTrace) {
 }
 ```
 
-Now that we've overridden `onError` we can do whatever we'd like whenever an `Exception` is thrown.
+Nyní, když jsme přepsali `onError`, můžeme dělat cokoli chceme kdykoli je vyvolána `Exception`.
 
 ## BlocDelegate
 
-One added bonus of using Bloc is that we can have access to all `Transitions` in one place. Even though in this application we only have one Bloc, it's fairly common in larger applications to have many Blocs managing different parts of the application's state.
+Jeden přidaný bonus používání Blocu je to, že můžeme míř přístup ke všem `Transitionům` na jednom místě. Dokonce i když v této aplikaci máme pouze jeden Bloc, je docela běžné ve větších aplikacích mít více Bloců, které zpracovávají rozdílné části stavů aplikace.
 
-If we want to be able to do something in response to all `Transitions` we can simply create our own `BlocDelegate`.
+Pokud chceme být schopni dělat něco v závislosti na všech `Transitionech`, můžeme jednoduše vytvořit náš vlastní `BlocDelegate`.
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
@@ -265,9 +265,9 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-?> **Note**: All we need to do is extend `BlocDelegate` and override the `onTransition` method.
+?> **Poznámka**: Všechno co potřebujeme udělat je rozšířit `BlocDelegate` a přepsat metodu `onTransition`.
 
-In order to tell Bloc to use our `SimpleBlocDelegate`, we just need to tweak our `main` function.
+Abychom Blocům řekli, aby používali `SimpleBlocDelegate`, musíme jenom poupravit naši `main` funkci.
 
 ```dart
 void main() {
@@ -280,7 +280,7 @@ void main() {
 }
 ```
 
-If we want to be able to do something in response to all `Events` added, we can also override the `onEvent` method in our `SimpleBlocDelegate`.
+Pokud chceme být schopni udělat něco v závislosti na všech přidaných `Eventech`, můžeme také přepsat metodu `onEvent` v našem `SimpleBlocDelegate`.
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
@@ -298,7 +298,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-If we want to be able to do something in response to all `Exceptions` thrown in a Bloc, we can also override the `onError` method in our `SimpleBlocDelegate`.
+Pokud chceme být schopni udělat něco v závislosti na všech vyvolaných `Exceptionech` v Blocu, můžeme také přepsat metodu `onError` v našem `SimpleBlocDelegate`.
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
@@ -322,4 +322,4 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-?> **Note**: `BlocSupervisor` is a singleton which oversees all Blocs and delegates responsibilities to the `BlocDelegate`.
+?> **Poznámka**: `BlocSupervisor` je singleton, který dohlíží na všechn Blocy a přenáší odpovědnost na `BlocDelegate`.
