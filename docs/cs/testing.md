@@ -1,10 +1,10 @@
 # Testování
 
-> Bloc was designed to be extremely easy to test.
+> Bloc byl navržen tak, aby byl velmi lehce testovatelný.
 
-For the sake of simplicity, let's write tests for the `CounterBloc` we created in [Core Concepts](coreconcepts.md).
+Pro jednoduchost si napíšeme testy pro `CounterBloc`, který jsme vytvořili v [Základních konceptech](cs/coreconcepts.md)
 
-To recap, the `CounterBloc` implementation looks like
+Pro rekapitulaci, implementace `CounterBlocu` vypadá takto
 
 ```dart
 enum CounterEvent { increment, decrement }
@@ -27,22 +27,22 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-Before we start writing our tests we're going to need to add a testing framework to our dependencies.
+Před tím, než začneme psát naše testy, budeme potřebovat přidat testovací framework do našich závislostí.
 
-We need to add [test](https://pub.dev/packages/test) to our `pubspec.yaml`.
+Potřebujeme přidat [test](https://pub.dev/packages/test) do našeho `pubspec.yaml`.
 
 ```yaml
 dev_dependencies:
   test: ">=1.3.0 <2.0.0"
 ```
 
-Let's get started by creating the file for our `CounterBloc` Tests, `counter_bloc_test.dart` and importing the test package.
+Začneme vytvořením souboru pro náš `CounterBloc` test, `counter_bloc_test.dart`, a importujeme balíček test.
 
 ```dart
 import 'package:test/test.dart';
 ```
 
-Next, we need to create our `main` as well as our test group.
+Jako další si vytvoříme náš `main` stejně jako naši skupinu testů.
 
 ```dart
 void main() {
@@ -52,9 +52,9 @@ void main() {
 }
 ```
 
-?> **Note**: groups are for organizing individual tests as well as for creating a context in which you can share a common `setUp` and `tearDown` across all of the individual tests.
+?> **Poznámka**: skupiny jsou pro organizaci jednotlivých testů stejně jako pro vytváření kontextu, ve kterém můžete sdílet společný `setUp` a `tearDown` napříč všemi jednotlivými testy.
 
-Let's start by creating an instance of our `CounterBloc` which will be used across all of our tests.
+Začneme vytvořením instance našeho `CounterBlocu`, který bude použit napříč všemi testy.
 
 ```dart
 group('CounterBloc', () {
@@ -66,7 +66,7 @@ group('CounterBloc', () {
 });
 ```
 
-Now we can start writing our individual tests.
+Nyní můžeme začít psát naše jednotlivé testy.
 
 ```dart
 group('CounterBloc', () {
@@ -82,9 +82,9 @@ group('CounterBloc', () {
 });
 ```
 
-?> **Note**: We can run all of our tests with the `pub run test` command.
+?> **Poznámka**: Můžeme spustit všechny naše testy pomocí příkazu `pub run test`.
 
-At this point we should have our first passing test! Now let's write a more complex test.
+V tomto bodě bychom měli mít náš první průchozí test! Nyní si napíšeme složitější test.
 
 ```dart
 test('single Increment event updates state to 1', () {
@@ -110,6 +110,6 @@ test('single Decrement event updates state to -1', () {
 });
 ```
 
-We should be able to run the tests and see that all are passing.
+Měli bychom být schopni spustit testy a vidět, že prochází.
 
-That's all there is to it, testing should be a breeze and we should feel confident when making changes and refactoring our code.
+To je všechno, testování by mělo být hračkou a měli bychom se cítit sebejistě, když děláme změny a refaktorujeme náš kód.
