@@ -29,7 +29,7 @@
   - Flutter
     - [Zobrazit SnackBar](cs/recipesfluttershowsnackbar.md)
     - [Navigace](cs/recipesflutternavigation.md)
-    - [Zpřístupnění Bloc](cs/recipesflutterblocaccess.md)
+    - [Zpřístupnění Blocu](cs/recipesflutterblocaccess.md)
 
 - Nástroje
 

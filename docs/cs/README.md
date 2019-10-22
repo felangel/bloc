@@ -26,6 +26,8 @@ Prediktivní knihovna pro state management, která pomáhá implementovat [návr
 
 Cílem této knihovne je umožnit jednoduše rozdělit _prezentační_ a _logickou_ část, usnadňující testování a opětovné použití.
 
+V rámci této dokumentace se budeme držet originálního názvu `Bloc` (čti _blok_). V případech, kdy budeme potřebovat skloňovat, budeme toto slovo skloňovat podle vzoru slova _blok_.
+
 ## Dokumentace
 
 - [Officiální dokumentace](https://bloclibrary.dev/#/cs/)

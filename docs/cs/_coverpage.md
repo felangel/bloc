@@ -11,7 +11,7 @@
 
 > prediktivní knihovna pro state management v Dart.
 
-- Jednoduchá & Lehká
+- Snadná & Jednoduchá
 - Vysoce testovatelná
 - Pro Dart, Flutter a AngularDart
 
