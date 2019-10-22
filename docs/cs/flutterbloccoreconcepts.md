@@ -1,16 +1,16 @@
-# Základní koncepty Flutter Bloc
+# Základní koncepty Flutter Blocu
 
-?> Please make sure to carefully read and understand the following sections before working with [flutter_bloc](https://pub.dev/packages/flutter_bloc).
+?> Prosím, ujistěte se, že si pečlivě přečtete a pochopíte následující sekce před tím, než budete pracovat s [flutter_bloc](https://pub.dev/packages/flutter_bloc).
 
 ## Bloc widgety
 
 ### BlocBuilder
 
-**BlocBuilder** is a Flutter widget which requires a `Bloc` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed. The `builder` function will potentially be called many times and should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that returns a widget in response to the state.
+**BlocBuilder** je Flutter widget, který vyžaduje `Bloc` a `builder` funkci. `BlocBuilder` zpracovává sestavení widgetu v reakci na nové stavy. `BlocBuilder` je velmi podobný k `StramBuilder`, ale jednodušší API ke snížení potřebného kódu. Funkce `builder` může být potencionálně zavolána vícekrát a měla by být [pure funkcí](https://en.wikipedia.org/wiki/Pure_function), která vrací widget v reakci na stav.
 
-See `BlocListener` if you want to "do" anything in response to state changes such as navigation, showing a dialog, etc...
+Podívejte se na `BlocListener`, pokud chcete "dělat" něco, v závislosti na stavu, jako je navigace, zobrazování dialogu atp.
 
-If the bloc parameter is omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+Pokud je parametr blocu vynechán, `BlocBuilder` automaticky provede lookup pomocí `BlocProvideru` a aktuálního `BuildContextu`.
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
@@ -20,7 +20,7 @@ BlocBuilder<BlocA, BlocAState>(
 )
 ```
 
-Only specify the bloc if you wish to provide a bloc that will be scoped to a single widget and isn't accessible via a parent `BlocProvider` and the current `BuildContext`.
+Specifikujte bloc pouze tehdy, pokud chcete poskytnout bloc, který bude zaměřený na jeden widget a není dostupný skrze rodičovský `BlocProvider` a aktuální `BuildContext`.
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
@@ -31,7 +31,7 @@ BlocBuilder<BlocA, BlocAState>(
 )
 ```
 
-If you want fine-grained control over when the builder function is called you can provide an optional `condition` to `BlocBuilder`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `builder` will be called with `state` and the widget will rebuild. If `condition` returns false, `builder` will not be called with `state` and no rebuild will occur.
+Pokud chcete hladkou kontrolu nad tím, kdy se builder funkce zavolá, můžete poskytnout nepovinnou `condition` (podmínku) `BlocBuilderu`. `condition` přijímá předchozí stav blocu a aktuální stav blocu a vrací boolean. Pokud `condition` vrací true, `builder` bude zavolán s aktuálním `stavem` a widget bude sestaven znovu. Pokud `condition` vrací false, `builder` nebude zavolán s aktuálním `stavem` a nebude znovu sestaven.
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
@@ -47,9 +47,9 @@ BlocBuilder<BlocA, BlocAState>(
 
 ### BlocProvider
 
-**BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
+**BlocProvider** je Flutter widget, který poskytuje bloc svým potomkům skrze `BlocProvider.of<T>(context)`. Je používán jako dependency injection (DI) widget tak, že jedna instance blocu může být poskytnuta vícero widgetům uvnitř podstromu.
 
-In most cases, `BlocProvider` should be used to build new `blocs` which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle closing the bloc.
+Ve většině případů by měl být `BlocProvider` použit k sestavení nových `bloců`, které budou dostupné ke zbytku podstromu. V tomto případě, jelikož `BlocProvider` je zodpovědný za vytváření blocu, bude automaticky zpracováno ukončení blocu.
 
 ```dart
 BlocProvider(
@@ -58,7 +58,7 @@ BlocProvider(
 );
 ```
 
-In some cases, `BlocProvider` can be used to provide an existing bloc to a new portion of the widget tree. This will be most commonly used when an existing `bloc` needs to be made available to a new route. In this case, `BlocProvider` will not automatically close the bloc since it did not create it.
+V některých případech může být `BlocProvider` použit k poskytnutí existujícího blocu nové části widget stromu. To bude nejvíce běžně použito když existující `bloc` potřebuje být dostupný nové routě. V tomto případě `BlocProvider` automaticky neukončí bloc, jelikož ho nevytvořil.
 
 ```dart
 BlocProvider.value(
@@ -67,7 +67,7 @@ BlocProvider.value(
 );
 ```
 
-then from either `ChildA`, or `ScreenA` we can retrieve `BlocA` with:
+a pak buď z `ChildA` nebo `ScreenA` můžeme získat `BlocA` pomocí:
 
 ```dart
 BlocProvider.of<BlocA>(context)
@@ -75,9 +75,7 @@ BlocProvider.of<BlocA>(context)
 
 ### MultiBlocProvider
 
-**MultiBlocProvider** is a Flutter widget that merges multiple `BlocProvider` widgets into one.
-`MultiBlocProvider` improves the readability and eliminates the need to nest multiple `BlocProviders`.
-By using `MultiBlocProvider` we can go from:
+**MultiBlocProvider** je Flutter widget, který pojí více `BlocProvider` widgetů do jednoho. `MultiBlocProvider` zlepšuje čitelnost a eliminuje potřebu zanořovat více `BlocProviderů`. Použitím `MultiBlocProvideru` můžeme z tohoto kódu:
 
 ```dart
 BlocProvider<BlocA>(
@@ -92,7 +90,7 @@ BlocProvider<BlocA>(
 )
 ```
 
-to:
+udělat toto:
 
 ```dart
 MultiBlocProvider(
@@ -113,11 +111,11 @@ MultiBlocProvider(
 
 ### BlocListener
 
-**BlocListener** is a Flutter widget which takes a `BlocWidgetListener` and an optional `Bloc` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
+**BlocListener** je Flutter widget, který bere `BlocWidgetListener` a nepovinný `Bloc` a vyvolá `listener` v závislosti na změně stavu v blocu. Měl by být použit pro funkcionalitu, která se potřebuje stát jednou za změnu stavu jako je navigace, zobrazení `SnackBaru`, zobrazení `Dialogu` atp.
 
-`listener` is only called once for each state change (**NOT** including `initialState`) unlike `builder` in `BlocBuilder` and is a `void` function.
+`listener` je zavolán pouze jednou pro každý stav (**NE** pro `initialState`) na rozdíl od `builder` v `BlocBuilder` a je to `void` funkce.
 
-If the bloc parameter is omitted, `BlocListener` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+Pokud je parametr blocu vynechán, `BlocListener` automaticky provede lookup pomocí `BlockProvideru` a aktuálního `BuildContextu`.
 
 ```dart
 BlocListener<BlocA, BlocAState>(
@@ -128,7 +126,7 @@ BlocListener<BlocA, BlocAState>(
 )
 ```
 
-Only specify the bloc if you wish to provide a bloc that is otherwise not accessible via `BlocProvider` and the current `BuildContext`.
+Specifikujte bloc pouze tehdy, pokud chcete poskytnout bloc, který není jinak dostupný skrze rodičovský `BlocProvider` a aktuální `BuildContext`.
 
 ```dart
 BlocListener<BlocA, BlocAState>(
@@ -139,7 +137,7 @@ BlocListener<BlocA, BlocAState>(
 )
 ```
 
-If you want fine-grained control over when the listener function is called you can provide an optional `condition` to `BlocListener`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `listener` will be called with `state`. If `condition` returns false, `listener` will not be called with `state`.
+Pokud chcete hladkou kontrolu nad tím, kdy se listener funkce zavolá, můžete poskytnout nepovinnou `condition` (podmínku) `BlocListeneru`. `condition` přijímá předchozí stav blocu a aktuální stav blocu a vrací boolean. Pokud `condition` vrací true, `listener` bude zavolán s aktuálním `stavem`. Pokud `condition` vrací false, `listener` nebude zavolán s aktuálním `stavem`.
 
 ```dart
 BlocListener<BlocA, BlocAState>(
@@ -156,9 +154,7 @@ BlocListener<BlocA, BlocAState>(
 
 ### MultiBlocListener
 
-**MultiBlocListener** is a Flutter widget that merges multiple `BlocListener` widgets into one.
-`MultiBlocListener` improves the readability and eliminates the need to nest multiple `BlocListeners`.
-By using `MultiBlocListener` we can go from:
+**MultiBlocListener** je flutter widget, který pojí více `BlocListener` widgetů do jednoho. `MultiBlocListener` zlepšuje čitelnost a eliminuje potřebu zanořovat více `BlocListenerů`. Použitím `MultiBlocListeneru` můžeme z tohoto kódu:
 
 ```dart
 BlocListener<BlocA, BlocAState>(
@@ -173,7 +169,7 @@ BlocListener<BlocA, BlocAState>(
 )
 ```
 
-to:
+udělat toto:
 
 ```dart
 MultiBlocListener(
@@ -194,7 +190,7 @@ MultiBlocListener(
 
 ### RepositoryProvider
 
-**RepositoryProvider** is a Flutter widget which provides a repository to its children via `RepositoryProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a repository can be provided to multiple widgets within a subtree. `BlocProvider` should be used to provide blocs whereas `RepositoryProvider` should only be used for repositories.
+**RepositoryProvider** je Flutter widget, který poskytuje repozitář jeho potomkům prostřednictvím `RepositoryProvider.of<T>(context)`. Je použit jako depencency injection (DI) widget tak, že jedna instance repozitáře může být poskytnuta vícero widgetům uvnitř podstromu. `BlocProvider` by měl být poskytnut blocům kdežto `RepositoryProvider` by měl být použit pro repozitáře.
 
 ```dart
 RepositoryProvider(
@@ -203,7 +199,7 @@ RepositoryProvider(
 );
 ```
 
-then from `ChildA` we can retrieve the `Repository` instance with:
+pak z `ChildA` můžeme získat instanci `Repozitáře` pomocí:
 
 ```dart
 RepositoryProvider.of<RepositoryA>(context)
@@ -211,9 +207,7 @@ RepositoryProvider.of<RepositoryA>(context)
 
 ### MultiRepositoryProvider
 
-**MultiRepositoryProvider** is a Flutter widget that merges multiple `RepositoryProvider` widgets into one.
-`MultiRepositoryProvider` improves the readability and eliminates the need to nest multiple `RepositoryProvider`.
-By using `MultiRepositoryProvider` we can go from:
+**MultiRepositoryProvider** je Flutter widget, který pojí více `RepositoryProvider` do jednoho. `MultiRepositoryProvider` zlepšuje čitelnost a eliminuje potřebu zanořovat více `RepositoryProviderů`. Použitím `MultiRepositoryProvider` můžeme z tohoto kódu:
 
 ```dart
 RepositoryProvider<RepositoryA>(
@@ -228,7 +222,7 @@ RepositoryProvider<RepositoryA>(
 )
 ```
 
-to:
+udělat toto:
 
 ```dart
 MultiRepositoryProvider(
@@ -249,7 +243,7 @@ MultiRepositoryProvider(
 
 ## Použití
 
-Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
+Podívejme se na to, jak použít `BlocBuilder` pro připojení `CounterPage` widgetu ke `CounterBloc`.
 
 ### counter_bloc.dart
 
@@ -323,4 +317,4 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-At this point we have successfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
+V tomto bodě máme úspěšně oddělenou naší prezenční vrstvu od naší logické vrstvy. Všimněte si, že `CounterPage` widget neví nic o tom, co se děje když uživatel klepne na tlačítko. Widget jednoduše řekne `CounterBloc` že uživatel stiskl tlačítko inkrementace nebo dekrementace.

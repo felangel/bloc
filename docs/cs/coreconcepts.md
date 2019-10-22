@@ -1,6 +1,6 @@
 # Základní koncepty
 
-?> Prosím, ujistěte se, že si pečlivě přečtete a pochopíte následující sekce před tím, než budete pracovat s (https://pub.dev/packages/bloc).
+?> Prosím, ujistěte se, že si pečlivě přečtete a pochopíte následující sekce před tím, než budete pracovat s [bloc](https://pub.dev/packages/bloc).
 
 Existuje několik základních konceptů, které jsou kritické pro pochopení, jak používat Bloc.
 
@@ -322,4 +322,4 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-?> **Poznámka**: `BlocSupervisor` je singleton, který dohlíží na všechn Blocy a přenáší odpovědnost na `BlocDelegate`.
+?> **Poznámka**: `BlocSupervisor` je singleton, který dohlíží na všechny Blocy a přenáší odpovědnost na `BlocDelegate`.
