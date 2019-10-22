@@ -16,4 +16,4 @@
 - Pro Dart, Flutter a AngularDart
 
 [GitHub](https://github.com/felangel/bloc/)
-[Jak začít](cs/gettingstarted.md)
+[Začínáme](cs/gettingstarted.md)

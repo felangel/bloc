@@ -84,8 +84,8 @@ Cílem této knihovne je umožnit jednoduše rozdělit _prezentační_ a _logick
 - [Validace formuláře](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) - ukázka jak použít balíčky `bloc` a `flutter_bloc` pro implementaci validaci formulářů.
 - [Bloc se Stream](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - ukázka jak propojit `bloc` ke `Stream` a obdovit UI v odpovědi na data ze `Stream`.
 - [Nekonečný List](https://bloclibrary.dev/#/cs/flutterinfinitelisttutorial) - ukázka jak použít balíčky `bloc` a `flutter_bloc` k implementaci nekonečného skrolovacího listu.
-- [Tok přihlášení](https://bloclibrary.dev/#/cs/flutterlogintutorial) - ukázka jak použít balíčky `bloc` a `flutter_bloc` k implementaci toku přihlášení.
-- [Firebase přihlášení](https://bloclibrary.dev/#/cs/flutterfirebaselogintutorial) - ukázka jak použít balíčky `bloc` a `flutter_bloc` k implementaci přihlášení pomocí Firebase.
+- [Přihlašování](https://bloclibrary.dev/#/cs/flutterlogintutorial) - ukázka jak použít balíčky `bloc` a `flutter_bloc` k implementaci přihlašování.
+- [Firebase přihlášování](https://bloclibrary.dev/#/cs/flutterfirebaselogintutorial) - ukázka jak použít balíčky `bloc` a `flutter_bloc` k implementaci přihlašování pomocí Firebase.
 - [Github vyhledávání](https://bloclibrary.dev/#/cs/flutterangulargithubsearch) - ukázka jak vytvořit aplikaci na Github vyhledávání použitím balíčků `bloc` a `flutter_bloc`.
 - [Počasí](https://bloclibrary.dev/#/cs/flutterweathertutorial) - ukázka jak vytvořit aplikaci na počasí použitím balíčků `bloc` a `flutter_bloc`. Aplikace používá `RefreshIndicator` k implementaci "zatáhnout pro obnovení" a také dynamické motivy.
 - [Plánovač](https://bloclibrary.dev/#/cs/fluttertodostutorial) - ukázka jak vytvořit aplikaci plánování použitím balíčků `bloc` a `flutter_bloc`.
