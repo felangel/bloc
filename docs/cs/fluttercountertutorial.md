@@ -1,22 +1,20 @@
 # Tutoriál: Počítadlo ve Flutteru
 
-?> **Poznámka:** Tento tutoriál ještě nemá překlad.
+![začátečník](https://img.shields.io/badge/úroveň-začátečník-green.svg)
 
-![beginner](https://img.shields.io/badge/level-beginner-green.svg)
-
-> In the following tutorial, we're going to build a Counter in Flutter using the Bloc library.
+> V tomto tutoriálu vytvoříme počítadlo ve Flutteru pomocí Bloc knihovny.
 
 ![demo](../assets/gifs/flutter_counter.gif)
 
-## Setup
+## Nastavení
 
-We'll start off by creating a brand new Flutter project
+Začneme vytvořením nového Flutter projektu.
 
 ```bash
 flutter create flutter_counter
 ```
 
-We can then go ahead and replace the contents of `pubspec.yaml` with
+Potom nahradíme obsah `pubspec.yaml` tímto
 
 ```yaml
 name: flutter_counter
@@ -40,23 +38,23 @@ flutter:
   uses-material-design: true
 ```
 
-and then install all of our dependencies
+a pak nainstalujeme všechny závislosti
 
 ```bash
 flutter packages get
 ```
 
-Our counter app is just going to have two buttons to increment/decrement the counter value and a `Text` widget to display the current value. Let's get started designing the `CounterEvents`.
+Naše aplikace počítadla bude mít pouze dvě tlačítka na inkrementaci/dekrementaci hodnoty počítadla a `Text` widget, který zobrazí aktuální hodnotu. Pojďme začít navrhovat `CounterEventy`.
 
-## Counter Events
+## Události Počátadla
 
 ```dart
 enum CounterEvent { increment, decrement }
 ```
 
-## Counter States
+## Stavy Počítadla
 
-Since our counter's state can be represented by an integer we don't need to create a custom class!
+Protože stav našeho počítadla může být reprezentován celým číslem, nemusíme vytvářet vlastní třídu!
 
 ## Counter Bloc
 
@@ -79,11 +77,11 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-?> **Note**: Just from the class declaration we can tell that our `CounterBloc` will be taking `CounterEvents` as input and outputting integers.
+?> **Poznámka**: Jen z deklarace třídy můžeme vidět, že náš `CounterBloc` bude přijímat `CounterEventy` jako vstup a produkovat celá čísla.
 
 ## Counter App
 
-Now that we have our `CounterBloc` fully implemented, we can get started creating our Flutter application.
+Nyní když máme náš `CounterBloc` plně implementován, můžeme začít vytvářet naší Flutter aplikaci.
 
 ```dart
 void main() => runApp(MyApp());
@@ -102,7 +100,7 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-?> **Note**: We are using the `BlocProvider` widget from `flutter_bloc` in order to make the instance of `CounterBloc` available to the entire subtree (`CounterPage`). `BlocProvider` also handles closing the `CounterBloc` automatically so we don't need to use a `StatefulWidget`.
+?> **Poznámka**: Používáme `BlocProvider` widget z `flutter_bloc`, abychom zpřístupnili instanci `CounterBloc` celému podstromu (`CounterPage`). `BlocProvider` také automaticky zpracovává ukončení `CounterBlocu`, takže nemusíme použít `StatefulWidget`.
 
 ## Counter Page
 
@@ -155,16 +153,16 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-?> **Note**: We are able to access the `CounterBloc` instance using `BlocProvider.of<CounterBloc>(context)` because we wrapped our `CounterPage` in a `BlocProvider`.
+?> **Poznámka**: Jsme schopni přistoupit k `CounterBloc` instanci pomocí `BlocProvider.of<CounterBloc>(context)`, protože jsme zabalili náš `CounterPage` do `BlocProvideru`.
 
-?> **Note**: We are using the `BlocBuilder` widget from `flutter_bloc` in order to rebuild our UI in response to state changes (changes in the counter value).
+?> **Poznámka**: Používáme `BlocBuilder` widget z `flutter_bloc`, abychom překreslili naši UI v reakci na změny stavu (změny v stavu počítadla).
 
-?> **Note**: `BlocBuilder` takes an optional `bloc` parameter but we can specify the type of the bloc and the type of the state and `BlocBuilder` will find the bloc automatically so we don't need to explicity use `BlocProvider.of<CounterBloc>(context)`.
+?> **Poznámka**: `BlocBuilder` přijímá nepovinný parametr `bloc`, ale můžeme specifikovat typ blocu a typ stavu a `BlocBuilder` najde bloc automaticky, takže nemusíme explicitně používat `BlocProvider.of<CounterBloc>(context)`.
 
-!> Only specify the bloc in `BlocBuilder` if you wish to provide a bloc that will be scoped to a single widget and isn't accessible via a parent `BlocProvider` and the current `BuildContext`.
+!> Pouze specifikujte bloc v `BlocBuilderu` pokud chcete poskytnout bloc, který bude použit v jednom widgetu a nebude přístupný pomocí rodičovského `BlocProvider` a aktuálního `BuildContextu`.
 
-That's it! We've separated our presentation layer from our business logic layer. Our `CounterPage` has no idea what happens when a user presses a button; it just adds an event to notify the `CounterBloc`. Furthermore, our `CounterBloc` has no idea what is happening with the state (counter value); it's simply converting the `CounterEvents` into integers.
+To je vše! Oddělili jsme naši prezenční vrstvu od aplikační vrstvy. Naše `CounterPage` neví, co se stane, když uživatel zmáčkne tlačítko. Jenom přidá událost a upozorní `CounterBloc`. Navíc, náš `CounterBloc` neví co se děje se stavem (hodnotou počítadla), jen jednoduše převádí `CounterEventy` na celá čísla.
 
-We can run our app with `flutter run` and can view it on our device or simulator/emulator.
+Můžeme spustit naší aplikaci pomocí `flutter run` a zobrazit ji na našem zařízení nebo simulátoru/emulátoru.
 
-The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example).
+Celý zdrojový kód tohoto příkladu můžete najít [zde](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example).
