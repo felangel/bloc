@@ -1,16 +1,16 @@
-# Recipes: Show SnackBar with BlocListener
+# Recepty: Zobrazení SnackBaru s BlocListenerem
 
-> In this recipe, we're going to take a look at how to use `BlocListener` to show a `SnackBar` in response to a state change in a bloc.
+> V tomto receptu se podíváme na to, jak použít `BlocListener` k zobrazení `SnackBaru` v reakci na změnu stavu blocu.
 
-![demo](./assets/gifs/recipes_flutter_snack_bar.gif)
+![demo](../assets/gifs/recipes_flutter_snack_bar.gif)
 
 ## Bloc
 
-Let's build a basic `DataBloc` which will handle `DataEvents` and output `DataStates`.
+Pojďme si udělat základní `DataBloc`, který bude zpracovávat `DataEventy` a produkovat `DataStaty`.
 
 ### DataEvent
 
-For simplicity, our `DataBloc` will only respond to a single `DataEvent` called `FetchData`.
+Pro jednoduchost bude náš `DataBloc` reagovat pouze na jeden `DataEvent`, který pojmenujeme `FetchData`.
 
 ```dart
 import 'package:meta/meta.dart';
@@ -23,11 +23,11 @@ class FetchData extends DataEvent {}
 
 ### DataState
 
-Our `DataBloc` can have one of three different `DataStates`:
+Náš `DataBloc` může mít jeden z tří různých `DataStatů`:
 
-- `Initial` - the initial state before any events are added
-- `Loading` - the state of the bloc while it is asynchronously "fetching data"
-- `Success` - the state of the bloc when it has successfully "fetched data"
+- `Initial` - počáteční stav před přidáním jakýchkoli událostí
+- `Loading` - stav blocu zatímco se asynchroně "načítají data"
+- `Success` - stav blocu když se data úspěšně "načetla"
 
 ```dart
 import 'package:meta/meta.dart';
@@ -44,7 +44,7 @@ class Success extends DataState {}
 
 ### DataBloc
 
-Our `DataBloc` should look something like this:
+Náš `DataBloc` by měl vypadat nějak takto:
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -66,11 +66,11 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 }
 ```
 
-?> **Note:** We're using `Future.delayed` to simulate latency.
+?> **Poznámka:** Používáme `Future.delayed` abychom simulovali latenci.
 
-## UI Layer
+## UI vrstva
 
-Now let's take a look at how to hook up our `DataBloc` to a widget and show a `SnackBar` in response to a success state.
+Nyní se pojďme podívat jak připojit `DataBloc` wiget a zobrazit `Snackbar` v reakci na stav úspěchu.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -138,10 +138,10 @@ class Home extends StatelessWidget {
 }
 ```
 
-?> We use the `BlocListener` widget in order to **DO THINGS** in response to state changes in our `DataBloc`.
+?> Používáme `BlocListener` widget abychom **DĚLALI VĚCI** v reakci na změny stavu našeho `DataBlocu`.
 
-?> We use the `BlocBuilder` widget in order to **RENDER WIDGETS** in response to state changes in our `DataBloc`.
+?> Používáme `BlocBuilder` widget abychom **VYKRESLOVALI WIDGETY** v závislosti na změně stavu našeho `DataBlocu`.
 
-!> We should **NEVER** "do things" in response to state changes in the `builder` method of `BlocBuilder` because that method can be called many times by the Flutter framework. The `builder` method should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that just returns a widget in response to the state of the bloc.
+!> **NIKDY** bychom neměli "dělat věci" v závislosti na změně stavu v `builder` metodě `BlocBuilderu`, protože tato metoda může být zavolána Flutter frameworkem mnohokrát. `builder` metoda by měla být [pure funkce](https://en.wikipedia.org/wiki/Pure_function), která vrací widget v reakci na stav blocu.
 
-The full source for this recipe can be found [here](https://gist.github.com/felangel/1e5b2c25b263ad1aa7bbed75d8c76c44).
+Celý zdrojový kód pro tento recept můžete najít [zde](https://gist.github.com/felangel/1e5b2c25b263ad1aa7bbed75d8c76c44).

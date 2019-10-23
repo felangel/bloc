@@ -10,7 +10,7 @@
 
 ### Bloc
 
-Pojďme si udělat `MyBloc`, který bude přijímat `MyEventy` a konvertovat je na `MyStaty`.
+Pojďme si udělat `MyBloc`, který bude přijímat `MyEventy` a produkovat `MyStaty`.
 
 #### MyEvent
 

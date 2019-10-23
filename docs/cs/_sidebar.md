@@ -11,23 +11,23 @@
 - Tutoriály
 
   - Flutter
-    - [Počítadlo](fluttercountertutorial.md)
-    - [Časovač](fluttertimertutorial.md)
-    - [Nekonečný list](flutterinfinitelisttutorial.md)
-    - [Přihlašování](flutterlogintutorial.md)
-    - [Počasí](flutterweathertutorial.md)
-    - [Plánovač](fluttertodostutorial.md)
-    - [Firebase přihlašování](flutterfirebaselogintutorial.md)
-    - [Firestore plánovač](flutterfirestoretodostutorial.md)
+    - [Počítadlo](cs/fluttercountertutorial.md)
+    - [Časovač](cs/fluttertimertutorial.md)
+    - [Nekonečný list](cs/flutterinfinitelisttutorial.md)
+    - [Přihlašování](cs/flutterlogintutorial.md)
+    - [Počasí](cs/flutterweathertutorial.md)
+    - [Plánovač](cs/fluttertodostutorial.md)
+    - [Firebase přihlašování](cs/flutterfirebaselogintutorial.md)
+    - [Firestore plánovač](cs/flutterfirestoretodostutorial.md)
   - AngularDart
-    - [Počítadlo](angularcountertutorial.md)
+    - [Počítadlo](cs/angularcountertutorial.md)
   - Flutter + AngularDart
-    - [Github vyhledávání](flutterangulargithubsearch.md)
+    - [Github vyhledávání](cs/flutterangulargithubsearch.md)
 
 - Recepty
 
   - Flutter
-    - [Zobrazit SnackBar](cs/recipesfluttershowsnackbar.md)
+    - [Zobrazení SnackBaru](cs/recipesfluttershowsnackbar.md)
     - [Navigace](cs/recipesflutternavigation.md)
     - [Zpřístupnění Blocu](cs/recipesflutterblocaccess.md)
 
