@@ -9,7 +9,7 @@
 [![Gitter](https://img.shields.io/badge/gitter-chat-hotpink.svg)](https://gitter.im/bloc_package/Lobby)
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
-> prediktivní knihovna pro state management v Dart.
+> prediktivní knihovna pro state management v Dartu.
 
 - Snadná & Jednoduchá
 - Vysoce testovatelná

@@ -24,7 +24,7 @@
   - Flutter + AngularDart
     - [Github vyhledávání](cs/flutterangulargithubsearch.md)
 
-- Recipes
+- Recepty
 
   - Flutter
     - [Zobrazit SnackBar](cs/recipesfluttershowsnackbar.md)
