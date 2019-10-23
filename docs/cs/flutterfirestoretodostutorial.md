@@ -2,7 +2,7 @@
 
 ?> **Poznámka:** Tento tutoriál ještě nemá překlad.
 
-![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+![advanced](https://img.shields.io/badge/úroveň-pokročilý-red.svg)
 
 > In the following tutorial, we're going to build a reactive Todos App which hooks up to Firestore. We're going to be building on top of the [flutter todos](https://bloclibrary.dev/#/fluttertodostutorial) example so we won't go into the UI since it will all be the same.
 

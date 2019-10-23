@@ -2,7 +2,7 @@
 
 ?> **Poznámka:** Tento tutoriál ještě nemá překlad.
 
-![beginner](https://img.shields.io/badge/level-beginner-green.svg)
+![beginner](https://img.shields.io/badge/úroveň-začátečník-green.svg)
 
 > In the following tutorial we’re going to cover how to build a timer application using the bloc library. The finished application should look like this:
 

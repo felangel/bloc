@@ -2,7 +2,7 @@
 
 ?> **Poznámka:** Tento tutoriál ještě nemá překlad.
 
-![intermediate](https://img.shields.io/badge/level-intermediate-orange.svg)
+![intermediate](https://img.shields.io/badge/úroveň-středně%20pokročilý-orange.svg)
 
 > In this tutorial, we’re going to be implementing an app which fetches data over the network and loads it as a user scrolls using Flutter and the bloc library.
 

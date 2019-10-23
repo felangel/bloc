@@ -2,7 +2,7 @@
 
 ?> **Poznámka:** Tento tutoriál ještě nemá překlad.
 
-![intermediate](https://img.shields.io/badge/level-intermediate-orange.svg)
+![intermediate](https://img.shields.io/badge/úroveň-středně%20pokročilý-orange.svg)
 
 > In the following tutorial, we're going to build a Login Flow in Flutter using the Bloc library.
 

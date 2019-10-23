@@ -2,7 +2,7 @@
 
 ?> **Poznámka:** Tento tutoriál ještě nemá překlad.
 
-![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+![advanced](https://img.shields.io/badge/úroveň-pokročilý-red.svg)
 
 > In the following tutorial, we're going to build a Todos App in Flutter using the Bloc library.
 
