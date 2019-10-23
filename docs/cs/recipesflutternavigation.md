@@ -1,20 +1,20 @@
-# Recipes: Navigation
+# Recepty: Navigace
 
-> In this recipe, we're going to take a look at how to use `BlocBuilder` and/or `BlocListener` to do navigation. We're going to explore two approaches: Direct Navigation and Route Navigation.
+> V tomto receptu se podíváme na použítí `BlocBuilderu` a/nebo `BlocListeneru` k navigaci. Prozkoumáme dva přístupy: Přímou navigaci a Navigaci routami.
 
-## Direct Navigation
+## Přímá navigace
 
-> In this example, we're going to take a look at how to use `BlocBuilder` to show a specific page (widget) in response to a state change in a bloc without the use of a route.
+> V tétu ukázce se podíváme na to, jak použít `BlocBuilder` k zobrazení dané stránky (widgetu) jako odezvu na změnu stavu v blocu bez použití routy.
 
-![demo](./assets/gifs/recipes_flutter_navigation_direct.gif)
+![demo](../assets/gifs/recipes_flutter_navigation_direct.gif)
 
 ### Bloc
 
-Let's build `MyBloc` which will take `MyEvents` and convert them into `MyStates`.
+Pojďme si udělat `MyBloc`, který bude přijímat `MyEventy` a konvertovat je na `MyStaty`.
 
 #### MyEvent
 
-For simplicity, our `MyBloc` will only respond to a two `MyEvents`: `eventA` and `eventB`.
+Pro jednoduchost bude naše aplikace reagovat pouze na dva `MyEventy`: `eventA` a `eventB`.
 
 ```dart
 enum MyEvent { eventA, eventB }
@@ -22,10 +22,10 @@ enum MyEvent { eventA, eventB }
 
 #### MyState
 
-Our `MyBloc` can have one of two different `DataStates`:
+Náš `MyBloc` může mít jeden ze dvou `MyStavů`:
 
-- `StateA` - the state of the bloc when `PageA` is rendered.
-- `StateB` - the state of the bloc when `PageB` is rendered.
+- `StateA` - stav blocu, když je vekreslena `PageA`.
+- `StateB` - stav blocu, když je vekreslena `PageB`.
 
 ```dart
 abstract class MyState {}
@@ -37,7 +37,7 @@ class StateB extends MyState {}
 
 #### MyBloc
 
-Our `MyBloc` should look something like this:
+Náš `MyBloc` by měl vypadat nějak takto:
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -60,9 +60,9 @@ class MyBloc extends Bloc<MyEvent, MyState> {
 }
 ```
 
-### UI Layer
+### UI vrstva
 
-Now let's take a look at how to hook up our `MyBloc` to a widget and show a different page based on the bloc state.
+Nyní se pojďme podívat na to, jak propojit `MyBloc` k widgetu a zobrazit jinou stránku v závislosti na stavu blocu.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -155,25 +155,25 @@ class PageB extends StatelessWidget {
 }
 ```
 
-?> We use the `BlocBuilder` widget in order to render the correct widget in response to state changes in our `MyBloc`.
+?> Používáme `BlocBuilder` widget abychom vykreslili správný widget v reakci na změnu stavu našeho `MyBlocu`.
 
-?> We use the `BlocProvider` widget in order to make our instance of `MyBloc` available to the entire widget tree.
+?> Používáme `BlocProvider` widget abychom zpřístupnili naší instanci `MyBloc` celému stromu widgetů.
 
-The full source for this recipe can be found [here](https://gist.github.com/felangel/386c840aad41c7675ab8695f15c4cb09).
+Celý zdrojový kód pro tento recept můžete najít [zde](https://gist.github.com/felangel/386c840aad41c7675ab8695f15c4cb09).
 
-## Route Navigation
+## Navigace routami
 
-> In this example, we're going to take a look at how to use `BlocListener` to navigate to a specific page (widget) in response to a state change in a bloc using a route.
+> V této ukázce se podíváme na to, jak použít `BlocListener` k navigaci na danou stránku (widget) v reakci na změnu stavu v blocu použitím routy.
 
-![demo](./assets/gifs/recipes_flutter_navigation_routes.gif)
+![demo](../assets/gifs/recipes_flutter_navigation_routes.gif)
 
 ### Bloc
 
-We're going to reuse the same `MyBloc` from the previous example.
+Použijeme `MyBloc` z předešlého příkladu.
 
-### UI Layer
+### UI vrstva
 
-Let's take a look at how to route to a different page based on the state of `MyBloc`.
+Podívejme se na to, jak routovat na jinou stránku v závislosti na stavu `MyBlocu`.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -275,8 +275,8 @@ class PageB extends StatelessWidget {
 }
 ```
 
-?> We use the `BlocListener` widget in order to push a new route in response to state changes in our `MyBloc`.
+?> Používáme `BlocListener` widget abychom přidali novou routu v reakci na změnu stavu v našem `MyBlocu`.
 
-!> For the sake of this example we are adding an event just for navigation. In a real application, you should not create explicit navigation events. If there is no "business logic" necessary in order to trigger navigation you should always directly navigate in response to user input (in the `onPressed` callback, etc...). Only navigate in response to state changes if some "business logic" is required in order to determine where to navigate.
+!> Pro jednoduchost přidáváme událost pouze pro navigaci. V reálné aplikaci byste však konkrétní události pro navigaci nevytvářeli. Pokud pro spuštění navigace není nutná žádná logika, měli byste vždy přímo navigovat v reakci na vstup uživatele (v `onPressed` callbacku atp.). Navigujte v závislosti na změně stavu pouze když je vyžadována nějaká logika k určení, kam navigovat.
 
-The full source for this recipe can be found [here](https://gist.github.com/felangel/6bcd4be10c046ceb33eecfeb380135dd).
+Celý zdrojový kód pro tento recept můžete najít [zde](https://gist.github.com/felangel/6bcd4be10c046ceb33eecfeb380135dd).
