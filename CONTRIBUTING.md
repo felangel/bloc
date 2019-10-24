@@ -41,7 +41,7 @@ python -m SimpleHTTPServer 8080 .
 # navigate to http://localhost:8080
 ```
 
-To make your PRs more readable, you can provide this checkbox list to your PR's description. Additionally, people who wants to join translating docs into your language can easily see what's already done.
+To make PRs more readable, please provide this checklist to the PR description so other contributors can easily see what's already done.
 
 ```text
 * [ ] README
