@@ -41,6 +41,45 @@ python -m SimpleHTTPServer 8080 .
 # navigate to http://localhost:8080
 ```
 
+To make PRs more readable, please provide this checklist to the PR description so other contributors can easily see what's already done.
+
+```text
+* [ ] README
+* [ ] Cover page
+* [ ] Sidebar
+* Introduction
+  * [ ] Getting Started
+  * [ ] Why Bloc?
+* Core Concepts
+  * [ ] bloc
+  * [ ] flutter_bloc
+* [ ] Architecture
+* [ ] Testing
+* Tutorials
+  * Flutter
+    * [ ] Counter
+    * [ ] Timer
+    * [ ] Infinite List
+    * [ ] Login
+    * [ ] Weather
+    * [ ] Todos
+    * [ ] Firebase Login
+    * [ ] Firestore Todos
+  * AngularDart
+    * [ ] Counter
+  * Flutter + AngularDart
+    * [ ] Github Search
+* Recipes
+  * Flutter
+    * [ ] Show SnackBar
+    * [ ] Navigation
+    * [ ] Bloc Access
+* Tools
+  * Extensions
+    * [ ] IntelliJ
+    * [ ] VSCode
+```
+
 ## Getting in Touch
 
 If you want to just ask a question or get feedback on an idea you can post it on [gitter](https://gitter.im/bloc_package/Lobby).
