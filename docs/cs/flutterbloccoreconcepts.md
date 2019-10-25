@@ -6,7 +6,7 @@
 
 ### BlocBuilder
 
-**BlocBuilder** je Flutter widget, který vyžaduje `Bloc` a `builder` funkci. `BlocBuilder` zpracovává sestavení widgetu v reakci na nové stavy. `BlocBuilder` je velmi podobný k `StramBuilder`, ale jednodušší API ke snížení potřebného kódu. Funkce `builder` může být potencionálně zavolána vícekrát a měla by být [pure funkcí](https://en.wikipedia.org/wiki/Pure_function), která vrací widget v reakci na stav.
+**BlocBuilder** je Flutter widget, který vyžaduje `Bloc` a `builder` funkci. `BlocBuilder` zpracovává sestavení widgetu v reakci na nové stavy. `BlocBuilder` je velmi podobný k `StramBuilder`, ale jednodušší API ke snížení potřebného kódu. Funkce `builder` může být potencionálně zavolána vícekrát a měla by být bez vedlejších účinků ([pure funkce](https://en.wikipedia.org/wiki/Pure_function)), která vrací widget v reakci na stav.
 
 Podívejte se na `BlocListener`, pokud chcete "dělat" něco, v závislosti na stavu, jako je navigace, zobrazování dialogu atp.
 
