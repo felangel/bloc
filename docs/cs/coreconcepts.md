@@ -197,6 +197,8 @@ void main() {
 }
 ```
 
+!> `add` je asynchronní a události budou zpracovány v pořadí, ve kterém byly přidány a každá nová přidaná událost je zařazena do fronty. Událost je považována za plně zpracovanout v momentě, kdy se dokončí provádění `mapEventToState`.
+
 `Transitiony` ve výše zmíněném úryvku kódu bude následující:
 
 ```json
