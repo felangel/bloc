@@ -19,6 +19,14 @@
 
 An extension to the [bloc state management library](https://github.com/felangel/bloc) which automatically persists and restores bloc states.
 
+# Overview
+
+`hydrated_bloc` exports a `HydratedStorage` interface which means it can work with any storage provider. Out of the box, it comes with its own implementation: `HydratedBlocStorage`.
+
+`HydratedBlocStorage` is built on top of [path_provider](https://pub.dev/packages/path_provider) for a platform-agnostic storage layer. The out-of-the-box storage implementation reads/writes to file using the `toJson`/`fromJson` methods on `HydratedBloc` and should perform very well for most use-cases (performance reports coming soon). `HydratedBlocStorage` is supported for desktop ([example](https://github.com/felangel/hydrated_bloc/tree/master/example)).
+
+In addition, while the `HydratedBlocStorage` client doesn't automatically encrypt/decrypt the data, it is fairly straightforward to implement a custom `HydratedStorage` client which does support encryption.
+
 # Usage
 
 ### 1. Use `HydratedBlocDelegate`
@@ -94,16 +102,6 @@ class CounterState {
 ```
 
 Now our `CounterBloc` is a `HydratedBloc` and will automatically persist its state. We can increment the counter value, hot restart, kill the app, etc... and our `CounterBloc` will always retain its state.
-
-# How it works
-
-## Overview
-
-`hydrated_bloc` exports a `HydratedStorage` interface which means it can work with any storage provider. Out of the box, it comes with its own implementation: `HydratedBlocStorage`.
-
-`HydratedBlocStorage` is built on top of [path_provider](https://pub.dev/packages/path_provider) for a platform-agnostic storage layer. The out-of-the-box storage implementation reads/writes to file using the `toJson`/`fromJson` methods on `HydratedBloc` and should perform very well for most use-cases (performance reports coming soon). `HydratedBlocStorage` is supported for desktop ([example](https://github.com/felangel/hydrated_bloc/tree/master/example)).
-
-In addition, while the `HydratedBlocStorage` client doesn't automatically encrypt/decrypt the data, it is fairly straightforward to implement a custom `HydratedStorage` client which does support encryption.
 
 ## Custom Storage Directory
 
