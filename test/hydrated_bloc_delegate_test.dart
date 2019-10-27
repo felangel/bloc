@@ -13,62 +13,23 @@ class MockStorage extends Mock implements HydratedBlocStorage {}
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  MockStorage storage;
-  HydratedBlocDelegate delegate;
-  MockBloc bloc;
-
-  setUp(() async {
-    const MethodChannel channel =
-        MethodChannel('plugins.flutter.io/path_provider');
-    String response = '.';
-
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return response;
-    });
-
-    storage = MockStorage();
-    delegate = HydratedBlocDelegate(storage);
-    bloc = MockBloc();
-  });
-
-  tearDown(() async {
-    final file = File('./.hydrated_bloc.json');
-    if (file.existsSync()) {
-      file.deleteSync();
-    }
-  });
 
   group('HydratedBlocDelegate', () {
-    test(
-        'should call storage.write when onTransition is called using the static build',
-        () async {
-      delegate = await HydratedBlocDelegate.build();
-      final transition = Transition(
-        currentState: 'currentState',
-        event: 'event',
-        nextState: 'nextState',
-      );
-      Map<String, String> expected = {'nextState': 'json'};
-      when(bloc.id).thenReturn('');
-      when(bloc.toJson('nextState')).thenReturn(expected);
-      delegate.onTransition(bloc, transition);
-      expect(delegate.storage.read('MockBloc'), '{"nextState":"json"}');
+    MockStorage storage;
+    HydratedBlocDelegate delegate;
+    MockBloc bloc;
+
+    setUp(() {
+      storage = MockStorage();
+      delegate = HydratedBlocDelegate(storage);
+      bloc = MockBloc();
     });
 
-    test(
-        'should call storage.write when onTransition is called using the static build with bloc id',
-        () async {
-      delegate = await HydratedBlocDelegate.build();
-      final transition = Transition(
-        currentState: 'currentState',
-        event: 'event',
-        nextState: 'nextState',
-      );
-      Map<String, String> expected = {'nextState': 'json'};
-      when(bloc.id).thenReturn('A');
-      when(bloc.toJson('nextState')).thenReturn(expected);
-      delegate.onTransition(bloc, transition);
-      expect(delegate.storage.read('MockBlocA'), '{"nextState":"json"}');
+    tearDown(() async {
+      final file = File('./.hydrated_bloc.json');
+      if (file.existsSync()) {
+        file.deleteSync();
+      }
     });
 
     test('should call storage.write when onTransition is called', () {
@@ -96,6 +57,88 @@ void main() {
       when(bloc.toJson('nextState')).thenReturn(expected);
       delegate.onTransition(bloc, transition);
       verify(storage.write('MockBlocA', json.encode(expected))).called(1);
+    });
+
+    group('Default Storage Directory', () {
+      setUp(() async {
+        const MethodChannel channel =
+            MethodChannel('plugins.flutter.io/path_provider');
+        String response = '.';
+
+        channel.setMockMethodCallHandler((MethodCall methodCall) async {
+          return response;
+        });
+      });
+
+      test(
+          'should call storage.write when onTransition is called using the static build',
+          () async {
+        delegate = await HydratedBlocDelegate.build();
+        final transition = Transition(
+          currentState: 'currentState',
+          event: 'event',
+          nextState: 'nextState',
+        );
+        Map<String, String> expected = {'nextState': 'json'};
+        when(bloc.id).thenReturn('');
+        when(bloc.toJson('nextState')).thenReturn(expected);
+        delegate.onTransition(bloc, transition);
+        expect(delegate.storage.read('MockBloc'), '{"nextState":"json"}');
+      });
+
+      test(
+          'should call storage.write when onTransition is called using the static build with bloc id',
+          () async {
+        delegate = await HydratedBlocDelegate.build();
+        final transition = Transition(
+          currentState: 'currentState',
+          event: 'event',
+          nextState: 'nextState',
+        );
+        Map<String, String> expected = {'nextState': 'json'};
+        when(bloc.id).thenReturn('A');
+        when(bloc.toJson('nextState')).thenReturn(expected);
+        delegate.onTransition(bloc, transition);
+        expect(delegate.storage.read('MockBlocA'), '{"nextState":"json"}');
+      });
+    });
+
+    group('Custom Storage Directory', () {
+      test(
+          'should call storage.write when onTransition is called using the static build',
+          () async {
+        delegate = await HydratedBlocDelegate.build(
+          storageDirectory: Directory.current,
+        );
+        final transition = Transition(
+          currentState: 'currentState',
+          event: 'event',
+          nextState: 'nextState',
+        );
+        Map<String, String> expected = {'nextState': 'json'};
+        when(bloc.id).thenReturn('');
+        when(bloc.toJson('nextState')).thenReturn(expected);
+        delegate.onTransition(bloc, transition);
+        expect(delegate.storage.read('MockBloc'), '{"nextState":"json"}');
+      });
+
+      test(
+          'should call storage.write when onTransition is called using the static build with bloc id',
+          () async {
+        delegate = await HydratedBlocDelegate.build(
+          storageDirectory: Directory.current,
+        );
+        final transition = Transition(
+          currentState: 'currentState',
+          event: 'event',
+          nextState: 'nextState',
+        );
+        Map<String, String> expected = {'nextState': 'json'};
+        when(bloc.id).thenReturn('A');
+        when(bloc.toJson('nextState')).thenReturn(expected);
+        delegate.onTransition(bloc, transition);
+        expect(delegate.storage.read('MockBlocA'), '{"nextState":"json"}');
+      });
     });
   });
 }

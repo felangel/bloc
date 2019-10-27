@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -9,13 +10,16 @@ class HydratedBlocDelegate extends BlocDelegate {
 
   /// Builds a new instance of `HydratedBlocDelegate` with the
   /// default `HydratedBlocStorage`.
+  /// A custom `storageDirectory` can optionally be provided.
   ///
   /// This is the recommended way to use a `HydratedBlocDelegate`.
   /// If you want to customize `HydratedBlocDelegate` you can extend `HydratedBlocDelegate`
   /// and perform the necessary overrides.
-  static Future<HydratedBlocDelegate> build() async {
+  static Future<HydratedBlocDelegate> build({
+    Directory storageDirectory,
+  }) async {
     return HydratedBlocDelegate(
-      await HydratedBlocStorage.getInstance(),
+      await HydratedBlocStorage.getInstance(storageDirectory: storageDirectory),
     );
   }
 

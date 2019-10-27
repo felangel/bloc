@@ -22,19 +22,23 @@ abstract class HydratedStorage {
 /// Implementation of `HydratedStorage` which uses `PathProvider` and `dart.io`
 /// to persist and retrieve state changes from the local device.
 class HydratedBlocStorage implements HydratedStorage {
-  static const String _hydratedBlocStorageName = '.hydrated_bloc.json';
   static HydratedBlocStorage _instance;
   Map<String, dynamic> _storage;
   File _file;
 
   /// Returns an instance of `HydratedBlocStorage`.
-  static Future<HydratedBlocStorage> getInstance() async {
+  /// `storageDirectory` can optionally be provided.
+  /// By default, `getTemporaryDirectory` is used.
+  static Future<HydratedBlocStorage> getInstance({
+    Directory storageDirectory,
+  }) async {
     if (_instance != null) {
       return _instance;
     }
 
-    final Directory directory = await getTemporaryDirectory();
-    final File file = File('${directory.path}/$_hydratedBlocStorageName');
+    final Directory directory =
+        storageDirectory ?? await getTemporaryDirectory();
+    final File file = File('${directory.path}/.hydrated_bloc.json');
     Map<String, dynamic> storage = Map<String, dynamic>();
 
     if (await file.exists()) {
