@@ -2,24 +2,27 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:bloc/bloc.dart';
 
+/// {@template blocprovider}
+/// Takes a [ValueBuilder] that is responsible for
+/// building the bloc and a child which will have access to the bloc via `BlocProvider.of(context)`.
+/// It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided
+/// to multiple widgets within a subtree.
+///
+/// Automatically handles closing the bloc when used with a `builder`.
+///
+/// ```dart
+/// BlocProvider(
+///   builder: (BuildContext context) => BlocA(),
+///   child: ChildA(),
+/// );
+/// ```
+/// {@endtemplate}
 class BlocProvider<T extends Bloc<dynamic, dynamic>>
     extends ValueDelegateWidget<T> implements SingleChildCloneableWidget {
   /// The [Widget] and its descendants which will have access to the [Bloc].
   final Widget child;
 
-  /// Takes a [ValueBuilder] that is responsible for
-  /// building the bloc and a child which will have access to the bloc via `BlocProvider.of(context)`.
-  /// It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided
-  /// to multiple widgets within a subtree.
-  ///
-  /// Automatically handles closing the bloc when used with a `builder`.
-  ///
-  /// ```dart
-  /// BlocProvider(
-  ///   builder: (BuildContext context) => BlocA(),
-  ///   child: ChildA(),
-  /// );
-  /// ```
+  /// {@macro blocprovider}
   BlocProvider({
     Key key,
     ValueBuilder<T> builder,
@@ -76,7 +79,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
   static T of<T extends Bloc<dynamic, dynamic>>(BuildContext context) {
     try {
       return Provider.of<T>(context, listen: false);
-    } catch (_) {
+    } on Object catch (_) {
       throw FlutterError(
         """
         BlocProvider.of() called with a context that does not contain a Bloc of type $T.

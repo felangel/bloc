@@ -119,13 +119,13 @@ class CounterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CounterBloc _counterBloc = BlocProvider.of<CounterBloc>(context);
-    assert(_counterBloc != null);
+    final counterBloc = BlocProvider.of<CounterBloc>(context);
+    assert(counterBloc != null);
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
       body: BlocBuilder<CounterBloc, int>(
-        bloc: _counterBloc,
+        bloc: counterBloc,
         builder: (BuildContext context, int count) {
           if (onBuild != null) {
             onBuild();
@@ -220,17 +220,17 @@ void main() {
     });
 
     testWidgets('passes bloc to children', (WidgetTester tester) async {
-      final _builder = (BuildContext context) => CounterBloc();
-      final CounterPage _child = CounterPage();
+      CounterBloc _builder(BuildContext context) => CounterBloc();
+      final _child = CounterPage();
       await tester.pumpWidget(MyApp(
         builder: _builder,
         child: _child,
       ));
 
-      final Finder _counterFinder = find.byKey((Key('counter_text')));
+      final _counterFinder = find.byKey((Key('counter_text')));
       expect(_counterFinder, findsOneWidget);
 
-      final Text _counterText = _counterFinder.evaluate().first.widget as Text;
+      final _counterText = _counterFinder.evaluate().first.widget as Text;
       expect(_counterText.data, '0');
     });
 
@@ -255,8 +255,8 @@ void main() {
 
     testWidgets('calls close on bloc automatically',
         (WidgetTester tester) async {
-      bool closeCalled = false;
-      final _builder = (BuildContext context) => CounterBloc(
+      var closeCalled = false;
+      CounterBloc _builder(BuildContext context) => CounterBloc(
             onClose: () {
               closeCalled = true;
             },
@@ -267,7 +267,7 @@ void main() {
         child: _child,
       ));
 
-      final Finder _routeButtonFinder = find.byKey((Key('route_button')));
+      final _routeButtonFinder = find.byKey((Key('route_button')));
       expect(_routeButtonFinder, findsOneWidget);
       expect(closeCalled, false);
 
@@ -279,7 +279,7 @@ void main() {
 
     testWidgets('does not close when created using value',
         (WidgetTester tester) async {
-      bool closeCalled = false;
+      var closeCalled = false;
       final _value = CounterBloc(
         onClose: () {
           closeCalled = true;
@@ -291,7 +291,7 @@ void main() {
         child: _child,
       ));
 
-      final Finder _routeButtonFinder = find.byKey((Key('route_button')));
+      final _routeButtonFinder = find.byKey((Key('route_button')));
       expect(_routeButtonFinder, findsOneWidget);
       expect(closeCalled, false);
 
@@ -329,7 +329,7 @@ void main() {
     testWidgets(
         'should not rebuild widgets that inherited the bloc if the bloc is changed',
         (WidgetTester tester) async {
-      int numBuilds = 0;
+      var numBuilds = 0;
       final Widget _child = CounterPage(
         onBuild: () {
           numBuilds++;

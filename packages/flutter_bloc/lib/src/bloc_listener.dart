@@ -15,62 +15,65 @@ typedef BlocWidgetListener<S> = void Function(BuildContext context, S state);
 /// of [BlocListener] with the current state.
 typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 
+/// {@template bloclistener}
+/// Takes a [BlocWidgetListener] and an optional [Bloc]
+/// and invokes the listener in response to state changes in the bloc.
+/// It should be used for functionality that needs to occur only in response to a state change
+/// such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
+/// The `listener` is guaranteed to only be called once for each state change unlike the
+/// `builder` in [BlocBuilder].
+///
+/// If the bloc parameter is omitted, [BlocListener] will automatically perform a lookup using
+/// [BlocProvider] and the current [BuildContext].
+///
+/// ```dart
+/// BlocListener<BlocA, BlocAState>(
+///   listener: (context, state) {
+///     /// do stuff here based on BlocA's state
+///   },
+///   child: Container(),
+/// )
+/// ```
+/// Only specify the bloc if you wish to provide a bloc that is otherwise
+/// not accessible via [BlocProvider] and the current [BuildContext].
+///
+/// ```dart
+/// BlocListener<BlocA, BlocAState>(
+///   bloc: blocA,
+///   listener: (context, state) {
+///     /// do stuff here based on BlocA's state
+///   },
+///   child: Container(),
+/// )
+/// ```
+///
+/// An optional `condition` can be implemented for more granular control
+/// over when `listener` is called.
+/// The `condition` function will be invoked on each bloc state change.
+/// The `condition` takes the previous state and current state and must return a `bool`
+/// which determines whether or not the `listener` function will be invoked.
+/// The previous state will be initialized to `state` when the [BlocListener] is initialized.
+/// `condition` is optional and if it isn't implemented, it will default to return `true`.
+///
+/// ```dart
+/// BlocListener<BlocA, BlocAState>(
+///   condition: (previousState, state) {
+///     // return true/false to determine whether or not
+///     // to invoke listener with state
+///   },
+///   listener: (context, state) {
+///     // do stuff here based on BlocA's state
+///   }
+///   child: Container(),
+/// )
+/// ```
+/// {@endtemplate}
 class BlocListener<B extends Bloc<dynamic, S>, S> extends BlocListenerBase<B, S>
     with SingleChildCloneableWidget {
   /// The [Widget] which will be rendered as a descendant of the [BlocListener].
   final Widget child;
 
-  /// Takes a [BlocWidgetListener] and an optional [Bloc]
-  /// and invokes the listener in response to state changes in the bloc.
-  /// It should be used for functionality that needs to occur only in response to a state change
-  /// such as navigation, showing a [SnackBar], showing a [Dialog], etc...
-  /// The `listener` is guaranteed to only be called once for each state change unlike the
-  /// `builder` in [BlocBuilder].
-  ///
-  /// If the bloc parameter is omitted, [BlocListener] will automatically perform a lookup using
-  /// [BlocProvider] and the current [BuildContext].
-  ///
-  /// ```dart
-  /// BlocListener<BlocA, BlocAState>(
-  ///   listener: (context, state) {
-  ///     /// do stuff here based on BlocA's state
-  ///   },
-  ///   child: Container(),
-  /// )
-  /// ```
-  /// Only specify the bloc if you wish to provide a bloc that is otherwise
-  /// not accessible via [BlocProvider] and the current [BuildContext].
-  ///
-  /// ```dart
-  /// BlocListener<BlocA, BlocAState>(
-  ///   bloc: blocA,
-  ///   listener: (context, state) {
-  ///     /// do stuff here based on BlocA's state
-  ///   },
-  ///   child: Container(),
-  /// )
-  /// ```
-  ///
-  /// An optional `condition` can be implemented for more granular control
-  /// over when `listener` is called.
-  /// The `condition` function will be invoked on each bloc state change.
-  /// The `condition` takes the previous state and current state and must return a `bool`
-  /// which determines whether or not the `listener` function will be invoked.
-  /// The previous state will be initialized to `state` when the [BlocListener] is initialized.
-  /// `condition` is optional and if it isn't implemented, it will default to return `true`.
-  ///
-  /// ```dart
-  /// BlocListener<BlocA, BlocAState>(
-  ///   condition: (previousState, state) {
-  ///     // return true/false to determine whether or not
-  ///     // to invoke listener with state
-  ///   },
-  ///   listener: (context, state) {
-  ///     // do stuff here based on BlocA's state
-  ///   }
-  ///   child: Container(),
-  /// )
-  /// ```
+  /// {@macro bloclistener}
   const BlocListener({
     Key key,
     @required BlocWidgetListener<S> listener,
@@ -103,6 +106,13 @@ class BlocListener<B extends Bloc<dynamic, S>, S> extends BlocListenerBase<B, S>
   Widget build(BuildContext context) => child;
 }
 
+/// {@template bloclistenerbase}
+/// Base class for widgets that listen to state changes in a specified [Bloc].
+///
+/// A [BlocListenerBase] is stateful and maintains the state subscription.
+/// The type of the state and what happens with each state change
+/// is defined by sub-classes.
+/// {@endtemplate}
 abstract class BlocListenerBase<B extends Bloc<dynamic, S>, S>
     extends StatefulWidget {
   /// The [Bloc] whose state will be listened to.
@@ -123,11 +133,7 @@ abstract class BlocListenerBase<B extends Bloc<dynamic, S>, S>
   /// `condition` is optional and if it isn't implemented, it will default to return `true`.
   final BlocListenerCondition<S> condition;
 
-  /// Base class for widgets that listen to state changes in a specified [Bloc].
-  ///
-  /// A [BlocListenerBase] is stateful and maintains the state subscription.
-  /// The type of the state and what happens with each state change
-  /// is defined by sub-classes.
+  /// {@macro bloclistenerbase}
   const BlocListenerBase({
     Key key,
     this.listener,
@@ -158,8 +164,8 @@ class _BlocListenerBaseState<B extends Bloc<dynamic, S>, S>
   @override
   void didUpdateWidget(BlocListenerBase<B, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final Stream<S> oldState = oldWidget.bloc ?? BlocProvider.of<B>(context);
-    final Stream<S> currentState = widget.bloc ?? oldState;
+    final oldState = oldWidget.bloc ?? BlocProvider.of<B>(context);
+    final currentState = widget.bloc ?? oldState;
     if (oldState != currentState) {
       if (_subscription != null) {
         _unsubscribe();
