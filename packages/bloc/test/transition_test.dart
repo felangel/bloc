@@ -95,7 +95,7 @@ void main() {
             event: SimpleTransitionEvent(),
             nextState: SimpleTransitionState(),
           );
-        } catch (error) {
+        } on Object catch (_) {
           fail(
             'should not throw error when initialized with all required parameters',
           );

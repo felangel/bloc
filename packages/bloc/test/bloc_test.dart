@@ -23,7 +23,7 @@ void main() {
       });
 
       test('close does not emit new states over the state stream', () {
-        final List<Matcher> expectedStates = [equals(''), emitsDone];
+        final expectedStates = [equals(''), emitsDone];
 
         expectLater(
           simpleBloc,
@@ -48,7 +48,7 @@ void main() {
       });
 
       test('should map single event to correct state', () {
-        final List<String> expectedStates = ['', 'data'];
+        final expectedStates = ['', 'data'];
 
         expectLater(
           simpleBloc,
@@ -71,7 +71,7 @@ void main() {
       });
 
       test('should map multiple events to correct states', () {
-        final List<String> expectedStates = ['', 'data'];
+        final expectedStates = ['', 'data'];
 
         expectLater(
           simpleBloc,
@@ -113,10 +113,7 @@ void main() {
       });
 
       test('close does not emit new states over the state stream', () {
-        final List<Matcher> expectedStates = [
-          equals(ComplexStateA()),
-          emitsDone
-        ];
+        final expectedStates = [equals(ComplexStateA()), emitsDone];
 
         expectLater(
           complexBloc,
@@ -141,7 +138,7 @@ void main() {
       });
 
       test('should map single event to correct state', () {
-        final List<ComplexState> expectedStates = [
+        final expectedStates = [
           ComplexStateA(),
           ComplexStateB(),
         ];
@@ -167,7 +164,7 @@ void main() {
       });
 
       test('should map multiple events to correct states', () async {
-        final List<ComplexState> expectedStates = [
+        final expectedStates = [
           ComplexStateA(),
           ComplexStateB(),
           ComplexStateD(),
@@ -205,13 +202,13 @@ void main() {
       List<String> transitions;
       List<CounterEvent> events;
 
-      final OnEventCallback onEventCallback = (event) {
+      void onEventCallback(event) {
         events.add(event);
-      };
+      }
 
-      final OnTransitionCallback onTransitionCallback = (transition) {
+      void onTransitionCallback(transition) {
         transitions.add(transition.toString());
-      };
+      }
 
       setUp(() {
         events = [];
@@ -243,7 +240,7 @@ void main() {
       });
 
       test('single Increment event updates state to 1', () {
-        final List<int> expectedStates = [0, 1];
+        final expectedStates = [0, 1];
         final expectedTransitions = [
           'Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }'
         ];
@@ -270,7 +267,7 @@ void main() {
       });
 
       test('multiple Increment event updates state to 3', () {
-        final List<int> expectedStates = [0, 1, 2, 3];
+        final expectedStates = [0, 1, 2, 3];
         final expectedTransitions = [
           'Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }',
           'Transition { currentState: 1, event: CounterEvent.increment, nextState: 2 }',
@@ -338,10 +335,7 @@ void main() {
       });
 
       test('close does not emit new states over the state stream', () {
-        final List<Matcher> expectedStates = [
-          equals(AsyncState.initial()),
-          emitsDone
-        ];
+        final expectedStates = [equals(AsyncState.initial()), emitsDone];
 
         expectLater(
           asyncBloc,
@@ -354,10 +348,7 @@ void main() {
       test(
           'close while events are pending does not emit new states or trigger onError',
           () {
-        final List<Matcher> expectedStates = [
-          equals(AsyncState.initial()),
-          emitsDone
-        ];
+        final expectedStates = [equals(AsyncState.initial()), emitsDone];
 
         expectLater(
           asyncBloc,
@@ -385,7 +376,7 @@ void main() {
       });
 
       test('should map single event to correct state', () {
-        final List<AsyncState> expectedStates = [
+        final expectedStates = [
           AsyncState(isLoading: false, hasError: false, isSuccess: false),
           AsyncState(isLoading: true, hasError: false, isSuccess: false),
           AsyncState(isLoading: false, hasError: false, isSuccess: true),
@@ -451,15 +442,15 @@ void main() {
 
     group('== operator', () {
       test('returns true for the same two CounterBlocs', () {
-        final CounterBloc _blocA = CounterBloc();
-        final CounterBloc _blocB = CounterBloc();
+        final _blocA = CounterBloc();
+        final _blocB = CounterBloc();
 
         expect(_blocA == _blocB, true);
       });
 
       test('returns false for the two different Blocs', () {
-        final CounterBloc _blocA = CounterBloc();
-        final ComplexBloc _blocB = ComplexBloc();
+        final _blocA = CounterBloc();
+        final _blocB = ComplexBloc();
 
         expect(_blocA == _blocB, false);
       });
@@ -467,8 +458,8 @@ void main() {
 
     group('Exception', () {
       test('does not break stream', () {
-        final List<int> expected = [0, -1];
-        final CounterExceptionBloc _bloc = CounterExceptionBloc();
+        final expected = [0, -1];
+        final _bloc = CounterExceptionBloc();
 
         expectLater(_bloc, emitsInOrder(expected));
 
@@ -481,7 +472,7 @@ void main() {
         Object expectedError;
         StackTrace expectedStacktrace;
 
-        final OnExceptionBloc _bloc = OnExceptionBloc(
+        final _bloc = OnExceptionBloc(
             exception: exception,
             onErrorCallback: (Object error, StackTrace stacktrace) {
               expectedError = error;
@@ -502,7 +493,7 @@ void main() {
       test('triggers onError from add', () {
         Object capturedError;
         StackTrace capturedStacktrace;
-        final CounterBloc _bloc = CounterBloc(
+        final _bloc = CounterBloc(
           onErrorCallback: (Object error, StackTrace stacktrace) {
             capturedError = error;
             capturedStacktrace = stacktrace;
@@ -531,8 +522,8 @@ void main() {
 
     group('Error', () {
       test('does not break stream', () {
-        final List<int> expected = [0, -1];
-        final CounterErrorBloc _bloc = CounterErrorBloc();
+        final expected = [0, -1];
+        final _bloc = CounterErrorBloc();
 
         expectLater(_bloc, emitsInOrder(expected));
 
@@ -545,7 +536,7 @@ void main() {
         Object expectedError;
         StackTrace expectedStacktrace;
 
-        final OnErrorBloc _bloc = OnErrorBloc(
+        final _bloc = OnErrorBloc(
             error: error,
             onErrorCallback: (Object error, StackTrace stacktrace) {
               expectedError = error;
