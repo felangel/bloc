@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 /// {@template repositoryprovider}
-/// Takes a [ValueBuilder] that is responsible for
-/// building the repository and a child which will have access to the repository via `RepositoryProvider.of(context)`.
+/// Takes a `ValueBuilder` that is responsible for
+/// building the repository and a [child] which will have access to the repository via `RepositoryProvider.of(context)`.
 /// It is used as a dependency injection (DI) widget so that a single instance of a repository can be provided
 /// to multiple widgets within a subtree.
 ///
@@ -27,9 +27,9 @@ class RepositoryProvider<T> extends Provider<T> {
           child: child,
         );
 
-  /// Takes a repository and a child which will have access to the repository.
+  /// Takes a repository and a [child] which will have access to the repository.
   /// A new repository should not be created in `RepositoryProvider.value`.
-  /// Repositories should always be created using the default constructor within the `builder`.
+  /// Repositories should always be created using the default constructor within the [builder].
   RepositoryProvider.value({
     Key key,
     @required T value,

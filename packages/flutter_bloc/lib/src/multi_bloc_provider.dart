@@ -51,11 +51,11 @@ class MultiBlocProvider extends StatelessWidget {
   /// The [BlocProvider] list which is converted into a tree of [BlocProvider] widgets.
   /// The tree of [BlocProvider] widgets is created in order meaning the first [BlocProvider]
   /// will be the top-most [BlocProvider] and the last [BlocProvider] will be a direct ancestor
-  /// of the `child` [Widget].
+  /// of [child].
   final List<BlocProvider> providers;
 
-  /// The [Widget] and its descendants which will have access to every `Bloc` provided by `providers`.
-  /// This [Widget] will be a direct descendent of the last [BlocProvider] in `providers`.
+  /// The widget and its descendants which will have access to every [bloc] provided by [providers].
+  /// [child] will be a direct descendent of the last [BlocProvider] in [providers].
   final Widget child;
 
   /// {@macro multiblocprovider}

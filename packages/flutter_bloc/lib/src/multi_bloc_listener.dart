@@ -51,10 +51,10 @@ class MultiBlocListener extends StatelessWidget {
   /// The [BlocListener] list which is converted into a tree of [BlocListener] widgets.
   /// The tree of [BlocListener] widgets is created in order meaning the first [BlocListener]
   /// will be the top-most [BlocListener] and the last [BlocListener] will be a direct ancestor
-  /// of the `child` [Widget].
+  /// of [child].
   final List<BlocListener> listeners;
 
-  /// This [Widget] will be a direct descendent of the last [BlocListener] in `listeners`.
+  /// The widget which will be a direct descendent of the last [BlocListener] in [listeners].
   final Widget child;
 
   /// {@macro multibloclistener}

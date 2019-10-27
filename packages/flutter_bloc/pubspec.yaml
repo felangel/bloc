@@ -18,4 +18,4 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  effective_dart: ^1.0.1
+  effective_dart: ^1.1.1

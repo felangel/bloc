@@ -45,11 +45,11 @@ class MultiRepositoryProvider extends StatelessWidget {
   /// The [RepositoryProvider] list which is converted into a tree of [RepositoryProvider] widgets.
   /// The tree of [RepositoryProvider] widgets is created in order meaning the first [RepositoryProvider]
   /// will be the top-most [RepositoryProvider] and the last [RepositoryProvider] will be a direct ancestor
-  /// of the `child` [Widget].
+  /// of [child].
   final List<RepositoryProvider> providers;
 
-  /// The [Widget] and its descendants which will have access to every value provided by `providers`.
-  /// This [Widget] will be a direct descendent of the last [RepositoryProvider] in `providers`.
+  /// The widget and its descendants which will have access to every value provided by [providers].
+  /// [child] will be a direct descendent of the last [RepositoryProvider] in [providers].
   final Widget child;
 
   /// {@macro multirepositoryprovider}
