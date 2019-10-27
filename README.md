@@ -126,6 +126,11 @@ class MyHydratedStorage implements HydratedStorage {
   }
 
   @override
+  Future<void> delete(String key) async {
+    // TODO: implement delete
+  }
+
+  @override
   Future<void> clear() async {
     // TODO: implement clear
   }
