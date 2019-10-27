@@ -95,6 +95,57 @@ class CounterState {
 
 Now our `CounterBloc` is a `HydratedBloc` and will automatically persist its state. We can increment the counter value, hot restart, kill the app, etc... and our `CounterBloc` will always retain its state.
 
+## Custom Storage Directory
+
+By default, all data is written to [temporary storage](https://github.com/flutter/plugins/blob/61c39d1e79e8f36030162a5f85fb491c65f4e51c/packages/path_provider/lib/path_provider.dart#L24) which means it can be wiped by the operating system at any point in time.
+
+An optional `storageDirectory` can be provided to override the default temporary storage directory:
+
+```dart
+BlocSupervisor.delegate = await HydratedBlocDelegate.build(
+  storageDirectory: await getApplicationDocumentsDirectory(),
+);
+```
+
+## Custom Hydrated Storage
+
+If the default `HydratedBlocStorage` doesn't meet your needs, you can always implement a custom `HydratedStorage` by simply implementing the `HydratedStorage` interface and initializing `HydratedBlocDelegate` with the custom `HydratedStorage`.
+
+```dart
+// my_hydrated_storage.dart
+
+class MyHydratedStorage implements HydratedStorage {
+  @override
+  dynamic read(String key) {
+    // TODO: implement read
+  }
+
+  @override
+  Future<void> write(String key, dynamic value) async {
+    // TODO: implement write
+  }
+
+  @override
+  Future<void> clear() async {
+    // TODO: implement clear
+  }
+}
+```
+
+```dart
+// my_hydrated_bloc_delegate.dart
+
+class MyHydratedBlocDelegate extends HydratedBlocDelegate {
+ MyHydratedBlocDelegate() : super(MyHydratedBlocStorage());
+}
+```
+
+```dart
+// main.dart
+
+BlocSupervisor.delegate = MyHydratedBlocDelegate();
+```
+
 # How it works
 
 ## Overview
@@ -104,7 +155,5 @@ Now our `CounterBloc` is a `HydratedBloc` and will automatically persist its sta
 `HydratedBlocStorage` is built on top of [path_provider](https://pub.dev/packages/path_provider) for a platform-agnostic storage layer. The out-of-the-box storage implementation reads/writes to file using the `toJson`/`fromJson` methods on `HydratedBloc` and should perform very well for most use-cases (performance reports coming soon). `HydratedBlocStorage` is supported for desktop ([example](https://github.com/felangel/hydrated_bloc/tree/master/example)).
 
 ## Considerations
-
-On mobile, all data is written to [temporary storage](https://github.com/flutter/plugins/blob/61c39d1e79e8f36030162a5f85fb491c65f4e51c/packages/path_provider/lib/path_provider.dart#L24) which means it can be wiped by the operating system at any point in time. As a result, `hydrated_bloc` is not intended to be used as a persistent database and should be viewed as a cache instead.
 
 In addition, while the `HydratedBlocStorage` client doesn't automatically encrypt/decrypt the data, it is fairly straightforward to implement a custom `HydratedStorage` client which does support encryption.

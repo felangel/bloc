@@ -1,3 +1,8 @@
+# 1.1.0
+
+- Optional `storageDirectory` can be provided ([#28](https://github.com/felangel/hydrated_bloc/issues/28)).
+- Documentation Updates
+
 # 1.0.0
 
 - Update to bloc `v1.0.0`
