@@ -191,6 +191,8 @@ void main() {
 }
 ```
 
+!> `add` is asynchronous and, by default, events will always be processed in the order in which they were added and any newly added events are enqueued. An event is considered fully processed once `mapEventToState` has finished executing.
+
 The `Transitions` in the above code snippet would be
 
 ```json
