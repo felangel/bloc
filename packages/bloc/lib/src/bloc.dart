@@ -4,8 +4,10 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
+/// {@template bloc}
 /// Takes a [Stream] of [Event]s as input
 /// and transforms them into a [Stream] of [State]s as output.
+/// {@endtemplate}
 abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   final PublishSubject<Event> _eventSubject = PublishSubject<Event>();
 
@@ -20,6 +22,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// Returns whether the `Stream<State>` is a broadcast stream.
   bool get isBroadcast => _stateSubject.isBroadcast;
 
+  /// {@macro bloc}
   Bloc() {
     _stateSubject = BehaviorSubject<State>.seeded(initialState);
     _bindStateSubject();
@@ -68,7 +71,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
       BlocSupervisor.delegate.onEvent(this, event);
       onEvent(event);
       _eventSubject.sink.add(event);
-    } catch (error) {
+    } on Object catch (error) {
       _handleError(error);
     }
   }
