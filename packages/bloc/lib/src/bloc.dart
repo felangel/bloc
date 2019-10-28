@@ -5,18 +5,18 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// {@template bloc}
-/// Takes a [Stream] of [Event]s as input
-/// and transforms them into a [Stream] of [State]s as output.
+/// Takes a `Stream` of `Events` as input
+/// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
 abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   final PublishSubject<Event> _eventSubject = PublishSubject<Event>();
 
   BehaviorSubject<State> _stateSubject;
 
-  /// Returns the current [State] of the [Bloc].
+  /// Returns the current [state] of the [bloc].
   State get state => _stateSubject.value;
 
-  /// Returns the [State] before any [Event]s have been `added`.
+  /// Returns the [state] before any `events` have been [add]ed.
   State get initialState;
 
   /// Returns whether the `Stream<State>` is a broadcast stream.
@@ -45,25 +45,25 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     );
   }
 
-  /// Called whenever an [Event] is `added` to the [Bloc].
-  /// A great spot to add logging/analytics at the individual [Bloc] level.
+  /// Called whenever an [event] is [add]ed to the [bloc].
+  /// A great spot to add logging/analytics at the individual [bloc] level.
   void onEvent(Event event) => null;
 
-  /// Called whenever a [Transition] occurs with the given [Transition].
-  /// A [Transition] occurs when a new [Event] is `added` and `mapEventToState` executed.
-  /// `onTransition` is called before a [Bloc]'s [State] has been updated.
-  /// A great spot to add logging/analytics at the individual [Bloc] level.
+  /// Called whenever a [transition] occurs with the given [transition].
+  /// A [transition] occurs when a new `event` is [add]ed and [mapEventToState] executed.
+  /// [onTransition] is called before a [bloc]'s [state] has been updated.
+  /// A great spot to add logging/analytics at the individual [bloc] level.
   void onTransition(Transition<Event, State> transition) => null;
 
-  /// Called whenever an [Exception] is thrown within `mapEventToState`.
-  /// By default all exceptions will be ignored and [Bloc] functionality will be unaffected.
-  /// The stacktrace argument may be `null` if the state stream received an error without a [StackTrace].
-  /// A great spot to handle exceptions at the individual [Bloc] level.
+  /// Called whenever an [error] is thrown within [mapEventToState].
+  /// By default all [error]s will be ignored and [bloc] functionality will be unaffected.
+  /// The [stacktrace] argument may be `null` if the [state] stream received an error without a [stacktrace].
+  /// A great spot to handle errors at the individual [Bloc] level.
   void onError(Object error, StackTrace stacktrace) => null;
 
-  /// Notifies the [Bloc] of a new [Event] which triggers `mapEventToState`.
-  /// If `close` has already been called, any subsequent calls to `add` will
-  /// be delegated to the `onError` method which can be overriden at the [Bloc]
+  /// Notifies the [bloc] of a new [event] which triggers [mapEventToState].
+  /// If [close] has already been called, any subsequent calls to [add] will
+  /// be delegated to the [onError] method which can be overriden at the [bloc]
   /// as well as the [BlocDelegate] level.
   @override
   void add(Event event) {
@@ -76,12 +76,12 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     }
   }
 
-  /// Closes the [Event] and [State] [Stream]s.
-  /// This method should be called when a [Bloc] is no longer needed.
-  /// Once `close` is called, events that are `added` will not be
-  /// processed and will result in an error being passed to `onError`.
-  /// In addition, if `close` is called while [Event]s are still being processed,
-  /// any [State]s yielded after are ignored and will not result in a [Transition].
+  /// Closes the `event` and `state` `Streams`.
+  /// This method should be called when a [bloc] is no longer needed.
+  /// Once [close] is called, `events` that are [add]ed will not be
+  /// processed and will result in an error being passed to [onError].
+  /// In addition, if [close] is called while `events` are still being processed,
+  /// any `states` yielded after are ignored and will not result in a `transition`.
   @override
   @mustCallSuper
   void close() {
@@ -89,15 +89,15 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     _stateSubject.close();
   }
 
-  /// Transforms the `Stream<Event>` along with a `next` function into a `Stream<State>`.
-  /// Events that should be processed by `mapEventToState` need to be passed to `next`.
-  /// By default `asyncExpand` is used to ensure all events are processed in the order
-  /// in which they are received. You can override `transformEvents` for advanced usage
-  /// in order to manipulate the frequency and specificity with which `mapEventToState`
-  /// is called as well as which events are processed.
+  /// Transforms the [events] stream along with a [next] function into a `Stream<State>`.
+  /// Events that should be processed by [mapEventToState] need to be passed to [next].
+  /// By default `asyncExpand` is used to ensure all [events] are processed in the order
+  /// in which they are received. You can override [transformEvents] for advanced usage
+  /// in order to manipulate the frequency and specificity with which [mapEventToState]
+  /// is called as well as which [events] are processed.
   ///
-  /// For example, if you only want `mapEventToState` to be called on the most recent
-  /// event you can use `switchMap` instead of `asyncExpand`.
+  /// For example, if you only want [mapEventToState] to be called on the most recent
+  /// [event] you can use `switchMap` instead of `asyncExpand`.
   ///
   /// ```dart
   /// @override
@@ -106,7 +106,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// }
   /// ```
   ///
-  /// Alternatively, if you only want `mapEventToState` to be called for distinct events:
+  /// Alternatively, if you only want [mapEventToState] to be called for distinct [events]:
   ///
   /// ```dart
   /// @override
@@ -124,20 +124,20 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     return events.asyncExpand(next);
   }
 
-  /// Must be implemented when a class extends [Bloc].
-  /// Takes the incoming `event` as the argument.
-  /// `mapEventToState` is called whenever an [Event] is `added`.
-  /// `mapEventToState` must convert that [Event] into a new [State]
-  /// and return the new [State] in the form of a [Stream].
+  /// Must be implemented when a class extends [bloc].
+  /// Takes the incoming [event] as the argument.
+  /// [mapEventToState] is called whenever an [event] is [add]ed.
+  /// [mapEventToState] must convert that [event] into a new [state]
+  /// and return the new [state] in the form of a `Stream<State>`.
   Stream<State> mapEventToState(Event event);
 
   /// Transforms the `Stream<State>` into a new `Stream<State>`.
-  /// By default `transformStates` returns the incoming `Stream<State>`.
-  /// You can override `transformStates` for advanced usage
+  /// By default [transformStates] returns the incoming `Stream<State>`.
+  /// You can override [transformStates] for advanced usage
   /// in order to manipulate the frequency and specificity at which `transitions` (state changes)
   /// occur.
   ///
-  /// For example, if you want to debounce outgoing states:
+  /// For example, if you want to debounce outgoing [states]:
   ///
   /// ```dart
   /// @override
