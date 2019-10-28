@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final RepositoryA repositoryA = RepositoryProvider.of<RepositoryA>(context);
-    final RepositoryB repositoryB = RepositoryProvider.of<RepositoryB>(context);
+    final repositoryA = RepositoryProvider.of<RepositoryA>(context);
+    final repositoryB = RepositoryProvider.of<RepositoryB>(context);
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
@@ -62,7 +62,7 @@ void main() {
             child: null,
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -76,7 +76,7 @@ void main() {
             child: Container(),
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -90,7 +90,7 @@ void main() {
             child: null,
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -108,16 +108,16 @@ void main() {
         ),
       );
 
-      final Finder repositoryAFinder = find.byKey((Key('RepositoryA_data')));
+      final repositoryAFinder = find.byKey((Key('RepositoryA_data')));
       expect(repositoryAFinder, findsOneWidget);
 
-      final Text repositoryAText = tester.widget(repositoryAFinder);
+      final repositoryAText = tester.widget(repositoryAFinder) as Text;
       expect(repositoryAText.data, '0');
 
-      final Finder repositoryBFinder = find.byKey((Key('RepositoryB_data')));
+      final repositoryBFinder = find.byKey((Key('RepositoryB_data')));
       expect(repositoryBFinder, findsOneWidget);
 
-      final Text repositoryBText = tester.widget(repositoryBFinder);
+      final repositoryBText = tester.widget(repositoryBFinder) as Text;
       expect(repositoryBText.data, '1');
     });
   });

@@ -185,7 +185,7 @@ void main() {
             builder: null,
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -199,14 +199,14 @@ void main() {
             builder: null,
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
 
     testWidgets('passes initial state to widget', (WidgetTester tester) async {
-      final ThemeBloc _themeBloc = ThemeBloc();
-      int numBuilds = 0;
+      final _themeBloc = ThemeBloc();
+      var numBuilds = 0;
       await tester.pumpWidget(
         MyThemeApp(
           themeBloc: _themeBloc,
@@ -216,7 +216,7 @@ void main() {
         ),
       );
 
-      MaterialApp _materialApp = find
+      final _materialApp = find
           .byKey(Key('material_app'))
           .evaluate()
           .first
@@ -227,8 +227,8 @@ void main() {
 
     testWidgets('receives events and sends state updates to widget',
         (WidgetTester tester) async {
-      final ThemeBloc _themeBloc = ThemeBloc();
-      int numBuilds = 0;
+      final _themeBloc = ThemeBloc();
+      var numBuilds = 0;
       await tester.pumpWidget(
         MyThemeApp(
           themeBloc: _themeBloc,
@@ -242,7 +242,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      MaterialApp _materialApp = find
+      final _materialApp = find
           .byKey(Key('material_app'))
           .evaluate()
           .first
@@ -254,8 +254,8 @@ void main() {
 
     testWidgets('infers the bloc from the context if the bloc is not provided',
         (WidgetTester tester) async {
-      final ThemeBloc themeBloc = ThemeBloc();
-      int numBuilds = 0;
+      final themeBloc = ThemeBloc();
+      var numBuilds = 0;
       await tester.pumpWidget(
         BlocProvider.value(
           value: themeBloc,
@@ -279,11 +279,8 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      MaterialApp _materialApp = find
-          .byKey(Key('material_app'))
-          .evaluate()
-          .first
-          .widget as MaterialApp;
+      var _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
+          as MaterialApp;
 
       expect(_materialApp.theme, ThemeData.dark());
       expect(numBuilds, 2);
@@ -302,8 +299,8 @@ void main() {
     testWidgets(
         'updates when the bloc is changed at runtime to a different bloc and unsubscribes from old bloc',
         (WidgetTester tester) async {
-      final ThemeBloc _themeBloc = ThemeBloc();
-      int numBuilds = 0;
+      final _themeBloc = ThemeBloc();
+      var numBuilds = 0;
       await tester.pumpWidget(
         MyThemeApp(
           themeBloc: _themeBloc,
@@ -315,11 +312,8 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      MaterialApp _materialApp = find
-          .byKey(Key('material_app'))
-          .evaluate()
-          .first
-          .widget as MaterialApp;
+      var _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
+          as MaterialApp;
 
       expect(_materialApp.theme, ThemeData.light());
       expect(numBuilds, 1);
@@ -346,8 +340,8 @@ void main() {
     testWidgets(
         'does not update when the bloc is changed at runtime to same bloc and stays subscribed to current bloc',
         (WidgetTester tester) async {
-      final DarkThemeBloc _themeBloc = DarkThemeBloc();
-      int numBuilds = 0;
+      final _themeBloc = DarkThemeBloc();
+      var numBuilds = 0;
       await tester.pumpWidget(
         MyThemeApp(
           themeBloc: _themeBloc,
@@ -359,11 +353,8 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      MaterialApp _materialApp = find
-          .byKey(Key('material_app'))
-          .evaluate()
-          .first
-          .widget as MaterialApp;
+      var _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
+          as MaterialApp;
 
       expect(_materialApp.theme, ThemeData.dark());
       expect(numBuilds, 1);
@@ -389,11 +380,11 @@ void main() {
 
     testWidgets('shows latest state instead of initial state',
         (WidgetTester tester) async {
-      final ThemeBloc _themeBloc = ThemeBloc();
+      final _themeBloc = ThemeBloc();
       _themeBloc.add(SetDarkTheme());
       await tester.pumpAndSettle();
 
-      int numBuilds = 0;
+      var numBuilds = 0;
       await tester.pumpWidget(
         MyThemeApp(
           themeBloc: _themeBloc,
@@ -405,7 +396,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      MaterialApp _materialApp = find
+      final _materialApp = find
           .byKey(Key('material_app'))
           .evaluate()
           .first
@@ -426,45 +417,45 @@ void main() {
           find.byKey(Key('myCounterAppIncrementButton'));
       expect(incrementButtonFinder, findsOneWidget);
 
-      final Text counterText1 =
-          tester.widget(find.byKey(Key('myCounterAppText')));
+      final counterText1 =
+          tester.widget(find.byKey(Key('myCounterAppText'))) as Text;
       expect(counterText1.data, '0');
 
-      final Text conditionalCounterText1 =
-          tester.widget(find.byKey(Key('myCounterAppTextCondition')));
+      final conditionalCounterText1 =
+          tester.widget(find.byKey(Key('myCounterAppTextCondition'))) as Text;
       expect(conditionalCounterText1.data, '0');
 
       await tester.tap(incrementButtonFinder);
       await tester.pumpAndSettle();
 
-      final Text counterText2 =
-          tester.widget(find.byKey(Key('myCounterAppText')));
+      final counterText2 =
+          tester.widget(find.byKey(Key('myCounterAppText'))) as Text;
       expect(counterText2.data, '1');
 
-      final Text conditionalCounterText2 =
-          tester.widget(find.byKey(Key('myCounterAppTextCondition')));
+      final conditionalCounterText2 =
+          tester.widget(find.byKey(Key('myCounterAppTextCondition'))) as Text;
       expect(conditionalCounterText2.data, '0');
 
       await tester.tap(incrementButtonFinder);
       await tester.pumpAndSettle();
 
-      final Text counterText3 =
-          tester.widget(find.byKey(Key('myCounterAppText')));
+      final counterText3 =
+          tester.widget(find.byKey(Key('myCounterAppText'))) as Text;
       expect(counterText3.data, '2');
 
-      final Text conditionalCounterText3 =
-          tester.widget(find.byKey(Key('myCounterAppTextCondition')));
+      final conditionalCounterText3 =
+          tester.widget(find.byKey(Key('myCounterAppTextCondition'))) as Text;
       expect(conditionalCounterText3.data, '2');
 
       await tester.tap(incrementButtonFinder);
       await tester.pumpAndSettle();
 
-      final Text counterText4 =
-          tester.widget(find.byKey(Key('myCounterAppText')));
+      final counterText4 =
+          tester.widget(find.byKey(Key('myCounterAppText'))) as Text;
       expect(counterText4.data, '3');
 
-      final Text conditionalCounterText4 =
-          tester.widget(find.byKey(Key('myCounterAppTextCondition')));
+      final conditionalCounterText4 =
+          tester.widget(find.byKey(Key('myCounterAppTextCondition'))) as Text;
       expect(conditionalCounterText4.data, '2');
     });
   });

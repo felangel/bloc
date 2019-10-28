@@ -2,24 +2,27 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:bloc/bloc.dart';
 
+/// {@template blocprovider}
+/// Takes a [ValueBuilder] that is responsible for
+/// building the [bloc] and a [child] which will have access to the [bloc] via `BlocProvider.of(context)`.
+/// It is used as a dependency injection (DI) widget so that a single instance of a [bloc] can be provided
+/// to multiple widgets within a subtree.
+///
+/// Automatically handles closing the [bloc] when used with a [builder].
+///
+/// ```dart
+/// BlocProvider(
+///   builder: (BuildContext context) => BlocA(),
+///   child: ChildA(),
+/// );
+/// ```
+/// {@endtemplate}
 class BlocProvider<T extends Bloc<dynamic, dynamic>>
     extends ValueDelegateWidget<T> implements SingleChildCloneableWidget {
-  /// The [Widget] and its descendants which will have access to the [Bloc].
+  /// [child] and its descendants which will have access to the [bloc].
   final Widget child;
 
-  /// Takes a [ValueBuilder] that is responsible for
-  /// building the bloc and a child which will have access to the bloc via `BlocProvider.of(context)`.
-  /// It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided
-  /// to multiple widgets within a subtree.
-  ///
-  /// Automatically handles closing the bloc when used with a `builder`.
-  ///
-  /// ```dart
-  /// BlocProvider(
-  ///   builder: (BuildContext context) => BlocA(),
-  ///   child: ChildA(),
-  /// );
-  /// ```
+  /// {@macro blocprovider}
   BlocProvider({
     Key key,
     ValueBuilder<T> builder,
@@ -33,13 +36,13 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
           child: child,
         );
 
-  /// Takes a `Bloc` and a child which will have access to the bloc via `BlocProvider.of(context)`.
-  /// When `BlocProvider.value` is used, the bloc will not be automatically closed.
-  /// As a result, `BlocProvider.value` should mainly be used for providing existing blocs
+  /// Takes a [bloc] and a [child] which will have access to the [bloc] via `BlocProvider.of(context)`.
+  /// When `BlocProvider.value` is used, the [bloc] will not be automatically closed.
+  /// As a result, `BlocProvider.value` should mainly be used for providing existing [bloc]s
   /// to new routes.
   ///
-  /// A new bloc should not be created in `BlocProvider.value`.
-  /// Blocs should always be created using the default constructor within the `builder`.
+  /// A new [bloc] should not be created in `BlocProvider.value`.
+  /// [bloc]s should always be created using the default constructor within the [builder].
   ///
   /// ```dart
   /// BlocProvider.value(
@@ -56,15 +59,15 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
           child: child,
         );
 
-  /// Internal constructor responsible for creating the `BlocProvider`.
-  /// Used by the `BlocProvider` default and `value` constructors.
+  /// Internal constructor responsible for creating the [BlocProvider].
+  /// Used by the [BlocProvider] default and value constructors.
   BlocProvider._({
     Key key,
     @required ValueStateDelegate<T> delegate,
     this.child,
   }) : super(key: key, delegate: delegate);
 
-  /// Method that allows widgets to access a bloc instance as long as their `BuildContext`
+  /// Method that allows widgets to access a [bloc] instance as long as their `BuildContext`
   /// contains a [BlocProvider] instance.
   ///
   /// If we want to access an instance of `BlocA` which was provided higher up in the widget tree
@@ -76,7 +79,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
   static T of<T extends Bloc<dynamic, dynamic>>(BuildContext context) {
     try {
       return Provider.of<T>(context, listen: false);
-    } catch (_) {
+    } on Object catch (_) {
       throw FlutterError(
         """
         BlocProvider.of() called with a context that does not contain a Bloc of type $T.

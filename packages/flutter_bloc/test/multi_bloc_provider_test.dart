@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     getProviders() {
-      final List<BlocProvider> providers = List<BlocProvider>();
+      final providers = <BlocProvider>[];
       if (counterBlocValue != null) {
         providers.add(
           BlocProvider<CounterBloc>.value(
@@ -98,12 +98,12 @@ class MyApp extends StatelessWidget {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final CounterBloc _counterBloc = BlocProvider.of<CounterBloc>(context);
+    final counterBloc = BlocProvider.of<CounterBloc>(context);
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
       body: BlocBuilder<CounterBloc, int>(
-        bloc: _counterBloc,
+        bloc: counterBloc,
         builder: (BuildContext context, int count) {
           return Center(
             child: Text(
@@ -158,7 +158,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   void close() {
-    this.onClose?.call();
+    onClose?.call();
     super.close();
   }
 }
@@ -184,7 +184,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
 
   @override
   void close() {
-    this.onClose?.call();
+    onClose?.call();
     super.close();
   }
 }
@@ -200,7 +200,7 @@ void main() {
             child: Container(),
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -214,7 +214,7 @@ void main() {
             child: null,
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -230,20 +230,21 @@ void main() {
         ),
       );
 
-      final MaterialApp materialApp = tester.widget(find.byType(MaterialApp));
+      final materialApp =
+          tester.widget(find.byType(MaterialApp)) as MaterialApp;
       expect(materialApp.theme, ThemeData.light());
 
-      final Finder counterFinder = find.byKey((Key('counter_text')));
+      final counterFinder = find.byKey((Key('counter_text')));
       expect(counterFinder, findsOneWidget);
 
-      final Text counterText = tester.widget(counterFinder);
+      final counterText = tester.widget(counterFinder) as Text;
       expect(counterText.data, '0');
     });
 
     testWidgets('calls close on bloc automatically',
         (WidgetTester tester) async {
-      bool counterBlocClosed = false;
-      bool themeBlocClosed = false;
+      var counterBlocClosed = false;
+      var themeBlocClosed = false;
 
       await tester.pumpWidget(
         MyAppWithNavigation(
@@ -270,13 +271,13 @@ void main() {
 
     testWidgets('does not close when created using value',
         (WidgetTester tester) async {
-      bool counterBlocClosed = false;
-      bool themeBlocClosed = false;
+      var counterBlocClosed = false;
+      var themeBlocClosed = false;
 
-      final CounterBloc counterBloc = CounterBloc(onClose: () {
+      final counterBloc = CounterBloc(onClose: () {
         counterBlocClosed = true;
       });
-      final ThemeBloc themeBloc = ThemeBloc(onClose: () {
+      final themeBloc = ThemeBloc(onClose: () {
         themeBlocClosed = true;
       });
 
