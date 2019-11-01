@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^1.0.0
-  flutter_bloc: ^1.0.0
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
   meta: ^1.1.6
 
 flutter:
