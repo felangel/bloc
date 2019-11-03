@@ -346,17 +346,19 @@ void main() {
       });
 
       test(
-          'close while events are pending does not emit new states or trigger onError',
-          () {
-        final expectedStates = [equals(AsyncState.initial()), emitsDone];
-
-        expectLater(
-          asyncBloc,
-          emitsInOrder(expectedStates),
-        );
+          'close while events are pending finishes processing pending events and does not trigger onError',
+          () async {
+        final expectedStates = <AsyncState>[
+          AsyncState.initial(),
+          AsyncState.initial().copyWith(isLoading: true),
+          AsyncState.initial().copyWith(isSuccess: true),
+        ];
+        final states = <AsyncState>[];
+        asyncBloc.listen(states.add);
 
         asyncBloc.add(AsyncEvent());
-        asyncBloc.close();
+        await asyncBloc.close();
+        expect(states, expectedStates);
 
         verifyNever(delegate.onError(any, any, any));
       });
