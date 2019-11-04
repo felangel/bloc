@@ -81,12 +81,12 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// Once [close] is called, `events` that are [add]ed will not be
   /// processed and will result in an error being passed to [onError].
   /// In addition, if [close] is called while `events` are still being processed,
-  /// any `states` yielded after are ignored and will not result in a `transition`.
+  /// the [bloc] will continue to process the pending `events` to completion.
   @override
   @mustCallSuper
-  void close() {
-    _eventSubject.close();
-    _stateSubject.close();
+  Future<void> close() async {
+    await _eventSubject.close();
+    await _stateSubject.close();
   }
 
   /// Transforms the [events] stream along with a [next] function into a `Stream<State>`.
