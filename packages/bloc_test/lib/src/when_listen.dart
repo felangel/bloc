@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:mockito/mockito.dart';
 
-/// Creates a stub response for the `listen` method on a `Bloc`.
-/// Use `whenListen` if you want to return a canned `Stream` of states
-/// for a bloc instance.
+/// Creates a stub response for the `listen` method on a [bloc].
+/// Use [whenListen] if you want to return a canned `Stream` of states
+/// for a [bloc] instance.
 ///
-/// Returns a canned state stream of `[0, 1, 2, 3]`
+/// Return a canned state stream of `[0, 1, 2, 3]`
 /// when `counterBloc.listen` is called.
 ///
 /// ```dart

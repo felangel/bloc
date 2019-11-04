@@ -26,6 +26,8 @@ class MockCounterBloc extends Mock implements CounterBloc {}
 
 ## Stub the Bloc Stream
 
+**whenListen** creates a stub response for the `listen` method on a `Bloc`. Use `whenListen` if you want to return a canned `Stream` of states for a bloc instance.
+
 ```dart
 // Create a mock instance
 final counterBloc = MockCounterBloc();
@@ -35,6 +37,52 @@ whenListen(counterBloc, Stream.fromIterable([0, 1, 2, 3]));
 
 // Assert that the bloc emits the stubbed `Stream`.
 expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3])))
+```
+
+## Unit Test a Real Bloc with blocTest
+
+**blocTest** creates a new `bloc`-specific test case with the given `description`. `blocTest` will handle asserting that the `bloc` emits the `expect`ed states (in order) after `act` is executed. `blocTest` also handles ensuring that no additional states are emitted by closing the `bloc` stream before evaluating the `expect`ation.
+
+`build` should be used for all `bloc` initialization and preparation and must return the `bloc` under test.
+
+`act` is an optional callback which will be invoked with the `bloc` under test and should be used to `add` events to the bloc.
+
+`expect` is an `Iterable<State>` which the `bloc` under test is expected to emit after `act` is executed.
+
+```dart
+group('CounterBloc', () {
+    blocTest(
+      'emits [0] when nothing is added',
+      build: () => CounterBloc(),
+      expect: [0],
+    );
+
+    blocTest(
+      'emits [0, 1] when CounterEvent.increment is added',
+      build: () => CounterBloc(),
+      act: (bloc) => bloc.add(CounterEvent.increment),
+      expect: [0, 1],
+    );
+});
+```
+
+## Assert with Confidence using emitsExactly
+
+**emitsExactly** is similar to `emitsInOrder` but asserts that the provided `bloc` emits **only** the `expected` states in the **exact** order in which they were provided.
+
+```dart
+group('CounterBloc', () {
+    test('emits [0] when nothing is added', () async {
+      final bloc = CounterBloc();
+      await emitsExactly(bloc, [0]);
+    });
+
+    test('emits [0, 1] when CounterEvent.increment is added', () async {
+      final bloc = CounterBloc();
+      bloc.add(CounterEvent.increment);
+      await emitsExactly(bloc, [0, 1]);
+    });
+});
 ```
 
 ## Dart Versions
