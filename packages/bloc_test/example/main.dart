@@ -27,14 +27,44 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 class MockCounterBloc extends Mock implements CounterBloc {}
 
 void main() {
-  test("Let's mock the CounterBloc's stream!", () {
-    // Create Mock CounterBloc Instance
-    final counterBloc = MockCounterBloc();
+  group('whenListen', () {
+    test("Let's mock the CounterBloc's stream!", () {
+      // Create Mock CounterBloc Instance
+      final counterBloc = MockCounterBloc();
 
-    // Stub the listen with a fake Stream
-    whenListen(counterBloc, Stream.fromIterable([0, 1, 2, 3]));
+      // Stub the listen with a fake Stream
+      whenListen(counterBloc, Stream.fromIterable([0, 1, 2, 3]));
 
-    // Expect that the CounterBloc instance emitted the stubbed Stream of states
-    expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3]));
+      // Expect that the CounterBloc instance emitted the stubbed Stream of states
+      expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3]));
+    });
+  });
+
+  group('emitsExactly', () {
+    test('emits [0] when nothing is added', () async {
+      final bloc = CounterBloc();
+      await emitsExactly(bloc, [0]);
+    });
+
+    test('emits [0, 1] when CounterEvent.increment is added', () async {
+      final bloc = CounterBloc();
+      bloc.add(CounterEvent.increment);
+      await emitsExactly(bloc, [0, 1]);
+    });
+  });
+
+  group('blocTest', () {
+    blocTest(
+      'emits [0] when nothing is added',
+      build: () => CounterBloc(),
+      expect: [0],
+    );
+
+    blocTest(
+      'emits [0, 1] when CounterEvent.increment is added',
+      build: () => CounterBloc(),
+      act: (bloc) => bloc.add(CounterEvent.increment),
+      expect: [0, 1],
+    );
   });
 }
