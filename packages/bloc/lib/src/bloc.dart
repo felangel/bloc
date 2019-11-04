@@ -161,9 +161,13 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
           event: currentEvent,
           nextState: nextState,
         );
-        BlocSupervisor.delegate.onTransition(this, transition);
-        onTransition(transition);
-        _stateSubject.add(nextState);
+        try {
+          BlocSupervisor.delegate.onTransition(this, transition);
+          onTransition(transition);
+          _stateSubject.add(nextState);
+        } on Object catch (error) {
+          _handleError(error);
+        }
       },
     );
   }

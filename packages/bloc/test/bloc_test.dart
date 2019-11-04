@@ -442,29 +442,29 @@ void main() {
 
     group('== operator', () {
       test('returns true for the same two CounterBlocs', () {
-        final _blocA = CounterBloc();
-        final _blocB = CounterBloc();
+        final blocA = CounterBloc();
+        final blocB = CounterBloc();
 
-        expect(_blocA == _blocB, true);
+        expect(blocA == blocB, true);
       });
 
       test('returns false for the two different Blocs', () {
-        final _blocA = CounterBloc();
-        final _blocB = ComplexBloc();
+        final blocA = CounterBloc();
+        final blocB = ComplexBloc();
 
-        expect(_blocA == _blocB, false);
+        expect(blocA == blocB, false);
       });
     });
 
     group('Exception', () {
       test('does not break stream', () {
         final expected = [0, -1];
-        final _bloc = CounterExceptionBloc();
+        final bloc = CounterExceptionBloc();
 
-        expectLater(_bloc, emitsInOrder(expected));
+        expectLater(bloc, emitsInOrder(expected));
 
-        _bloc.add(CounterEvent.increment);
-        _bloc.add(CounterEvent.decrement);
+        bloc.add(CounterEvent.increment);
+        bloc.add(CounterEvent.decrement);
       });
 
       test('triggers onError from mapEventToState', () {
@@ -472,7 +472,7 @@ void main() {
         Object expectedError;
         StackTrace expectedStacktrace;
 
-        final _bloc = OnExceptionBloc(
+        final bloc = OnExceptionBloc(
             exception: exception,
             onErrorCallback: (Object error, StackTrace stacktrace) {
               expectedError = error;
@@ -480,20 +480,20 @@ void main() {
             });
 
         expectLater(
-          _bloc,
+          bloc,
           emitsInOrder(<int>[0]),
         ).then((dynamic _) {
           expect(expectedError, exception);
           expect(expectedStacktrace, isNotNull);
         });
 
-        _bloc.add(CounterEvent.increment);
+        bloc.add(CounterEvent.increment);
       });
 
       test('triggers onError from add', () {
         Object capturedError;
         StackTrace capturedStacktrace;
-        final _bloc = CounterBloc(
+        final bloc = CounterBloc(
           onErrorCallback: (Object error, StackTrace stacktrace) {
             capturedError = error;
             capturedStacktrace = stacktrace;
@@ -501,7 +501,7 @@ void main() {
         );
 
         expectLater(
-          _bloc,
+          bloc,
           emitsInOrder(<int>[0]),
         ).then((dynamic _) {
           expect(
@@ -515,20 +515,27 @@ void main() {
           expect(capturedStacktrace, isNull);
         });
 
-        _bloc.close();
-        _bloc.add(CounterEvent.increment);
+        bloc.close();
+        bloc.add(CounterEvent.increment);
       });
     });
 
     group('Error', () {
+      MockBlocDelegate delegate;
+
+      setUp(() {
+        delegate = MockBlocDelegate();
+        BlocSupervisor.delegate = delegate;
+      });
+
       test('does not break stream', () {
         final expected = [0, -1];
-        final _bloc = CounterErrorBloc();
+        final bloc = CounterErrorBloc();
 
-        expectLater(_bloc, emitsInOrder(expected));
+        expectLater(bloc, emitsInOrder(expected));
 
-        _bloc.add(CounterEvent.increment);
-        _bloc.add(CounterEvent.decrement);
+        bloc.add(CounterEvent.increment);
+        bloc.add(CounterEvent.decrement);
       });
 
       test('triggers onError from mapEventToState', () {
@@ -536,22 +543,47 @@ void main() {
         Object expectedError;
         StackTrace expectedStacktrace;
 
-        final _bloc = OnErrorBloc(
-            error: error,
-            onErrorCallback: (Object error, StackTrace stacktrace) {
-              expectedError = error;
-              expectedStacktrace = stacktrace;
-            });
+        final bloc = OnErrorBloc(
+          error: error,
+          onErrorCallback: (Object error, StackTrace stacktrace) {
+            expectedError = error;
+            expectedStacktrace = stacktrace;
+          },
+        );
 
         expectLater(
-          _bloc,
+          bloc,
           emitsInOrder(<int>[0]),
         ).then((dynamic _) {
           expect(expectedError, error);
           expect(expectedStacktrace, isNotNull);
         });
 
-        _bloc.add(CounterEvent.increment);
+        bloc.add(CounterEvent.increment);
+      });
+
+      test('triggers onError from onTransition', () {
+        final error = Error();
+        Object expectedError;
+        StackTrace expectedStacktrace;
+
+        final bloc = OnTransitionErrorBloc(
+          error: error,
+          onErrorCallback: (Object error, StackTrace stacktrace) {
+            expectedError = error;
+            expectedStacktrace = stacktrace;
+          },
+        );
+
+        expectLater(
+          bloc,
+          emitsInOrder(<int>[0]),
+        ).then((dynamic _) {
+          expect(expectedError, error);
+          expect(expectedStacktrace, isNull);
+          expect(bloc.state, 0);
+        });
+        bloc.add(CounterEvent.increment);
       });
     });
   });
