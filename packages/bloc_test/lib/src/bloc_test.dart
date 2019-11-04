@@ -23,7 +23,7 @@ import 'package:test/test.dart';
 /// ```dart
 /// blocTest(
 ///   'CounterBloc emits [0, 1] when CounterEvent.increment is added',
-///   setUp: () => CounterBloc(),
+///   build: () => CounterBloc(),
 ///   act: (bloc) => bloc.add(CounterEvent.increment),
 ///   expect: [0, 1],
 /// );
@@ -35,7 +35,7 @@ import 'package:test/test.dart';
 /// ```dart
 /// blocTest(
 ///   'CounterBloc emits [0] when nothing is added',
-///   setUp: () => CounterBloc(),
+///   build: () => CounterBloc(),
 ///   expect: [0],
 /// );
 /// ```
