@@ -28,8 +28,8 @@ class SumBloc extends Bloc<SumEvent, int> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _countSubscription.cancel();
-    super.close();
+    return super.close();
   }
 }
