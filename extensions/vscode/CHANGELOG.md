@@ -1,3 +1,7 @@
+# 2.0.0
+
+Update to support bloc `v2.0.0`
+
 # 1.0.0
 
 Update to support bloc `v1.0.0`
