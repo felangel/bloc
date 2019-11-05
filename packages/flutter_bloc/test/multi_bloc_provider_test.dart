@@ -157,9 +157,9 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     onClose?.call();
-    super.close();
+    return super.close();
   }
 }
 
@@ -183,9 +183,9 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     onClose?.call();
-    super.close();
+    return super.close();
   }
 }
 

@@ -193,9 +193,9 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       transformEvents.hashCode;
 
   @override
-  void close() {
+  Future<void> close() {
     onClose?.call();
-    super.close();
+    return super.close();
   }
 }
 
