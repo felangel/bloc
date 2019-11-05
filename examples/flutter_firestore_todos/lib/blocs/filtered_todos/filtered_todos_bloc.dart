@@ -78,8 +78,8 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _todosSubscription?.cancel();
-    super.close();
+    return super.close();
   }
 }

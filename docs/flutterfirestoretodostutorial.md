@@ -397,7 +397,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^1.0.0
+  flutter_bloc: ^2.0.0
   todos_repository:
     path: todos_repository
   user_repository:
@@ -591,9 +591,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _todosSubscription?.cancel();
-    super.close();
+    return super.close();
   }
 }
 ```

@@ -101,9 +101,9 @@ class MyBloc extends Bloc {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     otherBlocSubscription.cancel();
-    super.close();
+    return super.close();
   }
 }
 ```

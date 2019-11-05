@@ -16,23 +16,23 @@ První věci, kterou potřebujeme udělat je přidání balíčku bloc do našeh
 
 ```yaml
 dependencies:
-  bloc: ^1.0.0
+  bloc: ^2.0.0
 ```
 
 Pro [Flutter](https://flutter.io) aplikaci také potřebujeme do našeho `pubspec.yaml` přidat balíček flutter_bloc jako závislost.
 
 ```yaml
 dependencies:
-  bloc: ^1.0.0
-  flutter_bloc: ^1.0.0
+  bloc: ^2.0.0
+  flutter_bloc: ^2.0.0
 ```
 
 Pro [AngularDart](https://webdev.dartlang.org/angular) aplikaci také potřebujeme do našeho `pubspec.yaml` přidat balíček angular_bloc jako závislost.
 
 ```yaml
 dependencies:
-  bloc: ^1.0.0
-  angular_bloc: ^1.0.0
+  bloc: ^2.0.0
+  angular_bloc: ^2.0.0
 ```
 
 Jako další potřebujeme nainstalovat bloc.
