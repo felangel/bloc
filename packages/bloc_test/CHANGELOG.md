@@ -1,6 +1,6 @@
 # 2.1.0
 
-- Added `MockBloc` for simplified bloc mocks
+- Add `MockBloc` to `bloc_test` in order to simplify bloc mocks (addresses [#636](https://github.com/felangel/bloc/issues/636))
 - Documentation and example updates
 
 # 2.0.0
