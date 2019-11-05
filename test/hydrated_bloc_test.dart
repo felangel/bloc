@@ -27,7 +27,8 @@ class MyHydratedBloc extends HydratedBloc<int, int> {
   int fromJson(dynamic json) {
     try {
       return json['value'] as int;
-    } catch (_) {
+    } on dynamic catch (_) {
+      // ignore: avoid_returning_null
       return null;
     }
   }
@@ -58,7 +59,8 @@ class MyMultiHydratedBloc extends HydratedBloc<int, int> {
   int fromJson(dynamic json) {
     try {
       return json['value'] as int;
-    } catch (_) {
+    } on dynamic catch (_) {
+      // ignore: avoid_returning_null
       return null;
     }
   }

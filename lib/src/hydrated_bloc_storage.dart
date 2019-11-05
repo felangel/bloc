@@ -36,16 +36,15 @@ class HydratedBlocStorage implements HydratedStorage {
       return _instance;
     }
 
-    final Directory directory =
-        storageDirectory ?? await getTemporaryDirectory();
-    final File file = File('${directory.path}/.hydrated_bloc.json');
-    Map<String, dynamic> storage = Map<String, dynamic>();
+    final directory = storageDirectory ?? await getTemporaryDirectory();
+    final file = File('${directory.path}/.hydrated_bloc.json');
+    var storage = <String, dynamic>{};
 
     if (await file.exists()) {
       try {
         storage =
             json.decode(await file.readAsString()) as Map<String, dynamic>;
-      } catch (_) {
+      } on dynamic catch (_) {
         await file.delete();
       }
     }
@@ -76,7 +75,7 @@ class HydratedBlocStorage implements HydratedStorage {
 
   @override
   Future<void> clear() async {
-    _storage = Map<String, dynamic>();
+    _storage = <String, dynamic>{};
     _instance = null;
     return await _file.exists() ? await _file.delete() : null;
   }

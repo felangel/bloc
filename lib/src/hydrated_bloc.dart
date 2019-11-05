@@ -20,7 +20,7 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
       return jsonString?.isNotEmpty == true
           ? fromJson(json.decode(jsonString) as Map<String, dynamic>)
           : null;
-    } catch (_) {
+    } on dynamic catch (_) {
       return null;
     }
   }

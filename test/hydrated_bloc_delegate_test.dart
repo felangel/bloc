@@ -38,7 +38,7 @@ void main() {
         event: 'event',
         nextState: 'nextState',
       );
-      Map<String, String> expected = {'nextState': 'json'};
+      final expected = <String, String>{'nextState': 'json'};
       when(bloc.id).thenReturn('');
       when(bloc.toJson('nextState')).thenReturn(expected);
       delegate.onTransition(bloc, transition);
@@ -52,7 +52,7 @@ void main() {
         event: 'event',
         nextState: 'nextState',
       );
-      Map<String, String> expected = {'nextState': 'json'};
+      final expected = <String, String>{'nextState': 'json'};
       when(bloc.id).thenReturn('A');
       when(bloc.toJson('nextState')).thenReturn(expected);
       delegate.onTransition(bloc, transition);
@@ -61,9 +61,8 @@ void main() {
 
     group('Default Storage Directory', () {
       setUp(() async {
-        const MethodChannel channel =
-            MethodChannel('plugins.flutter.io/path_provider');
-        String response = '.';
+        const channel = MethodChannel('plugins.flutter.io/path_provider');
+        var response = '.';
 
         channel.setMockMethodCallHandler((MethodCall methodCall) async {
           return response;
@@ -79,7 +78,7 @@ void main() {
           event: 'event',
           nextState: 'nextState',
         );
-        Map<String, String> expected = {'nextState': 'json'};
+        final expected = <String, String>{'nextState': 'json'};
         when(bloc.id).thenReturn('');
         when(bloc.toJson('nextState')).thenReturn(expected);
         delegate.onTransition(bloc, transition);
@@ -95,7 +94,7 @@ void main() {
           event: 'event',
           nextState: 'nextState',
         );
-        Map<String, String> expected = {'nextState': 'json'};
+        final expected = <String, String>{'nextState': 'json'};
         when(bloc.id).thenReturn('A');
         when(bloc.toJson('nextState')).thenReturn(expected);
         delegate.onTransition(bloc, transition);
@@ -115,7 +114,7 @@ void main() {
           event: 'event',
           nextState: 'nextState',
         );
-        Map<String, String> expected = {'nextState': 'json'};
+        final expected = <String, String>{'nextState': 'json'};
         when(bloc.id).thenReturn('');
         when(bloc.toJson('nextState')).thenReturn(expected);
         delegate.onTransition(bloc, transition);
@@ -133,7 +132,7 @@ void main() {
           event: 'event',
           nextState: 'nextState',
         );
-        Map<String, String> expected = {'nextState': 'json'};
+        final expected = <String, String>{'nextState': 'json'};
         when(bloc.id).thenReturn('A');
         when(bloc.toJson('nextState')).thenReturn(expected);
         delegate.onTransition(bloc, transition);

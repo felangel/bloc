@@ -1,5 +1,6 @@
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,9 +11,8 @@ void main() {
 
   group('HydratedBlocStorage', () {
     group('Default Storage Directory', () {
-      const MethodChannel channel =
-          MethodChannel('plugins.flutter.io/path_provider');
-      String response = '.';
+      const channel = MethodChannel('plugins.flutter.io/path_provider');
+      var response = '.';
       HydratedBlocStorage hydratedStorage;
 
       channel.setMockMethodCallHandler((MethodCall methodCall) async {
