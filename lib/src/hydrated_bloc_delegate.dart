@@ -33,7 +33,7 @@ class HydratedBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    final dynamic state = transition.nextState;
+    final state = transition.nextState;
     if (bloc is HydratedBloc) {
       final stateJson = bloc.toJson(state);
       if (stateJson != null) {
