@@ -8,7 +8,7 @@ void main() {
     test('throws AssertionError if bloc is null', () async {
       try {
         await emitsExactly(null, []);
-      } on Object catch (error) {
+      } on dynamic catch (error) {
         expect(error is AssertionError, true);
       }
     });
