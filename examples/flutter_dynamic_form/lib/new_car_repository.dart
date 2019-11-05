@@ -37,7 +37,7 @@ class NewCarRepository {
         break;
       case 'Toyota':
         switch (model) {
-          case 'Corrolla':
+          case 'Corolla':
             return ['2015', '2014'];
           case 'Supra':
             return ['2013', '2012'];
