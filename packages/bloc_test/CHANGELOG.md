@@ -1,3 +1,8 @@
+# 2.1.0
+
+- Added `MockBloc` for simplified bloc mocks
+- Documentation and example updates
+
 # 2.0.0
 
 - Updated to `bloc: ^2.0.0` and Documentation Updates

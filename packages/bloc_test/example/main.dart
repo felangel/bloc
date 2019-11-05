@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 enum CounterEvent { increment }
@@ -24,7 +23,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 
 // Mock Bloc
-class MockCounterBloc extends Mock implements CounterBloc {}
+class MockCounterBloc extends MockBloc<CounterEvent, int>
+    implements CounterBloc {}
 
 void main() {
   group('whenListen', () {

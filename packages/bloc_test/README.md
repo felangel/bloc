@@ -19,9 +19,8 @@ A Dart package that makes testing blocs easy. Built to work with [bloc](https://
 
 ```dart
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mockito/mockito.dart';
 
-class MockCounterBloc extends Mock implements CounterBloc {}
+class MockCounterBloc extends MockBloc<CounterEvent, int> implements CounterBloc {}
 ```
 
 ## Stub the Bloc Stream
