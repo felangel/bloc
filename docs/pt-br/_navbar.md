@@ -1,0 +1,6 @@
+- Traduções
+  - [:us: en-us](/)
+  - [:fr: fr-fr](/fr/)
+  - [:kr: ko-kr](/ko-kr/)
+  - [:brazil: pt-br](/pt-br/)
+  - [:czech_republic: cs](/cs/)
