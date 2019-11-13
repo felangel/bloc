@@ -9,7 +9,10 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
   ComplexState get initialState => ComplexStateA();
 
   @override
-  Stream<ComplexState> transformEvents(events, next) {
+  Stream<ComplexState> transformEvents(
+    Stream<ComplexEvent> events,
+    Function(ComplexEvent) next,
+  ) {
     return (events as Observable<ComplexEvent>).switchMap(next);
   }
 
@@ -29,7 +32,7 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
   }
 
   @override
-  Stream<ComplexState> transformStates(states) {
+  Stream<ComplexState> transformStates(Stream<ComplexState> states) {
     return (states as Observable<ComplexState>)
         .debounceTime(Duration(milliseconds: 50));
   }

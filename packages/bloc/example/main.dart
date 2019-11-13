@@ -14,12 +14,12 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       case CounterEvent.decrement:
         // Simulating Network Latency
         await Future<void>.delayed(Duration(seconds: 1));
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
         // Simulating Network Latency
         await Future<void>.delayed(Duration(milliseconds: 500));
-        yield currentState + 1;
+        yield state + 1;
         break;
       default:
         throw Exception('unhandled event: $event');
@@ -52,17 +52,17 @@ void main() {
 
   final counterBloc = CounterBloc();
 
-  counterBloc.dispatch(CounterEvent.increment);
-  counterBloc.dispatch(CounterEvent.increment);
-  counterBloc.dispatch(CounterEvent.increment);
+  counterBloc.add(CounterEvent.increment);
+  counterBloc.add(CounterEvent.increment);
+  counterBloc.add(CounterEvent.increment);
 
-  counterBloc.dispatch(CounterEvent.decrement);
-  counterBloc.dispatch(CounterEvent.decrement);
-  counterBloc.dispatch(CounterEvent.decrement);
+  counterBloc.add(CounterEvent.decrement);
+  counterBloc.add(CounterEvent.decrement);
+  counterBloc.add(CounterEvent.decrement);
 
-  counterBloc.dispatch(null); // Triggers Exception
+  counterBloc.add(null); // Triggers Exception
 
   // The exception triggers `SimpleBlocDelegate.onError` but does not impact bloc functionality.
-  counterBloc.dispatch(CounterEvent.increment);
-  counterBloc.dispatch(CounterEvent.decrement);
+  counterBloc.add(CounterEvent.increment);
+  counterBloc.add(CounterEvent.decrement);
 }

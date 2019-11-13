@@ -1,3 +1,33 @@
+# 2.0.0
+
+- Allow blocs to finish processing pending events on `close` ([#639](https://github.com/felangel/bloc/issues/639))
+- Documentation Updates
+
+# 1.0.1
+
+- Bugfix: Exceptions thrown in `onTransition` are passed to `onError` and should not break bloc functionality ([#641](https://github.com/felangel/bloc/issues/641))
+- Adhere to [effective dart](https://dart.dev/guides/language/effective-dart) ([#561](https://github.com/felangel/bloc/issues/561))
+- Documentation and Example Updates
+
+# 1.0.0
+
+- `dispatch` and `dispose` removed
+- Documentation Updates
+
+# 0.16.1
+
+- Minor Documentation Updates
+
+# 0.16.0
+
+- Bloc extends `Stream<State>` ([#558](https://github.com/felangel/bloc/issues/558))
+  - `bloc.state.listen` -> `bloc.listen`
+  - `bloc.currentState` -> `bloc.state`
+- Bloc implements `Sink<Event>` ([#558](https://github.com/felangel/bloc/issues/558))
+  - `dispatch` deprecated in favor of `add`
+  - `dispose` deprecated in favor of `close`
+- Documentation and Example Updates
+
 # 0.15.0
 
 - Removed Bloc `event` Stream ([#326](https://github.com/felangel/bloc/issues/326))

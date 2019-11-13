@@ -15,7 +15,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
@@ -32,7 +32,7 @@ void main() {
             child: null,
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -46,7 +46,7 @@ void main() {
             child: Container(),
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -60,7 +60,7 @@ void main() {
             child: null,
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -68,12 +68,12 @@ void main() {
     testWidgets('calls listeners on state changes',
         (WidgetTester tester) async {
       int latestStateA;
-      int listenerCallCountA = 0;
+      var listenerCallCountA = 0;
       final counterBlocA = CounterBloc();
       final expectedStatesA = [0, 1, 2];
 
       int latestStateB;
-      int listenerCallCountB = 0;
+      var listenerCallCountB = 0;
       final counterBlocB = CounterBloc();
       final expectedStatesB = [0, 1];
 
@@ -102,16 +102,16 @@ void main() {
 
       expect(find.byKey(Key('multiBlocListener_child')), findsOneWidget);
 
-      counterBlocA.dispatch(CounterEvent.increment);
-      counterBlocA.dispatch(CounterEvent.increment);
-      counterBlocB.dispatch(CounterEvent.increment);
+      counterBlocA.add(CounterEvent.increment);
+      counterBlocA.add(CounterEvent.increment);
+      counterBlocB.add(CounterEvent.increment);
 
-      expectLater(counterBlocA.state, emitsInOrder(expectedStatesA)).then((_) {
+      expectLater(counterBlocA, emitsInOrder(expectedStatesA)).then((_) {
         expect(listenerCallCountA, 2);
         expect(latestStateA, 2);
       });
 
-      expectLater(counterBlocB.state, emitsInOrder(expectedStatesB)).then((_) {
+      expectLater(counterBlocB, emitsInOrder(expectedStatesB)).then((_) {
         expect(listenerCallCountB, 1);
         expect(latestStateB, 1);
       });

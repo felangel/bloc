@@ -110,7 +110,7 @@ class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onBuild?.call();
-    Repository repository = RepositoryProvider.of<Repository>(context);
+    final repository = RepositoryProvider.of<Repository>(context);
     assert(repository != null);
 
     return Scaffold(
@@ -171,33 +171,33 @@ void main() {
     testWidgets('passes value to children via builder',
         (WidgetTester tester) async {
       final repository = Repository(0);
-      final CounterPage _child = CounterPage();
+      final _child = CounterPage();
       await tester.pumpWidget(MyApp(
         repository: repository,
         child: _child,
       ));
 
-      final Finder _counterFinder = find.byKey((Key('value_data')));
+      final _counterFinder = find.byKey((Key('value_data')));
       expect(_counterFinder, findsOneWidget);
 
-      final Text _counterText = _counterFinder.evaluate().first.widget as Text;
+      final _counterText = _counterFinder.evaluate().first.widget as Text;
       expect(_counterText.data, '0');
     });
 
     testWidgets('passes value to children via value',
         (WidgetTester tester) async {
       final repository = Repository(0);
-      final CounterPage _child = CounterPage();
+      final _child = CounterPage();
       await tester.pumpWidget(MyApp(
         repository: repository,
         child: _child,
         useValueProvider: true,
       ));
 
-      final Finder _counterFinder = find.byKey((Key('value_data')));
+      final _counterFinder = find.byKey((Key('value_data')));
       expect(_counterFinder, findsOneWidget);
 
-      final Text _counterText = _counterFinder.evaluate().first.widget as Text;
+      final _counterText = _counterFinder.evaluate().first.widget as Text;
       expect(_counterText.data, '0');
     });
 
@@ -229,7 +229,7 @@ void main() {
     testWidgets(
         'should not rebuild widgets that inherited the value if the value is changed',
         (WidgetTester tester) async {
-      int numBuilds = 0;
+      var numBuilds = 0;
       final Widget _child = CounterPage(
         onBuild: () {
           numBuilds++;

@@ -38,8 +38,8 @@ environment:
 
 dependencies:
   meta: ^1.1.7
-  bloc: ^0.15.0
-  equatable: ^0.2.0
+  bloc: ^2.0.0
+  equatable: ^0.6.0
   http: ^0.12.0
 ```
 
@@ -253,13 +253,16 @@ Create `github_search_event.dart`.
 import 'package:equatable/equatable.dart';
 
 abstract class GithubSearchEvent extends Equatable {
-  GithubSearchEvent([List props = const []]) : super(props);
+  const GithubSearchEvent();
 }
 
 class TextChanged extends GithubSearchEvent {
   final String text;
 
-  TextChanged({this.text}) : super([text]);
+  const TextChanged({this.text});
+
+  @override
+  List<Object> get props => [text];
 
   @override
   String toString() => 'TextChanged { text: $text }';
@@ -290,23 +293,23 @@ import 'package:equatable/equatable.dart';
 import 'package:common_github_search/common_github_search.dart';
 
 abstract class GithubSearchState extends Equatable {
-  GithubSearchState([List props = const []]) : super(props);
+  const GithubSearchState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class SearchStateEmpty extends GithubSearchState {
-  @override
-  String toString() => 'SearchStateEmpty';
-}
+class SearchStateEmpty extends GithubSearchState {}
 
-class SearchStateLoading extends GithubSearchState {
-  @override
-  String toString() => 'SearchStateLoading';
-}
+class SearchStateLoading extends GithubSearchState {}
 
 class SearchStateSuccess extends GithubSearchState {
   final List<SearchResultItem> items;
 
-  SearchStateSuccess(this.items) : super([items]);
+  const SearchStateSuccess(this.items);
+
+  @override
+  List<Object> get props => [items];
 
   @override
   String toString() => 'SearchStateSuccess { items: ${items.length} }';
@@ -315,10 +318,10 @@ class SearchStateSuccess extends GithubSearchState {
 class SearchStateError extends GithubSearchState {
   final String error;
 
-  SearchStateError(this.error) : super([error]);
+  const SearchStateError(this.error);
 
   @override
-  String toString() => 'SearchStateError';
+  List<Object> get props => [error];
 }
 ```
 
@@ -422,12 +425,12 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.21.0
+  flutter_bloc: ^2.0.0
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search
@@ -512,7 +515,7 @@ class _SearchBarState extends State<_SearchBar> {
       controller: _textController,
       autocorrect: false,
       onChanged: (text) {
-        _githubSearchBloc.dispatch(
+        _githubSearchBloc.add(
           TextChanged(text: text),
         );
       },
@@ -530,7 +533,7 @@ class _SearchBarState extends State<_SearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    _githubSearchBloc.dispatch(TextChanged(text: ''));
+    _githubSearchBloc.add(TextChanged(text: ''));
   }
 }
 ```
@@ -547,7 +550,7 @@ We're done with `_SearchBar`, now onto `_SearchBody`.
 class _SearchBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GithubSearchEvent, GithubSearchState>(
+    return BlocBuilder<GithubSearchBloc, GithubSearchState>(
       bloc: BlocProvider.of<GithubSearchBloc>(context),
       builder: (BuildContext context, GithubSearchState state) {
         if (state is SearchStateEmpty) {
@@ -676,7 +679,7 @@ class _SearchBarState extends State<_SearchBar> {
       controller: _textController,
       autocorrect: false,
       onChanged: (text) {
-        _githubSearchBloc.dispatch(
+        _githubSearchBloc.add(
           TextChanged(text: text),
         );
       },
@@ -694,14 +697,14 @@ class _SearchBarState extends State<_SearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    _githubSearchBloc.dispatch(TextChanged(text: ''));
+    _githubSearchBloc.add(TextChanged(text: ''));
   }
 }
 
 class _SearchBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GithubSearchEvent, GithubSearchState>(
+    return BlocBuilder<GithubSearchBloc, GithubSearchState>(
       bloc: BlocProvider.of<GithubSearchBloc>(context),
       builder: (BuildContext context, GithubSearchState state) {
         if (state is SearchStateEmpty) {
@@ -805,7 +808,7 @@ class App extends StatelessWidget {
 }
 ```
 
-?> **Note:** Our `GithubRepository` is created in `main` and injected into our `App`. Our `SearchForm` is wrapped in a `BlocProvider` which is responsible for initializing, disposing, and making the instance of `GithubSearchBloc` available to the `SearchForm` widget and its children.
+?> **Note:** Our `GithubRepository` is created in `main` and injected into our `App`. Our `SearchForm` is wrapped in a `BlocProvider` which is responsible for initializing, closing, and making the instance of `GithubSearchBloc` available to the `SearchForm` widget and its children.
 
 That’s all there is to it! We’ve now successfully implemented a github search app in Flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
 
@@ -839,7 +842,7 @@ environment:
 dependencies:
   angular: ^5.0.0
   angular_components: ^0.9.0
-  angular_bloc: ^0.10.0
+  angular_bloc: ^2.0.0
   common_github_search:
     path: ../common_github_search
 
@@ -855,7 +858,7 @@ dev_dependencies:
 
 Just like in our Flutter app, we're going to need to create a `SearchForm` with a `SearchBar` and `SearchBody` component.
 
-> Our `SearchForm` component will implement `OnInit` and `OnDestroy` because it will need to create and dispose of a `GithubSearchBloc`.
+> Our `SearchForm` component will implement `OnInit` and `OnDestroy` because it will need to create and close a `GithubSearchBloc`.
 
 - `SearchBar` will be responsible for taking user input.
 - `SearchBody` will be responsible for displaying search results, loading indicators, and errors.
@@ -894,14 +897,14 @@ class SearchFormComponent implements OnInit, OnDestroy {
 
   @override
   void ngOnDestroy() {
-    githubSearchBloc.dispose();
+    githubSearchBloc.close();
   }
 }
 ```
 
 ?> **Note:** The `GithubRepository` is injected into the `SearchFormComponent`.
 
-?> **Note:** The `GithubSearchBloc` is created and disposed by the `SearchFormComponent`.
+?> **Note:** The `GithubSearchBloc` is created and closed by the `SearchFormComponent`.
 
 Our template (`search_form_component.html`) will look like:
 
@@ -935,7 +938,7 @@ class SearchBarComponent {
   GithubSearchBloc githubSearchBloc;
 
   void onTextChanged(String text) {
-    githubSearchBloc.dispatch(TextChanged(text: text));
+    githubSearchBloc.add(TextChanged(text: text));
   }
 }
 ```

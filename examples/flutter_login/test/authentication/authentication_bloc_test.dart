@@ -16,16 +16,20 @@ void main() {
     authenticationBloc = AuthenticationBloc(userRepository: userRepository);
   });
 
+  tearDown(() {
+    authenticationBloc?.close();
+  });
+
   test('initial state is correct', () {
     expect(authenticationBloc.initialState, AuthenticationUninitialized());
   });
 
-  test('dispose does not emit new states', () {
+  test('close does not emit new states', () {
     expectLater(
-      authenticationBloc.state,
+      authenticationBloc,
       emitsInOrder([AuthenticationUninitialized(), emitsDone]),
     );
-    authenticationBloc.dispose();
+    authenticationBloc.close();
   });
 
   group('AppStarted', () {
@@ -38,11 +42,11 @@ void main() {
       when(userRepository.hasToken()).thenAnswer((_) => Future.value(false));
 
       expectLater(
-        authenticationBloc.state,
+        authenticationBloc,
         emitsInOrder(expectedResponse),
       );
 
-      authenticationBloc.dispatch(AppStarted());
+      authenticationBloc.add(AppStarted());
     });
   });
 
@@ -57,11 +61,11 @@ void main() {
       ];
 
       expectLater(
-        authenticationBloc.state,
+        authenticationBloc,
         emitsInOrder(expectedResponse),
       );
 
-      authenticationBloc.dispatch(LoggedIn(
+      authenticationBloc.add(LoggedIn(
         token: 'instance.token',
       ));
     });
@@ -78,11 +82,11 @@ void main() {
       ];
 
       expectLater(
-        authenticationBloc.state,
+        authenticationBloc,
         emitsInOrder(expectedResponse),
       );
 
-      authenticationBloc.dispatch(LoggedOut());
+      authenticationBloc.add(LoggedOut());
     });
   });
 }

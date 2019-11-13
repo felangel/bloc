@@ -23,7 +23,6 @@ class _WeatherState extends State<Weather> {
 
   @override
   Widget build(BuildContext context) {
-    final weatherBloc = BlocProvider.of<WeatherBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Weather'),
@@ -49,7 +48,8 @@ class _WeatherState extends State<Weather> {
                 ),
               );
               if (city != null) {
-                weatherBloc.dispatch(FetchWeather(city: city));
+                BlocProvider.of<WeatherBloc>(context)
+                    .add(FetchWeather(city: city));
               }
             },
           )
@@ -59,7 +59,7 @@ class _WeatherState extends State<Weather> {
         child: BlocListener<WeatherBloc, WeatherState>(
           listener: (context, state) {
             if (state is WeatherLoaded) {
-              BlocProvider.of<ThemeBloc>(context).dispatch(
+              BlocProvider.of<ThemeBloc>(context).add(
                 WeatherChanged(condition: state.weather.condition),
               );
               _refreshCompleter?.complete();
@@ -80,7 +80,7 @@ class _WeatherState extends State<Weather> {
                       color: themeState.color,
                       child: RefreshIndicator(
                         onRefresh: () {
-                          weatherBloc.dispatch(
+                          BlocProvider.of<WeatherBloc>(context).add(
                             RefreshWeather(city: weather.location),
                           );
                           return _refreshCompleter.future;

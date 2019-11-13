@@ -7,7 +7,6 @@ import 'package:flutter_firestore_todos/models/models.dart';
 class ExtraActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final todosBloc = BlocProvider.of<TodosBloc>(context);
     return BlocBuilder<TodosBloc, TodosState>(
       builder: (context, state) {
         if (state is TodosLoaded) {
@@ -16,10 +15,10 @@ class ExtraActions extends StatelessWidget {
             onSelected: (action) {
               switch (action) {
                 case ExtraAction.clearCompleted:
-                  todosBloc.dispatch(ClearCompleted());
+                  BlocProvider.of<TodosBloc>(context).add(ClearCompleted());
                   break;
                 case ExtraAction.toggleAllComplete:
-                  todosBloc.dispatch(ToggleAll());
+                  BlocProvider.of<TodosBloc>(context).add(ToggleAll());
                   break;
               }
             },

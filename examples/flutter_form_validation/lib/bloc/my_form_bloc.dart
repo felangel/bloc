@@ -23,19 +23,19 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     MyFormEvent event,
   ) async* {
     if (event is EmailChanged) {
-      yield currentState.copyWith(
+      yield state.copyWith(
         email: event.email,
         isEmailValid: _isEmailValid(event.email),
       );
     }
     if (event is PasswordChanged) {
-      yield currentState.copyWith(
+      yield state.copyWith(
         password: event.password,
         isPasswordValid: _isPasswordValid(event.password),
       );
     }
     if (event is FormSubmitted) {
-      yield currentState.copyWith(formSubmittedSuccessfully: true);
+      yield state.copyWith(formSubmittedSuccessfully: true);
     }
     if (event is FormReset) {
       yield MyFormState.initial();

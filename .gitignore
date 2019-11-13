@@ -8,7 +8,7 @@
 build/
 packages/**/ios/
 packages/**/android/
-doc/api/
+doc/
 pubspec.lock
 .flutter-plugins
 *.iml

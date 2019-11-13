@@ -21,14 +21,14 @@ class TodosApp extends StatelessWidget {
           builder: (context) {
             return AuthenticationBloc(
               userRepository: FirebaseUserRepository(),
-            )..dispatch(AppStarted());
+            )..add(AppStarted());
           },
         ),
         BlocProvider<TodosBloc>(
           builder: (context) {
             return TodosBloc(
               todosRepository: FirebaseTodosRepository(),
-            )..dispatch(LoadTodos());
+            )..add(LoadTodos());
           },
         )
       ],
@@ -39,18 +39,20 @@ class TodosApp extends StatelessWidget {
             return BlocBuilder<AuthenticationBloc, AuthenticationState>(
               builder: (context, state) {
                 if (state is Authenticated) {
-                  final todosBloc = BlocProvider.of<TodosBloc>(context);
                   return MultiBlocProvider(
                     providers: [
                       BlocProvider<TabBloc>(
                         builder: (context) => TabBloc(),
                       ),
                       BlocProvider<FilteredTodosBloc>(
-                        builder: (context) =>
-                            FilteredTodosBloc(todosBloc: todosBloc),
+                        builder: (context) => FilteredTodosBloc(
+                          todosBloc: BlocProvider.of<TodosBloc>(context),
+                        ),
                       ),
                       BlocProvider<StatsBloc>(
-                        builder: (context) => StatsBloc(todosBloc: todosBloc),
+                        builder: (context) => StatsBloc(
+                          todosBloc: BlocProvider.of<TodosBloc>(context),
+                        ),
                       ),
                     ],
                     child: HomeScreen(),
@@ -66,10 +68,9 @@ class TodosApp extends StatelessWidget {
             );
           },
           '/addTodo': (context) {
-            final todosBloc = BlocProvider.of<TodosBloc>(context);
             return AddEditScreen(
               onSave: (task, note) {
-                todosBloc.dispatch(
+                BlocProvider.of<TodosBloc>(context).add(
                   AddTodo(Todo(task, note: note)),
                 );
               },

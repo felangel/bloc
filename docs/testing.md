@@ -17,10 +17,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
@@ -91,22 +91,22 @@ test('single Increment event updates state to 1', () {
     final List<int> expected = [0, 1];
 
     expectLater(
-        counterBloc.state,
+        counterBloc,
         emitsInOrder(expected),
     );
 
-    counterBloc.dispatch(CounterEvent.increment);
+    counterBloc.add(CounterEvent.increment);
 });
 
 test('single Decrement event updates state to -1', () {
     final List<int> expected = [0, -1];
 
     expectLater(
-        counterBloc.state,
+        counterBloc,
         emitsInOrder(expected),
     );
 
-    counterBloc.dispatch(CounterEvent.decrement);
+    counterBloc.add(CounterEvent.decrement);
 });
 ```
 

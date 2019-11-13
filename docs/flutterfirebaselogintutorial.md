@@ -23,7 +23,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -31,8 +31,8 @@ dependencies:
   cloud_firestore: ^0.9.7
   firebase_auth: ^0.8.1+4
   google_sign_in: ^4.0.1+1
-  flutter_bloc: ^0.21.0
-  equatable: ^0.2.0
+  flutter_bloc: ^2.0.0
+  equatable: ^0.6.0
   meta: ^1.1.6
   font_awesome_flutter: ^8.4.0
 
@@ -241,38 +241,36 @@ Create a folder/directory called `authentication_bloc` and we can create our aut
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 abstract class AuthenticationState extends Equatable {
-  AuthenticationState([List props = const []]) : super(props);
+  const AuthenticationState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class Uninitialized extends AuthenticationState {
-  @override
-  String toString() => 'Uninitialized';
-}
+class Uninitialized extends AuthenticationState {}
 
 class Authenticated extends AuthenticationState {
   final String displayName;
 
-  Authenticated(this.displayName) : super([displayName]);
+  const Authenticated(this.displayName);
+
+  @override
+  List<Object> get props => [displayName];
 
   @override
   String toString() => 'Authenticated { displayName: $displayName }';
 }
 
-class Unauthenticated extends AuthenticationState {
-  @override
-  String toString() => 'Unauthenticated';
-}
+class Unauthenticated extends AuthenticationState {}
 ```
 
 ?> **Note**: The [`equatable`](https://pub.dev/packages/equatable) package is used in order to be able to compare two instances of `AuthenticationState`. By default, `==` returns true only if the two objects are the same instance.
 
 ?> **Note**: `toString` is overridden to make it easier to read an `AuthenticationState` when printing it to the console or in `Transitions`.
 
-!> Since we're using `Equatable` to allow us to compare different instances of `AuthenticationState` we need to pass any properties to the superclass. Without `super([displayName])`, we will not be able to properly compare different instances of `Authenticated`.
+!> Since we're using `Equatable` to allow us to compare different instances of `AuthenticationState` we need to pass any properties to the superclass. Without `List<Object> get props => [displayName]`, we will not be able to properly compare different instances of `Authenticated`.
 
 ## Authentication Events
 
@@ -286,27 +284,17 @@ We will need:
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 abstract class AuthenticationEvent extends Equatable {
-  AuthenticationEvent([List props = const []]) : super(props);
+  @override
+  List<Object> get props => [];
 }
 
-class AppStarted extends AuthenticationEvent {
-  @override
-  String toString() => 'AppStarted';
-}
+class AppStarted extends AuthenticationEvent {}
 
-class LoggedIn extends AuthenticationEvent {
-  @override
-  String toString() => 'LoggedIn';
-}
+class LoggedIn extends AuthenticationEvent {}
 
-class LoggedOut extends AuthenticationEvent {
-  @override
-  String toString() => 'LoggedOut';
-}
+class LoggedOut extends AuthenticationEvent {}
 ```
 
 ## Authentication Barrel File
@@ -468,11 +456,12 @@ import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
       builder: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..dispatch(AppStarted()),
+        ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
   );
@@ -481,7 +470,9 @@ void main() {
 
 We are wrapping our entire `App` widget in a `BlocProvider` in order to make the `AuthenticationBloc` available to the entire widget tree.
 
-?> `BlocProvider` also handles disposing the `AuthenticationBloc` automatically so we don't need to do that.
+?> `WidgetsFlutterBinding.ensureInitialized()` is required in Flutter v1.9.4+ before using any plugins if the code is executed before runApp.
+
+?> `BlocProvider` also handles closing the `AuthenticationBloc` automatically so we don't need to do that.
 
 Next we need to implement our `App` widget.
 
@@ -495,11 +486,12 @@ import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
       builder: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..dispatch(AppStarted()),
+        ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
   );
@@ -566,12 +558,13 @@ Now we can hook up our `BlocDelegate` in our `main.dart`.
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
       builder: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..dispatch(AppStarted()),
+        ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
   );
@@ -611,12 +604,13 @@ import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
       builder: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..dispatch(AppStarted()),
+        ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
   );
@@ -646,7 +640,7 @@ class App extends StatelessWidget {
 }
 ```
 
-Now whenever our `AuthenticationBloc` has a `currentState` of `Uninitialized` we will render our `SplashScreen` widget!
+Now whenever our `AuthenticationBloc` has a `state` of `Uninitialized` we will render our `SplashScreen` widget!
 
 ## Home Screen
 
@@ -673,7 +667,7 @@ class HomeScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.exit_to_app),
             onPressed: () {
-              BlocProvider.of<AuthenticationBloc>(context).dispatch(
+              BlocProvider.of<AuthenticationBloc>(context).add(
                 LoggedOut(),
               );
             },
@@ -691,7 +685,7 @@ class HomeScreen extends StatelessWidget {
 }
 ```
 
-`HomeScreen` is a `StatelessWidget` that requires a `name` to be injected so that it can render the welcome message. It also uses `BlocProvider` in order to access the `AuthenticationBloc` via `BuildContext` so that when a user pressed the logout button, we can dispatch the `LoggedOut` event.
+`HomeScreen` is a `StatelessWidget` that requires a `name` to be injected so that it can render the welcome message. It also uses `BlocProvider` in order to access the `AuthenticationBloc` via `BuildContext` so that when a user pressed the logout button, we can add the `LoggedOut` event.
 
 Now let's update our `App` to render the `HomeScreen` if the `AuthenticationState` is `Authentication`.
 
@@ -706,12 +700,13 @@ import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
       builder: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..dispatch(AppStarted()),
+        ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
   );
@@ -887,15 +882,20 @@ Open up `login/bloc/login_event.dart` and let's define and implement our events.
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-@immutable
 abstract class LoginEvent extends Equatable {
-  LoginEvent([List props = const []]) : super(props);
+  const LoginEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class EmailChanged extends LoginEvent {
   final String email;
 
-  EmailChanged({@required this.email}) : super([email]);
+  const EmailChanged({@required this.email});
+
+  @override
+  List<Object> get props => [email];
 
   @override
   String toString() => 'EmailChanged { email :$email }';
@@ -904,7 +904,10 @@ class EmailChanged extends LoginEvent {
 class PasswordChanged extends LoginEvent {
   final String password;
 
-  PasswordChanged({@required this.password}) : super([password]);
+  const PasswordChanged({@required this.password});
+
+  @override
+  List<Object> get props => [password];
 
   @override
   String toString() => 'PasswordChanged { password: $password }';
@@ -914,8 +917,13 @@ class Submitted extends LoginEvent {
   final String email;
   final String password;
 
-  Submitted({@required this.email, @required this.password})
-      : super([email, password]);
+  const Submitted({
+    @required this.email,
+    @required this.password,
+  });
+
+  @override
+  List<Object> get props => [email, password];
 
   @override
   String toString() {
@@ -923,17 +931,19 @@ class Submitted extends LoginEvent {
   }
 }
 
-class LoginWithGooglePressed extends LoginEvent {
-  @override
-  String toString() => 'LoginWithGooglePressed';
-}
+class LoginWithGooglePressed extends LoginEvent {}
 
 class LoginWithCredentialsPressed extends LoginEvent {
   final String email;
   final String password;
 
-  LoginWithCredentialsPressed({@required this.email, @required this.password})
-      : super([email, password]);
+  const LoginWithCredentialsPressed({
+    @required this.email,
+    @required this.password,
+  });
+
+  @override
+  List<Object> get props => [email, password];
 
   @override
   String toString() {
@@ -1020,13 +1030,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Stream<LoginState> _mapEmailChangedToState(String email) async* {
-    yield currentState.update(
+    yield state.update(
       isEmailValid: Validators.isValidEmail(email),
     );
   }
 
   Stream<LoginState> _mapPasswordChangedToState(String password) async* {
-    yield currentState.update(
+    yield state.update(
       isPasswordValid: Validators.isValidPassword(password),
     );
   }
@@ -1086,7 +1096,7 @@ There's nothing special going on here. It's just some plain old Dart code which 
 
 ## Login Screen
 
-Now that we're finished the `LoginBloc` it's time to create our `LoginScreen` widget which will be responsible for creating and disposing the `LoginBloc` as well as providing the Scaffold for our `LoginForm` widget.
+Now that we're finished the `LoginBloc` it's time to create our `LoginScreen` widget which will be responsible for creating and closing the `LoginBloc` as well as providing the Scaffold for our `LoginForm` widget.
 
 Create `login/login_screen.dart` and let's implement it.
 
@@ -1118,7 +1128,7 @@ class LoginScreen extends StatelessWidget {
 
 ```
 
-Again, we are extending `StatelessWidget` and using a `BlocProvider` to initialize and dispose the `LoginBloc` as well as to make the `LoginBloc` instance available to all widgets within the sub-tree.
+Again, we are extending `StatelessWidget` and using a `BlocProvider` to initialize and close the `LoginBloc` as well as to make the `LoginBloc` instance available to all widgets within the sub-tree.
 
 At this point, we need to implement the `LoginForm` widget which will be responsible for displaying the form and submission buttons in order for a user to authenticate his/her self.
 
@@ -1169,7 +1179,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBloc, LoginState>(      
+    return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.isFailure) {
           Scaffold.of(context)
@@ -1200,7 +1210,7 @@ class _LoginFormState extends State<LoginForm> {
             );
         }
         if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context).dispatch(LoggedIn());
+          BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -1271,19 +1281,19 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _onEmailChanged() {
-    _loginBloc.dispatch(
+    _loginBloc.add(
       EmailChanged(email: _emailController.text),
     );
   }
 
   void _onPasswordChanged() {
-    _loginBloc.dispatch(
+    _loginBloc.add(
       PasswordChanged(password: _passwordController.text),
     );
   }
 
   void _onFormSubmitted() {
-    _loginBloc.dispatch(
+    _loginBloc.add(
       LoginWithCredentialsPressed(
         email: _emailController.text,
         password: _passwordController.text,
@@ -1301,7 +1311,7 @@ We use a `BlocListener` widget in order to execute one-time actions in response 
 
 We use a `BlocBuilder` widget in order to rebuild the UI in response to different `LoginStates`.
 
-Whenever the email or password changes, we dispatch an event to the `LoginBloc` in order for it to validate the current form state and return the new form state.
+Whenever the email or password changes, we add an event to the `LoginBloc` in order for it to validate the current form state and return the new form state.
 
 ?> **Note:** We're using `Image.asset` to load the flutter logo from our assets directory.
 
@@ -1355,7 +1365,7 @@ class GoogleLoginButton extends StatelessWidget {
       ),
       icon: Icon(FontAwesomeIcons.google, color: Colors.white),
       onPressed: () {
-        BlocProvider.of<LoginBloc>(context).dispatch(
+        BlocProvider.of<LoginBloc>(context).add(
           LoginWithGooglePressed(),
         );
       },
@@ -1366,7 +1376,7 @@ class GoogleLoginButton extends StatelessWidget {
 }
 ```
 
-Again, there's not too much going on here. We have another `StatelessWidget`; however, this time we are not exposing an `onPressed` callback. Instead, we're handling the onPressed internally and dispatching the `LoginWithGooglePressed` event to our `LoginBloc` which will handle the Google Sign In process.
+Again, there's not too much going on here. We have another `StatelessWidget`; however, this time we are not exposing an `onPressed` callback. Instead, we're handling the onPressed internally and adding the `LoginWithGooglePressed` event to our `LoginBloc` which will handle the Google Sign In process.
 
 ?> **Note:** We're using [font_awesome_flutter](https://pub.dev/packages/font_awesome_flutter) for the cool google icon.
 
@@ -1541,15 +1551,20 @@ Open up `register/bloc/register_event.dart` and let's implement our events.
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-@immutable
 abstract class RegisterEvent extends Equatable {
-  RegisterEvent([List props = const []]) : super(props);
+  const RegisterEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class EmailChanged extends RegisterEvent {
   final String email;
 
-  EmailChanged({@required this.email}) : super([email]);
+  const EmailChanged({@required this.email});
+
+  @override
+  List<Object> get props => [email];
 
   @override
   String toString() => 'EmailChanged { email :$email }';
@@ -1558,7 +1573,10 @@ class EmailChanged extends RegisterEvent {
 class PasswordChanged extends RegisterEvent {
   final String password;
 
-  PasswordChanged({@required this.password}) : super([password]);
+  const PasswordChanged({@required this.password});
+
+  @override
+  List<Object> get props => [password];
 
   @override
   String toString() => 'PasswordChanged { password: $password }';
@@ -1568,8 +1586,13 @@ class Submitted extends RegisterEvent {
   final String email;
   final String password;
 
-  Submitted({@required this.email, @required this.password})
-      : super([email, password]);
+  const Submitted({
+    @required this.email,
+    @required this.password,
+  });
+
+  @override
+  List<Object> get props => [email, password];
 
   @override
   String toString() {
@@ -1644,13 +1667,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   Stream<RegisterState> _mapEmailChangedToState(String email) async* {
-    yield currentState.update(
+    yield state.update(
       isEmailValid: Validators.isValidEmail(email),
     );
   }
 
   Stream<RegisterState> _mapPasswordChangedToState(String password) async* {
-    yield currentState.update(
+    yield state.update(
       isPasswordValid: Validators.isValidPassword(password),
     );
   }
@@ -1679,7 +1702,7 @@ Now that the `RegisterBloc` is fully functional, we just need to build out the p
 
 ## Register Screen
 
-Similar to the `LoginScreen`, our `RegisterScreen` will be a `StatelessWidget` responsible for initializing and disposing the `RegisterBloc`. It will also provide the Scaffold for the `RegisterForm`.
+Similar to the `LoginScreen`, our `RegisterScreen` will be a `StatelessWidget` responsible for initializing and closing the `RegisterBloc`. It will also provide the Scaffold for the `RegisterForm`.
 
 Create `register/register_screen.dart` and let's implement it.
 
@@ -1752,7 +1775,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RegisterBloc, RegisterState>(      
+    return BlocListener<RegisterBloc, RegisterState>(
       listener: (context, state) {
         if (state.isSubmitting) {
           Scaffold.of(context)
@@ -1770,7 +1793,7 @@ class _RegisterFormState extends State<RegisterForm> {
             );
         }
         if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context).dispatch(LoggedIn());
+          BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
           Navigator.of(context).pop();
         }
         if (state.isFailure) {
@@ -1844,19 +1867,19 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   void _onEmailChanged() {
-    _registerBloc.dispatch(
+    _registerBloc.add(
       EmailChanged(email: _emailController.text),
     );
   }
 
   void _onPasswordChanged() {
-    _registerBloc.dispatch(
+    _registerBloc.add(
       PasswordChanged(password: _passwordController.text),
     );
   }
 
   void _onFormSubmitted() {
-    _registerBloc.dispatch(
+    _registerBloc.add(
       Submitted(
         email: _emailController.text,
         password: _passwordController.text,
@@ -1866,7 +1889,7 @@ class _RegisterFormState extends State<RegisterForm> {
 }
 ```
 
-Again, we need to manage `TextEditingControllers` for the text input so our `RegisterForm` needs to be a `StatefulWidget`. In addition, we are using `BlocListener` again in order to execute one-time actions in response to state changes such as showing `SnackBar` when the registration is pending or fails. We are also dispatching the `LoggedIn` event to the `AuthenticationBloc` if the registration was a success so that we can immediately log the user in.
+Again, we need to manage `TextEditingControllers` for the text input so our `RegisterForm` needs to be a `StatefulWidget`. In addition, we are using `BlocListener` again in order to execute one-time actions in response to state changes such as showing `SnackBar` when the registration is pending or fails. We are also adding the `LoggedIn` event to the `AuthenticationBloc` if the registration was a success so that we can immediately log the user in.
 
 ?> **Note:** We're using `BlocBuilder` in order to make our UI respond to changes in the `RegisterBloc` state.
 
@@ -1915,12 +1938,13 @@ import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
       builder: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..dispatch(AppStarted()),
+        ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
   );

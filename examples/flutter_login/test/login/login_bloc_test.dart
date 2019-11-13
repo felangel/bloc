@@ -24,16 +24,21 @@ void main() {
     );
   });
 
+  tearDown(() {
+    loginBloc?.close();
+    authenticationBloc?.close();
+  });
+
   test('initial state is correct', () {
     expect(LoginInitial(), loginBloc.initialState);
   });
 
-  test('dispose does not emit new states', () {
+  test('close does not emit new states', () {
     expectLater(
-      loginBloc.state,
+      loginBloc,
       emitsInOrder([LoginInitial(), emitsDone]),
     );
-    loginBloc.dispose();
+    loginBloc.close();
   });
 
   group('LoginButtonPressed', () {
@@ -50,13 +55,13 @@ void main() {
       )).thenAnswer((_) => Future.value('token'));
 
       expectLater(
-        loginBloc.state,
+        loginBloc,
         emitsInOrder(expectedResponse),
       ).then((_) {
-        verify(authenticationBloc.dispatch(LoggedIn(token: 'token'))).called(1);
+        verify(authenticationBloc.add(LoggedIn(token: 'token'))).called(1);
       });
 
-      loginBloc.dispatch(LoginButtonPressed(
+      loginBloc.add(LoginButtonPressed(
         username: 'valid.username',
         password: 'valid.password',
       ));

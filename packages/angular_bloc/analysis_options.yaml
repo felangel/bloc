@@ -1,3 +1,4 @@
+include: package:effective_dart/analysis_options.1.1.0.yaml
 analyzer:
   exclude: [build/**]
   errors:

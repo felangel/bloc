@@ -1,3 +1,20 @@
+# 2.0.0
+
+- Updated to `bloc: ^2.0.0` and Documentation Updates
+- Adhere to [effective dart](https://dart.dev/guides/language/effective-dart) ([#561](https://github.com/felangel/bloc/issues/561))
+
+# 1.0.0
+
+Updated to `bloc: ^1.0.0` and Documentation Updates
+
+# 0.22.1
+
+Minor Bugfixes and Documentation Updates
+
+# 0.22.0
+
+Updated to `bloc: ^0.16.0` and Documentation Updates
+
 # 0.21.0
 
 Updated to `bloc: ^0.15.0` and Documentation Updates

@@ -31,6 +31,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   @override
   Stream<PostState> mapEventToState(PostEvent event) async* {
+    final currentState = state;
     if (event is Fetch && !_hasReachedMax(currentState)) {
       try {
         if (currentState is PostUninitialized) {
@@ -39,12 +40,11 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           return;
         }
         if (currentState is PostLoaded) {
-          final posts =
-              await _fetchPosts((currentState as PostLoaded).posts.length, 20);
+          final posts = await _fetchPosts(currentState.posts.length, 20);
           yield posts.isEmpty
-              ? (currentState as PostLoaded).copyWith(hasReachedMax: true)
+              ? currentState.copyWith(hasReachedMax: true)
               : PostLoaded(
-                  posts: (currentState as PostLoaded).posts + posts,
+                  posts: currentState.posts + posts,
                   hasReachedMax: false,
                 );
         }

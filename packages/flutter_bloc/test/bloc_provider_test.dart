@@ -15,7 +15,6 @@ class MyApp extends StatelessWidget {
     Key key,
     CounterBloc Function(BuildContext context) builder,
     CounterBloc value,
-    bool dispose,
     @required Widget child,
   })  : _builder = builder,
         _value = value,
@@ -91,7 +90,7 @@ class _MyStatefulAppState extends State<MyStatefulApp> {
 
   @override
   void dispose() {
-    bloc.dispose();
+    bloc.close();
     super.dispose();
   }
 }
@@ -120,13 +119,13 @@ class CounterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CounterBloc _counterBloc = BlocProvider.of<CounterBloc>(context);
-    assert(_counterBloc != null);
+    final counterBloc = BlocProvider.of<CounterBloc>(context);
+    assert(counterBloc != null);
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
       body: BlocBuilder<CounterBloc, int>(
-        bloc: _counterBloc,
+        bloc: counterBloc,
         builder: (BuildContext context, int count) {
           if (onBuild != null) {
             onBuild();
@@ -164,18 +163,18 @@ enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   int get initialState => 0;
-  Function onDispose;
+  Function onClose;
 
-  CounterBloc({this.onDispose});
+  CounterBloc({this.onClose});
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield currentState + 1;
+        yield state + 1;
         break;
       case CounterEvent.increment:
-        yield currentState - 1;
+        yield state - 1;
         break;
     }
   }
@@ -194,9 +193,9 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       transformEvents.hashCode;
 
   @override
-  void dispose() {
-    onDispose?.call();
-    super.dispose();
+  Future<void> close() {
+    onClose?.call();
+    return super.close();
   }
 }
 
@@ -221,17 +220,17 @@ void main() {
     });
 
     testWidgets('passes bloc to children', (WidgetTester tester) async {
-      final _builder = (BuildContext context) => CounterBloc();
-      final CounterPage _child = CounterPage();
+      CounterBloc _builder(BuildContext context) => CounterBloc();
+      final _child = CounterPage();
       await tester.pumpWidget(MyApp(
         builder: _builder,
         child: _child,
       ));
 
-      final Finder _counterFinder = find.byKey((Key('counter_text')));
+      final _counterFinder = find.byKey((Key('counter_text')));
       expect(_counterFinder, findsOneWidget);
 
-      final Text _counterText = _counterFinder.evaluate().first.widget as Text;
+      final _counterText = _counterFinder.evaluate().first.widget as Text;
       expect(_counterText.data, '0');
     });
 
@@ -254,12 +253,12 @@ void main() {
       },
     );
 
-    testWidgets('calls dispose on bloc automatically',
+    testWidgets('calls close on bloc automatically',
         (WidgetTester tester) async {
-      bool disposeCalled = false;
-      final _builder = (BuildContext context) => CounterBloc(
-            onDispose: () {
-              disposeCalled = true;
+      var closeCalled = false;
+      CounterBloc _builder(BuildContext context) => CounterBloc(
+            onClose: () {
+              closeCalled = true;
             },
           );
       final Widget _child = RoutePage();
@@ -268,39 +267,38 @@ void main() {
         child: _child,
       ));
 
-      final Finder _routeButtonFinder = find.byKey((Key('route_button')));
+      final _routeButtonFinder = find.byKey((Key('route_button')));
       expect(_routeButtonFinder, findsOneWidget);
-      expect(disposeCalled, false);
+      expect(closeCalled, false);
 
       await tester.tap(_routeButtonFinder);
       await tester.pumpAndSettle();
 
-      expect(disposeCalled, true);
+      expect(closeCalled, true);
     });
 
-    testWidgets('does not dispose when created using value',
+    testWidgets('does not close when created using value',
         (WidgetTester tester) async {
-      bool disposeCalled = false;
+      var closeCalled = false;
       final _value = CounterBloc(
-        onDispose: () {
-          disposeCalled = true;
+        onClose: () {
+          closeCalled = true;
         },
       );
       final Widget _child = RoutePage();
       await tester.pumpWidget(MyApp(
         value: _value,
-        dispose: false,
         child: _child,
       ));
 
-      final Finder _routeButtonFinder = find.byKey((Key('route_button')));
+      final _routeButtonFinder = find.byKey((Key('route_button')));
       expect(_routeButtonFinder, findsOneWidget);
-      expect(disposeCalled, false);
+      expect(closeCalled, false);
 
       await tester.tap(_routeButtonFinder);
       await tester.pumpAndSettle();
 
-      expect(disposeCalled, false);
+      expect(closeCalled, false);
     });
 
     testWidgets(
@@ -331,7 +329,7 @@ void main() {
     testWidgets(
         'should not rebuild widgets that inherited the bloc if the bloc is changed',
         (WidgetTester tester) async {
-      int numBuilds = 0;
+      var numBuilds = 0;
       final Widget _child = CounterPage(
         onBuild: () {
           numBuilds++;

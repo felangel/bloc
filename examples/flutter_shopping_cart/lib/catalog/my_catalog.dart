@@ -45,8 +45,6 @@ class _AddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cartBloc = BlocProvider.of<CartBloc>(context);
-
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
         if (state is CartLoading) {
@@ -56,7 +54,7 @@ class _AddButton extends StatelessWidget {
           return FlatButton(
             onPressed: state.items.contains(item)
                 ? null
-                : () => cartBloc.dispatch(AddItem(item)),
+                : () => BlocProvider.of<CartBloc>(context).add(AddItem(item)),
             splashColor: Theme.of(context).primaryColor,
             child: state.items.contains(item)
                 ? Icon(Icons.check, semanticLabel: 'ADDED')

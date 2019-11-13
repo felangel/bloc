@@ -3,26 +3,25 @@ import 'package:meta/meta.dart';
 
 import 'package:flutter_complex_list/models/models.dart';
 
-@immutable
 abstract class ListState extends Equatable {
-  ListState([List props = const []]) : super(props);
+  const ListState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class Loading extends ListState {
-  @override
-  String toString() => 'Loading';
-}
+class Loading extends ListState {}
 
 class Loaded extends ListState {
   final List<Item> items;
 
-  Loaded({@required this.items}) : super([items]);
+  const Loaded({@required this.items});
+
+  @override
+  List<Object> get props => [items];
 
   @override
   String toString() => 'Loaded { items: ${items.length} }';
 }
 
-class Failure extends ListState {
-  @override
-  String toString() => 'Failure';
-}
+class Failure extends ListState {}

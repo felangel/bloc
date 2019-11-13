@@ -22,7 +22,7 @@ class App extends StatelessWidget {
         ),
         body: BlocProvider(
           builder: (context) =>
-              ListBloc(repository: Repository())..dispatch(Fetch()),
+              ListBloc(repository: Repository())..add(Fetch()),
           child: HomePage(),
         ),
       ),
@@ -33,7 +33,6 @@ class App extends StatelessWidget {
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final listBloc = BlocProvider.of<ListBloc>(context);
     return BlocBuilder<ListBloc, ListState>(
       builder: (context, state) {
         if (state is Failure) {
@@ -52,7 +51,7 @@ class HomePage extends StatelessWidget {
               return ItemTile(
                 item: state.items[index],
                 onDeletePressed: (id) {
-                  listBloc.dispatch(Delete(id: id));
+                  BlocProvider.of<ListBloc>(context).add(Delete(id: id));
                 },
               );
             },

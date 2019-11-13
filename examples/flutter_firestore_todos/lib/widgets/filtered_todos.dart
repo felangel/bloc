@@ -11,8 +11,6 @@ class FilteredTodos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todosBloc = BlocProvider.of<TodosBloc>(context);
-
     return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
       builder: (context, state) {
         if (state is FilteredTodosLoading) {
@@ -26,10 +24,11 @@ class FilteredTodos extends StatelessWidget {
               return TodoItem(
                 todo: todo,
                 onDismissed: (direction) {
-                  todosBloc.dispatch(DeleteTodo(todo));
+                  BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
                   Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
                     todo: todo,
-                    onUndo: () => todosBloc.dispatch(AddTodo(todo)),
+                    onUndo: () =>
+                        BlocProvider.of<TodosBloc>(context).add(AddTodo(todo)),
                   ));
                 },
                 onTap: () async {
@@ -39,14 +38,17 @@ class FilteredTodos extends StatelessWidget {
                     }),
                   );
                   if (removedTodo != null) {
-                    Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
-                      todo: todo,
-                      onUndo: () => todosBloc.dispatch(AddTodo(todo)),
-                    ));
+                    Scaffold.of(context).showSnackBar(
+                      DeleteTodoSnackBar(
+                        todo: todo,
+                        onUndo: () => BlocProvider.of<TodosBloc>(context)
+                            .add(AddTodo(todo)),
+                      ),
+                    );
                   }
                 },
                 onCheckboxChanged: (_) {
-                  todosBloc.dispatch(
+                  BlocProvider.of<TodosBloc>(context).add(
                     UpdateTodo(todo.copyWith(complete: !todo.complete)),
                   );
                 },

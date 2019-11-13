@@ -28,8 +28,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.21.0
-  equatable: ^0.2.0
+  flutter_bloc: ^2.0.0
+  equatable: ^0.6.0
   wave: ^0.0.8
 
 flutter:
@@ -85,42 +85,39 @@ In order to keep all of our bloc files together, let’s create a bloc directory
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 abstract class TimerState extends Equatable {
   final int duration;
 
-  TimerState(this.duration, [List props = const []])
-      : super([duration]..addAll(props));
+  const TimerState(this.duration);
+
+  @override
+  List<Object> get props => [duration];
 }
 
 class Ready extends TimerState {
-  Ready(int duration) : super(duration);
+  const Ready(int duration) : super(duration);
 
   @override
   String toString() => 'Ready { duration: $duration }';
 }
 
 class Paused extends TimerState {
-  Paused(int duration) : super(duration);
+  const Paused(int duration) : super(duration);
 
   @override
   String toString() => 'Paused { duration: $duration }';
 }
 
 class Running extends TimerState {
-  Running(int duration) : super(duration);
+  const Running(int duration) : super(duration);
 
   @override
   String toString() => 'Running { duration: $duration }';
 }
 
 class Finished extends TimerState {
-  Finished() : super(0);
-
-  @override
-  String toString() => 'Finished';
+  const Finished() : super(0);
 }
 ```
 
@@ -144,39 +141,35 @@ If you didn’t use the [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bl
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-@immutable
 abstract class TimerEvent extends Equatable {
-  TimerEvent([List props = const []]) : super(props);
+  const TimerEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class Start extends TimerEvent {
   final int duration;
 
-  Start({@required this.duration}) : super([duration]);
+  const Start({@required this.duration});
 
   @override
   String toString() => "Start { duration: $duration }";
 }
 
-class Pause extends TimerEvent {
-  @override
-  String toString() => "Pause";
-}
+class Pause extends TimerEvent {}
 
-class Resume extends TimerEvent {
-  @override
-  String toString() => "Resume";
-}
+class Resume extends TimerEvent {}
 
-class Reset extends TimerEvent {
-  @override
-  String toString() => "Reset";
-}
+class Reset extends TimerEvent {}
 
 class Tick extends TimerEvent {
   final int duration;
 
-  Tick({@required this.duration}) : super([duration]);
+  const Tick({@required this.duration});
+
+  @override
+  List<Object> get props => [duration];
 
   @override
   String toString() => "Tick { duration: $duration }";
@@ -292,24 +285,22 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   @override
-  void dispose() {
+  Future<void> close() {
     _tickerSubscription?.cancel();
-    super.dispose();
+    return super.close();
   }
 
   Stream<TimerState> _mapStartToState(Start start) async* {
-    yield Running(start.duration);
+     yield Running(start.duration);
     _tickerSubscription?.cancel();
-    _tickerSubscription = _ticker.tick(ticks: start.duration).listen(
-      (duration) {
-        dispatch(Tick(duration: duration));
-      },
-    );
+    _tickerSubscription = _ticker
+        .tick(ticks: start.duration)
+        .listen((duration) => add(Tick(duration: duration)));
   }
 }
 ```
 
-If the `TimerBloc` receives a `Start` event, it pushes a `Running` state with the start duration. In addition, if there was already an open `_tickerSubscription` we need to cancel it to deallocate the memory. We also need to override the `dispose` method on our `TimerBloc` so that we can cancel the `_tickerSubscription` when the `TimerBloc` is disposed. Lastly, we listen to the `_ticker.tick` stream and on every tick we dispatch a `Tick` event with the remaining duration.
+If the `TimerBloc` receives a `Start` event, it pushes a `Running` state with the start duration. In addition, if there was already an open `_tickerSubscription` we need to cancel it to deallocate the memory. We also need to override the `close` method on our `TimerBloc` so that we can cancel the `_tickerSubscription` when the `TimerBloc` is closed. Lastly, we listen to the `_ticker.tick` stream and on every tick we add a `Tick` event with the remaining duration.
 
 Next, let’s implement the `Tick` event handler.
 
@@ -345,19 +336,17 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   @override
-  void dispose() {
+  Future<void> close() {
     _tickerSubscription?.cancel();
-    super.dispose();
+    return super.close();
   }
 
   Stream<TimerState> _mapStartToState(Start start) async* {
-    yield Running(start.duration);
+     yield Running(start.duration);
     _tickerSubscription?.cancel();
-    _tickerSubscription = _ticker.tick(ticks: start.duration).listen(
-      (duration) {
-        dispatch(Tick(duration: duration));
-      },
-    );
+    _tickerSubscription = _ticker
+        .tick(ticks: start.duration)
+        .listen((duration) => add(Tick(duration: duration)));
   }
 
   Stream<TimerState> _mapTickToState(Tick tick) async* {
@@ -404,23 +393,20 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   @override
-  void dispose() {
+  Future<void> close() {
     _tickerSubscription?.cancel();
-    super.dispose();
+    return super.close();
   }
 
   Stream<TimerState> _mapStartToState(Start start) async* {
-    yield Running(start.duration);
+     yield Running(start.duration);
     _tickerSubscription?.cancel();
-    _tickerSubscription = _ticker.tick(ticks: start.duration).listen(
-      (duration) {
-        dispatch(Tick(duration: duration));
-      },
-    );
+    _tickerSubscription = _ticker
+        .tick(ticks: start.duration)
+        .listen((duration) => add(Tick(duration: duration)));
   }
 
   Stream<TimerState> _mapPauseToState(Pause pause) async* {
-    final state = currentState;
     if (state is Running) {
       _tickerSubscription?.pause();
       yield Paused(state.duration);
@@ -433,7 +419,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 }
 ```
 
-In `_mapPauseToState` if the `currentState` of our `TimerBloc` is `Running`, then we can pause the `_tickerSubscription` and push a `Paused` state with the current timer duration.
+In `_mapPauseToState` if the `state` of our `TimerBloc` is `Running`, then we can pause the `_tickerSubscription` and push a `Paused` state with the current timer duration.
 
 Next, let’s implement the `Resume` event handler so that we can unpause the timer.
 
@@ -473,23 +459,20 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   @override
-  void dispose() {
+  Future<void> close() {
     _tickerSubscription?.cancel();
-    super.dispose();
+    return super.close();
   }
 
   Stream<TimerState> _mapStartToState(Start start) async* {
-    yield Running(start.duration);
+     yield Running(start.duration);
     _tickerSubscription?.cancel();
-    _tickerSubscription = _ticker.tick(ticks: start.duration).listen(
-      (duration) {
-        dispatch(Tick(duration: duration));
-      },
-    );
+    _tickerSubscription = _ticker
+        .tick(ticks: start.duration)
+        .listen((duration) => add(Tick(duration: duration)));
   }
 
   Stream<TimerState> _mapPauseToState(Pause pause) async* {
-    final state = currentState;
     if (state is Running) {
       _tickerSubscription?.pause();
       yield Paused(state.duration);
@@ -497,7 +480,6 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   Stream<TimerState> _mapResumeToState(Resume pause) async* {
-    final state = currentState;
     if (state is Paused) {
       _tickerSubscription?.resume();
       yield Running(state.duration);
@@ -510,7 +492,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 }
 ```
 
-The `Resume` event handler is very similar to the `Pause` event handler. If the `TimerBloc` has a `currentState` of `Paused` and it receives a `Resume` event, then it resumes the `_tickerSubscription` and pushes a `Running` state with the current duration.
+The `Resume` event handler is very similar to the `Pause` event handler. If the `TimerBloc` has a `state` of `Paused` and it receives a `Resume` event, then it resumes the `_tickerSubscription` and pushes a `Running` state with the current duration.
 
 Lastly, we need to implement the `Reset` event handler.
 
@@ -558,19 +540,17 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   @override
-  void dispose() {
+  Future<void> close() {
     _tickerSubscription?.cancel();
-    super.dispose();
+    return super.close();
   }
 
   Stream<TimerState> _mapStartToState(Start start) async* {
-    yield Running(start.duration);
+     yield Running(start.duration);
     _tickerSubscription?.cancel();
-    _tickerSubscription = _ticker.tick(ticks: start.duration).listen(
-      (duration) {
-        dispatch(Tick(duration: duration));
-      },
-    );
+    _tickerSubscription = _ticker
+        .tick(ticks: start.duration)
+        .listen((duration) => add(Tick(duration: duration)));
   }
 
   Stream<TimerState> _mapPauseToState(Pause pause) async* {
@@ -645,7 +625,7 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-`MyApp` is a `StatelessWidget` which will manage initializing and disposing an instance of `TimerBloc`. In addition, it’s using the `BlocProvider` widget in order to make our `TimerBloc` instance available to the widgets in our subtree.
+`MyApp` is a `StatelessWidget` which will manage initializing and closing an instance of `TimerBloc`. In addition, it’s using the `BlocProvider` widget in order to make our `TimerBloc` instance available to the widgets in our subtree.
 
 Next, we need to implement our `Timer` widget.
 
@@ -715,44 +695,45 @@ class Actions extends StatelessWidget {
   List<Widget> _mapStateToActionButtons({
     TimerBloc timerBloc,
   }) {
-    final TimerState state = timerBloc.currentState;
-    if (state is Ready) {
+    final TimerState currentState = timerBloc.state;
+    if (currentState is Ready) {
       return [
         FloatingActionButton(
           child: Icon(Icons.play_arrow),
-          onPressed: () => timerBloc.dispatch(Start(duration: state.duration)),
+          onPressed: () =>
+              timerBloc.add(Start(duration: currentState.duration)),
         ),
       ];
     }
-    if (state is Running) {
+    if (currentState is Running) {
       return [
         FloatingActionButton(
           child: Icon(Icons.pause),
-          onPressed: () => timerBloc.dispatch(Pause()),
+          onPressed: () => timerBloc.add(Pause()),
         ),
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc.dispatch(Reset()),
+          onPressed: () => timerBloc.add(Reset()),
         ),
       ];
     }
-    if (state is Paused) {
+    if (currentState is Paused) {
       return [
         FloatingActionButton(
           child: Icon(Icons.play_arrow),
-          onPressed: () => timerBloc.dispatch(Resume()),
+          onPressed: () => timerBloc.add(Resume()),
         ),
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc.dispatch(Reset()),
+          onPressed: () => timerBloc.add(Reset()),
         ),
       ];
     }
-    if (state is Finished) {
+    if (currentState is Finished) {
       return [
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc.dispatch(Reset()),
+          onPressed: () => timerBloc.add(Reset()),
         ),
       ];
     }
@@ -761,7 +742,7 @@ class Actions extends StatelessWidget {
 }
 ```
 
-The `Actions` widget is just another `StatelessWidget` which uses `BlocProvider` to access the `TimerBloc` instance and then returns different `FloatingActionButtons` based on the current state of the `TimerBloc`. Each of the `FloatingActionButtons` dispatches an event in its `onPressed` callback to notify the `TimerBloc`.
+The `Actions` widget is just another `StatelessWidget` which uses `BlocProvider` to access the `TimerBloc` instance and then returns different `FloatingActionButtons` based on the current state of the `TimerBloc`. Each of the `FloatingActionButtons` adds an event in its `onPressed` callback to notify the `TimerBloc`.
 
 Now we need to hook up the `Actions` to our `Timer` widget.
 
@@ -800,8 +781,8 @@ class Timer extends StatelessWidget {
             ),
           ),
           BlocBuilder<TimerBloc, TimerState>(
-            condition: (previousState, currentState) =>
-                currentState.runtimeType != previousState.runtimeType,
+            condition: (previousState, state) =>
+                state.runtimeType != previousState.runtimeType,
             builder: (context, state) => Actions(),
           ),
         ],
@@ -813,7 +794,7 @@ class Timer extends StatelessWidget {
 
 We added another `BlocBuilder` which will render the `Actions` widget; however, this time we’re using a newly introduced [flutter_bloc](https://pub.dev/packages/flutter_bloc) feature to control how frequently the `Actions` widget is rebuilt (introduced in `v0.15.0`).
 
-If you want fine-grained control over when the `builder` function is called you can provide an optional `condition` to `BlocBuilder`. The `condition` takes the previous bloc state and current bloc state and returns a `boolean`. If `condition` returns `true`, `builder` will be called with `currentState` and the widget will rebuild. If `condition` returns `false`, `builder` will not be called with `currentState` and no rebuild will occur.
+If you want fine-grained control over when the `builder` function is called you can provide an optional `condition` to `BlocBuilder`. The `condition` takes the previous bloc state and current bloc state and returns a `boolean`. If `condition` returns `true`, `builder` will be called with `state` and the widget will rebuild. If `condition` returns `false`, `builder` will not be called with `state` and no rebuild will occur.
 
 In this case, we don’t want the `Actions` widget to be rebuilt on every tick because that would be inefficient. Instead, we only want `Actions` to rebuild if the `runtimeType` of the `TimerState` changes (Ready => Running, Running => Paused, etc...).
 
@@ -964,44 +945,45 @@ class Actions extends StatelessWidget {
   List<Widget> _mapStateToActionButtons({
     TimerBloc timerBloc,
   }) {
-    final TimerState state = timerBloc.currentState;
-    if (state is Ready) {
+    final TimerState currentState = timerBloc.state;
+    if (currentState is Ready) {
       return [
         FloatingActionButton(
           child: Icon(Icons.play_arrow),
-          onPressed: () => timerBloc.dispatch(Start(duration: state.duration)),
+          onPressed: () =>
+              timerBloc.add(Start(duration: currentState.duration)),
         ),
       ];
     }
-    if (state is Running) {
+    if (currentState is Running) {
       return [
         FloatingActionButton(
           child: Icon(Icons.pause),
-          onPressed: () => timerBloc.dispatch(Pause()),
+          onPressed: () => timerBloc.add(Pause()),
         ),
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc.dispatch(Reset()),
+          onPressed: () => timerBloc.add(Reset()),
         ),
       ];
     }
-    if (state is Paused) {
+    if (currentState is Paused) {
       return [
         FloatingActionButton(
           child: Icon(Icons.play_arrow),
-          onPressed: () => timerBloc.dispatch(Resume()),
+          onPressed: () => timerBloc.add(Resume()),
         ),
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc.dispatch(Reset()),
+          onPressed: () => timerBloc.add(Reset()),
         ),
       ];
     }
-    if (state is Finished) {
+    if (currentState is Finished) {
       return [
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc.dispatch(Reset()),
+          onPressed: () => timerBloc.add(Reset()),
         ),
       ];
     }

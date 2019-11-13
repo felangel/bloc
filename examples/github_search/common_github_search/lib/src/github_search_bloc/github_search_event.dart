@@ -1,13 +1,16 @@
 import 'package:equatable/equatable.dart';
 
 abstract class GithubSearchEvent extends Equatable {
-  GithubSearchEvent([List props = const []]) : super(props);
+  const GithubSearchEvent();
 }
 
 class TextChanged extends GithubSearchEvent {
   final String text;
 
-  TextChanged({this.text}) : super([text]);
+  const TextChanged({this.text});
+
+  @override
+  List<Object> get props => [text];
 
   @override
   String toString() => 'TextChanged { text: $text }';

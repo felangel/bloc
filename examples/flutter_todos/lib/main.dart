@@ -24,7 +24,7 @@ void main() {
               getApplicationDocumentsDirectory,
             ),
           ),
-        )..dispatch(LoadTodos());
+        )..add(LoadTodos());
       },
       child: TodosApp(),
     ),
@@ -34,7 +34,6 @@ void main() {
 class TodosApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final todosBloc = BlocProvider.of<TodosBloc>(context);
     return MaterialApp(
       title: FlutterBlocLocalizations().appTitle,
       theme: ArchSampleTheme.theme,
@@ -50,10 +49,14 @@ class TodosApp extends StatelessWidget {
                 builder: (context) => TabBloc(),
               ),
               BlocProvider<FilteredTodosBloc>(
-                builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
+                builder: (context) => FilteredTodosBloc(
+                  todosBloc: BlocProvider.of<TodosBloc>(context),
+                ),
               ),
               BlocProvider<StatsBloc>(
-                builder: (context) => StatsBloc(todosBloc: todosBloc),
+                builder: (context) => StatsBloc(
+                  todosBloc: BlocProvider.of<TodosBloc>(context),
+                ),
               ),
             ],
             child: HomeScreen(),
@@ -63,7 +66,7 @@ class TodosApp extends StatelessWidget {
           return AddEditScreen(
             key: ArchSampleKeys.addTodoScreen,
             onSave: (task, note) {
-              todosBloc.dispatch(
+              BlocProvider.of<TodosBloc>(context).add(
                 AddTodo(Todo(task, note: note)),
               );
             },

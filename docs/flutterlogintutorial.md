@@ -22,14 +22,14 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.21.0
+  flutter_bloc: ^2.0.0
   meta: ^1.1.6
-  equatable: ^0.2.0
+  equatable: ^0.6.0
 
 dev_dependencies:
   flutter_test:
@@ -108,32 +108,21 @@ Now that we have our authentication states identified, we can implement our `Aut
 ```dart
 import 'package:equatable/equatable.dart';
 
-abstract class AuthenticationState extends Equatable {}
-
-class AuthenticationUninitialized extends AuthenticationState {
+abstract class AuthenticationState extends Equatable {
   @override
-  String toString() => 'AuthenticationUninitialized';
+  List<Object> get props => [];
 }
 
-class AuthenticationAuthenticated extends AuthenticationState {
-  @override
-  String toString() => 'AuthenticationAuthenticated';
-}
+class AuthenticationUninitialized extends AuthenticationState {}
 
-class AuthenticationUnauthenticated extends AuthenticationState {
-  @override
-  String toString() => 'AuthenticationUnauthenticated';
-}
+class AuthenticationAuthenticated extends AuthenticationState {}
 
-class AuthenticationLoading extends AuthenticationState {
-  @override
-  String toString() => 'AuthenticationLoading';
-}
+class AuthenticationUnauthenticated extends AuthenticationState {}
+
+class AuthenticationLoading extends AuthenticationState {}
 ```
 
 ?> **Note**: The [`equatable`](https://pub.dev/packages/equatable) package is used in order to be able to compare two instances of `AuthenticationState`. By default, `==` returns true only if the two objects are the same instance.
-
-?> **Note**: `toString` is overridden to make it easier to read an `AuthenticationState` when printing it to the console or in `Transitions`.
 
 ## Authentication Events
 
@@ -150,27 +139,27 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class AuthenticationEvent extends Equatable {
-  AuthenticationEvent([List props = const []]) : super(props);
+  const AuthenticationEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
-class AppStarted extends AuthenticationEvent {
-  @override
-  String toString() => 'AppStarted';
-}
+class AppStarted extends AuthenticationEvent {}
 
 class LoggedIn extends AuthenticationEvent {
   final String token;
 
-  LoggedIn({@required this.token}) : super([token]);
+  const LoggedIn({@required this.token});
+
+  @override
+  List<Object> get props => [token];
 
   @override
   String toString() => 'LoggedIn { token: $token }';
 }
 
-class LoggedOut extends AuthenticationEvent {
-  @override
-  String toString() => 'LoggedOut';
-}
+class LoggedOut extends AuthenticationEvent {}
 ```
 
 ?> **Note**: the `meta` package is used to annotate the `AuthenticationEvent` parameters as `@required`. This will cause the dart analyzer to warn developers if they don't provide the required parameters.
@@ -316,9 +305,6 @@ import 'package:flutter_login/authentication/authentication.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final AuthenticationBloc authenticationBloc =
-        BlocProvider.of<AuthenticationBloc>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
@@ -328,7 +314,7 @@ class HomePage extends StatelessWidget {
             child: RaisedButton(
           child: Text('logout'),
           onPressed: () {
-            authenticationBloc.dispatch(LoggedOut());
+            BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
           },
         )),
       ),
@@ -339,7 +325,7 @@ class HomePage extends StatelessWidget {
 
 ?> **Note**: This is the first class in which we are using `flutter_bloc`. We will get into `BlocProvider.of<AuthenticationBloc>(context)` shortly but for now just know that it allows our `HomePage` to access our `AuthenticationBloc`.
 
-?> **Note**: We are dispatching a `LoggedOut` event to our `AuthenticationBloc` when a user pressed the logout button.
+?> **Note**: We are adding a `LoggedOut` event to our `AuthenticationBloc` when a user pressed the logout button.
 
 Next up, we need to create a `LoginPage` and `LoginForm`.
 
@@ -354,23 +340,23 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class LoginState extends Equatable {
-  LoginState([List props = const []]) : super(props);
+  const LoginState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class LoginInitial extends LoginState {
-  @override
-  String toString() => 'LoginInitial';
-}
+class LoginInitial extends LoginState {}
 
-class LoginLoading extends LoginState {
-  @override
-  String toString() => 'LoginLoading';
-}
+class LoginLoading extends LoginState {}
 
 class LoginFailure extends LoginState {
   final String error;
 
-  LoginFailure({@required this.error}) : super([error]);
+  const LoginFailure({@required this.error});
+
+  @override
+  List<Object> get props => [error];
 
   @override
   String toString() => 'LoginFailure { error: $error }';
@@ -392,17 +378,20 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class LoginEvent extends Equatable {
-  LoginEvent([List props = const []]) : super(props);
+  const LoginEvent();
 }
 
 class LoginButtonPressed extends LoginEvent {
   final String username;
   final String password;
 
-  LoginButtonPressed({
+  const LoginButtonPressed({
     @required this.username,
     @required this.password,
-  }) : super([username, password]);
+  });
+
+  @override
+  List<Object> get props => [username, password];
 
   @override
   String toString() =>
@@ -410,7 +399,7 @@ class LoginButtonPressed extends LoginEvent {
 }
 ```
 
-`LoginButtonPressed` will be dispatched when a user pressed the login button. It will notify the `LoginBloc` that it needs to request a token for the given credentials.
+`LoginButtonPressed` will be added when a user pressed the login button. It will notify the `LoginBloc` that it needs to request a token for the given credentials.
 
 We can now implement our `LoginBloc`.
 
@@ -449,7 +438,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           password: event.password,
         );
 
-        authenticationBloc.dispatch(LoggedIn(token: token));
+        authenticationBloc.add(LoggedIn(token: token));
         yield LoginInitial();
       } catch (error) {
         yield LoginFailure(error: error.toString());
@@ -505,7 +494,7 @@ class LoginPage extends StatelessWidget {
 }
 ```
 
-?> **Note**: `LoginPage` is a `StatelessWidget`. The `LoginPage` widget uses the `BlocProvider` widget to create, dispose, and provide the `LoginBloc` to the sub-tree.
+?> **Note**: `LoginPage` is a `StatelessWidget`. The `LoginPage` widget uses the `BlocProvider` widget to create, close, and provide the `LoginBloc` to the sub-tree.
 
 ?> **Note**: We are using the injected `UserRepository` in order to create our `LoginBloc`.
 
@@ -531,13 +520,13 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final loginBloc = BlocProvider.of<LoginBloc>(context);
-
     _onLoginButtonPressed() {
-      loginBloc.dispatch(LoginButtonPressed(
-        username: _usernameController.text,
-        password: _passwordController.text,
-      ));
+      BlocProvider.of<LoginBloc>(context).add(
+        LoginButtonPressed(
+          username: _usernameController.text,
+          password: _passwordController.text,
+        ),
+      );
     }
 
     return BlocListener<LoginBloc, LoginState>(
@@ -646,7 +635,7 @@ void main() {
     BlocProvider<AuthenticationBloc>(
       builder: (context) {
         return AuthenticationBloc(userRepository: userRepository)
-          ..dispatch(AppStarted());
+          ..add(AppStarted());
       },
       child: App(userRepository: userRepository),
     ),

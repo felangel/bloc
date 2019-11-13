@@ -2,7 +2,7 @@
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-> In the following tutorial, we're going to build a reactive Todos App which hooks up to Firestore. We're going to be building on top of the [flutter todos](https://felangel.github.io/bloc/#/fluttertodostutorial) example so we won't go into the UI since it will all be the same.
+> In the following tutorial, we're going to build a reactive Todos App which hooks up to Firestore. We're going to be building on top of the [flutter todos](https://bloclibrary.dev/#/fluttertodostutorial) example so we won't go into the UI since it will all be the same.
 
 ![demo](./assets/gifs/flutter_firestore_todos.gif)
 
@@ -27,8 +27,6 @@ Inside our `todos_repository` create the following folder/file structure.
 │   │   ├── models
 │   │   │   ├── models.dart
 │   │   │   └── todo.dart
-│   │   ├── todo.dart
-│   │   ├── todo_entity.dart
 │   │   ├── todos_repository.dart
 │   │   └── firebase_todos_repository.dart
 │   └── todos_repository.dart
@@ -52,7 +50,7 @@ dependencies:
     sdk: flutter
   cloud_firestore: ^0.12.7
   rxdart: ^0.22.0
-  equatable: ^0.3.0
+  equatable: ^0.6.0
   firebase_core: ^0.4.0+7
 ```
 
@@ -87,6 +85,10 @@ Our `TodoEntity` is the representation of our `Todo` inside Firestore.
 Create `todo_entity.dart` and let's implement it.
 
 ```dart
+// Copyright 2018 The Flutter Architecture Sample Authors. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found
+// in the LICENSE file.
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
@@ -96,16 +98,19 @@ class TodoEntity extends Equatable {
   final String note;
   final String task;
 
-  TodoEntity(this.task, this.id, this.note, this.complete);
+  const TodoEntity(this.task, this.id, this.note, this.complete);
 
   Map<String, Object> toJson() {
     return {
-      'complete': complete,
-      'task': task,
-      'note': note,
-      'id': id,
+      "complete": complete,
+      "task": task,
+      "note": note,
+      "id": id,
     };
   }
+
+  @override
+  List<Object> get props => [complete, id, note, task];
 
   @override
   String toString() {
@@ -114,10 +119,10 @@ class TodoEntity extends Equatable {
 
   static TodoEntity fromJson(Map<String, Object> json) {
     return TodoEntity(
-      json['task'] as String,
-      json['id'] as String,
-      json['note'] as String,
-      json['complete'] as bool,
+      json["task"] as String,
+      json["id"] as String,
+      json["note"] as String,
+      json["complete"] as bool,
     );
   }
 
@@ -132,9 +137,9 @@ class TodoEntity extends Equatable {
 
   Map<String, Object> toDocument() {
     return {
-      'complete': complete,
-      'task': task,
-      'note': note,
+      "complete": complete,
+      "task": task,
+      "note": note,
     };
   }
 }
@@ -283,7 +288,7 @@ That's it for our `TodosRepository`, next we need to create a simple `UserReposi
 
 ## User Repository
 
-Create a new package at the root level of our app called `useer_repository`.
+Create a new package at the root level of our app called `user_repository`.
 
 Inside our `user_repository` create the following folder/file structure.
 
@@ -392,7 +397,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.21.0
+  flutter_bloc: ^2.0.0
   todos_repository:
     path: todos_repository
   user_repository:
@@ -409,22 +414,18 @@ flutter:
 
 Since we want to be able to sign in our users, we'll need to create an `AuthenticationBloc`.
 
-?> If you haven't already checked out the [flutter firebase login tutorial](https://felangel.github.io/bloc/#/flutterfirebaselogintutorial), I highly recommend checking it out now because we're simply going to reuse the same `AuthenticationBloc`.
+?> If you haven't already checked out the [flutter firebase login tutorial](https://bloclibrary.dev/#/flutterfirebaselogintutorial), I highly recommend checking it out now because we're simply going to reuse the same `AuthenticationBloc`.
 
 #### Authentication Events
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
-abstract class AuthenticationEvent extends Equatable {
-  AuthenticationEvent([List props = const []]) : super(props);
-}
+abstract class AuthenticationEvent extends Equatable {}
 
 class AppStarted extends AuthenticationEvent {
   @override
-  String toString() => 'AppStarted';
+  List<Object> get props => [];
 }
 ```
 
@@ -432,31 +433,29 @@ class AppStarted extends AuthenticationEvent {
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 abstract class AuthenticationState extends Equatable {
-  AuthenticationState([List props = const []]) : super(props);
+  const AuthenticationState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class Uninitialized extends AuthenticationState {
-  @override
-  String toString() => 'Uninitialized';
-}
+class Uninitialized extends AuthenticationState {}
 
 class Authenticated extends AuthenticationState {
   final String userId;
 
-  Authenticated(this.userId) : super([userId]);
+  const Authenticated(this.userId);
+
+  @override
+  List<Object> get props => [userId];
 
   @override
   String toString() => 'Authenticated { userId: $userId }';
 }
 
-class Unauthenticated extends AuthenticationState {
-  @override
-  String toString() => 'Unauthenticated';
-}
+class Unauthenticated extends AuthenticationState {}
 ```
 
 #### Authentication Bloc
@@ -503,7 +502,7 @@ class AuthenticationBloc
 }
 ```
 
-Now that our `AuthenticationBloc` is finished, we need to modify the `TodosBloc` from the original [Todos Tutorial](https://felangel.github.io/bloc/#/fluttertodostutorial) to consume the new `TodosRepository`.
+Now that our `AuthenticationBloc` is finished, we need to modify the `TodosBloc` from the original [Todos Tutorial](https://bloclibrary.dev/#/fluttertodostutorial) to consume the new `TodosRepository`.
 
 ### Todos Bloc
 
@@ -547,12 +546,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   Stream<TodosState> _mapLoadTodosToState() async* {
     _todosSubscription?.cancel();
     _todosSubscription = _todosRepository.todos().listen(
-      (todos) {
-        dispatch(
-          TodosUpdated(todos),
+          (todos) => add(TodosUpdated(todos)),
         );
-      },
-    );
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
@@ -568,10 +563,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapToggleAllToState() async* {
-    final state = currentState;
-    if (state is TodosLoaded) {
-      final allComplete = state.todos.every((todo) => todo.complete);
-      final List<Todo> updatedTodos = state.todos
+    final currentState = state;
+    if (currentState is TodosLoaded) {
+      final allComplete = currentState.todos.every((todo) => todo.complete);
+      final List<Todo> updatedTodos = currentState.todos
           .map((todo) => todo.copyWith(complete: !allComplete))
           .toList();
       updatedTodos.forEach((updatedTodo) {
@@ -581,10 +576,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapClearCompletedToState() async* {
-    final state = currentState;
-    if (state is TodosLoaded) {
+    final currentState = state;
+    if (currentState is TodosLoaded) {
       final List<Todo> completedTodos =
-          state.todos.where((todo) => todo.complete).toList();
+          currentState.todos.where((todo) => todo.complete).toList();
       completedTodos.forEach((completedTodo) {
         _todosRepository.deleteTodo(completedTodo);
       });
@@ -596,9 +591,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   @override
-  void dispose() {
+  Future<void> close() {
     _todosSubscription?.cancel();
-    super.dispose();
+    return super.close();
   }
 }
 ```
@@ -609,16 +604,12 @@ The main difference between our new `TodosBloc` and the original one is in the n
 Stream<TodosState> _mapLoadTodosToState() async* {
   _todosSubscription?.cancel();
   _todosSubscription = _todosRepository.todos().listen(
-    (todos) {
-      dispatch(
-        TodosUpdated(todos),
-      );
-    },
-  );
+      (todos) => add(TodosUpdated(todos)),
+    );
 }
 ```
 
-?> When we load our todos, we are subscribing to the `TodosRepository` and every time a new todo comes in, we dispatch a `TodosUpdated` event. We then handle all `TodosUpdates` via:
+?> When we load our todos, we are subscribing to the `TodosRepository` and every time a new todo comes in, we add a `TodosUpdated` event. We then handle all `TodosUpdates` via:
 
 ```dart
 Stream<TodosState> _mapTodosUpdateToState(TodosUpdated event) async* {
@@ -654,14 +645,14 @@ class TodosApp extends StatelessWidget {
           builder: (context) {
             return AuthenticationBloc(
               userRepository: FirebaseUserRepository(),
-            )..dispatch(AppStarted());
+            )..add(AppStarted());
           },
         ),
         BlocProvider<TodosBloc>(
           builder: (context) {
             return TodosBloc(
               todosRepository: FirebaseTodosRepository(),
-            )..dispatch(LoadTodos());
+            )..add(LoadTodos());
           },
         )
       ],
@@ -672,18 +663,20 @@ class TodosApp extends StatelessWidget {
             return BlocBuilder<AuthenticationBloc, AuthenticationState>(
               builder: (context, state) {
                 if (state is Authenticated) {
-                  final todosBloc = BlocProvider.of<TodosBloc>(context);
                   return MultiBlocProvider(
                     providers: [
                       BlocProvider<TabBloc>(
                         builder: (context) => TabBloc(),
                       ),
                       BlocProvider<FilteredTodosBloc>(
-                        builder: (context) =>
-                            FilteredTodosBloc(todosBloc: todosBloc),
+                        builder: (context) => FilteredTodosBloc(
+                          todosBloc: BlocProvider.of<TodosBloc>(context),
+                        ),
                       ),
                       BlocProvider<StatsBloc>(
-                        builder: (context) => StatsBloc(todosBloc: todosBloc),
+                        builder: (context) => StatsBloc(
+                          todosBloc: BlocProvider.of<TodosBloc>(context),
+                        ),
                       ),
                     ],
                     child: HomeScreen(),
@@ -699,10 +692,9 @@ class TodosApp extends StatelessWidget {
             );
           },
           '/addTodo': (context) {
-            final todosBloc = BlocProvider.of<TodosBloc>(context);
             return AddEditScreen(
               onSave: (task, note) {
-                todosBloc.dispatch(
+                BlocProvider.of<TodosBloc>(context).add(
                   AddTodo(Todo(task, note: note)),
                 );
               },

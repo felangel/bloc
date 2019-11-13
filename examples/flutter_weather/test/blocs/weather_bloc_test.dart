@@ -18,6 +18,10 @@ main() {
       weatherBloc = WeatherBloc(weatherRepository: weatherRepository);
     });
 
+    tearDown(() {
+      weatherBloc?.close();
+    });
+
     test('has a correct initialState', () {
       expect(weatherBloc.initialState, WeatherEmpty());
     });
@@ -39,14 +43,14 @@ main() {
           (_) => Future.value(weather),
         );
         expectLater(
-          weatherBloc.state,
+          weatherBloc,
           emitsInOrder([
             WeatherEmpty(),
             WeatherLoading(),
             WeatherLoaded(weather: weather),
           ]),
         );
-        weatherBloc.dispatch(FetchWeather(city: 'chicago'));
+        weatherBloc.add(FetchWeather(city: 'chicago'));
       });
 
       test(
@@ -55,14 +59,14 @@ main() {
         when(weatherRepository.getWeather('chicago'))
             .thenThrow('Weather Error');
         expectLater(
-          weatherBloc.state,
+          weatherBloc,
           emitsInOrder([
             WeatherEmpty(),
             WeatherLoading(),
             WeatherError(),
           ]),
         );
-        weatherBloc.dispatch(FetchWeather(city: 'chicago'));
+        weatherBloc.add(FetchWeather(city: 'chicago'));
       });
     });
 
@@ -83,23 +87,23 @@ main() {
           (_) => Future.value(weather),
         );
         expectLater(
-          weatherBloc.state,
+          weatherBloc,
           emitsInOrder([
             WeatherEmpty(),
             WeatherLoaded(weather: weather),
           ]),
         );
-        weatherBloc.dispatch(RefreshWeather(city: 'chicago'));
+        weatherBloc.add(RefreshWeather(city: 'chicago'));
       });
 
       test('emits [WeatherEmpty] when weather repository throws error', () {
         when(weatherRepository.getWeather('chicago'))
             .thenThrow('Weather Error');
         expectLater(
-          weatherBloc.state,
+          weatherBloc,
           emitsInOrder([WeatherEmpty()]),
         );
-        weatherBloc.dispatch(RefreshWeather(city: 'chicago'));
+        weatherBloc.add(RefreshWeather(city: 'chicago'));
       });
     });
   });

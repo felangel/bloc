@@ -1,0 +1,20 @@
+name: bloc_test
+description: A testing library which makes it easy to test blocs. Built to be used with the bloc state management package.
+version: 2.1.0
+author: Felix Angelov <felangelov@gmail.com>
+repository: https://github.com/felangel/bloc
+issue_tracker: https://github.com/felangel/bloc/issues
+homepage: https://bloclibrary.dev
+
+environment:
+  sdk: ">=2.0.0 <3.0.0"
+
+dependencies:
+  bloc: ^2.0.0
+  mockito: ^4.0.0
+  test: ^1.3.0
+  meta: ^1.1.6
+
+dev_dependencies:
+  test_coverage: ^0.2.0
+  effective_dart: ^1.1.1
