@@ -167,8 +167,8 @@ class _BlocBuilderBaseState<B extends Bloc<dynamic, S>, S>
           setState(() {
             _state = state;
           });
+          _previousState = state;
         }
-        _previousState = state;
       });
     }
   }
