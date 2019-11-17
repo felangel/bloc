@@ -123,7 +123,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 In the above code snippet, we are declaring our `CounterBloc` as a Bloc which converts `CounterEvents` into `ints`.
 
-> Every Bloc must define an initial state which is the state before any events have been recieved.
+> Every Bloc must define an initial state which is the state before any events have been received.
 
 In this case, we want our counter to start at `0`.
 
