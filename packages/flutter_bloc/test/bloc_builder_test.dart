@@ -445,7 +445,7 @@ void main() {
 
       final conditionalCounterText3 =
           tester.widget(find.byKey(Key('myCounterAppTextCondition'))) as Text;
-      expect(conditionalCounterText3.data, '2');
+      expect(conditionalCounterText3.data, '0');
 
       await tester.tap(incrementButtonFinder);
       await tester.pumpAndSettle();
@@ -456,7 +456,7 @@ void main() {
 
       final conditionalCounterText4 =
           tester.widget(find.byKey(Key('myCounterAppTextCondition'))) as Text;
-      expect(conditionalCounterText4.data, '2');
+      expect(conditionalCounterText4.data, '3');
     });
   });
 }

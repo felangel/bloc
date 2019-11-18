@@ -259,7 +259,6 @@ void main() {
             conditionCallCount++;
             latestPreviousState = previous;
             latestState = state;
-
             return true;
           },
           listener: (BuildContext context, int state) {},
@@ -271,6 +270,40 @@ void main() {
         expect(conditionCallCount, 1);
         expect(latestPreviousState, 0);
         expect(latestState, 1);
+      });
+    });
+
+    testWidgets(
+        'calls condition with previous listener state and current bloc state',
+        (WidgetTester tester) async {
+      int latestPreviousState;
+      int latestState;
+      var conditionCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [0, 1, 2, 3];
+      await tester.pumpWidget(
+        BlocListener(
+          bloc: counterBloc,
+          condition: (int previous, int state) {
+            conditionCallCount++;
+            if (previous + state % 3 == 0) {
+              latestPreviousState = previous;
+              latestState = state;
+              return true;
+            }
+            return false;
+          },
+          listener: (BuildContext context, int state) {},
+          child: Container(),
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
+        expect(conditionCallCount, 3);
+        expect(latestPreviousState, 0);
+        expect(latestState, 3);
       });
     });
 
