@@ -1,3 +1,8 @@
+# 2.0.1
+
+- Fix `BlocBuilder` and `BlocListener` condition behavior to set `previousState` to the previous state used by `BlocBuilder`/`BlocListener` instead of the previous state of the `bloc`.
+- Minor Documentation Updates
+
 # 2.0.0
 
 - Updated to `bloc: ^2.0.0` and Documentation Updates

@@ -15,5 +15,6 @@ pubspec.lock
 coverage/
 .test_coverage.dart
 *.log
+flutter_export_environment.sh
 !packages/**/example/ios/
 !packages/**/example/android/

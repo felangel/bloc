@@ -50,9 +50,11 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 /// An optional [condition] can be implemented for more granular control
 /// over when [listener] is called.
 /// The [condition] function will be invoked on each [bloc] [state] change.
-/// The [condition] takes the previous [state] and current [state] and must return a [bool]
-/// which determines whether or not the [listener] function will be invoked.
-/// The previous [state] will be initialized to [state] when the [BlocListener] is initialized.
+/// The [condition] takes the previous [state] handled by [BlocListener] and
+/// the current [state] of the [bloc] and must return a [bool] which determines
+/// whether or not the [listener] function will be invoked.
+/// The previous [state] will be initialized to the [state] of the [bloc]
+/// when the [BlocListener] is initialized.
 /// [condition] is optional and if it isn't implemented, it will default to `true`.
 ///
 /// ```dart
@@ -189,8 +191,8 @@ class _BlocListenerBaseState<B extends Bloc<dynamic, S>, S>
       _subscription = _bloc.skip(1).listen((S state) {
         if (widget.condition?.call(_previousState, state) ?? true) {
           widget.listener(context, state);
+          _previousState = state;
         }
-        _previousState = state;
       });
     }
   }
