@@ -27,7 +27,7 @@
 - Exemplos reais
 
   - Flutter
-    - [Mostrar SnackBar](pt-br/recipesfluttershowsnackbar.md)
+    - [Exibir SnackBar](pt-br/recipesfluttershowsnackbar.md)
     - [Navegação](pt-br/recipesflutternavigation.md)
     - [Acessar o Bloc](pt-br/recipesflutterblocaccess.md)
 
