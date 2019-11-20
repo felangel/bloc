@@ -9,7 +9,7 @@ export function analyzeDependencies() {
   const dependenciesToAnalyze = [
     {
       name: "equatable",
-      version: "^0.6.1",
+      version: "^1.0.0",
       actions: [
         {
           name: "Open Migration Guide",
