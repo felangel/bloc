@@ -1,6 +1,7 @@
 # Receitas: Exibir SnackBar com o BlocListener
 
-> Nesta receita, veremos como usar o `BlocListener` para exibir um `SnackBar` em resposta a uma alteração de estado em um bloco.
+> Nesta receita, veremos como usar o `BlocListener` para exibir um `SnackBar` em resposta a uma alteração de estado em um bloc.
+
 
 ![demo](./assets/gifs/recipes_flutter_snack_bar.gif)
 
@@ -142,6 +143,6 @@ class Home extends StatelessWidget {
 
 ?> Nós usamos o widget `BlocBuilder` para **RENDERIZAR OS WIDGETS** como resposta as mudanças de estado em nosso `DataBloc`.
 
-!> **NUNCA** "fazemos as coisas" em resposta a alterações de estado no método `builder` do `BlocBuilder` porque esse método só pode ser chamado várias vezes pela estrutura do Flutter. O método `builder` deve ser uma [função pura]((https://en.wikipedia.org/wiki/Pure_function) que retorna um widget como resposta ao estado do Bloc.
+!> **NUNCA** "fazemos as coisas" em resposta a alterações de estado no método `builder` do `BlocBuilder` porque esse método só pode ser chamado várias vezes pela estrutura do Flutter. O método `builder` deve ser uma [função pura](https://en.wikipedia.org/wiki/Pure_function) que retorna um widget como resposta ao estado do Bloc.
 
 O código completo desta receita você encontra [aqui](https://gist.github.com/felangel/1e5b2c25b263ad1aa7bbed75d8c76c44).
