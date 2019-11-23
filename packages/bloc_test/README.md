@@ -50,19 +50,30 @@ expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3])))
 
 ```dart
 group('CounterBloc', () {
-    blocTest(
-      'emits [0] when nothing is added',
-      build: () => CounterBloc(),
-      expect: [0],
-    );
+  blocTest(
+    'emits [0] when nothing is added',
+    build: () => CounterBloc(),
+    expect: [0],
+  );
 
-    blocTest(
-      'emits [0, 1] when CounterEvent.increment is added',
-      build: () => CounterBloc(),
-      act: (bloc) => bloc.add(CounterEvent.increment),
-      expect: [0, 1],
-    );
+  blocTest(
+    'emits [0, 1] when CounterEvent.increment is added',
+    build: () => CounterBloc(),
+    act: (bloc) => bloc.add(CounterEvent.increment),
+    expect: [0, 1],
+  );
 });
+```
+
+**Note:** when using `blocTest` with state classes you may need to explicitly provide the state type to the `expect` parameter if Dart cannot infer the type properly.
+
+```dart
+blocTest(
+  'emits [StateA, StateB] when MyEvent is added',
+  build: () => MyBloc(),
+  act: (bloc) => bloc.add(MyEvent()),
+  expect: <State>[StateA(), StateB()],
+);
 ```
 
 ## Assert with Confidence using emitsExactly
@@ -71,16 +82,16 @@ group('CounterBloc', () {
 
 ```dart
 group('CounterBloc', () {
-    test('emits [0] when nothing is added', () async {
-      final bloc = CounterBloc();
-      await emitsExactly(bloc, [0]);
-    });
+  test('emits [0] when nothing is added', () async {
+    final bloc = CounterBloc();
+    await emitsExactly(bloc, [0]);
+  });
 
-    test('emits [0, 1] when CounterEvent.increment is added', () async {
-      final bloc = CounterBloc();
-      bloc.add(CounterEvent.increment);
-      await emitsExactly(bloc, [0, 1]);
-    });
+  test('emits [0, 1] when CounterEvent.increment is added', () async {
+    final bloc = CounterBloc();
+    bloc.add(CounterEvent.increment);
+    await emitsExactly(bloc, [0, 1]);
+  });
 });
 ```
 

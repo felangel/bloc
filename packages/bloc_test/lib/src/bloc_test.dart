@@ -39,6 +39,19 @@ import 'package:test/test.dart';
 ///   expect: [0],
 /// );
 /// ```
+///
+/// **Note:** when using [blocTest] with state classes you may need to
+/// explicitly provide the state type to the [expect] parameter if
+/// Dart cannot infer the type properly.
+///
+/// ```dart
+/// blocTest(
+///  'emits [StateA, StateB] when MyEvent is added',
+///  build: () => MyBloc(),
+///  act: (bloc) => bloc.add(MyEvent()),
+///  expect: <State>[StateA(), StateB()],
+/// );
+/// ```
 @isTest
 void blocTest<B extends Bloc<Event, State>, Event, State>(
   String description, {
