@@ -34,6 +34,10 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [Flutter Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/README.md)
 - [Angular Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/angular_bloc/README.md)
 
+## Migration
+
+- [Upgrade from v0.x to v2.x ](https://dev.to/mhadaily/upgrade-to-bloc-library-v1-0-0-for-flutter-and-angular-dart-2np0)
+
 ## Examples
 
 <div style="text-align: center">
