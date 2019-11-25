@@ -98,7 +98,7 @@ void main() {
           ),
         );
         fail('should throw AssertionError');
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -114,7 +114,7 @@ void main() {
           ),
         );
         fail('should throw AssertionError');
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -136,7 +136,7 @@ void main() {
     testWidgets('calls listener on single state change',
         (WidgetTester tester) async {
       int latestState;
-      int listenerCallCount = 0;
+      var listenerCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1];
       await tester.pumpWidget(
@@ -159,7 +159,7 @@ void main() {
     testWidgets('calls listener on multiple state change',
         (WidgetTester tester) async {
       int latestState;
-      int listenerCallCount = 0;
+      var listenerCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1, 2];
       await tester.pumpWidget(
@@ -183,12 +183,10 @@ void main() {
     testWidgets(
         'updates when the bloc is changed at runtime to a different bloc and unsubscribes from old bloc',
         (WidgetTester tester) async {
-      int listenerCallCount = 0;
+      var listenerCallCount = 0;
       int latestState;
-      final Finder incrementFinder =
-          find.byKey(Key('bloc_listener_increment_button'));
-      final Finder resetBlocFinder =
-          find.byKey(Key('bloc_listener_reset_button'));
+      final incrementFinder = find.byKey(Key('bloc_listener_increment_button'));
+      final resetBlocFinder = find.byKey(Key('bloc_listener_reset_button'));
       await tester.pumpWidget(MyApp(
         onListenerCalled: (BuildContext context, int state) {
           listenerCallCount++;
@@ -217,12 +215,10 @@ void main() {
     testWidgets(
         'does not update when the bloc is changed at runtime to same bloc and stays subscribed to current bloc',
         (WidgetTester tester) async {
-      int listenerCallCount = 0;
+      var listenerCallCount = 0;
       int latestState;
-      final Finder incrementFinder =
-          find.byKey(Key('bloc_listener_increment_button'));
-      final Finder noopBlocFinder =
-          find.byKey(Key('bloc_listener_noop_button'));
+      final incrementFinder = find.byKey(Key('bloc_listener_increment_button'));
+      final noopBlocFinder = find.byKey(Key('bloc_listener_noop_button'));
       await tester.pumpWidget(MyApp(
         onListenerCalled: (BuildContext context, int state) {
           listenerCallCount++;
@@ -253,7 +249,7 @@ void main() {
         (WidgetTester tester) async {
       int latestPreviousState;
       int latestState;
-      int conditionCallCount = 0;
+      var conditionCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1];
       await tester.pumpWidget(
@@ -263,7 +259,6 @@ void main() {
             conditionCallCount++;
             latestPreviousState = previous;
             latestState = state;
-
             return true;
           },
           listener: (BuildContext context, int state) {},
@@ -278,11 +273,45 @@ void main() {
       });
     });
 
+    testWidgets(
+        'calls condition with previous listener state and current bloc state',
+        (WidgetTester tester) async {
+      int latestPreviousState;
+      int latestState;
+      var conditionCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [0, 1, 2, 3];
+      await tester.pumpWidget(
+        BlocListener(
+          bloc: counterBloc,
+          condition: (int previous, int state) {
+            conditionCallCount++;
+            if (previous + state % 3 == 0) {
+              latestPreviousState = previous;
+              latestState = state;
+              return true;
+            }
+            return false;
+          },
+          listener: (BuildContext context, int state) {},
+          child: Container(),
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
+        expect(conditionCallCount, 3);
+        expect(latestPreviousState, 0);
+        expect(latestState, 3);
+      });
+    });
+
     testWidgets('infers the bloc from the context if the bloc is not provided',
         (WidgetTester tester) async {
       int latestPreviousState;
       int latestState;
-      int conditionCallCount = 0;
+      var conditionCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1];
       await tester.pumpWidget(
@@ -314,7 +343,7 @@ void main() {
         (WidgetTester tester) async {
       int latestPreviousState;
       int latestState;
-      int conditionCallCount = 0;
+      var conditionCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1, 2];
       await tester.pumpWidget(
@@ -344,7 +373,7 @@ void main() {
     testWidgets(
         'does not call listener when condition returns false on single state change',
         (WidgetTester tester) async {
-      int listenerCallCount = 0;
+      var listenerCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1];
       await tester.pumpWidget(
@@ -366,7 +395,7 @@ void main() {
     testWidgets(
         'calls listener when condition returns true on single state change',
         (WidgetTester tester) async {
-      int listenerCallCount = 0;
+      var listenerCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1];
       await tester.pumpWidget(
@@ -388,7 +417,7 @@ void main() {
     testWidgets(
         'does not call listener when condition returns false on multiple state changes',
         (WidgetTester tester) async {
-      int listenerCallCount = 0;
+      var listenerCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1, 2, 3, 4];
       await tester.pumpWidget(
@@ -413,7 +442,7 @@ void main() {
     testWidgets(
         'calls listener when condition returns true on multiple state change',
         (WidgetTester tester) async {
-      int listenerCallCount = 0;
+      var listenerCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1, 2, 3, 4];
       await tester.pumpWidget(

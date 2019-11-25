@@ -31,7 +31,7 @@ dependencies:
   cloud_firestore: ^0.9.7
   firebase_auth: ^0.8.1+4
   google_sign_in: ^4.0.1+1
-  flutter_bloc: ^1.0.0
+  flutter_bloc: ^2.0.0
   equatable: ^0.6.0
   meta: ^1.1.6
   font_awesome_flutter: ^8.4.0
@@ -286,8 +286,6 @@ We will need:
 import 'package:equatable/equatable.dart';
 
 abstract class AuthenticationEvent extends Equatable {
-  const AuthenticationEvent();
-
   @override
   List<Object> get props => [];
 }

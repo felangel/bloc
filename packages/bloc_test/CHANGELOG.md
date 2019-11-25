@@ -1,3 +1,13 @@
+# 2.1.0
+
+- Add `MockBloc` to `bloc_test` in order to simplify bloc mocks (addresses [#636](https://github.com/felangel/bloc/issues/636))
+- Documentation and example updates
+
+# 2.0.0
+
+- Updated to `bloc: ^2.0.0` and Documentation Updates
+- Adhere to [effective dart](https://dart.dev/guides/language/effective-dart) ([#561](https://github.com/felangel/bloc/issues/561))
+
 # 1.0.0
 
 Updated to `bloc: ^1.0.0` and Documentation Updates

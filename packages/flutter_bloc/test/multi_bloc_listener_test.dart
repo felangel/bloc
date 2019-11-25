@@ -32,7 +32,7 @@ void main() {
             child: null,
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -46,7 +46,7 @@ void main() {
             child: Container(),
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -60,7 +60,7 @@ void main() {
             child: null,
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -68,12 +68,12 @@ void main() {
     testWidgets('calls listeners on state changes',
         (WidgetTester tester) async {
       int latestStateA;
-      int listenerCallCountA = 0;
+      var listenerCallCountA = 0;
       final counterBlocA = CounterBloc();
       final expectedStatesA = [0, 1, 2];
 
       int latestStateB;
-      int listenerCallCountB = 0;
+      var listenerCallCountB = 0;
       final counterBlocB = CounterBloc();
       final expectedStatesB = [0, 1];
 

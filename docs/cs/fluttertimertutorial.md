@@ -30,7 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^1.0.0
+  flutter_bloc: ^2.0.0
   equatable: ^0.6.0
   wave: ^0.0.8
 
@@ -287,9 +287,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _tickerSubscription?.cancel();
-    super.close();
+    return super.close();
   }
 
   Stream<TimerState> _mapStartToState(Start start) async* {
@@ -338,9 +338,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _tickerSubscription?.cancel();
-    super.close();
+    return super.close();
   }
 
   Stream<TimerState> _mapStartToState(Start start) async* {
@@ -395,9 +395,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _tickerSubscription?.cancel();
-    super.close();
+    return super.close();
   }
 
   Stream<TimerState> _mapStartToState(Start start) async* {
@@ -461,9 +461,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _tickerSubscription?.cancel();
-    super.close();
+    return super.close();
   }
 
   Stream<TimerState> _mapStartToState(Start start) async* {
@@ -542,9 +542,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _tickerSubscription?.cancel();
-    super.close();
+    return super.close();
   }
 
   Stream<TimerState> _mapStartToState(Start start) async* {

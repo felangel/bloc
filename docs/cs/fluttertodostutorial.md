@@ -28,7 +28,7 @@ environment:
 dependencies:
   meta: ">=1.1.0 <2.0.0"
   equatable: ^0.6.0
-  flutter_bloc: ^1.0.0
+  flutter_bloc: ^2.0.0
   flutter:
     sdk: flutter
 
@@ -621,9 +621,9 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     todosSubscription.cancel();
-    super.close();
+    return super.close();
   }
 }
 ```
@@ -755,9 +755,9 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     todosSubscription.cancel();
-    super.close();
+    return super.close();
   }
 }
 ```

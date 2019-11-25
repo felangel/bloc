@@ -29,7 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^1.0.0
+  flutter_bloc: ^2.0.0
   meta: ^1.1.6
   equatable: ^0.6.0
 

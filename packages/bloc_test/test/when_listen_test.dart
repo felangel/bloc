@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:test/test.dart';
-import 'package:mockito/mockito.dart';
 import 'helpers/helpers.dart';
 
-class MockCounterBloc extends Mock implements CounterBloc {}
+class MockCounterBloc extends MockBloc<CounterEvent, int>
+    implements CounterBloc {}
 
 void main() {
   group('whenListen', () {

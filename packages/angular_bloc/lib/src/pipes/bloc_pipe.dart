@@ -5,13 +5,20 @@ import 'package:angular/core.dart'
 
 import 'package:bloc/bloc.dart';
 
+/// {@template blocpipe}
+/// A `pipe` which helps bind [Bloc] state changes to the presentation layer.
+/// [BlocPipe] handles rendering the html element in response to new states.
+/// [BlocPipe] is very similar to `AsyncPipe` but has simplified API
+/// to reduce the amount of boilerplate code needed.
+/// {@endtemplate}
 @Pipe('bloc', pure: false)
 class BlocPipe implements OnDestroy, PipeTransform {
+  final ChangeDetectorRef _ref;
   Bloc _bloc;
   Object _latestValue;
   StreamSubscription _subscription;
-  ChangeDetectorRef _ref;
 
+  /// {@macro blocpipe}
   BlocPipe(this._ref);
 
   @override
@@ -21,6 +28,8 @@ class BlocPipe implements OnDestroy, PipeTransform {
     }
   }
 
+  /// Angular invokes the [transform] method with the value of a binding as the
+  /// first argument, and any parameters as the second argument in list form.
   dynamic transform(Bloc bloc) {
     if (_bloc == null) {
       if (bloc != null) {

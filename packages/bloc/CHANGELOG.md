@@ -1,3 +1,14 @@
+# 2.0.0
+
+- Allow blocs to finish processing pending events on `close` ([#639](https://github.com/felangel/bloc/issues/639))
+- Documentation Updates
+
+# 1.0.1
+
+- Bugfix: Exceptions thrown in `onTransition` are passed to `onError` and should not break bloc functionality ([#641](https://github.com/felangel/bloc/issues/641))
+- Adhere to [effective dart](https://dart.dev/guides/language/effective-dart) ([#561](https://github.com/felangel/bloc/issues/561))
+- Documentation and Example Updates
+
 # 1.0.0
 
 - `dispatch` and `dispose` removed
