@@ -65,7 +65,7 @@ group('CounterBloc', () {
 });
 ```
 
-**Note:** when using [blocTest] with state classes which don't override `==` and `hashCode` you can provide an `Iterable` of matchers instead of explicit state instances.
+**Note:** when using `blocTest` with state classes which don't override `==` and `hashCode` you can provide an `Iterable` of matchers instead of explicit state instances.
 
 ```dart
 blocTest(
@@ -95,7 +95,7 @@ group('CounterBloc', () {
 });
 ```
 
-[emitsExactly] also supports `Matchers` for states which don't override `==` and `hashCode`.
+`emitsExactly` also supports `Matchers` for states which don't override `==` and `hashCode`.
 
 ```dart
 test('emits [StateA, StateB] when EventB is added', () async {

@@ -1,3 +1,7 @@
+# 2.2.1
+
+- Minor documentation improvements (syntax highlighting in README)
+
 # 2.2.0
 
 - `emitsExactly` and `blocTest` support `Iterable<Matcher` ([#695](https://github.com/felangel/bloc/issues/695)).
