@@ -17,7 +17,7 @@ import 'package:test/test.dart';
 /// [act] is an optional callback which will be invoked with the [bloc] under test
 /// and should be used to `add` events to the bloc.
 ///
-/// [expect] is an `Iterable<State>` which the [bloc]
+/// [expect] is an `Iterable` of matchers which the [bloc]
 /// under test is expected to emit after [act] is executed.
 ///
 /// ```dart
@@ -40,23 +40,23 @@ import 'package:test/test.dart';
 /// );
 /// ```
 ///
-/// **Note:** when using [blocTest] with state classes you may need to
-/// explicitly provide the state type to the [expect] parameter if
-/// Dart cannot infer the type properly.
+/// **Note:** when using [blocTest] with state classes which don't override
+/// `==` and `hashCode` you can provide an `Iterable` of matchers instead of
+/// explicit state instances.
 ///
 /// ```dart
 /// blocTest(
 ///  'emits [StateA, StateB] when MyEvent is added',
 ///  build: () => MyBloc(),
 ///  act: (bloc) => bloc.add(MyEvent()),
-///  expect: <State>[StateA(), StateB()],
+///  expect: [isA<StateA>(), isA<StateB>()],
 /// );
 /// ```
 @isTest
 void blocTest<B extends Bloc<Event, State>, Event, State>(
   String description, {
   @required B build(),
-  @required Iterable<State> expect,
+  @required Iterable expect,
   Future<void> Function(B bloc) act,
 }) {
   test(description, () async {

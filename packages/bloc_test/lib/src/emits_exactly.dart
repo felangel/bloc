@@ -14,9 +14,20 @@ import 'package:test/test.dart';
 ///   await emitsExactly(bloc, [0, 1]);
 /// });
 /// ```
+///
+/// [emitsExactly] also supports `Matchers` for states
+/// which don't override `==` and `hashCode`.
+///
+/// ```dart
+/// test('emits [StateA, StateB] when EventB is added', () async {
+///   final bloc = MyBloc();
+///   bloc.add(EventB());
+///   await emitsExactly(bloc, [isA<StateA>(), isA<StateB>()]);
+/// });
+/// ```
 Future<void> emitsExactly<B extends Bloc<dynamic, State>, State>(
   B bloc,
-  Iterable<State> expected,
+  Iterable expected,
 ) async {
   assert(bloc != null);
   final states = <State>[];
