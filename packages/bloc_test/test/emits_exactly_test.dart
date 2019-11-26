@@ -180,5 +180,71 @@ void main() {
         }
       });
     });
+
+    group('ComplexBloc', () {
+      test('emits [ComplexStateA, ComplexStateB] when ComplexEventB is added',
+          () async {
+        final bloc = ComplexBloc();
+        bloc.add(ComplexEventB());
+        await emitsExactly(bloc, [isA<ComplexStateA>(), isA<ComplexStateB>()]);
+      });
+
+      test('fails if bloc does not emit all states', () async {
+        try {
+          await emitsExactly(
+              ComplexBloc(), [isA<ComplexStateA>(), isA<ComplexStateB>()]);
+          fail('should throw');
+        } on TestFailure catch (error) {
+          expect(
+              error.message,
+              'Expected: [<<Instance of \'ComplexStateA\'>>, <<Instance of \'ComplexStateB\'>>]\n'
+              '  Actual: [Instance of \'ComplexStateA\']\n'
+              '   Which: shorter than expected at location [1]\n'
+              '');
+        }
+      });
+
+      test('fails if bloc does not emit correct states', () async {
+        try {
+          final bloc = ComplexBloc();
+          bloc.add(ComplexEventA());
+          await emitsExactly(
+            bloc,
+            [isA<ComplexStateA>(), isA<ComplexStateB>()],
+          );
+          fail('should throw');
+        } on TestFailure catch (error) {
+          expect(
+              error.message,
+              'Expected: [<<Instance of \'ComplexStateA\'>>, <<Instance of \'ComplexStateB\'>>]\n'
+              '  Actual: [Instance of \'ComplexStateA\', Instance of \'ComplexStateA\']\n'
+              '   Which: does not match <Instance of \'ComplexStateB\'> at location [1]\n'
+              '');
+        }
+      });
+
+      test('fails if expecting extra states', () async {
+        try {
+          final bloc = ComplexBloc();
+          bloc.add(ComplexEventB());
+          await emitsExactly(
+            bloc,
+            [isA<ComplexStateA>(), isA<ComplexStateB>(), isA<ComplexStateA>()],
+          );
+          fail('should throw');
+        } on TestFailure catch (error) {
+          expect(
+              error.message,
+              'Expected: [\n'
+              '            <<Instance of \'ComplexStateA\'>>,\n'
+              '            <<Instance of \'ComplexStateB\'>>,\n'
+              '            <<Instance of \'ComplexStateA\'>>\n'
+              '          ]\n'
+              '  Actual: [Instance of \'ComplexStateA\', Instance of \'ComplexStateB\']\n'
+              '   Which: shorter than expected at location [2]\n'
+              '');
+        }
+      });
+    });
   });
 }
