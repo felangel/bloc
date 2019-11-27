@@ -24,6 +24,7 @@ class RepositoryProvider<T> extends Provider<T> {
     Widget child,
   }) : super(
           key: key,
+          // ignore: deprecated_member_use_from_same_package
           create: create ?? builder,
           dispose: (_, __) {},
           child: child,

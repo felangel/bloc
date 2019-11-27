@@ -1,3 +1,8 @@
+# 2.1.1
+
+- Fix internal analysis warnings
+- Enforce provider `^3.2.0`
+
 # 2.1.0
 
 - Deprecate `builder` in `BlocProvider` in favor of `create` to align with `provider`.

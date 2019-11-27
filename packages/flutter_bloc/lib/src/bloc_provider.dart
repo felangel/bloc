@@ -32,6 +32,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
   }) : this._(
           key: key,
           delegate: BuilderStateDelegate<T>(
+            // ignore: deprecated_member_use_from_same_package
             create ?? builder,
             dispose: (_, bloc) => bloc?.close(),
           ),
