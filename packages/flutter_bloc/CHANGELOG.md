@@ -1,3 +1,8 @@
+# 2.1.0
+
+- Deprecate `builder` in `BlocProvider` in favor of `create` to align with `provider`.
+- Deprecate `builder` in `RepositoryProvider` in favor of `create` to align with `provider`.
+
 # 2.0.1
 
 - Fix `BlocBuilder` and `BlocListener` condition behavior to set `previousState` to the previous state used by `BlocBuilder`/`BlocListener` instead of the previous state of the `bloc`.

@@ -12,11 +12,11 @@ import 'package:provider/provider.dart';
 ///
 /// ```dart
 /// BlocProvider<BlocA>(
-///   builder: (BuildContext context) => BlocA(),
+///   create: (BuildContext context) => BlocA(),
 ///   child: BlocProvider<BlocB>(
-///     builder: (BuildContext context) => BlocB(),
+///     create: (BuildContext context) => BlocB(),
 ///     child: BlocProvider<BlocC>(
-///       builder: (BuildContext context) => BlocC(),
+///       create: (BuildContext context) => BlocC(),
 ///       child: ChildA(),
 ///     )
 ///   )
@@ -29,13 +29,13 @@ import 'package:provider/provider.dart';
 /// MultiBlocProvider(
 ///   providers: [
 ///     BlocProvider<BlocA>(
-///       builder: (BuildContext context) => BlocA(),
+///       create: (BuildContext context) => BlocA(),
 ///     ),
 ///     BlocProvider<BlocB>(
-///       builder: (BuildContext context) => BlocB(),
+///       create: (BuildContext context) => BlocB(),
 ///     ),
 ///     BlocProvider<BlocC>(
-///       builder: (BuildContext context) => BlocC(),
+///       create: (BuildContext context) => BlocC(),
 ///     ),
 ///   ],
 ///   child: ChildA(),

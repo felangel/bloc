@@ -100,9 +100,11 @@ void main() {
         MultiRepositoryProvider(
           providers: [
             RepositoryProvider<RepositoryA>(
-                builder: (context) => RepositoryA(0)),
+              create: (context) => RepositoryA(0),
+            ),
             RepositoryProvider<RepositoryB>(
-                builder: (context) => RepositoryB(1)),
+              create: (context) => RepositoryB(1),
+            ),
           ],
           child: MyApp(),
         ),

@@ -3,13 +3,13 @@ import 'package:provider/provider.dart';
 
 /// {@template repositoryprovider}
 /// Takes a `ValueBuilder` that is responsible for
-/// building the repository and a [child] which will have access to the repository via `RepositoryProvider.of(context)`.
+/// creating the repository and a [child] which will have access to the repository via `RepositoryProvider.of(context)`.
 /// It is used as a dependency injection (DI) widget so that a single instance of a repository can be provided
 /// to multiple widgets within a subtree.
 ///
 /// ```dart
 /// RepositoryProvider(
-///   builder: (context) => RepositoryA(),
+///   create: (context) => RepositoryA(),
 ///   child: ChildA(),
 /// );
 /// ```
@@ -18,11 +18,13 @@ class RepositoryProvider<T> extends Provider<T> {
   /// {@macro repositoryprovider}
   RepositoryProvider({
     Key key,
-    @required ValueBuilder<T> builder,
+    @required ValueBuilder<T> create,
+    @Deprecated('will be removed in 3.0.0, use create instead')
+        ValueBuilder<T> builder,
     Widget child,
   }) : super(
           key: key,
-          builder: builder,
+          create: create ?? builder,
           dispose: (_, __) {},
           child: child,
         );
@@ -55,8 +57,8 @@ class RepositoryProvider<T> extends Provider<T> {
         1. The context you used comes from a widget above the RepositoryProvider.
         2. You used MultiRepositoryProvider and didn\'t explicity provide the RepositoryProvider types.
 
-        Good: RepositoryProvider<$T>(builder: (context) => $T())
-        Bad: RepositoryProvider(builder: (context) => $T()).
+        Good: RepositoryProvider<$T>(create: (context) => $T())
+        Bad: RepositoryProvider(create: (context) => $T()).
 
         The context used was: $context
         """,
