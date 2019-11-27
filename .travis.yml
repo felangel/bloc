@@ -1,6 +1,8 @@
-language: dart
+language: bash
 os:
-  - linux
+  - osx
+env:
+  - FLUTTER_CHANNEL="beta"
 sudo: required
 dist: trusty
 dart:
@@ -14,27 +16,21 @@ addons:
       - libstdc++6
       - fonts-droid
 before_script:
-  - git clone https://github.com/flutter/flutter.git -b beta --depth 1
-  - ./flutter/bin/flutter doctor
+  - cd ..
+  - git clone https://github.com/flutter/flutter.git -b $FLUTTER_CHANNEL
+  - export PATH=$PATH:$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin
+  - cd -
+  - flutter doctor
 script:
-  - cd packages/bloc
-  - pub get
-  - pub run test_coverage
-  - cp coverage/lcov.info ../../bloc.lcov
-  - cd ../bloc_test
-  - pub get
-  - pub run test_coverage
-  - cp coverage/lcov.info ../../bloc_test.lcov
-  - cd ../angular_bloc
-  - pub get
-  - pub upgrade
-  - pub global activate webdev
-  - webdev build
-  - pub run build_runner test --fail-on-severe
-  - cd ../flutter_bloc
-  - ../../flutter/bin/flutter test --coverage --coverage-path=../../flutter_bloc.lcov
+  - set -e
+  - ./scripts/ci.sh packages/bloc
+  - ./scripts/ci.sh packages/bloc_test
+  - ./scripts/ci.sh packages/angular_bloc
+  - ./scripts/ci.sh packages/flutter_bloc
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+matrix:
+  fast_finish: true
 cache:
   directories:
     - $HOME/.pub-cache
