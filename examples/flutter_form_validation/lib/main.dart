@@ -15,7 +15,7 @@ class App extends StatelessWidget {
         body: Padding(
           padding: EdgeInsets.all(20.0),
           child: BlocProvider(
-            builder: (context) => MyFormBloc(),
+            create: (context) => MyFormBloc(),
             child: MyForm(),
           ),
         ),

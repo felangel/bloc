@@ -73,7 +73,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 void main() {
   runApp(
     BlocProvider(
-      builder: (context) => MyBloc(),
+      create: (context) => MyBloc(),
       child: MyApp(),
     ),
   );
@@ -184,7 +184,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 void main() {
   runApp(
     BlocProvider(
-      builder: (context) => MyBloc(),
+      create: (context) => MyBloc(),
       child: MyApp(),
     ),
   );

@@ -429,7 +429,7 @@ class App extends StatelessWidget {
           title: Text('Posts'),
         ),
         body: BlocProvider(
-          builder: (context) =>
+          create: (context) =>
               PostBloc(httpClient: http.Client())..add(Fetch()),
           child: HomePage(),
         ),

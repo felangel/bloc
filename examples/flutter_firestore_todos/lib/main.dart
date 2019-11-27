@@ -18,14 +18,14 @@ class TodosApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthenticationBloc>(
-          builder: (context) {
+          create: (context) {
             return AuthenticationBloc(
               userRepository: FirebaseUserRepository(),
             )..add(AppStarted());
           },
         ),
         BlocProvider<TodosBloc>(
-          builder: (context) {
+          create: (context) {
             return TodosBloc(
               todosRepository: FirebaseTodosRepository(),
             )..add(LoadTodos());
@@ -42,15 +42,15 @@ class TodosApp extends StatelessWidget {
                   return MultiBlocProvider(
                     providers: [
                       BlocProvider<TabBloc>(
-                        builder: (context) => TabBloc(),
+                        create: (context) => TabBloc(),
                       ),
                       BlocProvider<FilteredTodosBloc>(
-                        builder: (context) => FilteredTodosBloc(
+                        create: (context) => FilteredTodosBloc(
                           todosBloc: BlocProvider.of<TodosBloc>(context),
                         ),
                       ),
                       BlocProvider<StatsBloc>(
-                        builder: (context) => StatsBloc(
+                        create: (context) => StatsBloc(
                           todosBloc: BlocProvider.of<TodosBloc>(context),
                         ),
                       ),

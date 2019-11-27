@@ -745,7 +745,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Weather',
       home: BlocProvider(
-        builder: (context) =>
+        create: (context) =>
             WeatherBloc(weatherRepository: weatherRepository),
         child: Weather(),
       ),
@@ -1402,7 +1402,7 @@ void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(
     BlocProvider<ThemeBloc>(
-      builder: (context) => ThemeBloc(),
+      create: (context) => ThemeBloc(),
       child: App(weatherRepository: weatherRepository),
     ),
   );
@@ -1427,7 +1427,7 @@ class App extends StatelessWidget {
           title: 'Flutter Weather',
           theme: themeState.theme,
           home: BlocProvider(
-            builder: (context) =>
+            create: (context) =>
                 WeatherBloc(weatherRepository: weatherRepository),
             child: Weather(),
           ),
@@ -1684,10 +1684,10 @@ void main() {
     MultiBlocProvider(
       providers: [
         BlocProvider<ThemeBloc>(
-          builder: (context) => ThemeBloc(),
+          create: (context) => ThemeBloc(),
         ),
         BlocProvider<SettingsBloc>(
-          builder: (context) => SettingsBloc(),
+          create: (context) => SettingsBloc(),
         ),
       ],
       child: App(weatherRepository: weatherRepository),

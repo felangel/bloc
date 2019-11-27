@@ -460,7 +460,7 @@ void main() {
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
-      builder: (context) => AuthenticationBloc(userRepository: userRepository)
+      create: (context) => AuthenticationBloc(userRepository: userRepository)
         ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
@@ -490,7 +490,7 @@ void main() {
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
-      builder: (context) => AuthenticationBloc(userRepository: userRepository)
+      create: (context) => AuthenticationBloc(userRepository: userRepository)
         ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
@@ -563,7 +563,7 @@ void main() {
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
-      builder: (context) => AuthenticationBloc(userRepository: userRepository)
+      create: (context) => AuthenticationBloc(userRepository: userRepository)
         ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
@@ -609,7 +609,7 @@ void main() {
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
-      builder: (context) => AuthenticationBloc(userRepository: userRepository)
+      create: (context) => AuthenticationBloc(userRepository: userRepository)
         ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
@@ -705,7 +705,7 @@ void main() {
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
-      builder: (context) => AuthenticationBloc(userRepository: userRepository)
+      create: (context) => AuthenticationBloc(userRepository: userRepository)
         ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),
@@ -1119,7 +1119,7 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Login')),
       body: BlocProvider<LoginBloc>(
-        builder: (context) => LoginBloc(userRepository: _userRepository),
+        create: (context) => LoginBloc(userRepository: _userRepository),
         child: LoginForm(userRepository: _userRepository),
       ),
     );
@@ -1726,7 +1726,7 @@ class RegisterScreen extends StatelessWidget {
       appBar: AppBar(title: Text('Register')),
       body: Center(
         child: BlocProvider<RegisterBloc>(
-          builder: (context) => RegisterBloc(userRepository: _userRepository),
+          create: (context) => RegisterBloc(userRepository: _userRepository),
           child: RegisterForm(),
         ),
       ),
@@ -1943,7 +1943,7 @@ void main() {
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(
-      builder: (context) => AuthenticationBloc(userRepository: userRepository)
+      create: (context) => AuthenticationBloc(userRepository: userRepository)
         ..add(AppStarted()),
       child: App(userRepository: userRepository),
     ),

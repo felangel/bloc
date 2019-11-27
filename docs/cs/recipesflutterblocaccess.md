@@ -56,7 +56,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: BlocProvider(
-        builder: (BuildContext context) => CounterBloc(),
+        create: (BuildContext context) => CounterBloc(),
         child: CounterPage(),
       ),
     );
@@ -184,7 +184,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: BlocProvider(
-        builder: (BuildContext context) => CounterBloc(),
+        create: (BuildContext context) => CounterBloc(),
         child: HomePage(),
       ),
     );
@@ -335,7 +335,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      builder: (BuildContext context) => CounterBloc(),
+      create: (BuildContext context) => CounterBloc(),
       child: MaterialApp(
         title: 'Flutter Demo',
         home: CounterPage(),

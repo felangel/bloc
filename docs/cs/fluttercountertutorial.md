@@ -92,7 +92,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: BlocProvider<CounterBloc>(
-        builder: (context) => CounterBloc(),
+        create: (context) => CounterBloc(),
         child: CounterPage(),
       ),
     );
