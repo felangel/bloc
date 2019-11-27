@@ -34,5 +34,5 @@ Future<void> emitsExactly<B extends Bloc<dynamic, State>, State>(
   final subscription = bloc.listen(states.add);
   await bloc.close();
   expect(states, expected);
-  subscription.cancel();
+  await subscription.cancel();
 }

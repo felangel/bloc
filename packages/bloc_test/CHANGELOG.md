@@ -1,3 +1,7 @@
+# 2.2.2
+
+- Minor internal improvements (fixed analysis warning in `emitsExactly`)
+
 # 2.2.1
 
 - Minor documentation improvements (syntax highlighting in README)
