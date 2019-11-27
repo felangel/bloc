@@ -2,7 +2,10 @@ language: bash
 os:
   - osx
 env:
-  - FLUTTER_CHANNEL="beta"
+  - PACKAGE=bloc
+  - PACKAGE=bloc_test
+  - PACKAGE=angular_bloc
+  - PACKAGE=flutter_bloc
 sudo: required
 dist: trusty
 dart:
@@ -17,16 +20,13 @@ addons:
       - fonts-droid
 before_script:
   - cd ..
-  - git clone https://github.com/flutter/flutter.git -b $FLUTTER_CHANNEL
+  - git clone https://github.com/flutter/flutter.git -b beta
   - export PATH=$PATH:$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin
   - cd -
   - flutter doctor
 script:
   - set -e
-  - ./scripts/ci.sh packages/bloc
-  - ./scripts/ci.sh packages/bloc_test
-  - ./scripts/ci.sh packages/angular_bloc
-  - ./scripts/ci.sh packages/flutter_bloc
+  - ./scripts/ci.sh packages/$PACKAGE
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 matrix:
