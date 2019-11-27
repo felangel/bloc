@@ -4,15 +4,15 @@ import 'package:bloc/bloc.dart';
 
 /// {@template blocprovider}
 /// Takes a [ValueBuilder] that is responsible for
-/// building the [bloc] and a [child] which will have access to the [bloc] via `BlocProvider.of(context)`.
+/// creating the [bloc] and a [child] which will have access to the [bloc] via `BlocProvider.of(context)`.
 /// It is used as a dependency injection (DI) widget so that a single instance of a [bloc] can be provided
 /// to multiple widgets within a subtree.
 ///
-/// Automatically handles closing the [bloc] when used with a [builder].
+/// Automatically handles closing the [bloc] when used with [create].
 ///
 /// ```dart
 /// BlocProvider(
-///   builder: (BuildContext context) => BlocA(),
+///   create: (BuildContext context) => BlocA(),
 ///   child: ChildA(),
 /// );
 /// ```
@@ -25,12 +25,14 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
   /// {@macro blocprovider}
   BlocProvider({
     Key key,
-    ValueBuilder<T> builder,
+    @Deprecated('will be removed in 3.0.0, use create instead')
+        ValueBuilder<T> builder,
+    @required ValueBuilder<T> create,
     Widget child,
   }) : this._(
           key: key,
           delegate: BuilderStateDelegate<T>(
-            builder,
+            create ?? builder,
             dispose: (_, bloc) => bloc?.close(),
           ),
           child: child,
@@ -42,7 +44,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
   /// to new routes.
   ///
   /// A new [bloc] should not be created in `BlocProvider.value`.
-  /// [bloc]s should always be created using the default constructor within the [builder].
+  /// [bloc]s should always be created using the default constructor within [create].
   ///
   /// ```dart
   /// BlocProvider.value(
@@ -89,8 +91,8 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
         1. The context you used comes from a widget above the BlocProvider.
         2. You used MultiBlocProvider and didn\'t explicity provide the BlocProvider types.
 
-        Good: BlocProvider<$T>(builder: (context) => $T())
-        Bad: BlocProvider(builder: (context) => $T()).
+        Good: BlocProvider<$T>(create: (context) => $T())
+        Bad: BlocProvider(create: (context) => $T()).
 
         The context used was: $context
         """,

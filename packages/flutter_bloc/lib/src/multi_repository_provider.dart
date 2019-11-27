@@ -12,11 +12,11 @@ import 'package:provider/provider.dart';
 ///
 /// ```dart
 /// RepositoryProvider<RepositoryA>(
-///   builder: (context) => RepositoryA(),
+///   create: (context) => RepositoryA(),
 ///   child: RepositoryProvider<RepositoryB>(
-///     builder: (context) => RepositoryB(),
+///     create: (context) => RepositoryB(),
 ///     child: RepositoryProvider<RepositoryC>(
-///       builder: (context) => RepositoryC(),
+///       create: (context) => RepositoryC(),
 ///       child: ChildA(),
 ///     )
 ///   )
@@ -28,9 +28,9 @@ import 'package:provider/provider.dart';
 /// ```dart
 /// MultiRepositoryProvider(
 ///   providers: [
-///     RepositoryProvider<RepositoryA>(builder: (context) => RepositoryA()),
-///     RepositoryProvider<RepositoryB>(builder: (context) => RepositoryB()),
-///     RepositoryProvider<RepositoryC>(builder: (context) => RepositoryC()),
+///     RepositoryProvider<RepositoryA>(create: (context) => RepositoryA()),
+///     RepositoryProvider<RepositoryB>(create: (context) => RepositoryB()),
+///     RepositoryProvider<RepositoryC>(create: (context) => RepositoryC()),
 ///   ],
 ///   child: ChildA(),
 /// )

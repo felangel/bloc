@@ -7,16 +7,16 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyApp extends StatelessWidget {
-  final CounterBloc Function(BuildContext context) _builder;
+  final CounterBloc Function(BuildContext context) _create;
   final CounterBloc _value;
   final Widget _child;
 
   const MyApp({
     Key key,
-    CounterBloc Function(BuildContext context) builder,
+    CounterBloc Function(BuildContext context) create,
     CounterBloc value,
     @required Widget child,
-  })  : _builder = builder,
+  })  : _create = create,
         _value = value,
         _child = child,
         super(key: key);
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
     }
     return MaterialApp(
       home: BlocProvider<CounterBloc>(
-        builder: _builder,
+        create: _create,
         child: _child,
       ),
     );
@@ -65,7 +65,7 @@ class _MyStatefulAppState extends State<MyStatefulApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: BlocProvider<CounterBloc>(
-        builder: (context) => bloc,
+        create: (context) => bloc,
         child: Scaffold(
           appBar: AppBar(
             title: Text('Counter'),
@@ -201,10 +201,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 void main() {
   group('BlocProvider', () {
-    testWidgets('throws if initialized with no builder',
+    testWidgets('throws if initialized with no create',
         (WidgetTester tester) async {
       await tester.pumpWidget(MyApp(
-        builder: null,
+        create: null,
         child: CounterPage(),
       ));
       expect(tester.takeException(), isInstanceOf<AssertionError>());
@@ -213,17 +213,17 @@ void main() {
     testWidgets('throws if initialized with no child',
         (WidgetTester tester) async {
       await tester.pumpWidget(MyApp(
-        builder: (context) => CounterBloc(),
+        create: (context) => CounterBloc(),
         child: null,
       ));
       expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
 
     testWidgets('passes bloc to children', (WidgetTester tester) async {
-      CounterBloc _builder(BuildContext context) => CounterBloc();
+      CounterBloc _create(BuildContext context) => CounterBloc();
       final _child = CounterPage();
       await tester.pumpWidget(MyApp(
-        builder: _builder,
+        create: _create,
         child: _child,
       ));
 
@@ -241,7 +241,7 @@ void main() {
           MaterialApp(
             home: Scaffold(
               body: BlocProvider(
-                builder: (context) => CounterBloc(),
+                create: (context) => CounterBloc(),
                 child: BlocBuilder<CounterBloc, int>(
                   builder: (context, state) => Text('state: $state'),
                 ),
@@ -256,14 +256,14 @@ void main() {
     testWidgets('calls close on bloc automatically',
         (WidgetTester tester) async {
       var closeCalled = false;
-      CounterBloc _builder(BuildContext context) => CounterBloc(
+      CounterBloc _create(BuildContext context) => CounterBloc(
             onClose: () {
               closeCalled = true;
             },
           );
       final Widget _child = RoutePage();
       await tester.pumpWidget(MyApp(
-        builder: _builder,
+        create: _create,
         child: _child,
       ));
 
@@ -317,8 +317,8 @@ void main() {
         1. The context you used comes from a widget above the BlocProvider.
         2. You used MultiBlocProvider and didn\'t explicity provide the BlocProvider types.
 
-        Good: BlocProvider<CounterBloc>(builder: (context) => CounterBloc())
-        Bad: BlocProvider(builder: (context) => CounterBloc()).
+        Good: BlocProvider<CounterBloc>(create: (context) => CounterBloc())
+        Bad: BlocProvider(create: (context) => CounterBloc()).
 
         The context used was: CounterPage(dirty)
 """;
