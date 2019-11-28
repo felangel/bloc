@@ -107,7 +107,7 @@ test('emits [StateA, StateB] when EventB is added', () async {
 
 ## Dart Versions
 
-- Dart 2: >= 2.0.0
+- Dart 2: >= 2.6.0
 
 ## Maintainers
 
