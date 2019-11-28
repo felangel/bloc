@@ -385,7 +385,7 @@ At this point we have successfully separated our presentational layer from our b
 
 ## Dart Versions
 
-- Dart 2: >= 2.0.0
+- Dart 2: >= 2.6.0
 
 ### Maintainers
 
