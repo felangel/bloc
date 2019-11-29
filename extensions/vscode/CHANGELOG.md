@@ -1,3 +1,7 @@
+# 2.2.0
+
+Update snippets to support flutter_bloc `v2.1.0`
+
 # 2.1.0
 
 Update to support equatable `v1.0.0`
