@@ -1,4 +1,4 @@
-# Flutter Timer Tutorial
+# Tutoriel Flutter chronomètre
 
 ![débutant](https://img.shields.io/badge/level-beginner-green.svg)
 
@@ -801,7 +801,7 @@ Par conséquent, si nous colorions au hasard les widgets sur chaque reconstructi
 
 ![Démonstration de l'état du BlocBuilder](https://cdn-images-1.medium.com/max/1600/1*YyjpH1rcZlYWxCX308l_Ew.gif)
 
-?> **Avis:** Même si le widget `Text` est reconstruit à chaque tick, nous ne reconstruisons les `Actions` que si elles doivent être reconstruites.
+?> **Note:** Même si le widget `Text` est reconstruit à chaque tick, nous ne reconstruisons les `Actions` que si elles doivent être reconstruites.
 
 Enfin, nous devons ajouter le fond d'onde super cool en utilisant le paquet [wave](https://pub.dev/packages/wave).
 

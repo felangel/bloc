@@ -1,10 +1,10 @@
-# Flutter Counter Tutorial
+# Tutoriel Flutter d'un Compteur 
 
 ![débutant](https://img.shields.io/badge/level-beginner-green.svg)
 
 > Dans ce tutoriel, nous allons construire un compteur avec Flutter en utilisant la bibliothèque Bloc.
 
-![demo](./assets/gifs/flutter_counter.gif)
+![demo](../assets/gifs/flutter_counter.gif)
 
 ## Configuration
 
