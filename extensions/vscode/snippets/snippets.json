@@ -94,7 +94,7 @@
     "prefix": "repositoryprovider",
     "body": [
       "RepositoryProvider(",
-      "\tcreate: (context) => ${1:myValue},",
+      "\tcreate: (context) => ${1:MyRepository}(),",
       "\tchild: ${2:Container()},",
       ")"
     ]
@@ -105,11 +105,11 @@
     "body": [
       "MultiRepositoryProvider(",
       "\tproviders: [",
-      "\t\tRepositoryProvider<${1:MyValue}>(",
-      "\t\t\tcreate: (context) => ${2:myValue},",
+      "\t\tRepositoryProvider<${1:MyRepository}>(",
+      "\t\t\tcreate: (context) => ${1:MyRepository}(),",
       "\t\t),",
-      "\t\tRepositoryProvider<${3:MyOtherValue}>(",
-      "\t\t\tcreate: (context) => ${4:myOtherValue},",
+      "\t\tRepositoryProvider<${3:MyOtherRepository}>(",
+      "\t\t\tcreate: (context) => ${4:MyOtherRepository}(),",
       "\t\t),",
       "\t],",
       "\tchild: ${5:Container()},",
