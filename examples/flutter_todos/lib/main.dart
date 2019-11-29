@@ -16,7 +16,7 @@ void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(
     BlocProvider(
-      builder: (context) {
+      create: (context) {
         return TodosBloc(
           todosRepository: const TodosRepositoryFlutter(
             fileStorage: const FileStorage(
@@ -24,7 +24,7 @@ void main() {
               getApplicationDocumentsDirectory,
             ),
           ),
-        )..dispatch(LoadTodos());
+        )..add(LoadTodos());
       },
       child: TodosApp(),
     ),
@@ -34,7 +34,6 @@ void main() {
 class TodosApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final todosBloc = BlocProvider.of<TodosBloc>(context);
     return MaterialApp(
       title: FlutterBlocLocalizations().appTitle,
       theme: ArchSampleTheme.theme,
@@ -47,13 +46,17 @@ class TodosApp extends StatelessWidget {
           return MultiBlocProvider(
             providers: [
               BlocProvider<TabBloc>(
-                builder: (context) => TabBloc(),
+                create: (context) => TabBloc(),
               ),
               BlocProvider<FilteredTodosBloc>(
-                builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
+                create: (context) => FilteredTodosBloc(
+                  todosBloc: BlocProvider.of<TodosBloc>(context),
+                ),
               ),
               BlocProvider<StatsBloc>(
-                builder: (context) => StatsBloc(todosBloc: todosBloc),
+                create: (context) => StatsBloc(
+                  todosBloc: BlocProvider.of<TodosBloc>(context),
+                ),
               ),
             ],
             child: HomeScreen(),
@@ -63,7 +66,7 @@ class TodosApp extends StatelessWidget {
           return AddEditScreen(
             key: ArchSampleKeys.addTodoScreen,
             onSave: (task, note) {
-              todosBloc.dispatch(
+              BlocProvider.of<TodosBloc>(context).add(
                 AddTodo(Todo(task, note: note)),
               );
             },

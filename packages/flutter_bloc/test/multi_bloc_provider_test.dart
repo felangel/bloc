@@ -18,15 +18,15 @@ class MyAppWithNavigation extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  final VoidCallback onCounterBlocDisposed;
-  final VoidCallback onThemeBlocDisposed;
+  final VoidCallback onCounterBlocClosed;
+  final VoidCallback onThemeBlocClosed;
   final CounterBloc counterBlocValue;
   final ThemeBloc themeBlocValue;
 
   HomePage({
     Key key,
-    this.onCounterBlocDisposed,
-    this.onThemeBlocDisposed,
+    this.onCounterBlocClosed,
+    this.onThemeBlocClosed,
     this.counterBlocValue,
     this.themeBlocValue,
   }) : super(key: key);
@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     getProviders() {
-      final List<BlocProvider> providers = List<BlocProvider>();
+      final providers = <BlocProvider>[];
       if (counterBlocValue != null) {
         providers.add(
           BlocProvider<CounterBloc>.value(
@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
       } else {
         providers.add(
           BlocProvider<CounterBloc>(
-            builder: (context) => CounterBloc(onDispose: onCounterBlocDisposed),
+            create: (context) => CounterBloc(onClose: onCounterBlocClosed),
           ),
         );
       }
@@ -58,7 +58,7 @@ class HomePage extends StatelessWidget {
       } else {
         providers.add(
           BlocProvider<ThemeBloc>(
-            builder: (context) => ThemeBloc(onDispose: onThemeBlocDisposed),
+            create: (context) => ThemeBloc(onClose: onThemeBlocClosed),
           ),
         );
       }
@@ -98,12 +98,12 @@ class MyApp extends StatelessWidget {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final CounterBloc _counterBloc = BlocProvider.of<CounterBloc>(context);
+    final counterBloc = BlocProvider.of<CounterBloc>(context);
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
       body: BlocBuilder<CounterBloc, int>(
-        bloc: _counterBloc,
+        bloc: counterBloc,
         builder: (BuildContext context, int count) {
           return Center(
             child: Text(
@@ -137,9 +137,9 @@ class CounterPage extends StatelessWidget {
 enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  VoidCallback onDispose;
+  VoidCallback onClose;
 
-  CounterBloc({this.onDispose});
+  CounterBloc({this.onClose});
 
   @override
   int get initialState => 0;
@@ -148,27 +148,27 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
 
   @override
-  void dispose() {
-    this.onDispose?.call();
-    super.dispose();
+  Future<void> close() {
+    onClose?.call();
+    return super.close();
   }
 }
 
 enum ThemeEvent { toggle }
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
-  VoidCallback onDispose;
+  VoidCallback onClose;
 
-  ThemeBloc({this.onDispose});
+  ThemeBloc({this.onClose});
 
   @override
   ThemeData get initialState => ThemeData.light();
@@ -177,17 +177,15 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
   Stream<ThemeData> mapEventToState(ThemeEvent event) async* {
     switch (event) {
       case ThemeEvent.toggle:
-        yield currentState == ThemeData.dark()
-            ? ThemeData.light()
-            : ThemeData.dark();
+        yield state == ThemeData.dark() ? ThemeData.light() : ThemeData.dark();
         break;
     }
   }
 
   @override
-  void dispose() {
-    this.onDispose?.call();
-    super.dispose();
+  Future<void> close() {
+    onClose?.call();
+    return super.close();
   }
 }
 
@@ -202,7 +200,7 @@ void main() {
             child: Container(),
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -216,7 +214,7 @@ void main() {
             child: null,
           ),
         );
-      } catch (error) {
+      } on Object catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -225,61 +223,62 @@ void main() {
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<CounterBloc>(builder: (context) => CounterBloc()),
-            BlocProvider<ThemeBloc>(builder: (context) => ThemeBloc())
+            BlocProvider<CounterBloc>(create: (context) => CounterBloc()),
+            BlocProvider<ThemeBloc>(create: (context) => ThemeBloc())
           ],
           child: MyApp(),
         ),
       );
 
-      final MaterialApp materialApp = tester.widget(find.byType(MaterialApp));
+      final materialApp =
+          tester.widget(find.byType(MaterialApp)) as MaterialApp;
       expect(materialApp.theme, ThemeData.light());
 
-      final Finder counterFinder = find.byKey((Key('counter_text')));
+      final counterFinder = find.byKey((Key('counter_text')));
       expect(counterFinder, findsOneWidget);
 
-      final Text counterText = tester.widget(counterFinder);
+      final counterText = tester.widget(counterFinder) as Text;
       expect(counterText.data, '0');
     });
 
-    testWidgets('calls dispose on bloc automatically',
+    testWidgets('calls close on bloc automatically',
         (WidgetTester tester) async {
-      bool counterBlocDisposed = false;
-      bool themeBlocDisposed = false;
+      var counterBlocClosed = false;
+      var themeBlocClosed = false;
 
       await tester.pumpWidget(
         MyAppWithNavigation(
           child: HomePage(
-            onCounterBlocDisposed: () {
-              counterBlocDisposed = true;
+            onCounterBlocClosed: () {
+              counterBlocClosed = true;
             },
-            onThemeBlocDisposed: () {
-              themeBlocDisposed = true;
+            onThemeBlocClosed: () {
+              themeBlocClosed = true;
             },
           ),
         ),
       );
 
-      expect(counterBlocDisposed, false);
-      expect(themeBlocDisposed, false);
+      expect(counterBlocClosed, false);
+      expect(themeBlocClosed, false);
 
       await tester.tap(find.byKey(Key('pop_button')));
       await tester.pumpAndSettle();
 
-      expect(counterBlocDisposed, true);
-      expect(themeBlocDisposed, true);
+      expect(counterBlocClosed, true);
+      expect(themeBlocClosed, true);
     });
 
-    testWidgets('does not dispose when created using value',
+    testWidgets('does not close when created using value',
         (WidgetTester tester) async {
-      bool counterBlocDisposed = false;
-      bool themeBlocDisposed = false;
+      var counterBlocClosed = false;
+      var themeBlocClosed = false;
 
-      final CounterBloc counterBloc = CounterBloc(onDispose: () {
-        counterBlocDisposed = true;
+      final counterBloc = CounterBloc(onClose: () {
+        counterBlocClosed = true;
       });
-      final ThemeBloc themeBloc = ThemeBloc(onDispose: () {
-        themeBlocDisposed = true;
+      final themeBloc = ThemeBloc(onClose: () {
+        themeBlocClosed = true;
       });
 
       await tester.pumpWidget(
@@ -291,14 +290,14 @@ void main() {
         ),
       );
 
-      expect(counterBlocDisposed, false);
-      expect(themeBlocDisposed, false);
+      expect(counterBlocClosed, false);
+      expect(themeBlocClosed, false);
 
       await tester.tap(find.byKey(Key('pop_button')));
       await tester.pumpAndSettle();
 
-      expect(counterBlocDisposed, false);
-      expect(themeBlocDisposed, false);
+      expect(counterBlocClosed, false);
+      expect(themeBlocClosed, false);
     });
   });
 }

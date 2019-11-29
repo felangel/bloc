@@ -39,10 +39,10 @@ void main() {
     MultiBlocProvider(
       providers: [
         BlocProvider<ThemeBloc>(
-          builder: (context) => ThemeBloc(),
+          create: (context) => ThemeBloc(),
         ),
         BlocProvider<SettingsBloc>(
-          builder: (context) => SettingsBloc(),
+          create: (context) => SettingsBloc(),
         ),
       ],
       child: App(weatherRepository: weatherRepository),
@@ -65,7 +65,7 @@ class App extends StatelessWidget {
           title: 'Flutter Weather',
           theme: themeState.theme,
           home: BlocProvider(
-            builder: (context) =>
+            create: (context) =>
                 WeatherBloc(weatherRepository: weatherRepository),
             child: Weather(),
           ),

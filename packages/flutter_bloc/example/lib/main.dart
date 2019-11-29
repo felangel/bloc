@@ -34,13 +34,13 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ThemeBloc>(
-      builder: (context) => ThemeBloc(),
+      create: (context) => ThemeBloc(),
       child: BlocBuilder<ThemeBloc, ThemeData>(
         builder: (context, theme) {
           return MaterialApp(
             title: 'Flutter Demo',
             home: BlocProvider(
-              builder: (context) => CounterBloc(),
+              create: (context) => CounterBloc(),
               child: CounterPage(),
             ),
             theme: theme,
@@ -54,9 +54,6 @@ class App extends StatelessWidget {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final counterBloc = BlocProvider.of<CounterBloc>(context);
-    final themeBloc = BlocProvider.of<ThemeBloc>(context);
-
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
       body: BlocBuilder<CounterBloc, int>(
@@ -77,27 +74,24 @@ class CounterPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: Icon(Icons.add),
-              onPressed: () {
-                counterBloc.dispatch(CounterEvent.increment);
-              },
+              onPressed: () => BlocProvider.of<CounterBloc>(context)
+                  .add(CounterEvent.increment),
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: Icon(Icons.remove),
-              onPressed: () {
-                counterBloc.dispatch(CounterEvent.decrement);
-              },
+              onPressed: () => BlocProvider.of<CounterBloc>(context)
+                  .add(CounterEvent.decrement),
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: Icon(Icons.update),
-              onPressed: () {
-                themeBloc.dispatch(ThemeEvent.toggle);
-              },
+              onPressed: () =>
+                  BlocProvider.of<ThemeBloc>(context).add(ThemeEvent.toggle),
             ),
           ),
         ],
@@ -116,10 +110,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
@@ -135,9 +129,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
   Stream<ThemeData> mapEventToState(ThemeEvent event) async* {
     switch (event) {
       case ThemeEvent.toggle:
-        yield currentState == ThemeData.dark()
-            ? ThemeData.light()
-            : ThemeData.dark();
+        yield state == ThemeData.dark() ? ThemeData.light() : ThemeData.dark();
         break;
     }
   }

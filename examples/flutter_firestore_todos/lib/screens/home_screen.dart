@@ -7,7 +7,6 @@ import 'package:flutter_firestore_todos/models/models.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final tabBloc = BlocProvider.of<TabBloc>(context);
     return BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) {
         return Scaffold(
@@ -28,7 +27,8 @@ class HomeScreen extends StatelessWidget {
           ),
           bottomNavigationBar: TabSelector(
             activeTab: activeTab,
-            onTabSelected: (tab) => tabBloc.dispatch(UpdateTab(tab)),
+            onTabSelected: (tab) =>
+                BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
           ),
         );
       },

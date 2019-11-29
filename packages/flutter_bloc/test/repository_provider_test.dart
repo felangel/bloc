@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     }
     return MaterialApp(
       home: RepositoryProvider<Repository>(
-        builder: (context) => _repository,
+        create: (context) => _repository,
         child: _child,
       ),
     );
@@ -61,7 +61,7 @@ class _MyStatefulAppState extends State<MyStatefulApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: RepositoryProvider<Repository>(
-        builder: (context) => _repository,
+        create: (context) => _repository,
         child: Scaffold(
           appBar: AppBar(
             title: Text('Counter'),
@@ -110,7 +110,7 @@ class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onBuild?.call();
-    Repository repository = RepositoryProvider.of<Repository>(context);
+    final repository = RepositoryProvider.of<Repository>(context);
     assert(repository != null);
 
     return Scaffold(
@@ -171,33 +171,33 @@ void main() {
     testWidgets('passes value to children via builder',
         (WidgetTester tester) async {
       final repository = Repository(0);
-      final CounterPage _child = CounterPage();
+      final _child = CounterPage();
       await tester.pumpWidget(MyApp(
         repository: repository,
         child: _child,
       ));
 
-      final Finder _counterFinder = find.byKey((Key('value_data')));
+      final _counterFinder = find.byKey((Key('value_data')));
       expect(_counterFinder, findsOneWidget);
 
-      final Text _counterText = _counterFinder.evaluate().first.widget as Text;
+      final _counterText = _counterFinder.evaluate().first.widget as Text;
       expect(_counterText.data, '0');
     });
 
     testWidgets('passes value to children via value',
         (WidgetTester tester) async {
       final repository = Repository(0);
-      final CounterPage _child = CounterPage();
+      final _child = CounterPage();
       await tester.pumpWidget(MyApp(
         repository: repository,
         child: _child,
         useValueProvider: true,
       ));
 
-      final Finder _counterFinder = find.byKey((Key('value_data')));
+      final _counterFinder = find.byKey((Key('value_data')));
       expect(_counterFinder, findsOneWidget);
 
-      final Text _counterText = _counterFinder.evaluate().first.widget as Text;
+      final _counterText = _counterFinder.evaluate().first.widget as Text;
       expect(_counterText.data, '0');
     });
 
@@ -217,8 +217,8 @@ void main() {
         1. The context you used comes from a widget above the RepositoryProvider.
         2. You used MultiRepositoryProvider and didn\'t explicity provide the RepositoryProvider types.
 
-        Good: RepositoryProvider<Repository>(builder: (context) => Repository())
-        Bad: RepositoryProvider(builder: (context) => Repository()).
+        Good: RepositoryProvider<Repository>(create: (context) => Repository())
+        Bad: RepositoryProvider(create: (context) => Repository()).
 
         The context used was: CounterPage(dirty)
 """;
@@ -229,7 +229,7 @@ void main() {
     testWidgets(
         'should not rebuild widgets that inherited the value if the value is changed',
         (WidgetTester tester) async {
-      int numBuilds = 0;
+      var numBuilds = 0;
       final Widget _child = CounterPage(
         onBuild: () {
           numBuilds++;

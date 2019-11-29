@@ -7,7 +7,6 @@ import 'package:flutter_weather/blocs/blocs.dart';
 class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final settingsBloc = BlocProvider.of<SettingsBloc>(context);
     return Scaffold(
       appBar: AppBar(title: Text('Settings')),
       body: ListView(
@@ -23,8 +22,8 @@ class Settings extends StatelessWidget {
                     Text('Use metric measurements for temperature units.'),
                 trailing: Switch(
                   value: state.temperatureUnits == TemperatureUnits.celsius,
-                  onChanged: (_) =>
-                      settingsBloc.dispatch(TemperatureUnitsToggled()),
+                  onChanged: (_) => BlocProvider.of<SettingsBloc>(context)
+                      .add(TemperatureUnitsToggled()),
                 ),
               );
             },

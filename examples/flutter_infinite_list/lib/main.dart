@@ -21,8 +21,8 @@ class App extends StatelessWidget {
           title: Text('Posts'),
         ),
         body: BlocProvider(
-          builder: (context) =>
-              PostBloc(httpClient: http.Client())..dispatch(Fetch()),
+          create: (context) =>
+              PostBloc(httpClient: http.Client())..add(Fetch()),
           child: HomePage(),
         ),
       ),
@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= _scrollThreshold) {
-      _postBloc.dispatch(Fetch());
+      _postBloc.add(Fetch());
     }
   }
 }

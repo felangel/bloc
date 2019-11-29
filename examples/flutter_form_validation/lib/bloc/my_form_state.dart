@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-@immutable
 class MyFormState extends Equatable {
   final String email;
   final bool isEmailValid;
@@ -11,19 +10,13 @@ class MyFormState extends Equatable {
 
   bool get isFormValid => isEmailValid && isPasswordValid;
 
-  MyFormState({
+  const MyFormState({
     @required this.email,
     @required this.isEmailValid,
     @required this.password,
     @required this.isPasswordValid,
     @required this.formSubmittedSuccessfully,
-  }) : super([
-          email,
-          isEmailValid,
-          password,
-          isPasswordValid,
-          formSubmittedSuccessfully,
-        ]);
+  });
 
   factory MyFormState.initial() {
     return MyFormState(
@@ -51,6 +44,15 @@ class MyFormState extends Equatable {
           formSubmittedSuccessfully ?? this.formSubmittedSuccessfully,
     );
   }
+
+  @override
+  List<Object> get props => [
+        email,
+        isEmailValid,
+        password,
+        isPasswordValid,
+        formSubmittedSuccessfully,
+      ];
 
   @override
   String toString() {

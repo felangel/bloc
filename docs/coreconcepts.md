@@ -8,7 +8,7 @@ In the upcoming sections, we're going to discuss each of them in detail as well 
 
 ## Events
 
-> Events are the input to a Bloc. They are commonly dispatched in response to user interactions such as button presses or lifecycle events like page loads.
+> Events are the input to a Bloc. They are commonly added in response to user interactions such as button presses or lifecycle events like page loads.
 
 When designing an app we need to step back and define how users will interact with it. In the context of our counter app we will have two buttons to increment and decrement our counter.
 
@@ -123,7 +123,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 In the above code snippet, we are declaring our `CounterBloc` as a Bloc which converts `CounterEvents` into `ints`.
 
-> Every Bloc must define an initial state which is the state before any events have been recieved.
+> Every Bloc must define an initial state which is the state before any events have been received.
 
 In this case, we want our counter to start at `0`.
 
@@ -132,17 +132,17 @@ In this case, we want our counter to start at `0`.
 int get initialState => 0;
 ```
 
-> Every Bloc must implement a function called `mapEventToState`. The function takes the incoming `event` as an argument and must return a `Stream` of new `states` which is consumed by the presentation layer. We can access the current bloc state at any time using the `currentState` property.
+> Every Bloc must implement a function called `mapEventToState`. The function takes the incoming `event` as an argument and must return a `Stream` of new `states` which is consumed by the presentation layer. We can access the current bloc state at any time using the `state` property.
 
 ```dart
 @override
 Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
 }
@@ -163,21 +163,21 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
 }
 ```
 
-!> Blocs will ignore duplicate states. If a Bloc yields `State state` where `currentState == state`, then no transition will occur and no change will be made to the `Stream<State>`.
+!> Blocs will ignore duplicate states. If a Bloc yields `State nextState` where `state == nextState`, then no transition will occur and no change will be made to the `Stream<State>`.
 
 At this point, you're probably wondering _"How do I notify a Bloc of an event?"_.
 
-> Every Bloc has a `dispatch` method. `Dispatch` takes an `event` and triggers `mapEventToState`. `Dispatch` may be called from the presentation layer or from within the Bloc and notifies the Bloc of a new `event`.
+> Every Bloc has a `add` method. `Add` takes an `event` and triggers `mapEventToState`. `Add` may be called from the presentation layer or from within the Bloc and notifies the Bloc of a new `event`.
 
 We can create a simple application which counts from 0 to 3.
 
@@ -186,10 +186,12 @@ void main() {
     CounterBloc bloc = CounterBloc();
 
     for (int i = 0; i < 3; i++) {
-        bloc.dispatch(CounterEvent.increment);
+        bloc.add(CounterEvent.increment);
     }
 }
 ```
+
+!> By default, events will always be processed in the order in which they were added and any newly added events are enqueued. An event is considered fully processed once `mapEventToState` has finished executing.
 
 The `Transitions` in the above code snippet would be
 
@@ -269,12 +271,12 @@ void main() {
   CounterBloc bloc = CounterBloc();
 
   for (int i = 0; i < 3; i++) {
-    bloc.dispatch(CounterEvent.increment);
+    bloc.add(CounterEvent.increment);
   }
 }
 ```
 
-If we want to be able to do something in response to all `Events` dispatched, we can also override the `onEvent` method in our `SimpleBlocDelegate`.
+If we want to be able to do something in response to all `Events` added, we can also override the `onEvent` method in our `SimpleBlocDelegate`.
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {

@@ -12,22 +12,22 @@ class ExtraActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todosBloc = BlocProvider.of<TodosBloc>(context);
     return BlocBuilder<TodosBloc, TodosState>(
       builder: (context, state) {
         if (state is TodosLoaded) {
-          bool allComplete = (todosBloc.currentState as TodosLoaded)
-              .todos
-              .every((todo) => todo.complete);
+          bool allComplete =
+              (BlocProvider.of<TodosBloc>(context).state as TodosLoaded)
+                  .todos
+                  .every((todo) => todo.complete);
           return PopupMenuButton<ExtraAction>(
             key: FlutterTodosKeys.extraActionsPopupMenuButton,
             onSelected: (action) {
               switch (action) {
                 case ExtraAction.clearCompleted:
-                  todosBloc.dispatch(ClearCompleted());
+                  BlocProvider.of<TodosBloc>(context).add(ClearCompleted());
                   break;
                 case ExtraAction.toggleAllComplete:
-                  todosBloc.dispatch(ToggleAll());
+                  BlocProvider.of<TodosBloc>(context).add(ToggleAll());
                   break;
               }
             },

@@ -20,14 +20,14 @@ class CounterPageComponent implements OnDestroy {
 
   @override
   void ngOnDestroy() {
-    counterBloc.dispose();
+    counterBloc.close();
   }
 
   void increment() {
-    counterBloc.dispatch(CounterEvent.increment);
+    counterBloc.add(CounterEvent.increment);
   }
 
   void decrement() {
-    counterBloc.dispatch(CounterEvent.decrement);
+    counterBloc.add(CounterEvent.decrement);
   }
 }

@@ -1,16 +1,17 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:todos_repository/todos_repository.dart';
 
-@immutable
 abstract class StatsEvent extends Equatable {
-  StatsEvent([List props = const []]) : super(props);
+  const StatsEvent();
 }
 
 class UpdateStats extends StatsEvent {
   final List<Todo> todos;
 
-  UpdateStats(this.todos) : super([todos]);
+  const UpdateStats(this.todos);
+
+  @override
+  List<Object> get props => [todos];
 
   @override
   String toString() => 'UpdateStats { todos: $todos }';

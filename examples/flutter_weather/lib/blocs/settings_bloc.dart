@@ -6,16 +6,21 @@ import 'package:equatable/equatable.dart';
 
 abstract class SettingsEvent extends Equatable {}
 
-class TemperatureUnitsToggled extends SettingsEvent {}
+class TemperatureUnitsToggled extends SettingsEvent {
+  @override
+  List<Object> get props => [];
+}
 
 enum TemperatureUnits { fahrenheit, celsius }
 
 class SettingsState extends Equatable {
   final TemperatureUnits temperatureUnits;
 
-  SettingsState({@required this.temperatureUnits})
-      : assert(temperatureUnits != null),
-        super([temperatureUnits]);
+  const SettingsState({@required this.temperatureUnits})
+      : assert(temperatureUnits != null);
+
+  @override
+  List<Object> get props => [temperatureUnits];
 }
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
@@ -27,10 +32,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   Stream<SettingsState> mapEventToState(SettingsEvent event) async* {
     if (event is TemperatureUnitsToggled) {
       yield SettingsState(
-        temperatureUnits:
-            currentState.temperatureUnits == TemperatureUnits.celsius
-                ? TemperatureUnits.fahrenheit
-                : TemperatureUnits.celsius,
+        temperatureUnits: state.temperatureUnits == TemperatureUnits.celsius
+            ? TemperatureUnits.fahrenheit
+            : TemperatureUnits.celsius,
       );
     }
   }

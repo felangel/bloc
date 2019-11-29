@@ -13,13 +13,13 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final loginBloc = BlocProvider.of<LoginBloc>(context);
-
     _onLoginButtonPressed() {
-      loginBloc.dispatch(LoginButtonPressed(
-        username: _usernameController.text,
-        password: _passwordController.text,
-      ));
+      BlocProvider.of<LoginBloc>(context).add(
+        LoginButtonPressed(
+          username: _usernameController.text,
+          password: _passwordController.text,
+        ),
+      );
     }
 
     return BlocListener<LoginBloc, LoginState>(

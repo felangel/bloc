@@ -1,3 +1,35 @@
+# 2.1.1
+
+- Fix internal analysis warnings
+- Enforce provider `^3.2.0`
+
+# 2.1.0
+
+- Deprecate `builder` in `BlocProvider` in favor of `create` to align with `provider`.
+- Deprecate `builder` in `RepositoryProvider` in favor of `create` to align with `provider`.
+
+# 2.0.1
+
+- Fix `BlocBuilder` and `BlocListener` condition behavior to set `previousState` to the previous state used by `BlocBuilder`/`BlocListener` instead of the previous state of the `bloc`.
+- Minor Documentation Updates
+
+# 2.0.0
+
+- Updated to `bloc: ^2.0.0` and Documentation Updates
+- Adhere to [effective dart](https://dart.dev/guides/language/effective-dart) ([#561](https://github.com/felangel/bloc/issues/561))
+
+# 1.0.0
+
+Updated to `bloc: ^1.0.0` and Documentation Updates
+
+# 0.22.1
+
+Minor Bugfixes and Documentation Updates
+
+# 0.22.0
+
+Updated to `bloc: ^0.16.0` and Documentation Updates
+
 # 0.21.0
 
 Updated to `bloc: ^0.15.0` and Documentation Updates

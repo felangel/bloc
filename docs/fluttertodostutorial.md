@@ -25,8 +25,8 @@ environment:
 
 dependencies:
   meta: ">=1.1.0 <2.0.0"
-  equatable: ^0.2.0
-  flutter_bloc: ^0.21.0
+  equatable: ^0.6.0
+  flutter_bloc: ^2.0.0
   flutter:
     sdk: flutter
 
@@ -138,21 +138,22 @@ Let's create a `models` directory and create `todo.dart`.
 
 ```dart
 import 'package:todos_app_core/todos_app_core.dart';
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:todos_repository_core/todos_repository_core.dart';
 
-@immutable
 class Todo extends Equatable {
   final bool complete;
   final String id;
   final String note;
   final String task;
 
-  Todo(this.task, {this.complete = false, String note = '', String id})
-      : this.note = note ?? '',
-        this.id = id ?? Uuid().generateV4(),
-        super([complete, id, note, task]);
+  Todo(
+    this.task, {
+    this.complete = false,
+    String note = '',
+    String id,
+  })  : this.note = note ?? '',
+        this.id = id ?? Uuid().generateV4();
 
   Todo copyWith({bool complete, String id, String note, String task}) {
     return Todo(
@@ -162,6 +163,9 @@ class Todo extends Equatable {
       note: note ?? this.note,
     );
   }
+
+  @override
+  List<Object> get props => [complete, id, note, task];
 
   @override
   String toString() {
@@ -199,35 +203,31 @@ The three states we will implement are:
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class TodosState extends Equatable {
-  TodosState([List props = const []]) : super(props);
+  const TodosState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class TodosLoading extends TodosState {
-  @override
-  String toString() => 'TodosLoading';
-}
+class TodosLoading extends TodosState {}
 
 class TodosLoaded extends TodosState {
   final List<Todo> todos;
 
-  TodosLoaded([this.todos = const []]) : super([todos]);
+  const TodosLoaded([this.todos = const []]);
+
+  @override
+  List<Object> get props => [todos];
 
   @override
   String toString() => 'TodosLoaded { todos: $todos }';
 }
 
-class TodosNotLoaded extends TodosState {
-  @override
-  String toString() => 'TodosNotLoaded';
-}
+class TodosNotLoaded extends TodosState {}
 ```
-
-?> **Note:** We are annotating our base `TodosState` with the [immutable](https://docs.flutter.io/flutter/meta/immutable-constant.html) decorator so that we can indicate that all `TodosStates` cannot be changed.
 
 Next, let's implement the events we will need to handle.
 
@@ -246,23 +246,24 @@ Create `blocs/todos/todos_event.dart` and let's implement the events we describe
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class TodosEvent extends Equatable {
-  TodosEvent([List props = const []]) : super(props);
+  const TodosEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
-class LoadTodos extends TodosEvent {
-  @override
-  String toString() => 'LoadTodos';
-}
+class LoadTodos extends TodosEvent {}
 
 class AddTodo extends TodosEvent {
   final Todo todo;
 
-  AddTodo(this.todo) : super([todo]);
+  const AddTodo(this.todo);
+
+  @override
+  List<Object> get props => [todo];
 
   @override
   String toString() => 'AddTodo { todo: $todo }';
@@ -271,7 +272,10 @@ class AddTodo extends TodosEvent {
 class UpdateTodo extends TodosEvent {
   final Todo updatedTodo;
 
-  UpdateTodo(this.updatedTodo) : super([updatedTodo]);
+  const UpdateTodo(this.updatedTodo);
+
+  @override
+  List<Object> get props => [updatedTodo];
 
   @override
   String toString() => 'UpdateTodo { updatedTodo: $updatedTodo }';
@@ -280,21 +284,18 @@ class UpdateTodo extends TodosEvent {
 class DeleteTodo extends TodosEvent {
   final Todo todo;
 
-  DeleteTodo(this.todo) : super([todo]);
+  const DeleteTodo(this.todo);
+
+  @override
+  List<Object> get props => [todo];
 
   @override
   String toString() => 'DeleteTodo { todo: $todo }';
 }
 
-class ClearCompleted extends TodosEvent {
-  @override
-  String toString() => 'ClearCompleted';
-}
+class ClearCompleted extends TodosEvent {}
 
-class ToggleAll extends TodosEvent {
-  @override
-  String toString() => 'ToggleAll';
-}
+class ToggleAll extends TodosEvent {}
 ```
 
 Now that we have our `TodosStates` and `TodosEvents` implemented we can implement our `TodosBloc`.
@@ -348,18 +349,17 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
-    if (currentState is TodosLoaded) {
-      final List<Todo> updatedTodos =
-          List.from((currentState as TodosLoaded).todos)..add(event.todo);
+    if (state is TodosLoaded) {
+      final List<Todo> updatedTodos = List.from((state as TodosLoaded).todos)
+        ..add(event.todo);
       yield TodosLoaded(updatedTodos);
       _saveTodos(updatedTodos);
     }
   }
 
   Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
-    if (currentState is TodosLoaded) {
-      final List<Todo> updatedTodos =
-          (currentState as TodosLoaded).todos.map((todo) {
+    if (state is TodosLoaded) {
+      final List<Todo> updatedTodos = (state as TodosLoaded).todos.map((todo) {
         return todo.id == event.updatedTodo.id ? event.updatedTodo : todo;
       }).toList();
       yield TodosLoaded(updatedTodos);
@@ -368,8 +368,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
-    if (currentState is TodosLoaded) {
-      final updatedTodos = (currentState as TodosLoaded)
+    if (state is TodosLoaded) {
+      final updatedTodos = (state as TodosLoaded)
           .todos
           .where((todo) => todo.id != event.todo.id)
           .toList();
@@ -379,10 +379,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapToggleAllToState() async* {
-    if (currentState is TodosLoaded) {
+    if (state is TodosLoaded) {
       final allComplete =
-          (currentState as TodosLoaded).todos.every((todo) => todo.complete);
-      final List<Todo> updatedTodos = (currentState as TodosLoaded)
+          (state as TodosLoaded).todos.every((todo) => todo.complete);
+      final List<Todo> updatedTodos = (state as TodosLoaded)
           .todos
           .map((todo) => todo.copyWith(complete: !allComplete))
           .toList();
@@ -392,11 +392,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapClearCompletedToState() async* {
-    if (currentState is TodosLoaded) {
-      final List<Todo> updatedTodos = (currentState as TodosLoaded)
-          .todos
-          .where((todo) => !todo.complete)
-          .toList();
+    if (state is TodosLoaded) {
+      final List<Todo> updatedTodos =
+          (state as TodosLoaded).todos.where((todo) => !todo.complete).toList();
       yield TodosLoaded(updatedTodos);
       _saveTodos(updatedTodos);
     }
@@ -410,7 +408,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 }
 ```
 
-!> When we yield a state in the private `mapEventToState` handlers, we are always yielding a new state instead of mutating the `currentState`. This is because every time we yield, bloc will compare the `currentState` to the `nextState` and will only trigger a state change (`transition`) if the two states are **not equal**. If we just mutate and yield the same instance of state, then `currentState == nextState` would evaluate to true and no state change would occur.
+!> When we yield a state in the private `mapEventToState` handlers, we are always yielding a new state instead of mutating the `state`. This is because every time we yield, bloc will compare the `state` to the `nextState` and will only trigger a state change (`transition`) if the two states are **not equal**. If we just mutate and yield the same instance of state, then `state == nextState` would evaluate to true and no state change would occur.
 
 Our `TodosBloc` will have a dependency on the `TodosRepository` so that it can load and save todos. It will have an initial state of `TodosLoading` and defines the private handlers for each of the events. Whenever the `TodosBloc` changes the list of todos it calls the `saveTodos` method in the `TodosRepository` in order to keep everything persisted locally.
 
@@ -457,25 +455,28 @@ Let's create `blocs/filtered_todos/filtered_todos_state.dart` and implement the 
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class FilteredTodosState extends Equatable {
-  FilteredTodosState([List props = const []]) : super(props);
+  const FilteredTodosState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class FilteredTodosLoading extends FilteredTodosState {
-  @override
-  String toString() => 'FilteredTodosLoading';
-}
+class FilteredTodosLoading extends FilteredTodosState {}
 
 class FilteredTodosLoaded extends FilteredTodosState {
   final List<Todo> filteredTodos;
   final VisibilityFilter activeFilter;
 
-  FilteredTodosLoaded(this.filteredTodos, this.activeFilter)
-      : super([filteredTodos, activeFilter]);
+  const FilteredTodosLoaded(
+    this.filteredTodos,
+    this.activeFilter,
+  );
+
+  @override
+  List<Object> get props => [filteredTodos, activeFilter];
 
   @override
   String toString() {
@@ -497,18 +498,19 @@ Create `blocs/filtered_todos/filtered_todos_event.dart` and let's implement the 
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class FilteredTodosEvent extends Equatable {
-  FilteredTodosEvent([List props = const []]) : super(props);
+  const FilteredTodosEvent();
 }
 
 class UpdateFilter extends FilteredTodosEvent {
   final VisibilityFilter filter;
 
-  UpdateFilter(this.filter) : super([filter]);
+  const UpdateFilter(this.filter);
+
+  @override
+  List<Object> get props => [filter];
 
   @override
   String toString() => 'UpdateFilter { filter: $filter }';
@@ -517,7 +519,10 @@ class UpdateFilter extends FilteredTodosEvent {
 class UpdateTodos extends FilteredTodosEvent {
   final List<Todo> todos;
 
-  UpdateTodos(this.todos) : super([todos]);
+  const UpdateTodos(this.todos);
+
+  @override
+  List<Object> get props => [todos];
 
   @override
   String toString() => 'UpdateTodos { todos: $todos }';
@@ -545,18 +550,18 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   StreamSubscription todosSubscription;
 
   FilteredTodosBloc({@required this.todosBloc}) {
-    todosSubscription = todosBloc.state.listen((state) {
+    todosSubscription = todosBloc.listen((state) {
       if (state is TodosLoaded) {
-        dispatch(UpdateTodos((todosBloc.currentState as TodosLoaded).todos));
+        add(UpdateTodos((todosBloc.state as TodosLoaded).todos));
       }
     });
   }
 
   @override
   FilteredTodosState get initialState {
-    return todosBloc.currentState is TodosLoaded
+    return todosBloc.state is TodosLoaded
         ? FilteredTodosLoaded(
-            (todosBloc.currentState as TodosLoaded).todos,
+            (todosBloc.state as TodosLoaded).todos,
             VisibilityFilter.all,
           )
         : FilteredTodosLoading();
@@ -574,10 +579,10 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   Stream<FilteredTodosState> _mapUpdateFilterToState(
     UpdateFilter event,
   ) async* {
-    if (todosBloc.currentState is TodosLoaded) {
+    if (todosBloc.state is TodosLoaded) {
       yield FilteredTodosLoaded(
         _mapTodosToFilteredTodos(
-          (todosBloc.currentState as TodosLoaded).todos,
+          (todosBloc.state as TodosLoaded).todos,
           event.filter,
         ),
         event.filter,
@@ -588,12 +593,12 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   Stream<FilteredTodosState> _mapTodosUpdatedToState(
     UpdateTodos event,
   ) async* {
-    final visibilityFilter = currentState is FilteredTodosLoaded
-        ? (currentState as FilteredTodosLoaded).activeFilter
+    final visibilityFilter = state is FilteredTodosLoaded
+        ? (state as FilteredTodosLoaded).activeFilter
         : VisibilityFilter.all;
     yield FilteredTodosLoaded(
       _mapTodosToFilteredTodos(
-        (todosBloc.currentState as TodosLoaded).todos,
+        (todosBloc.state as TodosLoaded).todos,
         visibilityFilter,
       ),
       visibilityFilter,
@@ -607,21 +612,21 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
         return true;
       } else if (filter == VisibilityFilter.active) {
         return !todo.complete;
-      } else if (filter == VisibilityFilter.completed) {
+      } else {
         return todo.complete;
       }
     }).toList();
   }
 
   @override
-  void dispose() {
+  Future<void> close() {
     todosSubscription.cancel();
-    super.dispose();
+    return super.close();
   }
 }
 ```
 
-!> We create a `StreamSubscription` for the stream of `TodosStates` so that we can listen to the state changes in the `TodosBloc`. We override the bloc's dispose method and cancel the subscription so that we can clean up after the bloc is disposed.
+!> We create a `StreamSubscription` for the stream of `TodosStates` so that we can listen to the state changes in the `TodosBloc`. We override the bloc's close method and cancel the subscription so that we can clean up after the bloc is closed.
 
 ### Barrel File
 
@@ -652,24 +657,24 @@ Create `blocs/stats/stats_state.dart` and let's implement our `StatsState`.
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 abstract class StatsState extends Equatable {
-  StatsState([List props = const []]) : super(props);
+  const StatsState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class StatsLoading extends StatsState {
-  @override
-  String toString() => 'StatsLoading';
-}
+class StatsLoading extends StatsState {}
 
 class StatsLoaded extends StatsState {
   final int numActive;
   final int numCompleted;
 
-  StatsLoaded(this.numActive, this.numCompleted)
-      : super([numActive, numCompleted]);
+  const StatsLoaded(this.numActive, this.numCompleted);
+
+  @override
+  List<Object> get props => [numActive, numCompleted];
 
   @override
   String toString() {
@@ -682,24 +687,25 @@ Next, let's define and implement the `StatsEvents`.
 
 ### Events
 
-There will just be a single event our `StatsBloc` will respond to: `UpdateStats`. This event will be dispatched whenever the `TodosBloc` state changes so that our `StatsBloc` can recalculate the new statistics.
+There will just be a single event our `StatsBloc` will respond to: `UpdateStats`. This event will be added whenever the `TodosBloc` state changes so that our `StatsBloc` can recalculate the new statistics.
 
 Create `blocs/stats/states_event.dart` and let's implement it.
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class StatsEvent extends Equatable {
-  StatsEvent([List props = const []]) : super(props);
+  const StatsEvent();
 }
 
 class UpdateStats extends StatsEvent {
   final List<Todo> todos;
 
-  UpdateStats(this.todos) : super([todos]);
+  const UpdateStats(this.todos);
+
+  @override
+  List<Object> get props => [todos];
 
   @override
   String toString() => 'UpdateStats { todos: $todos }';
@@ -725,9 +731,9 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   StreamSubscription todosSubscription;
 
   StatsBloc({@required this.todosBloc}) {
-    todosSubscription = todosBloc.state.listen((state) {
+    todosSubscription = todosBloc.listen((state) {
       if (state is TodosLoaded) {
-        dispatch(UpdateStats(state.todos));
+        add(UpdateStats(state.todos));
       }
     });
   }
@@ -747,9 +753,9 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   }
 
   @override
-  void dispose() {
+  Future<void> close() {
     todosSubscription.cancel();
-    super.dispose();
+    return super.close();
   }
 }
 ```
@@ -782,18 +788,19 @@ Create `blocs/tab/tab_event.dart`:
 
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class TabEvent extends Equatable {
-  TabEvent([List props = const []]) : super(props);
+  const TabEvent();
 }
 
 class UpdateTab extends TabEvent {
   final AppTab tab;
 
-  UpdateTab(this.tab) : super([tab]);
+  const UpdateTab(this.tab);
+
+  @override
+  List<Object> get props => [tab];
 
   @override
   String toString() => 'UpdateTab { tab: $tab }';
@@ -903,7 +910,6 @@ import 'package:flutter_todos/models/models.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final tabBloc = BlocProvider.of<TabBloc>(context);
     return BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) {
         return Scaffold(
@@ -925,7 +931,8 @@ class HomeScreen extends StatelessWidget {
           ),
           bottomNavigationBar: TabSelector(
             activeTab: activeTab,
-            onTabSelected: (tab) => tabBloc.dispatch(UpdateTab(tab)),
+            onTabSelected: (tab) =>
+                BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
           ),
         );
       },
@@ -961,9 +968,8 @@ class DetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todosBloc = BlocProvider.of<TodosBloc>(context);
     return BlocBuilder<TodosBloc, TodosState>(
-      builder: (BuildContext context, TodosState state) {
+      builder: (context, state) {
         final todo = (state as TodosLoaded)
             .todos
             .firstWhere((todo) => todo.id == id, orElse: () => null);
@@ -977,7 +983,7 @@ class DetailsScreen extends StatelessWidget {
                 key: ArchSampleKeys.deleteTodoButton,
                 icon: Icon(Icons.delete),
                 onPressed: () {
-                  todosBloc.dispatch(DeleteTodo(todo));
+                  BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
                   Navigator.pop(context, todo);
                 },
               )
@@ -998,7 +1004,7 @@ class DetailsScreen extends StatelessWidget {
                                 key: FlutterTodosKeys.detailsScreenCheckBox,
                                 value: todo.complete,
                                 onChanged: (_) {
-                                  todosBloc.dispatch(
+                                  BlocProvider.of<TodosBloc>(context).add(
                                     UpdateTodo(
                                       todo.copyWith(complete: !todo.complete),
                                     ),
@@ -1051,7 +1057,7 @@ class DetailsScreen extends StatelessWidget {
                           return AddEditScreen(
                             key: ArchSampleKeys.editTodoScreen,
                             onSave: (task, note) {
-                              todosBloc.dispatch(
+                              BlocProvider.of<TodosBloc>(context).add(
                                 UpdateTodo(
                                   todo.copyWith(task: task, note: note),
                                 ),
@@ -1074,7 +1080,7 @@ class DetailsScreen extends StatelessWidget {
 
 ?> **Note:** The `DetailsScreen` requires a todo id so that it can pull the todo details from the `TodosBloc` and so that it can update whenever a todo's details have been changed (a todo's id cannot be changed).
 
-The main things to note are that there is an `IconButton` which dispatches a `DeleteTodo` event as well as a checkbox which dispatches an `UpdateTodo` event.
+The main things to note are that there is an `IconButton` which adds a `DeleteTodo` event as well as a checkbox which adds an `UpdateTodo` event.
 
 There is also another `FloatingActionButton` which navigates the user to the `AddEditScreen` with `isEditing` set to `true`. We'll take a look at the `AddEditScreen` next.
 
@@ -1228,26 +1234,24 @@ class FilterButton extends StatelessWidget {
         .textTheme
         .body1
         .copyWith(color: Theme.of(context).accentColor);
-    final FilteredTodosBloc filteredTodosBloc =
-        BlocProvider.of<FilteredTodosBloc>(context);
     return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
         builder: (context, state) {
-          final button = _Button(
-            onSelected: (filter) {
-              filteredTodosBloc.dispatch(UpdateFilter(filter));
-            },
-            activeFilter: state is FilteredTodosLoaded
-                ? state.activeFilter
-                : VisibilityFilter.all,
-            activeStyle: activeStyle,
-            defaultStyle: defaultStyle,
-          );
-          return AnimatedOpacity(
-            opacity: visible ? 1.0 : 0.0,
-            duration: Duration(milliseconds: 150),
-            child: visible ? button : IgnorePointer(child: button),
-          );
-        });
+      final button = _Button(
+        onSelected: (filter) {
+          BlocProvider.of<FilteredTodosBloc>(context).add(UpdateFilter(filter));
+        },
+        activeFilter: state is FilteredTodosLoaded
+            ? state.activeFilter
+            : VisibilityFilter.all,
+        activeStyle: activeStyle,
+        defaultStyle: defaultStyle,
+      );
+      return AnimatedOpacity(
+        opacity: visible ? 1.0 : 0.0,
+        duration: Duration(milliseconds: 150),
+        child: visible ? button : IgnorePointer(child: button),
+      );
+    });
   }
 }
 
@@ -1344,44 +1348,43 @@ class ExtraActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todosBloc = BlocProvider.of<TodosBloc>(context);
     return BlocBuilder<TodosBloc, TodosState>(
       builder: (context, state) {
         if (state is TodosLoaded) {
-          bool allComplete = (todosBloc.currentState as TodosLoaded)
-              .todos
-              .every((todo) => todo.complete);
+          bool allComplete =
+              (BlocProvider.of<TodosBloc>(context).state as TodosLoaded)
+                  .todos
+                  .every((todo) => todo.complete);
           return PopupMenuButton<ExtraAction>(
             key: FlutterTodosKeys.extraActionsPopupMenuButton,
             onSelected: (action) {
               switch (action) {
                 case ExtraAction.clearCompleted:
-                  todosBloc.dispatch(ClearCompleted());
+                  BlocProvider.of<TodosBloc>(context).add(ClearCompleted());
                   break;
                 case ExtraAction.toggleAllComplete:
-                  todosBloc.dispatch(ToggleAll());
+                  BlocProvider.of<TodosBloc>(context).add(ToggleAll());
                   break;
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuItem<ExtraAction>>[
-                  PopupMenuItem<ExtraAction>(
-                    key: ArchSampleKeys.toggleAll,
-                    value: ExtraAction.toggleAllComplete,
-                    child: Text(
-                      allComplete
-                          ? ArchSampleLocalizations.of(context)
-                              .markAllIncomplete
-                          : ArchSampleLocalizations.of(context).markAllComplete,
-                    ),
-                  ),
-                  PopupMenuItem<ExtraAction>(
-                    key: ArchSampleKeys.clearCompleted,
-                    value: ExtraAction.clearCompleted,
-                    child: Text(
-                      ArchSampleLocalizations.of(context).clearCompleted,
-                    ),
-                  ),
-                ],
+              PopupMenuItem<ExtraAction>(
+                key: ArchSampleKeys.toggleAll,
+                value: ExtraAction.toggleAllComplete,
+                child: Text(
+                  allComplete
+                      ? ArchSampleLocalizations.of(context).markAllIncomplete
+                      : ArchSampleLocalizations.of(context).markAllComplete,
+                ),
+              ),
+              PopupMenuItem<ExtraAction>(
+                key: ArchSampleKeys.clearCompleted,
+                value: ExtraAction.clearCompleted,
+                child: Text(
+                  ArchSampleLocalizations.of(context).clearCompleted,
+                ),
+              ),
+            ],
           );
         }
         return Container(key: FlutterTodosKeys.extraActionsEmptyContainer);
@@ -1393,7 +1396,7 @@ class ExtraActions extends StatelessWidget {
 
 Just like with the `FilterButton`, we use `BlocProvider` to access the `TodosBloc` from the `BuildContext` and `BlocBuilder` to respond to state changes in the `TodosBloc`.
 
-Based on the action selected, the widget dispatches an event to the `TodosBloc` to either `ToggleAll` todos' completion states or `ClearCompleted` todos.
+Based on the action selected, the widget adds an event to the `TodosBloc` to either `ToggleAll` todos' completion states or `ClearCompleted` todos.
 
 Next we'll take a look at the `TabSelector` widget.
 
@@ -1470,7 +1473,6 @@ class FilteredTodos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todosBloc = BlocProvider.of<TodosBloc>(context);
     final localizations = ArchSampleLocalizations.of(context);
 
     return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
@@ -1487,11 +1489,12 @@ class FilteredTodos extends StatelessWidget {
               return TodoItem(
                 todo: todo,
                 onDismissed: (direction) {
-                  todosBloc.dispatch(DeleteTodo(todo));
+                  BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
                   Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
                     key: ArchSampleKeys.snackbar,
                     todo: todo,
-                    onUndo: () => todosBloc.dispatch(AddTodo(todo)),
+                    onUndo: () =>
+                        BlocProvider.of<TodosBloc>(context).add(AddTodo(todo)),
                     localizations: localizations,
                   ));
                 },
@@ -1505,13 +1508,14 @@ class FilteredTodos extends StatelessWidget {
                     Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
                       key: ArchSampleKeys.snackbar,
                       todo: todo,
-                      onUndo: () => todosBloc.dispatch(AddTodo(todo)),
+                      onUndo: () => BlocProvider.of<TodosBloc>(context)
+                          .add(AddTodo(todo)),
                       localizations: localizations,
                     ));
                   }
                 },
                 onCheckboxChanged: (_) {
-                  todosBloc.dispatch(
+                  BlocProvider.of<TodosBloc>(context).add(
                     UpdateTodo(todo.copyWith(complete: !todo.complete)),
                   );
                 },
@@ -1687,8 +1691,8 @@ class Stats extends StatelessWidget {
   Stats({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {    
-    return BlocBuilder<StatsBloc, StatsState>(      
+  Widget build(BuildContext context) {
+    return BlocBuilder<StatsBloc, StatsState>(
       builder: (context, state) {
         if (state is StatsLoading) {
           return LoadingIndicator(key: FlutterTodosKeys.statsLoadingIndicator);
@@ -1750,7 +1754,7 @@ void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(
     BlocProvider(
-      builder: (context) {
+      create: (context) {
         return TodosBloc(
           todosRepository: const TodosRepositoryFlutter(
             fileStorage: const FileStorage(
@@ -1758,7 +1762,7 @@ void main() {
               getApplicationDocumentsDirectory,
             ),
           ),
-        )..dispatch(LoadTodos());
+        )..add(LoadTodos());
       },
       child: TodosApp(),
     ),
@@ -1768,7 +1772,7 @@ void main() {
 
 ?> **Note:** We are setting our BlocSupervisor's delegate to the `SimpleBlocDelegate` we created earlier so that we can hook into all transitions and errors.
 
-?> **Note:** We are also wrapping our `TodosApp` widget in a `BlocProvider` which manages initializing, disposing, and providing the `TodosBloc` to our entire widget tree from [flutter_bloc](https://pub.dev/packages/flutter_bloc). We immediately dispatch the `LoadTodos` event in order to request the latest todos.
+?> **Note:** We are also wrapping our `TodosApp` widget in a `BlocProvider` which manages initializing, closing, and providing the `TodosBloc` to our entire widget tree from [flutter_bloc](https://pub.dev/packages/flutter_bloc). We immediately add the `LoadTodos` event in order to request the latest todos.
 
 Next, let's implement our `TodosApp` widget.
 
@@ -1776,7 +1780,6 @@ Next, let's implement our `TodosApp` widget.
 class TodosApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final todosBloc = BlocProvider.of<TodosBloc>(context);
     return MaterialApp(
       title: FlutterBlocLocalizations().appTitle,
       theme: ArchSampleTheme.theme,
@@ -1789,13 +1792,17 @@ class TodosApp extends StatelessWidget {
           return MultiBlocProvider(
             providers: [
               BlocProvider<TabBloc>(
-                builder: (context) => TabBloc(),
+                create: (context) => TabBloc(),
               ),
               BlocProvider<FilteredTodosBloc>(
-                builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
+                create: (context) => FilteredTodosBloc(
+                  todosBloc: BlocProvider.of<TodosBloc>(context),
+                ),
               ),
               BlocProvider<StatsBloc>(
-                builder: (context) => StatsBloc(todosBloc: todosBloc),
+                create: (context) => StatsBloc(
+                  todosBloc: BlocProvider.of<TodosBloc>(context),
+                ),
               ),
             ],
             child: HomeScreen(),
@@ -1805,7 +1812,7 @@ class TodosApp extends StatelessWidget {
           return AddEditScreen(
             key: ArchSampleKeys.addTodoScreen,
             onSave: (task, note) {
-              todosBloc.dispatch(
+              BlocProvider.of<TodosBloc>(context).add(
                 AddTodo(Todo(task, note: note)),
               );
             },
@@ -1831,13 +1838,13 @@ The `TodosApp` also makes the `TabBloc`, `FilteredTodosBloc`, and `StatsBloc` av
 MultiBlocProvider(
   providers: [
     BlocProvider<TabBloc>(
-      builder: (context) => TabBloc(),
+      create: (context) => TabBloc(),
     ),
     BlocProvider<FilteredTodosBloc>(
-      builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
+      create: (context) => FilteredTodosBloc(todosBloc: todosBloc),
     ),
     BlocProvider<StatsBloc>(
-      builder: (context) => StatsBloc(todosBloc: todosBloc),
+      create: (context) => StatsBloc(todosBloc: todosBloc),
     ),
   ],
   child: HomeScreen(),
@@ -1848,11 +1855,11 @@ is equivalent to writing
 
 ```dart
 BlocProvider<TabBloc>(
-  builder: (context) => TabBloc(),
+  create: (context) => TabBloc(),
   child: BlocProvider<FilteredTodosBloc>(
-    builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
+    create: (context) => FilteredTodosBloc(todosBloc: todosBloc),
     child: BlocProvider<StatsBloc>(
-      builder: (context) => StatsBloc(todosBloc: todosBloc),
+      create: (context) => StatsBloc(todosBloc: todosBloc),
       child: Scaffold(...),
     ),
   ),
@@ -1882,7 +1889,7 @@ void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(
     BlocProvider(
-      builder: (context) {
+      create: (context) {
         return TodosBloc(
           todosRepository: const TodosRepositoryFlutter(
             fileStorage: const FileStorage(
@@ -1890,7 +1897,7 @@ void main() {
               getApplicationDocumentsDirectory,
             ),
           ),
-        )..dispatch(LoadTodos());
+        )..add(LoadTodos());
       },
       child: TodosApp(),
     ),
@@ -1900,7 +1907,6 @@ void main() {
 class TodosApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final todosBloc = BlocProvider.of<TodosBloc>(context);
     return MaterialApp(
       title: FlutterBlocLocalizations().appTitle,
       theme: ArchSampleTheme.theme,
@@ -1913,13 +1919,17 @@ class TodosApp extends StatelessWidget {
           return MultiBlocProvider(
             providers: [
               BlocProvider<TabBloc>(
-                builder: (context) => TabBloc(),
+                create: (context) => TabBloc(),
               ),
               BlocProvider<FilteredTodosBloc>(
-                builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
+                create: (context) => FilteredTodosBloc(
+                  todosBloc: BlocProvider.of<TodosBloc>(context),
+                ),
               ),
               BlocProvider<StatsBloc>(
-                builder: (context) => StatsBloc(todosBloc: todosBloc),
+                create: (context) => StatsBloc(
+                  todosBloc: BlocProvider.of<TodosBloc>(context),
+                ),
               ),
             ],
             child: HomeScreen(),
@@ -1929,7 +1939,7 @@ class TodosApp extends StatelessWidget {
           return AddEditScreen(
             key: ArchSampleKeys.addTodoScreen,
             onSave: (task, note) {
-              todosBloc.dispatch(
+              BlocProvider.of<TodosBloc>(context).add(
                 AddTodo(Todo(task, note: note)),
               );
             },

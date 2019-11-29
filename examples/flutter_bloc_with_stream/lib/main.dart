@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: BlocProvider(
-        builder: (context) => TickerBloc(Ticker()),
+        create: (context) => TickerBloc(Ticker()),
         child: MyHomePage(),
       ),
     );
@@ -21,7 +21,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final tickerBloc = BlocProvider.of<TickerBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Bloc with Streams'),
@@ -52,7 +51,7 @@ class MyHomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          tickerBloc.dispatch(StartTicker());
+          BlocProvider.of<TickerBloc>(context).add(StartTicker());
         },
         tooltip: 'Start',
         child: Icon(Icons.timer),

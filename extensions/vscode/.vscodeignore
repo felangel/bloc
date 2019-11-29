@@ -4,6 +4,7 @@ out/test/**
 src/**
 .gitignore
 vsc-extension-quickstart.md
+webpack.config.js
 **/tsconfig.json
 **/tslint.json
 **/*.map

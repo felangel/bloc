@@ -1,6 +1,6 @@
 # Bloc Extension for VSCode
 
-[![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc)
+[![Build Status](https://travis-ci.com/felangel/bloc.svg?branch=master)](https://travis-ci.com/felangel/bloc)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
 [![Star on GitHub](https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=Stars)](https://github.com/felangel/bloc)
 
@@ -17,7 +17,7 @@
 
 ## Introduction
 
-Bloc extends [VSCode](https://code.visualstudio.com/) with support for the [Bloc](https://felangel.github.io/bloc) library and provides tools for effectively creating Blocs for both [Flutter](https://flutter.io/) and [AngularDart](https://webdev.dartlang.org) apps.
+Bloc extends [VSCode](https://code.visualstudio.com/) with support for the [Bloc](https://bloclibrary.dev) library and provides tools for effectively creating Blocs for both [Flutter](https://flutter.io/) and [AngularDart](https://webdev.dartlang.org) apps.
 
 ## Installation
 

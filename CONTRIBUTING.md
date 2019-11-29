@@ -13,6 +13,7 @@ If you’re only fixing a bug, it’s fine to submit a pull request right away b
 ## Creating a Pull Request
 
 Before creating a pull request please:
+
 1. Fork the repository and create your branch from `master`.
 2. Install all dependencies (`flutter packages get` or `pub get`).
 3. Squash your commits and ensure you have a meaningful commit message.
@@ -25,6 +26,59 @@ Before creating a pull request please:
 10. Verify that all status checks are passing.
 
 While the prerequisites above must be satisfied prior to having your pull request reviewed, the reviewer(s) may ask you to complete additional design work, tests, or other changes before your pull request can be ultimately accepted.
+
+## Contributing to Documentation
+
+If you would like to contribute to the [documentation](https://bloclibrary.dev) please follow the same process for "Creating a Pull Request" and double check that your changes look good by running the docs locally.
+
+```sh
+# change directories into docs
+cd ./docs
+
+# run a local http server on port 8080
+python -m SimpleHTTPServer 8080 .
+
+# navigate to http://localhost:8080
+```
+
+To make PRs more readable, please provide this checklist to the PR description so other contributors can easily see what's already done.
+
+```text
+* [ ] README
+* [ ] Cover page
+* [ ] Sidebar
+* Introduction
+  * [ ] Getting Started
+  * [ ] Why Bloc?
+* Core Concepts
+  * [ ] bloc
+  * [ ] flutter_bloc
+* [ ] Architecture
+* [ ] Testing
+* Tutorials
+  * Flutter
+    * [ ] Counter
+    * [ ] Timer
+    * [ ] Infinite List
+    * [ ] Login
+    * [ ] Weather
+    * [ ] Todos
+    * [ ] Firebase Login
+    * [ ] Firestore Todos
+  * AngularDart
+    * [ ] Counter
+  * Flutter + AngularDart
+    * [ ] Github Search
+* Recipes
+  * Flutter
+    * [ ] Show SnackBar
+    * [ ] Navigation
+    * [ ] Bloc Access
+* Tools
+  * Extensions
+    * [ ] IntelliJ
+    * [ ] VSCode
+```
 
 ## Getting in Touch
 

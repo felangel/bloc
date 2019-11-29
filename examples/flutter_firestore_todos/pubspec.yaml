@@ -15,7 +15,7 @@ dependencies:
     path: todos_repository
   user_repository:
     path: user_repository
-  equatable: ^0.3.0
+  equatable: ^0.6.0
 
 flutter:
   uses-material-design: true

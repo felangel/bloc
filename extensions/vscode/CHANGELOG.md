@@ -1,3 +1,19 @@
+# 2.1.0
+
+Update to support equatable `v1.0.0`
+
+# 2.0.0
+
+Update to support bloc `v2.0.0`
+
+# 1.0.0
+
+Update to support bloc `v1.0.0`
+
+# 0.13.0
+
+Update Snippets to support changes in bloc `v0.16.0`
+
 # 0.12.2
 
 Add Update Action to automatically update outdated dependencies

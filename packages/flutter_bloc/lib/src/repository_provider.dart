@@ -1,32 +1,38 @@
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
+/// {@template repositoryprovider}
+/// Takes a `ValueBuilder` that is responsible for
+/// creating the repository and a [child] which will have access to the repository via `RepositoryProvider.of(context)`.
+/// It is used as a dependency injection (DI) widget so that a single instance of a repository can be provided
+/// to multiple widgets within a subtree.
+///
+/// ```dart
+/// RepositoryProvider(
+///   create: (context) => RepositoryA(),
+///   child: ChildA(),
+/// );
+/// ```
+/// {@endtemplate}
 class RepositoryProvider<T> extends Provider<T> {
-  /// Takes a [ValueBuilder] that is responsible for
-  /// building the repository and a child which will have access to the repository via `RepositoryProvider.of(context)`.
-  /// It is used as a dependency injection (DI) widget so that a single instance of a repository can be provided
-  /// to multiple widgets within a subtree.
-  ///
-  /// ```dart
-  /// RepositoryProvider(
-  ///   builder: (context) => RepositoryA(),
-  ///   child: ChildA(),
-  /// );
-  /// ```
+  /// {@macro repositoryprovider}
   RepositoryProvider({
     Key key,
-    @required ValueBuilder<T> builder,
+    @required ValueBuilder<T> create,
+    @Deprecated('will be removed in 3.0.0, use create instead')
+        ValueBuilder<T> builder,
     Widget child,
   }) : super(
           key: key,
-          builder: builder,
+          // ignore: deprecated_member_use_from_same_package
+          create: create ?? builder,
           dispose: (_, __) {},
           child: child,
         );
 
-  /// Takes a repository and a child which will have access to the repository.
+  /// Takes a repository and a [child] which will have access to the repository.
   /// A new repository should not be created in `RepositoryProvider.value`.
-  /// Repositories should always be created using the default constructor within the `builder`.
+  /// Repositories should always be created using the default constructor within the [builder].
   RepositoryProvider.value({
     Key key,
     @required T value,
@@ -42,7 +48,7 @@ class RepositoryProvider<T> extends Provider<T> {
   static T of<T>(BuildContext context) {
     try {
       return Provider.of<T>(context, listen: false);
-    } catch (_) {
+    } on Object catch (_) {
       throw FlutterError(
         """
         RepositoryProvider.of() called with a context that does not contain a repository of type $T.
@@ -52,8 +58,8 @@ class RepositoryProvider<T> extends Provider<T> {
         1. The context you used comes from a widget above the RepositoryProvider.
         2. You used MultiRepositoryProvider and didn\'t explicity provide the RepositoryProvider types.
 
-        Good: RepositoryProvider<$T>(builder: (context) => $T())
-        Bad: RepositoryProvider(builder: (context) => $T()).
+        Good: RepositoryProvider<$T>(create: (context) => $T())
+        Bad: RepositoryProvider(create: (context) => $T()).
 
         The context used was: $context
         """,

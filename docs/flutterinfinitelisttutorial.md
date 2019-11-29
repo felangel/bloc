@@ -23,14 +23,14 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^0.21.0
+  flutter_bloc: ^2.0.0
   http: ^0.12.0
-  equatable: ^0.2.0
+  equatable: ^0.6.0
 
 dev_dependencies:
   flutter_test:
@@ -87,7 +87,10 @@ class Post extends Equatable {
   final String title;
   final String body;
 
-  Post({this.id, this.title, this.body}) : super([id, title, body]);
+  const Post({this.id, this.title, this.body});
+
+  @override
+  List<Object> get props => [id, title, body];
 
   @override
   String toString() => 'Post { id: $id }';
@@ -108,17 +111,17 @@ Before we dive into the implementation, we need to define what our `PostBloc` is
 
 At a high level, it will be responding to user input (scrolling) and fetching more posts in order for the presentation layer to display them. Let’s start by creating our `Event`.
 
-Our `PostBloc` will only be responding to a single event; `Fetch` which will be dispatched by the presentation layer whenever it needs more Posts to present. Since our `Fetch` event is a type of `PostEvent` we can create `bloc/post_event.dart` and implement the event like so.
+Our `PostBloc` will only be responding to a single event; `Fetch` which will be added by the presentation layer whenever it needs more Posts to present. Since our `Fetch` event is a type of `PostEvent` we can create `bloc/post_event.dart` and implement the event like so.
 
 ```dart
 import 'package:equatable/equatable.dart';
 
-abstract class PostEvent extends Equatable {}
-
-class Fetch extends PostEvent {
+abstract class PostEvent extends Equatable {
   @override
-  String toString() => 'Fetch';
+  List<Object> get props => [];
 }
+
+class Fetch extends PostEvent {}
 ```
 
 ?> Again, we are overriding `toString` for an easier to read string representation of our event. Again, we are extending [`Equatable`](https://pub.dev/packages/equatable) so that we can compare instances for equality.
@@ -141,30 +144,27 @@ We can now create `bloc/post_state.dart` and implement it like so.
 ```dart
 import 'package:equatable/equatable.dart';
 
-import 'package:flutter_infinite_list/post.dart';
+import 'package:flutter_infinite_list/models/models.dart';
 
 abstract class PostState extends Equatable {
-  PostState([List props = const []]) : super(props);
+  const PostState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class PostUninitialized extends PostState {
-  @override
-  String toString() => 'PostUninitialized';
-}
+class PostUninitialized extends PostState {}
 
-class PostError extends PostState {
-  @override
-  String toString() => 'PostError';
-}
+class PostError extends PostState {}
 
 class PostLoaded extends PostState {
   final List<Post> posts;
   final bool hasReachedMax;
 
-  PostLoaded({
+  const PostLoaded({
     this.posts,
     this.hasReachedMax,
-  }) : super([posts, hasReachedMax]);
+  });
 
   PostLoaded copyWith({
     List<Post> posts,
@@ -175,6 +175,9 @@ class PostLoaded extends PostState {
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
+
+  @override
+  List<Object> get props => [posts, hasReachedMax];
 
   @override
   String toString() =>
@@ -226,18 +229,19 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
 ?> **Note:** just from the class declaration we can tell that our PostBloc will be taking PostEvents as input and outputting PostStates.
 
-We can start by implementing `initialState` which will be the state of our `PostBloc` before any events have been dispatched.
+We can start by implementing `initialState` which will be the state of our `PostBloc` before any events have been added.
 
 ```dart
 @override
 get initialState => PostUninitialized();
 ```
 
-Next, we need to implement `mapEventToState` which will be fired every time a `PostEvent` is dispatched.
+Next, we need to implement `mapEventToState` which will be fired every time a `PostEvent` is added.
 
 ```dart
 @override
 Stream<PostState> mapEventToState(PostEvent event) async* {
+  final currentState = state;
   if (event is Fetch && !_hasReachedMax(currentState)) {
     try {
       if (currentState is PostUninitialized) {
@@ -247,11 +251,11 @@ Stream<PostState> mapEventToState(PostEvent event) async* {
       }
       if (currentState is PostLoaded) {
         final posts =
-            await _fetchPosts((currentState as PostLoaded).posts.length, 20);
+            await _fetchPosts(currentState.posts.length, 20);
         yield posts.isEmpty
-            ? (currentState as PostLoaded).copyWith(hasReachedMax: true)
+            ? currentState.copyWith(hasReachedMax: true)
             : PostLoaded(
-                posts: (currentState as PostLoaded).posts + posts,
+                posts: currentState.posts + posts,
                 hasReachedMax: false,
               );
       }
@@ -282,9 +286,9 @@ Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
 }
 ```
 
-Our `PostBloc` will `yield` whenever there is a new state because it returns a `Stream<PostState>`. Check out [core concepts](https://felangel.github.io/bloc/#/coreconcepts?id=streams) for more information about `Streams` and other core concepts.
+Our `PostBloc` will `yield` whenever there is a new state because it returns a `Stream<PostState>`. Check out [core concepts](https://bloclibrary.dev/#/coreconcepts?id=streams) for more information about `Streams` and other core concepts.
 
-Now every time a `PostEvent` is dispatched, if it is a `Fetch` event and there are more posts to fetch, our `PostBloc` will fetch the next 20 posts.
+Now every time a `PostEvent` is added, if it is a `Fetch` event and there are more posts to fetch, our `PostBloc` will fetch the next 20 posts.
 
 The API will return an empty array if we try to fetch beyond the maximum number of posts (100), so if we get back an empty array, our bloc will `yield` the currentState except we will set `hasReachedMax` to true.
 
@@ -402,7 +406,7 @@ Great! Now that we’ve finished implementing the business logic all that’s le
 
 In our `main.dart` we can start by implementing our main function and calling `runApp` to render our root widget.
 
-In our `App` widget, we use `BlocProvider` to create and provide an instance of `PostBloc` to the subtree. Also, we dispatch a `Fetch` event so that when the app loads, it requests the initial batch of Posts.
+In our `App` widget, we use `BlocProvider` to create and provide an instance of `PostBloc` to the subtree. Also, we add a `Fetch` event so that when the app loads, it requests the initial batch of Posts.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -425,8 +429,8 @@ class App extends StatelessWidget {
           title: Text('Posts'),
         ),
         body: BlocProvider(
-          builder: (context) =>
-              PostBloc(httpClient: http.Client())..dispatch(Fetch()),
+          create: (context) =>
+              PostBloc(httpClient: http.Client())..add(Fetch()),
           child: HomePage(),
         ),
       ),
@@ -501,7 +505,7 @@ class _HomePageState extends State<HomePage> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= _scrollThreshold) {
-      _postBloc.dispatch(Fetch());
+      _postBloc.add(Fetch());
     }
   }
 }
@@ -513,7 +517,7 @@ Moving along, our build method returns a `BlocBuilder`. `BlocBuilder` is a Flutt
 
 !> We need to remember to clean up after ourselves and dispose of our `ScrollController` when the StatefulWidget is disposed.
 
-Whenever the user scrolls, we calculate how far away from the bottom of the page they are and if the distance is ≤ our `_scrollThreshold` we dispatch a `Fetch` event in order to load more posts.
+Whenever the user scrolls, we calculate how far away from the bottom of the page they are and if the distance is ≤ our `_scrollThreshold` we add a `Fetch` event in order to load more posts.
 
 Next, we need to implement our `BottomLoader` widget which will indicate to the user that we are loading more posts.
 
