@@ -67,7 +67,7 @@
     "prefix": "blocprovider",
     "body": [
       "BlocProvider(",
-      "\tbuilder: (context) => ${1:MyBloc}(),",
+      "\tcreate: (context) => ${1:MyBloc}(),",
       "\tchild: ${2:Container()},",
       ")"
     ]
@@ -79,10 +79,10 @@
       "MultiBlocProvider(",
       "\tproviders: [",
       "\t\tBlocProvider<${1:MyBloc}>(",
-      "\t\t\tbuilder: (context) => ${1:MyBloc}(),",
+      "\t\t\tcreate: (context) => ${1:MyBloc}(),",
       "\t\t),",
       "\t\tBlocProvider<${2:MyOtherBloc}>(",
-      "\t\t\tbuilder: (context) => ${2:MyOtherBloc}(),",
+      "\t\t\tcreate: (context) => ${2:MyOtherBloc}(),",
       "\t\t),",
       "\t],",
       "\tchild: ${3:Container()},",
@@ -94,7 +94,7 @@
     "prefix": "repositoryprovider",
     "body": [
       "RepositoryProvider(",
-      "\tbuilder: (context) => ${1:myValue},",
+      "\tcreate: (context) => ${1:myValue},",
       "\tchild: ${2:Container()},",
       ")"
     ]
@@ -106,10 +106,10 @@
       "MultiRepositoryProvider(",
       "\tproviders: [",
       "\t\tRepositoryProvider<${1:MyValue}>(",
-      "\t\t\tbuilder: (context) => ${2:myValue},",
+      "\t\t\tcreate: (context) => ${2:myValue},",
       "\t\t),",
       "\t\tRepositoryProvider<${3:MyOtherValue}>(",
-      "\t\t\tbuilder: (context) => ${4:myOtherValue},",
+      "\t\t\tcreate: (context) => ${4:myOtherValue},",
       "\t\t),",
       "\t],",
       "\tchild: ${5:Container()},",
