@@ -82,7 +82,7 @@ To make PRs more readable, please provide this checklist to the PR description s
 
 ## Getting in Touch
 
-If you want to just ask a question or get feedback on an idea you can post it on [gitter](https://gitter.im/bloc_package/Lobby).
+If you want to just ask a question or get feedback on an idea you can post it on [discord](https://discord.gg/Hc5KD3g).
 
 ## License
 
