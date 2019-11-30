@@ -7,14 +7,14 @@
 [![Flutter.io](https://img.shields.io/badge/flutter-website-deepskyblue.svg)](https://flutter.io/docs/development/data-and-backend/state-mgmt/options#bloc--rx)
 [![Awesome Flutter](https://img.shields.io/badge/awesome-flutter-blue.svg?longCache=true)](https://github.com/Solido/awesome-flutter#standard)
 [![Flutter Samples](https://img.shields.io/badge/flutter-samples-teal.svg?longCache=true)](http://fluttersamples.com)
-[![Gitter](https://img.shields.io/badge/gitter-chat-hotpink.svg)](https://gitter.im/bloc_package/Lobby)
+[![Discord](https://img.shields.io/badge/discord-chat-hotpink.svg)](https://discord.gg/Hc5KD3g)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
 Prediktivní knihovna pro state management, která pomáhá implementovat [návrhový vzor BLoC](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
 
-| Balíček                                                                            | Pub                                                                                |
+| Balíček                                                                            | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | [bloc](https://github.com/felangel/bloc/tree/master/packages/bloc)                 | [![pub package](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)                 |
 | [bloc_test](https://github.com/felangel/bloc/tree/master/packages/bloc_test)       | [![pub package](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)       |
