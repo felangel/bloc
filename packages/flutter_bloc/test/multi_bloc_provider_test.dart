@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
       } else {
         providers.add(
           BlocProvider<CounterBloc>(
-            builder: (context) => CounterBloc(onClose: onCounterBlocClosed),
+            create: (context) => CounterBloc(onClose: onCounterBlocClosed),
           ),
         );
       }
@@ -58,7 +58,7 @@ class HomePage extends StatelessWidget {
       } else {
         providers.add(
           BlocProvider<ThemeBloc>(
-            builder: (context) => ThemeBloc(onClose: onThemeBlocClosed),
+            create: (context) => ThemeBloc(onClose: onThemeBlocClosed),
           ),
         );
       }
@@ -223,8 +223,8 @@ void main() {
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<CounterBloc>(builder: (context) => CounterBloc()),
-            BlocProvider<ThemeBloc>(builder: (context) => ThemeBloc())
+            BlocProvider<CounterBloc>(create: (context) => CounterBloc()),
+            BlocProvider<ThemeBloc>(create: (context) => ThemeBloc())
           ],
           child: MyApp(),
         ),

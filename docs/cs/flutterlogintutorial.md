@@ -483,7 +483,7 @@ class LoginPage extends StatelessWidget {
         title: Text('Login'),
       ),
       body: BlocProvider(
-        builder: (context) {
+        create: (context) {
           return LoginBloc(
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             userRepository: userRepository,
@@ -635,7 +635,7 @@ void main() {
   final userRepository = UserRepository();
   runApp(
     BlocProvider<AuthenticationBloc>(
-      builder: (context) {
+      create: (context) {
         return AuthenticationBloc(userRepository: userRepository)
           ..add(AppStarted());
       },

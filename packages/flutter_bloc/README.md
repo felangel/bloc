@@ -8,7 +8,7 @@
 [![Awesome Flutter](https://img.shields.io/badge/awesome-flutter-blue.svg?longCache=true)](https://github.com/Solido/awesome-flutter#standard)
 [![Flutter Samples](https://img.shields.io/badge/flutter-samples-teal.svg?longCache=true)](http://fluttersamples.com)
 [![Star on GitHub](https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/felangel/bloc)
-[![Gitter](https://img.shields.io/badge/gitter-chat-hotpink.svg)](https://gitter.im/bloc_package/Lobby)
+[![Discord](https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue)](https://discord.gg/Hc5KD3g)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -60,11 +60,11 @@ BlocBuilder<BlocA, BlocAState>(
 
 **BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
 
-In most cases, `BlocProvider` should be used to build new `blocs` which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle closing the bloc.
+In most cases, `BlocProvider` should be used to create new `blocs` which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle closing the bloc.
 
 ```dart
 BlocProvider(
-  builder: (BuildContext context) => BlocA(),
+  create: (BuildContext context) => BlocA(),
   child: ChildA(),
 );
 ```
@@ -90,11 +90,11 @@ By using `MultiBlocProvider` we can go from:
 
 ```dart
 BlocProvider<BlocA>(
-  builder: (BuildContext context) => BlocA(),
+  create: (BuildContext context) => BlocA(),
   child: BlocProvider<BlocB>(
-    builder: (BuildContext context) => BlocB(),
+    create: (BuildContext context) => BlocB(),
     child: BlocProvider<BlocC>(
-      builder: (BuildContext context) => BlocC(),
+      create: (BuildContext context) => BlocC(),
       child: ChildA(),
     )
   )
@@ -107,13 +107,13 @@ to:
 MultiBlocProvider(
   providers: [
     BlocProvider<BlocA>(
-      builder: (BuildContext context) => BlocA(),
+      create: (BuildContext context) => BlocA(),
     ),
     BlocProvider<BlocB>(
-      builder: (BuildContext context) => BlocB(),
+      create: (BuildContext context) => BlocB(),
     ),
     BlocProvider<BlocC>(
-      builder: (BuildContext context) => BlocC(),
+      create: (BuildContext context) => BlocC(),
     ),
   ],
   child: ChildA(),
@@ -201,7 +201,7 @@ MultiBlocListener(
 
 ```dart
 RepositoryProvider(
-  builder: (context) => RepositoryA(),
+  create: (context) => RepositoryA(),
   child: ChildA(),
 );
 ```
@@ -218,11 +218,11 @@ By using `MultiRepositoryProvider` we can go from:
 
 ```dart
 RepositoryProvider<RepositoryA>(
-  builder: (context) => RepositoryA(),
+  create: (context) => RepositoryA(),
   child: RepositoryProvider<RepositoryB>(
-    builder: (context) => RepositoryB(),
+    create: (context) => RepositoryB(),
     child: RepositoryProvider<RepositoryC>(
-      builder: (context) => RepositoryC(),
+      create: (context) => RepositoryC(),
       child: ChildA(),
     )
   )
@@ -235,13 +235,13 @@ to:
 MultiRepositoryProvider(
   providers: [
     RepositoryProvider<RepositoryA>(
-      builder: (context) => RepositoryA(),
+      create: (context) => RepositoryA(),
     ),
     RepositoryProvider<RepositoryB>(
-      builder: (context) => RepositoryB(),
+      create: (context) => RepositoryB(),
     ),
     RepositoryProvider<RepositoryC>(
-      builder: (context) => RepositoryC(),
+      create: (context) => RepositoryC(),
     ),
   ],
   child: ChildA(),

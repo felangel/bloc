@@ -34,13 +34,13 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ThemeBloc>(
-      builder: (context) => ThemeBloc(),
+      create: (context) => ThemeBloc(),
       child: BlocBuilder<ThemeBloc, ThemeData>(
         builder: (context, theme) {
           return MaterialApp(
             title: 'Flutter Demo',
             home: BlocProvider(
-              builder: (context) => CounterBloc(),
+              create: (context) => CounterBloc(),
               child: CounterPage(),
             ),
             theme: theme,

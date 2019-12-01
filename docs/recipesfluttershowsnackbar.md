@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      builder: (context) => DataBloc(),
+      create: (context) => DataBloc(),
       child: MaterialApp(
         home: Home(),
       ),

@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     }
     return MaterialApp(
       home: RepositoryProvider<Repository>(
-        builder: (context) => _repository,
+        create: (context) => _repository,
         child: _child,
       ),
     );
@@ -61,7 +61,7 @@ class _MyStatefulAppState extends State<MyStatefulApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: RepositoryProvider<Repository>(
-        builder: (context) => _repository,
+        create: (context) => _repository,
         child: Scaffold(
           appBar: AppBar(
             title: Text('Counter'),
@@ -217,8 +217,8 @@ void main() {
         1. The context you used comes from a widget above the RepositoryProvider.
         2. You used MultiRepositoryProvider and didn\'t explicity provide the RepositoryProvider types.
 
-        Good: RepositoryProvider<Repository>(builder: (context) => Repository())
-        Bad: RepositoryProvider(builder: (context) => Repository()).
+        Good: RepositoryProvider<Repository>(create: (context) => Repository())
+        Bad: RepositoryProvider(create: (context) => Repository()).
 
         The context used was: CounterPage(dirty)
 """;

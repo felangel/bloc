@@ -35,7 +35,7 @@ void main() {
   final userRepository = UserRepository();
   runApp(
     BlocProvider<AuthenticationBloc>(
-      builder: (context) {
+      create: (context) {
         return AuthenticationBloc(userRepository: userRepository)
           ..add(AppStarted());
       },

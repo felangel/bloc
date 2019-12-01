@@ -49,11 +49,11 @@ BlocBuilder<BlocA, BlocAState>(
 
 **BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
 
-In most cases, `BlocProvider` should be used to build new `blocs` which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle closing the bloc.
+In most cases, `BlocProvider` should be used to create new `blocs` which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle closing the bloc.
 
 ```dart
 BlocProvider(
-  builder: (BuildContext context) => BlocA(),
+  create: (BuildContext context) => BlocA(),
   child: ChildA(),
 );
 ```
@@ -81,11 +81,11 @@ By using `MultiBlocProvider` we can go from:
 
 ```dart
 BlocProvider<BlocA>(
-  builder: (BuildContext context) => BlocA(),
+  create: (BuildContext context) => BlocA(),
   child: BlocProvider<BlocB>(
-    builder: (BuildContext context) => BlocB(),
+    create: (BuildContext context) => BlocB(),
     child: BlocProvider<BlocC>(
-      builder: (BuildContext context) => BlocC(),
+      create: (BuildContext context) => BlocC(),
       child: ChildA(),
     )
   )
@@ -98,13 +98,13 @@ to:
 MultiBlocProvider(
   providers: [
     BlocProvider<BlocA>(
-      builder: (BuildContext context) => BlocA(),
+      create: (BuildContext context) => BlocA(),
     ),
     BlocProvider<BlocB>(
-      builder: (BuildContext context) => BlocB(),
+      create: (BuildContext context) => BlocB(),
     ),
     BlocProvider<BlocC>(
-      builder: (BuildContext context) => BlocC(),
+      create: (BuildContext context) => BlocC(),
     ),
   ],
   child: ChildA(),

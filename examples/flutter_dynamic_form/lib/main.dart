@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
           title: Text('Flutter Dynamic Form'),
         ),
         body: BlocProvider(
-          builder: (context) => NewCarBloc(
+          create: (context) => NewCarBloc(
             newCarRepository: NewCarRepository(),
           )..add(FormLoaded()),
           child: MyForm(),

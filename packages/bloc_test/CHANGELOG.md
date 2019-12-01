@@ -1,3 +1,15 @@
+# 2.2.2
+
+- Minor internal improvements (fixed analysis warning in `emitsExactly`)
+
+# 2.2.1
+
+- Minor documentation improvements (syntax highlighting in README)
+
+# 2.2.0
+
+- `emitsExactly` and `blocTest` support `Iterable<Matcher` ([#695](https://github.com/felangel/bloc/issues/695)).
+
 # 2.1.0
 
 - Add `MockBloc` to `bloc_test` in order to simplify bloc mocks (addresses [#636](https://github.com/felangel/bloc/issues/636))

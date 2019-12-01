@@ -1754,7 +1754,7 @@ void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(
     BlocProvider(
-      builder: (context) {
+      create: (context) {
         return TodosBloc(
           todosRepository: const TodosRepositoryFlutter(
             fileStorage: const FileStorage(
@@ -1792,15 +1792,15 @@ class TodosApp extends StatelessWidget {
           return MultiBlocProvider(
             providers: [
               BlocProvider<TabBloc>(
-                builder: (context) => TabBloc(),
+                create: (context) => TabBloc(),
               ),
               BlocProvider<FilteredTodosBloc>(
-                builder: (context) => FilteredTodosBloc(
+                create: (context) => FilteredTodosBloc(
                   todosBloc: BlocProvider.of<TodosBloc>(context),
                 ),
               ),
               BlocProvider<StatsBloc>(
-                builder: (context) => StatsBloc(
+                create: (context) => StatsBloc(
                   todosBloc: BlocProvider.of<TodosBloc>(context),
                 ),
               ),
@@ -1838,13 +1838,13 @@ The `TodosApp` also makes the `TabBloc`, `FilteredTodosBloc`, and `StatsBloc` av
 MultiBlocProvider(
   providers: [
     BlocProvider<TabBloc>(
-      builder: (context) => TabBloc(),
+      create: (context) => TabBloc(),
     ),
     BlocProvider<FilteredTodosBloc>(
-      builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
+      create: (context) => FilteredTodosBloc(todosBloc: todosBloc),
     ),
     BlocProvider<StatsBloc>(
-      builder: (context) => StatsBloc(todosBloc: todosBloc),
+      create: (context) => StatsBloc(todosBloc: todosBloc),
     ),
   ],
   child: HomeScreen(),
@@ -1855,11 +1855,11 @@ is equivalent to writing
 
 ```dart
 BlocProvider<TabBloc>(
-  builder: (context) => TabBloc(),
+  create: (context) => TabBloc(),
   child: BlocProvider<FilteredTodosBloc>(
-    builder: (context) => FilteredTodosBloc(todosBloc: todosBloc),
+    create: (context) => FilteredTodosBloc(todosBloc: todosBloc),
     child: BlocProvider<StatsBloc>(
-      builder: (context) => StatsBloc(todosBloc: todosBloc),
+      create: (context) => StatsBloc(todosBloc: todosBloc),
       child: Scaffold(...),
     ),
   ),
@@ -1889,7 +1889,7 @@ void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(
     BlocProvider(
-      builder: (context) {
+      create: (context) {
         return TodosBloc(
           todosRepository: const TodosRepositoryFlutter(
             fileStorage: const FileStorage(
@@ -1919,15 +1919,15 @@ class TodosApp extends StatelessWidget {
           return MultiBlocProvider(
             providers: [
               BlocProvider<TabBloc>(
-                builder: (context) => TabBloc(),
+                create: (context) => TabBloc(),
               ),
               BlocProvider<FilteredTodosBloc>(
-                builder: (context) => FilteredTodosBloc(
+                create: (context) => FilteredTodosBloc(
                   todosBloc: BlocProvider.of<TodosBloc>(context),
                 ),
               ),
               BlocProvider<StatsBloc>(
-                builder: (context) => StatsBloc(
+                create: (context) => StatsBloc(
                   todosBloc: BlocProvider.of<TodosBloc>(context),
                 ),
               ),

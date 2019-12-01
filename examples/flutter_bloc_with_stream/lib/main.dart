@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: BlocProvider(
-        builder: (context) => TickerBloc(Ticker()),
+        create: (context) => TickerBloc(Ticker()),
         child: MyHomePage(),
       ),
     );

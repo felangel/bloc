@@ -8,7 +8,7 @@
 [![Awesome Flutter](https://img.shields.io/badge/awesome-flutter-blue.svg?longCache=true)](https://github.com/Solido/awesome-flutter#standard)
 [![Flutter Samples](https://img.shields.io/badge/flutter-samples-teal.svg?longCache=true)](http://fluttersamples.com)
 [![Star on GitHub](https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/felangel/bloc)
-[![Gitter](https://img.shields.io/badge/gitter-chat-hotpink.svg)](https://gitter.im/bloc_package/Lobby)
+[![Discord](https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue)](https://discord.gg/Hc5KD3g)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -65,14 +65,14 @@ group('CounterBloc', () {
 });
 ```
 
-**Note:** when using `blocTest` with state classes you may need to explicitly provide the state type to the `expect` parameter if Dart cannot infer the type properly.
+**Note:** when using `blocTest` with state classes which don't override `==` and `hashCode` you can provide an `Iterable` of matchers instead of explicit state instances.
 
 ```dart
 blocTest(
   'emits [StateA, StateB] when MyEvent is added',
   build: () => MyBloc(),
   act: (bloc) => bloc.add(MyEvent()),
-  expect: <State>[StateA(), StateB()],
+  expect: [isA<StateA>(), isA<StateB>()],
 );
 ```
 
@@ -92,6 +92,16 @@ group('CounterBloc', () {
     bloc.add(CounterEvent.increment);
     await emitsExactly(bloc, [0, 1]);
   });
+});
+```
+
+`emitsExactly` also supports `Matchers` for states which don't override `==` and `hashCode`.
+
+```dart
+test('emits [StateA, StateB] when EventB is added', () async {
+  final bloc = MyBloc();
+  bloc.add(EventB());
+  await emitsExactly(bloc, [isA<StateA>(), isA<StateB>()]);
 });
 ```
 

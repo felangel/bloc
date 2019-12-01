@@ -61,5 +61,20 @@ void main() {
         expect: [0, 1, 2],
       );
     });
+
+    group('ComplexBloc', () {
+      blocTest(
+        'emits [ComplexStateA] when nothing is added',
+        build: () => ComplexBloc(),
+        expect: [isA<ComplexStateA>()],
+      );
+
+      blocTest(
+        'emits [ComplexStateA, ComplexStateB] when ComplexEventB is added',
+        build: () => ComplexBloc(),
+        act: (bloc) => bloc.add(ComplexEventB()),
+        expect: [isA<ComplexStateA>(), isA<ComplexStateB>()],
+      );
+    });
   });
 }
