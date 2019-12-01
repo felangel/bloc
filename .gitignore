@@ -95,6 +95,7 @@ unlinked_spec.ds
 
 # Coverage
 coverage/
+.test_coverage.dart
 
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3
