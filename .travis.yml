@@ -2,10 +2,7 @@ language: bash
 os:
   - osx
 env:
-  - PACKAGE=bloc
-  - PACKAGE=bloc_test
-  - PACKAGE=angular_bloc
-  - PACKAGE=flutter_bloc
+  - FLUTTER_CHANNEL=beta
 sudo: required
 dist: trusty
 dart:
@@ -20,13 +17,16 @@ addons:
       - fonts-droid
 before_script:
   - cd ..
-  - git clone https://github.com/flutter/flutter.git -b beta
+  - git clone https://github.com/flutter/flutter.git -b $FLUTTER_CHANNEL
   - export PATH=$PATH:$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin
   - cd -
   - flutter doctor
 script:
   - set -e
-  - ./scripts/ci.sh packages/$PACKAGE
+  - ./scripts/ci.sh packages/bloc
+  - ./scripts/ci.sh packages/bloc_test
+  - ./scripts/ci.sh packages/angular_bloc
+  - ./scripts/ci.sh packages/flutter_bloc
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
