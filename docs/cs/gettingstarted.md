@@ -7,19 +7,19 @@
 Bloc obsahuje několik pub balíčků:
 
 - [bloc](https://pub.dev/packages/bloc) - Základní knihovna bloc.
-- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Výkonné Flutter widgety vytvořené k práci s bloc, určené k vytváření rychlejších, reaktivních mobilních aplikací.
-- [angular_bloc](https://pub.dev/packages/angular_bloc) - Výkonné AngularDart komponenty vytvořené k práci s bloc, určené k vytváření rychlejších, reaktivních webových aplikací.
+- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Užitečné Flutter widgety pro práci s blocem, určené k vytváření rychlejších, reaktivních mobilních aplikací.
+- [angular_bloc](https://pub.dev/packages/angular_bloc) - Užitečné AngularDart komponenty pro práci s blocem, určené k vytváření rychlejších, reaktivních webových aplikací.
 
 ## Instalace
 
-První věci, kterou potřebujeme udělat je přidání balíčku bloc do našeho `pubspec.yaml` jako závislost.
+První věci, kterou potřebujeme udělat, je přidat jako závislost do našeho `pubspec.yaml` balíček bloc.
 
 ```yaml
 dependencies:
   bloc: ^2.0.0
 ```
 
-Pro [Flutter](https://flutter.io) aplikaci také potřebujeme do našeho `pubspec.yaml` přidat balíček flutter_bloc jako závislost.
+Pro [Flutter](https://flutter.io) aplikaci také potřebujeme přidat jako závislost do našeho `pubspec.yaml` balíček flutter_bloc.
 
 ```yaml
 dependencies:
@@ -27,7 +27,7 @@ dependencies:
   flutter_bloc: ^2.0.0
 ```
 
-Pro [AngularDart](https://webdev.dartlang.org/angular) aplikaci také potřebujeme do našeho `pubspec.yaml` přidat balíček angular_bloc jako závislost.
+Pro [AngularDart](https://webdev.dartlang.org/angular) aplikaci také potřebujeme přidat jako závislost do našeho `pubspec.yaml` balíček angular_bloc.
 
 ```yaml
 dependencies:
