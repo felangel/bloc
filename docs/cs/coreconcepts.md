@@ -1,6 +1,6 @@
 # Základní koncepty
 
-?> Prosím, ujistěte se, že si pečlivě přečtete a pochopíte následující sekce před tím, než budete pracovat s [bloc](https://pub.dev/packages/bloc).
+?> Ujistěte se, prosím, že si pečlivě přečtete a pochopíte následující sekce před tím, než budete pracovat s [blocem](https://pub.dev/packages/bloc).
 
 Existuje několik základních konceptů, které jsou kritické pro pochopení, jak používat Bloc.
 
@@ -10,9 +10,9 @@ V následujících sekcích všechny podrobně probereme a také si ukážeme, j
 
 *Poznámka:* v angličtině se používá slovo `event`.
 
-> Události jsou vstupem do Blocu. Jsou běžně přidávány jako reakce na uživatelovu akci, jako je stisknutí tlačítka nebo události životního cyklu, jako je načítání stránky.
+> Události jsou vstupem do Blocu. Jsou běžně přidávány jako reakce na akci uživatele, jako je stisknutí tlačítka, nebo události životního cyklu, jako je načítání stránky.
 
-Při navrhování aplikace musíme udělat krok zpět a definovat si, jak s ní budou uživatelé interagovat. V kontextu naší aplikace počítadla budeme mít dvě tlačítka na inkrementaci a dekrementaci našeho počítadla.
+Při navrhování aplikace musíme udělat krok zpět a definovat si, jak s ní budou uživatelé pracovat. V kontextu naší aplikace počítadla budeme mít dvě tlačítka na inkrementaci a dekrementaci našeho počítadla.
 
 Když uživatel klepne na jedno z těchto dvou tlačítek, musí se stát něco, co upozorní "mozek" naší aplikace, aby mohla reagovat na vstup uživatele. Tady přicházejí do hry události.
 
@@ -22,21 +22,21 @@ Musíme být schopni upozornit "mozek" naší aplikace o inkrementaci i dekremen
 enum CounterEvent { increment, decrement }
 ```
 
-V tomto případě můžeme reprezentovat tyto události s použitím `enum`, ale pro více složité případy může být potřebné použít `class`, zejména pokud je do bloc potřebné předat informaci.
+V tomto případě můžeme reprezentovat tyto události s použitím `enum`, ale pro více složité případy může být potřebné použít `class`, zejména pokud je do bloc potřebné předat nějakou informaci.
 
-V tomto bodě již máme definované naše první události! Všimněte si, že jsme zatím nikdě Bloc nepoužili a nikde se neděje magicky nic. Je to jen čistý Dart kód.
+V tomto bodě již máme definované naše první události! Všimněte si, že jsme zatím nikdě Bloc nepoužili a nikde se nic magicky neděje. Je to jen čistý Dart kód.
 
 ## Stavy
 
 *Poznámka:* v angličtině se používá slovo `state`.
 
-> Stavy jsou výstupem Blocu a reprezentují část stavu naší aplikace. UI komponenty mohou být upozorněny o stavech a překreslit své části na základně aktuálního stavu.
+> Stavy jsou výstupem Blocu a reprezentují část stavu naší aplikace. UI komponenty mohou být o stavech upozorněny a překreslit své části na základně aktuálního stavu.
 
 Zatím jsme definovaly dvě události, na které bude naše aplikace reagovat: `CounterEvent.increment` a `CounterEvent.decrement`.
 
 Nyní potřebujeme definovat, jak reprezentovat stav naší aplikace.
 
-Jelikož vytváříme počítadlo, náš stav bude je velmi jednoduchý: je to obyčejné celé číslo, které reprezentuje aktuální hodnotu počítadla.
+Jelikož vytváříme počítadlo, náš stav bude velmi jednoduchý: obyčejné celé číslo, které reprezentuje aktuální hodnotu počítadla.
 
 Později si ukážeme složitější ukázky stavu, ale v tomto případně je primitivní typ zcela vhodný pro reprezentaci stavu.
 
@@ -58,7 +58,7 @@ Například, pokud uživatel otevře naší aplikaci a jednou klepne na tlačít
 }
 ```
 
-Jelikož je každá změna stavu zaznamenávána, jsme schopni jednoduše zpracovat a sledovat všechny uživatelské interakce a změny stavu na jednom míste. Kromě toho to také umožňuje věci jako ladění v čase.
+Jelikož je každá změna stavu zaznamenávána, jsme schopni jednoduše zpracovat a sledovat všechny uživatelské interakce a změny stavu na jednom místě. Kromě toho to také umožňuje věci jako ladění v čase.
 
 ## Streamy
 
@@ -70,7 +70,7 @@ Bloc je postavený nad [RxDart](https://pub.dev/packages/rxdart), avšak abstrah
 
 Aby bylo možné používat Bloc, je nutné mít dobrou znalost o `Streamech` a jak fungují.
 
-> Pokud nemáte se `Streamy` zkušenosti, představte si potrubí s vodou, které jím protéká. Potrubí je `Stream` a voda jsou asynchronní data.
+> Pokud nemáte se `Streamy` zkušenosti, představte si potrubí s vodou, která jím protéká. Potrubí je `Stream` a voda jsou asynchronní data.
 
 `Stream` můžeme v Dartu vytvořit pomocí `async*` funkce.
 
@@ -98,7 +98,7 @@ Future<int> sumStream(Stream<int> stream) async {
 }
 ```
 
-Označením funkce jako `async`, jsme schopni použít klíčové slovo `await` a vrátit `Future` celých čísel. V tomto případě čekáme na každou hodnotu ve streamu a vracíme součet všech celých čísel ve streamu.
+Označením funkce jako `async` můžeme použít klíčové slovo `await` a vrátit `Future` celých čísel. V tomto případě čekáme na každou hodnotu ve streamu a vracíme součet všech celých čísel ve streamu.
 
 Dohromady to můžeme použít nějak takto:
 
@@ -117,7 +117,7 @@ void main() async {
 
 > Bloc (Business Logic Component) je komponenta, která konvertuje `Stream` příchozích `Eventů` na `Stream` odchozích `Stavů`. Přemýšlejte o Blocu jako o "mozku" popisovaném výše.
 
-> Každý Bloc musí rozšiřovat základní třídu `Bloc`, který je součástí základního balíčku bloc.
+> Každý Bloc musí rozšiřovat základní třídu `Bloc`, která je součástí základního balíčku bloc.
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -138,7 +138,7 @@ V tomto případě chceme, aby naše počítadlo začínalo na `0`.
 int get initialState => 0;
 ```
 
-> Každý Bloc musí implementovat funkci nazývanou `mapEventToState`. Tato funkce přijímá jako argument příchozí `událost` a musí vracet `Stream` nových `stavů`, který je využíván prezenční vrstvou. Můžeme přistoupit ke konkrétnímu stavu blocu v jakémkoli čase pomocí vlastnosti `state`.
+> Každý Bloc musí implementovat funkci `mapEventToState`. Tato funkce přijímá jako argument příchozí `událost` a musí vracet `Stream` nových `stavů`, který je využíván prezenční vrstvou. Můžeme přistoupit ke konkrétnímu stavu blocu v jakémkoli čase pomocí vlastnosti `state`.
 
 ```dart
 @override
@@ -179,9 +179,9 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-!> Blocy budou ignorovat duplikátní stavy. Pokud Blok přidá stav `State nextState` kde `state == nextState`, nevyvolá se žádný přechod a nebude provedena žádná změna `Stream<State>`.
+!> Blocy budou ignorovat duplicitní stavy. Pokud Blok přidá stav `State nextState` kde `state == nextState`, nevyvolá se žádný přechod a nebude provedena žádná změna `Stream<State>`.
 
-V tomto bodě si asi říkáte _"Jak upozorním Bloc na událost?"_.
+Teď si asi říkáte _"Jak upozorním Bloc na událost?"_.
 
 > Každý Bloc má metodu `add`. `Add` přijímá `událost` a spouští `mapEventToState`. `Add` může být volána z prezenční vrstvy nebo zevnitř Blocu a upozorní Bloc na novou `událost`.
 
@@ -196,6 +196,8 @@ void main() {
     }
 }
 ```
+
+!> Ve výchozím nastavení budou události vždy zpracovány v pořadí, ve kterém byly přidány a každá nová přidaná událost je zařazena do fronty. Událost je považována za plně zpracovanout v momentě, kdy se dokončí provádění `mapEventToState`.
 
 `Transitiony` ve výše zmíněném úryvku kódu bude následující:
 
@@ -217,7 +219,7 @@ void main() {
 }
 ```
 
-Naneštěstí, v aktuálním stavu nebudeme schopni vidět žádný z těchto přechodů, dokud nepřepíšeme `onTransition`.
+Naneštěstí nebudeme v aktuálním stavu schopni vidět žádný z těchto přechodů, dokud nepřepíšeme `onTransition`.
 
 > `onTransition` je metoda, který může být přepsána ke zpracování každého lokálního `Transitionu` Blocu. `onTransition` je zavolána těsně před tím, než byl `stav` Blocu aktualizován.
 
@@ -232,7 +234,7 @@ void onTransition(Transition<CounterEvent, int> transition) {
 
 Nyní, když jsme přepsali `onTransition` můžeme dělat cokoli chceme kdykoli se objeví `Transition`.
 
-Stejně jako můžeme zpracovat `Transitiony` na úrovni blocu, můžeme také zpracovat `Exceptiony` (vyjímky).
+Stejně jako můžeme zpracovat `Transition` na úrovni blocu, můžeme také zpracovat `Exception` (vyjímky).
 
 > `onError` je metoda, která může být přepsána ke zpracování lokálního `Exceptionu` Blocu. Defaultně jsou všechny vyjímky ignorovány a funkčnost `Bloc` bude nedotčena.
 
@@ -251,7 +253,7 @@ Nyní, když jsme přepsali `onError`, můžeme dělat cokoli chceme kdykoli je 
 
 ## BlocDelegate
 
-Jeden přidaný bonus používání Blocu je to, že můžeme míř přístup ke všem `Transitionům` na jednom místě. Dokonce i když v této aplikaci máme pouze jeden Bloc, je docela běžné ve větších aplikacích mít více Bloců, které zpracovávají rozdílné části stavů aplikace.
+Jeden přidaný bonus používání Blocu je to, že můžeme míř přístup ke všem `Transitionům` na jednom místě. I když v této aplikaci máme pouze jeden Bloc, ve větších aplikacích je docela běžné mít více Bloců, které zpracovávají rozdílné části stavů aplikace.
 
 Pokud chceme být schopni dělat něco v závislosti na všech `Transitionech`, můžeme jednoduše vytvořit náš vlastní `BlocDelegate`.
 

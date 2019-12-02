@@ -29,11 +29,12 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 Před tím, než začneme psát naše testy, budeme potřebovat přidat testovací framework do našich závislostí.
 
-Potřebujeme přidat [test](https://pub.dev/packages/test) do našeho `pubspec.yaml`.
+Potřebujeme přidat [test](https://pub.dev/packages/test) a [bloc_test](https://pub.dev/packages/bloc_test) do našeho `pubspec.yaml`.
 
 ```yaml
 dev_dependencies:
   test: ">=1.3.0 <2.0.0"
+  bloc_test: ^2.1.0
 ```
 
 Začneme vytvořením souboru pro náš `CounterBloc` test, `counter_bloc_test.dart`, a importujeme balíček test.
@@ -84,32 +85,26 @@ group('CounterBloc', () {
 
 ?> **Poznámka**: Můžeme spustit všechny naše testy pomocí příkazu `pub run test`.
 
-V tomto bodě bychom měli mít náš první průchozí test! Nyní si napíšeme složitější test.
+V tomto bodě bychom měli mít náš první průchozí test! Nyní si napíšeme složitější test pomocí balíčku [bloc_test](https://pub.dev/packages/bloc_test).
 
 ```dart
-test('single Increment event updates state to 1', () {
-    final List<int> expected = [0, 1];
+blocTest(
+    'emits [0, 1] when CounterEvent.increment is added',
+    build: () => counterBloc,
+    act: (bloc) => bloc.add(CounterEvent.increment),
+    expect: [0, 1],
+);
 
-    expectLater(
-        counterBloc,
-        emitsInOrder(expected),
-    );
-
-    counterBloc.add(CounterEvent.increment);
-});
-
-test('single Decrement event updates state to -1', () {
-    final List<int> expected = [0, -1];
-
-    expectLater(
-        counterBloc,
-        emitsInOrder(expected),
-    );
-
-    counterBloc.add(CounterEvent.decrement);
-});
+blocTest(
+    'emits [0, -1] when CounterEvent.decrement is added',
+    build: () => counterBloc,
+    act: (bloc) => bloc.add(CounterEvent.decrement),
+    expect: [0, -1],
+);
 ```
 
 Měli bychom být schopni spustit testy a vidět, že prochází.
 
 To je všechno, testování by mělo být hračkou a měli bychom se cítit sebejistě, když děláme změny a refaktorujeme náš kód.
+
+Příklad plně otestované aplikace můžete nalézt v [Todos App](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library).
