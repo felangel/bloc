@@ -23,18 +23,14 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^2.0.0
+  flutter_bloc: ^3.0.0
   http: ^0.12.0
-  equatable: ^0.6.0
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  equatable: ^1.0.0
 
 flutter:
   uses-material-design: true
@@ -307,7 +303,7 @@ Stream<PostState> transformEvents(
   Stream<PostState> Function(PostEvent event) next,
 ) {
   return super.transformEvents(
-    (events as Observable<PostEvent>).debounceTime(
+    events.debounceTime(
       Duration(milliseconds: 500),
     ),
     next,
@@ -339,7 +335,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     Stream<PostState> Function(PostEvent event) next,
   ) {
     return super.transformEvents(
-      (events as Observable<PostEvent>).debounceTime(
+      events.debounceTime(
         Duration(milliseconds: 500),
       ),
       next,
