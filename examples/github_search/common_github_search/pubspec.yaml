@@ -3,10 +3,11 @@ description: Shared Code between AngularDart and Flutter
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   meta: ^1.1.6
-  bloc: ^2.0.0
-  equatable: ^0.6.0
+  bloc:
+    path: ../../../packages/bloc
+  equatable: ^1.0.0
   http: ^0.12.0
