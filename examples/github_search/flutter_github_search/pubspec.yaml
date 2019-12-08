@@ -4,20 +4,16 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
-    sdk: flutter  
+    sdk: flutter
   flutter_bloc:
     path: ../../../packages/flutter_bloc
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
 
 flutter:
   uses-material-design: true

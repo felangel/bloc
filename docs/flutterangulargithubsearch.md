@@ -34,12 +34,12 @@ description: Shared Code between AngularDart and Flutter
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
-  meta: ^1.1.7
-  bloc: ^2.0.0
-  equatable: ^0.6.0
+  meta: ^1.1.6
+  bloc: ^3.0.0
+  equatable: ^1.0.0
   http: ^0.12.0
 ```
 
@@ -353,7 +353,7 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
     Stream<GithubSearchState> Function(GithubSearchEvent event) next,
   ) {
     return super.transformEvents(
-      (events as Observable<GithubSearchEvent>).debounceTime(
+      events.debounceTime(
         Duration(milliseconds: 500),
       ),
       next,
@@ -425,19 +425,15 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^2.0.0
+  flutter_bloc: ^3.0.0
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
 
 flutter:
   uses-material-design: true
@@ -837,20 +833,20 @@ name: angular_github_search
 description: A web app that uses AngularDart Components
 
 environment:
-  sdk: ">=2.0.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
-  angular: ^5.0.0
-  angular_components: ^0.9.0
-  angular_bloc: ^2.0.0
+  angular: ^5.3.0
+  angular_components: ^0.13.0
+  angular_bloc: ^3.0.0
   common_github_search:
     path: ../common_github_search
 
 dev_dependencies:
   angular_test: ^2.0.0
-  build_runner: ^0.10.0
+  build_runner: ">=1.6.2 <2.0.0"
   build_test: ^0.10.2
-  build_web_compilers: ^0.4.0
+  build_web_compilers: ">=1.2.0 <3.0.0"
   test: ^1.0.0
 ```
 
