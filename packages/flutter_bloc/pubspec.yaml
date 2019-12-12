@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   bloc: ^3.0.0-dev.1
-  provider: ^3.2.0
+  provider: 4.0.0-dev
 
 dev_dependencies:
   flutter_test:

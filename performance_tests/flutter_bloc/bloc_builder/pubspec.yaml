@@ -3,7 +3,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.28.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter_bloc:
@@ -16,7 +16,6 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  test: ">=1.3.0 <2.0.0"
 
 flutter:
   uses-material-design: true
