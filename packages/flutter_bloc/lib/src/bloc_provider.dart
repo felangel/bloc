@@ -70,7 +70,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
     this.child,
   })  : _create = create,
         _dispose = dispose,
-        super(key: key);
+        super(key: key, child: child);
 
   /// Method that allows widgets to access a [bloc] instance as long as their `BuildContext`
   /// contains a [BlocProvider] instance.
@@ -108,7 +108,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
     return InheritedProvider<T>(
       create: _create,
       dispose: _dispose,
-      child: child ?? this.child,
+      child: child,
     );
   }
 }
