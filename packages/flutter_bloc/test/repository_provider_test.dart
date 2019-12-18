@@ -239,7 +239,7 @@ void main() {
         child: _child,
       ));
       await tester.tap(find.byKey(Key('iconButtonKey')));
-      await tester.pumpAndSettle();
+      await tester.pump();
       expect(numBuilds, 1);
     });
   });

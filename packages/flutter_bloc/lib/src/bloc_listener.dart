@@ -86,27 +86,11 @@ class BlocListener<B extends Bloc<dynamic, S>, S>
   })  : assert(listener != null),
         super(
           key: key,
+          child: child,
           listener: listener,
           bloc: bloc,
           condition: condition,
         );
-
-  @override
-  BlocListener<B, S> builder(
-    BuildContext context,
-    B bloc,
-    BlocWidgetListener<S> listener,
-    BlocListenerCondition<S> condition,
-    Widget child,
-  ) {
-    return BlocListener<B, S>(
-      key: key,
-      bloc: bloc,
-      listener: listener,
-      condition: condition,
-      child: child,
-    );
-  }
 }
 
 /// {@template bloclistenerbase}
@@ -118,6 +102,9 @@ class BlocListener<B extends Bloc<dynamic, S>, S>
 /// {@endtemplate}
 abstract class BlocListenerBase<B extends Bloc<dynamic, S>, S>
     extends SingleChildStatefulWidget {
+  /// The widget which will be rendered as a descendant of the [BlocListenerBase].
+  final Widget child;
+
   /// The [bloc] whose [state] will be listened to.
   /// Whenever the [bloc]'s [state] changes, [listener] will be invoked.
   final B bloc;
@@ -141,21 +128,13 @@ abstract class BlocListenerBase<B extends Bloc<dynamic, S>, S>
     Key key,
     this.listener,
     this.bloc,
+    this.child,
     this.condition,
-  }) : super(key: key);
+  }) : super(key: key, child: child);
 
   @override
   SingleChildState<BlocListenerBase<B, S>> createState() =>
       _BlocListenerBaseState<B, S>();
-
-  /// Returns a widget based on the `BuildContext`.
-  BlocListenerBase<B, S> builder(
-    BuildContext context,
-    B bloc,
-    BlocWidgetListener<S> listener,
-    BlocListenerCondition<S> condition,
-    Widget child,
-  );
 }
 
 class _BlocListenerBaseState<B extends Bloc<dynamic, S>, S>
@@ -188,15 +167,7 @@ class _BlocListenerBaseState<B extends Bloc<dynamic, S>, S>
   }
 
   @override
-  Widget buildWithChild(BuildContext context, Widget child) {
-    return widget.builder(
-      context,
-      widget.bloc,
-      widget.listener,
-      widget.condition,
-      child,
-    );
-  }
+  Widget buildWithChild(BuildContext context, Widget child) => child;
 
   @override
   void dispose() {
