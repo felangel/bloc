@@ -18,14 +18,11 @@ class RepositoryProvider<T> extends Provider<T> {
   /// {@macro repositoryprovider}
   RepositoryProvider({
     Key key,
-    @required ValueBuilder<T> create,
-    @Deprecated('will be removed in 3.0.0, use create instead')
-        ValueBuilder<T> builder,
+    @required Create<T> create,
     Widget child,
   }) : super(
           key: key,
-          // ignore: deprecated_member_use_from_same_package
-          create: create ?? builder,
+          create: create,
           dispose: (_, __) {},
           child: child,
         );

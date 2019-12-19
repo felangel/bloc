@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:nested/nested.dart';
 
 /// Signature for the [listener] function which takes the `BuildContext` along with the [bloc] [state]
 /// and is responsible for executing in response to [state] changes.
@@ -69,8 +70,8 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 /// )
 /// ```
 /// {@endtemplate}
-class BlocListener<B extends Bloc<dynamic, S>, S> extends BlocListenerBase<B, S>
-    with SingleChildCloneableWidget {
+class BlocListener<B extends Bloc<dynamic, S>, S>
+    extends BlocListenerBase<B, S> {
   /// The widget which will be rendered as a descendant of the [BlocListener].
   final Widget child;
 
@@ -84,26 +85,11 @@ class BlocListener<B extends Bloc<dynamic, S>, S> extends BlocListenerBase<B, S>
   })  : assert(listener != null),
         super(
           key: key,
+          child: child,
           listener: listener,
           bloc: bloc,
           condition: condition,
         );
-
-  /// Clones the current [BlocListener] with a new [child] widget.
-  /// All other values, including [key], [bloc] and [listener] are preserved.
-  @override
-  BlocListener<B, S> cloneWithChild(Widget child) {
-    return BlocListener<B, S>(
-      key: key,
-      bloc: bloc,
-      listener: listener,
-      condition: condition,
-      child: child,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) => child;
 }
 
 /// {@template bloclistenerbase}
@@ -114,7 +100,10 @@ class BlocListener<B extends Bloc<dynamic, S>, S> extends BlocListenerBase<B, S>
 /// is defined by sub-classes.
 /// {@endtemplate}
 abstract class BlocListenerBase<B extends Bloc<dynamic, S>, S>
-    extends StatefulWidget {
+    extends SingleChildStatefulWidget {
+  /// The widget which will be rendered as a descendant of the [BlocListenerBase].
+  final Widget child;
+
   /// The [bloc] whose [state] will be listened to.
   /// Whenever the [bloc]'s [state] changes, [listener] will be invoked.
   final B bloc;
@@ -138,17 +127,17 @@ abstract class BlocListenerBase<B extends Bloc<dynamic, S>, S>
     Key key,
     this.listener,
     this.bloc,
+    this.child,
     this.condition,
-  }) : super(key: key);
+  }) : super(key: key, child: child);
 
-  State<BlocListenerBase<B, S>> createState() => _BlocListenerBaseState<B, S>();
-
-  /// Returns a widget based on the `BuildContext`.
-  Widget build(BuildContext context);
+  @override
+  SingleChildState<BlocListenerBase<B, S>> createState() =>
+      _BlocListenerBaseState<B, S>();
 }
 
 class _BlocListenerBaseState<B extends Bloc<dynamic, S>, S>
-    extends State<BlocListenerBase<B, S>> {
+    extends SingleChildState<BlocListenerBase<B, S>> {
   StreamSubscription<S> _subscription;
   S _previousState;
   B _bloc;
@@ -177,7 +166,7 @@ class _BlocListenerBaseState<B extends Bloc<dynamic, S>, S>
   }
 
   @override
-  Widget build(BuildContext context) => widget.build(context);
+  Widget buildWithChild(BuildContext context, Widget child) => child;
 
   @override
   void dispose() {

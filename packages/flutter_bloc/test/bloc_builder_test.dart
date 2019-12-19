@@ -277,7 +277,7 @@ void main() {
 
       themeBloc.add(SetDarkTheme());
 
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       var _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
           as MaterialApp;
@@ -287,7 +287,7 @@ void main() {
 
       themeBloc.add(SetLightTheme());
 
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
           as MaterialApp;
