@@ -21,8 +21,7 @@ class App extends StatelessWidget {
           title: Text('Complex List'),
         ),
         body: BlocProvider(
-          create: (context) =>
-              ListBloc(repository: Repository())..add(Fetch()),
+          create: (context) => ListBloc(repository: Repository())..add(Fetch()),
           child: HomePage(),
         ),
       ),
