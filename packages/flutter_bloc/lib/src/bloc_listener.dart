@@ -4,8 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
-import 'package:nested/nested.dart';
+import 'package:provider/single_child_widget.dart';
 
 /// Signature for the [listener] function which takes the `BuildContext` along with the [bloc] [state]
 /// and is responsible for executing in response to [state] changes.
