@@ -2,6 +2,8 @@
 
 set -ex
 
+source scripts/retry.sh
+
 cd $1
 package=${PWD##*/}
 
@@ -20,7 +22,7 @@ else
     pub get
     dartfmt -w .
     dartanalyzer --fatal-infos --fatal-warnings . || EXIT_CODE=$?
-    pub run test_coverage
+    retry pub run test_coverage
     cp ./coverage/lcov.info ../../$package.lcov
 fi
 
