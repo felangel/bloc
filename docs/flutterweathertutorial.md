@@ -461,7 +461,7 @@ Future<int> getLocationId(String city) async {
 }
 ```
 
-Here we are just making a simple HTTP request and then decoding the response as a list. Speaking of decoding, you'll see `jsonDecode` is a function from a dependency we need to import. So let's go ahead nad do that now. At the top of the file by the other imports go ahead and add:
+Here we are just making a simple HTTP request and then decoding the response as a list. Speaking of decoding, you'll see `jsonDecode` is a function from a dependency we need to import. So let's go ahead and do that now. At the top of the file by the other imports go ahead and add:
 
 ```dart
 import 'dart:convert';
