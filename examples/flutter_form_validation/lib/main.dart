@@ -61,6 +61,7 @@ class _MyFormState extends State<MyForm> {
                   icon: Icon(Icons.email),
                   labelText: 'Email',
                 ),
+                keyboardType: TextInputType.emailAddress,
                 autovalidate: true,
                 validator: (_) {
                   return state.isEmailValid ? null : 'Invalid Email';
