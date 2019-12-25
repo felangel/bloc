@@ -34,9 +34,9 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// using the provided [onData], [onError] and [onDone] handlers.
   @override
   StreamSubscription<State> listen(
-    void onData(State value), {
+    void Function(State) onData, {
     Function onError,
-    void onDone(),
+    void Function() onDone,
     bool cancelOnError,
   }) {
     return _stateSubject.listen(
@@ -119,7 +119,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// ```
   Stream<State> transformEvents(
     Stream<Event> events,
-    Stream<State> next(Event event),
+    Stream<State> Function(Event) next,
   ) {
     return events.asyncExpand(next);
   }
