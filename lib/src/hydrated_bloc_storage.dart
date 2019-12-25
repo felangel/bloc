@@ -23,8 +23,8 @@ abstract class HydratedStorage {
 /// to persist and retrieve state changes from the local device.
 class HydratedBlocStorage implements HydratedStorage {
   static HydratedBlocStorage _instance;
-  Map<String, dynamic> _storage;
-  File _file;
+  final Map<String, dynamic> _storage;
+  final File _file;
 
   /// Returns an instance of `HydratedBlocStorage`.
   /// `storageDirectory` can optionally be provided.
@@ -75,7 +75,7 @@ class HydratedBlocStorage implements HydratedStorage {
 
   @override
   Future<void> clear() async {
-    _storage = <String, dynamic>{};
+    _storage.clear();
     _instance = null;
     return await _file.exists() ? await _file.delete() : null;
   }

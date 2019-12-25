@@ -5,7 +5,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cirrusci/flutter:v1.5.4-hotfix.2
+      - image: cirrusci/flutter:stable
     steps:
       - checkout
       - run: scripts/run_ci.sh

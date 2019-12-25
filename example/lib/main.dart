@@ -23,7 +23,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CounterBloc>(
-      builder: (context) => CounterBloc(),
+      create: (context) => CounterBloc(),
       child: MaterialApp(
         title: 'Flutter Demo',
         home: CounterPage(),
