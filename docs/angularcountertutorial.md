@@ -27,6 +27,7 @@ environment:
 
 dependencies:
   angular: ^5.3.0
+  angular_components: ^0.13.0
   angular_bloc: ^2.0.0
 
 dev_dependencies:
@@ -111,6 +112,7 @@ Our `counter_page_component.dart` should look like:
 
 ```dart
 import 'package:angular/angular.dart';
+import 'package:angular_components/angular_components.dart';
 
 import 'package:angular_bloc/angular_bloc.dart';
 
@@ -120,6 +122,7 @@ import './counter_bloc.dart';
   selector: 'counter-page',
   templateUrl: 'counter_page_component.html',
   styleUrls: ['counter_page_component.css'],
+  directives: [MaterialFabComponent],
   providers: [ClassProvider(CounterBloc)],
   pipes: [BlocPipe],
 )
@@ -155,8 +158,12 @@ Lastly, our `counter_page_component.html` should look like:
 <div class="counter-page-container">
   <h1>Counter App</h1>
   <h2>Current Count: {{ counterBloc | bloc }}</h2>
-  <button class="counter-fab-button" (click)="increment()">+</button>
-  <button class="counter-fab-button" (click)="decrement()">-</button>
+  <material-fab class="counter-fab-button" (trigger)="increment()"
+    >+</material-fab
+  >
+  <material-fab class="counter-fab-button" (trigger)="decrement()"
+    >-</material-fab
+  >
 </div>
 ```
 

@@ -1,6 +1,6 @@
 <div class="counter-page-container">
   <h1>Counter App</h1>
   <h2>Current Count: {{ counterBloc | bloc }}</h2>
-  <button class="counter-fab-button" (click)="increment()">+</button>
-  <button class="counter-fab-button" (click)="decrement()">-</button>
+  <material-fab class="counter-fab-button" (trigger)="increment()">+</material-fab>
+  <material-fab class="counter-fab-button" (trigger)="decrement()">-</material-fab>
 </div>
