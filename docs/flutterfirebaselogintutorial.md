@@ -23,7 +23,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -31,14 +31,10 @@ dependencies:
   firebase_core: ^0.4.0+8
   google_sign_in: ^4.0.0
   firebase_auth: ^0.15.0+1
-  flutter_bloc: ^2.0.0
+  flutter_bloc: ^3.0.0
   equatable: ^1.0.0
   meta: ^1.1.6
   font_awesome_flutter: ^8.4.0
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
 
 flutter:
   uses-material-design: true
@@ -1003,14 +999,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Stream<LoginEvent> events,
     Stream<LoginState> Function(LoginEvent event) next,
   ) {
-    final observableStream = events as Observable<LoginEvent>;
-    final nonDebounceStream = observableStream.where((event) {
+    final nonDebounceStream = events.where((event) {
       return (event is! EmailChanged && event is! PasswordChanged);
     });
-    final debounceStream = observableStream.where((event) {
+    final debounceStream = events.where((event) {
       return (event is EmailChanged || event is PasswordChanged);
     }).debounceTime(Duration(milliseconds: 300));
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super.transformEvents(
+      nonDebounceStream.mergeWith([debounceStream]),
+      next,
+    );
   }
 
   @override
@@ -1644,14 +1642,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     Stream<RegisterEvent> events,
     Stream<RegisterState> Function(RegisterEvent event) next,
   ) {
-    final observableStream = events as Observable<RegisterEvent>;
-    final nonDebounceStream = observableStream.where((event) {
+    final nonDebounceStream = events.where((event) {
       return (event is! EmailChanged && event is! PasswordChanged);
     });
-    final debounceStream = observableStream.where((event) {
+    final debounceStream = events.where((event) {
       return (event is EmailChanged || event is PasswordChanged);
     }).debounceTime(Duration(milliseconds: 300));
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super.transformEvents(
+      nonDebounceStream.mergeWith([debounceStream]),
+      next,
+    );
   }
 
   @override

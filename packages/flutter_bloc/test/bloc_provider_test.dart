@@ -147,13 +147,23 @@ class RoutePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RaisedButton(
-        key: Key('route_button'),
-        onPressed: () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute<Widget>(builder: (context) => Container()),
-          );
-        },
+      body: Column(
+        children: [
+          RaisedButton(
+            key: Key('route_button'),
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute<Widget>(builder: (context) => Container()),
+              );
+            },
+          ),
+          RaisedButton(
+            key: Key('increment_buton'),
+            onPressed: () {
+              BlocProvider.of<CounterBloc>(context).add(CounterEvent.increment);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -170,10 +180,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
-      case CounterEvent.decrement:
+      case CounterEvent.increment:
         yield state + 1;
         break;
-      case CounterEvent.increment:
+      case CounterEvent.decrement:
         yield state - 1;
         break;
     }
@@ -253,7 +263,41 @@ void main() {
       },
     );
 
-    testWidgets('calls close on bloc automatically',
+    testWidgets(
+      'can access bloc directly within builder',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: BlocProvider(
+                create: (context) => CounterBloc(),
+                child: BlocBuilder<CounterBloc, int>(
+                  builder: (context, state) => Column(
+                    children: [
+                      Text('state: $state'),
+                      RaisedButton(
+                        key: Key('increment_button'),
+                        onPressed: () {
+                          BlocProvider.of<CounterBloc>(context)
+                              .add(CounterEvent.increment);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        expect(find.text('state: 0'), findsOneWidget);
+        await tester.tap(find.byKey(Key('increment_button')));
+        await tester.pump();
+        expect(tester.takeException(), isNull);
+        expect(find.text('state: 1'), findsOneWidget);
+      },
+    );
+
+    testWidgets('does not call close on bloc if it was not loaded (lazily)',
         (WidgetTester tester) async {
       var closeCalled = false;
       CounterBloc _create(BuildContext context) => CounterBloc(
@@ -272,6 +316,32 @@ void main() {
       expect(closeCalled, false);
 
       await tester.tap(_routeButtonFinder);
+      await tester.pumpAndSettle();
+
+      expect(closeCalled, false);
+    });
+
+    testWidgets('calls close on bloc automatically when invoked (lazily)',
+        (WidgetTester tester) async {
+      var closeCalled = false;
+      CounterBloc _create(BuildContext context) => CounterBloc(
+            onClose: () {
+              closeCalled = true;
+            },
+          );
+      final Widget _child = RoutePage();
+      await tester.pumpWidget(MyApp(
+        create: _create,
+        child: _child,
+      ));
+      final incrementButtonFinder = find.byKey(Key('increment_buton'));
+      expect(incrementButtonFinder, findsOneWidget);
+      await tester.tap(incrementButtonFinder);
+      final routeButtonFinder = find.byKey((Key('route_button')));
+      expect(routeButtonFinder, findsOneWidget);
+      expect(closeCalled, false);
+
+      await tester.tap(routeButtonFinder);
       await tester.pumpAndSettle();
 
       expect(closeCalled, true);
@@ -339,7 +409,7 @@ void main() {
         child: _child,
       ));
       await tester.tap(find.byKey(Key('iconButtonKey')));
-      await tester.pumpAndSettle();
+      await tester.pump();
       expect(numBuilds, 1);
     });
   });

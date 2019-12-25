@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
+
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 import 'package:bloc/bloc.dart';
 
 /// {@template blocprovider}
@@ -18,24 +20,23 @@ import 'package:bloc/bloc.dart';
 /// ```
 /// {@endtemplate}
 class BlocProvider<T extends Bloc<dynamic, dynamic>>
-    extends ValueDelegateWidget<T> implements SingleChildCloneableWidget {
+    extends SingleChildStatelessWidget {
   /// [child] and its descendants which will have access to the [bloc].
   final Widget child;
+
+  final Dispose<T> _dispose;
+
+  final Create<T> _create;
 
   /// {@macro blocprovider}
   BlocProvider({
     Key key,
-    @Deprecated('will be removed in 3.0.0, use create instead')
-        ValueBuilder<T> builder,
-    @required ValueBuilder<T> create,
+    @required Create<T> create,
     Widget child,
   }) : this._(
           key: key,
-          delegate: BuilderStateDelegate<T>(
-            // ignore: deprecated_member_use_from_same_package
-            create ?? builder,
-            dispose: (_, bloc) => bloc?.close(),
-          ),
+          create: create,
+          dispose: (_, bloc) => bloc?.close(),
           child: child,
         );
 
@@ -58,7 +59,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
     Widget child,
   }) : this._(
           key: key,
-          delegate: SingleValueDelegate<T>(value),
+          create: (_) => value,
           child: child,
         );
 
@@ -66,9 +67,12 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
   /// Used by the [BlocProvider] default and value constructors.
   BlocProvider._({
     Key key,
-    @required ValueStateDelegate<T> delegate,
+    @required Create<T> create,
+    Dispose<T> dispose,
     this.child,
-  }) : super(key: key, delegate: delegate);
+  })  : _create = create,
+        _dispose = dispose,
+        super(key: key, child: child);
 
   /// Method that allows widgets to access a [bloc] instance as long as their `BuildContext`
   /// contains a [BlocProvider] instance.
@@ -102,18 +106,10 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildWithChild(BuildContext context, Widget child) {
     return InheritedProvider<T>(
-      value: delegate.value,
-      child: child,
-    );
-  }
-
-  @override
-  BlocProvider<T> cloneWithChild(Widget child) {
-    return BlocProvider<T>._(
-      key: key,
-      delegate: delegate,
+      create: _create,
+      dispose: _dispose,
       child: child,
     );
   }

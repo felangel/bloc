@@ -21,15 +21,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     Stream<RegisterEvent> events,
     Stream<RegisterState> Function(RegisterEvent event) next,
   ) {
-    final observableStream = events as Observable<RegisterEvent>;
-    final nonDebounceStream = observableStream.where((event) {
+    final nonDebounceStream = events.where((event) {
       return (event is! EmailChanged && event is! PasswordChanged);
     });
-    final debounceStream = observableStream.where((event) {
+    final debounceStream = events.where((event) {
       return (event is EmailChanged || event is PasswordChanged);
     }).debounceTime(Duration(milliseconds: 300));
-    return super
-        .transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super.transformEvents(
+      nonDebounceStream.mergeWith([debounceStream]),
+      next,
+    );
   }
 
   @override

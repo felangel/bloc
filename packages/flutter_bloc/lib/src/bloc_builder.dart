@@ -49,9 +49,8 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 /// An optional [condition] can be implemented for more granular control
 /// over how often [BlocBuilder] rebuilds.
 /// The [condition] function will be invoked on each [bloc] [state] change.
-/// The [condition] takes the previous [state] built by [BlocBuilder] and
-/// the current [state] of the [bloc] and must return a [bool] which determines
-/// whether or not the [builder] function will be invoked.
+/// The [condition] takes the previous [state] and current [state] and must return a [bool]
+/// which determines whether or not the [builder] function will be invoked.
 /// The previous [state] will be initialized to the [state] of the [bloc]
 /// when the [BlocBuilder] is initialized.
 /// [condition] is optional and if it isn't implemented, it will default to `true`.
@@ -168,9 +167,9 @@ class _BlocBuilderBaseState<B extends Bloc<dynamic, S>, S>
         if (widget.condition?.call(_previousState, state) ?? true) {
           setState(() {
             _state = state;
-            _previousState = state;
           });
         }
+        _previousState = state;
       });
     }
   }

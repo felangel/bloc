@@ -1,3 +1,7 @@
+# 3.0.0-dev.1
+
+- Upgrade to `rxdart ^0.23.0`
+
 # 2.0.0
 
 - Allow blocs to finish processing pending events on `close` ([#639](https://github.com/felangel/bloc/issues/639))
