@@ -1,3 +1,8 @@
+# 3.0.0
+
+- Upgrade to `rxdart ^0.23.0`
+- Upgrade to `Dart >= 2.6.0`
+
 # 3.0.0-dev.1
 
 - Upgrade to `rxdart ^0.23.0`
