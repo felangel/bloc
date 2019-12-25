@@ -20,6 +20,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   State get initialState;
 
   /// Returns whether the `Stream<State>` is a broadcast stream.
+  @override
   bool get isBroadcast => _stateSubject.isBroadcast;
 
   /// {@macro bloc}
@@ -31,6 +32,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// Adds a subscription to the `Stream<State>`.
   /// Returns a [StreamSubscription] which handles events from the `Stream<State>`
   /// using the provided [onData], [onError] and [onDone] handlers.
+  @override
   StreamSubscription<State> listen(
     void onData(State value), {
     Function onError,
