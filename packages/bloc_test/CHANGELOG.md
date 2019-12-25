@@ -1,11 +1,12 @@
 # 3.0.0
 
-- `emitsExactly` supports optional `duration` for async operators like `debounceTime`.
-- `blocTest` supports optional `wait` for async operators like `debounceTime`.
+- Update to `bloc: ^3.0.0`
+- `emitsExactly` supports optional `duration` for async operators like `debounceTime` ([#726](https://github.com/felangel/bloc/issues/726))
+- `blocTest` supports optional `wait` for async operators like `debounceTime` ([#726](https://github.com/felangel/bloc/issues/726))
 
 # 3.0.0-dev.1
 
-- Updated to `bloc: ^3.0.0-dev.1`
+- Update to `bloc: ^3.0.0-dev.1`
 
 # 2.2.2
 
@@ -17,7 +18,7 @@
 
 # 2.2.0
 
-- `emitsExactly` and `blocTest` support `Iterable<Matcher` ([#695](https://github.com/felangel/bloc/issues/695)).
+- `emitsExactly` and `blocTest` support `Iterable<Matcher` ([#695](https://github.com/felangel/bloc/issues/695))
 
 # 2.1.0
 

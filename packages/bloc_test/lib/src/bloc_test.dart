@@ -71,7 +71,7 @@ import 'package:test/test.dart';
 @isTest
 void blocTest<B extends Bloc<Event, State>, Event, State>(
   String description, {
-  @required B build(),
+  @required B Function() build,
   @required Iterable expect,
   Future<void> Function(B bloc) act,
   Duration wait,
