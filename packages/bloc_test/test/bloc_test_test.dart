@@ -47,6 +47,22 @@ void main() {
       );
     });
 
+    group('DebounceCounterBloc', () {
+      blocTest(
+        'emits [0] when nothing is added',
+        build: () => DebounceCounterBloc(),
+        expect: [0],
+      );
+
+      blocTest(
+        'emits [0, 1] when DebounceCounterEvent.increment is added',
+        build: () => DebounceCounterBloc(),
+        act: (bloc) => bloc.add(DebounceCounterEvent.increment),
+        wait: const Duration(milliseconds: 300),
+        expect: [0, 1],
+      );
+    });
+
     group('MultiCounterBloc', () {
       blocTest(
         'emits [0] when nothing is added',
