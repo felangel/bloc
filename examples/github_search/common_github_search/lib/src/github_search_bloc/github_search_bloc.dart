@@ -16,7 +16,7 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
     Stream<GithubSearchEvent> events,
     Stream<GithubSearchState> Function(GithubSearchEvent event) next,
   ) {
-    return (events as Observable<GithubSearchEvent>)
+    return events
         .debounceTime(
           Duration(milliseconds: 300),
         )

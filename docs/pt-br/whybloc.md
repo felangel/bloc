@@ -11,7 +11,7 @@ Como desenvolvedores nós queremos:
 - Gravar todas as interações do usuário na aplicação para que possamos tomar decisões com base em dados.
 - Trabalhar da forma mais eficiente possível e reutilizar componentes dentro da aplicação e com outras aplicações.
 - Ter vários desenvolvedores trabalhando continuamente com uma única base de código seguindo os mesmos padrões e convenções.
-- Desenvolvedor apps rápidos e reativos.
+- Desenvolver apps rápidos e reativos.
 
 Bloc foi pensado para atender todas essas necessidades e muitas outras.
 

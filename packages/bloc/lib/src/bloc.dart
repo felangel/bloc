@@ -101,9 +101,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   ///
   /// ```dart
   /// @override
-  /// Stream<State> transformEvents(events, next) {
-  ///   return (events as Observable<Event>).switchMap(next);
-  /// }
+  /// Stream<State> transformEvents(events, next) => events.switchMap(next);
   /// ```
   ///
   /// Alternatively, if you only want [mapEventToState] to be called for distinct [events]:
@@ -112,7 +110,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// @override
   /// Stream<State> transformEvents(events, next) {
   ///   return super.transformEvents(
-  ///     (events as Observable<Event>).distinct(),
+  ///     events.distinct(),
   ///     next,
   ///   );
   /// }
@@ -142,7 +140,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// ```dart
   /// @override
   /// Stream<State> transformStates(Stream<State> states) {
-  ///   return (states as Observable<State>).debounceTime(Duration(seconds: 1));
+  ///   return states.debounceTime(Duration(seconds: 1));
   /// }
   /// ```
   Stream<State> transformStates(Stream<State> states) => states;

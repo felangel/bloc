@@ -67,11 +67,33 @@ class HomePage extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: getProviders(),
-      child: RaisedButton(
-        key: Key('pop_button'),
-        onPressed: () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute<Container>(builder: (context) => Container()),
+      child: Builder(
+        builder: (context) {
+          return Column(
+            children: [
+              RaisedButton(
+                key: Key('pop_button'),
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute<Container>(
+                        builder: (context) => Container()),
+                  );
+                },
+              ),
+              RaisedButton(
+                key: Key('increment_button'),
+                onPressed: () {
+                  BlocProvider.of<CounterBloc>(context)
+                      .add(CounterEvent.increment);
+                },
+              ),
+              RaisedButton(
+                key: Key('toggle_theme_button'),
+                onPressed: () {
+                  BlocProvider.of<ThemeBloc>(context).add(ThemeEvent.toggle);
+                },
+              ),
+            ],
           );
         },
       ),
@@ -241,7 +263,98 @@ void main() {
       expect(counterText.data, '0');
     });
 
-    testWidgets('calls close on bloc automatically',
+    testWidgets('close on counter bloc which was loaded (lazily)',
+        (WidgetTester tester) async {
+      var counterBlocClosed = false;
+      var themeBlocClosed = false;
+
+      await tester.pumpWidget(
+        MyAppWithNavigation(
+          child: HomePage(
+            onCounterBlocClosed: () {
+              counterBlocClosed = true;
+            },
+            onThemeBlocClosed: () {
+              themeBlocClosed = true;
+            },
+          ),
+        ),
+      );
+
+      expect(counterBlocClosed, false);
+      expect(themeBlocClosed, false);
+
+      await tester.tap(find.byKey(Key('increment_button')));
+      await tester.pump();
+      await tester.tap(find.byKey(Key('pop_button')));
+      await tester.pumpAndSettle();
+
+      expect(counterBlocClosed, true);
+      expect(themeBlocClosed, false);
+    });
+
+    testWidgets('close on theme bloc which was loaded (lazily)',
+        (WidgetTester tester) async {
+      var counterBlocClosed = false;
+      var themeBlocClosed = false;
+
+      await tester.pumpWidget(
+        MyAppWithNavigation(
+          child: HomePage(
+            onCounterBlocClosed: () {
+              counterBlocClosed = true;
+            },
+            onThemeBlocClosed: () {
+              themeBlocClosed = true;
+            },
+          ),
+        ),
+      );
+
+      expect(counterBlocClosed, false);
+      expect(themeBlocClosed, false);
+
+      await tester.tap(find.byKey(Key('toggle_theme_button')));
+      await tester.pump();
+      await tester.tap(find.byKey(Key('pop_button')));
+      await tester.pumpAndSettle();
+
+      expect(counterBlocClosed, false);
+      expect(themeBlocClosed, true);
+    });
+
+    testWidgets('close on all blocs which were loaded (lazily)',
+        (WidgetTester tester) async {
+      var counterBlocClosed = false;
+      var themeBlocClosed = false;
+
+      await tester.pumpWidget(
+        MyAppWithNavigation(
+          child: HomePage(
+            onCounterBlocClosed: () {
+              counterBlocClosed = true;
+            },
+            onThemeBlocClosed: () {
+              themeBlocClosed = true;
+            },
+          ),
+        ),
+      );
+
+      expect(counterBlocClosed, false);
+      expect(themeBlocClosed, false);
+      await tester.tap(find.byKey(Key('increment_button')));
+      await tester.pump();
+      await tester.tap(find.byKey(Key('toggle_theme_button')));
+      await tester.pump();
+      await tester.tap(find.byKey(Key('pop_button')));
+      await tester.pumpAndSettle();
+
+      expect(counterBlocClosed, true);
+      expect(themeBlocClosed, true);
+    });
+
+    testWidgets('does not call close on blocs if they were not loaded (lazily)',
         (WidgetTester tester) async {
       var counterBlocClosed = false;
       var themeBlocClosed = false;
@@ -265,8 +378,8 @@ void main() {
       await tester.tap(find.byKey(Key('pop_button')));
       await tester.pumpAndSettle();
 
-      expect(counterBlocClosed, true);
-      expect(themeBlocClosed, true);
+      expect(counterBlocClosed, false);
+      expect(themeBlocClosed, false);
     });
 
     testWidgets('does not close when created using value',

@@ -1,14 +1,14 @@
 # Základní koncepty Flutter Blocu
 
-?> Prosím, ujistěte se, že si pečlivě přečtete a pochopíte následující sekce před tím, než budete pracovat s [flutter_bloc](https://pub.dev/packages/flutter_bloc).
+?> Ujistěte se, prosím, že si pečlivě přečtete a pochopíte následující sekce před tím, než budete pracovat s [flutter_bloc](https://pub.dev/packages/flutter_bloc).
 
 ## Bloc widgety
 
 ### BlocBuilder
 
-**BlocBuilder** je Flutter widget, který vyžaduje `Bloc` a `builder` funkci. `BlocBuilder` zpracovává sestavení widgetu v reakci na nové stavy. `BlocBuilder` je velmi podobný k `StramBuilder`, ale jednodušší API ke snížení potřebného kódu. Funkce `builder` může být potencionálně zavolána vícekrát a měla by být [pure funkcí](https://en.wikipedia.org/wiki/Pure_function), která vrací widget v reakci na stav.
+**BlocBuilder** je Flutter widget, který vyžaduje `Bloc` a `builder` funkci. `BlocBuilder` zpracovává sestavení widgetu v reakci na nové stavy. `BlocBuilder` je velmi podobný `StreamBuilderu`, ale má jednodušší API a tak není potřeba psát tolik kódu. Funkce `builder` může být zavolána vícekrát a měla by být bez vedlejších účinků ([pure funkce](https://en.wikipedia.org/wiki/Pure_function)); vrací widget v reakci na stav.
 
-Podívejte se na `BlocListener`, pokud chcete "dělat" něco, v závislosti na stavu, jako je navigace, zobrazování dialogu atp.
+Pokud chcete "dělat" něco v závislosti na stavu, jako je navigace, zobrazování dialogu atp, podívejte se na `BlocListener`.
 
 Pokud je parametr blocu vynechán, `BlocBuilder` automaticky provede lookup pomocí `BlocProvideru` a aktuálního `BuildContextu`.
 
@@ -31,7 +31,7 @@ BlocBuilder<BlocA, BlocAState>(
 )
 ```
 
-Pokud chcete hladkou kontrolu nad tím, kdy se builder funkce zavolá, můžete poskytnout nepovinnou `condition` (podmínku) `BlocBuilderu`. `condition` přijímá předchozí stav blocu a aktuální stav blocu a vrací boolean. Pokud `condition` vrací true, `builder` bude zavolán s aktuálním `stavem` a widget bude sestaven znovu. Pokud `condition` vrací false, `builder` nebude zavolán s aktuálním `stavem` a nebude znovu sestaven.
+Pokud chcete mít snadnou kontrolu nad tím, kdy se builder funkce zavolá, můžete poskytnout nepovinnou `condition` (podmínku) `BlocBuilderu`. `condition` přijímá předchozí stav blocu a aktuální stav blocu a vrací boolean. Pokud `condition` vrací true, `builder` bude zavolán s aktuálním `stavem` a widget bude znovu sestaven. Pokud `condition` vrací false, `builder` nebude zavolán s aktuálním `stavem` a nebude znovu sestaven.
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
@@ -75,7 +75,7 @@ BlocProvider.of<BlocA>(context)
 
 ### MultiBlocProvider
 
-**MultiBlocProvider** je Flutter widget, který pojí více `BlocProvider` widgetů do jednoho. `MultiBlocProvider` zlepšuje čitelnost a eliminuje potřebu zanořovat více `BlocProviderů`. Použitím `MultiBlocProvideru` můžeme z tohoto kódu:
+**MultiBlocProvider** je Flutter widget, který pojí více `BlocProvider` widgetů do jednoho. `MultiBlocProvider` zlepšuje čitelnost a eliminuje potřebu zanořovat více `BlocProviderů` do sebe. Použitím `MultiBlocProvideru` můžeme z tohoto kódu:
 
 ```dart
 BlocProvider<BlocA>(
@@ -111,9 +111,9 @@ MultiBlocProvider(
 
 ### BlocListener
 
-**BlocListener** je Flutter widget, který bere `BlocWidgetListener` a nepovinný `Bloc` a vyvolá `listener` v závislosti na změně stavu v blocu. Měl by být použit pro funkcionalitu, která se potřebuje stát jednou za změnu stavu jako je navigace, zobrazení `SnackBaru`, zobrazení `Dialogu` atp.
+**BlocListener** je Flutter widget, který přijímá `BlocWidgetListener` a nepovinný `Bloc` a vyvolá `listener` v závislosti na změně stavu v blocu. Měl by být použit pro funkcionalitu, která se potřebuje stát jednou za změnu stavu jako je navigace, zobrazení `SnackBaru`, zobrazení `Dialogu` atp.
 
-`listener` je zavolán pouze jednou pro každý stav (**NE** pro `initialState`) na rozdíl od `builder` v `BlocBuilder` a je to `void` funkce.
+`listener` je zavolán pouze jednou pro každý stav (**NE** pro `initialState`) na rozdíl od `builder` v `BlocBuilderu` a je to `void` funkce.
 
 Pokud je parametr blocu vynechán, `BlocListener` automaticky provede lookup pomocí `BlockProvideru` a aktuálního `BuildContextu`.
 
@@ -137,7 +137,7 @@ BlocListener<BlocA, BlocAState>(
 )
 ```
 
-Pokud chcete hladkou kontrolu nad tím, kdy se listener funkce zavolá, můžete poskytnout nepovinnou `condition` (podmínku) `BlocListeneru`. `condition` přijímá předchozí stav blocu a aktuální stav blocu a vrací boolean. Pokud `condition` vrací true, `listener` bude zavolán s aktuálním `stavem`. Pokud `condition` vrací false, `listener` nebude zavolán s aktuálním `stavem`.
+Pokud chcete mít snadnou kontrolu nad tím, kdy se listener funkce zavolá, můžete poskytnout nepovinnou `condition` (podmínku) `BlocListeneru`. `condition` přijímá předchozí stav blocu a aktuální stav blocu a vrací boolean. Pokud `condition` vrací true, `listener` bude zavolán s aktuálním `stavem`. Pokud `condition` vrací false, `listener` nebude zavolán s aktuálním `stavem`.
 
 ```dart
 BlocListener<BlocA, BlocAState>(
@@ -317,4 +317,4 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-V tomto bodě máme úspěšně oddělenou naší prezenční vrstvu od naší logické vrstvy. Všimněte si, že `CounterPage` widget neví nic o tom, co se děje když uživatel klepne na tlačítko. Widget jednoduše řekne `CounterBloc` že uživatel stiskl tlačítko inkrementace nebo dekrementace.
+V tomto bodě máme úspěšně oddělenou naší prezenční vrstvu od naší aplikační vrstvy. Všimněte si, že `CounterPage` widget neví nic o tom, co se děje když uživatel klepne na tlačítko. Widget jednoduše řekne `CounterBloc`, že uživatel stiskl tlačítko inkrementace nebo dekrementace.

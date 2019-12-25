@@ -43,15 +43,15 @@ name: todos_repository
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^0.12.7
-  rxdart: ^0.22.0
-  equatable: ^0.6.0
-  firebase_core: ^0.4.0+7
+  cloud_firestore: ^0.12.10+2
+  rxdart: ^0.23.0
+  equatable: ^1.0.0
+  firebase_core: ^0.4.0+8
 ```
 
 ?> **Note:** We can immediately see our `todos_repository` has a dependency on `firebase_core` and `cloud_firestore`.
@@ -310,12 +310,12 @@ name: user_repository
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  firebase_auth: ^0.11.1+12
+  firebase_auth: ^0.15.0+1
 ```
 
 ?> **Note:** We can immediately see our `user_repository` has a dependency on `firebase_auth`.
@@ -392,17 +392,17 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^2.0.0
+  flutter_bloc: ^3.0.0
   todos_repository:
     path: todos_repository
   user_repository:
     path: user_repository
-  equatable: ^0.3.0
+  equatable: ^1.0.0
 
 flutter:
   uses-material-design: true

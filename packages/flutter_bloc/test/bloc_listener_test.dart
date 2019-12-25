@@ -286,7 +286,7 @@ void main() {
           bloc: counterBloc,
           condition: (int previous, int state) {
             conditionCallCount++;
-            if (previous + state % 3 == 0) {
+            if ((previous + state) % 3 == 0) {
               latestPreviousState = previous;
               latestState = state;
               return true;
@@ -302,8 +302,8 @@ void main() {
       counterBloc.add(CounterEvent.increment);
       expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
         expect(conditionCallCount, 3);
-        expect(latestPreviousState, 0);
-        expect(latestState, 3);
+        expect(latestPreviousState, 1);
+        expect(latestState, 2);
       });
     });
 

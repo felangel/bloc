@@ -13,7 +13,7 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
     Stream<ComplexEvent> events,
     Function(ComplexEvent) next,
   ) {
-    return (events as Observable<ComplexEvent>).switchMap(next);
+    return events.switchMap(next);
   }
 
   @override
@@ -33,8 +33,7 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
 
   @override
   Stream<ComplexState> transformStates(Stream<ComplexState> states) {
-    return (states as Observable<ComplexState>)
-        .debounceTime(Duration(milliseconds: 50));
+    return states.debounceTime(Duration(milliseconds: 50));
   }
 
   @override

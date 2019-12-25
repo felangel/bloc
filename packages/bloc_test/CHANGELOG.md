@@ -1,3 +1,12 @@
+# 3.0.0
+
+- `emitsExactly` supports optional `duration` for async operators like `debounceTime`.
+- `blocTest` supports optional `wait` for async operators like `debounceTime`.
+
+# 3.0.0-dev.1
+
+- Updated to `bloc: ^3.0.0-dev.1`
+
 # 2.2.2
 
 - Minor internal improvements (fixed analysis warning in `emitsExactly`)

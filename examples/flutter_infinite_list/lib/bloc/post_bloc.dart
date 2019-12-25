@@ -19,7 +19,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     Stream<PostState> Function(PostEvent event) next,
   ) {
     return super.transformEvents(
-      (events as Observable<PostEvent>).debounceTime(
+      events.debounceTime(
         Duration(milliseconds: 500),
       ),
       next,

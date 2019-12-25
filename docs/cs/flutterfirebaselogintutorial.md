@@ -1232,6 +1232,7 @@ class _LoginFormState extends State<LoginForm> {
                       icon: Icon(Icons.email),
                       labelText: 'Email',
                     ),
+                    keyboardType: TextInputType.emailAddress,
                     autovalidate: true,
                     autocorrect: false,
                     validator: (_) {
@@ -1828,6 +1829,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       icon: Icon(Icons.email),
                       labelText: 'Email',
                     ),
+                    keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
                     autovalidate: true,
                     validator: (_) {

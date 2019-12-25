@@ -8,7 +8,7 @@
 [![Awesome Flutter](https://img.shields.io/badge/awesome-flutter-blue.svg?longCache=true)](https://github.com/Solido/awesome-flutter#standard)
 [![Flutter Samples](https://img.shields.io/badge/flutter-samples-teal.svg?longCache=true)](http://fluttersamples.com)
 [![Star on GitHub](https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/felangel/bloc)
-[![Gitter](https://img.shields.io/badge/gitter-chat-hotpink.svg)](https://gitter.im/bloc_package/Lobby)
+[![Discord](https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue)](https://discord.gg/Hc5KD3g)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -44,7 +44,9 @@ expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3])))
 
 `build` should be used for all `bloc` initialization and preparation and must return the `bloc` under test.
 
-`act` is an optional callback which will be invoked with the `bloc` under test and should be used to `add` events to the bloc.
+`act` is an optional callback which will be invoked with the `bloc` under test and should be used to `add` events to the `bloc`.
+
+`wait` is an optional `Duration` which can be used to wait for async operations within the `bloc` under test such as `debounceTime`.
 
 `expect` is an `Iterable<State>` which the `bloc` under test is expected to emit after `act` is executed.
 
@@ -63,6 +65,18 @@ group('CounterBloc', () {
     expect: [0, 1],
   );
 });
+```
+
+`blocTest` can also be used to wait for async operations like `debounceTime` by providing a `Duration` to `wait`.
+
+```dart
+blocTest(
+  'CounterBloc emits [0, 1] when CounterEvent.increment is added',
+  build: () => CounterBloc(),
+  act: (bloc) => bloc.add(CounterEvent.increment),
+  wait: const Duration(milliseconds: 300),
+  expect: [0, 1],
+);
 ```
 
 **Note:** when using `blocTest` with state classes which don't override `==` and `hashCode` you can provide an `Iterable` of matchers instead of explicit state instances.
@@ -105,9 +119,19 @@ test('emits [StateA, StateB] when EventB is added', () async {
 });
 ```
 
+`emitsExactly` also takes an optional `duration` which is useful in cases where the `bloc` is using `debounceTime` or other similar operators.
+
+```dart
+test('emits [0, 1] when CounterEvent.increment is added', () async {
+  final bloc = CounterBloc();
+  bloc.add(CounterEvent.increment);
+  await emitsExactly(bloc, [0, 1], duration: const Duration(milliseconds: 300));
+});
+```
+
 ## Dart Versions
 
-- Dart 2: >= 2.0.0
+- Dart 2: >= 2.6.0
 
 ## Maintainers
 

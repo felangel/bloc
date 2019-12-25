@@ -81,6 +81,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       icon: Icon(Icons.email),
                       labelText: 'Email',
                     ),
+                    keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
                     autovalidate: true,
                     validator: (_) {

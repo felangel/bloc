@@ -23,18 +23,19 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^2.0.0
+  flutter_bloc: ^3.0.0
   http: ^0.12.0
-  equatable: ^0.6.0
+  equatable: ^1.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mockito: ^4.0.0
 
 flutter:
   uses-material-design: true
@@ -461,7 +462,7 @@ Future<int> getLocationId(String city) async {
 }
 ```
 
-Here we are just making a simple HTTP request and then decoding the response as a list. Speaking of decoding, you'll see `jsonDecode` is a function from a dependency we need to import. So let's go ahead nad do that now. At the top of the file by the other imports go ahead and add:
+Here we are just making a simple HTTP request and then decoding the response as a list. Speaking of decoding, you'll see `jsonDecode` is a function from a dependency we need to import. So let's go ahead and do that now. At the top of the file by the other imports go ahead and add:
 
 ```dart
 import 'dart:convert';

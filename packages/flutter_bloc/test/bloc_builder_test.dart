@@ -277,7 +277,7 @@ void main() {
 
       themeBloc.add(SetDarkTheme());
 
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       var _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
           as MaterialApp;
@@ -287,7 +287,7 @@ void main() {
 
       themeBloc.add(SetLightTheme());
 
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
           as MaterialApp;
@@ -445,7 +445,7 @@ void main() {
 
       final conditionalCounterText3 =
           tester.widget(find.byKey(Key('myCounterAppTextCondition'))) as Text;
-      expect(conditionalCounterText3.data, '0');
+      expect(conditionalCounterText3.data, '2');
 
       await tester.tap(incrementButtonFinder);
       await tester.pumpAndSettle();
@@ -456,7 +456,7 @@ void main() {
 
       final conditionalCounterText4 =
           tester.widget(find.byKey(Key('myCounterAppTextCondition'))) as Text;
-      expect(conditionalCounterText4.data, '3');
+      expect(conditionalCounterText4.data, '2');
     });
   });
 }

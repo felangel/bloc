@@ -119,7 +119,7 @@ DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `Flutter`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -148,7 +148,7 @@ EXTERNAL SOURCES:
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: Flutter
 
 SPEC CHECKSUMS:
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
@@ -162,7 +162,7 @@ SPEC CHECKSUMS:
   FirebaseCore: aecf02fb2274ec361b9bebeac112f5daa18273bd
   FirebaseFirestore: 41a035642eb017fc7206318985501626993840bd
   FirebaseInstanceID: 662b8108a09fe9ed01aafdedba100fde8536b0f6
-  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   GoogleAppMeasurement: 183bd916af7f80deb67c01888368f1108d641832
   GoogleUtilities: d2b0e277a95962e09bb27f5cd42f5f0b6a506c7d
   "gRPC-C++": 9dfe7b44821e7b3e44aacad2af29d2c21f7cde83
@@ -172,6 +172,6 @@ SPEC CHECKSUMS:
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
 
-PODFILE CHECKSUM: 7fb83752f59ead6285236625b82473f90b1cb932
+PODFILE CHECKSUM: 3dbe063e9c90a5d7c9e4e76e70a821b9e2c1d271
 
-COCOAPODS: 1.7.2
+COCOAPODS: 1.7.5
