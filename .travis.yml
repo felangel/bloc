@@ -20,7 +20,7 @@ addons:
       - fonts-droid
 before_script:
   - cd ..
-  - git clone https://github.com/flutter/flutter.git -b beta
+  - git clone https://github.com/flutter/flutter.git -b stable
   - export PATH=$PATH:$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin
   - cd -
   - flutter doctor
