@@ -1,3 +1,7 @@
+# 3.0.0
+
+Update to support bloc `v3.0.0`
+
 # 2.2.0
 
 Update snippets to support flutter_bloc `v2.1.0`

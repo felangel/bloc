@@ -23,10 +23,12 @@ export function analyzeDependencies() {
         }
       ]
     },
-    { name: "bloc", version: "^2.0.0", actions: [] },
-    { name: "bloc_test", version: "^2.0.0", actions: [] },
-    { name: "flutter_bloc", version: "^2.0.0", actions: [] },
-    { name: "angular_bloc", version: "^2.0.0", actions: [] }
+    { name: "bloc", version: "^3.0.0", actions: [] },
+    { name: "bloc_test", version: "^3.0.0", actions: [] },
+    { name: "flutter_bloc", version: "^3.0.0", actions: [] },
+    { name: "angular_bloc", version: "^3.0.0", actions: [] },
+    { name: "hydrated_bloc", version: "^3.0.0", actions: [] },
+    { name: "sealed_flutter_bloc", version: "^3.0.0", actions: [] }
   ];
 
   const dependencies = _.get(getPubspec(), "dependencies", {});
