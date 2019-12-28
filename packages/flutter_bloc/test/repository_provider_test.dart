@@ -168,6 +168,36 @@ void main() {
       expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
 
+    testWidgets('lazily loads repositories by default',
+        (WidgetTester tester) async {
+      var createCalled = false;
+      await tester.pumpWidget(
+        RepositoryProvider(
+          create: (_) {
+            createCalled = true;
+            return Repository(0);
+          },
+          child: Container(),
+        ),
+      );
+      expect(createCalled, isFalse);
+    });
+
+    testWidgets('can override lazy loading', (WidgetTester tester) async {
+      var createCalled = false;
+      await tester.pumpWidget(
+        RepositoryProvider(
+          create: (_) {
+            createCalled = true;
+            return Repository(0);
+          },
+          lazy: false,
+          child: Container(),
+        ),
+      );
+      expect(createCalled, isTrue);
+    });
+
     testWidgets('passes value to children via builder',
         (WidgetTester tester) async {
       final repository = Repository(0);

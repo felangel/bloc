@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 /// It is used as a dependency injection (DI) widget so that a single instance of a repository can be provided
 /// to multiple widgets within a subtree.
 ///
+/// Lazily creates the provided repository unless [lazy] is set to `false`.
+///
 /// ```dart
 /// RepositoryProvider(
 ///   create: (context) => RepositoryA(),
@@ -20,11 +22,13 @@ class RepositoryProvider<T> extends Provider<T> {
     Key key,
     @required Create<T> create,
     Widget child,
+    bool lazy,
   }) : super(
           key: key,
           create: create,
           dispose: (_, __) {},
           child: child,
+          lazy: lazy,
         );
 
   /// Takes a repository and a [child] which will have access to the repository.

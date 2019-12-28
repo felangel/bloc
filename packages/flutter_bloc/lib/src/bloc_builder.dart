@@ -57,7 +57,7 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 ///
 /// ```dart
 /// BlocBuilder<BlocA, BlocAState>(
-///   condition: (previousState, state) {
+///   condition: (previous, current) {
 ///     // return true/false to determine whether or not
 ///     // to rebuild the widget with state
 ///   },
