@@ -1,3 +1,7 @@
+# 3.0.1
+
+Hotfix for `command 'extension.new-bloc' not found`
+
 # 3.0.0
 
 Update to support bloc `v3.0.0`
