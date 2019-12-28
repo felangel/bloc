@@ -229,6 +229,35 @@ void main() {
       expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
 
+    testWidgets('lazily loads blocs by default', (WidgetTester tester) async {
+      var createCalled = false;
+      await tester.pumpWidget(
+        BlocProvider(
+          create: (_) {
+            createCalled = true;
+            return CounterBloc();
+          },
+          child: Container(),
+        ),
+      );
+      expect(createCalled, isFalse);
+    });
+
+    testWidgets('can override lazy loading', (WidgetTester tester) async {
+      var createCalled = false;
+      await tester.pumpWidget(
+        BlocProvider(
+          lazy: false,
+          create: (_) {
+            createCalled = true;
+            return CounterBloc();
+          },
+          child: Container(),
+        ),
+      );
+      expect(createCalled, isTrue);
+    });
+
     testWidgets('passes bloc to children', (WidgetTester tester) async {
       CounterBloc _create(BuildContext context) => CounterBloc();
       final _child = CounterPage();

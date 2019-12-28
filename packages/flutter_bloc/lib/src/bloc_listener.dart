@@ -29,7 +29,7 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 /// ```dart
 /// BlocListener<BlocA, BlocAState>(
 ///   listener: (context, state) {
-///     /// do stuff here based on BlocA's state
+///     // do stuff here based on BlocA's state
 ///   },
 ///   child: Container(),
 /// )
@@ -41,7 +41,7 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 /// BlocListener<BlocA, BlocAState>(
 ///   bloc: blocA,
 ///   listener: (context, state) {
-///     /// do stuff here based on BlocA's state
+///     // do stuff here based on BlocA's state
 ///   },
 ///   child: Container(),
 /// )
@@ -58,7 +58,7 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 ///
 /// ```dart
 /// BlocListener<BlocA, BlocAState>(
-///   condition: (previousState, state) {
+///   condition: (previous, current) {
 ///     // return true/false to determine whether or not
 ///     // to invoke listener with state
 ///   },

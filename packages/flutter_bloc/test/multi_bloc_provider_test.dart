@@ -263,6 +263,34 @@ void main() {
       expect(counterText.data, '0');
     });
 
+    testWidgets('adds event to each bloc', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<CounterBloc>(
+              create: (context) => CounterBloc()..add(CounterEvent.decrement),
+            ),
+            BlocProvider<ThemeBloc>(
+              create: (context) => ThemeBloc()..add(ThemeEvent.toggle),
+            ),
+          ],
+          child: MyApp(),
+        ),
+      );
+
+      await tester.pump();
+
+      final materialApp =
+          tester.widget(find.byType(MaterialApp)) as MaterialApp;
+      expect(materialApp.theme, ThemeData.dark());
+
+      final counterFinder = find.byKey((Key('counter_text')));
+      expect(counterFinder, findsOneWidget);
+
+      final counterText = tester.widget(counterFinder) as Text;
+      expect(counterText.data, '-1');
+    });
+
     testWidgets('close on counter bloc which was loaded (lazily)',
         (WidgetTester tester) async {
       var counterBlocClosed = false;

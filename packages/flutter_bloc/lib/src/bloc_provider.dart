@@ -10,7 +10,8 @@ import 'package:bloc/bloc.dart';
 /// It is used as a dependency injection (DI) widget so that a single instance of a [bloc] can be provided
 /// to multiple widgets within a subtree.
 ///
-/// Automatically handles closing the [bloc] when used with [create].
+/// Automatically handles closing the [bloc] when used with [create]
+/// and lazily creates the provided [bloc] unless [lazy] is set to `false`.
 ///
 /// ```dart
 /// BlocProvider(
@@ -24,6 +25,10 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
   /// [child] and its descendants which will have access to the [bloc].
   final Widget child;
 
+  /// Whether or not the [bloc] being provided should be lazily created.
+  /// Defaults to `true`.
+  final bool lazy;
+
   final Dispose<T> _dispose;
 
   final Create<T> _create;
@@ -33,11 +38,13 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
     Key key,
     @required Create<T> create,
     Widget child,
+    bool lazy,
   }) : this._(
           key: key,
           create: create,
           dispose: (_, bloc) => bloc?.close(),
           child: child,
+          lazy: lazy,
         );
 
   /// Takes a [bloc] and a [child] which will have access to the [bloc] via `BlocProvider.of(context)`.
@@ -70,6 +77,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
     @required Create<T> create,
     Dispose<T> dispose,
     this.child,
+    this.lazy,
   })  : _create = create,
         _dispose = dispose,
         super(key: key, child: child);
@@ -111,6 +119,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
       create: _create,
       dispose: _dispose,
       child: child,
+      lazy: lazy,
     );
   }
 }
