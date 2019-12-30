@@ -32,7 +32,7 @@ void main() {
             child: null,
           ),
         );
-      } on Object catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -46,7 +46,7 @@ void main() {
             child: Container(),
           ),
         );
-      } on Object catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -60,7 +60,7 @@ void main() {
             child: null,
           ),
         );
-      } on Object catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });

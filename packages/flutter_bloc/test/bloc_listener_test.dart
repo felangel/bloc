@@ -98,7 +98,7 @@ void main() {
           ),
         );
         fail('should throw AssertionError');
-      } on Object catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -114,7 +114,7 @@ void main() {
           ),
         );
         fail('should throw AssertionError');
-      } on Object catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });

@@ -49,7 +49,7 @@ class RepositoryProvider<T> extends Provider<T> {
   static T of<T>(BuildContext context) {
     try {
       return Provider.of<T>(context, listen: false);
-    } on Object catch (_) {
+    } on dynamic catch (_) {
       throw FlutterError(
         """
         RepositoryProvider.of() called with a context that does not contain a repository of type $T.

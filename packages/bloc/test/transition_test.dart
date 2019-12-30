@@ -95,7 +95,7 @@ void main() {
             event: SimpleTransitionEvent(),
             nextState: SimpleTransitionState(),
           );
-        } on Object catch (_) {
+        } on dynamic catch (_) {
           fail(
             'should not throw error when initialized with all required parameters',
           );

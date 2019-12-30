@@ -73,7 +73,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
       BlocSupervisor.delegate.onEvent(this, event);
       onEvent(event);
       _eventSubject.sink.add(event);
-    } on Object catch (error) {
+    } on dynamic catch (error) {
       _handleError(error);
     }
   }
@@ -165,7 +165,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
           BlocSupervisor.delegate.onTransition(this, transition);
           onTransition(transition);
           _stateSubject.add(nextState);
-        } on Object catch (error) {
+        } on dynamic catch (error) {
           _handleError(error);
         }
       },

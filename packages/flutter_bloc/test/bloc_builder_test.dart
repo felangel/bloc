@@ -185,7 +185,7 @@ void main() {
             builder: null,
           ),
         );
-      } on Object catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
@@ -199,7 +199,7 @@ void main() {
             builder: null,
           ),
         );
-      } on Object catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
