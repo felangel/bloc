@@ -1,6 +1,6 @@
 # Naming Conventions
 
-!> The following naming conventions are simply recommendations and are completely optional. Feel free to use what whatever naming conventions you prefer. You may find some of the examples/documentation do not follow the naming conventions mainly for simplicity/conciseness. These conventions are strongly recommended for large projects with multiple developers.
+!> The following naming conventions are simply recommendations and are completely optional. Feel free to use whatever naming conventions you prefer. You may find some of the examples/documentation do not follow the naming conventions mainly for simplicity/conciseness. These conventions are strongly recommended for large projects with multiple developers.
 
 ## Event Conventions
 
