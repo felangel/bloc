@@ -399,7 +399,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_
+  flutter_bloc: ^3.1.0
   todos_repository:
     path: todos_repository
   user_repository:

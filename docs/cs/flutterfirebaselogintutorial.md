@@ -33,7 +33,7 @@ dependencies:
   cloud_firestore: ^0.9.7
   firebase_auth: ^0.8.1+4
   google_sign_in: ^4.0.1+1
-  flutter_
+  flutter_bloc: ^3.1.0
   equatable: ^0.6.0
   meta: ^1.1.6
   font_awesome_flutter: ^8.4.0

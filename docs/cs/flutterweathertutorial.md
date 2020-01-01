@@ -30,7 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_
+  flutter_bloc: ^3.1.0
   http: ^0.12.0
   equatable: ^0.6.0
 

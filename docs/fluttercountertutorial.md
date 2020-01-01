@@ -27,7 +27,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_
+  flutter_bloc: ^3.1.0
   meta: ^1.1.6
 
 dev_dependencies:
