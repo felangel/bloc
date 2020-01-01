@@ -62,6 +62,20 @@
       ")"
     ]
   },
+  "blocconsumer": {
+    "scope": "dart",
+    "prefix": "blocconsumer",
+    "body": [
+      "BlocConsumer<${1:MyBloc}, ${2:MyState}>(",
+      "\tlistener: (context, state) {",
+      "\t\t${3:// TODO: implement listener}",
+      "\t},",
+      "\tbuilder: (context, state) {",
+      "\t\treturn ${4:Container();}",
+      "\t},",
+      ")"
+    ]
+  },
   "blocprovider": {
     "scope": "dart",
     "prefix": "blocprovider",
@@ -141,6 +155,20 @@
       "\t\t${4:// TODO: implement onTransition}",
       "\t}",
       "}"
+    ]
+  },
+  "blocof": {
+    "scope": "dart",
+    "prefix": "blocof",
+    "body": [      
+      "BlocProvider.of<$1>(context)"
+    ]
+  },
+  "repositoryof": {
+    "scope": "dart",
+    "prefix": "repositoryof",
+    "body": [      
+      "RepositoryProvider.of<$1>(context)"
     ]
   },
   "blocstate": {
