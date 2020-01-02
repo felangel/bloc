@@ -78,7 +78,6 @@ void blocTest<B extends Bloc<Event, State>, Event, State>(
 }) {
   test(description, () async {
     final bloc = build();
-    await act?.call(bloc);
-    await emitsExactly(bloc, expect, duration: wait);
+    await emitsExactly(bloc, expect, duration: wait, act: act);
   });
 }

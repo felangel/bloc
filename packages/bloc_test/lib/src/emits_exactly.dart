@@ -40,10 +40,12 @@ Future<void> emitsExactly<B extends Bloc<dynamic, State>, State>(
   B bloc,
   Iterable expected, {
   Duration duration,
+  Future<void> Function(B bloc) act,
 }) async {
   assert(bloc != null);
   final states = <State>[];
   final subscription = bloc.listen(states.add);
+  await act?.call(bloc);
   if (duration != null) await Future.delayed(duration);
   await bloc.close();
   expect(states, expected);

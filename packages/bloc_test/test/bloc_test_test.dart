@@ -30,6 +30,17 @@ void main() {
         },
         expect: [0, 1],
       );
+
+      blocTest(
+        'emits [0, 1, 2] when CounterEvent.increment is called multiple times with async act',
+        build: () => CounterBloc(),
+        act: (bloc) async {
+          bloc.add(CounterEvent.increment);
+          await Future.delayed(Duration(milliseconds: 10));
+          bloc.add(CounterEvent.increment);
+        },
+        expect: [0, 1, 2],
+      );
     });
 
     group('AsyncCounterBloc', () {
