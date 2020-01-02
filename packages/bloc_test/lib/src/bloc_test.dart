@@ -43,6 +43,22 @@ import 'package:test/test.dart';
 /// );
 /// ```
 ///
+/// [blocTest] can also be used when you need to add multiple events in sequence
+/// asynchronously by adding delays in the [act] function.
+///
+/// ```dart
+/// blocTest(
+///  'emits [0, 1, 2] when CounterEvent.increment is called multiple times with async act',
+///  build: () => CounterBloc(),
+///  act: (bloc) async {
+///    bloc.add(CounterEvent.increment);
+///    await Future.delayed(Duration(milliseconds: 10));
+///    bloc.add(CounterEvent.increment);
+///  },
+///  expect: [0, 1, 2],
+///);
+/// ```
+///
 /// [blocTest] can also be used to wait for async operations like `debounceTime`
 /// by optionally providing a `Duration` to [wait].
 ///
