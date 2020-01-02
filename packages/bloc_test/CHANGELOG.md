@@ -1,3 +1,7 @@
+# 3.0.1
+
+- Enable `blocTest` to add more than one asynchronous event at a time ([#724](https://github.com/felangel/bloc/issues/724))
+
 # 3.0.0
 
 - Update to `bloc: ^3.0.0`
