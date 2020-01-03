@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:bloc_test/bloc_test.dart';
 import 'package:meta/meta.dart';
-import 'package:test/test.dart';
+import 'package:test/test.dart' as test;
 
 /// Creates a new [bloc]-specific test case with the given [description].
 /// [blocTest] will handle asserting that the [bloc] emits the [expect]ed
@@ -76,9 +75,14 @@ void blocTest<B extends Bloc<Event, State>, Event, State>(
   Future<void> Function(B bloc) act,
   Duration wait,
 }) {
-  test(description, () async {
+  test.test(description, () async {
     final bloc = build();
+    final states = <State>[];
+    final subscription = bloc.listen(states.add);
     await act?.call(bloc);
-    await emitsExactly(bloc, expect, duration: wait);
+    if (wait != null) await Future.delayed(wait);
+    await bloc.close();
+    test.expect(states, expect);
+    await subscription.cancel();
   });
 }
