@@ -210,8 +210,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 void main() {
   group('BlocProvider', () {
-    testWidgets('throws if initialized with no create',
-        (tester) async {
+    testWidgets('throws if initialized with no create', (tester) async {
       await tester.pumpWidget(MyApp(
         create: null,
         child: CounterPage(),
@@ -219,8 +218,7 @@ void main() {
       expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
 
-    testWidgets('throws if initialized with no child',
-        (tester) async {
+    testWidgets('throws if initialized with no child', (tester) async {
       await tester.pumpWidget(MyApp(
         create: (context) => CounterBloc(),
         child: null,
@@ -375,8 +373,7 @@ void main() {
       expect(closeCalled, true);
     });
 
-    testWidgets('does not close when created using value',
-        (tester) async {
+    testWidgets('does not close when created using value', (tester) async {
       var closeCalled = false;
       final _value = CounterBloc(
         onClose: () {
