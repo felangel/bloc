@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import '../flutter_bloc.dart';
 
 /// Signature for the [builder] function which takes the `BuildContext` and [state]
 /// and is responsible for returning a widget which is to be rendered.
@@ -163,7 +163,7 @@ class _BlocBuilderBaseState<B extends Bloc<dynamic, S>, S>
 
   void _subscribe() {
     if (_bloc != null) {
-      _subscription = _bloc.skip(1).listen((S state) {
+      _subscription = _bloc.skip(1).listen((state) {
         if (widget.condition?.call(_previousState, state) ?? true) {
           setState(() {
             _state = state;

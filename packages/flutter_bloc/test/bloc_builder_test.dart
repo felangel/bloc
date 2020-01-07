@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class MyThemeApp extends StatefulWidget {
   final Bloc<ThemeEvent, ThemeData> _themeBloc;
@@ -40,8 +39,8 @@ class MyThemeAppState extends State<MyThemeApp> {
     return BlocBuilder(
       bloc: _themeBloc,
       builder: ((
-        BuildContext context,
-        ThemeData theme,
+        context,
+        theme,
       ) {
         _onBuild();
         return MaterialApp(
@@ -176,7 +175,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 void main() {
   group('BlocBuilder', () {
     testWidgets('throws if initialized with null bloc and builder',
-        (WidgetTester tester) async {
+        (tester) async {
       try {
         await tester.pumpWidget(
           BlocBuilder<ThemeBloc, ThemeData>(
@@ -189,8 +188,7 @@ void main() {
       }
     });
 
-    testWidgets('throws if initialized with null builder',
-        (WidgetTester tester) async {
+    testWidgets('throws if initialized with null builder', (tester) async {
       try {
         await tester.pumpWidget(
           BlocBuilder<ThemeBloc, ThemeData>(
@@ -203,7 +201,7 @@ void main() {
       }
     });
 
-    testWidgets('passes initial state to widget', (WidgetTester tester) async {
+    testWidgets('passes initial state to widget', (tester) async {
       final _themeBloc = ThemeBloc();
       var numBuilds = 0;
       await tester.pumpWidget(
@@ -225,7 +223,7 @@ void main() {
     });
 
     testWidgets('receives events and sends state updates to widget',
-        (WidgetTester tester) async {
+        (tester) async {
       final _themeBloc = ThemeBloc();
       var numBuilds = 0;
       await tester.pumpWidget(
@@ -252,7 +250,7 @@ void main() {
     });
 
     testWidgets('infers the bloc from the context if the bloc is not provided',
-        (WidgetTester tester) async {
+        (tester) async {
       final themeBloc = ThemeBloc();
       var numBuilds = 0;
       await tester.pumpWidget(
@@ -260,8 +258,8 @@ void main() {
           value: themeBloc,
           child: BlocBuilder<ThemeBloc, ThemeData>(
             builder: (
-              BuildContext context,
-              ThemeData theme,
+              context,
+              theme,
             ) {
               numBuilds++;
               return MaterialApp(
@@ -297,7 +295,7 @@ void main() {
 
     testWidgets(
         'updates when the bloc is changed at runtime to a different bloc and unsubscribes from old bloc',
-        (WidgetTester tester) async {
+        (tester) async {
       final _themeBloc = ThemeBloc();
       var numBuilds = 0;
       await tester.pumpWidget(
@@ -338,7 +336,7 @@ void main() {
 
     testWidgets(
         'does not update when the bloc is changed at runtime to same bloc and stays subscribed to current bloc',
-        (WidgetTester tester) async {
+        (tester) async {
       final _themeBloc = DarkThemeBloc();
       var numBuilds = 0;
       await tester.pumpWidget(
@@ -377,8 +375,7 @@ void main() {
       expect(numBuilds, 3);
     });
 
-    testWidgets('shows latest state instead of initial state',
-        (WidgetTester tester) async {
+    testWidgets('shows latest state instead of initial state', (tester) async {
       final _themeBloc = ThemeBloc();
       _themeBloc.add(SetDarkTheme());
       await tester.pumpAndSettle();
@@ -406,7 +403,7 @@ void main() {
     });
 
     testWidgets('with condition only rebuilds when condition evaluates to true',
-        (WidgetTester tester) async {
+        (tester) async {
       await tester.pumpWidget(MyCounterApp());
       await tester.pumpAndSettle();
 

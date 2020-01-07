@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:angular/core.dart'
     show ChangeDetectorRef, OnDestroy, Pipe, PipeTransform;
-
 import 'package:bloc/bloc.dart';
 
 /// {@template blocpipe}
@@ -48,8 +47,9 @@ class BlocPipe implements OnDestroy, PipeTransform {
   void _subscribe(Bloc bloc) {
     _bloc = bloc;
     _subscription = bloc.listen(
-        (Object value) => _updateLatestValue(bloc, value),
-        onError: (dynamic e) => throw e);
+      (value) => _updateLatestValue(bloc, value),
+      onError: (dynamic e) => throw e,
+    );
   }
 
   void _updateLatestValue(dynamic async, Object value) {

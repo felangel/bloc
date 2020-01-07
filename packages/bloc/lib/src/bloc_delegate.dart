@@ -1,5 +1,6 @@
-import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+
+import '../bloc.dart';
 
 /// Handles `events` from all [bloc]s
 /// which are delegated by the [BlocSupervisor].

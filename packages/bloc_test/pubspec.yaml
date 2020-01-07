@@ -17,4 +17,4 @@ dependencies:
 
 dev_dependencies:
   test_coverage: ^0.2.0
-  effective_dart: ^1.1.1
+  effective_dart: ^1.2.0

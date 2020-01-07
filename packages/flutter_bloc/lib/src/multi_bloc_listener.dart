@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+
+import '../flutter_bloc.dart';
 
 /// {@template multibloclistener}
 /// Merges multiple [BlocListener] widgets into one widget tree.

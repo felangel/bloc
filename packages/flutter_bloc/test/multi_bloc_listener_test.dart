@@ -23,7 +23,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 void main() {
   group('MultiBlocListener', () {
     testWidgets('throws if initialized with no listeners and no child',
-        (WidgetTester tester) async {
+        (tester) async {
       try {
         await tester.pumpWidget(
           MultiBlocListener(
@@ -36,8 +36,7 @@ void main() {
       }
     });
 
-    testWidgets('throws if initialized with no listeners',
-        (WidgetTester tester) async {
+    testWidgets('throws if initialized with no listeners', (tester) async {
       try {
         await tester.pumpWidget(
           MultiBlocListener(
@@ -50,8 +49,7 @@ void main() {
       }
     });
 
-    testWidgets('throws if initialized with no child',
-        (WidgetTester tester) async {
+    testWidgets('throws if initialized with no child', (tester) async {
       try {
         await tester.pumpWidget(
           MultiBlocListener(
@@ -64,8 +62,7 @@ void main() {
       }
     });
 
-    testWidgets('calls listeners on state changes',
-        (WidgetTester tester) async {
+    testWidgets('calls listeners on state changes', (tester) async {
       int latestStateA;
       var listenerCallCountA = 0;
       final counterBlocA = CounterBloc();
@@ -81,14 +78,14 @@ void main() {
           listeners: [
             BlocListener<CounterBloc, int>(
               bloc: counterBlocA,
-              listener: (BuildContext context, int state) {
+              listener: (context, state) {
                 listenerCallCountA++;
                 latestStateA = state;
               },
             ),
             BlocListener<CounterBloc, int>(
               bloc: counterBlocB,
-              listener: (BuildContext context, int state) {
+              listener: (context, state) {
                 listenerCallCountB++;
                 latestStateB = state;
               },

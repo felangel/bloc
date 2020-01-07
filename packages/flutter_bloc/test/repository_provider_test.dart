@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class MyApp extends StatelessWidget {
   final Repository _repository;
@@ -150,8 +149,7 @@ class Repository {
 
 void main() {
   group('RepositoryProvider', () {
-    testWidgets('throws if initialized with no repository',
-        (WidgetTester tester) async {
+    testWidgets('throws if initialized with no repository', (tester) async {
       await tester.pumpWidget(MyApp(
         repository: null,
         child: CounterPage(),
@@ -159,8 +157,7 @@ void main() {
       expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
 
-    testWidgets('throws if initialized with no child',
-        (WidgetTester tester) async {
+    testWidgets('throws if initialized with no child', (tester) async {
       await tester.pumpWidget(MyApp(
         repository: Repository(0),
         child: null,
@@ -168,8 +165,7 @@ void main() {
       expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
 
-    testWidgets('lazily loads repositories by default',
-        (WidgetTester tester) async {
+    testWidgets('lazily loads repositories by default', (tester) async {
       var createCalled = false;
       await tester.pumpWidget(
         RepositoryProvider(
@@ -183,7 +179,7 @@ void main() {
       expect(createCalled, isFalse);
     });
 
-    testWidgets('can override lazy loading', (WidgetTester tester) async {
+    testWidgets('can override lazy loading', (tester) async {
       var createCalled = false;
       await tester.pumpWidget(
         RepositoryProvider(
@@ -198,8 +194,7 @@ void main() {
       expect(createCalled, isTrue);
     });
 
-    testWidgets('passes value to children via builder',
-        (WidgetTester tester) async {
+    testWidgets('passes value to children via builder', (tester) async {
       final repository = Repository(0);
       final _child = CounterPage();
       await tester.pumpWidget(MyApp(
@@ -214,8 +209,7 @@ void main() {
       expect(_counterText.data, '0');
     });
 
-    testWidgets('passes value to children via value',
-        (WidgetTester tester) async {
+    testWidgets('passes value to children via value', (tester) async {
       final repository = Repository(0);
       final _child = CounterPage();
       await tester.pumpWidget(MyApp(
@@ -233,7 +227,7 @@ void main() {
 
     testWidgets(
         'should throw FlutterError if RepositoryProvider is not found in current context',
-        (WidgetTester tester) async {
+        (tester) async {
       final Widget _child = CounterPage();
       await tester.pumpWidget(MyAppNoProvider(
         child: _child,
@@ -258,7 +252,7 @@ void main() {
 
     testWidgets(
         'should not rebuild widgets that inherited the value if the value is changed',
-        (WidgetTester tester) async {
+        (tester) async {
       var numBuilds = 0;
       final Widget _child = CounterPage(
         onBuild: () {

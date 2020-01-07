@@ -125,7 +125,7 @@ class CounterPage extends StatelessWidget {
       appBar: AppBar(title: Text('Counter')),
       body: BlocBuilder<CounterBloc, int>(
         bloc: counterBloc,
-        builder: (BuildContext context, int count) {
+        builder: (context, count) {
           if (onBuild != null) {
             onBuild();
           }
@@ -211,7 +211,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 void main() {
   group('BlocProvider', () {
     testWidgets('throws if initialized with no create',
-        (WidgetTester tester) async {
+        (tester) async {
       await tester.pumpWidget(MyApp(
         create: null,
         child: CounterPage(),
@@ -220,7 +220,7 @@ void main() {
     });
 
     testWidgets('throws if initialized with no child',
-        (WidgetTester tester) async {
+        (tester) async {
       await tester.pumpWidget(MyApp(
         create: (context) => CounterBloc(),
         child: null,
@@ -228,7 +228,7 @@ void main() {
       expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
 
-    testWidgets('lazily loads blocs by default', (WidgetTester tester) async {
+    testWidgets('lazily loads blocs by default', (tester) async {
       var createCalled = false;
       await tester.pumpWidget(
         BlocProvider(
@@ -242,7 +242,7 @@ void main() {
       expect(createCalled, isFalse);
     });
 
-    testWidgets('can override lazy loading', (WidgetTester tester) async {
+    testWidgets('can override lazy loading', (tester) async {
       var createCalled = false;
       await tester.pumpWidget(
         BlocProvider(
@@ -257,7 +257,7 @@ void main() {
       expect(createCalled, isTrue);
     });
 
-    testWidgets('passes bloc to children', (WidgetTester tester) async {
+    testWidgets('passes bloc to children', (tester) async {
       CounterBloc _create(BuildContext context) => CounterBloc();
       final _child = CounterPage();
       await tester.pumpWidget(MyApp(
@@ -274,7 +274,7 @@ void main() {
 
     testWidgets(
       'passes bloc to children within same build',
-      (WidgetTester tester) async {
+      (tester) async {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -293,7 +293,7 @@ void main() {
 
     testWidgets(
       'can access bloc directly within builder',
-      (WidgetTester tester) async {
+      (tester) async {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -326,7 +326,7 @@ void main() {
     );
 
     testWidgets('does not call close on bloc if it was not loaded (lazily)',
-        (WidgetTester tester) async {
+        (tester) async {
       var closeCalled = false;
       CounterBloc _create(BuildContext context) => CounterBloc(
             onClose: () {
@@ -350,7 +350,7 @@ void main() {
     });
 
     testWidgets('calls close on bloc automatically when invoked (lazily)',
-        (WidgetTester tester) async {
+        (tester) async {
       var closeCalled = false;
       CounterBloc _create(BuildContext context) => CounterBloc(
             onClose: () {
@@ -376,7 +376,7 @@ void main() {
     });
 
     testWidgets('does not close when created using value',
-        (WidgetTester tester) async {
+        (tester) async {
       var closeCalled = false;
       final _value = CounterBloc(
         onClose: () {
@@ -401,7 +401,7 @@ void main() {
 
     testWidgets(
         'should throw FlutterError if BlocProvider is not found in current context',
-        (WidgetTester tester) async {
+        (tester) async {
       final Widget _child = CounterPage();
       await tester.pumpWidget(MyAppNoProvider(
         child: _child,
@@ -426,7 +426,7 @@ void main() {
 
     testWidgets(
         'should not rebuild widgets that inherited the bloc if the bloc is changed',
-        (WidgetTester tester) async {
+        (tester) async {
       var numBuilds = 0;
       final Widget _child = CounterPage(
         onBuild: () {

@@ -1,8 +1,9 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
+
+import '../bloc.dart';
 
 /// {@template bloc}
 /// Takes a `Stream` of `Events` as input
@@ -150,11 +151,11 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   void _bindStateSubject() {
     Event currentEvent;
 
-    transformStates(transformEvents(_eventSubject, (Event event) {
+    transformStates(transformEvents(_eventSubject, (event) {
       currentEvent = event;
       return mapEventToState(currentEvent).handleError(_handleError);
     })).forEach(
-      (State nextState) {
+      (nextState) {
         if (state == nextState || _stateSubject.isClosed) return;
         final transition = Transition(
           currentState: state,

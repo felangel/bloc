@@ -476,7 +476,7 @@ void main() {
 
         final bloc = OnExceptionBloc(
             exception: exception,
-            onErrorCallback: (Object error, StackTrace stacktrace) {
+            onErrorCallback: (error, stacktrace) {
               expectedError = error;
               expectedStacktrace = stacktrace;
             });
@@ -496,7 +496,7 @@ void main() {
         Object capturedError;
         StackTrace capturedStacktrace;
         final bloc = CounterBloc(
-          onErrorCallback: (Object error, StackTrace stacktrace) {
+          onErrorCallback: (error, stacktrace) {
             capturedError = error;
             capturedStacktrace = stacktrace;
           },
@@ -547,7 +547,7 @@ void main() {
 
         final bloc = OnErrorBloc(
           error: error,
-          onErrorCallback: (Object error, StackTrace stacktrace) {
+          onErrorCallback: (error, stacktrace) {
             expectedError = error;
             expectedStacktrace = stacktrace;
           },
@@ -571,7 +571,7 @@ void main() {
 
         final bloc = OnTransitionErrorBloc(
           error: error,
-          onErrorCallback: (Object error, StackTrace stacktrace) {
+          onErrorCallback: (error, stacktrace) {
             expectedError = error;
             expectedStacktrace = stacktrace;
           },

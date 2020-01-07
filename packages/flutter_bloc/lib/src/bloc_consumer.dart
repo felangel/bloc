@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../flutter_bloc.dart';
 
 /// {@template blocconsumer}
 /// [BlocConsumer] exposes a [builder] and [listener] in order react to new states.
