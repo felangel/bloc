@@ -43,8 +43,8 @@ void main() {
   group('Transition Tests', () {
     group('constructor', () {
       test(
-          'should throw assertion error when initialized with a null currentState',
-          () {
+          'should throw assertion error when initialized '
+          'with a null currentState', () {
         expect(
           () => Transition<TransitionEvent, TransitionState>(
             currentState: null,
@@ -87,8 +87,8 @@ void main() {
       });
 
       test(
-          'should not throw assertion error when initialized with with all required parameters',
-          () {
+          'should not throw assertion error when initialized with '
+          'all required parameters', () {
         try {
           Transition<TransitionEvent, TransitionState>(
             currentState: SimpleTransitionState(),
@@ -97,7 +97,8 @@ void main() {
           );
         } on dynamic catch (_) {
           fail(
-            'should not throw error when initialized with all required parameters',
+            'should not throw error when initialized '
+            'with all required parameters',
           );
         }
       });
@@ -159,8 +160,11 @@ void main() {
           nextState: CounterState(1),
         );
 
-        expect(transition.toString(),
-            'Transition { currentState: ${transition.currentState.toString()}, event: ${transition.event.toString()}, nextState: ${transition.nextState.toString()} }');
+        expect(
+            transition.toString(),
+            'Transition { currentState: ${transition.currentState.toString()}, '
+            'event: ${transition.event.toString()}, '
+            'nextState: ${transition.nextState.toString()} }');
       });
     });
   });

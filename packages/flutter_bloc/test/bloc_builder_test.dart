@@ -38,10 +38,7 @@ class MyThemeAppState extends State<MyThemeApp> {
   Widget build(BuildContext context) {
     return BlocBuilder(
       bloc: _themeBloc,
-      builder: ((
-        context,
-        theme,
-      ) {
+      builder: ((context, theme) {
         _onBuild();
         return MaterialApp(
           key: Key('material_app'),
@@ -294,8 +291,8 @@ void main() {
     });
 
     testWidgets(
-        'updates when the bloc is changed at runtime to a different bloc and unsubscribes from old bloc',
-        (tester) async {
+        'updates when the bloc is changed at runtime to a different bloc and'
+        'unsubscribes from old bloc', (tester) async {
       final _themeBloc = ThemeBloc();
       var numBuilds = 0;
       await tester.pumpWidget(
@@ -335,8 +332,8 @@ void main() {
     });
 
     testWidgets(
-        'does not update when the bloc is changed at runtime to same bloc and stays subscribed to current bloc',
-        (tester) async {
+        'does not update when the bloc is changed at runtime to same bloc '
+        'and stays subscribed to current bloc', (tester) async {
       final _themeBloc = DarkThemeBloc();
       var numBuilds = 0;
       await tester.pumpWidget(

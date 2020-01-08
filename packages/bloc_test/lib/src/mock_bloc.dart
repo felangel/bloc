@@ -6,11 +6,12 @@ import 'package:mockito/mockito.dart';
 /// Extend or mixin this class to mark the implementation as a [MockBloc].
 ///
 /// A mocked bloc implements all fields and methods with a default
-/// implementation that does not throw a [NoSuchMethodError], and may be further
-/// customized at runtime to define how it may behave using [when] and [whenListen].
+/// implementation that does not throw a [NoSuchMethodError],
+/// and may be further customized at runtime to define how it may behave using
+/// [when] and [whenListen].
 ///
-/// _**Note**: it is critical to explicitly provide the bloc event and state types_
-/// _when extending [MockBloc]_.
+/// _**Note**: it is critical to explicitly provide the bloc event and state
+/// types when extending [MockBloc]_.
 ///
 /// **GOOD**
 /// ```dart

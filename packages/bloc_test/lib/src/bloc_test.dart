@@ -13,8 +13,8 @@ import 'package:test/test.dart' as test;
 /// [build] should be used for all [bloc] initialization and preparation
 /// and must return the [bloc] under test.
 ///
-/// [act] is an optional callback which will be invoked with the [bloc] under test
-/// and should be used to `add` events to the [bloc].
+/// [act] is an optional callback which will be invoked with the [bloc] under
+/// test and should be used to `add` events to the [bloc].
 ///
 /// [wait] is an optional `Duration` which can be used to wait for
 /// async operations within the [bloc] under test such as `debounceTime`.

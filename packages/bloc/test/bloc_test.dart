@@ -242,7 +242,8 @@ void main() {
       test('single Increment event updates state to 1', () {
         final expectedStates = [0, 1];
         final expectedTransitions = [
-          'Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }'
+          'Transition { currentState: 0, event: CounterEvent.increment, '
+              'nextState: 1 }'
         ];
 
         expectLater(
@@ -269,9 +270,12 @@ void main() {
       test('multiple Increment event updates state to 3', () {
         final expectedStates = [0, 1, 2, 3];
         final expectedTransitions = [
-          'Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }',
-          'Transition { currentState: 1, event: CounterEvent.increment, nextState: 2 }',
-          'Transition { currentState: 2, event: CounterEvent.increment, nextState: 3 }',
+          'Transition { currentState: 0, event: CounterEvent.increment, '
+              'nextState: 1 }',
+          'Transition { currentState: 1, event: CounterEvent.increment, '
+              'nextState: 2 }',
+          'Transition { currentState: 2, event: CounterEvent.increment, '
+              'nextState: 3 }',
         ];
 
         expectLater(
@@ -346,8 +350,8 @@ void main() {
       });
 
       test(
-          'close while events are pending finishes processing pending events and does not trigger onError',
-          () async {
+          'close while events are pending finishes processing pending events '
+          'and does not trigger onError', () async {
         final expectedStates = <AsyncState>[
           AsyncState.initial(),
           AsyncState.initial().copyWith(isLoading: true),

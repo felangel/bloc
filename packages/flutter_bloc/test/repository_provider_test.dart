@@ -226,8 +226,8 @@ void main() {
     });
 
     testWidgets(
-        'should throw FlutterError if RepositoryProvider is not found in current context',
-        (tester) async {
+        'should throw FlutterError if RepositoryProvider is not found in '
+        'current context', (tester) async {
       final Widget _child = CounterPage();
       await tester.pumpWidget(MyAppNoProvider(
         child: _child,
@@ -251,8 +251,8 @@ void main() {
     });
 
     testWidgets(
-        'should not rebuild widgets that inherited the value if the value is changed',
-        (tester) async {
+        'should not rebuild widgets that inherited the value if the value is '
+        'changed', (tester) async {
       var numBuilds = 0;
       final Widget _child = CounterPage(
         onBuild: () {

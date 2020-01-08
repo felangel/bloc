@@ -32,7 +32,8 @@ void main() {
       );
 
       blocTest(
-        'emits [0, 1, 2] when CounterEvent.increment is called multiple times with async act',
+        'emits [0, 1, 2] when CounterEvent.increment is called multiple times'
+        'with async act',
         build: () => CounterBloc(),
         act: (bloc) async {
           bloc.add(CounterEvent.increment);
@@ -58,7 +59,8 @@ void main() {
       );
 
       blocTest(
-        'emits [0, 1, 2] when AsyncCounterEvent.increment is called multiple times with async act',
+        'emits [0, 1, 2] when AsyncCounterEvent.increment is called multiple'
+        'times with async act',
         build: () => AsyncCounterBloc(),
         act: (bloc) async {
           bloc.add(AsyncCounterEvent.increment);
@@ -100,7 +102,8 @@ void main() {
       );
 
       blocTest(
-        'emits [0, 1, 2, 3, 4] when MultiCounterEvent.increment is called multiple times with async act',
+        'emits [0, 1, 2, 3, 4] when MultiCounterEvent.increment is called'
+        'multiple times with async act',
         build: () => MultiCounterBloc(),
         act: (bloc) async {
           bloc.add(MultiCounterEvent.increment);

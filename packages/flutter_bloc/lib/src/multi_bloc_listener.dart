@@ -43,19 +43,21 @@ import '../flutter_bloc.dart';
 /// )
 /// ```
 ///
-/// [MultiBlocListener] converts the [BlocListener] list
-/// into a tree of nested [BlocListener] widgets.
+/// [MultiBlocListener] converts the [BlocListener] list into a tree of nested
+/// [BlocListener] widgets.
 /// As a result, the only advantage of using [MultiBlocListener] is improved
 /// readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
 class MultiBlocListener extends StatelessWidget {
-  /// The [BlocListener] list which is converted into a tree of [BlocListener] widgets.
-  /// The tree of [BlocListener] widgets is created in order meaning the first [BlocListener]
-  /// will be the top-most [BlocListener] and the last [BlocListener] will be a direct ancestor
-  /// of [child].
+  /// The [BlocListener] list which is converted into a tree of [BlocListener]
+  /// widgets.
+  /// The tree of [BlocListener] widgets is created in order meaning the first
+  /// [BlocListener] will be the top-most [BlocListener] and the last
+  /// [BlocListener] will be a direct ancestor of [child].
   final List<BlocListener> listeners;
 
-  /// The widget which will be a direct descendent of the last [BlocListener] in [listeners].
+  /// The widget which will be a direct descendent of the last [BlocListener]
+  /// in [listeners].
   final Widget child;
 
   /// {@macro multibloclistener}

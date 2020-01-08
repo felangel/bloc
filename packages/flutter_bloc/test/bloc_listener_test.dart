@@ -177,8 +177,8 @@ void main() {
     });
 
     testWidgets(
-        'updates when the bloc is changed at runtime to a different bloc and unsubscribes from old bloc',
-        (tester) async {
+        'updates when the bloc is changed at runtime to a different bloc '
+        'and unsubscribes from old bloc', (tester) async {
       var listenerCallCount = 0;
       int latestState;
       final incrementFinder = find.byKey(Key('bloc_listener_increment_button'));
@@ -209,8 +209,8 @@ void main() {
     });
 
     testWidgets(
-        'does not update when the bloc is changed at runtime to same bloc and stays subscribed to current bloc',
-        (tester) async {
+        'does not update when the bloc is changed at runtime to same bloc '
+        'and stays subscribed to current bloc', (tester) async {
       var listenerCallCount = 0;
       int latestState;
       final incrementFinder = find.byKey(Key('bloc_listener_increment_button'));
@@ -241,8 +241,8 @@ void main() {
     });
 
     testWidgets(
-        'calls condition on single state change with correct previous and current states',
-        (tester) async {
+        'calls condition on single state change with correct previous '
+        'and current states', (tester) async {
       int latestPreviousState;
       int latestState;
       var conditionCallCount = 0;
@@ -335,8 +335,8 @@ void main() {
     });
 
     testWidgets(
-        'calls condition on multiple state change with correct previous and current states',
-        (tester) async {
+        'calls condition on multiple state change with correct previous '
+        'and current states', (tester) async {
       int latestPreviousState;
       int latestState;
       var conditionCallCount = 0;
@@ -367,8 +367,8 @@ void main() {
     });
 
     testWidgets(
-        'does not call listener when condition returns false on single state change',
-        (tester) async {
+        'does not call listener when condition returns false on single state '
+        'change', (tester) async {
       var listenerCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1];
@@ -411,8 +411,8 @@ void main() {
     });
 
     testWidgets(
-        'does not call listener when condition returns false on multiple state changes',
-        (tester) async {
+        'does not call listener when condition returns false on multiple state '
+        'changes', (tester) async {
       var listenerCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1, 2, 3, 4];

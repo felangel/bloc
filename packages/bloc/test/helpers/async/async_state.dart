@@ -36,5 +36,6 @@ class AsyncState {
 
   @override
   String toString() =>
-      'AsyncState { isLoading: $isLoading, hasError: $hasError, isSuccess: $isSuccess }';
+      'AsyncState { isLoading: $isLoading, hasError: $hasError, '
+      'isSuccess: $isSuccess }';
 }

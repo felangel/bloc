@@ -51,8 +51,8 @@ void main() {
     });
 
     testWidgets(
-        'accesses the bloc directly and passes initial state to builder and nothing to listener',
-        (tester) async {
+        'accesses the bloc directly and passes initial state to builder and '
+        'nothing to listener', (tester) async {
       final counterBloc = CounterBloc();
       final listenerStates = <int>[];
       await tester.pumpWidget(
@@ -75,8 +75,8 @@ void main() {
     });
 
     testWidgets(
-        'accesses the bloc directly and passes multiple states to builder and listener',
-        (tester) async {
+        'accesses the bloc directly '
+        'and passes multiple states to builder and listener', (tester) async {
       final counterBloc = CounterBloc();
       final listenerStates = <int>[];
       await tester.pumpWidget(

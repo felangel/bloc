@@ -2,10 +2,11 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 /// {@template repositoryprovider}
-/// Takes a `ValueBuilder` that is responsible for
-/// creating the repository and a [child] which will have access to the repository via `RepositoryProvider.of(context)`.
-/// It is used as a dependency injection (DI) widget so that a single instance of a repository can be provided
-/// to multiple widgets within a subtree.
+/// Takes a `ValueBuilder` that is responsible for creating the repository and
+/// a [child] which will have access to the repository via
+/// `RepositoryProvider.of(context)`.
+/// It is used as a dependency injection (DI) widget so that a single instance
+/// of a repository can be provided to multiple widgets within a subtree.
 ///
 /// Lazily creates the provided repository unless [lazy] is set to `false`.
 ///
@@ -33,7 +34,8 @@ class RepositoryProvider<T> extends Provider<T> {
 
   /// Takes a repository and a [child] which will have access to the repository.
   /// A new repository should not be created in `RepositoryProvider.value`.
-  /// Repositories should always be created using the default constructor within the [builder].
+  /// Repositories should always be created using the default constructor
+  /// within the [builder].
   RepositoryProvider.value({
     Key key,
     @required T value,
@@ -44,8 +46,8 @@ class RepositoryProvider<T> extends Provider<T> {
           child: child,
         );
 
-  /// Method that allows widgets to access a repository instance as long as their `BuildContext`
-  /// contains a [RepositoryProvider] instance.
+  /// Method that allows widgets to access a repository instance as long as
+  /// their `BuildContext` contains a [RepositoryProvider] instance.
   static T of<T>(BuildContext context) {
     try {
       return Provider.of<T>(context, listen: false);

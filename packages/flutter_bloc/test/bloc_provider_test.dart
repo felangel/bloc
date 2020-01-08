@@ -397,8 +397,8 @@ void main() {
     });
 
     testWidgets(
-        'should throw FlutterError if BlocProvider is not found in current context',
-        (tester) async {
+        'should throw FlutterError if BlocProvider is not found in current '
+        'context', (tester) async {
       final Widget _child = CounterPage();
       await tester.pumpWidget(MyAppNoProvider(
         child: _child,
@@ -422,8 +422,8 @@ void main() {
     });
 
     testWidgets(
-        'should not rebuild widgets that inherited the bloc if the bloc is changed',
-        (tester) async {
+        'should not rebuild widgets that inherited the bloc if the bloc is '
+        'changed', (tester) async {
       var numBuilds = 0;
       final Widget _child = CounterPage(
         onBuild: () {
