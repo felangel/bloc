@@ -1,30 +1,31 @@
 import 'dart:async';
 
+import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import '../flutter_bloc.dart';
 
-/// Signature for the [builder] function which takes the `BuildContext` and [state]
-/// and is responsible for returning a widget which is to be rendered.
+/// Signature for the [builder] function which takes the `BuildContext` and
+/// [state] and is responsible for returning a widget which is to be rendered.
 /// This is analogous to the [builder] function in [StreamBuilder].
 typedef BlocWidgetBuilder<S> = Widget Function(BuildContext context, S state);
 
-/// Signature for the condition function which takes the previous [state] and the current [state]
-/// and is responsible for returning a [bool] which determines whether or not to rebuild
-/// [BlocBuilder] with the current [state].
+/// Signature for the condition function which takes the previous [state] and
+/// the current [state] and is responsible for returning a [bool] which
+/// determines whether or not to rebuild [BlocBuilder] with the current [state].
 typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 
 /// {@template blocbuilder}
 /// [BlocBuilder] handles building a widget in response to new [states].
-/// [BlocBuilder] is analogous to [StreamBuilder] but has simplified API
-/// to reduce the amount of boilerplate code needed as well as [bloc]-specific performance improvements.
+/// [BlocBuilder] is analogous to [StreamBuilder] but has simplified API to
+/// reduce the amount of boilerplate code needed as well as [bloc]-specific
+/// performance improvements.
 
-/// Please refer to [BlocListener] if you want to "do" anything in response to [state] changes such as
-/// navigation, showing a dialog, etc...
+/// Please refer to [BlocListener] if you want to "do" anything in response to
+/// [state] changes such as navigation, showing a dialog, etc...
 ///
-/// If the [bloc] parameter is omitted, [BlocBuilder] will automatically perform a lookup using
-/// [BlocProvider] and the current `BuildContext`.
+/// If the [bloc] parameter is omitted, [BlocBuilder] will automatically
+/// perform a lookup using [BlocProvider] and the current `BuildContext`.
 ///
 /// ```dart
 /// BlocBuilder<BlocA, BlocAState>(
@@ -46,14 +47,16 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 /// )
 /// ```
 ///
-/// An optional [condition] can be implemented for more granular control
-/// over how often [BlocBuilder] rebuilds.
+/// An optional [condition] can be implemented for more granular control over
+/// how often [BlocBuilder] rebuilds.
 /// The [condition] function will be invoked on each [bloc] [state] change.
-/// The [condition] takes the previous [state] and current [state] and must return a [bool]
-/// which determines whether or not the [builder] function will be invoked.
-/// The previous [state] will be initialized to the [state] of the [bloc]
-/// when the [BlocBuilder] is initialized.
-/// [condition] is optional and if it isn't implemented, it will default to `true`.
+/// The [condition] takes the previous [state] and current [state] and must
+/// return a [bool] which determines whether or not the [builder] function will
+/// be invoked.
+/// The previous [state] will be initialized to the [state] of the [bloc] when
+/// the [BlocBuilder] is initialized.
+/// [condition] is optional and if it isn't implemented, it will default to
+/// `true`.
 ///
 /// ```dart
 /// BlocBuilder<BlocA, BlocAState>(
@@ -107,10 +110,13 @@ abstract class BlocBuilderBase<B extends Bloc<dynamic, S>, S>
 
   /// The [BlocBuilderCondition] that the [BlocBuilderBase] will invoke.
   /// The [condition] function will be invoked on each [bloc] [state] change.
-  /// The [condition] takes the previous [state] and current [state] and must return a [bool]
-  /// which determines whether or not the [builder] function will be invoked.
-  /// The previous [state] will be initialized to [state] when the [BlocBuilderBase] is initialized.
-  /// [condition] is optional and if it isn't implemented, it will default to `true`.
+  /// The [condition] takes the previous [state] and current [state] and must
+  /// return a [bool] which determines whether or not the [builder] function
+  /// will be invoked.
+  /// The previous [state] will be initialized to [state] when the
+  /// [BlocBuilderBase] is initialized.
+  /// [condition] is optional and if it isn't implemented, it will default to
+  /// `true`.
   final BlocBuilderCondition<S> condition;
 
   /// Returns a widget based on the `BuildContext` and current [state].
@@ -163,7 +169,7 @@ class _BlocBuilderBaseState<B extends Bloc<dynamic, S>, S>
 
   void _subscribe() {
     if (_bloc != null) {
-      _subscription = _bloc.skip(1).listen((S state) {
+      _subscription = _bloc.skip(1).listen((state) {
         if (widget.condition?.call(_previousState, state) ?? true) {
           setState(() {
             _state = state;

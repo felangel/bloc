@@ -33,7 +33,11 @@ import 'package:test/test.dart';
 /// test('emits [0, 1] when CounterEvent.increment is added', () async {
 ///   final bloc = CounterBloc();
 ///   bloc.add(CounterEvent.increment);
-///   await emitsExactly(bloc, [0, 1], duration: const Duration(milliseconds: 300));
+///   await emitsExactly(
+///     bloc,
+///     [0, 1],
+///     duration: const Duration(milliseconds: 300),
+///   );
 /// });
 /// ```
 Future<void> emitsExactly<B extends Bloc<dynamic, State>, State>(

@@ -24,8 +24,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 void main() {
   group('BlocConsumer', () {
-    testWidgets('throws AssertionError if builder is null',
-        (WidgetTester tester) async {
+    testWidgets('throws AssertionError if builder is null', (tester) async {
       try {
         await tester.pumpWidget(
           BlocConsumer(
@@ -38,8 +37,7 @@ void main() {
       }
     });
 
-    testWidgets('throws AssertionError if listener is null',
-        (WidgetTester tester) async {
+    testWidgets('throws AssertionError if listener is null', (tester) async {
       try {
         await tester.pumpWidget(
           BlocConsumer(
@@ -53,8 +51,8 @@ void main() {
     });
 
     testWidgets(
-        'accesses the bloc directly and passes initial state to builder and nothing to listener',
-        (WidgetTester tester) async {
+        'accesses the bloc directly and passes initial state to builder and '
+        'nothing to listener', (tester) async {
       final counterBloc = CounterBloc();
       final listenerStates = <int>[];
       await tester.pumpWidget(
@@ -77,8 +75,8 @@ void main() {
     });
 
     testWidgets(
-        'accesses the bloc directly and passes multiple states to builder and listener',
-        (WidgetTester tester) async {
+        'accesses the bloc directly '
+        'and passes multiple states to builder and listener', (tester) async {
       final counterBloc = CounterBloc();
       final listenerStates = <int>[];
       await tester.pumpWidget(
@@ -106,7 +104,7 @@ void main() {
 
     testWidgets(
         'accesses the bloc via context and passes initial state to builder',
-        (WidgetTester tester) async {
+        (tester) async {
       final counterBloc = CounterBloc();
       final listenerStates = <int>[];
       await tester.pumpWidget(
@@ -133,7 +131,7 @@ void main() {
 
     testWidgets(
         'accesses the bloc via context and passes multiple states to builder',
-        (WidgetTester tester) async {
+        (tester) async {
       final counterBloc = CounterBloc();
       final listenerStates = <int>[];
       await tester.pumpWidget(
@@ -160,7 +158,7 @@ void main() {
     });
 
     testWidgets('does not trigger rebuilds when buildWhen evaluates to false',
-        (WidgetTester tester) async {
+        (tester) async {
       final counterBloc = CounterBloc();
       final listenerStates = <int>[];
       final builderStates = <int>[];
@@ -201,7 +199,7 @@ void main() {
     });
 
     testWidgets('does not trigger listen when listenWhen evaluates to false',
-        (WidgetTester tester) async {
+        (tester) async {
       final counterBloc = CounterBloc();
       final listenerStates = <int>[];
       final builderStates = <int>[];

@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+
+import '../flutter_bloc.dart';
 
 /// {@template multirepositoryprovider}
 /// Merges multiple [RepositoryProvider] widgets into one widget tree.
@@ -36,20 +37,23 @@ import 'package:provider/provider.dart';
 /// )
 /// ```
 ///
-/// [MultiRepositoryProvider] converts the [RepositoryProvider] list
-/// into a tree of nested [RepositoryProvider] widgets.
-/// As a result, the only advantage of using [MultiRepositoryProvider] is improved
-/// readability due to the reduction in nesting and boilerplate.
+/// [MultiRepositoryProvider] converts the [RepositoryProvider] list into a tree
+/// of nested [RepositoryProvider] widgets.
+/// As a result, the only advantage of using [MultiRepositoryProvider] is
+/// improved readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
 class MultiRepositoryProvider extends StatelessWidget {
-  /// The [RepositoryProvider] list which is converted into a tree of [RepositoryProvider] widgets.
-  /// The tree of [RepositoryProvider] widgets is created in order meaning the first [RepositoryProvider]
-  /// will be the top-most [RepositoryProvider] and the last [RepositoryProvider] will be a direct ancestor
-  /// of [child].
+  /// The [RepositoryProvider] list which is converted into a tree of
+  /// [RepositoryProvider] widgets.
+  /// The tree of [RepositoryProvider] widgets is created in order meaning
+  /// the first [RepositoryProvider] will be the top-most [RepositoryProvider]
+  /// and the last [RepositoryProvider] will be a direct ancestor of [child].
   final List<RepositoryProvider> providers;
 
-  /// The widget and its descendants which will have access to every value provided by [providers].
-  /// [child] will be a direct descendent of the last [RepositoryProvider] in [providers].
+  /// The widget and its descendants which will have access to every value
+  /// provided by [providers].
+  /// [child] will be a direct descendent of the last [RepositoryProvider] in
+  /// [providers].
   final Widget child;
 
   /// {@macro multirepositoryprovider}

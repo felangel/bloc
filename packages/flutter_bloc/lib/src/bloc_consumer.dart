@@ -1,19 +1,21 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../flutter_bloc.dart';
 
 /// {@template blocconsumer}
-/// [BlocConsumer] exposes a [builder] and [listener] in order react to new states.
+/// [BlocConsumer] exposes a [builder] and [listener] in order react to new
+/// states.
 /// [BlocConsumer] is analogous to a nested [BlocListener] and [BlocBuilder] but
 /// reduces the amount of boilerplate needed.
 /// [BlocConsumer] should only be used when it is necessary to both rebuild UI
 /// and execute other reactions to state changes in the [bloc].
 ///
-/// [BlocConsumer] takes a required [BlocWidgetBuilder] and [BlocWidgetListener] and an optional [bloc],
-/// [BlocBuilderCondition], and [BlocListenerCondition].
+/// [BlocConsumer] takes a required [BlocWidgetBuilder] and [BlocWidgetListener]
+/// and an optional [bloc], [BlocBuilderCondition], and [BlocListenerCondition].
 ///
-/// If the [bloc] parameter is omitted, [BlocConsumer] will automatically perform a lookup using
-/// [BlocProvider] and the current `BuildContext`.
+/// If the [bloc] parameter is omitted, [BlocConsumer] will automatically
+/// perform a lookup using [BlocProvider] and the current `BuildContext`.
 ///
 /// ```dart
 /// BlocConsumer<BlocA, BlocAState>(
@@ -26,14 +28,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// )
 /// ```
 ///
-/// An optional [listenWhen] and [buildWhen] can be implemented for more granular control
-/// over when [listener] and [builder] are called.
-/// The [listenWhen] and [buildWhen] will be invoked on each [bloc] [state] change.
-/// They each take the previous [state] and current [state] and must return a [bool]
-/// which determines whether or not the [builder] and/or [listener] function will be invoked.
-/// The previous [state] will be initialized to the [state] of the [bloc]
-/// when the [BlocConsumer] is initialized.
-/// [listenWhen] and [buildWhen] are optional and if they aren't implemented, they will default to `true`.
+/// An optional [listenWhen] and [buildWhen] can be implemented for more
+/// granular control over when [listener] and [builder] are called.
+/// The [listenWhen] and [buildWhen] will be invoked on each [bloc] [state]
+/// change.
+/// They each take the previous [state] and current [state] and must return
+/// a [bool] which determines whether or not the [builder] and/or [listener]
+/// function will be invoked.
+/// The previous [state] will be initialized to the [state] of the [bloc] when
+/// the [BlocConsumer] is initialized.
+/// [listenWhen] and [buildWhen] are optional and if they aren't implemented,
+/// they will default to `true`.
 ///
 /// ```dart
 /// BlocConsumer<BlocA, BlocAState>(
@@ -70,14 +75,14 @@ class BlocConsumer<B extends Bloc<dynamic, S>, S> extends StatelessWidget {
   /// and is responsible for executing in response to [state] changes.
   final BlocWidgetListener<S> listener;
 
-  /// Takes the previous [state] and the current [state]
-  /// and is responsible for returning a [bool] which determines whether or not to trigger
+  /// Takes the previous [state] and the current [state] and is responsible for
+  /// returning a [bool] which determines whether or not to trigger
   /// [builder] with the current [state].
   final BlocBuilderCondition<S> buildWhen;
 
-  /// Takes the previous [state] and the current [state]
-  /// and is responsible for returning a [bool] which determines whether or not to call [listener]
-  /// of [BlocConsumer] with the current [state].
+  /// Takes the previous [state] and the current [state] and is responsible for
+  /// returning a [bool] which determines whether or not to call [listener] of
+  /// [BlocConsumer] with the current [state].
   final BlocListenerCondition<S> listenWhen;
 
   /// {@macro blocconsumer}

@@ -1,30 +1,33 @@
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
-
 import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/single_child_widget.dart';
 
-/// Signature for the [listener] function which takes the `BuildContext` along with the [bloc] [state]
-/// and is responsible for executing in response to [state] changes.
+import '../flutter_bloc.dart';
+
+/// Signature for the [listener] function which takes the `BuildContext` along
+/// with the [bloc] [state] and is responsible for executing in response to
+/// [state] changes.
 typedef BlocWidgetListener<S> = void Function(BuildContext context, S state);
 
-/// Signature for the [condition] function which takes the previous [state] and the current [state]
-/// and is responsible for returning a [bool] which determines whether or not to call [BlocWidgetListener]
-/// of [BlocListener] with the current [state].
+/// Signature for the [condition] function which takes the previous [state]
+/// and the current [state] and is responsible for returning a [bool] which
+/// determines whether or not to call [BlocWidgetListener] of [BlocListener]
+/// with the current [state].
 typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 
 /// {@template bloclistener}
-/// Takes a [BlocWidgetListener] and an optional [bloc]
-/// and invokes the [listener] in response to [state] changes in the [bloc].
-/// It should be used for functionality that needs to occur only in response to a [state] change
-/// such as navigation, showing a [SnackBar], showing a [Dialog], etc...
-/// The [listener] is guaranteed to only be called once for each [state] change unlike the
-/// [builder] in [BlocBuilder].
+/// Takes a [BlocWidgetListener] and an optional [bloc] and invokes
+/// the [listener] in response to [state] changes in the [bloc].
+/// It should be used for functionality that needs to occur only in response to
+/// a [state] change such as navigation, showing a [SnackBar], showing
+/// a [Dialog], etc...
+/// The [listener] is guaranteed to only be called once for each [state] change
+/// unlike the [builder] in [BlocBuilder].
 ///
-/// If the [bloc] parameter is omitted, [BlocListener] will automatically perform a lookup using
-/// [BlocProvider] and the current `BuildContext`.
+/// If the [bloc] parameter is omitted, [BlocListener] will automatically
+/// perform a lookup using [BlocProvider] and the current `BuildContext`.
 ///
 /// ```dart
 /// BlocListener<BlocA, BlocAState>(
@@ -50,11 +53,13 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 /// An optional [condition] can be implemented for more granular control
 /// over when [listener] is called.
 /// The [condition] function will be invoked on each [bloc] [state] change.
-/// The [condition] takes the previous [state] and current [state] and must return a [bool]
-/// which determines whether or not the [listener] function will be invoked.
+/// The [condition] takes the previous [state] and current [state] and must
+/// return a [bool] which determines whether or not the [listener] function
+/// will be invoked.
 /// The previous [state] will be initialized to the [state] of the [bloc]
 /// when the [BlocListener] is initialized.
-/// [condition] is optional and if it isn't implemented, it will default to `true`.
+/// [condition] is optional and if it isn't implemented, it will default to
+/// `true`.
 ///
 /// ```dart
 /// BlocListener<BlocA, BlocAState>(
@@ -100,7 +105,8 @@ class BlocListener<B extends Bloc<dynamic, S>, S>
 /// {@endtemplate}
 abstract class BlocListenerBase<B extends Bloc<dynamic, S>, S>
     extends SingleChildStatefulWidget {
-  /// The widget which will be rendered as a descendant of the [BlocListenerBase].
+  /// The widget which will be rendered as a descendant of the
+  /// [BlocListenerBase].
   final Widget child;
 
   /// The [bloc] whose [state] will be listened to.
@@ -115,10 +121,13 @@ abstract class BlocListenerBase<B extends Bloc<dynamic, S>, S>
 
   /// The [BlocListenerCondition] that the [BlocListenerBase] will invoke.
   /// The [condition] function will be invoked on each [bloc] [state] change.
-  /// The [condition] takes the previous [state] and current [state] and must return a [bool]
-  /// which determines whether or not the [listener] function will be invoked.
-  /// The previous [state] will be initialized to [state] when the [BlocListenerBase] is initialized.
-  /// [condition] is optional and if it isn't implemented, it will default to `true`.
+  /// The [condition] takes the previous [state] and current [state] and must
+  /// return a [bool] which determines whether or not the [listener] function
+  /// will be invoked.
+  /// The previous [state] will be initialized to [state] when
+  /// the [BlocListenerBase] is initialized.
+  /// [condition] is optional and if it isn't implemented, it will default to
+  /// `true`.
   final BlocListenerCondition<S> condition;
 
   /// {@macro bloclistenerbase}
@@ -175,7 +184,7 @@ class _BlocListenerBaseState<B extends Bloc<dynamic, S>, S>
 
   void _subscribe() {
     if (_bloc != null) {
-      _subscription = _bloc.skip(1).listen((S state) {
+      _subscription = _bloc.skip(1).listen((state) {
         if (widget.condition?.call(_previousState, state) ?? true) {
           widget.listener(context, state);
         }

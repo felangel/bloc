@@ -11,16 +11,16 @@ void main() {
   });
 
   test(
-      'BlocSupervisor should have a correct BlocDelegate singleton when explicity set',
-      () {
+      'BlocSupervisor should have a correct BlocDelegate singleton '
+      'when explicity set', () {
     final delegate = MockBlocDelegate();
     BlocSupervisor.delegate = delegate;
     expect(BlocSupervisor.delegate, delegate);
   });
 
   test(
-      'BlocSupervisor should use default BlocDelegate singleton when explicity set to null',
-      () {
+      'BlocSupervisor should use default BlocDelegate singleton '
+      'when explicity set to null', () {
     BlocSupervisor.delegate = null;
     expect(BlocSupervisor.delegate, isNotNull);
   });

@@ -47,17 +47,4 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   void onError(Object error, StackTrace stacktrace) {
     onErrorCallback?.call(error, stacktrace);
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is CounterBloc &&
-          runtimeType == other.runtimeType &&
-          initialState == other.initialState;
-
-  @override
-  int get hashCode =>
-      initialState.hashCode ^
-      mapEventToState.hashCode ^
-      transformEvents.hashCode;
 }

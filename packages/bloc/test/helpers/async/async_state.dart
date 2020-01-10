@@ -1,3 +1,6 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class AsyncState {
   final bool isLoading;
   final bool hasError;
@@ -36,5 +39,6 @@ class AsyncState {
 
   @override
   String toString() =>
-      'AsyncState { isLoading: $isLoading, hasError: $hasError, isSuccess: $isSuccess }';
+      'AsyncState { isLoading: $isLoading, hasError: $hasError, '
+      'isSuccess: $isSuccess }';
 }

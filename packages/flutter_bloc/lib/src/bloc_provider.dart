@@ -5,13 +5,14 @@ import 'package:provider/single_child_widget.dart';
 import 'package:bloc/bloc.dart';
 
 /// {@template blocprovider}
-/// Takes a [ValueBuilder] that is responsible for
-/// creating the [bloc] and a [child] which will have access to the [bloc] via `BlocProvider.of(context)`.
-/// It is used as a dependency injection (DI) widget so that a single instance of a [bloc] can be provided
-/// to multiple widgets within a subtree.
+/// Takes a [ValueBuilder] that is responsible for creating the [bloc] and
+/// a [child] which will have access to the [bloc] via
+/// `BlocProvider.of(context)`.
+/// It is used as a dependency injection (DI) widget so that a single instance
+/// of a [bloc] can be provided to multiple widgets within a subtree.
 ///
-/// Automatically handles closing the [bloc] when used with [create]
-/// and lazily creates the provided [bloc] unless [lazy] is set to `false`.
+/// Automatically handles closing the [bloc] when used with [create] and lazily
+/// creates the provided [bloc] unless [lazy] is set to `false`.
 ///
 /// ```dart
 /// BlocProvider(
@@ -47,13 +48,16 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
           lazy: lazy,
         );
 
-  /// Takes a [bloc] and a [child] which will have access to the [bloc] via `BlocProvider.of(context)`.
-  /// When `BlocProvider.value` is used, the [bloc] will not be automatically closed.
-  /// As a result, `BlocProvider.value` should mainly be used for providing existing [bloc]s
-  /// to new routes.
+  /// Takes a [bloc] and a [child] which will have access to the [bloc] via
+  /// `BlocProvider.of(context)`.
+  /// When `BlocProvider.value` is used, the [bloc] will not be automatically
+  /// closed.
+  /// As a result, `BlocProvider.value` should mainly be used for providing
+  /// existing [bloc]s to new routes.
   ///
   /// A new [bloc] should not be created in `BlocProvider.value`.
-  /// [bloc]s should always be created using the default constructor within [create].
+  /// [bloc]s should always be created using the default constructor within
+  /// [create].
   ///
   /// ```dart
   /// BlocProvider.value(
@@ -82,11 +86,11 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
         _dispose = dispose,
         super(key: key, child: child);
 
-  /// Method that allows widgets to access a [bloc] instance as long as their `BuildContext`
-  /// contains a [BlocProvider] instance.
+  /// Method that allows widgets to access a [bloc] instance as long as their
+  /// `BuildContext` contains a [BlocProvider] instance.
   ///
-  /// If we want to access an instance of `BlocA` which was provided higher up in the widget tree
-  /// we can do so via:
+  /// If we want to access an instance of `BlocA` which was provided higher up
+  /// in the widget tree we can do so via:
   ///
   /// ```dart
   /// BlocProvider.of<BlocA>(context)
