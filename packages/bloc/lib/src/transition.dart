@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 /// A [Transition] consists of the [currentState], the [event] which was
 /// `added`, and the [nextState].
 /// {@endtemplate}
+@immutable
 class Transition<Event, State> {
   /// The current [State] of the [bloc] at the time of the [Transition].
   final State currentState;

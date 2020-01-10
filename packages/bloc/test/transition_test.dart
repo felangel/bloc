@@ -1,8 +1,11 @@
+import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 import 'package:bloc/bloc.dart';
 
+@immutable
 abstract class TransitionEvent {}
 
+@immutable
 abstract class TransitionState {}
 
 class SimpleTransitionEvent extends TransitionEvent {}

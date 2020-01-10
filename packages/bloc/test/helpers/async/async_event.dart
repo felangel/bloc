@@ -1,3 +1,6 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class AsyncEvent {
   @override
   bool operator ==(

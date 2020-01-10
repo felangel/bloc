@@ -1,3 +1,6 @@
+import 'package:meta/meta.dart';
+
+@immutable
 abstract class ComplexState {}
 
 class ComplexStateA extends ComplexState {

@@ -446,22 +446,6 @@ void main() {
       });
     });
 
-    group('== operator', () {
-      test('returns true for the same two CounterBlocs', () {
-        final blocA = CounterBloc();
-        final blocB = CounterBloc();
-
-        expect(blocA == blocB, true);
-      });
-
-      test('returns false for the two different Blocs', () {
-        final blocA = CounterBloc();
-        final blocB = ComplexBloc();
-
-        expect(blocA == blocB, false);
-      });
-    });
-
     group('Exception', () {
       test('does not break stream', () {
         final expected = [0, -1];

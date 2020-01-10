@@ -1,3 +1,6 @@
+import 'package:meta/meta.dart';
+
+@immutable
 abstract class ComplexEvent {}
 
 class ComplexEventA extends ComplexEvent {
