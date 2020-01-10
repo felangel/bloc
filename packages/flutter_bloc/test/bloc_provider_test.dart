@@ -189,19 +189,6 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is CounterBloc &&
-          runtimeType == other.runtimeType &&
-          initialState == other.initialState;
-
-  @override
-  int get hashCode =>
-      initialState.hashCode ^
-      mapEventToState.hashCode ^
-      transformEvents.hashCode;
-
-  @override
   Future<void> close() {
     onClose?.call();
     return super.close();

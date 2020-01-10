@@ -1,3 +1,6 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class AsyncState {
   final bool isLoading;
   final bool hasError;

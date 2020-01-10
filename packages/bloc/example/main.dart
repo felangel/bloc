@@ -62,7 +62,8 @@ void main() {
 
   counterBloc.add(null); // Triggers Exception
 
-  // The exception triggers `SimpleBlocDelegate.onError` but does not impact bloc functionality.
+  // The exception triggers `SimpleBlocDelegate.onError`
+  // but does not impact bloc functionality.
   counterBloc.add(CounterEvent.increment);
   counterBloc.add(CounterEvent.decrement);
 }

@@ -35,17 +35,4 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
   Stream<ComplexState> transformStates(Stream<ComplexState> states) {
     return states.debounceTime(Duration(milliseconds: 50));
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ComplexBloc &&
-          runtimeType == other.runtimeType &&
-          initialState == other.initialState;
-
-  @override
-  int get hashCode =>
-      initialState.hashCode ^
-      mapEventToState.hashCode ^
-      transformEvents.hashCode;
 }
