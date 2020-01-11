@@ -121,5 +121,34 @@ void main() {
       final repositoryBText = tester.widget(repositoryBFinder) as Text;
       expect(repositoryBText.data, '1');
     });
+
+    testWidgets('passes values to children without explict types',
+        (tester) async {
+      await tester.pumpWidget(
+        MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider(
+              create: (context) => RepositoryA(0),
+            ),
+            RepositoryProvider(
+              create: (context) => RepositoryB(1),
+            ),
+          ],
+          child: MyApp(),
+        ),
+      );
+
+      final repositoryAFinder = find.byKey((Key('RepositoryA_data')));
+      expect(repositoryAFinder, findsOneWidget);
+
+      final repositoryAText = tester.widget(repositoryAFinder) as Text;
+      expect(repositoryAText.data, '0');
+
+      final repositoryBFinder = find.byKey((Key('RepositoryB_data')));
+      expect(repositoryBFinder, findsOneWidget);
+
+      final repositoryBText = tester.widget(repositoryBFinder) as Text;
+      expect(repositoryBText.data, '1');
+    });
   });
 }

@@ -6,6 +6,10 @@ import 'package:provider/single_child_widget.dart';
 
 import '../flutter_bloc.dart';
 
+/// Mixin which allows `MultiBlocListener` to infer the types
+/// of multiple [BlocListener]s.
+mixin BlocListenerSingleChildWidget on SingleChildWidget {}
+
 /// Signature for the [listener] function which takes the `BuildContext` along
 /// with the [bloc] [state] and is responsible for executing in response to
 /// [state] changes.
@@ -74,8 +78,8 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 /// )
 /// ```
 /// {@endtemplate}
-class BlocListener<B extends Bloc<dynamic, S>, S>
-    extends BlocListenerBase<B, S> {
+class BlocListener<B extends Bloc<dynamic, S>, S> extends BlocListenerBase<B, S>
+    with BlocListenerSingleChildWidget {
   /// The widget which will be rendered as a descendant of the [BlocListener].
   final Widget child;
 

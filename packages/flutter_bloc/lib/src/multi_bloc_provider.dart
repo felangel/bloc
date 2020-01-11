@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-import '../flutter_bloc.dart';
+import 'bloc_provider.dart';
 
 /// {@template multiblocprovider}
 /// Merges multiple [BlocProvider] widgets into one widget tree.
@@ -54,7 +54,7 @@ class MultiBlocProvider extends StatelessWidget {
   /// The tree of [BlocProvider] widgets is created in order meaning the first
   /// [BlocProvider] will be the top-most [BlocProvider] and the last
   /// [BlocProvider] will be a direct ancestor of [child].
-  final List<BlocProvider> providers;
+  final List<BlocProviderSingleChildWidget> providers;
 
   /// The widget and its descendants which will have access to every [bloc]
   /// provided by [providers].

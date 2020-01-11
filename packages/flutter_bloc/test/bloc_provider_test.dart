@@ -227,6 +227,20 @@ void main() {
       expect(createCalled, isFalse);
     });
 
+    testWidgets('lazily loads blocs by default', (tester) async {
+      var createCalled = false;
+      await tester.pumpWidget(
+        BlocProvider(
+          create: (_) {
+            createCalled = true;
+            return CounterBloc();
+          },
+          child: Container(),
+        ),
+      );
+      expect(createCalled, isFalse);
+    });
+
     testWidgets('can override lazy loading', (tester) async {
       var createCalled = false;
       await tester.pumpWidget(
@@ -240,6 +254,25 @@ void main() {
         ),
       );
       expect(createCalled, isTrue);
+    });
+
+    testWidgets('can be provided without an explicit type', (tester) async {
+      final key = Key('__text_count__');
+      await tester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider(
+            create: (_) => CounterBloc(),
+            child: Builder(
+              builder: (context) => Text(
+                '${BlocProvider.of<CounterBloc>(context).state}',
+                key: key,
+              ),
+            ),
+          ),
+        ),
+      );
+      final text = tester.widget(find.byKey(key)) as Text;
+      expect(text.data, '0');
     });
 
     testWidgets('passes bloc to children', (tester) async {
@@ -395,12 +428,7 @@ void main() {
         BlocProvider.of() called with a context that does not contain a Bloc of type CounterBloc.
         No ancestor could be found starting from the context that was passed to BlocProvider.of<CounterBloc>().
 
-        This can happen if:
-        1. The context you used comes from a widget above the BlocProvider.
-        2. You used MultiBlocProvider and didn\'t explicity provide the BlocProvider types.
-
-        Good: BlocProvider<CounterBloc>(create: (context) => CounterBloc())
-        Bad: BlocProvider(create: (context) => CounterBloc()).
+        This can happen if the context you used comes from a widget above the BlocProvider.
 
         The context used was: CounterPage(dirty)
 """;

@@ -237,12 +237,7 @@ void main() {
         RepositoryProvider.of() called with a context that does not contain a repository of type Repository.
         No ancestor could be found starting from the context that was passed to RepositoryProvider.of<Repository>().
 
-        This can happen if:
-        1. The context you used comes from a widget above the RepositoryProvider.
-        2. You used MultiRepositoryProvider and didn\'t explicity provide the RepositoryProvider types.
-
-        Good: RepositoryProvider<Repository>(create: (context) => Repository())
-        Bad: RepositoryProvider(create: (context) => Repository()).
+        This can happen if the context you used comes from a widget above the RepositoryProvider.
 
         The context used was: CounterPage(dirty)
 """;

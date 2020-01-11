@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-import '../flutter_bloc.dart';
+import 'repository_provider.dart';
 
 /// {@template multirepositoryprovider}
 /// Merges multiple [RepositoryProvider] widgets into one widget tree.
@@ -48,7 +48,7 @@ class MultiRepositoryProvider extends StatelessWidget {
   /// The tree of [RepositoryProvider] widgets is created in order meaning
   /// the first [RepositoryProvider] will be the top-most [RepositoryProvider]
   /// and the last [RepositoryProvider] will be a direct ancestor of [child].
-  final List<RepositoryProvider> providers;
+  final List<RepositoryProviderSingleChildWidget> providers;
 
   /// The widget and its descendants which will have access to every value
   /// provided by [providers].
