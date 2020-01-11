@@ -1,5 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
+
+/// Mixin which allows `MultiRepositoryProvider` to infer the types
+/// of multiple [RepositoryProvider]s.
+mixin RepositoryProviderSingleChildWidget on SingleChildWidget {}
 
 /// {@template repositoryprovider}
 /// Takes a `ValueBuilder` that is responsible for creating the repository and
@@ -17,7 +22,8 @@ import 'package:provider/provider.dart';
 /// );
 /// ```
 /// {@endtemplate}
-class RepositoryProvider<T> extends Provider<T> {
+class RepositoryProvider<T> extends Provider<T>
+    with RepositoryProviderSingleChildWidget {
   /// {@macro repositoryprovider}
   RepositoryProvider({
     Key key,
@@ -57,12 +63,7 @@ class RepositoryProvider<T> extends Provider<T> {
         RepositoryProvider.of() called with a context that does not contain a repository of type $T.
         No ancestor could be found starting from the context that was passed to RepositoryProvider.of<$T>().
 
-        This can happen if:
-        1. The context you used comes from a widget above the RepositoryProvider.
-        2. You used MultiRepositoryProvider and didn\'t explicity provide the RepositoryProvider types.
-
-        Good: RepositoryProvider<$T>(create: (context) => $T())
-        Bad: RepositoryProvider(create: (context) => $T()).
+        This can happen if the context you used comes from a widget above the RepositoryProvider.
 
         The context used was: $context
         """,

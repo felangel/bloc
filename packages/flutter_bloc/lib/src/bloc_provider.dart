@@ -4,6 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:bloc/bloc.dart';
 
+/// Mixin which allows `MultiBlocProvider` to infer the types
+/// of multiple [BlocProvider]s.
+mixin BlocProviderSingleChildWidget on SingleChildWidget {}
+
 /// {@template blocprovider}
 /// Takes a [ValueBuilder] that is responsible for creating the [bloc] and
 /// a [child] which will have access to the [bloc] via
@@ -22,7 +26,7 @@ import 'package:bloc/bloc.dart';
 /// ```
 /// {@endtemplate}
 class BlocProvider<T extends Bloc<dynamic, dynamic>>
-    extends SingleChildStatelessWidget {
+    extends SingleChildStatelessWidget with BlocProviderSingleChildWidget {
   /// [child] and its descendants which will have access to the [bloc].
   final Widget child;
 
@@ -104,12 +108,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
         BlocProvider.of() called with a context that does not contain a Bloc of type $T.
         No ancestor could be found starting from the context that was passed to BlocProvider.of<$T>().
 
-        This can happen if:
-        1. The context you used comes from a widget above the BlocProvider.
-        2. You used MultiBlocProvider and didn\'t explicity provide the BlocProvider types.
-
-        Good: BlocProvider<$T>(create: (context) => $T())
-        Bad: BlocProvider(create: (context) => $T()).
+        This can happen if the context you used comes from a widget above the BlocProvider.
 
         The context used was: $context
         """,

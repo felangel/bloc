@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-import '../flutter_bloc.dart';
+import 'bloc_listener.dart';
 
 /// {@template multibloclistener}
 /// Merges multiple [BlocListener] widgets into one widget tree.
@@ -54,7 +54,7 @@ class MultiBlocListener extends StatelessWidget {
   /// The tree of [BlocListener] widgets is created in order meaning the first
   /// [BlocListener] will be the top-most [BlocListener] and the last
   /// [BlocListener] will be a direct ancestor of [child].
-  final List<BlocListener> listeners;
+  final List<BlocListenerSingleChildWidget> listeners;
 
   /// The widget which will be a direct descendent of the last [BlocListener]
   /// in [listeners].

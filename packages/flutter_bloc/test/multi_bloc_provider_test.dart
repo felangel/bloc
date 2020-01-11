@@ -260,6 +260,29 @@ void main() {
       expect(counterText.data, '0');
     });
 
+    testWidgets('passes blocs to children without explicit states',
+        (tester) async {
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => CounterBloc()),
+            BlocProvider(create: (context) => ThemeBloc())
+          ],
+          child: MyApp(),
+        ),
+      );
+
+      final materialApp =
+          tester.widget(find.byType(MaterialApp)) as MaterialApp;
+      expect(materialApp.theme, ThemeData.light());
+
+      final counterFinder = find.byKey((Key('counter_text')));
+      expect(counterFinder, findsOneWidget);
+
+      final counterText = tester.widget(counterFinder) as Text;
+      expect(counterText.data, '0');
+    });
+
     testWidgets('adds event to each bloc', (tester) async {
       await tester.pumpWidget(
         MultiBlocProvider(
