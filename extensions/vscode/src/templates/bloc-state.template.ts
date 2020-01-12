@@ -17,7 +17,7 @@ abstract class ${pascalCaseBlocName}State extends Equatable {
   const ${pascalCaseBlocName}State();
 }
 
-class Initial${pascalCaseBlocName}State extends ${pascalCaseBlocName}State {
+class ${pascalCaseBlocName}Initial extends ${pascalCaseBlocName}State {
   @override
   List<Object> get props => [];
 }
@@ -30,7 +30,7 @@ function getDefaultBlocStateTemplate(blocName: string): string {
 
 @immutable
 abstract class ${pascalCaseBlocName}State {}
-  
-class Initial${pascalCaseBlocName}State extends ${pascalCaseBlocName}State {}
+
+class ${pascalCaseBlocName}Initial extends ${pascalCaseBlocName}State {}
 `;
 }
