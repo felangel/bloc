@@ -43,7 +43,7 @@ jobs:
       - name: Analyze and test
         run: |
           cd packages/${{ matrix.package }}
-          scripts/ci.sh
+          ./../../scripts/ci.sh
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1.0.2
         if: success()
