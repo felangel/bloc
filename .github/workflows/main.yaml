@@ -41,6 +41,8 @@ jobs:
         with:
           channel: 'stable'
       - name: Analyze and test
+        env:
+          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/cache/dart-sdk/bin
         run: |
           ./scripts/ci.sh packages/${{ matrix.package }}
       - name: Upload coverage to Codecov
