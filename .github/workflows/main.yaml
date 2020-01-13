@@ -40,13 +40,13 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - name: Analyze and test
+      - name: Add Flutter's Dart to PATH
         env:
           FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
         run: |
-          ls -laf ${{ env.FLUTTER_HOME }}/bin
-          ls -laf $FLUTTER_DART_HOME
           echo '::add-path::$FLUTTER_DART_HOME'
+      - name: Analyze and test
+        run: |
           ./scripts/ci.sh packages/${{ matrix.package }}
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
