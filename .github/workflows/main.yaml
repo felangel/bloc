@@ -5,7 +5,13 @@ on: [push]
 jobs:
   # Set up Flutter for all other tasks.
   setup:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-lates]
+      fail-fast: true
+
     steps:
       - uses: actions/checkout@v1
       - name: Cache Flutter dependencies
@@ -19,11 +25,12 @@ jobs:
 
   # Analyze and test each package.
   analyze-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     needs: setup
 
     strategy:
       matrix:
+        os: [ubuntu-latest, macos-lates]
         package: ['angular_bloc', 'bloc', 'bloc_test', 'flutter_bloc']
       fail-fast: false
 
