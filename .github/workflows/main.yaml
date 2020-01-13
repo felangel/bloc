@@ -42,12 +42,9 @@ jobs:
           channel: 'stable'
       - name: Analyze and test
         run: |
-          cd packages/${{ matrix.package }}
-          ./../../scripts/ci.sh
-          cd ../../
+          ./scripts/ci.sh packages/${{ matrix.package }}
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1.0.2
-        if: success()
+        uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ${{ matrix.package }}.lcov
