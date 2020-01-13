@@ -44,6 +44,9 @@ jobs:
         env:
           FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/cache/dart-sdk/bin
         run: |
+          ls -laf ${{ env.FLUTTER_HOME }}
+          ls -laf ${{ env.FLUTTER_HOME }}/../
+          ls -laf $FLUTTER_DART_HOME
           echo '::add-path::$FLUTTER_DART_HOME'
           ./scripts/ci.sh packages/${{ matrix.package }}
       - name: Upload coverage to Codecov
