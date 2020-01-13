@@ -44,6 +44,7 @@ jobs:
         run: |
           cd packages/${{ matrix.package }}
           ./../../scripts/ci.sh
+          cd ../../
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1.0.2
         if: success()

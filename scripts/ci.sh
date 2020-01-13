@@ -2,7 +2,7 @@
 
 set -ex
 
-source scripts/retry.sh
+source retry.sh
 
 cd $1
 package=${PWD##*/}
