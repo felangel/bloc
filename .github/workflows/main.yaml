@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         package: ['angular_bloc', 'bloc', 'bloc_test', 'flutter_bloc']
-      fail-fast: true
+      fail-fast: false
 
     env:
       CODECOV_PACKAGE_TOKEN: secrets.CODECOV_TOKEN_${{ matrix.package }}
@@ -22,11 +22,11 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v1
-        with:
-          path: /opt/hostedtoolcache/flutter
-          key: ${{ runner.os }}-flutter
+      # - name: Cache Flutter dependencies
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: /opt/hostedtoolcache/flutter
+      #     key: ${{ runner.os }}-flutter
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
