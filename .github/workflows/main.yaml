@@ -42,10 +42,9 @@ jobs:
           channel: 'stable'
       - name: Analyze and test
         env:
-          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/cache/dart-sdk/bin
+          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
         run: |
-          ls -laf ${{ env.FLUTTER_HOME }}
-          ls -laf ${{ env.FLUTTER_HOME }}/../
+          ls -laf ${{ env.FLUTTER_HOME }}/bin
           ls -laf $FLUTTER_DART_HOME
           echo '::add-path::$FLUTTER_DART_HOME'
           ./scripts/ci.sh packages/${{ matrix.package }}
