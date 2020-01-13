@@ -45,10 +45,11 @@ jobs:
           FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
         run: |
           echo '::add-path::$FLUTTER_DART_HOME'
-          echo '$PATH'
+          echo "$PATH"
           chmod +x ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin/pub
       - name: Analyze and test
         run: |
+          echo "$PATH"
           ./scripts/ci.sh packages/${{ matrix.package }}
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
