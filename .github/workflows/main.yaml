@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-lates]
+        os: [ubuntu-latest, macos-latest]
       fail-fast: true
 
     steps:
@@ -30,7 +30,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-lates]
+        os: [ubuntu-latest, macos-latest]
         package: ['angular_bloc', 'bloc', 'bloc_test', 'flutter_bloc']
       fail-fast: false
 
