@@ -27,9 +27,6 @@ jobs:
         package: ['angular_bloc', 'bloc', 'bloc_test', 'flutter_bloc']
       fail-fast: false
 
-    env:
-      CODECOV_PACKAGE_TOKEN: secrets.CODECOV_TOKEN_${{ matrix.package }}
-
     steps:
       - uses: actions/checkout@v1
       # - uses: actions/setup-java@v1
@@ -45,11 +42,11 @@ jobs:
           channel: 'stable'
       - name: Analyze and test
         run: |
-          cd ${{ matrix.package }}
+          cd packages/${{ matrix.package }}
           scripts/ci.sh
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1.0.2
         if: success()
         with:
-          token: ${{ env.CODECOV_PACKAGE_TOKEN }}
+          token: ${{ secrets.CODECOV_TOKEN }}
           file: ${{ matrix.package }}.lcov
