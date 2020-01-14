@@ -10,6 +10,11 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
+          - os: macos-latest
+            flutter_path: /Users/runner/hostedtoolcache/flutter
       fail-fast: false
 
     steps:
@@ -17,7 +22,7 @@ jobs:
       - name: Cache Flutter dependencies
         uses: actions/cache@v1
         with:
-          path: /opt/hostedtoolcache/flutter
+          path: ${{ matrix.flutter_path }}
           key: ${{ runner.os }}-flutter
       - uses: subosito/flutter-action@v1
         with:
@@ -32,6 +37,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         package: ['angular_bloc', 'bloc', 'bloc_test', 'flutter_bloc']
+        include:
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
+          - os: macos-latest
+            flutter_path: /Users/runner/hostedtoolcache/flutter
       fail-fast: false
 
     steps:
@@ -39,7 +49,7 @@ jobs:
       - name: Cache Flutter dependencies
         uses: actions/cache@v1
         with:
-          path: /opt/hostedtoolcache/flutter
+          path: ${{ matrix.flutter_path }}
           key: ${{ runner.os }}-flutter
       - uses: subosito/flutter-action@v1
         with:
