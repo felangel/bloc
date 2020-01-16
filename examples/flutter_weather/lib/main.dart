@@ -4,29 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:flutter_weather/simple_bloc_delegate.dart';
 import 'package:flutter_weather/widgets/widgets.dart';
 import 'package:flutter_weather/repositories/repositories.dart';
 import 'package:flutter_weather/blocs/blocs.dart';
-
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
-    print(event);
-  }
-
-  @override
-  onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-
-  @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
-    print(error);
-  }
-}
 
 void main() {
   final WeatherRepository weatherRepository = WeatherRepository(
@@ -65,8 +46,10 @@ class App extends StatelessWidget {
           title: 'Flutter Weather',
           theme: themeState.theme,
           home: BlocProvider(
-            create: (context) =>
-                WeatherBloc(weatherRepository: weatherRepository),
+            create: (context) => WeatherBloc(
+              weatherRepository:
+                  RepositoryProvider.of<WeatherRepository>(context),
+            ),
             child: Weather(),
           ),
         );
