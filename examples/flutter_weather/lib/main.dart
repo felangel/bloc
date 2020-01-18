@@ -47,8 +47,7 @@ class App extends StatelessWidget {
           theme: themeState.theme,
           home: BlocProvider(
             create: (context) => WeatherBloc(
-              weatherRepository:
-                  RepositoryProvider.of<WeatherRepository>(context),
+              weatherRepository: weatherRepository,
             ),
             child: Weather(),
           ),
