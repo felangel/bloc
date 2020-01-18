@@ -4,4 +4,4 @@
   - [:kr: ko-kr](/ko-kr/)
   - [:brazil: pt-br](/pt-br/)
   - [:czech_republic: cs](/cs/)
-  - [:es: spa](/spa/)
+  - [:es: es](/es/)
