@@ -1,5 +1,6 @@
 - Translations
   - [:us: en-us](/)
+  - [:es: en-co](/es/)
   - [:fr: fr-fr](/fr/)
   - [:kr: ko-kr](/ko-kr/)
   - [:brazil: pt-br](/pt-br/)
