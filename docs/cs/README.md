@@ -36,6 +36,10 @@ V rámci této dokumentace se budeme držet originálního názvu `Bloc` (čti _
 - [Balíček Flutter Bloc](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/README.md)
 - [Balíček Angular Bloc](https://github.com/felangel/Bloc/tree/master/packages/angular_bloc/README.md)
 
+## Migrace
+
+- [Vylepšení z v0.x na v2.x](https://dev.to/mhadaily/upgrade-to-bloc-library-v1-0-0-for-flutter-and-angular-dart-2np0)
+
 ## Ukázky
 
 <div style="text-align: center">
@@ -117,6 +121,7 @@ V rámci této dokumentace se budeme držet originálního názvu `Bloc` (čti _
 - [firebase login tutorial with flutter_bloc](https://medium.com/flutter-community/firebase-login-with-flutter-bloc-47455e6047b0) - Jak vytvořit plně funkční přihlašování a registraci pomocí balíčků bloc a flutter_bloc s Firebase Authentication and Google Sign In.
 - [flutter timer tutorial with flutter_bloc](https://medium.com/flutter-community/flutter-timer-with-flutter-bloc-a464e8332ceb) - Jak vytvořit aplikaci časovače pomocí balíčků bloc a flutter_bloc.
 - [firestore todos tutorial with flutter_bloc](https://medium.com/flutter-community/firestore-todos-with-flutter-bloc-7b2d5fadcc80) - Jak vytvořit aplikaci plánovače s použitím balíčků bloc and flutter_bloc, které integruje s cloud firestore.
+- [Dynamický formulář](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - Jak použít balíčky `bloc` a `flutter_bloc` k implementaci dynamického formuláře, který stahuje data z repozitáře.
 
 ## Rozšíření
 
@@ -147,6 +152,11 @@ Více se dozvíte na následujících odkazech, které vytvořila komunita.
 - [State Management Foundation](https://www.youtube.com/watch?v=S2KmxzgsTwk&t=731s) - Úvod do state managementu použitím balíčku flutter_bloc, od [Techie Blossom](https://techieblossom.com).
 - [Flutter Football Player Search](https://www.youtube.com/watch?v=S2KmxzgsTwk) - Jak vytvořit aplikaci na vyhledávání fotbalových hráčů, která interaguje s API s použitím balíčků bloc a flutter_bloc, od [Techie Blossom](https://techieblossom.com).
 - [Learning the Flutter Bloc Package](https://www.youtube.com/watch?v=eAiCPl3yk9A&t=1s) - Učení se flutter_bloc naživo, od [Robert Brunhage](https://www.youtube.com/channel/UCSLIg5O0JiYO1i2nD4RclaQ)
+- [Bloc Test Tutorial](https://www.youtube.com/watch?v=S6jFBiiP0Mc) - Tutorial on how to unit test blocs using the bloc_test package, by [Reso Coder](https://resocoder.com)
+
+### Rozšíření
+
+- [Feature Scaffolding for VSCode](https://marketplace.visualstudio.com/items?itemName=KiritchoukC.flutter-clean-architecture) - VSCode rozšíření inspirováno [Reso Coderovým](https://resocoder.com) tutoriálem o Clean Architecture, který umožňuje rychle vytvářet featury, od [Kiritchouk Clément](https://github.com/KiritchoukC).
 
 ## Správci
 
