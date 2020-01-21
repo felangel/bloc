@@ -12,8 +12,8 @@
 
 > una librería de administración de estado predecible para Dart.
 
-- Simple y ligero
-- Altamente comprobable
+- Simple y Liviano
+- Altamente Testeable
 - Para Dart, Flutter y AngularDart
 
 [GitHub](https://github.com/felangel/bloc/)
