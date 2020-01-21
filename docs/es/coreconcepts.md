@@ -8,7 +8,7 @@ En las próximas secciones, vamos a discutir cada uno de ellos en detalle, así 
 
 ## Events
 
-> Los eventos o events son la entrada a un bloque. Se agregan comúnmente en respuesta a las interacciones del usuario, como presionar botones o eventos del ciclo de vida, como cargas de página.
+> Los eventos o events son la entrada a un bloc. Se agregan comúnmente en respuesta a las interacciones del usuario, como presionar botones o eventos del ciclo de vida, como cargas de página.
 
 Al diseñar una aplicación, debemos dar un paso atrás y definir cómo los usuarios interactuarán con ella. En el contexto de nuestra aplicación de contador, tendremos dos botones para aumentar y disminuir nuestro contador.
 
@@ -20,7 +20,7 @@ Necesitamos poder notificar a los "cerebros" de nuestra aplicación tanto de un 
 enum CounterEvent { increment, decrement }
 ```
 
-En este caso, podemos representar los eventos usando un `enum`, pero para casos más complejos puede ser necesario usar una `class`, especialmente si es necesario pasar información al bloque.
+En este caso, podemos representar los eventos usando un `enum`, pero para casos más complejos puede ser necesario usar una `class`, especialmente si es necesario pasar información al bloc.
 
 En este punto, hemos definido nuestro primer evento! Tenga en cuenta que hasta ahora no hemos usado Bloc de ninguna manera y que no ocurre ninguna magia; es simplemente código Dart.
 
@@ -123,7 +123,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 En el fragmento de código anterior, estamos declarando nuestro `CounterBloc` como un Bloc que convierte `CounterEvents` en `ints`.
 
-> Cada bloque debe definir un estado inicial que es el estado antes de que se haya recibido cualquier evento.
+> Cada bloc debe definir un estado inicial que es el estado antes de que se haya recibido cualquier evento.
 
 En este caso, queremos que nuestro contador comience en `0`.
 
@@ -132,7 +132,7 @@ En este caso, queremos que nuestro contador comience en `0`.
 int get initialState => 0;
 ```
 
-> Cada bloque debe implementar una función llamada `mapEventToState`. La función toma el `event` entrante como argumento y debe devolver un `Stream` de nuevos `states` que es consumida por la capa de presentación. Podemos acceder al estado del bloque actual en cualquier momento utilizando la propiedad `state`.
+> Cada bloc debe implementar una función llamada `mapEventToState`. La función toma el `event` entrante como argumento y debe devolver un `Stream` de nuevos `states` que es consumida por la capa de presentación. Podemos acceder al estado del bloc actual en cualquier momento utilizando la propiedad `state`.
 
 ```dart
 @override
@@ -173,11 +173,11 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-!> Los blocs ignorarán los estados duplicados. Si un Bloque arroja `State nextState` donde` state == nextState`, entonces no ocurrirá ninguna transición y no se realizará ningún cambio en el `Stream <State>`.
+!> Los blocs ignorarán los estados duplicados. Si un bloc arroja `State nextState` donde` state == nextState`, entonces no ocurrirá ninguna transición y no se realizará ningún cambio en el `Stream <State>`.
 
-En este punto, probablemente se está preguntando _"¿Cómo notifico a un Bloque de un evento?"_.
+En este punto, probablemente se está preguntando _"¿Cómo notifico a un bloc de un evento?"_.
 
-> Cada bloque tiene un método `add`. `Add` toma un `event` y activa `mapEventToState`. Se puede llamar a `Add` desde la capa de presentación o desde dentro del Bloc y notifica al Bloc de un nuevo `evento`.
+> Cada bloc tiene un método `add`. `Add` toma un `event` y activa `mapEventToState`. Se puede llamar a `Add` desde la capa de presentación o desde dentro del Bloc y notifica al Bloc de un nuevo `evento`.
 
 Podemos crear una aplicación simple que cuente de 0 a 3.
 
@@ -215,7 +215,7 @@ Las `Transitions` en el fragmento de código anterior serían
 
 Desafortunadamente, en el estado actual no podremos ver ninguna de estas transiciones a menos que anulemos `onTransition`.
 
-> `onTransition` es un método que se puede anular para manejar cada `Transition` del Bloc local. `onTransition` se llama justo antes de que se actualice el `estado` de un Bloque.
+> `onTransition` es un método que se puede anular para manejar cada `Transition` del Bloc local. `onTransition` se llama justo antes de que se actualice el `estado` de un bloc.
 
 ?> **Consejo**: `onTransition` es un gran lugar para agregar registros / análisis específicos de bloc.
 
@@ -234,7 +234,7 @@ Al igual que podemos manejar `Transition` a nivel de bloc, también podemos mane
 
 ?> **Nota**: El argumento stacktrace puede ser `null` si la secuencia de estado recibió un error sin un `StackTrace`.
 
-?> **Consejo**: `onError` es un gran lugar para agregar el manejo de errores específicos del bloque.
+?> **Consejo**: `onError` es un gran lugar para agregar el manejo de errores específicos del bloc.
 
 ```dart
 @override
@@ -294,7 +294,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-Si queremos poder hacer algo en respuesta a todas las `Exceptions` lanzadas en un Bloque, también podemos anular el método `onError` en nuestro `SimpleBlocDelegate`.
+Si queremos poder hacer algo en respuesta a todas las `Exceptions` lanzadas en un bloc, también podemos anular el método `onError` en nuestro `SimpleBlocDelegate`.
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
