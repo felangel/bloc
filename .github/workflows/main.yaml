@@ -4,7 +4,7 @@ on: [push]
 
 env:
   flutter_channel: 'stable'
-  flutter_version: 'v1.12.13+hotfix.5'
+  flutter_version: '1.12.13+hotfix.5'
 
 jobs:
   # Set up Flutter for all other tasks.
