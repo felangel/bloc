@@ -1,6 +1,10 @@
-name: CI
+name: Build
 
 on: [push]
+
+env:
+  flutter_channel: 'stable'
+  flutter_version: 'v1.12.13+hotfix.5'
 
 jobs:
   # Set up Flutter for all other tasks.
@@ -18,15 +22,20 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+
       - name: Cache Flutter dependencies
         uses: actions/cache@v1
         with:
           path: ${{ matrix.flutter_path }}
-          key: ${{ runner.os }}-flutter
+          key: ${{ runner.OS }}-flutter-cache-${{ env.flutter_version }}
+          restore-keys: |
+            ${{ runner.OS }}-flutter-cache-
+
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'stable'
+          channel: ${{ env.flutter_channel }}
+          flutter-version: ${{ env.flutter_version }}
 
   # Analyze and test each package.
   analyze-and-test:
@@ -45,21 +54,28 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+
       - name: Cache Flutter dependencies
         uses: actions/cache@v1
         with:
           path: ${{ matrix.flutter_path }}
-          key: ${{ runner.os }}-flutter
+          key: ${{ runner.OS }}-flutter-cache-${{ env.flutter_version }}
+          restore-keys: |
+            ${{ runner.OS }}-flutter-cache-
+
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'stable'
+          channel: ${{ env.flutter_channel }}
+          flutter-version: ${{ env.flutter_version }}
+
       - name: Analyze and test
         env:
           FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
         run: |
           export PATH=$PATH:$FLUTTER_DART_HOME
           ./scripts/ci.sh packages/${{ matrix.package }}
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
