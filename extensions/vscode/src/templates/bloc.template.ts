@@ -5,8 +5,10 @@ export function getBlocTemplate(blocName: string): string {
   const blocState = `${pascalCaseBlocName}State`;
   const blocEvent = `${pascalCaseBlocName}Event`;
   return `import 'dart:async';
+
 import 'package:bloc/bloc.dart';
-import './bloc.dart';
+
+import 'bloc.dart';
 
 class ${pascalCaseBlocName}Bloc extends Bloc<${blocEvent}, ${blocState}> {
   @override
