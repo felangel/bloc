@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import './helpers/helpers.dart';
+import 'helpers/helpers.dart';
 
 class MockBlocDelegate extends Mock implements BlocDelegate {}
 
@@ -215,7 +215,7 @@ void main() {
       final _bloc = CounterExceptionBloc();
       BlocSupervisor.delegate = delegate;
 
-      when(delegate.onError(any, any, any)).thenAnswer((Invocation invocation) {
+      when(delegate.onError(any, any, any)).thenAnswer((invocation) {
         blocWithError = invocation.positionalArguments[0] as Bloc;
         errorHandled = true;
       });

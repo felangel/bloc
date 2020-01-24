@@ -10,11 +10,11 @@
 [![Discord](https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue)](https://discord.gg/Hc5KD3g)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
-> Dart의 예측 가능한 상태 관리 라이브러리
+> una librería de administración de estado predecible para Dart.
 
-- 간단하고 가벼운
-- 높은 테스트 가능
-- Dart, Flutter 및 AngularDart에 사용
+- Simple y Liviano
+- Altamente Testeable
+- Para Dart, Flutter y AngularDart
 
 [GitHub](https://github.com/felangel/bloc/)
-[시작하다](ko-kr/gettingstarted.md)
+[Comenzar](es/gettingstarted.md)

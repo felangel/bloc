@@ -1,6 +1,6 @@
 name: angular_bloc
 description: Angular Components that make it easy to implement the BLoC (Business Logic Component) design pattern. Built to be used with the bloc state management package.
-version: 3.0.0-dev.1
+version: 3.0.0
 repository: https://github.com/felangel/bloc
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://bloclibrary.dev
@@ -10,7 +10,7 @@ environment:
 
 dependencies:
   angular: ^5.3.0
-  bloc: ^3.0.0-dev.1
+  bloc: ^3.0.0
 
 dev_dependencies:
   angular_test: ^2.3.0
@@ -20,4 +20,4 @@ dev_dependencies:
   pedantic: ^1.8.0
   test: ^1.6.0
   mockito: ^4.0.0
-  effective_dart: ^1.1.1
+  effective_dart: ^1.2.0

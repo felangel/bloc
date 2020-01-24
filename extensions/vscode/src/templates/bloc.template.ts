@@ -10,7 +10,7 @@ import './bloc.dart';
 
 class ${pascalCaseBlocName}Bloc extends Bloc<${blocEvent}, ${blocState}> {
   @override
-  ${blocState} get initialState => Initial${blocState}();
+  ${blocState} get initialState => ${pascalCaseBlocName}Initial();
 
   @override
   Stream<${blocState}> mapEventToState(

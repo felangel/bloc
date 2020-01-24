@@ -34,7 +34,7 @@ Potřebujeme přidat [test](https://pub.dev/packages/test) a [bloc_test](https:/
 ```yaml
 dev_dependencies:
   test: ">=1.3.0 <2.0.0"
-  bloc_test: ^2.1.0
+  bloc_test: ^3.0.0
 ```
 
 Začneme vytvořením souboru pro náš `CounterBloc` test, `counter_bloc_test.dart`, a importujeme balíček test.

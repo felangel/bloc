@@ -34,7 +34,7 @@ We need to add [test](https://pub.dev/packages/test) and [bloc_test](https://pub
 ```yaml
 dev_dependencies:
   test: ^1.3.0
-  bloc_test: ^2.0.0
+  bloc_test: ^3.0.0
 ```
 
 Let's get started by creating the file for our `CounterBloc` Tests, `counter_bloc_test.dart` and importing the test package.

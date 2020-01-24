@@ -259,6 +259,7 @@ void main() {
         } on TestFailure catch (error) {
           expect(
               error.message,
+              // ignore: lines_longer_than_80_chars
               'Expected: [<<Instance of \'ComplexStateA\'>>, <<Instance of \'ComplexStateB\'>>]\n'
               '  Actual: [Instance of \'ComplexStateA\']\n'
               '   Which: shorter than expected at location [1]\n'
@@ -278,8 +279,11 @@ void main() {
         } on TestFailure catch (error) {
           expect(
               error.message,
+              // ignore: lines_longer_than_80_chars
               'Expected: [<<Instance of \'ComplexStateA\'>>, <<Instance of \'ComplexStateB\'>>]\n'
+              // ignore: lines_longer_than_80_chars
               '  Actual: [Instance of \'ComplexStateA\', Instance of \'ComplexStateA\']\n'
+              // ignore: lines_longer_than_80_chars
               '   Which: does not match <Instance of \'ComplexStateB\'> at location [1]\n'
               '');
         }
@@ -302,6 +306,7 @@ void main() {
               '            <<Instance of \'ComplexStateB\'>>,\n'
               '            <<Instance of \'ComplexStateA\'>>\n'
               '          ]\n'
+              // ignore: lines_longer_than_80_chars
               '  Actual: [Instance of \'ComplexStateA\', Instance of \'ComplexStateB\']\n'
               '   Which: shorter than expected at location [2]\n'
               '');

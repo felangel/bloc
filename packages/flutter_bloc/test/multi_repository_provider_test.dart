@@ -1,6 +1,6 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -54,7 +54,7 @@ void main() {
   group('MultiRepositoryProvider', () {
     testWidgets(
         'throws if initialized with no RepositoryProviders and no child',
-        (WidgetTester tester) async {
+        (tester) async {
       try {
         await tester.pumpWidget(
           MultiRepositoryProvider(
@@ -62,13 +62,13 @@ void main() {
             child: null,
           ),
         );
-      } on Object catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
 
     testWidgets('throws if initialized with no RepositoryProviders',
-        (WidgetTester tester) async {
+        (tester) async {
       try {
         await tester.pumpWidget(
           MultiRepositoryProvider(
@@ -76,13 +76,12 @@ void main() {
             child: Container(),
           ),
         );
-      } on Object catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
 
-    testWidgets('throws if initialized with no child',
-        (WidgetTester tester) async {
+    testWidgets('throws if initialized with no child', (tester) async {
       try {
         await tester.pumpWidget(
           MultiRepositoryProvider(
@@ -90,12 +89,12 @@ void main() {
             child: null,
           ),
         );
-      } on Object catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
 
-    testWidgets('passes values to children', (WidgetTester tester) async {
+    testWidgets('passes values to children', (tester) async {
       await tester.pumpWidget(
         MultiRepositoryProvider(
           providers: [
@@ -103,6 +102,35 @@ void main() {
               create: (context) => RepositoryA(0),
             ),
             RepositoryProvider<RepositoryB>(
+              create: (context) => RepositoryB(1),
+            ),
+          ],
+          child: MyApp(),
+        ),
+      );
+
+      final repositoryAFinder = find.byKey((Key('RepositoryA_data')));
+      expect(repositoryAFinder, findsOneWidget);
+
+      final repositoryAText = tester.widget(repositoryAFinder) as Text;
+      expect(repositoryAText.data, '0');
+
+      final repositoryBFinder = find.byKey((Key('RepositoryB_data')));
+      expect(repositoryBFinder, findsOneWidget);
+
+      final repositoryBText = tester.widget(repositoryBFinder) as Text;
+      expect(repositoryBText.data, '1');
+    });
+
+    testWidgets('passes values to children without explict types',
+        (tester) async {
+      await tester.pumpWidget(
+        MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider(
+              create: (context) => RepositoryA(0),
+            ),
+            RepositoryProvider(
               create: (context) => RepositoryB(1),
             ),
           ],

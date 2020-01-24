@@ -1,9 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:bloc/bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class MyAppWithNavigation extends StatelessWidget {
   final Widget child;
@@ -106,7 +105,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder(
       bloc: BlocProvider.of<ThemeBloc>(context),
-      builder: (_, ThemeData theme) {
+      builder: (_, theme) {
         return MaterialApp(
           title: 'Flutter Demo',
           home: CounterPage(),
@@ -126,7 +125,7 @@ class CounterPage extends StatelessWidget {
       appBar: AppBar(title: Text('Counter')),
       body: BlocBuilder<CounterBloc, int>(
         bloc: counterBloc,
-        builder: (BuildContext context, int count) {
+        builder: (context, count) {
           return Center(
             child: Text(
               '$count',
@@ -213,8 +212,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
 
 void main() {
   group('MultiBlocProvider', () {
-    testWidgets('throws if initialized with no providers',
-        (WidgetTester tester) async {
+    testWidgets('throws if initialized with no providers', (tester) async {
       try {
         await tester.pumpWidget(
           MultiBlocProvider(
@@ -222,13 +220,12 @@ void main() {
             child: Container(),
           ),
         );
-      } on Object catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
 
-    testWidgets('throws if initialized with no child',
-        (WidgetTester tester) async {
+    testWidgets('throws if initialized with no child', (tester) async {
       try {
         await tester.pumpWidget(
           MultiBlocProvider(
@@ -236,12 +233,12 @@ void main() {
             child: null,
           ),
         );
-      } on Object catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
 
-    testWidgets('passes blocs to children', (WidgetTester tester) async {
+    testWidgets('passes blocs to children', (tester) async {
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -263,8 +260,59 @@ void main() {
       expect(counterText.data, '0');
     });
 
+    testWidgets('passes blocs to children without explicit states',
+        (tester) async {
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => CounterBloc()),
+            BlocProvider(create: (context) => ThemeBloc())
+          ],
+          child: MyApp(),
+        ),
+      );
+
+      final materialApp =
+          tester.widget(find.byType(MaterialApp)) as MaterialApp;
+      expect(materialApp.theme, ThemeData.light());
+
+      final counterFinder = find.byKey((Key('counter_text')));
+      expect(counterFinder, findsOneWidget);
+
+      final counterText = tester.widget(counterFinder) as Text;
+      expect(counterText.data, '0');
+    });
+
+    testWidgets('adds event to each bloc', (tester) async {
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<CounterBloc>(
+              create: (context) => CounterBloc()..add(CounterEvent.decrement),
+            ),
+            BlocProvider<ThemeBloc>(
+              create: (context) => ThemeBloc()..add(ThemeEvent.toggle),
+            ),
+          ],
+          child: MyApp(),
+        ),
+      );
+
+      await tester.pump();
+
+      final materialApp =
+          tester.widget(find.byType(MaterialApp)) as MaterialApp;
+      expect(materialApp.theme, ThemeData.dark());
+
+      final counterFinder = find.byKey((Key('counter_text')));
+      expect(counterFinder, findsOneWidget);
+
+      final counterText = tester.widget(counterFinder) as Text;
+      expect(counterText.data, '-1');
+    });
+
     testWidgets('close on counter bloc which was loaded (lazily)',
-        (WidgetTester tester) async {
+        (tester) async {
       var counterBlocClosed = false;
       var themeBlocClosed = false;
 
@@ -294,7 +342,7 @@ void main() {
     });
 
     testWidgets('close on theme bloc which was loaded (lazily)',
-        (WidgetTester tester) async {
+        (tester) async {
       var counterBlocClosed = false;
       var themeBlocClosed = false;
 
@@ -324,7 +372,7 @@ void main() {
     });
 
     testWidgets('close on all blocs which were loaded (lazily)',
-        (WidgetTester tester) async {
+        (tester) async {
       var counterBlocClosed = false;
       var themeBlocClosed = false;
 
@@ -355,7 +403,7 @@ void main() {
     });
 
     testWidgets('does not call close on blocs if they were not loaded (lazily)',
-        (WidgetTester tester) async {
+        (tester) async {
       var counterBlocClosed = false;
       var themeBlocClosed = false;
 
@@ -382,8 +430,7 @@ void main() {
       expect(themeBlocClosed, false);
     });
 
-    testWidgets('does not close when created using value',
-        (WidgetTester tester) async {
+    testWidgets('does not close when created using value', (tester) async {
       var counterBlocClosed = false;
       var themeBlocClosed = false;
 

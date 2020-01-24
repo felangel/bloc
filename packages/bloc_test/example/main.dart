@@ -35,7 +35,8 @@ void main() {
       // Stub the listen with a fake Stream
       whenListen(counterBloc, Stream.fromIterable([0, 1, 2, 3]));
 
-      // Expect that the CounterBloc instance emitted the stubbed Stream of states
+      // Expect that the CounterBloc instance emitted the stubbed Stream of
+      // states
       expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3]));
     });
   });

@@ -1,3 +1,20 @@
+# 3.1.0
+
+Update to support flutter_bloc `v3.1.0`
+Update Snippets for:
+
+- `BlocConsumer` (blocconsumer)
+- `BlocProvider.of` (blocof)
+- `RepositoryProvider.of` (repositoryof)
+
+# 3.0.1
+
+Hotfix for `command 'extension.new-bloc' not found`
+
+# 3.0.0
+
+Update to support bloc `v3.0.0`
+
 # 2.2.0
 
 Update snippets to support flutter_bloc `v2.1.0`
