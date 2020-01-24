@@ -124,7 +124,7 @@ El objetivo de esta librería es facilitar la separación de la *presentación* 
 ## Extensiones
 
 - [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) - extiende IntelliJ / Android Studio con soporte para la librería Bloc y proporciona herramientas para crear efectivamente Blocs para aplicaciones Flutter y AngularDart.
-- [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) - extiende VSCode con soporte para la librería Bloc y proporciona herramientas para crear efectivamente bloques para aplicaciones Flutter y AngularDart.
+- [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) - extiende VSCode con soporte para la librería Bloc y proporciona herramientas para crear efectivamente blocs para aplicaciones Flutter y AngularDart.
 
 ## Comunidad
 
@@ -135,13 +135,13 @@ Obtenga más información en los siguientes enlaces, que han sido aportados por 
 - [Hydrated Bloc](https://pub.dev/packages/hydrated_bloc) - Una extensión de la librería de administración de estado `bloc` que persiste y restaura automáticamente los estados `bloc`, por [Felix Angelov](https://github.com/felangel).
 - [Bloc.js](https://github.com/felangel/bloc.js) - Un puerto de la librería de administración de estado `bloc` de Dart a JavaScript, por [Felix Angelov](https://github.com/felangel).
 - [Flutter Bloc Extensions](https://pub.dev/packages/flutter_bloc_extensions) - Colección de widgets de ayuda construidos sobre `flutter_bloc`, por [Ondřej Kunc](https://github.com/OndrejKunc).
-- [Bloc Code Generator](https://pub.dev/packages/bloc_code_generator) - Un generador de código que facilita el trabajo con bloques, por [Adson Leal](https://github.com/adsonpleal).
+- [Bloc Code Generator](https://pub.dev/packages/bloc_code_generator) - Un generador de código que facilita el trabajo con blocs, por [Adson Leal](https://github.com/adsonpleal).
 - [Firebase Auth](https://pub.dev/packages/fb_auth) - Un complemento de autenticación web, Firebase móvil, por [Rody Davis](https://github.com/AppleEducate).
 - [Form Bloc](https://pub.dev/packages/form_bloc) - Una manera fácil de crear formularios con el patrón BLoC sin escribir mucho código repetitivo, por [Giancarlo](https://github.com/GiancarloCode).
 
 ### Tutoriales en vídeo (Inglés)
 
-- [Flutter Bloc Library Tutorial](https://www.youtube.com/watch?v=hTExlt1nJZI) - Introducción a la Librería de bloques, por [Reso Coder](https://resocoder.com).
+- [Flutter Bloc Library Tutorial](https://www.youtube.com/watch?v=hTExlt1nJZI) - Introducción a la Librería de blocs, por [Reso Coder](https://resocoder.com).
 - [Flutter Youtube Search](https://www.youtube.com/watch?v=BJY8nuYUM7M) - Cómo construir una aplicación de búsqueda de Youtube que interactúa con una API usando los paquetes bloc y flutter_bloc, por [Reso Coder](https://resocoder.com).
 - [Flutter Bloc - AUTOMATIC LOOKUP - v0.20 (and Up), Updated Tutorial](https://www.youtube.com/watch?v=_vOpPuVfmiU) - Tutorial actualizado sobre el paquete Flutter Bloc, por [Reso Coder](https://resocoder.com).
 - [Dynamic Theming with flutter_bloc](https://www.youtube.com/watch?v=YYbhkg-W8Mg) - Tutorial sobre cómo usar el paquete flutter_bloc para implementar temas dinámicos, por [Reso Coder](https://resocoder.com).
@@ -149,7 +149,7 @@ Obtenga más información en los siguientes enlaces, que han sido aportados por 
 - [State Management Foundation](https://www.youtube.com/watch?v=S2KmxzgsTwk&t=731s) - Introducción a la gestión de estado utilizando el paquete flutter_bloc, por [Techie Blossom](https://techieblossom.com).
 - [Flutter Football Player Search](https://www.youtube.com/watch?v=S2KmxzgsTwk) - Cómo construir una aplicación de búsqueda de jugadores de fútbol que interactúa con una API utilizando los paquetes bloc y flutter_bloc, por [Techie Blossom](https://techieblossom.com).
 - [Learning the Flutter Bloc Package](https://www.youtube.com/watch?v=eAiCPl3yk9A&t=1s) - Aprender el paquete flutter_bloc en vivo, por [Robert Brunhage](https://www.youtube.com/channel/UCSLIg5O0JiYO1i2nD4RclaQ)
-- [Bloc Test Tutorial](https://www.youtube.com/watch?v=S6jFBiiP0Mc) - Tutorial sobre cómo unir bloques de prueba usando el paquete bloc_test, por [Reso Coder](https://resocoder.com).
+- [Bloc Test Tutorial](https://www.youtube.com/watch?v=S6jFBiiP0Mc) - Tutorial sobre cómo unir blocs de prueba usando el paquete bloc_test, por [Reso Coder](https://resocoder.com).
 
 ### Extensiones
 
