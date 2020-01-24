@@ -1,8 +1,8 @@
 - Introduction
 
-  - [Getting Started](fr/gettingstarted.md)
-  - [Why Bloc?](fr/whybloc.md)
-  - Core Concepts
+  - [Commencer](fr/gettingstarted.md)
+  - [Pourquoi Bloc ?](fr/whybloc.md)
+  - Concepts de base
     - [bloc](fr/coreconcepts.md)
     - [flutter_bloc](fr/flutterbloccoreconcepts.md)
   - [Architecture](fr/architecture.md)

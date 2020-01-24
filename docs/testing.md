@@ -41,6 +41,7 @@ Let's get started by creating the file for our `CounterBloc` Tests, `counter_blo
 
 ```dart
 import 'package:test/test.dart';
+import 'package:bloc_test/bloc_test.dart';
 ```
 
 Next, we need to create our `main` as well as our test group.

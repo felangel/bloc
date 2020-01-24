@@ -1,6 +1,6 @@
 # Architecture
 
-![Bloc Architecture](assets/bloc_architecture.png)
+![Bloc Architecture](../assets/bloc_architecture.png)
 
 L'utilisation de Bloc nous permet de séparer notre application en trois couches :
 
