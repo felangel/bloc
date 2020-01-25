@@ -1,3 +1,7 @@
+# 3.1.0
+
+- Add `verify` to `blocTest` ([#781](https://github.com/felangel/bloc/issues/781))
+
 # 3.0.1
 
 - Enable `blocTest` to add more than one asynchronous event at a time ([#724](https://github.com/felangel/bloc/issues/724))
