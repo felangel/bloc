@@ -22,6 +22,9 @@ import 'package:test/test.dart' as test;
 /// [expect] is an `Iterable` of matchers which the [bloc]
 /// under test is expected to emit after [act] is executed.
 ///
+/// [verify] is an optional callback which is invoked after [expect]
+/// and can be used for additional non-bloc related assertions.
+///
 /// ```dart
 /// blocTest(
 ///   'CounterBloc emits [0, 1] when CounterEvent.increment is added',
@@ -39,6 +42,20 @@ import 'package:test/test.dart' as test;
 ///   'CounterBloc emits [0] when nothing is added',
 ///   build: () => CounterBloc(),
 ///   expect: [0],
+/// );
+/// ```
+///
+/// [blocTest] can also be used to [verify] internal bloc functionality.
+///
+/// ```dart
+/// blocTest(
+///   'CounterBloc emits [0, 1] when CounterEvent.increment is added',
+///   build: () => CounterBloc(),
+///   act: (bloc) => bloc.add(CounterEvent.increment),
+///   expect: [0, 1],
+///   verify: () async {
+///     verify(repository.someMethod(any)).called(1);
+///   }
 /// );
 /// ```
 ///
@@ -74,6 +91,7 @@ void blocTest<B extends Bloc<Event, State>, Event, State>(
   @required Iterable expect,
   Future<void> Function(B bloc) act,
   Duration wait,
+  Future<void> Function() verify,
 }) {
   test.test(description, () async {
     final bloc = build();
@@ -84,5 +102,6 @@ void blocTest<B extends Bloc<Event, State>, Event, State>(
     await bloc.close();
     test.expect(states, expect);
     await subscription.cancel();
+    await verify?.call();
   });
 }

@@ -50,6 +50,8 @@ expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3])))
 
 `expect` is an `Iterable<State>` which the `bloc` under test is expected to emit after `act` is executed.
 
+`verify` is an optional callback which is invoked after `expect` and can be used for additional non-bloc related assertions.
+
 ```dart
 group('CounterBloc', () {
   blocTest(
@@ -65,6 +67,20 @@ group('CounterBloc', () {
     expect: [0, 1],
   );
 });
+```
+
+`blocTest` can also be used to `verify` internal bloc functionality.
+
+```dart
+blocTest(
+  'CounterBloc emits [0, 1] when CounterEvent.increment is added',
+  build: () => CounterBloc(),
+  act: (bloc) => bloc.add(CounterEvent.increment),
+  expect: [0, 1],
+  verify: () async {
+    verify(repository.someMethod(any)).called(1);
+  }
+);
 ```
 
 `blocTest` can also be used to wait for async operations like `debounceTime` by providing a `Duration` to `wait`.

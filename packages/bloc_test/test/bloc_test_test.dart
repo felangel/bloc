@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'helpers/helpers.dart';
+
+class MockRepository extends Mock implements Repository {}
 
 void main() {
   group('blocTest', () {
@@ -126,6 +129,30 @@ void main() {
         build: () => ComplexBloc(),
         act: (bloc) => bloc.add(ComplexEventB()),
         expect: [isA<ComplexStateA>(), isA<ComplexStateB>()],
+      );
+    });
+
+    group('SideEffectCounterBloc', () {
+      Repository repository;
+
+      setUp(() {
+        repository = MockRepository();
+      });
+
+      blocTest(
+        'emits [0] when nothing is added',
+        build: () => SideEffectCounterBloc(repository),
+        expect: [0],
+      );
+
+      blocTest(
+        'emits [0, 1] when SideEffectCounterEvent.increment is added',
+        build: () => SideEffectCounterBloc(repository),
+        act: (bloc) => bloc.add(SideEffectCounterEvent.increment),
+        expect: [0, 1],
+        verify: () async {
+          verify(repository.sideEffect()).called(1);
+        },
       );
     });
   });
