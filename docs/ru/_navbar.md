@@ -1,4 +1,4 @@
-- Translations
+- Переводы
   - [:us: en-us](/)
   - [:fr: fr-fr](/fr/)
   - [:kr: ko-kr](/ko-kr/)

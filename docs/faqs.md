@@ -177,7 +177,7 @@ The Bloc Library uses `provider` internally to make it easy to provide and acces
 
 ❔**Question**: How do I do navigation with Bloc?
 
-💡**Answer**: Check out https://bloclibrary.dev/#/recipesflutternavigation
+💡**Answer**: Check out [Flutter Navigation](recipesflutternavigation.md)
 
 ## BlocProvider.of() Fails to Find Bloc
 
