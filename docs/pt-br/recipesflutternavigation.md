@@ -4,7 +4,7 @@
 
 ## Navegação Direta
 
-> Neste exemplo, veremos como usar o BlocBuilder para mostrar uma página específica (widget) em resposta a uma mudança de estado em um bloco sem o uso de uma rota.
+> Neste exemplo, veremos como usar o BlocBuilder para mostrar uma página específica (widget) em resposta a uma mudança de estado em um bloc sem o uso de uma rota.
 
 ![demo](./assets/gifs/recipes_flutter_navigation_direct.gif)
 
@@ -24,8 +24,8 @@ enum MyEvent { eventA, eventB }
 
 Nosso `MyBloc` pode ter um dos dois `DataStates` diferentes:
 
-- `StateA` - o estado do bloco quando `PageA` é renderizado.
-- `StateB` - o estado do bloco quando `PageB` é renderizado.
+- `StateA` - o estado do bloc quando `PageA` é renderizado.
+- `StateB` - o estado do bloc quando `PageB` é renderizado.
 
 ```dart
 abstract class MyState {}

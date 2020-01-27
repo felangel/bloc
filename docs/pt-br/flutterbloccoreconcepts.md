@@ -58,7 +58,7 @@ BlocProvider(
 );
 ```
 
-Em alguns casos, o BlocProvider pode ser usado para fornecer um bloc existente para uma nova parte da árvore de widgets. Isso será mais comumente usado quando um bloc existente precisar ser disponibilizado para uma nova rota. Nesse caso, o `BlocProvider` não fechará o bloco automaticamente, pois não o criou.
+Em alguns casos, o BlocProvider pode ser usado para fornecer um bloc existente para uma nova parte da árvore de widgets. Isso será mais comumente usado quando um bloc existente precisar ser disponibilizado para uma nova rota. Nesse caso, o `BlocProvider` não fechará o bloc automaticamente, pois não o criou.
 
 ```dart
 BlocProvider.value(
@@ -128,7 +128,7 @@ BlocListener<BlocA, BlocAState>(
 )
 ```
 
-Especifique o bloco apenas se desejar fornecer um bloc que, de outra forma, não poderá ser acessado via `BlocProvider` e pelo atual` BuildContext`.
+Especifique o bloc apenas se desejar fornecer um bloc que, de outra forma, não poderá ser acessado via `BlocProvider` e pelo atual` BuildContext`.
 
 ```dart
 BlocListener<BlocA, BlocAState>(
@@ -139,7 +139,7 @@ BlocListener<BlocA, BlocAState>(
 )
 ```
 
-Se você deseja um controle refinado sobre quando a função listener é chamada, você pode fornecer uma condição opcional ao` BlocListener`. A condição pega o estado anterior do bloco e o atual estado do bloco e retorna um valor booleano. Se `condition` retornar true,` listener` será chamado com `state`. Se `condition` retornar falso,`listener` não será chamado com `state`.
+Se você deseja um controle refinado sobre quando a função listener é chamada, você pode fornecer uma condição opcional ao` BlocListener`. A condição pega o estado anterior do bloc e o atual estado do bloco e retorna um valor booleano. Se `condition` retornar true,` listener` será chamado com `state`. Se `condition` retornar falso,`listener` não será chamado com `state`.
 
 ```dart
 BlocListener<BlocA, BlocAState>(

@@ -84,7 +84,7 @@ class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
 
 ### Comunicação entre Blocs
 
-> Todo bloc tem um fluxo de estado no qual outros blocos podem se inscrever para reagir às mudanças dentro do bloc.
+> Todo bloc tem um fluxo de estado no qual outros blocs podem se inscrever para reagir às mudanças dentro do bloc.
 
 Os blocs podem ter dependências de outros blocs para reagir às mudanças de estado. No exemplo a seguir, `MyBloc` depende de `OtherBloc` e pode `adicionar` eventos em resposta a alterações de estado em `OtherBloc`. O `StreamSubscription` é fechado na instrução `close` no `MyBloc`, a fim de evitar vazamentos de memória.
 

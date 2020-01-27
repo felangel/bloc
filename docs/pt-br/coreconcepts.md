@@ -8,7 +8,7 @@ Nas próximas seções, discutiremos cada uma delas em detalhes, bem como trabal
 
 ## Eventos
 
-> Eventos são a entrada para um bloco. Eles são geralmente adicionados em resposta a interações do usuário, como pressionar botões ou eventos do ciclo de vida, como carregamentos de páginas.
+> Eventos são a entrada para um bloc. Eles são geralmente adicionados em resposta a interações do usuário, como pressionar botões ou eventos do ciclo de vida, como carregamentos de páginas.
 
 Ao projetar um aplicativo, precisamos dar um passo atrás e definir como os usuários irão interagir com ele. No contexto do nosso aplicativo de contador, teremos dois botões para aumentar e diminuir nosso contador.
 
@@ -26,7 +26,7 @@ Neste ponto, definimos o nosso primeiro evento! Observe que não usamos o Bloc d
 
 ## States
 
-> Os estados são a saída de um bloco e representam uma parte do estado do seu aplicativo. Os componentes da interface do usuário podem ser notificados sobre os estados e redesenhar partes deles com base no estado atual.
+> Os estados são a saída de um bloc e representam uma parte do estado do seu aplicativo. Os componentes da interface do usuário podem ser notificados sobre os estados e redesenhar partes deles com base no estado atual.
 
 Até agora, definimos os dois eventos aos quais nosso aplicativo responderá: `CounterEvent.increment` e `CounterEvent.decrement`.
 
@@ -111,7 +111,7 @@ void main() async {
 
 > Um Bloc (Business Logic Component - componente da lógica de negócios) é um componente que converte uma `Stream` de `eventos` recebidos em uma `Stream` de `estados` de saída. Pense em um bloc como sendo os "cérebros" descritos acima.
 
-> Todo bloco deve estender a classe base do bloco, que faz parte do pacote principal do bloco.
+> Todo bloc deve estender a classe base do bloc, que faz parte do pacote principal do bloc.
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -173,11 +173,11 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-Blocos ignoram estados duplicados. Se um bloco produzir `State nextState` onde` state == nextState`, nenhuma transição ocorrerá e nenhuma alteração será feita no `Stream <State>`.
+Blocs ignoram estados duplicados. Se um bloc produzir `State nextState` onde` state == nextState`, nenhuma transição ocorrerá e nenhuma alteração será feita no `Stream <State>`.
 
 Neste ponto, você provavelmente está se perguntando _"Como notifico um Bloc de um evento?"_.
 
-Todo Bloc tem um método `add`. O `Add` pega um `event` e dispara o `mapEventToState`. O `Add` pode ser chamado a partir da camada de apresentação ou de dentro do Bloc e notifica o bloco de um novo `evento`.
+Todo Bloc tem um método `add`. O `Add` pega um `event` e dispara o `mapEventToState`. O `Add` pode ser chamado a partir da camada de apresentação ou de dentro do Bloc e notifica o bloc de um novo `evento`.
 
 Podemos criar uma aplicação simples que conta de 0 a 3.
 
@@ -215,7 +215,7 @@ As `Transições` no trecho de código acima seriam
 
 Infelizmente, no estado atual, não poderemos ver nenhuma dessas transições a menos que substituamos `onTransition`.
 
-> `onTransition` é um método que pode ser substituído para lidar com todas as `Transition` do Bloc locais. O `onTransition` é chamado logo antes do `State` de um bloco ser atualizado.
+> `onTransition` é um método que pode ser substituído para lidar com todas as `Transition` do Bloc locais. O `onTransition` é chamado logo antes do `State` de um bloc ser atualizado.
 
 ?> **Dica**: `onTransition` é um ótimo local para adicionar log de informações do Bloc / informações analíticas
 
@@ -234,7 +234,7 @@ Assim como podemos lidar com `Transitions` no nível do Bloc, também podemos li
 
 ?> **Nota**: O argumento stacktrace pode ser `null` se o fluxo de estados recebeu um erro sem um `StackTrace`.
 
-?> **Dica**: `onError` é um ótimo local para adicionar manipulação de erro específica de bloco.
+?> **Dica**: `onError` é um ótimo local para adicionar manipulação de erro específica de bloc.
 
 ```dart
 @override

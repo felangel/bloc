@@ -4,7 +4,7 @@
 
 ## Accesso Local
 
-> Neste exemplo, vamos usar o BlocProvider para disponibilizar um bloco para uma subárvore local. Nesse contexto, local significa dentro de um contexto em que não há rotas sendo empurradas / estouradas.
+> Neste exemplo, vamos usar o BlocProvider para disponibilizar um bloc para uma subárvore local. Nesse contexto, local significa dentro de um contexto em que não há rotas sendo empurradas / estouradas.
 
 ### Bloc
 
@@ -66,7 +66,7 @@ class App extends StatelessWidget {
 
 Nosso widget `App` é um `StatelessWidget` que usa um `MaterialApp` e define nosso` CounterPage` como o widget inicial. O widget `App` é responsável por criar e fechar o `CounterBloc`, além de disponibilizá-lo à `CounterPage` usando um `BlocProvider`.
 
-?>**Nota:** Quando envolvemos um widget com `BlocProvider`, podemos fornecer um bloco para todos os widgets dentro dessa subárvore. Nesse caso, podemos acessar o `CounterBloc` de dentro do widget `CounterPage` e quaisquer filhos do widget `CounterPage` usando o `BlocProvider.of <CounterBloc> (context)`.
+?>**Nota:** Quando envolvemos um widget com `BlocProvider`, podemos fornecer um bloc para todos os widgets dentro dessa subárvore. Nesse caso, podemos acessar o `CounterBloc` de dentro do widget `CounterPage` e quaisquer filhos do widget `CounterPage` usando o `BlocProvider.of <CounterBloc> (context)`.
 
 #### CounterPage
 
@@ -130,11 +130,11 @@ Nosso widget `CounterText` está usando um `BlocBuilder` para se reconstruir sem
 
 Isso envolve a parte de acesso ao bloc local desta receita e o código fonte completo pode ser encontrado [aqui](https://gist.github.com/felangel/20b03abfef694c00038a4ffbcc788c35).
 
-A seguir, veremos como fornecer um bloco em várias páginas / rotas.
+A seguir, veremos como fornecer um bloc em várias páginas / rotas.
 
 ## Accesso a Rota
 
-> Neste exemplo, vamos usar o `BlocProvider` para acessar um bloc através das rotas. Quando uma nova rota é adicionada, ela terá um `BuildContext` diferente, que não possui mais uma referência aos blocos fornecidos anteriormente. Como resultado, temos que agrupar a nova rota em um `BlocProvider` separado.
+> Neste exemplo, vamos usar o `BlocProvider` para acessar um bloc através das rotas. Quando uma nova rota é adicionada, ela terá um `BuildContext` diferente, que não possui mais uma referência aos blocs fornecidos anteriormente. Como resultado, temos que agrupar a nova rota em um `BlocProvider` separado.
 
 ### Bloc
 
@@ -255,7 +255,7 @@ A `HomePage` é semelhante à `CounterPage` no exemplo acima; no entanto, em vez
 
 Quando o usuário toca no `RaisedButton`, adicionamos uma nova `MaterialPageRoute` e retornamos o `CounterPage`; no entanto, estamos agrupando o `CounterPage` em um `BlocProvider` para disponibilizar a instância atual do `CounterBloc` na próxima página.
 
-!> É fundamental que estejamos usando o construtor de valor do `BlocProvider` neste caso, porque estamos fornecendo uma instância existente do `CounterBloc`. O construtor de valor do `BlocProvider` deve ser usado apenas nos casos em que desejamos fornecer um bloco existente para uma nova subárvore. Além disso, o uso do construtor value não fechará o bloco automaticamente, o que, neste caso, é o que queremos (já que ainda precisamos do `CounterBloc` para funcionar nos widgets ancestrais). Em vez disso, simplesmente passamos o `CounterBloc` existente para a nova página como um valor existente, em oposição a um construtor. Isso garante que o único `BlocProvider` de nível superior lide com o fechamento do `CounterBloc` quando não for mais necessário.
+!> É fundamental que estejamos usando o construtor de valor do `BlocProvider` neste caso, porque estamos fornecendo uma instância existente do `CounterBloc`. O construtor de valor do `BlocProvider` deve ser usado apenas nos casos em que desejamos fornecer um bloc existente para uma nova subárvore. Além disso, o uso do construtor value não fechará o bloco automaticamente, o que, neste caso, é o que queremos (já que ainda precisamos do `CounterBloc` para funcionar nos widgets ancestrais). Em vez disso, simplesmente passamos o `CounterBloc` existente para a nova página como um valor existente, em oposição a um construtor. Isso garante que o único `BlocProvider` de nível superior lide com o fechamento do `CounterBloc` quando não for mais necessário.
 
 #### CounterPage
 
@@ -283,7 +283,7 @@ O `CounterPage` é um `StatelessWidget` super super simples que usa o `BlocBuild
 
 É tudo o que existe neste exemplo e a fonte completa pode ser encontrada [aqui](https://gist.github.com/felangel/92b256270c5567210285526a07b4cf21).
 
-Por fim, veremos como disponibilizar globalmente um bloco para a árvore de widgets.
+Por fim, veremos como disponibilizar globalmente um bloc para a árvore de widgets.
 
 ## Accesso Global
 

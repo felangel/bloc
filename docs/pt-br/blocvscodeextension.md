@@ -25,13 +25,13 @@ Bloc pode ser instalado a partir de [VSCode Marketplace](https://marketplace.vis
 
 ## Novos comandos Bloc
 
-O comando New Bloc permite criar um bloco e os eventos / estados para que tudo o que resta fazer seja implementar sua lógica no `mapEventToState`.
+O comando New Bloc permite criar um bloc e os eventos / estados para que tudo o que resta fazer seja implementar sua lógica no `mapEventToState`.
 
 Você pode ativar o comando iniciando a paleta de comandos (Exibir -> Paleta de Comandos) e executando "Bloc: New Bloc".
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-1.gif)
 
-Ou você pode clicar com o botão direito do mouse no diretório em que deseja criar o bloco e selecionar o comando "Bloc: Novo bloc" no menu de contexto.
+Ou você pode clicar com o botão direito do mouse no diretório em que deseja criar o bloc e selecionar o comando "Bloc: Novo bloc" no menu de contexto.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-2.gif)
 
