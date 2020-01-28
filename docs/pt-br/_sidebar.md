@@ -7,6 +7,8 @@
     - [flutter_bloc](pt-br/flutterbloccoreconcepts.md)
   - [Arquitetura](pt-br/architecture.md)
   - [Testando](pt-br/testing.md)
+  - [Naming Conventions](blocnamingconventions.md)
+  - [FAQs](faqs.md)
 
 - Tutoriais
 
