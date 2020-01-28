@@ -23,7 +23,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: '>=2.6.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -1306,7 +1306,7 @@ Our `LoginForm` widget is a `StatefulWidget` because it needs to maintain it's o
 
 We use a `BlocListener` widget in order to execute one-time actions in response to state changes. In this case, we are showing different `SnackBar` widgets in response to a pending/failure state. In addition, if the submission is successful, we use the `listener` method to notify the `AuthenticationBloc` that the user has successfully logged in.
 
-?> **Tip:** Check out the [BlocListener Recipe](recipesbloclistener.md) for more details.
+?> **Tip:** Check out the [SnackBar Recipe](recipesfluttershowsnackbar.md) for more details.
 
 We use a `BlocBuilder` widget in order to rebuild the UI in response to different `LoginStates`.
 
