@@ -4,9 +4,9 @@
 
 > In the following tutorial, we're going to build a Github Search app in Flutter and AngularDart to demonstrate how we can share the data and business logic layers between the two projects.
 
-![demo](./assets/gifs/flutter_github_search.gif)
+![demo](../assets/gifs/flutter_github_search.gif)
 
-![demo](./assets/gifs/angular_github_search.gif)
+![demo](../assets/gifs/angular_github_search.gif)
 
 ## Common Github Search Library
 
@@ -34,7 +34,7 @@ description: Shared Code between AngularDart and Flutter
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: '>=2.6.0 <3.0.0'
 
 dependencies:
   meta: ^1.1.6
@@ -425,7 +425,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: '>=2.6.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -833,7 +833,7 @@ name: angular_github_search
 description: A web app that uses AngularDart Components
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: '>=2.6.0 <3.0.0'
 
 dependencies:
   angular: ^5.3.0
@@ -844,9 +844,9 @@ dependencies:
 
 dev_dependencies:
   angular_test: ^2.0.0
-  build_runner: ">=1.6.2 <2.0.0"
+  build_runner: '>=1.6.2 <2.0.0'
   build_test: ^0.10.2
-  build_web_compilers: ">=1.2.0 <3.0.0"
+  build_web_compilers: '>=1.2.0 <3.0.0'
   test: ^1.0.0
 ```
 

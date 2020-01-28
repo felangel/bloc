@@ -6,7 +6,7 @@
 
 > In this example, we're going to take a look at how to use `BlocBuilder` to show a specific page (widget) in response to a state change in a bloc without the use of a route.
 
-![demo](./assets/gifs/recipes_flutter_navigation_direct.gif)
+![demo](../assets/gifs/recipes_flutter_navigation_direct.gif)
 
 ### Bloc
 
