@@ -1,20 +1,20 @@
-# Flutter Todos Tutorial
+# Flutter задачи
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-> In the following tutorial, we're going to build a Todos App in Flutter using the Bloc library.
+> В следующем руководстве мы собираемся создать приложение Todos во Flutter с использованием библиотеки Bloc.
 
 ![demo](../assets/gifs/flutter_todos.gif)
 
-## Setup
+## Настройка
 
-We'll start off by creating a brand new Flutter project
+Мы начнем с создания нового проекта Flutter
 
 ```bash
 flutter create flutter_todos
 ```
 
-We can then replace the contents of `pubspec.yaml` with
+Сначала нам нужно заменить содержимое файла `pubspec.yaml` на:
 
 ```yaml
 name: flutter_todos
@@ -51,17 +51,17 @@ flutter:
   uses-material-design: true
 ```
 
-and then install all of the dependencies
+а затем установить все наши зависимости
 
 ```bash
 flutter packages get
 ```
 
-?> **Note:** We're overriding some dependencies because we're going to be reusing them from [Brian Egan's Flutter Architecture Samples](https://github.com/brianegan/flutter_architecture_samples).
+?> **Примечание:** Мы переопределяем некоторые зависимости, потому что собираемся повторно использовать их из [Образцов архитектуры Flutter Брайана Игана](https://github.com/brianegan/flutter_architecture_samples).
 
-## App Keys
+## Ключи приложения
 
-Before we jump into the application code, let's create `flutter_todos_keys.dart`. This file will contain keys which we will use to uniquely identify important widgets. We can later write tests that find widgets based on keys.
+Прежде чем мы перейдем к коду приложения, давайте создадим `flutter_todos_keys.dart`. Этот файл будет содержать ключи, которые мы будем использовать для уникальной идентификации важных виджетов. Позже мы можем написать тесты, которые находят виджеты на основе ключей.
 
 ```dart
 import 'package:flutter/widgets.dart';
@@ -80,13 +80,13 @@ class FlutterTodosKeys {
 }
 ```
 
-We will reference these keys throughout the rest of the tutorial.
+Мы будем ссылаться на эти ключи в оставшейся части руководства.
 
-?> **Note:** You can check out the integration tests for the application [here](https://github.com/brianegan/flutter_architecture_samples/tree/master/integration_tests). You can also check out unit and widget tests [here](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library/test).
+?> **Примечание:** Вы можете проверить интеграционные тесты для приложения [здесь](https://github.com/brianegan/flutter_architecture_samples/tree/master/integration_tests). Вы также можете проверить тесты модулей и виджетов [здесь](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library/test).
 
-## Localization
+## Локализация
 
-One last concept that we will touch on before going into the application itself is localization. Create `localization.dart` and we'll create the foundation for multi-language support.
+Последнее, что мы затронем прежде чем углубляться в само приложение - это локализация. Создайте `localization.dart` и мы создадим основу для мультиязычной поддержки.
 
 ```dart
 import 'dart:async';
@@ -119,23 +119,23 @@ class FlutterBlocLocalizationsDelegate
 }
 ```
 
-We can now import and provide our `FlutterBlocLocalizationsDelegate` to our `MaterialApp` (later in this tutorial).
+Теперь мы можем импортировать и предоставить `FlutterBlocLocalizationsDelegate` нашему `MaterialApp`(далее в этом руководстве).
 
-For more information on localization check out the [official flutter docs](https://flutter.dev/docs/development/accessibility-and-localization/internationalization).
+Для получения дополнительной информации о локализации ознакомьтесь с [официальными документами по Flutter](https://flutter.dev/docs/development/accessibility-and-localization/internationalization).
 
-## Todos Repository
+## Todos хранилище
 
-In this tutorial we're not going to go into the implementation details of the `TodosRepository` because it was implemented by [Brian Egan](https://github.com/brianegan) and is shared among all of the [Todo Architecture Samples](https://github.com/brianegan/flutter_architecture_samples). At a high level, the `TodosRepository` will expose a method to `loadTodos` and to `saveTodos`. That's pretty much all we need to know so for the rest of the tutorial we'll focus on the Bloc and Presentation layers.
+В этом руководстве мы не будем вдаваться в подробности реализации `TodosRepository`, потому что это уже было реализовано [Brian Egan](https://github.com/brianegan) и является общим для всех [примеров архитектуры Todo](https://github.com/brianegan/flutter_architecture_samples). На высоком уровне `TodosRepository` представит метод для `loadTodos` и `saveTodos`. Это почти все, что нам нужно знать, поэтому в оставшейся части урока мы сосредоточимся на слоях `Bloc` и `Presentation`.
 
-## Todos Bloc
+## Todos блок
 
-> Our `TodosBloc` will be responsible for converting `TodosEvents` into `TodosStates` and will manage the list of todos.
+> `TodosBloc` будет отвечать за преобразование `TodosEvents` в `TodosStates` и будет управлять списком задач.
 
-### Model
+### Модель
 
-The first thing we need to do is define our `Todo` model. Each todo will need to have an id, a task, an optional note, and an optional completed flag.
+Первое, что нам нужно сделать, это определить нашу модель `Todo`. Каждое задание должно иметь идентификатор, задачу, необязательную заметку и необязательный флаг завершения.
 
-Let's create a `models` directory and create `todo.dart`.
+Давайте создадим каталог `models` и создадим внутри файл `todo.dart`.
 
 ```dart
 import 'package:todos_app_core/todos_app_core.dart';
@@ -188,19 +188,19 @@ class Todo extends Equatable {
 }
 ```
 
-?> **Note:** We're using the [Equatable](https://pub.dev/packages/equatable) package so that we can compare instances of `Todos` without having to manually override `==` and `hashCode`.
+?> **Примечание:** Мы используем пакет [Equatable](https://pub.dev/packages/equatable), чтобы мы могли сравнивать экземпляры `Todos` без необходимости вручную переопределять `==` и `hashCode`.
 
-Next up, we need to create the `TodosState` which our presentation layer will receive.
+Далее нам нужно создать `TodosState`, который получит наш уровень представления.
 
-### States
+### Состояния
 
-Let's create `blocs/todos/todos_state.dart` and define the different states we'll need to handle.
+Давайте создадим `blocs/todos/todos_state.dart` и определим различные состояния, которые нам нужно обработать.
 
-The three states we will implement are:
+Мы будем реализовывать три состояния:
 
-- `TodosLoading` - the state while our application is fetching todos from the repository.
-- `TodosLoaded` - the state of our application after the todos have successfully been loaded.
-- `TodosNotLoaded` - the state of our application if the todos were not successfully loaded.
+- `TodosLoading` - состояние, когда наше приложение выбирает задачи из репозитория.
+- `TodosLoaded` - состояние нашего приложения после успешной загрузки задач.
+- `TodosNotLoaded` - состояние нашего приложения, если задачи не были успешно загружены.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -230,20 +230,20 @@ class TodosLoaded extends TodosState {
 class TodosNotLoaded extends TodosState {}
 ```
 
-Next, let's implement the events we will need to handle.
+Далее, давайте реализуем события, которые нам нужно будет обработать.
 
-### Events
+### События
 
-The events we will need to handle in our `TodosBloc` are:
+События, которые нам нужно обработать в нашем `TodosBloc`:
 
-- `LoadTodos` - tells the bloc that it needs to load the todos from the `TodosRepository`.
-- `AddTodo` - tells the bloc that it needs to add an new todo to the list of todos.
-- `UpdateTodo` - tells the bloc that it needs to update an existing todo.
-- `DeleteTodo` - tells the bloc that it needs to remove an existing todo.
-- `ClearCompleted` - tells the bloc that it needs to remove all completed todos.
-- `ToggleAll` - tells the bloc that it needs to toggle the completed state of all todos.
+- `LoadTodos` - сообщает блоку, что ему нужно загрузить задачи из `TodosRepository`.
+- `AddTodo` - сообщает блоку, что ему нужно добавить новую задачу в список задач.
+- `UpdateTodo` - сообщает блоку, что ему нужно обновить существующую задачу.
+- `DeleteTodo` - сообщает блоку, что ему нужно удалить существующую задачу.
+- `ClearCompleted` - сообщает блоку, что ему нужно удалить все выполненные задачи.
+- `ToggleAll` - сообщает блоку, что он должен переключить состояние завершения для всех задач.
 
-Create `blocs/todos/todos_event.dart` and let's implement the events we described above.
+Создайте `blocs/todos/todos_event.dart` и давайте реализуем события, которые мы описали выше.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -299,11 +299,11 @@ class ClearCompleted extends TodosEvent {}
 class ToggleAll extends TodosEvent {}
 ```
 
-Now that we have our `TodosStates` and `TodosEvents` implemented we can implement our `TodosBloc`.
+Теперь, когда у нас реализованы `TodosStates` и `TodosEvents`, мы можем реализовать наш `TodosBloc`.
 
-### Bloc
+### Блок
 
-Let's create `blocs/todos/todos_bloc.dart` and get started! We just need to implement `initialState` and `mapEventToState`.
+Давайте создадим `blocs/todos/todos_bloc.dart` и начнем! Нам просто нужно реализовать `initialState` и `mapEventToState`.
 
 ```dart
 import 'dart:async';
@@ -409,15 +409,15 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 }
 ```
 
-!> When we yield a state in the private `mapEventToState` handlers, we are always yielding a new state instead of mutating the `state`. This is because every time we yield, bloc will compare the `state` to the `nextState` and will only trigger a state change (`transition`) if the two states are **not equal**. If we just mutate and yield the same instance of state, then `state == nextState` would evaluate to true and no state change would occur.
+!> Когда мы выдаем состояние в приватных обработчиках `mapEventToState`, мы всегда получаем новое состояние, а не изменяем `state`. Это потому, что каждый раз, когда мы делаем `yield`, блок будет сравнивать `state` с `nextState` и вызывать изменение состояния (`transition`) только если два состояния **не равны**. Если мы просто изменим и выдадим один и тот же экземпляр состояния, то `state == nextState` будет иметь значение true и изменение состояния не произойдет.
 
-Our `TodosBloc` will have a dependency on the `TodosRepository` so that it can load and save todos. It will have an initial state of `TodosLoading` and defines the private handlers for each of the events. Whenever the `TodosBloc` changes the list of todos it calls the `saveTodos` method in the `TodosRepository` in order to keep everything persisted locally.
+`TodosBloc` будет зависеть от `TodosRepository`, чтобы он мог загружать и сохранять задачи. Он будет иметь начальное состояние `TodosLoading` и определять частные обработчики для каждого из событий. Всякий раз, когда `TodosBloc` изменяет список задач, он вызывает метод `saveTodos` в `TodosRepository`, чтобы сохранить все изменения.
 
-### Barrel File
+### Индексный файл
 
-Now that we're done with our `TodosBloc` we can create a barrel file to export all of our bloc files and make it convenient to import them later on.
+Теперь, когда мы закончили с нашим `TodosBloc`, мы можем создать индексный файл для экспорта всех наших блочных файлов и сделать его удобным для последующего импорта.
 
-Create `blocs/todos/todos.dart` and export the bloc, events, and states:
+Создайте `blocs/todos/todos.dart` и экспортируйте блок, события и состояния:
 
 ```dart
 export './todos_bloc.dart';
@@ -425,34 +425,34 @@ export './todos_event.dart';
 export './todos_state.dart';
 ```
 
-## Filtered Todos Bloc
+## Блок отфильтрованных задач
 
-> The `FilteredTodosBloc` will be responsible for reacting to state changes in the `TodosBloc` we just created and will maintain the state of filtered todos in our application.
+> `FilteredTodosBloc` будет отвечать за изменения состояния в только что созданном `TodosBloc` и будет поддерживать состояние отфильтрованных задач в нашем приложении.
 
-### Model
+### Модель
 
-Before we start defining and implementing the `TodosStates`, we will need to implement a `VisibilityFilter` model that will determine which todos our `FilteredTodosState` will contain. In this case, we will have three filters:
+Прежде чем мы начнем определять и реализовывать `TodosStates`, нам нужно реализовать модель `VisibilityFilter`, которая будет определять, какие задачи будут содержать наши `FilteredTodosState`. В этом случае у нас будет три фильтра:
 
-- `all` - show all Todos (default)
-- `active` - only show Todos which have not been completed
-- `completed` only show Todos which have been completed
+- `all` - показать все Todos (по умолчанию)
+- `active` - показывать только Todos, которые не были завершены
+- `completed` - показать только Todos, которые были завершены
 
-We can create `models/visibility_filter.dart` and define our filter as an enum:
+Мы можем создать `models/visibility_filter.dart` и определить наш фильтр как enum:
 
 ```dart
 enum VisibilityFilter { all, active, completed }
 ```
 
-### States
+### Состояния
 
-Just like we did with the `TodosBloc`, we'll need to define the different states for our `FilteredTodosBloc`.
+Как и в случае с `TodosBloc`, нам необходимо определить различные состояния для нашего `FilteredTodosBloc`.
 
-In this case, we only have two states:
+В этом случае у нас есть только два состояния:
 
-- `FilteredTodosLoading` - the state while we are fetching todos
-- `FilteredTodosLoaded` - the state when we are no longer fetching todos
+- `FilteredTodosLoading` - состояние, пока мы выбираем задачи
+- `FilteredTodosLoaded` - состояние, когда мы больше не выбираем задачи
 
-Let's create `blocs/filtered_todos/filtered_todos_state.dart` and implement the two states.
+Давайте создадим `blocs/filtered_todos/filtered_todos_state.dart` и реализуем два состояния.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -486,16 +486,16 @@ class FilteredTodosLoaded extends FilteredTodosState {
 }
 ```
 
-?> **Note:** The `FilteredTodosLoaded` state contains the list of filtered todos as well as the active visibility filter.
+?> **Примечание:** Состояние `FilteredTodosLoaded` содержит список отфильтрованных задач, а также фильтр активной видимости.
 
-### Events
+### События
 
-We're going to implement two events for our `FilteredTodosBloc`:
+Мы собираемся реализовать два события для нашего `FilteredTodosBloc`:
 
-- `UpdateFilter` - which notifies the bloc that the visibility filter has changed
-- `UpdateTodos` - which notifies the bloc that the list of todos has changed
+- `UpdateFilter` - уведомляет блок об изменении фильтра видимости.
+- `UpdateTodos` - уведомляет блок об изменении списка задач.
 
-Create `blocs/filtered_todos/filtered_todos_event.dart` and let's implement the two events.
+Создайте `blocs/filtered_todos/filtered_todos_event.dart` и давайте реализуем два события.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -530,13 +530,13 @@ class UpdateTodos extends FilteredTodosEvent {
 }
 ```
 
-We're ready to implement our `FilteredTodosBloc` next!
+Мы готовы к реализации нашего `FilteredTodosBloc` дальше!
 
-### Bloc
+### Блок
 
-Our `FilteredTodosBloc` will be similar to our `TodosBloc`; however, instead of having a dependency on the `TodosRepository`, it will have a dependency on the `TodosBloc` itself. This will allow the `FilteredTodosBloc` to update its state in response to state changes in the `TodosBloc`.
+`FilteredTodosBloc` будет похож на `TodosBloc`, однако вместо зависимости от `TodosRepository`, он будет зависеть от самого `TodosBloc`. Это позволит `FilteredTodosBloc` обновлять свое состояние в ответ на изменения состояния в `TodosBloc`.
 
-Create `blocs/filtered_todos/filtered_todos_bloc.dart` and let's get started.
+Создайте `blocs/filtered_todos/filtered_todos_bloc.dart` и начнем.
 
 ```dart
 import 'dart:async';
@@ -627,13 +627,13 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 }
 ```
 
-!> We create a `StreamSubscription` for the stream of `TodosStates` so that we can listen to the state changes in the `TodosBloc`. We override the bloc's close method and cancel the subscription so that we can clean up after the bloc is closed.
+!> Мы создаем `StreamSubscription` для потока `TodosStates`, чтобы мы могли прослушивать изменения состояния в `TodosBloc`. Мы переопределяем метод закрытия блока и отменяем подписку, чтобы мы могли выполнить очистку после закрытия блока.
 
-### Barrel File
+### Индексный файл
 
-Just like before, we can create a barrel file to make it more convenient to import the various filtered todos classes.
+Как и раньше, мы можем создать индексный файл, чтобы было удобнее импортировать различные классы по фильтрации задач.
 
-Create `blocs/filtered_todos/filtered_todos.dart` and export the three files:
+Создайте `blocs/filtered_todos/filtered_todos.dart` и экспортируйте три файла:
 
 ```dart
 export './filtered_todos_bloc.dart';
@@ -641,20 +641,20 @@ export './filtered_todos_event.dart';
 export './filtered_todos_state.dart';
 ```
 
-Next, we're going to implement the `StatsBloc`.
+Далее мы собираемся реализовать `StatsBloc`.
 
-## Stats Bloc
+## Блок статуса
 
-> The `StatsBloc` will be responsible for maintaining the statistics for number of active todos and number of completed todos. Similarly, to the `FilteredTodosBloc`, it will have a dependency on the `TodosBloc` itself so that it can react to changes in the `TodosBloc` state.
+> `StatsBloc` будет отвечать за ведение статистики количества активных и выполненных задач. Аналогично, для `FilteredTodosBloc` он будет зависеть от самого `TodosBloc`, чтобы он мог реагировать на изменения в состоянии `TodosBloc`.
 
-### State
+### Состояние
 
-Our `StatsBloc` will have two states that it can be in:
+`StatsBloc` будет иметь два состояния:
 
-- `StatsLoading` - the state when the statistics have not yet been calculated.
-- `StatsLoaded` - the state when the statistics have been calculated.
+- `StatsLoading` - состояние, когда статистика еще не рассчитана.
+- `StatsLoaded` - состояние, когда статистика была рассчитана.
 
-Create `blocs/stats/stats_state.dart` and let's implement our `StatsState`.
+Создайте `blocs/stats/stats_state.dart` и давайте реализуем `StatsState`.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -684,13 +684,13 @@ class StatsLoaded extends StatsState {
 }
 ```
 
-Next, let's define and implement the `StatsEvents`.
+Далее давайте определим и реализуем `StatsEvents`.
 
-### Events
+### События
 
-There will just be a single event our `StatsBloc` will respond to: `UpdateStats`. This event will be added whenever the `TodosBloc` state changes so that our `StatsBloc` can recalculate the new statistics.
+Будет только одно событие, на которое наш `StatsBloc` ответит: `UpdateStats`. Это событие будет добавлено всякий раз, когда изменяется состояние `TodosBloc`, чтобы наш `StatsBloc` мог пересчитать новую статистику.
 
-Create `blocs/stats/states_event.dart` and let's implement it.
+Создайте `blocs/stats/states_event.dart` и давайте реализуем это.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -713,13 +713,13 @@ class UpdateStats extends StatsEvent {
 }
 ```
 
-Now we're ready to implement our `StatsBloc` which will look very similar to the `FilteredTodosBloc`.
+Теперь мы готовы реализовать `StatsBloc`, который будет очень похож на `FilteredTodosBloc`.
 
-### Bloc
+### Блок
 
-Our `StatsBloc` will have a dependency on the `TodosBloc` itself which will allow it to update its state in response to state changes in the `TodosBloc`.
+`StatsBloc` будет зависеть от самого `TodosBloc`, что позволит ему обновлять свое состояние в ответ на изменения состояния в `TodosBloc`.
 
-Create `blocs/stats/stats_bloc.dart` and let's get started.
+Создайте `blocs/stats/stats_bloc.dart` и начнем.
 
 ```dart
 import 'dart:async';
@@ -761,31 +761,31 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
 }
 ```
 
-That's all there is to it! Our `StatsBloc` recalculates its state which contains the number of active todos and the number of completed todos on each state change of our `TodosBloc`.
+Это все, что нужно сделать! `StatsBloc` пересчитывает свое состояние, которое содержит количество активных задач и количество выполненных задач при каждом изменении состояния `TodosBloc`.
 
-Now that we're done with the `StatsBloc` we just have one last bloc to implement: the `TabBloc`.
+Теперь, когда мы закончили со `StatsBloc`, у нас есть только один последний блок для реализации: `TabBloc`.
 
-## Tab Bloc
+## Блок вкладок
 
-> The `TabBloc` will be responsible for maintaining the state of the tabs in our application. It will be taking `TabEvents` as input and outputting `AppTabs`.
+> `TabBloc` будет отвечать за поддержание состояния вкладок в нашем приложении. Он будет принимать `TabEvents` в качестве ввода и вывода `AppTabs`.
 
-### Model / State
+### Модель/состояние
 
-We need to define an `AppTab` model which we will also use to represent the `TabState`. The `AppTab` will just be an `enum` which represents the active tab in our application. Since the app we're building will only have two tabs: todos and stats, we just need two values.
+Нам необходимо определить модель `AppTab`, которую мы также будем использовать для представления `TabState`. `AppTab` будет просто enum, представляющий активную вкладку в нашем приложении. Поскольку приложение, которое мы создаем, будет иметь только две вкладки: задачи и статистику, нам просто нужно два значения.
 
-Create `models/app_tab.dart`:
+Создайте `models/app_tab.dart`:
 
 ```dart
 enum AppTab { todos, stats }
 ```
 
-### Event
+### Событие
 
-Our `TabBloc` will be responsible for handling a single `TabEvent`:
+`TabBloc` будет отвечать за обработку одного `TabEvent`:
 
-- `UpdateTab` - which notifies the bloc that the active tab has updated
+- `UpdateTab` - уведомляет блок об обновлении активной вкладки
 
-Create `blocs/tab/tab_event.dart`:
+Создайте `blocs/tab/tab_event.dart`:
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -808,11 +808,11 @@ class UpdateTab extends TabEvent {
 }
 ```
 
-### Bloc
+### Блок
 
-Our `TabBloc` implementation will be super simple. As always, we just need to implement `initialState` and `mapEventToState`.
+Реализация `TabBloc` будет очень простой. Как всегда, нам просто нужно реализовать `initialState` и `mapEventToState`.
 
-Create `blocs/tab/tab_bloc.dart` and let's quickly do the implementation.
+Создайте `blocs/tab/tab_bloc.dart` и давайте быстро сделаем реализацию.
 
 ```dart
 import 'dart:async';
@@ -833,22 +833,22 @@ class TabBloc extends Bloc<TabEvent, AppTab> {
 }
 ```
 
-I told you it'd be simple. All the `TabBloc` is doing is setting the initial state to the todos tab and handling the `UpdateTab` event by yielding a new `AppTab` instance.
+Я сказал вам, что это будет просто. Все, что делает `TabBloc` - это устанавливает начальное состояние на вкладку todos и обрабатывает событие `UpdateTab`, создавая новый экземпляр `AppTab`.
 
-### Barrel File
+### Индексный файл
 
-Lastly, we'll create another barrel file for our `TabBloc` exports. Create `blocs/tab/tab.dart` and export the two files:
+Наконец, мы создадим еще один индексный файл для нашего экспорта `TabBloc`. Создайте `blocs/tab/tab.dart` и экспортируйте два файла:
 
 ```dart
 export './tab_bloc.dart';
 export './tab_event.dart';
 ```
 
-## Bloc Delegate
+## Блок делегат
 
-Before we move on to the presentation layer, we will implement our own `BlocDelegate` which will allow us to handle all state changes and errors in a single place. It's really useful for things like developer logs or analytics.
+Прежде чем перейти к уровню представления, мы реализуем наш собственный `BlocDelegate`, который позволит нам обрабатывать все изменения состояния и ошибки в одном месте. Это действительно полезно для таких вещей, как журналы разработчиков или аналитика.
 
-Create `blocs/simple_bloc_delegate.dart` and let's get started.
+Создайте `blocs/simple_bloc_delegate.dart` и начнем.
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -874,12 +874,12 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-All we're doing in this case is printing all state changes (`transitions`) and errors to the console just so that we can see what's going on when we're running our app. You can hook up your `BlocDelegate` to google analytics, sentry, crashlytics, etc...
+Все, что мы делаем в этом случае - это печатаем все изменения состояния (`transitions`) и ошибки на консоли, чтобы мы могли видеть что происходит, когда мы запускаем наше приложение. Вы можете подключить свой `BlocDelegate` к аналитике `Google`, `sentry`, `crashlitics` и т.д.
 
-## Blocs Barrel
+## Индекс для блоков
 
-Now that we have all of our blocs implemented we can create a barrel file.
-Create `blocs/blocs.dart` and export all of our blocs so that we can conveniently import any bloc code with a single import.
+Теперь, когда у нас реализованы все наши блоки, мы можем создать индексный файл.
+Создайте `blocs/blocs.dart` и экспортируйте все наши блоки, чтобы мы могли легко импортировать любой код блока с помощью одного импорта.
 
 ```dart
 export './filtered_todos/filtered_todos.dart';
@@ -889,15 +889,15 @@ export './todos/todos.dart';
 export './simple_bloc_delegate.dart';
 ```
 
-Up next, we'll focus on implementing the major screens in our Todos application.
+Далее мы сосредоточимся на реализации основных экранов в нашем приложении Todos.
 
-## Screens
+## Экраны
 
-### Home Screen
+### Домашний экран
 
-> Our `HomeScreen` will be responsible for creating the `Scaffold` of our application. It will maintain the `AppBar`, `BottomNavigationBar`, as well as the `Stats`/`FilteredTodos` widgets (depending on the active tab).
+> `HomeScreen` будет отвечать за создание `Scaffold` нашего приложения. Он будет поддерживать `AppBar`,`BottomNavigationBar`, а также виджеты `Stats`/`FilteredTodos` (в зависимости от активной вкладки).
 
-Let's create a new directory called `screens` where we will put all of our new screen widgets and then create `screens/home_screen.dart`.
+Давайте создадим новую директорию под названием `screens`, в которую мы поместим все наши новые виджеты экрана, а затем создадим `screens/home_screen.dart`.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -942,15 +942,15 @@ class HomeScreen extends StatelessWidget {
 }
 ```
 
-The `HomeScreen` accesses the `TabBloc` using `BlocProvider.of<TabBloc>(context)` which will be made available from our root `TodosApp` widget (we'll get to it later in this tutorial).
+`HomeScreen` обращается к `TabBloc` с помощью `BlocProvider.of<TabBloc>(context)`, который будет доступен из нашего корневого виджета `TodosApp` (мы узнаем об этом позже в этом уроке).
 
-Next, we'll implement the `DetailsScreen`.
+Далее мы реализуем `DetailsScreen`.
 
-### Details Screen
+### Экран задачи
 
-> The `DetailsScreen` displays the full details of the selected todo and allows the user to either edit or delete the todo.
+> `DetailsScreen` отображает полную информацию о выбранной задаче и позволяет пользователю либо редактировать, либо удалять задачу.
 
-Create `screens/details_screen.dart` and let's build it.
+Создайте `screens/details_screen.dart` и давайте его создадим.
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -1079,17 +1079,17 @@ class DetailsScreen extends StatelessWidget {
 }
 ```
 
-?> **Note:** The `DetailsScreen` requires a todo id so that it can pull the todo details from the `TodosBloc` and so that it can update whenever a todo's details have been changed (a todo's id cannot be changed).
+?> **Примечание:** Для `DetailsScreen` требуется идентификатор todo, чтобы он мог извлекать детали todo из `TodosBloc` и чтобы он мог обновляться всякий раз, когда были изменены детали todo (идентификатор todo нельзя изменить) ,
 
-The main things to note are that there is an `IconButton` which adds a `DeleteTodo` event as well as a checkbox which adds an `UpdateTodo` event.
+Главное, на что следует обратить внимание это то, что существует `IconButton`, который добавляет событие `DeleteTodo`, а также флажок, который добавляет событие `UpdateTodo`.
 
-There is also another `FloatingActionButton` which navigates the user to the `AddEditScreen` with `isEditing` set to `true`. We'll take a look at the `AddEditScreen` next.
+Существует также другой `FloatingActionButton`, который перемещает пользователя к `AddEditScreen` с `isEditing`, установленным в `true`. Далее мы рассмотрим `AddEditScreen`.
 
-### Add/Edit Screen
+### Экраны добавления/редактирования
 
-> The `AddEditScreen` widget allows the user to either create a new todo or update an existing todo based on the `isEditing` flag that is passed via the constructor.
+> Виджет `AddEditScreen` позволяет пользователю либо создать новую задачу, либо обновить существующую на основе флага `isEditing`, который передается через конструктор.
 
-Create `screens/add_edit_screen.dart` and let's have a look at the implementation.
+Создайте `screens/add_edit_screen.dart` и давайте посмотрим на реализацию.
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -1187,18 +1187,18 @@ class _AddEditScreenState extends State<AddEditScreen> {
 }
 ```
 
-There's nothing bloc-specific in this widget. It's simply presenting a form and:
+В этом виджете нет ничего специфичного для блока. Это просто представление формы и:
 
-- if `isEditing` is true the form is populated it with the existing todo details.
-- otherwise the inputs are empty so that the user can create a new todo.
+- если значение `isEditing` равно true, форма заполняется существующими деталями todo.
+- если входные данные пусты то пользователь может создать новую задачу.
 
-It uses an `onSave` callback function to notify its parent of the updated or newly created todo.
+Он использует функцию обратного вызова `onSave`, чтобы уведомить своего родителя об обновленном или вновь созданном todo.
 
-That's it for the screens in our application so before we forget, let's create a barrel file to export them.
+Вот и все для экранов в нашем приложении, поэтому, прежде чем мы забудем, давайте создадим файл индекса для их экспорта.
 
-### Screens Barrel
+### Индекс экранов
 
-Create `screens/screens.dart` and export all three.
+Создайте `screens/screens.dart` и экспортируйте все три.
 
 ```dart
 export './add_edit_screen.dart';
@@ -1206,15 +1206,15 @@ export './details_screen.dart';
 export './home_screen.dart';
 ```
 
-Next, let's implement all of the "widgets" (anything that isn't a screen).
+Далее, давайте реализуем все «виджеты» (все, что не является экраном).
 
-## Widgets
+## Виджеты
 
-### Filter Button
+### Кнопка фильтрации
 
-> The `FilterButton` widget will be responsible for providing the user with a list of filter options and will notify the `FilteredTodosBloc` when a new filter is selected.
+> Виджет `FilterButton` будет отвечать за предоставление пользователю списка параметров фильтра и будет уведомлять `FilteredTodosBloc` при выборе нового фильтра.
 
-Let's create a new directory called `widgets` and put our `FilterButton` implementation in `widgets/filter_button.dart`.
+Давайте создадим новый каталог с именем `widgets` и поместим нашу реализацию `FilterButton` в `widgets/filter_button.dart`.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1314,25 +1314,25 @@ class _Button extends StatelessWidget {
 }
 ```
 
-The `FilterButton` needs to respond to state changes in the `FilteredTodosBloc` so it uses `BlocProvider` to access the `FilteredTodosBloc` from the `BuildContext`. It then uses `BlocBuilder` to re-render whenever the `FilteredTodosBloc` changes state.
+`FilterButton` должна реагировать на изменения состояния в `FilteredTodosBloc`, поэтому он использует `BlocProvider` для доступа к `FilteredTodosBloc` из `BuildContext`. Затем он использует `BlocBuilder` для повторного рендеринга всякий раз, когда `FilteredTodosBloc` изменяет состояние.
 
-The rest of the implementation is pure Flutter and there isn't much going on so we can move on to the `ExtraActions` widget.
+Остальная часть реализации - чистый Flutter и там не так много работы, поэтому мы можем перейти к виджету `ExtraActions`.
 
-### Extra Actions
+### Дополнительные действия
 
-> Similarly to the `FilterButton`, the `ExtraActions` widget is responsible for providing the user with a list of extra options: Toggling Todos and Clearing Completed Todos.
+> Подобно `FilterButton`, виджет `ExtraActions` отвечает за предоставление пользователю списка дополнительных опций: `Переключение задач` и `Очистка завершенных задач`.
 
-Since this widget doesn't care about the filters it will interact with the `TodosBloc` instead of the `FilteredTodosBloc`.
+Поскольку этот виджет не заботится о фильтрах, он будет взаимодействовать с `TodosBloc` вместо `FilteredTodosBloc`.
 
-Let's create the `ExtraAction` model in `models/extra_action.dart`.
+Давайте создадим модель `ExtraAction` в `models/extra_action.dart`.
 
 ```dart
 enum ExtraAction { toggleAllComplete, clearCompleted }
 ```
 
-And don't forget to export it from the `models/models.dart` barrel file.
+И не забудьте экспортировать его из файла индекса `models/models.dart`.
 
-Next, let's create `widgets/extra_actions.dart` and implement it.
+Далее, давайте создадим `widgets/extra_actions.dart` и реализуем его.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1395,17 +1395,17 @@ class ExtraActions extends StatelessWidget {
 }
 ```
 
-Just like with the `FilterButton`, we use `BlocProvider` to access the `TodosBloc` from the `BuildContext` and `BlocBuilder` to respond to state changes in the `TodosBloc`.
+Как и в случае с `FilterButton`, мы используем `BlocProvider` для доступа к `TodosBloc` из `BuildContext` и `BlocBuilder`, чтобы реагировать на изменения состояния в `TodosBloc`.
 
-Based on the action selected, the widget adds an event to the `TodosBloc` to either `ToggleAll` todos' completion states or `ClearCompleted` todos.
+Основываясь на выбранном действии, виджет добавляет событие в `TodosBloc` либо о состоянии завершения `ToggleAll`, либо в `ClearCompleted`.
 
-Next we'll take a look at the `TabSelector` widget.
+Далее мы рассмотрим виджет `TabSelector`.
 
-### Tab Selector
+### Селектор вкладок
 
-> The `TabSelector` widget is responsible for displaying the tabs in the `BottomNavigationBar` and handling user input.
+> Виджет `TabSelector` отвечает за отображение вкладок в `BottomNavigationBar` и обработку пользовательского ввода.
 
-Let's create `widgets/tab_selector.dart` and implement it.
+Давайте создадим `widgets/tab_selector.dart` и реализуем его.
 
 ```dart
 import 'package:flutter/cupertino.dart';
@@ -1448,15 +1448,15 @@ class TabSelector extends StatelessWidget {
 }
 ```
 
-You can see that there is no dependency on blocs in this widget; it just calls `onTabSelected` when a tab is selected and also takes an `activeTab` as input so it knows which tab is currently selected.
+Вы можете видеть, что в этом виджете нет зависимости от блоков; он просто вызывает `onTabSelected`, когда вкладка выбрана, а также принимает в качестве входных данных `activeTab`, чтобы знать какая вкладка выбрана в данный момент.
 
-Next, we'll take a look at the `FilteredTodos` widget.
+Далее мы рассмотрим виджет `FilteredTodos`.
 
-### Filtered Todos
+### Отфильтованные задачи
 
-> The `FilteredTodos` widget is responsible for showing a list of todos based on the current active filter.
+> Виджет `FilteredTodos` отвечает за отображение списка задач на основе текущего активного фильтра.
 
-Create `widgets/filtered_todos.dart` and let's implement it.
+Создайте `widgets/filtered_todos.dart` и давайте реализуем это.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1532,19 +1532,19 @@ class FilteredTodos extends StatelessWidget {
 }
 ```
 
-Just like the previous widgets we've written, the `FilteredTodos` widget uses `BlocProvider` to access blocs (in this case both the `FilteredTodosBloc` and the `TodosBloc` are needed).
+Как и предыдущие виджеты, которые мы написали, виджет `FilteredTodos` использует `BlocProvider` для доступа к блокам (в этом случае необходимы и `FilteredTodosBloc`, и `TodosBloc`).
 
-?> The `FilteredTodosBloc` is needed to help us render the correct todos based on the current filter
+?> `FilteredTodosBloc` необходим, чтобы помочь нам отобразить правильные задачи на основе текущего фильтра.
 
-?> The `TodosBloc` is needed to allow us to add/delete todos in response to user interactions such as swiping on an individual todo.
+?> `TodosBloc` необходим для того, чтобы мы могли добавлять/удалять задачи в ответ на взаимодействие с пользователем, такое как пролистывание отдельной задачи.
 
-From the `FilteredTodos` widget, the user can navigate to the `DetailsScreen` where it is possible to edit or delete the selected todo. Since our `FilteredTodos` widget renders a list of `TodoItem` widgets, we'll take a look at those next.
+Из виджета `FilteredTodos` пользователь может перейти к `DetailsScreen`, где можно редактировать или удалять выбранные задачи. Поскольку наш виджет `FilteredTodos` отображает список виджетов `TodoItem`, мы рассмотрим их далее.
 
-### Todo Item
+### Элемент задачи
 
-> `TodoItem` is a stateless widget which is responsible for rendering a single todo and handling user interactions (taps/swipes).
+> `TodoItem` - это виджет без сохранения состояния, который отвечает за рендеринг одной задачи и обработку действий пользователя (нажатий/листаний).
 
-Create `widgets/todo_item.dart` and let's build it.
+Создайте `widgets/todo_item.dart` и давайте его создадим.
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -1604,15 +1604,15 @@ class TodoItem extends StatelessWidget {
 }
 ```
 
-Again, notice that the `TodoItem` has no bloc-specific code in it. It simply renders based on the todo we pass via the constructor and calls the injected callback functions whenever the user interacts with the todo.
+Опять же, обратите внимание, что в `TodoItem` нет специфичного для блока кода. Он просто выполняет рендеринг на основе задачи, которую мы передаем через конструктор и вызывает введенные функции обратного вызова всякий раз, когда пользователь взаимодействует с задачей.
 
-Next up, we'll create the `DeleteTodoSnackBar`.
+Далее мы создадим `DeleteTodoSnackBar`.
 
-### Delete Todo SnackBar
+### Информационный SnackBar
 
-> The `DeleteTodoSnackBar` is responsible for indicating to the user that a todo was deleted and allows the user to undo his/her action.
+> `DeleteTodoSnackBar` отвечает за указание пользователю, что задача была удалена и позволяет пользователю отменить свое действие.
 
-Create `widgets/delete_todo_snack_bar.dart` and let's implement it.
+Создайте `widgets/delete_todo_snack_bar.dart` и давайте реализуем это.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1643,15 +1643,15 @@ class DeleteTodoSnackBar extends SnackBar {
 }
 ```
 
-By now, you're probably noticing a pattern: this widget also has no bloc-specific code. It simply takes in a todo in order to render the task and calls a callback function called `onUndo` if a user presses the undo button.
+К настоящему времени вы, вероятно, заметили шаблон: этот виджет также не имеет специфичного для блока кода. Он просто берет задачу для визуализации и вызывает функцию обратного вызова, называемую `onUndo`, если пользователь нажимает кнопку отмены.
 
-We're almost done; just two more widgets to go!
+Мы почти закончили; осталось только два виджета!
 
-### Loading Indicator
+### Индикатор загрузки
 
-> The `LoadingIndicator` widget is a stateless widget that is responsible for indicating to the user that something is in progress.
+> Виджет `LoadingIndicator` - это виджет без сохранения состояния, который отвечает за указание пользователю, что что-то выполняется.
 
-Create `widgets/loading_indicator.dart` and let's write it.
+Создайте `widgets/loading_indicator.dart` и давайте напишем это.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1668,15 +1668,15 @@ class LoadingIndicator extends StatelessWidget {
 }
 ```
 
-Not much to discuss here; we're just using a `CircularProgressIndicator` wrapped in a `Center` widget (again no bloc-specific code).
+Не очень много к обсуждению; мы просто используем `CircularProgressIndicator`, обернутый в виджет `Center` (опять же, нет специфичного для блока кода).
 
-Lastly, we need to build our `Stats` widget.
+Наконец, нам нужно построить наш виджет `Stats`.
 
-### Stats
+### Статистика
 
-> The `Stats` widget is responsible for showing the user how many todos are active (in progress) vs completed.
+> Виджет `Stats` отвечает за отображение количества активных (выполняемых) задач по сравнению с выполненными.
 
-Let's create `widgets/stats.dart` and take a look at the implementation.
+Давайте создадим `widgets/stats.dart` и посмотрим на реализацию.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1744,11 +1744,11 @@ class Stats extends StatelessWidget {
 }
 ```
 
-We're accessing the `StatsBloc` using `BlocProvider` and using `BlocBuilder` to rebuild in response to state changes in the `StatsBloc` state.
+Мы обращаемся к `StatsBloc` с помощью `BlocProvider` и `BlocBuilder` для перестройки в ответ на изменения состояния `StatsBloc`.
 
-## Putting it all together
+## Собираем все вместе
 
-Let's create `main.dart` and our `TodosApp` widget. We need to create a `main` function and run our `TodosApp`.
+Давайте создадим `main.dart` и виджет `TodosApp`. Нам нужно создать функцию `main` и запустить `TodosApp`.
 
 ```dart
 void main() {
@@ -1771,11 +1771,11 @@ void main() {
 }
 ```
 
-?> **Note:** We are setting our BlocSupervisor's delegate to the `SimpleBlocDelegate` we created earlier so that we can hook into all transitions and errors.
+?> **Примечание:** Мы устанавливаем делегата нашего `BlocSupervisor` в `SimpleBlocDelegate`, который мы создали ранее, чтобы мы могли подключиться ко всем переходам и ошибкам.
 
-?> **Note:** We are also wrapping our `TodosApp` widget in a `BlocProvider` which manages initializing, closing, and providing the `TodosBloc` to our entire widget tree from [flutter_bloc](https://pub.dev/packages/flutter_bloc). We immediately add the `LoadTodos` event in order to request the latest todos.
+?> **Примечание:** Мы также оборачиваем наш виджет `TodosApp` в `BlocProvider`, который управляет инициализацией, закрытием и предоставлением `TodosBloc` для всего нашего дерева виджетов из [flutter_bloc](https://pub.dev/packages/flutter_bloc). Мы немедленно добавляем событие `LoadTodos`, чтобы запросить последние задачи.
 
-Next, let's implement our `TodosApp` widget.
+Далее давайте реализуем наш виджет `TodosApp`.
 
 ```dart
 class TodosApp extends StatelessWidget {
@@ -1826,14 +1826,14 @@ class TodosApp extends StatelessWidget {
 }
 ```
 
-Our `TodosApp` is a `StatelessWidget` which accesses the provided `TodosBloc` via the `BuildContext`.
+`TodosApp` является `StatelessWidget`, который обращается к предоставленному `TodosBloc` через `BuildContext`.
 
-The `TodosApp` has two routes:
+`TodosApp` имеет два маршрута:
 
-- `Home` - which renders a `HomeScreen`
-- `AddTodo` - which renders a `AddEditScreen` with `isEditing` set to `false`.
+- `Home` - отображает`HomeScreen`
+- `AddTodo` - отображает `AddEditScreen` с `isEditing`, установленным в `false`.
 
-The `TodosApp` also makes the `TabBloc`, `FilteredTodosBloc`, and `StatsBloc` available to the widgets in its subtree by using the `MultiBlocProvider` widget from [flutter_bloc](https://pub.dev/packages/flutter_bloc).
+`TodosApp` также делает `TabBloc`, `FilteredTodosBloc` и `StatsBloc` доступными для виджетов в своем поддереве с помощью виджета `MultiBlocProvider` из [flutter_bloc](https://pub.dev/packages/flutter_bloc)
 
 ```dart
 MultiBlocProvider(
@@ -1852,7 +1852,7 @@ MultiBlocProvider(
 );
 ```
 
-is equivalent to writing
+эквивалентно написанию
 
 ```dart
 BlocProvider<TabBloc>(
@@ -1867,9 +1867,9 @@ BlocProvider<TabBloc>(
 );
 ```
 
-You can see how using `MultiBlocProvider` helps reduce the levels of nesting and makes the code easier to read and maintain.
+Вы можете видеть как использование `MultiBlocProvider` помогает снизить уровни вложенности и облегчает чтение и сопровождение кода.
 
-The entire `main.dart` should look like this:
+Весь файл `main.dart` должен выглядеть так:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1953,6 +1953,6 @@ class TodosApp extends StatelessWidget {
 }
 ```
 
-That’s all there is to it! We’ve now successfully implemented a todos app in flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
+Вот и все, что нужно сделать! Теперь мы успешно реализовали приложение todos в Flutter, используя пакеты [bloc](https://pub.dev/packages/bloc) и [flutter_bloc](https://pub.dev/packages/flutter_bloc) и мы успешно отделили наш уровень представления от нашей бизнес логики.
 
-The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos).
+Полный исходный код этого примера можно найти [здесь](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos).
