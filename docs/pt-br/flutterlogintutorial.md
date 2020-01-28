@@ -673,7 +673,7 @@ class App extends StatelessWidget {
 
 ?> **Nota**: Novamente, estamos usando o `BlocBuilder` para reagir às alterações no `AuthenticationState`, para que possamos mostrar ao usuário o `SplashPage`, `LoginPage`, `HomePage` ou `LoadingIndicator` com base no atual AuthenticationState.
 
-?> **Nota**: Nosso aplicativo está envolto em um `BlocProvider`, que torna nossa instância do `AuthenticationBloc` disponível para toda a subárvore do widget. O `BlocProvider` é um widget Flutter que fornece um bloco para seus filhos via` BlocProvider.of (context) `. Ele é usado como um widget de injeção de dependência (DI) para que uma única instância de um bloco possa ser fornecida a vários widgets em uma subárvore.
+?> **Nota**: Nosso aplicativo está envolto em um `BlocProvider`, que torna nossa instância do `AuthenticationBloc` disponível para toda a subárvore do widget. O `BlocProvider` é um widget Flutter que fornece um bloc para seus filhos via` BlocProvider.of (context) `. Ele é usado como um widget de injeção de dependência (DI) para que uma única instância de um bloc possa ser fornecida a vários widgets em uma subárvore.
 
 Agora o `BlocProvider.o<AuthenticationBloc>(context)` em nosso widget `HomePage` e `LoginPage` deve fazer sentido.
 

@@ -549,9 +549,9 @@ Impressionante! Agora estamos prontos para avançar para a camada de lógica de 
 
 #### Criando nosso primeiro Bloc
 
-Vamos criar alguns blocs durante este tutorial, então vamos criar uma pasta dentro do `lib` chamada` blocs`. Novamente, como teremos vários blocos, vamos primeiro criar um arquivo barrel chamado `blocs.dart` dentro da pasta` blocs`.
+Vamos criar alguns blocs durante este tutorial, então vamos criar uma pasta dentro do `lib` chamada` blocs`. Novamente, como teremos vários blocs, vamos primeiro criar um arquivo barrel chamado `blocs.dart` dentro da pasta` blocs`.
 
-Antes de pular para o bloco, precisamos definir quais eventos o nosso `WeatherBloc` manipulará e como vamos representar o nosso `WeatherState`. Para manter nossos arquivos pequenos, separaremos `event`, `state` e `bloc` em três arquivos.
+Antes de pular para o bloc, precisamos definir quais eventos o nosso `WeatherBloc` manipulará e como vamos representar o nosso `WeatherState`. Para manter nossos arquivos pequenos, separaremos `event`, `state` e `bloc` em três arquivos.
 
 #### Weather Event
 
@@ -1743,7 +1743,7 @@ void main() {
 }
 ```
 
-Novamente, estamos tornando o `SettingsBloc` acessível globalmente usando o `BlocProvider` e também o fechando no retorno de chamada `close`. Desta vez, no entanto, como estamos expondo mais de um bloco usando o `BlocProvider` no mesmo nível, podemos eliminar alguns aninhamentos usando o widget `MultiBlocProvider`.
+Novamente, estamos tornando o `SettingsBloc` acessível globalmente usando o `BlocProvider` e também o fechando no retorno de chamada `close`. Desta vez, no entanto, como estamos expondo mais de um bloc usando o `BlocProvider` no mesmo nível, podemos eliminar alguns aninhamentos usando o widget `MultiBlocProvider`.
 
 Agora precisamos criar nosso widget `Configurações` a partir do qual os usuários podem alternar as unidades.
 

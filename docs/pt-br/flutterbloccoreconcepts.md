@@ -139,7 +139,7 @@ BlocListener<BlocA, BlocAState>(
 )
 ```
 
-Se você deseja um controle refinado sobre quando a função listener é chamada, você pode fornecer uma condição opcional ao` BlocListener`. A condição pega o estado anterior do bloc e o atual estado do bloco e retorna um valor booleano. Se `condition` retornar true,` listener` será chamado com `state`. Se `condition` retornar falso,`listener` não será chamado com `state`.
+Se você deseja um controle refinado sobre quando a função listener é chamada, você pode fornecer uma condição opcional ao` BlocListener`. A condição pega o estado anterior do bloc e o atual estado do bloc e retorna um valor booleano. Se `condition` retornar true,` listener` será chamado com `state`. Se `condition` retornar falso,`listener` não será chamado com `state`.
 
 ```dart
 BlocListener<BlocA, BlocAState>(

@@ -286,7 +286,7 @@ Nosso `PostBloc` renderá sempre que houver um novo estado, pois retorna um `Str
 
 Agora, toda vez que um `PostEvent` é adicionado, se for um evento` Fetch` e houver mais postagens a serem buscadas, nosso `PostBloc` buscará as próximas 20 postagens.
 
-A API retornará uma matriz vazia se tentarmos buscar além do número máximo de postagens (100), portanto, se retornarmos uma matriz vazia, nosso bloco `produzirá` o currentState, exceto que definiremos `hasReachedMax` como true.
+A API retornará uma matriz vazia se tentarmos buscar além do número máximo de postagens (100), portanto, se retornarmos uma matriz vazia, nosso bloc `produzirá` o currentState, exceto que definiremos `hasReachedMax` como true.
 
 Se não podemos recuperar os posts, lançamos uma exceção e `yield` `PostError ()`.
 
@@ -509,7 +509,7 @@ class _HomePageState extends State<HomePage> {
 
 ?> `HomePage` é um `StatefulWidget` porque precisará manter um `ScrollController`. Em `initState`, adicionamos um ouvinte ao nosso `ScrollController` para que possamos responder aos eventos de rolagem. Também acessamos nossa instância `PostBloc` através de `BlocProvider.of <PostBloc> (context)`.
 
-Seguindo em frente, nosso método de compilação retorna um `BlocBuilder`. O `BlocBuilder` é um widget Flutter do [pacote flutter_bloc](https://pub.dev/packages/flutter_bloc) que lida com a construção de um widget em resposta a novos estados do bloco. Sempre que nosso estado `PostBloc` mudar, nossa função de construtor será chamada com o novo `PostState`.
+Seguindo em frente, nosso método de compilação retorna um `BlocBuilder`. O `BlocBuilder` é um widget Flutter do [pacote flutter_bloc](https://pub.dev/packages/flutter_bloc) que lida com a construção de um widget em resposta a novos estados do bloc. Sempre que nosso estado `PostBloc` mudar, nossa função de construtor será chamada com o novo `PostState`.
 
 !> Precisamos lembrar de descartar nosso `ScrollController` quando o StatefulWidget for descartado.
 
@@ -569,7 +569,7 @@ Um bônus adicional de usar a biblioteca de blocs é que podemos ter acesso a to
 
 ?> Uma `Transição` consiste no estado atual, no evento e no próximo estado.
 
-Mesmo que neste aplicativo tenha apenas um bloco, é bastante comum em aplicativos maiores ter muitos blocos gerenciando diferentes partes do estado do aplicativo.
+Mesmo que neste aplicativo tenha apenas um bloc, é bastante comum em aplicativos maiores ter muitos blocs gerenciando diferentes partes do estado do aplicativo.
 
 Se quisermos fazer algo em resposta a todas as `Transições`, podemos simplesmente criar nosso próprio `BlocDelegate`.
 

@@ -1,6 +1,6 @@
 # Receita: Acesso ao Bloc
 
-> Nesta receita, veremos como usar o BlocProvider para tornar um bloco acessível em toda a árvore de widgets. Vamos explorar três cenários: acesso local, acesso à rota e acesso global.
+> Nesta receita, veremos como usar o BlocProvider para tornar um bloc acessível em toda a árvore de widgets. Vamos explorar três cenários: acesso local, acesso à rota e acesso global.
 
 ## Accesso Local
 
@@ -255,7 +255,7 @@ A `HomePage` é semelhante à `CounterPage` no exemplo acima; no entanto, em vez
 
 Quando o usuário toca no `RaisedButton`, adicionamos uma nova `MaterialPageRoute` e retornamos o `CounterPage`; no entanto, estamos agrupando o `CounterPage` em um `BlocProvider` para disponibilizar a instância atual do `CounterBloc` na próxima página.
 
-!> É fundamental que estejamos usando o construtor de valor do `BlocProvider` neste caso, porque estamos fornecendo uma instância existente do `CounterBloc`. O construtor de valor do `BlocProvider` deve ser usado apenas nos casos em que desejamos fornecer um bloc existente para uma nova subárvore. Além disso, o uso do construtor value não fechará o bloco automaticamente, o que, neste caso, é o que queremos (já que ainda precisamos do `CounterBloc` para funcionar nos widgets ancestrais). Em vez disso, simplesmente passamos o `CounterBloc` existente para a nova página como um valor existente, em oposição a um construtor. Isso garante que o único `BlocProvider` de nível superior lide com o fechamento do `CounterBloc` quando não for mais necessário.
+!> É fundamental que estejamos usando o construtor de valor do `BlocProvider` neste caso, porque estamos fornecendo uma instância existente do `CounterBloc`. O construtor de valor do `BlocProvider` deve ser usado apenas nos casos em que desejamos fornecer um bloc existente para uma nova subárvore. Além disso, o uso do construtor value não fechará o bloc automaticamente, o que, neste caso, é o que queremos (já que ainda precisamos do `CounterBloc` para funcionar nos widgets ancestrais). Em vez disso, simplesmente passamos o `CounterBloc` existente para a nova página como um valor existente, em oposição a um construtor. Isso garante que o único `BlocProvider` de nível superior lide com o fechamento do `CounterBloc` quando não for mais necessário.
 
 #### CounterPage
 
