@@ -8,7 +8,7 @@
   - [Arquitetura](pt-br/architecture.md)
   - [Testando](pt-br/testing.md)
   - [Naming Conventions](blocnamingconventions.md)
-  - [FAQs](faqs.md)
+  - [FAQs](pt-br/faqs.md)
 
 - Tutoriais
 
