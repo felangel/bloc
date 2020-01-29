@@ -1,21 +1,23 @@
-# Bloc Plugin for IntelliJ and Android Studio
+# Bloc плагин для IntelliJ и Android Studio
 
 ![dialog](https://github.com/felangel/bloc/raw/master/extensions/intellij/assets/dialog.png)
 
-## Introduction
+## Введение
 
-Bloc plugin for [IntelliJ](https://www.jetbrains.com/idea/) and [Android Studio](https://developer.android.com/studio/) with support for the [Bloc](https://bloclibrary.dev) library and provides tools for effectively creating Blocs for both [Flutter](https://flutter.io/) and [AngularDart](https://webdev.dartlang.org) apps.
+Плагин `Bloc` для [IntelliJ](https://www.jetbrains.com/idea/) и [Android Studio](https://developer.android.com/studio/) с поддержкой [Bloc](https://bloclibrary.dev) предоставляет инструменты для эффективного создания блоков для приложений [Flutter](https://flutter.io/) и [AngularDart](https://webdev.dartlang.org).
 
-## Installation
+## Инсталляция
 
-You can find the plugin in the official IntelliJ and Android Studio marketplace:
+Вы можете найти плагин на официальной торговой площадке `IntelliJ` и `Android Studio`:
 
 - [Bloc Code Generator](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator)
 
-### How to use
+### Как использовать
 
 Simply right click on the File Project view, go to `New -> New Bloc -> Generate New Bloc`, give it a name, select if you want to use [Equatable](https://github.com/felangel/equatable), and click on `OK` to see all the boilerplate generated.
 
-## Deployment
+Просто щелкните правой кнопкой мыши на представлении `File Project`, перейдите в `New -> New Bloc -> Generate New Bloc`, дайте ему имя, выберите хотите ли вы использовать [Equatable](https://github.com/felangel/equatable) и нажмите `ОК`, чтобы увидеть все сгенерированные шаблоны.
 
-Using [Plugin Repository](http://www.jetbrains.org/intellij/sdk/docs/plugin_repository/index.html)
+## Развертывание
+
+Использование [Plugin Repository](http://www.jetbrains.org/intellij/sdk/docs/plugin_repository/index.html)

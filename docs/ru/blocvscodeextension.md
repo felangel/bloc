@@ -1,4 +1,4 @@
-# Bloc Extension for VSCode
+# Расширение Bloc для VSCode
 
 [![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
@@ -15,72 +15,72 @@
 
 ---
 
-## Introduction
+## Введение
 
-Bloc extends [VSCode](https://code.visualstudio.com/) with support for the [Bloc](https://bloclibrary.dev) library and provides tools for effectively creating Blocs for both [Flutter](https://flutter.io/) and [AngularDart](https://webdev.dartlang.org) apps.
+Блок расширяет [VSCode](https://code.visualstudio.com/) с поддержкой [Bloc](https://bloclibrary.dev) библиотеки и обеспечивает инструментарий для эффективного создания блоков для [Flutter](https://flutter.io/) и [AngularDart](https://webdev.dartlang.org) приложений.
 
-## Installation
+## Инсталляция
 
-Bloc can be installed from the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) or by [searching within VSCode](https://code.visualstudio.com/docs/editor/extension-gallery#_search-for-an-extension).
+Блок можно установить из [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) или с помощью [searching within VSCode](https://code.visualstudio.com/docs/editor/extension-gallery#_search-for-an-extension).
 
-## New Bloc Command Usage
+## Новый блок
 
-The New Bloc Command allows you to create a Bloc and the Events/States so that all that's left to do is implement your logic in `mapEventToState`.
+Команда `New Bloc` позволяет вам создать `Bloc` и `Events`/`States`, чтобы только осталось реализовать вашу логику в `mapEventToState`.
 
-You can active the command by launching the command palette (View -> Command Palette) and running "Bloc: New Bloc".
+Вы можете активировать команду, запустив палитру команд (View -> Command Palette) и запустив `Bloc: New Bloc`.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-1.gif)
 
-Or you can right click on the directory in which you'd like to create the bloc and select the "Bloc: New Bloc" command from the context menu.
+Или вы можете щелкнуть правой кнопкой мыши на каталоге, в котором вы хотите создать блок и выбрать команду «Bloc: New Bloc» из контекстного меню.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-2.gif)
 
-## Snippets Usage
+## Фрагменты
 
-### Bloc
+### Блок
 
-In a `.dart` file activate the snippet by typing `bloc` and hitting enter. Then you can name the bloc class and fill in the signature and implementation details by tabbing.
+В файле `.dart` активируйте фрагмент, набрав `bloc` и нажав Enter. Затем вы можете назвать класс блока и заполнить сигнатуру и детали реализации с помощью табуляции.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloc-snippet-usage.gif)
 
-### BlocEvent
+### События
 
-In a `.dart` file activate the snippet by typing `blocevent` and hitting enter. Then you can name the event class and fill in the signature and implementation details by tabbing.
+В файле `.dart` активируйте фрагмент, набрав `blocevent` и нажав Enter. Затем вы можете назвать класс события и ввести сигнатуру и детали реализации, используя вкладки.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocevent-snippet-usage.gif)
 
-### BlocState
+### Состояния
 
-In a `.dart` file activate the snippet by typing `blocstate` and hitting enter. Then you can name the state class and fill in the signature and implementation details by tabbing.
+В файле `.dart` активируйте фрагмент, набрав `blocstate` и нажав Enter. Затем вы можете назвать класс состояния и заполнить сигнатуру и детали реализации с помощью табуляции.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocstate-snippet-usage.gif)
 
-### BlocBuilder
+### Строитель
 
-In a `.dart` file activate the snippet by typing `blocbuilder` and hitting enter. Then you can fill in the implementation details by tabbing.
+В файле `.dart` активируйте фрагмент, набрав `blocbuilder` и нажав Enter. Затем вы можете заполнить детали реализации с помощью вкладок.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocbuilder-snippet-usage.gif)
 
-### BlocListener
+### Слушатель
 
-In a `.dart` file activate the snippet by typing `bloclistener` and hitting enter. Then you can fill in the implementation details by tabbing.
+В файле `.dart` активируйте фрагмент, набрав `bloclistener` и нажав Enter. Затем вы можете заполнить детали реализации с помощью вкладок.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloclistener-snippet-usage.gif)
 
-### BlocProvider
+### Поставщик
 
-In a `.dart` file activate the snippet by typing `blocprovider` and hitting enter. Then you can fill in the implementation details by tabbing.
+В файле `.dart` активируйте фрагмент, набрав `blocprovider` и нажав Enter. Затем вы можете заполнить детали реализации с помощью вкладок.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovider-snippet-usage.gif)
 
-### BlocProviderTree
+### Строитель дерева
 
-In a `.dart` file activate the snippet by typing `blocprovidertree` and hitting enter. Then you can fill in the implementation details by tabbing.
+В файле `.dart` активируйте фрагмент, набрав `blocprovidertree` и нажав Enter. Затем вы можете заполнить детали реализации с помощью вкладок.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovidertree-snippet-usage.gif)
 
-### BlocDelegate
+### Делегат
 
-In a `.dart` file activate the snippet by typing `blocdelegate` and hitting enter. Then you can fill in the implementation details by tabbing.
+В файле `.dart` активируйте фрагмент, набрав `blocdelegate` и нажав Enter. Затем вы можете заполнить детали реализации с помощью вкладок.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocdelegate-snippet-usage.gif)
