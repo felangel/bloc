@@ -1,22 +1,22 @@
-# AngularDart Counter Tutorial
+# AngularDart счетчик
 
 ![beginner](https://img.shields.io/badge/level-beginner-green.svg)
 
-> In the following tutorial, we're going to build a Counter in AngularDart using the Bloc library.
+> В следующем руководстве мы построим Counter в AngularDart с использованием библиотеки Bloc.
 
 ![demo](../assets/gifs/angular_counter.gif)
 
-## Setup
+## Настройка
 
-We'll start off by creating a brand new AngularDart project with [stagehand](https://github.com/dart-lang/stagehand).
+Мы начнем с создания нового проекта AngularDart с использованием [stagehand](https://github.com/dart-lang/stagehand).
 
 ```bash
 stagehand web-angular
 ```
 
-!> Activate stagehand by running `pub global activate stagehand`
+!> Активируйте stagehand, запустив `pub global activate stagehand`
 
-We can then go ahead and replace the contents of `pubspec.yaml` with:
+Затем мы заменим содержимое `pubspec.yaml` на:
 
 ```yaml
 name: angular_counter
@@ -38,25 +38,25 @@ dev_dependencies:
   test: ^1.0.0
 ```
 
-and then install all of our dependencies
+а затем установим все зависимости
 
 ```bash
 pub get
 ```
 
-Our counter app is just going to have two buttons to increment/decrement the counter value and an element to display the current value. Let's get started designing the `CounterEvents`.
+Наше приложение-счетчик будет иметь две кнопки для увеличения/уменьшения значения счетчика и элемент для отображения текущего значения. Приступим к разработке `CounterEvents`.
 
-## Counter Events
+## Counter события
 
 ```dart
 enum CounterEvent { increment, decrement }
 ```
 
-## Counter States
+## Counter состояния
 
-Since our counter's state can be represented by an integer we don't need to create a custom class!
+Поскольку состояние нашего счетчика может быть представлено целым числом, нам не нужно создавать собственный класс!
 
-## Counter Bloc
+## Counter блок
 
 ```dart
 class CounterBloc extends Bloc<CounterEvent, int> {
@@ -77,13 +77,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-?> **Note**: Just from the class declaration we can tell that our `CounterBloc` will be taking `CounterEvents` as input and outputting integers.
+?> **Примечание**: из объявления класса мы можем сказать, что наш `CounterBloc` будет принимать `CounterEvents` в качестве входных и выходных целых чисел.
 
-## Counter App
+## Counter приложение
 
-Now that we have our `CounterBloc` fully implemented, we can get started creating our AngularDart App Component.
+Теперь, когда `CounterBloc` полностью реализован, мы можем приступить к созданию компонента приложения `AngularDart`.
 
-Our `app.component.dart` should look like:
+`app.component.dart` должен выглядеть так:
 
 ```dart
 import 'package:angular/angular.dart';
@@ -98,17 +98,17 @@ import 'package:angular_counter/src/counter_page/counter_page_component.dart';
 class AppComponent {}
 ```
 
-and our `app.component.html` should look like:
+и `app.component.html` должен выглядеть так:
 
 ```html
 <counter-page></counter-page>
 ```
 
-## Counter Page
+## Counter страница
 
-Finally, all that's left is to build our Counter Page Component.
+Наконец все, что осталось, это построить `Counter` компонент.
 
-Our `counter_page_component.dart` should look like:
+`counter_page_component.dart` должен выглядеть так:
 
 ```dart
 import 'package:angular/angular.dart';
@@ -146,13 +146,13 @@ class CounterPageComponent implements OnDestroy {
 }
 ```
 
-?> **Note**: We are able to access the `CounterBloc` instance using AngularDart's dependency injection system. Because we have registered it as a `Provider`, AngularDart can properly resolve `CounterBloc`.
+?> **Примечание**: мы можем получить доступ к экземпляру `CounterBloc` с помощью системы внедрения зависимостей `AngularDart`. Поскольку мы зарегистрировали его как `Provider`, AngularDart может правильно определить `CounterBloc`.
 
-?> **Note**: We are closing the `CounterBloc` in `ngOnDestroy`.
+?> **Примечание**: Мы закрываем `CounterBloc` в `ngOnDestroy`.
 
-?> **Note**: We are importing the `BlocPipe` so that we can use it in our template.
+?> **Примечание**: мы импортируем `BlocPipe`, чтобы использовать его в нашем шаблоне.
 
-Lastly, our `counter_page_component.html` should look like:
+Наконец, наш `counter_page_component.html` должен выглядеть так:
 
 ```html
 <div class="counter-page-container">
@@ -167,10 +167,10 @@ Lastly, our `counter_page_component.html` should look like:
 </div>
 ```
 
-?> **Note**: We are using the `BlocPipe` so that we can display our counterBloc state as it is updated.
+?> **Примечание**: мы используем `BlocPipe`, чтобы мы могли отображать наше состояние counterBloc по мере его обновления.
 
-That's it! We've separated our presentation layer from our business logic layer. Our `CounterPageComponent` has no idea what happens when a user presses a button; it just adds an event to notify the `CounterBloc`. Furthermore, our `CounterBloc` has no idea what is happening with the state (counter value); it's simply converting the `CounterEvents` into integers.
+Это оно! Мы отделили уровень представления от уровня бизнес-логики. `CounterPageComponent` не знает что происходит, когда пользователь нажимает кнопку; он просто добавляет событие для уведомления `CounterBloc`. Кроме того, `CounterBloc` не имеет представления о том, что происходит с состоянием (значение счетчика); это просто преобразование `CounterEvents` в целые числа.
 
-We can run our app with `webdev serve` and can view it [locally](http://localhost:8080).
+Мы можем запустить приложение с `webdev serve` и просматривать его локально [по ссылке](http://localhost:8080).
 
-The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/angular_counter).
+Полные исходные тексты этого примера можно найти [здесь](https://github.com/felangel/Bloc/tree/master/examples/angular_counter).
