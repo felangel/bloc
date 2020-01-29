@@ -1,16 +1,16 @@
-# Recipes: Show SnackBar with BlocListener
+# Рецепты: Показ SnackBar с BlocListener
 
-> In this recipe, we're going to take a look at how to use `BlocListener` to show a `SnackBar` in response to a state change in a bloc.
+> В этом рецепте мы рассмотрим как использовать `BlocListener` для отображения `SnackBar` в ответ на изменение состояния в блоке.
 
 ![demo](../assets/gifs/recipes_flutter_snack_bar.gif)
 
-## Bloc
+## Блок
 
-Let's build a basic `DataBloc` which will handle `DataEvents` and output `DataStates`.
+Давайте создадим базовый `DataBloc`, который будет обрабатывать `DataEvents` и выводить `DataStates`.
 
-### DataEvent
+### Событие
 
-For simplicity, our `DataBloc` will only respond to a single `DataEvent` called `FetchData`.
+Для простоты `DataBloc` будет отвечать только на один `DataEvent`, называемый `FetchData`.
 
 ```dart
 import 'package:meta/meta.dart';
@@ -21,13 +21,13 @@ abstract class DataEvent {}
 class FetchData extends DataEvent {}
 ```
 
-### DataState
+### Состояние
 
-Our `DataBloc` can have one of three different `DataStates`:
+`DataBloc` может иметь один из трех разных `DataStates`:
 
-- `Initial` - the initial state before any events are added
-- `Loading` - the state of the bloc while it is asynchronously "fetching data"
-- `Success` - the state of the bloc when it has successfully "fetched data"
+- `Initial` - начальное состояние перед добавлением каких-либо событий
+- `Loading` - состояние блока во время асинхронной 'выборки данных'
+- `Success` - состояние блока, когда он успешно 'извлек данные'
 
 ```dart
 import 'package:meta/meta.dart';
@@ -42,9 +42,9 @@ class Loading extends DataState {}
 class Success extends DataState {}
 ```
 
-### DataBloc
+### Блок
 
-Our `DataBloc` should look something like this:
+`DataBloc` должен выглядеть примерно так:
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -66,11 +66,11 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 }
 ```
 
-?> **Note:** We're using `Future.delayed` to simulate latency.
+?> **Примечание:** мы используем `Future.delayed` для имитации задержки.
 
-## UI Layer
+## UI слой
 
-Now let's take a look at how to hook up our `DataBloc` to a widget and show a `SnackBar` in response to a success state.
+Теперь давайте посмотрим, как подключить `DataBloc` к виджету и показать `SnackBar` в ответ на состояние `success`.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -138,10 +138,10 @@ class Home extends StatelessWidget {
 }
 ```
 
-?> We use the `BlocListener` widget in order to **DO THINGS** in response to state changes in our `DataBloc`.
+?> Мы используем виджет `BlocListener`, чтобы **что-то делать** в ответ на изменения состояния в `DataBloc`.
 
-?> We use the `BlocBuilder` widget in order to **RENDER WIDGETS** in response to state changes in our `DataBloc`.
+?> мы используем виджет `BlocBuilder` для **отрисовки виджетов** в ответ на изменения состояния в нашем `DataBloc`.
 
-!> We should **NEVER** "do things" in response to state changes in the `builder` method of `BlocBuilder` because that method can be called many times by the Flutter framework. The `builder` method should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that just returns a widget in response to the state of the bloc.
+!> Мы не должны **НИКОГДА** не должны 'что-то делать' в ответ на изменения состояния в методе `builder` `BlocBuilder` потому, что этот метод может вызываться много раз средой Flutter. Метод `builder` должен быть [чистой функцией](https://en.wikipedia.org/wiki/Pure_function), который просто возвращает виджет в ответ на состояние блока.
 
-The full source for this recipe can be found [here](https://gist.github.com/felangel/1e5b2c25b263ad1aa7bbed75d8c76c44).
+Полный исходный код этого рецепта можно найти [здесь](https://gist.github.com/felangel/1e5b2c25b263ad1aa7bbed75d8c76c44).
