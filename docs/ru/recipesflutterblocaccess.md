@@ -1,16 +1,16 @@
-# Recipes: Bloc Access
+# Рецепты: Доступ к блоку
 
-> In this recipe, we're going to take a look at how to use `BlocProvider` to make a bloc accessible throughout the widget tree. We're going to explore three scenarios: Local Access, Route Access, and Global Access.
+> В этом рецепте мы рассмотрим, как использовать `BlocProvider`, чтобы сделать блок доступным по всему дереву виджетов. Мы изучим три сценария: локальный доступ, доступ с маршрутом и глобальный доступ.
 
-## Local Access
+## Локальный доступ
 
-> In this example, we're going to use `BlocProvider` to make a bloc available to a local sub-tree. In this context, local means within a context where there are no routes being pushed/popped.
+> В этом примере мы будем использовать `BlocProvider`, чтобы сделать блок доступным для локального поддерева. В этом контексте локальный означает внутри контекста, где нет маршрутов, которые переходят/возвращаются.
 
-### Bloc
+### Блок
 
-For the sake of simplicity we're going to use a `Counter` as our example application.
+Для простоты мы будем использовать `Counter` в качестве примера приложения.
 
-Our `CounterBloc` implementation will look like:
+Реализация `CounterBloc` будет выглядеть так:
 
 ```dart
 enum CounterEvent { increment, decrement }
@@ -35,13 +35,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 ### UI
 
-We're going to have 3 parts to our UI:
+У нас будет 3 части нашего интерфейса:
 
-- App: the root application widget
-- CounterPage: the container widget which will manage the `CounterBloc` and exposes `FloatingActionButtons` to `increment` and `decrement` the counter.
-- CounterText: a text widget which is responsible for displaying the current `count`.
+- `App` - виджет корневого приложения
+- `CounterPage` - контейнерный виджет, который будет управлять `CounterBloc` и показывает `FloatingActionButtons` для увеличения и уменьшения счетчика.
+- `CounterText` - текстовый виджет, который отвечает за отображение текущего `count`.
 
-#### App
+#### Приложение
 
 ```dart
 import 'package:flutter/material.dart';
@@ -64,11 +64,11 @@ class App extends StatelessWidget {
 }
 ```
 
-Our `App` widget is a `StatelessWidget` that uses a `MaterialApp` and sets our `CounterPage` as the home widget. The `App` widget is responsible for creating and closing the `CounterBloc` as well as making it available to the `CounterPage` using a `BlocProvider`.
+Виджет `App` - это `StatelessWidget`, который использует `MaterialApp` и устанавливает наш `CounterPage` в качестве домашнего виджета. Виджет `App` отвечает за создание и закрытие `CounterBloc`, а также делает его доступным для `CounterPage` с помощью `BlocProvider`.
 
-?> **Note:** When we wrap a widget with `BlocProvider` we can then provide a bloc to all widgets within that subtree. In this case, we can access the `CounterBloc` from within the `CounterPage` widget and any children of the `CounterPage` widget using `BlocProvider.of<CounterBloc>(context)`.
+?> **Примечание:** когда мы оборачиваем виджет с помощью `BlocProvider`, мы можем предоставить блок всем виджетам в этом поддереве. В этом случае мы можем получить доступ к `CounterBloc` из виджета `CounterPage` и любых дочерних элементов виджета `CounterPage`, используя `BlocProvider.of<CounterBloc>(context)`.
 
-#### CounterPage
+#### Страница счетчика
 
 ```dart
 class CounterPage extends StatelessWidget {
@@ -109,9 +109,9 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-The `CounterPage` widget is a `StatelessWidget` which is accesses the `CounterBloc` via the `BuildContext`.
+Виджет `CounterPage` - это `StatelessWidget`, который обращается к `CounterBloc` через `BuildContext`.
 
-#### CounterText
+#### Текст счетчика
 
 ```dart
 class CounterText extends StatelessWidget {
@@ -126,19 +126,19 @@ class CounterText extends StatelessWidget {
 }
 ```
 
-Our `CounterText` widget is using a `BlocBuilder` to rebuild itself whenever the `CounterBloc` state changes. We use `BlocProvider.of<CounterBloc>(context)` in order to access the provided `CounterBloc` and return a `Text` widget with the current count.
+Виджет `CounterText` использует `BlocBuilder` для ререндеринга себя всякий раз, когда изменяется состояние `CounterBloc`. Мы используем `BlocProvider.of<CounterBloc>(context)`, чтобы получить доступ к предоставленному `CounterBloc` и вернуть виджет `Text` с текущим счетчиком.
 
-That wraps up the local bloc access portion of this recipe and the full source code can be found [here](https://gist.github.com/felangel/20b03abfef694c00038a4ffbcc788c35).
+Это завершающая часть по доступу к локальному блоку этого рецепта и полный исходный код можно найти [здесь](https://gist.github.com/felangel/20b03abfef694c00038a4ffbcc788c35).
 
-Next, we'll take a look at how to provide a bloc across multiple pages/routes.
+Далее мы рассмотрим, как создать блок для нескольких страниц/маршрутов.
 
-## Route Access
+## Доступ по маршруту
 
-> In this example, we're going to use `BlocProvider` to access a bloc across routes. When a new route is pushed, it will have a different `BuildContext` which no longer has a reference to the previously provided blocs. As a result, we have to wrap the new route in a separate `BlocProvider`.
+> В этом примере мы используем `BlocProvider` для доступа к блоку по маршруту. Когда новый маршрут выставляется, он будет иметь другой `BuildContext`, который больше не имеет ссылки на ранее предоставленные блоки. В результате мы должны обернуть новый маршрут в отдельный `BlocProvider`.
 
-### Bloc
+### Блок
 
-Again, we're going to use the `CounterBloc` for simplicity.
+Опять же, мы будем использовать `CounterBloc` для простоты.
 
 ```dart
 enum CounterEvent { increment, decrement }
@@ -163,13 +163,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 ### UI
 
-Again, we're going to have three parts to our application's UI:
+Опять же, у нас будет три части пользовательского интерфейса нашего приложения:
 
-- App: the root application widget
-- HomePage: the container widget which will manage the `CounterBloc` and exposes `FloatingActionButtons` to `increment` and `decrement` the counter.
-- CounterPage: a widget which is responsible for displaying the current `count` as a separate route.
+- `App` - виджет корневого приложения
+- `HomePage` - контейнерный виджет, который будет управлять `CounterBloc` и показывать `FloatingActionButtons` для увеличения или уменьшения счетчика.
+- `CounterPage` - виджет, который отвечает за отображение текущего `count` в качестве отдельного маршрута.
 
-#### App
+#### Приложение
 
 ```dart
 import 'package:flutter/material.dart';
@@ -192,9 +192,9 @@ class App extends StatelessWidget {
 }
 ```
 
-Again, our `App` widget is the same as before.
+Опять же, наш виджет `App` такой же, как и раньше.
 
-#### HomePage
+#### Домашняя страница
 
 ```dart
 class HomePage extends StatelessWidget {
@@ -251,13 +251,13 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-The `HomePage` is similar to the `CounterPage` in the above example; however, instead of rendering a `CounterText` widget, it renders a `RaisedButton` in the center which allows the user to navigate to a new screen which displays the current count.
+`HomePage` похож на `CounterPage` в приведенном выше примере, однако вместо рендеринга виджета `CounterText` он рендерит `RaisedButton` в центре, который позволяет пользователю перейти к новому экрану, на котором отображается текущий счетчик.
 
-When the user taps the `RaisedButton`, we push a new `MaterialPageRoute` and return the `CounterPage`; however, we are wrapping the `CounterPage` in a `BlocProvider` in order to make the current `CounterBloc` instance available on the next page.
+Когда пользователь касается `RaisedButton`, мы выставляем новый `MaterialPageRoute` и возвращаем `CounterPage`, однако мы оборачиваем `CounterPage` в `BlocProvider`, чтобы сделать текущий экземпляр `CounterBloc` доступным на следующей странице.
 
-!> It is critical that we are using `BlocProvider's` value constructor in this case because we are providing an existing instance of `CounterBloc`. The value constructor of `BlocProvider` should be used only in cases where we want to provide an existing bloc to a new subtree. In addition, using the value constructor will not close the bloc automatically which, in this case, is what we want (since we still need the `CounterBloc` to function in the ancestor widgets). Instead, we simply pass the existing `CounterBloc` to the new page as an existing value as opposed to in a builder. This ensures that the only top level `BlocProvider` handles closing the `CounterBloc` when it is no longer needed.
+!> Очень важно, чтобы в этом случае мы использовали конструктор значений `BlocProvider`, потому что мы предоставляем существующий экземпляр `CounterBloc`. Конструктор значений `BlocProvider` должен использоваться только в тех случаях, когда мы хотим предоставить существующий блок новому поддереву. Кроме того, использование конструктора значений не приведет к автоматическому закрытию блока, что в данном случае является тем, что нам нужно (поскольку нам все еще нужен `CounterBloc` для работы в виджетах предков). Вместо этого мы просто передаем существующий `CounterBloc` новой странице как существующее значение, а не в компоновщике. Это гарантирует, что единственный `BlocProvider` верхнего уровня обрабатывает закрытие `CounterBloc`, когда он больше не нужен.
 
-#### CounterPage
+#### Страница счетчика
 
 ```dart
 class CounterPage extends StatelessWidget {
@@ -279,19 +279,19 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-`CounterPage` is a super simple `StatelessWidget` which uses `BlocBuilder` to re-render a `Text` widget with the current count. Just like before, we are able to use `BlocProvider.of<CounterBloc>(context)` in order to access the `CounterBloc`.
+`CounterPage` - супер простой `StatelessWidget`, который использует `BlocBuilder` для повторного рендеринга виджета `Text` с текущим счетчиком. Как и раньше, мы можем использовать `BlocProvider.of<CounterBloc>(context)` для доступа к `CounterBloc`.
 
-That's all there is to this example and the full source can be found [here](https://gist.github.com/felangel/92b256270c5567210285526a07b4cf21).
+Это все, что есть в этом примере и полный исходный код можно найти [здесь](https://gist.github.com/felangel/92b256270c5567210285526a07b4cf21).
 
-Last, we'll look at how to make a bloc globally available to the widget tree.
+Наконец, мы рассмотрим как сделать блок глобально доступным для дерева виджетов.
 
-## Global Access
+## Глобальный доступ
 
-> In this last example, we're going to demonstrate how to make a bloc instance available to the entire widget tree. This is useful for specific cases like an `AuthenticationBloc` or `ThemeBloc` because that state applies to all parts of the application.
+> В этом последнем примере мы продемонстрируем, как сделать экземпляр блока доступным для всего дерева виджетов. Это полезно для конкретных случаев, таких как `AuthenticationBloc` или `ThemeBloc`, потому что это состояние применяется ко всем частям приложения.
 
-### Bloc
+### Блок
 
-As usual, we're going to use the `CounterBloc` as our example for simplicity.
+Как обычно, мы будем использовать `CounterBloc` в качестве нашего примера для простоты.
 
 ```dart
 enum CounterEvent { increment, decrement }
@@ -316,13 +316,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 ### UI
 
-We're going to follow the same application structure as in the "Local Access" example. As a result, we're going to have three parts to our UI:
+Мы будем следовать той же структуре приложения, что и в примере `Локальный доступ`. В результате у нас будет три части нашего интерфейса:
 
-- App: the root application widget which manages the global instance of our `CounterBloc`.
-- CounterPage: the container widget which exposes `FloatingActionButtons` to `increment` and `decrement` the counter.
-- CounterText: a text widget which is responsible for displaying the current `count`.
+- `App` - виджет корневого приложения, который управляет глобальным экземпляром нашего `CounterBloc`.
+- `CounterPage` - контейнерный виджет, который показывает `FloatingActionButtons` для увеличения или уменьшения счетчика.
+- `CounterText` - текстовый виджет, который отвечает за отображение текущего `count`.
 
-#### App
+#### Приложение
 
 ```dart
 import 'package:flutter/material.dart';
@@ -345,13 +345,13 @@ class App extends StatelessWidget {
 }
 ```
 
-Much like in the local access example above, the `App` manages creating, closing, and providing the `CounterBloc` to the subtree using `BlocProvider`. The main difference is in this case, `MaterialApp` is a child of `BlocProvider`.
+Как и в примере с локальным доступом выше, `App` управляет созданием, закрытием и предоставлением `CounterBloc` для поддерева, используя `BlocProvider`. Основное отличие состоит в том, что `MaterialApp` является дочерним элементом `BlocProvider`.
 
-Wrapping the entire `MaterialApp` in a `BlocProvider` is the key to making our `CounterBloc` instance globally accessible. Now we can access our `CounterBloc` from anywhere in our application where we have a `BuildContext` using `BlocProvider.of<CounterBloc>(context);`
+Обертывание всего `MaterialApp` в `BlocProvider` является ключом к тому, чтобы сделать наш экземпляр `CounterBloc` глобально доступным. Теперь мы можем получить доступ к нашему `CounterBloc` из любой точки нашего приложения где у нас есть `BuildContext`, используя `BlocProvider.of<CounterBloc>(context)`
 
-?> **Note:** This approach still works if you're using a `CupertinoApp` or `WidgetsApp`.
+?> **Примечание:** Этот подход также работает, если вы используете `CupertinoApp` или `WidgetsApp`.
 
-#### CounterPage
+#### Страница счетчика
 
 ```dart
 class CounterPage extends StatelessWidget {
@@ -392,9 +392,9 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-Our `CounterPage` is a `StatelessWidget` because it doesn't need to manage any of its own state. Just as we mentioned above, it uses `BlocProvider.of<CounterBloc>(context)` to access the global instance of the `CounterBloc`.
+`CounterPage` является `StatelessWidget`, потому что ему не нужно управлять своим собственным состоянием. Как мы уже упоминали выше, он использует `BlocProvider.of<CounterBloc>(context)` для доступа к глобальному экземпляру `CounterBloc`.
 
-#### CounterText
+#### Текст счетчика
 
 ```dart
 class CounterText extends StatelessWidget {
@@ -409,6 +409,6 @@ class CounterText extends StatelessWidget {
 }
 ```
 
-Nothing new here; the `CounterText` widget is the same as in the first example. It's just a `StatelessWidget` which uses a `BlocBuilder` to re-render when the `CounterBloc` state changes and accesses the global `CounterBloc` instance using `BlocProvider.of<CounterBloc>(context)`.
+Здесь нет ничего нового; виджет `CounterText` такой же, как в первом примере. Это просто `StatelessWidget`, который использует `BlocBuilder` для повторного рендеринга при изменении состояния `CounterBloc` и доступа к глобальному экземпляру `CounterBloc` с помощью `BlocProvider.of<CounterBloc>(context)`.
 
-That's all there is to it! The full source can be found [here](https://gist.github.com/felangel/be891e73a7c91cdec9e7d5f035a61d5d).
+Это все, что нужно сделать! Полный исходный код можно найти [здесь](https://gist.github.com/felangel/be891e73a7c91cdec9e7d5f035a61d5d).
