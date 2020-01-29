@@ -1,32 +1,32 @@
-# Flutter + AngularDart Github Search Tutorial
+# Flutter + AngularDart Github поиск
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-> In the following tutorial, we're going to build a Github Search app in Flutter and AngularDart to demonstrate how we can share the data and business logic layers between the two projects.
+> В следующем руководстве мы создадим приложение Github Search во Flutter и AngularDart, чтобы продемонстрировать, как мы можем совместно использовать слои данных и бизнес-логики между двумя проектами.
 
 ![demo](../assets/gifs/flutter_github_search.gif)
 
 ![demo](../assets/gifs/angular_github_search.gif)
 
-## Common Github Search Library
+## Библиотека Common Github Search
 
-> The Common Github Search library will contain models, the data provider, the repository, as well as the bloc that will be shared between AngularDart and Flutter.
+> Библиотека Common Github Search будет содержать модели, поставщика данных, хранилище, а также блок, который будет использоваться совместно AngularDart и Flutter.
 
-### Setup
+### Настройка
 
-We'll start off by creating a new directory for our application.
+Мы начнем с создания нового каталога для нашего приложения.
 
 ```bash
 mkdir github_search && cd github_search
 ```
 
-Next, we'll create the scaffold for the `common_github_search` library.
+Далее мы создадим каркас для библиотеки `common_github_search`.
 
 ```bash
 mkdir common_github_search
 ```
 
-We need to create a `pubspec.yaml` with the required dependencies.
+Нам нужно создать `pubspec.yaml` с необходимыми зависимостями.
 
 ```yaml
 name: common_github_search
@@ -43,21 +43,21 @@ dependencies:
   http: ^0.12.0
 ```
 
-Lastly, we need to install our dependencies.
+Наконец, нам нужно установить все зависимости.
 
 ```bash
 pub get
 ```
 
-That's it for the project setup! Now we can get to work on building out the `common_github_search` package.
+Вот и все по настройке проекта! Теперь мы можем приступить к созданию пакета `common_github_search`.
 
-### Github Client
+### Клиент
 
-> The `GithubClient` which will be providing raw data from the [Github API](https://developer.github.com/v3/).
+> `GithubClient` будет предоставлять необработанные данные из [Github API](https://developer.github.com/v3/).
 
-?> **Note:** You can see a sample of what the data we get back will look like [here](https://api.github.com/search/repositories?q=dartlang).
+?> **Примечание:** Вы можете увидеть пример того, как будут выглядеть данные, которые мы получаем обратно [здесь](https://api.github.com/search/repositories?q=dartlang).
 
-Let's create `github_client.dart`.
+Давайте создадим `github_client.dart`.
 
 ```dart
 import 'dart:async';
@@ -88,13 +88,13 @@ class GithubClient {
 }
 ```
 
-?> **Note:** Our `GithubClient` is simply making a network request to Github's Repository Search API and converting the result into either a `SearchResult` or `SearchResultError` as a `Future`.
+?> **Примечание:** `GithubClient` просто делает сетевой запрос к API поиска GitHub в репозитории и преобразовывает результат в `SearchResult` или `SearchResultError` как `Future`.
 
-Next we need to define our `SearchResult` and `SearchResultError` models.
+Далее нам нужно определить наши модели `SearchResult` и `SearchResultError`.
 
-#### Search Result Model
+#### Модель результатов поиска
 
-Create `search_result.dart`.
+Создайте файл `search_result.dart`.
 
 ```dart
 import 'package:common_github_search/common_github_search.dart';
@@ -114,13 +114,13 @@ class SearchResult {
 }
 ```
 
-?> **Note:** The `SearchResult` implementation depends on `SearchResultItem.fromJson` which we have not yet implemented.
+?> **Примечание:** Реализация `SearchResult` зависит от `SearchResultItem.fromJson`, который мы еще не реализовали.
 
-?> **Note:** We aren't including properties that aren't going to be used in our model.
+?> **Примечание:** мы не включаем свойства, которые не будут использоваться в нашей модели.
 
-#### Search Result Item Model
+#### Элемент результатов поиска
 
-Next, we'll create `search_result_item.dart`.
+Далее мы создадим `search_result_item.dart`.
 
 ```dart
 import 'package:common_github_search/common_github_search.dart';
@@ -142,11 +142,11 @@ class SearchResultItem {
 }
 ```
 
-?> **Note:** Again, the `SearchResultItem` implementation dependes on `GithubUser.fromJson` which we have not yet implemented.
+?> **Примечание:** опять же, реализация `SearchResultItem` зависит от `GithubUser.fromJson`, который мы еще не реализовали.
 
-#### Github User Model
+#### Модель пользователя
 
-Next, we'll create `github_user.dart`.
+Далее мы создадим `github_user.dart`.
 
 ```dart
 class GithubUser {
@@ -164,11 +164,11 @@ class GithubUser {
 }
 ```
 
-At this point we have finished implementing `SearchResult` and its dependencies so next we'll move onto `SearchResultError`.
+На этом этапе мы завершили реализацию `SearchResult` и его зависимостей, поэтому далее мы перейдем к `SearchResultError`.
 
-#### Search Result Error Model
+#### Модель ошибки результата поиска
 
-Create `search_result_error.dart`.
+Далее мы создадим `search_result_error.dart`.
 
 ```dart
 class SearchResultError {
@@ -184,13 +184,13 @@ class SearchResultError {
 }
 ```
 
-Our `GithubClient` is finished so next we'll move onto the `GithubCache` which will be responsible for [memoizing](https://en.wikipedia.org/wiki/Memoization) as a performance optimization.
+`GithubClient` завершен, поэтому далее мы перейдем к `GithubCache`, который будет отвечать за [запоминание](https://en.wikipedia.org/wiki/Memoization) для оптимизации производительности.
 
-### Github Cache
+### Кеш
 
-> Our `GithubCache` will be responsible for remembering all past queries so that we can avoid making unnecessary network requests to the Github API. This will also help improve our application's performance.
+> `GithubCache` будет отвечать за запоминание всех прошлых запросов, чтобы мы могли избежать ненужных сетевых запросов к Github API. Это также поможет улучшить производительность нашего приложения.
 
-Create `github_cache.dart`.
+Создадим `github_cache.dart`.
 
 ```dart
 import 'package:common_github_search/common_github_search.dart';
@@ -208,13 +208,13 @@ class GithubCache {
 }
 ```
 
-Now we're ready to create our `GithubRepository`!
+Теперь мы готовы создать наш `GithubRepository`!
 
-### Github Repository
+### Хранилище
 
-> The Github Repository is responsible for creating an abstraction between the data layer (`GithubClient`) and the Business Logic Layer (`Bloc`). This is also where we're going to put our `GithubCache` to use.
+> Репозиторий Github отвечает за создание абстракции между уровнем данных (`GithubClient`) и уровнем бизнес-логики (`Bloc`). Это также то место, где мы собираемся использовать наш `GithubCache`.
 
-Create `github_repository.dart`.
+Создайте `github_repository.dart`.
 
 ```dart
 import 'dart:async';
@@ -239,15 +239,15 @@ class GithubRepository {
 }
 ```
 
-?> **Note:** The `GithubRepository` has a dependency on the `GithubCache` and the `GithubClient` and abstracts the underlying implementation. Our application never has to know about how the data is being retrieved or where it's coming from since it shouldn't care. We can change how the repository works at any time and as long as we don't change the interface we shouldn't need to change any client code.
+?> **Примечание:** `GithubRepository` зависит от `GithubCache` и `GithubClient` и абстрагирует базовую реализацию. Наше приложение никогда не должно знать о том, как данные извлекаются или откуда они поступают поскольку это не должно волновать. Мы можем изменить работу репозитория в любое время и до тех пор, пока мы не изменим интерфейс, нам не нужно менять какой-либо клиентский код.
 
-At this point, we've completed the data provider layer and the repository layer so we're ready to move on to the business logic layer.
+На этом этапе мы завершили уровень поставщика данных и уровень хранилища, поэтому мы готовы перейти к уровню бизнес-логики.
 
-### Github Search Event
+### Событие
 
-> Our Bloc will be notified when a user has typed the name of a repository which we will represent as a `TextChanged` `GithubSearchEvent`.
+> Наш блок будет уведомлен когда пользователь введет имя репозитория, которое мы будем представлять как `TextChanged` `GithubSearchEvent`.
 
-Create `github_search_event.dart`.
+Создайте `github_search_event.dart`.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -269,23 +269,23 @@ class TextChanged extends GithubSearchEvent {
 }
 ```
 
-?> **Note:** We extend [`Equatable`](https://pub.dev/packages/equatable) so that we can compare instances of `GithubSearchEvent`; by default, the equality operator returns true if and only if this and other are the same instance.
+?> **Примечание:** Мы расширяем [`Equatable`](https://pub.dev/packages/equatable), чтобы мы могли сравнивать экземпляры `GithubSearchEvent`; по умолчанию оператор равенства возвращает true, если и только если этот и другие являются одинаковыми экземплярами.
 
-### Github Search State
+### Состояние
 
-Our presentation layer will need to have several pieces of information in order to properly lay itself out:
+Уровень представления должен иметь несколько частей информации для правильного представления:
 
-- `SearchStateEmpty`- will tell the presentation layer that no input has been given by the user
+- `SearchStateEmpty` - сообщит уровню представления, что пользователь не предоставил информации
+- `SearchStateLoading` - сообщит уровню представления, что он должен отображать индикатор загрузки
+- `SearchStateSuccess` - сообщит уровню представления, что у него есть данные для представления
 
-- `SearchStateLoading`- will tell the presentation layer it has to display some sort of loading indicator
-- `SearchStateSuccess`- will tell the presentation layer that it has data to present
+- `items`- будет `List<SearchResultItem>`, который будет отображаться
 
-  - `items`- will be the `List<SearchResultItem>` which will be displayed
+- `SearchStateError` - сообщит уровню представления, что при загрузке репозиториев произошла ошибка
 
-- `SearchStateError`- will tell the presentation layer that an error has occurred while fetching repositories
-  - `error`- will be the exact error that occurred
+- `error`- будет точной ошибкой, которая произошла
 
-We can now create `github_search_state.dart` and implement it like so.
+Теперь мы можем создать `github_search_state.dart` и реализовать его следующим образом.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -329,9 +329,13 @@ class SearchStateError extends GithubSearchState {
 
 Now that we have our Events and States implemented, we can create our `GithubSearchBloc`.
 
-### Github Search Bloc
+?> **Примечание:** Мы расширяем [`Equatable`](https://pub.dev/packages/equatable), чтобы мы могли сравнивать экземпляры `GithubSearchState`; по умолчанию оператор равенства возвращает true, если и только если этот и другие являются одинаковыми экземплярами.
 
-Create `github_search_bloc.dart`
+Теперь, когда у нас реализованы наши `Events` и `States`, мы можем создать наш `GithubSearchBloc`.
+
+### Блок
+
+Создадим `github_search_bloc.dart`
 
 ```dart
 import 'dart:async';
@@ -393,30 +397,31 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
 }
 ```
 
-?> **Note:** Our `GithubSearchBloc` converts `GithubSearchEvent` to `GithubSearchState` and has a dependency on the `GithubRepository`.
+?> **Примечание:** `GithubSearchBloc` преобразует `GithubSearchEvent` в `GithubSearchState` и зависит от `GithubRepository`.
 
-?> **Note:** We override the `transformEvents` method to [debounce](http://reactivex.io/documentation/operators/debounce.html) the `GithubSearchEvents`.
+?> **Примечание:** Мы переопределяем метод `transformEvents` для [debounce](http://reactivex.io/documentation/operators/debounce.html) `GithubSearchEvents`.
 
-?> **Note:** We override `onTransition` so that we can log any time a state change occurs.
+?> **Примечание:** Мы переопределяем `onTransition` для логирования каждый раз, когда происходит изменение состояния.
 
-Awesome! We're all done with our `common_github_search` package.
-The finished product should look like [this](https://github.com/felangel/Bloc/tree/master/examples/github_search/common_github_search).
+Потрясающие! Мы все сделали с пакетом `common_github_search`.
 
-Next, we'll work on the Flutter implementation.
+Готовый продукт должен выглядеть [следующим образом](https://github.com/felangel/Bloc/tree/master/examples/github_search/common_github_search).
 
-## Flutter Github Search
+Далее мы будем работать над реализацией Flutter.
 
-> Flutter Github Search will be a Flutter application which reuses the models, data providers, repositories, and blocs from `common_github_search` to implement Github Search.
+## Flutter Github поиск
 
-### Setup
+> Flutter Github Search будет приложением Flutter, которое повторно использует модели, поставщиков данных, репозитории и блоки из `common_github_search` для реализации Github Search.
 
-We need to start by creating a new Flutter project in our `github_search` directory at the same level as `common_github_search`.
+### Настройка
+
+Начнем с создания нового проекта Flutter в каталоге `github_search` на том же уровне, что и `common_github_search`.
 
 ```bash
 flutter create flutter_github_search
 ```
 
-Next, we need to update our `pubspec.yaml` to include all the necessary dependencies.
+Далее нам нужно обновить `pubspec.yaml`, чтобы включить все необходимые зависимости.
 
 ```yaml
 name: flutter_github_search
@@ -439,26 +444,26 @@ flutter:
   uses-material-design: true
 ```
 
-?> **Note:** We are including our newly created `common_github_search` library as a dependency.
+?> **Примечание:** Мы включаем вновь созданную библиотеку `common_github_search` в качестве зависимости.
 
-Now we need to install the dependencies.
+Теперь нам нужно установить зависимости.
 
 ```bash
 flutter packages get
 ```
 
-That's it for project setup and since the `common_github_search` package contains our data layer as well as our business logic layer all we need to build is the presentation layer.
+Это все для настройки проекта и, поскольку пакет `common_github_search` содержит уровень данных, а также уровень бизнес-логики все, что нам нужно построить - это уровень представления.
 
-### Search Form
+### Форма поиска
 
-We're going to need to create a form with a `SearchBar` and `SearchBody` widget.
+Нам нужно создать форму с виджетом `SearchBar` и `SearchBody`.
 
-- `SearchBar` will be responsible for taking user input.
-- `SearchBody` will be responsible for displaying search results, loading indicators, and errors.
+- `SearchBar` будет отвечать за ввод данных пользователем.
+- `SearchBody` будет отвечать за отображение результатов поиска, индикаторов загрузки и ошибок.
 
-Let's create `search_form.dart`.
+Давайте создадим `search_form.dart`.
 
-> Our `SearchForm` will be a `StatelessWidget` which renders the `SearchBar` and `SearchBody` widgets.
+> `SearchForm` будет `StatelessWidget`, который отображает виджеты `SearchBar` и `SearchBody`.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -477,11 +482,11 @@ class SearchForm extends StatelessWidget {
 }
 ```
 
-Next, we'll implement `_SearchBar`.
+Далее мы реализуем `_SearchBar`.
 
-### Search Bar
+### Панель поиска
 
-> `SearchBar` is also going to be a `StatefulWidget` because it will need to maintain its own `TextController` so that we can keep track of what a user has entered as input.
+> `SearchBar` также будет `StatefulWidget`, потому что ему нужно будет поддерживать свой собственный `TextController`, чтобы мы могли отслеживать, что пользователь ввел в качестве ввода.
 
 ```dart
 class _SearchBar extends StatefulWidget {
@@ -534,13 +539,13 @@ class _SearchBarState extends State<_SearchBar> {
 }
 ```
 
-?> **Note:** `_SearchBar` accesses `GitHubSearchBloc` via `BlocProvider.of<GithubSearchBloc>(context)` and notifies the bloc of `TextChanged` events.
+?> **Примечание:** `_SearchBar` обращается к `GitHubSearchBloc` через `BlocProvider.of<GithubSearchBloc>(context)` и уведомляет блок о событиях `TextChanged`.
 
-We're done with `_SearchBar`, now onto `_SearchBody`.
+Мы закончили с `_SearchBar`, теперь начнем `_SearchBody`.
 
-### Search Body
+### Тело поиска
 
-> `SearchBody` is a `StatelessWidget` which will be responsible for displaying search results, errors, and loading indicators. It will be the consumer of the `GithubSearchBloc`.
+> `SearchBody` - это StatelessWidget, который будет отвечать за отображение результатов поиска, ошибок и индикаторов загрузки. Это будет потребитель `GithubSearchBloc`.
 
 ```dart
 class _SearchBody extends StatelessWidget {
@@ -569,13 +574,13 @@ class _SearchBody extends StatelessWidget {
 }
 ```
 
-?> **Note:** `_SearchBody` also accesses `GithubSearchBloc` via `BlocProvider` and uses `BlocBuilder` in order to rebuild in response to state changes.
+?> **Примечание:** `_SearchBody` также обращается к `GithubSearchBloc` через `BlocProvider` и использует `BlocBuilder` для перерендеринга в ответ на изменения состояния.
 
-If our state is `SearchStateSuccess` we render `_SearchResults` which we will implement next.
+Если наше состояние равно `SearchStateSuccess`, мы отображаем `_SearchResults`, который мы будем реализовывать следующим.
 
-### Search Results
+### Результаты поиска
 
-> `SearchResults` is a `StatelessWidget` which takes a `List<SearchResultItem>` and displays them as a list of `SearchResultItems`.
+> `SearchResults` является `StatelessWidget`, который принимает `List<SearchResultItem>` и отображает их в виде списка `SearchResultItems`.
 
 ```dart
 class _SearchResults extends StatelessWidget {
@@ -595,13 +600,13 @@ class _SearchResults extends StatelessWidget {
 }
 ```
 
-?> **Note:** We use `ListView.builder` in order to construct a scrollable list of `SearchResultItem`.
+?> **Примечание:** Мы используем `ListView.builder`, чтобы создать прокручиваемый список `SearchResultItem`.
 
-It's time to implement `_SearchResultItem`.
+Пришло время реализовать `_SearchResultItem`.
 
-### Search Result Item
+### Элемент результата поиска
 
-> `SearchResultItem` is a `StatelessWidget` and is responsible for rendering the information for a single search result. It is also responsible for handling user interaction and navigating to the repository url on a user tap.
+> `SearchResultItem` является `StatelessWidget` и отвечает за отображение информации для одного результата поиска. Он также отвечает за обработку взаимодействия с пользователем и переход к URL-адресу хранилища по касанию пользователя.
 
 ```dart
 class _SearchResultItem extends StatelessWidget {
@@ -626,11 +631,11 @@ class _SearchResultItem extends StatelessWidget {
 }
 ```
 
-?> **Note:** We use the [url_launcher](https://pub.dev/packages/url_launcher) package to open external urls.
+?> **Примечание:** мы используем пакет [url_launcher](https://pub.dev/packages/url_launcher) для доступа к внешним URL.
 
-### Putting it all together
+### Собираем все вместе
 
-At this point our `search_form.dart` should look like
+На данный момент `search_form.dart` должен выглядеть так:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -760,7 +765,7 @@ class _SearchResultItem extends StatelessWidget {
 }
 ```
 
-Now all that's left to do is implement our main app in `main.dart`.
+Теперь осталось только реализовать основное приложение в `main.dart`.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -804,29 +809,29 @@ class App extends StatelessWidget {
 }
 ```
 
-?> **Note:** Our `GithubRepository` is created in `main` and injected into our `App`. Our `SearchForm` is wrapped in a `BlocProvider` which is responsible for initializing, closing, and making the instance of `GithubSearchBloc` available to the `SearchForm` widget and its children.
+?> **Примечание:** `GithubRepository` создается в `main` и внедряется в `App`. `SearchForm` обернута в `BlocProvider`, который отвечает за инициализацию, закрытие и обеспечение доступности экземпляра `GithubSearchBloc` для виджета `SearchForm` и его дочерних элементов.
 
-That’s all there is to it! We’ve now successfully implemented a github search app in Flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
+Вот и все, что нужно сделать! Теперь мы успешно внедрили поисковое приложение Github на Flutter, используя пакеты [bloc](https://pub.dev/packages/bloc) и [flutter_bloc](https://pub.dev/packages/flutter_bloc) и мы успешно отделили наш уровень представления от нашей бизнес-логики.
 
-The full source can be found [here](https://github.com/felangel/Bloc/tree/master/examples/github_search/flutter_github_search).
+Полный исходный код можно найти [здесь](https://github.com/felangel/Bloc/tree/master/examples/github_search/flutter_github_search).
 
-Finally, we're going to build our AngularDart Github Search app.
+Наконец, мы собираемся создать наше приложение AngularDart Github Search.
 
-## AngularDart Github Search
+## AngularDart Github поиск
 
-> AngularDart Github Search will be an AngularDart application which reuses the models, data providers, repositories, and blocs from `common_github_search` to implement Github Search.
+> AngularDart Github Search будет приложением AngularDart, которое повторно использует модели, поставщиков данных, репозитории и блоки из `common_github_search` для реализации Github Search.
 
-### Setup
+### Настройка
 
-We need to start by creating a new AngularDart project in our github_search directory at the same level as `common_github_search`.
+Нам нужно начать с создания нового проекта AngularDart в каталоге `github_search` на том же уровне, что и `common_github_search`.
 
 ```bash
 stagehand web-angular
 ```
 
-!> Activate stagehand by running `pub global activate stagehand`
+!> Активируйте `stagehand`, запустив `pub global activate stagehand`
 
-We can then go ahead and replace the contents of `pubspec.yaml` with:
+Затем мы можем заменить содержимое `pubspec.yaml` на:
 
 ```yaml
 name: angular_github_search
@@ -850,16 +855,16 @@ dev_dependencies:
   test: ^1.0.0
 ```
 
-### Search Form
+### Форма поиска
 
-Just like in our Flutter app, we're going to need to create a `SearchForm` with a `SearchBar` and `SearchBody` component.
+Как и в приложении Flutter, нам нужно создать `SearchForm` с компонентами `SearchBar` и `SearchBody`.
 
-> Our `SearchForm` component will implement `OnInit` and `OnDestroy` because it will need to create and close a `GithubSearchBloc`.
+> Компонент `SearchForm` будет реализовывать `OnInit` и `OnDestroy`, потому что ему нужно будет создать и закрыть `GithubSearchBloc`.
 
-- `SearchBar` will be responsible for taking user input.
-- `SearchBody` will be responsible for displaying search results, loading indicators, and errors.
+- `SearchBar` будет отвечать за ввод данных пользователем.
+- `SearchBody` будет отвечать за отображение результатов поиска, индикаторов загрузки и ошибок.
 
-Let's create `search_form_component.dart.`
+Давайте создадим `search_form_component.dart`.
 
 ```dart
 import 'package:angular/angular.dart';
@@ -898,11 +903,11 @@ class SearchFormComponent implements OnInit, OnDestroy {
 }
 ```
 
-?> **Note:** The `GithubRepository` is injected into the `SearchFormComponent`.
+?> **Примечание:** `GithubRepository` внедряется в `SearchFormComponent`.
 
-?> **Note:** The `GithubSearchBloc` is created and closed by the `SearchFormComponent`.
+?> **Примечание:** `GithubSearchBloc` создается и закрывается с помощью `SearchFormComponent`.
 
-Our template (`search_form_component.html`) will look like:
+Шаблон `search_form_component.html` будет выглядеть так:
 
 ```html
 <div>
@@ -912,13 +917,13 @@ Our template (`search_form_component.html`) will look like:
 </div>
 ```
 
-Next, we'll implement the `SearchBar` Component.
+Далее мы реализуем компонент `SearchBar`.
 
-### Search Bar
+### Панель поиска
 
-> `SearchBar` is a component which will be responsible for taking in user input and notifying the `GithubSearchBloc` of text changes.
+> SearchBar - это компонент, который будет отвечать за ввод данных пользователем и уведомлять `GithubSearchBloc` об изменениях текста.
 
-Create `search_bar_component.dart`.
+Создадим `search_bar_component.dart`.
 
 ```dart
 import 'package:angular/angular.dart';
@@ -939,9 +944,9 @@ class SearchBarComponent {
 }
 ```
 
-?> **Note:** `SearchBarComponent` has a dependency on `GitHubSearchBloc` because it is responsible for notifying the bloc of `TextChanged` events.
+?> **Примечание:** `SearchBarComponent` зависит от `GitHubSearchBloc`, поскольку он отвечает за уведомление блока о событиях `TextChanged`.
 
-Next, we can create `search_bar_component.html`.
+Далее мы можем создать `search_bar_component.html`.
 
 ```html
 <label for="term" class="clip">Enter a search term</label>
@@ -954,13 +959,13 @@ Next, we can create `search_bar_component.html`.
 />
 ```
 
-We're done with `SearchBar`, now onto `SearchBody`.
+Мы закончили с `SearchBar`, теперь займемся `SearchBody`.
 
-### Search Body
+### Тело поиска
 
-> `SearchBody` is a component which will be responsible for displaying search results, errors, and loading indicators. It will be the consumer of the `GithubSearchBloc`.
+> `SearchBody` - это компонент, который будет отвечать за отображение результатов поиска, ошибок и индикаторов загрузки. Это будет потребитель `GithubSearchBloc`.
 
-Create `search_body_component.dart`
+Создадим `search_body_component.dart`
 
 ```dart
 import 'package:angular/angular.dart';
@@ -995,9 +1000,9 @@ class SearchBodyComponent {
 }
 ```
 
-?> **Note:** `SearchBodyComponent` has a dependency on `GithubSearchState` which is provided by the `GithubSearchBloc` using the `angular_bloc` bloc pipe.
+?> **Примечание:** `SearchBodyComponent` зависит от `GithubSearchState`, который предоставляется `GithubSearchBloc` с использованием блока `angular_bloc`.
 
-Create `search_body_component.html`
+Создадим `search_body_component.html`
 
 ```html
 <div *ngIf="state != null" class="mw10">
@@ -1020,13 +1025,13 @@ Create `search_body_component.html`
 </div>
 ```
 
-If our state `isSuccess` we render `SearchResults` which we will implement next.
+Если наше состояние `isSuccess`, мы визуализируем `SearchResults`, который мы будем реализовывать следующим.
 
-### Search Results
+### Результаты поиска
 
-> `SearchResults` is a component which takes a `List<SearchResultItem>` and displays them as a list of `SearchResultItems`.
+> `SearchResults` - это компонент, который берет `List<SearchResultItem>` и отображает в виде списка `SearchResultItems`.
 
-Create `search_results_component.dart`
+Создадим `search_results_component.dart`
 
 ```dart
 import 'package:angular/angular.dart';
@@ -1045,7 +1050,7 @@ class SearchResultsComponent {
 }
 ```
 
-Next up we'll create `search_results_component.html`.
+Далее мы создадим `search_results_component.html`.
 
 ```html
 <ul class="list pa0 ma0">
@@ -1055,15 +1060,15 @@ Next up we'll create `search_results_component.html`.
 </ul>
 ```
 
-?> **Note:** We use `ngFor` in order to construct a list of `SearchResultItem` components.
+?> **Примечание:** мы используем `ngFor`, чтобы создать список компонентов `SearchResultItem`.
 
-It's time to implement `SearchResultItem`.
+Пришло время реализовать `SearchResultItem`.
 
-### Search Result Item
+### Элемент результата поиска
 
-> `SearchResultItem` is a component that is responsible for rendering the information for a single search result. It is also responsible for handling user interaction and navigating to the repository url on a user tap.
+> `SearchResultItem` - это компонент, который отвечает за отображение информации для одного результата поиска. Он также отвечает за обработку взаимодействия с пользователем и переход к URL-адресу хранилища по касанию пользователя.
 
-Create `search_result_item_component.dart`.
+Создадим `search_result_item_component.dart`.
 
 ```dart
 import 'package:angular/angular.dart';
@@ -1080,7 +1085,7 @@ class SearchResultItemComponent {
 }
 ```
 
-and the corresponding template in `search_result_item_component.html`.
+и соответствующий шаблон в `search_result_item_component.html`.
 
 ```html
 <div class="fl w-10 h-auto">
@@ -1096,9 +1101,9 @@ and the corresponding template in `search_result_item_component.html`.
 </div>
 ```
 
-### Putting it all together
+### Собираем все вместе
 
-We have all of our components and now it's time to put them all together in our `app_component.dart`.
+У нас есть все компоненты и теперь пришло время собрать их все вместе в `app_component.dart`.
 
 ```dart
 import 'package:angular/angular.dart';
@@ -1120,16 +1125,16 @@ class AppComponent {
 }
 ```
 
-?> **Note:** We're creating the `GithubRepository` in the `AppComponent` and injecting it into the `SearchForm` component.
+?> **Примечание:** мы создаем `GithubRepository` в `AppComponent` и внедряем его в компонент `SearchForm`.
 
-That’s all there is to it! We’ve now successfully implemented a github search app in AngularDart using the `bloc` and `angular_bloc` packages and we’ve successfully separated our presentation layer from our business logic.
+Вот и все, что нужно сделать! Теперь мы успешно внедрили поисковое приложение Github в AngularDart с использованием пакетов `bloc` и `angular_bloc` и успешно отделили уровень представления от бизнес-логики.
 
-The full source can be found [here](https://github.com/felangel/Bloc/tree/master/examples/github_search/angular_github_search).
+Полный исходный код можно найти [здесь](https://github.com/felangel/Bloc/tree/master/examples/github_search/angular_github_search).
 
-## Summary
+## Резюме
 
-In this tutorial we created a Flutter and AngularDart app while sharing all of the models, data providers, and blocs between the two.
+В этом руководстве мы создали приложение Flutter и AngularDart, в то же время обмениваясь всеми моделями, поставщиками данных и блоками.
 
-The only thing we actually had to write twice was the presentation layer (UI) which is awesome in terms of efficiency and development speed. In addition, it's fairly common for web apps and mobile apps to have different user experiences and styles and this approach really demonstrates how easy it is to build two apps that look totally different but share the same data and business logic layers.
+Единственной вещью, которую мы фактически должны были написать дважды, был уровень представления (UI), который является удивительным с точки зрения эффективности и скорости разработки. Кроме того, веб-приложения и мобильные приложения довольно часто имеют разные пользовательские интерфейсы и стили и этот подход действительно демонстрирует, насколько легко создавать два приложения, которые выглядят совершенно по-разному, но имеют одни и те же слои данных и бизнес-логики.
 
-The full source can be found [here](https://github.com/felangel/Bloc/tree/master/examples/github_search).
+Полный исходный код можно найти [здесь](https://github.com/felangel/Bloc/tree/master/examples/github_search).
