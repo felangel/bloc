@@ -1,22 +1,22 @@
-# Flutter Firestore Todos Tutorial
+# Flutter Firestore задачи
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-> In the following tutorial, we're going to build a reactive Todos App which hooks up to Firestore. We're going to be building on top of the [flutter todos](https://bloclibrary.dev/#/fluttertodostutorial) example so we won't go into the UI since it will all be the same.
+> В следующем руководстве мы создадим реактивное приложение Todos, которое подключается к Firestore. Мы построим все на основе примера [flutter todos](ru/fluttertodostutorial.md), но не будем вдаваться в подробности пользовательского интерфейса, поскольку они будут одинаковыми.
 
 ![demo](../assets/gifs/flutter_firestore_todos.gif)
 
-The only things we're going to be refactoring in our existing [todos example](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos) are the repository layer and parts of the bloc layer.
+Единственное, что мы мы сделаем - это рефакторинг существующего [примера todos](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos) на уровне хранилища и частичто слоя блока.
 
-We'll start off in the repository layer with the `TodosRepository`.
+Мы начнем со слоя репозитория с `TodosRepository`.
 
-## Todos Repository
+## Todos хранилище
 
-Create a new package at the root level of our app called `todos_repository`.
+Создайте новый пакет на корневом уровне нашего приложения под названием `todos_repository`.
 
-?> **Note:** The reason for making the repository a standalone package is to illustrate that the repository should be decoupled from the application and can be reused across multiple apps.
+?> **Примечание:** Причина, по которой хранилище является автономным пакетом состоит в том, чтобы проиллюстрировать, что хранилище должно быть отделено от приложения и может быть повторно использовано в нескольких приложениях.
 
-Inside our `todos_repository` create the following folder/file structure.
+Внутри `todos_repository` создайте следующую структуру папок/файлов.
 
 ```sh
 ├── lib
@@ -33,9 +33,9 @@ Inside our `todos_repository` create the following folder/file structure.
 └── pubspec.yaml
 ```
 
-### Dependencies
+### Зависимости
 
-The `pubspec.yaml` should look like:
+`pubspec.yaml` должен выглядеть так:
 
 ```yaml
 name: todos_repository
@@ -54,11 +54,11 @@ dependencies:
   firebase_core: ^0.4.0+8
 ```
 
-?> **Note:** We can immediately see our `todos_repository` has a dependency on `firebase_core` and `cloud_firestore`.
+?> **Примечание:** Мы сразу видим, что наш `todos_repository` зависит от `firebase_core` и `cloud_firestore`.
 
-### Package Root
+### Корневой пакет
 
-The `todos_repository.dart` directly inside `lib` should look like:
+`Todos_repository.dart` непосредственно внутри `lib` должен выглядеть следующим образом:
 
 ```dart
 library todos_repository;
@@ -68,21 +68,20 @@ export 'src/models/models.dart';
 export 'src/todos_repository.dart';
 ```
 
-?> This is where all of our public classes are exported. If we want a class to be private to the package we should make sure to omit it.
+?> Здесь экспортируются все наши публичные классы. Если мы хотим, чтобы класс был закрытым для пакета, мы обязательно должны его опустить.
 
-### Entities
+### Сущности
 
-> Entities represent the data provided by our data provider.
+> Объекты представляют данные, предоставленные нашим поставщиком данных.
 
-The `entities.dart` file is a barrel file that exports the `todo_entity.dart`
-file.
+Файл `entity.dart` - это индексный файл, который экспортирует `todo_entity.dart`.
+файл.
 
 ```dart
 export 'todo_entity.dart';
 ```
 
-Our `TodoEntity` is the representation of our `Todo` inside Firestore.
-Create `todo_entity.dart` and let's implement it.
+`TodoEntity` является представлением нашего `Todo` внутри Firestore. Создайте `todo_entity.dart` и давайте его реализуем.
 
 ```dart
 // Copyright 2018 The Flutter Architecture Sample Authors. All rights reserved.
@@ -145,17 +144,17 @@ class TodoEntity extends Equatable {
 }
 ```
 
-The `toJson` and `fromJson` are standard methods for converting to/from json.
-The `fromSnapshot` and `toDocument` are specific to Firestore.
+`ToJson` и `fromJson` являются стандартными методами для преобразования в/из json.
+`FromSnapshot` и `toDocument` относятся к Firestore.
 
-?> **Note:** Firestore will automatically create the id for the document when we insert it. As such we don't want to duplicate data by storing the id in an id field.
+?> **Примечание:** Firestore автоматически создаст идентификатор для документа, когда мы его вставим. Поэтому мы не будем дублировать данные, сохраняя идентификатор в дополнительном поле.
 
-### Models
+### Модели
 
-> Models will contain plain dart classes which we will work with in our Flutter Application. Having the separation between models and entities allows us to switch our data provider at any time and only have to change the the `toEntity` and `fromEntity` conversion in our model layer.
+> Модели будут содержать простые классы dart, с которыми мы будем работать в нашем приложении Flutter. Разделение между моделями и сущностями позволяет нам в любое время переключать поставщика данных и нам нужно только изменить преобразования `toEntity` и `fromEntity` на уровне модели.
 
-Our `models.dart` is another barrel file.
-Inside the `todo.dart` let's put the following code.
+`models.dart` - это еще один индексный файл.
+Внутри `todo.dart` давайте поместим следующий код.
 
 ```dart
 import 'package:meta/meta.dart';
@@ -216,11 +215,11 @@ class Todo {
 
 ```
 
-### Todos Repository
+### Хранидище задач
 
-> `TodosRepository` is our abstract base class which we can extend whenever we want to integrate with a different `TodosProvider`.
+> `TodosRepository` - это наш абстрактный базовый класс, который мы можем расширять всякий раз, когда хотим интегрироваться с другим `TodosProvider`.
 
-Let's create `todos_repository.dart`
+Давайте создадим `todos_repository.dart`
 
 ```dart
 import 'dart:async';
@@ -238,13 +237,13 @@ abstract class TodosRepository {
 }
 ```
 
-?> **Note:** Because we have this interface it is easy to add another type of datastore. If, for example, we wanted to use something like [sembast](https://pub.dev/flutter/packages?q=sembast) all we would need to do is create a separate repository for handling the sembast specific code.
+?> **Примечание:** Поскольку у нас есть интерфейс, теперь легко добавить другой тип хранилища данных. Если, например, мы хотим использовать что-то вроде [sembast](https://pub.dev/flutter/packages?q=sembast), все, что нам нужно сделать - это создать отдельный репозиторий для обработки кода, специфичного для sembast.
 
-#### Firebase Todos Repository
+#### Firebase хранилище задач
 
-> `FirebaseTodosRepository` manages the integration with Firestore and implements our `TodosRepository` interface.
+> `FirebaseTodosRepository` управляет интеграцией с Firestore и реализует наш интерфейс `TodosRepository`.
 
-Let's open `firebase_todos_repository.dart` and implement it!
+Давайте откроем `firebase_todos_repository.dart` и реализуем его!
 
 ```dart
 import 'dart:async';
@@ -284,13 +283,13 @@ class FirebaseTodosRepository implements TodosRepository {
 }
 ```
 
-That's it for our `TodosRepository`, next we need to create a simple `UserRepository` to manage authenticating our users.
+Вот и все для нашего `TodosRepository`, теперь нам нужно создать простой `UserRepository` для управления аутентификацией наших пользователей.
 
-## User Repository
+## Хранилище пользователей
 
-Create a new package at the root level of our app called `user_repository`.
+Создайте новый пакет на корневом уровне нашего приложения под названием `user_repository`.
 
-Inside our `user_repository` create the following folder/file structure.
+Внутри `user_repository` создайте следующую структуру папок/файлов.
 
 ```sh
 ├── lib
@@ -300,9 +299,9 @@ Inside our `user_repository` create the following folder/file structure.
 └── pubspec.yaml
 ```
 
-### Dependencies
+### Зависимости
 
-The `pubspec.yaml` should look like:
+`Pubspec.yaml` должен выглядеть так:
 
 ```yaml
 name: user_repository
@@ -318,11 +317,11 @@ dependencies:
   firebase_auth: ^0.15.0+1
 ```
 
-?> **Note:** We can immediately see our `user_repository` has a dependency on `firebase_auth`.
+?> **Примечание:** Мы можем сразу увидеть, что наш `user_repository` зависит от `firebase_auth`.
 
-### Package Root
+### Корневой пакет
 
-The `user_repository.dart` directly inside `lib` should look like:
+`user_repository.dart` непосредственно внутри `lib` должен выглядеть следующим образом:
 
 ```dart
 library user_repository;
@@ -330,11 +329,11 @@ library user_repository;
 export 'src/user_repository.dart';
 ```
 
-### User Repository
+### Хранилище пользователей
 
-> `UserRepository` is our abstract base class which we can extend whenever we want to integrate with a different provider`.
+> `UserRepository` - это наш абстрактный базовый класс, который мы можем расширять всякий раз, когда хотим интегрироваться с другим провайдером.
 
-Let's create `user_repository.dart`
+Давайте создадим `user_repository.dart`
 
 ```dart
 abstract class UserRepository {
@@ -346,11 +345,11 @@ abstract class UserRepository {
 }
 ```
 
-#### Firebase User Repository
+#### Firebase хранилище пользователей
 
-> `FirebaseUserRepository` manages the integration with Firebase and implements our `UserRepository` interface.
+> `FirebaseUserRepository` управляет интеграцией с Firebase и реализует наш интерфейс `UserRepository`.
 
-Let's open `firebase_user_repository.dart` and implement it!
+Давайте откроем `firebase_user_repository.dart` и реализуем его!
 
 ```dart
 import 'package:firebase_auth/firebase_auth.dart';
@@ -377,13 +376,13 @@ class FirebaseUserRepository implements UserRepository {
 }
 ```
 
-That's it for our `UserRepository`, next we need to setup our Flutter app to use our new repositories.
+Вот и все для нашего `UserRepository`. Далее нам нужно настроить приложение Flutter для использования наших новых репозиториев.
 
-## Flutter App
+## Flutter приложение
 
-### Setup
+### Настройка
 
-Let's create a new Flutter app called `flutter_firestore_todos`. We can replace the contents of the `pubspec.yaml` with the following:
+Давайте создадим новое приложение Flutter под названием `flutter_firestore_todos`. Мы можем заменить содержимое `pubspec.yaml` следующим:
 
 ```yaml
 name: flutter_firestore_todos
@@ -408,15 +407,15 @@ flutter:
   uses-material-design: true
 ```
 
-?> **Note:** We're adding our `todos_repository` and `user_repository` as external dependencies.
+?> **Примечание:** Мы добавляем `todos_repository` и `user_repository` в качестве внешних зависимостей.
 
-### Authentication Bloc
+### Auth блок
 
-Since we want to be able to sign in our users, we'll need to create an `AuthenticationBloc`.
+Поскольку наши пользователи должны иметь возможность войти в систему, нам нужно создать `AuthenticationBloc`.
 
-?> If you haven't already checked out the [flutter firebase login tutorial](https://bloclibrary.dev/#/flutterfirebaselogintutorial), I highly recommend checking it out now because we're simply going to reuse the same `AuthenticationBloc`.
+?> Если вы еще не ознакомились с [Flutter Firebase Login](ru/flutterfirebaselogintutorial.md), я настоятельно рекомендую проверить его сейчас, потому что мы просто собираемся повторно использовать тот же `AuthenticationBloc`.
 
-#### Authentication Events
+#### Auth события
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -429,7 +428,7 @@ class AppStarted extends AuthenticationEvent {
 }
 ```
 
-#### Authentication States
+#### Auth состояния
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -458,7 +457,7 @@ class Authenticated extends AuthenticationState {
 class Unauthenticated extends AuthenticationState {}
 ```
 
-#### Authentication Bloc
+#### Auth блок
 
 ```dart
 import 'dart:async';
@@ -502,9 +501,9 @@ class AuthenticationBloc
 }
 ```
 
-Now that our `AuthenticationBloc` is finished, we need to modify the `TodosBloc` from the original [Todos Tutorial](https://bloclibrary.dev/#/fluttertodostutorial) to consume the new `TodosRepository`.
+Теперь, когда `AuthenticationBloc` закончен, нам нужно изменить `TodosBloc` из исходного [пособия по Todos](ru/fluttertodostutorial.md), чтобы использовать новый `TodosRepository`.
 
-### Todos Bloc
+### Todos блок
 
 ```dart
 import 'dart:async';
@@ -598,7 +597,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 }
 ```
 
-The main difference between our new `TodosBloc` and the original one is in the new one, everything is `Stream` based rather than `Future` based.
+Основное различие между новым `TodosBloc` и оригинальным заключается в том, что теперь все основано на `Stream`, а не на `Future`.
 
 ```dart
 Stream<TodosState> _mapLoadTodosToState() async* {
@@ -609,7 +608,7 @@ Stream<TodosState> _mapLoadTodosToState() async* {
 }
 ```
 
-?> When we load our todos, we are subscribing to the `TodosRepository` and every time a new todo comes in, we add a `TodosUpdated` event. We then handle all `TodosUpdates` via:
+?> Когда мы загружаем задачи, мы подписываемся на `TodosRepository` и каждый раз, когда появляется новая задача, мы добавляем событие `TodosUpdated`. Затем мы обрабатываем все `TodosUpdates` через:
 
 ```dart
 Stream<TodosState> _mapTodosUpdateToState(TodosUpdated event) async* {
@@ -617,9 +616,9 @@ Stream<TodosState> _mapTodosUpdateToState(TodosUpdated event) async* {
 }
 ```
 
-## Putting it all together
+## Собираем все вместе
 
-The last thing we need to modify is our `main.dart`.
+Последнее, что нам нужно изменить, это наш `main.dart`.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -708,8 +707,8 @@ class TodosApp extends StatelessWidget {
 }
 ```
 
-The main differences to note are the fact that we've wrapped our entire application in a `MultiBlocProvider` which initializes and provides the `AuthenticationBloc` and `TodosBloc`. We then, only render the todos app if the `AuthenticationState` is `Authenticated` using `BlocBuilder`. Everything else remains the same as in the previous `todos tutorial`.
+Основным отличием, которое следует отметить является тот факт, что мы завернули все наше приложение в `MultiBlocProvider`, который инициализирует и предоставляет `AuthenticationBloc` и `TodosBloc`. Затем мы только визуализируем приложение todos если для `AuthenticationState` установлено `Authenticated` с использованием `BlocBuilder`. Все остальное остается тем же, что и в предыдущем `учебнике todos`.
 
-That’s all there is to it! We’ve now successfully implemented a firestore todos app in flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic while also building an app that updates in real-time.
+Вот и все, что нужно сделать! Теперь мы успешно внедрили приложение todos для Firestore во Flutter, используя пакеты [bloc](https://pub.dev/packages/bloc) и [flutter_bloc](https://pub.dev/packages/flutter_bloc) и мы успешно отделили уровень представления от бизнес-логики, а также создали приложение, которое обновляется в режиме реального времени.
 
-The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_firestore_todos).
+Полный исходный код этого примера можно найти [здесь](https://github.com/felangel/Bloc/tree/master/examples/flutter_firestore_todos).
