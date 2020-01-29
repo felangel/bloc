@@ -71,7 +71,7 @@ then from either `ChildA`, or `ScreenA` we can retrieve `BlocA` with:
 
 ```dart
 // with extensions
-context.bloc<BlocA>(context);
+context.bloc<BlocA>();
 
 // without extensions
 BlocProvider.of<BlocA>(context)
@@ -250,7 +250,7 @@ then from `ChildA` we can retrieve the `Repository` instance with:
 
 ```dart
 // with extensions
-context.repository<RepositoryA>(context);
+context.repository<RepositoryA>();
 
 // without extensions
 RepositoryProvider.of<RepositoryA>(context)
