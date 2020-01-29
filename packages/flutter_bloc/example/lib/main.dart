@@ -32,14 +32,14 @@ void main() {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ThemeBloc>(
-      create: (context) => ThemeBloc(),
+    return BlocProvider(
+      create: (_) => ThemeBloc(),
       child: BlocBuilder<ThemeBloc, ThemeData>(
-        builder: (context, theme) {
+        builder: (_, theme) {
           return MaterialApp(
             title: 'Flutter Demo',
             home: BlocProvider(
-              create: (context) => CounterBloc(),
+              create: (_) => CounterBloc(),
               child: CounterPage(),
             ),
             theme: theme,
@@ -56,7 +56,7 @@ class CounterPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
       body: BlocBuilder<CounterBloc, int>(
-        builder: (context, count) {
+        builder: (_, count) {
           return Center(
             child: Text(
               '$count',
