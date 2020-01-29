@@ -102,7 +102,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
   static T of<T extends Bloc<dynamic, dynamic>>(BuildContext context) {
     try {
       return Provider.of<T>(context, listen: false);
-    } on dynamic catch (_) {
+    } on ProviderNotFoundException catch (_) {
       throw FlutterError(
         """
         BlocProvider.of() called with a context that does not contain a Bloc of type $T.
@@ -125,4 +125,18 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
       lazy: lazy,
     );
   }
+}
+
+/// Extends the `BuildContext` class with the ability
+/// to perform a lookup based on a `Bloc` type.
+extension BlocProviderExtension on BuildContext {
+  /// Performs a lookup using the `BuildContext` to obtain
+  /// the nearest ancestor `Bloc` of type [B].
+  ///
+  /// Calling this method is equivalent to calling:
+  ///
+  /// ```dart
+  /// BlocProvider.of<B>(context)
+  /// ```
+  B bloc<B extends Bloc>() => BlocProvider.of<B>(this);
 }

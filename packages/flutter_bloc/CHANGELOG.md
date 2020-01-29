@@ -1,3 +1,9 @@
+# 3.2.0
+
+- Fix type inference for: `MultiBlocProvider`, `MultiRepositoryProvider`, `MultiBlocListener` ([#773](https://github.com/felangel/bloc/pull/773))
+- Fix swallowed exceptions within `BlocProvider` and `RepositoryProvider` ([#807](https://github.com/felangel/bloc/issues/807))
+- Add `BlocProviderExtension` and `RepositoryProviderExtension` on `BuildContext` ([#608](https://github.com/felangel/bloc/issues/608))
+
 # 3.1.0
 
 - Expose lazy parameter on `RepositoryProvider` and `BlocProvider` ([#749](https://github.com/felangel/bloc/pull/749))
