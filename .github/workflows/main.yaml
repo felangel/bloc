@@ -90,7 +90,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        target_folder: ['packages/flutter_bloc/example']
+        target_folder: ['examples/flutter_bloc_with_stream', 'examples/flutter_complex_list', 'examples/flutter_dynamic_form', 'packages/flutter_bloc/example']
         include:
           - os: ubuntu-latest
             flutter_path: /opt/hostedtoolcache/flutter
