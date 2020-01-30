@@ -81,6 +81,10 @@ BlocProvider.value(
 then from either `ChildA`, or `ScreenA` we can retrieve `BlocA` with:
 
 ```dart
+// with extensions
+context.bloc<BlocA>();
+
+// without extensions
 BlocProvider.of<BlocA>(context)
 ```
 
@@ -246,6 +250,10 @@ RepositoryProvider(
 then from `ChildA` we can retrieve the `Repository` instance with:
 
 ```dart
+// with extensions
+context.repository<RepositoryA>();
+
+// without extensions
 RepositoryProvider.of<RepositoryA>(context)
 ```
 
@@ -318,7 +326,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
+    final CounterBloc counterBloc = context.bloc<CounterBloc>();
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),

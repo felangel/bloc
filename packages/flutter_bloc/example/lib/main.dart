@@ -32,14 +32,14 @@ void main() {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ThemeBloc>(
-      create: (context) => ThemeBloc(),
+    return BlocProvider(
+      create: (_) => ThemeBloc(),
       child: BlocBuilder<ThemeBloc, ThemeData>(
-        builder: (context, theme) {
+        builder: (_, theme) {
           return MaterialApp(
             title: 'Flutter Demo',
             home: BlocProvider(
-              create: (context) => CounterBloc(),
+              create: (_) => CounterBloc(),
               child: CounterPage(),
             ),
             theme: theme,
@@ -56,7 +56,7 @@ class CounterPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
       body: BlocBuilder<CounterBloc, int>(
-        builder: (context, count) {
+        builder: (_, count) {
           return Center(
             child: Text(
               '$count',
@@ -73,24 +73,23 @@ class CounterPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: Icon(Icons.add),
-              onPressed: () => BlocProvider.of<CounterBloc>(context)
-                  .add(CounterEvent.increment),
+              onPressed: () =>
+                  context.bloc<CounterBloc>().add(CounterEvent.increment),
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: Icon(Icons.remove),
-              onPressed: () => BlocProvider.of<CounterBloc>(context)
-                  .add(CounterEvent.decrement),
+              onPressed: () =>
+                  context.bloc<CounterBloc>().add(CounterEvent.decrement),
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: Icon(Icons.update),
-              onPressed: () =>
-                  BlocProvider.of<ThemeBloc>(context).add(ThemeEvent.toggle),
+              onPressed: () => context.bloc<ThemeBloc>().add(ThemeEvent.toggle),
             ),
           ),
         ],

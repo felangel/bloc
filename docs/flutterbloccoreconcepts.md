@@ -70,6 +70,10 @@ BlocProvider.value(
 then from either `ChildA`, or `ScreenA` we can retrieve `BlocA` with:
 
 ```dart
+// with extensions
+context.bloc<BlocA>();
+
+// without extensions
 BlocProvider.of<BlocA>(context)
 ```
 
@@ -245,6 +249,10 @@ RepositoryProvider(
 then from `ChildA` we can retrieve the `Repository` instance with:
 
 ```dart
+// with extensions
+context.repository<RepositoryA>();
+
+// without extensions
 RepositoryProvider.of<RepositoryA>(context)
 ```
 
