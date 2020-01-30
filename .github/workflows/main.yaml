@@ -69,7 +69,7 @@ jobs:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
 
-      - name: Analyze, build and test
+      - name: Analyze and test
         env:
           FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
         run: |
@@ -81,3 +81,43 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ${{ matrix.package }}.lcov
+
+  # Build an APK for each example.
+  build-apk:
+    runs-on: ${{ matrix.os }}
+    needs: setup
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        target_folder: ['packages/flutter_bloc/example']
+        include:
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
+          - os: macos-latest
+            flutter_path: /Users/runner/hostedtoolcache/flutter
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ matrix.flutter_path }}
+          key: ${{ runner.OS }}-flutter-cache-${{ env.flutter_version }}
+          restore-keys: |
+            ${{ runner.OS }}-flutter-cache-
+
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: ${{ env.flutter_channel }}
+          flutter-version: ${{ env.flutter_version }}
+
+      - name: Build an APK
+        env:
+          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
+        run: |
+          export PATH=$PATH:$FLUTTER_DART_HOME
+          ./scripts/ci_build_apk.sh ${{ matrix.target_folder }}
+
