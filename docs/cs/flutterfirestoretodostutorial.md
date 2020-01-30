@@ -52,7 +52,7 @@ dependencies:
     sdk: flutter
   cloud_firestore: ^0.12.7
   rxdart: ^0.22.0
-  equatable: ^0.6.0
+  equatable: ^1.0.0
   firebase_core: ^0.4.0+7
 ```
 
@@ -404,7 +404,7 @@ dependencies:
     path: todos_repository
   user_repository:
     path: user_repository
-  equatable: ^0.3.0
+  equatable: ^1.0.0
 
 flutter:
   uses-material-design: true
