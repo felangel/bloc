@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
 
 import '../bloc.dart';
 
@@ -10,23 +9,26 @@ import '../bloc.dart';
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
 abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
-  final PublishSubject<Event> _eventSubject = PublishSubject<Event>();
+  final _states = StreamController<State>();
+  final _events = StreamController<Event>.broadcast();
 
-  BehaviorSubject<State> _stateSubject;
+  State _currentState;
 
   /// Returns the current [state] of the [bloc].
-  State get state => _stateSubject.value;
+  State get state => _currentState;
 
   /// Returns the [state] before any `events` have been [add]ed.
   State get initialState;
 
   /// Returns whether the `Stream<State>` is a broadcast stream.
   @override
-  bool get isBroadcast => _stateSubject.isBroadcast;
+  bool get isBroadcast => _states.stream.isBroadcast
+      || _events.stream.isBroadcast;
 
   /// {@macro bloc}
   Bloc() {
-    _stateSubject = BehaviorSubject<State>.seeded(initialState);
+    _currentState = initialState;
+    _states.sink.add(initialState);
     _bindStateSubject();
   }
 
@@ -41,7 +43,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     void Function() onDone,
     bool cancelOnError,
   }) {
-    return _stateSubject.listen(
+    return _states.stream.listen(
       onData,
       onError: onError,
       onDone: onDone,
@@ -77,7 +79,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     try {
       BlocSupervisor.delegate.onEvent(this, event);
       onEvent(event);
-      _eventSubject.sink.add(event);
+      _events.sink.add(event);
     } on dynamic catch (error) {
       _handleError(error);
     }
@@ -93,8 +95,8 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   @override
   @mustCallSuper
   Future<void> close() async {
-    await _eventSubject.close();
-    await _stateSubject.close();
+    await _events.close();
+    await _states.close();
   }
 
   /// Transforms the [events] stream along with a [next] function into
@@ -160,12 +162,12 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   void _bindStateSubject() {
     Event currentEvent;
 
-    transformStates(transformEvents(_eventSubject, (event) {
+    transformStates(transformEvents(_events.stream, (event) {
       currentEvent = event;
       return mapEventToState(currentEvent).handleError(_handleError);
     })).forEach(
       (nextState) {
-        if (state == nextState || _stateSubject.isClosed) return;
+        if (state == nextState || _states.isClosed) return;
         final transition = Transition(
           currentState: state,
           event: currentEvent,
@@ -174,7 +176,8 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
         try {
           BlocSupervisor.delegate.onTransition(this, transition);
           onTransition(transition);
-          _stateSubject.add(nextState);
+          _states.add(nextState);
+          _currentState = nextState;
         } on dynamic catch (error) {
           _handleError(error);
         }
