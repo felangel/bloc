@@ -82,7 +82,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ${{ matrix.package }}.lcov
 
-  # Build an APK for each example.
+  # Build an APK for each flutter example.
   build-apk:
     runs-on: ${{ matrix.os }}
     needs: setup
