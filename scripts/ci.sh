@@ -11,6 +11,7 @@ if grep -q 'sdk: flutter' "./pubspec.yaml"; then
     flutter packages get
     flutter format --set-exit-if-changed lib test
     flutter analyze --no-current-package lib test/
+    flutter build apk
     flutter test --no-pub --coverage
     cp ./coverage/lcov.info ../../$package.lcov
 elif grep -q 'angular:' "./pubspec.yaml"; then
