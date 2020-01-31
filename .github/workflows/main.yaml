@@ -13,13 +13,11 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest] # macos-latest
+        os: [ubuntu-latest]
         package: ['angular_bloc', 'bloc', 'bloc_test', 'flutter_bloc']
         include:
           - os: ubuntu-latest
             flutter_path: /opt/hostedtoolcache/flutter
-#          - os: macos-latest
-#            flutter_path: /Users/runner/hostedtoolcache/flutter
       fail-fast: false
 
     steps:
