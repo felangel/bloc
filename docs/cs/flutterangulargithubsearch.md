@@ -432,7 +432,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^3.1.0
+  flutter_bloc: ^3.2.0
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search
