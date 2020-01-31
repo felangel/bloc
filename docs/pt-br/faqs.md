@@ -144,7 +144,7 @@ BLoC é um padrão de design definido pelas seguintes regras:
 
 1. A entrada e saída do BLoC são fluxos e sumidouros simples.
 2. As dependências devem ser injetáveis ​​e a Plataforma agnóstica.
-3. Nenhuma ramificação de plataforma é permitida
+3. Nenhuma ramificação de plataforma é permitida.
 4. A implementação pode ser o que você quiser, desde que siga as regras acima.
 
 As diretrizes da interface do usuário são:
