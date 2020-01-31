@@ -10,7 +10,6 @@ jobs:
   # Analyze and test each package.
   analyze-and-test:
     runs-on: ${{ matrix.os }}
-    needs: setup
 
     strategy:
       matrix:
