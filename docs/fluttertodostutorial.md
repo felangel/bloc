@@ -1674,7 +1674,7 @@ Lastly, we need to build our `Stats` widget.
 
 ### Stats
 
-> The `Stats` widget is responsible for showing the user how many todos are active (in progress) vs completed.
+> The `Stats` widget is responsible for showing the user how many todos are active (in progress) vs. completed.
 
 Let's create `widgets/stats.dart` and take a look at the implementation.
 
