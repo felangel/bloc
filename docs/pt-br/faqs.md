@@ -152,7 +152,7 @@ As diretrizes da interface do usuário são:
 1. Cada componente "suficientemente complexo" possui um BLoC correspondente.
 2. Os componentes devem enviar entradas "como estão".
 3. Os componentes devem mostrar as saídas o mais próximo possível de "como estão".
-4. Todas as ramificações devem ser baseadas em saídas booleanas simples de BLoC
+4. Todas as ramificações devem ser baseadas em saídas booleanas simples de BLoC.
 
 A Biblioteca Bloc implementa o BLoC Design Pattern e visa abstrair o RxDart para simplificar a experiência do desenvolvedor.
 
