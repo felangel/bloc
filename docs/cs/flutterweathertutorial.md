@@ -32,7 +32,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^3.1.0
   http: ^0.12.0
-  equatable: ^0.6.0
+  equatable: ^1.0.0
 
 dev_dependencies:
   flutter_test:
