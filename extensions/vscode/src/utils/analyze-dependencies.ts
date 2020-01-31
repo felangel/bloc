@@ -38,6 +38,7 @@ export function analyzeDependencies() {
     if (_.has(dependencies, dependency.name)) {
       const dependencyVersion = _.get(dependencies, dependency.name, "latest");
       if (dependencyVersion === "latest") continue;
+      if (dependencyVersion === "any") continue;
       if (dependencyVersion == null) continue;
       if (typeof dependencyVersion !== "string") continue;
       const minVersion = _.get(

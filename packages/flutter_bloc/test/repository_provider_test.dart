@@ -246,6 +246,21 @@ void main() {
     });
 
     testWidgets(
+        'should not throw FlutterError if internal '
+        'exception is thrown', (tester) async {
+      final expectedException = Exception('oops');
+      await tester.pumpWidget(
+        RepositoryProvider<Repository>(
+          lazy: false,
+          create: (_) => throw expectedException,
+          child: Container(),
+        ),
+      );
+      final dynamic exception = tester.takeException();
+      expect(exception, expectedException);
+    });
+
+    testWidgets(
         'should not rebuild widgets that inherited the value if the value is '
         'changed', (tester) async {
       var numBuilds = 0;
@@ -260,6 +275,35 @@ void main() {
       await tester.tap(find.byKey(Key('iconButtonKey')));
       await tester.pump();
       expect(numBuilds, 1);
+    });
+
+    testWidgets(
+        'should access repository instance'
+        'via RepositoryProviderExtension', (tester) async {
+      await tester.pumpWidget(
+        RepositoryProvider(
+          create: (_) => Repository(0),
+          child: MaterialApp(
+            home: Scaffold(
+              appBar: AppBar(title: Text('Value')),
+              body: Center(
+                child: Builder(
+                  builder: (context) => Text(
+                    '${context.repository<Repository>().data}',
+                    key: Key('value_data'),
+                    style: TextStyle(fontSize: 24.0),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      final _counterFinder = find.byKey((Key('value_data')));
+      expect(_counterFinder, findsOneWidget);
+
+      final _counterText = _counterFinder.evaluate().first.widget as Text;
+      expect(_counterText.data, '0');
     });
   });
 }

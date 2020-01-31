@@ -23,12 +23,12 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: '>=2.6.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^3.1.0
+  flutter_bloc: ^3.2.0
   http: ^0.12.0
   equatable: ^1.0.0
 
@@ -773,7 +773,7 @@ class App extends StatelessWidget {
 
 Now we need to create our `Weather` Widget. Go ahead and make a folder called `widgets` inside of `lib` and create a barrel file inside called `widgets.dart`. Next create a file called `weather.dart`.
 
-> Our Weather Widget will be a `StatelessWidget` responsible for rendering the various weather weather data.
+> Our Weather Widget will be a `StatelessWidget` responsible for rendering the various weather data.
 
 #### Creating Our Stateless Widget
 
@@ -1044,9 +1044,9 @@ class WeatherConditions extends StatelessWidget {
 }
 ```
 
-Here you can see we are using some assets. Please download them from [here](https://github.com/felangel/bloc/tree/master/examples/flutter_weather/assets) and add them to the `assets/` directory we created at the beginning of the project.
-
 Make sure to export this in the `widgets.dart` file.
+
+Here you can see we are using some assets. Please download them from [here](https://github.com/felangel/bloc/tree/master/examples/flutter_weather/assets) and add them to the `assets/` directory we created at the beginning of the project.
 
 ?> **Tip:** Check out [icons8](https://icons8.com/icon/set/weather/office) for the assets used in this tutorial.
 

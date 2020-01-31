@@ -71,6 +71,7 @@ so other contributors can easily see what's already done.
 - [ ] Architecture
 - [ ] Testing
 - [ ] Naming Conventions
+- [ ] FAQs
 - Tutorials
   - Flutter
     - [ ] Counter

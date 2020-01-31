@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_test_logo_full.png" height="60" alt="Bloc Test Package" />
 
 [![Pub](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)
-[![Build Status](https://travis-ci.com/felangel/bloc.svg?branch=master)](https://travis-ci.com/felangel/bloc)
+[![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://github.com/tenhobi/effective_dart)
 [![Flutter.io](https://img.shields.io/badge/flutter-website-deepskyblue.svg)](https://flutter.io/docs/development/data-and-backend/state-mgmt/options#bloc--rx)
@@ -50,6 +50,8 @@ expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3])))
 
 `expect` is an `Iterable<State>` which the `bloc` under test is expected to emit after `act` is executed.
 
+`verify` is an optional callback which is invoked after `expect` and can be used for additional non-bloc related assertions.
+
 ```dart
 group('CounterBloc', () {
   blocTest(
@@ -65,6 +67,20 @@ group('CounterBloc', () {
     expect: [0, 1],
   );
 });
+```
+
+`blocTest` can also be used to `verify` internal bloc functionality.
+
+```dart
+blocTest(
+  'CounterBloc emits [0, 1] when CounterEvent.increment is added',
+  build: () => CounterBloc(),
+  act: (bloc) => bloc.add(CounterEvent.increment),
+  expect: [0, 1],
+  verify: () async {
+    verify(repository.someMethod(any)).called(1);
+  }
+);
 ```
 
 `blocTest` can also be used to wait for async operations like `debounceTime` by providing a `Duration` to `wait`.

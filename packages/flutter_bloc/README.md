@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/flutter_bloc_logo_full.png" height="60" alt="Flutter Bloc Package" />
 
 [![Pub](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc)
-[![Build Status](https://travis-ci.com/felangel/bloc.svg?branch=master)](https://travis-ci.com/felangel/bloc)
+[![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://github.com/tenhobi/effective_dart)
 [![Flutter.io](https://img.shields.io/badge/flutter-website-deepskyblue.svg)](https://flutter.io/docs/development/data-and-backend/state-mgmt/options#bloc--rx)
@@ -81,6 +81,10 @@ BlocProvider.value(
 then from either `ChildA`, or `ScreenA` we can retrieve `BlocA` with:
 
 ```dart
+// with extensions
+context.bloc<BlocA>();
+
+// without extensions
 BlocProvider.of<BlocA>(context)
 ```
 
@@ -246,6 +250,10 @@ RepositoryProvider(
 then from `ChildA` we can retrieve the `Repository` instance with:
 
 ```dart
+// with extensions
+context.repository<RepositoryA>();
+
+// without extensions
 RepositoryProvider.of<RepositoryA>(context)
 ```
 
@@ -318,7 +326,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
+    final CounterBloc counterBloc = context.bloc<CounterBloc>();
 
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),

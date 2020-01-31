@@ -1,3 +1,8 @@
+# 3.2.0
+
+Update bloc generator to use `parts` (removes barrel file)
+Update dependency analyzer to handle `any` version
+
 # 3.1.0
 
 Update to support flutter_bloc `v3.1.0`
