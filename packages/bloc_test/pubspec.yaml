@@ -3,7 +3,7 @@ description: A testing library which makes it easy to test blocs. Built to be us
 version: 3.1.0
 repository: https://github.com/felangel/bloc
 issue_tracker: https://github.com/felangel/bloc/issues
-homepage: https://bloclibrary.dev
+homepage: https://github.com/felangel/bloc/tree/master/packages/bloc_test
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
