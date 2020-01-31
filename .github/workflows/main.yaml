@@ -91,7 +91,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        target_folder: {{ env.flutter_build_folders }}
+        target_folder: ${{ env.flutter_build_folders }}
         include:
           - os: ubuntu-latest
             flutter_path: /opt/hostedtoolcache/flutter
