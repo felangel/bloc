@@ -10,7 +10,7 @@ import '../bloc.dart';
 /// {@endtemplate}
 abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   final _states = StreamController<State>();
-  final _events = StreamController<Event>.broadcast();
+  final _events = StreamController<Event>();
 
   State _currentState;
 
@@ -22,8 +22,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
 
   /// Returns whether the `Stream<State>` is a broadcast stream.
   @override
-  bool get isBroadcast => _states.stream.isBroadcast
-      || _events.stream.isBroadcast;
+  bool get isBroadcast => true;
 
   /// {@macro bloc}
   Bloc() {
