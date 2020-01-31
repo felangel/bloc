@@ -30,7 +30,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^0.21.0
   http: ^0.12.0
-  equatable: ^0.2.0
+  equatable: ^1.0.0
 
 dev_dependencies:
   flutter_test:

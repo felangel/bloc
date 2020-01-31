@@ -24,7 +24,7 @@ Pro [Flutter](https://flutter.io) aplikaci také potřebujeme přidat jako závi
 ```yaml
 dependencies:
   bloc: ^3.0.0
-  flutter_bloc: ^3.1.0
+  flutter_bloc: ^3.2.0
 ```
 
 Pro [AngularDart](https://webdev.dartlang.org/angular) aplikaci také potřebujeme přidat jako závislost do našeho `pubspec.yaml` balíček angular_bloc.
