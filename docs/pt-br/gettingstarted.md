@@ -24,7 +24,7 @@ Para uma aplicação [Flutter](https://flutter.io), também é necessário adici
 ```yaml
 dependencies:
   bloc: ^3.0.0
-  flutter_bloc: ^3.1.0
+  flutter_bloc: ^3.2.0
 ```
 
 Para uma aplicação [AngularDart](https://webdev.dartlang.org/angular), também é necessário adicionar o package angular_bloc como uma dependência no `pubspec.yaml`.
