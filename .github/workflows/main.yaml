@@ -2,13 +2,11 @@ name: build
 
 on:
   push:
-    paths-ignore:
-    - 'docs/**'
-    - 'extensions/**'
+    paths:
+    - 'packages/**'
   pull_request:
-    paths-ignore:
-    - 'docs/**'
-    - 'extensions/**'
+    paths:
+    - 'packages/**'
 
 env:
   flutter_channel: 'stable'

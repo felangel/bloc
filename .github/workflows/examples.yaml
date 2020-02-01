@@ -2,13 +2,13 @@ name: examples
 
 on:
   push:
-    paths-ignore:
-    - 'docs/**'
-    - 'extensions/**'
+    paths:
+    - 'examples/**'
+    - 'packages/**'
   pull_request:
-    paths-ignore:
-    - 'docs/**'
-    - 'extensions/**'
+    paths:
+    - 'examples/**'
+    - 'packages/**'
 
 env:
   flutter_channel: 'stable'
