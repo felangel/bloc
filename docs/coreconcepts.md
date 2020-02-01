@@ -56,7 +56,7 @@ Because every state change is recorded, we are able to very easily instrument ou
 
 ## Streams
 
-?> Check out the official [Dart Documentation](https://www.dartlang.org/tutorials/language/streams) for more information about `Streams`.
+?> Check out the official [Dart Documentation](https://dart.dev/tutorials/language/streams) for more information about `Streams`.
 
 > A stream is a sequence of asynchronous data.
 

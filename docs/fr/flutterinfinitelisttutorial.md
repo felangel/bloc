@@ -568,7 +568,7 @@ Un avantage supplémentaire de l'utilisation de la bibliothèque de blocs est qu
 
 Même si dans cette application nous n'avons qu'un seul bloc, il est assez courant dans les applications plus grandes d'avoir plusieurs blocs gérant différentes parties de l'état de l'application.
 
-Si nous voulons pouvoir faire quelque chose en réponse à toutes les `Transitions`, nous pouvons simplement créer notre propre ` BlocsDelegate`.
+Si nous voulons pouvoir faire quelque chose en réponse à toutes les `Transitions`, nous pouvons simplement créer notre propre `BlocDelegate`.
 ```dart
 import 'package:bloc/bloc.dart';
 

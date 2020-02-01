@@ -1,6 +1,6 @@
 # Commencer
 
-?> Pour commencer à utiliser bloc, vous devez avoir installé [Dart SDK](https://www.dartlang.org/install) sur votre machine.
+?> Pour commencer à utiliser bloc, vous devez avoir installé [Dart SDK](https://dart.dev/get-dart) sur votre machine.
 
 ## Vue d'ensemble
 
@@ -18,7 +18,7 @@ dependencies:
   bloc: ^0.15.0
 ```
 
-Pour une application [Flutter](https://flutter.io), nous devons aussi ajouter le paquet flutter_bloc à notre `pubspec.yaml` comme dépendance.
+Pour une application [Flutter](https://flutter.dev/), nous devons aussi ajouter le paquet flutter_bloc à notre `pubspec.yaml` comme dépendance.
 
 ```yaml
 dependencies:
@@ -26,7 +26,7 @@ dependencies:
   flutter_bloc: ^0.21.0
 ```
 
-Pour une application [AngularDart](https://webdev.dartlang.org/angular), nous devons aussi ajouter le paquet angular_bloc à notre `pubspec.yaml' comme dépendance.
+Pour une application [AngularDart](https://angulardart.dev/), nous devons aussi ajouter le paquet angular_bloc à notre `pubspec.yaml' comme dépendance.
 
 ```yaml
 dependencies:

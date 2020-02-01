@@ -62,7 +62,7 @@ Jelikož je každá změna stavu zaznamenávána, jsme schopni jednoduše zpraco
 
 ## Streamy
 
-?> Pro více informací o `Streamech` se podívejte na oficiální [Dart dokumentaci](https://www.dartlang.org/tutorials/language/streams).
+?> Pro více informací o `Streamech` se podívejte na oficiální [Dart dokumentaci](https://dart.dev/tutorials/language/streams).
 
 > Stream je sekvence asynchroních dat.
 

@@ -56,7 +56,7 @@ Parce que chaque changement d'état est enregistré, nous sommes en mesure d'ins
 
 ## Streams
 
-Consultez la documentation officielle[Dart Documentation](https://www.dartlang.org/tutorials/language/streams) pour plus d'informations sur `Streams`.
+Consultez la documentation officielle[Dart Documentation](https://dart.dev/tutorials/language/streams) pour plus d'informations sur `Streams`.
 
 > Un "stream" est une séquence de données asynchrones.
 

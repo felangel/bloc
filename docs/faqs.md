@@ -165,7 +165,7 @@ The three principles of Redux are:
 The bloc library violates the first principle; with bloc state is distributed across multiple blocs.
 Furthermore, there is no concept of middleware in bloc and bloc is designed to make async state changes very easy, allowing you to emit multiple states for a single event.
 
-## Bloc vs.  Provider
+## Bloc vs. Provider
 
 ❔ **Question**: What's the difference between Bloc and Provider?
 
