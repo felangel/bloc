@@ -20,7 +20,7 @@ Nous devons être capables de notifier les "cerveaux" de notre application à la
 enum CounterEvent { increment, decrement }
 ```
 
-Dans ce cas, nous pouvons représenter les événements à l'aide d'un `enum' mais pour des cas plus complexes il peut être nécessaire d'utiliser une `class' surtout s'il est nécessaire de transmettre des informations au bloc.
+Dans ce cas, nous pouvons représenter les événements à l'aide d'un `enum` mais pour des cas plus complexes il peut être nécessaire d'utiliser une `class` surtout s'il est nécessaire de transmettre des informations au bloc.
 
 A ce stade, nous avons défini notre premier événement ! Notez que nous n'avons pas utilisé Bloc de quelque façon que ce soit jusqu'à présent et qu'il n'y a pas de magie ; c'est tout simplement du code Dart.
 
@@ -40,7 +40,7 @@ Nous verrons plus loin des exemples plus complexes d'état, mais dans ce cas, un
 
 > Le passage d'un état à un autre s'appelle une Transition. Une transition se compose de l'état actuel, de l'événement et de l'état suivant.
 
-Lorsqu'un utilisateur interagit avec notre application compteur, il déclenche les événements `Increment` et `Decrement` qui mettent à jour l'état du compteur. Tous ces changements d'état peuvent être décrits comme une série de  `Transitions`.
+Lorsqu'un utilisateur interagit avec notre application compteur, il déclenche les événements `Increment` et `Decrement` qui mettent à jour l'état du compteur. Tous ces changements d'état peuvent être décrits comme une série de `Transitions`.
 
 Par exemple, si un utilisateur ouvrait notre application et tapait sur le bouton d'incrémentation une fois que nous verrions la `Transition` suivante.
 
@@ -52,7 +52,7 @@ Par exemple, si un utilisateur ouvrait notre application et tapait sur le bouton
 }
 ```
 
-Parce que chaque changement d'état est enregistré, nous sommes en mesure d'instrumenter très facilement nos applications et de suivre toutes les interactions utilisateur et les changements d'état dans un seul endroit. De plus, cela rend possible des choses comme le débogage de  type "time-travel".
+Parce que chaque changement d'état est enregistré, nous sommes en mesure d'instrumenter très facilement nos applications et de suivre toutes les interactions utilisateur et les changements d'état dans un seul endroit. De plus, cela rend possible des choses comme le débogage de type "time-travel".
 
 ## Streams
 

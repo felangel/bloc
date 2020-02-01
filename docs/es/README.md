@@ -25,7 +25,7 @@ Una librería de administración de estado predecible que ayuda a implementar el
 
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
 
-El objetivo de esta librería es facilitar la separación de la *presentación* de la *lógica empresarial*, facilitando el testeo (testing) y la reutilización.
+El objetivo de esta librería es facilitar la separación de la _presentación_ de la _lógica empresarial_, facilitando el testeo (testing) y la reutilización.
 
 ## Documentación
 
@@ -86,18 +86,18 @@ El objetivo de esta librería es facilitar la separación de la *presentación* 
 ### Flutter
 
 - [Counter](https://bloclibrary.dev/#/fluttercountertutorial) - Un ejemplo de cómo crear un `CounterBloc` para implementar la aplicación clásica Flutter Counter.
-- [Form Validation](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) - Un ejemplo de cómo usar los paquetes `bloc` y` flutter_bloc` para implementar la validación de formularios.
-- [Bloc with Stream](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - un ejemplo de cómo conectar un `bloc` a un` Stream` y actualizar la interfaz del usuario en respuesta a los datos del `Stream`.
-- [Infinite List](https://bloclibrary.dev/#/flutterinfinitelisttutorial) - Un ejemplo de cómo usar los paquetes `bloc` y` flutter_bloc` para implementar una lista de desplazamiento infinita.
-- [Login Flow](https://bloclibrary.dev/#/flutterlogintutorial) - Un ejemplo de cómo utilizar los paquetes `bloc` y` flutter_bloc` para implementar un flujo de inicio de sesión.
-- [Firebase Login](https://bloclibrary.dev/#/flutterfirebaselogintutorial) - Un ejemplo de cómo usar los paquetes `bloc` y` flutter_bloc` para implementar el inicio de sesión a través de Firebase.
-- [Github Search](https://bloclibrary.dev/#/flutterangulargithubsearch) - Un ejemplo de cómo crear una aplicación de búsqueda de Github usando los paquetes `bloc` y` flutter_bloc`.
-- [Weather](https://bloclibrary.dev/#/flutterweathertutorial) - Un ejemplo de cómo crear una aplicación meteorológica utilizando los paquetes `bloc` y` flutter_bloc`. La aplicación utiliza un `RefreshIndicator` para implementar" hala-para-refrescar(pull-to-refresh)", así como temas dinámicos.
-- [Todos](https://bloclibrary.dev/#/fluttertodostutorial) - Un ejemplo de cómo crear una aplicación de quehaceres (TODO) utilizando los paquetes `bloc` y` flutter_bloc`.
-- [Timer](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - Un ejemplo de cómo crear un temporizador utilizando los paquetes `bloc` y` flutter_bloc`.
-- [Firestore Todos](https://bloclibrary.dev/#/flutterfirestoretodostutorial) - Un ejemplo de cómo crear una aplicación de quehaceres (TODO) utilizando los paquetes `bloc` y` flutter_bloc` que se integran con Cloud Firestore.
-- [Shopping Cart](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - Un ejemplo de cómo crear una aplicación de carrito de compras utilizando los paquetes `bloc` y` flutter_bloc` basados en [muestras de flutter](https://github.com/flutter/samples/tree/master/provider_shopper).
-- [Dynamic Form](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - Un ejemplo de cómo usar los paquetes `bloc` y` flutter_bloc` para implementar un formulario dinámica que extrae datos de un repositorio.
+- [Form Validation](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) - Un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para implementar la validación de formularios.
+- [Bloc with Stream](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - un ejemplo de cómo conectar un `bloc` a un `Stream` y actualizar la interfaz del usuario en respuesta a los datos del `Stream`.
+- [Infinite List](https://bloclibrary.dev/#/flutterinfinitelisttutorial) - Un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para implementar una lista de desplazamiento infinita.
+- [Login Flow](https://bloclibrary.dev/#/flutterlogintutorial) - Un ejemplo de cómo utilizar los paquetes `bloc` y `flutter_bloc` para implementar un flujo de inicio de sesión.
+- [Firebase Login](https://bloclibrary.dev/#/flutterfirebaselogintutorial) - Un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para implementar el inicio de sesión a través de Firebase.
+- [Github Search](https://bloclibrary.dev/#/flutterangulargithubsearch) - Un ejemplo de cómo crear una aplicación de búsqueda de Github usando los paquetes `bloc` y `flutter_bloc`.
+- [Weather](https://bloclibrary.dev/#/flutterweathertutorial) - Un ejemplo de cómo crear una aplicación meteorológica utilizando los paquetes `bloc` y `flutter_bloc`. La aplicación utiliza un `RefreshIndicator` para implementar" hala-para-refrescar(pull-to-refresh)", así como temas dinámicos.
+- [Todos](https://bloclibrary.dev/#/fluttertodostutorial) - Un ejemplo de cómo crear una aplicación de quehaceres (TODO) utilizando los paquetes `bloc` y `flutter_bloc`.
+- [Timer](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - Un ejemplo de cómo crear un temporizador utilizando los paquetes `bloc` y `flutter_bloc`.
+- [Firestore Todos](https://bloclibrary.dev/#/flutterfirestoretodostutorial) - Un ejemplo de cómo crear una aplicación de quehaceres (TODO) utilizando los paquetes `bloc` y `flutter_bloc` que se integran con Cloud Firestore.
+- [Shopping Cart](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - Un ejemplo de cómo crear una aplicación de carrito de compras utilizando los paquetes `bloc` y `flutter_bloc` basados en [muestras de flutter](https://github.com/flutter/samples/tree/master/provider_shopper).
+- [Dynamic Form](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - Un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para implementar un formulario dinámica que extrae datos de un repositorio.
 
 ### Web
 

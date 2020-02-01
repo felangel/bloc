@@ -136,6 +136,7 @@ Notre `TimerBloc` aura besoin de savoir comment traiter les événements suivant
 - Tick — informe le TimerBloc qu'une coche s'est produite et qu'il doit mettre à jour son état en conséquence.
 
 Si vous n'avez pas utilisé les extensions [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) ou [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc), alors créez `bloc/timer_event.dart` et implémentons ces événements.
+
 ```dart
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -180,6 +181,7 @@ Ensuite, implémentons le `TimerBloc` !
 ### TimerBloc
 
 Si ce n'est pas déjà fait, créez `bloc/timer_bloc.dart` et créez un `TimerBloc` vide.
+
 ```dart
 import 'package:bloc/bloc.dart';
 import 'package:flutter_timer/bloc/bloc.dart';
@@ -198,6 +200,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 ```
 
 La première chose que nous devons faire est de définir l'"EtatInitial" de notre `TimerBloc`. Dans ce cas, nous voulons que le TimerBloc démarre à l'état " Prêt " avec une durée prédéfinie de 1 minute (60 secondes).
+
 ```dart
 import 'package:bloc/bloc.dart';
 import 'package:flutter_timer/bloc/bloc.dart';
@@ -250,8 +253,8 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 
 Nous sommes également en train de définir un `StreamSubscription` pour notre `Ticker` que nous allons voir dans un instant.
 
-
 A ce stade, il ne reste plus qu'à implémenter `mapEventToState`. Pour une meilleure lisibilité, j'aime diviser chaque gestionnaire d'événement en sa propre fonction d'aide. Nous allons commencer par l'événement " Start ".
+
 ```dart
 import 'dart:async';
 import 'package:meta/meta.dart';
@@ -355,7 +358,6 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 Chaque fois qu'un événement `Tick` est reçu, si la durée de la tick est supérieure à 0, nous devons pousser un état `Running` mis à jour avec la nouvelle durée. Sinon, si la durée du tick est 0, notre temporisateur est terminé et nous devons pousser un état "Terminé".
 
 Maintenant, implémentons le gestionnaire d'événements `Pause`.
-
 
 ```dart
 import 'dart:async';
@@ -494,7 +496,6 @@ Le gestionnaire d'événements `Resume` est très similaire au gestionnaire d'é
 
 Enfin, nous devons implémenter le gestionnaire d'événements `Reset`.
 
-
 ```dart
 import 'dart:async';
 import 'package:meta/meta.dart';
@@ -582,6 +583,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 Si le `TimerBloc` reçoit un événement `Reset`, il doit annuler l'abonnement `_tickerSubscription` en cours afin de ne pas être notifié du tick supplémentaire et pousser un état `Ready` avec la durée originale.
 
 Si vous n'avez pas utilisé les extensions [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) ou [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc), assurez-vous de créer `bloc/bloc.dart` afin d'exporter tous les fichiers bloc et de permettre d'utiliser une seule importation par commodité.
+
 ```dart
 export 'timer_bloc.dart';
 export 'timer_event.dart';
@@ -626,7 +628,6 @@ class MyApp extends StatelessWidget {
 MyApp est un `StatelessWidget` qui gère l'initialisation et la fermeture d'une instance de `TimerBloc`. De plus, il utilise le widget `BlocProvider` afin de rendre notre instance `TimerBloc` disponible pour les widgets de notre sous-arbre.
 
 Ensuite, nous devons implémenter notre widget `Timer`.
-
 
 ### Timer
 

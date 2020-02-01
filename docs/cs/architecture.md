@@ -60,7 +60,7 @@ Jak můžete vidět, naše repozitářová vrstva může interagovat s vícero p
 
 ## Aplikační vrstva
 
-*Poznámka:* název aplikační vrstva je odvozen od anglického spojení *Bloc (Business Logic) Layer*.
+_Poznámka:_ název aplikační vrstva je odvozen od anglického spojení _Bloc (Business Logic) Layer_.
 
 > Odpovědnost aplikační vrstvy je reagovat na události z prezenční vrstvy novými stavy. Aplikační vrstva může záviset na jednom nebo více repozitářích pro získání dat potřebných pro sestavení stavu aplikace.
 

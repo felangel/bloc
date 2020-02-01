@@ -31,7 +31,7 @@ BlocBuilder<BlocA, BlocAState>(
 )
 ```
 
-Si desea un control detallado sobre cuándo se llama a la función del generador, puede proporcionar una `condición` opcional a `BlocBuilder`. La `condición` toma el estado de bloque anterior y el estado de bloque actual y devuelve un valor booleano. Si `condición` devuelve verdadero, se llamará a `constructor` con `state` y se reconstruirá el widget. Si `condición` devuelve falso, no se llamará a` constructor` con `state` y no se producirá ninguna reconstrucción.
+Si desea un control detallado sobre cuándo se llama a la función del generador, puede proporcionar una `condición` opcional a `BlocBuilder`. La `condición` toma el estado de bloque anterior y el estado de bloque actual y devuelve un valor booleano. Si `condición` devuelve verdadero, se llamará a `constructor` con `state` y se reconstruirá el widget. Si `condición` devuelve falso, no se llamará a `constructor` con `state` y no se producirá ninguna reconstrucción.
 
 Si desea un control detallado sobre cuándo se llama a la función builder, puede proporcionar una `condición` opcional a `BlocBuilder`. La `condición` toma el estado de bloc anterior y el estado de bloc actual y devuelve un valor booleano. Si la `condición` devuelve verdadero, se llamará a `builder` con `state` y se reconstruirá el widget. Si la `condición` devuelve falso, no se llamará a `builder` con `state` y no se producirá ninguna reconstrucción.
 
@@ -117,7 +117,7 @@ MultiBlocProvider(
 
 **BlocListener** es un widget de Flutter que toma un `BlocWidgetListener` y un `Bloc` opcional e invoca al `listener` en respuesta a los cambios de estado en el bloc. Debe usarse para la funcionalidad que debe ocurrir una vez por cada cambio de estado, como la navegación, mostrar una `SnackBar`, mostrar un `Dialog`, etc.
 
-`listener` solo se llama una vez por cada cambio de estado ( **SIN** incluir `initialState`) a diferencia de `builder` en` BlocBuilder` y es una función `void`.
+`listener` solo se llama una vez por cada cambio de estado ( **SIN** incluir `initialState`) a diferencia de `builder` en `BlocBuilder` y es una función `void`.
 
 Si se omite el parámetro bloc, `BlocListener` realizará automáticamente una búsqueda usando `BlocProvider` y el actual `BuildContext`.
 
@@ -130,7 +130,7 @@ BlocListener<BlocA, BlocAState>(
 )
 ```
 
-Solo especifique el bloc si desea proporcionar un bloc que de otro modo no sería accesible a través de `BlocProvider` y el` BuildContext` actual.
+Solo especifique el bloc si desea proporcionar un bloc que de otro modo no sería accesible a través de `BlocProvider` y el `BuildContext` actual.
 
 ```dart
 BlocListener<BlocA, BlocAState>(
@@ -196,10 +196,10 @@ MultiBlocListener(
 
 ### BlocConsumer
 
-**BlocConsumer** expone un `constructor` y un `listener` para reaccionar a nuevos estados. `BlocConsumer` es análogo a un `BlocListener` anidado y `BlocBuilder` pero reduce la cantidad de repetitivo necesaria. `BlocConsumer` solo debe usarse cuando sea necesario reconstruir la IU y ejecutar otras reacciones a los cambios de estado en el `bloque`. `BlocConsumer` toma un` BlocWidgetBuilder` y `BlocWidgetListener` requeridos y un `bloc`, `BlocBuilderCondition` y `BlocListenerCondition` opcionales.
+**BlocConsumer** expone un `constructor` y un `listener` para reaccionar a nuevos estados. `BlocConsumer` es análogo a un `BlocListener` anidado y `BlocBuilder` pero reduce la cantidad de repetitivo necesaria. `BlocConsumer` solo debe usarse cuando sea necesario reconstruir la IU y ejecutar otras reacciones a los cambios de estado en el `bloque`. `BlocConsumer` toma un `BlocWidgetBuilder` y `BlocWidgetListener` requeridos y un `bloc`, `BlocBuilderCondition` y `BlocListenerCondition` opcionales.
 
 Si se omite el parámetro `bloc`, `BlocConsumer` realizará automáticamente una búsqueda utilizando
-`BlocProvider` y el actual` BuildContext`.
+`BlocProvider` y el actual `BuildContext`.
 
 ```dart
 BlocConsumer<BlocA, BlocAState>(
@@ -212,19 +212,19 @@ BlocConsumer<BlocA, BlocAState>(
 )
 ```
 
-Se puede implementar un `listenWhen` y `buildWhen` opcionales para un control más granular sobre cuándo se llama a `listener` y `builder`. Se invocarán `listenWhen` y `buildWhen` en cada cambio de estado `bloc`. Cada uno toma el `state` anterior y el `state` actual y debe devolver un `bool` que determina si se invocará o no la función `builder` y / o `listener`. El `state` anterior se inicializará al `state` del `bloc` cuando se inicialice el` BlocConsumer`. `listenWhen` y `buildWhen` son opcionales y, si no se implementan, pasarán por defecto a `true`.
+Se puede implementar un `listenWhen` y `buildWhen` opcionales para un control más granular sobre cuándo se llama a `listener` y `builder`. Se invocarán `listenWhen` y `buildWhen` en cada cambio de estado `bloc`. Cada uno toma el `state` anterior y el `state` actual y debe devolver un `bool` que determina si se invocará o no la función `builder` y / o `listener`. El `state` anterior se inicializará al `state` del `bloc` cuando se inicialice el `BlocConsumer`. `listenWhen` y `buildWhen` son opcionales y, si no se implementan, pasarán por defecto a `true`.
 
 ```dart
 BlocConsumer<BlocA, BlocAState>(
   listenWhen: (previous, current) {
-    // retorne verdadero / falso para determinar 
+    // retorne verdadero / falso para determinar
     // si invocar o no al oyente con estado
   },
   listener: (context, state) {
     // hacer las cosas aquí según el estado de BlocA
   },
   buildWhen: (previous, current) {
-    // retorna verdadero / falso para determinar 
+    // retorna verdadero / falso para determinar
     // si reconstruir o no el widget con estado
   },
   builder: (context, state) {
@@ -253,7 +253,7 @@ RepositoryProvider.of<RepositoryA>(context)
 ### MultiRepositoryProvider
 
 **MultiRepositoryProvider** es un widget de Flutter que combina múltiples widgets `RepositoryProvider` en uno.
-`MultiRepositoryProvider` mejora la legibilidad y elimina la necesidad de anidar múltiples` RepositoryProvider`.
+`MultiRepositoryProvider` mejora la legibilidad y elimina la necesidad de anidar múltiples `RepositoryProvider`.
 Al usar `MultiRepositoryProvider` podemos pasar de:
 
 ```dart

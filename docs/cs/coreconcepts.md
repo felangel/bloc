@@ -8,7 +8,7 @@ V následujících sekcích všechny podrobně probereme a také si ukážeme, j
 
 ## Události
 
-*Poznámka:* v angličtině se používá slovo `event`.
+_Poznámka:_ v angličtině se používá slovo `event`.
 
 > Události jsou vstupem do Blocu. Jsou běžně přidávány jako reakce na akci uživatele, jako je stisknutí tlačítka, nebo události životního cyklu, jako je načítání stránky.
 
@@ -28,7 +28,7 @@ V tomto bodě již máme definované naše první události! Všimněte si, že 
 
 ## Stavy
 
-*Poznámka:* v angličtině se používá slovo `state`.
+_Poznámka:_ v angličtině se používá slovo `state`.
 
 > Stavy jsou výstupem Blocu a reprezentují část stavu naší aplikace. UI komponenty mohou být o stavech upozorněny a překreslit své části na základně aktuálního stavu.
 
@@ -42,7 +42,7 @@ Později si ukážeme složitější ukázky stavu, ale v tomto případně je p
 
 ## Přechody
 
-*Poznámka:* v angličtině se používá slovo `transition`.
+_Poznámka:_ v angličtině se používá slovo `transition`.
 
 > Změna z jednoho stavu na jiný se nazývá přechod. Přechod se skládá z aktuálního stavu, události a dalšího stavu.
 
