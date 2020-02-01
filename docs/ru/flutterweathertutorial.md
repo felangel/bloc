@@ -930,7 +930,7 @@ class LastUpdated extends StatelessWidget {
 
 Обязательно экспортируйте его в файл `widgets.dart`.
 
-?> **Примечание:** Мы используем [`TimeOfDay`](https://docs.flutter.io/flutter/material/TimeOfDay-class.html) для форматирования `DateTime` в более понятный для человека формат.
+?> **Примечание:** Мы используем [`TimeOfDay`](https://api.flutter.dev/flutter/material/TimeOfDay-class.html) для форматирования `DateTime` в более понятный для человека формат.
 
 ### Комбинированная температура
 
@@ -1318,7 +1318,7 @@ return RefreshIndicator(
 );
 ```
 
-Чтобы использовать `RefreshIndicator`, нам нужно было создать [`Completer`](https://api.dartlang.org/stable/2.1.0/dart-async/Completer-class.html), который позволяет нам создавать `Future` и мы сделаем это позже.
+Чтобы использовать `RefreshIndicator`, нам нужно было создать [`Completer`](https://api.dart.dev/stable/dart-async/Completer-class.html), который позволяет нам создавать `Future` и мы сделаем это позже.
 
 Это оно! Теперь мы решили проблему N1 и пользователи могут обновить погоду, потянув вниз. Не стесняйтесь снова запустить `flutter run` и попробовать обновить погоду.
 

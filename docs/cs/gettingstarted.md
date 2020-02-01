@@ -1,6 +1,6 @@
 # Začínáme
 
-?> Abyste mohli začít používat bloc, musíte mít na svém počítači nainstalovaný [Dart SDK](https://www.dartlang.org/install).
+?> Abyste mohli začít používat bloc, musíte mít na svém počítači nainstalovaný [Dart SDK](https://dart.dev/get-dart).
 
 ## Přehled
 
@@ -19,7 +19,7 @@ dependencies:
   bloc: ^3.0.0
 ```
 
-Pro [Flutter](https://flutter.io) aplikaci také potřebujeme přidat jako závislost do našeho `pubspec.yaml` balíček flutter_bloc.
+Pro [Flutter](https://flutter.dev/) aplikaci také potřebujeme přidat jako závislost do našeho `pubspec.yaml` balíček flutter_bloc.
 
 ```yaml
 dependencies:
@@ -27,7 +27,7 @@ dependencies:
   flutter_bloc: ^3.2.0
 ```
 
-Pro [AngularDart](https://webdev.dartlang.org/angular) aplikaci také potřebujeme přidat jako závislost do našeho `pubspec.yaml` balíček angular_bloc.
+Pro [AngularDart](https://angulardart.dev/) aplikaci také potřebujeme přidat jako závislost do našeho `pubspec.yaml` balíček angular_bloc.
 
 ```yaml
 dependencies:

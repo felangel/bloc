@@ -1,6 +1,6 @@
 # Начинаем
 
-?> Для того, чтобы начать использовать блок, нам нужно иметь [Dart SDK](https://www.dartlang.org/install) установленный на наш компьютер.
+?> Для того, чтобы начать использовать блок, нам нужно иметь [Dart SDK](https://dart.dev/get-dart) установленный на наш компьютер.
 
 ## Обзор
 
@@ -19,7 +19,7 @@ dependencies:
   bloc: ^3.0.0
 ```
 
-Для [Flutter](https://flutter.io) приложения, нам также нужно добавить пакет `flutter_bloc` в наш `pubspec.yaml` в качестве зависимости.
+Для [Flutter](https://flutter.dev/) приложения, нам также нужно добавить пакет `flutter_bloc` в наш `pubspec.yaml` в качестве зависимости.
 
 ```yaml
 dependencies:
@@ -27,7 +27,7 @@ dependencies:
   flutter_bloc: ^3.2.0
 ```
 
-Для [AngularDart](https://webdev.dartlang.org/angular) приложения, нам также нужно добавить пакет `angular_bloc` в наш `pubspec.yaml` в качестве зависимости.
+Для [AngularDart](https://angulardart.dev/) приложения, нам также нужно добавить пакет `angular_bloc` в наш `pubspec.yaml` в качестве зависимости.
 
 ```yaml
 dependencies:
