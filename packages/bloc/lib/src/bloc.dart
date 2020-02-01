@@ -3,31 +3,30 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 
 import '../bloc.dart';
+import 'state_subject.dart';
 
 /// {@template bloc}
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
 abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
-  final _states = StreamController<State>();
   final _events = StreamController<Event>();
 
-  State _currentState;
+  StateSubject<State> _states;
 
   /// Returns the current [state] of the [bloc].
-  State get state => _currentState;
+  State get state => _states.value;
 
   /// Returns the [state] before any `events` have been [add]ed.
   State get initialState;
 
   /// Returns whether the `Stream<State>` is a broadcast stream.
   @override
-  bool get isBroadcast => true;
+  bool get isBroadcast => _states.isBroadcast;
 
   /// {@macro bloc}
   Bloc() {
-    _currentState = initialState;
-    _states.sink.add(initialState);
+    _states = StateSubject.seeded(initialState);
     _bindStateSubject();
   }
 
@@ -42,7 +41,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     void Function() onDone,
     bool cancelOnError,
   }) {
-    return _states.stream.listen(
+    return _states.listen(
       onData,
       onError: onError,
       onDone: onDone,
@@ -176,7 +175,6 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
           BlocSupervisor.delegate.onTransition(this, transition);
           onTransition(transition);
           _states.add(nextState);
-          _currentState = nextState;
         } on dynamic catch (error) {
           _handleError(error);
         }
