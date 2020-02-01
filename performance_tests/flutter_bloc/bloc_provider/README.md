@@ -30,4 +30,4 @@ flutter drive --target=test_driver/main.dart --driver=test_driver/driver/bloc_pr
 **Average across 10 runs*
 
 For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+[documentation](https://flutter.dev/).

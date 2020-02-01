@@ -56,7 +56,7 @@ enum CounterEvent { increment, decrement }
 
 ## Streams (Потоки)
 
-?> Обратитесь к официальной [Dart Documentation](https://www.dartlang.org/tutorials/language/streams) для получения дополнительной информации о `Streams`.
+?> Обратитесь к официальной [Dart Documentation](https://dart.dev/tutorials/language/streams) для получения дополнительной информации о `Streams`.
 
 > Поток - это последовательность асинхронных данных.
 

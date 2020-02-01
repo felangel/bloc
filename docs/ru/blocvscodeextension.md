@@ -7,7 +7,7 @@
 [![Version](https://vsmarketplacebadge.apphb.com/version-short/FelixAngelov.bloc.svg)](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
 [![Install](https://vsmarketplacebadge.apphb.com/installs-short/FelixAngelov.bloc.svg)](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
 [![Ratings](https://vsmarketplacebadge.apphb.com/rating-short/FelixAngelov.bloc.svg)](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
-[![Flutter.io](https://img.shields.io/badge/Flutter-Website-deepskyblue.svg)](https://flutter.io/docs/development/data-and-backend/state-mgmt/options#bloc--rx)
+[![Flutter Website](https://img.shields.io/badge/Flutter-Website-deepskyblue.svg)](https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true)](https://github.com/Solido/awesome-flutter#standard)
 [![Flutter Samples](https://img.shields.io/badge/Flutter-Samples-teal.svg?longCache=true)](http://fluttersamples.com)
 [![Discord](https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue)](https://discord.gg/Hc5KD3g)
@@ -17,7 +17,7 @@
 
 ## Введение
 
-Блок расширяет [VSCode](https://code.visualstudio.com/) с поддержкой [Bloc](https://bloclibrary.dev) библиотеки и обеспечивает инструментарий для эффективного создания блоков для [Flutter](https://flutter.io/) и [AngularDart](https://webdev.dartlang.org) приложений.
+Блок расширяет [VSCode](https://code.visualstudio.com/) с поддержкой [Bloc](https://bloclibrary.dev) библиотеки и обеспечивает инструментарий для эффективного создания блоков для [Flutter](https://flutter.dev/) и [AngularDart](https://angulardart.dev/) приложений.
 
 ## Инсталляция
 
