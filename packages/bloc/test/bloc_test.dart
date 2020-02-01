@@ -98,6 +98,14 @@ void main() {
       test('isBroadcast returns true', () {
         expect(simpleBloc.isBroadcast, isTrue);
       });
+
+      test('multiple subscribers receive the latest state', () async {
+        simpleBloc.add('event');
+        await expectLater(simpleBloc, emitsInOrder(['', 'data']));
+        await expectLater(simpleBloc, emits('data'));
+        await expectLater(simpleBloc, emits('data'));
+        await expectLater(simpleBloc, emits('data'));
+      });
     });
 
     group('Complex Bloc', () {
@@ -193,6 +201,17 @@ void main() {
 
       test('isBroadcast returns true', () {
         expect(complexBloc.isBroadcast, isTrue);
+      });
+
+      test('multiple subscribers receive the latest state', () async {
+        complexBloc.add(ComplexEventB());
+        await expectLater(
+          complexBloc,
+          emitsInOrder([ComplexStateA(), ComplexStateB()]),
+        );
+        await expectLater(complexBloc, emits(ComplexStateB()));
+        await expectLater(complexBloc, emits(ComplexStateB()));
+        await expectLater(complexBloc, emits(ComplexStateB()));
       });
     });
 
@@ -324,6 +343,14 @@ void main() {
       test('isBroadcast returns true', () {
         expect(counterBloc.isBroadcast, isTrue);
       });
+
+      test('multiple subscribers receive the latest state', () async {
+        counterBloc.add(CounterEvent.increment);
+        await expectLater(counterBloc, emitsInOrder([0, 1]));
+        await expectLater(counterBloc, emits(1));
+        await expectLater(counterBloc, emits(1));
+        await expectLater(counterBloc, emits(1));
+      });
     });
 
     group('Async Bloc', () {
@@ -443,6 +470,30 @@ void main() {
 
       test('isBroadcast returns true', () {
         expect(asyncBloc.isBroadcast, isTrue);
+      });
+
+      test('multiple subscribers receive the latest state', () async {
+        asyncBloc.add(AsyncEvent());
+        await expectLater(
+          asyncBloc,
+          emitsInOrder([
+            AsyncState(isLoading: false, hasError: false, isSuccess: false),
+            AsyncState(isLoading: true, hasError: false, isSuccess: false),
+            AsyncState(isLoading: false, hasError: false, isSuccess: true),
+          ]),
+        );
+        await expectLater(
+          asyncBloc,
+          emits(AsyncState(isLoading: false, hasError: false, isSuccess: true)),
+        );
+        await expectLater(
+          asyncBloc,
+          emits(AsyncState(isLoading: false, hasError: false, isSuccess: true)),
+        );
+        await expectLater(
+          asyncBloc,
+          emits(AsyncState(isLoading: false, hasError: false, isSuccess: true)),
+        );
       });
     });
 
