@@ -11,7 +11,7 @@ if grep -q 'sdk: flutter' "./pubspec.yaml"; then
     flutter packages get
     flutter format --set-exit-if-changed lib
     flutter analyze --no-current-package lib
-    if [[ -f "$package/test" ]] then
+    if [[ -f "$package/test" ]]; then
       flutter format --set-exit-if-changed test
       flutter analyze --no-current-package test
       flutter test --no-pub --coverage
