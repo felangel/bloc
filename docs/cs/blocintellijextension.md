@@ -4,7 +4,7 @@
 
 ## Úvod
 
-Bloc plugin pro [IntelliJ](https://www.jetbrains.com/idea/) a [Android Studio](https://developer.android.com/studio/) podporou knihovny [Bloc](https://bloclibrary.dev) a poskytuje nástroje pro efektivní vytváření Bloců pro jak [Flutter](https://flutter.io/), tak i [AngularDart](https://webdev.dartlang.org) aplikace.
+Bloc plugin pro [IntelliJ](https://www.jetbrains.com/idea/) a [Android Studio](https://developer.android.com/studio/) podporou knihovny [Bloc](https://bloclibrary.dev) a poskytuje nástroje pro efektivní vytváření Bloců pro jak [Flutter](https://flutter.dev/), tak i [AngularDart](https://angulardart.dev/) aplikace.
 
 ## Instalace
 

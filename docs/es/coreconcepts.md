@@ -56,7 +56,7 @@ Debido a que cada cambio de estado se registra, podemos instrumentar muy fácilm
 
 ## Streams
 
-?> Consulte la documentación oficial de [Dart](https://www.dartlang.org/tutorials/language/streams) para obtener más información sobre Streams. 
+?> Consulte la documentación oficial de [Dart](https://dart.dev/tutorials/language/streams) para obtener más información sobre Streams. 
 
 > Un stream es una secuencia de datos asincrónicos.
 
