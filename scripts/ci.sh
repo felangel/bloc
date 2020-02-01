@@ -9,9 +9,13 @@ package=${PWD##*/}
 
 if grep -q 'sdk: flutter' "./pubspec.yaml"; then
     flutter packages get
-    flutter format --set-exit-if-changed lib test
-    flutter analyze --no-current-package lib test/
-    flutter test --no-pub --coverage
+    flutter format --set-exit-if-changed lib
+    flutter analyze --no-current-package lib
+    if [[ -f "$package/test" ]]
+      flutter format --set-exit-if-changed test
+      flutter analyze --no-current-package test
+      flutter test --no-pub --coverage
+    fi
     cp ./coverage/lcov.info ../../$package.lcov
 elif grep -q 'angular:' "./pubspec.yaml"; then
     pub get
