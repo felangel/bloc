@@ -57,7 +57,7 @@ class Repository {
 }
 ```
 
-Comme vous pouvez le voir, notre couche Repository peut interagir avec plusieurs DataProviders et effectuer des transformations sur les données avant de les  transmettre à la couche chargée de la logique métier.
+Comme vous pouvez le voir, notre couche Repository peut interagir avec plusieurs DataProviders et effectuer des transformations sur les données avant de les transmettre à la couche chargée de la logique métier.
 
 ## Bloc (Business Logic) Layer (Couche logique métier)
 
@@ -110,7 +110,6 @@ class MyBloc extends Bloc {
 La plupart des applications commenceront par un événement `AppStart` qui déclenchera la récupération des données pour les présenter à l'utilisateur.
 
 Dans ce scénario, la couche de présentation envoit un événement `AppStart`.
-
 
 De plus, la couche de présentation devra déterminer ce qu'il faut afficher à l'écran en fonction de l'état de la couche bloc.
 

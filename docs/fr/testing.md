@@ -2,7 +2,7 @@
 
 > Bloc a été conçu pour être extrêmement facile à tester.
 
-Par souci de simplicité, écrivons des tests pour  `CounterBloc` que nous avons créé dans [Concepts de base](coreconcepts.md).
+Par souci de simplicité, écrivons des tests pour `CounterBloc` que nous avons créé dans [Concepts de base](coreconcepts.md).
 
 Pour résumer, l'implémentation de `CounterBloc` ressemble à :
 

@@ -4,7 +4,7 @@
 
 Hay varios conceptos básicos que son críticos para entender cómo usar Bloc.
 
-En las próximas secciones, vamos a discutir cada uno de ellos en detalle, así como a analizar cómo se aplicarían a una aplicación del mundo real: una aplicación de contador. 
+En las próximas secciones, vamos a discutir cada uno de ellos en detalle, así como a analizar cómo se aplicarían a una aplicación del mundo real: una aplicación de contador.
 
 ## Events
 
@@ -30,7 +30,7 @@ En este punto, hemos definido nuestro primer evento! Tenga en cuenta que hasta a
 
 Hasta ahora, hemos definido los dos eventos a los que nuestra aplicación responderá: `CounterEvent.increment` y `CounterEvent.decrement`.
 
-Ahora necesitamos definir cómo representar el estado de nuestra aplicación. 
+Ahora necesitamos definir cómo representar el estado de nuestra aplicación.
 
 Como estamos construyendo un contador, nuestro estado es muy simple: es solo un número entero que representa el valor actual del contador.
 
@@ -56,7 +56,7 @@ Debido a que cada cambio de estado se registra, podemos instrumentar muy fácilm
 
 ## Streams
 
-?> Consulte la documentación oficial de [Dart](https://dart.dev/tutorials/language/streams) para obtener más información sobre Streams. 
+?> Consulte la documentación oficial de [Dart](https://dart.dev/tutorials/language/streams) para obtener más información sobre Streams.
 
 > Un stream es una secuencia de datos asincrónicos.
 
@@ -173,7 +173,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-!> Los blocs ignorarán los estados duplicados. Si un bloc arroja `State nextState` donde` state == nextState`, entonces no ocurrirá ninguna transición y no se realizará ningún cambio en el `Stream <State>`.
+!> Los blocs ignorarán los estados duplicados. Si un bloc arroja `State nextState` donde `state == nextState`, entonces no ocurrirá ninguna transición y no se realizará ningún cambio en el `Stream <State>`.
 
 En este punto, probablemente se está preguntando _"¿Cómo notifico a un bloc de un evento?"_.
 
@@ -226,7 +226,7 @@ void onTransition(Transition<CounterEvent, int> transition) {
 }
 ```
 
-Ahora que hemos anulado `onTransition` podemos hacer lo que queramos cuando ocurra una` Transition`.
+Ahora que hemos anulado `onTransition` podemos hacer lo que queramos cuando ocurra una `Transition`.
 
 Al igual que podemos manejar `Transition` a nivel de bloc, también podemos manejar `Exceptions`.
 

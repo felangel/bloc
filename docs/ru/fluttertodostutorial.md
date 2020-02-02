@@ -21,7 +21,7 @@ name: flutter_todos
 description: A new Flutter project.
 
 environment:
-  sdk: '>=2.6.0 <3.0.0'
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   meta: ^1.1.6

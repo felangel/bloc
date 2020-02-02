@@ -46,7 +46,7 @@ et ensuite installer toutes nos dépendances
 flutter packages get
 ```
 
-## API REST 
+## API REST
 
 Pour cette application de démonstration, nous utiliserons [jsonplaceholder](http://jsonplaceholder.typicode.com) comme source de données.
 
@@ -100,7 +100,6 @@ class Post extends Equatable {
 
 ?> Nous étendons [`Equatable`](https://pub.dev/packages/equatable) pour pouvoir comparer `Posts` ; par défaut, l'opérateur d'égalité retourne vrai si et seulement si ceci et d'autres sont la même instance.
 
-
 Maintenant que nous avons notre modèle objet `Post`, commençons à travailler sur le Business Logic Component (bloc).
 
 ## Post Events
@@ -109,7 +108,7 @@ Avant de nous lancer dans la mise en œuvre, nous devons définir ce que notre `
 
 A un haut niveau d'abstraction, il répondra aux entrées des utilisateurs (défilement) et récupérera plus de messages afin que la couche de présentation les affiche. Commençons par créer notre événement.
 
-Notre `PostBloc` ne répondra qu'à un seul événement ; `Fetch` qui sera envoyé par la couche de présentation chaque fois qu'elle aura besoin de plus de messages à présenter. Puisque notre événement `Fetch` est un type de `PostEvent' nous pouvons créer `bloc/post_event.dart` et implémenter l'événement comme ceci.
+Notre `PostBloc` ne répondra qu'à un seul événement ; `Fetch` qui sera envoyé par la couche de présentation chaque fois qu'elle aura besoin de plus de messages à présenter. Puisque notre événement `Fetch` est un type de `PostEvent` nous pouvons créer `bloc/post_event.dart` et implémenter l'événement comme ceci.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -187,6 +186,7 @@ Nous avons implémenté `copyWith` pour pouvoir copier une instance de `PostLoad
 Maintenant que nous avons mis en place nos `Events` et nos `States`, nous pouvons créer notre `PostBloc`.
 
 Pour faciliter l'importation de nos états et événements avec une seule importation, nous pouvons créer `bloc/bloc.dart` qui les exporte tous (nous ajouterons notre exportation `post_bloc.dart` dans la section suivante).
+
 ```dart
 export './post_event.dart';
 export './post_state.dart';
@@ -281,7 +281,7 @@ Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
 }
 ```
 
-Notre `PostBloc` cède à chaque fois qu'il y a un nouvel état car il retourne un `Stream<PostState>`. Consultez [concepts de base] (https://felangel.github.io/bloc/#/coreconcepts?id=streams) pour plus d'informations sur `Streams` et d'autres concepts de base.
+Notre `PostBloc` cède à chaque fois qu'il y a un nouvel état car il retourne un `Stream<PostState>`. Consultez [concepts de base](https://felangel.github.io/bloc/#/coreconcepts?id=streams) pour plus d'informations sur `Streams` et d'autres concepts de base.
 
 Maintenant, chaque fois qu'un `PostEvent` est envoyé, s'il s'agit d'un événement `Fetch` et qu'il y a plus de messages à récupérer, notre `PostBloc` ira chercher les 20 messages suivants.
 
@@ -294,6 +294,7 @@ Si nous pouvons récupérer les messages, nous retournons `PostLoaded()` qui pre
 Une optimisation que nous pouvons faire est de `rebondir` les `Events` afin d'éviter le spamming de notre API inutilement. Nous pouvons le faire en surchargeant la méthode `transform` dans notre `PostBloc`.
 
 ?> **Note:** Surpasser transform nous permet de transformer le Stream<Event> avant que mapEventToState ne soit appelé. Ceci permet d'appliquer des opérations comme distinct(), debounceTime(), etc......
+
 ```dart
 @override
 Stream<PostState> transformEvents(
@@ -401,6 +402,7 @@ Super ! Maintenant que nous avons fini d'implémenter la logique métier, il ne 
 Dans notre `main.dart` nous pouvons commencer par implémenter notre fonction principale et appeler `runApp` pour rendre notre widget racine.
 
 Dans notre widget `App`, nous utilisons `BlocProvider` pour créer et fournir une instance de `PostBloc` au sous-arbre. De plus, nous envoyons un événement `Fetch` pour que lorsque l'application se charge, elle demande le lot initial de messages.
+
 ```dart
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -569,6 +571,7 @@ Un avantage supplémentaire de l'utilisation de la bibliothèque de blocs est qu
 Même si dans cette application nous n'avons qu'un seul bloc, il est assez courant dans les applications plus grandes d'avoir plusieurs blocs gérant différentes parties de l'état de l'application.
 
 Si nous voulons pouvoir faire quelque chose en réponse à toutes les `Transitions`, nous pouvons simplement créer notre propre `BlocDelegate`.
+
 ```dart
 import 'package:bloc/bloc.dart';
 
