@@ -15,7 +15,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   State _state;
 
   /// Returns the current [state] of the [bloc].
-  State get state => _currentState;
+  State get state => _state;
 
   /// Returns the [state] before any `events` have been [add]ed.
   State get initialState;
@@ -26,7 +26,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
 
   /// {@macro bloc}
   Bloc() {
-    _currentState = initialState;
+    _state = initialState;
     _bindStateSubject();
   }
 
@@ -158,7 +158,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   Stream<State> transformStates(Stream<State> states) => states;
 
   Stream<State> _buildStateStream() async* {
-    yield _currentState;
+    yield _state;
     yield* _stateController.stream;
   }
 
@@ -180,7 +180,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
           BlocSupervisor.delegate.onTransition(this, transition);
           onTransition(transition);
           _stateController.add(nextState);
-          _currentState = nextState;
+          _state = nextState;
         } on dynamic catch (error) {
           _handleError(error);
         }
