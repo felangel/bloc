@@ -17,4 +17,3 @@ dev_dependencies:
   mockito: ^4.0.0
   effective_dart: ^1.2.0
   rxdart: ^0.23.0
-
