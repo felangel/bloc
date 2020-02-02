@@ -157,7 +157,7 @@ class CounterPage extends StatelessWidget {
 
 ?> **Nota**: Estamos usando o widget `BlocBuilder` do `flutter_bloc` para reconstruir nossa interface do usuário em resposta a alterações de estado (alterações no valor do contador).
 
-?> **Nota**: `BlocBuilder` usa um parâmetro opcional `bloc`, mas podemos especificar o tipo do blocc e o tipo do estado, e o `BlocBuilder` encontrará o bloc automaticamente, assim não precisamos explicitar use `BlocProvider.of <CounterBloc> (context)`.
+?> **Nota**: `BlocBuilder` usa um parâmetro opcional `bloc`, mas podemos especificar o tipo do blocc e o tipo do estado, e o `BlocBuilder` encontrará o bloc automaticamente, assim não precisamos explicitar use `BlocProvider.of<CounterBloc>(context)`.
 
 !> Especifique apenas o bloc no `BlocBuilder` se desejar fornecer um bloc com escopo definido para um único widget e que não possa ser acessado pelo pai` BlocProvider` e pelo atual `BuildContext`.
 
