@@ -56,7 +56,7 @@ Como todas as alterações de estado são registradas, somos capazes de instrume
 
 ## Streams
 
-Confira a documentação oficial [Dart Documentation](https://www.dartlang.org/tutorials/language/streams) para mais informações sobre `Streams`.
+Confira a documentação oficial [Documentação Dart](https://dart.dev/tutorials/language/streams) para mais informações sobre `Streams`.
 
 > Um fluxo é uma sequência de dados assíncronos.
 

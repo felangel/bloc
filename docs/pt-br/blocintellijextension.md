@@ -4,7 +4,7 @@
 
 ## Introdução
 
-Plugin Bloc para [IntelliJ](https://www.jetbrains.com/idea/) e [Android Studio](https://developer.android.com/studio/) com suporte para o [Bloc](https://bloclibrary.dev) e provê ferramentas para criar Blocs eficientemente para apps [Flutter](https://flutter.io/) e [AngularDart](https://webdev.dartlang.org).
+Plugin Bloc para [IntelliJ](https://www.jetbrains.com/idea/) e [Android Studio](https://developer.android.com/studio/) com suporte para o [Bloc](https://bloclibrary.dev) e provê ferramentas para criar Blocs eficientemente para apps [Flutter](https://flutter.dev/) e [AngularDart](https://angulardart.dev/).
 
 ## Instalação
 

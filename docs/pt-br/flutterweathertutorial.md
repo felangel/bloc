@@ -927,7 +927,7 @@ class LastUpdated extends StatelessWidget {
 
 Certifique-se de exportar isso no arquivo `widgets.dart`.
 
-?> **Nota:** Estamos utilizando [`TimeOfDay`](https://docs.flutter.io/flutter/material/TimeOfDay-class.html) para formatar o `DateTime` em um formato mais legível por humanos.
+?> **Nota:** Estamos utilizando [`TimeOfDay`](https://api.flutter.dev/flutter/material/TimeOfDay-class.html) para formatar o `DateTime` em um formato mais legível por humanos.
 
 ### Combined Weather Temperature
 
@@ -1315,7 +1315,7 @@ return RefreshIndicator(
 );
 ```
 
-Para usar o `RefreshIndicator`, tivemos que criar um [`Completer`](https://api.dartlang.org/stable/2.1.0/dart-async/Completer-class.html) o que nos permite produzir um "Future" que possamos concluir posteriormente.
+Para usar o `RefreshIndicator`, tivemos que criar um [`Completer`](https://api.dart.dev/stable/2.1.0/dart-async/Completer-class.html) o que nos permite produzir um "Future" que possamos concluir posteriormente.
 
 É isso aí! Agora resolvemos o problema nº 1 e os usuários podem atualizar o clima puxando para baixo. Sinta-se à vontade para executar o `flutter run` novamente e tente atualizar o clima.
 
