@@ -47,7 +47,7 @@ BlocBuilder<BlocA, BlocAState>(
 
 ### BlocProvider
 
-**BlocProvider** é um widget Flutter que fornece um Bloc para seus filhos via `BlocProvider.of <T> (context)`. Ele é usado como um widget de injeção de dependência (DI) para que uma única instância de um Bloc possa ser fornecida a vários widgets em uma subárvore.
+**BlocProvider** é um widget Flutter que fornece um Bloc para seus filhos via `BlocProvider.of<T>(context)`. Ele é usado como um widget de injeção de dependência (DI) para que uma única instância de um Bloc possa ser fornecida a vários widgets em uma subárvore.
 
 Na maioria dos casos, o `BlocProvider` deve ser usado para criar novos `blocs`, que serão disponibilizados para o restante da subárvore. Nesse caso, como o BlocProvider é responsável pela criação do bloc, ele automaticamente tratará do fechamento do bloc.
 
