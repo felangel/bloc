@@ -15,7 +15,7 @@ env:
   flutter_version: '1.12.13+hotfix.7'
 
 jobs:
-  # Analyze, test and build an APK for each example.
+  # Analyze, test and build an APK for each flutter example.
   analyze-and-test-and-build-apk:
     runs-on: ${{ matrix.os }}
 
@@ -26,8 +26,6 @@ jobs:
         include:
           - os: ubuntu-latest
             flutter_path: /opt/hostedtoolcache/flutter
-          - os: macos-latest
-            flutter_path: /Users/runner/hostedtoolcache/flutter
       fail-fast: false
 
     steps:
@@ -65,4 +63,34 @@ jobs:
         run: |
           export PATH=$PATH:$FLUTTER_DART_HOME
           ./scripts/ci_build_apk.sh ${{ matrix.folder }}
+
+  # Analyze, test and build for each web example.
+  analyze-and-test-and-build-web:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        folder: ['packages/angular_bloc/example']
+        include:
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Analyze and test
+        env:
+          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
+        run: |
+          export PATH=$PATH:$FLUTTER_DART_HOME
+          ./scripts/ci.sh ${{ matrix.folder }}
+
+      - name: Build javascript
+        env:
+          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
+        run: |
+          export PATH=$PATH:$FLUTTER_DART_HOME
+          ./scripts/ci_build_js.sh ${{ matrix.folder }}
 
