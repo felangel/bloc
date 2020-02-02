@@ -9,7 +9,7 @@ import '../bloc.dart';
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
 abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
-  final _eventController = StreamController<Event>();
+  final _eventController = StreamController<Event>.broadcast();
   final _stateController = StreamController<State>.broadcast();
 
   State _currentState;

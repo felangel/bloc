@@ -551,7 +551,7 @@ void main() {
           );
           expect(
             (capturedError as StateError).message,
-            'Cannot add event after closing',
+            'Cannot add new events after calling close',
           );
           expect(capturedStacktrace, isNull);
         });
