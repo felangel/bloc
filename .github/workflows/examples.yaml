@@ -71,7 +71,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        folder: ['packages/angular_bloc/example']
+        folder: ['packages/bloc/example', 'package/bloc_test/example', 'examples/angular_counter']
         include:
           - os: ubuntu-latest
             flutter_path: /opt/hostedtoolcache/flutter

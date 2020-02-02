@@ -6,6 +6,8 @@ source scripts/retry.sh
 
 cd $1
 
-pub run build_runner build
+grep -q 'build_runner:' "./pubspec.yaml"; then
+    pub run build_runner build
+fi
 
 cd -

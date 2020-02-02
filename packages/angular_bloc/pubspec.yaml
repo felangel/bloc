@@ -10,7 +10,8 @@ environment:
 
 dependencies:
   angular: ^5.3.0
-  bloc: ^3.0.0
+  bloc:
+    path: ../bloc
 
 dev_dependencies:
   angular_test: ^2.3.0
