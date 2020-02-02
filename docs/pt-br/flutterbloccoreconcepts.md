@@ -233,7 +233,7 @@ BlocConsumer<BlocA, BlocAState>(
 
 ### RepositoryProvider
 
-**RepositoryProvider** é um widget Flutter que fornece um repositório para seus filhos via `RepositoryProvider.of <T> (context)`. Ele é usado como um widget de injeção de dependência (DI) para que uma única instância de um repositório possa ser fornecida a vários widgets em uma subárvore. O `BlocProvider` deve ser usado para fornecer blocs, enquanto o` RepositoryProvider` deve ser usado apenas para repositórios.
+**RepositoryProvider** é um widget Flutter que fornece um repositório para seus filhos via `RepositoryProvider.of<T>(context)`. Ele é usado como um widget de injeção de dependência (DI) para que uma única instância de um repositório possa ser fornecida a vários widgets em uma subárvore. O `BlocProvider` deve ser usado para fornecer blocs, enquanto o` RepositoryProvider` deve ser usado apenas para repositórios.
 
 ```dart
 RepositoryProvider(
