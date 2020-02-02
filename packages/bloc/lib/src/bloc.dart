@@ -27,7 +27,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// {@macro bloc}
   Bloc() {
     _state = initialState;
-    _bindStateSubject();
+    _bindEventsToStates();
   }
 
   /// Adds a subscription to the `Stream<State>`.
@@ -162,7 +162,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     yield* _stateController.stream;
   }
 
-  void _bindStateSubject() {
+  void _bindEventsToStates() {
     Event currentEvent;
 
     transformStates(transformEvents(_eventController.stream, (event) {
