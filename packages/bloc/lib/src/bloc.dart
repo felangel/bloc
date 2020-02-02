@@ -12,7 +12,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   final _eventController = StreamController<Event>.broadcast();
   final _stateController = StreamController<State>();
 
-  State _currentState;
+  State _state;
 
   /// Returns the current [state] of the [bloc].
   State get state => _currentState;
