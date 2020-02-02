@@ -70,6 +70,16 @@ void main() {
         simpleBloc.add('event');
       });
 
+      test('is a broadcast stream', () {
+        final expectedStates = ['', 'data'];
+
+        expect(simpleBloc.isBroadcast, isTrue);
+        expectLater(simpleBloc, emitsInOrder(expectedStates));
+        expectLater(simpleBloc, emitsInOrder(expectedStates));
+
+        simpleBloc.add('event');
+      });
+
       test('should map multiple events to correct states', () {
         final expectedStates = ['', 'data'];
 
