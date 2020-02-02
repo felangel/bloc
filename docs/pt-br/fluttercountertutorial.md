@@ -153,7 +153,7 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-?> **Nota**: Podemos acessar a instância do `CounterBloc` usando o `BlocProvider.of <CounterBloc> (context)` porque envolvemos nossa `CounterPage` em um `BlocProvider`.
+?> **Nota**: Podemos acessar a instância do `CounterBloc` usando o `BlocProvider.of<CounterBloc>(context)` porque envolvemos nossa `CounterPage` em um `BlocProvider`.
 
 ?> **Nota**: Estamos usando o widget `BlocBuilder` do `flutter_bloc` para reconstruir nossa interface do usuário em resposta a alterações de estado (alterações no valor do contador).
 
