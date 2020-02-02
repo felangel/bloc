@@ -70,6 +70,10 @@ BlocProvider.value(
 then from either `ChildA`, or `ScreenA` we can retrieve `BlocA` with:
 
 ```dart
+// with extensions
+context.bloc<BlocA>();
+
+// without extensions
 BlocProvider.of<BlocA>(context)
 ```
 
@@ -194,7 +198,7 @@ MultiBlocListener(
 
 ### BlocConsumer
 
-**BlocConsumer** exposes a `builder` and `listener` in order react to new states. `BlocConsumer` is analogous to a nested `BlocListener` and `BlocBuilder` but reduces the amount of boilerplate needed. `BlocConsumer` should only be used when it is necessary to both rebuild UI and execute other reactions to state changes in the `bloc`. `BlocConsumer` takes a required `BlocWidgetBuilder` and `BlocWidgetListener` and an optional `bloc`, `BlocBuilderCondition`, and `BlocListenerCondition`.
+**BlocConsumer** exposes a `builder` and `listener` in order to react to new states. `BlocConsumer` is analogous to a nested `BlocListener` and `BlocBuilder` but reduces the amount of boilerplate needed. `BlocConsumer` should only be used when it is necessary to both rebuild UI and execute other reactions to state changes in the `bloc`. `BlocConsumer` takes a required `BlocWidgetBuilder` and `BlocWidgetListener` and an optional `bloc`, `BlocBuilderCondition`, and `BlocListenerCondition`.
 
 If the `bloc` parameter is omitted, `BlocConsumer` will automatically perform a lookup using
 `BlocProvider` and the current `BuildContext`.
@@ -245,6 +249,10 @@ RepositoryProvider(
 then from `ChildA` we can retrieve the `Repository` instance with:
 
 ```dart
+// with extensions
+context.repository<RepositoryA>();
+
+// without extensions
 RepositoryProvider.of<RepositoryA>(context)
 ```
 

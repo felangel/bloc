@@ -57,7 +57,7 @@ class RepositoryProvider<T> extends Provider<T>
   static T of<T>(BuildContext context) {
     try {
       return Provider.of<T>(context, listen: false);
-    } on dynamic catch (_) {
+    } on ProviderNotFoundException catch (_) {
       throw FlutterError(
         """
         RepositoryProvider.of() called with a context that does not contain a repository of type $T.
@@ -70,4 +70,18 @@ class RepositoryProvider<T> extends Provider<T>
       );
     }
   }
+}
+
+/// Extends the `BuildContext` class with the ability
+/// to perform a lookup based on a repository type.
+extension RepositoryProviderExtension on BuildContext {
+  /// Performs a lookup using the `BuildContext` to obtain
+  /// the nearest ancestor repository of type [T].
+  ///
+  /// Calling this method is equivalent to calling:
+  ///
+  /// ```dart
+  /// RepositoryProvider.of<T>(context)
+  /// ```
+  T repository<T>() => RepositoryProvider.of<T>(this);
 }

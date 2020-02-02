@@ -28,7 +28,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^3.1.0
+  flutter_bloc: ^3.2.0
   http: ^0.12.0
   equatable: ^1.0.0
 
@@ -773,7 +773,7 @@ class App extends StatelessWidget {
 
 Now we need to create our `Weather` Widget. Go ahead and make a folder called `widgets` inside of `lib` and create a barrel file inside called `widgets.dart`. Next create a file called `weather.dart`.
 
-> Our Weather Widget will be a `StatelessWidget` responsible for rendering the various weather weather data.
+> Our Weather Widget will be a `StatelessWidget` responsible for rendering the various weather data.
 
 #### Creating Our Stateless Widget
 
@@ -927,7 +927,7 @@ class LastUpdated extends StatelessWidget {
 
 Make sure to export this in the `widgets.dart` file.
 
-?> **Note:** We are using [`TimeOfDay`](https://docs.flutter.io/flutter/material/TimeOfDay-class.html) to format the `DateTime` into a more human-readable format.
+?> **Note:** We are using [`TimeOfDay`](https://api.flutter.dev/flutter/material/TimeOfDay-class.html) to format the `DateTime` into a more human-readable format.
 
 ### Combined Weather Temperature
 
@@ -1044,9 +1044,9 @@ class WeatherConditions extends StatelessWidget {
 }
 ```
 
-Here you can see we are using some assets. Please download them from [here](https://github.com/felangel/bloc/tree/master/examples/flutter_weather/assets) and add them to the `assets/` directory we created at the beginning of the project.
-
 Make sure to export this in the `widgets.dart` file.
+
+Here you can see we are using some assets. Please download them from [here](https://github.com/felangel/bloc/tree/master/examples/flutter_weather/assets) and add them to the `assets/` directory we created at the beginning of the project.
 
 ?> **Tip:** Check out [icons8](https://icons8.com/icon/set/weather/office) for the assets used in this tutorial.
 
@@ -1315,7 +1315,7 @@ return RefreshIndicator(
 );
 ```
 
-In order to use the `RefreshIndicator` we had to create a [`Completer`](https://api.dartlang.org/stable/2.1.0/dart-async/Completer-class.html) which allows us to produce a `Future` which we can complete at a later time.
+In order to use the `RefreshIndicator` we had to create a [`Completer`](https://api.dart.dev/stable/dart-async/Completer-class.html) which allows us to produce a `Future` which we can complete at a later time.
 
 That's it! We now have solved problem #1 and users can refresh the weather by pulling down. Feel free to run `flutter run` again and try refreshing the weather.
 

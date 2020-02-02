@@ -28,7 +28,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^3.1.0
+  flutter_bloc: ^3.2.0
   equatable: ^1.0.0
   wave: ^0.0.8
 
@@ -479,7 +479,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     }
   }
 
-  Stream<TimerState> _mapResumeToState(Resume pause) async* {
+  Stream<TimerState> _mapResumeToState(Resume resume) async* {
     if (state is Paused) {
       _tickerSubscription?.resume();
       yield Running(state.duration);
@@ -561,7 +561,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     }
   }
 
-  Stream<TimerState> _mapResumeToState(Resume pause) async* {
+  Stream<TimerState> _mapResumeToState(Resume resume) async* {
     final state = currentState;
     if (state is Paused) {
       _tickerSubscription?.resume();

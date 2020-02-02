@@ -27,8 +27,8 @@ environment:
 
 dependencies:
   meta: ">=1.1.0 <2.0.0"
-  equatable: ^0.6.0
-  flutter_bloc: ^3.1.0
+  equatable: ^1.0.0
+  flutter_bloc: ^3.2.0
   flutter:
     sdk: flutter
 
@@ -1675,7 +1675,7 @@ Lastly, we need to build our `Stats` widget.
 
 ### Stats
 
-> The `Stats` widget is responsible for showing the user how many todos are active (in progress) vs completed.
+> The `Stats` widget is responsible for showing the user how many todos are active (in progress) vs. completed.
 
 Let's create `widgets/stats.dart` and take a look at the implementation.
 
