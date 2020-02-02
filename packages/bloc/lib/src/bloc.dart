@@ -22,7 +22,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
 
   /// Returns whether the `Stream<State>` is a broadcast stream.
   @override
-  bool get isBroadcast => true;
+  bool get isBroadcast => _stateController.stream.isBroadcast;
 
   /// {@macro bloc}
   Bloc() {

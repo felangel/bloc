@@ -95,14 +95,19 @@ void main() {
         simpleBloc.add('event3');
       });
 
-      test('isBroadcast returns true', () {
+      test('is a broadcast stream', () {
+        final expectedStates = ['', 'data'];
+
         expect(simpleBloc.isBroadcast, isTrue);
+        expectLater(simpleBloc, emitsInOrder(expectedStates));
+        expectLater(simpleBloc, emitsInOrder(expectedStates));
+
+        simpleBloc.add('event');
       });
 
       test('multiple subscribers receive the latest state', () async {
         simpleBloc.add('event');
         await expectLater(simpleBloc, emitsInOrder(['', 'data']));
-        await expectLater(simpleBloc, emits('data'));
         await expectLater(simpleBloc, emits('data'));
         await expectLater(simpleBloc, emits('data'));
       });
@@ -199,8 +204,14 @@ void main() {
         complexBloc.add(ComplexEventC());
       });
 
-      test('isBroadcast returns true', () {
+      test('is a broadcast stream', () {
+        final expectedStates = [ComplexStateA(), ComplexStateB()];
+
         expect(complexBloc.isBroadcast, isTrue);
+        expectLater(complexBloc, emitsInOrder(expectedStates));
+        expectLater(complexBloc, emitsInOrder(expectedStates));
+
+        complexBloc.add(ComplexEventB());
       });
 
       test('multiple subscribers receive the latest state', () async {
@@ -209,7 +220,6 @@ void main() {
           complexBloc,
           emitsInOrder([ComplexStateA(), ComplexStateB()]),
         );
-        await expectLater(complexBloc, emits(ComplexStateB()));
         await expectLater(complexBloc, emits(ComplexStateB()));
         await expectLater(complexBloc, emits(ComplexStateB()));
       });
@@ -340,14 +350,19 @@ void main() {
         counterBloc.add(CounterEvent.increment);
       });
 
-      test('isBroadcast returns true', () {
+      test('is a broadcast stream', () {
+        final expectedStates = [0, 1];
+
         expect(counterBloc.isBroadcast, isTrue);
+        expectLater(counterBloc, emitsInOrder(expectedStates));
+        expectLater(counterBloc, emitsInOrder(expectedStates));
+
+        counterBloc.add(CounterEvent.increment);
       });
 
       test('multiple subscribers receive the latest state', () async {
         counterBloc.add(CounterEvent.increment);
         await expectLater(counterBloc, emitsInOrder([0, 1]));
-        await expectLater(counterBloc, emits(1));
         await expectLater(counterBloc, emits(1));
         await expectLater(counterBloc, emits(1));
       });
@@ -468,8 +483,18 @@ void main() {
         asyncBloc.add(AsyncEvent());
       });
 
-      test('isBroadcast returns true', () {
+      test('is a broadcast stream', () {
+        final expectedStates = [
+          AsyncState(isLoading: false, hasError: false, isSuccess: false),
+          AsyncState(isLoading: true, hasError: false, isSuccess: false),
+          AsyncState(isLoading: false, hasError: false, isSuccess: true),
+        ];
+
         expect(asyncBloc.isBroadcast, isTrue);
+        expectLater(asyncBloc, emitsInOrder(expectedStates));
+        expectLater(asyncBloc, emitsInOrder(expectedStates));
+
+        asyncBloc.add(AsyncEvent());
       });
 
       test('multiple subscribers receive the latest state', () async {
@@ -481,10 +506,6 @@ void main() {
             AsyncState(isLoading: true, hasError: false, isSuccess: false),
             AsyncState(isLoading: false, hasError: false, isSuccess: true),
           ]),
-        );
-        await expectLater(
-          asyncBloc,
-          emits(AsyncState(isLoading: false, hasError: false, isSuccess: true)),
         );
         await expectLater(
           asyncBloc,
