@@ -4,6 +4,11 @@ import 'package:meta/meta.dart';
 
 import '../bloc.dart';
 
+/// Signature for a mapper function which takes an [Event] as input
+/// and outputs a [Stream] of [Transition] objects.
+typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
+    Function(Event);
+
 /// {@template bloc}
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
@@ -41,12 +46,17 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     void Function() onDone,
     bool cancelOnError,
   }) {
-    return _buildStateStream().listen(
+    return _createStateStream().listen(
       onData,
       onError: onError,
       onDone: onDone,
       cancelOnError: cancelOnError,
     );
+  }
+
+  Stream<State> _createStateStream() async* {
+    yield state;
+    yield* _stateController.stream;
   }
 
   /// Called whenever an [event] is [add]ed to the [bloc].
@@ -97,10 +107,10 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     await _stateController.close();
   }
 
-  /// Transforms the [events] stream along with a [next] function into
-  /// a `Stream<State>`.
+  /// Transforms the [events] stream along with a [transitionFn] function into
+  /// a `Stream<Transition>`.
   /// Events that should be processed by [mapEventToState] need to be passed to
-  /// [next].
+  /// [transitionFn].
   /// By default `asyncExpand` is used to ensure all [events] are processed in
   /// the order in which they are received.
   /// You can override [transformEvents] for advanced usage in order to
@@ -112,7 +122,9 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   ///
   /// ```dart
   /// @override
-  /// Stream<State> transformEvents(events, next) => events.switchMap(next);
+  /// Stream<Transition<Event, State>> transformEvents(events, transitionFn) {
+  ///   return events.switchMap(transitionFn);
+  /// }
   /// ```
   ///
   /// Alternatively, if you only want [mapEventToState] to be called for
@@ -120,18 +132,18 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   ///
   /// ```dart
   /// @override
-  /// Stream<State> transformEvents(events, next) {
+  /// Stream<Transition<Event, State>> transformEvents(events, transitionFn) {
   ///   return super.transformEvents(
   ///     events.distinct(),
-  ///     next,
+  ///     transitionFn,
   ///   );
   /// }
   /// ```
-  Stream<State> transformEvents(
+  Stream<Transition<Event, State>> transformEvents(
     Stream<Event> events,
-    Stream<State> Function(Event) next,
+    TransitionFunction<Event, State> transitionFn,
   ) {
-    return events.asyncExpand(next);
+    return events.asyncExpand(transitionFn);
   }
 
   /// Must be implemented when a class extends [bloc].
@@ -141,51 +153,53 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// and return the new [state] in the form of a `Stream<State>`.
   Stream<State> mapEventToState(Event event);
 
-  /// Transforms the `Stream<State>` into a new `Stream<State>`.
-  /// By default [transformStates] returns the incoming `Stream<State>`.
-  /// You can override [transformStates] for advanced usage in order to
+  /// Transforms the `Stream<Transition>` into a new `Stream<Transition>`.
+  /// By default [transformTransitions] returns
+  /// the incoming `Stream<Transition>`.
+  /// You can override [transformTransitions] for advanced usage in order to
   /// manipulate the frequency and specificity at which `transitions`
   /// (state changes) occur.
   ///
-  /// For example, if you want to debounce outgoing [states]:
+  /// For example, if you want to debounce outgoing state changes:
   ///
   /// ```dart
   /// @override
-  /// Stream<State> transformStates(Stream<State> states) {
-  ///   return states.debounceTime(Duration(seconds: 1));
+  /// Stream<Transition<Event, State>> transformTransitions(
+  ///   Stream<Transition<Event, State>> transitions,
+  /// ) {
+  ///   return transitions.debounceTime(Duration(seconds: 1));
   /// }
   /// ```
-  Stream<State> transformStates(Stream<State> states) => states;
-
-  Stream<State> _buildStateStream() async* {
-    yield _state;
-    yield* _stateController.stream;
+  Stream<Transition<Event, State>> transformTransitions(
+    Stream<Transition<Event, State>> transitions,
+  ) {
+    return transitions;
   }
 
   void _bindEventsToStates() {
-    Event currentEvent;
-
-    transformStates(transformEvents(_eventController.stream, (event) {
-      currentEvent = event;
-      return mapEventToState(currentEvent).handleError(_handleError);
-    })).forEach(
-      (nextState) {
-        if (state == nextState || _stateController.isClosed) return;
-        final transition = Transition(
-          currentState: state,
-          event: currentEvent,
-          nextState: nextState,
-        );
-        try {
-          BlocSupervisor.delegate.onTransition(this, transition);
-          onTransition(transition);
-          _state = nextState;
-          _stateController.add(nextState);
-        } on dynamic catch (error) {
-          _handleError(error);
-        }
+    transformTransitions(transformEvents(
+      _eventController.stream,
+      (event) {
+        return mapEventToState(event).map((nextState) {
+          return Transition(
+            currentState: state,
+            event: event,
+            nextState: nextState,
+          );
+        }).skipWhile((transition) {
+          return state == transition.nextState || _stateController.isClosed;
+        }).handleError(_handleError);
       },
-    );
+    )).forEach((transition) {
+      try {
+        BlocSupervisor.delegate.onTransition(this, transition);
+        onTransition(transition);
+        _state = transition.nextState;
+        _stateController.add(transition.nextState);
+      } on dynamic catch (error) {
+        _handleError(error);
+      }
+    });
   }
 
   void _handleError(Object error, [StackTrace stacktrace]) {
