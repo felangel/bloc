@@ -10,6 +10,6 @@ if [[ -f "android/app/example_google-services.json" ]]; then
   cp android/app/example_google-services.json android/app/google-services.json
 fi
 flutter packages get
-flutter build apk --debug
+flutter build apk
 
 cd -
