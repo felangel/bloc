@@ -2,8 +2,6 @@
 
 set -ex
 
-source scripts/retry.sh
-
 cd $1
 
 if grep -q 'build_runner:' "./pubspec.yaml"; then

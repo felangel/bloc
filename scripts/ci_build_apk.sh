@@ -2,8 +2,6 @@
 
 set -ex
 
-source scripts/retry.sh
-
 cd $1
 
 if [[ -f "android/app/example_google-services.json" ]]; then
