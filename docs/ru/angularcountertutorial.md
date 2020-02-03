@@ -23,7 +23,7 @@ name: angular_counter
 description: A web app that uses angular_bloc
 
 environment:
-  sdk: '>=2.6.0 <3.0.0'
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   angular: ^5.3.0
@@ -32,9 +32,9 @@ dependencies:
 
 dev_dependencies:
   angular_test: ^2.0.0
-  build_runner: '>=1.6.2 <2.0.0'
+  build_runner: ">=1.6.2 <2.0.0"
   build_test: ^0.10.2
-  build_web_compilers: '>=1.2.0 <3.0.0'
+  build_web_compilers: ">=1.2.0 <3.0.0"
   test: ^1.0.0
 ```
 

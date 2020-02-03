@@ -11,6 +11,7 @@ Bloc se compose de plusieurs paquets:
 - [angular_bloc](https://pub.dev/packages/angular_bloc) - Composants Angular puissants conçus pour travailler avec Bloc afin de construire des applications web rapides et réactives.
 
 ## Installation
+
 La première chose que nous devons faire est d'ajouter le paquet Bloc à notre `pubspec.yaml` comme dépendance.
 
 ```yaml
