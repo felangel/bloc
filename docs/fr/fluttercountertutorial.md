@@ -1,4 +1,4 @@
-# Tutoriel Flutter d'un Compteur 
+# Tutoriel Flutter d'un Compteur
 
 ![débutant](https://img.shields.io/badge/level-beginner-green.svg)
 
@@ -14,7 +14,7 @@ Nous commencerons par créer un nouveau projet Flutter
 flutter create flutter_counter
 ```
 
-Nous pouvons  remplacer le contenu de `pubspec.yaml` par
+Nous pouvons remplacer le contenu de `pubspec.yaml` par
 
 ```yaml
 name: flutter_counter
@@ -162,7 +162,6 @@ class CounterPage extends StatelessWidget {
 !> Ne spécifiez le bloc dans `BlocBuilder` que si vous souhaitez fournir un bloc qui sera mis à la portée d'un seul widget et qui n'est pas accessible via un `BlocProvider` parent et le `BuildContext` courant.
 
 Ca y est ! Nous avons séparé notre couche de présentation de notre couche logique métier. Notre `CounterPage` n'a aucune idée de ce qui se passe quand un utilisateur appuie sur un bouton ; il ajoute simplement un événement pour avertir le `CounterBloc`. De plus, notre `CounterBloc` n'a aucune idée de ce qui se passe avec l'état (valeur du compteur) ; il s'agit simplement de convertir les `CounterEvents` en entiers.
-
 
 Nous pouvons exécuter notre application avec `flutter run` et la visualiser sur notre appareil ou simulateur/émulateur.
 

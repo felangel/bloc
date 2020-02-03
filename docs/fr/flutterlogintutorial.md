@@ -40,11 +40,11 @@ flutter:
 ```
 
 et ensuite installer toutes nos dépendances
-``
+
 ```bash
 flutter packages get
 ```
-``
+
 ## Répertoire utilisateur
 
 Nous allons devoir créer un `UserRepository` qui nous aide à gérer les données d'un utilisateur.
@@ -79,7 +79,7 @@ class UserRepository {
 }
 ```
 
-?> **Note**: Notre référentiel utilisateur se moque des différentes implémentations pour des raisons de simplicité, mais dans une application réelle, vous pouvez injecter un [HttpClient] (https://pub.dev/packages/http) ainsi que quelque chose comme [Flutter Secure Storage] (https://pub.dev/packages/flutter_secure_storage) afin de demander des tokens et de les lire/écrire dans un trousseau de clés.
+?> **Note**: Notre référentiel utilisateur se moque des différentes implémentations pour des raisons de simplicité, mais dans une application réelle, vous pouvez injecter un [HttpClient](https://pub.dev/packages/http) ainsi que quelque chose comme [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage) afin de demander des tokens et de les lire/écrire dans un trousseau de clés.
 
 ## Etats d'authentification
 
@@ -326,7 +326,7 @@ class HomePage extends StatelessWidget {
 
 ?> **Note**: Nous ajoutons un événement `LoggedOut` à notre `AuthenticationBloc` lorsqu'un utilisateur appuie sur le bouton Logout.
 
-Ensuite, nous devons créer une `LoginPage ` et un `LoginForm`.
+Ensuite, nous devons créer une `LoginPage` et un `LoginForm`.
 
 Parce que le `LoginForm` devra gérer l'entrée des utilisateurs (Bouton de connexion appuyé) et aura besoin d'une logique métier (obtenir un jeton pour un nom d'utilisateur/mot de passe donné), nous devrons créer un `LoginBloc`.
 
@@ -493,7 +493,7 @@ class LoginPage extends StatelessWidget {
 }
 ```
 
-?> **Note**: `LoginPage` est un `StatelessWidget'. Le widget `LoginPage` utilise le widget `BlocProvider` pour créer, fermer et fournir le `LoginBloc` au sous-arbre.
+?> **Note**: `LoginPage` est un `StatelessWidget`. Le widget `LoginPage` utilise le widget `BlocProvider` pour créer, fermer et fournir le `LoginBloc` au sous-arbre.
 
 ?> **Note**: Nous utilisons le `UserRepository` injecté pour créer notre `LoginBloc`.
 
@@ -574,7 +574,7 @@ class _LoginFormState extends State<LoginForm> {
 ```
 
 ?> **Note**: Notre `LoginForm` utilise le widget `BlocBuilder` pour qu'il puisse être reconstruit chaque fois qu'il y a un nouvel `LoginState`. `BlocBuilder` est un widget Flutter qui nécessite une fonction Bloc et un constructeur. `BlocBuilder` gère la construction du widget en réponse aux nouveaux états. `BlocBuilder` est très similaire à `StreamBuilder` mais possède une API plus simple pour réduire la quantité de code standard nécessaire et diverses optimisations de performance.
-             
+
 Il ne se passe pas grand-chose d'autre dans le widget `LoginForm` alors passons à la création de notre indicateur de chargement.
 
 ## Indicateur de chargement
@@ -673,7 +673,7 @@ class App extends StatelessWidget {
 ?> **Note**: Encore une fois, nous utilisons `BlocBuilder` afin de réagir aux changements dans `AuthenticationState` de sorte que nous puissions montrer à l'utilisateur soit le `SplashPage`, `LoginPage`, `HomePage`, ou `LoadingIndicator` basé sur l'état actuel `AuthenticationState`.
 
 ?> **Note**: Notre application est enveloppée dans un `BlocProvider` qui rend notre instance de `AuthenticationBloc` disponible à tout le sous-arbre widget. BlocProvider est un widget Flutter qui fournit un bloc à ses enfants via `BlocProvider.of(context)`. Il est utilisé comme un widget d'injection de dépendance (DI) pour qu'une seule instance d'un bloc puisse être fournie à plusieurs widgets dans un sous-arbre.
-             
+
 Maintenant `BlocProvider.of<AuthenticationBloc>(contexte)` dans notre widget `HomePage` et `LoginPage`devrait faire sens.
 
 Puisque nous avons enveloppé notre `App` dans un `BlocProvider<AuthenticationBloc>` nous pouvons accéder à l'instance de notre `AuthenticationBloc` en utilisant la méthode statique `BlocProvider.of<AuthenticationBloc>(contexte BuildContext)` de n'importe où dans le sous arbre.
