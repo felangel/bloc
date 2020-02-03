@@ -4,9 +4,11 @@ on:
   push:
     paths:
     - 'packages/**'
+    - '!packages/*/example/**'
   pull_request:
     paths:
     - 'packages/**'
+    - '!packages/*/example/**'
 
 env:
   flutter_channel: 'stable'
