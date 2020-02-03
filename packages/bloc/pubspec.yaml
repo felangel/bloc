@@ -3,7 +3,7 @@ description: A predictable state management library that helps implement the BLo
 version: 3.0.0
 repository: https://github.com/felangel/bloc
 issue_tracker: https://github.com/felangel/bloc/issues
-homepage: https://github.com/felangel/bloc/tree/master/packages/bloc
+homepage: https://bloclibrary.dev
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
