@@ -5,10 +5,12 @@ on:
     paths:
     - 'examples/**'
     - 'packages/**'
+    - '!packages/*/example/**'
   pull_request:
     paths:
     - 'examples/**'
     - 'packages/**'
+    - '!packages/*/example/**'
 
 env:
   flutter_channel: 'stable'
