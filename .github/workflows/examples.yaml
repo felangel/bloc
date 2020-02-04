@@ -6,11 +6,13 @@ on:
     - 'examples/**'
     - 'packages/**'
     - '!packages/*/example/**'
+    - 'performance_tests/**'
   pull_request:
     paths:
     - 'examples/**'
     - 'packages/**'
     - '!packages/*/example/**'
+    - 'performance_tests/**'
 
 env:
   flutter_channel: 'stable'
