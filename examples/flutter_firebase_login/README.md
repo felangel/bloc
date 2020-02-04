@@ -1,3 +1,5 @@
+[![examples](https://github.com/felangel/bloc/workflows/examples/badge.svg)](https://github.com/felangel/bloc/actions)
+
 # flutter_firebase_login
 
 Example Flutter app built with `flutter_bloc` to implement login using Firebase.

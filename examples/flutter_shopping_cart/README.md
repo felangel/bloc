@@ -1,3 +1,5 @@
+[![examples](https://github.com/felangel/bloc/workflows/examples/badge.svg)](https://github.com/felangel/bloc/actions)
+
 # flutter_shopping_cart
 
 A new Flutter project.

@@ -1,3 +1,5 @@
+[![examples](https://github.com/felangel/bloc/workflows/examples/badge.svg)](https://github.com/felangel/bloc/actions)
+
 # flutter_bloc_with_stream
 
 A new Flutter project.

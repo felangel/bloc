@@ -1,3 +1,5 @@
+[![examples](https://github.com/felangel/bloc/workflows/examples/badge.svg)](https://github.com/felangel/bloc/actions)
+
 # BlocProvider Performance Tests
 
 Integration Tests which test the performance of BlocProvider variants.
