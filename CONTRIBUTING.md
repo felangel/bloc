@@ -107,7 +107,6 @@ If you're adding an example, make sure to add CI checks for it:
 - For a non flutter example (pure dart or angular): add it to the `non_flutter_folder` in
 [examples.yaml](https://github.com/felangel/bloc/blob/master/.github/workflows/examples.yaml).
 
-
 ## Getting in Touch
 
 If you want to just ask a question or get feedback on an idea you can post it
