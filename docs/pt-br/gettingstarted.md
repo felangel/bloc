@@ -19,7 +19,7 @@ dependencies:
   bloc: ^3.0.0
 ```
 
-Para uma aplicação [Flutter](https://flutter.dev), também é necessário adicionar o package flutter_bloc como uma dependência no `pubspec.yaml`.
+Para uma aplicação [Flutter](https://flutter.dev/), também é necessário adicionar o package flutter_bloc como uma dependência no `pubspec.yaml`.
 
 ```yaml
 dependencies:
