@@ -4,7 +4,7 @@ on:
   push:
     paths:
     - 'packages/**'
-    - '!packages/*/example/**'
+    - 'performance_tests/**'
     - 'examples/**'
   pull_request:
     paths:
@@ -150,4 +150,3 @@ jobs:
         run: |
           export PATH=$PATH:$FLUTTER_DART_HOME
           ./scripts/ci_build_js.sh ${{ matrix.folder }}
-
