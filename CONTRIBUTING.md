@@ -102,9 +102,10 @@ so other contributors can easily see what's already done.
 Examples live in the `examples` folder.
 
 If you're adding an example, make sure to add CI checks for it:
-- For a flutter example: add it to the `flutter_folder` in
+- For a flutter example: add it to the `folder` in the `examples-apk` step in
 [main.yaml](https://github.com/felangel/bloc/blob/master/.github/workflows/main.yaml).
-- For a non flutter example (pure dart or angular): add it to the `non_flutter_folder` in
+- For a non flutter example (pure dart or angular): add it to the `folder` in the
+`examples-web` step in
 [main.yaml](https://github.com/felangel/bloc/blob/master/.github/workflows/main.yaml).
 
 ## Getting in Touch
