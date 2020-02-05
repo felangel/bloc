@@ -9,7 +9,7 @@ on:
   pull_request:
     paths:
     - 'packages/**'
-    - '!packages/*/example/**'
+    - 'performance_tests/**'
     - 'examples/**'
 
 env:
