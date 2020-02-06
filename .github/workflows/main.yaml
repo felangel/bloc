@@ -114,7 +114,7 @@ jobs:
 
     strategy:
       matrix:
-        folder: ['packages/bloc/example', 'packages/bloc_test/example', 'examples/angular_counter', 'examples/github_search/common_github_search', 'examples/github_search/angular_github_search']
+        folder: ['examples/angular_counter', 'examples/github_search/common_github_search', 'examples/github_search/angular_github_search']
         os: [ubuntu-latest]
         include:
           - os: ubuntu-latest
