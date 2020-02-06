@@ -39,7 +39,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 }
 
-const String template =	
+const String template =
     '<div class="counter-page-container"><h1>Counter App</h1><h2>Current Count: {{ counterBloc | bloc }}</h2><button (click)="increment()">+</button><button (click)="decrement()">-</button></div>';
 
 @Component(
