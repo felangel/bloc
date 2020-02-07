@@ -1,3 +1,5 @@
+[![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
+
 # BlocBuilder Performance Tests
 
 Integration Tests which test the performance of BlocBuilder variants.

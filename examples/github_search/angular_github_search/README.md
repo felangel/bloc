@@ -1,3 +1,5 @@
+[![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
+
 # angular_github_search
 
 A web app that uses [AngularDart](https://angulardart.dev/) and
