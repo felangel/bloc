@@ -97,6 +97,17 @@ so other contributors can easily see what's already done.
     - [ ] VSCode
 ```
 
+## Adding an example
+
+Examples live in the `examples` folder.
+
+If you're adding an example, make sure to add CI checks for it:
+- For a flutter example: add it to the `folder` in the `examples-apk` step in
+[main.yaml](https://github.com/felangel/bloc/blob/master/.github/workflows/main.yaml).
+- For a non flutter example (pure dart or angular): add it to the `folder` in the
+`examples-web` step in
+[main.yaml](https://github.com/felangel/bloc/blob/master/.github/workflows/main.yaml).
+
 ## Getting in Touch
 
 If you want to just ask a question or get feedback on an idea you can post it

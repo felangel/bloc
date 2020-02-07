@@ -1,3 +1,5 @@
+// This example is one-pager for the [angular_bloc](https://github.com/felangel/bloc/tree/master/examples/angular_counter) example.
+
 import 'dart:async';
 
 import 'package:angular/angular.dart';

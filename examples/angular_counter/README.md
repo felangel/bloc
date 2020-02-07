@@ -1,3 +1,5 @@
+[![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
+
 # example
 
 A web app that uses [AngularDart](https://angulardart.dev/) and

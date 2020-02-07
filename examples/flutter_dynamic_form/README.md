@@ -1,3 +1,5 @@
+[![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
+
 # flutter_dynamic_form
 
 A new Flutter project.
