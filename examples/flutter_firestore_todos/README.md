@@ -1,3 +1,5 @@
+[![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
+
 # flutter_firestore_todos
 
 A Flutter example showing how to use flutter_bloc with a firestore backend.

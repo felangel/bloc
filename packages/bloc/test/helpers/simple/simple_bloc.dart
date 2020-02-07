@@ -7,7 +7,7 @@ class SimpleBloc extends Bloc<dynamic, String> {
   String get initialState => '';
 
   @override
-  Stream<String> mapEventToState(dynamic event) {
-    return Stream.value('data');
+  Stream<String> mapEventToState(dynamic event) async* {
+    yield 'data';
   }
 }

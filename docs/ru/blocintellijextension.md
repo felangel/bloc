@@ -4,7 +4,7 @@
 
 ## Введение
 
-Плагин `Bloc` для [IntelliJ](https://www.jetbrains.com/idea/) и [Android Studio](https://developer.android.com/studio/) с поддержкой [Bloc](https://bloclibrary.dev) предоставляет инструменты для эффективного создания блоков для приложений [Flutter](https://flutter.io/) и [AngularDart](https://webdev.dartlang.org).
+Плагин `Bloc` для [IntelliJ](https://www.jetbrains.com/idea/) и [Android Studio](https://developer.android.com/studio/) с поддержкой [Bloc](https://bloclibrary.dev) предоставляет инструменты для эффективного создания блоков для приложений [Flutter](https://flutter.dev/) и [AngularDart](https://angulardart.dev/).
 
 ## Инсталляция
 

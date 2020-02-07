@@ -25,7 +25,7 @@ class TickerBloc extends Bloc<TickerEvent, TickerState> {
 
   @override
   Future<void> close() {
-    subscription.cancel();
+    subscription?.cancel();
     return super.close();
   }
 }

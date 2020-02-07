@@ -1,3 +1,5 @@
+[![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
+
 # BlocBuilder Performance Tests
 
 Integration Tests which test the performance of BlocBuilder variants.
@@ -18,4 +20,4 @@ flutter drive --target=test_driver/main.dart --driver=test_driver/driver/bloc_bu
 **Average across 10 runs*
 
 For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+[documentation](https://flutter.dev/).

@@ -1,10 +1,12 @@
+[![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
+
 # Github Search
 
 Sample project which illustrates how to setup a Flutter and AngularDart project with code sharing.
 
 ## Quick Start
 
-_Make sure you have the [Dart SDK](https://www.dartlang.org/tools/sdk) and [Flutter SDK](https://flutter.io/docs/get-started/install) installed before proceeding._
+_Make sure you have the [Dart SDK](https://dart.dev/tools/sdk) and [Flutter SDK](https://flutter.dev/docs/get-started/install) installed before proceeding._
 
 Open this project in your editor of choice (VSCode is recommended).
 

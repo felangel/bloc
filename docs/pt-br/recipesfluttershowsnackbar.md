@@ -1,6 +1,6 @@
 # Receitas: Exibir SnackBar com o BlocListener
 
-> Nesta receita, veremos como usar o `BlocListener` para exibir um `SnackBar` em resposta a uma alteração de estado em um bloco.
+> Nesta receita, veremos como usar o `BlocListener` para exibir um `SnackBar` em resposta a uma alteração de estado em um bloc.
 
 ![demo](../assets/gifs/recipes_flutter_snack_bar.gif)
 
