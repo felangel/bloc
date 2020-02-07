@@ -58,7 +58,7 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ${{ matrix.folder }}.lcov
+          file: ${{ matrix.folder }}/coverage/lcov.info
 
   # Analyze and test for each pure Dart example.
   examples-pure:
@@ -100,7 +100,7 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ${{ matrix.folder }}.lcov
+          file: ${{ matrix.folder }}/coverage/lcov.info
 
   # Analyze, test and build for each web example.
   examples-web:
@@ -138,12 +138,19 @@ jobs:
           export PATH=$PATH:$FLUTTER_DART_HOME
           ./scripts/ci.sh ${{ matrix.folder }}
 
-      - name: Build web
-        env:
-          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
-        run: |
-          export PATH=$PATH:$FLUTTER_DART_HOME
-          ./scripts/ci_build_web.sh ${{ matrix.folder }}
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ${{ matrix.folder }}/coverage/lcov.info
+
+# Disabled due to performance reasons.
+#      - name: Build web
+#        env:
+#          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
+#        run: |
+#          export PATH=$PATH:$FLUTTER_DART_HOME
+#          ./scripts/ci_build_web.sh ${{ matrix.folder }}
 
   # Analyze, test and build an Android/iOS for each Flutter example.
   examples-flutter:
@@ -157,9 +164,9 @@ jobs:
           - os: ubuntu-latest
             flutter_path: /opt/hostedtoolcache/flutter
             build_flutter_as: apk
-          - os: macos-latest
-            flutter_path: /Users/runner/hostedtoolcache/flutter
-            build_flutter_as: ios
+#          - os: macos-latest
+#            flutter_path: /Users/runner/hostedtoolcache/flutter
+#            build_flutter_as: ios
       fail-fast: false
 
     steps:
@@ -189,11 +196,13 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ${{ matrix.folder }}.lcov
+          file: ${{ matrix.folder }}/coverage/lcov.info
 
-      - name: Build as ${{ matrix.build_flutter_as }}
-        env:
-          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
-        run: |
-          export PATH=$PATH:$FLUTTER_DART_HOME
-          ./scripts/ci_build_flutter.sh ${{ matrix.folder }} ${{ matrix.build_flutter_as }}
+# Disabled due to performance reasons.  
+#        
+#      - name: Build as ${{ matrix.build_flutter_as }}
+#        env:
+#          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
+#        run: |
+#          export PATH=$PATH:$FLUTTER_DART_HOME
+#          ./scripts/ci_build_flutter.sh ${{ matrix.folder }} ${{ matrix.build_flutter_as }}

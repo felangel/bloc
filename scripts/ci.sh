@@ -18,7 +18,6 @@ if grep -q 'sdk: flutter' "./pubspec.yaml"; then
         flutter format --set-exit-if-changed test
         flutter analyze --no-current-package test
         flutter test --no-pub --coverage
-        cp ./coverage/lcov.info ../../$folder.lcov
     fi
     if [[ -d "$folder/test_driver" ]]; then
         flutter format --set-exit-if-changed test_driver
@@ -37,7 +36,6 @@ else
     dartanalyzer --fatal-infos --fatal-warnings . || EXIT_CODE=$?
     if [[ -d "$folder/test" ]]; then
         retry pub run test_coverage
-        cp ./coverage/lcov.info ../../$folder.lcov
     fi
 fi
 
