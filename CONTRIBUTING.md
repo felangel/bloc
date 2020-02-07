@@ -101,12 +101,13 @@ so other contributors can easily see what's already done.
 
 Examples live in the `examples` folder.
 
-If you're adding an example, make sure to add CI checks for it:
-- For a flutter example: add it to the `folder` in the `examples-apk` step in
-[main.yaml](https://github.com/felangel/bloc/blob/master/.github/workflows/main.yaml).
-- For a non flutter example (pure dart or angular): add it to the `folder` in the
-`examples-web` step in
-[main.yaml](https://github.com/felangel/bloc/blob/master/.github/workflows/main.yaml).
+When you're adding an example, make sure to add CI checks for it in
+[main.yaml](https://github.com/felangel/bloc/blob/master/.github/workflows/main.yaml):
+- For a Flutter example, add it to the `folder` list in the `examples-flutter`
+step.
+- For a web example, add it to the `folder` list in the `examples-web` step.
+- For a pure Dart example, add it to the `folder` list in the `examples-pure`
+step.
 
 ## Getting in Touch
 
@@ -116,4 +117,4 @@ on [Discord](https://discord.gg/Hc5KD3g).
 ## License
 
 By contributing to Bloc, you agree that your contributions will be licensed
-under its MIT license.
+under its [MIT license](LICENSE).
