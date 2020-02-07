@@ -1,4 +1,5 @@
 #!/bin/bash
+# inputs $1: project location
 
 set -ex
 
