@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:user_repository/user_repository.dart';
 
 import 'package:flutter_login/authentication/authentication.dart';
-import 'package:flutter_login/login/login.dart';
+
+part 'login_event.dart';
+part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserRepository userRepository;
