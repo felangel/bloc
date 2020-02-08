@@ -17,6 +17,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  bloc_test:
+    path: ../../packages/bloc_test
   mockito: ^4.0.0
 
 flutter:

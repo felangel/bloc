@@ -16,7 +16,7 @@ env:
   flutter_version: '1.12.13+hotfix.7'
 
 jobs:
-  # Analyze and test each package.
+  # Analyze and test each core package.
   packages:
     runs-on: ${{ matrix.os }}
 
@@ -100,7 +100,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ${{ matrix.folder }}/coverage/lcov.info
 
-  # Analyze, test and build for each web example.
+  # Analyze and test each AngularDart example.
   examples-web:
     runs-on: ${{ matrix.os }}
 
@@ -142,15 +142,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ${{ matrix.folder }}/coverage/lcov.info
 
-# Disabled due to performance reasons.
-#      - name: Build web
-#        env:
-#          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
-#        run: |
-#          export PATH=$PATH:$FLUTTER_DART_HOME
-#          ./scripts/ci_build_web.sh ${{ matrix.folder }}
-
-  # Analyze, test and build an Android/iOS for each Flutter example.
+  # Analyze and test each Flutter example.
   examples-flutter:
     runs-on: ${{ matrix.os }}
 
@@ -162,9 +154,6 @@ jobs:
           - os: ubuntu-latest
             flutter_path: /opt/hostedtoolcache/flutter
             build_flutter_as: apk
-#          - os: macos-latest
-#            flutter_path: /Users/runner/hostedtoolcache/flutter
-#            build_flutter_as: ios
       fail-fast: false
 
     steps:
@@ -195,12 +184,3 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ${{ matrix.folder }}/coverage/lcov.info
-
-# Disabled due to performance reasons.  
-#        
-#      - name: Build as ${{ matrix.build_flutter_as }}
-#        env:
-#          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
-#        run: |
-#          export PATH=$PATH:$FLUTTER_DART_HOME
-#          ./scripts/ci_build_flutter.sh ${{ matrix.folder }} ${{ matrix.build_flutter_as }}
