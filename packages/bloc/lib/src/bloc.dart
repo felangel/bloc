@@ -18,6 +18,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   final _stateController = StreamController<State>.broadcast();
 
   State _state;
+  StreamSubscription<Transition<Event, State>> _transitionSubscription;
 
   /// Returns the current [state] of the [bloc].
   State get state => _state;
@@ -46,7 +47,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     void Function() onDone,
     bool cancelOnError,
   }) {
-    return _createStateStream().listen(
+    return _stateStream.listen(
       onData,
       onError: onError,
       onDone: onDone,
@@ -54,7 +55,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     );
   }
 
-  Stream<State> _createStateStream() async* {
+  Stream<State> get _stateStream async* {
     yield state;
     yield* _stateController.stream;
   }
@@ -105,6 +106,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   Future<void> close() async {
     await _eventController.close();
     await _stateController.close();
+    await _transitionSubscription?.cancel();
   }
 
   /// Transforms the [events] stream along with a [transitionFn] function into
@@ -177,7 +179,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   }
 
   void _bindEventsToStates() {
-    transformTransitions(transformEvents(
+    _transitionSubscription = transformTransitions(transformEvents(
       _eventController.stream,
       (event) {
         return mapEventToState(event).map((nextState) {
@@ -188,18 +190,21 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
           );
         }).skipWhile((transition) {
           return state == transition.nextState || _stateController.isClosed;
-        }).handleError(_handleError);
+        });
       },
-    )).forEach((transition) {
-      try {
-        BlocSupervisor.delegate.onTransition(this, transition);
-        onTransition(transition);
-        _state = transition.nextState;
-        _stateController.add(transition.nextState);
-      } on dynamic catch (error) {
-        _handleError(error);
-      }
-    });
+    )).listen(
+      (transition) {
+        try {
+          BlocSupervisor.delegate.onTransition(this, transition);
+          onTransition(transition);
+          _state = transition.nextState;
+          _stateController.add(transition.nextState);
+        } on dynamic catch (error) {
+          _handleError(error);
+        }
+      },
+      onError: _handleError,
+    );
   }
 
   void _handleError(Object error, [StackTrace stacktrace]) {
