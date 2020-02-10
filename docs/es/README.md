@@ -134,7 +134,6 @@ Obtenga más información en los siguientes enlaces, que han sido aportados por 
 
 - [Hydrated Bloc](https://pub.dev/packages/hydrated_bloc) - Una extensión de la librería de administración de estado `bloc` que persiste y restaura automáticamente los estados `bloc`, por [Felix Angelov](https://github.com/felangel).
 - [Bloc.js](https://github.com/felangel/bloc.js) - Un puerto de la librería de administración de estado `bloc` de Dart a JavaScript, por [Felix Angelov](https://github.com/felangel).
-- [Flutter Bloc Extensions](https://pub.dev/packages/flutter_bloc_extensions) - Colección de widgets de ayuda construidos sobre `flutter_bloc`, por [Ondřej Kunc](https://github.com/OndrejKunc).
 - [Bloc Code Generator](https://pub.dev/packages/bloc_code_generator) - Un generador de código que facilita el trabajo con blocs, por [Adson Leal](https://github.com/adsonpleal).
 - [Firebase Auth](https://pub.dev/packages/fb_auth) - Un complemento de autenticación web, Firebase móvil, por [Rody Davis](https://github.com/AppleEducate).
 - [Form Bloc](https://pub.dev/packages/form_bloc) - Una manera fácil de crear formularios con el patrón BLoC sin escribir mucho código repetitivo, por [Giancarlo](https://github.com/GiancarloCode).

@@ -134,7 +134,6 @@
 
 - [Hydrated Bloc](https://pub.dev/packages/hydrated_bloc) - расширение библиотеки управления состояниями `bloc`, которая автоматически сохраняет и восстанавливает состояния `bloc` [Felix Angelov](https://github.com/felangel).
 - [Bloc.js](https://github.com/felangel/bloc.js) - порт библиотеки управления состоянием `bloc` из Dart в JavaScript [Felix Angelov](https://github.com/felangel).
-- [Flutter Bloc Extensions](https://pub.dev/packages/flutter_bloc_extensions) - коллекция вспомогательных виджетов, построенных поверх `flutter_bloc` [Ondřej Kunc](https://github.com/OndrejKunc).
 - [Bloc Code Generator](https://pub.dev/packages/bloc_code_generator) - генератор кода, который облегчает работу с блоком [Adson Leal](https://github.com/adsonpleal).
 - [Firebase Auth](https://pub.dev/packages/fb_auth) - A Web, Mobile Firebase Auth Plugin, by [Rody Davis](https://github.com/AppleEducate).
 - [Form Bloc](https://pub.dev/packages/form_bloc) - простой способ создания форм с шаблоном BLoC без написания большого количества стандартного кода [Giancarlo](https://github.com/GiancarloCode).

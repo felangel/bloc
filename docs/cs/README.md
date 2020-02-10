@@ -136,7 +136,6 @@ Více se dozvíte na následujících odkazech, které vytvořila komunita.
 
 - [Hydrated Bloc](https://pub.dev/packages/hydrated_bloc) - Rozšíření knihovny `bloc` pro state management, které automaticky uchovává a obnovuje `bloc` stavy, od [Felix Angelov](https://github.com/felangel).
 - [Bloc.js](https://github.com/felangel/bloc.js) - Port knihovny `bloc` pro state management z Dartu do JavaScriptu, od [Felix Angelov](https://github.com/felangel).
-- [Flutter Bloc Extensions](https://pub.dev/packages/flutter_bloc_extensions) - Kolekce pomocných widgetů postavených nad `flutter_bloc`, od [Ondřeje Kunce](https://github.com/OndrejKunc).
 - [Bloc Code Generator](https://pub.dev/packages/bloc_code_generator) - Generátor kódu, který činí práci s bloky jednoduší, od [Adson Leal](https://github.com/adsonpleal).
 - [Firebase Auth](https://pub.dev/packages/fb_auth) - Firebase plugin pro weby a mobily, od [Rody Davis](https://github.com/AppleEducate).
 - [Form Bloc](https://pub.dev/packages/form_bloc) - Jednoduchý způsob vytváření formulářů s použitím BLoCu a bez psaní velkého množství zbytečného kódu, od [Giancarlo](https://github.com/GiancarloCode).
