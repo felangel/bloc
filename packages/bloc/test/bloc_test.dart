@@ -518,6 +518,33 @@ void main() {
       });
     });
 
+    group('flatMap', () {
+      test('maintains correct transition composition', () {
+        final expectedTransitions = <Transition<CounterEvent, int>>[
+          Transition(
+            currentState: 0,
+            event: CounterEvent.decrement,
+            nextState: -1,
+          ),
+          Transition(
+            currentState: -1,
+            event: CounterEvent.increment,
+            nextState: 0,
+          ),
+        ];
+        final expectedStates = [0, -1, 0];
+        final transitions = <Transition<CounterEvent, int>>[];
+
+        final bloc = FlatMapBloc(onTransitionCallback: transitions.add);
+
+        expectLater(bloc, emitsInOrder(expectedStates)).then((_) {
+          expect(transitions, expectedTransitions);
+        });
+        bloc.add(CounterEvent.decrement);
+        bloc.add(CounterEvent.increment);
+      });
+    });
+
     group('Exception', () {
       test('does not break stream', () {
         final expected = [0, -1];

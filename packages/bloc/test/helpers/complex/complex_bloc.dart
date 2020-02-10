@@ -9,11 +9,11 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
   ComplexState get initialState => ComplexStateA();
 
   @override
-  Stream<ComplexState> transformEvents(
+  Stream<Transition<ComplexEvent, ComplexState>> transformEvents(
     Stream<ComplexEvent> events,
-    Function(ComplexEvent) next,
+    TransitionFunction<ComplexEvent, ComplexState> transitionFn,
   ) {
-    return events.switchMap(next);
+    return events.switchMap(transitionFn);
   }
 
   @override
@@ -32,7 +32,9 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
   }
 
   @override
-  Stream<ComplexState> transformStates(Stream<ComplexState> states) {
-    return states.debounceTime(Duration(milliseconds: 50));
+  Stream<Transition<ComplexEvent, ComplexState>> transformTransitions(
+    Stream<Transition<ComplexEvent, ComplexState>> transitions,
+  ) {
+    return transitions.debounceTime(Duration(milliseconds: 50));
   }
 }
