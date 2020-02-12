@@ -237,6 +237,7 @@ Ensuite, nous devons implémenter `mapEventToState` qui sera lancé chaque fois 
 ```dart
 @override
 Stream<PostState> mapEventToState(PostEvent event) async* {
+  final currentState = state;
   if (event is Fetch && !_hasReachedMax(currentState)) {
     try {
       if (currentState is PostUninitialized) {
