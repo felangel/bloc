@@ -1,14 +1,14 @@
 - 介绍
 
-  - [准备开始](gettingstarted.md)
-  - [为什么使用Bloc？](whybloc.md)
+  - [准备开始](zh-cn/gettingstarted.md)
+  - [为什么使用Bloc？](zh-cn/whybloc.md)
   - 核心思想
-    - [bloc](coreconcepts.md)
-    - [flutter_bloc](flutterbloccoreconcepts.md)
-  - [构架](architecture.md)
-  - [测试](testing.md)
-  - [命名惯例](blocnamingconventions.md)
-  - [常见问题](faqs.md)
+    - [bloc](zh-cn/coreconcepts.md)
+    - [flutter_bloc](zh-cn/flutterbloccoreconcepts.md)
+  - [构架](zh-cn/architecture.md)
+  - [测试](zh-cn/testing.md)
+  - [命名惯例](zh-cn/blocnamingconventions.md)
+  - [常见问题](zh-cn/faqs.md)
 
 - 教程 (Tutorials)
 

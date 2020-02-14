@@ -17,4 +17,4 @@
 - 为 Dart，Flutter，和 AngularDart
 
 [GitHub](https://github.com/felangel/bloc/)
-[开始](gettingstarted.md)
+[开始](zh-cn/gettingstarted.md)
