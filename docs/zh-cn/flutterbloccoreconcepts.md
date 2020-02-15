@@ -1,32 +1,33 @@
-# Flutter Bloc Core Concepts
+# Flutter Bloc的核心理念
 
-?> Please make sure to carefully read and understand the following sections before working with [flutter_bloc](https://pub.dev/packages/flutter_bloc).
+?> 使用前请确保仔细阅读并理解以下部分 [flutter_bloc](https://pub.dev/packages/flutter_bloc).
 
 ## Bloc Widgets
 
 ### BlocBuilder
 
-**BlocBuilder** is a Flutter widget which requires a `Bloc` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed. The `builder` function will potentially be called many times and should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that returns a widget in response to the state.
+**BlocBuilder** 是一个Flutter的部件(`Widget`)，它需要`Bloc`和`builder`两个方法。处理构建部件用来响应新的状态(`State`)。`BlocBuilder` 于 `StreamBuilder`十分相像，但是它有一个简单的接口来减少一部分必须的模版代码。`builder`方法会被潜在的触发很多次并且应该是一个返回一个部件(`Widget`)以响应该状态(`State`)的[纯方法](https://en.wikipedia.org/wiki/Pure_function) that returns a widget in response to the state.
 
-See `BlocListener` if you want to "do" anything in response to state changes such as navigation, showing a dialog, etc...
+如果要响应状态(`State`)更改（例如导航，显示对话框等）而执行任何操作，请参见`BlocListener`。
 
-If the bloc parameter is omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+如果省略了bloc中的参数，则`BlocBuilder`将使用`BlocProvider`和当前的`BuildContext`自动执行查找。
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
   builder: (context, state) {
-    // return widget here based on BlocA's state
+    // 根据BlocA的状态（State）在这里返回一个组件（widget）
   }
 )
 ```
 
 Only specify the bloc if you wish to provide a bloc that will be scoped to a single widget and isn't accessible via a parent `BlocProvider` and the current `BuildContext`.
+仅当您希望提供一个范围仅限于单个部件(widget)且无法通过父代`BlocProvider`和当前`BuildContext`访问的块时，才指定Bloc。
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
-  bloc: blocA, // provide the local bloc instance
+  bloc: blocA, // 提供一个本地的实例
   builder: (context, state) {
-    // return widget here based on BlocA's state
+    // 根据BlocA的状态（State）在这里返回一个部件（widget）
   }
 )
 ```
