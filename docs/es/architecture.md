@@ -1,6 +1,6 @@
 # Arquitectura
 
-![Bloc Architecture](assets/bloc_architecture.png)
+![Bloc Architecture](../assets/bloc_architecture.png)
 
 Utilizando **BLoC** nos permite separar nuestra aplicación en tres capas:
 
