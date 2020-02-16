@@ -33,7 +33,7 @@
 
 > Los estados deberían ser sustantivos debido a que un estado es solo una instantánea en un momento determinado de tiempo.
 
-### Anatomy
+### Anatomía
 
 `Sujeto del Bloc` + `Verbo (acción)` + `Estado`
 
