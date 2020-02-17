@@ -1317,6 +1317,37 @@ return RefreshIndicator(
 
 In order to use the `RefreshIndicator` we had to create a [`Completer`](https://api.dart.dev/stable/dart-async/Completer-class.html) which allows us to produce a `Future` which we can complete at a later time.
 
+The last thing we need to do is complete the `Completer` when we receive a `WeatherLoaded` state in order to dismiss the loading indicator once the weather has been updated.
+
+```dart
+class _WeatherState extends State<Weather> {
+  ...
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: ...
+      body: Center(
+        child: BlocConsumer<WeatherBloc, WeatherState>(
+          listener: (context, state) {
+            if (state is WeatherLoaded) {
+              _refreshCompleter?.complete();
+              _refreshCompleter = Completer();
+            }
+          },
+          builder: (context, state) {
+            ...
+          }
+        ),
+      )
+    )
+  }
+}
+```
+
+We converted our `BlocBuilder` into a `BlocConsumer` because we need to handle both rebuilding the UI based on state changes as well as performing side-effects (completing the `Completer`).
+
+?> **Note:** `BlocConsumer` is identical to having a nested `BlocBuilder` within a `BlocListener`.
+
 That's it! We now have solved problem #1 and users can refresh the weather by pulling down. Feel free to run `flutter run` again and try refreshing the weather.
 
 Next, let's tackle the plain looking UI by creating a `ThemeBloc`.
@@ -1578,7 +1609,7 @@ class _WeatherState extends State<Weather> {
         ],
       ),
       body: Center(
-        child: BlocListener<WeatherBloc, WeatherState>(
+        child: BlocConsumer<WeatherBloc, WeatherState>(
           listener: (context, state) {
             if (state is WeatherLoaded) {
               BlocProvider.of<ThemeBloc>(context).add(
@@ -1588,62 +1619,60 @@ class _WeatherState extends State<Weather> {
               _refreshCompleter = Completer();
             }
           },
-          child: BlocBuilder<WeatherBloc, WeatherState>(
-            builder: (context, state) {
-              if (state is WeatherEmpty) {
-                return Center(child: Text('Please Select a Location'));
-              }
-              if (state is WeatherLoading) {
-                return Center(child: CircularProgressIndicator());
-              }
-              if (state is WeatherLoaded) {
-                final weather = state.weather;
+          builder: (context, state) {
+            if (state is WeatherEmpty) {
+              return Center(child: Text('Please Select a Location'));
+            }
+            if (state is WeatherLoading) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (state is WeatherLoaded) {
+              final weather = state.weather;
 
-                return BlocBuilder<ThemeBloc, ThemeState>(
-                  builder: (context, themeState) {
-                    return GradientContainer(
-                      color: themeState.color,
-                      child: RefreshIndicator(
-                        onRefresh: () {
-                          BlocProvider.of<WeatherBloc>(context).add(
-                            RefreshWeather(city: weather.location),
-                          );
-                          return _refreshCompleter.future;
-                        },
-                        child: ListView(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(top: 100.0),
-                              child: Center(
-                                child: Location(location: weather.location),
+              return BlocBuilder<ThemeBloc, ThemeState>(
+                builder: (context, themeState) {
+                  return GradientContainer(
+                    color: themeState.color,
+                    child: RefreshIndicator(
+                      onRefresh: () {
+                        BlocProvider.of<WeatherBloc>(context).add(
+                          RefreshWeather(city: weather.location),
+                        );
+                        return _refreshCompleter.future;
+                      },
+                      child: ListView(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 100.0),
+                            child: Center(
+                              child: Location(location: weather.location),
+                            ),
+                          ),
+                          Center(
+                            child: LastUpdated(dateTime: weather.lastUpdated),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 50.0),
+                            child: Center(
+                              child: CombinedWeatherTemperature(
+                                weather: weather,
                               ),
                             ),
-                            Center(
-                              child: LastUpdated(dateTime: weather.lastUpdated),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 50.0),
-                              child: Center(
-                                child: CombinedWeatherTemperature(
-                                  weather: weather,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                );
-              }
-              if (state is WeatherError) {
-                return Text(
-                  'Something went wrong!',
-                  style: TextStyle(color: Colors.red),
-                );
-              }
-            },
-          ),
+                    ),
+                  );
+                },
+              );
+            }
+            if (state is WeatherError) {
+              return Text(
+                'Something went wrong!',
+                style: TextStyle(color: Colors.red),
+              );
+            }
+          },
         ),
       ),
     );
@@ -1856,7 +1885,7 @@ class _WeatherState extends State<Weather> {
         ],
       ),
       body: Center(
-        child: BlocListener<WeatherBloc, WeatherState>(
+        child: BlocConsumer<WeatherBloc, WeatherState>(
           listener: (context, state) {
             if (state is WeatherLoaded) {
               BlocProvider.of<ThemeBloc>(context).add(
@@ -1866,62 +1895,60 @@ class _WeatherState extends State<Weather> {
               _refreshCompleter = Completer();
             }
           },
-          child: BlocBuilder<WeatherBloc, WeatherState>(
-            builder: (context, state) {
-              if (state is WeatherEmpty) {
-                return Center(child: Text('Please Select a Location'));
-              }
-              if (state is WeatherLoading) {
-                return Center(child: CircularProgressIndicator());
-              }
-              if (state is WeatherLoaded) {
-                final weather = state.weather;
+          builder: (context, state) {
+            if (state is WeatherEmpty) {
+              return Center(child: Text('Please Select a Location'));
+            }
+            if (state is WeatherLoading) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (state is WeatherLoaded) {
+              final weather = state.weather;
 
-                return BlocBuilder<ThemeBloc, ThemeState>(
-                  builder: (context, themeState) {
-                    return GradientContainer(
-                      color: themeState.color,
-                      child: RefreshIndicator(
-                        onRefresh: () {
-                          BlocProvider.of<WeatherBloc>(context).add(
-                            RefreshWeather(city: weather.location),
-                          );
-                          return _refreshCompleter.future;
-                        },
-                        child: ListView(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(top: 100.0),
-                              child: Center(
-                                child: Location(location: weather.location),
+              return BlocBuilder<ThemeBloc, ThemeState>(
+                builder: (context, themeState) {
+                  return GradientContainer(
+                    color: themeState.color,
+                    child: RefreshIndicator(
+                      onRefresh: () {
+                        BlocProvider.of<WeatherBloc>(context).add(
+                          RefreshWeather(city: weather.location),
+                        );
+                        return _refreshCompleter.future;
+                      },
+                      child: ListView(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 100.0),
+                            child: Center(
+                              child: Location(location: weather.location),
+                            ),
+                          ),
+                          Center(
+                            child: LastUpdated(dateTime: weather.lastUpdated),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 50.0),
+                            child: Center(
+                              child: CombinedWeatherTemperature(
+                                weather: weather,
                               ),
                             ),
-                            Center(
-                              child: LastUpdated(dateTime: weather.lastUpdated),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 50.0),
-                              child: Center(
-                                child: CombinedWeatherTemperature(
-                                  weather: weather,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                );
-              }
-              if (state is WeatherError) {
-                return Text(
-                  'Something went wrong!',
-                  style: TextStyle(color: Colors.red),
-                );
-              }
-            },
-          ),
+                    ),
+                  );
+                },
+              );
+            }
+            if (state is WeatherError) {
+              return Text(
+                'Something went wrong!',
+                style: TextStyle(color: Colors.red),
+              );
+            }
+          },
         ),
       ),
     );
