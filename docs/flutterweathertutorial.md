@@ -1344,7 +1344,7 @@ class _WeatherState extends State<Weather> {
 }
 ```
 
-We converted our `BlocBuilder` into a `BlocConsumer` because we need to handle both rebuilding the UI based on state changes as well as performing side-effects (completing the completer).
+We converted our `BlocBuilder` into a `BlocConsumer` because we need to handle both rebuilding the UI based on state changes as well as performing side-effects (completing the `Completer`).
 
 ?> **Note:** `BlocConsumer` is identical to having a nested `BlocBuilder` within a `BlocListener`.
 
