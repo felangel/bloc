@@ -20,5 +20,6 @@ jobs:
       - uses: JasonEtco/create-an-issue@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          xxx: ${{ toJson(github) }}
         with:
           filename: .github/DOCS_ISSUE_TEMPLATE.md
