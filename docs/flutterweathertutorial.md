@@ -1317,7 +1317,7 @@ return RefreshIndicator(
 
 In order to use the `RefreshIndicator` we had to create a [`Completer`](https://api.dart.dev/stable/dart-async/Completer-class.html) which allows us to produce a `Future` which we can complete at a later time.
 
-The last thing we need to do is complete the completer when we receive a `WeatherLoaded` state in order to dismiss the loading indicator once the weather has been updated.
+The last thing we need to do is complete the `Completer` when we receive a `WeatherLoaded` state in order to dismiss the loading indicator once the weather has been updated.
 
 ```dart
 class _WeatherState extends State<Weather> {
