@@ -1,5 +1,5 @@
 ---
-title: [Translations] Include changes in {{ ref }}
+title: "[Translations] Include changes in {{ ref }}"
 assignees: tenhobi, rodrigobastov, basilex
 labels: documentation, translation
 ---
