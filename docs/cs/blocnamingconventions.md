@@ -1,27 +1,27 @@
-# Naming Conventions
+# Jmenné konvence
 
-!> The following naming conventions are simply recommendations and are completely optional. Feel free to use whatever naming conventions you prefer. You may find some of the examples/documentation do not follow the naming conventions mainly for simplicity/conciseness. These conventions are strongly recommended for large projects with multiple developers.
+!> Následující jmenné konvence jsou pouze doporučením a jsou kompletně dobrovolné. Neváhejte použít libovolné, vámi preferované, jmenné konvence. Některé z příkladů/dokumentace nedodržují jmenné konvence zejména kvůli jednoduchosti/stručnosti. Tyto konvence jsou velmi doporučovány pro velké projekty s více vývojáři.
 
-## Event Conventions
+## Konvence pro Event
 
-> Events should be named in the **past tense** because events are things that have already occurred from the bloc's perspective.
+> Eventy by měly být pojmenovány v minulém čase, protože eventy jsou věci, které z pohledu blocu již nastaly.
 
-### Anatomy
+### Anatomie
 
 `BlocSubject` + `Noun (optional)` + `Verb (event)`
 
-?> Initial load events should follow the convention: `BlocSubject` + `Started`
+?> Počáteční eventy by se měly řídit konvencí: `BlocSubject` + `Started`
 
-#### Examples
+#### Příklady
 
-✅ **Good**
+✅ **Správně**
 
 `CounterStarted`
 `CounterIncremented`
 `CounterDecremented`
 `CounterIncrementRetried`
 
-❌ **Bad**
+❌ **Špatně**
 
 `Initial`
 `CounterInitialized`
@@ -31,25 +31,25 @@
 
 ## State Conventions
 
-> States should be nouns because a state is just a snapshot at a particular point in time.
+> Stavy by měly být podstatná jména, protože stav je jen snímek v určitém časovém okamžiku.
 
 ### Anatomy
 
 `BlocSubject` + `Verb (action)` + `State`
 
-?> `State` should be one of the following: `Initial` | `Success` | `Failure` | `InProgress` and
-initial states should follow the convention: `BlocSubject` + `Initial`.
+?> `State` by měl být jedním z následujících: `Initial` | `Success` | `Failure` | `InProgress` a
+počáteční stavy by se měly řídit kovencí: `BlocSubject` + `Initial`.
 
 #### Examples
 
-✅ **Good**
+✅ **Správně**
 
 `CounterInitial`
 `CounterLoadInProgress`
 `CounterLoadSuccess`
 `CounterLoadFailure`
 
-❌ **Bad**
+❌ **Špatně**
 
 `Initial`
 `Loading`
