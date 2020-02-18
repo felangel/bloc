@@ -89,9 +89,9 @@
 - [表单验证（Form Validation）](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) -  如何使用 `bloc`和`flutter_bloc`的包来实现表单验证的示例
 - [Bloc 和 Stream](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - 如何将 `bloc`和`stream`相互关联并且实时更新界面，这里使用的数据是来自 `Stream`的
 - [无限列表](https://bloclibrary.dev/#/flutterinfinitelisttutorial) - 如何使用`bloc`和`flutter_bloc`的包来实现一个无限可滚动的列表的示例
-- [登陆流程](https://bloclibrary.dev/#/flutterlogintutorial) - 一个使用`bloc`和`flutter_bloc`的包来实现的登陆流程示例
-- [使用Firebase的登陆](https://bloclibrary.dev/#/flutterfirebaselogintutorial) - 如何使用`bloc`和`flutter_bloc`的包来实现通过Firebase登陆的示例
-- [Github 搜索](https://bloclibrary.dev/#/flutterangulargithubsearch) - 如何使用`bloc`和`flutter_bloc`的包来制作一个Github 搜索程序的示例
+- [登陆流程](https://bloclibrary.dev/#/flutterlogintutorial) - 一个使用`bloc`和`flutter_bloc`的包来实现的登陆流程的示例
+- [使用Firebase实现登陆](https://bloclibrary.dev/#/flutterfirebaselogintutorial) - 如何使用`bloc`和`flutter_bloc`的包来实现通过Firebase登陆的示例
+- [Github 搜索](https://bloclibrary.dev/#/flutterangulargithubsearch) - 如何使用`bloc`和`flutter_bloc`的包来制作一个Github搜索程序的示例
 - [天气预报](https://bloclibrary.dev/#/flutterweathertutorial) - 如何使用`bloc`和`flutter_bloc`的包来制作一个天气预报的程序， 这个程序使用了`RefreshIndicator`从而实现了“下拉更新”，同时还有动态主题展示。
 - [备忘录](https://bloclibrary.dev/#/fluttertodostutorial) - 如何使用`bloc`和`flutter_bloc`的包来制作一个备忘录程序的示例
 - [计时器](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - 如何使用`bloc`和`flutter_bloc`的包来制作一个计时器的示例
@@ -102,11 +102,11 @@
 ### Web
 
 - [计数器](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - 在一个 `AngularDart`的程序中如何使用 `CounterBloc`
-- [Github 搜索](https://github.com/felangel/Bloc/tree/master/examples/github_search/angular_github_search) - 如何使用 `bloc` 和 `angular_bloc` 的包来实现一个 Github搜索的程序
+- [Github 搜索](https://github.com/felangel/Bloc/tree/master/examples/github_search/angular_github_search) - 如何使用 `bloc` 和 `angular_bloc` 的包来实现一个Github搜索的程序
 
 ### Flutter + Web 
 
-- [Github 搜索](https://github.com/felangel/Bloc/tree/master/examples/github_search) - 如何创建一个Github 搜索的程序并且将其代码分享于 Flutter 和 AngularDart 之间
+- [Github 搜索](https://github.com/felangel/Bloc/tree/master/examples/github_search) - 如何创建一个Github搜索的程序并且将其代码分享于 Flutter 和 AngularDart 之间
 
 ## 文章
 
@@ -140,19 +140,20 @@
 
 ### 视屏教程
 
-- [Flutter Bloc Library Tutorial](https://www.youtube.com/watch?v=hTExlt1nJZI) - Introduction to the Bloc Library, by [Reso Coder](https://resocoder.com).
-- [Flutter Youtube Search](https://www.youtube.com/watch?v=BJY8nuYUM7M) - How to build a Youtube Search app which interacts with an API using the bloc and flutter_bloc packages, by [Reso Coder](https://resocoder.com).
-- [Flutter Bloc - AUTOMATIC LOOKUP - v0.20 (and Up), Updated Tutorial](https://www.youtube.com/watch?v=_vOpPuVfmiU) - Updated Tutorial on the Flutter Bloc Package, by [Reso Coder](https://resocoder.com).
-- [Dynamic Theming with flutter_bloc](https://www.youtube.com/watch?v=YYbhkg-W8Mg) - Tutorial on how to use the flutter_bloc package to implement dynamic theming, by [Reso Coder](https://resocoder.com).
-- [Persist Bloc State in Flutter](https://www.youtube.com/watch?v=vSOpZd_FFEY) - Tutorial on how to use the hydrated_bloc package to automatically persist app state, by [Reso Coder](https://resocoder.com).
-- [State Management Foundation](https://www.youtube.com/watch?v=S2KmxzgsTwk&t=731s) - Introduction to state management using the flutter_bloc package, by [Techie Blossom](https://techieblossom.com).
-- [Flutter Football Player Search](https://www.youtube.com/watch?v=S2KmxzgsTwk) - How to build a Football Player Search app which interacts with an API using the bloc and flutter_bloc packages, by [Techie Blossom](https://techieblossom.com).
-- [Learning the Flutter Bloc Package](https://www.youtube.com/watch?v=eAiCPl3yk9A&t=1s) - Learning the flutter_bloc package live, by [Robert Brunhage](https://www.youtube.com/channel/UCSLIg5O0JiYO1i2nD4RclaQ)
-- [Bloc Test Tutorial](https://www.youtube.com/watch?v=S6jFBiiP0Mc) - Tutorial on how to unit test blocs using the bloc_test package, by [Reso Coder](https://resocoder.com).
+- [Flutter Bloc Library Tutorial](https://www.youtube.com/watch?v=hTExlt1nJZI) - 
+Bloc库的简介, 作者： [Reso Coder](https://resocoder.com).
+- [Flutter Youtube Search](https://www.youtube.com/watch?v=BJY8nuYUM7M) - 如何使用Bloc和flutter_bloc软件包构建与API交互的Youtube Search应用, 作者： [Reso Coder](https://resocoder.com).
+- [Flutter Bloc - AUTOMATIC LOOKUP - v0.20 (and Up), Updated Tutorial](https://www.youtube.com/watch?v=_vOpPuVfmiU) - Flutter Bloc软件包的更新教程, 作者： [Reso Coder](https://resocoder.com).
+- [Dynamic Theming with flutter_bloc](https://www.youtube.com/watch?v=YYbhkg-W8Mg) - 关于如何使用flutter_bloc包实现动态主题的教程, 作者： [Reso Coder](https://resocoder.com).
+- [Persist Bloc State in Flutter](https://www.youtube.com/watch?v=vSOpZd_FFEY) - 关于如何使用hydrated_bloc软件包自动保持应用状态的教程, 作者： [Reso Coder](https://resocoder.com).
+- [State Management Foundation](https://www.youtube.com/watch?v=S2KmxzgsTwk&t=731s) - 使用flutter_bloc软件包进行状态管理的简介, 作者 [Techie Blossom](https://techieblossom.com).
+- [Flutter Football Player Search](https://www.youtube.com/watch?v=S2KmxzgsTwk) - 如何构建使用bloc和flutter_bloc软件包与API交互的Football Player搜索应用, 作者： [Techie Blossom](https://techieblossom.com).
+- [Learning the Flutter Bloc Package](https://www.youtube.com/watch?v=eAiCPl3yk9A&t=1s) - 实时学习flutter_bloc软件包, 作者： [Robert Brunhage](https://www.youtube.com/channel/UCSLIg5O0JiYO1i2nD4RclaQ)
+- [Bloc Test Tutorial](https://www.youtube.com/watch?v=S6jFBiiP0Mc) - 有关如何使用bloc_test包对bloc进行单元测试的教程, 作者： [Reso Coder](https://resocoder.com).
 
 ### 扩展
 
-- [Feature Scaffolding for VSCode](https://marketplace.visualstudio.com/items?itemName=KiritchoukC.flutter-clean-architecture) - 一个基于VSCode的插件，灵感来源于[Reso Coder's](https://resocoder.com) clean architecture tutorials, which helps quickly scaffold features, by [Kiritchouk Clément](https://github.com/KiritchoukC).
+- [Feature Scaffolding for VSCode](https://marketplace.visualstudio.com/items?itemName=KiritchoukC.flutter-clean-architecture) - 一个基于VSCode的插件，灵感来源于[Reso Coder's](https://resocoder.com) 干净的架构教程，可帮助快速搭建scaffold功能, 作者： [Kiritchouk Clément](https://github.com/KiritchoukC).
 
 ## 维护者
 
