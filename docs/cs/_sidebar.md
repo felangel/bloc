@@ -7,6 +7,8 @@
     - [flutter_bloc](cs/flutterbloccoreconcepts.md)
   - [Architektura](cs/architecture.md)
   - [Testování](cs/testing.md)
+  - [Jmenné konvence](cs/blocnamingconventions.md)
+  - [FAQ](cs/faqs.md)
 
 - Tutoriály
 
