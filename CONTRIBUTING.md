@@ -55,6 +55,8 @@ python -m SimpleHTTPServer 8080 .
 # navigate to http://localhost:8080
 ```
 
+If you want to help maintain translations in the future, add yourself to `.github/DOCS_ISSUE_TEMPLATE.md`.
+
 To make PRs more readable, please provide this checklist to the PR description
 so other contributors can easily see what's already done.
 
