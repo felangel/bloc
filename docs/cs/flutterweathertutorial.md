@@ -1,10 +1,8 @@
-# Flutter Weather Tutorial
+# Tutoriál: Počasí ve Flutteru
 
-![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+?> **Poznámka:** Tento tutoriál ještě nemá překlad.
 
-> In the following tutorial, we're going to build a Weather app in Flutter which demonstrates how to manage multiple blocs to implement dynamic theming, pull-to-refresh, and much more. Our weather app will pull real data from an API and demonstrate how to separate our application into three layers (data, business logic, and presentation).
-
-![demo](./assets/gifs/flutter_weather.gif)
+![advanced](https://img.shields.io/badge/úroveň-pokročilý-red.svg)
 
 ## Setup
 
