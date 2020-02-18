@@ -64,7 +64,7 @@ In most cases, `BlocProvider` should be used to create new `blocs` which will be
 
 ```dart
 BlocProvider(
-  create: (BuildContext context) => BlocA(),
+  builder: (BuildContext context) => BlocA(),
   child: ChildA(),
 );
 ```
@@ -94,11 +94,11 @@ By using `MultiBlocProvider` we can go from:
 
 ```dart
 BlocProvider<BlocA>(
-  create: (BuildContext context) => BlocA(),
+  builder: (BuildContext context) => BlocA(),
   child: BlocProvider<BlocB>(
-    create: (BuildContext context) => BlocB(),
+    builder: (BuildContext context) => BlocB(),
     child: BlocProvider<BlocC>(
-      create: (BuildContext context) => BlocC(),
+      builder: (BuildContext context) => BlocC(),
       child: ChildA(),
     )
   )
@@ -111,13 +111,13 @@ to:
 MultiBlocProvider(
   providers: [
     BlocProvider<BlocA>(
-      create: (BuildContext context) => BlocA(),
+      builder: (BuildContext context) => BlocA(),
     ),
     BlocProvider<BlocB>(
-      create: (BuildContext context) => BlocB(),
+      builder: (BuildContext context) => BlocB(),
     ),
     BlocProvider<BlocC>(
-      create: (BuildContext context) => BlocC(),
+      builder: (BuildContext context) => BlocC(),
     ),
   ],
   child: ChildA(),
@@ -242,7 +242,7 @@ BlocConsumer<BlocA, BlocAState>(
 
 ```dart
 RepositoryProvider(
-  create: (context) => RepositoryA(),
+  builder: (context) => RepositoryA(),
   child: ChildA(),
 );
 ```
@@ -263,11 +263,11 @@ By using `MultiRepositoryProvider` we can go from:
 
 ```dart
 RepositoryProvider<RepositoryA>(
-  create: (context) => RepositoryA(),
+  builder: (context) => RepositoryA(),
   child: RepositoryProvider<RepositoryB>(
-    create: (context) => RepositoryB(),
+    builder: (context) => RepositoryB(),
     child: RepositoryProvider<RepositoryC>(
-      create: (context) => RepositoryC(),
+      builder: (context) => RepositoryC(),
       child: ChildA(),
     )
   )
@@ -280,13 +280,13 @@ to:
 MultiRepositoryProvider(
   providers: [
     RepositoryProvider<RepositoryA>(
-      create: (context) => RepositoryA(),
+      builder: (context) => RepositoryA(),
     ),
     RepositoryProvider<RepositoryB>(
-      create: (context) => RepositoryB(),
+      builder: (context) => RepositoryB(),
     ),
     RepositoryProvider<RepositoryC>(
-      create: (context) => RepositoryC(),
+      builder: (context) => RepositoryC(),
     ),
   ],
   child: ChildA(),
@@ -380,7 +380,7 @@ At this point we have successfully separated our presentational layer from our b
                 <a href="https://bloclibrary.dev/#/fluttercountertutorial">
                     <img src="https://bloclibrary.dev/assets/gifs/flutter_counter.gif" width="200"/>
                 </a>
-            </td>            
+            </td>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/#/flutterinfinitelisttutorial">
                     <img src="https://bloclibrary.dev/assets/gifs/flutter_infinite_list.gif" width="200"/>
