@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+part of 'list_bloc.dart';
 
 abstract class ListEvent extends Equatable {
   const ListEvent();
