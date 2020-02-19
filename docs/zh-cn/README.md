@@ -12,5 +12,5 @@
 
 ---
 
-可预测的状态管理库，帮助实现。
+可预测的状态管理库，帮助实现
 [BLoC 设计模式](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc)。
