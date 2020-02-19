@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter_shopping_cart/catalog/catalog.dart';
-import 'package:meta/meta.dart';
+part of 'cart_bloc.dart';
 
 @immutable
 abstract class CartEvent extends Equatable {

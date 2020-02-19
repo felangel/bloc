@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter_shopping_cart/catalog/models/models.dart';
-import 'package:meta/meta.dart';
+part of 'catalog_bloc.dart';
 
 @immutable
 abstract class CatalogState extends Equatable {
