@@ -17,4 +17,4 @@
 - 支持 Dart，Flutter，以及 AngularDart
 
 [GitHub](https://github.com/felangel/bloc/)
-[入门](gettingstarted.md)
+[入门](zh-cn/gettingstarted.md)
