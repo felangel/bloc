@@ -25,22 +25,18 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^0.9.7
-  firebase_auth: ^0.8.1+4
-  google_sign_in: ^4.0.1+1
+  firebase_core: ^0.4.0+8
+  google_sign_in: ^4.0.0
+  firebase_auth: ^0.15.0+1
   flutter_bloc: ^3.2.0
   equatable: ^1.0.0
   meta: ^1.1.6
   font_awesome_flutter: ^8.4.0
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
 
 flutter:
   uses-material-design: true
@@ -235,14 +231,13 @@ Create a folder/directory called `authentication_bloc` and we can create our aut
 ├── authentication_bloc
 │   ├── authentication_bloc.dart
 │   ├── authentication_event.dart
-│   ├── authentication_state.dart
-│   └── bloc.dart
+│   └── authentication_state.dart
 ```
 
 ?> **Tip:** You can use the [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) or [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) extensions to autogenerate the files for you.
 
 ```dart
-import 'package:equatable/equatable.dart';
+part of 'authentication_bloc.dart';
 
 abstract class AuthenticationState extends Equatable {
   const AuthenticationState();
@@ -285,7 +280,7 @@ We will need:
 - a `LoggedOut` event to notify the bloc that the user has successfully logged out.
 
 ```dart
-import 'package:equatable/equatable.dart';
+part of 'authentication_bloc.dart';
 
 abstract class AuthenticationEvent extends Equatable {
   @override
@@ -299,16 +294,6 @@ class LoggedIn extends AuthenticationEvent {}
 class LoggedOut extends AuthenticationEvent {}
 ```
 
-## Authentication Barrel File
-
-Before we get to work on the `AuthenticationBloc` implementation, we will export all authentication bloc files from our `authentication_bloc/bloc.dart` barrel file. This will allow us import the `AuthenticationBloc`, `AuthenticationEvents`, and `AuthenticationState` with a single import later on.
-
-```dart
-export 'authentication_bloc.dart';
-export 'authentication_event.dart';
-export 'authentication_state.dart';
-```
-
 ## Authentication Bloc
 
 Now that we have our `AuthenticationState` and `AuthenticationEvents` defined, we can get to work on implementing the `AuthenticationBloc` which is going to manage checking and updating a user's `AuthenticationState` in response to `AuthenticationEvents`.
@@ -318,9 +303,12 @@ We'll start off by creating our `AuthenticationBloc` class.
 ```dart
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
+
+part 'authentication_event.dart';
+part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -391,9 +379,12 @@ Our complete `authentication_bloc.dart` should now look like this:
 ```dart
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
+
+part 'authentication_event.dart';
+part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -454,7 +445,7 @@ We'll start by removing everything from out `main.dart` and implementing our mai
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 
 void main() {
@@ -484,7 +475,7 @@ Next we need to implement our `App` widget.
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 
 void main() {
@@ -600,7 +591,7 @@ Now, let's hook it up to our `main.dart`.
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
@@ -653,7 +644,7 @@ Let's create `home_screen.dart` and get started.
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   final String name;
@@ -695,7 +686,7 @@ Now let's update our `App` to render the `HomeScreen` if the `AuthenticationStat
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 import 'package:flutter_firebase_login/home_screen.dart';
 import 'package:flutter_firebase_login/splash_screen.dart';
@@ -1005,14 +996,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Stream<LoginEvent> events,
     Stream<LoginState> Function(LoginEvent event) next,
   ) {
-    final observableStream = events as Observable<LoginEvent>;
-    final nonDebounceStream = observableStream.where((event) {
+    final nonDebounceStream = events.where((event) {
       return (event is! EmailChanged && event is! PasswordChanged);
     });
-    final debounceStream = observableStream.where((event) {
+    final debounceStream = events.where((event) {
       return (event is EmailChanged || event is PasswordChanged);
     }).debounceTime(Duration(milliseconds: 300));
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super.transformEvents(
+      nonDebounceStream.mergeWith([debounceStream]),
+      next,
+    );
   }
 
   @override
@@ -1142,7 +1135,7 @@ Create `login/login_form.dart` and let's build out our form.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/login/login.dart';
 
 class LoginForm extends StatefulWidget {
@@ -1310,7 +1303,7 @@ Our `LoginForm` widget is a `StatefulWidget` because it needs to maintain it's o
 
 We use a `BlocListener` widget in order to execute one-time actions in response to state changes. In this case, we are showing different `SnackBar` widgets in response to a pending/failure state. In addition, if the submission is successful, we use the `listener` method to notify the `AuthenticationBloc` that the user has successfully logged in.
 
-?> **Tip:** Check out the [BlocListener Recipe](recipesbloclistener.md) for more details.
+?> **Tip:** Check out the [SnackBar Recipe](recipesfluttershowsnackbar.md) for more details.
 
 We use a `BlocBuilder` widget in order to rebuild the UI in response to different `LoginStates`.
 
@@ -1646,14 +1639,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     Stream<RegisterEvent> events,
     Stream<RegisterState> Function(RegisterEvent event) next,
   ) {
-    final observableStream = events as Observable<RegisterEvent>;
-    final nonDebounceStream = observableStream.where((event) {
+    final nonDebounceStream = events.where((event) {
       return (event is! EmailChanged && event is! PasswordChanged);
     });
-    final debounceStream = observableStream.where((event) {
+    final debounceStream = events.where((event) {
       return (event is EmailChanged || event is PasswordChanged);
     }).debounceTime(Duration(milliseconds: 300));
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super.transformEvents(
+      nonDebounceStream.mergeWith([debounceStream]),
+      next,
+    );
   }
 
   @override
@@ -1748,7 +1743,7 @@ Create `register/register_form.dart` and let's build it.
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/register/register.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -1934,7 +1929,7 @@ All that's left to do is update our `App` widget in `main.dart` to show the `Log
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 import 'package:flutter_firebase_login/home_screen.dart';
 import 'package:flutter_firebase_login/login/login.dart';

@@ -229,14 +229,13 @@ Crie uma pasta/diretório chamado `authentication_bloc` e podemos criar nossos a
 ├── authentication_bloc
 │   ├── authentication_bloc.dart
 │   ├── authentication_event.dart
-│   ├── authentication_state.dart
-│   └── bloc.dart
+│   └── authentication_state.dart
 ```
 
 ?> **Dica:** Você pode usar o [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) ou [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) para gerar os arquivos para você.
 
 ```dart
-import 'package:equatable/equatable.dart';
+part of 'authentication_bloc.dart';
 
 abstract class AuthenticationState extends Equatable {
   const AuthenticationState();
@@ -279,7 +278,7 @@ Nós vamos precisar:
 - um evento `LoggedOut` para notificar o bloc de que o usuário efetuou logout com sucesso.
 
 ```dart
-import 'package:equatable/equatable.dart';
+part of 'authentication_bloc.dart';
 
 abstract class AuthenticationEvent extends Equatable {
   @override
@@ -293,16 +292,6 @@ class LoggedIn extends AuthenticationEvent {}
 class LoggedOut extends AuthenticationEvent {}
 ```
 
-## Authentication Barrel File
-
-Antes de começarmos a trabalhar na implementação do `AuthenticationBloc`, exportaremos todos os arquivos do bloc de autenticação do nosso arquivo barramento `authentication_bloc/bloc.dart`. Isso nos permitirá importar o `AuthenticationBloc`,` AuthenticationEvents` e `AuthenticationState` com uma única importação posteriormente.
-
-```dart
-export 'authentication_bloc.dart';
-export 'authentication_event.dart';
-export 'authentication_state.dart';
-```
-
 ## Authentication Bloc
 
 Agora que temos nossos `AuthenticationState` e `AuthenticationEvents` definidos, podemos começar a trabalhar na implementação do `AuthenticationBloc`, que gerenciará a verificação e a atualização do `AuthenticationState` de um usuário em resposta a `AuthenticationEvents`.
@@ -312,9 +301,12 @@ Começaremos criando nossa classe `AuthenticationBloc`.
 ```dart
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
+
+part 'authentication_event.dart';
+part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -385,9 +377,12 @@ Nosso `authentication_bloc.dart` completo deve agora ficar assim:
 ```dart
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
+
+part 'authentication_event.dart';
+part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -448,7 +443,7 @@ Começaremos removendo tudo do `main.dart` e implementando nossa função princi
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 
 void main() {
@@ -478,7 +473,7 @@ Em seguida, precisamos implementar nosso widget `App`.
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 
 void main() {
@@ -594,7 +589,7 @@ Agora, vamos ligá-lo ao nosso `main.dart`.
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
@@ -647,7 +642,7 @@ Vamos criar `home_screen.dart` e começar.
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   final String name;
@@ -689,7 +684,7 @@ Agora vamos atualizar nosso `App` para renderizar a `HomeScreen` se o `Authentic
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 import 'package:flutter_firebase_login/home_screen.dart';
 import 'package:flutter_firebase_login/splash_screen.dart';
@@ -1138,7 +1133,7 @@ Crie `login/login_form.dart` e vamos criar nosso formulário.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/login/login.dart';
 
 class LoginForm extends StatefulWidget {
@@ -1306,7 +1301,7 @@ Nosso widget `LoginForm` é um `StatefulWidget` porque precisa manter seu própr
 
 Utilizamos um widget `BlocListener` para executar ações únicas em resposta a alterações de estado. Neste caso, estamos mostrando diferentes widgets `SnackBar` em resposta a um estado pendente / falha. Além disso, se o envio for bem-sucedido, usamos o método `listener` para notificar o `AuthenticationBloc` de que o usuário efetuou login com êxito.
 
-?> **Dica:** Confira a [Receita do BlocListener](recipesbloclistener.md) para mais detalhes.
+?> **Dica:** Confira a [Receita do SnackBar](recipesfluttershowsnackbar.md) para mais detalhes.
 
 Usamos um widget `BlocBuilder` para reconstruir a interface do usuário em resposta a diferentes `LoginStates`.
 
@@ -1746,7 +1741,7 @@ Crie `register/register_form.dart` e vamos construí-lo.
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/register/register.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -1932,7 +1927,7 @@ Tudo o que resta a fazer é atualizar o widget `App` no `main.dart` para mostrar
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 import 'package:flutter_firebase_login/home_screen.dart';
 import 'package:flutter_firebase_login/login/login.dart';
