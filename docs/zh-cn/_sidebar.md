@@ -1,16 +1,16 @@
-- Introduction
+- 介绍
 
-  - [Getting Started](gettingstarted.md)
-  - [Why Bloc?](whybloc.md)
-  - Core Concepts
+  - [入门](zh-cn/gettingstarted.md)
+  - [为什么使用 Bloc？](whybloc.md)
+  - 核心概念
     - [bloc](coreconcepts.md)
     - [flutter_bloc](flutterbloccoreconcepts.md)
-  - [Architecture](architecture.md)
-  - [Testing](testing.md)
-  - [Naming Conventions](blocnamingconventions.md)
-  - [FAQs](faqs.md)
+  - [架构](architecture.md)
+  - [测试](testing.md)
+  - [命名约定](blocnamingconventions.md)
+  - [常见问题](faqs.md)
 
-- Tutorials
+- 教程
 
   - Flutter
     - [Counter](fluttercountertutorial.md)
@@ -33,9 +33,9 @@
     - [Navigation](recipesflutternavigation.md)
     - [Bloc Access](recipesflutterblocaccess.md)
 
-- Tools
+- 工具
 
-  - Extensions
+  - 扩展
 
     - [IntelliJ](blocintellijextension.md)
     - [VSCode](blocvscodeextension.md)
