@@ -1,25 +1,25 @@
-# Getting Started
+# 入门
 
-?> In order to start using bloc you must have the [Dart SDK](https://dart.dev/get-dart) installed on your machine.
+?> 为了开始使用 bloc，您必须在计算机上安装[Dart SDK](https://dart.dev/get-dart)
 
-## Overview
+## 概览
 
-Bloc consists of several pub packages:
+Bloc 由几个 pub 包组成：
 
-- [bloc](https://pub.dev/packages/bloc) - Core bloc library
-- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Powerful Flutter Widgets built to work with bloc in order to build fast, reactive mobile applications.
-- [angular_bloc](https://pub.dev/packages/angular_bloc) - Powerful Angular Components built to work with bloc in order to build fast, reactive web applications.
+- [bloc](https://pub.dev/packages/bloc) - 核心 bloc 库
+- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - 强大的 Flutter Widget，与 bloc 配合使用，以构建快速、响应式移动应用程序。
+- [angular_bloc](https://pub.dev/packages/angular_bloc) - 强大的 Angular 组件，与 bloc 配合使用，以构建快速、响应式 Web 应用程序。
 
-## Installation
+## 安装
 
-The first thing we need to do is add the bloc package to our `pubspec.yaml` as a dependency.
+我们需要做的第一件事是将 bloc 包为依赖项添加到我们的`pubspec.yaml` 中。
 
 ```yaml
 dependencies:
   bloc: ^3.0.0
 ```
 
-For a [Flutter](https://flutter.dev/) application, we also need to add the flutter_bloc package to our `pubspec.yaml` as a dependency.
+对于 [Flutter](https://flutter.dev/) 应用程序, 我们还需要将 flutter_bloc 软件包作为依赖项添加到我们的`pubspec.yaml`中。
 
 ```yaml
 dependencies:
@@ -27,7 +27,7 @@ dependencies:
   flutter_bloc: ^3.2.0
 ```
 
-For an [AngularDart](https://angulardart.dev/) application, we also need to add the angular_bloc package to our `pubspec.yaml` as a dependency.
+对于 [AngularDart](https://angulardart.dev/) 我们还需要将 angular_bloc 软件包作为依赖项添加到我们的`pubspec.yaml`中。
 
 ```yaml
 dependencies:
@@ -35,30 +35,30 @@ dependencies:
   angular_bloc: ^3.0.0
 ```
 
-Next we need to install bloc.
+接下来，我们需要安装 bloc。
 
-!> Make sure to run the following command from the same directory as your `pubspec.yaml` file.
+!> 确保从与`pubspec.yaml`文件相同的目录中运行以下命令。
 
-- For Dart or AngularDart run `pub get`
+- 对于 Dart 或 AngularDart 运行 `pub get`
 
-- For Flutter run `flutter packages get`
+- 对于 Flutter 运行 `flutter packages get`
 
-## Import
+## 导入
 
-Now that we have successfully installed bloc, we can create our `main.dart` and import bloc.
+现在我们已经成功安装了 bloc，我们可以创建我们的`main.dart`并导入 bloc。
 
 ```dart
 import 'package:bloc/bloc.dart';
 ```
 
-For a Flutter application we can also import flutter_bloc.
+对于 Flutter 应用程序，我们还可以导入 flutter_bloc。
 
 ```dart
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 ```
 
-For an AngularDart application we can also import angular_bloc.
+对于 AngularDart 应用程序，我们还可以导入 angular_bloc。
 
 ```dart
 import 'package:bloc/bloc.dart';
