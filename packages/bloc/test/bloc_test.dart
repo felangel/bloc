@@ -53,7 +53,7 @@ void main() {
         expectLater(
           simpleBloc,
           emitsInOrder(expectedStates),
-        ).then((dynamic _) {
+        ).then((_) {
           verify(
             delegate.onTransition(
               simpleBloc,
@@ -76,7 +76,7 @@ void main() {
         expectLater(
           simpleBloc,
           emitsInOrder(expectedStates),
-        ).then((dynamic _) {
+        ).then((_) {
           verify(
             delegate.onTransition(
               simpleBloc,
@@ -159,7 +159,7 @@ void main() {
         expectLater(
           complexBloc,
           emitsInOrder(expectedStates),
-        ).then((dynamic _) {
+        ).then((_) {
           verify(
             delegate.onTransition(
               complexBloc,
@@ -278,7 +278,7 @@ void main() {
         expectLater(
           counterBloc,
           emitsInOrder(expectedStates),
-        ).then((dynamic _) {
+        ).then((_) {
           expectLater(transitions, expectedTransitions);
           verify(
             delegate.onTransition(
@@ -310,7 +310,7 @@ void main() {
         expectLater(
           counterBloc,
           emitsInOrder(expectedStates),
-        ).then((dynamic _) {
+        ).then((_) {
           expect(transitions, expectedTransitions);
           verify(
             delegate.onTransition(
@@ -433,7 +433,7 @@ void main() {
         expectLater(
           asyncBloc,
           emitsInOrder(expectedStates),
-        ).then((dynamic _) {
+        ).then((_) {
           verify(
             delegate.onTransition(
               asyncBloc,
@@ -571,7 +571,7 @@ void main() {
         expectLater(
           bloc,
           emitsInOrder(<int>[0]),
-        ).then((dynamic _) {
+        ).then((_) {
           expect(expectedError, exception);
           expect(expectedStacktrace, isNotNull);
         });
@@ -592,7 +592,7 @@ void main() {
         expectLater(
           bloc,
           emitsInOrder(<int>[0]),
-        ).then((dynamic _) {
+        ).then((_) {
           expect(
             capturedError,
             isStateError,
@@ -643,7 +643,7 @@ void main() {
         expectLater(
           bloc,
           emitsInOrder(<int>[0]),
-        ).then((dynamic _) {
+        ).then((_) {
           expect(expectedError, error);
           expect(expectedStacktrace, isNotNull);
         });
@@ -667,7 +667,7 @@ void main() {
         expectLater(
           bloc,
           emitsInOrder(<int>[0]),
-        ).then((dynamic _) {
+        ).then((_) {
           expect(expectedError, error);
           expect(expectedStacktrace, isNull);
           expect(bloc.state, 0);
