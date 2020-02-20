@@ -27,7 +27,7 @@ class ${pascalCaseBlocName}Bloc extends Bloc<${blocEvent}, ${blocState}> {
   Stream<${blocState}> mapEventToState(
     ${blocEvent} event,
   ) async* {
-    // TODO: Add Logic
+    // TODO: implement mapEventToState
   }
 }
 `;
@@ -54,7 +54,7 @@ class ${pascalCaseBlocName}Bloc extends Bloc<${blocEvent}, ${blocState}> {
   Stream<${blocState}> mapEventToState(
     ${blocEvent} event,
   ) async* {
-    // TODO: Add Logic
+    // TODO: implement mapEventToState
   }
 }
 `;
