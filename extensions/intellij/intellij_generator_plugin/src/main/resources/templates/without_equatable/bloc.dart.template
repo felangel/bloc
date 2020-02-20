@@ -12,6 +12,6 @@ class ${bloc_pascal_case}Bloc extends Bloc<${bloc_pascal_case}Event, ${bloc_pasc
   Stream<${bloc_pascal_case}State> mapEventToState(
     ${bloc_pascal_case}Event event,
   ) async* {
-    // TODO: Add Logic
+    // TODO: implement mapEventToState
   }
 }
