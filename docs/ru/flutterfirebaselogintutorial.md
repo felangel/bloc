@@ -229,14 +229,13 @@ class UserRepository {
 ├── authentication_bloc
 │   ├── authentication_bloc.dart
 │   ├── authentication_event.dart
-│   ├── authentication_state.dart
-│   └── bloc.dart
+│   └── authentication_state.dart
 ```
 
 ?> **Совет:** Вы можете использовать [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) или [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) расширения для автоматического создания файлов для вас.
 
 ```dart
-import 'package:equatable/equatable.dart';
+part of 'authentication_bloc.dart';
 
 abstract class AuthenticationState extends Equatable {
   const AuthenticationState();
@@ -279,7 +278,7 @@ class Unauthenticated extends AuthenticationState {}
 - событие `LoggedOut`, чтобы уведомить блок о том, что пользователь успешно вышел из системы.
 
 ```dart
-import 'package:equatable/equatable.dart';
+part of 'authentication_bloc.dart';
 
 abstract class AuthenticationEvent extends Equatable {
   @override
@@ -293,16 +292,6 @@ class LoggedIn extends AuthenticationEvent {}
 class LoggedOut extends AuthenticationEvent {}
 ```
 
-## Auth индекс
-
-Прежде чем приступить к работе над реализацией `AuthenticationBloc`, мы экспортируем все файлы блоков аутентификации из нашего файла индекса `authentication_bloc/bloc.dart`. Это позволит нам импортировать `AuthenticationBloc`, `AuthenticationEvents` и `AuthenticationState` с последующим единственным импортом.
-
-```dart
-export 'authentication_bloc.dart';
-export 'authentication_event.dart';
-export 'authentication_state.dart';
-```
-
 ## Auth блок
 
 Теперь, когда у нас определены `AuthenticationState` и `AuthenticationEvents`, мы можем приступить к реализации `AuthenticationBloc`, который будет управлять проверкой и обновлением пользовательского `AuthenticationState` в ответ на `AuthenticationEvents`.
@@ -312,9 +301,12 @@ export 'authentication_state.dart';
 ```dart
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
+
+part 'authentication_event.dart';
+part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -385,9 +377,12 @@ Stream<AuthenticationState> _mapLoggedOutToState() async* {
 ```dart
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
+
+part 'authentication_event.dart';
+part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -448,7 +443,7 @@ class AuthenticationBloc
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 
 void main() {
@@ -478,7 +473,7 @@ void main() {
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 
 void main() {
@@ -594,7 +589,7 @@ class SplashScreen extends StatelessWidget {
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 import 'package:flutter_firebase_login/splash_screen.dart';
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
@@ -647,7 +642,7 @@ class App extends StatelessWidget {
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   final String name;
@@ -689,7 +684,7 @@ class HomeScreen extends StatelessWidget {
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 import 'package:flutter_firebase_login/home_screen.dart';
 import 'package:flutter_firebase_login/splash_screen.dart';
@@ -1131,7 +1126,7 @@ class LoginScreen extends StatelessWidget {
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/login/login.dart';
 
 class LoginForm extends StatefulWidget {
@@ -1739,7 +1734,7 @@ class RegisterScreen extends StatelessWidget {
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/register/register.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -1925,7 +1920,7 @@ class RegisterButton extends StatelessWidget {
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 import 'package:flutter_firebase_login/home_screen.dart';
 import 'package:flutter_firebase_login/login/login.dart';

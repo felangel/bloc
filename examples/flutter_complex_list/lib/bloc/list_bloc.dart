@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_complex_list/repository.dart';
 import 'package:flutter_complex_list/models/models.dart';
-import 'package:flutter_complex_list/bloc/bloc.dart';
+
+part 'list_event.dart';
+part 'list_state.dart';
 
 class ListBloc extends Bloc<ListEvent, ListState> {
   final Repository repository;

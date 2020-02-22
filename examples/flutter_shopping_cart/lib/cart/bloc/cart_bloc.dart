@@ -1,6 +1,11 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import './bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_shopping_cart/catalog/catalog.dart';
+import 'package:meta/meta.dart';
+
+part 'cart_event.dart';
+part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   @override

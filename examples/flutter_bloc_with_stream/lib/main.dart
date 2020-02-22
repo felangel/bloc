@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'ticker/ticker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_with_stream/bloc/bloc.dart';
+import 'package:flutter_bloc_with_stream/bloc/ticker_bloc.dart';
 
 void main() => runApp(MyApp());
 

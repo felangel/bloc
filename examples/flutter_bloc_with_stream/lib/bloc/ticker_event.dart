@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'ticker_bloc.dart';
 
 abstract class TickerEvent extends Equatable {
   const TickerEvent();

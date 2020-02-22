@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
 import 'package:flutter_dynamic_form/new_car_repository.dart';
-import './bloc.dart';
+
+part 'new_car_event.dart';
+part 'new_car_state.dart';
 
 class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
   final NewCarRepository _newCarRepository;

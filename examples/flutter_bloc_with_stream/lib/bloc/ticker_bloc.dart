@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import './bloc.dart';
+import 'package:equatable/equatable.dart';
 import '../ticker/ticker.dart';
+
+part 'ticker_event.dart';
+part 'ticker_state.dart';
 
 class TickerBloc extends Bloc<TickerEvent, TickerState> {
   final Ticker ticker;

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:flutter_complex_list/bloc/bloc.dart';
+import 'package:flutter_complex_list/bloc/list_bloc.dart';
 import 'package:flutter_complex_list/models/models.dart';
 import 'package:flutter_complex_list/repository.dart';
+import 'package:flutter_complex_list/simple_bloc_delegate.dart';
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();

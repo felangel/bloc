@@ -1,7 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
-
-import 'package:flutter_complex_list/models/models.dart';
+part of 'list_bloc.dart';
 
 abstract class ListState extends Equatable {
   const ListState();

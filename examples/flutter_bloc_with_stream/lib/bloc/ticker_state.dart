@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'ticker_bloc.dart';
 
 abstract class TickerState extends Equatable {
   const TickerState();
