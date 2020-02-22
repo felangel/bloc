@@ -6,7 +6,7 @@
 
 ### BlocBuilder
 
-**BlocBuilder** 是一个Flutter的部件(`Widget`)，它需要`Bloc`和`builder`两个方法。处理构建部件用来响应新的状态(`State`)。`BlocBuilder` 于 `StreamBuilder`十分相像，但是它有一个简单的接口来减少一部分必须的模版代码。`builder`方法会被潜在的触发很多次并且应该是一个返回一个部件(`Widget`)以响应该状态(`State`)的[纯方法](https://en.wikipedia.org/wiki/Pure_function)
+**BlocBuilder** 是一个Flutter部件(`Widget`)，它需要`Bloc`和`builder`两个方法。处理构建部件用来响应新的状态(`State`)。`BlocBuilder` 与 `StreamBuilder`十分相像，但是它有一个简单的接口来减少一部分必须的模版代码。`builder`方法会被潜在的触发很多次并且应该是一个返回一个部件(`Widget`)以响应该状态(`State`)的[纯方法](https://en.wikipedia.org/wiki/Pure_function)
 
 如果要响应状态(`State`)更改（例如导航，显示对话框等）而执行任何操作，请参见`BlocListener`。
 
@@ -30,7 +30,7 @@ BlocBuilder<BlocA, BlocAState>(
 )
 ```
 
-如果您希望对何时调用builder函数的时间进行十分缜密的控制，可以向`BlocBuilder`提供可选的条件（condition）。条件（condition)获取先前的块状态和当前的块状态并返回bool值。如果condition返回true，将使用`state`调用`builder`，并且部件(widget)将重新构建。如果`condition`返回false，则不会用`state`调用`builder`，也不会进行重建。
+如果您希望对何时调用builder函数的时间进行十分缜密的控制，可以向`BlocBuilder`提供可选的条件（condition）。条件（condition)获取先前的Bloc的状态和当前的bloc的状态并返回bool值。如果condition返回true，将使用`state`调用`builder`，并且部件(widget)将重新构建。如果`condition`返回false，则不会用`state`调用`builder`，也不会进行重建。
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
@@ -139,7 +139,7 @@ BlocListener<BlocA, BlocAState>(
 )
 ```
 
-如果您希望对何时调用监听器函数进行十分缜密的控制，则可以向`BlocListener`提供可选的条件（condition）。 条件（condition）获取先前的bloc的状态（State）和当前的bloc的状态（State）并返回bool值。如果条件（condition）返回true，listener将被state调用。如果条件返回false，则不会使用状态调用`listener`。
+如果您希望对任何时候调用监听器的函数进行十分缜密的控制，则可以向`BlocListener`提供可选的条件（condition）。 条件（condition）获取先前的bloc的状态（State）和当前的bloc的状态（State）并返回bool值。如果条件（condition）返回true，listener将被state调用。如果条件返回false，则不会使用状态调用`listener`。
 
 ```dart
 BlocListener<BlocA, BlocAState>(

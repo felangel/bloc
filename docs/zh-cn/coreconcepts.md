@@ -20,7 +20,7 @@
 enum CounterEvent { increment, decrement }
 ```
 
-在这种情况下，我们可以使用`enum`表示事件，但是对于更复杂的情况，就会可能需要使用`类`(也就是我们常说的`class`)，尤其是在要将信息传递给Bloc的情况下。
+在这种情况下，我们可以使用`enum`表示事件，但是对于更复杂的情况，就会可能需要使用类(也就是我们常说的`class`)，尤其是在要将信息传递给Bloc的情况下。
 
 至此，我们已经定义了我们的第一个事件(`Event`)！注意，到目前为止我们还没有使用过Bloc，也没有任何魔术发生。这些都只是普通的Dart代码而已。
 
@@ -34,11 +34,11 @@ enum CounterEvent { increment, decrement }
 
 由于我们正在构建的只是一个计数器，因此我们的状态就非常的简单：它只是一个整数，代表了计数器的当前值。
 
-稍后我们将看到拥有更复杂的状态状态(`State`)的示例，但是在现在这种情况下，基本的数据类型`Int`就非常适合作为状态状态(`State`)表示。
+稍后我们将看到拥有更复杂的状态状态(`State`)的示例，但是在现在这种情况下基本的数据类型`Int`就非常适合作为状态状态(`State`)表示。
 
 ## 转换（Transitions）
 
-> 从一种状态状态(`State`)到另一种状态状态(`State`)的转换称之为转换（`Transitions`）。转换是由当前状态，事件和下一个状态组成。
+> 从一种状态状态(`State`)到另一种状态状态(`State`)的变动称之为转换（`Transitions`）。转换是由当前状态，事件和下一个状态组成。
 
 当用户与我们的计数器应用程序进行交互时，他们将触发`递增`（加号按键）和`递减`（减号按键）事件，这将更新计数器的状态。所有这些状态变化都可以描述为一系列的“转换”。
 
@@ -56,7 +56,7 @@ enum CounterEvent { increment, decrement }
 
 ## 流（Streams）
 
-?> 查看官方文档 [Dart Documentation](https://dart.dev/tutorials/language/streams) 以获更多关于 `Streams`的信息.
+?> 查看官方文档 [Dart Documentation](https://dart.dev/tutorials/language/streams) 以获更多关于流（`Streams`）的信息.
 
 > 流（Stream）是`一系列非同步`的数据.
 
@@ -64,7 +64,7 @@ Bloc建立在[RxDart]的基础之上(https://pub.dev/packages/rxdart); 然而，
 
 为了使用Bloc，对`Streams`及其工作方式有扎实的了解是`十分必要的`。
 
-> 如果您不熟悉`Streams`，请试着想象一个_有水流过的管道_。管道是`Stream`，管道里的水是`非同步的数据`.
+> 如果您不熟悉`Streams`，请试着想象一个_有水流过的管道_。管道是“流”（`Stream`），管道里的水是`非同步的数据`.
 
 我们可以通过编写`async *`函数在Dart中创建一个`Stream`。
 
@@ -227,7 +227,7 @@ void onTransition(Transition<CounterEvent, int> transition) {
 }
 ```
 
-既然我们已经重写了`onTransition`，那么只要有`Transition`发生，我们就可以做任何我们想做的事情。
+既然我们已经重写了`onTransition`，那么只要有`Transition`发生，我们就可以作出相应。
 
 就像我们可以在Bloc级中处理转换(`Transitions`)一样，我们也可以处理抛出的异常(`Exceptions`)。
 
@@ -244,7 +244,7 @@ void onError(Object error, StackTrace stackTrace) {
 }
 ```
 
-既然我们已经覆盖了`onError`，那么只要有异常(`Exception`)抛出，我们就可以做任何我们想做的事情。
+既然我们已经覆盖了`onError`，那么只要有异常(`Exception`)抛出，我们就可以对异常作出响应。
 
 ## BlocDelegate
 
