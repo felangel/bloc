@@ -1,27 +1,27 @@
-# Naming Conventions
+# 命名惯例
 
-!> The following naming conventions are simply recommendations and are completely optional. Feel free to use whatever naming conventions you prefer. You may find some of the examples/documentation do not follow the naming conventions mainly for simplicity/conciseness. These conventions are strongly recommended for large projects with multiple developers.
+!> 以下命名约定仅是建议，并且是完全自选的。随意使用您喜欢的任何命名约定。您可能会发现某些示例/文档不遵循命名约定，主要是出于简化的目的。对于具有多个开发人员的大型项目，还是强烈建议使用这些约定。
 
-## Event Conventions
+## 事件惯例 （Event Conventions）
 
-> Events should be named in the **past tense** because events are things that have already occurred from the bloc's perspective.
+> 事件应以**过去时**来命名，因为从bloc的角度来看，事件是已经发生的事情.
 
-### Anatomy
+### 构成
 
-`BlocSubject` + `Noun (optional)` + `Verb (event)`
+`Bloc主题` + `名词 (可选)` + `动词 (event)`
 
-?> Initial load events should follow the convention: `BlocSubject` + `Started`
+?> 初始加载事件应遵循以下约定：`BlocSubject` +`Started`
 
-#### Examples
+#### 例子
 
-✅ **Good**
+✅ **推荐的命名**
 
 `CounterStarted`
 `CounterIncremented`
 `CounterDecremented`
 `CounterIncrementRetried`
 
-❌ **Bad**
+❌ **不推荐的命名**
 
 `Initial`
 `CounterInitialized`
@@ -29,27 +29,26 @@
 `DoIncrement`
 `IncrementCounter`
 
-## State Conventions
+## 命名状态（State）
 
-> States should be nouns because a state is just a snapshot at a particular point in time.
+> 状态应该是名词，因为状态只是特定时间点的快照。
 
-### Anatomy
+### 构成
 
 `BlocSubject` + `Verb (action)` + `State`
 
-?> `State` should be one of the following: `Initial` | `Success` | `Failure` | `InProgress` and
-initial states should follow the convention: `BlocSubject` + `Initial`.
+?> 状态（`State`）应为以下之一： `成功`| `失败`| `在过程中`和初始状态应遵循以下约定：`BlocSubject` +`Initial`。
 
-#### Examples
+#### 例子
 
-✅ **Good**
+✅ **推荐的命名**
 
 `CounterInitial`
 `CounterLoadInProgress`
 `CounterLoadSuccess`
 `CounterLoadFailure`
 
-❌ **Bad**
+❌ **不推荐的命名**
 
 `Initial`
 `Loading`

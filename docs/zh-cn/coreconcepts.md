@@ -1,48 +1,48 @@
-# Core Concepts
+# 核心思想
 
-?> Please make sure to carefully read and understand the following sections before working with [bloc](https://pub.dev/packages/bloc).
+?> 使用前请确保仔细阅读并理解以下部分 [bloc](https://pub.dev/packages/bloc).
 
-There are several core concepts that are critical to understanding how to use Bloc.
+有几个核心概念对于理解如何使用Bloc至关重要。
 
-In the upcoming sections, we're going to discuss each of them in detail as well as work through how they would apply to a real-world application: a counter app.
+在接下来的部分中，我们将详细讨论它们中的每一个，并逐步研究它们是如何应用于实际应用程序，例如：计数器应用程序。
 
-## Events
+## 事件（Events）
 
-> Events are the input to a Bloc. They are commonly added in response to user interactions such as button presses or lifecycle events like page loads.
+> 事件(`Event`)会被输入到Bloc中，通常是为了响应用户交互（例如按下按钮）或者是生命周期事件（例如页面加载）而添加它们。
 
-When designing an app we need to step back and define how users will interact with it. In the context of our counter app we will have two buttons to increment and decrement our counter.
+在设计应用程序时，我们需要退一步考虑，定义用户如何与之交互。例如，在计数器程序中，我们将有两个按钮来增加和减少计数器的值。
 
-When a user taps on one of these buttons, something needs to happen to notify the "brains" of our app so that it can respond to the user's input; this is where events come into play.
+当用户点击这两个按钮中的任何一个时，就会通知我们的程序的`"大脑"`，以便它可以响应用户的输入，这是事件起作用的地方。
 
-We need to be able to notify our application's "brains" of both an increment and a decrement so we need to define these events.
+我们需要能够将递增事件（按加号按钮）和递减事件（按减号按钮）通知我们程序的`"大脑"`，因此我们需要定义这些事件(`Event`)。
 
 ```dart
 enum CounterEvent { increment, decrement }
 ```
 
-In this case, we can represent the events using an `enum` but for more complex cases it might be necessary to use a `class` especially if it's necessary to pass information to the bloc.
+在这种情况下，我们可以使用`enum`表示事件，但是对于更复杂的情况，就会可能需要使用类(也就是我们常说的`class`)，尤其是在要将信息传递给Bloc的情况下。
 
-At this point we have defined our first event! Notice that we have not used Bloc in any way so far and there is no magic happening; it's just plain Dart code.
+至此，我们已经定义了我们的第一个事件(`Event`)！注意，到目前为止我们还没有使用过Bloc，也没有任何魔术发生。这些都只是普通的Dart代码而已。
 
-## States
+## 状态（States）
 
-> States are the output of a Bloc and represent a part of your application's state. UI components can be notified of states and redraw portions of themselves based on the current state.
+> 状态(`State`)是Bloc所输出的东西，是程序状态的一部分。它可以通知UI组件，并根据当前状态(`State`)重建（`build`）其自身的某些部分。
 
-So far, we've defined the two events that our app will be responding to: `CounterEvent.increment` and `CounterEvent.decrement`.
+到目前为止，我们已经定义了我们的应用将会响应的两个事件：`CounterEvent.increment`和`CounterEvent.decrement`。
 
-Now we need to define how to represent the state of our application.
+现在，我们需要定义如何表示应用程序的状态状态(`State`)。
 
-Since we're building a counter, our state is very simple: it's just an integer which represents the counter's current value.
+由于我们正在构建的只是一个计数器，因此我们的状态就非常的简单：它只是一个整数，代表了计数器的当前值。
 
-We will see more complex examples of state later on but in this case a primitive type is perfectly suitable as the state representation.
+稍后我们将看到拥有更复杂的状态状态(`State`)的示例，但是在现在这种情况下基本的数据类型`Int`就非常适合作为状态状态(`State`)表示。
 
-## Transitions
+## 转换（Transitions）
 
-> The change from one state to another is called a Transition. A Transition consists of the current state, the event, and the next state.
+> 从一种状态状态(`State`)到另一种状态状态(`State`)的变动称之为转换（`Transitions`）。转换是由当前状态，事件和下一个状态组成。
 
-As a user interacts with our counter app they will trigger `Increment` and `Decrement` events which will update the counter's state. All of these state changes can be described as a series of `Transitions`.
+当用户与我们的计数器应用程序进行交互时，他们将触发`递增`（加号按键）和`递减`（减号按键）事件，这将更新计数器的状态。所有这些状态变化都可以描述为一系列的“转换”。
 
-For example, if a user opened our app and tapped the increment button once we would see the following `Transition`.
+例如，如果用户打开我们的应用并点击了加号按钮，我们将看到以下`转换`。
 
 ```json
 {
@@ -52,21 +52,21 @@ For example, if a user opened our app and tapped the increment button once we wo
 }
 ```
 
-Because every state change is recorded, we are able to very easily instrument our applications and track all user interactions & state changes in one place. In addition, this makes things like time-travel debugging possible.
+由于记录了每个状态的更改，所以我们能够非常轻松地对我们的应用程序进行检测，并在任何位置跟踪所有的用户交互和状态更改。此外，这使像时间旅行调试之类的事情成为可能。
 
-## Streams
+## 流（Streams）
 
-?> Check out the official [Dart Documentation](https://dart.dev/tutorials/language/streams) for more information about `Streams`.
+?> 查看官方文档 [Dart Documentation](https://dart.dev/tutorials/language/streams) 以获更多关于流（`Streams`）的信息.
 
-> A stream is a sequence of asynchronous data.
+> 流（Stream）是`一系列非同步`的数据.
 
-Bloc is built on top of [RxDart](https://pub.dev/packages/rxdart); however, it abstracts all of the `RxDart` specific implementation details.
+Bloc建立在[RxDart]的基础之上(https://pub.dev/packages/rxdart); 然而，Bloc抽象出了所有特定于RxDart的实现细节。
 
-In order to use Bloc, it is criticial to have a solid understanding of `Streams` and how they work.
+为了使用Bloc，对`Streams`及其工作方式有扎实的了解是`十分必要的`。
 
-> If you're unfamiliar with `Streams` just think of a pipe with water flowing through it. The pipe is the `Stream` and the water is the asynchronous data.
+> 如果您不熟悉`Streams`，请试着想象一个_有水流过的管道_。管道是“流”（`Stream`），管道里的水是`非同步的数据`.
 
-We can create a `Stream` in Dart by writing an `async*` function.
+我们可以通过编写`async *`函数在Dart中创建一个`Stream`。
 
 ```dart
 Stream<int> countStream(int max) async* {
@@ -76,11 +76,11 @@ Stream<int> countStream(int max) async* {
 }
 ```
 
-By marking a function as `async*` we are able to use the `yield` keyword and return a `Stream` of data. In the above example, we are returning a `Stream` of integers up to the `max` integer parameter.
+通过将一个函数标记为`async *`，我们可以使用`yield`作为关键字并返回`Stream`数据。在上面的示例中，我们返回的是一个不超过整数Int边界的整数Stream。
 
-Every time we `yield` in an `async*` function we are pushing that piece of data through the `Stream`.
+每次我们在`async *`函数中`yield`时，我们都会通过`Stream`推送该数据。
 
-We can consume the above `Stream` in several ways. If we wanted to write a function to return the sum of a `Stream` of integers it could look something like:
+我们可以通过几种方式使用上面的`Stream`。如果我们想编写一个函数来返回所有整数`Stream`的总和，则它可能类似于：
 
 ```dart
 Future<int> sumStream(Stream<int> stream) async {
@@ -92,26 +92,26 @@ Future<int> sumStream(Stream<int> stream) async {
 }
 ```
 
-By marking the above function as `async` we are able to use the `await` keyword and return a `Future` of integers. In this example, we are awaiting each value in the stream and returning the sum of all integers in the stream.
+通过将上面的函数标记为`async`，我们可以使用`await`关键字并返回整数的`Future`数据。在此示例中，我们先等待流(`Stream`)中的每个值然后并返回流(`Stream`)中所有整数的总和。
 
-We can put it all together like so:
+我们可以像这样将它们放在一起：
 
 ```dart
 void main() async {
-    /// Initialize a stream of integers 0-9
+    /// 初始化一个从0到9的整数流
     Stream<int> stream = countStream(10);
-    /// Compute the sum of the stream of integers
+    /// 计算整数流的总和
     int sum = await sumStream(stream);
-    /// Print the sum
+    /// 打印总和
     print(sum); // 45
 }
 ```
 
 ## Blocs
 
-> A Bloc (Business Logic Component) is a component which converts a `Stream` of incoming `Events` into a `Stream` of outgoing `States`. Think of a Bloc as being the "brains" described above.
+> Bloc（业务逻辑组件）是将传入事件的流（`Stream`）转换为传出状态（`State`）的流（`Stream`）的组件。Bloc可以被视为是整个业务逻辑组件的`大脑`。
 
-> Every Bloc must extend the base `Bloc` class which is part of the core bloc package.
+> 每个Bloc必须扩展（`extend`）基本Bloc类，因为它是bloc核心包中的一部分。
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -121,18 +121,18 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-In the above code snippet, we are declaring our `CounterBloc` as a Bloc which converts `CounterEvents` into `ints`.
+在上面的代码中，我们把CounterBloc声明为将`CounterEvents`转换为`int`的Bloc。(简单的来说就是我们的大脑Bloc把传进来的事件转换成对应的状态输出了出来， 只是这里的状态是`int`整数，如果不理解可以回看一遍)
 
-> Every Bloc must define an initial state which is the state before any events have been received.
+> 每个Bloc必须定义一个`初始状态`，该状态是接收任何事件之前的状态(`State`)。
 
-In this case, we want our counter to start at `0`.
+在这种情况下，我们总是希望计数器可以从`0`开始，所以`0`就是我们的初始状态。
 
 ```dart
 @override
 int get initialState => 0;
 ```
 
-> Every Bloc must implement a function called `mapEventToState`. The function takes the incoming `event` as an argument and must return a `Stream` of new `states` which is consumed by the presentation layer. We can access the current bloc state at any time using the `state` property.
+> 每个Bloc都必须实现一个名为`mapEventToState`的函数。该函数将传入的事件(`Event`)作为参数，并且必须返回(`return`)被表现层(`Presentation`)所用的新状态(`State`)的流(`Stream`)。我们可以随时使用`state`属性来访问当前的状态. （简单的说就是返回的这状态`State`记住它是一个流`Stream`，要被表现层 _例如前端_ 所用）
 
 ```dart
 @override
@@ -148,7 +148,7 @@ Stream<int> mapEventToState(CounterEvent event) async* {
 }
 ```
 
-At this point, we have a fully functioning `CounterBloc`.
+至此，我们就有了一个功能齐全的`CounterBloc`。
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -173,13 +173,14 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-!> Blocs will ignore duplicate states. If a Bloc yields `State nextState` where `state == nextState`, then no transition will occur and no change will be made to the `Stream<State>`.
+!> Bloc将会忽略重复的状态（`State`）。如果Bloc产生`state nextState`状态，并且其中`state == nextState`，则不会发生任何转换，并且不会对流的状态（Stream <State>）进行任何更改。
 
-At this point, you're probably wondering _"How do I notify a Bloc of an event?"_.
 
-> Every Bloc has a `add` method. `Add` takes an `event` and triggers `mapEventToState`. `Add` may be called from the presentation layer or from within the Bloc and notifies the Bloc of a new `event`.
+此时，您可能想知道`如何将事件通知Bloc？`
 
-We can create a simple application which counts from 0 to 3.
+> 每个Bloc都有一个`add`方法。 `Add`接受一个事件(`Event`)并触发`mapEventToState`。可以从表示层(`Presentaion`)或在Bloc内部调用`Add`，并通知Bloc新的事件(`Event`)。
+
+我们可以创建一个从0到3的简单应用程序。
 
 ```dart
 void main() {
@@ -191,9 +192,9 @@ void main() {
 }
 ```
 
-!> By default, events will always be processed in the order in which they were added and any newly added events are enqueued. An event is considered fully processed once `mapEventToState` has finished executing.
+!> 默认情况下，将始终按照事件(`Event`)添加的顺序处理事件(`Event`)，并将所有新添加的事件(`Event`)排队。一旦`mapEventToState`执行完毕，就认为事件已被完全处理。
 
-The `Transitions` in the above code snippet would be
+上面的代码中的`Transitions'将会是
 
 ```json
 {
@@ -213,11 +214,11 @@ The `Transitions` in the above code snippet would be
 }
 ```
 
-Unfortunately, in the current state we won't be able to see any of these transitions unless we override `onTransition`.
+不幸的是，在当前状态下，除非覆盖onTransition，否则我们将看不到任何这些转换
 
-> `onTransition` is a method that can be overridden to handle every local Bloc `Transition`. `onTransition` is called just before a Bloc's `state` has been updated.
+> `onTransition`是一种可以被重写以处理每个本地Bloc `Transition`的方法。在更新Bloc的状态（`State`）之前，将调用`onTransition`。
 
-?> **Tip**: `onTransition` is a great place to add bloc-specific logging/analytics.
+?> **提示**: `ontransition`是添加特定Bloc的日志记录以及分析的好地方。
 
 ```dart
 @override
@@ -226,15 +227,15 @@ void onTransition(Transition<CounterEvent, int> transition) {
 }
 ```
 
-Now that we've overridden `onTransition` we can do whatever we'd like whenever a `Transition` occurs.
+既然我们已经重写了`onTransition`，那么只要有`Transition`发生，我们就可以作出相应。
 
-Just like we can handle `Transitions` at the bloc level, we can also handle `Exceptions`.
+就像我们可以在Bloc级中处理转换(`Transitions`)一样，我们也可以处理抛出的异常(`Exceptions`)。
 
-> `onError` is a method that can be overriden to handle every local Bloc `Exception`. By default all exceptions will be ignored and `Bloc` functionality will be unaffected.
+> `onError`是一个可以重写以处理每个本地Bloc抛出的`Exception`的方法。默认情况下，所有异常都将被忽略，而`Bloc`功能将不受影响。
 
-?> **Note**: The stacktrace argument may be `null` if the state stream received an error without a `StackTrace`.
+?> **注意**: 如果状态流（`Stream`）收到一个没有`StackTrace`的错误，则stacktrace的参数可能为空`null`。
 
-?> **Tip**: `onError` is a great place to add bloc-specific error handling.
+?> **提示**: `onError`是添加特定Bloc处理错误的好地方。
 
 ```dart
 @override
@@ -243,13 +244,13 @@ void onError(Object error, StackTrace stackTrace) {
 }
 ```
 
-Now that we've overridden `onError` we can do whatever we'd like whenever an `Exception` is thrown.
+既然我们已经覆盖了`onError`，那么只要有异常(`Exception`)抛出，我们就可以对异常作出响应。
 
 ## BlocDelegate
 
-One added bonus of using Bloc is that we can have access to all `Transitions` in one place. Even though in this application we only have one Bloc, it's fairly common in larger applications to have many Blocs managing different parts of the application's state.
+使用Bloc的另一个好处是，我们可以在一处访问所有的`Transitions`。虽然在这个应用程序中只有一个Bloc，但是在大型应用程序却中常见有许多Blocs管理不同部分的应用程序的状态。
 
-If we want to be able to do something in response to all `Transitions` we can simply create our own `BlocDelegate`.
+如果我们希望能够对所有转换`Transitions`做出响应，我们可以简单地创建自己的`BlocDelegate`。
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
@@ -261,9 +262,9 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-?> **Note**: All we need to do is extend `BlocDelegate` and override the `onTransition` method.
+?> **注意**: 我们需要做的就是扩展（`extend`）`BlocDelegate`这个类并重写(`override`)其中的`onTransition`方法。
 
-In order to tell Bloc to use our `SimpleBlocDelegate`, we just need to tweak our `main` function.
+为了让Bloc使用我们的`SimpleBlocDelegate`，我们只需要调整我们的`main`函数。
 
 ```dart
 void main() {
@@ -276,7 +277,7 @@ void main() {
 }
 ```
 
-If we want to be able to do something in response to all `Events` added, we can also override the `onEvent` method in our `SimpleBlocDelegate`.
+如果我们希望能够对所有添加的事件（`Event`）做出响应，那么我们也可以在`SimpleBlocDelegate`中重写`onEvent`方法。
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
@@ -294,7 +295,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-If we want to be able to do something in response to all `Exceptions` thrown in a Bloc, we can also override the `onError` method in our `SimpleBlocDelegate`.
+如果我们希望能够对Bloc中抛出的所有异常（`Exceptions`）做出响应，那么我们也可以在`SimpleBlocDelegate`中重写`onError`方法。
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
@@ -318,4 +319,4 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-?> **Note**: `BlocSupervisor` is a singleton which oversees all Blocs and delegates responsibilities to the `BlocDelegate`.
+?> **注意**: `BlocSupervisor`是一个实例，负责监督所有Bloc，并将职责委托给`BlocDelegate`。

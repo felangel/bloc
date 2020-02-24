@@ -1,12 +1,12 @@
-# Frequently Asked Questions
+# 常见问题
 
-## State Not Updating
+## 状态（State）没有更新
 
-❔ **Question**: I'm yielding a state in my bloc but the UI is not updating. What am I doing wrong?
+❔ **问题**: 我在自己的bloc中产生了一个状态（State），但是用户界面却没有更新。我究竟做错了什么？
 
-💡 **Answer**: If you're using Equatable make sure to pass all properties to the props getter.
+💡 **答案**: 如果你有用`Equatable`包的话，确保你已经将所有的属性都传入`props`的`getter`当中。
 
-✅ **GOOD**
+✅ **正确**
 
 ```dart
 abstract class MyState extends Equatable {
@@ -19,11 +19,11 @@ class StateA extends MyState {
     const StateA(this.property);
 
     @override
-    List<Object> get props => [property]; // pass all properties to props
+    List<Object> get props => [property]; // 将所有属性传入props中
 }
 ```
 
-❌ **BAD**
+❌ **错误**
 
 ```dart
 abstract class MyState extends Equatable {
@@ -55,14 +55,14 @@ class StateA extends MyState {
 }
 ```
 
-In addition, make sure you are yielding a new instance of the state in your bloc.
+另外，请确保在您的bloc中产生状态（State）的新实例。
 
-✅ **GOOD**
+✅ **正确**
 
 ```dart
 @override
 Stream<MyState> mapEventToState(MyEvent event) async* {
-    // always create a new instance of the state you are going to yield
+    // 始终创建要产生的状态（State）的新实例
     yield state.copyWith(property: event.property);
 }
 ```
@@ -71,28 +71,28 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 @override
 Stream<MyState> mapEventToState(MyEvent event) async* {
     final data = _getData(event.info);
-    // always create a new instance of the state you are going to yield
+    // 始终创建要产生的状态（State）的新实例
     yield MyState(data: data);
 }
 ```
 
-❌ **BAD**
+❌ **错误**
 
 ```dart
 @override
 Stream<MyState> mapEventToState(MyEvent event) async* {
-    // never modify/mutate state
+    // 永远不要修改/更改状态（State）
     state.property = event.property;
-    // never yield the same instance of state
+    // 永远不会产生相同的状态（State）的实例
     yield state;
 }
 ```
 
-## When to use Equatable
+## 什么时候该用Equatable
 
-❔**Question**: When should I use Equatable?
+❔**问题**: 我什么时候应该使用`Equatable`?
 
-💡**Answer**:
+💡**答案**:
 
 ```dart
 @override
@@ -102,12 +102,11 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 }
 ```
 
-In the above scenario if `StateA` extends `Equatable` only one state change will occur (the second yield will be ignored).
-In general, you should use `Equatable` if you want to optimize your code to reduce the number of rebuilds.
-You should not use `Equatable` if you want the same state back-to-back to trigger multiple transitions.
+在上述情况下，如果`StateA`扩展为`Equatable`，则只会发生一个状态更改（第二个产生的将被忽略）。
+通常，如果您想优化代码以减少重建次数，则应使用`Equatable`。
+如果您希望相同的状态(State)背对背触发多个转换，则不应使用`Equatable`。
 
-In addition, using `Equatable` makes it much easier to test blocs since we can expect specific instances of bloc states rather than using `Matchers` or `Predicates`.
-
+另外，使用`Equatable`可以更容易地测试bloc，因为我们可以预期bloc的状态(State)的特定实例，而不是使用`Matchers`或`Predicates`。
 ```dart
 blocTest(
     '...',
@@ -120,7 +119,7 @@ blocTest(
 )
 ```
 
-Without `Equatable` the above test would fail and would need to be rewritten like:
+没有`Equatable`的话，上述测试将失败，需要像下面这样重写：
 
 ```dart
 blocTest(
@@ -136,56 +135,56 @@ blocTest(
 
 ## Bloc vs. Redux
 
-❔ **Question**: What's the difference between Bloc and Redux?
+❔ **问题**: Bloc和Redux有什么区别？
 
-💡 **Answer**:
+💡 **答案**:
 
-BLoC is a design pattern that is defined by the following rules:
+BLoC是由以下规则定义的设计模式：
 
-1. Input and Output of the BLoC are simple Streams and Sinks.
-2. Dependencies must be injectable and Platform agnostic.
-3. No platform branching is allowed.
-4. Implementation can be whatever you want as long as you follow the above rules.
+1. BLoC的输入和输出是简单的流（Stream）和接收器（Sink）。
+2. 依赖性必须是可注入的，并且与平台无关。
+3. 不允许平台分支。
+4. 只要遵循上述规则，就可以得到您想要的。
 
-The UI guidelines are:
+UI的准则是:
 
-1. Each "complex enough" component has a corresponding BLoC.
-2. Components should send inputs "as is".
-3. Components should show outputs as close as possible to "as is".
-4. All branching should be based on simple BLoC boolean outputs.
+1. 每个`足够复杂`的组件都有一个对应的BLoC。
+2. 组件应按`原样`发送输入。
+3. 组件应显示尽可能接近`原样`的输出。
+4. 所有分支都应基于简单的BLoC的bool输出。
 
-The Bloc Library implements the BLoC Design Pattern and aims to abstract RxDart in order to simplify the developer experience.
+Bloc库实现BLoC设计模式，旨在抽象RxDart，以简化开发人员体验。
 
-The three principles of Redux are:
+Redux的三个原则是：
 
-1. Single source of truth
-2. State is read-only
-3. Changes are made with pure functions
+1. 真实的单一来源
+2. 状态为只读
+3. 使用纯函数进行更改
 
-The bloc library violates the first principle; with bloc state is distributed across multiple blocs.
-Furthermore, there is no concept of middleware in bloc and bloc is designed to make async state changes very easy, allowing you to emit multiple states for a single event.
+Bloc库违反了第一个原则。具有bloc状态的产品分布在多个bloc中。
+此外，在bloc中没有中间者的概念，并且bloc旨在使异步状态更改变得非常容易，从而允许您为单个事件发出多个状态。
 
 ## Bloc vs. Provider
 
-❔ **Question**: What's the difference between Bloc and Provider?
+❔ **问题**: Bloc和Provider之间有什么区别?
 
-💡 **Answer**: `provider` is designed for dependency injection (it wraps `InheritedWidget`).
-You still need to figure out how to manage your state (via `ChangeNotifier`, `Bloc`, `Mobx`, etc...).
-The Bloc Library uses `provider` internally to make it easy to provide and access blocs throughout the widget tree.
+💡 **答案**: provider是为依赖注入而设计的（它包装了InheritedWidget）。
+您仍然需要弄清楚如何管理状态（通过`ChangeNotifier`，`Bloc`，`Mobx`等）。
+Bloc库在内部使用`provider`来简化在整个小部件树中提供和访问bloc的过程。
 
-## Navigation with Bloc
+## 使用Bloc来导航
 
-❔ **Question**: How do I do navigation with Bloc?
+❔ **问题**: 如何使用Bloc导航？
 
-💡 **Answer**: Check out [Flutter Navigation](recipesflutternavigation.md)
+💡 **答案**: 查看 [Flutter Navigation](recipesflutternavigation.md)
 
-## BlocProvider.of() Fails to Find Bloc
+## BlocProvider.of() 找不到bloc
 
-❔ **Question**: When using `BlocProvider.of(context)` it cannot find the bloc. How can I fix this?
+❔ **问题**: 当使用`BlocProvider.of（context）`时，它找不到该bloc。我该怎样才能解决这个问题？
 
-💡 **Answer**: You cannot access a bloc from the same context in which it was provided so you must ensure `BlocProvider.of()` is called within a child `BuildContext`.
+💡 **答案**: 您无法从提供该context的context访问该bloc，因此必须确保在子`BuildContext`中调用`BlocProvider.of（）`。
 
-✅ **GOOD**
+✅ **正确**
 
 ```dart
 @override
@@ -227,7 +226,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-❌ **BAD**
+❌ **错误**
 
 ```dart
 @override
@@ -244,14 +243,14 @@ Widget build(BuildContext context) {
 }
 ```
 
-## Project Structure
+## 项目结构
 
-❔ **Question**: How should I structure my project?
+❔ **问题**: 我应该如何构架我的项目？
 
-💡 **Answer**: While there is really no right/wrong answer to this question, some recommended references are
+💡 **答案**: 尽管对于此问题确实没有对错只说，但是还是有一些推荐的参考文献：
 
-- [Flutter Architecture Samples - Brian Egan](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library)
-- [Flutter Shopping Card Example](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart)
-- [Flutter TDD Course - ResoCoder](https://github.com/ResoCoder/flutter-tdd-clean-architecture-course)
+- [Flutter架构样本 - Brian Egan](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library)
+- [Flutter购物车示例](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart)
+- [Flutter TDD 课程 - ResoCoder](https://github.com/ResoCoder/flutter-tdd-clean-architecture-course)
 
-The most important thing is having a **consistent** and **intentional** project structure.
+最重要的是要有一个**一致的**和**有意图的**项目结构。

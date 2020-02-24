@@ -10,11 +10,11 @@
 [![Discord](https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue)](https://discord.gg/Hc5KD3g)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
-> a predictable state management library for Dart.
+> 一个为Dart而生，可预测和管理状态的库
 
-- Simple & Lightweight
-- Highly Testable
-- For Dart, Flutter, and AngularDart
+- 简单 & 轻便
+- 可测试性高
+- 为 Dart，Flutter，和 AngularDart
 
 [GitHub](https://github.com/felangel/bloc/)
-[Get Started](gettingstarted.md)
+[开始](zh-cn/gettingstarted.md)
