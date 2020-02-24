@@ -8,14 +8,14 @@
 
 **BlocBuilder** 是一个Flutter部件(`Widget`)，它需要`Bloc`和`builder`两个方法。处理构建部件用来响应新的状态(`State`)。`BlocBuilder` 与 `StreamBuilder`十分相像，但是它有一个简单的接口来减少一部分必须的模版代码。`builder`方法会被潜在的触发很多次并且应该是一个返回一个部件(`Widget`)以响应该状态(`State`)的[纯方法](https://en.wikipedia.org/wiki/Pure_function)
 
-如果要响应状态(`State`)更改（例如导航，显示对话框等）而执行任何操作，请参见`BlocListener`。
+如果要响应状态(`State`)更改（例如导航，显示对话框等) 而执行任何操作，请参见`BlocListener`。
 
 如果省略了bloc中的参数，则`BlocBuilder`将使用`BlocProvider`和当前的`BuildContext`自动执行查找。
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
   builder: (context, state) {
-    // 根据BlocA的状态（State）在这里返回一个组件（widget）
+    // 根据BlocA的状态（State) 在这里返回一个组件（widget)
   }
 )
 ```
@@ -25,28 +25,28 @@ BlocBuilder<BlocA, BlocAState>(
 BlocBuilder<BlocA, BlocAState>(
   bloc: blocA, // 提供一个本地的实例
   builder: (context, state) {
-    // 根据BlocA的状态（State）在这里返回一个部件（widget）
+    // 根据BlocA的状态（State) 在这里返回一个部件（widget)
   }
 )
 ```
 
-如果您希望对何时调用builder函数的时间进行十分缜密的控制，可以向`BlocBuilder`提供可选的条件（condition）。条件（condition)获取先前的Bloc的状态和当前的bloc的状态并返回bool值。如果condition返回true，将使用`state`调用`builder`，并且部件(widget)将重新构建。如果`condition`返回false，则不会用`state`调用`builder`，也不会进行重建。
+如果您希望对何时调用builder函数的时间进行十分缜密的控制，可以向`BlocBuilder`提供可选的条件（condition) 。条件（condition)获取先前的Bloc的状态和当前的bloc的状态并返回bool值。如果condition返回true，将使用`state`调用`builder`，并且部件(widget)将重新构建。如果`condition`返回false，则不会用`state`调用`builder`，也不会进行重建。
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
   condition: (previousState, state) {
     // 返回 true/false 来决定
-    // 是否重建部件（widget）和状态（state）
+    // 是否重建部件（widget) 和状态（state)
   },
   builder: (context, state) {
-    // 在这里根据BlocA的状态（state）来返回部件（widget）
+    // 在这里根据BlocA的状态（state) 来返回部件（widget)
   }
 )
 ```
 
 ### BlocProvider
 
-**BlocProvider** 是Flutter部件(widget)，可通过`BlocProvider.of <T>（context）`向其子级提bloc。它被作为依赖项注入（DI）部件(widget)，以便可以将一个bloc的单个实例提供给子树中的多个部件(widgets)。
+**BlocProvider** 是Flutter部件(widget)，可通过`BlocProvider.of <T>（context)`向其子级提bloc。它被作为依赖项注入（DI)部件(widget)，以便可以将一个bloc的单个实例提供给子树中的多个部件(widgets)。
 
 在大多数情况下，应该使用`BlocProvider`来创建新的`blocs`，并将其提供给其余子树。在这种情况下，由于`BlocProvider`负责创建bloc，它将自动处理关闭bloc。
 ```dart
@@ -114,15 +114,15 @@ MultiBlocProvider(
 
 ### BlocListener
 
-**BlocListener** 是Flutter部件（widget），它接受一个`BlocWidgetListener`和一个可选的`Bloc`，并调用`listener`以响应该状态(state)的变化。它应用于每次状态更改都需要发生一次的功能，例如导航，显示`SnackBar`，显示`Dialog`等。
+**BlocListener** 是Flutter部件（widget)，它接受一个`BlocWidgetListener`和一个可选的`Bloc`，并调用`listener`以响应该状态(state)的变化。它应用于每次状态更改都需要发生一次的功能，例如导航，显示`SnackBar`，显示`Dialog`等。
 
-与`BlocBuilder`中的`builder`不同，每个状态(State)更改（**不包括** `initialState`在内的）仅被调用一次`listener`，并且是一个`void`函数。
+与`BlocBuilder`中的`builder`不同，每个状态(State)更改（**不包括** `initialState`在内的) 仅被调用一次`listener`，并且是一个`void`函数。
 
 如果省略了bloc参数，则`BlocListener`将使用`BlocProvider`和当前的`BuildContext`自动执行查找。
 ```dart
 BlocListener<BlocA, BlocAState>(
   listener: (context, state) {
-    // 在这里根据BlocA的状态（State）来写
+    // 在这里根据BlocA的状态（State) 来写
   },
   child: Container(),
 )
@@ -134,21 +134,21 @@ BlocListener<BlocA, BlocAState>(
 BlocListener<BlocA, BlocAState>(
   bloc: blocA,
   listener: (context, state) {
-    // 根据BlocA的状态（State）来写
+    // 根据BlocA的状态（State) 来写
   }
 )
 ```
 
-如果您希望对任何时候调用监听器的函数进行十分缜密的控制，则可以向`BlocListener`提供可选的条件（condition）。 条件（condition）获取先前的bloc的状态（State）和当前的bloc的状态（State）并返回bool值。如果条件（condition）返回true，listener将被state调用。如果条件返回false，则不会使用状态调用`listener`。
+如果您希望对任何时候调用监听器的函数进行十分缜密的控制，则可以向`BlocListener`提供可选的条件（condition) 。 条件（condition) 获取先前的bloc的状态（State) 和当前的bloc的状态（State) 并返回bool值。如果条件（condition) 返回true，listener将被state调用。如果条件返回false，则不会使用状态调用`listener`。
 
 ```dart
 BlocListener<BlocA, BlocAState>(
   condition: (previousState, state) {
     // 返回 true或者false来决定
-    // 是否调用listener和状态（State）
+    // 是否调用listener和状态（State)
   },
   listener: (context, state) {
-    // 根据BlocA的状态（State）来写
+    // 根据BlocA的状态（State) 来写
   }
   child: Container(),
 )
@@ -156,7 +156,7 @@ BlocListener<BlocA, BlocAState>(
 
 ### MultiBlocListener
 
-**MultiBlocListener** 是Flutter的部件（widget），将多个`BlocListener`部件合并为一个。
+**MultiBlocListener** 是Flutter的部件（widget)，将多个`BlocListener`部件合并为一个。
 `MultiBlocListener`可以提高可读性，并且不需要嵌套多个`BlocListeners`。
 通过使用`MultiBlocListener`，我们可以从：
 
@@ -201,10 +201,10 @@ MultiBlocListener(
 ```dart
 BlocConsumer<BlocA, BlocAState>(
   listener: (context, state) {
-    // 根据BlocA的状态（State）来写
+    // 根据BlocA的状态（State) 来写
   },
   builder: (context, state) {
-    // 根据BlocA的状态（State）返回一个部件（widget）
+    // 根据BlocA的状态（State) 返回一个部件（widget)
   }
 )
 ```
@@ -214,25 +214,25 @@ BlocConsumer<BlocA, BlocAState>(
 BlocConsumer<BlocA, BlocAState>(
   listenWhen: (previous, current) {
     // 返回 true或者false来决定
-    // 是否调用listener和状态（State）
+    // 是否调用listener和状态（State)
   },
   listener: (context, state) {
-    // 根据BlocA的状态（State）来写
+    // 根据BlocA的状态（State) 来写
   },
   buildWhen: (previous, current) {
     // 返回 true或者false来决定
-    // 是否重建部件（widget）和状态（State）
+    // 是否重建部件（widget) 和状态（State)
    
   },
   builder: (context, state) {
-    // 根据BlocA的状态（State）返回一个部件（widget）
+    // 根据BlocA的状态（State) 返回一个部件（widget)
   }
 )
 ```
 
 ### RepositoryProvider
 
-**RepositoryProvider** 是Flutter部件(widget)，可通过`RepositoryProvider.of <T>（context）`向其子级提供存储库。它用作依赖项注入（DI）部件（widget），以便可以将存储库的单个实例提供给子树中的多个部件(widgets)。 `BlocProvider`用于提供bloc，而`RepositoryProvider`仅用于存储库。
+**RepositoryProvider** 是Flutter部件(widget)，可通过`RepositoryProvider.of <T>（context)`向其子级提供存储库。它用作依赖项注入（DI) 部件（widget)，以便可以将存储库的单个实例提供给子树中的多个部件(widgets)。 `BlocProvider`用于提供bloc，而`RepositoryProvider`仅用于存储库。
 
 ```dart
 RepositoryProvider(
@@ -290,7 +290,7 @@ MultiRepositoryProvider(
 )
 ```
 
-## 用例（Usage）
+## 用例（Usage)
 
 让我们看一下如何使用`BlocBuilder`将`CounterPage`部件(widget)连接到`CounterBloc`。
 
@@ -366,4 +366,4 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-至此，我们已经成功地将表示层（Presentation）与业务逻辑层分离了。请注意，`CounterPage`部件(widget)对用户点击按钮时会发生的情况一无所知。窗口小部件只是告诉`CounterBloc`用户已按下了加号或减号按钮。
+至此，我们已经成功地将表示层（Presentation) 与业务逻辑层分离了。请注意，`CounterPage`部件(widget)对用户点击按钮时会发生的情况一无所知。窗口小部件只是告诉`CounterBloc`用户已按下了加号或减号按钮。

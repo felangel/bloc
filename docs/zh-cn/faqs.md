@@ -1,8 +1,8 @@
 # 常见问题
 
-## 状态（State）没有更新
+## 状态（State) 没有更新
 
-❔ **问题**: 我在自己的bloc中产生了一个状态（State），但是用户界面却没有更新。我究竟做错了什么？
+❔ **问题**: 我在自己的bloc中产生了一个状态（State)，但是用户界面却没有更新。我究竟做错了什么?
 
 💡 **答案**: 如果你有用`Equatable`包的话，确保你已经将所有的属性都传入`props`的`getter`当中。
 
@@ -55,14 +55,14 @@ class StateA extends MyState {
 }
 ```
 
-另外，请确保在您的bloc中产生状态（State）的新实例。
+另外，请确保在您的bloc中产生状态（State) 的新实例。
 
 ✅ **正确**
 
 ```dart
 @override
 Stream<MyState> mapEventToState(MyEvent event) async* {
-    // 始终创建要产生的状态（State）的新实例
+    // 始终创建要产生的状态（State) 的新实例
     yield state.copyWith(property: event.property);
 }
 ```
@@ -71,7 +71,7 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 @override
 Stream<MyState> mapEventToState(MyEvent event) async* {
     final data = _getData(event.info);
-    // 始终创建要产生的状态（State）的新实例
+    // 始终创建要产生的状态（State) 的新实例
     yield MyState(data: data);
 }
 ```
@@ -81,9 +81,9 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 ```dart
 @override
 Stream<MyState> mapEventToState(MyEvent event) async* {
-    // 永远不要修改/更改状态（State）
+    // 永远不要修改/更改状态（State)
     state.property = event.property;
-    // 永远不会产生相同的状态（State）的实例
+    // 永远不会产生相同的状态（State) 的实例
     yield state;
 }
 ```
@@ -102,7 +102,7 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 }
 ```
 
-在上述情况下，如果`StateA`扩展为`Equatable`，则只会发生一个状态更改（第二个产生的将被忽略）。
+在上述情况下，如果`StateA`扩展为`Equatable`，则只会发生一个状态更改（第二个产生的将被忽略) 。
 通常，如果您想优化代码以减少重建次数，则应使用`Equatable`。
 如果您希望相同的状态(State)背对背触发多个转换，则不应使用`Equatable`。
 
@@ -135,13 +135,13 @@ blocTest(
 
 ## Bloc vs. Redux
 
-❔ **问题**: Bloc和Redux有什么区别？
+❔ **问题**: Bloc和Redux有什么区别?
 
 💡 **答案**:
 
 BLoC是由以下规则定义的设计模式：
 
-1. BLoC的输入和输出是简单的流（Stream）和接收器（Sink）。
+1. BLoC的输入和输出是简单的流（Stream) 和接收器（Sink) 。
 2. 依赖性必须是可注入的，并且与平台无关。
 3. 不允许平台分支。
 4. 只要遵循上述规则，就可以得到您想要的。
@@ -168,21 +168,21 @@ Bloc库违反了第一个原则。具有bloc状态的产品分布在多个bloc�
 
 ❔ **问题**: Bloc和Provider之间有什么区别?
 
-💡 **答案**: provider是为依赖注入而设计的（它包装了InheritedWidget）。
-您仍然需要弄清楚如何管理状态（通过`ChangeNotifier`，`Bloc`，`Mobx`等）。
+💡 **答案**: provider是为依赖注入而设计的（它包装了InheritedWidget) 。
+您仍然需要弄清楚如何管理状态（通过`ChangeNotifier`，`Bloc`，`Mobx`等) 。
 Bloc库在内部使用`provider`来简化在整个小部件树中提供和访问bloc的过程。
 
 ## 使用Bloc来导航
 
-❔ **问题**: 如何使用Bloc导航？
+❔ **问题**: 如何使用Bloc导航?
 
 💡 **答案**: 查看 [Flutter Navigation](recipesflutternavigation.md)
 
 ## BlocProvider.of() 找不到bloc
 
-❔ **问题**: 当使用`BlocProvider.of（context）`时，它找不到该bloc。我该怎样才能解决这个问题？
+❔ **问题**: 当使用`BlocProvider.of（context)`时，它找不到该bloc。我该怎样才能解决这个问题?
 
-💡 **答案**: 您无法从提供该context的context访问该bloc，因此必须确保在子`BuildContext`中调用`BlocProvider.of（）`。
+💡 **答案**: 您无法从提供该context的context访问该bloc，因此必须确保在子`BuildContext`中调用`BlocProvider.of（)`。
 
 ✅ **正确**
 
@@ -245,7 +245,7 @@ Widget build(BuildContext context) {
 
 ## 项目结构
 
-❔ **问题**: 我应该如何构架我的项目？
+❔ **问题**: 我应该如何构架我的项目?
 
 💡 **答案**: 尽管对于此问题确实没有对错只说，但是还是有一些推荐的参考文献：
 

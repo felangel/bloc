@@ -1,7 +1,7 @@
 - 介绍
 
   - [准备开始](zh-cn/gettingstarted.md)
-  - [为什么使用Bloc？](zh-cn/whybloc.md)
+  - [为什么使用Bloc?](zh-cn/whybloc.md)
   - 核心思想
     - [bloc](zh-cn/coreconcepts.md)
     - [flutter_bloc](zh-cn/flutterbloccoreconcepts.md)
@@ -29,7 +29,7 @@
 - 配方 (Recipes)
 
   - Flutter
-    - [展示提示（SnackBar）](recipesfluttershowsnackbar.md)
+    - [展示提示（SnackBar)](recipesfluttershowsnackbar.md)
     - [导航](recipesflutternavigation.md)
     - [Bloc 访问](recipesflutterblocaccess.md)
 

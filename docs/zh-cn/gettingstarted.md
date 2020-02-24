@@ -12,7 +12,7 @@ Bloc是由以下包所组成:
 
 ## 安装
 
-我们要做的第一件事是将`bloc`的包作为依赖项（dependencies）添加到我们的`pubspec.yaml`中。
+我们要做的第一件事是将`bloc`的包作为依赖项（dependencies) 添加到我们的`pubspec.yaml`中。
 
 ```yaml
 dependencies:
@@ -43,7 +43,7 @@ dependencies:
 
 - 如果是 Flutter 的话，运行 `flutter packages get`
 
-## 引入（Import）
+## 引入（Import)
 
 现在我们已经成功安装了bloc，接下来我们可以创建我们的`main.dart`并导入bloc。
 

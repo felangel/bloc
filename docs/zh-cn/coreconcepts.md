@@ -6,15 +6,15 @@
 
 在接下来的部分中，我们将详细讨论它们中的每一个，并逐步研究它们是如何应用于实际应用程序，例如：计数器应用程序。
 
-## 事件（Events）
+## 事件（Events)
 
-> 事件(`Event`)会被输入到Bloc中，通常是为了响应用户交互（例如按下按钮）或者是生命周期事件（例如页面加载）而添加它们。
+> 事件(`Event`)会被输入到Bloc中，通常是为了响应用户交互（例如按下按钮)或者是生命周期事件（例如页面加载) 而添加它们。
 
 在设计应用程序时，我们需要退一步考虑，定义用户如何与之交互。例如，在计数器程序中，我们将有两个按钮来增加和减少计数器的值。
 
 当用户点击这两个按钮中的任何一个时，就会通知我们的程序的`"大脑"`，以便它可以响应用户的输入，这是事件起作用的地方。
 
-我们需要能够将递增事件（按加号按钮）和递减事件（按减号按钮）通知我们程序的`"大脑"`，因此我们需要定义这些事件(`Event`)。
+我们需要能够将递增事件（按加号按钮) 和递减事件（按减号按钮) 通知我们程序的`"大脑"`，因此我们需要定义这些事件(`Event`)。
 
 ```dart
 enum CounterEvent { increment, decrement }
@@ -24,9 +24,9 @@ enum CounterEvent { increment, decrement }
 
 至此，我们已经定义了我们的第一个事件(`Event`)！注意，到目前为止我们还没有使用过Bloc，也没有任何魔术发生。这些都只是普通的Dart代码而已。
 
-## 状态（States）
+## 状态（States)
 
-> 状态(`State`)是Bloc所输出的东西，是程序状态的一部分。它可以通知UI组件，并根据当前状态(`State`)重建（`build`）其自身的某些部分。
+> 状态(`State`)是Bloc所输出的东西，是程序状态的一部分。它可以通知UI组件，并根据当前状态(`State`)重建（`build`) 其自身的某些部分。
 
 到目前为止，我们已经定义了我们的应用将会响应的两个事件：`CounterEvent.increment`和`CounterEvent.decrement`。
 
@@ -36,11 +36,11 @@ enum CounterEvent { increment, decrement }
 
 稍后我们将看到拥有更复杂的状态状态(`State`)的示例，但是在现在这种情况下基本的数据类型`Int`就非常适合作为状态状态(`State`)表示。
 
-## 转换（Transitions）
+## 转换（Transitions)
 
-> 从一种状态状态(`State`)到另一种状态状态(`State`)的变动称之为转换（`Transitions`）。转换是由当前状态，事件和下一个状态组成。
+> 从一种状态状态(`State`)到另一种状态状态(`State`)的变动称之为转换（`Transitions`) 。转换是由当前状态，事件和下一个状态组成。
 
-当用户与我们的计数器应用程序进行交互时，他们将触发`递增`（加号按键）和`递减`（减号按键）事件，这将更新计数器的状态。所有这些状态变化都可以描述为一系列的“转换”。
+当用户与我们的计数器应用程序进行交互时，他们将触发`递增`（加号按键)和`递减`（减号按键) 事件，这将更新计数器的状态。所有这些状态变化都可以描述为一系列的“转换”。
 
 例如，如果用户打开我们的应用并点击了加号按钮，我们将看到以下`转换`。
 
@@ -54,17 +54,17 @@ enum CounterEvent { increment, decrement }
 
 由于记录了每个状态的更改，所以我们能够非常轻松地对我们的应用程序进行检测，并在任何位置跟踪所有的用户交互和状态更改。此外，这使像时间旅行调试之类的事情成为可能。
 
-## 流（Streams）
+## 流（Streams)
 
-?> 查看官方文档 [Dart Documentation](https://dart.dev/tutorials/language/streams) 以获更多关于流（`Streams`）的信息.
+?> 查看官方文档 [Dart Documentation](https://dart.dev/tutorials/language/streams) 以获更多关于流（`Streams`) 的信息.
 
-> 流（Stream）是`一系列非同步`的数据.
+> 流（Stream) 是`一系列非同步`的数据.
 
 Bloc建立在[RxDart]的基础之上(https://pub.dev/packages/rxdart); 然而，Bloc抽象出了所有特定于RxDart的实现细节。
 
 为了使用Bloc，对`Streams`及其工作方式有扎实的了解是`十分必要的`。
 
-> 如果您不熟悉`Streams`，请试着想象一个_有水流过的管道_。管道是“流”（`Stream`），管道里的水是`非同步的数据`.
+> 如果您不熟悉`Streams`，请试着想象一个_有水流过的管道_。管道是“流”（`Stream`)，管道里的水是`非同步的数据`.
 
 我们可以通过编写`async *`函数在Dart中创建一个`Stream`。
 
@@ -109,9 +109,9 @@ void main() async {
 
 ## Blocs
 
-> Bloc（业务逻辑组件）是将传入事件的流（`Stream`）转换为传出状态（`State`）的流（`Stream`）的组件。Bloc可以被视为是整个业务逻辑组件的`大脑`。
+> Bloc（业务逻辑组件) 是将传入事件的流（`Stream`) 转换为传出状态（`State`) 的流（`Stream`) 的组件。Bloc可以被视为是整个业务逻辑组件的`大脑`。
 
-> 每个Bloc必须扩展（`extend`）基本Bloc类，因为它是bloc核心包中的一部分。
+> 每个Bloc必须扩展（`extend`) 基本Bloc类，因为它是bloc核心包中的一部分。
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -132,7 +132,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 int get initialState => 0;
 ```
 
-> 每个Bloc都必须实现一个名为`mapEventToState`的函数。该函数将传入的事件(`Event`)作为参数，并且必须返回(`return`)被表现层(`Presentation`)所用的新状态(`State`)的流(`Stream`)。我们可以随时使用`state`属性来访问当前的状态. （简单的说就是返回的这状态`State`记住它是一个流`Stream`，要被表现层 _例如前端_ 所用）
+> 每个Bloc都必须实现一个名为`mapEventToState`的函数。该函数将传入的事件(`Event`)作为参数，并且必须返回(`return`)被表现层(`Presentation`)所用的新状态(`State`)的流(`Stream`)。我们可以随时使用`state`属性来访问当前的状态. （简单的说就是返回的这状态`State`记住它是一个流`Stream`，要被表现层 _例如前端_ 所用)
 
 ```dart
 @override
@@ -173,10 +173,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-!> Bloc将会忽略重复的状态（`State`）。如果Bloc产生`state nextState`状态，并且其中`state == nextState`，则不会发生任何转换，并且不会对流的状态（Stream <State>）进行任何更改。
+!> Bloc将会忽略重复的状态（`State`) 。如果Bloc产生`state nextState`状态，并且其中`state == nextState`，则不会发生任何转换，并且不会对流的状态（Stream <State>) 进行任何更改。
 
 
-此时，您可能想知道`如何将事件通知Bloc？`
+此时，您可能想知道`如何将事件通知Bloc?`
 
 > 每个Bloc都有一个`add`方法。 `Add`接受一个事件(`Event`)并触发`mapEventToState`。可以从表示层(`Presentaion`)或在Bloc内部调用`Add`，并通知Bloc新的事件(`Event`)。
 
@@ -216,7 +216,7 @@ void main() {
 
 不幸的是，在当前状态下，除非覆盖onTransition，否则我们将看不到任何这些转换
 
-> `onTransition`是一种可以被重写以处理每个本地Bloc `Transition`的方法。在更新Bloc的状态（`State`）之前，将调用`onTransition`。
+> `onTransition`是一种可以被重写以处理每个本地Bloc `Transition`的方法。在更新Bloc的状态（`State`) 之前，将调用`onTransition`。
 
 ?> **提示**: `ontransition`是添加特定Bloc的日志记录以及分析的好地方。
 
@@ -233,7 +233,7 @@ void onTransition(Transition<CounterEvent, int> transition) {
 
 > `onError`是一个可以重写以处理每个本地Bloc抛出的`Exception`的方法。默认情况下，所有异常都将被忽略，而`Bloc`功能将不受影响。
 
-?> **注意**: 如果状态流（`Stream`）收到一个没有`StackTrace`的错误，则stacktrace的参数可能为空`null`。
+?> **注意**: 如果状态流（`Stream`) 收到一个没有`StackTrace`的错误，则stacktrace的参数可能为空`null`。
 
 ?> **提示**: `onError`是添加特定Bloc处理错误的好地方。
 
@@ -262,7 +262,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-?> **注意**: 我们需要做的就是扩展（`extend`）`BlocDelegate`这个类并重写(`override`)其中的`onTransition`方法。
+?> **注意**: 我们需要做的就是扩展（`extend`) `BlocDelegate`这个类并重写(`override`)其中的`onTransition`方法。
 
 为了让Bloc使用我们的`SimpleBlocDelegate`，我们只需要调整我们的`main`函数。
 
@@ -277,7 +277,7 @@ void main() {
 }
 ```
 
-如果我们希望能够对所有添加的事件（`Event`）做出响应，那么我们也可以在`SimpleBlocDelegate`中重写`onEvent`方法。
+如果我们希望能够对所有添加的事件（`Event`) 做出响应，那么我们也可以在`SimpleBlocDelegate`中重写`onEvent`方法。
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
@@ -295,7 +295,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-如果我们希望能够对Bloc中抛出的所有异常（`Exceptions`）做出响应，那么我们也可以在`SimpleBlocDelegate`中重写`onError`方法。
+如果我们希望能够对Bloc中抛出的所有异常（`Exceptions`) 做出响应，那么我们也可以在`SimpleBlocDelegate`中重写`onError`方法。
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {

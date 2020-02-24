@@ -86,7 +86,7 @@
 ### Flutter
 
 - [计数器](https://bloclibrary.dev/#/fluttercountertutorial) - 使用Flutter制作一个 经典`计数器Bloc` 的示例
-- [表单验证（Form Validation）](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) -  如何使用 `bloc`和`flutter_bloc`的包来实现表单验证的示例
+- [表单验证（Form Validation)](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) -  如何使用 `bloc`和`flutter_bloc`的包来实现表单验证的示例
 - [Bloc 和 Stream](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - 如何将 `bloc`和`stream`相互关联并且实时更新界面，这里使用的数据是来自 `Stream`的
 - [无限列表](https://bloclibrary.dev/#/flutterinfinitelisttutorial) - 如何使用`bloc`和`flutter_bloc`的包来实现一个无限可滚动的列表的示例
 - [登陆流程](https://bloclibrary.dev/#/flutterlogintutorial) - 一个使用`bloc`和`flutter_bloc`的包来实现的登陆流程的示例
@@ -97,7 +97,7 @@
 - [计时器](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - 如何使用`bloc`和`flutter_bloc`的包来制作一个计时器的示例
 - [使用 Firebase 制作备忘录](https://bloclibrary.dev/#/flutterfirestoretodostutorial) - 如何使用`bloc`和`flutter_bloc`的包并整合 Firebase 来制作一个备忘录程序的示例
 - [购物车](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - 如何使用 `bloc` 和 `flutter_bloc`的包来制作一个购物车的示例 - 可参考(https://github.com/flutter/samples/tree/master/provider_shopper)
-- [动态表单（Dynamic Form ）](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - 如何使用`bloc`和`flutter_bloc`的包来实现动态表单从而使得表单中的数据来自于一个存储库
+- [动态表单（Dynamic Form )](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - 如何使用`bloc`和`flutter_bloc`的包来实现动态表单从而使得表单中的数据来自于一个存储库
 
 ### Web
 
