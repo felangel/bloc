@@ -64,8 +64,8 @@ void main() {
 
   group('LoginButtonPressed', () {
     blocTest(
-      'emits [LoginInitial, LoginLoading, LoginInitial] and token on success',
-      build: () {
+      'emits [LoginLoading, LoginInitial] and token on success',
+      build: () async {
         when(userRepository.authenticate(
           username: 'valid.username',
           password: 'valid.password',
@@ -79,18 +79,17 @@ void main() {
         ),
       ),
       expect: [
-        LoginInitial(),
         LoginLoading(),
         LoginInitial(),
       ],
-      verify: () async {
+      verify: (_) async {
         verify(authenticationBloc.add(LoggedIn(token: 'token'))).called(1);
       },
     );
 
     blocTest(
-      'emits [LoginInitial, LoginLoading, LoginFailure] on failure',
-      build: () {
+      'emits [LoginLoading, LoginFailure] on failure',
+      build: () async {
         when(userRepository.authenticate(
           username: 'valid.username',
           password: 'valid.password',
@@ -104,11 +103,10 @@ void main() {
         ),
       ),
       expect: [
-        LoginInitial(),
         LoginLoading(),
         LoginFailure(error: 'Exception: login-error'),
       ],
-      verify: () async {
+      verify: (_) async {
         verifyNever(authenticationBloc.add(any));
       },
     );

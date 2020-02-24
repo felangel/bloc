@@ -42,27 +42,25 @@ void main() {
 
   group('AppStarted', () {
     blocTest(
-      'emits [uninitialized, unauthenticated] for invalid token',
-      build: () {
+      'emits [unauthenticated] for invalid token',
+      build: () async {
         when(userRepository.hasToken()).thenAnswer((_) => Future.value(false));
         return authenticationBloc;
       },
       act: (bloc) => bloc.add(AppStarted()),
       expect: [
-        AuthenticationUninitialized(),
         AuthenticationUnauthenticated(),
       ],
     );
 
     blocTest(
-      'emits [uninitialized, authenticated] for valid token',
-      build: () {
+      'emits [authenticated] for valid token',
+      build: () async {
         when(userRepository.hasToken()).thenAnswer((_) => Future.value(true));
         return authenticationBloc;
       },
       act: (bloc) => bloc.add(AppStarted()),
       expect: [
-        AuthenticationUninitialized(),
         AuthenticationAuthenticated(),
       ],
     );
@@ -70,11 +68,10 @@ void main() {
 
   group('LoggedIn', () {
     blocTest(
-      'emits [uninitialized, loading, authenticated] when token is persisted',
-      build: () => authenticationBloc,
+      'emits [loading, authenticated] when token is persisted',
+      build: () async => authenticationBloc,
       act: (bloc) => bloc.add(LoggedIn(token: 'instance.token')),
       expect: [
-        AuthenticationUninitialized(),
         AuthenticationLoading(),
         AuthenticationAuthenticated(),
       ],
@@ -83,11 +80,10 @@ void main() {
 
   group('LoggedOut', () {
     blocTest(
-      'emits [uninitialized, loading, unauthenticated] when token is deleted',
-      build: () => authenticationBloc,
+      'emits [loading, unauthenticated] when token is deleted',
+      build: () async => authenticationBloc,
       act: (bloc) => bloc.add(LoggedOut()),
       expect: [
-        AuthenticationUninitialized(),
         AuthenticationLoading(),
         AuthenticationUnauthenticated(),
       ],
