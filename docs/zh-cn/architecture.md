@@ -1,6 +1,6 @@
 # 构架
 
-![Bloc的构架](assets/bloc_architecture.png) 
+![Bloc的构架](../assets/bloc_architecture.png) 
 
 使用Bloc可以将应用程序分为三层：
 
