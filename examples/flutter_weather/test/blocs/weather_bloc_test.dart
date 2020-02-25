@@ -42,8 +42,8 @@ main() {
 
     group('FetchWeather', () {
       blocTest(
-        'emits [WeatherEmpty, WeatherLoading, WeatherLoaded] when weather repository returns weather',
-        build: () {
+        'emits [WeatherLoading, WeatherLoaded] when weather repository returns weather',
+        build: () async {
           when(weatherRepository.getWeather('chicago')).thenAnswer(
             (_) => Future.value(weather),
           );
@@ -51,22 +51,20 @@ main() {
         },
         act: (bloc) => bloc.add(FetchWeather(city: 'chicago')),
         expect: [
-          WeatherEmpty(),
           WeatherLoading(),
           WeatherLoaded(weather: weather),
         ],
       );
 
       blocTest(
-        'emits [WeatherEmpty, WeatherLoading, WeatherError] when weather repository throws error',
-        build: () {
+        'emits [WeatherLoading, WeatherError] when weather repository throws error',
+        build: () async {
           when(weatherRepository.getWeather('chicago'))
               .thenThrow('Weather Error');
           return weatherBloc;
         },
         act: (bloc) => bloc.add(FetchWeather(city: 'chicago')),
         expect: [
-          WeatherEmpty(),
           WeatherLoading(),
           WeatherError(),
         ],
@@ -75,8 +73,8 @@ main() {
 
     group('RefreshWeather', () {
       blocTest(
-        'emits [WeatherEmpty, WeatherLoaded] when weather repository returns weather',
-        build: () {
+        'emits [WeatherLoaded] when weather repository returns weather',
+        build: () async {
           when(weatherRepository.getWeather('chicago')).thenAnswer(
             (_) => Future.value(weather),
           );
@@ -84,22 +82,19 @@ main() {
         },
         act: (bloc) => bloc.add(RefreshWeather(city: 'chicago')),
         expect: [
-          WeatherEmpty(),
           WeatherLoaded(weather: weather),
         ],
       );
 
       blocTest(
-        'emits [WeatherEmpty] when weather repository throws error',
-        build: () {
+        'emits [] when weather repository throws error',
+        build: () async {
           when(weatherRepository.getWeather('chicago'))
               .thenThrow('Weather Error');
           return weatherBloc;
         },
         act: (bloc) => bloc.add(RefreshWeather(city: 'chicago')),
-        expect: [
-          WeatherEmpty(),
-        ],
+        expect: [],
       );
     });
   });

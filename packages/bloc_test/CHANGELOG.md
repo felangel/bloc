@@ -1,3 +1,10 @@
+# 4.0.0
+
+- `blocTest` and `emitsExactly` skip `initialState` by default and expose optional `skip` ([#910](https://github.com/felangel/bloc/issues/910))
+- `blocTest` async `build` ([#910](https://github.com/felangel/bloc/issues/910))
+- `blocTest` `expect` is optional ([#910](https://github.com/felangel/bloc/issues/910))
+- `blocTest` `verify` includes the built bloc ([#910](https://github.com/felangel/bloc/issues/910))
+
 # 3.1.0
 
 - Add `verify` to `blocTest` ([#781](https://github.com/felangel/bloc/issues/781))

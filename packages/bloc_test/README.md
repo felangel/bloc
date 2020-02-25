@@ -42,44 +42,44 @@ expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3])))
 
 **blocTest** creates a new `bloc`-specific test case with the given `description`. `blocTest` will handle asserting that the `bloc` emits the `expect`ed states (in order) after `act` is executed. `blocTest` also handles ensuring that no additional states are emitted by closing the `bloc` stream before evaluating the `expect`ation.
 
-`build` should be used for all `bloc` initialization and preparation and must return the `bloc` under test.
+`build` should be used for all `bloc` initialization and preparation and must return the `bloc` under test as a `Future`.
 
 `act` is an optional callback which will be invoked with the `bloc` under test and should be used to `add` events to the `bloc`.
+
+`skip` is an optional `int` which can be used to skip any number of states. The default value is 1 which skips the `initialState` of the bloc. `skip` can be overridden to include the `initialState` by setting skip to 0.
 
 `wait` is an optional `Duration` which can be used to wait for async operations within the `bloc` under test such as `debounceTime`.
 
 `expect` is an `Iterable<State>` which the `bloc` under test is expected to emit after `act` is executed.
 
-`verify` is an optional callback which is invoked after `expect` and can be used for additional non-bloc related assertions.
+`verify` is an optional callback which is invoked after `expect` and can be used for additional verification/assertions. `verify` is called with the `bloc` returned by `build`.
 
 ```dart
 group('CounterBloc', () {
   blocTest(
-    'emits [0] when nothing is added',
-    build: () => CounterBloc(),
-    expect: [0],
+    'emits [] when nothing is added',
+    build: () async => CounterBloc(),
+    expect: [],
   );
 
   blocTest(
-    'emits [0, 1] when CounterEvent.increment is added',
-    build: () => CounterBloc(),
+    'emits [1] when CounterEvent.increment is added',
+    build: () async => CounterBloc(),
     act: (bloc) => bloc.add(CounterEvent.increment),
-    expect: [0, 1],
+    expect: [1],
   );
 });
 ```
 
-`blocTest` can also be used to `verify` internal bloc functionality.
+`blocTest` can also be used to `skip` any number of emitted states before asserting against the expected states. The default value is 1 which skips the `initialState` of the bloc. `skip` can be overridden to include the `initialState` by setting skip to 0.
 
 ```dart
 blocTest(
   'CounterBloc emits [0, 1] when CounterEvent.increment is added',
-  build: () => CounterBloc(),
+  build: () async => CounterBloc(),
   act: (bloc) => bloc.add(CounterEvent.increment),
+  skip: 0,
   expect: [0, 1],
-  verify: () async {
-    verify(repository.someMethod(any)).called(1);
-  }
 );
 ```
 
@@ -87,11 +87,25 @@ blocTest(
 
 ```dart
 blocTest(
-  'CounterBloc emits [0, 1] when CounterEvent.increment is added',
-  build: () => CounterBloc(),
+  'CounterBloc emits [1] when CounterEvent.increment is added',
+  build: () async => CounterBloc(),
   act: (bloc) => bloc.add(CounterEvent.increment),
   wait: const Duration(milliseconds: 300),
-  expect: [0, 1],
+  expect: [1],
+);
+```
+
+`blocTest` can also be used to `verify` internal bloc functionality.
+
+```dart
+blocTest(
+  'CounterBloc emits [1] when CounterEvent.increment is added',
+  build: () async => CounterBloc(),
+  act: (bloc) => bloc.add(CounterEvent.increment),
+  expect: [1],
+  verify: () async {
+    verify(repository.someMethod(any)).called(1);
+  }
 );
 ```
 
@@ -99,10 +113,10 @@ blocTest(
 
 ```dart
 blocTest(
-  'emits [StateA, StateB] when MyEvent is added',
-  build: () => MyBloc(),
+  'emits [StateB] when MyEvent is added',
+  build: () async => MyBloc(),
   act: (bloc) => bloc.add(MyEvent()),
-  expect: [isA<StateA>(), isA<StateB>()],
+  expect: [isA<StateB>()],
 );
 ```
 
@@ -112,15 +126,15 @@ blocTest(
 
 ```dart
 group('CounterBloc', () {
-  test('emits [0] when nothing is added', () async {
+  test('emits [] when nothing is added', () async {
     final bloc = CounterBloc();
-    await emitsExactly(bloc, [0]);
+    await emitsExactly(bloc, []);
   });
 
-  test('emits [0, 1] when CounterEvent.increment is added', () async {
+  test('emits [1] when CounterEvent.increment is added', () async {
     final bloc = CounterBloc();
     bloc.add(CounterEvent.increment);
-    await emitsExactly(bloc, [0, 1]);
+    await emitsExactly(bloc, [1]);
   });
 });
 ```
@@ -128,20 +142,30 @@ group('CounterBloc', () {
 `emitsExactly` also supports `Matchers` for states which don't override `==` and `hashCode`.
 
 ```dart
-test('emits [StateA, StateB] when EventB is added', () async {
+test('emits [StateB] when EventB is added', () async {
   final bloc = MyBloc();
   bloc.add(EventB());
-  await emitsExactly(bloc, [isA<StateA>(), isA<StateB>()]);
+  await emitsExactly(bloc, [isA<StateB>()]);
+});
+```
+
+`skip` is an optional `int` which defaults to 1 and can be used to skip any number of states. The default behavior skips the `initialState` of the bloc but can be overridden to include the `initialState` by setting skip to 0.
+
+```dart
+test('emits [0, 1] when CounterEvent.increment is added', () async {
+  final bloc = CounterBloc();
+  bloc.add(CounterEvent.increment);
+  await emitsExactly(bloc, [0, 1], skip: 0);
 });
 ```
 
 `emitsExactly` also takes an optional `duration` which is useful in cases where the `bloc` is using `debounceTime` or other similar operators.
 
 ```dart
-test('emits [0, 1] when CounterEvent.increment is added', () async {
+test('emits [1] when CounterEvent.increment is added', () async {
   final bloc = CounterBloc();
   bloc.add(CounterEvent.increment);
-  await emitsExactly(bloc, [0, 1], duration: const Duration(milliseconds: 300));
+  await emitsExactly(bloc, [1], duration: const Duration(milliseconds: 300));
 });
 ```
 
