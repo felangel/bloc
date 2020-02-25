@@ -122,7 +122,7 @@ blocTest(
 
 ## Assert with Confidence using emitsExactly
 
-**emitsExactly** is similar to `emitsInOrder` but asserts that the provided `bloc` emits **only** the `expected` states in the **exact** order in which they were provided. The `initialState` of the bloc is not included in the assertion and should be unit tested indepedently.
+**emitsExactly** is similar to `emitsInOrder` but asserts that the provided `bloc` emits **only** the `expected` states in the **exact** order in which they were provided.
 
 ```dart
 group('CounterBloc', () {

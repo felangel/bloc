@@ -196,6 +196,15 @@ void main() {
           verify(repository.sideEffect()).called(1);
         },
       );
+
+      blocTest(
+        'does not require an expect',
+        build: () async => SideEffectCounterBloc(repository),
+        act: (bloc) => bloc.add(SideEffectCounterEvent.increment),
+        verify: (_) async {
+          verify(repository.sideEffect()).called(1);
+        },
+      );
     });
   });
 }
