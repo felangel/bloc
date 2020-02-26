@@ -1,4 +1,4 @@
-# Naming Conventions
+# 네이밍 컨벤션
 
 !> Naming convention을 따르는 것은 단순히 추천하는 사항이며 완전히 선택적입니다. 선호하시는 naming convention을 따르셔도 좋습니다. Example이나 문서에서 단순함과 간결함을 위해 naming convention을 따르지 않을 수도 있습니다. 이 convention은 많은 개발자가 있는 큰 프로젝트에 강력히 추천합니다.
 
