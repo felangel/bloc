@@ -1,16 +1,16 @@
 - 소개
 
-  - [Getting Started](/ko-kr/gettingstarted.md)
-  - [Why Bloc?](/ko-kr/whybloc.md)
-  - Core Concepts
+  - [시작하기](/ko-kr/gettingstarted.md)
+  - [왜 Bloc인가?](/ko-kr/whybloc.md)
+  - 주요 개념
     - [bloc](/ko-kr/coreconcepts.md)
     - [flutter_bloc](/ko-kr/flutterbloccoreconcepts.md)
-  - [Architecture](/ko-kr/architecture.md)
-  - [Testing](/ko-kr/testing.md)
-  - [Naming Conventions](/ko-kr/blocnamingconventions.md)
-  - [FAQs](/ko-kr/faqs.md)
+  - [구조](/ko-kr/architecture.md)
+  - [테스트](/ko-kr/testing.md)
+  - [네이밍 컨벤션](/ko-kr/blocnamingconventions.md)
+  - [자주하는 질문](/ko-kr/faqs.md)
 
-- Tutorials
+- 튜토리얼
 
   - Flutter
     - [Counter](fluttercountertutorial.md)

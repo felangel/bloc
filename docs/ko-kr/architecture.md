@@ -1,6 +1,6 @@
-# Architecture
+# 구조
 
-![Bloc 아키텍처](../assets/bloc_architecture.png)
+![Bloc 구조](../assets/bloc_architecture.png)
 
 Bloc을 사용하면 어플리케이션을 3개의 layer으로 나눌 수 있게 됩니다.
 

@@ -2,7 +2,7 @@
 
 ?> bloc을 사용하기 위해서는 [Dart SDK](https://dart.dev/get-dart)가 설치되어야 합니다.
 
-## Overview
+## 개요
 
 Bloc은 몇 가지 pub pachages로 구성되어 있습니다:
 
@@ -10,7 +10,7 @@ Bloc은 몇 가지 pub pachages로 구성되어 있습니다:
 - [flutter_bloc](https://pub.dev/packages/flutter_bloc) - bloc을 이용하여 빠른 반응형 모바일 어플리케이션 개발을 돕는 강력한 Flutter Widget
 - [angular_bloc](https://pub.dev/packages/angular_bloc) - bloc을 이용하여 빠른 반응형 웹 어플리케이션 개발을 돕는 강력한 Angular Component
   
-## Installation
+## 설치
 
 먼저, `pubspec.yaml`의 dependency로 bloc 패키지를 추가해야 합니다.
 

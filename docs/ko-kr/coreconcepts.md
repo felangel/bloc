@@ -1,4 +1,4 @@
-# Core Concepts
+# 주요 개념
 
 ?> [bloc](https://pub.dev/packages/bloc)을 사용하기 전에 다음 내용을 잘 읽고 이해하기 바랍니다.
 
