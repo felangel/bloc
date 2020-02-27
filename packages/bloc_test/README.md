@@ -103,7 +103,7 @@ blocTest(
   build: () async => CounterBloc(),
   act: (bloc) => bloc.add(CounterEvent.increment),
   expect: [1],
-  verify: () async {
+  verify: (_) async {
     verify(repository.someMethod(any)).called(1);
   }
 );

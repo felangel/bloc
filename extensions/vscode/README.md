@@ -1,6 +1,6 @@
 # Bloc Extension for VSCode
 
-[![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
+[![build](https://img.shields.io/github/workflow/status/felangel/bloc/build.svg?logo=github)](https://github.com/felangel/bloc/actions)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
 [![Star on GitHub](https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=Stars)](https://github.com/felangel/bloc)
 
