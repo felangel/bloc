@@ -132,7 +132,7 @@ That wraps up the local bloc access portion of this recipe and the full source c
 
 Next, we'll take a look at how to provide a bloc across multiple pages/routes.
 
-## Route Access
+## Anonymous Route Access
 
 > In this example, we're going to use `BlocProvider` to access a bloc across routes. When a new route is pushed, it will have a different `BuildContext` which no longer has a reference to the previously provided blocs. As a result, we have to wrap the new route in a separate `BlocProvider`.
 
@@ -282,6 +282,169 @@ class CounterPage extends StatelessWidget {
 `CounterPage` is a super simple `StatelessWidget` which uses `BlocBuilder` to re-render a `Text` widget with the current count. Just like before, we are able to use `BlocProvider.of<CounterBloc>(context)` in order to access the `CounterBloc`.
 
 That's all there is to this example and the full source can be found [here](https://gist.github.com/felangel/92b256270c5567210285526a07b4cf21).
+
+Next, we'll look at how to scope a bloc to just one or more named routes.
+
+## Named Route Access
+
+> In this example, we're going to use `BlocProvider` to access a bloc across multiple named routes. When a new named route is pushed, it will have a different `BuildContext` (just like before) which no longer has a reference to the previously provided blocs. In this case, we're going to manage the blocs which we want to scope in the parent widget and selectively provide them to the routes that should have access.
+
+### Bloc
+
+Again, we're going to use the `CounterBloc` for simplicity.
+
+```dart
+enum CounterEvent { increment, decrement }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  @override
+  int get initialState => 0;
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
+    }
+  }
+}
+```
+
+### UI
+
+Again, we're going to have three parts to our application's UI:
+
+- App: the root application widget
+- HomePage: the container widget which will manage the `CounterBloc` and exposes `FloatingActionButtons` to `increment` and `decrement` the counter.
+- CounterPage: a widget which is responsible for displaying the current `count` as a separate route.
+
+#### App
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+void main() => runApp(App());
+
+class App extends StatefulWidget {
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  final _counterBloc = CounterBloc();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      routes: {
+        '/': (context) => BlocProvider.value(
+              value: _counterBloc,
+              child: HomePage(),
+            ),
+        '/counter': (context) => BlocProvider.value(
+              value: _counterBloc,
+              child: CounterPage(),
+            ),
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _counterBloc.close();
+    super.dispose();
+  }
+}
+```
+
+Our `App` widget is responsible for managing the instance of the `CounterBloc` which we'll be providing to the root (`/`) and counter (`/counter`) routes.
+
+!> It's critical to understand that since the `_AppState` is creating the `CounterBloc` instance it should also be closing it in the `dispose` override.
+
+!> We're using `BlocProvider.value` when providing the `CounterBloc` instance to the routes because we don't want the `BlocProvider` to handle disposing the bloc (since `_AppState` is responsible for that).
+
+#### HomePage
+
+```dart
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final counterBloc = BlocProvider.of<CounterBloc>(context);
+    return Scaffold(
+      appBar: AppBar(title: Text('Counter')),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () => Navigator.of(context).pushNamed('/counter'),
+          child: Text('Counter'),
+        ),
+      ),
+      floatingActionButton: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: FloatingActionButton(
+              heroTag: 0,
+              child: Icon(Icons.add),
+              onPressed: () {
+                counterBloc.add(CounterEvent.increment);
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: FloatingActionButton(
+              heroTag: 1,
+              child: Icon(Icons.remove),
+              onPressed: () {
+                counterBloc.add(CounterEvent.decrement);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+The `HomePage` is similar to the `CounterPage` in the above example; however, instead of rendering a `CounterText` widget, it renders a `RaisedButton` in the center which allows the user to navigate to a new screen which displays the current count.
+
+When the user taps the `RaisedButton`, we push a new named route to navigate to the `/counter` route we defined above.
+
+#### CounterPage
+
+```dart
+class CounterPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Counter'),
+      ),
+      body: BlocBuilder<CounterBloc, int>(
+        builder: (context, count) {
+          return Center(
+            child: Text('$count'),
+          );
+        },
+      ),
+    );
+  }
+}
+```
+
+`CounterPage` is a super simple `StatelessWidget` which uses `BlocBuilder` to re-render a `Text` widget with the current count. Just like before, we are able to use `BlocProvider.of<CounterBloc>(context)` in order to access the `CounterBloc`.
+
+That's all there is to this example and the full source can be found [here](https://gist.github.com/felangel/8d143cf3b7da38d80de4bcc6f65e9831).
 
 Last, we'll look at how to make a bloc globally available to the widget tree.
 
