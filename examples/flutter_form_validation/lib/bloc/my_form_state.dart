@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+part of 'my_form_bloc.dart';
 
 class MyFormState extends Equatable {
   final String email;
