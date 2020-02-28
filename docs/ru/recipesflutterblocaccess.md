@@ -132,7 +132,7 @@ class CounterText extends StatelessWidget {
 
 Далее мы рассмотрим, как создать блок для нескольких страниц/маршрутов.
 
-## Доступ по маршруту
+## Анонимный доступ по маршруту
 
 > В этом примере мы используем `BlocProvider` для доступа к блоку по маршруту. Когда новый маршрут выставляется, он будет иметь другой `BuildContext`, который больше не имеет ссылки на ранее предоставленные блоки. В результате мы должны обернуть новый маршрут в отдельный `BlocProvider`.
 
@@ -282,6 +282,169 @@ class CounterPage extends StatelessWidget {
 `CounterPage` - супер простой `StatelessWidget`, который использует `BlocBuilder` для повторного рендеринга виджета `Text` с текущим счетчиком. Как и раньше, мы можем использовать `BlocProvider.of<CounterBloc>(context)` для доступа к `CounterBloc`.
 
 Это все, что есть в этом примере и полный исходный код можно найти [здесь](https://gist.github.com/felangel/92b256270c5567210285526a07b4cf21).
+
+Далее мы рассмотрим, как настроить блок только для одного или нескольких именованных маршрутов.
+
+## Именованный доступ к маршруту
+
+> В этом примере мы будем использовать `BlocProvider` для доступа к блоку по нескольким именованным маршрутам. Когда проталкивается новый именованный маршрут он будет иметь другой `BuildContext` (как и прежде), который больше не имеет ссылки на ранее предоставленные блоки. В этом случае мы собираемся управлять блоками, которые мы хотим охватить в родительском виджете и выборочно предоставлять их маршрутам, которые должны иметь доступ.
+
+### Блок
+
+Опять же, мы будем использовать `CounterBloc` для простоты.
+
+```dart
+enum CounterEvent { increment, decrement }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  @override
+  int get initialState => 0;
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
+    }
+  }
+}
+```
+
+### UI
+
+Опять же, у нас будет три части пользовательского интерфейса нашего приложения:
+
+- App: виджет корневого приложения
+- HomePage: контейнерный виджет, который будет управлять `CounterBloc` и выставляет`FloatingActionButtons` для «приращения» и «уменьшения» счетчика.
+- CounterPage: виджет, который отвечает за отображение текущего `count` в качестве отдельного маршрута.
+
+#### App
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+void main() => runApp(App());
+
+class App extends StatefulWidget {
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  final _counterBloc = CounterBloc();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      routes: {
+        '/': (context) => BlocProvider.value(
+              value: _counterBloc,
+              child: HomePage(),
+            ),
+        '/counter': (context) => BlocProvider.value(
+              value: _counterBloc,
+              child: CounterPage(),
+            ),
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _counterBloc.close();
+    super.dispose();
+  }
+}
+```
+
+Наш виджет `App` отвечает за управление экземпляром `CounterBloc`, который мы будем предоставлять корневым (`/`) и (`/ counter`) маршрутам.
+
+!> Важно понимать, что, поскольку \_AppState создает экземпляр `CounterBloc`, он также должен закрывать его в переопределении `dispose`.
+
+!> Мы используем `BlocProvider.value` при предоставлении экземпляра `CounterBloc` для маршрутов, потому что мы не хотим, чтобы `BlocProvider` обрабатывал удаление блока (поскольку за это отвечает `_AppState`).
+
+#### HomePage
+
+```dart
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final counterBloc = BlocProvider.of<CounterBloc>(context);
+    return Scaffold(
+      appBar: AppBar(title: Text('Counter')),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () => Navigator.of(context).pushNamed('/counter'),
+          child: Text('Counter'),
+        ),
+      ),
+      floatingActionButton: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: FloatingActionButton(
+              heroTag: 0,
+              child: Icon(Icons.add),
+              onPressed: () {
+                counterBloc.add(CounterEvent.increment);
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: FloatingActionButton(
+              heroTag: 1,
+              child: Icon(Icons.remove),
+              onPressed: () {
+                counterBloc.add(CounterEvent.decrement);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+`HomePage` похож на `CounterPage` в приведенном выше примере, однако вместо рендеринга виджета `CounterText` он рендерит `RaisedButton` в центре, который позволяет пользователю перейти к новому экрану, на котором отображается текущий счетчик.
+
+Когда пользователь нажимает на `RaisedButton`, мы переходим на новый именованный маршрут, чтобы перейти на `/counter`, который мы определили выше.
+
+#### CounterPage
+
+```dart
+class CounterPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Counter'),
+      ),
+      body: BlocBuilder<CounterBloc, int>(
+        builder: (context, count) {
+          return Center(
+            child: Text('$count'),
+          );
+        },
+      ),
+    );
+  }
+}
+```
+
+CounterPage - супер простой `StatelessWidget`, который использует `BlocBuilder` для повторного рендеринга виджета `Text` с текущим счетчиком. Как и раньше, мы можем использовать `BlocProvider.of <CounterBloc> (context)` для доступа к `CounterBloc`.
+
+Это все, что есть в этом примере и полный источник информации можно найти здесь [https://gist.github.com/felangel/8d143cf3b7da38d80de4bcc6f65e9831).
 
 Наконец, мы рассмотрим как сделать блок глобально доступным для дерева виджетов.
 
