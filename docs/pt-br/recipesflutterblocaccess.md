@@ -132,7 +132,7 @@ Isso envolve a parte de acesso ao bloc local desta receita e o código fonte com
 
 A seguir, veremos como fornecer um bloc em várias páginas / rotas.
 
-## Accesso a Rota
+## Accesso a Rotas Anônimas
 
 > Neste exemplo, vamos usar o `BlocProvider` para acessar um bloc através das rotas. Quando uma nova rota é adicionada, ela terá um `BuildContext` diferente, que não possui mais uma referência aos blocs fornecidos anteriormente. Como resultado, temos que agrupar a nova rota em um `BlocProvider` separado.
 
@@ -281,9 +281,163 @@ class CounterPage extends StatelessWidget {
 
 O `CounterPage` é um `StatelessWidget` super super simples que usa o `BlocBuilder` para renderizar novamente um widget `Text` com a contagem atual. Assim como antes, somos capazes de usar o `BlocProvider.of <CounterBloc> (context)` para acessar o `CounterBloc`.
 
-É tudo o que existe neste exemplo e a fonte completa pode ser encontrada [aqui](https://gist.github.com/felangel/92b256270c5567210285526a07b4cf21).
+É tudo o que existe neste exemplo e o código fonte completo pode ser encontrado [aqui](https://gist.github.com/felangel/92b256270c5567210285526a07b4cf21).
 
-Por fim, veremos como disponibilizar globalmente um bloc para a árvore de widgets.
+A seguir, veremos como definir o escopo de um bloc para apenas uma ou mais rotas nomeadas.
+
+## Acesso a Rotas Nomeadas
+
+> Neste exemplo, vamos usar o BlocProvider para acessar um bloc através de várias rotas nomeadas. Quando uma nova rota nomeada é enviada, ela terá um `BuildContext` diferente (como antes), que não possui mais uma referência aos blocs fornecidos anteriormente. Nesse caso, vamos gerenciar os blocs que queremos escopar no widget pai e fornecê-los seletivamente para as rotas que devem ter acesso.
+
+### Bloc
+
+Novamente, vamos usar o `CounterBloc` para simplificar.
+
+```dart
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  @override
+  int get initialState => 0;
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
+    }
+  }
+}
+```
+
+### UI
+
+Novamente, teremos três partes na interface do usuário do nosso aplicativo:
+
+- App: o widget raiz do aplicativo
+- HomePage: o widget container que gerencia o `CounterBloc` e expõe `FloatingActionButtons` ao `increment` e `decrement` do contador.
+- CounterPage: um widget responsável por exibir a `contagem` atual como uma rota separada.
+
+#### App
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+void main() => runApp(App());
+class App extends StatefulWidget {
+  @override
+  _AppState createState() => _AppState();
+}
+class _AppState extends State<App> {
+  final _counterBloc = CounterBloc();
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      routes: {
+        '/': (context) => BlocProvider.value(
+              value: _counterBloc,
+              child: HomePage(),
+            ),
+        '/counter': (context) => BlocProvider.value(
+              value: _counterBloc,
+              child: CounterPage(),
+            ),
+      },
+    );
+  }
+  @override
+  void dispose() {
+    _counterBloc.close();
+    super.dispose();
+  }
+}
+```
+
+Nosso widget `App` é responsável por gerenciar a instância do `CounterBloc` que forneceremos para as rotas raiz (`/`) e counter (`/counter`).
+
+!> É essencial entender que, como o `_AppState` está criando a instância do `CounterBloc`, ele também deve fechá-la em seu método `dispose`.
+
+!> Estamos usando o `BlocProvider.value` ao fornecer a instância do `CounterBloc` para as rotas, porque não queremos que o `BlocProvider` lide com o dispose do bloc (já que o `_AppState` é responsável por isso).
+
+#### HomePage
+
+```dart
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final counterBloc = BlocProvider.of<CounterBloc>(context);
+    return Scaffold(
+      appBar: AppBar(title: Text('Counter')),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () => Navigator.of(context).pushNamed('/counter'),
+          child: Text('Counter'),
+        ),
+      ),
+      floatingActionButton: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: FloatingActionButton(
+              heroTag: 0,
+              child: Icon(Icons.add),
+              onPressed: () {
+                counterBloc.add(CounterEvent.increment);
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: FloatingActionButton(
+              heroTag: 1,
+              child: Icon(Icons.remove),
+              onPressed: () {
+                counterBloc.add(CounterEvent.decrement);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+A `HomePage` é semelhante à `CounterPage` no exemplo acima; no entanto, em vez de renderizar um widget `CounterText`, ele renderiza um `RaisedButton` no centro, o que permite ao usuário navegar para uma nova tela que exibe a contagem atual.
+
+Quando o usuário toca no `RaisedButton`, empurramos uma nova rota nomeada para navegar até a rota `/counter` que definimos acima.
+
+#### CounterPage
+
+```dart
+class CounterPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Counter'),
+      ),
+      body: BlocBuilder<CounterBloc, int>(
+        builder: (context, count) {
+          return Center(
+            child: Text('$count'),
+          );
+        },
+      ),
+    );
+  }
+}
+```
+
+O `CounterPage` é um `StatelessWidget` super super simples que usa o `BlocBuilder` para renderizar novamente um widget `Text` com a contagem atual. Assim como antes, somos capazes de usar o `BlocProvider.of<CounterBloc>(context)` para acessar o `CounterBloc`.
+
+Isso é tudo neste exemplo e o código fonte completo pode ser encontrado [aqui](https://gist.github.com/felangel/8d143cf3b7da38d80de4bcc6f65e9831).
 
 ## Accesso Global
 
