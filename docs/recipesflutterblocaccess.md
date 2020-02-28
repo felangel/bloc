@@ -318,8 +318,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 Again, we're going to have three parts to our application's UI:
 
-- App: the root application widget
-- HomePage: the container widget which will manage the `CounterBloc` and exposes `FloatingActionButtons` to `increment` and `decrement` the counter.
+- App: the root application widget which manages the `CounterBloc` and provides it to the appropriate named routes.
+- HomePage: the container widget which accesses the `CounterBloc` and exposes `FloatingActionButtons` to `increment` and `decrement` the counter.
 - CounterPage: a widget which is responsible for displaying the current `count` as a separate route.
 
 #### App
@@ -416,9 +416,7 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-The `HomePage` is similar to the `CounterPage` in the above example; however, instead of rendering a `CounterText` widget, it renders a `RaisedButton` in the center which allows the user to navigate to a new screen which displays the current count.
-
-When the user taps the `RaisedButton`, we push a new named route to navigate to the `/counter` route we defined above.
+The `HomePage` is similar above example; however, when the user taps the `RaisedButton`, we push a new named route to navigate to the `/counter` route we defined above.
 
 #### CounterPage
 
@@ -445,6 +443,196 @@ class CounterPage extends StatelessWidget {
 `CounterPage` is a super simple `StatelessWidget` which uses `BlocBuilder` to re-render a `Text` widget with the current count. Just like before, we are able to use `BlocProvider.of<CounterBloc>(context)` in order to access the `CounterBloc`.
 
 That's all there is to this example and the full source can be found [here](https://gist.github.com/felangel/8d143cf3b7da38d80de4bcc6f65e9831).
+
+Next, we'll look at how to create a `Router` to manage and scope a bloc to just one or more generated routes.
+
+## Generated Route Access
+
+> In this example, we're going to create a `Router` and use `BlocProvider` to access a bloc across multiple generated routes. We're going to manage the blocs which we want to scope in the `Router` and selectively provide them to the routes that should have access.
+
+### Bloc
+
+Again, we're going to use the `CounterBloc` for simplicity.
+
+```dart
+enum CounterEvent { increment, decrement }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  @override
+  int get initialState => 0;
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.decrement:
+        yield currentState - 1;
+        break;
+      case CounterEvent.increment:
+        yield currentState + 1;
+        break;
+    }
+  }
+}
+```
+
+### UI
+
+Again, we're going to have three parts to our application's UI but we're also going to add an `AppRouter`:
+
+- App: the root application widget which manages the `AppRouter`.
+- AppRouter: class which will manage and provide the `CounterBloc` to the appropriate generated routes.
+- HomePage: the container widget which accesses the `CounterBloc` and exposes `FloatingActionButtons` to `increment` and `decrement` the counter.
+- CounterPage: a widget which is responsible for displaying the current `count` as a separate route.
+
+#### App
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+void main() => runApp(App());
+
+class App extends StatefulWidget {
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  final _router = AppRouter();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      onGenerateRoute: _router.onGenerateRoute,
+    );
+  }
+
+  @override
+  void dispose() {
+    _router.dispose();
+    super.dispose();
+  }
+}
+```
+
+Our `App` widget is responsible for managing the instance of the `AppRouter` and uses the router's `onGenerateRoute` to determine the current route.
+
+!> We need to dispose the `_router` when the `App` widget is disposed in order to close all blocs in the `AppRouter`.
+
+#### App Router
+
+```dart
+class AppRouter {
+  final _counterBloc = CounterBloc();
+
+  Route onGenerateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case '/':
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: _counterBloc,
+            child: HomePage(),
+          ),
+        );
+      case '/counter':
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: _counterBloc,
+            child: CounterPage(),
+          ),
+        );
+      default:
+        return null;
+    }
+  }
+
+  void dispose() {
+    _counterBloc.close();
+  }
+}
+```
+
+Our `AppRouter` is responsible for managing the instance of the `CounterBloc` and provides `onGenerateRoute` which returns the correct route based on the provided `RouteSettings`.
+
+!> Since the `AppRouter` creates the `CounterBloc` instance it must also expose a `dispose` which `closes` the `CounterBloc` instance. `dispose` is called from the `_AppState` widget's `dispose` override.
+
+!> We're using `BlocProvider.value` when providing the `CounterBloc` instance to the routes because we don't want the `BlocProvider` to handle disposing the bloc (since `AppRouter` is responsible for that).
+
+#### HomePage
+
+```dart
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final counterBloc = BlocProvider.of<CounterBloc>(context);
+    return Scaffold(
+      appBar: AppBar(title: Text('Counter')),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () => Navigator.of(context).pushNamed('/counter'),
+          child: Text('Counter'),
+        ),
+      ),
+      floatingActionButton: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: FloatingActionButton(
+              heroTag: 0,
+              child: Icon(Icons.add),
+              onPressed: () {
+                counterBloc.add(CounterEvent.increment);
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: FloatingActionButton(
+              heroTag: 1,
+              child: Icon(Icons.remove),
+              onPressed: () {
+                counterBloc.add(CounterEvent.decrement);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+The `HomePage` is identical to the above example. When the user taps the `RaisedButton`, we push a new named route to navigate to the `/counter` route we defined above.
+
+#### CounterPage
+
+```dart
+class CounterPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Counter'),
+      ),
+      body: BlocBuilder<CounterBloc, int>(
+        builder: (context, count) {
+          return Center(
+            child: Text('$count'),
+          );
+        },
+      ),
+    );
+  }
+}
+```
+
+`CounterPage` is a super simple `StatelessWidget` which uses `BlocBuilder` to re-render a `Text` widget with the current count. Just like before, we are able to use `BlocProvider.of<CounterBloc>(context)` in order to access the `CounterBloc`.
+
+That's all there is to this example and the full source can be found [here](https://gist.github.com/felangel/354f9499dc4573699c62fc90c6bb314e).
 
 Last, we'll look at how to make a bloc globally available to the widget tree.
 
