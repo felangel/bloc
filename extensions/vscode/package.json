@@ -53,7 +53,7 @@
     "snippets": [
       {
         "language": "dart",
-        "path": "./snippets/snippets.json"
+        "path": "./snippets/dart.json"
       }
     ]
   },
