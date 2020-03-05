@@ -1,29 +1,29 @@
-# Why Bloc?
+# 为什么使用Bloc?
 
-> Bloc makes it easy to separate presentation from business logic, making your code _fast_, _easy to test_, and _reusable_.
+> Bloc可以比较轻松地将展示层的代码与业务逻辑分开，从而使您的代码快速，易于测试且可重复使用。
 
-When building production quality applications, managing state becomes critical.
+在构建高质量的应用程序时，状态管理就变得至关重要。
 
-As developers we want to:
+我们作为开发人员总是希望：
 
-- know what state our application is in at any point in time.
-- easily test every case to make sure our app is responding appropriately.
-- record every single user interaction in our application so that we can make data-driven decisions.
-- work as efficiently as possible and reuse components both within our application and across other applications.
-- have many developers seamlessly working within a single code base following the same patterns and conventions.
-- develop fast and reactive apps.
+- 知道我们的应用程序在任何时间下的状态。
+- 轻松地测试每种情况，以确保我们的应用程序能够正确响应。
+- 记录应用程序中的每个用户交互，以便我们做出数据驱动的决策。
+- 尽可能高效地工作，并在我们的应用程序内以及跨其他应用程序重用组件。
+- 有许多开发人员遵循相同的模式和约定在一个代码库中无缝工作。
+- 开发快速反应的应用程序。
 
-Bloc was designed to meet all of those needs and many more.
+Bloc就是在满足所有这些需求以及更多其他需求的情况下被设计出来的。
 
-There are many state management solutions and deciding which one to use can be a daunting task.
+状态管理的解决方案有很多，决定使用哪种解决方案可能会是一项艰巨的任务。
 
-Bloc was designed with three core values in mind:
+Bloc在设计时考虑到了以下三个核心价值：
 
-- Simple
-  - Easy to understand & can be used by developers with varying skill levels.
-- Powerful
-  - Help make amazing, complex applications by composing them of smaller components.
-- Testable
-  - Easily test every aspect of an application so that we can iterate with confidence.
+- 简单
+  - 易于理解，可供技能水平不同的开发人员使用。
+- 强劲
+  - 通过将它们组成更小的组件，帮助制作出色而复杂的应用程序。
+- 可测试
+  - 轻松测试应用程序的各个方面，以便我们可以自信地进行迭代。
 
-Bloc attempts to make state changes predictable by regulating when a state change can occur and enforcing a single way to change state throughout an entire application.
+Bloc试图通过调节何时可以发生`状态更改`并在整个应用程序中强制采用`一种更改状态`的方式来使状态更改`可预测`。

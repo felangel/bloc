@@ -12,9 +12,9 @@
 
 > Dart의 예측 가능한 상태 관리 라이브러리
 
-- 간단하고 가벼운
-- 높은 테스트 가능
-- Dart, Flutter 및 AngularDart에 사용
+- 간단하고 가볍고
+- 테스트 하기 쉬운
+- Dart, Flutter 및 AngularDart를 위한
 
 [GitHub](https://github.com/felangel/bloc/)
-[시작하다](ko-kr/gettingstarted.md)
+[시작하기](ko-kr/gettingstarted.md)

@@ -165,9 +165,9 @@ class _BlocListenerBaseState<B extends Bloc<dynamic, S>, S>
   @override
   void didUpdateWidget(BlocListenerBase<B, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final oldState = oldWidget.bloc ?? BlocProvider.of<B>(context);
-    final currentState = widget.bloc ?? oldState;
-    if (oldState != currentState) {
+    final oldBloc = oldWidget.bloc ?? BlocProvider.of<B>(context);
+    final currentBloc = widget.bloc ?? oldBloc;
+    if (oldBloc != currentBloc) {
       if (_subscription != null) {
         _unsubscribe();
         _bloc = widget.bloc ?? BlocProvider.of<B>(context);

@@ -11,10 +11,14 @@ import 'package:test/test.dart' as test;
 /// by closing the [bloc] stream before evaluating the [expect]ation.
 ///
 /// [build] should be used for all [bloc] initialization and preparation
-/// and must return the [bloc] under test.
+/// and must return the [bloc] under test as a `Future`.
 ///
 /// [act] is an optional callback which will be invoked with the [bloc] under
 /// test and should be used to `add` events to the [bloc].
+///
+/// [skip] is an optional `int` which can be used to skip any number of states.
+/// The default value is 1 which skips the `initialState` of the bloc.
+/// [skip] can be overridden to include the `initialState` by setting it to 0.
 ///
 /// [wait] is an optional `Duration` which can be used to wait for
 /// async operations within the [bloc] under test such as `debounceTime`.
@@ -23,14 +27,15 @@ import 'package:test/test.dart' as test;
 /// under test is expected to emit after [act] is executed.
 ///
 /// [verify] is an optional callback which is invoked after [expect]
-/// and can be used for additional non-bloc related assertions.
+/// and can be used for additional verification/assertions.
+/// [verify] is called with the [bloc] returned by [build].
 ///
 /// ```dart
 /// blocTest(
-///   'CounterBloc emits [0, 1] when CounterEvent.increment is added',
-///   build: () => CounterBloc(),
+///   'CounterBloc emits [1] when CounterEvent.increment is added',
+///   build: () async => CounterBloc(),
 ///   act: (bloc) => bloc.add(CounterEvent.increment),
-///   expect: [0, 1],
+///   expect: [1],
 /// );
 /// ```
 ///
@@ -39,23 +44,24 @@ import 'package:test/test.dart' as test;
 ///
 /// ```dart
 /// blocTest(
-///   'CounterBloc emits [0] when nothing is added',
-///   build: () => CounterBloc(),
-///   expect: [0],
+///   'CounterBloc emits [] when nothing is added',
+///   build: () async => CounterBloc(),
+///   expect: [],
 /// );
 /// ```
 ///
-/// [blocTest] can also be used to [verify] internal bloc functionality.
+/// [blocTest] can also be used to [skip] any number of emitted states
+/// before asserting against the expected states.
+/// The default value is 1 which skips the `initialState` of the bloc.
+/// [skip] can be overridden to include the `initialState` by setting it to 0.
 ///
 /// ```dart
 /// blocTest(
 ///   'CounterBloc emits [0, 1] when CounterEvent.increment is added',
-///   build: () => CounterBloc(),
+///   build: () async => CounterBloc(),
 ///   act: (bloc) => bloc.add(CounterEvent.increment),
+///   skip: 0,
 ///   expect: [0, 1],
-///   verify: () async {
-///     verify(repository.someMethod(any)).called(1);
-///   }
 /// );
 /// ```
 ///
@@ -64,11 +70,25 @@ import 'package:test/test.dart' as test;
 ///
 /// ```dart
 /// blocTest(
-///   'CounterBloc emits [0, 1] when CounterEvent.increment is added',
-///   build: () => CounterBloc(),
+///   'CounterBloc emits [1] when CounterEvent.increment is added',
+///   build: () async => CounterBloc(),
 ///   act: (bloc) => bloc.add(CounterEvent.increment),
 ///   wait: const Duration(milliseconds: 300),
-///   expect: [0, 1],
+///   expect: [1],
+/// );
+/// ```
+///
+/// [blocTest] can also be used to [verify] internal bloc functionality.
+///
+/// ```dart
+/// blocTest(
+///   'CounterBloc emits [1] when CounterEvent.increment is added',
+///   build: () async => CounterBloc(),
+///   act: (bloc) => bloc.add(CounterEvent.increment),
+///   expect: [1],
+///   verify: (_) async {
+///     verify(repository.someMethod(any)).called(1);
+///   }
 /// );
 /// ```
 ///
@@ -78,30 +98,31 @@ import 'package:test/test.dart' as test;
 ///
 /// ```dart
 /// blocTest(
-///  'emits [StateA, StateB] when MyEvent is added',
-///  build: () => MyBloc(),
+///  'emits [StateB] when MyEvent is added',
+///  build: () async => MyBloc(),
 ///  act: (bloc) => bloc.add(MyEvent()),
-///  expect: [isA<StateA>(), isA<StateB>()],
+///  expect: [isA<StateB>()],
 /// );
 /// ```
 @isTest
 void blocTest<B extends Bloc<Event, State>, Event, State>(
   String description, {
-  @required B Function() build,
-  @required Iterable expect,
+  @required Future<B> Function() build,
   Future<void> Function(B bloc) act,
   Duration wait,
-  Future<void> Function() verify,
+  int skip = 1,
+  Iterable expect,
+  Future<void> Function(B bloc) verify,
 }) {
   test.test(description, () async {
-    final bloc = build();
+    final bloc = await build();
     final states = <State>[];
-    final subscription = bloc.listen(states.add);
+    final subscription = bloc.skip(skip).listen(states.add);
     await act?.call(bloc);
     if (wait != null) await Future.delayed(wait);
     await bloc.close();
-    test.expect(states, expect);
+    if (expect != null) test.expect(states, expect);
     await subscription.cancel();
-    await verify?.call();
+    await verify?.call(bloc);
   });
 }

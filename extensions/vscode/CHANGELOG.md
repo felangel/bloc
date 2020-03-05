@@ -1,3 +1,11 @@
+# 3.3.0
+
+Update latest package versions:
+
+- bloc_test -> ^4.0.0
+- equatable -> ^1.1.0
+- flutter_bloc -> ^3.2.0
+
 # 3.2.0
 
 Update bloc generator to use `parts` (removes barrel file)

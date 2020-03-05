@@ -42,30 +42,30 @@ void main() {
   });
 
   group('emitsExactly', () {
-    test('emits [0] when nothing is added', () async {
+    test('emits [] when nothing is added', () async {
       final bloc = CounterBloc();
-      await emitsExactly(bloc, [0]);
+      await emitsExactly(bloc, []);
     });
 
-    test('emits [0, 1] when CounterEvent.increment is added', () async {
+    test('emits [1] when CounterEvent.increment is added', () async {
       final bloc = CounterBloc();
       bloc.add(CounterEvent.increment);
-      await emitsExactly(bloc, [0, 1]);
+      await emitsExactly(bloc, [1]);
     });
   });
 
   group('blocTest', () {
     blocTest(
-      'emits [0] when nothing is added',
-      build: () => CounterBloc(),
-      expect: [0],
+      'emits [] when nothing is added',
+      build: () async => CounterBloc(),
+      expect: [],
     );
 
     blocTest(
-      'emits [0, 1] when CounterEvent.increment is added',
-      build: () => CounterBloc(),
+      'emits [1] when CounterEvent.increment is added',
+      build: () async => CounterBloc(),
       act: (bloc) => bloc.add(CounterEvent.increment),
-      expect: [0, 1],
+      expect: [1],
     );
   });
 }

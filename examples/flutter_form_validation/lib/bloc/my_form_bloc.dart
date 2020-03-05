@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import './bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
+
+part 'my_form_event.dart';
+part 'my_form_state.dart';
 
 class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
   final RegExp _emailRegExp = RegExp(

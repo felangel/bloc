@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+part of 'my_form_bloc.dart';
 
 abstract class MyFormEvent extends Equatable {
   const MyFormEvent();
