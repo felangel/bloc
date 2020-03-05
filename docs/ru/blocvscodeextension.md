@@ -37,4 +37,4 @@
 
 ## Фрагменты
 
-This extension includes convenient snippets to generate Bloc-related widgets. All available snippets and their prefix can be found on [GitHub](https://github.com/felangel/bloc/blob/master/extensions/vscode/snippets/dart.json).
+This extension includes convenient snippets to generate Bloc-related code. All available snippets and their prefix can be found on [GitHub](https://github.com/felangel/bloc/blob/master/extensions/vscode/snippets/dart.json).
