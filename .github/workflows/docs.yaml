@@ -5,6 +5,7 @@ on:
     branches:
     - master
     paths:
+    - '.github/workflows/docs.yaml'
     - 'README.md'
     - 'docs/*'
 
