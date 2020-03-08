@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+part of 'async_bloc.dart';
 
 @immutable
 class AsyncState {

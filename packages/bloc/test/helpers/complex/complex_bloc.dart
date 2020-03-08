@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-import './complex.dart';
+part 'complex_event.dart';
+part 'complex_state.dart';
 
 class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
   ComplexState get initialState => ComplexStateA();
