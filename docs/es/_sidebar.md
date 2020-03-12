@@ -8,6 +8,7 @@
   - [Arquitectura](es/architecture.md)
   - [Testeo](es/testing.md)
   - [Convenciones de nombres](es/blocnamingconventions.md)
+  - [FAQs](es/faqs.md)
 
 - Tutoriales
 

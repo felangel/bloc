@@ -1,4 +1,4 @@
-# Pruebas
+# Testeo
 
 > Bloc fue diseñado para ser extremadamente fácil de probar.
 
@@ -54,7 +54,7 @@ void main() {
 }
 ```
 
-> **Nota:** Los grupos tienen como función organizar las pruebas individuales asi como también para crear un contexto en el cual se pueda compartir una configuración inicial (`setUp`) y una función a ejecutarse al final (`tearDown`) de cada una.
+?> **Nota:** Los grupos tienen como función organizar las pruebas individuales asi como también para crear un contexto en el cual se pueda compartir una configuración inicial (`setUp`) y una función a ejecutarse al final (`tearDown`) de cada una.
 
 Comencemos creando una instancia de nuestra clase `CounterBloc` la cual será reutilizada en nuestras pruebas.
 
@@ -84,21 +84,21 @@ group('CounterBloc', () {
 });
 ```
 
-> **Nota:** Podemos ejecutar todas nuestras pruebas con el comando `pub run test`.
+?> **Nota:** Podemos ejecutar todas nuestras pruebas con el comando `pub run test`.
 
 En este punto, ¡deberiamos tener nuestra primera prueba exitosa! Ahora escribamos una prueba mas compleja haciendo uso del paquete [bloc_test](https://pub.dev/packages/bloc_test).
 
 
 ```dart
 blocTest(
-    'emits [0, 1] when CounterEvent.increment is added',
+    'emite [0, 1] cuando CounterEvent.increment es agregado',
     build: () => counterBloc,
     act: (bloc) => bloc.add(CounterEvent.increment),
     expect: [0, 1],
 );
 
 blocTest(
-    'emits [0, -1] when CounterEvent.decrement is added',
+    'emite [0, -1] cuando CounterEvent.decrement es agregado',
     build: () => counterBloc,
     act: (bloc) => bloc.add(CounterEvent.decrement),
     expect: [0, -1],

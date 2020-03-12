@@ -10,7 +10,7 @@
 
 `Sujeto del Bloc` + `Sustantivo (opcional)` + `Verbo (evento)`
 
-> Los eventos de carga inicial deben seguir la siguiente nomenclatura: `Sujeto del Bloc` + `Started`
+?> Los eventos de carga inicial deben seguir la siguiente nomenclatura: `Sujeto del Bloc` + `Started`
 
 #### Ejemplos
 
@@ -37,7 +37,7 @@
 
 `Sujeto del Bloc` + `Verbo (acción)` + `Estado`
 
-> El valor de `Estado` deberían ser uno de los siguientes: `Initial` | `Success` | `Failure` | `InProgress` y el estado inicial deberia seguir la nomenclatura: `Sujeto del Bloc` + `Initial`.
+?> El valor de `Estado` deberían ser uno de los siguientes: `Initial` | `Success` | `Failure` | `InProgress` y el estado inicial deberia seguir la nomenclatura: `Sujeto del Bloc` + `Initial`.
 
 #### Ejemplos
 
