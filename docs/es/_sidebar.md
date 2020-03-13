@@ -13,7 +13,7 @@
 - Tutoriales
 
   - Flutter
-    - [Counter](es/fluttercountertutorial.md)
+    - [Contador](es/fluttercountertutorial.md)
     - [Timer](es/fluttertimertutorial.md)
     - [Infinite List](es/flutterinfinitelisttutorial.md)
     - [Login](es/flutterlogintutorial.md)
