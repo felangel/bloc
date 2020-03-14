@@ -1,25 +1,25 @@
-# Getting Started
+# Başlanğıc
 
-?> In order to start using bloc you must have the [Dart SDK](https://dart.dev/get-dart) installed on your machine.
+?> Bloc-dan istifadə etməyə başlamaq üçün  sizin cihazınızda [Dart SDK](https://dart.dev/get-dart) yüklənməlidir.
 
-## Overview
+## Icmal
 
-Bloc consists of several pub packages:
+Bloc bir neçə pub paketlərindən ibarətdir:
 
-- [bloc](https://pub.dev/packages/bloc) - Core bloc library
-- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Powerful Flutter Widgets built to work with bloc in order to build fast, reactive mobile applications.
-- [angular_bloc](https://pub.dev/packages/angular_bloc) - Powerful Angular Components built to work with bloc in order to build fast, reactive web applications.
+- [bloc](https://pub.dev/packages/bloc) - Əsas bloc kitabxanası
+- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Bloc ilə işləyərək, sürətli və reaktiv mobil tətbiqlərin yaradılması üçün güclü Flutter Widget-ləri
+- [angular_bloc](https://pub.dev/packages/angular_bloc) - Bloc ilə işləyərək, sürətli və reaktiv veb tətbiqlərin yaradılması üçün gücle Angular Komponentləri
 
-## Installation
+## Quraşdırma
 
-The first thing we need to do is add the bloc package to our `pubspec.yaml` as a dependency.
+İlk olaraq, biz bloc paketini bizim `pubspec.yaml`-a dependency olaraq əlavə etməliyik.
 
 ```yaml
 dependencies:
   bloc: ^3.0.0
 ```
 
-For a [Flutter](https://flutter.dev/) application, we also need to add the flutter_bloc package to our `pubspec.yaml` as a dependency.
+[Flutter](https://flutter.dev/) tətbiqi üçün, biz həmçinin flutter_bloc paketini `pubspec.yaml`-a dependency olaraq əlavə etməliyik.
 
 ```yaml
 dependencies:
@@ -27,7 +27,7 @@ dependencies:
   flutter_bloc: ^3.2.0
 ```
 
-For an [AngularDart](https://angulardart.dev/) application, we also need to add the angular_bloc package to our `pubspec.yaml` as a dependency.
+[AngularDart](https://angulardart.dev/) tətbiqi üçün, biz həmçinin angular_bloc paketini `pubspec.yaml`-a dependency olaraq əlavə etməliyik.
 
 ```yaml
 dependencies:
@@ -35,30 +35,30 @@ dependencies:
   angular_bloc: ^3.0.0
 ```
 
-Next we need to install bloc.
+Daha sonra bloc-u quraşdırmağa ehtiyacımız var.
 
-!> Make sure to run the following command from the same directory as your `pubspec.yaml` file.
+!> Əmin olun ki, aşağıdakı əmri `pubspec.yaml` faylı ilə eyni qovluqda icra edirsiniz.
 
-- For Dart or AngularDart run `pub get`
+- Dart və ya AngularDart üçün `pub get` əmrini icra edin
 
-- For Flutter run `flutter packages get`
+- Flutter üçün `flutter packages get` əmrini icra edin
 
 ## Import
 
-Now that we have successfully installed bloc, we can create our `main.dart` and import bloc.
+Artıq biz bloc-u uğurla quraşdırdıq, `main.dart`-ı yarada və bloc-u import edə bilərik..
 
 ```dart
 import 'package:bloc/bloc.dart';
 ```
 
-For a Flutter application we can also import flutter_bloc.
+Flutter tətbiqi üçün biz həmçinin flutter_bloc-u import edə bilərik.
 
 ```dart
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 ```
 
-For an AngularDart application we can also import angular_bloc.
+AngularDart tətbiqi üçün biz həmçinin angular_bloc-u import edə bilərik.
 
 ```dart
 import 'package:bloc/bloc.dart';
