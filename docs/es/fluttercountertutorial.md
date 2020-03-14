@@ -46,7 +46,7 @@ flutter packages get
 
 Nuestra aplicación de contador solo tendrá dos botones para aumentar / disminuir el valor del contador y un `Text` widget para mostrar el valor actual. Empecemos a diseñar los `CounterEvents`.
 
-## Eventos del Contador
+## CounterEvent
 
 ```dart
 enum CounterEvent { increment, decrement }
@@ -56,7 +56,7 @@ enum CounterEvent { increment, decrement }
 
 ¡Dado que el estado de nuestro contador puede ser representado por un número entero, no necesitamos crear una clase personalizada!
 
-## Contador Bloc
+## CounterBloc
 
 ```dart
 class CounterBloc extends Bloc<CounterEvent, int> {
@@ -102,7 +102,7 @@ class MyApp extends StatelessWidget {
 
 ?> **Nota**: Estamos utilizando el widget `BlocProvider` de `flutter_bloc` para que la instancia de `CounterBloc` esté disponible para todo el subárbol (`CounterPage`). `BlocProvider` también se encarga de cerrar el `CounterBloc` automáticamente, por lo que no necesitamos usar un `StatefulWidget`.
 
-## Página del Contador
+## CounterPage
 
 Finalmente, todo lo que queda es construir nuestra página de contador.
 
@@ -153,7 +153,7 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-?> **Nota**: Podemos acceder a la instancia de `CounterBloc` usando` BlocProvider.of <CounterBloc> (context)` porque envolvimos nuestra `CounterPage` en un `BlocProvider`.
+?> **Nota**: Podemos acceder a la instancia de `CounterBloc` usando` BlocProvider.of <CounterBloc>(context)` porque envolvimos nuestra `CounterPage` en un `BlocProvider`.
 
 ?> **Nota**: Estamos utilizando el widget `BlocBuilder` de` flutter_bloc` para reconstruir nuestra IU en respuesta a los cambios de estado (cambios en el valor del contador).
 

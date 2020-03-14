@@ -14,7 +14,7 @@
 
   - Flutter
     - [Contador](es/fluttercountertutorial.md)
-    - [Timer](es/fluttertimertutorial.md)
+    - [Temporizador](es/fluttertimertutorial.md)
     - [Infinite List](es/flutterinfinitelisttutorial.md)
     - [Login](es/flutterlogintutorial.md)
     - [Weather](es/flutterweathertutorial.md)
