@@ -142,17 +142,18 @@ Kitabxananın məqsədi _presentation_-ın (dizaynın) _businesss logic_-dən (h
 ### Video Dərslər
 
 - [Flutter Bloc Kitabxanası Dərsi](https://www.youtube.com/watch?v=hTExlt1nJZI) - [Reso Coder](https://resocoder.com) tərəfindən, Bloc kitabxanasına giriş.
-- [Flutter Youtube Axtarışı](https://www.youtube.com/watch?v=BJY8nuYUM7M) - [Reso Coder](https://resocoder.com) tərəfindən, bloc və flutter_bloc paketlərini istifadə edərək,  API ilə əlaqəli Youtube Axtarış tətbiqinin.
+- [Flutter Youtube Axtarışı](https://www.youtube.com/watch?v=BJY8nuYUM7M) - [Reso Coder](https://resocoder.com) tərəfindən, bloc və flutter_bloc paketlərini istifadə edərək,  API ilə əlaqəli Youtube Axtarış tətbiqinin yaradılması.
 - [Flutter Bloc - AUTOMATIC LOOKUP - v0.20 (and Up), Updated Tutorial](https://www.youtube.com/watch?v=_vOpPuVfmiU) - [Reso Coder](https://resocoder.com) tərəfindən, Flutter Bloc Paketi haqqqında yenilənmiş dərs.
 - [flutter_bloc ilə dinamik mövzu (theme) dəyişmə](https://www.youtube.com/watch?v=YYbhkg-W8Mg) - [Reso Coder](https://resocoder.com) tərəfindən, dinamik mövzu dəyişmənin həyata keçirilməsi üçün flutter_bloc paketinin necə istifadə olunması haqqında dərs.
 - [Flutter-də Davamlı Bloc Vəziyyəti](https://www.youtube.com/watch?v=vSOpZd_FFEY) - [Reso Coder](https://resocoder.com) tərəfindən, avtomatik olaraq, tətbiqin vəziyyətinin davam etdirilməsi üçün hydrated_bloc paketinin necə istifadə olunması haqqında dərs.
 - [Vəziyyətin idarə olunmasının əsasları](https://www.youtube.com/watch?v=S2KmxzgsTwk&t=731s) - [Techie Blossom](https://techieblossom.com) tərəfindən, flutter_bloc paketi istifadə edərək, vəziyyətin idarə olunmasına giriş.
 - [Flutter Futbolçu Axtarışı](https://www.youtube.com/watch?v=S2KmxzgsTwk) - [Techie Blossom](https://techieblossom.com) tərəfindən, bloc və flutter_bloc paketlərini istifadə edərək, API ilə işləyən Futbolçu Axtarışı tətbiqinin necə yaradılması.
-- [Flutter Bloc Paketinin öyrənilməsi](https://www.youtube.com/watch?v=eAiCPl3yk9A&t=1s) - [Robert Brunhage](https://www.youtube.com/channel/UCSLIg5O0JiYO1i2nD4RclaQ) tərəfindən, flutter_bloc paketinin canlı olaraq, öyrənilməsi.
+- [Flutter Bloc Paketinin öyrənilməsi](https://www.youtube.com/watch?v=eAiCPl3yk9A&t=1s) - [Robert Brunhage](https://www.youtube.com/channel/UCSLIg5O0JiYO1i2nD4RclaQ) tərəfindən, flutter_bloc paketinin canlı olaraq öyrənilməsi.
 - [Bloc Test Dərsi](https://www.youtube.com/watch?v=S6jFBiiP0Mc) - [Reso Coder](https://resocoder.com) tərəfindən, bloc_test paketini istifadə edərək, bloc-ların necə unit test olunması haqqında dərs.
 
 ### Extension-lar
 
+- [Feature Scaffolding for VSCode](https://marketplace.visualstudio.com/items?itemName=KiritchoukC.flutter-clean-architecture) -[Reso Coder's](https://resocoder.com)-in Clean Arxitektura dərslərindən ilhamlanaraq, [Kiritchouk Clément](https://github.com/KiritchoukC) tərəfindən yaradılan, sürətli şəkildə özəlliklərin (features) skeletinin qurulması üçün VSCode extension-u.
 - [Feature Scaffolding for VSCode](https://marketplace.visualstudio.com/items?itemName=KiritchoukC.flutter-clean-architecture) - A VSCode extension inspired by [Reso Coder's](https://resocoder.com) clean architecture tutorials, which helps quickly scaffold features, by [Kiritchouk Clément](https://github.com/KiritchoukC).
 
 ## Maintainer-lər
