@@ -1,3 +1,7 @@
+# 3.3.0
+
+- Add optional `dispose` callback to `RepositoryProvider` ([#952](https://github.com/felangel/bloc/issues/952))
+
 # 3.2.0
 
 - Fix type inference for: `MultiBlocProvider`, `MultiRepositoryProvider`, `MultiBlocListener` ([#773](https://github.com/felangel/bloc/pull/773))

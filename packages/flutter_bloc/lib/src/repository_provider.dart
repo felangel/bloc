@@ -21,6 +21,20 @@ mixin RepositoryProviderSingleChildWidget on SingleChildWidget {}
 ///   child: ChildA(),
 /// );
 /// ```
+///
+/// The repository can be optionally disposed via the [dispose] callback.
+/// [dispose] will be called when [RepositoryProvider]
+/// is unmounted from the widget tree.
+///
+/// ```dart
+/// RepositoryProvider(
+///   create: (context) => RepositoryA(),
+///   dispose: (context, repository) {
+///     // dispose logic goes here
+///   }
+///   child: ChildA(),
+/// );
+/// ```
 /// {@endtemplate}
 class RepositoryProvider<T> extends Provider<T>
     with RepositoryProviderSingleChildWidget {
@@ -28,12 +42,13 @@ class RepositoryProvider<T> extends Provider<T>
   RepositoryProvider({
     Key key,
     @required Create<T> create,
+    Dispose<T> dispose,
     Widget child,
     bool lazy,
   }) : super(
           key: key,
           create: create,
-          dispose: (_, __) {},
+          dispose: dispose,
           child: child,
           lazy: lazy,
         );

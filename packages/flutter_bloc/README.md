@@ -257,6 +257,18 @@ context.repository<RepositoryA>();
 RepositoryProvider.of<RepositoryA>(context)
 ```
 
+The repository can be optionally disposed via the `dispose` callback. `dispose` will be called when `RepositoryProvider` is unmounted from the widget tree.
+
+```dart
+RepositoryProvider(
+  create: (context) => RepositoryA(),
+  dispose: (context, repository) {
+    // dispose logic goes here
+  }
+  child: ChildA(),
+);
+```
+
 **MultiRepositoryProvider** is a Flutter widget that merges multiple `RepositoryProvider` widgets into one.
 `MultiRepositoryProvider` improves the readability and eliminates the need to nest multiple `RepositoryProvider`.
 By using `MultiRepositoryProvider` we can go from:

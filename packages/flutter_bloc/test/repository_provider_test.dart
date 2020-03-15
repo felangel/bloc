@@ -133,7 +133,9 @@ class RoutePage extends StatelessWidget {
         key: Key('route_button'),
         onPressed: () {
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute<Widget>(builder: (context) => Container()),
+            MaterialPageRoute<Widget>(
+              builder: (context) => Container(),
+            ),
           );
         },
       ),
@@ -192,6 +194,26 @@ void main() {
         ),
       );
       expect(createCalled, isTrue);
+    });
+
+    testWidgets('can override dispose', (tester) async {
+      var disposeCalled = false;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: RepositoryProvider(
+            create: (_) => Repository(0),
+            lazy: false,
+            dispose: (context, repository) {
+              disposeCalled = true;
+            },
+            child: RoutePage(),
+          ),
+        ),
+      );
+      expect(disposeCalled, isFalse);
+      await tester.tap(find.byKey(Key('route_button')));
+      await tester.pumpAndSettle();
+      expect(disposeCalled, isTrue);
     });
 
     testWidgets('passes value to children via builder', (tester) async {
