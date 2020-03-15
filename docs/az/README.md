@@ -12,22 +12,23 @@
 
 ---
 
-A predictable state management library that helps implement the [BLoC design pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+[BLoC design pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc)-i həyata keçirməyə kömək edən gözlənilən vəziyyətin idadə edilməsi kitabxanası.
 
-| Package                                                                            | Pub                                                                                                    |
+| Paketlər                                                                            | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | [bloc](https://github.com/felangel/bloc/tree/master/packages/bloc)                 | [![pub package](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)                 |
 | [bloc_test](https://github.com/felangel/bloc/tree/master/packages/bloc_test)       | [![pub package](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)       |
 | [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc) | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc) |
 | [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc) | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc) |
 
-## Overview
+## İcmal
 
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
 
-The goal of this library is to make it easy to separate _presentation_ from _business logic_, facilitating testability and reusability.
+Kitabxananın məqsədi _presentation_-ın (dizaynın) _businesss logic_-dən (hesablama və məntiqi hissədən) ayrılmasının, test edilə bilinməsinin və təkrar istifadənin asanlaşdırılmasıdır.
 
-## Documentation
+
+## Dokumentasiya
 
 - [Official Documentation](https://bloclibrary.dev)
 - [Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/bloc/README.md)
