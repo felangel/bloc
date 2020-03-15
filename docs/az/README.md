@@ -98,7 +98,7 @@ Kitabxananın məqsədi _presentation_-ın (dizaynın) _businesss logic_-dən (h
 - [Taymer](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - `bloc` və `flutter_bloc` paketlərindən istifadə edərək Taymerin necə yaradılması haqqında nümunə.
 - [Firestore Todo-lar](https://bloclibrary.dev/#/flutterfirestoretodostutorial) `bloc` və `flutter_bloc` paketlərindən istifadə edərək və onları cloud firestore-a inteqrasiya edərək Todo-lar Tətbiqinin necə yaradılması haqqında nümunə.
 - [Alış-veriş səbəti](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - [flutter nümunələri](https://github.com/flutter/samples/tree/master/provider_shopper) əsasında `bloc` və `flutter_bloc` paketlərini istifadə edərək Alış-Veriş Səbəti tətbiqinin necə yaradılması haqqında nümunə.
-- [Dinamik Form](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - `bloc` və `flutter_bloc` paketlərini istifadə edərək repository-dən məlumatı əldə edən dinak formun həyata keçirilməsi haqqında nümunə.
+- [Dinamik Form](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - `bloc` və `flutter_bloc` paketlərini istifadə edərək repository-dən məlumatı əldə edən dinamik formun həyata keçirilməsi haqqında nümunə.
 
 ### Veb
 
@@ -116,7 +116,7 @@ Kitabxananın məqsədi _presentation_-ın (dizaynın) _businesss logic_-dən (h
 - [bloc ilə unit testing](https://medium.com/@felangelov/unit-testing-with-bloc-b94de9655d86) - flutter login dərsində yaradılan bloc-ların necə unit test edilməsi.
 - [flutter_bloc ilə sonsuz list dərsi](https://medium.com/flutter-community/flutter-infinite-list-tutorial-with-flutter-bloc-2fc7a272ec67) - bloc və flutter_bloc paketlərini istifadə edərək sonsuz listin necə yaradılması.
 - [bloc ilə kodun bölüşdürülməsi](https://medium.com/flutter-community/code-sharing-with-bloc-b867302c18ef) Flutter ilə yazılan mobil tətbiq və AngularDart ilə yazılan veb tətbiq arasında kodun necə bölüşdürülməsi.
-- [flutter_bloc ilə hava tətbiqi dərsi](https://medium.com/flutter-community/weather-app-with-flutter-bloc-e24a7253340d) - bloc və flutter_bloc paketlərini istifadə edərək, dinamik mövzu (theme) dəyişdirilməsini, aşağı sürükləyərək yenilənməni və REST APİ ilə əlaqəni özündə cəmləşdirə hava tətbiqinin necə yaradılması.
+- [flutter_bloc ilə hava tətbiqi dərsi](https://medium.com/flutter-community/weather-app-with-flutter-bloc-e24a7253340d) - bloc və flutter_bloc paketlərini istifadə edərək, dinamik mövzu (theme) dəyişdirilməsini, aşağı sürükləyərək yenilənməni və REST APİ ilə əlaqəni özündə cəmləşdirən hava tətbiqinin necə yaradılması.
 - [flutter_bloc ilə todo-lar tətbiqi dərsi](https://medium.com/flutter-community/flutter-todos-tutorial-with-flutter-bloc-d9dd833f9df3) - bloc və flutter_bloc paketlərini istifadə edərək, todo-lar tətbiqinin necə yaradılması.
 - [flutter_bloc ilə firebase login dərsi](https://medium.com/flutter-community/firebase-login-with-flutter-bloc-47455e6047b0) - bloc və flutter_bloc paketlərini istifadə edərək, Firebase İdentifikasiyası və Google Sign İn ilə  tam funksional login/qeydiyyat prosesinin necə yaradılması.
 - [flutter_bloc ilə flutter taymer dərsi](https://medium.com/flutter-community/flutter-timer-with-flutter-bloc-a464e8332ceb) - bloc və flutter_bloc paketlərini istifadə edərək, timer tətbiqinin necə yaradılması.
@@ -124,8 +124,8 @@ Kitabxananın məqsədi _presentation_-ın (dizaynın) _businesss logic_-dən (h
 
 ## Extension-lar
 
-- [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) - İntelliJ və Android Studio-un imkanlarını Bloc kitabxanasını üçün genişlədirir və Flutter və AngularDart tətbiqlərində Bloc-ların effektiv şəkildə yaradılması üçün ləvazimatlar təmin edir.
-- [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) -  VSCode-un imkanlarını Bloc kitabxanasını üçün genişlədirir və Flutter və AngularDart tətbiqlərində Bloc-ların effektiv şəkildə yaradılması üçün ləvazimatlar təmin edir.
+- [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) - İntelliJ və Android Studio-un imkanlarını Bloc kitabxanası üçün genişlədirir və Flutter və AngularDart tətbiqlərində Bloc-ların effektiv şəkildə yaradılması üçün ləvazimatlar təmin edir.
+- [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) -  VSCode-un imkanlarını Bloc kitabxanası üçün genişlədirir və Flutter və AngularDart tətbiqlərində Bloc-ların effektiv şəkildə yaradılması üçün ləvazimatlar təmin edir.
 
 ## İcma
 
@@ -133,7 +133,7 @@ Kitabxananın məqsədi _presentation_-ın (dizaynın) _businesss logic_-dən (h
 
 ### Paketlər
 
-- [Hydrated Bloc](https://pub.dev/packages/hydrated_bloc) - [Felix Angelov](https://github.com/felangel) tərəfindən hazırlanan, avtomatik olaraq `bloc`-un vəziyyətlərini davam etdirən və bərpa edən `bloc`-da vəziyyətin idarə edilməsi kitaxanası üçün extension.
+- [Hydrated Bloc](https://pub.dev/packages/hydrated_bloc) - [Felix Angelov](https://github.com/felangel) tərəfindən hazırlanan, avtomatik olaraq `bloc`-un vəziyyətlərini davam etdirən və bərpa edən `bloc`-da vəziyyətin idarə edilməsi kitabxanası üçün extension.
 - [Bloc.js](https://github.com/felangel/bloc.js) - [Felix Angelov](https://github.com/felangel) tərəfindən hazırlanan, Dart-dan Javascript-ə, `bloc`-da vəziyyətin idarə edilməsi kitabxanasının portu.
 - [Bloc Kod Generatoru](https://pub.dev/packages/bloc_code_generator) - [Adson Leal](https://github.com/adsonpleal) tərəfindən hazırlanan, bloc-la işləməyi asanlaşdıran kod generatoru.
 - [Firebase Auth](https://pub.dev/packages/fb_auth) - [Rody Davis](https://github.com/AppleEducate) tərəfindən hazırlanan veb, mobil Firebase Auth Plugin-i.
