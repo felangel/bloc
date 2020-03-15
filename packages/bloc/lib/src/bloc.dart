@@ -81,7 +81,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
 
   /// Notifies the [bloc] of a new [event] which triggers [mapEventToState].
   /// If [close] has already been called, any subsequent calls to [add] will
-  /// be delegated to the [onError] method which can be overriden at the [bloc]
+  /// be delegated to the [onError] method which can be overridden at the [bloc]
   /// as well as the [BlocDelegate] level.
   @override
   void add(Event event) {
