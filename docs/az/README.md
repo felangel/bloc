@@ -154,7 +154,6 @@ Kitabxananın məqsədi _presentation_-ın (dizaynın) _businesss logic_-dən (h
 ### Extension-lar
 
 - [Feature Scaffolding for VSCode](https://marketplace.visualstudio.com/items?itemName=KiritchoukC.flutter-clean-architecture) -[Reso Coder's](https://resocoder.com)-in Clean Arxitektura dərslərindən ilhamlanaraq, [Kiritchouk Clément](https://github.com/KiritchoukC) tərəfindən yaradılan, sürətli şəkildə özəlliklərin (features) skeletinin qurulması üçün VSCode extension-u.
-- [Feature Scaffolding for VSCode](https://marketplace.visualstudio.com/items?itemName=KiritchoukC.flutter-clean-architecture) - A VSCode extension inspired by [Reso Coder's](https://resocoder.com) clean architecture tutorials, which helps quickly scaffold features, by [Kiritchouk Clément](https://github.com/KiritchoukC).
 
 ## Maintainer-lər
 
