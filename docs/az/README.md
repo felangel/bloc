@@ -12,7 +12,7 @@
 
 ---
 
-[BLoC design pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc)-i həyata keçirməyə kömək edən gözlənilən vəziyyətin idadə edilməsi kitabxanası.
+[BLoC design pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc)-i həyata keçirməyə kömək edən gözlənilən vəziyyətin idarə edilməsi kitabxanası.
 
 | Paketlər                                                                            | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -88,7 +88,7 @@ Kitabxananın məqsədi _presentation_-ın (dizaynın) _businesss logic_-dən (h
 
 - [Sayğac](https://bloclibrary.dev/#/fluttercountertutorial) - Klassik Flutter Counter tətbiqinin həyəta keçirilməsi üçün  `CounterBloc`-un necə yaradılması haqqında nümunə.
 - [Form Təsdiqləmə](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) -  form təsdiqləməni həyata keçirmək üçün `bloc` və `flutter_bloc`-un necə istifadə edilməsi haqqında nümunə. 
-- [Stream ilə Bloc](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - `bloc`-un `Stream`-ə necə qoşulması və `Stream`-dən gələn məlumata əsasən İstifadəçi İnterfeysinin yenilənməsin haqqında nümunə.
+- [Stream ilə Bloc](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - `bloc`-un `Stream`-ə necə qoşulması və `Stream`-dən gələn məlumata əsasən İstifadəçi İnterfeysinin yenilənməsi haqqında nümunə.
 - [Sonsuz List](https://bloclibrary.dev/#/flutterinfinitelisttutorial) - sonsuz listin həyatə keçirilməsi üçün `bloc` and `flutter_bloc`-un necə istifadə edilməsi haqqında nümunə.
 - [Login prosesi](https://bloclibrary.dev/#/flutterlogintutorial) - Login prosesini həyata keçirmək üçün `bloc` və `flutter_bloc` paketlərini necə istifadə etmək haqqında nümunə.
 - [Firebase Login](https://bloclibrary.dev/#/flutterfirebaselogintutorial) - Firebase ilə login prosesini həyata keçirmək üçün `bloc` və `flutter_bloc` paketlərindən necə istifadə etmək haqqında nümunə.
