@@ -1,46 +1,46 @@
-- Introduction
+- Giriş
 
-  - [Getting Started](gettingstarted.md)
-  - [Why Bloc?](whybloc.md)
-  - Core Concepts
+  - [Başla](gettingstarted.md)
+  - [Niyə Bloc?](whybloc.md)
+  - Əsas Konseptlər
     - [bloc](coreconcepts.md)
     - [flutter_bloc](flutterbloccoreconcepts.md)
-  - [Architecture](architecture.md)
+  - [Arxitektura](architecture.md)
   - [Testing](testing.md)
-  - [Naming Conventions](blocnamingconventions.md)
-  - [FAQs](faqs.md)
+  - [Adlandırma Konvensiyaları](blocnamingconventions.md)
+  - [Suallar](faqs.md)
 
-- Tutorials
+- Dərsliklər
 
   - Flutter
-    - [Counter](fluttercountertutorial.md)
-    - [Timer](fluttertimertutorial.md)
-    - [Infinite List](flutterinfinitelisttutorial.md)
+    - [Sayğac](fluttercountertutorial.md)
+    - [Taymer](fluttertimertutorial.md)
+    - [Sonsuz List](flutterinfinitelisttutorial.md)
     - [Login](flutterlogintutorial.md)
-    - [Weather](flutterweathertutorial.md)
-    - [Todos](fluttertodostutorial.md)
+    - [Hava](flutterweathertutorial.md)
+    - [Todolar](fluttertodostutorial.md)
     - [Firebase Login](flutterfirebaselogintutorial.md)
-    - [Firestore Todos](flutterfirestoretodostutorial.md)
+    - [Firestore Todo-lar](flutterfirestoretodostutorial.md)
   - AngularDart
-    - [Counter](angularcountertutorial.md)
+    - [Sayğac](angularcountertutorial.md)
   - Flutter + AngularDart
-    - [Github Search](flutterangulargithubsearch.md)
+    - [Github-da Axtarış](flutterangulargithubsearch.md)
 
-- Recipes
+- Tariflər
 
   - Flutter
-    - [Show SnackBar](recipesfluttershowsnackbar.md)
-    - [Navigation](recipesflutternavigation.md)
-    - [Bloc Access](recipesflutterblocaccess.md)
+    - [Snackbarın göstərilməsi](recipesfluttershowsnackbar.md)
+    - [Naviqasiya](recipesflutternavigation.md)
+    - [Bloc-a əlçatanlıq](recipesflutterblocaccess.md)
 
-- Tools
+- Alətlər
 
-  - Extensions
+  - Extension-lar
 
     - [IntelliJ](blocintellijextension.md)
     - [VSCode](blocvscodeextension.md)
 
-- API Reference
+- İstinad API
   - [bloc](https://pub.dev/documentation/bloc/latest/bloc/bloc-library.html)
   - [flutter_bloc](https://pub.dev/documentation/flutter_bloc/latest/flutter_bloc/flutter_bloc-library.html)
   - [angular_bloc](https://pub.dev/documentation/angular_bloc/latest/angular_dart/angular_dart-library.html)
