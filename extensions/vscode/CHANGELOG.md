@@ -1,3 +1,10 @@
+# 3.4.0
+
+Update snippets to support
+
+- `context.bloc<MyBloc>()`
+- `context.repository<MyRepository>()`
+
 # 3.3.0
 
 Update latest package versions:
