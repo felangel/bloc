@@ -10,11 +10,11 @@
 [![Discord](https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue)](https://discord.gg/Hc5KD3g)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
-> a predictable state management library for Dart.
+> Dart üçün gözlənilən vəziyyətin idarə edilməsi kitabxanası.
 
-- Simple & Lightweight
-- Highly Testable
-- For Dart, Flutter, and AngularDart
+- Sadə və yüngül
+- Yüksək test edilə bilən
+- Dart, Flutter və AngularDart üçün
 
 [GitHub](https://github.com/felangel/bloc/)
 [Get Started](gettingstarted.md)
