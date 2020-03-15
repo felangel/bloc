@@ -601,7 +601,7 @@ void main() {
             (capturedError as StateError).message,
             'Cannot add new events after calling close',
           );
-          expect(capturedStacktrace, isNull);
+          expect(capturedStacktrace, isNotNull);
         });
 
         bloc.close();
@@ -669,7 +669,7 @@ void main() {
           emitsInOrder(<int>[0]),
         ).then((_) {
           expect(expectedError, error);
-          expect(expectedStacktrace, isNull);
+          expect(expectedStacktrace, isNotNull);
           expect(bloc.state, 0);
         });
         bloc.add(CounterEvent.increment);
