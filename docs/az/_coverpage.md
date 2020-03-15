@@ -10,7 +10,6 @@
 [![Discord](https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue)](https://discord.gg/Hc5KD3g)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
-<<<<<<< HEAD
 > Dart üçün gözlənilən vəziyyətin idarə edilməsi kitabxanası.
 
 - Sadə və yüngül
@@ -19,13 +18,3 @@
 
 [GitHub](https://github.com/felangel/bloc/)
 [Başla](gettingstarted.md)
-=======
-> Dart üçün gözlənilən bir dövlət idarəetmə kitabxanası.
-
-- Sadə və yüngül
-- Yüksək test edilə bilər
-- Dart, Flutter və AngularDart üçün
-
-[GitHub](https://github.com/felangel/bloc/)
-[Başlamaq](az/gettingstarted.md)
->>>>>>> f2158fa0def6ee3f5905662183510ba6b656b3f1

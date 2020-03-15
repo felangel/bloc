@@ -8,11 +8,7 @@ Bloc bir neçə pub paketlərindən ibarətdir:
 
 - [bloc](https://pub.dev/packages/bloc) - Əsas bloc kitabxanası
 - [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Bloc ilə işləyərək, sürətli və reaktiv mobil tətbiqlərin yaradılması üçün güclü Flutter Widget-ləri
-<<<<<<< HEAD
 - [angular_bloc](https://pub.dev/packages/angular_bloc) - Bloc ilə işləyərək, sürətli və reaktiv veb tətbiqlərin yaradılması üçün güclü Angular Komponentləri
-=======
-- [angular_bloc](https://pub.dev/packages/angular_bloc) - Bloc ilə işləyərək, sürətli və reaktiv veb tətbiqlərin yaradılması üçün gücle Angular Komponentləri
->>>>>>> f2158fa0def6ee3f5905662183510ba6b656b3f1
 
 ## Quraşdırma
 
@@ -67,8 +63,4 @@ AngularDart tətbiqi üçün biz həmçinin angular_bloc-u import edə bilərik.
 ```dart
 import 'package:bloc/bloc.dart';
 import 'package:angular_bloc/angular_bloc.dart';
-<<<<<<< HEAD
 ```
-=======
-```
->>>>>>> f2158fa0def6ee3f5905662183510ba6b656b3f1
