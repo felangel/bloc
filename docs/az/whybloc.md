@@ -1,29 +1,29 @@
-# Why Bloc?
+# Niyə Bloc?
 
-> Bloc makes it easy to separate presentation from business logic, making your code _fast_, _easy to test_, and _reusable_.
+> Bloc dizayn kodları olan hissənin (presentation) məntiqi hissədən (business logic) ayrılmasını, kodunuzun sürətli, test etmək üçün asan və yenidən istifadəyə yararlı olmasını asanlaşdırır.
 
-When building production quality applications, managing state becomes critical.
+İstehsal keyfiyyətli tətbiqləri quran zaman, vəziyyətin (state) idadə edilməsi kritik olur.
 
-As developers we want to:
+Developer olaraq, biz istəyirik ki:
 
-- know what state our application is in at any point in time.
-- easily test every case to make sure our app is responding appropriately.
-- record every single user interaction in our application so that we can make data-driven decisions.
-- work as efficiently as possible and reuse components both within our application and across other applications.
-- have many developers seamlessly working within a single code base following the same patterns and conventions.
-- develop fast and reactive apps.
+-  Tətbiqimizin istənilən anda, istənilən nöqtədə hansı vəziyyətdə olmasını bilək.
+- Tətbiqimizin düzgün cavab verdiyinə əmin olmaq üçün, bütün halları asanlıqla test edə bilək.
+- Hər bir istifadəçinin tətbiqlə qarşılıqlı əlaqəsini (interaction) qeyd alaraq, bu məlumatlar əsasında qərarlar qəbul edə bilək.
+- Mümkün qədər səmərəli işləyək və həm cari tətbiqimizdə və həm də digər tətbiqlərimizdə komponentləri yenidən istifadə edək.
+- Çoxlu developer heç bir problem olmadan, eyni pattern və konvensiyaları izləyərək, bir kod bazasında işləyə bilsinlər.
+- Sürrtəli və reaktiv tətbiqlər yaradaq.
 
-Bloc was designed to meet all of those needs and many more.
+Bloc bu ehtiyaclarn hamısını və daha çox şeyləri qarşılamaq üçün tərtib edilmişdir.
 
-There are many state management solutions and deciding which one to use can be a daunting task.
+Çoxlu vəziyyətin idarə edilməsi üçün həllər vardır və istifadə üçün hansının yaxşı olduğunu seçmək çətin tapşırıq ola bilər.
 
-Bloc was designed with three core values in mind:
+Bloc 3 əsas dəyəri nəzərə alaraq, tərtib edilmişdir:
 
-- Simple
-  - Easy to understand & can be used by developers with varying skill levels.
-- Powerful
-  - Help make amazing, complex applications by composing them of smaller components.
-- Testable
-  - Easily test every aspect of an application so that we can iterate with confidence.
+- Sadə
+  - anlamaq asandır və müxtəlif səviyyəli developerlər tərəfindən istifadə oluna bilər.
+- Güclü
+  - İnanılmaz, kompleks tətbiqləri, onları kiçik komponentlərə bölərək, yaratmağa kömək edir.
+- Test edilə bilən
+  - Tətbiqin hər bir aspektini asanlıqla test etməyə imkan verir, beləliklə biz inamla təkrar edə bilərik.
 
-Bloc attempts to make state changes predictable by regulating when a state change can occur and enforcing a single way to change state throughout an entire application.
+Bloc vəziyyətdə dəyişiklik olan zamanı tənzimləyərək, vəziyyət dəyişiklikləri etməyə və bütün tətbiq boyunca tək yol ilə vəziyyətin dəyişməsinə çalışır.
