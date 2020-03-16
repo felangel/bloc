@@ -10,7 +10,7 @@ Developer olaraq, biz istəyirik ki:
 - Tətbiqimizin düzgün cavab verdiyinə əmin olmaq üçün, bütün halları asanlıqla test edə bilək.
 - Hər bir istifadəçinin tətbiqlə qarşılıqlı əlaqəsini (interaction) qeyd alaraq, bu məlumatlar əsasında qərarlar qəbul edə bilək.
 - Mümkün qədər səmərəli işləyək və həm cari tətbiqimizdə və həm də digər tətbiqlərimizdə komponentləri yenidən istifadə edək.
-- Komanda daxilində developer heç bir problem olmadan, eyni pattern və konvensiyaları izləyərək, bir kod bazasında işləyə bilsinlər.
+- Komanda daxilində developerlər heç bir problem olmadan, eyni pattern və konvensiyaları izləyərək, bir kod bazasında işləyə bilsinlər.
 - Sürətli və reaktiv tətbiqlər yaradaq.
 
 Bloc bu ehtiyacların hamısını və daha çox şeyləri qarşılamaq üçün tərtib edilmişdir.
