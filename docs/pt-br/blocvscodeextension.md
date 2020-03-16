@@ -37,50 +37,19 @@ Ou você pode clicar com o botão direito do mouse no diretório em que deseja c
 
 ## Snippets de Uso
 
-### Bloc
-
-Em um arquivo `.dart`, ative o trecho digitando `bloc` e pressione enter. Em seguida, você pode nomear a classe do bloc e preencher os detalhes da assinatura e implementação, tabs.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloc-snippet-usage.gif)
-
-### BlocEvent
-
-Em um arquivo `.dart`, ative o trecho digitando `blocevent` e pressione enter. Em seguida, você pode nomear a classe do evento e preencher os detalhes da assinatura e implementação, tabulando.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocevent-snippet-usage.gif)
-
-### BlocState
-
-Em um arquivo `.dart`, ative o trecho digitando `blocstate` e pressione enter. Em seguida, você pode nomear a classe state e preencher os detalhes da assinatura e implementação, tabs.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocstate-snippet-usage.gif)
-
-### BlocBuilder
-
-Em um arquivo `.dart`, ative o trecho digitando `blocbuilder` e pressione enter. Em seguida, você pode preencher os detalhes da implementação, tabulando.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocbuilder-snippet-usage.gif)
-
-### BlocListener
-
-Em um arquivo `.dart`, ative o trecho digitando `bloclistener` e pressione enter. Em seguida, você pode preencher os detalhes da implementação, tabulando.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloclistener-snippet-usage.gif)
-
-### BlocProvider
-
-Em um arquivo `.dart`, ative o trecho digitando `blocprovider` e pressione enter. Em seguida, você pode preencher os detalhes da implementação, tabulando.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovider-snippet-usage.gif)
-
-### BlocProviderTree
-
-Em um arquivo `.dart`, ative o trecho digitando `blocprovidertree` e pressione enter. Em seguida, você pode preencher os detalhes da implementação, tabulando.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovidertree-snippet-usage.gif)
-
-### BlocDelegate
-
-Em um arquivo `.dart`, ative o trecho digitando `blocdelegate` e pressione enter. Em seguida, você pode preencher os detalhes da implementação, tabulando.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocdelegate-snippet-usage.gif)
+| Shortcut                  | Description                                          |
+| ------------------------- | ---------------------------------------------------- |
+| `bloc`                    | Creates a Bloc Class                                 |
+| `blocbuilder`             | Creates a BlocBuilder Widget                         |
+| `bloclistener`            | Creates a BlocListener Widget                        |
+| `multibloclistener`       | Creates a MultiBlocListener Widget                   |
+| `blocconsumer`            | Creates a BlocConsumer Widget                        |
+| `blocprovider`            | Creates a BlocProvider Widget                        |
+| `multiblocprovider`       | Creates a MultiBlocProvider Widget                   |
+| `repositoryprovider`      | Creates a RepositoryProvider Widget                  |
+| `multirepositoryprovider` | Creates a MultiRepositoryProvider Widget             |
+| `blocdelegate`            | Creates a BlocDelegate Class                         |
+| `contextbloc`             | Shortcut for `context.bloc<MyBloc>()`                |
+| `blocof`                  | Shortcut for `BlocProvider.of<MyBloc>()`             |
+| `contextrepository`       | Shortcut for `context.repository<MyRepository>()`    |
+| `repositoryof`            | Shortcut for `RepositoryProvider.of<MyRepository>()` |
