@@ -4,7 +4,7 @@
 
 Bloc istifadə etmək üçün, bir sıra vacib konseptləri anlamaq lazımdır.
 
-Növbəti bölmələrdə, bu əsas konseptlərin hər biri haqqında ətraflı müzakirə aparacaq və onların real tətbiqlərdə necə tətbiq oluna bilməsini sayğac tətbiqi ilə görəcəyik.
+Növbəti bölmələrdə, bu əsas konseptlərin hər biri haqqında ətraflı müzakirə aparacaq və onların real tətbiqlərdə necə istifadə olunmasını sayğac tətbiqi ilə görəcəyik.
 
 ## Hadisələr (Events)
 
