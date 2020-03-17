@@ -150,6 +150,7 @@ Kitabxananın məqsədi _presentation_-ın (dizaynın) _businesss logic_-dən (h
 - [Flutter Futbolçu Axtarışı](https://www.youtube.com/watch?v=S2KmxzgsTwk) - [Techie Blossom](https://techieblossom.com) tərəfindən, bloc və flutter_bloc paketlərini istifadə edərək, API ilə işləyən Futbolçu Axtarışı tətbiqinin necə yaradılması.
 - [Flutter Bloc Paketinin öyrənilməsi](https://www.youtube.com/watch?v=eAiCPl3yk9A&t=1s) - [Robert Brunhage](https://www.youtube.com/channel/UCSLIg5O0JiYO1i2nD4RclaQ) tərəfindən, flutter_bloc paketinin canlı olaraq öyrənilməsi.
 - [Bloc Test Dərsi](https://www.youtube.com/watch?v=S6jFBiiP0Mc) - [Reso Coder](https://resocoder.com) tərəfindən, bloc_test paketini istifadə edərək, bloc-ların necə unit test olunması haqqında dərs.
+- [Bloc Dərsləri](https://www.youtube.com/watch?v=F2fmfB_ZxK0&list=PLKLWpjPq8Lfhg3J49fXM4Z_X23WPe7bQ5) - [Kənan Yusubov](https://github.com/KenanYusubov) tərəfindən hazırlanmış Bloc haqqında 5 video dərs.
 
 ### Extension-lar
 
