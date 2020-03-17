@@ -1,40 +1,40 @@
-# Core Concepts
+# Əsas Konseptlər
 
-?> Please make sure to carefully read and understand the following sections before working with [bloc](https://pub.dev/packages/bloc).
+?> Zəhmət olmasa, [bloc](https://pub.dev/packages/bloc)-la işləməzdən öncə, aşağıdakı bölmələri diqqətli şəkildə oxuyub, anladığınıza əmin olun.
 
-There are several core concepts that are critical to understanding how to use Bloc.
+Bloc istifadə etmək üçün, bir sıra vacib konseptləri anlamaq lazımdır.
 
-In the upcoming sections, we're going to discuss each of them in detail as well as work through how they would apply to a real-world application: a counter app.
+Növbəti bölmələrdə, bu əsas konseptlərin hər biri haqqında ətraflı müzakirə aparacaq və onların real tətbiqlərdə necə tətbiq oluna bilməsini sayğac tətbiqi ilə görəcəyik.
 
-## Events
+## Hadisələr (Events)
 
-> Events are the input to a Bloc. They are commonly added in response to user interactions such as button presses or lifecycle events like page loads.
+> Hadisələr Bloc-un girişidir (input). Bunlar, adətən istifadəçinin tətbiq ilə qarşılıqlı əlaqəsinə - hər hansı düyməyə basılmaya, lifecycle hadisələrinə (məsələn səhifənin yüklənməsi) cavab olaraq, Bloc-a əlavə olunur.
 
-When designing an app we need to step back and define how users will interact with it. In the context of our counter app we will have two buttons to increment and decrement our counter.
+Bir tətbiqi tərtib edərkən, əvvəlcə istifadəçinin onu necə istifadə edəcəyini müəyyən etməliyik. Bizim sayğac tətbiqində sayğacı azaltmaq və artırmaq üçün iki düymə olacaq.
 
-When a user taps on one of these buttons, something needs to happen to notify the "brains" of our app so that it can respond to the user's input; this is where events come into play.
+İstifadəçi düymələrdən birinə basan zaman, bizim tətbiqimizin beynini (əsas hissəsini) xəbərdar edə bilməliyik və bu xəbərdarlığa əasən istifadəçiyə cavab verilə bilər; elə buna görə də, bizim hadisələrə (events) ehtiyacımız var.
 
-We need to be able to notify our application's "brains" of both an increment and a decrement so we need to define these events.
+Sayğac tətbiqimizdə, tətbiqinin əsas hissəsini həm artırma, həm də azaltma üçün xəbərdar edə bilməliyik, buna görə də,  bunu hadisələri müəyyənləşdirməyə ehtiyacımız var.
 
 ```dart
 enum CounterEvent { increment, decrement }
 ```
 
-In this case, we can represent the events using an `enum` but for more complex cases it might be necessary to use a `class` especially if it's necessary to pass information to the bloc.
+Bu tətbiqdə, hadisələrimiz sadə olduğu üçün biz `enum` istifadə etdik, amma daha mürəkkəb hallarda, əsasən də bloc-a hər hansı informasiyanı ötürmək lazım olduqda, `class`-dan istifadə etmək lazım gəlir.
 
-At this point we have defined our first event! Notice that we have not used Bloc in any way so far and there is no magic happening; it's just plain Dart code.
+Bu nöqtədə, ilk hidəsimizi müəyyən etdik!. Diqqət edin ki, biz indiyə qədər Bloc istifadə etməkdir və burada heç bir sehr yoxdur; bu sadəcə Dart kodlarıdır.
 
-## States
+## Vəziyyətlər (States)
 
-> States are the output of a Bloc and represent a part of your application's state. UI components can be notified of states and redraw portions of themselves based on the current state.
+> Vəziyyətlər Bloc-un çıxışıdır (output) və tətbiqin vəziyyətini göstərir. İstifadəçi interfeysinin komponentləri bu vəziyyətləri əsasən xəbərdar edilə və cari vəziyyətə uyğun olaraq, özlərinin lazım olan hissələrini yeniləyə bilərlər.
 
-So far, we've defined the two events that our app will be responding to: `CounterEvent.increment` and `CounterEvent.decrement`.
+Beləliklə, bizim tətbiqin cavab verəcəyi iki hadisəni - `CounterEvent.increment` və `CounterEvent.decrement`-i müəyyən etdik.
 
-Now we need to define how to represent the state of our application.
+İndi isə, biz tətbiqimizin vəziyyətini necə nümayiş etdirəcəyimizi müəyyən etməliyik.
 
-Since we're building a counter, our state is very simple: it's just an integer which represents the counter's current value.
+Biz, sayğac düzəltdiyimiz üçün, vəziyyət (state) sadədir: bu sayğacın cari qiymətini göstərən tam ədəddir (integer).
 
-We will see more complex examples of state later on but in this case a primitive type is perfectly suitable as the state representation.
+Biz daha mürəkkəb nümunələr görəcəyik, amma bu halda, primitiv tip, tətbiqin vəziyyətini göstərmək üçün uyğundur.
 
 ## Transitions
 
