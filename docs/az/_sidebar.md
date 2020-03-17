@@ -1,9 +1,9 @@
 - Giriş
 
-  - [Başla](gettingstarted.md)
-  - [Niyə Bloc?](whybloc.md)
+  - [Başla](az/gettingstarted.md)
+  - [Niyə Bloc?](az/whybloc.md)
   - Əsas Konseptlər
-    - [bloc](coreconcepts.md)
+    - [bloc](az/coreconcepts.md)
     - [flutter_bloc](flutterbloccoreconcepts.md)
   - [Arxitektura](architecture.md)
   - [Testing](testing.md)
