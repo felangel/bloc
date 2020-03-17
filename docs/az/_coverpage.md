@@ -17,4 +17,4 @@
 - Dart, Flutter və AngularDart üçün
 
 [GitHub](https://github.com/felangel/bloc/)
-[Başla](gettingstarted.md)
+[Başla](az/gettingstarted.md)
