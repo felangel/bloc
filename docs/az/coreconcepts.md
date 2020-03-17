@@ -14,7 +14,7 @@ Bir tətbiqi tərtib edərkən, əvvəlcə istifadəçinin onu necə istifadə e
 
 İstifadəçi düymələrdən birinə basan zaman, bizim tətbiqimizin beynini (əsas hissəsini) xəbərdar edə bilməliyik və bu xəbərdarlığa əsasən istifadəçiyə cavab verilə bilər; elə buna görə də, bizim hadisələrə (events) ehtiyacımız var.
 
-Sayğac tətbiqimizdə, tətbiqinin əsas hissəsini həm artırma, həm də azaltma üçün xəbərdar edə bilməliyik, buna görə də, hadisələri müəyyənləşdirməyə ehtiyacımız var.
+Sayğac tətbiqimizdə, tətbiqin əsas hissəsini həm artırma, həm də azaltma üçün xəbərdar edə bilməliyik, buna görə də, hadisələri müəyyənləşdirməyə ehtiyacımız var.
 
 ```dart
 enum CounterEvent { increment, decrement }
