@@ -12,9 +12,9 @@ Növbəti bölmələrdə, bu əsas konseptlərin hər biri haqqında ətraflı m
 
 Bir tətbiqi tərtib edərkən, əvvəlcə istifadəçinin onu necə istifadə edəcəyini müəyyən etməliyik. Bizim sayğac tətbiqində sayğacı azaltmaq və artırmaq üçün iki düymə olacaq.
 
-İstifadəçi düymələrdən birinə basan zaman, bizim tətbiqimizin beynini (əsas hissəsini) xəbərdar edə bilməliyik və bu xəbərdarlığa əasən istifadəçiyə cavab verilə bilər; elə buna görə də, bizim hadisələrə (events) ehtiyacımız var.
+İstifadəçi düymələrdən birinə basan zaman, bizim tətbiqimizin beynini (əsas hissəsini) xəbərdar edə bilməliyik və bu xəbərdarlığa əsasən istifadəçiyə cavab verilə bilər; elə buna görə də, bizim hadisələrə (events) ehtiyacımız var.
 
-Sayğac tətbiqimizdə, tətbiqinin əsas hissəsini həm artırma, həm də azaltma üçün xəbərdar edə bilməliyik, buna görə də,  bunu hadisələri müəyyənləşdirməyə ehtiyacımız var.
+Sayğac tətbiqimizdə, tətbiqinin əsas hissəsini həm artırma, həm də azaltma üçün xəbərdar edə bilməliyik, buna görə də, hadisələri müəyyənləşdirməyə ehtiyacımız var.
 
 ```dart
 enum CounterEvent { increment, decrement }
@@ -22,11 +22,11 @@ enum CounterEvent { increment, decrement }
 
 Bu tətbiqdə, hadisələrimiz sadə olduğu üçün biz `enum` istifadə etdik, amma daha mürəkkəb hallarda, əsasən də bloc-a hər hansı informasiyanı ötürmək lazım olduqda, `class`-dan istifadə etmək lazım gəlir.
 
-Bu nöqtədə, ilk hidəsimizi müəyyən etdik!. Diqqət edin ki, biz indiyə qədər Bloc istifadə etməkdir və burada heç bir sehr yoxdur; bu sadəcə Dart kodlarıdır.
+Bu nöqtədə, ilk hadisəmizi müəyyən etdik!. Diqqət edin ki, biz indiyə qədər Bloc istifadə etmədik və burada heç bir sehr yoxdur; bu sadəcə Dart kodlarıdır.
 
 ## Vəziyyətlər (States)
 
-> Vəziyyətlər Bloc-un çıxışıdır (output) və tətbiqin vəziyyətini göstərir. İstifadəçi interfeysinin komponentləri bu vəziyyətləri əsasən xəbərdar edilə və cari vəziyyətə uyğun olaraq, özlərinin lazım olan hissələrini yeniləyə bilərlər.
+> Vəziyyətlər Bloc-un çıxışıdır (output) və tətbiqin vəziyyətini göstərir. İstifadəçi interfeysinin komponentləri bu vəziyyətlərə əsasən xəbərdar edilə və cari vəziyyətə uyğun olaraq, özlərinin lazım olan hissələrini yeniləyə bilərlər.
 
 Beləliklə, bizim tətbiqin cavab verəcəyi iki hadisəni - `CounterEvent.increment` və `CounterEvent.decrement`-i müəyyən etdik.
 
