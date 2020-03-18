@@ -73,7 +73,7 @@ class FlutterTodosKeys {
       const Key('__extraActionsEmptyContainer__');
   static final filteredTodosEmptyContainer =
       const Key('__filteredTodosEmptyContainer__');
-  static final statsLoadingIndicator = const Key('__statsLoadingIndicator__');
+  static final statsLoadInProgressIndicator = const Key('__statsLoadInProgressIndicator__');
   static final emptyStatsContainer = const Key('__emptyStatsContainer__');
   static final emptyDetailsContainer = const Key('__emptyDetailsContainer__');
   static final detailsScreenCheckBox = const Key('__detailsScreenCheckBox__');
@@ -198,9 +198,9 @@ class Todo extends Equatable {
 
 Мы будем реализовывать три состояния:
 
-- `TodosLoading` - состояние, когда наше приложение выбирает задачи из репозитория.
-- `TodosLoaded` - состояние нашего приложения после успешной загрузки задач.
-- `TodosNotLoaded` - состояние нашего приложения, если задачи не были успешно загружены.
+- `TodosLoadInProgress` - состояние, когда наше приложение выбирает задачи из репозитория.
+- `TodosLoadSuccess` - состояние нашего приложения после успешной загрузки задач.
+- `TodosLoadFailure` - состояние нашего приложения, если задачи не были успешно загружены.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -213,21 +213,21 @@ abstract class TodosState extends Equatable {
   List<Object> get props => [];
 }
 
-class TodosLoading extends TodosState {}
+class TodosLoadInProgress extends TodosState {}
 
-class TodosLoaded extends TodosState {
+class TodosLoadSuccess extends TodosState {
   final List<Todo> todos;
 
-  const TodosLoaded([this.todos = const []]);
+  const TodosLoadSuccess([this.todos = const []]);
 
   @override
   List<Object> get props => [todos];
 
   @override
-  String toString() => 'TodosLoaded { todos: $todos }';
+  String toString() => 'TodosLoadSuccess { todos: $todos }';
 }
 
-class TodosNotLoaded extends TodosState {}
+class TodosLoadFailure extends TodosState {}
 ```
 
 Далее, давайте реализуем события, которые нам нужно будет обработать.
@@ -319,7 +319,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   TodosBloc({@required this.todosRepository});
 
   @override
-  TodosState get initialState => TodosLoading();
+  TodosState get initialState => TodosLoadInProgress();
 
   @override
   Stream<TodosState> mapEventToState(TodosEvent event) async* {
@@ -341,62 +341,62 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   Stream<TodosState> _mapLoadTodosToState() async* {
     try {
       final todos = await this.todosRepository.loadTodos();
-      yield TodosLoaded(
+      yield TodosLoadSuccess(
         todos.map(Todo.fromEntity).toList(),
       );
     } catch (_) {
-      yield TodosNotLoaded();
+      yield TodosLoadFailure();
     }
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
-    if (state is TodosLoaded) {
-      final List<Todo> updatedTodos = List.from((state as TodosLoaded).todos)
+    if (state is TodosLoadSuccess) {
+      final List<Todo> updatedTodos = List.from((state as TodosLoadSuccess).todos)
         ..add(event.todo);
-      yield TodosLoaded(updatedTodos);
+      yield TodosLoadSuccess(updatedTodos);
       _saveTodos(updatedTodos);
     }
   }
 
   Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
-    if (state is TodosLoaded) {
-      final List<Todo> updatedTodos = (state as TodosLoaded).todos.map((todo) {
+    if (state is TodosLoadSuccess) {
+      final List<Todo> updatedTodos = (state as TodosLoadSuccess).todos.map((todo) {
         return todo.id == event.updatedTodo.id ? event.updatedTodo : todo;
       }).toList();
-      yield TodosLoaded(updatedTodos);
+      yield TodosLoadSuccess(updatedTodos);
       _saveTodos(updatedTodos);
     }
   }
 
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
-    if (state is TodosLoaded) {
-      final updatedTodos = (state as TodosLoaded)
+    if (state is TodosLoadSuccess) {
+      final updatedTodos = (state as TodosLoadSuccess)
           .todos
           .where((todo) => todo.id != event.todo.id)
           .toList();
-      yield TodosLoaded(updatedTodos);
+      yield TodosLoadSuccess(updatedTodos);
       _saveTodos(updatedTodos);
     }
   }
 
   Stream<TodosState> _mapToggleAllToState() async* {
-    if (state is TodosLoaded) {
+    if (state is TodosLoadSuccess) {
       final allComplete =
-          (state as TodosLoaded).todos.every((todo) => todo.complete);
-      final List<Todo> updatedTodos = (state as TodosLoaded)
+          (state as TodosLoadSuccess).todos.every((todo) => todo.complete);
+      final List<Todo> updatedTodos = (state as TodosLoadSuccess)
           .todos
           .map((todo) => todo.copyWith(complete: !allComplete))
           .toList();
-      yield TodosLoaded(updatedTodos);
+      yield TodosLoadSuccess(updatedTodos);
       _saveTodos(updatedTodos);
     }
   }
 
   Stream<TodosState> _mapClearCompletedToState() async* {
-    if (state is TodosLoaded) {
+    if (state is TodosLoadSuccess) {
       final List<Todo> updatedTodos =
-          (state as TodosLoaded).todos.where((todo) => !todo.complete).toList();
-      yield TodosLoaded(updatedTodos);
+          (state as TodosLoadSuccess).todos.where((todo) => !todo.complete).toList();
+      yield TodosLoadSuccess(updatedTodos);
       _saveTodos(updatedTodos);
     }
   }
@@ -411,7 +411,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
 !> Когда мы выдаем состояние в приватных обработчиках `mapEventToState`, мы всегда получаем новое состояние, а не изменяем `state`. Это потому, что каждый раз, когда мы делаем `yield`, блок будет сравнивать `state` с `nextState` и вызывать изменение состояния (`transition`) только если два состояния **не равны**. Если мы просто изменим и выдадим один и тот же экземпляр состояния, то `state == nextState` будет иметь значение true и изменение состояния не произойдет.
 
-`TodosBloc` будет зависеть от `TodosRepository`, чтобы он мог загружать и сохранять задачи. Он будет иметь начальное состояние `TodosLoading` и определять частные обработчики для каждого из событий. Всякий раз, когда `TodosBloc` изменяет список задач, он вызывает метод `saveTodos` в `TodosRepository`, чтобы сохранить все изменения.
+`TodosBloc` будет зависеть от `TodosRepository`, чтобы он мог загружать и сохранять задачи. Он будет иметь начальное состояние `TodosLoadInProgress` и определять частные обработчики для каждого из событий. Всякий раз, когда `TodosBloc` изменяет список задач, он вызывает метод `saveTodos` в `TodosRepository`, чтобы сохранить все изменения.
 
 ### Индексный файл
 
@@ -449,8 +449,8 @@ enum VisibilityFilter { all, active, completed }
 
 В этом случае у нас есть только два состояния:
 
-- `FilteredTodosLoading` - состояние, пока мы выбираем задачи
-- `FilteredTodosLoaded` - состояние, когда мы больше не выбираем задачи
+- `FilteredTodosLoadInProgress` - состояние, пока мы выбираем задачи
+- `FilteredTodosLoadSuccess` - состояние, когда мы больше не выбираем задачи
 
 Давайте создадим `blocs/filtered_todos/filtered_todos_state.dart` и реализуем два состояния.
 
@@ -465,13 +465,13 @@ abstract class FilteredTodosState extends Equatable {
   List<Object> get props => [];
 }
 
-class FilteredTodosLoading extends FilteredTodosState {}
+class FilteredTodosLoadInProgress extends FilteredTodosState {}
 
-class FilteredTodosLoaded extends FilteredTodosState {
+class FilteredTodosLoadSuccess extends FilteredTodosState {
   final List<Todo> filteredTodos;
   final VisibilityFilter activeFilter;
 
-  const FilteredTodosLoaded(
+  const FilteredTodosLoadSuccess(
     this.filteredTodos,
     this.activeFilter,
   );
@@ -481,19 +481,19 @@ class FilteredTodosLoaded extends FilteredTodosState {
 
   @override
   String toString() {
-    return 'FilteredTodosLoaded { filteredTodos: $filteredTodos, activeFilter: $activeFilter }';
+    return 'FilteredTodosLoadSuccess { filteredTodos: $filteredTodos, activeFilter: $activeFilter }';
   }
 }
 ```
 
-?> **Примечание:** Состояние `FilteredTodosLoaded` содержит список отфильтрованных задач, а также фильтр активной видимости.
+?> **Примечание:** Состояние `FilteredTodosLoadSuccess` содержит список отфильтрованных задач, а также фильтр активной видимости.
 
 ### События
 
 Мы собираемся реализовать два события для нашего `FilteredTodosBloc`:
 
-- `UpdateFilter` - уведомляет блок об изменении фильтра видимости.
-- `UpdateTodos` - уведомляет блок об изменении списка задач.
+- `FilterUpdated` - уведомляет блок об изменении фильтра видимости.
+- `TodosUpdated` - уведомляет блок об изменении списка задач.
 
 Создайте `blocs/filtered_todos/filtered_todos_event.dart` и давайте реализуем два события.
 
@@ -505,28 +505,28 @@ abstract class FilteredTodosEvent extends Equatable {
   const FilteredTodosEvent();
 }
 
-class UpdateFilter extends FilteredTodosEvent {
+class FilterUpdated extends FilteredTodosEvent {
   final VisibilityFilter filter;
 
-  const UpdateFilter(this.filter);
+  const FilterUpdated(this.filter);
 
   @override
   List<Object> get props => [filter];
 
   @override
-  String toString() => 'UpdateFilter { filter: $filter }';
+  String toString() => 'FilterUpdated { filter: $filter }';
 }
 
-class UpdateTodos extends FilteredTodosEvent {
+class TodosUpdated extends FilteredTodosEvent {
   final List<Todo> todos;
 
-  const UpdateTodos(this.todos);
+  const TodosUpdated(this.todos);
 
   @override
   List<Object> get props => [todos];
 
   @override
-  String toString() => 'UpdateTodos { todos: $todos }';
+  String toString() => 'TodosUpdated { todos: $todos }';
 }
 ```
 
@@ -552,38 +552,38 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 
   FilteredTodosBloc({@required this.todosBloc}) {
     todosSubscription = todosBloc.listen((state) {
-      if (state is TodosLoaded) {
-        add(UpdateTodos((todosBloc.state as TodosLoaded).todos));
+      if (state is TodosLoadSuccess) {
+        add(TodosUpdated((todosBloc.state as TodosLoadSuccess).todos));
       }
     });
   }
 
   @override
   FilteredTodosState get initialState {
-    return todosBloc.state is TodosLoaded
-        ? FilteredTodosLoaded(
-            (todosBloc.state as TodosLoaded).todos,
+    return todosBloc.state is TodosLoadSuccess
+        ? FilteredTodosLoadSuccess(
+            (todosBloc.state as TodosLoadSuccess).todos,
             VisibilityFilter.all,
           )
-        : FilteredTodosLoading();
+        : FilteredTodosLoadInProgress();
   }
 
   @override
   Stream<FilteredTodosState> mapEventToState(FilteredTodosEvent event) async* {
-    if (event is UpdateFilter) {
-      yield* _mapUpdateFilterToState(event);
-    } else if (event is UpdateTodos) {
+    if (event is FilterUpdated) {
+      yield* _mapFilterUpdatedToState(event);
+    } else if (event is TodosUpdated) {
       yield* _mapTodosUpdatedToState(event);
     }
   }
 
-  Stream<FilteredTodosState> _mapUpdateFilterToState(
-    UpdateFilter event,
+  Stream<FilteredTodosState> _mapFilterUpdatedToState(
+    FilterUpdated event,
   ) async* {
-    if (todosBloc.state is TodosLoaded) {
-      yield FilteredTodosLoaded(
+    if (todosBloc.state is TodosLoadSuccess) {
+      yield FilteredTodosLoadSuccess(
         _mapTodosToFilteredTodos(
-          (todosBloc.state as TodosLoaded).todos,
+          (todosBloc.state as TodosLoadSuccess).todos,
           event.filter,
         ),
         event.filter,
@@ -592,14 +592,14 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   }
 
   Stream<FilteredTodosState> _mapTodosUpdatedToState(
-    UpdateTodos event,
+    TodosUpdated event,
   ) async* {
-    final visibilityFilter = state is FilteredTodosLoaded
-        ? (state as FilteredTodosLoaded).activeFilter
+    final visibilityFilter = state is FilteredTodosLoadSuccess
+        ? (state as FilteredTodosLoadSuccess).activeFilter
         : VisibilityFilter.all;
-    yield FilteredTodosLoaded(
+    yield FilteredTodosLoadSuccess(
       _mapTodosToFilteredTodos(
-        (todosBloc.state as TodosLoaded).todos,
+        (todosBloc.state as TodosLoadSuccess).todos,
         visibilityFilter,
       ),
       visibilityFilter,
@@ -651,8 +651,8 @@ export './filtered_todos_state.dart';
 
 `StatsBloc` будет иметь два состояния:
 
-- `StatsLoading` - состояние, когда статистика еще не рассчитана.
-- `StatsLoaded` - состояние, когда статистика была рассчитана.
+- `StatsLoadInProgress` - состояние, когда статистика еще не рассчитана.
+- `StatsLoadSuccess` - состояние, когда статистика была рассчитана.
 
 Создайте `blocs/stats/stats_state.dart` и давайте реализуем `StatsState`.
 
@@ -666,20 +666,20 @@ abstract class StatsState extends Equatable {
   List<Object> get props => [];
 }
 
-class StatsLoading extends StatsState {}
+class StatsLoadInProgress extends StatsState {}
 
-class StatsLoaded extends StatsState {
+class StatsLoadSuccess extends StatsState {
   final int numActive;
   final int numCompleted;
 
-  const StatsLoaded(this.numActive, this.numCompleted);
+  const StatsLoadSuccess(this.numActive, this.numCompleted);
 
   @override
   List<Object> get props => [numActive, numCompleted];
 
   @override
   String toString() {
-    return 'StatsLoaded { numActive: $numActive, numCompleted: $numCompleted }';
+    return 'StatsLoadSuccess { numActive: $numActive, numCompleted: $numCompleted }';
   }
 }
 ```
@@ -688,7 +688,7 @@ class StatsLoaded extends StatsState {
 
 ### События
 
-Будет только одно событие, на которое наш `StatsBloc` ответит: `UpdateStats`. Это событие будет добавлено всякий раз, когда изменяется состояние `TodosBloc`, чтобы наш `StatsBloc` мог пересчитать новую статистику.
+Будет только одно событие, на которое наш `StatsBloc` ответит: `StatsUpdated`. Это событие будет добавлено всякий раз, когда изменяется состояние `TodosBloc`, чтобы наш `StatsBloc` мог пересчитать новую статистику.
 
 Создайте `blocs/stats/states_event.dart` и давайте реализуем это.
 
@@ -700,16 +700,16 @@ abstract class StatsEvent extends Equatable {
   const StatsEvent();
 }
 
-class UpdateStats extends StatsEvent {
+class StatsUpdated extends StatsEvent {
   final List<Todo> todos;
 
-  const UpdateStats(this.todos);
+  const StatsUpdated(this.todos);
 
   @override
   List<Object> get props => [todos];
 
   @override
-  String toString() => 'UpdateStats { todos: $todos }';
+  String toString() => 'StatsUpdated { todos: $todos }';
 }
 ```
 
@@ -733,23 +733,23 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
 
   StatsBloc({@required this.todosBloc}) {
     todosSubscription = todosBloc.listen((state) {
-      if (state is TodosLoaded) {
-        add(UpdateStats(state.todos));
+      if (state is TodosLoadSuccess) {
+        add(StatsUpdated(state.todos));
       }
     });
   }
 
   @override
-  StatsState get initialState => StatsLoading();
+  StatsState get initialState => StatsLoadInProgress();
 
   @override
   Stream<StatsState> mapEventToState(StatsEvent event) async* {
-    if (event is UpdateStats) {
+    if (event is StatsUpdated) {
       int numActive =
           event.todos.where((todo) => !todo.complete).toList().length;
       int numCompleted =
           event.todos.where((todo) => todo.complete).toList().length;
-      yield StatsLoaded(numActive, numCompleted);
+      yield StatsLoadSuccess(numActive, numCompleted);
     }
   }
 
@@ -783,7 +783,7 @@ enum AppTab { todos, stats }
 
 `TabBloc` будет отвечать за обработку одного `TabEvent`:
 
-- `UpdateTab` - уведомляет блок об обновлении активной вкладки
+- `TabUpdated` - уведомляет блок об обновлении активной вкладки
 
 Создайте `blocs/tab/tab_event.dart`:
 
@@ -795,16 +795,16 @@ abstract class TabEvent extends Equatable {
   const TabEvent();
 }
 
-class UpdateTab extends TabEvent {
+class TabUpdated extends TabEvent {
   final AppTab tab;
 
-  const UpdateTab(this.tab);
+  const TabUpdated(this.tab);
 
   @override
   List<Object> get props => [tab];
 
   @override
-  String toString() => 'UpdateTab { tab: $tab }';
+  String toString() => 'TabUpdated { tab: $tab }';
 }
 ```
 
@@ -826,14 +826,14 @@ class TabBloc extends Bloc<TabEvent, AppTab> {
 
   @override
   Stream<AppTab> mapEventToState(TabEvent event) async* {
-    if (event is UpdateTab) {
+    if (event is TabUpdated) {
       yield event.tab;
     }
   }
 }
 ```
 
-Я сказал вам, что это будет просто. Все, что делает `TabBloc` - это устанавливает начальное состояние на вкладку todos и обрабатывает событие `UpdateTab`, создавая новый экземпляр `AppTab`.
+Я сказал вам, что это будет просто. Все, что делает `TabBloc` - это устанавливает начальное состояние на вкладку todos и обрабатывает событие `TabUpdated`, создавая новый экземпляр `AppTab`.
 
 ### Индексный файл
 
@@ -933,7 +933,7 @@ class HomeScreen extends StatelessWidget {
           bottomNavigationBar: TabSelector(
             activeTab: activeTab,
             onTabSelected: (tab) =>
-                BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+                BlocProvider.of<TabBloc>(context).add(TabUpdated(tab)),
           ),
         );
       },
@@ -971,7 +971,7 @@ class DetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TodosBloc, TodosState>(
       builder: (context, state) {
-        final todo = (state as TodosLoaded)
+        final todo = (state as TodosLoadSuccess)
             .todos
             .firstWhere((todo) => todo.id == id, orElse: () => null);
         final localizations = ArchSampleLocalizations.of(context);
@@ -1239,9 +1239,9 @@ class FilterButton extends StatelessWidget {
         builder: (context, state) {
       final button = _Button(
         onSelected: (filter) {
-          BlocProvider.of<FilteredTodosBloc>(context).add(UpdateFilter(filter));
+          BlocProvider.of<FilteredTodosBloc>(context).add(FilterUpdated(filter));
         },
-        activeFilter: state is FilteredTodosLoaded
+        activeFilter: state is FilteredTodosLoadSuccess
             ? state.activeFilter
             : VisibilityFilter.all,
         activeStyle: activeStyle,
@@ -1351,9 +1351,9 @@ class ExtraActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TodosBloc, TodosState>(
       builder: (context, state) {
-        if (state is TodosLoaded) {
+        if (state is TodosLoadSuccess) {
           bool allComplete =
-              (BlocProvider.of<TodosBloc>(context).state as TodosLoaded)
+              (BlocProvider.of<TodosBloc>(context).state as TodosLoadSuccess)
                   .todos
                   .every((todo) => todo.complete);
           return PopupMenuButton<ExtraAction>(
@@ -1478,9 +1478,9 @@ class FilteredTodos extends StatelessWidget {
 
     return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
       builder: (context, state) {
-        if (state is FilteredTodosLoading) {
+        if (state is FilteredTodosLoadInProgress) {
           return LoadingIndicator(key: ArchSampleKeys.todosLoading);
-        } else if (state is FilteredTodosLoaded) {
+        } else if (state is FilteredTodosLoadSuccess) {
           final todos = state.filteredTodos;
           return ListView.builder(
             key: ArchSampleKeys.todoList,
@@ -1695,9 +1695,9 @@ class Stats extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<StatsBloc, StatsState>(
       builder: (context, state) {
-        if (state is StatsLoading) {
-          return LoadingIndicator(key: FlutterTodosKeys.statsLoadingIndicator);
-        } else if (state is StatsLoaded) {
+        if (state is StatsLoadInProgress) {
+          return LoadingIndicator(key: FlutterTodosKeys.statsLoadInProgressIndicator);
+        } else if (state is StatsLoadSuccess) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
