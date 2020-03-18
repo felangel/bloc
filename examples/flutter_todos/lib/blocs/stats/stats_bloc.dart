@@ -9,7 +9,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
 
   StatsBloc({@required this.todosBloc}) {
     todosSubscription = todosBloc.listen((state) {
-      if (state is TodosLoaded) {
+      if (state is TodosLoadSuccess) {
         add(UpdateStats(state.todos));
       }
     });

@@ -8,18 +8,18 @@ abstract class TodosState extends Equatable {
   List<Object> get props => [];
 }
 
-class TodosLoading extends TodosState {}
+class TodosLoadInProgress extends TodosState {}
 
-class TodosLoaded extends TodosState {
+class TodosLoadSuccess extends TodosState {
   final List<Todo> todos;
 
-  const TodosLoaded([this.todos = const []]);
+  const TodosLoadSuccess([this.todos = const []]);
 
   @override
   List<Object> get props => [todos];
 
   @override
-  String toString() => 'TodosLoaded { todos: $todos }';
+  String toString() => 'TodosLoadSuccess { todos: $todos }';
 }
 
-class TodosNotLoaded extends TodosState {}
+class TodosLoadFailure extends TodosState {}

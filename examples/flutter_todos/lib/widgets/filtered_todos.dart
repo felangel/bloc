@@ -29,12 +29,12 @@ class FilteredTodos extends StatelessWidget {
               return TodoItem(
                 todo: todo,
                 onDismissed: (direction) {
-                  BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
+                  BlocProvider.of<TodosBloc>(context).add(TodoDeleted(todo));
                   Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
                     key: ArchSampleKeys.snackbar,
                     todo: todo,
-                    onUndo: () =>
-                        BlocProvider.of<TodosBloc>(context).add(AddTodo(todo)),
+                    onUndo: () => BlocProvider.of<TodosBloc>(context)
+                        .add(TodoAdded(todo)),
                     localizations: localizations,
                   ));
                 },
@@ -49,14 +49,14 @@ class FilteredTodos extends StatelessWidget {
                       key: ArchSampleKeys.snackbar,
                       todo: todo,
                       onUndo: () => BlocProvider.of<TodosBloc>(context)
-                          .add(AddTodo(todo)),
+                          .add(TodoAdded(todo)),
                       localizations: localizations,
                     ));
                   }
                 },
                 onCheckboxChanged: (_) {
                   BlocProvider.of<TodosBloc>(context).add(
-                    UpdateTodo(todo.copyWith(complete: !todo.complete)),
+                    TodoUpdated(todo.copyWith(complete: !todo.complete)),
                   );
                 },
               );

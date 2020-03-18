@@ -11,17 +11,17 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 
   FilteredTodosBloc({@required this.todosBloc}) {
     todosSubscription = todosBloc.listen((state) {
-      if (state is TodosLoaded) {
-        add(UpdateTodos((todosBloc.state as TodosLoaded).todos));
+      if (state is TodosLoadSuccess) {
+        add(UpdateTodos((todosBloc.state as TodosLoadSuccess).todos));
       }
     });
   }
 
   @override
   FilteredTodosState get initialState {
-    return todosBloc.state is TodosLoaded
+    return todosBloc.state is TodosLoadSuccess
         ? FilteredTodosLoaded(
-            (todosBloc.state as TodosLoaded).todos,
+            (todosBloc.state as TodosLoadSuccess).todos,
             VisibilityFilter.all,
           )
         : FilteredTodosLoading();
@@ -39,10 +39,10 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   Stream<FilteredTodosState> _mapUpdateFilterToState(
     UpdateFilter event,
   ) async* {
-    if (todosBloc.state is TodosLoaded) {
+    if (todosBloc.state is TodosLoadSuccess) {
       yield FilteredTodosLoaded(
         _mapTodosToFilteredTodos(
-          (todosBloc.state as TodosLoaded).todos,
+          (todosBloc.state as TodosLoadSuccess).todos,
           event.filter,
         ),
         event.filter,
@@ -58,7 +58,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
         : VisibilityFilter.all;
     yield FilteredTodosLoaded(
       _mapTodosToFilteredTodos(
-        (todosBloc.state as TodosLoaded).todos,
+        (todosBloc.state as TodosLoadSuccess).todos,
         visibilityFilter,
       ),
       visibilityFilter,

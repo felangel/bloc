@@ -11,17 +11,17 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   TodosBloc({@required this.todosRepository});
 
   @override
-  TodosState get initialState => TodosLoading();
+  TodosState get initialState => TodosLoadInProgress();
 
   @override
   Stream<TodosState> mapEventToState(TodosEvent event) async* {
-    if (event is LoadTodos) {
+    if (event is TodosLoaded) {
       yield* _mapLoadTodosToState();
-    } else if (event is AddTodo) {
+    } else if (event is TodoAdded) {
       yield* _mapAddTodoToState(event);
-    } else if (event is UpdateTodo) {
+    } else if (event is TodoUpdated) {
       yield* _mapUpdateTodoToState(event);
-    } else if (event is DeleteTodo) {
+    } else if (event is TodoDeleted) {
       yield* _mapDeleteTodoToState(event);
     } else if (event is ToggleAll) {
       yield* _mapToggleAllToState();
@@ -33,62 +33,65 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   Stream<TodosState> _mapLoadTodosToState() async* {
     try {
       final todos = await this.todosRepository.loadTodos();
-      yield TodosLoaded(
+      yield TodosLoadSuccess(
         todos.map(Todo.fromEntity).toList(),
       );
     } catch (_) {
-      yield TodosNotLoaded();
+      yield TodosLoadFailure();
     }
   }
 
-  Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
-    if (state is TodosLoaded) {
-      final List<Todo> updatedTodos = List.from((state as TodosLoaded).todos)
-        ..add(event.todo);
-      yield TodosLoaded(updatedTodos);
+  Stream<TodosState> _mapAddTodoToState(TodoAdded event) async* {
+    if (state is TodosLoadSuccess) {
+      final List<Todo> updatedTodos =
+          List.from((state as TodosLoadSuccess).todos)..add(event.todo);
+      yield TodosLoadSuccess(updatedTodos);
       _saveTodos(updatedTodos);
     }
   }
 
-  Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
-    if (state is TodosLoaded) {
-      final List<Todo> updatedTodos = (state as TodosLoaded).todos.map((todo) {
-        return todo.id == event.updatedTodo.id ? event.updatedTodo : todo;
+  Stream<TodosState> _mapUpdateTodoToState(TodoUpdated event) async* {
+    if (state is TodosLoadSuccess) {
+      final List<Todo> updatedTodos =
+          (state as TodosLoadSuccess).todos.map((todo) {
+        return todo.id == event.todo.id ? event.todo : todo;
       }).toList();
-      yield TodosLoaded(updatedTodos);
+      yield TodosLoadSuccess(updatedTodos);
       _saveTodos(updatedTodos);
     }
   }
 
-  Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
-    if (state is TodosLoaded) {
-      final updatedTodos = (state as TodosLoaded)
+  Stream<TodosState> _mapDeleteTodoToState(TodoDeleted event) async* {
+    if (state is TodosLoadSuccess) {
+      final updatedTodos = (state as TodosLoadSuccess)
           .todos
           .where((todo) => todo.id != event.todo.id)
           .toList();
-      yield TodosLoaded(updatedTodos);
+      yield TodosLoadSuccess(updatedTodos);
       _saveTodos(updatedTodos);
     }
   }
 
   Stream<TodosState> _mapToggleAllToState() async* {
-    if (state is TodosLoaded) {
+    if (state is TodosLoadSuccess) {
       final allComplete =
-          (state as TodosLoaded).todos.every((todo) => todo.complete);
-      final List<Todo> updatedTodos = (state as TodosLoaded)
+          (state as TodosLoadSuccess).todos.every((todo) => todo.complete);
+      final List<Todo> updatedTodos = (state as TodosLoadSuccess)
           .todos
           .map((todo) => todo.copyWith(complete: !allComplete))
           .toList();
-      yield TodosLoaded(updatedTodos);
+      yield TodosLoadSuccess(updatedTodos);
       _saveTodos(updatedTodos);
     }
   }
 
   Stream<TodosState> _mapClearCompletedToState() async* {
-    if (state is TodosLoaded) {
-      final List<Todo> updatedTodos =
-          (state as TodosLoaded).todos.where((todo) => !todo.complete).toList();
-      yield TodosLoaded(updatedTodos);
+    if (state is TodosLoadSuccess) {
+      final List<Todo> updatedTodos = (state as TodosLoadSuccess)
+          .todos
+          .where((todo) => !todo.complete)
+          .toList();
+      yield TodosLoadSuccess(updatedTodos);
       _saveTodos(updatedTodos);
     }
   }

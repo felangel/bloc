@@ -24,7 +24,7 @@ void main() {
               getApplicationDocumentsDirectory,
             ),
           ),
-        )..add(LoadTodos());
+        )..add(TodosLoaded());
       },
       child: TodosApp(),
     ),
@@ -67,7 +67,7 @@ class TodosApp extends StatelessWidget {
             key: ArchSampleKeys.addTodoScreen,
             onSave: (task, note) {
               BlocProvider.of<TodosBloc>(context).add(
-                AddTodo(Todo(task, note: note)),
+                TodoAdded(Todo(task, note: note)),
               );
             },
             isEditing: false,
