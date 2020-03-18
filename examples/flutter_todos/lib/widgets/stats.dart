@@ -15,7 +15,8 @@ class Stats extends StatelessWidget {
     return BlocBuilder<StatsBloc, StatsState>(
       builder: (context, state) {
         if (state is StatsLoadInProgress) {
-          return LoadingIndicator(key: FlutterTodosKeys.statsLoadingIndicator);
+          return LoadingIndicator(
+              key: FlutterTodosKeys.statsLoadInProgressIndicator);
         } else if (state is StatsLoadSuccess) {
           return Center(
             child: Column(
