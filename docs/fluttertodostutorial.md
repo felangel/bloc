@@ -73,7 +73,7 @@ class FlutterTodosKeys {
       const Key('__extraActionsEmptyContainer__');
   static final filteredTodosEmptyContainer =
       const Key('__filteredTodosEmptyContainer__');
-  static final statsLoadingIndicator = const Key('__statsLoadingIndicator__');
+  static final statsLoadInProgressIndicator = const Key('__statsLoadInProgressIndicator__');
   static final emptyStatsContainer = const Key('__emptyStatsContainer__');
   static final emptyDetailsContainer = const Key('__emptyDetailsContainer__');
   static final detailsScreenCheckBox = const Key('__detailsScreenCheckBox__');
@@ -1696,7 +1696,7 @@ class Stats extends StatelessWidget {
     return BlocBuilder<StatsBloc, StatsState>(
       builder: (context, state) {
         if (state is StatsLoadInProgress) {
-          return LoadingIndicator(key: FlutterTodosKeys.statsLoadingIndicator);
+          return LoadingIndicator(key: FlutterTodosKeys.statsLoadInProgressIndicator);
         } else if (state is StatsLoadSuccess) {
           return Center(
             child: Column(
