@@ -12,7 +12,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   FilteredTodosBloc({@required this.todosBloc}) {
     todosSubscription = todosBloc.listen((state) {
       if (state is TodosLoadSuccess) {
-        add(UpdateTodos((todosBloc.state as TodosLoadSuccess).todos));
+        add(TodosUpdated((todosBloc.state as TodosLoadSuccess).todos));
       }
     });
   }
@@ -20,27 +20,27 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   @override
   FilteredTodosState get initialState {
     return todosBloc.state is TodosLoadSuccess
-        ? FilteredTodosLoaded(
+        ? FilteredTodosLoadSuccess(
             (todosBloc.state as TodosLoadSuccess).todos,
             VisibilityFilter.all,
           )
-        : FilteredTodosLoading();
+        : FilteredTodosLoadInProgress();
   }
 
   @override
   Stream<FilteredTodosState> mapEventToState(FilteredTodosEvent event) async* {
-    if (event is UpdateFilter) {
+    if (event is FilterUpdated) {
       yield* _mapUpdateFilterToState(event);
-    } else if (event is UpdateTodos) {
+    } else if (event is TodosUpdated) {
       yield* _mapTodosUpdatedToState(event);
     }
   }
 
   Stream<FilteredTodosState> _mapUpdateFilterToState(
-    UpdateFilter event,
+    FilterUpdated event,
   ) async* {
     if (todosBloc.state is TodosLoadSuccess) {
-      yield FilteredTodosLoaded(
+      yield FilteredTodosLoadSuccess(
         _mapTodosToFilteredTodos(
           (todosBloc.state as TodosLoadSuccess).todos,
           event.filter,
@@ -51,12 +51,12 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   }
 
   Stream<FilteredTodosState> _mapTodosUpdatedToState(
-    UpdateTodos event,
+    TodosUpdated event,
   ) async* {
-    final visibilityFilter = state is FilteredTodosLoaded
-        ? (state as FilteredTodosLoaded).activeFilter
+    final visibilityFilter = state is FilteredTodosLoadSuccess
+        ? (state as FilteredTodosLoadSuccess).activeFilter
         : VisibilityFilter.all;
-    yield FilteredTodosLoaded(
+    yield FilteredTodosLoadSuccess(
       _mapTodosToFilteredTodos(
         (todosBloc.state as TodosLoadSuccess).todos,
         visibilityFilter,

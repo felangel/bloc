@@ -17,9 +17,9 @@ class FilteredTodos extends StatelessWidget {
 
     return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
       builder: (context, state) {
-        if (state is FilteredTodosLoading) {
+        if (state is FilteredTodosLoadInProgress) {
           return LoadingIndicator(key: ArchSampleKeys.todosLoading);
-        } else if (state is FilteredTodosLoaded) {
+        } else if (state is FilteredTodosLoadSuccess) {
           final todos = state.filteredTodos;
           return ListView.builder(
             key: ArchSampleKeys.todoList,
