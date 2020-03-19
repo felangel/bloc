@@ -16,13 +16,13 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   @override
   Stream<TodosState> mapEventToState(TodosEvent event) async* {
     if (event is TodosLoaded) {
-      yield* _mapLoadTodosToState();
+      yield* _mapTodosLoadedToState();
     } else if (event is TodoAdded) {
-      yield* _mapAddTodoToState(event);
+      yield* _mapTodoAddedToState(event);
     } else if (event is TodoUpdated) {
-      yield* _mapUpdateTodoToState(event);
+      yield* _mapTodoUpdatedToState(event);
     } else if (event is TodoDeleted) {
-      yield* _mapDeleteTodoToState(event);
+      yield* _mapTodoDeletedToState(event);
     } else if (event is ToggleAll) {
       yield* _mapToggleAllToState();
     } else if (event is ClearCompleted) {
@@ -30,7 +30,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapLoadTodosToState() async* {
+  Stream<TodosState> _mapTodosLoadedToState() async* {
     try {
       final todos = await this.todosRepository.loadTodos();
       yield TodosLoadSuccess(
@@ -41,7 +41,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapAddTodoToState(TodoAdded event) async* {
+  Stream<TodosState> _mapTodoAddedToState(TodoAdded event) async* {
     if (state is TodosLoadSuccess) {
       final List<Todo> updatedTodos =
           List.from((state as TodosLoadSuccess).todos)..add(event.todo);
@@ -50,7 +50,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapUpdateTodoToState(TodoUpdated event) async* {
+  Stream<TodosState> _mapTodoUpdatedToState(TodoUpdated event) async* {
     if (state is TodosLoadSuccess) {
       final List<Todo> updatedTodos =
           (state as TodosLoadSuccess).todos.map((todo) {
@@ -61,7 +61,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapDeleteTodoToState(TodoDeleted event) async* {
+  Stream<TodosState> _mapTodoDeletedToState(TodoDeleted event) async* {
     if (state is TodosLoadSuccess) {
       final updatedTodos = (state as TodosLoadSuccess)
           .todos
