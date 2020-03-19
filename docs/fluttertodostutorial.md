@@ -236,7 +236,7 @@ Next, let's implement the events we will need to handle.
 
 The events we will need to handle in our `TodosBloc` are:
 
-- `TodosLoaded` - tells the bloc that it needs to load the todos from the `TodosRepository`.
+- `TodosLoadSuccess` - tells the bloc that it needs to load the todos from the `TodosRepository`.
 - `TodoAdded` - tells the bloc that it needs to add an new todo to the list of todos.
 - `TodoUpdated` - tells the bloc that it needs to update an existing todo.
 - `TodoDeleted` - tells the bloc that it needs to remove an existing todo.
@@ -256,7 +256,7 @@ abstract class TodosEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class TodosLoaded extends TodosEvent {}
+class TodosLoadSuccess extends TodosEvent {}
 
 class TodoAdded extends TodosEvent {
   final Todo todo;
@@ -323,14 +323,14 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   @override
   Stream<TodosState> mapEventToState(TodosEvent event) async* {
-    if (event is TodosLoaded) {
-      yield* _mapLoadTodosToState();
+    if (event is TodosLoadSuccess) {
+      yield* _mapTodosLoadedToState();
     } else if (event is TodoAdded) {
-      yield* _mapAddTodoToState(event);
+      yield* _mapTodoAddedToState(event);
     } else if (event is TodoUpdated) {
-      yield* _mapUpdateTodoToState(event);
+      yield* _mapTodoUpdatedToState(event);
     } else if (event is TodoDeleted) {
-      yield* _mapDeleteTodoToState(event);
+      yield* _mapTodoDeletedToState(event);
     } else if (event is ToggleAll) {
       yield* _mapToggleAllToState();
     } else if (event is ClearCompleted) {
@@ -338,7 +338,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapLoadTodosToState() async* {
+  Stream<TodosState> _mapTodosLoadedToState() async* {
     try {
       final todos = await this.todosRepository.loadTodos();
       yield TodosLoadSuccess(
@@ -349,7 +349,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapAddTodoToState(TodoAdded event) async* {
+  Stream<TodosState> _mapTodoAddedToState(TodoAdded event) async* {
     if (state is TodosLoadSuccess) {
       final List<Todo> updatedTodos = List.from((state as TodosLoadSuccess).todos)
         ..add(event.todo);
@@ -358,7 +358,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapUpdateTodoToState(TodoUpdated event) async* {
+  Stream<TodosState> _mapTodoUpdatedToState(TodoUpdated event) async* {
     if (state is TodosLoadSuccess) {
       final List<Todo> updatedTodos = (state as TodosLoadSuccess).todos.map((todo) {
         return todo.id == event.updatedTodo.id ? event.updatedTodo : todo;
@@ -368,7 +368,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapDeleteTodoToState(TodoDeleted event) async* {
+  Stream<TodosState> _mapTodoDeletedToState(TodoDeleted event) async* {
     if (state is TodosLoadSuccess) {
       final updatedTodos = (state as TodosLoadSuccess)
           .todos
@@ -1763,7 +1763,7 @@ void main() {
               getApplicationDocumentsDirectory,
             ),
           ),
-        )..add(TodosLoaded());
+        )..add(TodosLoadSuccess());
       },
       child: TodosApp(),
     ),
@@ -1773,7 +1773,7 @@ void main() {
 
 ?> **Note:** We are setting our BlocSupervisor's delegate to the `SimpleBlocDelegate` we created earlier so that we can hook into all transitions and errors.
 
-?> **Note:** We are also wrapping our `TodosApp` widget in a `BlocProvider` which manages initializing, closing, and providing the `TodosBloc` to our entire widget tree from [flutter_bloc](https://pub.dev/packages/flutter_bloc). We immediately add the `TodosLoaded` event in order to request the latest todos.
+?> **Note:** We are also wrapping our `TodosApp` widget in a `BlocProvider` which manages initializing, closing, and providing the `TodosBloc` to our entire widget tree from [flutter_bloc](https://pub.dev/packages/flutter_bloc). We immediately add the `TodosLoadSuccess` event in order to request the latest todos.
 
 Next, let's implement our `TodosApp` widget.
 
@@ -1898,7 +1898,7 @@ void main() {
               getApplicationDocumentsDirectory,
             ),
           ),
-        )..add(TodosLoaded());
+        )..add(TodosLoadSuccess());
       },
       child: TodosApp(),
     ),

@@ -236,10 +236,10 @@ class TodosLoadFailure extends TodosState {}
 
 События, которые нам нужно обработать в нашем `TodosBloc`:
 
-- `LoadTodos` - сообщает блоку, что ему нужно загрузить задачи из `TodosRepository`.
-- `AddTodo` - сообщает блоку, что ему нужно добавить новую задачу в список задач.
-- `UpdateTodo` - сообщает блоку, что ему нужно обновить существующую задачу.
-- `DeleteTodo` - сообщает блоку, что ему нужно удалить существующую задачу.
+- `TodosLoaded` - сообщает блоку, что ему нужно загрузить задачи из `TodosRepository`.
+- `TodoAdded` - сообщает блоку, что ему нужно добавить новую задачу в список задач.
+- `TodoUpdated` - сообщает блоку, что ему нужно обновить существующую задачу.
+- `TodoDeleted` - сообщает блоку, что ему нужно удалить существующую задачу.
 - `ClearCompleted` - сообщает блоку, что ему нужно удалить все выполненные задачи.
 - `ToggleAll` - сообщает блоку, что он должен переключить состояние завершения для всех задач.
 
@@ -256,42 +256,42 @@ abstract class TodosEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadTodos extends TodosEvent {}
+class TodosLoaded extends TodosEvent {}
 
-class AddTodo extends TodosEvent {
+class TodoAdded extends TodosEvent {
   final Todo todo;
 
-  const AddTodo(this.todo);
+  const TodoAdded(this.todo);
 
   @override
   List<Object> get props => [todo];
 
   @override
-  String toString() => 'AddTodo { todo: $todo }';
+  String toString() => 'TodoAdded { todo: $todo }';
 }
 
-class UpdateTodo extends TodosEvent {
+class TodoUpdated extends TodosEvent {
   final Todo updatedTodo;
 
-  const UpdateTodo(this.updatedTodo);
+  const TodoUpdated(this.updatedTodo);
 
   @override
   List<Object> get props => [updatedTodo];
 
   @override
-  String toString() => 'UpdateTodo { updatedTodo: $updatedTodo }';
+  String toString() => 'TodoUpdated { updatedTodo: $updatedTodo }';
 }
 
-class DeleteTodo extends TodosEvent {
+class TodoDeleted extends TodosEvent {
   final Todo todo;
 
-  const DeleteTodo(this.todo);
+  const TodoDeleted(this.todo);
 
   @override
   List<Object> get props => [todo];
 
   @override
-  String toString() => 'DeleteTodo { todo: $todo }';
+  String toString() => 'TodoDeleted { todo: $todo }';
 }
 
 class ClearCompleted extends TodosEvent {}
@@ -323,14 +323,14 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   @override
   Stream<TodosState> mapEventToState(TodosEvent event) async* {
-    if (event is LoadTodos) {
-      yield* _mapLoadTodosToState();
-    } else if (event is AddTodo) {
-      yield* _mapAddTodoToState(event);
-    } else if (event is UpdateTodo) {
-      yield* _mapUpdateTodoToState(event);
-    } else if (event is DeleteTodo) {
-      yield* _mapDeleteTodoToState(event);
+    if (event is TodosLoaded) {
+      yield* _mapTodosLoadedToState();
+    } else if (event is TodoAdded) {
+      yield* _mapTodoAddedToState(event);
+    } else if (event is TodoUpdated) {
+      yield* _mapTodoUpdatedToState(event);
+    } else if (event is TodoDeleted) {
+      yield* _mapTodoDeletedToState(event);
     } else if (event is ToggleAll) {
       yield* _mapToggleAllToState();
     } else if (event is ClearCompleted) {
@@ -338,7 +338,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapLoadTodosToState() async* {
+  Stream<TodosState> _mapTodosLoadedToState() async* {
     try {
       final todos = await this.todosRepository.loadTodos();
       yield TodosLoadSuccess(
@@ -349,7 +349,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
+  Stream<TodosState> _mapTodoAddedToState(TodoAdded event) async* {
     if (state is TodosLoadSuccess) {
       final List<Todo> updatedTodos = List.from((state as TodosLoadSuccess).todos)
         ..add(event.todo);
@@ -358,7 +358,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
+  Stream<TodosState> _mapTodoUpdatedToState(TodoUpdated event) async* {
     if (state is TodosLoadSuccess) {
       final List<Todo> updatedTodos = (state as TodosLoadSuccess).todos.map((todo) {
         return todo.id == event.updatedTodo.id ? event.updatedTodo : todo;
@@ -368,7 +368,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
+  Stream<TodosState> _mapTodoDeletedToState(TodoDeleted event) async* {
     if (state is TodosLoadSuccess) {
       final updatedTodos = (state as TodosLoadSuccess)
           .todos
@@ -984,7 +984,7 @@ class DetailsScreen extends StatelessWidget {
                 key: ArchSampleKeys.deleteTodoButton,
                 icon: Icon(Icons.delete),
                 onPressed: () {
-                  BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
+                  BlocProvider.of<TodosBloc>(context).add(TodoDeleted(todo));
                   Navigator.pop(context, todo);
                 },
               )
@@ -1006,7 +1006,7 @@ class DetailsScreen extends StatelessWidget {
                                 value: todo.complete,
                                 onChanged: (_) {
                                   BlocProvider.of<TodosBloc>(context).add(
-                                    UpdateTodo(
+                                    TodoUpdated(
                                       todo.copyWith(complete: !todo.complete),
                                     ),
                                   );
@@ -1059,7 +1059,7 @@ class DetailsScreen extends StatelessWidget {
                             key: ArchSampleKeys.editTodoScreen,
                             onSave: (task, note) {
                               BlocProvider.of<TodosBloc>(context).add(
-                                UpdateTodo(
+                                TodoUpdated(
                                   todo.copyWith(task: task, note: note),
                                 ),
                               );
@@ -1081,7 +1081,7 @@ class DetailsScreen extends StatelessWidget {
 
 ?> **Примечание:** Для `DetailsScreen` требуется идентификатор todo, чтобы он мог извлекать детали todo из `TodosBloc` и чтобы он мог обновляться всякий раз, когда были изменены детали todo (идентификатор todo нельзя изменить) ,
 
-Главное, на что следует обратить внимание это то, что существует `IconButton`, который добавляет событие `DeleteTodo`, а также флажок, который добавляет событие `UpdateTodo`.
+Главное, на что следует обратить внимание это то, что существует `IconButton`, который добавляет событие `TodoDeleted`, а также флажок, который добавляет событие `TodoUpdated`.
 
 Существует также другой `FloatingActionButton`, который перемещает пользователя к `AddEditScreen` с `isEditing`, установленным в `true`. Далее мы рассмотрим `AddEditScreen`.
 
@@ -1490,12 +1490,12 @@ class FilteredTodos extends StatelessWidget {
               return TodoItem(
                 todo: todo,
                 onDismissed: (direction) {
-                  BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
+                  BlocProvider.of<TodosBloc>(context).add(TodoDeleted(todo));
                   Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
                     key: ArchSampleKeys.snackbar,
                     todo: todo,
                     onUndo: () =>
-                        BlocProvider.of<TodosBloc>(context).add(AddTodo(todo)),
+                        BlocProvider.of<TodosBloc>(context).add(TodoAdded(todo)),
                     localizations: localizations,
                   ));
                 },
@@ -1510,14 +1510,14 @@ class FilteredTodos extends StatelessWidget {
                       key: ArchSampleKeys.snackbar,
                       todo: todo,
                       onUndo: () => BlocProvider.of<TodosBloc>(context)
-                          .add(AddTodo(todo)),
+                          .add(TodoAdded(todo)),
                       localizations: localizations,
                     ));
                   }
                 },
                 onCheckboxChanged: (_) {
                   BlocProvider.of<TodosBloc>(context).add(
-                    UpdateTodo(todo.copyWith(complete: !todo.complete)),
+                    TodoUpdated(todo.copyWith(complete: !todo.complete)),
                   );
                 },
               );
@@ -1763,7 +1763,7 @@ void main() {
               getApplicationDocumentsDirectory,
             ),
           ),
-        )..add(LoadTodos());
+        )..add(TodosLoaded());
       },
       child: TodosApp(),
     ),
@@ -1773,7 +1773,7 @@ void main() {
 
 ?> **Примечание:** Мы устанавливаем делегата нашего `BlocSupervisor` в `SimpleBlocDelegate`, который мы создали ранее, чтобы мы могли подключиться ко всем переходам и ошибкам.
 
-?> **Примечание:** Мы также оборачиваем наш виджет `TodosApp` в `BlocProvider`, который управляет инициализацией, закрытием и предоставлением `TodosBloc` для всего нашего дерева виджетов из [flutter_bloc](https://pub.dev/packages/flutter_bloc). Мы немедленно добавляем событие `LoadTodos`, чтобы запросить последние задачи.
+?> **Примечание:** Мы также оборачиваем наш виджет `TodosApp` в `BlocProvider`, который управляет инициализацией, закрытием и предоставлением `TodosBloc` для всего нашего дерева виджетов из [flutter_bloc](https://pub.dev/packages/flutter_bloc). Мы немедленно добавляем событие `TodosLoaded`, чтобы запросить последние задачи.
 
 Далее давайте реализуем наш виджет `TodosApp`.
 
@@ -1814,7 +1814,7 @@ class TodosApp extends StatelessWidget {
             key: ArchSampleKeys.addTodoScreen,
             onSave: (task, note) {
               BlocProvider.of<TodosBloc>(context).add(
-                AddTodo(Todo(task, note: note)),
+                TodoAdded(Todo(task, note: note)),
               );
             },
             isEditing: false,
@@ -1831,7 +1831,7 @@ class TodosApp extends StatelessWidget {
 `TodosApp` имеет два маршрута:
 
 - `Home` - отображает`HomeScreen`
-- `AddTodo` - отображает `AddEditScreen` с `isEditing`, установленным в `false`.
+- `TodoAdded` - отображает `AddEditScreen` с `isEditing`, установленным в `false`.
 
 `TodosApp` также делает `TabBloc`, `FilteredTodosBloc` и `StatsBloc` доступными для виджетов в своем поддереве с помощью виджета `MultiBlocProvider` из [flutter_bloc](https://pub.dev/packages/flutter_bloc)
 
@@ -1898,7 +1898,7 @@ void main() {
               getApplicationDocumentsDirectory,
             ),
           ),
-        )..add(LoadTodos());
+        )..add(TodosLoaded());
       },
       child: TodosApp(),
     ),
@@ -1941,7 +1941,7 @@ class TodosApp extends StatelessWidget {
             key: ArchSampleKeys.addTodoScreen,
             onSave: (task, note) {
               BlocProvider.of<TodosBloc>(context).add(
-                AddTodo(Todo(task, note: note)),
+                TodoAdded(Todo(task, note: note)),
               );
             },
             isEditing: false,
