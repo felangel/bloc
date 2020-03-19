@@ -60,7 +60,7 @@ Bütün vəziyyət dəyişikliyi yadda saxlanıldığı üçün, tətbiqlərimiz
 
 > Stream asinxron dataların ardıcıllığıdır.
 
-Bloc [RxDart](https://pub.dev/packages/rxdart) kitabxanası üzərində qurulub; buna baxmayaraq, `RxDart`-ın həyəta keçirilməsi üçün spesifik olan hər şeyi mücərrədləşdirir.
+Bloc [RxDart](https://pub.dev/packages/rxdart) kitabxanası üzərində qurulub; buna baxmayaraq, `RxDart`-ın həyata keçirilməsi üçün spesifik olan hər şeyi mücərrədləşdirir.
 
 Bloc-u istifadə etmək üçün, `Streamlər`-i və onların necə işləməsini anlamaq vacibdir.
 
@@ -132,7 +132,7 @@ Bu nümunədə, sayğacın `0`-dan başlamasını istəyirik, deməli başlanğ�
 int get initialState => 0;
 ```
 
-> Hər bir Bloc `mapEventToState` adlı funksiyanı işlətməlidir. Bu funksiya `event`-i arqument kimi qəbul edir və geriyə mütləq dizayn hissəsin tərəfindən istifadə olunan yeni `vəziyyətlər`-in `Stream`-ni qaytarmalıdır. İstədiyim vaxt cari bloc-un vəziyyətini `state` özəlliyi ilə əldə edə bilərik.
+> Hər bir Bloc `mapEventToState` adlı funksiyanı işlətməlidir. Bu funksiya `event`-i arqument kimi qəbul edir və geriyə mütləq dizayn hissəsi tərəfindən istifadə olunan yeni `vəziyyətlər`-in `Stream`-ni qaytarmalıdır. İstədiyim vaxt cari bloc-un vəziyyətini `state` özəlliyi ilə əldə edə bilərik.
 
 ```dart
 @override
@@ -177,7 +177,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 Bu nöqtədə, yəqin ki, təəccüblənirsiniz ki, _"Hadisə zamanı Bloc-u necə xəbərdar edəcəm?"_.
 
-> Hər bir Bloc-un `add` adlı metodu vardır. `Add` `hadisə (event)`-ni qəbul edir və bu hadisəyə əsasən, `mapEventToState` metodunu tətikləyir. `Add` dizayn kodları olan hissədən və ya Bloc-un özündə çağrıla və yeni `hadisə (event)`-yə əsəsn Bloc-a xəbər verə bilər. 
+> Hər bir Bloc-un `add` adlı metodu vardır. `Add` `hadisə (event)`-ni qəbul edir və bu hadisəyə əsasən, `mapEventToState` metodunu tətikləyir. `Add` dizayn kodları olan hissədən və ya Bloc-un özündə çağrıla və yeni `hadisə (event)`-yə əsasən Bloc-a xəbər verə bilər. 
 
 Bz 0-dan 3-ə qədər sayan sadə tətbiq yarada bilərik.
 
@@ -228,7 +228,7 @@ void onTransition(Transition<CounterEvent, int> transition) {
 
 Hal-hazırda, `onTransition` metodunu Bloc-a daxil etdik və bu halda, yeni `Keçid (Transition)` baş verərkən istədiyimiz prosesi icra edə bilərik.
 
-`Keçidlər (Transitions)`-i bloc səviyyəsində idarə bildiyimiz kimi, `Exception`-ları da idarə edə bilərik.
+`Keçidlər (Transitions)`-i bloc səviyyəsində idarə edə bildiyimiz kimi, `Exception`-ları da idarə edə bilərik.
 
 > `onError` metodu Bloc daxilində olan `Exception`-ı idarə etmək üçün, istifadə olunan metoddur. Susmaya görə, bütün exceptionlar ləğv olunur və `Bloc`-un funksionallığına heç bir təsir olmur.
 
