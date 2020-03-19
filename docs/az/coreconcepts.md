@@ -247,9 +247,9 @@ Hal-hazırda, `onError` metodunu Bloc-a daxil etdik və `Exception` baş verərk
 
 ## BlocDelegate
 
-One added bonus of using Bloc is that we can have access to all `Transitions` in one place. Even though in this application we only have one Bloc, it's fairly common in larger applications to have many Blocs managing different parts of the application's state.
+Bloc istifadə etməyin üstünlüklərindən biri budur ki, biz bütün Bloc-larda olan `Keçidlər (Transitions)`-i bir yerdən əldə edə bilərik. Bu nümunədə, bir Bloc olmasına baxmayaraq, böyük tətbiqlərdə müxtəlif hissələrdə tətbiqin vəziyyətini idarə etmək üçün çoxlu Bloc olması gözləniləndir.
 
-If we want to be able to do something in response to all `Transitions` we can simply create our own `BlocDelegate`.
+Əgər bütün `Keçidlər (Transitions)`-ə cavab olaraq, nəsə etmək istəyiriksə. sadəcə özümüzün `BlocDelegate`-ni yarada bilərik.
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
@@ -261,9 +261,9 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-?> **Note**: All we need to do is extend `BlocDelegate` and override the `onTransition` method.
+?> **Not**: Ehtiyacımız olan, `BlocDelegate` classını extend etmək və `onTransition` metodunu daxil etməkdir.
 
-In order to tell Bloc to use our `SimpleBlocDelegate`, we just need to tweak our `main` function.
+. Bloc-a bizim `SimpleBlocDelegate`-i istifadə etməsini demək üçün, sadəcə `main` funksiyasında bunu qeyd etməyimiz lazımdır. 
 
 ```dart
 void main() {
@@ -276,7 +276,7 @@ void main() {
 }
 ```
 
-If we want to be able to do something in response to all `Events` added, we can also override the `onEvent` method in our `SimpleBlocDelegate`.
+Əgər bütün `Hadisələr (Events)`-ə cavab olaraq, nəsə etmək istəyiriksə, `onEvent` metodunu `SimpleBlocDelegate`-ə əlavə edə bilərik.
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
@@ -294,7 +294,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-If we want to be able to do something in response to all `Exceptions` thrown in a Bloc, we can also override the `onError` method in our `SimpleBlocDelegate`.
+Əgər bütün `Exception`-lara cavab olaraq, nəsə etmək istəyiriksə, `onError` metodunu `SimpleBlocDelegate`-ə əlavə edə bilərik..
 
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
@@ -318,4 +318,4 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-?> **Note**: `BlocSupervisor` is a singleton which oversees all Blocs and delegates responsibilities to the `BlocDelegate`.
+?> **Not**: `BlocSupervisor` bütün Bloclara nəzarət edən və onların vəzifələrini `BlocDelegate`-ə ötürən singleton classdır .
