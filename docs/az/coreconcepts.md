@@ -109,9 +109,9 @@ void main() async {
 
 ## Bloclar (Blocs)
 
-> A Bloc (Business Logic Component) is a component which converts a `Stream` of incoming `Events` into a `Stream` of outgoing `States`. Think of a Bloc as being the "brains" described above.
+>  Bloc (**B**usiness **Lo**gic **C**omponent) Bloc tərəfindən qəbul edilən `Hadisələr (Events)`-in `Stream`-i, `Vəziyyətlər (States)`-in `Stream`-nə çevirən komponentdir. Yuxarıda da qeyd edildiyi kimi, Bloc-u beyin kimi təsəvvür edin.
 
-> Every Bloc must extend the base `Bloc` class which is part of the core bloc package.
+> Hər bir Bloc əsas bloc paketinin bir hissəsi olan `Bloc` class-ını miras almalıdır (İnheritance, extend etməlidir).
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -121,18 +121,18 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-In the above code snippet, we are declaring our `CounterBloc` as a Bloc which converts `CounterEvents` into `ints`.
+Yuxarıdakı kod parçasında, `CounterBloc`-u `CounterEvent`-ləri `int`-lərə çevirən Bloc kimi elan etdik. (Burada, CounterEvent hadisə, int isə vəziyyətdir).
 
-> Every Bloc must define an initial state which is the state before any events have been received.
+> Hər bir Bloc başlanğıc vəziyyəti müəyyən etməlidir, bu hər hansı event qəbul edilməmişdən qabaq lazım olan ilkin vəziyyətdir.
 
-In this case, we want our counter to start at `0`.
+Bu nümunədə, sayğacın `0`-dan başlamasını istəyirik, deməli başlanğıc vəziyyətini 0 elan edəcəyik.
 
 ```dart
 @override
 int get initialState => 0;
 ```
 
-> Every Bloc must implement a function called `mapEventToState`. The function takes the incoming `event` as an argument and must return a `Stream` of new `states` which is consumed by the presentation layer. We can access the current bloc state at any time using the `state` property.
+> Hər bir Bloc `mapEventToState` adlı funksiyanı işlətməlidir. Bu funksiya `event`-i arqument kimi qəbul edir və geriyə mütləq dizayn hissəsin tərəfindən istifadə olunan yeni `vəziyyətlər`-in `Stream`-ni qaytarmalıdır. İstədiyim vaxt cari bloc-un vəziyyətini `state` özəlliyi ilə əldə edə bilərik.
 
 ```dart
 @override
@@ -148,7 +148,7 @@ Stream<int> mapEventToState(CounterEvent event) async* {
 }
 ```
 
-At this point, we have a fully functioning `CounterBloc`.
+Bu nöqtədə, biz `CounterBloc`-u tam funksional etmiş olduq.
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -173,13 +173,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-!> Blocs will ignore duplicate states. If a Bloc yields `State nextState` where `state == nextState`, then no transition will occur and no change will be made to the `Stream<State>`.
+!> Bloc təkrar vəziyyətləri ləğv edir. Əgər Bloc-un yield etdiyi `State nextState` özəlliyi `state == nextState` olarsa, heç bir keçid (transition) baş verməyəcək və `Stream<State>`-də heç bir dəyişiklik olmayacaq.
 
-At this point, you're probably wondering _"How do I notify a Bloc of an event?"_.
+Bu nöqtədə, yəqin ki, təəccüblənirsiniz ki, _"Hadisə zamanı Bloc-u necə xəbərdar edəcəm?"_.
 
-> Every Bloc has a `add` method. `Add` takes an `event` and triggers `mapEventToState`. `Add` may be called from the presentation layer or from within the Bloc and notifies the Bloc of a new `event`.
+> Hər bir Bloc-un `add` adlı metodu vardır. `Add` `hadisə (event)`-ni qəbul edir və bu hadisəyə əsasən, `mapEventToState` metodunu tətikləyir. `Add` dizayn kodları olan hissədən və ya Bloc-un özündə çağrıla və yeni `hadisə (event)`-yə əsəsn Bloc-a xəbər verə bilər. 
 
-We can create a simple application which counts from 0 to 3.
+Bz 0-dan 3-ə qədər sayan sadə tətbiq yarada bilərik.
 
 ```dart
 void main() {
@@ -191,9 +191,9 @@ void main() {
 }
 ```
 
-!> By default, events will always be processed in the order in which they were added and any newly added events are enqueued. An event is considered fully processed once `mapEventToState` has finished executing.
+!> Susmaya görə, hadisələr həmişə ardıcıllıqla işləyəcək, yəni ki, yeni əlavə olunan hadisələr əvvəlki hadisələri gözləyəcəkdir. `mapEventToState` metodu öz işini bitirdikdə, hadisə də tam işləmiş sayılır.
 
-The `Transitions` in the above code snippet would be
+Yuxarıdakı kod parçasına əsasən, keçidlər aşağıdakı kimi olacaq:
 
 ```json
 {
@@ -213,11 +213,11 @@ The `Transitions` in the above code snippet would be
 }
 ```
 
-Unfortunately, in the current state we won't be able to see any of these transitions unless we override `onTransition`.
+Təəssüf ki, `onTransition` metodunu Bloc-umuzda istifadə etmədən, bu keçidlərin heç birini görə bilməyəcəyik.
 
-> `onTransition` is a method that can be overridden to handle every local Bloc `Transition`. `onTransition` is called just before a Bloc's `state` has been updated.
+> `onTransition`Bloc daxilində olan `Keçidlər (Transtions)`-i idarə etmək üçün istifadə olunan metoddur. `onTransition` Bloc-un `vəziyyət (state)`-i yenilmədən öncə çağırılır.
 
-?> **Tip**: `onTransition` is a great place to add bloc-specific logging/analytics.
+?> **İpucu**: `onTransition` bloc-a xas olan loglama/analitika üçün ideal yerdir.
 
 ```dart
 @override
@@ -226,15 +226,15 @@ void onTransition(Transition<CounterEvent, int> transition) {
 }
 ```
 
-Now that we've overridden `onTransition` we can do whatever we'd like whenever a `Transition` occurs.
+Hal-hazırda, `onTransition` metodunu Bloc-a daxil etdik və bu halda, yeni `Keçid (Transition)` baş verərkən istədiyimiz prosesi icra edə bilərik.
 
-Just like we can handle `Transitions` at the bloc level, we can also handle `Exceptions`.
+`Keçidlər (Transitions)`-i bloc səviyyəsində idarə bildiyimiz kimi, `Exception`-ları da idarə edə bilərik.
 
-> `onError` is a method that can be overriden to handle every local Bloc `Exception`. By default all exceptions will be ignored and `Bloc` functionality will be unaffected.
+> `onError` metodu Bloc daxilində olan `Exception`-ı idarə etmək üçün, istifadə olunan metoddur. Susmaya görə, bütün exceptionlar ləğv olunur və `Bloc`-un funksionallığına heç bir təsir olmur.
 
-?> **Note**: The stacktrace argument may be `null` if the state stream received an error without a `StackTrace`.
+?> **Not**: Əgər vəziyyət stream-i error-u `StackTrace` olmadan qəbul edərsə, stacktrace arqumenti `null` ola bilər. 
 
-?> **Tip**: `onError` is a great place to add bloc-specific error handling.
+?> **Tip**: `onError` metodu bloc-a xas olan error-ları idarə etmək üçün, ideal yerdir.
 
 ```dart
 @override
@@ -243,7 +243,7 @@ void onError(Object error, StackTrace stackTrace) {
 }
 ```
 
-Now that we've overridden `onError` we can do whatever we'd like whenever an `Exception` is thrown.
+Hal-hazırda, `onError` metodunu Bloc-a daxil etdik və `Exception` baş verərkən, istədiyimiz prosesi burada icra edə bilərik.
 
 ## BlocDelegate
 
