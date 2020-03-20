@@ -64,14 +64,14 @@ void main() {
         const channel = MethodChannel('plugins.flutter.io/path_provider');
         var response = '.';
 
-        channel.setMockMethodCallHandler((MethodCall methodCall) async {
+        channel.setMockMethodCallHandler((methodCall) async {
           return response;
         });
       });
 
       test(
-          'should call storage.write when onTransition is called using the static build',
-          () async {
+          'should call storage.write'
+          'when onTransition is called using the static build', () async {
         delegate = await HydratedBlocDelegate.build();
         final transition = Transition(
           currentState: 'currentState',
@@ -86,7 +86,8 @@ void main() {
       });
 
       test(
-          'should call storage.write when onTransition is called using the static build with bloc id',
+          'should call storage.write'
+          'when onTransition is called using the static build with bloc id',
           () async {
         delegate = await HydratedBlocDelegate.build();
         final transition = Transition(
@@ -104,8 +105,8 @@ void main() {
 
     group('Custom Storage Directory', () {
       test(
-          'should call storage.write when onTransition is called using the static build',
-          () async {
+          'should call storage.write'
+          'when onTransition is called using the static build', () async {
         delegate = await HydratedBlocDelegate.build(
           storageDirectory: Directory.current,
         );
@@ -122,7 +123,8 @@ void main() {
       });
 
       test(
-          'should call storage.write when onTransition is called using the static build with bloc id',
+          'should call storage.write'
+          'when onTransition is called using the static build with bloc id',
           () async {
         delegate = await HydratedBlocDelegate.build(
           storageDirectory: Directory.current,

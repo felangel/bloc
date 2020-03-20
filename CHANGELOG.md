@@ -1,3 +1,7 @@
+# 3.1.0
+
+- Persist `initialState` when initialized.
+
 # 3.0.0
 
 - Updated to `bloc: ^3.0.0`

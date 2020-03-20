@@ -15,7 +15,7 @@ void main() {
       var response = '.';
       HydratedBlocStorage hydratedStorage;
 
-      channel.setMockMethodCallHandler((MethodCall methodCall) async {
+      channel.setMockMethodCallHandler((methodCall) async {
         return response;
       });
 
@@ -42,7 +42,8 @@ void main() {
         });
 
         test(
-            'returns null value when file exists but contains corrupt json and deletes the file',
+            'returns null value'
+            'when file exists but contains corrupt json and deletes the file',
             () async {
           final file = File('./.hydrated_bloc.json');
           file.writeAsStringSync("invalid-json");
@@ -126,7 +127,8 @@ void main() {
         });
 
         test(
-            'returns null value when file exists but contains corrupt json and deletes the file',
+            'returns null value'
+            'when file exists but contains corrupt json and deletes the file',
             () async {
           final file = File('./.hydrated_bloc.json');
           file.writeAsStringSync("invalid-json");
