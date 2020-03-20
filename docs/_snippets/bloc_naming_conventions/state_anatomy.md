@@ -1,0 +1,1 @@
+`BlocSubject` + `Verb (action)` + `State`

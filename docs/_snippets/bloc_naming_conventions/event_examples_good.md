@@ -1,0 +1,4 @@
+`CounterStarted`
+`CounterIncremented`
+`CounterDecremented`
+`CounterIncrementRetried`

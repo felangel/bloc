@@ -8,7 +8,7 @@
 
 ### Anatomie
 
-`BlocSubject` + `Noun (optional)` + `Verb (event)`
+[event](../_snippets/bloc_naming_conventions/event_anatomy.md ':include')
 
 ?> Počáteční eventy by se měly řídit konvencí: `BlocSubject` + `Started`
 
@@ -16,18 +16,11 @@
 
 ✅ **Správně**
 
-`CounterStarted`
-`CounterIncremented`
-`CounterDecremented`
-`CounterIncrementRetried`
+[events_good](../_snippets/bloc_naming_conventions/event_examples_good.md ':include')
 
 ❌ **Špatně**
 
-`Initial`
-`CounterInitialized`
-`Increment`
-`DoIncrement`
-`IncrementCounter`
+[events_bad](../_snippets/bloc_naming_conventions/event_examples_bad.md ':include')
 
 ## State Conventions
 
@@ -35,7 +28,7 @@
 
 ### Anatomy
 
-`BlocSubject` + `Verb (action)` + `State`
+[state](../_snippets/bloc_naming_conventions/state_anatomy.md ':include')
 
 ?> `State` by měl být jedním z následujících: `Initial` | `Success` | `Failure` | `InProgress` a
 počáteční stavy by se měly řídit kovencí: `BlocSubject` + `Initial`.
@@ -44,17 +37,8 @@ počáteční stavy by se měly řídit kovencí: `BlocSubject` + `Initial`.
 
 ✅ **Správně**
 
-`CounterInitial`
-`CounterLoadInProgress`
-`CounterLoadSuccess`
-`CounterLoadFailure`
+[states_good](../_snippets/bloc_naming_conventions/state_examples_good.md ':include')
 
 ❌ **Špatně**
 
-`Initial`
-`Loading`
-`Success`
-`Succeeded`
-`Loaded`
-`Failure`
-`Failed`
+[states_bad](../_snippets/bloc_naming_conventions/state_examples_bad.md ':include')
