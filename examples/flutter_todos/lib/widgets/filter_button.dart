@@ -20,9 +20,10 @@ class FilterButton extends StatelessWidget {
         builder: (context, state) {
       final button = _Button(
         onSelected: (filter) {
-          BlocProvider.of<FilteredTodosBloc>(context).add(UpdateFilter(filter));
+          BlocProvider.of<FilteredTodosBloc>(context)
+              .add(FilterUpdated(filter));
         },
-        activeFilter: state is FilteredTodosLoaded
+        activeFilter: state is FilteredTodosLoadSuccess
             ? state.activeFilter
             : VisibilityFilter.all,
         activeStyle: activeStyle,
