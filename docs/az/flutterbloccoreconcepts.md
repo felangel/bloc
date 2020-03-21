@@ -115,12 +115,11 @@ MultiBlocProvider(
 
 ### BlocListener
 
-**BlocListener** is a Flutter widget which takes a `BlocWidgetListener` and an optional `Bloc` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
-**BlocListener** is a Flutter widget which takes a `BlocWidgetListener` and an optional `Bloc` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
+**BlocListener** `BlocWidgetListener`-i və ötürülə bilən `Bloc`-u götürən, bloc-da olan vəziyyət dəyişikliklərinə cavab olaraq, `listener`-i tətikləyən Flutter widget-idir. Bu widget əsasən, vəziyyət dəyişikliyinə qarşı bir dəfə icra olunan şeylərdə - naviqasiya (bir səhifədən digər səhifəyə keçid, `Snackbar`-ın göstərilməsi, `Dialog`-un göstərilməsi və s kimi şeylərdə istifadə olunmalıdır.
 
-`listener` is only called once for each state change (**NOT** including `initialState`) unlike `builder` in `BlocBuilder` and is a `void` function.
+`listener`, `BlocBuilder`-də `builder`-dən fərqli olaraq, hər vəziyyət dəyişikliyində bir dəfə (`initialState` istisna olmaqla) çağırılır və `void` funksiyadır.
 
-If the bloc parameter is omitted, `BlocListener` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+Əgər bloc parametri ötürülübsə, `BlocListener` avtomatik olaraq, `BlocProvider`-i və cari `BuildContext`-i istifadə edərək, axtarış edəcək.
 
 ```dart
 BlocListener<BlocA, BlocAState>(
@@ -130,8 +129,7 @@ BlocListener<BlocA, BlocAState>(
   child: Container(),
 )
 ```
-
-Only specify the bloc if you wish to provide a bloc that is otherwise not accessible via `BlocProvider` and the current `BuildContext`.
+Yalnız `BlocProvider` və hal-hazırki `BuildContext` ilə əlçatılmayan bloc-u təmin etmək üçün, bloc parametrini qeyd edin.
 
 ```dart
 BlocListener<BlocA, BlocAState>(
@@ -142,7 +140,7 @@ BlocListener<BlocA, BlocAState>(
 )
 ```
 
-If you want fine-grained control over when the listener function is called you can provide an optional `condition` to `BlocListener`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `listener` will be called with `state`. If `condition` returns false, `listener` will not be called with `state`.
+Əgər listener funksiyası çağırılan zaman, nəzarət etmək istəyirsinizsə, ötürülə bilən `condition` parametrini `BlocListener`-ə əlavə edin. `Condition` parametri bir əvvəlki və cari vəziyyətləri qəbul edir və geriyə məntiqi dəyər (boolean) qaytarır. Əgər `condition` geriyə true qaytarırsa, bu zaman `listener` funksiyası cari vəziyyət ilə çağrılır. Əgər `condition` false qaytarırsa, `listener` funksiyası çağrılmayacaq.
 
 ```dart
 BlocListener<BlocA, BlocAState>(
