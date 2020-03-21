@@ -79,7 +79,8 @@ BlocProvider.of<BlocA>(context)
 
 ### MultiBlocProvider
 
-**MultiBlocProvider**  çoxlu `BlocProvider` widget-lərini bir yerə yığan Flutter widget-idir. `MultiBlocProvider` həm oxunaqlığı artırır, həm də  çoxlu sayda `BlocProvider`-ləri  iç-içə yazmağın qarşısını alır. `MultiBlocProvider` istifadə edərək, aşağıdakı formadan:
+**MultiBlocProvider**  çoxlu `BlocProvider` widget-lərini bir yerə yığan Flutter widget-idir. `MultiBlocProvider` həm oxunaqlığı artırır, həm də  çoxlu sayda `BlocProvider`-ləri  iç-içə yazmağın qarşısını alır. 
+`MultiBlocProvider` istifadə edərək, aşağıdakı formadan:
 
 ```dart
 BlocProvider<BlocA>(
@@ -157,9 +158,8 @@ BlocListener<BlocA, BlocAState>(
 
 ### MultiBlocListener
 
-**MultiBlocListener** is a Flutter widget that merges multiple `BlocListener` widgets into one.
-`MultiBlocListener` improves the readability and eliminates the need to nest multiple `BlocListeners`.
-By using `MultiBlocListener` we can go from:
+**MultiBlocListener**  çoxlu `BlocListener` widget-lərini bir yerə yığan Flutter widget-idir. `MultiBlocListener` həm oxunaqlığı artırır, həm də  çoxlu sayda `BlocListener`-ləri  iç-içə yazmağın qarşısını alır. 
+`MultiBlocListener` istifadə edərək, aşağıdakı formadan:
 
 ```dart
 BlocListener<BlocA, BlocAState>(
@@ -174,7 +174,7 @@ BlocListener<BlocA, BlocAState>(
 )
 ```
 
-to:
+bu formaya keçid edə bilərik:
 
 ```dart
 MultiBlocListener(
