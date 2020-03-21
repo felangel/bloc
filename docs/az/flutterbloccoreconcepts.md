@@ -79,7 +79,7 @@ BlocProvider.of<BlocA>(context)
 
 ### MultiBlocProvider
 
-**MultiBlocProvider**  çoxlu `BlocProvider` widget-lərini bir yerə yığan Flutter widget-idir. `MultiBlocProvider` həm oxunuqluğu artırır, həm də  çoxlu sayda `BlocProvider`-ləri  iç-içi yazmağın qarşısını alır. `MultiBlocProvider` istifadə edərək, aşağıdakı formadan:
+**MultiBlocProvider**  çoxlu `BlocProvider` widget-lərini bir yerə yığan Flutter widget-idir. `MultiBlocProvider` həm oxunaqlığı artırır, həm də  çoxlu sayda `BlocProvider`-ləri  iç-içi yazmağın qarşısını alır. `MultiBlocProvider` istifadə edərək, aşağıdakı formadan:
 
 ```dart
 BlocProvider<BlocA>(
