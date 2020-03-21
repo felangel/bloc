@@ -365,4 +365,4 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-At this point we have successfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
+Bu nöqtədə, biz müvəffəqiyyətlə dizayn kodları olan hissəni (presentation layer), məntiqi kodlar olan hissədən (business logic layer) ayırdıq. Diqqət yetirin ki, `CounterPage` widget-i, istifadəçi hər hansı düyməyə basan zaman nə baş verdiyi haqqında heç nə bilmir. Sadəcə, widget `CounterBloc`-a istifadəçinin artırma və yaxud azaltma düyməsinə basdığı haqqında məlumat verir.
