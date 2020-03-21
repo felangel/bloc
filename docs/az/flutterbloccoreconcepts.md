@@ -79,7 +79,7 @@ BlocProvider.of<BlocA>(context)
 
 ### MultiBlocProvider
 
-**MultiBlocProvider**  çoxlu `BlocProvider` widget-lərini bir yerə yığan Flutter widget-idir. `MultiBlocProvider` həm oxunaqlığı artırır, həm də  çoxlu sayda `BlocProvider`-ləri  iç-içi yazmağın qarşısını alır. `MultiBlocProvider` istifadə edərək, aşağıdakı formadan:
+**MultiBlocProvider**  çoxlu `BlocProvider` widget-lərini bir yerə yığan Flutter widget-idir. `MultiBlocProvider` həm oxunaqlığı artırır, həm də  çoxlu sayda `BlocProvider`-ləri  iç-içə yazmağın qarşısını alır. `MultiBlocProvider` istifadə edərək, aşağıdakı formadan:
 
 ```dart
 BlocProvider<BlocA>(
@@ -115,6 +115,7 @@ MultiBlocProvider(
 
 ### BlocListener
 
+**BlocListener** is a Flutter widget which takes a `BlocWidgetListener` and an optional `Bloc` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
 **BlocListener** is a Flutter widget which takes a `BlocWidgetListener` and an optional `Bloc` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
 
 `listener` is only called once for each state change (**NOT** including `initialState`) unlike `builder` in `BlocBuilder` and is a `void` function.
