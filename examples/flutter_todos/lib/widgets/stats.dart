@@ -14,9 +14,11 @@ class Stats extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<StatsBloc, StatsState>(
       builder: (context, state) {
-        if (state is StatsLoading) {
-          return LoadingIndicator(key: FlutterTodosKeys.statsLoadingIndicator);
-        } else if (state is StatsLoaded) {
+        if (state is StatsLoadInProgress) {
+          return LoadingIndicator(
+            key: FlutterTodosKeys.statsLoadInProgressIndicator,
+          );
+        } else if (state is StatsLoadSuccess) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -8,7 +8,7 @@
 
 ### Anatomy
 
-`BlocSubject` + `Noun (optional)` + `Verb (event)`
+[event](../_snippets/bloc_naming_conventions/event_anatomy.md ':include')
 
 ?> Inition load event는 다음과 같이 표기될 수 있습니다: `BlocSubject` + `Started`
 
@@ -16,18 +16,11 @@
 
 ✅ **Good**
 
-`CounterStarted`
-`CounterIncremented`
-`CounterDecremented`
-`CounterIncrementRetried`
+[events_good](../_snippets/bloc_naming_conventions/event_examples_good.md ':include')
 
 ❌ **Bad**
 
-`Initial`
-`CounterInitialized`
-`Increment`
-`DoIncrement`
-`IncrementCounter`
+[events_bad](../_snippets/bloc_naming_conventions/event_examples_bad.md ':include')
 
 ## State Conventions
 
@@ -35,7 +28,7 @@
 
 ### Anatomy
 
-`BlocSubject` + `Verb (action)` + `State`
+[state](../_snippets/bloc_naming_conventions/state_anatomy.md ':include')
 
 ?> `State`는 다음 중 하나입니다: `Initial` | `Success` | `Failure` | `InProgress`.
 초기 state는 다음과 같이 표기 될 수 있습니다: `BlocSubject` + `Initial`.
@@ -44,17 +37,8 @@
 
 ✅ **Good**
 
-`CounterInitial`
-`CounterLoadInProgress`
-`CounterLoadSuccess`
-`CounterLoadFailure`
+[states_good](../_snippets/bloc_naming_conventions/state_examples_good.md ':include')
 
 ❌ **Bad**
 
-`Initial`
-`Loading`
-`Success`
-`Succeeded`
-`Loaded`
-`Failure`
-`Failed`
+[states_bad](../_snippets/bloc_naming_conventions/state_examples_bad.md ':include')

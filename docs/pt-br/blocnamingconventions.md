@@ -8,7 +8,7 @@
 
 ### Anatomia
 
-`BlocSubject` + `Substantivo(opcional)` + `Verbo(evento)`
+[event](../_snippets/bloc_naming_conventions/event_anatomy.md ':include')
 
 ?> Os eventos de carregamento inicial devem seguir a convenção: `BlocSubject` + `Started`
 
@@ -16,19 +16,11 @@
 
 ✅ **Bom**
 
-`CounterStarted`
-`CounterIncremented`
-`CounterDecremented`
-`CounterIncrementRetried`
+[events_good](../_snippets/bloc_naming_conventions/event_examples_good.md ':include')
 
 ❌ **Ruim**
 
-`Initial`
-`CounterInitialized`
-`Increment`
-`DoIncrement`
-`IncrementCounter`
-
+[events_bad](../_snippets/bloc_naming_conventions/event_examples_bad.md ':include')
 
 ## Convenções de Estado
 
@@ -36,7 +28,7 @@
 
 ### Anatomia
 
-`BlocSubject` + `Verbo(ação)` + `State`
+[state](../_snippets/bloc_naming_conventions/state_anatomy.md ':include')
 
 ?> `State` deve ser um dos seguintes: `Inicial` | "Sucesso" | Falha `InProgress` e
 os estados iniciais devem seguir a convenção: `BlocSubject` + `Initial`.
@@ -45,17 +37,8 @@ os estados iniciais devem seguir a convenção: `BlocSubject` + `Initial`.
 
 ✅ **Bom**
 
-`CounterInitial`
-`CounterLoadInProgress`
-`CounterLoadSuccess`
-`CounterLoadFailure`
+[states_good](../_snippets/bloc_naming_conventions/state_examples_good.md ':include')
 
 ❌ **Ruim**
 
-`Initial`
-`Loading`
-`Success`
-`Succeeded`
-`Loaded`
-`Failure`
-`Failed`
+[states_bad](../_snippets/bloc_naming_conventions/state_examples_bad.md ':include')

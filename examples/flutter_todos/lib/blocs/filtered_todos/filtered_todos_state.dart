@@ -8,13 +8,13 @@ abstract class FilteredTodosState extends Equatable {
   List<Object> get props => [];
 }
 
-class FilteredTodosLoading extends FilteredTodosState {}
+class FilteredTodosLoadInProgress extends FilteredTodosState {}
 
-class FilteredTodosLoaded extends FilteredTodosState {
+class FilteredTodosLoadSuccess extends FilteredTodosState {
   final List<Todo> filteredTodos;
   final VisibilityFilter activeFilter;
 
-  const FilteredTodosLoaded(
+  const FilteredTodosLoadSuccess(
     this.filteredTodos,
     this.activeFilter,
   );
@@ -24,6 +24,6 @@ class FilteredTodosLoaded extends FilteredTodosState {
 
   @override
   String toString() {
-    return 'FilteredTodosLoaded { filteredTodos: $filteredTodos, activeFilter: $activeFilter }';
+    return 'FilteredTodosLoadSuccess { filteredTodos: $filteredTodos, activeFilter: $activeFilter }';
   }
 }

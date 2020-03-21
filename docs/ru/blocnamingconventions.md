@@ -8,7 +8,7 @@
 
 ### Анатомия имен событий
 
-`BlocSubject` + `Noun (optional)` + `Verb (event)`
+[event](../_snippets/bloc_naming_conventions/event_anatomy.md ':include')
 
 ?> События начальной загрузки должны следовать соглашению: `BlocSubject` + `Started`
 
@@ -16,18 +16,11 @@
 
 ✅ **Хорошо**
 
-`CounterStarted`
-`CounterIncremented`
-`CounterDecremented`
-`CounterIncrementRetried`
+[events_good](../_snippets/bloc_naming_conventions/event_examples_good.md ':include')
 
 ❌ **Плохо**
 
-`Initial`
-`CounterInitialized`
-`Increment`
-`DoIncrement`
-`IncrementCounter`
+[events_bad](../_snippets/bloc_naming_conventions/event_examples_bad.md ':include')
 
 ## Именование состояний
 
@@ -35,7 +28,7 @@
 
 ### Анатомия имен состояний
 
-`BlocSubject` + `Verb (action)` + `State`
+[state](../_snippets/bloc_naming_conventions/state_anatomy.md ':include')
 
 ?> `State` должен быть одним из следующих: `Initial` | `Success` | `Failure` | `InProgress` и
 начальные состояния должны следовать соглашению: `BlocSubject` + `Initial`.
@@ -44,17 +37,8 @@
 
 ✅ **Хорошо**
 
-`CounterInitial`
-`CounterLoadInProgress`
-`CounterLoadSuccess`
-`CounterLoadFailure`
+[states_good](../_snippets/bloc_naming_conventions/state_examples_good.md ':include')
 
 ❌ **Плохо**
 
-`Initial`
-`Loading`
-`Success`
-`Succeeded`
-`Loaded`
-`Failure`
-`Failed`
+[states_bad](../_snippets/bloc_naming_conventions/state_examples_bad.md ':include')

@@ -8,7 +8,7 @@
 
 ### 构成
 
-`Bloc主题` + `名词 (可选)` + `动词 (event)`
+[event](../_snippets/bloc_naming_conventions/event_anatomy.md ':include')
 
 ?> 初始加载事件应遵循以下约定：`BlocSubject` +`Started`
 
@@ -16,18 +16,11 @@
 
 ✅ **推荐的命名**
 
-`CounterStarted`
-`CounterIncremented`
-`CounterDecremented`
-`CounterIncrementRetried`
+[events_good](../_snippets/bloc_naming_conventions/event_examples_good.md ':include')
 
 ❌ **不推荐的命名**
 
-`Initial`
-`CounterInitialized`
-`Increment`
-`DoIncrement`
-`IncrementCounter`
+[events_bad](../_snippets/bloc_naming_conventions/event_examples_bad.md ':include')
 
 ## 命名状态（State)
 
@@ -35,7 +28,7 @@
 
 ### 构成
 
-`BlocSubject` + `Verb (action)` + `State`
+[state](../_snippets/bloc_naming_conventions/state_anatomy.md ':include')
 
 ?> 状态（`State`) 应为以下之一： `成功`| `失败`| `在过程中`和初始状态应遵循以下约定：`BlocSubject` +`Initial`。
 
@@ -43,17 +36,8 @@
 
 ✅ **推荐的命名**
 
-`CounterInitial`
-`CounterLoadInProgress`
-`CounterLoadSuccess`
-`CounterLoadFailure`
+[states_good](../_snippets/bloc_naming_conventions/state_examples_good.md ':include')
 
 ❌ **不推荐的命名**
 
-`Initial`
-`Loading`
-`Success`
-`Succeeded`
-`Loaded`
-`Failure`
-`Failed`
+[states_bad](../_snippets/bloc_naming_conventions/state_examples_bad.md ':include')

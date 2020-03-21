@@ -5,10 +5,10 @@ abstract class StatsEvent extends Equatable {
   const StatsEvent();
 }
 
-class UpdateStats extends StatsEvent {
+class StatsUpdated extends StatsEvent {
   final List<Todo> todos;
 
-  const UpdateStats(this.todos);
+  const StatsUpdated(this.todos);
 
   @override
   List<Object> get props => [todos];
