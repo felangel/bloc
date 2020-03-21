@@ -47,9 +47,9 @@ BlocBuilder<BlocA, BlocAState>(
 
 ### BlocProvider
 
-**BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
+**BlocProvider** bloc-u onun uşaqlarına (children) `BlocProvider.of<T>(context)` ilə təmin edən Flutter widget-idir.Bu dependency injection (DI) widget-i kimi istifadə olunur, belə ki, bloc-un tək obyekti, elan olunduğu yerdən aşağıda olan çoxlu sayda widget-ə təmin oluna bilər.
 
-In most cases, `BlocProvider` should be used to create new `blocs` which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle closing the bloc.
+Çox hallarda, `BlocProvider` yeni `bloc`-ların yaradılması və onların alt hissədə olan widget-lərə çatdırılması üçün istifadə olunur. Bu halda, `BlocProvider` həm bloc-un yaradılması, həm də avtomatik olaraq, bloc-un bağlanmasını öz öhdəliyinə götürür.
 
 ```dart
 BlocProvider(
@@ -58,7 +58,7 @@ BlocProvider(
 );
 ```
 
-In some cases, `BlocProvider` can be used to provide an existing bloc to a new portion of the widget tree. This will be most commonly used when an existing `bloc` needs to be made available to a new route. In this case, `BlocProvider` will not automatically close the bloc since it did not create it.
+Bəzi hallarda, `BlocProvider` mövcud olan bloc-un widget ağacının yeni hissəsinə təmin edilməsi üçün istifadə oluna bilər. Əsasən, mövcud olan `bloc`-un yeni route-a çatdırılması üçün istifadə olunur. Bu halda, `BlocProvider` bloc-un yaradılmasını və avtomatik olaraq, bağlanmasını həyata keçirməyəcək.
 
 ```dart
 BlocProvider.value(
@@ -67,7 +67,7 @@ BlocProvider.value(
 );
 ```
 
-then from either `ChildA`, or `ScreenA` we can retrieve `BlocA` with:
+Beləliklə, hər hansı `ChildA` və yaxud `ScreenA`-dan `BlocA`-nı aşağıdakı üsulla əldə edə bilərik:
 
 ```dart
 // with extensions
