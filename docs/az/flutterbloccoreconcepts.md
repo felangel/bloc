@@ -289,9 +289,9 @@ MultiRepositoryProvider(
 )
 ```
 
-## Usage
+## Istifadəsi
 
-Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
+İndi isə, `CounterPage` ilə `CounterBloc`-u `BlocBuilder` istifadə edərək, necə qoşacağımıza baxaq.
 
 ### counter_bloc.dart
 
