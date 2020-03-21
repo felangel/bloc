@@ -195,10 +195,9 @@ MultiBlocListener(
 
 ### BlocConsumer
 
-**BlocConsumer** exposes a `builder` and `listener` in order to react to new states. `BlocConsumer` is analogous to a nested `BlocListener` and `BlocBuilder` but reduces the amount of boilerplate needed. `BlocConsumer` should only be used when it is necessary to both rebuild UI and execute other reactions to state changes in the `bloc`. `BlocConsumer` takes a required `BlocWidgetBuilder` and `BlocWidgetListener` and an optional `bloc`, `BlocBuilderCondition`, and `BlocListenerCondition`.
+**BlocConsumer**  yeni vəziyyətlərə reaksiya vermək üçün, `builder` və `listener` istifadə edir. `BlocConsumer` iç-içə yazılmış `BlocListener` və `BlocBuilder`-ə bərabərdir, amma onlardan fərqli olaraq, qarışıq kod yazılışını azaldır. `BlocConsumer` bloc-da baş verən vəziyyət dəyişiklərinə uyğun olaraq,  həm istifadəçi interfeysinin yenidən qurulması, həm də digər reaksiyaların edilməsi üçün istifadə edilməlidir. `BlocConsumer` üç buraxıla bilən - `bloc`, `BlocBuilderCondition` və `BlocListenerCondition` və iki tələb olunan `BlocWidgetBuilder` və `BlocWidgetListener`-i parametr olaraq götürür. 
 
-If the `bloc` parameter is omitted, `BlocConsumer` will automatically perform a lookup using
-`BlocProvider` and the current `BuildContext`.
+Əgər bloc parametri ötürülübsə, `BlocConsumer` avtomatik olaraq, `BlocProvider`-i və cari `BuildContext`-i istifadə edərək, axtarış edəcək.
 
 ```dart
 BlocConsumer<BlocA, BlocAState>(
@@ -211,7 +210,7 @@ BlocConsumer<BlocA, BlocAState>(
 )
 ```
 
-An optional `listenWhen` and `buildWhen` can be implemented for more granular control over when `listener` and `builder` are called. The `listenWhen` and `buildWhen` will be invoked on each `bloc` `state` change. They each take the previous `state` and current `state` and must return a `bool` which determines whether or not the `builder` and/or `listener` function will be invoked. The previous `state` will be initialized to the `state` of the `bloc` when the `BlocConsumer` is initialized. `listenWhen` and `buildWhen` are optional and if they aren't implemented, they will default to `true`.
+`listener` və `builder` çağırılan zaman nəzarət etmək istəyiriksə, ötürülə bilən `listenWhen` və `buildWhen` qeyd edilə bilər. `listenWhen` və `buildWhen` hər `bloc` `vəziyyət`-i dəyişə zaman çağırılır. Onlar həm cari, həm də əvvəldə `vəziyyət`-i götürüb, geriyə `bool` qaytarmalıdır, hansı ki, buna əsasən, `builder` və yaxud `listener`-in işləyib-işləməməsi müəyyən edilir. `BlocConsumer` başladılan zaman, əvvəlki vəziyyət, `bloc`-ı v`vəziyyət`-inə uyğun olaraq, başladılacaq. `listenWhen` və `buildWhen` ötürülə bilər və əgər ötürülübsə, o zaman susmaya görə, `true` qaytarılacaq.
 
 ```dart
 BlocConsumer<BlocA, BlocAState>(
