@@ -1,16 +1,16 @@
-# Flutter Bloc Core Concepts
+# Flutter Bloc-un Əsas Konseptləri
 
-?> Please make sure to carefully read and understand the following sections before working with [flutter_bloc](https://pub.dev/packages/flutter_bloc).
+?> Zəhmət olmasa, [flutter_bloc](https://pub.dev/packages/flutter_bloc) ilə işləməzdən əvvəl, aşağıdakı bölmələri diqqətli şəkildə oxuduğunuzdan və başa düşdüyünüzdən əmin olun.
 
-## Bloc Widgets
+## Bloc Widget-ləri
 
 ### BlocBuilder
 
-**BlocBuilder** is a Flutter widget which requires a `Bloc` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed. The `builder` function will potentially be called many times and should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that returns a widget in response to the state.
+**BlocBuilder** `Bloc` və `builder` funksiyasını tələb edən Flutter Widgetidir. `BlocBuilder` yeni vəziyyətlərə cavab olaraq, widgetin yaradılmasını idarə edir. `Bloc Builder` `StreamBuilder`-ə çox oxşardır, amma ondan fərqli olaraq, qarışıq kodun həcmini azaltmaq üçün daha sadə struktura malikdir. `Builder` funksiyası dəfələrlə çağrılan funksiyadır və gərəkdir ki, vəziyyətə uyğun olaraq, sadəcə widget-i geri qaytaran [xalis funksiya](https://en.wikipedia.org/wiki/Pure_function) olsun.
 
-See `BlocListener` if you want to "do" anything in response to state changes such as navigation, showing a dialog, etc...
+Əgər vəziyyət dəyişikliyinə cavab olaraq, müxtəlif şeylər - naviqasiya (bir səhifədən digərin keçid), dialoqun göstərilməsi və s kimi şeylər etmək istəyirsinizsə, `BlocListener`-ə baxın.
 
-If the bloc parameter is omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+Əgər bloc parametri ötürülübsə, `BlocBuilder` `BlocProvider` və `BuildContext`-i istifadə edərək, avtomatik axtarışı həyata keçirəcək.
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
@@ -20,7 +20,7 @@ BlocBuilder<BlocA, BlocAState>(
 )
 ```
 
-Only specify the bloc if you wish to provide a bloc that will be scoped to a single widget and isn't accessible via a parent `BlocProvider` and the current `BuildContext`.
+Yalnız `BlocProvider` və hal-hazırki `BuildContext` ilə əlçatılmayan və yalnız bir widget üçün nəzərdə tutulduqda, bloc parametrini qeyd edin.
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
@@ -31,7 +31,7 @@ BlocBuilder<BlocA, BlocAState>(
 )
 ```
 
-If you want fine-grained control over when the builder function is called you can provide an optional `condition` to `BlocBuilder`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `builder` will be called with `state` and the widget will rebuild. If `condition` returns false, `builder` will not be called with `state` and no rebuild will occur.
+Əgər builder funksiyası çağırılan zaman, nəzarət etmək istəyirsinizsə, ötürülə bilən `condition` parametrini `BlocBuilder`-ə əlavə edin. `Condition` parametri bir əvvəlki və cari vəziyyətləri qəbul edir və geriyə məntiqi dəyər (boolean) qaytarır. Əgər `condition` geriyə true qaytarırsa, bu zaman `builder` funksiyası cari vəziyyət ilə çağrılır və widget yenidən qurulur. Əgər `condition` false qaytarırsa, `builder` funksiyası çağrılmayacaq və `state`-ə görə heç bir dəyişiklik olmayacaq.
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
