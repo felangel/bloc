@@ -210,7 +210,7 @@ BlocConsumer<BlocA, BlocAState>(
 )
 ```
 
-`listener` və `builder` çağırılan zaman nəzarət etmək istəyiriksə, ötürülə bilən `listenWhen` və `buildWhen` qeyd edilə bilər. `listenWhen` və `buildWhen` hər `bloc` `vəziyyət`-i dəyişə zaman çağırılır. Onlar həm cari, həm də əvvəldə `vəziyyət`-i götürüb, geriyə `bool` qaytarmalıdır, hansı ki, buna əsasən, `builder` və yaxud `listener`-in işləyib-işləməməsi müəyyən edilir. `BlocConsumer` başladılan zaman, əvvəlki vəziyyət, `bloc`-ı v`vəziyyət`-inə uyğun olaraq, başladılacaq. `listenWhen` və `buildWhen` ötürülə bilər və əgər ötürülübsə, o zaman susmaya görə, `true` qaytarılacaq.
+`listener` və `builder` çağırılan zaman nəzarət etmək istəyiriksə, ötürülə bilən `listenWhen` və `buildWhen` qeyd edilə bilər. `listenWhen` və `buildWhen` hər `bloc` `vəziyyət`-i dəyişə zaman çağırılır. Onlar həm cari, həm də əvvəldə `vəziyyət`-i götürüb, geriyə `bool` qaytarmalıdır, hansı ki, buna əsasən, `builder` və yaxud `listener`-in işləyib-işləməməsi müəyyən edilir. `BlocConsumer` başladılan zaman, əvvəlki vəziyyət, `bloc`-ı `vəziyyət`-inə uyğun olaraq başladılacaq. `listenWhen` və `buildWhen` ötürülə bilər və əgər ötürülübsə, o zaman susmaya görə, `true` qaytarılacaq.
 
 ```dart
 BlocConsumer<BlocA, BlocAState>(
