@@ -233,7 +233,7 @@ BlocConsumer<BlocA, BlocAState>(
 
 ### RepositoryProvider
 
-**RepositoryProvider** is a Flutter widget which provides a repository to its children via `RepositoryProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a repository can be provided to multiple widgets within a subtree. `BlocProvider` should be used to provide blocs whereas `RepositoryProvider` should only be used for repositories.
+**RepositoryProvider** repository-ni onun uşaqlarına `RepositoryProvider.of<T>(context)` vasitəsilə təmin edən Flutter Widget-idir. Bu dependency injection (DI) widget-i kimi istifadə olunur, belə ki, repository-in tək obyekti, elan olunduğu yerdən aşağıda olan çoxlu sayda widget-ə təmin oluna bilər. `BlocProvider`-in təkcə bloc-ları təmin etdiyi kimi, `RepositoryProvider` də yalnız repository-lər üçün istifadə olunmalıdır.
 
 ```dart
 RepositoryProvider(
@@ -242,7 +242,7 @@ RepositoryProvider(
 );
 ```
 
-then from `ChildA` we can retrieve the `Repository` instance with:
+Beləliklə, hər hansı `ChildA`-dan `Repository` obyektini aşağıdakı üsulla əldə edə bilərik:
 
 ```dart
 // with extensions
@@ -254,9 +254,8 @@ RepositoryProvider.of<RepositoryA>(context)
 
 ### MultiRepositoryProvider
 
-**MultiRepositoryProvider** is a Flutter widget that merges multiple `RepositoryProvider` widgets into one.
-`MultiRepositoryProvider` improves the readability and eliminates the need to nest multiple `RepositoryProvider`.
-By using `MultiRepositoryProvider` we can go from:
+**MultiRepositoryProvider**  çoxlu `RepositoryProvider` widget-lərini bir yerə yığan Flutter widget-idir. `MultiBlocProvider` həm oxunaqlığı artırır, həm də  çoxlu sayda `RepositoryProvider`-ləri  iç-içə yazmağın qarşısını alır. 
+`MultiRepositoryProvider` istifadə edərək, aşağıdakı formadan:
 
 ```dart
 RepositoryProvider<RepositoryA>(
@@ -271,7 +270,7 @@ RepositoryProvider<RepositoryA>(
 )
 ```
 
-to:
+bu formaya keçid edə bilərik:
 
 ```dart
 MultiRepositoryProvider(
