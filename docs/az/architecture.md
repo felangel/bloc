@@ -1,8 +1,8 @@
-# Architecture
+# Arxitektura
 
-![Bloc Architecture](../assets/bloc_architecture.png)
+![Bloc Arxitekturası](../assets/bloc_architecture.png)
 
-Using Bloc allows us to separate our application into three layers:
+Bloc-un istifadəsi bizə tətbiqimizi 3 təbəqəyə bölməyə imkan verir:
 
 - Data
   - Data Provider
@@ -10,7 +10,7 @@ Using Bloc allows us to separate our application into three layers:
 - Business Logic
 - Presentation
 
-We're going to start at the lowest level layer (farthest from the user interface) and work our way up to the presentation layer.
+Ən aşağı təqəbədən (istifadə interfeysinə ən uzaq olan) başlayırıq və yolumuzu presentation təbəqəsinə qədər davam etdirəcəyik.
 
 ## Data Layer
 
