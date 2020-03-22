@@ -12,23 +12,23 @@ Bloc-un istifadəsi bizə tətbiqimizi 3 təbəqəyə bölməyə imkan verir:
 
 Ən aşağı təqəbədən (istifadəçi interfeysinə ən uzaq olan) başlayırıq və yolumuzu presentation təbəqəsinə qədər davam etdirəcəyik.
 
-## Data Layer
+## Data Təbəqəsi
 
-> The data layer's responsibility is to retrieve/manipulate data from one or more sources.
+> Data təbəqəsinin öhdəliyi bir və yaxud çox mənbədən gələn dataların əldə edilməsi və manipulyasiya edilməsidir.
 
-The data layer can be split into two parts:
+Data təbəqəsi 2 hissəyə bölünə bilər:
 
 - Repository
 - Data Provider
 
-This layer is the lowest level of the application and interacts with databases, network requests, and other asynchronous data sources.
+Bu təbəqə tətbiqin ən aşağı səviyyəsidir və database-lər, şəbəkə sorğuları və başqa asinxron data mənbələri ilə əlaqə yaradır.
 
 ### Data Provider
 
-> The data provider's responsibility is to provide raw data. The data provider should be generic and versatile.
+> Data provider-in öhdəliyi xam datanı (raw data) təmin etməkdir. Data provider ümumi və çox yönlü olmalıdır.
 
-The data provider will usually expose simple APIs to perform [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
-We might have a `createData`, `readData`, `updateData`, and `deleteData` method as part of our data layer.
+Data provider adətən [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) əməliyyatlarını yerinə yetirmək üçün sadə API-lar təmin edir.
+Data layer-in bir hissəsi kimi, `createData`, `readData`, `updateData`, və `deleteData` kimi metodlarımız ola bilər.
 
 ```dart
 class DataProvider {
@@ -40,7 +40,7 @@ class DataProvider {
 
 ### Repository
 
-> The repository layer is a wrapper around one or more data providers with which the Bloc Layer communicates.
+> Repository təbəqəsi Bloc layer-in əlaqə saxladığı və içərisində bir və ya daha çox data provider-i əhatə edən təbəqədir.
 
 ```dart
 class Repository {
@@ -57,9 +57,9 @@ class Repository {
 }
 ```
 
-As you can see, our repository layer can interact with multiple data providers and perform transformations on the data before handing the result to the business logic Layer.
+Gördüyünüz kimi, repository təbəqəsi çoxlu sayda data provider-lərlə əlaqə saxlaya və data-ları məntiqi kodlar olan hissəyə (Bloc-a) ötürməmişdən əvvəl onlar üzərində dəyişikliklər apara bilər.
 
-## Bloc (Business Logic) Layer
+## Bloc (Business Logic) Təbəqəsi
 
 > The bloc layer's responsibility is to respond to events from the presentation layer with new states. The bloc layer can depend on one or more repositories to retrieve data needed to build up the application state.
 
