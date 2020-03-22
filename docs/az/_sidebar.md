@@ -4,8 +4,8 @@
   - [Niyə Bloc?](az/whybloc.md)
   - Əsas Konseptlər
     - [bloc](az/coreconcepts.md)
-    - [flutter_bloc](flutterbloccoreconcepts.md)
-  - [Arxitektura](architecture.md)
+    - [flutter_bloc](az/flutterbloccoreconcepts.md)
+  - [Arxitektura](az/architecture.md)
   - [Testing](testing.md)
   - [Adlandırma Konvensiyaları](blocnamingconventions.md)
   - [Suallar](faqs.md)

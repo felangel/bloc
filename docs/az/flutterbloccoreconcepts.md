@@ -289,7 +289,7 @@ MultiRepositoryProvider(
 )
 ```
 
-## Istifadəsi
+## İstifadəsi
 
 İndi isə, `CounterPage` ilə `CounterBloc`-u `BlocBuilder` istifadə edərək, necə qoşacağımıza baxaq.
 
