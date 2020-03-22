@@ -30,32 +30,13 @@ Essa camada é o nível mais baixo do aplicativo e interage com bancos de dados,
 A camada provedora de dados geralmente expõe APIs simples para executar operações [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete).
 Podemos ter métodos `createData`, `readData`, `updateData` e `deleteData` como parte de nossa camada de dados.
 
-```dart
-class DataProvider {
-    Future<RawData> readData() async {
-        // Read from DB or make network request etc...
-    }
-}
-```
+[data_provider.dart](../_snippets/architecture/data_provider.dart.md ':include')
 
 ### Repositório
 
 > A camada de repositório é um invólucro em torno de um ou mais provedores de dados com os quais a camada de bloc se comunica.
 
-```dart
-class Repository {
-    final DataProviderA dataProviderA;
-    final DataProviderB dataProviderB;
-
-    Future<Data> getAllDataThatMeetsRequirements() async {
-        final RawDataA dataSetA = await dataProviderA.readData();
-        final RawDataB dataSetB = await dataProviderB.readData();
-
-        final Data filteredData = _filterData(dataSetA, dataSetB);
-        return filteredData;
-    }
-}
-```
+[repository.dart](../_snippets/architecture/repository.dart.md ':include')
 
 Como você pode ver, nossa camada de repositório pode interagir com vários provedores de dados e realizar transformações nos dados antes de entregar o resultado à camada de lógica de negócios.
 
@@ -65,22 +46,7 @@ Como você pode ver, nossa camada de repositório pode interagir com vários pro
 
 Pense na camada de bloc como a ponte entre a interface do usuário (camada de apresentação) e a camada de dados. A camada de bloc pega os eventos gerados pela entrada do usuário e depois se comunica com o repositório para criar um novo estado para a camada de apresentação consumir.
 
-```dart
-class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
-    final Repository repository;
-
-    Stream mapEventToState(event) async* {
-        if (event is AppStarted) {
-            try {
-                final data = await repository.getAllDataThatMeetsRequirements();
-                yield Success(data);
-            } catch (error) {
-                yield Failure(error);
-            }
-        }
-    }
-}
-```
+[business_logic_component.dart](../_snippets/architecture/business_logic_component.dart.md ':include')
 
 ### Comunicação entre Blocs
 
@@ -88,25 +54,7 @@ class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
 
 Os blocs podem ter dependências de outros blocs para reagir às mudanças de estado. No exemplo a seguir, `MyBloc` depende de `OtherBloc` e pode `adicionar` eventos em resposta a alterações de estado em `OtherBloc`. O `StreamSubscription` é fechado na instrução `close` no `MyBloc`, a fim de evitar vazamentos de memória.
 
-```dart
-class MyBloc extends Bloc {
-  final OtherBloc otherBloc;
-  StreamSubscription otherBlocSubscription;
-
-  MyBloc(this.otherBloc) {
-    otherBlocSubscription = otherBloc.listen((state) {
-        // React to state changes here.
-        // Add events here to trigger changes in MyBloc.
-    });
-  }
-
-  @override
-  Future<void> close() {
-    otherBlocSubscription.cancel();
-    return super.close();
-  }
-}
-```
+[bloc_to_bloc_communication.dart](../_snippets/architecture/bloc_to_bloc_communication.dart.md ':include')
 
 ## Camada de Apresentação
 
@@ -118,18 +66,6 @@ Nesse cenário, a camada de apresentação adicionaria um evento `AppStart`.
 
 Além disso, a camada de apresentação terá que descobrir o que renderizar na tela com base no estado da camada do bloc.
 
-```dart
-class PresentationComponent {
-    final Bloc bloc;
-
-    PresentationComponent() {
-        bloc.add(AppStarted());
-    }
-
-    build() {
-        // renderizar UI baseado no estado do bloc
-    }
-}
-```
+[presentation_component.dart](../_snippets/architecture/presentation_component.dart.md ':include')
 
 Até agora, apesar de termos alguns trechos de código, tudo isso tem sido de alto nível. Na seção do tutorial, vamos juntar tudo isso à medida que criamos vários aplicativos de exemplo diferentes.
