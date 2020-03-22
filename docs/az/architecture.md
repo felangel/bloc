@@ -114,7 +114,7 @@ class MyBloc extends Bloc {
 
 Əksər tətbiqlər istifadəçiyə göstərməyə lazım olan data-nı əldə etmək üçün tətbiqi tətikləyən `AppStart` hadisəsi ilə başlayır.
 
-In this scenario, the presentation layer would add an `AppStart` event.
+Bu mənzərəyə əsasən, presentation təbəqəsi `AppStart` hadisəsini əlavə etməlidir.
 
 In addition, the presentation layer will have to figure out what to render on the screen based on the state from the bloc layer.
 
