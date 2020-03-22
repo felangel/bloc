@@ -10,7 +10,7 @@ Bloc-un istifadəsi bizə tətbiqimizi 3 təbəqəyə bölməyə imkan verir:
 - Business Logic
 - Presentation
 
-Ən aşağı təqəbədən (istifadə interfeysinə ən uzaq olan) başlayırıq və yolumuzu presentation təbəqəsinə qədər davam etdirəcəyik.
+Ən aşağı təqəbədən (istifadəçi interfeysinə ən uzaq olan) başlayırıq və yolumuzu presentation təbəqəsinə qədər davam etdirəcəyik.
 
 ## Data Layer
 
