@@ -84,7 +84,7 @@ class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
 
 ### Bloc-un-Bloc-a rabitəsi
 
-> Hər bir bloc-un vəziyyət stream-i var, digər bloc-lar həmin bloc-da olan dəyişikliyə rekasiya vermək üçün stream-ə abunə ola (subscribe) bilərlər.
+> Hər bir bloc-un vəziyyət stream-i var, digər bloc-lar həmin bloc-da olan dəyişikliyə reaksiya vermək üçün stream-ə abunə ola (subscribe) bilərlər.
 
 Bloc-ların digər bloc-larda olan vəziyyət dəyişikliklərindən asılılığı ola bilər. Aşağıdakı nümunədə, `MyBloc`-un `OtherBloc`-dan asılılığı vardır və `OtherBloc`-da baş verən vəziyyət dəyişikliklərinə cavab olaraq, hadisələri `add` edə bilər. Yaddaş çatışmazlığı problemlərinin qarşısını almaq üçün `StreamSubsctiption`-ı `MyBloc`-da olan `close` metodunu əlavə edərək bağlanılır.
 
@@ -108,11 +108,11 @@ class MyBloc extends Bloc {
 }
 ```
 
-## Presentation Layer
+## Presentation Təbəqəsi
 
-> The presentation layer's responsibility is to figure out how to render itself based on one or more bloc states. In addition, it should handle user input and application lifecycle events.
+> Presentation təbəqəsinin öhdəliyi bloc-da baş verən bir və yaxud daha çox vəziyyətlərə uyğun olaraq, özünü necə render etməsini bilməsidir. Əlavə olaraq, istifadəçinin input-larını və tətbiqinin həyat hadisələrini (lifestyle events) idarə etməlidir.
 
-Most applications flows will start with a `AppStart` event which triggers the application to fetch some data to present to the user.
+Əksər tətbiqlər istifadəçiyə göstərməyə lazım olan data-nı əldə etmək üçün tətbiqi tətikləyən `AppStart` hadisəsi ilə başlayır.
 
 In this scenario, the presentation layer would add an `AppStart` event.
 
