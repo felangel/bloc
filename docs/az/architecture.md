@@ -116,7 +116,7 @@ class MyBloc extends Bloc {
 
 Bu mənzərəyə əsasən, presentation təbəqəsi `AppStart` hadisəsini əlavə etməlidir.
 
-In addition, the presentation layer will have to figure out what to render on the screen based on the state from the bloc layer.
+Əlavə olaraq, presentation təbəqəsi bloc təbəqəsindən gələn vəziyyət əsasında nəyi render etməli olduğunu bilməlidir.
 
 ```dart
 class PresentationComponent {
@@ -132,4 +132,5 @@ class PresentationComponent {
 }
 ```
 
-So far, even though we've had some code snippets, all of this has been fairly high level. In the tutorial section we're going to put all this together as we build several different example apps.
+
+İndiyə qədər bir neçə kod parçası olsa da, bütün bunlar kifayət qədər yüksək səviyyədədir. Dərslik bölməsində bir neçə fərqli nümunə tətbiqini qurduğumuz zaman bunları bir araya gətirəcəyik.
