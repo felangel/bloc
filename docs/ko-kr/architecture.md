@@ -30,32 +30,13 @@ data layer은 두 부분으로 나눌 수 있습니다:
 data provider는 주로 [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) 작업을 하기 위해 간단한 API를 노출합니다.
 Data layer의 함수로는 보통 `createData`, `readData`, `updateData`, `deleteData`가 있을 것입니다.
 
-```dart
-class DataProvider {
-    Future<RawData> readData() async {
-        // Read from DB or make network request etc...
-    }
-}
-```
+[data_provider.dart](../_snippets/architecture/data_provider.dart.md ':include')
 
 ### Repository
 
 > repository layer는 data provider를 포괄해서 Bloc Layer와 소통할 수 있게 해줍니다.
 
-```dart
-class Repository {
-    final DataProviderA dataProviderA;
-    final DataProviderB dataProviderB;
-
-    Future<Data> getAllDataThatMeetsRequirements() async {
-        final RawDataA dataSetA = await dataProviderA.readData();
-        final RawDataB dataSetB = await dataProviderB.readData();
-
-        final Data filteredData = _filterData(dataSetA, dataSetB);
-        return filteredData;
-    }
-}
-```
+[repository.dart](../_snippets/architecture/repository.dart.md ':include')
 
 위의 함수와 같이, repository layer는 여러 data provider와 상호작용할 수 있으며 결과값을 business logic layer에 전달하기 전에 data를 변모시키기도 합니다.
 
@@ -65,22 +46,7 @@ class Repository {
 
 bloc layer을 유저 인터페이스(presentation layer)와 data layer 사이의 연결 다리라고 생각하면 될 것 같습니다. bloc layer은 user input으로 생성된 event를 받아 presentation layer에게 제공할 새로운 state를 만들기 위해 repository와 소통합니다.
 
-```dart
-class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
-    final Repository repository;
-
-    Stream mapEventToState(event) async* {
-        if (event is AppStarted) {
-            try {
-                final data = await repository.getAllDataThatMeetsRequirements();
-                yield Success(data);
-            } catch (error) {
-                yield Failure(error);
-            }
-        }
-    }
-}
-```
+[business_logic_component.dart](../_snippets/architecture/business_logic_component.dart.md ':include')
 
 ### Bloc-to-Bloc Communication
 
@@ -90,25 +56,7 @@ Blocs can have dependencies on other blocs in order to react to their state chan
 
 Bloc은 state 변화에 대응하기 위해 다른 bloc에 의존성을 가지고 있을 수 있습니다. 다음 예시에서는, `MyBloc`은 `OtherBloc`에 의존성을 가지고 있으며 `OtherBloc`에서 발생하는 state 변화에 event를 `추가`할 수 있습니다. `StreamSubscription`는 메모리가 세는 것을 방지하기 위해 `MyBloc` 내의 `close` 함수에서 close가 가능합니다.
 
-```dart
-class MyBloc extends Bloc {
-  final OtherBloc otherBloc;
-  StreamSubscription otherBlocSubscription;
-
-  MyBloc(this.otherBloc) {
-    otherBlocSubscription = otherBloc.listen((state) {
-        // React to state changes here.
-        // Add events here to trigger changes in MyBloc.
-    });
-  }
-
-  @override
-  Future<void> close() {
-    otherBlocSubscription.cancel();
-    return super.close();
-  }
-}
-```
+[bloc_to_bloc_communication.dart](../_snippets/architecture/bloc_to_bloc_communication.dart.md ':include')
 
 ## Presentation Layer
 
@@ -120,18 +68,6 @@ class MyBloc extends Bloc {
 
 그리고 presentation layer는 bloc layer로부터 온 state에 따라 무엇을 보여줄지 결정합니다.
 
-```dart
-class PresentationComponent {
-    final Bloc bloc;
-
-    PresentationComponent() {
-        bloc.add(AppStarted());
-    }
-
-    build() {
-        // render UI based on bloc state
-    }
-}
-```
+[presentation_component.dart](../_snippets/architecture/presentation_component.dart.md ':include')
 
 여기까지, 코드의 일부만 살펴보았지만, 이것은 꽤 높은 수준의 내용입니다. 튜토리얼 섹션에서 다른 예제 앱을 만들어 보며 살펴본 내용을 응용해보겠습니다.
