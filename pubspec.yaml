@@ -17,3 +17,4 @@ dev_dependencies:
     sdk: flutter
   mockito: ^4.0.0
   effective_dart: ^1.1.1
+  uuid: ^2.0.4

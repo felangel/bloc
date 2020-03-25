@@ -27,8 +27,7 @@ void main() {
       bloc = MockBloc();
     });
 
-    tearDownAll(() async {
-      delegate = await HydratedBlocDelegate.build();
+    tearDown(() {
       delegate.storage.clear();
     });
 
