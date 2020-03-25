@@ -194,7 +194,7 @@ MultiBlocListener(
 
 ```dart
 RepositoryProvider(
-  builder: (context) => RepositoryA(),
+  create: (context) => RepositoryA(),
   child: ChildA(),
 );
 ```
@@ -211,11 +211,11 @@ RepositoryProvider.of<RepositoryA>(context)
 
 ```dart
 RepositoryProvider<RepositoryA>(
-  builder: (context) => RepositoryA(),
+  create: (context) => RepositoryA(),
   child: RepositoryProvider<RepositoryB>(
-    builder: (context) => RepositoryB(),
+    create: (context) => RepositoryB(),
     child: RepositoryProvider<RepositoryC>(
-      builder: (context) => RepositoryC(),
+      create: (context) => RepositoryC(),
       child: ChildA(),
     )
   )
@@ -228,13 +228,13 @@ udělat toto:
 MultiRepositoryProvider(
   providers: [
     RepositoryProvider<RepositoryA>(
-      builder: (context) => RepositoryA(),
+      create: (context) => RepositoryA(),
     ),
     RepositoryProvider<RepositoryB>(
-      builder: (context) => RepositoryB(),
+      create: (context) => RepositoryB(),
     ),
     RepositoryProvider<RepositoryC>(
-      builder: (context) => RepositoryC(),
+      create: (context) => RepositoryC(),
     ),
   ],
   child: ChildA(),
