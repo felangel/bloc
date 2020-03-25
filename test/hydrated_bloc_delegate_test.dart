@@ -7,7 +7,9 @@ import 'package:mockito/mockito.dart';
 import 'package:bloc/bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-class MockBloc extends Mock implements HydratedBloc<dynamic, dynamic> {}
+class MockBloc extends Mock implements HydratedBloc<dynamic, dynamic> {
+  String get storageToken => '${runtimeType.toString()}$id';
+}
 
 class MockStorage extends Mock implements HydratedBlocStorage {}
 
@@ -25,11 +27,9 @@ void main() {
       bloc = MockBloc();
     });
 
-    tearDown(() async {
-      final file = File('./.hydrated_bloc.json');
-      if (file.existsSync()) {
-        file.deleteSync();
-      }
+    tearDownAll(() async {
+      delegate = await HydratedBlocDelegate.build();
+      delegate.storage.clear();
     });
 
     test('should call storage.write when onTransition is called', () {

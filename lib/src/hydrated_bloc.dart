@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:meta/meta.dart';
 import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
 
@@ -14,12 +15,9 @@ import '../hydrated_bloc.dart';
 abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
   /// {@macro hydrated_bloc}
   HydratedBloc() {
-    final stateJson = toJson(initialState);
+    final stateJson = toJson(state);
     if (stateJson != null) {
-      _storage.write(
-        '${runtimeType.toString()}$id',
-        json.encode(stateJson),
-      );
+      _storage.write(storageToken, json.encode(stateJson));
     }
   }
 
@@ -30,8 +28,7 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
   @override
   State get initialState {
     try {
-      final jsonString =
-          _storage?.read('${runtimeType.toString()}$id') as String;
+      final jsonString = _storage?.read(storageToken) as String;
       return jsonString?.isNotEmpty == true
           ? fromJson(json.decode(jsonString) as Map<String, dynamic>)
           : null;
@@ -49,10 +46,14 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
   /// in order to keep the caches independent of each other.
   String get id => '';
 
+  /// `storageToken` is used as registration token for hydrated storage.
+  @nonVirtual
+  String get storageToken => '${runtimeType.toString()}$id';
+
   /// `clear` is used to wipe or invalidate the cache of a `HydratedBloc`.
   /// Calling `clear` will delete the cached state of the bloc
   /// but will not modify the current state of the bloc.
-  Future<void> clear() => _storage.delete('${runtimeType.toString()}$id');
+  Future<void> clear() => _storage.delete(storageToken);
 
   /// Responsible for converting the `Map<String, dynamic>` representation
   /// of the bloc state into a concrete instance of the bloc state.
