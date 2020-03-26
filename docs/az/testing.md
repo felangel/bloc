@@ -1,10 +1,10 @@
 # Testing
 
-> Bloc was designed to be extremely easy to test.
+> Bloc test edilməsi çox rahat olacaq şəkildə hazırlanmışdır.
 
-For the sake of simplicity, let's write tests for the `CounterBloc` we created in [Core Concepts](coreconcepts.md).
+Sadə olması üçün,  [Əsas Konseptlər](coreconcepts.md)-də yaratdığımız `CounterBloc` üçün testlər yazaq.
 
-To recap, the `CounterBloc` implementation looks like
+Təkrar olması üçün qeyd edək ki, `CounterBloc` aşağıdakı kod şəklindədir
 
 ```dart
 enum CounterEvent { increment, decrement }
@@ -27,24 +27,23 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-Before we start writing our tests we're going to need to add a testing framework to our dependencies.
+Testlərimizi yazmadan öncə dependency-lərə test üçün framework-ləri əlavə edəcəyik.
 
-We need to add [test](https://pub.dev/packages/test) and [bloc_test](https://pub.dev/packages/bloc_test) to our `pubspec.yaml`.
+[test](https://pub.dev/packages/test) və [bloc_test](https://pub.dev/packages/bloc_test) framework-lərini `pubspec.yaml`-a əlavə etməliyik.
 
 ```yaml
 dev_dependencies:
   test: ^1.3.0
   bloc_test: ^3.0.0
 ```
-
-Let's get started by creating the file for our `CounterBloc` Tests, `counter_bloc_test.dart` and importing the test package.
+`CounterBloc`-un testi üçün `counter_bloc_test.dart` yaradaraq və test paketini daxil edərək başlayırıq.
 
 ```dart
 import 'package:test/test.dart';
 import 'package:bloc_test/bloc_test.dart';
 ```
 
-Next, we need to create our `main` as well as our test group.
+Daha sonra, `main` funksiyasını və test qrupunu yaratmağa ehtiyacımız var.
 
 ```dart
 void main() {
@@ -54,6 +53,7 @@ void main() {
 }
 ```
 
+?> **Qeyd**: 
 ?> **Note**: groups are for organizing individual tests as well as for creating a context in which you can share a common `setUp` and `tearDown` across all of the individual tests.
 
 Let's start by creating an instance of our `CounterBloc` which will be used across all of our tests.
