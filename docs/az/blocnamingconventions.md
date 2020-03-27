@@ -24,21 +24,21 @@
 
 ## Vəziyyət (State) Konvensiyaları
 
-> States should be nouns because a state is just a snapshot at a particular point in time.
+> Vəziyyətlər isim olmalıdır, çünki onlar sadəcə müəyyən zamanda olan vəziyyət haqqında məlumat verən parçalardır.
 
 ### Quruluşu
 
 [state](../_snippets/bloc_naming_conventions/state_anatomy.md ':include')
 
-?> `State` should be one of the following: `Initial` | `Success` | `Failure` | `InProgress` and
-initial states should follow the convention: `BlocSubject` + `Initial`.
+?> `State` bunlardan biri olmalıdır: `Initial` | `Success` | `Failure` | `InProgress` və 
+başlanğıc vəziyyətlər bu konvensiyanı izləməlidir: `BlocSubject` + `Initial`.
 
 #### Nümunələr
 
-✅ **Pis**
+✅ **Yaxşı**
 
 [states_good](../_snippets/bloc_naming_conventions/state_examples_good.md ':include')
 
-❌ **Yaxşı**
+❌ **Pis**
 
 [states_bad](../_snippets/bloc_naming_conventions/state_examples_bad.md ':include')
