@@ -4,7 +4,7 @@
 
 ## Hadisə (Event) Konvensiyaları
 
-> Events should be named in the **past tense** because events are things that have already occurred from the bloc's perspective.
+> Hadisə adları ingilis dilində olan **keçmiş bitmiş** zamanda olan fellərlə adlandırılmalıdır, çünki bloc tərəfdən yanaşsaq, bu hadisələr artıq baş verdikdən sonra bloc-a daxil olur.
 
 ### Anatomy
 
