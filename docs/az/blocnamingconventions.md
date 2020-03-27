@@ -6,9 +6,9 @@
 
 > Hadisə adları ingilis dilində olan **keçmiş bitmiş** zamanda olan fellərlə adlandırılmalıdır, çünki bloc tərəfdən yanaşsaq, bu hadisələr artıq baş verdikdən sonra bloc-a daxil olur.
 
-### Anatomy
+### Anatomiya
 
-[event](_snippets/bloc_naming_conventions/event_anatomy.md ':include')
+[event](../_snippets/bloc_naming_conventions/event_anatomy.md ':include')
 
 ?> Initial load events should follow the convention: `BlocSubject` + `Started`
 
