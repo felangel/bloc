@@ -6,8 +6,8 @@
     - [bloc](az/coreconcepts.md)
     - [flutter_bloc](az/flutterbloccoreconcepts.md)
   - [Arxitektura](az/architecture.md)
-  - [Testing](testing.md)
-  - [Adlandırma Konvensiyaları](blocnamingconventions.md)
+  - [Testing](az/testing.md)
+  - [Adlandırma Konvensiyaları](az/blocnamingconventions.md)
   - [Suallar](faqs.md)
 
 - Dərsliklər

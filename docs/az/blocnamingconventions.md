@@ -1,44 +1,44 @@
-# Naming Conventions
+# Adlandırma Konvensiyaları
 
-!> The following naming conventions are simply recommendations and are completely optional. Feel free to use whatever naming conventions you prefer. You may find some of the examples/documentation do not follow the naming conventions mainly for simplicity/conciseness. These conventions are strongly recommended for large projects with multiple developers.
+!> Aşağıdakı adlandırma konvensiyaları sadə və tamamilə buraxıla bilən məsləhətlərdir. İstənilən adlandıram qaydalarını istifadə etmək üçün özünüzü azad hiss edin. Ola bilər ki, siz sadəlik/dəqiqlik üçün adlandırma qaydalarını izləməyən nümunələr/dokumentasiyalar tapasınız. Bu konvensiyalar çoxlu sayda developerin birlikdə böyük proyektlərdə işləməsi zamanı ciddi olaraq tövsiyə olunur.
 
-## Event Conventions
+## Hadisə (Event) Konvensiyaları
 
-> Events should be named in the **past tense** because events are things that have already occurred from the bloc's perspective.
+> Hadisə adları ingilis dilində olan **keçmiş bitmiş** zamanda olan fellərlə adlandırılmalıdır, çünki bloc tərəfdən yanaşsaq, bu hadisələr artıq baş verdikdən sonra bloc-a daxil olur.
 
-### Anatomy
+### Quruluşu
 
-[event](_snippets/bloc_naming_conventions/event_anatomy.md ':include')
+[event](../_snippets/bloc_naming_conventions/event_anatomy.md)
 
-?> Initial load events should follow the convention: `BlocSubject` + `Started`
+?> Başlanğıc yükləmə hadisələri bu konvensiyanı izləməlidir: `BlocSubject` + `Started`
 
-#### Examples
+#### Nümunələr
 
-✅ **Good**
+✅ **Yaxşı**
 
-[events_good](_snippets/bloc_naming_conventions/event_examples_good.md ':include')
+[events_good](../_snippets/bloc_naming_conventions/event_examples_good.md ':include')
 
-❌ **Bad**
+❌ **Pis**
 
-[events_bad](_snippets/bloc_naming_conventions/event_examples_bad.md ':include')
+[events_bad](../_snippets/bloc_naming_conventions/event_examples_bad.md ':include')
 
-## State Conventions
+## Vəziyyət (State) Konvensiyaları
 
-> States should be nouns because a state is just a snapshot at a particular point in time.
+> Vəziyyətlər isim olmalıdır, çünki onlar sadəcə müəyyən zamanda olan vəziyyət haqqında məlumat verən parçalardır.
 
-### Anatomy
+### Quruluşu
 
-[state](_snippets/bloc_naming_conventions/state_anatomy.md ':include')
+[state](../_snippets/bloc_naming_conventions/state_anatomy.md ':include')
 
-?> `State` should be one of the following: `Initial` | `Success` | `Failure` | `InProgress` and
-initial states should follow the convention: `BlocSubject` + `Initial`.
+?> `State` bunlardan biri olmalıdır: `Initial` | `Success` | `Failure` | `InProgress` və 
+başlanğıc vəziyyətlər bu konvensiyanı izləməlidir: `BlocSubject` + `Initial`.
 
-#### Examples
+#### Nümunələr
 
-✅ **Good**
+✅ **Yaxşı**
 
-[states_good](_snippets/bloc_naming_conventions/state_examples_good.md ':include')
+[states_good](../_snippets/bloc_naming_conventions/state_examples_good.md ':include')
 
-❌ **Bad**
+❌ **Pis**
 
-[states_bad](_snippets/bloc_naming_conventions/state_examples_bad.md ':include')
+[states_bad](../_snippets/bloc_naming_conventions/state_examples_bad.md ':include')
