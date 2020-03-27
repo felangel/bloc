@@ -8,7 +8,7 @@
   - [Arxitektura](az/architecture.md)
   - [Testing](az/testing.md)
   - [Adlandırma Konvensiyaları](az/blocnamingconventions.md)
-  - [Suallar](faqs.md)
+  - [Suallar](az/faqs.md)
 
 - Dərsliklər
 
