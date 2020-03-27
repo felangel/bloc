@@ -53,10 +53,9 @@ void main() {
 }
 ```
 
-?> **Qeyd**: 
-?> **Note**: groups are for organizing individual tests as well as for creating a context in which you can share a common `setUp` and `tearDown` across all of the individual tests.
+?> **Qeyd**: Qruplar individual testlərin təşkili üçündür və `setUp` və `tearDown` funksiyalarını istifadə edərək, bütün individual testlər üçün ümumi olan şeyləri yarada bilərik.
 
-Let's start by creating an instance of our `CounterBloc` which will be used across all of our tests.
+Beləliklə, bütün testlərimizdə istifadə olunacaq `CounterBloc` obyektini yaradırıq.
 
 ```dart
 group('CounterBloc', () {
@@ -68,7 +67,7 @@ group('CounterBloc', () {
 });
 ```
 
-Now we can start writing our individual tests.
+İndi individual testlərimizi yazmağa başlaya bilərik.
 
 ```dart
 group('CounterBloc', () {
@@ -84,9 +83,9 @@ group('CounterBloc', () {
 });
 ```
 
-?> **Note**: We can run all of our tests with the `pub run test` command.
+?> **Qeyd**: Bütün testlərimizi `pub run test` əmri ilə işlədə bilərik.
 
-At this point we should have our first passing test! Now let's write a more complex test using the [bloc_test](https://pub.dev/packages/bloc_test) package.
+Artıq bu nöqtədə bizim ilk düzgün olan testimiz oldu. İndi isə [bloc_test](https://pub.dev/packages/bloc_test) paketini istifadə edərək, daha mürəkkəb test yazaq.
 
 ```dart
 blocTest(
@@ -104,8 +103,8 @@ blocTest(
 );
 ```
 
-We should be able to run the tests and see that all are passing.
+Testləri işlədib, hamısının keçdiyini görməliyik.
 
-That's all there is to it, testing should be a breeze and we should feel confident when making changes and refactoring our code.
+Test üçün hər şey bunlardır, test rahat olmalıdır və dəyişiklik edərkən və kodumuzu yenidən düzəldərkən özümüzü əmin hiss etməliyik.
 
-You can refer to the [Todos App](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library) for an example of a fully tested application.
+Tam olaraq bir tətbiqin testi nümunəsini görmək üçün [Todo-lar Tətbiqinə](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_ nəzər sala bilərsiniz.
