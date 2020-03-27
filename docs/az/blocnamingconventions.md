@@ -1,6 +1,6 @@
 # Adlandırma Konvensiyaları
 
-!> Aşağıdakı adlandırma konvensiyaları sadə və tamamilə buraxıla bilən məsləhətlərdir. İstənilən adlandıram qaydalarını istifadə etmək üçün özünüzü azad hiss edin. Ola bilər ki, siz sadəlik/dəqiqlik üçün adlandırma qaydalarını izləməyən nümunələr/dokumentasiyalar tapasınız. Bu konvensiyalar çoxlu sayda developerin birlikdə böyük proyektlərdə işləməsi zamanı ciddi olaraq tövsiyə olunur.
+!> Aşağıdakı adlandırma konvensiyaları sadə və tamamilə buraxıla bilən məsləhətlərdir. İstənilən adlandırma qaydalarını istifadə etmək üçün özünüzü azad hiss edin. Ola bilər ki, siz sadəlik/dəqiqlik üçün adlandırma qaydalarını izləməyən nümunələr/dokumentasiyalar tapasınız. Bu konvensiyalar çoxlu sayda developerin birlikdə böyük proyektlərdə işləməsi zamanı ciddi olaraq tövsiyə olunur.
 
 ## Hadisə (Event) Konvensiyaları
 
