@@ -20,25 +20,25 @@
 
 ❌ **Pis**
 
-[events_bad](/_snippets/bloc_naming_conventions/event_examples_bad.md ':include')
+[events_bad](../_snippets/bloc_naming_conventions/event_examples_bad.md ':include')
 
-## State Conventions
+## Vəziyyət (State) Konvensiyaları
 
 > States should be nouns because a state is just a snapshot at a particular point in time.
 
 ### Quruluşu
 
-[state](_snippets/bloc_naming_conventions/state_anatomy.md ':include')
+[state](../_snippets/bloc_naming_conventions/state_anatomy.md ':include')
 
 ?> `State` should be one of the following: `Initial` | `Success` | `Failure` | `InProgress` and
 initial states should follow the convention: `BlocSubject` + `Initial`.
 
-#### Examples
+#### Nümunələr
 
-✅ **Good**
+✅ **Pis**
 
-[states_good](_snippets/bloc_naming_conventions/state_examples_good.md ':include')
+[states_good](../_snippets/bloc_naming_conventions/state_examples_good.md ':include')
 
-❌ **Bad**
+❌ **Yaxşı**
 
-[states_bad](_snippets/bloc_naming_conventions/state_examples_bad.md ':include')
+[states_bad](../_snippets/bloc_naming_conventions/state_examples_bad.md ':include')
