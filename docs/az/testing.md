@@ -107,4 +107,4 @@ Testləri işlədib, hamısının keçdiyini görməliyik.
 
 Test üçün hər şey bunlardır, test rahat olmalıdır və dəyişiklik edərkən və kodumuzu yenidən düzəldərkən özümüzü əmin hiss etməliyik.
 
-Tam olaraq bir tətbiqin testi nümunəsini görmək üçün [Todo-lar Tətbiqinə](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_ nəzər sala bilərsiniz.
+Tam olaraq bir tətbiqin testi nümunəsini görmək üçün [Todo-lar Tətbiqinə](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_) nəzər sala bilərsiniz.
