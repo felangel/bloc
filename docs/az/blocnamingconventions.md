@@ -1,8 +1,8 @@
-# Naming Conventions
+# Adlandırma Konvensiyaları
 
-!> The following naming conventions are simply recommendations and are completely optional. Feel free to use whatever naming conventions you prefer. You may find some of the examples/documentation do not follow the naming conventions mainly for simplicity/conciseness. These conventions are strongly recommended for large projects with multiple developers.
+!> Aşağıdakı adlandırma konvensiyaları sadə və tamamilə buraxıla bilən məsləhətlərdir. İstənilən adlandıram qaydalarını istifadə etmək üçün özünüzü azad hiss edin. Ola bilər ki, siz sadəlik/dəqiqlik üçün adlandırma qaydalarını izləməyən nümunələr/dokumentasiyalar tapasınız. Bu konvensiyalar çoxlu sayda developerin birlikdə böyük proyektlərdə işləməsi zamanı ciddi olaraq tövsiyə olunur.
 
-## Event Conventions
+## Hadisə (Event) Konvensiyaları
 
 > Events should be named in the **past tense** because events are things that have already occurred from the bloc's perspective.
 
