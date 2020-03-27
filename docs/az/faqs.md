@@ -1,12 +1,12 @@
-# Frequently Asked Questions
+# Tez-tez soruşulan suallar
 
-## State Not Updating
+## Vəziyyət yenilənmir
 
-❔ **Question**: I'm yielding a state in my bloc but the UI is not updating. What am I doing wrong?
+❔ **Sual**: Mən bloc-da vəziyyəti (state) yield edirəm, amma istifadəçi interfeysi (UI) yenilənmir. Nəyi səhv edirəm?
 
-💡 **Answer**: If you're using Equatable make sure to pass all properties to the props getter.
+💡 **Cavab**: Əgər Equatable istifadə edirsinizsə, bütün dəyişənləri props getter-inə əlavə etdiyinizə əmin olun.
 
-✅ **GOOD**
+✅ **Yaxşı**
 
 ```dart
 abstract class MyState extends Equatable {
@@ -23,7 +23,7 @@ class StateA extends MyState {
 }
 ```
 
-❌ **BAD**
+❌ **Pis**
 
 ```dart
 abstract class MyState extends Equatable {
@@ -55,9 +55,9 @@ class StateA extends MyState {
 }
 ```
 
-In addition, make sure you are yielding a new instance of the state in your bloc.
+Əlavə olaraq, bloc-unuzda vəziyyətin yeni obyektini yield etdiyinizə əmin olun.
 
-✅ **GOOD**
+✅ **Yaxşı**
 
 ```dart
 @override
@@ -76,7 +76,7 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 }
 ```
 
-❌ **BAD**
+❌ **Pis**
 
 ```dart
 @override
