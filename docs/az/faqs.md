@@ -88,11 +88,11 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 }
 ```
 
-## When to use Equatable
+## Nə zaman Equatable istifadə etməli
 
-❔**Question**: When should I use Equatable?
+❔**Question**: Equatable-dən nə zaman istifadə etməliyəm?
 
-💡**Answer**:
+💡**Cavab**:
 
 ```dart
 @override
@@ -102,11 +102,11 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 }
 ```
 
-In the above scenario if `StateA` extends `Equatable` only one state change will occur (the second yield will be ignored).
-In general, you should use `Equatable` if you want to optimize your code to reduce the number of rebuilds.
-You should not use `Equatable` if you want the same state back-to-back to trigger multiple transitions.
+Yuxarıdakı vəziyyətdə, əgər `StateA` `Equatable`-ı extend edirsə, o zaman bir vəziyyət dəyişməsi olacaq (ikinci yield ləğv olacaq).
+Ümumi olaraq, əgər yenidən yaradılmanın sayını azaldaraq kodunuzu optimizasiya etmək istəyirsinizsə, `Equatable` istifadə etməlisiniz.
+Əgər eyni vəziyyətin ard-arda çoxlu transition-ları başlatmasını istəyirsinizsə, `Equatable` istifadə etməməlisiniz.
 
-In addition, using `Equatable` makes it much easier to test blocs since we can expect specific instances of bloc states rather than using `Matchers` or `Predicates`.
+Əlavə olaraq, `Matchers` və ya `Predicates` istifadə edərək xüsusi bloc vəziyyətini gözləmək əvəzinə, `Equatable` test prosesini daha da asanlaşdırır.
 
 ```dart
 blocTest(
@@ -120,7 +120,7 @@ blocTest(
 )
 ```
 
-Without `Equatable` the above test would fail and would need to be rewritten like:
+`Equatable` istifadə etmədən, yuxarıdakı test uğursuz olacaq və testing uğurlu olması üçün aşağıdakı kimi yazmaq lazımdır:
 
 ```dart
 blocTest(
