@@ -140,7 +140,7 @@ blocTest(
 
 💡 **Cavab**:
 
-BLoC is a design pattern that is defined by the following rules:
+Bloc aşağıdakı qaydaların əsasında qurulan design patterndir:
 
 1. Input and Output of the BLoC are simple Streams and Sinks.
 2. Dependencies must be injectable and Platform agnostic.
