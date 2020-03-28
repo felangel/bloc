@@ -136,7 +136,7 @@ blocTest(
 
 ## Bloc vs. Redux
 
-❔ **Sual**: What's the difference between Bloc and Redux?
+❔ **Sual**: Bloc ilə Redux arasındakı fərq nədir?
 
 💡 **Cavab**:
 
