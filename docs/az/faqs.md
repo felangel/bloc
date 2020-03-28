@@ -156,7 +156,7 @@ The UI guidelines are:
 
 The Bloc Library implements the BLoC Design Pattern and aims to abstract RxDart in order to simplify the developer experience.
 
-The three principles of Redux are:
+Redux-un 3 prinsipi aşağıdakılardır:
 
 1. Single source of truth
 2. State is read-only
