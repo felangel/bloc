@@ -136,9 +136,9 @@ blocTest(
 
 ## Bloc vs. Redux
 
-❔ **Question**: What's the difference between Bloc and Redux?
+❔ **Sual**: What's the difference between Bloc and Redux?
 
-💡 **Answer**:
+💡 **Cavab**:
 
 BLoC is a design pattern that is defined by the following rules:
 
