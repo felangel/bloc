@@ -142,7 +142,7 @@ blocTest(
 
 Bloc aşağıdakı qaydaların əsasında qurulan design patterndir:
 
-1 Bloc-un giriş və çıxışları sadə Stream və Sinkdir.
+1. Bloc-un giriş və çıxışları sadə Stream və Sinkdir.
 2. Dependencies must be injectable and Platform agnostic.
 3. No platform branching is allowed.
 4. Implementation can be whatever you want as long as you follow the above rules.
