@@ -140,19 +140,19 @@ blocTest(
 
 💡 **Cavab**:
 
-Bloc aşağıdakı qaydaların əsasında qurulan design patterndir:
+BLoC aşağıdakı qaydaların əsasında qurulan design patterndir:
 
-1. Bloc-un giriş və çıxışları sadə Stream və Sinkdir.
-2. Dependencies must be injectable and Platform agnostic.
-3. No platform branching is allowed.
-4. Implementation can be whatever you want as long as you follow the above rules.
+1. BLoC-un giriş və çıxışları sadə Stream və Sinkdir.
+2. Dependency-lər enjektə edilə bilməli və platform aqnostik olmalıdır.
+3. Heç bir platform budaqlanmasına icazə verilmir.
+4. Həyata keçirmə prosesi yuxarıdakı qaydalara uyduğunuz zaman ərzində istədiyiniz şəkildə ola bilər.
 
-The UI guidelines are:
+İstifadəçi interfeysi (UI) qaydaları bunlardır:
 
-1. Each "complex enough" component has a corresponding BLoC.
-2. Components should send inputs "as is".
-3. Components should show outputs as close as possible to "as is".
-4. All branching should be based on simple BLoC boolean outputs.
+1. Kifayət qədər mürəkkəb olan hər bir komponentin uyğun BLoC-u vardır.
+2. Komponentlər girişləri olduğu kimi göndərməlidir.
+3. Komponentlər çıxışları (outputs) olduğununa mümkün qədər yaxın göstərməlidir.
+4. Bütün budaqlanmalar sadə BLoC boolean çıxışlarına əsaslanmalıdır.
 
 The Bloc Library implements the BLoC Design Pattern and aims to abstract RxDart in order to simplify the developer experience.
 
