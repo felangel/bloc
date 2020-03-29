@@ -143,7 +143,7 @@ blocTest(
 BLoC aşağıdakı qaydaların əsasında qurulan design patterndir:
 
 1. BLoC-un giriş və çıxışları sadə Stream və Sinkdir.
-2. Dependency-lər enjektə edilə bilməli və platform aqnostik olmalıdır.
+2. Dependency-lər enjektə(daxil) edilə bilməli və platform aqnostik olmalıdır.
 3. Heç bir platform budaqlanmasına icazə verilmir.
 4. Həyata keçirmə prosesi yuxarıdakı qaydalara uyduğunuz zaman ərzində istədiyiniz şəkildə ola bilər.
 
@@ -181,7 +181,7 @@ Bloc kitabxanası widget ağacına bloc-u təmin etməyi və widget ağacında o
 
 ## Bloc-u axtararkən BlocProvider.of() uğursuz olur
 
-❔ **Sual**:`BlocProvider.of(context)` ilə bloc-u axtaran zaaman tapa bilmir. Bunu necə həll edə bilərəm?
+❔ **Sual**:`BlocProvider.of(context)` ilə bloc-u axtaran zaman tapa bilmir. Bunu necə həll edə bilərəm?
 
 💡 **Cavab**: Eyni context ilə siz bloc-u əldə edə bilməzsiniz, belə ki, `BlocProvider.of()`-un uşaq widget-lərin `BuildContext`-ində çağrıldığına əmin olun.
 
