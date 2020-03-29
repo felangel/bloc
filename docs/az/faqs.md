@@ -154,16 +154,16 @@ BLoC aşağıdakı qaydaların əsasında qurulan design patterndir:
 3. Komponentlər çıxışları (outputs) olduğununa mümkün qədər yaxın göstərməlidir.
 4. Bütün budaqlanmalar sadə BLoC boolean çıxışlarına əsaslanmalıdır.
 
-The Bloc Library implements the BLoC Design Pattern and aims to abstract RxDart in order to simplify the developer experience.
+Bloc kitabxanası Bloc Design Pattern-i tətbiq edir və developer-in işini rahatlaşdırmaq üçün RxDart-ı abstraktlaşdırır.
 
 Redux-un 3 prinsipi aşağıdakılardır:
 
-1. Single source of truth
-2. State is read-only
-3. Changes are made with pure functions
+1. Tək doğruluq mənbəyi
+2. Vəziyyət (state) yalnız oxuna bilər
+3. Dəyişikliklər sadə funksiyalar ilə edilir
 
-The bloc library violates the first principle; with bloc state is distributed across multiple blocs.
-Furthermore, there is no concept of middleware in bloc and bloc is designed to make async state changes very easy, allowing you to emit multiple states for a single event.
+Bloc kitabxanası ilk prinsipi pozur; vəziyyət (state) bloc ilə çoxlu bloclar arasında bölüşdürülür.
+Bundan əlavə, bloc-da orta hissə anlayışı yoxdur və bloc asinxron vəziyyət dəyişikliklərini asanlıqla etmək üçün qurulub və tək hadisə zamanı (event) çoxlu vəziyyəti (states) göndərməyə icazə verir.
 
 ## Bloc vs. Provider
 
