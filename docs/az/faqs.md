@@ -177,15 +177,15 @@ Bloc kitabxanası widget ağacına bloc-u təmin etməyi və widget ağacında o
 
 ❔ **Sual**: Bloc ilə naviqasiyanı necə edim?
 
-💡 **Cavab**: [Flutter Naviqasiya](recipesflutternavigation.md)-nı yoxlayın.
+💡 **Cavab**: [Flutter Naviqasiya](../recipesflutternavigation.md)-nı yoxlayın.
 
-## BlocProvider.of() Fails to Find Bloc
+## Bloc-u axtararkən BlocProvider.of() uğursuz olur
 
-❔ **Question**: When using `BlocProvider.of(context)` it cannot find the bloc. How can I fix this?
+❔ **Sual**:`BlocProvider.of(context)` ilə bloc-u axtaran zaaman tapa bilmir. Bunu necə həll edə bilərəm?
 
-💡 **Answer**: You cannot access a bloc from the same context in which it was provided so you must ensure `BlocProvider.of()` is called within a child `BuildContext`.
+💡 **Cavab**: Eyni context ilə siz bloc-u əldə edə bilməzsiniz, belə ki, `BlocProvider.of()`-un uşaq widget-lərin `BuildContext`-ində çağrıldığına əmin olun.
 
-✅ **GOOD**
+✅ **Yaxşı**
 
 ```dart
 @override
@@ -227,7 +227,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-❌ **BAD**
+❌ **Pis**
 
 ```dart
 @override
@@ -244,14 +244,14 @@ Widget build(BuildContext context) {
 }
 ```
 
-## Project Structure
+## Proyektin Strukturu
 
-❔ **Question**: How should I structure my project?
+❔ **Sual**: Proyektimi necə strukturlaşdıra bilərəm?
 
-💡 **Answer**: While there is really no right/wrong answer to this question, some recommended references are
+💡 **Cavab**: Bu suala həqiqətən doğru/yalnış cavab yoxdur, sadəcə bəzi tövsiyələr var.
 
-- [Flutter Architecture Samples - Brian Egan](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library)
-- [Flutter Shopping Card Example](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart)
-- [Flutter TDD Course - ResoCoder](https://github.com/ResoCoder/flutter-tdd-clean-architecture-course)
+- [Flutter Arxitektura Nümunələri- Brian Egan](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library)
+- [Flutter Alış-Veriş Səbəti Nümunəsi](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart)
+- [Flutter TDD (Test Driven Development) Kursu - ResoCoder](https://github.com/ResoCoder/flutter-tdd-clean-architecture-course)
 
-The most important thing is having a **consistent** and **intentional** project structure.
+Ən vacib şey **tutarlı** və **məqsədli (planlaşdırılmış)** strukturuna malik olmaqdır.
