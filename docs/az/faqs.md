@@ -167,17 +167,17 @@ Bundan əlavə, bloc-da orta hissə anlayışı yoxdur və bloc asinxron vəziyy
 
 ## Bloc vs. Provider
 
-❔ **Question**: What's the difference between Bloc and Provider?
+❔ **Sual**:Bloc və Provider arasındakı fərq nədir?
 
-💡 **Answer**: `provider` is designed for dependency injection (it wraps `InheritedWidget`).
-You still need to figure out how to manage your state (via `ChangeNotifier`, `Bloc`, `Mobx`, etc...).
-The Bloc Library uses `provider` internally to make it easy to provide and access blocs throughout the widget tree.
+💡 **Cavab**: `provider` DI (Dependency Injection) üçün yaradılıb (`InheritedWidget` istifadə edir).
+Buna görə də, vəziyyəti necə idarə edəcəyinizi bilmək lazım gəlir (`ChangeNotifier`, `Bloc`, `Mobx` ilə, və s.).
+Bloc kitabxanası widget ağacına bloc-u təmin etməyi və widget ağacında onu əldə etməyi rahatlaşdırma üçün daxilində `provider` istifadə edir.
 
-## Navigation with Bloc
+## Bloc ilə Naviqasiya (Bir səhifədən digərinə keçid)
 
-❔ **Question**: How do I do navigation with Bloc?
+❔ **Sual**: Bloc ilə naviqasiyanı necə edim?
 
-💡 **Answer**: Check out [Flutter Navigation](recipesflutternavigation.md)
+💡 **Cavab**: [Flutter Naviqasiya](recipesflutternavigation.md)-nı yoxlayın.
 
 ## BlocProvider.of() Fails to Find Bloc
 
