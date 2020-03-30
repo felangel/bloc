@@ -30,32 +30,13 @@ Bu təbəqə tətbiqin ən aşağı səviyyəsidir və database-lər, şəbəkə
 Data provider adətən [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) əməliyyatlarını yerinə yetirmək üçün sadə API-lar təmin edir.
 Data layer-in bir hissəsi kimi, `createData`, `readData`, `updateData`, və `deleteData` kimi metodlarımız ola bilər.
 
-```dart
-class DataProvider {
-    Future<RawData> readData() async {
-        // Read from DB or make network request etc...
-    }
-}
-```
+[data_provider.dart](../_snippets/architecture/data_provider.dart.md ':include')
 
 ### Repository
 
 > Repository təbəqəsi Bloc layer-in əlaqə saxladığı və içərisində bir və ya daha çox data provider-i əhatə edən təbəqədir.
 
-```dart
-class Repository {
-    final DataProviderA dataProviderA;
-    final DataProviderB dataProviderB;
-
-    Future<Data> getAllDataThatMeetsRequirements() async {
-        final RawDataA dataSetA = await dataProviderA.readData();
-        final RawDataB dataSetB = await dataProviderB.readData();
-
-        final Data filteredData = _filterData(dataSetA, dataSetB);
-        return filteredData;
-    }
-}
-```
+[repository.dart](../_snippets/architecture/repository.dart.md ':include')
 
 Gördüyünüz kimi, repository təbəqəsi çoxlu sayda data provider-lərlə əlaqə saxlaya və data-ları məntiqi kodlar olan hissəyə (Bloc-a) ötürməmişdən əvvəl onlar üzərində dəyişikliklər apara bilər.
 
@@ -65,22 +46,7 @@ Gördüyünüz kimi, repository təbəqəsi çoxlu sayda data provider-lərlə �
 
 Bloc təbəqəsini istifadəçi interfeysi (presentation təbəqəsi) və data təbəqəsi arasındakı körpü kimi düşünə bilərsiniz. Bloc təbəqəsi istifadəçinin inputları əsasında yaranan hadisələri (events) qəbul edir və presentation təbəqəsinə lazım olan yeni vəziyyətin qurulması üçün repository ilə əlaqə yaradır.
 
-```dart
-class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
-    final Repository repository;
-
-    Stream mapEventToState(event) async* {
-        if (event is AppStarted) {
-            try {
-                final data = await repository.getAllDataThatMeetsRequirements();
-                yield Success(data);
-            } catch (error) {
-                yield Failure(error);
-            }
-        }
-    }
-}
-```
+[business_logic_component.dart](../_snippets/architecture/business_logic_component.dart.md ':include')
 
 ### Bloc-un-Bloc-a rabitəsi
 
@@ -88,25 +54,7 @@ class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
 
 Bloc-ların digər bloc-larda olan vəziyyət dəyişikliklərindən asılılığı ola bilər. Aşağıdakı nümunədə, `MyBloc`-un `OtherBloc`-dan asılılığı vardır və `OtherBloc`-da baş verən vəziyyət dəyişikliklərinə cavab olaraq, hadisələri `add` edə bilər. Yaddaş çatışmazlığı problemlərinin qarşısını almaq üçün `StreamSubsctiption`-ı `MyBloc`-da olan `close` metodunu əlavə edərək bağlanılır.
 
-```dart
-class MyBloc extends Bloc {
-  final OtherBloc otherBloc;
-  StreamSubscription otherBlocSubscription;
-
-  MyBloc(this.otherBloc) {
-    otherBlocSubscription = otherBloc.listen((state) {
-        // React to state changes here.
-        // Add events here to trigger changes in MyBloc.
-    });
-  }
-
-  @override
-  Future<void> close() {
-    otherBlocSubscription.cancel();
-    return super.close();
-  }
-}
-```
+[bloc_to_bloc_communication.dart](../_snippets/architecture/bloc_to_bloc_communication.dart.md ':include')
 
 ## Presentation Təbəqəsi
 
@@ -118,19 +66,6 @@ Bu mənzərəyə əsasən, presentation təbəqəsi `AppStart` hadisəsini əlav
 
 Əlavə olaraq, presentation təbəqəsi bloc təbəqəsindən gələn vəziyyət əsasında nəyi render etməli olduğunu bilməlidir.
 
-```dart
-class PresentationComponent {
-    final Bloc bloc;
-
-    PresentationComponent() {
-        bloc.add(AppStarted());
-    }
-
-    build() {
-        // render UI based on bloc state
-    }
-}
-```
-
+[presentation_component.dart](../_snippets/architecture/presentation_component.dart.md ':include')
 
 İndiyə qədər bir neçə kod parçası olsa da, bütün bunlar kifayət qədər yüksək səviyyədədir. Dərslik bölməsində bir neçə fərqli nümunə tətbiqini qurduğumuz zaman bunları bir araya gətirəcəyik.
