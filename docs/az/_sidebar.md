@@ -3,12 +3,12 @@
   - [Başla](az/gettingstarted.md)
   - [Niyə Bloc?](az/whybloc.md)
   - Əsas Konseptlər
-    - [bloc](coreconcepts.md)
-    - [flutter_bloc](flutterbloccoreconcepts.md)
-  - [Arxitektura](architecture.md)
-  - [Testing](testing.md)
-  - [Adlandırma Konvensiyaları](blocnamingconventions.md)
-  - [Suallar](faqs.md)
+    - [bloc](az/coreconcepts.md)
+    - [flutter_bloc](az/flutterbloccoreconcepts.md)
+  - [Arxitektura](az/architecture.md)
+  - [Testing](az/testing.md)
+  - [Adlandırma Konvensiyaları](az/blocnamingconventions.md)
+  - [Tez-tez soruşulan suallar](az/faqs.md)
 
 - Dərsliklər
 
