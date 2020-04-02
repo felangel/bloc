@@ -68,6 +68,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
   ///   value: BlocProvider.of<BlocA>(context),
   ///   child: ScreenA(),
   /// );
+  /// ```
   BlocProvider.value({
     Key key,
     @required T value,
