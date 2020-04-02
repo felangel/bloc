@@ -18,9 +18,7 @@ Když uživatel klepne na jedno z těchto dvou tlačítek, musí se stát něco,
 
 Musíme být schopni upozornit "mozek" naší aplikace o inkrementaci i dekrementaci, takže musíme tyto události definovat.
 
-```dart
-enum CounterEvent { increment, decrement }
-```
+[counter_event.dart](../_snippets/core_concepts/counter_event.dart.md ':include')
 
 V tomto případě můžeme reprezentovat tyto události s použitím `enum`, ale pro více složité případy může být potřebné použít `class`, zejména pokud je do bloc potřebné předat nějakou informaci.
 
@@ -50,13 +48,7 @@ Jak uživatel interaguje s naší aplikací počítadla, spustí události `Incr
 
 Například, pokud uživatel otevře naší aplikaci a jednou klepne na tlačítko inkrementace, uvidíme následující `Transition`.
 
-```json
-{
-  "currentState": 0,
-  "event": "CounterEvent.increment",
-  "nextState": 1
-}
-```
+[counter_increment_transition.json](../_snippets/core_concepts/counter_increment_transition.json.md ':include')
 
 Jelikož je každá změna stavu zaznamenávána, jsme schopni jednoduše zpracovat a sledovat všechny uživatelské interakce a změny stavu na jednom místě. Kromě toho to také umožňuje věci jako ladění v čase.
 
@@ -74,13 +66,7 @@ Aby bylo možné používat Bloc, je nutné mít dobrou znalost o `Streamech` a 
 
 `Stream` můžeme v Dartu vytvořit pomocí `async*` funkce.
 
-```dart
-Stream<int> countStream(int max) async* {
-    for (int i = 0; i < max; i++) {
-        yield i;
-    }
-}
-```
+[count_stream.dart](../_snippets/core_concepts/count_stream.dart.md ':include')
 
 Pokud nějakou funkci označíme jako `async*`, můžeme používat klíčové slovo `yield` a vracet `Stream` dat. V ukázce výše vracíme `Stream` celých čísel až do parametru `max`.
 
@@ -88,30 +74,13 @@ Pokaždé když použijeme `yield` v `async*` funkci, protlačíme daný kus dat
 
 Výše uvedený `Stream` můžeme zpracovat několika způsoby. Pokud bychom chtěli napsat funkci, která vrací součet `Streamu` celých čísel, vypadalo by to nějak takto:
 
-```dart
-Future<int> sumStream(Stream<int> stream) async {
-    int sum = 0;
-    await for (int value in stream) {
-        sum += value;
-    }
-    return sum;
-}
-```
+[sum_stream.dart](../_snippets/core_concepts/sum_stream.dart.md ':include')
 
 Označením funkce jako `async` můžeme použít klíčové slovo `await` a vrátit `Future` celých čísel. V tomto případě čekáme na každou hodnotu ve streamu a vracíme součet všech celých čísel ve streamu.
 
 Dohromady to můžeme použít nějak takto:
 
-```dart
-void main() async {
-    /// Initialize a stream of integers 0-9
-    Stream<int> stream = countStream(10);
-    /// Compute the sum of the stream of integers
-    int sum = await sumStream(stream);
-    /// Print the sum
-    print(sum); // 45
-}
-```
+[main.dart](../_snippets/core_concepts/streams_main.dart.md ':include')
 
 ## Blocy
 
@@ -119,13 +88,7 @@ void main() async {
 
 > Každý Bloc musí rozšiřovat základní třídu `Bloc`, která je součástí základního balíčku bloc.
 
-```dart
-import 'package:bloc/bloc.dart';
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_class.dart.md ':include')
 
 V úryvku kódu výše deklarujeme náš `CounterBloc` jako Bloc, který konvertuje `CounterEventy` na `inty` (celá čísla).
 
@@ -133,51 +96,15 @@ V úryvku kódu výše deklarujeme náš `CounterBloc` jako Bloc, který konvert
 
 V tomto případě chceme, aby naše počítadlo začínalo na `0`.
 
-```dart
-@override
-int get initialState => 0;
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_initial_state.dart.md ':include')
 
 > Každý Bloc musí implementovat funkci `mapEventToState`. Tato funkce přijímá jako argument příchozí `událost` a musí vracet `Stream` nových `stavů`, který je využíván prezenční vrstvou. Můžeme přistoupit ke konkrétnímu stavu blocu v jakémkoli čase pomocí vlastnosti `state`.
 
-```dart
-@override
-Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_map_event_to_state.dart.md ':include')
 
 V tomto bodě máme plně funkční `CounterBloc`.
 
-```dart
-import 'package:bloc/bloc.dart';
-
-enum CounterEvent { increment, decrement }
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc.dart.md ':include')
 
 !> Blocy budou ignorovat duplicitní stavy. Pokud Blok přidá stav `State nextState` kde `state == nextState`, nevyvolá se žádný přechod a nebude provedena žádná změna `Stream<State>`.
 
@@ -187,37 +114,13 @@ Teď si asi říkáte _"Jak upozorním Bloc na událost?"_.
 
 Můžeme vytvořit jednoduchou aplikaci, která počítá od 0 do 3.
 
-```dart
-void main() {
-    CounterBloc bloc = CounterBloc();
-
-    for (int i = 0; i < 3; i++) {
-        bloc.add(CounterEvent.increment);
-    }
-}
-```
+[main.dart](../_snippets/core_concepts/counter_bloc_main.dart.md ':include')
 
 !> Ve výchozím nastavení budou události vždy zpracovány v pořadí, ve kterém byly přidány a každá nová přidaná událost je zařazena do fronty. Událost je považována za plně zpracovanout v momentě, kdy se dokončí provádění `mapEventToState`.
 
 `Transitiony` ve výše zmíněném úryvku kódu bude následující:
 
-```json
-{
-    "currentState": 0,
-    "event": "CounterEvent.increment",
-    "nextState": 1
-}
-{
-    "currentState": 1,
-    "event": "CounterEvent.increment",
-    "nextState": 2
-}
-{
-    "currentState": 2,
-    "event": "CounterEvent.increment",
-    "nextState": 3
-}
-```
+[counter_bloc_transitions.json](../_snippets/core_concepts/counter_bloc_transitions.json.md ':include')
 
 Naneštěstí nebudeme v aktuálním stavu schopni vidět žádný z těchto přechodů, dokud nepřepíšeme `onTransition`.
 
@@ -225,12 +128,7 @@ Naneštěstí nebudeme v aktuálním stavu schopni vidět žádný z těchto př
 
 ?> **Tip**: `onTransition` je skvělé místo pro přidání specifického logování/analytiky pro daný bloc.
 
-```dart
-@override
-void onTransition(Transition<CounterEvent, int> transition) {
-    print(transition);
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_on_transition.dart.md ':include')
 
 Nyní, když jsme přepsali `onTransition` můžeme dělat cokoli chceme kdykoli se objeví `Transition`.
 
@@ -242,12 +140,7 @@ Stejně jako můžeme zpracovat `Transition` na úrovni blocu, můžeme také zp
 
 ?> **Tip**: `onError` je skvělé místo na zpracování errorů specifických pro daný bloc.
 
-```dart
-@override
-void onError(Object error, StackTrace stackTrace) {
-  print('$error, $stackTrace');
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_on_error.dart.md ':include')
 
 Nyní, když jsme přepsali `onError`, můžeme dělat cokoli chceme kdykoli je vyvolána `Exception`.
 
@@ -257,71 +150,20 @@ Jeden přidaný bonus používání Blocu je to, že můžeme míř přístup ke
 
 Pokud chceme být schopni dělat něco v závislosti na všech `Transitionech`, můžeme jednoduše vytvořit náš vlastní `BlocDelegate`.
 
-```dart
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-}
-```
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
 
 ?> **Poznámka**: Všechno co potřebujeme udělat je rozšířit `BlocDelegate` a přepsat metodu `onTransition`.
 
 Abychom Blocům řekli, aby používali `SimpleBlocDelegate`, musíme jenom poupravit naši `main` funkci.
 
-```dart
-void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
-  CounterBloc bloc = CounterBloc();
-
-  for (int i = 0; i < 3; i++) {
-    bloc.add(CounterEvent.increment);
-  }
-}
-```
+[main.dart](../_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
 
 Pokud chceme být schopni udělat něco v závislosti na všech přidaných `Eventech`, můžeme také přepsat metodu `onEvent` v našem `SimpleBlocDelegate`.
 
-```dart
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
-    print(event);
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-}
-```
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
 
 Pokud chceme být schopni udělat něco v závislosti na všech vyvolaných `Exceptionech` v Blocu, můžeme také přepsat metodu `onError` v našem `SimpleBlocDelegate`.
 
-```dart
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
-    print(event);
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-
-  @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
-    print('$error, $stacktrace');
-  }
-}
-```
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
 
 ?> **Poznámka**: `BlocSupervisor` je singleton, který dohlíží na všechny Blocy a přenáší odpovědnost na `BlocDelegate`.

@@ -16,9 +16,7 @@
 
 我们需要能够将递增事件（按加号按钮) 和递减事件（按减号按钮) 通知我们程序的`"大脑"`，因此我们需要定义这些事件(`Event`)。
 
-```dart
-enum CounterEvent { increment, decrement }
-```
+[counter_event.dart](../_snippets/core_concepts/counter_event.dart.md ':include')
 
 在这种情况下，我们可以使用`enum`表示事件，但是对于更复杂的情况，就会可能需要使用类(也就是我们常说的`class`)，尤其是在要将信息传递给Bloc的情况下。
 
@@ -44,13 +42,7 @@ enum CounterEvent { increment, decrement }
 
 例如，如果用户打开我们的应用并点击了加号按钮，我们将看到以下`转换`。
 
-```json
-{
-  "currentState": 0,
-  "event": "CounterEvent.increment",
-  "nextState": 1
-}
-```
+[counter_increment_transition.json](../_snippets/core_concepts/counter_increment_transition.json.md ':include')
 
 由于记录了每个状态的更改，所以我们能够非常轻松地对我们的应用程序进行检测，并在任何位置跟踪所有的用户交互和状态更改。此外，这使像时间旅行调试之类的事情成为可能。
 
@@ -68,13 +60,7 @@ Bloc建立在[RxDart]的基础之上(https://pub.dev/packages/rxdart); 然而，
 
 我们可以通过编写`async *`函数在Dart中创建一个`Stream`。
 
-```dart
-Stream<int> countStream(int max) async* {
-    for (int i = 0; i < max; i++) {
-        yield i;
-    }
-}
-```
+[count_stream.dart](../_snippets/core_concepts/count_stream.dart.md ':include')
 
 通过将一个函数标记为`async *`，我们可以使用`yield`作为关键字并返回`Stream`数据。在上面的示例中，我们返回的是一个不超过整数Int边界的整数Stream。
 
@@ -82,30 +68,13 @@ Stream<int> countStream(int max) async* {
 
 我们可以通过几种方式使用上面的`Stream`。如果我们想编写一个函数来返回所有整数`Stream`的总和，则它可能类似于：
 
-```dart
-Future<int> sumStream(Stream<int> stream) async {
-    int sum = 0;
-    await for (int value in stream) {
-        sum += value;
-    }
-    return sum;
-}
-```
+[sum_stream.dart](../_snippets/core_concepts/sum_stream.dart.md ':include')
 
 通过将上面的函数标记为`async`，我们可以使用`await`关键字并返回整数的`Future`数据。在此示例中，我们先等待流(`Stream`)中的每个值然后并返回流(`Stream`)中所有整数的总和。
 
 我们可以像这样将它们放在一起：
 
-```dart
-void main() async {
-    /// 初始化一个从0到9的整数流
-    Stream<int> stream = countStream(10);
-    /// 计算整数流的总和
-    int sum = await sumStream(stream);
-    /// 打印总和
-    print(sum); // 45
-}
-```
+[main.dart](../_snippets/core_concepts/streams_main.dart.md ':include')
 
 ## Blocs
 
@@ -113,13 +82,7 @@ void main() async {
 
 > 每个Bloc必须扩展（`extend`) 基本Bloc类，因为它是bloc核心包中的一部分。
 
-```dart
-import 'package:bloc/bloc.dart';
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_class.dart.md ':include')
 
 在上面的代码中，我们把CounterBloc声明为将`CounterEvents`转换为`int`的Bloc。(简单的来说就是我们的大脑Bloc把传进来的事件转换成对应的状态输出了出来， 只是这里的状态是`int`整数，如果不理解可以回看一遍)
 
@@ -127,51 +90,15 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 在这种情况下，我们总是希望计数器可以从`0`开始，所以`0`就是我们的初始状态。
 
-```dart
-@override
-int get initialState => 0;
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_initial_state.dart.md ':include')
 
 > 每个Bloc都必须实现一个名为`mapEventToState`的函数。该函数将传入的事件(`Event`)作为参数，并且必须返回(`return`)被表现层(`Presentation`)所用的新状态(`State`)的流(`Stream`)。我们可以随时使用`state`属性来访问当前的状态. （简单的说就是返回的这状态`State`记住它是一个流`Stream`，要被表现层 _例如前端_ 所用)
 
-```dart
-@override
-Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_map_event_to_state.dart.md ':include')
 
 至此，我们就有了一个功能齐全的`CounterBloc`。
 
-```dart
-import 'package:bloc/bloc.dart';
-
-enum CounterEvent { increment, decrement }
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc.dart.md ':include')
 
 !> Bloc将会忽略重复的状态（`State`) 。如果Bloc产生`state nextState`状态，并且其中`state == nextState`，则不会发生任何转换，并且不会对流的状态（Stream <State>) 进行任何更改。
 
@@ -182,37 +109,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 我们可以创建一个从0到3的简单应用程序。
 
-```dart
-void main() {
-    CounterBloc bloc = CounterBloc();
-
-    for (int i = 0; i < 3; i++) {
-        bloc.add(CounterEvent.increment);
-    }
-}
-```
+[main.dart](../_snippets/core_concepts/counter_bloc_main.dart.md ':include')
 
 !> 默认情况下，将始终按照事件(`Event`)添加的顺序处理事件(`Event`)，并将所有新添加的事件(`Event`)排队。一旦`mapEventToState`执行完毕，就认为事件已被完全处理。
 
 上面的代码中的`Transitions'将会是
 
-```json
-{
-    "currentState": 0,
-    "event": "CounterEvent.increment",
-    "nextState": 1
-}
-{
-    "currentState": 1,
-    "event": "CounterEvent.increment",
-    "nextState": 2
-}
-{
-    "currentState": 2,
-    "event": "CounterEvent.increment",
-    "nextState": 3
-}
-```
+[counter_bloc_transitions.json](../_snippets/core_concepts/counter_bloc_transitions.json.md ':include')
 
 不幸的是，在当前状态下，除非覆盖onTransition，否则我们将看不到任何这些转换
 
@@ -220,12 +123,7 @@ void main() {
 
 ?> **提示**: `ontransition`是添加特定Bloc的日志记录以及分析的好地方。
 
-```dart
-@override
-void onTransition(Transition<CounterEvent, int> transition) {
-    print(transition);
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_on_transition.dart.md ':include')
 
 既然我们已经重写了`onTransition`，那么只要有`Transition`发生，我们就可以作出相应。
 
@@ -237,12 +135,7 @@ void onTransition(Transition<CounterEvent, int> transition) {
 
 ?> **提示**: `onError`是添加特定Bloc处理错误的好地方。
 
-```dart
-@override
-void onError(Object error, StackTrace stackTrace) {
-  print('$error, $stackTrace');
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_on_error.dart.md ':include')
 
 既然我们已经覆盖了`onError`，那么只要有异常(`Exception`)抛出，我们就可以对异常作出响应。
 
@@ -252,71 +145,20 @@ void onError(Object error, StackTrace stackTrace) {
 
 如果我们希望能够对所有转换`Transitions`做出响应，我们可以简单地创建自己的`BlocDelegate`。
 
-```dart
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-}
-```
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
 
 ?> **注意**: 我们需要做的就是扩展（`extend`) `BlocDelegate`这个类并重写(`override`)其中的`onTransition`方法。
 
 为了让Bloc使用我们的`SimpleBlocDelegate`，我们只需要调整我们的`main`函数。
 
-```dart
-void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
-  CounterBloc bloc = CounterBloc();
-
-  for (int i = 0; i < 3; i++) {
-    bloc.add(CounterEvent.increment);
-  }
-}
-```
+[main.dart](../_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
 
 如果我们希望能够对所有添加的事件（`Event`) 做出响应，那么我们也可以在`SimpleBlocDelegate`中重写`onEvent`方法。
 
-```dart
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
-    print(event);
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-}
-```
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
 
 如果我们希望能够对Bloc中抛出的所有异常（`Exceptions`) 做出响应，那么我们也可以在`SimpleBlocDelegate`中重写`onError`方法。
 
-```dart
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
-    print(event);
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-
-  @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
-    print('$error, $stacktrace');
-  }
-}
-```
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
 
 ?> **注意**: `BlocSupervisor`是一个实例，负责监督所有Bloc，并将职责委托给`BlocDelegate`。
