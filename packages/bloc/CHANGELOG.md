@@ -1,3 +1,9 @@
+# 4.0.0-dev.1
+
+- Remove `rxdart` dependency ([#821](https://github.com/felangel/bloc/pull/821))
+- Replace `transformStates` with `transformTransitions` ([#840](https://github.com/felangel/bloc/pull/840))
+- Fix null `stackTrace` in `onError` ([#963](https://github.com/felangel/bloc/pull/963))
+
 # 3.0.0
 
 - Upgrade to `rxdart ^0.23.0`
