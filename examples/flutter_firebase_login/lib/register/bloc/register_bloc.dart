@@ -17,19 +17,19 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterState get initialState => RegisterState.empty();
 
   @override
-  Stream<RegisterState> transformEvents(
-    Stream<RegisterEvent> events,
-    Stream<RegisterState> Function(RegisterEvent event) next,
+  Stream<Transition<RegisterEvent, RegisterState>> transformTransitions(
+    Stream<Transition<RegisterEvent, RegisterState>> transitions,
   ) {
-    final nonDebounceStream = events.where((event) {
-      return (event is! EmailChanged && event is! PasswordChanged);
+    final nonDebounceStream = transitions.where((transition) {
+      return (transition.event is! EmailChanged &&
+          transition.event is! PasswordChanged);
     });
-    final debounceStream = events.where((event) {
-      return (event is EmailChanged || event is PasswordChanged);
+    final debounceStream = transitions.where((transition) {
+      return (transition.event is EmailChanged ||
+          transition.event is PasswordChanged);
     }).debounceTime(Duration(milliseconds: 300));
-    return super.transformEvents(
+    return super.transformTransitions(
       nonDebounceStream.mergeWith([debounceStream]),
-      next,
     );
   }
 
