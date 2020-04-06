@@ -1,3 +1,7 @@
+# 5.0.0-dev.1
+
+- Update to `bloc: ^4.0.0-dev.1`
+
 # 4.0.0
 
 - `blocTest` and `emitsExactly` skip `initialState` by default and expose optional `skip` ([#910](https://github.com/felangel/bloc/issues/910))

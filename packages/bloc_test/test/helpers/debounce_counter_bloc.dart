@@ -10,13 +10,13 @@ class DebounceCounterBloc extends Bloc<DebounceCounterEvent, int> {
   int get initialState => 0;
 
   @override
-  Stream<int> transformEvents(
+  Stream<Transition<DebounceCounterEvent, int>> transformEvents(
     Stream<DebounceCounterEvent> events,
-    Stream<int> Function(DebounceCounterEvent event) next,
+    TransitionFunction<DebounceCounterEvent, int> transitionFn,
   ) {
     return events
         .debounceTime(const Duration(milliseconds: 300))
-        .switchMap(next);
+        .switchMap(transitionFn);
   }
 
   @override
