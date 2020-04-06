@@ -18,9 +18,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginState get initialState => LoginState.empty();
 
   @override
-  Stream<LoginState> transformEvents(
+  Stream<Transition<LoginEvent, LoginState>> transformEvents(
     Stream<LoginEvent> events,
-    Stream<LoginState> Function(LoginEvent event) next,
+    TransitionFunction<LoginEvent, LoginState> transitionFn,
   ) {
     final nonDebounceStream = events.where((event) {
       return (event is! EmailChanged && event is! PasswordChanged);
@@ -30,7 +30,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }).debounceTime(Duration(milliseconds: 300));
     return super.transformEvents(
       nonDebounceStream.mergeWith([debounceStream]),
-      next,
+      transitionFn,
     );
   }
 

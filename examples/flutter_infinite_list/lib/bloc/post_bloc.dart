@@ -14,20 +14,18 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({@required this.httpClient});
 
   @override
-  Stream<PostState> transformEvents(
-    Stream<PostEvent> events,
-    Stream<PostState> Function(PostEvent event) next,
-  ) {
-    return super.transformEvents(
-      events.debounceTime(
-        Duration(milliseconds: 500),
-      ),
-      next,
-    );
-  }
+  get initialState => PostUninitialized();
 
   @override
-  get initialState => PostUninitialized();
+  Stream<Transition<PostEvent, PostState>> transformEvents(
+    Stream<PostEvent> events,
+    TransitionFunction<PostEvent, PostState> transitionFn,
+  ) {
+    return super.transformEvents(
+      events.debounceTime(const Duration(milliseconds: 500)),
+      transitionFn,
+    );
+  }
 
   @override
   Stream<PostState> mapEventToState(PostEvent event) async* {

@@ -16,6 +16,7 @@ dependencies:
     path: ../../packages/flutter_bloc
   equatable: ^1.0.0
   meta: ^1.1.6
+  rxdart: ^0.23.1
   font_awesome_flutter: ^8.4.0
 
 flutter:
