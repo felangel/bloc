@@ -18,8 +18,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   @override
   Stream<Transition<PostEvent, PostState>> transformEvents(
-    events,
-    transitionFn,
+    Stream<PostEvent> events,
+    TransitionFunction<PostEvent, PostState> transitionFn,
   ) {
     return super.transformEvents(
       events.debounceTime(const Duration(milliseconds: 500)),
