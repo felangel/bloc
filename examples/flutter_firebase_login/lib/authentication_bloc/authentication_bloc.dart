@@ -32,13 +32,13 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapAppStartedToState() async* {
-      final isSignedIn = await _userRepository.isSignedIn();
-      if (isSignedIn) {
-        final name = await _userRepository.getUser();
-        yield Authenticated(name);
-      } else {
-        yield Unauthenticated();
-      }
+    final isSignedIn = await _userRepository.isSignedIn();
+    if (isSignedIn) {
+      final name = await _userRepository.getUser();
+      yield Authenticated(name);
+    } else {
+      yield Unauthenticated();
+    }
   }
 
   Stream<AuthenticationState> _mapLoggedInToState() async* {
