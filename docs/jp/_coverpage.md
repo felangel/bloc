@@ -17,4 +17,4 @@
 - Dart, Flutter, そして AngularDartのため
 
 [GitHub](https://github.com/felangel/bloc/)
-[スタート](gettingstarted.md)
+[スタート](jp/gettingstarted.md)

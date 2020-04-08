@@ -1,20 +1,20 @@
-# AngularDart Counter Tutorial
+# AngularDartカウンターチュートリアル
 
-![beginner](https://img.shields.io/badge/level-beginner-green.svg)
+![初心者向け](https://img.shields.io/badge/level-beginner-green.svg)
 
-> In the following tutorial, we're going to build a Counter in AngularDart using the Bloc library.
+> このチュートリアルではAngularDartとBlocライブラリーを使ってカウンターアプリを作ります。
 
-![demo](./assets/gifs/angular_counter.gif)
+![デモ](./assets/gifs/angular_counter.gif)
 
-## Setup
+## セットアップ
 
-We'll start off by creating a brand new AngularDart project with [stagehand](https://github.com/dart-lang/stagehand).
+まずは[stagehand](https://github.com/dart-lang/stagehand)を使って新規のAngularDartプロジェクトを作ります
 
 [script](_snippets/angular_counter_tutorial/stagehand.sh.md ':include')
 
-!> Activate stagehand by running `pub global activate stagehand`
+!> `pub global activate stagehand` を実行しstagehandを起動します
 
-We can then go ahead and replace the contents of `pubspec.yaml` with:
+`pubspec.yaml`の中身を下記に置き換えます：
 
 [pubspec.yaml](_snippets/angular_counter_tutorial/pubspec.yaml.md ':include')
 

@@ -8,4 +8,4 @@
   - [:ru: ru](/ru/)
   - [:cn: zh-cn](/zh-cn/)
   - [:azerbaijan: az](/az/)
-  - [:ja: ja](/ja/)
+  - [:jp: jp](/jp/)
