@@ -1,88 +1,88 @@
 # コアコンセプト
 
-?> Please make sure to carefully read and understand the following sections before working with [bloc](https://pub.dev/packages/bloc).
+?> 下記の説明をよく読んで理解してから[bloc](https://pub.dev/packages/bloc)を使い始めてください。
 
-There are several core concepts that are critical to understanding how to use Bloc.
+Bloc を使いこなすにはいくつかコアとなるコンセプトを理解する必要があります。
 
-In the upcoming sections, we're going to discuss each of them in detail as well as work through how they would apply to a real-world application: a counter app.
+下記のセクションではそれらのコアコンセプトを「カウンター」というアプリを作りながらを一つ一つ深掘りしていきます。
 
-## Events
+## Event
 
-> Events are the input to a Bloc. They are commonly added in response to user interactions such as button presses or lifecycle events like page loads.
+> event は Bloc のインプットとなるものです。event は主にボタンタップなどのユーザーアクションや、ページロードなどのライフサイクル event をきっかけに Bloc に送られます。
 
-When designing an app we need to step back and define how users will interact with it. In the context of our counter app we will have two buttons to increment and decrement our counter.
+実際にアプリを作る時には一度立ち止まってユーザーがどのようにそのアプリを使用するかを考えなくてはなりません。カウンターの場合はボタンが二つあり、それぞれカウントを一つづつ増やすか減らします。
 
-When a user taps on one of these buttons, something needs to happen to notify the "brains" of our app so that it can respond to the user's input; this is where events come into play.
+カウンターの値を変えるにはユーザーがボタンをタップした時に何かがアプリの「脳」に指令を送らなければなりません。これが event の役割です。
 
-We need to be able to notify our application's "brains" of both an increment and a decrement so we need to define these events.
+この場合はカウントを増やすケースと減らすケースの二つケースを「脳」に送る event を用意する必要があります。
 
-[counter_event.dart](_snippets/core_concepts/counter_event.dart.md ':include')
+[counter_event.dart](../_snippets/core_concepts/counter_event.dart.md ':include')
 
-In this case, we can represent the events using an `enum` but for more complex cases it might be necessary to use a `class` especially if it's necessary to pass information to the bloc.
+今回の場合はevent を`enum`を使って表現できますが、より複雑なevent やevent に乗せて情報を bloc に送る場合は`class`を作ります。
 
-At this point we have defined our first event! Notice that we have not used Bloc in any way so far and there is no magic happening; it's just plain Dart code.
+ここまでできたら人生最初の最初のevent 定義が終わりです！まだ Bloc も出てきてないですし、特に何も起こってないですよね。ただの Dart のコードです。
 
-## States
+## State
 
-> States are the output of a Bloc and represent a part of your application's state. UI components can be notified of states and redraw portions of themselves based on the current state.
+> State は Bloc のアウトプットで、アプリのUIの一つの状態を表します。UIはこの state の変化を受けて再描画をします。
 
-So far, we've defined the two events that our app will be responding to: `CounterEvent.increment` and `CounterEvent.decrement`.
+ここまででアプリ内で使われる `CounterEvent.increment` と `CounterEvent.decrement` の二つの event を定義しました。
 
-Now we need to define how to represent the state of our application.
+今度はアプリ内の state (状態)を定義していきましょう。
 
-Since we're building a counter, our state is very simple: it's just an integer which represents the counter's current value.
+今はカウンターアプリを作っているので、state はとてもシンプル： 今のカウントを示すただの int 型の値一つだけです。
 
-We will see more complex examples of state later on but in this case a primitive type is perfectly suitable as the state representation.
+後ほどより複雑な例を見ていきますが、今回のアプリではシンプルな値一つだけで十分です。
 
-## Transitions
+## Transition
 
-> The change from one state to another is called a Transition. A Transition consists of the current state, the event, and the next state.
+> 一つの state から異なる別の state への変化を transition と呼びます。Transition は一つ前の state と後の state から成り立ちます。
 
-As a user interacts with our counter app they will trigger `Increment` and `Decrement` events which will update the counter's state. All of these state changes can be described as a series of `Transitions`.
+ユーザーがアプリを操作し、`Increment` や `Decrement` event を発火させるとカウンターの state が変化します。このような state の変化は連続した transition で表すことができます。
 
-For example, if a user opened our app and tapped the increment button once we would see the following `Transition`.
+例えば、もしユーザーがアプリを開き、値を増やすボタンを一回タップした時には下記のような `Transition` が発生します。
 
-[counter_increment_transition.json](_snippets/core_concepts/counter_increment_transition.json.md ':include')
+[counter_increment_transition.json](../_snippets/core_concepts/counter_increment_transition.json.md ':include')
 
-Because every state change is recorded, we are able to very easily instrument our applications and track all user interactions & state changes in one place. In addition, this makes things like time-travel debugging possible.
+全ての state の変化が記録されているので、アプリケーションの中で何が起こっているかを簡単に把握することができることに加え、「時を遡って」デバッグをすることも可能になります。
 
-## Streams
+## Stream
 
-?> Check out the official [Dart Documentation](https://dart.dev/tutorials/language/streams) for more information about `Streams`.
+?> `Stream`についてまだ詳しく知らない方はまず公式のドキュメンテーションを読むことをお勧めします [Dart Documentation](https://dart.dev/tutorials/language/streams)
 
-> A stream is a sequence of asynchronous data.
+> ストリームとは連続的な非同期データです。
 
-Bloc is built on top of [RxDart](https://pub.dev/packages/rxdart); however, it abstracts all of the `RxDart` specific implementation details.
+Bloc は内部で[RxDart](https://pub.dev/packages/rxdart)を使って作られています。しかし、`RxDart`の詳細な部分は Bloc のAPIの中に内包されています。
 
-In order to use Bloc, it is criticial to have a solid understanding of `Streams` and how they work.
+Bloc を使いこなすには`Stream`とは何かをきちんと理解していることが重要になります。
 
-> If you're unfamiliar with `Streams` just think of a pipe with water flowing through it. The pipe is the `Stream` and the water is the asynchronous data.
+> もし`Stream`についてあまり知らないのであれば、シンプルに水が流れているパイプをイメージしてください。この場合のパイプは`Stream`で、水が非同期データです。
 
-We can create a `Stream` in Dart by writing an `async*` function.
+Dartでは`async*`を使って`Stream`を返す関数を作ることができます。
 
-[count_stream.dart](_snippets/core_concepts/count_stream.dart.md ':include')
+[count_stream.dart](../_snippets/core_concepts/count_stream.dart.md ':include')
 
-By marking a function as `async*` we are able to use the `yield` keyword and return a `Stream` of data. In the above example, we are returning a `Stream` of integers up to the `max` integer parameter.
+関数名の後に`async*`をつけることで関数の内部で`yield`を使って`Stream`を返すことができるようになります。上記の例では引数である`max`の値まで連続したの int 型の`Stream`を返しています。
 
-Every time we `yield` in an `async*` function we are pushing that piece of data through the `Stream`.
+`async*`がついている関数の中で`yield`をするたびに新しいデータを`Stream`に流しています。
 
-We can consume the above `Stream` in several ways. If we wanted to write a function to return the sum of a `Stream` of integers it could look something like:
+`Stream`のデータの取り出し方は何パターンかあります。例えば、上記の`Stream`に流れてきた値の合計値を計算したい場合はこのようになります：
 
-[sum_stream.dart](_snippets/core_concepts/sum_stream.dart.md ':include')
+[sum_stream.dart](../_snippets/core_concepts/sum_stream.dart.md ':include')
 
-By marking the above function as `async` we are able to use the `await` keyword and return a `Future` of integers. In this example, we are awaiting each value in the stream and returning the sum of all integers in the stream.
+上記の関数名の後に`async`をつけることで関数の中で`await`を使うことができるようになり、`Future`型の int を返すことができます。この例では毎回やってくる値を await して合計値を最後に返しています。
 
-We can put it all together like so:
+全部くっつけるとこのようになります：
 
-[main.dart](_snippets/core_concepts/streams_main.dart.md ':include')
+[main.dart](../_snippets/core_concepts/streams_main.dart.md ':include')
 
-## Blocs
+## Bloc
 
 > A Bloc (Business Logic Component) is a component which converts a `Stream` of incoming `Events` into a `Stream` of outgoing `States`. Think of a Bloc as being the "brains" described above.
 
 > Every Bloc must extend the base `Bloc` class which is part of the core bloc package.
 
-[counter_bloc.dart](_snippets/core_concepts/counter_bloc_class.dart.md ':include')
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_class.dart.md ':include')
 
 In the above code snippet, we are declaring our `CounterBloc` as a Bloc which converts `CounterEvents` into `ints`.
 
@@ -90,15 +90,15 @@ In the above code snippet, we are declaring our `CounterBloc` as a Bloc which co
 
 In this case, we want our counter to start at `0`.
 
-[counter_bloc.dart](_snippets/core_concepts/counter_bloc_initial_state.dart.md ':include')
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_initial_state.dart.md ':include')
 
 > Every Bloc must implement a function called `mapEventToState`. The function takes the incoming `event` as an argument and must return a `Stream` of new `states` which is consumed by the presentation layer. We can access the current bloc state at any time using the `state` property.
 
-[counter_bloc.dart](_snippets/core_concepts/counter_bloc_map_event_to_state.dart.md ':include')
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_map_event_to_state.dart.md ':include')
 
 At this point, we have a fully functioning `CounterBloc`.
 
-[counter_bloc.dart](_snippets/core_concepts/counter_bloc.dart.md ':include')
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc.dart.md ':include')
 
 !> Blocs will ignore duplicate states. If a Bloc yields `State nextState` where `state == nextState`, then no transition will occur and no change will be made to the `Stream<State>`.
 
@@ -108,13 +108,13 @@ At this point, you're probably wondering _"How do I notify a Bloc of an event?"_
 
 We can create a simple application which counts from 0 to 3.
 
-[main.dart](_snippets/core_concepts/counter_bloc_main.dart.md ':include')
+[main.dart](../_snippets/core_concepts/counter_bloc_main.dart.md ':include')
 
 !> By default, events will always be processed in the order in which they were added and any newly added events are enqueued. An event is considered fully processed once `mapEventToState` has finished executing.
 
 The `Transitions` in the above code snippet would be
 
-[counter_bloc_transitions.json](_snippets/core_concepts/counter_bloc_transitions.json.md ':include')
+[counter_bloc_transitions.json](../_snippets/core_concepts/counter_bloc_transitions.json.md ':include')
 
 Unfortunately, in the current state we won't be able to see any of these transitions unless we override `onTransition`.
 
@@ -122,7 +122,7 @@ Unfortunately, in the current state we won't be able to see any of these transit
 
 ?> **Tip**: `onTransition` is a great place to add bloc-specific logging/analytics.
 
-[counter_bloc.dart](_snippets/core_concepts/counter_bloc_on_transition.dart.md ':include')
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_on_transition.dart.md ':include')
 
 Now that we've overridden `onTransition` we can do whatever we'd like whenever a `Transition` occurs.
 
@@ -134,7 +134,7 @@ Just like we can handle `Transitions` at the bloc level, we can also handle `Exc
 
 ?> **Tip**: `onError` is a great place to add bloc-specific error handling.
 
-[counter_bloc.dart](_snippets/core_concepts/counter_bloc_on_error.dart.md ':include')
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_on_error.dart.md ':include')
 
 Now that we've overridden `onError` we can do whatever we'd like whenever an `Exception` is thrown.
 
@@ -144,20 +144,20 @@ One added bonus of using Bloc is that we can have access to all `Transitions` in
 
 If we want to be able to do something in response to all `Transitions` we can simply create our own `BlocDelegate`.
 
-[simple_bloc_delegate.dart](_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
 
 ?> **Note**: All we need to do is extend `BlocDelegate` and override the `onTransition` method.
 
 In order to tell Bloc to use our `SimpleBlocDelegate`, we just need to tweak our `main` function.
 
-[main.dart](_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
+[main.dart](../_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
 
 If we want to be able to do something in response to all `Events` added, we can also override the `onEvent` method in our `SimpleBlocDelegate`.
 
-[simple_bloc_delegate.dart](_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
 
 If we want to be able to do something in response to all `Exceptions` thrown in a Bloc, we can also override the `onError` method in our `SimpleBlocDelegate`.
 
-[simple_bloc_delegate.dart](_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
 
 ?> **Note**: `BlocSupervisor` is a singleton which oversees all Blocs and delegates responsibilities to the `BlocDelegate`.
