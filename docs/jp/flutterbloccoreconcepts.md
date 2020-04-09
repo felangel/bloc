@@ -1,46 +1,46 @@
-# Flutter Bloc Core Concepts
+# Flutter Blocコアコンセプト
 
-?> Please make sure to carefully read and understand the following sections before working with [flutter_bloc](https://pub.dev/packages/flutter_bloc).
+?> [flutter_bloc](https://pub.dev/packages/flutter_bloc)を使い始める前に下記の説明をきちんと読んで理解してください。
 
-## Bloc Widgets
+## Blocウィジェット
 
 ### BlocBuilder
 
-**BlocBuilder** is a Flutter widget which requires a `Bloc` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed. The `builder` function will potentially be called many times and should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that returns a widget in response to the state.
+**BlocBuilder**はFlutterのウィジェットで`Bloc`と`builder`メソッドを与える必要があります。`BlocBuilder`は新しい state がきた時にウィジェットを再描画してくれる役割を持ちます。`BlocBuilder`は`StreamBuilder`によく似ていますが、よりシンプルなAPIになっています。`builder`メソッドはstateの変化に応じてウィジェットを返し、何回でも呼ばれることがあります。また、[pure関数](https://en.wikipedia.org/wiki/Pure_function)である必要があります。
 
-See `BlocListener` if you want to "do" anything in response to state changes such as navigation, showing a dialog, etc...
+state が変わった時に１度だけ何かをしたい時には`BlocListener`を使います。例えばほかのページへのナビゲーションやダイアログの表示など
 
-If the bloc parameter is omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+もし bloc 引数が省略されているときは`BlocBuilder`は自動的に`BlocProvider`とそこでの`BuildContext`を使って blocを探してくれます。
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
   builder: (context, state) {
-    // return widget here based on BlocA's state
+    // ここで state に応じたウィジェットを出し分ける
   }
 )
 ```
 
-Only specify the bloc if you wish to provide a bloc that will be scoped to a single widget and isn't accessible via a parent `BlocProvider` and the current `BuildContext`.
+bloc 引数は特定のウィジェットにのみ特定の bloc を使いたく、かつそこの`BuildContext`の先祖ウィジェットに`BlocProvider`がない場合のみ指定します。
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
-  bloc: blocA, // provide the local bloc instance
+  bloc: blocA, // ローカルの bloc インスタンスを渡す
   builder: (context, state) {
-    // return widget here based on BlocA's state
+    // ここで blocA の state に応じたウィジェットを出し分ける
   }
 )
 ```
 
-If you want fine-grained control over when the builder function is called you can provide an optional `condition` to `BlocBuilder`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `builder` will be called with `state` and the widget will rebuild. If `condition` returns false, `builder` will not be called with `state` and no rebuild will occur.
+もし、 state　が変化するたびに毎回 builder ファンクションを呼ぶのではなく、特定の条件を満たした時のみ builder を呼び画面の再描画を行いたいときは`BlocBuilder`に`condition` を設定します。`condition`は一個前の state と今の state が引数として渡されていて、boolean を返すようになっています。もし`condition`が true を返したら `builder` が呼ばれ画面の再描画が行われます。もし`condition`が false を返したら`builder`は呼ばれず、再描画は起きません。
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
   condition: (previousState, state) {
-    // return true/false to determine whether or not
-    // to rebuild the widget with state
+    // 今の state で再描画を行いたいかどうかによって
+    // true/false を返す
   },
   builder: (context, state) {
-    // return widget here based on BlocA's state
+    // ここで blocA の state に応じたウィジェットを出し分ける
   }
 )
 ```
@@ -48,6 +48,7 @@ BlocBuilder<BlocA, BlocAState>(
 ### BlocProvider
 
 **BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
+**BlocProvider** は子孫要素に bloc を渡す Flutter のウィジェットです。
 
 In most cases, `BlocProvider` should be used to create new `blocs` which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle closing the bloc.
 
