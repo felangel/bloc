@@ -78,86 +78,86 @@ Dartでは`async*`を使って`Stream`を返す関数を作ることができま
 
 ## Bloc
 
-> A Bloc (Business Logic Component) is a component which converts a `Stream` of incoming `Events` into a `Stream` of outgoing `States`. Think of a Bloc as being the "brains" described above.
+> Bloc (Business Logic Component)とは`Stream`に乗ってやってくる`Event`を`State`を乗せた`Stream`に変換して返してあげるコンポーネントのことです。この Bloc が上の例で度々出てきた「脳」に当たる部分です。
 
-> Every Bloc must extend the base `Bloc` class which is part of the core bloc package.
+> 全ての Bloc は bloc ライブラリー上で定義されている`Bloc`クラスを継承しなくてはなりません。
 
 [counter_bloc.dart](../_snippets/core_concepts/counter_bloc_class.dart.md ':include')
 
-In the above code snippet, we are declaring our `CounterBloc` as a Bloc which converts `CounterEvents` into `ints`.
+上記のコードでは`CounterBloc`を定義し`CounterEvents`を`int`型に変換しています。
 
-> Every Bloc must define an initial state which is the state before any events have been received.
+> 全ての Bloc は初期 state を定義しなければなりません。この初期 state はまだ一回も state がきていない時に使われます。
 
-In this case, we want our counter to start at `0`.
+この場合の初期 state は`0`です。
 
 [counter_bloc.dart](../_snippets/core_concepts/counter_bloc_initial_state.dart.md ':include')
 
-> Every Bloc must implement a function called `mapEventToState`. The function takes the incoming `event` as an argument and must return a `Stream` of new `states` which is consumed by the presentation layer. We can access the current bloc state at any time using the `state` property.
+> 全ての Bloc は`mapEventToState`という関数を備えていなければいけません。この関数は Bloc に入ってきた`event`を引数としてとり、`state`の`stream`を戻り値として返します。Bloc内ではいつでも state プロパティーにアクセスすることでその時の state を取得することができます。
 
 [counter_bloc.dart](../_snippets/core_concepts/counter_bloc_map_event_to_state.dart.md ':include')
 
-At this point, we have a fully functioning `CounterBloc`.
+ここまでくれば完全に動作する`CounterBloc`の完成です。
 
 [counter_bloc.dart](../_snippets/core_concepts/counter_bloc.dart.md ':include')
 
-!> Blocs will ignore duplicate states. If a Bloc yields `State nextState` where `state == nextState`, then no transition will occur and no change will be made to the `Stream<State>`.
+!> Bloc は同一の state を無視します。もし、Bloc が yield した state が`State nextState`で、`state == nextState`が true の場合、その transition は起こらず、`Stream<State>`にも何の変化も起こりません。
 
-At this point, you're probably wondering _"How do I notify a Bloc of an event?"_.
+ここまで来るときっと「どうやって Bloc に新しい event が来たことを知らせるの？」と思っていませんか？
 
-> Every Bloc has a `add` method. `Add` takes an `event` and triggers `mapEventToState`. `Add` may be called from the presentation layer or from within the Bloc and notifies the Bloc of a new `event`.
+> 全ての Bloc は`add`という関数を持っています。`Add`は`event`を引数として取り、その event を`mapEventToState`に渡してくれます。`Add`はUI側からでもBlocの中からでも呼び出すことができます。
 
-We can create a simple application which counts from 0 to 3.
+0から3まで数えてくれるアプリはこのように作れます。
 
 [main.dart](../_snippets/core_concepts/counter_bloc_main.dart.md ':include')
 
-!> By default, events will always be processed in the order in which they were added and any newly added events are enqueued. An event is considered fully processed once `mapEventToState` has finished executing.
+!> デフォルトでは event は常に来た順に処理されます。Event は`mapEventToState`が完了すると処理完了とみなされます。
 
-The `Transitions` in the above code snippet would be
+上記のコードでの`Transition`はこのようになります：
 
 [counter_bloc_transitions.json](../_snippets/core_concepts/counter_bloc_transitions.json.md ':include')
 
-Unfortunately, in the current state we won't be able to see any of these transitions unless we override `onTransition`.
+残念ながら今の状態では`onTransition`を上書きしないと transition を見ることができません。
 
-> `onTransition` is a method that can be overridden to handle every local Bloc `Transition`. `onTransition` is called just before a Bloc's `state` has been updated.
+> `onTransition`を上書きすることでその Bloc の`Transition`を観測することができます。`onTransition`は Bloc の state が更新される直前に呼ばれます。
 
-?> **Tip**: `onTransition` is a great place to add bloc-specific logging/analytics.
+?> **豆知識**: `onTransition`はその Bloc 特有のアナリティクスやログ用のコードを書くのに最適な場所です。
 
 [counter_bloc.dart](../_snippets/core_concepts/counter_bloc_on_transition.dart.md ':include')
 
-Now that we've overridden `onTransition` we can do whatever we'd like whenever a `Transition` occurs.
+`onTransition`を上書きしたので`Transition`が起こるたびに好きなコードを実行できます。
 
-Just like we can handle `Transitions` at the bloc level, we can also handle `Exceptions`.
+Bloc 内で`Transition`を観測できたのと同じように Bloc 内の`Exception`も観測することができます。
 
-> `onError` is a method that can be overriden to handle every local Bloc `Exception`. By default all exceptions will be ignored and `Bloc` functionality will be unaffected.
+> `onError`を上書きするとそのBloc内で起こった`Exception`を観測することができます。デフォルトでは Bloc 内で起こった全ての`Exception`は無視され、Bloc の動作には影響を及ぼしません。
 
-?> **Note**: The stacktrace argument may be `null` if the state stream received an error without a `StackTrace`.
+?> **メモ**: `StackTrace`が含まれないエラーの場合は StackTrace プロパティは`null`の場合があります。
 
-?> **Tip**: `onError` is a great place to add bloc-specific error handling.
+?> **豆知識**: `onError`はその Bloc 特有のエラー処理を行うのにうってつけのところです。
 
 [counter_bloc.dart](../_snippets/core_concepts/counter_bloc_on_error.dart.md ':include')
 
-Now that we've overridden `onError` we can do whatever we'd like whenever an `Exception` is thrown.
+`onError`を上書きしたので`Exception`が発生した時に好きなように処理することができます。
 
 ## BlocDelegate
 
-One added bonus of using Bloc is that we can have access to all `Transitions` in one place. Even though in this application we only have one Bloc, it's fairly common in larger applications to have many Blocs managing different parts of the application's state.
+Bloc を使うことで一個ついてくるボーナスが一箇所で全ての`Transition`にアクセスできるということです。今回のアプリでは一個しか Bloc がなかったものの、もう少し複雑なアプリになったら Bloc も複数出てきてアプリ内の様々な箇所で状態管理をするようになります。
 
-If we want to be able to do something in response to all `Transitions` we can simply create our own `BlocDelegate`.
+もし、アプリ内の全ての`Transition`を監視したい場合は`BlocDelegate`を作ります。
 
 [simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
 
-?> **Note**: All we need to do is extend `BlocDelegate` and override the `onTransition` method.
+?> **メモ**: `BlocDelegate`を継承し`onTransition`を上書きするだけです。
 
-In order to tell Bloc to use our `SimpleBlocDelegate`, we just need to tweak our `main` function.
+Bloc にこの`SimpleBlocDelegate`を使うように指示するにはただ`main`をいじるだけです。
 
 [main.dart](../_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
 
-If we want to be able to do something in response to all `Events` added, we can also override the `onEvent` method in our `SimpleBlocDelegate`.
+もし全ての`Event`に対して何かを実行したい場合は`SimpleBlocDelegate`内で`onEvent`を上書きします。
 
 [simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
 
-If we want to be able to do something in response to all `Exceptions` thrown in a Bloc, we can also override the `onError` method in our `SimpleBlocDelegate`.
+もし全ての`Exception`に対して何かを実行したい場合は`SimpleBlocDelegate`の`onError`を上書きします。
 
 [simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
 
-?> **Note**: `BlocSupervisor` is a singleton which oversees all Blocs and delegates responsibilities to the `BlocDelegate`.
+?> **メモ**: `BlocSupervisor` は全ての Bloc を上書きするシングルトンで、情報を`BlocDelegate`に上げてくれます。
