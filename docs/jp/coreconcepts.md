@@ -1,4 +1,4 @@
-# Core Concepts
+# コアコンセプト
 
 ?> Please make sure to carefully read and understand the following sections before working with [bloc](https://pub.dev/packages/bloc).
 

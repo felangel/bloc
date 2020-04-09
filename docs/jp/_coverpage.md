@@ -13,8 +13,8 @@
 > 思い通りに動くDartの状態管理用ライブラリー
 
 - シンプルで軽い
-- てスタビリティも考慮した
-- Dart, Flutter, そして AngularDartのため
+- テストにも考慮した
+- Dart, Flutter, AngularDartのため
 
 [GitHub](https://github.com/felangel/bloc/)
 [スタート](jp/gettingstarted.md)
