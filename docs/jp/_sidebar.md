@@ -1,7 +1,7 @@
 - 紹介
 
   - [まずはじめに](jp/gettingstarted.md)
-  - [なぜBloc?](jp/whybloc.md)
+  - [なぜBlocを使う?](jp/whybloc.md)
   - 基本的なコンセプト
     - [bloc](jp/coreconcepts.md)
     - [flutter_bloc](jp/flutterbloccoreconcepts.md)

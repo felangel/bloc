@@ -1,29 +1,31 @@
-# Why Bloc?
+# なぜBlocを使う?
 
-> Bloc makes it easy to separate presentation from business logic, making your code _fast_, _easy to test_, and _reusable_.
+> BlocはUI側のコードとビジネスロジックを分け、 _早く_, _楽にテストし_, そして _再利用しやすく_してくれます。
 
-When building production quality applications, managing state becomes critical.
+プロダクション用のアプリケーションを作るときは状態管理がとても大切になってきます。
 
 As developers we want to:
+ディベロパートしては：
 
-- know what state our application is in at any point in time.
-- easily test every case to make sure our app is responding appropriately.
-- record every single user interaction in our application so that we can make data-driven decisions.
-- work as efficiently as possible and reuse components both within our application and across other applications.
-- have many developers seamlessly working within a single code base following the same patterns and conventions.
-- develop fast and reactive apps.
+- いつアプリケーションがどの状態にあるかを知りたい
+- 簡単に全てのケースにおいて正しく挙動しているかをテストしたい
+- データを元に開発判断ができるようにユーザーがアプリケーションで何をしているかを一つ残らず把握したい
+- アプリケーションのコンポーネントをほかのアプリケーションでも再利用して効率よく開発をしたい
+- 大人数の開発者でも同じ開発パターンに基づき一つのコードベースを構築したい
+- サクサク動くリアクティブアプリケーションを開発したい
 
-Bloc was designed to meet all of those needs and many more.
+Blocはそんなニーズに応えるために開発されました。
 
-There are many state management solutions and deciding which one to use can be a daunting task.
+世の中には多数の状態管理用のソリューションがあり、どれを使うか判断するのは大変ですよね。
 
 Bloc was designed with three core values in mind:
+Blocはこれら３つのコアバリューを元に作成されました：
 
-- Simple
-  - Easy to understand & can be used by developers with varying skill levels.
-- Powerful
-  - Help make amazing, complex applications by composing them of smaller components.
-- Testable
-  - Easily test every aspect of an application so that we can iterate with confidence.
+- シンプル
+  - 簡単に使え、ディベロパーのレベルを問わずに使ってもらえる。
+- パワフル
+  - 大きく複雑なアプリケーションを小さなコンポーネントに分けることで質の高いアプリケーションを作る。
+- 可テスト性
+  - 品質に自信を持って開発できるようにアプリケーションを構築する全ての要素をテストできるようにする。
 
-Bloc attempts to make state changes predictable by regulating when a state change can occur and enforcing a single way to change state throughout an entire application.
+Blocは状態変化がいつどのように起こるかを定義、制限することで状態変化をわかりやすくしてくれます。
