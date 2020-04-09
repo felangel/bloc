@@ -1,33 +1,27 @@
-# Getting Started
+# まずはじめに
 
-?> In order to start using bloc you must have the [Dart SDK](https://dart.dev/get-dart) installed on your machine.
+?> Blocを使って開発を始めるにはまず [Dart SDK](https://dart.dev/get-dart) をインストールする必要があります
 
-## Overview
+## 概要
 
-Bloc consists of several pub packages:
+Blocには３つのpubパッケージが含まれています：
 
-- [bloc](https://pub.dev/packages/bloc) - Core bloc library
-- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Powerful Flutter Widgets built to work with bloc in order to build fast, reactive mobile applications.
-- [angular_bloc](https://pub.dev/packages/angular_bloc) - Powerful Angular Components built to work with bloc in order to build fast, reactive web applications.
+- [bloc](https://pub.dev/packages/bloc) - コアなBlocライブラリー
+- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Blocを使って早く、リアクティブなモバイルアプリケーションを作るためのFlutterウィジェット
+- [angular_bloc](https://pub.dev/packages/angular_bloc) - Blocを使って早く、リアクティブなモバイルアプリケーションを作るためのAngularのコンポーネント
 
-## Installation
+## インストール
 
-The first thing we need to do is add the bloc package to our `pubspec.yaml` as a dependency.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-```
-
-For a [Flutter](https://flutter.dev/) application, we also need to add the flutter_bloc package to our `pubspec.yaml` as a dependency.
+[Flutter](https://flutter.dev/)のアプリケーションの場合は`pubspec.yaml`にflutter_blocを追加します。
 
 ```yaml
 dependencies:
-  bloc: ^3.0.0
   flutter_bloc: ^3.2.0
 ```
 
-For an [AngularDart](https://angulardart.dev/) application, we also need to add the angular_bloc package to our `pubspec.yaml` as a dependency.
+
+[AngularDart](https://angulardart.dev/)の場合はblocとangular_blocの二つを`pubspec.yaml`に追加します。
 
 ```yaml
 dependencies:
@@ -35,30 +29,26 @@ dependencies:
   angular_bloc: ^3.0.0
 ```
 
-Next we need to install bloc.
+次にblocをインストールします。
 
-!> Make sure to run the following command from the same directory as your `pubspec.yaml` file.
+!> 以下のコマンドは`pubspec.yaml`ファイルと同じディレクトリー内で行うようにしてください。
 
-- For Dart or AngularDart run `pub get`
+- DartかAngularDartの場合は `pub get`を実行
 
-- For Flutter run `flutter packages get`
+- Flutterの場合は`flutter packages get`を実行
 
-## Import
+## インポート
 
-Now that we have successfully installed bloc, we can create our `main.dart` and import bloc.
+blocのインストールが無事完了したら`main.dart`にblocをインポートしてみましょう
 
-```dart
-import 'package:bloc/bloc.dart';
-```
+Flutterの場合はflutter_blocをインポートします。
 
-For a Flutter application we can also import flutter_bloc.
 
 ```dart
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 ```
 
-For an AngularDart application we can also import angular_bloc.
+AngularDartの場合はblocとangular_blocをインポートします。
 
 ```dart
 import 'package:bloc/bloc.dart';
