@@ -1,10 +1,10 @@
-# Testing
+# テスト
 
-> Bloc was designed to be extremely easy to test.
+> Bloc はとても簡単にテストができるように設計されています。
 
-For the sake of simplicity, let's write tests for the `CounterBloc` we created in [Core Concepts](coreconcepts.md).
+例として[コアコンセプト](coreconcepts.md)の中で作った`CounterBloc`のテストを書いていきましょう。
 
-To recap, the `CounterBloc` implementation looks like
+まずはおさらいです。`CounterBloc`は下記のようになっていましたね：
 
 ```dart
 enum CounterEvent { increment, decrement }
@@ -27,9 +27,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-Before we start writing our tests we're going to need to add a testing framework to our dependencies.
+テストコードを書き始める前にまずテスト用のフレームワークを追加する必要があります。
 
 We need to add [test](https://pub.dev/packages/test) and [bloc_test](https://pub.dev/packages/bloc_test) to our `pubspec.yaml`.
+[test](https://pub.dev/packages/test)と[bloc_test](https://pub.dev/packages/bloc_test)を`pubspec.yaml`に追加します。
 
 ```yaml
 dev_dependencies:
@@ -37,14 +38,14 @@ dev_dependencies:
   bloc_test: ^3.0.0
 ```
 
-Let's get started by creating the file for our `CounterBloc` Tests, `counter_bloc_test.dart` and importing the test package.
+まず`CounterBloc`に関するテストコードを記述する`counter_bloc_test.dart`ファイルを作り、テスト用のパッケージをインポートするところから始めましょう。
 
 ```dart
 import 'package:test/test.dart';
 import 'package:bloc_test/bloc_test.dart';
 ```
 
-Next, we need to create our `main` as well as our test group.
+次に`main`関数とテストグループを作ります。
 
 ```dart
 void main() {
@@ -54,9 +55,9 @@ void main() {
 }
 ```
 
-?> **Note**: groups are for organizing individual tests as well as for creating a context in which you can share a common `setUp` and `tearDown` across all of the individual tests.
+?> **メモ**: グループは一つ一つの単体テストをまとめ、一つの`setUp`と`tearDown`を共有するために作ります。
 
-Let's start by creating an instance of our `CounterBloc` which will be used across all of our tests.
+まず`CounterBloc`今回のテストグループの中で使われるのインスタンスを作るところから始めましょう。
 
 ```dart
 group('CounterBloc', () {
@@ -68,7 +69,7 @@ group('CounterBloc', () {
 });
 ```
 
-Now we can start writing our individual tests.
+これで単体テストを書き始められます。
 
 ```dart
 group('CounterBloc', () {
@@ -78,34 +79,34 @@ group('CounterBloc', () {
         counterBloc = CounterBloc();
     });
 
-    test('initial state is 0', () {
+    test('初期 state は 0', () {
         expect(counterBloc.initialState, 0);
     });
 });
 ```
 
-?> **Note**: We can run all of our tests with the `pub run test` command.
+?> **メモ**: `pub run test`コマンドでテストを走らせることができます。
 
-At this point we should have our first passing test! Now let's write a more complex test using the [bloc_test](https://pub.dev/packages/bloc_test) package.
+ここまできたら最初の通過するテストが書けたと思います！次にもっと複雑なテストを[bloc_test](https://pub.dev/packages/bloc_test)を使って書いていきましょう。
 
 ```dart
 blocTest(
-    'emits [0, 1] when CounterEvent.increment is added',
+    'CounterEvent.increment が追加されたら[0, 1]を返す',
     build: () => counterBloc,
     act: (bloc) => bloc.add(CounterEvent.increment),
     expect: [0, 1],
 );
 
 blocTest(
-    'emits [0, -1] when CounterEvent.decrement is added',
+    'CounterEvent.decrement が追加されたら[0, -1]を返す',
     build: () => counterBloc,
     act: (bloc) => bloc.add(CounterEvent.decrement),
     expect: [0, -1],
 );
 ```
 
-We should be able to run the tests and see that all are passing.
+ここまで書き、テストを走らせると全てのテストが通ることがわかると思います。
 
-That's all there is to it, testing should be a breeze and we should feel confident when making changes and refactoring our code.
+これでテストは終わりです。自信を持ってテストコードを書けるようになったことでしょう。
 
-You can refer to the [Todos App](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library) for an example of a fully tested application.
+[Todos App](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library)を開くとより詳細なテストコードの例が見つかります。
