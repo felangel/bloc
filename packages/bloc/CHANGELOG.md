@@ -1,3 +1,8 @@
+# 4.0.0-dev.2
+
+- Bugfix: Do not emit duplicate terminating state
+- Breaking Change: Always emit the first state even if it is equal to the `initialState`
+
 # 4.0.0-dev.1
 
 - Remove `rxdart` dependency ([#821](https://github.com/felangel/bloc/pull/821))
