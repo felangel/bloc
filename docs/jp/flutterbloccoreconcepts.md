@@ -160,9 +160,6 @@ BlocListener<BlocA, BlocAState>(
 
 ### MultiBlocListener
 
-**MultiBlocListener** is a Flutter widget that merges multiple `BlocListener` widgets into one.
-`MultiBlocListener` improves the readability and eliminates the need to nest multiple `BlocListeners`.
-By using `MultiBlocListener` we can go from:
 **MultiBlocListener**は複数の`BlocListener`を一つにまとめてくれる Flutter のウィジェットです。
 `MultiBlocListener`を使うと複数の`BlocListeners`を入れ子にしなくてよくなりコードの可読性が上がります。
 `MultiBlocListener`を使うとこれが:
@@ -239,7 +236,7 @@ BlocConsumer<BlocA, BlocAState>(
 
 ### RepositoryProvider
 
-**RepositoryProvider** is a Flutter widget which provides a repository to its children via `RepositoryProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a repository can be provided to multiple widgets within a subtree. `BlocProvider` should be used to provide blocs whereas `RepositoryProvider` should only be used for repositories.
+**RepositoryProvider**は`RepositoryProvider.of<T>(context)`を使って子孫要素に repository を渡すことができる Flutter のウィジェットです。一つの repository インスタンスを複数の子孫要素に渡したい時に使います。`BlocProvider`は子孫要素に Bloc を渡したい時に使い、`RepositoryProvider`は子孫要素に repository を渡したい時に使います。
 
 ```dart
 RepositoryProvider(
@@ -248,21 +245,21 @@ RepositoryProvider(
 );
 ```
 
-then from `ChildA` we can retrieve the `Repository` instance with:
+そうすると`ChildA`内でこのように`Repository`インスタンスを取得できます:
 
 ```dart
-// with extensions
+// extension を使った場合の記法
 context.repository<RepositoryA>();
 
-// without extensions
+// extension を使わない場合の記法
 RepositoryProvider.of<RepositoryA>(context)
 ```
 
 ### MultiRepositoryProvider
 
-**MultiRepositoryProvider** is a Flutter widget that merges multiple `RepositoryProvider` widgets into one.
-`MultiRepositoryProvider` improves the readability and eliminates the need to nest multiple `RepositoryProvider`.
-By using `MultiRepositoryProvider` we can go from:
+**MultiRepositoryProvider**は複数の`RepositoryProvider`を一つにまとめた Flutter のウィジェットです。
+`MultiRepositoryProvider`を使うと複数の`RepositoryProvider`を入れ子にする必要がなくなり、コードの可読性が上がります。
+`MultiRepositoryProvider`を使うとこれが:
 
 ```dart
 RepositoryProvider<RepositoryA>(
@@ -277,7 +274,7 @@ RepositoryProvider<RepositoryA>(
 )
 ```
 
-to:
+こうなります:
 
 ```dart
 MultiRepositoryProvider(
@@ -296,9 +293,10 @@ MultiRepositoryProvider(
 )
 ```
 
-## Usage
+## 使用法
 
 Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
+実際に`BlocBuilder`を使ってどのように`CounterPage`に`CounterBloc`を紐づけるかを見てみましょう。
 
 ### counter_bloc.dart
 
@@ -372,4 +370,4 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-At this point we have successfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
+ここまできたら完全にUI側のコードとロジック系のコードを分けることができました。注目して欲しいのは`CounterPage`ウィジェットにはユーザーがボタンを押した時に何が起こるかは一切定義されていません。ただ`CounterBloc`にユーザーが押したボタンに応じて event を送っているだけです。
