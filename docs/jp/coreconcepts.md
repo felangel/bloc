@@ -8,7 +8,7 @@ Bloc を使いこなすにはいくつかコアとなるコンセプトを理解
 
 ## Event
 
-> event は Bloc のインプットとなるものです。event は主にボタンタップなどのユーザーアクションや、ページロードなどのライフサイクル event をきっかけに Bloc に送られます。
+> event は Bloc のインプットとなるものです。Event は主にボタンタップなどのユーザーアクションや、ページロードなどのライフサイクルイベントをきっかけに Bloc に送られます。
 
 実際にアプリを作る時には一度立ち止まってユーザーがどのようにそのアプリを使用するかを考えなくてはなりません。カウンターの場合はボタンが二つあり、それぞれカウントを一つづつ増やすか減らします。
 
@@ -24,7 +24,7 @@ Bloc を使いこなすにはいくつかコアとなるコンセプトを理解
 
 ## State
 
-> State は Bloc のアウトプットで、アプリのUIの一つの状態を表します。UIはこの state の変化を受けて再描画をします。
+> State は Bloc のアウトプットで、アプリのUIの一つの状態を表します。UIはこの state の変化を受けて再描画されます。
 
 ここまででアプリ内で使われる `CounterEvent.increment` と `CounterEvent.decrement` の二つの event を定義しました。
 
@@ -36,7 +36,7 @@ Bloc を使いこなすにはいくつかコアとなるコンセプトを理解
 
 ## Transition
 
-> 一つの state から異なる別の state への変化を transition と呼びます。Transition は一つ前の state と後の state から成り立ちます。
+> 一つの state から異なる別の state への変化を transition と呼びます。Transition は一つ前の state と新しくやってきた state の二つから成り立ちます。
 
 ユーザーがアプリを操作し、`Increment` や `Decrement` event を発火させるとカウンターの state が変化します。このような state の変化は連続した transition で表すことができます。
 

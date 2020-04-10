@@ -27,8 +27,6 @@ Bloc はアプリケーションを３つのレイヤーに分けてくれます
 
 > Data Provider の役割は生のデータを返すことです。Data Provider は汎用的で多用途である必要があります。
 
-The data provider will usually expose simple APIs to perform [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
-We might have a `createData`, `readData`, `updateData`, and `deleteData` method as part of our data layer.
 Data Provider は複雑な処理はせず、シンプルに[CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)用のAPIを公開するだけです。
 例えば、`createData`, `readData`, `updateData`, `deleteData` のようなメソッドをデータレイヤーに作ったりするでしょう。
 

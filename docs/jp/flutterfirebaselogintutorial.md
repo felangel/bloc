@@ -4,7 +4,7 @@
 
 > In the following tutorial, we're going to build a Firebase Login Flow in Flutter using the Bloc library.
 
-![demo](./assets/gifs/flutter_firebase_login.gif)
+![demo](../assets/gifs/flutter_firebase_login.gif)
 
 ## Setup
 

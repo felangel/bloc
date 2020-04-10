@@ -6,7 +6,7 @@
 
 ### BlocBuilder
 
-**BlocBuilder**はFlutterのウィジェットで`Bloc`と`builder`メソッドを与える必要があります。`BlocBuilder`は新しい state がきた時にウィジェットを再描画してくれる役割を持ちます。`BlocBuilder`は`StreamBuilder`によく似ていますが、よりシンプルなAPIになっています。`builder`メソッドはstateの変化に応じてウィジェットを返し、何回でも呼ばれることがあります。また、[pure関数](https://en.wikipedia.org/wiki/Pure_function)である必要があります。
+**BlocBuilder**はFlutterのウィジェットで`Bloc`と`builder`関数を与える必要があります。`BlocBuilder`は新しい state がきた時にウィジェットを再描画してくれる役割を持ちます。`BlocBuilder`は`StreamBuilder`によく似ていますが、よりシンプルなAPIになっています。`builder`関数はstateの変化に応じてウィジェットを返し、何回でも呼ばれることがあります。また、[pure関数](https://en.wikipedia.org/wiki/Pure_function)である必要があります。
 
 state が変わった時に１度だけ何かをしたい時には`BlocListener`を使います。例えばほかのページへのナビゲーションやダイアログの表示など
 
@@ -31,7 +31,7 @@ BlocBuilder<BlocA, BlocAState>(
 )
 ```
 
-もし、 state　が変化するたびに毎回 builder ファンクションを呼ぶのではなく、特定の条件を満たした時のみ builder を呼び画面の再描画を行いたいときは`BlocBuilder`に`condition` を設定します。`condition`は一個前の state と今の state が引数として渡されていて、boolean を返すようになっています。もし`condition`が true を返したら `builder` が呼ばれ画面の再描画が行われます。もし`condition`が false を返したら`builder`は呼ばれず、再描画は起きません。
+もし、 state　が変化するたびに毎回 builder 関数を呼ぶのではなく、特定の条件を満たした時のみ builder を呼び画面の再描画を行いたいときは`BlocBuilder`に`condition` を設定します。`condition`は一個前の state と今の state が引数として渡されていて、boolean を返すようになっています。もし`condition`が true を返したら `builder` が呼ばれ画面の再描画が行われます。もし`condition`が false を返したら`builder`は呼ばれず、再描画は起きません。
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(

@@ -1,14 +1,14 @@
 # まずはじめに
 
-?> Blocを使って開発を始めるにはまず [Dart SDK](https://dart.dev/get-dart) をインストールする必要があります
+?> Blocを使って開発を始めるにはまず [Dart SDK](https://dart.dev/get-dart) をインストールする必要があります。
 
 ## 概要
 
 Blocには３つのpubパッケージが含まれています：
 
 - [bloc](https://pub.dev/packages/bloc) - コアなBlocライブラリー
-- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Blocを使って早く、リアクティブなモバイルアプリケーションを作るためのFlutterウィジェット
-- [angular_bloc](https://pub.dev/packages/angular_bloc) - Blocを使って早く、リアクティブなモバイルアプリケーションを作るためのAngularのコンポーネント
+- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Blocを使って素早く、リアクティブなモバイルアプリケーションを作るためのFlutterウィジェット
+- [angular_bloc](https://pub.dev/packages/angular_bloc) - Blocを使って素早く、リアクティブなモバイルアプリケーションを作るためのAngularのコンポーネント
 
 ## インストール
 
@@ -39,7 +39,7 @@ dependencies:
 
 ## インポート
 
-blocのインストールが無事完了したら`main.dart`にblocをインポートしてみましょう
+blocのインストールが無事完了したら`main.dart`にblocをインポートしてみましょう。
 
 Flutterの場合はflutter_blocをインポートします。
 

@@ -4,7 +4,7 @@
 
 > In the following tutorial, we're going to build a Counter in Flutter using the Bloc library.
 
-![demo](../assets/gifs/flutter_counter.gif)
+![demo](../../assets/gifs/flutter_counter.gif)
 
 ## Setup
 

@@ -4,7 +4,7 @@
 
 > In the following tutorial, we're going to build a Todos App in Flutter using the Bloc library.
 
-![demo](./assets/gifs/flutter_todos.gif)
+![demo](../assets/gifs/flutter_todos.gif)
 
 ## Setup
 

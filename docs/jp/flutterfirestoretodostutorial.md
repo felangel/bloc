@@ -4,7 +4,7 @@
 
 > In the following tutorial, we're going to build a reactive Todos App which hooks up to Firestore. We're going to be building on top of the [flutter todos](https://bloclibrary.dev/#/fluttertodostutorial) example so we won't go into the UI since it will all be the same.
 
-![demo](./assets/gifs/flutter_firestore_todos.gif)
+![demo](../assets/gifs/flutter_firestore_todos.gif)
 
 The only things we're going to be refactoring in our existing [todos example](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos) are the repository layer and parts of the bloc layer.
 
