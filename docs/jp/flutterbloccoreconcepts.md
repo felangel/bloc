@@ -47,10 +47,10 @@ BlocBuilder<BlocA, BlocAState>(
 
 ### BlocProvider
 
-**BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
-**BlocProvider** は子孫要素に bloc を渡す Flutter のウィジェットです。
+**BlocProvider** は`BlocProvider.of<T>(context)`を通じて子孫要素に bloc を渡す Flutter のウィジェットです。一つの Bloc インスタンスを複数の子孫要素に渡す役割があります。
 
-In most cases, `BlocProvider` should be used to create new `blocs` which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle closing the bloc.
+大抵の場合`BlocProvider`は新しい`bloc`を生成し、それを子孫要素に与えるために使います。この場合`BlocProvider`は生成した Bloc の close を行ってくれます。
+
 
 ```dart
 BlocProvider(
@@ -59,7 +59,7 @@ BlocProvider(
 );
 ```
 
-In some cases, `BlocProvider` can be used to provide an existing bloc to a new portion of the widget tree. This will be most commonly used when an existing `bloc` needs to be made available to a new route. In this case, `BlocProvider` will not automatically close the bloc since it did not create it.
+稀に`BlocProvider`を既存の Bloc を子孫要素に与えるために使われることがあります。大抵これが起きるのは既存の Bllc を新しい route に投げたい時です。この場合そのは`BlocProvider`は Bloc 生成を行なっていないためその Bloc の close を行ってくれません。
 
 ```dart
 BlocProvider.value(
@@ -68,21 +68,20 @@ BlocProvider.value(
 );
 ```
 
-then from either `ChildA`, or `ScreenA` we can retrieve `BlocA` with:
+そうすると`ChildA`, や`ScreenA`からは`BlocA`を以下のどちらかの書き方で引っ張ってこれます:
 
 ```dart
-// with extensions
+// extensionを使った書き方
 context.bloc<BlocA>();
 
-// without extensions
+// extensionを使わない書き方
 BlocProvider.of<BlocA>(context)
 ```
 
 ### MultiBlocProvider
 
-**MultiBlocProvider** is a Flutter widget that merges multiple `BlocProvider` widgets into one.
-`MultiBlocProvider` improves the readability and eliminates the need to nest multiple `BlocProviders`.
-By using `MultiBlocProvider` we can go from:
+**MultiBlocProvider**とは複数の`BlocProvider`を一つにまとめてくれるウィジェットです。`MultiBlocProvider`を複数の Bloc を使う場面で使うとコードの可読性を高められ、`BlocProviders`を何層にも入れ子にしなくてよくなります。
+`MultiBlocProvider`を使うとこれが:
 
 ```dart
 BlocProvider<BlocA>(
@@ -97,7 +96,7 @@ BlocProvider<BlocA>(
 )
 ```
 
-to:
+こうなります:
 
 ```dart
 MultiBlocProvider(
@@ -118,42 +117,42 @@ MultiBlocProvider(
 
 ### BlocListener
 
-**BlocListener** is a Flutter widget which takes a `BlocWidgetListener` and an optional `Bloc` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
+**BlocListener**は Bloc での state の変化に応じて`listener`に定義したコードを実行してくれる Flutter のウィジェットで、`Bloc`を引数として渡すこともできます。このウィジェットは何か state の変化につき１度だけコードを実行したい時に（ナビゲーション、`SnackBar`や`Dialog`の表示など）使います。
 
-`listener` is only called once for each state change (**NOT** including `initialState`) unlike `builder` in `BlocBuilder` and is a `void` function.
+`listener`は state の変化があるたびに1度呼ばれ(`initialState`は**含まない**)、`BlocBuilder`の中の`builder`と違い`void`型の関数です。
 
-If the bloc parameter is omitted, `BlocListener` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+もし引数として bloc を渡さなかった時は`BlocListener`はその時の`BuildContext`から先祖要素にある`BlocProvider`を探し出します。
 
 ```dart
 BlocListener<BlocA, BlocAState>(
   listener: (context, state) {
-    // do stuff here based on BlocA's state
+    // BlocA の state に応じて何かを実行する
   },
   child: Container(),
 )
 ```
 
-Only specify the bloc if you wish to provide a bloc that is otherwise not accessible via `BlocProvider` and the current `BuildContext`.
+`BlocListener`に引数として bloc を渡すのはその時の`BuildContext`から`BlocProvider`にアクセスできない場合にしてください。
 
 ```dart
 BlocListener<BlocA, BlocAState>(
   bloc: blocA,
   listener: (context, state) {
-    // do stuff here based on BlocA's state
+    // BlocA の state に応じて何かを実行する
   }
 )
 ```
 
-If you want fine-grained control over when the listener function is called you can provide an optional `condition` to `BlocListener`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `listener` will be called with `state`. If `condition` returns false, `listener` will not be called with `state`.
+もし state が変わるたびにコードを実行するのではなく、コードを実行する条件をより詳細にコントロールしたい場合は`condition`を`BlocListener`の引数として設定します。`condition`は bloc の一個前の state と今の state が引数として用意されていて、booleanを返す関数になっています。もし true が返されたら`listener`が実行され、もし false が返されていたら`listener`は実行されません。
 
 ```dart
 BlocListener<BlocA, BlocAState>(
   condition: (previousState, state) {
-    // return true/false to determine whether or not
-    // to call listener with state
+    // listener を実行したいかしたくないかで
+    // true/false を出し分ける
   },
   listener: (context, state) {
-    // do stuff here based on BlocA's state
+    // BlocA の state に応じて何かを実行する
   },
   child: Container(),
 )
@@ -164,6 +163,9 @@ BlocListener<BlocA, BlocAState>(
 **MultiBlocListener** is a Flutter widget that merges multiple `BlocListener` widgets into one.
 `MultiBlocListener` improves the readability and eliminates the need to nest multiple `BlocListeners`.
 By using `MultiBlocListener` we can go from:
+**MultiBlocListener**は複数の`BlocListener`を一つにまとめてくれる Flutter のウィジェットです。
+`MultiBlocListener`を使うと複数の`BlocListeners`を入れ子にしなくてよくなりコードの可読性が上がります。
+`MultiBlocListener`を使うとこれが:
 
 ```dart
 BlocListener<BlocA, BlocAState>(
@@ -178,7 +180,7 @@ BlocListener<BlocA, BlocAState>(
 )
 ```
 
-to:
+こうなります:
 
 ```dart
 MultiBlocListener(
@@ -199,39 +201,38 @@ MultiBlocListener(
 
 ### BlocConsumer
 
-**BlocConsumer** exposes a `builder` and `listener` in order to react to new states. `BlocConsumer` is analogous to a nested `BlocListener` and `BlocBuilder` but reduces the amount of boilerplate needed. `BlocConsumer` should only be used when it is necessary to both rebuild UI and execute other reactions to state changes in the `bloc`. `BlocConsumer` takes a required `BlocWidgetBuilder` and `BlocWidgetListener` and an optional `bloc`, `BlocBuilderCondition`, and `BlocListenerCondition`.
+**BlocConsumer**には`builder`と`listener`あります。 `BlocConsumer`は内部で`BlocListener`と`BlocBuilder`を使っており、その両方を使いたい時は`BlocConsumer`を使うとコードを書く量を減らせます。`BlocConsumer`は state の変化に応じてUIを変更させたいかつ単発で何かコードも実行したい時のみ使うべきです。 `BlocConsumer`は必須で`BlocWidgetBuilder`と`BlocWidgetListener`を与えて、必要に応じて`bloc`, `BlocBuilderCondition`, `BlocListenerCondition`を与えることができます。
 
-If the `bloc` parameter is omitted, `BlocConsumer` will automatically perform a lookup using
-`BlocProvider` and the current `BuildContext`.
+もし、`bloc`引数が省略されている場合は`BlocConsumer`はその時の`BuildContext`を使って先祖要素の`BlocProvider`を探し出します。
 
 ```dart
 BlocConsumer<BlocA, BlocAState>(
   listener: (context, state) {
-    // do stuff here based on BlocA's state
+    // BlocAの state に応じてコードを実行
   },
   builder: (context, state) {
-    // return widget here based on BlocA's state
+    // BlocA の state に応じてUIを変更
   }
 )
 ```
 
-An optional `listenWhen` and `buildWhen` can be implemented for more granular control over when `listener` and `builder` are called. The `listenWhen` and `buildWhen` will be invoked on each `bloc` `state` change. They each take the previous `state` and current `state` and must return a `bool` which determines whether or not the `builder` and/or `listener` function will be invoked. The previous `state` will be initialized to the `state` of the `bloc` when the `BlocConsumer` is initialized. `listenWhen` and `buildWhen` are optional and if they aren't implemented, they will default to `true`.
+オプションで`listenWhen`と`buildWhen`を渡すことで特定の条件を満たした時のみ`listener`や`builder`を実行させることができます。`listenWhen`と`buildWhen`はその`bloc`の`state`が変化するたびに呼ばれます。それぞれ一個前の`state`と新しい`state`が引数として用意されていて、`bool`を返すことで`builder`や`listener`を実行するかどうかをコントロールできます。`listenWhen`は必須ではなく、`buildWhen`省略された場合は常にtrueをした場合と同じ挙動になります。
 
 ```dart
 BlocConsumer<BlocA, BlocAState>(
   listenWhen: (previous, current) {
-    // return true/false to determine whether or not
-    // to invoke listener with state
+    // true/false を返して
+    // listener を実行させるかをコントロールする
   },
   listener: (context, state) {
-    // do stuff here based on BlocA's state
+    // BlocA の state に応じて何かを実行する
   },
   buildWhen: (previous, current) {
-    // return true/false to determine whether or not
-    // to rebuild the widget with state
+    // true/false を返して
+    // 再描画を行うかどうかをコントロールする
   },
   builder: (context, state) {
-    // return widget here based on BlocA's state
+    // BlocA の state に応じてUIを変える
   }
 )
 ```
