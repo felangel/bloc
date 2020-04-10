@@ -1,12 +1,12 @@
-# Frequently Asked Questions
+# よくある質問
 
-## State Not Updating
+## State が更新されない
 
-❔ **Question**: I'm yielding a state in my bloc but the UI is not updating. What am I doing wrong?
+❔ **質問**: State を yield してもUI側が更新されません。何が原因ですか？
 
-💡 **Answer**: If you're using Equatable make sure to pass all properties to the props getter.
+💡 **答え**: もし Equatable を使っているならきちんと state のプロパティ一覧を props に渡してあげてください。
 
-✅ **GOOD**
+✅ **正解**
 
 ```dart
 abstract class MyState extends Equatable {
@@ -19,11 +19,11 @@ class StateA extends MyState {
     const StateA(this.property);
 
     @override
-    List<Object> get props => [property]; // pass all properties to props
+    List<Object> get props => [property]; // 全てのプロパティを props に渡す
 }
 ```
 
-❌ **BAD**
+❌ **間違い**
 
 ```dart
 abstract class MyState extends Equatable {
@@ -55,14 +55,14 @@ class StateA extends MyState {
 }
 ```
 
-In addition, make sure you are yielding a new instance of the state in your bloc.
+それともう一つ、毎回新しい　state のインスタンスを yield するようにしてください。
 
-✅ **GOOD**
+✅ **正解**
 
 ```dart
 @override
 Stream<MyState> mapEventToState(MyEvent event) async* {
-    // always create a new instance of the state you are going to yield
+    // 常に新しい state インスタンスを yield する
     yield state.copyWith(property: event.property);
 }
 ```
@@ -71,28 +71,28 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 @override
 Stream<MyState> mapEventToState(MyEvent event) async* {
     final data = _getData(event.info);
-    // always create a new instance of the state you are going to yield
+    // 常に新しい state インスタンスを yield する
     yield MyState(data: data);
 }
 ```
 
-❌ **BAD**
+❌ **間違い**
 
 ```dart
 @override
 Stream<MyState> mapEventToState(MyEvent event) async* {
-    // never modify/mutate state
+    // state のプロパティのみ変更するのはだめ
     state.property = event.property;
-    // never yield the same instance of state
+    // 同じインスタンスの state を yield するのはだめ
     yield state;
 }
 ```
 
-## When to use Equatable
+## Equatable を使うのはどんな時？
 
-❔**Question**: When should I use Equatable?
+❔**質問**: Equatable はどんな時に使うべき？
 
-💡**Answer**:
+💡**答え**:
 
 ```dart
 @override
@@ -102,11 +102,11 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 }
 ```
 
-In the above scenario if `StateA` extends `Equatable` only one state change will occur (the second yield will be ignored).
-In general, you should use `Equatable` if you want to optimize your code to reduce the number of rebuilds.
-You should not use `Equatable` if you want the same state back-to-back to trigger multiple transitions.
+`StateA`が`Equatable`を継承している上のような場合では一度しか state は変化しません（２回目の yield は無視される）。
+一般的には再描画を最低限にしコードを最適化したい場合は`Equatable`を使うべきです。
+もし同じ state を返して transition を発生させたい場合は`Equatable`は使うべきではありません。
 
-In addition, using `Equatable` makes it much easier to test blocs since we can expect specific instances of bloc states rather than using `Matchers` or `Predicates`.
+加えて`Equatable`を使うとテストに置いて特定のプロパティを持った state を predict できるのでテストが楽になります。
 
 ```dart
 blocTest(
@@ -120,7 +120,7 @@ blocTest(
 )
 ```
 
-Without `Equatable` the above test would fail and would need to be rewritten like:
+`Equatable`なしでは上記のテストコードは通らず、下記のように書かなくてはなりません：
 
 ```dart
 blocTest(
@@ -136,56 +136,58 @@ blocTest(
 
 ## Bloc vs. Redux
 
-❔ **Question**: What's the difference between Bloc and Redux?
+❔ **質問**: Bloc と Redux の違いは何？
 
-💡 **Answer**:
+💡 **答え**:
 
 BLoC is a design pattern that is defined by the following rules:
+BLoC は下記のルールを元に設計されたデザインパターンです:
 
-1. Input and Output of the BLoC are simple Streams and Sinks.
-2. Dependencies must be injectable and Platform agnostic.
-3. No platform branching is allowed.
-4. Implementation can be whatever you want as long as you follow the above rules.
+1. Bloc の入力と出力はシンプルな Stream と Sink であるべき。
+2. 依存性は注入可能で、プラットフォームに依存しない。
+3. プラットフォームに分岐してはならない。
+4. 上記のルールを守っている限り実装方法はどのような形でも良い。
 
 The UI guidelines are:
+UIのガイドラインは:
 
-1. Each "complex enough" component has a corresponding BLoC.
-2. Components should send inputs "as is".
-3. Components should show outputs as close as possible to "as is".
-4. All branching should be based on simple BLoC boolean outputs.
+1. 一つ一つの「それなりに複雑な」コンポーネントは Bloc を持つべき。
+2. コンポーネントは入力をありのまま送るべき。
+3. コンポーネントは出力を出来るだけありのまま表示するべき。
+4. 全ての分岐はシンプルに BloC の主力に関連するべき。
 
-The Bloc Library implements the BLoC Design Pattern and aims to abstract RxDart in order to simplify the developer experience.
+Bloc ライブラリーは上記の BloC デザインパターンを RxDart を内包的に使って簡単に実装するツールを目指しています。
 
-The three principles of Redux are:
+Redux の３つの原則は:
 
-1. Single source of truth
-2. State is read-only
-3. Changes are made with pure functions
+1. 真となるものは一つ
+2. State は読み込みのみ
+3. 変更は pure 関数によってのみ加えられる
 
-The bloc library violates the first principle; with bloc state is distributed across multiple blocs.
-Furthermore, there is no concept of middleware in bloc and bloc is designed to make async state changes very easy, allowing you to emit multiple states for a single event.
+Bloc ライブラリーは一つ目の原則を犯しています。Bloc の場合は真となるデータはあちこちの bloc に分散されています。
+さらに、bloc にはミドルウェアという概念はなく、bloc を使うと簡単に一つの event に対して複数の非同期データを state として返すことができます。
 
 ## Bloc vs. Provider
 
-❔ **Question**: What's the difference between Bloc and Provider?
+❔ **質問**: Bloc と Provider の違いは？
 
-💡 **Answer**: `provider` is designed for dependency injection (it wraps `InheritedWidget`).
-You still need to figure out how to manage your state (via `ChangeNotifier`, `Bloc`, `Mobx`, etc...).
-The Bloc Library uses `provider` internally to make it easy to provide and access blocs throughout the widget tree.
+💡 **答え**: `provider`は依存性の注入をするためのものです(`InheritedWidget`のラッパー)。
+これだけでは自分で状態管理をどのようにするかを考えなければなりません(例えば`ChangeNotifier`, `Bloc`, `Mobx`, など...)。
+Bloc ライブラリーは内部で`provider`を使い bloc が子孫要素たちからアクセスできるようにしています。
 
-## Navigation with Bloc
+## Bloc を使ったナビゲーション
 
-❔ **Question**: How do I do navigation with Bloc?
+❔ **質問**: Blco を使った場合ナビゲーションはどのようにしたらいい？
 
-💡 **Answer**: Check out [Flutter Navigation](recipesflutternavigation.md)
+💡 **答え**: [Flutter Navigation](recipesflutternavigation.md)を見てみてください。
 
-## BlocProvider.of() Fails to Find Bloc
+## BlocProvider.of() が Bloc を見つけてくれません
 
-❔ **Question**: When using `BlocProvider.of(context)` it cannot find the bloc. How can I fix this?
+❔ **質問**: `BlocProvider.of(context)`を使っているのに Bloc を取ってきてくれません。どうしたらいい？
 
-💡 **Answer**: You cannot access a bloc from the same context in which it was provided so you must ensure `BlocProvider.of()` is called within a child `BuildContext`.
+💡 **答え**: Bloc provider と同じ`BuildContext`では bloc にアクセスできないので`BlocProvider.of()`を provider の子孫要素の中で呼ぶ必要があります。
 
-✅ **GOOD**
+✅ **正解**
 
 ```dart
 @override
@@ -227,7 +229,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-❌ **BAD**
+❌ **間違い**
 
 ```dart
 @override
@@ -245,13 +247,14 @@ Widget build(BuildContext context) {
 ```
 
 ## Project Structure
+## プロジェクトの構造
 
-❔ **Question**: How should I structure my project?
+❔ **質問**: プロジェクトはどのような構造にしたらいい？
 
-💡 **Answer**: While there is really no right/wrong answer to this question, some recommended references are
+💡 **答え**: 明確に正解・不正解はありませんが、いくつか参考になる例はこちらにあります。
 
 - [Flutter Architecture Samples - Brian Egan](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library)
 - [Flutter Shopping Card Example](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart)
 - [Flutter TDD Course - ResoCoder](https://github.com/ResoCoder/flutter-tdd-clean-architecture-course)
 
-The most important thing is having a **consistent** and **intentional** project structure.
+一番大切なのは**一貫**して**意図的な**プロジェクト構造にすることです。

@@ -8,7 +8,7 @@
   - [アーキテクチャー](jp/architecture.md)
   - [テスト](jp/testing.md)
   - [命名規則](jp/blocnamingconventions.md)
-  - [FAQ](jp/faqs.md)
+  - [よくある質問](jp/faqs.md)
 
 - チュートリアル
 
