@@ -140,7 +140,6 @@ blocTest(
 
 💡 **答え**:
 
-BLoC is a design pattern that is defined by the following rules:
 BLoC は下記のルールを元に設計されたデザインパターンです:
 
 1. Bloc の入力と出力はシンプルな Stream と Sink であるべき。
@@ -148,7 +147,6 @@ BLoC は下記のルールを元に設計されたデザインパターンです
 3. プラットフォームに分岐してはならない。
 4. 上記のルールを守っている限り実装方法はどのような形でも良い。
 
-The UI guidelines are:
 UIのガイドラインは:
 
 1. 一つ一つの「それなりに複雑な」コンポーネントは Bloc を持つべき。
