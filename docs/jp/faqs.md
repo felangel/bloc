@@ -8,85 +8,25 @@
 
 ✅ **正解**
 
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
-
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => [property]; // 全てのプロパティを props に渡す
-}
-```
+[my_state.dart](../_snippets/faqs/state_not_updating_good_1.dart.md ':include')
 
 ❌ **間違い**
 
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
+[my_state.dart](../_snippets/faqs/state_not_updating_bad_1.dart.md ':include')
 
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => [];
-}
-```
-
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
-
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => null;
-}
-```
+[my_state.dart](../_snippets/faqs/state_not_updating_bad_2.dart.md ':include')
 
 それともう一つ、毎回新しい　 state のインスタンスを yield するようにしてください。
 
 ✅ **正解**
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    // 常に新しい state インスタンスを yield する
-    yield state.copyWith(property: event.property);
-}
-```
+[my_state.dart](../_snippets/faqs/state_not_updating_bad_1.dart.md ':include')
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    final data = _getData(event.info);
-    // 常に新しい state インスタンスを yield する
-    yield MyState(data: data);
-}
-```
+[my_state.dart](../_snippets/faqs/state_not_updating_bad_2.dart.md ':include')
 
 ❌ **間違い**
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    // state のプロパティのみ変更するのはだめ
-    state.property = event.property;
-    // 同じインスタンスの state を yield するのはだめ
-    yield state;
-}
-```
+[my_bloc.dart](../_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
 
 ## Equatable を使うのはどんな時？
 
@@ -94,13 +34,7 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 
 💡**答え**:
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    yield StateA('hi');
-    yield StateA('hi');
-}
-```
+[my_bloc.dart](../_snippets/faqs/equatable_yield.dart.md ':include')
 
 `StateA`が`Equatable`を継承している上のような場合では一度しか state は変化しません（２回目の yield は無視される）。
 一般的には再描画を最低限にしコードを最適化したい場合は`Equatable`を使うべきです。
@@ -108,31 +42,11 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 
 加えて`Equatable` を使うとテストに置いて特定のプロパティを持った state を predict できるのでテストが楽になります。
 
-```dart
-blocTest(
-    '...',
-    build: () => MyBloc(),
-    act: (bloc) => bloc.add(MyEvent()),
-    expect: [
-        MyStateA(),
-        MyStateB(),
-    ],
-)
-```
+[my_bloc_test.dart](../_snippets/faqs/equatable_bloc_test.dart.md ':include')
 
 `Equatable`なしでは上記のテストコードは通らず、下記のように書かなくてはなりません：
 
-```dart
-blocTest(
-    '...',
-    build: () => MyBloc(),
-    act: (bloc) => bloc.add(MyEvent()),
-    expect: [
-        isA<MyStateA>(),
-        isA<MyStateB>(),
-    ],
-)
-```
+[my_bloc_test.dart](../_snippets/faqs/without_equatable_bloc_test.dart.md ':include')
 
 ## Bloc vs. Redux
 
@@ -187,62 +101,13 @@ Bloc ライブラリーは内部で`provider`を使い bloc が子孫要素た�
 
 ✅ **正解**
 
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: MyChild();
-  );
-}
+[my_page.dart](../_snippets/faqs/bloc_provider_good_1.dart.md ':include')
 
-class MyChild extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return RaisedButton(
-      onPressed: () {
-        final blocA = BlocProvider.of<BlocA>(context);
-        ...
-      },
-    )
-    ...
-  }
-}
-```
-
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: Builder(
-      builder: (context) => RaisedButton(
-        onPressed: () {
-          final blocA = BlocProvider.of<BlocA>(context);
-          ...
-        },
-      ),
-    ),
-  );
-}
-```
+[my_page.dart](../_snippets/faqs/bloc_provider_good_2.dart.md ':include')
 
 ❌ **間違い**
 
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: RaisedButton(
-      onPressed: () {
-        final blocA = BlocProvider.of<BlocA>(context);
-        ...
-      }
-    )
-  );
-}
-```
+[my_page.dart](../_snippets/faqs/bloc_provider_bad_1.dart.md ':include')
 
 ## Project Structure
 
