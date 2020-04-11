@@ -14,26 +14,15 @@ Bloc bir neçə pub paketlərindən ibarətdir:
 
 İlk olaraq, biz bloc paketini bizim `pubspec.yaml`-a dependency olaraq əlavə etməliyik.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-```
+[pubspec.yaml](../_snippets/getting_started/bloc_pubspec.yaml.md ':include')
 
 [Flutter](https://flutter.dev/) tətbiqi üçün, biz həmçinin flutter_bloc paketini `pubspec.yaml`-a dependency olaraq əlavə etməliyik.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-  flutter_bloc: ^3.2.0
-```
+[pubspec.yaml](../_snippets/getting_started/flutter_bloc_pubspec.yaml.md ':include')
 
 [AngularDart](https://angulardart.dev/) tətbiqi üçün, biz həmçinin angular_bloc paketini `pubspec.yaml`-a dependency olaraq əlavə etməliyik.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-  angular_bloc: ^3.0.0
-```
+[pubspec.yaml](../_snippets/getting_started/angular_bloc_pubspec.yaml.md ':include')
 
 Daha sonra bloc-u quraşdırmağa ehtiyacımız var.
 
@@ -47,20 +36,12 @@ Daha sonra bloc-u quraşdırmağa ehtiyacımız var.
 
 Artıq biz bloc-u uğurla quraşdırdıq, `main.dart`-ı yarada və bloc-u import edə bilərik..
 
-```dart
-import 'package:bloc/bloc.dart';
-```
+[main.dart](../_snippets/getting_started/bloc_main.dart.md ':include')
 
 Flutter tətbiqi üçün biz həmçinin flutter_bloc-u import edə bilərik.
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-```
+[main.dart](../_snippets/getting_started/flutter_bloc_main.dart.md ':include')
 
 AngularDart tətbiqi üçün biz həmçinin angular_bloc-u import edə bilərik.
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:angular_bloc/angular_bloc.dart';
-```
+[main.dart](../_snippets/getting_started/angular_bloc_main.dart.md ':include')
