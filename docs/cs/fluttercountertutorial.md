@@ -10,47 +10,21 @@
 
 Začneme vytvořením nového Flutter projektu.
 
-```bash
-flutter create flutter_counter
-```
+[script](../_snippets/flutter_counter_tutorial/flutter_create.sh.md ':include')
 
 Potom nahradíme obsah `pubspec.yaml` tímto
 
-```yaml
-name: flutter_counter
-description: A new Flutter project.
-version: 1.0.0+1
-
-environment:
-  sdk: ">=2.0.0 <3.0.0"
-
-dependencies:
-  flutter:
-    sdk: flutter
-  flutter_bloc: ^3.2.0
-  meta: ^1.1.6
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
-flutter:
-  uses-material-design: true
-```
+[pubspec.yaml](../_snippets/flutter_counter_tutorial/pubspec.yaml.md ':include')
 
 a pak nainstalujeme všechny závislosti
 
-```bash
-flutter packages get
-```
+[script](../_snippets/flutter_counter_tutorial/flutter_packages_get.sh.md ':include')
 
 Naše aplikace počítadla bude mít pouze dvě tlačítka na inkrementaci/dekrementaci hodnoty počítadla a `Text` widget, který zobrazí aktuální hodnotu. Pojďme začít navrhovat `CounterEventy`.
 
 ## Události Počátadla
 
-```dart
-enum CounterEvent { increment, decrement }
-```
+[counter_event.dart](../_snippets/flutter_counter_tutorial/counter_event.dart.md ':include')
 
 ## Stavy Počítadla
 
@@ -58,24 +32,7 @@ Protože stav našeho počítadla může být reprezentován celým číslem, ne
 
 ## Counter Bloc
 
-```dart
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](../_snippets/flutter_counter_tutorial/counter_bloc.dart.md ':include')
 
 ?> **Poznámka**: Jen z deklarace třídy můžeme vidět, že náš `CounterBloc` bude přijímat `CounterEventy` jako vstup a produkovat celá čísla.
 
@@ -83,22 +40,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 Nyní když máme náš `CounterBloc` plně implementován, můžeme začít vytvářet naší Flutter aplikaci.
 
-```dart
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      home: BlocProvider<CounterBloc>(
-        create: (context) => CounterBloc(),
-        child: CounterPage(),
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/flutter_counter_tutorial/main.dart.md ':include')
 
 ?> **Poznámka**: Používáme `BlocProvider` widget z `flutter_bloc`, abychom zpřístupnili instanci `CounterBloc` celému podstromu (`CounterPage`). `BlocProvider` také automaticky zpracovává ukončení `CounterBlocu`, takže nemusíme použít `StatefulWidget`.
 
@@ -106,52 +48,7 @@ class MyApp extends StatelessWidget {
 
 Finally, all that's left is to build our Counter Page.
 
-```dart
-class CounterPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
-
-    return Scaffold(
-      appBar: AppBar(title: Text('Counter')),
-      body: BlocBuilder<CounterBloc, int>(
-        builder: (context, count) {
-          return Center(
-            child: Text(
-              '$count',
-              style: TextStyle(fontSize: 24.0),
-            ),
-          );
-        },
-      ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {
-                counterBloc.add(CounterEvent.increment);
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: Icon(Icons.remove),
-              onPressed: () {
-                counterBloc.add(CounterEvent.decrement);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
+[counter_page.dart](../_snippets/flutter_counter_tutorial/counter_page.dart.md ':include')
 
 ?> **Poznámka**: Jsme schopni přistoupit k `CounterBloc` instanci pomocí `BlocProvider.of<CounterBloc>(context)`, protože jsme zabalili náš `CounterPage` do `BlocProvideru`.
 
