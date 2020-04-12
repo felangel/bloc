@@ -165,6 +165,19 @@ void main() {
         act: (bloc) => bloc.add(ComplexEventB()),
         expect: [isA<ComplexStateB>()],
       );
+
+      blocTest(
+        'emits [1, 2, 3] when three ComplexEventA are added',
+        build: () async => ComplexBloc(),
+        act: (bloc) async {
+          bloc
+            ..add(ComplexEventA(1))
+            ..add(ComplexEventA(2))
+            ..add(ComplexEventA(3));
+        },
+        mapState: (state) => state.id,
+        expect: [1, 2, 3],
+      );
     });
 
     group('SideEffectCounterBloc', () {

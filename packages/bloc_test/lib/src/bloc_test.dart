@@ -26,6 +26,9 @@ import 'package:test/test.dart' as test;
 /// [expect] is an `Iterable` of matchers which the [bloc]
 /// under test is expected to emit after [act] is executed.
 ///
+/// [mapState] is an optional function used to transform the state
+/// in a simpler object. It may be used to make [expect] easier.
+///
 /// [verify] is an optional callback which is invoked after [expect]
 /// and can be used for additional verification/assertions.
 /// [verify] is called with the [bloc] returned by [build].
@@ -92,6 +95,20 @@ import 'package:test/test.dart' as test;
 /// );
 /// ```
 ///
+/// [blocTest] can also be used to transform the result states insimpler
+/// testable objects.
+/// 
+/// ```dart
+/// blocTest(
+///   'ComplexBloc emits [0, 1] when ComplexEvent() is added',
+///   build: () async => ComplexBloc(),
+///   act: (bloc) => bloc.add(ComplexEvent()),
+///   skip: 0,
+///   mapState: (state) => state.interestPart,
+///   expect: [0, 1],
+/// );
+/// ```
+///
 /// **Note:** when using [blocTest] with state classes which don't override
 /// `==` and `hashCode` you can provide an `Iterable` of matchers instead of
 /// explicit state instances.
@@ -112,6 +129,7 @@ void blocTest<B extends Bloc<Event, State>, Event, State>(
   Duration wait,
   int skip = 1,
   Iterable expect,
+  dynamic Function(State state) mapState,
   Future<void> Function(B bloc) verify,
 }) {
   test.test(description, () async {
@@ -121,7 +139,12 @@ void blocTest<B extends Bloc<Event, State>, Event, State>(
     await act?.call(bloc);
     if (wait != null) await Future.delayed(wait);
     await bloc.close();
-    if (expect != null) test.expect(states, expect);
+    if (expect != null) {
+      test.expect(
+        mapState != null ? states.map(mapState).toList() : states,
+        expect,
+      );
+    }
     await subscription.cancel();
     await verify?.call(bloc);
   });
