@@ -14,26 +14,15 @@ Bloc은 몇 가지 pub pachages로 구성되어 있습니다:
 
 먼저, `pubspec.yaml`의 dependency로 bloc 패키지를 추가해야 합니다.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-```
+[pubspec.yaml](../_snippets/getting_started/bloc_pubspec.yaml.md ':include')
 
 [Flutter](https://flutter.dev/) 어플리케이션의 경우에는, flutter_bloc 패키지도 같이 `pubspec.yaml`의 dependency로 추가합니다.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-  flutter_bloc: ^3.2.0
-```
+[pubspec.yaml](../_snippets/getting_started/flutter_bloc_pubspec.yaml.md ':include')
 
 [AngularDart](https://angulardart.dev/) 어플리케이션의 경우에는, angular_bloc 패키지도 같이 `pubspec.yaml`의 dependency로 추가합니다.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-  angular_bloc: ^3.0.0
-```
+[pubspec.yaml](../_snippets/getting_started/angular_bloc_pubspec.yaml.md ':include')
 
 이제 bloc을 설치해봅시다.
 
@@ -47,20 +36,12 @@ dependencies:
 
 bloc이 성공적으로 설치되었다면, `main.dart`를 생성하고 bloc을 import 합니다.
 
-```dart
-import 'package:bloc/bloc.dart';
-```
+[main.dart](../_snippets/getting_started/bloc_main.dart.md ':include')
 
 Flutter 어플리케이션의 경우, flutter_bloc도 import 할 수 있습니다.
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-```
+[main.dart](../_snippets/getting_started/flutter_bloc_main.dart.md ':include')
 
 AngularDart 어플리케이션의 경우, angular_bloc도 import 할 수 있습니다.
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:angular_bloc/angular_bloc.dart';
-```
+[main.dart](../_snippets/getting_started/angular_bloc_main.dart.md ':include')

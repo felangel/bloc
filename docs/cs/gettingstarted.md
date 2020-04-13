@@ -14,26 +14,15 @@ Bloc obsahuje několik pub balíčků:
 
 První věci, kterou potřebujeme udělat, je přidat jako závislost do našeho `pubspec.yaml` balíček bloc.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-```
+[pubspec.yaml](../_snippets/getting_started/bloc_pubspec.yaml.md ':include')
 
 Pro [Flutter](https://flutter.dev/) aplikaci také potřebujeme přidat jako závislost do našeho `pubspec.yaml` balíček flutter_bloc.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-  flutter_bloc: ^3.2.0
-```
+[pubspec.yaml](../_snippets/getting_started/flutter_bloc_pubspec.yaml.md ':include')
 
 Pro [AngularDart](https://angulardart.dev/) aplikaci také potřebujeme přidat jako závislost do našeho `pubspec.yaml` balíček angular_bloc.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-  angular_bloc: ^3.0.0
-```
+[pubspec.yaml](../_snippets/getting_started/angular_bloc_pubspec.yaml.md ':include')
 
 Jako další potřebujeme nainstalovat bloc.
 
@@ -47,20 +36,12 @@ Jako další potřebujeme nainstalovat bloc.
 
 Nyní, když jsme úspěšně nainstalovali bloc, můžeme vytvořit náš soubor `main.dart` a importovat bloc.
 
-```dart
-import 'package:bloc/bloc.dart';
-```
+[main.dart](../_snippets/getting_started/bloc_main.dart.md ':include')
 
 Pro Flutter aplikaci můžeme také importovat flutter_bloc.
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-```
+[main.dart](../_snippets/getting_started/flutter_bloc_main.dart.md ':include')
 
 Pro AngularDart aplikaci můžeme také importovat angular_bloc.
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:angular_bloc/angular_bloc.dart';
-```
+[main.dart](../_snippets/getting_started/angular_bloc_main.dart.md ':include')

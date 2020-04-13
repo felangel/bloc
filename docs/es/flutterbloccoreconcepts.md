@@ -12,40 +12,17 @@ Consulte `BlocListener` si desea "hacer"algo en respuesta a cambios de estado co
 
 Si se omite el parámetro bloc, `BlocBuilder` realizará automáticamente una búsqueda utilizando `BlocProvider` y el actual `BuildContext`.
 
-```dart
-BlocBuilder<BlocA, BlocAState>(
-  builder: (context, state) {
-    // retorna el widget basado en el estado de BlocA
-  }
-)
-```
+[bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder.dart.md ':include')
 
 Solo especifique el bloc si desea proporcionar un bloc que se abarcará a un solo widget y no es accesible a través de un `BlocProvider` principal y el `BuildContext` actual.
 
-```dart
-BlocBuilder<BlocA, BlocAState>(
-  bloc: blocA, // proporciona la instancia de bloc local
-  builder: (context, state) {
-    // retorna el widget basado en el estado de BlocA
-  }
-)
-```
+[bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_explicit_bloc.dart.md ':include')
 
 Si desea un control detallado sobre cuándo se llama a la función del generador, puede proporcionar una `condición` opcional a `BlocBuilder`. La `condición` toma el estado de bloque anterior y el estado de bloque actual y devuelve un valor booleano. Si `condición` devuelve verdadero, se llamará a `constructor` con `state` y se reconstruirá el widget. Si `condición` devuelve falso, no se llamará a `constructor` con `state` y no se producirá ninguna reconstrucción.
 
 Si desea un control detallado sobre cuándo se llama a la función builder, puede proporcionar una `condición` opcional a `BlocBuilder`. La `condición` toma el estado de bloc anterior y el estado de bloc actual y devuelve un valor booleano. Si la `condición` devuelve verdadero, se llamará a `builder` con `state` y se reconstruirá el widget. Si la `condición` devuelve falso, no se llamará a `builder` con `state` y no se producirá ninguna reconstrucción.
 
-```dart
-BlocBuilder<BlocA, BlocAState>(
-  condition: (previousState, state) {
-    // devuelve verdadero / falso para determinar
-    // si reconstruir o no el widget con estado
-  },
-  builder: (context, state) {
-    // retorna el widget basado en el estado de BlocA
-  }
-)
-```
+[bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_condition.dart.md ':include')
 
 ### BlocProvider
 
@@ -53,27 +30,15 @@ BlocBuilder<BlocA, BlocAState>(
 
 En la mayoría de los casos, `BlocProvider` debe usarse para crear nuevos `blocs` que estarán disponibles para el resto del subárbol. En este caso, dado que `BlocProvider` es responsable de crear el bloc, se encargará automáticamente de cerrar el bloc.
 
-```dart
-BlocProvider(
-  create: (BuildContext context) => BlocA(),
-  child: ChildA(),
-);
-```
+[bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider.dart.md ':include')
 
 En la mayoría de los casos, `BlocProvider` debe usarse para crear nuevos `blocs` que estarán disponibles para el resto del subárbol. En este caso, dado que `BlocProvider` es responsable de crear el bloc, se encargará automáticamente de cerrar el bloc.
 
-```dart
-BlocProvider.value(
-  value: BlocProvider.of<BlocA>(context),
-  child: ScreenA(),
-);
-```
+[bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider_value.dart.md ':include')
 
 entonces desde `ChildA` o `ScreenA` podemos recuperar `BlocA` con:
 
-```dart
-BlocProvider.of<BlocA>(context)
-```
+[bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider_lookup.dart.md ':include')
 
 ### MultiBlocProvider
 
@@ -81,37 +46,11 @@ BlocProvider.of<BlocA>(context)
 `MultiBlocProvider` mejora la legibilidad y elimina la necesidad de anidar múltiples `BlocProviders`.
 Al usar `MultiBlocProvider` podemos pasar de:
 
-```dart
-BlocProvider<BlocA>(
-  create: (BuildContext context) => BlocA(),
-  child: BlocProvider<BlocB>(
-    create: (BuildContext context) => BlocB(),
-    child: BlocProvider<BlocC>(
-      create: (BuildContext context) => BlocC(),
-      child: ChildA(),
-    )
-  )
-)
-```
+[bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/nested_bloc_provider.dart.md ':include')
 
 por:
 
-```dart
-MultiBlocProvider(
-  providers: [
-    BlocProvider<BlocA>(
-      create: (BuildContext context) => BlocA(),
-    ),
-    BlocProvider<BlocB>(
-      create: (BuildContext context) => BlocB(),
-    ),
-    BlocProvider<BlocC>(
-      create: (BuildContext context) => BlocC(),
-    ),
-  ],
-  child: ChildA(),
-)
-```
+[multi_bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/multi_bloc_provider.dart.md ':include')
 
 ### BlocListener
 
@@ -121,40 +60,15 @@ MultiBlocProvider(
 
 Si se omite el parámetro bloc, `BlocListener` realizará automáticamente una búsqueda usando `BlocProvider` y el actual `BuildContext`.
 
-```dart
-BlocListener<BlocA, BlocAState>(
-  listener: (context, state) {
-    // haga las cosas aquí según el estado de BlocA
-  },
-  child: Container(),
-)
-```
+[bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener.dart.md ':include')
 
 Solo especifique el bloc si desea proporcionar un bloc que de otro modo no sería accesible a través de `BlocProvider` y el `BuildContext` actual.
 
-```dart
-BlocListener<BlocA, BlocAState>(
-  bloc: blocA,
-  listener: (context, state) {
-    // haga las cosas aquí según el estado de BlocA
-  }
-)
-```
+[bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_explicit_bloc.dart.md ':include')
 
 Si desea un control detallado sobre cuándo se llama a la función listener, puede proporcionar una `condición` opcional a `BlocListener`. La `condición` toma el estado de bloque anterior y el estado de bloque actual y devuelve un valor booleano. Si `condición` devuelve verdadero, se llamará a `listener` con `state`. Si `condición` devuelve falso, `listener` no será llamado con `state`.
 
-```dart
-BlocListener<BlocA, BlocAState>(
-  condition: (previousState, state) {
-    // retorna verdadero / falso para determinar
-    // si llamar o no al listener con state
-  },
-  listener: (context, state) {
-    // haga las cosas aquí según el estado de BlocA
-  }
-  child: Container(),
-)
-```
+[bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_condition.dart.md ':include')
 
 ### MultiBlocListener
 
@@ -162,37 +76,11 @@ BlocListener<BlocA, BlocAState>(
 `MultiBlocListener` mejora la legibilidad y elimina la necesidad de anidar múltiples `BlocListeners`.
 Al usar `MultiBlocListener` podemos pasar de:
 
-```dart
-BlocListener<BlocA, BlocAState>(
-  listener: (context, state) {},
-  child: BlocListener<BlocB, BlocBState>(
-    listener: (context, state) {},
-    child: BlocListener<BlocC, BlocCState>(
-      listener: (context, state) {},
-      child: ChildA(),
-    ),
-  ),
-)
-```
+[bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/nested_bloc_listener.dart.md ':include')
 
 por:
 
-```dart
-MultiBlocListener(
-  listeners: [
-    BlocListener<BlocA, BlocAState>(
-      listener: (context, state) {},
-    ),
-    BlocListener<BlocB, BlocBState>(
-      listener: (context, state) {},
-    ),
-    BlocListener<BlocC, BlocCState>(
-      listener: (context, state) {},
-    ),
-  ],
-  child: ChildA(),
-)
-```
+[multi_bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/multi_bloc_listener.dart.md ':include')
 
 ### BlocConsumer
 
@@ -201,54 +89,21 @@ MultiBlocListener(
 Si se omite el parámetro `bloc`, `BlocConsumer` realizará automáticamente una búsqueda utilizando
 `BlocProvider` y el actual `BuildContext`.
 
-```dart
-BlocConsumer<BlocA, BlocAState>(
-  listener: (context, state) {
-    // haga las cosas aquí según el estado de BlocA
-  },
-  builder: (context, state) {
-    // retorna aquí el widget basado en el estado de BlocA
-  }
-)
-```
+[bloc_consumer.dart](../_snippets/flutter_bloc_core_concepts/bloc_consumer.dart.md ':include')
 
 Se puede implementar un `listenWhen` y `buildWhen` opcionales para un control más granular sobre cuándo se llama a `listener` y `builder`. Se invocarán `listenWhen` y `buildWhen` en cada cambio de estado `bloc`. Cada uno toma el `state` anterior y el `state` actual y debe devolver un `bool` que determina si se invocará o no la función `builder` y / o `listener`. El `state` anterior se inicializará al `state` del `bloc` cuando se inicialice el `BlocConsumer`. `listenWhen` y `buildWhen` son opcionales y, si no se implementan, pasarán por defecto a `true`.
 
-```dart
-BlocConsumer<BlocA, BlocAState>(
-  listenWhen: (previous, current) {
-    // retorne verdadero / falso para determinar
-    // si invocar o no al oyente con estado
-  },
-  listener: (context, state) {
-    // hacer las cosas aquí según el estado de BlocA
-  },
-  buildWhen: (previous, current) {
-    // retorna verdadero / falso para determinar
-    // si reconstruir o no el widget con estado
-  },
-  builder: (context, state) {
-    //retorne el widget aquí basado en el estado de BlocA
-  }
-)
-```
+[bloc_consumer.dart](../_snippets/flutter_bloc_core_concepts/bloc_consumer_condition.dart.md ':include')
 
 ### RepositoryProvider
 
 **RepositoryProvider** es un widget de Flutter que proporciona un repositorio a sus hijos a través de `RepositoryProvider.of <T> (context)`. Se utiliza como un widget de inyección de dependencia (DI) para que se pueda proporcionar una sola instancia de un repositorio a múltiples widgets dentro de un subárbol. `BlocProvider` debe usarse para proporcionar bloques mientras que `RepositoryProvider` solo debe usarse para repositorios.
 
-```dart
-RepositoryProvider(
-  create: (context) => RepositoryA(),
-  child: ChildA(),
-);
-```
+[repository_provider.dart](../_snippets/flutter_bloc_core_concepts/repository_provider.dart.md ':include')
 
 entonces desde `ChildA` podemos recuperar la instancia de `Repository` con:
 
-```dart
-RepositoryProvider.of<RepositoryA>(context)
-```
+[repository_provider.dart](../_snippets/flutter_bloc_core_concepts/repository_provider_lookup.dart.md ':include')
 
 ### MultiRepositoryProvider
 
@@ -256,37 +111,11 @@ RepositoryProvider.of<RepositoryA>(context)
 `MultiRepositoryProvider` mejora la legibilidad y elimina la necesidad de anidar múltiples `RepositoryProvider`.
 Al usar `MultiRepositoryProvider` podemos pasar de:
 
-```dart
-RepositoryProvider<RepositoryA>(
-  create: (context) => RepositoryA(),
-  child: RepositoryProvider<RepositoryB>(
-    create: (context) => RepositoryB(),
-    child: RepositoryProvider<RepositoryC>(
-      create: (context) => RepositoryC(),
-      child: ChildA(),
-    )
-  )
-)
-```
+[repository_provider.dart](../_snippets/flutter_bloc_core_concepts/nested_repository_provider.dart.md ':include')
 
 por:
 
-```dart
-MultiRepositoryProvider(
-  providers: [
-    RepositoryProvider<RepositoryA>(
-      create: (context) => RepositoryA(),
-    ),
-    RepositoryProvider<RepositoryB>(
-      create: (context) => RepositoryB(),
-    ),
-    RepositoryProvider<RepositoryC>(
-      create: (context) => RepositoryC(),
-    ),
-  ],
-  child: ChildA(),
-)
-```
+[multi_repository_provider.dart](../_snippets/flutter_bloc_core_concepts/multi_repository_provider.dart.md ':include')
 
 ## Uso
 
@@ -294,74 +123,10 @@ Veamos cómo usar `BlocBuilder` para conectar un widget `CounterPage` a un `Coun
 
 ### counter_bloc.dart
 
-```dart
-enum CounterEvent { increment, decrement }
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](../_snippets/flutter_bloc_core_concepts/counter_bloc.dart.md ':include')
 
 ### counter_page.dart
 
-```dart
-class CounterPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
-
-    return Scaffold(
-      appBar: AppBar(title: Text('Counter')),
-      body: BlocBuilder<CounterBloc, int>(
-        builder: (context, count) {
-          return Center(
-            child: Text(
-              '$count',
-              style: TextStyle(fontSize: 24.0),
-            ),
-          );
-        },
-      ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {
-                counterBloc.add(CounterEvent.increment);
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: Icon(Icons.remove),
-              onPressed: () {
-                counterBloc.add(CounterEvent.decrement);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
+[counter_page.dart](../_snippets/flutter_bloc_core_concepts/counter_page.dart.md ':include')
 
 En este punto, hemos separado con éxito nuestra capa de presentación de nuestra capa de lógica de negocios. Observe que el widget `CounterPage` no sabe nada sobre lo que sucede cuando un usuario toca los botones. El widget simplemente le dice al `CounterBloc` que el usuario ha presionado el botón de incremento o decremento.

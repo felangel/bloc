@@ -12,26 +12,7 @@ Pro jednoduchost jako ukázkovou aplikaci použijeme `Počítadlo`.
 
 Naše implementace `CounterBlocu` bude vypadat takto:
 
-```dart
-enum CounterEvent { increment, decrement }
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield currentState - 1;
-        break;
-      case CounterEvent.increment:
-        yield currentState + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](../_snippets/recipes_flutter_bloc_access/counter_bloc.dart.md ':include')
 
 ### UI
 
@@ -43,26 +24,7 @@ Budeme mít 3 části našeho UI:
 
 #### App
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-void main() => runApp(App());
-
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      home: BlocProvider(
-        create: (BuildContext context) => CounterBloc(),
-        child: CounterPage(),
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/recipes_flutter_bloc_access/local_access/main.dart.md ':include')
 
 Náš widget `App` je `StatelessWidget`, který používá `MaterialApp` a nastavuje naši `CounterPage` jako home widget. Widget `App` je odpovědný za vytvoření a ukončení `CounterBlocu`, stejně za jeho poskytuní `CounterPage` pomocí `BlocProvideru`.
 
@@ -70,61 +32,13 @@ Náš widget `App` je `StatelessWidget`, který používá `MaterialApp` a nasta
 
 #### CounterPage
 
-```dart
-class CounterPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final counterBloc = BlocProvider.of<CounterBloc>(context);
-    return Scaffold(
-      appBar: AppBar(title: Text('Counter')),
-      body: Center(
-        child: CounterText(),
-      ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {
-                counterBloc.add(CounterEvent.increment);
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: Icon(Icons.remove),
-              onPressed: () {
-                counterBloc.add(CounterEvent.decrement);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
+[counter_page.dart](../_snippets/recipes_flutter_bloc_access/local_access/counter_page.dart.md ':include')
 
 Widget `CounterPage` je `StatelessWidget`, který přistupuje k `CounterBlocu` pomocí `BuildContextu`.
 
 #### CounterText
 
-```dart
-class CounterText extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CounterBloc, int>(
-      builder: (context, count) {
-        return Text('$count');
-      },
-    );
-  }
-}
-```
+[counter_text.dart](../_snippets/recipes_flutter_bloc_access/local_access/counter_text.dart.md ':include')
 
 Náš `CounterText` widget používá `BlocBuilder` k opětovnému renderování sebe sama kdykoli se stav `CounterBlocu` změní. Abychom mohli přistoupit k poskytovanému `CounterBlocu`, používáme `BlocProvider.of<CounterBloc>(context)` a vracíme `Text` widget s aktuálním číslem.
 
@@ -140,26 +54,7 @@ Jako další si ukážeme, jak poskytovat bloc napříč vícero stránkami/rout
 
 Znovu pro jednoduchost použijeme `CounterBloc`.
 
-```dart
-enum CounterEvent { increment, decrement }
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield currentState - 1;
-        break;
-      case CounterEvent.increment:
-        yield currentState + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](../_snippets/recipes_flutter_bloc_access/counter_bloc.dart.md ':include')
 
 ### UI
 
@@ -171,85 +66,13 @@ Znovu budeme mít tři části UI aplikace:
 
 #### App
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-void main() => runApp(App());
-
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      home: BlocProvider(
-        create: (BuildContext context) => CounterBloc(),
-        child: HomePage(),
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/recipes_flutter_bloc_access/anonymous_route_access/main.dart.md ':include')
 
 Náš `App` widget bude stejný jako v předešlé ukázce.
 
 #### HomePage
 
-```dart
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final counterBloc = BlocProvider.of<CounterBloc>(context);
-    return Scaffold(
-      appBar: AppBar(title: Text('Counter')),
-      body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<CounterPage>(
-                builder: (context) {
-                  return BlocProvider.value(
-                    value: counterBloc,
-                    child: CounterPage(),
-                  );
-                },
-              ),
-            );
-          },
-          child: Text('Counter'),
-        ),
-      ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              heroTag: 0,
-              child: Icon(Icons.add),
-              onPressed: () {
-                counterBloc.add(CounterEvent.increment);
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              heroTag: 1,
-              child: Icon(Icons.remove),
-              onPressed: () {
-                counterBloc.add(CounterEvent.decrement);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
+[home_page.dart](../_snippets/recipes_flutter_bloc_access/anonymous_route_access/home_page.dart.md ':include')
 
 `HomePage` je podobná `CounterPage` z předešlé ukázky, avšak namísto renderování `CounterText` widgetu renderuje uprostřed `RaisedButton`, který umožní uživatelovi navigovat na novout obrazovku, která zobrazí aktuální číslo.
 
@@ -259,25 +82,7 @@ Když uživatel klepne na `RaisedButton`, přidáme novou `MaterialPageRoute` a 
 
 #### CounterPage
 
-```dart
-class CounterPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Counter'),
-      ),
-      body: BlocBuilder<CounterBloc, int>(
-        builder: (context, count) {
-          return Center(
-            child: Text('$count'),
-          );
-        },
-      ),
-    );
-  }
-}
-```
+[counter_page.dart](../_snippets/recipes_flutter_bloc_access/anonymous_route_access/counter_page.dart.md ':include')
 
 `CounterPage` je super jednoduchý `StatelessWidget`, který používá `BlocBuilder` k překreslení `Text` widgetu s aktuálním číslem. Stejně jako předtím, můžeme použít `BlocProvider.of<CounterBloc>(context)` abychom přistoupili k `CounterBloc`.
 
@@ -293,26 +98,7 @@ Nakonec se podíváme na to, jak globálně zpřístupnit bloc stromu widgetů.
 
 Jako obvykle, pro jednoduchost použijeme pro náš příklad `CounterBloc`.
 
-```dart
-enum CounterEvent { increment, decrement }
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield currentState - 1;
-        break;
-      case CounterEvent.increment:
-        yield currentState + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](../_snippets/recipes_flutter_bloc_access/counter_bloc.dart.md ':include')
 
 ### UI
 
@@ -324,26 +110,7 @@ Budeme mít stejnou strukturu jako v příkladu o lokálním přístupu. V důsl
 
 #### App
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-void main() => runApp(App());
-
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => CounterBloc(),
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        home: CounterPage(),
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/recipes_flutter_bloc_access/global_access/main.dart.md ':include')
 
 Podobně jako ve výše uvedeném příkladu lokálního přístupu, `App` řídí vytváření, ukončování a poskytování `CounterBlocu` podstromu pomocí `BlocProvideru`. Hlavní rozdíl je v tomto případě je to, že `MaterialApp` je potomkem `BlocProvideru`.
 
@@ -353,61 +120,13 @@ Zabalení celé `MaterialApp` do `BlocProvideru` je klíčem k tomu, aby byla na
 
 #### CounterPage
 
-```dart
-class CounterPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
-    return Scaffold(
-      appBar: AppBar(title: Text('Counter')),
-      body: Center(
-        child: CounterText(),
-      ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {
-                counterBloc.add(CounterEvent.increment);
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: Icon(Icons.remove),
-              onPressed: () {
-                counterBloc.add(CounterEvent.decrement);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
+[counter_page.dart](../_snippets/recipes_flutter_bloc_access/global_access/counter_page.dart.md ':include')
 
 Naše `CounterPage` je `StatelessWidget`, protože nepotřebuje spravovat svůj stav. Jak jsme zmínili výše, k přístupu k globální instanci `CounterBlocu` používá `BlocProvider.of<CounterBloc>(context)`.
 
 #### CounterText
 
-```dart
-class CounterText extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CounterBloc, int>(
-      builder: (context, count) {
-        return Text('$count');
-      },
-    );
-  }
-}
-```
+[counter_text.dart](../_snippets/recipes_flutter_bloc_access/global_access/counter_text.dart.md ':include')
 
 Nic nového, `CounterText` widget je ten samý jako v naší první ukázce. Je to jen `StatelessWidget`, který používá `BlocBuilder` k překreslení když se stav `CounterBloc` změní a přistupuje k globální instanci `CounterBloc` pomocí `BlocProvider.of<CounterBloc>(context)`.
 

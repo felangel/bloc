@@ -12,22 +12,13 @@ Blocには３つのpubパッケージが含まれています：
 
 ## インストール
 
-
 [Flutter](https://flutter.dev/)のアプリケーションの場合は`pubspec.yaml`にflutter_blocを追加します。
 
-```yaml
-dependencies:
-  flutter_bloc: ^3.2.0
-```
-
+[pubspec.yaml](../_snippets/getting_started/flutter_bloc_pubspec.yaml.md ':include')
 
 [AngularDart](https://angulardart.dev/)の場合はblocとangular_blocの二つを`pubspec.yaml`に追加します。
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-  angular_bloc: ^3.0.0
-```
+[pubspec.yaml](../_snippets/getting_started/angular_bloc_pubspec.yaml.md ':include')
 
 次にblocをインストールします。
 
@@ -43,14 +34,8 @@ blocのインストールが無事完了したら`main.dart`にblocをインポ�
 
 Flutterの場合はflutter_blocをインポートします。
 
-
-```dart
-import 'package:flutter_bloc/flutter_bloc.dart';
-```
+[main.dart](../_snippets/getting_started/flutter_bloc_main.dart.md ':include')
 
 AngularDartの場合はblocとangular_blocをインポートします。
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:angular_bloc/angular_bloc.dart';
-```
+[main.dart](../_snippets/getting_started/angular_bloc_main.dart.md ':include')
