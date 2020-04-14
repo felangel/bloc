@@ -1,3 +1,7 @@
+# 4.0.0-dev.2
+
+- Bugfix: Do not emit duplicate terminating state
+
 # 4.0.0-dev.1
 
 - Remove `rxdart` dependency ([#821](https://github.com/felangel/bloc/pull/821))

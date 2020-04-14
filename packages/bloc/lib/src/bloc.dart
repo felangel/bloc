@@ -179,32 +179,28 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   }
 
   void _bindEventsToStates() {
-    _transitionSubscription = transformTransitions(transformEvents(
-      _eventController.stream,
-      (event) {
-        return mapEventToState(event).map((nextState) {
-          return Transition(
+    _transitionSubscription = transformTransitions(
+      transformEvents(
+        _eventController.stream,
+        (event) => mapEventToState(event).map(
+          (nextState) => Transition(
             currentState: state,
             event: event,
             nextState: nextState,
-          );
-        }).skipWhile((transition) {
-          return state == transition.nextState || _stateController.isClosed;
-        });
-      },
-    )).listen(
-      (transition) {
-        try {
-          BlocSupervisor.delegate.onTransition(this, transition);
-          onTransition(transition);
-          _state = transition.nextState;
-          _stateController.add(transition.nextState);
-        } on dynamic catch (error, stacktrace) {
-          _handleError(error, stacktrace);
-        }
-      },
-      onError: _handleError,
-    );
+          ),
+        ),
+      ),
+    ).listen((transition) {
+      if (transition.nextState == state) return;
+      try {
+        BlocSupervisor.delegate.onTransition(this, transition);
+        onTransition(transition);
+        _state = transition.nextState;
+        _stateController.add(transition.nextState);
+      } on dynamic catch (error, stacktrace) {
+        _handleError(error, stacktrace);
+      }
+    }, onError: _handleError);
   }
 
   void _handleError(Object error, [StackTrace stacktrace]) {
