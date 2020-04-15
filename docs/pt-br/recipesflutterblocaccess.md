@@ -12,26 +12,7 @@ Por uma questão de simplicidade, usaremos um `Counter` como nosso aplicativo de
 
 Nossa implementação do `CounterBloc` será parecida com:
 
-```dart
-enum CounterEvent { increment, decrement }
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield currentState - 1;
-        break;
-      case CounterEvent.increment:
-        yield currentState + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](../_snippets/recipes_flutter_bloc_access/counter_bloc.dart.md ':include')
 
 ### UI
 
@@ -43,26 +24,7 @@ Teremos três partes em nossa interface do usuário:
 
 #### App
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-void main() => runApp(App());
-
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      home: BlocProvider(
-        create: (BuildContext context) => CounterBloc(),
-        child: CounterPage(),
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/recipes_flutter_bloc_access/local_access/main.dart.md ':include')
 
 Nosso widget `App` é um `StatelessWidget` que usa um `MaterialApp` e define nosso` CounterPage` como o widget inicial. O widget `App` é responsável por criar e fechar o `CounterBloc`, além de disponibilizá-lo à `CounterPage` usando um `BlocProvider`.
 
@@ -70,61 +32,13 @@ Nosso widget `App` é um `StatelessWidget` que usa um `MaterialApp` e define nos
 
 #### CounterPage
 
-```dart
-class CounterPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final counterBloc = BlocProvider.of<CounterBloc>(context);
-    return Scaffold(
-      appBar: AppBar(title: Text('Counter')),
-      body: Center(
-        child: CounterText(),
-      ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {
-                counterBloc.add(CounterEvent.increment);
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: Icon(Icons.remove),
-              onPressed: () {
-                counterBloc.add(CounterEvent.decrement);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
+[counter_page.dart](../_snippets/recipes_flutter_bloc_access/local_access/counter_page.dart.md ':include')
 
 O widget `CounterPage` é um` StatelessWidget` que acessa o `CounterBloc` através do` BuildContext`.
 
 #### CounterText
 
-```dart
-class CounterText extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CounterBloc, int>(
-      builder: (context, count) {
-        return Text('$count');
-      },
-    );
-  }
-}
-```
+[counter_text.dart](../_snippets/recipes_flutter_bloc_access/local_access/counter_text.dart.md ':include')
 
 Nosso widget `CounterText` está usando um `BlocBuilder` para se reconstruir sempre que o estado do `CounterBloc` mudar. Utilizamos `BlocProvider.of <CounterBloc> (context)` para acessar o CounterBloc fornecido e retornar um widget `Text` com a contagem atual.
 
@@ -140,26 +54,7 @@ A seguir, veremos como fornecer um bloc em várias páginas / rotas.
 
 Novamente, vamos usar o `CounterBloc` para simplificar.
 
-```dart
-enum CounterEvent { increment, decrement }
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield currentState - 1;
-        break;
-      case CounterEvent.increment:
-        yield currentState + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](../_snippets/recipes_flutter_bloc_access/counter_bloc.dart.md ':include')
 
 ### UI
 
@@ -171,85 +66,13 @@ Novamente, teremos três partes na interface do usuário do nosso aplicativo:
 
 #### App
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-void main() => runApp(App());
-
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      home: BlocProvider(
-        create: (BuildContext context) => CounterBloc(),
-        child: HomePage(),
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/recipes_flutter_bloc_access/anonymous_route_access/main.dart.md ':include')
 
 Novamente, nosso widget `App` é o mesmo de antes.
 
 #### HomePage
 
-```dart
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final counterBloc = BlocProvider.of<CounterBloc>(context);
-    return Scaffold(
-      appBar: AppBar(title: Text('Counter')),
-      body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<CounterPage>(
-                builder: (context) {
-                  return BlocProvider.value(
-                    value: counterBloc,
-                    child: CounterPage(),
-                  );
-                },
-              ),
-            );
-          },
-          child: Text('Counter'),
-        ),
-      ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              heroTag: 0,
-              child: Icon(Icons.add),
-              onPressed: () {
-                counterBloc.add(CounterEvent.increment);
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              heroTag: 1,
-              child: Icon(Icons.remove),
-              onPressed: () {
-                counterBloc.add(CounterEvent.decrement);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
+[home_page.dart](../_snippets/recipes_flutter_bloc_access/anonymous_route_access/home_page.dart.md ':include')
 
 A `HomePage` é semelhante à `CounterPage` no exemplo acima; no entanto, em vez de renderizar um widget `CounterText`, ele renderiza um `RaisedButton` no centro, o que permite ao usuário navegar para uma nova tela que exibe a contagem atual.
 
@@ -259,25 +82,7 @@ Quando o usuário toca no `RaisedButton`, adicionamos uma nova `MaterialPageRout
 
 #### CounterPage
 
-```dart
-class CounterPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Counter'),
-      ),
-      body: BlocBuilder<CounterBloc, int>(
-        builder: (context, count) {
-          return Center(
-            child: Text('$count'),
-          );
-        },
-      ),
-    );
-  }
-}
-```
+[counter_page.dart](../_snippets/recipes_flutter_bloc_access/anonymous_route_access/counter_page.dart.md ':include')
 
 O `CounterPage` é um `StatelessWidget` super super simples que usa o `BlocBuilder` para renderizar novamente um widget `Text` com a contagem atual. Assim como antes, somos capazes de usar o `BlocProvider.of <CounterBloc> (context)` para acessar o `CounterBloc`.
 
@@ -293,24 +98,7 @@ A seguir, veremos como definir o escopo de um bloc para apenas uma ou mais rotas
 
 Novamente, vamos usar o `CounterBloc` para simplificar.
 
-```dart
-enum CounterEvent { increment, decrement }
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield currentState - 1;
-        break;
-      case CounterEvent.increment:
-        yield currentState + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](../_snippets/recipes_flutter_bloc_access/counter_bloc.dart.md ':include')
 
 ### UI
 
@@ -322,40 +110,7 @@ Novamente, teremos três partes na interface do usuário do nosso aplicativo:
 
 #### App
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-void main() => runApp(App());
-class App extends StatefulWidget {
-  @override
-  _AppState createState() => _AppState();
-}
-class _AppState extends State<App> {
-  final _counterBloc = CounterBloc();
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      routes: {
-        '/': (context) => BlocProvider.value(
-              value: _counterBloc,
-              child: HomePage(),
-            ),
-        '/counter': (context) => BlocProvider.value(
-              value: _counterBloc,
-              child: CounterPage(),
-            ),
-      },
-    );
-  }
-  @override
-  void dispose() {
-    _counterBloc.close();
-    super.dispose();
-  }
-}
-```
+[main.dart](../_snippets/recipes_flutter_bloc_access/named_route_access/main.dart.md ':include')
 
 Nosso widget `App` é responsável por gerenciar a instância do `CounterBloc` que forneceremos para as rotas raiz (`/`) e counter (`/counter`).
 
@@ -365,49 +120,7 @@ Nosso widget `App` é responsável por gerenciar a instância do `CounterBloc` q
 
 #### HomePage
 
-```dart
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final counterBloc = BlocProvider.of<CounterBloc>(context);
-    return Scaffold(
-      appBar: AppBar(title: Text('Counter')),
-      body: Center(
-        child: RaisedButton(
-          onPressed: () => Navigator.of(context).pushNamed('/counter'),
-          child: Text('Counter'),
-        ),
-      ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              heroTag: 0,
-              child: Icon(Icons.add),
-              onPressed: () {
-                counterBloc.add(CounterEvent.increment);
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              heroTag: 1,
-              child: Icon(Icons.remove),
-              onPressed: () {
-                counterBloc.add(CounterEvent.decrement);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
+[home_page.dart](../_snippets/recipes_flutter_bloc_access/named_route_access/home_page.dart.md ':include')
 
 A `HomePage` é semelhante à `CounterPage` no exemplo acima; no entanto, em vez de renderizar um widget `CounterText`, ele renderiza um `RaisedButton` no centro, o que permite ao usuário navegar para uma nova tela que exibe a contagem atual.
 
@@ -415,25 +128,7 @@ Quando o usuário toca no `RaisedButton`, empurramos uma nova rota nomeada para 
 
 #### CounterPage
 
-```dart
-class CounterPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Counter'),
-      ),
-      body: BlocBuilder<CounterBloc, int>(
-        builder: (context, count) {
-          return Center(
-            child: Text('$count'),
-          );
-        },
-      ),
-    );
-  }
-}
-```
+[counter_page.dart](../_snippets/recipes_flutter_bloc_access/named_route_access/counter_page.dart.md ':include')
 
 O `CounterPage` é um `StatelessWidget` super super simples que usa o `BlocBuilder` para renderizar novamente um widget `Text` com a contagem atual. Assim como antes, somos capazes de usar o `BlocProvider.of<CounterBloc>(context)` para acessar o `CounterBloc`.
 
@@ -447,26 +142,7 @@ Isso é tudo neste exemplo e o código fonte completo pode ser encontrado [aqui]
 
 Como sempre, vamos usar o `CounterBloc` como nosso exemplo de simplicidade.
 
-```dart
-enum CounterEvent { increment, decrement }
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield currentState - 1;
-        break;
-      case CounterEvent.increment:
-        yield currentState + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](../_snippets/recipes_flutter_bloc_access/counter_bloc.dart.md ':include')
 
 ### UI
 
@@ -478,26 +154,7 @@ Vamos seguir a mesma estrutura de aplicativo do exemplo "Acesso local". Como res
 
 #### App
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-void main() => runApp(App());
-
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => CounterBloc(),
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        home: CounterPage(),
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/recipes_flutter_bloc_access/global_access/main.dart.md ':include')
 
 Assim como no exemplo de acesso local acima, o `App` gerencia criando, fechando e fornecendo o `CounterBloc` para a subárvore usando o `BlocProvider`. A principal diferença está neste caso, `MaterialApp` é filho do `BlocProvider`.
 
@@ -507,61 +164,13 @@ Envolvendo todo o `MaterialApp` em um `BlocProvider` é a chave para tornar noss
 
 #### CounterPage
 
-```dart
-class CounterPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
-    return Scaffold(
-      appBar: AppBar(title: Text('Counter')),
-      body: Center(
-        child: CounterText(),
-      ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {
-                counterBloc.add(CounterEvent.increment);
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: Icon(Icons.remove),
-              onPressed: () {
-                counterBloc.add(CounterEvent.decrement);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
+[counter_page.dart](../_snippets/recipes_flutter_bloc_access/global_access/counter_page.dart.md ':include')
 
 Nosso `CounterPage` é um `StatelessWidget` porque não precisa gerenciar nada do seu próprio estado. Assim como mencionamos acima, ele usa o `BlocProvider.of <CounterBloc> (context)` para acessar a instância global do `CounterBloc`.
 
 #### CounterText
 
-```dart
-class CounterText extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CounterBloc, int>(
-      builder: (context, count) {
-        return Text('$count');
-      },
-    );
-  }
-}
-```
+[counter_text.dart](../_snippets/recipes_flutter_bloc_access/global_access/counter_text.dart.md ':include')
 
 Nada de novo aqui; o widget `CounterText` é o mesmo que no primeiro exemplo. É apenas um `StatelessWidget` que usa um `BlocBuilder` para renderizar novamente quando o estado do `CounterBloc` muda e acessa a instância global do `CounterBloc` usando o `BlocProvider.of <CounterBloc> (context)`.
 

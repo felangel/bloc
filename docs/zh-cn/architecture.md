@@ -31,32 +31,13 @@
 
 作为数据层的一部分，我们可能有一个`createData`，`readData`，`updateData`和`deleteData`的方法。
 
-```dart
-class DataProvider {
-    Future<RawData> readData() async {
-        // 从数据库中读取或作出一个网络请求等
-    }
-}
-```
+[data_provider.dart](../_snippets/architecture/data_provider.dart.md ':include')
 
 ### Repository
 
 > 存储库层是与Bloc层进行通信的一个或多个数据提供程序的包装。
 
-```dart
-class Repository {
-    final DataProviderA dataProviderA;
-    final DataProviderB dataProviderB;
-
-    Future<Data> getAllDataThatMeetsRequirements() async {
-        final RawDataA dataSetA = await dataProviderA.readData();
-        final RawDataB dataSetB = await dataProviderB.readData();
-
-        final Data filteredData = _filterData(dataSetA, dataSetB);
-        return filteredData;
-    }
-}
-```
+[repository.dart](../_snippets/architecture/repository.dart.md ':include')
 
 如您所见，我们的存储库层可以与多个数据提供者进行交互，并对数据执行转换，然后再将结果传递给业务逻辑层。
 
@@ -66,22 +47,7 @@ class Repository {
 
 将块层视为用户界面（表示层) 和数据层之间的桥梁。Bloc层接受由用户输入生成的事件(Event)，然后与存储库进行通信，以建立供表示层使用的新状态(State)。
 
-```dart
-class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
-    final Repository repository;
-
-    Stream mapEventToState(event) async* {
-        if (event is AppStarted) {
-            try {
-                final data = await repository.getAllDataThatMeetsRequirements();
-                yield Success(data);
-            } catch (error) {
-                yield Failure(error);
-            }
-        }
-    }
-}
-```
+[business_logic_component.dart](../_snippets/architecture/business_logic_component.dart.md ':include')
 
 ### Bloc和Bloc之间的交流
 
@@ -89,25 +55,7 @@ class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
 
 `MyBloc`可以依赖于`其他Bloc`，以便对它们的状态(State)变化做出反应。在下面的示例中，`MyBloc`依赖于`OtherBloc`，并且可以响应` OtherBloc`中的状态(State)更改而`添加`事件(Event)。为了避免内存泄漏，在`MyBloc`的`close`替代中关闭了`StreamSubscription`。
 
-```dart
-class MyBloc extends Bloc {
-  final OtherBloc otherBloc;
-  StreamSubscription otherBlocSubscription;
-
-  MyBloc(this.otherBloc) {
-    otherBlocSubscription = otherBloc.listen((state) {
-        // 对状态（State) 的改变作出反应
-        // 在这里添加事件（events) 来触发MyBloc中的改变
-    });
-  }
-
-  @override
-  Future<void> close() {
-    otherBlocSubscription.cancel();
-    return super.close();
-  }
-}
-```
+[bloc_to_bloc_communication.dart](../_snippets/architecture/bloc_to_bloc_communication.dart.md ':include')
 
 ## 表现层（也可理解为用户界面)
 
@@ -119,18 +67,6 @@ class MyBloc extends Bloc {
 
 另外，表示层将必须根据bloc层的状态(State)确定要在屏幕上呈现的内容。
 
-```dart
-class PresentationComponent {
-    final Bloc bloc;
-
-    PresentationComponent() {
-        bloc.add(AppStarted());
-    }
-
-    build() {
-        // 根据bloc的状态来渲染UI
-    }
-}
-```
+[presentation_component.dart](../_snippets/architecture/presentation_component.dart.md ':include')
 
 到目前为止，我们有的一些代码片段都已经相当高级了。在教程部分，我们将在构建几个不同的示例应用程序时将所有这些内容放在一起。

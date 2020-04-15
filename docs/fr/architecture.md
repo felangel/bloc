@@ -30,32 +30,13 @@ Cette couche est le niveau le plus bas de l'application et interagit avec les ba
 Le DataProvider expose généralement des API simples pour effectuer [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) des opérations.
 Nous pourrions avoir des méthodes `createData`, `readData`, `updateData`, et `deleteData` dans notre couche de données.
 
-```dart
-class DataProvider {
-    Future<RawData> readData() async {
-        // Lire à partir d'une base de données ou faire une demande réseau etc...
-    }
-}
-```
+[data_provider.dart](../_snippets/architecture/data_provider.dart.md ':include')
 
 ### Repository (Dépôt)
 
 > La couche Repository est une enveloppe autour d'un ou plusieurs DataProvider avec lesquels le Bloc Layer communique.
 
-```dart
-class Repository {
-    final DataProviderA dataProviderA;
-    final DataProviderB dataProviderB;
-
-    Future<Data> getAllDataThatMeetsRequirements() async {
-        final RawDataA dataSetA = await dataProviderA.readData();
-        final RawDataB dataSetB = await dataProviderB.readData();
-
-        final Data filteredData = _filterData(dataSetA, dataSetB);
-        return filteredData;
-    }
-}
-```
+[repository.dart](../_snippets/architecture/repository.dart.md ':include')
 
 Comme vous pouvez le voir, notre couche Repository peut interagir avec plusieurs DataProviders et effectuer des transformations sur les données avant de les transmettre à la couche chargée de la logique métier.
 
@@ -65,17 +46,7 @@ Comme vous pouvez le voir, notre couche Repository peut interagir avec plusieurs
 
 Pensez à la couche bloc comme le pont entre l'interface utilisateur (couche de présentation) et la couche de données. La couche bloc prend les événements générés par l'entrée utilisateur et communique ensuite avec le Repository afin de construire un nouvel état pour la couche de présentation à consommer.
 
-```dart
-class BusinessLogicComponent extends Bloc {
-    final Repository repository;
-
-    Stream mapEventToState(event) async* {
-        if (event is AppStarted) {
-            yield await repository.getAllDataThatMeetsRequirements();
-        }
-    }
-}
-```
+[business_logic_component.dart](../_snippets/architecture/business_logic_component.dart.md ':include')
 
 ### Communication Bloc à Bloc
 
@@ -83,25 +54,7 @@ class BusinessLogicComponent extends Bloc {
 
 Les blocs peuvent avoir des dépendances avec d'autres blocs afin de réagir à leurs changements d'état. Dans l'exemple suivant, `MyBloc` a une dépendance à l'égard de `OtherBloc` et peut `dispatch` en réponse à des changements d'état dans les activités dans `OtherBloc`. Le `StreamSubscription` est fermé dans `dispose` dans `MyBloc` afin d'éviter les fuites de mémoire.
 
-```dart
-class MyBloc extends Bloc {
-  final OtherBloc otherBloc;
-  StreamSubscription otherBlocSubscription;
-
-  MyBloc(this.otherBloc) {
-    otherBlocSubscription = otherBloc.state.listen((state) {
-        // Réagir aux changements d'état ici.
-        // Envoyez des événements ici pour déclencher des changements dans MyBloc.
-    });
-  }
-
-  @override
-  void dispose() {
-    otherBlocSubscription.cancel();
-    super.dispose();
-  }
-}
-```
+[bloc_to_bloc_communication.dart](../_snippets/architecture/bloc_to_bloc_communication.dart.md ':include')
 
 ## Couche de présentation
 
@@ -113,18 +66,6 @@ Dans ce scénario, la couche de présentation envoit un événement `AppStart`.
 
 De plus, la couche de présentation devra déterminer ce qu'il faut afficher à l'écran en fonction de l'état de la couche bloc.
 
-```dart
-class PresentationComponent {
-    final Bloc bloc;
-
-    PresentationComponent() {
-        bloc.dispatch(AppStarted());
-    }
-
-    build() {
-        // rendu de l'interface utilisateur basé sur l'état du bloc
-    }
-}
-```
+[presentation_component.dart](../_snippets/architecture/presentation_component.dart.md ':include')
 
 Jusqu'à présent, même si nous avons vu quelques bribes de code, tout cela est d'un niveau assez élevé. Dans la section tutoriel, nous allons mettre tout cela ensemble en construisant plusieurs exemples d'applications différentes.

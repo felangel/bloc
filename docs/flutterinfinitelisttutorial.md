@@ -31,6 +31,7 @@ dependencies:
   flutter_bloc: ^3.2.0
   http: ^0.12.0
   equatable: ^1.0.0
+  rxdart: ^0.23.1
 
 flutter:
   uses-material-design: true
@@ -298,15 +299,13 @@ One optimization we can make is to `debounce` the `Events` in order to prevent s
 
 ```dart
 @override
-Stream<PostState> transformEvents(
+Stream<Transition<PostEvent, PostState>> transformEvents(
   Stream<PostEvent> events,
-  Stream<PostState> Function(PostEvent event) next,
+  TransitionFunction<PostEvent, PostState> transitionFn,
 ) {
   return super.transformEvents(
-    events.debounceTime(
-      Duration(milliseconds: 500),
-    ),
-    next,
+    events.debounceTime(const Duration(milliseconds: 500)),
+    transitionFn,
   );
 }
 ```
@@ -314,15 +313,15 @@ Stream<PostState> transformEvents(
 Our finished `PostBloc` should now look like this:
 
 ```dart
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:bloc/bloc.dart';
-
-import 'package:flutter_infinite_list/post.dart';
 import 'package:flutter_infinite_list/bloc/bloc.dart';
+import 'package:flutter_infinite_list/models/models.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   final http.Client httpClient;
@@ -330,36 +329,37 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({@required this.httpClient});
 
   @override
-  Stream<PostState> transformEvents(
+  get initialState => PostUninitialized();
+
+  @override
+  Stream<Transition<PostEvent, PostState>> transformEvents(
     Stream<PostEvent> events,
-    Stream<PostState> Function(PostEvent event) next,
+    TransitionFunction<PostEvent, PostState> transitionFn,
   ) {
     return super.transformEvents(
-      events.debounceTime(
-        Duration(milliseconds: 500),
-      ),
-      next,
+      events.debounceTime(const Duration(milliseconds: 500)),
+      transitionFn,
     );
   }
 
   @override
-  get initialState => PostUninitialized();
-
-  @override
-  Stream<PostState> mapEventToState(event) async* {
+  Stream<PostState> mapEventToState(PostEvent event) async* {
     final currentState = state;
     if (event is Fetch && !_hasReachedMax(currentState)) {
       try {
         if (currentState is PostUninitialized) {
           final posts = await _fetchPosts(0, 20);
           yield PostLoaded(posts: posts, hasReachedMax: false);
+          return;
         }
         if (currentState is PostLoaded) {
           final posts = await _fetchPosts(currentState.posts.length, 20);
           yield posts.isEmpty
               ? currentState.copyWith(hasReachedMax: true)
               : PostLoaded(
-                  posts: currentState.posts + posts, hasReachedMax: false);
+                  posts: currentState.posts + posts,
+                  hasReachedMax: false,
+                );
         }
       } catch (_) {
         yield PostError();

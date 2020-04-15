@@ -16,9 +16,7 @@
 
 Нам нужно иметь возможность по уведомлению «мозгов» нашего приложения об увеличении и уменьшении, поэтому нам нужно определить эти события.
 
-```dart
-enum CounterEvent { increment, decrement }
-```
+[counter_event.dart](../_snippets/core_concepts/counter_event.dart.md ':include')
 
 В этом случае мы можем представлять события с помощью `enum`, но для более сложных случаев может потребоваться использование `class`, особенно если это необходимо для передачи информации в блок.
 
@@ -44,13 +42,7 @@ enum CounterEvent { increment, decrement }
 
 Например, если пользователь открыл наше приложение и нажал кнопку увеличения, мы увидим следующий `Transition`.
 
-```json
-{
-  "currentState": 0,
-  "event": "CounterEvent.increment",
-  "nextState": 1
-}
-```
+[counter_increment_transition.json](../_snippets/core_concepts/counter_increment_transition.json.md ':include')
 
 Поскольку каждое изменение состояния сохраняется, мы можем очень легко контролировать наши приложения и отслеживать все взаимодействия с пользователем & изменения состояния в одном месте. Кроме того, это позволяет производить `time-travel` отладку.
 
@@ -68,13 +60,7 @@ enum CounterEvent { increment, decrement }
 
 Мы можем создать `Stream` в Dart, написав `async*` функцию.
 
-```dart
-Stream<int> countStream(int max) async* {
-    for (int i = 0; i < max; i++) {
-        yield i;
-    }
-}
-```
+[count_stream.dart](../_snippets/core_concepts/count_stream.dart.md ':include')
 
 Помечая функцию как `async*`, мы можем использовать ключевое слово `yield` и возвращать поток данных. В приведенном выше примере мы возвращаем `Stream` целых чисел вплоть до целочисленного параметра `max`.
 
@@ -82,43 +68,20 @@ Stream<int> countStream(int max) async* {
 
 Мы можем использовать вышеприведенный `Stream` несколькими способами. Если бы мы хотели написать функцию, возвращающую сумму целых чисел из `Stream`, это могло бы выглядеть примерно так:
 
-```dart
-Future<int> sumStream(Stream<int> stream) async {
-    int sum = 0;
-    await for (int value in stream) {
-        sum += value;
-    }
-    return sum;
-}
-```
+[sum_stream.dart](../_snippets/core_concepts/sum_stream.dart.md ':include')
 
 Помечая вышеуказанную функцию как `async`, мы можем использовать ключевое слово `await` и возвращать `Future` целых чисел. В этом примере мы ожидаем каждое значение в потоке и возвращаем из него сумму всех целых чисел.
 
 Мы можем собрать все это вместе вот так:
 
-```dart
-void main() async {
-    /// Initialize a stream of integers 0-9
-    Stream<int> stream = countStream(10);
-    /// Compute the sum of the stream of integers
-    int sum = await sumStream(stream);
-    /// Print the sum
-    print(sum); // 45
-}
-```
+[main.dart](../_snippets/core_concepts/streams_main.dart.md ':include')
 
 ## Blocs (Блоки)
 
 > Блок (Business Logic Component) - это компонент, который преобразует `Stream` входящих `Events` в `Stream` исходящих `States`. Думайте о Блоке как о `мозгах`, описанных выше.
 > Каждый блок должен расширять базовый класс `Bloc`, который является частью пакета основного блока.
 
-```dart
-import 'package:bloc/bloc.dart';
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_class.dart.md ':include')
 
 В приведенном выше фрагменте кода мы объявляем наш `CounterBloc` как блок, который преобразует `CounterEvents` в `ints`.
 
@@ -126,51 +89,15 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 В этом случае мы хотим, чтобы наш счетчик начинался с `0`.
 
-```dart
-@override
-int get initialState => 0;
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_initial_state.dart.md ':include')
 
 > Каждый `bloc` должен реализовывать функцию с именем `mapEventToState`. Функция принимает входящее `event` в качестве аргумента и должна возвращать `Stream` новых `states`, который используется уровнем представления. Мы можем получить доступ к текущему состоянию блока в любое время, используя свойство `state`.
 
-```dart
-@override
-Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_map_event_to_state.dart.md ':include')
 
 На данный момент у нас есть полностью функционирующий `CounterBloc`.
 
-```dart
-import 'package:bloc/bloc.dart';
-
-enum CounterEvent { increment, decrement }
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc.dart.md ':include')
 
 !> Блоки будут игнорировать повторяющиеся состояния. Если блок выдает `State nextState`, где `state == nextState`, тогда никакого перехода не произойдет и в `Stream<State>` не будет внесено никаких изменений.
 
@@ -180,37 +107,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 Мы можем создать простое приложение, которое считает от 0 до 3.
 
-```dart
-void main() {
-    CounterBloc bloc = CounterBloc();
-
-    for (int i = 0; i < 3; i++) {
-        bloc.add(CounterEvent.increment);
-    }
-}
-```
+[main.dart](../_snippets/core_concepts/counter_bloc_main.dart.md ':include')
 
 !> По умолчанию события всегда будут обрабатываться в том порядке, в котором они были добавлены, а все вновь добавленные события помещаются в очередь. Событие считается полностью обработанным после завершения выполнения `mapEventToState`.
 
 `Transitions` в приведенном фрагменте кода будут:
 
-```json
-{
-    "currentState": 0,
-    "event": "CounterEvent.increment",
-    "nextState": 1
-}
-{
-    "currentState": 1,
-    "event": "CounterEvent.increment",
-    "nextState": 2
-}
-{
-    "currentState": 2,
-    "event": "CounterEvent.increment",
-    "nextState": 3
-}
-```
+[counter_bloc_transitions.json](../_snippets/core_concepts/counter_bloc_transitions.json.md ':include')
 
 К сожалению, в текущем состоянии мы не сможем увидеть ни один из этих переходов, если не переопределим `onTransition`.
 
@@ -218,12 +121,7 @@ void main() {
 
 ?> **Совет**: `onTransition` - отличное место для добавления блочного логирования/аналитики.
 
-```dart
-@override
-void onTransition(Transition<CounterEvent, int> transition) {
-    print(transition);
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_on_transition.dart.md ':include')
 
 Теперь, когда мы переопределили `onTransition`, мы можем делать все, что нам необходимо каждый раз когда происходит `Transition`.
 
@@ -235,12 +133,7 @@ void onTransition(Transition<CounterEvent, int> transition) {
 
 ?> **Совет**: `onError` - отличное место для добавления обработки ошибок, специфичных для блоков.
 
-```dart
-@override
-void onError(Object error, StackTrace stackTrace) {
-  print('$error, $stackTrace');
-}
-```
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_on_error.dart.md ':include')
 
 Теперь, когда мы переопределили `onError`, мы можем делать все, что необходимо каждый раз, когда выдается `Exception`.
 
@@ -250,71 +143,20 @@ void onError(Object error, StackTrace stackTrace) {
 
 Если мы хотим иметь возможность что-то делать в ответ на все `Transitions`, мы можем просто создать наш собственный `BlocDelegate`.
 
-```dart
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-}
-```
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
 
 ?> **Примечание**: Все, что нам нужно сделать, это расширить `BlocDelegate` и переопределить метод `onTransition`.
 
 Чтобы указать `Bloc` использовать наш `SimpleBlocDelegate`, нам просто нужно настроить нашу функцию `main`.
 
-```dart
-void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
-  CounterBloc bloc = CounterBloc();
-
-  for (int i = 0; i < 3; i++) {
-    bloc.add(CounterEvent.increment);
-  }
-}
-```
+[main.dart](../_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
 
 Если мы хотим иметь возможность что-то делать в ответ на все предопределенные события, мы также можем переопределить метод `onEvent` в нашем `SimpleBlocDelegate`.
 
-```dart
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
-    print(event);
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-}
-```
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
 
 Если мы хотим иметь возможность что-то делать в ответ на все `Exceptions`, сгенерированные в блоке, мы также можем переопределить метод `onError` в нашем `SimpleBlocDelegate`.
 
-```dart
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
-    print(event);
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-
-  @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
-    print('$error, $stacktrace');
-  }
-}
-```
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
 
 ?> **Примечание**: `BlocSupervisor` - это синглтон, который наблюдает за всеми блоками и делегирует обязанности `BlocDelegate`.

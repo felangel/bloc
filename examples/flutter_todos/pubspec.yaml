@@ -5,8 +5,8 @@ environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
-  meta: ^1.1.6
-  equatable: ^1.0.0
+  meta: ^1.1.8
+  equatable: ^1.1.1
   flutter_bloc:
     path: ../../packages/flutter_bloc
   flutter:

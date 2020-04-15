@@ -34,6 +34,7 @@ dependencies:
   flutter_bloc: ^3.2.0
   equatable: ^1.0.0
   meta: ^1.1.6
+  rxdart: ^0.23.1
   font_awesome_flutter: ^8.4.0
 
 flutter:
@@ -345,15 +346,11 @@ Stream<AuthenticationState> mapEventToState(
 }
 
 Stream<AuthenticationState> _mapAppStartedToState() async* {
-  try {
-    final isSignedIn = await _userRepository.isSignedIn();
-    if (isSignedIn) {
-      final name = await _userRepository.getUser();
-      yield Authenticated(name);
-    } else {
-      yield Unauthenticated();
-    }
-  } catch (_) {
+  final isSignedIn = await _userRepository.isSignedIn();
+  if (isSignedIn) {
+    final name = await _userRepository.getUser();
+    yield Authenticated(name);
+  } else {
     yield Unauthenticated();
   }
 }
@@ -409,15 +406,11 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapAppStartedToState() async* {
-    try {
-      final isSignedIn = await _userRepository.isSignedIn();
-      if (isSignedIn) {
-        final name = await _userRepository.getUser();
-        yield Authenticated(name);
-      } else {
-        yield Unauthenticated();
-      }
-    } catch (_) {
+    final isSignedIn = await _userRepository.isSignedIn();
+    if (isSignedIn) {
+      final name = await _userRepository.getUser();
+      yield Authenticated(name);
+    } else {
       yield Unauthenticated();
     }
   }
@@ -990,9 +983,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginState get initialState => LoginState.empty();
 
   @override
-  Stream<LoginState> transformEvents(
+  Stream<Transition<LoginEvent, LoginState>> transformEvents(
     Stream<LoginEvent> events,
-    Stream<LoginState> Function(LoginEvent event) next,
+    TransitionFunction<LoginEvent, LoginState> transitionFn,
   ) {
     final nonDebounceStream = events.where((event) {
       return (event is! EmailChanged && event is! PasswordChanged);
@@ -1002,7 +995,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }).debounceTime(Duration(milliseconds: 300));
     return super.transformEvents(
       nonDebounceStream.mergeWith([debounceStream]),
-      next,
+      transitionFn,
     );
   }
 
@@ -1633,9 +1626,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterState get initialState => RegisterState.empty();
 
   @override
-  Stream<RegisterState> transformEvents(
+  Stream<Transition<RegisterEvent, RegisterState>> transformEvents(
     Stream<RegisterEvent> events,
-    Stream<RegisterState> Function(RegisterEvent event) next,
+    TransitionFunction<RegisterEvent, RegisterState> transitionFn,
   ) {
     final nonDebounceStream = events.where((event) {
       return (event is! EmailChanged && event is! PasswordChanged);
@@ -1645,7 +1638,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     }).debounceTime(Duration(milliseconds: 300));
     return super.transformEvents(
       nonDebounceStream.mergeWith([debounceStream]),
-      next,
+      transitionFn,
     );
   }
 

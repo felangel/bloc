@@ -23,7 +23,7 @@ void main() {
       });
 
       test('close does not emit new states over the state stream', () {
-        final expectedStates = [equals(''), emitsDone];
+        final expectedStates = ['', emitsDone];
 
         expectLater(
           simpleBloc,
@@ -126,7 +126,7 @@ void main() {
       });
 
       test('close does not emit new states over the state stream', () {
-        final expectedStates = [equals(ComplexStateA()), emitsDone];
+        final expectedStates = [ComplexStateA(), emitsDone];
 
         expectLater(
           complexBloc,
@@ -381,7 +381,7 @@ void main() {
       });
 
       test('close does not emit new states over the state stream', () {
-        final expectedStates = [equals(AsyncState.initial()), emitsDone];
+        final expectedStates = [AsyncState.initial(), emitsDone];
 
         expectLater(
           asyncBloc,
@@ -545,6 +545,45 @@ void main() {
       });
     });
 
+    group('SeededBloc', () {
+      test('does not emit repeated states', () async {
+        final bloc = SeededBloc(seed: 0, states: [1, 2, 1, 1]);
+        final expectedStates = [0, 1, 2, 1, emitsDone];
+        expectLater(
+          bloc,
+          emitsInOrder(expectedStates),
+        );
+        bloc.add('event');
+        await bloc.close();
+      });
+
+      test('discards subsequent duplicate states (distinct events)', () async {
+        final bloc = SeededBloc(seed: 0, states: [0]);
+        final expectedStates = [0, emitsDone];
+        expectLater(
+          bloc,
+          emitsInOrder(expectedStates),
+        );
+        bloc.add('eventA');
+        bloc.add('eventB');
+        bloc.add('eventC');
+        await bloc.close();
+      });
+
+      test('discards subsequent duplicate states (same event)', () async {
+        final bloc = SeededBloc(seed: 0, states: [0]);
+        final expectedStates = [0, emitsDone];
+        expectLater(
+          bloc,
+          emitsInOrder(expectedStates),
+        );
+        bloc.add('event');
+        bloc.add('event');
+        bloc.add('event');
+        await bloc.close();
+      });
+    });
+
     group('Exception', () {
       test('does not break stream', () {
         final expected = [0, -1];
@@ -601,7 +640,7 @@ void main() {
             (capturedError as StateError).message,
             'Cannot add new events after calling close',
           );
-          expect(capturedStacktrace, isNull);
+          expect(capturedStacktrace, isNotNull);
         });
 
         bloc.close();
@@ -669,7 +708,7 @@ void main() {
           emitsInOrder(<int>[0]),
         ).then((_) {
           expect(expectedError, error);
-          expect(expectedStacktrace, isNull);
+          expect(expectedStacktrace, isNotNull);
           expect(bloc.state, 0);
         });
         bloc.add(CounterEvent.increment);

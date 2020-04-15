@@ -7,3 +7,5 @@
   - [:es: es](/es/)
   - [:ru: ru](/ru/)
   - [:cn: zh-cn](/zh-cn/)
+  - [:azerbaijan: az](/az/)
+  - [:jp: jp](/jp/)

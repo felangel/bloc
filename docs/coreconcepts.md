@@ -16,9 +16,7 @@ When a user taps on one of these buttons, something needs to happen to notify th
 
 We need to be able to notify our application's "brains" of both an increment and a decrement so we need to define these events.
 
-```dart
-enum CounterEvent { increment, decrement }
-```
+[counter_event.dart](_snippets/core_concepts/counter_event.dart.md ':include')
 
 In this case, we can represent the events using an `enum` but for more complex cases it might be necessary to use a `class` especially if it's necessary to pass information to the bloc.
 
@@ -44,13 +42,7 @@ As a user interacts with our counter app they will trigger `Increment` and `Decr
 
 For example, if a user opened our app and tapped the increment button once we would see the following `Transition`.
 
-```json
-{
-  "currentState": 0,
-  "event": "CounterEvent.increment",
-  "nextState": 1
-}
-```
+[counter_increment_transition.json](_snippets/core_concepts/counter_increment_transition.json.md ':include')
 
 Because every state change is recorded, we are able to very easily instrument our applications and track all user interactions & state changes in one place. In addition, this makes things like time-travel debugging possible.
 
@@ -68,13 +60,7 @@ In order to use Bloc, it is criticial to have a solid understanding of `Streams`
 
 We can create a `Stream` in Dart by writing an `async*` function.
 
-```dart
-Stream<int> countStream(int max) async* {
-    for (int i = 0; i < max; i++) {
-        yield i;
-    }
-}
-```
+[count_stream.dart](_snippets/core_concepts/count_stream.dart.md ':include')
 
 By marking a function as `async*` we are able to use the `yield` keyword and return a `Stream` of data. In the above example, we are returning a `Stream` of integers up to the `max` integer parameter.
 
@@ -82,30 +68,13 @@ Every time we `yield` in an `async*` function we are pushing that piece of data 
 
 We can consume the above `Stream` in several ways. If we wanted to write a function to return the sum of a `Stream` of integers it could look something like:
 
-```dart
-Future<int> sumStream(Stream<int> stream) async {
-    int sum = 0;
-    await for (int value in stream) {
-        sum += value;
-    }
-    return sum;
-}
-```
+[sum_stream.dart](_snippets/core_concepts/sum_stream.dart.md ':include')
 
 By marking the above function as `async` we are able to use the `await` keyword and return a `Future` of integers. In this example, we are awaiting each value in the stream and returning the sum of all integers in the stream.
 
 We can put it all together like so:
 
-```dart
-void main() async {
-    /// Initialize a stream of integers 0-9
-    Stream<int> stream = countStream(10);
-    /// Compute the sum of the stream of integers
-    int sum = await sumStream(stream);
-    /// Print the sum
-    print(sum); // 45
-}
-```
+[main.dart](_snippets/core_concepts/streams_main.dart.md ':include')
 
 ## Blocs
 
@@ -113,13 +82,7 @@ void main() async {
 
 > Every Bloc must extend the base `Bloc` class which is part of the core bloc package.
 
-```dart
-import 'package:bloc/bloc.dart';
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-
-}
-```
+[counter_bloc.dart](_snippets/core_concepts/counter_bloc_class.dart.md ':include')
 
 In the above code snippet, we are declaring our `CounterBloc` as a Bloc which converts `CounterEvents` into `ints`.
 
@@ -127,51 +90,15 @@ In the above code snippet, we are declaring our `CounterBloc` as a Bloc which co
 
 In this case, we want our counter to start at `0`.
 
-```dart
-@override
-int get initialState => 0;
-```
+[counter_bloc.dart](_snippets/core_concepts/counter_bloc_initial_state.dart.md ':include')
 
 > Every Bloc must implement a function called `mapEventToState`. The function takes the incoming `event` as an argument and must return a `Stream` of new `states` which is consumed by the presentation layer. We can access the current bloc state at any time using the `state` property.
 
-```dart
-@override
-Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-}
-```
+[counter_bloc.dart](_snippets/core_concepts/counter_bloc_map_event_to_state.dart.md ':include')
 
 At this point, we have a fully functioning `CounterBloc`.
 
-```dart
-import 'package:bloc/bloc.dart';
-
-enum CounterEvent { increment, decrement }
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](_snippets/core_concepts/counter_bloc.dart.md ':include')
 
 !> Blocs will ignore duplicate states. If a Bloc yields `State nextState` where `state == nextState`, then no transition will occur and no change will be made to the `Stream<State>`.
 
@@ -181,37 +108,13 @@ At this point, you're probably wondering _"How do I notify a Bloc of an event?"_
 
 We can create a simple application which counts from 0 to 3.
 
-```dart
-void main() {
-    CounterBloc bloc = CounterBloc();
-
-    for (int i = 0; i < 3; i++) {
-        bloc.add(CounterEvent.increment);
-    }
-}
-```
+[main.dart](_snippets/core_concepts/counter_bloc_main.dart.md ':include')
 
 !> By default, events will always be processed in the order in which they were added and any newly added events are enqueued. An event is considered fully processed once `mapEventToState` has finished executing.
 
 The `Transitions` in the above code snippet would be
 
-```json
-{
-    "currentState": 0,
-    "event": "CounterEvent.increment",
-    "nextState": 1
-}
-{
-    "currentState": 1,
-    "event": "CounterEvent.increment",
-    "nextState": 2
-}
-{
-    "currentState": 2,
-    "event": "CounterEvent.increment",
-    "nextState": 3
-}
-```
+[counter_bloc_transitions.json](_snippets/core_concepts/counter_bloc_transitions.json.md ':include')
 
 Unfortunately, in the current state we won't be able to see any of these transitions unless we override `onTransition`.
 
@@ -219,12 +122,7 @@ Unfortunately, in the current state we won't be able to see any of these transit
 
 ?> **Tip**: `onTransition` is a great place to add bloc-specific logging/analytics.
 
-```dart
-@override
-void onTransition(Transition<CounterEvent, int> transition) {
-    print(transition);
-}
-```
+[counter_bloc.dart](_snippets/core_concepts/counter_bloc_on_transition.dart.md ':include')
 
 Now that we've overridden `onTransition` we can do whatever we'd like whenever a `Transition` occurs.
 
@@ -236,12 +134,7 @@ Just like we can handle `Transitions` at the bloc level, we can also handle `Exc
 
 ?> **Tip**: `onError` is a great place to add bloc-specific error handling.
 
-```dart
-@override
-void onError(Object error, StackTrace stackTrace) {
-  print('$error, $stackTrace');
-}
-```
+[counter_bloc.dart](_snippets/core_concepts/counter_bloc_on_error.dart.md ':include')
 
 Now that we've overridden `onError` we can do whatever we'd like whenever an `Exception` is thrown.
 
@@ -251,71 +144,20 @@ One added bonus of using Bloc is that we can have access to all `Transitions` in
 
 If we want to be able to do something in response to all `Transitions` we can simply create our own `BlocDelegate`.
 
-```dart
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-}
-```
+[simple_bloc_delegate.dart](_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
 
 ?> **Note**: All we need to do is extend `BlocDelegate` and override the `onTransition` method.
 
 In order to tell Bloc to use our `SimpleBlocDelegate`, we just need to tweak our `main` function.
 
-```dart
-void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
-  CounterBloc bloc = CounterBloc();
-
-  for (int i = 0; i < 3; i++) {
-    bloc.add(CounterEvent.increment);
-  }
-}
-```
+[main.dart](_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
 
 If we want to be able to do something in response to all `Events` added, we can also override the `onEvent` method in our `SimpleBlocDelegate`.
 
-```dart
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
-    print(event);
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-}
-```
+[simple_bloc_delegate.dart](_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
 
 If we want to be able to do something in response to all `Exceptions` thrown in a Bloc, we can also override the `onError` method in our `SimpleBlocDelegate`.
 
-```dart
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
-    print(event);
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-
-  @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
-    print('$error, $stacktrace');
-  }
-}
-```
+[simple_bloc_delegate.dart](_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
 
 ?> **Note**: `BlocSupervisor` is a singleton which oversees all Blocs and delegates responsibilities to the `BlocDelegate`.

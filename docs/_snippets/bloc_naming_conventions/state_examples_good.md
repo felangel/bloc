@@ -1,0 +1,4 @@
+`CounterInitial`
+`CounterLoadInProgress`
+`CounterLoadSuccess`
+`CounterLoadFailure`

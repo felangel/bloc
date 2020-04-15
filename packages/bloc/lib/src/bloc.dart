@@ -81,7 +81,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
 
   /// Notifies the [bloc] of a new [event] which triggers [mapEventToState].
   /// If [close] has already been called, any subsequent calls to [add] will
-  /// be delegated to the [onError] method which can be overriden at the [bloc]
+  /// be delegated to the [onError] method which can be overridden at the [bloc]
   /// as well as the [BlocDelegate] level.
   @override
   void add(Event event) {
@@ -89,8 +89,8 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
       BlocSupervisor.delegate.onEvent(this, event);
       onEvent(event);
       _eventController.add(event);
-    } on dynamic catch (error) {
-      _handleError(error);
+    } on dynamic catch (error, stacktrace) {
+      _handleError(error, stacktrace);
     }
   }
 
@@ -179,32 +179,28 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   }
 
   void _bindEventsToStates() {
-    _transitionSubscription = transformTransitions(transformEvents(
-      _eventController.stream,
-      (event) {
-        return mapEventToState(event).map((nextState) {
-          return Transition(
+    _transitionSubscription = transformTransitions(
+      transformEvents(
+        _eventController.stream,
+        (event) => mapEventToState(event).map(
+          (nextState) => Transition(
             currentState: state,
             event: event,
             nextState: nextState,
-          );
-        }).skipWhile((transition) {
-          return state == transition.nextState || _stateController.isClosed;
-        });
-      },
-    )).listen(
-      (transition) {
-        try {
-          BlocSupervisor.delegate.onTransition(this, transition);
-          onTransition(transition);
-          _state = transition.nextState;
-          _stateController.add(transition.nextState);
-        } on dynamic catch (error) {
-          _handleError(error);
-        }
-      },
-      onError: _handleError,
-    );
+          ),
+        ),
+      ),
+    ).listen((transition) {
+      if (transition.nextState == state) return;
+      try {
+        BlocSupervisor.delegate.onTransition(this, transition);
+        onTransition(transition);
+        _state = transition.nextState;
+        _stateController.add(transition.nextState);
+      } on dynamic catch (error, stacktrace) {
+        _handleError(error, stacktrace);
+      }
+    }, onError: _handleError);
   }
 
   void _handleError(Object error, [StackTrace stacktrace]) {

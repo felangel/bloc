@@ -37,50 +37,19 @@
 
 ## Фрагменты
 
-### Блок
-
-В файле `.dart` активируйте фрагмент, набрав `bloc` и нажав Enter. Затем вы можете назвать класс блока и заполнить сигнатуру и детали реализации с помощью табуляции.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloc-snippet-usage.gif)
-
-### События
-
-В файле `.dart` активируйте фрагмент, набрав `blocevent` и нажав Enter. Затем вы можете назвать класс события и ввести сигнатуру и детали реализации, используя вкладки.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocevent-snippet-usage.gif)
-
-### Состояния
-
-В файле `.dart` активируйте фрагмент, набрав `blocstate` и нажав Enter. Затем вы можете назвать класс состояния и заполнить сигнатуру и детали реализации с помощью табуляции.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocstate-snippet-usage.gif)
-
-### Строитель
-
-В файле `.dart` активируйте фрагмент, набрав `blocbuilder` и нажав Enter. Затем вы можете заполнить детали реализации с помощью вкладок.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocbuilder-snippet-usage.gif)
-
-### Слушатель
-
-В файле `.dart` активируйте фрагмент, набрав `bloclistener` и нажав Enter. Затем вы можете заполнить детали реализации с помощью вкладок.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloclistener-snippet-usage.gif)
-
-### Поставщик
-
-В файле `.dart` активируйте фрагмент, набрав `blocprovider` и нажав Enter. Затем вы можете заполнить детали реализации с помощью вкладок.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovider-snippet-usage.gif)
-
-### Строитель дерева
-
-В файле `.dart` активируйте фрагмент, набрав `blocprovidertree` и нажав Enter. Затем вы можете заполнить детали реализации с помощью вкладок.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovidertree-snippet-usage.gif)
-
-### Делегат
-
-В файле `.dart` активируйте фрагмент, набрав `blocdelegate` и нажав Enter. Затем вы можете заполнить детали реализации с помощью вкладок.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocdelegate-snippet-usage.gif)
+| Shortcut                  | Description                                          |
+| ------------------------- | ---------------------------------------------------- |
+| `bloc`                    | Creates a Bloc Class                                 |
+| `blocbuilder`             | Creates a BlocBuilder Widget                         |
+| `bloclistener`            | Creates a BlocListener Widget                        |
+| `multibloclistener`       | Creates a MultiBlocListener Widget                   |
+| `blocconsumer`            | Creates a BlocConsumer Widget                        |
+| `blocprovider`            | Creates a BlocProvider Widget                        |
+| `multiblocprovider`       | Creates a MultiBlocProvider Widget                   |
+| `repositoryprovider`      | Creates a RepositoryProvider Widget                  |
+| `multirepositoryprovider` | Creates a MultiRepositoryProvider Widget             |
+| `blocdelegate`            | Creates a BlocDelegate Class                         |
+| `contextbloc`             | Shortcut for `context.bloc<MyBloc>()`                |
+| `blocof`                  | Shortcut for `BlocProvider.of<MyBloc>()`             |
+| `contextrepository`       | Shortcut for `context.repository<MyRepository>()`    |
+| `repositoryof`            | Shortcut for `RepositoryProvider.of<MyRepository>()` |
