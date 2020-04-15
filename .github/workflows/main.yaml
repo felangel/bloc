@@ -33,14 +33,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v1
-        with:
-          path: ${{ matrix.flutter_path }}
-          key: ${{ runner.OS }}-flutter-cache-${{ env.flutter_version }}
-          restore-keys: |
-            ${{ runner.OS }}-flutter-cache-
-
       - uses: subosito/flutter-action@v1
         with:
           channel: ${{ env.flutter_channel }}
@@ -74,14 +66,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v1
-        with:
-          path: ${{ matrix.flutter_path }}
-          key: ${{ runner.OS }}-flutter-cache-${{ env.flutter_version }}
-          restore-keys: |
-            ${{ runner.OS }}-flutter-cache-
 
       - uses: subosito/flutter-action@v1
         with:
@@ -117,14 +101,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v1
-        with:
-          path: ${{ matrix.flutter_path }}
-          key: ${{ runner.OS }}-flutter-cache-${{ env.flutter_version }}
-          restore-keys: |
-            ${{ runner.OS }}-flutter-cache-
-
       - uses: subosito/flutter-action@v1
         with:
           channel: ${{ env.flutter_channel }}
@@ -158,15 +134,7 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v1
-        with:
-          path: ${{ matrix.flutter_path }}
-          key: ${{ runner.OS }}-flutter-cache-${{ env.flutter_version }}
-          restore-keys: |
-            ${{ runner.OS }}-flutter-cache-
+      - uses: actions/checkout@v2 
 
       - uses: subosito/flutter-action@v1
         with:
