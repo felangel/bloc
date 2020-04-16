@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of '${bloc_pascal_case}.dart';
 
 abstract class ${bloc_pascal_case}State extends Equatable {
   const ${bloc_pascal_case}State();

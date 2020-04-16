@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
 
-import 'bloc.dart';
+part '${bloc_pascal_case}_event.dart';
+part '${bloc_pascal_case}_state.dart';
 
 class ${bloc_pascal_case}Bloc extends Bloc<${bloc_pascal_case}Event, ${bloc_pascal_case}State> {
   @override

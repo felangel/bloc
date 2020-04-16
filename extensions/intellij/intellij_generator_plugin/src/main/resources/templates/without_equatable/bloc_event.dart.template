@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+part of '${bloc_pascal_case}.dart';
 
 @immutable
 abstract class ${bloc_pascal_case}Event {}
