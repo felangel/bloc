@@ -1,6 +1,8 @@
 # 3.1.0
 
 - Persist `initialState` when initialized.
+- Fix: add package:synchronous to prevent file corruption
+- Refactor `HydratedBlocStorage.getInstance` to avoid using a singleton
 
 # 3.0.0
 
