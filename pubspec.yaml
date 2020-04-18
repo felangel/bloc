@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   bloc: ^3.0.0
   path_provider: ^1.1.0
+  synchronized: ^2.2.0
 
 dev_dependencies:
   flutter_test:
