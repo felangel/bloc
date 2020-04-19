@@ -15,6 +15,7 @@ class OnExceptionBloc extends Bloc<CounterEvent, int> {
 
   @override
   void onError(Object error, StackTrace stacktrace) {
+    super.onError(error, stacktrace);
     onErrorCallback(error, stacktrace);
   }
 

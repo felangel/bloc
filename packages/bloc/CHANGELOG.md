@@ -1,6 +1,10 @@
+# 4.0.0-dev.3
+
+- Add `mustCallSuper` to `onEvent`, `onTransition`, and `onError`
+
 # 4.0.0-dev.2
 
-- Bugfix: Do not emit duplicate terminating state
+- Fix: remove duplicate terminating state
 
 # 4.0.0-dev.1
 
