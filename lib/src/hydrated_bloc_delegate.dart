@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:bloc/bloc.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
+
+import '../hydrated_bloc.dart';
 
 /// {@template hydratedblocdelegate}
 /// A specialized `BlocDelegate` which handles persisting state changes
@@ -17,8 +19,8 @@ class HydratedBlocDelegate extends BlocDelegate {
   /// A custom `storageDirectory` can optionally be provided.
   ///
   /// This is the recommended way to use a `HydratedBlocDelegate`.
-  /// If you want to customize `HydratedBlocDelegate` you can extend `HydratedBlocDelegate`
-  /// and perform the necessary overrides.
+  /// If you want to customize `HydratedBlocDelegate`
+  /// you can extend `HydratedBlocDelegate` and perform the necessary overrides.
   static Future<HydratedBlocDelegate> build({
     Directory storageDirectory,
   }) async {
@@ -37,10 +39,12 @@ class HydratedBlocDelegate extends BlocDelegate {
     if (bloc is HydratedBloc) {
       final stateJson = bloc.toJson(state);
       if (stateJson != null) {
-        storage.write(
-          '${bloc.runtimeType.toString()}${bloc.id}',
-          json.encode(stateJson),
-        );
+        try {
+          storage.write(bloc.storageToken, json.encode(stateJson));
+        } on dynamic catch (error, stackTrace) {
+          bloc.onError(error, stackTrace);
+          onError(bloc, error, stackTrace);
+        }
       }
     }
   }
