@@ -62,14 +62,24 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
 
   /// Called whenever an [event] is [add]ed to the [bloc].
   /// A great spot to add logging/analytics at the individual [bloc] level.
-  void onEvent(Event event) => null;
+  ///
+  /// **Note: `super.onEvent` should always be called first.**
+  @mustCallSuper
+  void onEvent(Event event) {
+    BlocSupervisor.delegate.onEvent(this, event);
+  }
 
   /// Called whenever a [transition] occurs with the given [transition].
   /// A [transition] occurs when a new `event` is [add]ed and [mapEventToState]
   /// executed.
   /// [onTransition] is called before a [bloc]'s [state] has been updated.
   /// A great spot to add logging/analytics at the individual [bloc] level.
-  void onTransition(Transition<Event, State> transition) => null;
+  ///
+  /// **Note: `super.onTransition` should always be called first.**
+  @mustCallSuper
+  void onTransition(Transition<Event, State> transition) {
+    BlocSupervisor.delegate.onTransition(this, transition);
+  }
 
   /// Called whenever an [error] is thrown within [mapEventToState].
   /// By default all [error]s will be ignored and [bloc] functionality will be
@@ -77,7 +87,12 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// The [stacktrace] argument may be `null` if the [state] stream received
   /// an error without a [stacktrace].
   /// A great spot to handle errors at the individual [Bloc] level.
-  void onError(Object error, StackTrace stacktrace) => null;
+  ///
+  /// **Note: `super.onError` should always be called first.**
+  @mustCallSuper
+  void onError(Object error, StackTrace stacktrace) {
+    BlocSupervisor.delegate.onError(this, error, stacktrace);
+  }
 
   /// Notifies the [bloc] of a new [event] which triggers [mapEventToState].
   /// If [close] has already been called, any subsequent calls to [add] will
@@ -86,11 +101,10 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   @override
   void add(Event event) {
     try {
-      BlocSupervisor.delegate.onEvent(this, event);
       onEvent(event);
       _eventController.add(event);
     } on dynamic catch (error, stacktrace) {
-      _handleError(error, stacktrace);
+      onError(error, stacktrace);
     }
   }
 
@@ -193,18 +207,12 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     ).listen((transition) {
       if (transition.nextState == state) return;
       try {
-        BlocSupervisor.delegate.onTransition(this, transition);
         onTransition(transition);
         _state = transition.nextState;
         _stateController.add(transition.nextState);
       } on dynamic catch (error, stacktrace) {
-        _handleError(error, stacktrace);
+        onError(error, stacktrace);
       }
-    }, onError: _handleError);
-  }
-
-  void _handleError(Object error, [StackTrace stacktrace]) {
-    BlocSupervisor.delegate.onError(this, error, stacktrace);
-    onError(error, stacktrace);
+    }, onError: onError);
   }
 }
