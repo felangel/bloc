@@ -1,8 +1,10 @@
 # 3.1.0
 
 - Persist `initialState` when initialized.
-- Fix: add package:synchronous to prevent file corruption
+- Fix: add `synchronous` to prevent file corruption
 - Refactor `HydratedBlocStorage.getInstance` to avoid using a singleton
+- Upgrade to `path_provider: ^1.6.5`
+- Fix: invoke `onError` and continue emitting states when exceptions occur
 
 # 3.0.0
 
