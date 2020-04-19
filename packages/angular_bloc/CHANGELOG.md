@@ -1,3 +1,7 @@
+# 4.0.0-dev.3
+
+Updated to `bloc: ^4.0.0-dev.3`
+
 # 4.0.0-dev.2
 
 Updated to `bloc: ^4.0.0-dev.2`
