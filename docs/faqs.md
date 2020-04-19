@@ -28,6 +28,8 @@ In addition, make sure you are yielding a new instance of the state in your bloc
 
 [my_bloc.dart](_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
 
+!> Equatable will consider objects with the same reference as the same. If you are using a `List` inside your props getter for example, passing the list from your old state into the new one will result in `state == nextState` because you gave the same object twice. Consider always using copies of your objects by creating new ones and by creating copies.
+
 ## When to use Equatable
 
 ❔**Question**: When should I use Equatable?
