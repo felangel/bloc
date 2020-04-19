@@ -103,6 +103,56 @@ class MyMultiHydratedBloc extends HydratedBloc<int, int> {
   }
 }
 
+class MyErrorThrowingBloc extends HydratedBloc<Object, int> {
+  final Function(Object error, StackTrace stackTrace) onErrorCallback;
+
+  MyErrorThrowingBloc({this.onErrorCallback});
+
+  @override
+  int get initialState => super.initialState ?? 0;
+
+  @override
+  Stream<int> mapEventToState(Object event) async* {
+    yield state + 1;
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+    onErrorCallback?.call(error, stackTrace);
+  }
+
+  @override
+  Map<String, dynamic> toJson(int state) {
+    return {'key': Object};
+  }
+
+  @override
+  int fromJson(dynamic json) {
+    // ignore: avoid_returning_null
+    return null;
+  }
+}
+
+class MyHydratedBlocDelegate extends HydratedBlocDelegate {
+  final Function(
+    Bloc bloc,
+    Object error,
+    StackTrace stackTrace,
+  ) onErrorCallback;
+
+  MyHydratedBlocDelegate(
+    HydratedStorage storage, {
+    this.onErrorCallback,
+  }) : super(storage);
+
+  @override
+  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
+    super.onError(bloc, error, stackTrace);
+    onErrorCallback?.call(bloc, error, stackTrace);
+  }
+}
+
 /// `HydratedBloc` test group
 /// <-: [main]
 void blocGroup() {
@@ -220,6 +270,58 @@ void blocGroup() {
                 .captured
                 .last;
         expect(initialStateB, cachedState);
+      });
+    });
+
+    group('MyErrorThrowingBloc', () {
+      test('continues to emit new states when serialization fails', () async {
+        final bloc = MyErrorThrowingBloc();
+        final expectedStates = [0, 1, emitsDone];
+        expectLater(
+          bloc,
+          emitsInOrder(expectedStates),
+        );
+        bloc.add(Object);
+        await bloc.close();
+      });
+
+      test('calls onError when json decode fails', () async {
+        Object lastError;
+        StackTrace lastStackTrace;
+        when(storage.read(any)).thenReturn('invalid json');
+        final bloc = MyErrorThrowingBloc(
+          onErrorCallback: (error, stackTrace) {
+            lastError = error;
+            lastStackTrace = stackTrace;
+          },
+        );
+        bloc.add(Object);
+        await bloc.close();
+        expect(
+          '$lastError',
+          'Converting object to an encodable object failed: Object',
+        );
+        expect(lastStackTrace, isNotNull);
+        verify(delegate.onError(bloc, lastError, lastStackTrace)).called(1);
+      });
+
+      test('calls onError when json encode fails', () async {
+        Object lastError;
+        StackTrace lastStackTrace;
+        final bloc = MyErrorThrowingBloc(
+          onErrorCallback: (error, stackTrace) {
+            lastError = error;
+            lastStackTrace = stackTrace;
+          },
+        );
+        bloc.add(Object);
+        await bloc.close();
+        expect(
+          '$lastError',
+          'Converting object to an encodable object failed: Object',
+        );
+        expect(lastStackTrace, isNotNull);
+        verify(delegate.onError(bloc, lastError, lastStackTrace)).called(1);
       });
     });
   });
@@ -489,6 +591,31 @@ void delegateGroup() {
       when(bloc.toJson('nextState')).thenReturn(expected);
       delegate.onTransition(bloc, transition);
       verify(storage.write('MockBlocA', json.encode(expected))).called(1);
+    });
+
+    test('should call onError when storage.write throws', () {
+      Bloc lastBloc;
+      Object lastError;
+      StackTrace lastStackTrace;
+      final transition = Transition(
+        currentState: 'currentState',
+        event: 'event',
+        nextState: 'nextState',
+      );
+      when(bloc.toJson('nextState')).thenReturn({'nextState': 'json'});
+      when(storage.write(any, any)).thenThrow(Exception('oops'));
+      delegate = MyHydratedBlocDelegate(
+        storage,
+        onErrorCallback: (bloc, error, stackTrace) {
+          lastBloc = bloc;
+          lastError = error;
+          lastStackTrace = stackTrace;
+        },
+      );
+      delegate.onTransition(bloc, transition);
+      expect(lastBloc, bloc);
+      expect('$lastError', 'Exception: oops');
+      expect(lastStackTrace, isNotNull);
     });
 
     group('Default Storage Directory', () {

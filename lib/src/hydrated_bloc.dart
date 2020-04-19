@@ -17,22 +17,28 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
   HydratedBloc() {
     final stateJson = toJson(state);
     if (stateJson != null) {
-      _storage.write(storageToken, json.encode(stateJson));
+      try {
+        _storage.write(storageToken, json.encode(stateJson));
+      } on dynamic catch (error, stackTrace) {
+        _handleError(error, stackTrace);
+      }
     }
   }
 
-  final HydratedStorage _storage =
-      (BlocSupervisor.delegate as HydratedBlocDelegate).storage;
+  static HydratedBlocDelegate get _delegate =>
+      BlocSupervisor.delegate as HydratedBlocDelegate;
+  static HydratedStorage get _storage => _delegate.storage;
 
   @mustCallSuper
   @override
   State get initialState {
     try {
-      final jsonString = _storage?.read(storageToken) as String;
+      final jsonString = _storage.read(storageToken) as String;
       return jsonString?.isNotEmpty == true
           ? fromJson(json.decode(jsonString) as Map<String, dynamic>)
           : null;
-    } on dynamic catch (_) {
+    } on dynamic catch (error, stackTrace) {
+      _handleError(error, stackTrace);
       return null;
     }
   }
@@ -69,4 +75,9 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
   ///
   /// If `toJson` returns `null`, then no state changes will be persisted.
   Map<String, dynamic> toJson(State state);
+
+  void _handleError(Object error, [StackTrace stackTrace]) {
+    _delegate.onError(this, error, stackTrace);
+    onError(error, stackTrace);
+  }
 }
