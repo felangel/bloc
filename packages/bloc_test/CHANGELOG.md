@@ -1,6 +1,10 @@
+# 5.0.0-dev.4
+
+- Update to `bloc: ^4.0.0-dev.4`
+
 # 5.0.0-dev.3
 
-Updated to `bloc: ^4.0.0-dev.3`
+- Update to `bloc: ^4.0.0-dev.3`
 
 # 5.0.0-dev.2
 
