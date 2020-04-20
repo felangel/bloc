@@ -1,3 +1,7 @@
+# 4.0.0-dev.4
+
+Updated to `bloc: ^4.0.0-dev.4`
+
 # 4.0.0-dev.3
 
 Updated to `bloc: ^4.0.0-dev.3`
@@ -16,7 +20,7 @@ Updated to `bloc: ^3.0.0` and Minor Updates to Documentation
 
 # 3.0.0-dev.1
 
-- Updated to `bloc: ^3.0.0-dev.1`
+Updated to `bloc: ^3.0.0-dev.1`
 
 # 2.0.0
 
