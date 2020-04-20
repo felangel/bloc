@@ -4,6 +4,28 @@ import 'package:meta/meta.dart';
 
 import '../bloc.dart';
 
+/// {@template bloc_unhandled_error_exception}
+/// Exception thrown in debug mode when an unhandled error occurs within a bloc.
+/// {@endtemplate}
+class BlocUnhandledErrorException implements Exception {
+  /// The [bloc] in which the unhandled error occurred.
+  final Bloc bloc;
+
+  /// The unhandled [error] object.
+  final Object error;
+
+  /// An optional [stackTrace] which accompanied the error.
+  final StackTrace stackTrace;
+
+  /// {@macro bloc_unhandled_error_exception}
+  BlocUnhandledErrorException(this.bloc, this.error, this.stackTrace);
+
+  @override
+  String toString() {
+    return 'Unhandled error $error occurred in bloc $bloc.\n$stackTrace';
+  }
+}
+
 /// Signature for a mapper function which takes an [Event] as input
 /// and outputs a [Stream] of [Transition] objects.
 typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
@@ -63,7 +85,16 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// Called whenever an [event] is [add]ed to the [bloc].
   /// A great spot to add logging/analytics at the individual [bloc] level.
   ///
-  /// **Note: `super.onEvent` should always be called first.**
+  /// **Note: `super.onEvent` should always be called last.**
+  /// ```dart
+  /// @override
+  /// void onEvent(Event event) {
+  ///   // Custom onEvent logic goes here
+  ///
+  ///   // Always call super.onEvent with the current event
+  ///   super.onEvent(event);
+  /// }
+  /// ```
   @mustCallSuper
   void onEvent(Event event) {
     BlocSupervisor.delegate.onEvent(this, event);
@@ -75,7 +106,16 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// [onTransition] is called before a [bloc]'s [state] has been updated.
   /// A great spot to add logging/analytics at the individual [bloc] level.
   ///
-  /// **Note: `super.onTransition` should always be called first.**
+  /// **Note: `super.onTransition` should always be called last.**
+  /// ```dart
+  /// @override
+  /// void onTransition(Transition<Event, State> transition) {
+  ///   // Custom onTransition logic goes here
+  ///
+  ///   // Always call super.onTransition with the current transition
+  ///   super.onTransition(transition);
+  /// }
+  /// ```
   @mustCallSuper
   void onTransition(Transition<Event, State> transition) {
     BlocSupervisor.delegate.onTransition(this, transition);
@@ -84,14 +124,26 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// Called whenever an [error] is thrown within [mapEventToState].
   /// By default all [error]s will be ignored and [bloc] functionality will be
   /// unaffected.
-  /// The [stacktrace] argument may be `null` if the [state] stream received
-  /// an error without a [stacktrace].
+  /// The [stackTrace] argument may be `null` if the [state] stream received
+  /// an error without a [stackTrace].
   /// A great spot to handle errors at the individual [Bloc] level.
   ///
-  /// **Note: `super.onError` should always be called first.**
+  /// **Note: `super.onError` should always be called last.**
+  /// ```dart
+  /// @override
+  /// void onError(Object error, StackTrace stackTrace) {
+  ///   // Custom onError logic goes here
+  ///
+  ///   // Always call super.onError with the current error and stackTrace
+  ///   super.onError(error, stackTrace);
+  /// }
+  /// ```
   @mustCallSuper
-  void onError(Object error, StackTrace stacktrace) {
-    BlocSupervisor.delegate.onError(this, error, stacktrace);
+  void onError(Object error, StackTrace stackTrace) {
+    BlocSupervisor.delegate.onError(this, error, stackTrace);
+    assert(() {
+      throw BlocUnhandledErrorException(this, error, stackTrace);
+    }());
   }
 
   /// Notifies the [bloc] of a new [event] which triggers [mapEventToState].
@@ -103,8 +155,8 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     try {
       onEvent(event);
       _eventController.add(event);
-    } on dynamic catch (error, stacktrace) {
-      onError(error, stacktrace);
+    } on dynamic catch (error, stackTrace) {
+      onError(error, stackTrace);
     }
   }
 
@@ -210,8 +262,8 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
         onTransition(transition);
         _state = transition.nextState;
         _stateController.add(transition.nextState);
-      } on dynamic catch (error, stacktrace) {
-        onError(error, stacktrace);
+      } on dynamic catch (error, stackTrace) {
+        onError(error, stackTrace);
       }
     }, onError: onError);
   }

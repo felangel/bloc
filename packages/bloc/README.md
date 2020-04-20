@@ -118,8 +118,8 @@ As our app grows and relies on multiple `Blocs`, it becomes useful to see the `T
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
     print(transition);
+    super.onTransition(bloc, transition);
   }
 }
 ```
@@ -150,14 +150,14 @@ If we want to be able to handle any incoming `Events` that are added to a `Bloc`
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
     print(event);
+    super.onEvent(bloc, event);
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
     print(transition);
+    super.onTransition(bloc, transition);
   }
 }
 ```
@@ -168,20 +168,20 @@ If we want to be able to handle any `Exceptions` that might be thrown in a `Bloc
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
     print(event);
+    super.onEvent(bloc, event);
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
     print(transition);
+    super.onTransition(bloc, transition);
   }
 
   @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
-    print('$error, $stacktrace');
+  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
+    print('$error, $stackTrace');
+    super.onError(bloc, error, stackTrace);
   }
 }
 ```

@@ -21,10 +21,10 @@ class BlocDelegate {
   void onTransition(Bloc bloc, Transition transition) => null;
 
   /// Called whenever an [error] is thrown in any [bloc] with the given [bloc],
-  /// [error], and [stacktrace].
-  /// The [stacktrace] argument may be `null` if the state stream received
-  /// an error without a [stacktrace].
+  /// [error], and [stackTrace].
+  /// The [stackTrace] argument may be `null` if the state stream received
+  /// an error without a [stackTrace].
   /// A great spot to add universal error handling.
   @mustCallSuper
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) => null;
+  void onError(Bloc bloc, Object error, StackTrace stackTrace) => null;
 }

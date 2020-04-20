@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 
 typedef OnEventCallback = Function(CounterEvent);
 typedef OnTransitionCallback = Function(Transition<CounterEvent, int>);
-typedef OnErrorCallback = Function(Object error, StackTrace stacktrace);
+typedef OnErrorCallback = Function(Object error, StackTrace stackTrace);
 
 enum CounterEvent { increment, decrement }
 
@@ -35,19 +35,19 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   void onEvent(CounterEvent event) {
-    super.onEvent(event);
     onEventCallback?.call(event);
+    super.onEvent(event);
   }
 
   @override
   void onTransition(Transition<CounterEvent, int> transition) {
-    super.onTransition(transition);
     onTransitionCallback?.call(transition);
+    super.onTransition(transition);
   }
 
   @override
-  void onError(Object error, StackTrace stacktrace) {
-    super.onError(error, stacktrace);
-    onErrorCallback?.call(error, stacktrace);
+  void onError(Object error, StackTrace stackTrace) {
+    onErrorCallback?.call(error, stackTrace);
+    super.onError(error, stackTrace);
   }
 }
