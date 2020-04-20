@@ -1,6 +1,7 @@
 # 4.0.0-dev.4
 
 - Surface Unhandled Bloc Errors in Debug Mode
+- Internal testing improvements
 
 # 4.0.0-dev.3
 
