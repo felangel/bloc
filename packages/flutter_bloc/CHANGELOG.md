@@ -1,3 +1,8 @@
+# 4.0.0
+
+- Update to `bloc: ^4.0.0`
+- Update to `provider: ^4.0.5`
+
 # 4.0.0-dev.4
 
 - Update to `bloc: ^4.0.0-dev.4`
