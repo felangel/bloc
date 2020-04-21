@@ -1,63 +1,67 @@
+# 4.0.0
+
+Update to `bloc: ^4.0.0`
+
 # 4.0.0-dev.4
 
-Updated to `bloc: ^4.0.0-dev.4`
+Update to `bloc: ^4.0.0-dev.4`
 
 # 4.0.0-dev.3
 
-Updated to `bloc: ^4.0.0-dev.3`
+Update to `bloc: ^4.0.0-dev.3`
 
 # 4.0.0-dev.2
 
-Updated to `bloc: ^4.0.0-dev.2`
+Update to `bloc: ^4.0.0-dev.2`
 
 # 4.0.0-dev.1
 
-Updated to `bloc: ^4.0.0-dev.1`
+Update to `bloc: ^4.0.0-dev.1`
 
 # 3.0.0
 
-Updated to `bloc: ^3.0.0` and Minor Updates to Documentation
+Update to `bloc: ^3.0.0` and Minor Updates to Documentation
 
 # 3.0.0-dev.1
 
-Updated to `bloc: ^3.0.0-dev.1`
+Update to `bloc: ^3.0.0-dev.1`
 
 # 2.0.0
 
-- Updated to `bloc: ^2.0.0` and Documentation Updates
+- Update to `bloc: ^2.0.0` and Documentation Updates
 - Adhere to [effective dart](https://dart.dev/guides/language/effective-dart) ([#561](https://github.com/felangel/bloc/issues/561))
 
 # 1.0.0
 
-Updated to `bloc: ^1.0.0` and Minor Updates to Documentation
+Update to `bloc: ^1.0.0` and Minor Updates to Documentation
 
 # 0.11.0
 
-Updated to `bloc: ^0.16.0` and Minor Updates to Documentation
+Update to `bloc: ^0.16.0` and Minor Updates to Documentation
 
 # 0.10.0
 
-Updated to `bloc: ^0.15.0` and Minor Updates to Documentation
+Update to `bloc: ^0.15.0` and Minor Updates to Documentation
 
 # 0.9.0
 
-Updated to `bloc: ^0.14.0` and Minor Updates to Documentation
+Update to `bloc: ^0.14.0` and Minor Updates to Documentation
 
 # 0.8.0
 
-Updated to `bloc: ^0.13.0` and Minor Updates to Documentation
+Update to `bloc: ^0.13.0` and Minor Updates to Documentation
 
 # 0.7.0
 
-Updated to `bloc: ^0.12.0` and Minor Updates to Documentation
+Update to `bloc: ^0.12.0` and Minor Updates to Documentation
 
 # 0.6.0
 
-Updated to `bloc: ^0.11.0` and Minor Updates to Documentation
+Update to `bloc: ^0.11.0` and Minor Updates to Documentation
 
 # 0.5.0
 
-Updated to `bloc: ^0.10.0` and Minor Updates to Documentation
+Update to `bloc: ^0.10.0` and Minor Updates to Documentation
 
 # 0.4.4
 
@@ -65,7 +69,7 @@ Additional Minor Updates to Documentation
 
 # 0.4.3
 
-Updated to `bloc:^0.9.3` and Minor Updates to Documentation
+Update to `bloc:^0.9.3` and Minor Updates to Documentation
 
 # 0.4.2
 
@@ -77,7 +81,7 @@ Minor Updates to Documentation
 
 # 0.4.0
 
-Updated to `bloc: ^0.9.0`
+Update to `bloc: ^0.9.0`
 
 # 0.3.3
 
@@ -93,7 +97,7 @@ Minor Updates to Documentation
 
 # 0.3.0
 
-Updated to `bloc: ^0.8.0`
+Update to `bloc: ^0.8.0`
 
 # 0.2.5
 
@@ -117,7 +121,7 @@ Minor Updates to Documentation
 
 # 0.2.0
 
-Updated to `bloc: ^0.7.0`
+Update to `bloc: ^0.7.0`
 
 # 0.1.2
 
