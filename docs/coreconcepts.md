@@ -130,7 +130,7 @@ Just like we can handle `Transitions` at the bloc level, we can also handle `Exc
 
 > `onError` is a method that can be overriden to handle every local Bloc `Exception`. By default all exceptions will be ignored and `Bloc` functionality will be unaffected.
 
-?> **Note**: The stacktrace argument may be `null` if the state stream received an error without a `StackTrace`.
+?> **Note**: The stackTrace argument may be `null` if the state stream received an error without a `StackTrace`.
 
 ?> **Tip**: `onError` is a great place to add bloc-specific error handling.
 

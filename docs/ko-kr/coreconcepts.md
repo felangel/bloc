@@ -133,7 +133,7 @@ Bloc을 사용하기 위해서는, `Stream`과 이것의 동작 원리를 제대
 
 > `onError`은 local Bloc `Exception`을 핸들링하기 위해 overide할 수 있는 함수입니다. 기본적으로 모든 exception은 무시되고 `Bloc`의 기능에는 영향을 미치지 않습니다.
 
-?> **노트**: 만일 state stream이 `StackTrace`가 없는 에러를 받으면 stacktrace 인자는 `null`일 수 있습니다.
+?> **노트**: 만일 state stream이 `StackTrace`가 없는 에러를 받으면 stackTrace 인자는 `null`일 수 있습니다.
 ?> **팁**: `onError`은 bloc에 따른 에러 핸들링하기에 매우 용이합니다.
 
 [counter_bloc.dart](../_snippets/core_concepts/counter_bloc_on_error.dart.md ':include')

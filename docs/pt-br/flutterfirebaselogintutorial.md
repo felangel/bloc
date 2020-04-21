@@ -517,20 +517,20 @@ import 'package:bloc/bloc.dart';
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
     print(event);
+    super.onEvent(bloc, event);
   }
 
   @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
+  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
     print(error);
+    super.onError(bloc, error, stackTrace);
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
     print(transition);
+    super.onTransition(bloc, transition);
   }
 }
 ```
@@ -668,7 +668,7 @@ class HomeScreen extends StatelessWidget {
 }
 ```
 
-O `HomeScreen` é um `StatelessWidget` que requer que um `nome` seja injetado para que possa renderizar a mensagem de boas-vindas. Ele também usa o `BlocProvider` para acessar o` AuthenticationBloc` via `BuildContext`, de modo que quando um usuário pressiona o botão de logout, podemos adicionar o evento `LoggedOut`.
+O `HomeScreen` é um `StatelessWidget` que requer que um `nome` seja injetado para que possa renderizar a mensagem de boas-vindas. Ele também usa o `BlocProvider` para acessar o`AuthenticationBloc` via `BuildContext`, de modo que quando um usuário pressiona o botão de logout, podemos adicionar o evento `LoggedOut`.
 
 Agora vamos atualizar nosso `App` para renderizar a `HomeScreen` se o `AuthenticationState` for `Authentication`.
 
@@ -1332,7 +1332,7 @@ class LoginButton extends StatelessWidget {
 
 Não há nada de especial acontecendo aqui; apenas um `StatelessWidget` que possui algum estilo e um retorno de chamada `onPressed`, para que possamos ter um `VoidCallback` personalizado sempre que o botão for pressionado.
 
-## Botão Login com Google 
+## Botão Login com Google
 
 Crie `login/google_login_button.dart` e vamos trabalhar no nosso login no Google.
 

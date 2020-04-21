@@ -43,6 +43,7 @@ dependencies:
   bloc: ^4.0.0
   equatable: ^1.0.0
   http: ^0.12.0
+  rxdart: ^0.24.0
 ```
 
 Lastly, we need to install our dependencies.
@@ -366,6 +367,7 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   void onTransition(
       Transition<GithubSearchEvent, GithubSearchState> transition) {
     print(transition);
+    super.onTransition(transition);
   }
 
   @override

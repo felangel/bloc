@@ -136,7 +136,7 @@ Stejně jako můžeme zpracovat `Transition` na úrovni blocu, můžeme také zp
 
 > `onError` je metoda, která může být přepsána ke zpracování lokálního `Exceptionu` Blocu. Defaultně jsou všechny vyjímky ignorovány a funkčnost `Bloc` bude nedotčena.
 
-?> **Poznámka**: Argument stacktrace může být `null` pokud stav streamu přijal error bez `StackTrace`.
+?> **Poznámka**: Argument stackTrace může být `null` pokud stav streamu přijal error bez `StackTrace`.
 
 ?> **Tip**: `onError` je skvělé místo na zpracování errorů specifických pro daný bloc.
 

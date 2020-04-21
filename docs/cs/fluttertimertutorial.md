@@ -520,8 +520,8 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 
   @override
   void onTransition(Transition<TimerEvent, TimerState> transition) {
-    super.onTransition(transition);
     print(transition);
+    super.onTransition(transition);
   }
 
   @override

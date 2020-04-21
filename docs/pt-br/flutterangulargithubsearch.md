@@ -41,6 +41,7 @@ dependencies:
   bloc: ^4.0.0
   equatable: ^1.0.0
   http: ^0.12.0
+  rxdart: ^0.24.0
 ```
 
 Por fim, precisamos instalar nossas dependências.
@@ -347,22 +348,23 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   GithubSearchBloc({@required this.githubRepository});
 
   @override
-  Stream<GithubSearchState> transformEvents(
+  Stream<Transition<GithubSearchEvent, GithubSearchState>> transformEvents(
     Stream<GithubSearchEvent> events,
-    Stream<GithubSearchState> Function(GithubSearchEvent event) next,
+    Stream<Transition<GithubSearchEvent, GithubSearchState>> Function(
+      GithubSearchEvent event,
+    )
+        transitionFn,
   ) {
-    return super.transformEvents(
-      events.debounceTime(
-        Duration(milliseconds: 500),
-      ),
-      next,
-    );
+    return events
+        .debounceTime(const Duration(milliseconds: 300))
+        .switchMap(transitionFn);
   }
 
   @override
   void onTransition(
       Transition<GithubSearchEvent, GithubSearchState> transition) {
     print(transition);
+    super.onTransition(transition);
   }
 
   @override

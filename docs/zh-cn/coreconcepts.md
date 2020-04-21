@@ -131,7 +131,7 @@ Bloc建立在[RxDart]的基础之上(https://pub.dev/packages/rxdart); 然而，
 
 > `onError`是一个可以重写以处理每个本地Bloc抛出的`Exception`的方法。默认情况下，所有异常都将被忽略，而`Bloc`功能将不受影响。
 
-?> **注意**: 如果状态流（`Stream`) 收到一个没有`StackTrace`的错误，则stacktrace的参数可能为空`null`。
+?> **注意**: 如果状态流（`Stream`) 收到一个没有`StackTrace`的错误，则stackTrace的参数可能为空`null`。
 
 ?> **提示**: `onError`是添加特定Bloc处理错误的好地方。
 
