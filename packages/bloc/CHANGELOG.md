@@ -1,3 +1,13 @@
+# 4.0.0
+
+- Remove `rxdart` dependency ([#821](https://github.com/felangel/bloc/pull/821))
+- Replace `transformStates` with `transformTransitions` ([#840](https://github.com/felangel/bloc/pull/840))
+- Fix null `stackTrace` in `onError` ([#963](https://github.com/felangel/bloc/pull/963))
+- Fix remove duplicate terminating state
+- Add `mustCallSuper` to `onEvent`, `onTransition`, and `onError`
+- Surface Unhandled Bloc Errors in Debug Mode
+- Internal testing improvements
+
 # 4.0.0-dev.4
 
 - Surface Unhandled Bloc Errors in Debug Mode
@@ -9,7 +19,7 @@
 
 # 4.0.0-dev.2
 
-- Fix: remove duplicate terminating state
+- Fix remove duplicate terminating state
 
 # 4.0.0-dev.1
 
