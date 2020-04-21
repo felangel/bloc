@@ -18,11 +18,12 @@ class BlocUnhandledErrorException implements Exception {
   final StackTrace stackTrace;
 
   /// {@macro bloc_unhandled_error_exception}
-  BlocUnhandledErrorException(this.bloc, this.error, this.stackTrace);
+  BlocUnhandledErrorException(this.bloc, this.error, [this.stackTrace]);
 
   @override
   String toString() {
-    return 'Unhandled error $error occurred in bloc $bloc.\n$stackTrace';
+    return 'Unhandled error $error occurred in bloc $bloc.\n'
+        '${stackTrace ?? ''}';
   }
 }
 
