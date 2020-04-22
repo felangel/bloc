@@ -1,3 +1,13 @@
+# 3.5.0
+
+Update latest package versions:
+
+- bloc_test -> ^5.0.0
+- equatable -> ^1.1.1
+- angular_bloc -> ^4.0.0
+- bloc -> ^4.0.0
+- flutter_bloc -> ^4.0.0
+
 # 3.4.0
 
 Update snippets to support
