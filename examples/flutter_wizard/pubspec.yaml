@@ -1,0 +1,19 @@
+name: flutter_wizard
+description: A new Flutter project.
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
+  equatable: ^1.1.1
+  meta: ^1.1.8
+
+flutter:
+  uses-material-design: true
