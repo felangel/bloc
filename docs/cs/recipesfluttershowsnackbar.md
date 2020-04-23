@@ -12,14 +12,7 @@ Pojďme si udělat základní `DataBloc`, který bude zpracovávat `DataEventy` 
 
 Pro jednoduchost bude náš `DataBloc` reagovat pouze na jeden `DataEvent`, který pojmenujeme `FetchData`.
 
-```dart
-import 'package:meta/meta.dart';
-
-@immutable
-abstract class DataEvent {}
-
-class FetchData extends DataEvent {}
-```
+[data_event.dart](../_snippets/recipes_flutter_show_snack_bar/data_event.dart.md ':include')
 
 ### DataState
 
@@ -29,42 +22,13 @@ Náš `DataBloc` může mít jeden z tří různých `DataStatů`:
 - `Loading` - stav blocu zatímco se asynchroně "načítají data"
 - `Success` - stav blocu když se data úspěšně "načetla"
 
-```dart
-import 'package:meta/meta.dart';
-
-@immutable
-abstract class DataState {}
-
-class Initial extends DataState {}
-
-class Loading extends DataState {}
-
-class Success extends DataState {}
-```
+[data_state.dart](../_snippets/recipes_flutter_show_snack_bar/data_state.dart.md ':include')
 
 ### DataBloc
 
 Náš `DataBloc` by měl vypadat nějak takto:
 
-```dart
-import 'package:bloc/bloc.dart';
-
-class DataBloc extends Bloc<DataEvent, DataState> {
-  @override
-  DataState get initialState => Initial();
-
-  @override
-  Stream<DataState> mapEventToState(
-    DataEvent event,
-  ) async* {
-    if (event is FetchData) {
-      yield Loading();
-      await Future.delayed(Duration(seconds: 2));
-      yield Success();
-    }
-  }
-}
-```
+[data_bloc.dart](../_snippets/recipes_flutter_show_snack_bar/data_bloc.dart.md ':include')
 
 ?> **Poznámka:** Používáme `Future.delayed` abychom simulovali latenci.
 
@@ -72,71 +36,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
 Nyní se pojďme podívat jak připojit `DataBloc` wiget a zobrazit `Snackbar` v reakci na stav úspěchu.
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => DataBloc(),
-      child: MaterialApp(
-        home: Home(),
-      ),
-    );
-  }
-}
-
-class Home extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final dataBloc = BlocProvider.of<DataBloc>(context);
-    return Scaffold(
-      appBar: AppBar(title: Text('Home')),
-      body: BlocListener<DataBloc, DataState>(
-        listener: (context, state) {
-          if (state is Success) {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.green,
-                content: Text('Success'),
-              ),
-            );
-          }
-        },
-        child: BlocBuilder<DataBloc, DataState>(
-          builder: (context, state) {
-            if (state is Initial) {
-              return Center(child: Text('Press the Button'));
-            }
-            if (state is Loading) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (state is Success) {
-              return Center(child: Text('Success'));
-            }
-          },
-        ),
-      ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          FloatingActionButton(
-            child: Icon(Icons.play_arrow),
-            onPressed: () {
-              dataBloc.add(FetchData());
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/recipes_flutter_show_snack_bar/main.dart.md ':include')
 
 ?> Používáme `BlocListener` widget abychom **DĚLALI VĚCI** v reakci na změny stavu našeho `DataBlocu`.
 

@@ -130,7 +130,7 @@ Al igual que podemos manejar `Transition` a nivel de bloc, también podemos mane
 
 > `onError` es un método que se puede anular para manejar cada `Excepción` del Bloc local. Por defecto, todas las excepciones serán ignoradas y la funcionalidad `Bloc` no se verá afectada.
 
-?> **Nota**: El argumento stacktrace puede ser `null` si la secuencia de estado recibió un error sin un `StackTrace`.
+?> **Nota**: El argumento stackTrace puede ser `null` si la secuencia de estado recibió un error sin un `StackTrace`.
 
 ?> **Consejo**: `onError` es un gran lugar para agregar el manejo de errores específicos del bloc.
 

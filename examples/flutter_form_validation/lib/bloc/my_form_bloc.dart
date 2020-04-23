@@ -20,6 +20,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
   @override
   void onTransition(Transition<MyFormEvent, MyFormState> transition) {
     print(transition);
+    super.onTransition(transition);
   }
 
   @override

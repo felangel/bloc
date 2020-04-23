@@ -130,7 +130,7 @@ Hal-hazırda, `onTransition` metodunu Bloc-a daxil etdik və bu halda, yeni `Ke�
 
 > `onError` metodu Bloc daxilində olan `Exception`-ı idarə etmək üçün, istifadə olunan metoddur. Susmaya görə, bütün exceptionlar ləğv olunur və `Bloc`-un funksionallığına heç bir təsir olmur.
 
-?> **Qeyd**: Əgər vəziyyət stream-i error-u `StackTrace` olmadan qəbul edərsə, stacktrace arqumenti `null` ola bilər. 
+?> **Qeyd**: Əgər vəziyyət stream-i error-u `StackTrace` olmadan qəbul edərsə, stackTrace arqumenti `null` ola bilər. 
 
 ?> **Tip**: `onError` metodu bloc-a xas olan error-ları idarə etmək üçün, ideal yerdir.
 

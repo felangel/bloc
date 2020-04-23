@@ -128,7 +128,7 @@ Tout comme nous pouvons gérer les `Transitions` au niveau des blocs, nous pouvo
 
 > `onError` est une méthode qui peut être surchargée pour gérer chaque `Exception` de Bloc local. Par défaut, toutes les exceptions seront ignorées et la fonctionnalité `Bloc` ne sera pas affectée.
 
-?> **Note**: L'argument stacktrace peut être `null` si le flux d'état a reçu une erreur sans `StackTrace`.
+?> **Note**: L'argument stackTrace peut être `null` si le flux d'état a reçu une erreur sans `StackTrace`.
 
 ?> **Tip**: `onError` est un excellent endroit pour ajouter la gestion des erreurs spécifiques aux blocs.
 

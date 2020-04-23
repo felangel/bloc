@@ -11,5 +11,8 @@ dependencies:
   flutter_bloc:
     path: ../
 
+dev_dependencies:
+  effective_dart: ^1.2.0
+
 flutter:
   uses-material-design: true

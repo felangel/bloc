@@ -1,5 +1,5 @@
 ```yaml
 dependencies:
-  bloc: ^3.0.0
-  angular_bloc: ^3.0.0
+  bloc: ^4.0.0
+  angular_bloc: ^4.0.0
 ```
