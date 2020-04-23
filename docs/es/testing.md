@@ -1,4 +1,4 @@
-# Pruebas
+# Testeo
 
 > Bloc fue diseñado para ser extremadamente fácil de probar.
 
@@ -22,7 +22,7 @@ Lo siguiente es crear la función `main` asi como también el grupo de pruebas.
 
 [counter_bloc_test.dart](../_snippets/testing/counter_bloc_test_main.dart.md ':include')
 
-> **Nota:** Los grupos tienen como función organizar las pruebas individuales asi como también para crear un contexto en el cual se pueda compartir una configuración inicial (`setUp`) y una función a ejecutarse al final (`tearDown`) de cada una.
+?> **Nota:** Los grupos tienen como función organizar las pruebas individuales asi como también para crear un contexto en el cual se pueda compartir una configuración inicial (`setUp`) y una función a ejecutarse al final (`tearDown`) de cada una.
 
 Comencemos creando una instancia de nuestra clase `CounterBloc` la cual será reutilizada en nuestras pruebas.
 
@@ -32,10 +32,9 @@ Ahora podemos comenzar a escribir nuestras pruebas individuales.
 
 [counter_bloc_test.dart](../_snippets/testing/counter_bloc_test_initial_state.dart.md ':include')
 
-> **Nota:** Podemos ejecutar todas nuestras pruebas con el comando `pub run test`.
+?> **Nota:** Podemos ejecutar todas nuestras pruebas con el comando `pub run test`.
 
 En este punto, ¡deberiamos tener nuestra primera prueba exitosa! Ahora escribamos una prueba mas compleja haciendo uso del paquete [bloc_test](https://pub.dev/packages/bloc_test).
-
 
 [counter_bloc_test.dart](../_snippets/testing/counter_bloc_test_bloc_test.dart.md ':include')
 
