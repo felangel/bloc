@@ -16,9 +16,7 @@ Pojďme si udělat `MyBloc`, který bude přijímat `MyEventy` a produkovat `MyS
 
 Pro jednoduchost bude naše aplikace reagovat pouze na dva `MyEventy`: `eventA` a `eventB`.
 
-```dart
-enum MyEvent { eventA, eventB }
-```
+[my_event.dart](../_snippets/recipes_flutter_navigation/my_event.dart.md ':include')
 
 #### MyState
 
@@ -27,133 +25,19 @@ Náš `MyBloc` může mít jeden ze dvou `MyStavů`:
 - `StateA` - stav blocu, když je vekreslena `PageA`.
 - `StateB` - stav blocu, když je vekreslena `PageB`.
 
-```dart
-abstract class MyState {}
-
-class StateA extends MyState {}
-
-class StateB extends MyState {}
-```
+[my_state.dart](../_snippets/recipes_flutter_navigation/my_state.dart.md ':include')
 
 #### MyBloc
 
 Náš `MyBloc` by měl vypadat nějak takto:
 
-```dart
-import 'package:bloc/bloc.dart';
-
-class MyBloc extends Bloc<MyEvent, MyState> {
-  @override
-  MyState get initialState => StateA();
-
-  @override
-  Stream<MyState> mapEventToState(MyEvent event) async* {
-    switch (event) {
-      case MyEvent.eventA:
-        yield StateA();
-        break;
-      case MyEvent.eventB:
-        yield StateB();
-        break;
-    }
-  }
-}
-```
+[my_bloc.dart](../_snippets/recipes_flutter_navigation/my_bloc.dart.md ':include')
 
 ### UI vrstva
 
 Nyní se pojďme podívat na to, jak propojit `MyBloc` k widgetu a zobrazit jinou stránku v závislosti na stavu blocu.
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-void main() {
-  runApp(
-    BlocProvider(
-      create: (context) => MyBloc(),
-      child: MyApp(),
-    ),
-  );
-}
-
-enum MyEvent { eventA, eventB }
-
-@immutable
-abstract class MyState {}
-
-class StateA extends MyState {}
-
-class StateB extends MyState {}
-
-class MyBloc extends Bloc<MyEvent, MyState> {
-  @override
-  MyState get initialState => StateA();
-
-  @override
-  Stream<MyState> mapEventToState(MyEvent event) async* {
-    switch (event) {
-      case MyEvent.eventA:
-        yield StateA();
-        break;
-      case MyEvent.eventB:
-        yield StateB();
-        break;
-    }
-  }
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BlocBuilder<MyBloc, MyState>(
-        builder: (_, state) => state is StateA ? PageA() : PageB(),
-      ),
-    );
-  }
-}
-
-class PageA extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Page A'),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('Go to PageB'),
-          onPressed: () {
-            BlocProvider.of<MyBloc>(context).add(MyEvent.eventB);
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class PageB extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Page B'),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('Go to PageA'),
-          onPressed: () {
-            BlocProvider.of<MyBloc>(context).add(MyEvent.eventA);
-          },
-        ),
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/recipes_flutter_navigation/direct_navigation/main.dart.md ':include')
 
 ?> Používáme `BlocBuilder` widget abychom vykreslili správný widget v reakci na změnu stavu našeho `MyBlocu`.
 
@@ -175,105 +59,7 @@ Použijeme `MyBloc` z předešlého příkladu.
 
 Podívejme se na to, jak routovat na jinou stránku v závislosti na stavu `MyBlocu`.
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-void main() {
-  runApp(
-    BlocProvider(
-      create: (context) => MyBloc(),
-      child: MyApp(),
-    ),
-  );
-}
-
-enum MyEvent { eventA, eventB }
-
-@immutable
-abstract class MyState {}
-
-class StateA extends MyState {}
-
-class StateB extends MyState {}
-
-class MyBloc extends Bloc<MyEvent, MyState> {
-  @override
-  MyState get initialState => StateA();
-
-  @override
-  Stream<MyState> mapEventToState(MyEvent event) async* {
-    switch (event) {
-      case MyEvent.eventA:
-        yield StateA();
-        break;
-      case MyEvent.eventB:
-        yield StateB();
-        break;
-    }
-  }
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        '/': (context) => PageA(),
-        '/pageB': (context) => PageB(),
-      },
-      initialRoute: '/',
-    );
-  }
-}
-
-class PageA extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocListener<MyBloc, MyState>(
-      listener: (context, state) {
-        if (state is StateB) {
-          Navigator.of(context).pushNamed('/pageB');
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Page A'),
-        ),
-        body: Center(
-          child: RaisedButton(
-            child: Text('Go to PageB'),
-            onPressed: () {
-              BlocProvider.of<MyBloc>(context).add(MyEvent.eventB);
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PageB extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Page B'),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('Pop'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/recipes_flutter_navigation/route_navigation/main.dart.md ':include')
 
 ?> Používáme `BlocListener` widget abychom přidali novou routu v reakci na změnu stavu v našem `MyBlocu`.
 

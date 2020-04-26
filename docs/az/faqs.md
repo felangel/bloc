@@ -8,6 +8,7 @@
 
 ✅ **Yaxşı**
 
+<<<<<<< HEAD
 ```dart
 abstract class MyState extends Equatable {
     const MyState();
@@ -54,11 +55,21 @@ class StateA extends MyState {
     List<Object> get props => null;
 }
 ```
+=======
+[my_state.dart](../_snippets/faqs/state_not_updating_good_1.dart.md ':include')
+
+❌ **Pis**
+
+[my_state.dart](../_snippets/faqs/state_not_updating_bad_1.dart.md ':include')
+
+[my_state.dart](../_snippets/faqs/state_not_updating_bad_2.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Əlavə olaraq, bloc-unuzda vəziyyətin yeni obyektini yield etdiyinizə əmin olun.
 
 ✅ **Yaxşı**
 
+<<<<<<< HEAD
 ```dart
 @override
 Stream<MyState> mapEventToState(MyEvent event) async* {
@@ -87,6 +98,15 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
     yield state;
 }
 ```
+=======
+[my_bloc.dart](../_snippets/faqs/state_not_updating_good_2.dart.md ':include')
+
+[my_bloc.dart](../_snippets/faqs/state_not_updating_good_3.dart.md ':include')
+
+❌ **Pis**
+
+[my_bloc.dart](../_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ## Nə zaman Equatable istifadə etməli
 
@@ -94,6 +114,7 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 
 💡**Cavab**:
 
+<<<<<<< HEAD
 ```dart
 @override
 Stream<MyState> mapEventToState(MyEvent event) async* {
@@ -101,6 +122,9 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
     yield StateA('hi');
 }
 ```
+=======
+[my_bloc.dart](../_snippets/faqs/equatable_yield.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Yuxarıdakı vəziyyətdə, əgər `StateA` `Equatable`-ı extend edirsə, o zaman bir vəziyyət dəyişməsi olacaq (ikinci yield ləğv olacaq).
 Ümumi olaraq, əgər yenidən yaradılmanın sayını azaldaraq kodunuzu optimizasiya etmək istəyirsinizsə, `Equatable` istifadə etməlisiniz.
@@ -108,6 +132,7 @@ Yuxarıdakı vəziyyətdə, əgər `StateA` `Equatable`-ı extend edirsə, o zam
 
 Əlavə olaraq, `Matchers` və ya `Predicates` istifadə edərək xüsusi bloc vəziyyətini gözləmək əvəzinə, `Equatable` test prosesini daha da asanlaşdırır.
 
+<<<<<<< HEAD
 ```dart
 blocTest(
     '...',
@@ -133,6 +158,13 @@ blocTest(
     ],
 )
 ```
+=======
+[my_bloc_test.dart](../_snippets/faqs/equatable_bloc_test.dart.md ':include')
+
+`Equatable` istifadə etmədən, yuxarıdakı test uğursuz olacaq və testing uğurlu olması üçün aşağıdakı kimi yazmaq lazımdır:
+
+[my_bloc_test.dart](../_snippets/faqs/without_equatable_bloc_test.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ## Bloc vs. Redux
 
@@ -187,6 +219,7 @@ Bloc kitabxanası widget ağacına bloc-u təmin etməyi və widget ağacında o
 
 ✅ **Yaxşı**
 
+<<<<<<< HEAD
 ```dart
 @override
 Widget build(BuildContext context) {
@@ -243,6 +276,15 @@ Widget build(BuildContext context) {
   );
 }
 ```
+=======
+[my_page.dart](../_snippets/faqs/bloc_provider_good_1.dart.md ':include')
+
+[my_page.dart](../_snippets/faqs/bloc_provider_good_2.dart.md ':include')
+
+❌ **Pis**
+
+[my_page.dart](../_snippets/faqs/bloc_provider_bad_1.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ## Proyektin Strukturu
 

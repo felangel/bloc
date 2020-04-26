@@ -10,7 +10,7 @@
 
 [event](../_snippets/bloc_naming_conventions/event_anatomy.md ':include')
 
-> Los eventos de carga inicial deben seguir la siguiente nomenclatura: `Sujeto del Bloc` + `Started`
+?> Los eventos de carga inicial deben seguir la siguiente nomenclatura: `Sujeto del Bloc` + `Started`
 
 #### Ejemplos
 
@@ -30,7 +30,7 @@
 
 [state](../_snippets/bloc_naming_conventions/state_anatomy.md ':include')
 
-> El valor de `Estado` deberían ser uno de los siguientes: `Initial` | `Success` | `Failure` | `InProgress` y el estado inicial deberia seguir la nomenclatura: `Sujeto del Bloc` + `Initial`.
+?> El valor de `Estado` deberían ser uno de los siguientes: `Initial` | `Success` | `Failure` | `InProgress` y el estado inicial deberia seguir la nomenclatura: `Sujeto del Bloc` + `Initial`.
 
 #### Ejemplos
 

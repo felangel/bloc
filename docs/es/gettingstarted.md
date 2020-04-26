@@ -4,7 +4,7 @@
 
 ## Visión general
 
-Bloc está compuesto por varios paquetes pub:
+Bloc está compuesto por varios paquetes de pub:
 
 - [bloc](https://pub.dev/packages/bloc) - Libreía central de bloc
 - [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Potentes widgets de Flutter creados para trabajar con bloc para crear aplicaciones móviles rápidas y reactivas.
@@ -14,26 +14,15 @@ Bloc está compuesto por varios paquetes pub:
 
 Lo primero que debemos hacer es agregar el paquete de bloc a nuestro `pubspec.yaml` como dependencia.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-```
+[pubspec.yaml](../_snippets/getting_started/bloc_pubspec.yaml.md ':include')
 
 Para una aplicación [Flutter](https://flutter.dev/), también necesitamos agregar el paquete flutter_bloc a nuestro `pubspec.yaml` como dependencia.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-  flutter_bloc: ^3.2.0
-```
+[pubspec.yaml](../_snippets/getting_started/flutter_bloc_pubspec.yaml.md ':include')
 
 Para una aplicación [AngularDart](https://angulardart.dev/), también necesitamos agregar el paquete angular_bloc a nuestro `pubspec.yaml` como dependencia.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-  angular_bloc: ^3.0.0
-```
+[pubspec.yaml](../_snippets/getting_started/angular_bloc_pubspec.yaml.md ':include')
 
 Luego necesitamos instalar bloc.
 
@@ -47,20 +36,12 @@ Luego necesitamos instalar bloc.
 
 Ahora que hemos instalado con éxito bloc, podemos crear nuestro `main.dart` e importar el bloc.
 
-```dart
-import 'package:bloc/bloc.dart';
-```
+[main.dart](../_snippets/getting_started/bloc_main.dart.md ':include')
 
 Para una aplicación Flutter también podemos importar flutter_bloc.
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-```
+[main.dart](../_snippets/getting_started/flutter_bloc_main.dart.md ':include')
 
 Para una aplicación AngularDart también podemos importar angular_bloc.
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:angular_bloc/angular_bloc.dart';
-```
+[main.dart](../_snippets/getting_started/angular_bloc_main.dart.md ':include')

@@ -16,9 +16,13 @@ Bir tətbiqi tərtib edərkən, əvvəlcə istifadəçinin onu necə istifadə e
 
 Sayğac tətbiqimizdə, tətbiqin əsas hissəsini həm artırma, həm də azaltma üçün xəbərdar edə bilməliyik, buna görə də, hadisələri müəyyənləşdirməyə ehtiyacımız var.
 
+<<<<<<< HEAD
 ```dart
 enum CounterEvent { increment, decrement }
 ```
+=======
+[counter_event.dart](../_snippets/core_concepts/counter_event.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Bu tətbiqdə, hadisələrimiz sadə olduğu üçün biz `enum` istifadə etdik, amma daha mürəkkəb hallarda, əsasən də bloc-a hər hansı informasiyanı ötürmək lazım olduqda, `class`-dan istifadə etmək lazım gəlir.
 
@@ -44,6 +48,7 @@ Biz daha mürəkkəb nümunələr görəcəyik, amma bu halda, primitiv tip, tə
 
 Məsələn, əgər istifadəçi tətbiqin açaraq, artırma (increment) düyməsinə basarsa, biz aşağıdakı `Keçid (Transition)`-i görəcəyik.
 
+<<<<<<< HEAD
 ```json
 {
   "currentState": 0,
@@ -51,6 +56,9 @@ Məsələn, əgər istifadəçi tətbiqin açaraq, artırma (increment) düyməs
   "nextState": 1
 }
 ```
+=======
+[counter_increment_transition.json](../_snippets/core_concepts/counter_increment_transition.json.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Bütün vəziyyət dəyişikliyi yadda saxlanıldığı üçün, tətbiqlərimizi çox rahat şəkildə istifadə edə və istifadəçinin tətbiqlə bütün qarşılıqlı əlaqələrini və vəziyyət dəyişikliklərini bir yerdən izləyə bilərik.
 
@@ -68,6 +76,7 @@ Bloc-u istifadə etmək üçün, `Streamlər`-i və onların necə işləməsini
 
 Dart dilində, `Stream`-ləri `async*` funksiya yazaraq, yarada bilərik.
 
+<<<<<<< HEAD
 ```dart
 Stream<int> countStream(int max) async* {
     for (int i = 0; i < max; i++) {
@@ -75,6 +84,9 @@ Stream<int> countStream(int max) async* {
     }
 }
 ```
+=======
+[count_stream.dart](../_snippets/core_concepts/count_stream.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Funksiyanı `async*` kimi yaradaraq, biz `yield` açarsözündən istifadə edə bilərik və bu əmr vasitəsilə funksiyadan `Stream` datasını geri qaytara bilərik. Yuxarıdakı nümunəyə əsasən, 0-dan başlayaraq, `max` adı ilə verilmiş parametr-ə qədər olan bütün tam ədədləri `Stream` kimi geri qaytarırıq.
 
@@ -82,6 +94,7 @@ Hər dəfə `yield` əmrini `async*` funksiyada istifadə edərkən, datanın bu
 
 Yuxarıdakı `Stream`-i bir neçə şəkildə bitirə bilərik. Əgər, tam ədədlərin `Stream`-in cəmini geri qaytaran funksiya yazmaq istəyiriksə. bu belə ola bilər:
 
+<<<<<<< HEAD
 ```dart
 Future<int> sumStream(Stream<int> stream) async {
     int sum = 0;
@@ -91,11 +104,15 @@ Future<int> sumStream(Stream<int> stream) async {
     return sum;
 }
 ```
+=======
+[sum_stream.dart](../_snippets/core_concepts/sum_stream.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Yuxarıdakı funksiyanı `async` ilə işarə edərək, `await` açar sözünü istifadə edə və geriyə tam ədədlərin `Future`-ni qaytara bildik. Bu nümunədə, stream-dən gələcək olan bütün qiymətləri gözləyir və sonda bu tam ədədlərin cəmini geri qaytarırıq. 
 
 Bunların hamısını aşağıdakı şəkildə birləşdirə bilərik:
 
+<<<<<<< HEAD
 ```dart
 void main() async {
     /// Initialize a stream of integers 0-9
@@ -106,6 +123,9 @@ void main() async {
     print(sum); // 45
 }
 ```
+=======
+[main.dart](../_snippets/core_concepts/streams_main.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ## Bloclar (Blocs)
 
@@ -113,6 +133,7 @@ void main() async {
 
 > Hər bir Bloc əsas bloc paketinin bir hissəsi olan `Bloc` class-ını miras almalıdır (İnheritance, extend etməlidir).
 
+<<<<<<< HEAD
 ```dart
 import 'package:bloc/bloc.dart';
 
@@ -120,6 +141,9 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 }
 ```
+=======
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_class.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Yuxarıdakı kod parçasında, `CounterBloc`-u `CounterEvent`-ləri `int`-lərə çevirən Bloc kimi elan etdik. (Burada, CounterEvent hadisə, int isə vəziyyətdir).
 
@@ -127,6 +151,7 @@ Yuxarıdakı kod parçasında, `CounterBloc`-u `CounterEvent`-ləri `int`-lərə
 
 Bu nümunədə, sayğacın `0`-dan başlamasını istəyirik, deməli başlanğıc vəziyyətini 0 elan edəcəyik.
 
+<<<<<<< HEAD
 ```dart
 @override
 int get initialState => 0;
@@ -172,6 +197,17 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 }
 ```
+=======
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_initial_state.dart.md ':include')
+
+> Hər bir Bloc `mapEventToState` adlı funksiyanı işlətməlidir. Bu funksiya `event`-i arqument kimi qəbul edir və geriyə mütləq dizayn hissəsi tərəfindən istifadə olunan yeni `vəziyyətlər`-in `Stream`-ni qaytarmalıdır. İstədiyim vaxt cari bloc-un vəziyyətini `state` özəlliyi ilə əldə edə bilərik.
+
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_map_event_to_state.dart.md ':include')
+
+Bu nöqtədə, biz `CounterBloc`-u tam funksional etmiş olduq.
+
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 !> Bloc təkrar vəziyyətləri ləğv edir. Əgər Bloc-un yield etdiyi `State nextState` özəlliyi `state == nextState` olarsa, heç bir keçid (transition) baş verməyəcək və `Stream<State>`-də heç bir dəyişiklik olmayacaq.
 
@@ -181,6 +217,7 @@ Bu nöqtədə, yəqin ki, təəccüblənirsiniz ki, _"Hadisə zamanı Bloc-u nec
 
 Bz 0-dan 3-ə qədər sayan sadə tətbiq yarada bilərik.
 
+<<<<<<< HEAD
 ```dart
 void main() {
     CounterBloc bloc = CounterBloc();
@@ -190,11 +227,15 @@ void main() {
     }
 }
 ```
+=======
+[main.dart](../_snippets/core_concepts/counter_bloc_main.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 !> Susmaya görə, hadisələr həmişə ardıcıllıqla işləyəcək, yəni ki, yeni əlavə olunan hadisələr əvvəlki hadisələri gözləyəcəkdir. `mapEventToState` metodu öz işini bitirdikdə, hadisə də tam işləmiş sayılır.
 
 Yuxarıdakı kod parçasına əsasən, keçidlər aşağıdakı kimi olacaq:
 
+<<<<<<< HEAD
 ```json
 {
     "currentState": 0,
@@ -212,6 +253,9 @@ Yuxarıdakı kod parçasına əsasən, keçidlər aşağıdakı kimi olacaq:
     "nextState": 3
 }
 ```
+=======
+[counter_bloc_transitions.json](../_snippets/core_concepts/counter_bloc_transitions.json.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Təəssüf ki, `onTransition` metodunu Bloc-umuzda istifadə etmədən, bu keçidlərin heç birini görə bilməyəcəyik.
 
@@ -219,12 +263,16 @@ Təəssüf ki, `onTransition` metodunu Bloc-umuzda istifadə etmədən, bu keçi
 
 ?> **İpucu**: `onTransition` bloc-a xas olan loglama/analitika üçün ideal yerdir.
 
+<<<<<<< HEAD
 ```dart
 @override
 void onTransition(Transition<CounterEvent, int> transition) {
     print(transition);
 }
 ```
+=======
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_on_transition.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Hal-hazırda, `onTransition` metodunu Bloc-a daxil etdik və bu halda, yeni `Keçid (Transition)` baş verərkən istədiyimiz prosesi icra edə bilərik.
 
@@ -232,6 +280,7 @@ Hal-hazırda, `onTransition` metodunu Bloc-a daxil etdik və bu halda, yeni `Ke�
 
 > `onError` metodu Bloc daxilində olan `Exception`-ı idarə etmək üçün, istifadə olunan metoddur. Susmaya görə, bütün exceptionlar ləğv olunur və `Bloc`-un funksionallığına heç bir təsir olmur.
 
+<<<<<<< HEAD
 ?> **Qeyd**: Əgər vəziyyət stream-i error-u `StackTrace` olmadan qəbul edərsə, stacktrace arqumenti `null` ola bilər. 
 
 ?> **Tip**: `onError` metodu bloc-a xas olan error-ları idarə etmək üçün, ideal yerdir.
@@ -242,6 +291,13 @@ void onError(Object error, StackTrace stackTrace) {
   print('$error, $stackTrace');
 }
 ```
+=======
+?> **Qeyd**: Əgər vəziyyət stream-i error-u `StackTrace` olmadan qəbul edərsə, stackTrace arqumenti `null` ola bilər. 
+
+?> **Tip**: `onError` metodu bloc-a xas olan error-ları idarə etmək üçün, ideal yerdir.
+
+[counter_bloc.dart](../_snippets/core_concepts/counter_bloc_on_error.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Hal-hazırda, `onError` metodunu Bloc-a daxil etdik və `Exception` baş verərkən, istədiyimiz prosesi burada icra edə bilərik.
 
@@ -251,6 +307,7 @@ Bloc istifadə etməyin üstünlüklərindən biri budur ki, biz bütün Bloc-la
 
 Əgər bütün `Keçidlər (Transitions)`-ə cavab olaraq, nəsə etmək istəyiriksə. sadəcə özümüzün `BlocDelegate`-ni yarada bilərik.
 
+<<<<<<< HEAD
 ```dart
 class SimpleBlocDelegate extends BlocDelegate {
   @override
@@ -260,11 +317,15 @@ class SimpleBlocDelegate extends BlocDelegate {
   }
 }
 ```
+=======
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ?> **Qeyd**: Ehtiyacımız olan, `BlocDelegate` classını extend etmək və `onTransition` metodunu daxil etməkdir.
 
 . Bloc-a bizim `SimpleBlocDelegate`-i istifadə etməsini demək üçün, sadəcə `main` funksiyasında bunu qeyd etməyimiz lazımdır. 
 
+<<<<<<< HEAD
 ```dart
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
@@ -317,5 +378,16 @@ class SimpleBlocDelegate extends BlocDelegate {
   }
 }
 ```
+=======
+[main.dart](../_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
+
+Əgər bütün `Hadisələr (Events)`-ə cavab olaraq, nəsə etmək istəyiriksə, `onEvent` metodunu `SimpleBlocDelegate`-ə əlavə edə bilərik.
+
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
+
+Əgər bütün `Exception`-lara cavab olaraq, nəsə etmək istəyiriksə, `onError` metodunu `SimpleBlocDelegate`-ə əlavə edə bilərik..
+
+[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ?> **Qeyd**: `BlocSupervisor` bütün Bloclara nəzarət edən və onların vəzifələrini `BlocDelegate`-ə ötürən singleton classdır .

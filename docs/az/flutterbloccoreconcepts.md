@@ -12,6 +12,7 @@
 
 Əgər bloc parametri ötürülübsə, `BlocBuilder` `BlocProvider` və `BuildContext`-i istifadə edərək, avtomatik axtarışı həyata keçirəcək.
 
+<<<<<<< HEAD
 ```dart
 BlocBuilder<BlocA, BlocAState>(
   builder: (context, state) {
@@ -44,6 +45,17 @@ BlocBuilder<BlocA, BlocAState>(
   }
 )
 ```
+=======
+[bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder.dart.md ':include')
+
+Yalnız `BlocProvider` və hal-hazırki `BuildContext` ilə əlçatılmayan və yalnız bir widget üçün nəzərdə tutulduqda, bloc parametrini qeyd edin.
+
+[bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_explicit_bloc.dart.md ':include')
+
+Əgər builder funksiyası çağırılan zaman, nəzarət etmək istəyirsinizsə, ötürülə bilən `condition` parametrini `BlocBuilder`-ə əlavə edin. `Condition` parametri bir əvvəlki və cari vəziyyətləri qəbul edir və geriyə məntiqi dəyər (boolean) qaytarır. Əgər `condition` geriyə true qaytarırsa, bu zaman `builder` funksiyası cari vəziyyət ilə çağrılır və widget yenidən qurulur. Əgər `condition` false qaytarırsa, `builder` funksiyası çağrılmayacaq və `state`-ə görə heç bir dəyişiklik olmayacaq.
+
+[bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_condition.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ### BlocProvider
 
@@ -51,6 +63,7 @@ BlocBuilder<BlocA, BlocAState>(
 
 Çox hallarda, `BlocProvider` yeni `bloc`-ların yaradılması və onların alt hissədə olan widget-lərə çatdırılması üçün istifadə olunur. Bu halda, `BlocProvider` həm bloc-un yaradılması, həm də avtomatik olaraq, bloc-un bağlanmasını öz öhdəliyinə götürür.
 
+<<<<<<< HEAD
 ```dart
 BlocProvider(
   create: (BuildContext context) => BlocA(),
@@ -76,12 +89,24 @@ context.bloc<BlocA>();
 // without extensions
 BlocProvider.of<BlocA>(context)
 ```
+=======
+[bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider.dart.md ':include')
+
+Bəzi hallarda, `BlocProvider` mövcud olan bloc-un widget ağacının yeni hissəsinə təmin edilməsi üçün istifadə oluna bilər. Əsasən, mövcud olan `bloc`-un yeni route-a çatdırılması üçün istifadə olunur. Bu halda, `BlocProvider` bloc-un yaradılmasını və avtomatik olaraq, bağlanmasını həyata keçirməyəcək.
+
+[bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider_value.dart.md ':include')
+
+Beləliklə, hər hansı `ChildA` və yaxud `ScreenA`-dan `BlocA`-nı aşağıdakı üsulla əldə edə bilərik:
+
+[bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider_lookup.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ### MultiBlocProvider
 
 **MultiBlocProvider**  çoxlu `BlocProvider` widget-lərini bir yerə yığan Flutter widget-idir. `MultiBlocProvider` həm oxunaqlığı artırır, həm də  çoxlu sayda `BlocProvider`-ləri  iç-içə yazmağın qarşısını alır. 
 `MultiBlocProvider` istifadə edərək, aşağıdakı formadan:
 
+<<<<<<< HEAD
 ```dart
 BlocProvider<BlocA>(
   create: (BuildContext context) => BlocA(),
@@ -113,6 +138,13 @@ MultiBlocProvider(
   child: ChildA(),
 )
 ```
+=======
+[bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/nested_bloc_provider.dart.md ':include')
+
+bu formaya keçid edə bilərik:
+
+[multi_bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/multi_bloc_provider.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ### BlocListener
 
@@ -122,6 +154,7 @@ MultiBlocProvider(
 
 Əgər bloc parametri ötürülübsə, `BlocListener` avtomatik olaraq, `BlocProvider`-i və cari `BuildContext`-i istifadə edərək, axtarış edəcək.
 
+<<<<<<< HEAD
 ```dart
 BlocListener<BlocA, BlocAState>(
   listener: (context, state) {
@@ -155,12 +188,24 @@ BlocListener<BlocA, BlocAState>(
   child: Container(),
 )
 ```
+=======
+[bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener.dart.md ':include')
+
+Yalnız `BlocProvider` və hal-hazırki `BuildContext` ilə əlçatılmayan bloc-u təmin etmək üçün, bloc parametrini qeyd edin.
+
+[bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_explicit_bloc.dart.md ':include')
+
+Əgər listener funksiyası çağırılan zaman, nəzarət etmək istəyirsinizsə, ötürülə bilən `condition` parametrini `BlocListener`-ə əlavə edin. `Condition` parametri bir əvvəlki və cari vəziyyətləri qəbul edir və geriyə məntiqi dəyər (boolean) qaytarır. Əgər `condition` geriyə true qaytarırsa, bu zaman `listener` funksiyası cari vəziyyət ilə çağrılır. Əgər `condition` false qaytarırsa, `listener` funksiyası çağrılmayacaq.
+
+[bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_condition.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ### MultiBlocListener
 
 **MultiBlocListener**  çoxlu `BlocListener` widget-lərini bir yerə yığan Flutter widget-idir. `MultiBlocListener` həm oxunaqlığı artırır, həm də  çoxlu sayda `BlocListener`-ləri  iç-içə yazmağın qarşısını alır. 
 `MultiBlocListener` istifadə edərək, aşağıdakı formadan:
 
+<<<<<<< HEAD
 ```dart
 BlocListener<BlocA, BlocAState>(
   listener: (context, state) {},
@@ -192,6 +237,13 @@ MultiBlocListener(
   child: ChildA(),
 )
 ```
+=======
+[bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/nested_bloc_listener.dart.md ':include')
+
+bu formaya keçid edə bilərik:
+
+[multi_bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/multi_bloc_listener.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ### BlocConsumer
 
@@ -199,6 +251,7 @@ MultiBlocListener(
 
 Əgər bloc parametri ötürülübsə, `BlocConsumer` avtomatik olaraq, `BlocProvider`-i və cari `BuildContext`-i istifadə edərək, axtarış edəcək.
 
+<<<<<<< HEAD
 ```dart
 BlocConsumer<BlocA, BlocAState>(
   listener: (context, state) {
@@ -230,11 +283,19 @@ BlocConsumer<BlocA, BlocAState>(
   }
 )
 ```
+=======
+[bloc_consumer.dart](../_snippets/flutter_bloc_core_concepts/bloc_consumer.dart.md ':include')
+
+`listener` və `builder` çağırılan zaman nəzarət etmək istəyiriksə, ötürülə bilən `listenWhen` və `buildWhen` qeyd edilə bilər. `listenWhen` və `buildWhen` hər `bloc` `vəziyyət`-i dəyişə zaman çağırılır. Onlar həm cari, həm də əvvəldə `vəziyyət`-i götürüb, geriyə `bool` qaytarmalıdır, hansı ki, buna əsasən, `builder` və yaxud `listener`-in işləyib-işləməməsi müəyyən edilir. `BlocConsumer` başladılan zaman, əvvəlki vəziyyət, `bloc`-ı `vəziyyət`-inə uyğun olaraq başladılacaq. `listenWhen` və `buildWhen` ötürülə bilər və əgər ötürülübsə, o zaman susmaya görə, `true` qaytarılacaq.
+
+[bloc_consumer.dart](../_snippets/flutter_bloc_core_concepts/bloc_consumer_condition.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ### RepositoryProvider
 
 **RepositoryProvider** repository-ni onun uşaqlarına `RepositoryProvider.of<T>(context)` vasitəsilə təmin edən Flutter Widget-idir. Bu dependency injection (DI) widget-i kimi istifadə olunur, belə ki, repository-in tək obyekti, elan olunduğu yerdən aşağıda olan çoxlu sayda widget-ə təmin oluna bilər. `BlocProvider`-in təkcə bloc-ları təmin etdiyi kimi, `RepositoryProvider` də yalnız repository-lər üçün istifadə olunmalıdır.
 
+<<<<<<< HEAD
 ```dart
 RepositoryProvider(
   builder: (context) => RepositoryA(),
@@ -251,12 +312,20 @@ context.repository<RepositoryA>();
 // without extensions
 RepositoryProvider.of<RepositoryA>(context)
 ```
+=======
+[repository_provider.dart](../_snippets/flutter_bloc_core_concepts/repository_provider.dart.md ':include')
+
+Beləliklə, hər hansı `ChildA`-dan `Repository` obyektini aşağıdakı üsulla əldə edə bilərik:
+
+[repository_provider.dart](../_snippets/flutter_bloc_core_concepts/repository_provider_lookup.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ### MultiRepositoryProvider
 
 **MultiRepositoryProvider**  çoxlu `RepositoryProvider` widget-lərini bir yerə yığan Flutter widget-idir. `MultiBlocProvider` həm oxunaqlığı artırır, həm də  çoxlu sayda `RepositoryProvider`-ləri  iç-içə yazmağın qarşısını alır. 
 `MultiRepositoryProvider` istifadə edərək, aşağıdakı formadan:
 
+<<<<<<< HEAD
 ```dart
 RepositoryProvider<RepositoryA>(
   builder: (context) => RepositoryA(),
@@ -288,6 +357,13 @@ MultiRepositoryProvider(
   child: ChildA(),
 )
 ```
+=======
+[repository_provider.dart](../_snippets/flutter_bloc_core_concepts/nested_repository_provider.dart.md ':include')
+
+bu formaya keçid edə bilərik:
+
+[multi_repository_provider.dart](../_snippets/flutter_bloc_core_concepts/multi_repository_provider.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ## İstifadəsi
 
@@ -295,6 +371,7 @@ MultiRepositoryProvider(
 
 ### counter_bloc.dart
 
+<<<<<<< HEAD
 ```dart
 enum CounterEvent { increment, decrement }
 
@@ -364,5 +441,12 @@ class CounterPage extends StatelessWidget {
   }
 }
 ```
+=======
+[counter_bloc.dart](../_snippets/flutter_bloc_core_concepts/counter_bloc.dart.md ':include')
+
+### counter_page.dart
+
+[counter_page.dart](../_snippets/flutter_bloc_core_concepts/counter_page.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Bu nöqtədə, biz müvəffəqiyyətlə dizayn kodları olan hissəni (presentation layer), məntiqi kodlar olan hissədən (business logic layer) ayırdıq. Diqqət yetirin ki, `CounterPage` widget-i, istifadəçi hər hansı düyməyə basan zaman nə baş verdiyi haqqında heç nə bilmir. Sadəcə, widget `CounterBloc`-a istifadəçinin artırma və yaxud azaltma düyməsinə basdığı haqqında məlumat verir.

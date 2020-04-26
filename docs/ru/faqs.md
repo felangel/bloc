@@ -8,85 +8,25 @@
 
 ✅ **Хорошо**
 
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
-
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => [property]; // pass all properties to props
-}
-```
+[my_state.dart](../_snippets/faqs/state_not_updating_good_1.dart.md ':include')
 
 ❌ **Плохо**
 
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
+[my_state.dart](../_snippets/faqs/state_not_updating_bad_1.dart.md ':include')
 
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => [];
-}
-```
-
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
-
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => null;
-}
-```
+[my_state.dart](../_snippets/faqs/state_not_updating_bad_2.dart.md ':include')
 
 Кроме того, убедитесь, что вы получаете новый экземпляр состояния в вашем блоке.
 
 ✅ **Хорошо**
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    // always create a new instance of the state you are going to yield
-    yield state.copyWith(property: event.property);
-}
-```
+[my_bloc.dart](../_snippets/faqs/state_not_updating_good_2.dart.md ':include')
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    final data = _getData(event.info);
-    // always create a new instance of the state you are going to yield
-    yield MyState(data: data);
-}
-```
+[my_bloc.dart](../_snippets/faqs/state_not_updating_good_3.dart.md ':include')
 
 ❌ **Плохо**
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    // never modify/mutate state
-    state.property = event.property;
-    // never yield the same instance of state
-    yield state;
-}
-```
+[my_bloc.dart](../_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
 
 ## Когда использовать Equatable
 
@@ -94,44 +34,18 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 
 💡 **Ответ**:
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    yield StateA('hi');
-    yield StateA('hi');
-}
-```
+[my_bloc.dart](../_snippets/faqs/equatable_yield.dart.md ':include')
 
 В приведенном выше сценарии, если `StateA` расширяет `Equatable`, произойдет только одно изменение состояния (второе получение будет игнорироваться).
 В общем, вы должны использовать `Equatable`, если вы хотите оптимизировать свой код, чтобы уменьшить количество пересборок.
 Вы не должны использовать `Equatable` если хотите, чтобы одно и то же состояние в `back-to-back` вызывало несколько переходов.
 Кроме того, использование `Equatable` значительно облегчает тестирование блоков, так как мы можем ожидать конкретные экземпляры состояний блоков, а не использовать `Matchers` или `Predicates`.
 
-```dart
-blocTest(
-    '...',
-    build: () => MyBloc(),
-    act: (bloc) => bloc.add(MyEvent()),
-    expect: [
-        MyStateA(),
-        MyStateB(),
-    ],
-)
-```
+[my_bloc_test.dart](../_snippets/faqs/equatable_bloc_test.dart.md ':include')
 
 Без `Equatable` вышеприведенный тест потерпит неудачу и его нужно будет переписать так:
 
-```dart
-blocTest(
-    '...',
-    build: () => MyBloc(),
-    act: (bloc) => bloc.add(MyEvent()),
-    expect: [
-        isA<MyStateA>(),
-        isA<MyStateB>(),
-    ],
-)
-```
+[my_bloc_test.dart](../_snippets/faqs/without_equatable_bloc_test.dart.md ':include')
 
 ## Bloc против Redux
 
@@ -183,62 +97,13 @@ blocTest(
 
 ✅ **Хорошо**
 
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: MyChild();
-  );
-}
+[my_page.dart](../_snippets/faqs/bloc_provider_good_1.dart.md ':include')
 
-class MyChild extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return RaisedButton(
-      onPressed: () {
-        final blocA = BlocProvider.of<BlocA>(context);
-        ...
-      },
-    )
-    ...
-  }
-}
-```
-
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: Builder(
-      builder: (context) => RaisedButton(
-        onPressed: () {
-          final blocA = BlocProvider.of<BlocA>(context);
-          ...
-        },
-      ),
-    ),
-  );
-}
-```
+[my_page.dart](../_snippets/faqs/bloc_provider_good_2.dart.md ':include')
 
 ❌ **Плохо**
 
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: RaisedButton(
-      onPressed: () {
-        final blocA = BlocProvider.of<BlocA>(context);
-        ...
-      }
-    )
-  );
-}
-```
+[my_page.dart](../_snippets/faqs/bloc_provider_bad_1.dart.md ':include')
 
 ## Структура проекта
 

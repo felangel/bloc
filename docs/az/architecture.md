@@ -30,6 +30,7 @@ Bu təbəqə tətbiqin ən aşağı səviyyəsidir və database-lər, şəbəkə
 Data provider adətən [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) əməliyyatlarını yerinə yetirmək üçün sadə API-lar təmin edir.
 Data layer-in bir hissəsi kimi, `createData`, `readData`, `updateData`, və `deleteData` kimi metodlarımız ola bilər.
 
+<<<<<<< HEAD
 ```dart
 class DataProvider {
     Future<RawData> readData() async {
@@ -37,11 +38,15 @@ class DataProvider {
     }
 }
 ```
+=======
+[data_provider.dart](../_snippets/architecture/data_provider.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ### Repository
 
 > Repository təbəqəsi Bloc layer-in əlaqə saxladığı və içərisində bir və ya daha çox data provider-i əhatə edən təbəqədir.
 
+<<<<<<< HEAD
 ```dart
 class Repository {
     final DataProviderA dataProviderA;
@@ -56,6 +61,9 @@ class Repository {
     }
 }
 ```
+=======
+[repository.dart](../_snippets/architecture/repository.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Gördüyünüz kimi, repository təbəqəsi çoxlu sayda data provider-lərlə əlaqə saxlaya və data-ları məntiqi kodlar olan hissəyə (Bloc-a) ötürməmişdən əvvəl onlar üzərində dəyişikliklər apara bilər.
 
@@ -65,6 +73,7 @@ Gördüyünüz kimi, repository təbəqəsi çoxlu sayda data provider-lərlə �
 
 Bloc təbəqəsini istifadəçi interfeysi (presentation təbəqəsi) və data təbəqəsi arasındakı körpü kimi düşünə bilərsiniz. Bloc təbəqəsi istifadəçinin inputları əsasında yaranan hadisələri (events) qəbul edir və presentation təbəqəsinə lazım olan yeni vəziyyətin qurulması üçün repository ilə əlaqə yaradır.
 
+<<<<<<< HEAD
 ```dart
 class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
     final Repository repository;
@@ -81,6 +90,9 @@ class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
     }
 }
 ```
+=======
+[business_logic_component.dart](../_snippets/architecture/business_logic_component.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ### Bloc-un-Bloc-a rabitəsi
 
@@ -88,6 +100,7 @@ class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
 
 Bloc-ların digər bloc-larda olan vəziyyət dəyişikliklərindən asılılığı ola bilər. Aşağıdakı nümunədə, `MyBloc`-un `OtherBloc`-dan asılılığı vardır və `OtherBloc`-da baş verən vəziyyət dəyişikliklərinə cavab olaraq, hadisələri `add` edə bilər. Yaddaş çatışmazlığı problemlərinin qarşısını almaq üçün `StreamSubsctiption`-ı `MyBloc`-da olan `close` metodunu əlavə edərək bağlanılır.
 
+<<<<<<< HEAD
 ```dart
 class MyBloc extends Bloc {
   final OtherBloc otherBloc;
@@ -107,6 +120,9 @@ class MyBloc extends Bloc {
   }
 }
 ```
+=======
+[bloc_to_bloc_communication.dart](../_snippets/architecture/bloc_to_bloc_communication.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ## Presentation Təbəqəsi
 
@@ -118,6 +134,7 @@ Bu mənzərəyə əsasən, presentation təbəqəsi `AppStart` hadisəsini əlav
 
 Əlavə olaraq, presentation təbəqəsi bloc təbəqəsindən gələn vəziyyət əsasında nəyi render etməli olduğunu bilməlidir.
 
+<<<<<<< HEAD
 ```dart
 class PresentationComponent {
     final Bloc bloc;
@@ -132,5 +149,8 @@ class PresentationComponent {
 }
 ```
 
+=======
+[presentation_component.dart](../_snippets/architecture/presentation_component.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 İndiyə qədər bir neçə kod parçası olsa da, bütün bunlar kifayət qədər yüksək səviyyədədir. Dərslik bölməsində bir neçə fərqli nümunə tətbiqini qurduğumuz zaman bunları bir araya gətirəcəyik.

@@ -28,7 +28,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^3.2.0
+  flutter_bloc: ^4.0.0
   http: ^0.12.0
   equatable: ^1.0.0
 
@@ -582,8 +582,8 @@ import 'package:bloc/bloc.dart';
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
     print(transition);
+    super.onTransition(bloc, transition);
   }
 }
 ```

@@ -45,9 +45,9 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **add** is a method that takes an `event` and triggers `mapEventToState`. If `close` has already been called, any subsequent calls to `add` will be delegated to the `onError` method which can be overriden at the `Bloc` as well as the `BlocDelegate` level.
 
-**transformEvents** is a method that transforms the `Stream<Event>` along with a `next` function into a `Stream<State>`. Events that should be processed by `mapEventToState` need to be passed to `next`. **By default `asyncExpand` is used to ensure all events are processed in the order in which they are received**. You can override `transformEvents` for advanced usage in order to manipulate the frequency and specificity with which `mapEventToState` is called as well as which events are processed.
+**transformEvents** is a method that transforms the `Stream<Event>` along with a transition function, `transitionFn`, into a `Stream<Transition>`. Events that should be processed by `mapEventToState` need to be passed to `transitionFn`. **By default `asyncExpand` is used to ensure all events are processed in the order in which they are received**. You can override `transformEvents` for advanced usage in order to manipulate the frequency and specificity with which `mapEventToState` is called as well as which events are processed.
 
-**transformStates** is a method that transforms the `Stream<State>` into a new `Stream<State>`. By default `transformStates` returns the incoming `Stream<State>`. You can override `transformStates` for advanced usage in order to manipulate the frequency and specificity at which `transitions` (state changes) occur.
+**transformTransitions** is a method that transforms the `Stream<Transition>` into a new `Stream<Transition>`. By default `transformTransitions` returns the incoming `Stream<Transition>`. You can override `transformTransitions` for advanced usage in order to manipulate the frequency and specificity at which `transitions` (state changes) occur.
 
 **onEvent** is a method that can be overridden to handle whenever an `Event` is added. **It is a great place to add bloc-specific logging/analytics**.
 
@@ -118,8 +118,8 @@ As our app grows and relies on multiple `Blocs`, it becomes useful to see the `T
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
     print(transition);
+    super.onTransition(bloc, transition);
   }
 }
 ```
@@ -150,14 +150,14 @@ If we want to be able to handle any incoming `Events` that are added to a `Bloc`
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
     print(event);
+    super.onEvent(bloc, event);
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
     print(transition);
+    super.onTransition(bloc, transition);
   }
 }
 ```
@@ -168,20 +168,20 @@ If we want to be able to handle any `Exceptions` that might be thrown in a `Bloc
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
     print(event);
+    super.onEvent(bloc, event);
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
     print(transition);
+    super.onTransition(bloc, transition);
   }
 
   @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
-    print('$error, $stacktrace');
+  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
+    print('$error, $stackTrace');
+    super.onError(bloc, error, stackTrace);
   }
 }
 ```

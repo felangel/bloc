@@ -13,6 +13,7 @@ dependencies:
     path: ../../packages/flutter_bloc
   http: ^0.12.0
   equatable: ^1.0.0
+  rxdart: ^0.23.1
 
 flutter:
   uses-material-design: true

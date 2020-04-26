@@ -6,6 +6,7 @@ Sadə olması üçün,  [Əsas Konseptlər](coreconcepts.md)-də yaratdığımı
 
 Təkrar olması üçün qeyd edək ki, `CounterBloc` aşağıdakı kod şəklindədir
 
+<<<<<<< HEAD
 ```dart
 enum CounterEvent { increment, decrement }
 
@@ -26,11 +27,15 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 }
 ```
+=======
+[counter_bloc.dart](../_snippets/testing/counter_bloc.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Testlərimizi yazmadan öncə dependency-lərə test üçün framework-ləri əlavə edəcəyik.
 
 [test](https://pub.dev/packages/test) və [bloc_test](https://pub.dev/packages/bloc_test) framework-lərini `pubspec.yaml`-a əlavə etməliyik.
 
+<<<<<<< HEAD
 ```yaml
 dev_dependencies:
   test: ^1.3.0
@@ -52,11 +57,23 @@ void main() {
     });
 }
 ```
+=======
+[pubspec.yaml](../_snippets/testing/pubspec.yaml.md ':include')
+
+`CounterBloc`-un testi üçün `counter_bloc_test.dart` yaradaraq və test paketini daxil edərək başlayırıq.
+
+[counter_bloc_test.dart](../_snippets/testing/counter_bloc_test_imports.dart.md ':include')
+
+Daha sonra, `main` funksiyasını və test qrupunu yaratmağa ehtiyacımız var.
+
+[counter_bloc_test.dart](../_snippets/testing/counter_bloc_test_main.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ?> **Qeyd**: Qruplar individual testlərin təşkili üçündür və `setUp` və `tearDown` funksiyalarını istifadə edərək, bütün individual testlər üçün ümumi olan şeyləri yarada bilərik.
 
 Beləliklə, bütün testlərimizdə istifadə olunacaq `CounterBloc` obyektini yaradırıq.
 
+<<<<<<< HEAD
 ```dart
 group('CounterBloc', () {
     CounterBloc counterBloc;
@@ -82,11 +99,19 @@ group('CounterBloc', () {
     });
 });
 ```
+=======
+[counter_bloc_test.dart](../_snippets/testing/counter_bloc_test_setup.dart.md ':include')
+
+İndi individual testlərimizi yazmağa başlaya bilərik.
+
+[counter_bloc_test.dart](../_snippets/testing/counter_bloc_test_initial_state.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ?> **Qeyd**: Bütün testlərimizi `pub run test` əmri ilə işlədə bilərik.
 
 Artıq bu nöqtədə bizim ilk düzgün olan testimiz oldu. İndi isə [bloc_test](https://pub.dev/packages/bloc_test) paketini istifadə edərək, daha mürəkkəb test yazaq.
 
+<<<<<<< HEAD
 ```dart
 blocTest(
     'emits [0, 1] when CounterEvent.increment is added',
@@ -102,6 +127,9 @@ blocTest(
     expect: [0, -1],
 );
 ```
+=======
+[counter_bloc_test.dart](../_snippets/testing/counter_bloc_test_bloc_test.dart.md ':include')
+>>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Testləri işlədib, hamısının keçdiyini görməliyik.
 
