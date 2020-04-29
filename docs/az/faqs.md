@@ -8,54 +8,6 @@
 
 ✅ **Yaxşı**
 
-<<<<<<< HEAD
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
-
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => [property]; // pass all properties to props
-}
-```
-
-❌ **Pis**
-
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
-
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => [];
-}
-```
-
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
-
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => null;
-}
-```
-=======
 [my_state.dart](../_snippets/faqs/state_not_updating_good_1.dart.md ':include')
 
 ❌ **Pis**
@@ -63,42 +15,11 @@ class StateA extends MyState {
 [my_state.dart](../_snippets/faqs/state_not_updating_bad_1.dart.md ':include')
 
 [my_state.dart](../_snippets/faqs/state_not_updating_bad_2.dart.md ':include')
->>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Əlavə olaraq, bloc-unuzda vəziyyətin yeni obyektini yield etdiyinizə əmin olun.
 
 ✅ **Yaxşı**
 
-<<<<<<< HEAD
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    // always create a new instance of the state you are going to yield
-    yield state.copyWith(property: event.property);
-}
-```
-
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    final data = _getData(event.info);
-    // always create a new instance of the state you are going to yield
-    yield MyState(data: data);
-}
-```
-
-❌ **Pis**
-
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    // never modify/mutate state
-    state.property = event.property;
-    // never yield the same instance of state
-    yield state;
-}
-```
-=======
 [my_bloc.dart](../_snippets/faqs/state_not_updating_good_2.dart.md ':include')
 
 [my_bloc.dart](../_snippets/faqs/state_not_updating_good_3.dart.md ':include')
@@ -106,7 +27,6 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 ❌ **Pis**
 
 [my_bloc.dart](../_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
->>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ## Nə zaman Equatable istifadə etməli
 
@@ -114,17 +34,7 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 
 💡**Cavab**:
 
-<<<<<<< HEAD
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    yield StateA('hi');
-    yield StateA('hi');
-}
-```
-=======
 [my_bloc.dart](../_snippets/faqs/equatable_yield.dart.md ':include')
->>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 Yuxarıdakı vəziyyətdə, əgər `StateA` `Equatable`-ı extend edirsə, o zaman bir vəziyyət dəyişməsi olacaq (ikinci yield ləğv olacaq).
 Ümumi olaraq, əgər yenidən yaradılmanın sayını azaldaraq kodunuzu optimizasiya etmək istəyirsinizsə, `Equatable` istifadə etməlisiniz.
@@ -132,39 +42,11 @@ Yuxarıdakı vəziyyətdə, əgər `StateA` `Equatable`-ı extend edirsə, o zam
 
 Əlavə olaraq, `Matchers` və ya `Predicates` istifadə edərək xüsusi bloc vəziyyətini gözləmək əvəzinə, `Equatable` test prosesini daha da asanlaşdırır.
 
-<<<<<<< HEAD
-```dart
-blocTest(
-    '...',
-    build: () => MyBloc(),
-    act: (bloc) => bloc.add(MyEvent()),
-    expect: [
-        MyStateA(),
-        MyStateB(),
-    ],
-)
-```
-
-`Equatable` istifadə etmədən, yuxarıdakı test uğursuz olacaq və testing uğurlu olması üçün aşağıdakı kimi yazmaq lazımdır:
-
-```dart
-blocTest(
-    '...',
-    build: () => MyBloc(),
-    act: (bloc) => bloc.add(MyEvent()),
-    expect: [
-        isA<MyStateA>(),
-        isA<MyStateB>(),
-    ],
-)
-```
-=======
 [my_bloc_test.dart](../_snippets/faqs/equatable_bloc_test.dart.md ':include')
 
 `Equatable` istifadə etmədən, yuxarıdakı test uğursuz olacaq və testing uğurlu olması üçün aşağıdakı kimi yazmaq lazımdır:
 
 [my_bloc_test.dart](../_snippets/faqs/without_equatable_bloc_test.dart.md ':include')
->>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ## Bloc vs. Redux
 
@@ -219,64 +101,6 @@ Bloc kitabxanası widget ağacına bloc-u təmin etməyi və widget ağacında o
 
 ✅ **Yaxşı**
 
-<<<<<<< HEAD
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: MyChild();
-  );
-}
-
-class MyChild extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return RaisedButton(
-      onPressed: () {
-        final blocA = BlocProvider.of<BlocA>(context);
-        ...
-      },
-    )
-    ...
-  }
-}
-```
-
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: Builder(
-      builder: (context) => RaisedButton(
-        onPressed: () {
-          final blocA = BlocProvider.of<BlocA>(context);
-          ...
-        },
-      ),
-    ),
-  );
-}
-```
-
-❌ **Pis**
-
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: RaisedButton(
-      onPressed: () {
-        final blocA = BlocProvider.of<BlocA>(context);
-        ...
-      }
-    )
-  );
-}
-```
-=======
 [my_page.dart](../_snippets/faqs/bloc_provider_good_1.dart.md ':include')
 
 [my_page.dart](../_snippets/faqs/bloc_provider_good_2.dart.md ':include')
@@ -284,7 +108,6 @@ Widget build(BuildContext context) {
 ❌ **Pis**
 
 [my_page.dart](../_snippets/faqs/bloc_provider_bad_1.dart.md ':include')
->>>>>>> 778ca2b88b802862318dfe4655b8a82c89eff719
 
 ## Proyektin Strukturu
 
