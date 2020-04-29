@@ -9,6 +9,7 @@ on:
 
   pull_request:
     paths:
+    - '.github/workflows/main.yaml'
     - 'examples/**'
     - 'packages/**'
 
