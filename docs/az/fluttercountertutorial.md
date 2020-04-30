@@ -1,42 +1,42 @@
-# Flutter Counter Tutorial
+# Flutter Sayğac dərsi
 
 ![beginner](https://img.shields.io/badge/level-beginner-green.svg)
 
-> In the following tutorial, we're going to build a Counter in Flutter using the Bloc library.
+> Sıradakı dərsdə, Bloc kitabxanasını istifadə edərək, Flutter-də Sayğac düzəldəcəyik.
 
-![demo](./assets/gifs/flutter_counter.gif)
+![demo](../assets/gifs/flutter_counter.gif)
 
-## Setup
+## Quraşdırma
 
-We'll start off by creating a brand new Flutter project
+Yeni Flutter proyekti yaradaraq başlayacağıq.
 
 [script](_snippets/flutter_counter_tutorial/flutter_create.sh.md ':include')
 
-We can then go ahead and replace the contents of `pubspec.yaml` with
+Daha sonra `pubspec.yaml`-dakı kontentləri aşağıdakı kimi əvəzləyirik
 
 [pubspec.yaml](_snippets/flutter_counter_tutorial/pubspec.yaml.md ':include')
 
-and then install all of our dependencies
+və dependency-lərimizi quraşdırırıq
 
 [script](_snippets/flutter_counter_tutorial/flutter_packages_get.sh.md ':include')
 
-Our counter app is just going to have two buttons to increment/decrement the counter value and a `Text` widget to display the current value. Let's get started designing the `CounterEvents`.
+Sayğac tətbiqimiz sadəcə sayğacın qiymətini azaltmaq/artırmaq üçün 2 düymədən və sayğacın cari qiymətini göstərmək üçün `Text` widget-indən ibarət olacaq. `CounterEvent`-ləri yaratmağa başlayaq.
 
-## Counter Events
+## Counter Events (Counter Hadisələri)
 
 [counter_event.dart](_snippets/flutter_counter_tutorial/counter_event.dart.md ':include')
 
-## Counter States
+## Counter States (Counter Vəziyyətləri)
 
-Since our counter's state can be represented by an integer we don't need to create a custom class!
+Sate-imiz sadəcə integer (tam ədəd) olduğu üçün, əlavə class yaratmağa ehtiyac yoxdur!
 
 ## Counter Bloc
 
 [counter_bloc.dart](_snippets/flutter_counter_tutorial/counter_bloc.dart.md ':include')
 
-?> **Note**: Just from the class declaration we can tell that our `CounterBloc` will be taking `CounterEvents` as input and outputting integers.
+?> **Qeyd**: `CounterBloc` elanından görə bilərik ki, `CounterEvent`-lər input kimi və integer-lər isə output kimi istifadə ediləcək.
 
-## Counter App
+## Sayğac Tətbiqi
 
 Now that we have our `CounterBloc` fully implemented, we can get started creating our Flutter application.
 
