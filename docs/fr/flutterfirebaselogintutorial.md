@@ -138,7 +138,7 @@ Future<String> getUser() async {
 
 ?> **Note:** `getUser` retourne uniquement l'adresse mail de l'utilisateur connecté pour faire simple mais nous pourrions définir notre propre modèle User et lui ajouter beaucoup plus d'informations sur l'utilisateur pour en des applications plus complexes.
 
-Our finished `user_repository.dart` should look like this:
+Notre fichier `user_repository.dart` terminé devrait ressembler à ceci :
 
 ```dart
 import 'dart:async';
@@ -196,32 +196,29 @@ class UserRepository {
   }
 }
 ```
+Ensuite, nous allons construire notre `AuthenticationBloc` qui sera responsable de gérer le `AuthenticationState`de l'application qui lui répondra à `AuthenticationEvents`.
 
-Next up, we're going to build our `AuthenticationBloc` which will be responsible for handling the `AuthenticationState` of the application in response to `AuthenticationEvents`.
+## Authentication States (Les états d'authentification)
 
-## Authentication States
+Nous avons besoin de déterminer comment nous allons gérer le state ("état") de notre application et créer les blocs (business logic components) nécessaires.
+A un haut niveau, nous allons devoir gérer l'Authentification state de l'utilisateur. Le state d'un utilisateur peut être l'un parmis la liste suivante : 
 
-We need to determine how we’re going to manage the state of our application and create the necessary blocs (business logic components).
+- uninitialized - attend de voir si l'utilisateur est authentifié ou non quand l'application commence.
+- authenticated - l'authentification est un succès.
+- unauthenticated - non authentifié.
 
-At a high level, we’re going to need to manage the user’s Authentication State. A user's authentication state can be one of the following:
+Chacun de ses états (states) modifiera ce que l'utilisateur verra.
 
-- uninitialized - waiting to see if the user is authenticated or not on app start.
-- authenticated - successfully authenticated
-- unauthenticated - not authenticated
+Par exemple :
+- si l'authentification state est uninitialized, l'utilisateur pourrait voir un splash screen.
+- si l'authentification state est authenticated, l'utilisateur pourrait voir la page d'accueil.
+- si l'authentification state est unauthenticated, l'utilisateur pourrait voir un formulaire de connexion.
 
-Each of these states will have an implication on what the user sees.
+> Il est important d'identifier quels seront les différents états (states) avant de plonger dans leur implémentation. 
 
-For example:
+Maintenant que les états(states) d'authentification sont identifiés, nous pouvons implémenter notre class `AuthenticationState`.
 
-- if the authentication state was uninitialized, the user might be seeing a splash screen
-- if the authentication state was authenticated, the user might see a home screen.
-- if the authentication state was unauthenticated, the user might see a login form.
-
-> It's critical to identify what the different states are going to be before diving into the implementation.
-
-Now that we have our authentication states identified, we can implement our `AuthenticationState` class.
-
-Create a folder/directory called `authentication_bloc` and we can create our authentication bloc files.
+Créer une dossier/répertoire appelé `authentication_bloc` dans lequel nous allons créer nos fichiers d'authentification bloc.
 
 ```sh
 ├── authentication_bloc
@@ -230,7 +227,7 @@ Create a folder/directory called `authentication_bloc` and we can create our aut
 │   └── authentication_state.dart
 ```
 
-?> **Tip:** You can use the [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) or [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) extensions to autogenerate the files for you.
+?> **Conseil:** Vous pouvez utiliser le plugin [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) ou [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) pour générer les fichiers automatiquement.
 
 ```dart
 part of 'authentication_bloc.dart';
@@ -259,21 +256,21 @@ class Authenticated extends AuthenticationState {
 class Unauthenticated extends AuthenticationState {}
 ```
 
-?> **Note**: The [`equatable`](https://pub.dev/packages/equatable) package is used in order to be able to compare two instances of `AuthenticationState`. By default, `==` returns true only if the two objects are the same instance.
+?> **Note**: Le package [`equatable`](https://pub.dev/packages/equatable) est utilisé dans le but de permettre de comparer deux instances de `AuthenticationState`. Par défaut, `==` renvoie true seulement si deux objets ont la même instance.
 
-?> **Note**: `toString` is overridden to make it easier to read an `AuthenticationState` when printing it to the console or in `Transitions`.
+?> **Note**: `toString` est "overridden" pour faciliter la lecture d'un `AuthenticationState` quand on l'affiche dans la console ou dans `Transitions`.
 
-!> Since we're using `Equatable` to allow us to compare different instances of `AuthenticationState` we need to pass any properties to the superclass. Without `List<Object> get props => [displayName]`, we will not be able to properly compare different instances of `Authenticated`.
+!> Puisque nous utilisons `Equatable` pour pouvoir comparer deux instances de `AuthenticationState`, nous avons besoin de passer toutes les propriétés de la superclass. Sans `List<Object> get props => [displayName]`, nous ne pourrions pas comparer proprement différentes instances de  `Authenticated`.
 
-## Authentication Events
+## Authentication Events (les événements d'authentification)
 
-Now that we have our `AuthenticationState` defined we need to define the `AuthenticationEvents` which our `AuthenticationBloc` will be reacting to.
+Maintenant que nous avons notre `AuthenticationState` de définie, nous allons définir `AuthenticationEvents` auquel notre `AuthenticationBloc`réagira.
 
-We will need:
+Nous allons avoir besoin :
 
-- an `AppStarted` event to notify the bloc that it needs to check if the user is currently authenticated or not.
-- a `LoggedIn` event to notify the bloc that the user has successfully logged in.
-- a `LoggedOut` event to notify the bloc that the user has successfully logged out.
+- d'un événement `AppStarted` pour notifier le bloc qu'il a besoin de vérifier si l'utilisateur est actuellement authentifié ou non.
+- d'un événement `LoggedIn` pour notifier le bloc que l'utilisateur s'est connecté avec succès.
+- d'un événement `LoggedOut` pour notifier le bloc que l'utilisateur s'est déconnecté avec succès.
 
 ```dart
 part of 'authentication_bloc.dart';
@@ -290,11 +287,11 @@ class LoggedIn extends AuthenticationEvent {}
 class LoggedOut extends AuthenticationEvent {}
 ```
 
-## Authentication Bloc
+## Authentication Bloc (Le bloc d'authentification)
 
-Now that we have our `AuthenticationState` and `AuthenticationEvents` defined, we can get to work on implementing the `AuthenticationBloc` which is going to manage checking and updating a user's `AuthenticationState` in response to `AuthenticationEvents`.
+Maintenant que nous avons notre `AuthenticationState` et `AuthenticationEvents` de définis, nous pouvons travailler sur l'implémentation de `AuthenticationBloc` qui va s'occuper de vérifier et d'actualiser l'`AuthenticationState` d'un utilisateur en réponse à `AuthenticationEvents`.
 
-We'll start off by creating our `AuthenticationBloc` class.
+Nous allons commencer par créer notre class `AuthenticationBloc`.
 
 ```dart
 import 'dart:async';
@@ -315,18 +312,17 @@ class AuthenticationBloc
         _userRepository = userRepository;
 ```
 
-?> **Note**: Just from reading the class definition, we already know this bloc is going to be converting `AuthenticationEvents` into `AuthenticationStates`.
+?> **Note**: Juste en lisant la class, nous savons déjà que le bloc convertira `AuthenticationEvents` en `AuthenticationStates`.
 
-?> **Note**: Our `AuthenticationBloc` has a dependency on the `UserRepository`.
+?> **Note**: Notre `AuthenticationBloc` a des dépendances avec `UserRepository`.
 
-We can start by overriding `initialState` to the `AuthenticationUninitialized()` state.
+Nous pouvons commencer par overriding `initialState` à l'état (state) `AuthenticationUninitialized()`.
 
 ```dart
 @override
 AuthenticationState get initialState => Uninitialized();
 ```
-
-Now all that's left is to implement `mapEventToState`.
+Maintenant il nous reste plus qu'à implémenter `mapEventToState`.
 
 ```dart
 @override
@@ -361,12 +357,12 @@ Stream<AuthenticationState> _mapLoggedOutToState() async* {
   _userRepository.signOut();
 }
 ```
+Les fonctions privés `_mapLoggedInToState()` ou `_mapLoggedOutToState()` sont crées en dehors de `mapEventToState` pour convertir chaque `AuthenticationEvent` en son propre `AuthenticationState` et dans le but de garder `mapEventToState` le plus propre et facile à lire possible.
 
-We created separate private helper functions to convert each `AuthenticationEvent` into the proper `AuthenticationState` in order to keep `mapEventToState` clean and easy to read.
 
-?> **Note:** We are using `yield*` (yield-each) in `mapEventToState` to separate the event handlers into their own functions. `yield*` inserts all the elements of the subsequence into the sequence currently being constructed, as if we had an individual yield for each element.
+?> **Note:** Nous utilisions `yield*` (yield-each) dans `mapEventToState` pour séparer les event handler dans leurs propres fonctions. `yield*` insert tous les élements de la sous-séquence dans la séquence actuellement construite, comme si nous avions un yiel individuel poour chaque élément.
 
-Our complete `authentication_bloc.dart` should now look like this:
+Notre `authentication_bloc.dart` devrait ressembler à ceci maintenant :
 
 ```dart
 import 'dart:async';
@@ -423,7 +419,7 @@ class AuthenticationBloc
 }
 ```
 
-Now that we have our `AuthenticationBloc` fully implemented, let’s get to work on the presentational layer.
+Maintenant que nous avons notre `AuthenticationBloc` entièrement implenté, nous pouvons maintenant travailler sur la couche de présentation.
 
 ## App
 
