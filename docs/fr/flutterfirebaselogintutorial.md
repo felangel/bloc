@@ -136,7 +136,7 @@ Future<String> getUser() async {
 }
 ```
 
-?> **Note:** `getUser` is only returning the current user's email address for the sake of simplicity but we can define our own User model and populate it with a lot more information about the user in more complex applications.
+?> **Note:** `getUser` retourne uniquement l'adresse mail de l'utilisateur connecté pour faire simple mais nous pourrions définir notre propre modèle User et lui ajouter beaucoup plus d'informations sur l'utilisateur pour en des applications plus complexes.
 
 Our finished `user_repository.dart` should look like this:
 
