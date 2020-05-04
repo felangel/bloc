@@ -622,7 +622,7 @@ Maintenant peu importe quand notre `AuthenticationBloc` a un `state` de `Uniniti
 
 ## Home Screen (Page d'accueil)
 
-Next, we will need to create our `HomeScreen` so that we can navigate users there once they have successfully logged in. In this case, our `HomeScreen` will allow the user to logout and also will display their current name (email).
+Ensuite, nous allons avoir besoin de créer notre `HomeScreen` pour que l'on puisse diriger l'utilisateur une fois qu'ils ont réussi à se connecter. Dans ce cas, notre `HomeScreen` va permettre à l'utilisateur de se déconnecter mais également de lui montre son email actuel.
 
 Créons `home_screen.dart` et commençons.
 
