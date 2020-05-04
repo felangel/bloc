@@ -423,7 +423,7 @@ Maintenant que nous avons notre `AuthenticationBloc` entièrement implenté, nou
 
 ## App
 
-We'll start by removing everything from out `main.dart` and implementing our main function.
+Nous allons commencer par supprimer tout le contenu de `main.dart` et implémenter notre fonction main.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -444,16 +444,16 @@ void main() {
   );
 }
 ```
+Nous envelopons notre widget `App` entière dans un `BlocProvider` dans le but de mettre l'`AuthenticationBloc` disponible partout dans l'arbre du widget.
 
-We are wrapping our entire `App` widget in a `BlocProvider` in order to make the `AuthenticationBloc` available to the entire widget tree.
 
-?> `WidgetsFlutterBinding.ensureInitialized()` is required in Flutter v1.9.4+ before using any plugins if the code is executed before runApp.
+?> `WidgetsFlutterBinding.ensureInitialized()` est requis dans Flutter v1.9.4+ avant d'utiliser n'importe quel plugin si le code est exécuée avant runApp.
 
-?> `BlocProvider` also handles closing the `AuthenticationBloc` automatically so we don't need to do that.
+?> `BlocProvider` gère aussi la fermeture `AuthenticationBloc` automatiquement donc nous n'en avons pas besoin de nous en occuper.
 
-Next we need to implement our `App` widget.
+Ensuite, nous allons implémenter notre widget `App`.
 
-> `App` will be a `StatelessWidget` and be responsible for reacting to the `AuthenticationBloc` state and rendering the appropriate widget.
+> `App` sera un `StatelessWidget` et réagira à `AuthenticationBloc` state et affichera le widget approprié.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -495,15 +495,16 @@ class App extends StatelessWidget {
 }
 ```
 
-We are using `BlocBuilder` in order to render UI based on the `AuthenticationBloc` state.
+Nous utilisons `BlocBuilder` dans le but d'afficher l'UI en fonction du  `AuthenticationBloc` state.
+`SplashScreen`,
 
-So far we don't have any widgets to render but we'll come back to this once we make our `SplashScreen`, `LoginScreen`, and `HomeScreen`.
+À  l'heure actuelle nous n'avons pas de widget à afficher mais nous y reviendrons plus tard quand nous allons créer `SplashScreen`, `LoginScreen`, et `HomeScreen`.
 
 ## Bloc Delegate
 
-Before we get too far along, it's always handy to implement our own `BlocDelegate` which allows us to override `onTransition` and `onError` and will help us see all bloc state changes (transitions) and errors in one place!
+Avant de rentrer dans le vif du sujet, c'est toujours une bonne pratique d'implémenter notre propre `BlocDelegate` ce qui nous permet d'override `onTransition` et `onError` ce qui va nous aider à voir tous les changements d'état (state) des blocs (les transifitions) et les erreurs à une seule et même place!
 
-Create `simple_bloc_delegate.dart` and let's quickly implement our own delegate.
+Créez `simple_bloc_delegate.dart` et implémentons rapidement notre delegate.
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -529,7 +530,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-Now we can hook up our `BlocDelegate` in our `main.dart`.
+Maintenant nous pouvons attraper (hook up) notre `BlocDelegate` dans notre `main.dart`.
 
 ```dart
 import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
@@ -548,11 +549,11 @@ void main() {
 }
 ```
 
-## Splash Screen
+## Splash Screen (Ecran d'atterrissage)
 
-Next, we’ll need to make a `SplashScreen` widget which will be rendered while our `AuthenticationBloc` determines whether or not a user is logged in.
+Ensuite, nous allons créer un `SplashScreen` widget qui s'affichera pendant qu'`AuthenticationBloc` détermine si un utilisateur est connecté ou non.
 
-Let's create `splash_screen.dart` and implement it!
+Créeons `splash_screen.dart` et implémentons le!
 
 ```dart
 import 'package:flutter/material.dart';
@@ -567,9 +568,10 @@ class SplashScreen extends StatelessWidget {
 }
 ```
 
-As you can tell, this widget is super minimal and you would probably want to add some sort of image or animation in order to make it look nicer. For the sake of simplicity, we're just going to leave it as is.
+Comme vous pouvez le voir, ce widget est super minimalist et nous pourrions y ajouter des images ou des animations dans le but de le rendre plus esthétique à regarder. 
+As you can tell, this widget is super minimal and you would probably want to add some sort of image or animation in order to make it look nicer. Pour rester dans la simplicité nous allons juste le laisser tel quel.
 
-Now, let's hook it up to our `main.dart`.
+Maintenant, rattachons le à `main.dart`.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -616,14 +618,13 @@ class App extends StatelessWidget {
   }
 }
 ```
+Maintenant peu importe quand notre `AuthenticationBloc` a un `state` de `Uninitialized` nous allons afficher le widget `SplashScreen`!
 
-Now whenever our `AuthenticationBloc` has a `state` of `Uninitialized` we will render our `SplashScreen` widget!
-
-## Home Screen
+## Home Screen (Page d'accueil)
 
 Next, we will need to create our `HomeScreen` so that we can navigate users there once they have successfully logged in. In this case, our `HomeScreen` will allow the user to logout and also will display their current name (email).
 
-Let's create `home_screen.dart` and get started.
+Créons `home_screen.dart` et commençons.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -662,9 +663,9 @@ class HomeScreen extends StatelessWidget {
 }
 ```
 
-`HomeScreen` is a `StatelessWidget` that requires a `name` to be injected so that it can render the welcome message. It also uses `BlocProvider` in order to access the `AuthenticationBloc` via `BuildContext` so that when a user pressed the logout button, we can add the `LoggedOut` event.
+`HomeScreen` est `StatelessWidget` qui requiert `name` d'être injecté pour qu'il puisse afficher le message de bienvenue. Il utilise aussi `BlocProvider` pour accèder à `AuthenticationBloc` via `BuildContext` pour que lorsqu'un utilisateur presse le boutton se déconnecter, nous pouvons ajouter l'évenement `LoggedOut`.
 
-Now let's update our `App` to render the `HomeScreen` if the `AuthenticationState` is `Authentication`.
+Maintenant nous allons actualiser `App` pour afficher `HomeScreen` si l'`AuthenticationState` est `Authentication`.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -715,11 +716,11 @@ class App extends StatelessWidget {
 }
 ```
 
-## Login States
+## Login States (Les états de connexion)
 
-It's finally time to start working on the login flow. We'll start by identifying the different `LoginStates` that we'll have.
+Nous pouvons enfin commencer à travailler sur l'environnement de connexion. Nous allons commencer par identifier différents `LoginStates` que nous aurons.
 
-Create a `login` directory and create the standard bloc directory and files.
+Créez un dossier `login` et créer le schéma classique du dossier bloc et ses fichiers.
 
 ```sh
 ├── lib
@@ -731,7 +732,7 @@ Create a `login` directory and create the standard bloc directory and files.
 │   │   │   └── login_state.dart
 ```
 
-Our `login/bloc/login_state.dart` should look like:
+Notre `login/bloc/login_state.dart` devrait ressembler à ceci:
 
 ```dart
 import 'package:meta/meta.dart';
@@ -837,23 +838,23 @@ class LoginState {
 }
 ```
 
-The states we're representing are:
+Les états (states) que nous allons utiliser sont:
 
-`empty` is the initial state of the LoginForm.
+`empty` est le state initial de LoginForm.
 
-`loading` is the state of the LoginForm when we are validating credentials
+`loading` est le state du LoginForm quand nous procéssons à la validation des identifiants.
 
-`failure` is the state of the LoginForm when a login attempt has failed.
+`failure` est le state LoginForm si la connexion a échoué.
 
-`success` is the state of the LoginForm when a login attempt has succeeded.
+`success` est le state du LoginForm si la connexion est un succès.
 
-We have also defined a `copyWith` and an `update` function for convenience (which we'll put to use shortly).
+Nous avons aussi définis les fonctions `copyWith` et une fonction `update` par commodité (nous allons nous en servir bientôt).
 
-Now that we have the `LoginState` defined let’s take a look at the `LoginEvent` class.
+Maintenant que le `LoginState` est défini, jetons un oeil sur la class `LoginEvent`.
 
-## Login Events
+## Login Events (Evénements de connexion)
 
-Open up `login/bloc/login_event.dart` and let's define and implement our events.
+Ouvrez `login/bloc/login_event.dart` et définissons et implémentons nos événements.
 
 ```dart
 import 'package:meta/meta.dart';
@@ -929,17 +930,17 @@ class LoginWithCredentialsPressed extends LoginEvent {
 }
 ```
 
-The events we defined are:
+Les événements que nous avons définis sont:
 
-`EmailChanged` - notifies the bloc that the user has changed the email
+`EmailChanged` - notifie que le bloc que l'email a changé
 
-`PasswordChanged` - notifies the bloc that the user has changed the password
+`PasswordChanged` - notifie le bloc que l'utilisateur a changé le mot de passe
 
-`Submitted` - notifies the bloc that the user has submitted the form
+`Submitted` - notifie le bloc que l'utilisateur a soumis le formulaire
 
-`LoginWithGooglePressed` - notifies the bloc that the user has pressed the Google Sign In button
+`LoginWithGooglePressed` - notifie le bloc que l'utilisateur a pressé le bouton Google Sign In
 
-`LoginWithCredentialsPressed` - notifies the bloc that the user has pressed the regular sign in button.
+`LoginWithCredentialsPressed` - notifie le bloc que l'utilisateur a pressé le bouton classique de connexion
 
 ## Login Barrel File
 
