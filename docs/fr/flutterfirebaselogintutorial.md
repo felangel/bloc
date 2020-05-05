@@ -942,9 +942,9 @@ Les événements que nous avons définis sont:
 
 `LoginWithCredentialsPressed` - notifie le bloc que l'utilisateur a pressé le bouton classique de connexion
 
-## Login Barrel File
+## Login Barrel File (Fichier Baril pour la connexion)
 
-Before we implement the `LoginBloc`, let's make sure our barrel file is done so that we can easily import all Login Bloc related files with a single import.
+Avant d'implémenter `LoginBloc`, assurons nous que notre fichier baril est fait pour que nous puissions importer facilement tous les fichiers reliés à notre Bloc de connexion en un seul import.
 
 ```dart
 export 'login_bloc.dart';
@@ -952,9 +952,9 @@ export 'login_event.dart';
 export 'login_state.dart';
 ```
 
-## Login Bloc
+## Login Bloc (Bloc de connexion)
 
-It's time to implement our `LoginBloc`. As always, we need to extend `Bloc` and define our `initialState` as well as `mapEventToState`.
+Il est temps d'implémenter notre `LoginBloc`. Comme toujours, nous avons besoin d'étendre `Bloc` et définir notre `initialState` et notre `mapEventToState`.
 
 ```dart
 import 'dart:async';
@@ -1045,13 +1045,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 }
 ```
 
-**Note:** We're overriding `transformEvents` in order to debounce the `EmailChanged` and `PasswordChanged` events so that we give the user some time to stop typing before validating the input.
+**Note:** Nous allons override `transformEvents` dans le but debounce les événements `EmailChanged` et `PasswordChanged`  so pour que les utilisateurs aient le temps d'arrêter d'écrire avant de valider l'input.
 
-We are using a `Validators` class to validate the email and password which we're going to implement next.
+Nous utilisons une class `Validators` pour valider l'email et le mot de passe, nous allons l'implémenter maintenant.
 
 ## Validators
 
-Let's create `validators.dart` and implement our email and password validation checks.
+Créeons  `validators.dart` et implémentons notre validation pour notre email et notre mot de passe.
 
 ```dart
 class Validators {
@@ -1072,13 +1072,13 @@ class Validators {
 }
 ```
 
-There's nothing special going on here. It's just some plain old Dart code which uses regular expressions to validate the email and password. At this point, we should have a fully functional `LoginBloc` which we can hook up to the UI.
+On ne fait rien de spécial ici. Nous utilisons du code Dart pour utiliser des expressions régulières pour valider l'email et le mot de passe. Maintenant, vous devriez avoir une une class `LoginBloc` entièrement fonctionnel que l'on peut rattacher à notre UI.
 
-## Login Screen
+## Login Screen (Écran de connexion)
 
-Now that we're finished the `LoginBloc` it's time to create our `LoginScreen` widget which will be responsible for creating and closing the `LoginBloc` as well as providing the Scaffold for our `LoginForm` widget.
+Maintenant que nous avons fini le `LoginBloc`, il est temps de créer notre widget `LoginScreen` qui sera responsable de créer et de fermer le `LoginBloc` et aussi à fournir le Scaffold pour notre widget `LoginForm`.
 
-Create `login/login_screen.dart` and let's implement it.
+Créez `login/login_screen.dart` et implémentons le.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1108,13 +1108,13 @@ class LoginScreen extends StatelessWidget {
 
 ```
 
-Again, we are extending `StatelessWidget` and using a `BlocProvider` to initialize and close the `LoginBloc` as well as to make the `LoginBloc` instance available to all widgets within the sub-tree.
+Encore une fois, extendons `StatelessWidget`et utilisons un `BlocProvider` pour initialiser et fermer le `LoginBloc` aussi bien que pour permettre à l'instance `LoginBloc` d'être disponible partout à tous les widgets à l'intérieur du sous-arbre (sub-tree).
 
-At this point, we need to implement the `LoginForm` widget which will be responsible for displaying the form and submission buttons in order for a user to authenticate his/her self.
+Maintenant, nous allons devoir implémenter le widget `LoginForm` qui sera responsable de l'affichage du formulaire et de la soumission des bouttons dans le but que l'utilisateur puisse s'authentifier lui même.
 
-## Login Form
+## Login Form (Formulaire de connexion)
 
-Create `login/login_form.dart` and let's build out our form.
+Créez `login/login_form.dart` et construisons notre formulaire.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1284,23 +1284,24 @@ class _LoginFormState extends State<LoginForm> {
 }
 ```
 
-Our `LoginForm` widget is a `StatefulWidget` because it needs to maintain it's own `TextEditingControllers` for the email and password input.
+Notre widget `LoginForm` est un `StatefulWidget` car il a besoin de maintenir ses propres `TextEditingControllers` pour les champs e-mail et mot de passe.
 
-We use a `BlocListener` widget in order to execute one-time actions in response to state changes. In this case, we are showing different `SnackBar` widgets in response to a pending/failure state. In addition, if the submission is successful, we use the `listener` method to notify the `AuthenticationBloc` that the user has successfully logged in.
+Nous utilisions un widget `BlocListener` pour exécuter en une fois les actions en réponse aux changements de states (états). Dans ce cas, nous allons afficher différentes `SnackBar`  en réponse aux states (états) en attente ou qui ont échoués. En plus de cela, si la soumission est une réussite, nous allons utiliser la méthode `listener` pour notifier l'`AuthenticationBloc` que l'utilisateur a réussi à se connecter.
 
-?> **Tip:** Check out the [SnackBar Recipe](recipesfluttershowsnackbar.md) for more details.
+?> **Tip:** Allez voir la [SnackBar Recette](recipesfluttershowsnackbar.md) pour plus d'informations.
 
-We use a `BlocBuilder` widget in order to rebuild the UI in response to different `LoginStates`.
+On utilise le widget `BlocBuilder` dans le but de reconstruire l'UI en réponse aux différents `LoginStates`.
 
+Peu importe si l'email ou le mot de passe change, nous ajoutons un événement au `LoginBloc`dans le but qu'il valide l'état actuel du formulaire (current form state) et qu'il retourne le nouvel état du formulaire (new form state)
 Whenever the email or password changes, we add an event to the `LoginBloc` in order for it to validate the current form state and return the new form state.
 
-?> **Note:** We're using `Image.asset` to load the flutter logo from our assets directory.
+?> **Note:** Nous utilisons `Image.asset` pour charger le logo de Flutter via notre dossier assets.
 
-At this point, you'll notice we haven't implemented `LoginButton`, `GoogleLoginButton`, or `CreateAccountButton` so we'll do those next.
+Maintenant, vous devriez remarquez que nous n'avons pas implémenter `LoginButton`, `GoogleLoginButton`, or `CreateAccountButton`, c'est ce que nous allons faire dès à présent.
 
-## Login Button
+## Login Button (Bouton de connexion)
 
-Create `login/login_button.dart` and let's quickly implement our `LoginButton` widget.
+Créez `login/login_button.dart` et implémentons rapidement notre widget `LoginButton`.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1325,9 +1326,9 @@ class LoginButton extends StatelessWidget {
 }
 ```
 
-There's nothing special going on here; just a `StatelessWidget` which has some styling and an `onPressed` callback so that we can have a custom `VoidCallback` whenever the button is pressed.
+Encore une fois, rien de spécial dans ce code; nous avons juste un `StatelessWidget` qui a un peu de style et un `onPressed` callback (fonction de rappel) pour que l'on puisse exécuté une fonction `VoidCallback` customisé à chaque fois que le bouton est pressé. 
 
-## Google Login Button
+## Google Login Button (Boutton de connexion Google)
 
 Create `login/google_login_button.dart` and let's get to work on our Google Sign In.
 
