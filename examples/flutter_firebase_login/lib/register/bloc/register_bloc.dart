@@ -14,7 +14,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         _userRepository = userRepository;
 
   @override
-  RegisterState get initialState => RegisterState.empty();
+  RegisterState get initialState => RegisterState.initial();
 
   @override
   Stream<Transition<RegisterEvent, RegisterState>> transformEvents(
@@ -22,10 +22,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     TransitionFunction<RegisterEvent, RegisterState> transitionFn,
   ) {
     final nonDebounceStream = events.where((event) {
-      return (event is! EmailChanged && event is! PasswordChanged);
+      return (event is! RegisterEmailChanged &&
+          event is! RegisterPasswordChanged);
     });
     final debounceStream = events.where((event) {
-      return (event is EmailChanged || event is PasswordChanged);
+      return (event is RegisterEmailChanged ||
+          event is RegisterPasswordChanged);
     }).debounceTime(Duration(milliseconds: 300));
     return super.transformEvents(
       nonDebounceStream.mergeWith([debounceStream]),
@@ -37,11 +39,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   Stream<RegisterState> mapEventToState(
     RegisterEvent event,
   ) async* {
-    if (event is EmailChanged) {
+    if (event is RegisterEmailChanged) {
       yield* _mapEmailChangedToState(event.email);
-    } else if (event is PasswordChanged) {
+    } else if (event is RegisterPasswordChanged) {
       yield* _mapPasswordChangedToState(event.password);
-    } else if (event is Submitted) {
+    } else if (event is RegisterSubmitted) {
       yield* _mapFormSubmittedToState(event.email, event.password);
     }
   }

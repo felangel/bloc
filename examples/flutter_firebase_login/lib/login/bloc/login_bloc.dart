@@ -15,7 +15,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         _userRepository = userRepository;
 
   @override
-  LoginState get initialState => LoginState.empty();
+  LoginState get initialState => LoginState.initial();
 
   @override
   Stream<Transition<LoginEvent, LoginState>> transformEvents(
@@ -23,10 +23,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     TransitionFunction<LoginEvent, LoginState> transitionFn,
   ) {
     final nonDebounceStream = events.where((event) {
-      return (event is! EmailChanged && event is! PasswordChanged);
+      return (event is! LoginEmailChanged && event is! LoginPasswordChanged);
     });
     final debounceStream = events.where((event) {
-      return (event is EmailChanged || event is PasswordChanged);
+      return (event is LoginEmailChanged || event is LoginPasswordChanged);
     }).debounceTime(Duration(milliseconds: 300));
     return super.transformEvents(
       nonDebounceStream.mergeWith([debounceStream]),
@@ -36,9 +36,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if (event is EmailChanged) {
+    if (event is LoginEmailChanged) {
       yield* _mapEmailChangedToState(event.email);
-    } else if (event is PasswordChanged) {
+    } else if (event is LoginPasswordChanged) {
       yield* _mapPasswordChangedToState(event.password);
     } else if (event is LoginWithGooglePressed) {
       yield* _mapLoginWithGooglePressedToState();
