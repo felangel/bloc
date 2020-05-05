@@ -27,7 +27,7 @@ class MyHomePage extends StatelessWidget {
       ),
       body: BlocBuilder<TickerBloc, TickerState>(
         builder: (context, state) {
-          if (state is Update) {
+          if (state is TickerTickSuccess) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +51,7 @@ class MyHomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          BlocProvider.of<TickerBloc>(context).add(StartTicker());
+          BlocProvider.of<TickerBloc>(context).add(TickerStarted());
         },
         tooltip: 'Start',
         child: Icon(Icons.timer),
