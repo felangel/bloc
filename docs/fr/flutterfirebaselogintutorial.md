@@ -1330,7 +1330,7 @@ Encore une fois, rien de spécial dans ce code; nous avons juste un `StatelessWi
 
 ## Google Login Button (Boutton de connexion Google)
 
-Create `login/google_login_button.dart` and let's get to work on our Google Sign In.
+Créez `login/google_login_button.dart` et travaillons sur notre Google Sign In.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1358,13 +1358,14 @@ class GoogleLoginButton extends StatelessWidget {
 }
 ```
 
-Again, there's not too much going on here. We have another `StatelessWidget`; however, this time we are not exposing an `onPressed` callback. Instead, we're handling the onPressed internally and adding the `LoginWithGooglePressed` event to our `LoginBloc` which will handle the Google Sign In process.
+Encore une fois, il n'y a rien de spécial dans ce snippet. Nous avons un autre `StatelessWidget`; par contre cette fois nous n'exposons pas une fonction de rappel (callback) sur `onPressed`.
+A la place, nous allons le gérer à l'intérieur et nous ajoutons l'event (événement) `LoginWithGooglePressed` à notre `LoginBloc` qui lui va gérer le processus du Google Sign In.
 
-?> **Note:** We're using [font_awesome_flutter](https://pub.dev/packages/font_awesome_flutter) for the cool google icon.
+?> **Note:** Nous utilisons [font_awesome_flutter](https://pub.dev/packages/font_awesome_flutter) pour l'icône Google.
 
-## Create Account Button
+## Créer le bouton 'Créer un compte'
 
-The last of the three buttons is the `CreateAccountButton`. Let's create `login/create_account_button.dart` and get to work.
+Le dernier des trois boutons est `CreateAccountButton`. Commençons par créer `login/create_account_button.dart` et  mettons nous au travail !
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1397,13 +1398,13 @@ class CreateAccountButton extends StatelessWidget {
 }
 ```
 
-In this case, again we have a `StatelessWidget` and again we're handling the `onPressed` callback internally. This time, however, we're pushing a new route in response to the button press to the `RegisterScreen`. Let's build that next!
+Dans ce cas, encore une fois nous un `StatelessWidget`et encore une fois nous gérons la fonction de rappel (callback) à l'intérieur du widget. Cette fois, toutefois, nous allons lui ajouter une nouvelle route en réponse au click sur le bouton pour rediriger vers `RegisterScreen`. Allons-y!
 
-## Register States
+## Register States (Etats d'enregistrement)
 
-Just like with login, we're going to need to define our `RegisterStates` before proceeding.
+Comme pour le login (connexion), nous allons avoir besoin de définir notre `RegisterStates` avant de procéder.
 
-Create a `register` directory and create the standard bloc directory and files.
+Créez un dossier `register` et créez un standard dossier bloc avec ses fichiers comme ci-dessous:
 
 ```sh
 ├── lib
@@ -1415,7 +1416,7 @@ Create a `register` directory and create the standard bloc directory and files.
 │   │   │   └── register_state.dart
 ```
 
-Our `register/bloc/register_state.dart` should look like:
+Notre `register/bloc/register_state.dart` devrait ressembler à ceci:
 
 ```dart
 import 'package:meta/meta.dart';
@@ -1521,9 +1522,8 @@ class RegisterState {
 }
 ```
 
-?> **Note:** The `RegisterState` is very similar to the `LoginState` and we could have created a single state and shared it between the two; however, it's very likely that the Login and Register features will diverge and in most cases it's best to keep them decoupled.
-
-Next, we'll move on to the `RegisterEvent` class.
+?> **Note:** Le `RegisterState` est très similaire au `LoginState` et nous pourrions créer un seul événement (state) et le partager entre les deux fichiers; cependant, il est très probable que Le Login (connexion) et le Register(inscription) auront des divergences et donc la plus part du temps il vaut mieux les séparer.
+Ensuite passons à la class `RegisterEvent`.
 
 ## Register Events
 
