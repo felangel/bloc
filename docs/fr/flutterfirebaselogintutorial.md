@@ -1525,9 +1525,9 @@ class RegisterState {
 ?> **Note:** Le `RegisterState` est très similaire au `LoginState` et nous pourrions créer un seul événement (state) et le partager entre les deux fichiers; cependant, il est très probable que Le Login (connexion) et le Register(inscription) auront des divergences et donc la plus part du temps il vaut mieux les séparer.
 Ensuite passons à la class `RegisterEvent`.
 
-## Register Events
+## Register Events (Evénements d'inscription)
 
-Open up `register/bloc/register_event.dart` and let's implement our events.
+Ouvrez `register/bloc/register_event.dart` et implémentons nos événements.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -1583,13 +1583,12 @@ class Submitted extends RegisterEvent {
 }
 ```
 
-?> **Note:** Again, the `RegisterEvent` implementation looks very similar to the `LoginEvent` implementation but since the two are separate features we're keeping them independent in this example.
+?> **Note:** Encore une fois, l'implémentation du `RegisterEvent` ressemble fortement à celui du `LoginEvent` mais puisqu'il s'agit de deux features indépendantes nous les gardons séparées l'une de l'autre.
 
-## Register Barrel File
+## Register Barrel File (Fichier baril pour l'inscription)
 
-Again, just like with login, we need to create a barrel file to export our register bloc related files.
-
-Open up `bloc.dart` in our `register/bloc` directory and export the three files.
+Encore une fois, tout comme pour le login, nous avons besoin de créer un fichier baril pour exporter tous les fichiers relatif à notre bloc d'inscription (register bloc).
+Ouvrez `bloc.dart` dans le dossier `register/bloc` et exportez les trois fichiers.
 
 ```dart
 export 'register_bloc.dart';
@@ -1597,9 +1596,9 @@ export 'register_event.dart';
 export 'register_state.dart';
 ```
 
-## Register Bloc
+## Register Bloc (Bloc d'inscription)
 
-Now, let's open `register/bloc/register_bloc.dart` and implement the `RegisterBloc`.
+Maintenant, ouvrons `register/bloc/register_bloc.dart` et implémentons `RegisterBloc`.
 
 ```dart
 import 'dart:async';
@@ -1680,15 +1679,15 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 }
 ```
 
-Just as before, we need to extend `Bloc`, implement `initialState`, and `mapEventToState`. Optionally, we are overriding `transformEvents` again so that we can give users some time to finish typing before we validate the form.
+Comme avant, nous avons besoin d'étendre `Bloc`, d'implémenter `initialState` et `mapEventToState`. Accessoirement, nous overridons `transformEvents` encore une fois pour que l'on puisse donner aux utilisateurs le temps de rentrer des informations avant de valider le formulaire.
 
-Now that the `RegisterBloc` is fully functional, we just need to build out the presentation layer.
+Maintenant que notre `RegisterBloc` est entièrement fonctionnel, nous avons juste à construire l'interface.
 
-## Register Screen
+## Register Screen (L'écran d'inscription)
 
-Similar to the `LoginScreen`, our `RegisterScreen` will be a `StatelessWidget` responsible for initializing and closing the `RegisterBloc`. It will also provide the Scaffold for the `RegisterForm`.
+Comme pour `LoginScreen`, notre `RegisterScreen` sera un `StatelessWidget` responsable pour initialiser et fermer le `RegisterBloc`. Il fournira également le Scaffold pour `RegisterForm`.
 
-Create `register/register_screen.dart` and let's implement it.
+Créons `register/register_screen.dart` et implémentons le.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1720,11 +1719,10 @@ class RegisterScreen extends StatelessWidget {
 
 ```
 
-## Register Form
+## Register Form (Formulaire d'inscription)
 
-Next, let's create the `RegisterForm` which will provide the form fields for a user to create his/her account.
-
-Create `register/register_form.dart` and let's build it.
+Ensuite, créons le `RegisterForm` qui fournira les champs du formulaire pour qu'un utilisateur puisse créer son compte.
+Créons `register/register_form.dart` et construisons le.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1873,16 +1871,15 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 }
 ```
+Encore une fois, nous avons besoin de gérer les `TextEditingControllers` pour les champs textes de notre `RegisterForm`, il a donc besoin d'être un `StatefulWidget`.En plus de cela, nous utilisons un `BlocListener` encore une fois dans le but d'exécuter actions en un temps (one-time actions) en réponse aux changements d'états (states) comme par exemple monter une `SnackBar` quand l'inscription est en cours ou si elle échoue. Nous ajoutons également l'évenement (event) `LoggedIn` à l'`AuthenticationBloc` si l'inscription a été un succès pour qu'on puisse connecter directement le l'utilisateur.
 
-Again, we need to manage `TextEditingControllers` for the text input so our `RegisterForm` needs to be a `StatefulWidget`. In addition, we are using `BlocListener` again in order to execute one-time actions in response to state changes such as showing `SnackBar` when the registration is pending or fails. We are also adding the `LoggedIn` event to the `AuthenticationBloc` if the registration was a success so that we can immediately log the user in.
+?> **Note:** Nous utilisons `BlocBuilder` dans le but de mettre que notre UI puisse répondre aux changements dans le `RegisterBloc` state.
 
-?> **Note:** We're using `BlocBuilder` in order to make our UI respond to changes in the `RegisterBloc` state.
+Ensuite, construisons notre widget `RegisterButton`.
 
-Let's build our `RegisterButton` widget next.
+## Register Button (Bouton d'inscription)
 
-## Register Button
-
-Create `register/register_button.dart` and let's get started.
+Créons `register/register_button.dart` et commençons.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1906,10 +1903,9 @@ class RegisterButton extends StatelessWidget {
   }
 }
 ```
+C'est très similaire à l'installation faite pour `LoginButton`, le `RegisterButton` a du code pour changer son style et il expose une fonction  `VoidCallback` pour que l'on puisse gérer le moment où l'utilisateur va appuyer sur le bouton de le Widget parent.
 
-Very similar to how we setup the `LoginButton`, the `RegisterButton` has some custom styling and exposes a `VoidCallback` so that we can handle whenever a user presses the button in the parent widget.
-
-All that's left to do is update our `App` widget in `main.dart` to show the `LoginScreen` if the `AuthenticationState` is `Unauthenticated`.
+Tout ce qui nous reste à faire est d'actualiser notre widget `App` dans `main.dart` pour afficher le `LoginScreen` si le `AuthenticationState` est `Unauthenticated`.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1964,6 +1960,6 @@ class App extends StatelessWidget {
 }
 ```
 
-At this point we have a pretty solid login implementation using Firebase and we have decoupled our presentation layer from the business logic layer by using the Bloc Library.
+Maintenant nous avons un formulaire de connexion assez robuste utilisant Firebase and nous avons notre couche de présentation qui est séparé de notre couche de business logic tout cela en utilisant la librairie Bloc.
 
-The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_firebase_login).
+Le code source entier de cette exemple est trouvable [ici](https://github.com/felangel/Bloc/tree/master/examples/flutter_firebase_login).
