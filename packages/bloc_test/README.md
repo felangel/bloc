@@ -25,7 +25,7 @@ class MockCounterBloc extends MockBloc<CounterEvent, int> implements CounterBloc
 
 ## Stub the Bloc Stream
 
-**whenListen** creates a stub response for the `listen` method on a `Bloc`. Use `whenListen` if you want to return a canned `Stream` of states for a bloc instance.
+**whenListen** creates a stub response for the `listen` method on a `Bloc`. Use `whenListen` if you want to return a canned `Stream` of states for a bloc instance. `whenListen` also handles stubbing the `state` of the bloc to stay in sync with the emitted state.
 
 ```dart
 // Create a mock instance
@@ -35,7 +35,10 @@ final counterBloc = MockCounterBloc();
 whenListen(counterBloc, Stream.fromIterable([0, 1, 2, 3]));
 
 // Assert that the bloc emits the stubbed `Stream`.
-expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3])))
+await expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3])))
+
+// Assert that the bloc's current state is in sync with the `Stream`.
+expect(counterBloc.state, equals(3));
 ```
 
 ## Unit Test a Real Bloc with blocTest
