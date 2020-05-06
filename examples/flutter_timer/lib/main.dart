@@ -96,39 +96,39 @@ class Actions extends StatelessWidget {
         FloatingActionButton(
           child: Icon(Icons.play_arrow),
           onPressed: () =>
-              timerBloc.add(TimerRunStarted(duration: currentState.duration)),
+              timerBloc.add(TimerStarted(duration: currentState.duration)),
         ),
       ];
     }
-    if (currentState is TimerRunningInProgress) {
+    if (currentState is TimerRunInProgress) {
       return [
         FloatingActionButton(
           child: Icon(Icons.pause),
-          onPressed: () => timerBloc.add(TimerRunPaused()),
+          onPressed: () => timerBloc.add(TimerPaused()),
         ),
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc.add(TimerRunReset()),
+          onPressed: () => timerBloc.add(TimerReset()),
         ),
       ];
     }
-    if (currentState is TimerRunningPaused) {
+    if (currentState is TimerRunPause) {
       return [
         FloatingActionButton(
           child: Icon(Icons.play_arrow),
-          onPressed: () => timerBloc.add(TimerRunResumed()),
+          onPressed: () => timerBloc.add(TimerResumed()),
         ),
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc.add(TimerRunReset()),
+          onPressed: () => timerBloc.add(TimerReset()),
         ),
       ];
     }
-    if (currentState is TimerRunningFinished) {
+    if (currentState is TimerRunComplete) {
       return [
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc.add(TimerRunReset()),
+          onPressed: () => timerBloc.add(TimerReset()),
         ),
       ];
     }
