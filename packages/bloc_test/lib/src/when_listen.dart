@@ -33,16 +33,20 @@ void whenListen<Event, State>(
   Bloc<Event, State> bloc,
   Stream<State> stream,
 ) {
-  StreamSubscription<State> subscription;
   final broadcastStream = stream.asBroadcastStream();
-  subscription = broadcastStream.listen(
-    (state) => when(bloc.state).thenReturn(state),
-    onDone: () => subscription?.cancel(),
-  );
+  StreamSubscription<State> subscription;
   when(bloc.skip(any)).thenAnswer(
-    (invocation) => broadcastStream.skip(
-      invocation.positionalArguments.first as int,
-    ),
+    (invocation) {
+      final stream = broadcastStream.skip(
+        invocation.positionalArguments.first as int,
+      );
+      subscription?.cancel();
+      subscription = stream.listen(
+        (state) => when(bloc.state).thenReturn(state),
+        onDone: subscription?.cancel,
+      );
+      return stream;
+    },
   );
 
   when(bloc.listen(
@@ -52,7 +56,10 @@ void whenListen<Event, State>(
     cancelOnError: captureAnyNamed('cancelOnError'),
   )).thenAnswer((invocation) {
     return broadcastStream.listen(
-      invocation.positionalArguments.first as Function(State),
+      (state) {
+        when(bloc.state).thenReturn(state);
+        (invocation.positionalArguments.first as Function(State)).call(state);
+      },
       onError: invocation.namedArguments[Symbol('onError')] as Function,
       onDone: invocation.namedArguments[Symbol('onDone')] as void Function(),
       cancelOnError: invocation.namedArguments[Symbol('cancelOnError')] as bool,
