@@ -43,7 +43,7 @@ void whenListen<Event, State>(
       subscription?.cancel();
       subscription = stream.listen(
         (state) => when(bloc.state).thenReturn(state),
-        onDone: subscription?.cancel,
+        onDone: () => subscription?.cancel(),
       );
       return stream;
     },
