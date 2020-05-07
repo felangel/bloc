@@ -3,7 +3,7 @@
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
 > Dans ce tutoriel, nous allons construire une application Todos (Liste de choses à faire) en utilisant la librairie Bloc !
-?> **Note:** Pour des raisons de sens, je ne vais toujours tout traduire donc voici une liste des mots anglais et leur équivalent français que vous allez retrouver tout au long du tutorial : state -> état / Todos -> Choses à faires / Overriding -> Réécrire du code par dessus un code déjà existant et similaire
+?> **Note:** Pour des raisons de sens, je ne vais toujours tout traduire donc voici une liste des mots anglais et leur équivalent français que vous allez retrouver tout au long du tutorial : state -> état / Todos -> Choses à faires / Overriding -> Réécrire du code par dessus un code déjà existant et similaire / Input -> valeur d'entrée / Output -> valeur de sortie
 
 ![demo](../assets/gifs/flutter_todos.gif)
 
@@ -1392,7 +1392,7 @@ class ExtraActions extends StatelessWidget {
 
 Comme pouir le `FilterButton`, on utilise un `BlocProvider` pour accèder au `TodosBloc` à partir de  `BuildContext` et `BlocBuilder` to en réponse aux changements de states dans le bloc `TodosBloc`.
 
-En fonction des actions sélectionnées, le widget ajoutera un événement soit au `TodosBloc` ou alors à `ToggleAll` aux todos ayant un state de complété ou pour clear `ClearCompleted` les todos.
+En fonction actions sélectionnées, the widget adds an event to the `TodosBloc` to either `ToggleAll` todos' completion states or `ClearCompleted` todos.
 
 Ensuite nous travaillerons sur le widget `TabSelector`.
 
