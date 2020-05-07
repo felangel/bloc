@@ -2,19 +2,19 @@
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-> In the following tutorial, we're going to build a Todos App in Flutter using the Bloc library.
+> Dans ce tutoriel, nous allons construire une application Todos (Liste de choses à faire) en utilisant la librairie Bloc !
+?> **Note:** Pour des raisons de sens, je ne vais toujours tout traduire donc voici une liste des mots anglais et leur équivalent français que vous allez retrouver tout au long du tutorial : state -> état / Todos -> Choses à faires / Overriding -> Réécrire du code par dessus un code déjà existant et similaire
 
 ![demo](./assets/gifs/flutter_todos.gif)
 
-## Setup
+## Configuration
 
-We'll start off by creating a brand new Flutter project
+Commençons par créer un tout nouveau projet Flutter
 
 ```bash
 flutter create flutter_todos
 ```
-
-We can then replace the contents of `pubspec.yaml` with
+Ensuite, remplaçons le contenu de `pubspec.yaml` avec
 
 ```yaml
 name: flutter_todos
@@ -51,17 +51,17 @@ flutter:
   uses-material-design: true
 ```
 
-and then install all of the dependencies
+et ensuite nous allons installer toutes les dépendances
 
 ```bash
 flutter packages get
 ```
 
-?> **Note:** We're overriding some dependencies because we're going to be reusing them from [Brian Egan's Flutter Architecture Samples](https://github.com/brianegan/flutter_architecture_samples).
+?> **Note:** Nous allons overriding quelques dépendances car nous allons les réutiliser depuis [Brian Egan's Flutter Architecture Samples](https://github.com/brianegan/flutter_architecture_samples).
 
-## App Keys
+## App Keys (Clefs d'application)
 
-Before we jump into the application code, let's create `flutter_todos_keys.dart`. This file will contain keys which we will use to uniquely identify important widgets. We can later write tests that find widgets based on keys.
+Avant de sauter dans le code de l'application, créons `flutter_todos_keys.dart`. Ce fichier contiendra des clefs (keys) qui seront utilisés pour identifier uniquement les widgets importants. Plus tard, nous pourrons écrire des tests qui trouvent les widgets en se basant sur les keys.
 
 ```dart
 import 'package:flutter/widgets.dart';
@@ -79,14 +79,13 @@ class FlutterTodosKeys {
   static final detailsScreenCheckBox = const Key('__detailsScreenCheckBox__');
 }
 ```
+Nous allons référencer ces clefs tout au long du reste du tutoriel.
 
-We will reference these keys throughout the rest of the tutorial.
+?> **Note:** Vous pouvvez vérifier les tests d'intégrations de votre appli [ici](https://github.com/brianegan/flutter_architecture_samples/tree/master/integration_tests). Et également checker les tests unitaires et de widgets [ici](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library/test).
 
-?> **Note:** You can check out the integration tests for the application [here](https://github.com/brianegan/flutter_architecture_samples/tree/master/integration_tests). You can also check out unit and widget tests [here](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library/test).
+## Localisation
 
-## Localization
-
-One last concept that we will touch on before going into the application itself is localization. Create `localization.dart` and we'll create the foundation for multi-language support.
+Le dernier concept que nous allons apporter avant de rentrer dans le vif de l'application est la localisation. Créons `localization.dart` et nous allons créer la fondation pour un support multi-langage.
 
 ```dart
 import 'dart:async';
@@ -118,24 +117,21 @@ class FlutterBlocLocalizationsDelegate
       locale.languageCode.toLowerCase().contains("en");
 }
 ```
+Nous pouvons maintenant importer et fournir notre `FlutterBlocLocalizationsDelegate` à notre `MaterialApp` (plus tard dans ce tutoriel).
+Pour plus d'informations sur la localisation, visitez [la doc officiel Flutter](https://flutter.dev/docs/development/accessibility-and-localization/internationalization).
 
-We can now import and provide our `FlutterBlocLocalizationsDelegate` to our `MaterialApp` (later in this tutorial).
+## Todos Repository (Répertoire Todos)
 
-For more information on localization check out the [official flutter docs](https://flutter.dev/docs/development/accessibility-and-localization/internationalization).
+Dans ce tutoriel, nous n'allons pas aller dans les détails de l'implémentation du `TodosRepository` car il a été implémenté par [Brian Egan](https://github.com/brianegan) et il partagé parmi la [Todo Architecture Samples](https://github.com/brianegan/flutter_architecture_samples). A un plus haut niveau, le `TodosRepository` va exposer une méthode pour `loadTodos` et pour `saveTodos`. C'est à peu prèt tout ce que nous avons de savoir pour le reste du tutorial et nous allons pouvoir se focus sur le Bloc et la Presentation de notre application.
 
-## Todos Repository
+## Le Bloc Todos
 
-In this tutorial we're not going to go into the implementation details of the `TodosRepository` because it was implemented by [Brian Egan](https://github.com/brianegan) and is shared among all of the [Todo Architecture Samples](https://github.com/brianegan/flutter_architecture_samples). At a high level, the `TodosRepository` will expose a method to `loadTodos` and to `saveTodos`. That's pretty much all we need to know so for the rest of the tutorial we'll focus on the Bloc and Presentation layers.
+> Notre `TodosBloc` va être responsable de convertir les `TodosEvents` en `TodosStates` et va gérer la liste des todos.
 
-## Todos Bloc
+### Modèle
 
-> Our `TodosBloc` will be responsible for converting `TodosEvents` into `TodosStates` and will manage the list of todos.
-
-### Model
-
-The first thing we need to do is define our `Todo` model. Each todo will need to have an id, a task, an optional note, and an optional completed flag.
-
-Let's create a `models` directory and create `todo.dart`.
+La première chose que nous avons besoin de définir est notre modèle `Todo`. Chaque todo aura besoin d'un id, d'une tâche (task), optionnellement d'une note et d'un drapeau complété optionnel lui aussi.
+Créons un dossier `models` et créons `todo.dart`.
 
 ```dart
 import 'package:todos_app_core/todos_app_core.dart';
@@ -188,19 +184,19 @@ class Todo extends Equatable {
 }
 ```
 
-?> **Note:** We're using the [Equatable](https://pub.dev/packages/equatable) package so that we can compare instances of `Todos` without having to manually override `==` and `hashCode`.
+?> **Note:** Nous utilisons le package [Equatable](https://pub.dev/packages/equatable) pour que l'on puisse comparer les instances de `Todos` sans avoir a manuellement override `==` et `hashCode`.
 
-Next up, we need to create the `TodosState` which our presentation layer will receive.
+Ensuite, nousa avons besoin de créer le `TodosState` qui sera interprété par notre couche de présentation.
 
-### States
+### States (états)
 
-Let's create `blocs/todos/todos_state.dart` and define the different states we'll need to handle.
+Créons `blocs/todos/todos_state.dart` et définissons les différents states que nous allons devoir gérer.
 
-The three states we will implement are:
+Les trois states que nous allons implémenter sont:
 
-- `TodosLoadInProgress` - the state while our application is fetching todos from the repository.
-- `TodosLoadSuccess` - the state of our application after the todos have successfully been loaded.
-- `TodosLoadFailure` - the state of our application if the todos were not successfully loaded.
+- `TodosLoadInProgress` - le state pendant que notre application va chercher (fetching) les todos depuis notre répertoire (repository). 
+- `TodosLoadSuccess` - le state de notre application une fois que la liste des todos a chargé avec succès.
+- `TodosLoadFailure` - le state de notre application si la liste n'a pas été correctement chargé.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -230,20 +226,20 @@ class TodosLoadSuccess extends TodosState {
 class TodosLoadFailure extends TodosState {}
 ```
 
-Next, let's implement the events we will need to handle.
+Ensuite, nous allons implémenter les événements que nous allons devoir gérer.
 
-### Events
+### Events (événements)
 
-The events we will need to handle in our `TodosBloc` are:
+Les événements qui nous allons devoir gérer dans notre `TodosBloc` sont:
 
-- `TodosLoadSuccess` - tells the bloc that it needs to load the todos from the `TodosRepository`.
-- `TodoAdded` - tells the bloc that it needs to add an new todo to the list of todos.
-- `TodoUpdated` - tells the bloc that it needs to update an existing todo.
-- `TodoDeleted` - tells the bloc that it needs to remove an existing todo.
-- `ClearCompleted` - tells the bloc that it needs to remove all completed todos.
-- `ToggleAll` - tells the bloc that it needs to toggle the completed state of all todos.
+- `TodosLoadSuccess` - dis au bloc qu'il est nécessaire de charger les todos depuis `TodosRepository`.
+- `TodoAdded` - dis au bloc qu'il est nécessaire d'ajouter un nouveau todo à la liste des todos.
+- `TodoUpdated` - dis au bloc qu'il est nécessaire d'actualiser un todo existant.
+- `TodoDeleted` - dis au bloc qu'il est nécessaire de supprimer un todo existant.
+- `ClearCompleted` - dis au bloc qu'il est nécessaire de supprimer tous les todos complétés.
+- `ToggleAll` - dis au bloc qu'il est nécessaire de basculer (toggle) le state completed de tous les todos.
 
-Create `blocs/todos/todos_event.dart` and let's implement the events we described above.
+Créons `blocs/todos/todos_event.dart` et implémentons les événements décris au dessus.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -299,11 +295,11 @@ class ClearCompleted extends TodosEvent {}
 class ToggleAll extends TodosEvent {}
 ```
 
-Now that we have our `TodosStates` and `TodosEvents` implemented we can implement our `TodosBloc`.
+Maintenant que nous avons `TodosStates` et `TodosEvents` d'implémenter, nous puvons implémenter notre `TodosBloc`.
 
 ### Bloc
 
-Let's create `blocs/todos/todos_bloc.dart` and get started! We just need to implement `initialState` and `mapEventToState`.
+Créons `blocs/todos/todos_bloc.dart` et commençons! Nous avons juste besoin d'implémenter `initialState` et `mapEventToState`.
 
 ```dart
 import 'dart:async';
@@ -409,15 +405,15 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 }
 ```
 
-!> When we yield a state in the private `mapEventToState` handlers, we are always yielding a new state instead of mutating the `state`. This is because every time we yield, bloc will compare the `state` to the `nextState` and will only trigger a state change (`transition`) if the two states are **not equal**. If we just mutate and yield the same instance of state, then `state == nextState` would evaluate to true and no state change would occur.
+!> Quand nous "yieldons" un state dans le gestionnaire privé (private handlers) `mapEventToState`, nous sommes toujours entrain de yield un nouveau state plutôt de muter le `state`. Cela s'explique car à chaque fois que nous yieldons, le bloc va comparer le `state` au `nextState` et va déclencher un changement de state (`transition`) si les deux states **ne sont pas égaux**. Si nous faisons juste muter et yield la même instance de notren state, alors `state == nextState` renverra vrai (true) et aucun changement de state n'aurait lieu.
 
-Our `TodosBloc` will have a dependency on the `TodosRepository` so that it can load and save todos. It will have an initial state of `TodosLoadInProgress` and defines the private handlers for each of the events. Whenever the `TodosBloc` changes the list of todos it calls the `saveTodos` method in the `TodosRepository` in order to keep everything persisted locally.
+Notre `TodosBloc` aura une dépendance sur le `TodosRepository` pour qu'il puisse charger et sauvegarder les todos. Il aura un state initial de `TodosLoadInProgress` et définira le private handlers pour chacun des événements. Peu importe quand le `TodosBloc` change la liste des todos, il appelle la méthode `saveTodos` dans le `TodosRepository` dans le but de tout garder localement.
 
-### Barrel File
+### Barrel File (Fichier baril)
 
-Now that we're done with our `TodosBloc` we can create a barrel file to export all of our bloc files and make it convenient to import them later on.
+Maintenant que nous en avons terminé avec notre `TodosBloc`, nous pouvons créer un barrel file pour exporter tous les fichiers de notre et faciliter leur import plus tard.
 
-Create `blocs/todos/todos.dart` and export the bloc, events, and states:
+Créons `blocs/todos/todos.dart` et exportons le bloc, les événements (events) et les states:
 
 ```dart
 export './todos_bloc.dart';
@@ -425,34 +421,34 @@ export './todos_event.dart';
 export './todos_state.dart';
 ```
 
-## Filtered Todos Bloc
+## Filtrés Todos Bloc
 
-> The `FilteredTodosBloc` will be responsible for reacting to state changes in the `TodosBloc` we just created and will maintain the state of filtered todos in our application.
+> Le `FilteredTodosBloc` sera responsable de réagir aux changements de states dans le `TodosBloc` que nous venons de créer et il maintiendra le state de filtrage des todos dans notre application.
 
-### Model
+### Modèle
 
-Before we start defining and implementing the `TodosStates`, we will need to implement a `VisibilityFilter` model that will determine which todos our `FilteredTodosState` will contain. In this case, we will have three filters:
+Avant que nous commençons à définir et à implémenter le `TodosStates`, nous allons implémenter le modèle `VisibilityFilter` qui déterminera quel todo notre `FilteredTodosState` contiendra. Dans ce cas, nous aurons trois filtres:
 
-- `all` - show all Todos (default)
-- `active` - only show Todos which have not been completed
-- `completed` only show Todos which have been completed
+- `all` - va afficher tous les Todos (par défaut)
+- `active` - affichera seulement les Todos qui ne sont pas complétés
+- `completed` affichera seulement les Todos complétés
 
-We can create `models/visibility_filter.dart` and define our filter as an enum:
+Nous pouvons créer `models/visibility_filter.dart` aet définir notre filtre comme un enum:
 
 ```dart
 enum VisibilityFilter { all, active, completed }
 ```
 
-### States
+### States (états)
 
-Just like we did with the `TodosBloc`, we'll need to define the different states for our `FilteredTodosBloc`.
+Comme nous l'avons fais dans `TodosBloc`, nous allons définir les différents states pour notre `FilteredTodosBloc`.
 
-In this case, we only have two states:
+Dans ce cas, nous aurons uniquement deux states:
 
-- `FilteredTodosLoadInProgress` - the state while we are fetching todos
-- `FilteredTodosLoadSuccess` - the state when we are no longer fetching todos
+- `FilteredTodosLoadInProgress` - le state pendant que nous récupérons les todos
+- `FilteredTodosLoadSuccess` - le state quand nous avons fini de récupérer les todos
 
-Let's create `blocs/filtered_todos/filtered_todos_state.dart` and implement the two states.
+Créons `blocs/filtered_todos/filtered_todos_state.dart` et implémentons les deux states.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -486,16 +482,16 @@ class FilteredTodosLoadSuccess extends FilteredTodosState {
 }
 ```
 
-?> **Note:** The `FilteredTodosLoadSuccess` state contains the list of filtered todos as well as the active visibility filter.
+?> **Note:** Le state `FilteredTodosLoadSuccess` contient la liste des todos filtrés ainsi que le filtre de visibilité activé.
 
-### Events
+### Events (événements)
 
-We're going to implement two events for our `FilteredTodosBloc`:
+Nous allons implémenter deux événements pour notre `FilteredTodosBloc`:
 
-- `FilterUpdated` - which notifies the bloc that the visibility filter has changed
-- `TodosUpdated` - which notifies the bloc that the list of todos has changed
+- `FilterUpdated` - qui notifiera le bloc que la visibilité du filtre a changé
+- `TodosUpdated` - qui notifiera le bloc que la list des todos a changé
 
-Create `blocs/filtered_todos/filtered_todos_event.dart` and let's implement the two events.
+Créons `blocs/filtered_todos/filtered_todos_event.dart` et implémentons les deux événements.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -530,13 +526,13 @@ class TodosUpdated extends FilteredTodosEvent {
 }
 ```
 
-We're ready to implement our `FilteredTodosBloc` next!
+Nous sommes prêts pour implémenter `FilteredTodosBloc`!
 
 ### Bloc
 
-Our `FilteredTodosBloc` will be similar to our `TodosBloc`; however, instead of having a dependency on the `TodosRepository`, it will have a dependency on the `TodosBloc` itself. This will allow the `FilteredTodosBloc` to update its state in response to state changes in the `TodosBloc`.
+Notre `FilteredTodosBloc` sera similaire à celui `TodosBloc`; toutefois, au lieu d'avoir une dépendance sur `TodosRepository`, il aura une dépendance sur le bloc `TodosBloc`. Cela nous permettra au `FilteredTodosBloc` d'actualiser son propre state en réponse aux changements du state dans le `TodosBloc`.
 
-Create `blocs/filtered_todos/filtered_todos_bloc.dart` and let's get started.
+Créons `blocs/filtered_todos/filtered_todos_bloc.dart` et commençons.
 
 ```dart
 import 'dart:async';
@@ -627,13 +623,13 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 }
 ```
 
-!> We create a `StreamSubscription` for the stream of `TodosStates` so that we can listen to the state changes in the `TodosBloc`. We override the bloc's close method and cancel the subscription so that we can clean up after the bloc is closed.
+!> Nous créons un `StreamSubscription` pour le stream de `TodosStates` pour que l'on puisse écouter les changements du state dans le `TodosBloc`. On override la méthode de fermeture du bloc et annulons la souscription pour que l'on puisse nettoyer(clean) après que le bloc soit fermé.
 
-### Barrel File
+### Barrel File (fichier baril)
 
-Just like before, we can create a barrel file to make it more convenient to import the various filtered todos classes.
+Comme avant, nous pouvons créer un fichier baril pour permettre l'import des classes de filtrage des todos.
 
-Create `blocs/filtered_todos/filtered_todos.dart` and export the three files:
+Créons `blocs/filtered_todos/filtered_todos.dart` et exportons les trois fichiers:
 
 ```dart
 export './filtered_todos_bloc.dart';
@@ -641,20 +637,21 @@ export './filtered_todos_event.dart';
 export './filtered_todos_state.dart';
 ```
 
-Next, we're going to implement the `StatsBloc`.
+Ensuite, nous allons implémenter le `StatsBloc`.
 
-## Stats Bloc
+## Stats Bloc (Bloc de statistiques)
 
-> The `StatsBloc` will be responsible for maintaining the statistics for number of active todos and number of completed todos. Similarly, to the `FilteredTodosBloc`, it will have a dependency on the `TodosBloc` itself so that it can react to changes in the `TodosBloc` state.
+> Le `StatsBloc` sera responsable de maintenir les statistiques du nombre de todos actifs et du nombres de todos complétés.
+Comme pour le `FilteredTodosBloc`, il aura une dépendance sur le `TodosBloc` pour qu'il puisse réagir aux changements dans le `TodosBloc` state.
 
 ### State
 
-Our `StatsBloc` will have two states that it can be in:
+Notre `StatsBloc` pourra être dans deux states:
 
-- `StatsLoadInProgress` - the state when the statistics have not yet been calculated.
-- `StatsLoadSuccess` - the state when the statistics have been calculated.
+- `StatsLoadInProgress` - soit le state quand les statistiques n'ont pas encore été calculées.
+- `StatsLoadSuccess` -  ques les statistiques ont été calculées.
 
-Create `blocs/stats/stats_state.dart` and let's implement our `StatsState`.
+Créons `blocs/stats/stats_state.dart` et implémentons notre `StatsState`.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -684,7 +681,7 @@ class StatsLoadSuccess extends StatsState {
 }
 ```
 
-Next, let's define and implement the `StatsEvents`.
+Ensuite, définissons et implémentons `StatsEvents`.
 
 ### Events
 
