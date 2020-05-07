@@ -14,7 +14,7 @@
 
 [BLoC design pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc)-i həyata keçirməyə kömək edən gözlənilən vəziyyətin idarə edilməsi kitabxanası.
 
-| Paketlər                                                                            | Pub                                                                                                    |
+| Paketlər                                                                           | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | [bloc](https://github.com/felangel/bloc/tree/master/packages/bloc)                 | [![pub package](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)                 |
 | [bloc_test](https://github.com/felangel/bloc/tree/master/packages/bloc_test)       | [![pub package](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)       |
@@ -26,7 +26,6 @@
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
 
 Kitabxananın məqsədi _presentation_-ın (dizaynın) _businesss logic_-dən (hesablama və məntiqi hissədən) ayrılmasının, test edilə bilinməsinin və təkrar istifadənin asanlaşdırılmasıdır.
-
 
 ## Dokumentasiya
 
@@ -86,14 +85,14 @@ Kitabxananın məqsədi _presentation_-ın (dizaynın) _businesss logic_-dən (h
 
 ### Flutter
 
-- [Sayğac](https://bloclibrary.dev/#/fluttercountertutorial) - Klassik Flutter Counter tətbiqinin həyəta keçirilməsi üçün  `CounterBloc`-un necə yaradılması haqqında nümunə.
-- [Form Təsdiqləmə](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) -  form təsdiqləməni həyata keçirmək üçün `bloc` və `flutter_bloc`-un necə istifadə edilməsi haqqında nümunə. 
+- [Sayğac](https://bloclibrary.dev/#/fluttercountertutorial) - Klassik Flutter Counter tətbiqinin həyəta keçirilməsi üçün `CounterBloc`-un necə yaradılması haqqında nümunə.
+- [Form Təsdiqləmə](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) - form təsdiqləməni həyata keçirmək üçün `bloc` və `flutter_bloc`-un necə istifadə edilməsi haqqında nümunə.
 - [Stream ilə Bloc](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - `bloc`-un `Stream`-ə necə qoşulması və `Stream`-dən gələn məlumata əsasən İstifadəçi İnterfeysinin yenilənməsi haqqında nümunə.
 - [Sonsuz List](https://bloclibrary.dev/#/flutterinfinitelisttutorial) - sonsuz listin həyatə keçirilməsi üçün `bloc` and `flutter_bloc`-un necə istifadə edilməsi haqqında nümunə.
 - [Login prosesi](https://bloclibrary.dev/#/flutterlogintutorial) - Login prosesini həyata keçirmək üçün `bloc` və `flutter_bloc` paketlərini necə istifadə etmək haqqında nümunə.
 - [Firebase Login](https://bloclibrary.dev/#/flutterfirebaselogintutorial) - Firebase ilə login prosesini həyata keçirmək üçün `bloc` və `flutter_bloc` paketlərindən necə istifadə etmək haqqında nümunə.
 - [Github-da Axtarış](https://bloclibrary.dev/#/flutterangulargithubsearch) - `bloc` və `flutter_bloc` paketlərini istifadə edərək Github-da Axtarış Tətbiqinin necə yaradılması haqqında nümunə.
-- [Hava](https://bloclibrary.dev/#/flutterweathertutorial) - `bloc` və `flutter_bloc` paketlərini istifadə edərək Hava tətbiqinin yaradılması haqqında nümunə. Tətbiq  aşağı sürükləməklə yenilənmə üçün `RefreshIndicator` və dinamik mövzu (theme) dəyişilməsini istifadə edir.
+- [Hava](https://bloclibrary.dev/#/flutterweathertutorial) - `bloc` və `flutter_bloc` paketlərini istifadə edərək Hava tətbiqinin yaradılması haqqında nümunə. Tətbiq aşağı sürükləməklə yenilənmə üçün `RefreshIndicator` və dinamik mövzu (theme) dəyişilməsini istifadə edir.
 - [Todo-lar](https://bloclibrary.dev/#/fluttertodostutorial) -`bloc` və `flutter_bloc` paketlərindən istifadə edərək Todo-lar Tətbiqinin necə yaradılması haqqında nümunə.
 - [Taymer](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - `bloc` və `flutter_bloc` paketlərindən istifadə edərək Taymerin necə yaradılması haqqında nümunə.
 - [Firestore Todo-lar](https://bloclibrary.dev/#/flutterfirestoretodostutorial) `bloc` və `flutter_bloc` paketlərindən istifadə edərək və onları cloud firestore-a inteqrasiya edərək Todo-lar Tətbiqinin necə yaradılması haqqında nümunə.
@@ -118,14 +117,14 @@ Kitabxananın məqsədi _presentation_-ın (dizaynın) _businesss logic_-dən (h
 - [bloc ilə kodun bölüşdürülməsi](https://medium.com/flutter-community/code-sharing-with-bloc-b867302c18ef) Flutter ilə yazılan mobil tətbiq və AngularDart ilə yazılan veb tətbiq arasında kodun necə bölüşdürülməsi.
 - [flutter_bloc ilə hava tətbiqi dərsi](https://medium.com/flutter-community/weather-app-with-flutter-bloc-e24a7253340d) - bloc və flutter_bloc paketlərini istifadə edərək, dinamik mövzu (theme) dəyişdirilməsini, aşağı sürükləyərək yenilənməni və REST APİ ilə əlaqəni özündə cəmləşdirən hava tətbiqinin necə yaradılması.
 - [flutter_bloc ilə todo-lar tətbiqi dərsi](https://medium.com/flutter-community/flutter-todos-tutorial-with-flutter-bloc-d9dd833f9df3) - bloc və flutter_bloc paketlərini istifadə edərək, todo-lar tətbiqinin necə yaradılması.
-- [flutter_bloc ilə firebase login dərsi](https://medium.com/flutter-community/firebase-login-with-flutter-bloc-47455e6047b0) - bloc və flutter_bloc paketlərini istifadə edərək, Firebase İdentifikasiyası və Google Sign İn ilə  tam funksional login/qeydiyyat prosesinin necə yaradılması.
+- [flutter_bloc ilə firebase login dərsi](https://medium.com/flutter-community/firebase-login-with-flutter-bloc-47455e6047b0) - bloc və flutter_bloc paketlərini istifadə edərək, Firebase İdentifikasiyası və Google Sign İn ilə tam funksional login/qeydiyyat prosesinin necə yaradılması.
 - [flutter_bloc ilə flutter taymer dərsi](https://medium.com/flutter-community/flutter-timer-with-flutter-bloc-a464e8332ceb) - bloc və flutter_bloc paketlərini istifadə edərək, timer tətbiqinin necə yaradılması.
-- [flutter_bloc ilə firestore todos dərsi](https://medium.com/flutter-community/firestore-todos-with-flutter-bloc-7b2d5fadcc80) - bloc və flutter_bloc paketlərini istifadə edərək və onları cloud firesotre ilə inteqrasiya edərək,  todolar tətbiqinin necə yaradılması.
+- [flutter_bloc ilə firestore todos dərsi](https://medium.com/flutter-community/firestore-todos-with-flutter-bloc-7b2d5fadcc80) - bloc və flutter_bloc paketlərini istifadə edərək və onları cloud firesotre ilə inteqrasiya edərək, todolar tətbiqinin necə yaradılması.
 
 ## Extension-lar
 
 - [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) - İntelliJ və Android Studio-un imkanlarını Bloc kitabxanası üçün genişlədirir və Flutter və AngularDart tətbiqlərində Bloc-ların effektiv şəkildə yaradılması üçün ləvazimatlar təmin edir.
-- [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) -  VSCode-un imkanlarını Bloc kitabxanası üçün genişlədirir və Flutter və AngularDart tətbiqlərində Bloc-ların effektiv şəkildə yaradılması üçün ləvazimatlar təmin edir.
+- [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) - VSCode-un imkanlarını Bloc kitabxanası üçün genişlədirir və Flutter və AngularDart tətbiqlərində Bloc-ların effektiv şəkildə yaradılması üçün ləvazimatlar təmin edir.
 
 ## İcma
 
@@ -141,8 +140,9 @@ Kitabxananın məqsədi _presentation_-ın (dizaynın) _businesss logic_-dən (h
 
 ### Video Dərslər
 
+- [Bloc Library: Basics and Beyond 🚀](https://youtu.be/knMvKPKBzGE) - Talk given at [Flutter Europe](https://fluttereurope.dev) about the basics of the bloc library, by [Felix Angelov](https://github.com/felangel).
 - [Flutter Bloc Kitabxanası Dərsi](https://www.youtube.com/watch?v=hTExlt1nJZI) - [Reso Coder](https://resocoder.com) tərəfindən, Bloc kitabxanasına giriş.
-- [Flutter Youtube Axtarışı](https://www.youtube.com/watch?v=BJY8nuYUM7M) - [Reso Coder](https://resocoder.com) tərəfindən, bloc və flutter_bloc paketlərini istifadə edərək,  API ilə əlaqəli Youtube Axtarış tətbiqinin yaradılması.
+- [Flutter Youtube Axtarışı](https://www.youtube.com/watch?v=BJY8nuYUM7M) - [Reso Coder](https://resocoder.com) tərəfindən, bloc və flutter_bloc paketlərini istifadə edərək, API ilə əlaqəli Youtube Axtarış tətbiqinin yaradılması.
 - [Flutter Bloc - AUTOMATIC LOOKUP - v0.20 (and Up), Updated Tutorial](https://www.youtube.com/watch?v=_vOpPuVfmiU) - [Reso Coder](https://resocoder.com) tərəfindən, Flutter Bloc Paketi haqqqında yenilənmiş dərs.
 - [flutter_bloc ilə dinamik mövzu (theme) dəyişmə](https://www.youtube.com/watch?v=YYbhkg-W8Mg) - [Reso Coder](https://resocoder.com) tərəfindən, dinamik mövzu dəyişmənin həyata keçirilməsi üçün flutter_bloc paketinin necə istifadə olunması haqqında dərs.
 - [Flutter-də Davamlı Bloc Vəziyyəti](https://www.youtube.com/watch?v=vSOpZd_FFEY) - [Reso Coder](https://resocoder.com) tərəfindən, avtomatik olaraq, tətbiqin vəziyyətinin davam etdirilməsi üçün hydrated_bloc paketinin necə istifadə olunması haqqında dərs.
