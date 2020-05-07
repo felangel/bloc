@@ -4,7 +4,7 @@
 
 > Dans ce tutorial, nous allons voir comment créer une formulaire de connexion Firebase en utilisant la librairie Bloc dans Flutter.
 
-![demo](./assets/gifs/flutter_firebase_login.gif)
+![demo](../assets/gifs/flutter_firebase_login.gif)
 
 ## Installation
 
