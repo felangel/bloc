@@ -1392,7 +1392,7 @@ class ExtraActions extends StatelessWidget {
 
 Comme pouir le `FilterButton`, on utilise un `BlocProvider` pour accèder au `TodosBloc` à partir de  `BuildContext` et `BlocBuilder` to en réponse aux changements de states dans le bloc `TodosBloc`.
 
-En fonction actions sélectionnées, the widget adds an event to the `TodosBloc` to either `ToggleAll` todos' completion states or `ClearCompleted` todos.
+En fonction des actions sélectionnées, le widget ajoutera un événement soit au `TodosBloc` ou alors à `ToggleAll` aux todos ayant un state de complété ou pour clear `ClearCompleted` les todos.
 
 Ensuite nous travaillerons sur le widget `TabSelector`.
 
