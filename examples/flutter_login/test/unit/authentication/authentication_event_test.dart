@@ -5,22 +5,22 @@ void main() {
   group('AuthenticationEvent', () {
     group('AppStarted', () {
       test('props are []', () {
-        expect(AppStarted().props, []);
+        expect(AuthenticationStarted().props, []);
       });
 
       test('toString is "AppStarted"', () {
-        expect(AppStarted().toString(), 'AppStarted');
+        expect(AuthenticationStarted().toString(), 'AppStarted');
       });
     });
 
     group('LoggedIn', () {
       test('props are [token]', () {
-        expect(LoggedIn(token: 'token').props, ['token']);
+        expect(AuthenticationLoggedIn(token: 'token').props, ['token']);
       });
 
       test('toString is "LoggedIn { token: token }"', () {
         expect(
-          LoggedIn(token: 'token').toString(),
+          AuthenticationLoggedIn(token: 'token').toString(),
           'LoggedIn { token: token }',
         );
       });
@@ -28,11 +28,11 @@ void main() {
 
     group('LoggedOut', () {
       test('props are []', () {
-        expect(LoggedOut().props, []);
+        expect(AuthenticationLoggedOut().props, []);
       });
 
       test('toString is "LoggedOut"', () {
-        expect(LoggedOut().toString(), 'LoggedOut');
+        expect(AuthenticationLoggedOut().toString(), 'LoggedOut');
       });
     });
   });

@@ -15,11 +15,11 @@ void main() {
 
     group('LoginLoading', () {
       test('props are []', () {
-        expect(LoginLoading().props, []);
+        expect(LoginInProgress().props, []);
       });
 
       test('toString is LoginLoading', () {
-        expect(LoginLoading().toString(), 'LoginLoading');
+        expect(LoginInProgress().toString(), 'LoginLoading');
       });
     });
 

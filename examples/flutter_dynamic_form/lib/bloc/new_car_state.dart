@@ -30,7 +30,7 @@ class NewCarState {
         year: null,
       );
 
-  factory NewCarState.brandsLoading() => NewCarState(
+  factory NewCarState.brandsLoadInProgress() => NewCarState(
         brands: <String>[],
         brand: null,
         models: <String>[],
@@ -39,7 +39,7 @@ class NewCarState {
         year: null,
       );
 
-  factory NewCarState.brandsLoaded({
+  factory NewCarState.brandsLoadSuccess({
     @required List<String> brands,
   }) =>
       NewCarState(
@@ -51,7 +51,7 @@ class NewCarState {
         year: null,
       );
 
-  factory NewCarState.modelsLoading({
+  factory NewCarState.modelsLoadInProgress({
     @required List<String> brands,
     @required String brand,
   }) =>
@@ -64,7 +64,7 @@ class NewCarState {
         year: null,
       );
 
-  factory NewCarState.modelsLoaded({
+  factory NewCarState.modelsLoadSuccess({
     @required List<String> brands,
     @required String brand,
     @required List<String> models,
@@ -78,7 +78,7 @@ class NewCarState {
         year: null,
       );
 
-  factory NewCarState.yearsLoading({
+  factory NewCarState.yearsLoadInProgress({
     @required List<String> brands,
     @required String brand,
     @required List<String> models,
@@ -93,7 +93,7 @@ class NewCarState {
         year: null,
       );
 
-  factory NewCarState.yearsLoaded({
+  factory NewCarState.yearsLoadSuccess({
     @required List<String> brands,
     @required String brand,
     @required List<String> models,
