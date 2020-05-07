@@ -3,7 +3,7 @@
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
 > Dans ce tutoriel, nous allons construire une application Todos (Liste de choses à faire) en utilisant la librairie Bloc !
-?> **Note:** Pour des raisons de sens, je ne vais toujours tout traduire donc voici une liste des mots anglais et leur équivalent français que vous allez retrouver tout au long du tutorial : state -> état / Todos -> Choses à faires / Overriding -> Réécrire du code par dessus un code déjà existant et similaire
+?> **Note:** Pour des raisons de sens, je ne vais toujours tout traduire donc voici une liste des mots anglais et leur équivalent français que vous allez retrouver tout au long du tutorial : state -> état / Todos -> Choses à faires / Overriding -> Réécrire du code par dessus un code déjà existant et similaire / Input -> valeur d'entrée / Output -> valeur de sortie
 
 ![demo](./assets/gifs/flutter_todos.gif)
 
@@ -685,9 +685,9 @@ Ensuite, définissons et implémentons `StatsEvents`.
 
 ### Events
 
-There will just be a single event our `StatsBloc` will respond to: `StatsUpdated`. This event will be added whenever the `TodosBloc` state changes so that our `StatsBloc` can recalculate the new statistics.
+Il y aura qu'un seul événement dans notre `StatsBloc` il répondra à: `StatsUpdated`. Cet événement sera ajouté peu importe quand le state de `TodosBloc` changera pour que notre `StatsBloc` puisse recalculer les nouvelles statistiques.
 
-Create `blocs/stats/states_event.dart` and let's implement it.
+Créons `blocs/stats/states_event.dart` et implémentons le.
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -709,14 +709,13 @@ class StatsUpdated extends StatsEvent {
   String toString() => 'StatsUpdated { todos: $todos }';
 }
 ```
-
-Now we're ready to implement our `StatsBloc` which will look very similar to the `FilteredTodosBloc`.
+Maintenant nous sommes prêts à implémenter notre `StatsBloc` which will look very similar to the `FilteredTodosBloc`.
 
 ### Bloc
 
-Our `StatsBloc` will have a dependency on the `TodosBloc` itself which will allow it to update its state in response to state changes in the `TodosBloc`.
+Notre `StatsBloc` aura une dépendance avec `TodosBloc` ce qui lui permettra d'actualiser son state en réponse aux changements du state dans le `TodosBloc`.
 
-Create `blocs/stats/stats_bloc.dart` and let's get started.
+Créons `blocs/stats/stats_bloc.dart` et commençons.
 
 ```dart
 import 'dart:async';
@@ -758,31 +757,31 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
 }
 ```
 
-That's all there is to it! Our `StatsBloc` recalculates its state which contains the number of active todos and the number of completed todos on each state change of our `TodosBloc`.
+C'est tout ce dont nous avons besoin! Notre `StatsBloc` recalculera son state qui contient le nombre de todos actifs et le nombre de todos complétés à chaque fois que le state de notre bloc `TodosBloc` changera.
 
-Now that we're done with the `StatsBloc` we just have one last bloc to implement: the `TabBloc`.
+Maintenant que nous avons terminé avec le `StatsBloc` il ne faut plus qu'implémenter notre dernier bloc : le `TabBloc`.
 
 ## Tab Bloc
 
-> The `TabBloc` will be responsible for maintaining the state of the tabs in our application. It will be taking `TabEvents` as input and outputting `AppTabs`.
+> Le `TabBloc` sera responsable de maintenir le state des différentes fenêtres (tabs) dans notre application. Il prendra `TabEvents` comme input et son output sera `AppTabs`.
 
-### Model / State
+### Model / State (Modèle / état)
 
-We need to define an `AppTab` model which we will also use to represent the `TabState`. The `AppTab` will just be an `enum` which represents the active tab in our application. Since the app we're building will only have two tabs: todos and stats, we just need two values.
+Nous avons besoin de définir un modèle `AppTab` que nous utiliserons pour représenter le `TabState`. Le `AppTab` sera juste un `enum` qui représente la fenêtre active dans notre application. Comme notre application ne contiendra que deux fenêtres à savoir les todos et les statistiques, nous avons besoin d'y ajouter 2 valeurs.
 
-Create `models/app_tab.dart`:
+Créons `models/app_tab.dart`:
 
 ```dart
 enum AppTab { todos, stats }
 ```
 
-### Event
+### Event 
 
-Our `TabBloc` will be responsible for handling a single `TabEvent`:
+Notre `TabBloc` sera responsable de gérer un seul événement `TabEvent`:
 
-- `TabUpdated` - which notifies the bloc that the active tab has updated
+- `TabUpdated` - il notifiera le bloc que la fenêtre active a été mise à jour
 
-Create `blocs/tab/tab_event.dart`:
+Créons `blocs/tab/tab_event.dart`:
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -807,9 +806,9 @@ class TabUpdated extends TabEvent {
 
 ### Bloc
 
-Our `TabBloc` implementation will be super simple. As always, we just need to implement `initialState` and `mapEventToState`.
+Dans notre `TabBloc` l'implémentation sera super simple. Comme toujours, nous avons juste besoin d'implémenter `initialState` et `mapEventToState`.
 
-Create `blocs/tab/tab_bloc.dart` and let's quickly do the implementation.
+Créons `blocs/tab/tab_bloc.dart` et implémentons le rapidement.
 
 ```dart
 import 'dart:async';
@@ -830,11 +829,11 @@ class TabBloc extends Bloc<TabEvent, AppTab> {
 }
 ```
 
-I told you it'd be simple. All the `TabBloc` is doing is setting the initial state to the todos tab and handling the `TabUpdated` event by yielding a new `AppTab` instance.
+Je vous avais prévenu que ce serait simple! Tout ce que `TabBloc` va faire est de définir le state initial à la fenêtre des todos (cela veut dire que par défaut l'application s'ouvrira sur cette fenêtre) et gérer l'événement `TabUpdated` en "yieldant" une nouvelle instance `AppTab`.
 
-### Barrel File
+### Barrel File (Fichier baril)
 
-Lastly, we'll create another barrel file for our `TabBloc` exports. Create `blocs/tab/tab.dart` and export the two files:
+Enfin, nous allons créer un autre fichier baril pour exporter notre `TabBloc`. Créons `blocs/tab/tab.dart` et exportons les deux fichiers:
 
 ```dart
 export './tab_bloc.dart';
@@ -843,9 +842,9 @@ export './tab_event.dart';
 
 ## Bloc Delegate
 
-Before we move on to the presentation layer, we will implement our own `BlocDelegate` which will allow us to handle all state changes and errors in a single place. It's really useful for things like developer logs or analytics.
+Avant de passer à la couche de présentation, nous allons implémenter notre propre `BlocDelegate` qui nous permettra de gérer tous les changements de state et les erreurs dans une seule place. C'est très pratique pour des choses comme avoir les développeurs logs ou les analyses (analytics).
 
-Create `blocs/simple_bloc_delegate.dart` and let's get started.
+Créons `blocs/simple_bloc_delegate.dart` et commençons.
 
 ```dart
 import 'package:bloc/bloc.dart';
@@ -870,13 +869,12 @@ class SimpleBlocDelegate extends BlocDelegate {
   }
 }
 ```
+Tout ce que nous faisons dans ce cas est d'afficher (en console) tous les changements de states (`transitions`) et les erreurs pour que l'on puisse voir ce qu'il se passe quand nous utilisons notre application. Vous pourriez même relier `BlocDelegate` à votre Google analytics, sentry, crashlytics, etc...
 
-All we're doing in this case is printing all state changes (`transitions`) and errors to the console just so that we can see what's going on when we're running our app. You can hook up your `BlocDelegate` to google analytics, sentry, crashlytics, etc...
+## Blocs Barrel (Baril de blocs)
 
-## Blocs Barrel
-
-Now that we have all of our blocs implemented we can create a barrel file.
-Create `blocs/blocs.dart` and export all of our blocs so that we can conveniently import any bloc code with a single import.
+Maintenant que nous avons tous nos blocs d'implémentés, nous pouvons créer un fichier baril.
+Créons `blocs/blocs.dart` et exportons tous nos blocs pour pouvoir importer de manière conventionnel nos blocs dans n'importe quel fichier avec un simple import.
 
 ```dart
 export './filtered_todos/filtered_todos.dart';
@@ -886,15 +884,15 @@ export './todos/todos.dart';
 export './simple_bloc_delegate.dart';
 ```
 
-Up next, we'll focus on implementing the major screens in our Todos application.
+Ensuite, nous allons nous concentrer sur la manière dont nous allons implémenter la plus part de nos écrans (screens) dans notre Todos application.
 
-## Screens
+## Screens (écrans)
 
-### Home Screen
+### Home Screen (Ecran d'accueil)
 
-> Our `HomeScreen` will be responsible for creating the `Scaffold` of our application. It will maintain the `AppBar`, `BottomNavigationBar`, as well as the `Stats`/`FilteredTodos` widgets (depending on the active tab).
+> Notre `HomeScreen` sera responsable de la créaton du `Scaffold` de notre application. Il contiendra notre `AppBar`, `BottomNavigationBar`, mais aussi nos widgets `Stats`/`FilteredTodos` (en fonction de la fenêtre active).
 
-Let's create a new directory called `screens` where we will put all of our new screen widgets and then create `screens/home_screen.dart`.
+Créons un nouveau dossier appelé `screens` où nous mettrons tous nos nouveaux screen widgets et ensuite créons `screens/home_screen.dart`.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -939,15 +937,15 @@ class HomeScreen extends StatelessWidget {
 }
 ```
 
-The `HomeScreen` accesses the `TabBloc` using `BlocProvider.of<TabBloc>(context)` which will be made available from our root `TodosApp` widget (we'll get to it later in this tutorial).
+Le `HomeScreen` a accès au `TabBloc` en utilisant `BlocProvider.of<TabBloc>(context)` qui va devenir disponible depuis la racine(root) de notre widget `TodosApp` (nous y reviendrons un peu plus tard dans ce tutoriel).
 
-Next, we'll implement the `DetailsScreen`.
+Ensuite, nous allons implémenter notre `DetailsScreen`.
 
 ### Details Screen
 
-> The `DetailsScreen` displays the full details of the selected todo and allows the user to either edit or delete the todo.
+> L'écran `DetailsScreen` affichera tous les détails du todo que nous l'utilisateur aura sélectionné et lui permettra de soit l'éditer ou alors de le supprimer.
 
-Create `screens/details_screen.dart` and let's build it.
+Créons et construisons `screens/details_screen.dart`.
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -1076,17 +1074,17 @@ class DetailsScreen extends StatelessWidget {
 }
 ```
 
-?> **Note:** The `DetailsScreen` requires a todo id so that it can pull the todo details from the `TodosBloc` and so that it can update whenever a todo's details have been changed (a todo's id cannot be changed).
+?> **Note:** Le `DetailsScreen` requiert un id d'un todo pour qu'il puisse afficher les détail du todo sélectionné à partir du `TodosBloc` et pour qu'il puisse la mettre à jour peu importe quand les détails d'unb todo ont été changés (l'id d'un todo ne peut pas être modifié).
 
-The main things to note are that there is an `IconButton` which adds a `TodoDeleted` event as well as a checkbox which adds an `TodoUpdated` event.
+Les choses à remarqués ici sont l'icône `IconButton` qui ajoute un événement `TodoDeleted` ainsi qu'une checkbox qui ajoute un événement `TodoUpdated`.
 
-There is also another `FloatingActionButton` which navigates the user to the `AddEditScreen` with `isEditing` set to `true`. We'll take a look at the `AddEditScreen` next.
+Il y aussi un autre `FloatingActionButton` qui fait naviguer l'utilisateur à `AddEditScreen` avec `isEditing` qui prend `true` comme valeur. Nous allons examiner l'écran `AddEditScreen` juste après.
 
-### Add/Edit Screen
+### Add/Edit Screen (Ecran d'ajout/de modification)
 
-> The `AddEditScreen` widget allows the user to either create a new todo or update an existing todo based on the `isEditing` flag that is passed via the constructor.
+> Le widget `AddEditScreen` permet à l'utilisateur de soit créer un nouveau todo ou alors d'actualiser un todo existant en se basant sur le flag (drapeau) `isEditing` qui lui est passé via le constructeur.
 
-Create `screens/add_edit_screen.dart` and let's have a look at the implementation.
+Créons `screens/add_edit_screen.dart` et regardons comment l'implémenter.
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -1184,18 +1182,18 @@ class _AddEditScreenState extends State<AddEditScreen> {
 }
 ```
 
-There's nothing bloc-specific in this widget. It's simply presenting a form and:
+Il n'y a rien de specific au bloc dans ce widget, il s'agit simplement d'un formulaire et:
 
-- if `isEditing` is true the form is populated it with the existing todo details.
-- otherwise the inputs are empty so that the user can create a new todo.
+- si `isEditing` est true le formulaire est rempli avec les détails existantes du todo.
+- sinon les inputs sont vides pour que l'utilisateur puisse créer un nouveau todo.
 
-It uses an `onSave` callback function to notify its parent of the updated or newly created todo.
+On utilise une fonction de rappel (callback) `onSave` pour notifier le parent de l'actualisation ou la création d'un todo.
 
-That's it for the screens in our application so before we forget, let's create a barrel file to export them.
+C'est tout pour les écrans dans notre application, mais avant d'oublier, créons notre fichier baril.
 
-### Screens Barrel
+### Screens Barrel (Baril d'écrans)
 
-Create `screens/screens.dart` and export all three.
+Créons `screens/screens.dart` et exportons les trois fichiers.
 
 ```dart
 export './add_edit_screen.dart';
@@ -1203,15 +1201,15 @@ export './details_screen.dart';
 export './home_screen.dart';
 ```
 
-Next, let's implement all of the "widgets" (anything that isn't a screen).
+Ensuite, implémentons tous les "widgets" (tout ce qui n'est pas un screen).
 
 ## Widgets
 
-### Filter Button
+### Filter Button (Boutton pour filtrer)
 
-> The `FilterButton` widget will be responsible for providing the user with a list of filter options and will notify the `FilteredTodosBloc` when a new filter is selected.
+> Le widget `FilterButton` sera responsable de fournir à l'utilisateur unbe liste des options de filtrage et il notifiera le `FilteredTodosBloc` quand un filtre a été selectionné.
 
-Let's create a new directory called `widgets` and put our `FilterButton` implementation in `widgets/filter_button.dart`.
+Créons un nouveau fichier appelé `widgets` et mettons-y l'implémentation de `FilterButton` dans `widgets/filter_button.dart`.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1311,25 +1309,25 @@ class _Button extends StatelessWidget {
 }
 ```
 
-The `FilterButton` needs to respond to state changes in the `FilteredTodosBloc` so it uses `BlocProvider` to access the `FilteredTodosBloc` from the `BuildContext`. It then uses `BlocBuilder` to re-render whenever the `FilteredTodosBloc` changes state.
+Le `FilterButton` a besoin de répondre aux changements d'états (states) dans le `FilteredTodosBloc` donc il utilise un `BlocProvider` pour accèder au `FilteredTodosBloc` depuis `BuildContext`. Ensuite, il utilise `BlocBuilder` pour ré-affichier peu importe quand le state de `FilteredTodosBloc` change.
 
-The rest of the implementation is pure Flutter and there isn't much going on so we can move on to the `ExtraActions` widget.
+Le reste de l'implémentation est du Flutter pur et il n'y a rien de spécial qui se passe, nous pouvons donc passer au widget `ExtraActions`.
 
 ### Extra Actions
 
-> Similarly to the `FilterButton`, the `ExtraActions` widget is responsible for providing the user with a list of extra options: Toggling Todos and Clearing Completed Todos.
+> Comme pour `FilterButton`, le widget `ExtraActions` est responsable de founir à l'utilisateur une liste d'options supplémentaires :  Toggling Todos et nettoyer (clear) les todos complétés.
 
-Since this widget doesn't care about the filters it will interact with the `TodosBloc` instead of the `FilteredTodosBloc`.
+Puisque ce widget s'en fiche des filters, il va intéragir directement avec `TodosBloc` plutôt que `FilteredTodosBloc`.
 
-Let's create the `ExtraAction` model in `models/extra_action.dart`.
+Créons le modèle `ExtraAction` dans `models/extra_action.dart`.
 
 ```dart
 enum ExtraAction { toggleAllComplete, clearCompleted }
 ```
 
-And don't forget to export it from the `models/models.dart` barrel file.
+Et n'oubliez pas de l'exporter dans le fichier baril `models/models.dart`.
 
-Next, let's create `widgets/extra_actions.dart` and implement it.
+Ensuite, créons `widgets/extra_actions.dart` et implémentons le.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1392,17 +1390,17 @@ class ExtraActions extends StatelessWidget {
 }
 ```
 
-Just like with the `FilterButton`, we use `BlocProvider` to access the `TodosBloc` from the `BuildContext` and `BlocBuilder` to respond to state changes in the `TodosBloc`.
+Comme pouir le `FilterButton`, on utilise un `BlocProvider` pour accèder au `TodosBloc` à partir de  `BuildContext` et `BlocBuilder` to en réponse aux changements de states dans le bloc `TodosBloc`.
 
-Based on the action selected, the widget adds an event to the `TodosBloc` to either `ToggleAll` todos' completion states or `ClearCompleted` todos.
+En fonction actions sélectionnées, the widget adds an event to the `TodosBloc` to either `ToggleAll` todos' completion states or `ClearCompleted` todos.
 
-Next we'll take a look at the `TabSelector` widget.
+Ensuite nous travaillerons sur le widget `TabSelector`.
 
-### Tab Selector
+### Tab Selector (Sélectionner la fenêtre)
 
-> The `TabSelector` widget is responsible for displaying the tabs in the `BottomNavigationBar` and handling user input.
+> Le widget `TabSelector` a pour rôle d'afficher les fenêtres dans le `BottomNavigationBar` et de gérer les input des utilisateurs.
 
-Let's create `widgets/tab_selector.dart` and implement it.
+Créons `widgets/tab_selector.dart` et implémentons le.
 
 ```dart
 import 'package:flutter/cupertino.dart';
@@ -1444,16 +1442,13 @@ class TabSelector extends StatelessWidget {
   }
 }
 ```
+Vous pouvez voir qu'il n'y aucune dépendance sur les blocs dans ce widget; il appel juste `onTabSelected` quand une fenêtre est sélectionné et il prend aussi `activeTab` comme input afin de savoir quelle fenêtre est actuellement sélectionné.
+Ensuite, nous allons regarder le widget `FilteredTodos`.
 
-You can see that there is no dependency on blocs in this widget; it just calls `onTabSelected` when a tab is selected and also takes an `activeTab` as input so it knows which tab is currently selected.
+### Filtered Todos (Filtrés les todos)
 
-Next, we'll take a look at the `FilteredTodos` widget.
-
-### Filtered Todos
-
-> The `FilteredTodos` widget is responsible for showing a list of todos based on the current active filter.
-
-Create `widgets/filtered_todos.dart` and let's implement it.
+> Le widget `FilteredTodos` est reponsable d'afficher une liste de todos en fonction des filtres actifs.
+Créons `widgets/filtered_todos.dart` et implémentons le.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1529,19 +1524,19 @@ class FilteredTodos extends StatelessWidget {
 }
 ```
 
-Just like the previous widgets we've written, the `FilteredTodos` widget uses `BlocProvider` to access blocs (in this case both the `FilteredTodosBloc` and the `TodosBloc` are needed).
+Comme pour les widgets précédemment écrits, le widget `FilteredTodos` utilise `BlocProvider` pour accèder au bloc (dans ce cas les deux blocs `FilteredTodosBloc` et `TodosBloc` son nécessaires).
 
-?> The `FilteredTodosBloc` is needed to help us render the correct todos based on the current filter
+?> Le `FilteredTodosBloc` est nécessaire pour nous aider à afficher correment les todos en fonction de leur filtre actuel
 
-?> The `TodosBloc` is needed to allow us to add/delete todos in response to user interactions such as swiping on an individual todo.
+?> Le `TodosBloc` est nécessaire pour nous permettre d'ajouter/supprimer des todos en réponse aux intéractions de l'utilisateur comme swiper sur un todo individuel.
 
-From the `FilteredTodos` widget, the user can navigate to the `DetailsScreen` where it is possible to edit or delete the selected todo. Since our `FilteredTodos` widget renders a list of `TodoItem` widgets, we'll take a look at those next.
+Depuis le widget `FilteredTodos`, l'utilisateur peut naviguer sur l'écran `DetailsScreen` où il est possible de soit supprimer ou éditer un todo sélectionné. Puisque notre widget `FilteredTodos` affiche une liste de widgets `TodoItem`, nous allons nous y intéresser prochainement.
 
 ### Todo Item
 
-> `TodoItem` is a stateless widget which is responsible for rendering a single todo and handling user interactions (taps/swipes).
+> `TodoItem` est un stateless widget qui est reponsable d'afficher un seul todo et de gérer les intéractions de l'utilisateurs (taps/swipes).
 
-Create `widgets/todo_item.dart` and let's build it.
+Créons `widgets/todo_item.dart` et construisons le.
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -1601,15 +1596,14 @@ class TodoItem extends StatelessWidget {
 }
 ```
 
-Again, notice that the `TodoItem` has no bloc-specific code in it. It simply renders based on the todo we pass via the constructor and calls the injected callback functions whenever the user interacts with the todo.
+Encore une fois, notez que le `TodoItem` n'a pas de relation avec un bloc specific dans ce code. Il va simplement afficher via le todo passé dans le constructeur et ensuite appelé les fonctions de rappels (callback) injectés quand l'utilisateur va intéragir avec le todo.
+Ensuite, nous allons construire le widget `DeleteTodoSnackBar`.
 
-Next up, we'll create the `DeleteTodoSnackBar`.
+### Delete Todo SnackBar (Supprimer un todo)
 
-### Delete Todo SnackBar
+> Le `DeleteTodoSnackBar` sera responsable d'afficher à l'utilisateur que le todo a été supprimé et va permettre à l'utilisateur d'annuler son action.
 
-> The `DeleteTodoSnackBar` is responsible for indicating to the user that a todo was deleted and allows the user to undo his/her action.
-
-Create `widgets/delete_todo_snack_bar.dart` and let's implement it.
+Créons `widgets/delete_todo_snack_bar.dart` et implémentons le.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1640,15 +1634,15 @@ class DeleteTodoSnackBar extends SnackBar {
 }
 ```
 
-By now, you're probably noticing a pattern: this widget also has no bloc-specific code. It simply takes in a todo in order to render the task and calls a callback function called `onUndo` if a user presses the undo button.
+Maintenant, vous avez probablement repérer le pattern: ce widget lui aussi ne possède pas de bloc-specific code. Il va simplement prendre un todo dans le but d'afficher la tâche et d'appeler une fonction callback appelé `onUndo` si un utilisateur appuie sur le boutton undo.
 
-We're almost done; just two more widgets to go!
+Nous y sommes presque; plus que deux widgets restants!
 
-### Loading Indicator
+### Loading Indicator (Indicateur de chargement)
 
-> The `LoadingIndicator` widget is a stateless widget that is responsible for indicating to the user that something is in progress.
+> Le widget `LoadingIndicator` est stateless widget qui est responsable d'indiquer à l'utilisateur que quelque chose est en progrès.
 
-Create `widgets/loading_indicator.dart` and let's write it.
+Créons `widgets/loading_indicator.dart` et écrivons le.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1664,16 +1658,14 @@ class LoadingIndicator extends StatelessWidget {
   }
 }
 ```
-
-Not much to discuss here; we're just using a `CircularProgressIndicator` wrapped in a `Center` widget (again no bloc-specific code).
+Il n'y a rien de spécial à dire ici; nous utilisons un standard `CircularProgressIndicator` enveloppé dans un widget `Center` (encore une fois rien de spécific à du code Bloc).
 
 Lastly, we need to build our `Stats` widget.
 
 ### Stats
 
-> The `Stats` widget is responsible for showing the user how many todos are active (in progress) vs. completed.
-
-Let's create `widgets/stats.dart` and take a look at the implementation.
+> Le widget `Stats` est responsable de montrer à l'utilisateur combien de todos sont actifs (en progrès donc) vs combien sont complétés.
+Créons `widgets/stats.dart` et regardons comme l'implémenter.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1741,11 +1733,11 @@ class Stats extends StatelessWidget {
 }
 ```
 
-We're accessing the `StatsBloc` using `BlocProvider` and using `BlocBuilder` to rebuild in response to state changes in the `StatsBloc` state.
+Nous accèdons à `StatsBloc` en utilisant `BlocProvider` et `BlocBuilder` pour reconstruire la réponse aux changements de state dans le state `StatsBloc`.
 
-## Putting it all together
+## Assemblons le tout !
 
-Let's create `main.dart` and our `TodosApp` widget. We need to create a `main` function and run our `TodosApp`.
+Créons `main.dart` dans notre widget `TodosApp`. Nous avons besoin de créer une fonction `main` pour lancer notre `TodosApp`.
 
 ```dart
 void main() {
@@ -1768,11 +1760,11 @@ void main() {
 }
 ```
 
-?> **Note:** We are setting our BlocSupervisor's delegate to the `SimpleBlocDelegate` we created earlier so that we can hook into all transitions and errors.
+?> **Note:** Le BlocSupervisor's delegate prend la valeur de `SimpleBlocDelegate` que nous avons créé plutôt pour qu'on puisse récupérer toutes les transitions et les erreurs.
 
-?> **Note:** We are also wrapping our `TodosApp` widget in a `BlocProvider` which manages initializing, closing, and providing the `TodosBloc` to our entire widget tree from [flutter_bloc](https://pub.dev/packages/flutter_bloc). We immediately add the `TodosLoadSuccess` event in order to request the latest todos.
+?> **Note:** Nous enveloppons aussi notre widget `TodosApp` dans un `BlocProvider` qui va gérer l'initialisation, la fermeture et de fournir le bloc `TodosBloc` à l'arbre entier de notre widget depuis [flutter_bloc](https://pub.dev/packages/flutter_bloc). Cela permet d'y avoir accès dans tous les widgets enfants. Nous ajoutons aussi immédiatement l'événement `TodosLoadSuccess` dans le but de "demander" les todos les plus récents.
 
-Next, let's implement our `TodosApp` widget.
+Ensuite nous implémentons notre widget `TodosApp`.
 
 ```dart
 class TodosApp extends StatelessWidget {
@@ -1823,14 +1815,14 @@ class TodosApp extends StatelessWidget {
 }
 ```
 
-Our `TodosApp` is a `StatelessWidget` which accesses the provided `TodosBloc` via the `BuildContext`.
+Notre `TodosApp` est un `StatelessWidget` qui accède le bloc `TodosBloc` fourni par le `BuildContext`.
 
-The `TodosApp` has two routes:
+Le `TodosApp` possède deux routes:
 
-- `Home` - which renders a `HomeScreen`
-- `TodoAdded` - which renders a `AddEditScreen` with `isEditing` set to `false`.
+- `Home` - qui affiche `HomeScreen`
+- `TodoAdded` - qui affiche `AddEditScreen` avec `isEditing` qui a pour valeur `false`.
 
-The `TodosApp` also makes the `TabBloc`, `FilteredTodosBloc`, and `StatsBloc` available to the widgets in its subtree by using the `MultiBlocProvider` widget from [flutter_bloc](https://pub.dev/packages/flutter_bloc).
+Le `TodosApp` rend `TabBloc`, `FilteredTodosBloc`, et `StatsBloc` disponible pour les widgets dans le sous-arbre en utilisant le widget `MultiBlocProvider` de [flutter_bloc](https://pub.dev/packages/flutter_bloc).
 
 ```dart
 MultiBlocProvider(
@@ -1849,7 +1841,7 @@ MultiBlocProvider(
 );
 ```
 
-is equivalent to writing
+revient à écrire
 
 ```dart
 BlocProvider<TabBloc>(
@@ -1864,9 +1856,9 @@ BlocProvider<TabBloc>(
 );
 ```
 
-You can see how using `MultiBlocProvider` helps reduce the levels of nesting and makes the code easier to read and maintain.
+Vous pouvez voir à quel point `MultiBlocProvider` aide à réduire les niveaux  reduce the levels de nesting et donne un code plus facile à lire et à maintenir.
 
-The entire `main.dart` should look like this:
+Notre `main.dart` en entier devrait ressmebler à ceci :
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1949,7 +1941,6 @@ class TodosApp extends StatelessWidget {
   }
 }
 ```
+C'est tout ce qu'il nous faut! Nous avons réussi à implémenter une todo app dans flutter en utilisant les packages [bloc] https://pub.dev/packages/bloc) et [flutter_bloc](https://pub.dev/packages/flutter_bloc) et nous avons  and we’ve séparés avec succès notre présentation (screens et widgets) de notre business logic.
 
-That’s all there is to it! We’ve now successfully implemented a todos app in flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
-
-The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos).
+Le code source en entier est disponible [ici](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos)!
