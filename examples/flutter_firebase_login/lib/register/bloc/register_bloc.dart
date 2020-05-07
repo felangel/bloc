@@ -40,27 +40,27 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     RegisterEvent event,
   ) async* {
     if (event is RegisterEmailChanged) {
-      yield* _mapEmailChangedToState(event.email);
+      yield* _mapRegisterEmailChangedToState(event.email);
     } else if (event is RegisterPasswordChanged) {
-      yield* _mapPasswordChangedToState(event.password);
+      yield* _mapRegisterPasswordChangedToState(event.password);
     } else if (event is RegisterSubmitted) {
-      yield* _mapFormSubmittedToState(event.email, event.password);
+      yield* _mapRegisterSubmittedToState(event.email, event.password);
     }
   }
 
-  Stream<RegisterState> _mapEmailChangedToState(String email) async* {
+  Stream<RegisterState> _mapRegisterEmailChangedToState(String email) async* {
     yield state.update(
       isEmailValid: Validators.isValidEmail(email),
     );
   }
 
-  Stream<RegisterState> _mapPasswordChangedToState(String password) async* {
+  Stream<RegisterState> _mapRegisterPasswordChangedToState(String password) async* {
     yield state.update(
       isPasswordValid: Validators.isValidPassword(password),
     );
   }
 
-  Stream<RegisterState> _mapFormSubmittedToState(
+  Stream<RegisterState> _mapRegisterSubmittedToState(
     String email,
     String password,
   ) async* {

@@ -32,7 +32,6 @@ class RegisterPasswordChanged extends RegisterEvent {
   String toString() => 'PasswordChanged { password: $password }';
 }
 
-//Class is not being used anywhere in this project; previously 'Submitted'
 class RegisterSubmitted extends RegisterEvent {
   final String email;
   final String password;
