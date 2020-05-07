@@ -140,6 +140,7 @@
 
 ### 视屏教程
 
+- [Bloc Library: Basics and Beyond 🚀](https://youtu.be/knMvKPKBzGE) - Talk given at [Flutter Europe](https://fluttereurope.dev) about the basics of the bloc library, by [Felix Angelov](https://github.com/felangel).
 - [Flutter Bloc Library Tutorial](https://www.youtube.com/watch?v=hTExlt1nJZI) - 
 Bloc库的简介, 作者： [Reso Coder](https://resocoder.com).
 - [Flutter Youtube Search](https://www.youtube.com/watch?v=BJY8nuYUM7M) - 如何使用Bloc和flutter_bloc软件包构建与API交互的Youtube Search应用, 作者： [Reso Coder](https://resocoder.com).

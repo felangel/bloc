@@ -1,3 +1,8 @@
+# 5.1.0
+
+- Add `errors` to `blocTest` to enable expecting unhandled exceptions within blocs.
+- Update `whenListen` to also handle stubbing the state property of the bloc.
+
 # 5.0.0
 
 - Update to `bloc: ^4.0.0`
