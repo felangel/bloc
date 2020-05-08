@@ -5,7 +5,7 @@
 > Dans ce tutoriel, nous allons construire une application Todos (Liste de choses à faire) en utilisant la librairie Bloc !
 ?> **Note:** Pour des raisons de sens, je ne vais toujours tout traduire donc voici une liste des mots anglais et leur équivalent français que vous allez retrouver tout au long du tutorial : state -> état / Todos -> Choses à faires / Overriding -> Réécrire du code par dessus un code déjà existant et similaire / Input -> valeur d'entrée / Output -> valeur de sortie
 
-![demo](./assets/gifs/flutter_todos.gif)
+![demo](../assets/gifs/flutter_todos.gif)
 
 ## Configuration
 
