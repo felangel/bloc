@@ -1,3 +1,8 @@
+# 4.0.0
+
+- Updated to `bloc: ^4.0.0` and `flutter_bloc: ^4.0.0`
+- `onTransition` moved from `HydratedBlocDelegate` to `HydratedBloc`
+
 # 3.1.0
 
 - Persist `initialState` when initialized (thanks to [@orsenkucher](https://github.com/orsenkucher)).

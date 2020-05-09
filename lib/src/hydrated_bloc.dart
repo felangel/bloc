@@ -19,7 +19,7 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
       try {
         _storage.write(storageToken, json.encode(stateJson));
       } on dynamic catch (error, stackTrace) {
-        _handleError(error, stackTrace);
+        onError(error, stackTrace);
       }
     }
   }
@@ -37,9 +37,23 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
           ? fromJson(json.decode(jsonString) as Map<String, dynamic>)
           : null;
     } on dynamic catch (error, stackTrace) {
-      _handleError(error, stackTrace);
+      onError(error, stackTrace);
       return null;
     }
+  }
+
+  @override
+  void onTransition(Transition<Event, State> transition) {
+    final state = transition.nextState;
+    final stateJson = toJson(state);
+    if (stateJson != null) {
+      try {
+        _storage.write(storageToken, json.encode(stateJson));
+      } on dynamic catch (error, stackTrace) {
+        onError(error, stackTrace);
+      }
+    }
+    super.onTransition(transition);
   }
 
   /// `id` is used to uniquely identify multiple instances
@@ -53,7 +67,7 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
 
   /// `storageToken` is used as registration token for hydrated storage.
   @nonVirtual
-  String get storageToken => '${runtimeType.toString()}$id';
+  String get storageToken => '${runtimeType.toString()}${id ?? ''}';
 
   /// `clear` is used to wipe or invalidate the cache of a `HydratedBloc`.
   /// Calling `clear` will delete the cached state of the bloc
@@ -74,9 +88,4 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
   ///
   /// If `toJson` returns `null`, then no state changes will be persisted.
   Map<String, dynamic> toJson(State state);
-
-  void _handleError(Object error, [StackTrace stackTrace]) {
-    _delegate.onError(this, error, stackTrace);
-    onError(error, stackTrace);
-  }
 }

@@ -9,7 +9,7 @@ dartfmt --set-exit-if-changed .
 if grep -q 'sdk: flutter' "./pubspec.yaml"; then
   flutter packages get
   flutter analyze --no-congratulate
-  flutter test --coverage --coverage-path coverage/lcov.info
+  flutter test -j 1 --coverage --coverage-path coverage/lcov.info
 else
   pub get
   dartanalyzer --fatal-infos --fatal-warnings .

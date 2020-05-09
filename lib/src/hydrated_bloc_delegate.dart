@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -31,21 +30,4 @@ class HydratedBlocDelegate extends BlocDelegate {
 
   /// {@macro hydratedblocdelegate}
   HydratedBlocDelegate(this.storage);
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    final state = transition.nextState;
-    if (bloc is HydratedBloc) {
-      final stateJson = bloc.toJson(state);
-      if (stateJson != null) {
-        try {
-          storage.write(bloc.storageToken, json.encode(stateJson));
-        } on dynamic catch (error, stackTrace) {
-          bloc.onError(error, stackTrace);
-          onError(bloc, error, stackTrace);
-        }
-      }
-    }
-  }
 }
