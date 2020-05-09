@@ -54,8 +54,6 @@ For example, if a user opened our app and tapped the increment button once we wo
 
 > Stream은 일련의 asynchronous data입니다.
 
-Bloc은 [RxDart](https://pub.dev/packages/rxdart)을 바탕으로 개발되었습니다; 하지만 `RxDart`의 구현 세부 사항은 모두 추상화했습니다.
-
 Bloc을 사용하기 위해서는, `Stream`과 이것의 동작 원리를 제대로 이해하는 것이 중요합니다.
 
 > 만일 `Stream`이 아직 어색하다면 물이 흐르는 파이프를 생각해봅시다. 파이프가 `Stream`

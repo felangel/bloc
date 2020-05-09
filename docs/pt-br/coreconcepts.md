@@ -52,8 +52,6 @@ Confira a documentação oficial [Documentação Dart](https://dart.dev/tutorial
 
 > Um fluxo é uma sequência de dados assíncronos.
 
-Bloc é construído em cima do [RxDart](https://pub.dev/packages/rxdart); no entanto, ele abstrai todos os detalhes de implementação específicos do `RxDart`.
-
 Para usar o Bloc, é essencial ter uma sólida compreensão de `Streams` e como elas funcionam.
 
 > Se você não estiver familiarizado com o `Streams`, pense em um cano com água fluindo através dele. O tubo é a `Stream` e a água são os dados assíncronos.

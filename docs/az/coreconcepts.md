@@ -52,8 +52,6 @@ Bütün vəziyyət dəyişikliyi yadda saxlanıldığı üçün, tətbiqlərimiz
 
 > Stream asinxron dataların ardıcıllığıdır.
 
-Bloc [RxDart](https://pub.dev/packages/rxdart) kitabxanası üzərində qurulub; buna baxmayaraq, `RxDart`-ın həyata keçirilməsi üçün spesifik olan hər şeyi mücərrədləşdirir.
-
 Bloc-u istifadə etmək üçün, `Streamlər`-i və onların necə işləməsini anlamaq vacibdir.
 
 > Əgər siz `Streamlər` ilə tanış deyilsinizsə, bunu bir borudan axan su kimi təsəvvür edin. Bu boru `Stream`-dir və su isə asinxron datadır.
