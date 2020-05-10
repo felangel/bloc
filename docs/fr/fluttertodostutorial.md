@@ -1023,14 +1023,14 @@ class DetailsScreen extends StatelessWidget {
                                       todo.task,
                                       key: ArchSampleKeys.detailsTodoItemTask,
                                       style:
-                                          Theme.of(context).textTheme.headline,
+                                          Theme.of(context).textTheme.headline5,
                                     ),
                                   ),
                                 ),
                                 Text(
                                   todo.note,
                                   key: ArchSampleKeys.detailsTodoItemNote,
-                                  style: Theme.of(context).textTheme.subhead,
+                                  style: Theme.of(context).textTheme.subtitle1,
                                 ),
                               ],
                             ),
@@ -1139,7 +1139,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
                 initialValue: isEditing ? widget.todo.task : '',
                 key: ArchSampleKeys.taskField,
                 autofocus: !isEditing,
-                style: textTheme.headline,
+                style: textTheme.headline5,
                 decoration: InputDecoration(
                   hintText: localizations.newTodoHint,
                 ),
@@ -1154,7 +1154,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
                 initialValue: isEditing ? widget.todo.note : '',
                 key: ArchSampleKeys.noteField,
                 maxLines: 10,
-                style: textTheme.subhead,
+                style: textTheme.subtitle1,
                 decoration: InputDecoration(
                   hintText: localizations.notesHint,
                 ),
@@ -1225,10 +1225,10 @@ class FilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultStyle = Theme.of(context).textTheme.body1;
+    final defaultStyle = Theme.of(context).textTheme.bodyText2;
     final activeStyle = Theme.of(context)
         .textTheme
-        .body1
+        .bodyText2
         .copyWith(color: Theme.of(context).accentColor);
     return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
         builder: (context, state) {
@@ -1577,7 +1577,7 @@ class TodoItem extends StatelessWidget {
             child: Text(
               todo.task,
               key: ArchSampleKeys.todoItemTask(todo.id),
-              style: Theme.of(context).textTheme.title,
+              style: Theme.of(context).textTheme.headline6,
             ),
           ),
         ),
@@ -1587,7 +1587,7 @@ class TodoItem extends StatelessWidget {
                 key: ArchSampleKeys.todoItemNote(todo.id),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.subhead,
+                style: Theme.of(context).textTheme.subtitle1,
               )
             : null,
       ),
@@ -1695,7 +1695,7 @@ class Stats extends StatelessWidget {
                   padding: EdgeInsets.only(bottom: 8.0),
                   child: Text(
                     ArchSampleLocalizations.of(context).completedTodos,
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
                 Padding(
@@ -1703,14 +1703,14 @@ class Stats extends StatelessWidget {
                   child: Text(
                     '${state.numCompleted}',
                     key: ArchSampleKeys.statsNumCompleted,
-                    style: Theme.of(context).textTheme.subhead,
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
                   child: Text(
                     ArchSampleLocalizations.of(context).activeTodos,
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
                 Padding(
@@ -1718,7 +1718,7 @@ class Stats extends StatelessWidget {
                   child: Text(
                     "${state.numActive}",
                     key: ArchSampleKeys.statsNumActive,
-                    style: Theme.of(context).textTheme.subhead,
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
                 )
               ],
