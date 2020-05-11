@@ -3,13 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('AuthenticationEvent', () {
-    group('AppStarted', () {
+    group('AuthenticationStarted', () {
       test('props are []', () {
         expect(AuthenticationStarted().props, []);
       });
 
-      test('toString is "AppStarted"', () {
-        expect(AuthenticationStarted().toString(), 'AppStarted');
+      test('toString is "AuthenticationStarted"', () {
+        expect(AuthenticationStarted().toString(), 'AuthenticationStarted');
       });
     });
 
@@ -26,13 +26,13 @@ void main() {
       });
     });
 
-    group('LoggedOut', () {
+    group('AuthenticationLoggedOut', () {
       test('props are []', () {
         expect(AuthenticationLoggedOut().props, []);
       });
 
-      test('toString is "LoggedOut"', () {
-        expect(AuthenticationLoggedOut().toString(), 'LoggedOut');
+      test('toString is "AuthenticationLoggedOut"', () {
+        expect(AuthenticationLoggedOut().toString(), 'AuthenticationLoggedOut');
       });
     });
   });

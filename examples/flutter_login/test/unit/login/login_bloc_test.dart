@@ -83,7 +83,8 @@ void main() {
         LoginInitial(),
       ],
       verify: (_) async {
-        verify(authenticationBloc.add(AuthenticationLoggedIn(token: 'token'))).called(1);
+        verify(authenticationBloc.add(AuthenticationLoggedIn(token: 'token')))
+            .called(1);
       },
     );
 

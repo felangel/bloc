@@ -12,7 +12,10 @@ void main() {
       });
 
       test(
-          'toString is LoginButtonPressed { username: username, password: password }',
+          //removed 'toString' as it would fail command:
+          // flutter format --set-exit-if-changed test
+          //line length exceeded 80 characters
+          'is LoginButtonPressed { username: username, password: password }',
           () {
         expect(
           LoginButtonPressed(
