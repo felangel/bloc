@@ -6,96 +6,95 @@
 
 ### BlocBuilder
 
-**BlocBuilder** is a Flutter widget which requires a `Bloc` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed. The `builder` function will potentially be called many times and should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that returns a widget in response to the state.
+**BlocBuilder** est un widget Flutter qui nécessite un `Bloc` et une fonction `builder`. `BlocBuilder` gère la construction du widget en réponse aux nouveaux states. `BlocBuilder` est très similaire à `StreamBuilder` mais il a une API plus simple pour réduire la charge de code "passe-partout" (boilerplate) requise. La fonction `builder` peut potentiellement être appelée plusieurs fois et devrait être une [fonction pure](https://en.wikipedia.org/wiki/Pure_function) qui retourne un widget en réponse au state.
 
-See `BlocListener` if you want to "do" anything in response to state changes such as navigation, showing a dialog, etc...
+Voir `BlocListener` si vous voulez faire quelque chose en réponse au changement de state comme la navigation, afficher une boite de dialogue...
 
-If the bloc parameter is omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+Si vous oubliez le paramètre bloc, `BlocBuilder` va automatiquement faire un lookup(va chercher) en utilisant `BlocProvider` et le `BuildContext` actuel.
 
 [bloc_builder.dart](_snippets/flutter_bloc_core_concepts/bloc_builder.dart.md ':include')
 
-Only specify the bloc if you wish to provide a bloc that will be scoped to a single widget and isn't accessible via a parent `BlocProvider` and the current `BuildContext`.
+Spécifiez le bloc seulement si vous voulez fournir un bloc qui aura pour portée un seul widget et qui n'est pas accessible par un parent `BlocProvider` ou le `BuildContext` actuel.
 
 [bloc_builder.dart](_snippets/flutter_bloc_core_concepts/bloc_builder_explicit_bloc.dart.md ':include')
 
-If you want fine-grained control over when the builder function is called you can provide an optional `condition` to `BlocBuilder`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `builder` will be called with `state` and the widget will rebuild. If `condition` returns false, `builder` will not be called with `state` and no rebuild will occur.
+Si vous voulez avoir plus de controle sur la fonction builder lorsqu'elle est appelée, vous pouvez fournir une `condition` optionnelle au `BlocBuilder`. La `condition` prend le state précédent du bloc et le compare au state du bloc actuel pour retourner un boolean. Si la `condition` renvoie true, `builder` va être appelé avec `state` et le widget sera reconstruit. Si `condition` retourne false, `builder` ne sera pas appelé avec `state` et la reconstruction n'aura pas lieu.
 
 [bloc_builder.dart](_snippets/flutter_bloc_core_concepts/bloc_builder_condition.dart.md ':include')
 
 ### BlocProvider
 
-**BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
+**BlocProvider** est un widget Flutter qui fournit un bloc a son enfant(children) via `BlocProvider.of<T>(context)`. C'est utilisé comme un widget à injection dépendante (dependency injection) pour qu'une seule instance d'un bloc puisse être distribué à plusieurs widgets à l'intérieur d'un sous-arbre (subtree).
 
-In most cases, `BlocProvider` should be used to create new `blocs` which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle closing the bloc.
+La plus part du temps, `BlocProvider` devrait être utilisé pour créer de nouveaux `blocs` qui seront rendus disponibles au reste du subtree. Dans ce cas, puisque `BlocProvider` est responsable pour la création des blocs, il va automatiquement gérer la fermeture des blocs.
 
 [bloc_provider.dart](_snippets/flutter_bloc_core_concepts/bloc_provider.dart.md ':include')
 
-In some cases, `BlocProvider` can be used to provide an existing bloc to a new portion of the widget tree. This will be most commonly used when an existing `bloc` needs to be made available to a new route. In this case, `BlocProvider` will not automatically close the bloc since it did not create it.
+Dans certains cas, `BlocProvider` peut-être utilisé pour fournir un bloc existant a une nouvelle portion dans notre widget tree (arbre). Cette pratique est souvent utilisée quand nous avons un `bloc` déjà existant qui a besoin d'être disponible à une nouvelle route. Dans ce cas, `BlocProvider` ne fermera pas automatiquement le bloc puisqu'il ne l'a pas crée.
 
 [bloc_provider.dart](_snippets/flutter_bloc_core_concepts/bloc_provider_value.dart.md ':include')
 
-then from either `ChildA`, or `ScreenA` we can retrieve `BlocA` with:
+ensuite depuis `ChildA` ou `ScreenA` nous pouvons récupérer le `BlocA` avec:
 
 [bloc_provider.dart](_snippets/flutter_bloc_core_concepts/bloc_provider_lookup.dart.md ':include')
 
 ### MultiBlocProvider
 
-**MultiBlocProvider** is a Flutter widget that merges multiple `BlocProvider` widgets into one.
-`MultiBlocProvider` improves the readability and eliminates the need to nest multiple `BlocProviders`.
-By using `MultiBlocProvider` we can go from:
+**MultiBlocProvider** est widget Flutter qui fusionne de multiples widgets `BlocProvider` widgets en un seul.
+`MultiBlocProvider` améliorer la lecture et élimine le besoin d'encapsuler plusieurs `BlocProviders`.
+En utilisant `MultiBlocProvider` nous passons de:
 
 [bloc_provider.dart](_snippets/flutter_bloc_core_concepts/nested_bloc_provider.dart.md ':include')
 
-to:
+à:
 
 [multi_bloc_provider.dart](_snippets/flutter_bloc_core_concepts/multi_bloc_provider.dart.md ':include')
 
 ### BlocListener
 
-**BlocListener** is a Flutter widget which takes a `BlocWidgetListener` and an optional `Bloc` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
+**BlocListener** est un widget Flutter qui prend un `BlocWidgetListener`, un optionnel `Bloc` et il invoque le `listener` en réponse à tout changement de state dans le bloc. Il devrait être utilisé pour les fonctionnalités qui ont besoin de se produire une fois à chaque changement de state comme la navigation, afficher une `SnackBar`, afficher une `Dialog`, etc...
 
-`listener` is only called once for each state change (**NOT** including `initialState`) unlike `builder` in `BlocBuilder` and is a `void` function.
+`listener` est appelé à chaque changement de state(**SANS** inclure `initialState`) à l'inverse de `builder` dans `BlocBuilder` et sa fonction `void`.
 
-If the bloc parameter is omitted, `BlocListener` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+Si le paramètre bloc n'est pas renseigné, `BlocListener` va automatiquement faire un lookup(va chercher) en utilisant `BlocProvider` et le `BuildContext` actuel.
 
 [bloc_listener.dart](_snippets/flutter_bloc_core_concepts/bloc_listener.dart.md ':include')
 
-Only specify the bloc if you wish to provide a bloc that is otherwise not accessible via `BlocProvider` and the current `BuildContext`.
+Spécifié le bloc seulement si vous voulez fournir un bloc qui n'est pas accessible via `BlocProvider` et le `BuildContext` actuel.
 
 [bloc_listener.dart](_snippets/flutter_bloc_core_concepts/bloc_listener_explicit_bloc.dart.md ':include')
 
-If you want fine-grained control over when the listener function is called you can provide an optional `condition` to `BlocListener`. The `condition` takes the previous bloc state and current bloc state and returns a boolean. If `condition` returns true, `listener` will be called with `state`. If `condition` returns false, `listener` will not be called with `state`.
+Si vous voulez avoir plus de contrôle lorsque la fonction listener est appelé, vous pouvez utiliser une `condition` optionnele au `BlocListener`. La `condition` prend le précédent state du bloc et celui du bloc actuel pour retourner un boolean. Si `condition` renvoie true, `listener` sera appelé avec `state`. Si `condition` renvoie false, `listener` ne sera pas appelé avec `state`.
 
 [bloc_listener.dart](_snippets/flutter_bloc_core_concepts/bloc_listener_condition.dart.md ':include')
 
 ### MultiBlocListener
 
-**MultiBlocListener** is a Flutter widget that merges multiple `BlocListener` widgets into one.
-`MultiBlocListener` improves the readability and eliminates the need to nest multiple `BlocListeners`.
-By using `MultiBlocListener` we can go from:
+**MultiBlocListener** est un widget Flutter qui fusionne plus widgets `BlocListener` en un seul.
+`MultiBlocListener` améliore la lecture et élimine le besoin d'encapsuler plusieurs `BlocListeners`.
+En utilisant `MultiBlocListener` nous passons de:
 
 [bloc_listener.dart](_snippets/flutter_bloc_core_concepts/nested_bloc_listener.dart.md ':include')
 
-to:
+à:
 
 [multi_bloc_listener.dart](_snippets/flutter_bloc_core_concepts/multi_bloc_listener.dart.md ':include')
 
 ### BlocConsumer
 
-**BlocConsumer** exposes a `builder` and `listener` in order to react to new states. `BlocConsumer` is analogous to a nested `BlocListener` and `BlocBuilder` but reduces the amount of boilerplate needed. `BlocConsumer` should only be used when it is necessary to both rebuild UI and execute other reactions to state changes in the `bloc`. `BlocConsumer` takes a required `BlocWidgetBuilder` and `BlocWidgetListener` and an optional `bloc`, `BlocBuilderCondition`, and `BlocListenerCondition`.
+**BlocConsumer** expose un `builder` et `listener` dans le but de réagir aux nouveaux states. `BlocConsumer` est comparable à une imbrication de `BlocListener` et `BlocBuilder` mais réduit le montant de boilerplate[traduction](https://www.google.com/search?q=boilerplate+IT&rlz=1C1CHBF_frFR865FR865&oq=boilerp&aqs=chrome.0.69i59l2j69i57j0l5.46422j1j4&sourceid=chrome&ie=UTF-8) nécessaire. `BlocConsumer` devrait être utilisé uniquement quand cela est nécessaire d'à la fois reconstruire l'UI et éxecuter trop réactions liés aux changements de states dans le `bloc`. `BlocConsumer` a comme paramètre requis `BlocWidgetBuilder` et `BlocWidgetListener` ainsi qu'un optionnel `bloc`, `BlocBuilderCondition`, et `BlocListenerCondition`.
 
-If the `bloc` parameter is omitted, `BlocConsumer` will automatically perform a lookup using
-`BlocProvider` and the current `BuildContext`.
+Si le paramètre `bloc` est oublié, `BlocConsumer` va automatiquement faire un lookup(va chercher) en utilisant `BlocProvider` et le `BuildContext` actuel.
 
 [bloc_consumer.dart](_snippets/flutter_bloc_core_concepts/bloc_consumer.dart.md ':include')
 
-An optional `listenWhen` and `buildWhen` can be implemented for more granular control over when `listener` and `builder` are called. The `listenWhen` and `buildWhen` will be invoked on each `bloc` `state` change. They each take the previous `state` and current `state` and must return a `bool` which determines whether or not the `builder` and/or `listener` function will be invoked. The previous `state` will be initialized to the `state` of the `bloc` when the `BlocConsumer` is initialized. `listenWhen` and `buildWhen` are optional and if they aren't implemented, they will default to `true`.
+Les paramètres optionnels `listenWhen` et `buildWhen` peuvent être implémentés pour un meilleur controle lorsque `listener` et `builder` sont appelés. Le `listenWhen` et `buildWhen` seront invoqués sur chaque changement du `bloc` `state`. Ils prennent chacun la valeur du précédent `state` et de l'actuel `state` et ils doivent retourner un `bool` qui détermine si oui ou non les fonctions `builder` et/ou `listener` doivent être invoquées. L'ancien `state` sera initialisé au `state` du `bloc` quand le `BlocConsumer` sera initialisé. `listenWhen` et `buildWhen` sont optionnels et si ils ne sont pas implémentés, ils retourneront `true` par défaut.
 
 [bloc_consumer.dart](_snippets/flutter_bloc_core_concepts/bloc_consumer_condition.dart.md ':include')
 
 ### RepositoryProvider
 
-**RepositoryProvider** is a Flutter widget which provides a repository to its children via `RepositoryProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a repository can be provided to multiple widgets within a subtree. `BlocProvider` should be used to provide blocs whereas `RepositoryProvider` should only be used for repositories.
+**RepositoryProvider** est un widget Flutter qui fournit un répertoire a son enfant (children) via `RepositoryProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a repository can be provided to multiple widgets within a subtree. `BlocProvider` should be used to provide blocs whereas `RepositoryProvider` should only be used for repositories.
 
 [repository_provider.dart](_snippets/flutter_bloc_core_concepts/repository_provider.dart.md ':include')
 
