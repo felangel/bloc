@@ -66,13 +66,13 @@ class DetailsScreen extends StatelessWidget {
                                     child: Text(
                                       todo.task,
                                       style:
-                                          Theme.of(context).textTheme.headline,
+                                          Theme.of(context).textTheme.headline5,
                                     ),
                                   ),
                                 ),
                                 Text(
                                   todo.note,
-                                  style: Theme.of(context).textTheme.subhead,
+                                  style: Theme.of(context).textTheme.subtitle1,
                                 ),
                               ],
                             ),

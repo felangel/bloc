@@ -47,7 +47,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
               TextFormField(
                 initialValue: isEditing ? widget.todo.task : '',
                 autofocus: !isEditing,
-                style: textTheme.headline,
+                style: textTheme.headline5,
                 decoration: InputDecoration(
                   hintText: 'What needs to be done?',
                 ),
@@ -59,7 +59,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
               TextFormField(
                 initialValue: isEditing ? widget.todo.note : '',
                 maxLines: 10,
-                style: textTheme.subhead,
+                style: textTheme.subtitle1,
                 decoration: InputDecoration(
                   hintText: 'Additional Notes...',
                 ),
