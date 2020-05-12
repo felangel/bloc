@@ -14,7 +14,7 @@
 
 [my_state.dart](_snippets/faqs/state_not_updating_bad_1.dart.md ':include')
 
-[my_state.dart](_snippets/faqs/state_not_updating_bad_2.dart.md ':include')
+[my_state.dart](../_snippets/faqs/state_not_updating_bad_2.dart.md ':include')
 
 En plus de cela, assurez vous de yield une nouvelle instance de votre state dans votre bloc.
 
