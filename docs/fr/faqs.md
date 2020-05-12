@@ -26,7 +26,7 @@ En plus de cela, assurez vous de yield une nouvelle instance de votre state dans
 
 ❌ **BAD**
 
-[my_bloc.dart](_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
+[my_bloc.dart](../_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
 
 ## Quand utiliser Equatable
 
