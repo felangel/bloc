@@ -20,7 +20,7 @@ En plus de cela, assurez vous de yield une nouvelle instance de votre state dans
 
 ✅ **GOOD**
 
-[my_bloc.dart](_snippets/faqs/state_not_updating_good_2.dart.md ':include')
+[my_bloc.dart](../_snippets/faqs/state_not_updating_good_2.dart.md ':include')
 
 [my_bloc.dart](_snippets/faqs/state_not_updating_good_3.dart.md ':include')
 
