@@ -94,29 +94,29 @@ Les paramètres optionnels `listenWhen` et `buildWhen` peuvent être implément�
 
 ### RepositoryProvider
 
-**RepositoryProvider** est un widget Flutter qui fournit un répertoire a son enfant (children) via `RepositoryProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a repository can be provided to multiple widgets within a subtree. `BlocProvider` should be used to provide blocs whereas `RepositoryProvider` should only be used for repositories.
+**RepositoryProvider** est un widget Flutter qui fournit un répertoire a son enfant (children) via `RepositoryProvider.of<T>(context)`. Il est utilisé par un widget à injection dépendante pour qu'une seule instance d'un répertoire puisse être fournit à plusieurs widgets dans le sous-arbre (subtree). `BlocProvider` devrait être utilisé pour fournir des blocs tandis que `RepositoryProvider` doit uniquement utilisé pour les répertoires.
 
 [repository_provider.dart](_snippets/flutter_bloc_core_concepts/repository_provider.dart.md ':include')
 
-then from `ChildA` we can retrieve the `Repository` instance with:
+ensuite depuis `ChildA` we can récupérer l'instance de `Repository` avec:
 
 [repository_provider.dart](_snippets/flutter_bloc_core_concepts/repository_provider_lookup.dart.md ':include')
 
 ### MultiRepositoryProvider
 
-**MultiRepositoryProvider** is a Flutter widget that merges multiple `RepositoryProvider` widgets into one.
-`MultiRepositoryProvider` improves the readability and eliminates the need to nest multiple `RepositoryProvider`.
-By using `MultiRepositoryProvider` we can go from:
+**MultiRepositoryProvider** est un widget Flutter qui fusionne de multiples `RepositoryProvider` widgets en un seul.
+`MultiRepositoryProvider` améliore la lecture et élimine la nécessité d'imbriquer plusieurs `RepositoryProvider`.
+En utilisant `MultiRepositoryProvider` nous passons de:
 
 [repository_provider.dart](_snippets/flutter_bloc_core_concepts/nested_repository_provider.dart.md ':include')
 
-to:
+à:
 
 [multi_repository_provider.dart](_snippets/flutter_bloc_core_concepts/multi_repository_provider.dart.md ':include')
 
-## Usage
+## Utilisation
 
-Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
+Regardons comment utiliser `BlocBuilder` pour récupérer (hook up) le widget `CounterPage` à un `CounterBloc`.
 
 ### counter_bloc.dart
 
@@ -126,4 +126,4 @@ Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget t
 
 [counter_page.dart](_snippets/flutter_bloc_core_concepts/counter_page.dart.md ':include')
 
-At this point we have successfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
+A présent, nous avons réussi à séparer la couche de présention à celle de notre business logique. Vous pouvez remarquer que le widget `CounterPage` connaît tout à propos de ce qu'il se passe lorsque l'utilisateur appuie sur un des boutons. Ce widget va simplement informer `CounterBloc` que l'utilisateur à appuyer sur soit le bouton d'incrémentation ou sur le bouton de décrémentation.
