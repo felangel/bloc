@@ -46,7 +46,7 @@ En plus de cela, utiliser `Equatable` facilite le testing sur les blocs puisque 
 
 Sans `Equatable` le test du dessus échouera et aura besoin d'être réécrit de la manière suivante:
 
-[my_bloc_test.dart](_snippets/faqs/without_equatable_bloc_test.dart.md ':include')
+[my_bloc_test.dart](../_snippets/faqs/without_equatable_bloc_test.dart.md ':include')
 
 ## Bloc vs. Redux
 
