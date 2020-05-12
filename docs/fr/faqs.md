@@ -101,7 +101,7 @@ La Librairie Bloc Library utilise `provider` en interne pour permettre de fourni
 
 ✅ **GOOD**
 
-[my_page.dart](_snippets/faqs/bloc_provider_good_1.dart.md ':include')
+[my_page.dart](../_snippets/faqs/bloc_provider_good_1.dart.md ':include')
 
 [my_page.dart](_snippets/faqs/bloc_provider_good_2.dart.md ':include')
 
