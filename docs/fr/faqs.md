@@ -42,7 +42,7 @@ Vous ne devriez pas `Equatable` si vous voulez que le même state déclenche cou
 
 En plus de cela, utiliser `Equatable` facilite le testing sur les blocs puisque qu'on le peut attendre des instances spécifiques des blocs states plutôt que d'utiliser des `Matchers` ou `Predicates`.
 
-[my_bloc_test.dart](_snippets/faqs/equatable_bloc_test.dart.md ':include')
+[my_bloc_test.dart](../_snippets/faqs/equatable_bloc_test.dart.md ':include')
 
 Sans `Equatable` le test du dessus échouera et aura besoin d'être réécrit de la manière suivante:
 
