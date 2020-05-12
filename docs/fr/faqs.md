@@ -8,7 +8,7 @@
 
 ✅ **GOOD**
 
-[my_state.dart](_snippets/faqs/state_not_updating_good_1.dart.md ':include')
+[my_state.dart](../_snippets/faqs/state_not_updating_good_1.dart.md ':include')
 
 ❌ **BAD**
 
