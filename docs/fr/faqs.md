@@ -34,7 +34,7 @@ En plus de cela, assurez vous de yield une nouvelle instance de votre state dans
 
 💡**Answer**:
 
-[my_bloc.dart](_snippets/faqs/equatable_yield.dart.md ':include')
+[my_bloc.dart](../_snippets/faqs/equatable_yield.dart.md ':include')
 
 Dans le scénario du dessus si `StateA` étend `Equatable` un seul changement de state aura lieu(le deuxième yield sera ignoré).
 En général, vous devriez utiliser `Equatable` si vous voulez optimiser votre code pour réduire le nombre de reconstructions (rebuilds).
