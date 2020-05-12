@@ -57,8 +57,8 @@ Sans `Equatable` le test du dessus échouera et aura besoin d'être réécrit de
 BLoC est un paterne design qui est défini selon les règles suivantes:
 
 1. Input et Output du BloC sont des simples Streams et Sinks.
-2. Dependencies must be injectable and Platform agnostic.
-3. No platform branching is allowed.
+2. Les dépendances doivent être injectables et s'adapter aux plateformes (iOs, Android and Web).
+3. Aucune logique doit dépendre sur la plateforme sur laquelle on se trouve.
 4. L'implementation est libre tant que vous suivez les règles cités ci-dessus.
 
 Les lignes directrices pour l'UI sont:
