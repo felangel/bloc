@@ -107,7 +107,7 @@ La Librairie Bloc Library utilise `provider` en interne pour permettre de fourni
 
 ❌ **BAD**
 
-[my_page.dart](_snippets/faqs/bloc_provider_bad_1.dart.md ':include')
+[my_page.dart](../_snippets/faqs/bloc_provider_bad_1.dart.md ':include')
 
 ## Structure d'un projet
 
