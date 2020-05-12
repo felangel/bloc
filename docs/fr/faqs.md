@@ -8,25 +8,25 @@
 
 ✅ **GOOD**
 
-[my_state.dart](_snippets/faqs/state_not_updating_good_1.dart.md ':include')
+[my_state.dart](../_snippets/faqs/state_not_updating_good_1.dart.md ':include')
 
 ❌ **BAD**
 
-[my_state.dart](_snippets/faqs/state_not_updating_bad_1.dart.md ':include')
+[my_state.dart](../_snippets/faqs/state_not_updating_bad_1.dart.md ':include')
 
-[my_state.dart](_snippets/faqs/state_not_updating_bad_2.dart.md ':include')
+[my_state.dart](../_snippets/faqs/state_not_updating_bad_2.dart.md ':include')
 
 En plus de cela, assurez vous de yield une nouvelle instance de votre state dans votre bloc.
 
 ✅ **GOOD**
 
-[my_bloc.dart](_snippets/faqs/state_not_updating_good_2.dart.md ':include')
+[my_bloc.dart](../_snippets/faqs/state_not_updating_good_2.dart.md ':include')
 
-[my_bloc.dart](_snippets/faqs/state_not_updating_good_3.dart.md ':include')
+[my_bloc.dart](../_snippets/faqs/state_not_updating_good_3.dart.md ':include')
 
 ❌ **BAD**
 
-[my_bloc.dart](_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
+[my_bloc.dart](../_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
 
 ## Quand utiliser Equatable
 
@@ -34,7 +34,7 @@ En plus de cela, assurez vous de yield une nouvelle instance de votre state dans
 
 💡**Answer**:
 
-[my_bloc.dart](_snippets/faqs/equatable_yield.dart.md ':include')
+[my_bloc.dart](../_snippets/faqs/equatable_yield.dart.md ':include')
 
 Dans le scénario du dessus si `StateA` étend `Equatable` un seul changement de state aura lieu(le deuxième yield sera ignoré).
 En général, vous devriez utiliser `Equatable` si vous voulez optimiser votre code pour réduire le nombre de reconstructions (rebuilds).
@@ -42,11 +42,11 @@ Vous ne devriez pas `Equatable` si vous voulez que le même state déclenche cou
 
 En plus de cela, utiliser `Equatable` facilite le testing sur les blocs puisque qu'on le peut attendre des instances spécifiques des blocs states plutôt que d'utiliser des `Matchers` ou `Predicates`.
 
-[my_bloc_test.dart](_snippets/faqs/equatable_bloc_test.dart.md ':include')
+[my_bloc_test.dart](../_snippets/faqs/equatable_bloc_test.dart.md ':include')
 
 Sans `Equatable` le test du dessus échouera et aura besoin d'être réécrit de la manière suivante:
 
-[my_bloc_test.dart](_snippets/faqs/without_equatable_bloc_test.dart.md ':include')
+[my_bloc_test.dart](../_snippets/faqs/without_equatable_bloc_test.dart.md ':include')
 
 ## Bloc vs. Redux
 
@@ -101,13 +101,13 @@ La Librairie Bloc Library utilise `provider` en interne pour permettre de fourni
 
 ✅ **GOOD**
 
-[my_page.dart](_snippets/faqs/bloc_provider_good_1.dart.md ':include')
+[my_page.dart](../_snippets/faqs/bloc_provider_good_1.dart.md ':include')
 
-[my_page.dart](_snippets/faqs/bloc_provider_good_2.dart.md ':include')
+[my_page.dart](../_snippets/faqs/bloc_provider_good_2.dart.md ':include')
 
 ❌ **BAD**
 
-[my_page.dart](_snippets/faqs/bloc_provider_bad_1.dart.md ':include')
+[my_page.dart](../_snippets/faqs/bloc_provider_bad_1.dart.md ':include')
 
 ## Structure d'un projet
 
