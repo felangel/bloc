@@ -28,6 +28,8 @@ In addition, make sure you are yielding a new instance of the state in your bloc
 
 [my_bloc.dart](_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
 
+!> `Equatable` properties should always be copied rather than modified. If an `Equatable` class contains a `List` or `Map` as properties, be sure to use `List.from` or `Map.from` respectively to ensure that equality is evaluated based on the values of the properties rather than the reference.
+
 ## When to use Equatable
 
 ❔**Question**: When should I use Equatable?
