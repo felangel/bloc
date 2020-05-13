@@ -52,8 +52,6 @@ Debido a que cada cambio de estado se registra, podemos instrumentar muy fácilm
 
 > Un stream es una secuencia de datos asincrónicos.
 
-Bloc está construido sobre [RxDart](https://pub.dev/packages/rxdart); sin embargo, abstrae todos los detalles de implementación específicos de `RxDart`.
-
 Para usar Bloc, es crítico tener una comprensión sólida de `Streams` y cómo funcionan.
 
 > Si no está familiarizado con `Streams`, piense en una tubería con agua que fluye a través de ella. La tubería es el `Stream` y el agua son los datos asincrónicos.
@@ -130,7 +128,7 @@ Al igual que podemos manejar `Transition` a nivel de bloc, también podemos mane
 
 > `onError` es un método que se puede anular para manejar cada `Excepción` del Bloc local. Por defecto, todas las excepciones serán ignoradas y la funcionalidad `Bloc` no se verá afectada.
 
-?> **Nota**: El argumento stacktrace puede ser `null` si la secuencia de estado recibió un error sin un `StackTrace`.
+?> **Nota**: El argumento stackTrace puede ser `null` si la secuencia de estado recibió un error sin un `StackTrace`.
 
 ?> **Consejo**: `onError` es un gran lugar para agregar el manejo de errores específicos del bloc.
 

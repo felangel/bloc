@@ -38,9 +38,10 @@ environment:
 
 dependencies:
   meta: ^1.1.6
-  bloc: ^3.0.0
+  bloc: ^4.0.0
   equatable: ^1.0.0
   http: ^0.12.0
+  rxdart: ^0.24.0
 ```
 
 Наконец, нам нужно установить все зависимости.
@@ -352,22 +353,23 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   GithubSearchBloc({@required this.githubRepository});
 
   @override
-  Stream<GithubSearchState> transformEvents(
+  Stream<Transition<GithubSearchEvent, GithubSearchState>> transformEvents(
     Stream<GithubSearchEvent> events,
-    Stream<GithubSearchState> Function(GithubSearchEvent event) next,
+    Stream<Transition<GithubSearchEvent, GithubSearchState>> Function(
+      GithubSearchEvent event,
+    )
+        transitionFn,
   ) {
-    return super.transformEvents(
-      events.debounceTime(
-        Duration(milliseconds: 500),
-      ),
-      next,
-    );
+    return events
+        .debounceTime(const Duration(milliseconds: 300))
+        .switchMap(transitionFn);
   }
 
   @override
   void onTransition(
       Transition<GithubSearchEvent, GithubSearchState> transition) {
     print(transition);
+    super.onTransition(transition);
   }
 
   @override
@@ -435,7 +437,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^3.2.0
+  flutter_bloc: ^4.0.0
   url_launcher: ^4.0.3
   common_github_search:
     path: ../common_github_search
@@ -843,7 +845,7 @@ environment:
 dependencies:
   angular: ^5.3.0
   angular_components: ^0.13.0
-  angular_bloc: ^3.0.0
+  angular_bloc: ^4.0.0
   common_github_search:
     path: ../common_github_search
 

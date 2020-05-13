@@ -31,7 +31,7 @@ class MyCart extends StatelessWidget {
 class _CartList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final itemNameStyle = Theme.of(context).textTheme.title;
+    final itemNameStyle = Theme.of(context).textTheme.headline6;
 
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
@@ -60,7 +60,7 @@ class _CartTotal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hugeStyle =
-        Theme.of(context).textTheme.display4.copyWith(fontSize: 48);
+        Theme.of(context).textTheme.headline1.copyWith(fontSize: 48);
 
     return SizedBox(
       height: 200,

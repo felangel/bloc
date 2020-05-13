@@ -58,8 +58,6 @@ Jelikož je každá změna stavu zaznamenávána, jsme schopni jednoduše zpraco
 
 > Stream je sekvence asynchroních dat.
 
-Bloc je postavený nad [RxDart](https://pub.dev/packages/rxdart), avšak abstrahuje všechny specifické `RxDart` implementační detaily.
-
 Aby bylo možné používat Bloc, je nutné mít dobrou znalost o `Streamech` a jak fungují.
 
 > Pokud nemáte se `Streamy` zkušenosti, představte si potrubí s vodou, která jím protéká. Potrubí je `Stream` a voda jsou asynchronní data.
@@ -136,7 +134,7 @@ Stejně jako můžeme zpracovat `Transition` na úrovni blocu, můžeme také zp
 
 > `onError` je metoda, která může být přepsána ke zpracování lokálního `Exceptionu` Blocu. Defaultně jsou všechny vyjímky ignorovány a funkčnost `Bloc` bude nedotčena.
 
-?> **Poznámka**: Argument stacktrace může být `null` pokud stav streamu přijal error bez `StackTrace`.
+?> **Poznámka**: Argument stackTrace může být `null` pokud stav streamu přijal error bez `StackTrace`.
 
 ?> **Tip**: `onError` je skvělé místo na zpracování errorů specifických pro daný bloc.
 

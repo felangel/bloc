@@ -31,7 +31,7 @@ dependencies:
   firebase_core: ^0.4.0+8
   google_sign_in: ^4.0.0
   firebase_auth: ^0.15.0+1
-  flutter_bloc: ^3.2.0
+  flutter_bloc: ^4.0.0
   equatable: ^1.0.0
   meta: ^1.1.6
   rxdart: ^0.23.1
@@ -526,20 +526,20 @@ import 'package:bloc/bloc.dart';
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
     print(event);
+    super.onEvent(bloc, event);
   }
 
   @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
+  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
     print(error);
+    super.onError(bloc, error, stackTrace);
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
     print(transition);
+    super.onTransition(bloc, transition);
   }
 }
 ```

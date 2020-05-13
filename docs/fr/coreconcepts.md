@@ -52,8 +52,6 @@ Consultez la documentation officielle[Dart Documentation](https://dart.dev/tutor
 
 > Un "stream" est une séquence de données asynchrones.
 
-Bloc est construit sur les bases de [RxDart](https://pub.dev/packages/rxdart) ; cependant, il fait abstraction tous les détails d'implémentation spécifiques de `RxDart`.
-
 Pour utiliser Bloc, il est critique d'avoir une bonne compréhension des `Streams` et de son fonctionnement.
 
 > Si vous n'êtes pas familier avec `Streams`, pensez simplement à un tuyau avec de l'eau qui le traverse. Le tuyau est le `Stream` et l'eau est la donnée asynchrone.
@@ -128,7 +126,7 @@ Tout comme nous pouvons gérer les `Transitions` au niveau des blocs, nous pouvo
 
 > `onError` est une méthode qui peut être surchargée pour gérer chaque `Exception` de Bloc local. Par défaut, toutes les exceptions seront ignorées et la fonctionnalité `Bloc` ne sera pas affectée.
 
-?> **Note**: L'argument stacktrace peut être `null` si le flux d'état a reçu une erreur sans `StackTrace`.
+?> **Note**: L'argument stackTrace peut être `null` si le flux d'état a reçu une erreur sans `StackTrace`.
 
 ?> **Tip**: `onError` est un excellent endroit pour ajouter la gestion des erreurs spécifiques aux blocs.
 

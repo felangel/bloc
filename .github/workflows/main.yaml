@@ -9,12 +9,13 @@ on:
 
   pull_request:
     paths:
+    - '.github/workflows/main.yaml'
     - 'examples/**'
     - 'packages/**'
 
 env:
   flutter_channel: 'stable'
-  flutter_version: '1.12.13+hotfix.9'
+  flutter_version: '1.17.0'
 
 jobs:
   # Analyze and test each core package.

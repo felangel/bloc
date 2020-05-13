@@ -140,6 +140,7 @@ Learn more at the following links, which have been contributed by the community.
 
 ### Video Tutorials
 
+- [Bloc Library: Basics and Beyond 🚀](https://youtu.be/knMvKPKBzGE) - Talk given at [Flutter Europe](https://fluttereurope.dev) about the basics of the bloc library, by [Felix Angelov](https://github.com/felangel).
 - [Flutter Bloc Library Tutorial](https://www.youtube.com/watch?v=hTExlt1nJZI) - Introduction to the Bloc Library, by [Reso Coder](https://resocoder.com).
 - [Flutter Youtube Search](https://www.youtube.com/watch?v=BJY8nuYUM7M) - How to build a Youtube Search app which interacts with an API using the bloc and flutter_bloc packages, by [Reso Coder](https://resocoder.com).
 - [Flutter Bloc - AUTOMATIC LOOKUP - v0.20 (and Up), Updated Tutorial](https://www.youtube.com/watch?v=_vOpPuVfmiU) - Updated Tutorial on the Flutter Bloc Package, by [Reso Coder](https://resocoder.com).
@@ -151,6 +152,7 @@ Learn more at the following links, which have been contributed by the community.
 - [Bloc Test Tutorial](https://www.youtube.com/watch?v=S6jFBiiP0Mc) - Tutorial on how to unit test blocs using the bloc_test package, by [Reso Coder](https://resocoder.com).
 
 ### Written Resources
+
 - [DevonFw Flutter Guide](https://github.com/devonfw-forge/devonfw4flutter) - A guide on building structured & scalable applications with Flutter and BLoC, by [Sebastian Faust](https://github.com/Fasust)
 - [Using Google´s Flutter Framework for the Development of a Large-Scale Reference Application](https://epb.bibl.th-koeln.de/frontdoor/index/index/docId/1498) - Scientific paper describing how to build [a large-scale Flutter application](https://github.com/devonfw-forge/devonfw4flutter-mts-app) with BLoC, by [Sebastian Faust](https://github.com/Fasust)
 

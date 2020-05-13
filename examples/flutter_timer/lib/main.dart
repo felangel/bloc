@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_timer/bloc/bloc.dart';
+import 'package:flutter_timer/bloc/timer_bloc.dart';
 import 'package:flutter_timer/ticker.dart';
 import 'package:wave/wave.dart';
 import 'package:wave/config.dart';
