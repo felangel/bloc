@@ -100,7 +100,6 @@ Nous pouvons commencer par implémenter `initialState` qui sera l'état de notre
 
 Ensuite, nous devons implémenter `mapEventToState` qui sera lancé chaque fois qu'un `PostEvent` est envoyé.
 
-```dart
 [post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_map_event_to_state.dart.md ':include')
 
 Notre `PostBloc` cède à chaque fois qu'il y a un nouvel état car il retourne un `Stream<PostState>`. Consultez [concepts de base](https://felangel.github.io/bloc/#/coreconcepts?id=streams) pour plus d'informations sur `Streams` et d'autres concepts de base.
