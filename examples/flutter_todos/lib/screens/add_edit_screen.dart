@@ -50,7 +50,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
                 initialValue: isEditing ? widget.todo.task : '',
                 key: ArchSampleKeys.taskField,
                 autofocus: !isEditing,
-                style: textTheme.headline,
+                style: textTheme.headline5,
                 decoration: InputDecoration(
                   hintText: localizations.newTodoHint,
                 ),
@@ -65,7 +65,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
                 initialValue: isEditing ? widget.todo.note : '',
                 key: ArchSampleKeys.noteField,
                 maxLines: 10,
-                style: textTheme.subhead,
+                style: textTheme.subtitle1,
                 decoration: InputDecoration(
                   hintText: localizations.notesHint,
                 ),

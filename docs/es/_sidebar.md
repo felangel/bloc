@@ -13,10 +13,10 @@
 - Tutoriales
 
   - Flutter
-    - [Counter](es/fluttercountertutorial.md)
-    - [Timer](es/fluttertimertutorial.md)
-    - [Infinite List](es/flutterinfinitelisttutorial.md)
-    - [Login](es/flutterlogintutorial.md)
+    - [Contador](es/fluttercountertutorial.md)
+    - [Temporizador](es/fluttertimertutorial.md)
+    - [Lista Infinita](es/flutterinfinitelisttutorial.md)
+    - [Iniciar Sesión](es/flutterlogintutorial.md)
     - [Weather](es/flutterweathertutorial.md)
     - [Todos](es/fluttertodostutorial.md)
     - [Firebase Login](es/flutterfirebaselogintutorial.md)

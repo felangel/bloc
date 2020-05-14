@@ -140,6 +140,7 @@ Obtenga más información en los siguientes enlaces, que han sido aportados por 
 
 ### Tutoriales en vídeo (Inglés)
 
+- [Bloc Library: Basics and Beyond 🚀](https://youtu.be/knMvKPKBzGE) - Conferencia impartida en [Flutter Europe](https://fluttereurope.dev) acerca de los conceptos básicos de la librería de Bloc, por [Felix Angelov](https://github.com/felangel).
 - [Flutter Bloc Library Tutorial](https://www.youtube.com/watch?v=hTExlt1nJZI) - Introducción a la Librería de blocs, por [Reso Coder](https://resocoder.com).
 - [Flutter Youtube Search](https://www.youtube.com/watch?v=BJY8nuYUM7M) - Cómo construir una aplicación de búsqueda de Youtube que interactúa con una API usando los paquetes bloc y flutter_bloc, por [Reso Coder](https://resocoder.com).
 - [Flutter Bloc - AUTOMATIC LOOKUP - v0.20 (and Up), Updated Tutorial](https://www.youtube.com/watch?v=_vOpPuVfmiU) - Tutorial actualizado sobre el paquete Flutter Bloc, por [Reso Coder](https://resocoder.com).
@@ -154,6 +155,6 @@ Obtenga más información en los siguientes enlaces, que han sido aportados por 
 
 - [Feature Scaffolding for VSCode](https://marketplace.visualstudio.com/items?itemName=KiritchoukC.flutter-clean-architecture) - Una extensión VSCode inspirada en los tutoriales de arquitectura limpia de [Reso Coder's](https://resocoder.com), que ayuda rápidamente a las funciones de andamio, por [Kiritchouk Clément](https://github.com/KiritchoukC).
 
-## Maintainers
+## Mantenedores
 
 - [Felix Angelov](https://github.com/felangel)

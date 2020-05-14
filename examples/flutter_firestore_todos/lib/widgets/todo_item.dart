@@ -33,7 +33,7 @@ class TodoItem extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             child: Text(
               todo.task,
-              style: Theme.of(context).textTheme.title,
+              style: Theme.of(context).textTheme.headline6,
             ),
           ),
         ),
@@ -42,7 +42,7 @@ class TodoItem extends StatelessWidget {
                 todo.note,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.subhead,
+                style: Theme.of(context).textTheme.subtitle1,
               )
             : null,
       ),

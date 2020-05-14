@@ -1,3 +1,28 @@
+# 5.1.0
+
+- Add `errors` to `blocTest` to enable expecting unhandled exceptions within blocs.
+- Update `whenListen` to also handle stubbing the state property of the bloc.
+
+# 5.0.0
+
+- Update to `bloc: ^4.0.0`
+
+# 5.0.0-dev.4
+
+- Update to `bloc: ^4.0.0-dev.4`
+
+# 5.0.0-dev.3
+
+- Update to `bloc: ^4.0.0-dev.3`
+
+# 5.0.0-dev.2
+
+- Update to `bloc: ^4.0.0-dev.2`
+
+# 5.0.0-dev.1
+
+- Update to `bloc: ^4.0.0-dev.1`
+
 # 4.0.0
 
 - `blocTest` and `emitsExactly` skip `initialState` by default and expose optional `skip` ([#910](https://github.com/felangel/bloc/issues/910))

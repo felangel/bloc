@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'timer_bloc.dart';
 
 abstract class TimerState extends Equatable {
   final int duration;

@@ -9,12 +9,13 @@ on:
 
   pull_request:
     paths:
+    - '.github/workflows/main.yaml'
     - 'examples/**'
     - 'packages/**'
 
 env:
   flutter_channel: 'stable'
-  flutter_version: '1.12.13+hotfix.8'
+  flutter_version: '1.17.0'
 
 jobs:
   # Analyze and test each core package.
@@ -32,14 +33,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v1
-        with:
-          path: ${{ matrix.flutter_path }}
-          key: ${{ runner.OS }}-flutter-cache-${{ env.flutter_version }}
-          restore-keys: |
-            ${{ runner.OS }}-flutter-cache-
 
       - uses: subosito/flutter-action@v1
         with:
@@ -75,14 +68,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v1
-        with:
-          path: ${{ matrix.flutter_path }}
-          key: ${{ runner.OS }}-flutter-cache-${{ env.flutter_version }}
-          restore-keys: |
-            ${{ runner.OS }}-flutter-cache-
-
       - uses: subosito/flutter-action@v1
         with:
           channel: ${{ env.flutter_channel }}
@@ -117,14 +102,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v1
-        with:
-          path: ${{ matrix.flutter_path }}
-          key: ${{ runner.OS }}-flutter-cache-${{ env.flutter_version }}
-          restore-keys: |
-            ${{ runner.OS }}-flutter-cache-
-
       - uses: subosito/flutter-action@v1
         with:
           channel: ${{ env.flutter_channel }}
@@ -158,15 +135,7 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v1
-        with:
-          path: ${{ matrix.flutter_path }}
-          key: ${{ runner.OS }}-flutter-cache-${{ env.flutter_version }}
-          restore-keys: |
-            ${{ runner.OS }}-flutter-cache-
+      - uses: actions/checkout@v2 
 
       - uses: subosito/flutter-action@v1
         with:

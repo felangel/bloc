@@ -18,9 +18,7 @@
 
 Для простоты наш `MyBloc` будет отвечать только на два `MyEvents`: `eventA` и `eventB`.
 
-```dart
-enum MyEvent { eventA, eventB }
-```
+[my_event.dart](../_snippets/recipes_flutter_navigation/my_event.dart.md ':include')
 
 #### Мои состояния
 
@@ -29,133 +27,19 @@ enum MyEvent { eventA, eventB }
 - `StateA` - состояние блока при отображении `PageA`.
 - `StateB` - состояние блока при отображении `PageB`.
 
-```dart
-abstract class MyState {}
-
-class StateA extends MyState {}
-
-class StateB extends MyState {}
-```
+[my_state.dart](../_snippets/recipes_flutter_navigation/my_state.dart.md ':include')
 
 #### Мой блок
 
 `MyBloc` должен выглядеть примерно так:
 
-```dart
-import 'package:bloc/bloc.dart';
-
-class MyBloc extends Bloc<MyEvent, MyState> {
-  @override
-  MyState get initialState => StateA();
-
-  @override
-  Stream<MyState> mapEventToState(MyEvent event) async* {
-    switch (event) {
-      case MyEvent.eventA:
-        yield StateA();
-        break;
-      case MyEvent.eventB:
-        yield StateB();
-        break;
-    }
-  }
-}
-```
+[my_bloc.dart](../_snippets/recipes_flutter_navigation/my_bloc.dart.md ':include')
 
 ### UI слой
 
 Теперь давайте посмотрим, как подключить `MyBloc` к виджету и показать другую страницу, основанную на состоянии блока.
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-void main() {
-  runApp(
-    BlocProvider(
-      create: (context) => MyBloc(),
-      child: MyApp(),
-    ),
-  );
-}
-
-enum MyEvent { eventA, eventB }
-
-@immutable
-abstract class MyState {}
-
-class StateA extends MyState {}
-
-class StateB extends MyState {}
-
-class MyBloc extends Bloc<MyEvent, MyState> {
-  @override
-  MyState get initialState => StateA();
-
-  @override
-  Stream<MyState> mapEventToState(MyEvent event) async* {
-    switch (event) {
-      case MyEvent.eventA:
-        yield StateA();
-        break;
-      case MyEvent.eventB:
-        yield StateB();
-        break;
-    }
-  }
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BlocBuilder<MyBloc, MyState>(
-        builder: (_, state) => state is StateA ? PageA() : PageB(),
-      ),
-    );
-  }
-}
-
-class PageA extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Page A'),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('Go to PageB'),
-          onPressed: () {
-            BlocProvider.of<MyBloc>(context).add(MyEvent.eventB);
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class PageB extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Page B'),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('Go to PageA'),
-          onPressed: () {
-            BlocProvider.of<MyBloc>(context).add(MyEvent.eventA);
-          },
-        ),
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/recipes_flutter_navigation/direct_navigation/main.dart.md ':include')
 
 ?> Мы используем виджет `BlocBuilder`, чтобы отобразить правильный виджет в ответ на изменения состояния в `MyBloc`.
 
@@ -177,105 +61,7 @@ class PageB extends StatelessWidget {
 
 Давайте посмотрим, как перейти на другую страницу в зависимости от состояния MyBloc.
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-void main() {
-  runApp(
-    BlocProvider(
-      create: (context) => MyBloc(),
-      child: MyApp(),
-    ),
-  );
-}
-
-enum MyEvent { eventA, eventB }
-
-@immutable
-abstract class MyState {}
-
-class StateA extends MyState {}
-
-class StateB extends MyState {}
-
-class MyBloc extends Bloc<MyEvent, MyState> {
-  @override
-  MyState get initialState => StateA();
-
-  @override
-  Stream<MyState> mapEventToState(MyEvent event) async* {
-    switch (event) {
-      case MyEvent.eventA:
-        yield StateA();
-        break;
-      case MyEvent.eventB:
-        yield StateB();
-        break;
-    }
-  }
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        '/': (context) => PageA(),
-        '/pageB': (context) => PageB(),
-      },
-      initialRoute: '/',
-    );
-  }
-}
-
-class PageA extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocListener<MyBloc, MyState>(
-      listener: (context, state) {
-        if (state is StateB) {
-          Navigator.of(context).pushNamed('/pageB');
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Page A'),
-        ),
-        body: Center(
-          child: RaisedButton(
-            child: Text('Go to PageB'),
-            onPressed: () {
-              BlocProvider.of<MyBloc>(context).add(MyEvent.eventB);
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PageB extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Page B'),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('Pop'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/recipes_flutter_navigation/route_navigation/main.dart.md ':include')
 
 ?> Мы используем виджет `BlocListener`, чтобы выставить новый маршрут в ответ на изменения состояния в нашем `MyBloc`.
 

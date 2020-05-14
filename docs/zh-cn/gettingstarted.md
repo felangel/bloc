@@ -14,26 +14,15 @@ Bloc是由以下包所组成:
 
 我们要做的第一件事是将`bloc`的包作为依赖项（dependencies) 添加到我们的`pubspec.yaml`中。
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-```
+[pubspec.yaml](../_snippets/getting_started/bloc_pubspec.yaml.md ':include')
 
 对于[Flutter]https://flutter.dev/ 的应用程序，我们还需要将`flutter_bloc`包作为依赖项添加到我们的`pubspec.yaml`中 
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-  flutter_bloc: ^3.2.0
-```
+[pubspec.yaml](../_snippets/getting_started/flutter_bloc_pubspec.yaml.md ':include')
 
 对于[AngularDart]https://angulardart.dev/ 的应用程序，我们还需要将angular_bloc包作为依赖项添加到我们的`pubspec.yaml`中。
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-  angular_bloc: ^3.0.0
-```
+[pubspec.yaml](../_snippets/getting_started/angular_bloc_pubspec.yaml.md ':include')
 
 接下来，我们要安装`bloc`.
 
@@ -47,20 +36,12 @@ dependencies:
 
 现在我们已经成功安装了bloc，接下来我们可以创建我们的`main.dart`并导入bloc。
 
-```dart
-import 'package:bloc/bloc.dart';
-```
+[main.dart](../_snippets/getting_started/bloc_main.dart.md ':include')
 
 对于Flutter应用程序，我们还要导入flutter_bloc。
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-```
+[main.dart](../_snippets/getting_started/flutter_bloc_main.dart.md ':include')
 
 对于AngularDart应用程序，我们还要导入angular_bloc。
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:angular_bloc/angular_bloc.dart';
-```
+[main.dart](../_snippets/getting_started/angular_bloc_main.dart.md ':include')

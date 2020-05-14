@@ -14,9 +14,11 @@ class Stats extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<StatsBloc, StatsState>(
       builder: (context, state) {
-        if (state is StatsLoading) {
-          return LoadingIndicator(key: FlutterTodosKeys.statsLoadingIndicator);
-        } else if (state is StatsLoaded) {
+        if (state is StatsLoadInProgress) {
+          return LoadingIndicator(
+            key: FlutterTodosKeys.statsLoadInProgressIndicator,
+          );
+        } else if (state is StatsLoadSuccess) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -25,7 +27,7 @@ class Stats extends StatelessWidget {
                   padding: EdgeInsets.only(bottom: 8.0),
                   child: Text(
                     ArchSampleLocalizations.of(context).completedTodos,
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
                 Padding(
@@ -33,14 +35,14 @@ class Stats extends StatelessWidget {
                   child: Text(
                     '${state.numCompleted}',
                     key: ArchSampleKeys.statsNumCompleted,
-                    style: Theme.of(context).textTheme.subhead,
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
                   child: Text(
                     ArchSampleLocalizations.of(context).activeTodos,
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
                 Padding(
@@ -48,7 +50,7 @@ class Stats extends StatelessWidget {
                   child: Text(
                     "${state.numActive}",
                     key: ArchSampleKeys.statsNumActive,
-                    style: Theme.of(context).textTheme.subhead,
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
                 )
               ],

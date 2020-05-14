@@ -140,8 +140,9 @@
 
 ### 视屏教程
 
+- [Bloc Library: Basics and Beyond 🚀](https://youtu.be/knMvKPKBzGE) - [Felix Angelov](https://github.com/felangel)在 [Flutter Europe](https://fluttereurope.dev) 上关于基础Bloc库的讲座.
 - [Flutter Bloc Library Tutorial](https://www.youtube.com/watch?v=hTExlt1nJZI) - 
-Bloc库的简介, 作者： [Reso Coder](https://resocoder.com).
+Bloc库的教程, 作者： [Reso Coder](https://resocoder.com).
 - [Flutter Youtube Search](https://www.youtube.com/watch?v=BJY8nuYUM7M) - 如何使用Bloc和flutter_bloc软件包构建与API交互的Youtube Search应用, 作者： [Reso Coder](https://resocoder.com).
 - [Flutter Bloc - AUTOMATIC LOOKUP - v0.20 (and Up), Updated Tutorial](https://www.youtube.com/watch?v=_vOpPuVfmiU) - Flutter Bloc软件包的更新教程, 作者： [Reso Coder](https://resocoder.com).
 - [Dynamic Theming with flutter_bloc](https://www.youtube.com/watch?v=YYbhkg-W8Mg) - 关于如何使用flutter_bloc包实现动态主题的教程, 作者： [Reso Coder](https://resocoder.com).

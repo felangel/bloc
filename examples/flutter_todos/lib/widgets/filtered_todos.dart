@@ -17,9 +17,9 @@ class FilteredTodos extends StatelessWidget {
 
     return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
       builder: (context, state) {
-        if (state is FilteredTodosLoading) {
+        if (state is FilteredTodosLoadInProgress) {
           return LoadingIndicator(key: ArchSampleKeys.todosLoading);
-        } else if (state is FilteredTodosLoaded) {
+        } else if (state is FilteredTodosLoadSuccess) {
           final todos = state.filteredTodos;
           return ListView.builder(
             key: ArchSampleKeys.todoList,
@@ -29,12 +29,12 @@ class FilteredTodos extends StatelessWidget {
               return TodoItem(
                 todo: todo,
                 onDismissed: (direction) {
-                  BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
+                  BlocProvider.of<TodosBloc>(context).add(TodoDeleted(todo));
                   Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
                     key: ArchSampleKeys.snackbar,
                     todo: todo,
-                    onUndo: () =>
-                        BlocProvider.of<TodosBloc>(context).add(AddTodo(todo)),
+                    onUndo: () => BlocProvider.of<TodosBloc>(context)
+                        .add(TodoAdded(todo)),
                     localizations: localizations,
                   ));
                 },
@@ -49,14 +49,14 @@ class FilteredTodos extends StatelessWidget {
                       key: ArchSampleKeys.snackbar,
                       todo: todo,
                       onUndo: () => BlocProvider.of<TodosBloc>(context)
-                          .add(AddTodo(todo)),
+                          .add(TodoAdded(todo)),
                       localizations: localizations,
                     ));
                   }
                 },
                 onCheckboxChanged: (_) {
                   BlocProvider.of<TodosBloc>(context).add(
-                    UpdateTodo(todo.copyWith(complete: !todo.complete)),
+                    TodoUpdated(todo.copyWith(complete: !todo.complete)),
                   );
                 },
               );

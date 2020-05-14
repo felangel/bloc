@@ -23,12 +23,15 @@ import 'package:test/test.dart' as test;
 /// [wait] is an optional `Duration` which can be used to wait for
 /// async operations within the [bloc] under test such as `debounceTime`.
 ///
-/// [expect] is an `Iterable` of matchers which the [bloc]
+/// [expect] is an optional `Iterable` of matchers which the [bloc]
 /// under test is expected to emit after [act] is executed.
 ///
 /// [verify] is an optional callback which is invoked after [expect]
 /// and can be used for additional verification/assertions.
 /// [verify] is called with the [bloc] returned by [build].
+///
+/// [errors] is an optional `Iterable` of error matchers which the [bloc]
+/// under test is expected to have thrown after [act] is executed.
 ///
 /// ```dart
 /// blocTest(
@@ -91,6 +94,18 @@ import 'package:test/test.dart' as test;
 ///   }
 /// );
 /// ```
+/// `blocTest` can also be used to expect that exceptions have been thrown.
+///
+/// ```dart
+/// blocTest(
+///   'CounterBloc throws Exception when null is added',
+///   build: () async => CounterBloc(),
+///   act: (bloc) => bloc.add(null),
+///   errors: [
+///     isA<Exception>(),
+///   ]
+/// );
+/// ```
 ///
 /// **Note:** when using [blocTest] with state classes which don't override
 /// `==` and `hashCode` you can provide an `Iterable` of matchers instead of
@@ -113,16 +128,30 @@ void blocTest<B extends Bloc<Event, State>, Event, State>(
   int skip = 1,
   Iterable expect,
   Future<void> Function(B bloc) verify,
+  Iterable errors,
 }) {
   test.test(description, () async {
-    final bloc = await build();
-    final states = <State>[];
-    final subscription = bloc.skip(skip).listen(states.add);
-    await act?.call(bloc);
-    if (wait != null) await Future.delayed(wait);
-    await bloc.close();
-    if (expect != null) test.expect(states, expect);
-    await subscription.cancel();
-    await verify?.call(bloc);
+    final unhandledErrors = <Object>[];
+    await runZoned(
+      () async {
+        final bloc = await build();
+        final states = <State>[];
+        final subscription = bloc.skip(skip).listen(states.add);
+        await act?.call(bloc);
+        if (wait != null) await Future.delayed(wait);
+        await bloc.close();
+        if (expect != null) test.expect(states, expect);
+        await subscription.cancel();
+        await verify?.call(bloc);
+      },
+      onError: (error) {
+        if (error is BlocUnhandledErrorException) {
+          unhandledErrors.add(error.error);
+        } else {
+          throw error;
+        }
+      },
+    );
+    if (errors != null) test.expect(unhandledErrors, errors);
   });
 }

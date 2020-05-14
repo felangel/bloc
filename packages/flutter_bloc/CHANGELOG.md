@@ -1,3 +1,24 @@
+# 4.0.0
+
+- Update to `bloc: ^4.0.0`
+- Update to `provider: ^4.0.5`
+
+# 4.0.0-dev.4
+
+- Update to `bloc: ^4.0.0-dev.4`
+
+# 4.0.0-dev.3
+
+- Update to `bloc: ^4.0.0-dev.3`
+
+# 4.0.0-dev.2
+
+- Update to `bloc: ^4.0.0-dev.2`
+
+# 4.0.0-dev.1
+
+- Update to `bloc: ^4.0.0-dev.1`
+
 # 3.2.0
 
 - Fix type inference for: `MultiBlocProvider`, `MultiRepositoryProvider`, `MultiBlocListener` ([#773](https://github.com/felangel/bloc/pull/773))

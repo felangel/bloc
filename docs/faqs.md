@@ -8,85 +8,27 @@
 
 ✅ **GOOD**
 
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
-
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => [property]; // pass all properties to props
-}
-```
+[my_state.dart](_snippets/faqs/state_not_updating_good_1.dart.md ':include')
 
 ❌ **BAD**
 
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
+[my_state.dart](_snippets/faqs/state_not_updating_bad_1.dart.md ':include')
 
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => [];
-}
-```
-
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
-
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => null;
-}
-```
+[my_state.dart](_snippets/faqs/state_not_updating_bad_2.dart.md ':include')
 
 In addition, make sure you are yielding a new instance of the state in your bloc.
 
 ✅ **GOOD**
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    // always create a new instance of the state you are going to yield
-    yield state.copyWith(property: event.property);
-}
-```
+[my_bloc.dart](_snippets/faqs/state_not_updating_good_2.dart.md ':include')
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    final data = _getData(event.info);
-    // always create a new instance of the state you are going to yield
-    yield MyState(data: data);
-}
-```
+[my_bloc.dart](_snippets/faqs/state_not_updating_good_3.dart.md ':include')
 
 ❌ **BAD**
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    // never modify/mutate state
-    state.property = event.property;
-    // never yield the same instance of state
-    yield state;
-}
-```
+[my_bloc.dart](_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
+
+!> `Equatable` properties should always be copied rather than modified. If an `Equatable` class contains a `List` or `Map` as properties, be sure to use `List.from` or `Map.from` respectively to ensure that equality is evaluated based on the values of the properties rather than the reference.
 
 ## When to use Equatable
 
@@ -94,13 +36,7 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 
 💡**Answer**:
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    yield StateA('hi');
-    yield StateA('hi');
-}
-```
+[my_bloc.dart](_snippets/faqs/equatable_yield.dart.md ':include')
 
 In the above scenario if `StateA` extends `Equatable` only one state change will occur (the second yield will be ignored).
 In general, you should use `Equatable` if you want to optimize your code to reduce the number of rebuilds.
@@ -108,31 +44,11 @@ You should not use `Equatable` if you want the same state back-to-back to trigge
 
 In addition, using `Equatable` makes it much easier to test blocs since we can expect specific instances of bloc states rather than using `Matchers` or `Predicates`.
 
-```dart
-blocTest(
-    '...',
-    build: () => MyBloc(),
-    act: (bloc) => bloc.add(MyEvent()),
-    expect: [
-        MyStateA(),
-        MyStateB(),
-    ],
-)
-```
+[my_bloc_test.dart](_snippets/faqs/equatable_bloc_test.dart.md ':include')
 
 Without `Equatable` the above test would fail and would need to be rewritten like:
 
-```dart
-blocTest(
-    '...',
-    build: () => MyBloc(),
-    act: (bloc) => bloc.add(MyEvent()),
-    expect: [
-        isA<MyStateA>(),
-        isA<MyStateB>(),
-    ],
-)
-```
+[my_bloc_test.dart](_snippets/faqs/without_equatable_bloc_test.dart.md ':include')
 
 ## Bloc vs. Redux
 
@@ -187,62 +103,13 @@ The Bloc Library uses `provider` internally to make it easy to provide and acces
 
 ✅ **GOOD**
 
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: MyChild();
-  );
-}
+[my_page.dart](_snippets/faqs/bloc_provider_good_1.dart.md ':include')
 
-class MyChild extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return RaisedButton(
-      onPressed: () {
-        final blocA = BlocProvider.of<BlocA>(context);
-        ...
-      },
-    )
-    ...
-  }
-}
-```
-
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: Builder(
-      builder: (context) => RaisedButton(
-        onPressed: () {
-          final blocA = BlocProvider.of<BlocA>(context);
-          ...
-        },
-      ),
-    ),
-  );
-}
-```
+[my_page.dart](_snippets/faqs/bloc_provider_good_2.dart.md ':include')
 
 ❌ **BAD**
 
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: RaisedButton(
-      onPressed: () {
-        final blocA = BlocProvider.of<BlocA>(context);
-        ...
-      }
-    )
-  );
-}
-```
+[my_page.dart](_snippets/faqs/bloc_provider_bad_1.dart.md ':include')
 
 ## Project Structure
 

@@ -10,47 +10,23 @@
 
 Мы начнем с создания нового проекта AngularDart с использованием [stagehand](https://github.com/dart-lang/stagehand).
 
-```bash
-stagehand web-angular
-```
+[script](../_snippets/angular_counter_tutorial/stagehand.sh.md ':include')
 
 !> Активируйте stagehand, запустив `pub global activate stagehand`
 
 Затем мы заменим содержимое `pubspec.yaml` на:
 
-```yaml
-name: angular_counter
-description: A web app that uses angular_bloc
-
-environment:
-  sdk: ">=2.6.0 <3.0.0"
-
-dependencies:
-  angular: ^5.3.0
-  angular_components: ^0.13.0
-  angular_bloc: ^3.0.0
-
-dev_dependencies:
-  angular_test: ^2.0.0
-  build_runner: ">=1.6.2 <2.0.0"
-  build_test: ^0.10.2
-  build_web_compilers: ">=1.2.0 <3.0.0"
-  test: ^1.0.0
-```
+[pubspec.yaml](../_snippets/angular_counter_tutorial/pubspec.yaml.md ':include')
 
 а затем установим все зависимости
 
-```bash
-pub get
-```
+[script](../_snippets/angular_counter_tutorial/install.sh.md ':include')
 
 Наше приложение-счетчик будет иметь две кнопки для увеличения/уменьшения значения счетчика и элемент для отображения текущего значения. Приступим к разработке `CounterEvents`.
 
 ## Counter события
 
-```dart
-enum CounterEvent { increment, decrement }
-```
+[counter_event.dart](../_snippets/angular_counter_tutorial/counter_event.dart.md ':include')
 
 ## Counter состояния
 
@@ -58,24 +34,7 @@ enum CounterEvent { increment, decrement }
 
 ## Counter блок
 
-```dart
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](../_snippets/angular_counter_tutorial/counter_bloc.dart.md ':include')
 
 ?> **Примечание**: из объявления класса мы можем сказать, что наш `CounterBloc` будет принимать `CounterEvents` в качестве входных и выходных целых чисел.
 
@@ -85,24 +44,11 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 `app.component.dart` должен выглядеть так:
 
-```dart
-import 'package:angular/angular.dart';
-
-import 'package:angular_counter/src/counter_page/counter_page_component.dart';
-
-@Component(
-  selector: 'my-app',
-  templateUrl: 'app_component.html',
-  directives: [CounterPageComponent],
-)
-class AppComponent {}
-```
+[app.component.dart](../_snippets/angular_counter_tutorial/app_component.dart.md ':include')
 
 и `app.component.html` должен выглядеть так:
 
-```html
-<counter-page></counter-page>
-```
+[app.component.html](../_snippets/angular_counter_tutorial/app_component.html.md ':include')
 
 ## Counter страница
 
@@ -110,41 +56,7 @@ class AppComponent {}
 
 `counter_page_component.dart` должен выглядеть так:
 
-```dart
-import 'package:angular/angular.dart';
-import 'package:angular_components/angular_components.dart';
-
-import 'package:angular_bloc/angular_bloc.dart';
-
-import './counter_bloc.dart';
-
-@Component(
-  selector: 'counter-page',
-  templateUrl: 'counter_page_component.html',
-  styleUrls: ['counter_page_component.css'],
-  directives: [MaterialFabComponent],
-  providers: [ClassProvider(CounterBloc)],
-  pipes: [BlocPipe],
-)
-class CounterPageComponent implements OnDestroy {
-  final CounterBloc counterBloc;
-
-  CounterPageComponent(this.counterBloc) {}
-
-  @override
-  void ngOnDestroy() {
-    counterBloc.close();
-  }
-
-  void increment() {
-    counterBloc.add(CounterEvent.increment);
-  }
-
-  void decrement() {
-    counterBloc.add(CounterEvent.decrement);
-  }
-}
-```
+[counter_page_component.dart](../_snippets/angular_counter_tutorial/counter_page_component.dart.md ':include')
 
 ?> **Примечание**: мы можем получить доступ к экземпляру `CounterBloc` с помощью системы внедрения зависимостей `AngularDart`. Поскольку мы зарегистрировали его как `Provider`, AngularDart может правильно определить `CounterBloc`.
 
@@ -154,18 +66,7 @@ class CounterPageComponent implements OnDestroy {
 
 Наконец, наш `counter_page_component.html` должен выглядеть так:
 
-```html
-<div class="counter-page-container">
-  <h1>Counter App</h1>
-  <h2>Current Count: {{ counterBloc | bloc }}</h2>
-  <material-fab class="counter-fab-button" (trigger)="increment()"
-    >+</material-fab
-  >
-  <material-fab class="counter-fab-button" (trigger)="decrement()"
-    >-</material-fab
-  >
-</div>
-```
+[counter_page_component.html](../_snippets/angular_counter_tutorial/counter_page_component.html.md ':include')
 
 ?> **Примечание**: мы используем `BlocPipe`, чтобы мы могли отображать наше состояние counterBloc по мере его обновления.
 

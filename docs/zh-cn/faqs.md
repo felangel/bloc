@@ -4,89 +4,31 @@
 
 ❔ **问题**: 我在自己的bloc中产生了一个状态（State)，但是用户界面却没有更新。我究竟做错了什么?
 
-💡 **答案**: 如果你有用`Equatable`包的话，确保你已经将所有的属性都传入`props`的`getter`当中。
+💡 **答案**: 如果你有用 `Equatable` 包的话，确保你已经将所有的属性都传入`props`的`getter`当中。
 
 ✅ **正确**
 
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
-
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => [property]; // 将所有属性传入props中
-}
-```
+[my_state.dart](../_snippets/faqs/state_not_updating_good_1.dart.md ':include')
 
 ❌ **错误**
 
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
+[my_state.dart](../_snippets/faqs/state_not_updating_bad_1.dart.md ':include')
 
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => [];
-}
-```
-
-```dart
-abstract class MyState extends Equatable {
-    const MyState();
-}
-
-class StateA extends MyState {
-    final String property;
-
-    const StateA(this.property);
-
-    @override
-    List<Object> get props => null;
-}
-```
+[my_state.dart](../_snippets/faqs/state_not_updating_bad_2.dart.md ':include')
 
 另外，请确保在您的bloc中产生状态（State) 的新实例。
 
 ✅ **正确**
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    // 始终创建要产生的状态（State) 的新实例
-    yield state.copyWith(property: event.property);
-}
-```
+[my_bloc.dart](../_snippets/faqs/state_not_updating_good_2.dart.md ':include')
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    final data = _getData(event.info);
-    // 始终创建要产生的状态（State) 的新实例
-    yield MyState(data: data);
-}
-```
+[my_bloc.dart](../_snippets/faqs/state_not_updating_good_3.dart.md ':include')
 
 ❌ **错误**
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    // 永远不要修改/更改状态（State)
-    state.property = event.property;
-    // 永远不会产生相同的状态（State) 的实例
-    yield state;
-}
-```
+[my_bloc.dart](../_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
+
+!> `Equatable` 属性应该被复制而非被修改。如果一个 `Equatable` 类中含有 `List` 或者 `Map` 作为其属性, 确保使用 `List.from` 或者 `Map.from` 以确保根据属性的值来衡量是否等价而非地址而引用地址。
 
 ## 什么时候该用Equatable
 
@@ -94,44 +36,18 @@ Stream<MyState> mapEventToState(MyEvent event) async* {
 
 💡**答案**:
 
-```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    yield StateA('hi');
-    yield StateA('hi');
-}
-```
+[my_bloc.dart](../_snippets/faqs/equatable_yield.dart.md ':include')
 
 在上述情况下，如果`StateA`扩展为`Equatable`，则只会发生一个状态更改（第二个产生的将被忽略) 。
 通常，如果您想优化代码以减少重建次数，则应使用`Equatable`。
 如果您希望相同的状态(State)背对背触发多个转换，则不应使用`Equatable`。
 
 另外，使用`Equatable`可以更容易地测试bloc，因为我们可以预期bloc的状态(State)的特定实例，而不是使用`Matchers`或`Predicates`。
-```dart
-blocTest(
-    '...',
-    build: () => MyBloc(),
-    act: (bloc) => bloc.add(MyEvent()),
-    expect: [
-        MyStateA(),
-        MyStateB(),
-    ],
-)
-```
+[my_bloc_test.dart](../_snippets/faqs/equatable_bloc_test.dart.md ':include')
 
 没有`Equatable`的话，上述测试将失败，需要像下面这样重写：
 
-```dart
-blocTest(
-    '...',
-    build: () => MyBloc(),
-    act: (bloc) => bloc.add(MyEvent()),
-    expect: [
-        isA<MyStateA>(),
-        isA<MyStateB>(),
-    ],
-)
-```
+[my_bloc_test.dart](../_snippets/faqs/without_equatable_bloc_test.dart.md ':include')
 
 ## Bloc vs. Redux
 
@@ -186,62 +102,13 @@ Bloc库在内部使用`provider`来简化在整个小部件树中提供和访问
 
 ✅ **正确**
 
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: MyChild();
-  );
-}
+[my_page.dart](../_snippets/faqs/bloc_provider_good_1.dart.md ':include')
 
-class MyChild extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return RaisedButton(
-      onPressed: () {
-        final blocA = BlocProvider.of<BlocA>(context);
-        ...
-      },
-    )
-    ...
-  }
-}
-```
-
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: Builder(
-      builder: (context) => RaisedButton(
-        onPressed: () {
-          final blocA = BlocProvider.of<BlocA>(context);
-          ...
-        },
-      ),
-    ),
-  );
-}
-```
+[my_page.dart](../_snippets/faqs/bloc_provider_good_2.dart.md ':include')
 
 ❌ **错误**
 
-```dart
-@override
-Widget build(BuildContext context) {
-  BlocProvider(
-    create: (_) => BlocA(),
-    child: RaisedButton(
-      onPressed: () {
-        final blocA = BlocProvider.of<BlocA>(context);
-        ...
-      }
-    )
-  );
-}
-```
+[my_page.dart](../_snippets/faqs/bloc_provider_bad_1.dart.md ':include')
 
 ## 项目结构
 

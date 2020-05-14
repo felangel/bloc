@@ -14,26 +14,15 @@ Bloc состоит из нескольких `pub` пакетов:
 
 Первое, что нам нужно сделать, это добавить пакет `bloc` в наш `pubspec.yaml` в качестве зависимости.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-```
+[pubspec.yaml](../_snippets/getting_started/bloc_pubspec.yaml.md ':include')
 
 Для [Flutter](https://flutter.dev/) приложения, нам также нужно добавить пакет `flutter_bloc` в наш `pubspec.yaml` в качестве зависимости.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-  flutter_bloc: ^3.2.0
-```
+[pubspec.yaml](../_snippets/getting_started/flutter_bloc_pubspec.yaml.md ':include')
 
 Для [AngularDart](https://angulardart.dev/) приложения, нам также нужно добавить пакет `angular_bloc` в наш `pubspec.yaml` в качестве зависимости.
 
-```yaml
-dependencies:
-  bloc: ^3.0.0
-  angular_bloc: ^3.0.0
-```
+[pubspec.yaml](../_snippets/getting_started/angular_bloc_pubspec.yaml.md ':include')
 
 Затем мы должны установить `bloc`.
 
@@ -47,20 +36,12 @@ dependencies:
 
 Теперь, когда мы успешно установили `bloc`, мы можем создать наш `main.dart` и импортировать `bloc`.
 
-```dart
-import 'package:bloc/bloc.dart';
-```
+[main.dart](../_snippets/getting_started/bloc_main.dart.md ':include')
 
 Для Flutter приложения нам нужно импортировать `flutter_bloc`.
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-```
+[main.dart](../_snippets/getting_started/flutter_bloc_main.dart.md ':include')
 
 Для AngularDart приложения нам нужно импортировать `angular_bloc`.
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:angular_bloc/angular_bloc.dart';
-```
+[main.dart](../_snippets/getting_started/angular_bloc_main.dart.md ':include')

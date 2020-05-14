@@ -142,6 +142,7 @@ Více se dozvíte na následujících odkazech, které vytvořila komunita.
 
 ### Video tutoriály (anglicky)
 
+- [Bloc Library: Basics and Beyond 🚀](https://youtu.be/knMvKPKBzGE) - Talk given at [Flutter Europe](https://fluttereurope.dev) about the basics of the bloc library, by [Felix Angelov](https://github.com/felangel).
 - [Flutter Bloc Library Tutorial](https://www.youtube.com/watch?v=LeLrsnHeCZY) - Úvod do knihovny Bloc, od [Reso Coder](https://resocoder.com).
 - [Flutter Youtube Search](https://www.youtube.com/watch?v=BJY8nuYUM7M) - Jak vytvořit aplikaci na Youtube vyhledávání, která interaguje s API s použitím balíčků bloc a flutter_bloc, od [Reso Coder](https://resocoder.com).
 - [Bloc Library (Updated) – Painless State Management for Flutter](https://www.youtube.com/watch?v=nQMfaQeCL6M) - Aktualizovaný tutoriál na knihovnu Bloc, od [Reso Coder](https://resocoder.com).

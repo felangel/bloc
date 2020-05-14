@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -208,27 +210,38 @@ void main() {
     });
 
     test('is called on bloc exception', () {
-      var errorHandled = false;
-      Bloc blocWithError;
+      runZoned(() {
+        var errorHandled = false;
+        Bloc blocWithError;
 
-      final delegate = MockBlocDelegate();
-      final _bloc = CounterExceptionBloc();
-      BlocSupervisor.delegate = delegate;
+        final delegate = MockBlocDelegate();
+        final bloc = CounterExceptionBloc();
+        BlocSupervisor.delegate = delegate;
 
-      when(delegate.onError(any, any, any)).thenAnswer((invocation) {
-        blocWithError = invocation.positionalArguments[0] as Bloc;
-        errorHandled = true;
+        when(delegate.onError(any, any, any)).thenAnswer((invocation) {
+          blocWithError = invocation.positionalArguments[0] as Bloc;
+          errorHandled = true;
+        });
+
+        expectLater(
+          bloc,
+          emitsInOrder(<int>[0]),
+        ).then((_) {
+          expect(errorHandled, isTrue);
+          expect(blocWithError, bloc);
+        });
+
+        bloc.add(CounterEvent.increment);
+      }, onError: (error, stackTrace) {
+        expect(
+          (error as BlocUnhandledErrorException).toString(),
+          contains(
+            'Unhandled error Exception: fatal exception occurred '
+            'in bloc Instance of \'CounterExceptionBloc\'.',
+          ),
+        );
+        expect(stackTrace, isNotNull);
       });
-
-      expectLater(
-        _bloc,
-        emitsInOrder(<int>[0]),
-      ).then((_) {
-        expect(errorHandled, isTrue);
-        expect(blocWithError, _bloc);
-      });
-
-      _bloc.add(CounterEvent.increment);
     });
   });
 }

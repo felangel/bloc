@@ -37,50 +37,19 @@ Nebo můžete kliknout pravým tlačítkem na složku, ve které chcete vytvoři
 
 ## Jak používat úryvky
 
-### Bloc
-
-V `.dart` souboru aktivujete úryvky psaním `bloc` a zmáčknutím enteru. Potom můžete pojmenovat bloc a doplnit implementační detaily tabováním.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloc-snippet-usage.gif)
-
-### BlocEvent
-
-V `.dart` souboru aktivujete úryvky psaním `blocevent` a zmáčknutím enteru. Potom můžete pojmenovat bloc a doplnit implementační detaily tabováním.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocevent-snippet-usage.gif)
-
-### BlocState
-
-V `.dart` souboru aktivujete úryvky psaním `blocstate` a zmáčknutím enteru. Potom můžete pojmenovat bloc a doplnit implementační detaily tabováním.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocstate-snippet-usage.gif)
-
-### BlocBuilder
-
-V `.dart` souboru aktivujete úryvky psaním `blocbuilder` a zmáčknutím enteru. Potom můžete pojmenovat bloc a doplnit implementační detaily tabováním.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocbuilder-snippet-usage.gif)
-
-### BlocListener
-
-V `.dart` souboru aktivujete úryvky psaním `bloclistener` a zmáčknutím enteru. Potom můžete pojmenovat bloc a doplnit implementační detaily tabováním.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloclistener-snippet-usage.gif)
-
-### BlocProvider
-
-V `.dart` souboru aktivujete úryvky psaním `blocprovider` a zmáčknutím enteru. Potom můžete pojmenovat bloc a doplnit implementační detaily tabováním.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovider-snippet-usage.gif)
-
-### BlocProviderTree
-
-V `.dart` souboru aktivujete úryvky psaním `blocprovidertree` a zmáčknutím enteru. Potom můžete pojmenovat bloc a doplnit implementační detaily tabováním.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovidertree-snippet-usage.gif)
-
-### BlocDelegate
-
-V `.dart` souboru aktivujete úryvky psaním `blocdelegate` a zmáčknutím enteru. Potom můžete pojmenovat bloc a doplnit implementační detaily tabováním.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocdelegate-snippet-usage.gif)
+| Shortcut                  | Description                                          |
+| ------------------------- | ---------------------------------------------------- |
+| `bloc`                    | Creates a Bloc Class                                 |
+| `blocbuilder`             | Creates a BlocBuilder Widget                         |
+| `bloclistener`            | Creates a BlocListener Widget                        |
+| `multibloclistener`       | Creates a MultiBlocListener Widget                   |
+| `blocconsumer`            | Creates a BlocConsumer Widget                        |
+| `blocprovider`            | Creates a BlocProvider Widget                        |
+| `multiblocprovider`       | Creates a MultiBlocProvider Widget                   |
+| `repositoryprovider`      | Creates a RepositoryProvider Widget                  |
+| `multirepositoryprovider` | Creates a MultiRepositoryProvider Widget             |
+| `blocdelegate`            | Creates a BlocDelegate Class                         |
+| `contextbloc`             | Shortcut for `context.bloc<MyBloc>()`                |
+| `blocof`                  | Shortcut for `BlocProvider.of<MyBloc>()`             |
+| `contextrepository`       | Shortcut for `context.repository<MyRepository>()`    |
+| `repositoryof`            | Shortcut for `RepositoryProvider.of<MyRepository>()` |
