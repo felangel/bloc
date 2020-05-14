@@ -13,7 +13,7 @@ void main() {
       });
     });
 
-    group('LoggedIn', () {
+    group('AuthenticationLoggedIn', () {
       test('props are [token]', () {
         expect(AuthenticationLoggedIn(token: 'token').props, ['token']);
       });
