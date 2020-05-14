@@ -10,37 +10,15 @@
 
 Comenzaremos creando un nuevo proyecto Flutter
 
-```bash
-flutter create flutter_infinite_list
-```
+[script](../_snippets/flutter_infinite_list_tutorial/flutter_create.sh.md ':include')
 
 Luego podemos continuar y reemplazar el contenido de pubspec.yaml con
 
-```yaml
-name: flutter_infinite_list
-description: A new Flutter project.
-
-version: 1.0.0+1
-
-environment:
-  sdk: ">=2.6.0 <3.0.0"
-
-dependencies:
-  flutter:
-    sdk: flutter
-  flutter_bloc: ^3.2.0
-  http: ^0.12.0
-  equatable: ^1.0.0
-
-flutter:
-  uses-material-design: true
-```
+[pubspec.yaml](../_snippets/flutter_infinite_list_tutorial/pubspec.yaml.md ':include')
 
 y luego instalar todas nuestras dependencias
 
-```bash
-flutter packages get
-```
+[script](../_snippets/flutter_infinite_list_tutorial/flutter_packages_get.sh.md ':include')
 
 ## REST API
 
@@ -50,22 +28,7 @@ Para esta aplicación de demostración, utilizaremos [jsonplaceholder](http://js
 
 Abra una nueva pestaña en su navegador y visite https://jsonplaceholder.typicode.com/posts?_start=0&_limit=2 para ver qué devuelve el API.
 
-```json
-[
-  {
-    "userId": 1,
-    "id": 1,
-    "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-    "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
-  },
-  {
-    "userId": 1,
-    "id": 2,
-    "title": "qui est esse",
-    "body": "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
-  }
-]
-```
+[posts.json](../_snippets/flutter_infinite_list_tutorial/posts.json.md ':include')
 
 ?> **Nota:** en nuestra url especificamos el inicio y el límite como parámetros de consulta a la solicitud GET.
 
@@ -75,23 +38,7 @@ Genial, ahora que sabemos cómo se verán nuestros datos, creemos el modelo.
 
 Cree `post.dart` y comencemos a crear el modelo de nuestro objeto Post.
 
-```dart
-import 'package:equatable/equatable.dart';
-
-class Post extends Equatable {
-  final int id;
-  final String title;
-  final String body;
-
-  const Post({this.id, this.title, this.body});
-
-  @override
-  List<Object> get props => [id, title, body];
-
-  @override
-  String toString() => 'Post { id: $id }';
-}
-```
+[post.dart](../_snippets/flutter_infinite_list_tutorial/post.dart.md ':include')
 
 `Post` es solo una clase con un` id`, `title` y` body`.
 
@@ -109,16 +56,7 @@ En un nivel alto, responderá a la entrada del usuario (deslizar) y buscará má
 
 Nuestro `PostBloc` solo responderá a un solo evento; `Fetch` que será agregado por la capa de presentación cada vez que necesite más publicaciones para presentar. Dado que nuestro evento `Fetch` es un tipo de `PostEvent` podemos crear `bloc/post_event.dart` e implementar el evento así.
 
-```dart
-import 'package:equatable/equatable.dart';
-
-abstract class PostEvent extends Equatable {
-  @override
-  List<Object> get props => [];
-}
-
-class Fetch extends PostEvent {}
-```
+[post_event.dart](../_snippets/flutter_infinite_list_tutorial/post_event.dart.md ':include')
 
 ?> Nuevamente, estamos anulando `toString` para una representación de cadena String más fácil de leer de nuestro evento. Nuevamente, estamos extendiendo [`Equatable`](https://pub.dev/packages/equatable) para que podamos comparar instancias para la igualdad.
 
@@ -137,49 +75,7 @@ Nuestra capa de presentación necesitará tener varias piezas de información pa
 
 Ahora podemos crear `bloc/post_state.dart` e implementarlo así.
 
-```dart
-import 'package:equatable/equatable.dart';
-
-import 'package:flutter_infinite_list/models/models.dart';
-
-abstract class PostState extends Equatable {
-  const PostState();
-
-  @override
-  List<Object> get props => [];
-}
-
-class PostUninitialized extends PostState {}
-
-class PostError extends PostState {}
-
-class PostLoaded extends PostState {
-  final List<Post> posts;
-  final bool hasReachedMax;
-
-  const PostLoaded({
-    this.posts,
-    this.hasReachedMax,
-  });
-
-  PostLoaded copyWith({
-    List<Post> posts,
-    bool hasReachedMax,
-  }) {
-    return PostLoaded(
-      posts: posts ?? this.posts,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-    );
-  }
-
-  @override
-  List<Object> get props => [posts, hasReachedMax];
-
-  @override
-  String toString() =>
-      'PostLoaded { posts: ${posts.length}, hasReachedMax: $hasReachedMax }';
-}
-```
+[post_state.dart](../_snippets/flutter_infinite_list_tutorial/post_state.dart.md ':include')
 
 ?> Implementamos `copyWith` para que podamos copiar una instancia de `PostLoaded` y actualizar cero o más propiedades convenientemente (esto será útil más adelante).
 
@@ -187,10 +83,7 @@ Ahora que tenemos implementados nuestros `Eventos` y `Estados`, podemos crear nu
 
 Para que sea conveniente importar nuestros estados y eventos con una sola importación, podemos crear `bloc/bloc.dart` que los exporta a todos (agregaremos nuestra exportación `post_bloc.dart` en la siguiente sección).
 
-```dart
-export './post_event.dart';
-export './post_state.dart';
-```
+[bloc.dart](../_snippets/flutter_infinite_list_tutorial/bloc_initial.dart.md ':include')
 
 ## Post Bloc
 
@@ -198,89 +91,17 @@ Por simplicidad, nuestro `PostBloc` tendrá una dependencia directa de un `clien
 
 Creemos `post_bloc.dart` y creemos nuestro `PostBloc` vacío.
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
-import 'package:http/http.dart' as http;
-
-import 'package:flutter_infinite_list/bloc/bloc.dart';
-import 'package:flutter_infinite_list/post.dart';
-
-class PostBloc extends Bloc<PostEvent, PostState> {
-  final http.Client httpClient;
-
-  PostBloc({@required this.httpClient});
-
-  @override
-  // TODO: implement initialState
-  PostState get initialState => null;
-
-  @override
-  Stream<PostState> mapEventToState(PostEvent event) async* {
-    // TODO: implement mapEventToState
-    yield null;
-  }
-}
-```
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_initial.dart.md ':include')
 
 ?> **Nota:** solo a partir de la declaración de la clase podemos decir que nuestro PostBloc tomará PostEvents como entrada y como salida PostStates.
 
 Podemos comenzar implementando `initialState`, que será el estado de nuestro `PostBloc` antes de que se agregue cualquier evento.
 
-```dart
-@override
-get initialState => PostUninitialized();
-```
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_initial_state.dart.md ':include')
 
 A continuación, necesitamos implementar `mapEventToState` que se disparará cada vez que se agregue un `PostEvent`.
 
-```dart
-@override
-Stream<PostState> mapEventToState(PostEvent event) async* {
-  final currentState = state;
-  if (event is Fetch && !_hasReachedMax(currentState)) {
-    try {
-      if (currentState is PostUninitialized) {
-        final posts = await _fetchPosts(0, 20);
-        yield PostLoaded(posts: posts, hasReachedMax: false);
-        return;
-      }
-      if (currentState is PostLoaded) {
-        final posts =
-            await _fetchPosts(currentState.posts.length, 20);
-        yield posts.isEmpty
-            ? currentState.copyWith(hasReachedMax: true)
-            : PostLoaded(
-                posts: currentState.posts + posts,
-                hasReachedMax: false,
-              );
-      }
-    } catch (_) {
-      yield PostError();
-    }
-  }
-}
-
-bool _hasReachedMax(PostState state) =>
-    state is PostLoaded && state.hasReachedMax;
-
-Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
-  final response = await httpClient.get(
-      'https://jsonplaceholder.typicode.com/posts?_start=$startIndex&_limit=$limit');
-  if (response.statusCode == 200) {
-    final data = json.decode(response.body) as List;
-    return data.map((rawPost) {
-      return Post(
-        id: rawPost['id'],
-        title: rawPost['title'],
-        body: rawPost['body'],
-      );
-    }).toList();
-  } else {
-    throw Exception('error fetching posts');
-  }
-}
-```
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_map_event_to_state.dart.md ':include')
 
 Nuestro `PostBloc` hará `yield` siempre que haya un nuevo estado porque devuelve un `Stream<PostState>`. Consulte [conceptos básicos](https://bloclibrary.dev/#/es/coreconcepts?id=streams) para obtener más información sobre `Streams` y otros conceptos básicos.
 
@@ -296,106 +117,15 @@ Una optimización que podemos hacer es `rebotar` los `Eventos` para evitar spam 
 
 ?> **Nota:** La transformación de anulación nos permite transformar el Stream<Event> antes de llamar a mapEventToState. Esto permite que se apliquen operaciones como distinct(), debounceTime(), etc.
 
-```dart
-@override
-Stream<PostState> transformEvents(
-  Stream<PostEvent> events,
-  Stream<PostState> Function(PostEvent event) next,
-) {
-  return super.transformEvents(
-    events.debounceTime(
-      Duration(milliseconds: 500),
-    ),
-    next,
-  );
-}
-```
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transform_events.dart.md ':include')
 
 Nuestro `PostBloc` terminado debería verse así:
 
-```dart
-import 'dart:convert';
-
-import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:http/http.dart' as http;
-import 'package:bloc/bloc.dart';
-
-import 'package:flutter_infinite_list/post.dart';
-import 'package:flutter_infinite_list/bloc/bloc.dart';
-
-class PostBloc extends Bloc<PostEvent, PostState> {
-  final http.Client httpClient;
-
-  PostBloc({@required this.httpClient});
-
-  @override
-  Stream<PostState> transformEvents(
-    Stream<PostEvent> events,
-    Stream<PostState> Function(PostEvent event) next,
-  ) {
-    return super.transformEvents(
-      events.debounceTime(
-        Duration(milliseconds: 500),
-      ),
-      next,
-    );
-  }
-
-  @override
-  get initialState => PostUninitialized();
-
-  @override
-  Stream<PostState> mapEventToState(event) async* {
-    final currentState = state;
-    if (event is Fetch && !_hasReachedMax(currentState)) {
-      try {
-        if (currentState is PostUninitialized) {
-          final posts = await _fetchPosts(0, 20);
-          yield PostLoaded(posts: posts, hasReachedMax: false);
-        }
-        if (currentState is PostLoaded) {
-          final posts = await _fetchPosts(currentState.posts.length, 20);
-          yield posts.isEmpty
-              ? currentState.copyWith(hasReachedMax: true)
-              : PostLoaded(
-                  posts: currentState.posts + posts, hasReachedMax: false);
-        }
-      } catch (_) {
-        yield PostError();
-      }
-    }
-  }
-
-  bool _hasReachedMax(PostState state) =>
-      state is PostLoaded && state.hasReachedMax;
-
-  Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
-    final response = await httpClient.get(
-        'https://jsonplaceholder.typicode.com/posts?_start=$startIndex&_limit=$limit');
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body) as List;
-      return data.map((rawPost) {
-        return Post(
-          id: rawPost['id'],
-          title: rawPost['title'],
-          body: rawPost['body'],
-        );
-      }).toList();
-    } else {
-      throw Exception('error fetching posts');
-    }
-  }
-}
-```
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc.dart.md ':include')
 
 ¡No olvide actualizar `bloc/bloc.dart` para incluir nuestro` PostBloc`!
 
-```dart
-export './post_bloc.dart';
-export './post_event.dart';
-export './post_state.dart';
-```
+[bloc.dart](../_snippets/flutter_infinite_list_tutorial/bloc.dart.md ':include')
 
 ¡Excelente! Ahora que hemos terminado de implementar la lógica de negocios, todo lo que queda por hacer es implementar la capa de presentación.
 
@@ -405,108 +135,11 @@ En nuestro `main.dart` podemos comenzar implementando nuestra función principal
 
 En nuestro widget `App`, usamos `BlocProvider` para crear y proporcionar una instancia de `PostBloc` al subárbol. Además, agregamos un evento `Fetch` para que cuando se cargue la aplicación, solicite el lote inicial de publicaciones.
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:flutter_infinite_list/bloc/bloc.dart';
-
-void main() {
-  runApp(App());
-}
-
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Infinite Scroll',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Posts'),
-        ),
-        body: BlocProvider(
-          create: (context) =>
-              PostBloc(httpClient: http.Client())..add(Fetch()),
-          child: HomePage(),
-        ),
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/flutter_infinite_list_tutorial/main.dart.md ':include')
 
 A continuación, necesitamos implementar nuestro widget `HomePage` que presentará nuestras publicaciones y se conectará a nuestro `PostBloc`.
 
-```dart
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final _scrollController = ScrollController();
-  final _scrollThreshold = 200.0;
-  PostBloc _postBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-    _postBloc = BlocProvider.of<PostBloc>(context);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<PostBloc, PostState>(
-      builder: (context, state) {
-        if (state is PostUninitialized) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (state is PostError) {
-          return Center(
-            child: Text('failed to fetch posts'),
-          );
-        }
-        if (state is PostLoaded) {
-          if (state.posts.isEmpty) {
-            return Center(
-              child: Text('no posts'),
-            );
-          }
-          return ListView.builder(
-            itemBuilder: (BuildContext context, int index) {
-              return index >= state.posts.length
-                  ? BottomLoader()
-                  : PostWidget(post: state.posts[index]);
-            },
-            itemCount: state.hasReachedMax
-                ? state.posts.length
-                : state.posts.length + 1,
-            controller: _scrollController,
-          );
-        }
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
-    if (maxScroll - currentScroll <= _scrollThreshold) {
-      _postBloc.add(Fetch());
-    }
-  }
-}
-```
+[home_page.dart](../_snippets/flutter_infinite_list_tutorial/home_page.dart.md ':include')
 
 ?> `HomePage` es un` StatefulWidget` porque necesitará mantener un `ScrollController`. En `initState`, agregamos un oyente a nuestro `ScrollController` para que podamos responder a los eventos de desplazamiento. También accedemos a nuestra instancia de `PostBloc` a través de `BlocProvider.of<PostBloc>(context) `.
 
@@ -518,49 +151,10 @@ Cada vez que el usuario se desplaza, calculamos qué tan lejos están de la part
 
 A continuación, necesitamos implementar nuestro widget `Bottom Loader` que le indicará al usuario que estamos cargando más publicaciones.
 
-```dart
-class BottomLoader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: Center(
-        child: SizedBox(
-          width: 33,
-          height: 33,
-          child: CircularProgressIndicator(
-            strokeWidth: 1.5,
-          ),
-        ),
-      ),
-    );
-  }
-}
-```
-
+[bottom_loader.dart](../_snippets/flutter_infinite_list_tutorial/bottom_loader.dart.md ':include')
 Por último, necesitamos implementar nuestro `PostWidget` que representará una publicación individual.
 
-```dart
-class PostWidget extends StatelessWidget {
-  final Post post;
-
-  const PostWidget({Key key, @required this.post}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Text(
-        '${post.id}',
-        style: TextStyle(fontSize: 10.0),
-      ),
-      title: Text(post.title),
-      isThreeLine: true,
-      subtitle: Text(post.body),
-      dense: true,
-    );
-  }
-}
-```
+[post.dart](../_snippets/flutter_infinite_list_tutorial/post_widget.dart.md ':include')
 
 En este punto, deberíamos poder ejecutar nuestra aplicación y todo debería funcionar; Sin embargo, hay una cosa más que podemos hacer.
 
@@ -574,28 +168,13 @@ Aunque en esta aplicación solo tenemos un bloque, es bastante común en aplicac
 
 Si queremos poder hacer algo en respuesta a todas las `Transiciones`, simplemente podemos crear nuestro propio `BlocDelegate`.
 
-```dart
-import 'package:bloc/bloc.dart';
-
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-}
-```
+[main.dart](../_snippets/flutter_infinite_list_tutorial/bloc_delegate_main.dart.md ':include')
 
 ?> Todo lo que necesitamos hacer es extender `BlocDelegate` y anular el método `onTransition`.
 
 Para decirle a Bloc que use nuestro `SimpleBlocDelegate`, solo necesitamos ajustar nuestra función principal.
 
-```dart
-void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(MyApp());
-}
-```
+[main.dart](../_snippets/flutter_infinite_list_tutorial/bloc_delegate_main.dart.md ':include')
 
 Ahora, cuando ejecutamos nuestra aplicación, cada vez que se produce un Bloc 'Transition' podemos ver la transición impresa en la consola.
 
