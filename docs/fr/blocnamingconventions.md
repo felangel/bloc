@@ -8,7 +8,7 @@
 
 ### Anatomie
 
-[event](_snippets/bloc_naming_conventions/event_anatomy.md ':include')
+[event](../_snippets/bloc_naming_conventions/event_anatomy.md ':include')
 
 ?> Le chargement initial des events devrait suivre la convention: `BlocSubject` + `Started`
 
@@ -16,11 +16,11 @@
 
 ✅ **Bon**
 
-[events_good](_snippets/bloc_naming_conventions/event_examples_good.md ':include')
+[events_good](../_snippets/bloc_naming_conventions/event_examples_good.md ':include')
 
 ❌ **Mauvais**
 
-[events_bad](_snippets/bloc_naming_conventions/event_examples_bad.md ':include')
+[events_bad](../_snippets/bloc_naming_conventions/event_examples_bad.md ':include')
 
 ## Convention pour State (état)
 
@@ -28,7 +28,7 @@
 
 ### Anatomie
 
-[state](_snippets/bloc_naming_conventions/state_anatomy.md ':include')
+[state](../_snippets/bloc_naming_conventions/state_anatomy.md ':include')
 
 ?> `State` devrait être comme suivant: `Initial` | `Success` | `Failure` | `InProgress` et initial state devrait toujours suivre la forme: `BlocSubject` + `Initial`.
 
@@ -36,8 +36,8 @@
 
 ✅ **Bon**
 
-[states_good](_snippets/bloc_naming_conventions/state_examples_good.md ':include')
+[states_good](../_snippets/bloc_naming_conventions/state_examples_good.md ':include')
 
 ❌ **Mauvais**
 
-[states_bad](_snippets/bloc_naming_conventions/state_examples_bad.md ':include')
+[states_bad](../_snippets/bloc_naming_conventions/state_examples_bad.md ':include')
