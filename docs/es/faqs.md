@@ -28,6 +28,8 @@ Además, asegúrese de obtener una nueva instancia del estado en su bloc.
 
 [my_bloc.dart](../_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
 
+!> Las propiedades `Equatable` siempre deben copiarse en lugar de modificarse. Si una clase `Equatable` contiene una `Lista` o `Mapa` como propiedades, asegúrese de usar `List.from` o `Map.from` respectivamente para asegurarse de que la igualdad se evalúa basada en los valores de las propiedades en vez de la referencia.
+
 ## Cuando usar Equatable
 
 ❔**Pregunta**: ¿Cuándo debo usar Equatable?

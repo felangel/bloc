@@ -4,7 +4,7 @@
 
 ❔ **问题**: 我在自己的bloc中产生了一个状态（State)，但是用户界面却没有更新。我究竟做错了什么?
 
-💡 **答案**: 如果你有用`Equatable`包的话，确保你已经将所有的属性都传入`props`的`getter`当中。
+💡 **答案**: 如果你有用 `Equatable` 包的话，确保你已经将所有的属性都传入`props`的`getter`当中。
 
 ✅ **正确**
 
@@ -27,6 +27,8 @@
 ❌ **错误**
 
 [my_bloc.dart](../_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
+
+!> `Equatable` 属性应该被复制而非被修改。如果一个 `Equatable` 类中含有 `List` 或者 `Map` 作为其属性, 确保使用 `List.from` 或者 `Map.from` 以确保根据属性的值来衡量是否等价而非地址而引用地址。
 
 ## 什么时候该用Equatable
 

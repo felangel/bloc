@@ -155,6 +155,6 @@ Obtenga más información en los siguientes enlaces, que han sido aportados por 
 
 - [Feature Scaffolding for VSCode](https://marketplace.visualstudio.com/items?itemName=KiritchoukC.flutter-clean-architecture) - Una extensión VSCode inspirada en los tutoriales de arquitectura limpia de [Reso Coder's](https://resocoder.com), que ayuda rápidamente a las funciones de andamio, por [Kiritchouk Clément](https://github.com/KiritchoukC).
 
-## Maintainers
+## Mantenedores
 
 - [Felix Angelov](https://github.com/felangel)
