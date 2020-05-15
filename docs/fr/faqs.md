@@ -30,6 +30,8 @@ En plus de cela, assurez vous de yield une nouvelle instance de votre state dans
 
 ## Quand utiliser Equatable
 
+!> Les propriétés de `Equatable` devraient toujours être copiés plutôt que modifiés. Si une classe `Equatable` contient une `List` ou une `Map` comme propriété, assurez vous d'utiliser `List.from` ou `Map.from` respectivement pour vous assurer que l'égalité est évalué sur la base des valeurs des propriétés plutôt que la référence.
+
 ❔**Question**: Quand est ce que je dois utiliser Equatable?
 
 💡**Answer**:
