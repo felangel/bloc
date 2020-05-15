@@ -1,14 +1,12 @@
-import 'package:flutter/material.dart';
-
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login/login/login_page.dart';
-import 'package:user_repository/user_repository.dart';
-
 import 'package:flutter_login/authentication/authentication.dart';
-import 'package:flutter_login/splash/splash.dart';
-import 'package:flutter_login/home/home.dart';
 import 'package:flutter_login/common/common.dart';
+import 'package:flutter_login/home/home.dart';
+import 'package:flutter_login/login/login_page.dart';
+import 'package:flutter_login/splash/splash.dart';
+import 'package:user_repository/user_repository.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
@@ -37,7 +35,7 @@ void main() {
     BlocProvider<AuthenticationBloc>(
       create: (context) {
         return AuthenticationBloc(userRepository: userRepository)
-          ..add(AppStarted());
+          ..add(AuthenticationStarted());
       },
       child: App(userRepository: userRepository),
     ),
@@ -54,13 +52,13 @@ class App extends StatelessWidget {
     return MaterialApp(
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          if (state is AuthenticationAuthenticated) {
+          if (state is AuthenticationSuccess) {
             return HomePage();
           }
-          if (state is AuthenticationUnauthenticated) {
+          if (state is AuthenticationFailure) {
             return LoginPage(userRepository: userRepository);
           }
-          if (state is AuthenticationLoading) {
+          if (state is AuthenticationInProgress) {
             return LoadingIndicator();
           }
           return SplashPage();

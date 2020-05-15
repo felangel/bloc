@@ -13,13 +13,13 @@ void main() {
       });
     });
 
-    group('LoginLoading', () {
+    group('LoginInProgress', () {
       test('props are []', () {
-        expect(LoginLoading().props, []);
+        expect(LoginInProgress().props, []);
       });
 
       test('toString is LoginLoading', () {
-        expect(LoginLoading().toString(), 'LoginLoading');
+        expect(LoginInProgress().toString(), 'LoginInProgress');
       });
     });
 

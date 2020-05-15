@@ -29,13 +29,13 @@ void main() {
   });
 
   test('initial state is correct', () {
-    expect(authenticationBloc.initialState, AuthenticationUninitialized());
+    expect(authenticationBloc.initialState, AuthenticationInitial());
   });
 
   test('close does not emit new states', () {
     expectLater(
       authenticationBloc,
-      emitsInOrder([AuthenticationUninitialized(), emitsDone]),
+      emitsInOrder([AuthenticationInitial(), emitsDone]),
     );
     authenticationBloc.close();
   });
@@ -47,9 +47,9 @@ void main() {
         when(userRepository.hasToken()).thenAnswer((_) => Future.value(false));
         return authenticationBloc;
       },
-      act: (bloc) => bloc.add(AppStarted()),
+      act: (bloc) => bloc.add(AuthenticationStarted()),
       expect: [
-        AuthenticationUnauthenticated(),
+        AuthenticationFailure(),
       ],
     );
 
@@ -59,9 +59,9 @@ void main() {
         when(userRepository.hasToken()).thenAnswer((_) => Future.value(true));
         return authenticationBloc;
       },
-      act: (bloc) => bloc.add(AppStarted()),
+      act: (bloc) => bloc.add(AuthenticationStarted()),
       expect: [
-        AuthenticationAuthenticated(),
+        AuthenticationSuccess(),
       ],
     );
   });
@@ -70,10 +70,10 @@ void main() {
     blocTest(
       'emits [loading, authenticated] when token is persisted',
       build: () async => authenticationBloc,
-      act: (bloc) => bloc.add(LoggedIn(token: 'instance.token')),
+      act: (bloc) => bloc.add(AuthenticationLoggedIn(token: 'instance.token')),
       expect: [
-        AuthenticationLoading(),
-        AuthenticationAuthenticated(),
+        AuthenticationInProgress(),
+        AuthenticationSuccess(),
       ],
     );
   });
@@ -82,10 +82,10 @@ void main() {
     blocTest(
       'emits [loading, unauthenticated] when token is deleted',
       build: () async => authenticationBloc,
-      act: (bloc) => bloc.add(LoggedOut()),
+      act: (bloc) => bloc.add(AuthenticationLoggedOut()),
       expect: [
-        AuthenticationLoading(),
-        AuthenticationUnauthenticated(),
+        AuthenticationInProgress(),
+        AuthenticationFailure(),
       ],
     );
   });

@@ -71,7 +71,8 @@ class _LoginFormState extends State<LoginForm> {
             );
         }
         if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+          BlocProvider.of<AuthenticationBloc>(context)
+              .add(AuthenticationLoggedIn());
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -144,13 +145,13 @@ class _LoginFormState extends State<LoginForm> {
 
   void _onEmailChanged() {
     _loginBloc.add(
-      EmailChanged(email: _emailController.text),
+      LoginEmailChanged(email: _emailController.text),
     );
   }
 
   void _onPasswordChanged() {
     _loginBloc.add(
-      PasswordChanged(password: _passwordController.text),
+      LoginPasswordChanged(password: _passwordController.text),
     );
   }
 

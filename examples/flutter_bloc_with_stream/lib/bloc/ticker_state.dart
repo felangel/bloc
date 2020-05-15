@@ -7,12 +7,12 @@ abstract class TickerState extends Equatable {
   List<Object> get props => [];
 }
 
-class Initial extends TickerState {}
+class TickerInitial extends TickerState {}
 
-class Update extends TickerState {
+class TickerTickSuccess extends TickerState {
   final int count;
 
-  const Update(this.count);
+  const TickerTickSuccess(this.count);
 
   @override
   List<Object> get props => [count];

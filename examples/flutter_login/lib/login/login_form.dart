@@ -49,11 +49,11 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 RaisedButton(
                   onPressed:
-                      state is! LoginLoading ? _onLoginButtonPressed : null,
+                      state is! LoginInProgress ? _onLoginButtonPressed : null,
                   child: Text('Login'),
                 ),
                 Container(
-                  child: state is LoginLoading
+                  child: state is LoginInProgress
                       ? CircularProgressIndicator()
                       : null,
                 ),
