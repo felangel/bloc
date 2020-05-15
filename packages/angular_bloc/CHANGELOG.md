@@ -1,3 +1,7 @@
+# 5.0.0-dev.1
+
+Update to `angular_dart: ^6.0.0-alpha+1`
+
 # 4.0.0
 
 Update to `bloc: ^4.0.0`
