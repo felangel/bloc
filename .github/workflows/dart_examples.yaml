@@ -3,11 +3,13 @@ name: dart_examples
 on:
   push:
     paths:
+      - ".github/workflows/dart_examples.yaml"
       - "packages/bloc/**"
       - "examples/bloc_test/**"
 
   pull_request:
     paths:
+      - ".github/workflows/dart_examples.yaml"
       - "packages/bloc/**"
       - "examples/bloc_test/**"
 

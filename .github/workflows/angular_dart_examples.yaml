@@ -3,6 +3,7 @@ name: angular_dart_examples
 on:
   push:
     paths:
+      - ".github/workflows/angular_dart_examples.yaml"
       - "packages/angular_bloc/**"
       - "examples/angular_counter/**"
       - "examples/github_search/common_github_search/**"
@@ -10,6 +11,7 @@ on:
 
   pull_request:
     paths:
+      - ".github/workflows/angular_dart_examples.yaml"
       - "packages/angular_bloc/**"
       - "examples/angular_counter/**"
       - "examples/github_search/common_github_search/**"
