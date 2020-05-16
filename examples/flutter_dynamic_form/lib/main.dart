@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         body: BlocProvider(
           create: (context) => NewCarBloc(
             newCarRepository: NewCarRepository(),
-          )..add(FormLoaded()),
+          )..add(NewCarFormLoaded()),
           child: MyForm(),
         ),
       ),
@@ -27,14 +27,14 @@ class MyApp extends StatelessWidget {
 class MyForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    void _onBrandChanged(String brand) =>
-        BlocProvider.of<NewCarBloc>(context).add(BrandChanged(brand: brand));
+    void _onBrandChanged(String brand) => BlocProvider.of<NewCarBloc>(context)
+        .add(NewCarBrandChanged(brand: brand));
 
-    void _onModelChanged(String model) =>
-        BlocProvider.of<NewCarBloc>(context).add(ModelChanged(model: model));
+    void _onModelChanged(String model) => BlocProvider.of<NewCarBloc>(context)
+        .add(NewCarModelChanged(model: model));
 
     void _onYearChanged(String year) =>
-        BlocProvider.of<NewCarBloc>(context).add(YearChanged(year: year));
+        BlocProvider.of<NewCarBloc>(context).add(NewCarYearChanged(year: year));
 
     void _onFormSubmitted({
       String brand,

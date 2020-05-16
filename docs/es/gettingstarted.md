@@ -4,7 +4,7 @@
 
 ## Visión general
 
-Bloc está compuesto por varios paquetes pub:
+Bloc está compuesto por varios paquetes de pub:
 
 - [bloc](https://pub.dev/packages/bloc) - Libreía central de bloc
 - [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Potentes widgets de Flutter creados para trabajar con bloc para crear aplicaciones móviles rápidas y reactivas.

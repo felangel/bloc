@@ -167,6 +167,84 @@ void main() {
       );
     });
 
+    group('ExceptionCounterBloc', () {
+      blocTest(
+        'emits [] when nothing is added',
+        build: () async => ExceptionCounterBloc(),
+        expect: [],
+      );
+
+      blocTest(
+        'emits [0] when nothing is added and skip: 0',
+        build: () async => ExceptionCounterBloc(),
+        skip: 0,
+        expect: [0],
+      );
+
+      blocTest(
+        'emits [1] when increment is added',
+        build: () async => ExceptionCounterBloc(),
+        act: (bloc) => bloc.add(ExceptionCounterEvent.increment),
+        expect: [1],
+      );
+
+      blocTest(
+        'throws ExceptionCounterBlocException when increment is added',
+        build: () async => ExceptionCounterBloc(),
+        act: (bloc) => bloc.add(ExceptionCounterEvent.increment),
+        errors: [
+          isA<ExceptionCounterBlocException>(),
+        ],
+      );
+
+      blocTest(
+        'emits [1] and throws ExceptionCounterBlocException '
+        'when increment is added',
+        build: () async => ExceptionCounterBloc(),
+        act: (bloc) => bloc.add(ExceptionCounterEvent.increment),
+        expect: [1],
+        errors: [
+          isA<ExceptionCounterBlocException>(),
+        ],
+      );
+
+      blocTest(
+        'emits [1, 2] when increment is added twice',
+        build: () async => ExceptionCounterBloc(),
+        act: (bloc) async => bloc
+          ..add(ExceptionCounterEvent.increment)
+          ..add(ExceptionCounterEvent.increment),
+        expect: [1, 2],
+      );
+
+      blocTest(
+        'throws two ExceptionCounterBlocExceptions '
+        'when increment is added twice',
+        build: () async => ExceptionCounterBloc(),
+        act: (bloc) async => bloc
+          ..add(ExceptionCounterEvent.increment)
+          ..add(ExceptionCounterEvent.increment),
+        errors: [
+          isA<ExceptionCounterBlocException>(),
+          isA<ExceptionCounterBlocException>(),
+        ],
+      );
+
+      blocTest(
+        'emits [1, 2] and throws two ExceptionCounterBlocException '
+        'when increment is added twice',
+        build: () async => ExceptionCounterBloc(),
+        act: (bloc) async => bloc
+          ..add(ExceptionCounterEvent.increment)
+          ..add(ExceptionCounterEvent.increment),
+        expect: [1, 2],
+        errors: [
+          isA<ExceptionCounterBlocException>(),
+          isA<ExceptionCounterBlocException>(),
+        ],
+      );
+    });
+
     group('SideEffectCounterBloc', () {
       Repository repository;
 

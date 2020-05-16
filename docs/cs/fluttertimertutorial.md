@@ -30,7 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^3.2.0
+  flutter_bloc: ^4.0.0
   equatable: ^1.0.0
   wave: ^0.0.8
 
@@ -520,8 +520,8 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 
   @override
   void onTransition(Transition<TimerEvent, TimerState> transition) {
-    super.onTransition(transition);
     print(transition);
+    super.onTransition(transition);
   }
 
   @override

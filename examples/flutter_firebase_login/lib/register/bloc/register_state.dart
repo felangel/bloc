@@ -18,7 +18,7 @@ class RegisterState {
     @required this.isFailure,
   });
 
-  factory RegisterState.empty() {
+  factory RegisterState.initial() {
     return RegisterState(
       isEmailValid: true,
       isPasswordValid: true,

@@ -25,7 +25,7 @@ class MockCounterBloc extends MockBloc<CounterEvent, int> implements CounterBloc
 
 ## Stub the Bloc Stream
 
-**whenListen** creates a stub response for the `listen` method on a `Bloc`. Use `whenListen` if you want to return a canned `Stream` of states for a bloc instance.
+**whenListen** creates a stub response for the `listen` method on a `Bloc`. Use `whenListen` if you want to return a canned `Stream` of states for a bloc instance. `whenListen` also handles stubbing the `state` of the bloc to stay in sync with the emitted state.
 
 ```dart
 // Create a mock instance
@@ -35,7 +35,10 @@ final counterBloc = MockCounterBloc();
 whenListen(counterBloc, Stream.fromIterable([0, 1, 2, 3]));
 
 // Assert that the bloc emits the stubbed `Stream`.
-expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3])))
+await expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3])))
+
+// Assert that the bloc's current state is in sync with the `Stream`.
+expect(counterBloc.state, equals(3));
 ```
 
 ## Unit Test a Real Bloc with blocTest
@@ -50,9 +53,11 @@ expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3])))
 
 `wait` is an optional `Duration` which can be used to wait for async operations within the `bloc` under test such as `debounceTime`.
 
-`expect` is an `Iterable<State>` which the `bloc` under test is expected to emit after `act` is executed.
+`expect` is an optional `Iterable<State>` which the `bloc` under test is expected to emit after `act` is executed.
 
 `verify` is an optional callback which is invoked after `expect` and can be used for additional verification/assertions. `verify` is called with the `bloc` returned by `build`.
+
+`errors` is an optional `Iterable` of error matchers which the `bloc` under test is expected to have thrown after `act` is executed.
 
 ```dart
 group('CounterBloc', () {
@@ -106,6 +111,19 @@ blocTest(
   verify: (_) async {
     verify(repository.someMethod(any)).called(1);
   }
+);
+```
+
+`blocTest` can also be used to expect that exceptions have been thrown.
+
+```dart
+blocTest(
+  'CounterBloc throws Exception when null is added',
+  build: () async => CounterBloc(),
+  act: (bloc) => bloc.add(null),
+  errors: [
+    isA<Exception>(),
+  ]
 );
 ```
 

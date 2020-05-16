@@ -3,36 +3,36 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('AuthenticationEvent', () {
-    group('AppStarted', () {
+    group('AuthenticationStarted', () {
       test('props are []', () {
-        expect(AppStarted().props, []);
+        expect(AuthenticationStarted().props, []);
       });
 
-      test('toString is "AppStarted"', () {
-        expect(AppStarted().toString(), 'AppStarted');
+      test('toString is "AuthenticationStarted"', () {
+        expect(AuthenticationStarted().toString(), 'AuthenticationStarted');
       });
     });
 
-    group('LoggedIn', () {
+    group('AuthenticationLoggedIn', () {
       test('props are [token]', () {
-        expect(LoggedIn(token: 'token').props, ['token']);
+        expect(AuthenticationLoggedIn(token: 'token').props, ['token']);
       });
 
       test('toString is "LoggedIn { token: token }"', () {
         expect(
-          LoggedIn(token: 'token').toString(),
+          AuthenticationLoggedIn(token: 'token').toString(),
           'LoggedIn { token: token }',
         );
       });
     });
 
-    group('LoggedOut', () {
+    group('AuthenticationLoggedOut', () {
       test('props are []', () {
-        expect(LoggedOut().props, []);
+        expect(AuthenticationLoggedOut().props, []);
       });
 
-      test('toString is "LoggedOut"', () {
-        expect(LoggedOut().toString(), 'LoggedOut');
+      test('toString is "AuthenticationLoggedOut"', () {
+        expect(AuthenticationLoggedOut().toString(), 'AuthenticationLoggedOut');
       });
     });
   });
