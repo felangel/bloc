@@ -2,6 +2,10 @@ name: ci
 
 on:
   pull_request:
+    paths:
+      - "!packages/**"
+      - "!.github/workflows/**"
+      - "!examples/**"
     branches:
       - master
 
