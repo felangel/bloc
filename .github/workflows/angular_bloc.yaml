@@ -4,10 +4,12 @@ on:
   push:
     paths:
       - "packages/angular_bloc/**"
+      - ".github/workflows/angular_bloc.yaml"
 
   pull_request:
     paths:
       - "packages/angular_bloc/**"
+      - ".github/workflows/angular_bloc.yaml"
 
 jobs:
   build:
