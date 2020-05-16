@@ -75,7 +75,7 @@ jobs:
       - name: Run tests
         working-directory: ${{ matrix.folder }}
         run: |
-          if [[ -d "test" ]]; then
+          if [ -d "test" ]; then
             flutter test --no-pub --test-randomize-ordering-seed random      
           fi
   build:

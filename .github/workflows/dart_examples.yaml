@@ -34,7 +34,7 @@ jobs:
       - name: Run tests
         working-directory: ${{ matrix.folder }}
         run: |
-          if [[ -d "test" ]]; then
+          if [ -d "test" ]; then
             pub run test
           fi
   build:
