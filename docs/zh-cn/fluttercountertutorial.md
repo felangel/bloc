@@ -8,7 +8,7 @@
 
 ## 起步
 
-我们将从创建一个全新的 `Flutter` 项目开始 （在控制台中输入以下指令）
+我们将从创建一个全新的 `Flutter` 项目开始（在控制台中输入以下指令）
 
 [script](../_snippets/flutter_counter_tutorial/flutter_create.sh.md ':include')
 
@@ -16,7 +16,7 @@
 
 [pubspec.yaml](../_snippets/flutter_counter_tutorial/pubspec.yaml.md ':include')
 
-替换之后下一步就可以安装所有的依赖包了 （在控制台中输入以下指令）
+替换之后下一步就可以安装所有的依赖包了（在控制台中输入以下指令）
 
 [script](../_snippets/flutter_counter_tutorial/flutter_packages_get.sh.md ':include')
 
@@ -42,7 +42,7 @@
 
 [main.dart](../_snippets/flutter_counter_tutorial/main.dart.md ':include')
 
-?> **提示**: 我们正在使用 `Flutter_bloc` 中的 `BlocProvider` 小部件，使得 `CounterBloc` 的实例可用于整个子树（`CounterPage`）。 `BlocProvider` 还可以自动关闭 `CounterBloc`，因此在此我们不需要使用 `StatefulWidget`。
+?> **提示**: 我们正在使用 `Flutter_bloc` 中的 `BlocProvider` 部件，使得 `CounterBloc` 的实例可用于整个子树（`CounterPage`）。 `BlocProvider` 还可以自动关闭 `CounterBloc`，因此在此我们不需要使用 `StatefulWidget`。
 
 ## Counter Page
 
@@ -50,11 +50,11 @@
 
 [counter_page.dart](../_snippets/flutter_counter_tutorial/counter_page.dart.md ':include')
 
-?> **提示**: 我们可以使用 `BlocProvider.of <CounterBloc>（context）` 访问 `CounterBloc` 实例，因为我们将 `CounterPage` 包装在 `BlocProvider` 中。
+?> **提示**: 我们可以使用 `BlocProvider.of<CounterBloc>(context)` 访问 `CounterBloc` 实例，因为我们将 `CounterPage` 包装在 `BlocProvider` 中。
 
 ?> **提示**: 我们使用来自 `Flutter_bloc` 的 `BlocBuilder` 部件，以响应状态变化（计数器值的变化）重建UI。
 
-?> **提示**: `BlocBuilder` 具有一个可选的 `bloc` 参数，但是我们可以指定块的类型和状态的类型，而 `BlocBuilder` 会自动找到该 `Bloc`，因此我们无需显式使用 `BlocProvider.of <CounterBloc> （context）`。
+?> **提示**: `BlocBuilder` 具有一个可选的 `bloc` 参数，但是我们可以指定块的类型和状态的类型，而 `BlocBuilder` 会自动找到该 `Bloc`，因此我们无需显式使用 `BlocProvider.of<CounterBloc>(context)`。
 
 !> 仅当您的部件无法通过父类 `BlocProvider` 和当前 `BuildContext` 来访问的 `Bloc` 时，才在 ` BlocBuilder` 中指定该 `Bloc`。
 
