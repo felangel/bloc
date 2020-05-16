@@ -9,14 +9,11 @@ on:
     - 'README.md'
     - 'docs/*'
 
-jobs:
-  # Create an issue, when any changes to source docs were made.
-  create-issue:
+jobs:  
+  build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-
       - uses: JasonEtco/create-an-issue@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
