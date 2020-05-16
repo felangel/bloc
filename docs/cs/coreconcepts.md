@@ -58,8 +58,6 @@ Jelikož je každá změna stavu zaznamenávána, jsme schopni jednoduše zpraco
 
 > Stream je sekvence asynchroních dat.
 
-Bloc je postavený nad [RxDart](https://pub.dev/packages/rxdart), avšak abstrahuje všechny specifické `RxDart` implementační detaily.
-
 Aby bylo možné používat Bloc, je nutné mít dobrou znalost o `Streamech` a jak fungují.
 
 > Pokud nemáte se `Streamy` zkušenosti, představte si potrubí s vodou, která jím protéká. Potrubí je `Stream` a voda jsou asynchronní data.

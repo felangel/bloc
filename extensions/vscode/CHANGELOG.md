@@ -1,3 +1,11 @@
+# 3.6.0
+
+Update latest package versions:
+
+- bloc_test -> ^5.1.0
+- hydrated_bloc -> ^4.0.0
+- sealed_flutter_bloc -> ^4.0.0
+
 # 3.5.0
 
 Update latest package versions:

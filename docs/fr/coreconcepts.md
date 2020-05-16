@@ -52,8 +52,6 @@ Consultez la documentation officielle[Dart Documentation](https://dart.dev/tutor
 
 > Un "stream" est une séquence de données asynchrones.
 
-Bloc est construit sur les bases de [RxDart](https://pub.dev/packages/rxdart) ; cependant, il fait abstraction tous les détails d'implémentation spécifiques de `RxDart`.
-
 Pour utiliser Bloc, il est critique d'avoir une bonne compréhension des `Streams` et de son fonctionnement.
 
 > Si vous n'êtes pas familier avec `Streams`, pensez simplement à un tuyau avec de l'eau qui le traverse. Le tuyau est le `Stream` et l'eau est la donnée asynchrone.

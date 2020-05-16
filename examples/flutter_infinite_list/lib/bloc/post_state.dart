@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-
 import 'package:flutter_infinite_list/models/models.dart';
 
 abstract class PostState extends Equatable {
@@ -9,24 +8,24 @@ abstract class PostState extends Equatable {
   List<Object> get props => [];
 }
 
-class PostUninitialized extends PostState {}
+class PostInitial extends PostState {}
 
-class PostError extends PostState {}
+class PostFailure extends PostState {}
 
-class PostLoaded extends PostState {
+class PostSuccess extends PostState {
   final List<Post> posts;
   final bool hasReachedMax;
 
-  const PostLoaded({
+  const PostSuccess({
     this.posts,
     this.hasReachedMax,
   });
 
-  PostLoaded copyWith({
+  PostSuccess copyWith({
     List<Post> posts,
     bool hasReachedMax,
   }) {
-    return PostLoaded(
+    return PostSuccess(
       posts: posts ?? this.posts,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );

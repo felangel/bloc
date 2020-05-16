@@ -54,12 +54,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 <div class="counter-page-container">
   <h1>Counter App</h1>
   <h2>Current Count: {{ counterBloc | bloc }}</h2>
-  <material-fab class="counter-fab-button" (trigger)="increment()"
-    >+</material-fab
-  >
-  <material-fab class="counter-fab-button" (trigger)="decrement()"
-    >-</material-fab
-  >
+  <button class="counter-button" (click)="increment()">+</button>
+  <button class="counter-button" (click)="decrement()">-</button>
 </div>
 ```
 
@@ -67,7 +63,6 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 ```dart
 import 'package:angular/angular.dart';
-import 'package:angular_components/angular_components.dart';
 
 import 'package:angular_bloc/angular_bloc.dart';
 
@@ -77,7 +72,6 @@ import './counter_bloc.dart';
   selector: 'counter-page',
   templateUrl: 'counter_page_component.html',
   styleUrls: ['counter_page_component.css'],
-  directives: [MaterialFabComponent],
   pipes: [BlocPipe],
 )
 class CounterPageComponent implements OnInit, OnDestroy {

@@ -20,28 +20,28 @@ class Stats extends StatelessWidget {
                   padding: EdgeInsets.only(bottom: 8.0),
                   child: Text(
                     'Completed Todos',
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 24.0),
                   child: Text(
                     '${state.numCompleted}',
-                    style: Theme.of(context).textTheme.subhead,
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
                   child: Text(
                     'Active Todos',
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 24.0),
                   child: Text(
                     "${state.numActive}",
-                    style: Theme.of(context).textTheme.subhead,
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
                 )
               ],

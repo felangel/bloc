@@ -52,8 +52,6 @@ Debido a que cada cambio de estado se registra, podemos instrumentar muy fácilm
 
 > Un stream es una secuencia de datos asincrónicos.
 
-Bloc está construido sobre [RxDart](https://pub.dev/packages/rxdart); sin embargo, abstrae todos los detalles de implementación específicos de `RxDart`.
-
 Para usar Bloc, es crítico tener una comprensión sólida de `Streams` y cómo funcionan.
 
 > Si no está familiarizado con `Streams`, piense en una tubería con agua que fluye a través de ella. La tubería es el `Stream` y el agua son los datos asincrónicos.

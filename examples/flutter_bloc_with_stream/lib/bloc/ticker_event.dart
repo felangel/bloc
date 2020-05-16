@@ -7,12 +7,12 @@ abstract class TickerEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class StartTicker extends TickerEvent {}
+class TickerStarted extends TickerEvent {}
 
-class Tick extends TickerEvent {
+class TickerTicked extends TickerEvent {
   final int tickCount;
 
-  const Tick(this.tickCount);
+  const TickerTicked(this.tickCount);
 
   @override
   List<Object> get props => [tickCount];

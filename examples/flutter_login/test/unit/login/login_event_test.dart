@@ -12,8 +12,9 @@ void main() {
       });
 
       test(
-          'toString is LoginButtonPressed { username: username, password: password }',
-          () {
+          'toString is '
+          'LoginButtonPressed '
+          '{ username: username, password: password }', () {
         expect(
           LoginButtonPressed(
             username: 'username',
