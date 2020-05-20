@@ -1,21 +1,16 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_form_validation/models/models.dart';
+import 'package:formz/formz.dart';
 import 'package:meta/meta.dart';
 
 part 'my_form_event.dart';
 part 'my_form_state.dart';
 
 class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
-  final RegExp _emailRegExp = RegExp(
-    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
-  );
-  final RegExp _passwordRegExp = RegExp(
-    r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
-  );
-
   @override
-  MyFormState get initialState => MyFormState.initial();
+  MyFormState get initialState => const MyFormState();
 
   @override
   void onTransition(Transition<MyFormEvent, MyFormState> transition) {
@@ -28,30 +23,25 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     MyFormEvent event,
   ) async* {
     if (event is EmailChanged) {
+      final email = Email.dirty(event.email);
       yield state.copyWith(
-        email: event.email,
-        isEmailValid: _isEmailValid(event.email),
+        email: email,
+        status: Formz.validate([email, state.password]),
       );
-    }
-    if (event is PasswordChanged) {
+    } else if (event is PasswordChanged) {
+      final password = Password.dirty(event.password);
       yield state.copyWith(
-        password: event.password,
-        isPasswordValid: _isPasswordValid(event.password),
+        password: password,
+        status: Formz.validate([state.email, password]),
       );
+    } else if (event is FormSubmitted) {
+      if (state.status.isValidated) {
+        yield state.copyWith(status: FormzStatus.submissionInProgress);
+        await Future.delayed(const Duration(seconds: 1));
+        yield state.copyWith(status: FormzStatus.submissionSuccess);
+      }
+    } else if (event is FormReset) {
+      yield const MyFormState();
     }
-    if (event is FormSubmitted) {
-      yield state.copyWith(formSubmittedSuccessfully: true);
-    }
-    if (event is FormReset) {
-      yield MyFormState.initial();
-    }
-  }
-
-  bool _isEmailValid(String email) {
-    return _emailRegExp.hasMatch(email);
-  }
-
-  bool _isPasswordValid(String password) {
-    return _passwordRegExp.hasMatch(password);
   }
 }

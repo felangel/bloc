@@ -1,66 +1,31 @@
 part of 'my_form_bloc.dart';
 
 class MyFormState extends Equatable {
-  final String email;
-  final bool isEmailValid;
-  final String password;
-  final bool isPasswordValid;
-  final bool formSubmittedSuccessfully;
-
-  bool get isFormValid => isEmailValid && isPasswordValid;
+  final Email email;
+  final Password password;
+  final FormzStatus status;
 
   const MyFormState({
-    @required this.email,
-    @required this.isEmailValid,
-    @required this.password,
-    @required this.isPasswordValid,
-    @required this.formSubmittedSuccessfully,
+    this.email = const Email.pure(),
+    this.password = const Password.pure(),
+    this.status = FormzStatus.pure,
   });
 
-  factory MyFormState.initial() {
-    return MyFormState(
-      email: '',
-      isEmailValid: false,
-      password: '',
-      isPasswordValid: false,
-      formSubmittedSuccessfully: false,
-    );
-  }
-
   MyFormState copyWith({
-    String email,
-    bool isEmailValid,
-    String password,
-    bool isPasswordValid,
-    bool formSubmittedSuccessfully,
+    Email email,
+    Password password,
+    FormzStatus status,
   }) {
     return MyFormState(
       email: email ?? this.email,
-      isEmailValid: isEmailValid ?? this.isEmailValid,
       password: password ?? this.password,
-      isPasswordValid: isPasswordValid ?? this.isPasswordValid,
-      formSubmittedSuccessfully:
-          formSubmittedSuccessfully ?? this.formSubmittedSuccessfully,
+      status: status ?? this.status,
     );
   }
 
   @override
-  List<Object> get props => [
-        email,
-        isEmailValid,
-        password,
-        isPasswordValid,
-        formSubmittedSuccessfully,
-      ];
+  List<Object> get props => [email, password, status];
 
   @override
-  String toString() {
-    return '''MyFormState {
-      email: $email,
-      isEmailValid: $isEmailValid,
-      password: $password,
-      isPasswordValid: $isPasswordValid,
-      formSubmittedSuccessfully: $formSubmittedSuccessfully
-    }''';
-  }
+  bool get stringify => true;
 }
