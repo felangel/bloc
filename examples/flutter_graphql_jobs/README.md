@@ -1,6 +1,6 @@
 [![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
 
-# flutter_wizard
+# flutter_graphql_jobs
 
 A new Flutter project.
 
