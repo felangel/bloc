@@ -1,13 +1,8 @@
 name: ci
 
-on:
-  pull_request:
-    paths:
-      - "!packages/**"
-      - "!.github/workflows/**"
-      - "!examples/**"
-    branches:
-      - master
+on: pull_request
+  branches:
+    - master
 
 jobs:
   build:
