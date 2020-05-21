@@ -1,0 +1,70 @@
+name: angular_dart_examples
+
+on:
+  push:
+    paths:
+      - ".github/workflows/angular_dart_examples.yaml"
+      - "packages/angular_bloc/**"
+      - "examples/angular_counter/**"
+      - "examples/github_search/common_github_search/**"
+      - "examples/github_search/angular_github_search/**"
+
+  pull_request:
+    paths:
+      - ".github/workflows/angular_dart_examples.yaml"
+      - "packages/angular_bloc/**"
+      - "examples/angular_counter/**"
+      - "examples/github_search/common_github_search/**"
+      - "examples/github_search/angular_github_search/**"
+
+jobs:
+  examples:
+    strategy:
+      matrix:
+        folder:
+          [
+            "examples/angular_counter",
+            "examples/github_search/common_github_search",
+            "examples/github_search/angular_github_search",
+          ]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1.3.0
+      - name: Install Dependencies
+        working-directory: ${{ matrix.folder }}
+        env:
+          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
+        run: |
+          export PATH=$PATH:$FLUTTER_DART_HOME
+          pub get
+      - name: Format
+        working-directory: ${{ matrix.folder }}
+        env:
+          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
+        run: |
+          export PATH=$PATH:$FLUTTER_DART_HOME
+          dartfmt --dry-run --set-exit-if-changed .
+      - name: Analyze
+        working-directory: ${{ matrix.folder }}
+        env:
+          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
+        run: |
+          export PATH=$PATH:$FLUTTER_DART_HOME
+          dartanalyzer --fatal-infos --fatal-warnings .
+      - name: Run tests
+        working-directory: ${{ matrix.folder }}
+        env:
+          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
+        run: |
+          export PATH=$PATH:$FLUTTER_DART_HOME
+          if [ -d "test" ]; then
+            pub run build_runner test --fail-on-severe
+          fi
+  build:
+    needs: [examples]
+    runs-on: ubuntu-latest
+    steps:
+      - name: noop
+        run: echo 'noop'

@@ -5,6 +5,9 @@ abstract class MyFormEvent extends Equatable {
 
   @override
   List<Object> get props => [];
+
+  @override
+  bool get stringify => true;
 }
 
 class EmailChanged extends MyFormEvent {
@@ -14,9 +17,6 @@ class EmailChanged extends MyFormEvent {
 
   @override
   List<Object> get props => [email];
-
-  @override
-  String toString() => 'EmailChanged { email: $email }';
 }
 
 class PasswordChanged extends MyFormEvent {
@@ -26,9 +26,6 @@ class PasswordChanged extends MyFormEvent {
 
   @override
   List<Object> get props => [password];
-
-  @override
-  String toString() => 'PasswordChanged { password: $password }';
 }
 
 class FormSubmitted extends MyFormEvent {}
