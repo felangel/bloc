@@ -85,19 +85,23 @@ El objetivo de esta librería es facilitar la separación de la _presentación_ 
 
 ### Flutter
 
-- [Counter](https://bloclibrary.dev/#/fluttercountertutorial) - Un ejemplo de cómo crear un `CounterBloc` para implementar la aplicación clásica Flutter Counter.
-- [Form Validation](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) - Un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para implementar la validación de formularios.
-- [Bloc with Stream](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - un ejemplo de cómo conectar un `bloc` a un `Stream` y actualizar la interfaz del usuario en respuesta a los datos del `Stream`.
-- [Infinite List](https://bloclibrary.dev/#/flutterinfinitelisttutorial) - Un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para implementar una lista de desplazamiento infinita.
-- [Login Flow](https://bloclibrary.dev/#/flutterlogintutorial) - Un ejemplo de cómo utilizar los paquetes `bloc` y `flutter_bloc` para implementar un flujo de inicio de sesión.
-- [Firebase Login](https://bloclibrary.dev/#/flutterfirebaselogintutorial) - Un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para implementar el inicio de sesión a través de Firebase.
-- [Github Search](https://bloclibrary.dev/#/flutterangulargithubsearch) - Un ejemplo de cómo crear una aplicación de búsqueda de Github usando los paquetes `bloc` y `flutter_bloc`.
-- [Weather](https://bloclibrary.dev/#/flutterweathertutorial) - Un ejemplo de cómo crear una aplicación meteorológica utilizando los paquetes `bloc` y `flutter_bloc`. La aplicación utiliza un `RefreshIndicator` para implementar" hala-para-refrescar(pull-to-refresh)", así como temas dinámicos.
-- [Todos](https://bloclibrary.dev/#/fluttertodostutorial) - Un ejemplo de cómo crear una aplicación de quehaceres (TODO) utilizando los paquetes `bloc` y `flutter_bloc`.
-- [Timer](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - Un ejemplo de cómo crear un temporizador utilizando los paquetes `bloc` y `flutter_bloc`.
-- [Firestore Todos](https://bloclibrary.dev/#/flutterfirestoretodostutorial) - Un ejemplo de cómo crear una aplicación de quehaceres (TODO) utilizando los paquetes `bloc` y `flutter_bloc` que se integran con Cloud Firestore.
-- [Shopping Cart](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - Un ejemplo de cómo crear una aplicación de carrito de compras utilizando los paquetes `bloc` y `flutter_bloc` basados en [muestras de flutter](https://github.com/flutter/samples/tree/master/provider_shopper).
-- [Dynamic Form](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - Un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para implementar un formulario dinámica que extrae datos de un repositorio.
+- [Contador](https://bloclibrary.dev/#/fluttercountertutorial) - Implementación de ejemplo de la clásica aplicación de contador (`CounterBloc`) en Flutter.
+- [Validación de formularios](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) - Aprende a validar formularios con los paquetes `bloc` y `flutter_bloc`.
+- [Bloc con Stream](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - Descubre como conectar un `bloc` a un flujo de eventos asincronos (`Stream`) y actualizar la interfaz del usuario según su respuesta.
+- [Lista Compleja](https://github.com/felangel/bloc/tree/master/examples/flutter_complex_list) - Aprende a manejar una lista de elementos y borrar asincrónicamente uno a la vez utilizando las librerias `bloc` y `flutter_bloc`.
+- [Lista Infinita](https://bloclibrary.dev/#/flutterinfinitelisttutorial) - Un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para implementar una lista de desplazamiento infinita.
+- [Flujo de Inicio de Sesión](https://bloclibrary.dev/#/flutterlogintutorial) - Un ejemplo de cómo utilizar los paquetes `bloc` y `flutter_bloc` para implementar un flujo de inicio de sesión.
+- [Autenticación con Firebase](https://bloclibrary.dev/#/flutterfirebaselogintutorial) - Tutorial para implementar una interfaz de inicio de sesión a través de Firebase utilizando los paquetes de `bloc` y `flutter_bloc` .
+- [Búsqueda de Github](https://bloclibrary.dev/#/flutterangulargithubsearch) - Tutorial práctico para crear una aplicación de búsqueda de Github usando los paquetes `bloc` y `flutter_bloc`.
+- [Clima](https://bloclibrary.dev/#/flutterweathertutorial) - Construye una plicación meteorológica (`Weather`) utilizando los paquetes `bloc` y `flutter_bloc`. La aplicación utiliza un indicador (`RefreshIndicator`) para implementar la técnica "desliza para refrescar" (del inglés "pull-to-refresh")", así como temas dinámicos.
+- [Todos](https://bloclibrary.dev/#/fluttertodostutorial) - un ejemplo sencillo de una aplicación para mostrar una lista quehaceres (TODO) utilizando los paquetes `bloc` y `flutter_bloc`.
+- [Temporizador](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - Crea un temporizador básico utilizando los paquetes `bloc` y `flutter_bloc`.
+- [Todos con Firestore](https://bloclibrary.dev/#/flutterfirestoretodostutorial) - Construya tu aplicación de lista quehaceres (TODO) con integración en Cloud Firestore utilizando los paquetes `bloc` y `flutter_bloc`.
+- [Carro de Compras](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - Un ejemplo de cómo crear una aplicación de carrito de compras utilizando los paquetes `bloc` y `flutter_bloc` basado en [ejemplos de flutter](https://github.com/flutter/samples/tree/master/provider_shopper).
+- [Formulario Dinámico](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - Un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para implementar un formulario dinámico que extrae datos de un repositorio.
+- [Asistente](https://github.com/felangel/bloc/tree/master/examples/flutter_wizard) - Construye un asistente de varios pasos utilizandolos paquetes `bloc` y `flutter_bloc`.
+- [GraphQL](https://github.com/felangel/bloc/tree/master/examples/flutter_graphql_jobs) - Domina la última tecnología para realizar consultas en tu servidor con `graphql` en conjunto a los paquetes `bloc` y `flutter_bloc` para extraer datos de [api.graphql.jobs](https://api.graphql.jobs).
+
 
 ### Web
 
