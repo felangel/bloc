@@ -4,10 +4,12 @@ on:
   push:
     paths:
       - "packages/flutter_bloc/**"
+      - ".github/workflows/flutter_bloc.yaml"
 
   pull_request:
     paths:
       - "packages/flutter_bloc/**"
+      - ".github/workflows/flutter_bloc.yaml"
 
 jobs:
   build:
@@ -28,3 +30,7 @@ jobs:
         run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
       - name: Check Code Coverage
         uses: ChicagoFlutter/lcov-cop@v1.0.0
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

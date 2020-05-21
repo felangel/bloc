@@ -4,10 +4,12 @@ on:
   push:
     paths:
       - "packages/bloc_test/**"
+      - ".github/workflows/bloc_test.yaml"
 
   pull_request:
     paths:
       - "packages/bloc_test/**"
+      - ".github/workflows/bloc_test.yaml"
 
 jobs:
   build:
@@ -29,3 +31,7 @@ jobs:
         run: pub run test_coverage
       - name: Check Code Coverage
         uses: ChicagoFlutter/lcov-cop@v1.0.0
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
