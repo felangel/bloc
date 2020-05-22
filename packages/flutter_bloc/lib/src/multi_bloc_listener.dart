@@ -27,7 +27,7 @@ import 'bloc_listener.dart';
 /// to:
 ///
 /// ```dart
-/// MutliBlocListener(
+/// MultiBlocListener(
 ///   listeners: [
 ///     BlocListener<BlocA, BlocAState>(
 ///       listener: (context, state) {},
