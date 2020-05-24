@@ -93,7 +93,7 @@
 
 [bloc_consumer.dart](../_snippets/flutter_bloc_core_concepts/bloc_consumer_condition.dart.md ':include')
 
-### RepositoryProvider (Постащик хранилища)
+### RepositoryProvider (Поставщик хранилища)
 
 **RepositoryProvider** - это виджет Flutter, который предоставляет хранилище своим дочерним элементам через `RepositoryProvider.of<T>(context)`. Он используется в качестве виджета внедрения зависимостей (DI) так, что один экземпляр репозитория может быть предоставлен нескольким виджетам в поддереве. `BlocProvider` должен использоваться для предоставления блоков, тогда как `RepositoryProvider` должен использоваться только для репозиториев.
 
