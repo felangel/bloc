@@ -40,10 +40,6 @@
 
 ### MultiBlocProvider (Мульти блок поставщик)
 
-**MultiBlocProvider** is a Flutter widget that merges multiple `BlocProvider` widgets into one.
-`MultiBlocProvider` improves the readability and eliminates the need to nest multiple `BlocProviders`.
-By using `MultiBlocProvider` we can go from:
-
 **MultiBlocProvider** - это виджет Flutter, который объединяет несколько виджетов `BlocProvider` в один.
 `MultiBlocProvider` улучшает читаемость и устраняет необходимость вложения нескольких `BlocProviders`.
 Используя `MultiBlocProvider`, мы можем перейти от:
