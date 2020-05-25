@@ -28,7 +28,7 @@ void main() {
       getTemporaryDirectoryCallCount = 0;
     });
 
-    tearDownAll(() async {
+    tearDown(() async {
       await delegate?.storage?.clear();
     });
 
@@ -37,8 +37,8 @@ void main() {
           () async {
         delegate = await HydratedBlocDelegate.build();
         expect(getTemporaryDirectoryCallCount, 1);
-        await delegate.storage.write('MockBloc', '{"nextState":"json"}');
-        expect(delegate.storage.read('MockBloc'), '{"nextState":"json"}');
+        await delegate.storage.write('MockBloc', {"nextState": "json"});
+        expect(delegate.storage.read('MockBloc'), {'nextState': 'json'});
       });
     });
 
@@ -48,8 +48,8 @@ void main() {
         delegate = await HydratedBlocDelegate.build(
           storageDirectory: Directory.current,
         );
-        await delegate.storage.write('MockBloc', '{"nextState":"json"}');
-        expect(delegate.storage.read('MockBloc'), '{"nextState":"json"}');
+        await delegate.storage.write('MockBloc', {'nextState': 'json'});
+        expect(delegate.storage.read('MockBloc'), {"nextState": "json"});
       });
     });
   });

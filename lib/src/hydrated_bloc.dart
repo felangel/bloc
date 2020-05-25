@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
@@ -17,7 +16,7 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
     final stateJson = toJson(state);
     if (stateJson != null) {
       try {
-        _storage.write(storageToken, json.encode(stateJson));
+        _storage.write(storageToken, stateJson);
       } on dynamic catch (error, stackTrace) {
         onError(error, stackTrace);
       }
@@ -32,10 +31,9 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
   @override
   State get initialState {
     try {
-      final jsonString = _storage.read(storageToken) as String;
-      return jsonString?.isNotEmpty == true
-          ? fromJson(json.decode(jsonString) as Map<String, dynamic>)
-          : null;
+      final stateJson = _storage.read(storageToken);
+      if (stateJson == null) return null;
+      return fromJson(Map<String, dynamic>.from(stateJson));
     } on dynamic catch (error, stackTrace) {
       onError(error, stackTrace);
       return null;
@@ -48,7 +46,7 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
     final stateJson = toJson(state);
     if (stateJson != null) {
       try {
-        _storage.write(storageToken, json.encode(stateJson));
+        _storage.write(storageToken, stateJson);
       } on dynamic catch (error, stackTrace) {
         onError(error, stackTrace);
       }

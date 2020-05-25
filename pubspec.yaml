@@ -4,15 +4,16 @@ version: 4.0.0
 homepage: https://github.com/felangel/hydrated_bloc
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^4.0.0
   meta: ^1.1.8
-  path_provider: ^1.6.5
+  bloc: ^4.0.0
+  hive: ^1.4.1+1
   synchronized: ^2.2.0
+  path_provider: ^1.6.5
 
 dev_dependencies:
   flutter_test:

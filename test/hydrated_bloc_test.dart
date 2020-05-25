@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -176,7 +175,7 @@ void main() {
         final expected = <String, int>{'value': 0};
         bloc.onTransition(transition);
         verify(
-          storage.write('MyHydratedBloc', json.encode(expected)),
+          storage.write('MyHydratedBloc', expected),
         ).called(2);
       });
 
@@ -191,7 +190,7 @@ void main() {
         final expected = <String, int>{'value': 0};
         bloc.onTransition(transition);
         verify(
-          storage.write('MyHydratedBlocA', json.encode(expected)),
+          storage.write('MyHydratedBlocA', expected),
         ).called(2);
       });
 
@@ -217,7 +216,7 @@ void main() {
 
       test('stores initialState when instantiated', () {
         verify<dynamic>(
-          storage.write('MyHydratedBloc', '{"value":0}'),
+          storage.write('MyHydratedBloc', {"value": 0}),
         ).called(1);
       });
 
@@ -229,7 +228,7 @@ void main() {
 
       test('initialState should return 101 when fromJson returns 101', () {
         when<dynamic>(storage.read('MyHydratedBloc'))
-            .thenReturn(json.encode({'value': 101}));
+            .thenReturn({'value': 101});
         expect(bloc.initialState, 101);
         verify<dynamic>(storage.read('MyHydratedBloc')).called(2);
       });
@@ -264,12 +263,12 @@ void main() {
       test('initialState should return 101/102 when fromJson returns 101/102',
           () {
         when<dynamic>(storage.read('MyMultiHydratedBlocA'))
-            .thenReturn(json.encode({'value': 101}));
+            .thenReturn({'value': 101});
         expect(multiBlocA.initialState, 101);
         verify<dynamic>(storage.read('MyMultiHydratedBlocA')).called(2);
 
         when<dynamic>(storage.read('MyMultiHydratedBlocB'))
-            .thenReturn(json.encode({'value': 102}));
+            .thenReturn({'value': 102});
         expect(multiBlocB.initialState, 102);
         verify<dynamic>(storage.read('MyMultiHydratedBlocB')).called(2);
       });
@@ -293,7 +292,7 @@ void main() {
       });
 
       test('correctly caches computed initialState', () {
-        String cachedState;
+        dynamic cachedState;
         when<dynamic>(storage.write('MyUuidHydratedBloc', any))
             .thenReturn(null);
         when<dynamic>(storage.read('MyUuidHydratedBloc'))

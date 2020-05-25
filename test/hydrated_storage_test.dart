@@ -40,7 +40,7 @@ void main() {
         test('returns correct value when file exists', () async {
           final file = File('./.hydrated_bloc.json');
           file.writeAsStringSync(json.encode({
-            "CounterBloc": {"value": 4}
+            "CounterBloc": json.encode({"value": 4})
           }));
           hydratedStorage = await HydratedBlocStorage.getInstance();
           expect(hydratedStorage.read('CounterBloc')['value'] as int, 4);
@@ -106,7 +106,7 @@ void main() {
       HydratedBlocStorage hydratedStorage;
 
       tearDown(() async {
-        await hydratedStorage.clear();
+        await hydratedStorage?.clear();
       });
 
       group('read', () {
@@ -123,7 +123,7 @@ void main() {
         test('returns correct value when file exists', () async {
           final file = File('./.hydrated_bloc.json');
           file.writeAsStringSync(json.encode({
-            "CounterBloc": {"value": 4}
+            "CounterBloc": json.encode({"value": 4})
           }));
           hydratedStorage = await HydratedBlocStorage.getInstance(
             storageDirectory: Directory.current,
@@ -163,22 +163,24 @@ void main() {
           hydratedStorage = await HydratedBlocStorage.getInstance(
             storageDirectory: directory,
           );
-          final tasks = Iterable.generate(120, (i) => i).map((i) async {
+          await Stream.fromIterable(
+            Iterable.generate(120, (i) => i),
+          ).asyncMap((i) async {
             final record = Iterable.generate(
               i,
               (i) => Iterable.generate(i, (j) => 'Point($i,$j);').toList(),
             ).toList();
+
             hydratedStorage.write(token, record); // no await here
 
             hydratedStorage = await HydratedBlocStorage.getInstance(
               storageDirectory: directory,
-            ); // basically refreshes cache
+            ); // basically does nothing now
 
-            final written = hydratedStorage.read(token);
+            final written = hydratedStorage.read(token) as List<List<String>>;
+            expect(written, isNotNull);
             expect(written, record);
-          });
-
-          await Future.wait(tasks, eagerError: true);
+          }).drain();
         });
       });
 
