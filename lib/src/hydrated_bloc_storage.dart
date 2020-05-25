@@ -38,7 +38,7 @@ class HydratedBlocStorage extends HydratedStorage {
   /// import 'package:hydrated_bloc/hydrated_bloc.dart';
   ///
   /// const password = 'hydration';
-  /// final byteskey = sha256.convert(utf8.encode(pass)).bytes;
+  /// final byteskey = sha256.convert(utf8.encode(password)).bytes;
   /// return HydratedAesCipher(byteskey);
   /// ```
   static Future<HydratedBlocStorage> getInstance({

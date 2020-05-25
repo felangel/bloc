@@ -1,3 +1,8 @@
+# 4.1.0
+
+- Update default `HydratedStorage` to use `package:hive` (thanks to [@orsenkucher](https://github.com/orsenkucher)).
+- Add encryption support to `HydratedStorage` (thanks to [@orsenkucher](https://github.com/orsenkucher)).
+
 # 4.0.0
 
 - Updated to `bloc: ^4.0.0` and `flutter_bloc: ^4.0.0`

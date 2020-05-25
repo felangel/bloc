@@ -110,8 +110,8 @@ class MyErrorThrowingBloc extends HydratedBloc<Object, int> {
 
   @override
   void onError(Object error, StackTrace stackTrace) {
-    super.onError(error, stackTrace);
     onErrorCallback?.call(error, stackTrace);
+    super.onError(error, stackTrace);
   }
 
   @override
@@ -346,6 +346,24 @@ void main() {
           expect(lastStackTrace, isNotNull);
           verify(delegate.onError(bloc, lastError, lastStackTrace)).called(1);
         }, onError: (_) {});
+      });
+
+      test('calls onError when storage.write fails', () async {
+        Object lastError;
+        StackTrace lastStackTrace;
+        final exception = Exception('oops');
+        runZoned(() async {
+          when(storage.write(any, any)).thenThrow(exception);
+          MyErrorThrowingBloc(
+            onErrorCallback: (error, stackTrace) {
+              lastError = error;
+              lastStackTrace = stackTrace;
+            },
+          );
+        }, onError: (_) {
+          expect(lastError, exception);
+          expect(lastStackTrace, isNotNull);
+        });
       });
 
       test('calls onError when json encode fails', () async {

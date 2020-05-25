@@ -25,7 +25,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   path_provider_fde: 71febf5c9c8ddf45466632da27cbf38324ce81bf
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
 

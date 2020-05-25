@@ -13,6 +13,7 @@ import '../hydrated_bloc.dart';
 abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
   /// {@macro hydrated_bloc}
   HydratedBloc() {
+    print('HydratedBloc()');
     final stateJson = toJson(state);
     if (stateJson != null) {
       try {
