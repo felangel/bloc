@@ -35,7 +35,7 @@ packages:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   flutter:
     dependency: "direct main"
     description: flutter
