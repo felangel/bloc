@@ -18,6 +18,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  crypto: ^2.1.4
   mockito: ^4.0.0
   effective_dart: ^1.1.1
   uuid: ^2.0.4
