@@ -100,7 +100,7 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
   /// ```dart
   /// BlocProvider.of<BlocA>(context)
   /// ```
-  static T of<T extends Bloc<dynamic, dynamic>>(BuildContext context) {
+  static T of<T extends Bloc>(BuildContext context) {
     try {
       return Provider.of<T>(context, listen: false);
     } on ProviderNotFoundException catch (_) {
@@ -117,16 +117,29 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
     }
   }
 
+  static final _precursors = <CreatePrecursor>[];
+
+  static void registerPrecursor(CreatePrecursor precursor) {
+    _precursors.add(precursor);
+  }
+
+  static bool unregisterPrecursor(CreatePrecursor precursor) {
+    return _precursors.remove(precursor);
+  }
+
   @override
   Widget buildWithChild(BuildContext context, Widget child) {
+    final fn = _precursors.fold(_create, (create, fn) => fn(context, create));
     return InheritedProvider<T>(
-      create: _create,
+      create: (context) => fn?.call(context) as T,
       dispose: _dispose,
       child: child,
       lazy: lazy,
     );
   }
 }
+
+typedef CreatePrecursor = Create Function(BuildContext, Create);
 
 /// Extends the `BuildContext` class with the ability
 /// to perform a lookup based on a `Bloc` type.
