@@ -1,3 +1,7 @@
+# 4.1.1
+
+- Remove unnecessary `print` statement
+
 # 4.1.0
 
 - Update default `HydratedStorage` to use `package:hive` (thanks to [@orsenkucher](https://github.com/orsenkucher)).
