@@ -4,11 +4,11 @@
 
 Bloc-un istifadəsi bizə tətbiqimizi 3 təbəqəyə bölməyə imkan verir:
 
-- Data
-  - Data Provider
-  - Repository
-- Business Logic
 - Presentation
+- Business Logic
+- Data
+  - Repository
+  - Data Provider
 
 Ən aşağı təqəbədən (istifadəçi interfeysinə ən uzaq olan) başlayırıq və yolumuzu presentation təbəqəsinə qədər davam etdirəcəyik.
 
