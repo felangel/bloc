@@ -7,8 +7,8 @@ Using Bloc allows us to separate our application into three layers:
 - Presentation
 - Business Logic
 - Data
-  - Data Provider
   - Repository
+  - Data Provider
 
 We're going to start at the lowest level layer (farthest from the user interface) and work our way up to the presentation layer.
 
