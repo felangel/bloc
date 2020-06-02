@@ -4,11 +4,11 @@
 
 Používání Blocu nám dovoluje rozdělit naší aplikaci do tří vrstev:
 
-- Datová vrstva
-  - Poskytovatel dat
-  - Repositorář
-- Aplikační vrstva
 - Prezenční vrstva
+- Aplikační vrstva
+- Datová vrstva
+  - Repositorář
+  - Poskytovatel dat
 
 Začneme na nejnižší vrstvě (nejdále od uživatelského rozhraní) a vypracujeme se až do prezenční vrstvy.
 

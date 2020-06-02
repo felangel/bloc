@@ -4,11 +4,11 @@
 
 使用Bloc可以将应用程序分为三层：
 
--  数据层（Data)
-  - 数据提供者（Data Provider)
-  - 数据源/库（Repository )
--  业务逻辑（Business Logic)
 -  表现层（Presentation)
+-  业务逻辑（Business Logic)
+-  数据层（Data)
+  - 数据源/库（Repository)
+  - 数据提供者（Data Provider)
 
 我们将从最低层（距离用户界面最远的层)开始，一直到表示层
 

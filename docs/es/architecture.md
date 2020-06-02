@@ -4,11 +4,11 @@
 
 Utilizando **BLoC** nos permite separar nuestra aplicación en tres capas:
 
-- Datos
-    - Proveedor de datos
-    - Repositorio
-- Lógica de Negocio
 - Presentación
+- Lógica de Negocio
+- Datos
+    - Repositorio
+    - Proveedor de datos
 
 Comenzaremos a trabajar con la capa de nivel más bajo (la más alejada de la interfaz de usuario) hasta llegar a la capa de presentación.
 
