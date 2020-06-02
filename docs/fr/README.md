@@ -12,7 +12,7 @@
 
 ---
 
-A predictable state management library that helps implement the [BLoC design pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+Une librairie pour gérer le state de notre application en implémentant le [paterne BLoC](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
 
 | Package                                                                            | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -21,15 +21,15 @@ A predictable state management library that helps implement the [BLoC design pat
 | [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc) | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc) |
 | [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc) | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc) |
 
-## Overview
+## Aperçu
 
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
 
-The goal of this library is to make it easy to separate _presentation_ from _business logic_, facilitating testability and reusability.
+Le but de cette architecte est de facilité la séparation entre _présentation_ et _la business logic_, facilitant à la fois les test et sa réutilisation.
 
 ## Documentation
 
-- [Official Documentation](https://bloclibrary.dev)
+- [Documentation officielle](https://bloclibrary.dev)
 - [Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/bloc/README.md)
 - [Flutter Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/README.md)
 - [Angular Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/angular_bloc/README.md)
@@ -38,7 +38,7 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 
 - [Upgrade from v0.x to v2.x ](https://dev.to/mhadaily/upgrade-to-bloc-library-v1-0-0-for-flutter-and-angular-dart-2np0)
 
-## Examples
+## Exemples
 
 <div style="text-align: center">
     <table>
@@ -81,85 +81,85 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 
 ### Dart
 
-- [Counter](https://github.com/felangel/Bloc/tree/master/packages/bloc/example) - an example of how to create a `CounterBloc` (pure dart).
+- [Compteur](https://github.com/felangel/Bloc/tree/master/packages/bloc/example) - un exemple pour créer un `CounterBloc` (dart pur).
 
 ### Flutter
 
-- [Counter](https://bloclibrary.dev/#/fluttercountertutorial) - an example of how to create a `CounterBloc` to implement the classic Flutter Counter app.
-- [Form Validation](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) - an example of how to use the `bloc` and `flutter_bloc` packages to implement form validation.
-- [Bloc with Stream](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - an example of how to hook up a `bloc` to a `Stream` and update the UI in response to data from the `Stream`.
-- [Infinite List](https://bloclibrary.dev/#/flutterinfinitelisttutorial) - an example of how to use the `bloc` and `flutter_bloc` packages to implement an infinite scrolling list.
-- [Login Flow](https://bloclibrary.dev/#/flutterlogintutorial) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a Login Flow.
-- [Firebase Login](https://bloclibrary.dev/#/flutterfirebaselogintutorial) - an example of how to use the `bloc` and `flutter_bloc` packages to implement login via Firebase.
-- [Github Search](https://bloclibrary.dev/#/flutterangulargithubsearch) - an example of how to create a Github Search Application using the `bloc` and `flutter_bloc` packages.
-- [Weather](https://bloclibrary.dev/#/flutterweathertutorial) - an example of how to create a Weather Application using the `bloc` and `flutter_bloc` packages. The app uses a `RefreshIndicator` to implement "pull-to-refresh" as well as dynamic theming.
-- [Todos](https://bloclibrary.dev/#/fluttertodostutorial) - an example of how to create a Todos Application using the `bloc` and `flutter_bloc` packages.
-- [Timer](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - an example of how to create a Timer using the `bloc` and `flutter_bloc` packages.
-- [Firestore Todos](https://bloclibrary.dev/#/flutterfirestoretodostutorial) - an example of how to create a Todos Application using the `bloc` and `flutter_bloc` packages that integrates with cloud firestore.
-- [Shopping Cart](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - an example of how to create a Shopping Cart Application using the `bloc` and `flutter_bloc` packages based on [flutter samples](https://github.com/flutter/samples/tree/master/provider_shopper).
-- [Dynamic Form](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a dynamic form which pulls data from a repository.
+- [Compteur](https://bloclibrary.dev/#/fluttercountertutorial) - un exemple pour montrer comment créer un `CounterBloc` pour implémenter la classique application compteur de Flutter.
+- [Validation d'un formulaire](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) - un exemple pour apprendre à utiliser les packages `bloc` et `flutter_bloc` pour implémenter la validation d'un formulaire.
+- [Bloc avec Stream](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - un exemple sur comment relier un `bloc` à un `Stream` et actualiser son UI en réponse aux données venant du `Stream`.
+- [Liste infinie](https://bloclibrary.dev/#/flutterinfinitelisttutorial) - un exemple pour utiliser les packages `bloc` et `flutter_bloc` pour implémenter une liste avec un scroll infini.
+- [Espace de connexion](https://bloclibrary.dev/#/flutterlogintutorial) - un exemple pour apprendre à utiliser les packages `bloc` et `flutter_bloc` pour implémenter un espace de connexion.
+- [Connexion avec Firebase](https://bloclibrary.dev/#/flutterfirebaselogintutorial) - un exemple sur comment utiliser les packages `bloc` et `flutter_bloc`pour implémenter un formulaire de connexion avec Firebase.
+- [Recherche Gihub](https://bloclibrary.dev/#/flutterangulargithubsearch) - un exemple sur comment créer une application de recherche sur Github en utilisant les packages `bloc` et `flutter_bloc`.
+- [Météo](https://bloclibrary.dev/#/flutterweathertutorial) - un exemple pour créer une application météorologique en utilisant les packages `bloc` et `flutter_bloc`. L'app utiliser un `RefreshIndicator` pour implémenter un "tirer pour rafraichir la page" ainsi qu'un thème dynamique.
+- [Liste de choses à faire](https://bloclibrary.dev/#/fluttertodostutorial) - un exemple pour créer une application "Liste de choses à faire" en utilisant les packages `bloc` et `flutter_bloc`.
+- [Minuteur](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - un exemple pour créer un Minuteur en utilisant les packages `bloc` et `flutter_bloc`.
+- [Liste de choses à faire avec Firestore](https://bloclibrary.dev/#/flutterfirestoretodostutorial) - un exemple pour créer une application "Liste de choses à faire" en utilisant les packages `bloc` et `flutter_bloc` qui intègre le cloud firestore.
+- [Panier Shopping](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - un exemple pour créer une application contenant un panier de Shopping en utilisant les packages `bloc`et `flutter_bloc` basé sur les [flutter samples](https://github.com/flutter/samples/tree/master/provider_shopper).
+- [Formulaire dynamique](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - un exemple pour créer utiliser les packages `bloc` et `flutter_bloc` afin d'implémenter un formulaire dynamique qui extrait des données depuis un répertoire.
 
 ### Web
 
-- [Counter](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - an example of how to use a `CounterBloc` in an AngularDart app.
-- [Github Search](https://github.com/felangel/Bloc/tree/master/examples/github_search/angular_github_search) - an example of how to create a Github Search Application using the `bloc` and `angular_bloc` packages.
+- [Compteur](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - un exemple qui montre comment utiliser un example  `CounterBloc` dans une application AngularDart.
+- [Recherche Github](https://github.com/felangel/Bloc/tree/master/examples/github_search/angular_github_search) - un exemple qui montre comment créer une Application de recherche Github en utilisant les packages `bloc` et `angular_bloc`.
 
 ### Flutter + Web
 
-- [Github Search](https://github.com/felangel/Bloc/tree/master/examples/github_search) - an example of how to create a Github Search Application and share code between Flutter and AngularDart.
+- [Recherche Github](https://github.com/felangel/Bloc/tree/master/examples/github_search) - un exemple pour apprendre comment créer une Application de recherche Github et en partageant le code entre Flutter et AngularDart.
 
 ## Articles
 
-- [bloc package](https://medium.com/flutter-community/flutter-bloc-package-295b53e95c5c) - An intro to the bloc package with high level architecture and examples.
-- [login tutorial with flutter_bloc](https://medium.com/flutter-community/flutter-login-tutorial-with-flutter-bloc-ea606ef701ad) - How to create a full login flow using the bloc and flutter_bloc packages.
-- [unit testing with bloc](https://medium.com/@felangelov/unit-testing-with-bloc-b94de9655d86) - How to unit test the blocs created in the flutter login tutorial.
-- [infinite list tutorial with flutter_bloc](https://medium.com/flutter-community/flutter-infinite-list-tutorial-with-flutter-bloc-2fc7a272ec67) - How to create an infinite list using the bloc and flutter_bloc packages.
-- [code sharing with bloc](https://medium.com/flutter-community/code-sharing-with-bloc-b867302c18ef) - How to share code between a mobile application written with Flutter and a web application written with AngularDart.
-- [weather app tutorial with flutter_bloc](https://medium.com/flutter-community/weather-app-with-flutter-bloc-e24a7253340d) - How to build a weather app which supports dynamic theming, pull-to-refresh, and interacting with a REST API using the bloc and flutter_bloc packages.
+- [package bloc](https://medium.com/flutter-community/flutter-bloc-package-295b53e95c5c) - Une introduction sur le package bloc avec une architecture de haut niveau et des exemples.
+- [tutoriel pour un formulaire de connexion avec Flutter](https://medium.com/flutter-community/flutter-login-tutorial-with-flutter-bloc-ea606ef701ad) - Comment créer un espace de connexion de A à Z en utilisant les packages bloc et flutter_bloc.
+- [test unitaire avec bloc](https://medium.com/@felangelov/unit-testing-with-bloc-b94de9655d86) - Comment faire des tests unitaires pour les blocs créés dans le tutoriel pour le formulaire de connexion Flutter.
+- [Liste infinie avec flutter_bloc](https://medium.com/flutter-community/flutter-infinite-list-tutorial-with-flutter-bloc-2fc7a272ec67) - Comment créer une liste infinie en utilisant les packages bloc et flutter_bloc.
+- [Partager son code avec bloc](https://medium.com/flutter-community/code-sharing-with-bloc-b867302c18ef) - Comment partager son code entre une application mobile écrite avec Flutter et une application web écrite avec AngularDart.
+- [Tutoriel Application météorologique avec flutter_bloc](https://medium.com/flutter-community/weather-app-with-flutter-bloc-e24a7253340d) - Comment construire une application météorologique qui supporte un thème dynamique, tirer pour rafraichir, et qui intéragit avec une REST API en utilisant les packages bloc et flutter_bloc.
 - [todos app tutorial with flutter_bloc](https://medium.com/flutter-community/flutter-todos-tutorial-with-flutter-bloc-d9dd833f9df3) - How to build a todos app using the bloc and flutter_bloc packages.
-- [firebase login tutorial with flutter_bloc](https://medium.com/flutter-community/firebase-login-with-flutter-bloc-47455e6047b0) - How to create a fully functional login/sign up flow using the bloc and flutter_bloc packages with Firebase Authentication and Google Sign In.
-- [flutter timer tutorial with flutter_bloc](https://medium.com/flutter-community/flutter-timer-with-flutter-bloc-a464e8332ceb) - How to create a timer app using the bloc and flutter_bloc packages.
-- [firestore todos tutorial with flutter_bloc](https://medium.com/flutter-community/firestore-todos-with-flutter-bloc-7b2d5fadcc80) - How to create a todos app using the bloc and flutter_bloc packages that integrates with cloud firestore.
+- [Formulaire de connexion/inscription firebase et flutter_bloc](https://medium.com/flutter-community/firebase-login-with-flutter-bloc-47455e6047b0) - Comment construire un formulaire de connexion et d'inscription entièrement fonctionnel en utilisant les packages bloc et flutter_bloc avec l'Authentification Firebase et Google Sign In.
+- [tutoriel minuteur flutter avec flutter_bloc](https://medium.com/flutter-community/flutter-timer-with-flutter-bloc-a464e8332ceb) - Comment créer une application minuteur en utilisant les packages bloc et flutter_bloc.
+- [tutoriel liste de choses à faire avec firestore et flutter_bloc](https://medium.com/flutter-community/firestore-todos-with-flutter-bloc-7b2d5fadcc80) - Comment créer une application qui liste des choses à faire en utilisant les packages bloc et flutter_bloc qui intègrent le cloud firestore.
 
 ## Extensions
 
-- [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) - extends IntelliJ/Android Studio with support for the Bloc library and provides tools for effectively creating Blocs for both Flutter and AngularDart apps.
-- [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) - extends VSCode with support for the Bloc library and provides tools for effectively creating Blocs for both Flutter and AngularDart apps.
+- [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) - étend IntelliJ/Android Studio avec du support pour la librairie Bloc et fournit des outils pour créer efficacement des Blocs pour à la fois des applications Flutter et AngularDart.
+- [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) - étend VSCode avec du support pour la librairie Bloc et fournit des outils pour créer efficacement des Blocs pour à la fois des applications Flutter et AngularDart.
 
-## Community
+## Communauté
 
-Learn more at the following links, which have been contributed by the community.
+Apprennez en plus en suivant les liens qui ont été apportés par la communauté.
 
 ### Packages
 
-- [Hydrated Bloc](https://pub.dev/packages/hydrated_bloc) - An extension to the `bloc` state management library which automatically persists and restores `bloc` states, by [Felix Angelov](https://github.com/felangel).
-- [Bloc.js](https://github.com/felangel/bloc.js) - A port of the `bloc` state management library from Dart to JavaScript, by [Felix Angelov](https://github.com/felangel).
-- [Bloc Code Generator](https://pub.dev/packages/bloc_code_generator) - A code generator that makes working with bloc easier, by [Adson Leal](https://github.com/adsonpleal).
-- [Firebase Auth](https://pub.dev/packages/fb_auth) - A Web, Mobile Firebase Auth Plugin, by [Rody Davis](https://github.com/AppleEducate).
-- [Form Bloc](https://pub.dev/packages/form_bloc) - An easy way to create forms with BLoC pattern without writing a lot of boilerplate code, by [Giancarlo](https://github.com/GiancarloCode).
+- [Hydrated Bloc](https://pub.dev/packages/hydrated_bloc) - Une extension à la librairie `bloc` state management qui va automatiquement rendre persistant et restaurer les `bloc` states, par [Felix Angelov](https://github.com/felangel).
+- [Bloc.js](https://github.com/felangel/bloc.js) - Pour exporter la librairie `bloc` et son state management depuis Dart jusqu'à Javascript, par [Felix Angelov](https://github.com/felangel).
+- [Bloc Code Generator](https://pub.dev/packages/bloc_code_generator) - Un générateur de code qui permet de travailler plus facilement avec bloc, par [Adson Leal](https://github.com/adsonpleal).
+- [Firebase Auth](https://pub.dev/packages/fb_auth) - Un plugin pour créer une authentification Web et Mobile avec Firebase, par [Rody Davis](https://github.com/AppleEducate).
+- [Form Bloc](https://pub.dev/packages/form_bloc) - Faciliter la création des formulaires avec le paterne BloC sans avoir besoin d'écrire beaucoup de code "futile" (boilerplate), par [Giancarlo](https://github.com/GiancarloCode).
 
-### Video Tutorials
+### Vidéos tutoriels
 
-- [Bloc Library: Basics and Beyond 🚀](https://youtu.be/knMvKPKBzGE) - Talk given at [Flutter Europe](https://fluttereurope.dev) about the basics of the bloc library, by [Felix Angelov](https://github.com/felangel).
-- [Flutter Bloc Library Tutorial](https://www.youtube.com/watch?v=hTExlt1nJZI) - Introduction to the Bloc Library, by [Reso Coder](https://resocoder.com).
-- [Flutter Youtube Search](https://www.youtube.com/watch?v=BJY8nuYUM7M) - How to build a Youtube Search app which interacts with an API using the bloc and flutter_bloc packages, by [Reso Coder](https://resocoder.com).
-- [Flutter Bloc - AUTOMATIC LOOKUP - v0.20 (and Up), Updated Tutorial](https://www.youtube.com/watch?v=_vOpPuVfmiU) - Updated Tutorial on the Flutter Bloc Package, by [Reso Coder](https://resocoder.com).
-- [Dynamic Theming with flutter_bloc](https://www.youtube.com/watch?v=YYbhkg-W8Mg) - Tutorial on how to use the flutter_bloc package to implement dynamic theming, by [Reso Coder](https://resocoder.com).
-- [Persist Bloc State in Flutter](https://www.youtube.com/watch?v=vSOpZd_FFEY) - Tutorial on how to use the hydrated_bloc package to automatically persist app state, by [Reso Coder](https://resocoder.com).
+- [Librarie Bloc: Basiques et au-delà 🚀](https://youtu.be/knMvKPKBzGE) - Conférence donnée à [Flutter Europe](https://fluttereurope.dev) à propos des basiques de la librarie bloc, par [Felix Angelov](https://github.com/felangel).
+- [Tutoriel Flutter sur la Librairie Bloc](https://www.youtube.com/watch?v=hTExlt1nJZI) - Introduction à la Librarie Bloc, par [Reso Coder](https://resocoder.com).
+- [Flutter Recherche Youtube](https://www.youtube.com/watch?v=BJY8nuYUM7M) - Comment construire une application Recherche Youtube qui intéragit avec une API en utilisant les packages bloc et flutter_bloc, par [Reso Coder](https://resocoder.com).
+- [Flutter Bloc - AUTOMATIC LOOKUP - v0.20 (and Up), Tutoriel à jour](https://www.youtube.com/watch?v=_vOpPuVfmiU) - Tutoriel à jour sur le Package Flutter Bloc, par [Reso Coder](https://resocoder.com).
+- [Thème dynamique avec flutter_bloc](https://www.youtube.com/watch?v=YYbhkg-W8Mg) - Tutoriel pour utiliser le package flutter_bloc afin d'implémenter un thème dynamique, par [Reso Coder](https://resocoder.com).
+- [Persistant Bloc State dans Flutter](https://www.youtube.com/watch?v=vSOpZd_FFEY) - Tutoriel pour apprendre à utiliser le package hydrated_bloc pour automatiquement rendre persistant le state de notre application, par [Reso Coder](https://resocoder.com).
 - [State Management Foundation](https://www.youtube.com/watch?v=S2KmxzgsTwk&t=731s) - Introduction to state management using the flutter_bloc package, by [Techie Blossom](https://techieblossom.com).
 - [Flutter Football Player Search](https://www.youtube.com/watch?v=S2KmxzgsTwk) - How to build a Football Player Search app which interacts with an API using the bloc and flutter_bloc packages, by [Techie Blossom](https://techieblossom.com).
 - [Learning the Flutter Bloc Package](https://www.youtube.com/watch?v=eAiCPl3yk9A&t=1s) - Learning the flutter_bloc package live, by [Robert Brunhage](https://www.youtube.com/channel/UCSLIg5O0JiYO1i2nD4RclaQ)
 - [Bloc Test Tutorial](https://www.youtube.com/watch?v=S6jFBiiP0Mc) - Tutorial on how to unit test blocs using the bloc_test package, by [Reso Coder](https://resocoder.com).
 
-### Written Resources
+### Ressources écrites
 
-- [DevonFw Flutter Guide](https://github.com/devonfw-forge/devonfw4flutter) - A guide on building structured & scalable applications with Flutter and BLoC, by [Sebastian Faust](https://github.com/Fasust)
-- [Using Google´s Flutter Framework for the Development of a Large-Scale Reference Application](https://epb.bibl.th-koeln.de/frontdoor/index/index/docId/1498) - Scientific paper describing how to build [a large-scale Flutter application](https://github.com/devonfw-forge/devonfw4flutter-mts-app) with BLoC, by [Sebastian Faust](https://github.com/Fasust)
+- [DevonFw Flutter Guide](https://github.com/devonfw-forge/devonfw4flutter) - Un guide pour créer des applications structurées et évolutives avec Flutter et BLoC, par [Sebastian Faust](https://github.com/Fasust)
+- [Utiliser le Framework de Google Flutter pour le développement d'une grande-évolutive Application](https://epb.bibl.th-koeln.de/frontdoor/index/index/docId/1498) - Papier scientifique qui décrit comment construire [une grande-évolutive application Flutter](https://github.com/devonfw-forge/devonfw4flutter-mts-app) avec BLoC, par [Sebastian Faust](https://github.com/Fasust)
 
 ### Extensions
 
-- [Feature Scaffolding for VSCode](https://marketplace.visualstudio.com/items?itemName=KiritchoukC.flutter-clean-architecture) - A VSCode extension inspired by [Reso Coder's](https://resocoder.com) clean architecture tutorials, which helps quickly scaffold features, by [Kiritchouk Clément](https://github.com/KiritchoukC).
+- [Echafaudage (Scaffolding) pour VSCode](https://marketplace.visualstudio.com/items?itemName=KiritchoukC.flutter-clean-architecture) - Une extension VSCode inspiré de [Reso Coder](https://resocoder.com) et ses tutoriels sur une architecture propre, cela va vous aider à créer rapidement les dossiers pour votre feature, par [Kiritchouk Clément](https://github.com/KiritchoukC).
 
-## Maintainers
+## Mainteneurs
 
 - [Felix Angelov](https://github.com/felangel)
