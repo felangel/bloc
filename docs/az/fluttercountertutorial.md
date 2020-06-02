@@ -10,21 +10,21 @@
 
 Yeni Flutter proyekti yaradaraq başlayacağıq.
 
-[script](_snippets/flutter_counter_tutorial/flutter_create.sh.md ':include')
+[script](../_snippets/flutter_counter_tutorial/flutter_create.sh.md ':include')
 
 Daha sonra `pubspec.yaml`-dakı kontentləri aşağıdakı kimi əvəzləyirik
 
-[pubspec.yaml](_snippets/flutter_counter_tutorial/pubspec.yaml.md ':include')
+[pubspec.yaml](../_snippets/flutter_counter_tutorial/pubspec.yaml.md ':include')
 
 və dependency-lərimizi quraşdırırıq
 
-[script](_snippets/flutter_counter_tutorial/flutter_packages_get.sh.md ':include')
+[script](../_snippets/flutter_counter_tutorial/flutter_packages_get.sh.md ':include')
 
 Sayğac tətbiqimiz sadəcə sayğacın qiymətini azaltmaq/artırmaq üçün 2 düymədən və sayğacın cari qiymətini göstərmək üçün `Text` widget-indən ibarət olacaq. `CounterEvent`-ləri yaratmağa başlayaq.
 
 ## Counter Events (Counter Hadisələri)
 
-[counter_event.dart](_snippets/flutter_counter_tutorial/counter_event.dart.md ':include')
+[counter_event.dart](../_snippets/flutter_counter_tutorial/counter_event.dart.md ':include')
 
 ## Counter States (Counter Vəziyyətləri)
 
@@ -32,7 +32,7 @@ Sate-imiz sadəcə integer (tam ədəd) olduğu üçün, əlavə class yaratmağ
 
 ## Counter Bloc
 
-[counter_bloc.dart](_snippets/flutter_counter_tutorial/counter_bloc.dart.md ':include')
+[counter_bloc.dart](../_snippets/flutter_counter_tutorial/counter_bloc.dart.md ':include')
 
 ?> **Qeyd**: `CounterBloc` elanından görə bilərik ki, `CounterEvent`-lər input kimi və integer-lər isə output kimi istifadə ediləcək.
 
@@ -40,7 +40,7 @@ Sate-imiz sadəcə integer (tam ədəd) olduğu üçün, əlavə class yaratmağ
 
 Now that we have our `CounterBloc` fully implemented, we can get started creating our Flutter application.
 
-[main.dart](_snippets/flutter_counter_tutorial/main.dart.md ':include')
+[main.dart](../_snippets/flutter_counter_tutorial/main.dart.md ':include')
 
 ?> **Note**: We are using the `BlocProvider` widget from `flutter_bloc` in order to make the instance of `CounterBloc` available to the entire subtree (`CounterPage`). `BlocProvider` also handles closing the `CounterBloc` automatically so we don't need to use a `StatefulWidget`.
 
@@ -48,7 +48,7 @@ Now that we have our `CounterBloc` fully implemented, we can get started creatin
 
 Finally, all that's left is to build our Counter Page.
 
-[counter_page.dart](_snippets/flutter_counter_tutorial/counter_page.dart.md ':include')
+[counter_page.dart](../_snippets/flutter_counter_tutorial/counter_page.dart.md ':include')
 
 ?> **Note**: We are able to access the `CounterBloc` instance using `BlocProvider.of<CounterBloc>(context)` because we wrapped our `CounterPage` in a `BlocProvider`.
 
