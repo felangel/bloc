@@ -81,7 +81,7 @@ class PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MyFormBloc, MyFormState>(
-      condition: (previous, current) => previous.email != current.email,
+      condition: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextFormField(
           decoration: InputDecoration(
