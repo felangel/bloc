@@ -33,3 +33,11 @@ The above code outputs:
 1
 0
 ```
+
+## Dart Versions
+
+- Dart 2: >= 2.7.0
+
+### Maintainers
+
+- [Felix Angelov](https://github.com/felangel)

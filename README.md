@@ -2,9 +2,14 @@
 
 **WARNING: This is highly experimental**
 
-An experimental Dart library which exposes a `cubit`. A cubit is a reimagined bloc (from [package:bloc](https://pub.dev/packages/bloc)) which removes events and relies on methods to emit new states instead.
+A cubit is a reimagined bloc (from [package:bloc](https://pub.dev/packages/bloc)) which removes events and relies on methods to emit new states instead.
 
-## Creating a Cubit
+| Package                                                                               | Pub                                                                                                      |
+| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| [cubit](https://github.com/felangel/cubit/tree/master/packages/bloc)                  | [![pub package](https://img.shields.io/pub/v/cubit.svg)](https://pub.dev/packages/cubit)                 |
+| [flutter_cubit](https://github.com/felangel/cubit/tree/master/packages/flutter_cubit) | [![pub package](https://img.shields.io/pub/v/flutter_cubit.svg)](https://pub.dev/packages/flutter_cubit) |
+
+## Overview
 
 ```dart
 class CounterCubit extends Cubit<int> {
@@ -16,20 +21,15 @@ class CounterCubit extends Cubit<int> {
 }
 ```
 
-## Consuming a Cubit
+## Documentation
 
-```dart
-void main() async {
-  final counterCubit = CounterCubit()..listen(print);
-  await counterCubit.increment();
-  await counterCubit.decrement();
-}
-```
+- [Cubit Package](https://github.com/felangel/cubit/tree/master/packages/cubit/README.md)
+- [Flutter Cubit Package](https://github.com/felangel/cubit/tree/master/packages/flutter_cubit/README.md)
 
-The above code outputs:
+## Dart Versions
 
-```sh
-0
-1
-0
-```
+- Dart 2: >= 2.7.0
+
+### Maintainers
+
+- [Felix Angelov](https://github.com/felangel)

@@ -1,0 +1,28 @@
+name: build
+
+on:
+  push:
+    paths:
+      - "packages/flutter_cubit/**"
+      - ".github/workflows/flutter_cubit.yaml"
+
+  pull_request:
+    paths:
+      - "packages/flutter_cubit/**"
+      - ".github/workflows/flutter_cubit.yaml"
+
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: packages/flutter_cubit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1.3.0
+      - name: Install Dependencies
+        run: flutter packages get
+      - name: Format
+        run: flutter format --set-exit-if-changed lib test
+      - name: Analyze
+        run: flutter analyze lib test
