@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_complex_list/repository.dart';
 import 'package:flutter_complex_list/models/models.dart';
-import 'package:flutter_complex_list/bloc/bloc.dart';
+
+part 'list_event.dart';
+part 'list_state.dart';
 
 class ListBloc extends Bloc<ListEvent, ListState> {
   final Repository repository;
@@ -26,7 +29,7 @@ class ListBloc extends Bloc<ListEvent, ListState> {
       }
     }
     if (event is Delete) {
-      final listState = currentState;
+      final listState = state;
       if (listState is Loaded) {
         final List<Item> updatedItems =
             List<Item>.from(listState.items).map((Item item) {
@@ -34,12 +37,12 @@ class ListBloc extends Bloc<ListEvent, ListState> {
         }).toList();
         yield Loaded(items: updatedItems);
         repository.deleteItem(event.id).listen((id) {
-          dispatch(Deleted(id: id));
+          add(Deleted(id: id));
         });
       }
     }
     if (event is Deleted) {
-      final listState = currentState;
+      final listState = state;
       if (listState is Loaded) {
         final List<Item> updatedItems = List<Item>.from(listState.items)
           ..removeWhere((item) => item.id == event.id);

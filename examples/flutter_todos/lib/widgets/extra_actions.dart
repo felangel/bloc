@@ -12,45 +12,43 @@ class ExtraActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todosBloc = BlocProvider.of<TodosBloc>(context);
-    return BlocBuilder(
-      bloc: todosBloc,
-      builder: (BuildContext context, TodosState state) {
-        if (state is TodosLoaded) {
-          bool allComplete = (todosBloc.currentState as TodosLoaded)
-              .todos
-              .every((todo) => todo.complete);
+    return BlocBuilder<TodosBloc, TodosState>(
+      builder: (context, state) {
+        if (state is TodosLoadSuccess) {
+          bool allComplete =
+              (BlocProvider.of<TodosBloc>(context).state as TodosLoadSuccess)
+                  .todos
+                  .every((todo) => todo.complete);
           return PopupMenuButton<ExtraAction>(
             key: FlutterTodosKeys.extraActionsPopupMenuButton,
             onSelected: (action) {
               switch (action) {
                 case ExtraAction.clearCompleted:
-                  todosBloc.dispatch(ClearCompleted());
+                  BlocProvider.of<TodosBloc>(context).add(ClearCompleted());
                   break;
                 case ExtraAction.toggleAllComplete:
-                  todosBloc.dispatch(ToggleAll());
+                  BlocProvider.of<TodosBloc>(context).add(ToggleAll());
                   break;
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuItem<ExtraAction>>[
-                  PopupMenuItem<ExtraAction>(
-                    key: ArchSampleKeys.toggleAll,
-                    value: ExtraAction.toggleAllComplete,
-                    child: Text(
-                      allComplete
-                          ? ArchSampleLocalizations.of(context)
-                              .markAllIncomplete
-                          : ArchSampleLocalizations.of(context).markAllComplete,
-                    ),
-                  ),
-                  PopupMenuItem<ExtraAction>(
-                    key: ArchSampleKeys.clearCompleted,
-                    value: ExtraAction.clearCompleted,
-                    child: Text(
-                      ArchSampleLocalizations.of(context).clearCompleted,
-                    ),
-                  ),
-                ],
+              PopupMenuItem<ExtraAction>(
+                key: ArchSampleKeys.toggleAll,
+                value: ExtraAction.toggleAllComplete,
+                child: Text(
+                  allComplete
+                      ? ArchSampleLocalizations.of(context).markAllIncomplete
+                      : ArchSampleLocalizations.of(context).markAllComplete,
+                ),
+              ),
+              PopupMenuItem<ExtraAction>(
+                key: ArchSampleKeys.clearCompleted,
+                value: ExtraAction.clearCompleted,
+                child: Text(
+                  ArchSampleLocalizations.of(context).clearCompleted,
+                ),
+              ),
+            ],
           );
         }
         return Container(key: FlutterTodosKeys.extraActionsEmptyContainer);

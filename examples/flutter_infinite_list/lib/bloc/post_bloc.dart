@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:http/http.dart' as http;
 import 'package:bloc/bloc.dart';
 import 'package:flutter_infinite_list/bloc/bloc.dart';
 import 'package:flutter_infinite_list/models/models.dart';
+import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
+import 'package:rxdart/rxdart.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   final http.Client httpClient;
@@ -14,48 +14,46 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({@required this.httpClient});
 
   @override
-  Stream<PostState> transform(
+  get initialState => PostInitial();
+
+  @override
+  Stream<Transition<PostEvent, PostState>> transformEvents(
     Stream<PostEvent> events,
-    Stream<PostState> Function(PostEvent event) next,
+    TransitionFunction<PostEvent, PostState> transitionFn,
   ) {
-    return super.transform(
-      (events as Observable<PostEvent>).debounceTime(
-        Duration(milliseconds: 500),
-      ),
-      next,
+    return super.transformEvents(
+      events.debounceTime(const Duration(milliseconds: 500)),
+      transitionFn,
     );
   }
 
   @override
-  get initialState => PostUninitialized();
-
-  @override
   Stream<PostState> mapEventToState(PostEvent event) async* {
-    if (event is Fetch && !_hasReachedMax(currentState)) {
+    final currentState = state;
+    if (event is PostFetched && !_hasReachedMax(currentState)) {
       try {
-        if (currentState is PostUninitialized) {
+        if (currentState is PostInitial) {
           final posts = await _fetchPosts(0, 20);
-          yield PostLoaded(posts: posts, hasReachedMax: false);
+          yield PostSuccess(posts: posts, hasReachedMax: false);
           return;
         }
-        if (currentState is PostLoaded) {
-          final posts =
-              await _fetchPosts((currentState as PostLoaded).posts.length, 20);
+        if (currentState is PostSuccess) {
+          final posts = await _fetchPosts(currentState.posts.length, 20);
           yield posts.isEmpty
-              ? (currentState as PostLoaded).copyWith(hasReachedMax: true)
-              : PostLoaded(
-                  posts: (currentState as PostLoaded).posts + posts,
+              ? currentState.copyWith(hasReachedMax: true)
+              : PostSuccess(
+                  posts: currentState.posts + posts,
                   hasReachedMax: false,
                 );
         }
       } catch (_) {
-        yield PostError();
+        yield PostFailure();
       }
     }
   }
 
   bool _hasReachedMax(PostState state) =>
-      state is PostLoaded && state.hasReachedMax;
+      state is PostSuccess && state.hasReachedMax;
 
   Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
     final response = await httpClient.get(

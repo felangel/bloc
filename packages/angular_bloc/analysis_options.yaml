@@ -1,3 +1,5 @@
+include: package:effective_dart/analysis_options.1.2.0.yaml
+
 analyzer:
   exclude: [build/**]
   errors:
@@ -5,7 +7,7 @@ analyzer:
   # Angular plugin support is in beta. You're welcome to try it and report
   # issues: https://github.com/dart-lang/angular_analyzer_plugin/issues
   # plugins:
-    # - angular
+  # - angular
 
 # Lint rules and documentation, see http://dart-lang.github.io/linter/lints
 linter:

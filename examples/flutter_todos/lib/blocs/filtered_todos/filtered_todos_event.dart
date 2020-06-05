@@ -1,26 +1,30 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class FilteredTodosEvent extends Equatable {
-  FilteredTodosEvent([List props = const []]) : super(props);
+  const FilteredTodosEvent();
 }
 
-class UpdateFilter extends FilteredTodosEvent {
+class FilterUpdated extends FilteredTodosEvent {
   final VisibilityFilter filter;
 
-  UpdateFilter(this.filter) : super([filter]);
+  const FilterUpdated(this.filter);
 
   @override
-  String toString() => 'UpdateFilter { filter: $filter }';
+  List<Object> get props => [filter];
+
+  @override
+  String toString() => 'FilterUpdated { filter: $filter }';
 }
 
-class UpdateTodos extends FilteredTodosEvent {
+class TodosUpdated extends FilteredTodosEvent {
   final List<Todo> todos;
 
-  UpdateTodos(this.todos) : super([todos]);
+  const TodosUpdated(this.todos);
 
   @override
-  String toString() => 'UpdateTodos { todos: $todos }';
+  List<Object> get props => [todos];
+
+  @override
+  String toString() => 'TodosUpdated { todos: $todos }';
 }

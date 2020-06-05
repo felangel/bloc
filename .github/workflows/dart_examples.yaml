@@ -1,0 +1,47 @@
+name: dart_examples
+
+on:
+  push:
+    paths:
+      - ".github/workflows/dart_examples.yaml"
+      - "packages/bloc/**"
+      - "examples/bloc_test/**"
+
+  pull_request:
+    paths:
+      - ".github/workflows/dart_examples.yaml"
+      - "packages/bloc/**"
+      - "examples/bloc_test/**"
+
+jobs:
+  examples:
+    strategy:
+      matrix:
+        folder: ["packages/bloc/example", "packages/bloc_test/example"]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    container:
+      image: google/dart:2.8.1
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        working-directory: ${{ matrix.folder }}
+        run: pub get
+      - name: Format
+        working-directory: ${{ matrix.folder }}
+        run: dartfmt --dry-run --set-exit-if-changed .
+      - name: Analyze
+        working-directory: ${{ matrix.folder }}
+        run: dartanalyzer --fatal-infos --fatal-warnings .
+      - name: Run tests
+        working-directory: ${{ matrix.folder }}
+        run: |
+          if [ -d "test" ]; then
+            pub run test
+          fi
+  build:
+    needs: [examples]
+    runs-on: ubuntu-latest
+    steps:
+      - name: noop
+        run: echo 'noop'

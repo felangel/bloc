@@ -1,25 +1,25 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 abstract class StatsState extends Equatable {
-  StatsState([List props = const []]) : super(props);
-}
+  const StatsState();
 
-class StatsLoading extends StatsState {
   @override
-  String toString() => 'StatsLoading';
+  List<Object> get props => [];
 }
 
-class StatsLoaded extends StatsState {
+class StatsLoadInProgress extends StatsState {}
+
+class StatsLoadSuccess extends StatsState {
   final int numActive;
   final int numCompleted;
 
-  StatsLoaded(this.numActive, this.numCompleted)
-      : super([numActive, numCompleted]);
+  const StatsLoadSuccess(this.numActive, this.numCompleted);
+
+  @override
+  List<Object> get props => [numActive, numCompleted];
 
   @override
   String toString() {
-    return 'StatsLoaded { numActive: $numActive, numCompleted: $numCompleted }';
+    return 'StatsLoadSuccess { numActive: $numActive, numCompleted: $numCompleted }';
   }
 }

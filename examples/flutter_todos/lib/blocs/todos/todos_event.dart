@@ -1,50 +1,51 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_todos/models/models.dart';
 
-@immutable
 abstract class TodosEvent extends Equatable {
-  TodosEvent([List props = const []]) : super(props);
-}
+  const TodosEvent();
 
-class LoadTodos extends TodosEvent {
   @override
-  String toString() => 'LoadTodos';
+  List<Object> get props => [];
 }
 
-class AddTodo extends TodosEvent {
+class TodosLoaded extends TodosEvent {}
+
+class TodoAdded extends TodosEvent {
   final Todo todo;
 
-  AddTodo(this.todo) : super([todo]);
+  const TodoAdded(this.todo);
 
   @override
-  String toString() => 'AddTodo { todo: $todo }';
-}
-
-class UpdateTodo extends TodosEvent {
-  final Todo updatedTodo;
-
-  UpdateTodo(this.updatedTodo) : super([updatedTodo]);
+  List<Object> get props => [todo];
 
   @override
-  String toString() => 'UpdateTodo { updatedTodo: $updatedTodo }';
+  String toString() => 'TodoAdded { todo: $todo }';
 }
 
-class DeleteTodo extends TodosEvent {
+class TodoUpdated extends TodosEvent {
   final Todo todo;
 
-  DeleteTodo(this.todo) : super([todo]);
+  const TodoUpdated(this.todo);
 
   @override
-  String toString() => 'DeleteTodo { todo: $todo }';
+  List<Object> get props => [todo];
+
+  @override
+  String toString() => 'TodoUpdated { updatedTodo: $todo }';
 }
 
-class ClearCompleted extends TodosEvent {
+class TodoDeleted extends TodosEvent {
+  final Todo todo;
+
+  const TodoDeleted(this.todo);
+
   @override
-  String toString() => 'ClearCompleted';
+  List<Object> get props => [todo];
+
+  @override
+  String toString() => 'TodoDeleted { todo: $todo }';
 }
 
-class ToggleAll extends TodosEvent {
-  @override
-  String toString() => 'ToggleAll';
-}
+class ClearCompleted extends TodosEvent {}
+
+class ToggleAll extends TodosEvent {}

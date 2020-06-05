@@ -15,29 +15,31 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         _userRepository = userRepository;
 
   @override
-  LoginState get initialState => LoginState.empty();
+  LoginState get initialState => LoginState.initial();
 
   @override
-  Stream<LoginState> transform(
+  Stream<Transition<LoginEvent, LoginState>> transformEvents(
     Stream<LoginEvent> events,
-    Stream<LoginState> Function(LoginEvent event) next,
+    TransitionFunction<LoginEvent, LoginState> transitionFn,
   ) {
-    final observableStream = events as Observable<LoginEvent>;
-    final nonDebounceStream = observableStream.where((event) {
-      return (event is! EmailChanged && event is! PasswordChanged);
+    final nonDebounceStream = events.where((event) {
+      return (event is! LoginEmailChanged && event is! LoginPasswordChanged);
     });
-    final debounceStream = observableStream.where((event) {
-      return (event is EmailChanged || event is PasswordChanged);
+    final debounceStream = events.where((event) {
+      return (event is LoginEmailChanged || event is LoginPasswordChanged);
     }).debounceTime(Duration(milliseconds: 300));
-    return super.transform(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super.transformEvents(
+      nonDebounceStream.mergeWith([debounceStream]),
+      transitionFn,
+    );
   }
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if (event is EmailChanged) {
-      yield* _mapEmailChangedToState(event.email);
-    } else if (event is PasswordChanged) {
-      yield* _mapPasswordChangedToState(event.password);
+    if (event is LoginEmailChanged) {
+      yield* _mapLoginEmailChangedToState(event.email);
+    } else if (event is LoginPasswordChanged) {
+      yield* _mapLoginPasswordChangedToState(event.password);
     } else if (event is LoginWithGooglePressed) {
       yield* _mapLoginWithGooglePressedToState();
     } else if (event is LoginWithCredentialsPressed) {
@@ -48,14 +50,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  Stream<LoginState> _mapEmailChangedToState(String email) async* {
-    yield currentState.update(
+  Stream<LoginState> _mapLoginEmailChangedToState(String email) async* {
+    yield state.update(
       isEmailValid: Validators.isValidEmail(email),
     );
   }
 
-  Stream<LoginState> _mapPasswordChangedToState(String password) async* {
-    yield currentState.update(
+  Stream<LoginState> _mapLoginPasswordChangedToState(String password) async* {
+    yield state.update(
       isPasswordValid: Validators.isValidPassword(password),
     );
   }

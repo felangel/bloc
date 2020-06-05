@@ -1,40 +1,42 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-import './complex.dart';
+part 'complex_event.dart';
+part 'complex_state.dart';
 
 class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
   ComplexState get initialState => ComplexStateA();
 
   @override
-  Stream<ComplexState> transform(Stream<ComplexEvent> events, next) {
-    return super.transform(
-      (events as Observable<ComplexEvent>).distinct(),
-      next,
-    );
+  Stream<Transition<ComplexEvent, ComplexState>> transformEvents(
+    Stream<ComplexEvent> events,
+    TransitionFunction<ComplexEvent, ComplexState> transitionFn,
+  ) {
+    return events.switchMap(transitionFn);
   }
 
   @override
-  Stream<ComplexState> mapEventToState(ComplexEvent event) {
+  Stream<ComplexState> mapEventToState(ComplexEvent event) async* {
     if (event is ComplexEventA) {
-      return Observable.just(ComplexStateA());
+      yield ComplexStateA();
+    } else if (event is ComplexEventB) {
+      yield ComplexStateB();
+    } else if (event is ComplexEventC) {
+      await Future<void>.delayed(Duration(milliseconds: 100));
+      yield ComplexStateC();
+    } else if (event is ComplexEventD) {
+      await Future<void>.delayed(Duration(milliseconds: 100));
+      yield ComplexStateD();
     }
-    if (event is ComplexEventB) {
-      return Observable.just(ComplexStateB());
-    }
-    return Observable.just(ComplexStateC());
   }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ComplexBloc &&
-          runtimeType == other.runtimeType &&
-          initialState == other.initialState;
-
-  @override
-  int get hashCode =>
-      initialState.hashCode ^ mapEventToState.hashCode ^ transform.hashCode;
+  Stream<Transition<ComplexEvent, ComplexState>> transformTransitions(
+    Stream<Transition<ComplexEvent, ComplexState>> transitions,
+  ) {
+    return transitions.debounceTime(Duration(milliseconds: 50));
+  }
 }

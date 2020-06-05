@@ -1,65 +1,31 @@
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+part of 'my_form_bloc.dart';
 
-@immutable
 class MyFormState extends Equatable {
-  final String email;
-  final bool isEmailValid;
-  final String password;
-  final bool isPasswordValid;
-  final bool formSubmittedSuccessfully;
+  final Email email;
+  final Password password;
+  final FormzStatus status;
 
-  bool get isFormValid => isEmailValid && isPasswordValid;
-
-  MyFormState({
-    @required this.email,
-    @required this.isEmailValid,
-    @required this.password,
-    @required this.isPasswordValid,
-    @required this.formSubmittedSuccessfully,
-  }) : super([
-          email,
-          isEmailValid,
-          password,
-          isPasswordValid,
-          formSubmittedSuccessfully,
-        ]);
-
-  factory MyFormState.initial() {
-    return MyFormState(
-      email: '',
-      isEmailValid: false,
-      password: '',
-      isPasswordValid: false,
-      formSubmittedSuccessfully: false,
-    );
-  }
+  const MyFormState({
+    this.email = const Email.pure(),
+    this.password = const Password.pure(),
+    this.status = FormzStatus.pure,
+  });
 
   MyFormState copyWith({
-    String email,
-    bool isEmailValid,
-    String password,
-    bool isPasswordValid,
-    bool formSubmittedSuccessfully,
+    Email email,
+    Password password,
+    FormzStatus status,
   }) {
     return MyFormState(
       email: email ?? this.email,
-      isEmailValid: isEmailValid ?? this.isEmailValid,
       password: password ?? this.password,
-      isPasswordValid: isPasswordValid ?? this.isPasswordValid,
-      formSubmittedSuccessfully:
-          formSubmittedSuccessfully ?? this.formSubmittedSuccessfully,
+      status: status ?? this.status,
     );
   }
 
   @override
-  String toString() {
-    return '''MyFormState {
-      email: $email,
-      isEmailValid: $isEmailValid,
-      password: $password,
-      isPasswordValid: $isPasswordValid,
-      formSubmittedSuccessfully: $formSubmittedSuccessfully
-    }''';
-  }
+  List<Object> get props => [email, password, status];
+
+  @override
+  bool get stringify => true;
 }

@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class MyThemeApp extends StatefulWidget {
   final Bloc<ThemeEvent, ThemeData> _themeBloc;
@@ -40,10 +38,7 @@ class MyThemeAppState extends State<MyThemeApp> {
   Widget build(BuildContext context) {
     return BlocBuilder(
       bloc: _themeBloc,
-      builder: ((
-        BuildContext context,
-        ThemeData theme,
-      ) {
+      builder: ((context, theme) {
         _onBuild();
         return MaterialApp(
           key: Key('material_app'),
@@ -127,16 +122,16 @@ class MyCounterAppState extends State<MyCounterApp> {
         key: Key('myCounterApp'),
         body: Column(
           children: <Widget>[
-            BlocBuilder<CounterEvent, int>(
+            BlocBuilder<CounterBloc, int>(
               bloc: _bloc,
-              condition: (previousState, currentState) {
-                return (previousState + currentState) % 3 == 0;
+              condition: (previousState, state) {
+                return (previousState + state) % 3 == 0;
               },
               builder: (context, count) {
                 return Text('$count', key: Key('myCounterAppTextCondition'));
               },
             ),
-            BlocBuilder<CounterEvent, int>(
+            BlocBuilder<CounterBloc, int>(
               bloc: _bloc,
               builder: (context, count) {
                 return Text('$count', key: Key('myCounterAppText'));
@@ -145,7 +140,7 @@ class MyCounterAppState extends State<MyCounterApp> {
             RaisedButton(
               key: Key('myCounterAppIncrementButton'),
               onPressed: () {
-                _bloc.dispatch(CounterEvent.increment);
+                _bloc.add(CounterEvent.increment);
               },
             )
           ],
@@ -165,10 +160,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
@@ -177,36 +172,35 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 void main() {
   group('BlocBuilder', () {
     testWidgets('throws if initialized with null bloc and builder',
-        (WidgetTester tester) async {
+        (tester) async {
       try {
         await tester.pumpWidget(
-          BlocBuilder<ThemeEvent, ThemeData>(
+          BlocBuilder<ThemeBloc, ThemeData>(
             bloc: null,
             builder: null,
           ),
         );
-      } catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
 
-    testWidgets('throws if initialized with null builder',
-        (WidgetTester tester) async {
+    testWidgets('throws if initialized with null builder', (tester) async {
       try {
         await tester.pumpWidget(
-          BlocBuilder<ThemeEvent, ThemeData>(
+          BlocBuilder<ThemeBloc, ThemeData>(
             bloc: ThemeBloc(),
             builder: null,
           ),
         );
-      } catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
 
-    testWidgets('passes initial state to widget', (WidgetTester tester) async {
-      final ThemeBloc _themeBloc = ThemeBloc();
-      int numBuilds = 0;
+    testWidgets('passes initial state to widget', (tester) async {
+      final _themeBloc = ThemeBloc();
+      var numBuilds = 0;
       await tester.pumpWidget(
         MyThemeApp(
           themeBloc: _themeBloc,
@@ -216,7 +210,7 @@ void main() {
         ),
       );
 
-      MaterialApp _materialApp = find
+      final _materialApp = find
           .byKey(Key('material_app'))
           .evaluate()
           .first
@@ -226,9 +220,9 @@ void main() {
     });
 
     testWidgets('receives events and sends state updates to widget',
-        (WidgetTester tester) async {
-      final ThemeBloc _themeBloc = ThemeBloc();
-      int numBuilds = 0;
+        (tester) async {
+      final _themeBloc = ThemeBloc();
+      var numBuilds = 0;
       await tester.pumpWidget(
         MyThemeApp(
           themeBloc: _themeBloc,
@@ -238,11 +232,11 @@ void main() {
         ),
       );
 
-      _themeBloc.dispatch(SetDarkTheme());
+      _themeBloc.add(SetDarkTheme());
 
       await tester.pumpAndSettle();
 
-      MaterialApp _materialApp = find
+      final _materialApp = find
           .byKey(Key('material_app'))
           .evaluate()
           .first
@@ -252,11 +246,55 @@ void main() {
       expect(numBuilds, 2);
     });
 
+    testWidgets('infers the bloc from the context if the bloc is not provided',
+        (tester) async {
+      final themeBloc = ThemeBloc();
+      var numBuilds = 0;
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: themeBloc,
+          child: BlocBuilder<ThemeBloc, ThemeData>(
+            builder: (
+              context,
+              theme,
+            ) {
+              numBuilds++;
+              return MaterialApp(
+                key: Key('material_app'),
+                theme: theme,
+                home: Container(),
+              );
+            },
+          ),
+        ),
+      );
+
+      themeBloc.add(SetDarkTheme());
+
+      await tester.pump();
+
+      var _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
+          as MaterialApp;
+
+      expect(_materialApp.theme, ThemeData.dark());
+      expect(numBuilds, 2);
+
+      themeBloc.add(SetLightTheme());
+
+      await tester.pump();
+
+      _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
+          as MaterialApp;
+
+      expect(_materialApp.theme, ThemeData.light());
+      expect(numBuilds, 3);
+    });
+
     testWidgets(
-        'updates when the bloc is changed at runtime to a different bloc and unsubscribes from old bloc',
-        (WidgetTester tester) async {
-      final ThemeBloc _themeBloc = ThemeBloc();
-      int numBuilds = 0;
+        'updates when the bloc is changed at runtime to a different bloc and'
+        'unsubscribes from old bloc', (tester) async {
+      final _themeBloc = ThemeBloc();
+      var numBuilds = 0;
       await tester.pumpWidget(
         MyThemeApp(
           themeBloc: _themeBloc,
@@ -268,11 +306,8 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      MaterialApp _materialApp = find
-          .byKey(Key('material_app'))
-          .evaluate()
-          .first
-          .widget as MaterialApp;
+      var _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
+          as MaterialApp;
 
       expect(_materialApp.theme, ThemeData.light());
       expect(numBuilds, 1);
@@ -286,7 +321,7 @@ void main() {
       expect(_materialApp.theme, ThemeData.dark());
       expect(numBuilds, 2);
 
-      _themeBloc.dispatch(SetLightTheme());
+      _themeBloc.add(SetLightTheme());
       await tester.pumpAndSettle();
 
       _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
@@ -297,10 +332,10 @@ void main() {
     });
 
     testWidgets(
-        'does not update when the bloc is changed at runtime to same bloc and stays subscribed to current bloc',
-        (WidgetTester tester) async {
-      final DarkThemeBloc _themeBloc = DarkThemeBloc();
-      int numBuilds = 0;
+        'does not update when the bloc is changed at runtime to same bloc '
+        'and stays subscribed to current bloc', (tester) async {
+      final _themeBloc = DarkThemeBloc();
+      var numBuilds = 0;
       await tester.pumpWidget(
         MyThemeApp(
           themeBloc: _themeBloc,
@@ -312,11 +347,8 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      MaterialApp _materialApp = find
-          .byKey(Key('material_app'))
-          .evaluate()
-          .first
-          .widget as MaterialApp;
+      var _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
+          as MaterialApp;
 
       expect(_materialApp.theme, ThemeData.dark());
       expect(numBuilds, 1);
@@ -330,7 +362,7 @@ void main() {
       expect(_materialApp.theme, ThemeData.dark());
       expect(numBuilds, 2);
 
-      _themeBloc.dispatch(SetLightTheme());
+      _themeBloc.add(SetLightTheme());
       await tester.pumpAndSettle();
 
       _materialApp = find.byKey(Key('material_app')).evaluate().first.widget
@@ -340,13 +372,12 @@ void main() {
       expect(numBuilds, 3);
     });
 
-    testWidgets('shows latest state instead of initial state',
-        (WidgetTester tester) async {
-      final ThemeBloc _themeBloc = ThemeBloc();
-      _themeBloc.dispatch(SetDarkTheme());
+    testWidgets('shows latest state instead of initial state', (tester) async {
+      final _themeBloc = ThemeBloc();
+      _themeBloc.add(SetDarkTheme());
       await tester.pumpAndSettle();
 
-      int numBuilds = 0;
+      var numBuilds = 0;
       await tester.pumpWidget(
         MyThemeApp(
           themeBloc: _themeBloc,
@@ -358,7 +389,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      MaterialApp _materialApp = find
+      final _materialApp = find
           .byKey(Key('material_app'))
           .evaluate()
           .first
@@ -369,7 +400,7 @@ void main() {
     });
 
     testWidgets('with condition only rebuilds when condition evaluates to true',
-        (WidgetTester tester) async {
+        (tester) async {
       await tester.pumpWidget(MyCounterApp());
       await tester.pumpAndSettle();
 
@@ -379,45 +410,45 @@ void main() {
           find.byKey(Key('myCounterAppIncrementButton'));
       expect(incrementButtonFinder, findsOneWidget);
 
-      final Text counterText1 =
-          tester.widget(find.byKey(Key('myCounterAppText')));
+      final counterText1 =
+          tester.widget(find.byKey(Key('myCounterAppText'))) as Text;
       expect(counterText1.data, '0');
 
-      final Text conditionalCounterText1 =
-          tester.widget(find.byKey(Key('myCounterAppTextCondition')));
+      final conditionalCounterText1 =
+          tester.widget(find.byKey(Key('myCounterAppTextCondition'))) as Text;
       expect(conditionalCounterText1.data, '0');
 
       await tester.tap(incrementButtonFinder);
       await tester.pumpAndSettle();
 
-      final Text counterText2 =
-          tester.widget(find.byKey(Key('myCounterAppText')));
+      final counterText2 =
+          tester.widget(find.byKey(Key('myCounterAppText'))) as Text;
       expect(counterText2.data, '1');
 
-      final Text conditionalCounterText2 =
-          tester.widget(find.byKey(Key('myCounterAppTextCondition')));
+      final conditionalCounterText2 =
+          tester.widget(find.byKey(Key('myCounterAppTextCondition'))) as Text;
       expect(conditionalCounterText2.data, '0');
 
       await tester.tap(incrementButtonFinder);
       await tester.pumpAndSettle();
 
-      final Text counterText3 =
-          tester.widget(find.byKey(Key('myCounterAppText')));
+      final counterText3 =
+          tester.widget(find.byKey(Key('myCounterAppText'))) as Text;
       expect(counterText3.data, '2');
 
-      final Text conditionalCounterText3 =
-          tester.widget(find.byKey(Key('myCounterAppTextCondition')));
+      final conditionalCounterText3 =
+          tester.widget(find.byKey(Key('myCounterAppTextCondition'))) as Text;
       expect(conditionalCounterText3.data, '2');
 
       await tester.tap(incrementButtonFinder);
       await tester.pumpAndSettle();
 
-      final Text counterText4 =
-          tester.widget(find.byKey(Key('myCounterAppText')));
+      final counterText4 =
+          tester.widget(find.byKey(Key('myCounterAppText'))) as Text;
       expect(counterText4.data, '3');
 
-      final Text conditionalCounterText4 =
-          tester.widget(find.byKey(Key('myCounterAppTextCondition')));
+      final conditionalCounterText4 =
+          tester.widget(find.byKey(Key('myCounterAppTextCondition'))) as Text;
       expect(conditionalCounterText4.data, '2');
     });
   });

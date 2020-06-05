@@ -14,11 +14,9 @@ class DetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todosBloc = BlocProvider.of<TodosBloc>(context);
-    return BlocBuilder(
-      bloc: todosBloc,
-      builder: (BuildContext context, TodosState state) {
-        final todo = (state as TodosLoaded)
+    return BlocBuilder<TodosBloc, TodosState>(
+      builder: (context, state) {
+        final todo = (state as TodosLoadSuccess)
             .todos
             .firstWhere((todo) => todo.id == id, orElse: () => null);
         final localizations = ArchSampleLocalizations.of(context);
@@ -31,7 +29,7 @@ class DetailsScreen extends StatelessWidget {
                 key: ArchSampleKeys.deleteTodoButton,
                 icon: Icon(Icons.delete),
                 onPressed: () {
-                  todosBloc.dispatch(DeleteTodo(todo));
+                  BlocProvider.of<TodosBloc>(context).add(TodoDeleted(todo));
                   Navigator.pop(context, todo);
                 },
               )
@@ -52,8 +50,8 @@ class DetailsScreen extends StatelessWidget {
                                 key: FlutterTodosKeys.detailsScreenCheckBox,
                                 value: todo.complete,
                                 onChanged: (_) {
-                                  todosBloc.dispatch(
-                                    UpdateTodo(
+                                  BlocProvider.of<TodosBloc>(context).add(
+                                    TodoUpdated(
                                       todo.copyWith(complete: !todo.complete),
                                     ),
                                   );
@@ -75,14 +73,14 @@ class DetailsScreen extends StatelessWidget {
                                       todo.task,
                                       key: ArchSampleKeys.detailsTodoItemTask,
                                       style:
-                                          Theme.of(context).textTheme.headline,
+                                          Theme.of(context).textTheme.headline5,
                                     ),
                                   ),
                                 ),
                                 Text(
                                   todo.note,
                                   key: ArchSampleKeys.detailsTodoItemNote,
-                                  style: Theme.of(context).textTheme.subhead,
+                                  style: Theme.of(context).textTheme.subtitle1,
                                 ),
                               ],
                             ),
@@ -105,8 +103,8 @@ class DetailsScreen extends StatelessWidget {
                           return AddEditScreen(
                             key: ArchSampleKeys.editTodoScreen,
                             onSave: (task, note) {
-                              todosBloc.dispatch(
-                                UpdateTodo(
+                              BlocProvider.of<TodosBloc>(context).add(
+                                TodoUpdated(
                                   todo.copyWith(task: task, note: note),
                                 ),
                               );

@@ -1,8 +1,11 @@
+import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 import 'package:bloc/bloc.dart';
 
+@immutable
 abstract class TransitionEvent {}
 
+@immutable
 abstract class TransitionState {}
 
 class SimpleTransitionEvent extends TransitionEvent {}
@@ -43,14 +46,14 @@ void main() {
   group('Transition Tests', () {
     group('constructor', () {
       test(
-          'should throw assertion error when initialized with a null currentState',
-          () {
+          'should throw assertion error when initialized '
+          'with a null currentState', () {
         expect(
           () => Transition<TransitionEvent, TransitionState>(
-                currentState: null,
-                event: SimpleTransitionEvent(),
-                nextState: SimpleTransitionState(),
-              ),
+            currentState: null,
+            event: SimpleTransitionEvent(),
+            nextState: SimpleTransitionState(),
+          ),
           throwsA(
             TypeMatcher<AssertionError>(),
           ),
@@ -61,10 +64,10 @@ void main() {
           () {
         expect(
           () => Transition<TransitionEvent, TransitionState>(
-                currentState: SimpleTransitionState(),
-                event: null,
-                nextState: SimpleTransitionState(),
-              ),
+            currentState: SimpleTransitionState(),
+            event: null,
+            nextState: SimpleTransitionState(),
+          ),
           throwsA(
             TypeMatcher<AssertionError>(),
           ),
@@ -76,10 +79,10 @@ void main() {
           () {
         expect(
           () => Transition<TransitionEvent, TransitionState>(
-                currentState: SimpleTransitionState(),
-                event: SimpleTransitionEvent(),
-                nextState: null,
-              ),
+            currentState: SimpleTransitionState(),
+            event: SimpleTransitionEvent(),
+            nextState: null,
+          ),
           throwsA(
             TypeMatcher<AssertionError>(),
           ),
@@ -87,17 +90,18 @@ void main() {
       });
 
       test(
-          'should not throw assertion error when initialized with with all required parameters',
-          () {
+          'should not throw assertion error when initialized with '
+          'all required parameters', () {
         try {
           Transition<TransitionEvent, TransitionState>(
             currentState: SimpleTransitionState(),
             event: SimpleTransitionEvent(),
             nextState: SimpleTransitionState(),
           );
-        } catch (error) {
+        } on dynamic catch (_) {
           fail(
-            'should not throw error when initialized with all required parameters',
+            'should not throw error when initialized '
+            'with all required parameters',
           );
         }
       });
@@ -159,8 +163,11 @@ void main() {
           nextState: CounterState(1),
         );
 
-        expect(transition.toString(),
-            'Transition { currentState: ${transition.currentState.toString()}, event: ${transition.event.toString()}, nextState: ${transition.nextState.toString()} }');
+        expect(
+            transition.toString(),
+            'Transition { currentState: ${transition.currentState.toString()}, '
+            'event: ${transition.event.toString()}, '
+            'nextState: ${transition.nextState.toString()} }');
       });
     });
   });

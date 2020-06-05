@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:flutter_complex_list/bloc/bloc.dart';
+import 'package:flutter_complex_list/bloc/list_bloc.dart';
 import 'package:flutter_complex_list/models/models.dart';
 import 'package:flutter_complex_list/repository.dart';
+import 'package:flutter_complex_list/simple_bloc_delegate.dart';
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
@@ -20,38 +21,20 @@ class App extends StatelessWidget {
         appBar: AppBar(
           title: Text('Complex List'),
         ),
-        body: HomePage(),
+        body: BlocProvider(
+          create: (context) => ListBloc(repository: Repository())..add(Fetch()),
+          child: HomePage(),
+        ),
       ),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final Repository _repository = Repository();
-  ListBloc _listBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _listBloc = ListBloc(repository: _repository);
-    _listBloc.dispatch(Fetch());
-  }
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _listBloc,
-      builder: (BuildContext context, ListState state) {
-        if (state is Loading) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+    return BlocBuilder<ListBloc, ListState>(
+      builder: (context, state) {
         if (state is Failure) {
           return Center(
             child: Text('Oops something went wrong!'),
@@ -68,21 +51,18 @@ class _HomePageState extends State<HomePage> {
               return ItemTile(
                 item: state.items[index],
                 onDeletePressed: (id) {
-                  _listBloc.dispatch(Delete(id: id));
+                  BlocProvider.of<ListBloc>(context).add(Delete(id: id));
                 },
               );
             },
             itemCount: state.items.length,
           );
         }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       },
     );
-  }
-
-  @override
-  void dispose() {
-    _listBloc.dispose();
-    super.dispose();
   }
 }
 

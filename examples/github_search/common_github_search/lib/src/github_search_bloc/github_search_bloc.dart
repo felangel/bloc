@@ -12,23 +12,16 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   GithubSearchBloc({@required this.githubRepository});
 
   @override
-  Stream<GithubSearchState> transform(
+  Stream<Transition<GithubSearchEvent, GithubSearchState>> transformEvents(
     Stream<GithubSearchEvent> events,
-    Stream<GithubSearchState> Function(GithubSearchEvent event) next,
+    Stream<Transition<GithubSearchEvent, GithubSearchState>> Function(
+      GithubSearchEvent event,
+    )
+        transitionFn,
   ) {
-    return super.transform(
-      (events as Observable<GithubSearchEvent>).debounceTime(
-        Duration(milliseconds: 500),
-      ),
-      next,
-    );
-  }
-
-  @override
-  void onTransition(
-    Transition<GithubSearchEvent, GithubSearchState> transition,
-  ) {
-    print(transition);
+    return events
+        .debounceTime(const Duration(milliseconds: 300))
+        .switchMap(transitionFn);
   }
 
   @override
@@ -43,6 +36,7 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
       } else {
         yield SearchStateLoading();
         try {
+          await Future<void>.delayed(Duration(seconds: 2));
           final results = await githubRepository.search(searchTerm);
           yield SearchStateSuccess(results.items);
         } catch (error) {

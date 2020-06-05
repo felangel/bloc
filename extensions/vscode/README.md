@@ -1,23 +1,23 @@
 # Bloc Extension for VSCode
 
-[![Build Status](https://travis-ci.org/felangel/bloc.svg?branch=master)](https://travis-ci.org/felangel/bloc)
+[![build](https://img.shields.io/github/workflow/status/felangel/bloc/build.svg?logo=github)](https://github.com/felangel/bloc/actions)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
 [![Star on GitHub](https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=Stars)](https://github.com/felangel/bloc)
 
 [![Version](https://vsmarketplacebadge.apphb.com/version-short/FelixAngelov.bloc.svg)](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
 [![Install](https://vsmarketplacebadge.apphb.com/installs-short/FelixAngelov.bloc.svg)](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
 [![Ratings](https://vsmarketplacebadge.apphb.com/rating-short/FelixAngelov.bloc.svg)](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
-[![Flutter.io](https://img.shields.io/badge/Flutter-Website-deepskyblue.svg)](https://flutter.io/docs/development/data-and-backend/state-mgmt/options#bloc--rx)
+[![Flutter Website](https://img.shields.io/badge/Flutter-Website-deepskyblue.svg)](https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true)](https://github.com/Solido/awesome-flutter#standard)
 [![Flutter Samples](https://img.shields.io/badge/Flutter-Samples-teal.svg?longCache=true)](http://fluttersamples.com)
-[![Gitter](https://img.shields.io/badge/gitter-chat-hotpink.svg)](https://gitter.im/bloc_package/Lobby)
+[![Discord](https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue)](https://discord.gg/Hc5KD3g)
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
 ## Introduction
 
-Bloc extends [VSCode](https://code.visualstudio.com/) with support for the [Bloc](https://felangel.github.io/bloc) library and provides tools for effectively creating Blocs for both [Flutter](https://flutter.io/) and [AngularDart](https://webdev.dartlang.org) apps.
+Bloc extends [VSCode](https://code.visualstudio.com/) with support for the [Bloc](https://bloclibrary.dev) library and provides tools for effectively creating Blocs for both [Flutter](https://flutter.dev/) and [AngularDart](https://angulardart.dev/) apps.
 
 ## Installation
 
@@ -37,56 +37,19 @@ Or you can right click on the directory in which you'd like to create the bloc a
 
 ## Snippets Usage
 
-### Bloc
-
-In a `.dart` file activate the snippet by typing `bloc` and hitting enter. Then you can name the bloc class and fill in the signature and implementation details by tabbing.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloc-snippet-usage.gif)
-
-### BlocEvent
-
-In a `.dart` file activate the snippet by typing `blocevent` and hitting enter. Then you can name the event class and fill in the signature and implementation details by tabbing.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocevent-snippet-usage.gif)
-
-### BlocState
-
-In a `.dart` file activate the snippet by typing `blocstate` and hitting enter. Then you can name the state class and fill in the signature and implementation details by tabbing.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocstate-snippet-usage.gif)
-
-### BlocBuilder
-
-In a `.dart` file activate the snippet by typing `blocbuilder` and hitting enter. Then you can fill in the implementation details by tabbing.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocbuilder-snippet-usage.gif)
-
-### BlocListener
-
-In a `.dart` file activate the snippet by typing `bloclistener` and hitting enter. Then you can fill in the implementation details by tabbing.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloclistener-snippet-usage.gif)
-
-### BlocListenerTree
-
-In a `.dart` file activate the snippet by typing `bloclistenertree` and hitting enter. Then you can fill in the implementation details by tabbing.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/bloclistenertree-snippet-usage.gif)
-
-### BlocProvider
-
-In a `.dart` file activate the snippet by typing `blocprovider` and hitting enter. Then you can fill in the implementation details by tabbing.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovider-snippet-usage.gif)
-
-### BlocProviderTree
-
-In a `.dart` file activate the snippet by typing `blocprovidertree` and hitting enter. Then you can fill in the implementation details by tabbing.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocprovidertree-snippet-usage.gif)
-
-### BlocDelegate
-
-In a `.dart` file, activate the snippet by typing `blocdelegate` and hitting enter. Then you can fill in the implementation details by tabbing.
-
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/blocdelegate-snippet-usage.gif)
+| Shortcut                  | Description                                          |
+| ------------------------- | ---------------------------------------------------- |
+| `bloc`                    | Creates a Bloc Class                                 |
+| `blocbuilder`             | Creates a BlocBuilder Widget                         |
+| `bloclistener`            | Creates a BlocListener Widget                        |
+| `multibloclistener`       | Creates a MultiBlocListener Widget                   |
+| `blocconsumer`            | Creates a BlocConsumer Widget                        |
+| `blocprovider`            | Creates a BlocProvider Widget                        |
+| `multiblocprovider`       | Creates a MultiBlocProvider Widget                   |
+| `repositoryprovider`      | Creates a RepositoryProvider Widget                  |
+| `multirepositoryprovider` | Creates a MultiRepositoryProvider Widget             |
+| `blocdelegate`            | Creates a BlocDelegate Class                         |
+| `contextbloc`             | Shortcut for `context.bloc<MyBloc>()`                |
+| `blocof`                  | Shortcut for `BlocProvider.of<MyBloc>()`             |
+| `contextrepository`       | Shortcut for `context.repository<MyRepository>()`    |
+| `repositoryof`            | Shortcut for `RepositoryProvider.of<MyRepository>()` |

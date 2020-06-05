@@ -2,9 +2,13 @@
 
   - [Getting Started](gettingstarted.md)
   - [Why Bloc?](whybloc.md)
-  - [Core Concepts](coreconcepts.md)
+  - Core Concepts
+    - [bloc](coreconcepts.md)
+    - [flutter_bloc](flutterbloccoreconcepts.md)
   - [Architecture](architecture.md)
   - [Testing](testing.md)
+  - [Naming Conventions](blocnamingconventions.md)
+  - [FAQs](faqs.md)
 
 - Tutorials
 
@@ -16,6 +20,7 @@
     - [Weather](flutterweathertutorial.md)
     - [Todos](fluttertodostutorial.md)
     - [Firebase Login](flutterfirebaselogintutorial.md)
+    - [Firestore Todos](flutterfirestoretodostutorial.md)
   - AngularDart
     - [Counter](angularcountertutorial.md)
   - Flutter + AngularDart
@@ -36,6 +41,6 @@
     - [VSCode](blocvscodeextension.md)
 
 - API Reference
-  - [bloc](https://pub.dartlang.org/documentation/bloc/latest/bloc/bloc-library.html)
-  - [flutter_bloc](https://pub.dartlang.org/documentation/flutter_bloc/latest/flutter_bloc/flutter_bloc-library.html)
-  - [angular_bloc](https://pub.dartlang.org/documentation/angular_bloc/latest/angular_dart/angular_dart-library.html)
+  - [bloc](https://pub.dev/documentation/bloc/latest/bloc/bloc-library.html)
+  - [flutter_bloc](https://pub.dev/documentation/flutter_bloc/latest/flutter_bloc/flutter_bloc-library.html)
+  - [angular_bloc](https://pub.dev/documentation/angular_bloc/latest/angular_dart/angular_dart-library.html)

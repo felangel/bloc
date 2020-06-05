@@ -1,3 +1,140 @@
+# 3.6.0
+
+Update latest package versions:
+
+- bloc_test -> ^5.1.0
+- hydrated_bloc -> ^4.0.0
+- sealed_flutter_bloc -> ^4.0.0
+
+# 3.5.0
+
+Update latest package versions:
+
+- bloc_test -> ^5.0.0
+- equatable -> ^1.1.1
+- angular_bloc -> ^4.0.0
+- bloc -> ^4.0.0
+- flutter_bloc -> ^4.0.0
+
+# 3.4.0
+
+Update snippets to support
+
+- `context.bloc<MyBloc>()`
+- `context.repository<MyRepository>()`
+
+# 3.3.0
+
+Update latest package versions:
+
+- bloc_test -> ^4.0.0
+- equatable -> ^1.1.0
+- flutter_bloc -> ^3.2.0
+
+# 3.2.0
+
+Update bloc generator to use `parts` (removes barrel file)
+Update dependency analyzer to handle `any` version
+
+# 3.1.0
+
+Update to support flutter_bloc `v3.1.0`
+Update Snippets for:
+
+- `BlocConsumer` (blocconsumer)
+- `BlocProvider.of` (blocof)
+- `RepositoryProvider.of` (repositoryof)
+
+# 3.0.1
+
+Hotfix for `command 'extension.new-bloc' not found`
+
+# 3.0.0
+
+Update to support bloc `v3.0.0`
+
+# 2.2.0
+
+Update snippets to support flutter_bloc `v2.1.0`
+
+# 2.1.0
+
+Update to support equatable `v1.0.0`
+
+# 2.0.0
+
+Update to support bloc `v2.0.0`
+
+# 1.0.0
+
+Update to support bloc `v1.0.0`
+
+# 0.13.0
+
+Update Snippets to support changes in bloc `v0.16.0`
+
+# 0.12.2
+
+Add Update Action to automatically update outdated dependencies
+
+# 0.12.1
+
+Add detection for outdated dependencies in workspace.
+
+# 0.12.0
+
+Update Snippets and New Bloc to support changes in equatable `v0.6.0`
+
+# 0.11.1
+
+`Equatable` enhancement to address `implicit-dynamic` warning ([#463](https://github.com/felangel/bloc/pull/463)).
+
+# 0.11.0
+
+Update Snippets to support changes in flutter_bloc `v0.20.0`
+
+# 0.10.1
+
+- Minor Documentation Updates
+
+# 0.10.0
+
+Update Snippets for:
+
+- `RepositoryProvider`
+- `MultiRepositoryProvider`
+- `MultiBlocProvider`
+- `MultiBlocListener`
+
+to support changes in flutter_bloc `v0.19.0`
+
+# 0.9.0
+
+Update Snippets for:
+
+- `ImmutableProvider`
+- `ImmutableProviderTree`
+
+to support changes in flutter_bloc `v0.18.0`
+
+# 0.8.0
+
+Update Snippets for:
+
+- `BlocProvider`
+- `BlocProviderTree`
+
+to support changes in flutter_bloc `v0.17.0`
+
+# 0.7.0
+
+Update Snippets for:
+
+- `BlocProvider`
+- `BlocProviderTree`
+
+to support changes in flutter_bloc `v0.16.0`
+
 # 0.6.2
 
 Updated `BlocDelegate` snippet to support changes in bloc `v0.13.0`

@@ -1,3 +1,5 @@
+// This example is one-pager for the [angular_bloc](https://github.com/felangel/bloc/tree/master/examples/angular_counter) example.
+
 import 'dart:async';
 
 import 'package:angular/angular.dart';
@@ -22,16 +24,17 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   @override
   void onTransition(Transition<CounterEvent, int> transition) {
     print(transition);
+    super.onTransition(transition);
   }
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
@@ -56,14 +59,14 @@ class CounterPageComponent implements OnInit, OnDestroy {
 
   @override
   void ngOnDestroy() {
-    counterBloc.dispose();
+    counterBloc.close();
   }
 
   void increment() {
-    counterBloc.dispatch(CounterEvent.increment);
+    counterBloc.add(CounterEvent.increment);
   }
 
   void decrement() {
-    counterBloc.dispatch(CounterEvent.decrement);
+    counterBloc.add(CounterEvent.decrement);
   }
 }

@@ -1,5 +1,4 @@
 import 'package:angular/angular.dart';
-import 'package:angular_components/angular_components.dart';
 
 import 'package:angular_bloc/angular_bloc.dart';
 
@@ -9,7 +8,6 @@ import './counter_bloc.dart';
   selector: 'counter-page',
   templateUrl: 'counter_page_component.html',
   styleUrls: ['counter_page_component.css'],
-  directives: [MaterialFabComponent],
   providers: [ClassProvider(CounterBloc)],
   pipes: [BlocPipe],
 )
@@ -20,14 +18,14 @@ class CounterPageComponent implements OnDestroy {
 
   @override
   void ngOnDestroy() {
-    counterBloc.dispose();
+    counterBloc.close();
   }
 
   void increment() {
-    counterBloc.dispatch(CounterEvent.increment);
+    counterBloc.add(CounterEvent.increment);
   }
 
   void decrement() {
-    counterBloc.dispatch(CounterEvent.decrement);
+    counterBloc.add(CounterEvent.decrement);
   }
 }

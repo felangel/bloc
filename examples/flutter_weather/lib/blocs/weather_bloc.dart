@@ -8,27 +8,32 @@ import 'package:flutter_weather/repositories/repositories.dart';
 import 'package:flutter_weather/models/models.dart';
 
 abstract class WeatherEvent extends Equatable {
-  WeatherEvent([List props = const []]) : super(props);
+  const WeatherEvent();
 }
 
 class FetchWeather extends WeatherEvent {
   final String city;
 
-  FetchWeather({@required this.city})
-      : assert(city != null),
-        super([city]);
+  const FetchWeather({@required this.city}) : assert(city != null);
+
+  @override
+  List<Object> get props => [city];
 }
 
 class RefreshWeather extends WeatherEvent {
   final String city;
 
-  RefreshWeather({@required this.city})
-      : assert(city != null),
-        super([city]);
+  const RefreshWeather({@required this.city}) : assert(city != null);
+
+  @override
+  List<Object> get props => [city];
 }
 
 abstract class WeatherState extends Equatable {
-  WeatherState([List props = const []]) : super(props);
+  const WeatherState();
+
+  @override
+  List<Object> get props => [];
 }
 
 class WeatherEmpty extends WeatherState {}
@@ -38,9 +43,10 @@ class WeatherLoading extends WeatherState {}
 class WeatherLoaded extends WeatherState {
   final Weather weather;
 
-  WeatherLoaded({@required this.weather})
-      : assert(weather != null),
-        super([weather]);
+  const WeatherLoaded({@required this.weather}) : assert(weather != null);
+
+  @override
+  List<Object> get props => [weather];
 }
 
 class WeatherError extends WeatherState {}
@@ -57,22 +63,28 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   @override
   Stream<WeatherState> mapEventToState(WeatherEvent event) async* {
     if (event is FetchWeather) {
-      yield WeatherLoading();
-      try {
-        final Weather weather = await weatherRepository.getWeather(event.city);
-        yield WeatherLoaded(weather: weather);
-      } catch (_) {
-        yield WeatherError();
-      }
+      yield* _mapFetchWeatherToState(event);
+    } else if (event is RefreshWeather) {
+      yield* _mapRefreshWeatherToState(event);
     }
+  }
 
-    if (event is RefreshWeather) {
-      try {
-        final Weather weather = await weatherRepository.getWeather(event.city);
-        yield WeatherLoaded(weather: weather);
-      } catch (_) {
-        yield currentState;
-      }
+  Stream<WeatherState> _mapFetchWeatherToState(FetchWeather event) async* {
+    yield WeatherLoading();
+    try {
+      final Weather weather = await weatherRepository.getWeather(event.city);
+      yield WeatherLoaded(weather: weather);
+    } catch (_) {
+      yield WeatherError();
+    }
+  }
+
+  Stream<WeatherState> _mapRefreshWeatherToState(RefreshWeather event) async* {
+    try {
+      final Weather weather = await weatherRepository.getWeather(event.city);
+      yield WeatherLoaded(weather: weather);
+    } catch (_) {
+      yield state;
     }
   }
 }

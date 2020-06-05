@@ -1,39 +1,28 @@
 # Getting Started
 
-?> In order to start using bloc you must have the [Dart SDK](https://www.dartlang.org/install) installed on your machine.
+?> In order to start using bloc you must have the [Dart SDK](https://dart.dev/get-dart) installed on your machine.
 
 ## Overview
 
 Bloc consists of several pub packages:
 
-- [bloc](https://pub.dartlang.org/packages/bloc) - Core bloc library
-- [flutter_bloc](https://pub.dartlang.org/packages/flutter_bloc) - Powerful Flutter Widgets built to work with bloc in order to build fast, reactive mobile applications.
-- [angular_bloc](https://pub.dartlang.org/packages/angular_bloc) - Powerful Angular Components built to work with bloc in order to build fast, reactive web applications.
+- [bloc](https://pub.dev/packages/bloc) - Core bloc library
+- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Powerful Flutter Widgets built to work with bloc in order to build fast, reactive mobile applications.
+- [angular_bloc](https://pub.dev/packages/angular_bloc) - Powerful Angular Components built to work with bloc in order to build fast, reactive web applications.
 
 ## Installation
 
 The first thing we need to do is add the bloc package to our `pubspec.yaml` as a dependency.
 
-```yaml
-dependencies:
-  bloc: ^0.14.0
-```
+[pubspec.yaml](_snippets/getting_started/bloc_pubspec.yaml.md ':include')
 
-For a [Flutter](https://flutter.io) application, we also need to add the flutter_bloc package to our `pubspec.yaml` as a dependency.
+For a [Flutter](https://flutter.dev/) application, we also need to add the flutter_bloc package to our `pubspec.yaml` as a dependency.
 
-```yaml
-dependencies:
-  bloc: ^0.14.0
-  flutter_bloc: ^0.14.0
-```
+[pubspec.yaml](_snippets/getting_started/flutter_bloc_pubspec.yaml.md ':include')
 
-For an [AngularDart](https://webdev.dartlang.org/angular) application, we also need to add the angular_bloc package to our `pubspec.yaml` as a dependency.
+For an [AngularDart](https://angulardart.dev/) application, we also need to add the angular_bloc package to our `pubspec.yaml` as a dependency.
 
-```yaml
-dependencies:
-  bloc: ^0.14.0
-  angular_bloc: ^0.9.0
-```
+[pubspec.yaml](_snippets/getting_started/angular_bloc_pubspec.yaml.md ':include')
 
 Next we need to install bloc.
 
@@ -47,20 +36,12 @@ Next we need to install bloc.
 
 Now that we have successfully installed bloc, we can create our `main.dart` and import bloc.
 
-```dart
-import 'package:bloc/bloc.dart';
-```
+[main.dart](_snippets/getting_started/bloc_main.dart.md ':include')
 
 For a Flutter application we can also import flutter_bloc.
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-```
+[main.dart](_snippets/getting_started/flutter_bloc_main.dart.md ':include')
 
 For an AngularDart application we can also import angular_bloc.
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:angular_bloc/angular_bloc.dart';
-```
+[main.dart](_snippets/getting_started/angular_bloc_main.dart.md ':include')

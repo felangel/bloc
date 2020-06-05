@@ -1,3 +1,6 @@
+part of 'async_bloc.dart';
+
+@immutable
 class AsyncEvent {
   @override
   bool operator ==(

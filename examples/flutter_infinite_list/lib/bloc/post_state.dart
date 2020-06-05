@@ -1,39 +1,38 @@
 import 'package:equatable/equatable.dart';
-
 import 'package:flutter_infinite_list/models/models.dart';
 
 abstract class PostState extends Equatable {
-  PostState([List props = const []]) : super(props);
-}
+  const PostState();
 
-class PostUninitialized extends PostState {
   @override
-  String toString() => 'PostUninitialized';
+  List<Object> get props => [];
 }
 
-class PostError extends PostState {
-  @override
-  String toString() => 'PostError';
-}
+class PostInitial extends PostState {}
 
-class PostLoaded extends PostState {
+class PostFailure extends PostState {}
+
+class PostSuccess extends PostState {
   final List<Post> posts;
   final bool hasReachedMax;
 
-  PostLoaded({
+  const PostSuccess({
     this.posts,
     this.hasReachedMax,
-  }) : super([posts, hasReachedMax]);
+  });
 
-  PostLoaded copyWith({
+  PostSuccess copyWith({
     List<Post> posts,
     bool hasReachedMax,
   }) {
-    return PostLoaded(
+    return PostSuccess(
       posts: posts ?? this.posts,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
+
+  @override
+  List<Object> get props => [posts, hasReachedMax];
 
   @override
   String toString() =>

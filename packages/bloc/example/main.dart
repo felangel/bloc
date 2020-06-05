@@ -14,12 +14,12 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       case CounterEvent.decrement:
         // Simulating Network Latency
         await Future<void>.delayed(Duration(seconds: 1));
-        yield currentState - 1;
+        yield state - 1;
         break;
       case CounterEvent.increment:
         // Simulating Network Latency
         await Future<void>.delayed(Duration(milliseconds: 500));
-        yield currentState + 1;
+        yield state + 1;
         break;
       default:
         throw Exception('unhandled event: $event');
@@ -30,20 +30,20 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onEvent(Bloc bloc, Object event) {
-    super.onEvent(bloc, event);
     print('bloc: ${bloc.runtimeType}, event: $event');
+    super.onEvent(bloc, event);
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
     print('bloc: ${bloc.runtimeType}, transition: $transition');
+    super.onTransition(bloc, transition);
   }
 
   @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
+  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
     print('bloc: ${bloc.runtimeType}, error: $error');
+    super.onError(bloc, error, stackTrace);
   }
 }
 
@@ -52,17 +52,18 @@ void main() {
 
   final counterBloc = CounterBloc();
 
-  counterBloc.dispatch(CounterEvent.increment);
-  counterBloc.dispatch(CounterEvent.increment);
-  counterBloc.dispatch(CounterEvent.increment);
+  counterBloc.add(CounterEvent.increment);
+  counterBloc.add(CounterEvent.increment);
+  counterBloc.add(CounterEvent.increment);
 
-  counterBloc.dispatch(CounterEvent.decrement);
-  counterBloc.dispatch(CounterEvent.decrement);
-  counterBloc.dispatch(CounterEvent.decrement);
+  counterBloc.add(CounterEvent.decrement);
+  counterBloc.add(CounterEvent.decrement);
+  counterBloc.add(CounterEvent.decrement);
 
-  counterBloc.dispatch(null); // Triggers Exception
+  counterBloc.add(null); // Triggers Exception
 
-  // The exception triggers `SimpleBlocDelegate.onError` but does not impact bloc functionality.
-  counterBloc.dispatch(CounterEvent.increment);
-  counterBloc.dispatch(CounterEvent.decrement);
+  // The exception triggers `SimpleBlocDelegate.onError`
+  // but does not impact bloc functionality.
+  counterBloc.add(CounterEvent.increment);
+  counterBloc.add(CounterEvent.decrement);
 }

@@ -1,0 +1,37 @@
+name: bloc
+
+on:
+  push:
+    paths:
+      - "packages/bloc/**"
+      - ".github/workflows/bloc.yaml"
+
+  pull_request:
+    paths:
+      - "packages/bloc/**"
+      - ".github/workflows/bloc.yaml"
+
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: packages/bloc
+    runs-on: ubuntu-latest
+    container:
+      image: google/dart:2.8.1
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: pub get
+      - name: Format
+        run: dartfmt --dry-run --set-exit-if-changed .
+      - name: Analyze
+        run: dartanalyzer --fatal-infos --fatal-warnings .
+      - name: Run tests
+        run: pub run test_coverage
+      - name: Check Code Coverage
+        uses: ChicagoFlutter/lcov-cop@v1.0.0
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

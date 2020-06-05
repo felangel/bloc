@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:flutter_infinite_list/bloc/bloc.dart';
 import 'package:flutter_infinite_list/models/models.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
@@ -20,7 +19,11 @@ class App extends StatelessWidget {
         appBar: AppBar(
           title: Text('Posts'),
         ),
-        body: HomePage(),
+        body: BlocProvider(
+          create: (context) =>
+              PostBloc(httpClient: http.Client())..add(PostFetched()),
+          child: HomePage(),
+        ),
       ),
     );
   }
@@ -33,30 +36,26 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _scrollController = ScrollController();
-  final PostBloc _postBloc = PostBloc(httpClient: http.Client());
   final _scrollThreshold = 200.0;
+  PostBloc _postBloc;
 
-  _HomePageState() {
+  @override
+  void initState() {
+    super.initState();
     _scrollController.addListener(_onScroll);
-    _postBloc.dispatch(Fetch());
+    _postBloc = BlocProvider.of<PostBloc>(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _postBloc,
-      builder: (BuildContext context, PostState state) {
-        if (state is PostUninitialized) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (state is PostError) {
+    return BlocBuilder<PostBloc, PostState>(
+      builder: (context, state) {
+        if (state is PostFailure) {
           return Center(
             child: Text('failed to fetch posts'),
           );
         }
-        if (state is PostLoaded) {
+        if (state is PostSuccess) {
           if (state.posts.isEmpty) {
             return Center(
               child: Text('no posts'),
@@ -74,13 +73,16 @@ class _HomePageState extends State<HomePage> {
             controller: _scrollController,
           );
         }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }
 
   @override
   void dispose() {
-    _postBloc.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -88,7 +90,7 @@ class _HomePageState extends State<HomePage> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= _scrollThreshold) {
-      _postBloc.dispatch(Fetch());
+      _postBloc.add(PostFetched());
     }
   }
 }

@@ -1,26 +1,24 @@
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+part of 'authentication_bloc.dart';
 
-@immutable
 abstract class AuthenticationState extends Equatable {
-  AuthenticationState([List props = const []]) : super(props);
-}
+  const AuthenticationState();
 
-class Uninitialized extends AuthenticationState {
   @override
-  String toString() => 'Uninitialized';
+  List<Object> get props => [];
 }
 
-class Authenticated extends AuthenticationState {
+class AuthenticationInitial extends AuthenticationState {}
+
+class AuthenticationSuccess extends AuthenticationState {
   final String displayName;
 
-  Authenticated(this.displayName) : super([displayName]);
+  const AuthenticationSuccess(this.displayName);
+
+  @override
+  List<Object> get props => [displayName];
 
   @override
   String toString() => 'Authenticated { displayName: $displayName }';
 }
 
-class Unauthenticated extends AuthenticationState {
-  @override
-  String toString() => 'Unauthenticated';
-}
+class AuthenticationFailure extends AuthenticationState {}

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'ticker/ticker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_with_stream/bloc/bloc.dart';
+import 'package:flutter_bloc_with_stream/bloc/ticker_bloc.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,48 +10,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: MyHomePage(),
+      home: BlocProvider(
+        create: (context) => TickerBloc(Ticker()),
+        child: MyHomePage(),
+      ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  Ticker _ticker;
-  TickerBloc _tickerBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _ticker = Ticker();
-    _tickerBloc = TickerBloc(_ticker);
-  }
-
+class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Bloc with Streams'),
       ),
-      body: BlocBuilder(
-        bloc: _tickerBloc,
-        builder: (BuildContext context, TickerState state) {
-          if (state is Initial) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Press the floating button to start',
-                  ),
-                ],
-              ),
-            );
-          } else if (state is Update) {
+      body: BlocBuilder<TickerBloc, TickerState>(
+        builder: (context, state) {
+          if (state is TickerTickSuccess) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -61,21 +37,25 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             );
           }
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Press the floating button to start',
+                ),
+              ],
+            ),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _tickerBloc.dispatch(StartTicker());
+          BlocProvider.of<TickerBloc>(context).add(TickerStarted());
         },
         tooltip: 'Start',
         child: Icon(Icons.timer),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _tickerBloc.dispose();
-    super.dispose();
   }
 }

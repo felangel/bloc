@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import * as changeCase from "change-case";
 import * as mkdirp from "mkdirp";
+
 import {
   commands,
   ExtensionContext,
@@ -10,15 +11,17 @@ import {
   Uri,
   window
 } from "vscode";
-import { existsSync, lstatSync, writeFile, appendFile } from "fs";
+import { existsSync, lstatSync, writeFile } from "fs";
 import {
-  getBarrelTemplate,
   getBlocEventTemplate,
   getBlocStateTemplate,
   getBlocTemplate
 } from "./templates";
+import { analyzeDependencies } from "./utils";
 
 export function activate(_context: ExtensionContext) {
+  analyzeDependencies();
+
   commands.registerCommand("extension.new-bloc", async (uri: Uri) => {
     const blocName = await promptForBlocName();
     if (_.isNil(blocName) || blocName.trim() === "") {
@@ -103,8 +106,7 @@ async function generateBlocCode(
   await Promise.all([
     createBlocEventTemplate(blocName, targetDirectory, useEquatable),
     createBlocStateTemplate(blocName, targetDirectory, useEquatable),
-    createBlocTemplate(blocName, targetDirectory),
-    createBarrelTemplate(blocName, targetDirectory)
+    createBlocTemplate(blocName, targetDirectory, useEquatable),    
   ]);
 }
 
@@ -171,14 +173,14 @@ function createBlocStateTemplate(
   });
 }
 
-function createBlocTemplate(blocName: string, targetDirectory: string) {
+function createBlocTemplate(blocName: string, targetDirectory: string, useEquatable: boolean) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
   const targetPath = `${targetDirectory}/bloc/${snakeCaseBlocName}_bloc.dart`;
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseBlocName}_bloc.dart already exists`);
   }
   return new Promise(async (resolve, reject) => {
-    writeFile(targetPath, getBlocTemplate(blocName), "utf8", error => {
+    writeFile(targetPath, getBlocTemplate(blocName, useEquatable), "utf8", error => {
       if (error) {
         reject(error);
         return;
@@ -188,26 +190,4 @@ function createBlocTemplate(blocName: string, targetDirectory: string) {
   });
 }
 
-function createBarrelTemplate(blocName: string, targetDirectory: string) {
-  const targetPath = `${targetDirectory}/bloc/bloc.dart`;
-  if (existsSync(targetPath)) {
-    return new Promise((resolve, reject) => {
-      appendFile(targetPath, getBarrelTemplate(blocName), "utf8", error => {
-        if (error) {
-          reject(error);
-          return;
-        }
-        resolve();
-      });
-    });
-  }
-  return new Promise(async (resolve, reject) => {
-    writeFile(targetPath, getBarrelTemplate(blocName), "utf8", error => {
-      if (error) {
-        reject(error);
-        return;
-      }
-      resolve();
-    });
-  });
-}
+

@@ -1,3 +1,85 @@
+# 4.0.0
+
+- Remove `rxdart` dependency ([#821](https://github.com/felangel/bloc/pull/821))
+- Replace `transformStates` with `transformTransitions` ([#840](https://github.com/felangel/bloc/pull/840))
+- Fix null `stackTrace` in `onError` ([#963](https://github.com/felangel/bloc/pull/963))
+- Fix remove duplicate terminating state
+- Add `mustCallSuper` to `onEvent`, `onTransition`, and `onError`
+- Surface Unhandled Bloc Errors in Debug Mode
+- Internal testing improvements
+
+# 4.0.0-dev.4
+
+- Surface Unhandled Bloc Errors in Debug Mode
+- Internal testing improvements
+
+# 4.0.0-dev.3
+
+- Add `mustCallSuper` to `onEvent`, `onTransition`, and `onError`
+
+# 4.0.0-dev.2
+
+- Fix remove duplicate terminating state
+
+# 4.0.0-dev.1
+
+- Remove `rxdart` dependency ([#821](https://github.com/felangel/bloc/pull/821))
+- Replace `transformStates` with `transformTransitions` ([#840](https://github.com/felangel/bloc/pull/840))
+- Fix null `stackTrace` in `onError` ([#963](https://github.com/felangel/bloc/pull/963))
+
+# 3.0.0
+
+- Upgrade to `rxdart ^0.23.0`
+- Upgrade to `Dart >= 2.6.0`
+
+# 3.0.0-dev.1
+
+- Upgrade to `rxdart ^0.23.0`
+
+# 2.0.0
+
+- Allow blocs to finish processing pending events on `close` ([#639](https://github.com/felangel/bloc/issues/639))
+- Documentation Updates
+
+# 1.0.1
+
+- Bugfix: Exceptions thrown in `onTransition` are passed to `onError` and should not break bloc functionality ([#641](https://github.com/felangel/bloc/issues/641))
+- Adhere to [effective dart](https://dart.dev/guides/language/effective-dart) ([#561](https://github.com/felangel/bloc/issues/561))
+- Documentation and Example Updates
+
+# 1.0.0
+
+- `dispatch` and `dispose` removed
+- Documentation Updates
+
+# 0.16.1
+
+- Minor Documentation Updates
+
+# 0.16.0
+
+- Bloc extends `Stream<State>` ([#558](https://github.com/felangel/bloc/issues/558))
+  - `bloc.state.listen` -> `bloc.listen`
+  - `bloc.currentState` -> `bloc.state`
+- Bloc implements `Sink<Event>` ([#558](https://github.com/felangel/bloc/issues/558))
+  - `dispatch` deprecated in favor of `add`
+  - `dispose` deprecated in favor of `close`
+- Documentation and Example Updates
+
+# 0.15.0
+
+- Removed Bloc `event` Stream ([#326](https://github.com/felangel/bloc/issues/326))
+- Renamed `transform` to `transformEvents`
+- Added `transformStates` ([#382](https://github.com/felangel/bloc/issues/382))
+
+# 0.14.4
+
+Additional Dependency and Documentation Updates.
+
+# 0.14.3
+
+Dependency and Documentation Updates.
+
 # 0.14.2
 
 - Deprecated Bloc `event` Stream ([#326](https://github.com/felangel/bloc/issues/326))

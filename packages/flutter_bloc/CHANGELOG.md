@@ -1,3 +1,146 @@
+# 4.0.0
+
+- Update to `bloc: ^4.0.0`
+- Update to `provider: ^4.0.5`
+
+# 4.0.0-dev.4
+
+- Update to `bloc: ^4.0.0-dev.4`
+
+# 4.0.0-dev.3
+
+- Update to `bloc: ^4.0.0-dev.3`
+
+# 4.0.0-dev.2
+
+- Update to `bloc: ^4.0.0-dev.2`
+
+# 4.0.0-dev.1
+
+- Update to `bloc: ^4.0.0-dev.1`
+
+# 3.2.0
+
+- Fix type inference for: `MultiBlocProvider`, `MultiRepositoryProvider`, `MultiBlocListener` ([#773](https://github.com/felangel/bloc/pull/773))
+- Fix swallowed exceptions within `BlocProvider` and `RepositoryProvider` ([#807](https://github.com/felangel/bloc/issues/807))
+- Add `BlocProviderExtension` and `RepositoryProviderExtension` on `BuildContext` ([#608](https://github.com/felangel/bloc/issues/608))
+
+# 3.1.0
+
+- Expose lazy parameter on `RepositoryProvider` and `BlocProvider` ([#749](https://github.com/felangel/bloc/pull/749))
+- Updated to `provider: ^4.0.1` ([#748](https://github.com/felangel/bloc/issues/748))
+- Add `BlocConsumer` ([#545](https://github.com/felangel/bloc/issues/545))
+- Export `bloc` as part of `flutter_bloc`
+
+# 3.0.0
+
+- Updated to `bloc: ^3.0.0` ([#700](https://github.com/felangel/bloc/pull/700))
+- Updated to `flutter >=1.12.1` ([#700](https://github.com/felangel/bloc/pull/700))
+- Updated to `provider: ^4.0.0` ([#700](https://github.com/felangel/bloc/pull/700), [#734](https://github.com/felangel/bloc/pull/734))
+- Revert `BlocBuilder` and `BlocListener` condition behavior to set `previousState` to the previous bloc state ([#709](https://github.com/felangel/bloc/issues/709))
+
+# 3.0.0-dev.1
+
+- Updated to `bloc: ^3.0.0-dev.1`
+
+# 2.1.1
+
+- Fix internal analysis warnings
+- Enforce provider `^3.2.0`
+
+# 2.1.0
+
+- Deprecate `builder` in `BlocProvider` in favor of `create` to align with `provider`.
+- Deprecate `builder` in `RepositoryProvider` in favor of `create` to align with `provider`.
+
+# 2.0.1
+
+- Fix `BlocBuilder` and `BlocListener` condition behavior to set `previousState` to the previous state used by `BlocBuilder`/`BlocListener` instead of the previous state of the `bloc`.
+- Minor Documentation Updates
+
+# 2.0.0
+
+- Updated to `bloc: ^2.0.0` and Documentation Updates
+- Adhere to [effective dart](https://dart.dev/guides/language/effective-dart) ([#561](https://github.com/felangel/bloc/issues/561))
+
+# 1.0.0
+
+Updated to `bloc: ^1.0.0` and Documentation Updates
+
+# 0.22.1
+
+Minor Bugfixes and Documentation Updates
+
+# 0.22.0
+
+Updated to `bloc: ^0.16.0` and Documentation Updates
+
+# 0.21.0
+
+Updated to `bloc: ^0.15.0` and Documentation Updates
+
+# 0.20.1
+
+- Minor Updates to Package Dependencies
+- Documentation Updates
+
+# 0.20.0
+
+- Add Automatic Bloc Lookup to `BlocBuilder` and `BlocListener` ([#415](https://github.com/felangel/bloc/pull/415))
+- Support for `BlocProvider` instantiation and look-up within the same `BuildContext` ([#415](https://github.com/felangel/bloc/pull/415))
+- Documentation Updates
+
+# 0.19.1
+
+Add optional `condition` to `BlocListener` to control listener calls ([#406](https://github.com/felangel/bloc/pull/406)) and Documentation Updates
+
+# 0.19.0
+
+Addresses [#354](https://github.com/felangel/bloc/issues/354)
+
+#### BlocProvider
+
+- Refactor `BlocProvider` to extend `Provider`
+- Rename `BlocProviderTree` to `MultiBlocProvider`
+
+#### ImmutableProvider
+
+- Refactor `ImmutableProvider` to extend `Provider`
+- Rename `ImmutableProvider` to `RepositoryProvider`
+- Rename `ImmutableProviderTree` to `MultiRepositoryProvider`
+
+#### BlocListener
+
+- Rename `BlocListenerTree` to `MultiBlocListener`
+
+#### Documentation
+
+- Inline documentation updates/improvements
+
+# 0.18.3
+
+Fix `BlocProvider` bug where `copyWith` does not preserve `dispose` value ([#376](https://github.com/felangel/bloc/issues/376)).
+
+# 0.18.2
+
+Fix `BlocListener` bug where `listener` gets called even when no state change occurs ([#368](https://github.com/felangel/bloc/issues/368)).
+
+# 0.18.1
+
+Minor Documentation Updates
+
+# 0.18.0
+
+Expose `ImmutableProvider` & `ImmutableProviderTree` to enable developers to provide immutable values, such as repositories, throughout the widget tree ([#364](https://github.com/felangel/bloc/pull/364)) and Documentation Updates
+
+# 0.17.0
+
+Update `BlocProvider` to automatically `dispose` the provided bloc ([#349](https://github.com/felangel/bloc/pull/349)) and Documentation Updates
+
+# 0.16.0
+
+Update `BlocProvider` to expose `builder` and `dispose` ([#344](https://github.com/felangel/bloc/pull/344) and [#347](https://github.com/felangel/bloc/pull/347)) and Documentation Updates
+
 # 0.15.1
 
 Fix `null` initial `previousState` in `BlocBuilder` `condition` ([#328](https://github.com/felangel/bloc/issues/328)) and Documentation Updates

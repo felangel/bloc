@@ -1,35 +1,33 @@
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+part of 'my_form_bloc.dart';
 
-@immutable
 abstract class MyFormEvent extends Equatable {
-  MyFormEvent([List props = const []]) : super(props);
+  const MyFormEvent();
+
+  @override
+  List<Object> get props => [];
+
+  @override
+  bool get stringify => true;
 }
 
 class EmailChanged extends MyFormEvent {
   final String email;
 
-  EmailChanged({@required this.email}) : super([email]);
+  const EmailChanged({@required this.email});
 
   @override
-  String toString() => 'EmailChanged { email: $email }';
+  List<Object> get props => [email];
 }
 
 class PasswordChanged extends MyFormEvent {
   final String password;
 
-  PasswordChanged({@required this.password}) : super([password]);
+  const PasswordChanged({@required this.password});
 
   @override
-  String toString() => 'PasswordChanged { password: $password }';
+  List<Object> get props => [password];
 }
 
-class FormSubmitted extends MyFormEvent {
-  @override
-  String toString() => 'FormSubmitted';
-}
+class FormSubmitted extends MyFormEvent {}
 
-class FormReset extends MyFormEvent {
-  @override
-  String toString() => 'FormReset';
-}
+class FormReset extends MyFormEvent {}

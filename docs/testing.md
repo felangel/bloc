@@ -6,110 +6,40 @@ For the sake of simplicity, let's write tests for the `CounterBloc` we created i
 
 To recap, the `CounterBloc` implementation looks like
 
-```dart
-enum CounterEvent { increment, decrement }
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield currentState - 1;
-        break;
-      case CounterEvent.increment:
-        yield currentState + 1;
-        break;
-    }
-  }
-}
-```
+[counter_bloc.dart](_snippets/testing/counter_bloc.dart.md ':include')
 
 Before we start writing our tests we're going to need to add a testing framework to our dependencies.
 
-We need to add [test](https://pub.dartlang.org/packages/test) to our `pubspec.yaml`.
+We need to add [test](https://pub.dev/packages/test) and [bloc_test](https://pub.dev/packages/bloc_test) to our `pubspec.yaml`.
 
-```yaml
-dev_dependencies:
-  test: ">=1.3.0 <2.0.0"
-```
+[pubspec.yaml](_snippets/testing/pubspec.yaml.md ':include')
 
 Let's get started by creating the file for our `CounterBloc` Tests, `counter_bloc_test.dart` and importing the test package.
 
-```dart
-import 'package:test/test.dart';
-```
+[counter_bloc_test.dart](_snippets/testing/counter_bloc_test_imports.dart.md ':include')
 
 Next, we need to create our `main` as well as our test group.
 
-```dart
-void main() {
-    group('CounterBloc', () {
-
-    });
-}
-```
+[counter_bloc_test.dart](_snippets/testing/counter_bloc_test_main.dart.md ':include')
 
 ?> **Note**: groups are for organizing individual tests as well as for creating a context in which you can share a common `setUp` and `tearDown` across all of the individual tests.
 
 Let's start by creating an instance of our `CounterBloc` which will be used across all of our tests.
 
-```dart
-group('CounterBloc', () {
-    CounterBloc counterBloc;
-
-    setUp(() {
-        counterBloc = CounterBloc();
-    });
-});
-```
+[counter_bloc_test.dart](_snippets/testing/counter_bloc_test_setup.dart.md ':include')
 
 Now we can start writing our individual tests.
 
-```dart
-group('CounterBloc', () {
-    CounterBloc counterBloc;
-
-    setUp(() {
-        counterBloc = CounterBloc();
-    });
-
-    test('initial state is 0', () {
-        expect(counterBloc.initialState, 0);
-    });
-});
-```
+[counter_bloc_test.dart](_snippets/testing/counter_bloc_test_initial_state.dart.md ':include')
 
 ?> **Note**: We can run all of our tests with the `pub run test` command.
 
-At this point we should have our first passing test! Now let's write a more complex test.
+At this point we should have our first passing test! Now let's write a more complex test using the [bloc_test](https://pub.dev/packages/bloc_test) package.
 
-```dart
-test('single Increment event updates state to 1', () {
-    final List<int> expected = [0, 1];
-
-    expectLater(
-        counterBloc.state,
-        emitsInOrder(expected),
-    );
-
-    counterBloc.dispatch(CounterEvent.increment);
-});
-
-test('single Decrement event updates state to -1', () {
-    final List<int> expected = [0, -1];
-
-    expectLater(
-        counterBloc.state,
-        emitsInOrder(expected),
-    );
-
-    counterBloc.dispatch(CounterEvent.decrement);
-});
-```
+[counter_bloc_test.dart](_snippets/testing/counter_bloc_test_bloc_test.dart.md ':include')
 
 We should be able to run the tests and see that all are passing.
 
 That's all there is to it, testing should be a breeze and we should feel confident when making changes and refactoring our code.
+
+You can refer to the [Todos App](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library) for an example of a fully tested application.

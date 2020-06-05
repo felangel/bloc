@@ -1,15 +1,19 @@
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+part of 'ticker_bloc.dart';
 
-@immutable
 abstract class TickerState extends Equatable {
-  TickerState([List props = const []]) : super(props);
+  const TickerState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class Initial extends TickerState {}
+class TickerInitial extends TickerState {}
 
-class Update extends TickerState {
+class TickerTickSuccess extends TickerState {
   final int count;
 
-  Update(this.count) : super([count]);
+  const TickerTickSuccess(this.count);
+
+  @override
+  List<Object> get props => [count];
 }

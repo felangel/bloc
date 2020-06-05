@@ -1,0 +1,92 @@
+name: flutter_examples
+
+on:
+  push:
+    paths:
+      - ".github/workflows/flutter_examples.yaml"
+      - "packages/flutter_bloc/**"
+      - "examples/flutter_bloc_with_stream/**"
+      - "examples/flutter_complex_list/**"
+      - "examples/flutter_dynamic_form/**"
+      - "examples/flutter_firebase_login/**"
+      - "examples/flutter_firestore_todos/**"
+      - "examples/flutter_form_validation/**"
+      - "examples/flutter_graphql_jobs/**"
+      - "examples/flutter_infinite_list/**"
+      - "examples/flutter_login/**"
+      - "examples/flutter_shopping_cart/**"
+      - "examples/flutter_timer/**"
+      - "examples/flutter_todos/**"
+      - "examples/flutter_weather/**"
+      - "examples/flutter_wizard/**"
+      - "examples/github_search/flutter_github_search/**"
+
+  pull_request:
+    paths:
+      - ".github/workflows/flutter_examples.yaml"
+      - "packages/flutter_bloc/**"
+      - "examples/flutter_bloc_with_stream/**"
+      - "examples/flutter_complex_list/**"
+      - "examples/flutter_dynamic_form/**"
+      - "examples/flutter_firebase_login/**"
+      - "examples/flutter_firestore_todos/**"
+      - "examples/flutter_form_validation/**"
+      - "examples/flutter_graphql_jobs/**"
+      - "examples/flutter_infinite_list/**"
+      - "examples/flutter_login/**"
+      - "examples/flutter_shopping_cart/**"
+      - "examples/flutter_timer/**"
+      - "examples/flutter_todos/**"
+      - "examples/flutter_weather/**"
+      - "examples/flutter_wizard/**"
+      - "examples/github_search/flutter_github_search/**"
+
+jobs:
+  examples:
+    strategy:
+      matrix:
+        folder:
+          [
+            "packages/flutter_bloc/example",
+            "examples/flutter_bloc_with_stream",
+            "examples/flutter_complex_list",
+            "examples/flutter_dynamic_form",
+            "examples/flutter_firebase_login",
+            "examples/flutter_firestore_todos",
+            "examples/flutter_form_validation",
+            "examples/flutter_graphql_jobs",
+            "examples/flutter_infinite_list",
+            "examples/flutter_login",
+            "examples/flutter_shopping_cart",
+            "examples/flutter_timer",
+            "examples/flutter_todos",
+            "examples/flutter_weather",
+            "examples/flutter_wizard",
+            "examples/github_search/flutter_github_search",
+          ]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1.3.0
+      - name: Install Dependencies
+        working-directory: ${{ matrix.folder }}
+        run: flutter packages get
+      - name: Format
+        working-directory: ${{ matrix.folder }}
+        run: flutter format --set-exit-if-changed lib
+      - name: Analyze
+        working-directory: ${{ matrix.folder }}
+        run: flutter analyze lib
+      - name: Run tests
+        working-directory: ${{ matrix.folder }}
+        run: |
+          if [ -d "test" ]; then
+            flutter test --no-pub --test-randomize-ordering-seed random      
+          fi
+  build:
+    needs: [examples]
+    runs-on: ubuntu-latest
+    steps:
+      - name: noop
+        run: echo 'noop'

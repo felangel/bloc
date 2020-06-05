@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
+import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   final String name;
@@ -16,8 +16,8 @@ class HomeScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.exit_to_app),
             onPressed: () {
-              BlocProvider.of<AuthenticationBloc>(context).dispatch(
-                LoggedOut(),
+              BlocProvider.of<AuthenticationBloc>(context).add(
+                AuthenticationLoggedOut(),
               );
             },
           )

@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import './helpers/helpers.dart';
+import 'helpers/helpers.dart';
 
 class MockBlocDelegate extends Mock implements BlocDelegate {}
 
@@ -15,7 +17,7 @@ void main() {
     test('is called when delegate is provided', () {
       final delegate = MockBlocDelegate();
       final complexBloc = ComplexBloc();
-      final List<ComplexState> expectedStateAfterEventB = [
+      final expectedStateAfterEventB = [
         ComplexStateA(),
         ComplexStateB(),
       ];
@@ -23,9 +25,9 @@ void main() {
       when(delegate.onEvent(any, any)).thenReturn(null);
 
       expectLater(
-        complexBloc.state,
+        complexBloc,
         emitsInOrder(expectedStateAfterEventB),
-      ).then((dynamic _) {
+      ).then((_) {
         verify(
           delegate.onEvent(
             complexBloc,
@@ -34,28 +36,22 @@ void main() {
         ).called(1);
       });
 
-      complexBloc.dispatch(ComplexEventB());
+      complexBloc.add(ComplexEventB());
     });
 
     test('is called when delegate is provided for multiple blocs', () {
       final delegate = MockBlocDelegate();
       final complexBlocA = ComplexBloc();
       final complexBlocB = ComplexBloc();
-      final List<ComplexState> expectedStateAfterEventB = [
-        ComplexStateA(),
-        ComplexStateB()
-      ];
-      final List<ComplexState> expectedStateAfterEventC = [
-        ComplexStateA(),
-        ComplexStateC()
-      ];
+      final expectedStateAfterEventB = [ComplexStateA(), ComplexStateB()];
+      final expectedStateAfterEventC = [ComplexStateA(), ComplexStateC()];
       BlocSupervisor.delegate = delegate;
       when(delegate.onEvent(any, any)).thenReturn(null);
 
       expectLater(
-        complexBlocA.state,
+        complexBlocA,
         emitsInOrder(expectedStateAfterEventB),
-      ).then((dynamic _) {
+      ).then((_) {
         verify(
           delegate.onEvent(
             complexBlocA,
@@ -65,9 +61,9 @@ void main() {
       });
 
       expectLater(
-        complexBlocB.state,
+        complexBlocB,
         emitsInOrder(expectedStateAfterEventC),
-      ).then((dynamic _) {
+      ).then((_) {
         verify(
           delegate.onEvent(
             complexBlocB,
@@ -76,24 +72,21 @@ void main() {
         ).called(1);
       });
 
-      complexBlocA.dispatch(ComplexEventB());
-      complexBlocB.dispatch(ComplexEventC());
+      complexBlocA.add(ComplexEventB());
+      complexBlocB.add(ComplexEventC());
     });
 
     test('is not called when delegate is not provided', () {
       final delegate = MockBlocDelegate();
       final complexBloc = ComplexBloc();
-      final List<ComplexState> expectedStateAfterEventB = [
-        ComplexStateA(),
-        ComplexStateB()
-      ];
+      final expectedStateAfterEventB = [ComplexStateA(), ComplexStateB()];
       BlocSupervisor.delegate = null;
       when(delegate.onEvent(any, any)).thenReturn(null);
 
       expectLater(
-        complexBloc.state,
+        complexBloc,
         emitsInOrder(expectedStateAfterEventB),
-      ).then((dynamic _) {
+      ).then((_) {
         verifyNever(
           delegate.onEvent(
             complexBloc,
@@ -102,7 +95,7 @@ void main() {
         );
       });
 
-      complexBloc.dispatch(ComplexEventB());
+      complexBloc.add(ComplexEventB());
     });
   });
   group('onTransition', () {
@@ -113,7 +106,7 @@ void main() {
     test('is called when delegate is provided', () {
       final delegate = MockBlocDelegate();
       final complexBloc = ComplexBloc();
-      final List<ComplexState> expectedStateAfterEventB = [
+      final expectedStateAfterEventB = [
         ComplexStateA(),
         ComplexStateB(),
       ];
@@ -121,9 +114,9 @@ void main() {
       when(delegate.onTransition(any, any)).thenReturn(null);
 
       expectLater(
-        complexBloc.state,
+        complexBloc,
         emitsInOrder(expectedStateAfterEventB),
-      ).then((dynamic _) {
+      ).then((_) {
         verify(
           delegate.onTransition(
             complexBloc,
@@ -136,28 +129,22 @@ void main() {
         ).called(1);
       });
 
-      complexBloc.dispatch(ComplexEventB());
+      complexBloc.add(ComplexEventB());
     });
 
     test('is called when delegate is provided for multiple blocs', () {
       final delegate = MockBlocDelegate();
       final complexBlocA = ComplexBloc();
       final complexBlocB = ComplexBloc();
-      final List<ComplexState> expectedStateAfterEventB = [
-        ComplexStateA(),
-        ComplexStateB()
-      ];
-      final List<ComplexState> expectedStateAfterEventC = [
-        ComplexStateA(),
-        ComplexStateC()
-      ];
+      final expectedStateAfterEventB = [ComplexStateA(), ComplexStateB()];
+      final expectedStateAfterEventC = [ComplexStateA(), ComplexStateC()];
       BlocSupervisor.delegate = delegate;
       when(delegate.onTransition(any, any)).thenReturn(null);
 
       expectLater(
-        complexBlocA.state,
+        complexBlocA,
         emitsInOrder(expectedStateAfterEventB),
-      ).then((dynamic _) {
+      ).then((_) {
         verify(
           delegate.onTransition(
             complexBlocA,
@@ -171,9 +158,9 @@ void main() {
       });
 
       expectLater(
-        complexBlocB.state,
+        complexBlocB,
         emitsInOrder(expectedStateAfterEventC),
-      ).then((dynamic _) {
+      ).then((_) {
         verify(
           delegate.onTransition(
             complexBlocB,
@@ -186,24 +173,21 @@ void main() {
         ).called(1);
       });
 
-      complexBlocA.dispatch(ComplexEventB());
-      complexBlocB.dispatch(ComplexEventC());
+      complexBlocA.add(ComplexEventB());
+      complexBlocB.add(ComplexEventC());
     });
 
     test('is not called when delegate is not provided', () {
       final delegate = MockBlocDelegate();
       final complexBloc = ComplexBloc();
-      final List<ComplexState> expectedStateAfterEventB = [
-        ComplexStateA(),
-        ComplexStateB()
-      ];
+      final expectedStateAfterEventB = [ComplexStateA(), ComplexStateB()];
       BlocSupervisor.delegate = null;
       when(delegate.onTransition(any, any)).thenReturn(null);
 
       expectLater(
-        complexBloc.state,
+        complexBloc,
         emitsInOrder(expectedStateAfterEventB),
-      ).then((dynamic _) {
+      ).then((_) {
         verifyNever(
           delegate.onTransition(
             complexBloc,
@@ -216,7 +200,7 @@ void main() {
         );
       });
 
-      complexBloc.dispatch(ComplexEventB());
+      complexBloc.add(ComplexEventB());
     });
   });
 
@@ -226,24 +210,38 @@ void main() {
     });
 
     test('is called on bloc exception', () {
-      bool errorHandled = false;
-      Bloc blocWithError;
+      runZoned(() {
+        var errorHandled = false;
+        Bloc blocWithError;
 
-      final delegate = MockBlocDelegate();
-      final CounterExceptionBloc _bloc = CounterExceptionBloc();
-      BlocSupervisor.delegate = delegate;
+        final delegate = MockBlocDelegate();
+        final bloc = CounterExceptionBloc();
+        BlocSupervisor.delegate = delegate;
 
-      when(delegate.onError(any, any, any)).thenAnswer((Invocation invocation) {
-        blocWithError = invocation.positionalArguments[0] as Bloc;
-        errorHandled = true;
+        when(delegate.onError(any, any, any)).thenAnswer((invocation) {
+          blocWithError = invocation.positionalArguments[0] as Bloc;
+          errorHandled = true;
+        });
+
+        expectLater(
+          bloc,
+          emitsInOrder(<int>[0]),
+        ).then((_) {
+          expect(errorHandled, isTrue);
+          expect(blocWithError, bloc);
+        });
+
+        bloc.add(CounterEvent.increment);
+      }, onError: (error, stackTrace) {
+        expect(
+          (error as BlocUnhandledErrorException).toString(),
+          contains(
+            'Unhandled error Exception: fatal exception occurred '
+            'in bloc Instance of \'CounterExceptionBloc\'.',
+          ),
+        );
+        expect(stackTrace, isNotNull);
       });
-
-      expectLater(_bloc.state, emitsInOrder(<int>[0])).then((dynamic _) {
-        expect(errorHandled, isTrue);
-        expect(blocWithError, _bloc);
-      });
-
-      _bloc.dispatch(CounterEvent.increment);
     });
   });
 }

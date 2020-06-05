@@ -3,23 +3,23 @@ import 'package:equatable/equatable.dart';
 import 'package:common_github_search/common_github_search.dart';
 
 abstract class GithubSearchState extends Equatable {
-  GithubSearchState([List props = const []]) : super(props);
+  const GithubSearchState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class SearchStateEmpty extends GithubSearchState {
-  @override
-  String toString() => 'SearchStateEmpty';
-}
+class SearchStateEmpty extends GithubSearchState {}
 
-class SearchStateLoading extends GithubSearchState {
-  @override
-  String toString() => 'SearchStateLoading';
-}
+class SearchStateLoading extends GithubSearchState {}
 
 class SearchStateSuccess extends GithubSearchState {
   final List<SearchResultItem> items;
 
-  SearchStateSuccess(this.items) : super([items]);
+  const SearchStateSuccess(this.items);
+
+  @override
+  List<Object> get props => [items];
 
   @override
   String toString() => 'SearchStateSuccess { items: ${items.length} }';
@@ -28,8 +28,8 @@ class SearchStateSuccess extends GithubSearchState {
 class SearchStateError extends GithubSearchState {
   final String error;
 
-  SearchStateError(this.error) : super([error]);
+  const SearchStateError(this.error);
 
   @override
-  String toString() => 'SearchStateError';
+  List<Object> get props => [error];
 }

@@ -1,13 +1,23 @@
 import 'package:meta/meta.dart';
 
-/// Occurs when an [Event] is `dispatched` after `mapEventToState` has been called
-/// but before the [Bloc]'s [State] has been updated.
-/// A [Transition] consists of the `currentState`, the `event` which was `dispatched`, and the `nextState`.
+/// {@template transition}
+/// Occurs when an [event] is `added` after `mapEventToState` has been called
+/// but before the [bloc]'s `state` has been updated.
+/// A [Transition] consists of the [currentState], the [event] which was
+/// `added`, and the [nextState].
+/// {@endtemplate}
+@immutable
 class Transition<Event, State> {
+  /// The current [State] of the [bloc] at the time of the [Transition].
   final State currentState;
+
+  /// The [Event] which triggered the current [Transition].
   final Event event;
+
+  /// The next [State] of the [bloc] at the time of the [Transition].
   final State nextState;
 
+  /// {@macro transition}
   const Transition({
     @required this.currentState,
     @required this.event,
@@ -31,5 +41,6 @@ class Transition<Event, State> {
 
   @override
   String toString() =>
-      'Transition { currentState: $currentState, event: $event, nextState: $nextState }';
+      'Transition { currentState: $currentState, event: $event, '
+      'nextState: $nextState }';
 }

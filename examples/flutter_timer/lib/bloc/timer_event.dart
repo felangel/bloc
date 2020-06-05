@@ -1,39 +1,34 @@
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+part of 'timer_bloc.dart';
 
-@immutable
 abstract class TimerEvent extends Equatable {
-  TimerEvent([List props = const []]) : super(props);
+  const TimerEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
-class Start extends TimerEvent {
+class TimerStarted extends TimerEvent {
   final int duration;
 
-  Start({@required this.duration}) : super([duration]);
+  const TimerStarted({@required this.duration});
 
   @override
   String toString() => "Start { duration: $duration }";
 }
 
-class Pause extends TimerEvent {
-  @override
-  String toString() => "Pause";
-}
+class TimerPaused extends TimerEvent {}
 
-class Resume extends TimerEvent {
-  @override
-  String toString() => "Resume";
-}
+class TimerResumed extends TimerEvent {}
 
-class Reset extends TimerEvent {
-  @override
-  String toString() => "Reset";
-}
+class TimerReset extends TimerEvent {}
 
-class Tick extends TimerEvent {
+class TimerTicked extends TimerEvent {
   final int duration;
 
-  Tick({@required this.duration}) : super([duration]);
+  const TimerTicked({@required this.duration});
+
+  @override
+  List<Object> get props => [duration];
 
   @override
   String toString() => "Tick { duration: $duration }";

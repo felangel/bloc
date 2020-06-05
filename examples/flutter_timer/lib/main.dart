@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_timer/bloc/bloc.dart';
+import 'package:flutter_timer/bloc/timer_bloc.dart';
 import 'package:flutter_timer/ticker.dart';
 import 'package:wave/wave.dart';
 import 'package:wave/config.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final TimerBloc _timerBloc = TimerBloc(ticker: Ticker());
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,16 +18,10 @@ class _MyAppState extends State<MyApp> {
       ),
       title: 'Flutter Timer',
       home: BlocProvider(
-        bloc: _timerBloc,
+        create: (context) => TimerBloc(ticker: Ticker()),
         child: Timer(),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _timerBloc.dispose();
-    super.dispose();
   }
 }
 
@@ -45,7 +33,6 @@ class Timer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TimerBloc _timerBloc = BlocProvider.of<TimerBloc>(context);
     return Scaffold(
       appBar: AppBar(title: Text('Flutter Timer')),
       body: Stack(
@@ -58,8 +45,7 @@ class Timer extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 100.0),
                 child: Center(
-                  child: BlocBuilder(
-                    bloc: _timerBloc,
+                  child: BlocBuilder<TimerBloc, TimerState>(
                     builder: (context, state) {
                       final String minutesStr = ((state.duration / 60) % 60)
                           .floor()
@@ -77,10 +63,9 @@ class Timer extends StatelessWidget {
                   ),
                 ),
               ),
-              BlocBuilder(
-                condition: (previousState, currentState) =>
-                    currentState.runtimeType != previousState.runtimeType,
-                bloc: _timerBloc,
+              BlocBuilder<TimerBloc, TimerState>(
+                condition: (previousState, state) =>
+                    state.runtimeType != previousState.runtimeType,
                 builder: (context, state) => Actions(),
               ),
             ],
@@ -105,44 +90,45 @@ class Actions extends StatelessWidget {
   List<Widget> _mapStateToActionButtons({
     TimerBloc timerBloc,
   }) {
-    final TimerState state = timerBloc.currentState;
-    if (state is Ready) {
+    final TimerState currentState = timerBloc.state;
+    if (currentState is TimerInitial) {
       return [
         FloatingActionButton(
           child: Icon(Icons.play_arrow),
-          onPressed: () => timerBloc.dispatch(Start(duration: state.duration)),
+          onPressed: () =>
+              timerBloc.add(TimerStarted(duration: currentState.duration)),
         ),
       ];
     }
-    if (state is Running) {
+    if (currentState is TimerRunInProgress) {
       return [
         FloatingActionButton(
           child: Icon(Icons.pause),
-          onPressed: () => timerBloc.dispatch(Pause()),
+          onPressed: () => timerBloc.add(TimerPaused()),
         ),
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc.dispatch(Reset()),
+          onPressed: () => timerBloc.add(TimerReset()),
         ),
       ];
     }
-    if (state is Paused) {
+    if (currentState is TimerRunPause) {
       return [
         FloatingActionButton(
           child: Icon(Icons.play_arrow),
-          onPressed: () => timerBloc.dispatch(Resume()),
+          onPressed: () => timerBloc.add(TimerResumed()),
         ),
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc.dispatch(Reset()),
+          onPressed: () => timerBloc.add(TimerReset()),
         ),
       ];
     }
-    if (state is Finished) {
+    if (currentState is TimerRunComplete) {
       return [
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => timerBloc.dispatch(Reset()),
+          onPressed: () => timerBloc.add(TimerReset()),
         ),
       ];
     }

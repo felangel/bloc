@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 enum CounterEvent { increment }
 
@@ -16,7 +14,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.increment:
-        yield currentState + 1;
+        yield state + 1;
         break;
     }
   }
@@ -46,7 +44,7 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         body: BlocListener(
           bloc: _counterBloc,
-          listener: (BuildContext context, int state) {
+          listener: (context, state) {
             widget.onListenerCalled?.call(context, state);
           },
           child: Column(
@@ -74,7 +72,7 @@ class _MyAppState extends State<MyApp> {
                 key: Key('bloc_listener_increment_button'),
                 child: Text('Increment Bloc'),
                 onPressed: () {
-                  _counterBloc.dispatch(CounterEvent.increment);
+                  _counterBloc.add(CounterEvent.increment);
                 },
               ),
             ],
@@ -88,43 +86,43 @@ class _MyAppState extends State<MyApp> {
 void main() {
   group('BlocListener', () {
     testWidgets('throws if initialized with null bloc, listener, and child',
-        (WidgetTester tester) async {
+        (tester) async {
       try {
         await tester.pumpWidget(
-          BlocListener<dynamic, dynamic>(
+          BlocListener<Bloc, dynamic>(
             bloc: null,
             listener: null,
             child: null,
           ),
         );
         fail('should throw AssertionError');
-      } catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
 
     testWidgets('throws if initialized with null listener and child',
-        (WidgetTester tester) async {
+        (tester) async {
       try {
         await tester.pumpWidget(
-          BlocListener(
+          BlocListener<CounterBloc, int>(
             bloc: CounterBloc(),
             listener: null,
             child: null,
           ),
         );
         fail('should throw AssertionError');
-      } catch (error) {
+      } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
 
-    testWidgets('renders child properly', (WidgetTester tester) async {
+    testWidgets('renders child properly', (tester) async {
       final targetKey = Key('bloc_listener_container');
       await tester.pumpWidget(
         BlocListener(
           bloc: CounterBloc(),
-          listener: (BuildContext context, int state) {},
+          listener: (context, state) {},
           child: Container(
             key: targetKey,
           ),
@@ -133,64 +131,60 @@ void main() {
       expect(find.byKey(targetKey), findsOneWidget);
     });
 
-    testWidgets('calls listener on every state change, including initial',
-        (WidgetTester tester) async {
+    testWidgets('calls listener on single state change', (tester) async {
       int latestState;
-      int listenerCallCount = 0;
+      var listenerCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1];
       await tester.pumpWidget(
         BlocListener(
           bloc: counterBloc,
-          listener: (BuildContext context, int state) {
+          listener: (context, state) {
             listenerCallCount++;
             latestState = state;
           },
           child: Container(),
         ),
       );
-      counterBloc.dispatch(CounterEvent.increment);
-      expectLater(counterBloc.state, emitsInOrder(expectedStates)).then((_) {
-        expect(listenerCallCount, 2);
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
+        expect(listenerCallCount, 1);
         expect(latestState, 1);
       });
     });
 
-    testWidgets('calls listener on multiple state change',
-        (WidgetTester tester) async {
+    testWidgets('calls listener on multiple state change', (tester) async {
       int latestState;
-      int listenerCallCount = 0;
+      var listenerCallCount = 0;
       final counterBloc = CounterBloc();
       final expectedStates = [0, 1, 2];
       await tester.pumpWidget(
         BlocListener(
           bloc: counterBloc,
-          listener: (BuildContext context, int state) {
+          listener: (context, state) {
             listenerCallCount++;
             latestState = state;
           },
           child: Container(),
         ),
       );
-      counterBloc.dispatch(CounterEvent.increment);
-      counterBloc.dispatch(CounterEvent.increment);
-      expectLater(counterBloc.state, emitsInOrder(expectedStates)).then((_) {
-        expect(listenerCallCount, 3);
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
+        expect(listenerCallCount, 2);
         expect(latestState, 2);
       });
     });
 
     testWidgets(
-        'updates when the bloc is changed at runtime to a different bloc and unsubscribes from old bloc',
-        (WidgetTester tester) async {
-      int listenerCallCount = 0;
+        'updates when the bloc is changed at runtime to a different bloc '
+        'and unsubscribes from old bloc', (tester) async {
+      var listenerCallCount = 0;
       int latestState;
-      final Finder incrementFinder =
-          find.byKey(Key('bloc_listener_increment_button'));
-      final Finder resetBlocFinder =
-          find.byKey(Key('bloc_listener_reset_button'));
+      final incrementFinder = find.byKey(Key('bloc_listener_increment_button'));
+      final resetBlocFinder = find.byKey(Key('bloc_listener_reset_button'));
       await tester.pumpWidget(MyApp(
-        onListenerCalled: (BuildContext context, int state) {
+        onListenerCalled: (context, state) {
           listenerCallCount++;
           latestState = state;
         },
@@ -198,33 +192,31 @@ void main() {
 
       await tester.tap(incrementFinder);
       await tester.pumpAndSettle();
-      expect(listenerCallCount, 2);
+      expect(listenerCallCount, 1);
       expect(latestState, 1);
 
       await tester.tap(incrementFinder);
       await tester.pumpAndSettle();
-      expect(listenerCallCount, 3);
+      expect(listenerCallCount, 2);
       expect(latestState, 2);
 
       await tester.tap(resetBlocFinder);
       await tester.pumpAndSettle();
       await tester.tap(incrementFinder);
       await tester.pumpAndSettle();
-      expect(listenerCallCount, 5);
+      expect(listenerCallCount, 3);
       expect(latestState, 1);
     });
 
     testWidgets(
-        'does not update when the bloc is changed at runtime to same bloc and stays subscribed to current bloc',
-        (WidgetTester tester) async {
-      int listenerCallCount = 0;
+        'does not update when the bloc is changed at runtime to same bloc '
+        'and stays subscribed to current bloc', (tester) async {
+      var listenerCallCount = 0;
       int latestState;
-      final Finder incrementFinder =
-          find.byKey(Key('bloc_listener_increment_button'));
-      final Finder noopBlocFinder =
-          find.byKey(Key('bloc_listener_noop_button'));
+      final incrementFinder = find.byKey(Key('bloc_listener_increment_button'));
+      final noopBlocFinder = find.byKey(Key('bloc_listener_noop_button'));
       await tester.pumpWidget(MyApp(
-        onListenerCalled: (BuildContext context, int state) {
+        onListenerCalled: (context, state) {
           listenerCallCount++;
           latestState = state;
         },
@@ -232,20 +224,240 @@ void main() {
 
       await tester.tap(incrementFinder);
       await tester.pumpAndSettle();
-      expect(listenerCallCount, 2);
+      expect(listenerCallCount, 1);
       expect(latestState, 1);
 
       await tester.tap(incrementFinder);
       await tester.pumpAndSettle();
-      expect(listenerCallCount, 3);
+      expect(listenerCallCount, 2);
       expect(latestState, 2);
 
       await tester.tap(noopBlocFinder);
       await tester.pumpAndSettle();
       await tester.tap(incrementFinder);
       await tester.pumpAndSettle();
-      expect(listenerCallCount, 4);
+      expect(listenerCallCount, 3);
       expect(latestState, 3);
+    });
+
+    testWidgets(
+        'calls condition on single state change with correct previous '
+        'and current states', (tester) async {
+      int latestPreviousState;
+      int latestState;
+      var conditionCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [0, 1];
+      await tester.pumpWidget(
+        BlocListener(
+          bloc: counterBloc,
+          condition: (previous, state) {
+            conditionCallCount++;
+            latestPreviousState = previous;
+            latestState = state;
+            return true;
+          },
+          listener: (context, state) {},
+          child: Container(),
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
+        expect(conditionCallCount, 1);
+        expect(latestPreviousState, 0);
+        expect(latestState, 1);
+      });
+    });
+
+    testWidgets(
+        'calls condition with previous listener state and current bloc state',
+        (tester) async {
+      int latestPreviousState;
+      int latestState;
+      var conditionCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [0, 1, 2, 3];
+      await tester.pumpWidget(
+        BlocListener(
+          bloc: counterBloc,
+          condition: (previous, state) {
+            conditionCallCount++;
+            if ((previous + state) % 3 == 0) {
+              latestPreviousState = previous;
+              latestState = state;
+              return true;
+            }
+            return false;
+          },
+          listener: (context, state) {},
+          child: Container(),
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
+        expect(conditionCallCount, 3);
+        expect(latestPreviousState, 1);
+        expect(latestState, 2);
+      });
+    });
+
+    testWidgets('infers the bloc from the context if the bloc is not provided',
+        (tester) async {
+      int latestPreviousState;
+      int latestState;
+      var conditionCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [0, 1];
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: counterBloc,
+          child: BlocListener<CounterBloc, int>(
+            condition: (previous, state) {
+              conditionCallCount++;
+              latestPreviousState = previous;
+              latestState = state;
+
+              return true;
+            },
+            listener: (context, state) {},
+            child: Container(),
+          ),
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
+        expect(conditionCallCount, 1);
+        expect(latestPreviousState, 0);
+        expect(latestState, 1);
+      });
+    });
+
+    testWidgets(
+        'calls condition on multiple state change with correct previous '
+        'and current states', (tester) async {
+      int latestPreviousState;
+      int latestState;
+      var conditionCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [0, 1, 2];
+      await tester.pumpWidget(
+        BlocListener(
+          bloc: counterBloc,
+          condition: (previous, state) {
+            conditionCallCount++;
+            latestPreviousState = previous;
+            latestState = state;
+
+            return true;
+          },
+          listener: (context, state) {},
+          child: Container(),
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
+        expect(conditionCallCount, 2);
+        expect(latestPreviousState, 1);
+        expect(latestState, 2);
+      });
+    });
+
+    testWidgets(
+        'does not call listener when condition returns false on single state '
+        'change', (tester) async {
+      var listenerCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [0, 1];
+      await tester.pumpWidget(
+        BlocListener(
+          bloc: counterBloc,
+          condition: (previous, state) => false,
+          listener: (context, state) {
+            listenerCallCount++;
+          },
+          child: Container(),
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
+        expect(listenerCallCount, 0);
+      });
+    });
+
+    testWidgets(
+        'calls listener when condition returns true on single state change',
+        (tester) async {
+      var listenerCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [0, 1];
+      await tester.pumpWidget(
+        BlocListener(
+          bloc: counterBloc,
+          condition: (previous, state) => true,
+          listener: (context, state) {
+            listenerCallCount++;
+          },
+          child: Container(),
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
+        expect(listenerCallCount, 1);
+      });
+    });
+
+    testWidgets(
+        'does not call listener when condition returns false on multiple state '
+        'changes', (tester) async {
+      var listenerCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [0, 1, 2, 3, 4];
+      await tester.pumpWidget(
+        BlocListener(
+          bloc: counterBloc,
+          condition: (previous, state) => false,
+          listener: (context, state) {
+            listenerCallCount++;
+          },
+          child: Container(),
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
+        expect(listenerCallCount, 0);
+      });
+    });
+
+    testWidgets(
+        'calls listener when condition returns true on multiple state change',
+        (tester) async {
+      var listenerCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [0, 1, 2, 3, 4];
+      await tester.pumpWidget(
+        BlocListener(
+          bloc: counterBloc,
+          condition: (previous, state) => true,
+          listener: (context, state) {
+            listenerCallCount++;
+          },
+          child: Container(),
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      counterBloc.add(CounterEvent.increment);
+      expectLater(counterBloc, emitsInOrder(expectedStates)).then((_) {
+        expect(listenerCallCount, 4);
+      });
     });
   });
 }

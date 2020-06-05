@@ -1,25 +1,25 @@
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 abstract class AuthenticationEvent extends Equatable {
-  AuthenticationEvent([List props = const []]) : super(props);
-}
+  const AuthenticationEvent();
 
-class AppStarted extends AuthenticationEvent {
   @override
-  String toString() => 'AppStarted';
+  List<Object> get props => [];
 }
 
-class LoggedIn extends AuthenticationEvent {
+class AuthenticationStarted extends AuthenticationEvent {}
+
+class AuthenticationLoggedIn extends AuthenticationEvent {
   final String token;
 
-  LoggedIn({@required this.token}) : super([token]);
+  const AuthenticationLoggedIn({@required this.token});
+
+  @override
+  List<Object> get props => [token];
 
   @override
   String toString() => 'LoggedIn { token: $token }';
 }
 
-class LoggedOut extends AuthenticationEvent {
-  @override
-  String toString() => 'LoggedOut';
-}
+class AuthenticationLoggedOut extends AuthenticationEvent {}
