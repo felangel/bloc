@@ -26,10 +26,10 @@ abstract class Cubit<T> extends Stream<T> {
   /// [state] has successfully been updated to the provided [state].
   @protected
   Future<void> emit(T state) async {
-    if (_controller.isClosed) return;
     // Wait one tick before updating the internal state.
     // This ensures that the initial state has propagated.
     return Future.delayed(Duration.zero, () {
+      if (_controller.isClosed) return;
       _state = state;
       _controller.add(state);
     });
@@ -56,11 +56,13 @@ abstract class Cubit<T> extends Stream<T> {
 
   /// Returns whether the `Stream<T>` is a broadcast stream.
   @override
-  bool get isBroadcast => _stream.isBroadcast;
+  bool get isBroadcast => _controller.stream.isBroadcast;
 
   /// Closes the stream
   @mustCallSuper
-  Future<void> close() => _controller.close();
+  Future<void> close() {
+    return Future.delayed(Duration.zero, _controller.close);
+  }
 
   Stream<T> get _stream async* {
     yield state;

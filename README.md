@@ -1,5 +1,7 @@
 <img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/cubit_full.png" height="60" alt="Cubit" />
 
+[![build](https://github.com/felangel/cubit/workflows/build/badge.svg)](https://github.com/felangel/cubit/actions)
+
 **WARNING: This is highly experimental**
 
 A cubit is a reimagined bloc (from [package:bloc](https://pub.dev/packages/bloc)) which removes events and relies on methods to emit new states instead.
