@@ -6,10 +6,10 @@
 
 A cubit is a reimagined bloc (from [package:bloc](https://pub.dev/packages/bloc)) which removes events and relies on methods to emit new states instead.
 
-| Package                                                                               | Pub                                                                                                      |
-| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| [cubit](https://github.com/felangel/cubit/tree/master/packages/cubit)                 | [![pub package](https://img.shields.io/pub/v/cubit.svg)](https://pub.dev/packages/cubit)                 |
-| [flutter_cubit](https://github.com/felangel/cubit/tree/master/packages/flutter_cubit) | [![pub package](https://img.shields.io/pub/v/flutter_cubit.svg)](https://pub.dev/packages/flutter_cubit) |
+| Package                                                                               | Pub                                                                                                      | Coverage                                                                                                                                          |
+| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [cubit](https://github.com/felangel/cubit/tree/master/packages/cubit)                 | [![pub package](https://img.shields.io/pub/v/cubit.svg)](https://pub.dev/packages/cubit)                 | [![coverage](https://github.com/felangel/cubit/blob/master/packages/cubit/coverage_badge.svg)](https://github.com/felangel/cubit/actions)         |
+| [flutter_cubit](https://github.com/felangel/cubit/tree/master/packages/flutter_cubit) | [![pub package](https://img.shields.io/pub/v/flutter_cubit.svg)](https://pub.dev/packages/flutter_cubit) | [![coverage](https://github.com/felangel/cubit/blob/master/packages/flutter_cubit/coverage_badge.svg)](https://github.com/felangel/cubit/actions) |
 
 ## Overview
 
