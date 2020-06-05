@@ -8,7 +8,7 @@ A cubit is a reimagined bloc (from [package:bloc](https://pub.dev/packages/bloc)
 
 | Package                                                                               | Pub                                                                                                      |
 | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| [cubit](https://github.com/felangel/cubit/tree/master/packages/bloc)                  | [![pub package](https://img.shields.io/pub/v/cubit.svg)](https://pub.dev/packages/cubit)                 |
+| [cubit](https://github.com/felangel/cubit/tree/master/packages/cubit)                 | [![pub package](https://img.shields.io/pub/v/cubit.svg)](https://pub.dev/packages/cubit)                 |
 | [flutter_cubit](https://github.com/felangel/cubit/tree/master/packages/flutter_cubit) | [![pub package](https://img.shields.io/pub/v/flutter_cubit.svg)](https://pub.dev/packages/flutter_cubit) |
 
 ## Overview
