@@ -161,17 +161,6 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     }
   }
 
-<<<<<<< HEAD
-  /// Closes the [Event] and [State] [Stream]s.
-<<<<<<< HEAD
-=======
-  /// This method should be called when a [Bloc] is no longer needed.
-  /// Once `dispose` is called, events that are `dispatched` will not be
-  /// processed and will result in an error being passed to `onError`.
-  /// In addition, if `dispose` is called while [Event]s are still being processed,
-  /// any [State]s yielded after are ignored and will not result in a [Transition].
->>>>>>> 31a804bf9397a80eba211653963a96997c5eac5b
-=======
   /// Closes the `event` and `state` `Streams`.
   /// This method should be called when a [bloc] is no longer needed.
   /// Once [close] is called, `events` that are [add]ed will not be
@@ -180,7 +169,6 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// processed,
   /// the [bloc] will continue to process the pending `events` to completion.
   @override
->>>>>>> 3860bed6eee4b6026f32a9e0eb9214d3a0cb7dfd
   @mustCallSuper
   Future<void> close() async {
     await _eventController.close();
