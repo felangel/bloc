@@ -39,12 +39,13 @@ Sate-imiz sadəcə integer (tam ədəd) olduğu üçün, əlavə class yaratmağ
 ## Sayğac Tətbiqi
 
 Now that we have our `CounterBloc` fully implemented, we can get started creating our Flutter application.
+Artıq bizim tam yaradılmış `CounterBloc` var, artıq Flutter tətbiqini yaratmağa başlaya bilərik.
 
 [main.dart](../_snippets/flutter_counter_tutorial/main.dart.md ':include')
 
-?> **Note**: We are using the `BlocProvider` widget from `flutter_bloc` in order to make the instance of `CounterBloc` available to the entire subtree (`CounterPage`). `BlocProvider` also handles closing the `CounterBloc` automatically so we don't need to use a `StatefulWidget`.
+?> **Qeyd**: `CounterBloc` obyektinin bütün subtree üzrə (`CounterPage`) əlçatan olması üçün `flutter_bloc` içərisində olan `BlocProvider` istifadə edirik. `BlocProvider` həmçinin `CounterBloc`-ın avtomatik bağlanmasını təmin edir, `StatefulWidget` istifadə etməyə ehtiyac yoxdur.
 
-## Counter Page
+## Sayğac səhifəsi
 
 Finally, all that's left is to build our Counter Page.
 
