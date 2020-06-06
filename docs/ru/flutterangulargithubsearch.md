@@ -16,39 +16,19 @@
 
 Мы начнем с создания нового каталога для нашего приложения.
 
-```bash
-mkdir github_search && cd github_search
-```
+[setup.sh](../_snippets/flutter_angular_github_search/common/setup1.sh.md ':include')
 
 Далее мы создадим каркас для библиотеки `common_github_search`.
 
-```bash
-mkdir common_github_search
-```
+[setup.sh](../_snippets/flutter_angular_github_search/common/setup2.sh.md ':include')
 
 Нам нужно создать `pubspec.yaml` с необходимыми зависимостями.
 
-```yaml
-name: common_github_search
-description: Shared Code between AngularDart and Flutter
-version: 1.0.0+1
-
-environment:
-  sdk: ">=2.6.0 <3.0.0"
-
-dependencies:
-  meta: ^1.1.6
-  bloc: ^4.0.0
-  equatable: ^1.0.0
-  http: ^0.12.0
-  rxdart: ^0.24.0
-```
+[pubspec.yaml](../_snippets/flutter_angular_github_search/common/pubspec.yaml.md ':include')
 
 Наконец, нам нужно установить все зависимости.
 
-```bash
-pub get
-```
+[pub_get.sh](../_snippets/flutter_angular_github_search/common/pub_get.sh.md ':include')
 
 Вот и все по настройке проекта! Теперь мы можем приступить к созданию пакета `common_github_search`.
 
@@ -60,34 +40,7 @@ pub get
 
 Давайте создадим `github_client.dart`.
 
-```dart
-import 'dart:async';
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
-import 'package:common_github_search/common_github_search.dart';
-
-class GithubClient {
-  final String baseUrl;
-  final http.Client httpClient;
-
-  GithubClient({
-    http.Client httpClient,
-    this.baseUrl = "https://api.github.com/search/repositories?q=",
-  }) : this.httpClient = httpClient ?? http.Client();
-
-  Future<SearchResult> search(String term) async {
-    final response = await httpClient.get(Uri.parse("$baseUrl$term"));
-    final results = json.decode(response.body);
-
-    if (response.statusCode == 200) {
-      return SearchResult.fromJson(results);
-    } else {
-      throw SearchResultError.fromJson(results);
-    }
-  }
-}
-```
+[github_client.dart](../_snippets/flutter_angular_github_search/common/github_client.dart.md ':include')
 
 ?> **Примечание:** `GithubClient` просто делает сетевой запрос к API поиска GitHub в репозитории и преобразовывает результат в `SearchResult` или `SearchResultError` как `Future`.
 
@@ -97,23 +50,7 @@ class GithubClient {
 
 Создайте файл `search_result.dart`.
 
-```dart
-import 'package:common_github_search/common_github_search.dart';
-
-class SearchResult {
-  final List<SearchResultItem> items;
-
-  const SearchResult({this.items});
-
-  static SearchResult fromJson(Map<String, dynamic> json) {
-    final items = (json['items'] as List<dynamic>)
-        .map((dynamic item) =>
-            SearchResultItem.fromJson(item as Map<String, dynamic>))
-        .toList();
-    return SearchResult(items: items);
-  }
-}
-```
+[search_result.dart](../_snippets/flutter_angular_github_search/common/search_result.dart.md ':include')
 
 ?> **Примечание:** Реализация `SearchResult` зависит от `SearchResultItem.fromJson`, который мы еще не реализовали.
 
@@ -123,25 +60,7 @@ class SearchResult {
 
 Далее мы создадим `search_result_item.dart`.
 
-```dart
-import 'package:common_github_search/common_github_search.dart';
-
-class SearchResultItem {
-  final String fullName;
-  final String htmlUrl;
-  final GithubUser owner;
-
-  const SearchResultItem({this.fullName, this.htmlUrl, this.owner});
-
-  static SearchResultItem fromJson(dynamic json) {
-    return SearchResultItem(
-      fullName: json['full_name'] as String,
-      htmlUrl: json['html_url'] as String,
-      owner: GithubUser.fromJson(json['owner']),
-    );
-  }
-}
-```
+[search_result_item.dart](../_snippets/flutter_angular_github_search/common/search_result_item.dart.md ':include')
 
 ?> **Примечание:** опять же, реализация `SearchResultItem` зависит от `GithubUser.fromJson`, который мы еще не реализовали.
 
@@ -149,21 +68,7 @@ class SearchResultItem {
 
 Далее мы создадим `github_user.dart`.
 
-```dart
-class GithubUser {
-  final String login;
-  final String avatarUrl;
-
-  const GithubUser({this.login, this.avatarUrl});
-
-  static GithubUser fromJson(dynamic json) {
-    return GithubUser(
-      login: json['login'] as String,
-      avatarUrl: json['avatar_url'] as String,
-    );
-  }
-}
-```
+[github_user.dart](../_snippets/flutter_angular_github_search/common/github_user.dart.md ':include')
 
 На этом этапе мы завершили реализацию `SearchResult` и его зависимостей, поэтому далее мы перейдем к `SearchResultError`.
 
@@ -171,19 +76,7 @@ class GithubUser {
 
 Далее мы создадим `search_result_error.dart`.
 
-```dart
-class SearchResultError {
-  final String message;
-
-  const SearchResultError({this.message});
-
-  static SearchResultError fromJson(dynamic json) {
-    return SearchResultError(
-      message: json['message'] as String,
-    );
-  }
-}
-```
+[search_result_error.dart](../_snippets/flutter_angular_github_search/common/search_result_error.dart.md ':include')
 
 `GithubClient` завершен, поэтому далее мы перейдем к `GithubCache`, который будет отвечать за [запоминание](https://en.wikipedia.org/wiki/Memoization) для оптимизации производительности.
 
@@ -193,21 +86,7 @@ class SearchResultError {
 
 Создадим `github_cache.dart`.
 
-```dart
-import 'package:common_github_search/common_github_search.dart';
-
-class GithubCache {
-  final _cache = <String, SearchResult>{};
-
-  SearchResult get(String term) => _cache[term];
-
-  void set(String term, SearchResult result) => _cache[term] = result;
-
-  bool contains(String term) => _cache.containsKey(term);
-
-  void remove(String term) => _cache.remove(term);
-}
-```
+[github_cache.dart](../_snippets/flutter_angular_github_search/common/github_cache.dart.md ':include')
 
 Теперь мы готовы создать наш `GithubRepository`!
 
@@ -217,28 +96,7 @@ class GithubCache {
 
 Создайте `github_repository.dart`.
 
-```dart
-import 'dart:async';
-
-import 'package:common_github_search/common_github_search.dart';
-
-class GithubRepository {
-  final GithubCache cache;
-  final GithubClient client;
-
-  GithubRepository(this.cache, this.client);
-
-  Future<SearchResult> search(String term) async {
-    if (cache.contains(term)) {
-      return cache.get(term);
-    } else {
-      final result = await client.search(term);
-      cache.set(term, result);
-      return result;
-    }
-  }
-}
-```
+[github_repository.dart](../_snippets/flutter_angular_github_search/common/github_repository.dart.md ':include')
 
 ?> **Примечание:** `GithubRepository` зависит от `GithubCache` и `GithubClient` и абстрагирует базовую реализацию. Наше приложение никогда не должно знать о том, как данные извлекаются или откуда они поступают поскольку это не должно волновать. Мы можем изменить работу репозитория в любое время и до тех пор, пока мы не изменим интерфейс, нам не нужно менять какой-либо клиентский код.
 
@@ -250,25 +108,7 @@ class GithubRepository {
 
 Создайте `github_search_event.dart`.
 
-```dart
-import 'package:equatable/equatable.dart';
-
-abstract class GithubSearchEvent extends Equatable {
-  const GithubSearchEvent();
-}
-
-class TextChanged extends GithubSearchEvent {
-  final String text;
-
-  const TextChanged({this.text});
-
-  @override
-  List<Object> get props => [text];
-
-  @override
-  String toString() => 'TextChanged { text: $text }';
-}
-```
+[github_search_event.dart](../_snippets/flutter_angular_github_search/common/github_search_event.dart.md ':include')
 
 ?> **Примечание:** Мы расширяем [`Equatable`](https://pub.dev/packages/equatable), чтобы мы могли сравнивать экземпляры `GithubSearchEvent`; по умолчанию оператор равенства возвращает true, если и только если этот и другие являются одинаковыми экземплярами.
 
@@ -288,43 +128,7 @@ class TextChanged extends GithubSearchEvent {
 
 Теперь мы можем создать `github_search_state.dart` и реализовать его следующим образом.
 
-```dart
-import 'package:equatable/equatable.dart';
-
-import 'package:common_github_search/common_github_search.dart';
-
-abstract class GithubSearchState extends Equatable {
-  const GithubSearchState();
-
-  @override
-  List<Object> get props => [];
-}
-
-class SearchStateEmpty extends GithubSearchState {}
-
-class SearchStateLoading extends GithubSearchState {}
-
-class SearchStateSuccess extends GithubSearchState {
-  final List<SearchResultItem> items;
-
-  const SearchStateSuccess(this.items);
-
-  @override
-  List<Object> get props => [items];
-
-  @override
-  String toString() => 'SearchStateSuccess { items: ${items.length} }';
-}
-
-class SearchStateError extends GithubSearchState {
-  final String error;
-
-  const SearchStateError(this.error);
-
-  @override
-  List<Object> get props => [error];
-}
-```
+[github_search_state.dart](../_snippets/flutter_angular_github_search/common/github_search_state.dart.md ':include')
 
 ?> **Note:** We extend [`Equatable`](https://pub.dev/packages/equatable) so that we can compare instances of `GithubSearchState`; by default, the equality operator returns true if and only if this and other are the same instance.
 
@@ -338,66 +142,7 @@ Now that we have our Events and States implemented, we can create our `GithubSea
 
 Создадим `github_search_bloc.dart`
 
-```dart
-import 'dart:async';
-
-import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:bloc/bloc.dart';
-
-import 'package:common_github_search/common_github_search.dart';
-
-class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
-  final GithubRepository githubRepository;
-
-  GithubSearchBloc({@required this.githubRepository});
-
-  @override
-  Stream<Transition<GithubSearchEvent, GithubSearchState>> transformEvents(
-    Stream<GithubSearchEvent> events,
-    Stream<Transition<GithubSearchEvent, GithubSearchState>> Function(
-      GithubSearchEvent event,
-    )
-        transitionFn,
-  ) {
-    return events
-        .debounceTime(const Duration(milliseconds: 300))
-        .switchMap(transitionFn);
-  }
-
-  @override
-  void onTransition(
-      Transition<GithubSearchEvent, GithubSearchState> transition) {
-    print(transition);
-    super.onTransition(transition);
-  }
-
-  @override
-  GithubSearchState get initialState => SearchStateEmpty();
-
-  @override
-  Stream<GithubSearchState> mapEventToState(
-    GithubSearchEvent event,
-  ) async* {
-    if (event is TextChanged) {
-      final String searchTerm = event.text;
-      if (searchTerm.isEmpty) {
-        yield SearchStateEmpty();
-      } else {
-        yield SearchStateLoading();
-        try {
-          final results = await githubRepository.search(searchTerm);
-          yield SearchStateSuccess(results.items);
-        } catch (error) {
-          yield error is SearchResultError
-              ? SearchStateError(error.message)
-              : SearchStateError('something went wrong');
-        }
-      }
-    }
-  }
-}
-```
+[github_search_bloc.dart](../_snippets/flutter_angular_github_search/common/github_search_bloc.dart.md ':include')
 
 ?> **Примечание:** `GithubSearchBloc` преобразует `GithubSearchEvent` в `GithubSearchState` и зависит от `GithubRepository`.
 
@@ -419,40 +164,17 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
 
 Начнем с создания нового проекта Flutter в каталоге `github_search` на том же уровне, что и `common_github_search`.
 
-```bash
-flutter create flutter_github_search
-```
+[flutter_create.sh](../_snippets/flutter_angular_github_search/flutter/flutter_create.sh.md ':include')
 
 Далее нам нужно обновить `pubspec.yaml`, чтобы включить все необходимые зависимости.
 
-```yaml
-name: flutter_github_search
-description: A new Flutter project.
-
-version: 1.0.0+1
-
-environment:
-  sdk: ">=2.6.0 <3.0.0"
-
-dependencies:
-  flutter:
-    sdk: flutter
-  flutter_bloc: ^4.0.0
-  url_launcher: ^4.0.3
-  common_github_search:
-    path: ../common_github_search
-
-flutter:
-  uses-material-design: true
-```
+[pubspec.yaml](../_snippets/flutter_angular_github_search/flutter/pubspec.yaml.md ':include')
 
 ?> **Примечание:** Мы включаем вновь созданную библиотеку `common_github_search` в качестве зависимости.
 
 Теперь нам нужно установить зависимости.
 
-```bash
-flutter packages get
-```
+[flutter_packages_get.sh](../_snippets/flutter_angular_github_search/flutter/flutter_packages_get.sh.md ':include')
 
 Это все для настройки проекта и, поскольку пакет `common_github_search` содержит уровень данных, а также уровень бизнес-логики все, что нам нужно построить - это уровень представления.
 
@@ -467,22 +189,7 @@ flutter packages get
 
 > `SearchForm` будет `StatelessWidget`, который отображает виджеты `SearchBar` и `SearchBody`.
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import 'package:common_github_search/common_github_search.dart';
-
-class SearchForm extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[_SearchBar(), _SearchBody()],
-    );
-  }
-}
-```
+[search_form.dart](../_snippets/flutter_angular_github_search/flutter/search_form.dart.md ':include')
 
 Далее мы реализуем `_SearchBar`.
 
@@ -490,56 +197,7 @@ class SearchForm extends StatelessWidget {
 
 > `SearchBar` также будет `StatefulWidget`, потому что ему нужно будет поддерживать свой собственный `TextController`, чтобы мы могли отслеживать, что пользователь ввел в качестве ввода.
 
-```dart
-class _SearchBar extends StatefulWidget {
-  @override
-  State<_SearchBar> createState() => _SearchBarState();
-}
-
-class _SearchBarState extends State<_SearchBar> {
-  final _textController = TextEditingController();
-  GithubSearchBloc _githubSearchBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _githubSearchBloc = BlocProvider.of<GithubSearchBloc>(context);
-  }
-
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: _textController,
-      autocorrect: false,
-      onChanged: (text) {
-        _githubSearchBloc.add(
-          TextChanged(text: text),
-        );
-      },
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.search),
-        suffixIcon: GestureDetector(
-          child: Icon(Icons.clear),
-          onTap: _onClearTapped,
-        ),
-        border: InputBorder.none,
-        hintText: 'Enter a search term',
-      ),
-    );
-  }
-
-  void _onClearTapped() {
-    _textController.text = '';
-    _githubSearchBloc.add(TextChanged(text: ''));
-  }
-}
-```
+[search_form.dart](../_snippets/flutter_angular_github_search/flutter/search_bar.dart.md ':include')
 
 ?> **Примечание:** `_SearchBar` обращается к `GitHubSearchBloc` через `BlocProvider.of<GithubSearchBloc>(context)` и уведомляет блок о событиях `TextChanged`.
 
@@ -549,32 +207,7 @@ class _SearchBarState extends State<_SearchBar> {
 
 > `SearchBody` - это StatelessWidget, который будет отвечать за отображение результатов поиска, ошибок и индикаторов загрузки. Это будет потребитель `GithubSearchBloc`.
 
-```dart
-class _SearchBody extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<GithubSearchBloc, GithubSearchState>(
-      bloc: BlocProvider.of<GithubSearchBloc>(context),
-      builder: (BuildContext context, GithubSearchState state) {
-        if (state is SearchStateEmpty) {
-          return Text('Please enter a term to begin');
-        }
-        if (state is SearchStateLoading) {
-          return CircularProgressIndicator();
-        }
-        if (state is SearchStateError) {
-          return Text(state.error);
-        }
-        if (state is SearchStateSuccess) {
-          return state.items.isEmpty
-              ? Text('No Results')
-              : Expanded(child: _SearchResults(items: state.items));
-        }
-      },
-    );
-  }
-}
-```
+[search_form.dart](../_snippets/flutter_angular_github_search/flutter/search_body.dart.md ':include')
 
 ?> **Примечание:** `_SearchBody` также обращается к `GithubSearchBloc` через `BlocProvider` и использует `BlocBuilder` для перерендеринга в ответ на изменения состояния.
 
@@ -584,23 +217,7 @@ class _SearchBody extends StatelessWidget {
 
 > `SearchResults` является `StatelessWidget`, который принимает `List<SearchResultItem>` и отображает их в виде списка `SearchResultItems`.
 
-```dart
-class _SearchResults extends StatelessWidget {
-  final List<SearchResultItem> items;
-
-  const _SearchResults({Key key, this.items}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (BuildContext context, int index) {
-        return _SearchResultItem(item: items[index]);
-      },
-    );
-  }
-}
-```
+[search_form.dart](../_snippets/flutter_angular_github_search/flutter/search_results.dart.md ':include')
 
 ?> **Примечание:** Мы используем `ListView.builder`, чтобы создать прокручиваемый список `SearchResultItem`.
 
@@ -610,28 +227,7 @@ class _SearchResults extends StatelessWidget {
 
 > `SearchResultItem` является `StatelessWidget` и отвечает за отображение информации для одного результата поиска. Он также отвечает за обработку взаимодействия с пользователем и переход к URL-адресу хранилища по касанию пользователя.
 
-```dart
-class _SearchResultItem extends StatelessWidget {
-  final SearchResultItem item;
-
-  const _SearchResultItem({Key key, @required this.item}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        child: Image.network(item.owner.avatarUrl),
-      ),
-      title: Text(item.fullName),
-      onTap: () async {
-        if (await canLaunch(item.htmlUrl)) {
-          await launch(item.htmlUrl);
-        }
-      },
-    );
-  }
-}
-```
+[search_form.dart](../_snippets/flutter_angular_github_search/flutter/search_result_item.dart.md ':include')
 
 ?> **Примечание:** мы используем пакет [url_launcher](https://pub.dev/packages/url_launcher) для доступа к внешним URL.
 
@@ -639,177 +235,11 @@ class _SearchResultItem extends StatelessWidget {
 
 На данный момент `search_form.dart` должен выглядеть так:
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import 'package:common_github_search/common_github_search.dart';
-
-class SearchForm extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[_SearchBar(), _SearchBody()],
-    );
-  }
-}
-
-class _SearchBar extends StatefulWidget {
-  @override
-  State<_SearchBar> createState() => _SearchBarState();
-}
-
-class _SearchBarState extends State<_SearchBar> {
-  final _textController = TextEditingController();
-  GithubSearchBloc _githubSearchBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _githubSearchBloc = BlocProvider.of<GithubSearchBloc>(context);
-  }
-
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: _textController,
-      autocorrect: false,
-      onChanged: (text) {
-        _githubSearchBloc.add(
-          TextChanged(text: text),
-        );
-      },
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.search),
-        suffixIcon: GestureDetector(
-          child: Icon(Icons.clear),
-          onTap: _onClearTapped,
-        ),
-        border: InputBorder.none,
-        hintText: 'Enter a search term',
-      ),
-    );
-  }
-
-  void _onClearTapped() {
-    _textController.text = '';
-    _githubSearchBloc.add(TextChanged(text: ''));
-  }
-}
-
-class _SearchBody extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<GithubSearchBloc, GithubSearchState>(
-      bloc: BlocProvider.of<GithubSearchBloc>(context),
-      builder: (BuildContext context, GithubSearchState state) {
-        if (state is SearchStateEmpty) {
-          return Text('Please enter a term to begin');
-        }
-        if (state is SearchStateLoading) {
-          return CircularProgressIndicator();
-        }
-        if (state is SearchStateError) {
-          return Text(state.error);
-        }
-        if (state is SearchStateSuccess) {
-          return state.items.isEmpty
-              ? Text('No Results')
-              : Expanded(child: _SearchResults(items: state.items));
-        }
-      },
-    );
-  }
-}
-
-class _SearchResults extends StatelessWidget {
-  final List<SearchResultItem> items;
-
-  const _SearchResults({Key key, this.items}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (BuildContext context, int index) {
-        return _SearchResultItem(item: items[index]);
-      },
-    );
-  }
-}
-
-class _SearchResultItem extends StatelessWidget {
-  final SearchResultItem item;
-
-  const _SearchResultItem({Key key, @required this.item}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        child: Image.network(item.owner.avatarUrl),
-      ),
-      title: Text(item.fullName),
-      onTap: () async {
-        if (await canLaunch(item.htmlUrl)) {
-          await launch(item.htmlUrl);
-        }
-      },
-    );
-  }
-}
-```
+[search_form.dart](../_snippets/flutter_angular_github_search/flutter/search_form_complete.dart.md ':include')
 
 Теперь осталось только реализовать основное приложение в `main.dart`.
 
-```dart
-import 'package:flutter/material.dart';
-
-import 'package:meta/meta.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:common_github_search/common_github_search.dart';
-import 'package:flutter_github_search/search_form.dart';
-
-void main() {
-  final GithubRepository _githubRepository = GithubRepository(
-    GithubCache(),
-    GithubClient(),
-  );
-
-  runApp(App(githubRepository: _githubRepository));
-}
-
-class App extends StatelessWidget {
-  final GithubRepository githubRepository;
-
-  const App({
-    Key key,
-    @required this.githubRepository,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Github Search',
-      home: Scaffold(
-        appBar: AppBar(title: Text('Github Search')),
-        body: BlocProvider(
-          create: (context) =>
-              GithubSearchBloc(githubRepository: githubRepository),
-          child: SearchForm(),
-        ),
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/flutter_angular_github_search/flutter/main.dart.md ':include')
 
 ?> **Примечание:** `GithubRepository` создается в `main` и внедряется в `App`. `SearchForm` обернута в `BlocProvider`, который отвечает за инициализацию, закрытие и обеспечение доступности экземпляра `GithubSearchBloc` для виджета `SearchForm` и его дочерних элементов.
 
@@ -827,35 +257,13 @@ class App extends StatelessWidget {
 
 Нам нужно начать с создания нового проекта AngularDart в каталоге `github_search` на том же уровне, что и `common_github_search`.
 
-```bash
-stagehand web-angular
-```
+[stagehand.sh](../_snippets/flutter_angular_github_search/angular/stagehand.sh.md ':include')
 
 !> Активируйте `stagehand`, запустив `pub global activate stagehand`
 
 Затем мы можем заменить содержимое `pubspec.yaml` на:
 
-```yaml
-name: angular_github_search
-description: A web app that uses AngularDart Components
-
-environment:
-  sdk: ">=2.6.0 <3.0.0"
-
-dependencies:
-  angular: ^5.3.0
-  angular_components: ^0.13.0
-  angular_bloc: ^4.0.0
-  common_github_search:
-    path: ../common_github_search
-
-dev_dependencies:
-  angular_test: ^2.0.0
-  build_runner: ">=1.6.2 <2.0.0"
-  build_test: ^0.10.2
-  build_web_compilers: ">=1.2.0 <3.0.0"
-  test: ^1.0.0
-```
+[pubspec.yaml](../_snippets/flutter_angular_github_search/angular/pubspec.yaml.md ':include')
 
 ### Форма поиска
 
@@ -868,42 +276,7 @@ dev_dependencies:
 
 Давайте создадим `search_form_component.dart`.
 
-```dart
-import 'package:angular/angular.dart';
-import 'package:angular_bloc/angular_bloc.dart';
-
-import 'package:common_github_search/common_github_search.dart';
-import 'package:angular_github_search/src/github_search.dart';
-
-@Component(
-    selector: 'search-form',
-    templateUrl: 'search_form_component.html',
-    directives: [
-      SearchBarComponent,
-      SearchBodyComponent,
-    ],
-    pipes: [
-      BlocPipe
-    ])
-class SearchFormComponent implements OnInit, OnDestroy {
-  @Input()
-  GithubRepository githubRepository;
-
-  GithubSearchBloc githubSearchBloc;
-
-  @override
-  void ngOnInit() {
-    githubSearchBloc = GithubSearchBloc(
-      githubRepository: githubRepository,
-    );
-  }
-
-  @override
-  void ngOnDestroy() {
-    githubSearchBloc.close();
-  }
-}
-```
+[search_form_component.dart](../_snippets/flutter_angular_github_search/angular/search_form_component.dart.md ':include')
 
 ?> **Примечание:** `GithubRepository` внедряется в `SearchFormComponent`.
 
@@ -911,13 +284,7 @@ class SearchFormComponent implements OnInit, OnDestroy {
 
 Шаблон `search_form_component.html` будет выглядеть так:
 
-```html
-<div>
-  <h1>Github Search</h1>
-  <search-bar [githubSearchBloc]="githubSearchBloc"></search-bar>
-  <search-body [state]="githubSearchBloc | bloc"></search-body>
-</div>
-```
+[search_form_component.html](../_snippets/flutter_angular_github_search/angular/search_form_component.html.md ':include')
 
 Далее мы реализуем компонент `SearchBar`.
 
@@ -927,39 +294,13 @@ class SearchFormComponent implements OnInit, OnDestroy {
 
 Создадим `search_bar_component.dart`.
 
-```dart
-import 'package:angular/angular.dart';
-
-import 'package:common_github_search/common_github_search.dart';
-
-@Component(
-  selector: 'search-bar',
-  templateUrl: 'search_bar_component.html',
-)
-class SearchBarComponent {
-  @Input()
-  GithubSearchBloc githubSearchBloc;
-
-  void onTextChanged(String text) {
-    githubSearchBloc.add(TextChanged(text: text));
-  }
-}
-```
+[search_bar_component.dart](../_snippets/flutter_angular_github_search/angular/search_bar_component.dart.md ':include')
 
 ?> **Примечание:** `SearchBarComponent` зависит от `GitHubSearchBloc`, поскольку он отвечает за уведомление блока о событиях `TextChanged`.
 
 Далее мы можем создать `search_bar_component.html`.
 
-```html
-<label for="term" class="clip">Enter a search term</label>
-<input
-  id="term"
-  placeholder="Enter a search term"
-  class="input-reset outline-transparent glow o-50 bg-near-black near-white w-100 pv2 border-box b--white-50 br-0 bl-0 bt-0 bb-ridge mb3"
-  autofocus
-  (keyup)="onTextChanged($event.target.value)"
-/>
-```
+[search_bar_component.html](../_snippets/flutter_angular_github_search/angular/search_bar_component.html.md ':include')
 
 Мы закончили с `SearchBar`, теперь займемся `SearchBody`.
 
@@ -969,63 +310,13 @@ class SearchBarComponent {
 
 Создадим `search_body_component.dart`
 
-```dart
-import 'package:angular/angular.dart';
-import 'package:angular_components/angular_components.dart';
-
-import 'package:common_github_search/common_github_search.dart';
-import 'package:angular_github_search/src/github_search.dart';
-
-@Component(
-  selector: 'search-body',
-  templateUrl: 'search_body_component.html',
-  directives: [
-    coreDirectives,
-    MaterialSpinnerComponent,
-    MaterialIconComponent,
-    SearchResultsComponent,
-  ],
-)
-class SearchBodyComponent {
-  @Input()
-  GithubSearchState state;
-
-  bool get isEmpty => state is SearchStateEmpty;
-  bool get isLoading => state is SearchStateLoading;
-  bool get isSuccess => state is SearchStateSuccess;
-  bool get isError => state is SearchStateError;
-
-  List<SearchResultItem> get items =>
-      isSuccess ? (state as SearchStateSuccess).items : [];
-
-  String get error => isError ? (state as SearchStateError).error : '';
-}
-```
+[search_body_component.dart](../_snippets/flutter_angular_github_search/angular/search_body_component.dart.md ':include')
 
 ?> **Примечание:** `SearchBodyComponent` зависит от `GithubSearchState`, который предоставляется `GithubSearchBloc` с использованием блока `angular_bloc`.
 
 Создадим `search_body_component.html`
 
-```html
-<div *ngIf="state != null" class="mw10">
-  <div *ngIf="isEmpty" class="tc">
-    <material-icon icon="info" class="light-blue"></material-icon>
-    <p>Please enter a term to begin</p>
-  </div>
-  <div *ngIf="isLoading" class="tc"><material-spinner></material-spinner></div>
-  <div *ngIf="isError" class="tc">
-    <material-icon icon="error" class="light-red"></material-icon>
-    <p>{{ error }}</p>
-  </div>
-  <div *ngIf="isSuccess">
-    <div *ngIf="items.length == 0" class="tc">
-      <material-icon icon="warning" class="light-yellow"></material-icon>
-      <p>No Results</p>
-    </div>
-    <search-results [items]="items"></search-results>
-  </div>
-</div>
-```
+[search_body_component.html](../_snippets/flutter_angular_github_search/angular/search_body_component.html.md ':include')
 
 Если наше состояние `isSuccess`, мы визуализируем `SearchResults`, который мы будем реализовывать следующим.
 
@@ -1035,32 +326,11 @@ class SearchBodyComponent {
 
 Создадим `search_results_component.dart`
 
-```dart
-import 'package:angular/angular.dart';
-
-import 'package:common_github_search/common_github_search.dart';
-import 'package:angular_github_search/src/github_search.dart';
-
-@Component(
-  selector: 'search-results',
-  templateUrl: 'search_results_component.html',
-  directives: [coreDirectives, SearchResultItemComponent],
-)
-class SearchResultsComponent {
-  @Input()
-  List<SearchResultItem> items;
-}
-```
+[search_results_component.dart](../_snippets/flutter_angular_github_search/angular/search_results_component.dart.md ':include')
 
 Далее мы создадим `search_results_component.html`.
 
-```html
-<ul class="list pa0 ma0">
-  <li *ngFor="let item of items" class="pa2 cf">
-    <search-result-item [item]="item"></search-result-item>
-  </li>
-</ul>
-```
+[search_results_component.html](../_snippets/flutter_angular_github_search/angular/search_results_component.html.md ':include')
 
 ?> **Примечание:** мы используем `ngFor`, чтобы создать список компонентов `SearchResultItem`.
 
@@ -1072,60 +342,17 @@ class SearchResultsComponent {
 
 Создадим `search_result_item_component.dart`.
 
-```dart
-import 'package:angular/angular.dart';
-
-import 'package:common_github_search/common_github_search.dart';
-
-@Component(
-  selector: 'search-result-item',
-  templateUrl: 'search_result_item_component.html',
-)
-class SearchResultItemComponent {
-  @Input()
-  SearchResultItem item;
-}
-```
+[search_result_item_component.dart](../_snippets/flutter_angular_github_search/angular/search_result_item_component.dart.md ':include')
 
 и соответствующий шаблон в `search_result_item_component.html`.
 
-```html
-<div class="fl w-10 h-auto">
-  <img class="br-100" src="{{ item?.owner.avatarUrl }}" />
-</div>
-<div class="fl w-90 ph3">
-  <h1 class="f5 ma0">{{ item.fullName }}</h1>
-  <p>
-    <a href="{{ item?.htmlUrl }}" class="light-blue" target="_blank"
-      >{{ item?.htmlUrl }}</a
-    >
-  </p>
-</div>
-```
+[search_result_item_component.html](../_snippets/flutter_angular_github_search/angular/search_result_item_component.html.md ':include')
 
 ### Собираем все вместе
 
 У нас есть все компоненты и теперь пришло время собрать их все вместе в `app_component.dart`.
 
-```dart
-import 'package:angular/angular.dart';
-
-import 'package:common_github_search/common_github_search.dart';
-import 'package:angular_github_search/src/github_search.dart';
-
-@Component(
-  selector: 'my-app',
-  template:
-      '<search-form [githubRepository]="githubRepository"></search-form>',
-  directives: [SearchFormComponent],
-)
-class AppComponent {
-  final githubRepository = GithubRepository(
-    GithubCache(),
-    GithubClient(),
-  );
-}
-```
+[app_component.dart](../_snippets/flutter_angular_github_search/angular/app_component.dart.md ':include')
 
 ?> **Примечание:** мы создаем `GithubRepository` в `AppComponent` и внедряем его в компонент `SearchForm`.
 
