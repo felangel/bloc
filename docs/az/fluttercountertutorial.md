@@ -55,12 +55,12 @@ Sonda, sadəcə Sayğac səhifəsini yaratmaq qaldı.
 
 ?> **Qeyd**: İstifadəçi interfeysini vəziyyət dəyişikliklərinə uyğun olaraq (sayğac qiymətində olan dəyişikliklər) yeniləmək üçün `flutter_bloc` içərisində olan `BlocBuilder` istifadə edirik.
 
-?> **Note**: `BlocBuilder` takes an optional `bloc` parameter but we can specify the type of the bloc and the type of the state and `BlocBuilder` will find the bloc automatically so we don't need to explicity use `BlocProvider.of<CounterBloc>(context)`.
+?> **Qeyd**: `BlocBuilder` ötürülə bilən `bloc` parametri qəbul edir, amma biz bloc-un tipini və vəziyyətin tipini qeyd edərək `BlocBuilder`-in lazım olan bloc-u tapmasını təmin də bilərik, beləliklə bizim açıq şəkildə `BlocProvider.of<CounterBloc>(context)` yazmağımıza ehtiyac yoxdur.
 
-!> Only specify the bloc in `BlocBuilder` if you wish to provide a bloc that will be scoped to a single widget and isn't accessible via a parent `BlocProvider` and the current `BuildContext`.
+!> Əgər bu bloc yalnız bir widget üçün keçərlidir və `BlocProvider` və cari `BuilderContext` ilə əldə etmək mümkün deyilsə,`BlocBuilder`-də bloc-u yalnız o zaman aşkar şəkildə əlavə edin.
 
-That's it! We've separated our presentation layer from our business logic layer. Our `CounterPage` has no idea what happens when a user presses a button; it just adds an event to notify the `CounterBloc`. Furthermore, our `CounterBloc` has no idea what is happening with the state (counter value); it's simply converting the `CounterEvents` into integers.
+Bu qədər! Biz presentation (dizayn) təbəqəsini business logic (məntiq kodu) hissədən ayırdıq. `CounterPage` səhifəsinin düyməyə basan zaman nə baş verdiyi haqqında heç bir məlumatı yoxdur; bu sadəcə hadisəni (event) `CounterBloc`-u xəbərdar etmək üçün əlavə edir. Beləliklə, `CounterBloc` hissəsinin vəziyyət dəyişən zaman dizaynda nə baş verdiyi haqqında heç bir məlumatı, ideyası yoxdur; bu sadəcə `CounterEvent`-ləri integer-ə (tam ədədə) çevirir.
 
-We can run our app with `flutter run` and can view it on our device or simulator/emulator.
+Biz tətbiqimizi `flutter run` əmri vasitəsi ilə başlada və cihazımızda və ya simulator/emulator-da görə bilərik.
 
-The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example).
+Bu nümunənin tam kodu [buradan](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example) əldə oluna bilər.
