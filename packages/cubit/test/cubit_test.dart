@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 
 import 'cubits/counter_cubit.dart';
@@ -22,40 +21,18 @@ void main() {
       test('does nothing if cubit is closed', () async {
         final cubit = CounterCubit();
         await cubit.close();
-        await cubit.increment();
+        cubit.increment();
         await expectLater(cubit, emitsInOrder(<Matcher>[equals(0), emitsDone]));
       });
 
-      test('emits states in the correct order async', () async {
-        final cubit = CounterCubit();
-        unawaited(expectLater(
-          cubit,
-          emitsInOrder(<Matcher>[
-            equals(0),
-            equals(1),
-            equals(0),
-            emitsDone,
-          ]),
-        ));
-        await cubit.increment();
-        await cubit.decrement();
+      test('emits states in the correct order', () async {
+        final states = <int>[];
+        final cubit = CounterCubit()
+          ..listen(states.add)
+          ..increment();
         await cubit.close();
-      });
-
-      test('emits states in the correct order sync', () async {
-        final cubit = CounterCubit();
-        unawaited(expectLater(
-          cubit,
-          emitsInOrder(<Matcher>[
-            equals(0),
-            equals(1),
-            equals(-1),
-            emitsDone,
-          ]),
-        ));
-        unawaited(cubit.increment());
-        unawaited(cubit.decrement());
-        await cubit.close();
+        await Future<void>.delayed(Duration.zero);
+        expect(states, [1]);
       });
     });
 

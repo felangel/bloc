@@ -3,8 +3,17 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 
 /// {@template cubit}
-/// `Stream` which exposes a `state` and
-/// can conditionally emit new states asynchronously.
+/// A `cubit` is a reimagined [bloc](https://pub.dev/packages/bloc)
+/// which removes events and relies on methods to emit new states instead.
+///
+/// ```dart
+/// class CounterCubit extends Cubit<int> {
+///   @override
+///   int get initialState => 0;
+///
+///   void increment() => emit(state + 1);
+/// }
+/// ```
 /// {@endtemplate}
 abstract class Cubit<T> extends Stream<T> {
   /// {@macro cubit}
@@ -22,23 +31,15 @@ abstract class Cubit<T> extends Stream<T> {
 
   T _state;
 
-  /// Returns a `Future` which will completes when the cubit's
-  /// [state] has successfully been updated to the provided [state].
+  /// Updates the [state] of the `cubit` to the provided [state].
+  /// [emit] does nothing if the `cubit` has been closed.
   @protected
-  Future<void> emit(T state) async {
-    // Wait one tick before updating the internal state.
-    // This ensures that the initial state has propagated.
-    return Future.delayed(Duration.zero, () {
-      if (_controller.isClosed) return;
-      _state = state;
-      _controller.add(state);
-    });
+  void emit(T state) async {
+    if (_controller.isClosed) return;
+    _state = state;
+    _controller.add(state);
   }
 
-  /// Adds a subscription to the `Stream<T>`.
-  /// Returns a [StreamSubscription] which handles events from
-  /// the `Stream<T>` using the provided [onData], [onError] and [onDone]
-  /// handlers.
   @override
   StreamSubscription<T> listen(
     void Function(T) onData, {
@@ -54,14 +55,14 @@ abstract class Cubit<T> extends Stream<T> {
     );
   }
 
-  /// Returns whether the `Stream<T>` is a broadcast stream.
   @override
   bool get isBroadcast => _controller.stream.isBroadcast;
 
-  /// Closes the stream
+  /// Closes the `cubit`.
   @mustCallSuper
-  Future<void> close() {
-    return Future.delayed(Duration.zero, _controller.close);
+  Future<void> close() async {
+    await _controller.close();
+    await _controller.stream.drain<T>();
   }
 
   Stream<T> get _stream async* {
