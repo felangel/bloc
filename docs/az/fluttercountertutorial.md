@@ -47,13 +47,13 @@ Artıq bizim tam yaradılmış `CounterBloc` var, artıq Flutter tətbiqini yara
 
 ## Sayğac səhifəsi
 
-Finally, all that's left is to build our Counter Page.
+Sonda, sadəcə Sayğac səhifəsini yaratmaq qaldı.
 
 [counter_page.dart](../_snippets/flutter_counter_tutorial/counter_page.dart.md ':include')
 
-?> **Note**: We are able to access the `CounterBloc` instance using `BlocProvider.of<CounterBloc>(context)` because we wrapped our `CounterPage` in a `BlocProvider`.
+?> **Qeyd**: `BlocProvider.of<CounterBloc>(context)` istifadə edərək, `CounterBloc` obyektini `CounterPage`-i əhatə edən `BlocProvider` sayəsində əldə edə bilirik.
 
-?> **Note**: We are using the `BlocBuilder` widget from `flutter_bloc` in order to rebuild our UI in response to state changes (changes in the counter value).
+?> **Qeyd**: İstifadəçi interfeysini vəziyyət dəyişikliklərinə uyğun olaraq (sayğac qiymətində olan dəyişikliklər) yeniləmək üçün `flutter_bloc` içərisində olan `BlocBuilder` istifadə edirik.
 
 ?> **Note**: `BlocBuilder` takes an optional `bloc` parameter but we can specify the type of the bloc and the type of the state and `BlocBuilder` will find the bloc automatically so we don't need to explicity use `BlocProvider.of<CounterBloc>(context)`.
 
