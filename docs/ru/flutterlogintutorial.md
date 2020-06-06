@@ -122,8 +122,6 @@ class AuthenticationUnauthenticated extends AuthenticationState {}
 class AuthenticationLoading extends AuthenticationState {}
 ```
 
-?> **Note**: The [`equatable`](https://pub.dev/packages/equatable) package is used in order to be able to compare two instances of `AuthenticationState`. By default, `==` returns true only if the two objects are the same instance.
-
 ?> **Примечание**: Пакет [Equatable](https://pub.dev/packages/equatable) используется для сравнения двух экземпляров `AuthenticationState`. По умолчанию `==` возвращает true, только если два объекта являются одним и тем же экземпляром.
 
 ## Auth события

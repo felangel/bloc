@@ -1,68 +1,69 @@
-# Recipes: Navigation
+# 配方: 导航
 
-> In this recipe, we're going to take a look at how to use `BlocBuilder` and/or `BlocListener` to do navigation. We're going to explore two approaches: Direct Navigation and Route Navigation.
+> 在这里，我们将展示如何使用 `BlocBuilder` 和 `BlocListener` 进行导航。我们将使用两种方式：直接导航和路由导航。
 
-## Direct Navigation
+## 直接导航
 
-> In this example, we're going to take a look at how to use `BlocBuilder` to show a specific page (widget) in response to a state change in a bloc without the use of a route.
+> 在这个例子中，我们不使用路由，而是使用 `BlocBuilder` 显示一个特定页面（部件）来响应 bloc 的状态改变。
 
-![demo](./assets/gifs/recipes_flutter_navigation_direct.gif)
+![demo](../assets/gifs/recipes_flutter_navigation_direct.gif)
 
 ### Bloc
 
-Let's build `MyBloc` which will take `MyEvents` and convert them into `MyStates`.
+我们构建 `MyEvents` 作为输入，`MyStates` 作为输出的 `MyBloc`。
 
 #### MyEvent
 
-For simplicity, our `MyBloc` will only respond to a two `MyEvents`: `eventA` and `eventB`.
+简单起见，`MyBloc` 只响应两种 `MyEvents`：`eventA` 和 `eventB`。
 
 [my_event.dart](../_snippets/recipes_flutter_navigation/my_event.dart.md ':include')
 
 #### MyState
 
-Our `MyBloc` can have one of two different `DataStates`:
+`MyBloc` 可以有两种不同的 `DataStates`：
 
-- `StateA` - the state of the bloc when `PageA` is rendered.
-- `StateB` - the state of the bloc when `PageB` is rendered.
+- `StateA` - `PageA` 被渲染时的状态。
+- `StateB` - `PageB` 被渲染时的状态。
 
 [my_state.dart](../_snippets/recipes_flutter_navigation/my_state.dart.md ':include')
 
 #### MyBloc
 
-Our `MyBloc` should look something like this:
+`MyBloc` 的实现如下：
 
 [my_bloc.dart](../_snippets/recipes_flutter_navigation/my_bloc.dart.md ':include')
 
-### UI Layer
+### UI 层
 
-Now let's take a look at how to hook up our `MyBloc` to a widget and show a different page based on the bloc state.
+现在，我们将展示如何将 `MyBloc` 挂载到一个部件，并根据 bloc 的状态显示不同的页面。
 
 [main.dart](../_snippets/recipes_flutter_navigation/direct_navigation/main.dart.md ':include')
 
-?> We use the `BlocBuilder` widget in order to render the correct widget in response to state changes in our `MyBloc`.
+?> 在 `MyBloc` 中，我们使用 `BlocBuilder` 部件渲染相应的部件来响应状态改变。
 
-?> We use the `BlocProvider` widget in order to make our instance of `MyBloc` available to the entire widget tree.
+?> 我们使用 `BlocProvider` 部件让 `MyBloc` 的实例在整个部件树上可用。
 
-The full source for this recipe can be found [here](https://gist.github.com/felangel/386c840aad41c7675ab8695f15c4cb09).
+您可以在[这里](https://gist.github.com/felangel/386c840aad41c7675ab8695f15c4cb09)查看完整源代码。
 
-## Route Navigation
 
-> In this example, we're going to take a look at how to use `BlocListener` to navigate to a specific page (widget) in response to a state change in a bloc using a route.
+## 路由导航
 
-![demo](./assets/gifs/recipes_flutter_navigation_routes.gif)
+> 在这个例子中，我们将通过路由，在 bloc 状态改变时使用 `BlocListener` 导航到特定页面（部件）。
+
+![demo](../assets/gifs/recipes_flutter_navigation_routes.gif)
 
 ### Bloc
 
-We're going to reuse the same `MyBloc` from the previous example.
+我们将重用上个例子中的 `MyBloc`。
 
-### UI Layer
+### UI 层
 
-Let's take a look at how to route to a different page based on the state of `MyBloc`.
+我们将展示如何根据 `MyBloc` 的状态导航到不同的页面。
 
 [main.dart](../_snippets/recipes_flutter_navigation/route_navigation/main.dart.md ':include')
 
-?> We use the `BlocListener` widget in order to push a new route in response to state changes in our `MyBloc`.
+?> 当 `MyBloc` 的状态改变时，我们使用 `BlocListener` 部件将一个新路由入栈。
 
-!> For the sake of this example we are adding an event just for navigation. In a real application, you should not create explicit navigation events. If there is no "business logic" necessary in order to trigger navigation you should always directly navigate in response to user input (in the `onPressed` callback, etc...). Only navigate in response to state changes if some "business logic" is required in order to determine where to navigate.
+!> 为了展示用法，我们添加了一个仅用于导航的事件。在实际的应用程序中，您不应该创建显式的导航事件。如果不需要“业务逻辑”来触发导航，则应该直接响应用户输入（例如在 `onPressed` 回调方法中等等）。只有在需要“业务逻辑”来决定导航到某个页面时，才根据状态改变进行导航。
 
-The full source for this recipe can be found [here](https://gist.github.com/felangel/6bcd4be10c046ceb33eecfeb380135dd).
+您可以在[这里](https://gist.github.com/felangel/6bcd4be10c046ceb33eecfeb380135dd)查看完整源代码。

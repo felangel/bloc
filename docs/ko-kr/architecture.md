@@ -4,11 +4,11 @@
 
 Bloc을 사용하면 어플리케이션을 3개의 layer으로 나눌 수 있게 됩니다.
 
-- Data
-  - Data Provider
-  - Repository
-- Business Logic
 - Presentation
+- Business Logic
+- Data
+  - Repository
+  - Data Provider
 
 먼저, (User Interface에서 가장 먼) 제일 낮은 layer에서 시작해서 presentation layer까지 올라갈 예정입니다.
 

@@ -4,11 +4,11 @@
 
 O uso do Bloc nos permite separar nosso aplicativo em três camadas:
 
-- Dados
-  - Provedor de Dados
-  - Repositório
-- Lógica de Negócio
 - Apresentação
+- Lógica de Negócio
+- Dados
+  - Repositório
+  - Provedor de Dados
 
 Vamos começar na camada de nível mais baixo (o mais distante da interface do usuário) e seguir até a camada de apresentação.
 

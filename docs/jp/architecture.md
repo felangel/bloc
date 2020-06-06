@@ -4,11 +4,11 @@
 
 Bloc はアプリケーションを３つのレイヤーに分けてくれます：
 
-- データ
-  - Data Provider
-  - Repository
-- Business Logic (Bloc)
 - プレゼンテーション
+- Business Logic (Bloc)
+- データ
+  - Repository
+  - Data Provider
 
 ここではまずユーザーインターフェイスから一番遠いレイヤーから解説していきます。
 

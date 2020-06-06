@@ -119,15 +119,13 @@ API вернет пустой массив, если мы попытаемся �
 
 [post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transform_events.dart.md ':include')
 
-Our finished `PostBloc` should now look like this:
+Наш готовый `PostBloc` теперь должен выглядеть так:
 
 [post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc.dart.md ':include')
 
 Не забудьте обновить `bloc/bloc.dart` и включить наш `PostBloc`!
 
 [bloc.dart](../_snippets/flutter_infinite_list_tutorial/bloc.dart.md ':include')
-
-Great! Now that we’ve finished implementing the business logic all that’s left to do is implement the presentation layer.
 
 Великолепно! Теперь, когда мы закончили реализацию бизнес логики, нам остался только уровень представления.
 

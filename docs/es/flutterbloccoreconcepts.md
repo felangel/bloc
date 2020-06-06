@@ -32,7 +32,7 @@ En la mayoría de los casos, `BlocProvider` debe usarse para crear nuevos `blocs
 
 [bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider.dart.md ':include')
 
-En la mayoría de los casos, `BlocProvider` debe usarse para crear nuevos `blocs` que estarán disponibles para el resto del subárbol. En este caso, dado que `BlocProvider` es responsable de crear el bloc, se encargará automáticamente de cerrar el bloc.
+En otros casos, `BlocProvider` puede ser usado para proveer un bloc ya existente al subárbol, esto es comúnmente usado cuando ya se requiere que un `bloc` anteriormente creado esté disponible para una nueva ruta, en este caso, `BlocProvider` no cerrará automáticamente el `bloc` puesto que no lo creó.
 
 [bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider_value.dart.md ':include')
 

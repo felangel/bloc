@@ -792,8 +792,6 @@ class Timer extends StatelessWidget {
 }
 ```
 
-We added another `BlocBuilder` which will render the `Actions` widget; however, this time we’re using a newly introduced [flutter_bloc](https://pub.dev/packages/flutter_bloc) feature to control how frequently the `Actions` widget is rebuilt (introduced in `v0.15.0`).
-
 Мы добавили еще один `BlocBuilder`, который будет отображать виджет `Actions`, однако на этот раз мы используем недавно представленную функцию [flutter_bloc](https://pub.dev/packages/flutter_bloc), чтобы контролировать, как часто перестраивается виджет `Actions` (представлено в `v0.15.0`).
 
 Если вам нужен детальный контроль над тем, когда вызывается функция `builder`, вы можете предоставить необязательное условие для `BlocBuilder`. Условие принимает предыдущее и текущее состояние блока и возвращает логическое значение. Если `condition` возвращает `true`, `builder` будет вызван со `state` и виджет будет перестроен. Если `condition` возвращает `false`, `builder` не будет вызван со `state` и перестройка не произойдет.
