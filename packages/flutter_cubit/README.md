@@ -127,21 +127,20 @@ class CounterCubit extends Cubit<int> {
   @override
   int get initialState => 0;
 
-  Future<void> increment() => emit(state + 1);
-  Future<void> decrement() => emit(state - 1);
+  void increment() => emit(state + 1);
+  void decrement() => emit(state - 1);
 }
 ```
 
 ### main.dart
 
 ```dart
-void main() => runApp(CounterApp());
+void main() => runApp(CubitCounter());
 
-class CounterApp extends StatelessWidget {
+class CubitCounter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       home: CubitProvider(
         create: (_) => CounterCubit(),
         child: CounterPage(),
@@ -154,14 +153,11 @@ class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Counter')),
+      appBar: AppBar(title: const Text('Cubit Counter')),
       body: CubitBuilder<CounterCubit, int>(
         builder: (_, count) {
           return Center(
-            child: Text(
-              '$count',
-              style: const TextStyle(fontSize: 24.0),
-            ),
+            child: Text('$count', style: Theme.of(context).textTheme.headline1),
           );
         },
       ),
@@ -170,17 +166,17 @@ class CounterPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: FloatingActionButton(
               child: const Icon(Icons.add),
-              onPressed: () => context.cubit<CounterCubit>().increment(),
+              onPressed: context.cubit<CounterCubit>().increment,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: FloatingActionButton(
               child: const Icon(Icons.remove),
-              onPressed: () => context.cubit<CounterCubit>().decrement(),
+              onPressed: context.cubit<CounterCubit>().decrement,
             ),
           ),
         ],

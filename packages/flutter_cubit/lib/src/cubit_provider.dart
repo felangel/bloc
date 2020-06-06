@@ -27,17 +27,6 @@ mixin CubitProviderSingleChildWidget on SingleChildWidget {}
 /// {@endtemplate}
 class CubitProvider<T extends Cubit<dynamic>> extends SingleChildStatelessWidget
     with CubitProviderSingleChildWidget {
-  /// [child] and its descendants which will have access to the `cubit`.
-  final Widget child;
-
-  /// Whether or not the `cubit` being provided should be lazily created.
-  /// Defaults to `true`.
-  final bool lazy;
-
-  final Dispose<T> _dispose;
-
-  final Create<T> _create;
-
   /// {@macro cubitprovider}
   CubitProvider({
     Key key,
@@ -90,6 +79,17 @@ class CubitProvider<T extends Cubit<dynamic>> extends SingleChildStatelessWidget
   })  : _create = create,
         _dispose = dispose,
         super(key: key, child: child);
+
+  /// [child] and its descendants which will have access to the `cubit`.
+  final Widget child;
+
+  /// Whether or not the `cubit` being provided should be lazily created.
+  /// Defaults to `true`.
+  final bool lazy;
+
+  final Dispose<T> _dispose;
+
+  final Create<T> _create;
 
   /// Method that allows widgets to access a `cubit` instance as long as their
   /// `BuildContext` contains a [CubitProvider] instance.

@@ -23,6 +23,8 @@ jobs:
       - name: Install Dependencies
         run: flutter packages get
       - name: Format
-        run: flutter format --set-exit-if-changed lib
+        run: flutter format --set-exit-if-changed lib test
       - name: Analyze
-        run: flutter analyze lib
+        run: flutter analyze lib test
+      - name: Check Code Coverage
+        uses: ChicagoFlutter/lcov-cop@v1.0.0

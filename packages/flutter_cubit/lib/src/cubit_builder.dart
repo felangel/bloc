@@ -71,12 +71,6 @@ typedef CubitBuilderCondition<S> = bool Function(S previous, S current);
 /// ```
 /// {@endtemplate}
 class CubitBuilder<C extends Cubit<S>, S> extends CubitBuilderBase<C, S> {
-  /// The [builder] function which will be invoked on each widget build.
-  /// The [builder] takes the `BuildContext` and current `state` and
-  /// must return a widget.
-  /// This is analogous to the [builder] function in [StreamBuilder].
-  final CubitWidgetBuilder<S> builder;
-
   /// {@macro cubitbuilder}
   const CubitBuilder({
     Key key,
@@ -85,6 +79,12 @@ class CubitBuilder<C extends Cubit<S>, S> extends CubitBuilderBase<C, S> {
     CubitBuilderCondition<S> condition,
   })  : assert(builder != null),
         super(key: key, cubit: cubit, condition: condition);
+
+  /// The [builder] function which will be invoked on each widget build.
+  /// The [builder] takes the `BuildContext` and current `state` and
+  /// must return a widget.
+  /// This is analogous to the [builder] function in [StreamBuilder].
+  final CubitWidgetBuilder<S> builder;
 
   @override
   Widget build(BuildContext context, S state) => builder(context, state);

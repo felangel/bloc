@@ -80,11 +80,6 @@ typedef CubitListenerCondition<S> = bool Function(S previous, S current);
 /// {@endtemplate}
 class CubitListener<C extends Cubit<S>, S> extends CubitListenerBase<C, S>
     with CubitListenerSingleChildWidget {
-  /// The widget which will be rendered as a descendant of the [CubitListener].
-  @override
-  // ignore: overridden_fields
-  final Widget child;
-
   /// {@macro cubitlistener}
   const CubitListener({
     Key key,
@@ -100,6 +95,11 @@ class CubitListener<C extends Cubit<S>, S> extends CubitListenerBase<C, S>
           cubit: cubit,
           condition: condition,
         );
+
+  /// The widget which will be rendered as a descendant of the [CubitListener].
+  @override
+  // ignore: overridden_fields
+  final Widget child;
 }
 
 /// {@template cubitlistenerbase}
@@ -111,6 +111,15 @@ class CubitListener<C extends Cubit<S>, S> extends CubitListenerBase<C, S>
 /// {@endtemplate}
 abstract class CubitListenerBase<C extends Cubit<S>, S>
     extends SingleChildStatefulWidget {
+  /// {@macro cubitlistenerbase}
+  const CubitListenerBase({
+    Key key,
+    this.listener,
+    this.cubit,
+    this.child,
+    this.condition,
+  }) : super(key: key, child: child);
+
   /// The widget which will be rendered as a descendant of the
   /// [CubitListenerBase].
   final Widget child;
@@ -134,15 +143,6 @@ abstract class CubitListenerBase<C extends Cubit<S>, S>
   /// [condition] is optional and if it isn't implemented, it will default to
   /// `true`.
   final CubitListenerCondition<S> condition;
-
-  /// {@macro cubitlistenerbase}
-  const CubitListenerBase({
-    Key key,
-    this.listener,
-    this.cubit,
-    this.child,
-    this.condition,
-  }) : super(key: key, child: child);
 
   @override
   SingleChildState<CubitListenerBase<C, S>> createState() =>
