@@ -28,12 +28,12 @@ class WeatherCubit extends Cubit<WeatherState> {
 
   Future<void> getWeather({@required String city}) async {
     if (city == null || city.isEmpty) return;
-    await emit(WeatherLoadInProgress());
+    emit(WeatherLoadInProgress());
     try {
       final weather = await _weatherService.getWeather(city);
-      return emit(WeatherLoadSuccess(weather));
+      emit(WeatherLoadSuccess(weather));
     } catch (_) {
-      return emit(WeatherLoadFailure());
+      emit(WeatherLoadFailure());
     }
   }
 }

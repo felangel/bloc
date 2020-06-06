@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cubit: ^0.0.1
-  flutter_cubit: ^0.0.1
+  cubit: ^0.0.2
+  flutter_cubit: ^0.0.1  
   google_fonts: ^1.1.0
   http: ^0.12.1
   json_annotation: ^3.0.1
