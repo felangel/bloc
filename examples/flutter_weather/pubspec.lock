@@ -140,7 +140,7 @@ packages:
       name: cubit
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.3"
   dart_style:
     dependency: transitive
     description:
@@ -166,7 +166,7 @@ packages:
       name: flutter_cubit
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1"
+    version: "0.0.3"
   glob:
     dependency: transitive
     description:

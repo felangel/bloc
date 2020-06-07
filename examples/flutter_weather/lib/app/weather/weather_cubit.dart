@@ -19,12 +19,9 @@ class WeatherLoadSuccess extends WeatherState {
 class WeatherLoadFailure extends WeatherState {}
 
 class WeatherCubit extends Cubit<WeatherState> {
-  WeatherCubit(this._weatherService);
+  WeatherCubit(this._weatherService) : super(WeatherInitial());
 
   final WeatherService _weatherService;
-
-  @override
-  WeatherState get initialState => WeatherInitial();
 
   Future<void> getWeather({@required String city}) async {
     if (city == null || city.isEmpty) return;
