@@ -16,8 +16,7 @@ A cubit is a reimagined bloc (from [package:bloc](https://pub.dev/packages/bloc)
 
 ```dart
 class CounterCubit extends Cubit<int> {
-  @override
-  int get initialState => 0;
+  CounterCubit() : super(0);
 
   void increment() => emit(state + 1);
   void decrement() => emit(state - 1);

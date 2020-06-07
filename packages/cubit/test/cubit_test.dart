@@ -6,13 +6,8 @@ import 'cubits/counter_cubit.dart';
 
 void main() {
   group('cubit', () {
-    group('initialState', () {
+    group('initial state', () {
       test('is correct', () {
-        expect(CounterCubit().initialState, 0);
-      });
-
-      test('state matches initialState', () {
-        expect(CounterCubit().initialState, 0);
         expect(CounterCubit().state, 0);
       });
     });

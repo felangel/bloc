@@ -12,8 +12,7 @@ An experimental Dart library which exposes a `cubit`. A cubit is a reimagined bl
 
 ```dart
 class CounterCubit extends Cubit<int> {
-  @override
-  int get initialState => 0;
+  CounterCubit() : super(0);
 
   void increment() => emit(state + 1);
 }

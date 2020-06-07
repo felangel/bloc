@@ -1,3 +1,7 @@
+# 0.0.3
+
+- **BREAKING**: remove `initialState` getter and instead require initial state via constructor
+
 # 0.0.2
 
 - **BREAKING**: update `emit` to be a `void` function
