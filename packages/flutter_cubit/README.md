@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/flutter_cubit_full.png" height="60" alt="Flutter Cubit" />
+<img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/flutter_cubit_full.png" height="80" alt="Flutter Cubit" />
 
 **WARNING: This is highly experimental**
 
