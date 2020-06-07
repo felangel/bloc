@@ -64,16 +64,14 @@ class MyThemeAppState extends State<MyThemeApp> {
 }
 
 class ThemeCubit extends Cubit<ThemeData> {
-  @override
-  ThemeData get initialState => ThemeData.light();
+  ThemeCubit() : super(ThemeData.light());
 
   void setDarkTheme() => emit(ThemeData.dark());
   void setLightTheme() => emit(ThemeData.light());
 }
 
 class DarkThemeCubit extends Cubit<ThemeData> {
-  @override
-  ThemeData get initialState => ThemeData.dark();
+  DarkThemeCubit() : super(ThemeData.dark());
 
   void setDarkTheme() => emit(ThemeData.dark());
   void setLightTheme() => emit(ThemeData.light());
@@ -127,8 +125,7 @@ class MyCounterAppState extends State<MyCounterApp> {
 }
 
 class CounterCubit extends Cubit<int> {
-  @override
-  int get initialState => 0;
+  CounterCubit() : super(0);
 
   void increment() => emit(state + 1);
   void decrement() => emit(state - 1);

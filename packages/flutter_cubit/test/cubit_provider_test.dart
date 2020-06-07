@@ -149,10 +149,7 @@ class RoutePage extends StatelessWidget {
 }
 
 class CounterCubit extends Cubit<int> {
-  CounterCubit({this.onClose});
-
-  @override
-  int get initialState => 0;
+  CounterCubit({this.onClose}) : super(0);
 
   final Function onClose;
 

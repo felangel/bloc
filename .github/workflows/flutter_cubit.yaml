@@ -2,14 +2,18 @@ name: build
 
 on:
   push:
+    branches:
+      - master
     paths:
-      - "packages/flutter_cubit/**"
       - ".github/workflows/flutter_cubit.yaml"
+      - "packages/flutter_cubit/**"
 
   pull_request:
+    branches:
+      - master
     paths:
-      - "packages/flutter_cubit/**"
       - ".github/workflows/flutter_cubit.yaml"
+      - "packages/flutter_cubit/**"
 
 jobs:
   build:

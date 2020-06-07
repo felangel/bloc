@@ -1,8 +1,81 @@
 <img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/flutter_cubit_full.png" height="80" alt="Flutter Cubit" />
 
+[![Pub](https://img.shields.io/pub/v/flutter_cubit.svg)](https://pub.dev/packages/flutter_cubit)
+[![build](https://github.com/felangel/cubit/workflows/build/badge.svg)](https://github.com/felangel/cubit/actions)
+[![coverage](https://github.com/felangel/cubit/blob/master/packages/cubit/coverage_badge.svg)](https://github.com/felangel/cubit/actions)
+
 **WARNING: This is highly experimental**
 
 An experimental Flutter library which exposes widgets that integrate with `cubits`. Built to work with [package:cubit](https://pub.dev/packages/cubit).
+
+## Usage
+
+Lets take a look at how to use `CubitBuilder` to hook up a `CounterPage` widget to a `CounterCubit`.
+
+### counter_cubit.dart
+
+```dart
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
+
+  void increment() => emit(state + 1);
+  void decrement() => emit(state - 1);
+}
+```
+
+### main.dart
+
+```dart
+void main() => runApp(CubitCounter());
+
+class CubitCounter extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: CubitProvider(
+        create: (_) => CounterCubit(),
+        child: CounterPage(),
+      ),
+    );
+  }
+}
+
+class CounterPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Cubit Counter')),
+      body: CubitBuilder<CounterCubit, int>(
+        builder: (_, count) {
+          return Center(
+            child: Text('$count', style: Theme.of(context).textTheme.headline1),
+          );
+        },
+      ),
+      floatingActionButton: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: FloatingActionButton(
+              child: const Icon(Icons.add),
+              onPressed: context.cubit<CounterCubit>().increment,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: FloatingActionButton(
+              child: const Icon(Icons.remove),
+              onPressed: context.cubit<CounterCubit>().decrement,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
 
 ## Cubit Widgets
 
@@ -114,76 +187,6 @@ CubitListener<CubitA, CubitAState>(
   },
   child: Container(),
 )
-```
-
-## Usage
-
-Lets take a look at how to use `CubitBuilder` to hook up a `CounterPage` widget to a `CounterCubit`.
-
-### counter_cubit.dart
-
-```dart
-class CounterCubit extends Cubit<int> {
-  @override
-  int get initialState => 0;
-
-  void increment() => emit(state + 1);
-  void decrement() => emit(state - 1);
-}
-```
-
-### main.dart
-
-```dart
-void main() => runApp(CubitCounter());
-
-class CubitCounter extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: CubitProvider(
-        create: (_) => CounterCubit(),
-        child: CounterPage(),
-      ),
-    );
-  }
-}
-
-class CounterPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Cubit Counter')),
-      body: CubitBuilder<CounterCubit, int>(
-        builder: (_, count) {
-          return Center(
-            child: Text('$count', style: Theme.of(context).textTheme.headline1),
-          );
-        },
-      ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: FloatingActionButton(
-              child: const Icon(Icons.add),
-              onPressed: context.cubit<CounterCubit>().increment,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: FloatingActionButton(
-              child: const Icon(Icons.remove),
-              onPressed: context.cubit<CounterCubit>().decrement,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 ```
 
 ## Dart Versions

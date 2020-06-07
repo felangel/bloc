@@ -1,6 +1,13 @@
 name: build
 
 on:
+  push:
+    branches:
+      - master
+    paths:
+      - ".github/workflows/cubit.yaml"
+      - "packages/cubit/**"
+
   pull_request:
     branches:
       - master

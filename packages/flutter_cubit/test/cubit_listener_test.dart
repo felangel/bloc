@@ -4,8 +4,7 @@ import 'package:flutter_cubit/flutter_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class CounterCubit extends Cubit<int> {
-  @override
-  int get initialState => 0;
+  CounterCubit() : super(0);
 
   void increment() => emit(state + 1);
 }

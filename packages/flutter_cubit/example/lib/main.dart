@@ -59,12 +59,14 @@ class CounterPage extends StatelessWidget {
   }
 }
 
+/// {@template counter_cubit}
 /// A simple `cubit` which manages an `int` as its state
 /// and exposes two public APIs to `increment` and `decrement`
 /// the value of the state.
+/// {@endtemplate}
 class CounterCubit extends Cubit<int> {
-  @override
-  int get initialState => 0;
+  /// {@macro counter_cubit}
+  CounterCubit() : super(0);
 
   /// Increments the `cubit` state by 1.
   void increment() => emit(state + 1);
