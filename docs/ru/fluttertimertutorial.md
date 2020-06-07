@@ -10,31 +10,11 @@
 
 Мы начнем с создания нового проекта Flutter
 
-```sh
-flutter create flutter_timer
-```
+[script](../_snippets/flutter_timer_tutorial/flutter_create.sh.md ':include')
 
 Сначала нам нужно заменить содержимое файла `pubspec.yaml` на:
 
-```yaml
-name: flutter_timer
-description: A new Flutter project.
-
-version: 1.0.0+1
-
-environment:
-  sdk: ">=2.6.0 <3.0.0"
-
-dependencies:
-  flutter:
-    sdk: flutter
-  flutter_bloc: ^4.0.0
-  equatable: ^1.0.0
-  wave: ^0.0.8
-
-flutter:
-  uses-material-design: true
-```
+[pubspec.yaml](../_snippets/flutter_timer_tutorial/pubspec.yaml.md ':include')
 
 Затем запустить `flutter packages get`, чтобы установить все зависимости.
 
@@ -46,14 +26,7 @@ flutter:
 
 Начнем с создания `ticker.dart`.
 
-```dart
-class Ticker {
-  Stream<int> tick({int ticks}) {
-    return Stream.periodic(Duration(seconds: 1), (x) => ticks - x - 1)
-        .take(ticks);
-  }
-}
-```
+[ticker.dart](../_snippets/flutter_timer_tutorial/ticker.dart.md ':include')
 
 Все, что делает наш класс `Ticker` - предоставляет функцию tick, которая принимает желаемое количество тиков (секунд) и возвращает поток, который генерирует оставшиеся секунды каждую секунду.
 
@@ -83,43 +56,7 @@ class Ticker {
 
 ?> **Совет:** Вы можете использовать [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) или [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) расширения для автоматического создания следующих файлов блока.
 
-```dart
-import 'package:equatable/equatable.dart';
-
-abstract class TimerState extends Equatable {
-  final int duration;
-
-  const TimerState(this.duration);
-
-  @override
-  List<Object> get props => [duration];
-}
-
-class Ready extends TimerState {
-  const Ready(int duration) : super(duration);
-
-  @override
-  String toString() => 'Ready { duration: $duration }';
-}
-
-class Paused extends TimerState {
-  const Paused(int duration) : super(duration);
-
-  @override
-  String toString() => 'Paused { duration: $duration }';
-}
-
-class Running extends TimerState {
-  const Running(int duration) : super(duration);
-
-  @override
-  String toString() => 'Running { duration: $duration }';
-}
-
-class Finished extends TimerState {
-  const Finished() : super(0);
-}
-```
+[timer_state.dart](../_snippets/flutter_timer_tutorial/timer_state.dart.md ':include')
 
 Обратите внимание, что все `TimerStates` расширяют абстрактный базовый класс `TimerState`, который имеет свойство `duration`. Это потому, что независимо от того, в каком состоянии находится наш `TimerBloc`, мы хотим знать сколько времени осталось.
 
@@ -137,44 +74,7 @@ class Finished extends TimerState {
 
 Если вы не использовали [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) или [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc), создадим файл `bloc/timer_event.dart` и реализуем эти события.
 
-```dart
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
-
-abstract class TimerEvent extends Equatable {
-  const TimerEvent();
-
-  @override
-  List<Object> get props => [];
-}
-
-class Start extends TimerEvent {
-  final int duration;
-
-  const Start({@required this.duration});
-
-  @override
-  String toString() => "Start { duration: $duration }";
-}
-
-class Pause extends TimerEvent {}
-
-class Resume extends TimerEvent {}
-
-class Reset extends TimerEvent {}
-
-class Tick extends TimerEvent {
-  final int duration;
-
-  const Tick({@required this.duration});
-
-  @override
-  List<Object> get props => [duration];
-
-  @override
-  String toString() => "Tick { duration: $duration }";
-}
-```
+[timer_event.dart](../_snippets/flutter_timer_tutorial/timer_event.dart.md ':include')
 
 Далее давайте реализуем `TimerBloc`!
 
@@ -182,315 +82,39 @@ class Tick extends TimerEvent {
 
 Если вы этого еще не сделали, создайте `bloc/timer_bloc.dart` и создайте пустой `TimerBloc`.
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:flutter_timer/bloc/bloc.dart';
-
-class TimerBloc extends Bloc<TimerEvent, TimerState> {
-  @override
-  TimerState get initialState => // TODO: implement initialState;
-
-  @override
-  Stream<TimerState> mapEventToState(
-    TimerEvent event,
-  ) async* {
-    // TODO: implement mapEventToState
-  }
-}
-```
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_empty.dart.md ':include')
 
 Первое, что нам нужно сделать, это определить `initialState` нашего `TimerBloc`. В этом случае мы хотим, чтобы `TimerBloc` запускался в состоянии `Ready` с заданной продолжительностью 1 минута (60 секунд).
 
-```dart
-import 'package:bloc/bloc.dart';
-import 'package:flutter_timer/bloc/bloc.dart';
-
-class TimerBloc extends Bloc<TimerEvent, TimerState> {
-  final int _duration = 60;
-
-  @override
-  TimerState get initialState => Ready(_duration);
-
-  @override
-  Stream<TimerState> mapEventToState(
-    TimerEvent event,
-  ) async* {
-    // TODO: implement mapEventToState
-  }
-}
-```
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_initial_state.dart.md ':include')
 
 Далее нам нужно определить зависимость от нашего `Ticker`.
 
-```dart
-import 'dart:async';
-import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_timer/bloc/bloc.dart';
-import 'package:flutter_timer/ticker.dart';
-
-class TimerBloc extends Bloc<TimerEvent, TimerState> {
-  final Ticker _ticker;
-  final int _duration = 60;
-
-  StreamSubscription<int> _tickerSubscription;
-
-  TimerBloc({@required Ticker ticker})
-      : assert(ticker != null),
-        _ticker = ticker;
-
-  @override
-  TimerState get initialState => Ready(_duration);
-
-  @override
-  Stream<TimerState> mapEventToState(
-    TimerEvent event,
-  ) async* {
-    // TODO: implement mapEventToState
-  }
-}
-```
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_ticker.dart.md ':include')
 
 Мы также определяем `StreamSubscription` для нашего `Ticker`, к которому мы скоро перейдем.
 
 На данный момент все, что осталось сделать, это реализовать `mapEventToState`. Для улучшения читаемости мне нравится разбивать каждый обработчик событий на его собственную вспомогательную функцию. Начнем с события `Start`.
 
-```dart
-import 'dart:async';
-import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_timer/bloc/bloc.dart';
-import 'package:flutter_timer/ticker.dart';
-
-class TimerBloc extends Bloc<TimerEvent, TimerState> {
-  final Ticker _ticker;
-  final int _duration = 60;
-
-  StreamSubscription<int> _tickerSubscription;
-
-  TimerBloc({@required Ticker ticker})
-      : assert(ticker != null),
-        _ticker = ticker;
-
-  @override
-  TimerState get initialState => Ready(_duration);
-
-  @override
-  Stream<TimerState> mapEventToState(
-    TimerEvent event,
-  ) async* {
-    if (event is Start) {
-      yield* _mapStartToState(event);
-    }
-  }
-
-  @override
-  Future<void> close() {
-    _tickerSubscription?.cancel();
-    return super.close();
-  }
-
-  Stream<TimerState> _mapStartToState(Start start) async* {
-     yield Running(start.duration);
-    _tickerSubscription?.cancel();
-    _tickerSubscription = _ticker
-        .tick(ticks: start.duration)
-        .listen((duration) => add(Tick(duration: duration)));
-  }
-}
-```
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_start.dart.md ':include')
 
 Если `TimerBloc` получает событие `Start`, он переводит состояние в `Running` с первоначальной продолжительностью. Кроме того, если уже была открытая `_tickerSubscription`, нам нужно отменить ее, чтобы освободить память. Нам также нужно переопределить метод `close` нашего `TimerBloc`, чтобы мы могли отменить `_tickerSubscription` когда `TimerBloc` закрыт. Наконец, мы слушаем поток `_ticker.tick` и на каждом тике мы добавляем событие `Tick` с оставшейся продолжительностью.
 
 Теперь давайте реализуем обработчик событий `Tick`.
 
-```dart
-import 'dart:async';
-import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_timer/bloc/bloc.dart';
-import 'package:flutter_timer/ticker.dart';
-
-class TimerBloc extends Bloc<TimerEvent, TimerState> {
-  final Ticker _ticker;
-  final int _duration = 60;
-
-  StreamSubscription<int> _tickerSubscription;
-
-  TimerBloc({@required Ticker ticker})
-      : assert(ticker != null),
-        _ticker = ticker;
-
-  @override
-  TimerState get initialState => Ready(_duration);
-
-  @override
-  Stream<TimerState> mapEventToState(
-    TimerEvent event,
-  ) async* {
-    if (event is Start) {
-      yield* _mapStartToState(event);
-    } else if (event is Tick) {
-      yield* _mapTickToState(event);
-    }
-  }
-
-  @override
-  Future<void> close() {
-    _tickerSubscription?.cancel();
-    return super.close();
-  }
-
-  Stream<TimerState> _mapStartToState(Start start) async* {
-     yield Running(start.duration);
-    _tickerSubscription?.cancel();
-    _tickerSubscription = _ticker
-        .tick(ticks: start.duration)
-        .listen((duration) => add(Tick(duration: duration)));
-  }
-
-  Stream<TimerState> _mapTickToState(Tick tick) async* {
-    yield tick.duration > 0 ? Running(tick.duration) : Finished();
-  }
-}
-```
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_tick.dart.md ':include')
 
 Каждый раз, когда получено событие `Tick`, если длительность тика больше 0, нам нужно выставить обновленное состояние `Running` с новой продолжительностью. В противном случае, если длительность тика равна 0, наш таймер закончился и нам нужно перейти в состояние `Finished`.
 
 Теперь давайте реализуем обработчик событий `Pause`.
 
-```dart
-import 'dart:async';
-import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_timer/bloc/bloc.dart';
-import 'package:flutter_timer/ticker.dart';
-
-class TimerBloc extends Bloc<TimerEvent, TimerState> {
-  final Ticker _ticker;
-  final int _duration = 60;
-
-  StreamSubscription<int> _tickerSubscription;
-
-  TimerBloc({@required Ticker ticker})
-      : assert(ticker != null),
-        _ticker = ticker;
-
-  @override
-  TimerState get initialState => Ready(_duration);
-
-  @override
-  Stream<TimerState> mapEventToState(
-    TimerEvent event,
-  ) async* {
-    if (event is Start) {
-      yield* _mapStartToState(event);
-    } else if (event is Pause) {
-      yield* _mapPauseToState(event);
-    } else if (event is Tick) {
-      yield* _mapTickToState(event);
-    }
-  }
-
-  @override
-  Future<void> close() {
-    _tickerSubscription?.cancel();
-    return super.close();
-  }
-
-  Stream<TimerState> _mapStartToState(Start start) async* {
-     yield Running(start.duration);
-    _tickerSubscription?.cancel();
-    _tickerSubscription = _ticker
-        .tick(ticks: start.duration)
-        .listen((duration) => add(Tick(duration: duration)));
-  }
-
-  Stream<TimerState> _mapPauseToState(Pause pause) async* {
-    if (state is Running) {
-      _tickerSubscription?.pause();
-      yield Paused(state.duration);
-    }
-  }
-
-  Stream<TimerState> _mapTickToState(Tick tick) async* {
-    yield tick.duration > 0 ? Running(tick.duration) : Finished();
-  }
-}
-```
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_pause.dart.md ':include')
 
 В `_mapPauseToState`, если `state` нашего `TimerBloc` равно `Running`, тогда мы можем приостановить `_tickerSubscription` и выставить состояние `Paused` с текущей длительностью таймера.
 
 Далее, давайте реализуем обработчик событий `Resume`, чтобы мы могли отключать таймер.
 
-```dart
-import 'dart:async';
-import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_timer/bloc/bloc.dart';
-import 'package:flutter_timer/ticker.dart';
-
-class TimerBloc extends Bloc<TimerEvent, TimerState> {
-  final Ticker _ticker;
-  final int _duration = 60;
-
-  StreamSubscription<int> _tickerSubscription;
-
-  TimerBloc({@required Ticker ticker})
-      : assert(ticker != null),
-        _ticker = ticker;
-
-  @override
-  TimerState get initialState => Ready(_duration);
-
-  @override
-  Stream<TimerState> mapEventToState(
-    TimerEvent event,
-  ) async* {
-    if (event is Start) {
-      yield* _mapStartToState(event);
-    } else if (event is Pause) {
-      yield* _mapPauseToState(event);
-    } else if (event is Resume) {
-      yield* _mapResumeToState(event);
-    } else if (event is Tick) {
-      yield* _mapTickToState(event);
-    }
-  }
-
-  @override
-  Future<void> close() {
-    _tickerSubscription?.cancel();
-    return super.close();
-  }
-
-  Stream<TimerState> _mapStartToState(Start start) async* {
-     yield Running(start.duration);
-    _tickerSubscription?.cancel();
-    _tickerSubscription = _ticker
-        .tick(ticks: start.duration)
-        .listen((duration) => add(Tick(duration: duration)));
-  }
-
-  Stream<TimerState> _mapPauseToState(Pause pause) async* {
-    if (state is Running) {
-      _tickerSubscription?.pause();
-      yield Paused(state.duration);
-    }
-  }
-
-  Stream<TimerState> _mapResumeToState(Resume resume) async* {
-    if (state is Paused) {
-      _tickerSubscription?.resume();
-      yield Running(state.duration);
-    }
-  }
-
-  Stream<TimerState> _mapTickToState(Tick tick) async* {
-    yield tick.duration > 0 ? Running(tick.duration) : Finished();
-  }
-}
-```
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_resume.dart.md ':include')
 
 Обработчик события `Resume` очень похож на обработчик события `Pause`. Если `TimerBloc` имеет `state` `Paused` и он получает событие `Resume`, то он возобновляет `_tickerSubscription` и выставляет состояние `Running` с текущей продолжительностью.
 
@@ -584,11 +208,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 
 Если вы не использовали [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) или [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) расширения, обязательно создайте `bloc/bloc.dart` для того, чтобы экспортировать все файлы блока и для удобства использовать один импорт.
 
-```dart
-export 'timer_bloc.dart';
-export 'timer_event.dart';
-export 'timer_state.dart';
-```
+[bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_barrel.dart.md ':include')
 
 Это все, что есть в `TimerBloc`. Теперь осталось только реализовать пользовательский интерфейс для нашего приложения `Timer`.
 
@@ -598,32 +218,7 @@ export 'timer_state.dart';
 
 Мы можем начать с удаления содержимого файла `main.dart` и создания нашего виджета `MyApp`, который будет корнем нашего приложения.
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_timer/bloc/bloc.dart';
-import 'package:flutter_timer/ticker.dart';
-
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primaryColor: Color.fromRGBO(109, 234, 255, 1),
-        accentColor: Color.fromRGBO(72, 74, 126, 1),
-        brightness: Brightness.dark,
-      ),
-      title: 'Flutter Timer',
-      home: BlocProvider(
-        create: (context) => TimerBloc(ticker: Ticker()),
-        child: Timer(),
-      ),
-    );
-  }
-}
-```
+[main.dart](../_snippets/flutter_timer_tutorial/main1.dart.md ':include')
 
 `MyApp` - это `StatelessWidget`, который будет управлять инициализацией и закрытием экземпляра `TimerBloc`. Кроме того, он использует виджет `BlocProvider`, чтобы сделать наш экземпляр `TimerBloc` доступным для виджетов в нашем поддереве.
 
@@ -633,46 +228,7 @@ class MyApp extends StatelessWidget {
 
 Наш виджет `Таймер` будет отвечать за отображение оставшегося времени вместе с соответствующими кнопками, которые позволят пользователям запускать, приостанавливать и сбрасывать таймер.
 
-```dart
-class Timer extends StatelessWidget {
-  static const TextStyle timerTextStyle = TextStyle(
-    fontSize: 60,
-    fontWeight: FontWeight.bold,
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Flutter Timer')),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 100.0),
-            child: Center(
-              child: BlocBuilder<TimerBloc, TimerState>(
-                builder: (context, state) {
-                  final String minutesStr = ((state.duration / 60) % 60)
-                      .floor()
-                      .toString()
-                      .padLeft(2, '0');
-                  final String secondsStr =
-                      (state.duration % 60).floor().toString().padLeft(2, '0');
-                  return Text(
-                    '$minutesStr:$secondsStr',
-                    style: Timer.timerTextStyle,
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
+[timer.dart](../_snippets/flutter_timer_tutorial/timer1.dart.md ':include')
 
 Пока что мы просто используем `BlocProvider` для доступа к экземпляру нашего `TimerBloc` и используем виджет `BlocBuilder` для перестройки пользовательского интерфейса каждый раз, когда мы получаем новый `TimerState`.
 
@@ -680,117 +236,13 @@ class Timer extends StatelessWidget {
 
 ### Действия
 
-```dart
-class Actions extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: _mapStateToActionButtons(
-        timerBloc: BlocProvider.of<TimerBloc>(context),
-      ),
-    );
-  }
-
-  List<Widget> _mapStateToActionButtons({
-    TimerBloc timerBloc,
-  }) {
-    final TimerState currentState = timerBloc.state;
-    if (currentState is Ready) {
-      return [
-        FloatingActionButton(
-          child: Icon(Icons.play_arrow),
-          onPressed: () =>
-              timerBloc.add(Start(duration: currentState.duration)),
-        ),
-      ];
-    }
-    if (currentState is Running) {
-      return [
-        FloatingActionButton(
-          child: Icon(Icons.pause),
-          onPressed: () => timerBloc.add(Pause()),
-        ),
-        FloatingActionButton(
-          child: Icon(Icons.replay),
-          onPressed: () => timerBloc.add(Reset()),
-        ),
-      ];
-    }
-    if (currentState is Paused) {
-      return [
-        FloatingActionButton(
-          child: Icon(Icons.play_arrow),
-          onPressed: () => timerBloc.add(Resume()),
-        ),
-        FloatingActionButton(
-          child: Icon(Icons.replay),
-          onPressed: () => timerBloc.add(Reset()),
-        ),
-      ];
-    }
-    if (currentState is Finished) {
-      return [
-        FloatingActionButton(
-          child: Icon(Icons.replay),
-          onPressed: () => timerBloc.add(Reset()),
-        ),
-      ];
-    }
-    return [];
-  }
-}
-```
+[actions.dart](../_snippets/flutter_timer_tutorial/actions.dart.md ':include')
 
 Виджет `Actions` - это просто еще один `StatelessWidget`, который использует `BlocProvider` для доступа к экземпляру `TimerBloc`, а затем возвращает различные `FloatingActionButtons` в зависимости от текущего состояния `TimerBloc`. Каждый из `FloatingActionButtons` добавляет событие в свой обратный вызов `onPressed`, чтобы уведомить `TimerBloc`.
 
 Теперь нам нужно подключить `Actions` к нашему виджету `Timer`.
 
-```dart
-class Timer extends StatelessWidget {
-  static const TextStyle timerTextStyle = TextStyle(
-    fontSize: 60,
-    fontWeight: FontWeight.bold,
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Flutter Timer')),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 100.0),
-            child: Center(
-              child: BlocBuilder<TimerBloc, TimerState>(
-                builder: (context, state) {
-                  final String minutesStr = ((state.duration / 60) % 60)
-                      .floor()
-                      .toString()
-                      .padLeft(2, '0');
-                  final String secondsStr =
-                      (state.duration % 60).floor().toString().padLeft(2, '0');
-                  return Text(
-                    '$minutesStr:$secondsStr',
-                    style: Timer.timerTextStyle,
-                  );
-                },
-              ),
-            ),
-          ),
-          BlocBuilder<TimerBloc, TimerState>(
-            condition: (previousState, state) =>
-                state.runtimeType != previousState.runtimeType,
-            builder: (context, state) => Actions(),
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
+[timer.dart](../_snippets/flutter_timer_tutorial/timer2.dart.md ':include')
 
 Мы добавили еще один `BlocBuilder`, который будет отображать виджет `Actions`, однако на этот раз мы используем недавно представленную функцию [flutter_bloc](https://pub.dev/packages/flutter_bloc), чтобы контролировать, как часто перестраивается виджет `Actions` (представлено в `v0.15.0`).
 
@@ -808,223 +260,13 @@ class Timer extends StatelessWidget {
 
 ### Фон волны
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:wave/wave.dart';
-import 'package:wave/config.dart';
-
-class Background extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return WaveWidget(
-      config: CustomConfig(
-        gradients: [
-          [
-            Color.fromRGBO(72, 74, 126, 1),
-            Color.fromRGBO(125, 170, 206, 1),
-            Color.fromRGBO(184, 189, 245, 0.7)
-          ],
-          [
-            Color.fromRGBO(72, 74, 126, 1),
-            Color.fromRGBO(125, 170, 206, 1),
-            Color.fromRGBO(172, 182, 219, 0.7)
-          ],
-          [
-            Color.fromRGBO(72, 73, 126, 1),
-            Color.fromRGBO(125, 170, 206, 1),
-            Color.fromRGBO(190, 238, 246, 0.7)
-          ],
-        ],
-        durations: [19440, 10800, 6000],
-        heightPercentages: [0.03, 0.01, 0.02],
-        gradientBegin: Alignment.bottomCenter,
-        gradientEnd: Alignment.topCenter,
-      ),
-      size: Size(double.infinity, double.infinity),
-      waveAmplitude: 25,
-      backgroundColor: Colors.blue[50],
-    );
-  }
-}
-```
+[background.dart](../_snippets/flutter_timer_tutorial/background.dart.md ':include')
 
 ### Собираем все вместе
 
 наш финальный `main.dart` должен выглядеть приблизительно так:
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_timer/bloc/bloc.dart';
-import 'package:flutter_timer/ticker.dart';
-import 'package:wave/wave.dart';
-import 'package:wave/config.dart';
-
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primaryColor: Color.fromRGBO(109, 234, 255, 1),
-        accentColor: Color.fromRGBO(72, 74, 126, 1),
-        brightness: Brightness.dark,
-      ),
-      title: 'Flutter Timer',
-      home: BlocProvider(
-        create: (context) => TimerBloc(ticker: Ticker()),
-        child: Timer(),
-      ),
-    );
-  }
-}
-
-class Timer extends StatelessWidget {
-  static const TextStyle timerTextStyle = TextStyle(
-    fontSize: 60,
-    fontWeight: FontWeight.bold,
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Flutter Timer')),
-      body: Stack(
-        children: [
-          Background(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 100.0),
-                child: Center(
-                  child: BlocBuilder<TimerBloc, TimerState>(
-                    builder: (context, state) {
-                      final String minutesStr = ((state.duration / 60) % 60)
-                          .floor()
-                          .toString()
-                          .padLeft(2, '0');
-                      final String secondsStr = (state.duration % 60)
-                          .floor()
-                          .toString()
-                          .padLeft(2, '0');
-                      return Text(
-                        '$minutesStr:$secondsStr',
-                        style: Timer.timerTextStyle,
-                      );
-                    },
-                  ),
-                ),
-              ),
-              BlocBuilder<TimerBloc, TimerState>(
-                condition: (previousState, currentState) =>
-                    currentState.runtimeType != previousState.runtimeType,
-                builder: (context, state) => Actions(),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Actions extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: _mapStateToActionButtons(
-        timerBloc: BlocProvider.of<TimerBloc>(context),
-      ),
-    );
-  }
-
-  List<Widget> _mapStateToActionButtons({
-    TimerBloc timerBloc,
-  }) {
-    final TimerState currentState = timerBloc.state;
-    if (currentState is Ready) {
-      return [
-        FloatingActionButton(
-          child: Icon(Icons.play_arrow),
-          onPressed: () =>
-              timerBloc.add(Start(duration: currentState.duration)),
-        ),
-      ];
-    }
-    if (currentState is Running) {
-      return [
-        FloatingActionButton(
-          child: Icon(Icons.pause),
-          onPressed: () => timerBloc.add(Pause()),
-        ),
-        FloatingActionButton(
-          child: Icon(Icons.replay),
-          onPressed: () => timerBloc.add(Reset()),
-        ),
-      ];
-    }
-    if (currentState is Paused) {
-      return [
-        FloatingActionButton(
-          child: Icon(Icons.play_arrow),
-          onPressed: () => timerBloc.add(Resume()),
-        ),
-        FloatingActionButton(
-          child: Icon(Icons.replay),
-          onPressed: () => timerBloc.add(Reset()),
-        ),
-      ];
-    }
-    if (currentState is Finished) {
-      return [
-        FloatingActionButton(
-          child: Icon(Icons.replay),
-          onPressed: () => timerBloc.add(Reset()),
-        ),
-      ];
-    }
-    return [];
-  }
-}
-
-class Background extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return WaveWidget(
-      config: CustomConfig(
-        gradients: [
-          [
-            Color.fromRGBO(72, 74, 126, 1),
-            Color.fromRGBO(125, 170, 206, 1),
-            Color.fromRGBO(184, 189, 245, 0.7)
-          ],
-          [
-            Color.fromRGBO(72, 74, 126, 1),
-            Color.fromRGBO(125, 170, 206, 1),
-            Color.fromRGBO(172, 182, 219, 0.7)
-          ],
-          [
-            Color.fromRGBO(72, 73, 126, 1),
-            Color.fromRGBO(125, 170, 206, 1),
-            Color.fromRGBO(190, 238, 246, 0.7)
-          ],
-        ],
-        durations: [19440, 10800, 6000],
-        heightPercentages: [0.03, 0.01, 0.02],
-        gradientBegin: Alignment.bottomCenter,
-        gradientEnd: Alignment.topCenter,
-      ),
-      size: Size(double.infinity, double.infinity),
-      waveAmplitude: 25,
-      backgroundColor: Colors.blue[50],
-    );
-  }
-}
-```
+[main.dart](../_snippets/flutter_timer_tutorial/main2.dart.md ':include')
 
 Вот и все, что нужно сделать! На данный момент у нас есть довольно солидное приложение таймера, которое эффективно перестраивает только те виджеты, для которых это действительно нужно.
 
