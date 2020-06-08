@@ -141,7 +141,12 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// ```
   @mustCallSuper
   void onError(Object error, StackTrace stackTrace) {
-    assert(BlocSupervisor.delegate.onError(this, error, stackTrace) != null);
+    final caught = BlocSupervisor.delegate.onError(this, error, stackTrace);
+    assert(() {
+      if(caught == null) {
+        throw BlocUnhandledErrorException(this, error, stackTrace);
+      }
+    }());
   }
 
   /// Notifies the [bloc] of a new [event] which triggers [mapEventToState].
