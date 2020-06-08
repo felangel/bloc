@@ -24,7 +24,15 @@ class BlocDelegate {
   /// [error], and [stackTrace].
   /// The [stackTrace] argument may be `null` if the state stream received
   /// an error without a [stackTrace].
+  ///
   /// A great spot to add universal error handling.
+  ///
+  /// Returning a non-null value will mimic the production behavior, i.e. all
+  /// exceptions are ignored unless explicitly re-thrown
+  ///
+  /// If null is returned (default) the super.onError will throw a
+  /// BlocUnhandledErrorException in debug mode
+  ///
   @mustCallSuper
-  void onError(Bloc bloc, Object error, StackTrace stackTrace) => null;
+  dynamic onError(Bloc bloc, Object error, StackTrace stackTrace) => null;
 }
