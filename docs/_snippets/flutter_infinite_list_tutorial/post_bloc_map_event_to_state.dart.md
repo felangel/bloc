@@ -2,31 +2,31 @@
 @override
 Stream<PostState> mapEventToState(PostEvent event) async* {
   final currentState = state;
-  if (event is Fetch && !_hasReachedMax(currentState)) {
+  if (event is PostFetched && !_hasReachedMax(currentState)) {
     try {
-      if (currentState is PostUninitialized) {
+      if (currentState is PostInitial) {
         final posts = await _fetchPosts(0, 20);
-        yield PostLoaded(posts: posts, hasReachedMax: false);
+        yield PostSuccess(posts: posts, hasReachedMax: false);
         return;
       }
-      if (currentState is PostLoaded) {
+      if (currentState is PostSuccess) {
         final posts =
             await _fetchPosts(currentState.posts.length, 20);
         yield posts.isEmpty
             ? currentState.copyWith(hasReachedMax: true)
-            : PostLoaded(
+            : PostSuccess(
                 posts: currentState.posts + posts,
                 hasReachedMax: false,
               );
       }
     } catch (_) {
-      yield PostError();
+      yield PostFailure();
     }
   }
 }
 
 bool _hasReachedMax(PostState state) =>
-    state is PostLoaded && state.hasReachedMax;
+    state is PostSuccess && state.hasReachedMax;
 
 Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
   final response = await httpClient.get(

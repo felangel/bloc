@@ -20,17 +20,17 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocBuilder<PostBloc, PostState>(
       builder: (context, state) {
-        if (state is PostUninitialized) {
+        if (state is PostInitial) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-        if (state is PostError) {
+        if (state is PostFailure) {
           return Center(
             child: Text('failed to fetch posts'),
           );
         }
-        if (state is PostLoaded) {
+        if (state is PostSuccess) {
           if (state.posts.isEmpty) {
             return Center(
               child: Text('no posts'),
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= _scrollThreshold) {
-      _postBloc.add(Fetch());
+      _postBloc.add(PostFetched());
     }
   }
 }
