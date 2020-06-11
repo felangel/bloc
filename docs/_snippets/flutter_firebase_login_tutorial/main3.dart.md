@@ -8,7 +8,7 @@ void main() {
   runApp(
     BlocProvider(
       create: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..add(AppStarted()),
+        ..add(AuthenticationStarted()),
       child: App(userRepository: userRepository),
     ),
   );

@@ -70,9 +70,9 @@
 
 На высоком уровне нам нужно будет управлять состоянием аутентификации пользователя. Состояние аутентификации пользователя может быть одним из следующих:
 
-- uninitialized - ожидание проверки подлинности пользователя при запуске приложения
-- authenticated - пользователь успешно аутентифицирован
-- unauthenticated - пользователь не аутентифицирован
+- AuthenticationInitial - ожидание проверки подлинности пользователя при запуске приложения
+- AuthenticationSuccess - пользователь успешно аутентифицирован
+- AuthenticationFailure - пользователь не аутентифицирован
 
 Каждое из этих состояний будет влиять на то, что видит пользователь.
 
@@ -98,7 +98,7 @@
 
 ?> **Примечание**: `toString` переопределяется, чтобы упростить чтение `AuthenticationState` при печати его на консоли или в `Transitions`.
 
-!> Поскольку мы используем `Equatable`, чтобы позволить нам сравнивать различные экземпляры `AuthenticationState`, нам нужно передать все свойства суперклассу. Без `List<Object> get props => [displayName]` мы не сможем правильно сравнить различные экземпляры `Authenticated`.
+!> Поскольку мы используем `Equatable`, чтобы позволить нам сравнивать различные экземпляры `AuthenticationState`, нам нужно передать все свойства суперклассу. Без `List<Object> get props => [displayName]` мы не сможем правильно сравнить различные экземпляры `AuthenticationSuccess`.
 
 ## Auth события
 
@@ -106,9 +106,9 @@
 
 Нам понадобится:
 
-- событие `AppStarted`, чтобы уведомить блок о том, что ему нужно проверить, аутентифицирован ли пользователь в настоящее время или нет.
-- событие `LoggedIn`, чтобы уведомить блок о том, что пользователь успешно вошел в систему.
-- событие `LoggedOut`, чтобы уведомить блок о том, что пользователь успешно вышел из системы.
+- событие `AuthenticationStarted`, чтобы уведомить блок о том, что ему нужно проверить, аутентифицирован ли пользователь в настоящее время или нет.
+- событие `AuthenticationLoggedIn`, чтобы уведомить блок о том, что пользователь успешно вошел в систему.
+- событие `AuthenticationLoggedOut`, чтобы уведомить блок о том, что пользователь успешно вышел из системы.
 
 [authentication_event.dart](../_snippets/flutter_firebase_login_tutorial/authentication_event.dart.md ':include')
 
@@ -124,7 +124,7 @@
 
 ?> **Примечание**: `AuthenticationBloc` зависит от `UserRepository`.
 
-Мы можем начать с переопределения `initialState` в состояние `AuthenticationUninitialized()`.
+Мы можем начать с переопределения `initialState` в состояние `AuthenticationInitial()`.
 
 [authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_initial_state.dart.md ':include')
 
@@ -190,7 +190,7 @@
 
 [main.dart](../_snippets/flutter_firebase_login_tutorial/main4.dart.md ':include')
 
-Теперь, когда наш `AuthenticationBloc` имеет `state Uninitialized`, мы будем отображать наш виджет `SplashScreen`!
+Теперь, когда наш `AuthenticationBloc` имеет `AuthenticationInitial`, мы будем отображать наш виджет `SplashScreen`!
 
 ## Домашний экран
 
@@ -200,9 +200,9 @@
 
 [home_screen.dart](../_snippets/flutter_firebase_login_tutorial/home_screen.dart.md ':include')
 
-`HomeScreen` - это `StatelessWidget`, для которого требуется ввести имя, чтобы оно могло отобразить приветственное сообщение. Он также использует `BlocProvider` для доступа к `AuthenticationBloc` через `BuildContext`, так что когда пользователь нажимает кнопку выхода из системы, мы можем добавить событие `LoggedOut`.
+`HomeScreen` - это `StatelessWidget`, для которого требуется ввести имя, чтобы оно могло отобразить приветственное сообщение. Он также использует `BlocProvider` для доступа к `AuthenticationBloc` через `BuildContext`, так что когда пользователь нажимает кнопку выхода из системы, мы можем добавить событие `AuthenticationLoggedOut`.
 
-Теперь давайте обновим наше приложение для отображения `HomeScreen` если для `AuthenticationState` установлено значение `Authentication`.
+Теперь давайте обновим наше приложение для отображения `HomeScreen` если для `AuthenticationState` установлено значение `AuthenticationSuccess`.
 
 [main.dart](../_snippets/flutter_firebase_login_tutorial/main5.dart.md ':include')
 
@@ -220,7 +220,7 @@
 
 Состояния, которые мы представляем:
 
-`empty` - начальное состояние LoginForm.
+`initial` - начальное состояние LoginForm.
 `loading` - это состояние LoginForm, когда мы проверяем учетные данные
 `fail` - это состояние LoginForm, когда попытка входа не удалась.
 `success` - это состояние LoginForm, когда попытка входа в систему была успешной.
@@ -237,9 +237,8 @@
 
 Определенные нами события:
 
-`EmailChanged` - уведомляет блок о том, что пользователь изменил адрес электронной почты.
-`PasswordChanged` - уведомляет блок о том, что пользователь сменил пароль
-`Submitted` - уведомляет блок о том, что пользователь отправил форму
+`LoginEmailChanged` - уведомляет блок о том, что пользователь изменил адрес электронной почты.
+`LoginPasswordChanged` - уведомляет блок о том, что пользователь сменил пароль
 `LoginWithGooglePressed` - уведомляет блок о том, что пользователь нажал кнопку входа в Google
 `LoginWithCredentialsPressed` - уведомляет блок о том, что пользователь нажал кнопку обычного входа.
 
@@ -255,7 +254,7 @@
 
 [login_bloc.dart](../_snippets/flutter_firebase_login_tutorial/login_bloc.dart.md ':include')
 
-**Примечание:** Мы переопределяем `transformEvents`, чтобы отменить события `EmailChanged` и `PasswordChanged` и дать пользователю время прекратить вводить текст перед проверкой ввода.
+**Примечание:** Мы переопределяем `transformEvents`, чтобы отменить события `LoginEmailChanged` и `LoginPasswordChanged` и дать пользователю время прекратить вводить текст перед проверкой ввода.
 
 Мы используем класс `Validators` для проверки адреса электронной почты и пароля, которые мы собираемся реализовать далее.
 
@@ -383,7 +382,7 @@
 
 [register_form.dart](../_snippets/flutter_firebase_login_tutorial/register_form.dart.md ':include')
 
-Опять же, нам нужно управлять `TextEditingControllers` для ввода текста, поэтому наша `RegisterForm` должна быть `StatefulWidget`. Кроме того, мы снова используем `BlocListener`, чтобы выполнить одноразовые действия в ответ на изменения состояния, такие как показ `SnackBar`, когда регистрация ожидает или не удается. Мы также добавляем событие `LoggedIn` в `AuthenticationBloc` если регистрация прошла успешно, чтобы мы могли немедленно войти в систему.
+Опять же, нам нужно управлять `TextEditingControllers` для ввода текста, поэтому наша `RegisterForm` должна быть `StatefulWidget`. Кроме того, мы снова используем `BlocListener`, чтобы выполнить одноразовые действия в ответ на изменения состояния, такие как показ `SnackBar`, когда регистрация ожидает или не удается. Мы также добавляем событие `AuthenticationLoggedIn` в `AuthenticationBloc` если регистрация прошла успешно, чтобы мы могли немедленно войти в систему.
 
 ?> **Примечание:** Мы используем `BlocBuilder`, чтобы заставить наш пользовательский интерфейс реагировать на изменения в состоянии `RegisterBloc`.
 
@@ -397,7 +396,7 @@
 
 Очень похоже на то, как мы настраивали `LoginButton`, `RegisterButton` имеет некоторый пользовательский стиль и предоставляет `VoidCallback`, чтобы мы могли обрабатывать каждый раз, когда пользователь нажимает кнопку в родительском виджете.
 
-Все, что осталось сделать - это обновить наш виджет `App` в `main.dart`, чтобы показать `LoginScreen`, если для `AuthenticationState` установлено значение `Unauthenticated`.
+Все, что осталось сделать - это обновить наш виджет `App` в `main.dart`, чтобы показать `LoginScreen`, если для `AuthenticationState` установлено значение `AuthenticationFailure`.
 
 [main.dart](../_snippets/flutter_firebase_login_tutorial/main6.dart.md ':include')
 
