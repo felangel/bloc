@@ -103,7 +103,8 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
   static T of<T extends Bloc<dynamic, dynamic>>(BuildContext context) {
     try {
       return Provider.of<T>(context, listen: false);
-    } on ProviderNotFoundException catch (_) {
+    } on ProviderNotFoundException catch (e) {
+      if (e.valueType != T) rethrow;
       throw FlutterError(
         """
         BlocProvider.of() called with a context that does not contain a Bloc of type $T.
