@@ -20,7 +20,7 @@ class App extends StatelessWidget {
         ),
         body: BlocProvider(
           create: (context) =>
-              PostBloc(httpClient: http.Client())..add(Fetch()),
+              PostBloc(httpClient: http.Client())..add(PostFetched()),
           child: HomePage(),
         ),
       ),

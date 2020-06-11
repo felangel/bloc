@@ -55,32 +55,32 @@
 
 总体来看, 它会响应用户的输入(滚动屏幕)和请求更多的Post数据, 并且送给表现层显示给用户. 让我们先创建我们的`Event`
 
-我们的`PostBloc`每次只响应一个Event(事件); 当表现层需要更多Post展示时, 他将会创建和添加`Fetch`事件. 
-因为我们的`Fetch`事件是一种`PostEvent`, 所以我们可以像这样实现`bloc/post_event.dart`.
+我们的`PostBloc`每次只响应一个Event(事件); 当表现层需要更多Post展示时, 他将会创建和添加`PostFetched`事件. 
+因为我们的`PostFetched`事件是一种`PostEvent`, 所以我们可以像这样实现`bloc/post_event.dart`.
 
 [post_event.dart](../_snippets/flutter_infinite_list_tutorial/post_event.dart.md ':include')
 
 ?> 和之前一样, 我们重写了`toString`, 因为这样可以让事件更容易阅读. 和之前一样, 我们继承了[`Equatable`](https://pub.dev/packages/equatable), 这样我们就可以比较对象的是否相等了.
 
 复习一下之前说过的内容, `PostBloc`会接收`PostEvents(Post事件)`, 并且把他们转化成`PostStates(Post状态)`. 
-我们已经定义了所有我们需要用到的`PostEvents`(只有一个Fetch), 接下来让我们定义我们的`PostState`.
+我们已经定义了所有我们需要用到的`PostEvents`(只有一个PostFetched), 接下来让我们定义我们的`PostState`.
 
 ## Post 状态(States)
 
 我们的表现层需要以下的几部分信息:
 
-- `PostUninitialized`(Post 未初始化) - 会告诉表现层需要渲染加载进度条. 加载一批新的post的时候会是这种状态.
+- `PostInitial`(Post 未初始化) - 会告诉表现层需要渲染加载进度条. 加载一批新的post的时候会是这种状态.
 
-- `PostLoaded`(Post 已加载) - 会告诉表现层已经有了可以渲染的内容.
+- `PostSuccess`(Post 已加载) - 会告诉表现层已经有了可以渲染的内容.
   - `posts`- 是之后会显示在屏幕上的`List<Post>`
   - `hasReachedMax`- 会告诉表现层它是否达到了最大数量的posts
-- `PostError`- 会告诉表现层在请求posts的时候遇到了错误
+- `PostFailure`- 会告诉表现层在请求posts的时候遇到了错误
 
 我们现在可以创建`bloc/post_state.dart`并且实现它了, 像这样
 
 [post_state.dart](../_snippets/flutter_infinite_list_tutorial/post_state.dart.md ':include')
 
-?> 我们实现了`copyWith`, 这样我们就可以从已有的`PostLoaded`对象复制一个实例, 并且还能很方便的修改其中任意个属性(之后用起来很方便).
+?> 我们实现了`copyWith`, 这样我们就可以从已有的`PostSuccess`对象复制一个实例, 并且还能很方便的修改其中任意个属性(之后用起来很方便).
 
 现在我们的`Events`和`States`都实现好了, 接下来我们可以创建`PostBloc`.
 
@@ -109,14 +109,14 @@
 当一个新的state出现的时候, 我们的`PostBloc`会`yield`(生成一个新的值), 因为函数返回了一个`Stream<PostState>`.
 你可以参考[核心概念](https://bloclibrary.dev/#/coreconcepts?id=streams)来了解更多关于`Streams`和其他核心概念知识.
 
-现在, 每次加入新的`PostEvent`时, 如果这个event(事件)是`Fetch`并且还有更多可加载的post的话,
+现在, 每次加入新的`PostEvent`时, 如果这个event(事件)是`PostFetched`并且还有更多可加载的post的话,
 `PostBloc`就会请求接下来的20个post.
 
 如果我们的请求数量超过了post的最大数量(100)的话, 这个API会返回一个空数组. 所以如果我们收到了一个空数组的话, bloc会`yield`当前的状态并把`hasReachedMax`设成true.
 
-如果收不到post的话, 这里就会抛出一个异常, 函数就会随之`yield`一个`PostError()`.
+如果收不到post的话, 这里就会抛出一个异常, 函数就会随之`yield`一个`PostFailure()`.
 
-如果能收到post的话, 函数就会返回保存着所有post的`PostLoaded`对象.
+如果能收到post的话, 函数就会返回保存着所有post的`PostSuccess`对象.
 
 这里我们可以做一个优化: 我们可以给`Event(事件)``debounce(消除抖动)`, 从而防止给API发出过多的请求.
 通过重写`PostBloc`的`transform`方法达成这一点.
@@ -140,7 +140,7 @@
 在`main.dart`中, 我们可以先在主函数调用`runApp`来渲染我们的root(根) widget.
 
 在`App`widget中, 我们使用`BlocProvider`来创建 和 给subtree(指`BlocProvider`下的子widgets)提供`PostBloc`的实例.
-我们给bloc添加了一个`Fetch`事件, 这样当应用载入的时候, 它就会请求最开始的一批post了.
+我们给bloc添加了一个`PostFetched`事件, 这样当应用载入的时候, 它就会请求最开始的一批post了.
 
 [main.dart](../_snippets/flutter_infinite_list_tutorial/main.dart.md ':include')
 
@@ -155,7 +155,7 @@
 !> 记得在StatefulWidget声明周期结束时释放`ScrollController`.
 
 当有任何用户滚动时, 我们会计算现在距离页面底部还有多远. 如果 距离≤`_scrollThreshold` 的话, 我们
-就添加一个`Fetch`事件来加载更多post.
+就添加一个`PostFetched`事件来加载更多post.
 
 接下来, 我们需要实现`BottomLoader` widget. 它会告诉用户我们正在加载更多posts.
 

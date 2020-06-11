@@ -54,30 +54,30 @@ Antes de sumergirnos en la implementación, debemos definir qué hará nuestro `
 
 En un nivel alto, responderá a la entrada del usuario (deslizar) y buscará más publicaciones para que la capa de presentación las muestre. Comencemos creando nuestro `Event`.
 
-Nuestro `PostBloc` solo responderá a un solo evento; `Fetch` que será agregado por la capa de presentación cada vez que necesite más publicaciones para presentar. Dado que nuestro evento `Fetch` es un tipo de `PostEvent` podemos crear `bloc/post_event.dart` e implementar el evento así.
+Nuestro `PostBloc` solo responderá a un solo evento; `PostFetched` que será agregado por la capa de presentación cada vez que necesite más publicaciones para presentar. Dado que nuestro evento `PostFetched` es un tipo de `PostEvent` podemos crear `bloc/post_event.dart` e implementar el evento así.
 
 [post_event.dart](../_snippets/flutter_infinite_list_tutorial/post_event.dart.md ':include')
 
 ?> Nuevamente, estamos anulando `toString` para una representación de cadena String más fácil de leer de nuestro evento. Nuevamente, estamos extendiendo [`Equatable`](https://pub.dev/packages/equatable) para que podamos comparar instancias para la igualdad.
 
-En resumen, nuestro `PostBloc` recibirá `PostEvents` y los convertirá en `PostStates`. Hemos definido todos nuestros `PostEvents` (Fetch), así que a continuación definamos nuestro` PostState`.
+En resumen, nuestro `PostBloc` recibirá `PostEvents` y los convertirá en `PostStates`. Hemos definido todos nuestros `PostEvents` (PostFetched), así que a continuación definamos nuestro` PostState`.
 
 ## Post States
 
 Nuestra capa de presentación necesitará tener varias piezas de información para poder presentarse correctamente:
 
-- `PostUninitialized`- le dirá a la capa de presentación que necesita presentar un indicador de carga mientras se carga el lote inicial de publicaciones
+- `PostInitial`- le dirá a la capa de presentación que necesita presentar un indicador de carga mientras se carga el lote inicial de publicaciones
 
-- `PostLoaded`- le dirá a la capa de presentación que tiene contenido para representar
+- `PostSuccess`- le dirá a la capa de presentación que tiene contenido para representar
   - `posts`- será la `Lista <Post>` que se mostrará
   - `hasReachedMax`- le dirá a la capa de presentación si ha alcanzado o no el número máximo de publicaciones
-- `PostError`- le dirá a la capa de presentación que se ha producido un error al buscar publicaciones
+- `PostFailure`- le dirá a la capa de presentación que se ha producido un error al buscar publicaciones
 
 Ahora podemos crear `bloc/post_state.dart` e implementarlo así.
 
 [post_state.dart](../_snippets/flutter_infinite_list_tutorial/post_state.dart.md ':include')
 
-?> Implementamos `copyWith` para que podamos copiar una instancia de `PostLoaded` y actualizar cero o más propiedades convenientemente (esto será útil más adelante).
+?> Implementamos `copyWith` para que podamos copiar una instancia de `PostSuccess` y actualizar cero o más propiedades convenientemente (esto será útil más adelante).
 
 Ahora que tenemos implementados nuestros `Eventos` y `Estados`, podemos crear nuestro `PostBloc`.
 
@@ -105,13 +105,13 @@ A continuación, necesitamos implementar `mapEventToState` que se disparará cad
 
 Nuestro `PostBloc` hará `yield` siempre que haya un nuevo estado porque devuelve un `Stream<PostState>`. Consulte [conceptos básicos](https://bloclibrary.dev/#/es/coreconcepts?id=streams) para obtener más información sobre `Streams` y otros conceptos básicos.
 
-Ahora, cada vez que se agrega un `PostEvent`, si es un evento `Fetch` y hay más publicaciones para buscar, nuestro `PostBloc` buscará las próximas 20 publicaciones.
+Ahora, cada vez que se agrega un `PostEvent`, si es un evento `PostFetched` y hay más publicaciones para buscar, nuestro `PostBloc` buscará las próximas 20 publicaciones.
 
 La API devolverá una matriz vacía si intentamos obtener más allá del número máximo de publicaciones (100), por lo que si recuperamos una matriz vacía, nuestro bloc hará `yield` al estado actual, excepto que estableceremos `hasReachedMax` en verdadero.
 
-Si no podemos recuperar las publicaciones, lanzamos una excepción y hacemos `yield` al `PostError()`.
+Si no podemos recuperar las publicaciones, lanzamos una excepción y hacemos `yield` al `PostFailure()`.
 
-Si podemos recuperar las publicaciones, devolvemos `PostLoaded()` que toma la lista completa de publicaciones.
+Si podemos recuperar las publicaciones, devolvemos `PostSuccess()` que toma la lista completa de publicaciones.
 
 Una optimización que podemos hacer es `rebotar` los `Eventos` para evitar spam innecesariamente en nuestra API. Podemos hacer esto anulando el método `transform` en nuestro` PostBloc`.
 
@@ -133,7 +133,7 @@ Nuestro `PostBloc` terminado debería verse así:
 
 En nuestro `main.dart` podemos comenzar implementando nuestra función principal y llamando a` runApp` para representar nuestro widget raíz.
 
-En nuestro widget `App`, usamos `BlocProvider` para crear y proporcionar una instancia de `PostBloc` al subárbol. Además, agregamos un evento `Fetch` para que cuando se cargue la aplicación, solicite el lote inicial de publicaciones.
+En nuestro widget `App`, usamos `BlocProvider` para crear y proporcionar una instancia de `PostBloc` al subárbol. Además, agregamos un evento `PostFetched` para que cuando se cargue la aplicación, solicite el lote inicial de publicaciones.
 
 [main.dart](../_snippets/flutter_infinite_list_tutorial/main.dart.md ':include')
 
@@ -147,7 +147,7 @@ Avanzando, nuestro método de construcción que retorna un `BlocBuilder`. `BlocB
 
 !> Debemos recordar limpiar después de nosotros mismos y desechar nuestro `ScrollController` cuando se elimine el StatefulWidget.
 
-Cada vez que el usuario se desplaza, calculamos qué tan lejos están de la parte inferior de la página y si la distancia es ≤ nuestro `_scrollThreshold` le agregamos un event `Fetch` para cargar más publicaciones.
+Cada vez que el usuario se desplaza, calculamos qué tan lejos están de la parte inferior de la página y si la distancia es ≤ nuestro `_scrollThreshold` le agregamos un event `PostFetched` para cargar más publicaciones.
 
 A continuación, necesitamos implementar nuestro widget `Bottom Loader` que le indicará al usuario que estamos cargando más publicaciones.
 
