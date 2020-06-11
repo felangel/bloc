@@ -62,9 +62,9 @@ Agora que temos nosso `AuthenticationState` definido, precisamos definir os `Aut
 
 Nós vamos precisar:
 
-- um evento `AppStarted` para notificar o bloc de que ele precisa verificar se o usuário está atualmente autenticado ou não.
-- um evento `LoggedIn` para notificar o bloc de que o usuário efetuou login com êxito.
-- um evento `LoggedOut` para notificar o bloc de que o usuário efetuou logout com sucesso.
+- um evento `AuthenticationStarted` para notificar o bloc de que ele precisa verificar se o usuário está atualmente autenticado ou não.
+- um evento `AuthenticationLoggedIn` para notificar o bloc de que o usuário efetuou login com êxito.
+- um evento `AuthenticationLoggedOut` para notificar o bloc de que o usuário efetuou logout com sucesso.
 
 [authentication_event.dart](../_snippets/flutter_login_tutorial/authentication_event.dart.md ':include')
 
@@ -82,7 +82,7 @@ Começaremos criando nossa classe `AuthenticationBloc`.
 
 ?> **Nota**: Nosso `AuthenticationBloc` depende do `UserRepository`.
 
-Podemos começar substituindo `initialState` pelo estado `AuthenticationUninitialized()`.
+Podemos começar substituindo `initialState` pelo estado `AuthenticationInitial()`.
 
 [authentication_bloc.dart](../_snippets/flutter_login_tutorial/authentication_bloc_initial_state.dart.md ':include')
 
@@ -110,7 +110,7 @@ Em seguida, precisaremos criar nossa `HomePage` para que possamos navegar pelos 
 
 ?> **Nota**: Esta é a primeira classe em que estamos usando o `flutter_bloc`. Entraremos em breve em `BlocProvider.of<AuthenticationBloc>(context)`, mas por enquanto sabemos que ele permite que nossa `HomePage` acesse o nosso `AuthenticationBloc`.
 
-?> **Nota**: Estamos adicionando um evento `LoggedOut` ao nosso `AuthenticationBloc` quando um usuário pressiona o botão logout.
+?> **Nota**: Estamos adicionando um evento `AuthenticationLoggedOut` ao nosso `AuthenticationBloc` quando um usuário pressiona o botão logout.
 
 Em seguida, precisamos criar um `LoginPage` e `LoginForm`.
 
@@ -124,7 +124,7 @@ Assim como fizemos no `AuthenticationBloc`, precisaremos definir o `LoginState` 
 
 `LoginInitial` é o estado inicial do LoginForm.
 
-`LoginLoading` é o estado do LoginForm quando estamos validando credenciais
+`LoginInProgress` é o estado do LoginForm quando estamos validando credenciais
 
 `LoginFailure` é o estado do LoginForm quando uma tentativa de login falha.
 

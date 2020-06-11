@@ -34,10 +34,10 @@ A continuación, vamos a necesitar determinar cómo vamos a administrar el estad
 
 En un nivel alto, vamos a necesitar administrar el estado de autenticación del usuario. El estado de autenticación de un usuario puede ser uno de los siguientes:
 
-- uninitialized - esperando para ver si el usuario está autenticado o no en el inicio de la aplicación.
-- loading - esperando para persistir/eliminar un token
-- authenticated - autenticado con éxito
-- unauthenticated - no autenticado
+- AuthenticationInitial - esperando para ver si el usuario está autenticado o no en el inicio de la aplicación.
+- AuthenticationInProgress - esperando para persistir/eliminar un token
+- AuthenticationSuccess - autenticado con éxito
+- AuthenticationFailure - no autenticado
 
 Cada uno de estos estados tendrá una implicación en lo que ve el usuario.
 
@@ -62,9 +62,9 @@ Ahora que tenemos definido nuestro `AuthenticationState`, necesitamos definir lo
 
 Nosotros necesitaremos:
 
-- un evento `AppStarted` para notificar al bloc que necesita verificar si el usuario está autenticado actualmente o no.
-- un evento `LoggedIn` para notificar al bloc que el usuario ha iniciado sesión correctamente.
-- un evento `LoggedOut` para notificar al bloc que el usuario ha cerrado la sesión correctamente.
+- un evento `AuthenticationStarted` para notificar al bloc que necesita verificar si el usuario está autenticado actualmente o no.
+- un evento `AuthenticationLoggedIn` para notificar al bloc que el usuario ha iniciado sesión correctamente.
+- un evento `AuthenticationLoggedOut` para notificar al bloc que el usuario ha cerrado la sesión correctamente.
 
 [authentication_event.dart](../_snippets/flutter_login_tutorial/authentication_event.dart.md ':include')
 
@@ -82,7 +82,7 @@ Comenzaremos creando nuestra clase `AuthenticationBloc`.
 
 ?> **Nota**: Nuestro `AuthenticationBloc` depende del `UserRepository`.
 
-Podemos comenzar anulando `initialState` al estado `AuthenticationUninitialized()`.
+Podemos comenzar anulando `initialState` al estado `AuthenticationInitial()`.
 
 [authentication_bloc.dart](../_snippets/flutter_login_tutorial/authentication_bloc_initial_state.dart.md ':include')
 
@@ -110,7 +110,7 @@ A continuación, necesitaremos crear nuestra `HomePage` para que podamos navegar
 
 ?> **Nota**: Esta es la primera clase en la que estamos usando `flutter_bloc`. Entraremos en `BlocProvider.of<AuthenticationBloc>(context)` en breve pero por ahora solo sabemos que permite que nuestra `HomePage` para acceder a nuestro `AuthenticationBloc`.
 
-?> **Nota**: Estamos agregando un evento `LoggedOut` a nuestro `AuthenticationBloc` cuando un usuario presiona el botón de cerrar sesión.
+?> **Nota**: Estamos agregando un evento `AuthenticationLoggedOut` a nuestro `AuthenticationBloc` cuando un usuario presiona el botón de cerrar sesión.
 
 A continuación, debemos crear una `LoginPage` y un `LoginForm`.
 
@@ -124,7 +124,7 @@ Al igual que hicimos con el `AuthenticationBloc`, necesitaremos definir el `Logi
 
 `LoginInitial` es el estado inicial de LoginForm.
 
-`LoginLoading` es el estado del LoginForm cuando estamos validando credenciales
+`LoginInProgress` es el estado del LoginForm cuando estamos validando credenciales
 
 `LoginFailure` es el estado del LoginForm cuando falla un intento de inicio de sesión.
 
