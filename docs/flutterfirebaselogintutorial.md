@@ -70,17 +70,17 @@ We need to determine how we’re going to manage the state of our application an
 
 At a high level, we’re going to need to manage the user’s Authentication State. A user's authentication state can be one of the following:
 
-- uninitialized - waiting to see if the user is authenticated or not on app start.
-- authenticated - successfully authenticated
-- unauthenticated - not authenticated
+- AuthenticationInitial - waiting to see if the user is authenticated or not on app start.
+- AuthenticationSuccess - successfully authenticated
+- AuthenticationFailure - not authenticated
 
 Each of these states will have an implication on what the user sees.
 
 For example:
 
-- if the authentication state was uninitialized, the user might be seeing a splash screen
-- if the authentication state was authenticated, the user might see a home screen.
-- if the authentication state was unauthenticated, the user might see a login form.
+- if the authentication state was AuthenticationInitial, the user might be seeing a splash screen
+- if the authentication state was AuthenticationSuccess, the user might see a home screen.
+- if the authentication state was AuthenticationFailure, the user might see a login form.
 
 > It's critical to identify what the different states are going to be before diving into the implementation.
 
@@ -98,7 +98,7 @@ Create a folder/directory called `authentication_bloc` and we can create our aut
 
 ?> **Note**: `toString` is overridden to make it easier to read an `AuthenticationState` when printing it to the console or in `Transitions`.
 
-!> Since we're using `Equatable` to allow us to compare different instances of `AuthenticationState` we need to pass any properties to the superclass. Without `List<Object> get props => [displayName]`, we will not be able to properly compare different instances of `Authenticated`.
+!> Since we're using `Equatable` to allow us to compare different instances of `AuthenticationState` we need to pass any properties to the superclass. Without `List<Object> get props => [displayName]`, we will not be able to properly compare different instances of `AuthenticationSuccess`.
 
 ## Authentication Events
 
@@ -106,9 +106,9 @@ Now that we have our `AuthenticationState` defined we need to define the `Authen
 
 We will need:
 
-- an `AppStarted` event to notify the bloc that it needs to check if the user is currently authenticated or not.
-- a `LoggedIn` event to notify the bloc that the user has successfully logged in.
-- a `LoggedOut` event to notify the bloc that the user has successfully logged out.
+- an `AuthenticationStarted` event to notify the bloc that it needs to check if the user is currently authenticated or not.
+- a `AuthenticationLoggedIn` event to notify the bloc that the user has successfully logged in.
+- a `AuthenticationLoggedOut` event to notify the bloc that the user has successfully logged out.
 
 [authentication_event.dart](_snippets/flutter_firebase_login_tutorial/authentication_event.dart.md ':include')
 
@@ -124,7 +124,7 @@ We'll start off by creating our `AuthenticationBloc` class.
 
 ?> **Note**: Our `AuthenticationBloc` has a dependency on the `UserRepository`.
 
-We can start by overriding `initialState` to the `AuthenticationUninitialized()` state.
+We can start by overriding `initialState` to the `AuthenticationInitial()` state.
 
 [authentication_bloc.dart](_snippets/flutter_firebase_login_tutorial/authentication_bloc_initial_state.dart.md ':include')
 
@@ -190,7 +190,7 @@ Now, let's hook it up to our `main.dart`.
 
 [main.dart](_snippets/flutter_firebase_login_tutorial/main4.dart.md ':include')
 
-Now whenever our `AuthenticationBloc` has a `state` of `Uninitialized` we will render our `SplashScreen` widget!
+Now whenever our `AuthenticationBloc` has a `state` of `AuthenticationInitial` we will render our `SplashScreen` widget!
 
 ## Home Screen
 
@@ -200,9 +200,9 @@ Let's create `home_screen.dart` and get started.
 
 [home_screen.dart](_snippets/flutter_firebase_login_tutorial/home_screen.dart.md ':include')
 
-`HomeScreen` is a `StatelessWidget` that requires a `name` to be injected so that it can render the welcome message. It also uses `BlocProvider` in order to access the `AuthenticationBloc` via `BuildContext` so that when a user pressed the logout button, we can add the `LoggedOut` event.
+`HomeScreen` is a `StatelessWidget` that requires a `name` to be injected so that it can render the welcome message. It also uses `BlocProvider` in order to access the `AuthenticationBloc` via `BuildContext` so that when a user pressed the logout button, we can add the `AuthenticationLoggedOut` event.
 
-Now let's update our `App` to render the `HomeScreen` if the `AuthenticationState` is `Authentication`.
+Now let's update our `App` to render the `HomeScreen` if the `AuthenticationState` is `AuthenticationSuccess`.
 
 [main.dart](_snippets/flutter_firebase_login_tutorial/main5.dart.md ':include')
 
@@ -220,7 +220,7 @@ Our `login/bloc/login_state.dart` should look like:
 
 The states we're representing are:
 
-`empty` is the initial state of the LoginForm.
+`initial` is the initial state of the LoginForm.
 
 `loading` is the state of the LoginForm when we are validating credentials
 
@@ -240,11 +240,9 @@ Open up `login/bloc/login_event.dart` and let's define and implement our events.
 
 The events we defined are:
 
-`EmailChanged` - notifies the bloc that the user has changed the email
+`LoginEmailChanged` - notifies the bloc that the user has changed the email
 
-`PasswordChanged` - notifies the bloc that the user has changed the password
-
-`Submitted` - notifies the bloc that the user has submitted the form
+`LoginPasswordChanged` - notifies the bloc that the user has changed the password
 
 `LoginWithGooglePressed` - notifies the bloc that the user has pressed the Google Sign In button
 
@@ -262,7 +260,7 @@ It's time to implement our `LoginBloc`. As always, we need to extend `Bloc` and 
 
 [login_bloc.dart](_snippets/flutter_firebase_login_tutorial/login_bloc.dart.md ':include')
 
-**Note:** We're overriding `transformEvents` in order to debounce the `EmailChanged` and `PasswordChanged` events so that we give the user some time to stop typing before validating the input.
+**Note:** We're overriding `transformEvents` in order to debounce the `LoginEmailChanged` and `LoginPasswordChanged` events so that we give the user some time to stop typing before validating the input.
 
 We are using a `Validators` class to validate the email and password which we're going to implement next.
 
@@ -390,7 +388,7 @@ Create `register/register_form.dart` and let's build it.
 
 [register_form.dart](_snippets/flutter_firebase_login_tutorial/register_form.dart.md ':include')
 
-Again, we need to manage `TextEditingControllers` for the text input so our `RegisterForm` needs to be a `StatefulWidget`. In addition, we are using `BlocListener` again in order to execute one-time actions in response to state changes such as showing `SnackBar` when the registration is pending or fails. We are also adding the `LoggedIn` event to the `AuthenticationBloc` if the registration was a success so that we can immediately log the user in.
+Again, we need to manage `TextEditingControllers` for the text input so our `RegisterForm` needs to be a `StatefulWidget`. In addition, we are using `BlocListener` again in order to execute one-time actions in response to state changes such as showing `SnackBar` when the registration is pending or fails. We are also adding the `AuthenticationLoggedIn` event to the `AuthenticationBloc` if the registration was a success so that we can immediately log the user in.
 
 ?> **Note:** We're using `BlocBuilder` in order to make our UI respond to changes in the `RegisterBloc` state.
 
@@ -404,7 +402,7 @@ Create `register/register_button.dart` and let's get started.
 
 Very similar to how we setup the `LoginButton`, the `RegisterButton` has some custom styling and exposes a `VoidCallback` so that we can handle whenever a user presses the button in the parent widget.
 
-All that's left to do is update our `App` widget in `main.dart` to show the `LoginScreen` if the `AuthenticationState` is `Unauthenticated`.
+All that's left to do is update our `App` widget in `main.dart` to show the `LoginScreen` if the `AuthenticationState` is `AuthenticationFailure`.
 
 [main.dart](_snippets/flutter_firebase_login_tutorial/main6.dart.md ':include')
 

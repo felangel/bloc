@@ -35,8 +35,8 @@ class _LoginFormState extends State<LoginForm> {
   void initState() {
     super.initState();
     _loginBloc = BlocProvider.of<LoginBloc>(context);
-    _emailController.addListener(_onEmailChanged);
-    _passwordController.addListener(_onPasswordChanged);
+    _emailController.addListener(_onLoginEmailChanged);
+    _passwordController.addListener(_onLoginPasswordChanged);
   }
 
   @override
@@ -72,7 +72,7 @@ class _LoginFormState extends State<LoginForm> {
             );
         }
         if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+          BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationLoggedIn());
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -143,15 +143,15 @@ class _LoginFormState extends State<LoginForm> {
     super.dispose();
   }
 
-  void _onEmailChanged() {
+  void _onLoginEmailChanged() {
     _loginBloc.add(
-      EmailChanged(email: _emailController.text),
+      LoginEmailChanged(email: _emailController.text),
     );
   }
 
-  void _onPasswordChanged() {
+  void _onLoginPasswordChanged() {
     _loginBloc.add(
-      PasswordChanged(password: _passwordController.text),
+      LoginPasswordChanged(password: _passwordController.text),
     );
   }
 

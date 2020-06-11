@@ -98,7 +98,7 @@ Crie uma pasta/diretório chamado `authentication_bloc` e podemos criar nossos a
 
 ?> **Nota**: O `toString` é substituído para facilitar a leitura de um `AuthenticationState` ao imprimi-lo no console ou no `Transitions`.
 
-!> Como estamos usando o `Equatable` para nos permitir comparar diferentes instâncias do `AuthenticationState`, precisamos passar quaisquer propriedades para a superclasse. Sem o `List <Object> get props => [displayName]`, não poderemos comparar adequadamente diferentes instâncias do `Authenticated`.
+!> Como estamos usando o `Equatable` para nos permitir comparar diferentes instâncias do `AuthenticationState`, precisamos passar quaisquer propriedades para a superclasse. Sem o `List <Object> get props => [displayName]`, não poderemos comparar adequadamente diferentes instâncias do `AuthenticationSuccess`.
 
 ## Authentication Events
 
@@ -106,9 +106,9 @@ Agora que temos nosso `AuthenticationState` definido, precisamos definir os `Aut
 
 Nós vamos precisar:
 
-- um evento `AppStarted` para notificar o bloc de que ele precisa verificar se o usuário está atualmente autenticado ou não.
-- um evento `LoggedIn` para notificar o bloc de que o usuário efetuou login com êxito.
-- um evento `LoggedOut` para notificar o bloc de que o usuário efetuou logout com sucesso.
+- um evento `AuthenticationStarted` para notificar o bloc de que ele precisa verificar se o usuário está atualmente autenticado ou não.
+- um evento `AuthenticationLoggedIn` para notificar o bloc de que o usuário efetuou login com êxito.
+- um evento `AuthenticationLoggedOut` para notificar o bloc de que o usuário efetuou logout com sucesso.
 
 [authentication_event.dart](../_snippets/flutter_firebase_login_tutorial/authentication_event.dart.md ':include')
 
@@ -124,7 +124,7 @@ Começaremos criando nossa classe `AuthenticationBloc`.
 
 ?> **Nota**: Nosso `AuthenticationBloc` depende do `UserRepository`.
 
-Podemos começar substituindo `initialState` pelo estado `AuthenticationUninitialized()`.
+Podemos começar substituindo `initialState` pelo estado `AuthenticationInitial()`.
 
 [authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_initial_state.dart.md ':include')
 
@@ -200,9 +200,9 @@ Vamos criar `home_screen.dart` e começar.
 
 [home_screen.dart](../_snippets/flutter_firebase_login_tutorial/home_screen.dart.md ':include')
 
-O `HomeScreen` é um `StatelessWidget` que requer que um `nome` seja injetado para que possa renderizar a mensagem de boas-vindas. Ele também usa o `BlocProvider` para acessar o`AuthenticationBloc` via `BuildContext`, de modo que quando um usuário pressiona o botão de logout, podemos adicionar o evento `LoggedOut`.
+O `HomeScreen` é um `StatelessWidget` que requer que um `nome` seja injetado para que possa renderizar a mensagem de boas-vindas. Ele também usa o `BlocProvider` para acessar o`AuthenticationBloc` via `BuildContext`, de modo que quando um usuário pressiona o botão de logout, podemos adicionar o evento `AuthenticationLoggedOut`.
 
-Agora vamos atualizar nosso `App` para renderizar a `HomeScreen` se o `AuthenticationState` for `Authentication`.
+Agora vamos atualizar nosso `App` para renderizar a `HomeScreen` se o `AuthenticationState` for `AuthenticationSuccess`.
 
 [main.dart](../_snippets/flutter_firebase_login_tutorial/main5.dart.md ':include')
 
@@ -240,9 +240,9 @@ Abra `login/bloc/login_event.dart` e vamos definir e implementar nossos eventos.
 
 Os eventos que definimos são:
 
-`EmailChanged` - notifica o bloc que o usuário alterou o email
+`LoginEmailChanged` - notifica o bloc que o usuário alterou o email
 
-`PasswordChanged` - notifica o bloc que o usuário alterou a senha
+`LoginPasswordChanged` - notifica o bloc que o usuário alterou a senha
 
 `Enviado` - notifica o bloc que o usuário enviou o formulário
 
@@ -262,7 +262,7 @@ Antes de implementar o `LoginBloc`, vamos garantir que nosso arquivo barrel este
 
 [login_bloc.dart](../_snippets/flutter_firebase_login_tutorial/login_bloc.dart.md ':include')
 
-**Nota:** Nós estamos substituindo o `transformEvents` para rejeitar os eventos `EmailChanged` e `PasswordChanged`, para que possamos dar ao usuário algum tempo para parar de digitar antes de validar a entrada.
+**Nota:** Nós estamos substituindo o `transformEvents` para rejeitar os eventos `LoginEmailChanged` e `LoginPasswordChanged`, para que possamos dar ao usuário algum tempo para parar de digitar antes de validar a entrada.
 
 Estamos usando uma classe `Validators` para validar o email e a senha que vamos implementar a seguir.
 
@@ -390,7 +390,7 @@ Crie `register/register_form.dart` e vamos construí-lo.
 
 [register_form.dart](../_snippets/flutter_firebase_login_tutorial/register_form.dart.md ':include')
 
-Novamente, precisamos gerenciar `TextEditingControllers` para a entrada de texto, para que nosso `RegisterForm` precise ser um `StatefulWidget`. Além disso, estamos usando o BlocListener novamente para executar ações únicas em resposta a alterações de estado, como mostrar o SnackBar quando o registro está pendente ou falha. Também estamos adicionando o evento `LoggedIn` ao `AuthenticationBloc` se o registro foi bem-sucedido, para que possamos logar imediatamente o usuário.
+Novamente, precisamos gerenciar `TextEditingControllers` para a entrada de texto, para que nosso `RegisterForm` precise ser um `StatefulWidget`. Além disso, estamos usando o BlocListener novamente para executar ações únicas em resposta a alterações de estado, como mostrar o SnackBar quando o registro está pendente ou falha. Também estamos adicionando o evento `AuthenticationLoggedIn` ao `AuthenticationBloc` se o registro foi bem-sucedido, para que possamos logar imediatamente o usuário.
 
 ?> **Nota:** Estamos usando o `BlocBuilder` para fazer com que nossa interface do usuário responda às alterações no estado `RegisterBloc`.
 
@@ -404,7 +404,7 @@ Crie `register/register_button.dart` e vamos começar.
 
 Muito parecido com o modo como configuramos o `LoginButton`, o `RegisterButton` possui um estilo personalizado e expõe um `VoidCallback` para que possamos lidar sempre que um usuário pressionar o botão no widget pai.
 
-Tudo o que resta a fazer é atualizar o widget `App` no `main.dart` para mostrar a `LoginScreen` se o `AuthenticationState` for `Unauthenticated`.
+Tudo o que resta a fazer é atualizar o widget `App` no `main.dart` para mostrar a `LoginScreen` se o `AuthenticationState` for `AuthenticationFailure`.
 
 [main.dart](../_snippets/flutter_firebase_login_tutorial/main6.dart.md ':include')
 

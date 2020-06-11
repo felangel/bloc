@@ -17,37 +17,37 @@ class AuthenticationBloc
         _userRepository = userRepository;
 
   @override
-  AuthenticationState get initialState => Uninitialized();
+  AuthenticationState get initialState => AuthenticationInitial();
 
   @override
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {
-    if (event is AppStarted) {
-      yield* _mapAppStartedToState();
-    } else if (event is LoggedIn) {
-      yield* _mapLoggedInToState();
-    } else if (event is LoggedOut) {
-      yield* _mapLoggedOutToState();
+    if (event is AuthenticationStarted) {
+      yield* _mapAuthenticationStartedToState();
+    } else if (event is AuthenticationLoggedIn) {
+      yield* _mapAuthenticationLoggedInToState();
+    } else if (event is AuthenticationLoggedOut) {
+      yield* _mapAuthenticationLoggedOutToState();
     }
   }
 
-  Stream<AuthenticationState> _mapAppStartedToState() async* {
+  Stream<AuthenticationState> _mapAuthenticationStartedToState() async* {
     final isSignedIn = await _userRepository.isSignedIn();
     if (isSignedIn) {
       final name = await _userRepository.getUser();
-      yield Authenticated(name);
+      yield AuthenticationSuccess(name);
     } else {
-      yield Unauthenticated();
+      yield AuthenticationFailure();
     }
   }
 
-  Stream<AuthenticationState> _mapLoggedInToState() async* {
-    yield Authenticated(await _userRepository.getUser());
+  Stream<AuthenticationState> _mapAuthenticationLoggedInToState() async* {
+    yield AuthenticationSuccess(await _userRepository.getUser());
   }
 
-  Stream<AuthenticationState> _mapLoggedOutToState() async* {
-    yield Unauthenticated();
+  Stream<AuthenticationState> _mapAuthenticationLoggedOutToState() async* {
+    yield AuthenticationFailure();
     _userRepository.signOut();
   }
 }

@@ -1,4 +1,4 @@
 ```dart
 @override
-AuthenticationState get initialState => Uninitialized();
+AuthenticationState get initialState => AuthenticationInitial();
 ```
