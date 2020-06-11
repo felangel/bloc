@@ -62,9 +62,9 @@
 
 Нам понадобится:
 
-- событие `AppStarted`, чтобы уведомить блок о том, что ему нужно проверить, аутентифицирован ли пользователь в настоящее время или нет.
-- событие `LoggedIn`, чтобы уведомить блок о том, что пользователь успешно вошел в систему.
-- событие `LoggedOut`, чтобы уведомить блок о том, что пользователь успешно вышел из системы.
+- событие `AuthenticationStarted`, чтобы уведомить блок о том, что ему нужно проверить, аутентифицирован ли пользователь в настоящее время или нет.
+- событие `AuthenticationLoggedIn`, чтобы уведомить блок о том, что пользователь успешно вошел в систему.
+- событие `AuthenticationLoggedOut`, чтобы уведомить блок о том, что пользователь успешно вышел из системы.
 
 [authentication_event.dart](../_snippets/flutter_login_tutorial/authentication_event.dart.md ':include')
 
@@ -82,7 +82,7 @@
 
 ?> **Примечание**: наш `AuthenticationBloc` зависит от `UserRepository`.
 
-Мы можем начать с переопределения `initialState` в состояние `AuthenticationUninitialized ()`.
+Мы можем начать с переопределения `initialState` в состояние `AuthenticationInitial ()`.
 
 [authentication_bloc.dart](../_snippets/flutter_login_tutorial/authentication_bloc_initial_state.dart.md ':include')
 
@@ -110,7 +110,7 @@
 
 ?> **Примечание**: Это первый класс, в котором мы используем `flutter_bloc`. Мы коротко затронем `BlocProvider.of<AuthenticationBloc>(context)` выражение, но пока нам достаточно знать, что это позволит нашему `HomePage` получить доступ к `AuthenticationBloc`.
 
-?> **Примечание**: мы добавляем событие `LoggedOut` к нашему `AuthenticationBloc`, когда пользователь нажимает кнопку выхода из системы.
+?> **Примечание**: мы добавляем событие `AuthenticationLoggedOut` к нашему `AuthenticationBloc`, когда пользователь нажимает кнопку выхода из системы.
 
 Далее нам нужно создать `LoginPage` и `LoginForm`.
 
@@ -125,7 +125,7 @@
 Состояния могут выглядет так:
 
 - `LoginInitial` - является начальным состоянием LoginForm.
-- `LoginLoading` - состояние LoginForm, когда мы проверяем учетные данные
+- `LoginInProgress` - состояние LoginForm, когда мы проверяем учетные данные
 - `LoginFailure` - состояние LoginForm, когда попытка входа не удалась.
 
 Теперь, когда мы определили `LoginState`, давайте взглянем на класс `LoginEvent`.

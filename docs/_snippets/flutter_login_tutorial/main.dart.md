@@ -38,7 +38,7 @@ void main() {
     BlocProvider<AuthenticationBloc>(
       create: (context) {
         return AuthenticationBloc(userRepository: userRepository)
-          ..add(AppStarted());
+          ..add(AuthenticationStarted());
       },
       child: App(userRepository: userRepository),
     ),
@@ -55,16 +55,16 @@ class App extends StatelessWidget {
     return MaterialApp(
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          if (state is AuthenticationUninitialized) {
+          if (state is AuthenticationInitial) {
             return SplashPage();
           }
-          if (state is AuthenticationAuthenticated) {
+          if (state is AuthenticationSuccess) {
             return HomePage();
           }
-          if (state is AuthenticationUnauthenticated) {
+          if (state is AuthenticationFailure) {
             return LoginPage(userRepository: userRepository);
           }
-          if (state is AuthenticationLoading) {
+          if (state is AuthenticationInProgress) {
             return LoadingIndicator();
           }
         },

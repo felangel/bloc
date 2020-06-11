@@ -4,7 +4,7 @@
 
 > In the following tutorial, we're going to build a Login Flow in Flutter using the Bloc library.
 
-![demo](./assets/gifs/flutter_login.gif)
+![demo](../assets/gifs/flutter_login.gif)
 
 ## Setup
 
@@ -34,19 +34,19 @@ Next, we’re going to need to determine how we’re going to manage the state o
 
 At a high level, we’re going to need to manage the user’s Authentication State. A user's authentication state can be one of the following:
 
-- uninitialized - waiting to see if the user is authenticated or not on app start.
-- loading - waiting to persist/delete a token
-- authenticated - successfully authenticated
-- unauthenticated - not authenticated
+- AuthenticationInitial - waiting to see if the user is authenticated or not on app start.
+- AuthenticationInProgress - waiting to persist/delete a token
+- AuthenticationSuccess - successfully authenticated
+- AuthenticationFailure - not authenticated
 
 Each of these states will have an implication on what the user sees.
 
 For example:
 
-- if the authentication state was uninitialized, the user might be seeing a splash screen.
-- if the authentication state was loading, the user might be seeing a progress indicator.
-- if the authentication state was authenticated, the user might see a home screen.
-- if the authentication state was unauthenticated, the user might see a login form.
+- if the authentication state was AuthenticationInitial, the user might be seeing a splash screen.
+- if the authentication state was AuthenticationInProgress, the user might be seeing a progress indicator.
+- if the authentication state was AuthenticationSuccess, the user might see a home screen.
+- if the authentication state was AuthenticationFailure, the user might see a login form.
 
 > It's critical to identify what the different states are going to be before diving into the implementation.
 
@@ -62,9 +62,9 @@ Now that we have our `AuthenticationState` defined we need to define the `Authen
 
 We will need:
 
-- an `AppStarted` event to notify the bloc that it needs to check if the user is currently authenticated or not.
-- a `LoggedIn` event to notify the bloc that the user has successfully logged in.
-- a `LoggedOut` event to notify the bloc that the user has successfully logged out.
+- an `AuthenticationStarted` event to notify the bloc that it needs to check if the user is currently authenticated or not.
+- a `AuthenticationLoggedIn` event to notify the bloc that the user has successfully logged in.
+- a `AuthenticationLoggedOut` event to notify the bloc that the user has successfully logged out.
 
 [authentication_event.dart](../_snippets/flutter_login_tutorial/authentication_event.dart.md ':include')
 
@@ -82,7 +82,7 @@ We'll start off by creating our `AuthenticationBloc` class.
 
 ?> **Note**: Our `AuthenticationBloc` has a dependency on the `UserRepository`.
 
-We can start by overriding `initialState` to the `AuthenticationUninitialized()` state.
+We can start by overriding `initialState` to the `AuthenticationInitial()` state.
 
 [authentication_bloc.dart](../_snippets/flutter_login_tutorial/authentication_bloc_initial_state.dart.md ':include')
 
@@ -110,7 +110,7 @@ Next, we will need to create our `HomePage` so that we can navigate users there 
 
 ?> **Note**: This is the first class in which we are using `flutter_bloc`. We will get into `BlocProvider.of<AuthenticationBloc>(context)` shortly but for now just know that it allows our `HomePage` to access our `AuthenticationBloc`.
 
-?> **Note**: We are adding a `LoggedOut` event to our `AuthenticationBloc` when a user pressed the logout button.
+?> **Note**: We are adding a `AuthenticationLoggedOut` event to our `AuthenticationBloc` when a user pressed the logout button.
 
 Next up, we need to create a `LoginPage` and `LoginForm`.
 
@@ -124,7 +124,7 @@ Just like we did for the `AuthenticationBloc`, we will need to define the `Login
 
 `LoginInitial` is the initial state of the LoginForm.
 
-`LoginLoading` is the state of the LoginForm when we are validating credentials
+`LoginInProgress` is the state of the LoginForm when we are validating credentials
 
 `LoginFailure` is the state of the LoginForm when a login attempt has failed.
 

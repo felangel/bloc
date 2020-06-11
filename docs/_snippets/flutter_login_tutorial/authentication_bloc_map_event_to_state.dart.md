@@ -3,26 +3,26 @@
 Stream<AuthenticationState> mapEventToState(
   AuthenticationEvent event,
 ) async* {
-  if (event is AppStarted) {
+  if (event is AuthenticationStarted) {
     final bool hasToken = await userRepository.hasToken();
 
     if (hasToken) {
-      yield AuthenticationAuthenticated();
+      yield AuthenticationSuccess();
     } else {
-      yield AuthenticationUnauthenticated();
+      yield AuthenticationFailure();
     }
   }
 
-  if (event is LoggedIn) {
-    yield AuthenticationLoading();
+  if (event is AuthenticationLoggedIn) {
+    yield AuthenticationInProgress();
     await userRepository.persistToken(event.token);
-    yield AuthenticationAuthenticated();
+    yield AuthenticationSuccess();
   }
 
-  if (event is LoggedOut) {
-    yield AuthenticationLoading();
+  if (event is AuthenticationLoggedOut) {
+    yield AuthenticationInProgress();
     await userRepository.deleteToken();
-    yield AuthenticationUnauthenticated();
+    yield AuthenticationFailure();
   }
 }
 ```
