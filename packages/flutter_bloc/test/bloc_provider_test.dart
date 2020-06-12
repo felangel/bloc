@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
   final CounterBloc Function(BuildContext context) _create;
@@ -434,6 +434,20 @@ void main() {
 """;
       expect(exception is FlutterError, true);
       expect(exception.message, expectedMessage);
+    });
+
+    testWidgets(
+        'should not wrap into FlutterError if '
+        'ProviderNotFoundException with wrong valueType '
+        'is thrown', (tester) async {
+      await tester.pumpWidget(
+        BlocProvider<CounterBloc>(
+          create: (context) => CounterBloc(onClose: Provider.of(context)),
+          child: CounterPage(),
+        ),
+      );
+      final dynamic exception = tester.takeException();
+      expect(exception is ProviderNotFoundException, true);
     });
 
     testWidgets(
