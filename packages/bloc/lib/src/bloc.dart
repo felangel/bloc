@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cubit/cubit.dart';
 import 'package:meta/meta.dart';
 
 import '../bloc.dart';
@@ -36,9 +37,8 @@ typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
-abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
+abstract class Bloc<Event, State> extends Cubit<State> implements Sink<Event> {
   final _eventController = StreamController<Event>.broadcast();
-  final _stateController = StreamController<State>.broadcast();
 
   State _state;
   StreamSubscription<Transition<Event, State>> _transitionSubscription;
@@ -46,41 +46,10 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   /// Returns the current [state] of the [bloc].
   State get state => _state;
 
-  /// Returns the [state] before any `events` have been [add]ed.
-  State get initialState;
-
-  /// Returns whether the `Stream<State>` is a broadcast stream.
-  @override
-  bool get isBroadcast => _stateController.stream.isBroadcast;
-
   /// {@macro bloc}
-  Bloc() {
-    _state = initialState;
+  Bloc(State state) : super(state) {
+    _state = state;
     _bindEventsToStates();
-  }
-
-  /// Adds a subscription to the `Stream<State>`.
-  /// Returns a [StreamSubscription] which handles events from
-  /// the `Stream<State>` using the provided [onData], [onError] and [onDone]
-  /// handlers.
-  @override
-  StreamSubscription<State> listen(
-    void Function(State) onData, {
-    Function onError,
-    void Function() onDone,
-    bool cancelOnError,
-  }) {
-    return _stateStream.listen(
-      onData,
-      onError: onError,
-      onDone: onDone,
-      cancelOnError: cancelOnError,
-    );
-  }
-
-  Stream<State> get _stateStream async* {
-    yield state;
-    yield* _stateController.stream;
   }
 
   /// Called whenever an [event] is [add]ed to the [bloc].
@@ -172,8 +141,8 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   @mustCallSuper
   Future<void> close() async {
     await _eventController.close();
-    await _stateController.close();
     await _transitionSubscription?.cancel();
+    return super.close();
   }
 
   /// Transforms the [events] stream along with a [transitionFn] function into
@@ -262,7 +231,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
       try {
         onTransition(transition);
         _state = transition.nextState;
-        _stateController.add(transition.nextState);
+        emit(transition.nextState);
       } on dynamic catch (error, stackTrace) {
         onError(error, stackTrace);
       }

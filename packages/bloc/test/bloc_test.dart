@@ -33,10 +33,6 @@ void main() {
         simpleBloc.close();
       });
 
-      test('initialState returns correct value', () {
-        expect(simpleBloc.initialState, '');
-      });
-
       test('state returns correct value initially', () {
         expect(simpleBloc.state, '');
       });
@@ -44,7 +40,7 @@ void main() {
       test('state should equal initial state before any events are added',
           () async {
         final initialState = await simpleBloc.first;
-        expect(initialState, simpleBloc.initialState);
+        expect(initialState, simpleBloc.state);
       });
 
       test('should map single event to correct state', () {
@@ -141,10 +137,6 @@ void main() {
         complexBloc.close();
       });
 
-      test('initialState returns ComplexStateA', () {
-        expect(complexBloc.initialState, ComplexStateA());
-      });
-
       test('state returns correct value initially', () {
         expect(complexBloc.state, ComplexStateA());
       });
@@ -152,7 +144,7 @@ void main() {
       test('state should equal initial state before any events are added',
           () async {
         final initialState = await complexBloc.first;
-        expect(initialState, complexBloc.initialState);
+        expect(initialState, complexBloc.state);
       });
 
       test('should map single event to correct state', () {
@@ -257,20 +249,16 @@ void main() {
         BlocSupervisor.delegate = delegate;
       });
 
-      test('initial state is 0', () {
-        expect(counterBloc.initialState, 0);
-        expect(events.isEmpty, true);
-        expect(transitions.isEmpty, true);
-      });
-
       test('state returns correct value initially', () {
         expect(counterBloc.state, 0);
+        expect(events.isEmpty, true);
+        expect(transitions.isEmpty, true);
       });
 
       test('state should equal initial state before any events are added',
           () async {
         final initialState = await counterBloc.first;
-        expect(initialState, counterBloc.initialState);
+        expect(initialState, counterBloc.state);
       });
 
       test('single Increment event updates state to 1', () {
@@ -420,10 +408,6 @@ void main() {
         verifyNever(delegate.onError(any, any, any));
       });
 
-      test('initialState returns correct initial state', () {
-        expect(asyncBloc.initialState, AsyncState.initial());
-      });
-
       test('state returns correct value initially', () {
         expect(asyncBloc.state, AsyncState.initial());
       });
@@ -431,7 +415,7 @@ void main() {
       test('state should equal initial state before any events are added',
           () async {
         final initialState = await asyncBloc.first;
-        expect(initialState, asyncBloc.initialState);
+        expect(initialState, asyncBloc.state);
       });
 
       test('should map single event to correct state', () {
