@@ -40,17 +40,17 @@ Começaremos definindo os `TimerStates` nos quais nosso `TimerBloc` pode estar.
 
 Nosso estado `TimerBloc` pode ser um dos seguintes:
 
-- Pronto - pronto para começar a contagem regressiva a partir da duração especificada.
-- Executando - contando ativamente a duração especificada.
-- Pausado - pausado com a duração restante.
-- Concluído - concluído com uma duração restante de 0.
+- TimerInitial - pronto para começar a contagem regressiva a partir da duração especificada.
+- TimerRunInProgress - contando ativamente a duração especificada.
+- TimerRunPause - pausado com a duração restante.
+- TimerRunComplete - concluído com uma duração restante de 0.
 
 Cada um desses estados terá implicações no que o usuário vê. Por exemplo:
 
-- se o estado estiver "pronto", o usuário poderá iniciar o cronômetro.
-- se o estado estiver "em execução", o usuário poderá pausar e redefinir o timer, além de ver a duração restante.
-- se o estado estiver em pausa, o usuário poderá retomar o cronômetro e redefinir o cronômetro.
-- se o estado estiver "concluído", o usuário poderá redefinir o timer.
+- se o estado estiver `TimerInitial`, o usuário poderá iniciar o cronômetro.
+- se o estado estiver `TimerRunInProgress`, o usuário poderá pausar e redefinir o timer, além de ver a duração restante.
+- se o estado estiver em `TimerRunPause`, o usuário poderá retomar o cronômetro e redefinir o cronômetro.
+- se o estado estiver `TimerRunComplete`, o usuário poderá redefinir o timer.
 
 Para manter todos os nossos arquivos de bloc juntos, vamos criar um diretório de bloc com `bloc/timer_state.dart`..
 
@@ -66,11 +66,11 @@ Em seguida, vamos definir e implementar os `TimerEvents` que nosso `TimerBloc` p
 
 Nosso `TimerBloc` precisará saber como processar os seguintes eventos:
 
-- Iniciar - informa ao TimerBloc que o timer deve ser iniciado.
-- Pausar - informa ao TimerBloc que o cronômetro deve ser pausado.
-- Continuar - informa o TimerBloc que o cronômetro deve ser reiniciado.
-- Reset - informa ao TimerBloc que o timer deve ser redefinido para o estado original.
-- Tick - informa ao TimerBloc que um tick ocorreu e que ele precisa atualizar seu estado de acordo.
+- TimerStarted - informa ao TimerBloc que o timer deve ser iniciado.
+- TimerPaused - informa ao TimerBloc que o cronômetro deve ser pausado.
+- TimerResumed - informa o TimerBloc que o cronômetro deve ser reiniciado.
+- TimerReset - informa ao TimerBloc que o timer deve ser redefinido para o estado original.
+- TimerTicked - informa ao TimerBloc que um tick ocorreu e que ele precisa atualizar seu estado de acordo.
 
 Se você não utiliza [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) ou [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc), então crie `bloc/timer_event.dart` e vamos implementar estes eventos.
 
@@ -84,7 +84,7 @@ Se você ainda não o fez, crie `bloc/timer bloc.dart` e crie um` TimerBloc` vaz
 
 [timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_empty.dart.md ':include')
 
-A primeira coisa que precisamos fazer é definir o `initialState` do nosso `TimerBloc`. Nesse caso, queremos que o `TimerBloc` inicie no estado `Ready` com uma duração predefinida de 1 minuto (60 segundos).
+A primeira coisa que precisamos fazer é definir o `initialState` do nosso `TimerBloc`. Nesse caso, queremos que o `TimerBloc` inicie no estado `TimerInitial` com uma duração predefinida de 1 minuto (60 segundos).
 
 [timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_initial_state.dart.md ':include')
 
@@ -94,117 +94,35 @@ Em seguida, precisamos definir a dependência do nosso `Ticker`.
 
 Também estamos definindo um `StreamSubscription` para o nosso `Ticker`, o qual entraremos em breve.
 
-Neste ponto, tudo o que resta a fazer é implementar o `mapEventToState`. Para melhorar a legibilidade, gosto de dividir cada manipulador de eventos em sua própria função auxiliar. Começaremos com o evento `Start`.
+Neste ponto, tudo o que resta a fazer é implementar o `mapEventToState`. Para melhorar a legibilidade, gosto de dividir cada manipulador de eventos em sua própria função auxiliar. Começaremos com o evento `TimerStarted`.
 
 [timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_start.dart.md ':include')
 
-Se o `TimerBloc` receber um evento `Start`, ele empurra um estado `Running` com a duração inicial. Além disso, se já havia um `_tickerSubscription` aberto, precisamos cancelá-lo para desalocar a memória. Também precisamos substituir o método `close` no nosso` TimerBloc` para que possamos cancelar o `_tickerSubscription` quando o `TimerBloc` for fechado. Por fim, ouvimos o fluxo `_ticker.tick` e, em cada tick, adicionamos um evento` Tick` com a duração restante.
+Se o `TimerBloc` receber um evento `TimerStarted`, ele empurra um estado `TimerRunInProgress` com a duração inicial. Além disso, se já havia um `_tickerSubscription` aberto, precisamos cancelá-lo para desalocar a memória. Também precisamos substituir o método `close` no nosso` TimerBloc` para que possamos cancelar o `_tickerSubscription` quando o `TimerBloc` for fechado. Por fim, ouvimos o fluxo `_ticker.tick` e, em cada tick, adicionamos um evento `TimerTicked` com a duração restante.
 
-Em seguida, vamos implementar o manipulador de eventos `Tick`.
+Em seguida, vamos implementar o manipulador de eventos `TimerTicked`.
 
 [timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_tick.dart.md ':include')
 
-Sempre que um evento `Tick` é recebido, se a duração do tick for maior que 0, precisamos enviar um estado atualizado `Running` com a nova duração. Caso contrário, se a duração do tiquetaque for 0, nosso cronômetro terminou e precisamos pressionar o estado `Concluído`.
+Sempre que um evento `TimerTicked` é recebido, se a duração do tick for maior que 0, precisamos enviar um estado atualizado `TimerRunInProgress` com a nova duração. Caso contrário, se a duração do tiquetaque for 0, nosso cronômetro terminou e precisamos pressionar o estado `TimerRunComplete`.
 
-Agora vamos implementar o manipulador de eventos `Pause`.
+Agora vamos implementar o manipulador de eventos `TimerPaused`.
 
 [timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_pause.dart.md ':include')
 
-Em `_mapPauseToState`, se o `state` do nosso `TimerBloc` for `Running`, poderemos pausar o `_tickerSubscription` e pressionar o estado de `Paused` com a duração atual do timer.
+Em `_mapTimerPausedToState`, se o `state` do nosso `TimerBloc` for `TimerRunInProgress`, poderemos pausar o `_tickerSubscription` e pressionar o estado de `TimerRunPause` com a duração atual do timer.
 
-Em seguida, vamos implementar o manipulador de eventos `Continuar` para que possamos pausar o cronômetro.
+Em seguida, vamos implementar o manipulador de eventos `TimerResumed` para que possamos pausar o cronômetro.
 
 [timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_resume.dart.md ':include')
 
-O manipulador de eventos `Resume` é muito semelhante ao manipulador de eventos `Pause`. Se o `TimerBloc` possui um `state` de `Paused` e recebe um eventoc`Resume`, ele retoma o `_tickerSubscription` e empurra o estado de `Running` com a duração atual.
+O manipulador de eventos `TimerResumed` é muito semelhante ao manipulador de eventos `TimerPaused`. Se o `TimerBloc` possui um `state` de `TimerRunPause` e recebe um eventoc`TimerResumed`, ele retoma o `_tickerSubscription` e empurra o estado de `TimerRunInProgress` com a duração atual.
 
-Por fim, precisamos implementar o manipulador de eventos `Reset`.
+Por fim, precisamos implementar o manipulador de eventos `TimerReset`.
 
-```dart
-import 'dart:async';
-import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
-import 'package:flutter_timer/bloc/bloc.dart';
-import 'package:flutter_timer/ticker.dart';
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc.dart.md ':include')
 
-class TimerBloc extends Bloc<TimerEvent, TimerState> {
-  final Ticker _ticker;
-  final int _duration = 60;
-
-  StreamSubscription<int> _tickerSubscription;
-
-  TimerBloc({@required Ticker ticker})
-      : assert(ticker != null),
-        _ticker = ticker;
-
-  @override
-  TimerState get initialState => Ready(_duration);
-
-  @override
-  void onTransition(Transition<TimerEvent, TimerState> transition) {
-    print(transition);
-    super.onTransition(transition);
-  }
-
-  @override
-  Stream<TimerState> mapEventToState(
-    TimerEvent event,
-  ) async* {
-    if (event is Start) {
-      yield* _mapStartToState(event);
-    } else if (event is Pause) {
-      yield* _mapPauseToState(event);
-    } else if (event is Resume) {
-      yield* _mapResumeToState(event);
-    } else if (event is Reset) {
-      yield* _mapResetToState(event);
-    } else if (event is Tick) {
-      yield* _mapTickToState(event);
-    }
-  }
-
-  @override
-  Future<void> close() {
-    _tickerSubscription?.cancel();
-    return super.close();
-  }
-
-  Stream<TimerState> _mapStartToState(Start start) async* {
-     yield Running(start.duration);
-    _tickerSubscription?.cancel();
-    _tickerSubscription = _ticker
-        .tick(ticks: start.duration)
-        .listen((duration) => add(Tick(duration: duration)));
-  }
-
-  Stream<TimerState> _mapPauseToState(Pause pause) async* {
-    final state = currentState;
-    if (state is Running) {
-      _tickerSubscription?.pause();
-      yield Paused(state.duration);
-    }
-  }
-
-  Stream<TimerState> _mapResumeToState(Resume resume) async* {
-    final state = currentState;
-    if (state is Paused) {
-      _tickerSubscription?.resume();
-      yield Running(state.duration);
-    }
-  }
-
-  Stream<TimerState> _mapResetToState(Reset reset) async* {
-    _tickerSubscription?.cancel();
-    yield Ready(_duration);
-  }
-
-  Stream<TimerState> _mapTickToState(Tick tick) async* {
-    yield tick.duration > 0 ? Running(tick.duration) : Finished();
-  }
-}
-```
-
-Se o `TimerBloc` receber um evento `Reset`, ele precisará cancelar a atual `_tickerSubscription` para que não seja notificado de nenhum tique adicional e empurre o estado `Ready` com a duração original.
+Se o `TimerBloc` receber um evento `TimerReset`, ele precisará cancelar a atual `_tickerSubscription` para que não seja notificado de nenhum tique adicional e empurre o estado `TimerInitial` com a duração original.
 
 Se você não utiliza [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) ou [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc), então crie `bloc/timer_event.dart` e vamos implementar estes eventos.
 
@@ -248,7 +166,7 @@ Adicionamos outro `BlocBuilder` que renderizará o widget `Actions`; no entanto,
 
 Se você deseja um controle refinado sobre quando a função `builder` é chamada, você pode fornecer uma condição opcional ao `BlocBuilder`. A condição pega o estado anterior do bloc e o estado atual do bloc e retorna um `booleano`. Se `condition` retornar `true`, o `builder` será chamado com` state` e o widget será reconstruído. Se `condition` retornar `false`, o `builder` não será chamado com `state` e nenhuma reconstrução ocorrerá.
 
-Nesse caso, não queremos que o widget "Actions" seja reconstruído a cada tick porque isso seria ineficiente. Em vez disso, queremos apenas que o `Actions` seja reconstruído se o `runtimeType` do `TimerState` mudar (Pronto => Em execução, Em execução => Em pausa, etc ...).
+Nesse caso, não queremos que o widget "Actions" seja reconstruído a cada tick porque isso seria ineficiente. Em vez disso, queremos apenas que o `Actions` seja reconstruído se o `runtimeType` do `TimerState` mudar (TimerInitial => TimerRunInProgress, TimerRunInProgress => TimerRunPause, etc...).
 
 Como resultado, se coloríssemos os widgets aleatoriamente em cada reconstrução, ficaria assim:
 
