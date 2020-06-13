@@ -113,7 +113,7 @@ class Actions extends StatelessWidget {
         ),
       ];
     }
-    if (currentState is TimerRunTimerPaused) {
+    if (currentState is TimerRunPause) {
       return [
         FloatingActionButton(
           child: Icon(Icons.play_arrow),

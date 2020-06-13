@@ -48,7 +48,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   Stream<TimerState> _mapTimerPausedToState(TimerPaused pause) async* {
     if (state is TimerRunInProgress) {
       _tickerSubscription?.pause();
-      yield TimerRunTimerPaused(state.duration);
+      yield TimerRunPause(state.duration);
     }
   }
 
