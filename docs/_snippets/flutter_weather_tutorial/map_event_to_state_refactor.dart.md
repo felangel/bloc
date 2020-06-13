@@ -1,27 +1,27 @@
 ```dart
 @override
 Stream<WeatherState> mapEventToState(WeatherEvent event) async* {
-  if (event is FetchWeather) {
-    yield* _mapFetchWeatherToState(event);
-  } else if (event is RefreshWeather) {
-    yield* _mapRefreshWeatherToState(event);
+  if (event is WeatherRequested) {
+    yield* _mapWeatherRequestedToState(event);
+  } else if (event is WeatherRefreshRequested) {
+    yield* _mapWeatherRefreshRequestedToState(event);
   }
 }
 
-Stream<WeatherState> _mapFetchWeatherToState(FetchWeather event) async* {
-  yield WeatherLoading();
+Stream<WeatherState> _mapWeatherRequestedToState(WeatherRequested event) async* {
+  yield WeatherLoadInProgress();
   try {
     final Weather weather = await weatherRepository.getWeather(event.city);
-    yield WeatherLoaded(weather: weather);
+    yield WeatherLoadSuccess(weather: weather);
   } catch (_) {
-    yield WeatherError();
+    yield WeatherLoadFailure();
   }
 }
 
-Stream<WeatherState> _mapRefreshWeatherToState(RefreshWeather event) async* {
+Stream<WeatherState> _mapWeatherRefreshRequestedToState(WeatherRefreshRequested event) async* {
   try {
     final Weather weather = await weatherRepository.getWeather(event.city);
-    yield WeatherLoaded(weather: weather);
+    yield WeatherLoadSuccess(weather: weather);
   } catch (_) {
     yield state;
   }

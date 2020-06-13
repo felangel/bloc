@@ -3,15 +3,15 @@ import 'package:flutter_weather/blocs/weather_bloc.dart';
 
 void main() {
   group('WeatherEvent', () {
-    group('FetchWeather', () {
+    group('WeatherRequested', () {
       test('props are [city]', () {
-        expect(FetchWeather(city: 'city').props, ['city']);
+        expect(WeatherRequested(city: 'city').props, ['city']);
       });
     });
 
-    group('RefreshWeather', () {
+    group('WeatherRefreshRequested', () {
       test('props are [city]', () {
-        expect(RefreshWeather(city: 'city').props, ['city']);
+        expect(WeatherRefreshRequested(city: 'city').props, ['city']);
       });
     });
   });

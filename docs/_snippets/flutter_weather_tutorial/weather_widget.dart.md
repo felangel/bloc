@@ -24,7 +24,7 @@ class Weather extends StatelessWidget {
               );
               if (city != null) {
                 BlocProvider.of<WeatherBloc>(context)
-                    .add(FetchWeather(city: city));
+                    .add(WeatherRequested(city: city));
               }
             },
           )
@@ -33,13 +33,13 @@ class Weather extends StatelessWidget {
       body: Center(
         child: BlocBuilder<WeatherBloc, WeatherState>(
           builder: (context, state) {
-            if (state is WeatherEmpty) {
+            if (state is WeatherInitial) {
               return Center(child: Text('Please Select a Location'));
             }
-            if (state is WeatherLoading) {
+            if (state is WeatherLoadInProgress) {
               return Center(child: CircularProgressIndicator());
             }
-            if (state is WeatherLoaded) {
+            if (state is WeatherLoadSuccess) {
               final weather = state.weather;
 
               return ListView(
@@ -64,7 +64,7 @@ class Weather extends StatelessWidget {
                 ],
               );
             }
-            if (state is WeatherError) {
+            if (state is WeatherLoadFailure) {
               return Text(
                 'Something went wrong!',
                 style: TextStyle(color: Colors.red),

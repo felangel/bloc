@@ -1,8 +1,8 @@
 ```dart
-if (event is RefreshWeather) {
+if (event is WeatherRefreshRequested) {
   try {
     final Weather weather = await weatherRepository.getWeather(event.city);
-    yield WeatherLoaded(weather: weather);
+    yield WeatherLoadSuccess(weather: weather);
   } catch (_) {
     yield state;
   }
