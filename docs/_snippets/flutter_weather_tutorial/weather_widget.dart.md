@@ -36,7 +36,7 @@ class Weather extends StatelessWidget {
             if (state is WeatherInitial) {
               return Center(child: Text('Please Select a Location'));
             }
-            if (state is WeatherInitialWeatherLoadInProgress) {
+            if (state is WeatherLoadInProgress) {
               return Center(child: CircularProgressIndicator());
             }
             if (state is WeatherLoadSuccess) {

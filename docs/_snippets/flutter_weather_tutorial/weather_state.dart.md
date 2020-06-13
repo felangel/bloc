@@ -13,7 +13,7 @@ abstract class WeatherState extends Equatable {
 
 class WeatherInitial extends WeatherState {}
 
-class WeatherInitialWeatherLoadInProgress extends WeatherState {}
+class WeatherLoadInProgress extends WeatherState {}
 
 class WeatherLoadSuccess extends WeatherState {
   final Weather weather;

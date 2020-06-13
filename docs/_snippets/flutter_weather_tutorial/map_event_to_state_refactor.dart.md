@@ -9,7 +9,7 @@ Stream<WeatherState> mapEventToState(WeatherEvent event) async* {
 }
 
 Stream<WeatherState> _mapWeatherRequestedToState(WeatherRequested event) async* {
-  yield WeatherInitialWeatherLoadInProgress();
+  yield WeatherLoadInProgress();
   try {
     final Weather weather = await weatherRepository.getWeather(event.city);
     yield WeatherLoadSuccess(weather: weather);
