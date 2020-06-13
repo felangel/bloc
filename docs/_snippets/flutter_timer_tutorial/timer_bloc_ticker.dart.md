@@ -16,7 +16,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
         _ticker = ticker;
 
   @override
-  TimerState get initialState => Ready(_duration);
+  TimerState get initialState => TimerInitial(_duration);
 
   @override
   Stream<TimerState> mapEventToState(
