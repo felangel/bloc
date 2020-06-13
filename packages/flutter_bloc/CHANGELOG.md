@@ -1,3 +1,7 @@
+# 4.0.1
+
+- Fix `ProviderNotFoundException` handling
+
 # 4.0.0
 
 - Update to `bloc: ^4.0.0`
