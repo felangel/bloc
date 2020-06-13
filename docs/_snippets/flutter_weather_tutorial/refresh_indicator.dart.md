@@ -2,7 +2,7 @@
 return RefreshIndicator(
   onRefresh: () {
     BlocProvider.of<WeatherBloc>(context).add(
-      RefreshWeather(city: state.weather.location),
+      WeatherRefreshRequested(city: state.weather.location),
     );
     return _refreshCompleter.future;
   },
