@@ -58,8 +58,6 @@ Our `PostBloc` will only be responding to a single event; `PostFetched` which wi
 
 [post_event.dart](_snippets/flutter_infinite_list_tutorial/post_event.dart.md ':include')
 
-?> Again, we are overriding `toString` for an easier to read string representation of our event. Again, we are extending [`Equatable`](https://pub.dev/packages/equatable) so that we can compare instances for equality.
-
 To recap, our `PostBloc` will be receiving `PostEvents` and converting them to `PostStates`. We have defined all of our `PostEvents` (PostFetched) so next let’s define our `PostState`.
 
 ## Post States
