@@ -6,12 +6,12 @@ import 'package:flutter_timer/bloc/bloc.dart';
 import 'package:flutter_timer/ticker.dart';
 
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
-  final TimerTickeder _ticker;
+  final Ticker _ticker;
   final int _duration = 60;
 
   StreamSubscription<int> _tickerSubscription;
 
-  TimerBloc({@required TimerTickeder ticker})
+  TimerBloc({@required Ticker ticker})
       : assert(ticker != null),
         _ticker = ticker;
 
