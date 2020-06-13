@@ -9,6 +9,7 @@ environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
+  cubit: ^0.0.3
   meta: ^1.1.6
 
 dev_dependencies:

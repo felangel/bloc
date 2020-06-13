@@ -8,7 +8,7 @@ part 'complex_event.dart';
 part 'complex_state.dart';
 
 class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
-  ComplexState get initialState => ComplexStateA();
+  ComplexBloc() : super(ComplexStateA());
 
   @override
   Stream<Transition<ComplexEvent, ComplexState>> transformEvents(
