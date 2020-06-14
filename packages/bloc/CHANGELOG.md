@@ -1,3 +1,8 @@
+# 5.0.0-dev
+
+- refactor: bloc to extend `Cubit` rather than `Stream`
+- **BREAKING**: remove `initialState` override in favor of providing the initial state via super
+
 # 4.0.0
 
 - Remove `rxdart` dependency ([#821](https://github.com/felangel/bloc/pull/821))
