@@ -40,15 +40,10 @@ typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
 abstract class Bloc<Event, State> extends Cubit<State> implements Sink<Event> {
   final _eventController = StreamController<Event>.broadcast();
 
-  State _state;
   StreamSubscription<Transition<Event, State>> _transitionSubscription;
-
-  /// Returns the current [state] of the [bloc].
-  State get state => _state;
 
   /// {@macro bloc}
   Bloc(State state) : super(state) {
-    _state = state;
     _bindEventsToStates();
   }
 
@@ -230,7 +225,6 @@ abstract class Bloc<Event, State> extends Cubit<State> implements Sink<Event> {
       if (transition.nextState == state) return;
       try {
         onTransition(transition);
-        _state = transition.nextState;
         emit(transition.nextState);
       } on dynamic catch (error, stackTrace) {
         onError(error, stackTrace);
