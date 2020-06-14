@@ -1,3 +1,8 @@
+# 0.0.6
+
+- fix: expose `CubitListenerSingleChildWidget`
+- fix: expose `CubitProviderSingleChildWidget`
+
 # 0.0.5
 
 - fix: hide `CubitListenerSingleChildWidget`
