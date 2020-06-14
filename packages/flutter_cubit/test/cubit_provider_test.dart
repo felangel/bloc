@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_cubit/flutter_cubit.dart';
+import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -373,6 +374,20 @@ void main() {
 ''';
       expect(exception is FlutterError, true);
       expect(exception.message, expectedMessage);
+    });
+
+    testWidgets(
+        'should not wrap into FlutterError if '
+        'ProviderNotFoundException with wrong valueType '
+        'is thrown', (tester) async {
+      await tester.pumpWidget(
+        CubitProvider<CounterCubit>(
+          create: (context) => CounterCubit(onClose: Provider.of(context)),
+          child: const CounterPage(),
+        ),
+      );
+      final dynamic exception = tester.takeException();
+      expect(exception is ProviderNotFoundException, true);
     });
 
     testWidgets(

@@ -4,6 +4,11 @@ import 'package:cubit/cubit.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+/// A function that creates a `Cubit` of type [T].
+typedef CreateCubit<T extends Cubit<dynamic>> = T Function(
+  BuildContext context,
+);
+
 /// Mixin which allows `MultiCubitProvider` to infer the types
 /// of multiple [CubitProvider]s.
 mixin CubitProviderSingleChildWidget on SingleChildWidget {}
@@ -30,7 +35,7 @@ class CubitProvider<T extends Cubit<dynamic>> extends SingleChildStatelessWidget
   /// {@macro cubitprovider}
   CubitProvider({
     Key key,
-    @required Create<T> create,
+    @required CreateCubit<T> create,
     Widget child,
     bool lazy,
   }) : this._(
@@ -103,7 +108,8 @@ class CubitProvider<T extends Cubit<dynamic>> extends SingleChildStatelessWidget
   static T of<T extends Cubit<dynamic>>(BuildContext context) {
     try {
       return Provider.of<T>(context, listen: false);
-    } on ProviderNotFoundException catch (_) {
+    } on ProviderNotFoundException catch (e) {
+      if (e.valueType != T) rethrow;
       throw FlutterError(
         '''
         CubitProvider.of() called with a context that does not contain a Cubit of type $T.
