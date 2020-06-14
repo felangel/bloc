@@ -28,6 +28,24 @@ class BlocUnhandledErrorException implements Exception {
   }
 }
 
+/// {@template bloc_emit_exception}
+/// Exception thrown in when `emit` is call within a bloc.
+/// {@endtemplate}
+class BlocEmitException implements Exception {
+  /// An optional [stackTrace] which accompanied the error.
+  final StackTrace stackTrace;
+
+  /// {@macro bloc_emit_exception}
+  const BlocEmitException([this.stackTrace]);
+
+  @override
+  String toString() {
+    return 'The emit API is restricted and should never be invoked on a bloc.\n'
+        'To output new states, please yield a new state from mapEventToState.\n'
+        '${stackTrace ?? ''}';
+  }
+}
+
 /// Signature for a mapper function which takes an [Event] as input
 /// and outputs a [Stream] of [Transition] objects.
 typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
@@ -209,6 +227,17 @@ abstract class Bloc<Event, State> extends Cubit<State> implements Sink<Event> {
     return transitions;
   }
 
+  /// A bloc cannot directly `emit` new states.
+  /// New states must be yielded from `mapEventToState` in response to events.
+  ///
+  /// Calling this will result in an `BlocEmitException`.
+  @visibleForTesting
+  @alwaysThrows
+  @override
+  void emit(State state) {
+    throw BlocEmitException(StackTrace.current);
+  }
+
   void _bindEventsToStates() {
     _transitionSubscription = transformTransitions(
       transformEvents(
@@ -225,7 +254,7 @@ abstract class Bloc<Event, State> extends Cubit<State> implements Sink<Event> {
       if (transition.nextState == state) return;
       try {
         onTransition(transition);
-        emit(transition.nextState);
+        super.emit(transition.nextState);
       } on dynamic catch (error, stackTrace) {
         onError(error, stackTrace);
       }
