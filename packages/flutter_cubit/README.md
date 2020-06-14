@@ -148,6 +148,42 @@ context.cubit<CubitA>();
 CubitProvider.of<CubitA>(context)
 ```
 
+**MultiCubitProvider** is a Flutter widget that merges multiple `CubitProvider` widgets into one.
+`MultiCubitProvider` improves the readability and eliminates the need to nest multiple `CubitProviders`.
+By using `MultiCubitProvider` we can go from:
+
+```dart
+CubitProvider<CubitA>(
+  create: (BuildContext context) => CubitA(),
+  child: CubitProvider<CubitB>(
+    create: (BuildContext context) => CubitB(),
+    child: CubitProvider<CubitC>(
+      create: (BuildContext context) => CubitC(),
+      child: ChildA(),
+    )
+  )
+)
+```
+
+to:
+
+```dart
+MultiCubitProvider(
+  providers: [
+    CubitProvider<CubitA>(
+      create: (BuildContext context) => CubitA(),
+    ),
+    CubitProvider<CubitB>(
+      create: (BuildContext context) => CubitB(),
+    ),
+    CubitProvider<CubitC>(
+      create: (BuildContext context) => CubitC(),
+    ),
+  ],
+  child: ChildA(),
+)
+```
+
 **CubitListener** is a Flutter widget which takes a `CubitWidgetListener` and an optional `Cubit` and invokes the `listener` in response to state changes in the cubit. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
 
 `listener` is only called once for each state change (**NOT** including `initialState`) unlike `builder` in `CubitBuilder` and is a `void` function.
@@ -159,7 +195,7 @@ CubitListener<CubitA, CubitAState>(
   listener: (context, state) {
     // do stuff here based on CubitA's state
   },
-  child: Container(),
+  child: const SizedBox(),
 )
 ```
 
@@ -185,7 +221,80 @@ CubitListener<CubitA, CubitAState>(
   listener: (context, state) {
     // do stuff here based on CubitA's state
   },
-  child: Container(),
+  child: const SizedBox(),
+)
+```
+
+**MultiCubitListener** is a Flutter widget that merges multiple `CubitListener` widgets into one.
+`MultiCubitListener` improves the readability and eliminates the need to nest multiple `CubitListeners`.
+By using `MultiCubitListener` we can go from:
+
+```dart
+CubitListener<CubitA, CubitAState>(
+  listener: (context, state) {},
+  child: CubitListener<CubitB, CubitBState>(
+    listener: (context, state) {},
+    child: CubitListener<CubitC, CubitCState>(
+      listener: (context, state) {},
+      child: ChildA(),
+    ),
+  ),
+)
+```
+
+to:
+
+```dart
+MultiCubitListener(
+  listeners: [
+    CubitListener<CubitA, CubitAState>(
+      listener: (context, state) {},
+    ),
+    CubitListener<CubitB, CubitBState>(
+      listener: (context, state) {},
+    ),
+    CubitListener<CubitC, CubitCState>(
+      listener: (context, state) {},
+    ),
+  ],
+  child: ChildA(),
+)
+```
+
+**CubitConsumer** exposes a `builder` and `listener` in order react to new states. `CubitConsumer` is analogous to a nested `CubitListener` and `CubitBuilder` but reduces the amount of boilerplate needed. `CubitConsumer` should only be used when it is necessary to both rebuild UI and execute other reactions to state changes in the `cubit`. `CubitConsumer` takes a required `CubitWidgetBuilder` and `CubitWidgetListener` and an optional `cubit`, `CubitBuilderCondition`, and `CubitListenerCondition`.
+
+If the `cubit` parameter is omitted, `CubitConsumer` will automatically perform a lookup using
+`CubitProvider` and the current `BuildContext`.
+
+```dart
+CubitConsumer<CubitA, CubitAState>(
+  listener: (context, state) {
+    // do stuff here based on CubitA's state
+  },
+  builder: (context, state) {
+    // return widget here based on CubitA's state
+  }
+)
+```
+
+An optional `listenWhen` and `buildWhen` can be implemented for more granular control over when `listener` and `builder` are called. The `listenWhen` and `buildWhen` will be invoked on each `cubit` `state` change. They each take the previous `state` and current `state` and must return a `bool` which determines whether or not the `builder` and/or `listener` function will be invoked. The previous `state` will be initialized to the `state` of the `cubit` when the `CubitConsumer` is initialized. `listenWhen` and `buildWhen` are optional and if they aren't implemented, they will default to `true`.
+
+```dart
+CubitConsumer<CubitA, CubitAState>(
+  listenWhen: (previous, current) {
+    // return true/false to determine whether or not
+    // to invoke listener with state
+  },
+  listener: (context, state) {
+    // do stuff here based on CubitA's state
+  },
+  buildWhen: (previous, current) {
+    // return true/false to determine whether or not
+    // to rebuild the widget with state
+  },
+  builder: (context, state) {
+    // return widget here based on CubitA's state
+  }
 )
 ```
 

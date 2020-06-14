@@ -1,3 +1,9 @@
+# 0.0.4
+
+- feat: add `CubitConsumer`
+- feat: add `MultiCubitListener`
+- feat: add `MultiCubitProvider`
+
 # 0.0.3
 
 - **BREAKING**: upgrade to `cubit: ^0.0.3`

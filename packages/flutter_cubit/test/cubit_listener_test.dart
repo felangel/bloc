@@ -10,9 +10,9 @@ class CounterCubit extends Cubit<int> {
 }
 
 class MyApp extends StatefulWidget {
-  final CubitWidgetListener<int> onListenerCalled;
-
   const MyApp({Key key, this.onListenerCalled}) : super(key: key);
+
+  final CubitWidgetListener<int> onListenerCalled;
 
   @override
   State<MyApp> createState() => _MyAppState();

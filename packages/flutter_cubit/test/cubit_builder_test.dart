@@ -4,9 +4,6 @@ import 'package:flutter_cubit/flutter_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class MyThemeApp extends StatefulWidget {
-  final Cubit<ThemeData> _themeCubit;
-  final Function _onBuild;
-
   MyThemeApp({
     Key key,
     @required Cubit<ThemeData> themeCubit,
@@ -14,6 +11,9 @@ class MyThemeApp extends StatefulWidget {
   })  : _themeCubit = themeCubit,
         _onBuild = onBuild,
         super(key: key);
+
+  final Cubit<ThemeData> _themeCubit;
+  final Function _onBuild;
 
   @override
   State<MyThemeApp> createState() => MyThemeAppState(
@@ -23,14 +23,14 @@ class MyThemeApp extends StatefulWidget {
 }
 
 class MyThemeAppState extends State<MyThemeApp> {
-  Cubit<ThemeData> _themeCubit;
-  final Function _onBuild;
-
   MyThemeAppState({
     @required Cubit<ThemeData> themeCubit,
     @required Function onBuild,
   })  : _themeCubit = themeCubit,
         _onBuild = onBuild;
+
+  Cubit<ThemeData> _themeCubit;
+  final Function _onBuild;
 
   @override
   Widget build(BuildContext context) {
