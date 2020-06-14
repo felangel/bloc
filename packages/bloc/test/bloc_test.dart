@@ -777,5 +777,15 @@ void main() {
         }, onError: (_, __) {});
       });
     });
+
+    group('emit', () {
+      test('throws a BlocEmitException', () {
+        final counterBloc = CounterBloc();
+        expect(
+          () => counterBloc.emit(0),
+          throwsA(isA<BlocEmitException>()),
+        );
+      });
+    });
   });
 }
