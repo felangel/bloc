@@ -4,7 +4,7 @@ repository: https://github.com/felangel/cubit
 issue_tracker: https://github.com/felangel/cubit/issues
 homepage: https://github.com/felangel/cubit
 
-version: 0.0.6
+version: 0.0.7
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

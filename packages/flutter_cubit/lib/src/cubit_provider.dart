@@ -30,7 +30,7 @@ mixin CubitProviderSingleChildWidget on SingleChildWidget {}
 /// );
 /// ```
 /// {@endtemplate}
-class CubitProvider<T extends Cubit<dynamic>> extends SingleChildStatelessWidget
+class CubitProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
     with CubitProviderSingleChildWidget {
   /// {@macro cubitprovider}
   CubitProvider({
@@ -138,12 +138,12 @@ class CubitProvider<T extends Cubit<dynamic>> extends SingleChildStatelessWidget
 /// to perform a lookup based on a `Cubit` type.
 extension CubitProviderExtension on BuildContext {
   /// Performs a lookup using the `BuildContext` to obtain
-  /// the nearest ancestor `Cubit` of type [B].
+  /// the nearest ancestor `Cubit` of type [C].
   ///
   /// Calling this method is equivalent to calling:
   ///
   /// ```dart
-  /// CubitProvider.of<B>(context)
+  /// CubitProvider.of<C>(context)
   /// ```
-  B cubit<B extends Cubit<dynamic>>() => CubitProvider.of<B>(this);
+  C cubit<C extends Cubit<Object>>() => CubitProvider.of<C>(this);
 }

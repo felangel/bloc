@@ -1,3 +1,7 @@
+# 0.0.7
+
+- fix: use `Cubit<Object>` instead of `Cubit<dynamic>` in `CubitProvider`
+
 # 0.0.6
 
 - fix: expose `CubitListenerSingleChildWidget`
