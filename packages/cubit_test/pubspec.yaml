@@ -1,0 +1,20 @@
+name: cubit_test
+description: A testing library which makes it easy to test cubits. Built to be used with the cubit state management package.
+repository: https://github.com/felangel/cubit
+issue_tracker: https://github.com/felangel/cubit/issues
+homepage: https://github.com/felangel/cubit
+
+version: 0.0.1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  cubit: ^0.0.3
+  mockito: ^4.0.0
+  pedantic: ^1.9.0
+  test: ^1.14.6
+  meta: ^1.1.6
+
+dev_dependencies:
+  test_coverage: ^0.4.1
