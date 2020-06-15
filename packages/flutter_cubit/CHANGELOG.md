@@ -1,3 +1,7 @@
+# 0.0.8
+
+- **BREAKING**: upgrade to `cubit: ^0.0.4`
+
 # 0.0.7
 
 - fix: use `Cubit<Object>` instead of `Cubit<dynamic>` in `CubitProvider`

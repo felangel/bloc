@@ -66,7 +66,7 @@ class CounterPage extends StatelessWidget {
 /// {@endtemplate}
 class CounterCubit extends Cubit<int> {
   /// {@macro counter_cubit}
-  CounterCubit() : super(0);
+  CounterCubit() : super(initialState: 0);
 
   /// Increments the `cubit` state by 1.
   void increment() => emit(state + 1);
