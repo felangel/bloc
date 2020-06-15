@@ -18,7 +18,7 @@ abstract class Cubit<T> extends Stream<T> {
   /// {@macro cubit}
   Cubit(this._state);
 
-  /// The current [state] of the cubit
+  /// The current [state] of the cubit.
   T get state => _state;
 
   final _controller = StreamController<T>.broadcast();
