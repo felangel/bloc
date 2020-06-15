@@ -779,21 +779,11 @@ void main() {
     });
 
     group('emit', () {
-      test('throws a BlocEmitException', () {
-        const blocEmitExceptionMessage = 'The emit API is restricted and '
-            'should never be invoked on a bloc.\n'
-            'To output new states, '
-            'please yield a new state from mapEventToState.\n';
+      test('updates the state', () async {
         final counterBloc = CounterBloc();
-        try {
-          counterBloc.emit(0);
-        } on Exception catch (e) {
-          expect(e, isA<BlocEmitException>());
-          expect(
-            e.toString().startsWith(blocEmitExceptionMessage),
-            isTrue,
-          );
-        }
+        expectLater(counterBloc, emitsInOrder([42]));
+        counterBloc.emit(42);
+        await counterBloc.close();
       });
     });
   });
