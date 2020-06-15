@@ -19,7 +19,7 @@ class WeatherLoadSuccess extends WeatherState {
 class WeatherLoadFailure extends WeatherState {}
 
 class WeatherCubit extends Cubit<WeatherState> {
-  WeatherCubit(this._weatherService) : super(WeatherInitial());
+  WeatherCubit(this._weatherService) : super(initialState: WeatherInitial());
 
   final WeatherService _weatherService;
 
