@@ -5,7 +5,7 @@ class Repository {
 }
 
 class SideEffectCounterCubit extends Cubit<int> {
-  SideEffectCounterCubit(this.repository) : super(0);
+  SideEffectCounterCubit(this.repository) : super(initialState: 0);
 
   final Repository repository;
 
