@@ -17,7 +17,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
     this.onEventCallback,
     this.onTransitionCallback,
     this.onErrorCallback,
-  }) : super(0);
+  }) : super(initialState: 0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {

@@ -43,7 +43,9 @@ abstract class Bloc<Event, State> extends Cubit<State> implements Sink<Event> {
   StreamSubscription<Transition<Event, State>> _transitionSubscription;
 
   /// {@macro bloc}
-  Bloc(State state) : super(state) {
+  Bloc({@required State initialState})
+      : assert(initialState != null),
+        super(initialState: initialState) {
     _bindEventsToStates();
   }
 

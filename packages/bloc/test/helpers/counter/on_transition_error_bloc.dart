@@ -8,7 +8,8 @@ class OnTransitionErrorBloc extends Bloc<CounterEvent, int> {
   final Function onErrorCallback;
   final Error error;
 
-  OnTransitionErrorBloc({this.error, this.onErrorCallback}) : super(0);
+  OnTransitionErrorBloc({this.error, this.onErrorCallback})
+      : super(initialState: 0);
 
   @override
   void onError(Object error, StackTrace stackTrace) {

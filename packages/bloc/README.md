@@ -41,8 +41,6 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 ## Bloc Interface
 
-**initialState** is the state before any events have been processed (before `mapEventToState` has ever been called). `initialState` **must be implemented**.
-
 **mapEventToState** is a method that **must be implemented** when a class extends `Bloc`. The function takes the incoming event as an argument. `mapEventToState` is called whenever an event is `added`. `mapEventToState` must convert that event into a new state and return the new state in the form of a `Stream`.
 
 **add** is a method that takes an `event` and triggers `mapEventToState`. If `close` has already been called, any subsequent calls to `add` will be delegated to the `onError` method which can be overriden at the `Bloc` as well as the `BlocDelegate` level.
@@ -73,8 +71,7 @@ For simplicity we can create a `CounterBloc` like:
 
 ```dart
 class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
+  CounterBloc() : super(initialState: 0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
