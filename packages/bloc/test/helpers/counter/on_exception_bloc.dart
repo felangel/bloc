@@ -8,7 +8,8 @@ class OnExceptionBloc extends Bloc<CounterEvent, int> {
   final Function onErrorCallback;
   final Exception exception;
 
-  OnExceptionBloc({this.exception, this.onErrorCallback}) : super(0);
+  OnExceptionBloc({this.exception, this.onErrorCallback})
+      : super(initialState: 0);
 
   @override
   void onError(Object error, StackTrace stackTrace) {
