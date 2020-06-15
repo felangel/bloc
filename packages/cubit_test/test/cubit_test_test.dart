@@ -90,20 +90,20 @@ void main() {
 
     group('DelayedCounterCubit', () {
       cubitTest<DelayedCounterCubit, int>(
-        'emits [] when nothing is added',
+        'emits [] when nothing is called',
         build: () async => DelayedCounterCubit(),
         expect: <int>[],
       );
 
       cubitTest<DelayedCounterCubit, int>(
-        'emits [0] when nothing is added and skip: 0',
+        'emits [0] when nothing is called and skip: 0',
         build: () async => DelayedCounterCubit(),
         skip: 0,
         expect: <int>[0],
       );
 
       cubitTest<DelayedCounterCubit, int>(
-        'emits [1] when DebounceCounterEvent.increment is added',
+        'emits [1] when increment is called',
         build: () async => DelayedCounterCubit(),
         act: (cubit) async => cubit.increment(),
         wait: const Duration(milliseconds: 300),

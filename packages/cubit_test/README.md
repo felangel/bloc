@@ -53,7 +53,7 @@ expect(counterCubit.state, equals(3));
 ```dart
 group('CounterCubit', () {
   cubitTest(
-    'emits [] when nothing is added',
+    'emits [] when nothing is called',
     build: () async => CounterCubit(),
     expect: [],
   );
@@ -109,7 +109,7 @@ cubitTest(
 
 ```dart
 cubitTest(
-  'emits [StateB] when MyEvent is added',
+  'emits [StateB] when emitB is called',
   build: () async => MyCubit(),
   act: (cubit) async => cubit.emitB(),
   expect: [isA<StateB>()],

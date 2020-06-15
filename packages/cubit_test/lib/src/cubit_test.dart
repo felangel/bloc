@@ -99,9 +99,9 @@ import 'package:test/test.dart' as test;
 ///
 /// ```dart
 /// cubitTest(
-///  'emits [StateB] when MyEvent is added',
+///  'emits [StateB] when emitB is called',
 ///  build: () async => MyCubit(),
-///  act: (cubit) => cubit.add(MyEvent()),
+///  act: (cubit) async => cubit.emitB(),
 ///  expect: [isA<StateB>()],
 /// );
 /// ```

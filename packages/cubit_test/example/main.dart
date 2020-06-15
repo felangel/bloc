@@ -32,13 +32,13 @@ void main() {
 
   group('cubitTest', () {
     cubitTest<CounterCubit, int>(
-      'emits [] when nothing is added',
+      'emits [] when nothing is called',
       build: () async => CounterCubit(),
       expect: <int>[],
     );
 
     cubitTest<CounterCubit, int>(
-      'emits [1] when CounterEvent.increment is added',
+      'emits [1] when increment is called',
       build: () async => CounterCubit(),
       act: (cubit) async => cubit.increment(),
       expect: <int>[1],
