@@ -1,8 +1,8 @@
 ```dart
-class RefreshWeather extends WeatherEvent {
+class WeatherRefreshRequested extends WeatherEvent {
   final String city;
 
-  const RefreshWeather({@required this.city}) : assert(city != null);
+  const WeatherRefreshRequested({@required this.city}) : assert(city != null);
 
   @override
   List<Object> get props => [city];

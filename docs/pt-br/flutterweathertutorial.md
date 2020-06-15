@@ -179,13 +179,13 @@ Antes de pular para o bloc, precisamos definir quais eventos o nosso `WeatherBlo
 
 #### Weather Event
 
-Vamos criar um arquivo chamado `weather_event.dart` dentro da pasta `blocs`. Para simplificar, vamos começar com um único evento chamado `FetchWeather`.
+Vamos criar um arquivo chamado `weather_event.dart` dentro da pasta `blocs`. Para simplificar, vamos começar com um único evento chamado `WeatherRequested`.
 
 Podemos defini-lo como:
 
 [weather_event.dart](../_snippets/flutter_weather_tutorial/fetch_weather_event.dart.md ':include')
 
-Sempre que um usuário digitar uma cidade, adicionaremos um evento `FetchWeather` à cidade especificada e nosso bloc será responsável por descobrir o que o tempo está aí e retornar um novo `WeatherState`.
+Sempre que um usuário digitar uma cidade, adicionaremos um evento `WeatherRequested` à cidade especificada e nosso bloc será responsável por descobrir o que o tempo está aí e retornar um novo `WeatherState`.
 
 Então vamos exportar a classe em nosso arquivo barrel. Dentro do `blocs.dart`, adicione:
 
@@ -197,10 +197,10 @@ Em seguida, vamos criar nosso arquivo `state`. Dentro da pasta `blocs`, vá em f
 
 Para a aplicação atual, teremos 4 estados possíveis:
 
-- `WeatherEmpty` - nosso estado inicial que não terá dados climáticos porque o usuário ainda não selecionou uma cidade
-- `WeatherLoading` - um estado que ocorrerá enquanto buscamos o clima para uma determinada cidade
-- `WeatherLoaded` - um estado que ocorrerá se conseguirmos obter o tempo com êxito em uma determinada cidade.
-- `WeatherError` - um estado que ocorrerá se não conseguirmos obter tempo para uma determinada cidade.
+- `WeatherInitial` - nosso estado inicial que não terá dados climáticos porque o usuário ainda não selecionou uma cidade
+- `WeatherLoadInProgress` - um estado que ocorrerá enquanto buscamos o clima para uma determinada cidade
+- `WeatherLoadSuccess` - um estado que ocorrerá se conseguirmos obter o tempo com êxito em uma determinada cidade.
+- `WeatherLoadFailure` - um estado que ocorrerá se não conseguirmos obter tempo para uma determinada cidade.
 
 Podemos representar esses estados da seguinte maneira:
 
@@ -222,11 +222,11 @@ Vá em frente e crie um arquivo dentro da pasta `blocs` chamada `weather_bloc.da
 
 [weather_bloc.dart](../_snippets/flutter_weather_tutorial/weather_bloc.dart.md ':include')
 
-Definimos nosso `initialState` como `WeatherEmpty`, pois inicialmente o usuário não selecionou uma cidade. Então, tudo o que resta é implementar o `mapEventToState`.
+Definimos nosso `initialState` como `WeatherInitial`, pois inicialmente o usuário não selecionou uma cidade. Então, tudo o que resta é implementar o `mapEventToState`.
 
-Como estamos lidando apenas com o evento `FetchWeather`, tudo o que precisamos fazer é `renderizar` nosso estado `WeatherLoading` quando obtivermos um evento `FetchWeather` e, em seguida, tentar obter o clima no `WeatherRepository`.
+Como estamos lidando apenas com o evento `WeatherRequested`, tudo o que precisamos fazer é `renderizar` nosso estado `WeatherLoadInProgress` quando obtivermos um evento `WeatherRequested` e, em seguida, tentar obter o clima no `WeatherRepository`.
 
-Se conseguirmos recuperar o clima com sucesso, "produziremos" um estado "WeatherLoaded" e se não for possível recuperar o clima, "produziremos" um estado "WeatherError".
+Se conseguirmos recuperar o clima com sucesso, "produziremos" um estado "WeatherLoadSuccess" e se não for possível recuperar o clima, "produziremos" um estado "WeatherLoadFailure".
 
 Agora exporte esta classe em `blocs.dart`:
 
@@ -361,11 +361,11 @@ Vamos resolver esses problemas e levar nosso aplicativo Weather para o próximo 
 
 ## Pull-To-Refresh
 
-> Para oferecer suporte ao pull-to-refresh, precisamos atualizar nosso `WeatherEvent` para lidar com um segundo evento:` RefreshWeather`. Vá em frente e adicione o seguinte código ao `blocs / weather_event.dart`
+> Para oferecer suporte ao pull-to-refresh, precisamos atualizar nosso `WeatherEvent` para lidar com um segundo evento:` WeatherRefreshRequested`. Vá em frente e adicione o seguinte código ao `blocs / weather_event.dart`
 
 [weather_event.dart](../_snippets/flutter_weather_tutorial/refresh_weather_event.dart.md ':include')
 
-Em seguida, precisamos atualizar nosso `mapEventToState` dentro de `weather_bloc.dart` para manipular um evento `RefreshWeather`. Vá em frente e adicione esta declaração `if` abaixo da existente.
+Em seguida, precisamos atualizar nosso `mapEventToState` dentro de `weather_bloc.dart` para manipular um evento `WeatherRefreshRequested`. Vá em frente e adicione esta declaração `if` abaixo da existente.
 
 [weather_bloc.dart](../_snippets/flutter_weather_tutorial/refresh_weather_bloc.dart.md ':include')
 
@@ -393,7 +393,7 @@ Como nosso widget `Weather` precisará manter uma instância de um `Completer`, 
 
 Para usar o `RefreshIndicator`, tivemos que criar um [`Completer`](https://api.dart.dev/stable/dart-async/Completer-class.html) o que nos permite produzir um "Future" que possamos concluir posteriormente.
 
-A última coisa que precisamos fazer é concluir o `Completer` quando recebermos um estado` WeatherLoaded` para descartar o indicador de carregamento assim que o clima for atualizado.
+A última coisa que precisamos fazer é concluir o `Completer` quando recebermos um estado` WeatherLoadSuccess` para descartar o indicador de carregamento assim que o clima for atualizado.
 
 [weather.dart](../_snippets/flutter_weather_tutorial/bloc_consumer_refactor.dart.md ':include')
 

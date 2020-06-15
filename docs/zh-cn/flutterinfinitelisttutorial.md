@@ -60,8 +60,6 @@
 
 [post_event.dart](../_snippets/flutter_infinite_list_tutorial/post_event.dart.md ':include')
 
-?> 和之前一样, 我们重写了`toString`, 因为这样可以让事件更容易阅读. 和之前一样, 我们继承了[`Equatable`](https://pub.dev/packages/equatable), 这样我们就可以比较对象的是否相等了.
-
 复习一下之前说过的内容, `PostBloc`会接收`PostEvents(Post事件)`, 并且把他们转化成`PostStates(Post状态)`. 
 我们已经定义了所有我们需要用到的`PostEvents`(只有一个PostFetched), 接下来让我们定义我们的`PostState`.
 

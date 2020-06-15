@@ -58,8 +58,6 @@
 
 [post_event.dart](../_snippets/flutter_infinite_list_tutorial/post_event.dart.md ':include')
 
-?> Опять же, мы переопределяем `toString` для облегчения чтения строкового представления нашего события. Мы опять расширяем [`Equatable`](https://pub.dev/packages/equatable), чтобы мы могли сравнивать экземпляры на равенство.
-
 Напомним, что наш `PostBloc` будет получать `PostEvents` и преобразовывать их в `PostStates`. Мы определили все наши `PostEvents` (PostFetched), так что теперь давайте определим наш `PostState`.
 
 ## Состояния

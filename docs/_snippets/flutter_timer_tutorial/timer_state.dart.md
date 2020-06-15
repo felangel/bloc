@@ -10,28 +10,28 @@ abstract class TimerState extends Equatable {
   List<Object> get props => [duration];
 }
 
-class Ready extends TimerState {
-  const Ready(int duration) : super(duration);
+class TimerInitial extends TimerState {
+  const TimerInitial(int duration) : super(duration);
 
   @override
-  String toString() => 'Ready { duration: $duration }';
+  String toString() => 'TimerInitial { duration: $duration }';
 }
 
-class Paused extends TimerState {
-  const Paused(int duration) : super(duration);
+class TimerRunPause extends TimerState {
+  const TimerRunPause(int duration) : super(duration);
 
   @override
-  String toString() => 'Paused { duration: $duration }';
+  String toString() => 'TimerRunPause { duration: $duration }';
 }
 
-class Running extends TimerState {
-  const Running(int duration) : super(duration);
+class TimerRunInProgress extends TimerState {
+  const TimerRunInProgress(int duration) : super(duration);
 
   @override
-  String toString() => 'Running { duration: $duration }';
+  String toString() => 'TimerRunInProgress { duration: $duration }';
 }
 
-class Finished extends TimerState {
-  const Finished() : super(0);
+class TimerRunComplete extends TimerState {
+  const TimerRunComplete() : super(0);
 }
 ```

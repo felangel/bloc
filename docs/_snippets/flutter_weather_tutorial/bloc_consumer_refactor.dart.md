@@ -8,7 +8,7 @@ class _WeatherState extends State<Weather> {
       body: Center(
         child: BlocConsumer<WeatherBloc, WeatherState>(
           listener: (context, state) {
-            if (state is WeatherLoaded) {
+            if (state is WeatherLoadSuccess) {
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             }
