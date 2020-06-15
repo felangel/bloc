@@ -2,10 +2,17 @@ import 'dart:async';
 
 import 'package:test/test.dart';
 
-import 'cubits/counter_cubit.dart';
+import 'cubits/cubits.dart';
 
 void main() {
   group('cubit', () {
+    test('throws AssertionError if initialState is null', () {
+      expect(
+        () => SeededCubit(initialState: null),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+
     group('initial state', () {
       test('is correct', () {
         expect(CounterCubit().state, 0);

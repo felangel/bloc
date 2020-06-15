@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 ///
 /// ```dart
 /// class CounterCubit extends Cubit<int> {
-///   CounterCubit() : super(0);
+///   CounterCubit() : super(initialState: 0);
 ///
 ///   void increment() => emit(state + 1);
 /// }
@@ -16,7 +16,9 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 abstract class Cubit<T> extends Stream<T> {
   /// {@macro cubit}
-  Cubit(this._state);
+  Cubit({@required T initialState})
+      : assert(initialState != null),
+        _state = initialState;
 
   /// The current [state] of the cubit.
   T get state => _state;

@@ -1,3 +1,7 @@
+# 0.0.4
+
+- **BREAKING**: use named parameter for `initialState`
+
 # 0.0.3
 
 - **BREAKING**: remove `initialState` getter and instead require initial state via constructor
