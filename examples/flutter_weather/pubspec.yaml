@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cubit: ^0.0.4
+  cubit: ^0.0.6
   flutter_cubit: ^0.0.8
   google_fonts: ^1.1.0
   http: ^0.12.1
@@ -19,7 +19,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^1.8.1
-  cubit_test: ^0.0.3
+  cubit_test: ^0.0.4
   json_serializable: ^3.3.0
   matcher: ^0.12.6
   mockito: ^4.0.0
