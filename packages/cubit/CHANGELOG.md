@@ -1,3 +1,7 @@
+# 0.0.6
+
+- **BREAKING**: ignore duplicate states
+
 # 0.0.5
 
 - feat: allow `initialState` to be `null`

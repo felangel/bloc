@@ -29,7 +29,7 @@ abstract class Cubit<T> extends Stream<T> {
   /// [emit] does nothing if the `cubit` has been closed.
   @protected
   void emit(T state) async {
-    if (_controller.isClosed) return;
+    if (state == _state || _controller.isClosed) return;
     _state = state;
     _controller.add(state);
   }

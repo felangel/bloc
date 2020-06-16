@@ -22,12 +22,29 @@ void main() {
 
       test('emits states in the correct order', () async {
         final states = <int>[];
-        final cubit = CounterCubit()
-          ..listen(states.add)
-          ..increment();
+        final cubit = CounterCubit();
+        final subscription = cubit.listen(states.add);
+        await Future<void>.delayed(Duration.zero, cubit.increment);
         await cubit.close();
+        await subscription.cancel();
+        expect(states, [0, 1]);
+      });
+
+      test('does not emit duplicate states', () async {
+        final states = <int>[];
+        final cubit = SeededCubit(initialState: 0);
+        final subscription = cubit.listen(states.add);
         await Future<void>.delayed(Duration.zero);
-        expect(states, [1]);
+        cubit
+          ..emitState(1)
+          ..emitState(1)
+          ..emitState(2)
+          ..emitState(2)
+          ..emitState(3)
+          ..emitState(3);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, [0, 1, 2, 3]);
       });
     });
 
