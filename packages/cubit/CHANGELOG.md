@@ -1,3 +1,7 @@
+# 0.0.5
+
+- feat: allow `initialState` to be `null`
+
 # 0.0.4
 
 - **BREAKING**: use named parameter for `initialState`

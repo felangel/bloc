@@ -16,9 +16,7 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 abstract class Cubit<T> extends Stream<T> {
   /// {@macro cubit}
-  Cubit({@required T initialState})
-      : assert(initialState != null),
-        _state = initialState;
+  Cubit({@required T initialState}) : _state = initialState;
 
   /// The current [state] of the cubit.
   T get state => _state;
