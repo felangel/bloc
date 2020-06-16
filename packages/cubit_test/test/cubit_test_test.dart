@@ -8,6 +8,8 @@ import 'helpers/helpers.dart';
 
 class MockRepository extends Mock implements Repository {}
 
+Future<void> delay() => Future.delayed(const Duration(microseconds: 1));
+
 void main() {
   group('cubitTest', () {
     group('CounterCubit', () {
@@ -35,7 +37,7 @@ void main() {
         'emits [1] when increment is called with async act',
         build: () async => CounterCubit(),
         act: (cubit) async {
-          await Future<void>.delayed(const Duration(seconds: 1));
+          await delay();
           cubit.increment();
         },
         expect: <int>[1],
@@ -47,7 +49,7 @@ void main() {
         build: () async => CounterCubit(),
         act: (cubit) async {
           cubit.increment();
-          await Future<void>.delayed(const Duration(milliseconds: 10));
+          await delay();
           cubit.increment();
         },
         expect: <int>[1, 2],
@@ -81,7 +83,7 @@ void main() {
         build: () async => AsyncCounterCubit(),
         act: (cubit) async {
           await cubit.increment();
-          await Future<void>.delayed(const Duration(milliseconds: 10));
+          await delay();
           await cubit.increment();
         },
         expect: <int>[1, 2],
@@ -103,7 +105,14 @@ void main() {
       );
 
       cubitTest<DelayedCounterCubit, int>(
-        'emits [1] when increment is called',
+        'emits [] when increment is called without wait',
+        build: () async => DelayedCounterCubit(),
+        act: (cubit) async => cubit.increment(),
+        expect: <int>[],
+      );
+
+      cubitTest<DelayedCounterCubit, int>(
+        'emits [1] when increment is called with wait',
         build: () async => DelayedCounterCubit(),
         act: (cubit) async => cubit.increment(),
         wait: const Duration(milliseconds: 300),
