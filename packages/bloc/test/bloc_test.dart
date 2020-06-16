@@ -10,13 +10,6 @@ class MockBlocDelegate extends Mock implements BlocDelegate {}
 
 void main() {
   group('Bloc Tests', () {
-    test('throws AssertionError when initialState is null', () {
-      expect(
-        () => SeededBloc(seed: null, states: <int>[]),
-        throwsA(isA<AssertionError>()),
-      );
-    });
-
     group('Simple Bloc', () {
       SimpleBloc simpleBloc;
       MockBlocDelegate delegate;
