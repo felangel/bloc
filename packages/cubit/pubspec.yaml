@@ -1,10 +1,10 @@
 name: cubit
-description: An experimental Dart library which expose a cubit. A cubit is a reimagined bloc (from package:bloc) which removes events and relies on methods to emit new states instead.
+description: A cubit is a subset of package:bloc which has no notion of events and relies on methods to emit new states.
 repository: https://github.com/felangel/cubit
 issue_tracker: https://github.com/felangel/cubit/issues
 homepage: https://github.com/felangel/cubit
 
-version: 0.0.6
+version: 0.0.7
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

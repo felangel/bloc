@@ -1,10 +1,16 @@
-import 'dart:async';
-
 import 'package:meta/meta.dart';
 
+import 'cubit_stream.dart';
+import 'transition.dart';
+
 /// {@template cubit}
-/// A `cubit` is a reimagined [bloc](https://pub.dev/packages/bloc)
-/// which removes events and relies on methods to emit new states instead.
+/// A [Cubit] is a subset of [bloc](https://pub.dev/packages/bloc)
+/// which has no notion of events and relies on methods to `emit` new states.
+///
+/// Every `cubit` requires an `initialState` which will be the
+/// state of the `cubit` before `emit` has been called.
+///
+/// The current state of a `cubit` can be accessed via the `state` getter.
 ///
 /// ```dart
 /// class CounterCubit extends Cubit<int> {
@@ -13,54 +19,39 @@ import 'package:meta/meta.dart';
 ///   void increment() => emit(state + 1);
 /// }
 /// ```
+///
+/// See also:
+///
+/// * [CubitStream], the base `Stream` implementation
+/// upon which [Cubit] is built.
+///
 /// {@endtemplate}
-abstract class Cubit<T> extends Stream<T> {
+abstract class Cubit<State> extends CubitStream<State> {
   /// {@macro cubit}
-  Cubit({@required T initialState}) : _state = initialState;
+  Cubit({@required State initialState}) : super(initialState: initialState);
 
-  /// The current [state] of the cubit.
-  T get state => _state;
-
-  final _controller = StreamController<T>.broadcast();
-
-  T _state;
-
-  /// Updates the [state] of the `cubit` to the provided [state].
-  /// [emit] does nothing if the `cubit` has been closed.
-  @protected
-  void emit(T state) async {
-    if (state == _state || _controller.isClosed) return;
-    _state = state;
-    _controller.add(state);
-  }
-
-  @override
-  StreamSubscription<T> listen(
-    void Function(T) onData, {
-    Function onError,
-    void Function() onDone,
-    bool cancelOnError,
-  }) {
-    return _stream.listen(
-      onData,
-      onError: onError,
-      onDone: onDone,
-      cancelOnError: cancelOnError,
-    );
-  }
-
-  @override
-  bool get isBroadcast => _controller.stream.isBroadcast;
-
-  /// Closes the `cubit`.
+  /// Called whenever a [transition] occurs with the given [transition].
+  /// A [transition] occurs when a new `state` is emitted.
+  /// [onTransition] is called before the `state` of the `cubit` is updated.
+  /// [onTransition] is a great spot to add logging/analytics for a specific `cubit`.
+  ///
+  /// **Note: `super.onTransition` should always be called last.**
+  /// ```dart
+  /// @override
+  /// void onTransition(Transition transition) {
+  ///   // Custom onTransition logic goes here
+  ///
+  ///   // Always call super.onTransition with the current transition
+  ///   super.onTransition(transition);
+  /// }
+  /// ```
   @mustCallSuper
-  Future<void> close() async {
-    await _controller.close();
-    await _controller.stream.drain<T>();
-  }
+  void onTransition(Transition<State> transition) {}
 
-  Stream<T> get _stream async* {
-    yield state;
-    yield* _controller.stream;
+  /// {@macro emit}
+  @override
+  void emit(State state) {
+    onTransition(Transition<State>(currentState: this.state, nextState: state));
+    super.emit(state);
   }
 }

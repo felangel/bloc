@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cubit/cubit.dart';
 import 'package:test/test.dart';
 
 import 'cubits/cubits.dart';
@@ -9,6 +10,43 @@ void main() {
     group('initial state', () {
       test('is correct', () {
         expect(CounterCubit().state, 0);
+      });
+    });
+
+    group('onTransition', () {
+      test('is not called for the initialState', () async {
+        final transitions = <Transition<int>>[];
+        final cubit = CounterCubit(onTransitionCallback: transitions.add);
+        await cubit.close();
+        expect(transitions, isEmpty);
+      });
+
+      test('is called with correct transition for a single state change',
+          () async {
+        final transitions = <Transition<int>>[];
+        final cubit = CounterCubit(onTransitionCallback: transitions.add);
+        await Future<void>.delayed(Duration.zero, cubit.increment);
+        await cubit.close();
+        expect(
+          transitions,
+          const [Transition(currentState: 0, nextState: 1)],
+        );
+      });
+
+      test('is called with correct transitions for multiple state changes',
+          () async {
+        final transitions = <Transition<int>>[];
+        final cubit = CounterCubit(onTransitionCallback: transitions.add);
+        await Future<void>.delayed(Duration.zero);
+        cubit..increment()..increment();
+        await cubit.close();
+        expect(
+          transitions,
+          const [
+            Transition(currentState: 0, nextState: 1),
+            Transition(currentState: 1, nextState: 2),
+          ],
+        );
       });
     });
 
