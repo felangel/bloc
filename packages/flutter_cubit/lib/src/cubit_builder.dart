@@ -70,7 +70,7 @@ typedef CubitBuilderCondition<S> = bool Function(S previous, S current);
 ///)
 /// ```
 /// {@endtemplate}
-class CubitBuilder<C extends Cubit<S>, S> extends CubitBuilderBase<C, S> {
+class CubitBuilder<C extends CubitStream<S>, S> extends CubitBuilderBase<C, S> {
   /// {@macro cubitbuilder}
   const CubitBuilder({
     Key key,
@@ -98,7 +98,8 @@ class CubitBuilder<C extends Cubit<S>, S> extends CubitBuilderBase<C, S> {
 /// so far. The type of the state and how it is updated with each interaction
 /// is defined by sub-classes.
 /// {@endtemplate}
-abstract class CubitBuilderBase<C extends Cubit<S>, S> extends StatefulWidget {
+abstract class CubitBuilderBase<C extends CubitStream<S>, S>
+    extends StatefulWidget {
   /// {@macro cubitbuilderbase}
   const CubitBuilderBase({Key key, this.cubit, this.condition})
       : super(key: key);
@@ -126,7 +127,7 @@ abstract class CubitBuilderBase<C extends Cubit<S>, S> extends StatefulWidget {
   State<CubitBuilderBase<C, S>> createState() => _CubitBuilderBaseState<C, S>();
 }
 
-class _CubitBuilderBaseState<C extends Cubit<S>, S>
+class _CubitBuilderBaseState<C extends CubitStream<S>, S>
     extends State<CubitBuilderBase<C, S>> {
   StreamSubscription<S> _subscription;
   S _previousState;
@@ -136,7 +137,7 @@ class _CubitBuilderBaseState<C extends Cubit<S>, S>
   @override
   void initState() {
     super.initState();
-    _cubit = widget.cubit ?? CubitProvider.of<C>(context);
+    _cubit = widget.cubit ?? context.cubit<C>();
     _previousState = _cubit?.state;
     _state = _cubit?.state;
     _subscribe();
@@ -145,12 +146,12 @@ class _CubitBuilderBaseState<C extends Cubit<S>, S>
   @override
   void didUpdateWidget(CubitBuilderBase<C, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final oldCubit = oldWidget.cubit ?? CubitProvider.of<C>(context);
+    final oldCubit = oldWidget.cubit ?? context.cubit<C>();
     final currentCubit = widget.cubit ?? oldCubit;
     if (oldCubit != currentCubit) {
       if (_subscription != null) {
         _unsubscribe();
-        _cubit = widget.cubit ?? CubitProvider.of<C>(context);
+        _cubit = widget.cubit ?? context.cubit<C>();
         _previousState = _cubit?.state;
         _state = _cubit?.state;
       }

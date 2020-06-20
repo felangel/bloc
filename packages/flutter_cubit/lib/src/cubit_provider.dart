@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 /// A function that creates a `Cubit` of type [T].
-typedef CreateCubit<T extends Cubit<dynamic>> = T Function(
+typedef CreateCubit<T extends CubitStream<dynamic>> = T Function(
   BuildContext context,
 );
 
@@ -30,8 +30,8 @@ mixin CubitProviderSingleChildWidget on SingleChildWidget {}
 /// );
 /// ```
 /// {@endtemplate}
-class CubitProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
-    with CubitProviderSingleChildWidget {
+class CubitProvider<T extends CubitStream<Object>>
+    extends SingleChildStatelessWidget with CubitProviderSingleChildWidget {
   /// {@macro cubitprovider}
   CubitProvider({
     Key key,
@@ -105,7 +105,7 @@ class CubitProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   /// ```dart
   /// CubitProvider.of<CubitA>(context)
   /// ```
-  static T of<T extends Cubit<dynamic>>(BuildContext context) {
+  static T of<T extends CubitStream<Object>>(BuildContext context) {
     try {
       return Provider.of<T>(context, listen: false);
     } on ProviderNotFoundException catch (e) {
@@ -145,5 +145,5 @@ extension CubitProviderExtension on BuildContext {
   /// ```dart
   /// CubitProvider.of<C>(context)
   /// ```
-  C cubit<C extends Cubit<Object>>() => CubitProvider.of<C>(this);
+  C cubit<C extends CubitStream<Object>>() => CubitProvider.of<C>(this);
 }

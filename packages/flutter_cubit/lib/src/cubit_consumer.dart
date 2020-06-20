@@ -60,7 +60,7 @@ import '../flutter_cubit.dart';
 /// )
 /// ```
 /// {@endtemplate}
-class CubitConsumer<B extends Cubit<S>, S> extends StatelessWidget {
+class CubitConsumer<C extends CubitStream<S>, S> extends StatelessWidget {
   /// {@macro cubitconsumer}
   const CubitConsumer({
     Key key,
@@ -76,7 +76,7 @@ class CubitConsumer<B extends Cubit<S>, S> extends StatelessWidget {
   /// The [cubit] that the [CubitConsumer] will interact with.
   /// If omitted, [CubitConsumer] will automatically perform a lookup using
   /// `CubitProvider` and the current `BuildContext`.
-  final B cubit;
+  final C cubit;
 
   /// The [builder] function which will be invoked on each widget build.
   /// The [builder] takes the `BuildContext` and current `state` and
@@ -100,12 +100,12 @@ class CubitConsumer<B extends Cubit<S>, S> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = this.cubit ?? CubitProvider.of<B>(context);
-    return CubitListener<B, S>(
+    final cubit = this.cubit ?? context.cubit<C>();
+    return CubitListener<C, S>(
       cubit: cubit,
       listener: listener,
       condition: listenWhen,
-      child: CubitBuilder<B, S>(
+      child: CubitBuilder<C, S>(
         cubit: cubit,
         builder: builder,
         condition: buildWhen,

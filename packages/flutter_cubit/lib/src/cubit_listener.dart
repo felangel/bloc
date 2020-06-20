@@ -78,7 +78,7 @@ typedef CubitListenerCondition<S> = bool Function(S previous, S current);
 /// )
 /// ```
 /// {@endtemplate}
-class CubitListener<C extends Cubit<S>, S> extends CubitListenerBase<C, S>
+class CubitListener<C extends CubitStream<S>, S> extends CubitListenerBase<C, S>
     with CubitListenerSingleChildWidget {
   /// {@macro cubitlistener}
   const CubitListener({
@@ -109,7 +109,7 @@ class CubitListener<C extends Cubit<S>, S> extends CubitListenerBase<C, S>
 /// The type of the state and what happens with each state change
 /// is defined by sub-classes.
 /// {@endtemplate}
-abstract class CubitListenerBase<C extends Cubit<S>, S>
+abstract class CubitListenerBase<C extends CubitStream<S>, S>
     extends SingleChildStatefulWidget {
   /// {@macro cubitlistenerbase}
   const CubitListenerBase({
@@ -149,29 +149,29 @@ abstract class CubitListenerBase<C extends Cubit<S>, S>
       _CubitListenerBaseState<C, S>();
 }
 
-class _CubitListenerBaseState<B extends Cubit<S>, S>
-    extends SingleChildState<CubitListenerBase<B, S>> {
+class _CubitListenerBaseState<C extends CubitStream<S>, S>
+    extends SingleChildState<CubitListenerBase<C, S>> {
   StreamSubscription<S> _subscription;
   S _previousState;
-  B _cubit;
+  C _cubit;
 
   @override
   void initState() {
     super.initState();
-    _cubit = widget.cubit ?? CubitProvider.of<B>(context);
+    _cubit = widget.cubit ?? context.cubit<C>();
     _previousState = _cubit?.state;
     _subscribe();
   }
 
   @override
-  void didUpdateWidget(CubitListenerBase<B, S> oldWidget) {
+  void didUpdateWidget(CubitListenerBase<C, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final oldCubit = oldWidget.cubit ?? CubitProvider.of<B>(context);
+    final oldCubit = oldWidget.cubit ?? context.cubit<C>();
     final currentCubit = widget.cubit ?? oldCubit;
     if (oldCubit != currentCubit) {
       if (_subscription != null) {
         _unsubscribe();
-        _cubit = widget.cubit ?? CubitProvider.of<B>(context);
+        _cubit = widget.cubit ?? context.cubit<C>();
         _previousState = _cubit?.state;
       }
       _subscribe();

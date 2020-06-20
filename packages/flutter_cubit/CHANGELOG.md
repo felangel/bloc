@@ -1,3 +1,8 @@
+# 0.0.9
+
+- feat: upgrade to `cubit: ^0.0.7`
+- feat: make all widgets compatible with `CubitStream`
+
 # 0.0.8
 
 - **BREAKING**: upgrade to `cubit: ^0.0.4`
