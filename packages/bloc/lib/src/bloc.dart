@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cubit/cubit.dart';
+import 'package:cubit/cubit.dart' hide Transition;
 import 'package:meta/meta.dart';
 
 import '../bloc.dart';
@@ -37,7 +37,8 @@ typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
-abstract class Bloc<Event, State> extends Cubit<State> implements Sink<Event> {
+abstract class Bloc<Event, State> extends CubitStream<State>
+    implements Sink<Event> {
   final _eventController = StreamController<Event>.broadcast();
 
   StreamSubscription<Transition<Event, State>> _transitionSubscription;
