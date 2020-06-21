@@ -1,7 +1,8 @@
-# 5.0.0-dev
+# 5.0.0-dev.1
 
-- refactor: bloc to extend `Cubit` rather than `Stream`
-- **BREAKING**: remove `initialState` override in favor of providing the initial state via super
+- **BREAKING**: remove `initialState` override in favor of providing the initial state via super ([#1304](https://github.com/felangel/bloc/issues/1304)).
+- feat: support `null` states ([#1312](https://github.com/felangel/bloc/issues/1312)).
+- refactor: bloc to extend [cubit](https://pub.dev/packages/cubit) rather than `Stream`.
 
 # 4.0.0
 
