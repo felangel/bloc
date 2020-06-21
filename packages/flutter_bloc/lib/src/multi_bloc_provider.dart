@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_cubit/flutter_cubit.dart';
 
 import 'bloc_provider.dart';
 
@@ -48,34 +48,13 @@ import 'bloc_provider.dart';
 /// As a result, the only advantage of using [MultiBlocProvider] is improved
 /// readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
-class MultiBlocProvider extends StatelessWidget {
-  /// The [BlocProvider] list which is converted into a tree of [BlocProvider]
-  /// widgets.
-  /// The tree of [BlocProvider] widgets is created in order meaning the first
-  /// [BlocProvider] will be the top-most [BlocProvider] and the last
-  /// [BlocProvider] will be a direct ancestor of [child].
-  final List<BlocProviderSingleChildWidget> providers;
-
-  /// The widget and its descendants which will have access to every [bloc]
-  /// provided by [providers].
-  /// [child] will be a direct descendent of the last [BlocProvider] in
-  /// [providers].
-  final Widget child;
-
+class MultiBlocProvider extends MultiCubitProvider {
   /// {@macro multiblocprovider}
-  const MultiBlocProvider({
+  MultiBlocProvider({
     Key key,
-    @required this.providers,
-    @required this.child,
+    @required List<CubitProviderSingleChildWidget> providers,
+    @required Widget child,
   })  : assert(providers != null),
         assert(child != null),
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: providers,
-      child: child,
-    );
-  }
+        super(key: key, providers: providers, child: child);
 }

@@ -305,8 +305,7 @@ Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget t
 enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
+  CounterBloc() : super(initialState: 0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
@@ -328,17 +327,12 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final CounterBloc counterBloc = context.bloc<CounterBloc>();
-
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
       body: BlocBuilder<CounterBloc, int>(
         builder: (context, count) {
           return Center(
-            child: Text(
-              '$count',
-              style: TextStyle(fontSize: 24.0),
-            ),
+            child: Text('$count'),
           );
         },
       ),
@@ -351,7 +345,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                counterBloc.add(CounterEvent.increment);
+                context.bloc<CounterBloc>().add(CounterEvent.increment);
               },
             ),
           ),
@@ -360,7 +354,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: Icon(Icons.remove),
               onPressed: () {
-                counterBloc.add(CounterEvent.decrement);
+                context.bloc<CounterBloc>().add(CounterEvent.decrement);
               },
             ),
           ),

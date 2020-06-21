@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_cubit/flutter_cubit.dart';
 
 import 'bloc_listener.dart';
 
@@ -48,32 +48,13 @@ import 'bloc_listener.dart';
 /// As a result, the only advantage of using [MultiBlocListener] is improved
 /// readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
-class MultiBlocListener extends StatelessWidget {
-  /// The [BlocListener] list which is converted into a tree of [BlocListener]
-  /// widgets.
-  /// The tree of [BlocListener] widgets is created in order meaning the first
-  /// [BlocListener] will be the top-most [BlocListener] and the last
-  /// [BlocListener] will be a direct ancestor of [child].
-  final List<BlocListenerSingleChildWidget> listeners;
-
-  /// The widget which will be a direct descendent of the last [BlocListener]
-  /// in [listeners].
-  final Widget child;
-
+class MultiBlocListener extends MultiCubitListener {
   /// {@macro multibloclistener}
-  const MultiBlocListener({
+  MultiBlocListener({
     Key key,
-    @required this.listeners,
-    @required this.child,
+    @required List<CubitListenerSingleChildWidget> listeners,
+    @required Widget child,
   })  : assert(listeners != null),
         assert(child != null),
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: listeners,
-      child: child,
-    );
-  }
+        super(key: key, listeners: listeners, child: child);
 }
