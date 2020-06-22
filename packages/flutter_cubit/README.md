@@ -16,7 +16,7 @@ Lets take a look at how to use `CubitBuilder` to hook up a `CounterPage` widget 
 
 ```dart
 class CounterCubit extends Cubit<int> {
-  CounterCubit() : super(initialState: 0);
+  CounterCubit() : super(0);
 
   void increment() => emit(state + 1);
   void decrement() => emit(state - 1);

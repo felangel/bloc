@@ -124,7 +124,7 @@ class CounterPage extends StatelessWidget {
 }
 
 class CounterCubit extends Cubit<int> {
-  CounterCubit({this.onClose}) : super(initialState: 0);
+  CounterCubit({this.onClose}) : super(0);
 
   final VoidCallback onClose;
 
@@ -139,7 +139,7 @@ class CounterCubit extends Cubit<int> {
 }
 
 class ThemeCubit extends Cubit<ThemeData> {
-  ThemeCubit({this.onClose}) : super(initialState: ThemeData.light());
+  ThemeCubit({this.onClose}) : super(ThemeData.light());
 
   final VoidCallback onClose;
 
