@@ -11,7 +11,7 @@ import 'cubit.dart';
 /// In most cases, [CubitStream] should only be extended when building
 /// functionality that is otherwise incompatible with `Cubit`.
 ///
-/// Every [CubitStream] requires an `initialState` which will be the
+/// Every [CubitStream] requires an initial state which will be the
 /// state of the [CubitStream] before `emit` has been called.
 ///
 /// See also:
@@ -21,7 +21,7 @@ import 'cubit.dart';
 /// {@endtemplate}
 abstract class CubitStream<State> extends Stream<State> {
   /// {@macro cubit_stream}
-  CubitStream({@required State initialState}) : _state = initialState;
+  CubitStream(this._state);
 
   /// The current [state].
   State get state => _state;

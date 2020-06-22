@@ -6,7 +6,7 @@ void main() async {
 }
 
 class CounterCubit extends Cubit<int> {
-  CounterCubit() : super(initialState: 0);
+  CounterCubit() : super(0);
 
   void increment() => emit(state + 1);
 

@@ -14,7 +14,7 @@ void main() {
     });
 
     group('onTransition', () {
-      test('is not called for the initialState', () async {
+      test('is not called for the initial state', () async {
         final transitions = <Transition<int>>[];
         final cubit = CounterCubit(onTransitionCallback: transitions.add);
         await cubit.close();
@@ -95,7 +95,7 @@ void main() {
         await cubit.close();
       });
 
-      test('recieves initialState immediately upon subscribing', () async {
+      test('receives initial state immediately upon subscribing', () async {
         final states = <int>[];
         final cubit = CounterCubit()..listen(states.add);
         await cubit.close();

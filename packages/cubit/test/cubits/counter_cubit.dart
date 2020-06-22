@@ -1,7 +1,7 @@
 import 'package:cubit/cubit.dart';
 
 class CounterCubit extends Cubit<int> {
-  CounterCubit({this.onTransitionCallback}) : super(initialState: 0);
+  CounterCubit({this.onTransitionCallback}) : super(0);
 
   final void Function(Transition<int>) onTransitionCallback;
 

@@ -7,14 +7,14 @@ import 'transition.dart';
 /// A [Cubit] is a subset of [bloc](https://pub.dev/packages/bloc)
 /// which has no notion of events and relies on methods to `emit` new states.
 ///
-/// Every `cubit` requires an `initialState` which will be the
+/// Every `cubit` requires an initial state which will be the
 /// state of the `cubit` before `emit` has been called.
 ///
 /// The current state of a `cubit` can be accessed via the `state` getter.
 ///
 /// ```dart
 /// class CounterCubit extends Cubit<int> {
-///   CounterCubit() : super(initialState: 0);
+///   CounterCubit() : super(0);
 ///
 ///   void increment() => emit(state + 1);
 /// }
@@ -28,7 +28,7 @@ import 'transition.dart';
 /// {@endtemplate}
 abstract class Cubit<State> extends CubitStream<State> {
   /// {@macro cubit}
-  Cubit({@required State initialState}) : super(initialState: initialState);
+  Cubit(State initialState) : super(initialState);
 
   /// Called whenever a [transition] occurs with the given [transition].
   /// A [transition] occurs when a new `state` is emitted.

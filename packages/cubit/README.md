@@ -8,14 +8,14 @@
 
 A `cubit` is a subset of [bloc](https://pub.dev/packages/bloc) which has no notion of events and relies on methods to `emit` new states.
 
-Every `cubit` requires an `initialState` which will be the state of the `cubit` before `emit` has been called.
+Every `cubit` requires an initial state which will be the state of the `cubit` before `emit` has been called.
 The current state of a `cubit` can be accessed via the `state` getter.
 
 ## Creating a Cubit
 
 ```dart
 class CounterCubit extends Cubit<int> {
-  CounterCubit() : super(initialState: 0);
+  CounterCubit() : super(0);
 
   void increment() => emit(state + 1);
 }
