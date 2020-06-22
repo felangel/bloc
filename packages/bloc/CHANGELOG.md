@@ -1,3 +1,7 @@
+# 5.0.0-dev.2
+
+- **BREAKING**: update `initialState` to be a required positional parameter ([related issue](https://github.com/dart-lang/sdk/issues/42438)).
+
 # 5.0.0-dev.1
 
 - **BREAKING**: remove `initialState` override in favor of providing the initial state via super ([#1304](https://github.com/felangel/bloc/issues/1304)).

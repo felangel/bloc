@@ -44,7 +44,7 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   StreamSubscription<Transition<Event, State>> _transitionSubscription;
 
   /// {@macro bloc}
-  Bloc({@required State initialState}) : super(initialState: initialState) {
+  Bloc(State initialState) : super(initialState) {
     _bindEventsToStates();
   }
 

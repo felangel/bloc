@@ -71,7 +71,7 @@ For simplicity we can create a `CounterBloc` like:
 
 ```dart
 class CounterBloc extends Bloc<CounterEvent, int> {
-  CounterBloc() : super(initialState: 0);
+  CounterBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
