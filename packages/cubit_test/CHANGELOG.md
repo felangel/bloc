@@ -1,3 +1,8 @@
+# 0.0.5
+
+- **BREAKING**: upgrade to `cubit: ^0.0.8`
+- docs: minor logo updates
+
 # 0.0.4
 
 - **BREAKING**: upgrade to `cubit: ^0.0.6`

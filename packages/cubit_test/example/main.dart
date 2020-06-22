@@ -5,7 +5,7 @@ import 'package:cubit_test/cubit_test.dart';
 import 'package:test/test.dart';
 
 class CounterCubit extends Cubit<int> {
-  CounterCubit() : super(initialState: 0);
+  CounterCubit() : super(0);
 
   void increment() => emit(state + 1);
 }

@@ -7,7 +7,7 @@ class ComplexStateA extends ComplexState {}
 class ComplexStateB extends ComplexState {}
 
 class ComplexCubit extends Cubit<ComplexState> {
-  ComplexCubit() : super(initialState: ComplexStateA());
+  ComplexCubit() : super(ComplexStateA());
 
   void emitA() => emit(ComplexStateA());
   void emitB() => emit(ComplexStateB());

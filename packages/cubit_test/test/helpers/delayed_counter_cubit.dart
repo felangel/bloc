@@ -1,7 +1,7 @@
 import 'package:cubit/cubit.dart';
 
 class DelayedCounterCubit extends Cubit<int> {
-  DelayedCounterCubit() : super(initialState: 0);
+  DelayedCounterCubit() : super(0);
 
   void increment() {
     Future<void>.delayed(
