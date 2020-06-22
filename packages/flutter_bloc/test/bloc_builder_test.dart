@@ -76,7 +76,7 @@ class SetDarkTheme extends ThemeEvent {}
 class SetLightTheme extends ThemeEvent {}
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
-  ThemeBloc() : super(initialState: ThemeData.light());
+  ThemeBloc() : super(ThemeData.light());
 
   @override
   Stream<ThemeData> mapEventToState(ThemeEvent event) async* {
@@ -85,7 +85,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
 }
 
 class DarkThemeBloc extends Bloc<ThemeEvent, ThemeData> {
-  DarkThemeBloc() : super(initialState: ThemeData.dark());
+  DarkThemeBloc() : super(ThemeData.dark());
 
   @override
   Stream<ThemeData> mapEventToState(ThemeEvent event) async* {
@@ -139,7 +139,7 @@ class MyCounterAppState extends State<MyCounterApp> {
 enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  CounterBloc() : super(initialState: 0);
+  CounterBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {

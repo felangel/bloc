@@ -21,6 +21,9 @@ dev_dependencies:
     path: ../../packages/bloc_test
   mockito: ^4.0.0
 
+dependency_overrides:
+  bloc: ^5.0.0-dev.2
+
 flutter:
   uses-material-design: true
   assets:

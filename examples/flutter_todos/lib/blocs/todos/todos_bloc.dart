@@ -8,10 +8,7 @@ import 'package:todos_repository_simple/todos_repository_simple.dart';
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final TodosRepositoryFlutter todosRepository;
 
-  TodosBloc({@required this.todosRepository});
-
-  @override
-  TodosState get initialState => TodosLoadInProgress();
+  TodosBloc({@required this.todosRepository}) : super(TodosLoadInProgress());
 
   @override
   Stream<TodosState> mapEventToState(TodosEvent event) async* {

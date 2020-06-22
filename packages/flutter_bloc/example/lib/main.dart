@@ -109,7 +109,7 @@ class CounterPage extends StatelessWidget {
 enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  CounterBloc() : super(initialState: 0);
+  CounterBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
@@ -129,7 +129,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 enum ThemeEvent { toggle }
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
-  ThemeBloc() : super(initialState: ThemeData.light());
+  ThemeBloc() : super(ThemeData.light());
 
   @override
   Stream<ThemeData> mapEventToState(ThemeEvent event) async* {

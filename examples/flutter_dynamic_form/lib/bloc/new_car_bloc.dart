@@ -11,10 +11,8 @@ class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
   final NewCarRepository _newCarRepository;
 
   NewCarBloc({NewCarRepository newCarRepository})
-      : _newCarRepository = newCarRepository;
-
-  @override
-  NewCarState get initialState => NewCarState.initial();
+      : _newCarRepository = newCarRepository,
+        super(NewCarState.initial());
 
   @override
   Stream<NewCarState> mapEventToState(

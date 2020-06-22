@@ -9,22 +9,20 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   final TodosBloc todosBloc;
   StreamSubscription todosSubscription;
 
-  FilteredTodosBloc({@required this.todosBloc}) {
+  FilteredTodosBloc({@required this.todosBloc})
+      : super(
+          todosBloc.state is TodosLoadSuccess
+              ? FilteredTodosLoadSuccess(
+                  (todosBloc.state as TodosLoadSuccess).todos,
+                  VisibilityFilter.all,
+                )
+              : FilteredTodosLoadInProgress(),
+        ) {
     todosSubscription = todosBloc.listen((state) {
       if (state is TodosLoadSuccess) {
         add(TodosUpdated((todosBloc.state as TodosLoadSuccess).todos));
       }
     });
-  }
-
-  @override
-  FilteredTodosState get initialState {
-    return todosBloc.state is TodosLoadSuccess
-        ? FilteredTodosLoadSuccess(
-            (todosBloc.state as TodosLoadSuccess).todos,
-            VisibilityFilter.all,
-          )
-        : FilteredTodosLoadInProgress();
   }
 
   @override

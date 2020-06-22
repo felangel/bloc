@@ -5,16 +5,15 @@ import 'package:flutter_firestore_todos/blocs/blocs.dart';
 class StatsBloc extends Bloc<StatsEvent, StatsState> {
   StreamSubscription _todosSubscription;
 
-  StatsBloc({TodosBloc todosBloc}) : assert(todosBloc != null) {
+  StatsBloc({TodosBloc todosBloc})
+      : assert(todosBloc != null),
+        super(StatsLoading()) {
     _todosSubscription = todosBloc.listen((state) {
       if (state is TodosLoaded) {
         add(UpdateStats(state.todos));
       }
     });
   }
-
-  @override
-  StatsState get initialState => StatsLoading();
 
   @override
   Stream<StatsState> mapEventToState(StatsEvent event) async* {

@@ -173,7 +173,7 @@ enum CounterEvent { increment, decrement }
 class CounterBloc extends Bloc<CounterEvent, int> {
   final Function onClose;
 
-  CounterBloc({this.onClose}) : super(initialState: 0);
+  CounterBloc({this.onClose}) : super(0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
