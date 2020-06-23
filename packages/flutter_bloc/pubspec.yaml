@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_cubit: ^0.0.9
-  bloc: ^5.0.0-dev.2
+  bloc: ^5.0.0-dev.3
   provider: ^4.0.5
 
 dev_dependencies:
