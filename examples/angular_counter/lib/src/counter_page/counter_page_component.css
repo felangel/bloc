@@ -1,0 +1,11 @@
+.counter-page-container {
+  text-align: center;
+}
+
+.counter-button {
+  background: lightskyblue;
+  color: black;
+  padding: 24px;
+  border-radius: 50%;
+  font-size: 24px;
+}

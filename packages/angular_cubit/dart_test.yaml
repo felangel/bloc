@@ -1,0 +1,31 @@
+# As of test: ^0.12.32, we can use a common/base dart_test.yaml, which this is.
+#
+# See documentation:
+# * https://github.com/dart-lang/test/blob/master/doc/configuration.md
+# * https://github.com/dart-lang/test/blob/master/doc/configuration.md#include
+presets:
+  # When run with -P travis, we have different settings/options.
+  #
+  # 1: We don't use Chrome --headless:
+  # 2: We use --reporter expanded
+  # 3: We skip anything tagged "fails-on-travis".
+  travis:
+    override_platforms:
+      chrome:
+        settings:
+          # Disable some security options, since this is only on Travis.
+          # https://chromium.googlesource.com/chromium/src/+/master/docs/design/sandbox.md
+          # https://docs.travis-ci.com/user/chrome#Sandboxing
+          arguments: --no-sandbox
+          # TODO(https://github.com/dart-lang/test/issues/772)
+          headless: false
+
+    # Don't run any tests that are tagged ["fails-on-travis"].
+    exclude_tags: "fails-on-travis"
+
+    # https://github.com/dart-lang/test/blob/master/doc/configuration.md#reporter
+    reporter: expanded
+
+# This repository has only web tests.
+platforms:
+  - chrome

@@ -12,6 +12,7 @@
 | [cubit](https://github.com/felangel/cubit/tree/master/packages/cubit)                 | [![pub package](https://img.shields.io/pub/v/cubit.svg)](https://pub.dev/packages/cubit)                 |
 | [cubit_test](https://github.com/felangel/cubit/tree/master/packages/cubit_test)       | [![pub package](https://img.shields.io/pub/v/cubit_test.svg)](https://pub.dev/packages/cubit_test)       |
 | [flutter_cubit](https://github.com/felangel/cubit/tree/master/packages/flutter_cubit) | [![pub package](https://img.shields.io/pub/v/flutter_cubit.svg)](https://pub.dev/packages/flutter_cubit) |
+| [angular_cubit](https://github.com/felangel/cubit/tree/master/packages/angular_cubit) | [![pub package](https://img.shields.io/pub/v/angular_cubit.svg)](https://pub.dev/packages/angular_cubit) |
 
 ## Overview
 
@@ -29,6 +30,7 @@ class CounterCubit extends Cubit<int> {
 - [Cubit Package](https://github.com/felangel/cubit/tree/master/packages/cubit/README.md)
 - [Cubit Test Package](https://github.com/felangel/cubit/tree/master/packages/cubit_test/README.md)
 - [Flutter Cubit Package](https://github.com/felangel/cubit/tree/master/packages/flutter_cubit/README.md)
+- [Angular Cubit Package](https://github.com/felangel/cubit/tree/master/packages/angular_cubit/README.md)
 
 ## Dart Versions
 
