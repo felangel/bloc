@@ -23,7 +23,7 @@ A predictable state management library that helps implement the [BLoC design pat
 
 ## Overview
 
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/feat/flutter_bloc-v5.0.0/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
 
 The goal of this library is to make it easy to separate _presentation_ from _business logic_, facilitating testability and reusability.
 
