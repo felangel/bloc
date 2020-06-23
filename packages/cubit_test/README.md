@@ -1,14 +1,13 @@
-<img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/cubit_test_full.png" height="150" alt="Cubit Test" />
+<p align="center"><img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/cubit_test_full.png" height="100" alt="Cubit Test"></p>
 
-[![Pub](https://img.shields.io/pub/v/cubit_test.svg)](https://pub.dev/packages/cubit_test)
-[![build](https://github.com/felangel/cubit/workflows/build/badge.svg)](https://github.com/felangel/cubit/actions)
-[![coverage](https://github.com/felangel/cubit/blob/master/packages/cubit_test/coverage_badge.svg)](https://github.com/felangel/cubit/actions)
-[![Star on GitHub](https://img.shields.io/github/stars/felangel/cubit.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/felangel/cubit)
-[![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
-
----
-
-**WARNING: This is highly experimental**
+<p align="center">
+<a href="https://pub.dev/packages/cubit_test"><img src="https://img.shields.io/pub/v/cubit_test.svg" alt="Pub"></a>
+<a href="https://github.com/felangel/cubit/actions"><img src="https://github.com/felangel/cubit/workflows/build/badge.svg" alt="build"></a>
+<a href="https://github.com/felangel/cubit/actions"><img src="https://github.com/felangel/cubit/blob/master/packages/cubit_test/coverage_badge.svg" alt="coverage"></a>
+<a href="https://github.com/felangel/cubit"><img src="https://img.shields.io/github/stars/felangel/cubit.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on GitHub"></a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
+<a href="https://github.com/zepfietje/starware"><img src="https://img.shields.io/badge/Starware-%E2%AD%90-black?labelColor=%23f9b00d" alt="Starware"></a>
+</p>
 
 A Dart package built to make testing cubits easy. Built to work with the [cubit](https://pub.dev/packages/cubit) and [bloc](https://pub.dev/packages/bloc) state management packages.
 
@@ -127,3 +126,9 @@ cubitTest(
 ## Maintainers
 
 - [Felix Angelov](https://github.com/felangel)
+
+## Starware
+
+Cubit Test is Starware.  
+This means you're free to use the project, as long as you star its GitHub repository.  
+Your appreciation makes us grow and glow up. ⭐
