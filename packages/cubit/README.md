@@ -3,6 +3,10 @@
 [![Pub](https://img.shields.io/pub/v/cubit.svg)](https://pub.dev/packages/cubit)
 [![build](https://github.com/felangel/cubit/workflows/build/badge.svg)](https://github.com/felangel/cubit/actions)
 [![coverage](https://github.com/felangel/cubit/blob/master/packages/cubit/coverage_badge.svg)](https://github.com/felangel/cubit/actions)
+[![Star on GitHub](https://img.shields.io/github/stars/felangel/cubit.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/felangel/cubit)
+[![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
+
+---
 
 **WARNING: This is highly experimental**
 
