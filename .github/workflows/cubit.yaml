@@ -35,3 +35,5 @@ jobs:
         run: pub run test_coverage
       - name: Check Code Coverage
         uses: ChicagoFlutter/lcov-cop@v1.0.0
+        with:
+          path: packages/cubit/coverage/lcov.info

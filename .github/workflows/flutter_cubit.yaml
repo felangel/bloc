@@ -30,5 +30,9 @@ jobs:
         run: flutter format --set-exit-if-changed lib test
       - name: Analyze
         run: flutter analyze lib test
+      - name: Run tests
+        run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
       - name: Check Code Coverage
         uses: ChicagoFlutter/lcov-cop@v1.0.0
+        with:
+          path: packages/flutter_cubit/coverage/lcov.info
