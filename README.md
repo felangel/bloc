@@ -5,7 +5,7 @@
 
 **WARNING: This is highly experimental**
 
-A cubit is a reimagined bloc (from [package:bloc](https://pub.dev/packages/bloc)) which removes events and relies on methods to emit new states instead.
+`Cubit` is a lightweight state management solution. It is a subset of the [bloc package](https://pub.dev/packages/bloc) that does not rely on events and instead uses methods to emit new states.
 
 | Package                                                                               | Pub                                                                                                      |
 | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
