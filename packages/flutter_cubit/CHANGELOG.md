@@ -1,3 +1,8 @@
+# 0.0.12
+
+- feat: upgrade to `cubit: ^0.0.13`
+- docs: various documentation updates
+
 # 0.0.11
 
 - feat: upgrade to `cubit ^0.0.10`
