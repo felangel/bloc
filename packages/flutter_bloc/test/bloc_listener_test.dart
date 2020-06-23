@@ -7,8 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 enum CounterEvent { increment }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
+  CounterBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
@@ -21,7 +20,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 
 class MyApp extends StatefulWidget {
-  final BlocWidgetListener<int> onListenerCalled;
+  final Function(BuildContext, int) onListenerCalled;
 
   MyApp({Key key, this.onListenerCalled}) : super(key: key);
 
@@ -52,28 +51,19 @@ class _MyAppState extends State<MyApp> {
               Text('count: $count'),
               RaisedButton(
                 key: Key('bloc_listener_reset_button'),
-                child: Text('Reset Bloc'),
                 onPressed: () {
-                  setState(() {
-                    _counterBloc = CounterBloc();
-                  });
+                  setState(() => _counterBloc = CounterBloc());
                 },
               ),
               RaisedButton(
                 key: Key('bloc_listener_noop_button'),
-                child: Text('Noop Bloc'),
                 onPressed: () {
-                  setState(() {
-                    _counterBloc = _counterBloc;
-                  });
+                  setState(() => _counterBloc = _counterBloc);
                 },
               ),
               RaisedButton(
                 key: Key('bloc_listener_increment_button'),
-                child: Text('Increment Bloc'),
-                onPressed: () {
-                  _counterBloc.add(CounterEvent.increment);
-                },
+                onPressed: () => _counterBloc.add(CounterEvent.increment),
               ),
             ],
           ),
@@ -118,14 +108,12 @@ void main() {
     });
 
     testWidgets('renders child properly', (tester) async {
-      final targetKey = Key('bloc_listener_container');
+      const targetKey = Key('bloc_listener_container');
       await tester.pumpWidget(
         BlocListener(
           bloc: CounterBloc(),
           listener: (context, state) {},
-          child: Container(
-            key: targetKey,
-          ),
+          child: const SizedBox(key: targetKey),
         ),
       );
       expect(find.byKey(targetKey), findsOneWidget);
@@ -143,7 +131,7 @@ void main() {
             listenerCallCount++;
             latestState = state;
           },
-          child: Container(),
+          child: const SizedBox(),
         ),
       );
       counterBloc.add(CounterEvent.increment);
@@ -165,7 +153,7 @@ void main() {
             listenerCallCount++;
             latestState = state;
           },
-          child: Container(),
+          child: const SizedBox(),
         ),
       );
       counterBloc.add(CounterEvent.increment);
@@ -258,7 +246,7 @@ void main() {
             return true;
           },
           listener: (context, state) {},
-          child: Container(),
+          child: const SizedBox(),
         ),
       );
       counterBloc.add(CounterEvent.increment);
@@ -290,7 +278,7 @@ void main() {
             return false;
           },
           listener: (context, state) {},
-          child: Container(),
+          child: const SizedBox(),
         ),
       );
       counterBloc.add(CounterEvent.increment);
@@ -322,7 +310,7 @@ void main() {
               return true;
             },
             listener: (context, state) {},
-            child: Container(),
+            child: const SizedBox(),
           ),
         ),
       );
@@ -353,7 +341,7 @@ void main() {
             return true;
           },
           listener: (context, state) {},
-          child: Container(),
+          child: const SizedBox(),
         ),
       );
       counterBloc.add(CounterEvent.increment);
@@ -379,7 +367,7 @@ void main() {
           listener: (context, state) {
             listenerCallCount++;
           },
-          child: Container(),
+          child: const SizedBox(),
         ),
       );
       counterBloc.add(CounterEvent.increment);
@@ -401,7 +389,7 @@ void main() {
           listener: (context, state) {
             listenerCallCount++;
           },
-          child: Container(),
+          child: const SizedBox(),
         ),
       );
       counterBloc.add(CounterEvent.increment);
@@ -423,7 +411,7 @@ void main() {
           listener: (context, state) {
             listenerCallCount++;
           },
-          child: Container(),
+          child: const SizedBox(),
         ),
       );
       counterBloc.add(CounterEvent.increment);
@@ -448,7 +436,7 @@ void main() {
           listener: (context, state) {
             listenerCallCount++;
           },
-          child: Container(),
+          child: const SizedBox(),
         ),
       );
       counterBloc.add(CounterEvent.increment);

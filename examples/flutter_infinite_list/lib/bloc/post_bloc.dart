@@ -11,10 +11,7 @@ import 'package:rxdart/rxdart.dart';
 class PostBloc extends Bloc<PostEvent, PostState> {
   final http.Client httpClient;
 
-  PostBloc({@required this.httpClient});
-
-  @override
-  get initialState => PostInitial();
+  PostBloc({@required this.httpClient}) : super(PostInitial());
 
   @override
   Stream<Transition<PostEvent, PostState>> transformEvents(

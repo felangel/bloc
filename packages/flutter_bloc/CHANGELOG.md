@@ -1,3 +1,8 @@
+# 5.0.0-dev.1
+
+- Update to `bloc: ^5.0.0-dev.2`
+- Internal implementation updates to use [flutter_cubit](https://pub.dev/packages/flutter_cubit)
+
 # 4.0.1
 
 - Fix `ProviderNotFoundException` handling ([#1286](https://github.com/felangel/bloc/pull/1286))

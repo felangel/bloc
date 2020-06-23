@@ -8,8 +8,7 @@ part 'cart_event.dart';
 part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  @override
-  CartState get initialState => CartLoading();
+  CartBloc() : super(CartLoading());
 
   @override
   Stream<CartState> mapEventToState(

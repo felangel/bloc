@@ -51,7 +51,7 @@ void main() {
   });
 
   test('initial state is correct', () {
-    expect(LoginInitial(), loginBloc.initialState);
+    expect(loginBloc.state, LoginInitial());
   });
 
   test('close does not emit new states', () {

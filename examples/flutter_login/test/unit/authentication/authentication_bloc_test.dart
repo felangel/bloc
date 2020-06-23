@@ -29,7 +29,7 @@ void main() {
   });
 
   test('initial state is correct', () {
-    expect(authenticationBloc.initialState, AuthenticationInitial());
+    expect(authenticationBloc.state, AuthenticationInitial());
   });
 
   test('close does not emit new states', () {

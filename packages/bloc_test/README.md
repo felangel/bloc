@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_test_logo_full.png" height="60" alt="Bloc Test Package" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/feat/flutter_bloc-v5.0.0/docs/assets/bloc_test_logo_full.png" height="150" alt="Bloc Test Package" />
 
 [![Pub](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)
 [![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)

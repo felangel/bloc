@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/angular_bloc_logo_full.png" height="60" alt="Angular Bloc Package" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/feat/flutter_bloc-v5.0.0/docs/assets/angular_bloc_logo_full.png" height="150" alt="Angular Bloc Package" />
 
 [![Pub](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)
 [![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)

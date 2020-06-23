@@ -11,10 +11,7 @@ part 'list_state.dart';
 class ListBloc extends Bloc<ListEvent, ListState> {
   final Repository repository;
 
-  ListBloc({@required this.repository});
-
-  @override
-  ListState get initialState => Loading();
+  ListBloc({@required this.repository}) : super(Loading());
 
   @override
   Stream<ListState> mapEventToState(
