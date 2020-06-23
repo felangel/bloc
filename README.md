@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/felangel/bloc/feat/flutter_bloc-v5.0.0/docs/assets/bloc_logo_full.png" height="60" alt="Bloc" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/feat/flutter_bloc-v5.0.0/docs/assets/bloc_logo_full.png" height="150" alt="Bloc" />
 
 [![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
