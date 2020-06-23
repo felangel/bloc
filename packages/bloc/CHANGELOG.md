@@ -1,3 +1,7 @@
+# 5.0.0-dev.3
+
+- Update documentation and static assets.
+
 # 5.0.0-dev.2
 
 - **BREAKING**: update `initialState` to be a required positional parameter ([related issue](https://github.com/dart-lang/sdk/issues/42438)).

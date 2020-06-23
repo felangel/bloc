@@ -21,7 +21,7 @@ This package is built to work with [flutter_bloc](https://pub.dev/packages/flutt
 
 ## Overview
 
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/bloc_architecture.png" height="300" alt="Bloc Architecture" />
 
 The goal of this package is to make it easy to implement the `BLoC` Design Pattern (Business Logic Component).
 
