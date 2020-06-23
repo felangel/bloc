@@ -106,7 +106,7 @@ import 'package:test/test.dart' as test;
 /// );
 /// ```
 @isTest
-void cubitTest<C extends Cubit<State>, State>(
+void cubitTest<C extends CubitStream<State>, State>(
   String description, {
   @required Future<C> Function() build,
   Future<void> Function(C cubit) act,

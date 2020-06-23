@@ -1,3 +1,8 @@
+# 0.0.7
+
+- feat: update `cubitTest` to use `CubitStream` instead of `Cubit`
+- feat: update `whenListen` to use `CubitStream` instead of `Cubit`
+
 # 0.0.6
 
 - feat: upgrade to `cubit: ^0.0.10`

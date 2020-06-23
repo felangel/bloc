@@ -30,7 +30,7 @@ import 'package:mockito/mockito.dart';
 /// expect(counterCubit.state, equals(3));
 /// ```
 void whenListen<Event, State>(
-  Cubit<State> cubit,
+  CubitStream<State> cubit,
   Stream<State> stream,
 ) {
   final broadcastStream = stream.asBroadcastStream();
