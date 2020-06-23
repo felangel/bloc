@@ -1,3 +1,7 @@
+# 0.0.9
+
+- docs: documentation and logo updates
+
 # 0.0.8
 
 - **BREAKING**: revert named `initialState` parameter ([related issue](https://github.com/dart-lang/sdk/issues/42438))
