@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/felangel/bloc/feat/flutter_bloc-v5.0.0/docs/assets/flutter_bloc_logo_full.png" height="150" alt="Flutter Bloc Package" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/flutter_bloc_logo_full.png" height="150" alt="Flutter Bloc Package" />
 
 [![Pub](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc)
 [![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
