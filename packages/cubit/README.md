@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/cubit_full.png" height="80" alt="Cubit" />
+<img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/cubit_full.png" height="150" alt="Cubit" />
 
 [![Pub](https://img.shields.io/pub/v/cubit.svg)](https://pub.dev/packages/cubit)
 [![build](https://github.com/felangel/cubit/workflows/build/badge.svg)](https://github.com/felangel/cubit/actions)

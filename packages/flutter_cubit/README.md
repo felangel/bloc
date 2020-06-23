@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/flutter_cubit_full.png" height="80" alt="Flutter Cubit" />
+<img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/flutter_cubit_full.png" height="150" alt="Flutter Cubit" />
 
 [![Pub](https://img.shields.io/pub/v/flutter_cubit.svg)](https://pub.dev/packages/flutter_cubit)
 [![build](https://github.com/felangel/cubit/workflows/build/badge.svg)](https://github.com/felangel/cubit/actions)
