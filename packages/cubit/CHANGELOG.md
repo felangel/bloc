@@ -1,3 +1,7 @@
+# 0.0.12
+
+- docs: fix coverage badge
+
 # 0.0.11
 
 - docs: various documentation updates
