@@ -1,3 +1,7 @@
+# 0.0.11
+
+- docs: various documentation updates
+
 # 0.0.10
 
 - docs: various documentation updates
