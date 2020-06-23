@@ -3,10 +3,14 @@
 [![Pub](https://img.shields.io/pub/v/flutter_cubit.svg)](https://pub.dev/packages/flutter_cubit)
 [![build](https://github.com/felangel/cubit/workflows/build/badge.svg)](https://github.com/felangel/cubit/actions)
 [![coverage](https://github.com/felangel/cubit/blob/master/packages/cubit/coverage_badge.svg)](https://github.com/felangel/cubit/actions)
+[![Star on GitHub](https://img.shields.io/github/stars/felangel/cubit.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/felangel/cubit)
+[![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
+
+---
 
 **WARNING: This is highly experimental**
 
-An experimental Flutter library which exposes widgets that integrate with `cubits`. Built to work with [package:cubit](https://pub.dev/packages/cubit).
+A Flutter library built to expose widgets that integrate with cubits. Built to work with the [cubit](https://pub.dev/packages/cubit) and [bloc](https://pub.dev/packages/bloc) state management packages.
 
 ## Usage
 
