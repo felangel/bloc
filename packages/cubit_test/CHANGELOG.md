@@ -1,3 +1,8 @@
+# 0.0.8
+
+- feat: upgrade to `cubit: ^0.0.13`
+- docs: various documentation updates
+
 # 0.0.7
 
 - feat: update `cubitTest` to use `CubitStream` instead of `Cubit`
