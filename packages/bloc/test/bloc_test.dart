@@ -655,7 +655,28 @@ void main() {
         });
       });
 
-      test('triggers onError from add', () {
+      test('triggers onError from onEvent', () {
+        runZoned(() {
+          final exception = Exception('fatal exception');
+
+          final onEventErrorBloc = OnEventErrorBloc(exception: exception);
+
+          onEventErrorBloc.add(CounterEvent.increment);
+
+          onEventErrorBloc.close();
+        }, onError: (error, stackTrace) {
+          expect(
+            (error as BlocUnhandledErrorException).toString(),
+            contains(
+              'Unhandled error Exception: fatal exception occurred '
+              'in bloc Instance of \'OnEventErrorBloc\'.',
+            ),
+          );
+          expect(stackTrace, isNotNull);
+        });
+      });
+
+      test('does not triggers onError from add', () {
         runZoned(() {
           Object capturedError;
           StackTrace capturedStacktrace;
@@ -670,30 +691,15 @@ void main() {
             counterBloc,
             emitsInOrder([0, emitsDone]),
           ).then((_) {
-            expect(
-              capturedError,
-              isStateError,
-            );
-            expect(
-              (capturedError as StateError).message,
-              'Cannot add new events after calling close',
-            );
-            expect(capturedStacktrace, isNotNull);
+            expect(capturedError, isNull);
+            expect(capturedStacktrace, isNull);
           });
 
           counterBloc.close();
 
           counterBloc.add(CounterEvent.increment);
         }, onError: (error, stackTrace) {
-          expect(
-            (error as BlocUnhandledErrorException).toString(),
-            contains(
-              'Unhandled error Bad state: '
-              'Cannot add new events after calling close occurred '
-              'in bloc Instance of \'CounterBloc\'.',
-            ),
-          );
-          expect(stackTrace, isNotNull);
+          fail('should not throw when add is called after bloc is closed');
         });
       });
     });

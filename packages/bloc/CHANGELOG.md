@@ -1,3 +1,7 @@
+# 5.0.0-dev.7
+
+- Ignore newly added events after bloc is closed ([#1236](https://github.com/felangel/bloc/issues/1236)).
+
 # 5.0.0-dev.6
 
 - Additional documentation optimizations.

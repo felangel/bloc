@@ -114,10 +114,10 @@ abstract class Bloc<Event, State> extends CubitStream<State>
 
   /// Notifies the [bloc] of a new [event] which triggers [mapEventToState].
   /// If [close] has already been called, any subsequent calls to [add] will
-  /// be delegated to the [onError] method which can be overridden at the [bloc]
-  /// as well as the [BlocDelegate] level.
+  /// be ignored and will not result in any subsequent state changes.
   @override
   void add(Event event) {
+    if (_eventController.isClosed) return;
     try {
       onEvent(event);
       _eventController.add(event);
