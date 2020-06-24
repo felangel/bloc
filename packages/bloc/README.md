@@ -21,7 +21,7 @@ This package is built to work with [flutter_bloc](https://pub.dev/packages/flutt
 
 ## Overview
 
-<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/bloc_architecture.png" width="250px" alt="Bloc Architecture" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/bloc_architecture.png" width="300px" alt="Bloc Architecture" />
 
 The goal of this package is to make it easy to implement the `BLoC` Design Pattern (Business Logic Component).
 
@@ -201,4 +201,4 @@ At this point, all `Bloc` `Exceptions` will also be reported to the `SimpleBlocD
 
 ## Supporters
 
-[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" style="max-width:120px" />](https://verygood.ventures)
+[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120px" />](https://verygood.ventures)
