@@ -1,3 +1,9 @@
+# 5.0.0-dev.2
+
+- Update to `bloc: ^5.0.0-dev.6`
+- Update to `flutter_cubit ^0.0.12`
+- Various Documentation Updates
+
 # 5.0.0-dev.1
 
 - Update to `bloc: ^5.0.0-dev.3`
