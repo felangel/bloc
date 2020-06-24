@@ -1,3 +1,7 @@
+# 5.0.0-dev.6
+
+- Additional documentation optimizations.
+
 # 5.0.0-dev.5
 
 - Optimize documentation assets for smaller viewports.
