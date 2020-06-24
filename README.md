@@ -167,6 +167,6 @@ Learn more at the following links, which have been contributed by the community.
 
 - [Felix Angelov](https://github.com/felangel)
 
-## Supported By
+## Supporters
 
-[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" style="max-width:120px;width:50%" />](https://verygood.ventures)
+[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120px" />](https://verygood.ventures)
