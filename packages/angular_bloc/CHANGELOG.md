@@ -1,3 +1,7 @@
+# 6.0.0-dev.2
+
+Update to `bloc ^5.0.0-dev.7`
+
 # 6.0.0-dev.1
 
 Update to `bloc ^5.0.0-dev.6`
