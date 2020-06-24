@@ -1,3 +1,7 @@
+# 5.0.0-dev.5
+
+- Optimize documentation assets for smaller viewports.
+
 # 5.0.0-dev.4
 
 - Update to [cubit](https://pub.dev/packages/cubit) `^0.0.13`
