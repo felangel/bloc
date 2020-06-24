@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/angular_bloc_logo_full.png" height="150" alt="Angular Bloc Package" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/angular_bloc_logo_full.png" height="100px" alt="Angular Bloc Package" />
 
 [![Pub](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)
 [![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
@@ -108,6 +108,10 @@ At this point we have successfully separated our presentational layer from our b
 - [Counter](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - a complete example of how to create a `CounterBloc` and hook it up to an AngularDart app.
 - [Github Search](https://github.com/felangel/Bloc/tree/master/examples/github_search/angular_github_search) - an example of how to create a Github Search Application using the `bloc` and `angular_bloc` packages.
 
-### Maintainers
+## Maintainers
 
 - [Felix Angelov](https://github.com/felangel)
+
+## Supporters
+
+[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120px" />](https://verygood.ventures)
