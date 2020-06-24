@@ -7,8 +7,7 @@ class ExceptionCounterBlocException implements Exception {}
 enum ExceptionCounterEvent { increment }
 
 class ExceptionCounterBloc extends Bloc<ExceptionCounterEvent, int> {
-  @override
-  int get initialState => 0;
+  ExceptionCounterBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(

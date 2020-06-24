@@ -11,10 +11,7 @@ class Repository {
 class SideEffectCounterBloc extends Bloc<SideEffectCounterEvent, int> {
   final Repository repository;
 
-  SideEffectCounterBloc(this.repository);
-
-  @override
-  int get initialState => 0;
+  SideEffectCounterBloc(this.repository) : super(0);
 
   @override
   Stream<int> mapEventToState(

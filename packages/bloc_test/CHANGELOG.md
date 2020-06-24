@@ -1,3 +1,8 @@
+# 6.0.0-dev.1
+
+- Update to `bloc: ^5.0.0-dev.4`
+- Internal implementation updates to use [cubit_test](https://pub.dev/packages/cubit_test)
+
 # 5.1.0
 
 - Add `errors` to `blocTest` to enable expecting unhandled exceptions within blocs.
