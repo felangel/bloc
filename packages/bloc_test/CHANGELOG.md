@@ -1,6 +1,6 @@
 # 6.0.0-dev.1
 
-- Update to `bloc: ^5.0.0-dev.4`
+- Update to `bloc ^5.0.0-dev.6`.
 - Internal implementation updates to use [cubit_test](https://pub.dev/packages/cubit_test)
 
 # 5.1.0
