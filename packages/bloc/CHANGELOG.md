@@ -1,3 +1,8 @@
+# 5.0.0-dev.4
+
+- Update to [cubit](https://pub.dev/packages/cubit) `^0.0.13`
+- Update documentation and static assets.
+
 # 5.0.0-dev.3
 
 - Update documentation and static assets.
