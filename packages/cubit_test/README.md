@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/cubit_test_full.png" height="100px" alt="Cubit Test"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/cubit_test_full.png" height="100" alt="Cubit Test"></p>
 
 <p align="center">
 <a href="https://pub.dev/packages/cubit_test"><img src="https://img.shields.io/pub/v/cubit_test.svg" alt="Pub"></a>

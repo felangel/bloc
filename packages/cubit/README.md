@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/cubit_full.png" height="100px" alt="Cubit"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/cubit_full.png" height="100" alt="Cubit"></p>
 
 <p align="center">
 <a href="https://pub.dev/packages/cubit"><img src="https://img.shields.io/pub/v/cubit.svg" alt="Pub"></a>

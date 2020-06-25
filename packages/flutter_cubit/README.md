@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/flutter_cubit_full.png" height="100px" alt="Flutter Cubit"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/flutter_cubit_full.png" height="100" alt="Flutter Cubit"></p>
 
 <p align="center">
 <a href="https://pub.dev/packages/flutter_cubit"><img src="https://img.shields.io/pub/v/flutter_cubit.svg" alt="Pub"></a>
