@@ -1,28 +1,31 @@
 <p align="center">
-  <img src="https://github.com/felangel/hydrated_bloc/raw/master/doc/assets/hydrated_bloc_logo.png" width="50%" alt="logo" />
-  <br/>
-  <a href="https://pub.dartlang.org/packages/hydrated_bloc">
-    <img alt="Pub Package" src="https://img.shields.io/pub/v/hydrated_bloc.svg">
-  </a>
-  <a href="https://circleci.com/gh/felangel/hydrated_bloc">
-    <img alt="Build Status" src="https://circleci.com/gh/felangel/hydrated_bloc.svg?style=shield">
-  </a>
-  <a href="https://codecov.io/gh/felangel/hydrated_bloc">
-    <img alt="Code Coverage" src="https://codecov.io/gh/felangel/hydrated_bloc/branch/master/graph/badge.svg" />
-  </a>  
-  <a href="https://github.com/tenhobi/effective_dart">
-    <img alt="Effective Dart" src="https://img.shields.io/badge/style-effective_dart-40c4ff.svg" />
-  </a>
-  <a href="https://opensource.org/licenses/MIT">
-    <img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg">
-  </a>  
+  <img src="https://github.com/felangel/hydrated_bloc/raw/master/doc/assets/hydrated_bloc_logo.png" height="240" alt="Hydrated Bloc">
 </p>
 
----
+<p align="center">
+  <a href="https://pub.dev/packages/hydrated_bloc">
+    <img src="https://img.shields.io/pub/v/hydrated_bloc.svg" alt="Pub Version">
+  </a>
+  <a href="https://circleci.com/gh/felangel/hydrated_bloc">
+    <img src="https://circleci.com/gh/felangel/hydrated_bloc.svg?style=shield" alt="Build Status">
+  </a>
+  <a href="https://codecov.io/gh/felangel/hydrated_bloc">
+    <img src="https://codecov.io/gh/felangel/hydrated_bloc/branch/master/graph/badge.svg" alt="Code Coverage">
+  </a>
+  <a href="https://pub.dev/packages/effective_dart">
+    <img src="https://img.shields.io/badge/style-effective_dart-40c4ff.svg" alt="style: effective dart">
+  </a>
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License">
+  </a>
+  <a href="https://github.com/zepfietje/starware">
+    <img src="https://img.shields.io/badge/Starware-⭐-black?labelColor=f9b00d" alt="Starware">
+  </a>
+</p>
 
 An extension to the [bloc state management library](https://github.com/felangel/bloc) which automatically persists and restores bloc states.
 
-# Overview
+## Overview
 
 `hydrated_bloc` exports a `HydratedStorage` interface which means it can work with any storage provider. Out of the box, it comes with its own implementation: `HydratedBlocStorage`.
 
@@ -30,7 +33,7 @@ An extension to the [bloc state management library](https://github.com/felangel/
 
 In addition, while the `HydratedBlocStorage` client doesn't automatically encrypt/decrypt the data, it is fairly straightforward to implement a custom `HydratedStorage` client which does support encryption.
 
-# Usage
+## Usage
 
 ### 1. Use `HydratedBlocDelegate`
 
@@ -156,3 +159,9 @@ class MyHydratedBlocDelegate extends HydratedBlocDelegate {
 
 BlocSupervisor.delegate = MyHydratedBlocDelegate();
 ```
+
+## Starware
+
+Hydrated Bloc is Starware.  
+This means you're free to use the project, as long as you star its GitHub repository.  
+Your appreciation makes us grow and glow up. ⭐
