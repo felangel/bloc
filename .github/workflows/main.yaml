@@ -1,4 +1,4 @@
-name: hydrated_bloc
+name: build
 
 on:
   push:
