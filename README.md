@@ -169,4 +169,4 @@ Learn more at the following links, which have been contributed by the community.
 
 ## Supporters
 
-[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120px" />](https://verygood.ventures)
+[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120" />](https://verygood.ventures)

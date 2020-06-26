@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/angular_bloc_logo_full.png" height="100px" alt="Angular Bloc Package" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/angular_bloc_logo_full.png" height="100" alt="Angular Bloc Package" />
 
 [![Pub](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)
 [![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
@@ -114,4 +114,4 @@ At this point we have successfully separated our presentational layer from our b
 
 ## Supporters
 
-[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120px" />](https://verygood.ventures)
+[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120" />](https://verygood.ventures)

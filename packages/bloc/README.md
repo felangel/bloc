@@ -1,6 +1,6 @@
-<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/bloc_logo_full.png" height="100px" alt="Bloc Package" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/bloc_logo_full.png" height="100" alt="Bloc Package" />
 
-[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/flutter_favorite.png" width="100px" />](https://flutter.dev/docs/development/packages-and-plugins/favorites)
+[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/flutter_favorite.png" width="100" />](https://flutter.dev/docs/development/packages-and-plugins/favorites)
 
 [![Pub](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)
 [![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
@@ -21,7 +21,7 @@ This package is built to work with [flutter_bloc](https://pub.dev/packages/flutt
 
 ## Overview
 
-<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/bloc_architecture.png" width="300px" alt="Bloc Architecture" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/bloc_architecture.png" width="300" alt="Bloc Architecture" />
 
 The goal of this package is to make it easy to implement the `BLoC` Design Pattern (Business Logic Component).
 
@@ -201,4 +201,4 @@ At this point, all `Bloc` `Exceptions` will also be reported to the `SimpleBlocD
 
 ## Supporters
 
-[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120px" />](https://verygood.ventures)
+[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120" />](https://verygood.ventures)
