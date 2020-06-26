@@ -11,17 +11,10 @@ abstract class ProvidedBlocState<T extends StatefulWidget, B extends Bloc>
   ///public Bloc object in a [State]
   B bloc;
 
-  B _stateBloc(BuildContext context) => BlocProvider.of<B>(context);
-
   @override
   void initState() {
-    bloc = _stateBloc(context);
+    bloc = BlocProvider.of<B>(context);
     super.initState();
   }
 
-  @override
-  void dispose() {
-    bloc.close();
-    super.dispose();
-  }
 }
