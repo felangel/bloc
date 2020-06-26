@@ -2,15 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('HydratedStorage', () {
     group('Default Storage Directory', () {
-      final response = '.';
+      final response = Directory.current.absolute.path;
       const channel = MethodChannel('plugins.flutter.io/path_provider');
       channel.setMockMethodCallHandler((methodCall) async {
         if (methodCall.method == 'getTemporaryDirectory') {
@@ -38,7 +38,8 @@ void main() {
         });
 
         test('returns correct value when file exists', () async {
-          final file = File('./.hydrated_bloc.json');
+          final directory = await getTemporaryDirectory();
+          final file = File('${directory.path}/.hydrated_bloc.json');
           file.writeAsStringSync(json.encode({
             "CounterBloc": json.encode({"value": 4})
           }));
@@ -47,10 +48,11 @@ void main() {
         });
 
         test(
-            'returns null value'
+            'returns null value '
             'when file exists but contains corrupt json and deletes the file',
             () async {
-          final file = File('./.hydrated_bloc.json');
+          final directory = await getTemporaryDirectory();
+          final file = File('${directory.path}/.hydrated_bloc.json');
           file.writeAsStringSync("invalid-json");
           hydratedStorage = await HydratedBlocStorage.getInstance();
           expect(hydratedStorage.read('CounterBloc'), isNull);
@@ -76,7 +78,8 @@ void main() {
           expect(hydratedStorage.read('CounterBloc'), '{"value":4}');
           await hydratedStorage.clear();
           expect(hydratedStorage.read('CounterBloc'), isNull);
-          final file = File('./.hydrated_bloc.json');
+          final directory = await getTemporaryDirectory();
+          final file = File('${directory.path}/.hydrated_bloc.json');
           expect(file.existsSync(), false);
         });
       });
@@ -114,10 +117,7 @@ void main() {
           hydratedStorage = await HydratedBlocStorage.getInstance(
             storageDirectory: Directory.current,
           );
-          expect(
-            hydratedStorage.read('CounterBloc'),
-            isNull,
-          );
+          expect(hydratedStorage.read('CounterBloc'), isNull);
         });
 
         test('returns correct value when file exists', () async {
@@ -195,7 +195,8 @@ void main() {
           expect(hydratedStorage.read('CounterBloc'), '{"value":4}');
           await hydratedStorage.clear();
           expect(hydratedStorage.read('CounterBloc'), isNull);
-          final file = File('./.hydrated_bloc.json');
+          final directory = await getTemporaryDirectory();
+          final file = File('${directory.path}/.hydrated_bloc.json');
           expect(file.existsSync(), false);
         });
       });

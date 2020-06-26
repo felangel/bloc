@@ -4,7 +4,6 @@ import 'package:mockito/mockito.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:bloc/bloc.dart';
 import 'package:uuid/uuid.dart';
-import 'package:flutter/widgets.dart';
 
 class MockStorage extends Mock implements HydratedBlocStorage {}
 
@@ -146,7 +145,7 @@ class MyHydratedBlocDelegate extends HydratedBlocDelegate {
 }
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('HydratedBloc', () {
     MockHydratedBlocDelegate delegate;
     MockStorage storage;

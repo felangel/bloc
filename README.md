@@ -6,8 +6,8 @@
   <a href="https://pub.dev/packages/hydrated_bloc">
     <img src="https://img.shields.io/pub/v/hydrated_bloc.svg" alt="Pub Version">
   </a>
-  <a href="https://circleci.com/gh/felangel/hydrated_bloc">
-    <img src="https://circleci.com/gh/felangel/hydrated_bloc.svg?style=shield" alt="Build Status">
+  <a href="https://github.com/felangel/hydrated_bloc/actions">
+    <img src="https://github.com/felangel/hydrated_bloc/workflows/build/badge.svg" alt="Build Status">
   </a>
   <a href="https://codecov.io/gh/felangel/hydrated_bloc">
     <img src="https://codecov.io/gh/felangel/hydrated_bloc/branch/master/graph/badge.svg" alt="Code Coverage">

@@ -49,7 +49,6 @@ class HydratedBlocStorage extends HydratedStorage {
       if (_instance != null) {
         return _instance;
       }
-
       final directory = storageDirectory ?? await getTemporaryDirectory();
       if (!kIsWeb) {
         Hive.init(directory.path);
