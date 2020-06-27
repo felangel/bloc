@@ -1,3 +1,4 @@
+import 'package:cubit/cubit.dart';
 import 'package:meta/meta.dart';
 
 import 'cubit_stream.dart';
@@ -30,6 +31,9 @@ abstract class Cubit<State> extends CubitStream<State> {
   /// {@macro cubit}
   Cubit(State initialState) : super(initialState);
 
+  /// The current [CubitObserver].
+  static CubitObserver observer = CubitObserver();
+
   /// Called whenever a [transition] occurs with the given [transition].
   /// A [transition] occurs when a new `state` is emitted.
   /// [onTransition] is called before the `state` of the `cubit` is updated.
@@ -45,8 +49,14 @@ abstract class Cubit<State> extends CubitStream<State> {
   ///   super.onTransition(transition);
   /// }
   /// ```
+  ///
+  /// See also:
+  ///
+  /// * [CubitObserver] for observing [Cubit] behavior globally.
   @mustCallSuper
-  void onTransition(Transition<State> transition) {}
+  void onTransition(Transition<State> transition) {
+    observer.onTransition(this, transition);
+  }
 
   /// {@macro emit}
   @override

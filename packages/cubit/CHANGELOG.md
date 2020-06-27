@@ -1,3 +1,8 @@
+# 0.0.14
+
+- feat: add `CubitObserver` support
+- docs: minor documentation improvements
+
 # 0.0.13
 
 - docs: various documentation updates

@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:cubit/cubit.dart';
+import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'cubits/cubits.dart';
+
+class MockCubitObserver extends Mock implements CubitObserver {}
 
 void main() {
   group('cubit', () {
@@ -14,11 +17,19 @@ void main() {
     });
 
     group('onTransition', () {
+      CubitObserver observer;
+
+      setUp(() {
+        observer = MockCubitObserver();
+        Cubit.observer = observer;
+      });
+
       test('is not called for the initial state', () async {
         final transitions = <Transition<int>>[];
         final cubit = CounterCubit(onTransitionCallback: transitions.add);
         await cubit.close();
         expect(transitions, isEmpty);
+        verifyNever(observer.onTransition(any, any));
       });
 
       test('is called with correct transition for a single state change',
@@ -31,6 +42,10 @@ void main() {
           transitions,
           const [Transition(currentState: 0, nextState: 1)],
         );
+        verify(observer.onTransition(
+          cubit,
+          const Transition<int>(currentState: 0, nextState: 1),
+        )).called(1);
       });
 
       test('is called with correct transitions for multiple state changes',
@@ -47,6 +62,14 @@ void main() {
             Transition(currentState: 1, nextState: 2),
           ],
         );
+        verify(observer.onTransition(
+          cubit,
+          const Transition<int>(currentState: 0, nextState: 1),
+        )).called(1);
+        verify(observer.onTransition(
+          cubit,
+          const Transition<int>(currentState: 1, nextState: 2),
+        )).called(1);
       });
     });
 

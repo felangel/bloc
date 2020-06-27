@@ -24,7 +24,7 @@ class CounterCubit extends Cubit<int> {
 }
 ```
 
-## Consuming a Cubit
+## Using a Cubit
 
 ```dart
 void main() async {
