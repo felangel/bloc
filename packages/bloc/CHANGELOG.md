@@ -1,3 +1,11 @@
+# 5.0.0-dev.10
+
+- docs: additional minor improvement to bloc logo alignment
+
+# 5.0.0-dev.9
+
+- docs: minor improvement to bloc logo alignment
+
 # 5.0.0-dev.8
 
 - **BREAKING**: Remove `BlocSupervisor` and rename `BlocDelegate` to `BlocObserver`.
