@@ -39,6 +39,9 @@ typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
 /// {@endtemplate}
 abstract class Bloc<Event, State> extends CubitStream<State>
     implements Sink<Event> {
+  /// The current [BlocObserver].
+  static BlocObserver observer = BlocObserver();
+
   final _eventController = StreamController<Event>.broadcast();
 
   StreamSubscription<Transition<Event, State>> _transitionSubscription;
@@ -62,9 +65,7 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   /// }
   /// ```
   @mustCallSuper
-  void onEvent(Event event) {
-    BlocSupervisor.delegate.onEvent(this, event);
-  }
+  void onEvent(Event event) => observer.onEvent(this, event);
 
   /// Called whenever a [transition] occurs with the given [transition].
   /// A [transition] occurs when a new `event` is [add]ed and [mapEventToState]
@@ -84,7 +85,7 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   /// ```
   @mustCallSuper
   void onTransition(Transition<Event, State> transition) {
-    BlocSupervisor.delegate.onTransition(this, transition);
+    observer.onTransition(this, transition);
   }
 
   /// Called whenever an [error] is thrown within [mapEventToState].
@@ -106,7 +107,7 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   /// ```
   @mustCallSuper
   void onError(Object error, StackTrace stackTrace) {
-    BlocSupervisor.delegate.onError(this, error, stackTrace);
+    observer.onError(this, error, stackTrace);
     assert(() {
       throw BlocUnhandledErrorException(this, error, stackTrace);
     }());

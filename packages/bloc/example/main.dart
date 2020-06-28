@@ -26,7 +26,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 }
 
-class SimpleBlocDelegate extends BlocDelegate {
+class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
     print('bloc: ${bloc.runtimeType}, event: $event');
@@ -47,7 +47,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 
 void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
 
   final counterBloc = CounterBloc();
 

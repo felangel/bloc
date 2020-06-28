@@ -1,3 +1,7 @@
+# 5.0.0-dev.8
+
+- **BREAKING**: Remove `BlocSupervisor` and rename `BlocDelegate` to `BlocObserver`.
+
 # 5.0.0-dev.7
 
 - Ignore newly added events after bloc is closed ([#1236](https://github.com/felangel/bloc/issues/1236)).

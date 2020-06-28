@@ -35,9 +35,7 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **Transitions** occur when an `Event` is `added` after `mapEventToState` has been called but before the `Bloc`'s state has been updated. A `Transition` consists of the currentState, the event which was added, and the nextState.
 
-**BlocSupervisor** oversees `Bloc`s and delegates to `BlocDelegate`.
-
-**BlocDelegate** handles events from all `Bloc`s which are delegated by the `BlocSupervisor`. Can be used to intercept all `Bloc` events, transitions, and errors. **It is a great way to handle logging/analytics as well as error handling universally**.
+**BlocObserver** An interface for observing the behavior of a `Bloc`. Can be used to intercept all `Bloc` events, transitions, and errors. **It is a great way to handle logging/analytics as well as error handling universally**.
 
 ## Bloc Interface
 
@@ -57,7 +55,7 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **close** is a method that closes the `event` and `state` streams. `close` should be called when a `Bloc` is no longer needed. Once `close` is called, `events` that are `added` will not be processed and will result in an error being passed to `onError`. In addition, if `close` is called while `events` are still being processed the `bloc` will continue to process the pending `events` to completion.
 
-## BlocDelegate Interface
+## BlocObserver Interface
 
 **onEvent** is a method that can be overridden to handle whenever an `Event` is added to **any** `Bloc`. **It is a great place to add universal logging/analytics**.
 
@@ -111,10 +109,10 @@ void main() {
 }
 ```
 
-As our app grows and relies on multiple `Blocs`, it becomes useful to see the `Transitions` for all `Blocs`. This can easily be achieved by implementing a `BlocDelegate`.
+As our app grows and relies on multiple `Blocs`, it becomes useful to see the `Transitions` for all `Blocs`. This can easily be achieved by implementing a `BlocObserver`.
 
 ```dart
-class SimpleBlocDelegate extends BlocDelegate {
+class SimpleBlocObserver extends BlocObserver {
   @override
   void onTransition(Bloc bloc, Transition transition) {
     print(transition);
@@ -123,11 +121,11 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-Now that we have our `SimpleBlocDelegate`, we just need to tell the `BlocSupervisor` to use our delegate in our `main.dart`.
+Now that we have our `SimpleBlocObserver`, we just need to tell `Bloc` to use our observer in our `main.dart`.
 
 ```dart
 void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
 
   final counterBloc = CounterBloc();
 
@@ -141,12 +139,12 @@ void main() {
 }
 ```
 
-At this point, all `Bloc` `Transitions` will be reported to the `SimpleBlocDelegate` and we can see them in the console after running our app.
+At this point, all `Bloc` `Transitions` will be reported to the `SimpleBlocObserver` and we can see them in the console after running our app.
 
-If we want to be able to handle any incoming `Events` that are added to a `Bloc` we can also override `onEvent` in our `SimpleBlocDelegate`.
+If we want to be able to handle any incoming `Events` that are added to a `Bloc` we can also override `onEvent` in our `SimpleBlocObserver`.
 
 ```dart
-class SimpleBlocDelegate extends BlocDelegate {
+class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
     print(event);
@@ -161,10 +159,10 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-If we want to be able to handle any `Exceptions` that might be thrown in a `Bloc` we can also override `onError` in our `SimpleBlocDelegate`.
+If we want to be able to handle any `Exceptions` that might be thrown in a `Bloc` we can also override `onError` in our `SimpleBlocObserver`.
 
 ```dart
-class SimpleBlocDelegate extends BlocDelegate {
+class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
     print(event);
@@ -185,7 +183,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 ```
 
-At this point, all `Bloc` `Exceptions` will also be reported to the `SimpleBlocDelegate` and we can see them in the console.
+At this point, all `Bloc` `Exceptions` will also be reported to the `SimpleBlocObserver` and we can see them in the console.
 
 ## Dart Versions
 
