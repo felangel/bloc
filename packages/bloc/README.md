@@ -1,6 +1,6 @@
-<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/bloc_logo_full.png" height="100" alt="Bloc Package" />
-
 [<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/flutter_favorite.png" width="100" />](https://flutter.dev/docs/development/packages-and-plugins/favorites)
+
+<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/bloc_logo_full.png" height="100" alt="Bloc Package" />
 
 [![Pub](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)
 [![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
