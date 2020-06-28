@@ -7,9 +7,8 @@ import 'package:synchronized/synchronized.dart';
 
 import 'hydrated_cipher.dart';
 
-/// Interface which `HydratedCubitDelegate` uses to persist and retrieve
-/// state changes from the local device.
-abstract class HydratedStorage {
+/// Interface which is used to persist and retrieve state changes.
+abstract class Storage {
   /// Returns value for key
   dynamic read(String key);
 
@@ -24,17 +23,17 @@ abstract class HydratedStorage {
 }
 
 /// {@template hydrated_cubit_storage}
-/// Implementation of [HydratedStorage] which uses `PathProvider` and `dart.io`
+/// Implementation of [Storage] which uses `PathProvider` and `dart.io`
 /// to persist and retrieve state changes from the local device.
 /// {@endtemplate}
-class HydratedCubitStorage extends HydratedStorage {
+class HydratedStorage implements Storage {
   /// {@macro hydrated_cubit_storage}
   @visibleForTesting
-  HydratedCubitStorage(this._box);
+  HydratedStorage(this._box);
 
-  /// Returns an instance of `HydratedCubitStorage`.
+  /// Returns an instance of [HydratedStorage].
   /// [storageDirectory] can optionally be provided.
-  /// By default, `getTemporaryDirectory` is used.
+  /// By default, [getTemporaryDirectory] is used.
   ///
   /// With [encryptionCipher] you can provide custom encryption.
   /// Following snippet shows how to make default one:
@@ -46,7 +45,7 @@ class HydratedCubitStorage extends HydratedStorage {
   /// final byteskey = sha256.convert(utf8.encode(password)).bytes;
   /// return HydratedAesCipher(byteskey);
   /// ```
-  static Future<HydratedStorage> getInstance({
+  static Future<HydratedStorage> build({
     Directory storageDirectory,
     HydratedCipher encryptionCipher,
   }) {
@@ -58,7 +57,7 @@ class HydratedCubitStorage extends HydratedStorage {
         'hydrated_box',
         encryptionCipher: encryptionCipher,
       );
-      return _instance = HydratedCubitStorage(box);
+      return _instance = HydratedStorage(box);
     });
   }
 

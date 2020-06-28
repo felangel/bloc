@@ -33,7 +33,7 @@ class CounterCubit extends HydratedCubit<int> {
 ```dart
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  HydratedCubit.storage = await HydratedCubitStorage.getInstance();
+  HydratedCubit.storage = await HydratedStorage.build();
   final counterCubit = CounterCubit();
 }
 ```

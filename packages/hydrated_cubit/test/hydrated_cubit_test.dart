@@ -5,7 +5,7 @@ import 'package:hydrated_cubit/hydrated_cubit.dart';
 import 'package:cubit/cubit.dart';
 import 'package:uuid/uuid.dart';
 
-class MockStorage extends Mock implements HydratedCubitStorage {}
+class MockStorage extends Mock implements Storage {}
 
 class MockCubit extends Mock implements HydratedCubit<dynamic> {
   @override
@@ -57,7 +57,7 @@ class MyMultiHydratedCubit extends HydratedCubit<int> {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   group('HydratedCubit', () {
-    MockStorage storage;
+    Storage storage;
 
     setUp(() {
       storage = MockStorage();
@@ -86,7 +86,7 @@ void main() {
           'HydratedStorage was accessed before it was initialized.\n'
           'Please ensure that storage has been initialized.\n\n'
           'For example:\n\n'
-          'HydratedCubit.storage = await HydratedCubitStorage.getInstance();',
+          'HydratedCubit.storage = await HydratedStorage.build();',
         );
       });
 

@@ -30,38 +30,36 @@ void main() {
       await Hive.deleteBoxFromDisk('hydrated_box');
     });
 
-    group('getInstance', () {
+    group('build', () {
       setUp(() async {
-        await (await HydratedCubitStorage.getInstance()).clear();
+        await (await HydratedStorage.build()).clear();
         getTemporaryDirectoryCallCount = 0;
       });
 
       test('calls getTemporaryDirectory when storageDirectory is null',
           () async {
-        await HydratedCubitStorage.getInstance();
+        await HydratedStorage.build();
         expect(getTemporaryDirectoryCallCount, 1);
       });
 
       test(
           'does not call getTemporaryDirectory '
           'when storageDirectory is defined', () async {
-        await HydratedCubitStorage.getInstance(
-          storageDirectory: Directory(cwd),
-        );
+        await HydratedStorage.build(storageDirectory: Directory(cwd));
         expect(getTemporaryDirectoryCallCount, 0);
       });
 
       test('reuses existing instance when called multiple times', () async {
-        final instanceA = await HydratedCubitStorage.getInstance();
+        final instanceA = await HydratedStorage.build();
         final beforeCount = getTemporaryDirectoryCallCount;
-        final instanceB = await HydratedCubitStorage.getInstance();
+        final instanceB = await HydratedStorage.build();
         final afterCount = getTemporaryDirectoryCallCount;
         expect(beforeCount, afterCount);
         expect(instanceA, instanceB);
       });
 
       test('calls Hive.init with correct directory', () async {
-        await HydratedCubitStorage.getInstance();
+        await HydratedStorage.build();
         final box = Hive.box<dynamic>('hydrated_box');
         final directory = await getTemporaryDirectory();
         expect(box, isNotNull);
@@ -73,23 +71,23 @@ void main() {
       const key = '__key__';
       const value = '__value__';
       Box box;
-      HydratedCubitStorage hydratedCubitStorage;
+      Storage storage;
 
       setUp(() {
         box = MockBox();
-        hydratedCubitStorage = HydratedCubitStorage(box);
+        storage = HydratedStorage(box);
       });
 
       group('read', () {
         test('returns null when box is not open', () {
           when(box.isOpen).thenReturn(false);
-          expect(hydratedCubitStorage.read(key), isNull);
+          expect(storage.read(key), isNull);
         });
 
         test('returns correct value when box is open', () {
           when(box.isOpen).thenReturn(true);
           when<dynamic>(box.get(any)).thenReturn(value);
-          expect(hydratedCubitStorage.read(key), value);
+          expect(storage.read(key), value);
           verify<dynamic>(box.get(key)).called(1);
         });
       });
@@ -97,13 +95,13 @@ void main() {
       group('write', () {
         test('does nothing when box is not open', () async {
           when(box.isOpen).thenReturn(false);
-          await hydratedCubitStorage.write(key, value);
+          await storage.write(key, value);
           verifyNever(box.put(any, any));
         });
 
         test('puts key/value in box when box is open', () async {
           when(box.isOpen).thenReturn(true);
-          await hydratedCubitStorage.write(key, value);
+          await storage.write(key, value);
           verify(box.put(key, value)).called(1);
         });
       });
@@ -111,13 +109,13 @@ void main() {
       group('delete', () {
         test('does nothing when box is not open', () async {
           when(box.isOpen).thenReturn(false);
-          await hydratedCubitStorage.delete(key);
+          await storage.delete(key);
           verifyNever(box.delete(any));
         });
 
         test('puts key/value in box when box is open', () async {
           when(box.isOpen).thenReturn(true);
-          await hydratedCubitStorage.delete(key);
+          await storage.delete(key);
           verify(box.delete(key)).called(1);
         });
       });
@@ -125,13 +123,13 @@ void main() {
       group('clear', () {
         test('does nothing when box is not open', () async {
           when(box.isOpen).thenReturn(false);
-          await hydratedCubitStorage.clear();
+          await storage.clear();
           verifyNever(box.deleteFromDisk());
         });
 
         test('deletes box when box is open', () async {
           when(box.isOpen).thenReturn(true);
-          await hydratedCubitStorage.clear();
+          await storage.clear();
           verify(box.deleteFromDisk()).called(1);
         });
       });
@@ -140,7 +138,7 @@ void main() {
     group('During heavy load', () {
       test('writes key/value pairs correctly', () async {
         const token = 'token';
-        var hydratedStorage = await HydratedCubitStorage.getInstance(
+        var hydratedStorage = await HydratedStorage.build(
           storageDirectory: Directory(cwd),
         );
         await Stream.fromIterable(
@@ -153,7 +151,7 @@ void main() {
 
           unawaited(hydratedStorage.write(token, record));
 
-          hydratedStorage = await HydratedCubitStorage.getInstance(
+          hydratedStorage = await HydratedStorage.build(
             storageDirectory: Directory(cwd),
           );
 

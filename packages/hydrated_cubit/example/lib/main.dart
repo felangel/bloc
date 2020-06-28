@@ -5,7 +5,7 @@ import 'package:hydrated_cubit/hydrated_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  HydratedCubit.storage = await HydratedCubitStorage.getInstance();
+  HydratedCubit.storage = await HydratedStorage.build();
   runApp(App());
 }
 

@@ -12,7 +12,7 @@ import 'hydrated_storage.dart';
 /// ```dart
 /// void main() async {
 ///   WidgetsFlutterBinding.ensureInitialized();
-///   HydratedCubit.storage = await HydratedCubitStorage.getInstance();
+///   HydratedCubit.storage = await HydratedStorage.build();
 ///   runApp(MyApp());
 /// }
 /// ```
@@ -27,7 +27,7 @@ class HydratedStorageNotFound implements Exception {
     return 'HydratedStorage was accessed before it was initialized.\n'
         'Please ensure that storage has been initialized.\n\n'
         'For example:\n\n'
-        'HydratedCubit.storage = await HydratedCubitStorage.getInstance();';
+        'HydratedCubit.storage = await HydratedStorage.build();';
   }
 }
 
@@ -48,9 +48,9 @@ abstract class HydratedCubit<State> extends Cubit<State> {
     }
   }
 
-  /// Instance of [HydratedStorage] which will be used to
+  /// Instance of [Storage] which will be used to
   /// manage persisting/restoring the [Cubit] state.
-  static HydratedStorage storage;
+  static Storage storage;
 
   State _state;
 
