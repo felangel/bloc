@@ -37,6 +37,7 @@ class CounterCubit extends Cubit<int> {
 - [Cubit Test Package](https://github.com/felangel/cubit/tree/master/packages/cubit_test/README.md)
 - [Flutter Cubit Package](https://github.com/felangel/cubit/tree/master/packages/flutter_cubit/README.md)
 - [Angular Cubit Package](https://github.com/felangel/cubit/tree/master/packages/angular_cubit/README.md)
+- [Hydrated Cubit Package](https://github.com/felangel/cubit/tree/master/packages/hydrated_cubit/README.md)
 
 ## Dart Versions
 
