@@ -1,7 +1,7 @@
 <p align="center"><img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/hydrated_cubit_full.png" height="100" alt="Cubit"></p>
 
 <p align="center">
-<a href="https://pub.dev/packages/cubit"><img src="https://img.shields.io/pub/v/cubit.svg" alt="Pub"></a>
+<a href="https://pub.dev/packages/hydrated_cubit"><img src="https://img.shields.io/pub/v/hydrated_cubit.svg" alt="Pub"></a>
 <a href="https://github.com/felangel/cubit/actions"><img src="https://github.com/felangel/cubit/workflows/build/badge.svg" alt="build"></a>
 <a href="https://github.com/felangel/cubit/actions"><img src="https://raw.githubusercontent.com/felangel/cubit/master/packages/cubit/coverage_badge.svg" alt="coverage"></a>
 <a href="https://github.com/felangel/cubit"><img src="https://img.shields.io/github/stars/felangel/cubit.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on GitHub"></a>
