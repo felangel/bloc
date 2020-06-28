@@ -23,12 +23,13 @@ class CounterCubit extends Cubit<int> {
 
 ## Packages
 
-| Package                                                                               | Pub                                                                                                      |
-| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| [cubit](https://github.com/felangel/cubit/tree/master/packages/cubit)                 | [![pub package](https://img.shields.io/pub/v/cubit.svg)](https://pub.dev/packages/cubit)                 |
-| [cubit_test](https://github.com/felangel/cubit/tree/master/packages/cubit_test)       | [![pub package](https://img.shields.io/pub/v/cubit_test.svg)](https://pub.dev/packages/cubit_test)       |
-| [flutter_cubit](https://github.com/felangel/cubit/tree/master/packages/flutter_cubit) | [![pub package](https://img.shields.io/pub/v/flutter_cubit.svg)](https://pub.dev/packages/flutter_cubit) |
-| [angular_cubit](https://github.com/felangel/cubit/tree/master/packages/angular_cubit) | [![pub package](https://img.shields.io/pub/v/angular_cubit.svg)](https://pub.dev/packages/angular_cubit) |
+| Package                                                                                 | Pub                                                                                                        |
+| --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| [cubit](https://github.com/felangel/cubit/tree/master/packages/cubit)                   | [![pub package](https://img.shields.io/pub/v/cubit.svg)](https://pub.dev/packages/cubit)                   |
+| [cubit_test](https://github.com/felangel/cubit/tree/master/packages/cubit_test)         | [![pub package](https://img.shields.io/pub/v/cubit_test.svg)](https://pub.dev/packages/cubit_test)         |
+| [flutter_cubit](https://github.com/felangel/cubit/tree/master/packages/flutter_cubit)   | [![pub package](https://img.shields.io/pub/v/flutter_cubit.svg)](https://pub.dev/packages/flutter_cubit)   |
+| [angular_cubit](https://github.com/felangel/cubit/tree/master/packages/angular_cubit)   | [![pub package](https://img.shields.io/pub/v/angular_cubit.svg)](https://pub.dev/packages/angular_cubit)   |
+| [hydrated_cubit](https://github.com/felangel/cubit/tree/master/packages/hydrated_cubit) | [![pub package](https://img.shields.io/pub/v/hydrated_cubit.svg)](https://pub.dev/packages/hydrated_cubit) |
 
 ## Documentation
 
