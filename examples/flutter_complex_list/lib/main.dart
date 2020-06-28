@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_complex_list/bloc/list_bloc.dart';
 import 'package:flutter_complex_list/models/models.dart';
 import 'package:flutter_complex_list/repository.dart';
-import 'package:flutter_complex_list/simple_bloc_delegate.dart';
+import 'package:flutter_complex_list/simple_bloc_observer.dart';
 
 void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
   runApp(App());
 }
 

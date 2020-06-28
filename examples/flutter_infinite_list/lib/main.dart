@@ -6,7 +6,7 @@ import 'package:flutter_infinite_list/models/models.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
   runApp(App());
 }
 
