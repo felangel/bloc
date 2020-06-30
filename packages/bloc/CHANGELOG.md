@@ -1,10 +1,14 @@
+# 5.0.0-dev.11
+
+- feat: do not throw `BlocUnhandledException` when custom `BlocObserver` is used ([#1254](https://github.com/felangel/bloc/issues/1254)).
+
 # 5.0.0-dev.10
 
-- docs: additional minor improvement to bloc logo alignment
+- docs: additional minor improvement to bloc logo alignment.
 
 # 5.0.0-dev.9
 
-- docs: minor improvement to bloc logo alignment
+- docs: minor improvement to bloc logo alignment.
 
 # 5.0.0-dev.8
 

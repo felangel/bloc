@@ -619,6 +619,51 @@ void main() {
         });
       });
 
+      test(
+          'triggers BlocUnhandledErrorException '
+          'when default observer is used.', () {
+        runZoned(() {
+          Bloc.observer = BlocObserver();
+          final expectedStates = [0, -1, emitsDone];
+          final counterBloc = CounterExceptionBloc();
+
+          expectLater(counterBloc, emitsInOrder(expectedStates));
+
+          counterBloc.add(CounterEvent.increment);
+          counterBloc.add(CounterEvent.decrement);
+
+          counterBloc.close();
+        }, onError: (error, stackTrace) {
+          expect(
+            (error as BlocUnhandledErrorException).toString(),
+            contains(
+              'Unhandled error Exception: fatal exception occurred '
+              'in bloc Instance of \'CounterExceptionBloc\'.',
+            ),
+          );
+          expect(stackTrace, isNotNull);
+        });
+      });
+
+      test(
+          'does not trigger BlocUnhandledErrorException '
+          'when custom observer is used.', () {
+        runZoned(() {
+          Bloc.observer = MockBlocObserver();
+          final expectedStates = [0, -1, emitsDone];
+          final counterBloc = CounterExceptionBloc();
+
+          expectLater(counterBloc, emitsInOrder(expectedStates));
+
+          counterBloc.add(CounterEvent.increment);
+          counterBloc.add(CounterEvent.decrement);
+
+          counterBloc.close();
+        }, onError: (error, stackTrace) {
+          fail('should not throw');
+        });
+      });
+
       test('triggers onError from mapEventToState', () {
         runZoned(() {
           final exception = Exception('fatal exception');

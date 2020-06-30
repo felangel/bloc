@@ -108,9 +108,11 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   @mustCallSuper
   void onError(Object error, StackTrace stackTrace) {
     observer.onError(this, error, stackTrace);
-    assert(() {
-      throw BlocUnhandledErrorException(this, error, stackTrace);
-    }());
+    if (observer.isDefault) {
+      assert(() {
+        throw BlocUnhandledErrorException(this, error, stackTrace);
+      }());
+    }
   }
 
   /// Notifies the [bloc] of a new [event] which triggers [mapEventToState].
@@ -242,4 +244,8 @@ abstract class Bloc<Event, State> extends CubitStream<State>
       }
     }, onError: onError);
   }
+}
+
+extension on BlocObserver {
+  bool get isDefault => runtimeType == BlocObserver;
 }
