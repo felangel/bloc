@@ -21,7 +21,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
         yield state + 1;
         break;
       default:
-        throw Exception('unhandled event: $event');
+        addError(Exception('unhandled event: $event'));
     }
   }
 }

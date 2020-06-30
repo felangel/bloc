@@ -7,6 +7,10 @@ import '../bloc.dart';
 
 /// {@template bloc_unhandled_error_exception}
 /// Exception thrown in debug mode when an unhandled error occurs within a bloc.
+///
+/// See also:
+/// * [addError], API used to trigger [onError].
+///
 /// {@endtemplate}
 class BlocUnhandledErrorException implements Exception {
   /// The [bloc] in which the unhandled error occurred.
@@ -38,7 +42,7 @@ typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
 abstract class Bloc<Event, State> extends CubitStream<State>
-    implements Sink<Event> {
+    implements EventSink<Event> {
   /// The current [BlocObserver].
   static BlocObserver observer = BlocObserver();
 
@@ -64,8 +68,12 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   ///   super.onEvent(event);
   /// }
   /// ```
+  @protected
   @mustCallSuper
-  void onEvent(Event event) => observer.onEvent(this, event);
+  void onEvent(Event event) {
+    // ignore: invalid_use_of_protected_member
+    observer.onEvent(this, event);
+  }
 
   /// Called whenever a [transition] occurs with the given [transition].
   /// A [transition] occurs when a new `event` is [add]ed and [mapEventToState]
@@ -83,8 +91,10 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   ///   super.onTransition(transition);
   /// }
   /// ```
+  @protected
   @mustCallSuper
   void onTransition(Transition<Event, State> transition) {
+    // ignore: invalid_use_of_protected_member
     observer.onTransition(this, transition);
   }
 
@@ -105,8 +115,10 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   ///   super.onError(error, stackTrace);
   /// }
   /// ```
+  @protected
   @mustCallSuper
   void onError(Object error, StackTrace stackTrace) {
+    // ignore: invalid_use_of_protected_member
     observer.onError(this, error, stackTrace);
     assert(() {
       throw BlocUnhandledErrorException(this, error, stackTrace);
@@ -125,6 +137,11 @@ abstract class Bloc<Event, State> extends CubitStream<State>
     } on dynamic catch (error, stackTrace) {
       onError(error, stackTrace);
     }
+  }
+
+  @override
+  void addError(Object error, [StackTrace stackTrace]) {
+    onError(error, stackTrace);
   }
 
   /// Closes the `event` and `state` `Streams`.

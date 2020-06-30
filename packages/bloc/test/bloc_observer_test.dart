@@ -11,18 +11,21 @@ void main() {
   group('BlocObserver', () {
     group('onEvent', () {
       test('does nothing by default', () {
+        // ignore: invalid_use_of_protected_member
         BlocObserver().onEvent(MockBloc(), Object());
       });
     });
 
     group('onTransition', () {
       test('does nothing by default', () {
+        // ignore: invalid_use_of_protected_member
         BlocObserver().onTransition(MockBloc(), MockTransition());
       });
     });
 
     group('onError', () {
       test('does nothing by default', () {
+        // ignore: invalid_use_of_protected_member
         BlocObserver().onError(MockBloc(), Object(), StackTrace.current);
       });
     });

@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
@@ -613,6 +615,28 @@ void main() {
             contains(
               'Unhandled error Exception: fatal exception occurred '
               'in bloc Instance of \'CounterExceptionBloc\'.',
+            ),
+          );
+          expect(stackTrace, isNotNull);
+        });
+      });
+
+      test('addError triggers onError', () async {
+        final expectedError = Exception('fatal exception');
+
+        runZoned(() {
+          final onExceptionBloc = OnExceptionBloc(
+            exception: expectedError,
+            onErrorCallback: (error, stackTrace) {},
+          );
+
+          onExceptionBloc.addError(expectedError, StackTrace.current);
+        }, onError: (error, stackTrace) {
+          expect(
+            (error as BlocUnhandledErrorException).toString(),
+            contains(
+              'Unhandled error Exception: fatal exception occurred '
+              'in bloc Instance of \'OnExceptionBloc\'.',
             ),
           );
           expect(stackTrace, isNotNull);

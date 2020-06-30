@@ -1,3 +1,8 @@
+# 5.0.0-dev.11
+
+- feat: add `addError` to conform to `EventSink` interface.
+- feat: mark `onError`, `onTransition`, `onEvent` as `protected`.
+
 # 5.0.0-dev.10
 
 - docs: additional minor improvement to bloc logo alignment
