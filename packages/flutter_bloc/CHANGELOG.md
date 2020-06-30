@@ -1,3 +1,8 @@
+# 5.0.0-dev.5
+
+- Update to `bloc: ^5.0.0-dev.11`
+- Minor README updates
+
 # 5.0.0-dev.4
 
 - Update to `bloc: ^5.0.0-dev.10`
