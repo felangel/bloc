@@ -52,6 +52,18 @@ void main() {
         },
         expect: [1, 2],
       );
+
+      blocTest(
+        'emits [1, 2] when CounterEvent.increment is called multiple times'
+        'with async act and expectAsync',
+        build: () async => CounterBloc(),
+        act: (bloc) async {
+          bloc.add(CounterEvent.increment);
+          await Future.delayed(Duration(milliseconds: 10));
+          bloc.add(CounterEvent.increment);
+        },
+        expectAsync: () async => [1, await Future.value(2)],
+      );
     });
 
     group('AsyncCounterBloc', () {
@@ -85,6 +97,18 @@ void main() {
           bloc.add(AsyncCounterEvent.increment);
         },
         expect: [1, 2],
+      );
+
+      blocTest(
+        'emits [1, 2] when AsyncCounterEvent.increment is called multiple'
+        'times with async act and expectAsync',
+        build: () async => AsyncCounterBloc(),
+        act: (bloc) async {
+          bloc.add(AsyncCounterEvent.increment);
+          await Future.delayed(Duration(milliseconds: 10));
+          bloc.add(AsyncCounterEvent.increment);
+        },
+        expectAsync: () async => [Future.value(1), 2],
       );
     });
 
@@ -142,6 +166,18 @@ void main() {
           bloc.add(MultiCounterEvent.increment);
         },
         expect: [1, 2, 3, 4],
+      );
+
+      blocTest(
+        'emits [1, 2, 3, 4] when MultiCounterEvent.increment is called'
+        'multiple times with async act and expectAsync',
+        build: () async => MultiCounterBloc(),
+        act: (bloc) async {
+          bloc.add(MultiCounterEvent.increment);
+          await Future.delayed(Duration(milliseconds: 10));
+          bloc.add(MultiCounterEvent.increment);
+        },
+        expect: () async => [1, 2, Future.value(3), 4],
       );
     });
 
