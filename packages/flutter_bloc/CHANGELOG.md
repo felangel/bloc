@@ -1,3 +1,7 @@
+# 4.0.1
+
+- Fix `ProviderNotFoundException` handling ([#1286](https://github.com/felangel/bloc/pull/1286))
+
 # 4.0.0
 
 - Update to `bloc: ^4.0.0`

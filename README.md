@@ -166,3 +166,7 @@ Learn more at the following links, which have been contributed by the community.
 ## Maintainers
 
 - [Felix Angelov](https://github.com/felangel)
+
+## Supported By
+
+[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" style="max-width:120px;width:50%" />](https://verygood.ventures)

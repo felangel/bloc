@@ -49,7 +49,7 @@ class _WeatherState extends State<Weather> {
               );
               if (city != null) {
                 BlocProvider.of<WeatherBloc>(context)
-                    .add(FetchWeather(city: city));
+                    .add(WeatherRequested(city: city));
               }
             },
           )
@@ -58,7 +58,7 @@ class _WeatherState extends State<Weather> {
       body: Center(
         child: BlocConsumer<WeatherBloc, WeatherState>(
           listener: (context, state) {
-            if (state is WeatherLoaded) {
+            if (state is WeatherLoadSuccess) {
               BlocProvider.of<ThemeBloc>(context).add(
                 WeatherChanged(condition: state.weather.condition),
               );
@@ -67,10 +67,10 @@ class _WeatherState extends State<Weather> {
             }
           },
           builder: (context, state) {
-            if (state is WeatherLoading) {
+            if (state is WeatherLoadInProgress) {
               return Center(child: CircularProgressIndicator());
             }
-            if (state is WeatherLoaded) {
+            if (state is WeatherLoadSuccess) {
               final weather = state.weather;
 
               return BlocBuilder<ThemeBloc, ThemeState>(
@@ -80,7 +80,7 @@ class _WeatherState extends State<Weather> {
                     child: RefreshIndicator(
                       onRefresh: () {
                         BlocProvider.of<WeatherBloc>(context).add(
-                          RefreshWeather(city: weather.location),
+                          WeatherRefreshRequested(city: weather.location),
                         );
                         return _refreshCompleter.future;
                       },
@@ -110,7 +110,7 @@ class _WeatherState extends State<Weather> {
                 },
               );
             }
-            if (state is WeatherError) {
+            if (state is WeatherLoadFailure) {
               return Text(
                 'Something went wrong!',
                 style: TextStyle(color: Colors.red),
