@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/bloc_test_logo_full.png" height="100" alt="Bloc" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/bloc_test_logo_full.png" height="100" alt="Bloc Test Package" />
 </p>
 
 <p align="center">
