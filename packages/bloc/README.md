@@ -50,6 +50,8 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 **add** is a method that takes an `event` and triggers `mapEventToState`. If `close` has already been called, any subsequent calls to `add` will be ignored and will not result in any subsequent state changes.
 
+**addError** is a method that takes an `error` and `stackTrace` and triggers `onError`.
+
 **transformEvents** is a method that transforms the `Stream<Event>` along with a transition function, `transitionFn`, into a `Stream<Transition>`. Events that should be processed by `mapEventToState` need to be passed to `transitionFn`. **By default `asyncExpand` is used to ensure all events are processed in the order in which they are received**. You can override `transformEvents` for advanced usage in order to manipulate the frequency and specificity with which `mapEventToState` is called as well as which events are processed.
 
 **transformTransitions** is a method that transforms the `Stream<Transition>` into a new `Stream<Transition>`. By default `transformTransitions` returns the incoming `Stream<Transition>`. You can override `transformTransitions` for advanced usage in order to manipulate the frequency and specificity at which `transitions` (state changes) occur.

@@ -68,8 +68,12 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   ///   super.onEvent(event);
   /// }
   /// ```
+  @protected
   @mustCallSuper
-  void onEvent(Event event) => observer.onEvent(this, event);
+  void onEvent(Event event) {
+    // ignore: invalid_use_of_protected_member
+    observer.onEvent(this, event);
+  }
 
   /// Called whenever a [transition] occurs with the given [transition].
   /// A [transition] occurs when a new `event` is [add]ed and [mapEventToState]
@@ -87,8 +91,10 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   ///   super.onTransition(transition);
   /// }
   /// ```
+  @protected
   @mustCallSuper
   void onTransition(Transition<Event, State> transition) {
+    // ignore: invalid_use_of_protected_member
     observer.onTransition(this, transition);
   }
 
@@ -109,8 +115,10 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   ///   super.onError(error, stackTrace);
   /// }
   /// ```
+  @protected
   @mustCallSuper
   void onError(Object error, StackTrace stackTrace) {
+    // ignore: invalid_use_of_protected_member
     observer.onError(this, error, stackTrace);
     assert(() {
       throw BlocUnhandledErrorException(this, error, stackTrace);

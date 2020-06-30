@@ -6,6 +6,7 @@ import '../bloc.dart';
 class BlocObserver {
   /// Called whenever an [event] is `added` to any [bloc] with the given [bloc]
   /// and [event].
+  @protected
   @mustCallSuper
   void onEvent(Bloc bloc, Object event) {}
 
@@ -14,6 +15,7 @@ class BlocObserver {
   /// A [transition] occurs when a new `event` is `added` and `mapEventToState`
   /// executed.
   /// [onTransition] is called before a [bloc]'s state has been updated.
+  @protected
   @mustCallSuper
   void onTransition(Bloc bloc, Transition transition) {}
 
@@ -21,6 +23,7 @@ class BlocObserver {
   /// [error], and [stackTrace].
   /// The [stackTrace] argument may be `null` if the state stream received
   /// an error without a [stackTrace].
+  @protected
   @mustCallSuper
   void onError(Bloc bloc, Object error, StackTrace stackTrace) {}
 }
