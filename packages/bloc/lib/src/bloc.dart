@@ -7,6 +7,10 @@ import '../bloc.dart';
 
 /// {@template bloc_unhandled_error_exception}
 /// Exception thrown in debug mode when an unhandled error occurs within a bloc.
+///
+/// See also:
+/// * [addError], API used to trigger [onError].
+///
 /// {@endtemplate}
 class BlocUnhandledErrorException implements Exception {
   /// The [bloc] in which the unhandled error occurred.
@@ -38,7 +42,7 @@ typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
 abstract class Bloc<Event, State> extends CubitStream<State>
-    implements Sink<Event> {
+    implements EventSink<Event> {
   /// The current [BlocObserver].
   static BlocObserver observer = BlocObserver();
 
@@ -125,6 +129,11 @@ abstract class Bloc<Event, State> extends CubitStream<State>
     } on dynamic catch (error, stackTrace) {
       onError(error, stackTrace);
     }
+  }
+
+  @override
+  void addError(Object error, [StackTrace stackTrace]) {
+    onError(error, stackTrace);
   }
 
   /// Closes the `event` and `state` `Streams`.
