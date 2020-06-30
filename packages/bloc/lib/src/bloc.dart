@@ -53,6 +53,9 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   @override
   bool get isBroadcast => _stateController.stream.isBroadcast;
 
+  /// Returns that the [bloc] was closed.
+  bool get isClosed => _eventController.isClosed;
+
   /// {@macro bloc}
   Bloc() {
     _state = initialState;
