@@ -177,7 +177,7 @@ void main() {
           await Future.delayed(Duration(milliseconds: 10));
           bloc.add(MultiCounterEvent.increment);
         },
-        expect: () async => [1, 2, Future.value(3), 4],
+        expectAsync: () async => [1, 2, Future.value(3), 4],
       );
     });
 
