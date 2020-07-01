@@ -127,7 +127,7 @@ void blocTest<B extends Bloc<Event, State>, Event, State>(
   Duration wait,
   int skip = 1,
   Iterable expect,
-  Future<Iterable> Function() expectAsync,
+  Iterable Function() expectAsFunction,
   Future<void> Function(B bloc) verify,
   Iterable errors,
 }) {
@@ -142,10 +142,7 @@ void blocTest<B extends Bloc<Event, State>, Event, State>(
         if (wait != null) await Future.delayed(wait);
         await bloc.close();
         if (expect != null) test.expect(states, expect);
-        if (expectAsync != null) {
-          final expectForAsync = await expectAsync();
-          test.expect(states, expectForAsync);
-        }
+        if (expectAsFunction != null) test.expect(states, expectAsFunction());
         await subscription.cancel();
         await verify?.call(bloc);
       },
