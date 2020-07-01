@@ -15,7 +15,7 @@ An [AngularDart](https://angulardart.dev) library built to expose components tha
 
 Lets take a look at how to use `CubitPipe` to hook up a `CounterPage` html template to a `CounterCubit`.
 
-`counter_cubit.dart`
+### `counter_cubit.dart`
 
 ```dart
 class CounterCubit extends Cubit<int> {
@@ -26,7 +26,7 @@ class CounterCubit extends Cubit<int> {
 }
 ```
 
-`counter_page_component.html`
+### `counter_page_component.html`
 
 ```html
 <div class="counter-page-container">
@@ -37,7 +37,7 @@ class CounterCubit extends Cubit<int> {
 </div>
 ```
 
-`counter_page_component.dart`
+### `counter_page_component.dart`
 
 ```dart
 import 'package:angular/angular.dart';

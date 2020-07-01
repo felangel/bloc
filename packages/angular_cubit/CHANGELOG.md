@@ -1,6 +1,7 @@
 # 0.1.0-dev.1
 
 - feat: API is stable and is no longer in an experimental phase
+- docs: minor updates to README
 
 # 0.0.1-dev.3
 
