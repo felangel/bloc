@@ -1,6 +1,6 @@
 # 0.1.0-dev.1
 
-- feat: API is stable and is no longer in an experimental phase
+- feat: upgrade to `cubit ^0.1.0`
 - docs: minor updates to README
 
 # 0.0.1-dev.3
