@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import '../flutter_cubit.dart';
 
-/// {@template cubitconsumer}
+/// {@template cubit_consumer}
 /// [CubitConsumer] exposes a [builder] and [listener] in order react to new
 /// states.
 /// [CubitConsumer] is analogous to a nested `CubitListener`
@@ -61,7 +61,7 @@ import '../flutter_cubit.dart';
 /// ```
 /// {@endtemplate}
 class CubitConsumer<C extends CubitStream<S>, S> extends StatelessWidget {
-  /// {@macro cubitconsumer}
+  /// {@macro cubit_consumer}
   const CubitConsumer({
     Key key,
     @required this.builder,
@@ -104,11 +104,11 @@ class CubitConsumer<C extends CubitStream<S>, S> extends StatelessWidget {
     return CubitListener<C, S>(
       cubit: cubit,
       listener: listener,
-      condition: listenWhen,
+      listenWhen: listenWhen,
       child: CubitBuilder<C, S>(
         cubit: cubit,
         builder: builder,
-        condition: buildWhen,
+        buildWhen: buildWhen,
       ),
     );
   }

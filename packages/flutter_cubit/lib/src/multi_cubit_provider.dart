@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'cubit_provider.dart';
 
-/// {@template multicubitprovider}
+/// {@template multi_cubit_provider}
 /// Merges multiple [CubitProvider] widgets into one widget tree.
 ///
 /// [MultiCubitProvider] improves the readability and eliminates the need
@@ -49,7 +49,7 @@ import 'cubit_provider.dart';
 /// readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
 class MultiCubitProvider extends MultiProvider {
-  /// {@macro multicubitprovider}
+  /// {@macro multi_cubit_provider}
   MultiCubitProvider({
     Key key,
     @required List<CubitProviderSingleChildWidget> providers,

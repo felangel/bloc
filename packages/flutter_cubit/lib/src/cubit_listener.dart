@@ -15,13 +15,13 @@ mixin CubitListenerSingleChildWidget on SingleChildWidget {}
 /// `state` changes.
 typedef CubitWidgetListener<S> = void Function(BuildContext context, S state);
 
-/// Signature for the `condition` function which takes the previous `state`
+/// Signature for the `listenWhen` function which takes the previous `state`
 /// and the current `state` and is responsible for returning a [bool] which
 /// determines whether or not to call [CubitWidgetListener] of [CubitListener]
 /// with the current `state`.
 typedef CubitListenerCondition<S> = bool Function(S previous, S current);
 
-/// {@template cubitlistener}
+/// {@template cubit_listener}
 /// Takes a [CubitWidgetListener] and an optional [cubit] and invokes
 /// the [listener] in response to `state` changes in the [cubit].
 /// It should be used for functionality that needs to occur only in response to
@@ -53,21 +53,21 @@ typedef CubitListenerCondition<S> = bool Function(S previous, S current);
 ///   child: Container(),
 /// )
 /// ```
-///
-/// An optional [condition] can be implemented for more granular control
+/// {@endtemplate}
+/// {@template cubit_listener_listen_when}
+/// An optional [listenWhen] can be implemented for more granular control
 /// over when [listener] is called.
-/// The [condition] function will be invoked on each [cubit] `state` change.
-/// The [condition] takes the previous `state` and current `state` and must
+/// [listenWhen] will be invoked on each [cubit] `state` change.
+/// [listenWhen] takes the previous `state` and current `state` and must
 /// return a [bool] which determines whether or not the [listener] function
 /// will be invoked.
 /// The previous `state` will be initialized to the `state` of the [cubit]
 /// when the [CubitListener] is initialized.
-/// [condition] is optional and if it isn't implemented, it will default to
-/// `true`.
+/// [listenWhen] is optional and if omitted, it will default to `true`.
 ///
 /// ```dart
 /// CubitListener<CubitA, CubitAState>(
-///   condition: (previous, current) {
+///   listenWhen: (previous, current) {
 ///     // return true/false to determine whether or not
 ///     // to invoke listener with state
 ///   },
@@ -80,12 +80,12 @@ typedef CubitListenerCondition<S> = bool Function(S previous, S current);
 /// {@endtemplate}
 class CubitListener<C extends CubitStream<S>, S> extends CubitListenerBase<C, S>
     with CubitListenerSingleChildWidget {
-  /// {@macro cubitlistener}
+  /// {@macro cubit_listener}
   const CubitListener({
     Key key,
     @required CubitWidgetListener<S> listener,
     C cubit,
-    CubitListenerCondition<S> condition,
+    CubitListenerCondition<S> listenWhen,
     this.child,
   })  : assert(listener != null),
         super(
@@ -93,7 +93,7 @@ class CubitListener<C extends CubitStream<S>, S> extends CubitListenerBase<C, S>
           child: child,
           listener: listener,
           cubit: cubit,
-          condition: condition,
+          listenWhen: listenWhen,
         );
 
   /// The widget which will be rendered as a descendant of the [CubitListener].
@@ -102,7 +102,7 @@ class CubitListener<C extends CubitStream<S>, S> extends CubitListenerBase<C, S>
   final Widget child;
 }
 
-/// {@template cubitlistenerbase}
+/// {@template cubit_listener_base}
 /// Base class for widgets that listen to state changes in a specified [cubit].
 ///
 /// A [CubitListenerBase] is stateful and maintains the state subscription.
@@ -111,13 +111,13 @@ class CubitListener<C extends CubitStream<S>, S> extends CubitListenerBase<C, S>
 /// {@endtemplate}
 abstract class CubitListenerBase<C extends CubitStream<S>, S>
     extends SingleChildStatefulWidget {
-  /// {@macro cubitlistenerbase}
+  /// {@macro cubit_listener_base}
   const CubitListenerBase({
     Key key,
     this.listener,
     this.cubit,
     this.child,
-    this.condition,
+    this.listenWhen,
   }) : super(key: key, child: child);
 
   /// The widget which will be rendered as a descendant of the
@@ -133,16 +133,8 @@ abstract class CubitListenerBase<C extends CubitStream<S>, S>
   /// in response to a `state` change.
   final CubitWidgetListener<S> listener;
 
-  /// The [CubitListenerCondition] that the [CubitListenerBase] will invoke.
-  /// The [condition] function will be invoked on each [cubit] `state` change.
-  /// The [condition] takes the previous `state` and current `state` and must
-  /// return a [bool] which determines whether or not the [listener] function
-  /// will be invoked.
-  /// The previous `state` will be initialized to `state` when
-  /// the [CubitListenerBase] is initialized.
-  /// [condition] is optional and if it isn't implemented, it will default to
-  /// `true`.
-  final CubitListenerCondition<S> condition;
+  /// {@macro cubit_listener_listen_when}
+  final CubitListenerCondition<S> listenWhen;
 
   @override
   SingleChildState<CubitListenerBase<C, S>> createState() =>
@@ -190,7 +182,7 @@ class _CubitListenerBaseState<C extends CubitStream<S>, S>
   void _subscribe() {
     if (_cubit != null) {
       _subscription = _cubit.skip(1).listen((state) {
-        if (widget.condition?.call(_previousState, state) ?? true) {
+        if (widget.listenWhen?.call(_previousState, state) ?? true) {
           widget.listener(context, state);
         }
         _previousState = state;

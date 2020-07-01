@@ -225,18 +225,18 @@ void main() {
     });
 
     testWidgets(
-        'calls condition on single state change with correct previous '
+        'calls listenWhen on single state change with correct previous '
         'and current states', (tester) async {
       int latestPreviousState;
-      var conditionCallCount = 0;
+      var listenWhenCallCount = 0;
       final states = <int>[];
       final counterCubit = CounterCubit();
       const expectedStates = [1];
       await tester.pumpWidget(
         CubitListener<CounterCubit, int>(
           cubit: counterCubit,
-          condition: (previous, state) {
-            conditionCallCount++;
+          listenWhen: (previous, state) {
+            listenWhenCallCount++;
             latestPreviousState = previous;
             states.add(state);
             return true;
@@ -249,23 +249,23 @@ void main() {
       await tester.pump();
 
       expect(states, expectedStates);
-      expect(conditionCallCount, 1);
+      expect(listenWhenCallCount, 1);
       expect(latestPreviousState, 0);
     });
 
     testWidgets(
-        'calls condition with previous listener state and current cubit state',
+        'calls listenWhen with previous listener state and current cubit state',
         (tester) async {
       int latestPreviousState;
-      var conditionCallCount = 0;
+      var listenWhenCallCount = 0;
       final states = <int>[];
       final counterCubit = CounterCubit();
       const expectedStates = [2];
       await tester.pumpWidget(
         CubitListener<CounterCubit, int>(
           cubit: counterCubit,
-          condition: (previous, state) {
-            conditionCallCount++;
+          listenWhen: (previous, state) {
+            listenWhenCallCount++;
             if ((previous + state) % 3 == 0) {
               latestPreviousState = previous;
               states.add(state);
@@ -285,7 +285,7 @@ void main() {
       await tester.pump();
 
       expect(states, expectedStates);
-      expect(conditionCallCount, 3);
+      expect(listenWhenCallCount, 3);
       expect(latestPreviousState, 1);
     });
 
@@ -293,7 +293,7 @@ void main() {
         'infers the cubit from the context if the cubit is not provided',
         (tester) async {
       int latestPreviousState;
-      var conditionCallCount = 0;
+      var listenWhenCallCount = 0;
       final states = <int>[];
       final counterCubit = CounterCubit();
       const expectedStates = [1];
@@ -301,8 +301,8 @@ void main() {
         CubitProvider.value(
           value: counterCubit,
           child: CubitListener<CounterCubit, int>(
-            condition: (previous, state) {
-              conditionCallCount++;
+            listenWhen: (previous, state) {
+              listenWhenCallCount++;
               latestPreviousState = previous;
               states.add(state);
               return true;
@@ -316,23 +316,23 @@ void main() {
       await tester.pump();
 
       expect(states, expectedStates);
-      expect(conditionCallCount, 1);
+      expect(listenWhenCallCount, 1);
       expect(latestPreviousState, 0);
     });
 
     testWidgets(
-        'calls condition on multiple state change with correct previous '
+        'calls listenWhen on multiple state change with correct previous '
         'and current states', (tester) async {
       int latestPreviousState;
-      var conditionCallCount = 0;
+      var listenWhenCallCount = 0;
       final states = <int>[];
       final counterCubit = CounterCubit();
       const expectedStates = [1, 2];
       await tester.pumpWidget(
         CubitListener<CounterCubit, int>(
           cubit: counterCubit,
-          condition: (previous, state) {
-            conditionCallCount++;
+          listenWhen: (previous, state) {
+            listenWhenCallCount++;
             latestPreviousState = previous;
             states.add(state);
             return true;
@@ -348,12 +348,12 @@ void main() {
       await tester.pump();
 
       expect(states, expectedStates);
-      expect(conditionCallCount, 2);
+      expect(listenWhenCallCount, 2);
       expect(latestPreviousState, 1);
     });
 
     testWidgets(
-        'does not call listener when condition returns false on single state '
+        'does not call listener when listenWhen returns false on single state '
         'change', (tester) async {
       final states = <int>[];
       final counterCubit = CounterCubit();
@@ -361,7 +361,7 @@ void main() {
       await tester.pumpWidget(
         CubitListener<CounterCubit, int>(
           cubit: counterCubit,
-          condition: (_, __) => false,
+          listenWhen: (_, __) => false,
           listener: (_, state) => states.add(state),
           child: const SizedBox(),
         ),
@@ -373,7 +373,7 @@ void main() {
     });
 
     testWidgets(
-        'calls listener when condition returns true on single state change',
+        'calls listener when listenWhen returns true on single state change',
         (tester) async {
       final states = <int>[];
       final counterCubit = CounterCubit();
@@ -381,7 +381,7 @@ void main() {
       await tester.pumpWidget(
         CubitListener<CounterCubit, int>(
           cubit: counterCubit,
-          condition: (_, __) => true,
+          listenWhen: (_, __) => true,
           listener: (_, state) => states.add(state),
           child: const SizedBox(),
         ),
@@ -393,15 +393,15 @@ void main() {
     });
 
     testWidgets(
-        'does not call listener when condition returns false on multiple state '
-        'changes', (tester) async {
+        'does not call listener when listenWhen returns false '
+        'on multiple state changes', (tester) async {
       final states = <int>[];
       final counterCubit = CounterCubit();
       const expectedStates = <int>[];
       await tester.pumpWidget(
         CubitListener<CounterCubit, int>(
           cubit: counterCubit,
-          condition: (_, __) => false,
+          listenWhen: (_, __) => false,
           listener: (_, state) => states.add(state),
           child: const SizedBox(),
         ),
@@ -419,7 +419,7 @@ void main() {
     });
 
     testWidgets(
-        'calls listener when condition returns true on multiple state change',
+        'calls listener when listenWhen returns true on multiple state change',
         (tester) async {
       final states = <int>[];
       final counterCubit = CounterCubit();
@@ -427,7 +427,7 @@ void main() {
       await tester.pumpWidget(
         CubitListener<CounterCubit, int>(
           cubit: counterCubit,
-          condition: (_, __) => true,
+          listenWhen: (_, __) => true,
           listener: (_, state) => states.add(state),
           child: const SizedBox(),
         ),

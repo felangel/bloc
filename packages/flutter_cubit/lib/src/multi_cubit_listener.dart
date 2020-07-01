@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'cubit_listener.dart';
 
-/// {@template multicubitlistener}
+/// {@template multi_cubit_listener}
 /// Merges multiple [CubitListener] widgets into one widget tree.
 ///
 /// [MultiCubitListener] improves the readability and eliminates the need
@@ -49,7 +49,7 @@ import 'cubit_listener.dart';
 /// readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
 class MultiCubitListener extends MultiProvider {
-  /// {@macro multicubitlistener}
+  /// {@macro multi_cubit_listener}
   MultiCubitListener({
     Key key,
     @required List<CubitListenerSingleChildWidget> listeners,

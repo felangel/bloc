@@ -13,7 +13,7 @@ typedef CreateCubit<T extends CubitStream<dynamic>> = T Function(
 /// of multiple [CubitProvider]s.
 mixin CubitProviderSingleChildWidget on SingleChildWidget {}
 
-/// {@template cubitprovider}
+/// {@template cubit_provider}
 /// Takes a `ValueBuilder` that is responsible for creating the `cubit` and
 /// a [child] which will have access to the `cubit` via
 /// `CubitProvider.of(context)`.
@@ -32,7 +32,7 @@ mixin CubitProviderSingleChildWidget on SingleChildWidget {}
 /// {@endtemplate}
 class CubitProvider<T extends CubitStream<Object>>
     extends SingleChildStatelessWidget with CubitProviderSingleChildWidget {
-  /// {@macro cubitprovider}
+  /// {@macro cubit_provider}
   CubitProvider({
     Key key,
     @required CreateCubit<T> create,

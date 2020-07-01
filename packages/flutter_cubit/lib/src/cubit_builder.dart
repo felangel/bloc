@@ -10,12 +10,12 @@ import 'cubit_provider.dart';
 /// This is analogous to the `builder` function in [StreamBuilder].
 typedef CubitWidgetBuilder<S> = Widget Function(BuildContext context, S state);
 
-/// Signature for the condition function which takes the previous `state` and
+/// Signature for the `buildWhen` function which takes the previous `state` and
 /// the current `state` and is responsible for returning a [bool] which
 /// determines whether to rebuild [CubitBuilder] with the current `state`.
 typedef CubitBuilderCondition<S> = bool Function(S previous, S current);
 
-/// {@template cubitbuilder}
+/// {@template cubit_builder}
 /// [CubitBuilder] handles building a widget in response to new `states`.
 /// [CubitBuilder] is analogous to [StreamBuilder] but has simplified API to
 /// reduce the amount of boilerplate code needed as well as [cubit]-specific
@@ -46,21 +46,21 @@ typedef CubitBuilderCondition<S> = bool Function(S previous, S current);
 ///   }
 /// )
 /// ```
-///
-/// An optional [condition] can be implemented for more granular control over
+/// {@endtemplate}
+/// {@template cubit_builder_build_when}
+/// An optional [buildWhen] can be implemented for more granular control over
 /// how often [CubitBuilder] rebuilds.
-/// The [condition] function will be invoked on each [cubit] `state` change.
-/// The [condition] takes the previous `state` and current `state` and must
+/// [buildWhen] will be invoked on each [cubit] `state` change.
+/// [buildWhen] takes the previous `state` and current `state` and must
 /// return a [bool] which determines whether or not the [builder] function will
 /// be invoked.
 /// The previous `state` will be initialized to the `state` of the [cubit] when
 /// the [CubitBuilder] is initialized.
-/// [condition] is optional and if it isn't implemented, it will default to
-/// `true`.
+/// [buildWhen] is optional and if omitted, it will default to `true`.
 ///
 /// ```dart
 /// CubitBuilder<CubitA, CubitAState>(
-///   condition: (previous, current) {
+///   buildWhen: (previous, current) {
 ///     // return true/false to determine whether or not
 ///     // to rebuild the widget with state
 ///   },
@@ -71,14 +71,14 @@ typedef CubitBuilderCondition<S> = bool Function(S previous, S current);
 /// ```
 /// {@endtemplate}
 class CubitBuilder<C extends CubitStream<S>, S> extends CubitBuilderBase<C, S> {
-  /// {@macro cubitbuilder}
+  /// {@macro cubit_builder}
   const CubitBuilder({
     Key key,
     @required this.builder,
     C cubit,
-    CubitBuilderCondition<S> condition,
+    CubitBuilderCondition<S> buildWhen,
   })  : assert(builder != null),
-        super(key: key, cubit: cubit, condition: condition);
+        super(key: key, cubit: cubit, buildWhen: buildWhen);
 
   /// The [builder] function which will be invoked on each widget build.
   /// The [builder] takes the `BuildContext` and current `state` and
@@ -90,7 +90,7 @@ class CubitBuilder<C extends CubitStream<S>, S> extends CubitBuilderBase<C, S> {
   Widget build(BuildContext context, S state) => builder(context, state);
 }
 
-/// {@template cubitbuilderbase}
+/// {@template cubit_builder_base}
 /// Base class for widgets that build themselves based on interaction with
 /// a specified [cubit].
 ///
@@ -100,8 +100,8 @@ class CubitBuilder<C extends CubitStream<S>, S> extends CubitBuilderBase<C, S> {
 /// {@endtemplate}
 abstract class CubitBuilderBase<C extends CubitStream<S>, S>
     extends StatefulWidget {
-  /// {@macro cubitbuilderbase}
-  const CubitBuilderBase({Key key, this.cubit, this.condition})
+  /// {@macro cubit_builder_base}
+  const CubitBuilderBase({Key key, this.cubit, this.buildWhen})
       : super(key: key);
 
   /// The [cubit] that the [CubitBuilderBase] will interact with.
@@ -109,16 +109,8 @@ abstract class CubitBuilderBase<C extends CubitStream<S>, S>
   /// [CubitProvider] and the current `BuildContext`.
   final C cubit;
 
-  /// The [CubitBuilderCondition] that the [CubitBuilderBase] will invoke.
-  /// The [condition] function will be invoked on each [cubit] `state` change.
-  /// The [condition] takes the previous `state` and current `state` and must
-  /// return a [bool] which determines whether or not the `builder` function
-  /// will be invoked.
-  /// The previous `state` will be initialized to `state` when the
-  /// [CubitBuilderBase] is initialized.
-  /// [condition] is optional and if it isn't implemented, it will default to
-  /// `true`.
-  final CubitBuilderCondition<S> condition;
+  /// {@macro cubit_builder_build_when}
+  final CubitBuilderCondition<S> buildWhen;
 
   /// Returns a widget based on the `BuildContext` and current [state].
   Widget build(BuildContext context, S state);
@@ -171,7 +163,7 @@ class _CubitBuilderBaseState<C extends CubitStream<S>, S>
   void _subscribe() {
     if (_cubit != null) {
       _subscription = _cubit.skip(1).listen((state) {
-        if (widget.condition?.call(_previousState, state) ?? true) {
+        if (widget.buildWhen?.call(_previousState, state) ?? true) {
           setState(() {
             _state = state;
           });
