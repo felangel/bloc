@@ -33,6 +33,43 @@ void main() async {
 }
 ```
 
+## Observing a Cubit
+
+`onTransition` can be overridden to observe state changes for a single cubit.
+
+```dart
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
+
+  void increment() => emit(state + 1);
+
+  @override
+  void onTransition(Transition<int> transition) {
+    print(transition);
+    super.onTransition(transition);
+  }
+}
+```
+
+`CubitObserver` can be used to observe state changes for all cubits.
+
+```dart
+class MyCubitObserver extends CubitObserver {
+  @override
+  void onTransition(Cubit cubit, Transition transition) {
+    print(transition);
+    super.onTransition(cubit, transition);
+  }
+}
+```
+
+```dart
+void main() {
+  Cubit.observer = MyCubitObserver();
+  // Use cubits...
+}
+```
+
 ## Dart Versions
 
 - Dart 2: >= 2.7.0

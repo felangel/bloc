@@ -58,7 +58,6 @@ abstract class Cubit<State> extends CubitStream<State> {
     observer.onTransition(this, transition);
   }
 
-  /// {@macro emit}
   @override
   void emit(State state) {
     onTransition(Transition<State>(currentState: this.state, nextState: state));

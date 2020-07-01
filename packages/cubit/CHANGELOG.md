@@ -1,3 +1,8 @@
+# 0.1.0
+
+- docs: add `onTransition` documentation to README
+- docs: add `CubitObserver` documentation to README
+
 # 0.0.14
 
 - feat: add `CubitObserver` support
