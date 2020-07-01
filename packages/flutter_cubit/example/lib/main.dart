@@ -5,7 +5,7 @@ import 'package:flutter_cubit/flutter_cubit.dart';
 
 void main() => runApp(CubitCounter());
 
-/// A `StatelessWidget` which uses:
+/// A [StatelessWidget] which uses:
 /// * [cubit](https://pub.dev/packages/cubit)
 /// * [flutter_cubit](https://pub.dev/packages/flutter_cubit)
 /// to manage the state of a counter.
@@ -21,8 +21,8 @@ class CubitCounter extends StatelessWidget {
   }
 }
 
-/// A `StatelessWidget` which demonstrates
-/// how to consume and interact with a `CounterCubit`.
+/// A [StatelessWidget] which demonstrates
+/// how to consume and interact with a [CounterCubit].
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -60,18 +60,18 @@ class CounterPage extends StatelessWidget {
 }
 
 /// {@template counter_cubit}
-/// A simple `cubit` which manages an `int` as its state
-/// and exposes two public methods to `increment` and `decrement`
+/// A simple [Cubit] which manages an `int` as its state
+/// and exposes two public methods to [increment] and [decrement]
 /// the value of the state.
 /// {@endtemplate}
 class CounterCubit extends Cubit<int> {
   /// {@macro counter_cubit}
   CounterCubit() : super(0);
 
-  /// Increments the `cubit` state by 1.
+  /// Increments the [Cubit] state by 1.
   void increment() => emit(state + 1);
 
-  /// Decrements the `cubit` state by 1.
+  /// Decrements the [Cubit] state by 1.
   void decrement() => emit(state - 1);
 
   @override
