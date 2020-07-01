@@ -1,6 +1,6 @@
 name: hydrated_cubit
 description: An extension to the cubit state management library which automatically persists and restores cubit states.
-version: 0.0.3
+version: 0.1.0
 homepage: https://github.com/felangel/cubit
 
 environment:
@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   meta: ^1.1.8
-  cubit: ^0.0.13
+  cubit: ^0.1.0
   hive: ^1.4.1+1
   synchronized: ^2.2.0
   path_provider: ^1.6.5

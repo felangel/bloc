@@ -1,3 +1,7 @@
+# 0.1.0
+
+- feat: upgrade to `cubit: ^0.1.0`
+
 # 0.0.3
 
 - **BREAKING**:
