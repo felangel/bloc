@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -12,7 +11,7 @@ void main() async {
   // before using any plugins if the code is executed before runApp.
   // As a result, you will need the following line if you're using Flutter >=1.9.4.
   WidgetsFlutterBinding.ensureInitialized();
-  BlocSupervisor.delegate = await HydratedBlocDelegate.build();
+  HydratedBloc.storage = await HydratedStorage.build();
   runApp(App());
 }
 
@@ -20,11 +19,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CounterBloc>(
-      create: (context) => CounterBloc(),
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        home: CounterPage(),
-      ),
+      create: (_) => CounterBloc(),
+      child: MaterialApp(home: CounterPage()),
     );
   }
 }
@@ -32,16 +28,13 @@ class App extends StatelessWidget {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: AppBar(title: Text('Counter')),
-      body: BlocBuilder<CounterBloc, CounterState>(
-        builder: (BuildContext context, CounterState state) {
+      appBar: AppBar(title: const Text('Counter')),
+      body: BlocBuilder<CounterBloc, int>(
+        builder: (BuildContext context, int state) {
           return Center(
-            child: Text(
-              '${state.value}',
-              style: TextStyle(fontSize: 24.0),
-            ),
+            child: Text('$state', style: textTheme.headline2),
           );
         },
       ),
@@ -50,28 +43,29 @@ class CounterPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
               onPressed: () {
-                counterBloc.add(CounterEvent.increment);
+                context.bloc<CounterBloc>().add(CounterEvent.increment);
               },
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
-              child: Icon(Icons.remove),
+              child: const Icon(Icons.remove),
               onPressed: () {
-                counterBloc.add(CounterEvent.decrement);
+                context.bloc<CounterBloc>().add(CounterEvent.decrement);
               },
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
-              child: Icon(Icons.delete_forever),
+              child: const Icon(Icons.delete_forever),
               onPressed: () async {
+                final counterBloc = context.bloc<CounterBloc>();
                 await counterBloc.clear();
                 counterBloc.add(CounterEvent.reset);
               },
@@ -85,41 +79,27 @@ class CounterPage extends StatelessWidget {
 
 enum CounterEvent { increment, decrement, reset }
 
-class CounterState {
-  int value;
-
-  CounterState(this.value);
+class CounterBloc extends HydratedBloc<CounterEvent, int> {
+  CounterBloc() : super(0);
 
   @override
-  String toString() => 'CounterState { value: $value }';
-}
-
-class CounterBloc extends HydratedBloc<CounterEvent, CounterState> {
-  @override
-  CounterState get initialState => super.initialState ?? CounterState(0);
-
-  @override
-  Stream<CounterState> mapEventToState(CounterEvent event) async* {
+  Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        yield CounterState(state.value - 1);
+        yield state - 1;
         break;
       case CounterEvent.increment:
-        yield CounterState(state.value + 1);
+        yield state + 1;
         break;
       case CounterEvent.reset:
-        yield CounterState(0);
+        yield 0;
         break;
     }
   }
 
   @override
-  CounterState fromJson(Map<String, dynamic> source) {
-    return CounterState(source['value'] as int);
-  }
+  int fromJson(Map<String, dynamic> json) => json['value'] as int;
 
   @override
-  Map<String, int> toJson(CounterState state) {
-    return {'value': state.value};
-  }
+  Map<String, int> toJson(int state) => {'value': state};
 }
