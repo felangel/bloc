@@ -3,7 +3,7 @@ import 'package:flutter_cubit/flutter_cubit.dart';
 
 import 'bloc_listener.dart';
 
-/// {@template multibloclistener}
+/// {@template multi_bloc_listener}
 /// Merges multiple [BlocListener] widgets into one widget tree.
 ///
 /// [MultiBlocListener] improves the readability and eliminates the need
@@ -49,7 +49,7 @@ import 'bloc_listener.dart';
 /// readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
 class MultiBlocListener extends MultiCubitListener {
-  /// {@macro multibloclistener}
+  /// {@macro multi_bloc_listener}
   MultiBlocListener({
     Key key,
     @required List<CubitListenerSingleChildWidget> listeners,

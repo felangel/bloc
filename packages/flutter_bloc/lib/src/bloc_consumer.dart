@@ -4,7 +4,7 @@ import 'package:flutter_cubit/flutter_cubit.dart';
 
 import '../flutter_bloc.dart';
 
-/// {@template blocconsumer}
+/// {@template bloc_consumer}
 /// [BlocConsumer] exposes a [builder] and [listener] in order react to new
 /// states.
 /// [BlocConsumer] is analogous to a nested [BlocListener] and [BlocBuilder] but
@@ -61,7 +61,7 @@ import '../flutter_bloc.dart';
 /// ```
 /// {@endtemplate}
 class BlocConsumer<B extends Bloc<dynamic, S>, S> extends CubitConsumer<B, S> {
-  /// {@macro blocconsumer}
+  /// {@macro bloc_consumer}
   const BlocConsumer({
     Key key,
     @required CubitWidgetBuilder<S> builder,

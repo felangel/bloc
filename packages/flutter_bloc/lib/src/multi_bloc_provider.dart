@@ -3,7 +3,7 @@ import 'package:flutter_cubit/flutter_cubit.dart';
 
 import 'bloc_provider.dart';
 
-/// {@template multiblocprovider}
+/// {@template multi_bloc_provider}
 /// Merges multiple [BlocProvider] widgets into one widget tree.
 ///
 /// [MultiBlocProvider] improves the readability and eliminates the need
@@ -49,7 +49,7 @@ import 'bloc_provider.dart';
 /// readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
 class MultiBlocProvider extends MultiCubitProvider {
-  /// {@macro multiblocprovider}
+  /// {@macro multi_bloc_provider}
   MultiBlocProvider({
     Key key,
     @required List<CubitProviderSingleChildWidget> providers,

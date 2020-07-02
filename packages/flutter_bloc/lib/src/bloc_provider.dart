@@ -4,7 +4,7 @@ import 'package:flutter_cubit/flutter_cubit.dart';
 import 'package:provider/provider.dart';
 import 'package:bloc/bloc.dart';
 
-/// {@template blocprovider}
+/// {@template bloc_provider}
 /// Takes a [ValueBuilder] that is responsible for creating the [bloc] and
 /// a [child] which will have access to the [bloc] via
 /// `BlocProvider.of(context)`.
@@ -22,7 +22,7 @@ import 'package:bloc/bloc.dart';
 /// ```
 /// {@endtemplate}
 class BlocProvider<T extends Bloc<Object, Object>> extends CubitProvider<T> {
-  /// {@macro blocprovider}
+  /// {@macro bloc_provider}
   BlocProvider({
     Key key,
     @required Create<T> create,

@@ -4,7 +4,7 @@ import 'package:flutter_cubit/flutter_cubit.dart';
 
 import '../flutter_bloc.dart';
 
-/// {@template bloclistener}
+/// {@template bloc_listener}
 /// Takes a [BlocWidgetListener] and an optional [bloc] and invokes
 /// the [listener] in response to [state] changes in the [bloc].
 /// It should be used for functionality that needs to occur only in response to
@@ -37,20 +37,19 @@ import '../flutter_bloc.dart';
 /// )
 /// ```
 ///
-/// An optional [condition] can be implemented for more granular control
+/// An optional [listenWhen] can be implemented for more granular control
 /// over when [listener] is called.
-/// The [condition] function will be invoked on each [bloc] [state] change.
-/// The [condition] takes the previous [state] and current [state] and must
+/// [listenWhen] will be invoked on each [bloc] `state` change.
+/// [listenWhen] takes the previous `state` and current `state` and must
 /// return a [bool] which determines whether or not the [listener] function
 /// will be invoked.
-/// The previous [state] will be initialized to the [state] of the [bloc]
+/// The previous `state` will be initialized to the `state` of the [bloc]
 /// when the [BlocListener] is initialized.
-/// [condition] is optional and if it isn't implemented, it will default to
-/// `true`.
+/// [listenWhen] is optional and if omitted, it will default to `true`.
 ///
 /// ```dart
 /// BlocListener<BlocA, BlocAState>(
-///   condition: (previous, current) {
+///   listenWhen: (previous, current) {
 ///     // return true/false to determine whether or not
 ///     // to invoke listener with state
 ///   },
@@ -62,12 +61,12 @@ import '../flutter_bloc.dart';
 /// ```
 /// {@endtemplate}
 class BlocListener<B extends Bloc<dynamic, S>, S> extends CubitListener<B, S> {
-  /// {@macro bloclistener}
+  /// {@macro bloc_listener}
   const BlocListener({
     Key key,
     @required CubitWidgetListener<S> listener,
     B bloc,
-    CubitListenerCondition<S> condition,
+    CubitListenerCondition<S> listenWhen,
     Widget child,
   })  : assert(listener != null),
         super(
@@ -75,6 +74,6 @@ class BlocListener<B extends Bloc<dynamic, S>, S> extends CubitListener<B, S> {
           child: child,
           listener: listener,
           cubit: bloc,
-          condition: condition,
+          listenWhen: listenWhen,
         );
 }

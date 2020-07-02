@@ -1,3 +1,12 @@
+# 5.0.0
+
+- **BREAKING**: `condition` on `BlocBuilder` renamed to `buildWhen`
+- **BREAKING**: `condition` on `BlocListener` renamed to `listenWhen`
+- **BREAKING**: upgrade to `bloc v5.0.0`
+- refactor: internal implementation updates to use [flutter_cubit](https://pub.dev/packages/flutter_cubit)
+- docs: various improvements
+- docs: logo updates
+
 # 5.0.0-dev.5
 
 - Update to `bloc: ^5.0.0-dev.11`

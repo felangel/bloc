@@ -110,7 +110,7 @@ class MyCounterAppState extends State<MyCounterApp> {
           children: <Widget>[
             BlocBuilder<CounterBloc, int>(
               bloc: _bloc,
-              condition: (previousState, state) {
+              buildWhen: (previousState, state) {
                 return (previousState + state) % 3 == 0;
               },
               builder: (context, count) {
@@ -384,7 +384,7 @@ void main() {
       expect(numBuilds, 1);
     });
 
-    testWidgets('with condition only rebuilds when condition evaluates to true',
+    testWidgets('with buildWhen only rebuilds when buildWhen evaluates to true',
         (tester) async {
       await tester.pumpWidget(MyCounterApp());
       await tester.pumpAndSettle();

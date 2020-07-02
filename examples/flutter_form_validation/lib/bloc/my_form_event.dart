@@ -29,5 +29,3 @@ class PasswordChanged extends MyFormEvent {
 }
 
 class FormSubmitted extends MyFormEvent {}
-
-class FormReset extends MyFormEvent {}

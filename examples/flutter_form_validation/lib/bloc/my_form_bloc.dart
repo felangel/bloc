@@ -39,8 +39,6 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
         await Future.delayed(const Duration(seconds: 1));
         yield state.copyWith(status: FormzStatus.submissionSuccess);
       }
-    } else if (event is FormReset) {
-      yield const MyFormState();
     }
   }
 }
