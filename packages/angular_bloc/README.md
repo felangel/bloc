@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/angular_bloc_logo_full.png" height="100" alt="Angular Bloc Package" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/angular_bloc_logo_full.png" height="100" alt="Angular Bloc Package" />
 </p>
 
 <p align="center">
@@ -30,7 +30,7 @@ This package is built to work with [bloc](https://pub.dev/packages/bloc).
 
 Lets take a look at how to use `BlocPipe` to hook up a `CounterPage` html template to a `CounterBloc`.
 
-`counter_bloc.dart`
+### `counter_bloc.dart`
 
 ```dart
 enum CounterEvent { increment, decrement }
@@ -52,7 +52,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-`counter_page_component.html`
+### `counter_page_component.html`
 
 ```html
 <div class="counter-page-container">
@@ -63,7 +63,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 </div>
 ```
 
-`counter_page_component.dart`
+### `counter_page_component.dart`
 
 ```dart
 import 'package:angular/angular.dart';

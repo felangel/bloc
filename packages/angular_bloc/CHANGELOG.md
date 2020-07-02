@@ -1,3 +1,8 @@
+# 6.0.0-dev.5
+
+Update to `bloc ^5.0.0`
+Update to `angular_cubit ^0.1.0-dev.1`
+
 # 6.0.0-dev.4
 
 Update to `bloc ^5.0.0-dev.11`
