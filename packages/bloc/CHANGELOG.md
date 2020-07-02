@@ -1,3 +1,14 @@
+# 5.0.0
+
+- **BREAKING**: remove `initialState` override in favor of providing the initial state via super ([#1304](https://github.com/felangel/bloc/issues/1304)).
+- **BREAKING**: Remove `BlocSupervisor` and rename `BlocDelegate` to `BlocObserver`.
+- feat: support `null` states ([#1312](https://github.com/felangel/bloc/issues/1312)).
+- refactor: bloc to extend [cubit](https://pub.dev/packages/cubit) rather than `Stream`.
+- feat: ignore newly added events after bloc is closed ([#1236](https://github.com/felangel/bloc/issues/1236)).
+- feat: add `addError` to conform to `EventSink` interface.
+- feat: mark `onError`, `onTransition`, `onEvent` as `protected`.
+- docs: logo updates
+
 # 5.0.0-dev.11
 
 - feat: add `addError` to conform to `EventSink` interface.

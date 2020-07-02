@@ -34,44 +34,6 @@ The goal of this package is to make it easy to implement the `BLoC` Design Patte
 
 This design pattern helps to separate _presentation_ from _business logic_. Following the BLoC pattern facilitates testability and reusability. This package abstracts reactive aspects of the pattern allowing developers to focus on converting events into states.
 
-## Glossary
-
-**Events** are the input to a Bloc. They are commonly UI events such as button presses. `Events` are `added` to the Bloc and then converted to `States`.
-
-**States** are the output of a Bloc. Presentation components can listen to the stream of states and redraw portions of themselves based on the given state (see `BlocBuilder` for more details).
-
-**Transitions** occur when an `Event` is `added` after `mapEventToState` has been called but before the `Bloc`'s state has been updated. A `Transition` consists of the currentState, the event which was added, and the nextState.
-
-**BlocObserver** An interface for observing the behavior of a `Bloc`. Can be used to intercept all `Bloc` events, transitions, and errors. **It is a great way to handle logging/analytics as well as error handling universally**.
-
-## Bloc Interface
-
-**mapEventToState** is a method that **must be implemented** when a class extends `Bloc`. The function takes the incoming event as an argument. `mapEventToState` is called whenever an event is `added`. `mapEventToState` must convert that event into a new state and return the new state in the form of a `Stream`.
-
-**add** is a method that takes an `event` and triggers `mapEventToState`. If `close` has already been called, any subsequent calls to `add` will be ignored and will not result in any subsequent state changes.
-
-**addError** is a method that takes an `error` and `stackTrace` and triggers `onError`.
-
-**transformEvents** is a method that transforms the `Stream<Event>` along with a transition function, `transitionFn`, into a `Stream<Transition>`. Events that should be processed by `mapEventToState` need to be passed to `transitionFn`. **By default `asyncExpand` is used to ensure all events are processed in the order in which they are received**. You can override `transformEvents` for advanced usage in order to manipulate the frequency and specificity with which `mapEventToState` is called as well as which events are processed.
-
-**transformTransitions** is a method that transforms the `Stream<Transition>` into a new `Stream<Transition>`. By default `transformTransitions` returns the incoming `Stream<Transition>`. You can override `transformTransitions` for advanced usage in order to manipulate the frequency and specificity at which `transitions` (state changes) occur.
-
-**onEvent** is a method that can be overridden to handle whenever an `Event` is added. **It is a great place to add bloc-specific logging/analytics**.
-
-**onTransition** is a method that can be overridden to handle whenever a `Transition` occurs. A `Transition` occurs when a new `Event` is added and `mapEventToState` is called. `onTransition` is called before a `Bloc`'s state has been updated. **It is a great place to add bloc-specific logging/analytics**.
-
-**onError** is a method that can be overridden to handle whenever an `Exception` is thrown. By default all exceptions will be ignored and `Bloc` functionality will be unaffected. **It is a great place to add bloc-specific error handling**.
-
-**close** is a method that closes the `event` and `state` streams. `close` should be called when a `Bloc` is no longer needed. Once `close` is called, `events` that are `added` will not be processed and will result in an error being passed to `onError`. In addition, if `close` is called while `events` are still being processed the `bloc` will continue to process the pending `events` to completion.
-
-## BlocObserver Interface
-
-**onEvent** is a method that can be overridden to handle whenever an `Event` is added to **any** `Bloc`. **It is a great place to add universal logging/analytics**.
-
-**onTransition** is a method that can be overridden to handle whenever a `Transition` occurs in **any** `Bloc`. **It is a great place to add universal logging/analytics**.
-
-**onError** is a method that can be overriden to handle whenever an `Exception` is thrown from **any** `Bloc`. **It is a great place to add universal error handling**.
-
 ## Usage
 
 For simplicity we can create a `CounterBloc` like:
@@ -193,6 +155,44 @@ class SimpleBlocObserver extends BlocObserver {
 ```
 
 At this point, all `Bloc` `Exceptions` will also be reported to the `SimpleBlocObserver` and we can see them in the console.
+
+## Glossary
+
+**Events** are the input to a Bloc. They are commonly UI events such as button presses. `Events` are `added` to the Bloc and then converted to `States`.
+
+**States** are the output of a Bloc. Presentation components can listen to the stream of states and redraw portions of themselves based on the given state (see `BlocBuilder` for more details).
+
+**Transitions** occur when an `Event` is `added` after `mapEventToState` has been called but before the `Bloc`'s state has been updated. A `Transition` consists of the currentState, the event which was added, and the nextState.
+
+**BlocObserver** An interface for observing the behavior of a `Bloc`. Can be used to intercept all `Bloc` events, transitions, and errors. **It is a great way to handle logging/analytics as well as error handling universally**.
+
+## Bloc Interface
+
+**mapEventToState** is a method that **must be implemented** when a class extends `Bloc`. The function takes the incoming event as an argument. `mapEventToState` is called whenever an event is `added`. `mapEventToState` must convert that event into a new state and return the new state in the form of a `Stream`.
+
+**add** is a method that takes an `event` and triggers `mapEventToState`. If `close` has already been called, any subsequent calls to `add` will be ignored and will not result in any subsequent state changes.
+
+**addError** is a method that takes an `error` and `stackTrace` and triggers `onError`.
+
+**transformEvents** is a method that transforms the `Stream<Event>` along with a transition function, `transitionFn`, into a `Stream<Transition>`. Events that should be processed by `mapEventToState` need to be passed to `transitionFn`. **By default `asyncExpand` is used to ensure all events are processed in the order in which they are received**. You can override `transformEvents` for advanced usage in order to manipulate the frequency and specificity with which `mapEventToState` is called as well as which events are processed.
+
+**transformTransitions** is a method that transforms the `Stream<Transition>` into a new `Stream<Transition>`. By default `transformTransitions` returns the incoming `Stream<Transition>`. You can override `transformTransitions` for advanced usage in order to manipulate the frequency and specificity at which `transitions` (state changes) occur.
+
+**onEvent** is a method that can be overridden to handle whenever an `Event` is added. **It is a great place to add bloc-specific logging/analytics**.
+
+**onTransition** is a method that can be overridden to handle whenever a `Transition` occurs. A `Transition` occurs when a new `Event` is added and `mapEventToState` is called. `onTransition` is called before a `Bloc`'s state has been updated. **It is a great place to add bloc-specific logging/analytics**.
+
+**onError** is a method that can be overridden to handle whenever an `Exception` is thrown. By default all exceptions will be ignored and `Bloc` functionality will be unaffected. **It is a great place to add bloc-specific error handling**.
+
+**close** is a method that closes the `event` and `state` streams. `close` should be called when a `Bloc` is no longer needed. Once `close` is called, `events` that are `added` will not be processed and will result in an error being passed to `onError`. In addition, if `close` is called while `events` are still being processed the `bloc` will continue to process the pending `events` to completion.
+
+## BlocObserver Interface
+
+**onEvent** is a method that can be overridden to handle whenever an `Event` is added to **any** `Bloc`. **It is a great place to add universal logging/analytics**.
+
+**onTransition** is a method that can be overridden to handle whenever a `Transition` occurs in **any** `Bloc`. **It is a great place to add universal logging/analytics**.
+
+**onError** is a method that can be overriden to handle whenever an `Exception` is thrown from **any** `Bloc`. **It is a great place to add universal error handling**.
 
 ## Dart Versions
 
