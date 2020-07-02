@@ -1,6 +1,6 @@
 ```dart
 BlocBuilder<BlocA, BlocAState>(
-  condition: (previousState, state) {
+  buildWhen: (previousState, state) {
     // return true/false to determine whether or not
     // to rebuild the widget with state
   },
