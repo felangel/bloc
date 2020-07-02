@@ -7,6 +7,7 @@
 - feat: ignore newly added events after bloc is closed ([#1236](https://github.com/felangel/bloc/issues/1236)).
 - feat: add `addError` to conform to `EventSink` interface.
 - feat: mark `onError`, `onTransition`, `onEvent` as `protected`.
+- docs: documentation improvements
 - docs: logo updates
 
 # 5.0.0-dev.11

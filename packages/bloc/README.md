@@ -172,7 +172,7 @@ At this point, all `Bloc` `Exceptions` will also be reported to the `SimpleBlocO
 
 **add** is a method that takes an `event` and triggers `mapEventToState`. If `close` has already been called, any subsequent calls to `add` will be ignored and will not result in any subsequent state changes.
 
-**addError** is a method that takes an `error` and `stackTrace` and triggers `onError`.
+**addError** is a method that notifies the `bloc` of an `error` and triggers `onError`.
 
 **transformEvents** is a method that transforms the `Stream<Event>` along with a transition function, `transitionFn`, into a `Stream<Transition>`. Events that should be processed by `mapEventToState` need to be passed to `transitionFn`. **By default `asyncExpand` is used to ensure all events are processed in the order in which they are received**. You can override `transformEvents` for advanced usage in order to manipulate the frequency and specificity with which `mapEventToState` is called as well as which events are processed.
 
@@ -184,7 +184,7 @@ At this point, all `Bloc` `Exceptions` will also be reported to the `SimpleBlocO
 
 **onError** is a method that can be overridden to handle whenever an `Exception` is thrown. By default all exceptions will be ignored and `Bloc` functionality will be unaffected. **It is a great place to add bloc-specific error handling**.
 
-**close** is a method that closes the `event` and `state` streams. `close` should be called when a `Bloc` is no longer needed. Once `close` is called, `events` that are `added` will not be processed and will result in an error being passed to `onError`. In addition, if `close` is called while `events` are still being processed the `bloc` will continue to process the pending `events` to completion.
+**close** is a method that closes the `event` and `state` streams. `close` should be called when a `Bloc` is no longer needed. Once `close` is called, `events` that are `added` will not be processed. In addition, if `close` is called while `events` are still being processed the `bloc` will finish processing the pending `events`.
 
 ## BlocObserver Interface
 

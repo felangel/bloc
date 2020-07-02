@@ -139,6 +139,7 @@ abstract class Bloc<Event, State> extends CubitStream<State>
     }
   }
 
+  /// Notifies the [bloc] of an [error] which triggers [onError].
   @override
   void addError(Object error, [StackTrace stackTrace]) {
     onError(error, stackTrace);
@@ -147,10 +148,9 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   /// Closes the `event` and `state` `Streams`.
   /// This method should be called when a [bloc] is no longer needed.
   /// Once [close] is called, `events` that are [add]ed will not be
-  /// processed and will result in an error being passed to [onError].
+  /// processed.
   /// In addition, if [close] is called while `events` are still being
-  /// processed,
-  /// the [bloc] will continue to process the pending `events` to completion.
+  /// processed, the [bloc] will finish processing the pending `events`.
   @override
   @mustCallSuper
   Future<void> close() async {
