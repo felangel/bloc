@@ -1,4 +1,4 @@
 ```yaml
 dependencies:
-  bloc: ^4.0.0
+  bloc: ^5.0.0
 ```
