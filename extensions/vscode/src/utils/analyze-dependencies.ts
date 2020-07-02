@@ -9,7 +9,7 @@ export function analyzeDependencies() {
   const dependenciesToAnalyze = [
     {
       name: "equatable",
-      version: "^1.1.1",
+      version: "^1.2.0",
       actions: [
         {
           name: "Open Migration Guide",
@@ -23,11 +23,11 @@ export function analyzeDependencies() {
         }
       ]
     },
-    { name: "bloc", version: "^4.0.0", actions: [] },
-    { name: "bloc_test", version: "^5.1.0", actions: [] },
-    { name: "flutter_bloc", version: "^4.0.0", actions: [] },
+    { name: "bloc", version: "^5.0.0", actions: [] },
+    { name: "bloc_test", version: "^6.0.0", actions: [] },
+    { name: "flutter_bloc", version: "^5.0.0", actions: [] },
     { name: "angular_bloc", version: "^4.0.0", actions: [] },
-    { name: "hydrated_bloc", version: "^4.0.0", actions: [] },
+    { name: "hydrated_bloc", version: "^5.0.0", actions: [] },
     { name: "sealed_flutter_bloc", version: "^4.0.0", actions: [] }
   ];
 

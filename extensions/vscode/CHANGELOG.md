@@ -1,3 +1,13 @@
+# 4.0.0
+
+Update latest package versions:
+
+- equatable -> ^1.2.0
+- bloc -> ^5.0.0
+- bloc_test -> ^6.0.0
+- flutter_bloc -> ^5.0.0
+- hydrated_bloc -> ^5.0.0
+
 # 3.6.0
 
 Update latest package versions:

@@ -2,16 +2,11 @@
   "Bloc": {
     "prefix": "bloc",
     "body": [
-      "import 'package:bloc/bloc.dart';",
-      "",
       "class ${1:Subject}Bloc extends Bloc<$1Event, $1State> {",
-      "\t@override",
-      "\t$1State get initialState => ${2:// TODO: implement initialState};",
+      "\t${1:Subject}Bloc() : super(${1:Subject}Initial());",
       "",
       "\t@override",
-      "\tStream<$1State> mapEventToState(",
-      "\t\t$1Event event,",
-      "\t) async* {",
+      "\tStream<$1State> mapEventToState($1Event event) async* {",
       "\t\t${3:// TODO: implement mapEventToState}",
       "\t}",
       "}"
@@ -121,12 +116,12 @@
       ")"
     ]
   },
-  "BlocDelegate": {
-    "prefix": "blocdelegate",
+  "BlocObserver": {
+    "prefix": "blocobserver",
     "body": [
       "import 'package:bloc/bloc.dart';",
       "",
-      "class ${1:My}BlocDelegate extends BlocDelegate {",
+      "class ${1:My}BlocObserver extends BlocObserver {",
       "\t@override",
       "\tvoid onEvent(Bloc bloc, Object event) {",
       "\t\tsuper.onEvent(bloc, event);",
