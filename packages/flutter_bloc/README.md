@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/flutter_bloc_logo_full.png" height="100" alt="Flutter Bloc Package" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/flutter_bloc_logo_full.png" height="100" alt="Flutter Bloc Package" />
 </p>
 
 <p align="center">
