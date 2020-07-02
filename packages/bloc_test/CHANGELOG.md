@@ -1,3 +1,8 @@
+# 6.0.0
+
+- feat: upgrade to `bloc ^5.0.0`
+- refactor: internal implementation updates to use [cubit_test](https://pub.dev/packages/cubit_test)
+
 # 6.0.0-dev.4
 
 - Update to `bloc ^5.0.0-dev.11`.
