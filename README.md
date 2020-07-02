@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/bloc_logo_full.png" height="100" alt="Bloc" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_logo_full.png" height="100" alt="Bloc" />
 </p>
 
 <p align="center">
@@ -28,7 +28,7 @@ A predictable state management library that helps implement the [BLoC design pat
 
 ## Overview
 
-<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-extends-cubit/docs/assets/bloc_architecture.png" height="300" alt="Bloc Architecture" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" height="300" alt="Bloc Architecture" />
 
 The goal of this library is to make it easy to separate _presentation_ from _business logic_, facilitating testability and reusability.
 
