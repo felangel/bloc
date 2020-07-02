@@ -1,11 +1,16 @@
 import 'dart:async';
 
+import 'package:cubit/cubit.dart' hide Transition;
 import 'package:meta/meta.dart';
 
 import '../bloc.dart';
 
 /// {@template bloc_unhandled_error_exception}
 /// Exception thrown in debug mode when an unhandled error occurs within a bloc.
+///
+/// See also:
+/// * [addError], API used to trigger [onError].
+///
 /// {@endtemplate}
 class BlocUnhandledErrorException implements Exception {
   /// The [bloc] in which the unhandled error occurred.
@@ -36,51 +41,18 @@ typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
-abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
-  final _eventController = StreamController<Event>.broadcast();
-  final _stateController = StreamController<State>.broadcast();
+abstract class Bloc<Event, State> extends CubitStream<State>
+    implements EventSink<Event> {
+  /// The current [BlocObserver].
+  static BlocObserver observer = BlocObserver();
 
-  State _state;
+  final _eventController = StreamController<Event>.broadcast();
+
   StreamSubscription<Transition<Event, State>> _transitionSubscription;
 
-  /// Returns the current [state] of the [bloc].
-  State get state => _state;
-
-  /// Returns the [state] before any `events` have been [add]ed.
-  State get initialState;
-
-  /// Returns whether the `Stream<State>` is a broadcast stream.
-  @override
-  bool get isBroadcast => _stateController.stream.isBroadcast;
-
   /// {@macro bloc}
-  Bloc() {
-    _state = initialState;
+  Bloc(State initialState) : super(initialState) {
     _bindEventsToStates();
-  }
-
-  /// Adds a subscription to the `Stream<State>`.
-  /// Returns a [StreamSubscription] which handles events from
-  /// the `Stream<State>` using the provided [onData], [onError] and [onDone]
-  /// handlers.
-  @override
-  StreamSubscription<State> listen(
-    void Function(State) onData, {
-    Function onError,
-    void Function() onDone,
-    bool cancelOnError,
-  }) {
-    return _stateStream.listen(
-      onData,
-      onError: onError,
-      onDone: onDone,
-      cancelOnError: cancelOnError,
-    );
-  }
-
-  Stream<State> get _stateStream async* {
-    yield state;
-    yield* _stateController.stream;
   }
 
   /// Called whenever an [event] is [add]ed to the [bloc].
@@ -96,9 +68,11 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   ///   super.onEvent(event);
   /// }
   /// ```
+  @protected
   @mustCallSuper
   void onEvent(Event event) {
-    BlocSupervisor.delegate.onEvent(this, event);
+    // ignore: invalid_use_of_protected_member
+    observer.onEvent(this, event);
   }
 
   /// Called whenever a [transition] occurs with the given [transition].
@@ -117,9 +91,11 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   ///   super.onTransition(transition);
   /// }
   /// ```
+  @protected
   @mustCallSuper
   void onTransition(Transition<Event, State> transition) {
-    BlocSupervisor.delegate.onTransition(this, transition);
+    // ignore: invalid_use_of_protected_member
+    observer.onTransition(this, transition);
   }
 
   /// Called whenever an [error] is thrown within [mapEventToState].
@@ -139,9 +115,11 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
   ///   super.onError(error, stackTrace);
   /// }
   /// ```
+  @protected
   @mustCallSuper
   void onError(Object error, StackTrace stackTrace) {
-    BlocSupervisor.delegate.onError(this, error, stackTrace);
+    // ignore: invalid_use_of_protected_member
+    observer.onError(this, error, stackTrace);
     assert(() {
       throw BlocUnhandledErrorException(this, error, stackTrace);
     }());
@@ -149,10 +127,10 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
 
   /// Notifies the [bloc] of a new [event] which triggers [mapEventToState].
   /// If [close] has already been called, any subsequent calls to [add] will
-  /// be delegated to the [onError] method which can be overridden at the [bloc]
-  /// as well as the [BlocDelegate] level.
+  /// be ignored and will not result in any subsequent state changes.
   @override
   void add(Event event) {
+    if (_eventController.isClosed) return;
     try {
       onEvent(event);
       _eventController.add(event);
@@ -161,19 +139,24 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     }
   }
 
+  /// Notifies the [bloc] of an [error] which triggers [onError].
+  @override
+  void addError(Object error, [StackTrace stackTrace]) {
+    onError(error, stackTrace);
+  }
+
   /// Closes the `event` and `state` `Streams`.
   /// This method should be called when a [bloc] is no longer needed.
   /// Once [close] is called, `events` that are [add]ed will not be
-  /// processed and will result in an error being passed to [onError].
+  /// processed.
   /// In addition, if [close] is called while `events` are still being
-  /// processed,
-  /// the [bloc] will continue to process the pending `events` to completion.
+  /// processed, the [bloc] will finish processing the pending `events`.
   @override
   @mustCallSuper
   Future<void> close() async {
     await _eventController.close();
-    await _stateController.close();
     await _transitionSubscription?.cancel();
+    return super.close();
   }
 
   /// Transforms the [events] stream along with a [transitionFn] function into
@@ -245,6 +228,15 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
     return transitions;
   }
 
+  /// **[emit] should never be used outside of tests.**
+  ///
+  /// Updates the state of the bloc to the provided [state].
+  /// A bloc's state should be only be updated by `yielding` a new `state`
+  /// from `mapEventToState` in response to an event.
+  @visibleForTesting
+  @override
+  void emit(State state) => super.emit(state);
+
   void _bindEventsToStates() {
     _transitionSubscription = transformTransitions(
       transformEvents(
@@ -261,8 +253,7 @@ abstract class Bloc<Event, State> extends Stream<State> implements Sink<Event> {
       if (transition.nextState == state) return;
       try {
         onTransition(transition);
-        _state = transition.nextState;
-        _stateController.add(transition.nextState);
+        emit(transition.nextState);
       } on dynamic catch (error, stackTrace) {
         onError(error, stackTrace);
       }

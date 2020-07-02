@@ -10,10 +10,7 @@ class TickerBloc extends Bloc<TickerEvent, TickerState> {
   final Ticker ticker;
   StreamSubscription subscription;
 
-  TickerBloc(this.ticker);
-
-  @override
-  TickerState get initialState => TickerInitial();
+  TickerBloc(this.ticker) : super(TickerInitial());
 
   @override
   Stream<TickerState> mapEventToState(TickerEvent event) async* {

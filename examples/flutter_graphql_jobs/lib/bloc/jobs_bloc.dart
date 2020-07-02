@@ -11,12 +11,10 @@ part 'jobs_state.dart';
 class JobsBloc extends Bloc<JobsEvent, JobsState> {
   JobsBloc({@required JobsApiClient jobsApiClient})
       : assert(jobsApiClient != null),
-        _jobsApiClient = jobsApiClient;
+        _jobsApiClient = jobsApiClient,
+        super(JobsLoadInProgress());
 
   final JobsApiClient _jobsApiClient;
-
-  @override
-  JobsState get initialState => JobsLoadInProgress();
 
   @override
   Stream<JobsState> mapEventToState(

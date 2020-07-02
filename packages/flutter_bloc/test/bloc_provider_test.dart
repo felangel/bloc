@@ -171,10 +171,9 @@ class RoutePage extends StatelessWidget {
 enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  int get initialState => 0;
-  Function onClose;
+  final Function onClose;
 
-  CounterBloc({this.onClose});
+  CounterBloc({this.onClose}) : super(0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {

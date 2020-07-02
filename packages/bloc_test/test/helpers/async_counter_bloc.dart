@@ -5,8 +5,7 @@ import 'package:bloc/bloc.dart';
 enum AsyncCounterEvent { increment }
 
 class AsyncCounterBloc extends Bloc<AsyncCounterEvent, int> {
-  @override
-  int get initialState => 0;
+  AsyncCounterBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(

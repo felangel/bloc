@@ -1,7 +1,5 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
-import 'dart:async';
-
-import 'package:mockito/mockito.dart';
+import 'package:cubit_test/cubit_test.dart';
 
 /// Extend or mixin this class to mark the implementation as a [MockBloc].
 ///
@@ -23,13 +21,4 @@ import 'package:mockito/mockito.dart';
 /// ```dart
 /// class MockCounterBloc extends MockBloc implements CounterBloc {}
 /// ```
-class MockBloc<E, S> extends Mock {
-  @override
-  dynamic noSuchMethod(Invocation invocation) {
-    final memberName = invocation.memberName.toString().split('"')[1];
-    final result = super.noSuchMethod(invocation);
-    return (memberName == 'skip' && result == null)
-        ? Stream<S>.empty()
-        : result;
-  }
-}
+class MockBloc<E, S> extends MockCubit<S> {}

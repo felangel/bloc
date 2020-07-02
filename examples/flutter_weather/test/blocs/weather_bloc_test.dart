@@ -36,8 +36,8 @@ void main() {
       expect(() => WeatherBloc(weatherRepository: null), throwsAssertionError);
     });
 
-    test('has a correct initialState', () {
-      expect(weatherBloc.initialState, WeatherInitial());
+    test('has a correct initial state', () {
+      expect(weatherBloc.state, WeatherInitial());
     });
 
     group('WeatherRequested', () {

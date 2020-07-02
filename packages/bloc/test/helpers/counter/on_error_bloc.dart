@@ -8,10 +8,7 @@ class OnErrorBloc extends Bloc<CounterEvent, int> {
   final Function onErrorCallback;
   final Error error;
 
-  OnErrorBloc({this.error, this.onErrorCallback});
-
-  @override
-  int get initialState => 0;
+  OnErrorBloc({this.error, this.onErrorCallback}) : super(0);
 
   @override
   void onError(Object error, StackTrace stackTrace) {

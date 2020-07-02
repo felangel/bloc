@@ -13,12 +13,9 @@ class SumEvent {
 class SumBloc extends Bloc<SumEvent, int> {
   StreamSubscription<int> _countSubscription;
 
-  SumBloc(CounterBloc counterBloc) {
+  SumBloc(CounterBloc counterBloc) : super(0) {
     _countSubscription = counterBloc.listen((count) => add(SumEvent(count)));
   }
-
-  @override
-  int get initialState => 0;
 
   @override
   Stream<int> mapEventToState(

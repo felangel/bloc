@@ -1,14 +1,10 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_cubit/flutter_cubit.dart';
 
 import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
 import 'package:bloc/bloc.dart';
 
-/// Mixin which allows `MultiBlocProvider` to infer the types
-/// of multiple [BlocProvider]s.
-mixin BlocProviderSingleChildWidget on SingleChildWidget {}
-
-/// {@template blocprovider}
+/// {@template bloc_provider}
 /// Takes a [ValueBuilder] that is responsible for creating the [bloc] and
 /// a [child] which will have access to the [bloc] via
 /// `BlocProvider.of(context)`.
@@ -25,29 +21,16 @@ mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 /// );
 /// ```
 /// {@endtemplate}
-class BlocProvider<T extends Bloc<dynamic, dynamic>>
-    extends SingleChildStatelessWidget with BlocProviderSingleChildWidget {
-  /// [child] and its descendants which will have access to the [bloc].
-  final Widget child;
-
-  /// Whether or not the [bloc] being provided should be lazily created.
-  /// Defaults to `true`.
-  final bool lazy;
-
-  final Dispose<T> _dispose;
-
-  final Create<T> _create;
-
-  /// {@macro blocprovider}
+class BlocProvider<T extends Bloc<Object, Object>> extends CubitProvider<T> {
+  /// {@macro bloc_provider}
   BlocProvider({
     Key key,
     @required Create<T> create,
     Widget child,
     bool lazy,
-  }) : this._(
+  }) : super(
           key: key,
           create: create,
-          dispose: (_, bloc) => bloc?.close(),
           child: child,
           lazy: lazy,
         );
@@ -73,23 +56,11 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
     Key key,
     @required T value,
     Widget child,
-  }) : this._(
+  }) : super.value(
           key: key,
-          create: (_) => value,
+          value: value,
           child: child,
         );
-
-  /// Internal constructor responsible for creating the [BlocProvider].
-  /// Used by the [BlocProvider] default and value constructors.
-  BlocProvider._({
-    Key key,
-    @required Create<T> create,
-    Dispose<T> dispose,
-    this.child,
-    this.lazy,
-  })  : _create = create,
-        _dispose = dispose,
-        super(key: key, child: child);
 
   /// Method that allows widgets to access a [bloc] instance as long as their
   /// `BuildContext` contains a [BlocProvider] instance.
@@ -117,16 +88,6 @@ class BlocProvider<T extends Bloc<dynamic, dynamic>>
       );
     }
   }
-
-  @override
-  Widget buildWithChild(BuildContext context, Widget child) {
-    return InheritedProvider<T>(
-      create: _create,
-      dispose: _dispose,
-      child: child,
-      lazy: lazy,
-    );
-  }
 }
 
 /// Extends the `BuildContext` class with the ability
@@ -140,5 +101,5 @@ extension BlocProviderExtension on BuildContext {
   /// ```dart
   /// BlocProvider.of<B>(context)
   /// ```
-  B bloc<B extends Bloc>() => BlocProvider.of<B>(this);
+  B bloc<B extends Bloc<Object, Object>>() => BlocProvider.of<B>(this);
 }

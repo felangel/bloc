@@ -9,8 +9,7 @@ part 'my_form_event.dart';
 part 'my_form_state.dart';
 
 class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
-  @override
-  MyFormState get initialState => const MyFormState();
+  MyFormBloc() : super(const MyFormState());
 
   @override
   void onTransition(Transition<MyFormEvent, MyFormState> transition) {
@@ -40,8 +39,6 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
         await Future.delayed(const Duration(seconds: 1));
         yield state.copyWith(status: FormzStatus.submissionSuccess);
       }
-    } else if (event is FormReset) {
-      yield const MyFormState();
     }
   }
 }

@@ -5,10 +5,7 @@ class SeededBloc extends Bloc<String, int> {
   final List<int> states;
   final int seed;
 
-  SeededBloc({@required this.seed, @required this.states});
-
-  @override
-  int get initialState => seed;
+  SeededBloc({@required this.seed, @required this.states}) : super(seed);
 
   @override
   Stream<int> mapEventToState(String event) async* {
