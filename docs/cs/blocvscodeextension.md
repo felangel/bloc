@@ -48,7 +48,7 @@ Nebo můžete kliknout pravým tlačítkem na složku, ve které chcete vytvoři
 | `multiblocprovider`       | Creates a MultiBlocProvider Widget                   |
 | `repositoryprovider`      | Creates a RepositoryProvider Widget                  |
 | `multirepositoryprovider` | Creates a MultiRepositoryProvider Widget             |
-| `blocdelegate`            | Creates a BlocDelegate Class                         |
+| `blocobserver`            | Creates a BlocObserver Class                         |
 | `contextbloc`             | Shortcut for `context.bloc<MyBloc>()`                |
 | `blocof`                  | Shortcut for `BlocProvider.of<MyBloc>()`             |
 | `contextrepository`       | Shortcut for `context.repository<MyRepository>()`    |
