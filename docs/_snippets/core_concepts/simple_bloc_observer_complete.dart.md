@@ -1,5 +1,5 @@
 ```dart
-class SimpleBlocDelegate extends BlocDelegate {
+class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
     print(event);
@@ -14,8 +14,8 @@ class SimpleBlocDelegate extends BlocDelegate {
 
   @override
   void onError(Bloc bloc, Object error, StackTrace stackTrace) {
-    super.onError(bloc, error, stackTrace);
     print('$error, $stackTrace');
+    super.onError(bloc, error, stackTrace);    
   }
 }
 ```

@@ -1,5 +1,5 @@
 ```dart
-class SimpleBlocDelegate extends BlocDelegate {
+class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
     print(event);

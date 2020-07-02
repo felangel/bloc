@@ -142,22 +142,20 @@ Bloc을 사용하기 위해서는, `Stream`과 이것의 동작 원리를 제대
 
 Bloc을 사용하는 또 하나의 장점으로 한 곳에서 모든 `Transition`에 대한 access를 가지게 됩니다. 이 어플리케이션에서는 Bloc이 하나 뿐이지만, 좀 더 큰 어플리케이션에서는 어플리케이션의 state를 관리하는 Bloc이 여러개인 경우가 빈번합니다.
 
-만일 모든 `Transition`에 대해 어떠한 액션을 할 수 있기를 원한다면, 우리는 간단히 `BlocDelegate`를 생성하면 됩니다.
+만일 모든 `Transition`에 대해 어떠한 액션을 할 수 있기를 원한다면, 우리는 간단히 `BlocObserver`를 생성하면 됩니다.
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer.dart.md ':include')
 
-?> **노트**: `BlocDelegate`를 extend하고 `onTransition`함수를 override하기만 하면 됩니다.
+?> **노트**: `BlocObserver`를 extend하고 `onTransition`함수를 override하기만 하면 됩니다.
 
-Bloc에게 우리가 만든 `SimpleBlocDelegate`를 사용하게 하기 위해서는, `main` 함수를 조금 바꾸면 됩니다.
+Bloc에게 우리가 만든 `SimpleBlocObserver`를 사용하게 하기 위해서는, `main` 함수를 조금 바꾸면 됩니다.
 
-[main.dart](../_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
+[main.dart](../_snippets/core_concepts/simple_bloc_observer_main.dart.md ':include')
 
-만일 모든 추가되는 `Event`에 직접 반응하고 싶다면, `SimpleBlocDelegate`에서 `onEvent` 함수를 override하면 됩니다.
+만일 모든 추가되는 `Event`에 직접 반응하고 싶다면, `SimpleBlocObserver`에서 `onEvent` 함수를 override하면 됩니다.
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer_on_event.dart.md ':include')
 
-만일 Bloc에서 발생하는 모든 `Exception`에 직접 반응하고 싶다면, `SimpleBlocDelegate`에서 `onError` 함수를 override하면 됩니다.
+만일 Bloc에서 발생하는 모든 `Exception`에 직접 반응하고 싶다면, `SimpleBlocObserver`에서 `onError` 함수를 override하면 됩니다.
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
-
-?> **노트**: `BlocSupervisor`는 모든 Bloc을 감독하는 singleton으로 `BlocDelegate`에 책임을 위임합니다.
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer_complete.dart.md ':include')

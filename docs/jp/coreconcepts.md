@@ -136,26 +136,24 @@ Bloc 内で`Transition`を観測できたのと同じように Bloc 内の`Excep
 
 `onError`を上書きしたので`Exception`が発生した時に好きなように処理することができます。
 
-## BlocDelegate
+## BlocObserver
 
 Bloc を使うことで一個ついてくるボーナスが一箇所で全ての`Transition`にアクセスできるということです。今回のアプリでは一個しか Bloc がなかったものの、もう少し複雑なアプリになったら Bloc も複数出てきてアプリ内の様々な箇所で状態管理をするようになります。
 
-もし、アプリ内の全ての`Transition`を監視したい場合は`BlocDelegate`を作ります。
+もし、アプリ内の全ての`Transition`を監視したい場合は`BlocObserver`を作ります。
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer.dart.md ':include')
 
-?> **メモ**: `BlocDelegate`を継承し`onTransition`を上書きするだけです。
+?> **メモ**: `BlocObserver`を継承し`onTransition`を上書きするだけです。
 
-Bloc にこの`SimpleBlocDelegate`を使うように指示するにはただ`main`をいじるだけです。
+Bloc にこの`SimpleBlocObserver`を使うように指示するにはただ`main`をいじるだけです。
 
-[main.dart](../_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
+[main.dart](../_snippets/core_concepts/simple_bloc_observer_main.dart.md ':include')
 
-もし全ての`Event`に対して何かを実行したい場合は`SimpleBlocDelegate`内で`onEvent`を上書きします。
+もし全ての`Event`に対して何かを実行したい場合は`SimpleBlocObserver`内で`onEvent`を上書きします。
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer_on_event.dart.md ':include')
 
-もし全ての`Exception`に対して何かを実行したい場合は`SimpleBlocDelegate`の`onError`を上書きします。
+もし全ての`Exception`に対して何かを実行したい場合は`SimpleBlocObserver`の`onError`を上書きします。
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
-
-?> **メモ**: `BlocSupervisor` は全ての Bloc を上書きするシングルトンで、情報を`BlocDelegate`に上げてくれます。
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer_complete.dart.md ':include')

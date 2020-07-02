@@ -139,26 +139,24 @@ Bloc建立在[RxDart]的基础之上(https://pub.dev/packages/rxdart); 然而，
 
 既然我们已经覆盖了`onError`，那么只要有异常(`Exception`)抛出，我们就可以对异常作出响应。
 
-## BlocDelegate
+## BlocObserver
 
 使用Bloc的另一个好处是，我们可以在一处访问所有的`Transitions`。虽然在这个应用程序中只有一个Bloc，但是在大型应用程序却中常见有许多Blocs管理不同部分的应用程序的状态。
 
-如果我们希望能够对所有转换`Transitions`做出响应，我们可以简单地创建自己的`BlocDelegate`。
+如果我们希望能够对所有转换`Transitions`做出响应，我们可以简单地创建自己的`BlocObserver`。
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer.dart.md ':include')
 
-?> **注意**: 我们需要做的就是扩展（`extend`) `BlocDelegate`这个类并重写(`override`)其中的`onTransition`方法。
+?> **注意**: 我们需要做的就是扩展（`extend`) `BlocObserver`这个类并重写(`override`)其中的`onTransition`方法。
 
-为了让Bloc使用我们的`SimpleBlocDelegate`，我们只需要调整我们的`main`函数。
+为了让Bloc使用我们的`SimpleBlocObserver`，我们只需要调整我们的`main`函数。
 
-[main.dart](../_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
+[main.dart](../_snippets/core_concepts/simple_bloc_observer_main.dart.md ':include')
 
-如果我们希望能够对所有添加的事件（`Event`) 做出响应，那么我们也可以在`SimpleBlocDelegate`中重写`onEvent`方法。
+如果我们希望能够对所有添加的事件（`Event`) 做出响应，那么我们也可以在`SimpleBlocObserver`中重写`onEvent`方法。
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer_on_event.dart.md ':include')
 
-如果我们希望能够对Bloc中抛出的所有异常（`Exceptions`) 做出响应，那么我们也可以在`SimpleBlocDelegate`中重写`onError`方法。
+如果我们希望能够对Bloc中抛出的所有异常（`Exceptions`) 做出响应，那么我们也可以在`SimpleBlocObserver`中重写`onError`方法。
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
-
-?> **注意**: `BlocSupervisor`是一个实例，负责监督所有Bloc，并将职责委托给`BlocDelegate`。
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer_complete.dart.md ':include')

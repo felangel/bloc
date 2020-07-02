@@ -1,6 +1,6 @@
 ```dart
 void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
   CounterBloc bloc = CounterBloc();
 
   for (int i = 0; i < 3; i++) {
