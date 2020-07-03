@@ -148,6 +148,18 @@ BlocProvider(
 );
 ```
 
+By default, BlocProvider will create the bloc lazily, meaning `create` will get executed when the bloc is looked up via `BlocProvider.of<BlocA>(context)`.
+
+To override this behavior and force `create` to be run immediately, `lazy` can be set to `false`.
+
+```dart
+BlocProvider(
+  lazy: false,
+  create: (BuildContext context) => BlocA(),
+  child: ChildA(),
+);
+```
+
 In some cases, `BlocProvider` can be used to provide an existing bloc to a new portion of the widget tree. This will be most commonly used when an existing `bloc` needs to be made available to a new route. In this case, `BlocProvider` will not automatically close the bloc since it did not create it.
 
 ```dart

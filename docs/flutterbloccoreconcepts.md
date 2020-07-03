@@ -30,6 +30,12 @@ In most cases, `BlocProvider` should be used to create new `blocs` which will be
 
 [bloc_provider.dart](_snippets/flutter_bloc_core_concepts/bloc_provider.dart.md ':include')
 
+By default, BlocProvider will create the bloc lazily, meaning `create` will get executed when the bloc is looked up via `BlocProvider.of<BlocA>(context)`.
+
+To override this behavior and force `create` to be run immediately, `lazy` can be set to `false`.
+
+[bloc_provider.dart](_snippets/flutter_bloc_core_concepts/bloc_provider_lazy.dart.md ':include')
+
 In some cases, `BlocProvider` can be used to provide an existing bloc to a new portion of the widget tree. This will be most commonly used when an existing `bloc` needs to be made available to a new route. In this case, `BlocProvider` will not automatically close the bloc since it did not create it.
 
 [bloc_provider.dart](_snippets/flutter_bloc_core_concepts/bloc_provider_value.dart.md ':include')
