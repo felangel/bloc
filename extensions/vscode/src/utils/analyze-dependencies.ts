@@ -5,6 +5,17 @@ import { window, env, Uri } from "vscode";
 import { getPubspec } from ".";
 import { updatePubspecDependency } from "./update-pubspec-dependency";
 
+interface Dependency {
+  name: string;
+  version: string;
+  actions: Action[];
+}
+
+interface Action {
+  name: string;
+  callback: Function;
+}
+
 export function analyzeDependencies() {
   const dependenciesToAnalyze = [
     {
@@ -19,25 +30,39 @@ export function analyzeDependencies() {
                 "https://github.com/felangel/equatable/blob/master/doc/migration_guides/migration-0.6.0.md"
               )
             );
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     { name: "bloc", version: "^5.0.0", actions: [] },
-    { name: "bloc_test", version: "^6.0.0", actions: [] },
+
     { name: "flutter_bloc", version: "^5.0.0", actions: [] },
     { name: "angular_bloc", version: "^4.0.0", actions: [] },
     { name: "hydrated_bloc", version: "^5.0.0", actions: [] },
     { name: "sealed_flutter_bloc", version: "^4.0.0", actions: [] },
     { name: "cubit", version: "^0.1.0", actions: [] },
-    { name: "cubit_test", version: "^0.1.0", actions: [] },
     { name: "flutter_cubit", version: "^0.1.0", actions: [] },
     { name: "angular_cubit", version: "^0.1.0-dev.1", actions: [] },
     { name: "hydrated_cubit", version: "^0.1.0", actions: [] },
   ];
 
-  const dependencies = _.get(getPubspec(), "dependencies", {});
+  const devDependenciesToAnalyze = [
+    { name: "bloc_test", version: "^6.0.0", actions: [] },
+    { name: "cubit_test", version: "^0.1.0", actions: [] },
+  ];
 
+  const pubspec = getPubspec();
+  const dependencies = _.get(pubspec, "dependencies", {});
+  const devDependencies = _.get(pubspec, "dev_dependencies", {});
+
+  checkForUpgrades(dependenciesToAnalyze, dependencies);
+  checkForUpgrades(devDependenciesToAnalyze, devDependencies);
+}
+
+function checkForUpgrades(
+  dependenciesToAnalyze: Dependency[],
+  dependencies: object[]
+) {
   for (let i = 0; i < dependenciesToAnalyze.length; i++) {
     const dependency = dependenciesToAnalyze[i];
     if (_.has(dependencies, dependency.name)) {
@@ -55,17 +80,18 @@ export function analyzeDependencies() {
         window
           .showWarningMessage(
             `This workspace contains an unsupported version of ${dependency.name}. Please update to ${dependency.version}.`,
-            ...dependency.actions.map(action => action.name).concat("Update")
+            ...dependency.actions.map((action) => action.name).concat("Update")
           )
-          .then(invokedAction => {
+          .then((invokedAction) => {
             if (invokedAction === "Update") {
               return updatePubspecDependency({
                 name: dependency.name,
-                version: dependency.version
+                latestVersion: dependency.version,
+                currentVersion: dependencyVersion,
               });
             }
             const action = dependency.actions.find(
-              action => action.name === invokedAction
+              (action) => action.name === invokedAction
             );
             if (!_.isNil(action)) {
               action.callback();

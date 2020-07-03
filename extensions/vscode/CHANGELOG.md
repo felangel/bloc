@@ -1,3 +1,7 @@
+# 4.1.1
+
+- fix: package version analysis on dev_dependencies
+
 # 4.1.0
 
 - Include "Cubit: New Cubit" command to generate a cubit and state
