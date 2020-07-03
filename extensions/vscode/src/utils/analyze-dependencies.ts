@@ -28,7 +28,12 @@ export function analyzeDependencies() {
     { name: "flutter_bloc", version: "^5.0.0", actions: [] },
     { name: "angular_bloc", version: "^4.0.0", actions: [] },
     { name: "hydrated_bloc", version: "^5.0.0", actions: [] },
-    { name: "sealed_flutter_bloc", version: "^4.0.0", actions: [] }
+    { name: "sealed_flutter_bloc", version: "^4.0.0", actions: [] },
+    { name: "cubit", version: "^0.1.0", actions: [] },
+    { name: "cubit_test", version: "^0.1.0", actions: [] },
+    { name: "flutter_cubit", version: "^0.1.0", actions: [] },
+    { name: "angular_cubit", version: "^0.1.0-dev.1", actions: [] },
+    { name: "hydrated_cubit", version: "^0.1.0", actions: [] },
   ];
 
   const dependencies = _.get(getPubspec(), "dependencies", {});
