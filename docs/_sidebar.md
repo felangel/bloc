@@ -9,6 +9,7 @@
   - [Testing](testing.md)
   - [Naming Conventions](blocnamingconventions.md)
   - [FAQs](faqs.md)
+  - [Migration](migration.md)
 
 - Tutorials
 
