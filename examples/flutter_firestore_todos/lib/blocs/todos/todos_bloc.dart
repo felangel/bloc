@@ -10,10 +10,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   TodosBloc({@required TodosRepository todosRepository})
       : assert(todosRepository != null),
-        _todosRepository = todosRepository;
-
-  @override
-  TodosState get initialState => TodosLoading();
+        _todosRepository = todosRepository,
+        super(TodosLoading());
 
   @override
   Stream<TodosState> mapEventToState(TodosEvent event) async* {

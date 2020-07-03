@@ -14,8 +14,7 @@ class MockChangeDetectorRef extends Mock implements ChangeDetectorRef {}
 enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
+  CounterBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
@@ -107,7 +106,7 @@ void main() {
         pipe.ngOnDestroy();
         bloc.add(CounterEvent.increment);
         Timer.run(expectAsync0(() {
-          expect(pipe.transform(bloc), 0);
+          expect(pipe.transform(bloc), 1);
         }));
       });
     });

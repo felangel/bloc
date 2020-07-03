@@ -4,11 +4,11 @@
 
 L'utilisation de Bloc nous permet de séparer notre application en trois couches :
 
-- Données
-  - DataProvider (Fournisseur de données)
-  - Repository (Dépôt)
-- Logique métier
 - Présentation
+- Logique métier
+- Données
+  - Repository (Dépôt)
+  - DataProvider (Fournisseur de données)
 
 Nous allons commencer par le niveau le plus bas (le plus éloigné de l'interface utilisateur) et remonter jusqu'à la couche de présentation.
 

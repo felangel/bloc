@@ -3,6 +3,7 @@ name: angular_dart_examples
 on:
   push:
     paths:
+      - ".github/workflows/angular_dart_examples.yaml"
       - "packages/angular_bloc/**"
       - "examples/angular_counter/**"
       - "examples/github_search/common_github_search/**"
@@ -10,6 +11,7 @@ on:
 
   pull_request:
     paths:
+      - ".github/workflows/angular_dart_examples.yaml"
       - "packages/angular_bloc/**"
       - "examples/angular_counter/**"
       - "examples/github_search/common_github_search/**"
@@ -57,7 +59,7 @@ jobs:
           FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
         run: |
           export PATH=$PATH:$FLUTTER_DART_HOME
-          if [[ -d "test" ]]; then
+          if [ -d "test" ]; then
             pub run build_runner test --fail-on-severe
           fi
   build:

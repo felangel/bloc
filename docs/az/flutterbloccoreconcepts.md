@@ -18,7 +18,7 @@ Yalnız `BlocProvider` və hal-hazırki `BuildContext` ilə əlçatılmayan və 
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_explicit_bloc.dart.md ':include')
 
-Əgər builder funksiyası çağırılan zaman, nəzarət etmək istəyirsinizsə, ötürülə bilən `condition` parametrini `BlocBuilder`-ə əlavə edin. `Condition` parametri bir əvvəlki və cari vəziyyətləri qəbul edir və geriyə məntiqi dəyər (boolean) qaytarır. Əgər `condition` geriyə true qaytarırsa, bu zaman `builder` funksiyası cari vəziyyət ilə çağrılır və widget yenidən qurulur. Əgər `condition` false qaytarırsa, `builder` funksiyası çağrılmayacaq və `state`-ə görə heç bir dəyişiklik olmayacaq.
+Əgər builder funksiyası çağırılan zaman, nəzarət etmək istəyirsinizsə, ötürülə bilən `buildWhen` parametrini `BlocBuilder`-ə əlavə edin. `buildWhen` parametri bir əvvəlki və cari vəziyyətləri qəbul edir və geriyə məntiqi dəyər (boolean) qaytarır. Əgər `buildWhen` geriyə true qaytarırsa, bu zaman `buildWhen` funksiyası cari vəziyyət ilə çağrılır və widget yenidən qurulur. Əgər `buildWhen` false qaytarırsa, `builder` funksiyası çağrılmayacaq və `state`-ə görə heç bir dəyişiklik olmayacaq.
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_condition.dart.md ':include')
 
@@ -63,7 +63,7 @@ Yalnız `BlocProvider` və hal-hazırki `BuildContext` ilə əlçatılmayan bloc
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_explicit_bloc.dart.md ':include')
 
-Əgər listener funksiyası çağırılan zaman, nəzarət etmək istəyirsinizsə, ötürülə bilən `condition` parametrini `BlocListener`-ə əlavə edin. `Condition` parametri bir əvvəlki və cari vəziyyətləri qəbul edir və geriyə məntiqi dəyər (boolean) qaytarır. Əgər `condition` geriyə true qaytarırsa, bu zaman `listener` funksiyası cari vəziyyət ilə çağrılır. Əgər `condition` false qaytarırsa, `listener` funksiyası çağrılmayacaq.
+Əgər listener funksiyası çağırılan zaman, nəzarət etmək istəyirsinizsə, ötürülə bilən `listenWhen` parametrini `BlocListener`-ə əlavə edin. `listenWhen` parametri bir əvvəlki və cari vəziyyətləri qəbul edir və geriyə məntiqi dəyər (boolean) qaytarır. Əgər `listenWhen` geriyə true qaytarırsa, bu zaman `listener` funksiyası cari vəziyyət ilə çağrılır. Əgər `listenWhen` false qaytarırsa, `listener` funksiyası çağrılmayacaq.
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_condition.dart.md ':include')
 

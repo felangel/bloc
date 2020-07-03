@@ -3,10 +3,10 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shopping_cart/cart/cart.dart';
 import 'package:flutter_shopping_cart/catalog/catalog.dart';
-import 'package:flutter_shopping_cart/simple_bloc_delegate.dart';
+import 'package:flutter_shopping_cart/simple_bloc_observer.dart';
 
 void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
   runApp(MyApp());
 }
 

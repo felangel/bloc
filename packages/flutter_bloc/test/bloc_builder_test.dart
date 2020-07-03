@@ -76,34 +76,20 @@ class SetDarkTheme extends ThemeEvent {}
 class SetLightTheme extends ThemeEvent {}
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
-  final ThemeData _darkTheme = ThemeData.dark();
-  final ThemeData _lightTheme = ThemeData.light();
-
-  ThemeData get initialState => _lightTheme;
+  ThemeBloc() : super(ThemeData.light());
 
   @override
   Stream<ThemeData> mapEventToState(ThemeEvent event) async* {
-    if (event is SetDarkTheme) {
-      yield _darkTheme;
-    } else {
-      yield _lightTheme;
-    }
+    yield event is SetDarkTheme ? ThemeData.dark() : ThemeData.light();
   }
 }
 
 class DarkThemeBloc extends Bloc<ThemeEvent, ThemeData> {
-  final ThemeData _darkTheme = ThemeData.dark();
-  final ThemeData _lightTheme = ThemeData.light();
-
-  ThemeData get initialState => _darkTheme;
+  DarkThemeBloc() : super(ThemeData.dark());
 
   @override
   Stream<ThemeData> mapEventToState(ThemeEvent event) async* {
-    if (event is SetDarkTheme) {
-      yield _darkTheme;
-    } else {
-      yield _lightTheme;
-    }
+    yield event is SetDarkTheme ? ThemeData.dark() : ThemeData.light();
   }
 }
 
@@ -124,7 +110,7 @@ class MyCounterAppState extends State<MyCounterApp> {
           children: <Widget>[
             BlocBuilder<CounterBloc, int>(
               bloc: _bloc,
-              condition: (previousState, state) {
+              buildWhen: (previousState, state) {
                 return (previousState + state) % 3 == 0;
               },
               builder: (context, count) {
@@ -153,8 +139,7 @@ class MyCounterAppState extends State<MyCounterApp> {
 enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
+  CounterBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
@@ -399,7 +384,7 @@ void main() {
       expect(numBuilds, 1);
     });
 
-    testWidgets('with condition only rebuilds when condition evaluates to true',
+    testWidgets('with buildWhen only rebuilds when buildWhen evaluates to true',
         (tester) async {
       await tester.pumpWidget(MyCounterApp());
       await tester.pumpAndSettle();

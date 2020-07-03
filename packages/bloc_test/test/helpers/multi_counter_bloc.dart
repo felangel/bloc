@@ -5,8 +5,7 @@ import 'package:bloc/bloc.dart';
 enum MultiCounterEvent { increment }
 
 class MultiCounterBloc extends Bloc<MultiCounterEvent, int> {
-  @override
-  int get initialState => 0;
+  MultiCounterBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(

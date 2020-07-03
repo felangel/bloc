@@ -6,8 +6,7 @@ import 'package:rxdart/rxdart.dart';
 enum DebounceCounterEvent { increment }
 
 class DebounceCounterBloc extends Bloc<DebounceCounterEvent, int> {
-  @override
-  int get initialState => 0;
+  DebounceCounterBloc() : super(0);
 
   @override
   Stream<Transition<DebounceCounterEvent, int>> transformEvents(

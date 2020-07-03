@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_cubit/flutter_cubit.dart';
 
 import '../flutter_bloc.dart';
 
-/// {@template blocconsumer}
+/// {@template bloc_consumer}
 /// [BlocConsumer] exposes a [builder] and [listener] in order react to new
 /// states.
 /// [BlocConsumer] is analogous to a nested [BlocListener] and [BlocBuilder] but
@@ -59,56 +60,23 @@ import '../flutter_bloc.dart';
 /// )
 /// ```
 /// {@endtemplate}
-class BlocConsumer<B extends Bloc<dynamic, S>, S> extends StatelessWidget {
-  /// The [bloc] that the [BlocConsumer] will interact with.
-  /// If omitted, [BlocConsumer] will automatically perform a lookup using
-  /// [BlocProvider] and the current `BuildContext`.
-  final B bloc;
-
-  /// The [builder] function which will be invoked on each widget build.
-  /// The [builder] takes the `BuildContext` and current [state] and
-  /// must return a widget.
-  /// This is analogous to the [builder] function in [StreamBuilder].
-  final BlocWidgetBuilder<S> builder;
-
-  /// Takes the `BuildContext` along with the [bloc] [state]
-  /// and is responsible for executing in response to [state] changes.
-  final BlocWidgetListener<S> listener;
-
-  /// Takes the previous [state] and the current [state] and is responsible for
-  /// returning a [bool] which determines whether or not to trigger
-  /// [builder] with the current [state].
-  final BlocBuilderCondition<S> buildWhen;
-
-  /// Takes the previous [state] and the current [state] and is responsible for
-  /// returning a [bool] which determines whether or not to call [listener] of
-  /// [BlocConsumer] with the current [state].
-  final BlocListenerCondition<S> listenWhen;
-
-  /// {@macro blocconsumer}
+class BlocConsumer<B extends Bloc<dynamic, S>, S> extends CubitConsumer<B, S> {
+  /// {@macro bloc_consumer}
   const BlocConsumer({
     Key key,
-    @required this.builder,
-    @required this.listener,
-    this.bloc,
-    this.buildWhen,
-    this.listenWhen,
+    @required CubitWidgetBuilder<S> builder,
+    @required CubitWidgetListener<S> listener,
+    B bloc,
+    CubitBuilderCondition<S> buildWhen,
+    CubitListenerCondition<S> listenWhen,
   })  : assert(builder != null),
         assert(listener != null),
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final bloc = this.bloc ?? BlocProvider.of<B>(context);
-    return BlocListener<B, S>(
-      bloc: bloc,
-      listener: listener,
-      condition: listenWhen,
-      child: BlocBuilder<B, S>(
-        bloc: bloc,
-        builder: builder,
-        condition: buildWhen,
-      ),
-    );
-  }
+        super(
+          key: key,
+          builder: builder,
+          listener: listener,
+          cubit: bloc,
+          buildWhen: buildWhen,
+          listenWhen: listenWhen,
+        );
 }

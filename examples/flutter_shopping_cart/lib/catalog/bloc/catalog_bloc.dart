@@ -8,8 +8,7 @@ part 'catalog_event.dart';
 part 'catalog_state.dart';
 
 class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
-  @override
-  CatalogState get initialState => CatalogLoading();
+  CatalogBloc() : super(CatalogLoading());
 
   @override
   Stream<CatalogState> mapEventToState(

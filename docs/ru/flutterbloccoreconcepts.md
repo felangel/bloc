@@ -18,7 +18,7 @@
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_explicit_bloc.dart.md ':include')
 
-Если вам нужен детальный контроль над тем, когда вызывается функция компоновщика, вы можете предоставить необязательное условие `condition` для `BlocBuilder`. Условие принимает предыдущее и текущее состояния блока и возвращает логическое значение. Если `condition` возвращает true, `builder` будет вызываться с помощью `state` и виджет перестраивается. Если `condition` возвращает false, `builder` не будет вызван со `state` и перестройка не произойдет.
+Если вам нужен детальный контроль над тем, когда вызывается функция компоновщика, вы можете предоставить необязательное условие `buildWhen` для `BlocBuilder`. Условие принимает предыдущее и текущее состояния блока и возвращает логическое значение. Если `buildWhen` возвращает true, `builder` будет вызываться с помощью `state` и виджет перестраивается. Если `buildWhen` возвращает false, `builder` не будет вызван со `state` и перестройка не произойдет.
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_condition.dart.md ':include')
 
@@ -39,10 +39,6 @@
 [bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider_lookup.dart.md ':include')
 
 ### MultiBlocProvider (Мульти блок поставщик)
-
-**MultiBlocProvider** is a Flutter widget that merges multiple `BlocProvider` widgets into one.
-`MultiBlocProvider` improves the readability and eliminates the need to nest multiple `BlocProviders`.
-By using `MultiBlocProvider` we can go from:
 
 **MultiBlocProvider** - это виджет Flutter, который объединяет несколько виджетов `BlocProvider` в один.
 `MultiBlocProvider` улучшает читаемость и устраняет необходимость вложения нескольких `BlocProviders`.
@@ -68,7 +64,7 @@ By using `MultiBlocProvider` we can go from:
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_explicit_bloc.dart.md ':include')
 
-Если вам нужен детальный контроль над тем, когда вызывается функция слушателя, вы можете предоставить необязательное условие для `BlocListener`. Условие принимает предыдущее состояние `bloc` и текущее состояние `bloc` и возвращает логическое значение. Если `condition` возвращает true, `listener` будет вызван со `state`. Если `condition` возвращает false, `listener` не будет вызван со `state`.
+Если вам нужен детальный контроль над тем, когда вызывается функция слушателя, вы можете предоставить необязательное условие для `BlocListener`. Условие принимает предыдущее состояние `bloc` и текущее состояние `bloc` и возвращает логическое значение. Если `listenWhen` возвращает true, `listener` будет вызван со `state`. Если `listenWhen` возвращает false, `listener` не будет вызван со `state`.
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_condition.dart.md ':include')
 
@@ -97,7 +93,7 @@ By using `MultiBlocProvider` we can go from:
 
 [bloc_consumer.dart](../_snippets/flutter_bloc_core_concepts/bloc_consumer_condition.dart.md ':include')
 
-### RepositoryProvider (Постащик хранилища)
+### RepositoryProvider (Поставщик хранилища)
 
 **RepositoryProvider** - это виджет Flutter, который предоставляет хранилище своим дочерним элементам через `RepositoryProvider.of<T>(context)`. Он используется в качестве виджета внедрения зависимостей (DI) так, что один экземпляр репозитория может быть предоставлен нескольким виджетам в поддереве. `BlocProvider` должен использоваться для предоставления блоков, тогда как `RepositoryProvider` должен использоваться только для репозиториев.
 

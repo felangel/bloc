@@ -8,8 +8,7 @@ part 'profile_wizard_event.dart';
 part 'profile_wizard_state.dart';
 
 class ProfileWizardBloc extends Bloc<ProfileWizardEvent, ProfileWizardState> {
-  @override
-  ProfileWizardState get initialState => ProfileWizardState.initial();
+  ProfileWizardBloc() : super(ProfileWizardState.initial());
 
   @override
   Stream<ProfileWizardState> mapEventToState(

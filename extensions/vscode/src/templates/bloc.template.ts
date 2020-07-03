@@ -20,8 +20,7 @@ part '${snakeCaseBlocName}_event.dart';
 part '${snakeCaseBlocName}_state.dart';
 
 class ${pascalCaseBlocName}Bloc extends Bloc<${blocEvent}, ${blocState}> {
-  @override
-  ${blocState} get initialState => ${pascalCaseBlocName}Initial();
+  ${pascalCaseBlocName}Bloc() : super(${pascalCaseBlocName}Initial());
 
   @override
   Stream<${blocState}> mapEventToState(
@@ -47,8 +46,7 @@ part '${snakeCaseBlocName}_event.dart';
 part '${snakeCaseBlocName}_state.dart';
 
 class ${pascalCaseBlocName}Bloc extends Bloc<${blocEvent}, ${blocState}> {
-  @override
-  ${blocState} get initialState => ${pascalCaseBlocName}Initial();
+  ${pascalCaseBlocName}Bloc() : super(${pascalCaseBlocName}Initial());
 
   @override
   Stream<${blocState}> mapEventToState(

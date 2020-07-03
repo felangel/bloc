@@ -142,26 +142,24 @@ Stejně jako můžeme zpracovat `Transition` na úrovni blocu, můžeme také zp
 
 Nyní, když jsme přepsali `onError`, můžeme dělat cokoli chceme kdykoli je vyvolána `Exception`.
 
-## BlocDelegate
+## BlocObserver
 
 Jeden přidaný bonus používání Blocu je to, že můžeme míř přístup ke všem `Transitionům` na jednom místě. I když v této aplikaci máme pouze jeden Bloc, ve větších aplikacích je docela běžné mít více Bloců, které zpracovávají rozdílné části stavů aplikace.
 
-Pokud chceme být schopni dělat něco v závislosti na všech `Transitionech`, můžeme jednoduše vytvořit náš vlastní `BlocDelegate`.
+Pokud chceme být schopni dělat něco v závislosti na všech `Transitionech`, můžeme jednoduše vytvořit náš vlastní `BlocObserver`.
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer.dart.md ':include')
 
-?> **Poznámka**: Všechno co potřebujeme udělat je rozšířit `BlocDelegate` a přepsat metodu `onTransition`.
+?> **Poznámka**: Všechno co potřebujeme udělat je rozšířit `BlocObserver` a přepsat metodu `onTransition`.
 
-Abychom Blocům řekli, aby používali `SimpleBlocDelegate`, musíme jenom poupravit naši `main` funkci.
+Abychom Blocům řekli, aby používali `SimpleBlocObserver`, musíme jenom poupravit naši `main` funkci.
 
-[main.dart](../_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
+[main.dart](../_snippets/core_concepts/simple_bloc_observer_main.dart.md ':include')
 
-Pokud chceme být schopni udělat něco v závislosti na všech přidaných `Eventech`, můžeme také přepsat metodu `onEvent` v našem `SimpleBlocDelegate`.
+Pokud chceme být schopni udělat něco v závislosti na všech přidaných `Eventech`, můžeme také přepsat metodu `onEvent` v našem `SimpleBlocObserver`.
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer_on_event.dart.md ':include')
 
-Pokud chceme být schopni udělat něco v závislosti na všech vyvolaných `Exceptionech` v Blocu, můžeme také přepsat metodu `onError` v našem `SimpleBlocDelegate`.
+Pokud chceme být schopni udělat něco v závislosti na všech vyvolaných `Exceptionech` v Blocu, můžeme také přepsat metodu `onError` v našem `SimpleBlocObserver`.
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
-
-?> **Poznámka**: `BlocSupervisor` je singleton, který dohlíží na všechny Blocy a přenáší odpovědnost na `BlocDelegate`.
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer_complete.dart.md ':include')

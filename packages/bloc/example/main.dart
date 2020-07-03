@@ -5,8 +5,7 @@ import 'package:bloc/bloc.dart';
 enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
+  CounterBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
@@ -22,12 +21,12 @@ class CounterBloc extends Bloc<CounterEvent, int> {
         yield state + 1;
         break;
       default:
-        throw Exception('unhandled event: $event');
+        addError(Exception('unhandled event: $event'));
     }
   }
 }
 
-class SimpleBlocDelegate extends BlocDelegate {
+class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
     print('bloc: ${bloc.runtimeType}, event: $event');
@@ -48,7 +47,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 
 void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
 
   final counterBloc = CounterBloc();
 
@@ -62,7 +61,7 @@ void main() {
 
   counterBloc.add(null); // Triggers Exception
 
-  // The exception triggers `SimpleBlocDelegate.onError`
+  // The exception triggers `SimpleBlocObserver.onError`
   // but does not impact bloc functionality.
   counterBloc.add(CounterEvent.increment);
   counterBloc.add(CounterEvent.decrement);

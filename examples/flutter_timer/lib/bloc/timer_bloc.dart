@@ -9,16 +9,14 @@ part 'timer_state.dart';
 
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
   final Ticker _ticker;
-  final int _duration = 60;
+  static const int _duration = 60;
 
   StreamSubscription<int> _tickerSubscription;
 
   TimerBloc({@required Ticker ticker})
       : assert(ticker != null),
-        _ticker = ticker;
-
-  @override
-  TimerState get initialState => TimerInitial(_duration);
+        _ticker = ticker,
+        super(TimerInitial(_duration));
 
   @override
   void onTransition(Transition<TimerEvent, TimerState> transition) {

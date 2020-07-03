@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SimpleBlocDelegate extends BlocDelegate {
+class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
     print(event);
@@ -25,7 +25,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 
 void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
   runApp(App());
 }
 
@@ -109,8 +109,7 @@ class CounterPage extends StatelessWidget {
 enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
+  CounterBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
@@ -122,7 +121,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
         yield state + 1;
         break;
       default:
-        throw Exception('oops');
+        addError(Exception('unsupported event'));
     }
   }
 }
@@ -130,8 +129,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 enum ThemeEvent { toggle }
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
-  @override
-  ThemeData get initialState => ThemeData.light();
+  ThemeBloc() : super(ThemeData.light());
 
   @override
   Stream<ThemeData> mapEventToState(ThemeEvent event) async* {

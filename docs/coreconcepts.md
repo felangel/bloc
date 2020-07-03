@@ -136,26 +136,24 @@ Just like we can handle `Transitions` at the bloc level, we can also handle `Exc
 
 Now that we've overridden `onError` we can do whatever we'd like whenever an `Exception` is thrown.
 
-## BlocDelegate
+## BlocObserver
 
 One added bonus of using Bloc is that we can have access to all `Transitions` in one place. Even though in this application we only have one Bloc, it's fairly common in larger applications to have many Blocs managing different parts of the application's state.
 
-If we want to be able to do something in response to all `Transitions` we can simply create our own `BlocDelegate`.
+If we want to be able to do something in response to all `Transitions` we can simply create our own `BlocObserver`.
 
-[simple_bloc_delegate.dart](_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](_snippets/core_concepts/simple_bloc_observer.dart.md ':include')
 
-?> **Note**: All we need to do is extend `BlocDelegate` and override the `onTransition` method.
+?> **Note**: All we need to do is extend `BlocObserver` and override the `onTransition` method.
 
-In order to tell Bloc to use our `SimpleBlocDelegate`, we just need to tweak our `main` function.
+In order to tell Bloc to use our `SimpleBlocObserver`, we just need to tweak our `main` function.
 
-[main.dart](_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
+[main.dart](_snippets/core_concepts/simple_bloc_observer_main.dart.md ':include')
 
-If we want to be able to do something in response to all `Events` added, we can also override the `onEvent` method in our `SimpleBlocDelegate`.
+If we want to be able to do something in response to all `Events` added, we can also override the `onEvent` method in our `SimpleBlocObserver`.
 
-[simple_bloc_delegate.dart](_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
+[simple_bloc_observer.dart](_snippets/core_concepts/simple_bloc_observer_on_event.dart.md ':include')
 
-If we want to be able to do something in response to all `Exceptions` thrown in a Bloc, we can also override the `onError` method in our `SimpleBlocDelegate`.
+If we want to be able to do something in response to all `Exceptions` thrown in a Bloc, we can also override the `onError` method in our `SimpleBlocObserver`.
 
-[simple_bloc_delegate.dart](_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
-
-?> **Note**: `BlocSupervisor` is a singleton which oversees all Blocs and delegates responsibilities to the `BlocDelegate`.
+[simple_bloc_observer.dart](_snippets/core_concepts/simple_bloc_observer_complete.dart.md ':include')

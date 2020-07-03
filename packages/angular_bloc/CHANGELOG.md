@@ -1,3 +1,27 @@
+# 6.0.0-dev.5
+
+Update to `bloc ^5.0.0`
+Update to `angular_cubit ^0.1.0-dev.1`
+
+# 6.0.0-dev.4
+
+Update to `bloc ^5.0.0-dev.11`
+Updates to documentation
+
+# 6.0.0-dev.3
+
+Update to `bloc ^5.0.0-dev.10`
+
+# 6.0.0-dev.2
+
+Update to `bloc ^5.0.0-dev.7`
+
+# 6.0.0-dev.1
+
+Update to `bloc ^5.0.0-dev.6`
+Update to extend [angular_cubit](https://pub.dev/packages/angular_cubit)
+Update documentation and static assets.
+
 # 5.0.0-dev.1
 
 Update to `angular_dart: ^6.0.0-alpha+1`

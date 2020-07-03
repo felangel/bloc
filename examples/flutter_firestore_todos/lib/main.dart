@@ -8,7 +8,7 @@ import 'package:flutter_firestore_todos/screens/screens.dart';
 import 'package:user_repository/user_repository.dart';
 
 void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
   runApp(TodosApp());
 }
 

@@ -9,7 +9,7 @@ import 'package:flutter_weather/blocs/weather_bloc.dart';
 
 class MockWeatherRepository extends Mock implements WeatherRepository {}
 
-main() {
+void main() {
   final Weather weather = Weather(
     condition: WeatherCondition.clear,
     formattedCondition: 'Clear',
@@ -36,53 +36,53 @@ main() {
       expect(() => WeatherBloc(weatherRepository: null), throwsAssertionError);
     });
 
-    test('has a correct initialState', () {
-      expect(weatherBloc.initialState, WeatherEmpty());
+    test('has a correct initial state', () {
+      expect(weatherBloc.state, WeatherInitial());
     });
 
-    group('FetchWeather', () {
+    group('WeatherRequested', () {
       blocTest(
-        'emits [WeatherLoading, WeatherLoaded] when weather repository returns weather',
+        'emits [WeatherLoadInProgress, WeatherLoadSuccess] when weather repository returns weather',
         build: () async {
           when(weatherRepository.getWeather('chicago')).thenAnswer(
             (_) => Future.value(weather),
           );
           return weatherBloc;
         },
-        act: (bloc) => bloc.add(FetchWeather(city: 'chicago')),
+        act: (bloc) => bloc.add(WeatherRequested(city: 'chicago')),
         expect: [
-          WeatherLoading(),
-          WeatherLoaded(weather: weather),
+          WeatherLoadInProgress(),
+          WeatherLoadSuccess(weather: weather),
         ],
       );
 
       blocTest(
-        'emits [WeatherLoading, WeatherError] when weather repository throws error',
+        'emits [WeatherLoadInProgress, WeatherLoadFailure] when weather repository throws error',
         build: () async {
           when(weatherRepository.getWeather('chicago'))
               .thenThrow('Weather Error');
           return weatherBloc;
         },
-        act: (bloc) => bloc.add(FetchWeather(city: 'chicago')),
+        act: (bloc) => bloc.add(WeatherRequested(city: 'chicago')),
         expect: [
-          WeatherLoading(),
-          WeatherError(),
+          WeatherLoadInProgress(),
+          WeatherLoadFailure(),
         ],
       );
     });
 
-    group('RefreshWeather', () {
+    group('WeatherRefreshRequested', () {
       blocTest(
-        'emits [WeatherLoaded] when weather repository returns weather',
+        'emits [WeatherLoadSuccess] when weather repository returns weather',
         build: () async {
           when(weatherRepository.getWeather('chicago')).thenAnswer(
             (_) => Future.value(weather),
           );
           return weatherBloc;
         },
-        act: (bloc) => bloc.add(RefreshWeather(city: 'chicago')),
+        act: (bloc) => bloc.add(WeatherRefreshRequested(city: 'chicago')),
         expect: [
-          WeatherLoaded(weather: weather),
+          WeatherLoadSuccess(weather: weather),
         ],
       );
 
@@ -93,7 +93,7 @@ main() {
               .thenThrow('Weather Error');
           return weatherBloc;
         },
-        act: (bloc) => bloc.add(RefreshWeather(city: 'chicago')),
+        act: (bloc) => bloc.add(WeatherRefreshRequested(city: 'chicago')),
         expect: [],
       );
     });

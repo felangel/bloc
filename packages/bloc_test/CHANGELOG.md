@@ -1,3 +1,25 @@
+# 6.0.0
+
+- feat: upgrade to `bloc ^5.0.0`
+- refactor: internal implementation updates to use [cubit_test](https://pub.dev/packages/cubit_test)
+
+# 6.0.0-dev.4
+
+- Update to `bloc ^5.0.0-dev.11`.
+
+# 6.0.0-dev.3
+
+- Update to `bloc ^5.0.0-dev.10`.
+
+# 6.0.0-dev.2
+
+- Update to `bloc ^5.0.0-dev.7`.
+
+# 6.0.0-dev.1
+
+- Update to `bloc ^5.0.0-dev.6`.
+- Internal implementation updates to use [cubit_test](https://pub.dev/packages/cubit_test)
+
 # 5.1.0
 
 - Add `errors` to `blocTest` to enable expecting unhandled exceptions within blocs.

@@ -1,0 +1,123 @@
+{
+  "Cubit": {
+    "prefix": "cubit",
+    "body": [
+      "class ${1:Subject}Cubit extends Cubit<$1State> {",
+      "\t${1:Subject}Cubit() : super(${1:Subject}Initial());",
+      "}"
+    ]
+  },
+  "CubitBuilder": {
+    "prefix": "cubitbuilder",
+    "body": [
+      "CubitBuilder<${1:Subject}Cubit, $1State>(",
+      "\tbuilder: (context, state) {",
+      "\t\treturn ${3:Container()};",
+      "\t},",
+      ")"
+    ]
+  },
+  "CubitListener": {
+    "prefix": "cubitlistener",
+    "body": [
+      "CubitListener<${1:Subject}Cubit, $1State>(",
+      "\tlistener: (context, state) {",
+      "\t\t${2:// TODO: implement listener}",
+      "\t},",
+      "\tchild: ${3:Container()},",
+      ")"
+    ]
+  },
+  "MultiCubitListener": {
+    "prefix": "multicubitlistener",
+    "body": [
+      "MultiCubitListener(",
+      "\tlisteners: [",
+      "\t\tCubitListener<${1:Subject}Cubit, $1State>(",
+      "\t\t\tlistener: (context, state) {",
+      "\t\t\t\t${2:// TODO: implement listener}",
+      "\t\t\t},",
+      "\t\t),",
+      "\t\tCubitListener<${3:Subject}Cubit, $3State>(",
+      "\t\t\tlistener: (context, state) {",
+      "\t\t\t\t${4:// TODO: implement listener}",
+      "\t\t\t},",
+      "\t\t),",
+      "\t],",
+      "\tchild: ${5:Container()},",
+      ")"
+    ]
+  },
+  "CubitConsumer": {
+    "prefix": "cubitconsumer",
+    "body": [
+      "CubitConsumer<${1:Subject}Cubit, $1State>(",
+      "\tlistener: (context, state) {",
+      "\t\t${2:// TODO: implement listener}",
+      "\t},",
+      "\tbuilder: (context, state) {",
+      "\t\treturn ${3:Container()};",
+      "\t},",
+      ")"
+    ]
+  },
+  "CubitProvider": {
+    "prefix": "cubitprovider",
+    "body": [
+      "CubitProvider(",
+      "\tcreate: (context) => ${1:Subject}Cubit(),",
+      "\tchild: ${2:Container()},",
+      ")"
+    ]
+  },
+  "MultiCubitProvider": {
+    "prefix": "multicubitprovider",
+    "body": [
+      "MultiCubitProvider(",
+      "\tproviders: [",
+      "\t\tCubitProvider(",
+      "\t\t\tcreate: (context) => ${1:Subject}Cubit(),",
+      "\t\t),",
+      "\t\tCubitProvider(",
+      "\t\t\tcreate: (context) => ${2:Subject}Cubit(),",
+      "\t\t),",
+      "\t],",
+      "\tchild: ${3:Container()},",
+      ")"
+    ]
+  },
+  "CubitObserver": {
+    "prefix": "cubitobserver",
+    "body": [
+      "import 'package:cubit/cubit.dart';",
+      "",
+      "class ${1:My}CubitObserver extends CubitObserver {",
+      "\t@override",
+      "\tvoid onEvent(Cubit cubit, Object event) {",
+      "\t\tsuper.onEvent(cubit, event);",
+      "\t\t${2:// TODO: implement onEvent}",
+      "\t}",
+      "",
+      "\t@override",
+      "\tvoid onError(Cubit cubit, Object error, StackTrace stacktrace) {",
+      "\t\tsuper.onError(cubit, error, stacktrace);",
+      "\t\t${3:// TODO: implement onError}",
+      "\t}",
+      "",
+      "\t@override",
+      "\tvoid onTransition(Cubit cubit, Transition transition) {",
+      "\t\tsuper.onTransition(cubit, transition);",
+      "\t\t${4:// TODO: implement onTransition}",
+      "\t}",
+      "}"
+    ]
+  },
+  "context.cubit()": {
+    "prefix": "contextcubit",
+    "body": "context.cubit<${1:Subject}Cubit>()"
+  },
+  "CubitProvider.of()": {
+    "prefix": "cubitof",
+    "body": "CubitProvider.of<${1:Subject}Cubit>(context)"
+  }
+}

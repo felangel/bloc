@@ -136,26 +136,24 @@ Al igual que podemos manejar `Transition` a nivel de bloc, también podemos mane
 
 Ahora que hemos anulado `onError` podemos hacer lo que queramos siempre que se produzca un `Exception`.
 
-## BlocDelegate
+## BlocObserver
 
 Una ventaja adicional de usar Bloc es que podemos tener acceso a todas las `Transitions` en un solo lugar. Aunque en esta aplicación solo tenemos un Bloc, es bastante común en aplicaciones más grandes tener muchos Blocs que administran diferentes partes del estado de la aplicación.
 
-Si queremos poder hacer algo en respuesta a todas las `Transitions`, simplemente podemos crear nuestro propio `BlocDelegate`.
+Si queremos poder hacer algo en respuesta a todas las `Transitions`, simplemente podemos crear nuestro propio `BlocObserver`.
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer.dart.md ':include')
 
-?> **Nota**: Todo lo que necesitamos hacer es extender `BlocDelegate` y anular el método `onTransition`.
+?> **Nota**: Todo lo que necesitamos hacer es extender `BlocObserver` y anular el método `onTransition`.
 
-Para decirle a Bloc que use nuestro `SimpleBlocDelegate`, solo necesitamos ajustar nuestra función `main`.
+Para decirle a Bloc que use nuestro `SimpleBlocObserver`, solo necesitamos ajustar nuestra función `main`.
 
-[main.dart](../_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
+[main.dart](../_snippets/core_concepts/simple_bloc_observer_main.dart.md ':include')
 
-Si queremos poder hacer algo en respuesta a todos los `Events` agregados, también podemos anular el método `onEvent` en nuestro `SimpleBlocDelegate`.
+Si queremos poder hacer algo en respuesta a todos los `Events` agregados, también podemos anular el método `onEvent` en nuestro `SimpleBlocObserver`.
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer_on_event.dart.md ':include')
 
-Si queremos poder hacer algo en respuesta a todas las `Exceptions` lanzadas en un bloc, también podemos anular el método `onError` en nuestro `SimpleBlocDelegate`.
+Si queremos poder hacer algo en respuesta a todas las `Exceptions` lanzadas en un bloc, también podemos anular el método `onError` en nuestro `SimpleBlocObserver`.
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
-
-?> **Nota**: `BlocSupervisor` es un singleton que supervisa todos los Blocs y delega responsabilidades al `BlocDelegate`.
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer_complete.dart.md ':include')

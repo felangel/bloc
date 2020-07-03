@@ -18,7 +18,7 @@ Especifique o Bloc apenas se você deseja fornecer um Bloc que terá o escopo de
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_explicit_bloc.dart.md ':include')
 
-Se você deseja um controle refinado sobre quando a função do construtor é chamada, você pode fornecer uma condição opcional ao `BlocBuilder`. A condição pega o estado anterior do bloc e o atual estado do bloc e retorna um valor booleano. Se `condition` retornar true,`builder` será chamado com `state` e o widget será reconstruído. Se `condition` retornar false, o `builder` não será chamado com `state` e nenhuma reconstrução ocorrerá.
+Se você deseja um controle refinado sobre quando a função do construtor é chamada, você pode fornecer uma condição opcional ao `BlocBuilder`. A condição pega o estado anterior do bloc e o atual estado do bloc e retorna um valor booleano. Se `buildWhen` retornar true,`builder` será chamado com `state` e o widget será reconstruído. Se `buildWhen` retornar false, o `builder` não será chamado com `state` e nenhuma reconstrução ocorrerá.
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_condition.dart.md ':include')
 
@@ -64,7 +64,7 @@ Especifique o bloc apenas se desejar fornecer um bloc que, de outra forma, não 
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_explicit_bloc.dart.md ':include')
 
-Se você deseja um controle refinado sobre quando a função listener é chamada, você pode fornecer uma condição opcional ao` BlocListener`. A condição pega o estado anterior do bloc e o atual estado do bloc e retorna um valor booleano. Se `condition` retornar true,` listener` será chamado com `state`. Se `condition` retornar falso,`listener` não será chamado com `state`.
+Se você deseja um controle refinado sobre quando a função listener é chamada, você pode fornecer uma condição opcional ao` BlocListener`. A condição pega o estado anterior do bloc e o atual estado do bloc e retorna um valor booleano. Se `listenWhen` retornar true,` listener` será chamado com `state`. Se `listenWhen` retornar falso,`listener` não será chamado com `state`.
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_condition.dart.md ':include')
 

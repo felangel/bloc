@@ -13,7 +13,7 @@ class TimerStarted extends TimerEvent {
   const TimerStarted({@required this.duration});
 
   @override
-  String toString() => "Start { duration: $duration }";
+  String toString() => "TimerStarted { duration: $duration }";
 }
 
 class TimerPaused extends TimerEvent {}
@@ -31,5 +31,5 @@ class TimerTicked extends TimerEvent {
   List<Object> get props => [duration];
 
   @override
-  String toString() => "Tick { duration: $duration }";
+  String toString() => "TimerTicked { duration: $duration }";
 }

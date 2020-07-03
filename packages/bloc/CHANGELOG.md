@@ -1,3 +1,63 @@
+# 5.0.0
+
+- **BREAKING**: remove `initialState` override in favor of providing the initial state via super ([#1304](https://github.com/felangel/bloc/issues/1304)).
+- **BREAKING**: Remove `BlocSupervisor` and rename `BlocDelegate` to `BlocObserver`.
+- feat: support `null` states ([#1312](https://github.com/felangel/bloc/issues/1312)).
+- refactor: bloc to extend [cubit](https://pub.dev/packages/cubit) rather than `Stream`.
+- feat: ignore newly added events after bloc is closed ([#1236](https://github.com/felangel/bloc/issues/1236)).
+- feat: add `addError` to conform to `EventSink` interface.
+- feat: mark `onError`, `onTransition`, `onEvent` as `protected`.
+- docs: documentation improvements
+- docs: logo updates
+
+# 5.0.0-dev.11
+
+- feat: add `addError` to conform to `EventSink` interface.
+- feat: mark `onError`, `onTransition`, `onEvent` as `protected`.
+
+# 5.0.0-dev.10
+
+- docs: additional minor improvement to bloc logo alignment
+
+# 5.0.0-dev.9
+
+- docs: minor improvement to bloc logo alignment
+
+# 5.0.0-dev.8
+
+- **BREAKING**: Remove `BlocSupervisor` and rename `BlocDelegate` to `BlocObserver`.
+
+# 5.0.0-dev.7
+
+- Ignore newly added events after bloc is closed ([#1236](https://github.com/felangel/bloc/issues/1236)).
+
+# 5.0.0-dev.6
+
+- Additional documentation optimizations.
+
+# 5.0.0-dev.5
+
+- Optimize documentation assets for smaller viewports.
+
+# 5.0.0-dev.4
+
+- Update to [cubit](https://pub.dev/packages/cubit) `^0.0.13`
+- Update documentation and static assets.
+
+# 5.0.0-dev.3
+
+- Update documentation and static assets.
+
+# 5.0.0-dev.2
+
+- **BREAKING**: update `initialState` to be a required positional parameter ([related issue](https://github.com/dart-lang/sdk/issues/42438)).
+
+# 5.0.0-dev.1
+
+- **BREAKING**: remove `initialState` override in favor of providing the initial state via super ([#1304](https://github.com/felangel/bloc/issues/1304)).
+- feat: support `null` states ([#1312](https://github.com/felangel/bloc/issues/1312)).
+- refactor: bloc to extend [cubit](https://pub.dev/packages/cubit) rather than `Stream`.
+
 # 4.0.0
 
 - Remove `rxdart` dependency ([#821](https://github.com/felangel/bloc/pull/821))

@@ -1,41 +1,50 @@
-# Расширение Bloc для VSCode
+<p align="center">
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_logo_full.png" height="100" alt="Bloc" />
+</p>
 
-[![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
-[![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
-[![Star on GitHub](https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=Stars)](https://github.com/felangel/bloc)
-
-[![Version](https://vsmarketplacebadge.apphb.com/version-short/FelixAngelov.bloc.svg)](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
-[![Install](https://vsmarketplacebadge.apphb.com/installs-short/FelixAngelov.bloc.svg)](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
-[![Ratings](https://vsmarketplacebadge.apphb.com/rating-short/FelixAngelov.bloc.svg)](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
-[![Flutter Website](https://img.shields.io/badge/Flutter-Website-deepskyblue.svg)](https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx)
-[![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true)](https://github.com/Solido/awesome-flutter#standard)
-[![Flutter Samples](https://img.shields.io/badge/Flutter-Samples-teal.svg?longCache=true)](http://fluttersamples.com)
-[![Discord](https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue)](https://discord.gg/Hc5KD3g)
-[![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](https://opensource.org/licenses/MIT)
+<p align="center">
+<a href="https://github.com/felangel/bloc/actions"><img src="https://img.shields.io/github/workflow/status/felangel/bloc/build.svg?logo=github" alt="build"></a>
+<a href="https://codecov.io/gh/felangel/bloc"><img src="https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg" alt="codecov"></a>
+<a href="https://github.com/felangel/bloc"><img src="https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on Github"></a>
+<a href="https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc"><img src="https://vsmarketplacebadge.apphb.com/version-short/FelixAngelov.bloc.svg" alt="Version"></a>
+<a href="https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc"><img src="https://vsmarketplacebadge.apphb.com/installs-short/FelixAngelov.bloc.svg" alt="Installs"></a>
+<a href="https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc"><img src="https://vsmarketplacebadge.apphb.com/rating-short/FelixAngelov.bloc.svg" alt="Ratings"></a>
+<a href="https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx"><img src="https://img.shields.io/badge/flutter-website-deepskyblue.svg" alt="Flutter Website"></a>
+<a href="https://github.com/Solido/awesome-flutter#standard"><img src="https://img.shields.io/badge/awesome-flutter-blue.svg?longCache=true" alt="Awesome Flutter"></a>
+<a href="http://fluttersamples.com"><img src="https://img.shields.io/badge/flutter-samples-teal.svg?longCache=true" alt="Flutter Samples"></a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
+<a href="https://discord.gg/Hc5KD3g"><img src="https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue" alt="Discord"></a>
+<a href="https://github.com/felangel/bloc"><img src="https://tinyurl.com/bloc-library" alt="Bloc Library"></a>
+</p>
 
 ---
 
 ## Введение
 
-Блок расширяет [VSCode](https://code.visualstudio.com/) с поддержкой [Bloc](https://bloclibrary.dev) библиотеки и обеспечивает инструментарий для эффективного создания блоков для [Flutter](https://flutter.dev/) и [AngularDart](https://angulardart.dev/) приложений.
+Блок расширяет [VSCode](https://code.visualstudio.com/) с поддержкой [Bloc библиотеки](https://bloclibrary.dev) и обеспечивает инструментарий для эффективного создания блоков для [Flutter](https://flutter.dev/) и [AngularDart](https://angulardart.dev/) приложений.
 
 ## Инсталляция
 
 Блок можно установить из [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) или с помощью [searching within VSCode](https://code.visualstudio.com/docs/editor/extension-gallery#_search-for-an-extension).
 
-## Новый блок
+## команды
 
-Команда `New Bloc` позволяет вам создать `Bloc` и `Events`/`States`, чтобы только осталось реализовать вашу логику в `mapEventToState`.
+| команда            | описание               |
+| ------------------ | ---------------------- |
+| `Bloc: New Bloc`   | Создать новый блок     |
+| `Cubit: New Cubit` | Генерация нового кубит |
 
-Вы можете активировать команду, запустив палитру команд (View -> Command Palette) и запустив `Bloc: New Bloc`.
+Вы можете активировать команду, запустив палитру команд (View -> Command Palette) и запустив команда.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-1.gif)
 
-Или вы можете щелкнуть правой кнопкой мыши на каталоге, в котором вы хотите создать блок и выбрать команду «Bloc: New Bloc» из контекстного меню.
+Или вы можете щелкнуть правой кнопкой мыши на каталоге, в котором вы хотите создать блок/кубит и выбрать команду из контекстного меню.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-2.gif)
 
 ## Фрагменты
+
+### Bloc
 
 | Shortcut                  | Description                                          |
 | ------------------------- | ---------------------------------------------------- |
@@ -48,8 +57,22 @@
 | `multiblocprovider`       | Creates a MultiBlocProvider Widget                   |
 | `repositoryprovider`      | Creates a RepositoryProvider Widget                  |
 | `multirepositoryprovider` | Creates a MultiRepositoryProvider Widget             |
-| `blocdelegate`            | Creates a BlocDelegate Class                         |
+| `blocobserver`            | Creates a BlocObserver Class                         |
 | `contextbloc`             | Shortcut for `context.bloc<MyBloc>()`                |
 | `blocof`                  | Shortcut for `BlocProvider.of<MyBloc>()`             |
 | `contextrepository`       | Shortcut for `context.repository<MyRepository>()`    |
 | `repositoryof`            | Shortcut for `RepositoryProvider.of<MyRepository>()` |
+
+### Cubit
+
+| Shortcut             | Description                                |
+| -------------------- | ------------------------------------------ |
+| `cubit`              | Creates a Cubit Class                      |
+| `cubitbuilder`       | Creates a CubitBuilder Widget              |
+| `cubitlistener`      | Creates a CubitListener Widget             |
+| `multicubitlistener` | Creates a MultiCubitListener Widget        |
+| `cubitconsumer`      | Creates a CubitConsumer Widget             |
+| `cubitprovider`      | Creates a CubitProvider Widget             |
+| `multicubitprovider` | Creates a MultiCubitProvider Widget        |
+| `contextcubit`       | Shortcut for `context.cubit<MyCubit>()`    |
+| `cubitof`            | Shortcut for `CubitProvider.of<MyCubit>()` |
