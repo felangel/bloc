@@ -150,7 +150,7 @@ BlocProvider(
 
 By default, BlocProvider will create the bloc lazily, meaning `create` will get executed when the bloc is looked up via `BlocProvider.of<BlocA>(context)`.
 
-To override this behavior and force create to be run immediately, `lazy` can be set to `false`.
+To override this behavior and force `create` to be run immediately, `lazy` can be set to `false`.
 
 ```dart
 BlocProvider(
