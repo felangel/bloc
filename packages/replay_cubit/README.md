@@ -24,7 +24,7 @@ class CounterCubit extends ReplayCubit<int> {
 ## Using a ReplayCubit
 
 ```dart
-void main() async {
+void main() {
   final cubit = CounterCubit();
 
   // trigger a state change
