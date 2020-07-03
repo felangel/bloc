@@ -8,10 +8,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  replay_cubit:
-    path: ..
   flutter_cubit:
     path: ../../flutter_cubit
+  hydrated_cubit:
+    path: ../../hydrated_cubit
+  replay_cubit:
+    path: ../
 
 flutter:
   uses-material-design: true

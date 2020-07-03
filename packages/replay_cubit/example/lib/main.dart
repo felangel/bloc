@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_cubit/flutter_cubit.dart';
+import 'package:hydrated_cubit/hydrated_cubit.dart';
 import 'package:replay_cubit/replay_cubit.dart';
 
-void main() => runApp(App());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedCubit.storage = await HydratedStorage.build();
+  runApp(App());
+}
 
 /// A [StatelessWidget] which uses:
 /// * [replay_cubit](https://pub.dev/packages/replay_cubit)
@@ -80,7 +85,8 @@ class CounterPage extends StatelessWidget {
               child: const Icon(Icons.delete_forever),
               onPressed: () => context.cubit<CounterCubit>()
                 ..reset()
-                ..clear(),
+                ..clear()
+                ..clearHistory(),
             ),
           ),
         ],
@@ -94,7 +100,7 @@ class CounterPage extends StatelessWidget {
 /// and exposes three public methods to `increment`, `decrement`, and
 /// `reset` the value of the state.
 /// {@endtemplate}
-class CounterCubit extends ReplayCubit<int> {
+class CounterCubit extends HydratedCubit<int> with ReplayMixin<int> {
   /// {@macro replay_counter_cubit}
   CounterCubit() : super(0);
 
@@ -106,4 +112,10 @@ class CounterCubit extends ReplayCubit<int> {
 
   /// Resets the `cubit` state to 0.
   void reset() => emit(0);
+
+  @override
+  int fromJson(Map<String, dynamic> json) => json['value'] as int;
+
+  @override
+  Map<String, int> toJson(int state) => {'value': state};
 }

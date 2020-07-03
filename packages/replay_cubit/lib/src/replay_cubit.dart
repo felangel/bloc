@@ -41,13 +41,17 @@ part 'change_stack.dart';
 /// * [Cubit] for information about the [ReplayCubit] superclass.
 ///
 /// {@endtemplate}
-abstract class ReplayCubit<State> extends Cubit<State> {
+abstract class ReplayCubit<State> extends Cubit<State> with ReplayMixin<State> {
   /// {@macro replay_cubit}
-  ReplayCubit(State state, {int limit})
-      : _changeStack = _ChangeStack<State>(limit: limit),
-        super(state);
+  ReplayCubit(State state, {int limit}) : super(state) {
+    this.limit = limit;
+  }
+}
 
-  final _ChangeStack _changeStack;
+mixin ReplayMixin<State> on CubitStream<State> {
+  final _changeStack = _ChangeStack<State>();
+
+  set limit(int limit) => _changeStack.limit = limit;
 
   @override
   void emit(State state) {
@@ -71,5 +75,5 @@ abstract class ReplayCubit<State> extends Cubit<State> {
   bool get canRedo => _changeStack.canRedo;
 
   /// Clear undo/redo history
-  void clear() => _changeStack.clear();
+  void clearHistory() => _changeStack.clear();
 }
