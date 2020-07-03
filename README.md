@@ -30,6 +30,7 @@ class CounterCubit extends Cubit<int> {
 | [flutter_cubit](https://github.com/felangel/cubit/tree/master/packages/flutter_cubit)   | [![pub package](https://img.shields.io/pub/v/flutter_cubit.svg)](https://pub.dev/packages/flutter_cubit)   |
 | [angular_cubit](https://github.com/felangel/cubit/tree/master/packages/angular_cubit)   | [![pub package](https://img.shields.io/pub/v/angular_cubit.svg)](https://pub.dev/packages/angular_cubit)   |
 | [hydrated_cubit](https://github.com/felangel/cubit/tree/master/packages/hydrated_cubit) | [![pub package](https://img.shields.io/pub/v/hydrated_cubit.svg)](https://pub.dev/packages/hydrated_cubit) |
+| [replay_cubit](https://github.com/felangel/cubit/tree/master/packages/replay_cubit) | [![pub package](https://img.shields.io/pub/v/replay_cubit.svg)](https://pub.dev/packages/replay_cubit) |
 
 ## Documentation
 
@@ -38,6 +39,7 @@ class CounterCubit extends Cubit<int> {
 - [Flutter Cubit Package](https://github.com/felangel/cubit/tree/master/packages/flutter_cubit/README.md)
 - [Angular Cubit Package](https://github.com/felangel/cubit/tree/master/packages/angular_cubit/README.md)
 - [Hydrated Cubit Package](https://github.com/felangel/cubit/tree/master/packages/hydrated_cubit/README.md)
+- [Replay Cubit Package](https://github.com/felangel/cubit/tree/master/packages/replay_cubit/README.md)
 
 ## Dart Versions
 
