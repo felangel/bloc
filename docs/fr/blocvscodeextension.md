@@ -1,4 +1,6 @@
-# Extension Bloc pour VSCode
+<p align="center">
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_logo_full.png" height="100" alt="Bloc" />
+</p>
 
 <p align="center">
 <a href="https://github.com/felangel/bloc/actions"><img src="https://img.shields.io/github/workflow/status/felangel/bloc/build.svg?logo=github" alt="build"></a>
