@@ -18,7 +18,7 @@ Spécifiez le bloc seulement si vous voulez fournir un bloc qui aura pour porté
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_explicit_bloc.dart.md ':include')
 
-Si vous voulez avoir plus de controle sur la fonction builder lorsqu'elle est appelée, vous pouvez fournir une `condition` optionnelle au `BlocBuilder`. La `condition` prend le state précédent du bloc et le compare au state du bloc actuel pour retourner un boolean. Si la `condition` renvoie true, `builder` va être appelé avec `state` et le widget sera reconstruit. Si `condition` retourne false, `builder` ne sera pas appelé avec `state` et la reconstruction n'aura pas lieu.
+Si vous voulez avoir plus de controle sur la fonction builder lorsqu'elle est appelée, vous pouvez fournir une `buildWhen` optionnelle au `BlocBuilder`. La `buildWhen` prend le state précédent du bloc et le compare au state du bloc actuel pour retourner un boolean. Si la `buildWhen` renvoie true, `builder` va être appelé avec `state` et le widget sera reconstruit. Si `buildWhen` retourne false, `builder` ne sera pas appelé avec `state` et la reconstruction n'aura pas lieu.
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_condition.dart.md ':include')
 
@@ -64,7 +64,7 @@ Spécifié le bloc seulement si vous voulez fournir un bloc qui n'est pas access
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_explicit_bloc.dart.md ':include')
 
-Si vous voulez avoir plus de contrôle lorsque la fonction listener est appelé, vous pouvez utiliser une `condition` optionnele au `BlocListener`. La `condition` prend le précédent state du bloc et celui du bloc actuel pour retourner un boolean. Si `condition` renvoie true, `listener` sera appelé avec `state`. Si `condition` renvoie false, `listener` ne sera pas appelé avec `state`.
+Si vous voulez avoir plus de contrôle lorsque la fonction listener est appelé, vous pouvez utiliser une `listenWhen` optionnele au `BlocListener`. La `listenWhen` prend le précédent state du bloc et celui du bloc actuel pour retourner un boolean. Si `listenWhen` renvoie true, `listener` sera appelé avec `state`. Si `listenWhen` renvoie false, `listener` ne sera pas appelé avec `state`.
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_condition.dart.md ':include')
 

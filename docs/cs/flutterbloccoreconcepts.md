@@ -18,7 +18,7 @@ Specifikujte bloc pouze tehdy, pokud chcete poskytnout bloc, který bude zaměř
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_explicit_bloc.dart.md ':include')
 
-Pokud chcete mít snadnou kontrolu nad tím, kdy se builder funkce zavolá, můžete poskytnout nepovinnou `condition` (podmínku) `BlocBuilderu`. `condition` přijímá předchozí stav blocu a aktuální stav blocu a vrací boolean. Pokud `condition` vrací true, `builder` bude zavolán s aktuálním `stavem` a widget bude znovu sestaven. Pokud `condition` vrací false, `builder` nebude zavolán s aktuálním `stavem` a nebude znovu sestaven.
+Pokud chcete mít snadnou kontrolu nad tím, kdy se builder funkce zavolá, můžete poskytnout nepovinnou `buildWhen` (podmínku) `BlocBuilderu`. `buildWhen` přijímá předchozí stav blocu a aktuální stav blocu a vrací boolean. Pokud `buildWhen` vrací true, `builder` bude zavolán s aktuálním `stavem` a widget bude znovu sestaven. Pokud `buildWhen` vrací false, `builder` nebude zavolán s aktuálním `stavem` a nebude znovu sestaven.
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_condition.dart.md ':include')
 
@@ -62,7 +62,7 @@ Specifikujte bloc pouze tehdy, pokud chcete poskytnout bloc, který není jinak 
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_explicit_bloc.dart.md ':include')
 
-Pokud chcete mít snadnou kontrolu nad tím, kdy se listener funkce zavolá, můžete poskytnout nepovinnou `condition` (podmínku) `BlocListeneru`. `condition` přijímá předchozí stav blocu a aktuální stav blocu a vrací boolean. Pokud `condition` vrací true, `listener` bude zavolán s aktuálním `stavem`. Pokud `condition` vrací false, `listener` nebude zavolán s aktuálním `stavem`.
+Pokud chcete mít snadnou kontrolu nad tím, kdy se listener funkce zavolá, můžete poskytnout nepovinnou `listenWhen` (podmínku) `BlocListeneru`. `listenWhen` přijímá předchozí stav blocu a aktuální stav blocu a vrací boolean. Pokud `listenWhen` vrací true, `listener` bude zavolán s aktuálním `stavem`. Pokud `listenWhen` vrací false, `listener` nebude zavolán s aktuálním `stavem`.
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_condition.dart.md ':include')
 
