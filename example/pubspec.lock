@@ -82,7 +82,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "5.0.0"
+    version: "5.0.1"
   hydrated_cubit:
     dependency: transitive
     description:

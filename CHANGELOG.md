@@ -1,3 +1,8 @@
+# 5.0.1
+
+- fix: export `Storage` interface
+- fix: use `Storage` interface to enable custom `Storage`
+
 # 5.0.0
 
 - **BREAKING**: update to `bloc ^5.0.0`
