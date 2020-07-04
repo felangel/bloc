@@ -16,6 +16,6 @@
 - Highly Testable
 - For Dart, Flutter, and AngularDart
 
-[GitHub](https://github.com/felangel/bloc/)
 [Migrate to v5.0.0](migration.md)
+[GitHub](https://github.com/felangel/bloc/)
 [Get Started](gettingstarted.md)
