@@ -50,6 +50,10 @@ class CounterCubit extends Cubit<int> {
 
 - [Felix Angelov](https://github.com/felangel)
 
+## Supporters
+
+[![Very Good Ventures](https://raw.githubusercontent.com/felangel/cubit/master/assets/vgv_logo.png)](https://verygood.ventures)
+
 ## Starware
 
 Cubit is Starware.  

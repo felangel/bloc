@@ -310,6 +310,10 @@ CubitConsumer<CubitA, CubitAState>(
 
 - [Felix Angelov](https://github.com/felangel)
 
+## Supporters
+
+[![Very Good Ventures](https://raw.githubusercontent.com/felangel/cubit/master/assets/vgv_logo.png)](https://verygood.ventures)
+
 ## Starware
 
 Flutter Cubit is Starware.  
