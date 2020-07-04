@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:hydrated_cubit/hydrated_cubit.dart';
 import 'package:mockito/mockito.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:pedantic/pedantic.dart';
 
@@ -26,8 +27,10 @@ void main() {
         throw UnimplementedError();
       });
 
-    tearDownAll(() async {
-      await Hive.deleteBoxFromDisk('hydrated_box');
+    Storage storage;
+
+    tearDown(() async {
+      await storage?.clear();
     });
 
     group('build', () {
@@ -38,19 +41,19 @@ void main() {
 
       test('calls getTemporaryDirectory when storageDirectory is null',
           () async {
-        await HydratedStorage.build();
+        storage = await HydratedStorage.build();
         expect(getTemporaryDirectoryCallCount, 1);
       });
 
       test(
           'does not call getTemporaryDirectory '
           'when storageDirectory is defined', () async {
-        await HydratedStorage.build(storageDirectory: Directory(cwd));
+        storage = await HydratedStorage.build(storageDirectory: Directory(cwd));
         expect(getTemporaryDirectoryCallCount, 0);
       });
 
       test('reuses existing instance when called multiple times', () async {
-        final instanceA = await HydratedStorage.build();
+        final instanceA = storage = await HydratedStorage.build();
         final beforeCount = getTemporaryDirectoryCallCount;
         final instanceB = await HydratedStorage.build();
         final afterCount = getTemporaryDirectoryCallCount;
@@ -59,11 +62,11 @@ void main() {
       });
 
       test('calls Hive.init with correct directory', () async {
-        await HydratedStorage.build();
+        storage = await HydratedStorage.build();
         final box = Hive.box<dynamic>('hydrated_box');
         final directory = await getTemporaryDirectory();
         expect(box, isNotNull);
-        expect(box.path, '${directory.path}/hydrated_box.hive');
+        expect(box.path, p.join(directory.path, 'hydrated_box.hive'));
       });
     });
 
@@ -71,7 +74,6 @@ void main() {
       const key = '__key__';
       const value = '__value__';
       Box box;
-      Storage storage;
 
       setUp(() {
         box = MockBox();
@@ -138,7 +140,7 @@ void main() {
     group('During heavy load', () {
       test('writes key/value pairs correctly', () async {
         const token = 'token';
-        var hydratedStorage = await HydratedStorage.build(
+        storage = await HydratedStorage.build(
           storageDirectory: Directory(cwd),
         );
         await Stream.fromIterable(
@@ -149,13 +151,13 @@ void main() {
             (i) => Iterable.generate(i, (j) => 'Point($i,$j);').toList(),
           ).toList();
 
-          unawaited(hydratedStorage.write(token, record));
+          unawaited(storage.write(token, record));
 
-          hydratedStorage = await HydratedStorage.build(
+          storage = await HydratedStorage.build(
             storageDirectory: Directory(cwd),
           );
 
-          final written = hydratedStorage.read(token) as List<List<String>>;
+          final written = storage.read(token) as List<List<String>>;
           expect(written, isNotNull);
           expect(written, record);
         }).drain<dynamic>();
