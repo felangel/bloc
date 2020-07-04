@@ -41,7 +41,7 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 
 ## Migration
 
-- [Upgrade from v0.x to v2.x ](https://dev.to/mhadaily/upgrade-to-bloc-library-v1-0-0-for-flutter-and-angular-dart-2np0)
+- [Upgrade to v5.0 ](https://bloclibrary.dev/#/migration)
 
 ## Examples
 

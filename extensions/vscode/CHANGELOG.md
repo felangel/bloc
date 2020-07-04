@@ -1,3 +1,7 @@
+# 4.2.0
+
+- feat: Add Open Migration Guide for `bloc`, `flutter_bloc`, and `hydrated_bloc`
+
 # 4.1.1
 
 - fix: package version analysis on dev_dependencies

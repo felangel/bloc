@@ -34,11 +34,54 @@ export function analyzeDependencies() {
         },
       ],
     },
-    { name: "bloc", version: "^5.0.0", actions: [] },
+    {
+      name: "bloc",
+      version: "^5.0.0",
+      actions: [
+        {
+          name: "Open Migration Guide",
+          callback: () => {
+            env.openExternal(
+              Uri.parse("https://bloclibrary.dev/#/migration?id=packagebloc")
+            );
+          },
+        },
+      ],
+    },
 
-    { name: "flutter_bloc", version: "^5.0.0", actions: [] },
+    {
+      name: "flutter_bloc",
+      version: "^5.0.0",
+      actions: [
+        {
+          name: "Open Migration Guide",
+          callback: () => {
+            env.openExternal(
+              Uri.parse(
+                "https://bloclibrary.dev/#/migration?id=packageflutter_bloc"
+              )
+            );
+          },
+        },
+      ],
+    },
     { name: "angular_bloc", version: "^4.0.0", actions: [] },
-    { name: "hydrated_bloc", version: "^5.0.0", actions: [] },
+    {
+      name: "hydrated_bloc",
+      version: "^5.0.0",
+      actions: [
+        {
+          name: "Open Migration Guide",
+          callback: () => {
+            env.openExternal(
+              Uri.parse(
+                "https://bloclibrary.dev/#/migration?id=packagehydrated_bloc"
+              )
+            );
+          },
+        },
+      ],
+    },
     { name: "sealed_flutter_bloc", version: "^4.0.0", actions: [] },
     { name: "cubit", version: "^0.1.0", actions: [] },
     { name: "flutter_cubit", version: "^0.1.0", actions: [] },
