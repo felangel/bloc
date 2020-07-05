@@ -1,3 +1,4 @@
+import 'package:cubit/cubit.dart' as cubit;
 import 'package:meta/meta.dart';
 
 /// {@template transition}
@@ -7,24 +8,16 @@ import 'package:meta/meta.dart';
 /// `added`, and the [nextState].
 /// {@endtemplate}
 @immutable
-class Transition<Event, State> {
-  /// The current [State] of the [bloc] at the time of the [Transition].
-  final State currentState;
+class Transition<Event, State> extends cubit.Transition<State> {
+  /// {@macro transition}
+  const Transition({
+    @required State currentState,
+    @required this.event,
+    @required State nextState,
+  }) : super(currentState: currentState, nextState: nextState);
 
   /// The [Event] which triggered the current [Transition].
   final Event event;
-
-  /// The next [State] of the [bloc] at the time of the [Transition].
-  final State nextState;
-
-  /// {@macro transition}
-  const Transition({
-    @required this.currentState,
-    @required this.event,
-    @required this.nextState,
-  })  : assert(currentState != null),
-        assert(event != null),
-        assert(nextState != null);
 
   @override
   bool operator ==(Object other) =>
@@ -36,11 +29,12 @@ class Transition<Event, State> {
           nextState == other.nextState;
 
   @override
-  int get hashCode =>
-      currentState.hashCode ^ event.hashCode ^ nextState.hashCode;
+  int get hashCode {
+    return currentState.hashCode ^ event.hashCode ^ nextState.hashCode;
+  }
 
   @override
-  String toString() =>
-      'Transition { currentState: $currentState, event: $event, '
-      'nextState: $nextState }';
+  String toString() {
+    return '''Transition { currentState: $currentState, event: $event, nextState: $nextState }''';
+  }
 }

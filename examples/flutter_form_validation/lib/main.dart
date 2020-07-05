@@ -26,11 +26,10 @@ class MyForm extends StatelessWidget {
     return BlocListener<MyFormBloc, MyFormState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
+          Scaffold.of(context).hideCurrentSnackBar();
           showDialog(
             context: context,
-            builder: (_) => SuccessDialog(onDismissed: () {
-              context.bloc<MyFormBloc>().add(FormReset());
-            }),
+            builder: (_) => SuccessDialog(),
           );
         }
         if (state.status.isSubmissionInProgress) {
@@ -59,9 +58,10 @@ class EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MyFormBloc, MyFormState>(
-      condition: (previous, current) => previous.email != current.email,
+      buildWhen: (previous, current) => previous.email != current.email,
       builder: (context, state) {
         return TextFormField(
+          initialValue: state.email.value,
           decoration: InputDecoration(
             icon: Icon(Icons.email),
             labelText: 'Email',
@@ -81,9 +81,10 @@ class PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MyFormBloc, MyFormState>(
-      condition: (previous, current) => previous.password != current.password,
+      buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextFormField(
+          initialValue: state.password.value,
           decoration: InputDecoration(
             icon: Icon(Icons.lock),
             labelText: 'Password',
@@ -103,7 +104,7 @@ class SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MyFormBloc, MyFormState>(
-      condition: (previous, current) => previous.status != current.status,
+      buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return RaisedButton(
           onPressed: state.status.isValidated
@@ -117,10 +118,6 @@ class SubmitButton extends StatelessWidget {
 }
 
 class SuccessDialog extends StatelessWidget {
-  final VoidCallback onDismissed;
-
-  SuccessDialog({Key key, @required this.onDismissed}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -149,7 +146,7 @@ class SuccessDialog extends StatelessWidget {
             ),
             RaisedButton(
               child: Text('OK'),
-              onPressed: onDismissed,
+              onPressed: () => Navigator.of(context).pop(),
             ),
           ],
         ),

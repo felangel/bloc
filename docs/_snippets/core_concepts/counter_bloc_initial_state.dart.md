@@ -1,4 +1,5 @@
 ```dart
-@override
-int get initialState => 0;
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+}
 ```

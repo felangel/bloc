@@ -136,26 +136,24 @@ Hal-hazırda, `onTransition` metodunu Bloc-a daxil etdik və bu halda, yeni `Ke�
 
 Hal-hazırda, `onError` metodunu Bloc-a daxil etdik və `Exception` baş verərkən, istədiyimiz prosesi burada icra edə bilərik.
 
-## BlocDelegate
+## BlocObserver
 
 Bloc istifadə etməyin üstünlüklərindən biri budur ki, biz bütün Bloc-larda olan `Keçidlər (Transitions)`-i bir yerdən əldə edə bilərik. Bu nümunədə, bir Bloc olmasına baxmayaraq, böyük tətbiqlərdə müxtəlif hissələrdə tətbiqin vəziyyətini idarə etmək üçün çoxlu Bloc olması gözləniləndir.
 
-Əgər bütün `Keçidlər (Transitions)`-ə cavab olaraq, nəsə etmək istəyiriksə. sadəcə özümüzün `BlocDelegate`-ni yarada bilərik.
+Əgər bütün `Keçidlər (Transitions)`-ə cavab olaraq, nəsə etmək istəyiriksə. sadəcə özümüzün `BlocObserver`-ni yarada bilərik.
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer.dart.md ':include')
 
-?> **Qeyd**: Ehtiyacımız olan, `BlocDelegate` classını extend etmək və `onTransition` metodunu daxil etməkdir.
+?> **Qeyd**: Ehtiyacımız olan, `BlocObserver` classını extend etmək və `onTransition` metodunu daxil etməkdir.
 
-. Bloc-a bizim `SimpleBlocDelegate`-i istifadə etməsini demək üçün, sadəcə `main` funksiyasında bunu qeyd etməyimiz lazımdır. 
+. Bloc-a bizim `SimpleBlocObserver`-i istifadə etməsini demək üçün, sadəcə `main` funksiyasında bunu qeyd etməyimiz lazımdır. 
 
-[main.dart](../_snippets/core_concepts/simple_bloc_delegate_main.dart.md ':include')
+[main.dart](../_snippets/core_concepts/simple_bloc_observer_main.dart.md ':include')
 
-Əgər bütün `Hadisələr (Events)`-ə cavab olaraq, nəsə etmək istəyiriksə, `onEvent` metodunu `SimpleBlocDelegate`-ə əlavə edə bilərik.
+Əgər bütün `Hadisələr (Events)`-ə cavab olaraq, nəsə etmək istəyiriksə, `onEvent` metodunu `SimpleBlocObserver`-ə əlavə edə bilərik.
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_on_event.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer_on_event.dart.md ':include')
 
-Əgər bütün `Exception`-lara cavab olaraq, nəsə etmək istəyiriksə, `onError` metodunu `SimpleBlocDelegate`-ə əlavə edə bilərik..
+Əgər bütün `Exception`-lara cavab olaraq, nəsə etmək istəyiriksə, `onError` metodunu `SimpleBlocObserver`-ə əlavə edə bilərik..
 
-[simple_bloc_delegate.dart](../_snippets/core_concepts/simple_bloc_delegate_complete.dart.md ':include')
-
-?> **Qeyd**: `BlocSupervisor` bütün Bloclara nəzarət edən və onların vəzifələrini `BlocDelegate`-ə ötürən singleton classdır .
+[simple_bloc_observer.dart](../_snippets/core_concepts/simple_bloc_observer_complete.dart.md ':include')

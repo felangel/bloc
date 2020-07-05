@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.bloc'
-version '1.6.0'
+version '1.8.0'
 
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
@@ -50,5 +50,8 @@ patchPluginXml {
       * v1.5 - Fix Overwrite Issue and Updates for implicit-dynamic support with Equatable
       * v1.5.1 - Minor dependency updates
       * v1.6.0 - Support for Equatable v0.6.0
+      * v1.7.0 - Support for Equatable v1.0.0 & Bloc v5.0.0
+      * v1.7.1 - Fix handle trailing _bloc in name
+      * v1.8.0 - Support for Cubit
       """
 }

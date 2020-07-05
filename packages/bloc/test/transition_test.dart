@@ -46,7 +46,7 @@ void main() {
   group('Transition Tests', () {
     group('constructor', () {
       test(
-          'should throw assertion error when initialized '
+          'should not throw assertion error when initialized '
           'with a null currentState', () {
         expect(
           () => Transition<TransitionEvent, TransitionState>(
@@ -54,13 +54,14 @@ void main() {
             event: SimpleTransitionEvent(),
             nextState: SimpleTransitionState(),
           ),
-          throwsA(
+          isNot(throwsA(
             TypeMatcher<AssertionError>(),
-          ),
+          )),
         );
       });
 
-      test('should throw assertion error when initialized with a null event',
+      test(
+          'should not throw assertion error when initialized with a null event',
           () {
         expect(
           () => Transition<TransitionEvent, TransitionState>(
@@ -68,24 +69,24 @@ void main() {
             event: null,
             nextState: SimpleTransitionState(),
           ),
-          throwsA(
+          isNot(throwsA(
             TypeMatcher<AssertionError>(),
-          ),
+          )),
         );
       });
 
       test(
-          'should throw assertion error when initialized with a null nextState',
-          () {
+          'should not throw assertion error '
+          'when initialized with a null nextState', () {
         expect(
           () => Transition<TransitionEvent, TransitionState>(
             currentState: SimpleTransitionState(),
             event: SimpleTransitionEvent(),
             nextState: null,
           ),
-          throwsA(
+          isNot(throwsA(
             TypeMatcher<AssertionError>(),
-          ),
+          )),
         );
       });
 

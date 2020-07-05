@@ -1,0 +1,4 @@
+part of '${bloc_snake_case}_bloc.dart';
+
+@immutable
+abstract class ${bloc_pascal_case}Event {}

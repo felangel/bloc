@@ -1,5 +1,0 @@
-import 'package:equatable/equatable.dart';
-
-abstract class ${bloc_pascal_case}Event extends Equatable {
-  const ${bloc_pascal_case}Event();
-}

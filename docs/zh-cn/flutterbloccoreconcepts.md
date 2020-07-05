@@ -18,7 +18,7 @@
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_explicit_bloc.dart.md ':include')
 
-如果您希望对何时调用builder函数的时间进行十分缜密的控制，可以向`BlocBuilder`提供可选的条件（condition) 。条件（condition)获取先前的Bloc的状态和当前的bloc的状态并返回bool值。如果condition返回true，将使用`state`调用`builder`，并且部件(widget)将重新构建。如果`condition`返回false，则不会用`state`调用`builder`，也不会进行重建。
+如果您希望对何时调用builder函数的时间进行十分缜密的控制，可以向`BlocBuilder`提供可选的条件（condition) 。条件（condition)获取先前的Bloc的状态和当前的bloc的状态并返回bool值。如果condition返回true，将使用`state`调用`builder`，并且部件(widget)将重新构建。如果`buildWhen`返回false，则不会用`state`调用`builder`，也不会进行重建。
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_condition.dart.md ':include')
 
@@ -62,7 +62,7 @@
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_explicit_bloc.dart.md ':include')
 
-如果您希望对任何时候调用监听器的函数进行十分缜密的控制，则可以向`BlocListener`提供可选的条件（condition) 。 条件（condition) 获取先前的bloc的状态（State) 和当前的bloc的状态（State) 并返回bool值。如果条件（condition) 返回true，listener将被state调用。如果条件返回false，则不会使用状态调用`listener`。
+如果您希望对任何时候调用监听器的函数进行十分缜密的控制，则可以向`BlocListener`提供可选的条件（listenWhen) 。 条件（listenWhen) 获取先前的bloc的状态（State) 和当前的bloc的状态（State) 并返回bool值。如果条件（listenWhen) 返回true，listener将被state调用。如果条件返回false，则不会使用状态调用`listener`。
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_condition.dart.md ':include')
 

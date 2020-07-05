@@ -1,11 +1,10 @@
 package com.bloc.intellij_generator_plugin.generator.components
 
-import com.bloc.intellij_generator_plugin.generator.Generator
+import com.bloc.intellij_generator_plugin.generator.BlocGenerator
 
 class BlocStateGenerator(
-    blocName: String,
-    blocShouldUseEquatable: Boolean
-) : Generator(blocName, blocShouldUseEquatable, templateName = "bloc_state") {
-
+    name: String,
+    useEquatable: Boolean
+) : BlocGenerator(name, useEquatable, templateName = "bloc_state") {
     override fun fileName() = "${snakeCase()}_state.${fileExtension()}"
 }

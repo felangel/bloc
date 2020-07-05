@@ -1,6 +1,6 @@
 ```dart
 BlocListener<BlocA, BlocAState>(
-  condition: (previousState, state) {
+  listenWhen: (previousState, state) {
     // return true/false to determine whether or not
     // to call listener with state
   },

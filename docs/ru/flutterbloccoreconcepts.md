@@ -18,7 +18,7 @@
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_explicit_bloc.dart.md ':include')
 
-Если вам нужен детальный контроль над тем, когда вызывается функция компоновщика, вы можете предоставить необязательное условие `condition` для `BlocBuilder`. Условие принимает предыдущее и текущее состояния блока и возвращает логическое значение. Если `condition` возвращает true, `builder` будет вызываться с помощью `state` и виджет перестраивается. Если `condition` возвращает false, `builder` не будет вызван со `state` и перестройка не произойдет.
+Если вам нужен детальный контроль над тем, когда вызывается функция компоновщика, вы можете предоставить необязательное условие `buildWhen` для `BlocBuilder`. Условие принимает предыдущее и текущее состояния блока и возвращает логическое значение. Если `buildWhen` возвращает true, `builder` будет вызываться с помощью `state` и виджет перестраивается. Если `buildWhen` возвращает false, `builder` не будет вызван со `state` и перестройка не произойдет.
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_condition.dart.md ':include')
 
@@ -64,7 +64,7 @@
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_explicit_bloc.dart.md ':include')
 
-Если вам нужен детальный контроль над тем, когда вызывается функция слушателя, вы можете предоставить необязательное условие для `BlocListener`. Условие принимает предыдущее состояние `bloc` и текущее состояние `bloc` и возвращает логическое значение. Если `condition` возвращает true, `listener` будет вызван со `state`. Если `condition` возвращает false, `listener` не будет вызван со `state`.
+Если вам нужен детальный контроль над тем, когда вызывается функция слушателя, вы можете предоставить необязательное условие для `BlocListener`. Условие принимает предыдущее состояние `bloc` и текущее состояние `bloc` и возвращает логическое значение. Если `listenWhen` возвращает true, `listener` будет вызван со `state`. Если `listenWhen` возвращает false, `listener` не будет вызван со `state`.
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_condition.dart.md ':include')
 

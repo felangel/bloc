@@ -1,0 +1,6 @@
+part of '${cubit_snake_case}_cubit.dart';
+
+@immutable
+abstract class ${cubit_pascal_case}State {}
+
+class ${cubit_pascal_case}Initial extends ${cubit_pascal_case}State {}

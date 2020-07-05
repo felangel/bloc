@@ -1,3 +1,0 @@
-export '${bloc_snake_case}_bloc.dart';
-export '${bloc_snake_case}_event.dart';
-export '${bloc_snake_case}_state.dart';

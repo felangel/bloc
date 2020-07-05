@@ -15,8 +15,7 @@ class ComplexStateA extends ComplexState {}
 class ComplexStateB extends ComplexState {}
 
 class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
-  @override
-  ComplexState get initialState => ComplexStateA();
+  ComplexBloc() : super(ComplexStateA());
 
   @override
   Stream<ComplexState> mapEventToState(

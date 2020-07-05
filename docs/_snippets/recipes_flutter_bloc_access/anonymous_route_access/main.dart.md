@@ -12,7 +12,7 @@ class App extends StatelessWidget {
       title: 'Flutter Demo',
       home: BlocProvider(
         create: (BuildContext context) => CounterBloc(),
-        child: CounterPage(),
+        child: HomePage(),
       ),
     );
   }

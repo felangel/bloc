@@ -1,7 +1,7 @@
 package com.bloc.intellij_generator_plugin.action
 
 import com.bloc.intellij_generator_plugin.generator.BlocGeneratorFactory
-import com.bloc.intellij_generator_plugin.generator.Generator
+import com.bloc.intellij_generator_plugin.generator.BlocGenerator
 import com.intellij.lang.java.JavaLanguage
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.application.ApplicationManager
@@ -33,7 +33,7 @@ class GenerateBlocAction : AnAction(), GenerateBlocDialog.Listener {
         }
     }
 
-    protected fun generate(mainSourceGenerators: List<Generator>) {
+    protected fun generate(mainSourceGenerators: List<BlocGenerator>) {
         val project = CommonDataKeys.PROJECT.getData(dataContext)
         val view = LangDataKeys.IDE_VIEW.getData(dataContext)
         val directory = view?.orChooseDirectory
@@ -49,7 +49,7 @@ class GenerateBlocAction : AnAction(), GenerateBlocDialog.Listener {
         }
     }
 
-    private fun createSourceFile(project: Project, generator: Generator, directory: PsiDirectory) {
+    private fun createSourceFile(project: Project, generator: BlocGenerator, directory: PsiDirectory) {
         val fileName = generator.fileName()
         val existingPsiFile = directory.findFile(fileName)
         if (existingPsiFile != null) {

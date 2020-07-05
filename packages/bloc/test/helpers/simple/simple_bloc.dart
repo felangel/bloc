@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 
 class SimpleBloc extends Bloc<dynamic, String> {
-  @override
-  String get initialState => '';
+  SimpleBloc() : super('');
 
   @override
   Stream<String> mapEventToState(dynamic event) async* {

@@ -1,6 +1,0 @@
-import 'package:meta/meta.dart';
-
-@immutable
-abstract class ${bloc_pascal_case}State {}
-
-class ${bloc_pascal_case}Initial extends ${bloc_pascal_case}State {}

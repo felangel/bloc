@@ -80,7 +80,7 @@ Next up, let’s implement the `TimerBloc`!
 
 ### TimerBloc
 
-If you haven’t already, create `bloc/timer_bloc.dart` and create a empty `TimerBloc`.
+If you haven’t already, create `bloc/timer_bloc.dart` and create an empty `TimerBloc`.
 
 [timer_bloc.dart](_snippets/flutter_timer_tutorial/timer_bloc_empty.dart.md ':include')
 

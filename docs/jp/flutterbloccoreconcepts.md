@@ -18,7 +18,7 @@ bloc 引数は特定のウィジェットにのみ特定の bloc を使いたく
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_explicit_bloc.dart.md ':include')
 
-もし、 state　が変化するたびに毎回 builder 関数を呼ぶのではなく、特定の条件を満たした時のみ builder を呼び画面の再描画を行いたいときは`BlocBuilder`に`condition` を設定します。`condition`は一個前の state と今の state が引数として渡されていて、boolean を返すようになっています。もし`condition`が true を返したら `builder` が呼ばれ画面の再描画が行われます。もし`condition`が false を返したら`builder`は呼ばれず、再描画は起きません。
+もし、 state　が変化するたびに毎回 builder 関数を呼ぶのではなく、特定の条件を満たした時のみ builder を呼び画面の再描画を行いたいときは`BlocBuilder`に`buildWhen` を設定します。`buildWhen`は一個前の state と今の state が引数として渡されていて、boolean を返すようになっています。もし`buildWhen`が true を返したら `builder` が呼ばれ画面の再描画が行われます。もし`buildWhen`が false を返したら`builder`は呼ばれず、再描画は起きません。
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_condition.dart.md ':include')
 
@@ -63,7 +63,7 @@ bloc 引数は特定のウィジェットにのみ特定の bloc を使いたく
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_explicit_bloc.dart.md ':include')
 
-もし state が変わるたびにコードを実行するのではなく、コードを実行する条件をより詳細にコントロールしたい場合は`condition`を`BlocListener`の引数として設定します。`condition`は bloc の一個前の state と今の state が引数として用意されていて、booleanを返す関数になっています。もし true が返されたら`listener`が実行され、もし false が返されていたら`listener`は実行されません。
+もし state が変わるたびにコードを実行するのではなく、コードを実行する条件をより詳細にコントロールしたい場合は`listenWhen`を`BlocListener`の引数として設定します。`listenWhen`は bloc の一個前の state と今の state が引数として用意されていて、booleanを返す関数になっています。もし true が返されたら`listener`が実行され、もし false が返されていたら`listener`は実行されません。
 
 [bloc_listener.dart](../_snippets/flutter_bloc_core_concepts/bloc_listener_condition.dart.md ':include')
 

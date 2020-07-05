@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   flutter_bloc:
     path: ../../packages/flutter_bloc
-  meta: ^1.1.6
+  meta: ^1.1.8
 
 flutter:
   uses-material-design: true

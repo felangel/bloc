@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'repository_provider.dart';
 
-/// {@template multirepositoryprovider}
+/// {@template multi_repository_provider}
 /// Merges multiple [RepositoryProvider] widgets into one widget tree.
 ///
 /// [MultiRepositoryProvider] improves the readability and eliminates the need
@@ -56,7 +56,7 @@ class MultiRepositoryProvider extends StatelessWidget {
   /// [providers].
   final Widget child;
 
-  /// {@macro multirepositoryprovider}
+  /// {@macro multi_repository_provider}
   const MultiRepositoryProvider({
     Key key,
     @required this.providers,

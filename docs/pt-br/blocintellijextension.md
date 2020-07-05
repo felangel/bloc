@@ -10,11 +10,11 @@ Plugin Bloc para [IntelliJ](https://www.jetbrains.com/idea/) e [Android Studio](
 
 Você pode encontrar o plug-in no MarketPlace do IntelliJ e Android Studio:
 
-- [Bloc Code Generator](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator)
+- [Bloc](https://plugins.jetbrains.com/plugin/12129-bloc)
 
 ### Como usar
 
-Simplesmente clique com o botão direito do mouse na visualização Projeto de arquivo, vá para `Novo -> Novo Bloc -> Gerar novo Bloc`, dê um nome e selecione se deseja usar o [Equatable] (https://github.com/felangel/equatable ) e clique em 'OK' para ver todo o padrão gerado.
+Simplesmente clique com o botão direito do mouse na visualização Projeto de arquivo, vá para `New -> Bloc Class`, dê um nome e selecione se deseja usar o [Equatable] (https://github.com/felangel/equatable ) e clique em 'OK' para ver todo o padrão gerado.
 
 ## Deploy
 

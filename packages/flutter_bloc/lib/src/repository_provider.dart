@@ -6,7 +6,7 @@ import 'package:provider/single_child_widget.dart';
 /// of multiple [RepositoryProvider]s.
 mixin RepositoryProviderSingleChildWidget on SingleChildWidget {}
 
-/// {@template repositoryprovider}
+/// {@template repository_provider}
 /// Takes a `ValueBuilder` that is responsible for creating the repository and
 /// a [child] which will have access to the repository via
 /// `RepositoryProvider.of(context)`.
@@ -24,7 +24,7 @@ mixin RepositoryProviderSingleChildWidget on SingleChildWidget {}
 /// {@endtemplate}
 class RepositoryProvider<T> extends Provider<T>
     with RepositoryProviderSingleChildWidget {
-  /// {@macro repositoryprovider}
+  /// {@macro repository_provider}
   RepositoryProvider({
     Key key,
     @required Create<T> create,
