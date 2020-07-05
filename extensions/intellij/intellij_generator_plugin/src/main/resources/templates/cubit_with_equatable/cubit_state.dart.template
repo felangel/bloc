@@ -1,0 +1,10 @@
+part of '${cubit_snake_case}_cubit.dart';
+
+abstract class ${cubit_pascal_case}State extends Equatable {
+  const ${cubit_pascal_case}State();
+}
+
+class ${cubit_pascal_case}Initial extends ${cubit_pascal_case}State {
+  @override
+  List<Object> get props => [];
+}

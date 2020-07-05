@@ -5,7 +5,7 @@
 
     <description>
         <![CDATA[
-            IntelliJ and Android Studio code generator plugin for the Bloc Library
+            Bloc Library Tools for effectively creating blocs and cubits for both Flutter and AngularDart apps.
         ]]>
     </description>
 
@@ -18,14 +18,23 @@
     <depends>com.intellij.modules.java</depends>
 
     <actions>
+        <action class="com.bloc.intellij_generator_plugin.action.GenerateCubitAction"
+                description="Generate a new Cubit"
+                id="GenerateCubitId"
+                icon="/icons/cubit.png"
+                text="Cubit Class">
+            <add-to-group
+                    group-id="NewGroup"
+                    anchor="first"/>
+        </action>
         <action class="com.bloc.intellij_generator_plugin.action.GenerateBlocAction"
                 description="Generate a new Bloc"
                 id="GenerateBlocId"
                 icon="/icons/bloc.png"
-                text="New Bloc">
-        <add-to-group
-                group-id="NewGroup"
-                anchor="first"/>
+                text="Bloc Class">
+            <add-to-group
+                    group-id="NewGroup"
+                    anchor="first"/>
         </action>
     </actions>
 </idea-plugin>
