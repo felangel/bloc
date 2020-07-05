@@ -52,8 +52,8 @@ void main() {
           () async {
         final transitions = <Transition<int>>[];
         final cubit = CounterCubit(onTransitionCallback: transitions.add);
-        await Future<void>.delayed(Duration.zero);
-        cubit..increment()..increment();
+        await Future<void>.delayed(Duration.zero, cubit.increment);
+        await Future<void>.delayed(Duration.zero, cubit.increment);
         await cubit.close();
         expect(
           transitions,
@@ -123,6 +123,14 @@ void main() {
         final cubit = CounterCubit()..listen(states.add);
         await cubit.close();
         expect(states, [equals(0)]);
+      });
+
+      test('receives fake async states immediately upon subscribing', () async {
+        final states = <int>[];
+        final cubit = FakeAsyncCounterCubit()..skip(1).listen(states.add);
+        await cubit.increment();
+        await cubit.close();
+        expect(states, [equals(1)]);
       });
 
       test('can call listen multiple times', () async {

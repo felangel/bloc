@@ -37,9 +37,12 @@ abstract class CubitStream<State> extends Stream<State> {
   /// {@endtemplate}
   @protected
   void emit(State state) {
-    if (state == _state || _controller.isClosed) return;
-    _state = state;
-    _controller.add(_state);
+    // Wait for next event-loop iteration before adding new state
+    Future<void>.delayed(Duration.zero, () {
+      if (state == _state || _controller.isClosed) return;
+      _state = state;
+      _controller.add(_state);
+    });
   }
 
   /// Adds a subscription to the `Stream<State>`.
@@ -72,6 +75,9 @@ abstract class CubitStream<State> extends Stream<State> {
   /// which resolves when it is done or an error occurred.
   @mustCallSuper
   Future<void> close() async {
+    // Wait for next event-loop iteration
+    // to allow propagation of newly emitted states.
+    await Future<void>.delayed(Duration.zero);
     await _controller.close();
     await _controller.stream.drain<State>();
   }

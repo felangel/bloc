@@ -1,3 +1,7 @@
+# 0.1.1
+
+- fix: offload state emission to next event loop iteration
+
 # 0.1.0
 
 - docs: add `onTransition` documentation to README
