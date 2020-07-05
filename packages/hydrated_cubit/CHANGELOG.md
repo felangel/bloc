@@ -1,3 +1,7 @@
+# 0.1.1
+
+- fix: support use alongside hive ([#53](https://github.com/felangel/cubit/pull/53))
+
 # 0.1.0
 
 - feat: upgrade to `cubit: ^0.1.0`
