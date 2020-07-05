@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:synchronized/synchronized.dart';
+// ignore: implementation_imports
+import 'package:hive/src/hive_impl.dart';
 
 import 'hydrated_cipher.dart';
 
@@ -52,14 +54,22 @@ class HydratedStorage implements Storage {
     return _lock.synchronized(() async {
       if (_instance != null) return _instance;
       final directory = storageDirectory ?? await getTemporaryDirectory();
-      if (!kIsWeb) Hive.init(directory.path);
-      final box = await Hive.openBox<dynamic>(
+      // Use HiveImpl directly to avoid conflicts with existing Hive.init
+      // https://github.com/hivedb/hive/issues/336
+      hive = HiveImpl();
+      if (!kIsWeb) hive.init(directory.path);
+      final box = await hive.openBox<dynamic>(
         'hydrated_box',
         encryptionCipher: encryptionCipher,
       );
       return _instance = HydratedStorage(box);
     });
   }
+
+  /// Internal instance of [HiveImpl].
+  /// It should only be used for testing.
+  @visibleForTesting
+  static HiveInterface hive;
 
   static final _lock = Lock();
   static HydratedStorage _instance;

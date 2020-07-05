@@ -61,9 +61,9 @@ void main() {
         expect(instanceA, instanceB);
       });
 
-      test('calls Hive.init with correct directory', () async {
+      test('creates internal HiveImpl with correct directory', () async {
         storage = await HydratedStorage.build();
-        final box = Hive.box<dynamic>('hydrated_box');
+        final box = HydratedStorage.hive?.box<dynamic>('hydrated_box');
         final directory = await getTemporaryDirectory();
         expect(box, isNotNull);
         expect(box.path, p.join(directory.path, 'hydrated_box.hive'));
@@ -161,6 +161,38 @@ void main() {
           expect(written, isNotNull);
           expect(written, record);
         }).drain<dynamic>();
+      });
+    });
+
+    group('Storage interference', () {
+      final temp = p.join(cwd, 'temp');
+      final docs = p.join(cwd, 'docs');
+
+      tearDown(() async {
+        await Directory(temp).delete(recursive: true);
+        await Directory(docs).delete(recursive: true);
+      });
+
+      test('Hive and Hydrated default directories', () async {
+        Hive.init(docs);
+        storage = await HydratedStorage.build(
+          storageDirectory: Directory(temp),
+        );
+
+        var box = await Hive.openBox<String>('hive');
+        await box.put('name', 'hive');
+        expect(box.get('name'), 'hive');
+        await Hive.close();
+
+        Hive.init(docs);
+        box = await Hive.openBox<String>('hive');
+        try {
+          expect(box.get('name'), isNotNull);
+          expect(box.get('name'), 'hive');
+        } finally {
+          await storage.clear();
+          await Hive.close();
+        }
       });
     });
   });
