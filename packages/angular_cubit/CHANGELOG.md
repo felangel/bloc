@@ -1,3 +1,7 @@
+# 0.1.0-dev.2
+
+- fix: upgrade to `cubit ^0.1.1`
+
 # 0.1.0-dev.1
 
 - feat: upgrade to `cubit ^0.1.0`

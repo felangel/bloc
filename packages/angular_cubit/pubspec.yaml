@@ -4,14 +4,14 @@ repository: https://github.com/felangel/cubit
 issue_tracker: https://github.com/felangel/cubit/issues
 homepage: https://github.com/felangel/cubit
 
-version: 0.1.0-dev.1
+version: 0.1.0-dev.2
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   angular: ^6.0.0-alpha+1
-  cubit: ^0.1.0
+  cubit: ^0.1.1
 
 dev_dependencies:
   angular_test: ^2.3.0
