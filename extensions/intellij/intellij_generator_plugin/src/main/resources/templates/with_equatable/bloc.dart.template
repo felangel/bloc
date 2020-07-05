@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 
-import 'bloc.dart';
+part '${bloc_snake_case}_event.dart';
+part '${bloc_snake_case}_state.dart';
 
 class ${bloc_pascal_case}Bloc extends Bloc<${bloc_pascal_case}Event, ${bloc_pascal_case}State> {
-  @override
-  ${bloc_pascal_case}State get initialState => ${bloc_pascal_case}Initial();
+  ${bloc_pascal_case}Bloc() : super(${bloc_pascal_case}Initial());
 
   @override
   Stream<${bloc_pascal_case}State> mapEventToState(

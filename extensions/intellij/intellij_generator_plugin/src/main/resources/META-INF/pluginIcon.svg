@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="34px" height="39px" viewBox="0 0 34 39" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>bloc</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="bloc">
+            <g id="black-hex" fill="#000000">
+                <polygon id="Rectangle" transform="translate(25.467925, 23.864151) scale(1, -1) translate(-25.467925, -23.864151) " points="16.9358491 9.23773585 33.8689605 18.4754717 34 38.490566 16.9358491 29.2528302"></polygon>
+                <polygon id="Rectangle" transform="translate(17.000000, 9.237736) scale(1, -1) translate(-17.000000, -9.237736) " points="16.934475 0 34 9.23773585 17 18.4754717 0 9.23773585"></polygon>
+                <polygon id="Rectangle" points="0 9.23773585 16.9358491 18.4754717 16.9358491 38.490566 2.23582855e-15 29.2528302"></polygon>
+            </g>
+            <g id="cube" transform="translate(2.822642, 3.207547)">
+                <polygon id="Rectangle" fill="#00D3B9" transform="translate(21.224420, 19.886792) scale(1, -1) translate(-21.224420, -19.886792) " points="14.1132075 7.69811321 28.2264151 15.3962264 28.3356323 32.0754717 14.1132075 24.3773585"></polygon>
+                <path d="M14.1141277,0.569041943 L1.04571825,7.69726526 L14.1678161,14.8271852 L27.2867975,7.69895864 L14.1141277,0.569041943 Z" id="Rectangle" stroke="#0084C1" fill="#0084C1" transform="translate(14.167816, 7.698113) scale(1, -1) translate(-14.167816, -7.698113) "></path>
+                <polygon id="Rectangle" fill="#82EDDF" points="0.019245283 7.69811321 14.1133681 15.3962264 14.1133681 32.0754717 0.019245283 24.3773585"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
