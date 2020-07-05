@@ -38,9 +38,9 @@ abstract class Generator(private val blocName: String,
         return substitutor.replace(templateString)
     }
 
-    fun pascalCase(): String = blocName.toUpperCamelCase()
+    fun pascalCase(): String = blocName.toUpperCamelCase().replace("Bloc", "")
 
-    fun snakeCase() = blocName.toLowerSnakeCase()
+    fun snakeCase() = blocName.toLowerSnakeCase().replace("_bloc", "")
 
     fun fileExtension() = "dart"
 }
