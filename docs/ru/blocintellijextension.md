@@ -10,13 +10,11 @@
 
 Вы можете найти плагин на официальной торговой площадке `IntelliJ` и `Android Studio`:
 
-- [Bloc Code Generator](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator)
+- [Bloc](https://plugins.jetbrains.com/plugin/12129-bloc)
 
 ### Как использовать
 
-Simply right click on the File Project view, go to `New -> New Bloc -> Generate New Bloc`, give it a name, select if you want to use [Equatable](https://github.com/felangel/equatable), and click on `OK` to see all the boilerplate generated.
-
-Просто щелкните правой кнопкой мыши на представлении `File Project`, перейдите в `New -> New Bloc -> Generate New Bloc`, дайте ему имя, выберите хотите ли вы использовать [Equatable](https://github.com/felangel/equatable) и нажмите `ОК`, чтобы увидеть все сгенерированные шаблоны.
+Просто щелкните правой кнопкой мыши на представлении `File Project`, перейдите в `New -> Bloc Class`, дайте ему имя, выберите хотите ли вы использовать [Equatable](https://github.com/felangel/equatable) и нажмите `ОК`, чтобы увидеть все сгенерированные шаблоны.
 
 ## Развертывание
 

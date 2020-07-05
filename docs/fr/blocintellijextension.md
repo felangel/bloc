@@ -14,7 +14,7 @@ Vous trouvez le plugin sur la marketplace officielle de IntelliJ et Android Stud
 
 ### Comment l'utiliser
 
-Il vous suffit de faire un clique droit sur 'File Project view', ensuite aller à `New -> New Bloc -> Generate New Bloc`, donnez lui un nom, sélectionnez si vous voulez utiliser ou non [Equatable](https://github.com/felangel/equatable), puis cliquez sur `OK` pour voir tout le code se créer.
+Il vous suffit de faire un clique droit sur 'File Project view', ensuite aller à `New -> Bloc Class`, donnez lui un nom, sélectionnez si vous voulez utiliser ou non [Equatable](https://github.com/felangel/equatable), puis cliquez sur `OK` pour voir tout le code se créer.
 
 ## Déploiement
 
