@@ -1,7 +1,7 @@
 package com.bloc.intellij_generator_plugin.action
 
-import com.bloc.intellij_generator_plugin.generator.BlocGeneratorFactory
-import com.bloc.intellij_generator_plugin.generator.BlocGenerator
+import com.bloc.intellij_generator_plugin.generator.CubitGeneratorFactory
+import com.bloc.intellij_generator_plugin.generator.CubitGenerator
 import com.intellij.lang.java.JavaLanguage
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.application.ApplicationManager
@@ -9,7 +9,7 @@ import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.*
 
-class GenerateBlocAction : AnAction(), GenerateBlocDialog.Listener {
+class GenerateCubitAction : AnAction(), GenerateBlocDialog.Listener {
 
     private lateinit var dataContext: DataContext
 
@@ -18,9 +18,9 @@ class GenerateBlocAction : AnAction(), GenerateBlocDialog.Listener {
         dialog.show()
     }
 
-    override fun onGenerateBlocClicked(blocName: String?, shouldUseEquatable: Boolean) {
-        blocName?.let { name ->
-            val generators = BlocGeneratorFactory.getBlocGenerators(name, shouldUseEquatable)
+    override fun onGenerateBlocClicked(name: String?, useEquatable: Boolean) {
+        name?.let { name ->
+            val generators = CubitGeneratorFactory.getCubitGenerators(name, useEquatable)
             generate(generators)
         }
     }
@@ -33,7 +33,7 @@ class GenerateBlocAction : AnAction(), GenerateBlocDialog.Listener {
         }
     }
 
-    protected fun generate(mainSourceGenerators: List<BlocGenerator>) {
+    protected fun generate(mainSourceGenerators: List<CubitGenerator>) {
         val project = CommonDataKeys.PROJECT.getData(dataContext)
         val view = LangDataKeys.IDE_VIEW.getData(dataContext)
         val directory = view?.orChooseDirectory
@@ -43,13 +43,13 @@ class GenerateBlocAction : AnAction(), GenerateBlocDialog.Listener {
                 {
                     mainSourceGenerators.forEach { createSourceFile(project!!, it, directory!!) }
                 },
-                "Generate a new Bloc",
+                "Generate a new Cubit",
                 null
             )
         }
     }
 
-    private fun createSourceFile(project: Project, generator: BlocGenerator, directory: PsiDirectory) {
+    private fun createSourceFile(project: Project, generator: CubitGenerator, directory: PsiDirectory) {
         val fileName = generator.fileName()
         val existingPsiFile = directory.findFile(fileName)
         if (existingPsiFile != null) {
