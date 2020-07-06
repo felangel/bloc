@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
@@ -31,6 +32,18 @@ void main() {
 
     tearDown(() async {
       await storage?.clear();
+    });
+
+    group('migration', () {
+      test('returns correct value when file exists', () async {
+        final directory = await getTemporaryDirectory();
+        File('${directory.path}/.hydrated_bloc.json')
+          ..writeAsStringSync(json.encode({
+            'CounterBloc': json.encode({'value': 4})
+          }));
+        storage = await HydratedStorage.build();
+        expect(storage.read('CounterBloc')['value'] as int, 4);
+      });
     });
 
     group('build', () {

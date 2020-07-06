@@ -1,3 +1,7 @@
+# 0.1.2
+
+- fix: reintroduce migration code to ensure no data loss ([#67](https://github.com/felangel/hydrated_bloc/issues/67))
+
 # 0.1.1
 
 - fix: support use alongside hive ([#53](https://github.com/felangel/cubit/pull/53))

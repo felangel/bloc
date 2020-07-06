@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
@@ -62,8 +63,30 @@ class HydratedStorage implements Storage {
         'hydrated_box',
         encryptionCipher: encryptionCipher,
       );
+
+      await _migrate(directory, box);
+
       return _instance = HydratedStorage(box);
     });
+  }
+
+  static Future _migrate(Directory directory, Box box) async {
+    final file = File('${directory.path}/.hydrated_bloc.json');
+    if (await file.exists()) {
+      try {
+        final dynamic storageJson = json.decode(await file.readAsString());
+        final cache = (storageJson as Map).cast<String, String>();
+        for (final key in cache.keys) {
+          try {
+            final string = cache[key];
+            final dynamic object = json.decode(string);
+            await box.put(key, object);
+          } on dynamic catch (_) {}
+        }
+      } on dynamic catch (_) {} finally {
+        await file.delete();
+      }
+    }
   }
 
   /// Internal instance of [HiveImpl].
