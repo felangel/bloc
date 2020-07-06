@@ -1,3 +1,8 @@
+# 4.2.1
+
+- fix: `CubitObserver` snippet fixes
+- fix: `BlocObserver` snippet fixes
+
 # 4.2.0
 
 - feat: Add Open Migration Guide for `bloc`, `flutter_bloc`, and `hydrated_bloc`
