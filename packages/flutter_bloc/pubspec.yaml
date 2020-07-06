@@ -4,6 +4,7 @@ version: 5.0.0
 repository: https://github.com/felangel/bloc/tree/master/packages/flutter_bloc
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://bloclibrary.dev
+documentation: https://bloclibrary.dev/#/gettingstarted
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
@@ -12,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_cubit: ^0.1.0
-  bloc: ^5.0.0
+  bloc: ^5.0.1
   provider: ^4.0.5
 
 dev_dependencies:

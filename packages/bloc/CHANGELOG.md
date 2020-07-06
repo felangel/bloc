@@ -1,6 +1,6 @@
 # 5.0.1
 
-- feat: upgrade to `cubit ^0.1.2`
+- fix: upgrade to `cubit ^0.1.2`
 - docs: minor documentation updates
 
 # 5.0.0
