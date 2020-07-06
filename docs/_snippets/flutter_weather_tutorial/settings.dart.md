@@ -8,7 +8,6 @@ import 'package:flutter_weather/blocs/blocs.dart';
 class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final settingsBloc = BlocProvider.of<SettingsBloc>(context);
     return Scaffold(
       appBar: AppBar(title: Text('Settings')),
       body: ListView(
