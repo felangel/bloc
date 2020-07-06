@@ -1,3 +1,8 @@
+# 5.0.1
+
+- feat: upgrade to `cubit ^0.1.2`
+- docs: minor documentation updates
+
 # 5.0.0
 
 - **BREAKING**: remove `initialState` override in favor of providing the initial state via super ([#1304](https://github.com/felangel/bloc/issues/1304)).
