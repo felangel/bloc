@@ -42,7 +42,7 @@ packages:
       name: cubit
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.2"
   file:
     dependency: transitive
     description:
@@ -89,7 +89,7 @@ packages:
       name: hydrated_cubit
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.2"
   intl:
     dependency: transitive
     description:

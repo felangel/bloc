@@ -1,3 +1,7 @@
+# 5.0.2
+
+- fix: upgrade to `hydrated_cubit ^0.1.2` to prevent data loss during migration.
+
 # 5.0.1
 
 - fix: export `Storage` interface
