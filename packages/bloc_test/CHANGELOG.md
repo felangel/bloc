@@ -1,3 +1,8 @@
+# 6.0.1
+
+- fix: upgrade to `bloc ^5.0.1`
+- docs: minor documentation updates
+
 # 6.0.0
 
 - feat: upgrade to `bloc ^5.0.0`
