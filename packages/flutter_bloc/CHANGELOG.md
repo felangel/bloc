@@ -1,3 +1,8 @@
+# 5.0.1
+
+- fix: upgrade to `bloc ^5.0.1`
+- docs: minor documentation updates
+
 # 5.0.0
 
 - **BREAKING**: `condition` on `BlocBuilder` renamed to `buildWhen`
