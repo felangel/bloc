@@ -1,3 +1,7 @@
+# 0.1.2
+
+- revert: `v0.1.1`
+
 # 0.1.1
 
 - fix: offload state emission to next event loop iteration

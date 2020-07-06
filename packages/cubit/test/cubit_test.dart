@@ -128,7 +128,7 @@ void main() {
       test('receives fake async states immediately upon subscribing', () async {
         final states = <int>[];
         final cubit = FakeAsyncCounterCubit()..skip(1).listen(states.add);
-        await cubit.increment();
+        await Future.delayed(Duration.zero, cubit.increment);
         await cubit.close();
         expect(states, [equals(1)]);
       });
