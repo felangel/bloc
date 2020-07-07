@@ -35,6 +35,22 @@ class HydratedStorageNotFound implements Exception {
 /// Specialized [Cubit] which handles initializing the [Cubit] state
 /// based on the persisted state. This allows state to be persisted
 /// across application restarts.
+///
+/// ```dart
+/// class CounterCubit extends HydratedCubit<int> {
+///   CounterCubit() : super(0);
+///
+///   void increment() => emit(state + 1);
+///   void decrement() => emit(state - 1);
+///
+///   @override
+///   int fromJson(Map<String, dynamic> json) => json['value'] as int;
+///
+///   @override
+///   Map<String, int> toJson(int state) => {'value': state};
+/// }
+/// ```
+///
 /// {@endtemplate}
 abstract class HydratedCubit<State> extends Cubit<State> {
   /// {@macro hydrated_cubit}
@@ -101,11 +117,6 @@ abstract class HydratedCubit<State> extends Cubit<State> {
 
   /// Responsible for converting the `Map<String, dynamic>` representation
   /// of the cubit state into a concrete instance of the cubit state.
-  ///
-  /// If `fromJson` throws an `Exception`,
-  /// `HydratedCubit` will return an `initialState` of `null`
-  /// so it is recommended to set `initialState` in the cubit to
-  /// `super.initialState() ?? defaultInitialState()`.
   State fromJson(Map<String, dynamic> json);
 
   /// Responsible for converting a concrete instance of the cubit state

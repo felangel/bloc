@@ -1,3 +1,8 @@
+# 0.1.4
+
+- docs: inline documentation improvements
+- fix: upgrade to `cubit: ^0.1.2`
+
 # 0.1.3
 
 - fix: excessive storage reads and `fromJson` invocations
