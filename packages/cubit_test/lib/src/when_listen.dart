@@ -35,6 +35,7 @@ void whenListen<Event, State>(
 ) {
   final broadcastStream = stream.asBroadcastStream();
   StreamSubscription<State> subscription;
+  when(cubit.isBroadcast).thenReturn(true);
   when(cubit.skip(any)).thenAnswer(
     (invocation) {
       final stream = broadcastStream.skip(
