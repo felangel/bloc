@@ -1,16 +1,17 @@
 name: bloc_test
 description: A testing library which makes it easy to test blocs. Built to be used with the bloc state management package.
-version: 6.0.0
+version: 6.0.1
 repository: https://github.com/felangel/bloc/tree/master/packages/bloc_test
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://bloclibrary.dev
+documentation: https://bloclibrary.dev/#/gettingstarted
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
-  bloc: ^5.0.0
-  cubit_test: ^0.1.0
+  bloc: ^5.0.1
+  cubit_test: ^0.1.1
   test: ^1.14.0
   meta: ^1.1.6
 
