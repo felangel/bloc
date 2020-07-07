@@ -1,3 +1,8 @@
+# 0.1.1
+
+- fix: upgrade to `cubit: ^0.1.2`
+- docs: minor documentation updates
+
 # 0.1.0
 
 - **BREAKING**: rename `condition` in `CubitBuilder` to `buildWhen`
