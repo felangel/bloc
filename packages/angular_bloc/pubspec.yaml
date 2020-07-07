@@ -20,6 +20,6 @@ dev_dependencies:
   build_test: ^0.10.8
   build_web_compilers: ^2.3.0
   effective_dart: ^1.2.0
-  test: ^1.14.6
   meta: ">=1.0.0 <1.2.0"
   mockito: ^4.0.0
+  test: ^1.14.6
