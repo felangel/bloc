@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:hydrated_cubit/hydrated_cubit.dart';
@@ -6,11 +7,6 @@ import 'package:cubit/cubit.dart';
 import 'package:uuid/uuid.dart';
 
 class MockStorage extends Mock implements Storage {}
-
-class MockCubit extends Mock implements HydratedCubit<dynamic> {
-  @override
-  String get storageToken => '${runtimeType.toString()}$id';
-}
 
 class MyUuidHydratedCubit extends HydratedCubit<String> {
   MyUuidHydratedCubit() : super(Uuid().v4());
@@ -20,6 +16,23 @@ class MyUuidHydratedCubit extends HydratedCubit<String> {
 
   @override
   String fromJson(dynamic json) => json['value'] as String;
+}
+
+class MyCallbackHydratedCubit extends HydratedCubit<int> {
+  MyCallbackHydratedCubit({this.onFromJsonCalled}) : super(0);
+
+  final ValueSetter<dynamic> onFromJsonCalled;
+
+  void increment() => emit(state + 1);
+
+  @override
+  Map<String, int> toJson(int state) => {'value': state};
+
+  @override
+  int fromJson(dynamic json) {
+    onFromJsonCalled?.call(json);
+    return json['value'] as int;
+  }
 }
 
 class MyHydratedCubit extends HydratedCubit<int> {
@@ -64,13 +77,89 @@ void main() {
       HydratedCubit.storage = storage;
     });
 
+    test('reads from storage once upon initialization', () {
+      MyCallbackHydratedCubit();
+      verify<dynamic>(storage.read('MyCallbackHydratedCubit')).called(1);
+    });
+
+    test(
+        'does not read from storage on subsequent state changes '
+        'when cache value exists', () {
+      when<dynamic>(storage.read('MyCallbackHydratedCubit')).thenReturn(
+        {'value': 42},
+      );
+      final cubit = MyCallbackHydratedCubit();
+      expect(cubit.state, 42);
+      cubit.increment();
+      expect(cubit.state, 43);
+      verify<dynamic>(storage.read('MyCallbackHydratedCubit')).called(1);
+    });
+
+    test(
+        'does not deserialize state on subsequent state changes '
+        'when cache value exists', () {
+      final fromJsonCalls = <dynamic>[];
+      when<dynamic>(storage.read('MyCallbackHydratedCubit')).thenReturn(
+        {'value': 42},
+      );
+      final cubit = MyCallbackHydratedCubit(
+        onFromJsonCalled: fromJsonCalls.add,
+      );
+      expect(cubit.state, 42);
+      cubit.increment();
+      expect(cubit.state, 43);
+      expect(fromJsonCalls, [
+        {'value': 42}
+      ]);
+    });
+
+    test(
+        'does not read from storage on subsequent state changes '
+        'when cache is empty', () {
+      when<dynamic>(storage.read('MyCallbackHydratedCubit')).thenReturn(null);
+      final cubit = MyCallbackHydratedCubit();
+      expect(cubit.state, 0);
+      cubit.increment();
+      expect(cubit.state, 1);
+      verify<dynamic>(storage.read('MyCallbackHydratedCubit')).called(1);
+    });
+
+    test('does not deserialize state when cache is empty', () {
+      final fromJsonCalls = <dynamic>[];
+      when<dynamic>(storage.read('MyCallbackHydratedCubit')).thenReturn(null);
+      final cubit = MyCallbackHydratedCubit(
+        onFromJsonCalled: fromJsonCalls.add,
+      );
+      expect(cubit.state, 0);
+      cubit.increment();
+      expect(cubit.state, 1);
+      expect(fromJsonCalls, isEmpty);
+    });
+
+    test(
+        'does not read from storage on subsequent state changes '
+        'when cache is malformed', () {
+      when<dynamic>(storage.read('MyCallbackHydratedCubit')).thenReturn('{');
+      final cubit = MyCallbackHydratedCubit();
+      expect(cubit.state, 0);
+      cubit.increment();
+      expect(cubit.state, 1);
+      verify<dynamic>(storage.read('MyCallbackHydratedCubit')).called(1);
+    });
+
+    test('does not deserialize state when cache is malformed', () {
+      final fromJsonCalls = <dynamic>[];
+      when<dynamic>(storage.read('MyCallbackHydratedCubit')).thenReturn('{');
+      final cubit = MyCallbackHydratedCubit(
+        onFromJsonCalled: fromJsonCalls.add,
+      );
+      expect(cubit.state, 0);
+      cubit.increment();
+      expect(cubit.state, 1);
+      expect(fromJsonCalls, isEmpty);
+    });
+
     group('SingleHydratedCubit', () {
-      MyHydratedCubit cubit;
-
-      setUp(() {
-        cubit = MyHydratedCubit();
-      });
-
       test('should throw HydratedStorageNotFound when storage is null', () {
         HydratedCubit.storage = null;
         expect(
@@ -93,7 +182,7 @@ void main() {
       test('should call storage.write when onTransition is called', () {
         final transition = const Transition(currentState: 0, nextState: 0);
         final expected = <String, int>{'value': 0};
-        cubit.onTransition(transition);
+        MyHydratedCubit().onTransition(transition);
         verify(storage.write('MyHydratedCubit', expected)).called(2);
       });
 
@@ -112,11 +201,12 @@ void main() {
           final expectedError = Exception('oops');
           final transition = const Transition(currentState: 0, nextState: 0);
           when(storage.write(any, any)).thenThrow(expectedError);
-          cubit.onTransition(transition);
+          MyHydratedCubit().onTransition(transition);
         }, onError: (dynamic _) => fail('should not throw'));
       });
 
       test('stores initial state when instantiated', () {
+        MyHydratedCubit();
         verify<dynamic>(
           storage.write('MyHydratedCubit', {'value': 0}),
         ).called(1);
@@ -124,70 +214,63 @@ void main() {
 
       test('initial state should return 0 when fromJson returns null', () {
         when<dynamic>(storage.read('MyHydratedCubit')).thenReturn(null);
-        expect(cubit.state, 0);
-        verify<dynamic>(storage.read('MyHydratedCubit')).called(2);
+        expect(MyHydratedCubit().state, 0);
+        verify<dynamic>(storage.read('MyHydratedCubit')).called(1);
       });
 
       test('initial state should return 0 when deserialization fails', () {
         when<dynamic>(storage.read('MyHydratedCubit'))
             .thenThrow(Exception('oops'));
-        expect(cubit.state, 0);
+        expect(MyHydratedCubit().state, 0);
       });
 
       test('initial state should return 101 when fromJson returns 101', () {
         when<dynamic>(storage.read('MyHydratedCubit'))
             .thenReturn({'value': 101});
-        expect(cubit.state, 101);
-        verify<dynamic>(storage.read('MyHydratedCubit')).called(2);
+
+        expect(MyHydratedCubit().state, 101);
+        verify<dynamic>(storage.read('MyHydratedCubit')).called(1);
       });
 
       group('clear', () {
         test('calls delete on storage', () async {
-          await cubit.clear();
+          await MyHydratedCubit().clear();
           verify(storage.delete('MyHydratedCubit')).called(1);
         });
       });
     });
 
     group('MultiHydratedCubit', () {
-      MyMultiHydratedCubit multiCubitA;
-      MyMultiHydratedCubit multiCubitB;
-
-      setUp(() {
-        multiCubitA = MyMultiHydratedCubit('A');
-        multiCubitB = MyMultiHydratedCubit('B');
-      });
-
       test('initial state should return 0 when fromJson returns null', () {
         when<dynamic>(storage.read('MyMultiHydratedCubitA')).thenReturn(null);
-        expect(multiCubitA.state, 0);
-        verify<dynamic>(storage.read('MyMultiHydratedCubitA')).called(2);
+        expect(MyMultiHydratedCubit('A').state, 0);
+        verify<dynamic>(storage.read('MyMultiHydratedCubitA')).called(1);
 
         when<dynamic>(storage.read('MyMultiHydratedCubitB')).thenReturn(null);
-        expect(multiCubitB.state, 0);
-        verify<dynamic>(storage.read('MyMultiHydratedCubitB')).called(2);
+        expect(MyMultiHydratedCubit('B').state, 0);
+        verify<dynamic>(storage.read('MyMultiHydratedCubitB')).called(1);
       });
 
       test('initial state should return 101/102 when fromJson returns 101/102',
           () {
         when<dynamic>(storage.read('MyMultiHydratedCubitA'))
             .thenReturn({'value': 101});
-        expect(multiCubitA.state, 101);
-        verify<dynamic>(storage.read('MyMultiHydratedCubitA')).called(2);
+        expect(MyMultiHydratedCubit('A').state, 101);
+        verify<dynamic>(storage.read('MyMultiHydratedCubitA')).called(1);
 
         when<dynamic>(storage.read('MyMultiHydratedCubitB'))
             .thenReturn({'value': 102});
-        expect(multiCubitB.state, 102);
-        verify<dynamic>(storage.read('MyMultiHydratedCubitB')).called(2);
+        expect(MyMultiHydratedCubit('B').state, 102);
+        verify<dynamic>(storage.read('MyMultiHydratedCubitB')).called(1);
       });
 
       group('clear', () {
         test('calls delete on storage', () async {
-          await multiCubitA.clear();
+          await MyMultiHydratedCubit('A').clear();
           verify(storage.delete('MyMultiHydratedCubitA')).called(1);
           verifyNever(storage.delete('MyMultiHydratedCubitB'));
 
-          await multiCubitB.clear();
+          await MyMultiHydratedCubit('B').clear();
           verify(storage.delete('MyMultiHydratedCubitB')).called(1);
         });
       });
