@@ -11,7 +11,7 @@ environment:
 
 dependencies:
   angular: ^6.0.0-alpha+1
-  angular_cubit: ^0.1.0-dev.1
+  angular_cubit: ^0.1.0-dev.3
   bloc: ^5.0.1
 
 dev_dependencies:
