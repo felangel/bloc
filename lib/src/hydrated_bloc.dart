@@ -33,11 +33,11 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State> {
     if (_state != null) return _state;
     try {
       final stateJson = storage.read(storageToken);
-      if (stateJson == null) return super.state;
-      return fromJson(Map<String, dynamic>.from(stateJson));
+      if (stateJson == null) return _state = super.state;
+      return _state = fromJson(Map<String, dynamic>.from(stateJson));
     } on dynamic catch (error, stackTrace) {
       onError(error, stackTrace);
-      return super.state;
+      return _state = super.state;
     }
   }
 

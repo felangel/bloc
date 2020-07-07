@@ -1,3 +1,10 @@
+# 5.0.3
+
+- fix: excessive storage reads and `fromJson` invocations
+- chore: upgrade to `hydrated_cubit ^0.1.3`
+- chore: upgrade to `bloc ^5.0.1`
+- docs: minor documentation improvements
+
 # 5.0.2
 
 - fix: upgrade to `hydrated_cubit ^0.1.2` to prevent data loss during migration.
