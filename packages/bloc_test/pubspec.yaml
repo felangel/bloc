@@ -11,7 +11,7 @@ environment:
 
 dependencies:
   bloc: ^5.0.1
-  cubit_test: ^0.1.0
+  cubit_test: ^0.1.1
   test: ^1.14.0
   meta: ^1.1.6
 
