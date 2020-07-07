@@ -35,7 +35,7 @@ packages:
       path: "../../packages/angular_cubit"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0-dev.3"
   archive:
     dependency: transitive
     description:
@@ -189,7 +189,7 @@ packages:
       name: cubit
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.9"
+    version: "0.1.2"
   dart_style:
     dependency: transitive
     description:
