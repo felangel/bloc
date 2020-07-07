@@ -35,7 +35,7 @@ packages:
       path: "../../packages/angular_cubit"
       relative: true
     source: path
-    version: "0.1.0-dev.3"
+    version: "0.1.0-dev.4"
   archive:
     dependency: transitive
     description:
