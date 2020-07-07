@@ -1,3 +1,8 @@
+# 0.1.0-dev.4
+
+- chore: restrict `meta` version in `dev_dependencies`
+- docs: minor documentation updates
+
 # 0.1.0-dev.3
 
 - fix: upgrade to cubit `v0.1.2`
