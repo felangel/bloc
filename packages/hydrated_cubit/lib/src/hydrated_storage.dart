@@ -7,6 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:synchronized/synchronized.dart';
 // ignore: implementation_imports
 import 'package:hive/src/hive_impl.dart';
+// ignore: implementation_imports
+import 'package:hive/src/box/default_compaction_strategy.dart';
 
 import 'hydrated_cipher.dart';
 
@@ -48,9 +50,21 @@ class HydratedStorage implements Storage {
   /// final byteskey = sha256.convert(utf8.encode(password)).bytes;
   /// return HydratedAesCipher(byteskey);
   /// ```
+  ///
+  /// Use [compactionStrategy] if you want to specify custom rules
+  /// for automatic compaction. Otherwise default strategy is used.
+  /// And `NEVER access a box from the compaction strategy.`
+  ///
+  /// Example:
+  /// ```dart
+  /// await HydratedStorage.build(compactionStrategy: (_, removedEntries) {
+  ///   return deletedEntries > 50;
+  /// });
+  /// ```
   static Future<HydratedStorage> build({
     Directory storageDirectory,
     HydratedCipher encryptionCipher,
+    CompactionStrategy compactionStrategy,
   }) {
     return _lock.synchronized(() async {
       if (_instance != null) return _instance;
@@ -62,6 +76,7 @@ class HydratedStorage implements Storage {
       final box = await hive.openBox<dynamic>(
         'hydrated_box',
         encryptionCipher: encryptionCipher,
+        compactionStrategy: compactionStrategy ?? defaultCompactionStrategy,
       );
 
       await _migrate(directory, box);
@@ -83,9 +98,8 @@ class HydratedStorage implements Storage {
             await box.put(key, object);
           } on dynamic catch (_) {}
         }
-      } on dynamic catch (_) {} finally {
-        await file.delete();
-      }
+      } on dynamic catch (_) {}
+      await file.delete();
     }
   }
 
@@ -126,4 +140,16 @@ class HydratedStorage implements Storage {
     }
     return null;
   }
+
+  /// Induces manual box compaction. It's rarely needed.
+  /// Consider using custom compaction strategy instead.
+  ///
+  /// `compact` is [HydratedStorage] specific feature,
+  /// to use it downcast `Storage` to `HydratedStorage`.
+  Future<void> compact() {
+    return _box.isOpen ? _lock.synchronized(_box.compact) : Future.value();
+  }
 }
+
+/// A function which decides when to compact a box.
+typedef CompactionStrategy = bool Function(int entries, int deletedEntries);

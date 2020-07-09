@@ -9,6 +9,7 @@ import 'package:mockito/mockito.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:pedantic/pedantic.dart';
+import 'package:hive/src/box/box_base_impl.dart';
 
 class MockBox extends Mock implements Box<dynamic> {}
 
@@ -81,6 +82,25 @@ void main() {
         expect(box, isNotNull);
         expect(box.path, p.join(directory.path, 'hydrated_box.hive'));
       });
+
+      test('uses defaultCompactionStrategy when needed', () async {
+        storage = await HydratedStorage.build(compactionStrategy: null);
+        // TODO(need_help)
+      });
+
+      test('invokes compactionStrategy', () async {
+        var counter = 0;
+        storage = await HydratedStorage.build(compactionStrategy: (_, __) {
+          counter++;
+          return false;
+        });
+
+        final box = HydratedStorage.hive?.box<dynamic>('hydrated_box');
+        // ignore: invalid_use_of_protected_member
+        await (box as BoxBaseImpl)?.performCompactionIfNeeded();
+
+        expect(counter, 1);
+      });
     });
 
     group('default constructor', () {
@@ -146,6 +166,20 @@ void main() {
           when(box.isOpen).thenReturn(true);
           await storage.clear();
           verify(box.deleteFromDisk()).called(1);
+        });
+      });
+
+      group('compact', () {
+        test('not closed box', () async {
+          when(box.isOpen).thenReturn(false);
+          await (storage as HydratedStorage).compact();
+          verifyNever(await box.compact());
+        });
+
+        test('opened box', () async {
+          when(box.isOpen).thenReturn(true);
+          await (storage as HydratedStorage).compact();
+          verify(await box.compact()).called(1);
         });
       });
     });
