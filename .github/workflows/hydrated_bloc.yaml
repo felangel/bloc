@@ -1,16 +1,25 @@
-name: build
+name: hydrated_bloc
 
 on:
   push:
     branches:
       - master
+    paths:
+      - ".github/workflows/hydrated_bloc.yaml"
+      - "packages/hydrated_bloc/**"
 
   pull_request:
     branches:
       - master
+    paths:
+      - ".github/workflows/hydrated_bloc.yaml"
+      - "packages/hydrated_bloc/**"
 
 jobs:
   build:
+    defaults:
+      run:
+        working-directory: packages/hydrated_bloc
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,8 +31,8 @@ jobs:
       - name: Analyze
         run: flutter analyze lib test
       - name: Run tests
-        run: flutter test -j 1 --no-pub --coverage --test-randomize-ordering-seed random
+        run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
       - name: Check Code Coverage
         uses: ChicagoFlutter/lcov-cop@v1.0.0
-      - name: Upload Coverage
-        run: bash <(curl -s https://codecov.io/bash)
+        with:
+          path: packages/hydrated_bloc/coverage/lcov.info
