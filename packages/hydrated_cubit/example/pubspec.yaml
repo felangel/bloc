@@ -1,0 +1,22 @@
+name: example
+description: A new Flutter project.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.6.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  hydrated_cubit:
+    path: ../
+  flutter_cubit:
+    path: ../../flutter_cubit
+  path_provider_fde:
+    git:
+      url: https://github.com/google/flutter-desktop-embedding
+      path: plugins/flutter_plugins/path_provider_fde
+      ref: 4ee135c8870c94aa462f2006025d5840e9ca82e2
+
+flutter:
+  uses-material-design: true

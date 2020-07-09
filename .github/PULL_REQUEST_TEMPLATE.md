@@ -1,33 +1,31 @@
+<!--
+  Thanks for contributing!
+
+  Provide a description of your changes below and a general summary in the title
+
+  Please look at the following checklist to ensure that your PR can be accepted quickly:
+-->
+
 ## Status
+
 **READY/IN DEVELOPMENT/HOLD**
 
 ## Breaking Changes
+
 YES | NO
 
 ## Description
-A few sentences describing the overall goals of the pull request's commits.
 
-## Related PRs
-List related PRs against other branches:
+<!--- Describe your changes in detail -->
 
-branch | PR
------- | ------
-other_pr_production | [link]()
-other_pr_master | [link]()
+## Type of Change
 
+<!--- Put an `x` in all the boxes that apply: -->
 
-## Todos
-- [ ] Tests
-- [ ] Documentation
-- [ ] Examples
-
-## Steps to Test or Reproduce
-Outline the steps to test or reproduce the PR here.
-
-```
-```
-
-## Impact to Remaining Code Base
-This PR will affect:
-
-* 
+- [ ] ✨ New feature (non-breaking change which adds functionality)
+- [ ] 🛠️ Bug fix (non-breaking change which fixes an issue)
+- [ ] ❌ Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] 🧹 Code refactor
+- [ ] ✅ Build configuration change
+- [ ] 📝 Documentation
+- [ ] 🗑️ Chore

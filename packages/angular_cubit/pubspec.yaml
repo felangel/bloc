@@ -1,0 +1,24 @@
+name: angular_cubit
+description: An AngularDart library built to expose components that integrate with cubits. Built to work with the cubit and bloc state management packages.
+repository: https://github.com/felangel/cubit
+issue_tracker: https://github.com/felangel/cubit/issues
+homepage: https://github.com/felangel/cubit
+documentation: https://github.com/felangel/cubit
+
+version: 0.1.0-dev.4
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  angular: ^6.0.0-alpha+1
+  cubit: ^0.1.2
+
+dev_dependencies:
+  angular_test: ^2.3.0
+  build_runner: ^1.6.0
+  build_test: ^0.10.8
+  build_web_compilers: ^2.3.0  
+  meta: ">=1.0.0 <1.2.0"
+  mockito: ^4.0.0
+  test: ^1.14.6

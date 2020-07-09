@@ -1,0 +1,38 @@
+name: hydrated_cubit
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - ".github/workflows/hydrated_cubit.yaml"
+      - "packages/hydrated_cubit/**"
+
+  pull_request:
+    branches:
+      - master
+    paths:
+      - ".github/workflows/hydrated_cubit.yaml"
+      - "packages/hydrated_cubit/**"
+
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: packages/hydrated_cubit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1.3.0
+      - name: Install Dependencies
+        run: flutter packages get
+      - name: Format
+        run: flutter format --set-exit-if-changed lib test
+      - name: Analyze
+        run: flutter analyze lib test
+      - name: Run tests
+        run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
+      - name: Check Code Coverage
+        uses: ChicagoFlutter/lcov-cop@v1.0.0
+        with:
+          path: packages/hydrated_cubit/coverage/lcov.info
