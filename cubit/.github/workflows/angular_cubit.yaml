@@ -1,0 +1,46 @@
+name: angular_cubit
+
+on:
+  push:
+    paths:
+      - "packages/angular_cubit/**"
+      - ".github/workflows/angular_cubit.yaml"
+
+  pull_request:
+    paths:
+      - "packages/angular_cubit/**"
+      - ".github/workflows/angular_cubit.yaml"
+
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: packages/angular_cubit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1.3.0
+      - name: Install Dependencies
+        env:
+          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
+        run: |
+          export PATH=$PATH:$FLUTTER_DART_HOME
+          pub get
+      - name: Format
+        env:
+          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
+        run: |
+          export PATH=$PATH:$FLUTTER_DART_HOME
+          dartfmt --dry-run --set-exit-if-changed .
+      - name: Analyze
+        env:
+          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
+        run: |
+          export PATH=$PATH:$FLUTTER_DART_HOME
+          dartanalyzer --fatal-infos --fatal-warnings .
+      - name: Run tests
+        env:
+          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
+        run: |
+          export PATH=$PATH:$FLUTTER_DART_HOME
+          pub run build_runner test --fail-on-severe

@@ -1,0 +1,21 @@
+name: flutter_cubit
+description: A Flutter library built to expose widgets that integrate with cubits. Built to work with the cubit and bloc state management packages.
+repository: https://github.com/felangel/cubit
+issue_tracker: https://github.com/felangel/cubit/issues
+homepage: https://github.com/felangel/cubit
+documentation: https://github.com/felangel/cubit
+
+version: 0.1.1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cubit: ^0.1.2
+  provider: ^4.1.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
