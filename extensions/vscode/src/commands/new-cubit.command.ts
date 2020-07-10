@@ -25,7 +25,7 @@ export const newCubit = async (uri: Uri) => {
     targetDirectory = uri.fsPath;
   }
 
-  const useEquatable = hasDependency("equatable");
+  const useEquatable = await hasDependency("equatable");
   const pascalCaseCubitName = changeCase.pascalCase(cubitName.toLowerCase());
   try {
     await generateCubitCode(cubitName, targetDirectory, useEquatable);
