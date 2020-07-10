@@ -16,7 +16,7 @@ interface Action {
   callback: Function;
 }
 
-export function analyzeDependencies() {
+export async function analyzeDependencies() {
   const dependenciesToAnalyze = [
     {
       name: "equatable",
@@ -94,7 +94,7 @@ export function analyzeDependencies() {
     { name: "cubit_test", version: "^0.1.0", actions: [] },
   ];
 
-  const pubspec = getPubspec();
+  const pubspec = await getPubspec();
   const dependencies = _.get(pubspec, "dependencies", {});
   const devDependencies = _.get(pubspec, "dev_dependencies", {});
 

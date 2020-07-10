@@ -2,7 +2,7 @@
   "name": "bloc",
   "displayName": "bloc",
   "description": "Support for the bloc library and provides tools for effectively creating blocs for both Flutter and AngularDart apps.",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "publisher": "FelixAngelov",
   "bugs": {
     "url": "https://github.com/felangel/bloc/issues",
@@ -77,9 +77,7 @@
     "webpack-dev": "webpack --mode development --watch",
     "test-compile": "tsc -p ./",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
     "@types/change-case": "^2.3.1",
@@ -90,10 +88,10 @@
     "@types/node": "^12.7.8",
     "@types/rimraf": "^2.0.2",
     "@types/semver": "^6.0.2",
+    "@types/vscode": "^1.31.0",
     "ts-loader": "^6.2.1",
     "tslint": "^5.12.1",
     "typescript": "^3.5.1",
-    "vscode": "^1.1.33",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
   },
