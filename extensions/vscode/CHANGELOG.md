@@ -1,3 +1,7 @@
+# 4.2.2
+
+- fix: Equatable not being recognized on Windows
+
 # 4.2.1
 
 - fix: `CubitObserver` snippet fixes
