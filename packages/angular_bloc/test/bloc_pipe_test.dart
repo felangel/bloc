@@ -92,7 +92,7 @@ void main() {
         pipe.transform(bloc);
         bloc.add(CounterEvent.increment);
         Timer(const Duration(milliseconds: 10), expectAsync0(() {
-          verify(ref.markForCheck()).called(2);
+          verify(ref.markForCheck()).called(1);
         }));
       });
     });
@@ -102,8 +102,9 @@ void main() {
         pipe.ngOnDestroy();
       });
       test('should dispose of the existing subscription', () async {
-        pipe.transform(bloc);
-        pipe.ngOnDestroy();
+        pipe
+          ..transform(bloc)
+          ..ngOnDestroy();
         bloc.add(CounterEvent.increment);
         Timer.run(expectAsync0(() {
           expect(pipe.transform(bloc), 1);
