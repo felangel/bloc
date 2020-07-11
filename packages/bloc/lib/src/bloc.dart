@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
-import '../bloc.dart';
+import 'bloc_observer.dart';
+import 'cubit.dart';
+import 'transition.dart';
 
 /// Signature for a mapper function which takes an [Event] as input
 /// and outputs a [Stream] of [Transition] objects.
