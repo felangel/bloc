@@ -24,6 +24,8 @@
 
 A dart package that helps implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
 
+**Learn more at [bloclibrary.dev](https://bloclibrary.dev)!**
+
 This package is built to work with:
 
 - [flutter_bloc](https://pub.dev/packages/flutter_bloc)
@@ -35,13 +37,13 @@ This package is built to work with:
 
 The goal of this package is to make it easy to implement the `BLoC` Design Pattern (Business Logic Component).
 
-This design pattern helps to separate _presentation_ from _business logic_. Following the BLoC pattern facilitates testability and reusability. This package abstracts reactive aspects of the pattern allowing developers to focus on converting events into states.
+This design pattern helps to separate _presentation_ from _business logic_. Following the BLoC pattern facilitates testability and reusability. This package abstracts reactive aspects of the pattern allowing developers to focus on writing the business logic.
 
 ### Cubit
 
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" width="300" alt="Cubit Architecture" />
 
-A `Cubit` is the base for `Bloc` (in other words `Bloc` extends `Cubit`). `Cubit` is a special type of `Stream` which can be extended to manage any type of state. `Cubit` requires an initial state which will be the state of the `cubit` before `emit` has been called. The current state of a `cubit` can be accessed via the `state` getter and the state of the `cubit` can be updated by calling `emit` with a new `state`.
+A `Cubit` is the base for `Bloc` (in other words `Bloc` extends `Cubit`). `Cubit` is a special type of `Stream` which can be extended to manage any type of state. `Cubit` requires an initial state which will be the state before `emit` has been called. The current state of a `cubit` can be accessed via the `state` getter and the state of the `cubit` can be updated by calling `emit` with a new `state`.
 
 #### Creating a Cubit
 
@@ -169,7 +171,7 @@ void main() {
   final bloc = CounterBloc();
 
   /// Access the state of the `bloc` via `state`.
-  print(bloc.state);
+  print(bloc.state); // 0
 
   /// Interact with the `bloc` to trigger `state` changes.
   bloc.add(CounterEvent.increment);
@@ -179,7 +181,7 @@ void main() {
   await Future.delayed(Duration.zero);
 
   /// Access the new `state`.
-  print(bloc.state);
+  print(bloc.state); // 1
 
   /// Close the `bloc` when it is no longer needed.
   bloc.close();
