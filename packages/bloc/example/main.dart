@@ -68,13 +68,13 @@ void blocMain() async {
 
   /// Wait for next iteration of the event-loop
   /// to ensure event has been processed.
-  await Future.delayed(Duration.zero);
+  await Future<void>.delayed(Duration.zero);
 
   /// Access the new `state`.
   print(bloc.state);
 
   /// Close the `bloc` when it is no longer needed.
-  bloc.close();
+  await bloc.close();
 }
 
 /// A `CounterCubit` which manages an `int` as its state.

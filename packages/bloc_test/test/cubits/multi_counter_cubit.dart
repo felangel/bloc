@@ -1,4 +1,4 @@
-import 'package:cubit/cubit.dart';
+import 'package:bloc/bloc.dart';
 
 class MultiCounterCubit extends Cubit<int> {
   MultiCounterCubit() : super(0);

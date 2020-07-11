@@ -1,4 +1,4 @@
-import 'package:cubit/cubit.dart';
+import 'package:bloc/bloc.dart';
 
 class DelayedCounterCubit extends Cubit<int> {
   DelayedCounterCubit() : super(0);

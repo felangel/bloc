@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:cubit/cubit.dart';
+import 'package:bloc/bloc.dart';
 import 'package:mockito/mockito.dart';
 
 /// Creates a stub response for the `listen` method on a [cubit].
 /// Use [whenListen] if you want to return a canned `Stream` of states
 /// for a [cubit] instance.
 ///
-/// [whenListen] also handles stubbing the `state` of the cubit to stay
+/// [whenListen] also handles stubbing the `state` of the [cubit] to stay
 /// in sync with the emitted state.
 ///
 /// Return a canned state stream of `[0, 1, 2, 3]`
@@ -17,8 +17,7 @@ import 'package:mockito/mockito.dart';
 /// whenListen(counterCubit, Stream.fromIterable([0, 1, 2, 3]));
 /// ```
 ///
-/// Assert that the `counterCubit` state `Stream`
-/// is the canned `Stream`.
+/// Assert that the `counterCubit` state `Stream` is the canned `Stream`.
 ///
 /// ```dart
 /// await expectLater(
@@ -29,8 +28,8 @@ import 'package:mockito/mockito.dart';
 /// );
 /// expect(counterCubit.state, equals(3));
 /// ```
-void whenListen<Event, State>(
-  CubitStream<State> cubit,
+void whenListen<State>(
+  Cubit<State> cubit,
   Stream<State> stream,
 ) {
   final broadcastStream = stream.asBroadcastStream();

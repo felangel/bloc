@@ -13,7 +13,7 @@ class AsyncCounterBloc extends Bloc<AsyncCounterEvent, int> {
   ) async* {
     switch (event) {
       case AsyncCounterEvent.increment:
-        await Future.delayed(Duration(microseconds: 1));
+        await Future<void>.delayed(const Duration(microseconds: 1));
         yield state + 1;
         break;
     }
