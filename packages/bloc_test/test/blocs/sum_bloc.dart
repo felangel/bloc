@@ -2,20 +2,20 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 
-import 'helpers.dart';
+import 'counter_bloc.dart';
 
 class SumEvent {
-  final int value;
-
   const SumEvent(this.value);
+
+  final int value;
 }
 
 class SumBloc extends Bloc<SumEvent, int> {
-  StreamSubscription<int> _countSubscription;
-
   SumBloc(CounterBloc counterBloc) : super(0) {
     _countSubscription = counterBloc.listen((count) => add(SumEvent(count)));
   }
+
+  StreamSubscription<int> _countSubscription;
 
   @override
   Stream<int> mapEventToState(

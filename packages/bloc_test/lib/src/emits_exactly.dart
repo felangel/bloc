@@ -26,15 +26,14 @@ import 'package:test/test.dart';
 /// });
 /// ```
 ///
-/// [skip] is an optional `int` which defaults to 1 and can be used to skip any
-/// number of states. The default behavior skips the `initialState` of the bloc
-/// but can be overridden to include the `initialState` by setting it to 0.
+/// [skip] is an optional `int` which defaults to 0 and can be used to skip any
+/// number of states.
 ///
 /// ```dart
-/// test('emits [0, 1] when CounterEvent.increment is added', () async {
+/// test('emits [2] when CounterEvent.increment is added twice', () async {
 ///   final bloc = CounterBloc();
-///   bloc.add(CounterEvent.increment);
-///   await emitsExactly(bloc, [0, 1], skip: 0);
+///   bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+///   await emitsExactly(bloc, [2], skip: 1);
 /// });
 /// ```
 ///
@@ -52,16 +51,16 @@ import 'package:test/test.dart';
 ///   );
 /// });
 /// ```
-Future<void> emitsExactly<B extends Bloc<dynamic, State>, State>(
+Future<void> emitsExactly<B extends Bloc<Object, State>, State>(
   B bloc,
   Iterable expected, {
   Duration duration,
-  int skip = 1,
+  int skip = 0,
 }) async {
   assert(bloc != null);
   final states = <State>[];
   final subscription = bloc.skip(skip).listen(states.add);
-  if (duration != null) await Future.delayed(duration);
+  if (duration != null) await Future<void>.delayed(duration);
   await bloc.close();
   expect(states, expected);
   await subscription.cancel();
