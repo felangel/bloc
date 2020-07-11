@@ -15,6 +15,7 @@ dependencies:
 dev_dependencies:
   effective_dart: ^1.2.0
   mockito: ^4.1.1
+  pedantic: ^1.9.0
   rxdart: ^0.24.0
   test_coverage: ^0.4.1
   test: ^1.14.6
