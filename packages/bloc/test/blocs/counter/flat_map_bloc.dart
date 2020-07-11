@@ -1,12 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../helpers.dart';
+import '../blocs.dart';
 
 class FlatMapBloc extends Bloc<CounterEvent, int> {
-  final void Function(Transition<CounterEvent, int>) onTransitionCallback;
-
   FlatMapBloc({this.onTransitionCallback}) : super(0);
+
+  final void Function(Transition<CounterEvent, int>) onTransitionCallback;
 
   @override
   void onTransition(Transition<CounterEvent, int> transition) {

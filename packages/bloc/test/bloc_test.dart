@@ -3,10 +3,11 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import './helpers/helpers.dart';
+import './blocs/blocs.dart';
 
 class MockBlocObserver extends Mock implements BlocObserver {}
 
@@ -25,7 +26,7 @@ void main() {
       });
 
       test('close does not emit new states over the state stream', () {
-        final expectedStates = ['', emitsDone];
+        final expectedStates = [emitsDone];
 
         expectLater(
           simpleBloc,
@@ -39,23 +40,17 @@ void main() {
         expect(simpleBloc.state, '');
       });
 
-      test('state should equal initial state before any events are added',
-          () async {
-        final initialState = await simpleBloc.first;
-        expect(initialState, simpleBloc.state);
-      });
-
       test('should map single event to correct state', () {
-        final expectedStates = ['', 'data', emitsDone];
+        final expectedStates = ['data', emitsDone];
 
         expectLater(
           simpleBloc,
           emitsInOrder(expectedStates),
-        ).then((_) {
+        ).then((dynamic _) {
           verify(
             observer.onTransition(
               simpleBloc,
-              Transition<dynamic, String>(
+              const Transition<dynamic, String>(
                 currentState: '',
                 event: 'event',
                 nextState: 'data',
@@ -65,21 +60,22 @@ void main() {
           expect(simpleBloc.state, 'data');
         });
 
-        simpleBloc.add('event');
-        simpleBloc.close();
+        simpleBloc
+          ..add('event')
+          ..close();
       });
 
       test('should map multiple events to correct states', () {
-        final expectedStates = ['', 'data', emitsDone];
+        final expectedStates = ['data', emitsDone];
 
         expectLater(
           simpleBloc,
           emitsInOrder(expectedStates),
-        ).then((_) {
+        ).then((dynamic _) {
           verify(
             observer.onTransition(
               simpleBloc,
-              Transition<dynamic, String>(
+              const Transition<dynamic, String>(
                 currentState: '',
                 event: 'event1',
                 nextState: 'data',
@@ -89,30 +85,30 @@ void main() {
           expect(simpleBloc.state, 'data');
         });
 
-        simpleBloc.add('event1');
-        simpleBloc.add('event2');
-        simpleBloc.add('event3');
-
-        simpleBloc.close();
+        simpleBloc
+          ..add('event1')
+          ..add('event2')
+          ..add('event3')
+          ..close();
       });
 
       test('is a broadcast stream', () {
-        final expectedStates = ['', 'data', emitsDone];
+        final expectedStates = ['data', emitsDone];
 
         expect(simpleBloc.isBroadcast, isTrue);
         expectLater(simpleBloc, emitsInOrder(expectedStates));
         expectLater(simpleBloc, emitsInOrder(expectedStates));
 
-        simpleBloc.add('event');
-
-        simpleBloc.close();
+        simpleBloc
+          ..add('event')
+          ..close();
       });
 
-      test('multiple subscribers receive the latest state', () async {
+      test('multiple subscribers receive the latest state', () {
+        expectLater(simpleBloc, emitsInOrder(const <String>['data']));
+        expectLater(simpleBloc, emitsInOrder(const <String>['data']));
+        expectLater(simpleBloc, emitsInOrder(const <String>['data']));
         simpleBloc.add('event');
-        await expectLater(simpleBloc, emitsInOrder(['', 'data']));
-        await expectLater(simpleBloc, emits('data'));
-        await expectLater(simpleBloc, emits('data'));
       });
     });
 
@@ -129,7 +125,7 @@ void main() {
       });
 
       test('close does not emit new states over the state stream', () {
-        final expectedStates = [ComplexStateA(), emitsDone];
+        final expectedStates = [emitsDone];
 
         expectLater(
           complexBloc,
@@ -143,22 +139,13 @@ void main() {
         expect(complexBloc.state, ComplexStateA());
       });
 
-      test('state should equal initial state before any events are added',
-          () async {
-        final initialState = await complexBloc.first;
-        expect(initialState, complexBloc.state);
-      });
-
       test('should map single event to correct state', () {
-        final expectedStates = [
-          ComplexStateA(),
-          ComplexStateB(),
-        ];
+        final expectedStates = [ComplexStateB()];
 
         expectLater(
           complexBloc,
           emitsInOrder(expectedStates),
-        ).then((_) {
+        ).then((dynamic _) {
           verify(
             observer.onTransition(
               complexBloc,
@@ -177,34 +164,32 @@ void main() {
 
       test('should map multiple events to correct states', () async {
         final expectedStates = [
-          ComplexStateA(),
           ComplexStateB(),
           ComplexStateD(),
           ComplexStateA(),
           ComplexStateC(),
         ];
 
-        expectLater(
+        unawaited(expectLater(
           complexBloc,
           emitsInOrder(expectedStates),
-        );
+        ));
 
         complexBloc.add(ComplexEventA());
-        await Future<void>.delayed(Duration(milliseconds: 20));
+        await Future<void>.delayed(const Duration(milliseconds: 20));
         complexBloc.add(ComplexEventB());
-        await Future<void>.delayed(Duration(milliseconds: 20));
+        await Future<void>.delayed(const Duration(milliseconds: 20));
         complexBloc.add(ComplexEventC());
-        await Future<void>.delayed(Duration(milliseconds: 20));
+        await Future<void>.delayed(const Duration(milliseconds: 20));
         complexBloc.add(ComplexEventD());
-        await Future<void>.delayed(Duration(milliseconds: 200));
-        complexBloc.add(ComplexEventC());
-        complexBloc.add(ComplexEventA());
-        await Future<void>.delayed(Duration(milliseconds: 120));
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+        complexBloc..add(ComplexEventC())..add(ComplexEventA());
+        await Future<void>.delayed(const Duration(milliseconds: 120));
         complexBloc.add(ComplexEventC());
       });
 
       test('is a broadcast stream', () {
-        final expectedStates = [ComplexStateA(), ComplexStateB()];
+        final expectedStates = [ComplexStateB()];
 
         expect(complexBloc.isBroadcast, isTrue);
         expectLater(complexBloc, emitsInOrder(expectedStates));
@@ -213,14 +198,12 @@ void main() {
         complexBloc.add(ComplexEventB());
       });
 
-      test('multiple subscribers receive the latest state', () async {
+      test('multiple subscribers receive the latest state', () {
+        final expected = <ComplexState>[ComplexStateB()];
         complexBloc.add(ComplexEventB());
-        await expectLater(
-          complexBloc,
-          emitsInOrder([ComplexStateA(), ComplexStateB()]),
-        );
-        await expectLater(complexBloc, emits(ComplexStateB()));
-        await expectLater(complexBloc, emits(ComplexStateB()));
+        expectLater(complexBloc, emitsInOrder(expected));
+        expectLater(complexBloc, emitsInOrder(expected));
+        expectLater(complexBloc, emitsInOrder(expected));
       });
     });
 
@@ -230,20 +213,14 @@ void main() {
       List<String> transitions;
       List<CounterEvent> events;
 
-      void onEventCallback(event) {
-        events.add(event);
-      }
-
-      void onTransitionCallback(transition) {
-        transitions.add(transition.toString());
-      }
-
       setUp(() {
         events = [];
         transitions = [];
         counterBloc = CounterBloc(
-          onEventCallback: onEventCallback,
-          onTransitionCallback: onTransitionCallback,
+          onEventCallback: events.add,
+          onTransitionCallback: (transition) {
+            transitions.add(transition.toString());
+          },
         );
         observer = MockBlocObserver();
         when(observer.onTransition(any, any)).thenReturn(null);
@@ -257,28 +234,21 @@ void main() {
         expect(transitions.isEmpty, true);
       });
 
-      test('state should equal initial state before any events are added',
-          () async {
-        final initialState = await counterBloc.first;
-        expect(initialState, counterBloc.state);
-      });
-
       test('single Increment event updates state to 1', () {
-        final expectedStates = [0, 1, emitsDone];
+        final expectedStates = [1, emitsDone];
         final expectedTransitions = [
-          'Transition { currentState: 0, event: CounterEvent.increment, '
-              'nextState: 1 }'
+          '''Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }'''
         ];
 
         expectLater(
           counterBloc,
           emitsInOrder(expectedStates),
-        ).then((_) {
+        ).then((dynamic _) {
           expectLater(transitions, expectedTransitions);
           verify(
             observer.onTransition(
               counterBloc,
-              Transition<CounterEvent, int>(
+              const Transition<CounterEvent, int>(
                 currentState: 0,
                 event: CounterEvent.increment,
                 nextState: 1,
@@ -288,31 +258,28 @@ void main() {
           expect(counterBloc.state, 1);
         });
 
-        counterBloc.add(CounterEvent.increment);
-
-        counterBloc.close();
+        counterBloc
+          ..add(CounterEvent.increment)
+          ..close();
       });
 
       test('multiple Increment event updates state to 3', () {
-        final expectedStates = [0, 1, 2, 3, emitsDone];
+        final expectedStates = [1, 2, 3, emitsDone];
         final expectedTransitions = [
-          'Transition { currentState: 0, event: CounterEvent.increment, '
-              'nextState: 1 }',
-          'Transition { currentState: 1, event: CounterEvent.increment, '
-              'nextState: 2 }',
-          'Transition { currentState: 2, event: CounterEvent.increment, '
-              'nextState: 3 }',
+          '''Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }''',
+          '''Transition { currentState: 1, event: CounterEvent.increment, nextState: 2 }''',
+          '''Transition { currentState: 2, event: CounterEvent.increment, nextState: 3 }''',
         ];
 
         expectLater(
           counterBloc,
           emitsInOrder(expectedStates),
-        ).then((_) {
+        ).then((dynamic _) {
           expect(transitions, expectedTransitions);
           verify(
             observer.onTransition(
               counterBloc,
-              Transition<CounterEvent, int>(
+              const Transition<CounterEvent, int>(
                 currentState: 0,
                 event: CounterEvent.increment,
                 nextState: 1,
@@ -322,7 +289,7 @@ void main() {
           verify(
             observer.onTransition(
               counterBloc,
-              Transition<CounterEvent, int>(
+              const Transition<CounterEvent, int>(
                 currentState: 1,
                 event: CounterEvent.increment,
                 nextState: 2,
@@ -332,7 +299,7 @@ void main() {
           verify(
             observer.onTransition(
               counterBloc,
-              Transition<CounterEvent, int>(
+              const Transition<CounterEvent, int>(
                 currentState: 2,
                 event: CounterEvent.increment,
                 nextState: 3,
@@ -342,30 +309,31 @@ void main() {
           expect(counterBloc.state, 3);
         });
 
-        counterBloc.add(CounterEvent.increment);
-        counterBloc.add(CounterEvent.increment);
-        counterBloc.add(CounterEvent.increment);
-
-        counterBloc.close();
+        counterBloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment)
+          ..close();
       });
 
       test('is a broadcast stream', () {
-        final expectedStates = [0, 1, emitsDone];
+        final expectedStates = [1, emitsDone];
 
         expect(counterBloc.isBroadcast, isTrue);
         expectLater(counterBloc, emitsInOrder(expectedStates));
         expectLater(counterBloc, emitsInOrder(expectedStates));
 
-        counterBloc.add(CounterEvent.increment);
-
-        counterBloc.close();
+        counterBloc
+          ..add(CounterEvent.increment)
+          ..close();
       });
 
-      test('multiple subscribers receive the latest state', () async {
+      test('multiple subscribers receive the latest state', () {
+        const expected = <int>[1];
+        expectLater(counterBloc, emitsInOrder(expected));
+        expectLater(counterBloc, emitsInOrder(expected));
+        expectLater(counterBloc, emitsInOrder(expected));
         counterBloc.add(CounterEvent.increment);
-        await expectLater(counterBloc, emitsInOrder([0, 1]));
-        await expectLater(counterBloc, emits(1));
-        await expectLater(counterBloc, emits(1));
       });
     });
 
@@ -382,7 +350,7 @@ void main() {
       });
 
       test('close does not emit new states over the state stream', () {
-        final expectedStates = [AsyncState.initial(), emitsDone];
+        final expectedStates = [emitsDone];
 
         expectLater(
           asyncBloc,
@@ -396,14 +364,13 @@ void main() {
           'close while events are pending finishes processing pending events '
           'and does not trigger onError', () async {
         final expectedStates = <AsyncState>[
-          AsyncState.initial(),
           AsyncState.initial().copyWith(isLoading: true),
           AsyncState.initial().copyWith(isSuccess: true),
         ];
         final states = <AsyncState>[];
-        asyncBloc.listen(states.add);
-
-        asyncBloc.add(AsyncEvent());
+        asyncBloc
+          ..listen(states.add)
+          ..add(AsyncEvent());
         await asyncBloc.close();
         expect(states, expectedStates);
 
@@ -414,15 +381,8 @@ void main() {
         expect(asyncBloc.state, AsyncState.initial());
       });
 
-      test('state should equal initial state before any events are added',
-          () async {
-        final initialState = await asyncBloc.first;
-        expect(initialState, asyncBloc.state);
-      });
-
       test('should map single event to correct state', () {
         final expectedStates = [
-          AsyncState(isLoading: false, hasError: false, isSuccess: false),
           AsyncState(isLoading: true, hasError: false, isSuccess: false),
           AsyncState(isLoading: false, hasError: false, isSuccess: true),
           emitsDone,
@@ -431,7 +391,7 @@ void main() {
         expectLater(
           asyncBloc,
           emitsInOrder(expectedStates),
-        ).then((_) {
+        ).then((dynamic _) {
           verify(
             observer.onTransition(
               asyncBloc,
@@ -478,14 +438,13 @@ void main() {
           );
         });
 
-        asyncBloc.add(AsyncEvent());
-
-        asyncBloc.close();
+        asyncBloc
+          ..add(AsyncEvent())
+          ..close();
       });
 
       test('is a broadcast stream', () {
         final expectedStates = [
-          AsyncState(isLoading: false, hasError: false, isSuccess: false),
           AsyncState(isLoading: true, hasError: false, isSuccess: false),
           AsyncState(isLoading: false, hasError: false, isSuccess: true),
           emitsDone,
@@ -495,126 +454,118 @@ void main() {
         expectLater(asyncBloc, emitsInOrder(expectedStates));
         expectLater(asyncBloc, emitsInOrder(expectedStates));
 
-        asyncBloc.add(AsyncEvent());
-
-        asyncBloc.close();
+        asyncBloc
+          ..add(AsyncEvent())
+          ..close();
       });
 
-      test('multiple subscribers receive the latest state', () async {
+      test('multiple subscribers receive the latest state', () {
+        final expected = <AsyncState>[
+          AsyncState(isLoading: true, hasError: false, isSuccess: false),
+          AsyncState(isLoading: false, hasError: false, isSuccess: true),
+        ];
+        expectLater(asyncBloc, emitsInOrder(expected));
+        expectLater(asyncBloc, emitsInOrder(expected));
+        expectLater(asyncBloc, emitsInOrder(expected));
         asyncBloc.add(AsyncEvent());
-        await expectLater(
-          asyncBloc,
-          emitsInOrder([
-            AsyncState(isLoading: false, hasError: false, isSuccess: false),
-            AsyncState(isLoading: true, hasError: false, isSuccess: false),
-            AsyncState(isLoading: false, hasError: false, isSuccess: true),
-          ]),
-        );
-        await expectLater(
-          asyncBloc,
-          emits(AsyncState(isLoading: false, hasError: false, isSuccess: true)),
-        );
-        await expectLater(
-          asyncBloc,
-          emits(AsyncState(isLoading: false, hasError: false, isSuccess: true)),
-        );
       });
     });
 
     group('flatMap', () {
       test('maintains correct transition composition', () {
         final expectedTransitions = <Transition<CounterEvent, int>>[
-          Transition(
+          const Transition(
             currentState: 0,
             event: CounterEvent.decrement,
             nextState: -1,
           ),
-          Transition(
+          const Transition(
             currentState: -1,
             event: CounterEvent.increment,
             nextState: 0,
           ),
         ];
-        final expectedStates = [0, -1, 0, emitsDone];
+        final expectedStates = [-1, 0, emitsDone];
         final transitions = <Transition<CounterEvent, int>>[];
 
         final flatMapBloc = FlatMapBloc(onTransitionCallback: transitions.add);
 
-        expectLater(flatMapBloc, emitsInOrder(expectedStates)).then((_) {
+        expectLater(flatMapBloc, emitsInOrder(expectedStates))
+            .then((dynamic _) {
           expect(transitions, expectedTransitions);
         });
-        flatMapBloc.add(CounterEvent.decrement);
-        flatMapBloc.add(CounterEvent.increment);
-
-        flatMapBloc.close();
+        flatMapBloc
+          ..add(CounterEvent.decrement)
+          ..add(CounterEvent.increment)
+          ..close();
       });
     });
 
     group('SeededBloc', () {
       test('does not emit repeated states', () {
         final seededBloc = SeededBloc(seed: 0, states: [1, 2, 1, 1]);
-        final expectedStates = [0, 1, 2, 1, emitsDone];
+        final expectedStates = [1, 2, 1, emitsDone];
 
         expectLater(
           seededBloc,
           emitsInOrder(expectedStates),
         );
-        seededBloc.add('event');
-
-        seededBloc.close();
+        seededBloc
+          ..add('event')
+          ..close();
       });
 
       test('discards subsequent duplicate states (distinct events)', () {
         final seededBloc = SeededBloc(seed: 0, states: [0]);
-        final expectedStates = [0, emitsDone];
+        final expectedStates = [emitsDone];
 
         expectLater(
           seededBloc,
           emitsInOrder(expectedStates),
         );
 
-        seededBloc.add('eventA');
-        seededBloc.add('eventB');
-        seededBloc.add('eventC');
-
-        seededBloc.close();
+        seededBloc
+          ..add('eventA')
+          ..add('eventB')
+          ..add('eventC')
+          ..close();
       });
 
       test('discards subsequent duplicate states (same event)', () {
         final seededBloc = SeededBloc(seed: 0, states: [0]);
-        final expectedStates = [0, emitsDone];
+        final expectedStates = [emitsDone];
 
         expectLater(
           seededBloc,
           emitsInOrder(expectedStates),
         );
 
-        seededBloc.add('event');
-        seededBloc.add('event');
-        seededBloc.add('event');
-
-        seededBloc.close();
+        seededBloc
+          ..add('event')
+          ..add('event')
+          ..add('event')
+          ..close();
       });
     });
 
     group('Exception', () {
       test('does not break stream', () {
         runZoned(() {
-          final expectedStates = [0, -1, emitsDone];
+          final expectedStates = [-1, emitsDone];
           final counterBloc = CounterExceptionBloc();
 
           expectLater(counterBloc, emitsInOrder(expectedStates));
 
-          counterBloc.add(CounterEvent.increment);
-          counterBloc.add(CounterEvent.decrement);
-
-          counterBloc.close();
-        }, onError: (error, stackTrace) {
+          counterBloc
+            ..add(CounterEvent.increment)
+            ..add(CounterEvent.decrement)
+            ..close();
+        }, onError: (Object error, StackTrace stackTrace) {
           expect(
-            (error as BlocUnhandledErrorException).toString(),
+            (error as CubitUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
-              'in bloc Instance of \'CounterExceptionBloc\'.',
+              'in cubit Instance of \'CounterExceptionBloc\'.',
             ),
           );
           expect(stackTrace, isNotNull);
@@ -625,18 +576,16 @@ void main() {
         final expectedError = Exception('fatal exception');
 
         runZoned(() {
-          final onExceptionBloc = OnExceptionBloc(
+          OnExceptionBloc(
             exception: expectedError,
-            onErrorCallback: (error, stackTrace) {},
-          );
-
-          onExceptionBloc.addError(expectedError, StackTrace.current);
-        }, onError: (error, stackTrace) {
+            onErrorCallback: (Object _, StackTrace __) {},
+          )..addError(expectedError, StackTrace.current);
+        }, onError: (Object error, StackTrace stackTrace) {
           expect(
-            (error as BlocUnhandledErrorException).toString(),
+            (error as CubitUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
-              'in bloc Instance of \'OnExceptionBloc\'.',
+              'in cubit Instance of \'OnExceptionBloc\'.',
             ),
           );
           expect(stackTrace, isNotNull);
@@ -651,28 +600,28 @@ void main() {
 
           final onExceptionBloc = OnExceptionBloc(
               exception: exception,
-              onErrorCallback: (error, stackTrace) {
+              onErrorCallback: (Object error, StackTrace stackTrace) {
                 expectedError = error;
                 expectedStacktrace = stackTrace;
               });
 
           expectLater(
             onExceptionBloc,
-            emitsInOrder([0, emitsDone]),
-          ).then((_) {
+            emitsInOrder(<Matcher>[emitsDone]),
+          ).then((dynamic _) {
             expect(expectedError, exception);
             expect(expectedStacktrace, isNotNull);
           });
 
-          onExceptionBloc.add(CounterEvent.increment);
-
-          onExceptionBloc.close();
-        }, onError: (error, stackTrace) {
+          onExceptionBloc
+            ..add(CounterEvent.increment)
+            ..close();
+        }, onError: (Object error, StackTrace stackTrace) {
           expect(
-            (error as BlocUnhandledErrorException).toString(),
+            (error as CubitUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
-              'in bloc Instance of \'OnExceptionBloc\'.',
+              'in cubit Instance of \'OnExceptionBloc\'.',
             ),
           );
           expect(stackTrace, isNotNull);
@@ -683,17 +632,15 @@ void main() {
         runZoned(() {
           final exception = Exception('fatal exception');
 
-          final onEventErrorBloc = OnEventErrorBloc(exception: exception);
-
-          onEventErrorBloc.add(CounterEvent.increment);
-
-          onEventErrorBloc.close();
-        }, onError: (error, stackTrace) {
+          OnEventErrorBloc(exception: exception)
+            ..add(CounterEvent.increment)
+            ..close();
+        }, onError: (Object error, StackTrace stackTrace) {
           expect(
-            (error as BlocUnhandledErrorException).toString(),
+            (error as CubitUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
-              'in bloc Instance of \'OnEventErrorBloc\'.',
+              'in cubit Instance of \'OnEventErrorBloc\'.',
             ),
           );
           expect(stackTrace, isNotNull);
@@ -713,16 +660,16 @@ void main() {
 
           expectLater(
             counterBloc,
-            emitsInOrder([0, emitsDone]),
-          ).then((_) {
+            emitsInOrder(<Matcher>[emitsDone]),
+          ).then((dynamic _) {
             expect(capturedError, isNull);
             expect(capturedStacktrace, isNull);
           });
 
-          counterBloc.close();
-
-          counterBloc.add(CounterEvent.increment);
-        }, onError: (error, stackTrace) {
+          counterBloc
+            ..close()
+            ..add(CounterEvent.increment);
+        }, onError: (Object _, StackTrace __) {
           fail('should not throw when add is called after bloc is closed');
         });
       });
@@ -731,16 +678,16 @@ void main() {
     group('Error', () {
       test('does not break stream', () {
         runZoned(() {
-          final expectedStates = [0, -1, emitsDone];
+          final expectedStates = [-1, emitsDone];
           final counterBloc = CounterErrorBloc();
 
           expectLater(counterBloc, emitsInOrder(expectedStates));
 
-          counterBloc.add(CounterEvent.increment);
-          counterBloc.add(CounterEvent.decrement);
-
-          counterBloc.close();
-        }, onError: (_, __) {});
+          counterBloc
+            ..add(CounterEvent.increment)
+            ..add(CounterEvent.decrement)
+            ..close();
+        }, onError: (Object _, StackTrace __) {});
       });
 
       test('triggers onError from mapEventToState', () {
@@ -751,7 +698,7 @@ void main() {
 
           final onErrorBloc = OnErrorBloc(
             error: error,
-            onErrorCallback: (error, stackTrace) {
+            onErrorCallback: (Object error, StackTrace stackTrace) {
               expectedError = error;
               expectedStacktrace = stackTrace;
             },
@@ -759,16 +706,16 @@ void main() {
 
           expectLater(
             onErrorBloc,
-            emitsInOrder([0, emitsDone]),
-          ).then((_) {
+            emitsInOrder(<Matcher>[emitsDone]),
+          ).then((dynamic _) {
             expect(expectedError, error);
             expect(expectedStacktrace, isNotNull);
           });
 
-          onErrorBloc.add(CounterEvent.increment);
-
-          onErrorBloc.close();
-        }, onError: (_, __) {});
+          onErrorBloc
+            ..add(CounterEvent.increment)
+            ..close();
+        }, onError: (Object _, StackTrace __) {});
       });
 
       test('triggers onError from onTransition', () {
@@ -779,7 +726,7 @@ void main() {
 
           final onTransitionErrorBloc = OnTransitionErrorBloc(
             error: error,
-            onErrorCallback: (error, stackTrace) {
+            onErrorCallback: (Object error, StackTrace stackTrace) {
               expectedError = error;
               expectedStacktrace = stackTrace;
             },
@@ -787,24 +734,24 @@ void main() {
 
           expectLater(
             onTransitionErrorBloc,
-            emitsInOrder([0, emitsDone]),
-          ).then((_) {
+            emitsInOrder(<Matcher>[emitsDone]),
+          ).then((dynamic _) {
             expect(expectedError, error);
             expect(expectedStacktrace, isNotNull);
             expect(onTransitionErrorBloc.state, 0);
           });
 
-          onTransitionErrorBloc.add(CounterEvent.increment);
-
-          onTransitionErrorBloc.close();
-        }, onError: (_, __) {});
+          onTransitionErrorBloc
+            ..add(CounterEvent.increment)
+            ..close();
+        }, onError: (Object _, StackTrace __) {});
       });
     });
 
     group('emit', () {
       test('updates the state', () async {
         final counterBloc = CounterBloc();
-        expectLater(counterBloc, emitsInOrder([42]));
+        unawaited(expectLater(counterBloc, emitsInOrder(const <int>[42])));
         counterBloc.emit(42);
         await counterBloc.close();
       });

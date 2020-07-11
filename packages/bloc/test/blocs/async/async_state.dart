@@ -2,15 +2,15 @@ part of 'async_bloc.dart';
 
 @immutable
 class AsyncState {
-  final bool isLoading;
-  final bool hasError;
-  final bool isSuccess;
-
   AsyncState({this.isLoading, this.hasError, this.isSuccess});
 
   factory AsyncState.initial() {
     return AsyncState(isLoading: false, hasError: false, isSuccess: false);
   }
+
+  final bool isLoading;
+  final bool hasError;
+  final bool isSuccess;
 
   AsyncState copyWith({bool isLoading, bool hasError, bool isSuccess}) {
     return AsyncState(

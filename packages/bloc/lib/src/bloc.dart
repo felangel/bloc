@@ -1,36 +1,8 @@
 import 'dart:async';
 
-import 'package:cubit/cubit.dart' hide Transition;
 import 'package:meta/meta.dart';
 
 import '../bloc.dart';
-
-/// {@template bloc_unhandled_error_exception}
-/// Exception thrown in debug mode when an unhandled error occurs within a bloc.
-///
-/// See also:
-/// * [addError], API used to trigger [onError].
-///
-/// {@endtemplate}
-class BlocUnhandledErrorException implements Exception {
-  /// The [bloc] in which the unhandled error occurred.
-  final Bloc bloc;
-
-  /// The unhandled [error] object.
-  final Object error;
-
-  /// An optional [stackTrace] which accompanied the error.
-  final StackTrace stackTrace;
-
-  /// {@macro bloc_unhandled_error_exception}
-  BlocUnhandledErrorException(this.bloc, this.error, [this.stackTrace]);
-
-  @override
-  String toString() {
-    return 'Unhandled error $error occurred in bloc $bloc.\n'
-        '${stackTrace ?? ''}';
-  }
-}
 
 /// Signature for a mapper function which takes an [Event] as input
 /// and outputs a [Stream] of [Transition] objects.
@@ -41,8 +13,13 @@ typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
-abstract class Bloc<Event, State> extends CubitStream<State>
+abstract class Bloc<Event, State> extends Cubit<State>
     implements EventSink<Event> {
+  /// {@macro bloc}
+  Bloc(State initialState) : super(initialState) {
+    _bindEventsToStates();
+  }
+
   /// The current [BlocObserver].
   static BlocObserver observer = BlocObserver();
 
@@ -50,13 +27,8 @@ abstract class Bloc<Event, State> extends CubitStream<State>
 
   StreamSubscription<Transition<Event, State>> _transitionSubscription;
 
-  /// {@macro bloc}
-  Bloc(State initialState) : super(initialState) {
-    _bindEventsToStates();
-  }
-
-  /// Called whenever an [event] is [add]ed to the [bloc].
-  /// A great spot to add logging/analytics at the individual [bloc] level.
+  /// Called whenever an [event] is [add]ed to the [Bloc].
+  /// A great spot to add logging/analytics at the individual [Bloc] level.
   ///
   /// **Note: `super.onEvent` should always be called last.**
   /// ```dart
@@ -68,6 +40,11 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   ///   super.onEvent(event);
   /// }
   /// ```
+  ///
+  /// See also:
+  ///
+  /// * [BlocObserver] for observing [Bloc] behavior globally.
+  ///
   @protected
   @mustCallSuper
   void onEvent(Event event) {
@@ -78,8 +55,8 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   /// Called whenever a [transition] occurs with the given [transition].
   /// A [transition] occurs when a new `event` is [add]ed and [mapEventToState]
   /// executed.
-  /// [onTransition] is called before a [bloc]'s [state] has been updated.
-  /// A great spot to add logging/analytics at the individual [bloc] level.
+  /// [onTransition] is called before a [Bloc]'s [state] has been updated.
+  /// A great spot to add logging/analytics at the individual [Bloc] level.
   ///
   /// **Note: `super.onTransition` should always be called last.**
   /// ```dart
@@ -91,6 +68,11 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   ///   super.onTransition(transition);
   /// }
   /// ```
+  ///
+  /// See also:
+  ///
+  /// * [BlocObserver] for observing [Bloc] behavior globally.
+  ///
   @protected
   @mustCallSuper
   void onTransition(Transition<Event, State> transition) {
@@ -99,7 +81,7 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   }
 
   /// Called whenever an [error] is thrown within [mapEventToState].
-  /// By default all [error]s will be ignored and [bloc] functionality will be
+  /// By default all [error]s will be ignored and [Bloc] functionality will be
   /// unaffected.
   /// The [stackTrace] argument may be `null` if the [state] stream received
   /// an error without a [stackTrace].
@@ -115,17 +97,19 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   ///   super.onError(error, stackTrace);
   /// }
   /// ```
+  ///
+  /// See also:
+  ///
+  /// * [BlocObserver] for observing [Bloc] behavior globally.
+  ///
   @protected
   @mustCallSuper
+  @override
   void onError(Object error, StackTrace stackTrace) {
-    // ignore: invalid_use_of_protected_member
-    observer.onError(this, error, stackTrace);
-    assert(() {
-      throw BlocUnhandledErrorException(this, error, stackTrace);
-    }());
+    super.onError(error, stackTrace);
   }
 
-  /// Notifies the [bloc] of a new [event] which triggers [mapEventToState].
+  /// Notifies the [Bloc] of a new [event] which triggers [mapEventToState].
   /// If [close] has already been called, any subsequent calls to [add] will
   /// be ignored and will not result in any subsequent state changes.
   @override
@@ -139,18 +123,18 @@ abstract class Bloc<Event, State> extends CubitStream<State>
     }
   }
 
-  /// Notifies the [bloc] of an [error] which triggers [onError].
+  /// Notifies the [Bloc] of an [error] which triggers [onError].
   @override
   void addError(Object error, [StackTrace stackTrace]) {
     onError(error, stackTrace);
   }
 
   /// Closes the `event` and `state` `Streams`.
-  /// This method should be called when a [bloc] is no longer needed.
+  /// This method should be called when a [Bloc] is no longer needed.
   /// Once [close] is called, `events` that are [add]ed will not be
   /// processed.
   /// In addition, if [close] is called while `events` are still being
-  /// processed, the [bloc] will finish processing the pending `events`.
+  /// processed, the [Bloc] will finish processing the pending `events`.
   @override
   @mustCallSuper
   Future<void> close() async {
@@ -170,7 +154,7 @@ abstract class Bloc<Event, State> extends CubitStream<State>
   /// called as well as which [events] are processed.
   ///
   /// For example, if you only want [mapEventToState] to be called on the most
-  /// recent [event] you can use `switchMap` instead of `asyncExpand`.
+  /// recent [Event] you can use `switchMap` instead of `asyncExpand`.
   ///
   /// ```dart
   /// @override
@@ -198,7 +182,7 @@ abstract class Bloc<Event, State> extends CubitStream<State>
     return events.asyncExpand(transitionFn);
   }
 
-  /// Must be implemented when a class extends [bloc].
+  /// Must be implemented when a class extends [Bloc].
   /// Takes the incoming [event] as the argument.
   /// [mapEventToState] is called whenever an [event] is [add]ed.
   /// [mapEventToState] must convert that [event] into a new [state]
