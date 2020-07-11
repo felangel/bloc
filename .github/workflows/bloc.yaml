@@ -18,7 +18,7 @@ jobs:
         working-directory: packages/bloc
     runs-on: ubuntu-latest
     container:
-      image: google/dart:2.8.1
+      image: google/dart:2.8.4
     steps:
       - uses: actions/checkout@v2
       - name: Install Dependencies
