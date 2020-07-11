@@ -1,14 +1,15 @@
-import 'package:cubit/cubit.dart' as cubit;
 import 'package:meta/meta.dart';
+
+import 'change.dart';
 
 /// {@template transition}
 /// Occurs when an [event] is `added` after `mapEventToState` has been called
-/// but before the [bloc]'s `state` has been updated.
+/// but before the bloc's [State] has been updated.
 /// A [Transition] consists of the [currentState], the [event] which was
 /// `added`, and the [nextState].
 /// {@endtemplate}
 @immutable
-class Transition<Event, State> extends cubit.Transition<State> {
+class Transition<Event, State> extends Change<State> {
   /// {@macro transition}
   const Transition({
     @required State currentState,

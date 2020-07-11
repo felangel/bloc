@@ -24,7 +24,7 @@
 
 A dart package that helps implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
 
-This package is built to work with [flutter_bloc](https://pub.dev/packages/flutter_bloc) and [angular_bloc](https://pub.dev/packages/angular_bloc) and is built on top of [cubit](https://pub.dev/packages/cubit).
+This package is built to work with [flutter_bloc](https://pub.dev/packages/flutter_bloc) and [angular_bloc](https://pub.dev/packages/angular_bloc).
 
 ## Overview
 

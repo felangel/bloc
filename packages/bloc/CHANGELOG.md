@@ -1,3 +1,10 @@
+# 6.0.0-dev.1
+
+- **BREAKING**: do not emit current state on subscription
+- feat: include `cubit` and remove external dependency on [package:cubit](https://pub.dev/packages/cubit)
+- refactor: apply additional lint rules
+- docs: fix inline documentation references
+
 # 5.0.1
 
 - fix: upgrade to `cubit ^0.1.2`

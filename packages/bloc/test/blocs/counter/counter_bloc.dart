@@ -9,15 +9,15 @@ typedef OnErrorCallback = Function(Object error, StackTrace stackTrace);
 enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  final OnEventCallback onEventCallback;
-  final OnTransitionCallback onTransitionCallback;
-  final OnErrorCallback onErrorCallback;
-
   CounterBloc({
     this.onEventCallback,
     this.onTransitionCallback,
     this.onErrorCallback,
   }) : super(0);
+
+  final OnEventCallback onEventCallback;
+  final OnTransitionCallback onTransitionCallback;
+  final OnErrorCallback onErrorCallback;
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {

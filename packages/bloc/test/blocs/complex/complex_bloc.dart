@@ -25,10 +25,10 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
     } else if (event is ComplexEventB) {
       yield ComplexStateB();
     } else if (event is ComplexEventC) {
-      await Future<void>.delayed(Duration(milliseconds: 100));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
       yield ComplexStateC();
     } else if (event is ComplexEventD) {
-      await Future<void>.delayed(Duration(milliseconds: 100));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
       yield ComplexStateD();
     }
   }
@@ -37,6 +37,6 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
   Stream<Transition<ComplexEvent, ComplexState>> transformTransitions(
     Stream<Transition<ComplexEvent, ComplexState>> transitions,
   ) {
-    return transitions.debounceTime(Duration(milliseconds: 50));
+    return transitions.debounceTime(const Duration(milliseconds: 50));
   }
 }
