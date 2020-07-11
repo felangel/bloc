@@ -166,7 +166,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 #### Using a Bloc
 
 ```dart
-void main() {
+void main() async {
   /// Create a `CounterBloc` instance.
   final bloc = CounterBloc();
 
