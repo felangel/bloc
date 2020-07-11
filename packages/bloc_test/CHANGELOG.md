@@ -1,3 +1,14 @@
+# 7.0.0-dev.1
+
+- **BREAKING**: upgrade to `bloc ^6.0.0-dev.1`
+- **BREAKING**: `MockBloc` only requires `State` type
+- **BREAKING**: `whenListen` only requires `State` type
+- **BREAKING**: `blocTest` only requires `State` type
+- **BREAKING**: `blocTest` `skip` defaults to `0`
+- feat: `MockBloc` is compatible with `cubit`
+- feat: `whenListen` is compatible with `cubit`
+- feat: `blocTest` is compatible with `cubit`
+
 # 6.0.1
 
 - fix: upgrade to `bloc ^5.0.1`

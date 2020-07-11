@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:cubit/cubit.dart';
+import 'package:bloc/bloc.dart';
 
-import 'helpers.dart';
+import 'counter_cubit.dart';
 
 class SumCubit extends Cubit<int> {
   SumCubit(CounterCubit counterCubit) : super(0) {
