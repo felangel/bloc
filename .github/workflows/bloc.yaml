@@ -26,7 +26,7 @@ jobs:
       - name: Format
         run: dartfmt --dry-run --set-exit-if-changed .
       - name: Analyze
-        run: dartanalyzer --fatal-infos --fatal-warnings lib test
+        run: dartanalyzer --fatal-infos --fatal-warnings lib test example
       - name: Run tests
         run: pub run test_coverage
       - name: Check Code Coverage
