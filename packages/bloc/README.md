@@ -41,7 +41,7 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 ### Cubit
 
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" width="300" alt="Cubit Architecture" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/cubit_architecture.png" width="300" alt="Cubit Architecture" />
 
 A `Cubit` is the base for `Bloc` (in other words `Bloc` extends `Cubit`). `Cubit` is a special type of `Stream` which can be extended to manage any type of state. `Cubit` requires an initial state which will be the state before `emit` has been called. The current state of a `cubit` can be accessed via the `state` getter and the state of the `cubit` can be updated by calling `emit` with a new `state`.
 
