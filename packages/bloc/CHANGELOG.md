@@ -1,7 +1,11 @@
 # 6.0.0-dev.1
 
 - **BREAKING**: do not emit current state on subscription
+- **BREAKING**: `onError` in `BlocObserver` takes a `Cubit` as first parameter
 - feat: include `cubit` and remove external dependency on [package:cubit](https://pub.dev/packages/cubit)
+  - exports class `Cubit`
+  - exports class `Change` (`Transition` for `Cubit`)
+- feat: `onChange` added to `BlocObserver`
 - refactor: apply additional lint rules
 - docs: fix inline documentation references
 
