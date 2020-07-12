@@ -95,7 +95,7 @@ Now that we have our `TodosStates` and `TodosEvents` implemented we can implemen
 
 ### Bloc
 
-Let's create `blocs/todos/todos_bloc.dart` and get started! We just need to implement `initialState` and `mapEventToState`.
+Let's create `blocs/todos/todos_bloc.dart` and get started! We just need to set the initial state and implement `mapEventToState`.
 
 [todos_bloc.dart](_snippets/flutter_todos_tutorial/todos_bloc.dart.md ':include')
 
@@ -238,7 +238,7 @@ Create `blocs/tab/tab_event.dart`:
 
 ### Bloc
 
-Our `TabBloc` implementation will be super simple. As always, we just need to implement `initialState` and `mapEventToState`.
+Our `TabBloc` implementation will be super simple. As always, we just need to set the initial state and implement `mapEventToState`.
 
 Create `blocs/tab/tab_bloc.dart` and let's quickly do the implementation.
 
@@ -252,15 +252,15 @@ Lastly, we'll create another barrel file for our `TabBloc` exports. Create `bloc
 
 [bloc.dart](_snippets/flutter_todos_tutorial/tab_bloc_barrel.dart.md ':include')
 
-## Bloc Delegate
+## Bloc Observer
 
-Before we move on to the presentation layer, we will implement our own `BlocDelegate` which will allow us to handle all state changes and errors in a single place. It's really useful for things like developer logs or analytics.
+Before we move on to the presentation layer, we will implement our own `BlocObserver` which will allow us to handle all state changes and errors in a single place. It's really useful for things like developer logs or analytics.
 
-Create `blocs/simple_bloc_delegate.dart` and let's get started.
+Create `blocs/simple_bloc_observer.dart` and let's get started.
 
-[simple_bloc_delegate.dart](_snippets/flutter_todos_tutorial/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](_snippets/flutter_todos_tutorial/simple_bloc_observer.dart.md ':include')
 
-All we're doing in this case is printing all state changes (`transitions`) and errors to the console just so that we can see what's going on when we're running our app. You can hook up your `BlocDelegate` to google analytics, sentry, crashlytics, etc...
+All we're doing in this case is printing all state changes (`transitions`) and errors to the console just so that we can see what's going on when we're running our app. You can hook up your `BlocObserver` to google analytics, sentry, crashlytics, etc...
 
 ## Blocs Barrel
 
@@ -440,7 +440,7 @@ Let's create `main.dart` and our `TodosApp` widget. We need to create a `main` f
 
 [main.dart](_snippets/flutter_todos_tutorial/main1.dart.md ':include')
 
-?> **Note:** We are setting our BlocSupervisor's delegate to the `SimpleBlocDelegate` we created earlier so that we can hook into all transitions and errors.
+?> **Note:** We are setting our observer to the `SimpleBlocObserver` we created earlier so that we can hook into all transitions and errors.
 
 ?> **Note:** We are also wrapping our `TodosApp` widget in a `BlocProvider` which manages initializing, closing, and providing the `TodosBloc` to our entire widget tree from [flutter_bloc](https://pub.dev/packages/flutter_bloc). We immediately add the `TodosLoadSuccess` event in order to request the latest todos.
 

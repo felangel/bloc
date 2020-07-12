@@ -93,10 +93,6 @@ Vamos criar `post_bloc.dart` e criar nossoc`PostBloc` vazio.
 
 ?> **Nota:** apenas a partir da declaração da classe, podemos dizer que nosso PostBloc aceitará os PostEvents como entrada e saída de PostStates.
 
-Podemos começar implementando `initialState`, que será o estado do nosso `PostBloc` antes que quaisquer eventos sejam adicionados.
-
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_initial_state.dart.md ':include')
-
 Em seguida, precisamos implementar o `mapEventToState`, que será acionado toda vez que um `PostEvent` for adicionado.
 
 [post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_map_event_to_state.dart.md ':include')
@@ -164,19 +160,19 @@ Um bônus adicional de usar a biblioteca de blocs é que podemos ter acesso a to
 
 Mesmo que neste aplicativo tenha apenas um bloc, é bastante comum em aplicativos maiores ter muitos blocs gerenciando diferentes partes do estado do aplicativo.
 
-Se quisermos fazer algo em resposta a todas as `Transições`, podemos simplesmente criar nosso próprio `BlocDelegate`.
+Se quisermos fazer algo em resposta a todas as `Transições`, podemos simplesmente criar nosso próprio `BlocObserver`.
 
-[simple_bloc_delegate.dart](../_snippets/flutter_infinite_list_tutorial/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/flutter_infinite_list_tutorial/simple_bloc_observer.dart.md ':include')
 
-?> Tudo o que precisamos fazer é estender o `BlocDelegate` e substituir o método `onTransition`.
+?> Tudo o que precisamos fazer é estender o `BlocObserver` e substituir o método `onTransition`.
 
-Para dizer ao Bloc para usar nosso `SimpleBlocDelegate`, precisamos apenas ajustar nossa função principal.
+Para dizer ao Bloc para usar nosso `SimpleBlocObserver`, precisamos apenas ajustar nossa função principal.
 
-[main.dart](../_snippets/flutter_infinite_list_tutorial/bloc_delegate_main.dart.md ':include')
+[main.dart](../_snippets/flutter_infinite_list_tutorial/bloc_observer_main.dart.md ':include')
 
 Agora, quando executamos nosso aplicativo, toda vez que ocorre uma transição do bloc, podemos ver a transição impressa no console.
 
-?> Na prática, você pode criar diferentes `BlocDelegates` e, como todas as alterações de estado são registradas, somos capazes de instrumentar nossos aplicativos com muita facilidade e rastrear todas as interações do usuário e alterações de estado em um só lugar!
+?> Na prática, você pode criar diferentes `BlocObservers` e, como todas as alterações de estado são registradas, somos capazes de instrumentar nossos aplicativos com muita facilidade e rastrear todas as interações do usuário e alterações de estado em um só lugar!
 
 Isso é tudo! Agora implementamos com sucesso uma lista infinita no flutter usando os pacotes [bloc](https://pub.dev/packages/bloc) e [flutter_bloc](https://pub.dev/packages/flutter_bloc) e nós separamos com êxito nossa camada de apresentação de nossa lógica de negócios.
 

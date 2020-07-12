@@ -11,7 +11,7 @@ import 'package:flutter_login/login/login.dart';
 import 'package:flutter_login/home/home.dart';
 import 'package:flutter_login/common/common.dart';
 
-class SimpleBlocDelegate extends BlocDelegate {
+class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
     print(event);
@@ -32,7 +32,7 @@ class SimpleBlocDelegate extends BlocDelegate {
 }
 
 void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
   final userRepository = UserRepository();
   runApp(
     BlocProvider<AuthenticationBloc>(

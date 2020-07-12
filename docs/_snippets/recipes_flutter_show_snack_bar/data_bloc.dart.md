@@ -2,8 +2,7 @@
 import 'package:bloc/bloc.dart';
 
 class DataBloc extends Bloc<DataEvent, DataState> {
-  @override
-  DataState get initialState => Initial();
+  DataBloc() : super(Initial());
 
   @override
   Stream<DataState> mapEventToState(

@@ -1,6 +1,6 @@
 ```dart
 void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
   runApp(
     BlocProvider(
       create: (context) {

@@ -3,8 +3,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_timer/bloc/bloc.dart';
 
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
-  @override
-  TimerState get initialState => // TODO: implement initialState;
+  // TODO: set initial state
+  TimerBloc(): super();
 
   @override
   Stream<TimerState> mapEventToState(

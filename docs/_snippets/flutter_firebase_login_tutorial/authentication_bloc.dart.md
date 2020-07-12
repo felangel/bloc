@@ -14,10 +14,8 @@ class AuthenticationBloc
 
   AuthenticationBloc({@required UserRepository userRepository})
       : assert(userRepository != null),
-        _userRepository = userRepository;
-
-  @override
-  AuthenticationState get initialState => AuthenticationInitial();
+        _userRepository = userRepository,
+        super(AuthenticationInitial());
 
   @override
   Stream<AuthenticationState> mapEventToState(

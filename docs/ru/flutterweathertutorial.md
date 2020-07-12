@@ -241,9 +241,9 @@
 
 ### Настройка
 
-Как вы, вероятно, уже видели в других руководствах, мы собираемся создать `SimpleBlocDelegate`, чтобы мы могли видеть все переходы состояний в нашем приложении. Давайте продолжим, создадим `simple_bloc_delegate.dart` и собственный пользовательский делегат.
+Как вы, вероятно, уже видели в других руководствах, мы собираемся создать `SimpleBlocObserver`, чтобы мы могли видеть все переходы состояний в нашем приложении. Давайте продолжим, создадим `simple_bloc_observer.dart` и собственный пользовательский делегат.
 
-[simple_bloc_delegate.dart](../_snippets/flutter_weather_tutorial/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/flutter_weather_tutorial/simple_bloc_observer.dart.md ':include')
 
 Теперь мы можем импортировать его в файл `main.dart` и установить наш делегат так:
 

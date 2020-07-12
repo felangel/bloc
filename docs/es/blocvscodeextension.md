@@ -57,7 +57,7 @@ O puede hacer click derecho en el directorio en el cual desea crear el nuevo Blo
 | `multiblocprovider`       | Crea un Widget de clase MultiBlocProvider          |
 | `repositoryprovider`      | Crea un Widget de clase RepositoryProvider         |
 | `multirepositoryprovider` | Crea un Widget de clase MultiRepositoryProvider    |
-| `blocdelegate`            | Crea un Widget de clase de tipo BlocDelegate       |
+| `blocobserver`            | Crea un Widget de clase de tipo BlocObserver       |
 | `contextbloc`             | Atajo para `context.bloc<MyBloc>()`                |
 | `blocof`                  | Atajo para `BlocProvider.of<MyBloc>()`             |
 | `contextrepository`       | Atajo para `context.repository<MyRepository>()`    |

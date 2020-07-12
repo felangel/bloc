@@ -2,21 +2,22 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
-import 'package:flutter_timer/bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_timer/ticker.dart';
+
+part 'timer_event.dart';
+part 'timer_state.dart';
 
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
   final Ticker _ticker;
-  final int _duration = 60;
+  static const int _duration = 60;
 
   StreamSubscription<int> _tickerSubscription;
 
   TimerBloc({@required Ticker ticker})
       : assert(ticker != null),
-        _ticker = ticker;
-
-  @override
-  TimerState get initialState => TimerInitial(_duration);
+        _ticker = ticker,
+        super(TimerInitial(_duration));
 
   @override
   void onTransition(Transition<TimerEvent, TimerState> transition) {
@@ -48,7 +49,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   Stream<TimerState> _mapTimerStartedToState(TimerStarted start) async* {
-     yield TimerRunInProgress(start.duration);
+    yield TimerRunInProgress(start.duration);
     _tickerSubscription?.cancel();
     _tickerSubscription = _ticker
         .tick(ticks: start.duration)
@@ -56,7 +57,6 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   Stream<TimerState> _mapTimerPausedToState(TimerPaused pause) async* {
-    final state = currentState;
     if (state is TimerRunInProgress) {
       _tickerSubscription?.pause();
       yield TimerRunPause(state.duration);
@@ -64,7 +64,6 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   Stream<TimerState> _mapTimerResumedToState(TimerResumed resume) async* {
-    final state = currentState;
     if (state is TimerRunPause) {
       _tickerSubscription?.resume();
       yield TimerRunInProgress(state.duration);
@@ -77,7 +76,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   Stream<TimerState> _mapTimerTickedToState(TimerTicked tick) async* {
-    yield tick.duration > 0 ? TimerRunInProgress(tick.duration) : TimerRunComplete();
+    yield tick.duration > 0
+        ? TimerRunInProgress(tick.duration)
+        : TimerRunComplete();
   }
 }
 ```

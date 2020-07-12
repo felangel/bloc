@@ -10,10 +10,8 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final WeatherRepository weatherRepository;
 
   WeatherBloc({@required this.weatherRepository})
-      : assert(weatherRepository != null);
-
-  @override
-  WeatherState get initialState => WeatherInitial();
+      : assert(weatherRepository != null),
+      super(WeatherInitial());
 
   @override
   Stream<WeatherState> mapEventToState(WeatherEvent event) async* {

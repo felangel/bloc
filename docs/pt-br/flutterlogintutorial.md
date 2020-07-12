@@ -82,10 +82,6 @@ Começaremos criando nossa classe `AuthenticationBloc`.
 
 ?> **Nota**: Nosso `AuthenticationBloc` depende do `UserRepository`.
 
-Podemos começar substituindo `initialState` pelo estado `AuthenticationInitial()`.
-
-[authentication_bloc.dart](../_snippets/flutter_login_tutorial/authentication_bloc_initial_state.dart.md ':include')
-
 Agora tudo o que resta é implementar o `mapEventToState`.
 
 [authentication_bloc.dart](../_snippets/flutter_login_tutorial/authentication_bloc_map_event_to_state.dart.md ':include')

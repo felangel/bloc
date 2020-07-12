@@ -252,15 +252,15 @@ Enfin, nous allons créer un autre fichier baril pour exporter notre `TabBloc`. 
 
 [bloc.dart](../_snippets/flutter_todos_tutorial/tab_bloc_barrel.dart.md ':include')
 
-## Bloc Delegate
+## Bloc Observer
 
-Avant de passer à la couche de présentation, nous allons implémenter notre propre `BlocDelegate` qui nous permettra de gérer tous les changements de state et les erreurs dans une seule place. C'est très pratique pour des choses comme avoir les développeurs logs ou les analyses (analytics).
+Avant de passer à la couche de présentation, nous allons implémenter notre propre `BlocObserver` qui nous permettra de gérer tous les changements de state et les erreurs dans une seule place. C'est très pratique pour des choses comme avoir les développeurs logs ou les analyses (analytics).
 
-Créons `blocs/simple_bloc_delegate.dart` et commençons.
+Créons `blocs/simple_bloc_observer.dart` et commençons.
 
-[simple_bloc_delegate.dart](../_snippets/flutter_todos_tutorial/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/flutter_todos_tutorial/simple_bloc_observer.dart.md ':include')
 
-Tout ce que nous faisons dans ce cas est d'afficher (en console) tous les changements de states (`transitions`) et les erreurs pour que l'on puisse voir ce qu'il se passe quand nous utilisons notre application. Vous pourriez même relier `BlocDelegate` à votre Google analytics, sentry, crashlytics, etc...
+Tout ce que nous faisons dans ce cas est d'afficher (en console) tous les changements de states (`transitions`) et les erreurs pour que l'on puisse voir ce qu'il se passe quand nous utilisons notre application. Vous pourriez même relier `BlocObserver` à votre Google analytics, sentry, crashlytics, etc...
 
 ## Blocs Barrel (Baril de blocs)
 
@@ -436,7 +436,7 @@ Créons `main.dart` dans notre widget `TodosApp`. Nous avons besoin de créer un
 
 [main.dart](../_snippets/flutter_todos_tutorial/main1.dart.md ':include')
 
-?> **Note:** Le BlocSupervisor's delegate prend la valeur de `SimpleBlocDelegate` que nous avons créé plutôt pour qu'on puisse récupérer toutes les transitions et les erreurs.
+?> **Note:** Le `Bloc.observer` prend la valeur de `SimpleBlocObserver` que nous avons créé plutôt pour qu'on puisse récupérer toutes les transitions et les erreurs.
 
 ?> **Note:** Nous enveloppons aussi notre widget `TodosApp` dans un `BlocProvider` qui va gérer l'initialisation, la fermeture et de fournir le bloc `TodosBloc` à l'arbre entier de notre widget depuis [flutter_bloc](https://pub.dev/packages/flutter_bloc). Cela permet d'y avoir accès dans tous les widgets enfants. Nous ajoutons aussi immédiatement l'événement `TodosLoadSuccess` dans le but de "demander" les todos les plus récents.
 

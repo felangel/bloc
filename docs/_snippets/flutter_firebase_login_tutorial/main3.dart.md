@@ -1,9 +1,9 @@
 ```dart
-import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
+import 'package:flutter_firebase_login/simple_bloc_observer.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(

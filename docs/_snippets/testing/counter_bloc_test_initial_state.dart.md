@@ -7,7 +7,7 @@ group('CounterBloc', () {
     });
 
     test('initial state is 0', () {
-        expect(counterBloc.initialState, 0);
+        expect(counterBloc.state, 0);
     });
 });
 ```

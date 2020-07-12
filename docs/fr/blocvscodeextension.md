@@ -59,7 +59,7 @@ Ou vous pouvez faire un clique droit sur le dossier dans lequel vous voudriez cr
 | `multiblocprovider`       | Crée un widget MultiBlocProvider                        |
 | `repositoryprovider`      | Crée un widget RepositoryProvider                       |
 | `multirepositoryprovider` | Crée un widget MultiRepositoryProvider                  |
-| `blocdelegate`            | Crée une Classe BlocDelegate                            |
+| `blocobserver`            | Crée une Classe BlocObserver                            |
 | `contextbloc`             | Raccourcis pour `context.bloc<MyBloc>()`                |
 | `blocof`                  | Raccourcis pour `BlocProvider.of<MyBloc>()`             |
 | `contextrepository`       | Raccourcis pour `context.repository<MyRepository>()`    |

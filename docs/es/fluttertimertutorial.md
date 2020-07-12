@@ -84,7 +84,7 @@ Si aún no lo ha hecho, cree `bloc/timer_bloc.dart` y cree un `TimerBloc` vacío
 
 [timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_empty.dart.md ':include')
 
-Lo primero que debemos hacer es definir el `initialState` de nuestro `TimerBloc`. En este caso, queremos que el `TimerBloc` comience en el estado `TimerInitial` con una duración predeterminada de 1 minuto (60 segundos).
+Lo primero que debemos hacer es definir el estado original de nuestro `TimerBloc`. En este caso, queremos que el `TimerBloc` comience en el estado `TimerInitial` con una duración predeterminada de 1 minuto (60 segundos).
 
 [timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_initial_state.dart.md ':include')
 
