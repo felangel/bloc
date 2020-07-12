@@ -1,3 +1,13 @@
+# 6.0.0-dev.1
+
+- **BREAKING**: upgrade to `bloc ^6.0.0-dev.1`
+- feat: `StorageNotFound` error thrown if no `Storage` is provided.
+- feat: `HydratedCubit` added for `Cubit` interoperability
+- feat: `HydratedMixin` added for additioanl flexibility
+- docs: inline documentation updates
+- docs: README updates
+- docs: example application updates
+
 # 5.0.3
 
 - fix: excessive storage reads and `fromJson` invocations

@@ -172,19 +172,19 @@ void main() {
     });
 
     group('SingleHydratedCubit', () {
-      test('should throw HydratedStorageNotFound when storage is null', () {
+      test('should throw StorageNotFound when storage is null', () {
         HydratedCubit.storage = null;
         expect(
           () => MyHydratedCubit(),
-          throwsA(isA<HydratedStorageNotFound>()),
+          throwsA(isA<StorageNotFound>()),
         );
       });
 
-      test('HydratedStorageNotFound overrides toString', () {
+      test('StorageNotFound overrides toString', () {
         expect(
           // ignore: prefer_const_constructors
-          HydratedStorageNotFound().toString(),
-          'HydratedStorage was accessed before it was initialized.\n'
+          StorageNotFound().toString(),
+          'Storage was accessed before it was initialized.\n'
           'Please ensure that storage has been initialized.\n\n'
           'For example:\n\n'
           'HydratedCubit.storage = await HydratedStorage.build();',
