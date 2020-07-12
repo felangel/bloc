@@ -12,7 +12,7 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
     with HydratedMixin {
   /// {@macro hydrated_bloc}
   HydratedBloc(State state) : super(state) {
-    init();
+    hydrate();
   }
 
   /// Setter for instance of [Storage] which will be used to

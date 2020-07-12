@@ -18,9 +18,19 @@ void main() async {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CounterBloc>(
-      create: (_) => CounterBloc(),
-      child: MaterialApp(home: CounterPage()),
+    return BlocProvider(
+      create: (_) => BrightnessCubit(),
+      child: BlocBuilder<BrightnessCubit, Brightness>(
+        builder: (context, brightness) {
+          return MaterialApp(
+            theme: ThemeData(brightness: brightness),
+            home: BlocProvider<CounterBloc>(
+              create: (_) => CounterBloc(),
+              child: CounterPage(),
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -42,6 +52,15 @@ class CounterPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: FloatingActionButton(
+              child: const Icon(Icons.brightness_6),
+              onPressed: () {
+                context.bloc<BrightnessCubit>().toggleBrightness();
+              },
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
@@ -79,8 +98,10 @@ class CounterPage extends StatelessWidget {
 
 enum CounterEvent { increment, decrement, reset }
 
-class CounterBloc extends HydratedBloc<CounterEvent, int> {
-  CounterBloc() : super(0);
+class CounterBloc extends Bloc<CounterEvent, int> with HydratedMixin {
+  CounterBloc() : super(0) {
+    hydrate();
+  }
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
@@ -102,4 +123,22 @@ class CounterBloc extends HydratedBloc<CounterEvent, int> {
 
   @override
   Map<String, int> toJson(int state) => {'value': state};
+}
+
+class BrightnessCubit extends HydratedCubit<Brightness> {
+  BrightnessCubit() : super(Brightness.light);
+
+  void toggleBrightness() {
+    emit(state == Brightness.light ? Brightness.dark : Brightness.light);
+  }
+
+  @override
+  Brightness fromJson(Map<String, dynamic> json) {
+    return Brightness.values[json['brightness'] as int];
+  }
+
+  @override
+  Map<String, dynamic> toJson(Brightness state) {
+    return <String, int>{'brightness': state.index};
+  }
 }
