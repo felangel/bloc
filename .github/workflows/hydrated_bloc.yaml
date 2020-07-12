@@ -27,9 +27,9 @@ jobs:
       - name: Install Dependencies
         run: flutter packages get
       - name: Format
-        run: flutter format --set-exit-if-changed lib test
+        run: flutter format --set-exit-if-changed lib test example
       - name: Analyze
-        run: flutter analyze lib test
+        run: flutter analyze lib test example
       - name: Run tests
         run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
       - name: Check Code Coverage
