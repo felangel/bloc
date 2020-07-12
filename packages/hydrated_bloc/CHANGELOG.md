@@ -3,7 +3,8 @@
 - **BREAKING**: upgrade to `bloc ^6.0.0-dev.1`
 - feat: `StorageNotFound` error thrown if no `Storage` is provided.
 - feat: `HydratedCubit` added for `Cubit` interoperability
-- feat: `HydratedMixin` added for additioanl flexibility
+- feat: `HydratedMixin` added for additional flexibility
+- feat: remove external dependency on [package:hydrated_cubit](https://pub.dev/packages/hydrated_cubit)
 - docs: inline documentation updates
 - docs: README updates
 - docs: example application updates
