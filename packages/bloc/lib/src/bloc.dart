@@ -29,6 +29,8 @@ abstract class Bloc<Event, State> extends Cubit<State>
 
   StreamSubscription<Transition<Event, State>> _transitionSubscription;
 
+  bool _emitted = false;
+
   /// Called whenever an [event] is [add]ed to the [Bloc].
   /// A great spot to add logging/analytics at the individual [Bloc] level.
   ///
@@ -235,14 +237,18 @@ abstract class Bloc<Event, State> extends Cubit<State>
           ),
         ),
       ),
-    ).listen((transition) {
-      if (transition.nextState == state) return;
-      try {
-        onTransition(transition);
-        emit(transition.nextState);
-      } on dynamic catch (error, stackTrace) {
-        onError(error, stackTrace);
-      }
-    }, onError: onError);
+    ).listen(
+      (transition) {
+        if (transition.nextState == state && _emitted) return;
+        try {
+          onTransition(transition);
+          emit(transition.nextState);
+        } on dynamic catch (error, stackTrace) {
+          onError(error, stackTrace);
+        }
+        _emitted = true;
+      },
+      onError: onError,
+    );
   }
 }
