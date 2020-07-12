@@ -83,9 +83,8 @@ class HydratedStorage implements Storage {
             await box.put(key, object);
           } on dynamic catch (_) {}
         }
-      } on dynamic catch (_) {} finally {
-        await file.delete();
-      }
+      } on dynamic catch (_) {}
+      await file.delete();
     }
   }
 
