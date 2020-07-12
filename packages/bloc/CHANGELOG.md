@@ -2,6 +2,7 @@
 
 - **BREAKING**: do not emit current state on subscription
 - **BREAKING**: `onError` in `BlocObserver` takes a `Cubit` as first parameter
+- **BREAKING**: allow blocs and cubits to emit the initial state
 - feat: include `cubit` and remove external dependency on [package:cubit](https://pub.dev/packages/cubit)
   - exports class `Cubit`
   - exports class `Change` (`Transition` for `Cubit`)
