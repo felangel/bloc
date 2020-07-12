@@ -7,7 +7,7 @@ environment:
 
 dependencies:
   angular: ^6.0.0-alpha+1
-  angular_bloc: ^5.0.0-dev.1
+  angular_bloc: ^6.0.0-dev.6
 
 dev_dependencies:
   build_runner: ">=1.6.2 <2.0.0"

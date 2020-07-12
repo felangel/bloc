@@ -238,11 +238,11 @@ Isso é tudo! Agora estamos prontos para avançar para a camada final: a camada 
 
 ### Setup
 
-Como você provavelmente já viu em outros tutoriais, criaremos um `SimpleBlocDelegate` para que possamos ver todas as transições de estado em nosso aplicativo. Vamos em frente e crie `simple_bloc_delegate.dart` e crie nosso próprio delegado personalizado.
+Como você provavelmente já viu em outros tutoriais, criaremos um `SimpleBlocObserver` para que possamos ver todas as transições de estado em nosso aplicativo. Vamos em frente e crie `simple_bloc_observer.dart` e crie nosso próprio delegado personalizado.
 
-[simple_bloc_delegate.dart](../_snippets/flutter_weather_tutorial/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/flutter_weather_tutorial/simple_bloc_observer.dart.md ':include')
 
-Podemos então importá-lo para o arquivo `main.dart` e definir nosso delegate da seguinte forma:
+Podemos então importá-lo para o arquivo `main.dart` e definir nosso observer da seguinte forma:
 
 [main.dart](../_snippets/flutter_weather_tutorial/main1.dart.md ':include')
 

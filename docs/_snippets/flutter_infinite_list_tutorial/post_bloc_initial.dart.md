@@ -9,11 +9,7 @@ import 'package:flutter_infinite_list/post.dart';
 class PostBloc extends Bloc<PostEvent, PostState> {
   final http.Client httpClient;
 
-  PostBloc({@required this.httpClient});
-
-  @override
-  // TODO: implement initialState
-  PostState get initialState => null;
+  PostBloc({@required this.httpClient}) : super(PostInitial());
 
   @override
   Stream<PostState> mapEventToState(PostEvent event) async* {

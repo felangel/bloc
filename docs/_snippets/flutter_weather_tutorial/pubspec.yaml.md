@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^4.0.0
+  flutter_bloc: ^5.0.0
   http: ^0.12.0
   equatable: ^1.0.0
 

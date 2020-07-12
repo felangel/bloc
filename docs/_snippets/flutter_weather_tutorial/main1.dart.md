@@ -1,8 +1,8 @@
 ```dart
-import 'package:flutter_weather/simple_bloc_delegate.dart';
+import 'package:flutter_weather/simple_bloc_observer.dart';
 
 void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
   runApp(App());
 }
 ```

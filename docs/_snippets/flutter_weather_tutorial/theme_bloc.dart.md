@@ -1,10 +1,7 @@
 ```dart
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
-  @override
-  ThemeState get initialState => ThemeState(
-        theme: ThemeData.light(),
-        color: Colors.lightBlue,
-      );
+  ThemeBloc()
+      : super(ThemeState(theme: ThemeData.light(), color: Colors.lightBlue));
 
   @override
   Stream<ThemeState> mapEventToState(ThemeEvent event) async* {
