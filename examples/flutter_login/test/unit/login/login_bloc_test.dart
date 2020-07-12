@@ -55,10 +55,7 @@ void main() {
   });
 
   test('close does not emit new states', () {
-    expectLater(
-      loginBloc,
-      emitsInOrder([LoginInitial(), emitsDone]),
-    );
+    expectLater(loginBloc, emitsInOrder([emitsDone]));
     loginBloc.close();
   });
 

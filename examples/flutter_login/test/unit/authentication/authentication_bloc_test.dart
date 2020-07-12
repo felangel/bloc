@@ -33,10 +33,7 @@ void main() {
   });
 
   test('close does not emit new states', () {
-    expectLater(
-      authenticationBloc,
-      emitsInOrder([AuthenticationInitial(), emitsDone]),
-    );
+    expectLater(authenticationBloc, emitsInOrder([emitsDone]));
     authenticationBloc.close();
   });
 
@@ -48,9 +45,7 @@ void main() {
         return authenticationBloc;
       },
       act: (bloc) => bloc.add(AuthenticationStarted()),
-      expect: [
-        AuthenticationFailure(),
-      ],
+      expect: [AuthenticationFailure()],
     );
 
     blocTest(
@@ -60,9 +55,7 @@ void main() {
         return authenticationBloc;
       },
       act: (bloc) => bloc.add(AuthenticationStarted()),
-      expect: [
-        AuthenticationSuccess(),
-      ],
+      expect: [AuthenticationSuccess()],
     );
   });
 
