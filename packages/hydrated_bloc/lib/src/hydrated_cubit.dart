@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:cubit/cubit.dart';
+import 'package:bloc/bloc.dart';
 
 import 'hydrated_storage.dart';
 
@@ -52,21 +52,40 @@ class HydratedStorageNotFound implements Exception {
 /// ```
 ///
 /// {@endtemplate}
-abstract class HydratedCubit<State> extends Cubit<State> {
+abstract class HydratedCubit<State> extends Cubit<State>
+    with HydratedMixin<State> {
   /// {@macro hydrated_cubit}
   HydratedCubit(State state) : super(state) {
-    if (storage == null) throw const HydratedStorageNotFound();
-    final stateJson = toJson(this.state);
-    if (stateJson != null) {
-      try {
-        storage.write(storageToken, stateJson);
-      } on dynamic catch (_) {}
-    }
+    init();
   }
 
+  /// Setter for instance of [Storage] which will be used to
+  /// manage persisting/restoring the [Cubit] state.
+  static set storage(Storage storage) {
+    HydratedMixin.storage = storage;
+  }
+
+  /// Getter for instance of [Storage] which will be used to
+  /// manage persisting/restoring the [Cubit] state.
+  static Storage get storage => HydratedMixin.storage;
+}
+
+mixin HydratedMixin<State> on Cubit<State> {
   /// Instance of [Storage] which will be used to
   /// manage persisting/restoring the [Cubit] state.
   static Storage storage;
+
+  void init() {
+    if (storage == null) throw const HydratedStorageNotFound();
+    final stateJson = toJson(state);
+    if (stateJson != null) {
+      try {
+        storage.write(storageToken, stateJson);
+      } on dynamic catch (error, stackTrace) {
+        onError(error, stackTrace);
+      }
+    }
+  }
 
   State _state;
 
@@ -78,23 +97,26 @@ abstract class HydratedCubit<State> extends Cubit<State> {
       final stateJson = storage.read(storageToken) as Map<dynamic, dynamic>;
       if (stateJson == null) return _state = super.state;
       return _state = fromJson(Map<String, dynamic>.from(stateJson));
-    } on dynamic catch (_) {
+    } on dynamic catch (error, stackTrace) {
+      onError(error, stackTrace);
       return _state = super.state;
     }
   }
 
   @override
-  void onTransition(Transition<State> transition) {
+  void onChange(Change<State> change) {
     if (storage == null) throw const HydratedStorageNotFound();
-    final state = transition.nextState;
+    final state = change.nextState;
     final stateJson = toJson(state);
     if (stateJson != null) {
       try {
         storage.write(storageToken, stateJson);
-      } on dynamic catch (_) {}
+      } on dynamic catch (error, stackTrace) {
+        onError(error, stackTrace);
+      }
     }
     _state = state;
-    super.onTransition(transition);
+    super.onChange(change);
   }
 
   /// `id` is used to uniquely identify multiple instances

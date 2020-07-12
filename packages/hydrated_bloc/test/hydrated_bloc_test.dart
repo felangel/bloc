@@ -1,10 +1,11 @@
+// ignore_for_file: invalid_use_of_protected_member
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hydrated_cubit/hydrated_cubit.dart';
-import 'package:mockito/mockito.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:mockito/mockito.dart';
 import 'package:bloc/bloc.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:uuid/uuid.dart';
 
 class MockStorage extends Mock implements HydratedStorage {}
@@ -21,7 +22,7 @@ class MyUuidHydratedBloc extends HydratedBloc<String, String> {
   @override
   String fromJson(dynamic json) {
     try {
-      return json['value'];
+      return json['value'] as String;
     } on dynamic catch (_) {
       // ignore: avoid_returning_null
       return null;
@@ -83,11 +84,11 @@ class MyHydratedBloc extends HydratedBloc<int, int> {
 }
 
 class MyMultiHydratedBloc extends HydratedBloc<int, int> {
-  final String _id;
-
   MyMultiHydratedBloc(String id)
       : _id = id,
         super(0);
+
+  final String _id;
 
   @override
   String get id => _id;
@@ -112,11 +113,11 @@ class MyMultiHydratedBloc extends HydratedBloc<int, int> {
 }
 
 class MyErrorThrowingBloc extends HydratedBloc<Object, int> {
-  final Function(Object error, StackTrace stackTrace) onErrorCallback;
-  final bool superOnError;
-
   MyErrorThrowingBloc({this.onErrorCallback, this.superOnError = true})
       : super(0);
+
+  final Function(Object error, StackTrace stackTrace) onErrorCallback;
+  final bool superOnError;
 
   @override
   Stream<int> mapEventToState(Object event) async* {
@@ -133,7 +134,7 @@ class MyErrorThrowingBloc extends HydratedBloc<Object, int> {
 
   @override
   Map<String, dynamic> toJson(int state) {
-    return {'key': Object};
+    return <String, Object>{'key': Object};
   }
 
   @override
@@ -153,6 +154,12 @@ void main() {
       HydratedBloc.storage = storage;
     });
 
+    test('storage getter returns correct storage instance', () {
+      final storage = MockStorage();
+      HydratedBloc.storage = storage;
+      expect(HydratedBloc.storage, storage);
+    });
+
     test('reads from storage once upon initialization', () {
       MyCallbackHydratedBloc();
       verify<dynamic>(storage.read('MyCallbackHydratedBloc')).called(1);
@@ -167,7 +174,7 @@ void main() {
       final bloc = MyCallbackHydratedBloc();
       expect(bloc.state, 42);
       bloc.add(CounterEvent.increment);
-      await expectLater(bloc, emitsInOrder([42, 43]));
+      await expectLater(bloc, emitsInOrder(const <int>[43]));
       verify<dynamic>(storage.read('MyCallbackHydratedBloc')).called(1);
     });
 
@@ -183,7 +190,7 @@ void main() {
       );
       expect(bloc.state, 42);
       bloc.add(CounterEvent.increment);
-      await expectLater(bloc, emitsInOrder([42, 43]));
+      await expectLater(bloc, emitsInOrder(const <int>[43]));
       expect(fromJsonCalls, [
         {'value': 42}
       ]);
@@ -196,7 +203,7 @@ void main() {
       final bloc = MyCallbackHydratedBloc();
       expect(bloc.state, 0);
       bloc.add(CounterEvent.increment);
-      await expectLater(bloc, emitsInOrder([0, 1]));
+      await expectLater(bloc, emitsInOrder(const <int>[1]));
       verify<dynamic>(storage.read('MyCallbackHydratedBloc')).called(1);
     });
 
@@ -208,58 +215,58 @@ void main() {
       );
       expect(bloc.state, 0);
       bloc.add(CounterEvent.increment);
-      await expectLater(bloc, emitsInOrder([0, 1]));
+      await expectLater(bloc, emitsInOrder(const <int>[1]));
       expect(fromJsonCalls, isEmpty);
     });
 
     test(
         'does not read from storage on subsequent state changes '
         'when cache is malformed', () async {
-      runZoned(() async {
+      unawaited(runZoned(() async {
         when<dynamic>(storage.read('MyCallbackHydratedBloc')).thenReturn('{');
         MyCallbackHydratedBloc().add(CounterEvent.increment);
-      }, onError: (_) {
+      }, onError: (dynamic _) {
         verify<dynamic>(storage.read('MyCallbackHydratedBloc')).called(1);
-      });
+      }));
     });
 
     test('does not deserialize state when cache is malformed', () async {
       final fromJsonCalls = <dynamic>[];
-      runZoned(() async {
+      unawaited(runZoned(() async {
         when<dynamic>(storage.read('MyCallbackHydratedBloc')).thenReturn('{');
         MyCallbackHydratedBloc(
           onFromJsonCalled: fromJsonCalls.add,
         ).add(CounterEvent.increment);
         expect(fromJsonCalls, isEmpty);
-      }, onError: (_) {
+      }, onError: (dynamic _) {
         expect(fromJsonCalls, isEmpty);
-      });
+      }));
     });
 
     group('SingleHydratedBloc', () {
-      test('should call storage.write when onTransition is called', () {
-        final transition = Transition(
+      test('should call storage.write when onChange is called', () {
+        const transition = Transition(
           currentState: 0,
           event: 0,
           nextState: 0,
         );
-        final expected = <String, int>{'value': 0};
-        MyHydratedBloc().onTransition(transition);
+        const expected = <String, int>{'value': 0};
+        MyHydratedBloc().onChange(transition);
         verify(
           storage.write('MyHydratedBloc', expected),
         ).called(2);
       });
 
-      test('should call storage.write when onTransition is called with bloc id',
+      test('should call storage.write when onChange is called with bloc id',
           () {
         final bloc = MyHydratedBloc('A');
-        final transition = Transition(
+        const transition = Transition(
           currentState: 0,
           event: 0,
           nextState: 0,
         );
-        final expected = <String, int>{'value': 0};
-        bloc.onTransition(transition);
+        const expected = <String, int>{'value': 0};
+        bloc.onChange(transition);
         verify(
           storage.write('MyHydratedBlocA', expected),
         ).called(2);
@@ -268,29 +275,29 @@ void main() {
       test('should call onError when storage.write throws', () {
         runZoned(() {
           final expectedError = Exception('oops');
-          final transition = Transition(
+          const transition = Transition(
             currentState: 0,
             event: 0,
             nextState: 0,
           );
           final bloc = MyHydratedBloc();
           when(storage.write(any, any)).thenThrow(expectedError);
-          bloc.onTransition(transition);
+          bloc.onChange(transition);
           // ignore: invalid_use_of_protected_member
           verify(bloc.onError(expectedError, any)).called(2);
-        }, onError: (error) {
+        }, onError: (dynamic error) {
           expect(
-            (error as BlocUnhandledErrorException).error.toString(),
+            (error as CubitUnhandledErrorException).error.toString(),
             'Exception: oops',
           );
-          expect((error as BlocUnhandledErrorException).stackTrace, isNotNull);
+          expect((error as CubitUnhandledErrorException).stackTrace, isNotNull);
         });
       });
 
       test('stores initial state when instantiated', () {
         MyHydratedBloc();
         verify<dynamic>(
-          storage.write('MyHydratedBloc', {"value": 0}),
+          storage.write('MyHydratedBloc', {'value': 0}),
         ).called(1);
       });
 
@@ -370,7 +377,7 @@ void main() {
         when<dynamic>(storage.read('MyUuidHydratedBloc'))
             .thenReturn(cachedState);
         MyUuidHydratedBloc();
-        final initialStateB =
+        final dynamic initialStateB =
             verify(storage.write('MyUuidHydratedBloc', captureAny))
                 .captured
                 .last;
@@ -380,44 +387,44 @@ void main() {
 
     group('MyErrorThrowingBloc', () {
       test('continues to emit new states when serialization fails', () async {
-        runZoned(() async {
-          final bloc = MyErrorThrowingBloc();
-          final expectedStates = [0, 1, emitsDone];
-          expectLater(
-            bloc,
-            emitsInOrder(expectedStates),
-          );
-          bloc.add(Object);
-          await bloc.close();
-        }, onError: (_) {});
+        await runZoned(
+          () async {
+            final bloc = MyErrorThrowingBloc();
+            final expectedStates = [0, 1, emitsDone];
+            unawaited(expectLater(bloc, emitsInOrder(expectedStates)));
+            bloc.add(Object);
+            await bloc.close();
+          },
+          onError: (dynamic _) {},
+        );
       });
 
       test('calls onError when json decode fails', () async {
         Object lastError;
         StackTrace lastStackTrace;
-        runZoned(() async {
-          when(storage.read(any)).thenReturn('invalid json');
+        unawaited(runZoned(() async {
+          when<dynamic>(storage.read(any)).thenReturn('invalid json');
           MyErrorThrowingBloc(
             onErrorCallback: (error, stackTrace) {
               lastError = error;
               lastStackTrace = stackTrace;
             },
           );
-        }, onError: (_) {
+        }, onError: (dynamic _) {
           expect(lastStackTrace, isNotNull);
           expect(
             '$lastError',
-            "type 'String' is not a subtype of type 'Map<dynamic, dynamic>'",
+            '''type \'String\' is not a subtype of type \'Map<dynamic, dynamic>\' in type cast''',
           );
-        });
+        }));
       });
 
       test('returns super.state when json decode fails', () async {
         MyErrorThrowingBloc bloc;
-        runZoned(() async {
-          when(storage.read(any)).thenReturn('invalid json');
+        await runZoned(() async {
+          when<dynamic>(storage.read(any)).thenReturn('invalid json');
           bloc = MyErrorThrowingBloc(superOnError: false);
-        }, onError: (_) {
+        }, onError: (dynamic _) {
           expect(bloc.state, 0);
         });
       });
@@ -426,7 +433,7 @@ void main() {
         Object lastError;
         StackTrace lastStackTrace;
         final exception = Exception('oops');
-        runZoned(() async {
+        unawaited(runZoned(() async {
           when(storage.write(any, any)).thenThrow(exception);
           MyErrorThrowingBloc(
             onErrorCallback: (error, stackTrace) {
@@ -434,30 +441,32 @@ void main() {
               lastStackTrace = stackTrace;
             },
           );
-        }, onError: (_) {
+        }, onError: (dynamic _) {
           expect(lastError, exception);
           expect(lastStackTrace, isNotNull);
-        });
+        }));
       });
 
       test('calls onError when json encode fails', () async {
-        runZoned(() async {
-          Object lastError;
-          StackTrace lastStackTrace;
-          final bloc = MyErrorThrowingBloc(
-            onErrorCallback: (error, stackTrace) {
-              lastError = error;
-              lastStackTrace = stackTrace;
-            },
-          );
-          bloc.add(Object);
-          await bloc.close();
-          expect(
-            '$lastError',
-            'Converting object to an encodable object failed: Object',
-          );
-          expect(lastStackTrace, isNotNull);
-        }, onError: (_) {});
+        unawaited(runZoned(
+          () async {
+            Object lastError;
+            StackTrace lastStackTrace;
+            final bloc = MyErrorThrowingBloc(
+              onErrorCallback: (error, stackTrace) {
+                lastError = error;
+                lastStackTrace = stackTrace;
+              },
+            )..add(Object);
+            await bloc.close();
+            expect(
+              '$lastError',
+              'Converting object to an encodable object failed: Object',
+            );
+            expect(lastStackTrace, isNotNull);
+          },
+          onError: (dynamic _) {},
+        ));
       });
     });
   });

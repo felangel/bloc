@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:crypto/crypto.dart';
 import 'package:hive/hive.dart';
-import 'package:hydrated_cubit/hydrated_cubit.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 void main() {
   group('HydratedAesCipher', () {

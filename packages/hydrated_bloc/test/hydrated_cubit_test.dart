@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:hydrated_cubit/hydrated_cubit.dart';
-import 'package:cubit/cubit.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:bloc/bloc.dart';
 import 'package:uuid/uuid.dart';
 
 class MockStorage extends Mock implements Storage {}
@@ -33,12 +33,17 @@ class MyCallbackHydratedCubit extends HydratedCubit<int> {
     onFromJsonCalled?.call(json);
     return json['value'] as int;
   }
+
+  @override
+  // ignore: must_call_super
+  void onError(Object error, StackTrace stackTrace) {}
 }
 
 class MyHydratedCubit extends HydratedCubit<int> {
-  MyHydratedCubit([this._id]) : super(0);
+  MyHydratedCubit([this._id, this._callSuper = true]) : super(0);
 
   final String _id;
+  final bool _callSuper;
 
   @override
   String get id => _id;
@@ -48,6 +53,11 @@ class MyHydratedCubit extends HydratedCubit<int> {
 
   @override
   int fromJson(dynamic json) => json['value'] as int;
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    if (_callSuper) super.onError(error, stackTrace);
+  }
 }
 
 class MyMultiHydratedCubit extends HydratedCubit<int> {
@@ -149,14 +159,16 @@ void main() {
 
     test('does not deserialize state when cache is malformed', () {
       final fromJsonCalls = <dynamic>[];
-      when<dynamic>(storage.read('MyCallbackHydratedCubit')).thenReturn('{');
-      final cubit = MyCallbackHydratedCubit(
-        onFromJsonCalled: fromJsonCalls.add,
+      runZoned(
+        () {
+          when<dynamic>(storage.read('MyCallbackHydratedCubit'))
+              .thenReturn('{');
+          MyCallbackHydratedCubit(onFromJsonCalled: fromJsonCalls.add);
+        },
+        onError: (dynamic error, StackTrace stackTrace) {
+          expect(fromJsonCalls, isEmpty);
+        },
       );
-      expect(cubit.state, 0);
-      cubit.increment();
-      expect(cubit.state, 1);
-      expect(fromJsonCalls, isEmpty);
     });
 
     group('SingleHydratedCubit', () {
@@ -179,30 +191,50 @@ void main() {
         );
       });
 
-      test('should call storage.write when onTransition is called', () {
-        final transition = const Transition(currentState: 0, nextState: 0);
+      test('storage getter returns correct storage instance', () {
+        final storage = MockStorage();
+        HydratedCubit.storage = storage;
+        expect(HydratedCubit.storage, storage);
+      });
+
+      test('should call storage.write when onChange is called', () {
+        final transition = const Change(currentState: 0, nextState: 0);
         final expected = <String, int>{'value': 0};
-        MyHydratedCubit().onTransition(transition);
+        MyHydratedCubit().onChange(transition);
         verify(storage.write('MyHydratedCubit', expected)).called(2);
       });
 
-      test(
-          'should call storage.write when onTransition is called with cubit id',
+      test('should call storage.write when onChange is called with cubit id',
           () {
         final cubit = MyHydratedCubit('A');
-        final transition = const Transition(currentState: 0, nextState: 0);
+        final transition = const Change(currentState: 0, nextState: 0);
         final expected = <String, int>{'value': 0};
-        cubit.onTransition(transition);
+        cubit.onChange(transition);
         verify(storage.write('MyHydratedCubitA', expected)).called(2);
       });
 
-      test('should do nothing when storage.write throws', () {
-        runZoned(() {
-          final expectedError = Exception('oops');
-          final transition = const Transition(currentState: 0, nextState: 0);
-          when(storage.write(any, any)).thenThrow(expectedError);
-          MyHydratedCubit().onTransition(transition);
-        }, onError: (dynamic _) => fail('should not throw'));
+      test(
+          'should throw CubitUnhandledErrorException when storage.write throws',
+          () {
+        runZoned(
+          () {
+            final expectedError = Exception('oops');
+            final transition = const Change(currentState: 0, nextState: 0);
+            when(storage.write(any, any)).thenThrow(expectedError);
+            MyHydratedCubit().onChange(transition);
+            fail('should throw');
+          },
+          onError: (dynamic error) {
+            expect(
+              (error as CubitUnhandledErrorException).error.toString(),
+              'Exception: oops',
+            );
+            expect(
+              (error as CubitUnhandledErrorException).stackTrace,
+              isNotNull,
+            );
+          },
+        );
       });
 
       test('stores initial state when instantiated', () {
@@ -221,7 +253,7 @@ void main() {
       test('initial state should return 0 when deserialization fails', () {
         when<dynamic>(storage.read('MyHydratedCubit'))
             .thenThrow(Exception('oops'));
-        expect(MyHydratedCubit().state, 0);
+        expect(MyHydratedCubit('', false).state, 0);
       });
 
       test('initial state should return 101 when fromJson returns 101', () {
