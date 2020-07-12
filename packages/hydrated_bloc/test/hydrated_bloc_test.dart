@@ -387,7 +387,7 @@ void main() {
 
     group('MyErrorThrowingBloc', () {
       test('continues to emit new states when serialization fails', () async {
-        await runZoned(
+        unawaited(runZoned(
           () async {
             final bloc = MyErrorThrowingBloc();
             final expectedStates = [0, 1, emitsDone];
@@ -396,7 +396,7 @@ void main() {
             await bloc.close();
           },
           onError: (dynamic _) {},
-        );
+        ));
       });
 
       test('calls onError when json decode fails', () async {
@@ -421,12 +421,12 @@ void main() {
 
       test('returns super.state when json decode fails', () async {
         MyErrorThrowingBloc bloc;
-        await runZoned(() async {
+        unawaited(runZoned(() async {
           when<dynamic>(storage.read(any)).thenReturn('invalid json');
           bloc = MyErrorThrowingBloc(superOnError: false);
         }, onError: (dynamic _) {
           expect(bloc.state, 0);
-        });
+        }));
       });
 
       test('calls onError when storage.write fails', () async {
