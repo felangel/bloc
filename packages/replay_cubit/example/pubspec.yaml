@@ -8,10 +8,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_cubit:
-    path: ../../flutter_cubit
-  hydrated_cubit:
-    path: ../../hydrated_cubit
+  flutter_bloc:
+    path: ../../flutter_bloc
+  hydrated_bloc:
+    path: ../../hydrated_bloc
   replay_cubit:
     path: ../
 

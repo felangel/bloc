@@ -1,5 +1,5 @@
 import 'dart:collection';
-import 'package:cubit/cubit.dart';
+import 'package:bloc/bloc.dart';
 
 part 'change_stack.dart';
 
@@ -48,7 +48,7 @@ abstract class ReplayCubit<State> extends Cubit<State> with ReplayMixin<State> {
   }
 }
 
-mixin ReplayMixin<State> on CubitStream<State> {
+mixin ReplayMixin<State> on Cubit<State> {
   final _changeStack = _ChangeStack<State>();
 
   set limit(int limit) => _changeStack.limit = limit;
