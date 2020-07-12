@@ -10,7 +10,7 @@ import 'package:flutter_weather/blocs/weather_bloc.dart';
 class MockWeatherRepository extends Mock implements WeatherRepository {}
 
 void main() {
-  final Weather weather = Weather(
+  final weather = Weather(
     condition: WeatherCondition.clear,
     formattedCondition: 'Clear',
     minTemp: 15,
@@ -19,6 +19,7 @@ void main() {
     location: 'Chicago',
     lastUpdated: DateTime(2019),
   );
+
   group('WeatherBloc', () {
     MockWeatherRepository weatherRepository;
     WeatherBloc weatherBloc;
@@ -81,9 +82,7 @@ void main() {
           return weatherBloc;
         },
         act: (bloc) => bloc.add(WeatherRefreshRequested(city: 'chicago')),
-        expect: [
-          WeatherLoadSuccess(weather: weather),
-        ],
+        expect: [WeatherLoadSuccess(weather: weather)],
       );
 
       blocTest(
