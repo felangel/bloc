@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 
 import 'hydrated_storage.dart';
 
-/// {@template hydrated_storage_not_found}
+/// {@template storage_not_found}
 /// Exception thrown if there was no [HydratedStorage] specified.
 /// This is most likely due to forgetting to setup the [HydratedStorage]:
 ///
@@ -18,13 +18,13 @@ import 'hydrated_storage.dart';
 /// ```
 ///
 /// {@endtemplate}
-class HydratedStorageNotFound implements Exception {
-  /// {@macro hydrated_storage_not_found}
-  const HydratedStorageNotFound();
+class StorageNotFound implements Exception {
+  /// {@macro storage_not_found}
+  const StorageNotFound();
 
   @override
   String toString() {
-    return 'HydratedStorage was accessed before it was initialized.\n'
+    return 'Storage was accessed before it was initialized.\n'
         'Please ensure that storage has been initialized.\n\n'
         'For example:\n\n'
         'HydratedCubit.storage = await HydratedStorage.build();';
@@ -76,7 +76,7 @@ mixin HydratedMixin<State> on Cubit<State> {
   static Storage storage;
 
   void init() {
-    if (storage == null) throw const HydratedStorageNotFound();
+    if (storage == null) throw const StorageNotFound();
     final stateJson = toJson(state);
     if (stateJson != null) {
       try {
@@ -91,7 +91,7 @@ mixin HydratedMixin<State> on Cubit<State> {
 
   @override
   State get state {
-    if (storage == null) throw const HydratedStorageNotFound();
+    if (storage == null) throw const StorageNotFound();
     if (_state != null) return _state;
     try {
       final stateJson = storage.read(storageToken) as Map<dynamic, dynamic>;
@@ -105,7 +105,7 @@ mixin HydratedMixin<State> on Cubit<State> {
 
   @override
   void onChange(Change<State> change) {
-    if (storage == null) throw const HydratedStorageNotFound();
+    if (storage == null) throw const StorageNotFound();
     final state = change.nextState;
     final stateJson = toJson(state);
     if (stateJson != null) {
