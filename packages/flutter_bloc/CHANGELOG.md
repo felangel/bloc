@@ -1,3 +1,13 @@
+# 6.0.0-dev.1
+
+- **BREAKING**: upgrade to `bloc ^6.0.0-dev.1`
+- **BREAKING**: `BlocBuilder` interop with `cubit` (`bloc` parameter renamed to `cubit`)
+- **BREAKING**: `BlocListener` interop with `cubit` (`bloc` parameter renamed to `cubit`)
+- **BREAKING**: `BlocProvider` interop with `cubit` (`bloc` parameter renamed to `cubit`)
+- docs: inline documentation updates
+- docs: README updates
+- docs: example application updates
+
 # 5.0.1
 
 - fix: upgrade to `bloc ^5.0.1`

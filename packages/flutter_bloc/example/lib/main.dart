@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+/// Custom [BlocObserver] which observes all bloc and cubit instances.
 class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
@@ -18,9 +19,9 @@ class SimpleBlocObserver extends BlocObserver {
   }
 
   @override
-  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
     print(error);
-    super.onError(bloc, error, stackTrace);
+    super.onError(cubit, error, stackTrace);
   }
 }
 
@@ -29,6 +30,10 @@ void main() {
   runApp(App());
 }
 
+/// A [StatelessWidget] which uses:
+/// * [bloc](https://pub.dev/packages/bloc)
+/// * [flutter_bloc](https://pub.dev/packages/flutter_bloc)
+/// to manage the state of a counter.
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -37,12 +42,11 @@ class App extends StatelessWidget {
       child: BlocBuilder<ThemeBloc, ThemeData>(
         builder: (_, theme) {
           return MaterialApp(
-            title: 'Flutter Demo',
+            theme: theme,
             home: BlocProvider(
               create: (_) => CounterBloc(),
               child: CounterPage(),
             ),
-            theme: theme,
           );
         },
       ),
@@ -50,6 +54,8 @@ class App extends StatelessWidget {
   }
 }
 
+/// A [StatelessWidget] which demonstrates
+/// how to consume and interact with a [CounterBloc].
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -58,10 +64,7 @@ class CounterPage extends StatelessWidget {
       body: BlocBuilder<CounterBloc, int>(
         builder: (_, count) {
           return Center(
-            child: Text(
-              '$count',
-              style: const TextStyle(fontSize: 24.0),
-            ),
+            child: Text('$count', style: Theme.of(context).textTheme.headline1),
           );
         },
       ),
@@ -106,9 +109,20 @@ class CounterPage extends StatelessWidget {
   }
 }
 
-enum CounterEvent { increment, decrement }
+/// Event being processed by [CounterBloc].
+enum CounterEvent {
+  /// Notifies bloc to increment state.
+  increment,
 
+  /// Notifies bloc to decrement state.
+  decrement
+}
+
+/// {@template counter_bloc}
+/// A simple [Bloc] which manages an `int` as its state.
+/// {@endtemplate}
 class CounterBloc extends Bloc<CounterEvent, int> {
+  /// {@macro counter_bloc}
   CounterBloc() : super(0);
 
   @override
@@ -126,9 +140,17 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 }
 
-enum ThemeEvent { toggle }
+/// Event being processed by [ThemeBloc].
+enum ThemeEvent {
+  /// event which notifies bloc to toggle the `ThemeData` state.
+  toggle
+}
 
+/// {@template theme_bloc}
+/// A simple [Bloc] which manages the [ThemeData] as its state.
+/// {@endtemplate}
 class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
+  /// {@macro theme_bloc}
   ThemeBloc() : super(ThemeData.light());
 
   @override

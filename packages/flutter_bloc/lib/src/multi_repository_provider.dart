@@ -43,6 +43,15 @@ import 'repository_provider.dart';
 /// improved readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
 class MultiRepositoryProvider extends StatelessWidget {
+  /// {@macro multi_repository_provider}
+  const MultiRepositoryProvider({
+    Key key,
+    @required this.providers,
+    @required this.child,
+  })  : assert(providers != null),
+        assert(child != null),
+        super(key: key);
+
   /// The [RepositoryProvider] list which is converted into a tree of
   /// [RepositoryProvider] widgets.
   /// The tree of [RepositoryProvider] widgets is created in order meaning
@@ -55,15 +64,6 @@ class MultiRepositoryProvider extends StatelessWidget {
   /// [child] will be a direct descendent of the last [RepositoryProvider] in
   /// [providers].
   final Widget child;
-
-  /// {@macro multi_repository_provider}
-  const MultiRepositoryProvider({
-    Key key,
-    @required this.providers,
-    @required this.child,
-  })  : assert(providers != null),
-        assert(child != null),
-        super(key: key);
 
   @override
   Widget build(BuildContext context) {

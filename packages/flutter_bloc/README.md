@@ -22,9 +22,11 @@
 
 ---
 
-A Flutter package that helps implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+Flutter Widgets that make it easy to implement the BLoC (Business Logic Component) design pattern.
 
 This package is built to work with [bloc](https://pub.dev/packages/bloc).
+
+**Learn more at [bloclibrary.dev](https://bloclibrary.dev)!**
 
 ## Usage
 
@@ -116,7 +118,7 @@ Only specify the bloc if you wish to provide a bloc that will be scoped to a sin
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
-  bloc: blocA, // provide the local bloc instance
+  cubit: blocA, // provide the local bloc instance
   builder: (context, state) {
     // return widget here based on BlocA's state
   }
@@ -234,7 +236,7 @@ Only specify the bloc if you wish to provide a bloc that is otherwise not access
 
 ```dart
 BlocListener<BlocA, BlocAState>(
-  bloc: blocA,
+  cubit: blocA,
   listener: (context, state) {
     // do stuff here based on BlocA's state
   }
