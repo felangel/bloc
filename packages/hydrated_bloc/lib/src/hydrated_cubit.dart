@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 
+import 'hydrated_bloc.dart';
 import 'hydrated_storage.dart';
 
 /// {@template storage_not_found}
@@ -56,7 +57,7 @@ abstract class HydratedCubit<State> extends Cubit<State>
     with HydratedMixin<State> {
   /// {@macro hydrated_cubit}
   HydratedCubit(State state) : super(state) {
-    init();
+    hydrate();
   }
 
   /// Setter for instance of [Storage] which will be used to
@@ -70,12 +71,35 @@ abstract class HydratedCubit<State> extends Cubit<State>
   static Storage get storage => HydratedMixin.storage;
 }
 
+/// A mixin which enables automatic state persistence
+/// for [Bloc] and [Cubit] classes.
+///
+/// The [hydrate] method must be invoked in the constructor body
+/// when using the [HydratedMixin] directly.
+///
+/// If a mixin is not necessary, it is recommended to
+/// extend [HydratedBloc] and [HydratedCubit] respectively.
+///
+/// ```dart
+/// class CounterBloc extends Bloc<CounterEvent, int> with HydratedMixin {
+///  CounterBloc() : super(0) {
+///    hydrate();
+///  }
+///  ...
+/// }
+/// ```
+///
+/// See also:
+///
+/// * [HydratedCubit] to enable automatic state persistence/restoration with [Cubit]
+/// * [HydratedBloc] to enable automatic state persistence/restoration with [Bloc]
+///
 mixin HydratedMixin<State> on Cubit<State> {
   /// Instance of [Storage] which will be used to
   /// manage persisting/restoring the [Cubit] state.
   static Storage storage;
 
-  void init() {
+  void hydrate() {
     if (storage == null) throw const StorageNotFound();
     final stateJson = toJson(state);
     if (stateJson != null) {
