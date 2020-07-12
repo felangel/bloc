@@ -35,7 +35,7 @@ void main() {
             (error as CubitUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
-              'in cubit Instance of \'CounterCubit\'.',
+              'in Instance of \'CounterCubit\'.',
             ),
           );
           expect(stackTrace, isNotNull);
@@ -115,6 +115,28 @@ void main() {
         await cubit.close();
         await subscription.cancel();
         expect(states, [1]);
+      });
+
+      test('can emit initial state only once', () async {
+        final states = <int>[];
+        final cubit = SeededCubit(initialState: 0);
+        final subscription = cubit.listen(states.add);
+        cubit..emitState(0)..emitState(0);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, [0]);
+      });
+
+      test(
+          'can emit initial state and '
+          'continue emitting distinct states', () async {
+        final states = <int>[];
+        final cubit = SeededCubit(initialState: 0);
+        final subscription = cubit.listen(states.add);
+        cubit..emitState(0)..emitState(1);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, [0, 1]);
       });
 
       test('does not emit duplicate states', () async {

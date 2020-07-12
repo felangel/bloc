@@ -7,7 +7,9 @@ import 'bloc_observer.dart';
 import 'change.dart';
 
 /// {@template cubit_unhandled_error_exception}
-/// Exception thrown in debug mode when an unhandled error occurs within a bloc.
+/// Exception thrown when an unhandled error occurs within a [Cubit].
+///
+/// _Note: thrown in debug mode only_
 /// {@endtemplate}
 class CubitUnhandledErrorException implements Exception {
   /// {@macro cubit_unhandled_error_exception}
@@ -24,19 +26,19 @@ class CubitUnhandledErrorException implements Exception {
 
   @override
   String toString() {
-    return 'Unhandled error $error occurred in cubit $cubit.\n'
+    return 'Unhandled error $error occurred in $cubit.\n'
         '${stackTrace ?? ''}';
   }
 }
 
 /// {@template cubit}
-/// A [Cubit] is a subset of [bloc](https://pub.dev/packages/bloc)
-/// which has no notion of events and relies on methods to `emit` new states.
+/// A [Cubit] is a subset of [Bloc] which has no notion of events
+/// and relies on methods to [emit] new states.
 ///
-/// Every `cubit` requires an initial state which will be the
-/// state of the `cubit` before `emit` has been called.
+/// Every [Cubit] requires an initial state which will be the
+/// state of the [Cubit] before [emit] has been called.
 ///
-/// The current state of a `cubit` can be accessed via the `state` getter.
+/// The current state of a [Cubit] can be accessed via the [state] getter.
 ///
 /// ```dart
 /// class CounterCubit extends Cubit<int> {
@@ -60,17 +62,25 @@ abstract class Cubit<State> extends Stream<State> {
 
   State _state;
 
+  bool _emitted = false;
+
   /// {@template emit}
   /// Updates the [state] to the provided [state].
   /// [emit] does nothing if the [Cubit] has been closed or if the
   /// [state] being emitted is equal to the current [state].
+  ///
+  /// To allow for the possibility of notifying listeners of the initial state,
+  /// emitting a state which is equal to the initial state is allowed as long
+  /// as it is the first thing emitted by the [Cubit].
   /// {@endtemplate}
   @protected
   void emit(State state) {
-    if (state == _state || _controller.isClosed) return;
+    if (_controller.isClosed) return;
+    if (state == _state && _emitted) return;
     onChange(Change<State>(currentState: this.state, nextState: state));
     _state = state;
     _controller.add(_state);
+    _emitted = true;
   }
 
   /// Notifies the [Cubit] of an [error] which triggers [onError].
@@ -156,7 +166,7 @@ abstract class Cubit<State> extends Stream<State> {
 
   /// Closes the [Cubit].
   /// When close is called, new states can no longer be emitted.
-  /// All data on the stream is discarded and a `Future` is returned
+  /// All data on the stream is discarded and a [Future] is returned
   /// which resolves when it is done or an error occurred.
   @mustCallSuper
   Future<void> close() async {
