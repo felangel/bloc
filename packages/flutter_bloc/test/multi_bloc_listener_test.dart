@@ -1,22 +1,12 @@
-import 'dart:async';
-
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-enum CounterEvent { increment }
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
 
-class CounterBloc extends Bloc<CounterEvent, int> {
-  CounterBloc() : super(0);
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-  }
+  void increment() => emit(state + 1);
 }
 
 void main() {
@@ -25,10 +15,7 @@ void main() {
         (tester) async {
       try {
         await tester.pumpWidget(
-          MultiBlocListener(
-            listeners: null,
-            child: null,
-          ),
+          MultiBlocListener(listeners: null, child: null),
         );
       } on dynamic catch (error) {
         expect(error, isAssertionError);
@@ -38,10 +25,7 @@ void main() {
     testWidgets('throws if initialized with no listeners', (tester) async {
       try {
         await tester.pumpWidget(
-          MultiBlocListener(
-            listeners: null,
-            child: Container(),
-          ),
+          MultiBlocListener(listeners: null, child: const SizedBox()),
         );
       } on dynamic catch (error) {
         expect(error, isAssertionError);
@@ -51,10 +35,7 @@ void main() {
     testWidgets('throws if initialized with no child', (tester) async {
       try {
         await tester.pumpWidget(
-          MultiBlocListener(
-            listeners: [],
-            child: null,
-          ),
+          MultiBlocListener(listeners: [], child: null),
         );
       } on dynamic catch (error) {
         expect(error, isAssertionError);
@@ -62,106 +43,82 @@ void main() {
     });
 
     testWidgets('calls listeners on state changes', (tester) async {
-      int latestStateA;
-      var listenerCallCountA = 0;
-      final counterBlocA = CounterBloc();
-      final expectedStatesA = [0, 1, 2];
+      final statesA = <int>[];
+      const expectedStatesA = [1, 2];
+      final counterCubitA = CounterCubit();
 
-      int latestStateB;
-      var listenerCallCountB = 0;
-      final counterBlocB = CounterBloc();
-      final expectedStatesB = [0, 1];
+      final statesB = <int>[];
+      final expectedStatesB = [1];
+      final counterCubitB = CounterCubit();
 
       await tester.pumpWidget(
         MultiBlocListener(
           listeners: [
-            BlocListener<CounterBloc, int>(
-              bloc: counterBlocA,
-              listener: (context, state) {
-                listenerCallCountA++;
-                latestStateA = state;
-              },
+            BlocListener<CounterCubit, int>(
+              cubit: counterCubitA,
+              listener: (context, state) => statesA.add(state),
             ),
-            BlocListener<CounterBloc, int>(
-              bloc: counterBlocB,
-              listener: (context, state) {
-                listenerCallCountB++;
-                latestStateB = state;
-              },
+            BlocListener<CounterCubit, int>(
+              cubit: counterCubitB,
+              listener: (context, state) => statesB.add(state),
             ),
           ],
-          child: Container(key: Key('multiBlocListener_child')),
+          child: const SizedBox(key: Key('multiCubitListener_child')),
         ),
       );
       await tester.pumpAndSettle();
 
-      expect(find.byKey(Key('multiBlocListener_child')), findsOneWidget);
+      expect(find.byKey(const Key('multiCubitListener_child')), findsOneWidget);
 
-      counterBlocA.add(CounterEvent.increment);
-      counterBlocA.add(CounterEvent.increment);
-      counterBlocB.add(CounterEvent.increment);
+      counterCubitA.increment();
+      await tester.pump();
+      counterCubitA.increment();
+      await tester.pump();
+      counterCubitB.increment();
+      await tester.pump();
 
-      expectLater(counterBlocA, emitsInOrder(expectedStatesA)).then((_) {
-        expect(listenerCallCountA, 2);
-        expect(latestStateA, 2);
-      });
-
-      expectLater(counterBlocB, emitsInOrder(expectedStatesB)).then((_) {
-        expect(listenerCallCountB, 1);
-        expect(latestStateB, 1);
-      });
+      expect(statesA, expectedStatesA);
+      expect(statesB, expectedStatesB);
     });
 
     testWidgets('calls listeners on state changes without explicit types',
         (tester) async {
-      int latestStateA;
-      var listenerCallCountA = 0;
-      final counterBlocA = CounterBloc();
-      final expectedStatesA = [0, 1, 2];
+      final statesA = <int>[];
+      const expectedStatesA = [1, 2];
+      final counterCubitA = CounterCubit();
 
-      int latestStateB;
-      var listenerCallCountB = 0;
-      final counterBlocB = CounterBloc();
-      final expectedStatesB = [0, 1];
+      final statesB = <int>[];
+      final expectedStatesB = [1];
+      final counterCubitB = CounterCubit();
 
       await tester.pumpWidget(
         MultiBlocListener(
           listeners: [
             BlocListener(
-              bloc: counterBlocA,
-              listener: (context, state) {
-                listenerCallCountA++;
-                latestStateA = state;
-              },
+              cubit: counterCubitA,
+              listener: (BuildContext context, int state) => statesA.add(state),
             ),
             BlocListener(
-              bloc: counterBlocB,
-              listener: (context, state) {
-                listenerCallCountB++;
-                latestStateB = state;
-              },
+              cubit: counterCubitB,
+              listener: (BuildContext context, int state) => statesB.add(state),
             ),
           ],
-          child: Container(key: Key('multiBlocListener_child')),
+          child: const SizedBox(key: Key('multiCubitListener_child')),
         ),
       );
       await tester.pumpAndSettle();
 
-      expect(find.byKey(Key('multiBlocListener_child')), findsOneWidget);
+      expect(find.byKey(const Key('multiCubitListener_child')), findsOneWidget);
 
-      counterBlocA.add(CounterEvent.increment);
-      counterBlocA.add(CounterEvent.increment);
-      counterBlocB.add(CounterEvent.increment);
+      counterCubitA.increment();
+      await tester.pump();
+      counterCubitA.increment();
+      await tester.pump();
+      counterCubitB.increment();
+      await tester.pump();
 
-      expectLater(counterBlocA, emitsInOrder(expectedStatesA)).then((_) {
-        expect(listenerCallCountA, 2);
-        expect(latestStateA, 2);
-      });
-
-      expectLater(counterBlocB, emitsInOrder(expectedStatesB)).then((_) {
-        expect(listenerCallCountB, 1);
-        expect(latestStateB, 1);
-      });
+      expect(statesA, expectedStatesA);
+      expect(statesB, expectedStatesB);
     });
   });
 }

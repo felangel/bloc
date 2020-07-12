@@ -1,63 +1,57 @@
 import 'dart:async';
 
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MyAppWithNavigation extends StatelessWidget {
-  final Widget child;
-
-  MyAppWithNavigation({Key key, this.child}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(body: child),
-    );
-  }
+class MyAppWithNavigation extends MaterialApp {
+  MyAppWithNavigation({Key key, Widget child})
+      : super(key: key, home: Scaffold(body: child));
 }
 
 class HomePage extends StatelessWidget {
-  final VoidCallback onCounterBlocClosed;
-  final VoidCallback onThemeBlocClosed;
-  final CounterBloc counterBlocValue;
-  final ThemeBloc themeBlocValue;
-
-  HomePage({
+  const HomePage({
     Key key,
-    this.onCounterBlocClosed,
-    this.onThemeBlocClosed,
-    this.counterBlocValue,
-    this.themeBlocValue,
+    this.onCounterCubitClosed,
+    this.onThemeCubitClosed,
+    this.counterCubitValue,
+    this.themeCubitValue,
   }) : super(key: key);
+
+  final VoidCallback onCounterCubitClosed;
+  final VoidCallback onThemeCubitClosed;
+  final CounterCubit counterCubitValue;
+  final ThemeCubit themeCubitValue;
 
   @override
   Widget build(BuildContext context) {
     getProviders() {
       final providers = <BlocProvider>[];
-      if (counterBlocValue != null) {
+      if (counterCubitValue != null) {
         providers.add(
-          BlocProvider<CounterBloc>.value(
-            value: counterBlocValue,
+          BlocProvider<CounterCubit>.value(
+            value: counterCubitValue,
           ),
         );
       } else {
         providers.add(
-          BlocProvider<CounterBloc>(
-            create: (context) => CounterBloc(onClose: onCounterBlocClosed),
+          BlocProvider<CounterCubit>(
+            create: (_) => CounterCubit(onClose: onCounterCubitClosed),
           ),
         );
       }
 
-      if (themeBlocValue != null) {
+      if (themeCubitValue != null) {
         providers.add(
-          BlocProvider<ThemeBloc>.value(
-            value: themeBlocValue,
+          BlocProvider<ThemeCubit>.value(
+            value: themeCubitValue,
           ),
         );
       } else {
         providers.add(
-          BlocProvider<ThemeBloc>(
-            create: (context) => ThemeBloc(onClose: onThemeBlocClosed),
+          BlocProvider<ThemeCubit>(
+            create: (_) => ThemeCubit(onClose: onThemeCubitClosed),
           ),
         );
       }
@@ -71,26 +65,21 @@ class HomePage extends StatelessWidget {
           return Column(
             children: [
               RaisedButton(
-                key: Key('pop_button'),
+                key: const Key('pop_button'),
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute<Container>(
-                        builder: (context) => Container()),
+                    MaterialPageRoute<void>(builder: (_) => const SizedBox()),
                   );
                 },
               ),
               RaisedButton(
-                key: Key('increment_button'),
-                onPressed: () {
-                  BlocProvider.of<CounterBloc>(context)
-                      .add(CounterEvent.increment);
-                },
+                key: const Key('increment_button'),
+                onPressed: () =>
+                    BlocProvider.of<CounterCubit>(context).increment(),
               ),
               RaisedButton(
-                key: Key('toggle_theme_button'),
-                onPressed: () {
-                  BlocProvider.of<ThemeBloc>(context).add(ThemeEvent.toggle);
-                },
+                key: const Key('toggle_theme_button'),
+                onPressed: () => BlocProvider.of<ThemeCubit>(context).toggle(),
               ),
             ],
           );
@@ -103,14 +92,10 @@ class HomePage extends StatelessWidget {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: BlocProvider.of<ThemeBloc>(context),
+    return BlocBuilder<ThemeCubit, ThemeData>(
+      cubit: BlocProvider.of<ThemeCubit>(context),
       builder: (_, theme) {
-        return MaterialApp(
-          title: 'Flutter Demo',
-          home: CounterPage(),
-          theme: theme,
-        );
+        return MaterialApp(home: CounterPage(), theme: theme);
       },
     );
   }
@@ -119,60 +104,32 @@ class MyApp extends StatelessWidget {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final counterBloc = BlocProvider.of<CounterBloc>(context);
+    final counterCubit = BlocProvider.of<CounterCubit>(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Counter')),
-      body: BlocBuilder<CounterBloc, int>(
-        bloc: counterBloc,
+      body: BlocBuilder<CounterCubit, int>(
+        cubit: counterCubit,
         builder: (context, count) {
           return Center(
-            child: Text(
-              '$count',
-              key: Key('counter_text'),
-              style: TextStyle(fontSize: 24.0),
-            ),
+            child: Text('$count', key: const Key('counter_text')),
           );
         },
       ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              key: Key('pop_button'),
-              child: Icon(Icons.navigate_next),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        key: const Key('pop_button'),
+        onPressed: Navigator.of(context).pop,
       ),
     );
   }
 }
 
-enum CounterEvent { increment, decrement }
+class CounterCubit extends Cubit<int> {
+  CounterCubit({this.onClose}) : super(0);
 
-class CounterBloc extends Bloc<CounterEvent, int> {
   final VoidCallback onClose;
 
-  CounterBloc({this.onClose}) : super(0);
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-  }
+  void increment() => emit(state + 1);
+  void decrement() => emit(state - 1);
 
   @override
   Future<void> close() {
@@ -181,20 +138,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 }
 
-enum ThemeEvent { toggle }
+class ThemeCubit extends Cubit<ThemeData> {
+  ThemeCubit({this.onClose}) : super(ThemeData.light());
 
-class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
   final VoidCallback onClose;
 
-  ThemeBloc({this.onClose}) : super(ThemeData.light());
-
-  @override
-  Stream<ThemeData> mapEventToState(ThemeEvent event) async* {
-    switch (event) {
-      case ThemeEvent.toggle:
-        yield state == ThemeData.dark() ? ThemeData.light() : ThemeData.dark();
-        break;
-    }
+  void toggle() {
+    emit(state == ThemeData.dark() ? ThemeData.light() : ThemeData.dark());
   }
 
   @override
@@ -209,10 +159,7 @@ void main() {
     testWidgets('throws if initialized with no providers', (tester) async {
       try {
         await tester.pumpWidget(
-          MultiBlocProvider(
-            providers: null,
-            child: Container(),
-          ),
+          MultiBlocProvider(providers: null, child: const SizedBox()),
         );
       } on dynamic catch (error) {
         expect(error, isAssertionError);
@@ -222,70 +169,65 @@ void main() {
     testWidgets('throws if initialized with no child', (tester) async {
       try {
         await tester.pumpWidget(
-          MultiBlocProvider(
-            providers: [],
-            child: null,
-          ),
+          MultiBlocProvider(providers: [], child: null),
         );
       } on dynamic catch (error) {
         expect(error, isAssertionError);
       }
     });
 
-    testWidgets('passes blocs to children', (tester) async {
+    testWidgets('passes cubits to children', (tester) async {
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<CounterBloc>(create: (context) => CounterBloc()),
-            BlocProvider<ThemeBloc>(create: (context) => ThemeBloc())
+            BlocProvider<CounterCubit>(create: (_) => CounterCubit()),
+            BlocProvider<ThemeCubit>(create: (_) => ThemeCubit())
           ],
           child: MyApp(),
         ),
       );
 
-      final materialApp =
-          tester.widget(find.byType(MaterialApp)) as MaterialApp;
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(materialApp.theme, ThemeData.light());
 
-      final counterFinder = find.byKey((Key('counter_text')));
+      final counterFinder = find.byKey((const Key('counter_text')));
       expect(counterFinder, findsOneWidget);
 
-      final counterText = tester.widget(counterFinder) as Text;
+      final counterText = tester.widget<Text>(counterFinder);
       expect(counterText.data, '0');
     });
 
-    testWidgets('passes blocs to children without explicit states',
+    testWidgets('passes cubits to children without explicit states',
         (tester) async {
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => CounterBloc()),
-            BlocProvider(create: (context) => ThemeBloc())
+            BlocProvider(create: (_) => CounterCubit()),
+            BlocProvider(create: (_) => ThemeCubit())
           ],
           child: MyApp(),
         ),
       );
 
-      final materialApp =
-          tester.widget(find.byType(MaterialApp)) as MaterialApp;
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(materialApp.theme, ThemeData.light());
 
-      final counterFinder = find.byKey((Key('counter_text')));
+      final counterFinder = find.byKey((const Key('counter_text')));
       expect(counterFinder, findsOneWidget);
 
-      final counterText = tester.widget(counterFinder) as Text;
+      final counterText = tester.widget<Text>(counterFinder);
       expect(counterText.data, '0');
     });
 
-    testWidgets('adds event to each bloc', (tester) async {
+    testWidgets('adds event to each cubit', (tester) async {
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<CounterBloc>(
-              create: (context) => CounterBloc()..add(CounterEvent.decrement),
+            BlocProvider<CounterCubit>(
+              create: (_) => CounterCubit()..decrement(),
             ),
-            BlocProvider<ThemeBloc>(
-              create: (context) => ThemeBloc()..add(ThemeEvent.toggle),
+            BlocProvider<ThemeCubit>(
+              create: (_) => ThemeCubit()..toggle(),
             ),
           ],
           child: MyApp(),
@@ -294,164 +236,148 @@ void main() {
 
       await tester.pump();
 
-      final materialApp =
-          tester.widget(find.byType(MaterialApp)) as MaterialApp;
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(materialApp.theme, ThemeData.dark());
 
-      final counterFinder = find.byKey((Key('counter_text')));
+      final counterFinder = find.byKey((const Key('counter_text')));
       expect(counterFinder, findsOneWidget);
 
-      final counterText = tester.widget(counterFinder) as Text;
+      final counterText = tester.widget<Text>(counterFinder);
       expect(counterText.data, '-1');
     });
 
-    testWidgets('close on counter bloc which was loaded (lazily)',
+    testWidgets('close on counter cubit which was loaded (lazily)',
         (tester) async {
-      var counterBlocClosed = false;
-      var themeBlocClosed = false;
+      var counterCubitClosed = false;
+      var themeCubitClosed = false;
 
       await tester.pumpWidget(
         MyAppWithNavigation(
           child: HomePage(
-            onCounterBlocClosed: () {
-              counterBlocClosed = true;
-            },
-            onThemeBlocClosed: () {
-              themeBlocClosed = true;
-            },
+            onCounterCubitClosed: () => counterCubitClosed = true,
+            onThemeCubitClosed: () => themeCubitClosed = true,
           ),
         ),
       );
 
-      expect(counterBlocClosed, false);
-      expect(themeBlocClosed, false);
+      expect(counterCubitClosed, false);
+      expect(themeCubitClosed, false);
 
-      await tester.tap(find.byKey(Key('increment_button')));
+      await tester.tap(find.byKey(const Key('increment_button')));
       await tester.pump();
-      await tester.tap(find.byKey(Key('pop_button')));
+      await tester.tap(find.byKey(const Key('pop_button')));
       await tester.pumpAndSettle();
 
-      expect(counterBlocClosed, true);
-      expect(themeBlocClosed, false);
+      expect(counterCubitClosed, true);
+      expect(themeCubitClosed, false);
     });
 
-    testWidgets('close on theme bloc which was loaded (lazily)',
+    testWidgets('close on theme cubit which was loaded (lazily)',
         (tester) async {
-      var counterBlocClosed = false;
-      var themeBlocClosed = false;
+      var counterCubitClosed = false;
+      var themeCubitClosed = false;
 
       await tester.pumpWidget(
         MyAppWithNavigation(
           child: HomePage(
-            onCounterBlocClosed: () {
-              counterBlocClosed = true;
-            },
-            onThemeBlocClosed: () {
-              themeBlocClosed = true;
-            },
+            onCounterCubitClosed: () => counterCubitClosed = true,
+            onThemeCubitClosed: () => themeCubitClosed = true,
           ),
         ),
       );
 
-      expect(counterBlocClosed, false);
-      expect(themeBlocClosed, false);
+      expect(counterCubitClosed, false);
+      expect(themeCubitClosed, false);
 
-      await tester.tap(find.byKey(Key('toggle_theme_button')));
+      await tester.tap(find.byKey(const Key('toggle_theme_button')));
       await tester.pump();
-      await tester.tap(find.byKey(Key('pop_button')));
+      await tester.tap(find.byKey(const Key('pop_button')));
       await tester.pumpAndSettle();
 
-      expect(counterBlocClosed, false);
-      expect(themeBlocClosed, true);
+      expect(counterCubitClosed, false);
+      expect(themeCubitClosed, true);
     });
 
-    testWidgets('close on all blocs which were loaded (lazily)',
+    testWidgets('close on all cubits which were loaded (lazily)',
         (tester) async {
-      var counterBlocClosed = false;
-      var themeBlocClosed = false;
+      var counterCubitClosed = false;
+      var themeCubitClosed = false;
 
       await tester.pumpWidget(
         MyAppWithNavigation(
           child: HomePage(
-            onCounterBlocClosed: () {
-              counterBlocClosed = true;
-            },
-            onThemeBlocClosed: () {
-              themeBlocClosed = true;
-            },
+            onCounterCubitClosed: () => counterCubitClosed = true,
+            onThemeCubitClosed: () => themeCubitClosed = true,
           ),
         ),
       );
 
-      expect(counterBlocClosed, false);
-      expect(themeBlocClosed, false);
-      await tester.tap(find.byKey(Key('increment_button')));
+      expect(counterCubitClosed, false);
+      expect(themeCubitClosed, false);
+      await tester.tap(find.byKey(const Key('increment_button')));
       await tester.pump();
-      await tester.tap(find.byKey(Key('toggle_theme_button')));
+      await tester.tap(find.byKey(const Key('toggle_theme_button')));
       await tester.pump();
-      await tester.tap(find.byKey(Key('pop_button')));
+      await tester.tap(find.byKey(const Key('pop_button')));
       await tester.pumpAndSettle();
 
-      expect(counterBlocClosed, true);
-      expect(themeBlocClosed, true);
+      expect(counterCubitClosed, true);
+      expect(themeCubitClosed, true);
     });
 
-    testWidgets('does not call close on blocs if they were not loaded (lazily)',
+    testWidgets(
+        'does not call close on cubits if they were not loaded (lazily)',
         (tester) async {
-      var counterBlocClosed = false;
-      var themeBlocClosed = false;
+      var counterCubitClosed = false;
+      var themeCubitClosed = false;
 
       await tester.pumpWidget(
         MyAppWithNavigation(
           child: HomePage(
-            onCounterBlocClosed: () {
-              counterBlocClosed = true;
-            },
-            onThemeBlocClosed: () {
-              themeBlocClosed = true;
-            },
+            onCounterCubitClosed: () => counterCubitClosed = true,
+            onThemeCubitClosed: () => themeCubitClosed = true,
           ),
         ),
       );
 
-      expect(counterBlocClosed, false);
-      expect(themeBlocClosed, false);
+      expect(counterCubitClosed, false);
+      expect(themeCubitClosed, false);
 
-      await tester.tap(find.byKey(Key('pop_button')));
+      await tester.tap(find.byKey(const Key('pop_button')));
       await tester.pumpAndSettle();
 
-      expect(counterBlocClosed, false);
-      expect(themeBlocClosed, false);
+      expect(counterCubitClosed, false);
+      expect(themeCubitClosed, false);
     });
 
     testWidgets('does not close when created using value', (tester) async {
-      var counterBlocClosed = false;
-      var themeBlocClosed = false;
+      var counterCubitClosed = false;
+      var themeCubitClosed = false;
 
-      final counterBloc = CounterBloc(onClose: () {
-        counterBlocClosed = true;
-      });
-      final themeBloc = ThemeBloc(onClose: () {
-        themeBlocClosed = true;
-      });
+      final counterCubit = CounterCubit(
+        onClose: () => counterCubitClosed = true,
+      );
+      final themeCubit = ThemeCubit(
+        onClose: () => themeCubitClosed = true,
+      );
 
       await tester.pumpWidget(
         MyAppWithNavigation(
           child: HomePage(
-            counterBlocValue: counterBloc,
-            themeBlocValue: themeBloc,
+            counterCubitValue: counterCubit,
+            themeCubitValue: themeCubit,
           ),
         ),
       );
 
-      expect(counterBlocClosed, false);
-      expect(themeBlocClosed, false);
+      expect(counterCubitClosed, false);
+      expect(themeCubitClosed, false);
 
-      await tester.tap(find.byKey(Key('pop_button')));
+      await tester.tap(find.byKey(const Key('pop_button')));
       await tester.pumpAndSettle();
 
-      expect(counterBlocClosed, false);
-      expect(themeBlocClosed, false);
+      expect(counterCubitClosed, false);
+      expect(themeCubitClosed, false);
     });
   });
 }
