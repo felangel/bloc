@@ -10,7 +10,7 @@ import 'cubits/cubits.dart';
 class MockBlocObserver extends Mock implements BlocObserver {}
 
 void main() {
-  group('cubit', () {
+  group('Cubit', () {
     group('initial state', () {
       test('is correct', () {
         expect(CounterCubit().state, 0);
@@ -111,7 +111,7 @@ void main() {
         final states = <int>[];
         final cubit = CounterCubit();
         final subscription = cubit.listen(states.add);
-        await Future<void>.delayed(Duration.zero, cubit.increment);
+        cubit.increment();
         await cubit.close();
         await subscription.cancel();
         expect(states, [1]);
@@ -121,7 +121,6 @@ void main() {
         final states = <int>[];
         final cubit = SeededCubit(initialState: 0);
         final subscription = cubit.listen(states.add);
-        await Future<void>.delayed(Duration.zero);
         cubit
           ..emitState(1)
           ..emitState(1)
