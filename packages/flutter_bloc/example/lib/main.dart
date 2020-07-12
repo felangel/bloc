@@ -13,6 +13,12 @@ class SimpleBlocObserver extends BlocObserver {
   }
 
   @override
+  void onChange(Cubit cubit, Change change) {
+    print(change);
+    super.onChange(cubit, change);
+  }
+
+  @override
   void onTransition(Bloc bloc, Transition transition) {
     print(transition);
     super.onTransition(bloc, transition);
@@ -38,8 +44,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ThemeBloc(),
-      child: BlocBuilder<ThemeBloc, ThemeData>(
+      create: (_) => ThemeCubit(),
+      child: BlocBuilder<ThemeCubit, ThemeData>(
         builder: (_, theme) {
           return MaterialApp(
             theme: theme,
@@ -92,7 +98,7 @@ class CounterPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: const Icon(Icons.brightness_6),
-              onPressed: () => context.bloc<ThemeBloc>().add(ThemeEvent.toggle),
+              onPressed: () => context.bloc<ThemeCubit>().toggleTheme(),
             ),
           ),
           Padding(
@@ -140,25 +146,29 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 }
 
-/// Event being processed by [ThemeBloc].
-enum ThemeEvent {
-  /// event which notifies bloc to toggle the `ThemeData` state.
-  toggle
-}
-
-/// {@template theme_bloc}
-/// A simple [Bloc] which manages the [ThemeData] as its state.
+/// {@template brightness_cubit}
+/// A simple [Cubit] which manages the [ThemeData] as its state.
 /// {@endtemplate}
-class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
-  /// {@macro theme_bloc}
-  ThemeBloc() : super(ThemeData.light());
+class ThemeCubit extends Cubit<ThemeData> {
+  /// {@macro brightness_cubit}
+  ThemeCubit() : super(_lightTheme);
 
-  @override
-  Stream<ThemeData> mapEventToState(ThemeEvent event) async* {
-    switch (event) {
-      case ThemeEvent.toggle:
-        yield state == ThemeData.dark() ? ThemeData.light() : ThemeData.dark();
-        break;
-    }
+  static final _lightTheme = ThemeData(
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      foregroundColor: Colors.white,
+    ),
+    brightness: Brightness.light,
+  );
+
+  static final _darkTheme = ThemeData(
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      foregroundColor: Colors.black,
+    ),
+    brightness: Brightness.dark,
+  );
+
+  /// Toggles the current brightness between light and dark.
+  void toggleTheme() {
+    emit(state.brightness == Brightness.dark ? _lightTheme : _darkTheme);
   }
 }
