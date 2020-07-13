@@ -12,8 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc:
-    path: ../bloc
+  bloc: ^6.0.0-dev.1
   provider: ^4.1.3
 
 dev_dependencies:
