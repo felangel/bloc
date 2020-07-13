@@ -11,8 +11,7 @@ environment:
 
 dependencies:
   angular: ^6.0.0-alpha+1
-  bloc:
-    path: ../bloc
+  bloc: ^6.0.0-dev.1
 
 dev_dependencies:
   angular_test: ^2.3.0
