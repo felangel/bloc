@@ -4,6 +4,7 @@
 - **BREAKING**: `BlocBuilder` interop with `cubit` (`bloc` parameter renamed to `cubit`)
 - **BREAKING**: `BlocListener` interop with `cubit` (`bloc` parameter renamed to `cubit`)
 - **BREAKING**: `BlocProvider` interop with `cubit` (`bloc` parameter renamed to `cubit`)
+- feat: remove external dependency on [package:flutter_cubit](https://pub.dev/packages/flutter_cubit)
 - docs: inline documentation updates
 - docs: README updates
 - docs: example application updates

@@ -1,6 +1,10 @@
 # 6.0.0-dev.7
 
 Update to `bloc ^6.0.0-dev.1`
+Remove external dependency on package:angular_cubit
+Inline documentation updates
+README updates
+Example application updates
 
 # 6.0.0-dev.6
 

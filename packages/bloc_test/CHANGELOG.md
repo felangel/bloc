@@ -5,6 +5,7 @@
 - **BREAKING**: `whenListen` only requires `State` type
 - **BREAKING**: `blocTest` only requires `State` type
 - **BREAKING**: `blocTest` `skip` defaults to `0`
+- feat: remove external dependency on [package:cubit_test](https://pub.dev/packages/cubit_test)
 - feat: `MockBloc` is compatible with `cubit`
 - feat: `whenListen` is compatible with `cubit`
 - feat: `blocTest` is compatible with `cubit`
