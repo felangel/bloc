@@ -133,6 +133,13 @@ mixin HydratedMixin<State> on Cubit<State> {
       });
       return map;
     }
+    if (value is List) {
+      final list = <dynamic>[];
+      for (var elem in value) {
+        list.add(_traverse(elem));
+      }
+      return list;
+    }
     return value;
   }
 
