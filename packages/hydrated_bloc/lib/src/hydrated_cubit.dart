@@ -120,12 +120,27 @@ mixin HydratedMixin<State> on Cubit<State> {
     try {
       final stateJson = storage.read(storageToken) as Map<dynamic, dynamic>;
       if (stateJson == null) return _state = super.state;
-      return _state = fromJson(Map<String, dynamic>.from(stateJson));
+      return _state = fromJson(
+        _cast<Map<String, dynamic>>(_traverse(stateJson)),
+      );
     } on dynamic catch (error, stackTrace) {
       onError(error, stackTrace);
       return _state = super.state;
     }
   }
+
+  dynamic _traverse(dynamic value) {
+    if (value is Map) {
+      final map = <String, dynamic>{};
+      value.forEach((dynamic key, dynamic value) {
+        map[_cast<String>(key)] = _traverse(value);
+      });
+      return map;
+    }
+    return value;
+  }
+
+  T _cast<T>(dynamic x) => x is T ? x : null;
 
   @override
   void onChange(Change<State> change) {
