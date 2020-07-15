@@ -414,8 +414,10 @@ void main() {
         }, onError: (dynamic _) {
           expect(lastStackTrace, isNotNull);
           expect(
-            '$lastError',
-            '''type \'String\' is not a subtype of type \'Map<dynamic, dynamic>\' in type cast''',
+            lastError.toString().startsWith(
+              '''Unhandled error type \'String\' is not a subtype of type \'Map<dynamic, dynamic>\' in type cast''',
+            ),
+            isTrue,
           );
         }));
       });
@@ -444,11 +446,11 @@ void main() {
             },
           );
         }, onError: (dynamic error) {
-          expect(lastError, exception);
+          expect(lastError, isA<HydratedUnsupportedError>());
           expect(lastStackTrace, isNotNull);
           expect(
             (error as CubitUnhandledErrorException).error.toString(),
-            'Exception: oops',
+            '''Converting object to an encodable object failed: Object''',
           );
           expect(
             (error as CubitUnhandledErrorException).stackTrace,
