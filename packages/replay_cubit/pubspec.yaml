@@ -10,8 +10,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  bloc:
-    path: ../bloc
+  bloc: ^6.0.0-dev.1
 
 dev_dependencies:
   test: ^1.14.6

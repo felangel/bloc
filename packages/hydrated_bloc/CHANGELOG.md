@@ -1,3 +1,9 @@
+# 6.0.0-dev.2
+
+- fix: json (de)serialization errors ([@orsenkucher](https://github.com/orsenkucher))
+  - Hydrated: type `'_InternalLinkedHashMap<dynamic, dynamic>'` is not a subtype of type `'Map<String, dynamic>'` ([#1452](https://github.com/felangel/bloc/issues/1452))
+  - Hydrated: HiveError: Cannot write, unknown type: Plan ([#1453](https://github.com/felangel/bloc/issues/1453))
+
 # 6.0.0-dev.1
 
 - **BREAKING**: upgrade to `bloc ^6.0.0-dev.1`

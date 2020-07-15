@@ -8,10 +8,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc:
-    path: ../../flutter_bloc
-  hydrated_bloc:
-    path: ../../hydrated_bloc
+  flutter_bloc: ^6.0.0-dev.1
+  hydrated_bloc: ^6.0.0-dev.1
   replay_cubit:
     path: ../
 
