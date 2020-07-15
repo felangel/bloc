@@ -152,6 +152,7 @@ void main() {
     setUp(() {
       storage = MockStorage();
       HydratedBloc.storage = storage;
+      when(storage.write(any, any)).thenAnswer((_) async {});
     });
 
     test('storage getter returns correct storage instance', () {
@@ -273,7 +274,7 @@ void main() {
       });
 
       test('should call onError when storage.write throws', () {
-        runZoned(() {
+        runZoned(() async {
           final expectedError = Exception('oops');
           const transition = Transition(
             currentState: 0,
@@ -281,8 +282,10 @@ void main() {
             nextState: 0,
           );
           final bloc = MyHydratedBloc();
-          when(storage.write(any, any)).thenThrow(expectedError);
+          when(storage.write(any, any))
+              .thenAnswer((_) => Future.error(expectedError));
           bloc.onChange(transition);
+          await Future<void>.delayed(const Duration(milliseconds: 300));
           // ignore: invalid_use_of_protected_member
           verify(bloc.onError(expectedError, any)).called(2);
         }, onError: (dynamic error) {
@@ -359,15 +362,13 @@ void main() {
     });
 
     group('MyUuidHydratedBloc', () {
-      test('stores initialState when instantiated', () {
+      test('stores initial state when instantiated', () {
         MyUuidHydratedBloc();
         verify<dynamic>(storage.write('MyUuidHydratedBloc', any)).called(1);
       });
 
-      test('correctly caches computed initialState', () {
+      test('correctly caches computed initial state', () {
         dynamic cachedState;
-        when<dynamic>(storage.write('MyUuidHydratedBloc', any))
-            .thenReturn(null);
         when<dynamic>(storage.read('MyUuidHydratedBloc'))
             .thenReturn(cachedState);
         MyUuidHydratedBloc();
@@ -434,16 +435,25 @@ void main() {
         StackTrace lastStackTrace;
         final exception = Exception('oops');
         unawaited(runZoned(() async {
-          when(storage.write(any, any)).thenThrow(exception);
+          when(storage.write(any, any))
+              .thenAnswer((_) => Future.error(exception));
           MyErrorThrowingBloc(
             onErrorCallback: (error, stackTrace) {
               lastError = error;
               lastStackTrace = stackTrace;
             },
           );
-        }, onError: (dynamic _) {
+        }, onError: (dynamic error) {
           expect(lastError, exception);
           expect(lastStackTrace, isNotNull);
+          expect(
+            (error as CubitUnhandledErrorException).error.toString(),
+            'Exception: oops',
+          );
+          expect(
+            (error as CubitUnhandledErrorException).stackTrace,
+            isNotNull,
+          );
         }));
       });
 
