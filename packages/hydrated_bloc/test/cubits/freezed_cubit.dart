@@ -4,16 +4,16 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 part 'freezed_cubit.freezed.dart';
 part 'freezed_cubit.g.dart';
 
-class FreezedCubit extends HydratedCubit<Question> {
+class FreezedCubit extends HydratedCubit<Tree> {
   FreezedCubit() : super(null);
 
-  void setQuestion(Question question) => emit(question);
+  void setQuestion(Tree tree) => emit(tree);
 
   @override
-  Map<String, dynamic> toJson(Question state) => state?.toJson();
+  Map<String, dynamic> toJson(Tree state) => state?.toJson();
 
   @override
-  Question fromJson(Map<String, dynamic> json) => Question.fromJson(json);
+  Tree fromJson(Map<String, dynamic> json) => Tree.fromJson(json);
 }
 
 @freezed
