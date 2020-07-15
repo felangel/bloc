@@ -3,7 +3,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 class BadCubit extends HydratedCubit<BadState> {
   BadCubit() : super(null);
 
-  void setBad() => emit(BadState());
+  void setBad([dynamic badObject = Object]) => emit(BadState(badObject));
 
   @override
   Map<String, dynamic> toJson(BadState state) => state?.toJson();
@@ -13,11 +13,19 @@ class BadCubit extends HydratedCubit<BadState> {
 }
 
 class BadState {
-  BadState();
+  BadState(this.badObject);
+
+  final dynamic badObject;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'bad_obj': Object,
+      'bad_obj': badObject,
     };
+  }
+}
+
+class VeryBadObject {
+  dynamic toJson() {
+    return Object;
   }
 }
