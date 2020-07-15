@@ -151,9 +151,13 @@ mixin HydratedMixin<State> on Cubit<State> {
   void onChange(Change<State> change) {
     if (storage == null) throw const StorageNotFound();
     final state = change.nextState;
-    final stateJson = _toJson(state);
-    if (stateJson != null) {
-      storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+    try {
+      final stateJson = _toJson(state);
+      if (stateJson != null) {
+        storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+      }
+    } on dynamic catch (error, stackTrace) {
+      onError(error, stackTrace);
     }
     _state = state;
     super.onChange(change);
@@ -166,8 +170,8 @@ mixin HydratedMixin<State> on Cubit<State> {
   dynamic _traverseWrite(dynamic value) {
     final dynamic traversedJson = _traverseJson(value);
     if (traversedJson is! _NIL) return traversedJson;
-    _checkCycle(value);
     try {
+      _checkCycle(value);
       final dynamic customJson = _toEncodable(value);
       final dynamic traversedCustomJson = _traverseJson(customJson);
       if (traversedCustomJson is _NIL) {
@@ -175,6 +179,10 @@ mixin HydratedMixin<State> on Cubit<State> {
       }
       _removeSeen(value);
       return traversedCustomJson;
+    } on HydratedCyclicError catch (e) {
+      throw HydratedUnsupportedError(value, cause: e);
+    } on HydratedUnsupportedError {
+      rethrow; // do not stack `HydratedUnsupportedError`
     } on dynamic catch (e) {
       throw HydratedUnsupportedError(value, cause: e);
     }
@@ -268,7 +276,7 @@ class HydratedCyclicError extends HydratedUnsupportedError {
   HydratedCyclicError(Object object) : super(object);
 
   @override
-  String toString() => 'Cyclic error in JSON stringify';
+  String toString() => 'Cyclic error while state traversing';
 }
 
 /// Reports that an object could not be serialized.
@@ -294,13 +302,10 @@ class HydratedUnsupportedError extends Error {
 
   @override
   String toString() {
-    var safeString = Error.safeToString(unsupportedObject);
-    String prefix;
-    if (cause != null) {
-      prefix = 'Converting object to an encodable object failed:';
-    } else {
-      prefix = 'Converting object did not return an encodable object:';
-    }
+    final safeString = Error.safeToString(unsupportedObject);
+    final prefix = cause != null
+        ? 'Converting object to an encodable object failed:'
+        : 'Converting object did not return an encodable object:';
     return '$prefix $safeString';
   }
 }
