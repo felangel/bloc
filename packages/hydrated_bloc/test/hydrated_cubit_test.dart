@@ -84,6 +84,7 @@ void main() {
 
     setUp(() {
       storage = MockStorage();
+      when(storage.write(any, any)).thenAnswer((_) async {});
       HydratedCubit.storage = storage;
     });
 
@@ -217,11 +218,13 @@ void main() {
           'should throw CubitUnhandledErrorException when storage.write throws',
           () {
         runZoned(
-          () {
+          () async {
             final expectedError = Exception('oops');
             final transition = const Change(currentState: 0, nextState: 0);
-            when(storage.write(any, any)).thenThrow(expectedError);
+            when(storage.write(any, any))
+                .thenAnswer((_) => Future.error(expectedError));
             MyHydratedCubit().onChange(transition);
+            await Future<void>.delayed(const Duration(seconds: 300));
             fail('should throw');
           },
           onError: (dynamic error) {
@@ -309,15 +312,13 @@ void main() {
     });
 
     group('MyUuidHydratedCubit', () {
-      test('stores initialState when instantiated', () {
+      test('stores initial state when instantiated', () {
         MyUuidHydratedCubit();
         verify<dynamic>(storage.write('MyUuidHydratedCubit', any)).called(1);
       });
 
-      test('correctly caches computed initialState', () {
+      test('correctly caches computed initial state', () {
         dynamic cachedState;
-        when<dynamic>(storage.write('MyUuidHydratedCubit', any))
-            .thenReturn(null);
         when<dynamic>(storage.read('MyUuidHydratedCubit'))
             .thenReturn(cachedState);
         MyUuidHydratedCubit();

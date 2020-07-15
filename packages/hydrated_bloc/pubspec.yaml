@@ -21,7 +21,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ^1.10.0  
   crypto: ^2.1.4
+  freezed_annotation: ^0.11.0
+  freezed: ^0.11.2
+  json_serializable: ^3.3.0
+  json_annotation: ^3.0.1
   mockito: ^4.0.0
   path: ^1.6.4
   pedantic: ^1.9.0

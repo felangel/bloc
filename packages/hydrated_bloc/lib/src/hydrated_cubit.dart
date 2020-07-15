@@ -103,11 +103,7 @@ mixin HydratedMixin<State> on Cubit<State> {
     if (storage == null) throw const StorageNotFound();
     final stateJson = toJson(state);
     if (stateJson != null) {
-      try {
-        storage.write(storageToken, stateJson);
-      } on dynamic catch (error, stackTrace) {
-        onError(error, stackTrace);
-      }
+      storage.write(storageToken, stateJson).then((_) {}, onError: onError);
     }
   }
 
@@ -133,11 +129,7 @@ mixin HydratedMixin<State> on Cubit<State> {
     final state = change.nextState;
     final stateJson = toJson(state);
     if (stateJson != null) {
-      try {
-        storage.write(storageToken, stateJson);
-      } on dynamic catch (error, stackTrace) {
-        onError(error, stackTrace);
-      }
+      storage.write(storageToken, stateJson).then((_) {}, onError: onError);
     }
     _state = state;
     super.onChange(change);
