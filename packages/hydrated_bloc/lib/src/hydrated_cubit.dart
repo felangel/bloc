@@ -134,11 +134,9 @@ mixin HydratedMixin<State> on Cubit<State> {
       return map;
     }
     if (value is List) {
-      final list = <dynamic>[];
-      for (var elem in value) {
-        list.add(_traverseRead(elem));
+      for (var i = 0; i < value.length; i++) {
+        value[i] = _traverseRead(value[i]);
       }
-      return list;
     }
     return value;
   }
@@ -192,9 +190,9 @@ mixin HydratedMixin<State> on Cubit<State> {
       return object;
     } else if (object is List) {
       _checkCycle(object);
-      final list = <dynamic>[];
-      for (var elem in object) {
-        list.add(_traverseWrite(elem));
+      final list = object.sublist(0);
+      for (var i = 0; i < list.length; i++) {
+        list[i] = _traverseWrite(list[i]);
       }
       _removeSeen(object);
       return list;
