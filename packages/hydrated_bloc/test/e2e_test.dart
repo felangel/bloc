@@ -25,12 +25,22 @@ void main() {
 
     group('FreezedCubit', () {
       test('persists and restores state correctly', () async {
-        const question = Question(id: 0, question: '?');
+        const tree = Tree(
+          question: Question(id: 0, question: '?00'),
+          left: Tree(
+            question: Question(id: 1, question: '?01'),
+          ),
+          right: Tree(
+            question: Question(id: 2, question: '?02'),
+            left: Tree(question: Question(id: 3, question: '?03')),
+            right: Tree(question: Question(id: 4, question: '?04')),
+          ),
+        );
         final cubit = FreezedCubit();
         expect(cubit.state, isNull);
-        cubit.setQuestion(question);
+        cubit.setQuestion(tree);
         await sleep();
-        expect(FreezedCubit().state, question);
+        expect(FreezedCubit().state, tree);
       });
     });
 
