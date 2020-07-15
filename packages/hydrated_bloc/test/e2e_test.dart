@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:hydrated_bloc/src/hydrated_cubit.dart';
 
 import 'cubits/cubits.dart';
 
@@ -22,6 +23,11 @@ void main() {
 
     tearDown(() async {
       await storage?.clear();
+    });
+
+    test('NIL constructor', () {
+      // ignore: prefer_const_constructors
+      NIL();
     });
 
     group('FreezedCubit', () {
