@@ -169,12 +169,12 @@ mixin HydratedMixin<State> on Cubit<State> {
 
   dynamic _traverseWrite(dynamic value) {
     final dynamic traversedJson = _traverseJson(value);
-    if (traversedJson is! _NIL) return traversedJson;
+    if (traversedJson is! NIL) return traversedJson;
     try {
       _checkCycle(value);
       final dynamic customJson = _toEncodable(value);
       final dynamic traversedCustomJson = _traverseJson(customJson);
-      if (traversedCustomJson is _NIL) {
+      if (traversedCustomJson is NIL) {
         throw HydratedUnsupportedError(value);
       }
       _removeSeen(value);
@@ -190,7 +190,7 @@ mixin HydratedMixin<State> on Cubit<State> {
 
   dynamic _traverseJson(dynamic object) {
     if (object is num) {
-      if (!object.isFinite) return const _NIL();
+      if (!object.isFinite) return const NIL();
       return object;
     } else if (identical(object, true)) {
       return true;
@@ -216,9 +216,8 @@ mixin HydratedMixin<State> on Cubit<State> {
       });
       _removeSeen(object);
       return map;
-    } else {
-      return const _NIL();
     }
+    return const NIL();
   }
 
   dynamic _toEncodable(dynamic object) => object.toJson();
@@ -310,6 +309,13 @@ class HydratedUnsupportedError extends Error {
   }
 }
 
-class _NIL {
-  const _NIL();
+/// {@template NIL}
+/// Type which represents objects that do not support json encoding
+///
+/// This should never be used and is exposed only for testing purposes.
+/// {@endtemplate}
+@visibleForTesting
+class NIL {
+  /// {@macro NIL}
+  const NIL();
 }
