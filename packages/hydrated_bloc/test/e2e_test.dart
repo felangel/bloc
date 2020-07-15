@@ -114,7 +114,7 @@ void main() {
     });
 
     group('BadCubit', () {
-      test('throws not serializable error', () async {
+      test('throws unsupported object: no `toJson`', () async {
         final cubit = BadCubit();
         expect(cubit.state, isNull);
         expect(
@@ -127,6 +127,19 @@ void main() {
               'Object has no `toJson`',
               isA<NoSuchMethodError>(),
             ),
+          )),
+        );
+      });
+
+      test('throws unsupported object: bad `toJson`', () async {
+        final cubit = BadCubit();
+        expect(cubit.state, isNull);
+        expect(
+          () => cubit.setBad(VeryBadObject()),
+          throwsA(isA<CubitUnhandledErrorException>().having(
+            (dynamic e) => e.error,
+            'inner error of cubit error',
+            isA<HydratedUnsupportedError>(),
           )),
         );
       });
