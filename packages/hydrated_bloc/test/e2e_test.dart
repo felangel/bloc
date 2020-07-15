@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
+import 'cubits/bad_cubit.dart';
 import 'cubits/cubits.dart';
+import 'cubits/cyclic_cubit.dart';
 
 Future<void> sleep() => Future<void>.delayed(const Duration(milliseconds: 100));
 
@@ -25,12 +28,22 @@ void main() {
 
     group('FreezedCubit', () {
       test('persists and restores state correctly', () async {
-        const question = Question(id: 0, question: '?');
+        const tree = Tree(
+          question: Question(id: 0, question: '?00'),
+          left: Tree(
+            question: Question(id: 1, question: '?01'),
+          ),
+          right: Tree(
+            question: Question(id: 2, question: '?02'),
+            left: Tree(question: Question(id: 3, question: '?03')),
+            right: Tree(question: Question(id: 4, question: '?04')),
+          ),
+        );
         final cubit = FreezedCubit();
         expect(cubit.state, isNull);
-        cubit.setQuestion(question);
+        cubit.setQuestion(tree);
         await sleep();
-        expect(FreezedCubit().state, question);
+        expect(FreezedCubit().state, tree);
       });
     });
 
@@ -77,6 +90,47 @@ void main() {
         expect(cubit.state, 1);
         await sleep();
         expect(SimpleCubit().state, 1);
+      });
+    });
+
+    group('CyclicCubit', () {
+      test('throws cyclic error', () async {
+        final cycle2 = Cycle2();
+        final cycle1 = Cycle1(cycle2);
+        cycle2.cycle1 = cycle1;
+        final cubit = CyclicCubit();
+        expect(cubit.state, isNull);
+        expect(
+          () => cubit.setCyclic(cycle1),
+          throwsA(isA<CubitUnhandledErrorException>().having(
+            (dynamic e) => e.error,
+            'inner error of cubit error',
+            isA<HydratedUnsupportedError>().having(
+              (dynamic e) => e.cause,
+              'cycle2 -> cycle1 -> cycle2 ->',
+              isA<HydratedCyclicError>(),
+            ),
+          )),
+        );
+      });
+    });
+
+    group('BadCubit', () {
+      test('throws not serializable error', () async {
+        final cubit = BadCubit();
+        expect(cubit.state, isNull);
+        expect(
+          cubit.setBad,
+          throwsA(isA<CubitUnhandledErrorException>().having(
+            (dynamic e) => e.error,
+            'inner error of cubit error',
+            isA<HydratedUnsupportedError>().having(
+              (dynamic e) => e.cause,
+              'Object has no `toJson`',
+              isA<NoSuchMethodError>(),
+            ),
+          )),
+        );
       });
     });
   });
