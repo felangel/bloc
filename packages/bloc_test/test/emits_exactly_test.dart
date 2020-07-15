@@ -36,7 +36,7 @@ void main() {
               error.message,
               'Expected: [1]\n'
               '  Actual: []\n'
-              '   Which: shorter than expected at location [0]\n'
+              '   Which: at location [0] is [] which shorter than expected\n'
               '');
         }
       });
@@ -51,7 +51,7 @@ void main() {
             error.message,
             'Expected: [2]\n'
             '  Actual: [1]\n'
-            '   Which: was <1> instead of <2> at location [0]\n'
+            '   Which: at location [0] is <1> instead of <2>\n'
             '',
           );
         }
@@ -67,7 +67,7 @@ void main() {
             error.message,
             'Expected: [1, 2]\n'
             '  Actual: [1]\n'
-            '   Which: shorter than expected at location [1]\n'
+            '   Which: at location [1] is [1] which shorter than expected\n'
             '',
           );
         }
@@ -104,7 +104,7 @@ void main() {
               error.message,
               'Expected: [1]\n'
               '  Actual: []\n'
-              '   Which: shorter than expected at location [0]\n'
+              '   Which: at location [0] is [] which shorter than expected\n'
               '');
         }
       });
@@ -119,7 +119,7 @@ void main() {
             error.message,
             'Expected: [2]\n'
             '  Actual: [1]\n'
-            '   Which: was <1> instead of <2> at location [0]\n'
+            '   Which: at location [0] is <1> instead of <2>\n'
             '',
           );
         }
@@ -135,7 +135,7 @@ void main() {
             error.message,
             'Expected: [1, 2]\n'
             '  Actual: [1]\n'
-            '   Which: shorter than expected at location [1]\n'
+            '   Which: at location [1] is [1] which shorter than expected\n'
             '',
           );
         }
@@ -174,7 +174,7 @@ void main() {
               error.message,
               'Expected: [1]\n'
               '  Actual: []\n'
-              '   Which: shorter than expected at location [0]\n'
+              '   Which: at location [0] is [] which shorter than expected\n'
               '');
         }
       });
@@ -194,7 +194,7 @@ void main() {
             error.message,
             'Expected: [2]\n'
             '  Actual: [1]\n'
-            '   Which: was <1> instead of <2> at location [0]\n'
+            '   Which: at location [0] is <1> instead of <2>\n'
             '',
           );
         }
@@ -215,7 +215,7 @@ void main() {
             error.message,
             'Expected: [1, 2]\n'
             '  Actual: [1]\n'
-            '   Which: shorter than expected at location [1]\n'
+            '   Which: at location [1] is [1] which shorter than expected\n'
             '',
           );
         }
@@ -250,7 +250,7 @@ void main() {
               error.message,
               'Expected: [1]\n'
               '  Actual: []\n'
-              '   Which: shorter than expected at location [0]\n'
+              '   Which: at location [0] is [] which shorter than expected\n'
               '');
         }
       });
@@ -265,7 +265,7 @@ void main() {
             error.message,
             'Expected: [2]\n'
             '  Actual: [1, 2]\n'
-            '   Which: was <1> instead of <2> at location [0]\n'
+            '   Which: at location [0] is <1> instead of <2>\n'
             '',
           );
         }
@@ -281,7 +281,7 @@ void main() {
             error.message,
             'Expected: [1, 2, 3]\n'
             '  Actual: [1, 2]\n'
-            '   Which: shorter than expected at location [2]\n'
+            '   Which: at location [2] is [1, 2] which shorter than expected\n'
             '',
           );
         }
@@ -320,7 +320,7 @@ void main() {
             error.message,
             'Expected: [<<Instance of \'ComplexStateB\'>>]\n'
             '  Actual: []\n'
-            '   Which: shorter than expected at location [0]\n'
+            '   Which: at location [0] is [] which shorter than expected\n'
             '',
           );
         }
@@ -340,7 +340,7 @@ void main() {
             'Expected: [<<Instance of \'ComplexStateB\'>>]\n'
             '  Actual: [Instance of \'ComplexStateA\']\n'
             // ignore: lines_longer_than_80_chars
-            '   Which: does not match <Instance of \'ComplexStateB\'> at location [0]\n'
+            '   Which: at location [0] is <Instance of \'ComplexStateA\'> which is not an instance of \'ComplexStateB\'\n'
             '',
           );
         }
@@ -360,7 +360,8 @@ void main() {
             // ignore: lines_longer_than_80_chars
             'Expected: [<<Instance of \'ComplexStateB\'>>, <<Instance of \'ComplexStateA\'>>]\n'
             '  Actual: [Instance of \'ComplexStateB\']\n'
-            '   Which: shorter than expected at location [1]\n'
+            // ignore: lines_longer_than_80_chars
+            '   Which: at location [1] is [Instance of \'ComplexStateB\'] which shorter than expected\n'
             '',
           );
         }
