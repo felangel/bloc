@@ -65,13 +65,65 @@ void main() {
     });
 
     group('ListCubit', () {
-      test('persists and restores state correctly', () async {
+      test('persists and restores string list correctly', () async {
         const item = 'foo';
         final cubit = ListCubit();
         expect(cubit.state, isEmpty);
         cubit.addItem(item);
         await sleep();
         expect(ListCubit().state, const <String>[item]);
+      });
+
+      test('persists and restores object->map list correctly', () async {
+        const item = ToMapObject(1);
+        fromJson(dynamic x) => ToMapObject.fromJson(x as Map<String, dynamic>);
+        final cubit = HeavyListCubit<ToMapObject>(fromJson);
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(
+          HeavyListCubit<ToMapObject>(fromJson).state,
+          const <ToMapObject>[item],
+        );
+      });
+
+      test('persists and restores object->list list correctly', () async {
+        const item = ToListObject(1);
+        fromJson(dynamic x) => ToListObject.fromJson(x as List<dynamic>);
+        final cubit = HeavyListCubit<ToListObject>(fromJson);
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(
+          HeavyListCubit<ToListObject>(fromJson).state,
+          const <ToListObject>[item],
+        );
+      });
+
+      test('persists and restores object->list<map> list correctly', () async {
+        final item = ToListMapObject(1);
+        fromJson(dynamic x) => ToListMapObject.fromJson(x as List<dynamic>);
+        final cubit = HeavyListCubit<ToListMapObject>(fromJson);
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(
+          HeavyListCubit<ToListMapObject>(fromJson).state,
+          <ToListMapObject>[item],
+        );
+      });
+
+      test('persists and restores object->list<list> list correctly', () async {
+        final item = ToListListObject(1);
+        fromJson(dynamic x) => ToListListObject.fromJson(x as List<dynamic>);
+        final cubit = HeavyListCubit<ToListListObject>(fromJson);
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(
+          HeavyListCubit<ToListListObject>(fromJson).state,
+          <ToListListObject>[item],
+        );
       });
     });
 
