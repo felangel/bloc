@@ -99,6 +99,32 @@ void main() {
           const <ToListObject>[item],
         );
       });
+
+      test('persists and restores object->list<map> list correctly', () async {
+        final item = ToListMapObject(1);
+        fromJson(dynamic x) => ToListMapObject.fromJson(x as List<dynamic>);
+        final cubit = HeavyListCubit<ToListMapObject>(fromJson);
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(
+          HeavyListCubit<ToListMapObject>(fromJson).state,
+          <ToListMapObject>[item],
+        );
+      });
+
+      test('persists and restores object->list<list> list correctly', () async {
+        final item = ToListListObject(1);
+        fromJson(dynamic x) => ToListListObject.fromJson(x as List<dynamic>);
+        final cubit = HeavyListCubit<ToListListObject>(fromJson);
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(
+          HeavyListCubit<ToListListObject>(fromJson).state,
+          <ToListListObject>[item],
+        );
+      });
     });
 
     group('ManualCubit', () {

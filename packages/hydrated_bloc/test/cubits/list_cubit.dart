@@ -78,3 +78,53 @@ class ToListObject {
   @override
   int get hashCode => value.hashCode;
 }
+
+class ToListMapObject {
+  ToListMapObject(int value) : value = ToMapObject(value);
+  final ToMapObject value;
+
+  List<dynamic> toJson() {
+    return <ToMapObject>[value];
+  }
+
+  static ToListMapObject fromJson(List<dynamic> list) {
+    return ToListMapObject(
+      ToMapObject.fromJson(list[0] as Map<String, dynamic>).value,
+    );
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is ToListMapObject && o.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+}
+
+class ToListListObject {
+  ToListListObject(int value) : value = ToListObject(value);
+  final ToListObject value;
+
+  List<dynamic> toJson() {
+    return <ToListObject>[value];
+  }
+
+  static ToListListObject fromJson(List<dynamic> list) {
+    return ToListListObject(
+      ToListObject.fromJson(list[0] as List<dynamic>).value,
+    );
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is ToListListObject && o.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+}
