@@ -329,7 +329,7 @@ class NIL {
 enum _Outcome { builtIn, custom }
 
 class _Traversed {
-  _Traversed._({@required this.outcome, this.value});
+  _Traversed._({@required this.outcome, @required this.value});
   _Traversed.builtIn(dynamic value)
       : this._(outcome: _Outcome.builtIn, value: value);
   _Traversed.custom(dynamic value)

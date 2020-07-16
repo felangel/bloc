@@ -1,3 +1,7 @@
+# 6.0.0-dev.3
+
+- fix: complex list (de)serialization errors ([@orsenkucher](https://github.com/orsenkucher))
+
 # 6.0.0-dev.2
 
 - fix: json (de)serialization errors ([@orsenkucher](https://github.com/orsenkucher))
