@@ -164,12 +164,14 @@ mixin HydratedMixin<State> on Cubit<State> {
   }
 
   Map<String, dynamic> _toJson(State state) {
-    return _cast<Map<String, dynamic>>(_traverseWrite(toJson(state)));
+    return _cast<Map<String, dynamic>>(_traverseWrite(toJson(state)).value);
   }
 
-  dynamic _traverseWrite(dynamic value) {
+  _Traversed _traverseWrite(dynamic value) {
     final dynamic traversedJson = _traverseJson(value);
-    if (traversedJson is! NIL) return traversedJson;
+    if (traversedJson is! NIL) {
+      return _Traversed.builtIn(traversedJson);
+    }
     try {
       _checkCycle(value);
       final dynamic customJson = _toEncodable(value);
@@ -178,7 +180,7 @@ mixin HydratedMixin<State> on Cubit<State> {
         throw HydratedUnsupportedError(value);
       }
       _removeSeen(value);
-      return traversedCustomJson;
+      return _Traversed.custom(traversedCustomJson);
     } on HydratedCyclicError catch (e) {
       throw HydratedUnsupportedError(value, cause: e);
     } on HydratedUnsupportedError {
@@ -202,9 +204,13 @@ mixin HydratedMixin<State> on Cubit<State> {
       return object;
     } else if (object is List) {
       _checkCycle(object);
-      final list = object.sublist(0);
-      for (var i = 0; i < list.length; i++) {
-        list[i] = _traverseWrite(list[i]);
+      List<dynamic> list;
+      for (var i = 0; i < object.length; i++) {
+        final traversed = _traverseWrite(object[i]);
+        list ??= traversed.outcome == _Outcome.builtIn
+            ? object.sublist(0)
+            : (<dynamic>[]..length = object.length);
+        list[i] = traversed.value;
       }
       _removeSeen(object);
       return list;
@@ -212,7 +218,7 @@ mixin HydratedMixin<State> on Cubit<State> {
       _checkCycle(object);
       final map = <String, dynamic>{};
       object.forEach((dynamic key, dynamic value) {
-        map[_cast<String>(key)] = _traverseWrite(value);
+        map[_cast<String>(key)] = _traverseWrite(value).value;
       });
       _removeSeen(object);
       return map;
@@ -318,4 +324,16 @@ class HydratedUnsupportedError extends Error {
 class NIL {
   /// {@macro NIL}
   const NIL();
+}
+
+enum _Outcome { builtIn, custom }
+
+class _Traversed {
+  _Traversed._({@required this.outcome, this.value});
+  _Traversed.builtIn(dynamic value)
+      : this._(outcome: _Outcome.builtIn, value: value);
+  _Traversed.custom(dynamic value)
+      : this._(outcome: _Outcome.custom, value: value);
+  final _Outcome outcome;
+  final dynamic value;
 }
