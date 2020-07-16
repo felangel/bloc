@@ -170,7 +170,7 @@ mixin HydratedMixin<State> on Cubit<State> {
   _Traversed _traverseWrite(dynamic value) {
     final dynamic traversedJson = _traverseJson(value);
     if (traversedJson is! NIL) {
-      return _Traversed(outcome: _Outcome.builtin, value: traversedJson);
+      return _Traversed.builtIn(traversedJson);
     }
     try {
       _checkCycle(value);
@@ -180,7 +180,7 @@ mixin HydratedMixin<State> on Cubit<State> {
         throw HydratedUnsupportedError(value);
       }
       _removeSeen(value);
-      return _Traversed(outcome: _Outcome.jsoned, value: traversedCustomJson);
+      return _Traversed.custom(traversedCustomJson);
     } on HydratedCyclicError catch (e) {
       throw HydratedUnsupportedError(value, cause: e);
     } on HydratedUnsupportedError {
@@ -207,7 +207,7 @@ mixin HydratedMixin<State> on Cubit<State> {
       List<dynamic> list;
       for (var i = 0; i < object.length; i++) {
         final traversed = _traverseWrite(object[i]);
-        list ??= traversed.outcome == _Outcome.builtin
+        list ??= traversed.outcome == _Outcome.builtIn
             ? object.sublist(0)
             : (<dynamic>[]..length = object.length);
         list[i] = traversed.value;
@@ -326,10 +326,14 @@ class NIL {
   const NIL();
 }
 
-enum _Outcome { builtin, jsoned }
+enum _Outcome { builtIn, custom }
 
 class _Traversed {
-  _Traversed({@required this.outcome, this.value});
+  _Traversed._({@required this.outcome, this.value});
+  _Traversed.builtIn(dynamic value)
+      : this._(outcome: _Outcome.builtIn, value: value);
+  _Traversed.custom(dynamic value)
+      : this._(outcome: _Outcome.custom, value: value);
   final _Outcome outcome;
   final dynamic value;
 }
