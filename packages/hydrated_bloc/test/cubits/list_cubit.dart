@@ -1,7 +1,23 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-class ListCubit<T> extends HydratedCubit<List<T>> {
-  ListCubit(this._fromJson) : super(<T>[]);
+class ListCubit extends HydratedCubit<List<String>> {
+  ListCubit() : super(const <String>[]);
+
+  void addItem(String item) => emit(List.from(state)..add(item));
+
+  @override
+  Map<String, dynamic> toJson(List<String> state) {
+    return <String, dynamic>{'state': state};
+  }
+
+  @override
+  List<String> fromJson(Map<String, dynamic> json) {
+    return json['state'] as List<String>;
+  }
+}
+
+class HeavyListCubit<T> extends HydratedCubit<List<T>> {
+  HeavyListCubit(this._fromJson) : super(<T>[]);
   final T Function(dynamic json) _fromJson;
 
   void addItem(T item) => emit(List.from(state)..add(item));
