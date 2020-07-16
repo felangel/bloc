@@ -78,7 +78,7 @@ group('CounterBloc', () {
   blocTest(
     'emits [1] when CounterEvent.increment is added',
     build: () => CounterBloc(),
-    act: (bloc) async => bloc.add(CounterEvent.increment),
+    act: (bloc) => bloc.add(CounterEvent.increment),
     expect: [1],
   );
 });
@@ -90,7 +90,7 @@ group('CounterBloc', () {
 blocTest(
   'CounterBloc emits [1] when CounterEvent.increment is added',
   build: () => CounterBloc(),
-  act: (bloc) async => bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+  act: (bloc) => bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
   skip: 1,
   expect: [1],
 );
@@ -102,7 +102,7 @@ blocTest(
 blocTest(
   'CounterBloc emits [1] when CounterEvent.increment is added',
   build: () => CounterBloc(),
-  act: (bloc) async => bloc.add(CounterEvent.increment),
+  act: (bloc) => bloc.add(CounterEvent.increment),
   wait: const Duration(milliseconds: 300),
   expect: [1],
 );
@@ -114,9 +114,9 @@ blocTest(
 blocTest(
   'CounterBloc emits [1] when CounterEvent.increment is added',
   build: () => CounterBloc(),
-  act: (bloc) async => bloc.add(CounterEvent.increment),
+  act: (bloc) => bloc.add(CounterEvent.increment),
   expect: [1],
-  verify: (_) async {
+  verify: (_) {
     verify(repository.someMethod(any)).called(1);
   }
 );
@@ -128,7 +128,7 @@ blocTest(
 blocTest(
   'CounterBloc throws Exception when null is added',
   build: () => CounterBloc(),
-  act: (bloc) async => bloc.add(null),
+  act: (bloc) => bloc.add(null),
   errors: [
     isA<Exception>(),
   ]
@@ -141,7 +141,7 @@ blocTest(
 blocTest(
   'emits [StateB] when MyEvent is added',
   build: () => MyBloc(),
-  act: (bloc) async => bloc.add(MyEvent()),
+  act: (bloc) => bloc.add(MyEvent()),
   expect: [isA<StateB>()],
 );
 ```

@@ -2,6 +2,7 @@
 
 - **BREAKING**: `blocTest` make `build` synchronous
 - fix: `blocTest` improve `wait` behavior when debouncing, etc...
+- feat: `blocTest` do not require `async` on `act` and `verify`
 
 # 7.0.0-dev.1
 

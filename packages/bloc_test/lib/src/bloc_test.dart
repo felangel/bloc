@@ -34,7 +34,7 @@ import 'package:test/test.dart' as test;
 /// blocTest(
 ///   'CounterCubit emits [1] when increment is called',
 ///   build: () => CounterCubit(),
-///   act: (cubit) async => cubit.increment(),
+///   act: (cubit) => cubit.increment(),
 ///   expect: [1],
 /// );
 /// ```
@@ -58,7 +58,7 @@ import 'package:test/test.dart' as test;
 /// blocTest(
 ///   'CounterCubit emits [2] when increment is called twice',
 ///   build: () => CounterCubit(),
-///   act: (cubit) async {
+///   act: (cubit) {
 ///     cubit
 ///       ..increment()
 ///       ..increment();
@@ -75,7 +75,7 @@ import 'package:test/test.dart' as test;
 /// blocTest(
 ///   'CounterCubit emits [1] when increment is called',
 ///   build: () => CounterCubit(),
-///   act: (cubit) async => cubit.increment(),
+///   act: (cubit) => cubit.increment(),
 ///   wait: const Duration(milliseconds: 300),
 ///   expect: [1],
 /// );
@@ -87,9 +87,9 @@ import 'package:test/test.dart' as test;
 /// blocTest(
 ///   'CounterCubit emits [1] when increment is called',
 ///   build: () => CounterCubit(),
-///   act: (cubit) async => cubit.increment(),
+///   act: (cubit) => cubit.increment(),
 ///   expect: [1],
-///   verify: (_) async {
+///   verify: (_) {
 ///     verify(repository.someMethod(any)).called(1);
 ///   }
 /// );
@@ -103,7 +103,7 @@ import 'package:test/test.dart' as test;
 /// blocTest(
 ///  'emits [StateB] when emitB is called',
 ///  build: () => MyCubit(),
-///  act: (cubit) async => cubit.emitB(),
+///  act: (cubit) => cubit.emitB(),
 ///  expect: [isA<StateB>()],
 /// );
 /// ```
@@ -111,11 +111,11 @@ import 'package:test/test.dart' as test;
 void blocTest<C extends Cubit<State>, State>(
   String description, {
   @required C Function() build,
-  Future<void> Function(C cubit) act,
+  Function(C cubit) act,
   Duration wait,
   int skip = 0,
   Iterable expect,
-  Future<void> Function(C cubit) verify,
+  Function(C cubit) verify,
   Iterable errors,
 }) {
   test.test(description, () async {
