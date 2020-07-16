@@ -44,4 +44,4 @@ Ahora echemos un vistazo a cómo conectar nuestro `DataBloc` a un widget y mostr
 
 !> Deberíamos **NUNCA** "hacer cosas" en respuesta a los cambios de estado en el método `builder` de `BlocBuilder` porque el marco Flutter puede llamar a ese método muchas veces. El método `builder` debe ser una [función pura](https://en.wikipedia.org/wiki/Pure_function) que solo devuelve un widget en respuesta al estado del bloc.
 
-The full source for this recipe can be found [here](https://gist.github.com/felangel/1e5b2c25b263ad1aa7bbed75d8c76c44).
+La fuente completa de esta receta se puede encontrar [aquí](https://gist.github.com/felangel/1e5b2c25b263ad1aa7bbed75d8c76c44).

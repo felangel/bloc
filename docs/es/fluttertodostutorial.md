@@ -256,9 +256,9 @@ Por último, crearemos otro archivo de barril para nuestras exportaciones `TabBl
 
 Antes de pasar a la capa de presentación, implementaremos nuestro propio `BlocDelegate` que nos permitirá manejar todos los cambios de estado y errores en un solo lugar. Es realmente útil para cosas como registros de desarrolladores o análisis.
 
-Cree `blocs / simple_bloc_delegate.dart` y comencemos.
+Cree `blocs/simple_bloc_delegate.dart` y comencemos.
 
-[simple_bloc_delegate.dart](../_snippets/flutter_todos_tutorial/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_delegate.dart](../_snippets/flutter_todos_tutorial/simple_bloc_observer.dart.md ':include')
 
 Todo lo que estamos haciendo en este caso es imprimir todos los cambios de estado ('transiciones') y errores en la consola solo para que podamos ver qué sucede cuando ejecutamos nuestra aplicación. Puede conectar su `BlocDelegate` a google analytics, sentry, crashlytics, etc.
 

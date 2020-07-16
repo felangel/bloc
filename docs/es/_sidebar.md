@@ -21,7 +21,7 @@
     - [Clima](es/flutterweathertutorial.md)
     - [Lista de quehaceres](es/fluttertodostutorial.md)
     - [Iniciar sesión con Firebase](es/flutterfirebaselogintutorial.md)
-    - [Firestore Todos](es/flutterfirestoretodostutorial.md)
+    - [Quehaceres con Firestore](es/flutterfirestoretodostutorial.md)
   - AngularDart
     - [Counter](es/angularcountertutorial.md)
   - Flutter + AngularDart
