@@ -166,11 +166,7 @@ La principal diferencia entre nuestro nuevo `TodosBloc` y el original es que el 
 
 ## Poniéndolo todo junto
 
-<<<<<<< HEAD
 Lo último que necesitamos modificar es nuestro `main.dart`.
-=======
-The last thing we need to modify is our `main.dart`.
->>>>>>> [ES] Documentation
 
 [main.dart](../_snippets/flutter_firestore_todos_tutorial/main.dart.md ':include')
 
