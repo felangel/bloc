@@ -9,6 +9,7 @@
   - [Testeo](es/testing.md)
   - [Convenciones de nombres](es/blocnamingconventions.md)
   - [FAQs](es/faqs.md)
+  - [Migración](es/migration.md)
 
 - Tutoriales
 
@@ -17,9 +18,9 @@
     - [Temporizador](es/fluttertimertutorial.md)
     - [Lista Infinita](es/flutterinfinitelisttutorial.md)
     - [Iniciar Sesión](es/flutterlogintutorial.md)
-    - [Weather](es/flutterweathertutorial.md)
-    - [Todos](es/fluttertodostutorial.md)
-    - [Firebase Login](es/flutterfirebaselogintutorial.md)
+    - [Clima](es/flutterweathertutorial.md)
+    - [Lista de quehaceres](es/fluttertodostutorial.md)
+    - [Iniciar sesión con Firebase](es/flutterfirebaselogintutorial.md)
     - [Firestore Todos](es/flutterfirestoretodostutorial.md)
   - AngularDart
     - [Counter](es/angularcountertutorial.md)
@@ -29,8 +30,8 @@
 - Recetas
 
   - Flutter
-    - [Show SnackBar](es/recipesfluttershowsnackbar.md)
-    - [Navigation](es/recipesflutternavigation.md)
+    - [Mostrar SnackBar](es/recipesfluttershowsnackbar.md)
+    - [Navegación](es/recipesflutternavigation.md)
     - [Bloc Access](es/recipesflutterblocaccess.md)
 
 - Herramientas
