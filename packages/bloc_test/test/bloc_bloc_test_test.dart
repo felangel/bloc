@@ -179,6 +179,13 @@ void main() {
         skip: 2,
         expect: const <int>[3],
       );
+
+      blocTest<InstantEmitBloc, int>(
+        'emits [11, 12] when CounterEvent.increment is added and emitted 10',
+        build: () => InstantEmitBloc()..emit(10),
+        act: (bloc) async => bloc.add(CounterEvent.increment),
+        expect: const <int>[11, 12],
+      );
     });
 
     group('MultiCounterBloc', () {
@@ -214,6 +221,13 @@ void main() {
             bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
         skip: 3,
         expect: const <int>[4],
+      );
+
+      blocTest<MultiCounterBloc, int>(
+        'emits [11, 12] when CounterEvent.increment is added and emitted 10',
+        build: () => MultiCounterBloc()..emit(10),
+        act: (bloc) async => bloc.add(CounterEvent.increment),
+        expect: const <int>[11, 12],
       );
     });
 
