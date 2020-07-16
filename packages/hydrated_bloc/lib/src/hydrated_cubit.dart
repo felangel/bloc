@@ -170,6 +170,8 @@ mixin HydratedMixin<State> on Cubit<State> {
   _Traversed _traverseWrite(dynamic value) {
     final dynamic traversedJson = _traverseJson(value);
     if (traversedJson is! NIL) {
+      // should not return garbage, but will
+      // so yes, garb map or list can be returned
       return _Traversed.builtIn(traversedJson);
     }
     try {
@@ -179,7 +181,7 @@ mixin HydratedMixin<State> on Cubit<State> {
       if (traversedCustomJson is NIL) {
         throw HydratedUnsupportedError(value);
       }
-      _removeSeen(value);
+      _removeSeen(value); // idicates that some garbage is returned
       return _Traversed.custom(traversedCustomJson);
     } on HydratedCyclicError catch (e) {
       throw HydratedUnsupportedError(value, cause: e);
@@ -193,27 +195,28 @@ mixin HydratedMixin<State> on Cubit<State> {
   dynamic _traverseJson(dynamic object) {
     if (object is num) {
       if (!object.isFinite) return const NIL();
-      return object;
+      return object; // not garb
     } else if (identical(object, true)) {
-      return true;
+      return true; // not garb
     } else if (identical(object, false)) {
-      return false;
+      return false; // not garb
     } else if (object == null) {
-      return null;
+      return null; // not garb
     } else if (object is String) {
-      return object;
+      return object; // not garb, because list should be of that type
     } else if (object is List) {
       _checkCycle(object);
       List<dynamic> list;
       for (var i = 0; i < object.length; i++) {
+        // <- may return garb
         final traversed = _traverseWrite(object[i]);
         list ??= traversed.outcome == _Outcome.builtIn
             ? object.sublist(0)
             : (<dynamic>[]..length = object.length);
-        list[i] = traversed.value;
+        list[i] = traversed.value; // <- putting it here
       }
       _removeSeen(object);
-      return list;
+      return list; // can be list dynamic - which is garb
     } else if (object is Map) {
       _checkCycle(object);
       final map = <String, dynamic>{};
@@ -221,9 +224,12 @@ mixin HydratedMixin<State> on Cubit<State> {
         map[_cast<String>(key)] = _traverseWrite(value).value;
       });
       _removeSeen(object);
+      // can be <String, some dirrerent type>, so garb
+      // in -> <String, MyJsonable>{}
+      // out <- <String, Map<String,...>{}
       return map;
     }
-    return const NIL();
+    return const NIL(); // garb, but handled properly
   }
 
   dynamic _toEncodable(dynamic object) => object.toJson();
