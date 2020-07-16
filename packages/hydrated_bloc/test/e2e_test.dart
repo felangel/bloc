@@ -65,13 +65,22 @@ void main() {
     });
 
     group('ListCubit', () {
-      test('persists and restores state correctly', () async {
+      test('persists and restores string list correctly', () async {
         const item = 'foo';
         final cubit = ListCubit();
         expect(cubit.state, isEmpty);
         cubit.addItem(item);
         await sleep();
         expect(ListCubit().state, const <String>[item]);
+      });
+
+      test('persists and restores heavy list correctly', () async {
+        const item = HeavyObject(1);
+        final cubit = HeavyListCubit();
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(ListCubit().state, const <HeavyObject>[item]);
       });
     });
 
