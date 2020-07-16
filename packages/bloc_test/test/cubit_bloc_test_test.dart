@@ -11,20 +11,20 @@ void main() {
     group('CounterCubit', () {
       blocTest<CounterCubit, int>(
         'emits [] when nothing is called',
-        build: () async => CounterCubit(),
+        build: () => CounterCubit(),
         expect: <int>[],
       );
 
       blocTest<CounterCubit, int>(
         'emits [1] when increment is called',
-        build: () async => CounterCubit(),
+        build: () => CounterCubit(),
         act: (cubit) async => cubit.increment(),
         expect: <int>[1],
       );
 
       blocTest<CounterCubit, int>(
         'emits [1] when increment is called with async act',
-        build: () async => CounterCubit(),
+        build: () => CounterCubit(),
         act: (cubit) async => cubit.increment(),
         expect: <int>[1],
       );
@@ -32,7 +32,7 @@ void main() {
       blocTest<CounterCubit, int>(
         'emits [1, 2] when increment is called multiple times'
         'with async act',
-        build: () async => CounterCubit(),
+        build: () => CounterCubit(),
         act: (cubit) async => cubit..increment()..increment(),
         expect: <int>[1, 2],
       );
@@ -41,13 +41,13 @@ void main() {
     group('AsyncCounterCubit', () {
       blocTest<AsyncCounterCubit, int>(
         'emits [] when nothing is called',
-        build: () async => AsyncCounterCubit(),
+        build: () => AsyncCounterCubit(),
         expect: <int>[],
       );
 
       blocTest<AsyncCounterCubit, int>(
         'emits [1] when increment is called',
-        build: () async => AsyncCounterCubit(),
+        build: () => AsyncCounterCubit(),
         act: (cubit) async => cubit.increment(),
         expect: <int>[1],
       );
@@ -55,7 +55,7 @@ void main() {
       blocTest<AsyncCounterCubit, int>(
         'emits [1, 2] when increment is called multiple'
         'times with async act',
-        build: () async => AsyncCounterCubit(),
+        build: () => AsyncCounterCubit(),
         act: (cubit) async {
           await cubit.increment();
           await cubit.increment();
@@ -67,36 +67,59 @@ void main() {
     group('DelayedCounterCubit', () {
       blocTest<DelayedCounterCubit, int>(
         'emits [] when nothing is called',
-        build: () async => DelayedCounterCubit(),
+        build: () => DelayedCounterCubit(),
         expect: <int>[],
       );
 
       blocTest<DelayedCounterCubit, int>(
         'emits [] when increment is called without wait',
-        build: () async => DelayedCounterCubit(),
+        build: () => DelayedCounterCubit(),
         act: (cubit) async => cubit.increment(),
         expect: <int>[],
       );
 
       blocTest<DelayedCounterCubit, int>(
         'emits [1] when increment is called with wait',
-        build: () async => DelayedCounterCubit(),
+        build: () => DelayedCounterCubit(),
         act: (cubit) async => cubit.increment(),
         wait: const Duration(milliseconds: 300),
         expect: <int>[1],
       );
     });
 
+    group('InstantEmitCubit', () {
+      blocTest<InstantEmitCubit, int>(
+        'emits [] when nothing is called',
+        build: () => InstantEmitCubit(),
+        expect: <int>[],
+      );
+
+      blocTest<InstantEmitCubit, int>(
+        'emits [2] when increment is called',
+        build: () => InstantEmitCubit(),
+        act: (cubit) async => cubit.increment(),
+        expect: <int>[2],
+      );
+
+      blocTest<InstantEmitCubit, int>(
+        'emits [2, 3] when increment is called'
+        'multiple times with async act',
+        build: () => InstantEmitCubit(),
+        act: (cubit) async => cubit..increment()..increment(),
+        expect: <int>[2, 3],
+      );
+    });
+
     group('MultiCounterCubit', () {
       blocTest<MultiCounterCubit, int>(
         'emits [] when nothing is called',
-        build: () async => MultiCounterCubit(),
+        build: () => MultiCounterCubit(),
         expect: <int>[],
       );
 
       blocTest<MultiCounterCubit, int>(
         'emits [1, 2] when increment is called',
-        build: () async => MultiCounterCubit(),
+        build: () => MultiCounterCubit(),
         act: (cubit) async => cubit.increment(),
         expect: <int>[1, 2],
       );
@@ -104,7 +127,7 @@ void main() {
       blocTest<MultiCounterCubit, int>(
         'emits [1, 2, 3, 4] when increment is called'
         'multiple times with async act',
-        build: () async => MultiCounterCubit(),
+        build: () => MultiCounterCubit(),
         act: (cubit) async => cubit..increment()..increment(),
         expect: <int>[1, 2, 3, 4],
       );
@@ -113,13 +136,13 @@ void main() {
     group('ComplexCubit', () {
       blocTest<ComplexCubit, ComplexState>(
         'emits [] when nothing is called',
-        build: () async => ComplexCubit(),
+        build: () => ComplexCubit(),
         expect: <Matcher>[],
       );
 
       blocTest<ComplexCubit, ComplexState>(
         'emits [ComplexStateB] when emitB is called',
-        build: () async => ComplexCubit(),
+        build: () => ComplexCubit(),
         act: (cubit) async => cubit.emitB(),
         expect: <Matcher>[isA<ComplexStateB>()],
       );
@@ -134,13 +157,13 @@ void main() {
 
       blocTest<SideEffectCounterCubit, int>(
         'emits [] when nothing is called',
-        build: () async => SideEffectCounterCubit(repository),
+        build: () => SideEffectCounterCubit(repository),
         expect: <int>[],
       );
 
       blocTest<SideEffectCounterCubit, int>(
         'emits [1] when SideEffectCounterEvent.increment is called',
-        build: () async => SideEffectCounterCubit(repository),
+        build: () => SideEffectCounterCubit(repository),
         act: (cubit) async => cubit.increment(),
         expect: <int>[1],
         verify: (_) async {
@@ -150,7 +173,7 @@ void main() {
 
       blocTest<SideEffectCounterCubit, int>(
         'does not require an expect',
-        build: () async => SideEffectCounterCubit(repository),
+        build: () => SideEffectCounterCubit(repository),
         act: (cubit) async => cubit.increment(),
         verify: (_) async {
           verify(repository.sideEffect()).called(1);

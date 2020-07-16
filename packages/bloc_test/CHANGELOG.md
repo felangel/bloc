@@ -1,3 +1,8 @@
+# 7.0.0-dev.2
+
+- **BREAKING**: `blocTest` make `build` synchronous
+- fix: `blocTest` improve `wait` behavior when debouncing, etc...
+
 # 7.0.0-dev.1
 
 - **BREAKING**: upgrade to `bloc ^6.0.0-dev.1`

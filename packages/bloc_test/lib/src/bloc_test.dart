@@ -11,7 +11,7 @@ import 'package:test/test.dart' as test;
 /// by closing the `cubit` stream before evaluating the [expect]ation.
 ///
 /// [build] should be used for all `cubit` initialization and preparation
-/// and must return the `cubit` under test as a `Future`.
+/// and must return the `cubit` under test.
 ///
 /// [act] is an optional callback which will be invoked with the `cubit` under
 /// test and should be used to interact with the `cubit`.
@@ -33,7 +33,7 @@ import 'package:test/test.dart' as test;
 /// ```dart
 /// blocTest(
 ///   'CounterCubit emits [1] when increment is called',
-///   build: () async => CounterCubit(),
+///   build: () => CounterCubit(),
 ///   act: (cubit) async => cubit.increment(),
 ///   expect: [1],
 /// );
@@ -45,7 +45,7 @@ import 'package:test/test.dart' as test;
 /// ```dart
 /// blocTest(
 ///   'CounterCubit emits [] when nothing is called',
-///   build: () async => CounterCubit(),
+///   build: () => CounterCubit(),
 ///   expect: [],
 /// );
 /// ```
@@ -57,7 +57,7 @@ import 'package:test/test.dart' as test;
 /// ```dart
 /// blocTest(
 ///   'CounterCubit emits [2] when increment is called twice',
-///   build: () async => CounterCubit(),
+///   build: () => CounterCubit(),
 ///   act: (cubit) async {
 ///     cubit
 ///       ..increment()
@@ -74,7 +74,7 @@ import 'package:test/test.dart' as test;
 /// ```dart
 /// blocTest(
 ///   'CounterCubit emits [1] when increment is called',
-///   build: () async => CounterCubit(),
+///   build: () => CounterCubit(),
 ///   act: (cubit) async => cubit.increment(),
 ///   wait: const Duration(milliseconds: 300),
 ///   expect: [1],
@@ -86,7 +86,7 @@ import 'package:test/test.dart' as test;
 /// ```dart
 /// blocTest(
 ///   'CounterCubit emits [1] when increment is called',
-///   build: () async => CounterCubit(),
+///   build: () => CounterCubit(),
 ///   act: (cubit) async => cubit.increment(),
 ///   expect: [1],
 ///   verify: (_) async {
@@ -102,7 +102,7 @@ import 'package:test/test.dart' as test;
 /// ```dart
 /// blocTest(
 ///  'emits [StateB] when emitB is called',
-///  build: () async => MyCubit(),
+///  build: () => MyCubit(),
 ///  act: (cubit) async => cubit.emitB(),
 ///  expect: [isA<StateB>()],
 /// );
@@ -110,7 +110,7 @@ import 'package:test/test.dart' as test;
 @isTest
 void blocTest<C extends Cubit<State>, State>(
   String description, {
-  @required Future<C> Function() build,
+  @required C Function() build,
   Future<void> Function(C cubit) act,
   Duration wait,
   int skip = 0,
@@ -122,11 +122,12 @@ void blocTest<C extends Cubit<State>, State>(
     final unhandledErrors = <Object>[];
     await runZoned(
       () async {
-        final cubit = await build();
         final states = <State>[];
+        final cubit = build();
         final subscription = cubit.skip(skip).listen(states.add);
         await act?.call(cubit);
         if (wait != null) await Future<void>.delayed(wait);
+        await Future<void>.delayed(Duration.zero);
         await cubit.close();
         if (expect != null) test.expect(states, expect);
         await subscription.cancel();
