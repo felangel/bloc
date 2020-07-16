@@ -74,13 +74,22 @@ void main() {
         expect(ListCubit().state, const <String>[item]);
       });
 
-      test('persists and restores heavy list correctly', () async {
-        const item = HeavyObject(1);
-        final cubit = HeavyListCubit();
+      test('persists and restores heavy(->map) list correctly', () async {
+        const item = ToMapObject(1);
+        final cubit = HeavyListCubit<ToMapObject>();
         expect(cubit.state, isEmpty);
         cubit.addItem(item);
         await sleep();
-        expect(ListCubit().state, const <HeavyObject>[item]);
+        expect(ListCubit().state, const <ToMapObject>[item]);
+      });
+
+      test('persists and restores heavy(->list) list correctly', () async {
+        const item = ToListObject(1);
+        final cubit = HeavyListCubit<ToListObject>();
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(ListCubit().state, const <ToListObject>[item]);
       });
     });
 

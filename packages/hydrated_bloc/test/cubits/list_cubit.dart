@@ -16,39 +16,62 @@ class ListCubit extends HydratedCubit<List<String>> {
   }
 }
 
-class HeavyListCubit extends HydratedCubit<List<HeavyObject>> {
-  HeavyListCubit() : super(const <HeavyObject>[]);
+class HeavyListCubit<T> extends HydratedCubit<List<T>> {
+  HeavyListCubit() : super(<T>[]);
 
-  void addItem(HeavyObject item) => emit(List.from(state)..add(item));
+  void addItem(T item) => emit(List.from(state)..add(item));
 
   @override
-  Map<String, dynamic> toJson(List<HeavyObject> state) {
+  Map<String, dynamic> toJson(List<T> state) {
     return <String, dynamic>{'state': state};
   }
 
   @override
-  List<HeavyObject> fromJson(Map<String, dynamic> json) {
-    return json['state'] as List<HeavyObject>;
+  List<T> fromJson(Map<String, dynamic> json) {
+    return json['state'] as List<T>;
   }
 }
 
-class HeavyObject {
-  const HeavyObject(this.value);
+class ToMapObject {
+  const ToMapObject(this.value);
   final int value;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{'value': value};
   }
 
-  HeavyObject fromJson(Map<String, dynamic> json) {
-    return HeavyObject(json['value'] as int);
+  ToMapObject fromJson(Map<String, dynamic> map) {
+    return ToMapObject(map['value'] as int);
   }
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is HeavyObject && o.value == value;
+    return o is ToMapObject && o.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+}
+
+class ToListObject {
+  const ToListObject(this.value);
+  final int value;
+
+  List<dynamic> toJson() {
+    return <int>[value];
+  }
+
+  ToListObject fromJson(List<dynamic> list) {
+    return ToListObject(list[0] as int);
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is ToListObject && o.value == value;
   }
 
   @override
