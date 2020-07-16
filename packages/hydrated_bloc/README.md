@@ -23,7 +23,7 @@ An extension to [package:bloc](https://github.com/felangel/bloc) which automatic
 
 `hydrated_bloc` exports a `Storage` interface which means it can work with any storage provider. Out of the box, it comes with its own implementation: `HydratedStorage`.
 
-`HydratedStorage` is built on top of [path_provider](https://pub.dev/packages/path_provider) for a platform-agnostic storage layer. The out-of-the-box storage implementation reads/writes to file using the `toJson`/`fromJson` methods on `HydratedBloc` and should perform very well for most use-cases (performance reports coming soon). `HydratedStorage` is supported for desktop ([example](https://github.com/felangel/hydrated_bloc/tree/master/example)).
+`HydratedStorage` is built on top of [hive](https://pub.dev/packages/hive) for a platform-agnostic, performant storage layer. See the complete [example](https://github.com/felangel/hydrated_bloc/tree/master/example) for more details.
 
 ## Usage
 
@@ -78,7 +78,7 @@ class CounterBloc extends HydratedBloc<CounterEvent, int> {
 }
 ```
 
-Now our `CounterCubit` and `CounterBloc` will automatically persist its state. We can increment the counter value, hot restart, kill the app, etc... and the previous state will be retained.
+Now the `CounterCubit` and `CounterBloc` will automatically persist/restore their state. We can increment the counter value, hot restart, kill the app, etc... and the previous state will be retained.
 
 ### HydratedMixin
 
