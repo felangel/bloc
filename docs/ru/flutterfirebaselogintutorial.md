@@ -124,10 +124,6 @@
 
 ?> **Примечание**: `AuthenticationBloc` зависит от `UserRepository`.
 
-Мы можем начать с переопределения `initialState` в состояние `AuthenticationInitial()`.
-
-[authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_initial_state.dart.md ':include')
-
 Теперь все, что осталось, это реализовать `mapEventToState`.
 
 [authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_map_event_to_state.dart.md ':include')
