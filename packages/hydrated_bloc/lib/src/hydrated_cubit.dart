@@ -190,7 +190,7 @@ mixin HydratedMixin<State> on Cubit<State> {
     }
   }
 
-  dynamic _traverseJson(dynamic object) {
+  dynamic _traverseAtomicJson(dynamic object) {
     if (object is num) {
       if (!object.isFinite) return const NIL();
       return object;
@@ -202,7 +202,12 @@ mixin HydratedMixin<State> on Cubit<State> {
       return null;
     } else if (object is String) {
       return object;
-    } else if (object is List) {
+    }
+    return const NIL();
+  }
+
+  dynamic _traverseComplexJson(dynamic object) {
+    if (object is List) {
       _checkCycle(object);
       List<dynamic> list;
       for (var i = 0; i < object.length; i++) {
@@ -224,6 +229,13 @@ mixin HydratedMixin<State> on Cubit<State> {
       return map;
     }
     return const NIL();
+  }
+
+  dynamic _traverseJson(dynamic object) {
+    final dynamic traversedAtomicJson = _traverseAtomicJson(object);
+    return traversedAtomicJson is! NIL
+        ? traversedAtomicJson
+        : _traverseComplexJson(object);
   }
 
   dynamic _toEncodable(dynamic object) => object.toJson();
