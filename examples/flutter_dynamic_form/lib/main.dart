@@ -10,13 +10,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Flutter Dynamic Form'),
-        ),
+        appBar: AppBar(title: const Text('Flutter Dynamic Form')),
         body: BlocProvider(
-          create: (context) => NewCarBloc(
-            newCarRepository: NewCarRepository(),
-          )..add(NewCarFormLoaded()),
+          create: (_) => NewCarBloc(newCarRepository: NewCarRepository())
+            ..add(NewCarFormLoaded()),
           child: MyForm(),
         ),
       ),
@@ -27,27 +24,22 @@ class MyApp extends StatelessWidget {
 class MyForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    void _onBrandChanged(String brand) => BlocProvider.of<NewCarBloc>(context)
-        .add(NewCarBrandChanged(brand: brand));
+    void _onBrandChanged(String brand) =>
+        context.bloc<NewCarBloc>().add(NewCarBrandChanged(brand: brand));
 
-    void _onModelChanged(String model) => BlocProvider.of<NewCarBloc>(context)
-        .add(NewCarModelChanged(model: model));
+    void _onModelChanged(String model) =>
+        context.bloc<NewCarBloc>().add(NewCarModelChanged(model: model));
 
     void _onYearChanged(String year) =>
-        BlocProvider.of<NewCarBloc>(context).add(NewCarYearChanged(year: year));
+        context.bloc<NewCarBloc>().add(NewCarYearChanged(year: year));
 
-    void _onFormSubmitted({
-      String brand,
-      String model,
-      String year,
-    }) =>
-        Scaffold.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(
-              content: Text('Submitted $brand $model $year'),
-            ),
-          );
+    void _onFormSubmitted({String brand, String model, String year}) {
+      Scaffold.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text('Submitted $brand $model $year')),
+        );
+    }
 
     return BlocBuilder<NewCarBloc, NewCarState>(
       builder: (context, state) {
@@ -57,10 +49,9 @@ class MyForm extends StatelessWidget {
           children: <Widget>[
             DropdownButton<String>(
               items: state.brands?.isNotEmpty == true
-                  ? state.brands
-                      .map((String brand) =>
-                          DropdownMenuItem(value: brand, child: Text(brand)))
-                      .toList()
+                  ? state.brands.map((brand) {
+                      return DropdownMenuItem(value: brand, child: Text(brand));
+                    }).toList()
                   : const [],
               value: state.brand,
               hint: Text('Select a Brand'),
@@ -68,10 +59,9 @@ class MyForm extends StatelessWidget {
             ),
             DropdownButton<String>(
               items: state.models?.isNotEmpty == true
-                  ? state.models
-                      .map((String model) =>
-                          DropdownMenuItem(value: model, child: Text(model)))
-                      .toList()
+                  ? state.models.map((model) {
+                      return DropdownMenuItem(value: model, child: Text(model));
+                    }).toList()
                   : const [],
               value: state.model,
               hint: Text('Select a Model'),
@@ -79,10 +69,9 @@ class MyForm extends StatelessWidget {
             ),
             DropdownButton<String>(
               items: state.years?.isNotEmpty == true
-                  ? state.years
-                      .map((String year) =>
-                          DropdownMenuItem(value: year, child: Text(year)))
-                      .toList()
+                  ? state.years.map((year) {
+                      return DropdownMenuItem(value: year, child: Text(year));
+                    }).toList()
                   : const [],
               value: state.year,
               hint: Text('Select a Year'),
@@ -90,13 +79,15 @@ class MyForm extends StatelessWidget {
             ),
             RaisedButton(
               onPressed: state.isComplete
-                  ? () => _onFormSubmitted(
+                  ? () {
+                      return _onFormSubmitted(
                         brand: state.brand,
                         model: state.model,
                         year: state.year,
-                      )
+                      );
+                    }
                   : null,
-              child: Text('Submit'),
+              child: const Text('Submit'),
             ),
           ],
         );
