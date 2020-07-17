@@ -205,6 +205,11 @@ mixin HydratedMixin<State> on Cubit<State> {
     } else if (object is String) {
       return object; // not garb, because list should be of that type
     } else if (object is List) {
+      // so i'm traversing list of list of custom objs
+      // or traversing list of map of custom objs
+      // and on traverse of inner list, i make new dynamic list
+      // then it's returned to here
+      // but it was marked as `builtIn`
       _checkCycle(object);
       List<dynamic> list;
       for (var i = 0; i < object.length; i++) {

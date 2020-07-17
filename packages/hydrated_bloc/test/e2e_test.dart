@@ -125,6 +125,33 @@ void main() {
           <ToListListObject>[item],
         );
       });
+
+      test('persists and restores object->list<cust> list correctly', () async {
+        final item = ToListCustomObject(1);
+        fromJson(dynamic x) => ToListCustomObject.fromJson(x as List<dynamic>);
+        final cubit = HeavyListCubit<ToListCustomObject>(fromJson);
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(
+          HeavyListCubit<ToListCustomObject>(fromJson).state,
+          <ToListCustomObject>[item],
+        );
+      });
+
+      test('persists restores object->list<cust>ex list correctly', () async {
+        final item = ToListCustomObject(1);
+        fromJson(dynamic x) => ToListCustomObject.fromJson(x as List<dynamic>);
+        final cubit = HeavyListCubit<ToListCustomObject>(fromJson, true);
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(
+          HeavyListCubit<ToListCustomObject>(fromJson).state,
+          <ToListCustomObject>[item],
+        );
+      });
+// test('persists and restores object->map<cust> list correctly', () async {
     });
 
     group('ManualCubit', () {

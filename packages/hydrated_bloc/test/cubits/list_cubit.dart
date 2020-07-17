@@ -17,14 +17,24 @@ class ListCubit extends HydratedCubit<List<String>> {
 }
 
 class HeavyListCubit<T> extends HydratedCubit<List<T>> {
-  HeavyListCubit(this._fromJson) : super(<T>[]);
+  HeavyListCubit(this._fromJson, [this.explicit = false]) : super(<T>[]);
   final T Function(dynamic json) _fromJson;
+  final bool explicit;
 
   void addItem(T item) => emit(List.from(state)..add(item));
 
   @override
   Map<String, dynamic> toJson(List<T> state) {
-    return <String, dynamic>{'state': state};
+    // return <String, dynamic>{'state': state};
+    return <String, dynamic>{
+      'state': (explicit
+          ? state
+              .map<List<CustomObject>>(
+                (e) => (e as dynamic).toJson() as List<CustomObject>,
+              )
+              .toList()
+          : state)
+    };
   }
 
   @override
@@ -123,6 +133,54 @@ class ToListListObject {
     if (identical(this, o)) return true;
 
     return o is ToListListObject && o.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+}
+
+class ToListCustomObject {
+  ToListCustomObject(int value) : value = CustomObject(value);
+  final CustomObject value;
+
+  List<dynamic> toJson() {
+    return <CustomObject>[value];
+  }
+
+  static ToListCustomObject fromJson(List<dynamic> list) {
+    return ToListCustomObject(
+      CustomObject.fromJson(list[0] as Map<String, dynamic>).value,
+    );
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is ToListCustomObject && o.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+}
+
+class CustomObject {
+  CustomObject(this.value);
+  final int value;
+
+  Map<String, dynamic> toJson() {
+    return <String, int>{'value': value};
+  }
+
+  static CustomObject fromJson(Map<String, dynamic> json) {
+    return CustomObject(json['value'] as int);
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is CustomObject && o.value == value;
   }
 
   @override
