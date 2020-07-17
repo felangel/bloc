@@ -231,6 +231,33 @@ void main() {
           <ListCustomObject>[item],
         );
       });
+
+      test('persists and restores obj->list<custom> empty list correctly',
+          () async {
+        const fromJson = ListCustomObject.fromJson;
+        final cubit = ListCubitList<ListCustomObject, CustomObject>(fromJson);
+        expect(cubit.state, isEmpty);
+        cubit.reset();
+        await sleep();
+        expect(
+          ListCubitList<ListCustomObject, CustomObject>(fromJson).state,
+          isEmpty,
+        );
+      });
+
+      test('persists and restores obj-*>list<custom> empty list correctly',
+          () async {
+        const fromJson = ListCustomObject.fromJson;
+        final cubit =
+            ListCubitList<ListCustomObject, CustomObject>(fromJson, true);
+        expect(cubit.state, isEmpty);
+        cubit.reset();
+        await sleep();
+        expect(
+          ListCubitList<ListCustomObject, CustomObject>(fromJson).state,
+          isEmpty,
+        );
+      });
     });
 
     group('ManualCubit', () {
