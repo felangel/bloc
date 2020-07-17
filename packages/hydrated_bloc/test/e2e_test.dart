@@ -76,20 +76,55 @@ void main() {
 
       test('persists and restores object->map list correctly', () async {
         const item = MapObject(1);
-        final cubit = ListCubitMap();
+        const fromJson = MapObject.fromJson;
+        final cubit = ListCubitMap<MapObject, int>(fromJson);
         expect(cubit.state, isEmpty);
         cubit.addItem(item);
         await sleep();
-        expect(ListCubitMap().state, const <MapObject>[item]);
+        expect(
+          ListCubitMap<MapObject, int>(fromJson).state,
+          const <MapObject>[item],
+        );
       });
 
       test('persists and restores object-*>map list correctly', () async {
         const item = MapObject(1);
-        final cubit = ListCubitMap(true);
+        const fromJson = MapObject.fromJson;
+        final cubit = ListCubitMap<MapObject, int>(fromJson, true);
         expect(cubit.state, isEmpty);
         cubit.addItem(item);
         await sleep();
-        expect(ListCubitMap().state, const <MapObject>[item]);
+        expect(
+          ListCubitMap<MapObject, int>(fromJson).state,
+          const <MapObject>[item],
+        );
+      });
+
+      test('persists and restores obj->map<custom> list correctly', () async {
+        final item = MapCustomObject(1);
+        const fromJson = MapCustomObject.fromJson;
+        final cubit = ListCubitMap<MapCustomObject, CustomObject>(fromJson);
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(
+          ListCubitMap<MapCustomObject, CustomObject>(fromJson).state,
+          <MapCustomObject>[item],
+        );
+      });
+
+      test('persists and restores obj-*>map<custom> list correctly', () async {
+        final item = MapCustomObject(1);
+        const fromJson = MapCustomObject.fromJson;
+        final cubit =
+            ListCubitMap<MapCustomObject, CustomObject>(fromJson, true);
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(
+          ListCubitMap<MapCustomObject, CustomObject>(fromJson).state,
+          <MapCustomObject>[item],
+        );
       });
 
       test('persists and restores object->list list correctly', () async {

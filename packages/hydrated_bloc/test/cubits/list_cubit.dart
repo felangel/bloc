@@ -16,17 +16,18 @@ class ListCubit extends HydratedCubit<List<String>> {
   }
 }
 
-class ListCubitMap extends HydratedCubit<List<MapObject>> {
-  ListCubitMap([this.explicit = false]) : super(<MapObject>[]);
+class ListCubitMap<T extends ToJsonMap<E>, E> extends HydratedCubit<List<T>> {
+  ListCubitMap(this._fromJson, [this.explicit = false]) : super(<T>[]);
+  final T Function(Map<String, dynamic> json) _fromJson;
   final bool explicit;
 
-  void addItem(MapObject item) => emit(List.from(state)..add(item));
+  void addItem(T item) => emit(List.from(state)..add(item));
 
   @override
-  Map<String, dynamic> toJson(List<MapObject> state) {
+  Map<String, dynamic> toJson(List<T> state) {
     final map = <String, dynamic>{
       'state': explicit
-          ? List<Map<String, dynamic>>.from(state.map<dynamic>(
+          ? List<Map<String, E>>.from(state.map<dynamic>(
               (x) => x.toJson(),
             ))
           : state
@@ -35,10 +36,10 @@ class ListCubitMap extends HydratedCubit<List<MapObject>> {
   }
 
   @override
-  List<MapObject> fromJson(Map<String, dynamic> json) {
+  List<T> fromJson(Map<String, dynamic> json) {
     final list = (json['state'] as List)
         .map((dynamic x) => x as Map<String, dynamic>)
-        .map(MapObject.fromJson)
+        .map(_fromJson)
         .toList();
     return list;
   }
@@ -73,12 +74,17 @@ class ListCubitList<T extends ToJsonList<E>, E> extends HydratedCubit<List<T>> {
   }
 }
 
-class MapObject {
+mixin ToJsonMap<T> {
+  Map<String, T> toJson();
+}
+
+class MapObject with ToJsonMap<int> {
   const MapObject(this.value);
   final int value;
 
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{'value': value};
+  @override
+  Map<String, int> toJson() {
+    return <String, int>{'value': value};
   }
 
   static MapObject fromJson(Map<String, dynamic> map) {
@@ -90,6 +96,32 @@ class MapObject {
     if (identical(this, o)) return true;
 
     return o is MapObject && o.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+}
+
+class MapCustomObject with ToJsonMap<CustomObject> {
+  MapCustomObject(int value) : value = CustomObject(value);
+  final CustomObject value;
+
+  @override
+  Map<String, CustomObject> toJson() {
+    return <String, CustomObject>{'value': value};
+  }
+
+  static MapCustomObject fromJson(Map<String, dynamic> map) {
+    return MapCustomObject(CustomObject.fromJson(
+      map['value'] as Map<String, dynamic>,
+    ).value);
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is MapCustomObject && o.value == value;
   }
 
   @override
@@ -186,9 +218,9 @@ class ListCustomObject with ToJsonList<CustomObject> {
   }
 
   static ListCustomObject fromJson(List<dynamic> list) {
-    return ListCustomObject(
-      CustomObject.fromJson(list[0] as Map<String, dynamic>).value,
-    );
+    return ListCustomObject(CustomObject.fromJson(
+      list[0] as Map<String, dynamic>,
+    ).value);
   }
 
   @override
