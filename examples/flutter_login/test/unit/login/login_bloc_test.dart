@@ -62,7 +62,7 @@ void main() {
   group('LoginButtonPressed', () {
     blocTest(
       'emits [LoginLoading, LoginInitial] and token on success',
-      build: () async {
+      build: () {
         when(userRepository.authenticate(
           username: 'valid.username',
           password: 'valid.password',
@@ -87,7 +87,7 @@ void main() {
 
     blocTest(
       'emits [LoginLoading, LoginFailure] on failure',
-      build: () async {
+      build: () {
         when(userRepository.authenticate(
           username: 'valid.username',
           password: 'valid.password',

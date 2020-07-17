@@ -44,7 +44,7 @@ void main() {
     group('WeatherRequested', () {
       blocTest(
         'emits [WeatherLoadInProgress, WeatherLoadSuccess] when weather repository returns weather',
-        build: () async {
+        build: () {
           when(weatherRepository.getWeather('chicago')).thenAnswer(
             (_) => Future.value(weather),
           );
@@ -59,7 +59,7 @@ void main() {
 
       blocTest(
         'emits [WeatherLoadInProgress, WeatherLoadFailure] when weather repository throws error',
-        build: () async {
+        build: () {
           when(weatherRepository.getWeather('chicago'))
               .thenThrow('Weather Error');
           return weatherBloc;
@@ -75,7 +75,7 @@ void main() {
     group('WeatherRefreshRequested', () {
       blocTest(
         'emits [WeatherLoadSuccess] when weather repository returns weather',
-        build: () async {
+        build: () {
           when(weatherRepository.getWeather('chicago')).thenAnswer(
             (_) => Future.value(weather),
           );
@@ -87,7 +87,7 @@ void main() {
 
       blocTest(
         'emits [] when weather repository throws error',
-        build: () async {
+        build: () {
           when(weatherRepository.getWeather('chicago'))
               .thenThrow('Weather Error');
           return weatherBloc;
