@@ -18,9 +18,7 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
   ComplexBloc() : super(ComplexStateA());
 
   @override
-  Stream<ComplexState> mapEventToState(
-    ComplexEvent event,
-  ) async* {
+  Stream<ComplexState> mapEventToState(ComplexEvent event) async* {
     if (event is ComplexEventA) {
       yield ComplexStateA();
     } else if (event is ComplexEventB) {

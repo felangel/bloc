@@ -2,17 +2,15 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 
-enum AsyncCounterEvent { increment }
+import 'blocs.dart';
 
-class AsyncCounterBloc extends Bloc<AsyncCounterEvent, int> {
+class AsyncCounterBloc extends Bloc<CounterEvent, int> {
   AsyncCounterBloc() : super(0);
 
   @override
-  Stream<int> mapEventToState(
-    AsyncCounterEvent event,
-  ) async* {
+  Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
-      case AsyncCounterEvent.increment:
+      case CounterEvent.increment:
         await Future<void>.delayed(const Duration(microseconds: 1));
         yield state + 1;
         break;
