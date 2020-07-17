@@ -168,9 +168,13 @@ mixin HydratedMixin<State> on Cubit<State> {
   }
 
   _Traversed _traverseWrite(dynamic value) {
-    final dynamic traversedJson = _traverseJson(value);
-    if (traversedJson is! NIL) {
-      return _Traversed.builtIn(traversedJson);
+    final dynamic traversedAtomicJson = _traverseAtomicJson(value);
+    if (traversedAtomicJson is! NIL) {
+      return _Traversed.atomic(traversedAtomicJson);
+    }
+    final dynamic traversedComplexJson = _traverseComplexJson(value);
+    if (traversedComplexJson is! NIL) {
+      return _Traversed.complex(traversedComplexJson);
     }
     try {
       _checkCycle(value);
@@ -180,7 +184,7 @@ mixin HydratedMixin<State> on Cubit<State> {
         throw HydratedUnsupportedError(value);
       }
       _removeSeen(value);
-      return _Traversed.custom(traversedCustomJson);
+      return _Traversed.complex(traversedCustomJson);
     } on HydratedCyclicError catch (e) {
       throw HydratedUnsupportedError(value, cause: e);
     } on HydratedUnsupportedError {
@@ -212,7 +216,7 @@ mixin HydratedMixin<State> on Cubit<State> {
       List<dynamic> list;
       for (var i = 0; i < object.length; i++) {
         final traversed = _traverseWrite(object[i]);
-        list ??= traversed.outcome == _Outcome.builtIn
+        list ??= traversed.outcome == _Outcome.atomic
             ? object.sublist(0)
             : (<dynamic>[]..length = object.length);
         list[i] = traversed.value;
@@ -338,14 +342,14 @@ class NIL {
   const NIL();
 }
 
-enum _Outcome { builtIn, custom }
+enum _Outcome { atomic, complex }
 
 class _Traversed {
   _Traversed._({@required this.outcome, @required this.value});
-  _Traversed.builtIn(dynamic value)
-      : this._(outcome: _Outcome.builtIn, value: value);
-  _Traversed.custom(dynamic value)
-      : this._(outcome: _Outcome.custom, value: value);
+  _Traversed.atomic(dynamic value)
+      : this._(outcome: _Outcome.atomic, value: value);
+  _Traversed.complex(dynamic value)
+      : this._(outcome: _Outcome.complex, value: value);
   final _Outcome outcome;
   final dynamic value;
 }
