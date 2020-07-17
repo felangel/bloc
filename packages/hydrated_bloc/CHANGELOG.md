@@ -1,3 +1,7 @@
+# 6.0.0-dev.5
+
+- fix: handle empty case for list traversal
+
 # 6.0.0-dev.4
 
 - fix: additional complex list (de)serialization errors ([@orsenkucher](https://github.com/orsenkucher))

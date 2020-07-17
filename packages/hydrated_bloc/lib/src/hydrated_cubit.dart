@@ -120,32 +120,12 @@ mixin HydratedMixin<State> on Cubit<State> {
     try {
       final stateJson = storage.read(storageToken) as Map<dynamic, dynamic>;
       if (stateJson == null) return _state = super.state;
-      return _state = fromJson(
-        _cast<Map<String, dynamic>>(_traverseRead(stateJson)),
-      );
+      return _state = _fromJson(stateJson);
     } on dynamic catch (error, stackTrace) {
       onError(error, stackTrace);
       return _state = super.state;
     }
   }
-
-  dynamic _traverseRead(dynamic value) {
-    if (value is Map) {
-      final map = <String, dynamic>{};
-      value.forEach((dynamic key, dynamic value) {
-        map[_cast<String>(key)] = _traverseRead(value);
-      });
-      return map;
-    }
-    if (value is List) {
-      for (var i = 0; i < value.length; i++) {
-        value[i] = _traverseRead(value[i]);
-      }
-    }
-    return value;
-  }
-
-  T _cast<T>(dynamic x) => x is T ? x : null;
 
   @override
   void onChange(Change<State> change) {
@@ -163,9 +143,32 @@ mixin HydratedMixin<State> on Cubit<State> {
     super.onChange(change);
   }
 
+  State _fromJson(dynamic json) {
+    return fromJson(_cast<Map<String, dynamic>>(_traverseRead(json)));
+  }
+
   Map<String, dynamic> _toJson(State state) {
     return _cast<Map<String, dynamic>>(_traverseWrite(toJson(state)).value);
   }
+
+  dynamic _traverseRead(dynamic value) {
+    if (value is Map) {
+      return value.map<String, dynamic>((dynamic key, dynamic value) {
+        return MapEntry<String, dynamic>(
+          _cast<String>(key),
+          _traverseRead(value),
+        );
+      });
+    }
+    if (value is List) {
+      for (var i = 0; i < value.length; i++) {
+        value[i] = _traverseRead(value[i]);
+      }
+    }
+    return value;
+  }
+
+  T _cast<T>(dynamic x) => x is T ? x : null;
 
   _Traversed _traverseWrite(dynamic value) {
     final dynamic traversedAtomicJson = _traverseAtomicJson(value);
@@ -212,6 +215,7 @@ mixin HydratedMixin<State> on Cubit<State> {
 
   dynamic _traverseComplexJson(dynamic object) {
     if (object is List) {
+      if (object.isEmpty) return object;
       _checkCycle(object);
       List<dynamic> list;
       for (var i = 0; i < object.length; i++) {

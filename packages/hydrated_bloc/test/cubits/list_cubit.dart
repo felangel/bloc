@@ -51,6 +51,7 @@ class ListCubitList<T extends ToJsonList<E>, E> extends HydratedCubit<List<T>> {
   final bool explicit;
 
   void addItem(T item) => emit(List.from(state)..add(item));
+  void reset() => emit(<T>[]);
 
   @override
   Map<String, dynamic> toJson(List<T> state) {
