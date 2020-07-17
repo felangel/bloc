@@ -57,7 +57,7 @@ expect(counterBloc.state, equals(3));
 
 `act` is an optional callback which will be invoked with the `cubit` under test and should be used to `add` events to the `cubit`.
 
-`skip` is an optional `int` which can be used to skip any number of states. The default value is 1 which skips the `initialState` of the bloc. `skip` can be overridden to include the `initialState` by setting skip to 0.
+`skip` is an optional `int` which can be used to skip any number of states and defaults to `0`.
 
 `wait` is an optional `Duration` which can be used to wait for async operations within the `cubit` under test such as `debounceTime`.
 
@@ -88,11 +88,11 @@ group('CounterBloc', () {
 
 ```dart
 blocTest(
-  'CounterBloc emits [1] when CounterEvent.increment is added',
+  'CounterBloc emits [2] when CounterEvent.increment is added twice',
   build: () => CounterBloc(),
   act: (bloc) => bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
   skip: 1,
-  expect: [1],
+  expect: [2],
 );
 ```
 
