@@ -1,3 +1,7 @@
+# 6.0.0-dev.4
+
+- fix: additional complex list (de)serialization errors ([@orsenkucher](https://github.com/orsenkucher))
+
 # 6.0.0-dev.3
 
 - fix: complex list (de)serialization errors ([@orsenkucher](https://github.com/orsenkucher))
