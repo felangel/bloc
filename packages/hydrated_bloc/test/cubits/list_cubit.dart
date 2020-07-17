@@ -24,21 +24,27 @@ class ListCubitMap extends HydratedCubit<List<MapObject>> {
 
   @override
   Map<String, dynamic> toJson(List<MapObject> state) {
-    return <String, dynamic>{
-      'state': explicit ? state.map((x) => x.toJson()).toList() : state
+    final map = <String, dynamic>{
+      'state': explicit
+          ? List<Map<String, dynamic>>.from(state.map<dynamic>(
+              (x) => x.toJson(),
+            ))
+          : state
     };
+    return map;
   }
 
   @override
   List<MapObject> fromJson(Map<String, dynamic> json) {
-    return (json['state'] as List)
+    final list = (json['state'] as List)
         .map((dynamic x) => x as Map<String, dynamic>)
         .map(MapObject.fromJson)
         .toList();
+    return list;
   }
 }
 
-class ListCubitList<T extends ToJsonList> extends HydratedCubit<List<T>> {
+class ListCubitList<T extends ToJsonList<E>, E> extends HydratedCubit<List<T>> {
   ListCubitList(this._fromJson, [this.explicit = false]) : super(<T>[]);
   final T Function(List<dynamic> json) _fromJson;
   final bool explicit;
@@ -47,17 +53,23 @@ class ListCubitList<T extends ToJsonList> extends HydratedCubit<List<T>> {
 
   @override
   Map<String, dynamic> toJson(List<T> state) {
-    return <String, dynamic>{
-      'state': explicit ? state.map((x) => x.toJson()).toList() : state
+    final map = <String, dynamic>{
+      'state': explicit
+          ? List<List<E>>.from(state.map<dynamic>(
+              (x) => x.toJson(),
+            ))
+          : state
     };
+    return map;
   }
 
   @override
   List<T> fromJson(Map<String, dynamic> json) {
-    return (json['state'] as List)
+    final list = (json['state'] as List)
         .map((dynamic x) => x as List<dynamic>)
         .map(_fromJson)
         .toList();
+    return list;
   }
 }
 
@@ -84,16 +96,16 @@ class MapObject {
   int get hashCode => value.hashCode;
 }
 
-mixin ToJsonList {
-  List<dynamic> toJson();
+mixin ToJsonList<T> {
+  List<T> toJson();
 }
 
-class ListObject with ToJsonList {
+class ListObject with ToJsonList<int> {
   const ListObject(this.value);
   final int value;
 
   @override
-  List<dynamic> toJson() {
+  List<int> toJson() {
     return <int>[value];
   }
 
@@ -112,12 +124,12 @@ class ListObject with ToJsonList {
   int get hashCode => value.hashCode;
 }
 
-class ListMapObject with ToJsonList {
+class ListMapObject with ToJsonList<MapObject> {
   ListMapObject(int value) : value = MapObject(value);
   final MapObject value;
 
   @override
-  List<dynamic> toJson() {
+  List<MapObject> toJson() {
     return <MapObject>[value];
   }
 
@@ -138,12 +150,12 @@ class ListMapObject with ToJsonList {
   int get hashCode => value.hashCode;
 }
 
-class ListListObject with ToJsonList {
+class ListListObject with ToJsonList<ListObject> {
   ListListObject(int value) : value = ListObject(value);
   final ListObject value;
 
   @override
-  List<dynamic> toJson() {
+  List<ListObject> toJson() {
     return <ListObject>[value];
   }
 
@@ -158,6 +170,55 @@ class ListListObject with ToJsonList {
     if (identical(this, o)) return true;
 
     return o is ListListObject && o.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+}
+
+class ListCustomObject with ToJsonList<CustomObject> {
+  ListCustomObject(int value) : value = CustomObject(value);
+  final CustomObject value;
+
+  @override
+  List<CustomObject> toJson() {
+    return <CustomObject>[value];
+  }
+
+  static ListCustomObject fromJson(List<dynamic> list) {
+    return ListCustomObject(
+      CustomObject.fromJson(list[0] as Map<String, dynamic>).value,
+    );
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is ListCustomObject && o.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+}
+
+class CustomObject {
+  CustomObject(this.value);
+  final int value;
+
+  Map<String, dynamic> toJson() {
+    return <String, int>{'value': value};
+  }
+
+  static CustomObject fromJson(Map<String, dynamic> json) {
+    return CustomObject(json['value'] as int);
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is CustomObject && o.value == value;
   }
 
   @override
