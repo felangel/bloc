@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum DebounceCounterEvent { increment }
+import 'blocs.dart';
 
-class DebounceCounterBloc extends Bloc<DebounceCounterEvent, int> {
+class DebounceCounterBloc extends Bloc<CounterEvent, int> {
   DebounceCounterBloc() : super(0);
 
   @override
-  Stream<Transition<DebounceCounterEvent, int>> transformEvents(
-    Stream<DebounceCounterEvent> events,
-    TransitionFunction<DebounceCounterEvent, int> transitionFn,
+  Stream<Transition<CounterEvent, int>> transformEvents(
+    Stream<CounterEvent> events,
+    TransitionFunction<CounterEvent, int> transitionFn,
   ) {
     return events
         .debounceTime(const Duration(milliseconds: 300))
@@ -19,11 +19,9 @@ class DebounceCounterBloc extends Bloc<DebounceCounterEvent, int> {
   }
 
   @override
-  Stream<int> mapEventToState(
-    DebounceCounterEvent event,
-  ) async* {
+  Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
-      case DebounceCounterEvent.increment:
+      case CounterEvent.increment:
         yield state + 1;
         break;
     }

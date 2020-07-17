@@ -2,19 +2,17 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 
+import 'blocs.dart';
+
 class ExceptionCounterBlocException implements Exception {}
 
-enum ExceptionCounterEvent { increment }
-
-class ExceptionCounterBloc extends Bloc<ExceptionCounterEvent, int> {
+class ExceptionCounterBloc extends Bloc<CounterEvent, int> {
   ExceptionCounterBloc() : super(0);
 
   @override
-  Stream<int> mapEventToState(
-    ExceptionCounterEvent event,
-  ) async* {
+  Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
-      case ExceptionCounterEvent.increment:
+      case CounterEvent.increment:
         yield state + 1;
         throw ExceptionCounterBlocException();
         break;

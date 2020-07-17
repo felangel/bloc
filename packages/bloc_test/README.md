@@ -53,7 +53,7 @@ expect(counterBloc.state, equals(3));
 
 **blocTest** creates a new `cubit`-specific test case with the given `description`. `blocTest` will handle asserting that the `cubit` emits the `expect`ed states (in order) after `act` is executed. `blocTest` also handles ensuring that no additional states are emitted by closing the `cubit` stream before evaluating the `expect`ation.
 
-`build` should be used for all `cubit` initialization and preparation and must return the `cubit` under test as a `Future`.
+`build` should be used for all `cubit` initialization and preparation and must return the `cubit` under test.
 
 `act` is an optional callback which will be invoked with the `cubit` under test and should be used to `add` events to the `cubit`.
 
@@ -71,14 +71,14 @@ expect(counterBloc.state, equals(3));
 group('CounterBloc', () {
   blocTest(
     'emits [] when nothing is added',
-    build: () async => CounterBloc(),
+    build: () => CounterBloc(),
     expect: [],
   );
 
   blocTest(
     'emits [1] when CounterEvent.increment is added',
-    build: () async => CounterBloc(),
-    act: (bloc) async => bloc.add(CounterEvent.increment),
+    build: () => CounterBloc(),
+    act: (bloc) => bloc.add(CounterEvent.increment),
     expect: [1],
   );
 });
@@ -89,8 +89,8 @@ group('CounterBloc', () {
 ```dart
 blocTest(
   'CounterBloc emits [1] when CounterEvent.increment is added',
-  build: () async => CounterBloc(),
-  act: (bloc) async => bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+  build: () => CounterBloc(),
+  act: (bloc) => bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
   skip: 1,
   expect: [1],
 );
@@ -101,8 +101,8 @@ blocTest(
 ```dart
 blocTest(
   'CounterBloc emits [1] when CounterEvent.increment is added',
-  build: () async => CounterBloc(),
-  act: (bloc) async => bloc.add(CounterEvent.increment),
+  build: () => CounterBloc(),
+  act: (bloc) => bloc.add(CounterEvent.increment),
   wait: const Duration(milliseconds: 300),
   expect: [1],
 );
@@ -113,10 +113,10 @@ blocTest(
 ```dart
 blocTest(
   'CounterBloc emits [1] when CounterEvent.increment is added',
-  build: () async => CounterBloc(),
-  act: (bloc) async => bloc.add(CounterEvent.increment),
+  build: () => CounterBloc(),
+  act: (bloc) => bloc.add(CounterEvent.increment),
   expect: [1],
-  verify: (_) async {
+  verify: (_) {
     verify(repository.someMethod(any)).called(1);
   }
 );
@@ -127,8 +127,8 @@ blocTest(
 ```dart
 blocTest(
   'CounterBloc throws Exception when null is added',
-  build: () async => CounterBloc(),
-  act: (bloc) async => bloc.add(null),
+  build: () => CounterBloc(),
+  act: (bloc) => bloc.add(null),
   errors: [
     isA<Exception>(),
   ]
@@ -140,8 +140,8 @@ blocTest(
 ```dart
 blocTest(
   'emits [StateB] when MyEvent is added',
-  build: () async => MyBloc(),
-  act: (bloc) async => bloc.add(MyEvent()),
+  build: () => MyBloc(),
+  act: (bloc) => bloc.add(MyEvent()),
   expect: [isA<StateB>()],
 );
 ```
