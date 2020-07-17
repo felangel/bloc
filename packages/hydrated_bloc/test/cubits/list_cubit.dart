@@ -17,13 +17,16 @@ class ListCubit extends HydratedCubit<List<String>> {
 }
 
 class ListCubitMap extends HydratedCubit<List<MapObject>> {
-  ListCubitMap() : super(<MapObject>[]);
+  ListCubitMap([this.explicit = false]) : super(<MapObject>[]);
+  final bool explicit;
 
   void addItem(MapObject item) => emit(List.from(state)..add(item));
 
   @override
   Map<String, dynamic> toJson(List<MapObject> state) {
-    return <String, dynamic>{'state': state};
+    return <String, dynamic>{
+      'state': explicit ? state.map((x) => x.toJson()).toList() : state
+    };
   }
 
   @override
@@ -35,15 +38,18 @@ class ListCubitMap extends HydratedCubit<List<MapObject>> {
   }
 }
 
-class ListCubitList<T> extends HydratedCubit<List<T>> {
-  ListCubitList(this._fromJson) : super(<T>[]);
+class ListCubitList<T extends ToJsonList> extends HydratedCubit<List<T>> {
+  ListCubitList(this._fromJson, [this.explicit = false]) : super(<T>[]);
   final T Function(List<dynamic> json) _fromJson;
+  final bool explicit;
 
   void addItem(T item) => emit(List.from(state)..add(item));
 
   @override
   Map<String, dynamic> toJson(List<T> state) {
-    return <String, dynamic>{'state': state};
+    return <String, dynamic>{
+      'state': explicit ? state.map((x) => x.toJson()).toList() : state
+    };
   }
 
   @override
@@ -78,10 +84,15 @@ class MapObject {
   int get hashCode => value.hashCode;
 }
 
-class ListObject {
+mixin ToJsonList {
+  List<dynamic> toJson();
+}
+
+class ListObject with ToJsonList {
   const ListObject(this.value);
   final int value;
 
+  @override
   List<dynamic> toJson() {
     return <int>[value];
   }
@@ -101,10 +112,11 @@ class ListObject {
   int get hashCode => value.hashCode;
 }
 
-class ListMapObject {
+class ListMapObject with ToJsonList {
   ListMapObject(int value) : value = MapObject(value);
   final MapObject value;
 
+  @override
   List<dynamic> toJson() {
     return <MapObject>[value];
   }
@@ -126,10 +138,11 @@ class ListMapObject {
   int get hashCode => value.hashCode;
 }
 
-class ListListObject {
+class ListListObject with ToJsonList {
   ListListObject(int value) : value = ListObject(value);
   final ListObject value;
 
+  @override
   List<dynamic> toJson() {
     return <ListObject>[value];
   }

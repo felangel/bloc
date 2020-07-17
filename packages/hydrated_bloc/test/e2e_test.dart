@@ -83,10 +83,32 @@ void main() {
         expect(ListCubitMap().state, const <MapObject>[item]);
       });
 
+      test('persists and restores object-*>map list correctly', () async {
+        const item = MapObject(1);
+        final cubit = ListCubitMap(true);
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(ListCubitMap().state, const <MapObject>[item]);
+      });
+
       test('persists and restores object->list list correctly', () async {
         const item = ListObject(1);
         const fromJson = ListObject.fromJson;
         final cubit = ListCubitList<ListObject>(fromJson);
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(
+          ListCubitList<ListObject>(fromJson).state,
+          const <ListObject>[item],
+        );
+      });
+
+      test('persists and restores object-*>list list correctly', () async {
+        const item = ListObject(1);
+        const fromJson = ListObject.fromJson;
+        final cubit = ListCubitList<ListObject>(fromJson, true);
         expect(cubit.state, isEmpty);
         cubit.addItem(item);
         await sleep();
@@ -109,10 +131,36 @@ void main() {
         );
       });
 
-      test('persists and restores object->list<list> list correctly', () async {
+      test('persists and restores obj-*>list<map> list correctly', () async {
+        final item = ListMapObject(1);
+        const fromJson = ListMapObject.fromJson;
+        final cubit = ListCubitList<ListMapObject>(fromJson, true);
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(
+          ListCubitList<ListMapObject>(fromJson).state,
+          <ListMapObject>[item],
+        );
+      });
+
+      test('persists and restores obj->list<list> list correctly', () async {
         final item = ListListObject(1);
         const fromJson = ListListObject.fromJson;
         final cubit = ListCubitList<ListListObject>(fromJson);
+        expect(cubit.state, isEmpty);
+        cubit.addItem(item);
+        await sleep();
+        expect(
+          ListCubitList<ListListObject>(fromJson).state,
+          <ListListObject>[item],
+        );
+      });
+
+      test('persists and restores obj-*>list<list> list correctly', () async {
+        final item = ListListObject(1);
+        const fromJson = ListListObject.fromJson;
+        final cubit = ListCubitList<ListListObject>(fromJson, true);
         expect(cubit.state, isEmpty);
         cubit.addItem(item);
         await sleep();
