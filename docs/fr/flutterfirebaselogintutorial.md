@@ -124,10 +124,6 @@ Nous allons commencer par créer notre classe `AuthenticationBloc`.
 
 ?> **Note**: Notre `AuthenticationBloc` a des dépendances avec `UserRepository`.
 
-Nous pouvons commencer par surcharger `initialState` à l'état (state) `AuthenticationInitial()`.
-
-[authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_initial_state.dart.md ':include')
-
 Maintenant il nous reste plus qu'à implémenter `mapEventToState`.
 
 [authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_map_event_to_state.dart.md ':include')

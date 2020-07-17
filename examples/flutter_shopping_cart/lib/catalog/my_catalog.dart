@@ -54,7 +54,7 @@ class _AddButton extends StatelessWidget {
           return FlatButton(
             onPressed: state.items.contains(item)
                 ? null
-                : () => BlocProvider.of<CartBloc>(context).add(AddItem(item)),
+                : () => context.bloc<CartBloc>().add(CartItemAdded(item)),
             splashColor: Theme.of(context).primaryColor,
             child: state.items.contains(item)
                 ? Icon(Icons.check, semanticLabel: 'ADDED')
@@ -75,8 +75,8 @@ class _MyAppBar extends StatelessWidget {
       floating: true,
       actions: [
         IconButton(
-          icon: Icon(Icons.shopping_cart),
-          onPressed: () => Navigator.pushNamed(context, '/cart'),
+          icon: const Icon(Icons.shopping_cart),
+          onPressed: () => Navigator.of(context).pushNamed('/cart'),
         ),
       ],
     );
@@ -97,16 +97,9 @@ class _MyListItem extends StatelessWidget {
         maxHeight: 48,
         child: Row(
           children: [
-            AspectRatio(
-              aspectRatio: 1,
-              child: Container(
-                color: item.color,
-              ),
-            ),
+            AspectRatio(aspectRatio: 1, child: ColoredBox(color: item.color)),
             SizedBox(width: 24),
-            Expanded(
-              child: Text(item.name, style: textTheme),
-            ),
+            Expanded(child: Text(item.name, style: textTheme)),
             SizedBox(width: 24),
             _AddButton(item: item),
           ],
