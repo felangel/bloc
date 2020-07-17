@@ -1,15 +1,14 @@
+const _delay = Duration(milliseconds: 300);
+Future<void> wait() => Future.delayed(_delay);
+
 class NewCarRepository {
   Future<List<String>> fetchBrands() async {
-    await Future.delayed(Duration(milliseconds: 200));
-    return [
-      'Chevy',
-      'Toyota',
-      'Honda',
-    ];
+    await wait();
+    return ['Chevy', 'Toyota', 'Honda'];
   }
 
   Future<List<String>> fetchModels({String brand}) async {
-    await Future.delayed(Duration(milliseconds: 200));
+    await wait();
     switch (brand) {
       case 'Chevy':
         return ['Malibu', 'Impala'];
@@ -23,7 +22,7 @@ class NewCarRepository {
   }
 
   Future<List<String>> fetchYears({String brand, String model}) async {
-    await Future.delayed(Duration(milliseconds: 200));
+    await wait();
     switch (brand) {
       case 'Chevy':
         switch (model) {

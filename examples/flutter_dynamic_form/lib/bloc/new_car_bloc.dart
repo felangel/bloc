@@ -21,11 +21,11 @@ class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
     if (event is NewCarFormLoaded) {
       yield* _mapNewCarFormLoadedToState();
     } else if (event is NewCarBrandChanged) {
-      yield* _mapNewCarBrandChangedToState(event);
+      yield* _mapNewCarBrandChangedToState(event, state);
     } else if (event is NewCarModelChanged) {
-      yield* _mapNewCarModelChangedToState(event);
+      yield* _mapNewCarModelChangedToState(event, state);
     } else if (event is NewCarYearChanged) {
-      yield* _mapNewCarYearChangedToState(event);
+      yield _mapNewCarYearChangedToState(event);
     }
   }
 
@@ -36,44 +36,45 @@ class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
   }
 
   Stream<NewCarState> _mapNewCarBrandChangedToState(
-      NewCarBrandChanged event) async* {
-    final currentState = state;
+    NewCarBrandChanged event,
+    NewCarState state,
+  ) async* {
     yield NewCarState.modelsLoadInProgress(
-      brands: currentState.brands,
+      brands: state.brands,
       brand: event.brand,
     );
     final models = await _newCarRepository.fetchModels(brand: event.brand);
     yield NewCarState.modelsLoadSuccess(
-      brands: currentState.brands,
+      brands: state.brands,
       brand: event.brand,
       models: models,
     );
   }
 
   Stream<NewCarState> _mapNewCarModelChangedToState(
-      NewCarModelChanged event) async* {
-    final currentState = state;
+    NewCarModelChanged event,
+    NewCarState state,
+  ) async* {
     yield NewCarState.yearsLoadInProgress(
-      brands: currentState.brands,
-      brand: currentState.brand,
-      models: currentState.models,
+      brands: state.brands,
+      brand: state.brand,
+      models: state.models,
       model: event.model,
     );
     final years = await _newCarRepository.fetchYears(
-      brand: currentState.brand,
+      brand: state.brand,
       model: event.model,
     );
     yield NewCarState.yearsLoadSuccess(
-      brands: currentState.brands,
-      brand: currentState.brand,
-      models: currentState.models,
+      brands: state.brands,
+      brand: state.brand,
+      models: state.models,
       model: event.model,
       years: years,
     );
   }
 
-  Stream<NewCarState> _mapNewCarYearChangedToState(
-      NewCarYearChanged event) async* {
-    yield state.copyWith(year: event.year);
+  NewCarState _mapNewCarYearChangedToState(NewCarYearChanged event) {
+    return state.copyWith(year: event.year);
   }
 }
