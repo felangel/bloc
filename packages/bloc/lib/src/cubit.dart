@@ -74,6 +74,7 @@ abstract class Cubit<State> extends Stream<State> {
   /// as it is the first thing emitted by the [Cubit].
   /// {@endtemplate}
   @protected
+  @visibleForTesting
   void emit(State state) {
     if (_controller.isClosed) return;
     if (state == _state && _emitted) return;
