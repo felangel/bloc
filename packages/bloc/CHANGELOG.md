@@ -1,3 +1,7 @@
+# 6.0.0-dev.2
+
+- fix: add `@visibleForTesting` to `emit` on class `Cubit`
+
 # 6.0.0-dev.1
 
 - **BREAKING**: do not emit current state on subscription

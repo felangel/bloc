@@ -1,4 +1,3 @@
-// ignore_for_file: invalid_use_of_protected_member
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
@@ -56,6 +55,7 @@ void main() {
         final cubit = CounterCubit(onChangeCallback: changes.add);
         await cubit.close();
         expect(changes, isEmpty);
+        // ignore: invalid_use_of_protected_member
         verifyNever(observer.onChange(any, any));
       });
 
@@ -68,6 +68,7 @@ void main() {
           changes,
           const [Change<int>(currentState: 0, nextState: 1)],
         );
+        // ignore: invalid_use_of_protected_member
         verify(observer.onChange(
           cubit,
           const Change<int>(currentState: 0, nextState: 1),
@@ -88,10 +89,12 @@ void main() {
             Change<int>(currentState: 1, nextState: 2),
           ],
         );
+        // ignore: invalid_use_of_protected_member
         verify(observer.onChange(
           cubit,
           const Change<int>(currentState: 0, nextState: 1),
         )).called(1);
+        // ignore: invalid_use_of_protected_member
         verify(observer.onChange(
           cubit,
           const Change<int>(currentState: 1, nextState: 2),
@@ -105,6 +108,12 @@ void main() {
         await cubit.close();
         cubit.increment();
         await expectLater(cubit, emitsInOrder(<Matcher>[emitsDone]));
+      });
+
+      test('can be invoked directly within a test', () async {
+        final cubit = CounterCubit()..emit(100);
+        expect(cubit.state, 100);
+        await cubit.close();
       });
 
       test('emits states in the correct order', () async {
