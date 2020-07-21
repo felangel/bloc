@@ -1,12 +1,283 @@
-# Migrating to v5.0.0
+# Migration Guide
 
-> Detailed instructions on how to migrate to v5.0.0 of the bloc library. Please refer to the [release log](https://github.com/felangel/bloc/releases) for more information regarding what changed in each release.
+?> **Tip**: Please refer to the [release log](https://github.com/felangel/bloc/releases) for more information regarding what changed in each release.
 
-## package:bloc
+## v6.0.0
 
-### initialState has been removed
+### package:bloc
 
-#### Rationale
+#### ❗BlocObserver onError takes Cubit
+
+##### Rationale
+
+Due to the integration of `Cubit`, `onError` is now shared between both `Bloc` and `Cubit` instances. Since `Cubit` is the base, `BlocObserver` will accept a `Cubit` type rather than a `Bloc` type in the `onError` override.
+
+**v5.x.x**
+
+```dart
+class MyBlocObserver extends BlocObserver {
+  @override
+  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
+    super.onError(bloc, error, stackTrace);
+  }
+}
+```
+
+**v6.0.0**
+
+```dart
+class MyBlocObserver extends BlocObserver {
+  @override
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
+    super.onError(cubit, error, stackTrace);
+  }
+}
+```
+
+#### ❗Bloc does not emit last state on subscription
+
+##### Rationale
+
+This change was made to align `Bloc` and `Cubit` with the built-in `Stream` behavior in `Dart`. In addition, conforming this the old behavior in the context of `Cubit` led to many unintended side-effects and overall complicated the internal implementations of other packages such as `flutter_bloc` and `bloc_test` unnecessarily (requiring `skip(1)`, etc...).
+
+**v5.x.x**
+
+```dart
+final bloc = MyBloc();
+bloc.listen(print);
+```
+
+Previously, the above snippet would output the initial state of the bloc followed by subsequent state changes.
+
+**v6.x.x**
+
+```dart
+final bloc = MyBloc();
+bloc.listen(print);
+```
+
+In v6.0.0, the above snippet does not output the initial state and only outputs subsequent state changes. The previous behavior can be achieved with the following:
+
+```dart
+final bloc = MyBloc();
+print(bloc.state);
+bloc.listen(print);
+```
+
+### package:bloc_test
+
+#### ❗MockBloc only requires State type
+
+##### Rationale
+
+It is not necessary and eliminates extra code while also making `MockBloc` compatible with `Cubit`.
+
+**v5.x.x**
+
+```dart
+class MockCounterBloc extends MockBloc<CounterEvent, int> implements CounterBloc {}
+```
+
+**v6.0.0**
+
+```dart
+class MockCounterBloc extends MockBloc<int> implements CounterBloc {}
+```
+
+#### ❗whenListen only requires State type
+
+##### Rationale
+
+It is not necessary and eliminates extra code while also making `whenListen` compatible with `Cubit`.
+
+**v5.x.x**
+
+```dart
+whenListen<CounterEvent,int>(bloc, Stream.fromIterable([0, 1, 2, 3]));
+```
+
+**v6.0.0**
+
+```dart
+whenListen<int>(bloc, Stream.fromIterable([0, 1, 2, 3]));
+```
+
+#### ❗blocTest only requires State type
+
+##### Rationale
+
+It is not necessary and eliminates extra code while also making `blocTest` compatible with `Cubit`.
+
+**v5.x.x**
+
+```dart
+blocTest<CounterBloc, CounterEvent, int>(
+  'emits [1] when increment is called',
+  build: () async => CounterBloc(),
+  act: (bloc) => bloc.add(CounterEvent.increment),
+  expect: const <int>[1],
+);
+```
+
+**v6.0.0**
+
+```dart
+blocTest<CounterBloc, int>(
+  'emits [1] when increment is called',
+  build: () => CounterBloc(),
+  act: (bloc) => bloc.add(CounterEvent.increment),
+  expect: const <int>[1],
+);
+```
+
+#### ❗blocTest skip defaults to 0
+
+##### Rationale
+
+Since `bloc` and `cubit` instances will no longer emit the latest state for new subscriptions, it was no longer necessary to default `skip` to `1`.
+
+**v5.x.x**
+
+```dart
+blocTest<CounterBloc, CounterEvent, int>(
+  'emits [0] when skip is 0',
+  build: () async => CounterBloc(),
+  skip: 0,
+  expect: const <int>[0],
+);
+```
+
+**v6.0.0**
+
+```dart
+blocTest<CounterBloc, int>(
+  'emits [] when skip is 0',
+  build: () => CounterBloc(),
+  skip: 0,
+  expect: const <int>[],
+);
+```
+
+#### ❗blocTest make build synchronous
+
+##### Rationale
+
+Previously, `build` was made `async` so that various preparation could be done to put the bloc under test in a specific state. It is no longer necessary and also resolves several issues due to the added latency between the build and the subscription internally. Instead of doing async prep to get a bloc in a desired state we can now set the bloc state by chaining `emit` with the desired state.
+
+**v5.x.x**
+
+```dart
+blocTest<CounterBloc, CounterEvent, int>(
+  'emits [2] when increment is added',
+  build: () async {
+    final bloc = CounterBloc();
+    bloc.add(CounterEvent.increment);
+    await bloc.take(2);
+    return bloc;
+  }
+  act: (bloc) => bloc.add(CounterEvent.increment),
+  expect: const <int>[2],
+);
+```
+
+**v6.0.0**
+
+```dart
+blocTest<CounterBloc, int>(
+  'emits [2] when increment is added',
+  build: () => CounterBloc()..emit(1),
+  act: (bloc) => bloc.add(CounterEvent.increment),
+  expect: const <int>[2],
+);
+```
+
+!> `emit` is only visible for testing and should never be used outside of tests.
+
+### package:flutter_bloc
+
+#### ❗BlocBuilder bloc parameter renamed to cubit
+
+##### Rationale
+
+In order to make `BlocBuilder` interoperate with `bloc` and `cubit` instances the `bloc` parameter was renamed to `cubit` (since `Cubit` is the base class).
+
+**v5.x.x**
+
+```dart
+BlocBuilder(
+  bloc: myBloc,
+  builder: (context, state) {...}
+)
+```
+
+**v6.0.0**
+
+```dart
+BlocBuilder(
+  cubit: myBloc,
+  builder: (context, state) {...}
+)
+```
+
+#### ❗BlocListener bloc parameter renamed to cubit
+
+##### Rationale
+
+In order to make `BlocListener` interoperate with `bloc` and `cubit` instances the `bloc` parameter was renamed to `cubit` (since `Cubit` is the base class).
+
+**v5.x.x**
+
+```dart
+BlocListener(
+  bloc: myBloc,
+  listener: (context, state) {...}
+)
+```
+
+**v6.0.0**
+
+```dart
+BlocListener(
+  cubit: myBloc,
+  listener: (context, state) {...}
+)
+```
+
+#### ❗BlocConsumer bloc parameter renamed to cubit
+
+##### Rationale
+
+In order to make `BlocConsumer` interoperate with `bloc` and `cubit` instances the `bloc` parameter was renamed to `cubit` (since `Cubit` is the base class).
+
+**v5.x.x**
+
+```dart
+BlocConsumer(
+  bloc: myBloc,
+  listener: (context, state) {...},
+  builder: (context, state) {...}
+)
+```
+
+**v6.0.0**
+
+```dart
+BlocConsumer(
+  cubit: myBloc,
+  listener: (context, state) {...},
+  builder: (context, state) {...}
+)
+```
+
+---
+
+## v5.0.0
+
+### package:bloc
+
+#### ❗initialState has been removed
+
+##### Rationale
 
 As a developer, having to override `initialState` when creating a bloc presents two main issues:
 
@@ -36,9 +307,9 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 ?> For more information check out [#1304](https://github.com/felangel/bloc/issues/1304)
 
-### BlocDelegate renamed to BlocObserver
+#### ❗BlocDelegate renamed to BlocObserver
 
-#### Rationale
+##### Rationale
 
 The name `BlocDelegate` was not an accurate description of the role that the class played. `BlocDelegate` suggests that the class plays an active role whereas in reality the intended role of the `BlocDelegate` was for it to be a passive component which simply observes all blocs in an application.
 
@@ -60,9 +331,9 @@ class MyBlocObserver extends BlocObserver {
 }
 ```
 
-### BlocSupervisor has been removed
+#### ❗BlocSupervisor has been removed
 
-#### Rationale
+##### Rationale
 
 `BlocSupervisor` was yet another component that developers had to know about and interact with for the sole purpose of specifying a custom `BlocDelegate`. With the change to `BlocObserver` we felt it improved the developer experience to set the observer directly on the bloc itself.
 
@@ -80,11 +351,11 @@ BlocSupervisor.delegate = MyBlocDelegate();
 Bloc.observer = MyBlocObserver();
 ```
 
-## package:flutter_bloc
+### package:flutter_bloc
 
-### BlocBuilder condition renamed to buildWhen
+#### ❗BlocBuilder condition renamed to buildWhen
 
-#### Rationale
+##### Rationale
 
 When using `BlocBuilder`, we previously could specify a `condition` to determine whether the `builder` should rebuild.
 
@@ -136,9 +407,9 @@ BlocBuilder<MyBloc, MyState>(
 )
 ```
 
-### BlocListener condition renamed to listenWhen
+#### ❗BlocListener condition renamed to listenWhen
 
-#### Rationale
+##### Rationale
 
 For the same reasons as described above, the `BlocListener` condition was also renamed.
 
@@ -164,11 +435,11 @@ BlocListener<MyBloc, MyState>(
 )
 ```
 
-## package:hydrated_bloc
+### package:hydrated_bloc
 
-### HydratedStorage and HydratedBlocStorage renamed
+#### ❗HydratedStorage and HydratedBlocStorage renamed
 
-#### Rationale
+##### Rationale
 
 In order to improve code reuse between [hydrated_bloc](https://pub.dev/packages/hydrated_bloc) and [hydrated_cubit](https://pub.dev/packages/hydrated_cubit), the concrete default storage implementation was renamed from `HydratedBlocStorage` to `HydratedStorage`. In addition, the `HydratedStorage` interface was renamed from `HydratedStorage` to `Storage`.
 
@@ -188,9 +459,9 @@ class MyHydratedStorage implements Storage {
 }
 ```
 
-### HydratedStorage decoupled from BlocDelegate
+#### ❗HydratedStorage decoupled from BlocDelegate
 
-#### Rationale
+##### Rationale
 
 As mentioned earlier, `BlocDelegate` was renamed to `BlocObserver` and was set directly as part of the `bloc` via:
 
@@ -216,9 +487,9 @@ BlocSupervisor.delegate = await HydratedBlocDelegate.build();
 HydratedBloc.storage = await HydratedStorage.build();
 ```
 
-### Simplified Initialization
+#### ❗Simplified Initialization
 
-#### Rationale
+##### Rationale
 
 Previously, developers had to manually call `super.initialState ?? DefaultInitialState()` in order to setup their `HydratedBloc` instances. This is clunky and verbose and also incompatible with the breaking changes to `initialState` in `bloc`. As a result, in v5.0.0 `HydratedBloc` initialization is identical to normal `Bloc` initialization.
 
