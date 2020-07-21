@@ -1,6 +1,6 @@
 # Core Concepts (package:bloc)
 
-?> Please make sure to carefully read and understand the following sections before working with [package:bloc](https://pub.dev/packages/bloc).
+?> Please make sure to carefully read the following sections before working with [package:bloc](https://pub.dev/packages/bloc).
 
 There are several core concepts that are critical to understanding how to use the bloc package.
 
@@ -46,6 +46,8 @@ A `Cubit` can expose functions which can be invoked to trigger state changes.
 
 > States are the output of a `Cubit` and represent a part of your application's state. UI components can be notified of states and redraw portions of themselves based on the current state.
 
+> **Note**: For more information about the origins of `Cubit` checkout [the following issue](https://github.com/felangel/cubit/issues/69).
+
 ### Creating a Cubit
 
 We can create a `CounterCubit` like:
@@ -87,7 +89,7 @@ class CounterCubit extends Cubit<int> {
 
 In the above snippet, the `CounterCubit` is exposing a public method called `increment` which can be called externally to notify the `CounterCubit` to increment its state. When `increment` is called, we can access the current state of the `Cubit` via the `state` getter and `emit` a new state by adding 1 to the current state.
 
-!> The `emit` method is protected meaning it should only be used inside of a `Cubit`.
+!> The `emit` method is protected, meaning it should only be used inside of a `Cubit`.
 
 ### Using a Cubit
 
@@ -156,7 +158,7 @@ void main() {
 }
 ```
 
-The above example, would output:
+The above example would output:
 
 ```sh
 Change { currentState: 0, nextState: 1 }
@@ -182,7 +184,7 @@ class SimpleBlocObserver extends BlocObserver {
 
 ?> **Note**: All we need to do is extend `BlocObserver` and override the `onChange` method.
 
-In order to use the `SimpleBlocObserver`, we just need to tweak the `main` function like:
+In order to use the `SimpleBlocObserver`, we just need to tweak the `main` function:
 
 ```dart
 void main() {
@@ -200,7 +202,7 @@ Change { currentState: 0, nextState: 1 }
 CounterCubit Change { currentState: 0, nextState: 1 }
 ```
 
-?> **Note**: The internal `onChange` override is called first followed by `onChange` in `BlocObserver`.
+?> **Note**: The internal `onChange` override is called first, followed by `onChange` in `BlocObserver`.
 
 ?> **Tip**: In `BlocObserver` we have access to the `Cubit` instance in addition to the `Change` itself.
 
@@ -294,7 +296,7 @@ Just like when creating the `CounterCubit`, we must specify an initial state by 
 
 ### State Changes
 
-Unlike when creating the `CounterCubit`, rather than defining functions to trigger state changes we need to override `mapEventToState` which will be responsible for converting any incoming events into one or more outgoing states.
+Unlike when creating the `CounterCubit`, rather than defining functions to trigger state changes, we need to override `mapEventToState`. This will be responsible for converting any incoming events into one or more outgoing states.
 
 ```dart
 enum CounterEvent { increment }
@@ -328,7 +330,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-In the above snippet, we are switching on the incoming event and if it is an increment event, we are yielding (similar to `emit`) a new state.
+In the above snippet, we are switching on the incoming event and if it is an increment event, we are yielding a new state (similar to `emit`).
 
 ?> **Note**: Since the `Bloc` class extends `Cubit`, we have access to the current state of the bloc at any point in time via the `state` getter.
 
@@ -359,7 +361,7 @@ In the above snippet, we start by creating an instance of the `CounterBloc`. We 
 
 #### Stream Usage
 
-Just like with `Cubit` a `Bloc` is a special type of `Stream`, which means can also subscribe to a `Bloc` for real-time updates to its state:
+Just like with `Cubit`, a `Bloc` is a special type of `Stream`, which means we can also subscribe to a `Bloc` for real-time updates to its state:
 
 ```dart
 Future<void> main() async {
@@ -454,7 +456,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-If we then re-run the same `main.dart` snippet from before, we should see the following output:
+If we then rerun the same `main.dart` snippet from before, we should see the following output:
 
 ```sh
 Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }
@@ -489,7 +491,7 @@ class SimpleBlocObserver extends BlocObserver {
 }
 ```
 
-We can initialize the `SimpleBlocObserver` just like before via:
+We can initialize the `SimpleBlocObserver` just like before:
 
 ```dart
 void main() {
@@ -511,7 +513,7 @@ CounterBloc Change { currentState: 0, nextState: 1 }
 
 ?> **Note**: `onTransition` is invoked first (local before global) followed by `onChange`.
 
-Another unique feature of `Bloc` instances is they allow us to override `onEvent` which is called whenever a new event is added to the `Bloc`. Just like with `onChange` and `onTransition`, `onEvent` can be overridden locally as well as globally.
+Another unique feature of `Bloc` instances is that they allow us to override `onEvent` which is called whenever a new event is added to the `Bloc`. Just like with `onChange` and `onTransition`, `onEvent` can be overridden locally as well as globally.
 
 ```dart
 enum CounterEvent { increment }
@@ -570,7 +572,7 @@ class SimpleBlocObserver extends BlocObserver {
 }
 ```
 
-We can run the same `main.dart` as before as should see the following output:
+We can run the same `main.dart` as before and should see the following output:
 
 ```sh
 CounterEvent.increment
@@ -623,7 +625,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-If we re-run the same `main.dart` as before, we can see what it looks like when an error is reported:
+If we rerun the same `main.dart` as before, we can see what it looks like when an error is reported:
 
 ```sh
 Exception: increment error!, #0      CounterBloc.mapEventToState (file:///main.dart:55:60)
@@ -664,19 +666,19 @@ CounterBloc Change { currentState: 0, nextState: 1 }
 
 ?> **Note**: `onError` and `onChange` work the exact same way for both `Bloc` and `Cubit` instances.
 
-!> Any unhandled exceptions which occur within `mapEventToState` are also reported to `onError`.
+!> Any unhandled exceptions that occur within `mapEventToState` are also reported to `onError`.
 
 ## Cubit vs. Bloc
 
-Now that we've covered the basics of the `Cubit` and `Bloc` classes, you might be wondering in what cases should you use `Cubit` and in what cases should you use `Bloc`.
+Now that we've covered the basics of the `Cubit` and `Bloc` classes, you might be wondering when you should use `Cubit` and when you should use `Bloc`.
 
 ### Cubit Advantages
 
 #### Simplicity
 
-One of the biggest advantages of using `Cubit` is simplicity. When creating a `Cubit`, we only have to define the state as well as the functions which we want to expose to change the state. This approach is generally a lot easier to understand and there is less code involved.
+One of the biggest advantages of using `Cubit` is simplicity. When creating a `Cubit`, we only have to define the state as well as the functions which we want to expose to change the state. In comparison, when creating a `Bloc`, we have to define the states, events, and the `mapEventToState` implementation. This makes `Cubit` easier to understand and there is less code involved.
 
-We can take a look at the two counter implementations:
+Now let's take a look at the two counter implementations:
 
 ##### CounterCubit
 
@@ -713,9 +715,9 @@ The `Cubit` implementation is a lot more concise and instead of defining events 
 
 #### Traceability
 
-One of the biggest advantages of using `Bloc` is knowing not only the sequence of state changes but also what triggered those changes. For state that is critical to the functionality of an application, it might be very beneficial to use a more event-driven approach in order to capture all events in addition to state changes.
+One of the biggest advantages of using `Bloc` is knowing the sequence of state changes as well as exactly what triggered those changes. For state that is critical to the functionality of an application, it might be very beneficial to use a more event-driven approach in order to capture all events in addition to state changes.
 
-A common use-case might be managing `AuthenticationState`. For simplicity, let's say we can represent `AuthenticationState` via an `enum`:
+A common use case might be managing `AuthenticationState`. For simplicity, let's say we can represent `AuthenticationState` via an `enum`:
 
 ```dart
 enum AuthenticationState { unknown, authenticated, unauthenticated }
@@ -744,9 +746,9 @@ This tells us that the user was logged out but it doesn't explain why which migh
 
 #### Advanced ReactiveX Operations
 
-Another area in which `Bloc` excels over `Cubit` is when we need to take advantage of reactive operators such as `buffer`, `debounceTime`, `throttle`, etc...
+Another area in which `Bloc` excels over `Cubit` is when we need to take advantage of reactive operators such as `buffer`, `debounceTime`, `throttle`, etc.
 
-`Bloc` has an event sink we allows us to control and transform the incoming flow of events.
+`Bloc` has an event sink that allows us to control and transform the incoming flow of events.
 
 For example, if we were building a real-time search, we would probably want to debounce the requests to the backend in order to avoid getting rate-limited as well as to cut down on cost/load on the backend.
 
@@ -767,4 +769,4 @@ Stream<Transition<CounterEvent, int>> transformEvents(
 
 With the above code, we can easily debounce the incoming events with very little additional code.
 
-?> **Tip**: It's best to start with a `Cubit` if you are unsure about which to use and you can later refactor or scale-up to a `Bloc` as needed.
+?> **Tip**: If you are still unsure about which to use, start with `Cubit` and you can later refactor or scale-up to a `Bloc` as needed.
