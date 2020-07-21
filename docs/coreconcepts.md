@@ -1,50 +1,10 @@
-# Core Concepts
+# Core Concepts (package:bloc)
 
-?> Please make sure to carefully read and understand the following sections before working with [bloc](https://pub.dev/packages/bloc).
+?> Please make sure to carefully read and understand the following sections before working with [package:bloc](https://pub.dev/packages/bloc).
 
-There are several core concepts that are critical to understanding how to use Bloc.
+There are several core concepts that are critical to understanding how to use the bloc package.
 
-In the upcoming sections, we're going to discuss each of them in detail as well as work through how they would apply to a real-world application: a counter app.
-
-## Events
-
-> Events are the input to a Bloc. They are commonly added in response to user interactions such as button presses or lifecycle events like page loads.
-
-When designing an app we need to step back and define how users will interact with it. In the context of our counter app we will have two buttons to increment and decrement our counter.
-
-When a user taps on one of these buttons, something needs to happen to notify the "brains" of our app so that it can respond to the user's input; this is where events come into play.
-
-We need to be able to notify our application's "brains" of both an increment and a decrement so we need to define these events.
-
-[counter_event.dart](_snippets/core_concepts/counter_event.dart.md ':include')
-
-In this case, we can represent the events using an `enum` but for more complex cases it might be necessary to use a `class` especially if it's necessary to pass information to the bloc.
-
-At this point we have defined our first event! Notice that we have not used Bloc in any way so far and there is no magic happening; it's just plain Dart code.
-
-## States
-
-> States are the output of a Bloc and represent a part of your application's state. UI components can be notified of states and redraw portions of themselves based on the current state.
-
-So far, we've defined the two events that our app will be responding to: `CounterEvent.increment` and `CounterEvent.decrement`.
-
-Now we need to define how to represent the state of our application.
-
-Since we're building a counter, our state is very simple: it's just an integer which represents the counter's current value.
-
-We will see more complex examples of state later on but in this case a primitive type is perfectly suitable as the state representation.
-
-## Transitions
-
-> The change from one state to another is called a Transition. A Transition consists of the current state, the event, and the next state.
-
-As a user interacts with our counter app they will trigger `Increment` and `Decrement` events which will update the counter's state. All of these state changes can be described as a series of `Transitions`.
-
-For example, if a user opened our app and tapped the increment button once we would see the following `Transition`.
-
-[counter_increment_transition.json](_snippets/core_concepts/counter_increment_transition.json.md ':include')
-
-Because every state change is recorded, we are able to very easily instrument our applications and track all user interactions & state changes in one place. In addition, this makes things like time-travel debugging possible.
+In the upcoming sections, we're going to discuss each of them in detail as well as work through how they would apply to a counter app.
 
 ## Streams
 
@@ -52,11 +12,11 @@ Because every state change is recorded, we are able to very easily instrument ou
 
 > A stream is a sequence of asynchronous data.
 
-In order to use Bloc, it is criticial to have a solid understanding of `Streams` and how they work.
+In order to use the bloc library, it is criticial to have a basic understanding of `Streams` and how they work.
 
 > If you're unfamiliar with `Streams` just think of a pipe with water flowing through it. The pipe is the `Stream` and the water is the asynchronous data.
 
-We can create a `Stream` in Dart by writing an `async*` function.
+We can create a `Stream` in Dart by writing an `async*` (async generator) function.
 
 [count_stream.dart](_snippets/core_concepts/count_stream.dart.md ':include')
 
@@ -74,86 +34,737 @@ We can put it all together like so:
 
 [main.dart](_snippets/core_concepts/streams_main.dart.md ':include')
 
-## Blocs
+Now that we have a basic understand of how `Streams` work in Dart we're ready to learn about the core component of the bloc package: a `Cubit`.
 
-> A Bloc (Business Logic Component) is a component which converts a `Stream` of incoming `Events` into a `Stream` of outgoing `States`. Think of a Bloc as being the "brains" described above.
+## Cubit
 
-> Every Bloc must extend the base `Bloc` class which is part of the core bloc package.
+> A `Cubit` is special type of `Stream` which is used as the base for the `Bloc` class (which we will cover later on).
 
-[counter_bloc.dart](_snippets/core_concepts/counter_bloc_class.dart.md ':include')
+<img src="assets/cubit_architecture_full.png" width="300" alt="Cubit Architecture" />
 
-In the above code snippet, we are declaring our `CounterBloc` as a Bloc which converts `CounterEvents` into `ints`.
+A `Cubit` can expose functions which can be invoked to trigger state changes.
 
-> Every Bloc must define an initial state which is the state before any events have been received.
+> States are the output of a `Cubit` and represent a part of your application's state. UI components can be notified of states and redraw portions of themselves based on the current state.
 
-In this case, we want our counter to start at `0`.
+### Creating a Cubit
 
-[counter_bloc.dart](_snippets/core_concepts/counter_bloc_initial_state.dart.md ':include')
+We can create a `CounterCubit` like:
 
-> Every Bloc must implement a function called `mapEventToState`. The function takes the incoming `event` as an argument and must return a `Stream` of new `states` which is consumed by the presentation layer. We can access the current bloc state at any time using the `state` property.
+```dart
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
+}
+```
 
-[counter_bloc.dart](_snippets/core_concepts/counter_bloc_map_event_to_state.dart.md ':include')
+When creating a `Cubit`, we need to define the type of state which the `Cubit` will be managing. In the case of the `CounterCubit` above, the state can be represented via an `int` but in more complex cases it might be necessary to use a `class` instead of a primitive type.
 
-At this point, we have a fully functioning `CounterBloc`.
+The second thing we need to do when creating a `Cubit` is specify the initial state. We can do this by calling `super` with the value of the initial state. In the snippet above, we are setting the initial state to `0` internally but we can also allow the `Cubit` to be more flexible by accepting an external value:
 
-[counter_bloc.dart](_snippets/core_concepts/counter_bloc.dart.md ':include')
+```dart
+class CounterCubit extends Cubit<int> {
+  CounterCubit(int initialState) : super(initialState);
+}
+```
 
-!> Blocs will ignore duplicate states. If a Bloc yields `State nextState` where `state == nextState`, then no transition will occur and no change will be made to the `Stream<State>`.
+This would allow us to instantiate `CounterCubit` instances with different initial states like:
 
-At this point, you're probably wondering _"How do I notify a Bloc of an event?"_.
+```dart
+final cubitA = CounterCubit(0); // state starts at 0
+final cubitB = CounterCubit(10); // state starts at 10
+```
 
-> Every Bloc has a `add` method. `Add` takes an `event` and triggers `mapEventToState`. `Add` may be called from the presentation layer or from within the Bloc and notifies the Bloc of a new `event`.
+### State Changes
 
-We can create a simple application which counts from 0 to 3.
+> Each `Cubit` has the ability to output a new state via `emit`.
 
-[main.dart](_snippets/core_concepts/counter_bloc_main.dart.md ':include')
+```dart
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
 
-!> By default, events will always be processed in the order in which they were added and any newly added events are enqueued. An event is considered fully processed once `mapEventToState` has finished executing.
+  void increment() => emit(state + 1);
+}
+```
 
-The `Transitions` in the above code snippet would be
+In the above snippet, the `CounterCubit` is exposing a public method called `increment` which can be called externally to notify the `CounterCubit` to increment its state. When `increment` is called, we can access the current state of the `Cubit` via the `state` getter and `emit` a new state by adding 1 to the current state.
 
-[counter_bloc_transitions.json](_snippets/core_concepts/counter_bloc_transitions.json.md ':include')
+!> The `emit` method is protected meaning it should only be used inside of a `Cubit`.
 
-Unfortunately, in the current state we won't be able to see any of these transitions unless we override `onTransition`.
+### Using a Cubit
 
-> `onTransition` is a method that can be overridden to handle every local Bloc `Transition`. `onTransition` is called just before a Bloc's `state` has been updated.
+We can now take the `CounterCubit` we've implemented and put it to use!
 
-?> **Tip**: `onTransition` is a great place to add bloc-specific logging/analytics.
+#### Basic Usage
 
-[counter_bloc.dart](_snippets/core_concepts/counter_bloc_on_transition.dart.md ':include')
+```dart
+void main() {
+  final cubit = CounterCubit();
+  print(cubit.state); // 0
+  cubit.increment();
+  print(cubit.state); // 1
+  cubit.close();
+}
+```
 
-Now that we've overridden `onTransition` we can do whatever we'd like whenever a `Transition` occurs.
+In the above snippet, we start by creating an instance of the `CounterCubit`. We then print the current state of the cubit which is the initial state (since no new states have been emitted yet). Next, we call the `increment` function to trigger a state change. Finally, we print the state of the `Cubit` again which went from `0` to `1` and close the `Cubit` to close the internal state stream.
 
-Just like we can handle `Transitions` at the bloc level, we can also handle `Exceptions`.
+#### Stream Usage
 
-> `onError` is a method that can be overriden to handle every local Bloc `Exception`. By default all exceptions will be ignored and `Bloc` functionality will be unaffected.
+Since a `Cubit` is a special type of `Stream`, we can also subscribe to a `Cubit` for real-time updates to its state:
 
-?> **Note**: The stackTrace argument may be `null` if the state stream received an error without a `StackTrace`.
+```dart
+Future<void> main() async {
+  final cubit = CounterCubit();
+  final subscription = cubit.listen(print); // 1
+  cubit.increment();
+  await Future.delayed(Duration.zero);
+  await subscription.cancel();
+  await cubit.close();
+}
+```
 
-?> **Tip**: `onError` is a great place to add bloc-specific error handling.
+In the above snippet, we are subscribing to the `CounterCubit` and calling print on each state change. We are then invoking the `increment` function which will emit a new state. Lastly, we are calling `cancel` on the `subscription` when we no longer want to receive updates and closing the `Cubit`.
 
-[counter_bloc.dart](_snippets/core_concepts/counter_bloc_on_error.dart.md ':include')
+?> **Note**: `await Future.delayed(Duration.zero)` is added for this example to avoid canceling the subscription immediately.
 
-Now that we've overridden `onError` we can do whatever we'd like whenever an `Exception` is thrown.
+!> Only subsequent state changes will be received when calling `listen` on a `Cubit`.
 
-## BlocObserver
+### Observing a Cubit
 
-One added bonus of using Bloc is that we can have access to all `Transitions` in one place. Even though in this application we only have one Bloc, it's fairly common in larger applications to have many Blocs managing different parts of the application's state.
+> When a `Cubit` emits a new state, a `Change` occurs. We can observe all changes for a given `Cubit` by overriding `onChange`.
 
-If we want to be able to do something in response to all `Transitions` we can simply create our own `BlocObserver`.
+```dart
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
 
-[simple_bloc_observer.dart](_snippets/core_concepts/simple_bloc_observer.dart.md ':include')
+  void increment() => emit(state + 1);
 
-?> **Note**: All we need to do is extend `BlocObserver` and override the `onTransition` method.
+  @override
+  void onChange(Change<int> change) {
+    print(change);
+    super.onChange(change);
+  }
+}
+```
 
-In order to tell Bloc to use our `SimpleBlocObserver`, we just need to tweak our `main` function.
+We can then interact with the `Cubit` and observe all changes output to the console.
 
-[main.dart](_snippets/core_concepts/simple_bloc_observer_main.dart.md ':include')
+```dart
+void main() {
+  CounterCubit()
+    ..increment()
+    ..close();
+}
+```
 
-If we want to be able to do something in response to all `Events` added, we can also override the `onEvent` method in our `SimpleBlocObserver`.
+The above example, would output:
 
-[simple_bloc_observer.dart](_snippets/core_concepts/simple_bloc_observer_on_event.dart.md ':include')
+```sh
+Change { currentState: 0, nextState: 1 }
+```
 
-If we want to be able to do something in response to all `Exceptions` thrown in a Bloc, we can also override the `onError` method in our `SimpleBlocObserver`.
+?> **Note**: A `Change` occurs just before the state of the `Cubit` is updated. A `Change` consists of the `currentState` and the `nextState`.
 
-[simple_bloc_observer.dart](_snippets/core_concepts/simple_bloc_observer_complete.dart.md ':include')
+#### BlocObserver
+
+One added bonus of using the bloc library is that we can have access to all `Changes` in one place. Even though in this application we only have one `Cubit`, it's fairly common in larger applications to have many `Cubits` managing different parts of the application's state.
+
+If we want to be able to do something in response to all `Changes` we can simply create our own `BlocObserver`.
+
+```dart
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onChange(Cubit cubit, Change change) {
+    print('${cubit.runtimeType} $change');
+    super.onChange(cubit, change);
+  }
+}
+```
+
+?> **Note**: All we need to do is extend `BlocObserver` and override the `onChange` method.
+
+In order to use the `SimpleBlocObserver`, we just need to tweak the `main` function like:
+
+```dart
+void main() {
+  Bloc.observer = SimpleBlocObserver();
+  CounterCubit()
+    ..increment()
+    ..close();
+}
+```
+
+The above snippet would then output:
+
+```sh
+Change { currentState: 0, nextState: 1 }
+CounterCubit Change { currentState: 0, nextState: 1 }
+```
+
+?> **Note**: The internal `onChange` override is called first followed by `onChange` in `BlocObserver`.
+
+?> **Tip**: In `BlocObserver` we have access to the `Cubit` instance in addition to the `Change` itself.
+
+### Error Handling
+
+> Every `Cubit` has an `addError` method which can be used to indicate that an error has occurred.
+
+```dart
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
+
+  void increment() {
+    addError(Exception('increment error!'), StackTrace.current);
+    emit(state + 1);
+  }
+
+  @override
+  void onChange(Change<int> change) {
+    print(change);
+    super.onChange(change);
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    print('$error, $stackTrace');
+    super.onError(error, stackTrace);
+  }
+}
+```
+
+?> **Note**: `onError` can be overridden within the `Cubit` to handle all errors for a specific `Cubit`.
+
+`onError` can also be overridden in `BlocObserver` to handle all reported errors globally.
+
+```dart
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onChange(Cubit cubit, Change change) {
+    print('${cubit.runtimeType} $change');
+    super.onChange(cubit, change);
+  }
+
+  @override
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
+    print('${cubit.runtimeType} $error $stackTrace');
+    super.onError(cubit, error, stackTrace);
+  }
+}
+```
+
+If we run the same program again we should see the following output:
+
+```sh
+Exception: increment error!, #0      CounterCubit.increment (file:///main.dart:21:56)
+#1      main (file:///main.dart:41:7)
+#2      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:301:19)
+#3      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:168:12)
+
+CounterCubit Exception: increment error! #0      CounterCubit.increment (file:///main.dart:21:56)
+#1      main (file:///main.dart:41:7)
+#2      _startIsolate.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:301:19)
+#3      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:168:12)
+
+Change { currentState: 0, nextState: 1 }
+CounterCubit Change { currentState: 0, nextState: 1 }
+```
+
+?> **Note**: Just as with `onChange`, the internal `onError` override is invoked before the global `BlocObserver` override.
+
+## Bloc
+
+> A `Bloc` is a special type of `Cubit` which transforms incoming events into outgoing states.
+
+<img src="assets/bloc_architecture_full.png" width="300" alt="Bloc Architecture" />
+
+### Creating a Bloc
+
+Creating a `Bloc` is similar to creating a `Cubit` except in addition to defining the state that we'll be managing, we must also define the event that the `Bloc` will be able to process.
+
+> Events are the input to a Bloc. They are commonly added in response to user interactions such as button presses or lifecycle events like page loads.
+
+```dart
+enum CounterEvent { increment }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+}
+```
+
+Just like when creating the `CounterCubit`, we must specify an initial state by passing it to the superclass via `super`.
+
+### State Changes
+
+Unlike when creating the `CounterCubit`, rather than defining functions to trigger state changes we need to override `mapEventToState` which will be responsible for converting any incoming events into one or more outgoing states.
+
+```dart
+enum CounterEvent { increment }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {}
+}
+```
+
+?> **Tip**: `async*` means the function is an [async generator](https://dart.dev/guides/language/language-tour#generators) which is capable of emitting states via the `yield` keyword.
+
+We can then update `mapEventToState` to handle the `CounterEvent.increment` event:
+
+```dart
+enum CounterEvent { increment }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.increment:
+        yield state + 1;
+        break;
+    }
+  }
+}
+```
+
+In the above snippet, we are switching on the incoming event and if it is an increment event, we are yielding (similar to `emit`) a new state.
+
+?> **Note**: Since the `Bloc` class extends `Cubit`, we have access to the current state of the bloc at any point in time via the `state` getter.
+
+!> Blocs should never directly `emit` new states. Instead every state change must be output in response to an incoming event within `mapEventToState`.
+
+!> Both blocs and cubits will ignore duplicate states. If we yield or emit `State nextState` where `state == nextState`, then no state change will occur.
+
+### Using a Bloc
+
+At this point, we can create an instance of our `CounterBloc` and put it to use!
+
+#### Basic Usage
+
+```dart
+Future<void> main() async {
+  final bloc = CounterBloc();
+  print(bloc.state); // 0
+  bloc.add(CounterEvent.increment);
+  await Future.delayed(Duration.zero);
+  print(bloc.state); // 1
+  await bloc.close();
+}
+```
+
+In the above snippet, we start by creating an instance of the `CounterBloc`. We then print the current state of the `Bloc` which is the initial state (since no new states have been emitted yet). Next, we add the increment event to trigger a state change. Finally, we print the state of the `Bloc` again which went from 0 to 1 and close the `Bloc` to close the internal state stream.
+
+?> **Note**: `await Future.delayed(Duration.zero)` is added to ensure we wait for the next event-loop iteration (allowing `mapEventToState` to process the increment event).
+
+#### Stream Usage
+
+Just like with `Cubit` a `Bloc` is a special type of `Stream`, which means can also subscribe to a `Bloc` for real-time updates to its state:
+
+```dart
+Future<void> main() async {
+  final bloc = CounterBloc();
+  final subscription = bloc.listen(print); // 1
+  bloc.add(CounterEvent.increment);
+  await Future.delayed(Duration.zero);
+  await subscription.cancel();
+  await bloc.close();
+}
+```
+
+In the above snippet, we are subscribing to the `CounterBloc` and calling print on each state change. We are then adding the increment event which triggers `mapEventToState` and yields a new state. Lastly, we are calling cancel on the subscription when we no longer want to receive updates and closing the `Bloc`.
+
+?> **Note**: `await Future.delayed(Duration.zero)` is added for this example to avoid canceling the subscription immediately.
+
+### Observing a Bloc
+
+Since all `Bloc` extends `Cubit` (meaning all blocs are also cubits), we can observe all state changes for a `Bloc` using `onChange`.
+
+```dart
+enum CounterEvent { increment }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.increment:
+        yield state + 1;
+        break;
+    }
+  }
+
+  @override
+  void onChange(Change<int> change) {
+    print(change);
+    super.onChange(change);
+  }
+}
+```
+
+We can then update `main.dart` to:
+
+```dart
+void main() {
+  CounterBloc()
+    ..add(CounterEvent.increment)
+    ..close();
+}
+```
+
+Now if we run the above snippet, the output will be:
+
+```sh
+Change { currentState: 0, nextState: 1 }
+```
+
+One key differentiating factor between `Bloc` and `Cubit` is that because `Bloc` is event-driven, we are also able to capture information about what triggered the state change.
+
+We can do this by overriding `onTransition`.
+
+> The change from one state to another is called a `Transition`. A `Transition` consists of the current state, the event, and the next state.
+
+```dart
+enum CounterEvent { increment }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.increment:
+        yield state + 1;
+        break;
+    }
+  }
+
+  @override
+  void onChange(Change<int> change) {
+    print(change);
+    super.onChange(change);
+  }
+
+  @override
+  void onTransition(Transition<CounterEvent, int> transition) {
+    print(transition);
+    super.onTransition(transition);
+  }
+}
+```
+
+If we then re-run the same `main.dart` snippet from before, we should see the following output:
+
+```sh
+Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }
+Change { currentState: 0, nextState: 1 }
+```
+
+?> **Note**: `onTransition` is invoked before `onChange` and contains the event which triggered the change from `currentState` to `nextState`.
+
+#### BlocObserver
+
+Just as before, we can override `onTransition` in a custom `BlocObserver` to observe all transitions that occur from a single place.
+
+```dart
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onChange(Cubit cubit, Change change) {
+    print('${cubit.runtimeType} $change');
+    super.onChange(cubit, change);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    print('${bloc.runtimeType} $transition');
+    super.onTransition(bloc, transition);
+  }
+
+  @override
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
+    print('${cubit.runtimeType} $error $stackTrace');
+    super.onError(cubit, error, stackTrace);
+  }
+}
+```
+
+We can initialize the `SimpleBlocObserver` just like before via:
+
+```dart
+void main() {
+  Bloc.observer = SimpleBlocObserver();
+  CounterBloc()
+    ..add(CounterEvent.increment)
+    ..close();
+}
+```
+
+Now if we run the above snippet, the output should look like:
+
+```sh
+Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }
+CounterBloc Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }
+Change { currentState: 0, nextState: 1 }
+CounterBloc Change { currentState: 0, nextState: 1 }
+```
+
+?> **Note**: `onTransition` is invoked first (local before global) followed by `onChange`.
+
+Another unique feature of `Bloc` instances is they allow us to override `onEvent` which is called whenever a new event is added to the `Bloc`. Just like with `onChange` and `onTransition`, `onEvent` can be overridden locally as well as globally.
+
+```dart
+enum CounterEvent { increment }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.increment:
+        yield state + 1;
+        break;
+    }
+  }
+
+  @override
+  void onEvent(CounterEvent event) {
+    print(event);
+    super.onEvent(event);
+  }
+
+  @override
+  void onChange(Change<int> change) {
+    print(change);
+    super.onChange(change);
+  }
+
+  @override
+  void onTransition(Transition<CounterEvent, int> transition) {
+    print(transition);
+    super.onTransition(transition);
+  }
+}
+```
+
+```dart
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onEvent(Bloc bloc, Object event) {
+    print('${bloc.runtimeType} $event');
+    super.onEvent(bloc, event);
+  }
+
+  @override
+  void onChange(Cubit cubit, Change change) {
+    print('${cubit.runtimeType} $change');
+    super.onChange(cubit, change);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    print('${bloc.runtimeType} $transition');
+    super.onTransition(bloc, transition);
+  }
+}
+```
+
+We can run the same `main.dart` as before as should see the following output:
+
+```sh
+CounterEvent.increment
+CounterBloc CounterEvent.increment
+Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }
+CounterBloc Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }
+Change { currentState: 0, nextState: 1 }
+CounterBloc Change { currentState: 0, nextState: 1 }
+```
+
+?> **Note**: `onEvent` is called as soon as the event is added. The local `onEvent` is invoked before the global `onEvent` in `BlocObserver`.
+
+### Error Handling
+
+Just like with `Cubit`, each `Bloc` has an `addError` and `onError` method. We can indicate that an error has occurred by calling `addError` from anywhere inside our `Bloc`. We can then react to all errors by overriding `onError` just as with `Cubit`.
+
+```dart
+enum CounterEvent { increment }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.increment:
+        addError(Exception('increment error!'), StackTrace.current);
+        yield state + 1;
+        break;
+    }
+  }
+
+  @override
+  void onChange(Change<int> change) {
+    print(change);
+    super.onChange(change);
+  }
+
+  @override
+  void onTransition(Transition<CounterEvent, int> transition) {
+    print(transition);
+    super.onTransition(transition);
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    print('$error, $stackTrace');
+    super.onError(error, stackTrace);
+  }
+}
+```
+
+If we re-run the same `main.dart` as before, we can see what it looks like when an error is reported:
+
+```sh
+Exception: increment error!, #0      CounterBloc.mapEventToState (file:///main.dart:55:60)
+<asynchronous suspension>
+#1      Bloc._bindEventsToStates.<anonymous closure> (package:bloc/src/bloc.dart:232:20)
+#2      Stream.asyncExpand.onListen.<anonymous closure> (dart:async/stream.dart:579:30)
+#3      _RootZone.runUnaryGuarded (dart:async/zone.dart:1374:10)
+#4      _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:339:11)
+#5      _DelayedData.perform (dart:async/stream_impl.dart:594:14)
+#6      _StreamImplEvents.handleNext (dart:async/stream_impl.dart:710:11)
+#7      _PendingEvents.schedule.<anonymous closure> (dart:async/stream_impl.dart:670:7)
+#8      _microtaskLoop (dart:async/schedule_microtask.dart:43:21)
+#9      _startMicrotaskLoop (dart:async/schedule_microtask.dart:52:5)
+#10     _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:118:13)
+#11     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:169:5)
+
+CounterBloc Exception: increment error! #0      CounterBloc.mapEventToState (file:///main.dart:55:60)
+<asynchronous suspension>
+#1      Bloc._bindEventsToStates.<anonymous closure> (package:bloc/src/bloc.dart:232:20)
+#2      Stream.asyncExpand.onListen.<anonymous closure> (dart:async/stream.dart:579:30)
+#3      _RootZone.runUnaryGuarded (dart:async/zone.dart:1374:10)
+#4      _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:339:11)
+#5      _DelayedData.perform (dart:async/stream_impl.dart:594:14)
+#6      _StreamImplEvents.handleNext (dart:async/stream_impl.dart:710:11)
+#7      _PendingEvents.schedule.<anonymous closure> (dart:async/stream_impl.dart:670:7)
+#8      _microtaskLoop (dart:async/schedule_microtask.dart:43:21)
+#9      _startMicrotaskLoop (dart:async/schedule_microtask.dart:52:5)
+#10     _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:118:13)
+#11     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:169:5)
+
+Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }
+CounterBloc Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }
+Change { currentState: 0, nextState: 1 }
+CounterBloc Change { currentState: 0, nextState: 1 }
+```
+
+?> **Note**: The local `onError` is invoked first followed by the global `onError` in `BlocObserver`.
+
+?> **Note**: `onError` and `onChange` work the exact same way for both `Bloc` and `Cubit` instances.
+
+!> Any unhandled exceptions which occur within `mapEventToState` are also reported to `onError`.
+
+## Cubit vs. Bloc
+
+Now that we've covered the basics of the `Cubit` and `Bloc` classes, you might be wondering in what cases should you use `Cubit` and in what cases should you use `Bloc`.
+
+### Cubit Advantages
+
+#### Simplicity
+
+One of the biggest advantages of using `Cubit` is simplicity. When creating a `Cubit`, we only have to define the state as well as the functions which we want to expose to change the state. This approach is generally a lot easier to understand and there is less code involved.
+
+We can take a look at the two counter implementations:
+
+##### CounterCubit
+
+```dart
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
+
+  void increment() => emit(state + 1);
+}
+```
+
+##### CounterBloc
+
+```dart
+enum CounterEvent { increment }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.increment:
+        yield state + 1;
+        break;
+    }
+  }
+}
+```
+
+The `Cubit` implementation is a lot more concise and instead of defining events separately, the functions act like events. In addition, when using a `Cubit`, we don't have to use async generators (`async*`) or have a strong understanding of the `yield` and `yield*` keywords because we can simply call `emit` from anywhere in order to trigger a state change.
+
+### Bloc Advantages
+
+#### Traceability
+
+One of the biggest advantages of using `Bloc` is knowing not only the sequence of state changes but also what triggered those changes. For state that is critical to the functionality of an application, it might be very beneficial to use a more event-driven approach in order to capture all events in addition to state changes.
+
+A common use-case might be managing `AuthenticationState`. For simplicity, let's say we can represent `AuthenticationState` via an `enum`:
+
+```dart
+enum AuthenticationState { unknown, authenticated, unauthenticated }
+```
+
+There could be many reasons as to why the application's state could change from `authenticated` to `unauthenticated`. For example, the user might have tapped a logout button and requested to be signed out of the application. On the other hand, maybe the user's access token was revoked and they were forcefully logged out. When using `Bloc` we can clearly trace how the application state got to a certain state.
+
+```sh
+Transition {
+  currentState: AuthenticationState.authenticated,
+  event: LogoutRequested,
+  nextState: AuthenticationState.unauthenticated
+}
+```
+
+The above `Transition` gives us all the information we need to understand why the state changed. If we had used a `Cubit` to manage the `AuthenticationState`, our logs would look like:
+
+```sh
+Change {
+  currentState: AuthenticationState.authenticated,
+  nextState: AuthenticationState.unauthenticated
+}
+```
+
+This tells us that the user was logged out but it doesn't explain why which might be critical to debugging and understanding how the state of the application is changing over time.
+
+#### Advanced ReactiveX Operations
+
+Another area in which `Bloc` excels over `Cubit` is when we need to take advantage of reactive operators such as `buffer`, `debounceTime`, `throttle`, etc...
+
+`Bloc` has an event sink we allows us to control and transform the incoming flow of events.
+
+For example, if we were building a real-time search, we would probably want to debounce the requests to the backend in order to avoid getting rate-limited as well as to cut down on cost/load on the backend.
+
+With `Bloc` we can override `transformEvents` to change the way incoming events are processed by the `Bloc`.
+
+```dart
+@override
+Stream<Transition<CounterEvent, int>> transformEvents(
+  Stream<CounterEvent> events,
+  TransitionFunction<CounterEvent, int> transitionFn,
+) {
+  return super.transformEvents(
+    events.debounceTime(const Duration(milliseconds: 300)),
+    transitionFn,
+  );
+}
+```
+
+With the above code, we can easily debounce the incoming events with very little additional code.
+
+?> **Tip**: It's best to start with a `Cubit` if you are unsure about which to use and you can later refactor or scale-up to a `Bloc` as needed.
