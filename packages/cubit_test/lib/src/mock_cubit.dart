@@ -10,12 +10,12 @@ import 'package:mockito/mockito.dart';
 /// and may be further customized at runtime to define how it may behave using
 /// [when] and `whenListen`.
 ///
-/// _**Note**: it is critical to explicitly provide the cubit event and state
-/// types when extending [MockCubit]_.
+/// _**Note**: it is critical to explicitly provide the cubit state type
+/// when extending [MockCubit]_.
 ///
 /// **GOOD**
 /// ```dart
-/// class MockCounterCubit extends MockCubit<CounterEvent, int>
+/// class MockCounterCubit extends MockCubit<int>
 ///   implements CounterCubit {}
 /// ```
 ///
