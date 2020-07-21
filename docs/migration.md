@@ -51,11 +51,6 @@ Previously, the above snippet would output the initial state of the bloc followe
 
 **v6.x.x**
 
-```dart
-final bloc = MyBloc();
-bloc.listen(print);
-```
-
 In v6.0.0, the above snippet does not output the initial state and only outputs subsequent state changes. The previous behavior can be achieved with the following:
 
 ```dart
@@ -63,6 +58,8 @@ final bloc = MyBloc();
 print(bloc.state);
 bloc.listen(print);
 ```
+
+?> **Note**: This change will only affect code that relies on direct bloc subscriptions. When using `BlocBuilder`, `BlocListener`, or `BlocConsumer` there will be no noticeable change in behavior.
 
 ### package:bloc_test
 
@@ -102,7 +99,7 @@ whenListen<CounterEvent,int>(bloc, Stream.fromIterable([0, 1, 2, 3]));
 whenListen<int>(bloc, Stream.fromIterable([0, 1, 2, 3]));
 ```
 
-#### ❗blocTest only requires State type
+#### ❗blocTest does not require Event type
 
 ##### Rationale
 
@@ -156,6 +153,14 @@ blocTest<CounterBloc, int>(
   skip: 0,
   expect: const <int>[],
 );
+```
+
+The initial state of a bloc or cubit can be tested with the following:
+
+```dart
+test('initial state is correct', () {
+  expect(MyBloc().state, InitialState());
+});
 ```
 
 #### ❗blocTest make build synchronous
