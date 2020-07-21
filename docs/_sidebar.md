@@ -3,8 +3,8 @@
   - [Getting Started](gettingstarted.md)
   - [Why Bloc?](whybloc.md)
   - Core Concepts
-    - [bloc](coreconcepts.md)
-    - [flutter_bloc](flutterbloccoreconcepts.md)
+    - [package:bloc](coreconcepts.md)
+    - [package:flutter_bloc](flutterbloccoreconcepts.md)
   - [Architecture](architecture.md)
   - [Testing](testing.md)
   - [Naming Conventions](blocnamingconventions.md)
