@@ -29,7 +29,9 @@ A predictable state management library that helps implement the [BLoC design pat
 
 ## Overview
 
-![Bloc Architecture](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png)
+<p align="center">
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" width="300" alt="Bloc Architecture"></img>
+</p>
 
 The goal of this library is to make it easy to separate _presentation_ from _business logic_, facilitating testability and reusability.
 
