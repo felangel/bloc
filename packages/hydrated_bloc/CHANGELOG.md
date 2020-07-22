@@ -1,3 +1,20 @@
+# 6.0.0
+
+- **BREAKING**: upgrade to `bloc ^6.0.0`
+- fix: json (de)serialization errors ([@orsenkucher](https://github.com/orsenkucher))
+  - Hydrated: type `'_InternalLinkedHashMap<dynamic, dynamic>'` is not a subtype of type `'Map<String, dynamic>'` ([#1452](https://github.com/felangel/bloc/issues/1452))
+  - Hydrated: HiveError: Cannot write, unknown type: Plan ([#1453](https://github.com/felangel/bloc/issues/1453))
+- fix: handle empty case for list traversal
+- fix: additional complex list (de)serialization errors ([@orsenkucher](https://github.com/orsenkucher))
+- fix: complex list (de)serialization errors ([@orsenkucher](https://github.com/orsenkucher))
+- feat: `StorageNotFound` error thrown if no `Storage` is provided.
+- feat: `HydratedCubit` added for `Cubit` interoperability
+- feat: `HydratedMixin` added for additional flexibility
+- feat: remove external dependency on [package:hydrated_cubit](https://pub.dev/packages/hydrated_cubit)
+- docs: inline documentation updates
+- docs: README updates
+- docs: example application updates
+
 # 6.0.0-dev.5
 
 - fix: handle empty case for list traversal

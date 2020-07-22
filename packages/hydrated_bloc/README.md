@@ -15,7 +15,7 @@
   <a href="https://github.com/felangel/bloc"><img src="https://tinyurl.com/bloc-library" alt="Bloc Library"></a>
 </p>
 
-An extension to [package:bloc](https://github.com/felangel/bloc) which automatically persists and restores bloc and cubit states.
+An extension to [package:bloc](https://github.com/felangel/bloc) which automatically persists and restores bloc and cubit states. Built to work with [package:bloc](https://pub.dev/packages/bloc).
 
 **Learn more at [bloclibrary.dev](https://bloclibrary.dev)!**
 
