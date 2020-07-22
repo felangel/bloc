@@ -164,7 +164,7 @@ Now we need to hook up the `Actions` to our `Timer` widget.
 
 We added another `BlocBuilder` which will render the `Actions` widget; however, this time we’re using a newly introduced [flutter_bloc](https://pub.dev/packages/flutter_bloc) feature to control how frequently the `Actions` widget is rebuilt (introduced in `v0.15.0`).
 
-If you want fine-grained control over when the `builder` function is called you can provide an optional `condition` to `BlocBuilder`. The `condition` takes the previous bloc state and current bloc state and returns a `boolean`. If `condition` returns `true`, `builder` will be called with `state` and the widget will rebuild. If `condition` returns `false`, `builder` will not be called with `state` and no rebuild will occur.
+If you want fine-grained control over when the `builder` function is called you can provide an optional `buildWhen` to `BlocBuilder`. The `buildWhen` takes the previous bloc state and current bloc state and returns a `boolean`. If `buildWhen` returns `true`, `builder` will be called with `state` and the widget will rebuild. If `buildWhen` returns `false`, `builder` will not be called with `state` and no rebuild will occur.
 
 In this case, we don’t want the `Actions` widget to be rebuilt on every tick because that would be inefficient. Instead, we only want `Actions` to rebuild if the `runtimeType` of the `TimerState` changes (TimerInitial => TimerRunInProgress, TimerRunInProgress => TimerRunPause, etc...).
 
