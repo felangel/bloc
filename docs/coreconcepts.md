@@ -40,7 +40,7 @@ Now that we have a basic understand of how `Streams` work in Dart we're ready to
 
 > A `Cubit` is special type of `Stream` which is used as the base for the `Bloc` class (which we will cover later on).
 
-<img src="assets/cubit_architecture_full.png" width="300" alt="Cubit Architecture" />
+![Cubit Architecture](assets/cubit_architecture_full.png)
 
 A `Cubit` can expose functions which can be invoked to trigger state changes.
 
@@ -276,7 +276,7 @@ CounterCubit Change { currentState: 0, nextState: 1 }
 
 > A `Bloc` is a special type of `Cubit` which transforms incoming events into outgoing states.
 
-<img src="assets/bloc_architecture_full.png" width="300" alt="Bloc Architecture" />
+![Bloc Architecture](assets/bloc_architecture_full.png)
 
 ### Creating a Bloc
 

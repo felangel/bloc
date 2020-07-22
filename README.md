@@ -29,7 +29,7 @@ A predictable state management library that helps implement the [BLoC design pat
 
 ## Overview
 
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" height="300" alt="Bloc Architecture" />
+![Bloc Architecture](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png)
 
 The goal of this library is to make it easy to separate _presentation_ from _business logic_, facilitating testability and reusability.
 
@@ -43,7 +43,7 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 
 ## Migration
 
-- [Upgrade to v5.0 ](https://bloclibrary.dev/#/migration)
+- [Migration Guide](https://bloclibrary.dev/#/migration)
 
 ## Examples
 

@@ -1,6 +1,6 @@
 # Architecture
 
-<img src="assets/bloc_architecture_full.png" width="300" alt="Bloc Architecture" />
+![Bloc Architecture](assets/bloc_architecture_full.png)
 
 Using the bloc library allows us to separate our application into three layers:
 
