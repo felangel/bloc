@@ -1,3 +1,18 @@
+# 7.0.0
+
+- **BREAKING**: upgrade to `bloc ^6.0.0`
+- **BREAKING**: `MockBloc` only requires `State` type
+- **BREAKING**: `whenListen` only requires `State` type
+- **BREAKING**: `blocTest` only requires `State` type
+- **BREAKING**: `blocTest` `skip` defaults to `0`
+- **BREAKING**: `blocTest` make `build` synchronous
+- fix: `blocTest` improve `wait` behavior when debouncing, etc...
+- feat: `blocTest` do not require `async` on `act` and `verify`
+- feat: remove external dependency on [package:cubit_test](https://pub.dev/packages/cubit_test)
+- feat: `MockBloc` is compatible with `cubit`
+- feat: `whenListen` is compatible with `cubit`
+- feat: `blocTest` is compatible with `cubit`
+
 # 7.0.0-dev.2
 
 - **BREAKING**: `blocTest` make `build` synchronous
