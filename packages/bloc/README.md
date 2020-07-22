@@ -120,7 +120,7 @@ class MyBlocObserver extends BlocObserver {
   @override
   void onError(Cubit cubit, Object error, StackTrace stackTrace) {
     print('$error, $stackTrace');
-    super.onChange(cubit, error, stackTrace);
+    super.onError(cubit, error, stackTrace);
   }
 }
 ```
@@ -264,7 +264,7 @@ class MyBlocObserver extends BlocObserver {
   @override
   void onError(Cubit cubit, Object error, StackTrace stackTrace) {
     print('$error, $stackTrace');
-    super.onChange(cubit, error, stackTrace);
+    super.onError(cubit, error, stackTrace);
   }
 }
 ```
