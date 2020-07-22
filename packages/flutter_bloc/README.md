@@ -35,7 +35,7 @@ Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget t
 ### counter_cubit.dart
 
 ```dart
-class CounterCubit extends Cubit<CounterEvent, int> {
+class CounterCubit extends Cubit<int> {
   CounterCubit() : super(0);
 
   void increment() => emit(state + 1);
