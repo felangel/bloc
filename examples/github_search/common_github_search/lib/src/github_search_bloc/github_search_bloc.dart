@@ -9,7 +9,8 @@ import 'package:common_github_search/common_github_search.dart';
 class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   final GithubRepository githubRepository;
 
-  GithubSearchBloc({@required this.githubRepository});
+  GithubSearchBloc({@required this.githubRepository})
+      : super(SearchStateEmpty());
 
   @override
   Stream<Transition<GithubSearchEvent, GithubSearchState>> transformEvents(
@@ -23,9 +24,6 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
         .debounceTime(const Duration(milliseconds: 300))
         .switchMap(transitionFn);
   }
-
-  @override
-  GithubSearchState get initialState => SearchStateEmpty();
 
   @override
   Stream<GithubSearchState> mapEventToState(GithubSearchEvent event) async* {

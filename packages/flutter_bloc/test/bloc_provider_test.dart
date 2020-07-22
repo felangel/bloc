@@ -1,37 +1,39 @@
 import 'dart:async';
 
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
-  final CounterBloc Function(BuildContext context) _create;
-  final CounterBloc _value;
-  final Widget _child;
-
   const MyApp({
     Key key,
-    CounterBloc Function(BuildContext context) create,
-    CounterBloc value,
+    CounterCubit Function(BuildContext context) create,
+    CounterCubit value,
     @required Widget child,
   })  : _create = create,
         _value = value,
         _child = child,
         super(key: key);
 
+  final CounterCubit Function(BuildContext context) _create;
+  final CounterCubit _value;
+  final Widget _child;
+
   @override
   Widget build(BuildContext context) {
     if (_value != null) {
       return MaterialApp(
-        home: BlocProvider<CounterBloc>.value(
+        home: BlocProvider<CounterCubit>.value(
           value: _value,
           child: _child,
         ),
       );
     }
     return MaterialApp(
-      home: BlocProvider<CounterBloc>(
+      home: BlocProvider<CounterCubit>(
         create: _create,
         child: _child,
       ),
@@ -40,43 +42,40 @@ class MyApp extends StatelessWidget {
 }
 
 class MyStatefulApp extends StatefulWidget {
-  final Widget child;
-
   const MyStatefulApp({
     Key key,
     @required this.child,
   }) : super(key: key);
+
+  final Widget child;
 
   @override
   _MyStatefulAppState createState() => _MyStatefulAppState();
 }
 
 class _MyStatefulAppState extends State<MyStatefulApp> {
-  CounterBloc bloc;
+  CounterCubit cubit;
 
   @override
   void initState() {
-    bloc = CounterBloc();
+    cubit = CounterCubit();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocProvider<CounterBloc>(
-        create: (context) => bloc,
+      home: BlocProvider<CounterCubit>(
+        create: (context) => cubit,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Counter'),
             actions: <Widget>[
               IconButton(
-                key: Key('iconButtonKey'),
-                icon: Icon(Icons.edit),
+                key: const Key('iconButtonKey'),
+                icon: const Icon(Icons.edit),
                 tooltip: 'Change State',
                 onPressed: () {
-                  setState(() {
-                    bloc = CounterBloc();
-                  });
+                  setState(() => cubit = CounterCubit());
                 },
               )
             ],
@@ -89,53 +88,33 @@ class _MyStatefulAppState extends State<MyStatefulApp> {
 
   @override
   void dispose() {
-    bloc.close();
+    cubit.close();
     super.dispose();
   }
 }
 
-class MyAppNoProvider extends StatelessWidget {
-  final Widget _child;
-
-  const MyAppNoProvider({
-    Key key,
-    @required Widget child,
-  })  : _child = child,
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: _child,
-    );
-  }
+class MyAppNoProvider extends MaterialApp {
+  const MyAppNoProvider({Key key, Widget home}) : super(key: key, home: home);
 }
 
 class CounterPage extends StatelessWidget {
-  final Function onBuild;
-
   const CounterPage({Key key, this.onBuild}) : super(key: key);
+
+  final Function onBuild;
 
   @override
   Widget build(BuildContext context) {
-    final counterBloc = BlocProvider.of<CounterBloc>(context);
-    assert(counterBloc != null);
+    final counterCubit = BlocProvider.of<CounterCubit>(context);
+    assert(counterCubit != null);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Counter')),
-      body: BlocBuilder<CounterBloc, int>(
-        bloc: counterBloc,
+      body: BlocBuilder<CounterCubit, int>(
+        cubit: counterCubit,
         builder: (context, count) {
           if (onBuild != null) {
             onBuild();
           }
-          return Center(
-            child: Text(
-              '$count',
-              key: Key('counter_text'),
-              style: TextStyle(fontSize: 24.0),
-            ),
-          );
+          return Text('$count', key: const Key('counter_text'));
         },
       ),
     );
@@ -149,17 +128,19 @@ class RoutePage extends StatelessWidget {
       body: Column(
         children: [
           RaisedButton(
-            key: Key('route_button'),
+            key: const Key('route_button'),
             onPressed: () {
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute<Widget>(builder: (context) => Container()),
+                MaterialPageRoute<Widget>(
+                  builder: (context) => const SizedBox(),
+                ),
               );
             },
           ),
           RaisedButton(
-            key: Key('increment_buton'),
+            key: const Key('increment_buton'),
             onPressed: () {
-              BlocProvider.of<CounterBloc>(context).add(CounterEvent.increment);
+              BlocProvider.of<CounterCubit>(context).increment();
             },
           ),
         ],
@@ -168,24 +149,12 @@ class RoutePage extends StatelessWidget {
   }
 }
 
-enum CounterEvent { increment, decrement }
+class CounterCubit extends Cubit<int> {
+  CounterCubit({this.onClose}) : super(0);
 
-class CounterBloc extends Bloc<CounterEvent, int> {
   final Function onClose;
 
-  CounterBloc({this.onClose}) : super(0);
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-    }
-  }
+  void increment() => emit(state + 1);
 
   @override
   Future<void> close() {
@@ -197,44 +166,41 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 void main() {
   group('BlocProvider', () {
     testWidgets('throws if initialized with no create', (tester) async {
-      await tester.pumpWidget(MyApp(
-        create: null,
-        child: CounterPage(),
-      ));
+      await tester.pumpWidget(const MyApp(create: null, child: CounterPage()));
       expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
 
     testWidgets('throws if initialized with no child', (tester) async {
       await tester.pumpWidget(MyApp(
-        create: (context) => CounterBloc(),
+        create: (context) => CounterCubit(),
         child: null,
       ));
       expect(tester.takeException(), isInstanceOf<AssertionError>());
     });
 
-    testWidgets('lazily loads blocs by default', (tester) async {
+    testWidgets('lazily loads cubits by default', (tester) async {
       var createCalled = false;
       await tester.pumpWidget(
         BlocProvider(
           create: (_) {
             createCalled = true;
-            return CounterBloc();
+            return CounterCubit();
           },
-          child: Container(),
+          child: const SizedBox(),
         ),
       );
       expect(createCalled, isFalse);
     });
 
-    testWidgets('lazily loads blocs by default', (tester) async {
+    testWidgets('lazily loads cubits by default', (tester) async {
       var createCalled = false;
       await tester.pumpWidget(
         BlocProvider(
           create: (_) {
             createCalled = true;
-            return CounterBloc();
+            return CounterCubit();
           },
-          child: Container(),
+          child: const SizedBox(),
         ),
       );
       expect(createCalled, isFalse);
@@ -247,23 +213,23 @@ void main() {
           lazy: false,
           create: (_) {
             createCalled = true;
-            return CounterBloc();
+            return CounterCubit();
           },
-          child: Container(),
+          child: const SizedBox(),
         ),
       );
       expect(createCalled, isTrue);
     });
 
     testWidgets('can be provided without an explicit type', (tester) async {
-      final key = Key('__text_count__');
+      final key = const Key('__text_count__');
       await tester.pumpWidget(
         MaterialApp(
           home: BlocProvider(
-            create: (_) => CounterBloc(),
+            create: (_) => CounterCubit(),
             child: Builder(
               builder: (context) => Text(
-                '${BlocProvider.of<CounterBloc>(context).state}',
+                '${BlocProvider.of<CounterCubit>(context).state}',
                 key: key,
               ),
             ),
@@ -274,15 +240,13 @@ void main() {
       expect(text.data, '0');
     });
 
-    testWidgets('passes bloc to children', (tester) async {
-      CounterBloc _create(BuildContext context) => CounterBloc();
-      final _child = CounterPage();
+    testWidgets('passes cubit to children', (tester) async {
       await tester.pumpWidget(MyApp(
-        create: _create,
-        child: _child,
+        create: (_) => CounterCubit(),
+        child: const CounterPage(),
       ));
 
-      final _counterFinder = find.byKey((Key('counter_text')));
+      final _counterFinder = find.byKey((const Key('counter_text')));
       expect(_counterFinder, findsOneWidget);
 
       final _counterText = _counterFinder.evaluate().first.widget as Text;
@@ -290,14 +254,14 @@ void main() {
     });
 
     testWidgets(
-      'passes bloc to children within same build',
+      'passes cubit to children within same build',
       (tester) async {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
               body: BlocProvider(
-                create: (context) => CounterBloc(),
-                child: BlocBuilder<CounterBloc, int>(
+                create: (context) => CounterCubit(),
+                child: BlocBuilder<CounterCubit, int>(
                   builder: (context, state) => Text('state: $state'),
                 ),
               ),
@@ -309,22 +273,21 @@ void main() {
     );
 
     testWidgets(
-      'can access bloc directly within builder',
+      'can access cubit directly within builder',
       (tester) async {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
               body: BlocProvider(
-                create: (context) => CounterBloc(),
-                child: BlocBuilder<CounterBloc, int>(
+                create: (_) => CounterCubit(),
+                child: BlocBuilder<CounterCubit, int>(
                   builder: (context, state) => Column(
                     children: [
                       Text('state: $state'),
                       RaisedButton(
-                        key: Key('increment_button'),
+                        key: const Key('increment_button'),
                         onPressed: () {
-                          BlocProvider.of<CounterBloc>(context)
-                              .add(CounterEvent.increment);
+                          context.bloc<CounterCubit>().increment();
                         },
                       ),
                     ],
@@ -335,28 +298,22 @@ void main() {
           ),
         );
         expect(find.text('state: 0'), findsOneWidget);
-        await tester.tap(find.byKey(Key('increment_button')));
-        await tester.pump();
+        await tester.tap(find.byKey(const Key('increment_button')));
+        await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
         expect(find.text('state: 1'), findsOneWidget);
       },
     );
 
-    testWidgets('does not call close on bloc if it was not loaded (lazily)',
+    testWidgets('does not call close on cubit if it was not loaded (lazily)',
         (tester) async {
       var closeCalled = false;
-      CounterBloc _create(BuildContext context) => CounterBloc(
-            onClose: () {
-              closeCalled = true;
-            },
-          );
-      final Widget _child = RoutePage();
       await tester.pumpWidget(MyApp(
-        create: _create,
-        child: _child,
+        create: (_) => CounterCubit(onClose: () => closeCalled = true),
+        child: RoutePage(),
       ));
 
-      final _routeButtonFinder = find.byKey((Key('route_button')));
+      final _routeButtonFinder = find.byKey((const Key('route_button')));
       expect(_routeButtonFinder, findsOneWidget);
       expect(closeCalled, false);
 
@@ -366,23 +323,17 @@ void main() {
       expect(closeCalled, false);
     });
 
-    testWidgets('calls close on bloc automatically when invoked (lazily)',
+    testWidgets('calls close on cubit automatically when invoked (lazily)',
         (tester) async {
       var closeCalled = false;
-      CounterBloc _create(BuildContext context) => CounterBloc(
-            onClose: () {
-              closeCalled = true;
-            },
-          );
-      final Widget _child = RoutePage();
       await tester.pumpWidget(MyApp(
-        create: _create,
-        child: _child,
+        create: (_) => CounterCubit(onClose: () => closeCalled = true),
+        child: RoutePage(),
       ));
-      final incrementButtonFinder = find.byKey(Key('increment_buton'));
+      final incrementButtonFinder = find.byKey(const Key('increment_buton'));
       expect(incrementButtonFinder, findsOneWidget);
       await tester.tap(incrementButtonFinder);
-      final routeButtonFinder = find.byKey((Key('route_button')));
+      final routeButtonFinder = find.byKey((const Key('route_button')));
       expect(routeButtonFinder, findsOneWidget);
       expect(closeCalled, false);
 
@@ -394,18 +345,11 @@ void main() {
 
     testWidgets('does not close when created using value', (tester) async {
       var closeCalled = false;
-      final _value = CounterBloc(
-        onClose: () {
-          closeCalled = true;
-        },
-      );
+      final value = CounterCubit(onClose: () => closeCalled = true);
       final Widget _child = RoutePage();
-      await tester.pumpWidget(MyApp(
-        value: _value,
-        child: _child,
-      ));
+      await tester.pumpWidget(MyApp(value: value, child: _child));
 
-      final _routeButtonFinder = find.byKey((Key('route_button')));
+      final _routeButtonFinder = find.byKey((const Key('route_button')));
       expect(_routeButtonFinder, findsOneWidget);
       expect(closeCalled, false);
 
@@ -418,19 +362,16 @@ void main() {
     testWidgets(
         'should throw FlutterError if BlocProvider is not found in current '
         'context', (tester) async {
-      final Widget _child = CounterPage();
-      await tester.pumpWidget(MyAppNoProvider(
-        child: _child,
-      ));
+      await tester.pumpWidget(const MyAppNoProvider(home: CounterPage()));
       final dynamic exception = tester.takeException();
-      final expectedMessage = """
-        BlocProvider.of() called with a context that does not contain a Bloc of type CounterBloc.
-        No ancestor could be found starting from the context that was passed to BlocProvider.of<CounterBloc>().
+      final expectedMessage = '''
+        BlocProvider.of() called with a context that does not contain a Cubit of type CounterCubit.
+        No ancestor could be found starting from the context that was passed to BlocProvider.of<CounterCubit>().
 
         This can happen if the context you used comes from a widget above the BlocProvider.
 
         The context used was: CounterPage(dirty)
-""";
+''';
       expect(exception is FlutterError, true);
       expect(exception.message, expectedMessage);
     });
@@ -440,9 +381,9 @@ void main() {
         'ProviderNotFoundException with wrong valueType '
         'is thrown', (tester) async {
       await tester.pumpWidget(
-        BlocProvider<CounterBloc>(
-          create: (context) => CounterBloc(onClose: Provider.of(context)),
-          child: CounterPage(),
+        BlocProvider<CounterCubit>(
+          create: (context) => CounterCubit(onClose: Provider.of(context)),
+          child: const CounterPage(),
         ),
       );
       final dynamic exception = tester.takeException();
@@ -454,7 +395,7 @@ void main() {
         'exception is thrown', (tester) async {
       final expectedException = Exception('oops');
       await tester.pumpWidget(
-        BlocProvider<CounterBloc>(
+        BlocProvider<CounterCubit>(
           lazy: false,
           create: (_) => throw expectedException,
           child: Container(),
@@ -465,45 +406,37 @@ void main() {
     });
 
     testWidgets(
-        'should not rebuild widgets that inherited the bloc if the bloc is '
+        'should not rebuild widgets that inherited the cubit if the cubit is '
         'changed', (tester) async {
       var numBuilds = 0;
-      final Widget _child = CounterPage(
-        onBuild: () {
-          numBuilds++;
-        },
-      );
+      final Widget _child = CounterPage(onBuild: () => numBuilds++);
       await tester.pumpWidget(MyStatefulApp(
         child: _child,
       ));
-      await tester.tap(find.byKey(Key('iconButtonKey')));
+      await tester.tap(find.byKey(const Key('iconButtonKey')));
       await tester.pump();
       expect(numBuilds, 1);
     });
 
     testWidgets(
-        'should access bloc instance'
+        'should access cubit instance'
         'via BlocProviderExtension', (tester) async {
       await tester.pumpWidget(
         BlocProvider(
-          create: (_) => CounterBloc(),
+          create: (_) => CounterCubit(),
           child: MaterialApp(
             home: Scaffold(
-              appBar: AppBar(title: Text('Value')),
-              body: Center(
-                child: Builder(
-                  builder: (context) => Text(
-                    '${context.bloc<CounterBloc>().state}',
-                    key: Key('value_data'),
-                    style: TextStyle(fontSize: 24.0),
-                  ),
+              body: Builder(
+                builder: (context) => Text(
+                  '${context.bloc<CounterCubit>().state}',
+                  key: const Key('value_data'),
                 ),
               ),
             ),
           ),
         ),
       );
-      final _counterFinder = find.byKey((Key('value_data')));
+      final _counterFinder = find.byKey((const Key('value_data')));
       expect(_counterFinder, findsOneWidget);
 
       final _counterText = _counterFinder.evaluate().first.widget as Text;

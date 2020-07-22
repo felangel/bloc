@@ -5,10 +5,12 @@ import 'package:mockito/mockito.dart';
 
 import 'package:test/test.dart';
 
-import 'helpers/counter_bloc.dart';
+import 'blocs/blocs.dart';
+import 'cubits/cubits.dart';
 
-class MockCounterBloc extends MockBloc<CounterEvent, int>
-    implements CounterBloc {}
+class MockCounterBloc extends MockBloc<int> implements CounterBloc {}
+
+class MockCounterCubit extends MockBloc<int> implements CounterCubit {}
 
 void main() {
   group('MockBloc', () {

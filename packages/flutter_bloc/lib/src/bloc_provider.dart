@@ -1,18 +1,27 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_cubit/flutter_cubit.dart';
 
-import 'package:provider/provider.dart';
 import 'package:bloc/bloc.dart';
+import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
+
+/// A function that creates a `Bloc` of type [T].
+typedef CreateBloc<T extends Cubit<dynamic>> = T Function(
+  BuildContext context,
+);
+
+/// Mixin which allows `MultiBlocProvider` to infer the types
+/// of multiple [BlocProvider]s.
+mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 
 /// {@template bloc_provider}
-/// Takes a [ValueBuilder] that is responsible for creating the [bloc] and
-/// a [child] which will have access to the [bloc] via
+/// Takes a `ValueBuilder` that is responsible for creating the `bloc` and
+/// a [child] which will have access to the `bloc` via
 /// `BlocProvider.of(context)`.
 /// It is used as a dependency injection (DI) widget so that a single instance
-/// of a [bloc] can be provided to multiple widgets within a subtree.
+/// of a `bloc` can be provided to multiple widgets within a subtree.
 ///
-/// Automatically handles closing the [bloc] when used with [create] and lazily
-/// creates the provided [bloc] unless [lazy] is set to `false`.
+/// Automatically handles closing the `bloc` when used with `create` and lazily
+/// creates the provided `bloc` unless [lazy] is set to `false`.
 ///
 /// ```dart
 /// BlocProvider(
@@ -21,30 +30,32 @@ import 'package:bloc/bloc.dart';
 /// );
 /// ```
 /// {@endtemplate}
-class BlocProvider<T extends Bloc<Object, Object>> extends CubitProvider<T> {
+class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
+    with BlocProviderSingleChildWidget {
   /// {@macro bloc_provider}
   BlocProvider({
     Key key,
-    @required Create<T> create,
+    @required CreateBloc<T> create,
     Widget child,
     bool lazy,
-  }) : super(
+  }) : this._(
           key: key,
           create: create,
+          dispose: (_, bloc) => bloc?.close(),
           child: child,
           lazy: lazy,
         );
 
-  /// Takes a [bloc] and a [child] which will have access to the [bloc] via
+  /// Takes a `bloc` and a [child] which will have access to the `bloc` via
   /// `BlocProvider.of(context)`.
-  /// When `BlocProvider.value` is used, the [bloc] will not be automatically
+  /// When `BlocProvider.value` is used, the `bloc` will not be automatically
   /// closed.
   /// As a result, `BlocProvider.value` should mainly be used for providing
-  /// existing [bloc]s to new routes.
+  /// existing `bloc`s to new routes.
   ///
-  /// A new [bloc] should not be created in `BlocProvider.value`.
-  /// [bloc]s should always be created using the default constructor within
-  /// [create].
+  /// A new `bloc` should not be created in `BlocProvider.value`.
+  /// `bloc`s should always be created using the default constructor within
+  /// `create`.
   ///
   /// ```dart
   /// BlocProvider.value(
@@ -56,13 +67,36 @@ class BlocProvider<T extends Bloc<Object, Object>> extends CubitProvider<T> {
     Key key,
     @required T value,
     Widget child,
-  }) : super.value(
+  }) : this._(
           key: key,
-          value: value,
+          create: (_) => value,
           child: child,
         );
 
-  /// Method that allows widgets to access a [bloc] instance as long as their
+  /// Internal constructor responsible for creating the [BlocProvider].
+  /// Used by the [BlocProvider] default and value constructors.
+  BlocProvider._({
+    Key key,
+    @required Create<T> create,
+    Dispose<T> dispose,
+    this.child,
+    this.lazy,
+  })  : _create = create,
+        _dispose = dispose,
+        super(key: key, child: child);
+
+  /// [child] and its descendants which will have access to the `bloc`.
+  final Widget child;
+
+  /// Whether or not the `bloc` being provided should be lazily created.
+  /// Defaults to `true`.
+  final bool lazy;
+
+  final Dispose<T> _dispose;
+
+  final Create<T> _create;
+
+  /// Method that allows widgets to access a `cubit` instance as long as their
   /// `BuildContext` contains a [BlocProvider] instance.
   ///
   /// If we want to access an instance of `BlocA` which was provided higher up
@@ -71,22 +105,32 @@ class BlocProvider<T extends Bloc<Object, Object>> extends CubitProvider<T> {
   /// ```dart
   /// BlocProvider.of<BlocA>(context)
   /// ```
-  static T of<T extends Bloc<dynamic, dynamic>>(BuildContext context) {
+  static T of<T extends Cubit<Object>>(BuildContext context) {
     try {
       return Provider.of<T>(context, listen: false);
     } on ProviderNotFoundException catch (e) {
       if (e.valueType != T) rethrow;
       throw FlutterError(
-        """
-        BlocProvider.of() called with a context that does not contain a Bloc of type $T.
+        '''
+        BlocProvider.of() called with a context that does not contain a Cubit of type $T.
         No ancestor could be found starting from the context that was passed to BlocProvider.of<$T>().
 
         This can happen if the context you used comes from a widget above the BlocProvider.
 
         The context used was: $context
-        """,
+        ''',
       );
     }
+  }
+
+  @override
+  Widget buildWithChild(BuildContext context, Widget child) {
+    return InheritedProvider<T>(
+      create: _create,
+      dispose: _dispose,
+      child: child,
+      lazy: lazy,
+    );
   }
 }
 
@@ -94,12 +138,12 @@ class BlocProvider<T extends Bloc<Object, Object>> extends CubitProvider<T> {
 /// to perform a lookup based on a `Bloc` type.
 extension BlocProviderExtension on BuildContext {
   /// Performs a lookup using the `BuildContext` to obtain
-  /// the nearest ancestor `Bloc` of type [B].
+  /// the nearest ancestor `Cubit` of type [C].
   ///
   /// Calling this method is equivalent to calling:
   ///
   /// ```dart
-  /// BlocProvider.of<B>(context)
+  /// BlocProvider.of<C>(context)
   /// ```
-  B bloc<B extends Bloc<Object, Object>>() => BlocProvider.of<B>(this);
+  C bloc<C extends Cubit<Object>>() => BlocProvider.of<C>(this);
 }

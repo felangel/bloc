@@ -16,6 +16,13 @@ void main() {
       });
     });
 
+    group('onChange', () {
+      test('does nothing by default', () {
+        // ignore: invalid_use_of_protected_member
+        BlocObserver().onChange(MockBloc(), MockTransition());
+      });
+    });
+
     group('onTransition', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member

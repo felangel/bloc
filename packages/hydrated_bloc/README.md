@@ -9,23 +9,25 @@
   <a href="https://github.com/tenhobi/effective_dart"><img src="https://img.shields.io/badge/style-effective_dart-40c4ff.svg" alt="style: effective dart"></a>
   <a href="https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx"><img src="https://img.shields.io/badge/flutter-website-deepskyblue.svg" alt="Flutter Website"></a>
   <a href="https://github.com/Solido/awesome-flutter#standard"><img src="https://img.shields.io/badge/awesome-flutter-blue.svg?longCache=true" alt="Awesome Flutter"></a>
-  <a href="http://fluttersamples.com"><img src="https://img.shields.io/badge/flutter-samples-teal.svg?longCache=true" alt="Flutter Samples"></a>
+  <a href="https://fluttersamples.com"><img src="https://img.shields.io/badge/flutter-samples-teal.svg?longCache=true" alt="Flutter Samples"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
   <a href="https://discord.gg/Hc5KD3g"><img src="https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue" alt="Discord"></a>
   <a href="https://github.com/felangel/bloc"><img src="https://tinyurl.com/bloc-library" alt="Bloc Library"></a>
 </p>
 
-An extension to the [bloc state management library](https://github.com/felangel/bloc) which automatically persists and restores bloc states and is built on top of [hydrated_cubit](https://pub.dev/packages/hydrated_cubit).
+An extension to [package:bloc](https://github.com/felangel/bloc) which automatically persists and restores bloc and cubit states. Built to work with [package:bloc](https://pub.dev/packages/bloc).
+
+**Learn more at [bloclibrary.dev](https://bloclibrary.dev)!**
 
 ## Overview
 
 `hydrated_bloc` exports a `Storage` interface which means it can work with any storage provider. Out of the box, it comes with its own implementation: `HydratedStorage`.
 
-`HydratedStorage` is built on top of [path_provider](https://pub.dev/packages/path_provider) for a platform-agnostic storage layer. The out-of-the-box storage implementation reads/writes to file using the `toJson`/`fromJson` methods on `HydratedBloc` and should perform very well for most use-cases (performance reports coming soon). `HydratedStorage` is supported for desktop ([example](https://github.com/felangel/hydrated_bloc/tree/master/example)).
+`HydratedStorage` is built on top of [hive](https://pub.dev/packages/hive) for a platform-agnostic, performant storage layer. See the complete [example](https://github.com/felangel/hydrated_bloc/tree/master/example) for more details.
 
 ## Usage
 
-### 1. Use `HydratedStorage`
+### Setup `HydratedStorage`
 
 ```dart
 void main() async {
@@ -35,10 +37,26 @@ void main() async {
 }
 ```
 
-### 2. Extend `HydratedBloc` and override `fromJson`/`toJson`
+### Create a HydratedCubit
 
 ```dart
-enum CounterEvent { increment, decrement }
+class CounterCubit extends HydratedCubit<int> {
+  CounterCubit() : super(0);
+
+  void increment() => emit(state + 1);
+
+  @override
+  int fromJson(Map<String, dynamic> json) => json['value'] as int;
+
+  @override
+  Map<String, int> toJson(int state) => { 'value': state };
+}
+```
+
+### Create a HydratedBloc
+
+```dart
+enum CounterEvent { increment }
 
 class CounterBloc extends HydratedBloc<CounterEvent, int> {
   CounterBloc() : super(0);
@@ -46,9 +64,6 @@ class CounterBloc extends HydratedBloc<CounterEvent, int> {
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
       case CounterEvent.increment:
         yield state + 1;
         break;
@@ -63,7 +78,25 @@ class CounterBloc extends HydratedBloc<CounterEvent, int> {
 }
 ```
 
-Now our `CounterBloc` is a `HydratedBloc` and will automatically persist its state. We can increment the counter value, hot restart, kill the app, etc... and our `CounterBloc` will always retain its state.
+Now the `CounterCubit` and `CounterBloc` will automatically persist/restore their state. We can increment the counter value, hot restart, kill the app, etc... and the previous state will be retained.
+
+### HydratedMixin
+
+```dart
+class CounterCubit extends Cubit<int> with HydratedMixin {
+  CounterCubit() : super(0) {
+    hydrate();
+  }
+
+  void increment() => emit(state + 1);
+
+  @override
+  int fromJson(Map<String, dynamic> json) => json['value'] as int;
+
+  @override
+  Map<String, int> toJson(int state) => { 'value': state };
+}
+```
 
 ## Custom Storage Directory
 
@@ -120,9 +153,3 @@ HydratedBloc.storage = MyHydratedStorage();
 ## Supporters
 
 [<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120" />](https://verygood.ventures)
-
-## Starware
-
-Hydrated Bloc is Starware.  
-This means you're free to use the project, as long as you star its GitHub repository.  
-Your appreciation makes us grow and glow up. ⭐

@@ -48,6 +48,7 @@ Ou você pode clicar com o botão direito do mouse no diretório em que deseja c
 
 | Shortcut                  | Description                                          |
 | ------------------------- | ---------------------------------------------------- |
+| `cubit`                   | Creates a Cubit Class                                |
 | `bloc`                    | Creates a Bloc Class                                 |
 | `blocbuilder`             | Creates a BlocBuilder Widget                         |
 | `bloclistener`            | Creates a BlocListener Widget                        |
@@ -62,17 +63,3 @@ Ou você pode clicar com o botão direito do mouse no diretório em que deseja c
 | `blocof`                  | Shortcut for `BlocProvider.of<MyBloc>()`             |
 | `contextrepository`       | Shortcut for `context.repository<MyRepository>()`    |
 | `repositoryof`            | Shortcut for `RepositoryProvider.of<MyRepository>()` |
-
-### Cubit
-
-| Shortcut             | Description                                |
-| -------------------- | ------------------------------------------ |
-| `cubit`              | Creates a Cubit Class                      |
-| `cubitbuilder`       | Creates a CubitBuilder Widget              |
-| `cubitlistener`      | Creates a CubitListener Widget             |
-| `multicubitlistener` | Creates a MultiCubitListener Widget        |
-| `cubitconsumer`      | Creates a CubitConsumer Widget             |
-| `cubitprovider`      | Creates a CubitProvider Widget             |
-| `multicubitprovider` | Creates a MultiCubitProvider Widget        |
-| `contextcubit`       | Shortcut for `context.cubit<MyCubit>()`    |
-| `cubitof`            | Shortcut for `CubitProvider.of<MyCubit>()` |

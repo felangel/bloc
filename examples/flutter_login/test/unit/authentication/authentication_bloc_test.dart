@@ -33,43 +33,36 @@ void main() {
   });
 
   test('close does not emit new states', () {
-    expectLater(
-      authenticationBloc,
-      emitsInOrder([AuthenticationInitial(), emitsDone]),
-    );
+    expectLater(authenticationBloc, emitsInOrder([emitsDone]));
     authenticationBloc.close();
   });
 
   group('AppStarted', () {
     blocTest(
       'emits [unauthenticated] for invalid token',
-      build: () async {
+      build: () {
         when(userRepository.hasToken()).thenAnswer((_) => Future.value(false));
         return authenticationBloc;
       },
       act: (bloc) => bloc.add(AuthenticationStarted()),
-      expect: [
-        AuthenticationFailure(),
-      ],
+      expect: [AuthenticationFailure()],
     );
 
     blocTest(
       'emits [authenticated] for valid token',
-      build: () async {
+      build: () {
         when(userRepository.hasToken()).thenAnswer((_) => Future.value(true));
         return authenticationBloc;
       },
       act: (bloc) => bloc.add(AuthenticationStarted()),
-      expect: [
-        AuthenticationSuccess(),
-      ],
+      expect: [AuthenticationSuccess()],
     );
   });
 
   group('LoggedIn', () {
     blocTest(
       'emits [loading, authenticated] when token is persisted',
-      build: () async => authenticationBloc,
+      build: () => authenticationBloc,
       act: (bloc) => bloc.add(AuthenticationLoggedIn(token: 'instance.token')),
       expect: [
         AuthenticationInProgress(),
@@ -81,7 +74,7 @@ void main() {
   group('LoggedOut', () {
     blocTest(
       'emits [loading, unauthenticated] when token is deleted',
-      build: () async => authenticationBloc,
+      build: () => authenticationBloc,
       act: (bloc) => bloc.add(AuthenticationLoggedOut()),
       expect: [
         AuthenticationInProgress(),

@@ -1,4 +1,4 @@
-import 'package:cubit/cubit.dart';
+import 'package:bloc/bloc.dart';
 import 'package:replay_cubit/replay_cubit.dart';
 
 class CounterCubit extends ReplayCubit<int> {

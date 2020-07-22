@@ -1,4 +1,8 @@
 <p align="center">
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_logo_full.png" height="100" alt="Bloc" />
+</p>
+
+<p align="center">
 <a href="https://github.com/felangel/bloc/actions"><img src="https://img.shields.io/github/workflow/status/felangel/bloc/build.svg?logo=github" alt="build"></a>
 <a href="https://codecov.io/gh/felangel/bloc"><img src="https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg" alt="codecov"></a>
 <a href="https://github.com/felangel/bloc"><img src="https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on Github"></a>
@@ -44,6 +48,7 @@ Or you can right click on the directory in which you'd like to create the bloc/c
 
 | Shortcut                  | Description                                          |
 | ------------------------- | ---------------------------------------------------- |
+| `cubit`                   | Creates a Cubit Class                                |
 | `bloc`                    | Creates a Bloc Class                                 |
 | `blocbuilder`             | Creates a BlocBuilder Widget                         |
 | `bloclistener`            | Creates a BlocListener Widget                        |
@@ -58,17 +63,3 @@ Or you can right click on the directory in which you'd like to create the bloc/c
 | `blocof`                  | Shortcut for `BlocProvider.of<MyBloc>()`             |
 | `contextrepository`       | Shortcut for `context.repository<MyRepository>()`    |
 | `repositoryof`            | Shortcut for `RepositoryProvider.of<MyRepository>()` |
-
-### Cubit
-
-| Shortcut             | Description                                |
-| -------------------- | ------------------------------------------ |
-| `cubit`              | Creates a Cubit Class                      |
-| `cubitbuilder`       | Creates a CubitBuilder Widget              |
-| `cubitlistener`      | Creates a CubitListener Widget             |
-| `multicubitlistener` | Creates a MultiCubitListener Widget        |
-| `cubitconsumer`      | Creates a CubitConsumer Widget             |
-| `cubitprovider`      | Creates a CubitProvider Widget             |
-| `multicubitprovider` | Creates a MultiCubitProvider Widget        |
-| `contextcubit`       | Shortcut for `context.cubit<MyCubit>()`    |
-| `cubitof`            | Shortcut for `CubitProvider.of<MyCubit>()` |
