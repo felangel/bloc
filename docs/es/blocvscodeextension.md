@@ -48,6 +48,7 @@ O puede hacer click derecho en el directorio en el cual desea crear el nuevo Blo
 
 | Atajo                     | Descripción                                        |
 | ------------------------- | -------------------------------------------------- |
+| `cubit`                   | Crea una clase Cubit                               |
 | `bloc`                    | Crea una clase Bloc                                |
 | `blocbuilder`             | Crea un Widget de clase BlocBuilder                |
 | `bloclistener`            | Crea un Widget de clase BlocListener               |
@@ -62,17 +63,3 @@ O puede hacer click derecho en el directorio en el cual desea crear el nuevo Blo
 | `blocof`                  | Atajo para `BlocProvider.of<MyBloc>()`             |
 | `contextrepository`       | Atajo para `context.repository<MyRepository>()`    |
 | `repositoryof`            | Atajo para `RepositoryProvider.of<MyRepository>()` |
-
-### Cubit
-
-| Atajo                | Descripción                                |
-| -------------------- | ------------------------------------------ |
-| `cubit`              | Crea una clase Cubit                       |
-| `cubitbuilder`       | Crea un Widget de clase CubitBuilder       |
-| `cubitlistener`      | Crea un Widget de clase CubitListener      |
-| `multicubitlistener` | Crea un Widget de clase MultiCubitListener |
-| `cubitconsumer`      | Crea un Widget de clase CubitConsumer      |
-| `cubitprovider`      | Crea un Widget de clase CubitProvider      |
-| `multicubitprovider` | Crea un Widget de clase MultiCubitProvider |
-| `contextcubit`       | Atajo para `context.cubit<MyCubit>()`      |
-| `cubitof`            | Atajo para `CubitProvider.of<MyCubit>()`   |
