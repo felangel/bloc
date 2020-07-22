@@ -1,4 +1,12 @@
 {
+  "Cubit": {
+    "prefix": "cubit",
+    "body": [
+      "class ${1:Subject}Cubit extends Cubit<$1State> {",
+      "\t${1:Subject}Cubit() : super(${1:Subject}Initial());",
+      "}"
+    ]
+  },
   "Bloc": {
     "prefix": "bloc",
     "body": [
