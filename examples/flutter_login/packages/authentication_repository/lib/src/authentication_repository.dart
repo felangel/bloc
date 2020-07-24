@@ -1,18 +1,15 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:uuid/uuid.dart';
 
-import 'models/models.dart';
+enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthenticationRepository {
-  final _controller = StreamController<User>();
-  User _user;
+  final _controller = StreamController<AuthenticationStatus>();
 
-  User get currentUser => _user;
-
-  Stream<User> get user async* {
-    yield _user;
+  Stream<AuthenticationStatus> get status async* {
+    await Future.delayed(const Duration(seconds: 1));
+    yield AuthenticationStatus.unauthenticated;
     yield* _controller.stream;
   }
 
@@ -23,20 +20,14 @@ class AuthenticationRepository {
     assert(username != null);
     assert(password != null);
 
-    final user = await Future.delayed(
+    await Future.delayed(
       const Duration(milliseconds: 300),
-      () async => User(Uuid().v4()),
+      () => _controller.add(AuthenticationStatus.authenticated),
     );
-
-    _controller.add(user);
-    _user = user;
   }
 
-  Future<void> logOut() async {
-    if (_user != null) {
-      _user = null;
-      _controller.add(null);
-    }
+  void logOut() {
+    _controller.add(AuthenticationStatus.unauthenticated);
   }
 
   void close() => _controller.close();

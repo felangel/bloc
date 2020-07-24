@@ -1,10 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-
-// ignore: must_be_immutable
-class MockUser extends Mock implements User {}
 
 void main() {
   group('AuthenticationEvent', () {
@@ -14,12 +10,11 @@ void main() {
       });
     });
 
-    group('UserChanged', () {
+    group('AuthenticationStatusChanged', () {
       test('supports value comparisons', () {
-        final user = MockUser();
         expect(
-          UserChanged(user),
-          UserChanged(user),
+          AuthenticationStatusChanged(AuthenticationStatus.unknown),
+          AuthenticationStatusChanged(AuthenticationStatus.unknown),
         );
       });
     });

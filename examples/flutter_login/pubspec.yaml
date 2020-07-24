@@ -17,6 +17,8 @@ dependencies:
   equatable: ^1.2.0
   authentication_repository:
     path: packages/authentication_repository
+  user_repository:
+    path: packages/user_repository
 
 dev_dependencies:
   flutter_test:

@@ -5,13 +5,19 @@ import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_login/home/home.dart';
 import 'package:flutter_login/login/login.dart';
 import 'package:flutter_login/splash/splash.dart';
+import 'package:user_repository/user_repository.dart';
 
 class AppRoot extends StatelessWidget {
-  const AppRoot({Key key, @required this.authenticationRepository})
-      : assert(authenticationRepository != null),
+  const AppRoot({
+    Key key,
+    @required this.authenticationRepository,
+    @required this.userRepository,
+  })  : assert(authenticationRepository != null),
+        assert(userRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
+  final UserRepository userRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +25,9 @@ class AppRoot extends StatelessWidget {
       value: authenticationRepository,
       child: BlocProvider(
         create: (_) => AuthenticationBloc(
-            authenticationRepository: authenticationRepository),
+          authenticationRepository: authenticationRepository,
+          userRepository: userRepository,
+        ),
         child: App(),
       ),
     );

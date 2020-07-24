@@ -11,15 +11,20 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Home')),
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Center(
-          child: RaisedButton(
-            child: const Text('Logout'),
-            onPressed: () {
-              context.bloc<AuthenticationBloc>().add(LoggedOut());
-            },
-          ),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              'UserID: ${context.bloc<AuthenticationBloc>().state.user.id}',
+            ),
+            RaisedButton(
+              child: const Text('Logout'),
+              onPressed: () {
+                context.bloc<AuthenticationBloc>().add(LoggedOut());
+              },
+            ),
+          ],
         ),
       ),
     );
