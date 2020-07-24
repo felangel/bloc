@@ -30,14 +30,14 @@ void main() {
       blocTest(
         'emits [submissionInProgress, submissionSuccess] '
         'when login succeeds',
-        build: () async {
+        build: () {
           when(userRepository.logIn(
             username: 'username',
             password: 'password',
           )).thenAnswer((_) => Future.value('user'));
           return loginBloc;
         },
-        act: (bloc) async {
+        act: (bloc) {
           bloc
             ..add(const LoginUsernameChanged('username'))
             ..add(const LoginPasswordChanged('password'))
@@ -68,14 +68,14 @@ void main() {
 
       blocTest(
         'emits [LoginInProgress, LoginFailure] when logIn fails',
-        build: () async {
+        build: () {
           when(userRepository.logIn(
             username: 'username',
             password: 'password',
           )).thenThrow(Exception('oops'));
           return loginBloc;
         },
-        act: (bloc) async {
+        act: (bloc) {
           bloc
             ..add(const LoginUsernameChanged('username'))
             ..add(const LoginPasswordChanged('password'))

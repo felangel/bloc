@@ -36,7 +36,7 @@ void main() {
 
     blocTest(
       'emits [AuthenticationUnauthenticated] when no user present',
-      build: () async {
+      build: () {
         when(userRepository.userStream()).thenAnswer((_) => Stream.value(null));
         return AuthenticationBloc(userRepository: userRepository);
       },
@@ -45,7 +45,7 @@ void main() {
 
     blocTest(
       'emits [AuthenticationAuthenticated] when user present',
-      build: () async {
+      build: () {
         when(userRepository.userStream()).thenAnswer((_) => Stream.value(user));
         return AuthenticationBloc(userRepository: userRepository);
       },
@@ -56,11 +56,11 @@ void main() {
   group('UserChanged', () {
     blocTest(
       'emits [AuthenticationAuthenticated] when user is present',
-      build: () async {
+      build: () {
         when(userRepository.userStream()).thenAnswer((_) => Stream.value(user));
         return AuthenticationBloc(userRepository: userRepository);
       },
-      act: (bloc) async => bloc.add(const UserChanged(user)),
+      act: (bloc) => bloc.add(const UserChanged(user)),
       expect: [const AuthenticationAuthenticated(user)],
     );
   });
@@ -69,26 +69,26 @@ void main() {
     blocTest(
       'emits [AuthenticationInProgress, AuthenticationFailure] '
       'when logging out',
-      build: () async {
+      build: () {
         when(userRepository.userStream()).thenAnswer(
           (_) => const Stream.empty(),
         );
         return AuthenticationBloc(userRepository: userRepository);
       },
-      act: (bloc) async => bloc.add(const UserChanged(null)),
+      act: (bloc) => bloc.add(const UserChanged(null)),
       expect: [const AuthenticationUnauthenticated()],
     );
 
     blocTest(
       'calls logOut on userRepository '
       'when LoggedOut is added',
-      build: () async {
+      build: () {
         when(userRepository.userStream()).thenAnswer(
           (_) => const Stream.empty(),
         );
         return AuthenticationBloc(userRepository: userRepository);
       },
-      act: (bloc) async => bloc.add(LoggedOut()),
+      act: (bloc) => bloc.add(LoggedOut()),
       verify: (_) async {
         verify(userRepository.logOut()).called(1);
       },
