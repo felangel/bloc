@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors
 import 'package:flutter_login/login/login.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -13,19 +14,13 @@ void main() {
 
     group('LoginPasswordChanged', () {
       test('supports value comparisons', () {
-        expect(
-          LoginPasswordChanged(password),
-          LoginPasswordChanged(password),
-        );
+        expect(LoginPasswordChanged(password), LoginPasswordChanged(password));
       });
     });
 
     group('LoginSubmitted', () {
       test('supports value comparisons', () {
-        expect(
-          LoginSubmitted(),
-          LoginSubmitted(),
-        );
+        expect(LoginSubmitted(), LoginSubmitted());
       });
     });
   });

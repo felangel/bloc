@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors
 import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -10,7 +11,10 @@ void main() {
   group('AuthenticationState', () {
     group('AuthenticationState.unknown', () {
       test('supports value comparisons', () {
-        expect(AuthenticationState.unknown(), AuthenticationState.unknown());
+        expect(
+          AuthenticationState.unknown(),
+          AuthenticationState.unknown(),
+        );
       });
     });
 

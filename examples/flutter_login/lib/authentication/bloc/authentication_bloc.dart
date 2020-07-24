@@ -50,14 +50,14 @@ class AuthenticationBloc
   ) async {
     switch (event.status) {
       case AuthenticationStatus.unauthenticated:
-        return AuthenticationState.unauthenticated();
+        return const AuthenticationState.unauthenticated();
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
         return user != null
             ? AuthenticationState.authenticated(user)
-            : AuthenticationState.unauthenticated();
+            : const AuthenticationState.unauthenticated();
       default:
-        return AuthenticationState.unknown();
+        return const AuthenticationState.unknown();
     }
   }
 

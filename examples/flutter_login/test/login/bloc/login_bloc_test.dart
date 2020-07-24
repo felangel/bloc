@@ -28,7 +28,7 @@ void main() {
     });
 
     group('LoginSubmitted', () {
-      blocTest(
+      blocTest<LoginBloc, LoginState>(
         'emits [submissionInProgress, submissionSuccess] '
         'when login succeeds',
         build: () {
@@ -44,22 +44,22 @@ void main() {
             ..add(const LoginPasswordChanged('password'))
             ..add(const LoginSubmitted());
         },
-        expect: [
-          const LoginState(
+        expect: const <LoginState>[
+          LoginState(
             username: Username.dirty('username'),
             status: FormzStatus.invalid,
           ),
-          const LoginState(
+          LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
             status: FormzStatus.valid,
           ),
-          const LoginState(
+          LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
             status: FormzStatus.submissionInProgress,
           ),
-          const LoginState(
+          LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
             status: FormzStatus.submissionSuccess,
@@ -67,7 +67,7 @@ void main() {
         ],
       );
 
-      blocTest(
+      blocTest<LoginBloc, LoginState>(
         'emits [LoginInProgress, LoginFailure] when logIn fails',
         build: () {
           when(authenticationRepository.logIn(
@@ -82,22 +82,22 @@ void main() {
             ..add(const LoginPasswordChanged('password'))
             ..add(const LoginSubmitted());
         },
-        expect: [
-          const LoginState(
+        expect: const <LoginState>[
+          LoginState(
             username: Username.dirty('username'),
             status: FormzStatus.invalid,
           ),
-          const LoginState(
+          LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
             status: FormzStatus.valid,
           ),
-          const LoginState(
+          LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
             status: FormzStatus.submissionInProgress,
           ),
-          const LoginState(
+          LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
             status: FormzStatus.submissionFailure,

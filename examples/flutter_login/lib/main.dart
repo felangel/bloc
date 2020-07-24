@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:user_repository/user_repository.dart';
 
 void main() {
-  runApp(AppRoot(
+  runApp(App(
     authenticationRepository: AuthenticationRepository(),
     userRepository: UserRepository(),
   ));

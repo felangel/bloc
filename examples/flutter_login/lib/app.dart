@@ -7,8 +7,8 @@ import 'package:flutter_login/login/login.dart';
 import 'package:flutter_login/splash/splash.dart';
 import 'package:user_repository/user_repository.dart';
 
-class AppRoot extends StatelessWidget {
-  const AppRoot({
+class App extends StatelessWidget {
+  const App({
     Key key,
     @required this.authenticationRepository,
     @required this.userRepository,
@@ -28,18 +28,18 @@ class AppRoot extends StatelessWidget {
           authenticationRepository: authenticationRepository,
           userRepository: userRepository,
         ),
-        child: App(),
+        child: AppView(),
       ),
     );
   }
 }
 
-class App extends StatefulWidget {
+class AppView extends StatefulWidget {
   @override
-  _AppState createState() => _AppState();
+  _AppViewState createState() => _AppViewState();
 }
 
-class _AppState extends State<App> {
+class _AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   NavigatorState get _navigator => _navigatorKey.currentState;
@@ -53,13 +53,13 @@ class _AppState extends State<App> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-                _navigator.pushAndRemoveUntil(
+                _navigator.pushAndRemoveUntil<void>(
                   HomePage.route(),
                   (route) => false,
                 );
                 break;
               case AuthenticationStatus.unauthenticated:
-                _navigator.pushAndRemoveUntil(
+                _navigator.pushAndRemoveUntil<void>(
                   LoginPage.route(),
                   (route) => false,
                 );

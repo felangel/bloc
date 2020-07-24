@@ -4,7 +4,7 @@ import 'package:flutter_login/authentication/authentication.dart';
 
 class HomePage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute(builder: (_) => HomePage());
+    return MaterialPageRoute<void>(builder: (_) => HomePage());
   }
 
   @override

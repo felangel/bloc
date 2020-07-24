@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors
 import 'package:flutter_login/login/login.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:formz/formz.dart';
@@ -11,30 +12,27 @@ void main() {
     });
 
     test('returns same object when no properties are passed', () {
-      expect(
-        const LoginState().copyWith(),
-        const LoginState(),
-      );
+      expect(LoginState().copyWith(), LoginState());
     });
 
     test('returns object with updated status when status is passed', () {
       expect(
-        const LoginState().copyWith(status: FormzStatus.pure),
-        const LoginState(status: FormzStatus.pure),
+        LoginState().copyWith(status: FormzStatus.pure),
+        LoginState(status: FormzStatus.pure),
       );
     });
 
     test('returns object with updated username when username is passed', () {
       expect(
-        const LoginState().copyWith(username: username),
-        const LoginState(username: username),
+        LoginState().copyWith(username: username),
+        LoginState(username: username),
       );
     });
 
     test('returns object with updated password when password is passed', () {
       expect(
-        const LoginState().copyWith(password: password),
-        const LoginState(password: password),
+        LoginState().copyWith(password: password),
+        LoginState(password: password),
       );
     });
   });

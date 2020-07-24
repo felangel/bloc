@@ -12,12 +12,12 @@ class LoginForm extends StatelessWidget {
           Scaffold.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text('Authentication Failure')),
+              const SnackBar(content: Text('Authentication Failure')),
             );
         }
       },
       child: Align(
-        alignment: Alignment(0, -1 / 3),
+        alignment: const Alignment(0, -1 / 3),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
