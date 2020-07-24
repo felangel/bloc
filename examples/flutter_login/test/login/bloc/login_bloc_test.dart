@@ -1,25 +1,26 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_login/login/login.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:formz/formz.dart';
 import 'package:mockito/mockito.dart';
-import 'package:user_repository/user_repository.dart';
 
-import 'package:flutter_login/login/login.dart';
-
-class MockUserRepository extends Mock implements UserRepository {}
+class MockAuthenticationRepository extends Mock
+    implements AuthenticationRepository {}
 
 void main() {
   LoginBloc loginBloc;
-  MockUserRepository userRepository;
+  MockAuthenticationRepository authenticationRepository;
 
   setUp(() {
-    userRepository = MockUserRepository();
-    loginBloc = LoginBloc(userRepository: userRepository);
+    authenticationRepository = MockAuthenticationRepository();
+    loginBloc = LoginBloc(authenticationRepository: authenticationRepository);
   });
 
   group('LoginBloc', () {
-    test('throws AssertionError when userRepository is null', () {
-      expect(() => LoginBloc(userRepository: null), throwsAssertionError);
+    test('throws AssertionError when authenticationRepository is null', () {
+      expect(() => LoginBloc(authenticationRepository: null),
+          throwsAssertionError);
     });
 
     test('initial state is LoginState', () {
@@ -31,7 +32,7 @@ void main() {
         'emits [submissionInProgress, submissionSuccess] '
         'when login succeeds',
         build: () {
-          when(userRepository.logIn(
+          when(authenticationRepository.logIn(
             username: 'username',
             password: 'password',
           )).thenAnswer((_) => Future.value('user'));
@@ -69,7 +70,7 @@ void main() {
       blocTest(
         'emits [LoginInProgress, LoginFailure] when logIn fails',
         build: () {
-          when(userRepository.logIn(
+          when(authenticationRepository.logIn(
             username: 'username',
             password: 'password',
           )).thenThrow(Exception('oops'));

@@ -1,16 +1,17 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:user_repository/src/models/user.dart';
 import 'package:uuid/uuid.dart';
 
-class UserRepository {
+import 'models/models.dart';
+
+class AuthenticationRepository {
   final _controller = StreamController<User>();
   User _user;
 
-  User get user => _user;
+  User get currentUser => _user;
 
-  Stream<User> userStream() async* {
+  Stream<User> get user async* {
     yield _user;
     yield* _controller.stream;
   }
@@ -38,5 +39,5 @@ class UserRepository {
     }
   }
 
-  void dispose() => _controller.close();
+  void close() => _controller.close();
 }

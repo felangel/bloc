@@ -1,23 +1,23 @@
 import 'dart:async';
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_login/login/login.dart';
 import 'package:formz/formz.dart';
 import 'package:meta/meta.dart';
-import 'package:user_repository/user_repository.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({
-    @required UserRepository userRepository,
-  })  : assert(userRepository != null),
-        _userRepository = userRepository,
+    @required AuthenticationRepository authenticationRepository,
+  })  : assert(authenticationRepository != null),
+        _authenticationRepository = authenticationRepository,
         super(const LoginState());
 
-  final UserRepository _userRepository;
+  final AuthenticationRepository _authenticationRepository;
 
   @override
   Stream<LoginState> mapEventToState(
@@ -61,7 +61,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (state.status.isValidated) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
       try {
-        await _userRepository.logIn(
+        await _authenticationRepository.logIn(
           username: state.username.value,
           password: state.password.value,
         );

@@ -1,34 +1,34 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:user_repository/user_repository.dart';
 
 // ignore: must_be_immutable
 class MockUser extends Mock implements User {}
 
 void main() {
   group('AuthenticationState', () {
-    group('AuthenticationInProgress', () {
+    group('AuthenticationState.initial', () {
       test('supports value comparisons', () {
-        expect(AuthenticationInProgress(), AuthenticationInProgress());
+        expect(AuthenticationState.initial(), AuthenticationState.initial());
       });
     });
 
-    group('AuthenticationAuthenticated', () {
+    group('AuthenticationState.authenticated', () {
       test('supports value comparisons', () {
         final user = MockUser();
         expect(
-          AuthenticationAuthenticated(user),
-          AuthenticationAuthenticated(user),
+          AuthenticationState.authenticated(user),
+          AuthenticationState.authenticated(user),
         );
       });
     });
 
-    group('AuthenticationUnauthenticated', () {
+    group('AuthenticationState.unauthenticated', () {
       test('supports value comparisons', () {
         expect(
-          AuthenticationUnauthenticated(),
-          AuthenticationUnauthenticated(),
+          AuthenticationState.unauthenticated(),
+          AuthenticationState.unauthenticated(),
         );
       });
     });

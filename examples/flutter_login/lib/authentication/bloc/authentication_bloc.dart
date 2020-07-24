@@ -1,25 +1,27 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
-import 'package:user_repository/user_repository.dart';
+
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc({@required UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository,
-        super(const AuthenticationInProgress()) {
-    _userStreamSubscription = _userRepository.userStream().listen((user) {
-      add(UserChanged(user));
-    });
+  AuthenticationBloc({
+    @required AuthenticationRepository authenticationRepository,
+  })  : assert(authenticationRepository != null),
+        _authenticationRepository = authenticationRepository,
+        super(const AuthenticationState.initial()) {
+    _userSubscription = _authenticationRepository.user.listen(
+      (user) => add(UserChanged(user)),
+    );
   }
 
-  final UserRepository _userRepository;
-  StreamSubscription<User> _userStreamSubscription;
+  final AuthenticationRepository _authenticationRepository;
+  StreamSubscription<User> _userSubscription;
 
   @override
   Stream<AuthenticationState> mapEventToState(
@@ -28,19 +30,19 @@ class AuthenticationBloc
     if (event is UserChanged) {
       yield _mapUserChangedToState(event);
     } else if (event is LoggedOut) {
-      _userRepository.logOut();
+      _authenticationRepository.logOut();
     }
   }
 
   @override
   Future<void> close() {
-    _userStreamSubscription?.cancel();
+    _userSubscription?.cancel();
     return super.close();
   }
 
   AuthenticationState _mapUserChangedToState(UserChanged event) {
     return event.user != null
-        ? AuthenticationAuthenticated(event.user)
-        : const AuthenticationUnauthenticated();
+        ? AuthenticationState.authenticated(event.user)
+        : AuthenticationState.unauthenticated();
   }
 }

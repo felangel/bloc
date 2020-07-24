@@ -1,96 +1,107 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:user_repository/user_repository.dart';
-
 import 'package:flutter_login/authentication/authentication.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 
-class MockUserRepository extends Mock implements UserRepository {}
+class MockAuthenticationRepository extends Mock
+    implements AuthenticationRepository {}
 
 void main() {
   const user = User('id');
-  AuthenticationBloc authenticationBloc;
-  MockUserRepository userRepository;
+  AuthenticationRepository authenticationRepository;
 
   setUp(() {
-    userRepository = MockUserRepository();
-    when(userRepository.userStream()).thenAnswer((_) => const Stream.empty());
-    authenticationBloc = AuthenticationBloc(userRepository: userRepository);
-  });
-
-  tearDown(() {
-    authenticationBloc?.close();
+    authenticationRepository = MockAuthenticationRepository();
+    when(authenticationRepository.user).thenAnswer((_) => const Stream.empty());
   });
 
   group('AuthenticationBloc', () {
-    test('throws when userRepository is null', () {
+    test('throws when authenticationRepository is null', () {
       expect(
-        () => AuthenticationBloc(userRepository: null),
+        () => AuthenticationBloc(authenticationRepository: null),
         throwsAssertionError,
       );
     });
 
-    test('initial state is AuthenticationInProgress', () {
-      expect(authenticationBloc.state, const AuthenticationInProgress());
+    test('initial state is AuthenticationState,initial', () {
+      final authenticationBloc = AuthenticationBloc(
+        authenticationRepository: authenticationRepository,
+      );
+      expect(authenticationBloc.state, const AuthenticationState.initial());
+      authenticationBloc.close();
     });
 
     blocTest(
-      'emits [AuthenticationUnauthenticated] when no user present',
+      'emits [unauthenticated] when no user is present',
       build: () {
-        when(userRepository.userStream()).thenAnswer((_) => Stream.value(null));
-        return AuthenticationBloc(userRepository: userRepository);
+        when(authenticationRepository.user)
+            .thenAnswer((_) => Stream.value(null));
+        return AuthenticationBloc(
+          authenticationRepository: authenticationRepository,
+        );
       },
-      expect: [const AuthenticationUnauthenticated()],
+      expect: [const AuthenticationState.unauthenticated()],
     );
 
     blocTest(
-      'emits [AuthenticationAuthenticated] when user present',
+      'emits [authenticated] when user is present',
       build: () {
-        when(userRepository.userStream()).thenAnswer((_) => Stream.value(user));
-        return AuthenticationBloc(userRepository: userRepository);
+        when(authenticationRepository.user)
+            .thenAnswer((_) => Stream.value(user));
+        return AuthenticationBloc(
+          authenticationRepository: authenticationRepository,
+        );
       },
-      expect: [const AuthenticationAuthenticated(user)],
+      expect: [const AuthenticationState.authenticated(user)],
     );
   });
 
   group('UserChanged', () {
     blocTest(
-      'emits [AuthenticationAuthenticated] when user is present',
+      'emits [authenticated] when user is present',
       build: () {
-        when(userRepository.userStream()).thenAnswer((_) => Stream.value(user));
-        return AuthenticationBloc(userRepository: userRepository);
+        when(authenticationRepository.user).thenAnswer(
+          (_) => Stream.value(user),
+        );
+        return AuthenticationBloc(
+          authenticationRepository: authenticationRepository,
+        );
       },
       act: (bloc) => bloc.add(const UserChanged(user)),
-      expect: [const AuthenticationAuthenticated(user)],
+      expect: [const AuthenticationState.authenticated(user)],
     );
   });
 
   group('LoggedOut', () {
     blocTest(
-      'emits [AuthenticationInProgress, AuthenticationFailure] '
-      'when logging out',
+      'emits [unauthenticated]',
       build: () {
-        when(userRepository.userStream()).thenAnswer(
+        when(authenticationRepository.user).thenAnswer(
           (_) => const Stream.empty(),
         );
-        return AuthenticationBloc(userRepository: userRepository);
+        return AuthenticationBloc(
+          authenticationRepository: authenticationRepository,
+        );
       },
       act: (bloc) => bloc.add(const UserChanged(null)),
-      expect: [const AuthenticationUnauthenticated()],
+      expect: [const AuthenticationState.unauthenticated()],
     );
 
     blocTest(
-      'calls logOut on userRepository '
+      'calls logOut on authenticationRepository '
       'when LoggedOut is added',
       build: () {
-        when(userRepository.userStream()).thenAnswer(
+        when(authenticationRepository.user).thenAnswer(
           (_) => const Stream.empty(),
         );
-        return AuthenticationBloc(userRepository: userRepository);
+        return AuthenticationBloc(
+          authenticationRepository: authenticationRepository,
+        );
       },
       act: (bloc) => bloc.add(LoggedOut()),
-      verify: (_) async {
-        verify(userRepository.logOut()).called(1);
+      verify: (_) {
+        verify(authenticationRepository.logOut()).called(1);
       },
     );
   });

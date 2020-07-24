@@ -1,18 +1,19 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:user_repository/user_repository.dart';
 
-class MockUserRepository extends Mock implements UserRepository {}
+class MockAuthenticationRepository extends Mock
+    implements AuthenticationRepository {}
 
 void main() {
   group('LoginPage', () {
-    UserRepository userRepository;
+    AuthenticationRepository authenticationRepository;
 
     setUp(() {
-      userRepository = MockUserRepository();
+      authenticationRepository = MockAuthenticationRepository();
     });
 
     test('is routable', () {
@@ -22,7 +23,7 @@ void main() {
     testWidgets('renders a LoginForm', (tester) async {
       await tester.pumpWidget(
         RepositoryProvider.value(
-          value: userRepository,
+          value: authenticationRepository,
           child: MaterialApp(
             home: Scaffold(body: LoginPage()),
           ),
