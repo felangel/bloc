@@ -46,7 +46,7 @@
         "icon": "assets/logo.png"
       },
       {
-        "command": "extension.new-frezzed-bloc",
+        "command": "extension.new-freezed-bloc",
         "title": "Bloc: New Freezed Bloc",
         "icon": "assets/logo.png"
       }
