@@ -77,6 +77,10 @@
       },
       {
         "language": "dart",
+        "path": "./snippets/freezed_bloc.json"
+      },
+      {
+        "language": "dart",
         "path": "./snippets/cubit.json"
       }
     ]

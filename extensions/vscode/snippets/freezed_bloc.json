@@ -1,0 +1,26 @@
+{
+  "create a state in a freezed class": {
+    "prefix": "fstate",
+    "body": "const factory ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}.${1:stateName}($2) = _${1/(.*)/${1:/capitalize}/};\n$3"
+  },
+  "create a event in a freezed class": {
+    "prefix": "fevent",
+    "body": "const factory ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}.${1:eventName}($2) = _${1/(.*)/${1:/capitalize}/};\n$3"
+  },
+  "create a map event to state function with freeze.when function": {
+    "prefix": "fmapToState",
+    "body": [
+      "Stream<${TM_FILENAME_BASE/(.*)(?=_bloc)(_bloc)/${1:/pascalcase}/g}State> _${1:event}ToState($2) async* {",
+      "${3}",
+      "}"
+    ]
+  },
+  "create a map event to state function with freeze.map function": {
+    "prefix": "ftoStateMap",
+    "body": [
+      "Stream<${TM_FILENAME_BASE/(.*)(?=_bloc)(_bloc)/${1:/pascalcase}/g}State> _${1:event}ToState(_${2:eventClass} event) async* {",
+      "${3}",
+      "}"
+    ]
+  }
+}
