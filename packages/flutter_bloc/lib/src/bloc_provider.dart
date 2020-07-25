@@ -126,13 +126,13 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   static final _wrappers = <CreateWrapper>[];
 
   /// Add [CreateWrapper] to bloc instantiation sequence.
-  static void addWrapper(CreateWrapper precursor) {
-    _wrappers.add(precursor);
+  static void addWrapper(CreateWrapper wrapper) {
+    _wrappers.add(wrapper);
   }
 
   /// Remove [CreateWrapper] from bloc instantiation sequence.
-  static bool removeWrapper(CreateWrapper precursor) {
-    return _wrappers.remove(precursor);
+  static bool removeWrapper(CreateWrapper wrapper) {
+    return _wrappers.remove(wrapper);
   }
 
   @override
