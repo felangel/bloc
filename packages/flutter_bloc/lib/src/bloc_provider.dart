@@ -123,16 +123,32 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
     }
   }
 
+  static final _wrappers = <CreateWrapper>[];
+
+  /// Add [CreateWrapper] to bloc instantiation sequence.
+  static void addWrapper(CreateWrapper precursor) {
+    _wrappers.add(precursor);
+  }
+
+  /// Remove [CreateWrapper] from bloc instantiation sequence.
+  static bool removeWrapper(CreateWrapper precursor) {
+    return _wrappers.remove(precursor);
+  }
+
   @override
   Widget buildWithChild(BuildContext context, Widget child) {
+    final create = _wrappers.fold(_create,
+        (Create create, CreateWrapper wrapper) => wrapper(context, create));
     return InheritedProvider<T>(
-      create: _create,
+      create: (context) => create?.call(context) as T,
       dispose: _dispose,
       child: child,
       lazy: lazy,
     );
   }
 }
+
+typedef CreateWrapper = Create Function(BuildContext, Create);
 
 /// Extends the `BuildContext` class with the ability
 /// to perform a lookup based on a `Bloc` type.
