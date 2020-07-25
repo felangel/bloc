@@ -16,7 +16,7 @@
     - [Счетчик](ru/fluttercountertutorial.md)
     - [Таймер](ru/fluttertimertutorial.md)
     - [Бесконечный список](ru/flutterinfinitelisttutorial.md)
-    - [Логин](ru/flutterlogintutorial.md)
+    - [**Логин** <sup>✨</sup>](ru/flutterlogintutorial.md)
     - [Погода](ru/flutterweathertutorial.md)
     - [Задачи](ru/fluttertodostutorial.md)
     - [Firebase логин](ru/flutterfirebaselogintutorial.md)
