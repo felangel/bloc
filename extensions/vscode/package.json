@@ -64,7 +64,7 @@
           "when": "explorerResourceIsFolder"
         },
         {
-          "command": "extension.new-frezzed-bloc",
+          "command": "extension.new-freezed-bloc",
           "group": "blocGroup@1",
           "when": "explorerResourceIsFolder"
         }
