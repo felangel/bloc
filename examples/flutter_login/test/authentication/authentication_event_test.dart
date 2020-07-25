@@ -7,7 +7,10 @@ void main() {
   group('AuthenticationEvent', () {
     group('LoggedOut', () {
       test('supports value comparisons', () {
-        expect(LoggedOut(), LoggedOut());
+        expect(
+          AuthenticationLogoutRequested(),
+          AuthenticationLogoutRequested(),
+        );
       });
     });
 
