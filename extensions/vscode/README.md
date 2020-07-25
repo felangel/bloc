@@ -25,10 +25,11 @@ Bloc can be installed from the [VSCode Marketplace](https://marketplace.visualst
 
 ## Commands
 
-| Command            | Description          |
-| ------------------ | -------------------- |
-| `Bloc: New Bloc`   | Generate a new Bloc  |
-| `Cubit: New Cubit` | Generate a new Cubit |
+| Command                  | Description                                   |
+| ------------------------ | --------------------------------------------- |
+| `Bloc: New Bloc`         | Generate a new Bloc                           |
+| `Cubit: New Cubit`       | Generate a new Cubit                          |
+| `Bloc: New Freezed Bloc` | Generate a new Bloc using the freezed library |
 
 You can activate the commands by launching the command palette (View -> Command Palette) and running entering the command name.
 
@@ -72,3 +73,11 @@ Or you can right click on the directory in which you'd like to create the bloc/c
 | `multicubitprovider` | Creates a MultiCubitProvider Widget        |
 | `contextcubit`       | Shortcut for `context.cubit<MyCubit>()`    |
 | `cubitof`            | Shortcut for `CubitProvider.of<MyCubit>()` |
+
+### Freezed Bloc
+
+| Shortcut | Description                           |
+| -------- | ------------------------------------- |
+| `fmap`   | Creates a map event to state function |
+| `fstate` | Creates a sub state                   |
+| `fevent` | Creates a sub event                   |
