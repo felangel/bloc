@@ -124,10 +124,6 @@ Começaremos criando nossa classe `AuthenticationBloc`.
 
 ?> **Nota**: Nosso `AuthenticationBloc` depende do `UserRepository`.
 
-Podemos começar substituindo `initialState` pelo estado `AuthenticationInitial()`.
-
-[authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_initial_state.dart.md ':include')
-
 Agora tudo o que resta é implementar o `mapEventToState`.
 
 [authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_map_event_to_state.dart.md ':include')
@@ -164,15 +160,15 @@ Estamos usando o `BlocBuilder` para renderizar a interface do usuário com base 
 
 Até o momento, não temos widgets para renderizar, mas voltaremos a isso assim que criarmos o `SplashScreen`, `LoginScreen` e `HomeScreen`
 
-## Bloc Delegate
+## Bloc Observer
 
-Antes de chegarmos muito longe, é sempre útil implementar nosso próprio `BlocDelegate`, que nos permite substituir `onTransition` e `onError` e nos ajudará a ver todas as mudanças de estado do bloc (transições) e erros em um só lugar!
+Antes de chegarmos muito longe, é sempre útil implementar nosso próprio `BlocObserver`, que nos permite substituir `onTransition` e `onError` e nos ajudará a ver todas as mudanças de estado do bloc (transições) e erros em um só lugar!
 
-Crie `simple_bloc_delegate.dart` e vamos implementar rapidamente nosso próprio delegado.
+Crie `simple_bloc_observer.dart` e vamos implementar rapidamente nosso próprio observer.
 
-[simple_bloc_delegate.dart](../_snippets/flutter_firebase_login_tutorial/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/flutter_firebase_login_tutorial/simple_bloc_observer.dart.md ':include')
 
-Agora podemos conectar nosso `BlocDelegate` no nosso `main.dart`.
+Agora podemos conectar nosso `BlocObserver` no nosso `main.dart`.
 
 [main.dart](../_snippets/flutter_firebase_login_tutorial/main3.dart.md ':include')
 

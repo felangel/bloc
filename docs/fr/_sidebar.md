@@ -17,7 +17,7 @@
     - [Counter](fr/fluttercountertutorial.md)
     - [Timer](fr/fluttertimertutorial.md)
     - [Infinite List](fr/flutterinfinitelisttutorial.md)
-    - [Login](fr/flutterlogintutorial.md)
+    - [**Login** <sup>✨</sup>](fr/flutterlogintutorial.md)
     - [Weather](fr/flutterweathertutorial.md)
     - [Todos](fr/fluttertodostutorial.md)
     - [Firebase Login](fr/flutterfirebaselogintutorial.md)

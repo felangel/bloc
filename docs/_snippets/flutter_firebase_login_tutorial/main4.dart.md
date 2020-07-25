@@ -5,11 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/authentication_bloc/authentication_bloc.dart';
 import 'package:flutter_firebase_login/user_repository.dart';
 import 'package:flutter_firebase_login/splash_screen.dart';
-import 'package:flutter_firebase_login/simple_bloc_delegate.dart';
+import 'package:flutter_firebase_login/simple_bloc_observer.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
   final UserRepository userRepository = UserRepository();
   runApp(
     BlocProvider(

@@ -5,7 +5,7 @@ void main() {
       httpClient: http.Client(),
     ),
   );
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
   runApp(
     MultiBlocProvider(
       providers: [

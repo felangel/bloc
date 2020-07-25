@@ -16,7 +16,7 @@
     - [Contador](es/fluttercountertutorial.md)
     - [Temporizador](es/fluttertimertutorial.md)
     - [Lista Infinita](es/flutterinfinitelisttutorial.md)
-    - [Iniciar Sesión](es/flutterlogintutorial.md)
+    - [**Iniciar Sesión** <sup>✨</sup>](es/flutterlogintutorial.md)
     - [Weather](es/flutterweathertutorial.md)
     - [Todos](es/fluttertodostutorial.md)
     - [Firebase Login](es/flutterfirebaselogintutorial.md)

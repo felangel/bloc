@@ -16,7 +16,7 @@
     - [カウンター](jp/fluttercountertutorial.md)
     - [タイマー](jp/fluttertimertutorial.md)
     - [無限リスト](jp/flutterinfinitelisttutorial.md)
-    - [ログイン](jp/flutterlogintutorial.md)
+    - [**ログイン** <sup>✨</sup>](jp/flutterlogintutorial.md)
     - [天気](jp/flutterweathertutorial.md)
     - [やることリスト](jp/fluttertodostutorial.md)
     - [Firebaseログイン](jp/flutterfirebaselogintutorial.md)

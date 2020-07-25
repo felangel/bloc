@@ -222,7 +222,7 @@ Go ahead and create a file inside of the `blocs` folder called `weather_bloc.dar
 
 [weather_bloc.dart](_snippets/flutter_weather_tutorial/weather_bloc.dart.md ':include')
 
-We set our `initialState` to `WeatherInitial` since initially, the user has not selected a city. Then, all that's left is to implement `mapEventToState`.
+We set our initial state to `WeatherInitial` since initially, the user has not selected a city. Then, all that's left is to implement `mapEventToState`.
 
 Since we are only handling the `WeatherRequested` event all we need to do is `yield` our `WeatherLoadInProgress` state when we get a `WeatherRequested` event and then try to get the weather from the `WeatherRepository`.
 
@@ -238,11 +238,11 @@ That's all there is to it! Now we're ready to move on to the final layer: the pr
 
 ### Setup
 
-As you've probably already seen in other tutorials, we're going to create a `SimpleBlocDelegate` so that we can see all state transitions in our application. Let's go ahead and create `simple_bloc_delegate.dart` and create our own custom delegate.
+As you've probably already seen in other tutorials, we're going to create a `SimpleBlocObserver` so that we can see all state transitions in our application. Let's go ahead and create `simple_bloc_observer.dart` and create our own custom observer.
 
-[simple_bloc_delegate.dart](_snippets/flutter_weather_tutorial/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](_snippets/flutter_weather_tutorial/simple_bloc_observer.dart.md ':include')
 
-We can then import it into `main.dart` file and set our delegate like so:
+We can then import it into `main.dart` file and set our observer like so:
 
 [main.dart](_snippets/flutter_weather_tutorial/main1.dart.md ':include')
 

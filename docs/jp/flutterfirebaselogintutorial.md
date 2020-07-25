@@ -124,10 +124,6 @@ We'll start off by creating our `AuthenticationBloc` class.
 
 ?> **Note**: Our `AuthenticationBloc` has a dependency on the `UserRepository`.
 
-We can start by overriding `initialState` to the `AuthenticationInitial()` state.
-
-[authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_initial_state.dart.md ':include')
-
 Now all that's left is to implement `mapEventToState`.
 
 [authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_map_event_to_state.dart.md ':include')
@@ -164,15 +160,15 @@ We are using `BlocBuilder` in order to render UI based on the `AuthenticationBlo
 
 So far we don't have any widgets to render but we'll come back to this once we make our `SplashScreen`, `LoginScreen`, and `HomeScreen`.
 
-## Bloc Delegate
+## Bloc Observer
 
-Before we get too far along, it's always handy to implement our own `BlocDelegate` which allows us to override `onTransition` and `onError` and will help us see all bloc state changes (transitions) and errors in one place!
+Before we get too far along, it's always handy to implement our own `BlocObserver` which allows us to override `onTransition` and `onError` and will help us see all bloc state changes (transitions) and errors in one place!
 
-Create `simple_bloc_delegate.dart` and let's quickly implement our own delegate.
+Create `simple_bloc_observer.dart` and let's quickly implement our own observer.
 
-[simple_bloc_delegate.dart](../_snippets/flutter_firebase_login_tutorial/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/flutter_firebase_login_tutorial/simple_bloc_observer.dart.md ':include')
 
-Now we can hook up our `BlocDelegate` in our `main.dart`.
+Now we can hook up our `BlocObserver` in our `main.dart`.
 
 [main.dart](../_snippets/flutter_firebase_login_tutorial/main3.dart.md ':include')
 
@@ -256,7 +252,7 @@ Before we implement the `LoginBloc`, let's make sure our barrel file is done so 
 
 ## Login Bloc
 
-It's time to implement our `LoginBloc`. As always, we need to extend `Bloc` and define our `initialState` as well as `mapEventToState`.
+It's time to implement our `LoginBloc`. As always, we need to extend `Bloc` and define our initial state as well as implement `mapEventToState`.
 
 [login_bloc.dart](../_snippets/flutter_firebase_login_tutorial/login_bloc.dart.md ':include')
 
@@ -368,7 +364,7 @@ Now, let's open `register/bloc/register_bloc.dart` and implement the `RegisterBl
 
 [register_bloc.dart](../_snippets/flutter_firebase_login_tutorial/register_bloc.dart.md ':include')
 
-Just as before, we need to extend `Bloc`, implement `initialState`, and `mapEventToState`. Optionally, we are overriding `transformEvents` again so that we can give users some time to finish typing before we validate the form.
+Just as before, we need to extend `Bloc`, define the initial state, and implement `mapEventToState`. Optionally, we are overriding `transformEvents` again so that we can give users some time to finish typing before we validate the form.
 
 Now that the `RegisterBloc` is fully functional, we just need to build out the presentation layer.
 

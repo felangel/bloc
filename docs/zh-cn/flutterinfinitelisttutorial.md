@@ -96,10 +96,6 @@
 
 ?> **附注:**  只是从类的声明看, 我们就可以知道PostBloc会接受`PostEvents`的输入, 并输出`PostStates`.
 
-我们可以开始实现`initialState`了. 在接收到任何事件(Event)之前, `initialState`将会成为`PostBloc`的默认状态(default State).
-
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_initial_state.dart.md ':include')
-
 下一步, 我们需要实现`mapEventToState`方法. 每次加入新的`PostEvent`的时候我们都会调用这个函数.
 
 [post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_map_event_to_state.dart.md ':include')
@@ -173,19 +169,19 @@
 
 虽然在这个应用中我们只有一个bloc, 但是在真正的大型应用程序中, 使用多个bloc管理应用的不同部分的`state(状态)`也很常见
 
-如果我们在每次`Transition(状态转移)`时都做一些事情来响应这些状态转移的话, 我们只需要创建自己的`BlocDelegate`就可以了.
+如果我们在每次`Transition(状态转移)`时都做一些事情来响应这些状态转移的话, 我们只需要创建自己的`BlocObserver`就可以了.
 
-[simple_bloc_delegate.dart](../_snippets/flutter_infinite_list_tutorial/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/flutter_infinite_list_tutorial/simple_bloc_observer.dart.md ':include')
 
-?> 我们只需要继承`BlocDelegate`并重写`onTransition`方法.
+?> 我们只需要继承`BlocObserver`并重写`onTransition`方法.
 
-为了让bloc知道我们刚写的`SimpleBlocDelegate`我们只需要像这样稍微改动main函数
+为了让bloc知道我们刚写的`SimpleBlocObserver`我们只需要像这样稍微改动main函数
 
-[main.dart](../_snippets/flutter_infinite_list_tutorial/bloc_delegate_main.dart.md ':include')
+[main.dart](../_snippets/flutter_infinite_list_tutorial/bloc_observer_main.dart.md ':include')
 
 现在, 当我们运行应用, 每次`Transition(状态转移)`发生时我们都可以在终端看到打印出的文本.
 
-?> 实践中, 你可以创建多个`BlocDelegates`. 因为每个state(状态)改变都会被记录下来, 我们能很容易的在**同一个地方**让应用程序记录**所有**来自用户的交互和状态改变
+?> 实践中, 你可以创建多个`BlocObservers`. 因为每个state(状态)改变都会被记录下来, 我们能很容易的在**同一个地方**让应用程序记录**所有**来自用户的交互和状态改变
 
 这就是我要介绍的所有事情了! 我们已经成功的用[bloc](https://pub.dev/packages/bloc)和[flutter_bloc](https://pub.dev/packages/flutter_bloc)实现了无限列表, 并将表现层和业务逻辑分离开来.
 

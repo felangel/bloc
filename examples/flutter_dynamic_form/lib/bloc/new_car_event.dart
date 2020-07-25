@@ -8,19 +8,19 @@ abstract class NewCarEvent {
 class NewCarFormLoaded extends NewCarEvent {}
 
 class NewCarBrandChanged extends NewCarEvent {
-  final String brand;
-
   const NewCarBrandChanged({this.brand});
+
+  final String brand;
 }
 
 class NewCarModelChanged extends NewCarEvent {
-  final String model;
-
   const NewCarModelChanged({this.model});
+
+  final String model;
 }
 
 class NewCarYearChanged extends NewCarEvent {
-  final String year;
-
   const NewCarYearChanged({this.year});
+
+  final String year;
 }

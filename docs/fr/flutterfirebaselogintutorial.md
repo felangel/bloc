@@ -124,10 +124,6 @@ Nous allons commencer par créer notre classe `AuthenticationBloc`.
 
 ?> **Note**: Notre `AuthenticationBloc` a des dépendances avec `UserRepository`.
 
-Nous pouvons commencer par surcharger `initialState` à l'état (state) `AuthenticationInitial()`.
-
-[authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_initial_state.dart.md ':include')
-
 Maintenant il nous reste plus qu'à implémenter `mapEventToState`.
 
 [authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_map_event_to_state.dart.md ':include')
@@ -166,15 +162,15 @@ Nous utilisons `BlocBuilder` dans le but d'afficher l'UI en fonction du  `Authen
 
 À  l'heure actuelle nous n'avons pas de widget à afficher mais nous y reviendrons plus tard quand nous allons créer `SplashScreen`, `LoginScreen`, et `HomeScreen`.
 
-## Bloc Delegate
+## Bloc Observer
 
-Avant de rentrer dans le vif du sujet, c'est toujours une bonne pratique d'implémenter notre propre `BlocDelegate` ce qui nous permet d'override `onTransition` et `onError` ce qui va nous aider à voir tous les changements d'état (state) des blocs (les transifitions) et les erreurs à une seule et même place!
+Avant de rentrer dans le vif du sujet, c'est toujours une bonne pratique d'implémenter notre propre `BlocObserver` ce qui nous permet d'override `onTransition` et `onError` ce qui va nous aider à voir tous les changements d'état (state) des blocs (les transifitions) et les erreurs à une seule et même place!
 
-Créez `simple_bloc_delegate.dart` et implémentons rapidement notre delegate.
+Créez `simple_bloc_observer.dart` et implémentons rapidement notre observer.
 
-[simple_bloc_delegate.dart](../_snippets/flutter_firebase_login_tutorial/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/flutter_firebase_login_tutorial/simple_bloc_observer.dart.md ':include')
 
-Maintenant nous pouvons connecter (hook up) notre `BlocDelegate` dans notre `main.dart`.
+Maintenant nous pouvons connecter (hook up) notre `BlocObserver` dans notre `main.dart`.
 
 [main.dart](../_snippets/flutter_firebase_login_tutorial/main3.dart.md ':include')
 

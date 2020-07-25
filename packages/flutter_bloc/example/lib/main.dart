@@ -4,11 +4,18 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+/// Custom [BlocObserver] which observes all bloc and cubit instances.
 class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
     print(event);
     super.onEvent(bloc, event);
+  }
+
+  @override
+  void onChange(Cubit cubit, Change change) {
+    print(change);
+    super.onChange(cubit, change);
   }
 
   @override
@@ -18,9 +25,9 @@ class SimpleBlocObserver extends BlocObserver {
   }
 
   @override
-  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
     print(error);
-    super.onError(bloc, error, stackTrace);
+    super.onError(cubit, error, stackTrace);
   }
 }
 
@@ -29,20 +36,23 @@ void main() {
   runApp(App());
 }
 
+/// A [StatelessWidget] which uses:
+/// * [bloc](https://pub.dev/packages/bloc)
+/// * [flutter_bloc](https://pub.dev/packages/flutter_bloc)
+/// to manage the state of a counter.
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ThemeBloc(),
-      child: BlocBuilder<ThemeBloc, ThemeData>(
+      create: (_) => ThemeCubit(),
+      child: BlocBuilder<ThemeCubit, ThemeData>(
         builder: (_, theme) {
           return MaterialApp(
-            title: 'Flutter Demo',
+            theme: theme,
             home: BlocProvider(
               create: (_) => CounterBloc(),
               child: CounterPage(),
             ),
-            theme: theme,
           );
         },
       ),
@@ -50,6 +60,8 @@ class App extends StatelessWidget {
   }
 }
 
+/// A [StatelessWidget] which demonstrates
+/// how to consume and interact with a [CounterBloc].
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -58,10 +70,7 @@ class CounterPage extends StatelessWidget {
       body: BlocBuilder<CounterBloc, int>(
         builder: (_, count) {
           return Center(
-            child: Text(
-              '$count',
-              style: const TextStyle(fontSize: 24.0),
-            ),
+            child: Text('$count', style: Theme.of(context).textTheme.headline1),
           );
         },
       ),
@@ -89,7 +98,7 @@ class CounterPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: const Icon(Icons.brightness_6),
-              onPressed: () => context.bloc<ThemeBloc>().add(ThemeEvent.toggle),
+              onPressed: () => context.bloc<ThemeCubit>().toggleTheme(),
             ),
           ),
           Padding(
@@ -106,9 +115,20 @@ class CounterPage extends StatelessWidget {
   }
 }
 
-enum CounterEvent { increment, decrement }
+/// Event being processed by [CounterBloc].
+enum CounterEvent {
+  /// Notifies bloc to increment state.
+  increment,
 
+  /// Notifies bloc to decrement state.
+  decrement
+}
+
+/// {@template counter_bloc}
+/// A simple [Bloc] which manages an `int` as its state.
+/// {@endtemplate}
 class CounterBloc extends Bloc<CounterEvent, int> {
+  /// {@macro counter_bloc}
   CounterBloc() : super(0);
 
   @override
@@ -126,17 +146,29 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 }
 
-enum ThemeEvent { toggle }
+/// {@template brightness_cubit}
+/// A simple [Cubit] which manages the [ThemeData] as its state.
+/// {@endtemplate}
+class ThemeCubit extends Cubit<ThemeData> {
+  /// {@macro brightness_cubit}
+  ThemeCubit() : super(_lightTheme);
 
-class ThemeBloc extends Bloc<ThemeEvent, ThemeData> {
-  ThemeBloc() : super(ThemeData.light());
+  static final _lightTheme = ThemeData(
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      foregroundColor: Colors.white,
+    ),
+    brightness: Brightness.light,
+  );
 
-  @override
-  Stream<ThemeData> mapEventToState(ThemeEvent event) async* {
-    switch (event) {
-      case ThemeEvent.toggle:
-        yield state == ThemeData.dark() ? ThemeData.light() : ThemeData.dark();
-        break;
-    }
+  static final _darkTheme = ThemeData(
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      foregroundColor: Colors.black,
+    ),
+    brightness: Brightness.dark,
+  );
+
+  /// Toggles the current brightness between light and dark.
+  void toggleTheme() {
+    emit(state.brightness == Brightness.dark ? _lightTheme : _darkTheme);
   }
 }

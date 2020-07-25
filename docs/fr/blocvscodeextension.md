@@ -50,6 +50,7 @@ Ou vous pouvez faire un clique droit sur le dossier dans lequel vous voudriez cr
 
 | Raccourcis                | Description                                             |
 | ------------------------- | ------------------------------------------------------- |
+| `cubit`                   | Crée une Classe Cubit                                   |
 | `bloc`                    | Crée une Classe Bloc                                    |
 | `blocbuilder`             | Crée un Widget BlocBuilder                              |
 | `bloclistener`            | Crée un BlocListener Widget                             |
@@ -59,22 +60,8 @@ Ou vous pouvez faire un clique droit sur le dossier dans lequel vous voudriez cr
 | `multiblocprovider`       | Crée un widget MultiBlocProvider                        |
 | `repositoryprovider`      | Crée un widget RepositoryProvider                       |
 | `multirepositoryprovider` | Crée un widget MultiRepositoryProvider                  |
-| `blocdelegate`            | Crée une Classe BlocDelegate                            |
+| `blocobserver`            | Crée une Classe BlocObserver                            |
 | `contextbloc`             | Raccourcis pour `context.bloc<MyBloc>()`                |
 | `blocof`                  | Raccourcis pour `BlocProvider.of<MyBloc>()`             |
 | `contextrepository`       | Raccourcis pour `context.repository<MyRepository>()`    |
 | `repositoryof`            | Raccourcis pour `RepositoryProvider.of<MyRepository>()` |
-
-### Cubit
-
-| Raccourcis           | Description                                   |
-| -------------------- | --------------------------------------------- |
-| `cubit`              | Crée une Classe Cubit                         |
-| `cubitbuilder`       | Crée un Widget CubitBuilder                   |
-| `cubitlistener`      | Crée un CubitListener Widget                  |
-| `multicubitlistener` | Crée un widget MultiCubitListener             |
-| `cubitconsumer`      | Crée un widget CubitConsumer                  |
-| `cubitprovider`      | Crée un widget CubitProvider                  |
-| `multicubitprovider` | Crée un widget MultiCubitProvider             |
-| `contextcubit`       | Raccourcis pour `context.cubit<MyCubit>()`    |
-| `cubitof`            | Raccourcis pour `CubitProvider.of<MyCubit>()` |

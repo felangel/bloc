@@ -1,15 +1,6 @@
 part of 'new_car_bloc.dart';
 
 class NewCarState {
-  final List<String> brands;
-  final String brand;
-
-  final List<String> models;
-  final String model;
-
-  final List<String> years;
-  final String year;
-
   const NewCarState({
     @required this.brands,
     @required this.brand,
@@ -19,95 +10,100 @@ class NewCarState {
     @required this.year,
   });
 
+  final List<String> brands;
+  final String brand;
+
+  final List<String> models;
+  final String model;
+
+  final List<String> years;
+  final String year;
+
   bool get isComplete => brand != null && model != null && year != null;
 
-  factory NewCarState.initial() => NewCarState(
-        brands: <String>[],
-        brand: null,
-        models: <String>[],
-        model: null,
-        years: <String>[],
-        year: null,
-      );
+  const NewCarState.initial()
+      : this(
+          brands: const <String>[],
+          brand: null,
+          models: const <String>[],
+          model: null,
+          years: const <String>[],
+          year: null,
+        );
 
-  factory NewCarState.brandsLoadInProgress() => NewCarState(
-        brands: <String>[],
-        brand: null,
-        models: <String>[],
-        model: null,
-        years: <String>[],
-        year: null,
-      );
+  const NewCarState.brandsLoadInProgress()
+      : this(
+          brands: const <String>[],
+          brand: null,
+          models: const <String>[],
+          model: null,
+          years: const <String>[],
+          year: null,
+        );
 
-  factory NewCarState.brandsLoadSuccess({
-    @required List<String> brands,
-  }) =>
-      NewCarState(
-        brands: brands,
-        brand: null,
-        models: <String>[],
-        model: null,
-        years: <String>[],
-        year: null,
-      );
+  const NewCarState.brandsLoadSuccess({@required List<String> brands})
+      : this(
+          brands: brands,
+          brand: null,
+          models: const <String>[],
+          model: null,
+          years: const <String>[],
+          year: null,
+        );
 
-  factory NewCarState.modelsLoadInProgress({
+  const NewCarState.modelsLoadInProgress({
     @required List<String> brands,
     @required String brand,
-  }) =>
-      NewCarState(
-        brands: brands,
-        brand: brand,
-        models: <String>[],
-        model: null,
-        years: <String>[],
-        year: null,
-      );
+  }) : this(
+          brands: brands,
+          brand: brand,
+          models: const <String>[],
+          model: null,
+          years: const <String>[],
+          year: null,
+        );
 
-  factory NewCarState.modelsLoadSuccess({
+  const NewCarState.modelsLoadSuccess({
     @required List<String> brands,
     @required String brand,
     @required List<String> models,
-  }) =>
-      NewCarState(
-        brands: brands,
-        brand: brand,
-        models: models,
-        model: null,
-        years: <String>[],
-        year: null,
-      );
+  }) : this(
+          brands: brands,
+          brand: brand,
+          models: models,
+          model: null,
+          years: const <String>[],
+          year: null,
+        );
 
-  factory NewCarState.yearsLoadInProgress({
+  const NewCarState.yearsLoadInProgress({
     @required List<String> brands,
     @required String brand,
     @required List<String> models,
     @required String model,
-  }) =>
-      NewCarState(
-        brands: brands,
-        brand: brand,
-        models: models,
-        model: model,
-        years: <String>[],
-        year: null,
-      );
+  }) : this(
+          brands: brands,
+          brand: brand,
+          models: models,
+          model: model,
+          years: const <String>[],
+          year: null,
+        );
 
-  factory NewCarState.yearsLoadSuccess({
+  const NewCarState.yearsLoadSuccess({
     @required List<String> brands,
     @required String brand,
     @required List<String> models,
     @required String model,
     @required List<String> years,
-  }) =>
-      NewCarState(
-        brands: brands,
-        brand: brand,
-        models: models,
-        model: model,
-        years: years,
-        year: null,
-      );
+  }) : this(
+          brands: brands,
+          brand: brand,
+          models: models,
+          model: model,
+          years: years,
+          year: null,
+        );
 
   NewCarState copyWith({
     List<String> brands,

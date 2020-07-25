@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_cubit/flutter_cubit.dart';
+import 'package:provider/provider.dart';
 
 import 'bloc_listener.dart';
 
@@ -48,13 +48,13 @@ import 'bloc_listener.dart';
 /// As a result, the only advantage of using [MultiBlocListener] is improved
 /// readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
-class MultiBlocListener extends MultiCubitListener {
+class MultiBlocListener extends MultiProvider {
   /// {@macro multi_bloc_listener}
   MultiBlocListener({
     Key key,
-    @required List<CubitListenerSingleChildWidget> listeners,
+    @required List<BlocListenerSingleChildWidget> listeners,
     @required Widget child,
   })  : assert(listeners != null),
         assert(child != null),
-        super(key: key, listeners: listeners, child: child);
+        super(key: key, providers: listeners, child: child);
 }

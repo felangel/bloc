@@ -124,10 +124,6 @@
 
 ?> **Примечание**: `AuthenticationBloc` зависит от `UserRepository`.
 
-Мы можем начать с переопределения `initialState` в состояние `AuthenticationInitial()`.
-
-[authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_initial_state.dart.md ':include')
-
 Теперь все, что осталось, это реализовать `mapEventToState`.
 
 [authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_map_event_to_state.dart.md ':include')
@@ -166,13 +162,13 @@
 
 ## Делегат блока
 
-Прежде чем мы зайдем слишком далеко, всегда удобно реализовать наш собственный `BlocDelegate`, который позволяет нам переопределять `onTransition` и `onError` и поможет нам увидеть все изменения состояния блока (переходы) и ошибки в одном месте!
+Прежде чем мы зайдем слишком далеко, всегда удобно реализовать наш собственный `BlocObserver`, который позволяет нам переопределять `onTransition` и `onError` и поможет нам увидеть все изменения состояния блока (переходы) и ошибки в одном месте!
 
-Создайте `simple_bloc_delegate.dart` и давайте быстро реализуем наш собственный делегат.
+Создайте `simple_bloc_observer.dart` и давайте быстро реализуем наш собственный делегат.
 
-[simple_bloc_delegate.dart](../_snippets/flutter_firebase_login_tutorial/simple_bloc_delegate.dart.md ':include')
+[simple_bloc_observer.dart](../_snippets/flutter_firebase_login_tutorial/simple_bloc_observer.dart.md ':include')
 
-Теперь мы можем подключить наш `BlocDelegate` к нашему `main.dart`.
+Теперь мы можем подключить наш `BlocObserver` к нашему `main.dart`.
 
 [main.dart](../_snippets/flutter_firebase_login_tutorial/main3.dart.md ':include')
 

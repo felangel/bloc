@@ -1,8 +1,9 @@
 ```dart
 BlocListener<BlocA, BlocAState>(
-  bloc: blocA,
+  cubit: blocA,
   listener: (context, state) {
     // do stuff here based on BlocA's state
-  }
+  },
+  child: Container()
 )
 ```
