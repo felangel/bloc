@@ -30,5 +30,5 @@ class AuthenticationRepository {
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 
-  void close() => _controller.close();
+  void dispose() => _controller.close();
 }
