@@ -5,9 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 /// A function that creates a `Bloc` of type [T].
-typedef CreateBloc<T extends Cubit<dynamic>> = T Function(
-  BuildContext context,
-);
+typedef CreateBloc<T extends Cubit<Object>> = T Function(BuildContext context);
 
 /// Mixin which allows `MultiBlocProvider` to infer the types
 /// of multiple [BlocProvider]s.
@@ -123,22 +121,22 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
     }
   }
 
-  static final _wrappers = <CreateWrapper>[];
+  static final _wrappers = <CreateWrapper<Cubit>>[];
 
   /// Add [CreateWrapper] to bloc instantiation sequence.
-  static void addWrapper(CreateWrapper wrapper) {
+  static void addWrapper(CreateWrapper<Cubit> wrapper) {
     _wrappers.add(wrapper);
   }
 
   /// Remove [CreateWrapper] from bloc instantiation sequence.
-  static bool removeWrapper(CreateWrapper wrapper) {
+  static bool removeWrapper(CreateWrapper<Cubit> wrapper) {
     return _wrappers.remove(wrapper);
   }
 
   @override
   Widget buildWithChild(BuildContext context, Widget child) {
     final create = _wrappers.fold(_create,
-        (Create create, CreateWrapper wrapper) => wrapper(context, create));
+        (CreateBloc create, CreateWrapper wrapper) => wrapper(context, create));
     return InheritedProvider<T>(
       create: (context) => create?.call(context) as T,
       dispose: _dispose,
@@ -148,7 +146,9 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   }
 }
 
-typedef CreateWrapper = Create Function(BuildContext, Create);
+/// A function that wraps creation of a `Cubit` of type [T].
+typedef CreateWrapper<T extends Cubit<Object>> = CreateBloc<T> Function(
+    BuildContext, CreateBloc<T>);
 
 /// Extends the `BuildContext` class with the ability
 /// to perform a lookup based on a `Bloc` type.
