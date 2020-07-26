@@ -20,8 +20,4 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
   static set storage(Storage storage) {
     HydratedMixin.storage = storage;
   }
-
-  /// Getter for instance of [Storage] which will be used to
-  /// manage persisting/restoring the [Bloc] state.
-  static Storage get storage => HydratedMixin.storage;
 }

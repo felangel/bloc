@@ -65,10 +65,6 @@ abstract class HydratedCubit<State> extends Cubit<State>
   static set storage(Storage storage) {
     HydratedMixin.storage = storage;
   }
-
-  /// Getter for instance of [Storage] which will be used to
-  /// manage persisting/restoring the [Cubit] state.
-  static Storage get storage => HydratedMixin.storage;
 }
 
 /// A mixin which enables automatic state persistence
@@ -95,16 +91,25 @@ abstract class HydratedCubit<State> extends Cubit<State>
 /// * [HydratedBloc] to enable automatic state persistence/restoration with [Bloc]
 ///
 mixin HydratedMixin<State> on Cubit<State> {
-  /// Instance of [Storage] which will be used to
+  // Instance of [Storage] which will be used to
+  // manage persisting/restoring the [Cubit] state.
+  static Storage _staticStorage;
+
+  /// Setter for instance of [Storage] which will be used to
   /// manage persisting/restoring the [Cubit] state.
-  static Storage storage;
+  static set storage(Storage storage) {
+    _staticStorage = storage;
+  }
+
+  Storage _instanceStorage;
+  Storage get _storage => _instanceStorage ??= _staticStorage;
 
   void hydrate() {
-    if (storage == null) throw const StorageNotFound();
+    if (_storage == null) throw const StorageNotFound();
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
-        storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+        _storage.write(storageToken, stateJson).then((_) {}, onError: onError);
       }
     } on dynamic catch (error, stackTrace) {
       onError(error, stackTrace);
@@ -115,10 +120,10 @@ mixin HydratedMixin<State> on Cubit<State> {
 
   @override
   State get state {
-    if (storage == null) throw const StorageNotFound();
+    if (_storage == null) throw const StorageNotFound();
     if (_state != null) return _state;
     try {
-      final stateJson = storage.read(storageToken) as Map<dynamic, dynamic>;
+      final stateJson = _storage.read(storageToken) as Map<dynamic, dynamic>;
       if (stateJson == null) return _state = super.state;
       return _state = _fromJson(stateJson);
     } on dynamic catch (error, stackTrace) {
@@ -129,12 +134,12 @@ mixin HydratedMixin<State> on Cubit<State> {
 
   @override
   void onChange(Change<State> change) {
-    if (storage == null) throw const StorageNotFound();
+    if (_storage == null) throw const StorageNotFound();
     final state = change.nextState;
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
-        storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+        _storage.write(storageToken, stateJson).then((_) {}, onError: onError);
       }
     } on dynamic catch (error, stackTrace) {
       onError(error, stackTrace);
@@ -281,7 +286,7 @@ mixin HydratedMixin<State> on Cubit<State> {
   /// `clear` is used to wipe or invalidate the cache of a `HydratedCubit`.
   /// Calling `clear` will delete the cached state of the cubit
   /// but will not modify the current state of the cubit.
-  Future<void> clear() => storage.delete(storageToken);
+  Future<void> clear() => _storage.delete(storageToken);
 
   /// Responsible for converting the `Map<String, dynamic>` representation
   /// of the cubit state into a concrete instance of the cubit state.
