@@ -44,11 +44,6 @@
         "command": "extension.new-cubit",
         "title": "Cubit: New Cubit",
         "icon": "assets/logo.png"
-      },
-      {
-        "command": "extension.new-freezed-bloc",
-        "title": "Bloc: New Freezed Bloc",
-        "icon": "assets/logo.png"
       }
     ],
     "menus": {
@@ -60,11 +55,6 @@
         },
         {
           "command": "extension.new-cubit",
-          "group": "blocGroup@1",
-          "when": "explorerResourceIsFolder"
-        },
-        {
-          "command": "extension.new-freezed-bloc",
           "group": "blocGroup@1",
           "when": "explorerResourceIsFolder"
         }

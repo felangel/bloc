@@ -9,7 +9,8 @@ import {
   getBlocStateTemplate,
   getBlocTemplate,
 } from "../templates";
-import { hasDependency } from "../utils";
+import { getUsingDependency } from "../utils/get-using-dependency";
+import { Dependency } from "../consts/dependency_enum";
 
 export const newBloc = async (uri: Uri) => {
   const blocName = await promptForBlocName();
@@ -29,10 +30,10 @@ export const newBloc = async (uri: Uri) => {
     targetDirectory = uri.fsPath;
   }
 
-  const useEquatable = await hasDependency("equatable");
+  const useDependency = await getUsingDependency();
   const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
   try {
-    await generateBlocCode(blocName, targetDirectory, useEquatable);
+    await generateBlocCode(blocName, targetDirectory, useDependency);
     window.showInformationMessage(
       `Successfully Generated ${pascalCaseBlocName} Bloc`
     );
@@ -70,7 +71,7 @@ async function promptForTargetDirectory(): Promise<string | undefined> {
 async function generateBlocCode(
   blocName: string,
   targetDirectory: string,
-  useEquatable: boolean
+  useDependency: Dependency
 ) {
   const blocDirectoryPath = `${targetDirectory}/bloc`;
   if (!existsSync(blocDirectoryPath)) {
@@ -78,9 +79,9 @@ async function generateBlocCode(
   }
 
   await Promise.all([
-    createBlocEventTemplate(blocName, targetDirectory, useEquatable),
-    createBlocStateTemplate(blocName, targetDirectory, useEquatable),
-    createBlocTemplate(blocName, targetDirectory, useEquatable),
+    createBlocEventTemplate(blocName, targetDirectory, useDependency),
+    createBlocStateTemplate(blocName, targetDirectory, useDependency),
+    createBlocTemplate(blocName, targetDirectory, useDependency),
   ]);
 }
 
@@ -98,7 +99,7 @@ function createDirectory(targetDirectory: string): Promise<void> {
 function createBlocEventTemplate(
   blocName: string,
   targetDirectory: string,
-  useEquatable: boolean
+  useDependency: Dependency
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
   const targetPath = `${targetDirectory}/bloc/${snakeCaseBlocName}_event.dart`;
@@ -108,7 +109,7 @@ function createBlocEventTemplate(
   return new Promise(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getBlocEventTemplate(blocName, useEquatable),
+      getBlocEventTemplate(blocName, useDependency),
       "utf8",
       (error) => {
         if (error) {
@@ -124,7 +125,7 @@ function createBlocEventTemplate(
 function createBlocStateTemplate(
   blocName: string,
   targetDirectory: string,
-  useEquatable: boolean
+  useDependency: Dependency
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
   const targetPath = `${targetDirectory}/bloc/${snakeCaseBlocName}_state.dart`;
@@ -134,7 +135,7 @@ function createBlocStateTemplate(
   return new Promise(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getBlocStateTemplate(blocName, useEquatable),
+      getBlocStateTemplate(blocName, useDependency),
       "utf8",
       (error) => {
         if (error) {
@@ -150,7 +151,7 @@ function createBlocStateTemplate(
 function createBlocTemplate(
   blocName: string,
   targetDirectory: string,
-  useEquatable: boolean
+  useDependency: Dependency
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
   const targetPath = `${targetDirectory}/bloc/${snakeCaseBlocName}_bloc.dart`;
@@ -160,7 +161,7 @@ function createBlocTemplate(
   return new Promise(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getBlocTemplate(blocName, useEquatable),
+      getBlocTemplate(blocName, useDependency),
       "utf8",
       (error) => {
         if (error) {
