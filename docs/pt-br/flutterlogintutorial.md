@@ -284,17 +284,17 @@ O `LoginState` irá conter o estado do formulário como também os estados dos i
 
 #### login_bloc.dart
 
-> The `LoginBloc` is responsible for reacting to user interactions in the `LoginForm` and handling the validation and submission of the form.
+> O `LoginBloc` é responsável por reagir as interações do usuário no `LoginForm` e controla a validação e submissão do formulário.
 
 [login_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/bloc/login_bloc.dart ':include')
 
-The `LoginBloc` has a dependency on the `AuthenticationRepository` because when the form is submitted, it invokes `logIn`. The initial state of the bloc is `pure` meaning neither the inputs nor the form has been touched or interacted with.
+O `LoginBloc` tem uma dependência do `AuthenticationRepository` porque quando o formulário é submetido, ele chama o `logIn`. O estado inicial do bloc é `puro` significando que nem os input e nem o formulário foi tocado ou teve interação.
 
-Whenever either the `username` or `password` change, the bloc will create a dirty variant of the `Username`/`Password` model and update the form status via the `Formz.validate` API.
+Sempre que o `username` ou `password` mudarem, o bloc irá criar uma versão suja dos modelos `Username`/`Password` e atualizar o status através da API `Formz.validate`.
 
-When the `LoginSubmitted` event is added, if the current status of the form is valid, the bloc makes a call to `logIn` and updates the status based on the outcome of the request.
+Quando o evento `LoginSubmitted` é adicionado, se o status do fomulário for válido, o bloc fara uma chamada para `logIn` e atualizará o status baseado no resultado da requisição.
 
-Next let's take a look at the `LoginPage` and `LoginForm`.
+A seguir iremos dar uma olhada em `LoginPage` e `LoginForm`.
 
 ### Página de Login
 
