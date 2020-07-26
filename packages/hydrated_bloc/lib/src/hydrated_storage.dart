@@ -48,27 +48,31 @@ class HydratedStorage implements Storage {
   /// final byteskey = sha256.convert(utf8.encode(password)).bytes;
   /// return HydratedAesCipher(byteskey);
   /// ```
-  /// TODO scope
+  ///
+  /// [scope] can optionally be provided.
+  /// If provided, distinct isolated storage is created.
   static Future<HydratedStorage> build({
     Directory storageDirectory,
     HydratedCipher encryptionCipher,
     String scope,
   }) {
     return _lock.synchronized(() async {
-      if (_instance != null) return _instance;
-      final directory = storageDirectory ?? await getTemporaryDirectory();
-      // Use HiveImpl directly to avoid conflicts with existing Hive.init
-      // https://github.com/hivedb/hive/issues/336
-      hive = HiveImpl();
-      if (!kIsWeb) hive.init(directory.path);
-      final box = await hive.openBox<dynamic>(
-        scope != null ? 'hydrated_box_$scope' : 'hydrated_box',
-        encryptionCipher: encryptionCipher,
-      );
+      final key = scope != null ? 'hydrated_box_$scope' : 'hydrated_box';
+      return _instances[key] ??= await () async {
+        final directory = storageDirectory ?? await getTemporaryDirectory();
+        // Use HiveImpl directly to avoid conflicts with existing Hive.init
+        // https://github.com/hivedb/hive/issues/336
+        hive = HiveImpl();
+        if (!kIsWeb) hive.init(directory.path);
+        final box = await hive.openBox<dynamic>(
+          scope != null ? 'hydrated_box_$scope' : 'hydrated_box',
+          encryptionCipher: encryptionCipher,
+        );
 
-      await _migrate(directory, box);
+        await _migrate(directory, box);
 
-      return _instance = HydratedStorage(box);
+        return HydratedStorage(box);
+      }();
     });
   }
 
@@ -96,7 +100,7 @@ class HydratedStorage implements Storage {
   static HiveInterface hive;
 
   static final _lock = Lock();
-  static HydratedStorage _instance;
+  static final _instances = <String, HydratedStorage>{};
 
   final Box _box;
 
@@ -122,7 +126,7 @@ class HydratedStorage implements Storage {
   @override
   Future<void> clear() {
     if (_box.isOpen) {
-      _instance = null;
+      _instances[_box.name] = null;
       return _lock.synchronized(_box.deleteFromDisk);
     }
     return null;
