@@ -65,6 +65,10 @@ abstract class HydratedCubit<State> extends Cubit<State>
   static set storage(Storage storage) {
     HydratedMixin.storage = storage;
   }
+
+  /// Getter for instance of [Storage] which will be used to
+  /// manage persisting/restoring the [Cubit] state.
+  static Storage get storage => HydratedMixin.storage;
 }
 
 /// A mixin which enables automatic state persistence
@@ -91,27 +95,15 @@ abstract class HydratedCubit<State> extends Cubit<State>
 /// * [HydratedBloc] to enable automatic state persistence/restoration with [Bloc]
 ///
 mixin HydratedMixin<State> on Cubit<State> {
-  // Instance of [Storage] which will be used to
-  // manage persisting/restoring the [Cubit] state.
-  static Storage _staticStorage;
-
-  /// Setter for instance of [Storage] which will be used to
+  /// Instance of [Storage] which will be used to
   /// manage persisting/restoring the [Cubit] state.
-  static set storage(Storage storage) {
-    _staticStorage = storage;
-  }
-
-  /// Getter for instance of [Storage] which will be used to
-  /// manage persisting/restoring the [Cubit] state.
-  static Storage get storage {
-    return _staticStorage;
-  }
+  static Storage storage;
 
   Storage _instanceStorage;
 
   /// Getter for instance of [Storage] for `this` instance of cubit
   /// which will be used to manage persisting/restoring the [Bloc] state.
-  Storage get instanceStorage => _instanceStorage ??= _staticStorage;
+  Storage get instanceStorage => _instanceStorage ??= storage;
 
   void hydrate() {
     if (instanceStorage == null) throw const StorageNotFound();
