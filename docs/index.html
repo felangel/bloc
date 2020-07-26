@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns#">
   <head>
     <meta charset="UTF-8" />
     <title>Bloc</title>
@@ -21,14 +21,25 @@
     <script>
       window.$docsify = {
         alias: {
-          "/.*/_navbar.md": "/_navbar.md"
+          "/.*/_navbar.md": "/_navbar.md",
         },
         name: "Bloc",
         repo: "https://github.com/felangel/bloc",
         homepage:
           "https://raw.githubusercontent.com/felangel/bloc/master/README.md",
         loadSidebar: true,
-        coverpage: ["/", "/ko-kr/", "/fr/", "/pt-br/", "/cs/", "/es/", "/ru/", "/zh-cn/", "/az/", "/jp/"],
+        coverpage: [
+          "/",
+          "/ko-kr/",
+          "/fr/",
+          "/pt-br/",
+          "/cs/",
+          "/es/",
+          "/ru/",
+          "/zh-cn/",
+          "/az/",
+          "/jp/",
+        ],
         fallbackLanguages: ["en"],
         auto2top: true,
         autoHeader: false,
@@ -40,9 +51,9 @@
           paths: "auto",
           placeholder: "Search",
           noData: "No Results.",
-          depth: 6
+          depth: 6,
         },
-        ga: "UA-131259352-1"
+        ga: "UA-131259352-1",
       };
     </script>
     <script src="./docsify/lib/docsify.min.js"></script>
