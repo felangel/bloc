@@ -48,9 +48,11 @@ class HydratedStorage implements Storage {
   /// final byteskey = sha256.convert(utf8.encode(password)).bytes;
   /// return HydratedAesCipher(byteskey);
   /// ```
+  /// TODO scope
   static Future<HydratedStorage> build({
     Directory storageDirectory,
     HydratedCipher encryptionCipher,
+    String scope,
   }) {
     return _lock.synchronized(() async {
       if (_instance != null) return _instance;
@@ -60,7 +62,7 @@ class HydratedStorage implements Storage {
       hive = HiveImpl();
       if (!kIsWeb) hive.init(directory.path);
       final box = await hive.openBox<dynamic>(
-        'hydrated_box',
+        scope != null ? 'hydrated_box_$scope' : 'hydrated_box',
         encryptionCipher: encryptionCipher,
       );
 

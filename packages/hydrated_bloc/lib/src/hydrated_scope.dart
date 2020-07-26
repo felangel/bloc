@@ -76,7 +76,9 @@ class HydratedScope extends InheritedWidget {
 /// ```dart
 /// void main() async {
 ///   WidgetsFlutterBinding.ensureInitialized();
-///   HydratedScope.config({"$scopeToken": await HydratedStorage.build()}); // TODO
+///   HydratedScope.config({
+///     "myscope": await HydratedStorage.build(scope:"myscope")
+///   });
 ///   runApp(MyApp());
 /// }
 /// ```
@@ -94,6 +96,8 @@ class ScopeStorageNotFound implements Exception {
     return 'Storage was accessed before it was initialized.\n'
         'Please ensure that storage has been initialized.\n\n'
         'For example:\n\n'
-        'HydratedScope.config({"$scopeToken": await HydratedStorage.build()});';
-  } //TODO build scoped storage of some kind here                   ^^^^^^^
+        'HydratedScope.config({'
+        '   "$scopeToken": await HydratedStorage.build(scope: "$scopeToken")'
+        '});';
+  }
 }
