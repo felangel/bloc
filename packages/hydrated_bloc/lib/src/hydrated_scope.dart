@@ -46,8 +46,8 @@ class HydratedScope extends InheritedWidget {
         final temp = HydratedMixin.storage;
         final storage = HydratedMixin.storage = _storage(token);
         final cubit = create(context);
-        if (storage == null) cubit.addError(_error(token));
         HydratedMixin.storage = temp;
+        if (storage == null) cubit.addError(_error(token));
         return cubit;
       };
     });
