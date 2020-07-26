@@ -57,20 +57,20 @@ class HydratedStorage implements Storage {
     String scope,
   }) {
     return _lock.synchronized(() async {
-      final key = scope != null ? 'hydrated_box_$scope' : 'hydrated_box';
-      return _instances[key] ??= await () async {
+      scope = scope != null ? 'hydrated_box_$scope' : 'hydrated_box';
+      return _instances[scope] ??= await () async {
         final directory = storageDirectory ?? await getTemporaryDirectory();
+
         // Use HiveImpl directly to avoid conflicts with existing Hive.init
         // https://github.com/hivedb/hive/issues/336
         hive = HiveImpl();
         if (!kIsWeb) hive.init(directory.path);
         final box = await hive.openBox<dynamic>(
-          scope != null ? 'hydrated_box_$scope' : 'hydrated_box',
+          scope,
           encryptionCipher: encryptionCipher,
         );
 
         await _migrate(directory, box);
-
         return HydratedStorage(box);
       }();
     });
