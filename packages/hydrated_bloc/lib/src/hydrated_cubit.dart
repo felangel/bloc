@@ -101,6 +101,12 @@ mixin HydratedMixin<State> on Cubit<State> {
     _staticStorage = storage;
   }
 
+  /// Getter for instance of [Storage] which will be used to
+  /// manage persisting/restoring the [Cubit] state.
+  static Storage get storage {
+    return _staticStorage;
+  }
+
   Storage _instanceStorage;
 
   /// Getter for instance of [Storage] for `this` instance of cubit

@@ -43,22 +43,20 @@ class HydratedScope extends InheritedWidget {
       final token = HydratedScope.of(context)?.token;
       if (token == null) return create;
       return (context) {
-        HydratedMixin.storage = _storage(token);
-        return create(context);
-        // final cub = create(context);
-        // if (storage == null) cub.error();
-        // return cub;
+        final temp = HydratedMixin.storage;
+        final storage = HydratedMixin.storage = _storage(token);
+        final cubit = create(context);
+        if (storage == null) cubit.addError(_error(token));
+        HydratedMixin.storage = temp;
+        return cubit;
       };
     });
   }
 
   static final _storages = <String, Storage>{};
 
-  static Storage _storage(String token) {
-    final storage = _storages[token];
-    if (storage == null) _error();
-    return storage;
-  }
+  /// Can return `null` when [Storage] is missing.
+  static Storage _storage(String token) => _storages[token];
 
   static void _config(Map<String, Storage> config) {
     for (final key in config.keys) {
@@ -66,5 +64,36 @@ class HydratedScope extends InheritedWidget {
     }
   }
 
-  static void _error() {}
+  static ScopeStorageNotFound _error(String token) {
+    return ScopeStorageNotFound(token);
+  }
+}
+
+/// {@template scope_storage_not_found}
+/// Exception thrown if there was no [HydratedStorage] specified.
+/// This is most likely due to forgetting to setup the [HydratedScope.config()]:
+///
+/// ```dart
+/// void main() async {
+///   WidgetsFlutterBinding.ensureInitialized();
+///   HydratedScope.config({"$scopeToken": await HydratedStorage.build()}); // TODO
+///   runApp(MyApp());
+/// }
+/// ```
+///
+/// {@endtemplate}
+class ScopeStorageNotFound implements Exception {
+  /// {@macro scope_storage_not_found}
+  const ScopeStorageNotFound(this.scopeToken);
+
+  /// Token of scope, storage wasn't found for.
+  final String scopeToken;
+
+  @override
+  String toString() {
+    return 'Storage was accessed before it was initialized.\n'
+        'Please ensure that storage has been initialized.\n\n'
+        'For example:\n\n'
+        'HydratedScope.config({"$scopeToken": await HydratedStorage.build()});';
+  } //TODO build scoped storage of some kind here                   ^^^^^^^
 }
