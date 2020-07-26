@@ -195,7 +195,8 @@ void main() {
       test('storage getter returns correct storage instance', () {
         final storage = MockStorage();
         HydratedCubit.storage = storage;
-        expect(HydratedCubit.storage, storage);
+        when(storage.write(any, any)).thenAnswer((_) => Future.value());
+        expect(MyHydratedCubit().instanceStorage, storage);
       });
 
       test('should call storage.write when onChange is called', () {

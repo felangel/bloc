@@ -158,7 +158,9 @@ void main() {
     test('storage getter returns correct storage instance', () {
       final storage = MockStorage();
       HydratedBloc.storage = storage;
-      expect(HydratedBloc.storage, storage);
+
+      when(storage.write(any, any)).thenAnswer((_) => Future.value());
+      expect(MyHydratedBloc().instanceStorage, storage);
     });
 
     test('reads from storage once upon initialization', () {
