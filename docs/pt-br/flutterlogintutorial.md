@@ -1,32 +1,32 @@
 # Flutter Login Tutorial
 
-![intermediate](https://img.shields.io/badge/level-intermediate-orange.svg)
+![intermediário](https://img.shields.io/badge/level-intermediate-orange.svg)
 
-> In the following tutorial, we're going to build a Login Flow in Flutter using the Bloc library.
+> No tutorial a seguir, nós iremos construir um fluxo de Login no Flutter usando a biblioteca Bloc.
 
 ![demo](../assets/gifs/flutter_login.gif)
 
-## Project Setup
+## Setup do Projeto
 
-We'll start off by creating a brand new Flutter project
+Nós iremos começar criando um novo projeto Flutter
 
 ```sh
 flutter create flutter_login
 ```
 
-Next, we can install all of our dependencies
+Depois, nós podemos instalar todas nossas dependências
 
 ```sh
 flutter packages get
 ```
 
-## Authentication Repository
+## Repositório de Autenticação
 
-The first thing we're going to do is create an `authentication_repository` package which will be responsible for managing the authentication domain.
+A primeira coia que iremos fazer é criar um pacote `authentication_repository` que será responsável por gerenciar o domínio de autenticação.
 
-We'll start by create a `packages/authentication_repository` directory at the root of the project which will contain all internal packages.
+Vamos começar criando um diretório `packages/authentication_repository` na raíz do projeto que irá conter todos os pacotes internos.
 
-At a high level, the directory structure should look like this:
+Em alto nível, a estrutura do diretório se parecerá com essa:
 
 ```sh
 ├── android
@@ -37,31 +37,31 @@ At a high level, the directory structure should look like this:
 └── test
 ```
 
-Next, we can create a `pubspec.yaml` for the `authentication_repository` package:
+Depois, nós podemos criar um `pubspec.yaml` para o pacote `authentication_repository`:
 
 [pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/authentication_repository/pubspec.yaml ':include')
 
-?> **Note**: `package:authentication_repository` will be a pure Dart package and for simplicity we will only have a dependency on [package:meta](https://pub.dev/packages/meta) for some useful annotations.
+?> **Nota**: `package:authentication_repository` será um pacote Dart puro e para simplificar nós teremos apenas uma dependência sobre o [pacote:meta](https://pub.dev/packages/meta) para alguma anotações uteis.
 
-Next up, we need to implement is the `AuthenticationRepository` class itself which will be in `lib/src/authentication_repository.dart`.
+Seguindo, nós precisamos implementar a classe `AuthenticationRepository` em sí que estará em `lib/src/authentication_repository.dart`.
 
 [authentication_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/authentication_repository/lib/src/authentication_repository.dart ':include')
 
-The `AuthenticationRepository` exposes a `Stream` of `AuthenticationStatus` updates which will be used to notify the application when a user signs in or out.
+O `AuthenticationRepository` expõe uma `Stream` de atualizações do `AuthenticationStatus` que será usada para notificar a aplicação quando o usuário logar ou deslogar.
 
-In addition, there is are `logIn` and `logOut` methods which are stubbed for simplicity but can easily be extended to authenticate with `FirebaseAuth` for example or some other authentication provider.
+Além disso, terão os esboços dos métodos `logIn` e `logOut` para simplificar mas que podem ser facilmente estendidos para autenticar com o `FirebaseAuth` por exemplo ou algum outro provedor de autenticação.
 
-?> **Note**: Since we are maintaining a `StreamController` internally, a `dispose` method is exposed so that the controller can be closed when it is no longer needed.
+?> **Nota**: Uma vez que estamos mantendo o `StreamController` internamente, o método `dispose` é exposto de modo que o controller pode ser fechado quando ele não for mais necessário.
 
-Lastly, we need to create `lib/authentication_repository.dart` which will contain the public exports:
+Por último, nós precisamos criar `lib/authentication_repository.dart` que conterá as exportações públicas:
 
 [authentication_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/authentication_repository/lib/authentication_repository.dart ':include')
 
-That's it for the `AuthenticationRepository`, next we'll work on the `UserRepository`.
+E é isso para o `AuthenticationRepository`, agora iremos trabalhar no `UserRepository`.
 
-## User Repository
+## Repositório do Usuário
 
-Just like with the `AuthenticationRepository`, we will create a `user_repository` package inside the `packages` directory.
+Assim como o `AuthenticationRepository`, nós iremos criar um pacote `user_repository` dentro do diretório `packages`.
 
 ```sh
 ├── android
@@ -73,43 +73,43 @@ Just like with the `AuthenticationRepository`, we will create a `user_repository
 └── test
 ```
 
-Next, we'll create the `pubspec.yaml` for the `user_repository`:
+Depois, vamos criar o `pubspec.yaml` para o `user_repository`:
 
 [pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/pubspec.yaml ':include')
 
-The `user_repository` will be responsible for the user domain and will expose APIs to interact with the current user.
+O `user_repository` será responsável pelo domínio do usuário e irá expor as APIs para interagir com o usuário atual.
 
-The first thing we will define is the user model in `lib/src/models/user.dart`:
+A primeira coisa que iremos definir é o modelo de usuário em `lib/src/models/user.dart`:
 
 [user.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/src/models/user.dart ':include')
 
-For simplicity, a user just has an `id` property but in practice we might have additional properties like `firstName`, `lastName`, `avatarUrl`, etc...
+Para simplificar, um usuários terá apenas a propriedade `id` mas na prática nós podemos ter propriedades adicionais como `firstName`, `lastName`, `avatarUrl`, etc...
 
-?> **Note**: [package:equatable](https://pub.dev/packages/equatable) is used to enable value comparisons of the `User` object.
+?> **Nota**: [package:equatable](https://pub.dev/packages/equatable) é usado para habilitar a comparação de valores do objeto `User`.
 
-Next, we can create a `models.dart` in `lib/src/models` which will export all models so that we can use a single import state to import multiple models.
+Seguindo, nós podemos criar um `models.dart` em `lib/src/models` que irá exportar todos os modelos assim nós podemos usar um único import para importar múltiplos modelos.
 
 [models.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/src/models/models.dart ':include')
 
-Now that the models have been defined, we can implement the `UserRepository` class.
+Agora que os modelos foram definidos, nós podemos implementar a classe `UserRepository`.
 
 [user_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/src/user_repository.dart ':include')
 
-For this simple example, the `UserRepository` exposes a single method `getUser` which will retrieve the current user. We are stubbing this but in practice this is where we would query the current user from the backend.
+Para esse simples exemplo, o `UserRepository` expões um único método `getUser` que irá recuperar o usuário atual. Aqui nós estamos esboçando mas em prática aqui é onde nós podemos fazer uma consulta do usuário atual no backend.
 
-Almost done with the `user_repository` package -- the only thing left to do is create the `user_repository.dart` file in `lib` which define the public exports:
+Quase finalizado com o pacote `user_repository` -- a única coisa que falta é criar o arquivo `user_repository.dart` em `lib` que define as exportações públicas:
 
 [user_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/user_repository.dart ':include')
 
-Now that we have the `authentication_repository` and `user_repository` packages complete, we can focus on the Flutter application.
+Agora que nós já terminamos com os pacotes `authentication_repository` e `user_repository`, nós podemos focar na aplicação Flutter.
 
-## Installing Dependencies
+## Instalando as Dependências
 
-Let's start by updating the generated `pubspec.yaml` at the root of our project:
+Vamos começar atualizando o `pubspec.yaml` gerado na raíz do nosso projeto:
 
 [pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/pubspec.yaml ':include')
 
-We can install the dependencies by running:
+Nós podemos instalar as dependências rodando:
 
 ```sh
 flutter packages get
@@ -336,4 +336,4 @@ The `HomePage` can access the current user's ID via `context.bloc<Authentication
 
 At this point we have a pretty solid login implementation and we have decoupled our presentation layer from the business logic layer by using Bloc.
 
-The full source for this example (including unit and widget tests) can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_login).
+O código fonte completo para este exemplo (incluindo os testes unitários e de widget) pode ser encontrado [aqui](https://github.com/felangel/Bloc/tree/master/examples/flutter_login).
