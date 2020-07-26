@@ -28,20 +28,14 @@ class HydratedScope extends InheritedWidget {
   /// Adds wrapping hook for now
   static Future<void> config() async {
     BlocProvider.addWrapper((context, create) {
-      final token = context.scope()?.token;
+      final token = HydratedScope.of(context)?.token;
       if (token == null) return create;
       return (context) {
         // Hydrated.prepare(token);
+        // HydratedMixin.storage = ;
         return create(context);
       };
     });
     // await Hydrated.config(configs);
   }
-}
-
-/// Extends the `BuildContext` class with the ability
-/// to perform a HydratedScope lookup.
-extension HydratedScopeExtension on BuildContext {
-  /// Retrieve nearest scope from context
-  HydratedScope scope() => HydratedScope.of(this);
 }
