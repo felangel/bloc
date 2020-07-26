@@ -1,9 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'hydrated_cubit.dart';
+import 'hydrated_storage.dart';
 
-/// Scope for hydrated storage
+/// Hydrated storage scope.
 class HydratedScope extends InheritedWidget {
-  /// token is scope name
+  /// Scope is defined by it's [token].
   const HydratedScope({
     Key key,
     @required this.token,
@@ -12,10 +14,10 @@ class HydratedScope extends InheritedWidget {
         assert(child != null),
         super(key: key, child: child);
 
-  /// scope is defined by it's name
+  /// Scope's unique identification token.
   final String token;
 
-  /// Retrieve scope from context
+  /// Retrieve scope from context.
   static HydratedScope of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<HydratedScope>();
   }
@@ -25,17 +27,44 @@ class HydratedScope extends InheritedWidget {
     return oldWidget.token != token;
   }
 
-  /// Adds wrapping hook for now
-  static Future<void> config() async {
+  /// Method to configure hydrated scopes app-wide.
+  /// Can be called multiple times, or from `build`.
+  static void config(Map<String, Storage> config) {
+    _config(config);
+
+    if (!_wrapped) _wrap();
+    _wrapped = true;
+  }
+
+  static bool _wrapped = false;
+
+  static void _wrap() {
     BlocProvider.addWrapper((context, create) {
       final token = HydratedScope.of(context)?.token;
       if (token == null) return create;
       return (context) {
-        // Hydrated.prepare(token);
-        // HydratedMixin.storage = ;
+        HydratedMixin.storage = _storage(token);
         return create(context);
+        // final cub = create(context);
+        // if (storage == null) cub.error();
+        // return cub;
       };
     });
-    // await Hydrated.config(configs);
   }
+
+  static final _storages = <String, Storage>{};
+
+  static Storage _storage(String token) {
+    final storage = _storages[token];
+    if (storage == null) _error();
+    return storage;
+  }
+
+  static void _config(Map<String, Storage> config) {
+    for (final key in config.keys) {
+      _storages.putIfAbsent(key, () => config[key]);
+    }
+  }
+
+  static void _error() {}
 }
