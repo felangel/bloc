@@ -65,19 +65,6 @@ Or you can right click on the directory in which you'd like to create the bloc/c
 | `contextrepository`       | Shortcut for `context.repository<MyRepository>()`    |
 | `repositoryof`            | Shortcut for `RepositoryProvider.of<MyRepository>()` |
 
-### Cubit
-
-| Shortcut             | Description                                |
-| -------------------- | ------------------------------------------ |
-| `cubit`              | Creates a Cubit Class                      |
-| `cubitbuilder`       | Creates a CubitBuilder Widget              |
-| `cubitlistener`      | Creates a CubitListener Widget             |
-| `multicubitlistener` | Creates a MultiCubitListener Widget        |
-| `cubitconsumer`      | Creates a CubitConsumer Widget             |
-| `cubitprovider`      | Creates a CubitProvider Widget             |
-| `multicubitprovider` | Creates a MultiCubitProvider Widget        |
-| `contextcubit`       | Shortcut for `context.cubit<MyCubit>()`    |
-| `cubitof`            | Shortcut for `CubitProvider.of<MyCubit>()` |
 
 ### Freezed Bloc
 
