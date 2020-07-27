@@ -1,3 +1,36 @@
+# 6.0.1
+
+- docs: minor documentation fixes and improvements
+
+# 6.0.0
+
+- **BREAKING**: do not emit current state on subscription
+- **BREAKING**: `onError` in `BlocObserver` takes a `Cubit` as first parameter
+- **BREAKING**: allow blocs and cubits to emit the initial state
+- feat: include `cubit` and remove external dependency on [package:cubit](https://pub.dev/packages/cubit)
+  - exports class `Cubit`
+  - exports class `Change` (`Transition` for `Cubit`)
+- feat: `onChange` added to `BlocObserver`
+- refactor: apply additional lint rules
+- fix: add `@visibleForTesting` to `emit` on class `Cubit`
+- docs: fix inline documentation references
+
+# 6.0.0-dev.2
+
+- fix: add `@visibleForTesting` to `emit` on class `Cubit`
+
+# 6.0.0-dev.1
+
+- **BREAKING**: do not emit current state on subscription
+- **BREAKING**: `onError` in `BlocObserver` takes a `Cubit` as first parameter
+- **BREAKING**: allow blocs and cubits to emit the initial state
+- feat: include `cubit` and remove external dependency on [package:cubit](https://pub.dev/packages/cubit)
+  - exports class `Cubit`
+  - exports class `Change` (`Transition` for `Cubit`)
+- feat: `onChange` added to `BlocObserver`
+- refactor: apply additional lint rules
+- docs: fix inline documentation references
+
 # 5.0.1
 
 - fix: upgrade to `cubit ^0.1.2`

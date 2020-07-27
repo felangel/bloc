@@ -1,3 +1,12 @@
+# 5.0.0
+
+- **BREAKING**: update to latest bloc packages
+  - bloc -> ^6.0.0
+  - bloc_test -> ^7.0.0
+  - flutter_bloc -> ^6.0.0
+  - hydrated_bloc -> ^6.0.0
+- fix: remove error dialog when no `pubspec.yaml` found in root
+
 # 4.2.2
 
 - fix: Equatable not being recognized on Windows

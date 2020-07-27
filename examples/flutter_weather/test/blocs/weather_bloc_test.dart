@@ -10,7 +10,7 @@ import 'package:flutter_weather/blocs/weather_bloc.dart';
 class MockWeatherRepository extends Mock implements WeatherRepository {}
 
 void main() {
-  final Weather weather = Weather(
+  final weather = Weather(
     condition: WeatherCondition.clear,
     formattedCondition: 'Clear',
     minTemp: 15,
@@ -19,6 +19,7 @@ void main() {
     location: 'Chicago',
     lastUpdated: DateTime(2019),
   );
+
   group('WeatherBloc', () {
     MockWeatherRepository weatherRepository;
     WeatherBloc weatherBloc;
@@ -43,7 +44,7 @@ void main() {
     group('WeatherRequested', () {
       blocTest(
         'emits [WeatherLoadInProgress, WeatherLoadSuccess] when weather repository returns weather',
-        build: () async {
+        build: () {
           when(weatherRepository.getWeather('chicago')).thenAnswer(
             (_) => Future.value(weather),
           );
@@ -58,7 +59,7 @@ void main() {
 
       blocTest(
         'emits [WeatherLoadInProgress, WeatherLoadFailure] when weather repository throws error',
-        build: () async {
+        build: () {
           when(weatherRepository.getWeather('chicago'))
               .thenThrow('Weather Error');
           return weatherBloc;
@@ -74,21 +75,19 @@ void main() {
     group('WeatherRefreshRequested', () {
       blocTest(
         'emits [WeatherLoadSuccess] when weather repository returns weather',
-        build: () async {
+        build: () {
           when(weatherRepository.getWeather('chicago')).thenAnswer(
             (_) => Future.value(weather),
           );
           return weatherBloc;
         },
         act: (bloc) => bloc.add(WeatherRefreshRequested(city: 'chicago')),
-        expect: [
-          WeatherLoadSuccess(weather: weather),
-        ],
+        expect: [WeatherLoadSuccess(weather: weather)],
       );
 
       blocTest(
         'emits [] when weather repository throws error',
-        build: () async {
+        build: () {
           when(weatherRepository.getWeather('chicago'))
               .thenThrow('Weather Error');
           return weatherBloc;

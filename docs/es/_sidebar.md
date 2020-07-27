@@ -14,10 +14,10 @@
 - Tutoriales
 
   - Flutter
-    - [Contador](es/fluttercountertutorial.md)
+    - [**Contador** <sup>✨</sup>](es/fluttercountertutorial.md)
     - [Temporizador](es/fluttertimertutorial.md)
     - [Lista Infinita](es/flutterinfinitelisttutorial.md)
-    - [Iniciar Sesión](es/flutterlogintutorial.md)
+    - [**Iniciar Sesión** <sup>✨</sup>](es/flutterlogintutorial.md)
     - [Clima](es/flutterweathertutorial.md)
     - [Lista de quehaceres](es/fluttertodostutorial.md)
     - [Iniciar sesión con Firebase](es/flutterfirebaselogintutorial.md)

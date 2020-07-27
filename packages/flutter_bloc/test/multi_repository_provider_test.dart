@@ -2,14 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      home: CounterPage(),
-    );
-  }
+class MyApp extends MaterialApp {
+  MyApp() : super(home: CounterPage());
 }
 
 class CounterPage extends StatelessWidget {
@@ -19,18 +13,15 @@ class CounterPage extends StatelessWidget {
     final repositoryB = RepositoryProvider.of<RepositoryB>(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Counter')),
       body: Column(
         children: [
           Text(
             '${repositoryA.data}',
-            key: Key('RepositoryA_data'),
-            style: TextStyle(fontSize: 24.0),
+            key: const Key('RepositoryA_data'),
           ),
           Text(
             '${repositoryB.data}',
-            key: Key('RepositoryB_data'),
-            style: TextStyle(fontSize: 24.0),
+            key: const Key('RepositoryB_data'),
           ),
         ],
       ),
@@ -39,15 +30,15 @@ class CounterPage extends StatelessWidget {
 }
 
 class RepositoryA {
-  final int data;
+  const RepositoryA(this.data);
 
-  RepositoryA(this.data);
+  final int data;
 }
 
 class RepositoryB {
-  final int data;
+  const RepositoryB(this.data);
 
-  RepositoryB(this.data);
+  final int data;
 }
 
 void main() {
@@ -57,10 +48,7 @@ void main() {
         (tester) async {
       try {
         await tester.pumpWidget(
-          MultiRepositoryProvider(
-            providers: null,
-            child: null,
-          ),
+          MultiRepositoryProvider(providers: null, child: null),
         );
       } on dynamic catch (error) {
         expect(error, isAssertionError);
@@ -71,10 +59,7 @@ void main() {
         (tester) async {
       try {
         await tester.pumpWidget(
-          MultiRepositoryProvider(
-            providers: null,
-            child: Container(),
-          ),
+          MultiRepositoryProvider(providers: null, child: const SizedBox()),
         );
       } on dynamic catch (error) {
         expect(error, isAssertionError);
@@ -84,10 +69,7 @@ void main() {
     testWidgets('throws if initialized with no child', (tester) async {
       try {
         await tester.pumpWidget(
-          MultiRepositoryProvider(
-            providers: [],
-            child: null,
-          ),
+          MultiRepositoryProvider(providers: [], child: null),
         );
       } on dynamic catch (error) {
         expect(error, isAssertionError);
@@ -99,23 +81,23 @@ void main() {
         MultiRepositoryProvider(
           providers: [
             RepositoryProvider<RepositoryA>(
-              create: (context) => RepositoryA(0),
+              create: (_) => const RepositoryA(0),
             ),
             RepositoryProvider<RepositoryB>(
-              create: (context) => RepositoryB(1),
+              create: (_) => const RepositoryB(1),
             ),
           ],
           child: MyApp(),
         ),
       );
 
-      final repositoryAFinder = find.byKey((Key('RepositoryA_data')));
+      final repositoryAFinder = find.byKey((const Key('RepositoryA_data')));
       expect(repositoryAFinder, findsOneWidget);
 
       final repositoryAText = tester.widget(repositoryAFinder) as Text;
       expect(repositoryAText.data, '0');
 
-      final repositoryBFinder = find.byKey((Key('RepositoryB_data')));
+      final repositoryBFinder = find.byKey((const Key('RepositoryB_data')));
       expect(repositoryBFinder, findsOneWidget);
 
       final repositoryBText = tester.widget(repositoryBFinder) as Text;
@@ -128,23 +110,23 @@ void main() {
         MultiRepositoryProvider(
           providers: [
             RepositoryProvider(
-              create: (context) => RepositoryA(0),
+              create: (_) => const RepositoryA(0),
             ),
             RepositoryProvider(
-              create: (context) => RepositoryB(1),
+              create: (_) => const RepositoryB(1),
             ),
           ],
           child: MyApp(),
         ),
       );
 
-      final repositoryAFinder = find.byKey((Key('RepositoryA_data')));
+      final repositoryAFinder = find.byKey((const Key('RepositoryA_data')));
       expect(repositoryAFinder, findsOneWidget);
 
       final repositoryAText = tester.widget(repositoryAFinder) as Text;
       expect(repositoryAText.data, '0');
 
-      final repositoryBFinder = find.byKey((Key('RepositoryB_data')));
+      final repositoryBFinder = find.byKey((const Key('RepositoryB_data')));
       expect(repositoryBFinder, findsOneWidget);
 
       final repositoryBText = tester.widget(repositoryBFinder) as Text;

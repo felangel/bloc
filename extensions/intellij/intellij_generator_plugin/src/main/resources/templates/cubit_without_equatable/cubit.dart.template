@@ -1,4 +1,4 @@
-import 'package:cubit/cubit.dart';
+import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 part '${cubit_snake_case}_state.dart';

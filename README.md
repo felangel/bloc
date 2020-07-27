@@ -29,7 +29,7 @@ A predictable state management library that helps implement the [BLoC design pat
 
 ## Overview
 
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" height="300" alt="Bloc Architecture" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" width="500" alt="Bloc Architecture"></img>
 
 The goal of this library is to make it easy to separate _presentation_ from _business logic_, facilitating testability and reusability.
 
@@ -43,7 +43,7 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 
 ## Migration
 
-- [Upgrade to v5.0 ](https://bloclibrary.dev/#/migration)
+- [Migration Guide](https://bloclibrary.dev/#/migration)
 
 ## Examples
 
@@ -142,7 +142,6 @@ Learn more at the following links, which have been contributed by the community.
 
 ### Packages
 
-- [Hydrated Bloc](https://pub.dev/packages/hydrated_bloc) - An extension to the `bloc` state management library which automatically persists and restores `bloc` states, by [Felix Angelov](https://github.com/felangel).
 - [Bloc.js](https://github.com/felangel/bloc.js) - A port of the `bloc` state management library from Dart to JavaScript, by [Felix Angelov](https://github.com/felangel).
 - [Bloc Code Generator](https://pub.dev/packages/bloc_code_generator) - A code generator that makes working with bloc easier, by [Adson Leal](https://github.com/adsonpleal).
 - [Firebase Auth](https://pub.dev/packages/fb_auth) - A Web, Mobile Firebase Auth Plugin, by [Rody Davis](https://github.com/AppleEducate).

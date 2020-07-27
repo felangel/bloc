@@ -36,14 +36,12 @@ export async function analyzeDependencies() {
     },
     {
       name: "bloc",
-      version: "^5.0.0",
+      version: "^6.0.0",
       actions: [
         {
           name: "Open Migration Guide",
           callback: () => {
-            env.openExternal(
-              Uri.parse("https://bloclibrary.dev/#/migration?id=packagebloc")
-            );
+            env.openExternal(Uri.parse("https://bloclibrary.dev/#/migration"));
           },
         },
       ],
@@ -51,16 +49,12 @@ export async function analyzeDependencies() {
 
     {
       name: "flutter_bloc",
-      version: "^5.0.0",
+      version: "^6.0.0",
       actions: [
         {
           name: "Open Migration Guide",
           callback: () => {
-            env.openExternal(
-              Uri.parse(
-                "https://bloclibrary.dev/#/migration?id=packageflutter_bloc"
-              )
-            );
+            env.openExternal(Uri.parse("https://bloclibrary.dev/#/migration"));
           },
         },
       ],
@@ -68,30 +62,32 @@ export async function analyzeDependencies() {
     { name: "angular_bloc", version: "^4.0.0", actions: [] },
     {
       name: "hydrated_bloc",
-      version: "^5.0.0",
+      version: "^6.0.0",
       actions: [
         {
           name: "Open Migration Guide",
           callback: () => {
-            env.openExternal(
-              Uri.parse(
-                "https://bloclibrary.dev/#/migration?id=packagehydrated_bloc"
-              )
-            );
+            env.openExternal(Uri.parse("https://bloclibrary.dev/#/migration"));
           },
         },
       ],
     },
     { name: "sealed_flutter_bloc", version: "^4.0.0", actions: [] },
-    { name: "cubit", version: "^0.1.0", actions: [] },
-    { name: "flutter_cubit", version: "^0.1.0", actions: [] },
-    { name: "angular_cubit", version: "^0.1.0-dev.1", actions: [] },
-    { name: "hydrated_cubit", version: "^0.1.0", actions: [] },
   ];
 
   const devDependenciesToAnalyze = [
-    { name: "bloc_test", version: "^6.0.0", actions: [] },
-    { name: "cubit_test", version: "^0.1.0", actions: [] },
+    {
+      name: "bloc_test",
+      version: "^7.0.0",
+      actions: [
+        {
+          name: "Open Migration Guide",
+          callback: () => {
+            env.openExternal(Uri.parse("https://bloclibrary.dev/#/migration"));
+          },
+        },
+      ],
+    },
   ];
 
   const pubspec = await getPubspec();

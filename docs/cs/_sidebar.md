@@ -13,10 +13,10 @@
 - Tutoriály
 
   - Flutter
-    - [Počítadlo](cs/fluttercountertutorial.md)
+    - [**Počítadlo** <sup>✨</sup>](cs/fluttercountertutorial.md)
     - [Časovač](cs/fluttertimertutorial.md)
     - [Nekonečný list](cs/flutterinfinitelisttutorial.md)
-    - [Přihlašování](cs/flutterlogintutorial.md)
+    - [**Přihlašování** <sup>✨</sup>](cs/flutterlogintutorial.md)
     - [Počasí](cs/flutterweathertutorial.md)
     - [Plánovač](cs/fluttertodostutorial.md)
     - [Firebase přihlašování](cs/flutterfirebaselogintutorial.md)

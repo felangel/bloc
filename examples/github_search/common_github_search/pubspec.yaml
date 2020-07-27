@@ -6,8 +6,8 @@ environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
-  meta: ^1.1.6
-  bloc: ^4.0.0
-  equatable: ^1.0.0
+  meta: ^1.1.8
+  bloc: ^6.0.0
+  equatable: ^1.2.0
   http: ^0.12.0
   rxdart: ^0.24.0

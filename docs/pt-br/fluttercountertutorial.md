@@ -1,65 +1,94 @@
-# Tutorial Flutter Counter
+# Flutter Counter Tutorial
 
-![iniciante](https://img.shields.io/badge/level-beginner-green.svg)
+![beginner](https://img.shields.io/badge/level-beginner-green.svg)
 
-> No tutorial a seguir, criaremos um contador no Flutter usando a biblioteca Bloc.
+> In the following tutorial, we're going to build a Counter in Flutter using the Bloc library.
 
 ![demo](../assets/gifs/flutter_counter.gif)
 
 ## Setup
 
-Começaremos criando um novo projeto Flutter
+We'll start off by creating a brand new Flutter project
 
-[script](../_snippets/flutter_counter_tutorial/flutter_create.sh.md ':include')
+```sh
+flutter create flutter_counter
+```
 
-Podemos então prosseguir e substituir o conteúdo de `pubspec.yaml` por
+We can then go ahead and replace the contents of `pubspec.yaml` with
 
-[pubspec.yaml](../_snippets/flutter_counter_tutorial/pubspec.yaml.md ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/pubspec.yaml ':include')
 
-e instale todas as nossas dependências
+and then install all of our dependencies
 
-[script](../_snippets/flutter_counter_tutorial/flutter_packages_get.sh.md ':include')
+```sh
+flutter packages get
+```
 
-Nosso aplicativo de contador terá apenas dois botões para aumentar / diminuir o valor do contador e um widget `Text` para exibir o valor atual. Vamos começar a projetar os `CounterEvents`.
+## BlocObserver
 
-## Eventos Counter
+The first thing we're going to take a look at is how to create a `BlocObserver` which will help us observe all state changes in the application.
 
-[counter_event.dart](../_snippets/flutter_counter_tutorial/counter_event.dart.md ':include')
+Let's create `lib/counter_observer.dart`:
 
-## Estados Counter
+[counter_observer.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter_observer.dart ':include')
 
-Como o estado do nosso contador pode ser representado por um número inteiro, não precisamos criar uma classe personalizada!
+In this case, we're only overriding `onChange` to see all state changes that occur.
 
-## Counter Bloc
+?> **Note**: `onChange` works the same way for both `Bloc` and `Cubit` instances.
 
-[counter_bloc.dart](../_snippets/flutter_counter_tutorial/counter_bloc.dart.md ':include')
+## main.dart
 
-?> **Nota**: Apenas a partir da declaração da classe, podemos dizer que o nosso `CounterBloc` aceitará o` CounterEvents` como números inteiros de entrada e saída.
+Next, let's replace the contents of `main.dart` with:
+
+[main.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/main.dart ':include')
+
+We're initializing the `CounterObserver` we just created and calling `runApp` with the `CounterApp` widget which we'll look at next.
 
 ## Counter App
 
-Agora que temos nosso `CounterBloc` totalmente implementado, podemos começar a criar nosso aplicativo Flutter.
+`CounterApp` will be a `MaterialApp` and is specifying the `home` as `CounterPage`.
 
-[main.dart](../_snippets/flutter_counter_tutorial/main.dart.md ':include')
+[app.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/app.dart ':include')
 
-?> **Nota**: Estamos usando o widget `BlocProvider` do `flutter_bloc` para tornar a instância do `CounterBloc` disponível para toda a subárvore (`CounterPage`). O `BlocProvider` também controla o fechamento do `CounterBloc` automaticamente, para que não seja necessário usar um `StatefulWidget`.
+?> **Note**: We are extending `MaterialApp` because `CounterApp` _is_ a `MaterialApp`. In most cases, we're going to be creating `StatelessWidget` or `StatefulWidget` instances and composing widgets in `build` but in this case there are no widgets to compose so it's simpler to just extend `MaterialApp`.
+
+Let's take a look at `CounterPage` next!
 
 ## Counter Page
 
-Finalmente, tudo o que resta é criar nossa página de contador.
+The `CounterPage` widget is responsible for creating a `CounterCubit` (which we will look at next) and providing it to the `CounterView`.
 
-[counter_page.dart](../_snippets/flutter_counter_tutorial/counter_page.dart.md ':include')
+[counter_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_page.dart ':include')
 
-?> **Nota**: Podemos acessar a instância do `CounterBloc` usando o `BlocProvider.of<CounterBloc>(context)` porque envolvemos nossa `CounterPage` em um `BlocProvider`.
+?> **Note**: It's important to separate or decouple the creation of a `Cubit` from the consumption of a `Cubit` in order to have code that is much more testable and reusable.
 
-?> **Nota**: Estamos usando o widget `BlocBuilder` do `flutter_bloc` para reconstruir nossa interface do usuário em resposta a alterações de estado (alterações no valor do contador).
+## Counter Cubit
 
-?> **Nota**: `BlocBuilder` usa um parâmetro opcional `bloc`, mas podemos especificar o tipo do blocc e o tipo do estado, e o `BlocBuilder` encontrará o bloc automaticamente, assim não precisamos explicitar use `BlocProvider.of<CounterBloc>(context)`.
+The `CounterCubit` class will expose two methods:
 
-!> Especifique apenas o bloc no `BlocBuilder` se desejar fornecer um bloc com escopo definido para um único widget e que não possa ser acessado pelo pai` BlocProvider` e pelo atual `BuildContext`.
+- `increment`: adds 1 to the current state
+- `decrement`: subtracts 1 from the current state
 
-É isso aí! Separamos nossa camada de apresentação da nossa camada de lógica de negócios. Nossa `CounterPage` não faz ideia do que acontece quando um usuário pressiona um botão; apenas adiciona um evento para notificar o `CounterBloc`. Além disso, nosso `CounterBloc` não faz ideia do que está acontecendo com o estado (valor do contador); é simplesmente converter os `CounterEvents` em números inteiros.
+The type of state the `CounterCubit` is managing is just an `int` and the initial state is `0`.
 
-Podemos executar nosso aplicativo com `flutter run` e podemos vê-lo em nosso dispositivo ou simulador / emulador.
+[counter_cubit.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/cubit/counter_cubit.dart ':include')
 
-O código fonte completo deste exemplo pode ser encontrado [aqui](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/example).
+?> **Tip**: Use the [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) or [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) to create new cubits automatically.
+
+Next, let's take a look at the `CounterView` which will be responsible for consuming the state and interacting with the `CounterCubit`.
+
+## Counter View
+
+The `CounterView` is responsible for rendering the current count and rendering two FloatingActionButtons to increment/decrement the counter.
+
+[counter_view.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_view.dart ':include')
+
+A `BlocBuilder` is used to wrap the `Text` widget in order to update the text any time the `CounterCubit` state changes. In addition, `context.bloc<CounterCubit>()` is used to look-up the closest `CounterCubit` instance.
+
+?> **Note**: Only the `Text` widget is wrapped in a `BlocBuilder` because that is the only widget that needs to be rebuilt in response to state changes in the `CounterCubit`. Avoid unnecessarily wrapping widgets that don't need to be rebuilt when a state changes.
+
+That's it! We've separated the presentation layer from the business logic layer. The `CounterView` has no idea what happens when a user presses a button; it just notifies the `CounterCubit`. Furthermore, the `CounterCubit` has no idea what is happening with the state (counter value); it's simply emitting new states in response to the methods being called.
+
+We can run our app with `flutter run` and can view it on our device or simulator/emulator.
+
+The full source (including unit and widget tests) for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_counter).

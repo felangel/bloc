@@ -6,10 +6,8 @@ class MyCart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Cart'),
-      ),
-      body: Container(
+      appBar: AppBar(title: const Text('Cart')),
+      body: ColoredBox(
         color: Colors.yellow,
         child: Column(
           children: [
@@ -42,7 +40,7 @@ class _CartList extends StatelessWidget {
           return ListView.builder(
             itemCount: state.items.length,
             itemBuilder: (context, index) => ListTile(
-              leading: Icon(Icons.done),
+              leading: const Icon(Icons.done),
               title: Text(
                 state.items[index].name,
                 style: itemNameStyle,
@@ -50,7 +48,7 @@ class _CartList extends StatelessWidget {
             ),
           );
         }
-        return Text('Something went wrong!');
+        return const Text('Something went wrong!');
       },
     );
   }

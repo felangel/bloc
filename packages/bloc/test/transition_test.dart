@@ -13,8 +13,9 @@ class SimpleTransitionEvent extends TransitionEvent {}
 class SimpleTransitionState extends TransitionState {}
 
 class CounterEvent extends TransitionEvent {
-  final String eventData;
   CounterEvent(this.eventData);
+
+  final String eventData;
 
   @override
   bool operator ==(Object other) =>
@@ -28,8 +29,9 @@ class CounterEvent extends TransitionEvent {
 }
 
 class CounterState extends TransitionState {
-  final int count;
   CounterState(this.count);
+
+  final int count;
 
   @override
   bool operator ==(Object other) =>
@@ -54,9 +56,7 @@ void main() {
             event: SimpleTransitionEvent(),
             nextState: SimpleTransitionState(),
           ),
-          isNot(throwsA(
-            TypeMatcher<AssertionError>(),
-          )),
+          isNot(throwsA(isA<AssertionError>())),
         );
       });
 
@@ -69,9 +69,7 @@ void main() {
             event: null,
             nextState: SimpleTransitionState(),
           ),
-          isNot(throwsA(
-            TypeMatcher<AssertionError>(),
-          )),
+          isNot(throwsA(isA<AssertionError>())),
         );
       });
 
@@ -84,9 +82,7 @@ void main() {
             event: SimpleTransitionEvent(),
             nextState: null,
           ),
-          isNot(throwsA(
-            TypeMatcher<AssertionError>(),
-          )),
+          isNot(throwsA(isA<AssertionError>())),
         );
       });
 

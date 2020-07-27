@@ -7,6 +7,7 @@ on:
       - "packages/flutter_bloc/**"
       - "examples/flutter_bloc_with_stream/**"
       - "examples/flutter_complex_list/**"
+      - "examples/flutter_counter/**"
       - "examples/flutter_dynamic_form/**"
       - "examples/flutter_firebase_login/**"
       - "examples/flutter_firestore_todos/**"
@@ -27,6 +28,7 @@ on:
       - "packages/flutter_bloc/**"
       - "examples/flutter_bloc_with_stream/**"
       - "examples/flutter_complex_list/**"
+      - "examples/flutter_counter/**"
       - "examples/flutter_dynamic_form/**"
       - "examples/flutter_firebase_login/**"
       - "examples/flutter_firestore_todos/**"
@@ -50,6 +52,7 @@ jobs:
             "packages/flutter_bloc/example",
             "examples/flutter_bloc_with_stream",
             "examples/flutter_complex_list",
+            "examples/flutter_counter",
             "examples/flutter_dynamic_form",
             "examples/flutter_firebase_login",
             "examples/flutter_firestore_todos",

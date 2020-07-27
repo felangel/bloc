@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns#">
   <head>
     <meta charset="UTF-8" />
     <title>Bloc</title>
@@ -8,6 +8,12 @@
     <meta
       name="viewport"
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="bloc library" />
+    <meta
+      property="og:description"
+      content="a predictable state management library"
     />
     <link
       rel="icon"
@@ -21,14 +27,25 @@
     <script>
       window.$docsify = {
         alias: {
-          "/.*/_navbar.md": "/_navbar.md"
+          "/.*/_navbar.md": "/_navbar.md",
         },
         name: "Bloc",
         repo: "https://github.com/felangel/bloc",
         homepage:
           "https://raw.githubusercontent.com/felangel/bloc/master/README.md",
         loadSidebar: true,
-        coverpage: ["/", "/ko-kr/", "/fr/", "/pt-br/", "/cs/", "/es/", "/ru/", "/zh-cn/", "/az/", "/jp/"],
+        coverpage: [
+          "/",
+          "/ko-kr/",
+          "/fr/",
+          "/pt-br/",
+          "/cs/",
+          "/es/",
+          "/ru/",
+          "/zh-cn/",
+          "/az/",
+          "/jp/",
+        ],
         fallbackLanguages: ["en"],
         auto2top: true,
         autoHeader: false,
@@ -40,13 +57,10 @@
           paths: "auto",
           placeholder: "Search",
           noData: "No Results.",
-          depth: 6
+          depth: 6,
         },
-        ga: "UA-131259352-1"
+        ga: "UA-131259352-1",
       };
-      if (typeof navigator.serviceWorker !== "undefined") {
-        navigator.serviceWorker.register("sw.js");
-      }
     </script>
     <script src="./docsify/lib/docsify.min.js"></script>
     <script src="./docsify/lib/plugins/emoji.min.js"></script>

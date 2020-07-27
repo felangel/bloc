@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_cubit/flutter_cubit.dart';
-import 'package:hydrated_cubit/hydrated_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:replay_cubit/replay_cubit.dart';
 
 void main() async {
@@ -17,7 +17,7 @@ void main() async {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CubitProvider<CounterCubit>(
+    return BlocProvider<CounterCubit>(
       create: (_) => CounterCubit(),
       child: MaterialApp(
         home: CounterPage(),
@@ -36,18 +36,18 @@ class CounterPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Counter'),
         actions: [
-          CubitBuilder<CounterCubit, int>(
+          BlocBuilder<CounterCubit, int>(
             builder: (context, state) {
-              final cubit = context.cubit<CounterCubit>();
+              final cubit = context.bloc<CounterCubit>();
               return IconButton(
                 icon: const Icon(Icons.undo),
                 onPressed: cubit.canUndo ? cubit.undo : null,
               );
             },
           ),
-          CubitBuilder<CounterCubit, int>(
+          BlocBuilder<CounterCubit, int>(
             builder: (context, state) {
-              final cubit = context.cubit<CounterCubit>();
+              final cubit = context.bloc<CounterCubit>();
               return IconButton(
                 icon: const Icon(Icons.redo),
                 onPressed: cubit.canRedo ? cubit.redo : null,
@@ -56,7 +56,7 @@ class CounterPage extends StatelessWidget {
           ),
         ],
       ),
-      body: CubitBuilder<CounterCubit, int>(
+      body: BlocBuilder<CounterCubit, int>(
         builder: (BuildContext context, int state) {
           return Center(child: Text('$state', style: textTheme));
         },
@@ -69,21 +69,21 @@ class CounterPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: const Icon(Icons.add),
-              onPressed: () => context.cubit<CounterCubit>().increment(),
+              onPressed: () => context.bloc<CounterCubit>().increment(),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: const Icon(Icons.remove),
-              onPressed: () => context.cubit<CounterCubit>().decrement(),
+              onPressed: () => context.bloc<CounterCubit>().decrement(),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: const Icon(Icons.delete_forever),
-              onPressed: () => context.cubit<CounterCubit>()
+              onPressed: () => context.bloc<CounterCubit>()
                 ..reset()
                 ..clear()
                 ..clearHistory(),

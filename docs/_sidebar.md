@@ -3,8 +3,8 @@
   - [Getting Started](gettingstarted.md)
   - [Why Bloc?](whybloc.md)
   - Core Concepts
-    - [bloc](coreconcepts.md)
-    - [flutter_bloc](flutterbloccoreconcepts.md)
+    - [package:bloc](coreconcepts.md)
+    - [package:flutter_bloc](flutterbloccoreconcepts.md)
   - [Architecture](architecture.md)
   - [Testing](testing.md)
   - [Naming Conventions](blocnamingconventions.md)
@@ -14,10 +14,10 @@
 - Tutorials
 
   - Flutter
-    - [Counter](fluttercountertutorial.md)
+    - [**Counter** <sup>✨</sup>](fluttercountertutorial.md)
     - [Timer](fluttertimertutorial.md)
     - [Infinite List](flutterinfinitelisttutorial.md)
-    - [Login](flutterlogintutorial.md)
+    - [**Login** <sup>✨</sup>](flutterlogintutorial.md)
     - [Weather](flutterweathertutorial.md)
     - [Todos](fluttertodostutorial.md)
     - [Firebase Login](flutterfirebaselogintutorial.md)
