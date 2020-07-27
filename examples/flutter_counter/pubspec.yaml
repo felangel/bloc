@@ -1,0 +1,24 @@
+name: flutter_counter
+description: A new Flutter project.
+
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  bloc: ^6.0.0
+  flutter_bloc: ^6.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  bloc_test: ^7.0.0
+  mockito: ^4.0.0
+
+flutter:
+  uses-material-design: true
