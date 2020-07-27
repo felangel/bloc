@@ -13,10 +13,10 @@
 - 教程 (Tutorials)
 
   - Flutter
-    - [计数器](zh-cn/fluttercountertutorial.md)
+    - [**计数器** <sup>✨</sup>](zh-cn/fluttercountertutorial.md)
     - [秒表](zh-cn/fluttertimertutorial.md)
     - [无限列表](zh-cn/flutterinfinitelisttutorial.md)
-    - [登陆](zh-cn/flutterlogintutorial.md)
+    - [**登陆** <sup>✨</sup>](zh-cn/flutterlogintutorial.md)
     - [天气](zh-cn/flutterweathertutorial.md)
     - [备忘录](zh-cn/fluttertodostutorial.md)
     - [Firebase 登陆](zh-cn/flutterfirebaselogintutorial.md)

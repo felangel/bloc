@@ -13,7 +13,7 @@
 - Dərsliklər
 
   - Flutter
-    - [Sayğac](fluttercountertutorial.md)
+    - [**Sayğac** <sup>✨</sup>](fluttercountertutorial.md)
     - [Taymer](fluttertimertutorial.md)
     - [Sonsuz List](flutterinfinitelisttutorial.md)
     - [Login](flutterlogintutorial.md)

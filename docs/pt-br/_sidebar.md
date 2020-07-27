@@ -13,10 +13,10 @@
 - Tutoriais
 
   - Flutter
-    - [Contador](pt-br/fluttercountertutorial.md)
+    - [**Contador** <sup>✨</sup>](pt-br/fluttercountertutorial.md)
     - [Timer](pt-br/fluttertimertutorial.md)
     - [Lista infinita](pt-br/flutterinfinitelisttutorial.md)
-    - [Login](pt-br/flutterlogintutorial.md)
+    - [**Login** <sup>✨</sup>](pt-br/flutterlogintutorial.md)
     - [Clima](pt-br/flutterweathertutorial.md)
     - [ToDos](pt-br/fluttertodostutorial.md)
     - [Login com Firebase](pt-br/flutterfirebaselogintutorial.md)
