@@ -8,7 +8,7 @@
 
 **BlocBuilder** es un widget de Flutter que requiere una función `Bloc` y un `builder`. `BlocBuilder` maneja la construcción del widget en respuesta a nuevos estados. `BlocBuilder` es muy similar a `StreamBuilder` pero tiene una API más simple para reducir la cantidad de código repetitivo necesario. La función `builder` se llamará muchas veces y debería ser una [función pura](https://en.wikipedia.org/wiki/Pure_function) que devuelve un widget en respuesta al estado.
 
-Consulte `BlocListener` si desea "hacer"algo en respuesta a cambios de estado como navegación, mostrar un diálogo, etc...
+Consulte `BlocListener` si desea "hacer" algo en respuesta a cambios de estado como navegación, mostrar un diálogo, etc...
 
 Si se omite el parámetro bloc, `BlocBuilder` realizará automáticamente una búsqueda utilizando `BlocProvider` y el actual `BuildContext`.
 
