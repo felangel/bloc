@@ -14,7 +14,7 @@
 - Tutorials
 
   - Flutter
-    - [Counter](fluttercountertutorial.md)
+    - [**Counter** <sup>✨</sup>](fluttercountertutorial.md)
     - [Timer](fluttertimertutorial.md)
     - [Infinite List](flutterinfinitelisttutorial.md)
     - [**Login** <sup>✨</sup>](flutterlogintutorial.md)

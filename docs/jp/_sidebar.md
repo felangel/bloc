@@ -13,7 +13,7 @@
 - チュートリアル
 
   - Flutter
-    - [カウンター](jp/fluttercountertutorial.md)
+    - [**カウンター** <sup>✨</sup>](jp/fluttercountertutorial.md)
     - [タイマー](jp/fluttertimertutorial.md)
     - [無限リスト](jp/flutterinfinitelisttutorial.md)
     - [**ログイン** <sup>✨</sup>](jp/flutterlogintutorial.md)
