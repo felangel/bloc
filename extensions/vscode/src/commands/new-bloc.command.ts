@@ -30,7 +30,7 @@ export const newBloc = async (uri: Uri) => {
     targetDirectory = uri.fsPath;
   }
 
-  const useDependency = await getUsingDependency();
+  const dependency = await getUsingDependency();
   const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
   try {
     await generateBlocCode(blocName, targetDirectory, useDependency);
