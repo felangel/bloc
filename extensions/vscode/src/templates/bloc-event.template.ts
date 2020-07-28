@@ -3,7 +3,7 @@ import { Dependency } from "../consts/dependency_enum";
 
 export function getBlocEventTemplate(
   blocName: string,
-  useDependcy: Dependency
+  dependency: Dependency
 ): string {
   switch (useDependcy) {
     case Dependency.Freezed:
