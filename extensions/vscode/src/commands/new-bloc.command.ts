@@ -135,7 +135,7 @@ function createBlocStateTemplate(
   return new Promise(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getBlocStateTemplate(blocName, useDependency),
+      getBlocStateTemplate(blocName, dependency),
       "utf8",
       (error) => {
         if (error) {
