@@ -161,7 +161,7 @@ function createBlocTemplate(
   return new Promise(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getBlocTemplate(blocName, useDependency),
+      getBlocTemplate(blocName, dependency),
       "utf8",
       (error) => {
         if (error) {
