@@ -5,7 +5,7 @@ export function getBlocTemplate(
   blocName: string,
   dependency: Dependency
 ): string {
-  switch (useDependcy) {
+  switch (dependency) {
     case Dependency.Freezed:
       return getFreezedBlocTemplate(blocName);
     case Dependency.Equatable:
