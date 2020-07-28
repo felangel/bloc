@@ -8,7 +8,7 @@
     "body": "const factory ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}.${1:eventName}($2) = _${1/(.*)/${1:/capitalize}/};\n$3"
   },
   "create a map event to state function with freeze.when function": {
-    "prefix": "fmapToState",
+    "prefix": "feventToState",
     "body": [
       "Stream<${TM_FILENAME_BASE/(.*)(?=_bloc)(_bloc)/${1:/pascalcase}/g}State> _${1:event}ToState($2) async* {",
       "${3}",
