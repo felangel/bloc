@@ -125,7 +125,7 @@ function createBlocEventTemplate(
 function createBlocStateTemplate(
   blocName: string,
   targetDirectory: string,
-  useDependency: Dependency
+  dependency: Dependency
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
   const targetPath = `${targetDirectory}/bloc/${snakeCaseBlocName}_state.dart`;
