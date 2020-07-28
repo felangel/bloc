@@ -44,6 +44,6 @@ function getFreezedBlocEvent(blocName: string): string {
 
 @freezed
 abstract class ${pascalCaseBlocName} with _\$${pascalCaseBlocName} {
-  const factory ${pascalCaseBlocName}.event1() = Event1;
+  const factory ${pascalCaseBlocName}.started() = _Started;
 }`;
 }
