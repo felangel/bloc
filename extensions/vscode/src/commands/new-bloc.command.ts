@@ -71,7 +71,7 @@ async function promptForTargetDirectory(): Promise<string | undefined> {
 async function generateBlocCode(
   blocName: string,
   targetDirectory: string,
-  useDependency: Dependency
+  dependency: Dependency
 ) {
   const blocDirectoryPath = `${targetDirectory}/bloc`;
   if (!existsSync(blocDirectoryPath)) {
