@@ -16,7 +16,7 @@
     ]
   },
   "create a map event to state function with freeze.map function": {
-    "prefix": "ftoStateMap",
+    "prefix": "fmapEventToState",
     "body": [
       "Stream<${TM_FILENAME_BASE/(.*)(?=_bloc)(_bloc)/${1:/pascalcase}/g}State> _${1:event}ToState(_${2:eventClass} event) async* {",
       "${3}",
