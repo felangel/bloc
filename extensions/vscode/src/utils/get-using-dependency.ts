@@ -1,7 +1,7 @@
 import { hasDependency } from "./has-dependency";
 import { Dependency } from "../consts/dependency_enum";
 
-const equaltable = "equatable";
+const equatable = "equatable";
 const freezed = "freezed";
 const freezed_annotation = "freezed_annotation";
 
