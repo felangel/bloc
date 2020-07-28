@@ -79,9 +79,9 @@ async function generateBlocCode(
   }
 
   await Promise.all([
-    createBlocEventTemplate(blocName, targetDirectory, useDependency),
-    createBlocStateTemplate(blocName, targetDirectory, useDependency),
-    createBlocTemplate(blocName, targetDirectory, useDependency),
+    createBlocEventTemplate(blocName, targetDirectory, dependency),
+    createBlocStateTemplate(blocName, targetDirectory, dependency),
+    createBlocTemplate(blocName, targetDirectory, dependency),
   ]);
 }
 
