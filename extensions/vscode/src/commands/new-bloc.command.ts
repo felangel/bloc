@@ -33,7 +33,7 @@ export const newBloc = async (uri: Uri) => {
   const dependency = await getUsingDependency();
   const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
   try {
-    await generateBlocCode(blocName, targetDirectory, useDependency);
+    await generateBlocCode(blocName, targetDirectory, dependency);
     window.showInformationMessage(
       `Successfully Generated ${pascalCaseBlocName} Bloc`
     );
