@@ -5,7 +5,7 @@ export function getBlocEventTemplate(
   blocName: string,
   dependency: Dependency
 ): string {
-  switch (useDependcy) {
+  switch (dependency) {
     case Dependency.Freezed:
       return getFreezedBlocEvent(blocName);
     case Dependency.Equatable:
