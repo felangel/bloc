@@ -29,11 +29,10 @@ Bloc can be installed from the [VSCode Marketplace](https://marketplace.visualst
 
 ## Commands
 
-| Command                  | Description                                   |
-| ------------------------ | --------------------------------------------- |
-| `Bloc: New Bloc`         | Generate a new Bloc                           |
-| `Cubit: New Cubit`       | Generate a new Cubit                          |
-| `Bloc: New Freezed Bloc` | Generate a new Bloc using the freezed library |
+| Command            | Description          |
+| ------------------ | -------------------- |
+| `Bloc: New Bloc`   | Generate a new Bloc  |
+| `Cubit: New Cubit` | Generate a new Cubit |
 
 You can activate the commands by launching the command palette (View -> Command Palette) and running entering the command name.
 
