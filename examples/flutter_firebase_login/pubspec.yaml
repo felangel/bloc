@@ -20,6 +20,12 @@ dependencies:
   authentication_repository:
     path: packages/authentication_repository
 
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  bloc_test: ^7.0.0
+  mockito: ^4.0.0
+
 flutter:
   uses-material-design: true
   assets:
