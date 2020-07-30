@@ -1,11 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/single_child_widget.dart';
-
-/// Mixin which allows `MultiBlocListener` to infer the types
-/// of multiple [BlocListener]s.
-mixin BlocListenerSingleChildWidget on SingleChildWidget {}
+import 'package:flutter_bloc/src/cubit/cubit_listener.dart';
 
 /// Signature for the `listener` function which takes the `BuildContext` along
 /// with the `state` and is responsible for executing in response to
@@ -76,7 +72,7 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 /// ```
 /// {@endtemplate}
 class BlocListener<B extends Bloc<Object, S>, S> extends CubitListener<B, S>
-    with BlocListenerSingleChildWidget {
+    with CubitListenerSingleChildWidget {
   /// {@macro bloc_listener}
   const BlocListener({
     Key key,

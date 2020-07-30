@@ -34,7 +34,7 @@ class MyThemeAppState extends State<MyThemeApp> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<Cubit<ThemeData>, ThemeData>(
+    return CubitBuilder<Cubit<ThemeData>, ThemeData>(
       cubit: _themeCubit,
       builder: ((context, theme) {
         _onBuild();
@@ -92,7 +92,7 @@ class MyCounterAppState extends State<MyCounterApp> {
         key: const Key('myCounterApp'),
         body: Column(
           children: <Widget>[
-            BlocBuilder<CounterCubit, int>(
+            CubitBuilder<CounterCubit, int>(
               cubit: _cubit,
               buildWhen: (previousState, state) {
                 return (previousState + state) % 3 == 0;
@@ -104,7 +104,7 @@ class MyCounterAppState extends State<MyCounterApp> {
                 );
               },
             ),
-            BlocBuilder<CounterCubit, int>(
+            CubitBuilder<CounterCubit, int>(
               cubit: _cubit,
               builder: (context, count) {
                 return Text(
@@ -132,12 +132,12 @@ class CounterCubit extends Cubit<int> {
 }
 
 void main() {
-  group('BlocBuilder', () {
+  group('CubitBuilder', () {
     testWidgets('throws if initialized with null cubit and builder',
         (tester) async {
       try {
         await tester.pumpWidget(
-          BlocBuilder<ThemeCubit, ThemeData>(
+          CubitBuilder<ThemeCubit, ThemeData>(
             cubit: null,
             builder: null,
           ),
@@ -150,7 +150,7 @@ void main() {
     testWidgets('throws if initialized with null builder', (tester) async {
       try {
         await tester.pumpWidget(
-          BlocBuilder<ThemeCubit, ThemeData>(
+          CubitBuilder<ThemeCubit, ThemeData>(
             cubit: ThemeCubit(),
             builder: null,
           ),
@@ -201,9 +201,9 @@ void main() {
       final themeCubit = ThemeCubit();
       var numBuilds = 0;
       await tester.pumpWidget(
-        BlocProvider.value(
+        CubitProvider.value(
           value: themeCubit,
-          child: BlocBuilder<ThemeCubit, ThemeData>(
+          child: CubitBuilder<ThemeCubit, ThemeData>(
             builder: (context, theme) {
               numBuilds++;
               return MaterialApp(

@@ -26,14 +26,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     if (_value != null) {
       return MaterialApp(
-        home: BlocProvider<CounterCubit>.value(
+        home: CubitProvider<CounterCubit>.value(
           value: _value,
           child: _child,
         ),
       );
     }
     return MaterialApp(
-      home: BlocProvider<CounterCubit>(
+      home: CubitProvider<CounterCubit>(
         create: _create,
         child: _child,
       ),
@@ -65,7 +65,7 @@ class _MyStatefulAppState extends State<MyStatefulApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocProvider<CounterCubit>(
+      home: CubitProvider<CounterCubit>(
         create: (context) => cubit,
         child: Scaffold(
           appBar: AppBar(
@@ -104,11 +104,11 @@ class CounterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final counterCubit = BlocProvider.of<CounterCubit>(context);
+    final counterCubit = CubitProvider.of<CounterCubit>(context);
     assert(counterCubit != null);
 
     return Scaffold(
-      body: BlocBuilder<CounterCubit, int>(
+      body: CubitBuilder<CounterCubit, int>(
         cubit: counterCubit,
         builder: (context, count) {
           if (onBuild != null) {
@@ -140,7 +140,7 @@ class RoutePage extends StatelessWidget {
           RaisedButton(
             key: const Key('increment_buton'),
             onPressed: () {
-              BlocProvider.of<CounterCubit>(context).increment();
+              CubitProvider.of<CounterCubit>(context).increment();
             },
           ),
         ],
@@ -164,7 +164,7 @@ class CounterCubit extends Cubit<int> {
 }
 
 void main() {
-  group('BlocProvider', () {
+  group('CubitProvider', () {
     testWidgets('throws if initialized with no create', (tester) async {
       await tester.pumpWidget(const MyApp(create: null, child: CounterPage()));
       expect(tester.takeException(), isInstanceOf<AssertionError>());
@@ -181,7 +181,7 @@ void main() {
     testWidgets('lazily loads cubits by default', (tester) async {
       var createCalled = false;
       await tester.pumpWidget(
-        BlocProvider(
+        CubitProvider(
           create: (_) {
             createCalled = true;
             return CounterCubit();
@@ -195,7 +195,7 @@ void main() {
     testWidgets('lazily loads cubits by default', (tester) async {
       var createCalled = false;
       await tester.pumpWidget(
-        BlocProvider(
+        CubitProvider(
           create: (_) {
             createCalled = true;
             return CounterCubit();
@@ -209,7 +209,7 @@ void main() {
     testWidgets('can override lazy loading', (tester) async {
       var createCalled = false;
       await tester.pumpWidget(
-        BlocProvider(
+        CubitProvider(
           lazy: false,
           create: (_) {
             createCalled = true;
@@ -225,11 +225,11 @@ void main() {
       final key = const Key('__text_count__');
       await tester.pumpWidget(
         MaterialApp(
-          home: BlocProvider(
+          home: CubitProvider(
             create: (_) => CounterCubit(),
             child: Builder(
               builder: (context) => Text(
-                '${BlocProvider.of<CounterCubit>(context).state}',
+                '${CubitProvider.of<CounterCubit>(context).state}',
                 key: key,
               ),
             ),
@@ -259,9 +259,9 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: BlocProvider(
+              body: CubitProvider(
                 create: (context) => CounterCubit(),
-                child: BlocBuilder<CounterCubit, int>(
+                child: CubitBuilder<CounterCubit, int>(
                   builder: (context, state) => Text('state: $state'),
                 ),
               ),
@@ -278,16 +278,16 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: BlocProvider(
+              body: CubitProvider(
                 create: (_) => CounterCubit(),
-                child: BlocBuilder<CounterCubit, int>(
+                child: CubitBuilder<CounterCubit, int>(
                   builder: (context, state) => Column(
                     children: [
                       Text('state: $state'),
                       RaisedButton(
                         key: const Key('increment_button'),
                         onPressed: () {
-                          context.bloc<CounterCubit>().increment();
+                          context.cubit<CounterCubit>().increment();
                         },
                       ),
                     ],
@@ -360,15 +360,15 @@ void main() {
     });
 
     testWidgets(
-        'should throw FlutterError if BlocProvider is not found in current '
+        'should throw FlutterError if CubitProvider is not found in current '
         'context', (tester) async {
       await tester.pumpWidget(const MyAppNoProvider(home: CounterPage()));
       final dynamic exception = tester.takeException();
       final expectedMessage = '''
-        BlocProvider.of() called with a context that does not contain a Cubit of type CounterCubit.
-        No ancestor could be found starting from the context that was passed to BlocProvider.of<CounterCubit>().
+        CubitProvider.of() called with a context that does not contain a Cubit of type CounterCubit.
+        No ancestor could be found starting from the context that was passed to CubitProvider.of<CounterCubit>().
 
-        This can happen if the context you used comes from a widget above the BlocProvider.
+        This can happen if the context you used comes from a widget above the CubitProvider.
 
         The context used was: CounterPage(dirty)
 ''';
@@ -381,7 +381,7 @@ void main() {
         'ProviderNotFoundException with wrong valueType '
         'is thrown', (tester) async {
       await tester.pumpWidget(
-        BlocProvider<CounterCubit>(
+        CubitProvider<CounterCubit>(
           create: (context) => CounterCubit(onClose: Provider.of(context)),
           child: const CounterPage(),
         ),
@@ -395,7 +395,7 @@ void main() {
         'exception is thrown', (tester) async {
       final expectedException = Exception('oops');
       await tester.pumpWidget(
-        BlocProvider<CounterCubit>(
+        CubitProvider<CounterCubit>(
           lazy: false,
           create: (_) => throw expectedException,
           child: Container(),
@@ -420,15 +420,15 @@ void main() {
 
     testWidgets(
         'should access cubit instance'
-        'via BlocProviderExtension', (tester) async {
+        'via CubitProviderExtension', (tester) async {
       await tester.pumpWidget(
-        BlocProvider(
+        CubitProvider(
           create: (_) => CounterCubit(),
           child: MaterialApp(
             home: Scaffold(
               body: Builder(
                 builder: (context) => Text(
-                  '${context.bloc<CounterCubit>().state}',
+                  '${context.cubit<CounterCubit>().state}',
                   key: const Key('value_data'),
                 ),
               ),

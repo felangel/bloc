@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/src/cubit/cubit_listener.dart';
 import 'package:provider/provider.dart';
 
 import 'bloc_listener.dart';
@@ -53,7 +54,7 @@ class MultiBlocListener extends MultiProvider {
   /// {@macro multi_bloc_listener}
   MultiBlocListener({
     Key key,
-    @required List<BlocListenerSingleChildWidget> listeners,
+    @required List<CubitListenerSingleChildWidget> listeners,
     @required Widget child,
   })  : assert(listeners != null),
         assert(child != null),

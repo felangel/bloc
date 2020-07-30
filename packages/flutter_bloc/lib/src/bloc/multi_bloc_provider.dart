@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/src/cubit/cubit_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'bloc_provider.dart';
@@ -52,7 +53,7 @@ class MultiBlocProvider extends MultiProvider {
   /// {@macro multi_bloc_provider}
   MultiBlocProvider({
     Key key,
-    @required List<BlocProviderSingleChildWidget> providers,
+    @required List<CubitProviderSingleChildWidget> providers,
     @required Widget child,
   })  : assert(providers != null),
         assert(child != null),

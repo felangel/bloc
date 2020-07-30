@@ -12,7 +12,7 @@ class CounterCubit extends Cubit<int> {
 class MyApp extends StatefulWidget {
   const MyApp({Key key, this.onListenerCalled}) : super(key: key);
 
-  final BlocWidgetListener<int> onListenerCalled;
+  final CubitWidgetListener<int> onListenerCalled;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: BlocListener<CounterCubit, int>(
+        body: CubitListener<CounterCubit, int>(
           cubit: _counterCubit,
           listener: (context, state) {
             widget.onListenerCalled?.call(context, state);
@@ -69,12 +69,12 @@ class _MyAppState extends State<MyApp> {
 }
 
 void main() {
-  group('BlocListener', () {
+  group('CubitListener', () {
     testWidgets('throws if initialized with null cubit, listener, and child',
         (tester) async {
       try {
         await tester.pumpWidget(
-          BlocListener<Cubit, dynamic>(
+          CubitListener<Cubit, dynamic>(
             cubit: null,
             listener: null,
             child: null,
@@ -90,7 +90,7 @@ void main() {
         (tester) async {
       try {
         await tester.pumpWidget(
-          BlocListener<CounterCubit, int>(
+          CubitListener<CounterCubit, int>(
             cubit: CounterCubit(),
             listener: null,
             child: null,
@@ -105,7 +105,7 @@ void main() {
     testWidgets('renders child properly', (tester) async {
       const targetKey = Key('cubit_listener_container');
       await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
+        CubitListener<CounterCubit, int>(
           cubit: CounterCubit(),
           listener: (_, __) {},
           child: const SizedBox(key: targetKey),
@@ -119,7 +119,7 @@ void main() {
       final states = <int>[];
       const expectedStates = [1];
       await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
+        CubitListener<CounterCubit, int>(
           cubit: counterCubit,
           listener: (_, state) {
             states.add(state);
@@ -137,7 +137,7 @@ void main() {
       final states = <int>[];
       const expectedStates = [1, 2];
       await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
+        CubitListener<CounterCubit, int>(
           cubit: counterCubit,
           listener: (_, state) {
             states.add(state);
@@ -233,7 +233,7 @@ void main() {
       final counterCubit = CounterCubit();
       const expectedStates = [1];
       await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
+        CubitListener<CounterCubit, int>(
           cubit: counterCubit,
           listenWhen: (previous, state) {
             listenWhenCallCount++;
@@ -262,7 +262,7 @@ void main() {
       final counterCubit = CounterCubit();
       const expectedStates = [2];
       await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
+        CubitListener<CounterCubit, int>(
           cubit: counterCubit,
           listenWhen: (previous, state) {
             listenWhenCallCount++;
@@ -298,9 +298,9 @@ void main() {
       final counterCubit = CounterCubit();
       const expectedStates = [1];
       await tester.pumpWidget(
-        BlocProvider.value(
+        CubitProvider.value(
           value: counterCubit,
-          child: BlocListener<CounterCubit, int>(
+          child: CubitListener<CounterCubit, int>(
             listenWhen: (previous, state) {
               listenWhenCallCount++;
               latestPreviousState = previous;
@@ -329,7 +329,7 @@ void main() {
       final counterCubit = CounterCubit();
       const expectedStates = [1, 2];
       await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
+        CubitListener<CounterCubit, int>(
           cubit: counterCubit,
           listenWhen: (previous, state) {
             listenWhenCallCount++;
@@ -359,7 +359,7 @@ void main() {
       final counterCubit = CounterCubit();
       const expectedStates = <int>[];
       await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
+        CubitListener<CounterCubit, int>(
           cubit: counterCubit,
           listenWhen: (_, __) => false,
           listener: (_, state) => states.add(state),
@@ -379,7 +379,7 @@ void main() {
       final counterCubit = CounterCubit();
       const expectedStates = [1];
       await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
+        CubitListener<CounterCubit, int>(
           cubit: counterCubit,
           listenWhen: (_, __) => true,
           listener: (_, state) => states.add(state),
@@ -399,7 +399,7 @@ void main() {
       final counterCubit = CounterCubit();
       const expectedStates = <int>[];
       await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
+        CubitListener<CounterCubit, int>(
           cubit: counterCubit,
           listenWhen: (_, __) => false,
           listener: (_, state) => states.add(state),
@@ -425,7 +425,7 @@ void main() {
       final counterCubit = CounterCubit();
       const expectedStates = [1, 2, 3, 4];
       await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
+        CubitListener<CounterCubit, int>(
           cubit: counterCubit,
           listenWhen: (_, __) => true,
           listener: (_, state) => states.add(state),

@@ -11,11 +11,11 @@ class CounterCubit extends Cubit<int> {
 }
 
 void main() {
-  group('BlocConsumer', () {
+  group('CubitConsumer', () {
     testWidgets('throws AssertionError if builder is null', (tester) async {
       try {
         await tester.pumpWidget(
-          BlocConsumer<CounterCubit, int>(
+          CubitConsumer<CounterCubit, int>(
             builder: null,
             listener: (_, __) {},
           ),
@@ -28,7 +28,7 @@ void main() {
     testWidgets('throws AssertionError if listener is null', (tester) async {
       try {
         await tester.pumpWidget(
-          BlocConsumer<CounterCubit, int>(
+          CubitConsumer<CounterCubit, int>(
             builder: (_, __) => const SizedBox(),
             listener: null,
           ),
@@ -39,14 +39,14 @@ void main() {
     });
 
     testWidgets(
-        'accesses the bloc directly and passes initial state to builder and '
+        'accesses the cubit directly and passes initial state to builder and '
         'nothing to listener', (tester) async {
       final counterCubit = CounterCubit();
       final listenerStates = <int>[];
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: BlocConsumer<CounterCubit, int>(
+            body: CubitConsumer<CounterCubit, int>(
               cubit: counterCubit,
               builder: (context, state) {
                 return Text('State: $state');
@@ -63,14 +63,14 @@ void main() {
     });
 
     testWidgets(
-        'accesses the bloc directly '
+        'accesses the cubit directly '
         'and passes multiple states to builder and listener', (tester) async {
       final counterCubit = CounterCubit();
       final listenerStates = <int>[];
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: BlocConsumer<CounterCubit, int>(
+            body: CubitConsumer<CounterCubit, int>(
               cubit: counterCubit,
               builder: (context, state) {
                 return Text('State: $state');
@@ -91,16 +91,16 @@ void main() {
     });
 
     testWidgets(
-        'accesses the bloc via context and passes initial state to builder',
+        'accesses the cubit via context and passes initial state to builder',
         (tester) async {
       final counterCubit = CounterCubit();
       final listenerStates = <int>[];
       await tester.pumpWidget(
-        BlocProvider<CounterCubit>.value(
+        CubitProvider<CounterCubit>.value(
           value: counterCubit,
           child: MaterialApp(
             home: Scaffold(
-              body: BlocConsumer<CounterCubit, int>(
+              body: CubitConsumer<CounterCubit, int>(
                 cubit: counterCubit,
                 builder: (context, state) {
                   return Text('State: $state');
@@ -118,14 +118,14 @@ void main() {
     });
 
     testWidgets(
-        'accesses the bloc via context and passes multiple states to builder',
+        'accesses the cubit via context and passes multiple states to builder',
         (tester) async {
       final counterCubit = CounterCubit();
       final listenerStates = <int>[];
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: BlocConsumer<CounterCubit, int>(
+            body: CubitConsumer<CounterCubit, int>(
               cubit: counterCubit,
               builder: (context, state) {
                 return Text('State: $state');
@@ -153,7 +153,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: BlocConsumer<CounterCubit, int>(
+            body: CubitConsumer<CounterCubit, int>(
               cubit: counterCubit,
               buildWhen: (previous, current) => (previous + current) % 3 == 0,
               builder: (context, state) {
@@ -194,7 +194,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: BlocConsumer<CounterCubit, int>(
+            body: CubitConsumer<CounterCubit, int>(
               cubit: counterCubit,
               builder: (context, state) {
                 builderStates.add(state);

@@ -1,3 +1,12 @@
+# 7.0.0
+
+- **BREAKING**: add cubit widgets
+- **BREAKING**: change bloc widgets to use cubit widgets internally
+- **BREAKING**: change bloc widgets to only allow using `Bloc`s
+- docs: inline documentation updates
+- docs: README updates
+- docs: example application updates
+
 # 6.0.1
 
 - docs: minor documentation fixes and improvements

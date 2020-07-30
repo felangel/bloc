@@ -27,16 +27,16 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     getProviders() {
-      final providers = <BlocProvider>[];
+      final providers = <CubitProvider>[];
       if (counterCubitValue != null) {
         providers.add(
-          BlocProvider<CounterCubit>.value(
+          CubitProvider<CounterCubit>.value(
             value: counterCubitValue,
           ),
         );
       } else {
         providers.add(
-          BlocProvider<CounterCubit>(
+          CubitProvider<CounterCubit>(
             create: (_) => CounterCubit(onClose: onCounterCubitClosed),
           ),
         );
@@ -44,13 +44,13 @@ class HomePage extends StatelessWidget {
 
       if (themeCubitValue != null) {
         providers.add(
-          BlocProvider<ThemeCubit>.value(
+          CubitProvider<ThemeCubit>.value(
             value: themeCubitValue,
           ),
         );
       } else {
         providers.add(
-          BlocProvider<ThemeCubit>(
+          CubitProvider<ThemeCubit>(
             create: (_) => ThemeCubit(onClose: onThemeCubitClosed),
           ),
         );
@@ -58,7 +58,7 @@ class HomePage extends StatelessWidget {
       return providers;
     }
 
-    return MultiBlocProvider(
+    return MultiCubitProvider(
       providers: getProviders(),
       child: Builder(
         builder: (context) {
@@ -75,11 +75,11 @@ class HomePage extends StatelessWidget {
               RaisedButton(
                 key: const Key('increment_button'),
                 onPressed: () =>
-                    BlocProvider.of<CounterCubit>(context).increment(),
+                    CubitProvider.of<CounterCubit>(context).increment(),
               ),
               RaisedButton(
                 key: const Key('toggle_theme_button'),
-                onPressed: () => BlocProvider.of<ThemeCubit>(context).toggle(),
+                onPressed: () => CubitProvider.of<ThemeCubit>(context).toggle(),
               ),
             ],
           );
@@ -92,8 +92,8 @@ class HomePage extends StatelessWidget {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeCubit, ThemeData>(
-      cubit: BlocProvider.of<ThemeCubit>(context),
+    return CubitBuilder<ThemeCubit, ThemeData>(
+      cubit: CubitProvider.of<ThemeCubit>(context),
       builder: (_, theme) {
         return MaterialApp(home: CounterPage(), theme: theme);
       },
@@ -104,10 +104,10 @@ class MyApp extends StatelessWidget {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final counterCubit = BlocProvider.of<CounterCubit>(context);
+    final counterCubit = CubitProvider.of<CounterCubit>(context);
 
     return Scaffold(
-      body: BlocBuilder<CounterCubit, int>(
+      body: CubitBuilder<CounterCubit, int>(
         cubit: counterCubit,
         builder: (context, count) {
           return Center(
@@ -155,11 +155,11 @@ class ThemeCubit extends Cubit<ThemeData> {
 }
 
 void main() {
-  group('MultiBlocProvider', () {
+  group('MultiCubitProvider', () {
     testWidgets('throws if initialized with no providers', (tester) async {
       try {
         await tester.pumpWidget(
-          MultiBlocProvider(providers: null, child: const SizedBox()),
+          MultiCubitProvider(providers: null, child: const SizedBox()),
         );
       } on dynamic catch (error) {
         expect(error, isAssertionError);
@@ -169,7 +169,7 @@ void main() {
     testWidgets('throws if initialized with no child', (tester) async {
       try {
         await tester.pumpWidget(
-          MultiBlocProvider(providers: [], child: null),
+          MultiCubitProvider(providers: [], child: null),
         );
       } on dynamic catch (error) {
         expect(error, isAssertionError);
@@ -178,10 +178,10 @@ void main() {
 
     testWidgets('passes cubits to children', (tester) async {
       await tester.pumpWidget(
-        MultiBlocProvider(
+        MultiCubitProvider(
           providers: [
-            BlocProvider<CounterCubit>(create: (_) => CounterCubit()),
-            BlocProvider<ThemeCubit>(create: (_) => ThemeCubit())
+            CubitProvider<CounterCubit>(create: (_) => CounterCubit()),
+            CubitProvider<ThemeCubit>(create: (_) => ThemeCubit())
           ],
           child: MyApp(),
         ),
@@ -200,10 +200,10 @@ void main() {
     testWidgets('passes cubits to children without explicit states',
         (tester) async {
       await tester.pumpWidget(
-        MultiBlocProvider(
+        MultiCubitProvider(
           providers: [
-            BlocProvider(create: (_) => CounterCubit()),
-            BlocProvider(create: (_) => ThemeCubit())
+            CubitProvider(create: (_) => CounterCubit()),
+            CubitProvider(create: (_) => ThemeCubit())
           ],
           child: MyApp(),
         ),
@@ -221,12 +221,12 @@ void main() {
 
     testWidgets('adds event to each cubit', (tester) async {
       await tester.pumpWidget(
-        MultiBlocProvider(
+        MultiCubitProvider(
           providers: [
-            BlocProvider<CounterCubit>(
+            CubitProvider<CounterCubit>(
               create: (_) => CounterCubit()..decrement(),
             ),
-            BlocProvider<ThemeCubit>(
+            CubitProvider<ThemeCubit>(
               create: (_) => ThemeCubit()..toggle(),
             ),
           ],

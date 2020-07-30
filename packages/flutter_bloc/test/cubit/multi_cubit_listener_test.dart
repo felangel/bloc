@@ -10,12 +10,12 @@ class CounterCubit extends Cubit<int> {
 }
 
 void main() {
-  group('MultiBlocListener', () {
+  group('MultiCubitListener', () {
     testWidgets('throws if initialized with no listeners and no child',
         (tester) async {
       try {
         await tester.pumpWidget(
-          MultiBlocListener(listeners: null, child: null),
+          MultiCubitListener(listeners: null, child: null),
         );
       } on dynamic catch (error) {
         expect(error, isAssertionError);
@@ -25,7 +25,7 @@ void main() {
     testWidgets('throws if initialized with no listeners', (tester) async {
       try {
         await tester.pumpWidget(
-          MultiBlocListener(listeners: null, child: const SizedBox()),
+          MultiCubitListener(listeners: null, child: const SizedBox()),
         );
       } on dynamic catch (error) {
         expect(error, isAssertionError);
@@ -35,7 +35,7 @@ void main() {
     testWidgets('throws if initialized with no child', (tester) async {
       try {
         await tester.pumpWidget(
-          MultiBlocListener(listeners: [], child: null),
+          MultiCubitListener(listeners: [], child: null),
         );
       } on dynamic catch (error) {
         expect(error, isAssertionError);
@@ -52,13 +52,13 @@ void main() {
       final counterCubitB = CounterCubit();
 
       await tester.pumpWidget(
-        MultiBlocListener(
+        MultiCubitListener(
           listeners: [
-            BlocListener<CounterCubit, int>(
+            CubitListener<CounterCubit, int>(
               cubit: counterCubitA,
               listener: (context, state) => statesA.add(state),
             ),
-            BlocListener<CounterCubit, int>(
+            CubitListener<CounterCubit, int>(
               cubit: counterCubitB,
               listener: (context, state) => statesB.add(state),
             ),
@@ -92,13 +92,13 @@ void main() {
       final counterCubitB = CounterCubit();
 
       await tester.pumpWidget(
-        MultiBlocListener(
+        MultiCubitListener(
           listeners: [
-            BlocListener(
+            CubitListener(
               cubit: counterCubitA,
               listener: (BuildContext context, int state) => statesA.add(state),
             ),
-            BlocListener(
+            CubitListener(
               cubit: counterCubitB,
               listener: (BuildContext context, int state) => statesB.add(state),
             ),

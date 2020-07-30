@@ -4,8 +4,8 @@ export 'package:bloc/bloc.dart';
 
 export './src/bloc/bloc_builder.dart';
 export './src/bloc/bloc_consumer.dart';
-export './src/bloc/bloc_listener.dart' hide BlocListenerSingleChildWidget;
-export './src/bloc/bloc_provider.dart' hide BlocProviderSingleChildWidget;
+export './src/bloc/bloc_listener.dart';
+export './src/bloc/bloc_provider.dart';
 export './src/bloc/multi_bloc_listener.dart';
 export './src/bloc/multi_bloc_provider.dart';
 

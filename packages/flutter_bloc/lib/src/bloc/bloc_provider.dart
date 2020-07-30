@@ -3,16 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
 
 /// A function that creates a [Bloc].
 typedef CreateBloc<T extends Bloc<Object, Object>> = T Function(
   BuildContext context,
 );
-
-/// Mixin which allows `MultiBlocProvider` to infer the types
-/// of multiple [BlocProvider]s.
-mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 
 /// {@template bloc_provider}
 /// Takes a `ValueBuilder` that is responsible for creating the `bloc` and
