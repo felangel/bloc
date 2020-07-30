@@ -1,11 +1,12 @@
 import 'package:flutter/widgets.dart';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
-/// A function that creates a `Bloc` of type [T].
-typedef CreateBloc<T extends Cubit<dynamic>> = T Function(
+/// A function that creates a [Bloc].
+typedef CreateBloc<T extends Bloc<Object, Object>> = T Function(
   BuildContext context,
 );
 
@@ -30,18 +31,16 @@ mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 /// );
 /// ```
 /// {@endtemplate}
-class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
-    with BlocProviderSingleChildWidget {
+class BlocProvider<T extends Bloc<Object, Object>> extends CubitProvider<T> {
   /// {@macro bloc_provider}
   BlocProvider({
     Key key,
     @required CreateBloc<T> create,
     Widget child,
     bool lazy,
-  }) : this._(
+  }) : super(
           key: key,
           create: create,
-          dispose: (_, bloc) => bloc?.close(),
           child: child,
           lazy: lazy,
         );
@@ -67,36 +66,13 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
     Key key,
     @required T value,
     Widget child,
-  }) : this._(
+  }) : super.value(
           key: key,
-          create: (_) => value,
+          value: value,
           child: child,
         );
 
-  /// Internal constructor responsible for creating the [BlocProvider].
-  /// Used by the [BlocProvider] default and value constructors.
-  BlocProvider._({
-    Key key,
-    @required Create<T> create,
-    Dispose<T> dispose,
-    this.child,
-    this.lazy,
-  })  : _create = create,
-        _dispose = dispose,
-        super(key: key, child: child);
-
-  /// [child] and its descendants which will have access to the `bloc`.
-  final Widget child;
-
-  /// Whether or not the `bloc` being provided should be lazily created.
-  /// Defaults to `true`.
-  final bool lazy;
-
-  final Dispose<T> _dispose;
-
-  final Create<T> _create;
-
-  /// Method that allows widgets to access a `cubit` instance as long as their
+  /// Method that allows widgets to access a `bloc` instance as long as their
   /// `BuildContext` contains a [BlocProvider] instance.
   ///
   /// If we want to access an instance of `BlocA` which was provided higher up
@@ -105,14 +81,14 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   /// ```dart
   /// BlocProvider.of<BlocA>(context)
   /// ```
-  static T of<T extends Cubit<Object>>(BuildContext context) {
+  static T of<T extends Bloc<Object, Object>>(BuildContext context) {
     try {
       return Provider.of<T>(context, listen: false);
     } on ProviderNotFoundException catch (e) {
       if (e.valueType != T) rethrow;
       throw FlutterError(
         '''
-        BlocProvider.of() called with a context that does not contain a Cubit of type $T.
+        BlocProvider.of() called with a context that does not contain a Bloc of type $T.
         No ancestor could be found starting from the context that was passed to BlocProvider.of<$T>().
 
         This can happen if the context you used comes from a widget above the BlocProvider.
@@ -122,28 +98,18 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
       );
     }
   }
-
-  @override
-  Widget buildWithChild(BuildContext context, Widget child) {
-    return InheritedProvider<T>(
-      create: _create,
-      dispose: _dispose,
-      child: child,
-      lazy: lazy,
-    );
-  }
 }
 
 /// Extends the `BuildContext` class with the ability
 /// to perform a lookup based on a `Bloc` type.
 extension BlocProviderExtension on BuildContext {
   /// Performs a lookup using the `BuildContext` to obtain
-  /// the nearest ancestor `Cubit` of type [C].
+  /// the nearest ancestor `Bloc` of type [T].
   ///
   /// Calling this method is equivalent to calling:
   ///
   /// ```dart
   /// BlocProvider.of<C>(context)
   /// ```
-  C bloc<C extends Cubit<Object>>() => BlocProvider.of<C>(this);
+  T bloc<T extends Bloc<Object, Object>>() => BlocProvider.of<T>(this);
 }
