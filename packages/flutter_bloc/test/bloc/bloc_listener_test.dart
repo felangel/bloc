@@ -123,55 +123,47 @@ void main() {
       expect(find.byKey(targetKey), findsOneWidget);
     });
 
-    testWidgets(
-      'calls listener on single state change',
-      (tester) async {
-        int latestState;
-        var listenerCallCount = 0;
-        final counterBloc = CounterBloc();
-        final expectedStates = [0, 1];
-        await tester.pumpWidget(
-          BlocListener<CounterBloc, int>(
-            bloc: counterBloc,
-            listener: (context, state) {
-              listenerCallCount++;
-              latestState = state;
-            },
-            child: const SizedBox(),
-          ),
-        );
-        counterBloc.add(CounterEvent.increment);
-        await expectLater(counterBloc, emitsInOrder(expectedStates));
-        expect(listenerCallCount, 1);
-        expect(latestState, 1);
-      },
-      initialTimeout: const Duration(seconds: 3),
-    );
+    testWidgets('calls listener on single state change', (tester) async {
+      int latestState;
+      var listenerCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [1];
+      await tester.pumpWidget(
+        BlocListener<CounterBloc, int>(
+          bloc: counterBloc,
+          listener: (context, state) {
+            listenerCallCount++;
+            latestState = state;
+          },
+          child: const SizedBox(),
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      await expectLater(counterBloc, emitsInOrder(expectedStates));
+      expect(listenerCallCount, 1);
+      expect(latestState, 1);
+    });
 
-    testWidgets(
-      'calls listener on multiple state change',
-      (tester) async {
-        int latestState;
-        var listenerCallCount = 0;
-        final counterBloc = CounterBloc();
-        final expectedStates = [0, 1, 2];
-        await tester.pumpWidget(
-          BlocListener<CounterBloc, int>(
-            bloc: counterBloc,
-            listener: (context, state) {
-              listenerCallCount++;
-              latestState = state;
-            },
-            child: const SizedBox(),
-          ),
-        );
-        counterBloc..add(CounterEvent.increment)..add(CounterEvent.increment);
-        await expectLater(counterBloc, emitsInOrder(expectedStates));
-        expect(listenerCallCount, 2);
-        expect(latestState, 2);
-      },
-      initialTimeout: const Duration(seconds: 3),
-    );
+    testWidgets('calls listener on multiple state change', (tester) async {
+      int latestState;
+      var listenerCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [1, 2];
+      await tester.pumpWidget(
+        BlocListener<CounterBloc, int>(
+          bloc: counterBloc,
+          listener: (context, state) {
+            listenerCallCount++;
+            latestState = state;
+          },
+          child: const SizedBox(),
+        ),
+      );
+      counterBloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+      await expectLater(counterBloc, emitsInOrder(expectedStates));
+      expect(listenerCallCount, 2);
+      expect(latestState, 2);
+    });
 
     testWidgets(
         'updates when the bloc is changed at runtime to a different bloc '
@@ -241,117 +233,78 @@ void main() {
     });
 
     testWidgets(
-      'calls listenWhen on single state change with correct previous '
-      'and current states',
-      (tester) async {
-        int latestPreviousState;
-        int latestState;
-        var listenWhenCallCount = 0;
-        final counterBloc = CounterBloc();
-        final expectedStates = [0, 1];
-        await tester.pumpWidget(
-          BlocListener<CounterBloc, int>(
-            bloc: counterBloc,
-            listenWhen: (previous, state) {
-              listenWhenCallCount++;
+        'calls listenWhen on single state change with correct previous '
+        'and current states', (tester) async {
+      int latestPreviousState;
+      int latestState;
+      var listenWhenCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [1];
+      await tester.pumpWidget(
+        BlocListener<CounterBloc, int>(
+          bloc: counterBloc,
+          listenWhen: (previous, state) {
+            listenWhenCallCount++;
+            latestPreviousState = previous;
+            latestState = state;
+            return true;
+          },
+          listener: (context, state) {},
+          child: const SizedBox(),
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      await expectLater(counterBloc, emitsInOrder(expectedStates));
+      expect(listenWhenCallCount, 1);
+      expect(latestPreviousState, 0);
+      expect(latestState, 1);
+    });
+
+    testWidgets(
+        'calls listenWhen with previous listener state and current bloc state',
+        (tester) async {
+      int latestPreviousState;
+      int latestState;
+      var listenWhenCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [1, 2, 3];
+      await tester.pumpWidget(
+        BlocListener<CounterBloc, int>(
+          bloc: counterBloc,
+          listenWhen: (previous, state) {
+            listenWhenCallCount++;
+            if ((previous + state) % 3 == 0) {
               latestPreviousState = previous;
               latestState = state;
               return true;
-            },
-            listener: (context, state) {},
-            child: const SizedBox(),
-          ),
-        );
-        counterBloc.add(CounterEvent.increment);
-        await expectLater(counterBloc, emitsInOrder(expectedStates));
-        expect(listenWhenCallCount, 1);
-        expect(latestPreviousState, 0);
-        expect(latestState, 1);
-      },
-      initialTimeout: const Duration(seconds: 3),
-    );
+            }
+            return false;
+          },
+          listener: (context, state) {},
+          child: const SizedBox(),
+        ),
+      );
+      counterBloc
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment);
+      await expectLater(counterBloc, emitsInOrder(expectedStates));
+      expect(listenWhenCallCount, 3);
+      expect(latestPreviousState, 1);
+      expect(latestState, 2);
+    });
 
-    testWidgets(
-      'calls listenWhen with previous listener state and current bloc state',
-      (tester) async {
-        int latestPreviousState;
-        int latestState;
-        var listenWhenCallCount = 0;
-        final counterBloc = CounterBloc();
-        final expectedStates = [0, 1, 2, 3];
-        await tester.pumpWidget(
-          BlocListener<CounterBloc, int>(
-            bloc: counterBloc,
-            listenWhen: (previous, state) {
-              listenWhenCallCount++;
-              if ((previous + state) % 3 == 0) {
-                latestPreviousState = previous;
-                latestState = state;
-                return true;
-              }
-              return false;
-            },
-            listener: (context, state) {},
-            child: const SizedBox(),
-          ),
-        );
-        counterBloc
-          ..add(CounterEvent.increment)
-          ..add(CounterEvent.increment)
-          ..add(CounterEvent.increment);
-        await expectLater(counterBloc, emitsInOrder(expectedStates));
-        expect(listenWhenCallCount, 3);
-        expect(latestPreviousState, 1);
-        expect(latestState, 2);
-      },
-      initialTimeout: const Duration(seconds: 3),
-    );
-
-    testWidgets(
-      'infers the bloc from the context if the bloc is not provided',
-      (tester) async {
-        int latestPreviousState;
-        int latestState;
-        var listenWhenCallCount = 0;
-        final counterBloc = CounterBloc();
-        final expectedStates = [0, 1];
-        await tester.pumpWidget(
-          BlocProvider.value(
-            value: counterBloc,
-            child: BlocListener<CounterBloc, int>(
-              listenWhen: (previous, state) {
-                listenWhenCallCount++;
-                latestPreviousState = previous;
-                latestState = state;
-
-                return true;
-              },
-              listener: (context, state) {},
-              child: const SizedBox(),
-            ),
-          ),
-        );
-        counterBloc.add(CounterEvent.increment);
-        await expectLater(counterBloc, emitsInOrder(expectedStates));
-        expect(listenWhenCallCount, 1);
-        expect(latestPreviousState, 0);
-        expect(latestState, 1);
-      },
-      initialTimeout: const Duration(seconds: 3),
-    );
-
-    testWidgets(
-      'calls listenWhen on multiple state change with correct previous '
-      'and current states',
-      (tester) async {
-        int latestPreviousState;
-        int latestState;
-        var listenWhenCallCount = 0;
-        final counterBloc = CounterBloc();
-        final expectedStates = [0, 1, 2];
-        await tester.pumpWidget(
-          BlocListener<CounterBloc, int>(
-            bloc: counterBloc,
+    testWidgets('infers the bloc from the context if the bloc is not provided',
+        (tester) async {
+      int latestPreviousState;
+      int latestState;
+      var listenWhenCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [1];
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: counterBloc,
+          child: BlocListener<CounterBloc, int>(
             listenWhen: (previous, state) {
               listenWhenCallCount++;
               latestPreviousState = previous;
@@ -362,117 +315,135 @@ void main() {
             listener: (context, state) {},
             child: const SizedBox(),
           ),
-        );
-        counterBloc..add(CounterEvent.increment)..add(CounterEvent.increment);
-
-        await expectLater(counterBloc, emitsInOrder(expectedStates));
-        expect(listenWhenCallCount, 2);
-        expect(latestPreviousState, 1);
-        expect(latestState, 2);
-      },
-      initialTimeout: const Duration(seconds: 3),
-    );
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      await expectLater(counterBloc, emitsInOrder(expectedStates));
+      expect(listenWhenCallCount, 1);
+      expect(latestPreviousState, 0);
+      expect(latestState, 1);
+    });
 
     testWidgets(
-      'does not call listener when listenWhen returns false on single state '
-      'change',
-      (tester) async {
-        var listenerCallCount = 0;
-        final counterBloc = CounterBloc();
-        final expectedStates = [0, 1];
-        await tester.pumpWidget(
-          BlocListener<CounterBloc, int>(
-            bloc: counterBloc,
-            listenWhen: (previous, state) => false,
-            listener: (context, state) {
-              listenerCallCount++;
-            },
-            child: const SizedBox(),
-          ),
-        );
-        counterBloc.add(CounterEvent.increment);
-        await expectLater(counterBloc, emitsInOrder(expectedStates));
-        expect(listenerCallCount, 0);
-      },
-      initialTimeout: const Duration(seconds: 3),
-    );
+        'calls listenWhen on multiple state change with correct previous '
+        'and current states', (tester) async {
+      int latestPreviousState;
+      int latestState;
+      var listenWhenCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [1, 2];
+      await tester.pumpWidget(
+        BlocListener<CounterBloc, int>(
+          bloc: counterBloc,
+          listenWhen: (previous, state) {
+            listenWhenCallCount++;
+            latestPreviousState = previous;
+            latestState = state;
+
+            return true;
+          },
+          listener: (context, state) {},
+          child: const SizedBox(),
+        ),
+      );
+      counterBloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+
+      await expectLater(counterBloc, emitsInOrder(expectedStates));
+      expect(listenWhenCallCount, 2);
+      expect(latestPreviousState, 1);
+      expect(latestState, 2);
+    });
 
     testWidgets(
-      'calls listener when listenWhen returns true on single state change',
-      (tester) async {
-        var listenerCallCount = 0;
-        final counterBloc = CounterBloc();
-        final expectedStates = [0, 1];
-        await tester.pumpWidget(
-          BlocListener<CounterBloc, int>(
-            bloc: counterBloc,
-            listenWhen: (previous, state) => true,
-            listener: (context, state) {
-              listenerCallCount++;
-            },
-            child: const SizedBox(),
-          ),
-        );
-        counterBloc.add(CounterEvent.increment);
-        await expectLater(counterBloc, emitsInOrder(expectedStates));
-        expect(listenerCallCount, 1);
-      },
-      initialTimeout: const Duration(seconds: 3),
-    );
+        'does not call listener when listenWhen returns false on single state '
+        'change', (tester) async {
+      var listenerCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [1];
+      await tester.pumpWidget(
+        BlocListener<CounterBloc, int>(
+          bloc: counterBloc,
+          listenWhen: (previous, state) => false,
+          listener: (context, state) {
+            listenerCallCount++;
+          },
+          child: const SizedBox(),
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      await expectLater(counterBloc, emitsInOrder(expectedStates));
+      expect(listenerCallCount, 0);
+    });
 
     testWidgets(
-      'does not call listener when listenWhen returns false '
-      'on multiple state changes',
-      (tester) async {
-        var listenerCallCount = 0;
-        final counterBloc = CounterBloc();
-        final expectedStates = [0, 1, 2, 3, 4];
-        await tester.pumpWidget(
-          BlocListener<CounterBloc, int>(
-            bloc: counterBloc,
-            listenWhen: (previous, state) => false,
-            listener: (context, state) {
-              listenerCallCount++;
-            },
-            child: const SizedBox(),
-          ),
-        );
-        counterBloc
-          ..add(CounterEvent.increment)
-          ..add(CounterEvent.increment)
-          ..add(CounterEvent.increment)
-          ..add(CounterEvent.increment);
-        await expectLater(counterBloc, emitsInOrder(expectedStates));
-        expect(listenerCallCount, 0);
-      },
-      initialTimeout: const Duration(seconds: 3),
-    );
+        'calls listener when listenWhen returns true on single state change',
+        (tester) async {
+      var listenerCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [1];
+      await tester.pumpWidget(
+        BlocListener<CounterBloc, int>(
+          bloc: counterBloc,
+          listenWhen: (previous, state) => true,
+          listener: (context, state) {
+            listenerCallCount++;
+          },
+          child: const SizedBox(),
+        ),
+      );
+      counterBloc.add(CounterEvent.increment);
+      await expectLater(counterBloc, emitsInOrder(expectedStates));
+      expect(listenerCallCount, 1);
+    });
 
     testWidgets(
-      'calls listener when listenWhen returns true on multiple state change',
-      (tester) async {
-        var listenerCallCount = 0;
-        final counterBloc = CounterBloc();
-        final expectedStates = [0, 1, 2, 3, 4];
-        await tester.pumpWidget(
-          BlocListener<CounterBloc, int>(
-            bloc: counterBloc,
-            listenWhen: (previous, state) => true,
-            listener: (context, state) {
-              listenerCallCount++;
-            },
-            child: const SizedBox(),
-          ),
-        );
-        counterBloc
-          ..add(CounterEvent.increment)
-          ..add(CounterEvent.increment)
-          ..add(CounterEvent.increment)
-          ..add(CounterEvent.increment);
-        await expectLater(counterBloc, emitsInOrder(expectedStates));
-        expect(listenerCallCount, 4);
-      },
-      initialTimeout: const Duration(seconds: 3),
-    );
+        'does not call listener when listenWhen returns false '
+        'on multiple state changes', (tester) async {
+      var listenerCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [1, 2, 3, 4];
+      await tester.pumpWidget(
+        BlocListener<CounterBloc, int>(
+          bloc: counterBloc,
+          listenWhen: (previous, state) => false,
+          listener: (context, state) {
+            listenerCallCount++;
+          },
+          child: const SizedBox(),
+        ),
+      );
+      counterBloc
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment);
+      await expectLater(counterBloc, emitsInOrder(expectedStates));
+      expect(listenerCallCount, 0);
+    });
+
+    testWidgets(
+        'calls listener when listenWhen returns true on multiple state change',
+        (tester) async {
+      var listenerCallCount = 0;
+      final counterBloc = CounterBloc();
+      final expectedStates = [1, 2, 3, 4];
+      await tester.pumpWidget(
+        BlocListener<CounterBloc, int>(
+          bloc: counterBloc,
+          listenWhen: (previous, state) => true,
+          listener: (context, state) {
+            listenerCallCount++;
+          },
+          child: const SizedBox(),
+        ),
+      );
+      counterBloc
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment);
+      await expectLater(counterBloc, emitsInOrder(expectedStates));
+      expect(listenerCallCount, 4);
+    });
   });
 }

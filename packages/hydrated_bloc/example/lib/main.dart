@@ -18,9 +18,9 @@ void main() async {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return CubitProvider(
       create: (_) => BrightnessCubit(),
-      child: BlocBuilder<BrightnessCubit, Brightness>(
+      child: CubitBuilder<BrightnessCubit, Brightness>(
         builder: (context, brightness) {
           return MaterialApp(
             theme: ThemeData(brightness: brightness),
@@ -57,7 +57,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: const Icon(Icons.brightness_6),
               onPressed: () {
-                context.bloc<BrightnessCubit>().toggleBrightness();
+                context.cubit<BrightnessCubit>().toggleBrightness();
               },
             ),
           ),
