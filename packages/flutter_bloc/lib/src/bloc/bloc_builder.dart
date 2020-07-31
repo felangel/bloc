@@ -15,13 +15,13 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 /// {@template bloc_builder}
 /// [BlocBuilder] handles building a widget in response to new `states`.
 /// [BlocBuilder] is analogous to [StreamBuilder] but has simplified API to
-/// reduce the amount of boilerplate code needed as well as [cubit]-specific
+/// reduce the amount of boilerplate code needed as well as `bloc`-specific
 /// performance improvements.
 
 /// Please refer to `BlocListener` if you want to "do" anything in response to
 /// `state` changes such as navigation, showing a dialog, etc...
 ///
-/// If the [cubit] parameter is omitted, [BlocBuilder] will automatically
+/// If the `bloc` parameter is omitted, [BlocBuilder] will automatically
 /// perform a lookup using [BlocProvider] and the current `BuildContext`.
 ///
 /// ```dart
@@ -32,12 +32,12 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 /// )
 /// ```
 ///
-/// Only specify the [cubit] if you wish to provide a [cubit] that is otherwise
+/// Only specify the `bloc` if you wish to provide a `bloc` that is otherwise
 /// not accessible via [BlocProvider] and the current `BuildContext`.
 ///
 /// ```dart
 /// BlocBuilder<BlocA, BlocAState>(
-///   cubit: blocA,
+///   bloc: blocA,
 ///   builder: (context, state) {
 ///   // return widget here based on BlocA's state
 ///   }
@@ -47,11 +47,11 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 /// {@template bloc_builder_build_when}
 /// An optional [buildWhen] can be implemented for more granular control over
 /// how often [BlocBuilder] rebuilds.
-/// [buildWhen] will be invoked on each [cubit] `state` change.
+/// [buildWhen] will be invoked on each `bloc` `state` change.
 /// [buildWhen] takes the previous `state` and current `state` and must
 /// return a [bool] which determines whether or not the [builder] function will
 /// be invoked.
-/// The previous `state` will be initialized to the `state` of the [cubit] when
+/// The previous `state` will be initialized to the `state` of the `bloc` when
 /// the [BlocBuilder] is initialized.
 /// [buildWhen] is optional and if omitted, it will default to `true`.
 ///
