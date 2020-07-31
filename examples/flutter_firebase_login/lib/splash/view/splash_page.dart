@@ -9,7 +9,11 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image.asset('assets/bloc_logo_small.png', width: 150),
+        child: Image.asset(
+          'assets/bloc_logo_small.png',
+          key: const Key('splash_bloc_image'),
+          width: 150,
+        ),
       ),
     );
   }
