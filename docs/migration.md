@@ -2,6 +2,168 @@
 
 ?> **Tip**: Please refer to the [release log](https://github.com/felangel/bloc/releases) for more information regarding what changed in each release.
 
+## package:flutter_bloc v7.0.0
+
+#### ❗BlocBuilder cubit parameter renamed back to bloc
+
+##### Rationale
+
+Version 7.0.0 of `flutter_bloc` adds new `Cubit` widgets that are now separated from the `Bloc` widgets.
+As a result, all `Bloc` widgets now take in a `bloc` parameter instead of a `cubit` parameter.
+
+This means that the `BlocBuilder` now has the same API as it did in v5.x.x.
+
+**v6.x.x**
+
+```dart
+BlocBuilder(
+  cubit: myBloc,
+  builder: (context, state) {...}
+)
+```
+
+**v7.0.0** (and **v5.x.x**)
+
+```dart
+BlocBuilder(
+  bloc: myBloc,
+  builder: (context, state) {...}
+)
+```
+
+#### ❗BlocBuilder no longer accepts cubits
+
+##### Rationale
+
+Version 7.0.0 of `flutter_bloc` adds new `Cubit` widgets that are now separated from the `Bloc` widgets.
+While `CubitBuilder` works with both `bloc` or `cubit` instances (since `bloc`s extend `cubit`s), `BlocBuilder` only allows `bloc` instances to be used.
+
+**v6.x.x**
+
+```dart
+BlocBuilder(
+  cubit: myCubit,
+  builder: (context, state) {...}
+)
+```
+
+**v7.0.0**
+
+```dart
+CubitBuilder(
+  cubit: myCubit,
+  builder: (context, state) {...}
+)
+```
+
+#### ❗BlocListener cubit parameter renamed back to bloc
+
+##### Rationale
+
+Version 7.0.0 of `flutter_bloc` adds new `Cubit` widgets that are now separated from the `Bloc` widgets.
+As a result, all `Bloc` widgets now take in a `bloc` parameter instead of a `cubit` parameter.
+
+This means that the `BlocListener` now has the same API as it did in v5.x.x.
+
+**v6.x.x**
+
+```dart
+BlocListener(
+  cubit: myBloc,
+  listener: (context, state) {...}
+)
+```
+
+**v7.0.0** (and **v5.x.x**)
+
+```dart
+BlocListener(
+  bloc: myBloc,
+  listener: (context, state) {...}
+)
+```
+
+#### ❗BlocListener no longer accepts cubits
+
+##### Rationale
+
+Version 7.0.0 of `flutter_bloc` adds new `Cubit` widgets that are now separated from the `Bloc` widgets.
+While `CubitListener` works with both `bloc` or `cubit` instances (since `bloc`s extend `cubit`s), `BlocListener` only allows `bloc` instances to be used.
+
+**v6.x.x**
+
+```dart
+BlocListener(
+  cubit: myCubit,
+  listener: (context, state) {...}
+)
+```
+
+**v7.0.0**
+
+```dart
+CubitListener(
+  cubit: myCubit,
+  listener: (context, state) {...}
+)
+```
+
+#### ❗BlocConsumer cubit parameter renamed back to bloc
+
+##### Rationale
+
+Version 7.0.0 of `flutter_bloc` adds new `Cubit` widgets that are now separated from the `Bloc` widgets.
+As a result, all `Bloc` widgets now take in a `bloc` parameter instead of a `cubit` parameter.
+
+This means that the `BlocConsumer` now has the same API as it did in v5.x.x.
+
+**v6.x.x**
+
+```dart
+BlocConsumer(
+  cubit: myBloc,
+  listener: (context, state) {...},
+  builder: (context, state) {...}
+)
+```
+
+**v7.0.0** (and **v5.x.x**)
+
+```dart
+BlocConsumer(
+  bloc: myBloc,
+  listener: (context, state) {...},
+  builder: (context, state) {...}
+)
+```
+
+#### ❗BlocConsumer no longer accepts cubits
+
+##### Rationale
+
+Version 7.0.0 of `flutter_bloc` adds new `Cubit` widgets that are now separated from the `Bloc` widgets.
+While `CubitConsumer` works with both `bloc` or `cubit` instances (since `bloc`s extend `cubit`s), `BlocConsumer` only allows `bloc` instances to be used.
+
+**v6.x.x**
+
+```dart
+BlocConsumer(
+  cubit: myCubit,
+  listener: (context, state) {...},
+  builder: (context, state) {...}
+)
+```
+
+**v7.0.0**
+
+```dart
+CubitConsumer(
+  cubit: myCubit,
+  listener: (context, state) {...},
+  builder: (context, state) {...}
+)
+```
+
 ## v6.0.0
 
 ### package:bloc
