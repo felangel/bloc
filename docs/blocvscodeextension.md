@@ -49,6 +49,12 @@ Or you can right click on the directory in which you'd like to create the bloc/c
 | Shortcut                  | Description                                          |
 | ------------------------- | ---------------------------------------------------- |
 | `cubit`                   | Creates a Cubit Class                                |
+| `cubitbuilder`            | Creates a CubitBuilder Widget                        |
+| `cubitlistener`           | Creates a CubitListener Widget                       |
+| `multicubitlistener`      | Creates a MultiCubitListener Widget                  |
+| `cubitconsumer`           | Creates a CubitConsumer Widget                       |
+| `cubitprovider`           | Creates a CubitProvider Widget                       |
+| `multicubitprovider`      | Creates a MultiCubitProvider Widget                  |
 | `bloc`                    | Creates a Bloc Class                                 |
 | `blocbuilder`             | Creates a BlocBuilder Widget                         |
 | `bloclistener`            | Creates a BlocListener Widget                        |

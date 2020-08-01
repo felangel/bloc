@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc/src/cubit/cubit_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -49,7 +50,7 @@ import 'bloc_provider.dart';
 /// As a result, the only advantage of using [MultiBlocProvider] is improved
 /// readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
-class MultiBlocProvider extends MultiProvider {
+class MultiBlocProvider extends MultiCubitProvider {
   /// {@macro multi_bloc_provider}
   MultiBlocProvider({
     Key key,

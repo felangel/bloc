@@ -1,3 +1,7 @@
+# 5.1.0
+
+- feat: add cubit widget snippets
+
 # 5.0.0
 
 - **BREAKING**: update to latest bloc packages
