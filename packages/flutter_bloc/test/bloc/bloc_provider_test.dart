@@ -80,6 +80,7 @@ void main() {
             ),
           ),
         );
+
         expect(find.text('state: 0'), findsOneWidget);
         await tester.tap(find.byKey(const Key('increment_button')));
         await tester.pumpAndSettle();
