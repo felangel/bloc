@@ -2,7 +2,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_firebase_login/authentication/authentication.dart';
-import 'package:flutter_firebase_login/login/login.dart';
+import 'package:flutter_firebase_login/sign_up/sign_up.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:formz/formz.dart';
 import 'package:mockito/mockito.dart';
@@ -23,7 +23,7 @@ void main() {
   const validPasswordString = 't0pS3cret1234';
   const validPassword = Password.dirty(validPasswordString);
 
-  group('LoginCubit', () {
+  group('SignUpCubit', () {
     AuthenticationRepository authenticationRepository;
 
     setUp(() {
@@ -31,30 +31,30 @@ void main() {
     });
 
     test('throws AssertionError when authenticationRepository is null', () {
-      expect(() => LoginCubit(null), throwsA(isA<AssertionError>()));
+      expect(() => SignUpCubit(null), throwsA(isA<AssertionError>()));
     });
 
-    test('initial state is LoginState', () {
-      expect(LoginCubit(authenticationRepository).state, LoginState());
+    test('initial state is SignUpState', () {
+      expect(SignUpCubit(authenticationRepository).state, SignUpState());
     });
 
     group('emailChanged', () {
-      blocTest<LoginCubit, LoginState>(
+      blocTest<SignUpCubit, SignUpState>(
         'emits [invalid] when email/password are invalid',
-        build: () => LoginCubit(authenticationRepository),
+        build: () => SignUpCubit(authenticationRepository),
         act: (cubit) => cubit.emailChanged(invalidEmailString),
-        expect: const <LoginState>[
-          LoginState(email: invalidEmail, status: FormzStatus.invalid),
+        expect: const <SignUpState>[
+          SignUpState(email: invalidEmail, status: FormzStatus.invalid),
         ],
       );
 
-      blocTest<LoginCubit, LoginState>(
+      blocTest<SignUpCubit, SignUpState>(
         'emits [valid] when email/password are valid',
-        build: () => LoginCubit(authenticationRepository)
-          ..emit(LoginState(password: validPassword)),
+        build: () => SignUpCubit(authenticationRepository)
+          ..emit(SignUpState(password: validPassword)),
         act: (cubit) => cubit.emailChanged(validEmailString),
-        expect: const <LoginState>[
-          LoginState(
+        expect: const <SignUpState>[
+          SignUpState(
             email: validEmail,
             password: validPassword,
             status: FormzStatus.valid,
@@ -64,25 +64,25 @@ void main() {
     });
 
     group('passwordChanged', () {
-      blocTest<LoginCubit, LoginState>(
+      blocTest<SignUpCubit, SignUpState>(
         'emits [invalid] when email/password are invalid',
-        build: () => LoginCubit(authenticationRepository),
+        build: () => SignUpCubit(authenticationRepository),
         act: (cubit) => cubit.passwordChanged(invalidPasswordString),
-        expect: const <LoginState>[
-          LoginState(
+        expect: const <SignUpState>[
+          SignUpState(
             password: invalidPassword,
             status: FormzStatus.invalid,
           ),
         ],
       );
 
-      blocTest<LoginCubit, LoginState>(
+      blocTest<SignUpCubit, SignUpState>(
         'emits [valid] when email/password are valid',
-        build: () => LoginCubit(authenticationRepository)
-          ..emit(LoginState(email: validEmail)),
+        build: () => SignUpCubit(authenticationRepository)
+          ..emit(SignUpState(email: validEmail)),
         act: (cubit) => cubit.passwordChanged(validPasswordString),
-        expect: const <LoginState>[
-          LoginState(
+        expect: const <SignUpState>[
+          SignUpState(
             email: validEmail,
             password: validPassword,
             status: FormzStatus.valid,
@@ -91,28 +91,28 @@ void main() {
       );
     });
 
-    group('logInWithCredentials', () {
-      blocTest<LoginCubit, LoginState>(
+    group('signUpFormSubmitted', () {
+      blocTest<SignUpCubit, SignUpState>(
         'does nothing when status is not validated',
-        build: () => LoginCubit(authenticationRepository),
-        act: (cubit) => cubit.logInWithCredentials(),
-        expect: const <LoginState>[],
+        build: () => SignUpCubit(authenticationRepository),
+        act: (cubit) => cubit.signUpFormSubmitted(),
+        expect: const <SignUpState>[],
       );
 
-      blocTest<LoginCubit, LoginState>(
-        'calls logInWithEmailAndPassword with correct email/password',
-        build: () => LoginCubit(authenticationRepository)
+      blocTest<SignUpCubit, SignUpState>(
+        'calls signUp with correct email/password',
+        build: () => SignUpCubit(authenticationRepository)
           ..emit(
-            LoginState(
+            SignUpState(
               status: FormzStatus.valid,
               email: validEmail,
               password: validPassword,
             ),
           ),
-        act: (cubit) => cubit.logInWithCredentials(),
+        act: (cubit) => cubit.signUpFormSubmitted(),
         verify: (_) {
           verify(
-            authenticationRepository.logInWithEmailAndPassword(
+            authenticationRepository.signUp(
               email: validEmailString,
               password: validPasswordString,
             ),
@@ -120,25 +120,25 @@ void main() {
         },
       );
 
-      blocTest<LoginCubit, LoginState>(
+      blocTest<SignUpCubit, SignUpState>(
         'emits [submissionInProgress, submissionSuccess] '
-        'when logInWithEmailAndPassword succeeds',
-        build: () => LoginCubit(authenticationRepository)
+        'when signUp succeeds',
+        build: () => SignUpCubit(authenticationRepository)
           ..emit(
-            LoginState(
+            SignUpState(
               status: FormzStatus.valid,
               email: validEmail,
               password: validPassword,
             ),
           ),
-        act: (cubit) => cubit.logInWithCredentials(),
-        expect: const <LoginState>[
-          LoginState(
+        act: (cubit) => cubit.signUpFormSubmitted(),
+        expect: const <SignUpState>[
+          SignUpState(
             status: FormzStatus.submissionInProgress,
             email: validEmail,
             password: validPassword,
           ),
-          LoginState(
+          SignUpState(
             status: FormzStatus.submissionSuccess,
             email: validEmail,
             password: validPassword,
@@ -146,80 +146,34 @@ void main() {
         ],
       );
 
-      blocTest<LoginCubit, LoginState>(
+      blocTest<SignUpCubit, SignUpState>(
         'emits [submissionInProgress, submissionFailure] '
-        'when logInWithEmailAndPassword fails',
+        'when signUp fails',
         build: () {
-          when(authenticationRepository.logInWithEmailAndPassword(
+          when(authenticationRepository.signUp(
             email: anyNamed('email'),
             password: anyNamed('password'),
           )).thenThrow(Exception('oops'));
-          return LoginCubit(authenticationRepository)
+          return SignUpCubit(authenticationRepository)
             ..emit(
-              LoginState(
+              SignUpState(
                 status: FormzStatus.valid,
                 email: validEmail,
                 password: validPassword,
               ),
             );
         },
-        act: (cubit) => cubit.logInWithCredentials(),
-        expect: const <LoginState>[
-          LoginState(
+        act: (cubit) => cubit.signUpFormSubmitted(),
+        expect: const <SignUpState>[
+          SignUpState(
             status: FormzStatus.submissionInProgress,
             email: validEmail,
             password: validPassword,
           ),
-          LoginState(
+          SignUpState(
             status: FormzStatus.submissionFailure,
             email: validEmail,
             password: validPassword,
-          )
-        ],
-      );
-    });
-
-    group('logInWithGoogle', () {
-      blocTest<LoginCubit, LoginState>(
-        'calls logInWithGoogle',
-        build: () => LoginCubit(authenticationRepository),
-        act: (cubit) => cubit.logInWithGoogle(),
-        verify: (_) {
-          verify(authenticationRepository.logInWithGoogle()).called(1);
-        },
-      );
-
-      blocTest<LoginCubit, LoginState>(
-        'emits [submissionInProgress, submissionSuccess] '
-        'when logInWithGoogle succeeds',
-        build: () => LoginCubit(authenticationRepository),
-        act: (cubit) => cubit.logInWithGoogle(),
-        expect: const <LoginState>[
-          LoginState(
-            status: FormzStatus.submissionInProgress,
-          ),
-          LoginState(
-            status: FormzStatus.submissionSuccess,
-          )
-        ],
-      );
-
-      blocTest<LoginCubit, LoginState>(
-        'emits [submissionInProgress, submissionFailure] '
-        'when logInWithGoogle fails',
-        build: () {
-          when(
-            authenticationRepository.logInWithGoogle(),
-          ).thenThrow(Exception('oops'));
-          return LoginCubit(authenticationRepository);
-        },
-        act: (cubit) => cubit.logInWithGoogle(),
-        expect: const <LoginState>[
-          LoginState(
-            status: FormzStatus.submissionInProgress,
-          ),
-          LoginState(
-            status: FormzStatus.submissionFailure,
           )
         ],
       );

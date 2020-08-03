@@ -22,7 +22,7 @@ class SignUpForm extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _UsernameInput(),
+            _EmailInput(),
             const Padding(padding: EdgeInsets.all(4.0)),
             _PasswordInput(),
             const Padding(padding: EdgeInsets.all(4.0)),
@@ -34,7 +34,7 @@ class SignUpForm extends StatelessWidget {
   }
 }
 
-class _UsernameInput extends StatelessWidget {
+class _EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(
