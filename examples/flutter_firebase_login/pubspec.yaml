@@ -9,9 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^6.0.0
-  equatable: ^1.0.0  
-  flutter_bloc: ^6.0.0
+  bloc: ^6.0.1
+  equatable: ^1.2.3
+  flutter_bloc: ^6.0.1
   font_awesome_flutter: ^8.4.0
   formz: ^0.2.0
   google_fonts: ^1.1.0

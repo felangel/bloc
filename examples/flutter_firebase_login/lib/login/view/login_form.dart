@@ -29,7 +29,7 @@ class LoginForm extends StatelessWidget {
               height: 120,
             ),
             const Padding(padding: EdgeInsets.all(16.0)),
-            _UsernameInput(),
+            _EmailInput(),
             const Padding(padding: EdgeInsets.all(4.0)),
             _PasswordInput(),
             const Padding(padding: EdgeInsets.all(4.0)),
@@ -45,7 +45,7 @@ class LoginForm extends StatelessWidget {
   }
 }
 
-class _UsernameInput extends StatelessWidget {
+class _EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
@@ -114,6 +114,7 @@ class _GoogleLoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return RaisedButton.icon(
+      key: const Key('loginForm_googleLogin_raisedButton'),
       label: const Text(
         'SIGN IN WITH GOOGLE',
         style: TextStyle(color: Colors.white),
@@ -131,6 +132,7 @@ class _SignUpButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return FlatButton(
+      key: const Key('loginForm_createAccount_flatButton'),
       child: Text(
         'CREATE ACCOUNT',
         style: TextStyle(color: theme.primaryColor),
