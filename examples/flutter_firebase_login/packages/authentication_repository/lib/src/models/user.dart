@@ -15,6 +15,8 @@ class User extends Equatable {
   final String name;
   final String photo;
 
+  static const empty = User(email: '', id: '', name: null, photo: null);
+
   @override
   List<Object> get props => [email, id, name, photo];
 }
