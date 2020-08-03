@@ -195,12 +195,8 @@ void main() {
         build: () => LoginCubit(authenticationRepository),
         act: (cubit) => cubit.logInWithGoogle(),
         expect: const <LoginState>[
-          LoginState(
-            status: FormzStatus.submissionInProgress,
-          ),
-          LoginState(
-            status: FormzStatus.submissionSuccess,
-          )
+          LoginState(status: FormzStatus.submissionInProgress),
+          LoginState(status: FormzStatus.submissionSuccess)
         ],
       );
 
@@ -215,12 +211,24 @@ void main() {
         },
         act: (cubit) => cubit.logInWithGoogle(),
         expect: const <LoginState>[
-          LoginState(
-            status: FormzStatus.submissionInProgress,
-          ),
-          LoginState(
-            status: FormzStatus.submissionFailure,
-          )
+          LoginState(status: FormzStatus.submissionInProgress),
+          LoginState(status: FormzStatus.submissionFailure)
+        ],
+      );
+
+      blocTest<LoginCubit, LoginState>(
+        'emits [submissionInProgress, pure] '
+        'when logInWithGoogle is cancelled',
+        build: () {
+          when(
+            authenticationRepository.logInWithGoogle(),
+          ).thenThrow(NoSuchMethodError.withInvocation(null, null));
+          return LoginCubit(authenticationRepository);
+        },
+        act: (cubit) => cubit.logInWithGoogle(),
+        expect: const <LoginState>[
+          LoginState(status: FormzStatus.submissionInProgress),
+          LoginState(status: FormzStatus.pure)
         ],
       );
     });
