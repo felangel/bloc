@@ -22,7 +22,7 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   Stream<CatalogState> _mapCatalogStartedToState() async* {
     yield CatalogLoading();
     try {
-      await Future.delayed(const Duration(milliseconds: 500));
+      await Future<void>.delayed(const Duration(milliseconds: 500));
       yield CatalogLoaded(Catalog());
     } catch (_) {
       yield CatalogError();
