@@ -63,11 +63,11 @@ void main() {
       );
 
       blocTest<AuthenticationBloc, AuthenticationState>(
-        'emits [unauthenticated] when user is null',
+        'emits [unauthenticated] when user is empty',
         build: () => AuthenticationBloc(
           authenticationRepository: authenticationRepository,
         ),
-        act: (bloc) => bloc.add(const AuthenticationUserChanged(null)),
+        act: (bloc) => bloc.add(const AuthenticationUserChanged(User.empty)),
         expect: const <AuthenticationState>[
           AuthenticationState.unauthenticated(),
         ],

@@ -12,3 +12,8 @@ dependencies:
   firebase_auth: ^0.16.1
   google_sign_in: ^4.5.1
   meta: ^1.1.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mockito: ^4.0.0
