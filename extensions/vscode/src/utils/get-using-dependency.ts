@@ -6,7 +6,7 @@ const freezed = "freezed";
 const freezed_annotation = "freezed_annotation";
 
 export async function getUsingDependency() {
-  if (await hasDependency(equaltable)) {
+  if (await hasDependency(equatable)) {
     return Dependency.Equatable;
   } else if (
     (await hasDependency(freezed)) ||
