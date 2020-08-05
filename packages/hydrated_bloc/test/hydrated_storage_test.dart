@@ -63,10 +63,10 @@ void main() {
           'does not call getTemporaryDirectory '
           'when storageDirectory is null and kIsWeb', () {
         HydratedStorage.isWeb = true;
-        HydratedStorage.build().whenComplete(() {
+        HydratedStorage.build().catchError((Object _) {
           expect(getTemporaryDirectoryCallCount, 0);
           HydratedStorage.isWeb = kIsWeb;
-        }).catchError((Object _) {});
+        });
       });
 
       test(
