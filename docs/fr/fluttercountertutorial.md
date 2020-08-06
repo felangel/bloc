@@ -1,24 +1,24 @@
-# Flutter Counter Tutorial
+# Tutoriel Compteur Flutter
 
-![beginner](https://img.shields.io/badge/level-beginner-green.svg)
+![débutant](https://img.shields.io/badge/level-beginner-green.svg)
 
-> In the following tutorial, we're going to build a Counter in Flutter using the Bloc library.
+> Dans le tutoriel qui suit, nous allons construire une application Compteur en utilisant Flutter et la librairie Bloc.
 
 ![demo](../assets/gifs/flutter_counter.gif)
 
-## Setup
+## Installation
 
-We'll start off by creating a brand new Flutter project
+Nous allons commencer par créer un tout nouveau projet Flutter
 
 ```sh
 flutter create flutter_counter
 ```
 
-We can then go ahead and replace the contents of `pubspec.yaml` with
+Continuons en renplaçant tout le contenu du `pubspec.yaml` avec
 
 [pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/pubspec.yaml ':include')
 
-and then install all of our dependencies
+et ensuite nous allons installer toutes les dépendances
 
 ```sh
 flutter packages get
@@ -26,69 +26,69 @@ flutter packages get
 
 ## BlocObserver
 
-The first thing we're going to take a look at is how to create a `BlocObserver` which will help us observe all state changes in the application.
+La première chose que nous allons regarder et comment créer un `BlocObserver` qui va nous aider à observer tous les changements de states (d'états) dans l'application.
 
-Let's create `lib/counter_observer.dart`:
+Crééons `lib/counter_observer.dart`:
 
 [counter_observer.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter_observer.dart ':include')
 
-In this case, we're only overriding `onChange` to see all state changes that occur.
+Dans ce cas, nous surchargeons uniquement `onChange` pour surveiller tous les changements de states.
 
-?> **Note**: `onChange` works the same way for both `Bloc` and `Cubit` instances.
+?> **Note**: `onChange` fonctionne de la même manière pour les instances `Bloc` et `Cubit`.
 
 ## main.dart
 
-Next, let's replace the contents of `main.dart` with:
+Ensuite, nous allons remplacer le contenu du `main.dart` avec:
 
 [main.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/main.dart ':include')
 
-We're initializing the `CounterObserver` we just created and calling `runApp` with the `CounterApp` widget which we'll look at next.
+Nous initialisations le `CounterObserver` que nous venons de créer et nous appelons `runApp` avec le widget `CounterApp` que l'on verra juste après.
 
 ## Counter App
 
-`CounterApp` will be a `MaterialApp` and is specifying the `home` as `CounterPage`.
+`CounterApp` sera un widget `MaterialApp` et le paramètre `home` instanciera notre `CounterPage`.
 
 [app.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/app.dart ':include')
 
-?> **Note**: We are extending `MaterialApp` because `CounterApp` _is_ a `MaterialApp`. In most cases, we're going to be creating `StatelessWidget` or `StatefulWidget` instances and composing widgets in `build` but in this case there are no widgets to compose so it's simpler to just extend `MaterialApp`.
+?> **Note**: Nous étendons `MaterialApp` car `CounterApp` _est_ un `MaterialApp`. Dans la plus part des cas, nous allons simplement créer des instances `StatelessWidget` ou `StatefulWidget` et nous allons composer nos widgets à l'intérieur du `build` mais dans ce cas précis il n'y a pas de widgets à composer donc il est plus simple de juste étendre `MaterialApp`.
 
-Let's take a look at `CounterPage` next!
+Passons maintenant à `CounterPage` !
 
 ## Counter Page
 
-The `CounterPage` widget is responsible for creating a `CounterCubit` (which we will look at next) and providing it to the `CounterView`.
+Le widget `CounterPage` va créer un `CounterCubit` (nous l'étudierons plus en détails juste après) et il va le fournir au `CounterView`.
 
 [counter_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_page.dart ':include')
 
-?> **Note**: It's important to separate or decouple the creation of a `Cubit` from the consumption of a `Cubit` in order to have code that is much more testable and reusable.
+?> **Note**: Il est important de séparer ou découper la création d'un `Cubit` de la conception d'un `Cubit` dans le but d'avoir un code bien plus testable et réutilisable.
 
 ## Counter Cubit
 
-The `CounterCubit` class will expose two methods:
+La class `CounterCubit` va exposer deux méthodes:
 
-- `increment`: adds 1 to the current state
-- `decrement`: subtracts 1 from the current state
+- `increment`: ajoute 1 au state actuel
+- `decrement`: retire 1 au state actuel
 
-The type of state the `CounterCubit` is managing is just an `int` and the initial state is `0`.
+Le type du state de `CounterCubit` est un simple `int` et son state initial est `0`.
 
 [counter_cubit.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/cubit/counter_cubit.dart ':include')
 
-?> **Tip**: Use the [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) or [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) to create new cubits automatically.
+?> **Tip**: Utilisez la [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) ou [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) pour créer vos cubits automatiquement.
 
-Next, let's take a look at the `CounterView` which will be responsible for consuming the state and interacting with the `CounterCubit`.
+Ensuite, regardons le `CounterView` qui sera responsable pour consommer le state et intéragir avec le `CounterCubit`.
 
 ## Counter View
 
-The `CounterView` is responsible for rendering the current count and rendering two FloatingActionButtons to increment/decrement the counter.
+Le `CounterView` est responsable de l'affichage du compteur et il va afficher deux FloatingActionButtons pour ajouter/soustraire le compteur.
 
 [counter_view.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_view.dart ':include')
 
-A `BlocBuilder` is used to wrap the `Text` widget in order to update the text any time the `CounterCubit` state changes. In addition, `context.bloc<CounterCubit>()` is used to look-up the closest `CounterCubit` instance.
+Un `BlocBuilder` est utilisé pour envelopper le widget `Text` dans le but d'actualiser le texte peu importe quand le state du `CounterCubit` change. En plus, `context.bloc<CounterCubit>()` est utilisé pour chercher l'instance `CounterCubit` la plus proche.
 
-?> **Note**: Only the `Text` widget is wrapped in a `BlocBuilder` because that is the only widget that needs to be rebuilt in response to state changes in the `CounterCubit`. Avoid unnecessarily wrapping widgets that don't need to be rebuilt when a state changes.
+?> **Note**: Seulement le widget `Text` est enveloppé dans un `BlocBuilder` car c'est le seul widget qui a besoin d'être reconstruit en réponse aux changements de states qui ont lieu dans le `CounterCubit`. Évitez d'envelopper des widgets non nécessaires qui n'ont pas besoin de se reconstruire quand un state change.
 
-That's it! We've separated the presentation layer from the business logic layer. The `CounterView` has no idea what happens when a user presses a button; it just notifies the `CounterCubit`. Furthermore, the `CounterCubit` has no idea what is happening with the state (counter value); it's simply emitting new states in response to the methods being called.
+C'est tout! Nous avons séparer la couche de présentation de celle qui s'occupe de la logique. Le `CounterView` n'a aucune idée de ce qui ce passe quand un utilisateur presse le boutton; cela notifie juste le `CounterCubit`. D'autant plus que le `CounterCubit` n'a pas idée de ce qui se passe à l'intérieur du state (la valeur du compteur); cela envoie simplement des nouveaux states en réponse aux méthodes qui sont appelées.
 
-We can run our app with `flutter run` and can view it on our device or simulator/emulator.
+Nous pouvons lancer notre appli avec `flutter run` et la voir sur notre simulateur/émulateur.
 
-The full source (including unit and widget tests) for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_counter).
+L'entiéreté du code source (qui inclut les tests unitaires et de widgets) pour cet exemple, est trouvable [ici](https://github.com/felangel/Bloc/tree/master/examples/flutter_counter).
