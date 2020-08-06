@@ -8,7 +8,7 @@ Dans les prochaines sections, nous allons discuter en détail de chacun d'entre 
 
 ## Événements
 
-> Les événements sont la contribution d'un Bloc. Elles sont généralement distribuées en réponse aux interactions de l'utilisateur telles que les pressions sur les boutons ou les événements du cycle de vie tels que les chargements de pages.
+> Les événements sont la contribution d'un Bloc. Ils sont généralement distribués en réponse aux interactions de l'utilisateur telles que les pressions sur les boutons ou les événements du cycle de vie tels que les chargements de pages.
 
 Lors de la conception d'une application, nous devons prendre du recul et définir comment les utilisateurs vont interagir avec elle. Dans le contexte de notre application compteur, nous aurons deux boutons pour incrémenter et décrémenter notre compteur.
 
@@ -76,13 +76,13 @@ On peut tout mettre ensemble comme ça :
 
 ## Blocs
 
-> Un Bloc (Business Logic Component) est un composant qui convertit un `Stream` d'évvènements entrants `Events` en un `Stream` d'états sortants `States`. Pensez à un Bloc comme étant des "cerveaux" décrit ci-dessus.
+> Un Bloc (Business Logic Component) est un composant qui convertit un `Stream` d'évènements entrants `Events` en un `Stream` d'états sortants `States`. Pensez à un Bloc comme étant des "cerveaux" décrits ci-dessus.
 
 > Chaque Bloc doit étendre la classe de base `Bloc` qui fait partie du paquet de base du bloc.
 
 [counter_bloc.dart](../_snippets/core_concepts/counter_bloc_class.dart.md ':include')
 
-Dans l'extrait de code ci-dessus, nous déclarons notre `CounterBloc` comme un Bloc qui convertit `CounterEvents` en `ints`.
+Dans l'extrait de code ci-dessus, nous déclarons notre `CounterBloc` comme un Bloc qui convertit `CounterEvent`s en `int`s.
 
 > Chaque Bloc doit définir un état initial qui est l'état avant que les événements n'aient été reçus.
 
