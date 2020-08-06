@@ -54,17 +54,24 @@ class HydratedStorage implements Storage {
   }) {
     return _lock.synchronized(() async {
       if (_instance != null) return _instance;
-      final directory = storageDirectory ?? await getTemporaryDirectory();
       // Use HiveImpl directly to avoid conflicts with existing Hive.init
       // https://github.com/hivedb/hive/issues/336
       hive = HiveImpl();
-      if (!kIsWeb) hive.init(directory.path);
-      final box = await hive.openBox<dynamic>(
-        'hydrated_box',
-        encryptionCipher: encryptionCipher,
-      );
-
-      await _migrate(directory, box);
+      Box<dynamic> box;
+      if (isWeb) {
+        box = await hive.openBox<dynamic>(
+          'hydrated_box',
+          encryptionCipher: encryptionCipher,
+        );
+      } else {
+        final directory = storageDirectory ?? await getTemporaryDirectory();
+        hive.init(directory.path);
+        box = await hive.openBox<dynamic>(
+          'hydrated_box',
+          encryptionCipher: encryptionCipher,
+        );
+        await _migrate(directory, box);
+      }
 
       return _instance = HydratedStorage(box);
     });
@@ -87,6 +94,11 @@ class HydratedStorage implements Storage {
       await file.delete();
     }
   }
+
+  /// Internal flag which determines if running on the web platform.
+  /// Defaults to [kIsWeb] and is only visible for testing purposes.
+  @visibleForTesting
+  static bool isWeb = kIsWeb;
 
   /// Internal instance of [HiveImpl].
   /// It should only be used for testing.

@@ -34,15 +34,15 @@ class _CartList extends StatelessWidget {
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
         if (state is CartLoading) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         if (state is CartLoaded) {
           return ListView.builder(
-            itemCount: state.items.length,
+            itemCount: state.cart.items.length,
             itemBuilder: (context, index) => ListTile(
               leading: const Icon(Icons.done),
               title: Text(
-                state.items[index].name,
+                state.cart.items[index].name,
                 style: itemNameStyle,
               ),
             ),
@@ -68,21 +68,22 @@ class _CartTotal extends StatelessWidget {
           children: [
             BlocBuilder<CartBloc, CartState>(builder: (context, state) {
               if (state is CartLoading) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               }
               if (state is CartLoaded) {
-                return Text('\$${state.totalPrice}', style: hugeStyle);
+                return Text('\$${state.cart.totalPrice}', style: hugeStyle);
               }
-              return Text('Something went wrong!');
+              return const Text('Something went wrong!');
             }),
-            SizedBox(width: 24),
+            const SizedBox(width: 24),
             FlatButton(
               onPressed: () {
                 Scaffold.of(context).showSnackBar(
-                    SnackBar(content: Text('Buying not supported yet.')));
+                  const SnackBar(content: Text('Buying not supported yet.')),
+                );
               },
               color: Colors.white,
-              child: Text('BUY'),
+              child: const Text('BUY'),
             ),
           ],
         ),

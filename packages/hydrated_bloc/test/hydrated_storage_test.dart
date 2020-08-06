@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
@@ -56,6 +57,16 @@ void main() {
           () async {
         storage = await HydratedStorage.build();
         expect(getTemporaryDirectoryCallCount, 1);
+      });
+
+      test(
+          'does not call getTemporaryDirectory '
+          'when storageDirectory is null and kIsWeb', () {
+        HydratedStorage.isWeb = true;
+        HydratedStorage.build().catchError((Object _) {
+          expect(getTemporaryDirectoryCallCount, 0);
+          HydratedStorage.isWeb = kIsWeb;
+        });
       });
 
       test(

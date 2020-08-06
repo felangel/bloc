@@ -24,7 +24,7 @@ Si vous voulez avoir plus de controle sur la fonction builder lorsqu'elle est ap
 
 ### BlocProvider
 
-**BlocProvider** est un widget Flutter qui fournit un bloc a son enfant(children) via `BlocProvider.of<T>(context)`. C'est utilisé comme un widget à injection dépendante (dependency injection) pour qu'une seule instance d'un bloc puisse être distribué à plusieurs widgets à l'intérieur d'un sous-arbre (subtree).
+**BlocProvider** est un widget Flutter qui fournit un bloc a ses enfants via `BlocProvider.of<T>(context)`. C'est utilisé comme un widget à injection dépendante (dependency injection) pour qu'une seule instance d'un bloc puisse être distribué à plusieurs widgets à l'intérieur d'un sous-arbre (subtree).
 
 La plus part du temps, `BlocProvider` devrait être utilisé pour créer de nouveaux `blocs` qui seront rendus disponibles au reste du subtree. Dans ce cas, puisque `BlocProvider` est responsable pour la création des blocs, il va automatiquement gérer la fermeture des blocs.
 
@@ -41,7 +41,7 @@ ensuite depuis `ChildA` ou `ScreenA` nous pouvons récupérer le `BlocA` avec:
 ### MultiBlocProvider
 
 **MultiBlocProvider** est widget Flutter qui fusionne de multiples widgets `BlocProvider` widgets en un seul.
-`MultiBlocProvider` améliorer la lecture et élimine le besoin d'encapsuler plusieurs `BlocProviders`.
+`MultiBlocProvider` améliore la lecture et élimine le besoin d'encapsuler plusieurs `BlocProviders`.
 En utilisant `MultiBlocProvider` nous passons de:
 
 [bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/nested_bloc_provider.dart.md ':include')
