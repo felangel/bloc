@@ -1,10 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_login/login/login.dart';
+import 'package:flutter_firebase_login/sign_up/sign_up.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
-
-import '../../sign_up/sign_up.dart';
-import '../login.dart';
 
 class LoginForm extends StatelessWidget {
   @override
@@ -28,15 +27,15 @@ class LoginForm extends StatelessWidget {
               'assets/bloc_logo_small.png',
               height: 120,
             ),
-            const Padding(padding: EdgeInsets.all(16.0)),
+            const SizedBox(height: 16.0),
             _EmailInput(),
-            const Padding(padding: EdgeInsets.all(4.0)),
+            const SizedBox(height: 8.0),
             _PasswordInput(),
-            const Padding(padding: EdgeInsets.all(4.0)),
+            const SizedBox(height: 8.0),
             _LoginButton(),
-            const Padding(padding: EdgeInsets.all(4.0)),
+            const SizedBox(height: 8.0),
             _GoogleLoginButton(),
-            const Padding(padding: EdgeInsets.all(4.0)),
+            const SizedBox(height: 4.0),
             _SignUpButton(),
           ],
         ),
@@ -54,8 +53,10 @@ class _EmailInput extends StatelessWidget {
         return TextField(
           key: const Key('loginForm_emailInput_textField'),
           onChanged: (email) => context.bloc<LoginCubit>().emailChanged(email),
+          keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             labelText: 'email',
+            helperText: '',
             errorText: state.email.invalid ? 'invalid email' : null,
           ),
         );
@@ -77,6 +78,7 @@ class _PasswordInput extends StatelessWidget {
           obscureText: true,
           decoration: InputDecoration(
             labelText: 'password',
+            helperText: '',
             errorText: state.password.invalid ? 'invalid password' : null,
           ),
         );

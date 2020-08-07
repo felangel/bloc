@@ -1,12 +1,11 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'authentication/authentication.dart';
-import 'home/home.dart';
-import 'login/login.dart';
-import 'splash/splash.dart';
-import 'theme.dart';
+import 'package:flutter_firebase_login/authentication/authentication.dart';
+import 'package:flutter_firebase_login/home/home.dart';
+import 'package:flutter_firebase_login/login/login.dart';
+import 'package:flutter_firebase_login/splash/splash.dart';
+import 'package:flutter_firebase_login/theme.dart';
 
 class App extends StatelessWidget {
   const App({
