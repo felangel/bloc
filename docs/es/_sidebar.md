@@ -20,7 +20,7 @@
     - [**Iniciar Sesión** <sup>✨</sup>](es/flutterlogintutorial.md)
     - [Clima](es/flutterweathertutorial.md)
     - [Lista de quehaceres](es/fluttertodostutorial.md)
-    - [Iniciar sesión con Firebase](es/flutterfirebaselogintutorial.md)
+    - [**Iniciar sesión con Firebase** <sup>✨</sup>](es/flutterfirebaselogintutorial.md)
     - [Quehaceres con Firestore](es/flutterfirestoretodostutorial.md)
   - AngularDart
     - [Counter](es/angularcountertutorial.md)

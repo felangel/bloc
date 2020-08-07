@@ -19,7 +19,7 @@
     - [**Login** <sup>✨</sup>](pt-br/flutterlogintutorial.md)
     - [Clima](pt-br/flutterweathertutorial.md)
     - [ToDos](pt-br/fluttertodostutorial.md)
-    - [Login com Firebase](pt-br/flutterfirebaselogintutorial.md)
+    - [**Login com Firebase** <sup>✨</sup>](pt-br/flutterfirebaselogintutorial.md)
     - [ToDos com Firestore](pt-br/flutterfirestoretodostutorial.md)
   - AngularDart
     - [Contador](pt-br/angularcountertutorial.md)

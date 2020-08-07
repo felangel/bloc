@@ -10,398 +10,234 @@
 
 We'll start off by creating a brand new Flutter project
 
-[flutter_create.sh](../_snippets/flutter_firebase_login_tutorial/flutter_create.sh.md ':include')
+```sh
+flutter create flutter_firebase_login
+```
 
-We can then replace the contents of `pubspec.yaml` with
+Just like in the [login tutorial](../flutterlogintutorial.md) we're going to create internal packages to better layer our application architecture and maintain clear boundaries and to maximize both reusability as well as improve testability.
 
-[pubspec.yaml](../_snippets/flutter_firebase_login_tutorial/pubspec.yaml.md ':include')
+In this case, the [firebase_auth](https://pub.dev/packages/firebase_auth) and [google_sign_in](https://pub.dev/packages/google_sign_in) packages are going to be our data layer so we're only going to be creating an `AuthenticationRepository` to compose data from the two API clients.
 
-Notice that we are specifying an assets directory for all of our applications local assets. Create an `assets` directory in the root of your project and add the [flutter logo](https://github.com/felangel/bloc/blob/master/examples/flutter_firebase_login/assets/flutter_logo.png) asset (which we'll use later).
+## AuthenticationRepository
+
+The `AuthenticationRepository` will be responsible for abstracting the internal implementation details of how we authentication and fetch user information. In this case, it will be integrating with firebase but we can always change the internal implementation later on and our application will be unaffected.
+
+### Setup
+
+We'll start by created `packages/authentication_repository` and create a `pubspec.yaml`.
+
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/packages/authentication_repository/pubspec.yaml ':include')
+
+
+Next, we can install the dependencies by running
+
+```sh
+flutter packages get
+```
+
+in the `authentication_repository` directory.
+
+Just like most packages, the `authentication_repository` will define it's API surface via `packages/authentication_repository/lib/authentication_repository.dart`
+
+[authentication_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/packages/authentication_repository/lib/authentication_repository.dart ':include')
+
+?> **Note**: The `authentication_repository` package will be exposing an `AuthenticationRepository` as well as models.
+
+Next, let's take a look at the models.
+
+### User Model
+
+> The `User` model will describe a user in the context of the authentication domain. For the purposes of this example, a user will consist of an `email`, `id`, `name`, and `photo`.
+
+?> **Note**: It's completely up to you to define what a user needs to look like in the context of your domain.
+
+[user.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/packages/authentication_repository/lib/src/models/user.dart ':include')
+
+?> **Note**: The `User` class is extending [equatable](https://pub.dev/packages/equatable) in order to override equality comparisons so that we can compare different instances of `User` by value.
+
+?> **Tip**: It's useful to define a `static` empty `User` so that we don't have to handle `null` Users and can always work with a concrete `User` object.
+
+### AuthenticationRepository
+
+> The `AuthenticationRepository` is responsible for abstracting the underlying implementation of how a user is authenticated as well as how a user is fetched.
+
+[authentication_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/packages/authentication_repository/lib/src/authentication_repository.dart ':include')
+
+The `AuthenticationRepository` exposes a `Stream<User>` which we can subscribe to in order to be notified of when a `User` changes. In addition, it exposes methods to `signUp`, `logInWithGoogle`, `logInWithEmailAndPassword`, and `logOut`.
+
+?> **Note**: The `AuthenticationRepository` is also responsible for handling low-level errors that can occur in the data layer and exposes a clean, simple set of errors that align with the domain.
+
+That's it for the `AuthenticationRepository`, next let's take a look at how to integrate it into the Flutter project we created.
+
+## Firebase Setup
+
+We need to follow the [firebase_auth usage instructions](https://pub.dev/packages/firebase_auth#usage) in order to hook up our application to firebase and enable [google_signin](https://pub.dev/packages/google_sign_in).
+
+!> Remember to update the `google-services.json` on Android and the `GoogleService-Info.plist` & `Info.plist` on iOS otherwise the application will crash.
+
+## pubspec.yaml
+
+We can replace the generated `pubspec.yaml` at the root of the project with the following:
+
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/pubspec.yaml ':include')
+
+Notice that we are specifying an assets directory for all of our applications local assets. Create an `assets` directory in the root of your project and add the [bloc logo](https://github.com/felangel/bloc/blob/master/examples/flutter_firebase_login/lib/assets/bloc_logo_small.png) asset (which we'll use later).
 
 then install all of the dependencies
 
-[flutter_packages_get.sh](../_snippets/flutter_firebase_login_tutorial/flutter_packages_get.sh.md ':include')
+```sh
+flutter packages get
+```
 
-The last thing we need to do is follow the [firebase_auth usage instructions](https://pub.dev/packages/firebase_auth#usage) in order to hook up our application to firebase and enable [google_signin](https://pub.dev/packages/google_sign_in).
+?> **Note**: We are depending on the `authentication_repository` package via path which will allow us to iterate quickly while still maintaining a clear separation.
 
-## User Repository
+## main.dart
 
-Just like in the [flutter login tutorial](./flutterlogintutorial.md), we're going to need to create our `UserRepository` which will be responsible for abstracting the underlying implementation for how we authenticate and retrieve user information.
+The `main.dart` file can be replaced with the following:
 
-Let's create `user_repository.dart` and get started.
+[main.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/main.dart ':include')
 
-We can start by defining our `UserRepository` class and implementing the constructor. You can immediately see that the `UserRepository` will have a dependency on both `FirebaseAuth` and `GoogleSignIn`.
+It's simply setting up some global configuration for the application and calling `runApp` with an instance of `App`.
 
-[user_repository.dart](../_snippets/flutter_firebase_login_tutorial/user_repository_constructor.dart.md ':include')
-
-?> **Note:** If `FirebaseAuth` and/or `GoogleSignIn` are not injected into the `UserRepository`, then we instantiate them internally. This allows us to be able to inject mock instances so that we can easily test the `UserRepository`.
-
-The first method we're going to implement we will call `signInWithGoogle` and it will authenticate the user using the `GoogleSignIn` package.
-
-[user_repository.dart](../_snippets/flutter_firebase_login_tutorial/sign_in_with_google.dart.md ':include')
-
-Next, we'll implement a `signInWithCredentials` method which will allow users to sign in with their own credentials using `FirebaseAuth`.
-
-[user_repository.dart](../_snippets/flutter_firebase_login_tutorial/sign_in_with_credentials.dart.md ':include')
-
-Up next, we need to implement a `signUp` method which allows users to create an account if they choose not to use Google Sign In.
-
-[user_repository.dart](../_snippets/flutter_firebase_login_tutorial/sign_up.dart.md ':include')
-
-We need to implement a `signOut` method so that we can give users the option to logout and clear their profile information from the device.
-
-[user_repository.dart](../_snippets/flutter_firebase_login_tutorial/sign_out.dart.md ':include')
-
-Lastly, we will need two additional methods: `isSignedIn` and `getUser` to allow us to check if a user is already authenticated and to retrieve their information.
-
-[user_repository.dart](../_snippets/flutter_firebase_login_tutorial/is_signed_in_and_get_user.dart.md ':include')
-
-?> **Note:** `getUser` is only returning the current user's email address for the sake of simplicity but we can define our own User model and populate it with a lot more information about the user in more complex applications.
-
-Our finished `user_repository.dart` should look like this:
-
-[user_repository.dart](../_snippets/flutter_firebase_login_tutorial/user_repository.dart.md ':include')
-
-Next up, we're going to build our `AuthenticationBloc` which will be responsible for handling the `AuthenticationState` of the application in response to `AuthenticationEvents`.
-
-## Authentication States
-
-We need to determine how we’re going to manage the state of our application and create the necessary blocs (business logic components).
-
-At a high level, we’re going to need to manage the user’s Authentication State. A user's authentication state can be one of the following:
-
-- AuthenticationInitial - waiting to see if the user is authenticated or not on app start.
-- AuthenticationSuccess - successfully authenticated
-- AuthenticationFailure - not authenticated
-
-Each of these states will have an implication on what the user sees.
-
-For example:
-
-- if the authentication state was AuthenticationInitial, the user might be seeing a splash screen
-- if the authentication state was AuthenticationSuccess, the user might see a home screen.
-- if the authentication state was AuthenticationFailure, the user might see a login form.
-
-> It's critical to identify what the different states are going to be before diving into the implementation.
-
-Now that we have our authentication states identified, we can implement our `AuthenticationState` class.
-
-Create a folder/directory called `authentication_bloc` and we can create our authentication bloc files.
-
-[authentication_bloc_dir.sh](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_dir.sh.md ':include')
-
-?> **Tip:** You can use the [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) or [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview) extensions to autogenerate the files for you.
-
-[authentication_state.dart](../_snippets/flutter_firebase_login_tutorial/authentication_state.dart.md ':include')
-
-?> **Note**: The [`equatable`](https://pub.dev/packages/equatable) package is used in order to be able to compare two instances of `AuthenticationState`. By default, `==` returns true only if the two objects are the same instance.
-
-?> **Note**: `toString` is overridden to make it easier to read an `AuthenticationState` when printing it to the console or in `Transitions`.
-
-!> Since we're using `Equatable` to allow us to compare different instances of `AuthenticationState` we need to pass any properties to the superclass. Without `List<Object> get props => [displayName]`, we will not be able to properly compare different instances of `AuthenticationSuccess`.
-
-## Authentication Events
-
-Now that we have our `AuthenticationState` defined we need to define the `AuthenticationEvents` which our `AuthenticationBloc` will be reacting to.
-
-We will need:
-
-- an `AuthenticationStarted` event to notify the bloc that it needs to check if the user is currently authenticated or not.
-- a `AuthenticationLoggedIn` event to notify the bloc that the user has successfully logged in.
-- a `AuthenticationLoggedOut` event to notify the bloc that the user has successfully logged out.
-
-[authentication_event.dart](../_snippets/flutter_firebase_login_tutorial/authentication_event.dart.md ':include')
-
-## Authentication Bloc
-
-Now that we have our `AuthenticationState` and `AuthenticationEvents` defined, we can get to work on implementing the `AuthenticationBloc` which is going to manage checking and updating a user's `AuthenticationState` in response to `AuthenticationEvents`.
-
-We'll start off by creating our `AuthenticationBloc` class.
-
-[authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_constructor.dart.md ':include')
-
-?> **Note**: Just from reading the class definition, we already know this bloc is going to be converting `AuthenticationEvents` into `AuthenticationStates`.
-
-?> **Note**: Our `AuthenticationBloc` has a dependency on the `UserRepository`.
-
-Now all that's left is to implement `mapEventToState`.
-
-[authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc_map_event_to_state.dart.md ':include')
-
-We created separate private helper functions to convert each `AuthenticationEvent` into the proper `AuthenticationState` in order to keep `mapEventToState` clean and easy to read.
-
-?> **Note:** We are using `yield*` (yield-each) in `mapEventToState` to separate the event handlers into their own functions. `yield*` inserts all the elements of the subsequence into the sequence currently being constructed, as if we had an individual yield for each element.
-
-Our complete `authentication_bloc.dart` should now look like this:
-
-[authentication_bloc.dart](../_snippets/flutter_firebase_login_tutorial/authentication_bloc.dart.md ':include')
-
-Now that we have our `AuthenticationBloc` fully implemented, let’s get to work on the presentational layer.
+?> **Note**: We're injecting a single instance of `AuthenticationRepository` into the `App` and it is an explicit constructor dependency.
 
 ## App
 
-We'll start by removing everything from out `main.dart` and implementing our main function.
+Just like in the [login tutorial](../flutterlogintutorial.md) our `app.dart` will provide an instance of the `AuthenticationRepository` to the application via `RepositoryProvider` and also creates and provides an instance of `AuthenticationBloc`. Then `AppView` consumes the `AuthenticationBloc` and handles updating the current route based on the `AuthenticationState`.
 
-[main.dart](../_snippets/flutter_firebase_login_tutorial/main1.dart.md ':include')
+[app.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app.dart ':include')
 
-We are wrapping our entire `App` widget in a `BlocProvider` in order to make the `AuthenticationBloc` available to the entire widget tree.
+## Authentication Bloc
 
-?> `WidgetsFlutterBinding.ensureInitialized()` is required in Flutter v1.9.4+ before using any plugins if the code is executed before runApp.
+> The `AuthenticationBloc` is responsible for managing the authentication state for the application. It has a dependency on the `AuthenticationRepository` and subscribes to the `user` Stream in order to emit new states in response to changes in the current user.
 
-?> `BlocProvider` also handles closing the `AuthenticationBloc` automatically so we don't need to do that.
+### AuthenticationState
 
-Next we need to implement our `App` widget.
+The `AuthenticationState` consists of an `AuthenticationStatus` and a `User`. Three named constructors are exposed: `unknown`, `authenticated`, and `unauthenticated` to make it easier to work with.
 
-> `App` will be a `StatelessWidget` and be responsible for reacting to the `AuthenticationBloc` state and rendering the appropriate widget.
+[authentication_state.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/authentication/bloc/authentication_state.dart ':include')
 
-[main.dart](../_snippets/flutter_firebase_login_tutorial/main2.dart.md ':include')
+### AuthenticationEvent
 
-We are using `BlocBuilder` in order to render UI based on the `AuthenticationBloc` state.
+The `AuthenticationEvent` has two subclasses:
 
-So far we don't have any widgets to render but we'll come back to this once we make our `SplashScreen`, `LoginScreen`, and `HomeScreen`.
+- `AuthenticationUserChanged` which notifies the bloc that the current user has changed
+- `AuthenticationLogoutRequested` which notifies the bloc that the current user has requested to be logged out
 
-## Bloc Observer
+[authentication_event.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/authentication/bloc/authentication_event.dart ':include')
 
-Before we get too far along, it's always handy to implement our own `BlocObserver` which allows us to override `onTransition` and `onError` and will help us see all bloc state changes (transitions) and errors in one place!
+### AuthenticationBloc
 
-Create `simple_bloc_observer.dart` and let's quickly implement our own observer.
+The `AuthenticationBloc` responds to incoming `AuthenticationEvents` and transforms them into outgoing `AuthenticationStates`. Upon initialization, it immediately subscribes to the `user` stream from the `AuthenticationRepository` and adds an `AuthenticationUserChanged` event internally to process changes in the current user.
 
-[simple_bloc_observer.dart](../_snippets/flutter_firebase_login_tutorial/simple_bloc_observer.dart.md ':include')
+!> `close` is overridden in order to handle cancelling the internal `StreamSubscription`.
 
-Now we can hook up our `BlocObserver` in our `main.dart`.
+[authentication_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/authentication/bloc/
+authentication_bloc.dart ':include')
 
-[main.dart](../_snippets/flutter_firebase_login_tutorial/main3.dart.md ':include')
+## Input Models
 
-## Splash Screen
+An `Email` and `Password` input model are useful for encapsulating the validation logic and will be used in both the `LoginForm` and `SignUpForm` (later in the tutorial.)
 
-Next, we’ll need to make a `SplashScreen` widget which will be rendered while our `AuthenticationBloc` determines whether or not a user is logged in.
+Both input models are made using the [formz](https://pub.dev/packages/formz) package and allow us to work with a validated object rather than a primitive type like a `String`.
 
-Let's create `splash_screen.dart` and implement it!
+### Email
 
-[splash_screen.dart](../_snippets/flutter_firebase_login_tutorial/splash_screen.dart.md ':include')
+[email.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/authentication/models/
+email.dart ':include')
 
-As you can tell, this widget is super minimal and you would probably want to add some sort of image or animation in order to make it look nicer. For the sake of simplicity, we're just going to leave it as is.
+### Password
 
-Now, let's hook it up to our `main.dart`.
+[email.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/authentication/models/
+email.dart ':include')
 
-[main.dart](../_snippets/flutter_firebase_login_tutorial/main4.dart.md ':include')
+### Email
 
-Now whenever our `AuthenticationBloc` has a `state` of `AuthenticationInitial` we will render our `SplashScreen` widget!
+## Splash
 
-## Home Screen
+The `SplashPage` is shown while the application determines the authentication state of the user. It's just a simple `StatelessWidget` which renders an image via `Image.asset`.
 
-Next, we will need to create our `HomeScreen` so that we can navigate users there once they have successfully logged in. In this case, our `HomeScreen` will allow the user to logout and also will display their current name (email).
+[splash_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/splash/view/
+splash_page.dart ':include')
 
-Let's create `home_screen.dart` and get started.
+## Login Page
 
-[home_screen.dart](../_snippets/flutter_firebase_login_tutorial/home_screen.dart.md ':include')
+The `LoginPage` is responsible for creating and providing an instance of `LoginCubit` to the `LoginForm`.
 
-`HomeScreen` is a `StatelessWidget` that requires a `name` to be injected so that it can render the welcome message. It also uses `BlocProvider` in order to access the `AuthenticationBloc` via `BuildContext` so that when a user pressed the logout button, we can add the `AuthenticationLoggedOut` event.
+[login_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/view/
+login_page.dart ':include')
 
-Now let's update our `App` to render the `HomeScreen` if the `AuthenticationState` is `AuthenticationSuccess`.
+?> **Tip**: It's very important to keep the creation of blocs/cubits separate from where they are consumed. This will allow you to easily inject mock instances and test your view in isolation.
 
-[main.dart](../_snippets/flutter_firebase_login_tutorial/main5.dart.md ':include')
+## Login Cubit
 
-## Login States
+> The `LoginCubit` is responsible for managing the `LoginState` of the form. It exposes APIs to `logInWithCredentials`, `logInWithGoogle`, as well as gets notified when the email/password are updated.
 
-It's finally time to start working on the login flow. We'll start by identifying the different `LoginStates` that we'll have.
+### LoginState
 
-Create a `login` directory and create the standard bloc directory and files.
+The `LoginState` consists of an `Email`, `Password`, and `FormzStatus`. The `Email` and `Password` models extend `FormzInput` from the [formz](https://pub.dev/packages/formz) package.
 
-[login_bloc_dir.sh](../_snippets/flutter_firebase_login_tutorial/login_bloc_dir.sh.md ':include')
+[login_state.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/cubit/
+login_state.dart ':include')
 
-Our `login/bloc/login_state.dart` should look like:
+### LoginCubit
 
-[login_state.dart](../_snippets/flutter_firebase_login_tutorial/login_state.dart.md ':include')
+The `LoginCubit` has a dependency on the `AuthenticationRepository` in order to sign the user in either via credentials or via google sign in.
 
-The states we're representing are:
+[login_cubit.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/cubit/
+login_cubit.dart ':include')
 
-`initial` is the initial state of the LoginForm.
-
-`loading` is the state of the LoginForm when we are validating credentials
-
-`failure` is the state of the LoginForm when a login attempt has failed.
-
-`success` is the state of the LoginForm when a login attempt has succeeded.
-
-We have also defined a `copyWith` and an `update` function for convenience (which we'll put to use shortly).
-
-Now that we have the `LoginState` defined let’s take a look at the `LoginEvent` class.
-
-## Login Events
-
-Open up `login/bloc/login_event.dart` and let's define and implement our events.
-
-[login_event.dart](../_snippets/flutter_firebase_login_tutorial/login_event.dart.md ':include')
-
-The events we defined are:
-
-`LoginEmailChanged` - notifies the bloc that the user has changed the email
-
-`LoginPasswordChanged` - notifies the bloc that the user has changed the password
-
-`LoginWithGooglePressed` - notifies the bloc that the user has pressed the Google Sign In button
-
-`LoginWithCredentialsPressed` - notifies the bloc that the user has pressed the regular sign in button.
-
-## Login Barrel File
-
-Before we implement the `LoginBloc`, let's make sure our barrel file is done so that we can easily import all Login Bloc related files with a single import.
-
-[bloc.dart](../_snippets/flutter_firebase_login_tutorial/login_barrel.dart.md ':include')
-
-## Login Bloc
-
-It's time to implement our `LoginBloc`. As always, we need to extend `Bloc` and define the initial state as well as implement `mapEventToState`.
-
-[login_bloc.dart](../_snippets/flutter_firebase_login_tutorial/login_bloc.dart.md ':include')
-
-**Note:** We're overriding `transformEvents` in order to debounce the `LoginEmailChanged` and `LoginPasswordChanged` events so that we give the user some time to stop typing before validating the input.
-
-We are using a `Validators` class to validate the email and password which we're going to implement next.
-
-## Validators
-
-Let's create `validators.dart` and implement our email and password validation checks.
-
-[validators.dart](../_snippets/flutter_firebase_login_tutorial/validators.dart.md ':include')
-
-There's nothing special going on here. It's just some plain old Dart code which uses regular expressions to validate the email and password. At this point, we should have a fully functional `LoginBloc` which we can hook up to the UI.
-
-## Login Screen
-
-Now that we're finished the `LoginBloc` it's time to create our `LoginScreen` widget which will be responsible for creating and closing the `LoginBloc` as well as providing the Scaffold for our `LoginForm` widget.
-
-Create `login/login_screen.dart` and let's implement it.
-
-[login_screen.dart](../_snippets/flutter_firebase_login_tutorial/login_screen.dart.md ':include')
-
-Again, we are extending `StatelessWidget` and using a `BlocProvider` to initialize and close the `LoginBloc` as well as to make the `LoginBloc` instance available to all widgets within the sub-tree.
-
-At this point, we need to implement the `LoginForm` widget which will be responsible for displaying the form and submission buttons in order for a user to authenticate his/her self.
+?> **Note**: We used a `Cubit` instead of a `Bloc` here because the `LoginState` is fairly simple and localized. Even without events, we can still have a fairly good sense of what happened just by looking at the changes from one state to another and our code is a lot simpler and more concise.
 
 ## Login Form
 
-Create `login/login_form.dart` and let's build out our form.
+The `LoginForm` is a responsible for rendering the form in response to the `LoginState` and invokes methods on the `LoginCubit` in response to user interactions.
 
-[login_form.dart](../_snippets/flutter_firebase_login_tutorial/login_form.dart.md ':include')
+[login_form.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/view/
+login_form.dart ':include')
 
-Our `LoginForm` widget is a `StatefulWidget` because it needs to maintain it's own `TextEditingControllers` for the email and password input.
+The `LoginForm` also renders a "Create Account" button which navigates to the `SignUpPage` where a user can create a brand new account.
 
-We use a `BlocListener` widget in order to execute one-time actions in response to state changes. In this case, we are showing different `SnackBar` widgets in response to a pending/failure state. In addition, if the submission is successful, we use the `listener` method to notify the `AuthenticationBloc` that the user has successfully logged in.
+## Sign Up Page
 
-?> **Tip:** Check out the [SnackBar Recipe](recipesfluttershowsnackbar.md) for more details.
+> The `SignUp` structure mirrors the `Login` structure and consists of a `SignUpPage`, `SignUpView`, and `SignUpCubit`.
 
-We use a `BlocBuilder` widget in order to rebuild the UI in response to different `LoginStates`.
+The `SignUpPage` is just responsible for creating and providing an instance of the `SignUpCubit` to the `SignUpForm` (exactly like in `LoginPage`).
 
-Whenever the email or password changes, we add an event to the `LoginBloc` in order for it to validate the current form state and return the new form state.
+[sign_up_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/view/sign_up_page.dart ':include')
 
-?> **Note:** We're using `Image.asset` to load the flutter logo from our assets directory.
+?> **Note**: Just as in the `LoginCubit`, the `SignUpCubit` has a dependency on the `AuthenticationRepository` in order to create new user accounts.
 
-At this point, you'll notice we haven't implemented `LoginButton`, `GoogleLoginButton`, or `CreateAccountButton` so we'll do those next.
+## Sign Up Cubit
 
-## Login Button
+The `SignUpCubit` manages the state of the `SignUpForm` and communicates with the `AuthenticationRepository` in order to create new user accounts.
 
-Create `login/login_button.dart` and let's quickly implement our `LoginButton` widget.
+### SignUpState
 
-[login_button.dart](../_snippets/flutter_firebase_login_tutorial/login_button.dart.md ':include')
+The `SignUpState` reuses the same `Email` and `Password` form input models because the validation logic is the same.
 
-There's nothing special going on here; just a `StatelessWidget` which has some styling and an `onPressed` callback so that we can have a custom `VoidCallback` whenever the button is pressed.
+[sign_up_state.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/cubit/
+sign_up_state.dart ':include')
 
-## Google Login Button
+### SignUpCubit
 
-Create `login/google_login_button.dart` and let's get to work on our Google Sign In.
+The `SignUpCubit` is extremely similar to the `LoginCubit` with the main exception being it exposes an API to submit the form as opposed to login.
 
-[google_login_button.dart](../_snippets/flutter_firebase_login_tutorial/google_login_button.dart.md ':include')
+[sign_up_cubit.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/cubit/
+sign_up_cubit.dart ':include')
 
-Again, there's not too much going on here. We have another `StatelessWidget`; however, this time we are not exposing an `onPressed` callback. Instead, we're handling the onPressed internally and adding the `LoginWithGooglePressed` event to our `LoginBloc` which will handle the Google Sign In process.
+## Home Page
 
-?> **Note:** We're using [font_awesome_flutter](https://pub.dev/packages/font_awesome_flutter) for the cool google icon.
+After a user either successfully logs in or signs up, the `user` stream will be updated which will trigger a state change in the `AuthenticationBloc` and will result in the `AppView` pushing the `HomePage` route onto the navigation stack.
 
-## Create Account Button
+From the `HomePage`, the user can view their profile information and log out by tapping the exit icon in the `AppBar`.
 
-The last of the three buttons is the `CreateAccountButton`. Let's create `login/create_account_button.dart` and get to work.
+[home_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/home/view/home_page.dart ':include')
 
-[create_account_button.dart](../_snippets/flutter_firebase_login_tutorial/create_account_button.dart.md ':include')
+?> **Note**: A `widgets` directory was created alongside the `view` directory within the `home` feature for reusable components that are specific to that particular feature. In this case a simple `Avatar` widget is exported and used within the `HomePage`.
 
-In this case, again we have a `StatelessWidget` and again we're handling the `onPressed` callback internally. This time, however, we're pushing a new route in response to the button press to the `RegisterScreen`. Let's build that next!
-
-## Register States
-
-Just like with login, we're going to need to define our `RegisterStates` before proceeding.
-
-Create a `register` directory and create the standard bloc directory and files.
-
-[register_bloc_dir.sh](../_snippets/flutter_firebase_login_tutorial/register_bloc_dir.sh.md ':include')
-
-Our `register/bloc/register_state.dart` should look like:
-
-[register_state.dart](../_snippets/flutter_firebase_login_tutorial/register_state.dart.md ':include')
-
-?> **Note:** The `RegisterState` is very similar to the `LoginState` and we could have created a single state and shared it between the two; however, it's very likely that the Login and Register features will diverge and in most cases it's best to keep them decoupled.
-
-Next, we'll move on to the `RegisterEvent` class.
-
-## Register Events
-
-Open up `register/bloc/register_event.dart` and let's implement our events.
-
-[register_event.dart](../_snippets/flutter_firebase_login_tutorial/register_event.dart.md ':include')
-
-?> **Note:** Again, the `RegisterEvent` implementation looks very similar to the `LoginEvent` implementation but since the two are separate features we're keeping them independent in this example.
-
-## Register Barrel File
-
-Again, just like with login, we need to create a barrel file to export our register bloc related files.
-
-Open up `bloc.dart` in our `register/bloc` directory and export the three files.
-
-[bloc.dart](../_snippets/flutter_firebase_login_tutorial/register_barrel.dart.md ':include')
-
-## Register Bloc
-
-Now, let's open `register/bloc/register_bloc.dart` and implement the `RegisterBloc`.
-
-[register_bloc.dart](../_snippets/flutter_firebase_login_tutorial/register_bloc.dart.md ':include')
-
-Just as before, we need to extend `Bloc`, define the initial state, and implement `mapEventToState`. Optionally, we are overriding `transformEvents` again so that we can give users some time to finish typing before we validate the form.
-
-Now that the `RegisterBloc` is fully functional, we just need to build out the presentation layer.
-
-## Register Screen
-
-Similar to the `LoginScreen`, our `RegisterScreen` will be a `StatelessWidget` responsible for initializing and closing the `RegisterBloc`. It will also provide the Scaffold for the `RegisterForm`.
-
-Create `register/register_screen.dart` and let's implement it.
-
-[register_screen.dart](../_snippets/flutter_firebase_login_tutorial/register_screen.dart.md ':include')
-
-## Register Form
-
-Next, let's create the `RegisterForm` which will provide the form fields for a user to create his/her account.
-
-Create `register/register_form.dart` and let's build it.
-
-[register_form.dart](../_snippets/flutter_firebase_login_tutorial/register_form.dart.md ':include')
-
-Again, we need to manage `TextEditingControllers` for the text input so our `RegisterForm` needs to be a `StatefulWidget`. In addition, we are using `BlocListener` again in order to execute one-time actions in response to state changes such as showing `SnackBar` when the registration is pending or fails. We are also adding the `AuthenticationLoggedIn` event to the `AuthenticationBloc` if the registration was a success so that we can immediately log the user in.
-
-?> **Note:** We're using `BlocBuilder` in order to make our UI respond to changes in the `RegisterBloc` state.
-
-Let's build our `RegisterButton` widget next.
-
-## Register Button
-
-Create `register/register_button.dart` and let's get started.
-
-[register_button.dart](../_snippets/flutter_firebase_login_tutorial/register_button.dart.md ':include')
-
-Very similar to how we setup the `LoginButton`, the `RegisterButton` has some custom styling and exposes a `VoidCallback` so that we can handle whenever a user presses the button in the parent widget.
-
-All that's left to do is update our `App` widget in `main.dart` to show the `LoginScreen` if the `AuthenticationState` is `AuthenticationFailure`.
-
-[main.dart](../_snippets/flutter_firebase_login_tutorial/main6.dart.md ':include')
+?> **Note**: When the logout `IconButton` is tapped, a `AuthenticationLogoutRequested` event is added to the `AuthenticationBloc` which signs the user out and navigates them back to the `LoginPage`.
 
 At this point we have a pretty solid login implementation using Firebase and we have decoupled our presentation layer from the business logic layer by using the Bloc Library.
 
-The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_firebase_login).
+The full source for this example can be found [here](https://github.com/felangel/bloc/tree/master/examples/flutter_firebase_login).
