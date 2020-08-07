@@ -19,7 +19,7 @@
     - [**Логин** <sup>✨</sup>](ru/flutterlogintutorial.md)
     - [Погода](ru/flutterweathertutorial.md)
     - [Задачи](ru/fluttertodostutorial.md)
-    - [Firebase логин](ru/flutterfirebaselogintutorial.md)
+    - [**Firebase логин** <sup>✨</sup>](ru/flutterfirebaselogintutorial.md)
     - [Firestore задачи](ru/flutterfirestoretodostutorial.md)
   - AngularDart
     - [Счетчик](ru/angularcountertutorial.md)
