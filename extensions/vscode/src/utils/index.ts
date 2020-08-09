@@ -1,4 +1,5 @@
 export * from "./analyze-dependencies";
+export * from './get-bloc-type';
 export * from "./get-pubspec";
 export * from "./get-pubspec-path";
 export * from "./has-dependency";

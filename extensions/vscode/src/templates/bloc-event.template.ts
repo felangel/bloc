@@ -1,14 +1,11 @@
 import * as changeCase from "change-case";
-import { Dependency } from "../consts/dependency_enum";
+import { BlocType } from "../utils";
 
-export function getBlocEventTemplate(
-  blocName: string,
-  dependency: Dependency
-): string {
-  switch (dependency) {
-    case Dependency.Freezed:
+export function getBlocEventTemplate(blocName: string, type: BlocType): string {
+  switch (type) {
+    case BlocType.Freezed:
       return getFreezedBlocEvent(blocName);
-    case Dependency.Equatable:
+    case BlocType.Equatable:
       return getEquatableBlocEventTemplate(blocName);
     default:
       return getDefaultBlocEventTemplate(blocName);
@@ -22,6 +19,9 @@ function getEquatableBlocEventTemplate(blocName: string): string {
 
 abstract class ${pascalCaseBlocName}Event extends Equatable {
   const ${pascalCaseBlocName}Event();
+
+  @override
+  List<Object> get props => [];
 }
 `;
 }

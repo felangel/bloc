@@ -1,14 +1,11 @@
 import * as changeCase from "change-case";
-import { Dependency } from "../consts/dependency_enum";
+import { BlocType } from "../utils";
 
-export function getBlocStateTemplate(
-  blocName: string,
-  dependency: Dependency
-): string {
-  switch (dependency) {
-    case Dependency.Freezed:
+export function getBlocStateTemplate(blocName: string, type: BlocType): string {
+  switch (type) {
+    case BlocType.Freezed:
       return getFreezedBlocState(blocName);
-    case Dependency.Equatable:
+    case BlocType.Equatable:
       return getEquatableBlocStateTemplate(blocName);
     default:
       return getDefaultBlocStateTemplate(blocName);
@@ -22,12 +19,12 @@ function getEquatableBlocStateTemplate(blocName: string): string {
 
 abstract class ${pascalCaseBlocName}State extends Equatable {
   const ${pascalCaseBlocName}State();
-}
-
-class ${pascalCaseBlocName}Initial extends ${pascalCaseBlocName}State {
+  
   @override
   List<Object> get props => [];
 }
+
+class ${pascalCaseBlocName}Initial extends ${pascalCaseBlocName}State {}
 `;
 }
 
@@ -52,9 +49,6 @@ function getFreezedBlocState(blocName: string): string {
 @freezed
 abstract class ${pascalCaseBlocName} with _\$${pascalCaseBlocName} {
   const factory ${pascalCaseBlocName}.inital() = _Initial;
-  const factory ${pascalCaseBlocName}.loadInProgress() = _LoadInProgress;
-  const factory ${pascalCaseBlocName}.loadSuccess() = _LoadSuccess;
-  const factory ${pascalCaseBlocName}.loadFailure() = _LoadFailure;
 }
 `;
 }

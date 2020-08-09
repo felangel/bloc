@@ -66,9 +66,9 @@ Or you can right click on the directory in which you'd like to create the bloc/c
 
 ### Freezed Bloc
 
-| Shortcut           | Description                                                    |
-| ------------------ | -------------------------------------------------------------- |
-| `feventToState`    | create a map event to state function with freeze.when function |
-| `fmapEventToState` | create a map event to state function with freeze.map function  |
-| `fstate`           | Creates a sub state                                            |
-| `fevent`           | Creates a sub event                                            |
+| Shortcut     | Description                                                    |
+| ------------ | -------------------------------------------------------------- |
+| `feventwhen` | create a map event to state function with freeze.when function |
+| `feventmap`  | create a map event to state function with freeze.map function  |
+| `fstate`     | Creates a sub state                                            |
+| `fevent`     | Creates a sub event                                            |

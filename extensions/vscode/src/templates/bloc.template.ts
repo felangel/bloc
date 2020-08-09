@@ -1,14 +1,11 @@
 import * as changeCase from "change-case";
-import { Dependency } from "../consts/dependency_enum";
+import { BlocType } from "../utils";
 
-export function getBlocTemplate(
-  blocName: string,
-  dependency: Dependency
-): string {
-  switch (dependency) {
-    case Dependency.Freezed:
+export function getBlocTemplate(blocName: string, type: BlocType): string {
+  switch (type) {
+    case BlocType.Freezed:
       return getFreezedBlocTemplate(blocName);
-    case Dependency.Equatable:
+    case BlocType.Equatable:
       return getEquatableBlocTemplate(blocName);
     default:
       return getDefaultBlocTemplate(blocName);
@@ -84,6 +81,7 @@ part '${snakeCaseBlocName}_bloc.freezed.dart';
 
 class ${pascalCaseBlocName}Bloc extends Bloc<${blocEvent}, ${blocState}> {
   ${pascalCaseBlocName}Bloc() : super(_Initial());
+
   @override
   Stream<${blocState}> mapEventToState(
     ${blocEvent} event,
