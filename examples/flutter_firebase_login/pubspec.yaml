@@ -9,15 +9,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^0.4.3+3
-  google_sign_in: ^4.1.1
-  firebase_auth: ^0.15.4
-  flutter_bloc:
-    path: ../../packages/flutter_bloc
-  equatable: ^1.0.0
-  meta: ^1.1.8
-  rxdart: ^0.23.1
+  bloc: ^6.0.1
+  equatable: ^1.2.3
+  flutter_bloc: ^6.0.1
   font_awesome_flutter: ^8.4.0
+  formz: ^0.2.0
+  google_fonts: ^1.1.0
+  meta: ^1.1.8
+  pedantic: ^1.9.0
+  authentication_repository:
+    path: packages/authentication_repository
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  bloc_test: ^7.0.0
+  mockito: ^4.0.0
 
 flutter:
   uses-material-design: true

@@ -4,13 +4,13 @@ import 'package:flutter_shopping_cart/catalog/catalog.dart';
 
 @immutable
 class Cart extends Equatable {
-  final Catalog _catalog;
-  final List<int> _itemIds;
+  const Cart({this.items = const <Item>[]});
 
-  Cart(this._catalog, Cart previous)
-      : assert(_catalog != null),
-        _itemIds = previous?._itemIds ?? [];
+  final List<Item> items;
+
+  int get totalPrice =>
+      items.fold(0, (total, current) => total + current.price);
 
   @override
-  List<Object> get props => [_catalog, _itemIds];
+  List<Object> get props => [items];
 }
