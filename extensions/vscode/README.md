@@ -63,3 +63,12 @@ Or you can right click on the directory in which you'd like to create the bloc/c
 | `blocof`                  | Shortcut for `BlocProvider.of<MyBloc>()`             |
 | `contextrepository`       | Shortcut for `context.repository<MyRepository>()`    |
 | `repositoryof`            | Shortcut for `RepositoryProvider.of<MyRepository>()` |
+
+### Freezed Bloc
+
+| Shortcut     | Description                                                    |
+| ------------ | -------------------------------------------------------------- |
+| `feventwhen` | create a map event to state function with freeze.when function |
+| `feventmap`  | create a map event to state function with freeze.map function  |
+| `fstate`     | Creates a sub state                                            |
+| `fevent`     | Creates a sub event                                            |

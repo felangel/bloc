@@ -64,7 +64,11 @@
       {
         "language": "dart",
         "path": "./snippets/bloc.json"
-      }      
+      },
+      {
+        "language": "dart",
+        "path": "./snippets/freezed_bloc.json"
+      }
     ]
   },
   "scripts": {
