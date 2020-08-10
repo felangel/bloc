@@ -2,13 +2,18 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/single_child_widget.dart';
 
 import 'bloc_provider.dart';
 
 /// Signature for the `builder` function which takes the `BuildContext` and
 /// [state] and is responsible for returning a widget which is to be rendered.
 /// This is analogous to the `builder` function in [StreamBuilder].
-typedef BlocWidgetBuilder<S> = Widget Function(BuildContext context, S state);
+typedef BlocWidgetBuilder<S> = Widget Function(
+  BuildContext context,
+  S state,
+  Widget child,
+);
 
 /// Signature for the `buildWhen` function which takes the previous `state` and
 /// the current `state` and is responsible for returning a [bool] which
@@ -77,8 +82,9 @@ class BlocBuilder<C extends Cubit<S>, S> extends BlocBuilderBase<C, S> {
     @required this.builder,
     C cubit,
     BlocBuilderCondition<S> buildWhen,
+    Widget child,
   })  : assert(builder != null),
-        super(key: key, cubit: cubit, buildWhen: buildWhen);
+        super(key: key, cubit: cubit, buildWhen: buildWhen, child: child);
 
   /// The [builder] function which will be invoked on each widget build.
   /// The [builder] takes the `BuildContext` and current `state` and
@@ -87,7 +93,8 @@ class BlocBuilder<C extends Cubit<S>, S> extends BlocBuilderBase<C, S> {
   final BlocWidgetBuilder<S> builder;
 
   @override
-  Widget build(BuildContext context, S state) => builder(context, state);
+  Widget buildWithChild(BuildContext context, S state, Widget child) =>
+      builder(context, state, child);
 }
 
 /// {@template bloc_builder_base}
@@ -98,10 +105,11 @@ class BlocBuilder<C extends Cubit<S>, S> extends BlocBuilderBase<C, S> {
 /// so far. The type of the state and how it is updated with each interaction
 /// is defined by sub-classes.
 /// {@endtemplate}
-abstract class BlocBuilderBase<C extends Cubit<S>, S> extends StatefulWidget {
+abstract class BlocBuilderBase<C extends Cubit<S>, S>
+    extends SingleChildStatefulWidget {
   /// {@macro bloc_builder_base}
-  const BlocBuilderBase({Key key, this.cubit, this.buildWhen})
-      : super(key: key);
+  const BlocBuilderBase({Key key, this.cubit, this.buildWhen, Widget child})
+      : super(key: key, child: child);
 
   /// The [cubit] that the [BlocBuilderBase] will interact with.
   /// If omitted, [BlocBuilderBase] will automatically perform a lookup using
@@ -111,15 +119,16 @@ abstract class BlocBuilderBase<C extends Cubit<S>, S> extends StatefulWidget {
   /// {@macro bloc_builder_build_when}
   final BlocBuilderCondition<S> buildWhen;
 
-  /// Returns a widget based on the `BuildContext` and current [state].
-  Widget build(BuildContext context, S state);
+  /// Returns a widget based on the `BuildContext`, current [state]
+  /// and optionally a [child].
+  Widget buildWithChild(BuildContext context, S state, Widget child);
 
   @override
   State<BlocBuilderBase<C, S>> createState() => _BlocBuilderBaseState<C, S>();
 }
 
 class _BlocBuilderBaseState<C extends Cubit<S>, S>
-    extends State<BlocBuilderBase<C, S>> {
+    extends SingleChildState<BlocBuilderBase<C, S>> {
   StreamSubscription<S> _subscription;
   S _previousState;
   S _state;
@@ -151,7 +160,8 @@ class _BlocBuilderBaseState<C extends Cubit<S>, S>
   }
 
   @override
-  Widget build(BuildContext context) => widget.build(context, _state);
+  Widget buildWithChild(BuildContext context, Widget child) =>
+      widget.buildWithChild(context, _state, child);
 
   @override
   void dispose() {

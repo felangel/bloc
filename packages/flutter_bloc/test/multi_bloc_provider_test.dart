@@ -94,7 +94,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeData>(
       cubit: BlocProvider.of<ThemeCubit>(context),
-      builder: (_, theme) {
+      builder: (_, theme, __) {
         return MaterialApp(home: CounterPage(), theme: theme);
       },
     );
@@ -109,7 +109,7 @@ class CounterPage extends StatelessWidget {
     return Scaffold(
       body: BlocBuilder<CounterCubit, int>(
         cubit: counterCubit,
-        builder: (context, count) {
+        builder: (context, count, _) {
           return Center(
             child: Text('$count', key: const Key('counter_text')),
           );

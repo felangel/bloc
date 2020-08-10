@@ -110,7 +110,7 @@ class CounterPage extends StatelessWidget {
     return Scaffold(
       body: BlocBuilder<CounterCubit, int>(
         cubit: counterCubit,
-        builder: (context, count) {
+        builder: (context, count, _) {
           if (onBuild != null) {
             onBuild();
           }
@@ -262,7 +262,7 @@ void main() {
               body: BlocProvider(
                 create: (context) => CounterCubit(),
                 child: BlocBuilder<CounterCubit, int>(
-                  builder: (context, state) => Text('state: $state'),
+                  builder: (context, state, _) => Text('state: $state'),
                 ),
               ),
             ),
@@ -281,7 +281,7 @@ void main() {
               body: BlocProvider(
                 create: (_) => CounterCubit(),
                 child: BlocBuilder<CounterCubit, int>(
-                  builder: (context, state) => Column(
+                  builder: (context, state, _) => Column(
                     children: [
                       Text('state: $state'),
                       RaisedButton(

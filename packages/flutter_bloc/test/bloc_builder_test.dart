@@ -36,7 +36,7 @@ class MyThemeAppState extends State<MyThemeApp> {
   Widget build(BuildContext context) {
     return BlocBuilder<Cubit<ThemeData>, ThemeData>(
       cubit: _themeCubit,
-      builder: ((context, theme) {
+      builder: ((context, theme, _) {
         _onBuild();
         return MaterialApp(
           key: const Key('material_app'),
@@ -97,7 +97,7 @@ class MyCounterAppState extends State<MyCounterApp> {
               buildWhen: (previousState, state) {
                 return (previousState + state) % 3 == 0;
               },
-              builder: (context, count) {
+              builder: (context, count, _) {
                 return Text(
                   '$count',
                   key: const Key('myCounterAppTextCondition'),
@@ -106,7 +106,7 @@ class MyCounterAppState extends State<MyCounterApp> {
             ),
             BlocBuilder<CounterCubit, int>(
               cubit: _cubit,
-              builder: (context, count) {
+              builder: (context, count, _) {
                 return Text(
                   '$count',
                   key: const Key('myCounterAppText'),
@@ -204,7 +204,7 @@ void main() {
         BlocProvider.value(
           value: themeCubit,
           child: BlocBuilder<ThemeCubit, ThemeData>(
-            builder: (context, theme) {
+            builder: (context, theme, _) {
               numBuilds++;
               return MaterialApp(
                 key: const Key('material_app'),

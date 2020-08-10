@@ -29,7 +29,7 @@ void main() {
       try {
         await tester.pumpWidget(
           BlocConsumer<CounterCubit, int>(
-            builder: (_, __) => const SizedBox(),
+            builder: (_, __, ___) => const SizedBox(),
             listener: null,
           ),
         );
@@ -48,7 +48,7 @@ void main() {
           home: Scaffold(
             body: BlocConsumer<CounterCubit, int>(
               cubit: counterCubit,
-              builder: (context, state) {
+              builder: (context, state, _) {
                 return Text('State: $state');
               },
               listener: (_, state) {
@@ -72,7 +72,7 @@ void main() {
           home: Scaffold(
             body: BlocConsumer<CounterCubit, int>(
               cubit: counterCubit,
-              builder: (context, state) {
+              builder: (context, state, _) {
                 return Text('State: $state');
               },
               listener: (_, state) {
@@ -102,7 +102,7 @@ void main() {
             home: Scaffold(
               body: BlocConsumer<CounterCubit, int>(
                 cubit: counterCubit,
-                builder: (context, state) {
+                builder: (context, state, _) {
                   return Text('State: $state');
                 },
                 listener: (_, state) {
@@ -127,7 +127,7 @@ void main() {
           home: Scaffold(
             body: BlocConsumer<CounterCubit, int>(
               cubit: counterCubit,
-              builder: (context, state) {
+              builder: (context, state, _) {
                 return Text('State: $state');
               },
               listener: (_, state) {
@@ -156,7 +156,7 @@ void main() {
             body: BlocConsumer<CounterCubit, int>(
               cubit: counterCubit,
               buildWhen: (previous, current) => (previous + current) % 3 == 0,
-              builder: (context, state) {
+              builder: (context, state, _) {
                 builderStates.add(state);
                 return Text('State: $state');
               },
@@ -196,7 +196,7 @@ void main() {
           home: Scaffold(
             body: BlocConsumer<CounterCubit, int>(
               cubit: counterCubit,
-              builder: (context, state) {
+              builder: (context, state, _) {
                 builderStates.add(state);
                 return Text('State: $state');
               },

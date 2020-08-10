@@ -21,7 +21,7 @@ class App extends StatelessWidget {
     return BlocProvider(
       create: (_) => BrightnessCubit(),
       child: BlocBuilder<BrightnessCubit, Brightness>(
-        builder: (context, brightness) {
+        builder: (context, brightness, _) {
           return MaterialApp(
             theme: ThemeData(brightness: brightness),
             home: BlocProvider<CounterBloc>(
@@ -42,7 +42,7 @@ class CounterPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Counter')),
       body: BlocBuilder<CounterBloc, int>(
-        builder: (BuildContext context, int state) {
+        builder: (BuildContext context, int state, _) {
           return Center(
             child: Text('$state', style: textTheme.headline2),
           );
