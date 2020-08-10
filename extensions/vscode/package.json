@@ -2,7 +2,7 @@
   "name": "bloc",
   "displayName": "bloc",
   "description": "Support for the bloc library and provides tools for effectively creating blocs for both Flutter and AngularDart apps.",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "publisher": "FelixAngelov",
   "bugs": {
     "url": "https://github.com/felangel/bloc/issues",
@@ -44,6 +44,26 @@
         "command": "extension.new-cubit",
         "title": "Cubit: New Cubit",
         "icon": "assets/logo.png"
+      },
+      {
+        "command": "extension.wrap-blocbuilder",
+        "title": "Wrap with BlocBuilder"
+      },
+      {
+        "command": "extension.wrap-bloclistener",
+        "title": "Wrap with BlocListener"
+      },
+      {
+        "command": "extension.wrap-blocconsumer",
+        "title": "Wrap with BlocConsumer"
+      },
+      {
+        "command": "extension.wrap-blocprovider",
+        "title": "Wrap with BlocProvider"
+      },
+      {
+        "command": "extension.wrap-repositoryprovider",
+        "title": "Wrap with RepositoryProvider"
       }
     ],
     "menus": {
@@ -57,6 +77,28 @@
           "command": "extension.new-cubit",
           "group": "blocGroup@1",
           "when": "explorerResourceIsFolder"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "extension.wrap-blocbuilder",
+          "when": "editorLangId == dart"
+        },
+        {
+          "command": "extension.wrap-bloclistener",
+          "when": "editorLangId == dart"
+        },
+        {
+          "command": "extension.wrap-blocconsumer",
+          "when": "editorLangId == dart"
+        },
+        {
+          "command": "extension.wrap-blocprovider",
+          "when": "editorLangId == dart"
+        },
+        {
+          "command": "extension.wrap-repositoryprovider",
+          "when": "editorLangId == dart"
         }
       ]
     },

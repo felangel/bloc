@@ -34,13 +34,21 @@ Bloc can be installed from the [VSCode Marketplace](https://marketplace.visualst
 | `Bloc: New Bloc`   | Generate a new Bloc  |
 | `Cubit: New Cubit` | Generate a new Cubit |
 
-You can activate the commands by launching the command palette (View -> Command Palette) and running entering the command name.
+You can activate the commands by launching the command palette (View -> Command Palette) and running entering the command name or you can right click on the directory in which you'd like to create the bloc/cubit and select the command from the context menu.
 
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-1.gif)
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage.gif)
 
-Or you can right click on the directory in which you'd like to create the bloc/cubit and select the command from the context menu.
+## Code Actions
 
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-2.gif)
+| Action                         | Description                                    |
+| ------------------------------ | ---------------------------------------------- |
+| `Wrap with BlocBuilder`        | Wraps current widget in a `BlocBuilder`        |
+| `Wrap with BlocListener`       | Wraps current widget in a `BlocListener`       |
+| `Wrap with BlocConsumer`       | Wraps current widget in a `BlocConsumer`       |
+| `Wrap with BlocProvider`       | Wraps current widget in a `BlocProvider`       |
+| `Wrap with RepositoryProvider` | Wraps current widget in a `RepositoryProvider` |
+
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/wrap-with-usage.gif)
 
 ## Snippets
 

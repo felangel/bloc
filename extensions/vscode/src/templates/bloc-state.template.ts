@@ -4,7 +4,7 @@ import { BlocType } from "../utils";
 export function getBlocStateTemplate(blocName: string, type: BlocType): string {
   switch (type) {
     case BlocType.Freezed:
-      return getFreezedBlocState(blocName);
+      return getFreezedBlocStateTemplate(blocName);
     case BlocType.Equatable:
       return getEquatableBlocStateTemplate(blocName);
     default:
@@ -40,7 +40,7 @@ class ${pascalCaseBlocName}Initial extends ${pascalCaseBlocName}State {}
 `;
 }
 
-function getFreezedBlocState(blocName: string): string {
+function getFreezedBlocStateTemplate(blocName: string): string {
   const pascalCaseBlocName =
     changeCase.pascalCase(blocName.toLowerCase()) + "State";
   const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
