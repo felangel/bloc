@@ -8,7 +8,7 @@ En las próximas secciones, vamos a discutir cada uno de ellos en detalle, así 
 
 ## Events
 
-> Los eventos o events son la entrada a un bloc. Se agregan comúnmente en respuesta a las interacciones del usuario, como presionar botones o eventos del ciclo de vida, como cargas de página.
+> Los eventos o events son la entrada a un bloc. Se agregan comúnmente en respuesta a las interacciones del usuario, como presionar botones o eventos del ciclo de vida, como cargar una página.
 
 Al diseñar una aplicación, debemos dar un paso atrás y definir cómo los usuarios interactuarán con ella. En el contexto de nuestra aplicación de contador, tendremos dos botones para aumentar y disminuir nuestro contador.
 
@@ -18,7 +18,7 @@ Necesitamos poder notificar a los "cerebros" de nuestra aplicación tanto de un 
 
 [counter_event.dart](../_snippets/core_concepts/counter_event.dart.md ':include')
 
-En este caso, podemos representar los eventos usando un `enum`, pero para casos más complejos puede ser necesario usar una `class`, especialmente si es necesario pasar información al bloc.
+En este caso, podemos representar los eventos usando un `enum`, pero para casos más complejos puede ser necesario usar una clase (`class`), especialmente si es necesario pasar información al bloc.
 
 En este punto, hemos definido nuestro primer evento! Tenga en cuenta que hasta ahora no hemos usado Bloc de ninguna manera y que no ocurre ninguna magia; es simplemente código Dart.
 
@@ -102,7 +102,7 @@ En este punto, tenemos un `CounterBloc` completamente funcional.
 
 En este punto, probablemente se está preguntando _"¿Cómo notifico a un bloc de un evento?"_.
 
-> Cada bloc tiene un método `add`. `Add` toma un `event` y activa `mapEventToState`. Se puede llamar a `Add` desde la capa de presentación o desde dentro del Bloc y notifica al Bloc de un nuevo `evento`.
+> Cada bloc tiene un método `add`. `Add` toma un `event` y activa `mapEventToState`. Se puede llamar a `Add` desde la capa de presentación o desde dentro del Bloc y notifica al Bloc de un nuevo `event`.
 
 Podemos crear una aplicación simple que cuente de 0 a 3.
 
@@ -126,7 +126,7 @@ Ahora que hemos anulado `onTransition` podemos hacer lo que queramos cuando ocur
 
 Al igual que podemos manejar `Transition` a nivel de bloc, también podemos manejar `Exceptions`.
 
-> `onError` es un método que se puede anular para manejar cada `Excepción` del Bloc local. Por defecto, todas las excepciones serán ignoradas y la funcionalidad `Bloc` no se verá afectada.
+> `onError` es un método que se puede anular para manejar cada `Exception` del Bloc local. Por defecto, todas las excepciones serán ignoradas y la funcionalidad `Bloc` no se verá afectada.
 
 ?> **Nota**: El argumento stackTrace puede ser `null` si la secuencia de estado recibió un error sin un `StackTrace`.
 

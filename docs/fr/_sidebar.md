@@ -14,13 +14,13 @@
 - Tutorials
 
   - Flutter
-    - [Counter](fr/fluttercountertutorial.md)
+    - [**Counter** <sup>✨</sup>](fr/fluttercountertutorial.md)
     - [Timer](fr/fluttertimertutorial.md)
     - [Infinite List](fr/flutterinfinitelisttutorial.md)
-    - [Login](fr/flutterlogintutorial.md)
+    - [**Login** <sup>✨</sup>](fr/flutterlogintutorial.md)
     - [Weather](fr/flutterweathertutorial.md)
     - [Todos](fr/fluttertodostutorial.md)
-    - [Firebase Login](fr/flutterfirebaselogintutorial.md)
+    - [**Firebase Login** <sup>✨</sup>](fr/flutterfirebaselogintutorial.md)
     - [Firestore Todos](fr/flutterfirestoretodostutorial.md)
   - AngularDart
     - [Counter](fr/angularcountertutorial.md)

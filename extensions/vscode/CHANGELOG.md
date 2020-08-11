@@ -1,3 +1,18 @@
+# 5.1.0
+
+- feat: add new bloc/cubit support for `package:freezed`
+- feat: add snippet support for `package:freezed`
+  - `fstate`: new freezed state
+  - `fevent`: new freezed event
+  - `feventwhen`: new freezed event.when helper function
+  - `feventmap`: new freezed event.map helper function
+- feat: add bloc code actions
+  - Wrap with `BlocBuilder`
+  - Wrap with `BlocListener`
+  - Wrap with `BlocConsumer`
+  - Wrap with `BlocProvider`
+  - Wrap with `RepositoryProvider`
+
 # 5.0.0
 
 - **BREAKING**: update to latest bloc packages

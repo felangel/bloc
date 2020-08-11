@@ -23,7 +23,7 @@
   "BlocBuilder": {
     "prefix": "blocbuilder",
     "body": [
-      "BlocBuilder<${1:Subject}Bloc, $1State>(",
+      "BlocBuilder<${1:Subject}${2|Bloc,Cubit|}, $1State>(",
       "\tbuilder: (context, state) {",
       "\t\treturn ${3:Container()};",
       "\t},",
@@ -33,11 +33,11 @@
   "BlocListener": {
     "prefix": "bloclistener",
     "body": [
-      "BlocListener<${1:Subject}Bloc, $1State>(",
+      "BlocListener<${1:Subject}${2|Bloc,Cubit|}, $1State>(",
       "\tlistener: (context, state) {",
-      "\t\t${2:// TODO: implement listener}",
+      "\t\t${3:// TODO: implement listener}",
       "\t},",
-      "\tchild: ${3:Container()},",
+      "\tchild: ${4:Container()},",
       ")"
     ]
   },
@@ -46,30 +46,30 @@
     "body": [
       "MultiBlocListener(",
       "\tlisteners: [",
-      "\t\tBlocListener<${1:Subject}Bloc, $1State>(",
+      "\t\tBlocListener<${1:Subject}${2|Bloc,Cubit|}, $1State>(",
       "\t\t\tlistener: (context, state) {",
-      "\t\t\t\t${2:// TODO: implement listener}",
+      "\t\t\t\t${3:// TODO: implement listener}",
       "\t\t\t},",
       "\t\t),",
-      "\t\tBlocListener<${3:Subject}Bloc, $3State>(",
+      "\t\tBlocListener<${4:Subject}${5|Bloc,Cubit|}, $4State>(",
       "\t\t\tlistener: (context, state) {",
-      "\t\t\t\t${4:// TODO: implement listener}",
+      "\t\t\t\t${6:// TODO: implement listener}",
       "\t\t\t},",
       "\t\t),",
       "\t],",
-      "\tchild: ${5:Container()},",
+      "\tchild: ${7:Container()},",
       ")"
     ]
   },
   "BlocConsumer": {
     "prefix": "blocconsumer",
     "body": [
-      "BlocConsumer<${1:Subject}Bloc, $1State>(",
+      "BlocConsumer<${1:Subject}${2|Bloc,Cubit|}, $1State>(",
       "\tlistener: (context, state) {",
-      "\t\t${2:// TODO: implement listener}",
+      "\t\t${3:// TODO: implement listener}",
       "\t},",
       "\tbuilder: (context, state) {",
-      "\t\treturn ${3:Container()};",
+      "\t\treturn ${4:Container()};",
       "\t},",
       ")"
     ]
@@ -78,8 +78,8 @@
     "prefix": "blocprovider",
     "body": [
       "BlocProvider(",
-      "\tcreate: (context) => ${1:Subject}Bloc(),",
-      "\tchild: ${2:Container()},",
+      "\tcreate: (context) => ${1:Subject}${2|Bloc,Cubit|}(),",
+      "\tchild: ${3:Container()},",
       ")"
     ]
   },
@@ -89,13 +89,13 @@
       "MultiBlocProvider(",
       "\tproviders: [",
       "\t\tBlocProvider(",
-      "\t\t\tcreate: (context) => ${1:Subject}Bloc(),",
+      "\t\t\tcreate: (context) => ${1:Subject}${2|Bloc,Cubit|}(),",
       "\t\t),",
       "\t\tBlocProvider(",
-      "\t\t\tcreate: (context) => ${2:Subject}Bloc(),",
+      "\t\t\tcreate: (context) => ${3:Subject}${4|Bloc,Cubit|}(),",
       "\t\t),",
       "\t],",
-      "\tchild: ${3:Container()},",
+      "\tchild: ${5:Container()},",
       ")"
     ]
   },
@@ -137,9 +137,9 @@
       "\t}",
       "",
       "\t@override",
-      "\tvoid onError(Bloc bloc, Object error, StackTrace stacktrace) {",
+      "\tvoid onError(Cubit cubit, Object error, StackTrace stacktrace) {",
       "\t\t${3:// TODO: implement onError}",
-      "\t\tsuper.onError(bloc, error, stacktrace);",
+      "\t\tsuper.onError(cubit, error, stacktrace);",
       "\t}",
       "",
       "\t@override",
@@ -152,11 +152,11 @@
   },
   "context.bloc()": {
     "prefix": "contextbloc",
-    "body": "context.bloc<${1:Subject}Bloc>()"
+    "body": "context.bloc<${1:Subject}${2|Bloc,Cubit|}>()"
   },
   "BlocProvider.of()": {
     "prefix": "blocof",
-    "body": "BlocProvider.of<${1:Subject}Bloc>(context)"
+    "body": "BlocProvider.of<${1:Subject}${2|Bloc,Cubit|}>(context)"
   },
   "context.repository()": {
     "prefix": "contextrepository",

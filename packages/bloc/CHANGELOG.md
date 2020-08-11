@@ -1,3 +1,7 @@
+# 6.0.1
+
+- docs: minor documentation fixes and improvements
+
 # 6.0.0
 
 - **BREAKING**: do not emit current state on subscription

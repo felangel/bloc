@@ -6,184 +6,334 @@
 
 ![demo](../assets/gifs/flutter_login.gif)
 
-## Setup
+## Project Setup
 
 We'll start off by creating a brand new Flutter project
 
-[script](../_snippets/flutter_login_tutorial/flutter_create.sh.md ':include')
+```sh
+flutter create flutter_login
+```
 
-We can then go ahead and replace the contents of `pubspec.yaml` with
+Next, we can install all of our dependencies
 
-[pubspec.yaml](../_snippets/flutter_login_tutorial/pubspec.yaml.md ':include')
+```sh
+flutter packages get
+```
 
-and then install all of our dependencies
+## Authentication Repository
 
-[script](../_snippets/flutter_login_tutorial/flutter_packages_get.sh.md ':include')
+The first thing we're going to do is create an `authentication_repository` package which will be responsible for managing the authentication domain.
+
+We'll start by create a `packages/authentication_repository` directory at the root of the project which will contain all internal packages.
+
+At a high level, the directory structure should look like this:
+
+```sh
+├── android
+├── ios
+├── lib
+├── packages
+│   └── authentication_repository
+└── test
+```
+
+Next, we can create a `pubspec.yaml` for the `authentication_repository` package:
+
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/authentication_repository/pubspec.yaml ':include')
+
+?> **Note**: `package:authentication_repository` will be a pure Dart package and for simplicity we will only have a dependency on [package:meta](https://pub.dev/packages/meta) for some useful annotations.
+
+Next up, we need to implement is the `AuthenticationRepository` class itself which will be in `lib/src/authentication_repository.dart`.
+
+[authentication_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/authentication_repository/lib/src/authentication_repository.dart ':include')
+
+The `AuthenticationRepository` exposes a `Stream` of `AuthenticationStatus` updates which will be used to notify the application when a user signs in or out.
+
+In addition, there is are `logIn` and `logOut` methods which are stubbed for simplicity but can easily be extended to authenticate with `FirebaseAuth` for example or some other authentication provider.
+
+?> **Note**: Since we are maintaining a `StreamController` internally, a `dispose` method is exposed so that the controller can be closed when it is no longer needed.
+
+Lastly, we need to create `lib/authentication_repository.dart` which will contain the public exports:
+
+[authentication_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/authentication_repository/lib/authentication_repository.dart ':include')
+
+That's it for the `AuthenticationRepository`, next we'll work on the `UserRepository`.
 
 ## User Repository
 
-We're going to need to create a `UserRepository` which helps us manage a user's data.
+Just like with the `AuthenticationRepository`, we will create a `user_repository` package inside the `packages` directory.
 
-[user_repository.dart](../_snippets/flutter_login_tutorial/user_repository.dart.md ':include')
+```sh
+├── android
+├── ios
+├── lib
+├── packages
+│   ├── authentication_repository
+│   └── user_repository
+└── test
+```
 
-?> **Note**: Our user repository is just mocking all of the different implementations for the sake of simplicity but in a real application you might inject a [HttpClient](https://pub.dev/packages/http) as well as something like [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage) in order to request tokens and read/write them to keystore/keychain.
+Next, we'll create the `pubspec.yaml` for the `user_repository`:
 
-## Authentication States
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/pubspec.yaml ':include')
 
-Next, we’re going to need to determine how we’re going to manage the state of our application and create the necessary blocs (business logic components).
+The `user_repository` will be responsible for the user domain and will expose APIs to interact with the current user.
 
-At a high level, we’re going to need to manage the user’s Authentication State. A user's authentication state can be one of the following:
+The first thing we will define is the user model in `lib/src/models/user.dart`:
 
-- AuthenticationInitial - waiting to see if the user is authenticated or not on app start.
-- AuthenticationInProgress - waiting to persist/delete a token
-- AuthenticationSuccess - successfully authenticated
-- AuthenticationFailure - not authenticated
+[user.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/src/models/user.dart ':include')
 
-Each of these states will have an implication on what the user sees.
+For simplicity, a user just has an `id` property but in practice we might have additional properties like `firstName`, `lastName`, `avatarUrl`, etc...
 
-For example:
+?> **Note**: [package:equatable](https://pub.dev/packages/equatable) is used to enable value comparisons of the `User` object.
 
-- if the authentication state was AuthenticationInitial, the user might be seeing a splash screen.
-- if the authentication state was AuthenticationInProgress, the user might be seeing a progress indicator.
-- if the authentication state was AuthenticationSuccess, the user might see a home screen.
-- if the authentication state was AuthenticationFailure, the user might see a login form.
+Next, we can create a `models.dart` in `lib/src/models` which will export all models so that we can use a single import state to import multiple models.
 
-> It's critical to identify what the different states are going to be before diving into the implementation.
+[models.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/src/models/models.dart ':include')
 
-Now that we have our authentication states identified, we can implement our `AuthenticationState` class.
+Now that the models have been defined, we can implement the `UserRepository` class.
 
-[authentication_state.dart](../_snippets/flutter_login_tutorial/authentication_state.dart.md ':include')
+[user_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/src/user_repository.dart ':include')
 
-?> **Note**: The [`equatable`](https://pub.dev/packages/equatable) package is used in order to be able to compare two instances of `AuthenticationState`. By default, `==` returns true only if the two objects are the same instance.
+For this simple example, the `UserRepository` exposes a single method `getUser` which will retrieve the current user. We are stubbing this but in practice this is where we would query the current user from the backend.
 
-## Authentication Events
+Almost done with the `user_repository` package -- the only thing left to do is create the `user_repository.dart` file in `lib` which define the public exports:
 
-Now that we have our `AuthenticationState` defined we need to define the `AuthenticationEvents` which our `AuthenticationBloc` will be reacting to.
+[user_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/user_repository.dart ':include')
 
-We will need:
+Now that we have the `authentication_repository` and `user_repository` packages complete, we can focus on the Flutter application.
 
-- an `AuthenticationStarted` event to notify the bloc that it needs to check if the user is currently authenticated or not.
-- a `AuthenticationLoggedIn` event to notify the bloc that the user has successfully logged in.
-- a `AuthenticationLoggedOut` event to notify the bloc that the user has successfully logged out.
+## Installing Dependencies
 
-[authentication_event.dart](../_snippets/flutter_login_tutorial/authentication_event.dart.md ':include')
+Let's start by updating the generated `pubspec.yaml` at the root of our project:
 
-?> **Note**: the `meta` package is used to annotate the `AuthenticationEvent` parameters as `@required`. This will cause the dart analyzer to warn developers if they don't provide the required parameters.
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/pubspec.yaml ':include')
+
+We can install the dependencies by running:
+
+```sh
+flutter packages get
+```
 
 ## Authentication Bloc
 
-Now that we have our `AuthenticationState` and `AuthenticationEvents` defined, we can get to work on implementing the `AuthenticationBloc` which is going to manage checking and updating a user's `AuthenticationState` in response to `AuthenticationEvents`.
+The `AuthenticationBloc` will be responsible to reacting to changes in the authentication state (exposed by the `AuthenticationRepository`) and will emit states we can react to in the presentation layer.
 
-We'll start off by creating our `AuthenticationBloc` class.
+The implementation for the `AuthenticationBloc` is inside of `lib/authentication` because we treat authentication as a feature in our application layer.
 
-[authentication_bloc.dart](../_snippets/flutter_login_tutorial/authentication_bloc_constructor.dart.md ':include')
+```sh
+├── lib
+│   ├── app.dart
+│   ├── authentication
+│   │   ├── authentication.dart
+│   │   └── bloc
+│   │       ├── authentication_bloc.dart
+│   │       ├── authentication_event.dart
+│   │       └── authentication_state.dart
+│   ├── main.dart
+```
 
-?> **Note**: Just from reading the class definition, we already know this bloc is going to be converting `AuthenticationEvents` into `AuthenticationStates`.
+?> **Tip**: Use the [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) or [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) to create blocs automatically.
 
-?> **Note**: Our `AuthenticationBloc` has a dependency on the `UserRepository`.
+### authentication_event.dart
 
-Now all that's left is to implement `mapEventToState`.
+> `AuthenticationEvent` instances will be the input to the `AuthenticationBloc` and will be processed and used to emit new `AuthenticationState` instances.
 
-[authentication_bloc.dart](../_snippets/flutter_login_tutorial/authentication_bloc_map_event_to_state.dart.md ':include')
+In this application, the `AuthenticationBloc` will be reacting to two different events:
 
-Great! Our final `AuthenticationBloc` should look like
+- `AuthenticationStatusChanged`: notifies the bloc of a change to the user's AuthenticationStatus
+- `AuthenticationLogoutRequested`: notifies the bloc of a logout request
 
-[authentication_bloc.dart](../_snippets/flutter_login_tutorial/authentication_bloc.dart.md ':include')
+[authentication_event.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/authentication/bloc/authentication_event.dart ':include')
 
-Now that we have our `AuthenticationBloc` fully implemented, let’s get to work on the presentational layer.
+Next, let's take a look at the `AuthenticationState`.
 
-## Splash Page
+### authentication_state.dart
 
-The first thing we’ll need is a `SplashPage` widget which will serve as our Splash Screen while our `AuthenticationBloc` determines whether or not a user is logged in.
+> `AuthenticationState` instances will be the output of the `AuthenticationBloc` and will be consumed by the presentation layer.
 
-[splash_page.dart](../_snippets/flutter_login_tutorial/splash_page.dart.md ':include')
+The `AuthenticationState` class has three named constructors:
 
-## Home Page
+- `AuthenticationState.unknown()`: the default state which indicates that the bloc does not yet know whether the current user is authenticated or not.
 
-Next, we will need to create our `HomePage` so that we can navigate users there once they have successfully logged in.
+- `AuthenticationState.authenticated()`: the state which indicates that the user is current authenticated.
 
-[home_page.dart](../_snippets/flutter_login_tutorial/home_page.dart.md ':include')
+- `AuthenticationState.unauthenticated()`: the state which indicates that the user is current not authenticated.
 
-?> **Note**: This is the first class in which we are using `flutter_bloc`. We will get into `BlocProvider.of<AuthenticationBloc>(context)` shortly but for now just know that it allows our `HomePage` to access our `AuthenticationBloc`.
+[authentication_state.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/authentication/bloc/authentication_state.dart ':include')
 
-?> **Note**: We are adding a `AuthenticationLoggedOut` event to our `AuthenticationBloc` when a user pressed the logout button.
+Now that we have seen the `AuthenticationEvent` and `AuthenticationState` implementations let's take a look at `AuthenticationBloc`.
 
-Next up, we need to create a `LoginPage` and `LoginForm`.
+### authentication_bloc.dart
 
-Because the `LoginForm` will have to handle user input (Login Button Pressed) and will need to have some business logic (getting a token for a given username/password), we will need to create a `LoginBloc`.
+> The `AuthenticationBloc` manages the authentication state of the application which is used to determine things like whether or not to start the user at a login page or a home page.
 
-Just like we did for the `AuthenticationBloc`, we will need to define the `LoginState`, and `LoginEvents`. Let’s start with `LoginState`.
+[authentication_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/authentication/bloc/authentication_bloc.dart ':include')
 
-## Login States
+The `AuthenticationBloc` has a dependency on both the `AuthenticationRepository` and `UserRepository` and defines the initial state as `AuthenticationState.unknown()`.
 
-[login_state.dart](../_snippets/flutter_login_tutorial/login_state.dart.md ':include')
+In the constructor body, the `AuthenticationBloc` subscribes to the `status` stream of the `AuthenticationRepository` and adds an `AuthenticationStatusChanged` event internally in response to a new `AuthenticationStatus`.
 
-`LoginInitial` is the initial state of the LoginForm.
+!> The `AuthenticationBloc` overrides `close` in order to dispose both the `StreamSubscription` as well as the `AuthenticationRepository`.
 
-`LoginInProgress` is the state of the LoginForm when we are validating credentials
+Next, `mapEventToState` handles transforming the incoming `AuthenticationEvent` instances into new `AuthenticationState` instances.
 
-`LoginFailure` is the state of the LoginForm when a login attempt has failed.
+When an `AuthenticationStatusChanged` event is added if the associated status is `AuthenticationStatus.authenticated`, the `AuthentictionBloc` queries the user via the `UserRepository`.
 
-Now that we have the `LoginState` defined let’s take a look at the `LoginEvent` class.
+## main.dart
 
-## Login Events
+Next, we can replace the default `main.dart` with:
 
-[login_event.dart](../_snippets/flutter_login_tutorial/login_event.dart.md ':include')
+[main.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/main.dart ':include')
 
-`LoginButtonPressed` will be added when a user pressed the login button. It will notify the `LoginBloc` that it needs to request a token for the given credentials.
+?> **Note**: We are injecting a single instance of the `AuthenticationRepository` and `UserRepository` into the `App` widget (which we will get to next).
 
-We can now implement our `LoginBloc`.
+## App
 
-## Login Bloc
+`app.dart` will contain the root `App` widget for the entire application.
 
-[login_bloc.dart](../_snippets/flutter_login_tutorial/login_bloc.dart.md ':include')
+[app.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/app.dart ':include')
 
-?> **Note**: `LoginBloc` has a dependency on `UserRepository` in order to authenticate a user given a username and password.
+?> **Note**: `app.dart` is split into two parts `App` and `AppView`. `App` is responsible for creating/providing the `AuthenticationBloc` which will be consumed by the `AppView`. This decoupling will enable us to easily test both the `App` and `AppView` widgets later on.
 
-?> **Note**: `LoginBloc` has a dependency on `AuthenticationBloc` in order to update the AuthenticationState when a user has entered valid credentials.
+?> **Note**: `RepositoryProvider` is used to provide the single instance of `AuthenticationRepository` to the entire application which will come in handy later on.
 
-Now that we have our `LoginBloc` we can start working on `LoginPage` and `LoginForm`.
+`AppView` is a `StatefulWidget` because it maintains a `GlobalKey` which is used to access the `NavigatorState`. By default, `AppView` will render the `SplashPage` (which we will see later) and it uses `BlocListener` to navigate to different pages based on changes in the `AuthenticationState`.
 
-## Login Page
+## Splash
 
-The `LoginPage` widget will serve as our container widget and will provide the necessary dependencies to the `LoginForm` widget (`LoginBloc` and `AuthenticationBloc`).
+> The splash feature will just contain a simple view which will be rendered right when the app is launched while the app determines whether the user is authenticated.
 
-[login_page.dart](../_snippets/flutter_login_tutorial/login_page.dart.md ':include')
+```sh
+lib
+└── splash
+    ├── splash.dart
+    └── view
+        └── splash_page.dart
+```
 
-?> **Note**: `LoginPage` is a `StatelessWidget`. The `LoginPage` widget uses the `BlocProvider` widget to create, close, and provide the `LoginBloc` to the sub-tree.
+[splash_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/splash/view/splash_page.dart ':include')
 
-?> **Note**: We are using the injected `UserRepository` in order to create our `LoginBloc`.
+?> **Tip**: `SplashPage` exposes a static `Route` which makes it very easy to navigate to via `Navigator.of(context).push(SplashPage.route())`;
 
-?> **Note**: We are using `BlocProvider.of<AuthenticationBloc>(context)` again in order to access the `AuthenticationBloc` from the `LoginPage`.
+## Login
 
-Next up, let’s go ahead and create our `LoginForm`.
+> The login feature contains a `LoginPage`, `LoginForm` and `LoginBloc` and allows users to enter a username and password to log into the application.
 
-## Login Form
+```sh
+├── lib
+│   ├── login
+│   │   ├── bloc
+│   │   │   ├── login_bloc.dart
+│   │   │   ├── login_event.dart
+│   │   │   └── login_state.dart
+│   │   ├── login.dart
+│   │   ├── models
+│   │   │   ├── models.dart
+│   │   │   ├── password.dart
+│   │   │   └── username.dart
+│   │   └── view
+│   │       ├── login_form.dart
+│   │       ├── login_page.dart
+│   │       └── view.dart
+```
 
-[login_form.dart](../_snippets/flutter_login_tutorial/login_form.dart.md ':include')
+### Login Models
 
-?> **Note**: Our `LoginForm` uses the `BlocBuilder` widget so that it can rebuild whenever there is a new `LoginState`. `BlocBuilder` is a Flutter widget which requires a Bloc and a builder function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed and various performance optimizations.
+We are using [package:formz](https://pub.dev/packages/formz) to create reusable and standard models the the `username` and `password`.
 
-There’s not much else going on in the `LoginForm` widget so let's move on to creating our loading indicator.
+#### Username
 
-## Loading Indicator
+[username.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/models/username.dart ':include')
 
-[loading_indicator.dart](../_snippets/flutter_login_tutorial/loading_indicator.dart.md ':include')
+For simplicity, we are just validating the username to ensure that it is not empty but in practice you can enforce special character usage, length, etc...
 
-Now it’s finally time to put it all together and create our main App widget in `main.dart`.
+#### Password
 
-## Putting it all together
+[password.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/models/password.dart ':include')
 
-[main.dart](../_snippets/flutter_login_tutorial/main.dart.md ':include')
+Again, we are just performing a simple check to ensure the password is not empty.
 
-?> **Note**: Again, we are using `BlocBuilder` in order to react to changes in `AuthenticationState` so that we can show the user either the `SplashPage`, `LoginPage`, `HomePage`, or `LoadingIndicator` based on the current `AuthenticationState`.
+#### Models Barrel
 
-?> **Note**: Our app is wrapped in a `BlocProvider` which makes our instance of `AuthenticationBloc` available to the entire widget subtree. `BlocProvider` is a Flutter widget which provides a bloc to its children via `BlocProvider.of(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
+Just like before, there is a `models.dart` barrel to make it easy to import the `Username` and `Password` models with a single import.
 
-Now `BlocProvider.of<AuthenticationBloc>(context)` in our `HomePage` and `LoginPage` widget should make sense.
+[models.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/models/models.dart ':include')
 
-Since we wrapped our `App` within a `BlocProvider<AuthenticationBloc>` we can access the instance of our `AuthenticationBloc` by using the `BlocProvider.of<AuthenticationBloc>(BuildContext context)` static method from anywhere in the subtree.
+### Login Bloc
+
+> The `LoginBloc` manages the state of the `LoginForm` and takes care validating the username and password input as well as the state of the form.
+
+#### login_event.dart
+
+In this application there are three different `LoginEvent` types:
+
+- `LoginUsernameChanged`: notifies the bloc that the username has been modified.
+- `LoginPasswordChanged`: notifies the bloc that the password has been modified.
+- `LoginSubmitted`: notifies the bloc that the form has been submitted.
+
+[login_event.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/bloc/login_event.dart ':include')
+
+#### login_state.dart
+
+The `LoginState` will contain the status of the form as well as the username and password input states.
+
+[login_state.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/bloc/login_state.dart ':include')
+
+?> **Note**: The `Username` and `Password` models are used as part of the `LoginState` and the status is also part of [package:formz](https://pub.dev/packages/formz).
+
+#### login_bloc.dart
+
+> The `LoginBloc` is responsible for reacting to user interactions in the `LoginForm` and handling the validation and submission of the form.
+
+[login_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/bloc/login_bloc.dart ':include')
+
+The `LoginBloc` has a dependency on the `AuthenticationRepository` because when the form is submitted, it invokes `logIn`. The initial state of the bloc is `pure` meaning neither the inputs nor the form has been touched or interacted with.
+
+Whenever either the `username` or `password` change, the bloc will create a dirty variant of the `Username`/`Password` model and update the form status via the `Formz.validate` API.
+
+When the `LoginSubmitted` event is added, if the current status of the form is valid, the bloc makes a call to `logIn` and updates the status based on the outcome of the request.
+
+Next let's take a look at the `LoginPage` and `LoginForm`.
+
+### Login Page
+
+> The `LoginPage` is responsible for exposing the `Route` as well as creating and providing the `LoginBloc` to the `LoginForm`.
+
+[login_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/view/login_page.dart ':include')
+
+?> **Note**: `context.repository` is used to lookup the instance of `AuthenticationRepository` via the `BuildContext`.
+
+### Login Form
+
+> The `LoginForm` handles notifying the `LoginBloc` of user events and also responds to state changes using `BlocBuilder` and `BlocListener`.
+
+[login_form.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/view/login_form.dart ':include')
+
+`BlocListener` is used to show a `SnackBar` if the login submission fails. In addition, `BlocBuilder` widgets are used to wrap each of the `TextField` widgets and make use of the `buildWhen` property in order to optimize for rebuilds. The `onChanged` callback is used to notify the `LoginBloc` of changes to the username/password.
+
+The `_LoginButton` widget is only enabled if the status of the form is valid and a `CircularProgressIndicator` is shown in its place while the form is being submitted.
+
+## Home
+
+> Upon a successful `logIn` request, the state of the `AuthenticationBloc` will change to `authenticated` and the user will be navigated to the `HomePage` where we display the user's `id` as well as a button to log out.
+
+```sh
+├── lib
+│   ├── home
+│   │   ├── home.dart
+│   │   └── view
+│   │       └── home_page.dart
+```
+
+### Home Page
+
+The `HomePage` can access the current user's ID via `context.bloc<AuthenticationBloc>().state.user.id` and displays it via a `Text` widget. In addition, when the logout button is tapped, an `AuthenticationLogoutRequested` event is added to the `AuthenticationBloc`.
+
+[home_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/home/view/home_page.dart ':include')
+
+?> **Note**: `context.bloc<AuthenticationBloc>().state.user.id` is a one time look-up and does not subscribe for updates.
 
 At this point we have a pretty solid login implementation and we have decoupled our presentation layer from the business logic layer by using Bloc.
 
-The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_login).
+The full source for this example (including unit and widget tests) can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_login).

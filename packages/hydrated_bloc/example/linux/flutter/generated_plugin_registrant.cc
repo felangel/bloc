@@ -5,5 +5,5 @@
 #include "generated_plugin_registrant.h"
 
 
-void RegisterPlugins(flutter::PluginRegistry* registry) {
+void fl_register_plugins(FlPluginRegistry* registry) {
 }

@@ -1,25 +1,30 @@
 name: flutter_login
 description: A new Flutter project.
+
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc:
-    path: ../../packages/flutter_bloc
+  bloc: ^6.0.0
+  flutter_bloc: ^6.0.0
+  formz: ^0.2.0
+  equatable: ^1.2.3
+  authentication_repository:
+    path: packages/authentication_repository
   user_repository:
-    path: user_repository
-  equatable: ^1.0.0
+    path: packages/user_repository
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  bloc_test:
-    path: ../../packages/bloc_test
-  mockito: ^4.0.0
+  bloc_test: ^7.0.0
+  mockito: ^4.1.1
 
 flutter:
   uses-material-design: true

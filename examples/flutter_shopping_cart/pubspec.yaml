@@ -9,9 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc:
-    path: ../../packages/flutter_bloc
-  equatable: ^1.0.0
+  bloc: ^6.0.1
+  flutter_bloc: ^6.0.1
+  equatable: ^1.2.3
 
 flutter:
   uses-material-design: true
