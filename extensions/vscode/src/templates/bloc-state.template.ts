@@ -48,7 +48,7 @@ function getFreezedBlocStateTemplate(blocName: string): string {
 
 @freezed
 abstract class ${pascalCaseBlocName} with _\$${pascalCaseBlocName} {
-  const factory ${pascalCaseBlocName}.inital() = _Initial;
+  const factory ${pascalCaseBlocName}.initial() = _Initial;
 }
 `;
 }
