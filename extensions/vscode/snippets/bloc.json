@@ -166,7 +166,7 @@
     "prefix": "repository",
     "body": "context.repository<${1:Subject}Repository>()"
   },
-  "SubjectVerbState": {
+  "Bloc state": {
     "prefix": "blocstate",
     "body": [
       "class ${1:Subject}${2:Verb}${3:State} extends $1State {",
@@ -180,17 +180,17 @@
     ],
     "description": "Subject + Verb (action) + State"
   },
-  "SubjectInitial": {
+  "Bloc state initial": {
     "prefix": "blocstateinitial",
     "body": "class ${1:Subject}Initial extends $1State {}",
     "description": "Subject + Initial"
   },
-  "SubjectVerbInProgress": {
+  "Bloc state in progress": {
     "prefix": "blocstateinprogress",
     "body": "class ${1:Subject}${2:Verb}InProgress extends $1State {}",
     "description": "Subject + Verb (action) + InProgress"
   },
-  "SubjectVerbSuccess": {
+  "Bloc state success": {
     "prefix": "blocstatesuccess",
     "body": [
       "class ${1:Subject}${2:Verb}Success extends $1State {",
@@ -204,7 +204,7 @@
     ],
     "description": "Subject + Verb (action) + Success"
   },
-  "SubjectVerbFailure": {
+  "Bloc state failure": {
     "prefix": "blocstatefailure",
     "body": [
       "class ${1:Subject}${2:Verb}Failure extends $1State {",
@@ -218,7 +218,7 @@
     ],
     "description": "Subject + Verb (action) + Failure"
   },
-  "SubjectNounVerb": {
+  "Bloc event": {
     "prefix": "blocevent",
     "body": [
       "class ${1:Subject}${2:Noun}${3:Verb} extends $1Event {",
@@ -232,7 +232,7 @@
     ],
     "description": "Subject + Noun (optional) + Verb (event)"
   },
-  "SubjectStarted": {
+  "Bloc event started": {
     "prefix": "bloceventstarted",
     "body": "class ${1:Subject}Started extends $1Event {}",
     "description": "Subject + Started"
