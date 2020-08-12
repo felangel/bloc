@@ -130,7 +130,7 @@
     ]
   },
   "context.bloc()": {
-    "prefix": "contextbloc",
+    "prefix": "bloc",
     "body": "context.bloc<${1:Subject}${2|Bloc,Cubit|}>()"
   },
   "BlocProvider.of()": {
@@ -138,7 +138,7 @@
     "body": "BlocProvider.of<${1:Subject}${2|Bloc,Cubit|}>(context)"
   },
   "context.repository()": {
-    "prefix": "contextrepository",
+    "prefix": "repository",
     "body": "context.repository<${1:Subject}Repository>()"
   },
   "RepositoryProvider.of()": {
