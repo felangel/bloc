@@ -58,6 +58,7 @@ You can activate the commands by launching the command palette (View -> Command 
 | ------------------------- | ------------------------------------------ |
 | `blocclass`               | Creates a bloc class                       |
 | `cubitclass`              | Creates a cubit class                      |
+| `blocobserver`            | Creates a `BlocObserver` class             |
 | `blocprovider`            | Creates a `BlocProvider` widget            |
 | `multiblocprovider`       | Creates a `MultiBlocProvider` widget       |
 | `repositoryprovider`      | Creates a `RepositoryProvider` widget      |
@@ -70,7 +71,6 @@ You can activate the commands by launching the command palette (View -> Command 
 | `repositoryof`            | Shortcut for `RepositoryProvider.of()`     |
 | `bloc`                    | Shortcut for `context.bloc()`              |
 | `repository`              | Shortcut for `context.repository()`        |
-| `blocobserver`            | Creates a `BlocObserver` class             |
 | `blocstate`               | Creates a state class                      |
 | `blocstateinitial`        | Creates an initial state class             |
 | `blocstateinprogress`     | Creates an in progress state class         |
