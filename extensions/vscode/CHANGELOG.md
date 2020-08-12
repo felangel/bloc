@@ -1,3 +1,7 @@
+# 5.1.1
+
+- fix: freezed template typo
+
 # 5.1.0
 
 - feat: add new bloc/cubit support for `package:freezed`
