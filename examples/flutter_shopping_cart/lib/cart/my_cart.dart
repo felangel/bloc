@@ -17,7 +17,7 @@ class MyCart extends StatelessWidget {
                 child: _CartList(),
               ),
             ),
-            Divider(height: 4, color: Colors.black),
+            const Divider(height: 4, color: Colors.black),
             _CartTotal()
           ],
         ),

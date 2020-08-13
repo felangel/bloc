@@ -5,7 +5,7 @@ import * as mkdirp from "mkdirp";
 import { InputBoxOptions, OpenDialogOptions, Uri, window } from "vscode";
 import { existsSync, lstatSync, writeFile } from "fs";
 import { getCubitStateTemplate, getCubitTemplate } from "../templates";
-import { hasDependency } from "../utils";
+import { getBlocType, BlocType } from "../utils";
 
 export const newCubit = async (uri: Uri) => {
   const cubitName = await promptForCubitName();
@@ -25,10 +25,10 @@ export const newCubit = async (uri: Uri) => {
     targetDirectory = uri.fsPath;
   }
 
-  const useEquatable = await hasDependency("equatable");
+  const blocType = await getBlocType();
   const pascalCaseCubitName = changeCase.pascalCase(cubitName.toLowerCase());
   try {
-    await generateCubitCode(cubitName, targetDirectory, useEquatable);
+    await generateCubitCode(cubitName, targetDirectory, blocType);
     window.showInformationMessage(
       `Successfully Generated ${pascalCaseCubitName} Cubit`
     );
@@ -66,7 +66,7 @@ async function promptForTargetDirectory(): Promise<string | undefined> {
 async function generateCubitCode(
   cubitName: string,
   targetDirectory: string,
-  useEquatable: boolean
+  type: BlocType
 ) {
   const cubitDirectoryPath = `${targetDirectory}/cubit`;
   if (!existsSync(cubitDirectoryPath)) {
@@ -74,8 +74,8 @@ async function generateCubitCode(
   }
 
   await Promise.all([
-    createCubitStateTemplate(cubitName, targetDirectory, useEquatable),
-    createCubitTemplate(cubitName, targetDirectory, useEquatable),
+    createCubitStateTemplate(cubitName, targetDirectory, type),
+    createCubitTemplate(cubitName, targetDirectory, type),
   ]);
 }
 
@@ -93,7 +93,7 @@ function createDirectory(targetDirectory: string): Promise<void> {
 function createCubitStateTemplate(
   cubitName: string,
   targetDirectory: string,
-  useEquatable: boolean
+  type: BlocType
 ) {
   const snakeCaseCubitName = changeCase.snakeCase(cubitName.toLowerCase());
   const targetPath = `${targetDirectory}/cubit/${snakeCaseCubitName}_state.dart`;
@@ -103,7 +103,7 @@ function createCubitStateTemplate(
   return new Promise(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getCubitStateTemplate(cubitName, useEquatable),
+      getCubitStateTemplate(cubitName, type),
       "utf8",
       (error) => {
         if (error) {
@@ -119,7 +119,7 @@ function createCubitStateTemplate(
 function createCubitTemplate(
   cubitName: string,
   targetDirectory: string,
-  useEquatable: boolean
+  type: BlocType
 ) {
   const snakeCaseCubitName = changeCase.snakeCase(cubitName.toLowerCase());
   const targetPath = `${targetDirectory}/cubit/${snakeCaseCubitName}_cubit.dart`;
@@ -129,7 +129,7 @@ function createCubitTemplate(
   return new Promise(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getCubitTemplate(cubitName, useEquatable),
+      getCubitTemplate(cubitName, type),
       "utf8",
       (error) => {
         if (error) {

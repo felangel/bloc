@@ -1,0 +1,1 @@
+export 'avatar.dart';

@@ -1,9 +1,15 @@
 import * as changeCase from "change-case";
+import { BlocType } from "../utils";
 
-export function getCubitTemplate(cubitName: string, useEquatable: boolean): string {
-  return useEquatable
-    ? getEquatableCubitTemplate(cubitName)
-    : getDefaultCubitTemplate(cubitName);
+export function getCubitTemplate(cubitName: string, type: BlocType): string {
+  switch (type) {
+    case BlocType.Freezed:
+      return getFreezedCubitTemplate(cubitName);
+    case BlocType.Equatable:
+      return getEquatableCubitTemplate(cubitName);
+    default:
+      return getDefaultCubitTemplate(cubitName);
+  }
 }
 
 function getEquatableCubitTemplate(cubitName: string) {
@@ -32,6 +38,22 @@ part '${snakeCaseCubitName}_state.dart';
 
 class ${pascalCaseCubitName}Cubit extends Cubit<${cubitState}> {
   ${pascalCaseCubitName}Cubit() : super(${pascalCaseCubitName}Initial());
+}
+`;
+}
+
+export function getFreezedCubitTemplate(cubitName: string) {
+  const pascalCaseCubitName = changeCase.pascalCase(cubitName.toLowerCase());
+  const snakeCaseCubitName = changeCase.snakeCase(cubitName.toLowerCase());
+  const cubitState = `${pascalCaseCubitName}State`;
+  return `import 'package:bloc/bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part '${snakeCaseCubitName}_state.dart';
+part '${snakeCaseCubitName}_cubit.freezed.dart';
+
+class ${pascalCaseCubitName}Cubit extends Cubit<${cubitState}> {
+  ${pascalCaseCubitName}Cubit() : super(_Initial());
 }
 `;
 }

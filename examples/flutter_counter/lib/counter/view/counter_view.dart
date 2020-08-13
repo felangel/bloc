@@ -22,13 +22,13 @@ class CounterView extends StatelessWidget {
         children: <Widget>[
           FloatingActionButton(
             key: const Key('counterView_increment_floatingActionButton'),
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
             onPressed: () => context.bloc<CounterCubit>().increment(),
           ),
           const SizedBox(height: 8),
           FloatingActionButton(
             key: const Key('counterView_decrement_floatingActionButton'),
-            child: Icon(Icons.remove),
+            child: const Icon(Icons.remove),
             onPressed: () => context.bloc<CounterCubit>().decrement(),
           ),
         ],
