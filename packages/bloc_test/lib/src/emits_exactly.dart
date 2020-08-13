@@ -51,6 +51,7 @@ import 'package:test/test.dart';
 ///   );
 /// });
 /// ```
+@Deprecated('next release, use blocTest instead')
 Future<void> emitsExactly<B extends Bloc<Object, State>, State>(
   B bloc,
   Iterable expected, {
