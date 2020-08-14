@@ -170,7 +170,7 @@ In this case, we don’t want the `Actions` widget to be rebuilt on every tick b
 
 As a result, if we randomly colored the widgets on every rebuild, it would look like:
 
-![BlocBuilder condition demo](https://cdn-images-1.medium.com/max/1600/1*YyjpH1rcZlYWxCX308l_Ew.gif)
+![BlocBuilder buildWhen demo](https://cdn-images-1.medium.com/max/1600/1*YyjpH1rcZlYWxCX308l_Ew.gif)
 
 ?> **Notice:** Even though the `Text` widget is rebuilt on every tick, we only rebuild the `Actions` if they need to be rebuilt.
 

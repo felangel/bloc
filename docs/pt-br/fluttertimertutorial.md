@@ -164,13 +164,13 @@ Agora precisamos conectar o `Actions` ao nosso widget `Timer`.
 
 Adicionamos outro `BlocBuilder` que renderizará o widget `Actions`; no entanto, desta vez, estamos usando um recurso recém-introduzido [flutter_bloc] (https://pub.dev/packages/flutter_bloc) para controlar a frequência com que o widget `Actions` é reconstruído (introduzido na` v0.15.0`).
 
-Se você deseja um controle refinado sobre quando a função `builder` é chamada, você pode fornecer uma condição opcional ao `BlocBuilder`. A condição pega o estado anterior do bloc e o estado atual do bloc e retorna um `booleano`. Se `condition` retornar `true`, o `builder` será chamado com` state` e o widget será reconstruído. Se `condition` retornar `false`, o `builder` não será chamado com `state` e nenhuma reconstrução ocorrerá.
+Se você deseja um controle refinado sobre quando a função `builder` é chamada, você pode fornecer uma condição opcional ao `BlocBuilder`. A condição pega o estado anterior do bloc e o estado atual do bloc e retorna um `booleano`. Se `buildWhen` retornar `true`, o `builder` será chamado com` state` e o widget será reconstruído. Se `buildWhen` retornar `false`, o `builder` não será chamado com `state` e nenhuma reconstrução ocorrerá.
 
 Nesse caso, não queremos que o widget "Actions" seja reconstruído a cada tick porque isso seria ineficiente. Em vez disso, queremos apenas que o `Actions` seja reconstruído se o `runtimeType` do `TimerState` mudar (TimerInitial => TimerRunInProgress, TimerRunInProgress => TimerRunPause, etc...).
 
 Como resultado, se coloríssemos os widgets aleatoriamente em cada reconstrução, ficaria assim:
 
-![BlocBuilder condition demo](https://cdn-images-1.medium.com/max/1600/1*YyjpH1rcZlYWxCX308l_Ew.gif)
+![BlocBuilder buildWhen demo](https://cdn-images-1.medium.com/max/1600/1*YyjpH1rcZlYWxCX308l_Ew.gif)
 
 ?> **Note:** Mesmo que o widget `Text` seja reconstruído a cada tick, apenas reconstruímos as `Actions` se elas precisarem ser reconstruídas.
 
