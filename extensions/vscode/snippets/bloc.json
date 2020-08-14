@@ -1,6 +1,6 @@
 {
   "Bloc": {
-    "prefix": "blocclass",
+    "prefix": "bloc",
     "body": [
       "class ${1:Subject}Bloc extends Bloc<$1Event, $1State> {",
       "\t${1:Subject}Bloc() : super(${1:Subject}Initial());",
@@ -13,7 +13,7 @@
     ]
   },
   "Cubit": {
-    "prefix": "cubitclass",
+    "prefix": "cubit",
     "body": [
       "class ${1:Subject}Cubit extends Cubit<$1State> {",
       "\t${1:Subject}Cubit() : super(${1:Subject}Initial());",
@@ -72,7 +72,7 @@
     ]
   },
   "RepositoryProvider": {
-    "prefix": "repositoryprovider",
+    "prefix": "repoprovider",
     "body": [
       "RepositoryProvider(",
       "\tcreate: (context) => ${1:Subject}Repository(),",
@@ -81,7 +81,7 @@
     ]
   },
   "MultiRepositoryProvider": {
-    "prefix": "multirepositoryprovider",
+    "prefix": "multirepoprovider",
     "body": [
       "MultiRepositoryProvider(",
       "\tproviders: [",
@@ -155,15 +155,15 @@
     "body": "BlocProvider.of<${1:Subject}${2|Bloc,Cubit|}>(context)"
   },
   "RepositoryProvider.of()": {
-    "prefix": "repositoryof",
+    "prefix": "repoof",
     "body": "RepositoryProvider.of<${1:Subject}Repository>(context)"
   },
   "context.bloc()": {
-    "prefix": "bloc",
+    "prefix": "ctxbloc",
     "body": "context.bloc<${1:Subject}${2|Bloc,Cubit|}>()"
   },
   "context.repository()": {
-    "prefix": "repository",
+    "prefix": "ctxrepo",
     "body": "context.repository<${1:Subject}Repository>()"
   },
   "Bloc state": {
@@ -172,51 +172,13 @@
       "class ${1:Subject}${2:Verb}${3:State} extends $1State {",
       "\tconst $1$2$3($5);",
       "",
-      "$4",
+      "\t$4",
       "",
       "\t@override",
       "\tList<Object> get props => [$6];",
       "}"
     ],
     "description": "Subject + Verb (action) + State"
-  },
-  "Bloc state initial": {
-    "prefix": "blocstateinitial",
-    "body": "class ${1:Subject}Initial extends $1State {}",
-    "description": "Subject + Initial"
-  },
-  "Bloc state in progress": {
-    "prefix": "blocstateinprogress",
-    "body": "class ${1:Subject}${2:Verb}InProgress extends $1State {}",
-    "description": "Subject + Verb (action) + InProgress"
-  },
-  "Bloc state success": {
-    "prefix": "blocstatesuccess",
-    "body": [
-      "class ${1:Subject}${2:Verb}Success extends $1State {",
-      "\tconst $1$2Success($4);",
-      "",
-      "\t$3",
-      "",
-      "\t@override",
-      "\tList<Object> get props => [$5];",
-      "}"
-    ],
-    "description": "Subject + Verb (action) + Success"
-  },
-  "Bloc state failure": {
-    "prefix": "blocstatefailure",
-    "body": [
-      "class ${1:Subject}${2:Verb}Failure extends $1State {",
-      "\tconst $1$2Failure(this.error);",
-      "",
-      "\tfinal Exception error;",
-      "",
-      "\t@override",
-      "\tList<Object> get props => [error];",
-      "}"
-    ],
-    "description": "Subject + Verb (action) + Failure"
   },
   "Bloc event": {
     "prefix": "blocevent",
@@ -231,10 +193,5 @@
       "}"
     ],
     "description": "Subject + Noun (optional) + Verb (event)"
-  },
-  "Bloc event started": {
-    "prefix": "bloceventstarted",
-    "body": "class ${1:Subject}Started extends $1Event {}",
-    "description": "Subject + Started"
   }
 }

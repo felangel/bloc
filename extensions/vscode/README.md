@@ -54,30 +54,25 @@ You can activate the commands by launching the command palette (View -> Command 
 
 ### Bloc
 
-| Shortcut                  | Description                                |
-| ------------------------- | ------------------------------------------ |
-| `blocclass`               | Creates a bloc class                       |
-| `cubitclass`              | Creates a cubit class                      |
-| `blocobserver`            | Creates a `BlocObserver` class             |
-| `blocprovider`            | Creates a `BlocProvider` widget            |
-| `multiblocprovider`       | Creates a `MultiBlocProvider` widget       |
-| `repositoryprovider`      | Creates a `RepositoryProvider` widget      |
-| `multirepositoryprovider` | Creates a `MultiRepositoryProvider` widget |
-| `blocbuilder`             | Creates a `BlocBuilder` widget             |
-| `bloclistener`            | Creates a `BlocListener` widget            |
-| `multibloclistener`       | Creates a `MultiBlocListener` widget       |
-| `blocconsumer`            | Creates a `BlocConsumer` widget            |
-| `blocof`                  | Shortcut for `BlocProvider.of()`           |
-| `repositoryof`            | Shortcut for `RepositoryProvider.of()`     |
-| `bloc`                    | Shortcut for `context.bloc()`              |
-| `repository`              | Shortcut for `context.repository()`        |
-| `blocstate`               | Creates a state class                      |
-| `blocstateinitial`        | Creates an initial state class             |
-| `blocstateinprogress`     | Creates an in progress state class         |
-| `blocstatesuccess`        | Creates a success state class              |
-| `blocstatefailure`        | Creates a failure state class              |
-| `blocevent`               | Creates an event class                     |
-| `bloceventstarted`        | Creates a started event class              |
+| Shortcut            | Description                                |
+| ------------------- | ------------------------------------------ |
+| `bloc`              | Creates a bloc class                       |
+| `cubit`             | Creates a cubit class                      |
+| `blocobserver`      | Creates a `BlocObserver` class             |
+| `blocprovider`      | Creates a `BlocProvider` widget            |
+| `multiblocprovider` | Creates a `MultiBlocProvider` widget       |
+| `repoprovider`      | Creates a `RepositoryProvider` widget      |
+| `multirepoprovider` | Creates a `MultiRepositoryProvider` widget |
+| `blocbuilder`       | Creates a `BlocBuilder` widget             |
+| `bloclistener`      | Creates a `BlocListener` widget            |
+| `multibloclistener` | Creates a `MultiBlocListener` widget       |
+| `blocconsumer`      | Creates a `BlocConsumer` widget            |
+| `blocof`            | Shortcut for `BlocProvider.of()`           |
+| `repoof`            | Shortcut for `RepositoryProvider.of()`     |
+| `ctxbloc`           | Shortcut for `context.bloc()`              |
+| `ctxrepo`           | Shortcut for `context.repository()`        |
+| `blocstate`         | Creates a state class                      |
+| `blocevent`         | Creates an event class                     |
 
 ### Freezed Bloc
 
