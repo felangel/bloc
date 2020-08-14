@@ -1,3 +1,14 @@
+# 5.2.0
+
+- feat: updates to snippets
+  - `contextbloc` -> `ctxbloc`
+  - `contextrepository` -> `ctxrepo`
+  - `repositoryof` -> `repoof`
+  - `repositoryprovider` -> `repoprovider`
+  - `multirepositoryprovider` -> `multirepoprovider`
+  - `blocstate` (new)
+  - `blocevent` (new)
+
 # 5.1.1
 
 - fix: freezed template typo
