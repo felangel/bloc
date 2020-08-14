@@ -1,12 +1,4 @@
 {
-  "Cubit": {
-    "prefix": "cubit",
-    "body": [
-      "class ${1:Subject}Cubit extends Cubit<$1State> {",
-      "\t${1:Subject}Cubit() : super(${1:Subject}Initial());",
-      "}"
-    ]
-  },
   "Bloc": {
     "prefix": "bloc",
     "body": [
@@ -18,6 +10,90 @@
       "\t\t${3:// TODO: implement mapEventToState}",
       "\t}",
       "}"
+    ]
+  },
+  "Cubit": {
+    "prefix": "cubit",
+    "body": [
+      "class ${1:Subject}Cubit extends Cubit<$1State> {",
+      "\t${1:Subject}Cubit() : super(${1:Subject}Initial());",
+      "}"
+    ]
+  },
+  "BlocObserver": {
+    "prefix": "blocobserver",
+    "body": [
+      "import 'package:bloc/bloc.dart';",
+      "",
+      "class ${1:My}BlocObserver extends BlocObserver {",
+      "\t@override",
+      "\tvoid onEvent(Bloc bloc, Object event) {",
+      "\t\t${2:// TODO: implement onEvent}",
+      "\t\tsuper.onEvent(bloc, event);",
+      "\t}",
+      "",
+      "\t@override",
+      "\tvoid onError(Cubit cubit, Object error, StackTrace stacktrace) {",
+      "\t\t${3:// TODO: implement onError}",
+      "\t\tsuper.onError(cubit, error, stacktrace);",
+      "\t}",
+      "",
+      "\t@override",
+      "\tvoid onTransition(Bloc bloc, Transition transition) {",
+      "\t\t${4:// TODO: implement onTransition}",
+      "\t\tsuper.onTransition(bloc, transition);",
+      "\t}",
+      "}"
+    ]
+  },
+  "BlocProvider": {
+    "prefix": "blocprovider",
+    "body": [
+      "BlocProvider(",
+      "\tcreate: (context) => ${1:Subject}${2|Bloc,Cubit|}(),",
+      "\tchild: ${3:Container()},",
+      ")"
+    ]
+  },
+  "MultiBlocProvider": {
+    "prefix": "multiblocprovider",
+    "body": [
+      "MultiBlocProvider(",
+      "\tproviders: [",
+      "\t\tBlocProvider(",
+      "\t\t\tcreate: (context) => ${1:Subject}${2|Bloc,Cubit|}(),",
+      "\t\t),",
+      "\t\tBlocProvider(",
+      "\t\t\tcreate: (context) => ${3:Subject}${4|Bloc,Cubit|}(),",
+      "\t\t),",
+      "\t],",
+      "\tchild: ${5:Container()},",
+      ")"
+    ]
+  },
+  "RepositoryProvider": {
+    "prefix": "repoprovider",
+    "body": [
+      "RepositoryProvider(",
+      "\tcreate: (context) => ${1:Subject}Repository(),",
+      "\tchild: ${2:Container()},",
+      ")"
+    ]
+  },
+  "MultiRepositoryProvider": {
+    "prefix": "multirepoprovider",
+    "body": [
+      "MultiRepositoryProvider(",
+      "\tproviders: [",
+      "\t\tRepositoryProvider(",
+      "\t\t\tcreate: (context) => ${1:Subject}Repository(),",
+      "\t\t),",
+      "\t\tRepositoryProvider(",
+      "\t\t\tcreate: (context) => ${2:Subject}Repository(),",
+      "\t\t),",
+      "\t],",
+      "\tchild: ${3:Container()},",
+      ")"
     ]
   },
   "BlocBuilder": {
@@ -74,96 +150,48 @@
       ")"
     ]
   },
-  "BlocProvider": {
-    "prefix": "blocprovider",
-    "body": [
-      "BlocProvider(",
-      "\tcreate: (context) => ${1:Subject}${2|Bloc,Cubit|}(),",
-      "\tchild: ${3:Container()},",
-      ")"
-    ]
-  },
-  "MultiBlocProvider": {
-    "prefix": "multiblocprovider",
-    "body": [
-      "MultiBlocProvider(",
-      "\tproviders: [",
-      "\t\tBlocProvider(",
-      "\t\t\tcreate: (context) => ${1:Subject}${2|Bloc,Cubit|}(),",
-      "\t\t),",
-      "\t\tBlocProvider(",
-      "\t\t\tcreate: (context) => ${3:Subject}${4|Bloc,Cubit|}(),",
-      "\t\t),",
-      "\t],",
-      "\tchild: ${5:Container()},",
-      ")"
-    ]
-  },
-  "RepositoryProvider": {
-    "prefix": "repositoryprovider",
-    "body": [
-      "RepositoryProvider(",
-      "\tcreate: (context) => ${1:Subject}Repository(),",
-      "\tchild: ${2:Container()},",
-      ")"
-    ]
-  },
-  "MultiRepositoryProvider": {
-    "prefix": "multirepositoryprovider",
-    "body": [
-      "MultiRepositoryProvider(",
-      "\tproviders: [",
-      "\t\tRepositoryProvider(",
-      "\t\t\tcreate: (context) => ${1:Subject}Repository(),",
-      "\t\t),",
-      "\t\tRepositoryProvider(",
-      "\t\t\tcreate: (context) => ${2:Subject}Repository(),",
-      "\t\t),",
-      "\t],",
-      "\tchild: ${3:Container()},",
-      ")"
-    ]
-  },
-  "BlocObserver": {
-    "prefix": "blocobserver",
-    "body": [
-      "import 'package:bloc/bloc.dart';",
-      "",
-      "class ${1:My}BlocObserver extends BlocObserver {",
-      "\t@override",
-      "\tvoid onEvent(Bloc bloc, Object event) {",
-      "\t\t${2:// TODO: implement onEvent}",
-      "\t\tsuper.onEvent(bloc, event);",
-      "\t}",
-      "",
-      "\t@override",
-      "\tvoid onError(Cubit cubit, Object error, StackTrace stacktrace) {",
-      "\t\t${3:// TODO: implement onError}",
-      "\t\tsuper.onError(cubit, error, stacktrace);",
-      "\t}",
-      "",
-      "\t@override",
-      "\tvoid onTransition(Bloc bloc, Transition transition) {",
-      "\t\t${4:// TODO: implement onTransition}",
-      "\t\tsuper.onTransition(bloc, transition);",
-      "\t}",
-      "}"
-    ]
-  },
-  "context.bloc()": {
-    "prefix": "contextbloc",
-    "body": "context.bloc<${1:Subject}${2|Bloc,Cubit|}>()"
-  },
   "BlocProvider.of()": {
     "prefix": "blocof",
     "body": "BlocProvider.of<${1:Subject}${2|Bloc,Cubit|}>(context)"
   },
+  "RepositoryProvider.of()": {
+    "prefix": "repoof",
+    "body": "RepositoryProvider.of<${1:Subject}Repository>(context)"
+  },
+  "context.bloc()": {
+    "prefix": "ctxbloc",
+    "body": "context.bloc<${1:Subject}${2|Bloc,Cubit|}>()"
+  },
   "context.repository()": {
-    "prefix": "contextrepository",
+    "prefix": "ctxrepo",
     "body": "context.repository<${1:Subject}Repository>()"
   },
-  "RepositoryProvider.of()": {
-    "prefix": "repositoryof",
-    "body": "RepositoryProvider.of<${1:Subject}Repository>(context)"
+  "Bloc state": {
+    "prefix": "blocstate",
+    "body": [
+      "class ${1:Subject}${2:Verb}${3:State} extends $1State {",
+      "\tconst $1$2$3($5);",
+      "",
+      "\t$4",
+      "",
+      "\t@override",
+      "\tList<Object> get props => [$6];",
+      "}"
+    ],
+    "description": "Subject + Verb (action) + State"
+  },
+  "Bloc event": {
+    "prefix": "blocevent",
+    "body": [
+      "class ${1:Subject}${2:Noun}${3:Verb} extends $1Event {",
+      "\tconst $1$2$3($5);",
+      "",
+      "\t$4",
+      "",
+      "\t@override",
+      "\tList<Object> get props => [$6];",
+      "}"
+    ],
+    "description": "Subject + Noun (optional) + Verb (event)"
   }
 }
