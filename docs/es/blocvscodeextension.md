@@ -46,20 +46,31 @@ O puede hacer click derecho en el directorio en el cual desea crear el nuevo Blo
 
 ### Bloc
 
-| Atajo                     | Descripción                                        |
-| ------------------------- | -------------------------------------------------- |
-| `cubit`                   | Crea una clase Cubit                               |
-| `bloc`                    | Crea una clase Bloc                                |
-| `blocbuilder`             | Crea un Widget de clase BlocBuilder                |
-| `bloclistener`            | Crea un Widget de clase BlocListener               |
-| `multibloclistener`       | Crea un Widget de clase MultiBlocListener          |
-| `blocconsumer`            | Crea un Widget de clase BlocConsumer               |
-| `blocprovider`            | Crea un Widget de clase BlocProvider               |
-| `multiblocprovider`       | Crea un Widget de clase MultiBlocProvider          |
-| `repositoryprovider`      | Crea un Widget de clase RepositoryProvider         |
-| `multirepositoryprovider` | Crea un Widget de clase MultiRepositoryProvider    |
-| `blocobserver`            | Crea un Widget de clase de tipo BlocObserver       |
-| `contextbloc`             | Atajo para `context.bloc<MyBloc>()`                |
-| `blocof`                  | Atajo para `BlocProvider.of<MyBloc>()`             |
-| `contextrepository`       | Atajo para `context.repository<MyRepository>()`    |
-| `repositoryof`            | Atajo para `RepositoryProvider.of<MyRepository>()` |
+| Atajo               | Descripción                                |
+| ------------------- | ------------------------------------------ |
+| `bloc`              | Creates a `Bloc` class                     |
+| `cubit`             | Creates a `Cubit` class                    |
+| `blocobserver`      | Creates a `BlocObserver` class             |
+| `blocprovider`      | Creates a `BlocProvider` widget            |
+| `multiblocprovider` | Creates a `MultiBlocProvider` widget       |
+| `repoprovider`      | Creates a `RepositoryProvider` widget      |
+| `multirepoprovider` | Creates a `MultiRepositoryProvider` widget |
+| `blocbuilder`       | Creates a `BlocBuilder` widget             |
+| `bloclistener`      | Creates a `BlocListener` widget            |
+| `multibloclistener` | Creates a `MultiBlocListener` widget       |
+| `blocconsumer`      | Creates a `BlocConsumer` widget            |
+| `blocof`            | Shortcut for `BlocProvider.of()`           |
+| `repoof`            | Shortcut for `RepositoryProvider.of()`     |
+| `ctxbloc`           | Shortcut for `context.bloc()`              |
+| `ctxrepo`           | Shortcut for `context.repository()`        |
+| `blocstate`         | Creates a state class                      |
+| `blocevent`         | Creates an event class                     |
+
+### Freezed Bloc
+
+| Shortcut     | Description                                                     |
+| ------------ | --------------------------------------------------------------- |
+| `feventwhen` | Creates a map event to state function with freeze.when function |
+| `feventmap`  | Creates a map event to state function with freeze.map function  |
+| `fstate`     | Creates a sub state                                             |
+| `fevent`     | Creates a sub event                                             |

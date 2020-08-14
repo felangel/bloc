@@ -54,29 +54,31 @@ You can activate the commands by launching the command palette (View -> Command 
 
 ### Bloc
 
-| Shortcut                  | Description                                          |
-| ------------------------- | ---------------------------------------------------- |
-| `cubit`                   | Creates a Cubit Class                                |
-| `bloc`                    | Creates a Bloc Class                                 |
-| `blocbuilder`             | Creates a BlocBuilder Widget                         |
-| `bloclistener`            | Creates a BlocListener Widget                        |
-| `multibloclistener`       | Creates a MultiBlocListener Widget                   |
-| `blocconsumer`            | Creates a BlocConsumer Widget                        |
-| `blocprovider`            | Creates a BlocProvider Widget                        |
-| `multiblocprovider`       | Creates a MultiBlocProvider Widget                   |
-| `repositoryprovider`      | Creates a RepositoryProvider Widget                  |
-| `multirepositoryprovider` | Creates a MultiRepositoryProvider Widget             |
-| `blocobserver`            | Creates a BlocObserver Class                         |
-| `contextbloc`             | Shortcut for `context.bloc<MyBloc>()`                |
-| `blocof`                  | Shortcut for `BlocProvider.of<MyBloc>()`             |
-| `contextrepository`       | Shortcut for `context.repository<MyRepository>()`    |
-| `repositoryof`            | Shortcut for `RepositoryProvider.of<MyRepository>()` |
+| Shortcut            | Description                                |
+| ------------------- | ------------------------------------------ |
+| `bloc`              | Creates a bloc class                       |
+| `cubit`             | Creates a cubit class                      |
+| `blocobserver`      | Creates a `BlocObserver` class             |
+| `blocprovider`      | Creates a `BlocProvider` widget            |
+| `multiblocprovider` | Creates a `MultiBlocProvider` widget       |
+| `repoprovider`      | Creates a `RepositoryProvider` widget      |
+| `multirepoprovider` | Creates a `MultiRepositoryProvider` widget |
+| `blocbuilder`       | Creates a `BlocBuilder` widget             |
+| `bloclistener`      | Creates a `BlocListener` widget            |
+| `multibloclistener` | Creates a `MultiBlocListener` widget       |
+| `blocconsumer`      | Creates a `BlocConsumer` widget            |
+| `blocof`            | Shortcut for `BlocProvider.of()`           |
+| `repoof`            | Shortcut for `RepositoryProvider.of()`     |
+| `ctxbloc`           | Shortcut for `context.bloc()`              |
+| `ctxrepo`           | Shortcut for `context.repository()`        |
+| `blocstate`         | Creates a state class                      |
+| `blocevent`         | Creates an event class                     |
 
 ### Freezed Bloc
 
-| Shortcut     | Description                                                    |
-| ------------ | -------------------------------------------------------------- |
-| `feventwhen` | create a map event to state function with freeze.when function |
-| `feventmap`  | create a map event to state function with freeze.map function  |
-| `fstate`     | Creates a sub state                                            |
-| `fevent`     | Creates a sub event                                            |
+| Shortcut     | Description                                                     |
+| ------------ | --------------------------------------------------------------- |
+| `feventwhen` | Creates a map event to state function with freeze.when function |
+| `feventmap`  | Creates a map event to state function with freeze.map function  |
+| `fstate`     | Creates a sub state                                             |
+| `fevent`     | Creates a sub event                                             |
