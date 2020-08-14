@@ -162,7 +162,7 @@ void main() {
       );
 
       blocTest<SideEffectCounterCubit, int>(
-        'emits [1] when SideEffectCounterEvent.increment is called',
+        'emits [1] when increment is called',
         build: () => SideEffectCounterCubit(repository),
         act: (cubit) => cubit.increment(),
         expect: <int>[1],
@@ -178,6 +178,27 @@ void main() {
         verify: (_) async {
           verify(repository.sideEffect()).called(1);
         },
+      );
+    });
+
+    group('ExceptionCubit', () {
+      final exception = Exception('oops');
+      blocTest<ExceptionCubit, int>(
+        'captures uncaught exceptions',
+        build: () => ExceptionCubit(),
+        act: (cubit) => cubit.throwException(exception),
+        errors: <Matcher>[
+          equals(exception),
+        ],
+      );
+
+      blocTest<ExceptionCubit, int>(
+        'captures calls to addError',
+        build: () => ExceptionCubit(),
+        act: (cubit) => cubit.addError(exception),
+        errors: <Matcher>[
+          equals(exception),
+        ],
       );
     });
   });
