@@ -61,8 +61,7 @@ void main() {
 
       test('is called with correct change for a single state change', () async {
         final changes = <Change<int>>[];
-        final cubit = CounterCubit(onChangeCallback: changes.add);
-        await Future<void>.delayed(Duration.zero, cubit.increment);
+        final cubit = CounterCubit(onChangeCallback: changes.add)..increment();
         await cubit.close();
         expect(
           changes,
@@ -78,9 +77,9 @@ void main() {
       test('is called with correct changes for multiple state changes',
           () async {
         final changes = <Change<int>>[];
-        final cubit = CounterCubit(onChangeCallback: changes.add);
-        await Future<void>.delayed(Duration.zero, cubit.increment);
-        await Future<void>.delayed(Duration.zero, cubit.increment);
+        final cubit = CounterCubit(onChangeCallback: changes.add)
+          ..increment()
+          ..increment();
         await cubit.close();
         expect(
           changes,
@@ -103,17 +102,29 @@ void main() {
     });
 
     group('emit', () {
-      test('does nothing if cubit is closed', () async {
+      test('does nothing if cubit is closed (indirect)', () {
         final cubit = CounterCubit();
-        await cubit.close();
-        cubit.increment();
-        await expectLater(cubit, emitsInOrder(<Matcher>[emitsDone]));
+        expectLater(cubit, emitsInOrder(<Matcher>[equals(1), emitsDone]));
+        cubit
+          ..increment()
+          ..close()
+          ..increment();
       });
 
-      test('can be invoked directly within a test', () async {
-        final cubit = CounterCubit()..emit(100);
+      test('does nothing if cubit is closed (direct)', () {
+        final cubit = CounterCubit();
+        expectLater(cubit, emitsInOrder(<Matcher>[equals(1), emitsDone]));
+        cubit
+          ..emit(1)
+          ..close()
+          ..emit(2);
+      });
+
+      test('can be invoked directly within a test', () {
+        final cubit = CounterCubit()
+          ..emit(100)
+          ..close();
         expect(cubit.state, 100);
-        await cubit.close();
       });
 
       test('emits states in the correct order', () async {
@@ -166,12 +177,12 @@ void main() {
     });
 
     group('listen', () {
-      test('returns a StreamSubscription', () async {
+      test('returns a StreamSubscription', () {
         final cubit = CounterCubit();
         final subscription = cubit.listen((_) {});
         expect(subscription, isA<StreamSubscription<int>>());
-        await subscription.cancel();
-        await cubit.close();
+        subscription.cancel();
+        cubit.close();
       });
 
       test('does not receive current state upon subscribing', () async {

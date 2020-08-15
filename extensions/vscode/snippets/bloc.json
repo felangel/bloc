@@ -1,12 +1,4 @@
 {
-  "Cubit": {
-    "prefix": "cubit",
-    "body": [
-      "class ${1:Subject}Cubit extends Cubit<$1State> {",
-      "\t${1:Subject}Cubit() : super(${1:Subject}Initial());",
-      "}"
-    ]
-  },
   "Bloc": {
     "prefix": "bloc",
     "body": [
@@ -20,108 +12,12 @@
       "}"
     ]
   },
-  "BlocBuilder": {
-    "prefix": "blocbuilder",
+  "Cubit": {
+    "prefix": "cubit",
     "body": [
-      "BlocBuilder<${1:Subject}${2|Bloc,Cubit|}, $1State>(",
-      "\tbuilder: (context, state) {",
-      "\t\treturn ${3:Container()};",
-      "\t},",
-      ")"
-    ]
-  },
-  "BlocListener": {
-    "prefix": "bloclistener",
-    "body": [
-      "BlocListener<${1:Subject}${2|Bloc,Cubit|}, $1State>(",
-      "\tlistener: (context, state) {",
-      "\t\t${3:// TODO: implement listener}",
-      "\t},",
-      "\tchild: ${4:Container()},",
-      ")"
-    ]
-  },
-  "MultiBlocListener": {
-    "prefix": "multibloclistener",
-    "body": [
-      "MultiBlocListener(",
-      "\tlisteners: [",
-      "\t\tBlocListener<${1:Subject}${2|Bloc,Cubit|}, $1State>(",
-      "\t\t\tlistener: (context, state) {",
-      "\t\t\t\t${3:// TODO: implement listener}",
-      "\t\t\t},",
-      "\t\t),",
-      "\t\tBlocListener<${4:Subject}${5|Bloc,Cubit|}, $4State>(",
-      "\t\t\tlistener: (context, state) {",
-      "\t\t\t\t${6:// TODO: implement listener}",
-      "\t\t\t},",
-      "\t\t),",
-      "\t],",
-      "\tchild: ${7:Container()},",
-      ")"
-    ]
-  },
-  "BlocConsumer": {
-    "prefix": "blocconsumer",
-    "body": [
-      "BlocConsumer<${1:Subject}${2|Bloc,Cubit|}, $1State>(",
-      "\tlistener: (context, state) {",
-      "\t\t${3:// TODO: implement listener}",
-      "\t},",
-      "\tbuilder: (context, state) {",
-      "\t\treturn ${4:Container()};",
-      "\t},",
-      ")"
-    ]
-  },
-  "BlocProvider": {
-    "prefix": "blocprovider",
-    "body": [
-      "BlocProvider(",
-      "\tcreate: (context) => ${1:Subject}${2|Bloc,Cubit|}(),",
-      "\tchild: ${3:Container()},",
-      ")"
-    ]
-  },
-  "MultiBlocProvider": {
-    "prefix": "multiblocprovider",
-    "body": [
-      "MultiBlocProvider(",
-      "\tproviders: [",
-      "\t\tBlocProvider(",
-      "\t\t\tcreate: (context) => ${1:Subject}${2|Bloc,Cubit|}(),",
-      "\t\t),",
-      "\t\tBlocProvider(",
-      "\t\t\tcreate: (context) => ${3:Subject}${4|Bloc,Cubit|}(),",
-      "\t\t),",
-      "\t],",
-      "\tchild: ${5:Container()},",
-      ")"
-    ]
-  },
-  "RepositoryProvider": {
-    "prefix": "repositoryprovider",
-    "body": [
-      "RepositoryProvider(",
-      "\tcreate: (context) => ${1:Subject}Repository(),",
-      "\tchild: ${2:Container()},",
-      ")"
-    ]
-  },
-  "MultiRepositoryProvider": {
-    "prefix": "multirepositoryprovider",
-    "body": [
-      "MultiRepositoryProvider(",
-      "\tproviders: [",
-      "\t\tRepositoryProvider(",
-      "\t\t\tcreate: (context) => ${1:Subject}Repository(),",
-      "\t\t),",
-      "\t\tRepositoryProvider(",
-      "\t\t\tcreate: (context) => ${2:Subject}Repository(),",
-      "\t\t),",
-      "\t],",
-      "\tchild: ${3:Container()},",
-      ")"
+      "class ${1:Subject}Cubit extends Cubit<$1State> {",
+      "\t${1:Subject}Cubit() : super(${1:Subject}Initial());",
+      "}"
     ]
   },
   "BlocObserver": {
@@ -150,20 +46,32 @@
       "}"
     ]
   },
-  "context.bloc()": {
-    "prefix": "contextbloc",
-    "body": "context.bloc<${1:Subject}${2|Bloc,Cubit|}>()"
+  "Bloc State": {
+    "prefix": "blocstate",
+    "body": [
+      "class ${1:Subject}${2:Verb}${3:State} extends $1State {",
+      "\tconst $1$2$3($5);",
+      "",
+      "\t$4",
+      "",
+      "\t@override",
+      "\tList<Object> get props => [$6];",
+      "}"
+    ],
+    "description": "Subject + Verb (action) + State"
   },
-  "BlocProvider.of()": {
-    "prefix": "blocof",
-    "body": "BlocProvider.of<${1:Subject}${2|Bloc,Cubit|}>(context)"
-  },
-  "context.repository()": {
-    "prefix": "contextrepository",
-    "body": "context.repository<${1:Subject}Repository>()"
-  },
-  "RepositoryProvider.of()": {
-    "prefix": "repositoryof",
-    "body": "RepositoryProvider.of<${1:Subject}Repository>(context)"
+  "Bloc Event": {
+    "prefix": "blocevent",
+    "body": [
+      "class ${1:Subject}${2:Noun}${3:Verb} extends $1Event {",
+      "\tconst $1$2$3($5);",
+      "",
+      "\t$4",
+      "",
+      "\t@override",
+      "\tList<Object> get props => [$6];",
+      "}"
+    ],
+    "description": "Subject + Noun (optional) + Verb (event)"
   }
 }

@@ -19,7 +19,7 @@
 
 ---
 
-## Introduction
+## Overview
 
 Bloc étend [VSCode](https://code.visualstudio.com/) avec le support de la librairie de [Bloc](https://bloclibrary.dev) et fournit les outils nécessaires pour créer des blocs à la fois pour des applications [Flutter](https://flutter.dev/) et [AngularDart](https://angulardart.dev/).
 
@@ -34,34 +34,51 @@ Bloc peut être installé à partir de la [Marketplace VSCode](https://marketpla
 | `Bloc: New Bloc`   | Créer un Bloc  |
 | `Cubit: New Cubit` | Créer un Cubit |
 
-## Utilisation des nouvelles commandes pour Bloc
+You can activate the commands by launching the command palette (View -> Command Palette) and running entering the command name or you can right click on the directory in which you'd like to create the bloc/cubit and select the command from the context menu.
 
-Vous pouvez activer la commande en ouvrant la palette de commande (View -> Command Palette) et en tapant la commande.
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage.gif)
 
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-1.gif)
+## Code Actions
 
-Ou vous pouvez faire un clique droit sur le dossier dans lequel vous voudriez créer un bloc/cubit et sélectionnez la commande.
+| Action                         | Description                                    |
+| ------------------------------ | ---------------------------------------------- |
+| `Wrap with BlocBuilder`        | Wraps current widget in a `BlocBuilder`        |
+| `Wrap with BlocListener`       | Wraps current widget in a `BlocListener`       |
+| `Wrap with BlocConsumer`       | Wraps current widget in a `BlocConsumer`       |
+| `Wrap with BlocProvider`       | Wraps current widget in a `BlocProvider`       |
+| `Wrap with RepositoryProvider` | Wraps current widget in a `RepositoryProvider` |
 
-![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage-2.gif)
+![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/wrap-with-usage.gif)
 
 ## Utilisation des raccourcis(snipets)
 
 ### Bloc
 
-| Raccourcis                | Description                                             |
-| ------------------------- | ------------------------------------------------------- |
-| `cubit`                   | Crée une Classe Cubit                                   |
-| `bloc`                    | Crée une Classe Bloc                                    |
-| `blocbuilder`             | Crée un Widget BlocBuilder                              |
-| `bloclistener`            | Crée un BlocListener Widget                             |
-| `multibloclistener`       | Crée un widget MultiBlocListener                        |
-| `blocconsumer`            | Crée un widget BlocConsumer                             |
-| `blocprovider`            | Crée un widget BlocProvider                             |
-| `multiblocprovider`       | Crée un widget MultiBlocProvider                        |
-| `repositoryprovider`      | Crée un widget RepositoryProvider                       |
-| `multirepositoryprovider` | Crée un widget MultiRepositoryProvider                  |
-| `blocobserver`            | Crée une Classe BlocObserver                            |
-| `contextbloc`             | Raccourcis pour `context.bloc<MyBloc>()`                |
-| `blocof`                  | Raccourcis pour `BlocProvider.of<MyBloc>()`             |
-| `contextrepository`       | Raccourcis pour `context.repository<MyRepository>()`    |
-| `repositoryof`            | Raccourcis pour `RepositoryProvider.of<MyRepository>()` |
+| Shortcut            | Description                               |
+| ------------------- | ----------------------------------------- |
+| `bloc`              | Crée une Classe `Bloc`                    |
+| `cubit`             | Crée une Classe `Cubit`                   |
+| `blocobserver`      | Crée une Classe `BlocObserver`            |
+| `blocprovider`      | Crée un Widget `BlocProvider`             |
+| `multiblocprovider` | Crée un Widget `MultiBlocProvider`        |
+| `repoprovider`      | Crée un Widget `RepositoryProvider`       |
+| `multirepoprovider` | Crée un Widget `MultiRepositoryProvider`  |
+| `blocbuilder`       | Crée un Widget `BlocBuilder`              |
+| `bloclistener`      | Crée un Widget `BlocListener`             |
+| `multibloclistener` | Crée un Widget `MultiBlocListener`        |
+| `blocconsumer`      | Crée un Widget `BlocConsumer`             |
+| `blocof`            | Raccourcis pour `BlocProvider.of()`       |
+| `repoof`            | Raccourcis pour `RepositoryProvider.of()` |
+| `ctxbloc`           | Raccourcis pour `context.bloc()`          |
+| `ctxrepo`           | Raccourcis pour `context.repository()`    |
+| `blocstate`         | Crée une Classe state                     |
+| `blocevent`         | Crée une Classe event                     |
+
+### Freezed Bloc
+
+| Shortcut     | Description                                                     |
+| ------------ | --------------------------------------------------------------- |
+| `feventwhen` | Creates a map event to state function with freeze.when function |
+| `feventmap`  | Creates a map event to state function with freeze.map function  |
+| `fstate`     | Creates a sub state                                             |
+| `fevent`     | Creates a sub event                                             |
