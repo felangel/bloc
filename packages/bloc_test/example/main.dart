@@ -61,18 +61,6 @@ void mainBloc() {
     });
   });
 
-  group('emitsExactly', () {
-    test('emits [] when nothing is added', () async {
-      final bloc = CounterBloc();
-      await emitsExactly<CounterBloc, int>(bloc, const <int>[]);
-    });
-
-    test('emits [1] when CounterEvent.increment is added', () async {
-      final bloc = CounterBloc()..add(CounterEvent.increment);
-      await emitsExactly<CounterBloc, int>(bloc, const <int>[1]);
-    });
-  });
-
   group('CounterBloc', () {
     blocTest<CounterBloc, int>(
       'emits [] when nothing is added',

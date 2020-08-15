@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc_test/bloc_test.dart';
 import 'package:test/test.dart';
 
+/// **Deprecated and will be removed in v8.0.0. Please use [blocTest] instead.**
+///
 /// Similar to `emitsInOrder` but asserts that the provided [bloc]
 /// emits **only** the [expected] states in the **exact** order in which
 /// they were provided.
@@ -51,6 +54,7 @@ import 'package:test/test.dart';
 ///   );
 /// });
 /// ```
+@Deprecated('Use blocTest instead')
 Future<void> emitsExactly<B extends Bloc<Object, State>, State>(
   B bloc,
   Iterable expected, {
