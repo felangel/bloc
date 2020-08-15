@@ -1,3 +1,7 @@
+# 6.0.2
+
+- refactor: cubit internal memory and performance optimizations
+
 # 6.0.1
 
 - docs: minor documentation fixes and improvements
