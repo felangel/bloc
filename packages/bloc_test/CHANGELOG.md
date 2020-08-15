@@ -1,3 +1,8 @@
+# 7.0.1
+
+- chore: deprecate `emitsExactly` in favor of `blocTest`
+- fix: capture uncaught exceptions in `Cubit`
+
 # 7.0.0
 
 - **BREAKING**: upgrade to `bloc ^6.0.0`
