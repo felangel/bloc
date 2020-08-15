@@ -125,7 +125,13 @@ void blocTest<C extends Cubit<State>, State>(
         final states = <State>[];
         final cubit = build();
         final subscription = cubit.skip(skip).listen(states.add);
-        await act?.call(cubit);
+        try {
+          await act?.call(cubit);
+        } on Exception catch (error) {
+          unhandledErrors.add(
+            error is CubitUnhandledErrorException ? error.error : error,
+          );
+        }
         if (wait != null) await Future<void>.delayed(wait);
         await Future<void>.delayed(Duration.zero);
         await cubit.close();
@@ -134,12 +140,9 @@ void blocTest<C extends Cubit<State>, State>(
         await verify?.call(cubit);
       },
       onError: (Object error) {
-        if (error is CubitUnhandledErrorException) {
-          unhandledErrors.add(error.error);
-        } else {
-          // ignore: only_throw_errors
-          throw error;
-        }
+        unhandledErrors.add(
+          error is CubitUnhandledErrorException ? error.error : error,
+        );
       },
     );
     if (errors != null) test.expect(unhandledErrors, errors);
