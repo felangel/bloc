@@ -20,22 +20,14 @@ void main() {
       });
 
       test('is true when a single state change has occurred', () async {
-        final bloc = CounterBloc();
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
+        final bloc = CounterBloc()..add(CounterEvent.increment);
         await Future<void>.delayed(Duration.zero);
         expect(bloc.canUndo, isTrue);
         await bloc.close();
       });
 
       test('is false when undos have been exhausted', () async {
-        final bloc = CounterBloc();
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
+        final bloc = CounterBloc()..add(CounterEvent.increment);
         await Future<void>.delayed(Duration.zero, bloc.undo);
         expect(bloc.canUndo, isFalse);
         await bloc.close();
@@ -50,22 +42,14 @@ void main() {
       });
 
       test('is true when a single undo has occurred', () async {
-        final bloc = CounterBloc();
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
+        final bloc = CounterBloc()..add(CounterEvent.increment);
         await Future<void>.delayed(Duration.zero, bloc.undo);
         expect(bloc.canRedo, isTrue);
         await bloc.close();
       });
 
       test('is false when redos have been exhausted', () async {
-        final bloc = CounterBloc();
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
+        final bloc = CounterBloc()..add(CounterEvent.increment);
         await Future<void>.delayed(Duration.zero, bloc.undo);
         await Future<void>.delayed(Duration.zero, bloc.redo);
         expect(bloc.canRedo, isFalse);
@@ -87,75 +71,58 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(Duration.zero, bloc.undo);
+        bloc.undo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0]);
+        expect(states, isEmpty);
       });
 
       test('does nothing when limit is 0', () async {
         final states = <int>[];
         final bloc = CounterBloc(limit: 0);
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.undo);
+        bloc.add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc.undo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1]);
+        expect(states, const <int>[1]);
       });
 
       test('loses history outside of limit', () async {
         final states = <int>[];
         final bloc = CounterBloc(limit: 1);
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.undo);
-        await Future<void>.delayed(Duration.zero, bloc.undo);
+        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc..undo()..undo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1, 2, 1]);
+        expect(states, const <int>[1, 2, 1]);
       });
 
       test('reverts to initial state', () async {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.undo);
+        bloc.add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc.undo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1, 0]);
+        expect(states, const <int>[1, 0]);
       });
 
       test('reverts to previous state with multiple state changes ', () async {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.undo);
+        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc.undo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1, 2, 1]);
+        expect(states, const <int>[1, 2, 1]);
       });
     });
 
@@ -164,67 +131,51 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(Duration.zero, bloc.redo);
+        bloc.redo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0]);
+        expect(states, isEmpty);
       });
 
       test('does nothing when no undos have occurred', () async {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.redo);
+        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc.redo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1, 2]);
+        expect(states, const <int>[1, 2]);
       });
 
       test('works when one undo has occurred', () async {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.undo);
-        await Future<void>.delayed(Duration.zero, bloc.redo);
+        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc
+          ..undo()
+          ..redo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1, 2, 1, 2]);
+        expect(states, const <int>[1, 2, 1, 2]);
       });
 
       test('does nothing when undos have been exhausted', () async {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.undo);
-        await Future<void>.delayed(Duration.zero, bloc.redo);
-        await Future<void>.delayed(Duration.zero, bloc.redo);
+        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc
+          ..undo()
+          ..redo()
+          ..redo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1, 2, 1, 2]);
+        expect(states, const <int>[1, 2, 1, 2]);
       });
 
       test(
@@ -233,23 +184,16 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.undo);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.decrement),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.redo);
+        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc
+          ..undo()
+          ..add(CounterEvent.decrement);
+        await Future<void>.delayed(Duration.zero);
+        bloc.redo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1, 2, 1, 0]);
+        expect(states, const <int>[1, 2, 1, 0]);
       });
     });
   });
@@ -269,22 +213,14 @@ void main() {
       });
 
       test('is true when a single state change has occurred', () async {
-        final bloc = CounterBlocMixin();
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
+        final bloc = CounterBlocMixin()..add(CounterEvent.increment);
         await Future<void>.delayed(Duration.zero);
         expect(bloc.canUndo, isTrue);
         await bloc.close();
       });
 
       test('is false when undos have been exhausted', () async {
-        final bloc = CounterBlocMixin();
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
+        final bloc = CounterBlocMixin()..add(CounterEvent.increment);
         await Future<void>.delayed(Duration.zero, bloc.undo);
         expect(bloc.canUndo, isFalse);
         await bloc.close();
@@ -299,22 +235,14 @@ void main() {
       });
 
       test('is true when a single undo has occurred', () async {
-        final bloc = CounterBlocMixin();
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
+        final bloc = CounterBlocMixin()..add(CounterEvent.increment);
         await Future<void>.delayed(Duration.zero, bloc.undo);
         expect(bloc.canRedo, isTrue);
         await bloc.close();
       });
 
       test('is false when redos have been exhausted', () async {
-        final bloc = CounterBlocMixin();
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
+        final bloc = CounterBlocMixin()..add(CounterEvent.increment);
         await Future<void>.delayed(Duration.zero, bloc.undo);
         await Future<void>.delayed(Duration.zero, bloc.redo);
         expect(bloc.canRedo, isFalse);
@@ -336,75 +264,58 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(Duration.zero, bloc.undo);
+        bloc.undo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0]);
+        expect(states, isEmpty);
       });
 
       test('does nothing when limit is 0', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin(limit: 0);
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.undo);
+        bloc.add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc.undo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1]);
+        expect(states, const <int>[1]);
       });
 
       test('loses history outside of limit', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin(limit: 1);
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.undo);
-        await Future<void>.delayed(Duration.zero, bloc.undo);
+        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc..undo()..undo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1, 2, 1]);
+        expect(states, const <int>[1, 2, 1]);
       });
 
       test('reverts to initial state', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.undo);
+        bloc.add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc.undo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1, 0]);
+        expect(states, const <int>[1, 0]);
       });
 
       test('reverts to previous state with multiple state changes ', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.undo);
+        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc.undo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1, 2, 1]);
+        expect(states, const <int>[1, 2, 1]);
       });
     });
 
@@ -413,67 +324,51 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(Duration.zero, bloc.redo);
+        bloc.redo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0]);
+        expect(states, isEmpty);
       });
 
       test('does nothing when no undos have occurred', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.redo);
+        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc.redo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1, 2]);
+        expect(states, const <int>[1, 2]);
       });
 
       test('works when one undo has occurred', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.undo);
-        await Future<void>.delayed(Duration.zero, bloc.redo);
+        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc
+          ..undo()
+          ..redo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1, 2, 1, 2]);
+        expect(states, const <int>[1, 2, 1, 2]);
       });
 
       test('does nothing when undos have been exhausted', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.undo);
-        await Future<void>.delayed(Duration.zero, bloc.redo);
-        await Future<void>.delayed(Duration.zero, bloc.redo);
+        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc
+          ..undo()
+          ..redo()
+          ..redo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1, 2, 1, 2]);
+        expect(states, const <int>[1, 2, 1, 2]);
       });
 
       test(
@@ -482,23 +377,16 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.listen(states.add);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.increment),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.undo);
-        await Future<void>.delayed(
-          Duration.zero,
-          () => bloc.add(CounterEvent.decrement),
-        );
-        await Future<void>.delayed(Duration.zero, bloc.redo);
+        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        await Future<void>.delayed(Duration.zero);
+        bloc
+          ..undo()
+          ..add(CounterEvent.decrement);
+        await Future<void>.delayed(Duration.zero);
+        bloc.redo();
         await bloc.close();
         await subscription.cancel();
-        expect(states, [0, 1, 2, 1, 0]);
+        expect(states, const <int>[1, 2, 1, 0]);
       });
     });
   });

@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 
-void main() => runApp(App());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build();
+  runApp(App());
+}
 
 /// A [StatelessWidget] which uses:
-/// * [replay_bloc](https://pub.dev/packages/replay_bloc)
-/// * [flutter_bloc](https://pub.dev/packages/flutter_bloc)
+/// * [replay_cubit](https://pub.dev/packages/replay_cubit)
+/// * [flutter_cubit](https://pub.dev/packages/flutter_cubit)
 /// to manage the state of a counter.
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CounterBloc>(
-      create: (_) => CounterBloc(),
+    return BlocProvider<CounterCubit>(
+      create: (_) => CounterCubit(),
       child: MaterialApp(
         home: CounterPage(),
       ),
@@ -22,7 +27,7 @@ class App extends StatelessWidget {
 }
 
 /// A [StatelessWidget] which demonstrates
-/// how to consume and interact with a [ReplayBloc].
+/// how to consume and interact with a [ReplayCubit].
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -31,27 +36,27 @@ class CounterPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Counter'),
         actions: [
-          BlocBuilder<CounterBloc, int>(
+          BlocBuilder<CounterCubit, int>(
             builder: (context, state) {
-              final bloc = context.bloc<CounterBloc>();
+              final cubit = context.bloc<CounterCubit>();
               return IconButton(
                 icon: const Icon(Icons.undo),
-                onPressed: bloc.canUndo ? bloc.undo : null,
+                onPressed: cubit.canUndo ? cubit.undo : null,
               );
             },
           ),
-          BlocBuilder<CounterBloc, int>(
+          BlocBuilder<CounterCubit, int>(
             builder: (context, state) {
-              final bloc = context.bloc<CounterBloc>();
+              final cubit = context.bloc<CounterCubit>();
               return IconButton(
                 icon: const Icon(Icons.redo),
-                onPressed: bloc.canRedo ? bloc.redo : null,
+                onPressed: cubit.canRedo ? cubit.redo : null,
               );
             },
           ),
         ],
       ),
-      body: BlocBuilder<CounterBloc, int>(
+      body: BlocBuilder<CounterCubit, int>(
         builder: (BuildContext context, int state) {
           return Center(child: Text('$state', style: textTheme));
         },
@@ -63,24 +68,24 @@ class CounterPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
-                child: const Icon(Icons.add),
-                onPressed: () =>
-                    context.bloc<CounterBloc>().add(CounterEvent.increment)),
+              child: const Icon(Icons.add),
+              onPressed: () => context.bloc<CounterCubit>().increment(),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: const Icon(Icons.remove),
-              onPressed: () =>
-                  context.bloc<CounterBloc>().add(CounterEvent.decrement),
+              onPressed: () => context.bloc<CounterCubit>().decrement(),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: const Icon(Icons.delete_forever),
-              onPressed: () => context.bloc<CounterBloc>()
-                ..add(CounterEvent.reset)
+              onPressed: () => context.bloc<CounterCubit>()
+                ..reset()
+                ..clear()
                 ..clearHistory(),
             ),
           ),
@@ -90,39 +95,27 @@ class CounterPage extends StatelessWidget {
   }
 }
 
-/// Supported [CounterBloc] events
-enum CounterEvent {
-  /// requests an increment
-  increment,
-
-  /// requests an decrement
-  decrement,
-
-  /// requests an reset
-  reset
-}
-
-/// {@template replay_counter_bloc}
-/// A simple [ReplayBloc] which manages an `int` as its state
+/// {@template replay_counter_cubit}
+/// A simple [ReplayCubit] which manages an `int` as its state
 /// and exposes three public methods to `increment`, `decrement`, and
 /// `reset` the value of the state.
 /// {@endtemplate}
-class CounterBloc extends ReplayBloc<CounterEvent, int> {
-  /// {@macro replay_counter_bloc}
-  CounterBloc() : super(0);
+class CounterCubit extends HydratedCubit<int> with ReplayMixin<int> {
+  /// {@macro replay_counter_cubit}
+  CounterCubit() : super(0);
+
+  /// Increments the `cubit` state by 1.
+  void increment() => emit(state + 1);
+
+  /// Decrements the `cubit` state by 1.
+  void decrement() => emit(state - 1);
+
+  /// Resets the `cubit` state to 0.
+  void reset() => emit(0);
 
   @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.reset:
-        yield 0;
-        break;
-    }
-  }
+  int fromJson(Map<String, dynamic> json) => json['value'] as int;
+
+  @override
+  Map<String, int> toJson(int state) => {'value': state};
 }

@@ -10,6 +10,8 @@ dependencies:
     sdk: flutter
   flutter_bloc:
     path: ../../flutter_bloc
+  hydrated_bloc:
+    path: ../../hydrated_bloc
   replay_bloc:
     path: ../
 
