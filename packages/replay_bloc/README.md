@@ -1,16 +1,15 @@
-<p align="center"><img src="https://raw.githubusercontent.com/felangel/cubit/master/assets/replay_cubit_full.png" height="100" alt="Cubit"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/replay_cubit_full.png" height="100" alt="ReplayBloc"></p>
 
 <p align="center">
-<a href="https://pub.dev/packages/replay_cubit"><img src="https://img.shields.io/pub/v/replay_cubit.svg" alt="Pub"></a>
-<a href="https://github.com/felangel/cubit/actions"><img src="https://github.com/felangel/cubit/workflows/build/badge.svg" alt="build"></a>
-<a href="https://github.com/felangel/cubit/actions"><img src="https://raw.githubusercontent.com/felangel/cubit/master/packages/cubit/coverage_badge.svg" alt="coverage"></a>
-<a href="https://github.com/felangel/cubit"><img src="https://img.shields.io/github/stars/felangel/cubit.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on GitHub"></a>
+<a href="https://pub.dev/packages/replay_bloc"><img src="https://img.shields.io/pub/v/replay_bloc.svg" alt="Pub"></a>
+<a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/workflows/build/badge.svg" alt="build"></a>
+<a href="https://github.com/felangel/bloc/actions"><img src="https://raw.githubusercontent.com/felangel/bloc/master/packages/replay_bloc/coverage_badge.svg" alt="coverage"></a>
+<a href="https://github.com/felangel/bloc"><img src="https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on GitHub"></a>
 <a href="https://discord.gg/Hc5KD3g"><img src="https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue" alt="Discord"></a>
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
-<a href="https://github.com/zepfietje/starware"><img src="https://img.shields.io/badge/Starware-%E2%AD%90-black?labelColor=%23f9b00d" alt="Starware"></a>
 </p>
 
-An extension to the [cubit](https://pub.dev/packages/cubit) state management library which adds support for undo and redo.
+An extension to the [bloc](https://pub.dev/packages/bloc) state management library which adds support for undo and redo.
 
 ## Creating a ReplayCubit
 
@@ -72,9 +71,3 @@ class CounterCubit extends HydratedCubit<int> with ReplayMixin<int> {
 ## Supporters
 
 [![Very Good Ventures](https://raw.githubusercontent.com/felangel/cubit/master/assets/vgv_logo.png)](https://verygood.ventures)
-
-## Starware
-
-ReplayCubit is Starware.  
-This means you're free to use the project, as long as you star its GitHub repository.  
-Your appreciation makes us grow and glow up. ⭐

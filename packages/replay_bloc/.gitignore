@@ -9,3 +9,6 @@ coverage/
 *.lcov
 
 .DS_Store
+
+# Exceptions to the above rules
+!coverage_badge.svg

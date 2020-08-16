@@ -1,6 +1,6 @@
 import 'dart:collection';
-import 'package:bloc/bloc.dart';
 
+import 'package:bloc/bloc.dart';
 part 'change_stack.dart';
 
 /// {@template replay_cubit}

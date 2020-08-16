@@ -1,0 +1,17 @@
+name: replay_bloc
+description: An extension to the bloc state management library which adds support for undo and redo.
+repository: https://github.com/felangel/bloc
+issue_tracker: https://github.com/felangel/bloc/issues
+homepage: https://github.com/felangel/bloc
+
+version: 0.0.1-dev.1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  bloc: ^6.0.0
+
+dev_dependencies:
+  test: ^1.14.6
+  test_coverage: ^0.4.1

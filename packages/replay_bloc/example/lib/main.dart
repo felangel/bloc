@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:replay_cubit/replay_cubit.dart';
+import 'package:replay_bloc/replay_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  HydratedCubit.storage = await HydratedStorage.build();
+  HydratedBloc.storage = await HydratedStorage.build();
   runApp(App());
 }
 
