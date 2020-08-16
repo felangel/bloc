@@ -8,7 +8,7 @@ class CounterCubit extends ReplayCubit<int> {
   void decrement() => emit(state - 1);
 }
 
-class CounterCubitMixin extends Cubit<int> with ReplayMixin<int> {
+class CounterCubitMixin extends Cubit<int> with ReplayCubitMixin<int> {
   CounterCubitMixin({int limit}) : super(0) {
     this.limit = limit;
   }

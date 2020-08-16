@@ -41,12 +41,74 @@ void main() {
 }
 ```
 
-## ReplayMixin
+## ReplayCubitMixin
 
-If you wish to be able to use a `ReplayCubit` in conjuction with a different type of cubit like `HydratedCubit`, you can use the `ReplayMixin`.
+If you wish to be able to use a `ReplayCubit` in conjuction with a different type of cubit like `HydratedCubit`, you can use the `ReplayCubitMixin`.
 
 ```dart
-class CounterCubit extends HydratedCubit<int> with ReplayMixin<int> {
+class CounterCubit extends HydratedCubit<int> with ReplayCubitMixin<int> {
+  CounterCubit() : super(0);
+
+  void increment() => emit(state + 1);
+  void decrement() => emit(state - 1);
+
+  @override
+  int fromJson(Map<String, dynamic> json) => json['value'] as int;
+
+  @override
+  Map<String, int> toJson(int state) => {'value': state};
+}
+```
+
+## Creating a ReplayBloc
+
+```dart
+class CounterEvent extends ReplayEvent {}
+
+class Increment extends CounterEvent {}
+
+class Decrement extends CounterEvent {}
+
+class CounterBloc extends ReplayBloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    if (event is Increment) {
+      yield state + 1;
+    } else if (event is Decrement) {
+      yield state - 1;
+    }
+  }
+}
+```
+
+## Using a ReplayBloc
+
+```dart
+void main() {
+  final bloc = CounterBloc();
+
+  // trigger a state change
+  bloc.add(CounterEvent.increment);
+  print(bloc.state); // 1
+
+  // undo the change
+  bloc.undo();
+  print(bloc.state); // 0
+
+  // redo the change
+  bloc.redo();
+  print(bloc.state); // 1
+}
+```
+
+## ReplayBlocMixin
+
+If you wish to be able to use a `ReplayBloc` in conjuction with a different type of cubit like `HydratedBloc`, you can use the `ReplayBlocMixin`.
+
+```dart
+class CounterCubit extends HydratedCubit<int> with ReplayCubitMixin<int> {
   CounterCubit() : super(0);
 
   void increment() => emit(state + 1);
