@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 
-abstract class CounterEvent with ReplayEvent {}
+abstract class CounterEvent extends ReplayEvent {}
 
 class Increment extends CounterEvent {}
 

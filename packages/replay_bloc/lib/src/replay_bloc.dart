@@ -1,7 +1,12 @@
 part of 'replay_cubit.dart';
 
+/// {@template replay_event}
 /// Base event class for all [ReplayBloc] events.
-abstract class ReplayEvent {}
+/// {@endtemplate}
+abstract class ReplayEvent {
+  /// {@template replay_event}
+  const ReplayEvent();
+}
 
 /// Notifies a [ReplayBloc] of a Redo
 class _Redo extends ReplayEvent {
