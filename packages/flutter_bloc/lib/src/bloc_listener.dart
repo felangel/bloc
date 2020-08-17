@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/single_child_widget.dart';
 
 import 'bloc_provider.dart';
+import 'bloc_widget_mixin.dart';
 
 /// Mixin which allows `MultiBlocListener` to infer the types
 /// of multiple [BlocListener]s.
@@ -110,7 +109,8 @@ class BlocListener<C extends Cubit<S>, S> extends BlocListenerBase<C, S>
 /// is defined by sub-classes.
 /// {@endtemplate}
 abstract class BlocListenerBase<C extends Cubit<S>, S>
-    extends SingleChildStatefulWidget {
+    extends SingleChildStatefulWidget
+    with BlocWidgetMixin<C, S>, BlocListenerMixin<C, S> {
   /// {@macro bloc_listener_base}
   const BlocListenerBase({
     Key key,
@@ -126,15 +126,24 @@ abstract class BlocListenerBase<C extends Cubit<S>, S>
 
   /// The [cubit] whose `state` will be listened to.
   /// Whenever the [cubit]'s `state` changes, [listener] will be invoked.
+  @override
   final C cubit;
 
   /// The [BlocWidgetListener] which will be called on every `state` change.
   /// This [listener] should be used for any code which needs to execute
   /// in response to a `state` change.
+  @override
   final BlocWidgetListener<S> listener;
 
   /// {@macro bloc_listener_listen_when}
+  @override
   final BlocListenerCondition<S> listenWhen;
+
+  @override
+  List<VoidCallback> filterReactions(
+    BlocWidgetStateMixin<BlocWidgetMixin<C, S>, C, S> widgetState,
+  ) =>
+      defaultBlocListenerReactions(widgetState);
 
   @override
   SingleChildState<BlocListenerBase<C, S>> createState() =>
@@ -142,58 +151,29 @@ abstract class BlocListenerBase<C extends Cubit<S>, S>
 }
 
 class _BlocListenerBaseState<C extends Cubit<S>, S>
-    extends SingleChildState<BlocListenerBase<C, S>> {
-  StreamSubscription<S> _subscription;
-  S _previousState;
-  C _cubit;
-
-  @override
-  void initState() {
-    super.initState();
-    _cubit = widget.cubit ?? context.bloc<C>();
-    _previousState = _cubit?.state;
-    _subscribe();
-  }
-
-  @override
-  void didUpdateWidget(BlocListenerBase<C, S> oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    final oldCubit = oldWidget.cubit ?? context.bloc<C>();
-    final currentCubit = widget.cubit ?? oldCubit;
-    if (oldCubit != currentCubit) {
-      if (_subscription != null) {
-        _unsubscribe();
-        _cubit = widget.cubit ?? context.bloc<C>();
-        _previousState = _cubit?.state;
-      }
-      _subscribe();
-    }
-  }
-
+    extends SingleChildState<BlocListenerBase<C, S>>
+    with BlocWidgetStateMixin<BlocListenerBase<C, S>, C, S> {
   @override
   Widget buildWithChild(BuildContext context, Widget child) => child;
+}
 
-  @override
-  void dispose() {
-    _unsubscribe();
-    super.dispose();
-  }
+mixin BlocListenerMixin<C extends Cubit<S>, S> on BlocWidgetMixin<C, S> {
+  /// The [BlocWidgetListener] which will be called on every `state` change.
+  /// This [listener] should be used for any code which needs to execute
+  /// in response to a `state` change.
+  BlocWidgetListener<S> get listener;
 
-  void _subscribe() {
-    if (_cubit != null) {
-      _subscription = _cubit.listen((state) {
-        if (widget.listenWhen?.call(_previousState, state) ?? true) {
-          widget.listener(context, state);
-        }
-        _previousState = state;
-      });
-    }
-  }
+  /// {@macro bloc_listener_listen_when}
+  BlocListenerCondition<S> get listenWhen;
 
-  void _unsubscribe() {
-    if (_subscription != null) {
-      _subscription.cancel();
-      _subscription = null;
-    }
+  List<VoidCallback> defaultBlocListenerReactions(
+    BlocWidgetStateMixin<BlocWidgetMixin<C, S>, C, S> widgetState,
+  ) {
+    final previuosState = widgetState.previous;
+    final currentState = widgetState.current;
+    return [
+      if (listenWhen?.call(previuosState, currentState) ?? true)
+        () => listener?.call(widgetState.context, currentState),
+    ];
   }
 }
