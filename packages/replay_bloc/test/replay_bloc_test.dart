@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:bloc/bloc.dart';
+import 'package:replay_bloc/replay_bloc.dart';
 import 'package:test/test.dart';
 
 import 'blocs/counter_bloc.dart';
@@ -20,14 +22,14 @@ void main() {
       });
 
       test('is true when a single state change has occurred', () async {
-        final bloc = CounterBloc()..add(CounterEvent.increment);
+        final bloc = CounterBloc()..add(Increment());
         await Future<void>.delayed(Duration.zero);
         expect(bloc.canUndo, isTrue);
         await bloc.close();
       });
 
       test('is false when undos have been exhausted', () async {
-        final bloc = CounterBloc()..add(CounterEvent.increment);
+        final bloc = CounterBloc()..add(Increment());
         await Future<void>.delayed(Duration.zero, bloc.undo);
         expect(bloc.canUndo, isFalse);
         await bloc.close();
@@ -42,14 +44,14 @@ void main() {
       });
 
       test('is true when a single undo has occurred', () async {
-        final bloc = CounterBloc()..add(CounterEvent.increment);
+        final bloc = CounterBloc()..add(Increment());
         await Future<void>.delayed(Duration.zero, bloc.undo);
         expect(bloc.canRedo, isTrue);
         await bloc.close();
       });
 
       test('is false when redos have been exhausted', () async {
-        final bloc = CounterBloc()..add(CounterEvent.increment);
+        final bloc = CounterBloc()..add(Increment());
         await Future<void>.delayed(Duration.zero, bloc.undo);
         await Future<void>.delayed(Duration.zero, bloc.redo);
         expect(bloc.canRedo, isFalse);
@@ -81,7 +83,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc(limit: 0);
         final subscription = bloc.listen(states.add);
-        bloc.add(CounterEvent.increment);
+        bloc.add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
         await bloc.close();
@@ -93,7 +95,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc(limit: 1);
         final subscription = bloc.listen(states.add);
-        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc..undo()..undo();
         await bloc.close();
@@ -105,7 +107,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.listen(states.add);
-        bloc.add(CounterEvent.increment);
+        bloc.add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
         await bloc.close();
@@ -117,12 +119,35 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.listen(states.add);
-        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1]);
+      });
+
+      test('triggers onEvent', () async {
+        final onEventCalls = <ReplayEvent>[];
+        final bloc = CounterBloc(onEventCallback: onEventCalls.add)
+          ..add(Increment());
+        await Future<void>.delayed(Duration.zero);
+        bloc.undo();
+        expect(onEventCalls.length, 2);
+        expect(onEventCalls.last.toString(), 'Undo');
+      });
+
+      test('triggers onTransition', () async {
+        final onTransitionCalls = <Transition<ReplayEvent, int>>[];
+        final bloc = CounterBloc(onTransitionCallback: onTransitionCalls.add)
+          ..add(Increment());
+        await Future<void>.delayed(Duration.zero);
+        bloc.undo();
+        expect(onTransitionCalls.length, 2);
+        expect(
+          onTransitionCalls.last.toString(),
+          'Transition { currentState: 1, event: Undo, nextState: 0 }',
+        );
       });
     });
 
@@ -141,7 +166,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.listen(states.add);
-        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.redo();
         await bloc.close();
@@ -153,7 +178,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.listen(states.add);
-        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -163,11 +188,40 @@ void main() {
         expect(states, const <int>[1, 2, 1, 2]);
       });
 
+      test('triggers onEvent', () async {
+        final onEventCalls = <ReplayEvent>[];
+        final bloc = CounterBloc(onEventCallback: onEventCalls.add)
+          ..add(Increment());
+        await Future<void>.delayed(Duration.zero);
+        bloc
+          ..undo()
+          ..redo();
+        await bloc.close();
+        expect(onEventCalls.length, 3);
+        expect(onEventCalls.last.toString(), 'Redo');
+      });
+
+      test('triggers onTransition', () async {
+        final onTransitionCalls = <Transition<ReplayEvent, int>>[];
+        final bloc = CounterBloc(onTransitionCallback: onTransitionCalls.add)
+          ..add(Increment());
+        await Future<void>.delayed(Duration.zero);
+        bloc
+          ..undo()
+          ..redo();
+        await bloc.close();
+        expect(onTransitionCalls.length, 3);
+        expect(
+          onTransitionCalls.last.toString(),
+          'Transition { currentState: 0, event: Redo, nextState: 1 }',
+        );
+      });
+
       test('does nothing when undos have been exhausted', () async {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.listen(states.add);
-        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -184,11 +238,11 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.listen(states.add);
-        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
-          ..add(CounterEvent.decrement);
+          ..add(Decrement());
         await Future<void>.delayed(Duration.zero);
         bloc.redo();
         await bloc.close();
@@ -213,14 +267,14 @@ void main() {
       });
 
       test('is true when a single state change has occurred', () async {
-        final bloc = CounterBlocMixin()..add(CounterEvent.increment);
+        final bloc = CounterBlocMixin()..add(Increment());
         await Future<void>.delayed(Duration.zero);
         expect(bloc.canUndo, isTrue);
         await bloc.close();
       });
 
       test('is false when undos have been exhausted', () async {
-        final bloc = CounterBlocMixin()..add(CounterEvent.increment);
+        final bloc = CounterBlocMixin()..add(Increment());
         await Future<void>.delayed(Duration.zero, bloc.undo);
         expect(bloc.canUndo, isFalse);
         await bloc.close();
@@ -235,14 +289,14 @@ void main() {
       });
 
       test('is true when a single undo has occurred', () async {
-        final bloc = CounterBlocMixin()..add(CounterEvent.increment);
+        final bloc = CounterBlocMixin()..add(Increment());
         await Future<void>.delayed(Duration.zero, bloc.undo);
         expect(bloc.canRedo, isTrue);
         await bloc.close();
       });
 
       test('is false when redos have been exhausted', () async {
-        final bloc = CounterBlocMixin()..add(CounterEvent.increment);
+        final bloc = CounterBlocMixin()..add(Increment());
         await Future<void>.delayed(Duration.zero, bloc.undo);
         await Future<void>.delayed(Duration.zero, bloc.redo);
         expect(bloc.canRedo, isFalse);
@@ -274,7 +328,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin(limit: 0);
         final subscription = bloc.listen(states.add);
-        bloc.add(CounterEvent.increment);
+        bloc.add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
         await bloc.close();
@@ -286,7 +340,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin(limit: 1);
         final subscription = bloc.listen(states.add);
-        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc..undo()..undo();
         await bloc.close();
@@ -298,7 +352,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.listen(states.add);
-        bloc.add(CounterEvent.increment);
+        bloc.add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
         await bloc.close();
@@ -310,7 +364,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.listen(states.add);
-        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
         await bloc.close();
@@ -334,7 +388,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.listen(states.add);
-        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.redo();
         await bloc.close();
@@ -346,7 +400,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.listen(states.add);
-        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -360,7 +414,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.listen(states.add);
-        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -377,11 +431,11 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.listen(states.add);
-        bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
-          ..add(CounterEvent.decrement);
+          ..add(Decrement());
         await Future<void>.delayed(Duration.zero);
         bloc.redo();
         await bloc.close();
