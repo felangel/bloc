@@ -46,7 +46,7 @@ void main() {
 If you wish to be able to use a `ReplayCubit` in conjuction with a different type of cubit like `HydratedCubit`, you can use the `ReplayCubitMixin`.
 
 ```dart
-class CounterCubit extends HydratedCubit<int> with ReplayCubitMixin<int> {
+class CounterCubit extends HydratedCubit<int> with ReplayCubitMixin {
   CounterCubit() : super(0);
 
   void increment() => emit(state + 1);
@@ -87,10 +87,11 @@ class CounterBloc extends ReplayBloc<CounterEvent, int> {
 
 ```dart
 void main() {
-  final bloc = CounterBloc();
-
   // trigger a state change
-  bloc.add(CounterEvent.increment);
+  final bloc = CounterBloc()..add(Increment());
+
+  // wait for state to update
+  await bloc.first;
   print(bloc.state); // 1
 
   // undo the change
@@ -108,11 +109,23 @@ void main() {
 If you wish to be able to use a `ReplayBloc` in conjuction with a different type of cubit like `HydratedBloc`, you can use the `ReplayBlocMixin`.
 
 ```dart
-class CounterCubit extends HydratedCubit<int> with ReplayCubitMixin<int> {
-  CounterCubit() : super(0);
+abstract class CounterEvent with ReplayEvent {}
 
-  void increment() => emit(state + 1);
-  void decrement() => emit(state - 1);
+class Increment extends CounterEvent {}
+
+class Decrement extends CounterEvent {}
+
+class CounterBloc extends HydratedBloc<CounterEvent, int> with ReplayBlocMixin {
+  CounterBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    if (event is Increment) {
+      yield state + 1;
+    } else if (event is Decrement) {
+      yield state - 1;
+    }
+  }
 
   @override
   int fromJson(Map<String, dynamic> json) => json['value'] as int;

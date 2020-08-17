@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:bloc/bloc.dart';
+import 'package:replay_bloc/replay_bloc.dart';
 import 'package:test/test.dart';
 
 import 'blocs/counter_bloc.dart';
@@ -124,6 +126,29 @@ void main() {
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1]);
       });
+
+      test('triggers onEvent', () async {
+        final onEventCalls = <ReplayEvent>[];
+        final bloc = CounterBloc(onEventCallback: onEventCalls.add)
+          ..add(Increment());
+        await Future<void>.delayed(Duration.zero);
+        bloc.undo();
+        expect(onEventCalls.length, 2);
+        expect(onEventCalls.last.toString(), 'Undo');
+      });
+
+      test('triggers onTransition', () async {
+        final onTransitionCalls = <Transition<ReplayEvent, int>>[];
+        final bloc = CounterBloc(onTransitionCallback: onTransitionCalls.add)
+          ..add(Increment());
+        await Future<void>.delayed(Duration.zero);
+        bloc.undo();
+        expect(onTransitionCalls.length, 2);
+        expect(
+          onTransitionCalls.last.toString(),
+          'Transition { currentState: 1, event: Undo, nextState: 0 }',
+        );
+      });
     });
 
     group('redo', () {
@@ -161,6 +186,35 @@ void main() {
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1, 2]);
+      });
+
+      test('triggers onEvent', () async {
+        final onEventCalls = <ReplayEvent>[];
+        final bloc = CounterBloc(onEventCallback: onEventCalls.add)
+          ..add(Increment());
+        await Future<void>.delayed(Duration.zero);
+        bloc
+          ..undo()
+          ..redo();
+        await bloc.close();
+        expect(onEventCalls.length, 3);
+        expect(onEventCalls.last.toString(), 'Redo');
+      });
+
+      test('triggers onTransition', () async {
+        final onTransitionCalls = <Transition<ReplayEvent, int>>[];
+        final bloc = CounterBloc(onTransitionCallback: onTransitionCalls.add)
+          ..add(Increment());
+        await Future<void>.delayed(Duration.zero);
+        bloc
+          ..undo()
+          ..redo();
+        await bloc.close();
+        expect(onTransitionCalls.length, 3);
+        expect(
+          onTransitionCalls.last.toString(),
+          'Transition { currentState: 0, event: Redo, nextState: 1 }',
+        );
       });
 
       test('does nothing when undos have been exhausted', () async {

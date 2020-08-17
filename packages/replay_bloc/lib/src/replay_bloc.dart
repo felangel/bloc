@@ -60,21 +60,34 @@ class _Undo extends ReplayEvent {
 ///
 /// {@endtemplate}
 abstract class ReplayBloc<Event extends ReplayEvent, State>
-    extends Bloc<ReplayEvent, State> with ReplayBlocMixin<Event, State> {
+    extends Bloc<Event, State> with ReplayBlocMixin<Event, State> {
   /// {@macro replay_bloc}
   ReplayBloc(State state, {int limit}) : super(state) {
     this.limit = limit;
   }
 }
 
-mixin ReplayBlocMixin<Event extends ReplayEvent, State>
-    on Bloc<ReplayEvent, State> {
+mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
   final _changeStack = _ChangeStack<State>();
 
   set limit(int limit) => _changeStack.limit = limit;
 
   @override
   Stream<State> mapEventToState(covariant Event event);
+
+  @override
+  // ignore: must_call_super
+  void onTransition(covariant Transition<ReplayEvent, State> transition) {
+    // ignore: invalid_use_of_protected_member
+    Bloc.observer.onTransition(this, transition);
+  }
+
+  @override
+  // ignore: must_call_super
+  void onEvent(covariant ReplayEvent event) {
+    // ignore: invalid_use_of_protected_member
+    Bloc.observer.onEvent(this, event);
+  }
 
   @override
   void emit(State state) {
@@ -97,7 +110,7 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State>
         onTransition(Transition(
           currentState: this.state,
           event: event,
-          nextState: state,
+          nextState: val,
         ));
         // ignore: invalid_use_of_visible_for_testing_member
         super.emit(val);
