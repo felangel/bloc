@@ -1,9 +1,8 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 
 import 'bloc_provider.dart';
+import 'bloc_widget_mixin.dart';
 
 /// Signature for the `builder` function which takes the `BuildContext` and
 /// [state] and is responsible for returning a widget which is to be rendered.
@@ -98,7 +97,8 @@ class BlocBuilder<C extends Cubit<S>, S> extends BlocBuilderBase<C, S> {
 /// so far. The type of the state and how it is updated with each interaction
 /// is defined by sub-classes.
 /// {@endtemplate}
-abstract class BlocBuilderBase<C extends Cubit<S>, S> extends StatefulWidget {
+abstract class BlocBuilderBase<C extends Cubit<S>, S> extends StatefulWidget
+    with BlocWidgetMixin<C, S>, BlocBuilderMixin<C, S> {
   /// {@macro bloc_builder_base}
   const BlocBuilderBase({Key key, this.cubit, this.buildWhen})
       : super(key: key);
@@ -106,76 +106,44 @@ abstract class BlocBuilderBase<C extends Cubit<S>, S> extends StatefulWidget {
   /// The [cubit] that the [BlocBuilderBase] will interact with.
   /// If omitted, [BlocBuilderBase] will automatically perform a lookup using
   /// [BlocProvider] and the current `BuildContext`.
+  @override
   final C cubit;
 
   /// {@macro bloc_builder_build_when}
+  @override
   final BlocBuilderCondition<S> buildWhen;
 
   /// Returns a widget based on the `BuildContext` and current [state].
   Widget build(BuildContext context, S state);
 
   @override
+  List<VoidCallback> filterReactions(
+    BlocWidgetStateMixin<BlocWidgetMixin<C, S>, C, S> widgetState,
+  ) =>
+      defaultBlocBuilderReactions(widgetState);
+
+  @override
   State<BlocBuilderBase<C, S>> createState() => _BlocBuilderBaseState<C, S>();
 }
 
 class _BlocBuilderBaseState<C extends Cubit<S>, S>
-    extends State<BlocBuilderBase<C, S>> {
-  StreamSubscription<S> _subscription;
-  S _previousState;
-  S _state;
-  C _cubit;
-
+    extends State<BlocBuilderBase<C, S>>
+    with BlocWidgetStateMixin<BlocBuilderBase<C, S>, C, S> {
   @override
-  void initState() {
-    super.initState();
-    _cubit = widget.cubit ?? context.bloc<C>();
-    _previousState = _cubit?.state;
-    _state = _cubit?.state;
-    _subscribe();
-  }
+  Widget build(BuildContext context) => widget.build(context, current);
 
-  @override
-  void didUpdateWidget(BlocBuilderBase<C, S> oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    final oldCubit = oldWidget.cubit ?? context.bloc<C>();
-    final currentBloc = widget.cubit ?? oldCubit;
-    if (oldCubit != currentBloc) {
-      if (_subscription != null) {
-        _unsubscribe();
-        _cubit = widget.cubit ?? context.bloc<C>();
-        _previousState = _cubit?.state;
-        _state = _cubit?.state;
-      }
-      _subscribe();
-    }
-  }
+  void rebuild() => setState(() {});
+}
 
-  @override
-  Widget build(BuildContext context) => widget.build(context, _state);
+mixin BlocBuilderMixin<C extends Cubit<S>, S> on BlocWidgetMixin<C, S> {
+  /// {@macro bloc_builder_build_when}
+  BlocBuilderCondition<S> get buildWhen;
 
-  @override
-  void dispose() {
-    _unsubscribe();
-    super.dispose();
-  }
-
-  void _subscribe() {
-    if (_cubit != null) {
-      _subscription = _cubit.listen((state) {
-        if (widget.buildWhen?.call(_previousState, state) ?? true) {
-          setState(() {
-            _state = state;
-          });
-        }
-        _previousState = state;
-      });
-    }
-  }
-
-  void _unsubscribe() {
-    if (_subscription != null) {
-      _subscription.cancel();
-      _subscription = null;
-    }
-  }
+  List<VoidCallback> defaultBlocBuilderReactions(
+    BlocWidgetStateMixin<BlocWidgetMixin<C, S>, C, S> widgetState,
+  ) =>
+      [
+        if (buildWhen?.call(widgetState.previous, widgetState.current) ?? true)
+          (widgetState as _BlocBuilderBaseState<C, S>).rebuild,
+      ];
 }
