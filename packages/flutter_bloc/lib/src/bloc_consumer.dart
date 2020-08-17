@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 
 import '../flutter_bloc.dart';
+import 'bloc_widget_mixin.dart';
 
 /// {@template bloc_consumer}
 /// [BlocConsumer] exposes a [builder] and [listener] in order react to new
@@ -60,56 +61,50 @@ import '../flutter_bloc.dart';
 /// )
 /// ```
 /// {@endtemplate}
-class BlocConsumer<C extends Cubit<S>, S> extends StatelessWidget {
+class BlocConsumer<C extends Cubit<S>, S> extends BlocBuilder<C, S>
+    with BlocListenerMixin<C, S> {
   /// {@macro bloc_consumer}
   const BlocConsumer({
     Key key,
-    @required this.builder,
+
+    /// The [builder] function which will be invoked on each widget build.
+    /// The [builder] takes the `BuildContext` and current `state` and
+    /// must return a widget.
+    /// This is analogous to the [builder] function in [StreamBuilder].
+    BlocWidgetBuilder<S> builder,
     @required this.listener,
-    this.cubit,
-    this.buildWhen,
+
+    /// The [cubit] that the [BlocConsumer] will interact with.
+    /// If omitted, [BlocConsumer] will automatically perform a lookup using
+    /// `BlocProvider` and the current `BuildContext`.
+    C cubit,
+
+    /// Takes the previous `state` and the current `state` and is responsible
+    /// for returning a [bool] which determines whether or not to trigger
+    /// [builder] with the current `state`.
+    BlocBuilderCondition<S> buildWhen,
     this.listenWhen,
   })  : assert(builder != null),
         assert(listener != null),
-        super(key: key);
-
-  /// The [cubit] that the [BlocConsumer] will interact with.
-  /// If omitted, [BlocConsumer] will automatically perform a lookup using
-  /// `BlocProvider` and the current `BuildContext`.
-  final C cubit;
-
-  /// The [builder] function which will be invoked on each widget build.
-  /// The [builder] takes the `BuildContext` and current `state` and
-  /// must return a widget.
-  /// This is analogous to the [builder] function in [StreamBuilder].
-  final BlocWidgetBuilder<S> builder;
+        super(key: key, cubit: cubit, builder: builder, buildWhen: buildWhen);
 
   /// Takes the `BuildContext` along with the [cubit] `state`
   /// and is responsible for executing in response to `state` changes.
+  @override
   final BlocWidgetListener<S> listener;
-
-  /// Takes the previous `state` and the current `state` and is responsible for
-  /// returning a [bool] which determines whether or not to trigger
-  /// [builder] with the current `state`.
-  final BlocBuilderCondition<S> buildWhen;
 
   /// Takes the previous `state` and the current `state` and is responsible for
   /// returning a [bool] which determines whether or not to call [listener] of
   /// [BlocConsumer] with the current `state`.
+  @override
   final BlocListenerCondition<S> listenWhen;
 
   @override
-  Widget build(BuildContext context) {
-    final cubit = this.cubit ?? context.bloc<C>();
-    return BlocListener<C, S>(
-      cubit: cubit,
-      listener: listener,
-      listenWhen: listenWhen,
-      child: BlocBuilder<C, S>(
-        cubit: cubit,
-        builder: builder,
-        buildWhen: buildWhen,
-      ),
-    );
-  }
+  List<VoidCallback> filterReactions(
+    BlocWidgetStateMixin<BlocWidgetMixin<C, S>, C, S> widgetState,
+  ) =>
+      [
+        ...defaultBlocListenerReactions(widgetState),
+        ...super.filterReactions(widgetState),
+      ];
 }
