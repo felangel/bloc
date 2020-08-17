@@ -1,7 +1,9 @@
 import 'dart:collection';
 
 import 'package:bloc/bloc.dart';
+
 part 'change_stack.dart';
+part 'replay_bloc.dart';
 
 /// {@template replay_cubit}
 /// A specialized [Cubit] which supports `undo` and `redo` operations.
@@ -41,14 +43,15 @@ part 'change_stack.dart';
 /// * [Cubit] for information about the [ReplayCubit] superclass.
 ///
 /// {@endtemplate}
-abstract class ReplayCubit<State> extends Cubit<State> with ReplayMixin<State> {
+abstract class ReplayCubit<State> extends Cubit<State>
+    with ReplayCubitMixin<State> {
   /// {@macro replay_cubit}
   ReplayCubit(State state, {int limit}) : super(state) {
     this.limit = limit;
   }
 }
 
-mixin ReplayMixin<State> on Cubit<State> {
+mixin ReplayCubitMixin<State> on Cubit<State> {
   final _changeStack = _ChangeStack<State>();
 
   set limit(int limit) => _changeStack.limit = limit;
@@ -60,6 +63,7 @@ mixin ReplayMixin<State> on Cubit<State> {
       () => super.emit(state),
       (val) => super.emit(val),
     ));
+    super.emit(state);
   }
 
   /// Undo the last change
