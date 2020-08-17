@@ -12,7 +12,6 @@ class _ChangeStack<T> {
   bool get canUndo => _history.isNotEmpty;
 
   void add(_Change<T> change) {
-    change.execute();
     if (limit != null && limit == 0) {
       return;
     }
