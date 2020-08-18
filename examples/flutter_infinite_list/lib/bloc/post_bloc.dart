@@ -2,16 +2,19 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter_infinite_list/bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_infinite_list/models/models.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-class PostBloc extends Bloc<PostEvent, PostState> {
-  final http.Client httpClient;
+part 'post_event.dart';
+part 'post_state.dart';
 
+class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({@required this.httpClient}) : super(PostInitial());
+
+  final http.Client httpClient;
 
   @override
   Stream<Transition<PostEvent, PostState>> transformEvents(
@@ -54,18 +57,18 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
     final response = await httpClient.get(
-        'https://jsonplaceholder.typicode.com/posts?_start=$startIndex&_limit=$limit');
+      'https://jsonplaceholder.typicode.com/posts?_start=$startIndex&_limit=$limit',
+    );
     if (response.statusCode == 200) {
       final data = json.decode(response.body) as List;
-      return data.map((rawPost) {
+      return data.map((dynamic rawPost) {
         return Post(
-          id: rawPost['id'],
-          title: rawPost['title'],
-          body: rawPost['body'],
+          id: rawPost['id'] as int,
+          title: rawPost['title'] as String,
+          body: rawPost['body'] as String,
         );
       }).toList();
-    } else {
-      throw Exception('error fetching posts');
     }
+    throw Exception('error fetching posts');
   }
 }

@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_infinite_list/bloc/bloc.dart';
+import 'package:flutter_infinite_list/bloc/post_bloc.dart';
 import 'package:flutter_infinite_list/models/models.dart';
+import 'package:flutter_infinite_list/simple_bloc_observer.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
@@ -14,14 +15,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Infinite Scroll',
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Posts'),
-        ),
+        appBar: AppBar(title: const Text('Posts')),
         body: BlocProvider(
-          create: (context) =>
-              PostBloc(httpClient: http.Client())..add(PostFetched()),
+          create: (_) => PostBloc(
+            httpClient: http.Client(),
+          )..add(PostFetched()),
           child: HomePage(),
         ),
       ),
@@ -36,14 +35,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _scrollController = ScrollController();
-  final _scrollThreshold = 200.0;
   PostBloc _postBloc;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _postBloc = BlocProvider.of<PostBloc>(context);
+    _postBloc = context.bloc<PostBloc>();
   }
 
   @override
@@ -51,15 +49,11 @@ class _HomePageState extends State<HomePage> {
     return BlocBuilder<PostBloc, PostState>(
       builder: (context, state) {
         if (state is PostFailure) {
-          return Center(
-            child: Text('failed to fetch posts'),
-          );
+          return const Center(child: Text('failed to fetch posts'));
         }
         if (state is PostSuccess) {
           if (state.posts.isEmpty) {
-            return Center(
-              child: Text('no posts'),
-            );
+            return const Center(child: Text('no posts'));
           }
           return ListView.builder(
             itemBuilder: (BuildContext context, int index) {
@@ -73,9 +67,7 @@ class _HomePageState extends State<HomePage> {
             controller: _scrollController,
           );
         }
-        return Center(
-          child: CircularProgressIndicator(),
-        );
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }
@@ -89,7 +81,7 @@ class _HomePageState extends State<HomePage> {
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
-    if (maxScroll - currentScroll <= _scrollThreshold) {
+    if (currentScroll > (maxScroll * 0.9)) {
       _postBloc.add(PostFetched());
     }
   }
@@ -98,33 +90,26 @@ class _HomePageState extends State<HomePage> {
 class BottomLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: Center(
-        child: SizedBox(
-          width: 33,
-          height: 33,
-          child: CircularProgressIndicator(
-            strokeWidth: 1.5,
-          ),
-        ),
+    return const Center(
+      child: SizedBox(
+        width: 33,
+        height: 33,
+        child: CircularProgressIndicator(strokeWidth: 1.5),
       ),
     );
   }
 }
 
 class PostWidget extends StatelessWidget {
-  final Post post;
-
   const PostWidget({Key key, @required this.post}) : super(key: key);
+
+  final Post post;
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return ListTile(
-      leading: Text(
-        '${post.id}',
-        style: TextStyle(fontSize: 10.0),
-      ),
+      leading: Text('${post.id}', style: textTheme.caption),
       title: Text(post.title),
       isThreeLine: true,
       subtitle: Text(post.body),
