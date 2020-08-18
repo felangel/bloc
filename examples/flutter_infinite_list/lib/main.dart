@@ -46,7 +46,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PostBloc, PostState>(
+    return BlocConsumer<PostBloc, PostState>(
+      listener: (context, state) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (state is PostSuccess && !state.hasReachedMax && _isBottom) {
+            _postBloc.add(PostFetched());
+          }
+        });
+      },
       builder: (context, state) {
         if (state is PostFailure) {
           return const Center(child: Text('failed to fetch posts'));
@@ -79,11 +86,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onScroll() {
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
-    if (currentScroll > (maxScroll * 0.9)) {
+    if (_isBottom) {
       _postBloc.add(PostFetched());
     }
+  }
+
+  bool get _isBottom {
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll * 0.9);
   }
 }
 
