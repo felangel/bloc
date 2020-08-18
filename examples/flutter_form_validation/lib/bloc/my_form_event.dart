@@ -5,24 +5,21 @@ abstract class MyFormEvent extends Equatable {
 
   @override
   List<Object> get props => [];
-
-  @override
-  bool get stringify => true;
 }
 
 class EmailChanged extends MyFormEvent {
-  final String email;
-
   const EmailChanged({@required this.email});
+
+  final String email;
 
   @override
   List<Object> get props => [email];
 }
 
 class PasswordChanged extends MyFormEvent {
-  final String password;
-
   const PasswordChanged({@required this.password});
+
+  final String password;
 
   @override
   List<Object> get props => [password];

@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_form_validation/models/models.dart';
 import 'package:formz/formz.dart';
 import 'package:meta/meta.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'my_form_event.dart';
 part 'my_form_state.dart';
@@ -18,9 +19,20 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
   }
 
   @override
-  Stream<MyFormState> mapEventToState(
-    MyFormEvent event,
-  ) async* {
+  Stream<Transition<MyFormEvent, MyFormState>> transformEvents(
+    Stream<MyFormEvent> events,
+    TransitionFunction<MyFormEvent, MyFormState> transitionFn,
+  ) {
+    final debounced = events
+        .where((event) => event is! FormSubmitted)
+        .debounceTime(const Duration(milliseconds: 300));
+    return events
+        .where((event) => event is FormSubmitted)
+        .mergeWith([debounced]).switchMap(transitionFn);
+  }
+
+  @override
+  Stream<MyFormState> mapEventToState(MyFormEvent event) async* {
     if (event is EmailChanged) {
       final email = Email.dirty(event.email);
       yield state.copyWith(
@@ -36,7 +48,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     } else if (event is FormSubmitted) {
       if (state.status.isValidated) {
         yield state.copyWith(status: FormzStatus.submissionInProgress);
-        await Future.delayed(const Duration(seconds: 1));
+        await Future<void>.delayed(const Duration(seconds: 1));
         yield state.copyWith(status: FormzStatus.submissionSuccess);
       }
     }
