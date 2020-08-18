@@ -46,7 +46,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
                   hasReachedMax: false,
                 );
         }
-      } catch (_) {
+      } on Exception {
         yield PostFailure();
       }
     }

@@ -12,7 +12,7 @@ class PostInitial extends PostState {}
 class PostFailure extends PostState {}
 
 class PostSuccess extends PostState {
-  const PostSuccess({this.posts, this.hasReachedMax});
+  const PostSuccess({this.posts = const <Post>[], this.hasReachedMax = false});
 
   final List<Post> posts;
   final bool hasReachedMax;
