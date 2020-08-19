@@ -1,3 +1,7 @@
+# 7.0.2
+
+- fix: `blocTest` timeouts when verify fails
+
 # 7.0.1
 
 - chore: deprecate `emitsExactly` in favor of `blocTest`

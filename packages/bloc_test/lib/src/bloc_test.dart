@@ -140,9 +140,12 @@ void blocTest<C extends Cubit<State>, State>(
         await verify?.call(cubit);
       },
       onError: (Object error) {
-        unhandledErrors.add(
-          error is CubitUnhandledErrorException ? error.error : error,
-        );
+        if (error is CubitUnhandledErrorException) {
+          unhandledErrors.add(error.error);
+        } else {
+          // ignore: only_throw_errors
+          throw error;
+        }
       },
     );
     if (errors != null) test.expect(unhandledErrors, errors);
