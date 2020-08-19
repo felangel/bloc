@@ -1,18 +1,23 @@
+import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_validation/bloc/my_form_bloc.dart';
 import 'package:formz/formz.dart';
 
-main() => runApp(App());
+void main() {
+  EquatableConfig.stringify = kDebugMode;
+  runApp(App());
+}
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text('Flutter Form Validation')),
+        appBar: AppBar(title: const Text('Flutter Form Validation')),
         body: BlocProvider(
-          create: (context) => MyFormBloc(),
+          create: (_) => MyFormBloc(),
           child: MyForm(),
         ),
       ),
@@ -27,7 +32,7 @@ class MyForm extends StatelessWidget {
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
           Scaffold.of(context).hideCurrentSnackBar();
-          showDialog(
+          showDialog<void>(
             context: context,
             builder: (_) => SuccessDialog(),
           );
@@ -36,7 +41,7 @@ class MyForm extends StatelessWidget {
           Scaffold.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text('Submitting...')),
+              const SnackBar(content: Text('Submitting...')),
             );
         }
       },
@@ -63,7 +68,7 @@ class EmailInput extends StatelessWidget {
         return TextFormField(
           initialValue: state.email.value,
           decoration: InputDecoration(
-            icon: Icon(Icons.email),
+            icon: const Icon(Icons.email),
             labelText: 'Email',
             errorText: state.email.invalid ? 'Invalid Email' : null,
           ),
@@ -86,7 +91,7 @@ class PasswordInput extends StatelessWidget {
         return TextFormField(
           initialValue: state.password.value,
           decoration: InputDecoration(
-            icon: Icon(Icons.lock),
+            icon: const Icon(Icons.lock),
             labelText: 'Password',
             errorText: state.password.invalid ? 'Invalid Password' : null,
           ),
@@ -110,7 +115,7 @@ class SubmitButton extends StatelessWidget {
           onPressed: state.status.isValidated
               ? () => context.bloc<MyFormBloc>().add(FormSubmitted())
               : null,
-          child: Text('Submit'),
+          child: const Text('Submit'),
         );
       },
     );
@@ -132,8 +137,8 @@ class SuccessDialog extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                Icon(Icons.info),
-                Flexible(
+                const Icon(Icons.info),
+                const Flexible(
                   child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Text(
@@ -145,7 +150,7 @@ class SuccessDialog extends StatelessWidget {
               ],
             ),
             RaisedButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
