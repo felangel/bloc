@@ -379,6 +379,15 @@ void main() {
           verify(repository.sideEffect()).called(1);
         },
       );
+      
+      blocTest<SideEffectCounterBloc, int>(
+        'verify should fail',
+        build: () => SideEffectCounterBloc(repository),
+        act: (bloc) => bloc.add(CounterEvent.increment),
+        verify: (_) {
+          verify(repository.sideEffect()).called(2);
+        },
+      );
     });
   });
 }

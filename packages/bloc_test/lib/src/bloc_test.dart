@@ -119,6 +119,7 @@ void blocTest<C extends Cubit<State>, State>(
   Iterable errors,
 }) {
   test.test(description, () async {
+    var verifyError = "Verify Error: ";
     final unhandledErrors = <Object>[];
     await runZoned(
       () async {
@@ -137,7 +138,11 @@ void blocTest<C extends Cubit<State>, State>(
         await cubit.close();
         if (expect != null) test.expect(states, expect);
         await subscription.cancel();
-        await verify?.call(cubit);
+        try {
+          await verify?.call(cubit);
+        } catch(error) {
+          verifyError += error.toString();
+        }
       },
       onError: (Object error) {
         unhandledErrors.add(
@@ -146,5 +151,6 @@ void blocTest<C extends Cubit<State>, State>(
       },
     );
     if (errors != null) test.expect(unhandledErrors, errors);
+    if (verifyError != null) test.fail(verifyError);
   });
 }
