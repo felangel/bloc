@@ -1,7 +1,7 @@
 # 7.0.2
 
-- fix: `blocTest` timeouts when verify fails
-- fix: `blocTest` timeouts when expect fails
+- fix: `blocTest` timeouts when verify fails ([#1639](https://github.com/felangel/bloc/issues/1639))
+- fix: `blocTest` timeouts when expect fails ([#1645](https://github.com/felangel/bloc/issues/1645))
 
 # 7.0.1
 
