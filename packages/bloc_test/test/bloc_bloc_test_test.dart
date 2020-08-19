@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 
 import 'blocs/blocs.dart';
@@ -62,6 +63,28 @@ void main() {
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: const <int>[11],
       );
+
+      test('fails immediately when expectation is incorrect', () async {
+        const expectedError = '''Expected: [2]
+  Actual: [1]
+   Which: at location [0] is <1> instead of <2>
+''';
+        Object actualError;
+        final completer = Completer<void>();
+        await runZoned(() async {
+          unawaited(runBlocTest<CounterBloc, int>(
+            'fails immediately',
+            build: () => CounterBloc(),
+            act: (bloc) => bloc.add(CounterEvent.increment),
+            expect: const <int>[2],
+          ).then((_) => completer.complete()));
+          await completer.future;
+        }, onError: (Object error) {
+          actualError = error;
+          completer.complete();
+        });
+        expect((actualError as TestFailure).message, expectedError);
+      });
     });
 
     group('AsyncCounterBloc', () {
@@ -379,6 +402,30 @@ void main() {
           verify(repository.sideEffect()).called(1);
         },
       );
+
+      test('fails immediately when verify is incorrect', () async {
+        const expectedError = '''Expected: <2>
+  Actual: <1>
+Unexpected number of calls
+''';
+        Object actualError;
+        final completer = Completer<void>();
+        await runZoned(() async {
+          unawaited(runBlocTest<SideEffectCounterBloc, int>(
+            'fails immediately',
+            build: () => SideEffectCounterBloc(repository),
+            act: (bloc) => bloc.add(CounterEvent.increment),
+            verify: (_) {
+              verify(repository.sideEffect()).called(2);
+            },
+          ).then((_) => completer.complete()));
+          await completer.future;
+        }, onError: (Object error) {
+          actualError = error;
+          completer.complete();
+        });
+        expect((actualError as TestFailure).message, expectedError);
+      });
     });
   });
 }
