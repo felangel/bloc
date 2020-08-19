@@ -140,7 +140,7 @@ void blocTest<C extends Cubit<State>, State>(
         await subscription.cancel();
         try {
           await verify?.call(cubit);
-        } catch(error) {
+        } catch (error) {
           verifyError += error.toString();
         }
       },

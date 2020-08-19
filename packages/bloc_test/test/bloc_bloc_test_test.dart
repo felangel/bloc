@@ -379,7 +379,7 @@ void main() {
           verify(repository.sideEffect()).called(1);
         },
       );
-      
+
       blocTest<SideEffectCounterBloc, int>(
         'verify should fail',
         build: () => SideEffectCounterBloc(repository),
