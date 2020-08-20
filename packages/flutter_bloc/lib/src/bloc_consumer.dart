@@ -98,13 +98,4 @@ class BlocConsumer<C extends Cubit<S>, S> extends BlocBuilder<C, S>
   /// [BlocConsumer] with the current `state`.
   @override
   final BlocListenerCondition<S> listenWhen;
-
-  @override
-  List<VoidCallback> filterReactions(
-    BlocWidgetStateMixin<BlocWidgetMixin<C, S>, C, S> widgetState,
-  ) =>
-      [
-        ...defaultBlocListenerReactions(widgetState),
-        ...super.filterReactions(widgetState),
-      ];
 }

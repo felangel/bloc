@@ -20,9 +20,13 @@ mixin BlocWidgetMixin<C extends Cubit<S>, S> on StatefulWidget {
   C get cubit;
 
   @protected
-  List<VoidCallback> filterReactions(
-    BlocWidgetStateMixin<BlocWidgetMixin<C, S>, C, S> widgetState,
-  );
+  @mustCallSuper
+  void onStateChanged(
+    BuildContext context,
+    S previousState,
+    S state,
+    VoidCallback rebuild,
+  ) {}
 }
 
 mixin BlocWidgetStateMixin<W extends BlocWidgetMixin<C, S>, C extends Cubit<S>,
@@ -31,14 +35,8 @@ mixin BlocWidgetStateMixin<W extends BlocWidgetMixin<C, S>, C extends Cubit<S>,
   S _previousState;
   C _cubit;
 
-  /// Previous state from cubit
-  S get previous => _previousState;
-
   /// Current state from cubit
-  S get current => _cubit?.state;
-
-  /// Current cubit
-  C get cubit => _cubit;
+  S get state => _cubit?.state;
 
   @override
   void initState() {
@@ -72,11 +70,7 @@ mixin BlocWidgetStateMixin<W extends BlocWidgetMixin<C, S>, C extends Cubit<S>,
   void _subscribe() {
     if (_cubit != null) {
       _subscription = _cubit.listen((state) {
-        final actions = widget.filterReactions(this);
-        assert(actions != null);
-        for (final action in actions) {
-          action?.call();
-        }
+        widget.onStateChanged?.call(context, _previousState, state, rebuild);
         _previousState = state;
       });
     }
@@ -88,4 +82,6 @@ mixin BlocWidgetStateMixin<W extends BlocWidgetMixin<C, S>, C extends Cubit<S>,
       _subscription = null;
     }
   }
+
+  void rebuild() => setState(() {});
 }

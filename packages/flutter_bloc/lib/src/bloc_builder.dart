@@ -117,12 +117,6 @@ abstract class BlocBuilderBase<C extends Cubit<S>, S> extends StatefulWidget
   Widget build(BuildContext context, S state);
 
   @override
-  List<VoidCallback> filterReactions(
-    BlocWidgetStateMixin<BlocWidgetMixin<C, S>, C, S> widgetState,
-  ) =>
-      defaultBlocBuilderReactions(widgetState);
-
-  @override
   State<BlocBuilderBase<C, S>> createState() => _BlocBuilderBaseState<C, S>();
 }
 
@@ -130,20 +124,21 @@ class _BlocBuilderBaseState<C extends Cubit<S>, S>
     extends State<BlocBuilderBase<C, S>>
     with BlocWidgetStateMixin<BlocBuilderBase<C, S>, C, S> {
   @override
-  Widget build(BuildContext context) => widget.build(context, current);
-
-  void rebuild() => setState(() {});
+  Widget build(BuildContext context) => widget.build(context, state);
 }
 
 mixin BlocBuilderMixin<C extends Cubit<S>, S> on BlocWidgetMixin<C, S> {
   /// {@macro bloc_builder_build_when}
   BlocBuilderCondition<S> get buildWhen;
 
-  List<VoidCallback> defaultBlocBuilderReactions(
-    BlocWidgetStateMixin<BlocWidgetMixin<C, S>, C, S> widgetState,
-  ) =>
-      [
-        if (buildWhen?.call(widgetState.previous, widgetState.current) ?? true)
-          (widgetState as _BlocBuilderBaseState<C, S>).rebuild,
-      ];
+  @override
+  void onStateChanged(
+    BuildContext context,
+    S previousState,
+    S state,
+    VoidCallback rebuild,
+  ) {
+    super.onStateChanged(context, previousState, state, rebuild);
+    if (buildWhen?.call(previousState, state) ?? true) rebuild();
+  }
 }

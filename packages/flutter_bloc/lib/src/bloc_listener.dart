@@ -140,12 +140,6 @@ abstract class BlocListenerBase<C extends Cubit<S>, S>
   final BlocListenerCondition<S> listenWhen;
 
   @override
-  List<VoidCallback> filterReactions(
-    BlocWidgetStateMixin<BlocWidgetMixin<C, S>, C, S> widgetState,
-  ) =>
-      defaultBlocListenerReactions(widgetState);
-
-  @override
   SingleChildState<BlocListenerBase<C, S>> createState() =>
       _BlocListenerBaseState<C, S>();
 }
@@ -166,14 +160,16 @@ mixin BlocListenerMixin<C extends Cubit<S>, S> on BlocWidgetMixin<C, S> {
   /// {@macro bloc_listener_listen_when}
   BlocListenerCondition<S> get listenWhen;
 
-  List<VoidCallback> defaultBlocListenerReactions(
-    BlocWidgetStateMixin<BlocWidgetMixin<C, S>, C, S> widgetState,
+  @override
+  void onStateChanged(
+    BuildContext context,
+    S previousState,
+    S state,
+    VoidCallback rebuild,
   ) {
-    final previuosState = widgetState.previous;
-    final currentState = widgetState.current;
-    return [
-      if (listenWhen?.call(previuosState, currentState) ?? true)
-        () => listener?.call(widgetState.context, currentState),
-    ];
+    super.onStateChanged(context, previousState, state, rebuild);
+    if (listenWhen?.call(previousState, state) ?? true) {
+      listener?.call(context, state);
+    }
   }
 }
