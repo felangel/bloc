@@ -119,32 +119,60 @@ void blocTest<C extends Cubit<State>, State>(
   Iterable errors,
 }) {
   test.test(description, () async {
-    final unhandledErrors = <Object>[];
-    await runZoned(
-      () async {
-        final states = <State>[];
-        final cubit = build();
-        final subscription = cubit.skip(skip).listen(states.add);
-        try {
-          await act?.call(cubit);
-        } on Exception catch (error) {
-          unhandledErrors.add(
-            error is CubitUnhandledErrorException ? error.error : error,
-          );
-        }
-        if (wait != null) await Future<void>.delayed(wait);
-        await Future<void>.delayed(Duration.zero);
-        await cubit.close();
-        if (expect != null) test.expect(states, expect);
-        await subscription.cancel();
-        await verify?.call(cubit);
-      },
-      onError: (Object error) {
+    await runBlocTest<C, State>(
+      description,
+      build: build,
+      act: act,
+      wait: wait,
+      skip: skip,
+      expect: expect,
+      verify: verify,
+      errors: errors,
+    );
+  });
+}
+
+/// Internal [blocTest] runner which is only visible for testing.
+/// This should never be used directly -- please use [blocTest] instead.
+@visibleForTesting
+Future<void> runBlocTest<C extends Cubit<State>, State>(
+  String description, {
+  @required C Function() build,
+  Function(C cubit) act,
+  Duration wait,
+  int skip = 0,
+  Iterable expect,
+  Function(C cubit) verify,
+  Iterable errors,
+}) async {
+  final unhandledErrors = <Object>[];
+  await runZoned(
+    () async {
+      final states = <State>[];
+      final cubit = build();
+      final subscription = cubit.skip(skip).listen(states.add);
+      try {
+        await act?.call(cubit);
+      } on Exception catch (error) {
         unhandledErrors.add(
           error is CubitUnhandledErrorException ? error.error : error,
         );
-      },
-    );
-    if (errors != null) test.expect(unhandledErrors, errors);
-  });
+      }
+      if (wait != null) await Future<void>.delayed(wait);
+      await Future<void>.delayed(Duration.zero);
+      await cubit.close();
+      if (expect != null) test.expect(states, expect);
+      await subscription.cancel();
+      await verify?.call(cubit);
+    },
+    onError: (Object error) {
+      if (error is CubitUnhandledErrorException) {
+        unhandledErrors.add(error.error);
+      } else {
+        // ignore: only_throw_errors
+        throw error;
+      }
+    },
+  );
+  if (errors != null) test.expect(unhandledErrors, errors);
 }

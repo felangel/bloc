@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'post_bloc.dart';
 
 abstract class PostEvent extends Equatable {
   @override
