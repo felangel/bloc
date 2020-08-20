@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 
 import '../flutter_bloc.dart';
-import 'bloc_widget_mixin.dart';
 
 /// {@template bloc_consumer}
 /// [BlocConsumer] exposes a [builder] and [listener] in order react to new
