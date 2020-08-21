@@ -47,6 +47,7 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 /// )
 /// ```
 /// {@endtemplate}
+///
 /// {@template bloc_builder_build_when}
 /// An optional [buildWhen] can be implemented for more granular control over
 /// how often [BlocBuilder] rebuilds.

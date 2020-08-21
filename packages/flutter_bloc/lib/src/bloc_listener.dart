@@ -54,6 +54,7 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 /// )
 /// ```
 /// {@endtemplate}
+///
 /// {@template bloc_listener_listen_when}
 /// An optional [listenWhen] can be implemented for more granular control
 /// over when [listener] is called.
