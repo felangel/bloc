@@ -296,7 +296,7 @@ Just like when creating the `CounterCubit`, we must specify an initial state by 
 
 ### State Changes
 
-Unlike when creating the `CounterCubit`, rather than defining functions to trigger state changes, we need to override `mapEventToState`. This will be responsible for converting any incoming events into one or more outgoing states.
+Unlike using `CounterCubit` directly where we define functions to trigger state changes, using `Bloc` requires us to instead override `mapEventToState`. This will be responsible for converting any incoming events into one or more outgoing states.
 
 ```dart
 enum CounterEvent { increment }
