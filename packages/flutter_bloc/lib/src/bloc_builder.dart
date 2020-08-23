@@ -99,7 +99,7 @@ class BlocBuilder<C extends Cubit<S>, S> extends BlocBuilderBase<C, S> {
 /// is defined by sub-classes.
 /// {@endtemplate}
 abstract class BlocBuilderBase<C extends Cubit<S>, S> extends StatefulWidget
-    with BlocWidgetMixin<C, S>, BlocBuilderMixin<C, S> {
+    with BlocWidgetMixin<C, S> {
   /// {@macro bloc_builder_base}
   const BlocBuilderBase({Key key, this.cubit, this.buildWhen})
       : super(key: key);
@@ -111,26 +111,10 @@ abstract class BlocBuilderBase<C extends Cubit<S>, S> extends StatefulWidget
   final C cubit;
 
   /// {@macro bloc_builder_build_when}
-  @override
   final BlocBuilderCondition<S> buildWhen;
 
   /// Returns a widget based on the `BuildContext` and current [state].
   Widget build(BuildContext context, S state);
-
-  @override
-  State<BlocBuilderBase<C, S>> createState() => _BlocBuilderBaseState<C, S>();
-}
-
-class _BlocBuilderBaseState<C extends Cubit<S>, S>
-    extends State<BlocBuilderBase<C, S>>
-    with BlocWidgetStateMixin<BlocBuilderBase<C, S>, C, S> {
-  @override
-  Widget build(BuildContext context) => widget.build(context, state);
-}
-
-mixin BlocBuilderMixin<C extends Cubit<S>, S> on BlocWidgetMixin<C, S> {
-  /// {@macro bloc_builder_build_when}
-  BlocBuilderCondition<S> get buildWhen;
 
   @override
   void onStateChanged(
@@ -142,4 +126,14 @@ mixin BlocBuilderMixin<C extends Cubit<S>, S> on BlocWidgetMixin<C, S> {
     super.onStateChanged(context, previousState, state, rebuild);
     if (buildWhen?.call(previousState, state) ?? true) rebuild();
   }
+
+  @override
+  State<BlocBuilderBase<C, S>> createState() => _BlocBuilderBaseState<C, S>();
+}
+
+class _BlocBuilderBaseState<C extends Cubit<S>, S>
+    extends State<BlocBuilderBase<C, S>>
+    with BlocWidgetStateMixin<BlocBuilderBase<C, S>, C, S> {
+  @override
+  Widget build(BuildContext context) => widget.build(context, state);
 }
