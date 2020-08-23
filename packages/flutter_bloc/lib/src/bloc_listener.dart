@@ -152,6 +152,7 @@ class _BlocListenerBaseState<C extends Cubit<S>, S>
   Widget buildWithChild(BuildContext context, Widget child) => child;
 }
 
+/// The [BlocListenerMixin] define the litener behavior for a [BlocWidgetMixin]
 mixin BlocListenerMixin<C extends Cubit<S>, S> on BlocWidgetMixin<C, S> {
   /// The [BlocWidgetListener] which will be called on every `state` change.
   /// This [listener] should be used for any code which needs to execute
