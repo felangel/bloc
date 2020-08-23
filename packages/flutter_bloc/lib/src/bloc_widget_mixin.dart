@@ -19,6 +19,7 @@ mixin BlocWidgetMixin<C extends Cubit<S>, S> on StatefulWidget {
   /// [BlocProvider] and the current `BuildContext`.
   C get cubit;
 
+  /// The [onStateChanged] is invoked when the `state` of [cubit] is emitted.
   @protected
   @mustCallSuper
   void onStateChanged(
@@ -29,13 +30,16 @@ mixin BlocWidgetMixin<C extends Cubit<S>, S> on StatefulWidget {
   ) {}
 }
 
+/// The [BlocWidgetStateMixin] handles the subscription to the optional
+/// [BlocWidgetMixin.cubit]. When a new `state` is emitted,
+/// [BlocWidgetMixin/onStateChanged] will be invoked.
 mixin BlocWidgetStateMixin<W extends BlocWidgetMixin<C, S>, C extends Cubit<S>,
     S> on State<W> {
   StreamSubscription<S> _subscription;
   S _previousState;
   C _cubit;
 
-  /// Current state from cubit
+  /// Current `state` from `cubit`
   S get state => _cubit?.state;
 
   @override
@@ -70,7 +74,7 @@ mixin BlocWidgetStateMixin<W extends BlocWidgetMixin<C, S>, C extends Cubit<S>,
   void _subscribe() {
     if (_cubit != null) {
       _subscription = _cubit.listen((state) {
-        widget.onStateChanged?.call(context, _previousState, state, rebuild);
+        widget.onStateChanged(context, _previousState, state, _rebuild);
         _previousState = state;
       });
     }
@@ -83,5 +87,5 @@ mixin BlocWidgetStateMixin<W extends BlocWidgetMixin<C, S>, C extends Cubit<S>,
     }
   }
 
-  void rebuild() => setState(() {});
+  void _rebuild() => setState(() {});
 }
