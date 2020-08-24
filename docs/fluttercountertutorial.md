@@ -16,7 +16,7 @@ flutter create flutter_counter
 
 We can then go ahead and replace the contents of `pubspec.yaml` with
 
-[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/pubspec.yaml ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/pubspec.yaml ":include")
 
 and then install all of our dependencies
 
@@ -30,7 +30,7 @@ The first thing we're going to take a look at is how to create a `BlocObserver` 
 
 Let's create `lib/counter_observer.dart`:
 
-[counter_observer.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter_observer.dart ':include')
+[counter_observer.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter_observer.dart ":include")
 
 In this case, we're only overriding `onChange` to see all state changes that occur.
 
@@ -40,7 +40,7 @@ In this case, we're only overriding `onChange` to see all state changes that occ
 
 Next, let's replace the contents of `main.dart` with:
 
-[main.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/main.dart ':include')
+[main.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/main.dart ":include")
 
 We're initializing the `CounterObserver` we just created and calling `runApp` with the `CounterApp` widget which we'll look at next.
 
@@ -48,7 +48,9 @@ We're initializing the `CounterObserver` we just created and calling `runApp` wi
 
 `CounterApp` will be a `MaterialApp` and is specifying the `home` as `CounterPage`.
 
-[app.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/app.dart ':include')
+Let's create `lib/app.dart` and fill it with:
+
+[app.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/app.dart ":include")
 
 ?> **Note**: We are extending `MaterialApp` because `CounterApp` _is_ a `MaterialApp`. In most cases, we're going to be creating `StatelessWidget` or `StatefulWidget` instances and composing widgets in `build` but in this case there are no widgets to compose so it's simpler to just extend `MaterialApp`.
 
@@ -58,7 +60,17 @@ Let's take a look at `CounterPage` next!
 
 The `CounterPage` widget is responsible for creating a `CounterCubit` (which we will look at next) and providing it to the `CounterView`.
 
-[counter_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_page.dart ':include')
+Create folder structure and add `counter_page.dart`:
+
+```text
+lib/
+  counter/
+    view/
+      counter_page.dart
+    cubit/
+```
+
+[counter_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_page.dart ":include")
 
 ?> **Note**: It's important to separate or decouple the creation of a `Cubit` from the consumption of a `Cubit` in order to have code that is much more testable and reusable.
 
@@ -71,7 +83,18 @@ The `CounterCubit` class will expose two methods:
 
 The type of state the `CounterCubit` is managing is just an `int` and the initial state is `0`.
 
-[counter_cubit.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/cubit/counter_cubit.dart ':include')
+Add `counter_cubit.dart` to the folder structure and fill it with the following.
+
+```text
+lib/
+  counter/
+    view/
+      counter_page.dart
+    cubit/
+      counter_cubit.dart
+```
+
+[counter_cubit.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/cubit/counter_cubit.dart ":include")
 
 ?> **Tip**: Use the [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) or [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) to create new cubits automatically.
 
@@ -81,7 +104,40 @@ Next, let's take a look at the `CounterView` which will be responsible for consu
 
 The `CounterView` is responsible for rendering the current count and rendering two FloatingActionButtons to increment/decrement the counter.
 
-[counter_view.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_view.dart ':include')
+Add `counter_view.dart` to the folder structure
+
+```text
+lib/
+  counter/
+    view/
+      counter_page.dart
+      counter_view.dart
+    cubit/
+      counter_cubit.dart
+```
+
+and fill it with the following.
+
+[counter_view.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_view.dart ":include")
+
+## Counter
+
+Add `counter.dart` to the folder structure
+
+```text
+lib/
+  counter/
+    counter.dart
+    view/
+      counter_page.dart
+      counter_view.dart
+    cubit/
+      counter_cubit.dart
+```
+
+and fill it with the following to have only one import per feature. This is the last missing puzzle.
+
+[counter.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/counter.dart ":include")
 
 A `BlocBuilder` is used to wrap the `Text` widget in order to update the text any time the `CounterCubit` state changes. In addition, `context.bloc<CounterCubit>()` is used to look-up the closest `CounterCubit` instance.
 
