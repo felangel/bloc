@@ -20,14 +20,10 @@ mixin BlocWidgetMixin<C extends Cubit<S>, S> on StatefulWidget {
   C get cubit;
 
   /// The [onStateEmitted] is invoked when the `state` of [cubit] is emitted.
+  /// if returns `true`, the widget will rebuild.
   @protected
   @mustCallSuper
-  void onStateEmitted(
-    BuildContext context,
-    S previousState,
-    S state,
-    VoidCallback rebuild,
-  ) {}
+  bool onStateEmitted(BuildContext context, S previousState, S state) => true;
 }
 
 /// The [BlocWidgetStateMixin] handles the subscription to the optional
@@ -74,7 +70,9 @@ mixin BlocWidgetStateMixin<W extends BlocWidgetMixin<C, S>, C extends Cubit<S>,
   void _subscribe() {
     if (_cubit != null) {
       _subscription = _cubit.listen((state) {
-        widget.onStateEmitted(context, _previousState, state, _rebuild);
+        if (widget.onStateEmitted(context, _previousState, state) ?? true) {
+          setState(() {});
+        }
         _previousState = state;
       });
     }
@@ -86,6 +84,4 @@ mixin BlocWidgetStateMixin<W extends BlocWidgetMixin<C, S>, C extends Cubit<S>,
       _subscription = null;
     }
   }
-
-  void _rebuild() => setState(() {});
 }

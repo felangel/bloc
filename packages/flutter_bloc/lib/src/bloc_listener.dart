@@ -163,15 +163,10 @@ mixin BlocListenerMixin<C extends Cubit<S>, S> on BlocWidgetMixin<C, S> {
   BlocListenerCondition<S> get listenWhen;
 
   @override
-  void onStateEmitted(
-    BuildContext context,
-    S previousState,
-    S state,
-    VoidCallback rebuild,
-  ) {
-    super.onStateEmitted(context, previousState, state, rebuild);
+  bool onStateEmitted(BuildContext context, S previousState, S state) {
     if (listenWhen?.call(previousState, state) ?? true) {
       listener?.call(context, state);
     }
+    return super.onStateEmitted(context, previousState, state);
   }
 }
