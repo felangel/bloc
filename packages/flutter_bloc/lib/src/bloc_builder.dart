@@ -117,13 +117,13 @@ abstract class BlocBuilderBase<C extends Cubit<S>, S> extends StatefulWidget
   Widget build(BuildContext context, S state);
 
   @override
-  void onStateChanged(
+  void onStateEmitted(
     BuildContext context,
     S previousState,
     S state,
     VoidCallback rebuild,
   ) {
-    super.onStateChanged(context, previousState, state, rebuild);
+    super.onStateEmitted(context, previousState, state, rebuild);
     if (buildWhen?.call(previousState, state) ?? true) rebuild();
   }
 
