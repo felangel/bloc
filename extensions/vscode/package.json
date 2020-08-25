@@ -34,6 +34,38 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": [
+      {
+        "title": "Bloc",
+        "properties": {
+          "bloc.blocTemplateGeneration": {
+            "type": "string",
+            "enum": [
+              "default",
+              "reverse",
+              "equatable",
+              "freezed",
+              "simple"
+            ]
+          }
+        }
+      },
+      {
+        "title": "Bloc",
+        "properties": {
+          "bloc.cubitTemplateGeneration": {
+            "type": "string",
+            "enum": [
+              "default",
+              "reverse",
+              "equatable",
+              "freezed",
+              "simple"
+            ]
+          }
+        }
+      }
+    ],
     "commands": [
       {
         "command": "extension.new-bloc",
