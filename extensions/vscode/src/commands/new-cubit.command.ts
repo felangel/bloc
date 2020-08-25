@@ -6,6 +6,7 @@ import { InputBoxOptions, OpenDialogOptions, Uri, window } from "vscode";
 import { existsSync, lstatSync, writeFile } from "fs";
 import { getCubitStateTemplate, getCubitTemplate } from "../templates";
 import { getTemplateType, BlocType } from "../utils";
+import { SettingType } from "../utils/get-vscode-config";
 
 export const newCubit = async (uri: Uri) => {
   const cubitName = await promptForCubitName();
@@ -25,10 +26,10 @@ export const newCubit = async (uri: Uri) => {
     targetDirectory = uri.fsPath;
   }
 
-  const blocType = await getTemplateType();
+  const templateType = await getTemplateType(SettingType.Cubit);
   const pascalCaseCubitName = changeCase.pascalCase(cubitName.toLowerCase());
   try {
-    await generateCubitCode(cubitName, targetDirectory, blocType);
+    await generateCubitCode(cubitName, targetDirectory, templateType);
     window.showInformationMessage(
       `Successfully Generated ${pascalCaseCubitName} Cubit`
     );

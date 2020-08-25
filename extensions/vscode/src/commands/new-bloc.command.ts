@@ -10,6 +10,7 @@ import {
   getBlocTemplate,
 } from "../templates";
 import { getTemplateType, BlocType } from "../utils";
+import { SettingType } from "../utils/get-vscode-config";
 
 export const newBloc = async (uri: Uri) => {
   const blocName = await promptForBlocName();
@@ -29,10 +30,10 @@ export const newBloc = async (uri: Uri) => {
     targetDirectory = uri.fsPath;
   }
 
-  const blocType = await getTemplateType();
+  const templateType = await getTemplateType(SettingType.Bloc);
   const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
   try {
-    await generateBlocCode(blocName, targetDirectory, blocType);
+    await generateBlocCode(blocName, targetDirectory, templateType);
     window.showInformationMessage(
       `Successfully Generated ${pascalCaseBlocName} Bloc`
     );
