@@ -9,7 +9,7 @@ export const enum BlocType {
   Freezed,
 }
 
-export async function getBlocType() {
+export async function getTemplateType() {
   if (await hasDependency(equatable)) {
     return BlocType.Equatable;
   } else if (await hasDependency(freezed_annotation)) {
