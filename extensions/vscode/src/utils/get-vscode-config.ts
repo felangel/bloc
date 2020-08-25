@@ -7,21 +7,22 @@ export const enum TemplateSetting {
   Simple,
 }
 
-export const enum Config {
+export const enum SettingType {
   Bloc,
   Cubit,
 }
 
-export function getConfigedTemplate(which: Config): TemplateSetting {
+export function getConfigedTemplate(which: SettingType): TemplateSetting {
   let config: string | undefined;
   switch (which) {
-    case Config.Bloc:
+    case SettingType.Bloc:
       config = workspace.getConfiguration("bloc").get("blocTemplateGeneration");
       break;
-    case Config.Cubit:
+    case SettingType.Cubit:
       config = workspace
         .getConfiguration("bloc")
         .get("cubitTemplateGeneration");
+      console.log(config);
       break;
     default:
       return TemplateSetting.Default;
