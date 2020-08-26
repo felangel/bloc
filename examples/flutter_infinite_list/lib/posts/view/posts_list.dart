@@ -22,33 +22,32 @@ class _PostsListState extends State<PostsList> {
   Widget build(BuildContext context) {
     return BlocConsumer<PostBloc, PostState>(
       listener: (context, state) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (state is PostSuccess && !state.hasReachedMax && _isBottom) {
-            _postBloc.add(PostFetched());
-          }
-        });
+        if (!state.hasReachedMax && _isBottom) {
+          _postBloc.add(PostFetched());
+        }
       },
       builder: (context, state) {
-        if (state is PostFailure) {
-          return const Center(child: Text('failed to fetch posts'));
+        switch (state.status) {
+          case PostStatus.failure:
+            return const Center(child: Text('failed to fetch posts'));
+          case PostStatus.success:
+            if (state.posts.isEmpty) {
+              return const Center(child: Text('no posts'));
+            }
+            return ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return index >= state.posts.length
+                    ? BottomLoader()
+                    : PostListItem(post: state.posts[index]);
+              },
+              itemCount: state.hasReachedMax
+                  ? state.posts.length
+                  : state.posts.length + 1,
+              controller: _scrollController,
+            );
+          default:
+            return const Center(child: CircularProgressIndicator());
         }
-        if (state is PostSuccess) {
-          if (state.posts.isEmpty) {
-            return const Center(child: Text('no posts'));
-          }
-          return ListView.builder(
-            itemBuilder: (BuildContext context, int index) {
-              return index >= state.posts.length
-                  ? BottomLoader()
-                  : PostListItem(post: state.posts[index]);
-            },
-            itemCount: state.hasReachedMax
-                ? state.posts.length
-                : state.posts.length + 1,
-            controller: _scrollController,
-          );
-        }
-        return const Center(child: CircularProgressIndicator());
       },
     );
   }

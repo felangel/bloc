@@ -12,7 +12,7 @@ part 'post_event.dart';
 part 'post_state.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
-  PostBloc({@required this.httpClient}) : super(PostInitial());
+  PostBloc({@required this.httpClient}) : super(const PostState());
 
   final http.Client httpClient;
 
@@ -29,31 +29,34 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   @override
   Stream<PostState> mapEventToState(PostEvent event) async* {
-    final currentState = state;
-    if (event is PostFetched && !_hasReachedMax(currentState)) {
-      try {
-        if (currentState is PostInitial) {
-          final posts = await _fetchPosts(0, 20);
-          yield PostSuccess(posts: posts, hasReachedMax: false);
-          return;
-        }
-        if (currentState is PostSuccess) {
-          final posts = await _fetchPosts(currentState.posts.length, 20);
-          yield posts.isEmpty
-              ? currentState.copyWith(hasReachedMax: true)
-              : PostSuccess(
-                  posts: currentState.posts + posts,
-                  hasReachedMax: false,
-                );
-        }
-      } on Exception {
-        yield PostFailure();
-      }
+    if (event is PostFetched) {
+      yield await _mapPostFetchedToState(state);
     }
   }
 
-  bool _hasReachedMax(PostState state) =>
-      state is PostSuccess && state.hasReachedMax;
+  Future<PostState> _mapPostFetchedToState(PostState state) async {
+    if (state.hasReachedMax) return state;
+    try {
+      if (state.status == PostStatus.initial) {
+        final posts = await _fetchPosts(0, 20);
+        return state.copyWith(
+          status: PostStatus.success,
+          posts: posts,
+          hasReachedMax: false,
+        );
+      }
+      final posts = await _fetchPosts(state.posts.length, 20);
+      return posts.isEmpty
+          ? state.copyWith(hasReachedMax: true)
+          : state.copyWith(
+              status: PostStatus.success,
+              posts: List.of(state.posts)..addAll(posts),
+              hasReachedMax: false,
+            );
+    } on Exception {
+      return state.copyWith(status: PostStatus.failure);
+    }
+  }
 
   Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
     final response = await httpClient.get(
