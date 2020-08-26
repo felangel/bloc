@@ -34,6 +34,48 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": [
+      {
+        "title": "Bloc",
+        "properties": {
+          "bloc.newBlocTemplate": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "equatable",
+              "freezed",
+              "simple"
+            ],
+            "enumDescriptions": [
+              "automatically pick template based on dependencies",
+              "always use equatable template",
+              "always use freezed template",
+              "always use simple template"
+            ]
+          }
+        }
+      },
+      {
+        "title": "Bloc",
+        "properties": {
+          "bloc.newCubitTemplate": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "equatable",
+              "freezed",
+              "simple"
+            ],
+            "enumDescriptions": [
+              "automatically pick template based on dependencies",
+              "always use equatable template",
+              "always use freezed template",
+              "always use simple template"
+            ]
+          }
+        }
+      }
+    ],
     "commands": [
       {
         "command": "extension.new-bloc",

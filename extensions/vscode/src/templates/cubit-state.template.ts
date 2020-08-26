@@ -22,12 +22,12 @@ function getEquatableCubitStateTemplate(cubitName: string): string {
 
 abstract class ${pascalCaseCubitName}State extends Equatable {
   const ${pascalCaseCubitName}State();
-}
 
-class ${pascalCaseCubitName}Initial extends ${pascalCaseCubitName}State {
   @override
   List<Object> get props => [];
 }
+
+class ${pascalCaseCubitName}Initial extends ${pascalCaseCubitName}State {}
 `;
 }
 
