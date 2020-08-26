@@ -3,7 +3,7 @@ import {
   TemplateType,
   getTemplateSetting,
   TemplateSetting,
-} from "./get-template-settings";
+} from "./get-template-setting";
 
 const equatable = "equatable";
 const freezed_annotation = "freezed_annotation";
