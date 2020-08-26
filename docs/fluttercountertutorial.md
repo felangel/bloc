@@ -68,8 +68,6 @@ We're initializing the `CounterObserver` we just created and calling `runApp` wi
 
 `CounterApp` will be a `MaterialApp` and is specifying the `home` as `CounterPage`.
 
-Let's create `lib/app.dart` and fill it with:
-
 [app.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/app.dart ':include')
 
 ?> **Note**: We are extending `MaterialApp` because `CounterApp` _is_ a `MaterialApp`. In most cases, we're going to be creating `StatelessWidget` or `StatefulWidget` instances and composing widgets in `build` but in this case there are no widgets to compose so it's simpler to just extend `MaterialApp`.
