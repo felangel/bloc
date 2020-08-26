@@ -45,10 +45,10 @@ class _SearchBarState extends State<_SearchBar> {
         );
       },
       decoration: InputDecoration(
-        prefixIcon:const Icon(Icons.search),
+        prefixIcon: const Icon(Icons.search),
         suffixIcon: GestureDetector(
           onTap: _onClearTapped,
-          child:const Icon(Icons.clear),
+          child: const Icon(Icons.clear),
         ),
         border: InputBorder.none,
         hintText: 'Enter a search term',
