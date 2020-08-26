@@ -28,7 +28,7 @@ class App extends StatelessWidget {
       title: 'Github Search',
       home: Scaffold(
         appBar: AppBar(title: const Text('Github Search')),
-        body: BlocProvider(
+        body: BlocProvider<GithubSearchBloc>(
           create: (BuildContext context) =>
               GithubSearchBloc(githubRepository: githubRepository),
           child: SearchForm(),
