@@ -38,21 +38,19 @@
       {
         "title": "Bloc",
         "properties": {
-          "bloc.blocTemplateGeneration": {
+          "bloc.newBlocTemplate": {
             "type": "string",
             "enum": [
-              "default",
-              "reverse",
+              "auto",
               "equatable",
               "freezed",
               "simple"
             ],
             "enumDescriptions": [
-              "generate template based on the dependency where the equatable have higher priority",
-              "generate template based on the dependency where the freezed have higher priority",
-              "always generate equatable template",
-              "always generate freezed template",
-              "always generate basic template"
+              "automatically pick template based on dependencies",
+              "always use equatable template",
+              "always use freezed template",
+              "always use simple template"
             ]
           }
         }
@@ -60,21 +58,19 @@
       {
         "title": "Bloc",
         "properties": {
-          "bloc.cubitTemplateGeneration": {
+          "bloc.newCubitTemplate": {
             "type": "string",
             "enum": [
-              "default",
-              "reverse",
+              "auto",
               "equatable",
               "freezed",
               "simple"
             ],
             "enumDescriptions": [
-              "generate template based on the dependency where the equatable have higher priority",
-              "generate template based on the dependency where the freezed have higher priority",
-              "always generate equatable template",
-              "always generate freezed template",
-              "always generate basic template"
+              "automatically pick template based on dependencies",
+              "always use equatable template",
+              "always use freezed template",
+              "always use simple template"
             ]
           }
         }

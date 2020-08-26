@@ -1,9 +1,9 @@
 import { hasDependency } from "./has-dependency";
 import {
-  SettingType,
-  getConfigedTemplate,
+  TemplateType,
+  getTemplateSetting,
   TemplateSetting,
-} from "./get-vscode-config";
+} from "./get-template-settings";
 
 const equatable = "equatable";
 const freezed_annotation = "freezed_annotation";
@@ -14,35 +14,22 @@ export const enum BlocType {
   Freezed,
 }
 
-export async function getTemplateType(which: SettingType) {
-  const setting = getConfigedTemplate(which);
+export async function getBlocType(type: TemplateType): Promise<BlocType> {
+  const setting = getTemplateSetting(type);
   switch (setting) {
-    case TemplateSetting.Default:
-      return getDefaultDependency();
-    case TemplateSetting.Reverse:
-      return getReverseDependency();
-    case TemplateSetting.Equatable:
-      return BlocType.Equatable;
     case TemplateSetting.Freezed:
       return BlocType.Freezed;
+    case TemplateSetting.Equatable:
+      return BlocType.Equatable;
     case TemplateSetting.Simple:
       return BlocType.Simple;
+    case TemplateSetting.Auto:
     default:
       return getDefaultDependency();
   }
 }
 
-async function getDefaultDependency() {
-  if (await hasDependency(equatable)) {
-    return BlocType.Equatable;
-  } else if (await hasDependency(freezed_annotation)) {
-    return BlocType.Freezed;
-  } else {
-    return BlocType.Simple;
-  }
-}
-
-async function getReverseDependency() {
+async function getDefaultDependency(): Promise<BlocType> {
   if (await hasDependency(freezed_annotation)) {
     return BlocType.Freezed;
   } else if (await hasDependency(equatable)) {
