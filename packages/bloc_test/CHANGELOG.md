@@ -1,3 +1,7 @@
+# 7.0.3
+
+- restrict `mockito` to `<4.1.2` to prevent breaking changes due to NNBD
+
 # 7.0.2
 
 - fix: `blocTest` timeouts when verify fails ([#1639](https://github.com/felangel/bloc/issues/1639))
