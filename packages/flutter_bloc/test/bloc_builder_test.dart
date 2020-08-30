@@ -266,7 +266,7 @@ void main() {
       await tester.tap(find.byType(RaisedButton));
       await tester.pumpAndSettle();
 
-      var materialApp = tester.widget<MaterialApp>(
+      final materialApp = tester.widget<MaterialApp>(
         find.byKey(const Key('material_app')),
       );
 
