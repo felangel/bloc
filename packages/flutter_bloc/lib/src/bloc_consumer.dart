@@ -60,7 +60,7 @@ import '../flutter_bloc.dart';
 /// )
 /// ```
 /// {@endtemplate}
-class BlocConsumer<C extends Cubit<S>, S> extends StatelessWidget {
+class BlocConsumer<C extends Cubit<S>, S> extends StatefulWidget {
   /// {@macro bloc_consumer}
   const BlocConsumer({
     Key key,
@@ -99,17 +99,23 @@ class BlocConsumer<C extends Cubit<S>, S> extends StatelessWidget {
   final BlocListenerCondition<S> listenWhen;
 
   @override
+  State<BlocConsumer<C, S>> createState() => _BlocConsumerState<C, S>();
+}
+
+class _BlocConsumerState<C extends Cubit<S>, S>
+    extends State<BlocConsumer<C, S>> {
+  @override
   Widget build(BuildContext context) {
-    final cubit = this.cubit ?? context.bloc<C>();
     return BlocListener<C, S>(
-      cubit: cubit,
-      listener: listener,
-      listenWhen: listenWhen,
-      child: BlocBuilder<C, S>(
-        cubit: cubit,
-        builder: builder,
-        buildWhen: buildWhen,
-      ),
+      cubit: widget.cubit,
+      listener: widget.listener,
+      listenWhen: (previous, current) {
+        if (widget.buildWhen?.call(previous, current) ?? true) {
+          setState(() {});
+        }
+        return widget.listenWhen?.call(previous, current) ?? true;
+      },
+      child: widget.builder(context, widget.cubit.state),
     );
   }
 }
