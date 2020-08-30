@@ -60,7 +60,7 @@ import '../flutter_bloc.dart';
 /// )
 /// ```
 /// {@endtemplate}
-class BlocConsumer<C extends Cubit<S>, S> extends StatefulWidget {
+class BlocConsumer<C extends Cubit<S>, S> extends StatelessWidget {
   /// {@macro bloc_consumer}
   const BlocConsumer({
     Key key,
@@ -80,7 +80,7 @@ class BlocConsumer<C extends Cubit<S>, S> extends StatefulWidget {
 
   /// The [builder] function which will be invoked on each widget build.
   /// The [builder] takes the `BuildContext` and current `state` and
-  /// must return a widget.
+  /// must return a
   /// This is analogous to the [builder] function in [StreamBuilder].
   final BlocWidgetBuilder<S> builder;
 
@@ -99,21 +99,15 @@ class BlocConsumer<C extends Cubit<S>, S> extends StatefulWidget {
   final BlocListenerCondition<S> listenWhen;
 
   @override
-  State<BlocConsumer<C, S>> createState() => _BlocConsumerState<C, S>();
-}
-
-class _BlocConsumerState<C extends Cubit<S>, S>
-    extends State<BlocConsumer<C, S>> {
-  @override
   Widget build(BuildContext context) {
     return BlocBuilder<C, S>(
-      cubit: widget.cubit,
-      builder: widget.builder,
+      cubit: cubit,
+      builder: builder,
       buildWhen: (previous, current) {
-        if (widget.listenWhen?.call(previous, current) ?? true) {
-          widget.listener(context, widget.cubit.state);
+        if (listenWhen?.call(previous, current) ?? true) {
+          listener(context, cubit.state);
         }
-        return widget.buildWhen?.call(previous, current) ?? true;
+        return buildWhen?.call(previous, current) ?? true;
       },
     );
   }
