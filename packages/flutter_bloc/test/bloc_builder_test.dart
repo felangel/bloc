@@ -239,6 +239,41 @@ void main() {
       expect(numBuilds, 3);
     });
 
+    testWidgets('updates cubit and performs new lookup when widget is updated',
+        (tester) async {
+      final themeCubit = ThemeCubit();
+      var numBuilds = 0;
+      await tester.pumpWidget(
+        StatefulBuilder(
+          builder: (context, setState) => BlocProvider.value(
+            value: themeCubit,
+            child: BlocBuilder<ThemeCubit, ThemeData>(
+              builder: (context, theme) {
+                numBuilds++;
+                return MaterialApp(
+                  key: const Key('material_app'),
+                  theme: theme,
+                  home: RaisedButton(
+                    onPressed: () => setState(() {}),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(RaisedButton));
+      await tester.pumpAndSettle();
+
+      final materialApp = tester.widget<MaterialApp>(
+        find.byKey(const Key('material_app')),
+      );
+
+      expect(materialApp.theme, ThemeData.light());
+      expect(numBuilds, 2);
+    });
+
     testWidgets(
         'updates when the cubit is changed at runtime to a different cubit and'
         'unsubscribes from old cubit', (tester) async {
