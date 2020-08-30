@@ -80,7 +80,7 @@ class BlocConsumer<C extends Cubit<S>, S> extends StatelessWidget {
 
   /// The [builder] function which will be invoked on each widget build.
   /// The [builder] takes the `BuildContext` and current `state` and
-  /// must return a
+  /// must return a widget.
   /// This is analogous to the [builder] function in [StreamBuilder].
   final BlocWidgetBuilder<S> builder;
 
