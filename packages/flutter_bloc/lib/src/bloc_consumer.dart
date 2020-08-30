@@ -106,16 +106,15 @@ class _BlocConsumerState<C extends Cubit<S>, S>
     extends State<BlocConsumer<C, S>> {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<C, S>(
+    return BlocBuilder<C, S>(
       cubit: widget.cubit,
-      listener: widget.listener,
-      listenWhen: (previous, current) {
-        if (widget.buildWhen?.call(previous, current) ?? true) {
-          setState(() {});
+      builder: widget.builder,
+      buildWhen: (previous, current) {
+        if (widget.listenWhen?.call(previous, current) ?? true) {
+          widget.listener(context, widget.cubit.state);
         }
-        return widget.listenWhen?.call(previous, current) ?? true;
+        return widget.buildWhen?.call(previous, current) ?? true;
       },
-      child: widget.builder(context, widget.cubit.state),
     );
   }
 }
