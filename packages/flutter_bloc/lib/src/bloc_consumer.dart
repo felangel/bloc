@@ -101,15 +101,15 @@ class BlocConsumer<C extends Cubit<S>, S> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = this.cubit ?? context.bloc<C>();
-    return BlocListener<C, S>(
+    return BlocBuilder<C, S>(
       cubit: cubit,
-      listener: listener,
-      listenWhen: listenWhen,
-      child: BlocBuilder<C, S>(
-        cubit: cubit,
-        builder: builder,
-        buildWhen: buildWhen,
-      ),
+      builder: builder,
+      buildWhen: (previous, current) {
+        if (listenWhen?.call(previous, current) ?? true) {
+          listener(context, cubit.state);
+        }
+        return buildWhen?.call(previous, current) ?? true;
+      },
     );
   }
 }
