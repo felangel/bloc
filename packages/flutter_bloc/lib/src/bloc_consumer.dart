@@ -100,6 +100,7 @@ class BlocConsumer<C extends Cubit<S>, S> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = this.cubit ?? context.bloc<C>();
     return BlocBuilder<C, S>(
       cubit: cubit,
       builder: builder,
