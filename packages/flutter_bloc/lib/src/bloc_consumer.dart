@@ -106,7 +106,7 @@ class BlocConsumer<C extends Cubit<S>, S> extends StatelessWidget {
       builder: builder,
       buildWhen: (previous, current) {
         if (listenWhen?.call(previous, current) ?? true) {
-          listener(context, cubit.state);
+          listener(context, current);
         }
         return buildWhen?.call(previous, current) ?? true;
       },

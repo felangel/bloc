@@ -121,17 +121,20 @@ abstract class BlocBuilderBase<C extends Cubit<S>, S> extends StatefulWidget {
 class _BlocBuilderBaseState<C extends Cubit<S>, S>
     extends State<BlocBuilderBase<C, S>> {
   C _cubit;
+  S _state;
 
   @override
   void initState() {
     super.initState();
     _cubit = widget.cubit ?? context.bloc<C>();
+    _state = _cubit.state;
   }
 
   @override
   void didUpdateWidget(BlocBuilderBase<C, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
     _cubit = widget.cubit ?? context.bloc<C>();
+    _state = _cubit.state;
   }
 
   @override
@@ -139,8 +142,8 @@ class _BlocBuilderBaseState<C extends Cubit<S>, S>
     return BlocListener<C, S>(
       cubit: _cubit,
       listenWhen: widget.buildWhen,
-      listener: (context, state) => setState(() {}),
-      child: widget.build(context, _cubit.state),
+      listener: (context, state) => setState(() => _state = state),
+      child: widget.build(context, _state),
     );
   }
 }
