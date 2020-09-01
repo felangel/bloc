@@ -1,3 +1,7 @@
+# 6.0.4
+
+- fix: state synchronization issue when providing a condition
+
 # 6.0.3
 
 - refactor: `BlocConsumer` requires a single subscription
