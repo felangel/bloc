@@ -294,10 +294,13 @@ void main() {
       await tester.pumpWidget(
         BlocListener<CounterCubit, int>(
           cubit: counterCubit,
-          listenWhen: (previous, state) {
-            listenWhenPreviousState.add(previous);
-            listenWhenCurrentState.add(state);
-            return true;
+          listenWhen: (previous, current) {
+            if (current % 3 == 0) {
+              listenWhenPreviousState.add(previous);
+              listenWhenCurrentState.add(current);
+              return true;
+            }
+            return false;
           },
           listener: (_, state) => states.add(state),
           child: const SizedBox(),
@@ -306,9 +309,9 @@ void main() {
       counterCubit..increment()..increment()..increment();
       await tester.pump();
 
-      expect(states, [1, 2, 3]);
-      expect(listenWhenPreviousState, [0, 1, 2]);
-      expect(listenWhenCurrentState, [1, 2, 3]);
+      expect(states, [3]);
+      expect(listenWhenPreviousState, [2]);
+      expect(listenWhenCurrentState, [3]);
     });
 
     testWidgets(
