@@ -277,16 +277,38 @@ void main() {
           child: const SizedBox(),
         ),
       );
-      counterCubit.increment();
-      await tester.pump();
-      counterCubit.increment();
-      await tester.pump();
-      counterCubit.increment();
+      counterCubit..increment()..increment()..increment();
       await tester.pump();
 
       expect(states, expectedStates);
       expect(listenWhenCallCount, 3);
       expect(latestPreviousState, 1);
+    });
+
+    testWidgets('calls listenWhen and listener with correct state',
+        (tester) async {
+      final listenWhenPreviousState = <int>[];
+      final listenWhenCurrentState = <int>[];
+      final states = <int>[];
+      final counterCubit = CounterCubit();
+      await tester.pumpWidget(
+        BlocListener<CounterCubit, int>(
+          cubit: counterCubit,
+          listenWhen: (previous, state) {
+            listenWhenPreviousState.add(previous);
+            listenWhenCurrentState.add(state);
+            return true;
+          },
+          listener: (_, state) => states.add(state),
+          child: const SizedBox(),
+        ),
+      );
+      counterCubit..increment()..increment()..increment();
+      await tester.pump();
+
+      expect(states, [1, 2, 3]);
+      expect(listenWhenPreviousState, [0, 1, 2]);
+      expect(listenWhenCurrentState, [1, 2, 3]);
     });
 
     testWidgets(
