@@ -132,6 +132,10 @@ void main() {
 }
 ```
 
+#### Cubit Flow
+
+![Cubit Flow](../../docs/assets/cubit_flow.png)
+
 ### Bloc
 
 ![Bloc Architecture](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture_full.png)
@@ -275,6 +279,10 @@ void main() {
   // Use blocs...
 }
 ```
+
+#### Bloc Flow
+
+![Bloc Flow](../../docs/assets/bloc_flow.png)
 
 ## Dart Versions
 
