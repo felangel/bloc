@@ -1,3 +1,7 @@
+# 6.0.3
+
+- docs: README updates to include flow diagrams for `Bloc` and `Cubit`.
+
 # 6.0.2
 
 - refactor: cubit internal memory and performance optimizations
