@@ -45,6 +45,10 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 A `Cubit` is the base for `Bloc` (in other words `Bloc` extends `Cubit`). `Cubit` is a special type of `Stream` which can be extended to manage any type of state. `Cubit` requires an initial state which will be the state before `emit` has been called. The current state of a `cubit` can be accessed via the `state` getter and the state of the `cubit` can be updated by calling `emit` with a new `state`.
 
+![Cubit Flow](../../docs/assets/cubit_flow.png)
+
+The flow of state changes in cubit begin with predefined function calls which can use the `emit` method to output new states. `onChange` is called on each state change and contains the current and next state.
+
 #### Creating a Cubit
 
 ```dart
@@ -137,6 +141,10 @@ void main() {
 ![Bloc Architecture](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture_full.png)
 
 A `Bloc` is a more advanced type of `Cubit` which relies on `events` to trigger `state` changes rather than functions. `Bloc` extends `Cubit` which means it has the same public API as `Cubit`. However, rather than calling a `function` on a `Bloc` and directly emitting a new `state`, `Blocs` receive `events` and convert the incoming `events` into outgoing `states`.
+
+![Bloc Flow](../../docs/assets/bloc_flow.png)
+
+The flow of state changes in bloc begin when events are added which triggers `onEvent`. The events are then funnelled through `transformEvents`. By default, `transformEvents` uses `asyncExpand` to ensure each event is processed in the order it was added but it can be overridden to manipulate the incoming event stream. `mapEventToState` is then invoked with the transformed events and is responsible for yielding states in response to the incoming events. `transitions` are then funnelled through `transformTransitions` which can be overridden to manipulation the outgoing state changes. Lastly, `onTransition` is called just before the state is updated and contains the current state, event, and next state.
 
 #### Creating a Bloc
 
