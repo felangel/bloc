@@ -32,6 +32,7 @@ This package is built to work with:
 - [angular_bloc](https://pub.dev/packages/angular_bloc)
 - [bloc_test](https://pub.dev/packages/bloc_test)
 - [hydrated_bloc](https://pub.dev/packages/hydrated_bloc)
+- [replay_bloc](https://pub.dev/packages/replay_bloc)
 
 ## Overview
 
