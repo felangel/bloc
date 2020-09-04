@@ -133,8 +133,12 @@ class _BlocBuilderBaseState<C extends Cubit<S>, S>
   @override
   void didUpdateWidget(BlocBuilderBase<C, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _cubit = widget.cubit ?? context.bloc<C>();
-    _state = _cubit.state;
+    final oldCubit = oldWidget.cubit ?? context.bloc<C>();
+    final currentCubit = widget.cubit ?? oldCubit;
+    if (oldCubit != currentCubit) {
+      _cubit = currentCubit;
+      _state = _cubit.state;
+    }
   }
 
   @override

@@ -275,7 +275,7 @@ void main() {
     });
 
     testWidgets(
-        'updates when the cubit is changed at runtime to a different cubit and'
+        'updates when the cubit is changed at runtime to a different cubit and '
         'unsubscribes from old cubit', (tester) async {
       final themeCubit = ThemeCubit();
       var numBuilds = 0;
@@ -454,6 +454,40 @@ void main() {
       expect(states, [0, 2]);
       expect(buildWhenPreviousState, [1]);
       expect(buildWhenCurrentState, [2]);
+    });
+
+    testWidgets(
+        'does not rebuild with latest state when '
+        'buildWhen is false and widget is updated', (tester) async {
+      const key = Key('__target__');
+      final states = <int>[];
+      final counterCubit = CounterCubit();
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: StatefulBuilder(
+            builder: (context, setState) => BlocBuilder<CounterCubit, int>(
+              cubit: counterCubit,
+              buildWhen: (previous, state) => state % 2 == 0,
+              builder: (_, state) {
+                states.add(state);
+                return RaisedButton(
+                  key: key,
+                  onPressed: () => setState(() {}),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      counterCubit..increment()..increment()..increment();
+      await tester.pumpAndSettle();
+      expect(states, [0, 2]);
+
+      await tester.tap(find.byKey(key));
+      await tester.pumpAndSettle();
+      expect(states, [0, 2, 2]);
     });
   });
 }
