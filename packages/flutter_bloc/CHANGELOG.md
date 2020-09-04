@@ -1,10 +1,14 @@
+# 6.0.5
+
+- fix: `BlocBuilder` `builder` and `buildWhen` state mismatch
+
 # 6.0.4
 
 - fix: state synchronization issue when providing a condition
 
 # 6.0.3
 
-- refactor: `BlocConsumer` requires a single subscription
+- refactor: `BlocConsumer` requires a single subscriptionpwd
 - refactor: `BlocBuilder` extends `BlocListener`
 - refactor: `MultiRepositoryProvider` extends `MultiProvider`
 
