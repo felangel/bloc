@@ -426,6 +426,29 @@ Unexpected number of calls
         });
         expect((actualError as TestFailure).message, expectedError);
       });
+
+      test('shows equality warning when strings are identical', () async {
+        const expectedError = '''Expected: [Instance of \'ComplexStateA\']
+  Actual: [Instance of \'ComplexStateA\']
+   Which: at location [0] is <Instance of \'ComplexStateA\'> instead of <Instance of \'ComplexStateA\'>\n
+WARNING: Please ensure state instances extend Equatable, override == and hashCode, or implement Comparable.
+Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''';
+        Object actualError;
+        final completer = Completer<void>();
+        await runZoned(() async {
+          unawaited(runBlocTest<ComplexBloc, ComplexState>(
+            'fails immediately',
+            build: () => ComplexBloc(),
+            act: (bloc) => bloc.add(ComplexEventA()),
+            expect: <ComplexState>[ComplexStateA()],
+          ).then((_) => completer.complete()));
+          await completer.future;
+        }, onError: (Object error) {
+          actualError = error;
+          completer.complete();
+        });
+        expect((actualError as TestFailure).message, expectedError);
+      });
     });
   });
 }
