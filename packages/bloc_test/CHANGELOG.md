@@ -1,3 +1,7 @@
+# 7.0.4
+
+- feat: `blocTest` provides warning to implement deep equality when shallow equality is true
+
 # 7.0.3
 
 - restrict `mockito` to `<4.1.2` to prevent breaking changes due to NNBD

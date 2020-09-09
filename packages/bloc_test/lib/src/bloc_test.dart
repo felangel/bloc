@@ -146,6 +146,7 @@ Future<void> runBlocTest<C extends Cubit<State>, State>(
   Iterable errors,
 }) async {
   final unhandledErrors = <Object>[];
+  var shallowEquality = false;
   await runZoned(
     () async {
       final states = <State>[];
@@ -161,13 +162,23 @@ Future<void> runBlocTest<C extends Cubit<State>, State>(
       if (wait != null) await Future<void>.delayed(wait);
       await Future<void>.delayed(Duration.zero);
       await cubit.close();
-      if (expect != null) test.expect(states, expect);
+      if (expect != null) {
+        shallowEquality = '$states' == '$expect';
+        test.expect(states, expect);
+      }
       await subscription.cancel();
       await verify?.call(cubit);
     },
     onError: (Object error) {
       if (error is CubitUnhandledErrorException) {
         unhandledErrors.add(error.error);
+      } else if (shallowEquality && error is test.TestFailure) {
+        // ignore: only_throw_errors
+        throw test.TestFailure(
+          '''${error.message}
+WARNING: Please ensure state instances extend Equatable, override == and hashCode, or implement Comparable.
+Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''',
+        );
       } else {
         // ignore: only_throw_errors
         throw error;
