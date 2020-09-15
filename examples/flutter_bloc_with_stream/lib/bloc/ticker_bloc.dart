@@ -6,26 +6,31 @@ import '../ticker/ticker.dart';
 part 'ticker_event.dart';
 part 'ticker_state.dart';
 
+/// {@template ticker_bloc}
+/// Bloc which manages the current [TickerState]
+/// and depends on a [Ticker] instance.
+/// {@endtemplate}
 class TickerBloc extends Bloc<TickerEvent, TickerState> {
-  final Ticker ticker;
-  StreamSubscription subscription;
+  /// {@macro ticker_bloc}
+  TickerBloc(this._ticker) : super(TickerInitial());
 
-  TickerBloc(this.ticker) : super(TickerInitial());
+  final Ticker _ticker;
+  StreamSubscription _subscription;
 
   @override
   Stream<TickerState> mapEventToState(TickerEvent event) async* {
     if (event is TickerStarted) {
-      subscription?.cancel();
-      subscription = ticker.tick().listen((tick) => add(TickerTicked(tick)));
+      await _subscription?.cancel();
+      _subscription = _ticker.tick().listen((tick) => add(_TickerTicked(tick)));
     }
-    if (event is TickerTicked) {
+    if (event is _TickerTicked) {
       yield TickerTickSuccess(event.tickCount);
     }
   }
 
   @override
   Future<void> close() {
-    subscription?.cancel();
+    _subscription?.cancel();
     return super.close();
   }
 }

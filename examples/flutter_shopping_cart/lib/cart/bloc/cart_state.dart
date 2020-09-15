@@ -11,15 +11,12 @@ class CartLoading extends CartState {
 }
 
 class CartLoaded extends CartState {
-  final List<Item> items;
+  const CartLoaded({this.cart = const Cart()});
 
-  const CartLoaded({this.items});
-
-  int get totalPrice =>
-      items.fold(0, (total, current) => total + current.price);
+  final Cart cart;
 
   @override
-  List<Object> get props => [items];
+  List<Object> get props => [cart];
 }
 
 class CartError extends CartState {

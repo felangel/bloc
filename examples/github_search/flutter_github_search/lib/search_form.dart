@@ -45,10 +45,10 @@ class _SearchBarState extends State<_SearchBar> {
         );
       },
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.search),
+        prefixIcon: const Icon(Icons.search),
         suffixIcon: GestureDetector(
-          child: Icon(Icons.clear),
           onTap: _onClearTapped,
+          child: const Icon(Icons.clear),
         ),
         border: InputBorder.none,
         hintText: 'Enter a search term',
@@ -58,7 +58,7 @@ class _SearchBarState extends State<_SearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    _githubSearchBloc.add(TextChanged(text: ''));
+    _githubSearchBloc.add(const TextChanged(text: ''));
   }
 }
 
@@ -68,17 +68,17 @@ class _SearchBody extends StatelessWidget {
     return BlocBuilder<GithubSearchBloc, GithubSearchState>(
       builder: (context, state) {
         if (state is SearchStateLoading) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         if (state is SearchStateError) {
           return Text(state.error);
         }
         if (state is SearchStateSuccess) {
           return state.items.isEmpty
-              ? Text('No Results')
+              ? const Text('No Results')
               : Expanded(child: _SearchResults(items: state.items));
         }
-        return Text('Please enter a term to begin');
+        return const Text('Please enter a term to begin');
       },
     );
   }

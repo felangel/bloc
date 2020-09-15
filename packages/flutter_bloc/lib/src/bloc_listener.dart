@@ -54,6 +54,7 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 /// )
 /// ```
 /// {@endtemplate}
+///
 /// {@template bloc_listener_listen_when}
 /// An optional [listenWhen] can be implemented for more granular control
 /// over when [listener] is called.
@@ -151,7 +152,7 @@ class _BlocListenerBaseState<C extends Cubit<S>, S>
   void initState() {
     super.initState();
     _cubit = widget.cubit ?? context.bloc<C>();
-    _previousState = _cubit?.state;
+    _previousState = _cubit.state;
     _subscribe();
   }
 
@@ -163,8 +164,8 @@ class _BlocListenerBaseState<C extends Cubit<S>, S>
     if (oldCubit != currentCubit) {
       if (_subscription != null) {
         _unsubscribe();
-        _cubit = widget.cubit ?? context.bloc<C>();
-        _previousState = _cubit?.state;
+        _cubit = currentCubit;
+        _previousState = _cubit.state;
       }
       _subscribe();
     }

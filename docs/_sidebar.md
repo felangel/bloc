@@ -20,7 +20,7 @@
     - [**Login** <sup>✨</sup>](flutterlogintutorial.md)
     - [Weather](flutterweathertutorial.md)
     - [Todos](fluttertodostutorial.md)
-    - [Firebase Login](flutterfirebaselogintutorial.md)
+    - [**Firebase Login** <sup>✨</sup>](flutterfirebaselogintutorial.md)
     - [Firestore Todos](flutterfirestoretodostutorial.md)
   - AngularDart
     - [Counter](angularcountertutorial.md)

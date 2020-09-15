@@ -10,11 +10,11 @@ class MyCatalog extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           _MyAppBar(),
-          SliverToBoxAdapter(child: SizedBox(height: 12)),
+          const SliverToBoxAdapter(child: SizedBox(height: 12)),
           BlocBuilder<CatalogBloc, CatalogState>(
             builder: (context, state) {
               if (state is CatalogLoading) {
-                return SliverFillRemaining(
+                return const SliverFillRemaining(
                   child: Center(
                     child: CircularProgressIndicator(),
                   ),
@@ -29,7 +29,7 @@ class MyCatalog extends StatelessWidget {
                   ),
                 );
               }
-              return Text('Something went wrong!');
+              return const Text('Something went wrong!');
             },
           ),
         ],
@@ -39,29 +39,30 @@ class MyCatalog extends StatelessWidget {
 }
 
 class _AddButton extends StatelessWidget {
-  final Item item;
-
   const _AddButton({Key key, @required this.item}) : super(key: key);
+
+  final Item item;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
         if (state is CartLoading) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         if (state is CartLoaded) {
           return FlatButton(
-            onPressed: state.items.contains(item)
+            onPressed: state.cart.items.contains(item)
                 ? null
                 : () => context.bloc<CartBloc>().add(CartItemAdded(item)),
-            splashColor: Theme.of(context).primaryColor,
-            child: state.items.contains(item)
-                ? Icon(Icons.check, semanticLabel: 'ADDED')
-                : Text('ADD'),
+            splashColor: theme.primaryColor,
+            child: state.cart.items.contains(item)
+                ? const Icon(Icons.check, semanticLabel: 'ADDED')
+                : const Text('ADD'),
           );
         }
-        return Text('Something went wrong!');
+        return const Text('Something went wrong!');
       },
     );
   }
@@ -71,7 +72,7 @@ class _MyAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      title: Text('Catalog'),
+      title: const Text('Catalog'),
       floating: true,
       actions: [
         IconButton(
@@ -84,9 +85,9 @@ class _MyAppBar extends StatelessWidget {
 }
 
 class _MyListItem extends StatelessWidget {
-  final Item item;
-
   const _MyListItem(this.item, {Key key}) : super(key: key);
+
+  final Item item;
 
   @override
   Widget build(BuildContext context) {
@@ -98,9 +99,9 @@ class _MyListItem extends StatelessWidget {
         child: Row(
           children: [
             AspectRatio(aspectRatio: 1, child: ColoredBox(color: item.color)),
-            SizedBox(width: 24),
+            const SizedBox(width: 24),
             Expanded(child: Text(item.name, style: textTheme)),
-            SizedBox(width: 24),
+            const SizedBox(width: 24),
             _AddButton(item: item),
           ],
         ),

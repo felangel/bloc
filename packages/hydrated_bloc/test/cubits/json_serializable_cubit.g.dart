@@ -12,9 +12,8 @@ User _$UserFromJson(Map<String, dynamic> json) {
     json['age'] as int,
     _$enumDecodeNullable(_$ColorEnumMap, json['favoriteColor']),
     (json['todos'] as List)
-        ?.map(
-            // ignore: implicit_dynamic_parameter
-            (e) => e == null ? null : Todo.fromJson(e as Map<String, dynamic>))
+        ?.map((dynamic e) =>
+            e == null ? null : Todo.fromJson(e as Map<String, dynamic>))
         ?.toList(),
   );
 }
