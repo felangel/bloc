@@ -23,6 +23,25 @@ y luego instale todas nuestras dependencias
 ```sh
 flutter packages get
 ```
+## Estructura del Proyecto
+
+```
+├── lib
+│   ├── app.dart
+│   ├── counter
+│   │   ├── counter.dart
+│   │   ├── cubit
+│   │   │   └── counter_cubit.dart
+│   │   └── view
+│   │       ├── counter_page.dart
+│   │       └── counter_view.dart
+│   ├── counter_observer.dart
+│   └── main.dart
+├── pubspec.lock
+├── pubspec.yaml
+```
+
+La aplicación utiliza una estructura de directorios basada en funciones. Esta estructura de proyecto nos permite escalar el proyecto al tener características independientes. En este ejemplo solo tendremos una característica (el contador en sí) pero en aplicaciones más complejas podemos tener cientos de características diferentes.
 
 ## BlocObserver
 
@@ -86,6 +105,12 @@ El `CounterView` es responsable de representar el conteo actual y de generar dos
 Un `BlocBuilder` se usa para envolver el widget `Text` con el fin de actualizar el texto en cualquier momento que cambie el estado de `CounterCubit`. Además, `context.bloc<CounterCubit>()` se usa para buscar la instancia de `CounterCubit` más cercana.
 
 ?> **Nota**: Sólo el widget `Text` está envuelto en un `BlocBuilder` porque es el único widget que necesita ser reconstruido en respuesta a los cambios de estado en el `CounterCubit`. Evite envolver innecesariamente los widgets que no necesitan ser reconstruidos cuando cambia un estado.
+
+## Barril
+
+Agregue `counter.dart` para exportar todas las partes que se deberían de mostrar.
+
+[counter.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/counter.dart ':include')
 
 ¡Eso es! Hemos separado la capa de presentación de la capa de lógica empresarial. El `CounterView` no tiene idea de lo que sucede cuando un usuario presiona un botón; simplemente notifica al `CounterCubit`. Además, el `CounterCubit` no tiene idea de lo que está sucediendo con el estado (el valor del contador); simplemente emite nuevos estados en respuesta a los métodos que se llaman.
 
