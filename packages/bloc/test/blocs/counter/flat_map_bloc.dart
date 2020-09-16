@@ -6,8 +6,8 @@ import '../blocs.dart';
 class FlatMapBloc extends Bloc<CounterEvent, int> {
   FlatMapBloc({this.onChangeCallback, this.onTransitionCallback}) : super(0);
 
-  final void Function(Change<int>) onChangeCallback;
-  final void Function(Transition<CounterEvent, int>) onTransitionCallback;
+  final void Function(Change<int>)? onChangeCallback;
+  final void Function(Transition<CounterEvent, int>)? onTransitionCallback;
 
   @override
   void onChange(Change<int> change) {
