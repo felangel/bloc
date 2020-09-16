@@ -8,6 +8,7 @@ documentation: https://bloclibrary.dev
 
 # Can't be published until null safety is shipped without requiring a flag
 publish_to: none
+
 environment:
   sdk: ">=2.12.0-0 <3.0.0"
 
