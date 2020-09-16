@@ -7,7 +7,7 @@ import 'package:meta/meta.dart';
 @immutable
 class Change<State> {
   /// {@macro change}
-  const Change({@required this.currentState, @required this.nextState});
+  const Change({required this.currentState, required this.nextState});
 
   /// The current [State] at the time of the [Change].
   final State currentState;

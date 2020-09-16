@@ -25,9 +25,9 @@ abstract class Bloc<Event, State> extends Cubit<State>
   /// The current [BlocObserver].
   static BlocObserver observer = BlocObserver();
 
-  final _eventController = StreamController<Event>.broadcast();
+  late final _eventController = StreamController<Event>.broadcast();
 
-  StreamSubscription<Transition<Event, State>> _transitionSubscription;
+  StreamSubscription<Transition<Event, State>>? _transitionSubscription;
 
   bool _emitted = false;
 
@@ -40,7 +40,7 @@ abstract class Bloc<Event, State> extends Cubit<State>
     try {
       onEvent(event);
       _eventController.add(event);
-    } on dynamic catch (error, stackTrace) {
+    } catch (error, stackTrace) {
       onError(error, stackTrace);
     }
   }
@@ -168,7 +168,7 @@ abstract class Bloc<Event, State> extends Cubit<State>
 
   /// Notifies the [Bloc] of an [error] which triggers [onError].
   @override
-  void addError(Object error, [StackTrace stackTrace]) {
+  void addError(Object error, [StackTrace? stackTrace]) {
     onError(error, stackTrace);
   }
 
@@ -197,7 +197,7 @@ abstract class Bloc<Event, State> extends Cubit<State>
   @protected
   @mustCallSuper
   @override
-  void onError(Object error, StackTrace stackTrace) {
+  void onError(Object error, StackTrace? stackTrace) {
     super.onError(error, stackTrace);
   }
 
@@ -242,7 +242,7 @@ abstract class Bloc<Event, State> extends Cubit<State>
         try {
           onTransition(transition);
           emit(transition.nextState);
-        } on dynamic catch (error, stackTrace) {
+        } catch (error, stackTrace) {
           onError(error, stackTrace);
         }
         _emitted = true;
