@@ -1,53 +1,56 @@
 import 'package:bloc/bloc.dart';
-import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-class MockBloc extends Mock implements Bloc<Object, int> {}
-
-// ignore: must_be_immutable
-class MockTransition extends Mock implements Transition<Object, int> {}
+import 'blocs/blocs.dart';
 
 void main() {
+  final bloc = CounterBloc();
+  const event = CounterEvent.increment;
+  const transition = Transition(
+    currentState: 0,
+    event: CounterEvent.increment,
+    nextState: 1,
+  );
   group('BlocObserver', () {
     group('onCreate', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
-        BlocObserver().onCreate(MockBloc());
+        BlocObserver().onCreate(bloc);
       });
     });
 
     group('onEvent', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
-        BlocObserver().onEvent(MockBloc(), Object());
+        BlocObserver().onEvent(bloc, event);
       });
     });
 
     group('onChange', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
-        BlocObserver().onChange(MockBloc(), MockTransition());
+        BlocObserver().onChange(bloc, transition);
       });
     });
 
     group('onTransition', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
-        BlocObserver().onTransition(MockBloc(), MockTransition());
+        BlocObserver().onTransition(bloc, transition);
       });
     });
 
     group('onError', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
-        BlocObserver().onError(MockBloc(), Object(), StackTrace.current);
+        BlocObserver().onError(bloc, event, StackTrace.current);
       });
     });
 
     group('onClose', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
-        BlocObserver().onClose(MockBloc());
+        BlocObserver().onClose(bloc);
       });
     });
   });

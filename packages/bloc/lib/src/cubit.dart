@@ -22,7 +22,7 @@ class CubitUnhandledErrorException implements Exception {
   final Object error;
 
   /// An optional [stackTrace] which accompanied the error.
-  final StackTrace stackTrace;
+  final StackTrace? stackTrace;
 
   @override
   String toString() {
@@ -61,7 +61,7 @@ abstract class Cubit<State> extends Stream<State> {
 
   BlocObserver get _observer => Bloc.observer;
 
-  StreamController<State> _controller;
+  late final _controller = StreamController<State>.broadcast();
 
   State _state;
 
@@ -79,7 +79,6 @@ abstract class Cubit<State> extends Stream<State> {
   @protected
   @visibleForTesting
   void emit(State state) {
-    _controller ??= StreamController<State>.broadcast();
     if (_controller.isClosed) return;
     if (state == _state && _emitted) return;
     onChange(Change<State>(currentState: this.state, nextState: state));
@@ -89,7 +88,7 @@ abstract class Cubit<State> extends Stream<State> {
   }
 
   /// Notifies the [Cubit] of an [error] which triggers [onError].
-  void addError(Object error, [StackTrace stackTrace]) {
+  void addError(Object error, [StackTrace? stackTrace]) {
     onError(error, stackTrace);
   }
 
@@ -137,7 +136,7 @@ abstract class Cubit<State> extends Stream<State> {
   /// ```
   @protected
   @mustCallSuper
-  void onError(Object error, StackTrace stackTrace) {
+  void onError(Object error, StackTrace? stackTrace) {
     // ignore: invalid_use_of_protected_member
     _observer.onError(this, error, stackTrace);
     assert(() {
@@ -151,12 +150,11 @@ abstract class Cubit<State> extends Stream<State> {
   /// handlers.
   @override
   StreamSubscription<State> listen(
-    void Function(State) onData, {
-    Function onError,
-    void Function() onDone,
-    bool cancelOnError,
+    void Function(State)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
   }) {
-    _controller ??= StreamController<State>.broadcast();
     return _controller.stream.listen(
       onData,
       onError: onError,
@@ -175,8 +173,7 @@ abstract class Cubit<State> extends Stream<State> {
   @mustCallSuper
   Future<void> close() {
     // ignore: invalid_use_of_protected_member
-    _observer.onClose(this);
-    _controller ??= StreamController<State>.broadcast();
+    _observer.onClose(this);    
     return _controller.close();
   }
 }

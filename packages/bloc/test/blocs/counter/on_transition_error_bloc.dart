@@ -5,13 +5,16 @@ import 'package:bloc/bloc.dart';
 import '../counter/counter_bloc.dart';
 
 class OnTransitionErrorBloc extends Bloc<CounterEvent, int> {
-  OnTransitionErrorBloc({this.error, this.onErrorCallback}) : super(0);
+  OnTransitionErrorBloc({
+    required this.error,
+    required this.onErrorCallback,
+  }) : super(0);
 
   final Function onErrorCallback;
   final Error error;
 
   @override
-  void onError(Object error, StackTrace stackTrace) {
+  void onError(Object error, StackTrace? stackTrace) {
     onErrorCallback(error, stackTrace);
     super.onError(error, stackTrace);
   }

@@ -8,7 +8,7 @@ void main() {
           'should not throw assertion error when initialized '
           'with a null currentState', () {
         expect(
-          () => const Change<int>(currentState: null, nextState: 1),
+          () => const Change<int?>(currentState: null, nextState: 1),
           isNot(throwsA(isA<AssertionError>())),
         );
       });
@@ -17,7 +17,7 @@ void main() {
           'should not throw assertion error '
           'when initialized with a null nextState', () {
         expect(
-          () => const Change<int>(currentState: 0, nextState: null),
+          () => const Change<int?>(currentState: 0, nextState: null),
           isNot(throwsA(isA<AssertionError>())),
         );
       });
@@ -27,7 +27,7 @@ void main() {
           'all required parameters', () {
         try {
           const Change<int>(currentState: 0, nextState: 1);
-        } on dynamic catch (_) {
+        } catch (_) {
           fail(
             'should not throw error when initialized '
             'with all required parameters',

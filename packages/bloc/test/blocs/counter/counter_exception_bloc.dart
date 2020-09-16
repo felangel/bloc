@@ -15,7 +15,6 @@ class CounterExceptionBloc extends Bloc<CounterEvent, int> {
         break;
       case CounterEvent.increment:
         throw Exception('fatal exception');
-        break;
     }
   }
 }
