@@ -19,7 +19,7 @@ class BlocObserver {
   /// and [event].
   @protected
   @mustCallSuper
-  void onEvent(Bloc bloc, Object event) {}
+  void onEvent(Bloc bloc, Object? event) {}
 
   /// Called whenever a [Change] occurs in any [cubit]
   /// A [change] occurs when a new state is emitted.
@@ -42,7 +42,7 @@ class BlocObserver {
   /// an error without a [stackTrace].
   @protected
   @mustCallSuper
-  void onError(Cubit cubit, Object error, StackTrace stackTrace) {}
+  void onError(Cubit cubit, Object error, StackTrace? stackTrace) {}
 
   /// Called whenever a [Cubit] is closed.
   /// [onClose] is called just before the [Cubit] is closed
