@@ -15,7 +15,6 @@ class CounterErrorBloc extends Bloc<CounterEvent, int> {
         break;
       case CounterEvent.increment:
         throw Error();
-        break;
     }
   }
 }

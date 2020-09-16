@@ -2,7 +2,11 @@ part of 'async_bloc.dart';
 
 @immutable
 class AsyncState {
-  AsyncState({this.isLoading, this.hasError, this.isSuccess});
+  AsyncState({
+    required this.isLoading,
+    required this.hasError,
+    required this.isSuccess,
+  });
 
   factory AsyncState.initial() {
     return AsyncState(isLoading: false, hasError: false, isSuccess: false);
@@ -12,7 +16,7 @@ class AsyncState {
   final bool hasError;
   final bool isSuccess;
 
-  AsyncState copyWith({bool isLoading, bool hasError, bool isSuccess}) {
+  AsyncState copyWith({bool? isLoading, bool? hasError, bool? isSuccess}) {
     return AsyncState(
         isLoading: isLoading ?? this.isLoading,
         hasError: hasError ?? this.hasError,

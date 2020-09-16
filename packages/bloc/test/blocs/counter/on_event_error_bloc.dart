@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 
 import '../counter/counter_bloc.dart';
 
 class OnEventErrorBloc extends Bloc<CounterEvent, int> {
-  OnEventErrorBloc({@required this.exception}) : super(0);
+  OnEventErrorBloc({required this.exception}) : super(0);
 
   final Exception exception;
 
