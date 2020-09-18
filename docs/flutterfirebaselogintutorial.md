@@ -20,7 +20,7 @@ In this case, the [firebase_auth](https://pub.dev/packages/firebase_auth) and [g
 
 ## Authentication Repository
 
-The `AuthenticationRepository` will be responsible for abstracting the internal implementation details of how we authentication and fetch user information. In this case, it will be integrating with firebase but we can always change the internal implementation later on and our application will be unaffected.
+The `AuthenticationRepository` will be responsible for abstracting the internal implementation details of how we authenticate and fetch user information. In this case, it will be integrating with firebase but we can always change the internal implementation later on and our application will be unaffected.
 
 ### Setup
 
