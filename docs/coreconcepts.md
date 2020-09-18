@@ -38,7 +38,7 @@ Now that we have a basic understand of how `Streams` work in Dart we're ready to
 
 ## Cubit
 
-> A `Cubit` is special type of `Stream` which is used as the base for the `Bloc` class (which we will cover later on).
+> A `Cubit` is a special type of `Stream` which is used as the base for the `Bloc` class (which we will cover later on).
 
 ![Cubit Architecture](assets/cubit_architecture_full.png)
 
