@@ -34,7 +34,7 @@ We can put it all together like so:
 
 [main.dart](_snippets/core_concepts/streams_main.dart.md ':include')
 
-Now that we have a basic understand of how `Streams` work in Dart we're ready to learn about the core component of the bloc package: a `Cubit`.
+Now that we have a basic understanding of how `Streams` work in Dart we're ready to learn about the core component of the bloc package: a `Cubit`.
 
 ## Cubit
 
