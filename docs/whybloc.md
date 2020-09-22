@@ -13,17 +13,14 @@ As developers we want to:
 - have many developers seamlessly working within a single code base following the same patterns and conventions.
 - develop fast and reactive apps.
 
-Bloc was designed to meet all of those needs and many more.
+Bloc was designed to meet all of these needs and many more.
 
-There are many state management solutions and deciding which one to use can be a daunting task.
+There are many state management solutions and deciding which one to use can be a daunting task. There is no one perfect state management solution! What's important is that you pick the one that works best for your team and your project.
 
 Bloc was designed with three core values in mind:
 
-- Simple
-  - Easy to understand & can be used by developers with varying skill levels.
-- Powerful
-  - Help make amazing, complex applications by composing them of smaller components.
-- Testable
-  - Easily test every aspect of an application so that we can iterate with confidence.
+- **Simple:** Easy to understand & can be used by developers with varying skill levels.
+- **Powerful:** Help make amazing, complex applications by composing them of smaller components.
+- **Testable:** Easily test every aspect of an application so that we can iterate with confidence.
 
-Bloc attempts to make state changes predictable by regulating when a state change can occur and enforcing a single way to change state throughout an entire application.
+Overall, Bloc attempts to make state changes predictable by regulating when a state change can occur and enforcing a single way to change state throughout an entire application.
