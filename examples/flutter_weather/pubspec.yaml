@@ -9,18 +9,21 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  bloc: ^6.0.0
   equatable: ^1.2.3
-  flutter_bloc:
-    path: ../../packages/flutter_bloc
+  flutter_bloc: ^6.0.0
   google_fonts: ^1.1.0
+  hydrated_bloc: ^6.0.0
+  json_annotation: ^3.0.1
   weather_repository:
     path: packages/weather_repository
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  bloc_test:
-    path: ../../packages/bloc_test
+  bloc_test: ^7.0.0
+  build_runner: ^1.10.0
+  json_serializable: ^3.4.0
   mockito: ^4.0.0
 
 flutter:

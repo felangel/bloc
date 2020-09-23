@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/search/search.dart';
+import 'package:flutter_weather/theme/theme.dart';
 import 'package:flutter_weather/weather/weather.dart';
 import 'package:weather_repository/weather_repository.dart';
 
@@ -20,11 +21,14 @@ class WeatherView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flutter Weather'),
-      ),
+      appBar: AppBar(title: const Text('Flutter Weather')),
       body: Center(
-        child: BlocBuilder<WeatherCubit, WeatherState>(
+        child: BlocConsumer<WeatherCubit, WeatherState>(
+          listener: (context, state) {
+            if (state is WeatherLoadSuccess) {
+              context.bloc<ThemeCubit>().updateTheme(state.weather);
+            }
+          },
           builder: (context, state) {
             if (state is WeatherInitial) {
               return const WeatherEmpty();
