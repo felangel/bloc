@@ -18,7 +18,7 @@ class WeatherApp extends StatelessWidget {
     return RepositoryProvider.value(
       value: _weatherRepository,
       child: BlocProvider(
-        create: (context) => ThemeCubit(),
+        create: (_) => ThemeCubit(),
         child: WeatherAppView(),
       ),
     );

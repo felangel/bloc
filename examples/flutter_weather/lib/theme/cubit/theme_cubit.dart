@@ -1,11 +1,23 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:weather_repository/weather_repository.dart';
 
-class ThemeCubit extends Cubit<Color> {
-  ThemeCubit() : super(null);
+const _defaultColor = Color(0xFF2196F3);
+
+class ThemeCubit extends HydratedCubit<Color> {
+  ThemeCubit() : super(_defaultColor);
 
   void updateTheme(Weather weather) => emit(weather.toColor);
+
+  @override
+  Color fromJson(Map<String, dynamic> json) {
+    return Color(int.parse(json['color'] as String));
+  }
+
+  @override
+  Map<String, dynamic> toJson(Color state) {
+    return <String, String>{'color': '${state.value}'};
+  }
 }
 
 extension on Weather {
@@ -21,7 +33,7 @@ extension on Weather {
         return Colors.indigoAccent;
       case WeatherCondition.unknown:
       default:
-        return null;
+        return _defaultColor;
     }
   }
 }

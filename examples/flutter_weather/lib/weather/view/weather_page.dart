@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/search/search.dart';
+import 'package:flutter_weather/settings/settings.dart';
 import 'package:flutter_weather/theme/theme.dart';
 import 'package:flutter_weather/weather/weather.dart';
 import 'package:weather_repository/weather_repository.dart';
@@ -21,23 +22,37 @@ class WeatherView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Flutter Weather')),
+      appBar: AppBar(
+        title: const Text('Flutter Weather'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.of(context).push<void>(SettingsPage.route(
+                context.bloc<WeatherCubit>(),
+              ));
+            },
+          ),
+        ],
+      ),
       body: Center(
         child: BlocConsumer<WeatherCubit, WeatherState>(
           listener: (context, state) {
-            if (state is WeatherLoadSuccess) {
+            if (state.status == WeatherStatus.success) {
               context.bloc<ThemeCubit>().updateTheme(state.weather);
             }
           },
           builder: (context, state) {
-            if (state is WeatherInitial) {
-              return const WeatherEmpty();
-            } else if (state is WeatherLoadInProgress) {
-              return const WeatherLoading();
-            } else if (state is WeatherLoadSuccess) {
-              return WeatherPopulated(weather: state.weather);
-            } else {
-              return const WeatherError();
+            switch (state.status) {
+              case WeatherStatus.initial:
+                return const WeatherEmpty();
+              case WeatherStatus.loading:
+                return const WeatherLoading();
+              case WeatherStatus.success:
+                return WeatherPopulated(weather: state.weather);
+              case WeatherStatus.failure:
+              default:
+                return const WeatherError();
             }
           },
         ),
