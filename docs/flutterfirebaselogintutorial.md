@@ -214,6 +214,12 @@ The `SignUpCubit` is extremely similar to the `LoginCubit` with the main excepti
 
 [sign_up_cubit.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/cubit/sign_up_cubit.dart ':include')
 
+## Sign Up Form
+
+The `SignUpForm` is a responsible for rendering the form in response to the `SignUpState` and invokes methods on the `SignUpCubit` in response to user interactions.
+
+[sign_up_form.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/view/sign_up_form.dart ':include')
+
 ## Home Page
 
 After a user either successfully logs in or signs up, the `user` stream will be updated which will trigger a state change in the `AuthenticationBloc` and will result in the `AppView` pushing the `HomePage` route onto the navigation stack.
