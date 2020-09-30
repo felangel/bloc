@@ -29,6 +29,7 @@ class Temperature extends Equatable {
 class Weather extends Equatable {
   const Weather({
     @required this.condition,
+    @required this.lastUpdated,
     @required this.location,
     @required this.temperature,
   });
@@ -39,6 +40,7 @@ class Weather extends Equatable {
   factory Weather.fromRepository(weather_repository.Weather weather) {
     return Weather(
       condition: weather.condition,
+      lastUpdated: DateTime.now(),
       location: weather.location,
       temperature: Temperature(
         units: TemperatureUnits.celsius,
@@ -48,21 +50,24 @@ class Weather extends Equatable {
   }
 
   final WeatherCondition condition;
+  final DateTime lastUpdated;
   final String location;
   final Temperature temperature;
 
   @override
-  List<Object> get props => [condition, location, temperature];
+  List<Object> get props => [condition, lastUpdated, location, temperature];
 
   Map<String, dynamic> toJson() => _$WeatherToJson(this);
 
   Weather copyWith({
     WeatherCondition condition,
+    DateTime lastUpdated,
     String location,
     Temperature temperature,
   }) {
     return Weather(
       condition: condition ?? this.condition,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
       location: location ?? this.location,
       temperature: temperature ?? this.temperature,
     );

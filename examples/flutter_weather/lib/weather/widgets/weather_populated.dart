@@ -4,9 +4,14 @@ import 'package:weather_repository/weather_repository.dart'
     show WeatherCondition;
 
 class WeatherPopulated extends StatelessWidget {
-  const WeatherPopulated({Key key, @required this.weather}) : super(key: key);
+  const WeatherPopulated({
+    Key key,
+    @required this.weather,
+    @required this.onRefresh,
+  }) : super(key: key);
 
   final Weather weather;
+  final ValueGetter<Future<void>> onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -14,27 +19,34 @@ class WeatherPopulated extends StatelessWidget {
     return Stack(
       children: [
         const _WeatherBackground(),
-        Align(
-          alignment: const Alignment(0, -1 / 3),
+        RefreshIndicator(
+          onRefresh: onRefresh,
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _WeatherIcon(condition: weather.condition),
-                Text(
-                  weather.location,
-                  style: theme.textTheme.headline2.copyWith(
-                    fontWeight: FontWeight.w200,
+            physics: const AlwaysScrollableScrollPhysics(),
+            clipBehavior: Clip.none,
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 48),
+                  _WeatherIcon(condition: weather.condition),
+                  Text(
+                    weather.location,
+                    style: theme.textTheme.headline2.copyWith(
+                      fontWeight: FontWeight.w200,
+                    ),
                   ),
-                ),
-                Text(
-                  weather.formattedTemperature(),
-                  style: theme.textTheme.headline3.copyWith(
-                    fontWeight: FontWeight.bold,
+                  Text(
+                    weather.formattedTemperature(),
+                    style: theme.textTheme.headline3.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
+                  Text(
+                    '''Last Updated at ${TimeOfDay.fromDateTime(weather.lastUpdated).format(context)}''',
+                  ),
+                ],
+              ),
             ),
           ),
         ),

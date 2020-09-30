@@ -41,6 +41,30 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
     }
   }
 
+  Future<void> refreshWeather() async {
+    try {
+      final weather = Weather.fromRepository(
+        await _weatherRepository.getWeather(state.weather.location),
+      );
+      final units = state.temperatureUnits;
+      final value = units == TemperatureUnits.fahrenheit
+          ? weather.temperature.value.toFahrenheit()
+          : weather.temperature.value;
+
+      emit(
+        state.copyWith(
+          status: WeatherStatus.success,
+          temperatureUnits: units,
+          weather: weather.copyWith(
+            temperature: Temperature(units: units, value: value),
+          ),
+        ),
+      );
+    } on Exception {
+      emit(state);
+    }
+  }
+
   void toggleUnits() {
     final units = state.temperatureUnits == TemperatureUnits.fahrenheit
         ? TemperatureUnits.celsius
