@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weather_repository/weather_repository.dart';
+import 'package:flutter_weather/weather/weather.dart';
+import 'package:weather_repository/weather_repository.dart'
+    show WeatherCondition;
 
 class WeatherPopulated extends StatelessWidget {
   const WeatherPopulated({Key key, @required this.weather}) : super(key: key);
@@ -27,7 +29,7 @@ class WeatherPopulated extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${weather.temperature.toStringAsPrecision(2)}°C',
+                  weather.formattedTemperature(),
                   style: theme.textTheme.headline3.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -112,5 +114,11 @@ extension on Color {
       green + ((255 - green) * p).round(),
       blue + ((255 - blue) * p).round(),
     );
+  }
+}
+
+extension on Weather {
+  String formattedTemperature() {
+    return '''${temperature.value.toStringAsPrecision(2)}°${temperature.units == TemperatureUnits.celsius ? 'C' : 'F'}''';
   }
 }

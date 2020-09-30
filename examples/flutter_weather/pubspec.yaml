@@ -15,6 +15,7 @@ dependencies:
   google_fonts: ^1.1.0
   hydrated_bloc: ^6.0.0
   json_annotation: ^3.0.1
+  pedantic: ^1.9.0
   weather_repository:
     path: packages/weather_repository
 

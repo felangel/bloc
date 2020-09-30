@@ -4,6 +4,7 @@ import 'package:flutter_weather/search/search.dart';
 import 'package:flutter_weather/settings/settings.dart';
 import 'package:flutter_weather/theme/theme.dart';
 import 'package:flutter_weather/weather/weather.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:weather_repository/weather_repository.dart';
 
 class WeatherPage extends StatelessWidget {
@@ -61,7 +62,7 @@ class WeatherView extends StatelessWidget {
         child: const Icon(Icons.search),
         onPressed: () async {
           final city = await Navigator.of(context).push(SearchPage.route());
-          await context.bloc<WeatherCubit>().fetchWeather(city);
+          unawaited(context.bloc<WeatherCubit>().fetchWeather(city));
         },
       ),
     );
