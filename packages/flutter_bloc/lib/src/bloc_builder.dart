@@ -50,6 +50,8 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 /// {@template bloc_builder_build_when}
 /// An optional [buildWhen] can be implemented for more granular control over
 /// how often [BlocBuilder] rebuilds.
+/// [buildWhen] should only be used for performance optimizations as it
+/// provides no security about the state passed to the [builder] function.
 /// [buildWhen] will be invoked on each [cubit] `state` change.
 /// [buildWhen] takes the previous `state` and current `state` and must
 /// return a [bool] which determines whether or not the [builder] function will
