@@ -68,14 +68,14 @@ void main() {
           HydratedStorage.build().whenComplete(completer.complete);
           return completer.future;
         }, onError: (Object _) {});
-
-        expect(getTemporaryDirectoryCallCount, 0);
         HydratedStorage.isWeb = false;
+        expect(getTemporaryDirectoryCallCount, 0);
       });
 
       test(
           'does not call getTemporaryDirectory '
           'when storageDirectory is defined', () async {
+        HydratedStorage.isWeb = false;
         storage = await HydratedStorage.build(storageDirectory: Directory(cwd));
         expect(getTemporaryDirectoryCallCount, 0);
       });
