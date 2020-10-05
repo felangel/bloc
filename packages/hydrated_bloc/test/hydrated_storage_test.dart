@@ -55,6 +55,7 @@ void main() {
 
       test('calls getTemporaryDirectory when storageDirectory is null',
           () async {
+        HydratedStorage.isWeb = false;
         storage = await HydratedStorage.build();
         expect(getTemporaryDirectoryCallCount, 1);
       });
@@ -75,7 +76,6 @@ void main() {
       test(
           'does not call getTemporaryDirectory '
           'when storageDirectory is defined', () async {
-        HydratedStorage.isWeb = false;
         storage = await HydratedStorage.build(storageDirectory: Directory(cwd));
         expect(getTemporaryDirectoryCallCount, 0);
       });
