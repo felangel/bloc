@@ -1,3 +1,7 @@
+# 6.0.6
+
+- docs: improve inline documentation for `buildWhen`
+
 # 6.0.5
 
 - fix: `BlocBuilder` `builder` and `buildWhen` state mismatch
