@@ -58,7 +58,7 @@ class HydratedStorage implements Storage {
       // https://github.com/hivedb/hive/issues/336
       hive = HiveImpl();
       Box<dynamic> box;
-      if (isWeb) {
+      if (kIsWeb) {
         box = await hive.openBox<dynamic>(
           'hydrated_box',
           encryptionCipher: encryptionCipher,
@@ -94,11 +94,6 @@ class HydratedStorage implements Storage {
       await file.delete();
     }
   }
-
-  /// Internal flag which determines if running on the web platform.
-  /// Defaults to [kIsWeb] and is only visible for testing purposes.
-  @visibleForTesting
-  static bool isWeb = kIsWeb;
 
   /// Internal instance of [HiveImpl].
   /// It should only be used for testing.
