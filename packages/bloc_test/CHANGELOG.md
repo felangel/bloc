@@ -1,3 +1,12 @@
+# 7.0.6
+
+- chore: revert support `dart >=2.7.0`
+
+# 7.0.5
+
+- fix: update to `mockito ^4.1.2`
+- chore: update to `dart >=2.10.0`
+
 # 7.0.4
 
 - feat: `blocTest` provides warning to implement deep equality when shallow equality is true

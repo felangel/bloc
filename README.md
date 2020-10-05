@@ -134,6 +134,10 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [flutter timer tutorial with flutter_bloc](https://medium.com/flutter-community/flutter-timer-with-flutter-bloc-a464e8332ceb) - How to create a timer app using the bloc and flutter_bloc packages.
 - [firestore todos tutorial with flutter_bloc](https://medium.com/flutter-community/firestore-todos-with-flutter-bloc-7b2d5fadcc80) - How to create a todos app using the bloc and flutter_bloc packages that integrates with cloud firestore.
 
+## Books
+
+  - [Flutter Complete Reference](https://fluttercompletereference.com/) - A book about the Dart programming language (version 2.10, with null safety support) and the Flutter framework (version 1.20). It covers the bloc package (version 6.0.3) in all flavors: bloc, flutter_bloc hydrated_bloc, replay_bloc, bloc_test and cubit.
+
 ## Extensions
 
 - [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) - extends IntelliJ/Android Studio with support for the Bloc library and provides tools for effectively creating Blocs for both Flutter and AngularDart apps.
