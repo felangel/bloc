@@ -1,3 +1,7 @@
+# 7.0.6
+
+- chore: revert support `dart >=2.7.0`
+
 # 7.0.5
 
 - fix: update to `mockito ^4.1.2`

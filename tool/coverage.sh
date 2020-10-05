@@ -30,6 +30,3 @@ pub run coverage:format_coverage \
   --out=coverage/lcov.info \
   --packages=.packages \
   --report-on=lib
-
-# Remove temporary files
-rm nohup.out

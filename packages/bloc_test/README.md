@@ -148,7 +148,7 @@ blocTest(
 
 ## Dart Versions
 
-- Dart 2: >= 2.10.0
+- Dart 2: >= 2.7.0
 
 ## Maintainers
 
