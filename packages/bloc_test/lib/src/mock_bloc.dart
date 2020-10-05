@@ -26,7 +26,7 @@ import 'package:mockito/mockito.dart';
 /// ```
 class MockBloc<S> extends Mock {
   @override
-  dynamic noSuchMethod(Invocation invocation) {
+  dynamic noSuchMethod(Invocation invocation, [Object returnValue]) {
     final memberName = invocation.memberName.toString().split('"')[1];
     final dynamic result = super.noSuchMethod(invocation);
     return (memberName == 'skip' && result == null)
