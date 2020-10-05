@@ -28,9 +28,9 @@ class TabSelector extends StatelessWidget {
                 ? ArchSampleKeys.todoTab
                 : ArchSampleKeys.statsTab,
           ),
-          title: Text(tab == AppTab.stats
+          label: tab == AppTab.stats
               ? ArchSampleLocalizations.of(context).stats
-              : ArchSampleLocalizations.of(context).todos),
+              : ArchSampleLocalizations.of(context).todos,
         );
       }).toList(),
     );
