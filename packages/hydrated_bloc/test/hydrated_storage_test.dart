@@ -14,6 +14,7 @@ import 'package:pedantic/pedantic.dart';
 class MockBox extends Mock implements Box<dynamic> {}
 
 void main() {
+  HydratedStorage.isWeb = false;
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('HydratedStorage', () {
@@ -48,7 +49,6 @@ void main() {
 
     group('build', () {
       setUp(() async {
-        HydratedStorage.isWeb = false;
         await (await HydratedStorage.build()).clear();
         getTemporaryDirectoryCallCount = 0;
       });
@@ -70,6 +70,7 @@ void main() {
         }, onError: (Object _) {});
 
         expect(getTemporaryDirectoryCallCount, 0);
+        HydratedStorage.isWeb = false;
       });
 
       test(
