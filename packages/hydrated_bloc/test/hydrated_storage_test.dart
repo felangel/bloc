@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -47,6 +48,7 @@ void main() {
 
     group('build', () {
       setUp(() async {
+        HydratedStorage.isWeb = false;
         await (await HydratedStorage.build()).clear();
         getTemporaryDirectoryCallCount = 0;
       });
@@ -55,6 +57,19 @@ void main() {
           () async {
         storage = await HydratedStorage.build();
         expect(getTemporaryDirectoryCallCount, 1);
+      });
+
+      test(
+          'does not call getTemporaryDirectory '
+          'when storageDirectory is null and kIsWeb', () async {
+        HydratedStorage.isWeb = true;
+        final completer = Completer<void>();
+        await runZoned(() {
+          HydratedStorage.build().whenComplete(completer.complete);
+          return completer.future;
+        }, onError: (Object _) {});
+
+        expect(getTemporaryDirectoryCallCount, 0);
       });
 
       test(
