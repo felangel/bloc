@@ -7,7 +7,7 @@ homepage: https://bloclibrary.dev
 documentation: https://bloclibrary.dev/#/gettingstarted
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
 
 dependencies:
   bloc: ^6.0.0
@@ -16,6 +16,6 @@ dependencies:
   mockito: ^4.1.2
 
 dev_dependencies:
+  coverage: ^0.14.1
   pedantic: ^1.9.0
   rxdart: ^0.24.0
-  test_coverage: ^0.4.1
