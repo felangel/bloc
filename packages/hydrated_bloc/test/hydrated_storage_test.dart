@@ -15,7 +15,6 @@ class MockBox extends Mock implements Box<dynamic> {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  disablePathProviderPlatformOverride = true;
 
   group('HydratedStorage', () {
     final cwd = Directory.current.absolute.path;
