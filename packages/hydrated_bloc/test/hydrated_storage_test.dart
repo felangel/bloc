@@ -22,8 +22,12 @@ void main() {
     var getTemporaryDirectoryCallCount = 0;
     const MethodChannel('plugins.flutter.io/path_provider')
       ..setMockMethodCallHandler((methodCall) async {
+        print('methodCall ${methodCall.method}');
         if (methodCall.method == 'getTemporaryDirectory') {
           getTemporaryDirectoryCallCount++;
+          print(
+            'getTemporaryDirectoryCallCount $getTemporaryDirectoryCallCount',
+          );
           return cwd;
         }
         throw UnimplementedError();
@@ -55,9 +59,11 @@ void main() {
 
       test('calls getTemporaryDirectory when storageDirectory is null',
           () async {
+        print('TEST START');
         HydratedStorage.isWeb = false;
         storage = await HydratedStorage.build();
         expect(getTemporaryDirectoryCallCount, 1);
+        print('TEST END');
       });
 
       test(
