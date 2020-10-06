@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
@@ -14,7 +15,6 @@ import 'package:pedantic/pedantic.dart';
 class MockBox extends Mock implements Box<dynamic> {}
 
 void main() {
-  HydratedStorage.isWeb = false;
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('HydratedStorage', () {
@@ -69,7 +69,7 @@ void main() {
           HydratedStorage.build().whenComplete(completer.complete);
           return completer.future;
         }, onError: (Object _) {});
-        HydratedStorage.isWeb = false;
+        HydratedStorage.isWeb = kIsWeb;
         expect(getTemporaryDirectoryCallCount, 0);
       });
 
