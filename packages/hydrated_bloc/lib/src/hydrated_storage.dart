@@ -66,7 +66,9 @@ class HydratedStorage implements Storage {
         );
       } else {
         print('isNotWeb');
+        print('storageDirectory $storageDirectory');
         final directory = storageDirectory ?? await getTemporaryDirectory();
+        print('return directory ${directory.path}');
         print('getTemporaryDirectory called!');
         hive.init(directory.path);
         box = await hive.openBox<dynamic>(
