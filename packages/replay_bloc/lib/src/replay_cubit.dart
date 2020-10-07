@@ -51,9 +51,13 @@ abstract class ReplayCubit<State> extends Cubit<State>
   }
 }
 
+/// A mixin which enables `undo` and `redo` operations
+/// for [Cubit] classes.
 mixin ReplayCubitMixin<State> on Cubit<State> {
   final _changeStack = _ChangeStack<State>();
 
+  /// Sets the internal `undo`/`redo` size limit.
+  /// By default there is no limit.
   set limit(int limit) => _changeStack.limit = limit;
 
   @override
