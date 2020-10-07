@@ -7,15 +7,30 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mockito/mockito.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-
+import 'package:path_provider/path_provider.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:pedantic/pedantic.dart';
-
-import 'mocks/mocks.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockBox extends Mock implements Box<dynamic> {}
+
+class MockPathProviderPlatform extends Mock
+    with MockPlatformInterfaceMixin
+    implements PathProviderPlatform {
+  MockPathProviderPlatform({
+    @required this.temporaryPath,
+    @required this.getTemporaryPathCalled,
+  });
+  final String temporaryPath;
+  final VoidCallback getTemporaryPathCalled;
+
+  @override
+  Future<String> getTemporaryPath() async {
+    getTemporaryPathCalled();
+    return temporaryPath;
+  }
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
