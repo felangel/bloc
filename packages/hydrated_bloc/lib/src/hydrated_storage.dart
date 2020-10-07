@@ -58,6 +58,7 @@ class HydratedStorage implements Storage {
       // https://github.com/hivedb/hive/issues/336
       hive = HiveImpl();
       Box<dynamic> box;
+      print('kIsWeb $kIsWeb');
       if (isWeb) {
         print('isWeb');
         box = await hive.openBox<dynamic>(
