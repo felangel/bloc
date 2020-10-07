@@ -3,8 +3,6 @@ import 'package:mockito/mockito.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-const String kTemporaryPath = 'temporaryPath';
-
 class MockPathProviderPlatform extends Mock
     with MockPlatformInterfaceMixin
     implements PathProviderPlatform {
@@ -17,6 +15,7 @@ class MockPathProviderPlatform extends Mock
 
   @override
   Future<String> getTemporaryPath() async {
-    return kTemporaryPath;
+    getTemporaryPathCalled();
+    return temporaryPath;
   }
 }
