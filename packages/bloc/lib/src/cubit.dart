@@ -89,7 +89,7 @@ abstract class Cubit<State> extends Stream<State> {
 
   /// Notifies the [Cubit] of an [error] which triggers [onError].
   void addError(Object error, [StackTrace? stackTrace]) {
-    onError(error, stackTrace);
+    onError(error, stackTrace ?? StackTrace.current);
   }
 
   /// Called whenever a [change] occurs with the given [change].
@@ -120,8 +120,6 @@ abstract class Cubit<State> extends Stream<State> {
   /// Called whenever an [error] occurs within a [Cubit].
   /// By default all [error]s will be ignored and [Cubit] functionality will be
   /// unaffected.
-  /// The [stackTrace] argument may be `null` if the [state] stream received
-  /// an error without a [stackTrace].
   /// A great spot to handle errors at the individual [Cubit] level.
   ///
   /// **Note: `super.onError` should always be called last.**
@@ -136,7 +134,7 @@ abstract class Cubit<State> extends Stream<State> {
   /// ```
   @protected
   @mustCallSuper
-  void onError(Object error, StackTrace? stackTrace) {
+  void onError(Object error, StackTrace stackTrace) {
     // ignore: invalid_use_of_protected_member
     _observer.onError(this, error, stackTrace);
     assert(() {
