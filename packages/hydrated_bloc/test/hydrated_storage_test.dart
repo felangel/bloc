@@ -57,10 +57,8 @@ void main() {
 
       test('calls getTemporaryDirectory when storageDirectory is null',
           () async {
-        print('TEST START');
         storage = await HydratedStorage.build();
         expect(getTemporaryDirectoryCallCount, 1);
-        print('TEST END');
       });
 
       test(
