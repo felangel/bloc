@@ -1,16 +1,13 @@
-import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mockito/mockito.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
-import 'package:pedantic/pedantic.dart';
+
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+
+import 'mocks/mocks.dart';
 
 class MockBox extends Mock implements Box<dynamic> {}
 
@@ -20,18 +17,13 @@ void main() {
   group('HydratedStorage', () {
     final cwd = Directory.current.absolute.path;
     var getTemporaryDirectoryCallCount = 0;
-    const MethodChannel('plugins.flutter.io/path_provider')
-      ..setMockMethodCallHandler((methodCall) async {
-        print('methodCall ${methodCall.method}');
-        if (methodCall.method == 'getTemporaryDirectory') {
-          getTemporaryDirectoryCallCount++;
-          print(
-            'getTemporaryDirectoryCallCount $getTemporaryDirectoryCallCount',
-          );
-          return cwd;
-        }
-        throw UnimplementedError();
-      });
+
+    setUp(() async {
+      PathProviderPlatform.instance = MockPathProviderPlatform(
+        temporaryPath: cwd,
+        getTemporaryPathCalled: () => getTemporaryDirectoryCallCount++,
+      );
+    });
 
     Storage storage;
 
@@ -59,7 +51,7 @@ void main() {
 
       test('calls getTemporaryDirectory when storageDirectory is null',
           () async {
-        print('TEST START');        
+        print('TEST START');
         storage = await HydratedStorage.build();
         expect(getTemporaryDirectoryCallCount, 1);
         print('TEST END');
