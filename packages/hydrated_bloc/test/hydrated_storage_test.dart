@@ -1,33 +1,50 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mockito/mockito.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:pedantic/pedantic.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockBox extends Mock implements Box<dynamic> {}
 
+class MockPathProviderPlatform extends Mock
+    with MockPlatformInterfaceMixin
+    implements PathProviderPlatform {
+  MockPathProviderPlatform({
+    @required this.temporaryPath,
+    @required this.getTemporaryPathCalled,
+  });
+  final String temporaryPath;
+  final VoidCallback getTemporaryPathCalled;
+
+  @override
+  Future<String> getTemporaryPath() async {
+    getTemporaryPathCalled();
+    return temporaryPath;
+  }
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  disablePathProviderPlatformOverride = true;
 
   group('HydratedStorage', () {
     final cwd = Directory.current.absolute.path;
     var getTemporaryDirectoryCallCount = 0;
-    const MethodChannel('plugins.flutter.io/path_provider')
-      ..setMockMethodCallHandler((methodCall) async {
-        if (methodCall.method == 'getTemporaryDirectory') {
-          getTemporaryDirectoryCallCount++;
-          return cwd;
-        }
-        throw UnimplementedError();
-      });
+
+    setUp(() async {
+      PathProviderPlatform.instance = MockPathProviderPlatform(
+        temporaryPath: cwd,
+        getTemporaryPathCalled: () => ++getTemporaryDirectoryCallCount,
+      );
+    });
 
     Storage storage;
 
@@ -61,12 +78,15 @@ void main() {
 
       test(
           'does not call getTemporaryDirectory '
-          'when storageDirectory is null and kIsWeb', () {
+          'when storageDirectory is null and kIsWeb', () async {
         HydratedStorage.isWeb = true;
-        HydratedStorage.build().catchError((Object _) {
-          expect(getTemporaryDirectoryCallCount, 0);
-          HydratedStorage.isWeb = kIsWeb;
-        });
+        final completer = Completer<void>();
+        await runZoned(() {
+          HydratedStorage.build().whenComplete(completer.complete);
+          return completer.future;
+        }, onError: (Object _) {});
+        HydratedStorage.isWeb = kIsWeb;
+        expect(getTemporaryDirectoryCallCount, 0);
       });
 
       test(
