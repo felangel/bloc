@@ -1,3 +1,7 @@
+# 0.0.1-dev.3
+
+- docs: add inline documentation to mixins
+
 # 0.0.1-dev.2
 
 - **BREAKING**: `ReplayMixin` renamed to `ReplayCubitMixin`
