@@ -14,7 +14,7 @@ class OnTransitionErrorBloc extends Bloc<CounterEvent, int> {
   final Error error;
 
   @override
-  void onError(Object error, StackTrace? stackTrace) {
+  void onError(Object error, StackTrace stackTrace) {
     onErrorCallback(error, stackTrace);
     super.onError(error, stackTrace);
   }
