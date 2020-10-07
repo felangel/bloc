@@ -25,9 +25,9 @@ abstract class Bloc<Event, State> extends Cubit<State>
   /// The current [BlocObserver].
   static BlocObserver observer = BlocObserver();
 
-  late final _eventController = StreamController<Event>.broadcast();
+  final _eventController = StreamController<Event>.broadcast();
 
-  StreamSubscription<Transition<Event, State>>? _transitionSubscription;
+  late StreamSubscription<Transition<Event, State>> _transitionSubscription;
 
   bool _emitted = false;
 
@@ -169,14 +169,12 @@ abstract class Bloc<Event, State> extends Cubit<State>
   /// Notifies the [Bloc] of an [error] which triggers [onError].
   @override
   void addError(Object error, [StackTrace? stackTrace]) {
-    onError(error, stackTrace);
+    onError(error, stackTrace ?? StackTrace.current);
   }
 
   /// Called whenever an [error] is thrown within [mapEventToState].
   /// By default all [error]s will be ignored and [Bloc] functionality will be
   /// unaffected.
-  /// The [stackTrace] argument may be `null` if the [state] stream received
-  /// an error without a [stackTrace].
   /// A great spot to handle errors at the individual [Bloc] level.
   ///
   /// **Note: `super.onError` should always be called last.**
@@ -197,7 +195,7 @@ abstract class Bloc<Event, State> extends Cubit<State>
   @protected
   @mustCallSuper
   @override
-  void onError(Object error, StackTrace? stackTrace) {
+  void onError(Object error, StackTrace stackTrace) {
     super.onError(error, stackTrace);
   }
 
@@ -211,7 +209,7 @@ abstract class Bloc<Event, State> extends Cubit<State>
   @mustCallSuper
   Future<void> close() async {
     await _eventController.close();
-    await _transitionSubscription?.cancel();
+    await _transitionSubscription.cancel();
     return super.close();
   }
 
