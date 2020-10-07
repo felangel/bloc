@@ -30,5 +30,7 @@ dev_dependencies:
   json_annotation: ^3.0.1
   mockito: ^4.0.0
   path: ^1.6.4
+  path_provider_platform_interface: ^1.0.1
   pedantic: ^1.9.0
+  plugin_platform_interface: ^1.0.0
   uuid: ^2.0.4
