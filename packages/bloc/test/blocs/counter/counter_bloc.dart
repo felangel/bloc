@@ -44,7 +44,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   }
 
   @override
-  void onError(Object error, StackTrace? stackTrace) {
+  void onError(Object error, StackTrace stackTrace) {
     onErrorCallback?.call(error, stackTrace);
     super.onError(error, stackTrace);
   }
