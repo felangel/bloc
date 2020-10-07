@@ -17,15 +17,29 @@ class SignUpCubit extends Cubit<SignUpState> {
     final email = Email.dirty(value);
     emit(state.copyWith(
       email: email,
-      status: Formz.validate([email, state.password]),
+      status: Formz.validate([email, state.password, state.confirmPassword]),
     ));
   }
 
   void passwordChanged(String value) {
     final password = Password.dirty(value);
+    final passwordMatch = (password == state.confirmPassword) ? FormzStatus.valid : FormzStatus.invalid;
+    final status = (Formz.validate([state.email, password, state.confirmPassword]).isValid && passwordMatch.isValid) ? FormzStatus.valid : FormzStatus.invalid;
     emit(state.copyWith(
       password: password,
-      status: Formz.validate([state.email, password]),
+      passwordMatch: passwordMatch,
+      status: status,
+    ));
+  }
+
+  void confirmPasswordChanged(String value) {
+    final confirmPassword = Password.dirty(value);
+    final passwordMatch = (state.password == confirmPassword) ? FormzStatus.valid : FormzStatus.invalid;
+    final status = (Formz.validate([state.email, state.password, confirmPassword]).isValid && passwordMatch.isValid) ? FormzStatus.valid : FormzStatus.invalid;
+    emit(state.copyWith(
+      confirmPassword: confirmPassword,
+      passwordMatch: passwordMatch,
+      status: status,
     ));
   }
 

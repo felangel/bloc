@@ -25,6 +25,8 @@ class SignUpForm extends StatelessWidget {
             const SizedBox(height: 8.0),
             _PasswordInput(),
             const SizedBox(height: 8.0),
+            _ConfirmPasswordInput(),
+            const SizedBox(height: 8.0),
             _SignUpButton(),
           ],
         ),
@@ -69,6 +71,30 @@ class _PasswordInput extends StatelessWidget {
             labelText: 'password',
             helperText: '',
             errorText: state.password.invalid ? 'invalid password' : null,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _ConfirmPasswordInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignUpCubit, SignUpState>(
+      buildWhen: (previous, current) =>
+      previous.confirmPassword != current.confirmPassword ||
+          previous.passwordMatch != current.passwordMatch,
+      builder: (context, state) {
+        return TextField(
+          key: const Key('signUpForm_confirmPasswordInput_textField'),
+          onChanged: (confirmPassword) =>
+              context.bloc<SignUpCubit>().confirmPasswordChanged(confirmPassword),
+          obscureText: true,
+          decoration: InputDecoration(
+            labelText: 'confirm password',
+            helperText: '',
+            errorText: state.passwordMatch.isInvalid ? 'passwords do not match' : state.confirmPassword.invalid ? 'invalid password' : null,
           ),
         );
       },
