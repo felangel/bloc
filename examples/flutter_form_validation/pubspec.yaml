@@ -10,8 +10,8 @@ dependencies:
     sdk: flutter
   flutter_bloc:
     path: ../../packages/flutter_bloc
-  equatable: ^1.2.3
-  formz: ^0.2.0
+  equatable: ^1.2.5
+  formz: ^0.3.1
   rxdart: ^0.24.0
 
 flutter:
