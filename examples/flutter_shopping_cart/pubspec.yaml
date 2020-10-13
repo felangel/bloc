@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   bloc: ^6.0.1
   flutter_bloc: ^6.0.1
-  equatable: ^1.2.3
+  equatable: ^1.2.5
 
 flutter:
   uses-material-design: true
