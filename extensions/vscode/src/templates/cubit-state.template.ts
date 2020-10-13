@@ -50,7 +50,7 @@ function getFreezedCubitStateTemplate(cubitName: string): string {
 
 @freezed
 abstract class ${pascalCaseCubitName}State with _\$${pascalCaseCubitName}State {
-  const factory ${pascalCaseCubitName}State.inital() = _Initial;
+  const factory ${pascalCaseCubitName}State.initial() = _Initial;
 }
 `;
 }

@@ -53,7 +53,7 @@ part '${snakeCaseCubitName}_state.dart';
 part '${snakeCaseCubitName}_cubit.freezed.dart';
 
 class ${pascalCaseCubitName}Cubit extends Cubit<${cubitState}> {
-  ${pascalCaseCubitName}Cubit() : super(_Initial());
+  ${pascalCaseCubitName}Cubit() : super(${pascalCaseCubitName}State.initial());
 }
 `;
 }
