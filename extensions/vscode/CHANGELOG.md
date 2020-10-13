@@ -1,3 +1,7 @@
+# 5.3.1
+
+- fix: freezed cubit template typo
+
 # 5.3.0
 
 - feat: make templates configurable via workspace settings
