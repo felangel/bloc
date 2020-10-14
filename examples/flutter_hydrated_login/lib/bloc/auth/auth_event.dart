@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 
 abstract class AuthEvent extends Equatable {
   @override
-  // TODO: implement props
   List<Object> get props => [];
 }
 
@@ -14,6 +13,5 @@ class AuthLogin extends AuthEvent {
   AuthLogin(this.email, this.password, this.uuid);
 
   @override
-  // TODO: implement props
   List<Object> get props => [email, password, uuid];
 }

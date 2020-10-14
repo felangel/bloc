@@ -1,7 +1,4 @@
-
-
 import 'package:equatable/equatable.dart';
-import 'login_state.dart';
 
 enum AuthStatus { success, failed, login }
 
@@ -9,7 +6,6 @@ abstract class LoginEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
-
 
 class EmailChange extends LoginEvent {
   final String email;

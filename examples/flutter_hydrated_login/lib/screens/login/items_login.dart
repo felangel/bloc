@@ -7,18 +7,19 @@ import 'package:flutter_hydrated_login/screens/login/button_login.dart';
 import 'package:flutter_hydrated_login/screens/login/email_form.dart';
 import 'package:flutter_hydrated_login/screens/login/password_form.dart';
 
+
 class ItemsLogin extends StatelessWidget {
-  BuildContext _buildContext;
+  
 
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
-    _buildContext = context;
+    
 
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is MyFormChange) {
-          onListenLoginPage(state);
+          onListenLoginPage(state, context);
         } else {
           Scaffold.of(context).showSnackBar(SnackBar(content: Text('error')));
         }
@@ -37,11 +38,11 @@ class ItemsLogin extends StatelessWidget {
     );
   }
 
-  void onListenLoginPage(MyFormChange state) {
+  void onListenLoginPage(MyFormChange state, BuildContext cntx) {
     if (state.userState?.user != null) {
-      _buildContext.bloc<AuthBloc>().add(AuthLogin(state.userState.user.email,
+      cntx.bloc<AuthBloc>().add(AuthLogin(state.userState.user.email,
           state.userState.user.password, state.userState.user.uuid));
-      Navigator.pushReplacementNamed(_buildContext, AppRoutes.HOME);
+      Navigator.pushReplacementNamed(cntx, AppRoutes.HOME);
     }
 
     final status = state.email.isNotEmpty &&
@@ -49,6 +50,6 @@ class ItemsLogin extends StatelessWidget {
         state.emailValidation() == null &&
         state.passwordValidation() == null;
 
-    _buildContext.bloc<LoginBloc>().add(ButtonActive(status));
+    cntx.bloc<LoginBloc>().add(ButtonActive(status));
   }
 }

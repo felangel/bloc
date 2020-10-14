@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hydrated_login/bloc/login/bloc.dart';
 import 'package:flutter_hydrated_login/repositorys/auth_repository.dart';
 import 'package:flutter_hydrated_login/screens/login/items_login.dart';
-import 'package:uuid/uuid.dart';
 
 class LoginPage extends StatefulWidget {
   @override

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter_hydrated_login/bloc/auth/bloc.dart';
-import 'package:flutter_hydrated_login/bloc/login/login_event.dart';
 import 'package:flutter_hydrated_login/models/user.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -42,7 +41,11 @@ main() {
         User.toMap(user),
       );
       final newBloc = AuthBloc();
+
       expect((newBloc.state as AuthUser).user, user);
+      
+      newBloc.close();
+
     });
 
     test(
@@ -64,13 +67,13 @@ main() {
     test(
         'does not read from storage on subsequent state change'
         'when cache malformed', () {
+      final bloc = AuthBloc();
+      
       runZoned(() async {
         when(_storage.read('AuthBloc')).thenReturn('{');
-
-        final bloc = AuthBloc();
-
         bloc.add(AuthLogin(user.email, user.password, user.uuid));
       }).catchError((e) {
+        bloc.close();
         verify<dynamic>(_storage.read('AuthBloc')).called(2);
       });
     });

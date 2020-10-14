@@ -16,6 +16,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       yield AuthUser(User.fromJson(data));
     }
   }
+
   @override
   AuthState fromJson(Map<String, dynamic> json) {
     print('fromjson');

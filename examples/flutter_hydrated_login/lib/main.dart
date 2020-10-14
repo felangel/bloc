@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hydrated_login/bloc/auth/bloc.dart';
-import 'package:flutter_hydrated_login/bloc/bloc_%20watcher.dart';
+import 'package:flutter_hydrated_login/bloc/bloc_watcher.dart';
 import 'package:flutter_hydrated_login/repositorys/auth_repository.dart';
 import 'package:flutter_hydrated_login/routes/app_pages.dart';
 import 'package:flutter_hydrated_login/routes/app_routes.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
 
 import 'bloc/auth/auth_bloc.dart';
 

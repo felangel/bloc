@@ -44,7 +44,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         case SubmitLogin:
           if (currentState is MyFormChange) {
             yield currentState.copyWith(isNewActivate: false);
-            
+
             // assumse this is response from server
             final resultFetch = await _repository.fetchUser(
                 currentState.email, currentState.password);

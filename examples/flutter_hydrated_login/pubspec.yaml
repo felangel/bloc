@@ -32,13 +32,18 @@ dependencies:
   equatable: ^1.2.5
   uuid: ^2.2.2
   regexpattern: ^1.0.0
-  flutter_bloc: ^6.0.0
+  # flutter_bloc: ^6.0.0
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
   rxdart: ^0.24.1
-  bloc_test: ^7.0.6
+  # bloc_test: ^7.0.6
+  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  bloc_test:
+    path: ../../packages/bloc_test
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

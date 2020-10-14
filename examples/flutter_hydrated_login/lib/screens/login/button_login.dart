@@ -14,6 +14,7 @@ class ButtonLogin extends StatelessWidget {
             if (previous is MyFormChange && current is MyFormChange) {
               return previous.isActive != current.isActive;
             }
+            return false;
           },
           builder: (context, state) {
             bool isActive = false;

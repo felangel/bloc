@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hydrated_login/bloc/login/bloc.dart';
 import 'package:flutter_hydrated_login/bloc/login/login_bloc.dart';
-import 'package:regexpattern/regexpattern.dart';
 
 class EmailFormTextField extends StatelessWidget {
   @override
@@ -14,6 +13,7 @@ class EmailFormTextField extends StatelessWidget {
           if (previous is MyFormChange && current is MyFormChange) {
             return previous.email != current.email;
           }
+          return false;
         }, builder: (_, state) {
           var errorTextState = '';
 
