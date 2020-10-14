@@ -68,7 +68,7 @@ jobs:
             "examples/flutter_weather",
             "examples/flutter_wizard",
             "examples/github_search/flutter_github_search",
-            "examples/flutter_hydrated_login/**"
+            "examples/flutter_hydrated_login"
           ]
       fail-fast: false
     runs-on: ubuntu-latest
