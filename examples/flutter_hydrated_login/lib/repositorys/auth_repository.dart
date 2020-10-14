@@ -10,7 +10,6 @@ class AuthRepository {
       return uuid.v1();
     });
     print(result);
-
     return User.fromJson(
         {'uuid': result, 'email': email, 'password': password});
   }
