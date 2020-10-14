@@ -7,14 +7,10 @@ import 'package:flutter_hydrated_login/screens/login/button_login.dart';
 import 'package:flutter_hydrated_login/screens/login/email_form.dart';
 import 'package:flutter_hydrated_login/screens/login/password_form.dart';
 
-
 class ItemsLogin extends StatelessWidget {
-  
-
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
-    
 
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {

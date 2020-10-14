@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hydrated_login/bloc/login/bloc.dart';
 
-
 class PasswordFormTextField extends StatelessWidget {
-  
-  
   @override
   Widget build(BuildContext context) {
-    
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child:
