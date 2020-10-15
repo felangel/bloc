@@ -100,8 +100,8 @@ class CounterCubit extends Cubit<int> {
 
   @override
   void onChange(Change<int> change) {
-    print(change);
     super.onChange(change);
+    print(change);
   }
 
   @override
@@ -119,25 +119,25 @@ class MyBlocObserver extends BlocObserver {
   @override
   void onCreate(Cubit cubit) {
     super.onCreate(cubit);
-    print('onCreate ${cubit.runtimeType}');
+    print('onCreate -- cubit: ${cubit.runtimeType}');
   }
 
   @override
   void onChange(Cubit cubit, Change change) {
     super.onChange(cubit, change);
-    print(change);
+    print('onChange -- cubit: ${cubit.runtimeType}, change: $change');
   }
 
   @override
   void onError(Cubit cubit, Object error, StackTrace stackTrace) {
-    print('$error, $stackTrace');
+    print('onError -- cubit: ${cubit.runtimeType}, error: $error');
     super.onError(cubit, error, stackTrace);
   }
 
   @override
   void onClose(Cubit cubit) {
     super.onClose(cubit);
-    print('onClose ${cubit.runtimeType}');
+    print('onClose -- cubit: ${cubit.runtimeType}');
   }
 }
 ```
@@ -236,20 +236,20 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   void onEvent(CounterEvent event) {
-    print(event);
     super.onEvent(event);
+    print(event);
   }
 
   @override
   void onChange(Change<int> change) {
-    print(change);
     super.onChange(change);
+    print(change);
   }
 
   @override
   void onTransition(Transition<CounterEvent, int> transition) {
-    print(transition);
     super.onTransition(transition);
+    print(transition);
   }
 
   @override
@@ -267,37 +267,37 @@ class MyBlocObserver extends BlocObserver {
   @override
   void onCreate(Cubit cubit) {
     super.onCreate(cubit);
-    print('onCreate ${cubit.runtimeType}');
+    print('onCreate -- cubit: ${cubit.runtimeType}');
   }
 
   @override
   void onEvent(Bloc bloc, Object event) {
     super.onEvent(bloc, event);
-    print(event);
+    print('onEvent -- bloc: ${bloc.runtimeType}, event: $event');
   }
 
   @override
   void onChange(Cubit cubit, Change change) {
     super.onChange(cubit, change);
-    print(change);
+    print('onChange -- cubit: ${cubit.runtimeType}, change: $change');
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    print(transition);
+    print('onTransition -- bloc: ${bloc.runtimeType}, transition: $transition');
   }
 
   @override
   void onError(Cubit cubit, Object error, StackTrace stackTrace) {
-    print('$error, $stackTrace');
+    print('onError -- cubit: ${cubit.runtimeType}, error: $error');
     super.onError(cubit, error, stackTrace);
   }
 
   @override
   void onClose(Cubit cubit) {
     super.onClose(cubit);
-    print('onClose ${cubit.runtimeType}');
+    print('onClose -- cubit: ${cubit.runtimeType}');
   }
 }
 ```
