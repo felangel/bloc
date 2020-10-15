@@ -1,7 +1,9 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_firebase_login/authentication/authentication.dart';
+import 'package:flutter_firebase_login/authentication/models/confirmedPassword.dart';
 import 'package:formz/formz.dart';
 
 part 'sign_up_state.dart';
@@ -17,29 +19,31 @@ class SignUpCubit extends Cubit<SignUpState> {
     final email = Email.dirty(value);
     emit(state.copyWith(
       email: email,
-      status: Formz.validate([email, state.password, state.confirmPassword]),
+      status: Formz.validate([email, state.password, state.confirmedPassword]),
     ));
   }
 
   void passwordChanged(String value) {
     final password = Password.dirty(value);
-    final passwordMatch = (password == state.confirmPassword) ? FormzStatus.valid : FormzStatus.invalid;
-    final status = (Formz.validate([state.email, password, state.confirmPassword]).isValid && passwordMatch.isValid) ? FormzStatus.valid : FormzStatus.invalid;
+    final confirmedPassword = ConfirmedPassword.dirty(
+        original: password, value: state.confirmedPassword.value);
     emit(state.copyWith(
+      email: state.email,
       password: password,
-      passwordMatch: passwordMatch,
-      status: status,
+      confirmedPassword: confirmedPassword,
+      status: Formz.validate([state.email, password, state.confirmedPassword]),
     ));
   }
 
-  void confirmPasswordChanged(String value) {
-    final confirmPassword = Password.dirty(value);
-    final passwordMatch = (state.password == confirmPassword) ? FormzStatus.valid : FormzStatus.invalid;
-    final status = (Formz.validate([state.email, state.password, confirmPassword]).isValid && passwordMatch.isValid) ? FormzStatus.valid : FormzStatus.invalid;
+  void confirmedPasswordChanged(String value) {
+    //added
+    final confirmedPassword =
+        ConfirmedPassword.dirty(original: state.password, value: value);
     emit(state.copyWith(
-      confirmPassword: confirmPassword,
-      passwordMatch: passwordMatch,
-      status: status,
+      email: state.email,
+      password: state.password,
+      confirmedPassword: confirmedPassword,
+      status: Formz.validate([state.email, state.password, confirmedPassword]),
     ));
   }
 

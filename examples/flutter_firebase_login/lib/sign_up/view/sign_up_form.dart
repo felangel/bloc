@@ -83,18 +83,20 @@ class _ConfirmPasswordInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(
       buildWhen: (previous, current) =>
-      previous.confirmPassword != current.confirmPassword ||
-          previous.passwordMatch != current.passwordMatch,
+          previous.confirmedPassword != current.confirmedPassword,
       builder: (context, state) {
         return TextField(
-          key: const Key('signUpForm_confirmPasswordInput_textField'),
-          onChanged: (confirmPassword) =>
-              context.bloc<SignUpCubit>().confirmPasswordChanged(confirmPassword),
+          key: const Key('signUpForm_confirmedPasswordInput_textField'),
+          onChanged: (confirmPassword) => context
+              .bloc<SignUpCubit>()
+              .confirmedPasswordChanged(confirmPassword),
           obscureText: true,
           decoration: InputDecoration(
             labelText: 'confirm password',
             helperText: '',
-            errorText: state.passwordMatch.isInvalid ? 'passwords do not match' : state.confirmPassword.invalid ? 'invalid password' : null,
+            errorText: state.confirmedPassword.invalid
+                ? 'passwords do not match'
+                : null,
           ),
         );
       },
