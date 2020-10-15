@@ -40,7 +40,8 @@ void main() {
     });
 
     test(
-        'returns object with updated confirmedPassword when confirmedPassword is passed',
+        'returns object with updated confirmedPassword'
+            ' when confirmedPassword is passed',
         () {
       expect(
         SignUpState().copyWith(confirmedPassword: confirmedPassword),

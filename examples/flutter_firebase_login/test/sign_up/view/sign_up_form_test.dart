@@ -168,7 +168,8 @@ void main() {
       });
 
       testWidgets(
-          'invalid confirmedPassword error text when confirmedPassword is invalid',
+          'invalid confirmedPassword error text'
+              ' when confirmedPassword is invalid',
           (tester) async {
         final confirmedPassword = MockConfirmedPassword();
         when(confirmedPassword.invalid).thenReturn(true);
