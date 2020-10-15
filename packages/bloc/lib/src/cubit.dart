@@ -51,7 +51,10 @@ class CubitUnhandledErrorException implements Exception {
 /// {@endtemplate}
 abstract class Cubit<State> extends Stream<State> {
   /// {@macro cubit}
-  Cubit(this._state);
+  Cubit(this._state) {
+    // ignore: invalid_use_of_protected_member
+    _observer.onCreate(this);
+  }
 
   /// The current [state].
   State get state => _state;
@@ -95,14 +98,14 @@ abstract class Cubit<State> extends Stream<State> {
   /// [onChange] is called before the `state` of the `cubit` is updated.
   /// [onChange] is a great spot to add logging/analytics for a specific `cubit`.
   ///
-  /// **Note: `super.onChange` should always be called last.**
+  /// **Note: `super.onChange` should always be called first.**
   /// ```dart
   /// @override
   /// void onChange(Change change) {
-  ///   // Custom onChange logic goes here
-  ///
   ///   // Always call super.onChange with the current change
   ///   super.onChange(change);
+  ///
+  ///   // Custom onChange logic goes here
   /// }
   /// ```
   ///
@@ -170,5 +173,9 @@ abstract class Cubit<State> extends Stream<State> {
   /// Closes the [Cubit].
   /// When close is called, new states can no longer be emitted.
   @mustCallSuper
-  Future<void> close() => _controller?.close();
+  Future<void> close() {
+    // ignore: invalid_use_of_protected_member
+    _observer.onClose(this);
+    return _controller?.close();
+  }
 }

@@ -1,3 +1,7 @@
+# 6.1.0
+
+- feat: add `onCreate` and `onClose` to `BlocObserver`
+
 # 6.0.3
 
 - docs: README updates to include flow diagrams for `Bloc` and `Cubit`.
