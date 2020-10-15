@@ -1,7 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_firebase_login/authentication/authentication.dart';
 import 'package:flutter_firebase_login/authentication/models/confirmedPassword.dart';
 import 'package:formz/formz.dart';
@@ -28,7 +27,6 @@ class SignUpCubit extends Cubit<SignUpState> {
     final confirmedPassword = ConfirmedPassword.dirty(
         original: password, value: state.confirmedPassword.value);
     emit(state.copyWith(
-      email: state.email,
       password: password,
       confirmedPassword: confirmedPassword,
       status: Formz.validate([state.email, password, state.confirmedPassword]),
@@ -40,8 +38,6 @@ class SignUpCubit extends Cubit<SignUpState> {
     final confirmedPassword =
         ConfirmedPassword.dirty(original: state.password, value: value);
     emit(state.copyWith(
-      email: state.email,
-      password: state.password,
       confirmedPassword: confirmedPassword,
       status: Formz.validate([state.email, state.password, confirmedPassword]),
     ));
