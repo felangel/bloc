@@ -218,7 +218,7 @@ abstract class Bloc<Event, State> extends Cubit<State>
   /// **[emit] should never be used outside of tests.**
   ///
   /// Updates the state of the bloc to the provided [state].
-  /// A bloc's state should be only be updated by `yielding` a new `state`
+  /// A bloc's state should only be updated by `yielding` a new `state`
   /// from `mapEventToState` in response to an event.
   @visibleForTesting
   @override
