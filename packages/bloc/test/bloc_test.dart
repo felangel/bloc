@@ -21,6 +21,19 @@ void main() {
         Bloc.observer = observer;
       });
 
+      test('triggers onCreate on observer when instantiated', () {
+        final bloc = SimpleBloc();
+        // ignore: invalid_use_of_protected_member
+        verify(observer.onCreate(bloc)).called(1);
+      });
+
+      test('triggers onClose on observer when closed', () async {
+        final bloc = SimpleBloc();
+        await bloc.close();
+        // ignore: invalid_use_of_protected_member
+        verify(observer.onClose(bloc)).called(1);
+      });
+
       test('close does not emit new states over the state stream', () async {
         final expectedStates = [emitsDone];
 

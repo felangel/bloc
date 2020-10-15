@@ -117,15 +117,27 @@ class CounterCubit extends Cubit<int> {
 ```dart
 class MyBlocObserver extends BlocObserver {
   @override
+  void onCreate(Cubit cubit) {
+    super.onCreate(cubit);
+    print('onCreate ${cubit.runtimeType}');
+  }
+
+  @override
   void onChange(Cubit cubit, Change change) {
-    print(change);
     super.onChange(cubit, change);
+    print(change);
   }
 
   @override
   void onError(Cubit cubit, Object error, StackTrace stackTrace) {
     print('$error, $stackTrace');
     super.onError(cubit, error, stackTrace);
+  }
+
+  @override
+  void onClose(Cubit cubit) {
+    super.onClose(cubit);
+    print('onClose ${cubit.runtimeType}');
   }
 }
 ```
@@ -253,27 +265,39 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 ```dart
 class MyBlocObserver extends BlocObserver {
   @override
+  void onCreate(Cubit cubit) {
+    super.onCreate(cubit);
+    print('onCreate ${cubit.runtimeType}');
+  }
+
+  @override
   void onEvent(Bloc bloc, Object event) {
-    print(event);
     super.onEvent(bloc, event);
+    print(event);
   }
 
   @override
   void onChange(Cubit cubit, Change change) {
-    print(change);
     super.onChange(cubit, change);
+    print(change);
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    print(transition);
     super.onTransition(bloc, transition);
+    print(transition);
   }
 
   @override
   void onError(Cubit cubit, Object error, StackTrace stackTrace) {
     print('$error, $stackTrace');
     super.onError(cubit, error, stackTrace);
+  }
+
+  @override
+  void onClose(Cubit cubit) {
+    super.onClose(cubit);
+    print('onClose ${cubit.runtimeType}');
   }
 }
 ```

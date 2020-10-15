@@ -10,6 +10,21 @@ class MockBlocObserver extends Mock implements BlocObserver {}
 
 void main() {
   group('Cubit', () {
+    group('constructor', () {
+      BlocObserver observer;
+
+      setUp(() {
+        observer = MockBlocObserver();
+        Bloc.observer = observer;
+      });
+
+      test('triggers onCreate on observer', () {
+        final cubit = CounterCubit();
+        // ignore: invalid_use_of_protected_member
+        verify(observer.onCreate(cubit)).called(1);
+      });
+    });
+
     group('initial state', () {
       test('is correct', () {
         expect(CounterCubit().state, 0);
@@ -218,6 +233,22 @@ void main() {
           ..increment();
         await cubit.close();
         expect(states, [equals(1), equals(1)]);
+      });
+    });
+
+    group('close', () {
+      BlocObserver observer;
+
+      setUp(() {
+        observer = MockBlocObserver();
+        Bloc.observer = observer;
+      });
+
+      test('triggers onClose on observer', () async {
+        final cubit = CounterCubit();
+        await cubit.close();
+        // ignore: invalid_use_of_protected_member
+        verify(observer.onClose(cubit)).called(1);
       });
     });
 

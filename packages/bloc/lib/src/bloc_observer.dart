@@ -7,6 +7,11 @@ import 'transition.dart';
 
 /// An interface for observing the behavior of [Bloc] and [Cubit] instances.
 class BlocObserver {
+  /// Called whenever a [Cubit] is instantiated.
+  @protected
+  @mustCallSuper
+  void onCreate(Cubit cubit) {}
+
   /// Called whenever an [event] is `added` to any [bloc] with the given [bloc]
   /// and [event].
   @protected
@@ -35,4 +40,9 @@ class BlocObserver {
   @protected
   @mustCallSuper
   void onError(Cubit cubit, Object error, StackTrace stackTrace) {}
+
+  /// Called whenever a [Cubit] is closed.
+  @protected
+  @mustCallSuper
+  void onClose(Cubit cubit) {}
 }
