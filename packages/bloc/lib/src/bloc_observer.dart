@@ -8,6 +8,9 @@ import 'transition.dart';
 /// An interface for observing the behavior of [Bloc] and [Cubit] instances.
 class BlocObserver {
   /// Called whenever a [Cubit] is instantiated.
+  /// In many cases, a cubit may be lazily instantiated and
+  /// [onCreate] can be used to observe exactly when the cubit
+  /// instance is created.
   @protected
   @mustCallSuper
   void onCreate(Cubit cubit) {}
@@ -42,6 +45,9 @@ class BlocObserver {
   void onError(Cubit cubit, Object error, StackTrace stackTrace) {}
 
   /// Called whenever a [Cubit] is closed.
+  /// [onClose] is called just before the [Cubit] is closed
+  /// and indicates that the particular instance will no longer
+  /// emit new states.
   @protected
   @mustCallSuper
   void onClose(Cubit cubit) {}
