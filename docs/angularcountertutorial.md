@@ -68,7 +68,7 @@ Lastly, our `counter_page_component.html` should look like:
 
 [counter_page_component.html](_snippets/angular_counter_tutorial/counter_page_component.html.md ':include')
 
-?> **Note**: We are using the `BlocPipe` so that we can display our counterBloc state as it is updated.
+?> **Note**: We are using the `BlocPipe` so that we can display our `CounterBloc` state as it is updated.
 
 That's it! We've separated our presentation layer from our business logic layer. Our `CounterPageComponent` has no idea what happens when a user presses a button; it just adds an event to notify the `CounterBloc`. Furthermore, our `CounterBloc` has no idea what is happening with the state (counter value); it's simply converting the `CounterEvents` into integers.
 

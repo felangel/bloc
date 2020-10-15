@@ -98,6 +98,7 @@ coverage/
 coverage_badge.svg
 .test_coverage.dart
 *.lcov
+nohup.out
 
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3

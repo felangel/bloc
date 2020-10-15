@@ -24,6 +24,26 @@ and then install all of our dependencies
 flutter packages get
 ```
 
+## Project Structure
+
+```
+├── lib
+│   ├── app.dart
+│   ├── counter
+│   │   ├── counter.dart
+│   │   ├── cubit
+│   │   │   └── counter_cubit.dart
+│   │   └── view
+│   │       ├── counter_page.dart
+│   │       └── counter_view.dart
+│   ├── counter_observer.dart
+│   └── main.dart
+├── pubspec.lock
+├── pubspec.yaml
+```
+
+The application uses a feature-driven directory structure. This project structure enables us to scale the project by having self-contained features. In this example we will only have a single feature (the counter itself) but in more complex applications we can have hundreds of different features.
+
 ## BlocObserver
 
 The first thing we're going to take a look at is how to create a `BlocObserver` which will help us observe all state changes in the application.
@@ -86,6 +106,12 @@ The `CounterView` is responsible for rendering the current count and rendering t
 A `BlocBuilder` is used to wrap the `Text` widget in order to update the text any time the `CounterCubit` state changes. In addition, `context.bloc<CounterCubit>()` is used to look-up the closest `CounterCubit` instance.
 
 ?> **Note**: Only the `Text` widget is wrapped in a `BlocBuilder` because that is the only widget that needs to be rebuilt in response to state changes in the `CounterCubit`. Avoid unnecessarily wrapping widgets that don't need to be rebuilt when a state changes.
+
+## Barrel
+
+Add `counter.dart` to export all the public facing parts of the counter feature.
+
+[counter.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/counter.dart ':include')
 
 That's it! We've separated the presentation layer from the business logic layer. The `CounterView` has no idea what happens when a user presses a button; it just notifies the `CounterCubit`. Furthermore, the `CounterCubit` has no idea what is happening with the state (counter value); it's simply emitting new states in response to the methods being called.
 

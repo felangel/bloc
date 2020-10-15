@@ -10,11 +10,12 @@
 [![Discord](https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue)](https://discord.gg/Hc5KD3g)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
-> una librería de administración de estado predecible para Dart.
+> una biblioteca de administración de estado predecible para Dart.
 
 - Simple y Liviano
 - Altamente Testeable
 - Para Dart, Flutter y AngularDart
 
+[Migrar a v6.0.0](es/migration.md)
 [GitHub](https://github.com/felangel/bloc/)
 [Comenzar](es/gettingstarted.md)

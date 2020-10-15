@@ -42,34 +42,13 @@ import 'repository_provider.dart';
 /// As a result, the only advantage of using [MultiRepositoryProvider] is
 /// improved readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
-class MultiRepositoryProvider extends StatelessWidget {
+class MultiRepositoryProvider extends MultiProvider {
   /// {@macro multi_repository_provider}
-  const MultiRepositoryProvider({
+  MultiRepositoryProvider({
     Key key,
-    @required this.providers,
-    @required this.child,
+    @required List<RepositoryProviderSingleChildWidget> providers,
+    @required Widget child,
   })  : assert(providers != null),
         assert(child != null),
-        super(key: key);
-
-  /// The [RepositoryProvider] list which is converted into a tree of
-  /// [RepositoryProvider] widgets.
-  /// The tree of [RepositoryProvider] widgets is created in order meaning
-  /// the first [RepositoryProvider] will be the top-most [RepositoryProvider]
-  /// and the last [RepositoryProvider] will be a direct ancestor of [child].
-  final List<RepositoryProviderSingleChildWidget> providers;
-
-  /// The widget and its descendants which will have access to every value
-  /// provided by [providers].
-  /// [child] will be a direct descendent of the last [RepositoryProvider] in
-  /// [providers].
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: providers,
-      child: child,
-    );
-  }
+        super(key: key, providers: providers, child: child);
 }

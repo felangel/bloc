@@ -1,3 +1,43 @@
+# 5.3.1
+
+- fix: freezed cubit template typo
+
+# 5.3.0
+
+- feat: make templates configurable via workspace settings
+- feat: improve cubit state equatable template
+- fix: remove unused dependency in freezed bloc template
+
+# 5.2.0
+
+- feat: updates to snippets
+  - `contextbloc` -> `ctxbloc`
+  - `contextrepository` -> `ctxrepo`
+  - `repositoryof` -> `repoof`
+  - `repositoryprovider` -> `repoprovider`
+  - `multirepositoryprovider` -> `multirepoprovider`
+  - `blocstate` (new)
+  - `blocevent` (new)
+
+# 5.1.1
+
+- fix: freezed template typo
+
+# 5.1.0
+
+- feat: add new bloc/cubit support for `package:freezed`
+- feat: add snippet support for `package:freezed`
+  - `fstate`: new freezed state
+  - `fevent`: new freezed event
+  - `feventwhen`: new freezed event.when helper function
+  - `feventmap`: new freezed event.map helper function
+- feat: add bloc code actions
+  - Wrap with `BlocBuilder`
+  - Wrap with `BlocListener`
+  - Wrap with `BlocConsumer`
+  - Wrap with `BlocProvider`
+  - Wrap with `RepositoryProvider`
+
 # 5.0.0
 
 - **BREAKING**: update to latest bloc packages

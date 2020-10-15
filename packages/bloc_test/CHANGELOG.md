@@ -1,3 +1,30 @@
+# 7.0.6
+
+- chore: revert support `dart >=2.7.0`
+
+# 7.0.5
+
+- fix: update to `mockito ^4.1.2`
+- chore: update to `dart >=2.10.0`
+
+# 7.0.4
+
+- feat: `blocTest` provides warning to implement deep equality when shallow equality is true
+
+# 7.0.3
+
+- restrict `mockito` to `<4.1.2` to prevent breaking changes due to NNBD
+
+# 7.0.2
+
+- fix: `blocTest` timeouts when verify fails ([#1639](https://github.com/felangel/bloc/issues/1639))
+- fix: `blocTest` timeouts when expect fails ([#1645](https://github.com/felangel/bloc/issues/1645))
+
+# 7.0.1
+
+- chore: deprecate `emitsExactly` in favor of `blocTest`
+- fix: capture uncaught exceptions in `Cubit`
+
 # 7.0.0
 
 - **BREAKING**: upgrade to `bloc ^6.0.0`

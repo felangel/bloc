@@ -26,6 +26,7 @@ A predictable state management library that helps implement the [BLoC design pat
 | [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc)   | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc)   |
 | [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc)   | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)   |
 | [hydrated_bloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc) | [![pub package](https://img.shields.io/pub/v/hydrated_bloc.svg)](https://pub.dev/packages/hydrated_bloc) |
+| [replay_bloc](https://github.com/felangel/bloc/tree/master/packages/replay_bloc)     | [![pub package](https://img.shields.io/pub/v/replay_bloc.svg)](https://pub.dev/packages/replay_bloc)     |
 
 ## Overview
 
@@ -40,6 +41,7 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [Flutter Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/README.md)
 - [Angular Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/angular_bloc/README.md)
 - [Hydrated Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/hydrated_bloc/README.md)
+- [Replay Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/replay_bloc/README.md)
 
 ## Migration
 
@@ -108,6 +110,7 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [Dynamic Form](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a dynamic form which pulls data from a repository.
 - [Wizard](https://github.com/felangel/bloc/tree/master/examples/flutter_wizard) - an example of how to build a multi-step wizard using the `bloc` and `flutter_bloc` packages.
 - [GraphQL](https://github.com/felangel/bloc/tree/master/examples/flutter_graphql_jobs) - an example of how to use the `bloc` and `flutter_bloc` packages with `graphql` to retrieve data from [api.graphql.jobs](https://api.graphql.jobs).
+- [Fluttersaurus](https://github.com/felangel/fluttersaurus) - an example of how to use the `bloc` and `flutter_bloc` packages to create a thesuarus app -- made for Bytconf Flutter 2020.
 
 ### Web
 
@@ -130,6 +133,10 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [firebase login tutorial with flutter_bloc](https://medium.com/flutter-community/firebase-login-with-flutter-bloc-47455e6047b0) - How to create a fully functional login/sign up flow using the bloc and flutter_bloc packages with Firebase Authentication and Google Sign In.
 - [flutter timer tutorial with flutter_bloc](https://medium.com/flutter-community/flutter-timer-with-flutter-bloc-a464e8332ceb) - How to create a timer app using the bloc and flutter_bloc packages.
 - [firestore todos tutorial with flutter_bloc](https://medium.com/flutter-community/firestore-todos-with-flutter-bloc-7b2d5fadcc80) - How to create a todos app using the bloc and flutter_bloc packages that integrates with cloud firestore.
+
+## Books
+
+  - [Flutter Complete Reference](https://fluttercompletereference.com/) - A book about the Dart programming language (version 2.10, with null safety support) and the Flutter framework (version 1.20). It covers the bloc package (version 6.0.3) in all flavors: bloc, flutter_bloc hydrated_bloc, replay_bloc, bloc_test and cubit.
 
 ## Extensions
 
@@ -159,6 +166,7 @@ Learn more at the following links, which have been contributed by the community.
 - [Flutter Football Player Search](https://www.youtube.com/watch?v=S2KmxzgsTwk) - How to build a Football Player Search app which interacts with an API using the bloc and flutter_bloc packages, by [Techie Blossom](https://techieblossom.com).
 - [Learning the Flutter Bloc Package](https://www.youtube.com/watch?v=eAiCPl3yk9A&t=1s) - Learning the flutter_bloc package live, by [Robert Brunhage](https://www.youtube.com/channel/UCSLIg5O0JiYO1i2nD4RclaQ)
 - [Bloc Test Tutorial](https://www.youtube.com/watch?v=S6jFBiiP0Mc) - Tutorial on how to unit test blocs using the bloc_test package, by [Reso Coder](https://resocoder.com).
+- [Bloc - from Zero to Hero](https://www.youtube.com/playlist?list=PLptHs0ZDJKt_T-oNj_6Q98v-tBnVf-S_o) - Playlist which includes everything needed to get started with bloc, by [Flutterly](https://www.youtube.com/channel/UC5PYcSe3to4mtm3SPCUmjvw).
 
 ### Written Resources
 

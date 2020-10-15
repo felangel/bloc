@@ -23,9 +23,7 @@ class TabSelector extends StatelessWidget {
           icon: Icon(
             tab == AppTab.todos ? Icons.list : Icons.show_chart,
           ),
-          title: Text(
-            tab == AppTab.stats ? 'Stats' : 'Todos',
-          ),
+          label: tab == AppTab.stats ? 'Stats' : 'Todos',
         );
       }).toList(),
     );

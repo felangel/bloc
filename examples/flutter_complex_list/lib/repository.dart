@@ -1,27 +1,26 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:flutter_complex_list/models/models.dart';
+
+import 'package:flutter_complex_list/list/list.dart';
 
 class Repository {
   final _random = Random();
 
-  int _next(int min, int max) => min + _random.nextInt(max - min);
+  int _randomRange(int min, int max) => min + _random.nextInt(max - min);
 
   Future<List<Item>> fetchItems() async {
-    await Future.delayed(Duration(seconds: _next(1, 5)));
+    await Future<void>.delayed(Duration(seconds: _randomRange(1, 5)));
     return List.of(_generateItemsList(10));
   }
 
-  List<Item> _generateItemsList(int numItems) {
-    final List<Item> items = [];
-    for (int i = 0; i < numItems; i++) {
-      items.add(Item(id: i.toString(), value: 'Item $i'));
-    }
-    return items;
+  List<Item> _generateItemsList(int length) {
+    return List.generate(
+      length,
+      (index) => Item(id: '$index', value: 'Item $index'),
+    );
   }
 
-  Stream<String> deleteItem(String id) async* {
-    await Future.delayed(Duration(seconds: _next(1, 5)));
-    yield id;
+  Future<void> deleteItem(String id) async {
+    await Future<void>.delayed(Duration(seconds: _randomRange(1, 5)));
   }
 }

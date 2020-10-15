@@ -1,3 +1,12 @@
+# 6.0.2
+
+- docs: add missing inline documentation for `hydrate`
+
+# 6.0.1
+
+- fix: compatibility with flutter_web
+- chore: upgrade to `bloc ^6.0.1`
+
 # 6.0.0
 
 - **BREAKING**: upgrade to `bloc ^6.0.0`

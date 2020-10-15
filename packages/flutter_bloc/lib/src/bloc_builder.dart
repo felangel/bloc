@@ -1,8 +1,7 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 
+import 'bloc_listener.dart';
 import 'bloc_provider.dart';
 
 /// Signature for the `builder` function which takes the `BuildContext` and
@@ -47,9 +46,12 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 /// )
 /// ```
 /// {@endtemplate}
+///
 /// {@template bloc_builder_build_when}
 /// An optional [buildWhen] can be implemented for more granular control over
 /// how often [BlocBuilder] rebuilds.
+/// [buildWhen] should only be used for performance optimizations as it
+/// provides no security about the state passed to the [builder] function.
 /// [buildWhen] will be invoked on each [cubit] `state` change.
 /// [buildWhen] takes the previous `state` and current `state` and must
 /// return a [bool] which determines whether or not the [builder] function will
@@ -120,62 +122,34 @@ abstract class BlocBuilderBase<C extends Cubit<S>, S> extends StatefulWidget {
 
 class _BlocBuilderBaseState<C extends Cubit<S>, S>
     extends State<BlocBuilderBase<C, S>> {
-  StreamSubscription<S> _subscription;
-  S _previousState;
-  S _state;
   C _cubit;
+  S _state;
 
   @override
   void initState() {
     super.initState();
     _cubit = widget.cubit ?? context.bloc<C>();
-    _previousState = _cubit?.state;
-    _state = _cubit?.state;
-    _subscribe();
+    _state = _cubit.state;
   }
 
   @override
   void didUpdateWidget(BlocBuilderBase<C, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
     final oldCubit = oldWidget.cubit ?? context.bloc<C>();
-    final currentBloc = widget.cubit ?? oldCubit;
-    if (oldCubit != currentBloc) {
-      if (_subscription != null) {
-        _unsubscribe();
-        _cubit = widget.cubit ?? context.bloc<C>();
-        _previousState = _cubit?.state;
-        _state = _cubit?.state;
-      }
-      _subscribe();
+    final currentCubit = widget.cubit ?? oldCubit;
+    if (oldCubit != currentCubit) {
+      _cubit = currentCubit;
+      _state = _cubit.state;
     }
   }
 
   @override
-  Widget build(BuildContext context) => widget.build(context, _state);
-
-  @override
-  void dispose() {
-    _unsubscribe();
-    super.dispose();
-  }
-
-  void _subscribe() {
-    if (_cubit != null) {
-      _subscription = _cubit.listen((state) {
-        if (widget.buildWhen?.call(_previousState, state) ?? true) {
-          setState(() {
-            _state = state;
-          });
-        }
-        _previousState = state;
-      });
-    }
-  }
-
-  void _unsubscribe() {
-    if (_subscription != null) {
-      _subscription.cancel();
-      _subscription = null;
-    }
+  Widget build(BuildContext context) {
+    return BlocListener<C, S>(
+      cubit: _cubit,
+      listenWhen: widget.buildWhen,
+      listener: (context, state) => setState(() => _state = state),
+      child: widget.build(context, _state),
+    );
   }
 }

@@ -3,6 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../counter.dart';
 
+/// {@template counter_view}
+/// A [StatelessWidget] which reacts to the provided
+/// [CounterCubit] state and notifies it in response to user input.
+/// {@endtemplate}
 class CounterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -22,13 +26,13 @@ class CounterView extends StatelessWidget {
         children: <Widget>[
           FloatingActionButton(
             key: const Key('counterView_increment_floatingActionButton'),
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
             onPressed: () => context.bloc<CounterCubit>().increment(),
           ),
           const SizedBox(height: 8),
           FloatingActionButton(
             key: const Key('counterView_decrement_floatingActionButton'),
-            child: Icon(Icons.remove),
+            child: const Icon(Icons.remove),
             onPressed: () => context.bloc<CounterCubit>().decrement(),
           ),
         ],

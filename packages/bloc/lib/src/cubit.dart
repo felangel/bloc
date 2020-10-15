@@ -58,7 +58,7 @@ abstract class Cubit<State> extends Stream<State> {
 
   BlocObserver get _observer => Bloc.observer;
 
-  final _controller = StreamController<State>.broadcast();
+  StreamController<State> _controller;
 
   State _state;
 
@@ -76,6 +76,7 @@ abstract class Cubit<State> extends Stream<State> {
   @protected
   @visibleForTesting
   void emit(State state) {
+    _controller ??= StreamController<State>.broadcast();
     if (_controller.isClosed) return;
     if (state == _state && _emitted) return;
     onChange(Change<State>(currentState: this.state, nextState: state));
@@ -152,6 +153,7 @@ abstract class Cubit<State> extends Stream<State> {
     void Function() onDone,
     bool cancelOnError,
   }) {
+    _controller ??= StreamController<State>.broadcast();
     return _controller.stream.listen(
       onData,
       onError: onError,
@@ -163,15 +165,10 @@ abstract class Cubit<State> extends Stream<State> {
   /// Returns whether the `Stream<State>` is a broadcast stream.
   /// Every [Cubit] is a broadcast stream.
   @override
-  bool get isBroadcast => _controller.stream.isBroadcast;
+  bool get isBroadcast => true;
 
   /// Closes the [Cubit].
   /// When close is called, new states can no longer be emitted.
-  /// All data on the stream is discarded and a [Future] is returned
-  /// which resolves when it is done or an error occurred.
   @mustCallSuper
-  Future<void> close() async {
-    await _controller.close();
-    await _controller.stream.drain<State>();
-  }
+  Future<void> close() => _controller?.close();
 }
