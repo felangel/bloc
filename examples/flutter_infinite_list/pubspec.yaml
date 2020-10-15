@@ -12,7 +12,7 @@ dependencies:
   flutter_bloc:
     path: ../../packages/flutter_bloc
   http: ^0.12.0
-  equatable: ^1.2.3
+  equatable: ^1.2.5
   rxdart: ^0.24.0
 
 flutter:
