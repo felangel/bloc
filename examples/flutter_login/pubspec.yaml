@@ -19,6 +19,7 @@ dependencies:
     path: packages/authentication_repository
   user_repository:
     path: packages/user_repository
+  hydrated_bloc: ^6.0.1
 
 dev_dependencies:
   flutter_test:

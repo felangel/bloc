@@ -1,7 +1,7 @@
 analyzer:
   strong-mode:
     implicit-casts: false
-    implicit-dynamic: false
+    implicit-dynamic: true
   errors:
     close_sinks: ignore
 

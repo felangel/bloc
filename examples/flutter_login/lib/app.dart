@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_login/home/home.dart';
 import 'package:flutter_login/login/login.dart';
+import 'package:flutter_login/profile/bloc/profile_bloc.dart';
 import 'package:flutter_login/splash/splash.dart';
 import 'package:user_repository/user_repository.dart';
 
@@ -22,15 +23,16 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-      value: authenticationRepository,
-      child: BlocProvider(
-        create: (_) => AuthenticationBloc(
-          authenticationRepository: authenticationRepository,
-          userRepository: userRepository,
-        ),
-        child: AppView(),
-      ),
-    );
+        value: authenticationRepository,
+        child: MultiBlocProvider(providers: [
+          BlocProvider(create: (_) => ProfileBloc()),
+          BlocProvider(
+            create: (_) => AuthenticationBloc(
+              authenticationRepository: authenticationRepository,
+              userRepository: userRepository,
+            ),
+          )
+        ], child: AppView()));
   }
 }
 
@@ -45,6 +47,12 @@ class _AppViewState extends State<AppView> {
   NavigatorState get _navigator => _navigatorKey.currentState;
 
   @override
+  void initState() {
+    // checkUser();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: _navigatorKey,
@@ -53,14 +61,24 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
+                context.bloc<ProfileBloc>().add(ProfileStore(state.user));
+
                 _navigator.pushAndRemoveUntil<void>(
                   HomePage.route(),
                   (route) => false,
                 );
                 break;
               case AuthenticationStatus.unauthenticated:
+                print(state.status);
                 _navigator.pushAndRemoveUntil<void>(
                   LoginPage.route(),
+                  (route) => false,
+                );
+                break;
+
+              case AuthenticationStatus.isLogin:
+                _navigator.pushAndRemoveUntil<void>(
+                  HomePage.route(),
                   (route) => false,
                 );
                 break;
@@ -73,5 +91,13 @@ class _AppViewState extends State<AppView> {
       },
       onGenerateRoute: (_) => SplashPage.route(),
     );
+  }
+
+  void checkUser() {
+    final status = context.bloc<ProfileBloc>().state;
+    if (status is ProfileUser) {
+      const status = AuthenticationStatusChanged(AuthenticationStatus.isLogin);
+      context.bloc<AuthenticationBloc>().add(status);
+    }
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:user_repository/user_repository.dart';
 
@@ -19,9 +20,17 @@ class AuthenticationBloc
         _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
-    _authenticationStatusSubscription = _authenticationRepository.status.listen(
-      (status) => add(AuthenticationStatusChanged(status)),
-    );
+    _authenticationStatusSubscription =
+        _authenticationRepository.status.listen((status) {
+      final profile = HydratedBloc.storage?.read('ProfileBloc') as Map;
+      final statusNew = AuthenticationStatusChanged(status);
+      if (profile != null && profile.containsKey('id')) {
+        // to home home
+        add(const AuthenticationStatusChanged(AuthenticationStatus.isLogin));
+      } else {
+        add(statusNew);
+      }
+    });
   }
 
   final AuthenticationRepository _authenticationRepository;
@@ -36,6 +45,7 @@ class AuthenticationBloc
       yield await _mapAuthenticationStatusChangedToState(event);
     } else if (event is AuthenticationLogoutRequested) {
       _authenticationRepository.logOut();
+      // yield const AuthenticationState.unauthenticated();
     }
   }
 
@@ -51,12 +61,15 @@ class AuthenticationBloc
   ) async {
     switch (event.status) {
       case AuthenticationStatus.unauthenticated:
+        print(event.status);
         return const AuthenticationState.unauthenticated();
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
         return user != null
             ? AuthenticationState.authenticated(user)
             : const AuthenticationState.unauthenticated();
+      case AuthenticationStatus.isLogin:
+        return const AuthenticationState.isLogin();
       default:
         return const AuthenticationState.unknown();
     }
