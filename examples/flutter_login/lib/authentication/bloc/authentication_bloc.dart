@@ -23,12 +23,12 @@ class AuthenticationBloc
     _authenticationStatusSubscription =
         _authenticationRepository.status.listen((status) {
       final profile = HydratedBloc.storage?.read('ProfileBloc') as Map;
-      final statusNew = AuthenticationStatusChanged(status);
+
       if (profile != null && profile.containsKey('id')) {
         // to home home
         add(const AuthenticationStatusChanged(AuthenticationStatus.isLogin));
       } else {
-        add(statusNew);
+        add(AuthenticationStatusChanged(status));
       }
     });
   }
@@ -45,7 +45,6 @@ class AuthenticationBloc
       yield await _mapAuthenticationStatusChangedToState(event);
     } else if (event is AuthenticationLogoutRequested) {
       _authenticationRepository.logOut();
-      // yield const AuthenticationState.unauthenticated();
     }
   }
 
@@ -61,7 +60,6 @@ class AuthenticationBloc
   ) async {
     switch (event.status) {
       case AuthenticationStatus.unauthenticated:
-        print(event.status);
         return const AuthenticationState.unauthenticated();
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();

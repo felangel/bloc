@@ -47,12 +47,6 @@ class _AppViewState extends State<AppView> {
   NavigatorState get _navigator => _navigatorKey.currentState;
 
   @override
-  void initState() {
-    // checkUser();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: _navigatorKey,
@@ -69,7 +63,6 @@ class _AppViewState extends State<AppView> {
                 );
                 break;
               case AuthenticationStatus.unauthenticated:
-                print(state.status);
                 _navigator.pushAndRemoveUntil<void>(
                   LoginPage.route(),
                   (route) => false,
@@ -91,13 +84,5 @@ class _AppViewState extends State<AppView> {
       },
       onGenerateRoute: (_) => SplashPage.route(),
     );
-  }
-
-  void checkUser() {
-    final status = context.bloc<ProfileBloc>().state;
-    if (status is ProfileUser) {
-      const status = AuthenticationStatusChanged(AuthenticationStatus.isLogin);
-      context.bloc<AuthenticationBloc>().add(status);
-    }
   }
 }
