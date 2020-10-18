@@ -48,14 +48,14 @@ abstract class Bloc<Event, State> extends Cubit<State>
   /// Called whenever an [event] is [add]ed to the [Bloc].
   /// A great spot to add logging/analytics at the individual [Bloc] level.
   ///
-  /// **Note: `super.onEvent` should always be called last.**
+  /// **Note: `super.onEvent` should always be called first.**
   /// ```dart
   /// @override
   /// void onEvent(Event event) {
-  ///   // Custom onEvent logic goes here
-  ///
   ///   // Always call super.onEvent with the current event
   ///   super.onEvent(event);
+  ///
+  ///   // Custom onEvent logic goes here
   /// }
   /// ```
   ///
@@ -144,14 +144,14 @@ abstract class Bloc<Event, State> extends Cubit<State>
   /// [onTransition] is called before a [Bloc]'s [state] has been updated.
   /// A great spot to add logging/analytics at the individual [Bloc] level.
   ///
-  /// **Note: `super.onTransition` should always be called last.**
+  /// **Note: `super.onTransition` should always be called first.**
   /// ```dart
   /// @override
   /// void onTransition(Transition<Event, State> transition) {
-  ///   // Custom onTransition logic goes here
-  ///
   ///   // Always call super.onTransition with the current transition
   ///   super.onTransition(transition);
+  ///
+  ///   // Custom onTransition logic goes here
   /// }
   /// ```
   ///

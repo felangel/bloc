@@ -9,6 +9,13 @@ class MockTransition extends Mock implements Transition<Object, int> {}
 
 void main() {
   group('BlocObserver', () {
+    group('onCreate', () {
+      test('does nothing by default', () {
+        // ignore: invalid_use_of_protected_member
+        BlocObserver().onCreate(MockBloc());
+      });
+    });
+
     group('onEvent', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
@@ -34,6 +41,13 @@ void main() {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
         BlocObserver().onError(MockBloc(), Object(), StackTrace.current);
+      });
+    });
+
+    group('onClose', () {
+      test('does nothing by default', () {
+        // ignore: invalid_use_of_protected_member
+        BlocObserver().onClose(MockBloc());
       });
     });
   });
