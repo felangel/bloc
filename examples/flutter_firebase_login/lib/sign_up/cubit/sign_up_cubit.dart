@@ -2,7 +2,6 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_firebase_login/authentication/authentication.dart';
-import 'package:flutter_firebase_login/authentication/models/confirmedPassword.dart';
 import 'package:formz/formz.dart';
 
 part 'sign_up_state.dart';
@@ -18,28 +17,43 @@ class SignUpCubit extends Cubit<SignUpState> {
     final email = Email.dirty(value);
     emit(state.copyWith(
       email: email,
-      status: Formz.validate([email, state.password, state.confirmedPassword]),
+      status: Formz.validate([
+        email,
+        state.password,
+        state.confirmedPassword,
+      ]),
     ));
   }
 
   void passwordChanged(String value) {
     final password = Password.dirty(value);
     final confirmedPassword = ConfirmedPassword.dirty(
-        original: password, value: state.confirmedPassword.value);
+      original: password,
+      value: state.confirmedPassword.value,
+    );
     emit(state.copyWith(
       password: password,
       confirmedPassword: confirmedPassword,
-      status: Formz.validate([state.email, password, state.confirmedPassword]),
+      status: Formz.validate([
+        state.email,
+        password,
+        state.confirmedPassword,
+      ]),
     ));
   }
 
   void confirmedPasswordChanged(String value) {
-    //added
-    final confirmedPassword =
-        ConfirmedPassword.dirty(original: state.password, value: value);
+    final confirmedPassword = ConfirmedPassword.dirty(
+      original: state.password,
+      value: value,
+    );
     emit(state.copyWith(
       confirmedPassword: confirmedPassword,
-      status: Formz.validate([state.email, state.password, confirmedPassword]),
+      status: Formz.validate([
+        state.email,
+        state.password,
+        confirmedPassword,
+      ]),
     ));
   }
 
