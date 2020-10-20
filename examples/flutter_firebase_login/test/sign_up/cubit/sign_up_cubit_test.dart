@@ -25,11 +25,15 @@ void main() {
 
   const invalidConfirmedPasswordString = 'invalid';
   const invalidConfirmedPassword = ConfirmedPassword.dirty(
-      original: validPassword, value: invalidConfirmedPasswordString);
+    password: validPasswordString,
+    value: invalidConfirmedPasswordString,
+  );
 
   const validConfirmedPasswordString = 't0pS3cret1234';
   const validConfirmedPassword = ConfirmedPassword.dirty(
-      original: validPassword, value: validConfirmedPasswordString);
+    password: validPasswordString,
+    value: validConfirmedPasswordString,
+  );
 
   group('SignUpCubit', () {
     AuthenticationRepository authenticationRepository;
@@ -81,8 +85,10 @@ void main() {
         act: (cubit) => cubit.passwordChanged(invalidPasswordString),
         expect: const <SignUpState>[
           SignUpState(
-            confirmedPassword:
-                ConfirmedPassword.dirty(original: invalidPassword, value: ''),
+            confirmedPassword: ConfirmedPassword.dirty(
+              password: invalidPasswordString,
+              value: '',
+            ),
             password: invalidPassword,
             status: FormzStatus.invalid,
           ),

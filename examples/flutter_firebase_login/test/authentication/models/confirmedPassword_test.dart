@@ -16,9 +16,11 @@ void main() {
 
       test('dirty creates correct instance', () {
         final confirmedPassword = ConfirmedPassword.dirty(
-            original: password, value: confirmedPasswordString);
+          password: password.value,
+          value: confirmedPasswordString,
+        );
         expect(confirmedPassword.value, confirmedPasswordString);
-        expect(confirmedPassword.original, password);
+        expect(confirmedPassword.password, password.value);
         expect(confirmedPassword.pure, false);
       });
     });
@@ -26,7 +28,7 @@ void main() {
     group('validator', () {
       test('returns invalid error when confirmedPassword is empty', () {
         expect(
-          ConfirmedPassword.dirty(original: password, value: '').error,
+          ConfirmedPassword.dirty(password: password.value, value: '').error,
           ConfirmedPasswordValidationError.invalid,
         );
       });
@@ -34,8 +36,9 @@ void main() {
       test('is valid when confirmedPassword is not empty', () {
         expect(
           ConfirmedPassword.dirty(
-                  original: password, value: confirmedPasswordString)
-              .error,
+            password: password.value,
+            value: confirmedPasswordString,
+          ).error,
           isNull,
         );
       });
