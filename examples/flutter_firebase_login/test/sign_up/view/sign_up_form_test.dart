@@ -17,13 +17,18 @@ class MockEmail extends Mock implements Email {}
 
 class MockPassword extends Mock implements Password {}
 
+class MockConfirmedPassword extends Mock implements ConfirmedPassword {}
+
 void main() {
   const signUpButtonKey = Key('signUpForm_continue_raisedButton');
   const emailInputKey = Key('signUpForm_emailInput_textField');
   const passwordInputKey = Key('signUpForm_passwordInput_textField');
+  const confirmedPasswordInputKey =
+      Key('signUpForm_confirmedPasswordInput_textField');
 
   const testEmail = 'test@gmail.com';
   const testPassword = 'testP@ssw0rd1';
+  const testConfirmedPassword = 'testP@ssw0rd1';
 
   group('SignUpForm', () {
     SignUpCubit signUpCubit;
@@ -62,6 +67,24 @@ void main() {
         );
         await tester.enterText(find.byKey(passwordInputKey), testPassword);
         verify(signUpCubit.passwordChanged(testPassword)).called(1);
+      });
+
+      testWidgets('confirmedPasswordChanged when confirmedPassword changes',
+          (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: BlocProvider.value(
+                value: signUpCubit,
+                child: SignUpForm(),
+              ),
+            ),
+          ),
+        );
+        await tester.enterText(
+            find.byKey(confirmedPasswordInputKey), testConfirmedPassword);
+        verify(signUpCubit.confirmedPasswordChanged(testConfirmedPassword))
+            .called(1);
       });
 
       testWidgets('signUpFormSubmitted when sign up button is pressed',
@@ -142,6 +165,26 @@ void main() {
           ),
         );
         expect(find.text('invalid password'), findsOneWidget);
+      });
+
+      testWidgets(
+          'invalid confirmedPassword error text'
+          ' when confirmedPassword is invalid', (tester) async {
+        final confirmedPassword = MockConfirmedPassword();
+        when(confirmedPassword.invalid).thenReturn(true);
+        when(signUpCubit.state)
+            .thenReturn(SignUpState(confirmedPassword: confirmedPassword));
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: BlocProvider.value(
+                value: signUpCubit,
+                child: SignUpForm(),
+              ),
+            ),
+          ),
+        );
+        expect(find.text('passwords do not match'), findsOneWidget);
       });
 
       testWidgets('disabled sign up button when status is not validated',
