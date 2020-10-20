@@ -1,59 +1,42 @@
 {
   "project_info": {
-    "project_number": "",
-    "firebase_url": "",
-    "project_id": "",
-    "storage_bucket": ""
+    "project_number": "979633879366",
+    "firebase_url": "https://flutter-firebase-auth-2b1c3.firebaseio.com",
+    "project_id": "flutter-firebase-auth-2b1c3",
+    "storage_bucket": "flutter-firebase-auth-2b1c3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:123456789012:android:1234567890123456",
+        "mobilesdk_app_id": "1:979633879366:android:cd6c9969cbe46460",
         "android_client_info": {
           "package_name": "com.example.flutterfirebaselogin"
         }
       },
       "oauth_client": [
         {
-          "client_id": "",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.flutterfirebaselogin",
-            "certificate_hash": ""
-          }
-        },
-        {
-          "client_id": "",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.flutterfirebaselogin",
-            "certificate_hash": ""
-          }
-        },
-        {
-          "client_id": "",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.flutterfirebaselogin",
-            "certificate_hash": ""
-          }
-        },
-        {
-          "client_id": "",
+          "client_id": "979633879366-lucrjde7auulec5l2pouo6aa34u4576d.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": ""
+          "current_key": "AIzaSyCUqu6Uggf0FRSPljkCT8GNlgPO9OzSa2g"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "",
+              "client_id": "979633879366-lucrjde7auulec5l2pouo6aa34u4576d.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "979633879366-7fh9utsod6e5pfjh2l01fh6dk2chjc8d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bloclibrary.flutterFirebaseLogin"
+              }
             }
           ]
         }

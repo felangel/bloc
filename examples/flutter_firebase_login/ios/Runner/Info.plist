@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -25,7 +25,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>paste-the-reversed-client-id-from-googleservice-info.plist-here</string>
+				<string>com.googleusercontent.apps.979633879366-7fh9utsod6e5pfjh2l01fh6dk2chjc8d</string>
 			</array>
 		</dict>
 	</array>
