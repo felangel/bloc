@@ -1,2 +1,36 @@
-# Create a Project at https://console.firebase.google.com/u/0/
-# Paste your GoogleService-Info.plist contents here
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>979633879366-7fh9utsod6e5pfjh2l01fh6dk2chjc8d.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.979633879366-7fh9utsod6e5pfjh2l01fh6dk2chjc8d</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDVqdUKRfDx2AJbcbGp9MDMq_GdYqlOBXA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>979633879366</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.bloclibrary.flutterFirebaseLogin</string>
+	<key>PROJECT_ID</key>
+	<string>flutter-firebase-auth-2b1c3</string>
+	<key>STORAGE_BUCKET</key>
+	<string>flutter-firebase-auth-2b1c3.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:979633879366:ios:ff401cff86859619d98d47</string>
+	<key>DATABASE_URL</key>
+	<string>https://flutter-firebase-auth-2b1c3.firebaseio.com</string>
+</dict>
+</plist>
