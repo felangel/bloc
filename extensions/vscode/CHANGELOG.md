@@ -1,3 +1,7 @@
+# 5.3.2
+
+- fix: update dependencies to fix potential security vulnerabilities
+
 # 5.3.1
 
 - fix: freezed cubit template typo
