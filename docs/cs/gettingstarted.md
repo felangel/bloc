@@ -9,6 +9,8 @@ Bloc obsahuje několik pub balíčků:
 - [bloc](https://pub.dev/packages/bloc) - Základní knihovna bloc.
 - [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Užitečné Flutter widgety pro práci s blocem, určené k vytváření rychlejších, reaktivních mobilních aplikací.
 - [angular_bloc](https://pub.dev/packages/angular_bloc) - Užitečné AngularDart komponenty pro práci s blocem, určené k vytváření rychlejších, reaktivních webových aplikací.
+- [hydrated_bloc](https://pub.dev/packages/hydrated_bloc) - An extension to the bloc state management library which automatically persists and restores bloc states.
+- [replay_bloc](https://pub.dev/packages/replay_bloc) - An extension to the bloc state management library which adds support for undo and redo.
 
 ## Instalace
 
