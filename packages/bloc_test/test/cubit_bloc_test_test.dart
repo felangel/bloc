@@ -36,6 +36,15 @@ void main() {
         act: (cubit) => cubit..increment()..increment(),
         expect: <int>[1, 2],
       );
+
+      blocTest<CounterCubit, int>(
+        'emits [3] when increment is called and seed is 2'
+        'with async act',
+        build: () => CounterCubit(),
+        seed: 2,
+        act: (cubit) => cubit.increment(),
+        expect: <int>[3],
+      );
     });
 
     group('AsyncCounterCubit', () {

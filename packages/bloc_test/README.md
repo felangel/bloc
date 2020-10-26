@@ -55,6 +55,8 @@ expect(counterBloc.state, equals(3));
 
 `build` should be used for all `cubit` initialization and preparation and must return the `cubit` under test.
 
+`seed` is an optional state which will be used to seed the `cubit` before `act` is called.
+
 `act` is an optional callback which will be invoked with the `cubit` under test and should be used to `add` events to the `cubit`.
 
 `skip` is an optional `int` which can be used to skip any number of states and defaults to `0`.
@@ -82,6 +84,18 @@ group('CounterBloc', () {
     expect: [1],
   );
 });
+```
+
+`blocTest` can optionally be used with a seeded state.
+
+```dart
+blocTest(
+  'CounterCubit emits [10] when seeded with 9',
+  build: () => CounterCubit(),
+  seed: 9,
+  act: (cubit) => cubit.increment(),
+  expect: [10],
+);
 ```
 
 `blocTest` can also be used to `skip` any number of emitted states before asserting against the expected states. The default value is 0.

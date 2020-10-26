@@ -64,6 +64,14 @@ void main() {
         expect: const <int>[11],
       );
 
+      blocTest<CounterBloc, int>(
+        'emits [11] when CounterEvent.increment is added and seed 10',
+        build: () => CounterBloc(),
+        seed: 10,
+        act: (bloc) => bloc.add(CounterEvent.increment),
+        expect: const <int>[11],
+      );
+
       test('fails immediately when expectation is incorrect', () async {
         const expectedError = '''Expected: [2]
   Actual: [1]
