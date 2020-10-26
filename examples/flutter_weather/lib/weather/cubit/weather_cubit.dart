@@ -31,9 +31,7 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
         state.copyWith(
           status: WeatherStatus.success,
           temperatureUnits: units,
-          weather: weather.copyWith(
-            temperature: Temperature(units: units, value: value),
-          ),
+          weather: weather.copyWith(temperature: Temperature(value: value)),
         ),
       );
     } on Exception {
@@ -42,6 +40,8 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
   }
 
   Future<void> refreshWeather() async {
+    if (!state.status.isSuccess) return;
+    if (state.weather?.location == null) return;
     try {
       final weather = Weather.fromRepository(
         await _weatherRepository.getWeather(state.weather.location),
@@ -55,9 +55,7 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
         state.copyWith(
           status: WeatherStatus.success,
           temperatureUnits: units,
-          weather: weather.copyWith(
-            temperature: Temperature(units: units, value: value),
-          ),
+          weather: weather.copyWith(temperature: Temperature(value: value)),
         ),
       );
     } on Exception {
@@ -83,9 +81,7 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
     emit(
       state.copyWith(
         temperatureUnits: units,
-        weather: state.weather.copyWith(
-          temperature: Temperature(units: units, value: value),
-        ),
+        weather: state.weather.copyWith(temperature: Temperature(value: value)),
       ),
     );
   }

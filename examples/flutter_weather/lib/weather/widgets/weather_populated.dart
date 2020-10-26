@@ -7,10 +7,12 @@ class WeatherPopulated extends StatelessWidget {
   const WeatherPopulated({
     Key key,
     @required this.weather,
+    @required this.units,
     @required this.onRefresh,
   }) : super(key: key);
 
   final Weather weather;
+  final TemperatureUnits units;
   final ValueGetter<Future<void>> onRefresh;
 
   @override
@@ -18,7 +20,7 @@ class WeatherPopulated extends StatelessWidget {
     final theme = Theme.of(context);
     return Stack(
       children: [
-        const _WeatherBackground(),
+        _WeatherBackground(),
         RefreshIndicator(
           onRefresh: onRefresh,
           child: SingleChildScrollView(
@@ -37,7 +39,7 @@ class WeatherPopulated extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    weather.formattedTemperature(),
+                    weather.formattedTemperature(units),
                     style: theme.textTheme.headline3.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -93,8 +95,6 @@ extension on WeatherCondition {
 }
 
 class _WeatherBackground extends StatelessWidget {
-  const _WeatherBackground({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).primaryColor;
@@ -130,7 +130,7 @@ extension on Color {
 }
 
 extension on Weather {
-  String formattedTemperature() {
-    return '''${temperature.value.toStringAsPrecision(2)}°${temperature.units.isCelsius ? 'C' : 'F'}''';
+  String formattedTemperature(TemperatureUnits units) {
+    return '''${temperature.value.toStringAsPrecision(2)}°${units.isCelsius ? 'C' : 'F'}''';
   }
 }

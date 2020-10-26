@@ -9,8 +9,6 @@ part of 'weather.dart';
 Temperature _$TemperatureFromJson(Map<String, dynamic> json) {
   return $checkedNew('Temperature', json, () {
     final val = Temperature(
-      units: $checkedConvert(json, 'units',
-          (v) => _$enumDecodeNullable(_$TemperatureUnitsEnumMap, v)),
       value: $checkedConvert(json, 'value', (v) => (v as num)?.toDouble()),
     );
     return val;
@@ -19,8 +17,33 @@ Temperature _$TemperatureFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$TemperatureToJson(Temperature instance) =>
     <String, dynamic>{
-      'units': _$TemperatureUnitsEnumMap[instance.units],
       'value': instance.value,
+    };
+
+Weather _$WeatherFromJson(Map<String, dynamic> json) {
+  return $checkedNew('Weather', json, () {
+    final val = Weather(
+      condition: $checkedConvert(json, 'condition',
+          (v) => _$enumDecodeNullable(_$WeatherConditionEnumMap, v)),
+      lastUpdated: $checkedConvert(json, 'last_updated',
+          (v) => v == null ? null : DateTime.parse(v as String)),
+      location: $checkedConvert(json, 'location', (v) => v as String),
+      temperature: $checkedConvert(
+          json,
+          'temperature',
+          (v) => v == null
+              ? null
+              : Temperature.fromJson(v as Map<String, dynamic>)),
+    );
+    return val;
+  }, fieldKeyMap: const {'lastUpdated': 'last_updated'});
+}
+
+Map<String, dynamic> _$WeatherToJson(Weather instance) => <String, dynamic>{
+      'condition': _$WeatherConditionEnumMap[instance.condition],
+      'last_updated': instance.lastUpdated?.toIso8601String(),
+      'location': instance.location,
+      'temperature': instance.temperature?.toJson(),
     };
 
 T _$enumDecode<T>(
@@ -54,37 +77,6 @@ T _$enumDecodeNullable<T>(
   }
   return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
 }
-
-const _$TemperatureUnitsEnumMap = {
-  TemperatureUnits.fahrenheit: 'fahrenheit',
-  TemperatureUnits.celsius: 'celsius',
-};
-
-Weather _$WeatherFromJson(Map<String, dynamic> json) {
-  return $checkedNew('Weather', json, () {
-    final val = Weather(
-      condition: $checkedConvert(json, 'condition',
-          (v) => _$enumDecodeNullable(_$WeatherConditionEnumMap, v)),
-      lastUpdated: $checkedConvert(json, 'last_updated',
-          (v) => v == null ? null : DateTime.parse(v as String)),
-      location: $checkedConvert(json, 'location', (v) => v as String),
-      temperature: $checkedConvert(
-          json,
-          'temperature',
-          (v) => v == null
-              ? null
-              : Temperature.fromJson(v as Map<String, dynamic>)),
-    );
-    return val;
-  }, fieldKeyMap: const {'lastUpdated': 'last_updated'});
-}
-
-Map<String, dynamic> _$WeatherToJson(Weather instance) => <String, dynamic>{
-      'condition': _$WeatherConditionEnumMap[instance.condition],
-      'last_updated': instance.lastUpdated?.toIso8601String(),
-      'location': instance.location,
-      'temperature': instance.temperature?.toJson(),
-    };
 
 const _$WeatherConditionEnumMap = {
   WeatherCondition.clear: 'clear',

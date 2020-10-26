@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/weather/weather.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-const _defaultColor = Color(0xFF2196F3);
-
 class ThemeCubit extends HydratedCubit<Color> {
-  ThemeCubit() : super(_defaultColor);
+  ThemeCubit() : super(defaultColor);
+
+  static const defaultColor = Color(0xFF2196F3);
 
   void updateTheme(Weather weather) => emit(weather.toColor);
 
@@ -33,7 +33,7 @@ extension on Weather {
         return Colors.indigoAccent;
       case WeatherCondition.unknown:
       default:
-        return _defaultColor;
+        return ThemeCubit.defaultColor;
     }
   }
 }

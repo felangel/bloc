@@ -54,6 +54,7 @@ class WeatherView extends StatelessWidget {
                   onRefresh: () =>
                       context.bloc<WeatherCubit>().refreshWeather(),
                   weather: state.weather,
+                  units: state.temperatureUnits,
                 );
               case WeatherStatus.failure:
               default:
