@@ -131,6 +131,6 @@ extension on Color {
 
 extension on Weather {
   String formattedTemperature() {
-    return '''${temperature.value.toStringAsPrecision(2)}°${temperature.units == TemperatureUnits.celsius ? 'C' : 'F'}''';
+    return '''${temperature.value.toStringAsPrecision(2)}°${temperature.units.isCelsius ? 'C' : 'F'}''';
   }
 }

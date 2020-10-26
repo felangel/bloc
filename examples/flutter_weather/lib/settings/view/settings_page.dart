@@ -30,7 +30,7 @@ class SettingsPage extends StatelessWidget {
                   'Use metric measurements for temperature units.',
                 ),
                 trailing: Switch(
-                  value: state.temperatureUnits == TemperatureUnits.celsius,
+                  value: state.temperatureUnits.isCelsius,
                   onChanged: (_) => context.bloc<WeatherCubit>().toggleUnits(),
                 ),
               );

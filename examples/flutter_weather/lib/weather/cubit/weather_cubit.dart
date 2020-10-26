@@ -23,7 +23,7 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
         await _weatherRepository.getWeather(city),
       );
       final units = state.temperatureUnits;
-      final value = units == TemperatureUnits.fahrenheit
+      final value = units.isFahrenheit
           ? weather.temperature.value.toFahrenheit()
           : weather.temperature.value;
 
@@ -47,7 +47,7 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
         await _weatherRepository.getWeather(state.weather.location),
       );
       final units = state.temperatureUnits;
-      final value = units == TemperatureUnits.fahrenheit
+      final value = units.isFahrenheit
           ? weather.temperature.value.toFahrenheit()
           : weather.temperature.value;
 
@@ -66,17 +66,17 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
   }
 
   void toggleUnits() {
-    final units = state.temperatureUnits == TemperatureUnits.fahrenheit
+    final units = state.temperatureUnits.isFahrenheit
         ? TemperatureUnits.celsius
         : TemperatureUnits.fahrenheit;
 
-    if (state.status != WeatherStatus.success) {
+    if (!state.status.isSuccess) {
       emit(state.copyWith(temperatureUnits: units));
       return;
     }
 
     final temperature = state.weather.temperature;
-    final value = units == TemperatureUnits.celsius
+    final value = units.isCelsius
         ? temperature.value.toCelsius()
         : temperature.value.toFahrenheit();
 
