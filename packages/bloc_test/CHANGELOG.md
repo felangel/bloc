@@ -1,3 +1,7 @@
+# 7.1.0
+
+- feat: add `seed` property to `blocTest`
+
 # 7.0.6
 
 - chore: revert support `dart >=2.7.0`
