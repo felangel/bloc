@@ -280,6 +280,15 @@ void main() {
         await sleep();
         expect(SimpleCubit().state, 1);
       });
+
+      test('does not throw after clear', () async {
+        final cubit = SimpleCubit();
+        expect(cubit.state, 0);
+        cubit.increment();
+        expect(cubit.state, 1);
+        await storage.clear();
+        expect(SimpleCubit().state, 0);
+      });
     });
 
     group('CyclicCubit', () {
