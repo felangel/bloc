@@ -13,6 +13,9 @@ import 'package:test/test.dart' as test;
 /// [build] should be used for all `cubit` initialization and preparation
 /// and must return the `cubit` under test.
 ///
+/// [seed] is an optional state which will be used to seed the `cubit` before
+/// [act] is called.
+///
 /// [act] is an optional callback which will be invoked with the `cubit` under
 /// test and should be used to interact with the `cubit`.
 ///
@@ -39,14 +42,15 @@ import 'package:test/test.dart' as test;
 /// );
 /// ```
 ///
-/// [blocTest] can also be used to test the initial state of the `cubit`
-/// by omitting [act].
+/// [blocTest] can optionally be used with a seeded state.
 ///
 /// ```dart
 /// blocTest(
-///   'CounterCubit emits [] when nothing is called',
+///   'CounterCubit emits [10] when seeded with 9',
 ///   build: () => CounterCubit(),
-///   expect: [],
+///   seed: 9,
+///   act: (cubit) => cubit.increment(),
+///   expect: [10],
 /// );
 /// ```
 ///
@@ -111,6 +115,7 @@ import 'package:test/test.dart' as test;
 void blocTest<C extends Cubit<State>, State>(
   String description, {
   @required C Function() build,
+  State seed,
   Function(C cubit) act,
   Duration wait,
   int skip = 0,
@@ -122,6 +127,7 @@ void blocTest<C extends Cubit<State>, State>(
     await runBlocTest<C, State>(
       description,
       build: build,
+      seed: seed,
       act: act,
       wait: wait,
       skip: skip,
@@ -138,6 +144,7 @@ void blocTest<C extends Cubit<State>, State>(
 Future<void> runBlocTest<C extends Cubit<State>, State>(
   String description, {
   @required C Function() build,
+  State seed,
   Function(C cubit) act,
   Duration wait,
   int skip = 0,
@@ -151,6 +158,8 @@ Future<void> runBlocTest<C extends Cubit<State>, State>(
     () async {
       final states = <State>[];
       final cubit = build();
+      // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+      if (seed != null) cubit.emit(seed);
       final subscription = cubit.skip(skip).listen(states.add);
       try {
         await act?.call(cubit);
