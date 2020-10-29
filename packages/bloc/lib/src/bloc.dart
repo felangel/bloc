@@ -31,88 +31,6 @@ abstract class Bloc<Event, State> extends Cubit<State>
 
   bool _emitted = false;
 
-  /// Called whenever an [event] is [add]ed to the [Bloc].
-  /// A great spot to add logging/analytics at the individual [Bloc] level.
-  ///
-  /// **Note: `super.onEvent` should always be called last.**
-  /// ```dart
-  /// @override
-  /// void onEvent(Event event) {
-  ///   // Custom onEvent logic goes here
-  ///
-  ///   // Always call super.onEvent with the current event
-  ///   super.onEvent(event);
-  /// }
-  /// ```
-  ///
-  /// See also:
-  ///
-  /// * [BlocObserver] for observing [Bloc] behavior globally.
-  ///
-  @protected
-  @mustCallSuper
-  void onEvent(Event event) {
-    // ignore: invalid_use_of_protected_member
-    observer.onEvent(this, event);
-  }
-
-  /// Called whenever a [transition] occurs with the given [transition].
-  /// A [transition] occurs when a new `event` is [add]ed and [mapEventToState]
-  /// executed.
-  /// [onTransition] is called before a [Bloc]'s [state] has been updated.
-  /// A great spot to add logging/analytics at the individual [Bloc] level.
-  ///
-  /// **Note: `super.onTransition` should always be called last.**
-  /// ```dart
-  /// @override
-  /// void onTransition(Transition<Event, State> transition) {
-  ///   // Custom onTransition logic goes here
-  ///
-  ///   // Always call super.onTransition with the current transition
-  ///   super.onTransition(transition);
-  /// }
-  /// ```
-  ///
-  /// See also:
-  ///
-  /// * [BlocObserver] for observing [Bloc] behavior globally.
-  ///
-  @protected
-  @mustCallSuper
-  void onTransition(Transition<Event, State> transition) {
-    // ignore: invalid_use_of_protected_member
-    observer.onTransition(this, transition);
-  }
-
-  /// Called whenever an [error] is thrown within [mapEventToState].
-  /// By default all [error]s will be ignored and [Bloc] functionality will be
-  /// unaffected.
-  /// The [stackTrace] argument may be `null` if the [state] stream received
-  /// an error without a [stackTrace].
-  /// A great spot to handle errors at the individual [Bloc] level.
-  ///
-  /// **Note: `super.onError` should always be called last.**
-  /// ```dart
-  /// @override
-  /// void onError(Object error, StackTrace stackTrace) {
-  ///   // Custom onError logic goes here
-  ///
-  ///   // Always call super.onError with the current error and stackTrace
-  ///   super.onError(error, stackTrace);
-  /// }
-  /// ```
-  ///
-  /// See also:
-  ///
-  /// * [BlocObserver] for observing [Bloc] behavior globally.
-  ///
-  @protected
-  @mustCallSuper
-  @override
-  void onError(Object error, StackTrace stackTrace) {
-    super.onError(error, stackTrace);
-  }
-
   /// Notifies the [Bloc] of a new [event] which triggers [mapEventToState].
   /// If [close] has already been called, any subsequent calls to [add] will
   /// be ignored and will not result in any subsequent state changes.
@@ -127,24 +45,29 @@ abstract class Bloc<Event, State> extends Cubit<State>
     }
   }
 
-  /// Notifies the [Bloc] of an [error] which triggers [onError].
-  @override
-  void addError(Object error, [StackTrace stackTrace]) {
-    onError(error, stackTrace);
-  }
-
-  /// Closes the `event` and `state` `Streams`.
-  /// This method should be called when a [Bloc] is no longer needed.
-  /// Once [close] is called, `events` that are [add]ed will not be
-  /// processed.
-  /// In addition, if [close] is called while `events` are still being
-  /// processed, the [Bloc] will finish processing the pending `events`.
-  @override
+  /// Called whenever an [event] is [add]ed to the [Bloc].
+  /// A great spot to add logging/analytics at the individual [Bloc] level.
+  ///
+  /// **Note: `super.onEvent` should always be called first.**
+  /// ```dart
+  /// @override
+  /// void onEvent(Event event) {
+  ///   // Always call super.onEvent with the current event
+  ///   super.onEvent(event);
+  ///
+  ///   // Custom onEvent logic goes here
+  /// }
+  /// ```
+  ///
+  /// See also:
+  ///
+  /// * [BlocObserver] for observing [Bloc] behavior globally.
+  ///
+  @protected
   @mustCallSuper
-  Future<void> close() async {
-    await _eventController.close();
-    await _transitionSubscription?.cancel();
-    return super.close();
+  void onEvent(Event event) {
+    // ignore: invalid_use_of_protected_member
+    observer.onEvent(this, event);
   }
 
   /// Transforms the [events] stream along with a [transitionFn] function into
@@ -187,10 +110,9 @@ abstract class Bloc<Event, State> extends Cubit<State>
   }
 
   /// Must be implemented when a class extends [Bloc].
-  /// Takes the incoming [event] as the argument.
-  /// [mapEventToState] is called whenever an [event] is [add]ed.
-  /// [mapEventToState] must convert that [event] into a new [state]
-  /// and return the new [state] in the form of a `Stream<State>`.
+  /// [mapEventToState] is called whenever an [event] is [add]ed
+  /// and is responsible for converting that [event] into a new [state].
+  /// [mapEventToState] can `yield` zero, one, or multiple states for an event.
   Stream<State> mapEventToState(Event event);
 
   /// Transforms the `Stream<Transition>` into a new `Stream<Transition>`.
@@ -216,10 +138,87 @@ abstract class Bloc<Event, State> extends Cubit<State>
     return transitions;
   }
 
+  /// Called whenever a [transition] occurs with the given [transition].
+  /// A [transition] occurs when a new `event` is [add]ed and [mapEventToState]
+  /// executed.
+  /// [onTransition] is called before a [Bloc]'s [state] has been updated.
+  /// A great spot to add logging/analytics at the individual [Bloc] level.
+  ///
+  /// **Note: `super.onTransition` should always be called first.**
+  /// ```dart
+  /// @override
+  /// void onTransition(Transition<Event, State> transition) {
+  ///   // Always call super.onTransition with the current transition
+  ///   super.onTransition(transition);
+  ///
+  ///   // Custom onTransition logic goes here
+  /// }
+  /// ```
+  ///
+  /// See also:
+  ///
+  /// * [BlocObserver] for observing [Bloc] behavior globally.
+  ///
+  @protected
+  @mustCallSuper
+  void onTransition(Transition<Event, State> transition) {
+    // ignore: invalid_use_of_protected_member
+    observer.onTransition(this, transition);
+  }
+
+  /// Notifies the [Bloc] of an [error] which triggers [onError].
+  @override
+  void addError(Object error, [StackTrace stackTrace]) {
+    onError(error, stackTrace);
+  }
+
+  /// Called whenever an [error] is thrown within [mapEventToState].
+  /// By default all [error]s will be ignored and [Bloc] functionality will be
+  /// unaffected.
+  /// The [stackTrace] argument may be `null` if the [state] stream received
+  /// an error without a [stackTrace].
+  /// A great spot to handle errors at the individual [Bloc] level.
+  ///
+  /// **Note: `super.onError` should always be called last.**
+  /// ```dart
+  /// @override
+  /// void onError(Object error, StackTrace stackTrace) {
+  ///   // Custom onError logic goes here
+  ///
+  ///   // Always call super.onError with the current error and stackTrace
+  ///   super.onError(error, stackTrace);
+  /// }
+  /// ```
+  ///
+  /// See also:
+  ///
+  /// * [BlocObserver] for observing [Bloc] behavior globally.
+  ///
+  @protected
+  @mustCallSuper
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+  }
+
+  /// Closes the `event` and `state` `Streams`.
+  /// This method should be called when a [Bloc] is no longer needed.
+  /// Once [close] is called, `events` that are [add]ed will not be
+  /// processed.
+  /// In addition, if [close] is called while `events` are still being
+  /// processed, the [Bloc] will finish processing the pending `events`.
+  @override
+  @mustCallSuper
+  Future<void> close() async {
+    await _eventController.close();
+    await _transitionSubscription?.cancel();
+    return super.close();
+  }
+
   /// **[emit] should never be used outside of tests.**
   ///
   /// Updates the state of the bloc to the provided [state].
-  /// A bloc's state should be only be updated by `yielding` a new `state`
+  /// A bloc's state should only be updated by `yielding` a new `state`
   /// from `mapEventToState` in response to an event.
   @visibleForTesting
   @override

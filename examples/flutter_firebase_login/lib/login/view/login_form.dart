@@ -20,24 +20,26 @@ class LoginForm extends StatelessWidget {
       },
       child: Align(
         alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'assets/bloc_logo_small.png',
-              height: 120,
-            ),
-            const SizedBox(height: 16.0),
-            _EmailInput(),
-            const SizedBox(height: 8.0),
-            _PasswordInput(),
-            const SizedBox(height: 8.0),
-            _LoginButton(),
-            const SizedBox(height: 8.0),
-            _GoogleLoginButton(),
-            const SizedBox(height: 4.0),
-            _SignUpButton(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/bloc_logo_small.png',
+                height: 120,
+              ),
+              const SizedBox(height: 16.0),
+              _EmailInput(),
+              const SizedBox(height: 8.0),
+              _PasswordInput(),
+              const SizedBox(height: 8.0),
+              _LoginButton(),
+              const SizedBox(height: 8.0),
+              _GoogleLoginButton(),
+              const SizedBox(height: 4.0),
+              _SignUpButton(),
+            ],
+          ),
         ),
       ),
     );

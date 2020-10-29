@@ -20,7 +20,7 @@ In this case, the [firebase_auth](https://pub.dev/packages/firebase_auth) and [g
 
 ## Authentication Repository
 
-The `AuthenticationRepository` will be responsible for abstracting the internal implementation details of how we authentication and fetch user information. In this case, it will be integrating with firebase but we can always change the internal implementation later on and our application will be unaffected.
+The `AuthenticationRepository` will be responsible for abstracting the internal implementation details of how we authenticate and fetch user information. In this case, it will be integrating with firebase but we can always change the internal implementation later on and our application will be unaffected.
 
 ### Setup
 
@@ -213,6 +213,12 @@ The `SignUpState` reuses the same `Email` and `Password` form input models becau
 The `SignUpCubit` is extremely similar to the `LoginCubit` with the main exception being it exposes an API to submit the form as opposed to login.
 
 [sign_up_cubit.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/cubit/sign_up_cubit.dart ':include')
+
+## Sign Up Form
+
+The `SignUpForm` is a responsible for rendering the form in response to the `SignUpState` and invokes methods on the `SignUpCubit` in response to user interactions.
+
+[sign_up_form.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/view/sign_up_form.dart ':include')
 
 ## Home Page
 

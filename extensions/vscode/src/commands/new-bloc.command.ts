@@ -9,7 +9,7 @@ import {
   getBlocStateTemplate,
   getBlocTemplate,
 } from "../templates";
-import { getBlocType, BlocType } from "../utils";
+import { getBlocType, BlocType, TemplateType } from "../utils";
 
 export const newBloc = async (uri: Uri) => {
   const blocName = await promptForBlocName();
@@ -29,7 +29,7 @@ export const newBloc = async (uri: Uri) => {
     targetDirectory = uri.fsPath;
   }
 
-  const blocType = await getBlocType();
+  const blocType = await getBlocType(TemplateType.Bloc);
   const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
   try {
     await generateBlocCode(blocName, targetDirectory, blocType);

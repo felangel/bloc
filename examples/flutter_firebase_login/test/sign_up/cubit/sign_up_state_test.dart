@@ -6,7 +6,12 @@ import 'package:formz/formz.dart';
 
 void main() {
   const email = Email.dirty('email');
-  const password = Password.dirty('password');
+  const passwordString = 'password';
+  const password = Password.dirty(passwordString);
+  const confirmedPassword = ConfirmedPassword.dirty(
+    password: passwordString,
+    value: passwordString,
+  );
   group('SignUpState', () {
     test('supports value comparisons', () {
       expect(SignUpState(), SignUpState());
@@ -34,6 +39,15 @@ void main() {
       expect(
         SignUpState().copyWith(password: password),
         SignUpState(password: password),
+      );
+    });
+
+    test(
+        'returns object with updated confirmedPassword'
+        ' when confirmedPassword is passed', () {
+      expect(
+        SignUpState().copyWith(confirmedPassword: confirmedPassword),
+        SignUpState(confirmedPassword: confirmedPassword),
       );
     });
   });

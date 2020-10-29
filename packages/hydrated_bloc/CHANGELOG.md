@@ -1,3 +1,11 @@
+# 6.0.3
+
+- fix: `HydratedStorage` exception due to closed box on `hydrate`
+
+# 6.0.2
+
+- docs: add missing inline documentation for `hydrate`
+
 # 6.0.1
 
 - fix: compatibility with flutter_web

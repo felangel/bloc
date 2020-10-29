@@ -1,12 +1,14 @@
 buildscript {
+    ext.kotlin_version = '1.3.50'
     repositories {
         google()
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
-        classpath 'com.google.gms:google-services:4.3.2'
+        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.google.gms:google-services:4.3.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -15,16 +17,6 @@ allprojects {
         google()
         jcenter()
     }
-}
-
-// This block encapsulates custom properties and makes them available to all
-// modules in the project.
-ext {
-    // The following are only a few examples of the types of properties you can define.
-    compileSdkVersion = 28
-    // You can also use this to specify versions for dependencies. Having consistent
-    // versions between modules can avoid behavior conflicts.
-    supportLibVersion = '1.0.0-beta01'
 }
 
 rootProject.buildDir = '../build'

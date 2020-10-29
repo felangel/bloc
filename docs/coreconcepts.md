@@ -34,11 +34,11 @@ We can put it all together like so:
 
 [main.dart](_snippets/core_concepts/streams_main.dart.md ':include')
 
-Now that we have a basic understand of how `Streams` work in Dart we're ready to learn about the core component of the bloc package: a `Cubit`.
+Now that we have a basic understanding of how `Streams` work in Dart we're ready to learn about the core component of the bloc package: a `Cubit`.
 
 ## Cubit
 
-> A `Cubit` is special type of `Stream` which is used as the base for the `Bloc` class (which we will cover later on).
+> A `Cubit` is a special type of `Stream` which is used as the base for the `Bloc` class (which we will cover later on).
 
 ![Cubit Architecture](assets/cubit_architecture_full.png)
 
@@ -296,7 +296,7 @@ Just like when creating the `CounterCubit`, we must specify an initial state by 
 
 ### State Changes
 
-Unlike when creating the `CounterCubit`, rather than defining functions to trigger state changes, we need to override `mapEventToState`. This will be responsible for converting any incoming events into one or more outgoing states.
+Unlike using `CounterCubit` directly where we define functions to trigger state changes, using `Bloc` requires us to instead override `mapEventToState`. This will be responsible for converting any incoming events into one or more outgoing states.
 
 ```dart
 enum CounterEvent { increment }

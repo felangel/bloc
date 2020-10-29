@@ -9,6 +9,8 @@ Bloc은 몇 가지 pub pachages로 구성되어 있습니다:
 - [bloc](https://pub.dev/packages/bloc) - 핵심 bloc 라이브러리
 - [flutter_bloc](https://pub.dev/packages/flutter_bloc) - bloc을 이용하여 빠른 반응형 모바일 어플리케이션 개발을 돕는 강력한 Flutter Widget
 - [angular_bloc](https://pub.dev/packages/angular_bloc) - bloc을 이용하여 빠른 반응형 웹 어플리케이션 개발을 돕는 강력한 Angular Component
+- [hydrated_bloc](https://pub.dev/packages/hydrated_bloc) - An extension to the bloc state management library which automatically persists and restores bloc states.
+- [replay_bloc](https://pub.dev/packages/replay_bloc) - An extension to the bloc state management library which adds support for undo and redo.
   
 ## 설치
 

@@ -114,27 +114,24 @@ class HydratedStorage implements Storage {
   dynamic read(String key) => _box.isOpen ? _box.get(key) : null;
 
   @override
-  Future<void> write(String key, dynamic value) {
+  Future<void> write(String key, dynamic value) async {
     if (_box.isOpen) {
       return _lock.synchronized(() => _box.put(key, value));
     }
-    return null;
   }
 
   @override
-  Future<void> delete(String key) {
+  Future<void> delete(String key) async {
     if (_box.isOpen) {
       return _lock.synchronized(() => _box.delete(key));
     }
-    return null;
   }
 
   @override
-  Future<void> clear() {
+  Future<void> clear() async {
     if (_box.isOpen) {
       _instance = null;
       return _lock.synchronized(_box.deleteFromDisk);
     }
-    return null;
   }
 }

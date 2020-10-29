@@ -21,6 +21,20 @@
       type="image/x-icon"
     />
     <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css" />
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/dist/style.min.css"
+      title="docsify-darklight-theme"
+      type="text/css"
+    />
+    <style>
+      body .app-nav {
+        color: #34495e !important;
+      }
+      .cover {
+        color: #34495e !important;
+      }
+    </style>
   </head>
   <body>
     <div id="app">Please wait...</div>
@@ -60,8 +74,15 @@
           depth: 6,
         },
         ga: "UA-131259352-1",
+        darklightTheme: {
+          defaultTheme: "light",
+        },
       };
     </script>
+    <script
+      src="//cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/dist/index.min.js"
+      type="text/javascript"
+    ></script>
     <script src="./docsify/lib/docsify.min.js"></script>
     <script src="./docsify/lib/plugins/emoji.min.js"></script>
     <script src="./docsify/lib/plugins/search.min.js"></script>

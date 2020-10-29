@@ -72,9 +72,13 @@ abstract class ReplayBloc<Event extends ReplayEvent, State>
   }
 }
 
+/// A mixin which enables `undo` and `redo` operations
+/// for [Bloc] classes.
 mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
   final _changeStack = _ChangeStack<State>();
 
+  /// Sets the internal `undo`/`redo` size limit.
+  /// By default there is no limit.
   set limit(int limit) => _changeStack.limit = limit;
 
   @override

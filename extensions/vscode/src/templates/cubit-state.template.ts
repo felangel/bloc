@@ -22,12 +22,12 @@ function getEquatableCubitStateTemplate(cubitName: string): string {
 
 abstract class ${pascalCaseCubitName}State extends Equatable {
   const ${pascalCaseCubitName}State();
-}
 
-class ${pascalCaseCubitName}Initial extends ${pascalCaseCubitName}State {
   @override
   List<Object> get props => [];
 }
+
+class ${pascalCaseCubitName}Initial extends ${pascalCaseCubitName}State {}
 `;
 }
 
@@ -50,7 +50,7 @@ function getFreezedCubitStateTemplate(cubitName: string): string {
 
 @freezed
 abstract class ${pascalCaseCubitName}State with _\$${pascalCaseCubitName}State {
-  const factory ${pascalCaseCubitName}State.inital() = _Initial;
+  const factory ${pascalCaseCubitName}State.initial() = _Initial;
 }
 `;
 }

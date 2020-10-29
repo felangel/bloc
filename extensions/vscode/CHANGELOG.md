@@ -1,3 +1,17 @@
+# 5.3.2
+
+- fix: update dependencies to fix potential security vulnerabilities
+
+# 5.3.1
+
+- fix: freezed cubit template typo
+
+# 5.3.0
+
+- feat: make templates configurable via workspace settings
+- feat: improve cubit state equatable template
+- fix: remove unused dependency in freezed bloc template
+
 # 5.2.0
 
 - feat: updates to snippets

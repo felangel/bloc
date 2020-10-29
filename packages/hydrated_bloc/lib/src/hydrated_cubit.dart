@@ -99,6 +99,18 @@ mixin HydratedMixin<State> on Cubit<State> {
   /// manage persisting/restoring the [Cubit] state.
   static Storage storage;
 
+  /// Populates the internal state storage with the latest state.
+  /// This should be called when using the [HydratedMixin]
+  /// directly within the constructor body.
+  ///
+  /// ```dart
+  /// class CounterBloc extends Bloc<CounterEvent, int> with HydratedMixin {
+  ///  CounterBloc() : super(0) {
+  ///    hydrate();
+  ///  }
+  ///  ...
+  /// }
+  /// ```
   void hydrate() {
     if (storage == null) throw const StorageNotFound();
     try {

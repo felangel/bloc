@@ -9,8 +9,9 @@ dependencies:
   flutter:
     sdk: flutter
   equatable: ^1.2.3
-  firebase_auth: ^0.16.1
-  google_sign_in: ^4.5.1
+  firebase_auth: ^0.18.0+1
+  firebase_core: ^0.5.0
+  google_sign_in: ^4.5.4
   meta: ^1.1.8
 
 dev_dependencies:

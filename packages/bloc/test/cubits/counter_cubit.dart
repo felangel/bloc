@@ -10,7 +10,7 @@ class CounterCubit extends Cubit<int> {
 
   @override
   void onChange(Change<int> change) {
-    onChangeCallback?.call(change);
     super.onChange(change);
+    onChangeCallback?.call(change);
   }
 }

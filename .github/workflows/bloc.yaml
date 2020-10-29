@@ -18,7 +18,7 @@ jobs:
         working-directory: packages/bloc
     runs-on: ubuntu-latest
     container:
-      image: google/dart:2.8.4
+      image: google/dart:2.10.0
     steps:
       - uses: actions/checkout@v2
       - name: Install Dependencies
@@ -28,7 +28,7 @@ jobs:
       - name: Analyze
         run: dartanalyzer --fatal-infos --fatal-warnings lib test example
       - name: Run tests
-        run: pub run test_coverage
+        run: ../../tool/coverage.sh
       - name: Check Code Coverage
         uses: ChicagoFlutter/lcov-cop@v1.0.0
         with:
