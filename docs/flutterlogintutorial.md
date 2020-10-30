@@ -141,7 +141,7 @@ The implementation for the `AuthenticationBloc` is inside of `lib/authentication
 
 In this application, the `AuthenticationBloc` will be reacting to two different events:
 
-- `AuthenticationStatusChanged`: notifies the bloc of a change to the user's AuthenticationStatus
+- `AuthenticationStatusChanged`: notifies the bloc of a change to the user's `AuthenticationStatus`
 - `AuthenticationLogoutRequested`: notifies the bloc of a logout request
 
 [authentication_event.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/authentication/bloc/authentication_event.dart ':include')
