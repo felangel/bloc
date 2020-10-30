@@ -43,7 +43,7 @@ Next, we can create a `pubspec.yaml` for the `authentication_repository` package
 
 ?> **Note**: `package:authentication_repository` will be a pure Dart package and for simplicity we will only have a dependency on [package:meta](https://pub.dev/packages/meta) for some useful annotations.
 
-Next up, we need to implement is the `AuthenticationRepository` class itself which will be in `lib/src/authentication_repository.dart`.
+Next up, we need to implement the `AuthenticationRepository` class itself which will be in `lib/src/authentication_repository.dart`.
 
 [authentication_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/authentication_repository/lib/src/authentication_repository.dart ':include')
 
