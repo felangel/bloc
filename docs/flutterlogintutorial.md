@@ -49,7 +49,7 @@ Next up, we need to implement the `AuthenticationRepository` class itself which 
 
 The `AuthenticationRepository` exposes a `Stream` of `AuthenticationStatus` updates which will be used to notify the application when a user signs in or out.
 
-In addition, there is are `logIn` and `logOut` methods which are stubbed for simplicity but can easily be extended to authenticate with `FirebaseAuth` for example or some other authentication provider.
+In addition, there are `logIn` and `logOut` methods which are stubbed for simplicity but can easily be extended to authenticate with `FirebaseAuth` for example or some other authentication provider.
 
 ?> **Note**: Since we are maintaining a `StreamController` internally, a `dispose` method is exposed so that the controller can be closed when it is no longer needed.
 
