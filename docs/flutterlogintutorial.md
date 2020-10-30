@@ -117,7 +117,7 @@ flutter packages get
 
 ## Authentication Bloc
 
-The `AuthenticationBloc` will be responsible to reacting to changes in the authentication state (exposed by the `AuthenticationRepository`) and will emit states we can react to in the presentation layer.
+The `AuthenticationBloc` will be responsible for reacting to changes in the authentication state (exposed by the `AuthenticationRepository`) and will emit states we can react to in the presentation layer.
 
 The implementation for the `AuthenticationBloc` is inside of `lib/authentication` because we treat authentication as a feature in our application layer.
 
