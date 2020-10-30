@@ -97,7 +97,7 @@ Now that the models have been defined, we can implement the `UserRepository` cla
 
 For this simple example, the `UserRepository` exposes a single method `getUser` which will retrieve the current user. We are stubbing this but in practice this is where we would query the current user from the backend.
 
-Almost done with the `user_repository` package -- the only thing left to do is create the `user_repository.dart` file in `lib` which define the public exports:
+Almost done with the `user_repository` package -- the only thing left to do is to create the `user_repository.dart` file in `lib` which defines the public exports:
 
 [user_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/user_repository.dart ':include')
 
