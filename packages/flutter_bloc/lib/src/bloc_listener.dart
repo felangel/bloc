@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/single_child_widget.dart';
+import 'package:nested/nested.dart';
 
 import 'bloc_provider.dart';
 

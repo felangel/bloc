@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
+import 'package:nested/nested.dart';
+
+/// A function that creates a repository of type [T].
+typedef Create<T> = T Function(BuildContext);
 
 /// Mixin which allows `MultiRepositoryProvider` to infer the types
 /// of multiple [RepositoryProvider]s.
@@ -22,21 +26,15 @@ mixin RepositoryProviderSingleChildWidget on SingleChildWidget {}
 /// );
 /// ```
 /// {@endtemplate}
-class RepositoryProvider<T> extends Provider<T>
+class RepositoryProvider<T> extends SingleChildStatefulWidget
     with RepositoryProviderSingleChildWidget {
   /// {@macro repository_provider}
   RepositoryProvider({
     Key key,
-    @required Create<T> create,
-    Widget child,
-    bool lazy,
-  }) : super(
-          key: key,
-          create: create,
-          dispose: (_, __) {},
-          child: child,
-          lazy: lazy,
-        );
+    @required this.create,
+    this.child,
+    this.lazy = true,
+  }) : super(key: key);
 
   /// Takes a repository and a [child] which will have access to the repository.
   /// A new repository should not be created in `RepositoryProvider.value`.
@@ -46,18 +44,29 @@ class RepositoryProvider<T> extends Provider<T>
     Key key,
     @required T value,
     Widget child,
-  }) : super.value(
+  }) : this(
           key: key,
-          value: value,
+          create: (_) => value,
           child: child,
         );
+
+  /// Creates the repository of type [T].
+  final Create<T> create;
+
+  /// Widget which will have access to the repository.
+  final Widget child;
+
+  /// Whether the repository should be created lazily.
+  /// Defaults to `true`.
+  final bool lazy;
 
   /// Method that allows widgets to access a repository instance as long as
   /// their `BuildContext` contains a [RepositoryProvider] instance.
   static T of<T>(BuildContext context) {
-    try {
-      return Provider.of<T>(context, listen: false);
-    } on ProviderNotFoundException catch (_) {
+    final provider = context
+        .getElementForInheritedWidgetOfExactType<_InheritedRepository<T>>()
+        ?.widget as _InheritedRepository<T>;
+    if (provider == null) {
       throw FlutterError(
         '''
         RepositoryProvider.of() called with a context that does not contain a repository of type $T.
@@ -69,6 +78,40 @@ class RepositoryProvider<T> extends Provider<T>
         ''',
       );
     }
+    return provider.value();
+  }
+
+  @override
+  _RepositoryProviderState<T> createState() => _RepositoryProviderState<T>();
+}
+
+class _RepositoryProviderState<T>
+    extends SingleChildState<RepositoryProvider<T>> {
+  T _repository;
+  final _completer = Completer<T>();
+
+  @override
+  void initState() {
+    super.initState();
+    if (!widget.lazy) {
+      _repository = widget.create(context);
+      _completer.complete(_repository);
+    }
+  }
+
+  @override
+  Widget buildWithChild(BuildContext context, Widget child) {
+    return _InheritedRepository(
+      value: () {
+        if (!_completer.isCompleted) {
+          _repository = widget.create(context);
+          _completer.complete(_repository);
+        }
+        return _repository;
+      },
+      future: _completer.future,
+      child: child ?? widget.child,
+    );
   }
 }
 
@@ -84,4 +127,62 @@ extension RepositoryProviderExtension on BuildContext {
   /// RepositoryProvider.of<T>(context)
   /// ```
   T repository<T>() => RepositoryProvider.of<T>(this);
+}
+
+class _InheritedRepository<T> extends InheritedWidget {
+  const _InheritedRepository({
+    Key key,
+    this.future,
+    this.value,
+    @required Widget child,
+  })  : assert(child != null),
+        super(key: key, child: child);
+
+  final Future<void> future;
+  final ValueGetter<T> value;
+
+  @override
+  bool updateShouldNotify(_InheritedRepository<T> oldWidget) {
+    return oldWidget.future != future;
+  }
+
+  @override
+  _InheritedRepositoryElement<T> createElement() =>
+      _InheritedRepositoryElement<T>(this);
+}
+
+class _InheritedRepositoryElement<T> extends InheritedElement {
+  _InheritedRepositoryElement(_InheritedRepository<T> widget) : super(widget) {
+    widget.future?.then((_) => _handleUpdate());
+  }
+
+  @override
+  _InheritedRepository<T> get widget => super.widget as _InheritedRepository<T>;
+
+  bool _dirty = false;
+
+  @override
+  void update(_InheritedRepository<T> newWidget) {
+    final oldFuture = widget.future;
+    final newFuture = newWidget.future;
+    if (oldFuture != newFuture) newFuture?.then((_) => _handleUpdate());
+    super.update(newWidget);
+  }
+
+  @override
+  Widget build() {
+    if (_dirty) notifyClients(widget);
+    return super.build();
+  }
+
+  void _handleUpdate() {
+    _dirty = true;
+    markNeedsBuild();
+  }
+
+  @override
+  void notifyClients(_InheritedRepository<T> oldWidget) {
+    super.notifyClients(oldWidget);
+    _dirty = false;
+  }
 }

@@ -1,17 +1,31 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 
 import 'package:bloc/bloc.dart';
-import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
+import 'package:inherited_stream/inherited_stream.dart';
+import 'package:nested/nested.dart';
 
-/// A function that creates a `Bloc` of type [T].
-typedef CreateBloc<T extends Cubit<dynamic>> = T Function(
-  BuildContext context,
-);
+/// A function that creates a [Cubit] of type [T].
+typedef CreateBloc<T extends Cubit<dynamic>> = T Function(BuildContext context);
 
 /// Mixin which allows `MultiBlocProvider` to infer the types
 /// of multiple [BlocProvider]s.
 mixin BlocProviderSingleChildWidget on SingleChildWidget {}
+
+/// Extends the [BuildContext] class with the ability
+/// to perform a lookup based on a [Cubit] type.
+extension BlocProviderExtension on BuildContext {
+  /// Performs a lookup using the [BuildContext] to obtain
+  /// the nearest ancestor [Cubit] of type [C].
+  ///
+  /// Calling this method is equivalent to calling:
+  ///
+  /// ```dart
+  /// BlocProvider.of<C>(context);
+  /// ```
+  C bloc<C extends Cubit<Object>>() => BlocProvider.of<C>(this);
+}
 
 /// {@template bloc_provider}
 /// Takes a `ValueBuilder` that is responsible for creating the `bloc` and
@@ -30,21 +44,16 @@ mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 /// );
 /// ```
 /// {@endtemplate}
-class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
+class BlocProvider<B extends Cubit<dynamic>> extends SingleChildStatefulWidget
     with BlocProviderSingleChildWidget {
   /// {@macro bloc_provider}
-  BlocProvider({
+  const BlocProvider({
     Key key,
-    @required CreateBloc<T> create,
-    Widget child,
-    bool lazy,
-  }) : this._(
-          key: key,
-          create: create,
-          dispose: (_, bloc) => bloc?.close(),
-          child: child,
-          lazy: lazy,
-        );
+    @required this.create,
+    this.child,
+    this.lazy = true,
+  })  : assert(create != null),
+        super(key: key);
 
   /// Takes a `bloc` and a [child] which will have access to the `bloc` via
   /// `BlocProvider.of(context)`.
@@ -65,36 +74,22 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   /// ```
   BlocProvider.value({
     Key key,
-    @required T value,
+    @required B value,
     Widget child,
-  }) : this._(
-          key: key,
-          create: (_) => value,
-          child: child,
-        );
+  }) : this(key: key, create: (_) => value, child: child);
 
-  /// Internal constructor responsible for creating the [BlocProvider].
-  /// Used by the [BlocProvider] default and value constructors.
-  BlocProvider._({
-    Key key,
-    @required Create<T> create,
-    Dispose<T> dispose,
-    this.child,
-    this.lazy,
-  })  : _create = create,
-        _dispose = dispose,
-        super(key: key, child: child);
+  /// Creates a [Cubit] of type [B].
+  final CreateBloc<B> create;
 
-  /// [child] and its descendants which will have access to the `bloc`.
+  /// Widget which will have access to the [Cubit].
   final Widget child;
 
-  /// Whether or not the `bloc` being provided should be lazily created.
+  /// Whether the [Cubit] should be created lazily.
   /// Defaults to `true`.
   final bool lazy;
 
-  final Dispose<T> _dispose;
-
-  final Create<T> _create;
+  @override
+  _BlocProviderState<B> createState() => _BlocProviderState<B>();
 
   /// Method that allows widgets to access a `cubit` instance as long as their
   /// `BuildContext` contains a [BlocProvider] instance.
@@ -103,13 +98,20 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   /// in the widget tree we can do so via:
   ///
   /// ```dart
-  /// BlocProvider.of<BlocA>(context)
+  /// BlocProvider.of<BlocA>(context);
   /// ```
-  static T of<T extends Cubit<Object>>(BuildContext context) {
-    try {
-      return Provider.of<T>(context, listen: false);
-    } on ProviderNotFoundException catch (e) {
-      if (e.valueType != T) rethrow;
+  static T of<T extends Cubit<dynamic>>(
+    BuildContext context, {
+    bool listen = false,
+  }) {
+    final provider = listen
+        ? context
+            .dependOnInheritedWidgetOfExactType<_InheritedBlocProvider<T>>()
+        : context
+            .getElementForInheritedWidgetOfExactType<
+                _InheritedBlocProvider<T>>()
+            ?.widget as _InheritedBlocProvider<T>;
+    if (provider == null) {
       throw FlutterError(
         '''
         BlocProvider.of() called with a context that does not contain a Cubit of type $T.
@@ -121,29 +123,54 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
         ''',
       );
     }
+    return provider.value();
+  }
+}
+
+class _BlocProviderState<B extends Cubit<dynamic>>
+    extends SingleChildState<BlocProvider<B>> {
+  B _bloc;
+  final _completer = Completer<B>();
+
+  @override
+  void initState() {
+    super.initState();
+    if (!widget.lazy) {
+      _bloc = widget.create(context);
+      _completer.complete(_bloc);
+    }
+  }
+
+  @override
+  void dispose() {
+    _bloc?.close();
+    super.dispose();
   }
 
   @override
   Widget buildWithChild(BuildContext context, Widget child) {
-    return InheritedProvider<T>(
-      create: _create,
-      dispose: _dispose,
-      child: child,
-      lazy: lazy,
+    return _InheritedBlocProvider(
+      child: child ?? widget.child,
+      deferredBloc: _completer.future,
+      value: () {
+        if (!_completer.isCompleted) {
+          _bloc = widget.create(context);
+          _completer.complete(_bloc);
+        }
+        return _bloc;
+      },
     );
   }
 }
 
-/// Extends the `BuildContext` class with the ability
-/// to perform a lookup based on a `Bloc` type.
-extension BlocProviderExtension on BuildContext {
-  /// Performs a lookup using the `BuildContext` to obtain
-  /// the nearest ancestor `Cubit` of type [C].
-  ///
-  /// Calling this method is equivalent to calling:
-  ///
-  /// ```dart
-  /// BlocProvider.of<C>(context)
-  /// ```
-  C bloc<C extends Cubit<Object>>() => BlocProvider.of<C>(this);
+class _InheritedBlocProvider<B extends Cubit<dynamic>>
+    extends DeferredInheritedStream<B> {
+  _InheritedBlocProvider({
+    Key key,
+    @required Future<B> deferredBloc,
+    @required this.value,
+    Widget child,
+  }) : super(key: key, deferredStream: deferredBloc, child: child);
+
+  final ValueGetter<B> value;
 }
