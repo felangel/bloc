@@ -688,7 +688,7 @@ void main() {
           OnExceptionBloc(
             exception: expectedError,
             onErrorCallback: (Object _, StackTrace __) {},
-          )..addError(expectedError, StackTrace.current);
+          ).addError(expectedError, StackTrace.current);
         }, onError: (Object error, StackTrace stackTrace) {
           expect(
             (error as CubitUnhandledErrorException).toString(),
