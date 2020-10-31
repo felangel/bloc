@@ -43,13 +43,13 @@ Next, we can create a `pubspec.yaml` for the `authentication_repository` package
 
 ?> **Note**: `package:authentication_repository` will be a pure Dart package and for simplicity we will only have a dependency on [package:meta](https://pub.dev/packages/meta) for some useful annotations.
 
-Next up, we need to implement is the `AuthenticationRepository` class itself which will be in `lib/src/authentication_repository.dart`.
+Next up, we need to implement the `AuthenticationRepository` class itself which will be in `lib/src/authentication_repository.dart`.
 
 [authentication_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/authentication_repository/lib/src/authentication_repository.dart ':include')
 
 The `AuthenticationRepository` exposes a `Stream` of `AuthenticationStatus` updates which will be used to notify the application when a user signs in or out.
 
-In addition, there is are `logIn` and `logOut` methods which are stubbed for simplicity but can easily be extended to authenticate with `FirebaseAuth` for example or some other authentication provider.
+In addition, there are `logIn` and `logOut` methods which are stubbed for simplicity but can easily be extended to authenticate with `FirebaseAuth` for example or some other authentication provider.
 
 ?> **Note**: Since we are maintaining a `StreamController` internally, a `dispose` method is exposed so that the controller can be closed when it is no longer needed.
 
@@ -97,7 +97,7 @@ Now that the models have been defined, we can implement the `UserRepository` cla
 
 For this simple example, the `UserRepository` exposes a single method `getUser` which will retrieve the current user. We are stubbing this but in practice this is where we would query the current user from the backend.
 
-Almost done with the `user_repository` package -- the only thing left to do is create the `user_repository.dart` file in `lib` which define the public exports:
+Almost done with the `user_repository` package -- the only thing left to do is to create the `user_repository.dart` file in `lib` which defines the public exports:
 
 [user_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/user_repository.dart ':include')
 
@@ -117,7 +117,7 @@ flutter packages get
 
 ## Authentication Bloc
 
-The `AuthenticationBloc` will be responsible to reacting to changes in the authentication state (exposed by the `AuthenticationRepository`) and will emit states we can react to in the presentation layer.
+The `AuthenticationBloc` will be responsible for reacting to changes in the authentication state (exposed by the `AuthenticationRepository`) and will emit states we can react to in the presentation layer.
 
 The implementation for the `AuthenticationBloc` is inside of `lib/authentication` because we treat authentication as a feature in our application layer.
 
@@ -141,7 +141,7 @@ The implementation for the `AuthenticationBloc` is inside of `lib/authentication
 
 In this application, the `AuthenticationBloc` will be reacting to two different events:
 
-- `AuthenticationStatusChanged`: notifies the bloc of a change to the user's AuthenticationStatus
+- `AuthenticationStatusChanged`: notifies the bloc of a change to the user's `AuthenticationStatus`
 - `AuthenticationLogoutRequested`: notifies the bloc of a logout request
 
 [authentication_event.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/authentication/bloc/authentication_event.dart ':include')
