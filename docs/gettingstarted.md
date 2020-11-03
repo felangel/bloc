@@ -14,15 +14,15 @@ Bloc consists of several pub packages:
 
 ## Installation
 
-The first thing we need to do is add the bloc package to our `pubspec.yaml` as a dependency.
+For a [Dart](https://dart.dev/) application, we need to add the `bloc` package to our `pubspec.yaml` as a dependency.
 
 [pubspec.yaml](_snippets/getting_started/bloc_pubspec.yaml.md ':include')
 
-For a [Flutter](https://flutter.dev/) application, we also need to add the flutter_bloc package to our `pubspec.yaml` as a dependency.
+For a [Flutter](https://flutter.dev/) application, we need to add the `flutter_bloc` package to our `pubspec.yaml` as a dependency.
 
 [pubspec.yaml](_snippets/getting_started/flutter_bloc_pubspec.yaml.md ':include')
 
-For an [AngularDart](https://angulardart.dev/) application, we also need to add the angular_bloc package to our `pubspec.yaml` as a dependency.
+For an [AngularDart](https://angulardart.dev/) application, we need to add the `angular_bloc` package to our `pubspec.yaml` as a dependency.
 
 [pubspec.yaml](_snippets/getting_started/angular_bloc_pubspec.yaml.md ':include')
 
@@ -36,14 +36,14 @@ Next we need to install bloc.
 
 ## Import
 
-Now that we have successfully installed bloc, we can create our `main.dart` and import bloc.
+Now that we have successfully installed bloc, we can create our `main.dart` and import `bloc`.
 
 [main.dart](_snippets/getting_started/bloc_main.dart.md ':include')
 
-For a Flutter application we can also import flutter_bloc.
+For a Flutter application we can import `flutter_bloc`.
 
 [main.dart](_snippets/getting_started/flutter_bloc_main.dart.md ':include')
 
-For an AngularDart application we can also import angular_bloc.
+For an AngularDart application we can import angular_bloc.
 
 [main.dart](_snippets/getting_started/angular_bloc_main.dart.md ':include')
