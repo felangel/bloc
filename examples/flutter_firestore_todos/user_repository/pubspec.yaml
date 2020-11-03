@@ -8,4 +8,4 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_auth: ^0.15.0+1
+  firebase_auth: ^0.18.2
