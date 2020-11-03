@@ -1,3 +1,8 @@
+# 6.0.0
+
+Update to `angular ^6.0.1`
+Update to `bloc ^6.1.0`
+
 # 6.0.0-dev.8
 
 Update to `bloc ^6.0.0`
