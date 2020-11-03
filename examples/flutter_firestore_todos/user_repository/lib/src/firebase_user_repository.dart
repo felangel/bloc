@@ -8,7 +8,7 @@ class FirebaseUserRepository implements UserRepository {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
 
   Future<bool> isAuthenticated() async {
-    final currentUser = await _firebaseAuth.currentUser();
+    final currentUser = _firebaseAuth.currentUser;
     return currentUser != null;
   }
 
@@ -17,6 +17,6 @@ class FirebaseUserRepository implements UserRepository {
   }
 
   Future<String> getUserId() async {
-    return (await _firebaseAuth.currentUser()).uid;
+    return (_firebaseAuth.currentUser).uid;
   }
 }
