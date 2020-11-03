@@ -7,7 +7,7 @@ import 'package:inherited_stream/inherited_stream.dart';
 import 'package:nested/nested.dart';
 
 /// A function that creates a [Cubit] of type [T].
-typedef CreateBloc<T extends Cubit<dynamic>> = T Function(BuildContext context);
+typedef CreateBloc<T extends Cubit<Object>> = T Function(BuildContext context);
 
 /// Mixin which allows `MultiBlocProvider` to infer the types
 /// of multiple [BlocProvider]s.
