@@ -5,8 +5,9 @@ environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
-  angular: ^6.0.0-alpha+1
-  angular_bloc: ^6.0.0-dev.8
+  angular: ^6.0.0
+  angular_bloc:
+    path: ../../../packages/angular_bloc
   common_github_search:
     path: ../common_github_search
 
