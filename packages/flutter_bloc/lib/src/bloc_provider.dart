@@ -17,14 +17,14 @@ mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 /// to perform a lookup based on a [Cubit] type.
 extension BlocProviderExtension on BuildContext {
   /// Performs a lookup using the [BuildContext] to obtain
-  /// the nearest ancestor [Cubit] of type [C].
+  /// the nearest ancestor [Cubit] of type [T].
   ///
   /// Calling this method is equivalent to calling:
   ///
   /// ```dart
   /// BlocProvider.of<C>(context);
   /// ```
-  C bloc<C extends Cubit<Object>>() => BlocProvider.of<C>(this);
+  T bloc<T extends Cubit<Object>>() => BlocProvider.of<T>(this);
 }
 
 /// {@template bloc_provider}
@@ -44,7 +44,7 @@ extension BlocProviderExtension on BuildContext {
 /// );
 /// ```
 /// {@endtemplate}
-class BlocProvider<B extends Cubit<dynamic>> extends SingleChildStatefulWidget
+class BlocProvider<T extends Cubit<Object>> extends SingleChildStatefulWidget
     with BlocProviderSingleChildWidget {
   /// {@macro bloc_provider}
   const BlocProvider({
@@ -74,12 +74,12 @@ class BlocProvider<B extends Cubit<dynamic>> extends SingleChildStatefulWidget
   /// ```
   BlocProvider.value({
     Key key,
-    @required B value,
+    @required T value,
     Widget child,
   }) : this(key: key, create: (_) => value, child: child);
 
-  /// Creates a [Cubit] of type [B].
-  final CreateBloc<B> create;
+  /// Creates a [Cubit] of type [T].
+  final CreateBloc<T> create;
 
   /// Widget which will have access to the [Cubit].
   final Widget child;
@@ -89,7 +89,7 @@ class BlocProvider<B extends Cubit<dynamic>> extends SingleChildStatefulWidget
   final bool lazy;
 
   @override
-  _BlocProviderState<B> createState() => _BlocProviderState<B>();
+  _BlocProviderState<T> createState() => _BlocProviderState<T>();
 
   /// Method that allows widgets to access a `cubit` instance as long as their
   /// `BuildContext` contains a [BlocProvider] instance.
@@ -100,7 +100,7 @@ class BlocProvider<B extends Cubit<dynamic>> extends SingleChildStatefulWidget
   /// ```dart
   /// BlocProvider.of<BlocA>(context);
   /// ```
-  static T of<T extends Cubit<dynamic>>(
+  static T of<T extends Cubit<Object>>(
     BuildContext context, {
     bool listen = false,
   }) {
@@ -127,10 +127,10 @@ class BlocProvider<B extends Cubit<dynamic>> extends SingleChildStatefulWidget
   }
 }
 
-class _BlocProviderState<B extends Cubit<dynamic>>
-    extends SingleChildState<BlocProvider<B>> {
-  B _bloc;
-  final _completer = Completer<B>();
+class _BlocProviderState<T extends Cubit<Object>>
+    extends SingleChildState<BlocProvider<T>> {
+  T _bloc;
+  final _completer = Completer<T>();
 
   @override
   void initState() {
@@ -163,14 +163,14 @@ class _BlocProviderState<B extends Cubit<dynamic>>
   }
 }
 
-class _InheritedBlocProvider<B extends Cubit<dynamic>>
-    extends DeferredInheritedStream<B> {
+class _InheritedBlocProvider<T extends Cubit<Object>>
+    extends DeferredInheritedStream<T> {
   _InheritedBlocProvider({
     Key key,
-    @required Future<B> deferredBloc,
+    @required Future<T> deferredBloc,
     @required this.value,
     Widget child,
   }) : super(key: key, deferredStream: deferredBloc, child: child);
 
-  final ValueGetter<B> value;
+  final ValueGetter<T> value;
 }
