@@ -4,11 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firestore_todos/blocs/authentication_bloc/bloc.dart';
 import 'package:todos_repository/todos_repository.dart';
 import 'package:flutter_firestore_todos/blocs/blocs.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_firestore_todos/screens/screens.dart';
 import 'package:user_repository/user_repository.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = SimpleBlocObserver();
+  await Firebase.initializeApp();
   runApp(TodosApp());
 }
 

@@ -15,10 +15,10 @@ class TodoEntity extends Equatable {
 
   Map<String, Object> toJson() {
     return {
-      "complete": complete,
-      "task": task,
-      "note": note,
-      "id": id,
+      'complete': complete,
+      'task': task,
+      'note': note,
+      'id': id,
     };
   }
 
@@ -32,27 +32,27 @@ class TodoEntity extends Equatable {
 
   static TodoEntity fromJson(Map<String, Object> json) {
     return TodoEntity(
-      json["task"] as String,
-      json["id"] as String,
-      json["note"] as String,
-      json["complete"] as bool,
+      json['task'] as String,
+      json['id'] as String,
+      json['note'] as String,
+      json['complete'] as bool,
     );
   }
 
   static TodoEntity fromSnapshot(DocumentSnapshot snap) {
     return TodoEntity(
-      snap.data['task'],
-      snap.documentID,
-      snap.data['note'],
-      snap.data['complete'],
+      snap.data()['task'],
+      snap.id,
+      snap.data()['note'],
+      snap.data()['complete'],
     );
   }
 
   Map<String, Object> toDocument() {
     return {
-      "complete": complete,
-      "task": task,
-      "note": note,
+      'complete': complete,
+      'task': task,
+      'note': note,
     };
   }
 }
