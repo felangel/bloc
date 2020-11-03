@@ -34,7 +34,8 @@ class RepositoryProvider<T> extends SingleChildStatefulWidget
     @required this.create,
     this.child,
     this.lazy = true,
-  }) : super(key: key);
+  })  : assert(create != null),
+        super(key: key);
 
   /// Takes a repository and a [child] which will have access to the repository.
   /// A new repository should not be created in `RepositoryProvider.value`.
