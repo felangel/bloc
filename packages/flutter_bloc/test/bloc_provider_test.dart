@@ -425,7 +425,7 @@ void main() {
       expect(counterText.data, '0');
     });
 
-    testWidgets('listen: true registers context as dependant', (tester) async {
+    testWidgets('listen: true registers context as dependent', (tester) async {
       const textKey = Key('__text__');
       const buttonKey = Key('__button__');
       var counterCubitCreateCount = 0;
@@ -449,6 +449,68 @@ void main() {
                         context,
                         listen: true,
                       ).state;
+                      return Text('$count', key: textKey);
+                    },
+                  ),
+                  floatingActionButton: FloatingActionButton(
+                    key: buttonKey,
+                    onPressed: () {
+                      context.bloc<CounterCubit>().increment();
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      var text = tester.widget<Text>(find.byKey(textKey));
+      expect(text.data, '0');
+      expect(counterCubitCreateCount, equals(1));
+      expect(materialBuildCount, equals(1));
+      expect(textBuildCount, equals(1));
+
+      await tester.tap(find.byKey(buttonKey));
+      await tester.pumpAndSettle();
+
+      text = tester.widget<Text>(find.byKey(textKey));
+      expect(text.data, '1');
+      expect(counterCubitCreateCount, equals(1));
+      expect(materialBuildCount, equals(1));
+      expect(textBuildCount, equals(2));
+
+      await tester.tap(find.byKey(buttonKey));
+      await tester.pumpAndSettle();
+
+      text = tester.widget<Text>(find.byKey(textKey));
+      expect(text.data, '2');
+      expect(counterCubitCreateCount, equals(1));
+      expect(materialBuildCount, equals(1));
+      expect(textBuildCount, equals(3));
+    });
+
+    testWidgets('context.listen registers context as dependent',
+        (tester) async {
+      const textKey = Key('__text__');
+      const buttonKey = Key('__button__');
+      var counterCubitCreateCount = 0;
+      var materialBuildCount = 0;
+      var textBuildCount = 0;
+      await tester.pumpWidget(
+        BlocProvider(
+          create: (_) {
+            counterCubitCreateCount++;
+            return CounterCubit();
+          },
+          child: Builder(
+            builder: (context) {
+              materialBuildCount++;
+              return MaterialApp(
+                home: Scaffold(
+                  body: Builder(
+                    builder: (context) {
+                      textBuildCount++;
+                      final count = context.listen<CounterCubit, int>();
                       return Text('$count', key: textKey);
                     },
                   ),

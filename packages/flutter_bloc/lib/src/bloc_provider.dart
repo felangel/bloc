@@ -127,7 +127,7 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatefulWidget
 /// to perform a lookup based on a [Bloc] or [Cubit] type.
 extension BlocProviderExtension on BuildContext {
   /// Performs a lookup using the [BuildContext] to obtain
-  /// the nearest ancestor [Cubit] of type [T].
+  /// the nearest ancestor [Bloc] or [Cubit] of type [T].
   ///
   /// Calling this method is equivalent to calling:
   ///
@@ -137,10 +137,26 @@ extension BlocProviderExtension on BuildContext {
   T bloc<T extends Cubit<Object>>() => BlocProvider.of<T>(this);
 }
 
+/// Extends the [BuildContext] class with the ability
+/// to listen to state changes given a [Bloc] or [Cubit] type.
+extension ListenProviderExtension on BuildContext {
+  /// Registers the [BuildContext] as a dependent and returns the
+  /// state of the [Bloc] or [Cubit].
+  ///
+  /// Calling this method is equivalent to calling:
+  ///
+  /// ```dart
+  /// BlocProvider.of<T>(context, listen: true).state;
+  /// ```
+  S listen<T extends Cubit<S>, S>() {
+    return BlocProvider.of<T>(this, listen: true).state;
+  }
+}
+
 class _BlocProviderState<T extends Cubit<Object>>
     extends SingleChildState<BlocProvider<T>> {
-  T _bloc;
   final _completer = Completer<T>();
+  T _bloc;
 
   @override
   void initState() {
