@@ -172,8 +172,7 @@ class _InheritedRepositoryElement<T> extends InheritedElement {
 
   @override
   void update(_InheritedRepository<T> newWidget) {
-    if (widget.future != newWidget.future)
-      newWidget.future?.then((_) => _handleUpdate());
+    if (widget.value != newWidget.value) _handleUpdate();
     super.update(newWidget);
   }
 
