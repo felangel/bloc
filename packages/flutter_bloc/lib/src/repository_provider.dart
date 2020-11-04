@@ -172,9 +172,8 @@ class _InheritedRepositoryElement<T> extends InheritedElement {
 
   @override
   void update(_InheritedRepository<T> newWidget) {
-    final oldFuture = widget.future;
-    final newFuture = newWidget.future;
-    if (oldFuture != newFuture) newFuture?.then((_) => _handleUpdate());
+    if (widget.future != newWidget.future)
+      newWidget.future?.then((_) => _handleUpdate());
     super.update(newWidget);
   }
 

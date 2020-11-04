@@ -13,20 +13,6 @@ typedef _Create<T extends Cubit<Object>> = T Function(BuildContext context);
 /// of multiple [BlocProvider]s.
 mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 
-/// Extends the [BuildContext] class with the ability
-/// to perform a lookup based on a [Bloc] or [Cubit] type.
-extension BlocProviderExtension on BuildContext {
-  /// Performs a lookup using the [BuildContext] to obtain
-  /// the nearest ancestor [Cubit] of type [T].
-  ///
-  /// Calling this method is equivalent to calling:
-  ///
-  /// ```dart
-  /// BlocProvider.of<T>(context);
-  /// ```
-  T bloc<T extends Cubit<Object>>() => BlocProvider.of<T>(this);
-}
-
 /// {@template bloc_provider}
 /// Takes a [create] function that is responsible for
 /// creating the [Bloc] or [Cubit] and a [child] which will have access
@@ -135,6 +121,20 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatefulWidget
     }
     return provider.value();
   }
+}
+
+/// Extends the [BuildContext] class with the ability
+/// to perform a lookup based on a [Bloc] or [Cubit] type.
+extension BlocProviderExtension on BuildContext {
+  /// Performs a lookup using the [BuildContext] to obtain
+  /// the nearest ancestor [Cubit] of type [T].
+  ///
+  /// Calling this method is equivalent to calling:
+  ///
+  /// ```dart
+  /// BlocProvider.of<T>(context);
+  /// ```
+  T bloc<T extends Cubit<Object>>() => BlocProvider.of<T>(this);
 }
 
 class _BlocProviderState<T extends Cubit<Object>>
