@@ -6,15 +6,15 @@ import 'package:bloc/bloc.dart';
 import 'package:inherited_stream/inherited_stream.dart';
 import 'package:nested/nested.dart';
 
-/// A function that creates a [Cubit] of type [T].
-typedef CreateBloc<T extends Cubit<Object>> = T Function(BuildContext context);
+/// Function that creates a [Bloc] or [Cubit] of type [T].
+typedef _Create<T extends Cubit<Object>> = T Function(BuildContext context);
 
 /// Mixin which allows `MultiBlocProvider` to infer the types
 /// of multiple [BlocProvider]s.
 mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 
 /// Extends the [BuildContext] class with the ability
-/// to perform a lookup based on a [Cubit] type.
+/// to perform a lookup based on a [Bloc] or [Cubit] type.
 extension BlocProviderExtension on BuildContext {
   /// Performs a lookup using the [BuildContext] to obtain
   /// the nearest ancestor [Cubit] of type [T].
@@ -28,14 +28,11 @@ extension BlocProviderExtension on BuildContext {
 }
 
 /// {@template bloc_provider}
-/// Takes a `ValueBuilder` that is responsible for creating the `bloc` and
-/// a [child] which will have access to the `bloc` via
-/// `BlocProvider.of(context)`.
+/// Takes a [create] function that is responsible for
+/// creating the [Bloc] or [Cubit] and a [child] which will have access
+/// to the instance via `BlocProvider.of(context)`.
 /// It is used as a dependency injection (DI) widget so that a single instance
-/// of a `bloc` can be provided to multiple widgets within a subtree.
-///
-/// Automatically handles closing the `bloc` when used with `create` and lazily
-/// creates the provided `bloc` unless [lazy] is set to `false`.
+/// of a [Bloc] or [Cubit] can be provided to multiple widgets within a subtree.
 ///
 /// ```dart
 /// BlocProvider(
@@ -43,6 +40,19 @@ extension BlocProviderExtension on BuildContext {
 ///   child: ChildA(),
 /// );
 /// ```
+///
+/// It automatically handles closing the instance when used with [create].
+/// By default, [create] is called only when the instance is accessed.
+/// To override this behavior, set [lazy] to `false`.
+///
+/// ```dart
+/// BlocProvider(
+///   lazy: false,
+///   create: (BuildContext context) => BlocA(),
+///   child: ChildA(),
+/// );
+/// ```
+///
 /// {@endtemplate}
 class BlocProvider<T extends Cubit<Object>> extends SingleChildStatefulWidget
     with BlocProviderSingleChildWidget {
@@ -55,16 +65,16 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatefulWidget
   })  : assert(create != null),
         super(key: key);
 
-  /// Takes a `bloc` and a [child] which will have access to the `bloc` via
+  /// Takes a [value] and a [child] which will have access to the [value] via
   /// `BlocProvider.of(context)`.
-  /// When `BlocProvider.value` is used, the `bloc` will not be automatically
-  /// closed.
-  /// As a result, `BlocProvider.value` should mainly be used for providing
-  /// existing `bloc`s to new routes.
+  /// When `BlocProvider.value` is used, the [Bloc] or [Cubit]
+  /// will not be automatically closed.
+  /// As a result, `BlocProvider.value` should only be used for providing
+  /// existing instances to new subtrees.
   ///
-  /// A new `bloc` should not be created in `BlocProvider.value`.
-  /// `bloc`s should always be created using the default constructor within
-  /// `create`.
+  /// A new [Bloc] or [Cubit] should not be created in `BlocProvider.value`.
+  /// New instances should always be created using the
+  /// default constructor within the [create] function.
   ///
   /// ```dart
   /// BlocProvider.value(
@@ -78,21 +88,21 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatefulWidget
     Widget child,
   }) : this(key: key, create: (_) => value, child: child);
 
-  /// Creates a [Cubit] of type [T].
-  final CreateBloc<T> create;
+  /// Creates a [Bloc] or [Cubit] of type [T].
+  final _Create<T> create;
 
-  /// Widget which will have access to the [Cubit].
+  /// Widget which will have access to the [Bloc] or [Cubit].
   final Widget child;
 
-  /// Whether the [Cubit] should be created lazily.
+  /// Whether the [Bloc] or [Cubit] should be created lazily.
   /// Defaults to `true`.
   final bool lazy;
 
   @override
   _BlocProviderState<T> createState() => _BlocProviderState<T>();
 
-  /// Method that allows widgets to access a `cubit` instance as long as their
-  /// `BuildContext` contains a [BlocProvider] instance.
+  /// Method that allows widgets to access a [Bloc] or [Cubit] instance
+  /// as long as their `BuildContext` contains a [BlocProvider] instance.
   ///
   /// If we want to access an instance of `BlocA` which was provided higher up
   /// in the widget tree we can do so via:

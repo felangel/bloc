@@ -3,24 +3,32 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:nested/nested.dart';
 
-/// A function that creates a repository of type [T].
-typedef Create<T> = T Function(BuildContext);
+/// Function that creates a repository of type [T].
+typedef _Create<T> = T Function(BuildContext);
 
 /// Mixin which allows `MultiRepositoryProvider` to infer the types
 /// of multiple [RepositoryProvider]s.
 mixin RepositoryProviderSingleChildWidget on SingleChildWidget {}
 
 /// {@template repository_provider}
-/// Takes a `ValueBuilder` that is responsible for creating the repository and
-/// a `child` which will have access to the repository via
+/// Takes a [create] function that is responsible for creating the repository
+/// and a `child` which will have access to the repository via
 /// `RepositoryProvider.of(context)`.
 /// It is used as a dependency injection (DI) widget so that a single instance
 /// of a repository can be provided to multiple widgets within a subtree.
 ///
-/// Lazily creates the provided repository unless `lazy` is set to `false`.
+/// ```dart
+/// RepositoryProvider(
+///   create: (context) => RepositoryA(),
+///   child: ChildA(),
+/// );
+/// ```
+///
+/// Lazily creates the repository unless [lazy] is set to `false`.
 ///
 /// ```dart
 /// RepositoryProvider(
+///   lazy: false,`
 ///   create: (context) => RepositoryA(),
 ///   child: ChildA(),
 /// );
@@ -40,7 +48,7 @@ class RepositoryProvider<T> extends SingleChildStatefulWidget
   /// Takes a repository and a [child] which will have access to the repository.
   /// A new repository should not be created in `RepositoryProvider.value`.
   /// Repositories should always be created using the default constructor
-  /// within the `builder`.
+  /// within the [create] function.
   RepositoryProvider.value({
     Key key,
     @required T value,
@@ -52,7 +60,7 @@ class RepositoryProvider<T> extends SingleChildStatefulWidget
         );
 
   /// Creates the repository of type [T].
-  final Create<T> create;
+  final _Create<T> create;
 
   /// Widget which will have access to the repository.
   final Widget child;
