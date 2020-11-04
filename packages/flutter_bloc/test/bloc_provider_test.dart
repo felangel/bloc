@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -246,11 +245,10 @@ void main() {
         child: const CounterPage(),
       ));
 
-      final _counterFinder = find.byKey((const Key('counter_text')));
-      expect(_counterFinder, findsOneWidget);
-
-      final _counterText = _counterFinder.evaluate().first.widget as Text;
-      expect(_counterText.data, '0');
+      final counterText = tester.widget<Text>(
+        find.byKey((const Key('counter_text'))),
+      );
+      expect(counterText.data, '0');
     });
 
     testWidgets(
@@ -313,11 +311,11 @@ void main() {
         child: RoutePage(),
       ));
 
-      final _routeButtonFinder = find.byKey((const Key('route_button')));
-      expect(_routeButtonFinder, findsOneWidget);
+      final routeButtonFinder = find.byKey((const Key('route_button')));
+      expect(routeButtonFinder, findsOneWidget);
       expect(closeCalled, false);
 
-      await tester.tap(_routeButtonFinder);
+      await tester.tap(routeButtonFinder);
       await tester.pumpAndSettle();
 
       expect(closeCalled, false);
@@ -349,11 +347,11 @@ void main() {
       final Widget _child = RoutePage();
       await tester.pumpWidget(MyApp(value: value, child: _child));
 
-      final _routeButtonFinder = find.byKey((const Key('route_button')));
-      expect(_routeButtonFinder, findsOneWidget);
+      final routeButtonFinder = find.byKey((const Key('route_button')));
+      expect(routeButtonFinder, findsOneWidget);
       expect(closeCalled, false);
 
-      await tester.tap(_routeButtonFinder);
+      await tester.tap(routeButtonFinder);
       await tester.pumpAndSettle();
 
       expect(closeCalled, false);
@@ -365,7 +363,7 @@ void main() {
       await tester.pumpWidget(const MyAppNoProvider(home: CounterPage()));
       final dynamic exception = tester.takeException();
       final expectedMessage = '''
-        BlocProvider.of() called with a context that does not contain a Cubit of type CounterCubit.
+        BlocProvider.of() called with a context that does not contain a Bloc/Cubit of type CounterCubit.
         No ancestor could be found starting from the context that was passed to BlocProvider.of<CounterCubit>().
 
         This can happen if the context you used comes from a widget above the BlocProvider.
@@ -374,20 +372,6 @@ void main() {
 ''';
       expect(exception is FlutterError, true);
       expect(exception.message, expectedMessage);
-    });
-
-    testWidgets(
-        'should not wrap into FlutterError if '
-        'ProviderNotFoundException with wrong valueType '
-        'is thrown', (tester) async {
-      await tester.pumpWidget(
-        BlocProvider<CounterCubit>(
-          create: (context) => CounterCubit(onClose: Provider.of(context)),
-          child: const CounterPage(),
-        ),
-      );
-      final dynamic exception = tester.takeException();
-      expect(exception is ProviderNotFoundException, true);
     });
 
     testWidgets(
@@ -418,9 +402,9 @@ void main() {
       expect(numBuilds, 1);
     });
 
-    testWidgets(
-        'should access cubit instance'
-        'via BlocProviderExtension', (tester) async {
+    testWidgets('should access cubit instance via context.bloc',
+        (tester) async {
+      const textKey = Key('__text__');
       await tester.pumpWidget(
         BlocProvider(
           create: (_) => CounterCubit(),
@@ -429,18 +413,80 @@ void main() {
               body: Builder(
                 builder: (context) => Text(
                   '${context.bloc<CounterCubit>().state}',
-                  key: const Key('value_data'),
+                  key: textKey,
                 ),
               ),
             ),
           ),
         ),
       );
-      final _counterFinder = find.byKey((const Key('value_data')));
-      expect(_counterFinder, findsOneWidget);
 
-      final _counterText = _counterFinder.evaluate().first.widget as Text;
-      expect(_counterText.data, '0');
+      final counterText = tester.widget<Text>(find.byKey(textKey));
+      expect(counterText.data, '0');
+    });
+
+    testWidgets('listen: true registers context as dependant', (tester) async {
+      const textKey = Key('__text__');
+      const buttonKey = Key('__button__');
+      var counterCubitCreateCount = 0;
+      var materialBuildCount = 0;
+      var textBuildCount = 0;
+      await tester.pumpWidget(
+        BlocProvider(
+          create: (_) {
+            counterCubitCreateCount++;
+            return CounterCubit();
+          },
+          child: Builder(
+            builder: (context) {
+              materialBuildCount++;
+              return MaterialApp(
+                home: Scaffold(
+                  body: Builder(
+                    builder: (context) {
+                      textBuildCount++;
+                      final count = BlocProvider.of<CounterCubit>(
+                        context,
+                        listen: true,
+                      ).state;
+                      return Text('$count', key: textKey);
+                    },
+                  ),
+                  floatingActionButton: FloatingActionButton(
+                    key: buttonKey,
+                    onPressed: () {
+                      context.bloc<CounterCubit>().increment();
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      var text = tester.widget<Text>(find.byKey(textKey));
+      expect(text.data, '0');
+      expect(counterCubitCreateCount, equals(1));
+      expect(materialBuildCount, equals(1));
+      expect(textBuildCount, equals(1));
+
+      await tester.tap(find.byKey(buttonKey));
+      await tester.pumpAndSettle();
+
+      text = tester.widget<Text>(find.byKey(textKey));
+      expect(text.data, '1');
+      expect(counterCubitCreateCount, equals(1));
+      expect(materialBuildCount, equals(1));
+      expect(textBuildCount, equals(2));
+
+      await tester.tap(find.byKey(buttonKey));
+      await tester.pumpAndSettle();
+
+      text = tester.widget<Text>(find.byKey(textKey));
+      expect(text.data, '2');
+      expect(counterCubitCreateCount, equals(1));
+      expect(materialBuildCount, equals(1));
+      expect(textBuildCount, equals(3));
     });
   });
 }

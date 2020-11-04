@@ -121,6 +121,13 @@ class Repository {
 
 void main() {
   group('RepositoryProvider', () {
+    test('throws if initialized with no create', () async {
+      expect(
+        () => RepositoryProvider<Object>(create: null, child: const SizedBox()),
+        throwsAssertionError,
+      );
+    });
+
     testWidgets('throws if initialized with no repository', (tester) async {
       await tester.pumpWidget(
         const MyApp(repository: null, child: CounterPage()),

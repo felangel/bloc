@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
+import 'package:nested/nested.dart';
 
 import 'bloc_provider.dart';
 
@@ -48,7 +48,7 @@ import 'bloc_provider.dart';
 /// As a result, the only advantage of using [MultiBlocProvider] is improved
 /// readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
-class MultiBlocProvider extends MultiProvider {
+class MultiBlocProvider extends Nested {
   /// {@macro multi_bloc_provider}
   MultiBlocProvider({
     Key key,
@@ -56,5 +56,5 @@ class MultiBlocProvider extends MultiProvider {
     @required Widget child,
   })  : assert(providers != null),
         assert(child != null),
-        super(key: key, providers: providers, child: child);
+        super(key: key, children: providers, child: child);
 }
