@@ -22,7 +22,7 @@ extension BlocProviderExtension on BuildContext {
   /// Calling this method is equivalent to calling:
   ///
   /// ```dart
-  /// BlocProvider.of<C>(context);
+  /// BlocProvider.of<T>(context);
   /// ```
   T bloc<T extends Cubit<Object>>() => BlocProvider.of<T>(this);
 }
@@ -114,7 +114,7 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatefulWidget
     if (provider == null) {
       throw FlutterError(
         '''
-        BlocProvider.of() called with a context that does not contain a Cubit of type $T.
+        BlocProvider.of() called with a context that does not contain a Bloc/Cubit of type $T.
         No ancestor could be found starting from the context that was passed to BlocProvider.of<$T>().
 
         This can happen if the context you used comes from a widget above the BlocProvider.
