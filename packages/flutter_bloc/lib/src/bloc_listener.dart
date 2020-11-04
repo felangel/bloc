@@ -87,7 +87,7 @@ class BlocListener<C extends Cubit<S>, S> extends BlocListenerBase<C, S>
     @required BlocWidgetListener<S> listener,
     C cubit,
     BlocListenerCondition<S> listenWhen,
-    this.child,
+    Widget child,
   })  : assert(listener != null),
         super(
           key: key,
@@ -96,11 +96,6 @@ class BlocListener<C extends Cubit<S>, S> extends BlocListenerBase<C, S>
           cubit: cubit,
           listenWhen: listenWhen,
         );
-
-  /// The widget which will be rendered as a descendant of the [BlocListener].
-  @override
-  // ignore: overridden_fields
-  final Widget child;
 }
 
 /// {@template bloc_listener_base}
