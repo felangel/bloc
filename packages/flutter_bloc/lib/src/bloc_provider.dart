@@ -166,6 +166,8 @@ extension BlocProviderExtension on BuildContext {
   /// ```dart
   /// BlocProvider.of<C>(context)
   /// ```
-  @Deprecated('Use context.read instead. Will be removed in v7.0.0')
+  @Deprecated(
+    'Use context.read or context.watch instead. Will be removed in v7.0.0',
+  )
   C bloc<C extends Cubit<Object>>() => BlocProvider.of<C>(this);
 }

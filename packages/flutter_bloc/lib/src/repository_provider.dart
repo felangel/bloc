@@ -91,6 +91,8 @@ extension RepositoryProviderExtension on BuildContext {
   /// ```dart
   /// RepositoryProvider.of<T>(context)
   /// ```
-  @Deprecated('Use context.read instead. Will be removed in v7.0.0')
+  @Deprecated(
+    'Use context.read or context.watch instead. Will be removed in v7.0.0',
+  )
   T repository<T>() => RepositoryProvider.of<T>(this);
 }
