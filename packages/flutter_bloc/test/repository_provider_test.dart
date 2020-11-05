@@ -246,6 +246,74 @@ void main() {
     });
 
     testWidgets(
+        'should rebuild widgets that inherited the value if the value is '
+        'changed with context.watch', (tester) async {
+      var numBuilds = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setState) {
+              var repository = const Repository(0);
+              return RepositoryProvider.value(
+                value: repository,
+                child: StatefulBuilder(
+                  builder: (context, _) {
+                    numBuilds++;
+                    final data = context.watch<Repository>().data;
+                    return TextButton(
+                      child: Text('Data: $data'),
+                      onPressed: () {
+                        setState(() => repository = const Repository(1));
+                      },
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      await tester.tap(find.byType(TextButton));
+      await tester.pump();
+      expect(numBuilds, 2);
+    });
+
+    testWidgets(
+        'should rebuild widgets that inherited the value if the value is '
+        'changed with listen: true', (tester) async {
+      var numBuilds = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setState) {
+              var repository = const Repository(0);
+              return RepositoryProvider.value(
+                value: repository,
+                child: StatefulBuilder(
+                  builder: (context, _) {
+                    numBuilds++;
+                    final data =
+                        RepositoryProvider.of<Repository>(context, listen: true)
+                            .data;
+                    return TextButton(
+                      child: Text('Data: $data'),
+                      onPressed: () {
+                        setState(() => repository = const Repository(1));
+                      },
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      await tester.tap(find.byType(TextButton));
+      await tester.pump();
+      expect(numBuilds, 2);
+    });
+
+    testWidgets(
         'should access repository instance'
         'via RepositoryProviderExtension', (tester) async {
       await tester.pumpWidget(

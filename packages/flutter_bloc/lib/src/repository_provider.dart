@@ -62,9 +62,9 @@ class RepositoryProvider<T> extends Provider<T>
 
   /// Method that allows widgets to access a repository instance as long as
   /// their `BuildContext` contains a [RepositoryProvider] instance.
-  static T of<T>(BuildContext context) {
+  static T of<T>(BuildContext context, {bool listen = false}) {
     try {
-      return Provider.of<T>(context, listen: false);
+      return Provider.of<T>(context, listen: listen);
     } on ProviderNotFoundException catch (_) {
       throw FlutterError(
         '''

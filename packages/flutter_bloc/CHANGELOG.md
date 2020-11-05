@@ -1,6 +1,6 @@
 # 6.1.0
 
-- feat: add optional `listen` to `BlocProvider`
+- feat: add optional `listen` to `BlocProvider` and `RepositoryProvider`
 - feat: add `context.select` extension
 - feat: add `context.watch` extension
 - feat: add `context.read` extension
