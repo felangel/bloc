@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
-import 'package:nested/nested.dart';
+import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 import 'bloc_provider.dart';
 
@@ -146,7 +147,7 @@ class _BlocListenerBaseState<C extends Cubit<S>, S>
   @override
   void initState() {
     super.initState();
-    _cubit = widget.cubit ?? context.bloc<C>();
+    _cubit = widget.cubit ?? context.read<C>();
     _previousState = _cubit.state;
     _subscribe();
   }
@@ -154,7 +155,7 @@ class _BlocListenerBaseState<C extends Cubit<S>, S>
   @override
   void didUpdateWidget(BlocListenerBase<C, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final oldCubit = oldWidget.cubit ?? context.bloc<C>();
+    final oldCubit = oldWidget.cubit ?? context.read<C>();
     final currentCubit = widget.cubit ?? oldCubit;
     if (oldCubit != currentCubit) {
       if (_subscription != null) {

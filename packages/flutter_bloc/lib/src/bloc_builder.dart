@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 import 'bloc_listener.dart';
 import 'bloc_provider.dart';
@@ -128,14 +129,14 @@ class _BlocBuilderBaseState<C extends Cubit<S>, S>
   @override
   void initState() {
     super.initState();
-    _cubit = widget.cubit ?? context.bloc<C>();
+    _cubit = widget.cubit ?? context.read<C>();
     _state = _cubit.state;
   }
 
   @override
   void didUpdateWidget(BlocBuilderBase<C, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final oldCubit = oldWidget.cubit ?? context.bloc<C>();
+    final oldCubit = oldWidget.cubit ?? context.read<C>();
     final currentCubit = widget.cubit ?? oldCubit;
     if (oldCubit != currentCubit) {
       _cubit = currentCubit;

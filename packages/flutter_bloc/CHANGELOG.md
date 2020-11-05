@@ -1,8 +1,11 @@
-# 7.0.0-dev.1
+# 6.1.0
 
-- **BREAKING**: remove dependency on `package:provider`
 - feat: add optional `listen` to `BlocProvider`
-- feat: add `ListenProviderExtension`
+- feat: add `context.select` extension
+- feat: add `context.watch` extension
+- feat: add `context.read` extension
+  - deprecated: `context.bloc` extension
+  - deprecated: `context.repository` extension
 - docs: improve inline documentation for `BlocProvider` and `RepositoryProvider`
 
 # 6.0.6

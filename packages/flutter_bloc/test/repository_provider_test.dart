@@ -256,6 +256,7 @@ void main() {
               body: Center(
                 child: Builder(
                   builder: (context) => Text(
+                    // ignore: deprecated_member_use_from_same_package
                     '${context.repository<Repository>().data}',
                     key: const Key('value_data'),
                   ),

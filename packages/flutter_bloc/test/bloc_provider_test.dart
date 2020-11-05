@@ -285,7 +285,7 @@ void main() {
                       RaisedButton(
                         key: const Key('increment_button'),
                         onPressed: () {
-                          context.bloc<CounterCubit>().increment();
+                          BlocProvider.of<CounterCubit>(context).increment();
                         },
                       ),
                     ],
@@ -412,6 +412,7 @@ void main() {
             home: Scaffold(
               body: Builder(
                 builder: (context) => Text(
+                  // ignore: deprecated_member_use_from_same_package
                   '${context.bloc<CounterCubit>().state}',
                   key: textKey,
                 ),
@@ -455,7 +456,7 @@ void main() {
                   floatingActionButton: FloatingActionButton(
                     key: buttonKey,
                     onPressed: () {
-                      context.bloc<CounterCubit>().increment();
+                      context.read<CounterCubit>().increment();
                     },
                   ),
                 ),
@@ -489,8 +490,7 @@ void main() {
       expect(textBuildCount, equals(3));
     });
 
-    testWidgets('context.listen registers context as dependent',
-        (tester) async {
+    testWidgets('context.watch registers context as dependent', (tester) async {
       const textKey = Key('__text__');
       const buttonKey = Key('__button__');
       var counterCubitCreateCount = 0;
@@ -510,14 +510,14 @@ void main() {
                   body: Builder(
                     builder: (context) {
                       textBuildCount++;
-                      final count = context.listen<CounterCubit, int>();
+                      final count = context.watch<CounterCubit>().state;
                       return Text('$count', key: textKey);
                     },
                   ),
                   floatingActionButton: FloatingActionButton(
                     key: buttonKey,
                     onPressed: () {
-                      context.bloc<CounterCubit>().increment();
+                      context.read<CounterCubit>().increment();
                     },
                   ),
                 ),
