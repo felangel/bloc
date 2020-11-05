@@ -6,6 +6,20 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+class MockCubit<S> extends Cubit<S> {
+  MockCubit(S state) : super(state);
+
+  @override
+  StreamSubscription<S> listen(
+    void Function(S p1) onData, {
+    Function onError,
+    void Function() onDone,
+    bool cancelOnError,
+  }) {
+    return null;
+  }
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({
     Key key,
@@ -549,6 +563,16 @@ void main() {
       expect(counterCubitCreateCount, equals(1));
       expect(materialBuildCount, equals(1));
       expect(textBuildCount, equals(3));
+    });
+
+    testWidgets('should not throw if listen returns null subscription',
+        (tester) async {
+      await tester.pumpWidget(BlocProvider(
+        lazy: false,
+        create: (_) => MockCubit(0),
+        child: const SizedBox(),
+      ));
+      expect(tester.takeException(), isNull);
     });
   });
 }
