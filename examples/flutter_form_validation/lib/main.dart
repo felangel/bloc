@@ -74,7 +74,7 @@ class EmailInput extends StatelessWidget {
           ),
           keyboardType: TextInputType.emailAddress,
           onChanged: (value) {
-            context.bloc<MyFormBloc>().add(EmailChanged(email: value));
+            context.read<MyFormBloc>().add(EmailChanged(email: value));
           },
         );
       },
@@ -97,7 +97,7 @@ class PasswordInput extends StatelessWidget {
           ),
           obscureText: true,
           onChanged: (value) {
-            context.bloc<MyFormBloc>().add(PasswordChanged(password: value));
+            context.read<MyFormBloc>().add(PasswordChanged(password: value));
           },
         );
       },
@@ -113,7 +113,7 @@ class SubmitButton extends StatelessWidget {
       builder: (context, state) {
         return RaisedButton(
           onPressed: state.status.isValidated
-              ? () => context.bloc<MyFormBloc>().add(FormSubmitted())
+              ? () => context.read<MyFormBloc>().add(FormSubmitted())
               : null,
           child: const Text('Submit'),
         );

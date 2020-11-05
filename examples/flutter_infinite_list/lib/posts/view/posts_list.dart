@@ -15,7 +15,7 @@ class _PostsListState extends State<PostsList> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _postBloc = context.bloc<PostBloc>();
+    _postBloc = context.read<PostBloc>();
   }
 
   @override

@@ -39,7 +39,7 @@ class CounterPage extends StatelessWidget {
         actions: [
           BlocBuilder<CounterBloc, int>(
             builder: (context, state) {
-              final bloc = context.bloc<CounterBloc>();
+              final bloc = context.read<CounterBloc>();
               return IconButton(
                 icon: const Icon(Icons.undo),
                 onPressed: bloc.canUndo ? bloc.undo : null,
@@ -48,7 +48,7 @@ class CounterPage extends StatelessWidget {
           ),
           BlocBuilder<CounterBloc, int>(
             builder: (context, state) {
-              final bloc = context.bloc<CounterBloc>();
+              final bloc = context.read<CounterBloc>();
               return IconButton(
                 icon: const Icon(Icons.redo),
                 onPressed: bloc.canRedo ? bloc.redo : null,
@@ -70,21 +70,21 @@ class CounterPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: FloatingActionButton(
               child: const Icon(Icons.add),
-              onPressed: () => context.bloc<CounterBloc>().add(Increment()),
+              onPressed: () => context.read<CounterBloc>().add(Increment()),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: FloatingActionButton(
               child: const Icon(Icons.remove),
-              onPressed: () => context.bloc<CounterBloc>().add(Decrement()),
+              onPressed: () => context.read<CounterBloc>().add(Decrement()),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: FloatingActionButton(
               child: const Icon(Icons.delete_forever),
-              onPressed: () => context.bloc<CounterBloc>().add(Reset()),
+              onPressed: () => context.read<CounterBloc>().add(Reset()),
             ),
           ),
         ],
