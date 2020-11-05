@@ -150,6 +150,7 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
     final subscription = value.listen(
       (Object _) => e.markNeedsNotifyDependents(),
     );
+    if (subscription == null) return () {};
     return subscription.cancel;
   }
 }
