@@ -51,7 +51,7 @@ class TickerPage extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.bloc<TickerBloc>().add(TickerStarted()),
+        onPressed: () => context.read<TickerBloc>().add(TickerStarted()),
         tooltip: 'Start',
         child: const Icon(Icons.timer),
       ),

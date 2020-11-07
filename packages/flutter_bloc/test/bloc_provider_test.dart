@@ -5,6 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
+
+class MockCubit<S> extends Cubit<S> {
+  MockCubit(S state) : super(state);
+
+  @override
+  StreamSubscription<S> listen(
+    void Function(S p1) onData, {
+    Function onError,
+    void Function() onDone,
+    bool cancelOnError,
+  }) {
+    return null;
+  }
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -154,6 +169,7 @@ class CounterCubit extends Cubit<int> {
   final Function onClose;
 
   void increment() => emit(state + 1);
+  void decrement() => emit(state - 1);
 
   @override
   Future<void> close() {
@@ -285,7 +301,7 @@ void main() {
                       RaisedButton(
                         key: const Key('increment_button'),
                         onPressed: () {
-                          context.bloc<CounterCubit>().increment();
+                          BlocProvider.of<CounterCubit>(context).increment();
                         },
                       ),
                     ],
@@ -382,11 +398,28 @@ void main() {
         BlocProvider<CounterCubit>(
           lazy: false,
           create: (_) => throw expectedException,
-          child: Container(),
+          child: const SizedBox(),
         ),
       );
       final dynamic exception = tester.takeException();
       expect(exception, expectedException);
+    });
+
+    testWidgets(
+        'should rethrow ProviderNotFound '
+        'if exception is for different provider', (tester) async {
+      await tester.pumpWidget(
+        BlocProvider<CounterCubit>(
+          lazy: false,
+          create: (context) {
+            context.read<int>();
+            return CounterCubit();
+          },
+          child: const SizedBox(),
+        ),
+      );
+      final exception = tester.takeException() as ProviderNotFoundException;
+      expect(exception.valueType, int);
     });
 
     testWidgets(
@@ -412,6 +445,7 @@ void main() {
             home: Scaffold(
               body: Builder(
                 builder: (context) => Text(
+                  // ignore: deprecated_member_use_from_same_package
                   '${context.bloc<CounterCubit>().state}',
                   key: textKey,
                 ),
@@ -455,7 +489,7 @@ void main() {
                   floatingActionButton: FloatingActionButton(
                     key: buttonKey,
                     onPressed: () {
-                      context.bloc<CounterCubit>().increment();
+                      context.read<CounterCubit>().increment();
                     },
                   ),
                 ),
@@ -489,8 +523,7 @@ void main() {
       expect(textBuildCount, equals(3));
     });
 
-    testWidgets('context.listen registers context as dependent',
-        (tester) async {
+    testWidgets('context.watch registers context as dependent', (tester) async {
       const textKey = Key('__text__');
       const buttonKey = Key('__button__');
       var counterCubitCreateCount = 0;
@@ -510,14 +543,14 @@ void main() {
                   body: Builder(
                     builder: (context) {
                       textBuildCount++;
-                      final count = context.listen<CounterCubit, int>();
+                      final count = context.watch<CounterCubit>().state;
                       return Text('$count', key: textKey);
                     },
                   ),
                   floatingActionButton: FloatingActionButton(
                     key: buttonKey,
                     onPressed: () {
-                      context.bloc<CounterCubit>().increment();
+                      context.read<CounterCubit>().increment();
                     },
                   ),
                 ),
@@ -549,6 +582,84 @@ void main() {
       expect(counterCubitCreateCount, equals(1));
       expect(materialBuildCount, equals(1));
       expect(textBuildCount, equals(3));
+    });
+
+    testWidgets('context.select only rebuilds on changes to selected value',
+        (tester) async {
+      const textKey = Key('__text__');
+      const incrementButtonKey = Key('__increment_button__');
+      const decrementButtonKey = Key('__decrement_button__');
+      var materialBuildCount = 0;
+      var textBuildCount = 0;
+      await tester.pumpWidget(
+        BlocProvider(
+          create: (_) => CounterCubit(),
+          child: Builder(
+            builder: (context) {
+              materialBuildCount++;
+              return MaterialApp(
+                home: Scaffold(
+                  body: Builder(
+                    builder: (context) {
+                      textBuildCount++;
+                      final isPositive = context.select(
+                        (CounterCubit c) => c.state >= 0,
+                      );
+                      return Text('$isPositive', key: textKey);
+                    },
+                  ),
+                  floatingActionButton: Column(
+                    children: [
+                      FloatingActionButton(
+                        key: incrementButtonKey,
+                        onPressed: () {
+                          context.read<CounterCubit>().increment();
+                        },
+                      ),
+                      FloatingActionButton(
+                        key: decrementButtonKey,
+                        onPressed: () {
+                          context.read<CounterCubit>().decrement();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      var text = tester.widget<Text>(find.byKey(textKey));
+      expect(text.data, 'true');
+      expect(materialBuildCount, equals(1));
+      expect(textBuildCount, equals(1));
+
+      await tester.tap(find.byKey(decrementButtonKey));
+      await tester.pumpAndSettle();
+
+      text = tester.widget<Text>(find.byKey(textKey));
+      expect(text.data, 'false');
+      expect(materialBuildCount, equals(1));
+      expect(textBuildCount, equals(2));
+
+      await tester.tap(find.byKey(decrementButtonKey));
+      await tester.pumpAndSettle();
+
+      text = tester.widget<Text>(find.byKey(textKey));
+      expect(text.data, 'false');
+      expect(materialBuildCount, equals(1));
+      expect(textBuildCount, equals(2));
+    });
+
+    testWidgets('should not throw if listen returns null subscription',
+        (tester) async {
+      await tester.pumpWidget(BlocProvider(
+        lazy: false,
+        create: (_) => MockCubit(0),
+        child: const SizedBox(),
+      ));
+      expect(tester.takeException(), isNull);
     });
   });
 }

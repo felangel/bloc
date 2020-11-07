@@ -1,6 +1,6 @@
 name: flutter_bloc
 description: Flutter Widgets that make it easy to implement the BLoC (Business Logic Component) design pattern. Built to be used with the bloc state management package.
-version: 7.0.0-dev.1
+version: 6.1.0
 repository: https://github.com/felangel/bloc/tree/master/packages/flutter_bloc
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://bloclibrary.dev
@@ -12,9 +12,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^6.0.0
-  inherited_stream: ^1.1.0
-  nested: ^0.0.4
+  bloc: ^6.1.0
+  provider: ^4.3.2+2
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
-import '../flutter_bloc.dart';
+import 'bloc_builder.dart';
+import 'bloc_listener.dart';
 
 /// {@template bloc_consumer}
 /// [BlocConsumer] exposes a [builder] and [listener] in order react to new
@@ -100,7 +102,7 @@ class BlocConsumer<C extends Cubit<S>, S> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = this.cubit ?? context.bloc<C>();
+    final cubit = this.cubit ?? context.watch<C>();
     return BlocBuilder<C, S>(
       cubit: cubit,
       builder: builder,

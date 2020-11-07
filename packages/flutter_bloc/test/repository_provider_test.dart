@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -235,6 +236,23 @@ void main() {
     });
 
     testWidgets(
+        'should rethrow ProviderNotFound '
+        'if exception is for different provider', (tester) async {
+      await tester.pumpWidget(
+        RepositoryProvider<Repository>(
+          lazy: false,
+          create: (context) {
+            context.read<int>();
+            return const Repository(0);
+          },
+          child: const SizedBox(),
+        ),
+      );
+      final exception = tester.takeException() as ProviderNotFoundException;
+      expect(exception.valueType, int);
+    });
+
+    testWidgets(
         'should not rebuild widgets that inherited the value if the value is '
         'changed', (tester) async {
       var numBuilds = 0;
@@ -243,6 +261,74 @@ void main() {
       await tester.tap(find.byKey(const Key('iconButtonKey')));
       await tester.pump();
       expect(numBuilds, 1);
+    });
+
+    testWidgets(
+        'should rebuild widgets that inherited the value if the value is '
+        'changed with context.watch', (tester) async {
+      var numBuilds = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setState) {
+              var repository = const Repository(0);
+              return RepositoryProvider.value(
+                value: repository,
+                child: StatefulBuilder(
+                  builder: (context, _) {
+                    numBuilds++;
+                    final data = context.watch<Repository>().data;
+                    return TextButton(
+                      child: Text('Data: $data'),
+                      onPressed: () {
+                        setState(() => repository = const Repository(1));
+                      },
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      await tester.tap(find.byType(TextButton));
+      await tester.pump();
+      expect(numBuilds, 2);
+    });
+
+    testWidgets(
+        'should rebuild widgets that inherited the value if the value is '
+        'changed with listen: true', (tester) async {
+      var numBuilds = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setState) {
+              var repository = const Repository(0);
+              return RepositoryProvider.value(
+                value: repository,
+                child: StatefulBuilder(
+                  builder: (context, _) {
+                    numBuilds++;
+                    final data =
+                        RepositoryProvider.of<Repository>(context, listen: true)
+                            .data;
+                    return TextButton(
+                      child: Text('Data: $data'),
+                      onPressed: () {
+                        setState(() => repository = const Repository(1));
+                      },
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      await tester.tap(find.byType(TextButton));
+      await tester.pump();
+      expect(numBuilds, 2);
     });
 
     testWidgets(
@@ -256,6 +342,7 @@ void main() {
               body: Center(
                 child: Builder(
                   builder: (context) => Text(
+                    // ignore: deprecated_member_use_from_same_package
                     '${context.repository<Repository>().data}',
                     key: const Key('value_data'),
                   ),

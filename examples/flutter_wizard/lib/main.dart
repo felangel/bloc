@@ -119,7 +119,7 @@ class _ProfileNameFormState extends State<ProfileNameForm> {
               child: const Text('Continue'),
               onPressed: _name.isNotEmpty
                   ? () => context
-                      .bloc<ProfileWizardBloc>()
+                      .read<ProfileWizardBloc>()
                       .add(ProfileWizardNameSubmitted(_name))
                   : null,
             )
@@ -161,7 +161,7 @@ class _ProfileAgeFormState extends State<ProfileAgeForm> {
               child: const Text('Continue'),
               onPressed: _age != null
                   ? () => context
-                      .bloc<ProfileWizardBloc>()
+                      .read<ProfileWizardBloc>()
                       .add(ProfileWizardAgeSubmitted(_age))
                   : null,
             )

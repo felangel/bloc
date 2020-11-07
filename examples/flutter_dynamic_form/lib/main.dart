@@ -25,13 +25,13 @@ class MyForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void _onBrandChanged(String brand) =>
-        context.bloc<NewCarBloc>().add(NewCarBrandChanged(brand: brand));
+        context.read<NewCarBloc>().add(NewCarBrandChanged(brand: brand));
 
     void _onModelChanged(String model) =>
-        context.bloc<NewCarBloc>().add(NewCarModelChanged(model: model));
+        context.read<NewCarBloc>().add(NewCarModelChanged(model: model));
 
     void _onYearChanged(String year) =>
-        context.bloc<NewCarBloc>().add(NewCarYearChanged(year: year));
+        context.read<NewCarBloc>().add(NewCarYearChanged(year: year));
 
     void _onFormSubmitted({String brand, String model, String year}) {
       Scaffold.of(context)

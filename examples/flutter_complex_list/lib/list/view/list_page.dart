@@ -37,7 +37,7 @@ class _ListView extends StatelessWidget {
               return _ItemTile(
                 item: items[index],
                 onDeletePressed: (id) {
-                  context.bloc<ListCubit>().deleteItem(id);
+                  context.read<ListCubit>().deleteItem(id);
                 },
               );
             },

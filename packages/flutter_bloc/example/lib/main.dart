@@ -83,7 +83,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: const Icon(Icons.add),
               onPressed: () =>
-                  context.bloc<CounterBloc>().add(CounterEvent.increment),
+                  context.read<CounterBloc>().add(CounterEvent.increment),
             ),
           ),
           Padding(
@@ -91,14 +91,14 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: const Icon(Icons.remove),
               onPressed: () =>
-                  context.bloc<CounterBloc>().add(CounterEvent.decrement),
+                  context.read<CounterBloc>().add(CounterEvent.decrement),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: const Icon(Icons.brightness_6),
-              onPressed: () => context.bloc<ThemeCubit>().toggleTheme(),
+              onPressed: () => context.read<ThemeCubit>().toggleTheme(),
             ),
           ),
           Padding(
@@ -106,7 +106,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               backgroundColor: Colors.red,
               child: const Icon(Icons.error),
-              onPressed: () => context.bloc<CounterBloc>().add(null),
+              onPressed: () => context.read<CounterBloc>().add(null),
             ),
           ),
         ],

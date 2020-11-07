@@ -1,20 +1,15 @@
-import 'dart:async';
-
 import 'package:flutter/widgets.dart';
 
 import 'package:bloc/bloc.dart';
-import 'package:inherited_stream/inherited_stream.dart';
-import 'package:nested/nested.dart';
-
-/// Function that creates a [Bloc] or [Cubit] of type [T].
-typedef _Create<T extends Cubit<Object>> = T Function(BuildContext context);
+import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 /// Mixin which allows `MultiBlocProvider` to infer the types
 /// of multiple [BlocProvider]s.
 mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 
 /// {@template bloc_provider}
-/// Takes a [create] function that is responsible for
+/// Takes a [Create] function that is responsible for
 /// creating the [Bloc] or [Cubit] and a [child] which will have access
 /// to the instance via `BlocProvider.of(context)`.
 /// It is used as a dependency injection (DI) widget so that a single instance
@@ -27,8 +22,8 @@ mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 /// );
 /// ```
 ///
-/// It automatically handles closing the instance when used with [create].
-/// By default, [create] is called only when the instance is accessed.
+/// It automatically handles closing the instance when used with [Create].
+/// By default, [Create] is called only when the instance is accessed.
 /// To override this behavior, set [lazy] to `false`.
 ///
 /// ```dart
@@ -40,16 +35,21 @@ mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 /// ```
 ///
 /// {@endtemplate}
-class BlocProvider<T extends Cubit<Object>> extends SingleChildStatefulWidget
+class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
     with BlocProviderSingleChildWidget {
   /// {@macro bloc_provider}
-  const BlocProvider({
+  BlocProvider({
     Key key,
-    @required this.create,
-    this.child,
-    this.lazy = true,
-  })  : assert(create != null),
-        super(key: key);
+    @required Create<T> create,
+    Widget child,
+    bool lazy,
+  }) : this._(
+          key: key,
+          create: create,
+          dispose: (_, bloc) => bloc?.close(),
+          child: child,
+          lazy: lazy,
+        );
 
   /// Takes a [value] and a [child] which will have access to the [value] via
   /// `BlocProvider.of(context)`.
@@ -60,7 +60,7 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatefulWidget
   ///
   /// A new [Bloc] or [Cubit] should not be created in `BlocProvider.value`.
   /// New instances should always be created using the
-  /// default constructor within the [create] function.
+  /// default constructor within the [Create] function.
   ///
   /// ```dart
   /// BlocProvider.value(
@@ -72,10 +72,23 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatefulWidget
     Key key,
     @required T value,
     Widget child,
-  }) : this(key: key, create: (_) => value, child: child);
+  }) : this._(
+          key: key,
+          create: (_) => value,
+          child: child,
+        );
 
-  /// Creates a [Bloc] or [Cubit] of type [T].
-  final _Create<T> create;
+  /// Internal constructor responsible for creating the [BlocProvider].
+  /// Used by the [BlocProvider] default and value constructors.
+  BlocProvider._({
+    Key key,
+    @required Create<T> create,
+    Dispose<T> dispose,
+    this.child,
+    this.lazy,
+  })  : _create = create,
+        _dispose = dispose,
+        super(key: key, child: child);
 
   /// Widget which will have access to the [Bloc] or [Cubit].
   final Widget child;
@@ -84,8 +97,9 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatefulWidget
   /// Defaults to `true`.
   final bool lazy;
 
-  @override
-  _BlocProviderState<T> createState() => _BlocProviderState<T>();
+  final Dispose<T> _dispose;
+
+  final Create<T> _create;
 
   /// Method that allows widgets to access a [Bloc] or [Cubit] instance
   /// as long as their `BuildContext` contains a [BlocProvider] instance.
@@ -100,14 +114,10 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatefulWidget
     BuildContext context, {
     bool listen = false,
   }) {
-    final provider = listen
-        ? context
-            .dependOnInheritedWidgetOfExactType<_InheritedBlocProvider<T>>()
-        : context
-            .getElementForInheritedWidgetOfExactType<
-                _InheritedBlocProvider<T>>()
-            ?.widget as _InheritedBlocProvider<T>;
-    if (provider == null) {
+    try {
+      return Provider.of<T>(context, listen: listen);
+    } on ProviderNotFoundException catch (e) {
+      if (e.valueType != T) rethrow;
       throw FlutterError(
         '''
         BlocProvider.of() called with a context that does not contain a Bloc/Cubit of type $T.
@@ -119,84 +129,45 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatefulWidget
         ''',
       );
     }
-    return provider.value();
-  }
-}
-
-/// Extends the [BuildContext] class with the ability
-/// to perform a lookup based on a [Bloc] or [Cubit] type.
-extension BlocProviderExtension on BuildContext {
-  /// Performs a lookup using the [BuildContext] to obtain
-  /// the nearest ancestor [Bloc] or [Cubit] of type [T].
-  ///
-  /// Calling this method is equivalent to calling:
-  ///
-  /// ```dart
-  /// BlocProvider.of<T>(context);
-  /// ```
-  T bloc<T extends Cubit<Object>>() => BlocProvider.of<T>(this);
-}
-
-/// Extends the [BuildContext] class with the ability
-/// to listen to state changes given a [Bloc] or [Cubit] type.
-extension ListenProviderExtension on BuildContext {
-  /// Registers the [BuildContext] as a dependent and returns the
-  /// state of the [Bloc] or [Cubit].
-  ///
-  /// Calling this method is equivalent to calling:
-  ///
-  /// ```dart
-  /// BlocProvider.of<T>(context, listen: true).state;
-  /// ```
-  S listen<T extends Cubit<S>, S>() {
-    return BlocProvider.of<T>(this, listen: true).state;
-  }
-}
-
-class _BlocProviderState<T extends Cubit<Object>>
-    extends SingleChildState<BlocProvider<T>> {
-  final _completer = Completer<T>();
-  T _bloc;
-
-  @override
-  void initState() {
-    super.initState();
-    if (!widget.lazy) {
-      _bloc = widget.create(context);
-      _completer.complete(_bloc);
-    }
-  }
-
-  @override
-  void dispose() {
-    _bloc?.close();
-    super.dispose();
   }
 
   @override
   Widget buildWithChild(BuildContext context, Widget child) {
-    return _InheritedBlocProvider(
-      child: child ?? widget.child,
-      deferredBloc: _completer.future,
-      value: () {
-        if (!_completer.isCompleted) {
-          _bloc = widget.create(context);
-          _completer.complete(_bloc);
-        }
-        return _bloc;
-      },
+    return InheritedProvider<T>(
+      create: _create,
+      dispose: _dispose,
+      startListening: _startListening,
+      child: child,
+      lazy: lazy,
     );
+  }
+
+  static VoidCallback _startListening(
+    InheritedContext<Cubit> e,
+    Cubit value,
+  ) {
+    if (value == null) return () {};
+    final subscription = value.listen(
+      (Object _) => e.markNeedsNotifyDependents(),
+    );
+    if (subscription == null) return () {};
+    return subscription.cancel;
   }
 }
 
-class _InheritedBlocProvider<T extends Cubit<Object>>
-    extends DeferredInheritedStream<T> {
-  _InheritedBlocProvider({
-    Key key,
-    @required Future<T> deferredBloc,
-    @required this.value,
-    Widget child,
-  }) : super(key: key, deferredStream: deferredBloc, child: child);
-
-  final ValueGetter<T> value;
+/// Extends the `BuildContext` class with the ability
+/// to perform a lookup based on a `Bloc` type.
+extension BlocProviderExtension on BuildContext {
+  /// Performs a lookup using the `BuildContext` to obtain
+  /// the nearest ancestor `Cubit` of type [C].
+  ///
+  /// Calling this method is equivalent to calling:
+  ///
+  /// ```dart
+  /// BlocProvider.of<C>(context)
+  /// ```
+  @Deprecated(
+    'Use context.read or context.watch instead. Will be removed in v7.0.0',
+  )
+  C bloc<C extends Cubit<Object>>() => BlocProvider.of<C>(this);
 }

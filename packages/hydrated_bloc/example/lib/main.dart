@@ -57,7 +57,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: const Icon(Icons.brightness_6),
               onPressed: () {
-                context.bloc<BrightnessCubit>().toggleBrightness();
+                context.read<BrightnessCubit>().toggleBrightness();
               },
             ),
           ),
@@ -66,7 +66,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: const Icon(Icons.add),
               onPressed: () {
-                context.bloc<CounterBloc>().add(CounterEvent.increment);
+                context.read<CounterBloc>().add(CounterEvent.increment);
               },
             ),
           ),
@@ -75,7 +75,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: const Icon(Icons.remove),
               onPressed: () {
-                context.bloc<CounterBloc>().add(CounterEvent.decrement);
+                context.read<CounterBloc>().add(CounterEvent.decrement);
               },
             ),
           ),
@@ -84,7 +84,7 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: const Icon(Icons.delete_forever),
               onPressed: () async {
-                final counterBloc = context.bloc<CounterBloc>();
+                final counterBloc = context.read<CounterBloc>();
                 await counterBloc.clear();
                 counterBloc.add(CounterEvent.reset);
               },

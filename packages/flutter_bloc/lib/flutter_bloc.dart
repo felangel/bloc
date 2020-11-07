@@ -1,6 +1,8 @@
 library flutter_bloc;
 
 export 'package:bloc/bloc.dart';
+export 'package:provider/provider.dart'
+    show ReadContext, SelectContext, WatchContext;
 
 export './src/bloc_builder.dart';
 export './src/bloc_consumer.dart';
