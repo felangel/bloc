@@ -1,6 +1,6 @@
 ```dart
 // with extensions
-context.bloc<BlocA>();
+context.read<BlocA>();
 
 // without extensions
 BlocProvider.of<BlocA>(context)
