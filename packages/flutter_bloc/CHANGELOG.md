@@ -8,6 +8,7 @@
 - deprecated: `context.repository` in favor of `context.read` and `context.watch`
 - fix: rethrow `ProviderNotFoundException` from `RepositoryProvider` for external dependencies 
 - docs: improve inline documentation for `BlocProvider` and `RepositoryProvider`
+- docs: update list of examples in `README`
 
 # 6.0.6
 
