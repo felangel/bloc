@@ -78,10 +78,10 @@ abstract class Cubit<State> extends Stream<State> {
   /// {@endtemplate}
   @protected
   @visibleForTesting
-  void emit(State state) {
+  void emit(State state, {bool force = true}) {
     _controller ??= StreamController<State>.broadcast();
     if (_controller.isClosed) return;
-    if (state == _state && _emitted) return;
+    if (!force && state == _state && _emitted) return;
     onChange(Change<State>(currentState: this.state, nextState: state));
     _state = state;
     _controller.add(_state);

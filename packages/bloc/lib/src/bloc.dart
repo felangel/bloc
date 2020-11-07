@@ -222,7 +222,8 @@ abstract class Bloc<Event, State> extends Cubit<State>
   /// from `mapEventToState` in response to an event.
   @visibleForTesting
   @override
-  void emit(State state) => super.emit(state);
+  void emit(State state, {bool force = false}) =>
+      super.emit(state, force: force);
 
   void _bindEventsToStates() {
     _transitionSubscription = transformTransitions(
