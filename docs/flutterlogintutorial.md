@@ -328,11 +328,11 @@ The `_LoginButton` widget is only enabled if the status of the form is valid and
 
 ### Home Page
 
-The `HomePage` can access the current user's ID via `context.bloc<AuthenticationBloc>().state.user.id` and displays it via a `Text` widget. In addition, when the logout button is tapped, an `AuthenticationLogoutRequested` event is added to the `AuthenticationBloc`.
+The `HomePage` can access the current user via `context.select((AuthenticationBloc bloc) => bloc.state.user)` and displays it via a `Text` widget. In addition, when the logout button is tapped, an `AuthenticationLogoutRequested` event is added to the `AuthenticationBloc`.
 
 [home_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/home/view/home_page.dart ':include')
 
-?> **Note**: `context.bloc<AuthenticationBloc>().state.user.id` is a one time look-up and does not subscribe for updates.
+?> **Note**: `context.select((AuthenticationBloc bloc) => bloc.state.user)` will trigger updates if the user changes.
 
 At this point we have a pretty solid login implementation and we have decoupled our presentation layer from the business logic layer by using Bloc.
 

@@ -330,11 +330,11 @@ El widget `_LoginButton` solo está habilitado si el estado del formulario es v�
 
 ### Home Page
 
-La `HomePage` puede acceder al ID del usuario actual a través de `context.bloc<AuthenticationBloc>().state.user.id` y lo muestra a través de un widget de `Text`. Además, cuando se presiona el botón de cierre de sesión, se agrega un evento `AuthenticationLogoutRequested` al` AuthenticationBloc`.
+La `HomePage` puede acceder al usuario actual a través de `context.select((AuthenticationBloc bloc) => bloc.state.user)` y lo muestra a través de un widget de `Text`. Además, cuando se presiona el botón de cierre de sesión, se agrega un evento `AuthenticationLogoutRequested` al` AuthenticationBloc`.
 
 [home_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/home/view/home_page.dart ':include')
 
-?> **Nota**: `context.bloc<AuthenticationBloc>().state.user.id` es una búsqueda única y no se suscribe para recibir actualizaciones.
+?> **Nota**: `context.select((AuthenticationBloc bloc) => bloc.state.user)` se suscribe para recibir actualizaciones.
 
 En este punto, tenemos una implementación de inicio de sesión bastante sólida y hemos desacoplado nuestra capa de presentación de la capa de lógica empresarial mediante Bloc.
 

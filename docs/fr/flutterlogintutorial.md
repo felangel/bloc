@@ -324,11 +324,11 @@ Le widget `_LoginButton` est uniquement activé si le statut du formulaire est v
 
 ### Page d'accueil (home page)
 
-La `HomePage` peut accèder à l'id de l'utilisateur courant via `context.bloc<AuthenticationBloc>().state.user.id` et l'afficher via un widget `Text`. En plus, quand le bouton de déconnexion est tappé, un événement  `AuthenticationLogoutRequested` est ajouté au `AuthenticationBloc`.
+La `HomePage` peut accèder à l'id de l'utilisateur courant via `context.select((AuthenticationBloc bloc) => bloc.state.user)` et l'afficher via un widget `Text`. En plus, quand le bouton de déconnexion est tappé, un événement  `AuthenticationLogoutRequested` est ajouté au `AuthenticationBloc`.
 
 [home_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/home/view/home_page.dart ':include')
 
-?> **Note**: `context.bloc<AuthenticationBloc>().state.user.id` va récupérer la valeur au moment de la connexion mais il n'est pas soumis aux mises à jour automatiquement.
+?> **Note**: `context.select((AuthenticationBloc bloc) => bloc.state.user)` déclenchera des mises à jour si l'utilisateur change.
 
 A présent nous avons un système de connexion assez solide et nous avons découper la couche présentation de la couche logique grâce à Bloc.
 
