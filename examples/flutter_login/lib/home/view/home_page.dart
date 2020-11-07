@@ -15,14 +15,19 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(
-              'UserID: ${context.bloc<AuthenticationBloc>().state.user.id}',
+            Builder(
+              builder: (context) {
+                final userId = context.select(
+                  (AuthenticationBloc bloc) => bloc.state.user.id,
+                );
+                return Text('UserID: $userId');
+              },
             ),
             RaisedButton(
               child: const Text('Logout'),
               onPressed: () {
                 context
-                    .bloc<AuthenticationBloc>()
+                    .read<AuthenticationBloc>()
                     .add(AuthenticationLogoutRequested());
               },
             ),

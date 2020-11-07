@@ -42,7 +42,7 @@ class _UsernameInput extends StatelessWidget {
         return TextField(
           key: const Key('loginForm_usernameInput_textField'),
           onChanged: (username) =>
-              context.bloc<LoginBloc>().add(LoginUsernameChanged(username)),
+              context.read<LoginBloc>().add(LoginUsernameChanged(username)),
           decoration: InputDecoration(
             labelText: 'username',
             errorText: state.username.invalid ? 'invalid username' : null,
@@ -62,7 +62,7 @@ class _PasswordInput extends StatelessWidget {
         return TextField(
           key: const Key('loginForm_passwordInput_textField'),
           onChanged: (password) =>
-              context.bloc<LoginBloc>().add(LoginPasswordChanged(password)),
+              context.read<LoginBloc>().add(LoginPasswordChanged(password)),
           obscureText: true,
           decoration: InputDecoration(
             labelText: 'password',
@@ -87,7 +87,7 @@ class _LoginButton extends StatelessWidget {
                 child: const Text('Login'),
                 onPressed: state.status.isValidated
                     ? () {
-                        context.bloc<LoginBloc>().add(const LoginSubmitted());
+                        context.read<LoginBloc>().add(const LoginSubmitted());
                       }
                     : null,
               );

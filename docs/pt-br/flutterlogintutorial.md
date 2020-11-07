@@ -328,11 +328,11 @@ O widget `_LoginButton` somente é habilitado se o status do formulário for vá
 
 ### Página Inicial
 
-A `HomePage` pode acessar o ID do usuário atual através do `context.select((AuthenticationBloc bloc) => bloc.state.user)` e mostrá-lo usando um widget `Text`. Além do mais, quando o botão de sair é pressionado, um evento de `AuthenticationLogoutRequested` é adicionado ao `AuthenticationBloc`.
+A `HomePage` pode acessar o ID do usuário atual através do `context.select((AuthenticationBloc bloc) => bloc.state.user.id)` e mostrá-lo usando um widget `Text`. Além do mais, quando o botão de sair é pressionado, um evento de `AuthenticationLogoutRequested` é adicionado ao `AuthenticationBloc`.
 
 [home_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/home/view/home_page.dart ':include')
 
-?> **Nota**: o `context.select((AuthenticationBloc bloc) => bloc.state.user)` irá disparar atualizações se o usuário mudar.
+?> **Nota**: o `context.select((AuthenticationBloc bloc) => bloc.state.user.id)` irá disparar atualizações se o user id mudar.
 
 Nes ponto temos uma implementação sólida de login e nós desacoplamos nossa camada de apresentação da camada com as regras de negócio usando o Bloc.
 

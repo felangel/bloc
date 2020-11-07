@@ -11,8 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^6.0.0
-  flutter_bloc: ^6.0.0
+  flutter_bloc: ^6.1.0
   formz: ^0.3.1
   equatable: ^1.2.5
   authentication_repository:
