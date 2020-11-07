@@ -302,7 +302,7 @@ A seguir iremos dar uma olhada em `LoginPage` e `LoginForm`.
 
 [login_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/view/login_page.dart ':include')
 
-?> **Nota**: `context.repository` é usado para procurar acima uma instância do `AuthenticationRepository` através do `BuildContext`.
+?> **Nota**: `context.read` é usado para procurar acima uma instância do `AuthenticationRepository` através do `BuildContext`.
 
 ### Formulário de Login
 

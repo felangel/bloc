@@ -302,7 +302,7 @@ Next let's take a look at the `LoginPage` and `LoginForm`.
 
 [login_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/view/login_page.dart ':include')
 
-?> **Note**: `context.repository` is used to lookup the instance of `AuthenticationRepository` via the `BuildContext`.
+?> **Note**: `context.read` is used to lookup the instance of `AuthenticationRepository` via the `BuildContext`.
 
 ### Login Form
 

@@ -298,7 +298,7 @@ Maintenant, regardons à quoi ressemble la page `LoginPage` et `LoginForm`.
 
 [login_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/view/login_page.dart ':include')
 
-?> **Note**: `context.repository` est utilisé pour récuperer l'instance de `AuthenticationRepository` via le `BuildContext`.
+?> **Note**: `context.read` est utilisé pour récuperer l'instance de `AuthenticationRepository` via le `BuildContext`.
 
 ### Formulaire de connexion (login form)
 

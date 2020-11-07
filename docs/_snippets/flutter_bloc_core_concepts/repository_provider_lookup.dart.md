@@ -1,6 +1,6 @@
 ```dart
 // with extensions
-context.repository<RepositoryA>();
+context.read<RepositoryA>();
 
 // without extensions
 RepositoryProvider.of<RepositoryA>(context)
