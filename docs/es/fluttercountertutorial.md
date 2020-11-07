@@ -102,7 +102,7 @@ El `CounterView` es responsable de representar el conteo actual y de generar dos
 
 [counter_view.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_view.dart ':include')
 
-Un `BlocBuilder` se usa para envolver el widget `Text` con el fin de actualizar el texto en cualquier momento que cambie el estado de `CounterCubit`. Además, `context.bloc<CounterCubit>()` se usa para buscar la instancia de `CounterCubit` más cercana.
+Un `BlocBuilder` se usa para envolver el widget `Text` con el fin de actualizar el texto en cualquier momento que cambie el estado de `CounterCubit`. Además, `context.read<CounterCubit>()` se usa para buscar la instancia de `CounterCubit` más cercana.
 
 ?> **Nota**: Sólo el widget `Text` está envuelto en un `BlocBuilder` porque es el único widget que necesita ser reconstruido en respuesta a los cambios de estado en el `CounterCubit`. Evite envolver innecesariamente los widgets que no necesitan ser reconstruidos cuando cambia un estado.
 
