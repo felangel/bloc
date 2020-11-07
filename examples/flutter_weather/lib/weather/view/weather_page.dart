@@ -11,9 +11,7 @@ class WeatherPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => WeatherCubit(
-        context.repository<WeatherRepository>(),
-      ),
+      create: (context) => WeatherCubit(context.read<WeatherRepository>()),
       child: WeatherView(),
     );
   }
@@ -30,7 +28,7 @@ class WeatherView extends StatelessWidget {
             icon: const Icon(Icons.settings),
             onPressed: () {
               Navigator.of(context).push<void>(SettingsPage.route(
-                context.bloc<WeatherCubit>(),
+                context.read<WeatherCubit>(),
               ));
             },
           ),
@@ -40,7 +38,7 @@ class WeatherView extends StatelessWidget {
         child: BlocConsumer<WeatherCubit, WeatherState>(
           listener: (context, state) {
             if (state.status.isSuccess) {
-              context.bloc<ThemeCubit>().updateTheme(state.weather);
+              context.read<ThemeCubit>().updateTheme(state.weather);
             }
           },
           builder: (context, state) {
@@ -52,7 +50,7 @@ class WeatherView extends StatelessWidget {
               case WeatherStatus.success:
                 return WeatherPopulated(
                   onRefresh: () =>
-                      context.bloc<WeatherCubit>().refreshWeather(),
+                      context.read<WeatherCubit>().refreshWeather(),
                   weather: state.weather,
                   units: state.temperatureUnits,
                 );
@@ -67,7 +65,7 @@ class WeatherView extends StatelessWidget {
         child: const Icon(Icons.search),
         onPressed: () async {
           final city = await Navigator.of(context).push(SearchPage.route());
-          unawaited(context.bloc<WeatherCubit>().fetchWeather(city));
+          unawaited(context.read<WeatherCubit>().fetchWeather(city));
         },
       ),
     );

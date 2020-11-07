@@ -31,7 +31,7 @@ class SettingsPage extends StatelessWidget {
                 ),
                 trailing: Switch(
                   value: state.temperatureUnits.isCelsius,
-                  onChanged: (_) => context.bloc<WeatherCubit>().toggleUnits(),
+                  onChanged: (_) => context.read<WeatherCubit>().toggleUnits(),
                 ),
               );
             },
