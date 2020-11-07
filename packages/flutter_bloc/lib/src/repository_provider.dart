@@ -65,7 +65,8 @@ class RepositoryProvider<T> extends Provider<T>
   static T of<T>(BuildContext context, {bool listen = false}) {
     try {
       return Provider.of<T>(context, listen: listen);
-    } on ProviderNotFoundException catch (_) {
+    } on ProviderNotFoundException catch (e) {
+      if (e.valueType != T) rethrow;
       throw FlutterError(
         '''
         RepositoryProvider.of() called with a context that does not contain a repository of type $T.

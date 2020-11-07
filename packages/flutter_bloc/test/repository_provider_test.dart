@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -232,6 +233,23 @@ void main() {
       );
       final dynamic exception = tester.takeException();
       expect(exception, expectedException);
+    });
+
+    testWidgets(
+        'should rethrow ProviderNotFound '
+        'if exception is for different provider', (tester) async {
+      await tester.pumpWidget(
+        RepositoryProvider<Repository>(
+          lazy: false,
+          create: (context) {
+            context.read<int>();
+            return const Repository(0);
+          },
+          child: const SizedBox(),
+        ),
+      );
+      final exception = tester.takeException() as ProviderNotFoundException;
+      expect(exception.valueType, int);
     });
 
     testWidgets(

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class MockCubit<S> extends Cubit<S> {
   MockCubit(S state) : super(state);
@@ -397,11 +398,28 @@ void main() {
         BlocProvider<CounterCubit>(
           lazy: false,
           create: (_) => throw expectedException,
-          child: Container(),
+          child: const SizedBox(),
         ),
       );
       final dynamic exception = tester.takeException();
       expect(exception, expectedException);
+    });
+
+    testWidgets(
+        'should rethrow ProviderNotFound '
+        'if exception is for different provider', (tester) async {
+      await tester.pumpWidget(
+        BlocProvider<CounterCubit>(
+          lazy: false,
+          create: (context) {
+            context.read<int>();
+            return CounterCubit();
+          },
+          child: const SizedBox(),
+        ),
+      );
+      final exception = tester.takeException() as ProviderNotFoundException;
+      expect(exception.valueType, int);
     });
 
     testWidgets(

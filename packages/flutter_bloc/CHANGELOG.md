@@ -6,6 +6,7 @@
 - feat: add `context.read<T>()` which allows widgets to access `T` without listening for changes
 - deprecated: `context.bloc` in favor of `context.read` and `context.watch`
 - deprecated: `context.repository` in favor of `context.read` and `context.watch`
+- fix: rethrow `ProviderNotFoundException` from `RepositoryProvider` for external dependencies 
 - docs: improve inline documentation for `BlocProvider` and `RepositoryProvider`
 
 # 6.0.6
