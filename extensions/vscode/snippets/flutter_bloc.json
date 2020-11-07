@@ -111,12 +111,16 @@
     "prefix": "repoof",
     "body": "RepositoryProvider.of<${1:Subject}Repository>(context)"
   },
-  "context.bloc()": {
-    "prefix": "ctxbloc",
-    "body": "context.bloc<${1:Subject}${2|Bloc,Cubit|}>()"
+  "context.read()": {
+    "prefix": "read",
+    "body": "context.read<${1:Subject}${2|Bloc,Cubit,Repository|}>()"
   },
-  "context.repository()": {
-    "prefix": "ctxrepo",
-    "body": "context.repository<${1:Subject}Repository>()"
+  "context.select()": {
+    "prefix": "select",
+    "body": "context.select((${1:Subject}${2|Bloc,Cubit|} element) => ${3:element.state})"
+  },
+  "context.watch()": {
+    "prefix": "watch",
+    "body": "context.watch<${1:Subject}${2|Bloc,Cubit,Repository|}>()"
   }
 }

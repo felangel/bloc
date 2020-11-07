@@ -1,3 +1,18 @@
+# 5.4.0
+
+- feat: add snippets for:
+  - `context.read`
+  - `context.select`
+  - `context.watch`
+- feat: update to latest packages
+  - angular_bloc -> ^6.0.1
+  - bloc -> ^6.1.0
+  - bloc_test -> ^7.1.0
+  - equatable -> ^1.2.5
+  - flutter_bloc -> ^6.1.0
+  - hydrated_bloc -> ^6.0.3
+  - sealed_flutter_bloc -> ^6.0.0
+
 # 5.3.2
 
 - fix: update dependencies to fix potential security vulnerabilities

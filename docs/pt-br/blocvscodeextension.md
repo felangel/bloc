@@ -70,8 +70,9 @@ Ou você pode clicar com o botão direito do mouse no diretório em que deseja c
 | `blocconsumer`      | Creates a `BlocConsumer` widget            |
 | `blocof`            | Shortcut for `BlocProvider.of()`           |
 | `repoof`            | Shortcut for `RepositoryProvider.of()`     |
-| `ctxbloc`           | Shortcut for `context.bloc()`              |
-| `ctxrepo`           | Shortcut for `context.repository()`        |
+| `read`              | Shortcut for `context.read()`              |
+| `watch`             | Shortcut for `context.watch()`             |
+| `select`            | Shortcut for `context.select()`            |
 | `blocstate`         | Creates a state class                      |
 | `blocevent`         | Creates an event class                     |
 

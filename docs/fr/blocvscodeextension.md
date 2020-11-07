@@ -69,8 +69,9 @@ You can activate the commands by launching the command palette (View -> Command 
 | `blocconsumer`      | Crée un Widget `BlocConsumer`             |
 | `blocof`            | Raccourcis pour `BlocProvider.of()`       |
 | `repoof`            | Raccourcis pour `RepositoryProvider.of()` |
-| `ctxbloc`           | Raccourcis pour `context.bloc()`          |
-| `ctxrepo`           | Raccourcis pour `context.repository()`    |
+| `read`              | Raccourcis pour `context.read()`          |
+| `watch`             | Raccourcis pour `context.watch()`         |
+| `select`            | Raccourcis pour `context.select()`        |
 | `blocstate`         | Crée une Classe state                     |
 | `blocevent`         | Crée une Classe event                     |
 
