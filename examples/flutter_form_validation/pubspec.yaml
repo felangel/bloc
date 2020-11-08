@@ -12,7 +12,6 @@ dependencies:
     path: ../../packages/flutter_bloc
   equatable: ^1.2.5
   formz: ^0.3.1
-  rxdart: ^0.24.0
 
 flutter:
   uses-material-design: true
