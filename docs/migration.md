@@ -2,6 +2,155 @@
 
 ?> **Tip**: Please refer to the [release log](https://github.com/felangel/bloc/releases) for more information regarding what changed in each release.
 
+## v6.1.0
+
+### package:flutter_bloc
+
+#### ❗context.bloc and context.repository are deprecated in favor of context.read and context.write
+
+##### Rationale
+
+`context.read`, `context.watch`, and `context.select` were added to align with the existing [provider](https://pub.dev/packages/provider) API which many developers are familiar and to address issues that have been raised by the community. To improve the safety of the code and maintain consistency, `context.bloc` was deprecated because it can be replaced with either `context.read` or `context.watch` dependending on if it's used directly within `build`.
+
+**context.watch**
+
+`context.watch` addresses the request to have a [MultiBlocBuilder](https://github.com/felangel/bloc/issues/538) because we can watch several blocs within a single `Builder` in order to render UI based on multiple states:
+
+```dart
+Builder(
+  builder: (context) {
+    final stateA = context.watch<BlocA>().state;
+    final stateB = context.watch<BlocB>().state;
+    final stateC = context.watch<BlocC>().state;
+
+    // return a Widget which depends on the state of BlocA, BlocB, and BlocC
+  }
+);
+```
+
+**context.select**
+
+`context.select` allows developers to render/update UI based on a part of a bloc state and addresses the request to have a [simpler buildWhen](https://github.com/felangel/bloc/issues/1521).
+
+```dart
+final name = context.select((UserBloc bloc) => bloc.state.user.name);
+```
+
+The above snippet allows us to access and rebuild the widget only when the current user's name changes.
+
+**context.read**
+
+Even though it looks like `context.read` is identical to `context.bloc` there are some subtle but significant differences. Both allow you to access a bloc with a `BuildContext` and do not result in rebuilds; however, `context.read` cannot be called directly within a `build` method. There are two main reasons to use `context.bloc` within `build`:
+
+1. **To access the bloc's state**
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final state = context.bloc<MyBloc>().state;
+  return Text('$state');
+}
+```
+
+The above usage is error prone because the `Text` widget will not be rebuilt if the state of the bloc changes. In this scenario, either a `BlocBuilder` or `context.watch` should be used.
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final state = context.watch<MyBloc>().state;
+  return Text('$state');
+}
+```
+
+or
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return BlocBuilder<MyBloc, MyState>(
+    builder: (context, state) => Text('$state'),
+  );
+}
+```
+
+!> Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes. If the entire widget does not need to be rebuilt, either use `BlocBuilder` to wrap the parts that should rebuild, use a `Builder` with `context.watch` to scope the rebuilds, or decompose the widget into smaller widgets.
+
+2. **To access the bloc so that an event can be added**
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final bloc = context.bloc<MyBloc>();
+  return RaisedButton(
+    onPressed: () => bloc.add(MyEvent()),
+    ...
+  )
+}
+```
+
+The above usage is inefficient because it results in a bloc lookup on each rebuild when the bloc is only needed when the user taps the `RaisedButton`. In this scenario, prefer to use `context.read` to access the bloc directly where it is needed (in this case, in the `onPressed` callback).
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return RaisedButton(
+    onPressed: () => context.read<MyBloc>().add(MyEvent()),
+    ...
+  )
+}
+```
+
+**Summary**
+
+**v6.0.x**
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final bloc = context.bloc<MyBloc>();
+  return RaisedButton(
+    onPressed: () => bloc.add(MyEvent()),
+    ...
+  )
+}
+```
+
+**v6.1.x**
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return RaisedButton(
+    onPressed: () => context.read<MyBloc>().add(MyEvent()),
+    ...
+  )
+}
+```
+
+?> If accessing a bloc to add an event, perform the bloc access using `context.read` in the callback where it is needed.
+
+**v6.0.x**
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final state = context.bloc<MyBloc>().state;
+  return Text('$state');
+}
+```
+
+**v6.1.x**
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final state = context.watch<MyBloc>().state;
+  return Text('$state');
+}
+```
+
+?> Use `context.watch` when accessing the state of the bloc in order to ensure the widget is rebuilt when the state changes.
+
 ## v6.0.0
 
 ### package:bloc

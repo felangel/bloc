@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_logo_full.png" height="100" alt="Bloc" /><br/><small>v6.0.0</small>
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_logo_full.png" height="100" alt="Bloc" /><br/><small>v6.1.0</small>
 
 [![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
@@ -16,6 +16,6 @@
 - 可测试性高
 - 为 Dart，Flutter，和 AngularDart
 
-[迁移到 v6.0.0](migration.md)
+[迁移到 v6.1.0](migration.md)
 [GitHub](https://github.com/felangel/bloc/)
 [开始](zh-cn/gettingstarted.md)
