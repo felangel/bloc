@@ -28,17 +28,17 @@ For fine-grained control over when the `builder` function is called an optional 
 
 **BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
 
-In most cases, `BlocProvider` should be used to create new `blocs` which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle closing the bloc.
+In most cases, `BlocProvider` should be used to create new blocs which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle closing the bloc.
 
 [bloc_provider.dart](_snippets/flutter_bloc_core_concepts/bloc_provider.dart.md ':include')
 
-By default, BlocProvider will create the bloc lazily, meaning `create` will get executed when the bloc is looked up via `BlocProvider.of<BlocA>(context)`.
+By default, `BlocProvider` will create the bloc lazily, meaning `create` will get executed when the bloc is looked up via `BlocProvider.of<BlocA>(context)`.
 
 To override this behavior and force `create` to be run immediately, `lazy` can be set to `false`.
 
 [bloc_provider.dart](_snippets/flutter_bloc_core_concepts/bloc_provider_lazy.dart.md ':include')
 
-In some cases, `BlocProvider` can be used to provide an existing bloc to a new portion of the widget tree. This will be most commonly used when an existing `cubit` needs to be made available to a new route. In this case, `BlocProvider` will not automatically close the bloc since it did not create it.
+In some cases, `BlocProvider` can be used to provide an existing bloc to a new portion of the widget tree. This will be most commonly used when an existing bloc needs to be made available to a new route. In this case, `BlocProvider` will not automatically close the bloc since it did not create it.
 
 [bloc_provider.dart](_snippets/flutter_bloc_core_concepts/bloc_provider_value.dart.md ':include')
 
