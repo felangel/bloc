@@ -7,4 +7,6 @@ class User extends Equatable {
 
   @override
   List<Object> get props => [id];
+
+  static const empty = User('-');
 }
