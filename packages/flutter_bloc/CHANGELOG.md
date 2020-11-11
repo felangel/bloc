@@ -1,12 +1,16 @@
+# 6.1.1
+
+- fix: `BlocConsumer` does not respect `buildWhen` and results in unnecessary rebuilds
+
 # 6.1.0
 
 - feat: add optional `listen` to `BlocProvider` and `RepositoryProvider`
-- feat: add `context.select<T, R>(R Function(T value))` which allows widgets to listen to only a small part of the state of `T` (`R`).
+- feat: add `context.select<T, R>(R Function(T value))` which allows widgets to listen to only a small part of the state of `T` (`R`)
 - feat: add `context.watch<T>()` which allows widgets to listen to changes in the state of `T`
 - feat: add `context.read<T>()` which allows widgets to access `T` without listening for changes
 - deprecated: `context.bloc` in favor of `context.read` and `context.watch`
 - deprecated: `context.repository` in favor of `context.read` and `context.watch`
-- fix: rethrow `ProviderNotFoundException` from `RepositoryProvider` for external dependencies 
+- fix: rethrow `ProviderNotFoundException` from `RepositoryProvider` for external dependencies
 - docs: improve inline documentation for `BlocProvider` and `RepositoryProvider`
 - docs: update list of examples in `README`
 
@@ -24,7 +28,7 @@
 
 # 6.0.3
 
-- refactor: `BlocConsumer` requires a single subscriptionpwd
+- refactor: `BlocConsumer` requires a single subscription
 - refactor: `BlocBuilder` extends `BlocListener`
 - refactor: `MultiRepositoryProvider` extends `MultiProvider`
 
