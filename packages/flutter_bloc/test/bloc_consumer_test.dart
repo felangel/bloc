@@ -186,6 +186,100 @@ void main() {
       expect(listenerStates, [1, 2]);
     });
 
+    testWidgets(
+        'does not trigger rebuilds when '
+        'buildWhen evaluates to false (inferred bloc)', (tester) async {
+      final counterCubit = CounterCubit();
+      final listenerStates = <int>[];
+      final builderStates = <int>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: BlocProvider.value(
+              value: counterCubit,
+              child: BlocConsumer<CounterCubit, int>(
+                buildWhen: (previous, current) => (previous + current) % 3 == 0,
+                builder: (context, state) {
+                  builderStates.add(state);
+                  return Text('State: $state');
+                },
+                listener: (_, state) {
+                  listenerStates.add(state);
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.text('State: 0'), findsOneWidget);
+      expect(builderStates, [0]);
+      expect(listenerStates, isEmpty);
+
+      counterCubit.increment();
+      await tester.pump();
+
+      expect(find.text('State: 0'), findsOneWidget);
+      expect(builderStates, [0]);
+      expect(listenerStates, [1]);
+
+      counterCubit.increment();
+      await tester.pumpAndSettle();
+
+      expect(find.text('State: 2'), findsOneWidget);
+      expect(builderStates, [0, 2]);
+      expect(listenerStates, [1, 2]);
+    });
+
+    testWidgets('updates when cubit/bloc reference has changed',
+        (tester) async {
+      const buttonKey = Key('__button__');
+      var counterCubit = CounterCubit();
+      final listenerStates = <int>[];
+      final builderStates = <int>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: StatefulBuilder(
+              builder: (context, setState) {
+                return BlocConsumer<CounterCubit, int>(
+                  cubit: counterCubit,
+                  builder: (context, state) {
+                    builderStates.add(state);
+                    return TextButton(
+                      key: buttonKey,
+                      onPressed: () => setState(() {}),
+                      child: Text('State: $state'),
+                    );
+                  },
+                  listener: (_, state) {
+                    listenerStates.add(state);
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+      );
+      expect(find.text('State: 0'), findsOneWidget);
+      expect(builderStates, [0]);
+      expect(listenerStates, isEmpty);
+
+      counterCubit.increment();
+      await tester.pump();
+
+      expect(find.text('State: 1'), findsOneWidget);
+      expect(builderStates, [0, 1]);
+      expect(listenerStates, [1]);
+
+      counterCubit = CounterCubit();
+      await tester.tap(find.byKey(buttonKey));
+      await tester.pumpAndSettle();
+
+      expect(find.text('State: 0'), findsOneWidget);
+      expect(builderStates, [0, 1, 0]);
+      expect(listenerStates, [1]);
+    });
+
     testWidgets('does not trigger listen when listenWhen evaluates to false',
         (tester) async {
       final counterCubit = CounterCubit();
