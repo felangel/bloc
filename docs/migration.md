@@ -6,7 +6,7 @@
 
 ### package:flutter_bloc
 
-#### ❗context.bloc and context.repository are deprecated in favor of context.read and context.write
+#### ❗context.bloc and context.repository are deprecated in favor of context.read and context.watch
 
 ##### Rationale
 
