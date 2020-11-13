@@ -144,7 +144,7 @@ class CounterBloc extends HydratedBloc<CounterEvent, int> with ReplayBlocMixin {
 
 ## Dart Versions
 
-- Dart 2: >= 2.7.0
+- Dart 2: >= 2.6.0
 
 ## Maintainers
 
