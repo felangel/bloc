@@ -2,7 +2,7 @@
 
 - feat: export `package:bloc/bloc.dart`
 - deps: update to `bloc: ^6.1.0`
-- deps: require dart >=2.6.0
+- deps: require `dart >=2.6.0`
 
 # 0.0.1-dev.3
 
