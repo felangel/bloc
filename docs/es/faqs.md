@@ -48,6 +48,48 @@ Sin `Equatable`, la prueba anterior fallaría y necesitaría reescribirse como:
 
 [my_bloc_test.dart](../_snippets/faqs/without_equatable_bloc_test.dart.md ':include')
 
+## Manejando errores
+
+❔ **Pregunta**: ¿Cómo puedo manejar un error sin dejar de mostrar datos anteriores?
+
+💡 **Respuesta**:
+
+Esto depende en gran medida de cómo se haya modelado el estado del bloc. En los casos en que los datos deban conservarse incluso en presencia de un error, considere usar una sola clase de estado.
+
+```dart
+enum Status { initial, loading, success, failure }
+class MyState {
+  const MyState({
+    this.data = Data.empty,
+    this.error = '',
+    this.status = Status.initial,
+  });
+  final Data data;
+  final String error;
+  final Status status;
+  MyState copyWith({Data data, String error, Status status}) {
+    return MyState(
+      data: data ?? this.data,
+      error: error ?? this.error,
+      status: status ?? this.status,
+    );
+  }
+}
+```
+
+Esto permitirá que los widgets tengan acceso a las propiedades `data` y `error` simultáneamente y el bloque puede usar `state.copyWith` para retener datos antiguos incluso cuando haya ocurrido un error.
+
+```dart
+if (event is DataRequested) {
+  try {
+    final data = await _repository.getData();
+    yield state.copyWith(status: Status.success, data: data);
+  } on Exception {
+    yield state.copyWith(status: Status.failure, error: 'Something went wrong!');
+  }
+}
+```
+
 ## Bloc vs. Redux
 
 ❔ **Pregunta**: ¿Cuál es la diferencia entre Bloc y Redux?

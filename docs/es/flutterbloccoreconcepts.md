@@ -26,19 +26,21 @@ Si desea un control detallado sobre cuándo se llama a la función builder, pued
 
 ### BlocProvider
 
-**BlocProvider** es un widget de Flutter que proporciona un bloc a sus hijos a través de `BlocProvider.of <T> (context)`. Se utiliza como un widget de inyección de dependencia (DI en inglés) para que se pueda proporcionar una sola instancia de un bloc a múltiples widgets dentro de un subárbol.
+**BlocProvider** es un widget de Flutter que proporciona un bloc a sus hijos a través de `BlocProvider.of<T>(context)`. Se utiliza como un widget de inyección de dependencia (DI en inglés) para que se pueda proporcionar una sola instancia de un bloc a múltiples widgets dentro de un subárbol.
 
 En la mayoría de los casos, `BlocProvider` debe usarse para crear nuevos `blocs` que estarán disponibles para el resto del subárbol. En este caso, dado que `BlocProvider` es responsable de crear el bloc, se encargará automáticamente de cerrar el bloc.
 
 [bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider.dart.md ':include')
 
-En otros casos, `BlocProvider` puede ser usado para proveer un bloc ya existente al subárbol, esto es comúnmente usado cuando ya se requiere que un `bloc` anteriormente creado esté disponible para una nueva ruta, en este caso, `BlocProvider` no cerrará automáticamente el `bloc` puesto que no lo creó.
+Por defecto, `BlocProvider` creará el bloc de forma perezosa, lo que significa que `create` se ejecutará cuando el bloc se busque a través de `BlocProvider.of<BlocA>(context)`.
+
+Para anular este comportamiento y forzar la ejecución inmediata de `create`, se puede establecer `lazy` a `false`.
+
+[bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider_lazy.dart.md ':include')
+
+En algunos casos, `BlocProvider` se puede utilizar para proporcionar un bloc existente a una nueva parte del árbol de widgets. Esto se utilizará con mayor frecuencia cuando un bloc existente deba estar disponible para una nueva ruta. En este caso, `BlocProvider` no cerrará automáticamente el bloc ya que no lo creó.
 
 [bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider_value.dart.md ':include')
-
-entonces desde `ChildA` o `ScreenA` podemos recuperar `BlocA` con:
-
-[bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider_lookup.dart.md ':include')
 
 ### MultiBlocProvider
 

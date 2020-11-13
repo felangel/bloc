@@ -16,6 +16,6 @@
 - Altamente Testeable
 - Para Dart, Flutter y AngularDart
 
-[Migrar a v6.0.0](es/migration.md)
+[Migrar a v6.1.0](es/migration.md)
 [GitHub](https://github.com/felangel/bloc/)
 [Comenzar](es/gettingstarted.md)
