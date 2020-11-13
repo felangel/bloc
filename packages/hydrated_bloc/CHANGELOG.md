@@ -1,3 +1,9 @@
+# 6.1.0
+
+- feat: export `package:bloc/bloc.dart`
+- deps: update to `bloc: ^6.1.0`
+- deps: require `dart >=2.6.0`
+
 # 6.0.3
 
 - fix: `HydratedStorage` exception due to closed box on `hydrate`
