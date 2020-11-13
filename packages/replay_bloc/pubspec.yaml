@@ -4,13 +4,13 @@ repository: https://github.com/felangel/bloc
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://github.com/felangel/bloc
 
-version: 0.0.1-dev.3
+version: 0.0.1-dev.4
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
-  bloc: ^6.0.0
+  bloc: ^6.1.0
 
 dev_dependencies:
   coverage: ^0.14.1

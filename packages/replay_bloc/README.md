@@ -144,7 +144,7 @@ class CounterBloc extends HydratedBloc<CounterEvent, int> with ReplayBlocMixin {
 
 ## Dart Versions
 
-- Dart 2: >= 2.7.0
+- Dart 2: >= 2.6.0
 
 ## Maintainers
 
@@ -152,4 +152,4 @@ class CounterBloc extends HydratedBloc<CounterEvent, int> with ReplayBlocMixin {
 
 ## Supporters
 
-[![Very Good Ventures](https://raw.githubusercontent.com/felangel/cubit/master/assets/vgv_logo.png)](https://verygood.ventures)
+[![Very Good Ventures](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png)](https://verygood.ventures)
