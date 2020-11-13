@@ -35,7 +35,7 @@ class MyThemeAppState extends State<MyThemeApp> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<Cubit<ThemeData>, ThemeData>(
-      cubit: _themeCubit,
+      value: _themeCubit,
       builder: ((context, theme) {
         _onBuild();
         return MaterialApp(
@@ -93,7 +93,7 @@ class MyCounterAppState extends State<MyCounterApp> {
         body: Column(
           children: <Widget>[
             BlocBuilder<CounterCubit, int>(
-              cubit: _cubit,
+              value: _cubit,
               buildWhen: (previousState, state) {
                 return (previousState + state) % 3 == 0;
               },
@@ -105,7 +105,7 @@ class MyCounterAppState extends State<MyCounterApp> {
               },
             ),
             BlocBuilder<CounterCubit, int>(
-              cubit: _cubit,
+              value: _cubit,
               builder: (context, count) {
                 return Text(
                   '$count',
@@ -133,12 +133,12 @@ class CounterCubit extends Cubit<int> {
 
 void main() {
   group('BlocBuilder', () {
-    testWidgets('throws if initialized with null cubit and builder',
+    testWidgets('throws if initialized with null value and builder',
         (tester) async {
       try {
         await tester.pumpWidget(
           BlocBuilder<ThemeCubit, ThemeData>(
-            cubit: null,
+            value: null,
             builder: null,
           ),
         );
@@ -151,7 +151,7 @@ void main() {
       try {
         await tester.pumpWidget(
           BlocBuilder<ThemeCubit, ThemeData>(
-            cubit: ThemeCubit(),
+            value: ThemeCubit(),
             builder: null,
           ),
         );
@@ -432,7 +432,7 @@ void main() {
       final counterCubit = CounterCubit();
       await tester.pumpWidget(
         BlocBuilder<CounterCubit, int>(
-          cubit: counterCubit,
+          value: counterCubit,
           buildWhen: (previous, state) {
             if (state % 2 == 0) {
               buildWhenPreviousState.add(previous);
@@ -467,7 +467,7 @@ void main() {
           textDirection: TextDirection.ltr,
           child: StatefulBuilder(
             builder: (context, setState) => BlocBuilder<CounterCubit, int>(
-              cubit: counterCubit,
+              value: counterCubit,
               buildWhen: (previous, state) => state % 2 == 0,
               builder: (_, state) {
                 states.add(state);

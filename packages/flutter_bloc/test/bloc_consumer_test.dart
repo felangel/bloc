@@ -47,7 +47,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: BlocConsumer<CounterCubit, int>(
-              cubit: counterCubit,
+              value: counterCubit,
               builder: (context, state) {
                 return Text('State: $state');
               },
@@ -71,7 +71,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: BlocConsumer<CounterCubit, int>(
-              cubit: counterCubit,
+              value: counterCubit,
               builder: (context, state) {
                 return Text('State: $state');
               },
@@ -101,7 +101,7 @@ void main() {
           child: MaterialApp(
             home: Scaffold(
               body: BlocConsumer<CounterCubit, int>(
-                cubit: counterCubit,
+                value: counterCubit,
                 builder: (context, state) {
                   return Text('State: $state');
                 },
@@ -126,7 +126,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: BlocConsumer<CounterCubit, int>(
-              cubit: counterCubit,
+              value: counterCubit,
               builder: (context, state) {
                 return Text('State: $state');
               },
@@ -154,7 +154,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: BlocConsumer<CounterCubit, int>(
-              cubit: counterCubit,
+              value: counterCubit,
               buildWhen: (previous, current) => (previous + current) % 3 == 0,
               builder: (context, state) {
                 builderStates.add(state);
@@ -242,7 +242,7 @@ void main() {
             body: StatefulBuilder(
               builder: (context, setState) {
                 return BlocConsumer<CounterCubit, int>(
-                  cubit: counterCubit,
+                  value: counterCubit,
                   builder: (context, state) {
                     builderStates.add(state);
                     return TextButton(
@@ -289,7 +289,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: BlocConsumer<CounterCubit, int>(
-              cubit: counterCubit,
+              value: counterCubit,
               builder: (context, state) {
                 builderStates.add(state);
                 return Text('State: $state');
@@ -333,7 +333,7 @@ void main() {
       final counterCubit = CounterCubit();
       await tester.pumpWidget(
         BlocConsumer<CounterCubit, int>(
-          cubit: counterCubit,
+          value: counterCubit,
           listenWhen: (previous, current) {
             if (current % 3 == 0) {
               listenWhenPreviousState.add(previous);

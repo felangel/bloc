@@ -55,11 +55,11 @@ void main() {
         MultiBlocListener(
           listeners: [
             BlocListener<CounterCubit, int>(
-              cubit: counterCubitA,
+              value: counterCubitA,
               listener: (context, state) => statesA.add(state),
             ),
             BlocListener<CounterCubit, int>(
-              cubit: counterCubitB,
+              value: counterCubitB,
               listener: (context, state) => statesB.add(state),
             ),
           ],
@@ -95,11 +95,11 @@ void main() {
         MultiBlocListener(
           listeners: [
             BlocListener(
-              cubit: counterCubitA,
+              value: counterCubitA,
               listener: (BuildContext context, int state) => statesA.add(state),
             ),
             BlocListener(
-              cubit: counterCubitB,
+              value: counterCubitB,
               listener: (BuildContext context, int state) => statesB.add(state),
             ),
           ],
