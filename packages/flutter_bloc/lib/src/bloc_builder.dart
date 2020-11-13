@@ -137,9 +137,9 @@ class _BlocBuilderBaseState<T extends Cubit<S>, S>
   void didUpdateWidget(BlocBuilderBase<T, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
     final oldBloc = oldWidget.value ?? context.read<T>();
-    final currentCubit = widget.value ?? oldBloc;
-    if (oldBloc != currentCubit) {
-      _bloc = currentCubit;
+    final currentBloc = widget.value ?? oldBloc;
+    if (oldBloc != currentBloc) {
+      _bloc = currentBloc;
       _state = _bloc.state;
     }
   }
