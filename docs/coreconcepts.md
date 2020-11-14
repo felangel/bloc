@@ -336,6 +336,8 @@ In the above snippet, we are switching on the incoming event and if it is an inc
 
 !> Blocs should never directly `emit` new states. Instead every state change must be output in response to an incoming event within `mapEventToState`.
 
+?> **Tip**: It is possible to add events inside the block. The authentication state from `authenticationRepository` is listened on in the constructor of `AuthenticationBloc` and adds events to change the state in the following example: [Firebase Login, Authentication Bloc](flutterfirebaselogintutorial.md#bloc). Adding events instead of states from a stream can solve issues with `yeld* _longStream();` blocking `mapEventToState` from emitting states until `_longStream();` is done.
+
 !> Both blocs and cubits will ignore duplicate states. If we yield or emit `State nextState` where `state == nextState`, then no state change will occur.
 
 ### Using a Bloc
