@@ -62,7 +62,7 @@ class AuthenticationRepository {
 
   /// Starts the Sign In with Google Flow.
   ///
-  /// Throws a [LogInWithEmailAndPasswordFailure] if an exception occurs.
+  /// Throws a [LogInWithGoogleFailure] if an exception occurs.
   Future<void> logInWithGoogle() async {
     try {
       final googleUser = await _googleSignIn.signIn();
