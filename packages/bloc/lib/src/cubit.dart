@@ -13,7 +13,11 @@ import 'change.dart';
 /// {@endtemplate}
 class CubitUnhandledErrorException implements Exception {
   /// {@macro cubit_unhandled_error_exception}
-  CubitUnhandledErrorException(this.cubit, this.error, [this.stackTrace]);
+  CubitUnhandledErrorException(
+    this.cubit,
+    this.error, [
+    this.stackTrace = StackTrace.empty,
+  ]);
 
   /// The [cubit] in which the unhandled error occurred.
   final Cubit cubit;
@@ -21,13 +25,14 @@ class CubitUnhandledErrorException implements Exception {
   /// The unhandled [error] object.
   final Object error;
 
-  /// An optional [stackTrace] which accompanied the error.
-  final StackTrace? stackTrace;
+  /// Stack trace which accompanied the error.
+  /// May be [StackTrace.empty] if no stack trace was provided.
+  final StackTrace stackTrace;
 
   @override
   String toString() {
     return 'Unhandled error $error occurred in $cubit.\n'
-        '${stackTrace ?? ''}';
+        '$stackTrace';
   }
 }
 
