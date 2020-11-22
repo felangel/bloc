@@ -332,7 +332,7 @@ void main() {
 
 ## Dart Versions
 
-- Dart 2: >= 2.6.0
+- Dart 2: >= 2.12.0-0
 
 ## Examples
 
