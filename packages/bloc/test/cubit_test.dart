@@ -36,6 +36,7 @@ void main() {
             ),
           );
           expect(stackTrace, isNotNull);
+          expect(stackTrace, isNot(StackTrace.empty));
         });
       });
     });
