@@ -38,11 +38,11 @@ class BlocObserver {
   void onTransition(Bloc bloc, Transition transition) {}
 
   /// Called whenever an [error] is thrown in any [Bloc] or [Cubit].
-  /// The [stackTrace] argument may be `null` if the state stream received
-  /// an error without a [stackTrace].
+  /// The [stackTrace] argument may be [StackTrace.empty] if an error
+  /// was received without a stack trace.
   @protected
   @mustCallSuper
-  void onError(Cubit cubit, Object error, StackTrace? stackTrace) {}
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {}
 
   /// Called whenever a [Cubit] is closed.
   /// [onClose] is called just before the [Cubit] is closed
