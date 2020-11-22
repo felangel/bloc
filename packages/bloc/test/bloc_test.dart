@@ -704,6 +704,7 @@ void main() {
             ),
           );
           expect(stackTrace, isNotNull);
+          expect(stackTrace, isNot(StackTrace.empty));
         });
       });
 
@@ -724,6 +725,7 @@ void main() {
             ),
           );
           expect(stackTrace, isNotNull);
+          expect(stackTrace, isNot(StackTrace.empty));
         });
       });
 
@@ -746,6 +748,7 @@ void main() {
           ).then((dynamic _) {
             expect(expectedError, exception);
             expect(expectedStacktrace, isNotNull);
+            expect(expectedStacktrace, isNot(StackTrace.empty));
           });
 
           onExceptionBloc
@@ -760,6 +763,7 @@ void main() {
             ),
           );
           expect(stackTrace, isNotNull);
+          expect(stackTrace, isNot(StackTrace.empty));
         });
       });
 
@@ -779,10 +783,11 @@ void main() {
             ),
           );
           expect(stackTrace, isNotNull);
+          expect(stackTrace, isNot(StackTrace.empty));
         });
       });
 
-      test('does not triggers onError from add', () {
+      test('does not trigger onError from add', () {
         runZonedGuarded(() {
           Object? capturedError;
           StackTrace? capturedStacktrace;
