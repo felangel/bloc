@@ -2,7 +2,7 @@
   "name": "bloc",
   "displayName": "bloc",
   "description": "Support for the bloc library and provides tools for effectively creating blocs for both Flutter and AngularDart apps.",
-  "version": "5.4.0",
+  "version": "5.5.0",
   "publisher": "FelixAngelov",
   "bugs": {
     "url": "https://github.com/felangel/bloc/issues",
@@ -38,6 +38,11 @@
       {
         "title": "Bloc",
         "properties": {
+          "bloc.checkForUpdates": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to check if you are using the latest package versions at startup."
+          },
           "bloc.newBlocTemplate": {
             "type": "string",
             "enum": [

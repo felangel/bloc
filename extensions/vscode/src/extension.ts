@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 
-import { commands, ExtensionContext, languages } from "vscode";
+import { commands, ExtensionContext, languages, workspace } from "vscode";
 import { analyzeDependencies } from "./utils";
 import {
   newBloc,
@@ -16,7 +16,9 @@ import { BlocCodeActionProvider } from "./code-actions";
 const DART_MODE = { language: "dart", scheme: "file" };
 
 export function activate(_context: ExtensionContext) {
-  analyzeDependencies();
+  if (workspace.getConfiguration("bloc").get<boolean>("checkForUpdates")) {
+    analyzeDependencies();
+  }
 
   _context.subscriptions.push(
     commands.registerCommand("extension.new-bloc", newBloc),
