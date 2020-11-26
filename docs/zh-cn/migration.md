@@ -1,20 +1,20 @@
 # 迁移指南
 
-?> **Tip**: Please refer to the [release log](https://github.com/felangel/bloc/releases) for more information regarding what changed in each release.
+?> **提示**: 请参考 [发布日志](https://github.com/felangel/bloc/releases) 以获取有关每个版本中更改内容的更多信息。
 
 ## v6.1.0
 
 ### package:flutter_bloc
 
-#### ❗context.bloc and context.repository are deprecated in favor of context.read and context.watch
+#### ❗context.bloc 和 context.repository 已不再推荐使用，目前推荐使用 context.read 和 context.watch
 
-##### Rationale
+##### 基本原理
 
-`context.read`, `context.watch`, and `context.select` were added to align with the existing [provider](https://pub.dev/packages/provider) API which many developers are familiar and to address issues that have been raised by the community. To improve the safety of the code and maintain consistency, `context.bloc` was deprecated because it can be replaced with either `context.read` or `context.watch` dependending on if it's used directly within `build`.
+`context.read`, `context.watch`, and `context.select` 被添加，以与许多开发人员熟悉的现有[provider]（https://pub.dev/packages/provider）API保持一致，并解决社区提出的问题。为了提高代码的安全性并保持一致性，不赞成使用 `context.bloc`，因为可以将其替换为 `context.read` 或 `context.watch`，具体取决于是否直接在build中使用。
 
 **context.watch**
 
-`context.watch` addresses the request to have a [MultiBlocBuilder](https://github.com/felangel/bloc/issues/538) because we can watch several blocs within a single `Builder` in order to render UI based on multiple states:
+`context.watch` 解决了拥有[MultiBlocBuilder]（https://github.com/felangel/bloc/issues/538）的请求，因为我们可以在单个 `Builder` 中观察多个bloc，以便基于多种状态：
 
 ```dart
 Builder(
@@ -23,26 +23,27 @@ Builder(
     final stateB = context.watch<BlocB>().state;
     final stateC = context.watch<BlocC>().state;
 
-    // return a Widget which depends on the state of BlocA, BlocB, and BlocC
+    // 返回一个依赖于 BlocA，BlocB 和 BlocC 状态的 Widget
   }
 );
 ```
 
 **context.select**
 
-`context.select` allows developers to render/update UI based on a part of a bloc state and addresses the request to have a [simpler buildWhen](https://github.com/felangel/bloc/issues/1521).
+
+`context.select` 允许开发人员根据整体状态的一部分来呈现/更新UI，并解决具有[更简单的buildWhen]（https://github.com/felangel/bloc/issues/1521）的请求。
 
 ```dart
 final name = context.select((UserBloc bloc) => bloc.state.user.name);
 ```
 
-The above snippet allows us to access and rebuild the widget only when the current user's name changes.
+上面的代码片段仅在当前用户名更改时允许我们访问和重建部件。
 
 **context.read**
 
-Even though it looks like `context.read` is identical to `context.bloc` there are some subtle but significant differences. Both allow you to access a bloc with a `BuildContext` and do not result in rebuilds; however, `context.read` cannot be called directly within a `build` method. There are two main reasons to use `context.bloc` within `build`:
+即使看起来 `context.read` 与 `context.bloc` 相同，也存在一些细微但重要的差异。两者都允许您使用`BuildContext` 访问 bloc，并且不会导致重建；但是，不能直接在 build 方法中调用 `context.read`。在`build` 中使用 `context.bloc` 的主要原因有两个：
 
-1. **To access the bloc's state**
+1. **访问 Bloc 中的的状态**
 
 ```dart
 @override
@@ -52,7 +53,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-The above usage is error prone because the `Text` widget will not be rebuilt if the state of the bloc changes. In this scenario, either a `BlocBuilder` or `context.watch` should be used.
+上面的用法容易出错，因为如果集团的状态发生变化，`Text` 部件将不会重建。在这种情况下，应该使用 ` BlocBuilder` 或 `context.watch`。
 
 ```dart
 @override
@@ -62,7 +63,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-or
+或者
 
 ```dart
 @override
@@ -73,9 +74,9 @@ Widget build(BuildContext context) {
 }
 ```
 
-!> Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes. If the entire widget does not need to be rebuilt, either use `BlocBuilder` to wrap the parts that should rebuild, use a `Builder` with `context.watch` to scope the rebuilds, or decompose the widget into smaller widgets.
+!> 在 `build` 方法的根部使用 `context.watch` 会导致当状态改变时整个窗口部件被重建。如果不需要重建整个窗口小部件，请使用 `BlocBuilder` 包装应该重建的部分，或者将 `Builder` 和 `context.watch` 一起使用以限制重建范围，或者部件分解为较小的部件。
 
-2. **To access the bloc so that an event can be added**
+1. **访问 Bloc 以便可以添加事件**
 
 ```dart
 @override
@@ -88,7 +89,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-The above usage is inefficient because it results in a bloc lookup on each rebuild when the bloc is only needed when the user taps the `RaisedButton`. In this scenario, prefer to use `context.read` to access the bloc directly where it is needed (in this case, in the `onPressed` callback).
+上面的用法效率低下，因为当仅在用户点击 `RaisedButton` 时才需要该 `bloc` 时，这会导致在每次重建时对块进行查找。在这种情况下，最好使用 `context.read` 在需要的地方直接访问该块（在这种情况下，在 `onPressed` 回调中）。
 
 ```dart
 @override
@@ -100,7 +101,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-**Summary**
+**总结**
 
 **v6.0.x**
 
@@ -127,7 +128,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-?> If accessing a bloc to add an event, perform the bloc access using `context.read` in the callback where it is needed.
+?> 如果要访问 Bloc 添加事件，请在需要回调的回调中使用 `context.read` 执行 Bloc 访问。
 
 **v6.0.x**
 
@@ -149,17 +150,17 @@ Widget build(BuildContext context) {
 }
 ```
 
-?> Use `context.watch` when accessing the state of the bloc in order to ensure the widget is rebuilt when the state changes.
+?> 访问 Bloc 的状态时，请使用 `context.watch`，以确保状态更改时重新构建部件。
 
 ## v6.0.0
 
 ### package:bloc
 
-#### ❗BlocObserver onError takes Cubit
+#### ❗BlocObserver onError 接受 Cubit
 
-##### Rationale
+##### 基本原理
 
-Due to the integration of `Cubit`, `onError` is now shared between both `Bloc` and `Cubit` instances. Since `Cubit` is the base, `BlocObserver` will accept a `Cubit` type rather than a `Bloc` type in the `onError` override.
+由于 `Cubit` 的集成，现在 `onBloc` 和 `Cubit` 实例之间共享 `onError`。由于 `Cubit` 是基础，因此 `onError` 替代中的 `BlocObserver` 将接受 `Cubit` 类型而不是 `Bloc` 类型。
 
 **v5.x.x**
 
@@ -183,11 +184,11 @@ class MyBlocObserver extends BlocObserver {
 }
 ```
 
-#### ❗Bloc does not emit last state on subscription
+#### ❗Bloc不会在订阅时发出最后状态
 
-##### Rationale
+##### 基本原理
 
-This change was made to align `Bloc` and `Cubit` with the built-in `Stream` behavior in `Dart`. In addition, conforming this the old behavior in the context of `Cubit` led to many unintended side-effects and overall complicated the internal implementations of other packages such as `flutter_bloc` and `bloc_test` unnecessarily (requiring `skip(1)`, etc...).
+进行此更改是为了将 `Bloc` 和 `Cubit` 与` Dart` 中内置的 `Stream` 行为对齐。此外，在 `Cubit` 环境中遵循此旧行为会导致许多意想不到的副作用，并不必要地使其他软件包（例如 `Flutter_bloc` 和 `bloc_test`）的内部实现复杂化（要求 `skip(1)`，等等...）。
 
 **v5.x.x**
 
@@ -196,11 +197,11 @@ final bloc = MyBloc();
 bloc.listen(print);
 ```
 
-Previously, the above snippet would output the initial state of the bloc followed by subsequent state changes.
+以前，以上代码段将输出 Bloc 的初始状态，然后输出随后的状态更改。
 
 **v6.x.x**
 
-In v6.0.0, the above snippet does not output the initial state and only outputs subsequent state changes. The previous behavior can be achieved with the following:
+在 v6.0.0 中，以上代码段不输出初始状态，而仅输出后续状态更改。可以通过以下方式实现以前的行为：
 
 ```dart
 final bloc = MyBloc();
@@ -208,15 +209,16 @@ print(bloc.state);
 bloc.listen(print);
 ```
 
-?> **Note**: This change will only affect code that relies on direct bloc subscriptions. When using `BlocBuilder`, `BlocListener`, or `BlocConsumer` there will be no noticeable change in behavior.
+?> **注意**: 此更改将仅影响依赖于直接团体订阅的代码。使用 `BlocBuilder`，`BlocListener` 或 `BlocConsumer` 时，行为不会有明显变化。
 
 ### package:bloc_test
 
-#### ❗MockBloc only requires State type
+#### ❗MockBloc 只需要 State 类型
 
-##### Rationale
+##### 基本原理
 
-It is not necessary and eliminates extra code while also making `MockBloc` compatible with `Cubit`.
+
+这是没有必要的，并且消除了多余的代码，同时还使 `MockBloc` 与 `Cubit` 兼容。
 
 **v5.x.x**
 
@@ -230,11 +232,11 @@ class MockCounterBloc extends MockBloc<CounterEvent, int> implements CounterBloc
 class MockCounterBloc extends MockBloc<int> implements CounterBloc {}
 ```
 
-#### ❗whenListen only requires State type
+#### ❗whenListen 只需要 State 类型
 
-##### Rationale
+##### 基本原理
 
-It is not necessary and eliminates extra code while also making `whenListen` compatible with `Cubit`.
+这是没有必要的，并且消除了多余的代码，同时还使 `whenListen` 与 `Cubit` 兼容。
 
 **v5.x.x**
 
@@ -248,11 +250,11 @@ whenListen<CounterEvent,int>(bloc, Stream.fromIterable([0, 1, 2, 3]));
 whenListen<int>(bloc, Stream.fromIterable([0, 1, 2, 3]));
 ```
 
-#### ❗blocTest does not require Event type
+#### ❗blocTest 不需要 Event 类型
 
-##### Rationale
+##### 基本原理
 
-It is not necessary and eliminates extra code while also making `blocTest` compatible with `Cubit`.
+这是没有必要的，并且消除了多余的代码，同时还使 `blocTest` 与 `Cubit` 兼容。
 
 **v5.x.x**
 
@@ -276,11 +278,11 @@ blocTest<CounterBloc, int>(
 );
 ```
 
-#### ❗blocTest skip defaults to 0
+#### ❗blocTest skip 默认为 0
 
-##### Rationale
+##### 基本原理
 
-Since `bloc` and `cubit` instances will no longer emit the latest state for new subscriptions, it was no longer necessary to default `skip` to `1`.
+由于 `bloc` 和 `cubit` 实例将不再为新订阅发出最新状态，因此不再需要将 `skip` 默认为 `1`。
 
 **v5.x.x**
 
@@ -304,7 +306,7 @@ blocTest<CounterBloc, int>(
 );
 ```
 
-The initial state of a bloc or cubit can be tested with the following:
+`Bloc` 或 `Cubit` 的初始状态可以通过以下方式进行测试：
 
 ```dart
 test('initial state is correct', () {
@@ -312,11 +314,11 @@ test('initial state is correct', () {
 });
 ```
 
-#### ❗blocTest make build synchronous
+#### ❗blocTest 使构建同步
 
-##### Rationale
+##### 基本原理
 
-Previously, `build` was made `async` so that various preparation could be done to put the bloc under test in a specific state. It is no longer necessary and also resolves several issues due to the added latency between the build and the subscription internally. Instead of doing async prep to get a bloc in a desired state we can now set the bloc state by chaining `emit` with the desired state.
+以前，将 `build` 设为 `async`，以便进行各种准备工作以将处于待测试状态的集团置于特定状态。由于内部版本和订阅之间增加了延迟，因此不再需要，并且还解决了一些问题。现在可以通过将 `emit` 与所需状态链接起来，而不是进行异步准备来使 bloc 处于所需状态，而无需设置异步状态。
 
 **v5.x.x**
 
@@ -345,15 +347,16 @@ blocTest<CounterBloc, int>(
 );
 ```
 
-!> `emit` is only visible for testing and should never be used outside of tests.
+!> `emit` 仅在测试中可见，切勿在测试之外使用。
 
 ### package:flutter_bloc
 
-#### ❗BlocBuilder bloc parameter renamed to cubit
+#### ❗BlocBuilder bloc 参数重命名为 cubit
 
-##### Rationale
+##### 基本原理
 
-In order to make `BlocBuilder` interoperate with `bloc` and `cubit` instances the `bloc` parameter was renamed to `cubit` (since `Cubit` is the base class).
+
+为了使 `BlocBuilder` 与 `bloc` 和 `cubit` 实例互操作，将 bloc 参数重命名为 cubit（因为 `Cubit` 是基类）。
 
 **v5.x.x**
 
@@ -373,11 +376,11 @@ BlocBuilder(
 )
 ```
 
-#### ❗BlocListener bloc parameter renamed to cubit
+#### ❗BlocListener bloc 参数重命名为 cubit
 
-##### Rationale
+##### 基本原理
 
-In order to make `BlocListener` interoperate with `bloc` and `cubit` instances the `bloc` parameter was renamed to `cubit` (since `Cubit` is the base class).
+为了使 `BlocListener` 与 `bloc` 和 `cubit` 实例互操作，将 bloc 参数重命名为 `cubit`（因为 `Cubit` 是基类）。
 
 **v5.x.x**
 
@@ -397,11 +400,11 @@ BlocListener(
 )
 ```
 
-#### ❗BlocConsumer bloc parameter renamed to cubit
+#### ❗BlocConsumer bloc 参数重命名为 cubit
 
-##### Rationale
+##### 基本原理
 
-In order to make `BlocConsumer` interoperate with `bloc` and `cubit` instances the `bloc` parameter was renamed to `cubit` (since `Cubit` is the base class).
+为了使 `BlocConsumer` 与 `bloc` 和 `cubit` 实例互操作，将 bloc 参数重命名为 `cubit`（因为 `Cubit` 是基类）。
 
 **v5.x.x**
 
@@ -429,14 +432,14 @@ BlocConsumer(
 
 ### package:bloc
 
-#### ❗initialState has been removed
+#### ❗initialState 已被移除
 
-##### Rationale
+##### 基本原理
 
-As a developer, having to override `initialState` when creating a bloc presents two main issues:
+作为开发人员，创建 bloc 时必须覆盖 `initialState` 存在两个主要问题：
 
-- The `initialState` of the bloc can be dynamic and can also be referenced at a later point in time (even outside of the bloc itself). In some ways, this can be viewed as leaking internal bloc information to the UI layer.
-- It's verbose.
+- 群组的 `initialState` 可以是动态的，也可以在以后的某个时间点被引用（即使在群组本身之外）。在某些方面，这可以看作是将内部集团信息泄漏到UI层。
+- 很冗长。
 
 **v4.x.x**
 
@@ -459,15 +462,15 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-?> For more information check out [#1304](https://github.com/felangel/bloc/issues/1304)
+?> 想要了解更多请查看 [#1304](https://github.com/felangel/bloc/issues/1304)
 
-#### ❗BlocDelegate renamed to BlocObserver
+#### ❗BlocDelegate 重命名为 BlocObserver
 
-##### Rationale
+##### 基本原理
 
-The name `BlocDelegate` was not an accurate description of the role that the class played. `BlocDelegate` suggests that the class plays an active role whereas in reality the intended role of the `BlocDelegate` was for it to be a passive component which simply observes all blocs in an application.
+名称 `BlocDelegate` 不是该类所扮演角色的准确描述。 `BlocDelegate` 建议该类起积极作用，而实际上，`BlocDelegate` 的预期作用是使其成为一个被动组件，它仅观察应用程序中的所有 bloc。
 
-!> There should ideally be no user-facing functionality or features handled within `BlocObserver`.
+!> 理想情况下，`BlocObserver` 中不应处理任何面向用户的功能。
 
 **v4.x.x**
 
@@ -485,13 +488,13 @@ class MyBlocObserver extends BlocObserver {
 }
 ```
 
-#### ❗BlocSupervisor has been removed
+#### ❗BlocSupervisor 已被移除
 
-##### Rationale
+##### 基本原理
 
-`BlocSupervisor` was yet another component that developers had to know about and interact with for the sole purpose of specifying a custom `BlocDelegate`. With the change to `BlocObserver` we felt it improved the developer experience to set the observer directly on the bloc itself.
+`BlocSupervisor` 是开发人员必须了解并与之交互的另一个组件，其唯一目的就是指定自定义的 `BlocDelegate`。通过更改为 `BlocObserver`，我们认为将观察者直接设置在 Bloc 本身上可以改善开发人员的体验。
 
-?> This changed also enabled us to decouple other bloc add-ons like `HydratedStorage` from the `BlocObserver`.
+?> 这一变化还使我们能够将其他类似` HydratedStorage` 的 bloc 附加组件与` BlocObserver` 分离。
 
 **v4.x.x**
 
@@ -507,44 +510,44 @@ Bloc.observer = MyBlocObserver();
 
 ### package:flutter_bloc
 
-#### ❗BlocBuilder condition renamed to buildWhen
+#### ❗BlocBuilder condition 重命名为 buildWhen
 
-##### Rationale
+##### 基本原理
 
-When using `BlocBuilder`, we previously could specify a `condition` to determine whether the `builder` should rebuild.
+当使用 `BlocBuilder` 时，我们以前可以指定一个 `condition` 来确定 `builder` 是否应该重建。
 
 ```dart
 BlocBuilder<MyBloc, MyState>(
   condition: (previous, current) {
-    // return true/false to determine whether to call builder
+    // 返回true / false，以确定是否调用构建器 builder
   },
   builder: (context, state) {...}
 )
 ```
 
-The name `condition` is not very self-explanatory or obvious and more importantly, when interacting with a `BlocConsumer` the API became inconsistent because developers can provide two conditions (one for `builder` and one for `listener`). As a result, the `BlocConsumer` API exposed a `buildWhen` and `listenWhen`
+`condition` 这个名称不是很容易理解，也不是很明显，更重要的是，当与 `BlocConsumer` 交互时，API变得不一致，因为开发人员可以提供两个条件（一个用于 `builder`，一个用于 `listener`）。结果，`BlocConsumer` API暴露了 `buildWhen` 和 `listenWhen`。
 
 ```dart
 BlocConsumer<MyBloc, MyState>(
   listenWhen: (previous, current) {
-    // return true/false to determine whether to call listener
+    // 返回true / false，以确定是否调用侦听器
   },
   listener: (context, state) {...},
   buildWhen: (previous, current) {
-    // return true/false to determine whether to call builder
+    // 返回true / false，以确定是否调用构建器 builder
   },
   builder: (context, state) {...},
 )
 ```
 
-In order to align the API and provide a more consistent developer experience, `condition` was renamed to `buildWhen`.
+为了调整API并提供更一致的开发人员体验，将 `condition` 重命名为 `buildWhen`。
 
 **v4.x.x**
 
 ```dart
 BlocBuilder<MyBloc, MyState>(
   condition: (previous, current) {
-    // return true/false to determine whether to call builder
+    // 返回true / false，以确定是否调用构建器
   },
   builder: (context, state) {...}
 )
@@ -555,24 +558,24 @@ BlocBuilder<MyBloc, MyState>(
 ```dart
 BlocBuilder<MyBloc, MyState>(
   buildWhen: (previous, current) {
-    // return true/false to determine whether to call builder
+    // 返回true / false，以确定是否调用构建器 builder
   },
   builder: (context, state) {...}
 )
 ```
 
-#### ❗BlocListener condition renamed to listenWhen
+#### ❗BlocListener condition 重命名为 listenWhen
 
-##### Rationale
+##### 基本原理
 
-For the same reasons as described above, the `BlocListener` condition was also renamed.
+由于与上述相同的原因，`BlocListener` condition 也被重命名。
 
 **v4.x.x**
 
 ```dart
 BlocListener<MyBloc, MyState>(
   condition: (previous, current) {
-    // return true/false to determine whether to call listener
+    // 返回true / false，以确定是否调用构建器
   },
   listener: (context, state) {...}
 )
@@ -583,7 +586,7 @@ BlocListener<MyBloc, MyState>(
 ```dart
 BlocListener<MyBloc, MyState>(
   listenWhen: (previous, current) {
-    // return true/false to determine whether to call listener
+    // 返回true / false，以确定是否调用构建器 builder
   },
   listener: (context, state) {...}
 )
@@ -591,11 +594,11 @@ BlocListener<MyBloc, MyState>(
 
 ### package:hydrated_bloc
 
-#### ❗HydratedStorage and HydratedBlocStorage renamed
+#### ❗HydratedStorage 和 HydratedBlocStorage 被重命名
 
-##### Rationale
+##### 基本原理
 
-In order to improve code reuse between [hydrated_bloc](https://pub.dev/packages/hydrated_bloc) and [hydrated_cubit](https://pub.dev/packages/hydrated_cubit), the concrete default storage implementation was renamed from `HydratedBlocStorage` to `HydratedStorage`. In addition, the `HydratedStorage` interface was renamed from `HydratedStorage` to `Storage`.
+为了提高[hydrated_bloc]（https://pub.dev/packages/hydrated_bloc）和[hydrated_cubit]（https://pub.dev/packages/hydrated_cubit）之间的代码重用，将具体的默认存储实现从 `HydratedBlocStorage` 到 `HydratedStorage`。此外，`HydratedStorage` 界面从 `HydratedStorage` 重命名为 `Storage`。
 
 **v4.0.0**
 
@@ -613,21 +616,23 @@ class MyHydratedStorage implements Storage {
 }
 ```
 
-#### ❗HydratedStorage decoupled from BlocDelegate
+#### ❗HydratedStorage 与 BlocDelegate 分离
 
-##### Rationale
+##### 基本原理
 
 As mentioned earlier, `BlocDelegate` was renamed to `BlocObserver` and was set directly as part of the `bloc` via:
+
+
+如前所述，`BlocDelegate` 被重命名为 `BlocObserver`，并通过以下方式直接设置为 `bloc` 的一部分：
 
 ```dart
 Bloc.observer = MyBlocObserver();
 ```
+对以下内容进行了更改：
 
-The following change was made to:
-
-- Stay consistent with the new bloc observer API
-- Keep the storage scoped to just `HydratedBloc`
-- Decouple the `BlocObserver` from `Storage`
+- 与新的 bloc 观察器API保持一致
+- 保持存储范围为 `HydratedBloc`
+- 将 `BlocObserver` 与 `Storage `解耦
 
 **v4.0.0**
 
@@ -641,11 +646,11 @@ BlocSupervisor.delegate = await HydratedBlocDelegate.build();
 HydratedBloc.storage = await HydratedStorage.build();
 ```
 
-#### ❗Simplified Initialization
+#### ❗简化的初始化
 
-##### Rationale
+##### 基本原理
 
-Previously, developers had to manually call `super.initialState ?? DefaultInitialState()` in order to setup their `HydratedBloc` instances. This is clunky and verbose and also incompatible with the breaking changes to `initialState` in `bloc`. As a result, in v5.0.0 `HydratedBloc` initialization is identical to normal `Bloc` initialization.
+以前，开发人员必须手动调用 `super.initialState ?? DefaultInitialState（）` 以设置其 ` HydratedBloc` 实例。这是笨拙且冗长的，并且与 `bloc` 中对 `initialState` 的重大更改不兼容。结果，在 v5.0.0 中， `HydratedBloc` 初始化与普通的 `Bloc` 初始化相同。
 
 **v4.0.0**
 
