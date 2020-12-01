@@ -215,12 +215,12 @@ abstract class Bloc<Event, State> extends Cubit<State>
     return super.close();
   }
 
-  /// **[emit] should never be used outside of tests.**
+  /// **[emit] should only be used inside a bloc.**
   ///
   /// Updates the state of the bloc to the provided [state].
   /// A bloc's state should only be updated by `yielding` a new `state`
-  /// from `mapEventToState` in response to an event.
-  @visibleForTesting
+  /// from `mapEventToState` in response to an event, or if an underlying state
+  /// (e.g.: authentication state) changes.
   @override
   void emit(State state) => super.emit(state);
 

@@ -334,7 +334,7 @@ In the above snippet, we are switching on the incoming event and if it is an inc
 
 ?> **Note**: Since the `Bloc` class extends `Cubit`, we have access to the current state of the bloc at any point in time via the `state` getter.
 
-!> Blocs should never directly `emit` new states. Instead every state change must be output in response to an incoming event within `mapEventToState`.
+!> Code that uses Blocs should never directly invoke `emit()` to emit new states. Instead every state change must be output in response to an incoming event within `mapEventToState` or in response to an internal state change (e.g.: the user signed in or out).
 
 !> Both blocs and cubits will ignore duplicate states. If we yield or emit `State nextState` where `state == nextState`, then no state change will occur.
 
