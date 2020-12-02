@@ -9,16 +9,14 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'post_event.dart';
-
 part 'post_state.dart';
+
+const _postLimit = 20;
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({@required this.httpClient}) : super(const PostState());
 
   final http.Client httpClient;
-
-  /// Limit of posts to be fetched in each request
-  final _limit = 20;
 
   @override
   Stream<Transition<PostEvent, PostState>> transformEvents(
@@ -42,11 +40,11 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     if (state.hasReachedMax) return state;
     try {
       if (state.status == PostStatus.initial) {
-        final posts = await _fetchPosts(0);
+        final posts = await _fetchPosts();
         return state.copyWith(
           status: PostStatus.success,
           posts: posts,
-          hasReachedMax: _hasReachedEnd(posts.length),
+          hasReachedMax: _hasReachedMax(posts.length),
         );
       }
       final posts = await _fetchPosts(state.posts.length);
@@ -55,29 +53,29 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           : state.copyWith(
               status: PostStatus.success,
               posts: List.of(state.posts)..addAll(posts),
-              hasReachedMax: _hasReachedEnd(posts.length),
+              hasReachedMax: _hasReachedMax(posts.length),
             );
     } on Exception {
       return state.copyWith(status: PostStatus.failure);
     }
   }
 
-  Future<List<Post>> _fetchPosts(int startIndex) async {
+  Future<List<Post>> _fetchPosts([int startIndex = 0]) async {
     final response = await httpClient.get(
-      'https://jsonplaceholder.typicode.com/posts?_start=$startIndex&_limit=$_limit',
+      'https://jsonplaceholder.typicode.com/posts?_start=$startIndex&_postLimit=$_postLimit',
     );
     if (response.statusCode == 200) {
-      final data = json.decode(response.body) as List;
-      return data.map((dynamic rawPost) {
+      final body = json.decode(response.body) as List;
+      return body.map((dynamic json) {
         return Post(
-          id: rawPost['id'] as int,
-          title: rawPost['title'] as String,
-          body: rawPost['body'] as String,
+          id: json['id'] as int,
+          title: json['title'] as String,
+          body: json['body'] as String,
         );
       }).toList();
     }
     throw Exception('error fetching posts');
   }
 
-  bool _hasReachedEnd(int postsCount) => postsCount < _limit ? true : false;
+  bool _hasReachedMax(int postsCount) => postsCount < _postLimit ? true : false;
 }
