@@ -62,7 +62,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   Future<List<Post>> _fetchPosts([int startIndex = 0]) async {
     final response = await httpClient.get(
-      'https://jsonplaceholder.typicode.com/posts?_start=$startIndex&_postLimit=$_postLimit',
+      'https://jsonplaceholder.typicode.com/posts?_start=$startIndex&_limit=$_postLimit',
     );
     if (response.statusCode == 200) {
       final body = json.decode(response.body) as List;
