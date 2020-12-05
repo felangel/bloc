@@ -10,8 +10,8 @@ import 'package:mockito/mockito.dart';
 /// and may be further customized at runtime to define how it may behave using
 /// [when] and `whenListen`.
 ///
-/// _**Note**: it is critical to explicitly provide the bloc event and state
-/// types when extending [MockBloc]_.
+/// _**Note**: It is critical to explicitly provide the bloc state
+/// type when extending [MockBloc]_.
 ///
 /// **GOOD**
 /// ```dart
