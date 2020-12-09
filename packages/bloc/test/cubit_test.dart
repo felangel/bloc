@@ -250,6 +250,17 @@ void main() {
         // ignore: invalid_use_of_protected_member
         verify(observer.onClose(cubit)).called(1);
       });
+
+      test('emits done (sync)', () {
+        final cubit = CounterCubit()..close();
+        expect(cubit, emitsDone);
+      });
+
+      test('emits done (async)', () async {
+        final cubit = CounterCubit();
+        await cubit.close();
+        expect(cubit, emitsDone);
+      });
     });
 
     test('isBroadcast returns true', () {
