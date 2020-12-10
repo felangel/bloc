@@ -18,7 +18,6 @@ class CounterView extends StatelessWidget {
           builder: (context, state) {
             return Text(
               '$state',
-              key: const Key('counterState'),
               style: textTheme.headline2,
             );
           },
