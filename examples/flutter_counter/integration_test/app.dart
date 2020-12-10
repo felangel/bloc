@@ -8,68 +8,70 @@ const _decrementButtonKey = Key('counterView_decrement_floatingActionButton');
 
 Future<void> main() async {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  group('Integration testing of counter app', () {
+    testWidgets('verify the App Bar text', (WidgetTester tester) async {
+      app.main();
 
-  testWidgets('verify the App Bar text', (WidgetTester tester) async {
-    app.main();
+      // Trigger a frame.
+      await tester.pumpAndSettle();
 
-    // Trigger a frame.
-    await tester.pumpAndSettle();
+      // Verify AppBar text
+      expect(
+        find.byWidgetPredicate(
+          (Widget widget) =>
+              widget is Text && widget.data.startsWith('Counter'),
+        ),
+        findsOneWidget,
+      );
+    });
 
-    // Verify AppBar text
-    expect(
-      find.byWidgetPredicate(
-        (Widget widget) => widget is Text && widget.data.startsWith('Counter'),
-      ),
-      findsOneWidget,
-    );
-  });
+    testWidgets('counterText is started with 0', (WidgetTester tester) async {
+      app.main();
 
-  testWidgets('counterText is started with 0', (WidgetTester tester) async {
-    app.main();
+      // Trigger a frame.
+      await tester.pumpAndSettle();
 
-    // Trigger a frame.
-    await tester.pumpAndSettle();
+      // Verify AppBar text
+      expect(
+        find.byWidgetPredicate(
+          (Widget widget) => widget is Text && widget.data.startsWith('0'),
+        ),
+        findsOneWidget,
+      );
+    });
 
-    // Verify AppBar text
-    expect(
-      find.byWidgetPredicate(
-        (Widget widget) => widget is Text && widget.data.startsWith('0'),
-      ),
-      findsOneWidget,
-    );
-  });
+    testWidgets('tap the increment floating action button',
+        (WidgetTester tester) async {
+      app.main();
 
-  testWidgets('tap the increment floating action button',
-      (WidgetTester tester) async {
-    app.main();
+      // Trigger a frame.
+      await tester.pumpAndSettle();
 
-    // Trigger a frame.
-    await tester.pumpAndSettle();
+      await tester.tap(find.byKey(_incrementButtonKey));
 
-    await tester.tap(find.byKey(_incrementButtonKey));
+      await tester.pumpAndSettle();
 
-    await tester.pumpAndSettle();
+      expect(find.text('1'), findsOneWidget);
 
-    expect(find.text('1'), findsOneWidget);
+      await tester.tap(find.byKey(_incrementButtonKey));
 
-    await tester.tap(find.byKey(_incrementButtonKey));
+      await tester.pumpAndSettle();
 
-    await tester.pumpAndSettle();
+      expect(find.text('2'), findsOneWidget);
+    });
 
-    expect(find.text('2'), findsOneWidget);
-  });
+    testWidgets('tap the decrement floating action button',
+        (WidgetTester tester) async {
+      app.main();
 
-  testWidgets('tap the decrement floating action button',
-      (WidgetTester tester) async {
-    app.main();
+      // Trigger a frame.
+      await tester.pumpAndSettle();
 
-    // Trigger a frame.
-    await tester.pumpAndSettle();
+      await tester.tap(find.byKey(_decrementButtonKey));
 
-    await tester.tap(find.byKey(_decrementButtonKey));
+      await tester.pumpAndSettle();
 
-    await tester.pumpAndSettle();
-
-    expect(find.text('-1'), findsOneWidget);
+      expect(find.text('-1'), findsOneWidget);
+    });
   });
 }
