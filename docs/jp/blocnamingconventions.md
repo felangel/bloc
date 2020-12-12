@@ -30,8 +30,6 @@
 
 [state](../_snippets/bloc_naming_conventions/state_anatomy.md ':include')
 
-?> `State` should be one of the following: `Initial` | `Success` | `Failure` | `InProgress` and
-initial states should follow the convention: `BlocSubject` + `Initial`.
 ?> `State` はこれらのどれかであるべき: `Initial` | `Success` | `Failure` | `InProgress` かつ初期 state はこの規則に沿うべき: `ブロックの種名` + `Initial`.
 
 #### 例
