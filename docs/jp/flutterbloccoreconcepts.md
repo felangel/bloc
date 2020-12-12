@@ -115,7 +115,6 @@ bloc 引数は特定のウィジェットにのみ特定の bloc を使いたく
 
 ## 使用法
 
-Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
 実際に`BlocBuilder`を使ってどのように`CounterPage`に`CounterBloc`を紐づけるかを見てみましょう。
 
 ### counter_bloc.dart

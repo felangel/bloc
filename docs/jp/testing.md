@@ -10,7 +10,6 @@
 
 テストコードを書き始める前にまずテスト用のフレームワークを追加する必要があります。
 
-We need to add [test](https://pub.dev/packages/test) and [bloc_test](https://pub.dev/packages/bloc_test) to our `pubspec.yaml`.
 [test](https://pub.dev/packages/test)と[bloc_test](https://pub.dev/packages/bloc_test)を`pubspec.yaml`に追加します。
 
 [pubspec.yaml](../_snippets/testing/pubspec.yaml.md ':include')

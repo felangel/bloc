@@ -10,7 +10,7 @@
 
 [event](../_snippets/bloc_naming_conventions/event_anatomy.md ':include')
 
-￥?> 初期ロード用の event はこの構造であるべき: `ブロックの種名` + `Started`
+?> 初期ロード用の event はこの構造であるべき: `ブロックの種名` + `Started`
 
 #### 例
 
