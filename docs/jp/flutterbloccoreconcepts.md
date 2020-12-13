@@ -30,7 +30,7 @@ bloc 引数は特定のウィジェットにのみ特定の bloc を使いたく
 
 [bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider.dart.md ':include')
 
-稀に`BlocProvider`を既存の Bloc を子孫要素に与えるために使われることがあります。大抵これが起きるのは既存の Bllc を新しい route に投げたい時です。この場合そのは`BlocProvider`は Bloc 生成を行なっていないためその Bloc の close を行ってくれません。
+稀に`BlocProvider`を既存の Bloc を子孫要素に与えるために使われることがあります。大抵これが起きるのは既存の Bloc を新しい route に投げたい時です。この場合その`BlocProvider`は Bloc 生成を行なっていないためその Bloc の close を行ってくれません。
 
 [bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider_value.dart.md ':include')
 
@@ -115,7 +115,6 @@ bloc 引数は特定のウィジェットにのみ特定の bloc を使いたく
 
 ## 使用法
 
-Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
 実際に`BlocBuilder`を使ってどのように`CounterPage`に`CounterBloc`を紐づけるかを見てみましょう。
 
 ### counter_bloc.dart
