@@ -169,20 +169,3 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
     return subscription.cancel;
   }
 }
-
-/// Extends the `BuildContext` class with the ability
-/// to perform a lookup based on a `Bloc` type.
-extension BlocProviderExtension on BuildContext {
-  /// Performs a lookup using the `BuildContext` to obtain
-  /// the nearest ancestor `Cubit` of type [C].
-  ///
-  /// Calling this method is equivalent to calling:
-  ///
-  /// ```dart
-  /// BlocProvider.of<C>(context)
-  /// ```
-  @Deprecated(
-    'Use context.read or context.watch instead. Will be removed in v7.0.0',
-  )
-  C bloc<C extends Cubit<Object>>() => BlocProvider.of<C>(this);
-}
