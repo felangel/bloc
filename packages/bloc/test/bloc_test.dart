@@ -875,5 +875,18 @@ void main() {
         await counterBloc.close();
       });
     });
+
+    group('close', () {
+      test('emits done (sync)', () {
+        final bloc = CounterBloc()..close();
+        expect(bloc, emitsDone);
+      });
+
+      test('emits done (async)', () async {
+        final bloc = CounterBloc();
+        await bloc.close();
+        expect(bloc, emitsDone);
+      });
+    });
   });
 }
