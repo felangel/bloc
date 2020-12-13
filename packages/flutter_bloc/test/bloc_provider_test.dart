@@ -123,7 +123,7 @@ class CounterPage extends StatelessWidget {
 
     return Scaffold(
       body: BlocBuilder<CounterCubit, int>(
-        cubit: counterCubit,
+        value: counterCubit,
         builder: (context, count) {
           if (onBuild != null) {
             onBuild();
@@ -481,30 +481,6 @@ void main() {
       await tester.tap(find.byKey(const Key('iconButtonKey')));
       await tester.pump();
       expect(numBuilds, 1);
-    });
-
-    testWidgets('should access cubit instance via context.bloc',
-        (tester) async {
-      const textKey = Key('__text__');
-      await tester.pumpWidget(
-        BlocProvider(
-          create: (_) => CounterCubit(),
-          child: MaterialApp(
-            home: Scaffold(
-              body: Builder(
-                builder: (context) => Text(
-                  // ignore: deprecated_member_use_from_same_package
-                  '${context.bloc<CounterCubit>().state}',
-                  key: textKey,
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-
-      final counterText = tester.widget<Text>(find.byKey(textKey));
-      expect(counterText.data, '0');
     });
 
     testWidgets('listen: true registers context as dependent', (tester) async {

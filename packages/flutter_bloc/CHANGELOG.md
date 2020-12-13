@@ -1,3 +1,19 @@
+# 7.0.0-dev.2
+
+- **BREAKING**: revert `7.0.0-dev.1`
+- **BREAKING**: remove `context.bloc` extension
+- **BREAKING**: rename `cubit` parameter in `BlocListener` to `value`
+- **BREAKING**: rename `cubit` parameter in `BlocBuilder` to `value`
+- **BREAKING**: rename `cubit` parameter in `BlocConsumer` to `value`
+- docs: update inline API docs
+
+# 7.0.0-dev.1
+
+- **BREAKING**: remove dependency on `package:provider`
+- feat: add optional listen to `BlocProvider`
+- feat: add ListenProviderExtension
+- docs: improve inline documentation for `BlocProvider` and `RepositoryProvider`
+
 # 6.1.2
 
 - fix: `BlocProvider.value` use `InheritedProvider.value`
