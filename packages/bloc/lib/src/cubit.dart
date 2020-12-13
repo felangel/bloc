@@ -176,7 +176,7 @@ abstract class Cubit<State> extends Stream<State> {
   @mustCallSuper
   Future<void> close() {
     // ignore: invalid_use_of_protected_member
-    _observer.onClose(this);    
+    _observer.onClose(this);
     return _controller.close();
   }
 }
