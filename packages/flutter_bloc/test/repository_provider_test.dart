@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({
-    Key key,
-    @required this.repository,
-    @required this.child,
-    this.useValueProvider,
+    Key? key,
+    required this.repository,
+    required this.child,
+    this.useValueProvider = false,
   }) : super(key: key);
 
   final Repository repository;
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyStatefulApp extends StatefulWidget {
-  const MyStatefulApp({Key key, @required this.child}) : super(key: key);
+  const MyStatefulApp({Key? key, required this.child}) : super(key: key);
 
   final Widget child;
 
@@ -44,7 +44,7 @@ class MyStatefulApp extends StatefulWidget {
 }
 
 class _MyStatefulAppState extends State<MyStatefulApp> {
-  Repository _repository;
+  late Repository _repository;
 
   @override
   void initState() {
@@ -77,20 +77,19 @@ class _MyStatefulAppState extends State<MyStatefulApp> {
 }
 
 class MyAppNoProvider extends MaterialApp {
-  const MyAppNoProvider({Key key, @required Widget child})
+  const MyAppNoProvider({Key? key, required Widget child})
       : super(key: key, home: child);
 }
 
 class CounterPage extends StatelessWidget {
-  const CounterPage({Key key, this.onBuild}) : super(key: key);
+  const CounterPage({Key? key, this.onBuild}) : super(key: key);
 
-  final VoidCallback onBuild;
+  final VoidCallback? onBuild;
 
   @override
   Widget build(BuildContext context) {
     onBuild?.call();
     final repository = RepositoryProvider.of<Repository>(context);
-    assert(repository != null);
 
     return Scaffold(
       body: Text('${repository.data}', key: const Key('value_data')),
@@ -122,27 +121,6 @@ class Repository {
 
 void main() {
   group('RepositoryProvider', () {
-    test('throws if initialized with no create', () async {
-      expect(
-        () => RepositoryProvider<Object>(create: null, child: const SizedBox()),
-        throwsAssertionError,
-      );
-    });
-
-    testWidgets('throws if initialized with no repository', (tester) async {
-      await tester.pumpWidget(
-        const MyApp(repository: null, child: CounterPage()),
-      );
-      expect(tester.takeException(), isInstanceOf<AssertionError>());
-    });
-
-    testWidgets('throws if initialized with no child', (tester) async {
-      await tester.pumpWidget(
-        const MyApp(repository: Repository(0), child: null),
-      );
-      expect(tester.takeException(), isInstanceOf<AssertionError>());
-    });
-
     testWidgets('lazily loads repositories by default', (tester) async {
       var createCalled = false;
       await tester.pumpWidget(
