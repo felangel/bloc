@@ -199,23 +199,49 @@ void main() {
     });
 
     testWidgets(
-        'should not throw FlutterError if internal '
+        'should throw StateError if internal '
         'exception is thrown', (tester) async {
-      final expectedException = Exception('oops');
+      const expected = 'Tried to read a provider that threw '
+          'during the creation of its value.\n'
+          'The exception occurred during the creation of type Repository.';
+      final onError = FlutterError.onError;
+      final flutterErrors = <FlutterErrorDetails>[];
+      FlutterError.onError = flutterErrors.add;
       await tester.pumpWidget(
         RepositoryProvider<Repository>(
           lazy: false,
-          create: (_) => throw expectedException,
+          create: (_) => throw Exception('oops'),
           child: const SizedBox(),
         ),
       );
-      final dynamic exception = tester.takeException();
-      expect(exception, expectedException);
+
+      expect(
+        flutterErrors,
+        contains(
+          isA<FlutterErrorDetails>().having(
+            (d) => d.exception,
+            'exception',
+            isA<StateError>().having(
+              (e) => e.message,
+              'message',
+              expected,
+            ),
+          ),
+        ),
+      );
+
+      FlutterError.onError = onError;
     });
 
     testWidgets(
-        'should rethrow ProviderNotFound '
+        'should throw StateError '
         'if exception is for different provider', (tester) async {
+      const expected = 'Tried to read a provider that threw '
+          'during the creation of its value.\n'
+          'The exception occurred during the creation of type Repository.';
+      final onError = FlutterError.onError;
+      final flutterErrors = <FlutterErrorDetails>[];
+      FlutterError.onError = flutterErrors.add;
       await tester.pumpWidget(
         RepositoryProvider<Repository>(
           lazy: false,
@@ -226,8 +252,19 @@ void main() {
           child: const SizedBox(),
         ),
       );
-      final exception = tester.takeException() as ProviderNotFoundException;
-      expect(exception.valueType, int);
+
+      expect(
+        flutterErrors,
+        contains(
+          isA<FlutterErrorDetails>().having(
+            (d) => d.exception,
+            'exception',
+            isA<StateError>().having((e) => e.message, 'message', expected),
+          ),
+        ),
+      );
+
+      FlutterError.onError = onError;
     });
 
     testWidgets(
