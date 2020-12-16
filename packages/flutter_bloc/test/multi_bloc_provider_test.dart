@@ -67,7 +67,7 @@ class HomePage extends StatelessWidget {
               RaisedButton(
                 key: const Key('pop_button'),
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(
+                  Navigator.of(context)?.pushReplacement(
                     MaterialPageRoute<void>(builder: (_) => const SizedBox()),
                   );
                 },
@@ -117,7 +117,7 @@ class CounterPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         key: const Key('pop_button'),
-        onPressed: Navigator.of(context).pop,
+        onPressed: () => Navigator.of(context)?.pop(),
       ),
     );
   }
