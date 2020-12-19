@@ -25,7 +25,7 @@ abstract class Bloc<Event, State> extends Cubit<State>
   /// The current [BlocObserver].
   static BlocObserver observer = BlocObserver();
 
-  final _eventController = StreamController<Event>.broadcast();
+  final _eventController = StreamController<Event>();
 
   StreamSubscription<Transition<Event, State>> _transitionSubscription;
 

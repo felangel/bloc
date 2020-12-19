@@ -61,7 +61,7 @@ abstract class Cubit<State> extends Stream<State> {
 
   BlocObserver get _observer => Bloc.observer;
 
-  StreamController<State> _controller;
+  final StreamController<State> _controller = StreamController.broadcast();
 
   State _state;
 
@@ -79,7 +79,6 @@ abstract class Cubit<State> extends Stream<State> {
   @protected
   @visibleForTesting
   void emit(State state) {
-    _controller ??= StreamController<State>.broadcast();
     if (_controller.isClosed) return;
     if (state == _state && _emitted) return;
     onChange(Change<State>(currentState: this.state, nextState: state));
@@ -156,7 +155,6 @@ abstract class Cubit<State> extends Stream<State> {
     void Function() onDone,
     bool cancelOnError,
   }) {
-    _controller ??= StreamController<State>.broadcast();
     return _controller.stream.listen(
       onData,
       onError: onError,
@@ -176,7 +174,6 @@ abstract class Cubit<State> extends Stream<State> {
   Future<void> close() {
     // ignore: invalid_use_of_protected_member
     _observer.onClose(this);
-    _controller ??= StreamController<State>.broadcast();
     return _controller.close();
   }
 }
