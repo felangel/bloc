@@ -2,13 +2,12 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_complex_list/list/list.dart';
 import 'package:flutter_complex_list/repository.dart';
-import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
 
 part 'list_state.dart';
 
 class ListCubit extends Cubit<ListState> {
-  ListCubit({@required this.repository}) : super(const ListState.loading());
+  ListCubit({required this.repository}) : super(const ListState.loading());
 
   final Repository repository;
 

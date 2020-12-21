@@ -4,7 +4,7 @@ abstract class ProfileWizardEvent extends Equatable {
   const ProfileWizardEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 
   @override
   bool get stringify => true;
@@ -22,8 +22,8 @@ class ProfileWizardNameSubmitted extends ProfileWizardEvent {
 class ProfileWizardAgeSubmitted extends ProfileWizardEvent {
   const ProfileWizardAgeSubmitted(this.age);
 
-  final int age;
+  final int? age;
 
   @override
-  List<Object> get props => [age];
+  List<Object?> get props => [age];
 }

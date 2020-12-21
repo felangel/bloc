@@ -1,8 +1,13 @@
+import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_wizard/bloc/profile_wizard_bloc.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  EquatableConfig.stringify = kDebugMode;
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -26,7 +31,7 @@ class Home extends StatelessWidget {
                 final profile = await Navigator.of(context).push(
                   ProfileWizard.route(),
                 );
-                Scaffold.of(context)
+                ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(SnackBar(content: Text('$profile')));
               },
@@ -56,7 +61,7 @@ class ProfileWizard extends StatelessWidget {
 }
 
 class ProfileWizardController extends StatefulWidget {
-  const ProfileWizardController({Key key, @required this.onComplete})
+  const ProfileWizardController({Key? key, required this.onComplete})
       : super(key: key);
 
   final ValueSetter<Profile> onComplete;
@@ -69,7 +74,7 @@ class ProfileWizardController extends StatefulWidget {
 class _ProfileWizardControllerState extends State<ProfileWizardController> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
-  NavigatorState get _navigator => _navigatorKey.currentState;
+  NavigatorState? get _navigator => _navigatorKey.currentState;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +83,7 @@ class _ProfileWizardControllerState extends State<ProfileWizardController> {
         if (state.profile.age != null) {
           widget.onComplete(state.profile);
         } else if (state.profile.name?.isNotEmpty == true) {
-          _navigator.push(ProfileAgeForm.route());
+          _navigator?.push(ProfileAgeForm.route());
         }
       },
       child: Navigator(
@@ -140,7 +145,7 @@ class ProfileAgeForm extends StatefulWidget {
 }
 
 class _ProfileAgeFormState extends State<ProfileAgeForm> {
-  int _age;
+  int? _age;
 
   @override
   Widget build(BuildContext context) {

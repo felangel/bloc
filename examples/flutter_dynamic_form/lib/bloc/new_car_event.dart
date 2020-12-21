@@ -10,17 +10,17 @@ class NewCarFormLoaded extends NewCarEvent {}
 class NewCarBrandChanged extends NewCarEvent {
   const NewCarBrandChanged({this.brand});
 
-  final String brand;
+  final String? brand;
 }
 
 class NewCarModelChanged extends NewCarEvent {
   const NewCarModelChanged({this.model});
 
-  final String model;
+  final String? model;
 }
 
 class NewCarYearChanged extends NewCarEvent {
   const NewCarYearChanged({this.year});
 
-  final String year;
+  final String? year;
 }
