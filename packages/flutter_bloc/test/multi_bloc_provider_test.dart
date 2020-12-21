@@ -6,23 +6,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class MyAppWithNavigation extends MaterialApp {
-  MyAppWithNavigation({Key key, Widget child})
+  MyAppWithNavigation({Key? key, required Widget child})
       : super(key: key, home: Scaffold(body: child));
 }
 
 class HomePage extends StatelessWidget {
   const HomePage({
-    Key key,
+    Key? key,
     this.onCounterCubitClosed,
     this.onThemeCubitClosed,
     this.counterCubitValue,
     this.themeCubitValue,
   }) : super(key: key);
 
-  final VoidCallback onCounterCubitClosed;
-  final VoidCallback onThemeCubitClosed;
-  final CounterCubit counterCubitValue;
-  final ThemeCubit themeCubitValue;
+  final VoidCallback? onCounterCubitClosed;
+  final VoidCallback? onThemeCubitClosed;
+  final CounterCubit? counterCubitValue;
+  final ThemeCubit? themeCubitValue;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
       if (counterCubitValue != null) {
         providers.add(
           BlocProvider<CounterCubit>.value(
-            value: counterCubitValue,
+            value: counterCubitValue!,
           ),
         );
       } else {
@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
       if (themeCubitValue != null) {
         providers.add(
           BlocProvider<ThemeCubit>.value(
-            value: themeCubitValue,
+            value: themeCubitValue!,
           ),
         );
       } else {
@@ -117,7 +117,7 @@ class CounterPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         key: const Key('pop_button'),
-        onPressed: Navigator.of(context).pop,
+        onPressed: () => Navigator.of(context).pop(),
       ),
     );
   }
@@ -126,7 +126,7 @@ class CounterPage extends StatelessWidget {
 class CounterCubit extends Cubit<int> {
   CounterCubit({this.onClose}) : super(0);
 
-  final VoidCallback onClose;
+  final VoidCallback? onClose;
 
   void increment() => emit(state + 1);
   void decrement() => emit(state - 1);
@@ -141,7 +141,7 @@ class CounterCubit extends Cubit<int> {
 class ThemeCubit extends Cubit<ThemeData> {
   ThemeCubit({this.onClose}) : super(ThemeData.light());
 
-  final VoidCallback onClose;
+  final VoidCallback? onClose;
 
   void toggle() {
     emit(state == ThemeData.dark() ? ThemeData.light() : ThemeData.dark());
@@ -156,26 +156,6 @@ class ThemeCubit extends Cubit<ThemeData> {
 
 void main() {
   group('MultiBlocProvider', () {
-    testWidgets('throws if initialized with no providers', (tester) async {
-      try {
-        await tester.pumpWidget(
-          MultiBlocProvider(providers: null, child: const SizedBox()),
-        );
-      } on dynamic catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
-    testWidgets('throws if initialized with no child', (tester) async {
-      try {
-        await tester.pumpWidget(
-          MultiBlocProvider(providers: [], child: null),
-        );
-      } on dynamic catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
     testWidgets('passes cubits to children', (tester) async {
       await tester.pumpWidget(
         MultiBlocProvider(

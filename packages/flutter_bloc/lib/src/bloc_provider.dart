@@ -39,14 +39,14 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
     with BlocProviderSingleChildWidget {
   /// {@macro bloc_provider}
   BlocProvider({
-    Key key,
-    @required Create<T> create,
-    Widget child,
-    bool lazy,
+    Key? key,
+    required Create<T> create,
+    Widget? child,
+    bool? lazy,
   }) : this._(
           key: key,
           create: create,
-          dispose: (_, bloc) => bloc?.close(),
+          dispose: (_, bloc) => bloc.close(),
           child: child,
           lazy: lazy,
         );
@@ -69,9 +69,9 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   /// );
   /// ```
   BlocProvider.value({
-    Key key,
-    @required T value,
-    Widget child,
+    Key? key,
+    required T value,
+    Widget? child,
   }) : this._(
           key: key,
           create: (_) => value,
@@ -81,9 +81,9 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   /// Internal constructor responsible for creating the [BlocProvider].
   /// Used by the [BlocProvider] default and value constructors.
   BlocProvider._({
-    Key key,
-    @required Create<T> create,
-    Dispose<T> dispose,
+    Key? key,
+    required Create<T> create,
+    Dispose<T>? dispose,
     this.child,
     this.lazy,
   })  : _create = create,
@@ -91,13 +91,13 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
         super(key: key, child: child);
 
   /// Widget which will have access to the [Bloc] or [Cubit].
-  final Widget child;
+  final Widget? child;
 
   /// Whether the [Bloc] or [Cubit] should be created lazily.
   /// Defaults to `true`.
-  final bool lazy;
+  final bool? lazy;
 
-  final Dispose<T> _dispose;
+  final Dispose<T>? _dispose;
 
   final Create<T> _create;
 
@@ -132,7 +132,7 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   }
 
   @override
-  Widget buildWithChild(BuildContext context, Widget child) {
+  Widget buildWithChild(BuildContext context, Widget? child) {
     return InheritedProvider<T>(
       create: _create,
       dispose: _dispose,
@@ -146,11 +146,9 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
     InheritedContext<Cubit> e,
     Cubit value,
   ) {
-    if (value == null) return () {};
     final subscription = value.listen(
-      (Object _) => e.markNeedsNotifyDependents(),
+      (dynamic _) => e.markNeedsNotifyDependents(),
     );
-    if (subscription == null) return () {};
     return subscription.cancel;
   }
 }

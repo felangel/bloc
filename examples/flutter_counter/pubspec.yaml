@@ -1,18 +1,24 @@
 name: flutter_counter
 description: A new Flutter project.
-
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
-
 version: 1.0.0+1
+publish_to: none
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^6.1.0
-  flutter_bloc: ^6.1.0
+  bloc:
+    path: ../../packages/bloc
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
+
+dependency_overrides:
+  bloc:
+    path: ../../packages/bloc
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
 
 dev_dependencies:
   flutter_test:

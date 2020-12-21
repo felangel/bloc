@@ -24,7 +24,7 @@ class ListPage extends StatelessWidget {
 }
 
 class _ListView extends StatelessWidget {
-  const _ListView({Key key, this.items}) : super(key: key);
+  const _ListView({Key? key, required this.items}) : super(key: key);
 
   final List<Item> items;
 
@@ -48,9 +48,9 @@ class _ListView extends StatelessWidget {
 
 class _ItemTile extends StatelessWidget {
   const _ItemTile({
-    Key key,
-    @required this.item,
-    @required this.onDeletePressed,
+    Key? key,
+    required this.item,
+    required this.onDeletePressed,
   }) : super(key: key);
 
   final Item item;

@@ -65,20 +65,18 @@ import 'bloc_listener.dart';
 class BlocConsumer<T extends Cubit<S>, S> extends StatefulWidget {
   /// {@macro bloc_consumer}
   const BlocConsumer({
-    Key key,
-    @required this.builder,
-    @required this.listener,
+    Key? key,
+    required this.builder,
+    required this.listener,
     this.value,
     this.buildWhen,
     this.listenWhen,
-  })  : assert(builder != null),
-        assert(listener != null),
-        super(key: key);
+  }) : super(key: key);
 
   /// The bloc/cubit that the [BlocConsumer] will interact with.
   /// If omitted, [BlocConsumer] will automatically perform a lookup using
   /// `BlocProvider` and the current `BuildContext`.
-  final T value;
+  final T? value;
 
   /// The [builder] function which will be invoked on each widget build.
   /// The [builder] takes the `BuildContext` and current `state` and
@@ -93,12 +91,12 @@ class BlocConsumer<T extends Cubit<S>, S> extends StatefulWidget {
   /// Takes the previous `state` and the current `state` and is responsible for
   /// returning a [bool] which determines whether or not to trigger
   /// [builder] with the current `state`.
-  final BlocBuilderCondition<S> buildWhen;
+  final BlocBuilderCondition<S>? buildWhen;
 
   /// Takes the previous `state` and the current `state` and is responsible for
   /// returning a [bool] which determines whether or not to call [listener] of
   /// [BlocConsumer] with the current `state`.
-  final BlocListenerCondition<S> listenWhen;
+  final BlocListenerCondition<S>? listenWhen;
 
   @override
   State<BlocConsumer<T, S>> createState() => _BlocConsumerState<T, S>();
@@ -106,7 +104,7 @@ class BlocConsumer<T extends Cubit<S>, S> extends StatefulWidget {
 
 class _BlocConsumerState<T extends Cubit<S>, S>
     extends State<BlocConsumer<T, S>> {
-  T _bloc;
+  late T _bloc;
 
   @override
   void initState() {
