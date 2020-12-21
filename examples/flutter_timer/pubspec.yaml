@@ -1,7 +1,7 @@
 name: flutter_timer
 description: A new Flutter project.
-
 version: 1.0.0+1
+publish_to: none
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
@@ -9,10 +9,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  bloc:
+    path: ../../packages/bloc
   flutter_bloc:
     path: ../../packages/flutter_bloc
-  equatable: ^1.0.0
+  equatable: ^1.2.5
   wave: ^0.0.8
+
+dependency_overrides:
+  bloc:
+    path: ../../packages/bloc
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
 
 flutter:
   uses-material-design: true
