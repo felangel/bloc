@@ -17,7 +17,7 @@ void main() {
 /// {@endtemplate}
 class TickerApp extends MaterialApp {
   /// {@macro ticker_app}
-  TickerApp({Key key})
+  TickerApp({Key? key})
       : super(
           key: key,
           home: BlocProvider(

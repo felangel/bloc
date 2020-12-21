@@ -72,6 +72,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1.4.0
+        with:
+          channel: beta
       - name: Install Dependencies
         working-directory: ${{ matrix.folder }}
         run: flutter packages get
@@ -85,7 +87,7 @@ jobs:
         working-directory: ${{ matrix.folder }}
         run: |
           if [ -d "test" ]; then
-            flutter test --no-pub --test-randomize-ordering-seed random      
+            flutter test --no-pub --test-randomize-ordering-seed random --no-sound-null-safety
           fi
   build:
     needs: [examples]

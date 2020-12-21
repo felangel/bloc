@@ -31,7 +31,7 @@ class FilteredTodos extends StatelessWidget {
                 todo: todo,
                 onDismissed: (direction) {
                   BlocProvider.of<TodosBloc>(context).add(TodoDeleted(todo));
-                  Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(DeleteTodoSnackBar(
                     key: ArchSampleKeys.snackbar,
                     todo: todo,
                     onUndo: () =>
@@ -46,7 +46,7 @@ class FilteredTodos extends StatelessWidget {
                     }),
                   );
                   if (removedTodo != null) {
-                    Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(DeleteTodoSnackBar(
                       key: ArchSampleKeys.snackbar,
                       todo: todo,
                       onUndo: () => BlocProvider.of<TodosBloc>(context)
