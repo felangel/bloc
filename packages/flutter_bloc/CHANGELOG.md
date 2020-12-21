@@ -1,3 +1,8 @@
+# 7.0.0-nullsafety.0
+
+- **BREAKING**: opt into null safety
+- feat!: upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+
 # 7.0.0-dev.2
 
 - **BREAKING**: revert `7.0.0-dev.1`

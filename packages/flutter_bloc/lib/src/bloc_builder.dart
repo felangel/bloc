@@ -76,12 +76,11 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 class BlocBuilder<T extends Cubit<S>, S> extends BlocBuilderBase<T, S> {
   /// {@macro bloc_builder}
   const BlocBuilder({
-    Key key,
-    @required this.builder,
-    T value,
-    BlocBuilderCondition<S> buildWhen,
-  })  : assert(builder != null),
-        super(key: key, value: value, buildWhen: buildWhen);
+    Key? key,
+    required this.builder,
+    T? value,
+    BlocBuilderCondition<S>? buildWhen,
+  }) : super(key: key, value: value, buildWhen: buildWhen);
 
   /// The [builder] function which will be invoked on each widget build.
   /// The [builder] takes the `BuildContext` and current `state` and
@@ -103,16 +102,16 @@ class BlocBuilder<T extends Cubit<S>, S> extends BlocBuilderBase<T, S> {
 /// {@endtemplate}
 abstract class BlocBuilderBase<T extends Cubit<S>, S> extends StatefulWidget {
   /// {@macro bloc_builder_base}
-  const BlocBuilderBase({Key key, this.value, this.buildWhen})
+  const BlocBuilderBase({Key? key, this.value, this.buildWhen})
       : super(key: key);
 
   /// The bloc/cubit that the [BlocBuilderBase] will interact with.
   /// If omitted, [BlocBuilderBase] will automatically perform a lookup using
   /// [BlocProvider] and the current `BuildContext`.
-  final T value;
+  final T? value;
 
   /// {@macro bloc_builder_build_when}
-  final BlocBuilderCondition<S> buildWhen;
+  final BlocBuilderCondition<S>? buildWhen;
 
   /// Returns a widget based on the `BuildContext` and current [state].
   Widget build(BuildContext context, S state);
@@ -123,8 +122,8 @@ abstract class BlocBuilderBase<T extends Cubit<S>, S> extends StatefulWidget {
 
 class _BlocBuilderBaseState<T extends Cubit<S>, S>
     extends State<BlocBuilderBase<T, S>> {
-  T _bloc;
-  S _state;
+  late T _bloc;
+  late S _state;
 
   @override
   void initState() {

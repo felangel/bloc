@@ -84,13 +84,12 @@ class BlocListener<T extends Cubit<S>, S> extends BlocListenerBase<T, S>
     with BlocListenerSingleChildWidget {
   /// {@macro bloc_listener}
   const BlocListener({
-    Key key,
-    @required BlocWidgetListener<S> listener,
-    T value,
-    BlocListenerCondition<S> listenWhen,
-    Widget child,
-  })  : assert(listener != null),
-        super(
+    Key? key,
+    required BlocWidgetListener<S> listener,
+    T? value,
+    BlocListenerCondition<S>? listenWhen,
+    Widget? child,
+  }) : super(
           key: key,
           child: child,
           listener: listener,
@@ -110,8 +109,8 @@ abstract class BlocListenerBase<T extends Cubit<S>, S>
     extends SingleChildStatefulWidget {
   /// {@macro bloc_listener_base}
   const BlocListenerBase({
-    Key key,
-    this.listener,
+    Key? key,
+    required this.listener,
     this.value,
     this.child,
     this.listenWhen,
@@ -119,11 +118,11 @@ abstract class BlocListenerBase<T extends Cubit<S>, S>
 
   /// The widget which will be rendered as a descendant of the
   /// [BlocListenerBase].
-  final Widget child;
+  final Widget? child;
 
   /// The bloc/cubit which will be listened to.
   /// Whenever the `state` changes, [listener] will be invoked.
-  final T value;
+  final T? value;
 
   /// The [BlocWidgetListener] which will be called on every `state` change.
   /// This [listener] should be used for any code which needs to execute
@@ -131,7 +130,7 @@ abstract class BlocListenerBase<T extends Cubit<S>, S>
   final BlocWidgetListener<S> listener;
 
   /// {@macro bloc_listener_listen_when}
-  final BlocListenerCondition<S> listenWhen;
+  final BlocListenerCondition<S>? listenWhen;
 
   @override
   SingleChildState<BlocListenerBase<T, S>> createState() =>
@@ -140,9 +139,9 @@ abstract class BlocListenerBase<T extends Cubit<S>, S>
 
 class _BlocListenerBaseState<T extends Cubit<S>, S>
     extends SingleChildState<BlocListenerBase<T, S>> {
-  StreamSubscription<S> _subscription;
-  S _previousState;
-  T _bloc;
+  StreamSubscription<S>? _subscription;
+  late S _previousState;
+  late T _bloc;
 
   @override
   void initState() {
@@ -168,7 +167,7 @@ class _BlocListenerBaseState<T extends Cubit<S>, S>
   }
 
   @override
-  Widget buildWithChild(BuildContext context, Widget child) => child;
+  Widget buildWithChild(BuildContext context, Widget? child) => child!;
 
   @override
   void dispose() {
@@ -177,20 +176,16 @@ class _BlocListenerBaseState<T extends Cubit<S>, S>
   }
 
   void _subscribe() {
-    if (_bloc != null) {
-      _subscription = _bloc.listen((state) {
-        if (widget.listenWhen?.call(_previousState, state) ?? true) {
-          widget.listener(context, state);
-        }
-        _previousState = state;
-      });
-    }
+    _subscription = _bloc.listen((state) {
+      if (widget.listenWhen?.call(_previousState, state) ?? true) {
+        widget.listener(context, state);
+      }
+      _previousState = state;
+    });
   }
 
   void _unsubscribe() {
-    if (_subscription != null) {
-      _subscription.cancel();
-      _subscription = null;
-    }
+    _subscription?.cancel();
+    _subscription = null;
   }
 }
