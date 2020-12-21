@@ -24,17 +24,17 @@ class MyApp extends StatelessWidget {
 class MyForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    void _onBrandChanged(String brand) =>
+    void _onBrandChanged(String? brand) =>
         context.read<NewCarBloc>().add(NewCarBrandChanged(brand: brand));
 
-    void _onModelChanged(String model) =>
+    void _onModelChanged(String? model) =>
         context.read<NewCarBloc>().add(NewCarModelChanged(model: model));
 
-    void _onYearChanged(String year) =>
+    void _onYearChanged(String? year) =>
         context.read<NewCarBloc>().add(NewCarYearChanged(year: year));
 
-    void _onFormSubmitted({String brand, String model, String year}) {
-      Scaffold.of(context)
+    void _onFormSubmitted({String? brand, String? model, String? year}) {
+      ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(content: Text('Submitted $brand $model $year')),
@@ -48,7 +48,7 @@ class MyForm extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             DropdownButton<String>(
-              items: state.brands?.isNotEmpty == true
+              items: state.brands.isNotEmpty == true
                   ? state.brands.map((brand) {
                       return DropdownMenuItem(value: brand, child: Text(brand));
                     }).toList()
@@ -58,7 +58,7 @@ class MyForm extends StatelessWidget {
               onChanged: _onBrandChanged,
             ),
             DropdownButton<String>(
-              items: state.models?.isNotEmpty == true
+              items: state.models.isNotEmpty == true
                   ? state.models.map((model) {
                       return DropdownMenuItem(value: model, child: Text(model));
                     }).toList()
@@ -68,7 +68,7 @@ class MyForm extends StatelessWidget {
               onChanged: _onModelChanged,
             ),
             DropdownButton<String>(
-              items: state.years?.isNotEmpty == true
+              items: state.years.isNotEmpty == true
                   ? state.years.map((year) {
                       return DropdownMenuItem(value: year, child: Text(year));
                     }).toList()

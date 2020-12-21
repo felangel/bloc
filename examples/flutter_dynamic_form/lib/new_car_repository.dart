@@ -7,7 +7,7 @@ class NewCarRepository {
     return ['Chevy', 'Toyota', 'Honda'];
   }
 
-  Future<List<String>> fetchModels({String brand}) async {
+  Future<List<String>> fetchModels({String? brand}) async {
     await wait();
     switch (brand) {
       case 'Chevy':
@@ -21,7 +21,7 @@ class NewCarRepository {
     }
   }
 
-  Future<List<String>> fetchYears({String brand, String model}) async {
+  Future<List<String>> fetchYears({String? brand, String? model}) async {
     await wait();
     switch (brand) {
       case 'Chevy':
@@ -33,7 +33,6 @@ class NewCarRepository {
           default:
             return [];
         }
-        break;
       case 'Toyota':
         switch (model) {
           case 'Corolla':
@@ -43,7 +42,6 @@ class NewCarRepository {
           default:
             return [];
         }
-        break;
       case 'Honda':
         switch (model) {
           case 'Civic':
@@ -53,7 +51,6 @@ class NewCarRepository {
           default:
             return [];
         }
-        break;
       default:
         return [];
     }

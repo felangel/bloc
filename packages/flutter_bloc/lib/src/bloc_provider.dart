@@ -39,17 +39,13 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
     with BlocProviderSingleChildWidget {
   /// {@macro bloc_provider}
   BlocProvider({
-    Key key,
-    @required Create<T> create,
-    Widget child,
-    bool lazy,
-  }) : this._(
-          key: key,
-          create: create,
-          dispose: (_, bloc) => bloc?.close(),
-          child: child,
-          lazy: lazy,
-        );
+    Key? key,
+    required Create<T> create,
+    this.child,
+    this.lazy,
+  })  : _create = create,
+        _value = null,
+        super(key: key, child: child);
 
   /// Takes a [value] and a [child] which will have access to the [value] via
   /// `BlocProvider.of(context)`.
@@ -69,45 +65,24 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   /// );
   /// ```
   BlocProvider.value({
-    Key key,
-    @required T value,
-    Widget child,
-  }) : this._(
-          key: key,
-          value: value,
-          child: child,
-        );
-
-  /// Internal constructor responsible for creating the [BlocProvider].
-  /// Used by the [BlocProvider] default and value constructors.
-  BlocProvider._({
-    Key key,
-    Create<T> create,
-    T value,
-    Dispose<T> dispose,
+    Key? key,
+    required T value,
     this.child,
-    this.lazy,
-  })  : _create = create,
-        _dispose = dispose,
-        _value = value,
-        assert(
-          create != null || value != null,
-          'either create or value must not be null',
-        ),
+  })  : _value = value,
+        _create = null,
+        lazy = null,
         super(key: key, child: child);
 
   /// Widget which will have access to the [Bloc] or [Cubit].
-  final Widget child;
+  final Widget? child;
 
   /// Whether the [Bloc] or [Cubit] should be created lazily.
   /// Defaults to `true`.
-  final bool lazy;
+  final bool? lazy;
 
-  final Dispose<T> _dispose;
+  final Create<T>? _create;
 
-  final Create<T> _create;
-
-  final T _value;
+  final T? _value;
 
   /// Method that allows widgets to access a [Bloc] or [Cubit] instance
   /// as long as their `BuildContext` contains a [BlocProvider] instance.
@@ -140,17 +115,18 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   }
 
   @override
-  Widget buildWithChild(BuildContext context, Widget child) {
-    return _value != null
+  Widget buildWithChild(BuildContext context, Widget? child) {
+    final value = _value;
+    return value != null
         ? InheritedProvider<T>.value(
-            value: _value,
+            value: value,
             startListening: _startListening,
             lazy: lazy,
             child: child,
           )
         : InheritedProvider<T>(
             create: _create,
-            dispose: _dispose,
+            dispose: (_, bloc) => bloc.close(),
             startListening: _startListening,
             child: child,
             lazy: lazy,
@@ -161,11 +137,9 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
     InheritedContext<Cubit> e,
     Cubit value,
   ) {
-    if (value == null) return () {};
     final subscription = value.listen(
-      (Object _) => e.markNeedsNotifyDependents(),
+      (dynamic _) => e.markNeedsNotifyDependents(),
     );
-    if (subscription == null) return () {};
     return subscription.cancel;
   }
 }

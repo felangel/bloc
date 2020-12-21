@@ -2,22 +2,22 @@ part of 'new_car_bloc.dart';
 
 class NewCarState {
   const NewCarState({
-    @required this.brands,
+    required this.brands,
     @required this.brand,
-    @required this.models,
+    required this.models,
     @required this.model,
-    @required this.years,
+    required this.years,
     @required this.year,
   });
 
   final List<String> brands;
-  final String brand;
+  final String? brand;
 
   final List<String> models;
-  final String model;
+  final String? model;
 
   final List<String> years;
-  final String year;
+  final String? year;
 
   bool get isComplete => brand != null && model != null && year != null;
 
@@ -41,7 +41,7 @@ class NewCarState {
           year: null,
         );
 
-  const NewCarState.brandsLoadSuccess({@required List<String> brands})
+  const NewCarState.brandsLoadSuccess({required List<String> brands})
       : this(
           brands: brands,
           brand: null,
@@ -52,8 +52,8 @@ class NewCarState {
         );
 
   const NewCarState.modelsLoadInProgress({
-    @required List<String> brands,
-    @required String brand,
+    required List<String> brands,
+    String? brand,
   }) : this(
           brands: brands,
           brand: brand,
@@ -64,9 +64,9 @@ class NewCarState {
         );
 
   const NewCarState.modelsLoadSuccess({
-    @required List<String> brands,
-    @required String brand,
-    @required List<String> models,
+    required List<String> brands,
+    @required String? brand,
+    required List<String> models,
   }) : this(
           brands: brands,
           brand: brand,
@@ -77,10 +77,10 @@ class NewCarState {
         );
 
   const NewCarState.yearsLoadInProgress({
-    @required List<String> brands,
-    @required String brand,
-    @required List<String> models,
-    @required String model,
+    required List<String> brands,
+    @required String? brand,
+    required List<String> models,
+    @required String? model,
   }) : this(
           brands: brands,
           brand: brand,
@@ -91,11 +91,11 @@ class NewCarState {
         );
 
   const NewCarState.yearsLoadSuccess({
-    @required List<String> brands,
-    @required String brand,
-    @required List<String> models,
-    @required String model,
-    @required List<String> years,
+    required List<String> brands,
+    @required String? brand,
+    required List<String> models,
+    @required String? model,
+    required List<String> years,
   }) : this(
           brands: brands,
           brand: brand,
@@ -106,12 +106,12 @@ class NewCarState {
         );
 
   NewCarState copyWith({
-    List<String> brands,
-    String brand,
-    List<String> models,
-    String model,
-    List<String> years,
-    String year,
+    List<String>? brands,
+    String? brand,
+    List<String>? models,
+    String? model,
+    List<String>? years,
+    String? year,
   }) {
     return NewCarState(
       brands: brands ?? this.brands,
