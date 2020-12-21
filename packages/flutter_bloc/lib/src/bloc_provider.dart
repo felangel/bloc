@@ -144,9 +144,8 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
 
   static VoidCallback _startListening(
     InheritedContext<Cubit> e,
-    Cubit? value,
+    Cubit value,
   ) {
-    if (value == null) return () {};
     final subscription = value.listen(
       (dynamic _) => e.markNeedsNotifyDependents(),
     );
