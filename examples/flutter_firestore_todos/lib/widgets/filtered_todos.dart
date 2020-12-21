@@ -25,11 +25,13 @@ class FilteredTodos extends StatelessWidget {
                 todo: todo,
                 onDismissed: (direction) {
                   BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
-                  Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
-                    todo: todo,
-                    onUndo: () =>
-                        BlocProvider.of<TodosBloc>(context).add(AddTodo(todo)),
-                  ));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    DeleteTodoSnackBar(
+                      todo: todo,
+                      onUndo: () => BlocProvider.of<TodosBloc>(context)
+                          .add(AddTodo(todo)),
+                    ),
+                  );
                 },
                 onTap: () async {
                   final removedTodo = await Navigator.of(context).push(
@@ -38,7 +40,7 @@ class FilteredTodos extends StatelessWidget {
                     }),
                   );
                   if (removedTodo != null) {
-                    Scaffold.of(context).showSnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
                       DeleteTodoSnackBar(
                         todo: todo,
                         onUndo: () => BlocProvider.of<TodosBloc>(context)

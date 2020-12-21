@@ -1,9 +1,11 @@
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_counter/counter/counter.dart';
 import 'package:flutter_counter/counter/view/counter_view.dart';
 import 'package:flutter_test/flutter_test.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:mockito/mockito.dart';
 
 class MockCounterCubit extends MockBloc<int> implements CounterCubit {}
