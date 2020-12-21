@@ -7,5 +7,5 @@ import 'counter/counter.dart';
 /// {@endtemplate}
 class CounterApp extends MaterialApp {
   /// {@macro counter_app}
-  const CounterApp({Key key}) : super(key: key, home: const CounterPage());
+  const CounterApp({Key? key}) : super(key: key, home: const CounterPage());
 }

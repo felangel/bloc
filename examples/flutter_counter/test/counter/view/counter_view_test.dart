@@ -12,11 +12,12 @@ const _incrementButtonKey = Key('counterView_increment_floatingActionButton');
 const _decrementButtonKey = Key('counterView_decrement_floatingActionButton');
 
 void main() {
-  CounterCubit counterCubit;
+  late CounterCubit counterCubit;
 
   setUp(() {
     counterCubit = MockCounterCubit();
     when(counterCubit.state).thenReturn(0);
+    whenListen(counterCubit, Stream.value(0));
   });
 
   group('CounterView', () {
@@ -55,7 +56,9 @@ void main() {
           ),
         ),
       );
-      await tester.tap(find.byKey(_decrementButtonKey));
+      final decrementFinder = find.byKey(_decrementButtonKey);
+      await tester.ensureVisible(decrementFinder);
+      await tester.tap(decrementFinder);
       verify(counterCubit.decrement()).called(1);
     });
   });
