@@ -5,10 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 class MyThemeApp extends StatefulWidget {
   MyThemeApp({
-    Key key,
-    @required Cubit<ThemeData> themeCubit,
-    @required Function onBuild,
-  })  : _themeCubit = themeCubit,
+    Key? key,
+    required Cubit<ThemeData> themeCubit,
+    required Function onBuild,
+  })   : _themeCubit = themeCubit,
         _onBuild = onBuild,
         super(key: key);
 
@@ -24,9 +24,9 @@ class MyThemeApp extends StatefulWidget {
 
 class MyThemeAppState extends State<MyThemeApp> {
   MyThemeAppState({
-    @required Cubit<ThemeData> themeCubit,
-    @required Function onBuild,
-  })  : _themeCubit = themeCubit,
+    required Cubit<ThemeData> themeCubit,
+    required Function onBuild,
+  })   : _themeCubit = themeCubit,
         _onBuild = onBuild;
 
   Cubit<ThemeData> _themeCubit;
@@ -133,33 +133,6 @@ class CounterCubit extends Cubit<int> {
 
 void main() {
   group('BlocBuilder', () {
-    testWidgets('throws if initialized with null value and builder',
-        (tester) async {
-      try {
-        await tester.pumpWidget(
-          BlocBuilder<ThemeCubit, ThemeData>(
-            value: null,
-            builder: null,
-          ),
-        );
-      } on dynamic catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
-    testWidgets('throws if initialized with null builder', (tester) async {
-      try {
-        await tester.pumpWidget(
-          BlocBuilder<ThemeCubit, ThemeData>(
-            value: ThemeCubit(),
-            builder: null,
-          ),
-        );
-      } on dynamic catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
     testWidgets('passes initial state to widget', (tester) async {
       final themeCubit = ThemeCubit();
       var numBuilds = 0;

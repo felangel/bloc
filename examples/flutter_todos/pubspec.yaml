@@ -1,20 +1,26 @@
 name: flutter_todos
 description: A new Flutter project.
-
 version: 1.0.0+1
+publish_to: none
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
-  meta: ^1.1.8
-  equatable: ^1.2.5
-  flutter_bloc:
-    path: ../../packages/flutter_bloc
   flutter:
     sdk: flutter
+  equatable: ^1.2.5
+  bloc:
+    path: ../../packages/bloc
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
+  meta: ^1.1.8
 
 dependency_overrides:
+  bloc:
+    path: ../../packages/bloc
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
   todos_app_core:
     git:
       url: https://github.com/felangel/flutter_architecture_samples

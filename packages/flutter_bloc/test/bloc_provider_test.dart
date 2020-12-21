@@ -12,28 +12,33 @@ class MockCubit<S> extends Cubit<S> {
 
   @override
   StreamSubscription<S> listen(
-    void Function(S p1) onData, {
-    Function onError,
-    void Function() onDone,
-    bool cancelOnError,
+    void Function(S p1)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
   }) {
-    return null;
+    return Stream<S>.empty().listen(
+      onData,
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
   }
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({
-    Key key,
-    CounterCubit Function(BuildContext context) create,
-    CounterCubit value,
-    @required Widget child,
-  })  : _create = create,
+    Key? key,
+    CounterCubit Function(BuildContext context)? create,
+    CounterCubit? value,
+    required Widget child,
+  })   : _create = create,
         _value = value,
         _child = child,
         super(key: key);
 
-  final CounterCubit Function(BuildContext context) _create;
-  final CounterCubit _value;
+  final CounterCubit Function(BuildContext context)? _create;
+  final CounterCubit? _value;
   final Widget _child;
 
   @override
@@ -41,14 +46,14 @@ class MyApp extends StatelessWidget {
     if (_value != null) {
       return MaterialApp(
         home: BlocProvider<CounterCubit>.value(
-          value: _value,
+          value: _value!,
           child: _child,
         ),
       );
     }
     return MaterialApp(
       home: BlocProvider<CounterCubit>(
-        create: _create,
+        create: _create!,
         child: _child,
       ),
     );
@@ -57,8 +62,8 @@ class MyApp extends StatelessWidget {
 
 class MyStatefulApp extends StatefulWidget {
   const MyStatefulApp({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
   }) : super(key: key);
 
   final Widget child;
@@ -68,7 +73,7 @@ class MyStatefulApp extends StatefulWidget {
 }
 
 class _MyStatefulAppState extends State<MyStatefulApp> {
-  CounterCubit cubit;
+  late CounterCubit cubit;
 
   @override
   void initState() {
@@ -108,26 +113,26 @@ class _MyStatefulAppState extends State<MyStatefulApp> {
 }
 
 class MyAppNoProvider extends MaterialApp {
-  const MyAppNoProvider({Key key, Widget home}) : super(key: key, home: home);
+  const MyAppNoProvider({
+    Key? key,
+    required Widget home,
+  }) : super(key: key, home: home);
 }
 
 class CounterPage extends StatelessWidget {
-  const CounterPage({Key key, this.onBuild}) : super(key: key);
+  const CounterPage({Key? key, this.onBuild}) : super(key: key);
 
-  final Function onBuild;
+  final Function? onBuild;
 
   @override
   Widget build(BuildContext context) {
     final counterCubit = BlocProvider.of<CounterCubit>(context);
-    assert(counterCubit != null);
 
     return Scaffold(
       body: BlocBuilder<CounterCubit, int>(
         value: counterCubit,
         builder: (context, count) {
-          if (onBuild != null) {
-            onBuild();
-          }
+          onBuild?.call();
           return Text('$count', key: const Key('counter_text'));
         },
       ),
@@ -141,8 +146,9 @@ class RoutePage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          RaisedButton(
+          ElevatedButton(
             key: const Key('route_button'),
+            child: const SizedBox(),
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute<Widget>(
@@ -151,8 +157,9 @@ class RoutePage extends StatelessWidget {
               );
             },
           ),
-          RaisedButton(
+          ElevatedButton(
             key: const Key('increment_buton'),
+            child: const SizedBox(),
             onPressed: () {
               BlocProvider.of<CounterCubit>(context).increment();
             },
@@ -166,7 +173,7 @@ class RoutePage extends StatelessWidget {
 class CounterCubit extends Cubit<int> {
   CounterCubit({this.onClose}) : super(0);
 
-  final Function onClose;
+  final Function? onClose;
 
   void increment() => emit(state + 1);
   void decrement() => emit(state - 1);
@@ -180,31 +187,6 @@ class CounterCubit extends Cubit<int> {
 
 void main() {
   group('BlocProvider', () {
-    testWidgets('throws AssertionError if initialized with no create or value',
-        (tester) async {
-      expect(
-        () => BlocProvider(child: const SizedBox(), create: null),
-        throwsAssertionError,
-      );
-      expect(
-        () => BlocProvider.value(child: const SizedBox(), value: null),
-        throwsAssertionError,
-      );
-    });
-
-    testWidgets('throws if initialized with no create', (tester) async {
-      await tester.pumpWidget(const MyApp(create: null, child: CounterPage()));
-      expect(tester.takeException(), isInstanceOf<AssertionError>());
-    });
-
-    testWidgets('throws if initialized with no child', (tester) async {
-      await tester.pumpWidget(MyApp(
-        create: (context) => CounterCubit(),
-        child: null,
-      ));
-      expect(tester.takeException(), isInstanceOf<AssertionError>());
-    });
-
     testWidgets('lazily loads cubits by default', (tester) async {
       var createCalled = false;
       await tester.pumpWidget(
@@ -347,8 +329,9 @@ void main() {
                 builder: (context, state) => Column(
                   children: [
                     Text('state: $state'),
-                    RaisedButton(
+                    ElevatedButton(
                       key: const Key('increment_button'),
+                      child: const SizedBox(),
                       onPressed: () {
                         BlocProvider.of<CounterCubit>(context).increment();
                       },
@@ -439,23 +422,49 @@ void main() {
     });
 
     testWidgets(
-        'should not throw FlutterError if internal '
+        'should throw StateError if internal '
         'exception is thrown', (tester) async {
-      final expectedException = Exception('oops');
+      const expected = 'Tried to read a provider that threw '
+          'during the creation of its value.\n'
+          'The exception occurred during the creation of type CounterCubit.';
+      final onError = FlutterError.onError;
+      final flutterErrors = <FlutterErrorDetails>[];
+      FlutterError.onError = flutterErrors.add;
       await tester.pumpWidget(
         BlocProvider<CounterCubit>(
           lazy: false,
-          create: (_) => throw expectedException,
+          create: (_) => throw Exception('oops'),
           child: const SizedBox(),
         ),
       );
-      final dynamic exception = tester.takeException();
-      expect(exception, expectedException);
+
+      expect(
+        flutterErrors,
+        contains(
+          isA<FlutterErrorDetails>().having(
+            (d) => d.exception,
+            'exception',
+            isA<StateError>().having(
+              (e) => e.message,
+              'message',
+              expected,
+            ),
+          ),
+        ),
+      );
+
+      FlutterError.onError = onError;
     });
 
     testWidgets(
-        'should rethrow ProviderNotFound '
+        'should throw StateError '
         'if exception is for different provider', (tester) async {
+      const expected = 'Tried to read a provider that threw '
+          'during the creation of its value.\n'
+          'The exception occurred during the creation of type CounterCubit.';
+      final onError = FlutterError.onError;
+      final flutterErrors = <FlutterErrorDetails>[];
+      FlutterError.onError = flutterErrors.add;
       await tester.pumpWidget(
         BlocProvider<CounterCubit>(
           lazy: false,
@@ -466,8 +475,19 @@ void main() {
           child: const SizedBox(),
         ),
       );
-      final exception = tester.takeException() as ProviderNotFoundException;
-      expect(exception.valueType, int);
+
+      expect(
+        flutterErrors,
+        contains(
+          isA<FlutterErrorDetails>().having(
+            (d) => d.exception,
+            'exception',
+            isA<StateError>().having((e) => e.message, 'message', expected),
+          ),
+        ),
+      );
+
+      FlutterError.onError = onError;
     });
 
     testWidgets(
