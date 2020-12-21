@@ -1,6 +1,5 @@
 name: flutter_graphql_jobs
 description: A example of how to use a GraphQL client with bloc.
-
 version: 1.0.0+1
 publish_to: none
 

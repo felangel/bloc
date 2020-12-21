@@ -1,6 +1,5 @@
 name: common_github_search
 description: Shared Code between AngularDart and Flutter
-
 version: 1.0.0+1
 publish_to: none
 
