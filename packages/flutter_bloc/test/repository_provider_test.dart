@@ -104,7 +104,7 @@ class RoutePage extends StatelessWidget {
       body: RaisedButton(
         key: const Key('route_button'),
         onPressed: () {
-          Navigator.of(context)?.pushReplacement(
+          Navigator.of(context).pushReplacement(
             MaterialPageRoute<Widget>(builder: (context) => const SizedBox()),
           );
         },
