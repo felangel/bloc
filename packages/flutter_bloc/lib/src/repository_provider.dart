@@ -34,10 +34,10 @@ class RepositoryProvider<T> extends Provider<T>
     with RepositoryProviderSingleChildWidget {
   /// {@macro repository_provider}
   RepositoryProvider({
-    Key key,
-    @required Create<T> create,
-    Widget child,
-    bool lazy,
+    Key? key,
+    required Create<T> create,
+    Widget? child,
+    bool? lazy,
   }) : super(
           key: key,
           create: create,
@@ -51,9 +51,9 @@ class RepositoryProvider<T> extends Provider<T>
   /// Repositories should always be created using the default constructor
   /// within the [Create] function.
   RepositoryProvider.value({
-    Key key,
-    @required T value,
-    Widget child,
+    Key? key,
+    required T value,
+    Widget? child,
   }) : super.value(
           key: key,
           value: value,

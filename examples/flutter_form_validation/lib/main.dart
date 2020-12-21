@@ -62,14 +62,14 @@ class _MyFormState extends State<MyForm> {
     return BlocListener<MyFormBloc, MyFormState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
-          Scaffold.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
           showDialog<void>(
             context: context,
             builder: (_) => SuccessDialog(),
           );
         }
         if (state.status.isSubmissionInProgress) {
-          Scaffold.of(context)
+          ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               const SnackBar(content: Text('Submitting...')),

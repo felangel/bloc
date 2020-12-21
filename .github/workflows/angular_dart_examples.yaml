@@ -31,36 +31,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1.4.0
+      - name: Install Dart SDK
+        run: |
+          sudo apt-get update
+          sudo apt-get install apt-transport-https
+          sudo sh -c 'wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
+          sudo sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_unstable.list > /etc/apt/sources.list.d/dart_unstable.list'
+          sudo apt-get update
+          sudo apt-get -y install dart
       - name: Install Dependencies
         working-directory: ${{ matrix.folder }}
-        env:
-          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
-        run: |
-          export PATH=$PATH:$FLUTTER_DART_HOME
-          pub get
+        run: PATH="$PATH:/usr/lib/dart/bin" pub get
       - name: Format
         working-directory: ${{ matrix.folder }}
-        env:
-          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
-        run: |
-          export PATH=$PATH:$FLUTTER_DART_HOME
-          dartfmt --dry-run --set-exit-if-changed .
+        run: PATH="$PATH:/usr/lib/dart/bin" dartfmt --dry-run --set-exit-if-changed .
       - name: Analyze
         working-directory: ${{ matrix.folder }}
-        env:
-          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
-        run: |
-          export PATH=$PATH:$FLUTTER_DART_HOME
-          dartanalyzer --fatal-infos --fatal-warnings .
+        run: PATH="$PATH:/usr/lib/dart/bin" dartanalyzer --fatal-infos --fatal-warnings .
       - name: Run tests
         working-directory: ${{ matrix.folder }}
-        env:
-          FLUTTER_DART_HOME: ${{ env.FLUTTER_HOME }}/bin/cache/dart-sdk/bin
         run: |
-          export PATH=$PATH:$FLUTTER_DART_HOME
           if [ -d "test" ]; then
-            pub run build_runner test --fail-on-severe
+            PATH="$PATH:/usr/lib/dart/bin" pub run build_runner test --fail-on-severe
           fi
   build:
     needs: [examples]
