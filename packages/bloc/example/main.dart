@@ -4,9 +4,9 @@ import 'package:bloc/bloc.dart';
 
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onCreate(Cubit cubit) {
-    super.onCreate(cubit);
-    print('onCreate -- cubit: ${cubit.runtimeType}');
+  void onCreate(Bloc bloc) {
+    super.onCreate(bloc);
+    print('onCreate -- bloc: ${bloc.runtimeType}');
   }
 
   @override
@@ -16,27 +16,21 @@ class SimpleBlocObserver extends BlocObserver {
   }
 
   @override
-  void onChange(Cubit cubit, Change change) {
-    super.onChange(cubit, change);
-    print('onChange -- cubit: ${cubit.runtimeType}, change: $change');
-  }
-
-  @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
     print('onTransition -- bloc: ${bloc.runtimeType}, transition: $transition');
   }
 
   @override
-  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
-    print('onError -- cubit: ${cubit.runtimeType}, error: $error');
-    super.onError(cubit, error, stackTrace);
+  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
+    print('onError -- bloc: ${bloc.runtimeType}, error: $error');
+    super.onError(bloc, error, stackTrace);
   }
 
   @override
-  void onClose(Cubit cubit) {
-    super.onClose(cubit);
-    print('onClose -- cubit: ${cubit.runtimeType}');
+  void onClose(Bloc bloc) {
+    super.onClose(bloc);
+    print('onClose -- bloc: ${bloc.runtimeType}');
   }
 }
 

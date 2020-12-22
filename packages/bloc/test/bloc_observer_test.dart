@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 class MockBloc extends Mock implements Bloc<Object, int> {}
 
 // ignore: must_be_immutable
-class MockTransition extends Mock implements Transition<Object, int> {}
+class MockTransition extends Mock implements Transition<Null, int> {}
 
 void main() {
   group('BlocObserver', () {
@@ -20,13 +20,6 @@ void main() {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
         BlocObserver().onEvent(MockBloc(), Object());
-      });
-    });
-
-    group('onChange', () {
-      test('does nothing by default', () {
-        // ignore: invalid_use_of_protected_member
-        BlocObserver().onChange(MockBloc(), MockTransition());
       });
     });
 

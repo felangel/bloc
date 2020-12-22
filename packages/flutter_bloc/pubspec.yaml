@@ -15,6 +15,10 @@ dependencies:
   bloc: ^6.1.0
   provider: ^4.3.2+2
 
+dependency_overrides:
+  bloc:
+    path: ../bloc
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
