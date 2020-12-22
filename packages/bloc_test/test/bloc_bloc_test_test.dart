@@ -79,7 +79,7 @@ void main() {
 ''';
         Object actualError;
         final completer = Completer<void>();
-        await runZoned(() async {
+        await runZonedGuarded(() async {
           unawaited(runBlocTest<CounterBloc, int>(
             'fails immediately',
             build: () => CounterBloc(),
@@ -87,7 +87,7 @@ void main() {
             expect: const <int>[2],
           ).then((_) => completer.complete()));
           await completer.future;
-        }, onError: (Object error) {
+        }, (Object error, _) {
           actualError = error;
           completer.complete();
         });
@@ -418,7 +418,7 @@ Unexpected number of calls
 ''';
         Object actualError;
         final completer = Completer<void>();
-        await runZoned(() async {
+        await runZonedGuarded(() async {
           unawaited(runBlocTest<SideEffectCounterBloc, int>(
             'fails immediately',
             build: () => SideEffectCounterBloc(repository),
@@ -428,7 +428,7 @@ Unexpected number of calls
             },
           ).then((_) => completer.complete()));
           await completer.future;
-        }, onError: (Object error) {
+        }, (Object error, _) {
           actualError = error;
           completer.complete();
         });
@@ -443,7 +443,7 @@ WARNING: Please ensure state instances extend Equatable, override == and hashCod
 Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''';
         Object actualError;
         final completer = Completer<void>();
-        await runZoned(() async {
+        await runZonedGuarded(() async {
           unawaited(runBlocTest<ComplexBloc, ComplexState>(
             'fails immediately',
             build: () => ComplexBloc(),
@@ -451,7 +451,7 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
             expect: <ComplexState>[ComplexStateA()],
           ).then((_) => completer.complete()));
           await completer.future;
-        }, onError: (Object error) {
+        }, (Object error, _) {
           actualError = error;
           completer.complete();
         });
