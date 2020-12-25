@@ -40,7 +40,7 @@ void mainCubit() {
     blocTest<CounterCubit, int>(
       'emits [1] when increment is called',
       build: () => CounterCubit(),
-      act: (cubit) => cubit.increment(),
+      act: (cubit) async => cubit.increment(),
       expect: const <int>[1],
     );
   });
@@ -71,7 +71,7 @@ void mainBloc() {
     blocTest<CounterBloc, int>(
       'emits [1] when CounterEvent.increment is added',
       build: () => CounterBloc(),
-      act: (bloc) => bloc.add(CounterEvent.increment),
+      act: (bloc) async => bloc.add(CounterEvent.increment),
       expect: const <int>[1],
     );
   });

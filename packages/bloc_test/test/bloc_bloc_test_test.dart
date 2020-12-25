@@ -79,14 +79,15 @@ void main() {
 ''';
         Object actualError;
         final completer = Completer<void>();
-        await runZonedGuarded(() async {
+        await runZoned(() async {
           unawaited(runBlocTest<CounterBloc, int>(
+            'fails immediately',
             build: () => CounterBloc(),
             act: (bloc) => bloc.add(CounterEvent.increment),
             expect: const <int>[2],
           ).then((_) => completer.complete()));
           await completer.future;
-        }, (Object error, _) {
+        }, onError: (Object error) {
           actualError = error;
           completer.complete();
         });
@@ -417,8 +418,9 @@ Unexpected number of calls
 ''';
         Object actualError;
         final completer = Completer<void>();
-        await runZonedGuarded(() async {
+        await runZoned(() async {
           unawaited(runBlocTest<SideEffectCounterBloc, int>(
+            'fails immediately',
             build: () => SideEffectCounterBloc(repository),
             act: (bloc) => bloc.add(CounterEvent.increment),
             verify: (_) {
@@ -426,7 +428,7 @@ Unexpected number of calls
             },
           ).then((_) => completer.complete()));
           await completer.future;
-        }, (Object error, _) {
+        }, onError: (Object error) {
           actualError = error;
           completer.complete();
         });
@@ -441,14 +443,15 @@ WARNING: Please ensure state instances extend Equatable, override == and hashCod
 Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''';
         Object actualError;
         final completer = Completer<void>();
-        await runZonedGuarded(() async {
+        await runZoned(() async {
           unawaited(runBlocTest<ComplexBloc, ComplexState>(
+            'fails immediately',
             build: () => ComplexBloc(),
             act: (bloc) => bloc.add(ComplexEventA()),
             expect: <ComplexState>[ComplexStateA()],
           ).then((_) => completer.complete()));
           await completer.future;
-        }, (Object error, _) {
+        }, onError: (Object error) {
           actualError = error;
           completer.complete();
         });

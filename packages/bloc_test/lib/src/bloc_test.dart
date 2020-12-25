@@ -4,40 +4,40 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart' as test;
 
-/// Creates a new `bloc`-specific test case with the given [description].
-/// [blocTest] will handle asserting that the `bloc` emits the [expect]ed
+/// Creates a new `cubit`-specific test case with the given [description].
+/// [blocTest] will handle asserting that the `cubit` emits the [expect]ed
 /// states (in order) after [act] is executed.
 /// [blocTest] also handles ensuring that no additional states are emitted
-/// by closing the `bloc` stream before evaluating the [expect]ation.
+/// by closing the `cubit` stream before evaluating the [expect]ation.
 ///
-/// [build] should be used for all `bloc` initialization and preparation
-/// and must return the `bloc` under test.
+/// [build] should be used for all `cubit` initialization and preparation
+/// and must return the `cubit` under test.
 ///
-/// [seed] is an optional state which will be used to seed the `bloc` before
+/// [seed] is an optional state which will be used to seed the `cubit` before
 /// [act] is called.
 ///
-/// [act] is an optional callback which will be invoked with the `bloc` under
-/// test and should be used to interact with the `bloc`.
+/// [act] is an optional callback which will be invoked with the `cubit` under
+/// test and should be used to interact with the `cubit`.
 ///
 /// [skip] is an optional `int` which can be used to skip any number of states.
 /// [skip] defaults to 0.
 ///
 /// [wait] is an optional `Duration` which can be used to wait for
-/// async operations within the `bloc` under test such as `debounceTime`.
+/// async operations within the `cubit` under test such as `debounceTime`.
 ///
-/// [expect] is an optional `Iterable` of matchers which the `bloc`
+/// [expect] is an optional `Iterable` of matchers which the `cubit`
 /// under test is expected to emit after [act] is executed.
 ///
 /// [verify] is an optional callback which is invoked after [expect]
 /// and can be used for additional verification/assertions.
-/// [verify] is called with the `bloc` returned by [build].
+/// [verify] is called with the `cubit` returned by [build].
 ///
 ///
 /// ```dart
 /// blocTest(
-///   'CounterBloc emits [1] when increment is added',
-///   build: () => CounterBloc(),
-///   act: (bloc) => bloc.add(CounterEvent.increment),
+///   'CounterCubit emits [1] when increment is called',
+///   build: () => CounterCubit(),
+///   act: (cubit) => cubit.increment(),
 ///   expect: [1],
 /// );
 /// ```
@@ -46,10 +46,10 @@ import 'package:test/test.dart' as test;
 ///
 /// ```dart
 /// blocTest(
-///   'CounterBloc emits [10] when seeded with 9',
-///   build: () => CounterBloc(),
+///   'CounterCubit emits [10] when seeded with 9',
+///   build: () => CounterCubit(),
 ///   seed: 9,
-///   act: (bloc) => bloc.add(CounterEvent.increment),
+///   act: (cubit) => cubit.increment(),
 ///   expect: [10],
 /// );
 /// ```
@@ -60,12 +60,12 @@ import 'package:test/test.dart' as test;
 ///
 /// ```dart
 /// blocTest(
-///   'CounterBloc emits [2] when increment is added twice',
-///   build: () => CounterBloc(),
-///   act: (bloc) {
-///     bloc
-///       ..add(CounterEvent.increment)
-///       ..add(CounterEvent.increment);
+///   'CounterCubit emits [2] when increment is called twice',
+///   build: () => CounterCubit(),
+///   act: (cubit) {
+///     cubit
+///       ..increment()
+///       ..increment();
 ///   },
 ///   skip: 1,
 ///   expect: [2],
@@ -77,21 +77,21 @@ import 'package:test/test.dart' as test;
 ///
 /// ```dart
 /// blocTest(
-///   'CounterBloc emits [1] when increment is added',
-///   build: () => CounterBloc(),
-///   act: (bloc) => bloc.add(CounterEvent.increment),
+///   'CounterCubit emits [1] when increment is called',
+///   build: () => CounterCubit(),
+///   act: (cubit) => cubit.increment(),
 ///   wait: const Duration(milliseconds: 300),
 ///   expect: [1],
 /// );
 /// ```
 ///
-/// [blocTest] can also be used to [verify] internal bloc functionality.
+/// [blocTest] can also be used to [verify] internal cubit functionality.
 ///
 /// ```dart
 /// blocTest(
-///   'CounterBloc emits [1] when increment is added',
-///   build: () => CounterBloc(),
-///   act: (bloc) => bloc.add(CounterEvent.increment),
+///   'CounterCubit emits [1] when increment is called',
+///   build: () => CounterCubit(),
+///   act: (cubit) => cubit.increment(),
 ///   expect: [1],
 ///   verify: (_) {
 ///     verify(repository.someMethod(any)).called(1);
@@ -106,25 +106,26 @@ import 'package:test/test.dart' as test;
 /// ```dart
 /// blocTest(
 ///  'emits [StateB] when emitB is called',
-///  build: () => MyBloc(),
-///  act: (bloc) => bloc.emitB(),
+///  build: () => MyCubit(),
+///  act: (cubit) => cubit.emitB(),
 ///  expect: [isA<StateB>()],
 /// );
 /// ```
 @isTest
-void blocTest<B extends Bloc<Object, State>, State>(
+void blocTest<C extends Cubit<State>, State>(
   String description, {
-  @required B Function() build,
+  @required C Function() build,
   State seed,
-  Function(B bloc) act,
+  Function(C cubit) act,
   Duration wait,
   int skip = 0,
   Iterable expect,
-  Function(B bloc) verify,
+  Function(C cubit) verify,
   Iterable errors,
 }) {
   test.test(description, () async {
-    await runBlocTest<B, State>(
+    await runBlocTest<C, State>(
+      description,
       build: build,
       seed: seed,
       act: act,
@@ -140,44 +141,45 @@ void blocTest<B extends Bloc<Object, State>, State>(
 /// Internal [blocTest] runner which is only visible for testing.
 /// This should never be used directly -- please use [blocTest] instead.
 @visibleForTesting
-Future<void> runBlocTest<B extends Bloc<Object, State>, State>({
-  @required B Function() build,
+Future<void> runBlocTest<C extends Cubit<State>, State>(
+  String description, {
+  @required C Function() build,
   State seed,
-  Function(B bloc) act,
+  Function(C cubit) act,
   Duration wait,
   int skip = 0,
   Iterable expect,
-  Function(B bloc) verify,
+  Function(C cubit) verify,
   Iterable errors,
 }) async {
   final unhandledErrors = <Object>[];
   var shallowEquality = false;
-  await runZonedGuarded(
+  await runZoned(
     () async {
       final states = <State>[];
-      final bloc = build();
+      final cubit = build();
       // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-      if (seed != null) bloc.emit(seed);
-      final subscription = bloc.skip(skip).listen(states.add);
+      if (seed != null) cubit.emit(seed);
+      final subscription = cubit.skip(skip).listen(states.add);
       try {
-        await act?.call(bloc);
+        await act?.call(cubit);
       } on Exception catch (error) {
         unhandledErrors.add(
-          error is BlocUnhandledErrorException ? error.error : error,
+          error is CubitUnhandledErrorException ? error.error : error,
         );
       }
       if (wait != null) await Future<void>.delayed(wait);
       await Future<void>.delayed(Duration.zero);
-      await bloc.close();
+      await cubit.close();
       if (expect != null) {
         shallowEquality = '$states' == '$expect';
         test.expect(states, expect);
       }
       await subscription.cancel();
-      await verify?.call(bloc);
+      await verify?.call(cubit);
     },
-    (Object error, _) {
-      if (error is BlocUnhandledErrorException) {
+    onError: (Object error) {
+      if (error is CubitUnhandledErrorException) {
         unhandledErrors.add(error.error);
       } else if (shallowEquality && error is test.TestFailure) {
         // ignore: only_throw_errors

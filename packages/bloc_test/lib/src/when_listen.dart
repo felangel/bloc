@@ -11,45 +11,45 @@ import 'package:mockito/mockito.dart';
 /// in sync with the emitted state.
 ///
 /// Return a canned state stream of `[0, 1, 2, 3]`
-/// when `counterBloc.listen` is called.
+/// when `counterCubit.listen` is called.
 ///
 /// ```dart
-/// whenListen(counterBloc, Stream.fromIterable([0, 1, 2, 3]));
+/// whenListen(counterCubit, Stream.fromIterable([0, 1, 2, 3]));
 /// ```
 ///
-/// Assert that the `counterBloc` state `Stream` is the canned `Stream`.
+/// Assert that the `counterCubit` state `Stream` is the canned `Stream`.
 ///
 /// ```dart
 /// await expectLater(
-///   counterBloc,
+///   counterCubit,
 ///   emitsInOrder(
 ///     <Matcher>[equals(0), equals(1), equals(2), equals(3), emitsDone],
 ///   )
 /// );
-/// expect(counterBloc.state, equals(3));
+/// expect(counterCubit.state, equals(3));
 /// ```
 void whenListen<State>(
-  Bloc<Object, State> bloc,
+  Cubit<State> cubit,
   Stream<State> stream,
 ) {
   final broadcastStream = stream.asBroadcastStream();
   StreamSubscription<State> subscription;
-  when(bloc.isBroadcast).thenReturn(true);
-  when(bloc.skip(any)).thenAnswer(
+  when(cubit.isBroadcast).thenReturn(true);
+  when(cubit.skip(any)).thenAnswer(
     (invocation) {
       final stream = broadcastStream.skip(
         invocation.positionalArguments.first as int,
       );
       subscription?.cancel();
       subscription = stream.listen(
-        (state) => when(bloc.state).thenReturn(state),
+        (state) => when(cubit.state).thenReturn(state),
         onDone: () => subscription?.cancel(),
       );
       return stream;
     },
   );
 
-  when(bloc.listen(
+  when(cubit.listen(
     any,
     onError: captureAnyNamed('onError'),
     onDone: captureAnyNamed('onDone'),
@@ -57,7 +57,7 @@ void whenListen<State>(
   )).thenAnswer((invocation) {
     return broadcastStream.listen(
       (state) {
-        when(bloc.state).thenReturn(state);
+        when(cubit.state).thenReturn(state);
         (invocation.positionalArguments.first as Function(State)).call(state);
       },
       onError: invocation.namedArguments[const Symbol('onError')] as Function,
