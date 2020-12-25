@@ -81,7 +81,6 @@ void main() {
         final completer = Completer<void>();
         await runZonedGuarded(() async {
           unawaited(runBlocTest<CounterBloc, int>(
-            'fails immediately',
             build: () => CounterBloc(),
             act: (bloc) => bloc.add(CounterEvent.increment),
             expect: const <int>[2],
@@ -420,7 +419,6 @@ Unexpected number of calls
         final completer = Completer<void>();
         await runZonedGuarded(() async {
           unawaited(runBlocTest<SideEffectCounterBloc, int>(
-            'fails immediately',
             build: () => SideEffectCounterBloc(repository),
             act: (bloc) => bloc.add(CounterEvent.increment),
             verify: (_) {
@@ -445,7 +443,6 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
         final completer = Completer<void>();
         await runZonedGuarded(() async {
           unawaited(runBlocTest<ComplexBloc, ComplexState>(
-            'fails immediately',
             build: () => ComplexBloc(),
             act: (bloc) => bloc.add(ComplexEventA()),
             expect: <ComplexState>[ComplexStateA()],

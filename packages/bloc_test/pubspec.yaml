@@ -15,6 +15,10 @@ dependencies:
   meta: ^1.1.8
   mockito: ^4.1.2
 
+dependency_overrides:
+  bloc:
+    path: ../bloc
+
 dev_dependencies:
   coverage: ^0.14.1
   pedantic: ^1.9.0
