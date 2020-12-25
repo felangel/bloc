@@ -63,9 +63,13 @@ abstract class Bloc<Event, State> extends Stream<State>
 
   StreamSubscription<Transition<Event, State>>? _transitionSubscription;
 
-  StreamController<State>? _stateController;
+  StreamController<State>? __stateController;
+  StreamController<State> get _stateController =>
+      __stateController ??= StreamController<State>.broadcast();
 
-  StreamController<Event>? _eventController;
+  StreamController<Event>? __eventController;
+  StreamController<Event> get _eventController =>
+      __eventController ??= StreamController<Event>();
 
   bool _emitted = false;
 
@@ -74,11 +78,10 @@ abstract class Bloc<Event, State> extends Stream<State>
   /// be ignored and will not result in any subsequent state changes.
   @override
   void add(Event event) {
-    _eventController ??= StreamController<Event>();
-    if (_eventController!.isClosed) return;
+    if (_eventController.isClosed) return;
     try {
       onEvent(event);
-      _eventController!.add(event);
+      _eventController.add(event);
     } catch (error, stackTrace) {
       onError(error, stackTrace);
     }
@@ -95,8 +98,7 @@ abstract class Bloc<Event, State> extends Stream<State>
     void Function()? onDone,
     bool? cancelOnError,
   }) {
-    _stateController ??= StreamController<State>.broadcast();
-    return _stateController!.stream.listen(
+    return _stateController.stream.listen(
       onData,
       onError: onError,
       onDone: onDone,
@@ -183,8 +185,7 @@ abstract class Bloc<Event, State> extends Stream<State>
   @protected
   @visibleForTesting
   void emit(State state) {
-    _stateController ??= StreamController<State>.broadcast();
-    if (_stateController!.isClosed) return;
+    if (_stateController.isClosed) return;
     if (state == _state && _emitted) return;
     if (this is Cubit<State>) {
       onTransition(
@@ -195,7 +196,7 @@ abstract class Bloc<Event, State> extends Stream<State>
       );
     }
     _state = state;
-    _stateController!.add(_state);
+    _stateController.add(_state);
     _emitted = true;
   }
 
@@ -298,19 +299,17 @@ abstract class Bloc<Event, State> extends Stream<State>
   Future<void> close() async {
     // ignore: invalid_use_of_protected_member
     _observer.onClose(this);
-    _stateController ??= StreamController<State>.broadcast();
     if (this is! Cubit<State>) {
-      await _eventController?.close();
+      await _eventController.close();
       await _transitionSubscription?.cancel();
     }
-    await _stateController!.close();
+    await _stateController.close();
   }
 
   void _bindEventsToStates() {
-    _eventController ??= StreamController<Event>();
     _transitionSubscription = transformTransitions(
       transformEvents(
-        _eventController!.stream,
+        _eventController.stream,
         (event) => mapEventToState(event).map(
           (nextState) => Transition(
             currentState: state,
