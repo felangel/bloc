@@ -1,6 +1,5 @@
-import 'package:flutter/widgets.dart';
-
 import 'package:bloc/bloc.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 

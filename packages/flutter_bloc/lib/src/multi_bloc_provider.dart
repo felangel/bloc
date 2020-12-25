@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/src/bloc_provider.dart';
 import 'package:provider/provider.dart';
-
-import 'bloc_provider.dart';
 
 /// {@template multi_bloc_provider}
 /// Merges multiple [BlocProvider] widgets into one widget tree.
