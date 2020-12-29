@@ -17,7 +17,7 @@ class LoginCubit extends Cubit<LoginState> {
     final email = Email.dirty(value);
     emit(state.copyWith(
       email: email,
-      status: Formz.validate([email, state.password]),
+      status: _validateInputs(email: email),
     ));
   }
 
@@ -25,7 +25,7 @@ class LoginCubit extends Cubit<LoginState> {
     final password = Password.dirty(value);
     emit(state.copyWith(
       password: password,
-      status: Formz.validate([state.email, password]),
+      status: _validateInputs(password: password),
     ));
   }
 
@@ -53,5 +53,9 @@ class LoginCubit extends Cubit<LoginState> {
     } on NoSuchMethodError {
       emit(state.copyWith(status: FormzStatus.pure));
     }
+  }
+
+  FormzStatus _validateInputs({Email email, Password password}) {
+    return Formz.validate([email ?? state.email, password ?? state.password]);
   }
 }

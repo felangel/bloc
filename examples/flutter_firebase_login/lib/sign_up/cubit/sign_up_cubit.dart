@@ -17,11 +17,7 @@ class SignUpCubit extends Cubit<SignUpState> {
     final email = Email.dirty(value);
     emit(state.copyWith(
       email: email,
-      status: Formz.validate([
-        email,
-        state.password,
-        state.confirmedPassword,
-      ]),
+      status: _validateInputs(email: email),
     ));
   }
 
@@ -34,11 +30,7 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(state.copyWith(
       password: password,
       confirmedPassword: confirmedPassword,
-      status: Formz.validate([
-        state.email,
-        password,
-        state.confirmedPassword,
-      ]),
+      status: _validateInputs(password: password),
     ));
   }
 
@@ -49,11 +41,7 @@ class SignUpCubit extends Cubit<SignUpState> {
     );
     emit(state.copyWith(
       confirmedPassword: confirmedPassword,
-      status: Formz.validate([
-        state.email,
-        state.password,
-        confirmedPassword,
-      ]),
+      status: _validateInputs(confirmedPassword: confirmedPassword),
     ));
   }
 
@@ -69,5 +57,17 @@ class SignUpCubit extends Cubit<SignUpState> {
     } on Exception {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
+  }
+
+  FormzStatus _validateInputs({
+    Email email,
+    Password password,
+    ConfirmedPassword confirmedPassword,
+  }) {
+    return Formz.validate([
+      email ?? state.email,
+      password ?? state.password,
+      confirmedPassword ?? state.confirmedPassword,
+    ]);
   }
 }

@@ -39,7 +39,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     final username = Username.dirty(event.username);
     return state.copyWith(
       username: username,
-      status: Formz.validate([state.password, username]),
+      status: _validateInputs(username: username),
     );
   }
 
@@ -50,7 +50,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     final password = Password.dirty(event.password);
     return state.copyWith(
       password: password,
-      status: Formz.validate([password, state.username]),
+      status: _validateInputs(password: password),
     );
   }
 
@@ -70,5 +70,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }
     }
+  }
+
+  FormzStatus _validateInputs({Username username, Password password}) {
+    return Formz.validate([
+      username ?? state.username,
+      password ?? state.password,
+    ]);
   }
 }
