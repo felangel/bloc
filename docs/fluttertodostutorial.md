@@ -81,7 +81,7 @@ Next, let's implement the events we will need to handle.
 The events we will need to handle in our `TodosBloc` are:
 
 - `TodosLoadSuccess` - tells the bloc that it needs to load the todos from the `TodosRepository`.
-- `TodoAdded` - tells the bloc that it needs to add an new todo to the list of todos.
+- `TodoAdded` - tells the bloc that it needs to add a new todo to the list of todos.
 - `TodoUpdated` - tells the bloc that it needs to update an existing todo.
 - `TodoDeleted` - tells the bloc that it needs to remove an existing todo.
 - `ClearCompleted` - tells the bloc that it needs to remove all completed todos.
