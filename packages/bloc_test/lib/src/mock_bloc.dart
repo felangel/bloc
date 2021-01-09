@@ -1,8 +1,7 @@
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-import 'dart:async';
+import 'package:bloc/bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'package:mockito/mockito.dart';
-
+/// {@template mock_bloc}
 /// Extend or mixin this class to mark the implementation as a [MockBloc].
 ///
 /// A mocked bloc/cubit implements all fields and methods with a default
@@ -10,13 +9,15 @@ import 'package:mockito/mockito.dart';
 /// and may be further customized at runtime to define how it may behave using
 /// [when] and `whenListen`.
 ///
-/// _**Note**: It is critical to explicitly provide the bloc state
-/// type when extending [MockBloc]_.
+/// _**Note**: It is critical to explicitly provide the bloc event and state
+/// types when extending [MockBloc]_.
 ///
 /// **GOOD**
 /// ```dart
-/// class MockCounterBloc extends MockBloc<int> implements CounterBloc {}
-/// class MockCounterCubit extends MockBloc<int> implements CounterCubit {}
+/// class MockCounterBloc extends MockBloc<CounterEvent, int>
+///   implements CounterBloc {}
+/// class MockCounterCubit extends MockBloc<Null, int>
+///   implements CounterCubit {}
 /// ```
 ///
 /// **BAD**
@@ -24,13 +25,15 @@ import 'package:mockito/mockito.dart';
 /// class MockCounterBloc extends MockBloc implements CounterBloc {}
 /// class MockCounterCubit extends MockBloc implements CounterCubit {}
 /// ```
-class MockBloc<S> extends Mock {
-  @override
-  dynamic noSuchMethod(Invocation invocation, [Object returnValue]) {
-    final memberName = invocation.memberName.toString().split('"')[1];
-    final dynamic result = super.noSuchMethod(invocation);
-    return (memberName == 'skip' && result == null)
-        ? Stream<S>.empty()
-        : result;
+/// {@endtemplate}
+class MockBloc<E, S> extends Mock implements Bloc<E, S> {
+  /// {@macro mock_bloc}
+  MockBloc() {
+    when(this).calls(#add).thenReturn(null);
+    when(this).calls(#isBroadcast).thenReturn(true);
+    when(this).calls(#skip).thenAnswer((_) => Stream<S>.empty());
+    when(this)
+        .calls(#listen)
+        .thenAnswer((_) => Stream<S>.empty().listen((_) {}));
   }
 }

@@ -1,36 +1,36 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'package:test/test.dart';
 
 import 'blocs/blocs.dart';
 import 'cubits/cubits.dart';
 
-class MockCounterBloc extends MockBloc<int> implements CounterBloc {}
+class MockCounterBloc extends MockBloc<CounterEvent, int>
+    implements CounterBloc {}
 
-class MockCounterCubit extends MockBloc<int> implements CounterCubit {}
+class MockCounterCubit extends MockBloc<Null, int> implements CounterCubit {}
 
 void main() {
   group('MockBloc', () {
-    CounterBloc counterBloc;
+    late CounterBloc counterBloc;
 
     setUp(() {
       counterBloc = MockCounterBloc();
     });
 
-    test('is compatible with skip', () {
-      expect(counterBloc.skip(1) is Stream<int>, isTrue);
-    });
-
     test('is compatible with when', () {
-      when(counterBloc.state).thenReturn(10);
+      when(counterBloc).calls(#state).thenReturn(10);
       expect(counterBloc.state, 10);
     });
 
     test('is automatically compatible with whenListen', () {
-      whenListen(counterBloc, Stream<int>.fromIterable([0, 1, 2, 3]));
+      whenListen(
+        counterBloc,
+        Stream<int>.fromIterable([0, 1, 2, 3]),
+      );
       expectLater(
         counterBloc,
         emitsInOrder(
