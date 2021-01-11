@@ -54,13 +54,7 @@ class _PostsListState extends State<PostsList> {
   }
 
   void _onScroll() {
-    if (_isBottom) _postBloc.add(PostFetched());
-  }
-
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll * 0.9);
+    if (_scrollController.position.atEdge &&
+        _scrollController.position.pixels > 0) _postBloc.add(PostFetched());
   }
 }
