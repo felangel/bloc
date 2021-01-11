@@ -378,7 +378,7 @@ void main() {
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: const <int>[1],
         verify: (_) {
-          verify(repository).calls(#sideEffect).times(1);
+          verify(repository).called(#sideEffect).once();
         },
       );
 
@@ -397,7 +397,7 @@ void main() {
         build: () => SideEffectCounterBloc(repository),
         act: (bloc) => bloc.add(CounterEvent.increment),
         verify: (_) {
-          verify(repository).calls(#sideEffect).times(1);
+          verify(repository).called(#sideEffect).times(1);
         },
       );
 
@@ -407,13 +407,13 @@ void main() {
         act: (bloc) => bloc.add(CounterEvent.increment),
         verify: (_) async {
           await Future<void>.delayed(Duration.zero);
-          verify(repository).calls(#sideEffect).times(1);
+          verify(repository).called(#sideEffect).once();
         },
       );
 
       test('fails immediately when verify is incorrect', () async {
         const expectedError =
-            '''Expected MockRepository.sideEffect to be called <2> time(s) but actual call count was <1>.''';
+            '''Expected MockRepository.sideEffect() to be called <2> time(s) but actual call count was <1>.''';
         late Object actualError;
         final completer = Completer<void>();
         await runZonedGuarded(() async {
@@ -421,7 +421,7 @@ void main() {
             build: () => SideEffectCounterBloc(repository),
             act: (bloc) => bloc.add(CounterEvent.increment),
             verify: (_) {
-              verify(repository).calls(#sideEffect).times(2);
+              verify(repository).called(#sideEffect).times(2);
             },
           ).then((_) => completer.complete()));
           await completer.future;

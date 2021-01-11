@@ -177,7 +177,7 @@ void main() {
         act: (cubit) => cubit.increment(),
         expect: <int>[1],
         verify: (_) async {
-          verify(repository).calls(#sideEffect).times(1);
+          verify(repository).called(#sideEffect).once();
         },
       );
 
@@ -186,7 +186,7 @@ void main() {
         build: () => SideEffectCounterCubit(repository),
         act: (cubit) => cubit.increment(),
         verify: (_) async {
-          verify(repository).calls(#sideEffect).times(1);
+          verify(repository).called(#sideEffect).once();
         },
       );
     });

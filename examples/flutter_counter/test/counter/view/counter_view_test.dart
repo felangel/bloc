@@ -17,6 +17,8 @@ void main() {
   setUp(() {
     counterCubit = MockCounterCubit();
     when(counterCubit).calls(#state).thenReturn(0);
+    when(counterCubit).calls(#increment).thenReturn(() {});
+    when(counterCubit).calls(#decrement).thenReturn(() {});
     whenListen(counterCubit, Stream.value(0));
   });
 
@@ -44,7 +46,7 @@ void main() {
         ),
       );
       await tester.tap(find.byKey(_incrementButtonKey));
-      verify(counterCubit).calls(#increment).times(1);
+      verify(counterCubit).called(#increment).once();
     });
 
     testWidgets('tapping decrement button invokes decrement', (tester) async {
@@ -59,7 +61,7 @@ void main() {
       final decrementFinder = find.byKey(_decrementButtonKey);
       await tester.ensureVisible(decrementFinder);
       await tester.tap(decrementFinder);
-      verify(counterCubit).calls(#decrement).times(1);
+      verify(counterCubit).called(#decrement).once();
     });
   });
 }
