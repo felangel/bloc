@@ -34,6 +34,30 @@ This package is built to work with:
 - [hydrated_bloc](https://pub.dev/packages/hydrated_bloc)
 - [replay_bloc](https://pub.dev/packages/replay_bloc)
 
+## Supporters
+<p align="center">
+   <a href="https://verygood.ventures">
+   <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120" />
+   </a>
+</p>
+
+</br>
+
+<p align="center">
+  <br/>
+  <a href="https://getstream.io/chat/?utm_source=github&utm_medium=react-native-gifted-chat&utm_campaign=sponsorship" target="_blank">
+    <img width="250px" src="https://stream-blog.s3.amazonaws.com/blog/wp-content/uploads/fc148f0fc75d02841d017bb36e14e388/Stream-logo-with-background-.png">
+  </a>
+  <br>
+  <p align="center">
+    Sponsored with 💙 &nbsp by  <a href="https://getstream.io/?utm_source=github&utm_medium=bloc-flutter&utm_campaign=oss_sponsorship" target="_blank">Stream</a> 
+  </p>
+  <p align="center">
+   <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=github&utm_medium=bloc-flutter&utm_campaign=oss_sponsorship" target="_blank">Try the Flutter Chat Tutorial &nbsp 💬</a>
+  </p>
+</p>
+
+
 ## Overview
 
 The goal of this package is to make it easy to implement the `BLoC` Design Pattern (Business Logic Component).
@@ -321,6 +345,3 @@ void main() {
 
 - [Felix Angelov](https://github.com/felangel)
 
-## Supporters
-
-[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120" />](https://verygood.ventures)
