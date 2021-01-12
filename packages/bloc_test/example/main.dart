@@ -5,7 +5,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:test/test.dart';
 
 // Mock Cubit
-class MockCounterCubit extends MockBloc<Null, int> implements CounterCubit {}
+class MockCounterCubit extends MockCubit<int> implements CounterCubit {}
 
 // Mock Bloc
 class MockCounterBloc extends MockBloc<CounterEvent, int>

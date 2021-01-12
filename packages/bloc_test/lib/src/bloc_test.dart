@@ -105,9 +105,9 @@ import 'package:test/test.dart' as test;
 ///
 /// ```dart
 /// blocTest(
-///  'emits [StateB] when emitB is called',
+///  'emits [StateB] when EventB is added',
 ///  build: () => MyBloc(),
-///  act: (bloc) => bloc.emitB(),
+///  act: (bloc) => bloc.add(EventB()),
 ///  expect: [isA<StateB>()],
 /// );
 /// ```

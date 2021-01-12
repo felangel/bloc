@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 
 import 'cubits/cubits.dart';
 
-class MockCounterCubit extends MockBloc<Null, int> implements CounterCubit {}
+class MockCounterCubit extends MockCubit<int> implements CounterCubit {}
 
 void main() {
   group('whenListen', () {

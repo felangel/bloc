@@ -6,7 +6,7 @@ import 'package:flutter_counter/counter/view/counter_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockCounterCubit extends Mock implements CounterCubit {}
+class MockCounterCubit extends MockCubit<int> implements CounterCubit {}
 
 const _incrementButtonKey = Key('counterView_increment_floatingActionButton');
 const _decrementButtonKey = Key('counterView_decrement_floatingActionButton');
