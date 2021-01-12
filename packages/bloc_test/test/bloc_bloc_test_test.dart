@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 
@@ -77,17 +77,16 @@ void main() {
   Actual: [1]
    Which: at location [0] is <1> instead of <2>
 ''';
-        Object actualError;
+        late Object actualError;
         final completer = Completer<void>();
-        await runZoned(() async {
-          unawaited(runBlocTest<CounterBloc, int>(
-            'fails immediately',
+        await runZonedGuarded(() async {
+          unawaited(testBloc<CounterBloc, int>(
             build: () => CounterBloc(),
             act: (bloc) => bloc.add(CounterEvent.increment),
             expect: const <int>[2],
           ).then((_) => completer.complete()));
           await completer.future;
-        }, onError: (Object error) {
+        }, (Object error, _) {
           actualError = error;
           completer.complete();
         });
@@ -360,10 +359,11 @@ void main() {
     });
 
     group('SideEffectCounterBloc', () {
-      Repository repository;
+      late Repository repository;
 
       setUp(() {
         repository = MockRepository();
+        when(repository).calls(#sideEffect).thenReturn(null);
       });
 
       blocTest<SideEffectCounterBloc, int>(
@@ -378,7 +378,7 @@ void main() {
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: const <int>[1],
         verify: (_) {
-          verify(repository.sideEffect()).called(1);
+          verify(repository).called(#sideEffect).once();
         },
       );
 
@@ -397,7 +397,7 @@ void main() {
         build: () => SideEffectCounterBloc(repository),
         act: (bloc) => bloc.add(CounterEvent.increment),
         verify: (_) {
-          verify(repository.sideEffect()).called(1);
+          verify(repository).called(#sideEffect).times(1);
         },
       );
 
@@ -407,32 +407,29 @@ void main() {
         act: (bloc) => bloc.add(CounterEvent.increment),
         verify: (_) async {
           await Future<void>.delayed(Duration.zero);
-          verify(repository.sideEffect()).called(1);
+          verify(repository).called(#sideEffect).once();
         },
       );
 
       test('fails immediately when verify is incorrect', () async {
-        const expectedError = '''Expected: <2>
-  Actual: <1>
-Unexpected number of calls
-''';
-        Object actualError;
+        const expectedError =
+            '''Expected MockRepository.sideEffect() to be called <2> time(s) but actual call count was <1>.''';
+        late Object actualError;
         final completer = Completer<void>();
-        await runZoned(() async {
-          unawaited(runBlocTest<SideEffectCounterBloc, int>(
-            'fails immediately',
+        await runZonedGuarded(() async {
+          unawaited(testBloc<SideEffectCounterBloc, int>(
             build: () => SideEffectCounterBloc(repository),
             act: (bloc) => bloc.add(CounterEvent.increment),
             verify: (_) {
-              verify(repository.sideEffect()).called(2);
+              verify(repository).called(#sideEffect).times(2);
             },
           ).then((_) => completer.complete()));
           await completer.future;
-        }, onError: (Object error) {
+        }, (Object error, _) {
           actualError = error;
           completer.complete();
         });
-        expect((actualError as TestFailure).message, expectedError);
+        expect((actualError as MocktailFailure).message, expectedError);
       });
 
       test('shows equality warning when strings are identical', () async {
@@ -441,17 +438,16 @@ Unexpected number of calls
    Which: at location [0] is <Instance of \'ComplexStateA\'> instead of <Instance of \'ComplexStateA\'>\n
 WARNING: Please ensure state instances extend Equatable, override == and hashCode, or implement Comparable.
 Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''';
-        Object actualError;
+        late Object actualError;
         final completer = Completer<void>();
-        await runZoned(() async {
-          unawaited(runBlocTest<ComplexBloc, ComplexState>(
-            'fails immediately',
+        await runZonedGuarded(() async {
+          unawaited(testBloc<ComplexBloc, ComplexState>(
             build: () => ComplexBloc(),
             act: (bloc) => bloc.add(ComplexEventA()),
             expect: <ComplexState>[ComplexStateA()],
           ).then((_) => completer.complete()));
           await completer.future;
-        }, onError: (Object error) {
+        }, (Object error, _) {
           actualError = error;
           completer.complete();
         });
