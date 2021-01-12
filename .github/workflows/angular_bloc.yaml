@@ -25,6 +25,6 @@ jobs:
       - name: Format
         run: flutter format --dry-run --set-exit-if-changed .
       - name: Analyze
-        run: flutter analyze --fatal-infos --fatal-warnings .
+        run: flutter analyze .
       - name: Run tests
         run: flutter pub run build_runner test --fail-on-severe
