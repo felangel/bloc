@@ -1,6 +1,5 @@
-import 'package:flutter/widgets.dart';
-
 import 'package:bloc/bloc.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -35,8 +34,8 @@ mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 /// ```
 ///
 /// {@endtemplate}
-class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
-    with BlocProviderSingleChildWidget {
+class BlocProvider<T extends Bloc<Object?, Object?>>
+    extends SingleChildStatelessWidget with BlocProviderSingleChildWidget {
   /// {@macro bloc_provider}
   BlocProvider({
     Key? key,
@@ -110,7 +109,7 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   /// ```dart
   /// BlocProvider.of<BlocA>(context);
   /// ```
-  static T of<T extends Cubit<Object>>(
+  static T of<T extends Bloc<Object?, Object?>>(
     BuildContext context, {
     bool listen = false,
   }) {
@@ -120,7 +119,7 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
       if (e.valueType != T) rethrow;
       throw FlutterError(
         '''
-        BlocProvider.of() called with a context that does not contain a Bloc/Cubit of type $T.
+        BlocProvider.of() called with a context that does not contain a Bloc of type $T.
         No ancestor could be found starting from the context that was passed to BlocProvider.of<$T>().
 
         This can happen if the context you used comes from a widget above the BlocProvider.
@@ -143,8 +142,8 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   }
 
   static VoidCallback _startListening(
-    InheritedContext<Cubit> e,
-    Cubit value,
+    InheritedContext<Bloc> e,
+    Bloc value,
   ) {
     final subscription = value.listen(
       (dynamic _) => e.markNeedsNotifyDependents(),

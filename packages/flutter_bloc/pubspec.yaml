@@ -12,8 +12,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^7.0.0-nullsafety.0
-  provider: ^5.0.0-nullsafety.2
+  bloc: ">=7.0.0-nullsafety.0 <7.0.0"
+  provider: ">=5.0.0-nullsafety.2 <5.0.0"
+
+dependency_overrides:
+  bloc:
+    path: ../bloc
 
 dev_dependencies:
   flutter_test:

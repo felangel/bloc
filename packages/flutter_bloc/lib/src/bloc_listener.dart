@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
-
-import 'bloc_provider.dart';
 
 /// Mixin which allows `MultiBlocListener` to infer the types
 /// of multiple [BlocListener]s.
@@ -23,15 +22,15 @@ typedef BlocWidgetListener<S> = void Function(BuildContext context, S state);
 typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 
 /// {@template bloc_listener}
-/// Takes a [BlocWidgetListener] and an optional [value] and invokes
-/// the [listener] in response to `state` changes in the [value].
+/// Takes a [BlocWidgetListener] and an optional [bloc] and invokes
+/// the [listener] in response to `state` changes in the [bloc].
 /// It should be used for functionality that needs to occur only in response to
 /// a `state` change such as navigation, showing a `SnackBar`, showing
 /// a `Dialog`, etc...
 /// The [listener] is guaranteed to only be called once for each `state` change
 /// unlike the `builder` in `BlocBuilder`.
 ///
-/// If the [value] parameter is omitted, [BlocListener] will automatically
+/// If the [bloc] parameter is omitted, [BlocListener] will automatically
 /// perform a lookup using [BlocProvider] and the current `BuildContext`.
 ///
 /// ```dart
@@ -42,7 +41,7 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 ///   child: Container(),
 /// )
 /// ```
-/// Only specify the [value] if you wish to provide a bloc/cubit that is otherwise
+/// Only specify the [bloc] if you wish to provide a [bloc] that is otherwise
 /// not accessible via [BlocProvider] and the current `BuildContext`.
 ///
 /// ```dart
@@ -59,11 +58,11 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 /// {@template bloc_listener_listen_when}
 /// An optional [listenWhen] can be implemented for more granular control
 /// over when [listener] is called.
-/// [listenWhen] will be invoked on each `state` change.
+/// [listenWhen] will be invoked on each [bloc] `state` change.
 /// [listenWhen] takes the previous `state` and current `state` and must
 /// return a [bool] which determines whether or not the [listener] function
 /// will be invoked.
-/// The previous `state` will be initialized to the `state` of the bloc/cubit
+/// The previous `state` will be initialized to the `state` of the [bloc]
 /// when the [BlocListener] is initialized.
 /// [listenWhen] is optional and if omitted, it will default to `true`.
 ///
@@ -80,38 +79,38 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 /// )
 /// ```
 /// {@endtemplate}
-class BlocListener<T extends Cubit<S>, S> extends BlocListenerBase<T, S>
+class BlocListener<B extends Bloc<Object?, S>, S> extends BlocListenerBase<B, S>
     with BlocListenerSingleChildWidget {
   /// {@macro bloc_listener}
   const BlocListener({
     Key? key,
     required BlocWidgetListener<S> listener,
-    T? value,
+    B? bloc,
     BlocListenerCondition<S>? listenWhen,
     Widget? child,
   }) : super(
           key: key,
           child: child,
           listener: listener,
-          value: value,
+          bloc: bloc,
           listenWhen: listenWhen,
         );
 }
 
 /// {@template bloc_listener_base}
-/// Base class for widgets that listen to state changes in a specified bloc/cubit.
+/// Base class for widgets that listen to state changes in a specified [bloc].
 ///
 /// A [BlocListenerBase] is stateful and maintains the state subscription.
 /// The type of the state and what happens with each state change
 /// is defined by sub-classes.
 /// {@endtemplate}
-abstract class BlocListenerBase<T extends Cubit<S>, S>
+abstract class BlocListenerBase<B extends Bloc<Object?, S>, S>
     extends SingleChildStatefulWidget {
   /// {@macro bloc_listener_base}
   const BlocListenerBase({
     Key? key,
     required this.listener,
-    this.value,
+    this.bloc,
     this.child,
     this.listenWhen,
   }) : super(key: key, child: child);
@@ -120,9 +119,9 @@ abstract class BlocListenerBase<T extends Cubit<S>, S>
   /// [BlocListenerBase].
   final Widget? child;
 
-  /// The bloc/cubit which will be listened to.
-  /// Whenever the `state` changes, [listener] will be invoked.
-  final T? value;
+  /// The [bloc] whose `state` will be listened to.
+  /// Whenever the [bloc]'s `state` changes, [listener] will be invoked.
+  final B? bloc;
 
   /// The [BlocWidgetListener] which will be called on every `state` change.
   /// This [listener] should be used for any code which needs to execute
@@ -133,29 +132,29 @@ abstract class BlocListenerBase<T extends Cubit<S>, S>
   final BlocListenerCondition<S>? listenWhen;
 
   @override
-  SingleChildState<BlocListenerBase<T, S>> createState() =>
-      _BlocListenerBaseState<T, S>();
+  SingleChildState<BlocListenerBase<B, S>> createState() =>
+      _BlocListenerBaseState<B, S>();
 }
 
-class _BlocListenerBaseState<T extends Cubit<S>, S>
-    extends SingleChildState<BlocListenerBase<T, S>> {
+class _BlocListenerBaseState<B extends Bloc<Object?, S>, S>
+    extends SingleChildState<BlocListenerBase<B, S>> {
   StreamSubscription<S>? _subscription;
+  late B _bloc;
   late S _previousState;
-  late T _bloc;
 
   @override
   void initState() {
     super.initState();
-    _bloc = widget.value ?? context.read<T>();
+    _bloc = widget.bloc ?? context.read<B>();
     _previousState = _bloc.state;
     _subscribe();
   }
 
   @override
-  void didUpdateWidget(BlocListenerBase<T, S> oldWidget) {
+  void didUpdateWidget(BlocListenerBase<B, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final oldBloc = oldWidget.value ?? context.read<T>();
-    final currentBloc = widget.value ?? oldBloc;
+    final oldBloc = oldWidget.bloc ?? context.read<B>();
+    final currentBloc = widget.bloc ?? oldBloc;
     if (oldBloc != currentBloc) {
       if (_subscription != null) {
         _unsubscribe();
