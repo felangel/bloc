@@ -47,11 +47,9 @@ abstract class Bloc<Event, State> extends Stream<State>
   /// {@macro bloc}
   Bloc(this._state) {
     // ignore: invalid_use_of_protected_member
-    _observer.onCreate(this);
+    observer.onCreate(this);
     if (this is! Cubit<State>) _bindEventsToStates();
   }
-
-  BlocObserver get _observer => Bloc.observer;
 
   /// The current [state].
   State get state => _state;
@@ -64,12 +62,14 @@ abstract class Bloc<Event, State> extends Stream<State>
   StreamSubscription<Transition<Event, State>>? _transitionSubscription;
 
   StreamController<State>? __stateController;
-  StreamController<State> get _stateController =>
-      __stateController ??= StreamController<State>.broadcast();
+  StreamController<State> get _stateController {
+    return __stateController ??= StreamController<State>.broadcast();
+  }
 
   StreamController<Event>? __eventController;
-  StreamController<Event> get _eventController =>
-      __eventController ??= StreamController<Event>();
+  StreamController<Event> get _eventController {
+    return __eventController ??= StreamController<Event>();
+  }
 
   bool _emitted = false;
 
@@ -282,7 +282,7 @@ abstract class Bloc<Event, State> extends Stream<State>
   @mustCallSuper
   void onError(Object error, StackTrace stackTrace) {
     // ignore: invalid_use_of_protected_member
-    _observer.onError(this, error, stackTrace);
+    observer.onError(this, error, stackTrace);
     assert(() {
       throw BlocUnhandledErrorException(this, error, stackTrace);
     }());
@@ -298,7 +298,7 @@ abstract class Bloc<Event, State> extends Stream<State>
   @mustCallSuper
   Future<void> close() async {
     // ignore: invalid_use_of_protected_member
-    _observer.onClose(this);
+    observer.onClose(this);
     if (this is! Cubit<State>) {
       await _eventController.close();
       await _transitionSubscription?.cancel();
