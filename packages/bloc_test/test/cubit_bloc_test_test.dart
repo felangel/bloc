@@ -1,5 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'cubits/cubits.dart';
@@ -158,10 +158,11 @@ void main() {
     });
 
     group('SideEffectCounterCubit', () {
-      Repository repository;
+      late Repository repository;
 
       setUp(() {
         repository = MockRepository();
+        when(repository).calls(#sideEffect).thenReturn(null);
       });
 
       blocTest<SideEffectCounterCubit, int>(
@@ -176,7 +177,7 @@ void main() {
         act: (cubit) => cubit.increment(),
         expect: <int>[1],
         verify: (_) async {
-          verify(repository.sideEffect()).called(1);
+          verify(repository).called(#sideEffect).once();
         },
       );
 
@@ -185,7 +186,7 @@ void main() {
         build: () => SideEffectCounterCubit(repository),
         act: (cubit) => cubit.increment(),
         verify: (_) async {
-          verify(repository.sideEffect()).called(1);
+          verify(repository).called(#sideEffect).once();
         },
       );
     });

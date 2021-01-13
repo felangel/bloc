@@ -6,19 +6,19 @@ import 'package:test/test.dart';
 
 import 'cubits/cubits.dart';
 
-class MockCounterCubit extends MockBloc<int> implements CounterCubit {}
+class MockCounterCubit extends MockCubit<int> implements CounterCubit {}
 
 void main() {
   group('whenListen', () {
     test('can mock the stream of a single cubit with an empty Stream', () {
       final counterCubit = MockCounterCubit();
-      whenListen<int>(counterCubit, const Stream<int>.empty());
+      whenListen(counterCubit, const Stream<int>.empty());
       expectLater(counterCubit, emitsInOrder(<int>[]));
     });
 
     test('can mock the stream of a single cubit', () async {
       final counterCubit = MockCounterCubit();
-      whenListen<int>(
+      whenListen(
         counterCubit,
         Stream.fromIterable([0, 1, 2, 3]),
       );
@@ -33,7 +33,7 @@ void main() {
     test('can mock the stream of a single cubit with delays', () async {
       final counterCubit = MockCounterCubit();
       final controller = StreamController<int>();
-      whenListen<int>(counterCubit, controller.stream);
+      whenListen(counterCubit, controller.stream);
       unawaited(expectLater(
         counterCubit,
         emitsInOrder(
@@ -54,7 +54,7 @@ void main() {
         () async {
       final counterCubit = MockCounterCubit();
       final controller = StreamController<int>();
-      whenListen<int>(counterCubit, controller.stream);
+      whenListen(counterCubit, controller.stream);
       unawaited(expectLater(
         counterCubit.skip(1),
         emitsInOrder(
@@ -74,7 +74,7 @@ void main() {
     test('can mock the state of a single cubit with delays', () async {
       final counterCubit = MockCounterCubit();
       final controller = StreamController<int>();
-      whenListen<int>(counterCubit, controller.stream);
+      whenListen(counterCubit, controller.stream);
       unawaited(expectLater(
         counterCubit,
         emitsInOrder(
@@ -97,7 +97,7 @@ void main() {
         () async {
       final counterCubit = MockCounterCubit();
       final controller = StreamController<int>();
-      whenListen<int>(counterCubit, controller.stream);
+      whenListen(counterCubit, controller.stream);
       unawaited(expectLater(
         counterCubit.skip(1),
         emitsInOrder(
@@ -118,7 +118,7 @@ void main() {
 
     test('can mock the state of a single cubit', () async {
       final counterCubit = MockCounterCubit();
-      whenListen<int>(
+      whenListen(
         counterCubit,
         Stream.fromIterable([0, 1, 2, 3]),
       );
@@ -133,7 +133,7 @@ void main() {
 
     test('can mock the stream of a single cubit as broadcast stream', () {
       final counterCubit = MockCounterCubit();
-      whenListen<int>(
+      whenListen(
         counterCubit,
         Stream.fromIterable([0, 1, 2, 3]),
       );
@@ -154,7 +154,7 @@ void main() {
     test('can mock the stream of a single cubit as broadcast stream with skips',
         () {
       final counterCubit = MockCounterCubit();
-      whenListen<int>(
+      whenListen(
         counterCubit,
         Stream.fromIterable([0, 1, 2, 3]),
       );
@@ -174,7 +174,7 @@ void main() {
 
     test('can mock the stream of a single cubit with skip(1)', () {
       final counterCubit = MockCounterCubit();
-      whenListen<int>(
+      whenListen(
         counterCubit,
         Stream.fromIterable([0, 1, 2, 3]),
       );
@@ -188,7 +188,7 @@ void main() {
 
     test('can mock the state of a single cubit with skip(1)', () async {
       final counterCubit = MockCounterCubit();
-      whenListen<int>(
+      whenListen(
         counterCubit,
         Stream.fromIterable([0, 1, 2, 3]),
       );
@@ -204,7 +204,7 @@ void main() {
     test('can mock the state of a single cubit with skip(1).listen', () async {
       final counterCubit = MockCounterCubit();
       final states = <int>[];
-      whenListen<int>(
+      whenListen(
         counterCubit,
         Stream.fromIterable([0, 1, 2, 3]),
       );
@@ -216,7 +216,7 @@ void main() {
 
     test('can mock the stream of a single cubit with skip(2)', () {
       final counterCubit = MockCounterCubit();
-      whenListen<int>(
+      whenListen(
         counterCubit,
         Stream.fromIterable([0, 1, 2, 3]),
       );
@@ -231,7 +231,7 @@ void main() {
     test('can mock the state of a single cubit with skip(2).listen', () async {
       final counterCubit = MockCounterCubit();
       final states = <int>[];
-      whenListen<int>(
+      whenListen(
         counterCubit,
         Stream.fromIterable([0, 1, 2, 3]),
       );
@@ -243,7 +243,7 @@ void main() {
 
     test('can mock the state of a single cubit with skip(2)', () async {
       final counterCubit = MockCounterCubit();
-      whenListen<int>(
+      whenListen(
         counterCubit,
         Stream.fromIterable([0, 1, 2, 3]),
       );
@@ -259,7 +259,7 @@ void main() {
     test('can mock the state of a single cubit with skip(3).listen', () async {
       final counterCubit = MockCounterCubit();
       final states = <int>[];
-      whenListen<int>(
+      whenListen(
         counterCubit,
         Stream.fromIterable([0, 1, 2, 3]),
       );
@@ -271,7 +271,7 @@ void main() {
 
     test('can mock the stream of a single cubit with skip(3)', () {
       final counterCubit = MockCounterCubit();
-      whenListen<int>(
+      whenListen(
         counterCubit,
         Stream.fromIterable([0, 1, 2, 3]),
       );
@@ -285,7 +285,7 @@ void main() {
 
     test('can mock the state of a single cubit with skip(3)', () async {
       final counterCubit = MockCounterCubit();
-      whenListen<int>(
+      whenListen(
         counterCubit,
         Stream.fromIterable([0, 1, 2, 3]),
       );
@@ -303,7 +303,7 @@ void main() {
         '(with initial state)', () async {
       final controller = StreamController<int>();
       final counterCubit = MockCounterCubit();
-      whenListen<int>(counterCubit, controller.stream);
+      whenListen(counterCubit, controller.stream);
       final sumCubit = SumCubit(counterCubit);
       unawaited(expectLater(sumCubit, emitsInOrder(<int>[0, 1, 3, 6])));
       controller..add(0)..add(1)..add(2)..add(3);
@@ -314,7 +314,7 @@ void main() {
     test('can mock the stream of a cubit dependency', () async {
       final controller = StreamController<int>();
       final counterCubit = MockCounterCubit();
-      whenListen<int>(counterCubit, controller.stream);
+      whenListen(counterCubit, controller.stream);
       final sumCubit = SumCubit(counterCubit);
       unawaited(expectLater(sumCubit, emitsInOrder(<int>[1, 3, 6])));
       controller..add(1)..add(2)..add(3);

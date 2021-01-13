@@ -1,7 +1,5 @@
 import 'package:meta/meta.dart';
 
-import 'change.dart';
-
 /// {@template transition}
 /// Occurs when an [event] is `added` after `mapEventToState` has been called
 /// but before the bloc's [State] has been updated.
@@ -9,16 +7,22 @@ import 'change.dart';
 /// `added`, and the [nextState].
 /// {@endtemplate}
 @immutable
-class Transition<Event, State> extends Change<State> {
+class Transition<Event, State> {
   /// {@macro transition}
   const Transition({
-    required State currentState,
-    required this.event,
-    required State nextState,
-  }) : super(currentState: currentState, nextState: nextState);
+    required this.currentState,
+    this.event,
+    required this.nextState,
+  });
+
+  /// The current [State] at the time of the [Transition].
+  final State currentState;
 
   /// The [Event] which triggered the current [Transition].
-  final Event event;
+  final Event? event;
+
+  /// The next [State] at the time of the [Transition].
+  final State nextState;
 
   @override
   bool operator ==(Object other) =>

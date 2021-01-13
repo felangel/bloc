@@ -11,7 +11,7 @@ class SumCubit extends Cubit<int> {
     );
   }
 
-  StreamSubscription<int> _countSubscription;
+  late StreamSubscription<int> _countSubscription;
 
   @override
   Future<void> close() {
