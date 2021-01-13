@@ -12,6 +12,10 @@ dependencies:
   flutter_bloc:
     path: ../
 
+dependency_overrides:
+  bloc:
+    path: ../../bloc
+
 dev_dependencies:
   effective_dart: ^1.2.0
 

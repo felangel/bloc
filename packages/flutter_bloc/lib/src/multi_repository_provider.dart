@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/src/repository_provider.dart';
 import 'package:provider/provider.dart';
-
-import 'repository_provider.dart';
 
 /// {@template multi_repository_provider}
 /// Merges multiple [RepositoryProvider] widgets into one widget tree.
