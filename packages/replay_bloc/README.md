@@ -18,6 +18,27 @@ An extension to [package:bloc](https://github.com/felangel/bloc) which adds auto
 
 **Learn more at [bloclibrary.dev](https://bloclibrary.dev)!**
 
+---
+
+## Sponsors
+
+Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsors/felangel)]
+
+<table>    
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://verygood.ventures"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120"/></a>
+            </td>
+            <td align="center">
+                <a href="https://getstream.io/chat/?utm_source=github&utm_medium=react-native-gifted-chat&utm_campaign=sponsorship" target="_blank"><img width="250px" src="https://stream-blog.s3.amazonaws.com/blog/wp-content/uploads/fc148f0fc75d02841d017bb36e14e388/Stream-logo-with-background-.png"/></a><br/><span><a href="https://getstream.io/chat/flutter/tutorial/?utm_source=github&utm_medium=bloc-flutter&utm_campaign=oss_sponsorship" target="_blank">Try the Flutter Chat Tutorial &nbsp💬</a></span>
+            </td>            
+        </tr>
+    </tbody>
+</table>
+
+---
+
 ## Creating a ReplayCubit
 
 ```dart
@@ -149,7 +170,3 @@ class CounterBloc extends HydratedBloc<CounterEvent, int> with ReplayBlocMixin {
 ## Maintainers
 
 - [Felix Angelov](https://github.com/felangel)
-
-## Supporters
-
-[![Very Good Ventures](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png)](https://verygood.ventures)
