@@ -1,3 +1,12 @@
+# 8.0.0-nullsafety.0
+
+- **BREAKING**: feat: opt into null safety
+- **BREAKING**: feat: upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+- **BREAKING**: refactor: remove `emitsExactly`
+- **BREAKING**: refactor: `MockBloc` uses [package:mocktail](https://pub.dev/packages/mocktail)
+- **BREAKING**: feat: introduce `MockCubit` which uses [package:mocktail](https://pub.dev/packages/mocktail)
+- feat: introduce `MockCubit`
+
 # 7.1.0
 
 - feat: add `seed` property to `blocTest`

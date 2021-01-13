@@ -1,36 +1,19 @@
 import 'package:bloc/bloc.dart';
 
 class OnCreateCall {
-  const OnCreateCall(this.cubit);
+  const OnCreateCall(this.bloc);
 
-  final Cubit cubit;
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is OnCreateCall && o.cubit == cubit;
-  }
-
-  @override
-  int get hashCode => cubit.hashCode;
-}
-
-class OnChangeCall {
-  const OnChangeCall(this.cubit, this.change);
-
-  final Change change;
-  final Cubit cubit;
+  final Bloc bloc;
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is OnChangeCall && o.change == change && o.cubit == cubit;
+    return o is OnCreateCall && o.bloc == bloc;
   }
 
   @override
-  int get hashCode => change.hashCode ^ cubit.hashCode;
+  int get hashCode => bloc.hashCode;
 }
 
 class OnTransitionCall {
@@ -70,9 +53,9 @@ class OnEventCall {
 }
 
 class OnErrorCall {
-  const OnErrorCall(this.cubit, this.error, this.stackTrace);
+  const OnErrorCall(this.bloc, this.error, this.stackTrace);
 
-  final Cubit cubit;
+  final Bloc bloc;
   final Object error;
   final StackTrace? stackTrace;
 
@@ -81,47 +64,41 @@ class OnErrorCall {
     if (identical(this, o)) return true;
 
     return o is OnErrorCall &&
-        o.cubit == cubit &&
+        o.bloc == bloc &&
         o.error == error &&
         o.stackTrace == stackTrace;
   }
 
   @override
-  int get hashCode => cubit.hashCode ^ error.hashCode ^ stackTrace.hashCode;
+  int get hashCode => bloc.hashCode ^ error.hashCode ^ stackTrace.hashCode;
 }
 
 class OnCloseCall {
-  const OnCloseCall(this.cubit);
+  const OnCloseCall(this.bloc);
 
-  final Cubit cubit;
+  final Bloc bloc;
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is OnCloseCall && o.cubit == cubit;
+    return o is OnCloseCall && o.bloc == bloc;
   }
 
   @override
-  int get hashCode => cubit.hashCode;
+  int get hashCode => bloc.hashCode;
 }
 
 class MockBlocObserver implements BlocObserver {
   final onCreateCalls = <OnCreateCall>[];
-  final onChangeCalls = <OnChangeCall>[];
   final onTransitionCalls = <OnTransitionCall>[];
   final onEventCalls = <OnEventCall>[];
   final onErrorCalls = <OnErrorCall>[];
   final onCloseCalls = <OnCloseCall>[];
 
   @override
-  void onCreate(Cubit cubit) {
-    onCreateCalls.add(OnCreateCall(cubit));
-  }
-
-  @override
-  void onChange(Cubit cubit, Change change) {
-    onChangeCalls.add(OnChangeCall(cubit, change));
+  void onCreate(Bloc bloc) {
+    onCreateCalls.add(OnCreateCall(bloc));
   }
 
   @override
@@ -135,12 +112,12 @@ class MockBlocObserver implements BlocObserver {
   }
 
   @override
-  void onError(Cubit cubit, Object error, StackTrace? stackTrace) {
-    onErrorCalls.add(OnErrorCall(cubit, error, stackTrace));
+  void onError(Bloc bloc, Object error, StackTrace? stackTrace) {
+    onErrorCalls.add(OnErrorCall(bloc, error, stackTrace));
   }
 
   @override
-  void onClose(Cubit cubit) {
-    onCloseCalls.add(OnCloseCall(cubit));
+  void onClose(Bloc bloc) {
+    onCloseCalls.add(OnCloseCall(bloc));
   }
 }
