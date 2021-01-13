@@ -19,12 +19,14 @@ dependency_overrides:
     path: ../../packages/bloc
   flutter_bloc:
     path: ../../packages/flutter_bloc
+  bloc_test:
+    path: ../../packages/bloc_test
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   bloc_test: ^7.1.0
-  mockito: ^4.0.0
+  mocktail: ">=0.0.1-dev.7 <0.1.0"
   integration_test: ^1.0.0
 
 flutter:

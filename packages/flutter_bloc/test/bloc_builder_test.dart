@@ -35,7 +35,7 @@ class MyThemeAppState extends State<MyThemeApp> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<Cubit<ThemeData>, ThemeData>(
-      value: _themeCubit,
+      bloc: _themeCubit,
       builder: ((context, theme) {
         _onBuild();
         return MaterialApp(
@@ -93,7 +93,7 @@ class MyCounterAppState extends State<MyCounterApp> {
         body: Column(
           children: <Widget>[
             BlocBuilder<CounterCubit, int>(
-              value: _cubit,
+              bloc: _cubit,
               buildWhen: (previousState, state) {
                 return (previousState + state) % 3 == 0;
               },
@@ -105,7 +105,7 @@ class MyCounterAppState extends State<MyCounterApp> {
               },
             ),
             BlocBuilder<CounterCubit, int>(
-              value: _cubit,
+              bloc: _cubit,
               builder: (context, count) {
                 return Text(
                   '$count',
@@ -405,7 +405,7 @@ void main() {
       final counterCubit = CounterCubit();
       await tester.pumpWidget(
         BlocBuilder<CounterCubit, int>(
-          value: counterCubit,
+          bloc: counterCubit,
           buildWhen: (previous, state) {
             if (state % 2 == 0) {
               buildWhenPreviousState.add(previous);
@@ -440,7 +440,7 @@ void main() {
           textDirection: TextDirection.ltr,
           child: StatefulBuilder(
             builder: (context, setState) => BlocBuilder<CounterCubit, int>(
-              value: counterCubit,
+              bloc: counterCubit,
               buildWhen: (previous, state) => state % 2 == 0,
               builder: (_, state) {
                 states.add(state);
