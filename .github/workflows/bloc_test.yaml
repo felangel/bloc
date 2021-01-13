@@ -18,7 +18,7 @@ jobs:
         working-directory: packages/bloc_test
     runs-on: ubuntu-latest
     container:
-      image: google/dart:2.10.0
+      image: google/dart:2.12-dev
     steps:
       - uses: actions/checkout@v2
       - name: Install Dependencies
@@ -30,7 +30,7 @@ jobs:
       - name: Run tests
         run: dart test --coverage=coverage && pub run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
       - name: Check Code Coverage
-        uses: ChicagoFlutter/lcov-cop@v1.0.0
+        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           path: packages/bloc_test/coverage/lcov.info
       - name: Upload coverage to Codecov

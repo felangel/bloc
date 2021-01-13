@@ -59,12 +59,6 @@ void main() {
               ),
             )
           ]);
-          expect(observer.onChangeCalls, [
-            OnChangeCall(
-              simpleBloc,
-              const Change<String>(currentState: '', nextState: 'data'),
-            )
-          ]);
           expect(simpleBloc.state, 'data');
         });
 
@@ -88,12 +82,6 @@ void main() {
                 event: 'event1',
                 nextState: 'data',
               ),
-            )
-          ]);
-          expect(observer.onChangeCalls, [
-            OnChangeCall(
-              simpleBloc,
-              const Change<String>(currentState: '', nextState: 'data'),
             )
           ]);
           expect(simpleBloc.state, 'data');
@@ -164,15 +152,6 @@ void main() {
               Transition<ComplexEvent, ComplexState>(
                 currentState: ComplexStateA(),
                 event: ComplexEventB(),
-                nextState: ComplexStateB(),
-              ),
-            )
-          ]);
-          expect(observer.onChangeCalls, [
-            OnChangeCall(
-              complexBloc,
-              Change<ComplexState>(
-                currentState: ComplexStateA(),
                 nextState: ComplexStateB(),
               ),
             )
@@ -273,12 +252,6 @@ void main() {
               ),
             )
           ]);
-          expect(observer.onChangeCalls, [
-            OnChangeCall(
-              counterBloc,
-              const Change<int>(currentState: 0, nextState: 1),
-            )
-          ]);
           expect(counterBloc.state, 1);
         });
 
@@ -325,20 +298,6 @@ void main() {
                 nextState: 3,
               ),
             ),
-          ]);
-          expect(observer.onChangeCalls, [
-            OnChangeCall(
-              counterBloc,
-              const Change<int>(currentState: 0, nextState: 1),
-            ),
-            OnChangeCall(
-              counterBloc,
-              const Change<int>(currentState: 1, nextState: 2),
-            ),
-            OnChangeCall(
-              counterBloc,
-              const Change<int>(currentState: 2, nextState: 3),
-            )
           ]);
         });
 
@@ -458,38 +417,6 @@ void main() {
               ),
             )
           ]);
-          expect(observer.onChangeCalls, [
-            OnChangeCall(
-              asyncBloc,
-              Change<AsyncState>(
-                currentState: AsyncState(
-                  isLoading: false,
-                  hasError: false,
-                  isSuccess: false,
-                ),
-                nextState: AsyncState(
-                  isLoading: true,
-                  hasError: false,
-                  isSuccess: false,
-                ),
-              ),
-            ),
-            OnChangeCall(
-              asyncBloc,
-              Change<AsyncState>(
-                currentState: AsyncState(
-                  isLoading: true,
-                  hasError: false,
-                  isSuccess: false,
-                ),
-                nextState: AsyncState(
-                  isLoading: false,
-                  hasError: false,
-                  isSuccess: true,
-                ),
-              ),
-            )
-          ]);
           expect(
             asyncBloc.state,
             AsyncState(
@@ -549,22 +476,15 @@ void main() {
             nextState: 0,
           ),
         ];
-        final expectedChanges = const <Change<int>>[
-          Change(currentState: 0, nextState: -1),
-          Change(currentState: -1, nextState: 0),
-        ];
-        final expectedStates = [-1, 0, emitsDone];
-        final changes = <Change<int>>[];
-        final transitions = <Transition<CounterEvent, int>>[];
 
+        final expectedStates = [-1, 0, emitsDone];
+        final transitions = <Transition<CounterEvent, int>>[];
         final flatMapBloc = FlatMapBloc(
-          onChangeCallback: changes.add,
           onTransitionCallback: transitions.add,
         );
 
         expectLater(flatMapBloc, emitsInOrder(expectedStates))
             .then((dynamic _) {
-          expect(changes, expectedChanges);
           expect(transitions, expectedTransitions);
         });
         flatMapBloc
@@ -651,7 +571,7 @@ void main() {
             ..close();
         }, (Object error, StackTrace stackTrace) {
           expect(
-            (error as CubitUnhandledErrorException).toString(),
+            (error as BlocUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
               'in Instance of \'CounterExceptionBloc\'.',
@@ -672,7 +592,7 @@ void main() {
           )..addError(expectedError, StackTrace.current);
         }, (Object error, StackTrace stackTrace) {
           expect(
-            (error as CubitUnhandledErrorException).toString(),
+            (error as BlocUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
               'in Instance of \'OnExceptionBloc\'.',
@@ -710,7 +630,7 @@ void main() {
             ..close();
         }, (Object error, StackTrace stackTrace) {
           expect(
-            (error as CubitUnhandledErrorException).toString(),
+            (error as BlocUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
               'in Instance of \'OnExceptionBloc\'.',
@@ -730,7 +650,7 @@ void main() {
             ..close();
         }, (Object error, StackTrace stackTrace) {
           expect(
-            (error as CubitUnhandledErrorException).toString(),
+            (error as BlocUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
               'in Instance of \'OnEventErrorBloc\'.',
