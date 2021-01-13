@@ -26,13 +26,6 @@ void main() {
       });
     });
 
-    group('onChange', () {
-      test('does nothing by default', () {
-        // ignore: invalid_use_of_protected_member
-        BlocObserver().onChange(bloc, transition);
-      });
-    });
-
     group('onTransition', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member

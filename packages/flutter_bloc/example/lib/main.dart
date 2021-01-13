@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Custom [BlocObserver] which observes all bloc and cubit instances.
@@ -13,21 +12,15 @@ class SimpleBlocObserver extends BlocObserver {
   }
 
   @override
-  void onChange(Cubit cubit, Change change) {
-    print(change);
-    super.onChange(cubit, change);
-  }
-
-  @override
   void onTransition(Bloc bloc, Transition transition) {
     print(transition);
     super.onTransition(bloc, transition);
   }
 
   @override
-  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
+  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
     print(error);
-    super.onError(cubit, error, stackTrace);
+    super.onError(bloc, error, stackTrace);
   }
 }
 
