@@ -23,17 +23,7 @@ import 'package:mocktail/mocktail.dart';
 /// class MockCounterBloc extends MockBloc implements CounterBloc {}
 /// ```
 /// {@endtemplate}
-class MockBloc<E, S> extends Mock implements Bloc<E, S> {
-  /// {@macro mock_bloc}
-  MockBloc() {
-    when(this).calls(#add).thenReturn(null);
-    when(this).calls(#isBroadcast).thenReturn(true);
-    when(this).calls(#skip).thenAnswer((_) => Stream<S>.empty());
-    when(this)
-        .calls(#listen)
-        .thenAnswer((_) => Stream<S>.empty().listen((_) {}));
-  }
-}
+class MockBloc<E, S> extends Mock implements Bloc<E, S> {}
 
 /// {@template mock_cubit}
 /// Extend or mixin this class to mark the implementation as a [MockCubit].
