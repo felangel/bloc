@@ -18,7 +18,7 @@
 
 ---
 
-A Dart package that makes testing blocs and cubits easy. Built to work with [bloc](https://pub.dev/packages/bloc) and [mockito](https://pub.dev/packages/mockito).
+A Dart package that makes testing blocs and cubits easy. Built to work with [bloc](https://pub.dev/packages/bloc) and [mocktail](https://pub.dev/packages/mocktail).
 
 **Learn more at [bloclibrary.dev](https://bloclibrary.dev)!**
 
@@ -48,8 +48,8 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 ```dart
 import 'package:bloc_test/bloc_test.dart';
 
-class MockCounterBloc extends MockBloc<int> implements CounterBloc {}
-class MockCounterCubit extends MockBloc<int> implements CounterCubit {}
+class MockCounterBloc extends MockBloc<CounterEvent, int> implements CounterBloc {}
+class MockCounterCubit extends MockCubit<int> implements CounterCubit {}
 ```
 
 ## Stub the State Stream
