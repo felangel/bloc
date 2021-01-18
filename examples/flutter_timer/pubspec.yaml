@@ -13,7 +13,7 @@ dependencies:
     path: ../../packages/bloc
   flutter_bloc:
     path: ../../packages/flutter_bloc
-  equatable: ^1.2.5
+  equatable: ">=2.0.0-nullsafety.1 <2.0.0"
   wave: ^0.0.8
 
 dependency_overrides:
