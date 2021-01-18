@@ -131,6 +131,23 @@ void main() {
       expect(counterCubit.state, equals(3));
     });
 
+    test('can mock the initial state of a single cubit', () async {
+      final counterCubit = MockCounterCubit();
+      whenListen(
+        counterCubit,
+        Stream.fromIterable([0, 1, 2, 3]),
+        initialState: 0,
+      );
+      expect(counterCubit.state, equals(0));
+      await expectLater(
+        counterCubit,
+        emitsInOrder(
+          <Matcher>[equals(0), equals(1), equals(2), equals(3), emitsDone],
+        ),
+      );
+      expect(counterCubit.state, equals(3));
+    });
+
     test('can mock the stream of a single cubit as broadcast stream', () {
       final counterCubit = MockCounterCubit();
       whenListen(
