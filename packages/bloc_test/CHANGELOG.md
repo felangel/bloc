@@ -5,7 +5,10 @@
 - **BREAKING**: refactor: remove `emitsExactly`
 - **BREAKING**: refactor: `MockBloc` uses [package:mocktail](https://pub.dev/packages/mocktail)
 - **BREAKING**: feat: introduce `MockCubit` which uses [package:mocktail](https://pub.dev/packages/mocktail)
+- **BREAKING**: refactor: `expect` returns a `Function` with `Matcher` support
+- **BREAKING**: refactor: `errors` returns a `Function` with `Matcher` support
 - feat: introduce `MockCubit`
+- feat: add optional `initialState` to `whenListen`
 
 # 7.1.0
 

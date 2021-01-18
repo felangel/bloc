@@ -25,20 +25,22 @@ import 'package:test/test.dart' as test;
 /// [wait] is an optional `Duration` which can be used to wait for
 /// async operations within the `bloc` under test such as `debounceTime`.
 ///
-/// [expect] is an optional `Iterable` of matchers which the `bloc`
+/// [expect] is an optional `Function` that returns a `Matcher` which the `bloc`
 /// under test is expected to emit after [act] is executed.
 ///
 /// [verify] is an optional callback which is invoked after [expect]
 /// and can be used for additional verification/assertions.
 /// [verify] is called with the `bloc` returned by [build].
 ///
+/// [errors] is an optional `Function` that returns a `Matcher` which the `bloc`
+/// under test is expected to throw after [act] is executed.
 ///
 /// ```dart
 /// blocTest(
 ///   'CounterBloc emits [1] when increment is added',
 ///   build: () => CounterBloc(),
 ///   act: (bloc) => bloc.add(CounterEvent.increment),
-///   expect: [1],
+///   expect: () => [1],
 /// );
 /// ```
 ///
@@ -50,7 +52,7 @@ import 'package:test/test.dart' as test;
 ///   build: () => CounterBloc(),
 ///   seed: 9,
 ///   act: (bloc) => bloc.add(CounterEvent.increment),
-///   expect: [10],
+///   expect: () => [10],
 /// );
 /// ```
 ///
@@ -68,7 +70,7 @@ import 'package:test/test.dart' as test;
 ///       ..add(CounterEvent.increment);
 ///   },
 ///   skip: 1,
-///   expect: [2],
+///   expect: () => [2],
 /// );
 /// ```
 ///
@@ -81,7 +83,7 @@ import 'package:test/test.dart' as test;
 ///   build: () => CounterBloc(),
 ///   act: (bloc) => bloc.add(CounterEvent.increment),
 ///   wait: const Duration(milliseconds: 300),
-///   expect: [1],
+///   expect: () => [1],
 /// );
 /// ```
 ///
@@ -92,7 +94,7 @@ import 'package:test/test.dart' as test;
 ///   'CounterBloc emits [1] when increment is added',
 ///   build: () => CounterBloc(),
 ///   act: (bloc) => bloc.add(CounterEvent.increment),
-///   expect: [1],
+///   expect: () => [1],
 ///   verify: (_) {
 ///     verify(repository.someMethod(any)).called(1);
 ///   }
@@ -108,7 +110,7 @@ import 'package:test/test.dart' as test;
 ///  'emits [StateB] when EventB is added',
 ///  build: () => MyBloc(),
 ///  act: (bloc) => bloc.add(EventB()),
-///  expect: [isA<StateB>()],
+///  expect: () => [isA<StateB>()],
 /// );
 /// ```
 @isTest
@@ -119,9 +121,9 @@ void blocTest<B extends Bloc<Object?, State>, State>(
   Function(B bloc)? act,
   Duration? wait,
   int skip = 0,
-  Iterable? expect,
+  dynamic Function()? expect,
   Function(B bloc)? verify,
-  Iterable? errors,
+  dynamic Function()? errors,
 }) {
   test.test(description, () async {
     await testBloc<B, State>(
@@ -146,9 +148,9 @@ Future<void> testBloc<B extends Bloc<Object?, State>, State>({
   Function(B bloc)? act,
   Duration? wait,
   int skip = 0,
-  Iterable? expect,
+  dynamic Function()? expect,
   Function(B bloc)? verify,
-  Iterable? errors,
+  dynamic Function()? errors,
 }) async {
   final unhandledErrors = <Object>[];
   var shallowEquality = false;
@@ -170,8 +172,9 @@ Future<void> testBloc<B extends Bloc<Object?, State>, State>({
       await Future<void>.delayed(Duration.zero);
       await bloc.close();
       if (expect != null) {
-        shallowEquality = '$states' == '$expect';
-        test.expect(states, expect);
+        final dynamic expected = expect();
+        shallowEquality = '$states' == '$expected';
+        test.expect(states, test.wrapMatcher(expected));
       }
       await subscription.cancel();
       await verify?.call(bloc);
@@ -192,5 +195,5 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
       }
     },
   );
-  if (errors != null) test.expect(unhandledErrors, errors);
+  if (errors != null) test.expect(unhandledErrors, test.wrapMatcher(errors()));
 }
