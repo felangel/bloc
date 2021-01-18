@@ -47,22 +47,10 @@ void whenListen<Event, State>(
   State? initialState,
 }) {
   final broadcastStream = stream.asBroadcastStream();
-  StreamSubscription<State>? subscription;
-  when(bloc).calls(#state).thenReturn(initialState);
-  when(bloc).calls(#isBroadcast).thenReturn(true);
-  when(bloc).calls(#skip).thenAnswer(
-    (invocation) {
-      final stream = broadcastStream.skip(
-        invocation.positionalArguments.first as int,
-      );
-      subscription?.cancel();
-      subscription = stream.listen(
-        (state) => when(bloc).calls(#state).thenReturn(state),
-        onDone: () => subscription?.cancel(),
-      );
-      return stream;
-    },
-  );
+
+  if (initialState != null) {
+    when(bloc).calls(#state).thenReturn(initialState);
+  }
 
   when(bloc).calls(#listen).thenAnswer((invocation) {
     return broadcastStream.listen(
