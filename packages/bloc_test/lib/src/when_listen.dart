@@ -28,12 +28,27 @@ import 'package:mocktail/mocktail.dart';
 /// );
 /// expect(counterBloc.state, equals(3));
 /// ```
+///
+/// Optionally provide an [initialState] to stub the state of the [bloc]
+/// before any subscriptions.
+///
+/// ```dart
+/// whenListen(
+///   counterBloc,
+///   Stream.fromIterable([0, 1, 2, 3]),
+///   initialState: 0,
+/// );
+///
+/// expect(counterBloc.state, equals(0));
+/// ```
 void whenListen<Event, State>(
   Bloc<Event, State> bloc,
-  Stream<State> stream,
-) {
+  Stream<State> stream, {
+  State? initialState,
+}) {
   final broadcastStream = stream.asBroadcastStream();
   StreamSubscription<State>? subscription;
+  when(bloc).calls(#state).thenReturn(initialState);
   when(bloc).calls(#isBroadcast).thenReturn(true);
   when(bloc).calls(#skip).thenAnswer(
     (invocation) {
