@@ -1,3 +1,11 @@
+# 7.0.0-nullsafety.1
+
+- **BREAKING**: refactor: upgrade to `bloc ^7.0.0-nullsafety.1`
+  - refactor: rename `cubit` parameter in `BlocListener` to `bloc`
+  - refactor: rename `cubit` parameter in `BlocBuilder` to `bloc`
+  - refactor: rename `cubit` parameter in `BlocConsumer` to `bloc`
+- feat: upgrade to `provider ^5.0.0-nullsafety.3`
+
 # 7.0.0-nullsafety.0
 
 - **BREAKING**: opt into null safety
