@@ -9,12 +9,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  equatable: ^1.2.5
   bloc:
     path: ../../packages/bloc
+  equatable: ">=2.0.0-nullsafety.1 <2.0.0"
   flutter_bloc:
     path: ../../packages/flutter_bloc
-  meta: ^1.1.8
+  meta: ">=1.3.0-nullsafety.6 <1.3.0"
 
 dependency_overrides:
   bloc:
