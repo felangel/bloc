@@ -106,11 +106,11 @@ At this point we have successfully separated our presentational layer from our b
 
 ### BlocBuilder
 
-**BlocBuilder** is a Flutter widget which requires a `cubit` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed. The `builder` function will potentially be called many times and should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that returns a widget in response to the state.
+**BlocBuilder** is a Flutter widget which requires a `bloc` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed. The `builder` function will potentially be called many times and should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that returns a widget in response to the state.
 
 See `BlocListener` if you want to "do" anything in response to state changes such as navigation, showing a dialog, etc...
 
-If the cubit parameter is omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+If the `bloc` parameter is omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
@@ -120,18 +120,18 @@ BlocBuilder<BlocA, BlocAState>(
 )
 ```
 
-Only specify the cubit if you wish to provide a cubit that will be scoped to a single widget and isn't accessible via a parent `BlocProvider` and the current `BuildContext`.
+Only specify the bloc if you wish to provide a bloc that will be scoped to a single widget and isn't accessible via a parent `BlocProvider` and the current `BuildContext`.
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
-  cubit: blocA, // provide the local bloc instance
+  bloc: blocA, // provide the local bloc instance
   builder: (context, state) {
     // return widget here based on BlocA's state
   }
 )
 ```
 
-For fine-grained control over when the `builder` function is called an optional `buildWhen` can be provided. `buildWhen` takes the previous cubit state and current cubit state and returns a boolean. If `buildWhen` returns true, `builder` will be called with `state` and the widget will rebuild. If `buildWhen` returns false, `builder` will not be called with `state` and no rebuild will occur.
+For fine-grained control over when the `builder` function is called an optional `buildWhen` can be provided. `buildWhen` takes the previous bloc state and current bloc state and returns a boolean. If `buildWhen` returns true, `builder` will be called with `state` and the widget will rebuild. If `buildWhen` returns false, `builder` will not be called with `state` and no rebuild will occur.
 
 ```dart
 BlocBuilder<BlocA, BlocAState>(
@@ -147,9 +147,9 @@ BlocBuilder<BlocA, BlocAState>(
 
 ### BlocProvider
 
-**BlocProvider** is a Flutter widget which provides a cubit to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a cubit can be provided to multiple widgets within a subtree.
+**BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
 
-In most cases, `BlocProvider` should be used to create new cubits which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the cubit, it will automatically handle closing it.
+In most cases, `BlocProvider` should be used to create new blocs which will be made available to the rest of the subtree. In this case, since `BlocProvider` is responsible for creating the bloc, it will automatically handle closing it.
 
 ```dart
 BlocProvider(
@@ -158,7 +158,7 @@ BlocProvider(
 );
 ```
 
-By default, BlocProvider will create the cubit lazily, meaning `create` will get executed when the cubit is looked up via `BlocProvider.of<BlocA>(context)`.
+By default, BlocProvider will create the bloc lazily, meaning `create` will get executed when the bloc is looked up via `BlocProvider.of<BlocA>(context)`.
 
 To override this behavior and force `create` to be run immediately, `lazy` can be set to `false`.
 
@@ -170,7 +170,7 @@ BlocProvider(
 );
 ```
 
-In some cases, `BlocProvider` can be used to provide an existing cubit to a new portion of the widget tree. This will be most commonly used when an existing `cubit` needs to be made available to a new route. In this case, `BlocProvider` will not automatically close the cubit since it did not create it.
+In some cases, `BlocProvider` can be used to provide an existing bloc to a new portion of the widget tree. This will be most commonly used when an existing `bloc` needs to be made available to a new route. In this case, `BlocProvider` will not automatically close the bloc since it did not create it.
 
 ```dart
 BlocProvider.value(
@@ -247,7 +247,7 @@ MultiBlocProvider(
 
 ### BlocListener
 
-**BlocListener** is a Flutter widget which takes a `BlocWidgetListener` and an optional `cubit` and invokes the `listener` in response to state changes in the cubit. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
+**BlocListener** is a Flutter widget which takes a `BlocWidgetListener` and an optional `bloc` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
 
 `listener` is only called once for each state change (**NOT** including the initial state) unlike `builder` in `BlocBuilder` and is a `void` function.
 
@@ -262,18 +262,18 @@ BlocListener<BlocA, BlocAState>(
 )
 ```
 
-Only specify the cubit if you wish to provide a cubit that is otherwise not accessible via `BlocProvider` and the current `BuildContext`.
+Only specify the bloc if you wish to provide a bloc that is otherwise not accessible via `BlocProvider` and the current `BuildContext`.
 
 ```dart
 BlocListener<BlocA, BlocAState>(
-  cubit: blocA,
+  bloc: blocA,
   listener: (context, state) {
     // do stuff here based on BlocA's state
   }
 )
 ```
 
-For fine-grained control over when the `listener` function is called an optional `listenWhen` can be provided. `listenWhen` takes the previous cubit state and current cubit state and returns a boolean. If `listenWhen` returns true, `listener` will be called with `state`. If `listenWhen` returns false, `listener` will not be called with `state`.
+For fine-grained control over when the `listener` function is called an optional `listenWhen` can be provided. `listenWhen` takes the previous bloc state and current bloc state and returns a boolean. If `listenWhen` returns true, `listener` will be called with `state`. If `listenWhen` returns false, `listener` will not be called with `state`.
 
 ```dart
 BlocListener<BlocA, BlocAState>(
@@ -328,9 +328,9 @@ MultiBlocListener(
 
 ### BlocConsumer
 
-**BlocConsumer** exposes a `builder` and `listener` in order react to new states. `BlocConsumer` is analogous to a nested `BlocListener` and `BlocBuilder` but reduces the amount of boilerplate needed. `BlocConsumer` should only be used when it is necessary to both rebuild UI and execute other reactions to state changes in the `cubit`. `BlocConsumer` takes a required `BlocWidgetBuilder` and `BlocWidgetListener` and an optional `cubit`, `BlocBuilderCondition`, and `BlocListenerCondition`.
+**BlocConsumer** exposes a `builder` and `listener` in order react to new states. `BlocConsumer` is analogous to a nested `BlocListener` and `BlocBuilder` but reduces the amount of boilerplate needed. `BlocConsumer` should only be used when it is necessary to both rebuild UI and execute other reactions to state changes in the `bloc`. `BlocConsumer` takes a required `BlocWidgetBuilder` and `BlocWidgetListener` and an optional `bloc`, `BlocBuilderCondition`, and `BlocListenerCondition`.
 
-If the `cubit` parameter is omitted, `BlocConsumer` will automatically perform a lookup using
+If the `bloc` parameter is omitted, `BlocConsumer` will automatically perform a lookup using
 `BlocProvider` and the current `BuildContext`.
 
 ```dart
@@ -344,7 +344,7 @@ BlocConsumer<BlocA, BlocAState>(
 )
 ```
 
-An optional `listenWhen` and `buildWhen` can be implemented for more granular control over when `listener` and `builder` are called. The `listenWhen` and `buildWhen` will be invoked on each `cubit` `state` change. They each take the previous `state` and current `state` and must return a `bool` which determines whether or not the `builder` and/or `listener` function will be invoked. The previous `state` will be initialized to the `state` of the `cubit` when the `BlocConsumer` is initialized. `listenWhen` and `buildWhen` are optional and if they aren't implemented, they will default to `true`.
+An optional `listenWhen` and `buildWhen` can be implemented for more granular control over when `listener` and `builder` are called. The `listenWhen` and `buildWhen` will be invoked on each `bloc` `state` change. They each take the previous `state` and current `state` and must return a `bool` which determines whether or not the `builder` and/or `listener` function will be invoked. The previous `state` will be initialized to the `state` of the `bloc` when the `BlocConsumer` is initialized. `listenWhen` and `buildWhen` are optional and if they aren't implemented, they will default to `true`.
 
 ```dart
 BlocConsumer<BlocA, BlocAState>(
@@ -487,7 +487,7 @@ MultiRepositoryProvider(
 
 ## Dart Versions
 
-- Dart 2: >= 2.6.0
+- Dart 2: >= 2.12.0-0
 
 ## Maintainers
 
