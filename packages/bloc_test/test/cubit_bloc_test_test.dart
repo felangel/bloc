@@ -12,21 +12,21 @@ void main() {
       blocTest<CounterCubit, int>(
         'emits [] when nothing is called',
         build: () => CounterCubit(),
-        expect: <int>[],
+        expect: () => <int>[],
       );
 
       blocTest<CounterCubit, int>(
         'emits [1] when increment is called',
         build: () => CounterCubit(),
         act: (cubit) => cubit.increment(),
-        expect: <int>[1],
+        expect: () => <int>[1],
       );
 
       blocTest<CounterCubit, int>(
         'emits [1] when increment is called with async act',
         build: () => CounterCubit(),
         act: (cubit) => cubit.increment(),
-        expect: <int>[1],
+        expect: () => <int>[1],
       );
 
       blocTest<CounterCubit, int>(
@@ -34,7 +34,7 @@ void main() {
         'with async act',
         build: () => CounterCubit(),
         act: (cubit) => cubit..increment()..increment(),
-        expect: <int>[1, 2],
+        expect: () => <int>[1, 2],
       );
 
       blocTest<CounterCubit, int>(
@@ -43,7 +43,7 @@ void main() {
         build: () => CounterCubit(),
         seed: 2,
         act: (cubit) => cubit.increment(),
-        expect: <int>[3],
+        expect: () => <int>[3],
       );
     });
 
@@ -51,14 +51,14 @@ void main() {
       blocTest<AsyncCounterCubit, int>(
         'emits [] when nothing is called',
         build: () => AsyncCounterCubit(),
-        expect: <int>[],
+        expect: () => <int>[],
       );
 
       blocTest<AsyncCounterCubit, int>(
         'emits [1] when increment is called',
         build: () => AsyncCounterCubit(),
         act: (cubit) => cubit.increment(),
-        expect: <int>[1],
+        expect: () => <int>[1],
       );
 
       blocTest<AsyncCounterCubit, int>(
@@ -69,7 +69,7 @@ void main() {
           await cubit.increment();
           await cubit.increment();
         },
-        expect: <int>[1, 2],
+        expect: () => <int>[1, 2],
       );
     });
 
@@ -77,14 +77,14 @@ void main() {
       blocTest<DelayedCounterCubit, int>(
         'emits [] when nothing is called',
         build: () => DelayedCounterCubit(),
-        expect: <int>[],
+        expect: () => <int>[],
       );
 
       blocTest<DelayedCounterCubit, int>(
         'emits [] when increment is called without wait',
         build: () => DelayedCounterCubit(),
         act: (cubit) => cubit.increment(),
-        expect: <int>[],
+        expect: () => <int>[],
       );
 
       blocTest<DelayedCounterCubit, int>(
@@ -92,7 +92,7 @@ void main() {
         build: () => DelayedCounterCubit(),
         act: (cubit) => cubit.increment(),
         wait: const Duration(milliseconds: 300),
-        expect: <int>[1],
+        expect: () => <int>[1],
       );
     });
 
@@ -100,14 +100,14 @@ void main() {
       blocTest<InstantEmitCubit, int>(
         'emits [] when nothing is called',
         build: () => InstantEmitCubit(),
-        expect: <int>[],
+        expect: () => <int>[],
       );
 
       blocTest<InstantEmitCubit, int>(
         'emits [2] when increment is called',
         build: () => InstantEmitCubit(),
         act: (cubit) => cubit.increment(),
-        expect: <int>[2],
+        expect: () => <int>[2],
       );
 
       blocTest<InstantEmitCubit, int>(
@@ -115,7 +115,7 @@ void main() {
         'multiple times with async act',
         build: () => InstantEmitCubit(),
         act: (cubit) => cubit..increment()..increment(),
-        expect: <int>[2, 3],
+        expect: () => <int>[2, 3],
       );
     });
 
@@ -123,14 +123,14 @@ void main() {
       blocTest<MultiCounterCubit, int>(
         'emits [] when nothing is called',
         build: () => MultiCounterCubit(),
-        expect: <int>[],
+        expect: () => <int>[],
       );
 
       blocTest<MultiCounterCubit, int>(
         'emits [1, 2] when increment is called',
         build: () => MultiCounterCubit(),
         act: (cubit) => cubit.increment(),
-        expect: <int>[1, 2],
+        expect: () => <int>[1, 2],
       );
 
       blocTest<MultiCounterCubit, int>(
@@ -138,7 +138,7 @@ void main() {
         'multiple times with async act',
         build: () => MultiCounterCubit(),
         act: (cubit) => cubit..increment()..increment(),
-        expect: <int>[1, 2, 3, 4],
+        expect: () => <int>[1, 2, 3, 4],
       );
     });
 
@@ -146,14 +146,14 @@ void main() {
       blocTest<ComplexCubit, ComplexState>(
         'emits [] when nothing is called',
         build: () => ComplexCubit(),
-        expect: <Matcher>[],
+        expect: () => <Matcher>[],
       );
 
       blocTest<ComplexCubit, ComplexState>(
         'emits [ComplexStateB] when emitB is called',
         build: () => ComplexCubit(),
         act: (cubit) => cubit.emitB(),
-        expect: <Matcher>[isA<ComplexStateB>()],
+        expect: () => [isA<ComplexStateB>()],
       );
     });
 
@@ -168,14 +168,14 @@ void main() {
       blocTest<SideEffectCounterCubit, int>(
         'emits [] when nothing is called',
         build: () => SideEffectCounterCubit(repository),
-        expect: <int>[],
+        expect: () => <int>[],
       );
 
       blocTest<SideEffectCounterCubit, int>(
         'emits [1] when increment is called',
         build: () => SideEffectCounterCubit(repository),
         act: (cubit) => cubit.increment(),
-        expect: <int>[1],
+        expect: () => <int>[1],
         verify: (_) async {
           verify(repository).called(#sideEffect).once();
         },
@@ -193,22 +193,26 @@ void main() {
 
     group('ExceptionCubit', () {
       final exception = Exception('oops');
+
+      blocTest<ExceptionCubit, int>(
+        'errors supports matchers',
+        build: () => ExceptionCubit(),
+        act: (cubit) => cubit.throwException(exception),
+        errors: () => contains(exception),
+      );
+
       blocTest<ExceptionCubit, int>(
         'captures uncaught exceptions',
         build: () => ExceptionCubit(),
         act: (cubit) => cubit.throwException(exception),
-        errors: <Matcher>[
-          equals(exception),
-        ],
+        errors: () => <Matcher>[equals(exception)],
       );
 
       blocTest<ExceptionCubit, int>(
         'captures calls to addError',
         build: () => ExceptionCubit(),
         act: (cubit) => cubit.addError(exception),
-        errors: <Matcher>[
-          equals(exception),
-        ],
+        errors: () => <Matcher>[equals(exception)],
       );
     });
   });
