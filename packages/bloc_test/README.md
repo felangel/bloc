@@ -172,9 +172,7 @@ blocTest(
   'CounterBloc throws Exception when null is added',
   build: () => CounterBloc(),
   act: (bloc) => bloc.add(null),
-  errors: [
-    isA<Exception>(),
-  ]
+  errors: () => [isA<Exception>()]
 );
 ```
 
@@ -191,7 +189,7 @@ blocTest(
 
 ## Dart Versions
 
-- Dart 2: >= 2.7.0
+- Dart 2: >= 2.12.0-0
 
 ## Maintainers
 
