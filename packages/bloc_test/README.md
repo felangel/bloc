@@ -61,7 +61,14 @@ class MockCounterCubit extends MockCubit<int> implements CounterCubit {}
 final counterBloc = MockCounterBloc();
 
 // Stub the state stream
-whenListen(counterBloc, Stream.fromIterable([0, 1, 2, 3]));
+whenListen(
+  counterBloc,
+  Stream.fromIterable([0, 1, 2, 3]),
+  initialState: 0,
+);
+
+// Assert that the initial state is correct.
+expect(counterBloc.state, equals(0));
 
 // Assert that the stubbed stream is emitted.
 await expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3])))
@@ -72,37 +79,38 @@ expect(counterBloc.state, equals(3));
 
 ## Unit Test with blocTest
 
-**blocTest** creates a new `cubit`-specific test case with the given `description`. `blocTest` will handle asserting that the `cubit` emits the `expect`ed states (in order) after `act` is executed. `blocTest` also handles ensuring that no additional states are emitted by closing the `cubit` stream before evaluating the `expect`ation.
+**blocTest** creates a new `bloc`-specific test case with the given `description`.
+`blocTest` will handle asserting that the `bloc` emits the `expect`ed states (in order) after `act` is executed. `blocTest` also handles ensuring that no additional states are emitted by closing the `bloc` stream before evaluating the `expect`ation.
 
-`build` should be used for all `cubit` initialization and preparation and must return the `cubit` under test.
+`build` should be used for all `bloc` initialization and preparation and must return the `bloc` under test.
 
-`seed` is an optional state which will be used to seed the `cubit` before `act` is called.
+`seed` is an optional state which will be used to seed the `bloc` before `act` is called.
 
-`act` is an optional callback which will be invoked with the `cubit` under test and should be used to `add` events to the `cubit`.
+`act` is an optional callback which will be invoked with the `bloc` under test and should be used to interact with the `bloc`.
 
-`skip` is an optional `int` which can be used to skip any number of states and defaults to `0`.
+`skip` is an optional `int` which can be used to skip any number of states. `skip` defaults to 0.
 
-`wait` is an optional `Duration` which can be used to wait for async operations within the `cubit` under test such as `debounceTime`.
+`wait` is an optional `Duration` which can be used to wait for async operations within the `bloc` under test such as `debounceTime`.
 
-`expect` is an optional `Iterable<State>` which the `cubit` under test is expected to emit after `act` is executed.
+`expect` is an optional `Function` that returns a `Matcher` which the `bloc` under test is expected to emit after `act` is executed.
 
-`verify` is an optional callback which is invoked after `expect` and can be used for additional verification/assertions. `verify` is called with the `cubit` returned by `build`.
+`verify` is an optional callback which is invoked after `expect` and can be used for additional verification/assertions. `verify` is called with the `bloc` returned by `build`.
 
-`errors` is an optional `Iterable` of error matchers which the `cubit` under test is expected to have thrown after `act` is executed.
+`errors` is an optional `Function` that returns a `Matcher` which the `bloc` under test is expected to throw after `act` is executed.
 
 ```dart
 group('CounterBloc', () {
   blocTest(
     'emits [] when nothing is added',
     build: () => CounterBloc(),
-    expect: [],
+    expect: () => [],
   );
 
   blocTest(
     'emits [1] when CounterEvent.increment is added',
     build: () => CounterBloc(),
     act: (bloc) => bloc.add(CounterEvent.increment),
-    expect: [1],
+    expect: () => [1],
   );
 });
 ```
@@ -115,7 +123,7 @@ blocTest(
   build: () => CounterCubit(),
   seed: 9,
   act: (cubit) => cubit.increment(),
-  expect: [10],
+  expect: () => [10],
 );
 ```
 
@@ -127,7 +135,7 @@ blocTest(
   build: () => CounterBloc(),
   act: (bloc) => bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
   skip: 1,
-  expect: [2],
+  expect: () => [2],
 );
 ```
 
@@ -139,7 +147,7 @@ blocTest(
   build: () => CounterBloc(),
   act: (bloc) => bloc.add(CounterEvent.increment),
   wait: const Duration(milliseconds: 300),
-  expect: [1],
+  expect: () => [1],
 );
 ```
 
@@ -150,7 +158,7 @@ blocTest(
   'CounterBloc emits [1] when CounterEvent.increment is added',
   build: () => CounterBloc(),
   act: (bloc) => bloc.add(CounterEvent.increment),
-  expect: [1],
+  expect: () => [1],
   verify: (_) {
     verify(repository.someMethod(any)).called(1);
   }
@@ -177,7 +185,7 @@ blocTest(
   'emits [StateB] when MyEvent is added',
   build: () => MyBloc(),
   act: (bloc) => bloc.add(MyEvent()),
-  expect: [isA<StateB>()],
+  expect: () => [isA<StateB>()],
 );
 ```
 
