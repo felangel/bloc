@@ -7,7 +7,9 @@
 - **BREAKING**: feat: introduce `MockCubit` which uses [package:mocktail](https://pub.dev/packages/mocktail)
 - **BREAKING**: refactor: `expect` returns a `Function` with `Matcher` support
 - **BREAKING**: refactor: `errors` returns a `Function` with `Matcher` support
+- **BREAKING**: refactor: `whenListen` does not stub `skip`
 - feat: introduce `MockCubit`
+- feat: `MockBloc` and `MockCubit` automatically stub core API
 - feat: add optional `initialState` to `whenListen`
 
 # 7.1.0
