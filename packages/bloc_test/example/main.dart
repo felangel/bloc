@@ -35,14 +35,14 @@ void mainCubit() {
     blocTest<CounterCubit, int>(
       'emits [] when nothing is called',
       build: () => CounterCubit(),
-      expect: const <int>[],
+      expect: () => const <int>[],
     );
 
     blocTest<CounterCubit, int>(
       'emits [1] when increment is called',
       build: () => CounterCubit(),
       act: (cubit) => cubit.increment(),
-      expect: const <int>[1],
+      expect: () => const <int>[1],
     );
   });
 }
@@ -66,14 +66,14 @@ void mainBloc() {
     blocTest<CounterBloc, int>(
       'emits [] when nothing is added',
       build: () => CounterBloc(),
-      expect: const <int>[],
+      expect: () => const <int>[],
     );
 
     blocTest<CounterBloc, int>(
       'emits [1] when CounterEvent.increment is added',
       build: () => CounterBloc(),
       act: (bloc) => bloc.add(CounterEvent.increment),
-      expect: const <int>[1],
+      expect: () => const <int>[1],
     );
   });
 }
