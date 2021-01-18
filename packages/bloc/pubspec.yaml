@@ -1,6 +1,6 @@
 name: bloc
 description: A predictable state management library that helps implement the BLoC (Business Logic Component) design pattern.
-version: 7.0.0-nullsafety.0
+version: 7.0.0-nullsafety.1
 repository: https://github.com/felangel/bloc/tree/master/packages/bloc
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://github.com/felangel/bloc

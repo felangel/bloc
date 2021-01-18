@@ -3,11 +3,11 @@ part of 'new_car_bloc.dart';
 class NewCarState {
   const NewCarState({
     required this.brands,
-    @required this.brand,
+    required this.brand,
     required this.models,
-    @required this.model,
+    required this.model,
     required this.years,
-    @required this.year,
+    required this.year,
   });
 
   final List<String> brands;
@@ -65,7 +65,7 @@ class NewCarState {
 
   const NewCarState.modelsLoadSuccess({
     required List<String> brands,
-    @required String? brand,
+    required String? brand,
     required List<String> models,
   }) : this(
           brands: brands,
@@ -78,9 +78,9 @@ class NewCarState {
 
   const NewCarState.yearsLoadInProgress({
     required List<String> brands,
-    @required String? brand,
+    required String? brand,
     required List<String> models,
-    @required String? model,
+    required String? model,
   }) : this(
           brands: brands,
           brand: brand,
@@ -92,9 +92,9 @@ class NewCarState {
 
   const NewCarState.yearsLoadSuccess({
     required List<String> brands,
-    @required String? brand,
+    required String? brand,
     required List<String> models,
-    @required String? model,
+    required String? model,
     required List<String> years,
   }) : this(
           brands: brands,
