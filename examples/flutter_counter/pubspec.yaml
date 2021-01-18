@@ -26,7 +26,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   bloc_test: ^7.1.0
-  mocktail: ">=0.0.1-dev.7 <0.1.0"
+  mocktail: ">=0.0.1-dev.8 <0.0.1"
   integration_test: ^1.0.0
 
 flutter:

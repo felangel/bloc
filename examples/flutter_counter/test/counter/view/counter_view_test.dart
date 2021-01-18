@@ -16,10 +16,10 @@ void main() {
 
   setUp(() {
     counterCubit = MockCounterCubit();
-    when(counterCubit).calls(#state).thenReturn(0);
-    when(counterCubit).calls(#increment).thenReturn(() {});
-    when(counterCubit).calls(#decrement).thenReturn(() {});
-    whenListen(counterCubit, Stream.value(0));
+  });
+
+  tearDown(() {
+    verifyMocks(counterCubit);
   });
 
   group('CounterView', () {
@@ -37,6 +37,8 @@ void main() {
     });
 
     testWidgets('tapping increment button invokes increment', (tester) async {
+      when(counterCubit).calls(#state).thenReturn(0);
+      when(counterCubit).calls(#increment).thenReturn(() {});
       await tester.pumpWidget(
         MaterialApp(
           home: BlocProvider.value(
@@ -50,6 +52,8 @@ void main() {
     });
 
     testWidgets('tapping decrement button invokes decrement', (tester) async {
+      when(counterCubit).calls(#state).thenReturn(0);
+      when(counterCubit).calls(#decrement).thenReturn(() {});
       await tester.pumpWidget(
         MaterialApp(
           home: BlocProvider.value(
