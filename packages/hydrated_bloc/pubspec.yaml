@@ -10,7 +10,7 @@ environment:
   sdk: ">=2.12.0-0 <3.0.0"
 
 dependencies:
-  bloc: ">=7.0.0-nullsafety.0 <7.0.0"
+  bloc: ">=7.0.0-nullsafety.1 <7.0.0"
   hive: ^1.4.1+1
   meta: ">=1.3.0-nullsafety.6 <1.3.0"
   synchronized: ">=3.0.0-nullsafety.1 <3.0.0"
