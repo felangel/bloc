@@ -38,10 +38,10 @@ class User {
   final List<Todo> todos;
 
   User copyWith({
-    String name,
-    int age,
-    Color favoriteColor,
-    List<Todo> todos,
+    String? name,
+    int? age,
+    Color? favoriteColor,
+    List<Todo>? todos,
   }) {
     return User(
       name ?? this.name,

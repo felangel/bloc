@@ -12,6 +12,6 @@ class SimpleCubit extends HydratedCubit<int> {
 
   @override
   int fromJson(Map<String, dynamic> json) {
-    return json['state'] as int;
+    return json['state'] as int? ?? 0;
   }
 }
