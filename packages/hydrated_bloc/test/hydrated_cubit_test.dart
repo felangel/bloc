@@ -14,7 +14,7 @@ class MyUuidHydratedCubit extends HydratedCubit<String> {
   Map<String, String> toJson(String state) => {'value': state};
 
   @override
-  String? fromJson(dynamic json) => json['value'] as String?;
+  String? fromJson(Map<String, dynamic> json) => json['value'] as String?;
 }
 
 class MyCallbackHydratedCubit extends HydratedCubit<int> {

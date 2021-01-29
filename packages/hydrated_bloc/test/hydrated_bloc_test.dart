@@ -49,14 +49,9 @@ class MyCallbackHydratedBloc extends HydratedBloc<CounterEvent, int> {
   Map<String, int> toJson(int state) => {'value': state};
 
   @override
-  int? fromJson(dynamic json) {
+  int? fromJson(Map<String, dynamic> json) {
     onFromJsonCalled?.call(json);
-    try {
-      return json['value'] as int;
-    } catch (_) {
-      // ignore: avoid_returning_null
-      return null;
-    }
+    return json['value'] as int?;
   }
 }
 
@@ -77,14 +72,7 @@ class MyHydratedBloc extends HydratedBloc<int, int> {
   }
 
   @override
-  int? fromJson(Map<String, dynamic> json) {
-    try {
-      return json['value'] as int;
-    } catch (_) {
-      // ignore: avoid_returning_null
-      return null;
-    }
-  }
+  int? fromJson(Map<String, dynamic> json) => json['value'] as int?;
 }
 
 class MyMultiHydratedBloc extends HydratedBloc<int, int> {
@@ -106,14 +94,7 @@ class MyMultiHydratedBloc extends HydratedBloc<int, int> {
   }
 
   @override
-  int? fromJson(dynamic json) {
-    try {
-      return json['value'] as int;
-    } catch (_) {
-      // ignore: avoid_returning_null
-      return null;
-    }
-  }
+  int? fromJson(dynamic json) => json['value'] as int?;
 }
 
 class MyErrorThrowingBloc extends HydratedBloc<Object, int> {
