@@ -87,7 +87,7 @@ void main() {
       when(storage).calls(#write).thenAnswer((_) async {});
       when(storage).calls(#delete).thenAnswer((_) async {});
       when(storage).calls(#clear).thenAnswer((_) async {});
-      HydratedCubit.storage = storage;
+      HydratedBloc.storage = storage;
     });
 
     test('reads from storage once upon initialization', () {
@@ -179,7 +179,7 @@ void main() {
 
     group('SingleHydratedCubit', () {
       test('should throw StorageNotFound when storage is null', () {
-        HydratedCubit.storage = null;
+        HydratedBloc.storage = null;
         expect(
           () => MyHydratedCubit(),
           throwsA(isA<StorageNotFound>()),
@@ -199,8 +199,8 @@ void main() {
 
       test('storage getter returns correct storage instance', () {
         final storage = MockStorage();
-        HydratedCubit.storage = storage;
-        expect(HydratedCubit.storage, storage);
+        HydratedBloc.storage = storage;
+        expect(HydratedBloc.storage, storage);
       });
 
       test('should call storage.write when onTransition is called', () {

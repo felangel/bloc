@@ -16,13 +16,45 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
 
   /// Setter for instance of [Storage] which will be used to
   /// manage persisting/restoring the [Bloc] state.
-  static set storage(Storage storage) {
-    HydratedMixin.storage = storage;
-  }
+  static Storage? _storage;
 
-  /// Getter for instance of [Storage] which will be used to
+  static set storage(Storage? storage) => _storage = storage;
+
+  /// Instance of [Storage] which will be used to
   /// manage persisting/restoring the [Bloc] state.
-  static Storage get storage => HydratedMixin.storage!;
+  static Storage get storage {
+    if (_storage == null) throw const StorageNotFound();
+    return _storage!;
+  }
+}
+
+/// {@template hydrated_cubit}
+/// Specialized [Cubit] which handles initializing the [Cubit] state
+/// based on the persisted state. This allows state to be persisted
+/// across application restarts.
+///
+/// ```dart
+/// class CounterCubit extends HydratedCubit<int> {
+///   CounterCubit() : super(0);
+///
+///   void increment() => emit(state + 1);
+///   void decrement() => emit(state - 1);
+///
+///   @override
+///   int fromJson(Map<String, dynamic> json) => json['value'] as int;
+///
+///   @override
+///   Map<String, int> toJson(int state) => {'value': state};
+/// }
+/// ```
+///
+/// {@endtemplate}
+abstract class HydratedCubit<State> extends Cubit<State>
+    with HydratedMixin<Null, State> {
+  /// {@macro hydrated_cubit}
+  HydratedCubit(State state) : super(state) {
+    hydrate();
+  }
 }
 
 /// A mixin which enables automatic state persistence
@@ -49,10 +81,6 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
 /// * [HydratedBloc] to enable automatic state persistence/restoration with [Bloc]
 ///
 mixin HydratedMixin<Event, State> on Bloc<Event, State> {
-  /// Instance of [Storage] which will be used to
-  /// manage persisting/restoring the [Cubit] state.
-  static Storage? storage;
-
   /// Populates the internal state storage with the latest state.
   /// This should be called when using the [HydratedMixin]
   /// directly within the constructor body.
@@ -66,11 +94,11 @@ mixin HydratedMixin<Event, State> on Bloc<Event, State> {
   /// }
   /// ```
   void hydrate() {
-    if (storage == null) throw const StorageNotFound();
+    final storage = HydratedBloc.storage;
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
-        storage!
+        storage
             .write(storageToken, stateJson)
             .then((_) {}, onError: onError)
             .catchError(onError);
@@ -84,10 +112,10 @@ mixin HydratedMixin<Event, State> on Bloc<Event, State> {
 
   @override
   State get state {
-    if (storage == null) throw const StorageNotFound();
+    final storage = HydratedBloc.storage;
     if (_state != null) return _state!;
     try {
-      final stateJson = storage!.read(storageToken) as Map<dynamic, dynamic>?;
+      final stateJson = storage.read(storageToken) as Map<dynamic, dynamic>?;
       if (stateJson == null) {
         _state = super.state;
         return super.state;
@@ -109,12 +137,12 @@ mixin HydratedMixin<Event, State> on Bloc<Event, State> {
   @override
   void onTransition(Transition<Event, State> transition) {
     super.onTransition(transition);
-    if (storage == null) throw const StorageNotFound();
+    final storage = HydratedBloc.storage;
     final state = transition.nextState;
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
-        storage!
+        storage
             .write(storageToken, stateJson)
             .then((_) {}, onError: onError)
             .catchError(onError);
@@ -268,7 +296,7 @@ mixin HydratedMixin<Event, State> on Bloc<Event, State> {
   /// `clear` is used to wipe or invalidate the cache of a `HydratedCubit`.
   /// Calling `clear` will delete the cached state of the cubit
   /// but will not modify the current state of the cubit.
-  Future<void> clear() => storage!.delete(storageToken);
+  Future<void> clear() => HydratedBloc.storage.delete(storageToken);
 
   /// Responsible for converting the `Map<String, dynamic>` representation
   /// of the cubit state into a concrete instance of the cubit state.
