@@ -28,7 +28,9 @@ jobs:
       - name: Format
         run: dartfmt --dry-run --set-exit-if-changed .
       - name: Analyze
-        run: dart analyze --fatal-infos --fatal-warnings .
+        run: |
+          dart analyze --fatal-infos --fatal-warnings lib
+          dart analyze --fatal-infos --fatal-warnings test
       - name: Run tests
         run: dart test -j 1 --coverage=coverage && pub run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
       - name: Check Code Coverage
