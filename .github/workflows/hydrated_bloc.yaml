@@ -2,8 +2,6 @@ name: hydrated_bloc
 
 on:
   push:
-    branches:
-      - master
     paths:
       - "packages/hydrated_bloc/**"
       - ".github/workflows/hydrated_bloc.yaml"
@@ -19,20 +17,19 @@ jobs:
       run:
         working-directory: packages/hydrated_bloc
     runs-on: ubuntu-latest
-    container:
-      image: google/dart:2.12-dev
     steps:
       - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1.4.0
+        with:
+          channel: beta
       - name: Install Dependencies
-        run: pub get
+        run: flutter pub get
       - name: Format
-        run: dartfmt --dry-run --set-exit-if-changed .
+        run: flutter format --set-exit-if-changed lib test example
       - name: Analyze
-        run: |
-          dart analyze --fatal-infos --fatal-warnings lib
-          dart analyze --fatal-infos --fatal-warnings test
+        run: flutter analyze lib test example
       - name: Run tests
-        run: dart test -j 1 --coverage=coverage && pub run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
+        run: flutter test -j 1 --no-pub --coverage --test-randomize-ordering-seed random
       - name: Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
