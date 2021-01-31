@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   // https://github.com/flutter/flutter/pull/38464
@@ -11,7 +12,9 @@ void main() async {
   // before using any plugins if the code is executed before runApp.
   // As a result, you will need the following line if you're using Flutter >=1.9.4.
   WidgetsFlutterBinding.ensureInitialized();
-  HydratedBloc.storage = await HydratedStorage.build();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: await getTemporaryDirectory(),
+  );
   runApp(App());
 }
 
