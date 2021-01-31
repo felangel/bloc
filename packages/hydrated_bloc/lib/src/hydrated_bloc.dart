@@ -307,12 +307,12 @@ mixin HydratedMixin<Event, State> on Bloc<Event, State> {
     _seen.removeLast();
   }
 
-  /// `id` is used to uniquely identify multiple instances
-  /// of the same `HydratedCubit` type.
+  /// [id] is used to uniquely identify multiple instances
+  /// of the same [HydratedBloc] type.
   /// In most cases it is not necessary;
   /// however, if you wish to intentionally have multiple instances
-  /// of the same `HydratedCubit`, then you must override `id`
-  /// and return a unique identifier for each `HydratedCubit` instance
+  /// of the same [HydratedBloc], then you must override [id]
+  /// and return a unique identifier for each [HydratedBloc] instance
   /// in order to keep the caches independent of each other.
   String get id => '';
 
@@ -320,19 +320,19 @@ mixin HydratedMixin<Event, State> on Bloc<Event, State> {
   @nonVirtual
   String get storageToken => '${runtimeType.toString()}$id';
 
-  /// `clear` is used to wipe or invalidate the cache of a `HydratedCubit`.
-  /// Calling `clear` will delete the cached state of the cubit
-  /// but will not modify the current state of the cubit.
+  /// [clear] is used to wipe or invalidate the cache of a [HydratedBloc].
+  /// Calling [clear] will delete the cached state of the bloc
+  /// but will not modify the current state of the bloc.
   Future<void> clear() => HydratedBloc.storage.delete(storageToken);
 
   /// Responsible for converting the `Map<String, dynamic>` representation
-  /// of the cubit state into a concrete instance of the cubit state.
+  /// of the bloc state into a concrete instance of the bloc state.
   State? fromJson(Map<String, dynamic> json);
 
-  /// Responsible for converting a concrete instance of the cubit state
+  /// Responsible for converting a concrete instance of the bloc state
   /// into the the `Map<String, dynamic>` representation.
   ///
-  /// If `toJson` returns `null`, then no state changes will be persisted.
+  /// If [toJson] returns `null`, then no state changes will be persisted.
   Map<String, dynamic>? toJson(State state);
 }
 
