@@ -1,12 +1,12 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-class CyclicCubit extends HydratedCubit<Cycle1> {
+class CyclicCubit extends HydratedCubit<Cycle1?> {
   CyclicCubit() : super(null);
 
   void setCyclic(Cycle1 cycle1) => emit(cycle1);
 
   @override
-  Map<String, dynamic> toJson(Cycle1 state) => state?.toJson();
+  Map<String, dynamic>? toJson(Cycle1? state) => state?.toJson();
 
   @override
   Cycle1 fromJson(Map<String, dynamic> json) => Cycle1.fromJson(json);
@@ -27,7 +27,7 @@ class Cycle1 {
     };
   }
 
-  Cycle2 cycle2;
+  Cycle2? cycle2;
 
   @override
   bool operator ==(Object o) {
@@ -54,7 +54,7 @@ class Cycle2 {
     };
   }
 
-  Cycle1 cycle1;
+  Cycle1? cycle1;
 
   @override
   bool operator ==(Object o) {

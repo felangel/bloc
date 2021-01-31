@@ -1,13 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-class ManualCubit extends HydratedCubit<Dog> {
+class ManualCubit extends HydratedCubit<Dog?> {
   ManualCubit() : super(null);
 
   void setDog(Dog dog) => emit(dog);
 
   @override
-  Map<String, dynamic> toJson(Dog state) => state?.toJson();
+  Map<String, dynamic>? toJson(Dog? state) => state?.toJson();
 
   @override
   Dog fromJson(Map<String, dynamic> json) => Dog.fromJson(json);
