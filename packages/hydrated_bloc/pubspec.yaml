@@ -1,36 +1,31 @@
 name: hydrated_bloc
 description: An extension to the bloc state management library which automatically persists and restores bloc states.
-version: 6.1.0
+version: 7.0.0-nullsafety.0
 repository: https://github.com/felangel/bloc
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://bloclibrary.dev
 documentation: https://bloclibrary.dev/#/gettingstarted
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
-  meta: ^1.1.8
-  bloc: ^6.1.0
-  hive: ^1.4.1+1
-  synchronized: ^2.2.0
-  path_provider: ^1.6.5
+  bloc: ">=7.0.0-nullsafety.1 <7.0.0"
+  hive: ">=1.6.0-nullsafety.1 <1.6.0"
+  meta: ">=1.3.0-nullsafety.6 <1.3.0"
+  synchronized: ">=3.0.0-nullsafety.1 <3.0.0"
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  coverage: ^0.14.2
+  test: ">=1.16.0-nullsafety.12 <1.16.0"
   build_runner: ^1.10.0
-  collection: ^1.14.12
-  crypto: ^2.1.4
-  freezed_annotation: ^0.11.0
-  freezed: ^0.11.2
-  json_serializable: ^3.3.0
-  json_annotation: ^3.0.1
-  mockito: ^4.0.0
-  path: ^1.6.4
-  path_provider_platform_interface: ^1.0.1
-  pedantic: ^1.9.0
-  plugin_platform_interface: ^1.0.0
-  uuid: ^2.0.4
+  collection: ">=1.15.0-nullsafety.5 <1.15.0"
+  crypto: ">=3.0.0-nullsafety.0 <3.0.0"
+  freezed_annotation: ">=0.13.0-nullsafety.0 <0.13.0"
+  freezed: ">=0.13.0-nullsafety.1 <0.13.0"
+  json_serializable: ">=4.0.0-nullsafety.0 <4.0.0"
+  json_annotation: ">=4.0.0-nullsafety.0 <4.0.0"
+  mocktail: ^0.0.1-dev.10
+  path: ">=1.8.0-nullsafety.3 <1.8.0"
+  pedantic: ">=1.10.0-nullsafety.3 <1.10.0"
+  uuid: ">=3.0.0-nullsafety.0 <3.0.0"

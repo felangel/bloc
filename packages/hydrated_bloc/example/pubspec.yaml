@@ -1,6 +1,7 @@
 name: example
 description: A new Flutter project.
 version: 1.0.0+1
+publish_to: none
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
@@ -12,6 +13,7 @@ dependencies:
     path: ../
   flutter_bloc:
     path: ../../flutter_bloc
+  path_provider: ^1.6.27
   path_provider_fde:
     git:
       url: https://github.com/google/flutter-desktop-embedding

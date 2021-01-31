@@ -2,18 +2,14 @@ name: hydrated_bloc
 
 on:
   push:
-    branches:
-      - master
     paths:
-      - ".github/workflows/hydrated_bloc.yaml"
       - "packages/hydrated_bloc/**"
+      - ".github/workflows/hydrated_bloc.yaml"
 
   pull_request:
-    branches:
-      - master
     paths:
-      - ".github/workflows/hydrated_bloc.yaml"
       - "packages/hydrated_bloc/**"
+      - ".github/workflows/hydrated_bloc.yaml"
 
 jobs:
   build:
@@ -24,8 +20,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1.4.0
+        with:
+          channel: beta
       - name: Install Dependencies
-        run: flutter packages get
+        run: flutter pub get
       - name: Format
         run: flutter format --set-exit-if-changed lib test example
       - name: Analyze
@@ -33,6 +31,10 @@ jobs:
       - name: Run tests
         run: flutter test -j 1 --no-pub --coverage --test-randomize-ordering-seed random
       - name: Check Code Coverage
-        uses: ChicagoFlutter/lcov-cop@v1.0.0
+        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           path: packages/hydrated_bloc/coverage/lcov.info
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

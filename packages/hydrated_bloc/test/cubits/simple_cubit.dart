@@ -6,12 +6,8 @@ class SimpleCubit extends HydratedCubit<int> {
   void increment() => emit(state + 1);
 
   @override
-  Map<String, dynamic> toJson(int state) {
-    return <String, dynamic>{'state': state};
-  }
+  Map<String, dynamic> toJson(int state) => <String, dynamic>{'state': state};
 
   @override
-  int fromJson(Map<String, dynamic> json) {
-    return json['state'] as int;
-  }
+  int fromJson(Map<String, dynamic> json) => json['state'] as int;
 }
