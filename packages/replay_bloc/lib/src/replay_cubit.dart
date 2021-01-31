@@ -46,8 +46,10 @@ part 'replay_bloc.dart';
 abstract class ReplayCubit<State> extends Cubit<State>
     with ReplayCubitMixin<State> {
   /// {@macro replay_cubit}
-  ReplayCubit(State state, {int limit}) : super(state) {
-    this.limit = limit;
+  ReplayCubit(State state, {int? limit}) : super(state) {
+    if (limit != null) {
+      this.limit = limit;
+    }
   }
 }
 
