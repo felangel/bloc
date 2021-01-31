@@ -8,11 +8,11 @@ part 'new_car_event.dart';
 part 'new_car_state.dart';
 
 class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
-  final NewCarRepository _newCarRepository;
-
   NewCarBloc({NewCarRepository newCarRepository})
       : _newCarRepository = newCarRepository,
         super(NewCarState.initial());
+
+  final NewCarRepository _newCarRepository;
 
   @override
   Stream<NewCarState> mapEventToState(
