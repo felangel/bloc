@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
+import 'package:path/path.dart' as path;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:hydrated_bloc/src/hydrated_cubit.dart';
+import 'package:hydrated_bloc/src/hydrated_bloc.dart';
 
 import 'cubits/cubits.dart';
 
@@ -12,17 +12,19 @@ Future<void> sleep() => Future<void>.delayed(const Duration(milliseconds: 100));
 
 void main() {
   group('E2E', () {
-    Storage storage;
+    late Storage storage;
 
     setUp(() async {
       storage = await HydratedStorage.build(
-        storageDirectory: Directory.current,
+        storageDirectory: Directory(
+          path.join(Directory.current.path, '.cache'),
+        ),
       );
       HydratedBloc.storage = storage;
     });
 
     tearDown(() async {
-      await storage?.clear();
+      await storage.clear();
     });
 
     test('NIL constructor', () {
@@ -300,7 +302,7 @@ void main() {
         expect(cubit.state, isNull);
         expect(
           () => cubit.setCyclic(cycle1),
-          throwsA(isA<CubitUnhandledErrorException>().having(
+          throwsA(isA<BlocUnhandledErrorException>().having(
             (dynamic e) => e.error,
             'inner error of cubit error',
             isA<HydratedUnsupportedError>().having(
@@ -319,7 +321,7 @@ void main() {
         expect(cubit.state, isNull);
         expect(
           cubit.setBad,
-          throwsA(isA<CubitUnhandledErrorException>().having(
+          throwsA(isA<BlocUnhandledErrorException>().having(
             (dynamic e) => e.error,
             'inner error of cubit error',
             isA<HydratedUnsupportedError>().having(
@@ -336,7 +338,7 @@ void main() {
         expect(cubit.state, isNull);
         expect(
           () => cubit.setBad(VeryBadObject()),
-          throwsA(isA<CubitUnhandledErrorException>().having(
+          throwsA(isA<BlocUnhandledErrorException>().having(
             (dynamic e) => e.error,
             'inner error of cubit error',
             isA<HydratedUnsupportedError>(),

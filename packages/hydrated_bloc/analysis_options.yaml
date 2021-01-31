@@ -4,6 +4,9 @@ analyzer:
     implicit-dynamic: false
   errors:
     close_sinks: ignore
+  exclude:
+    - test/cubits/freezed_cubit.freezed.dart
+    - test/cubits/freezed_cubit.g.dart
 
 linter:
   rules:
