@@ -6,7 +6,7 @@ class _ChangeStack<T> {
   final Queue<_Change<T>> _history = ListQueue();
   final Queue<_Change<T>> _redos = ListQueue();
 
-  int limit;
+  int? limit;
 
   bool get canRedo => _redos.isNotEmpty;
   bool get canUndo => _history.isNotEmpty;
@@ -19,8 +19,8 @@ class _ChangeStack<T> {
     _history.addLast(change);
     _redos.clear();
 
-    if (limit != null && _history.length > limit) {
-      if (limit > 0) {
+    if (limit != null && _history.length > limit!) {
+      if (limit! > 0) {
         _history.removeFirst();
       }
     }
