@@ -117,7 +117,7 @@
   },
   "context.select()": {
     "prefix": "select",
-    "body": "context.select((${1:Subject}${2|Bloc,Cubit|} element) => ${3:element.state})"
+    "body": "context.select((${1:Subject}${2|Bloc,Cubit|} ${3:element}) => $3$4)"
   },
   "context.watch()": {
     "prefix": "watch",
