@@ -6,6 +6,33 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 /// Specialized [Bloc] which handles initializing the [Bloc] state
 /// based on the persisted state. This allows state to be persisted
 /// across hot restarts as well as complete app restarts.
+///
+/// ```dart
+/// enum CounterEvent { increment, decrement }
+///
+/// class CounterBloc extends HydratedBloc<CounterEvent, int> {
+///   CounterBloc() : super(0);
+///
+///   @override
+///   Stream<int> mapEventToState(CounterEvent event) async* {
+///     switch (event) {
+///       case CounterEvent.increment:
+///         yield state + 1;
+///         break;
+///       case CounterEvent.decrement:
+///         yield state - 1;
+///         break;
+///     }
+///   }
+///
+///   @override
+///   int fromJson(Map<String, dynamic> json) => json['value'] as int;
+///
+///   @override
+///   Map<String, int> toJson(int state) => {'value': state};
+/// }
+/// ```
+///
 /// {@endtemplate}
 abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
     with HydratedMixin {
@@ -77,8 +104,8 @@ abstract class HydratedCubit<State> extends Cubit<State>
 ///
 /// See also:
 ///
-/// * [HydratedCubit] to enable automatic state persistence/restoration with [Cubit]
 /// * [HydratedBloc] to enable automatic state persistence/restoration with [Bloc]
+/// * [HydratedCubit] to enable automatic state persistence/restoration with [Cubit]
 ///
 mixin HydratedMixin<Event, State> on Bloc<Event, State> {
   /// Populates the internal state storage with the latest state.

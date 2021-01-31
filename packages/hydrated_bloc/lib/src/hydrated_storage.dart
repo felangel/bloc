@@ -24,12 +24,12 @@ abstract class Storage {
   Future<void> clear();
 }
 
-/// {@template hydrated_cubit_storage}
-/// Implementation of [Storage] which uses `PathProvider` and `dart.io`
+/// {@template hydrated_storage}
+/// Implementation of [Storage] which uses [package:hive](https://pub.dev/packages/hive)
 /// to persist and retrieve state changes from the local device.
 /// {@endtemplate}
 class HydratedStorage implements Storage {
-  /// {@macro hydrated_cubit_storage}
+  /// {@macro hydrated_storage}
   @visibleForTesting
   HydratedStorage(this._box);
 
@@ -40,7 +40,7 @@ class HydratedStorage implements Storage {
   /// Following snippet shows how to make default one:
   /// ```dart
   /// import 'package:crypto/crypto.dart';
-  /// import 'package:hydrated_cubit/hydrated_cubit.dart';
+  /// import 'package:hydrated_bloc/hydrated_bloc.dart';
   ///
   /// const password = 'hydration';
   /// final byteskey = sha256.convert(utf8.encode(password)).bytes;
