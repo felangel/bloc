@@ -1,3 +1,7 @@
+# 5.5.1
+
+- feat: improve `context.select` extension snippet
+
 # 5.5.0
 
 - feat: add `checkForUpdates` configuration in extension settings
