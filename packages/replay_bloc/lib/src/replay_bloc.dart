@@ -67,8 +67,10 @@ class _Undo extends ReplayEvent {
 abstract class ReplayBloc<Event extends ReplayEvent, State>
     extends Bloc<Event, State> with ReplayBlocMixin<Event, State> {
   /// {@macro replay_bloc}
-  ReplayBloc(State state, {int limit}) : super(state) {
-    this.limit = limit;
+  ReplayBloc(State state, {int? limit}) : super(state) {
+    if (limit != null) {
+      this.limit = limit;
+    }
   }
 }
 
