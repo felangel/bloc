@@ -1,3 +1,9 @@
+# 0.0.1-nullsafety.0
+
+- **BREAKING**: opt into null safety
+  - feat!: upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+- **BREAKING**: refactor: upgrade to `bloc ^7.0.0-nullsafety.1`
+
 # 0.0.1-dev.4
 
 - feat: export `package:bloc/bloc.dart`
