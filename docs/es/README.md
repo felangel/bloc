@@ -21,6 +21,26 @@ Una librería de administración de estado predecible que ayuda a implementar el
 | [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc) | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc) |
 | [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc) | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc) |
 
+
+## Patrocinador
+
+¡Nuestros principales patrocinadores se muestran a continuación! [[Conviértete en patrocinador](https://github.com/sponsors/felangel)]
+
+<table>
+    <tbody>
+        <tr>
+            <td align="center">
+                <a href="https://verygood.ventures"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120"/></a>
+            </td>
+            <td align="center">
+                <a href="https://getstream.io/chat/?utm_source=github&utm_medium=bloc-flutter&utm_campaign=oss_sponsorship" target="_blank"><img width="250px" src="https://stream-blog.s3.amazonaws.com/blog/wp-content/uploads/fc148f0fc75d02841d017bb36e14e388/Stream-logo-with-background-.png"/></a><br/><span><a href="https://getstream.io/chat/flutter/tutorial/?utm_source=github&utm_medium=bloc-flutter&utm_campaign=oss_sponsorship" target="_blank">Prueba el tutorial de Chat en Flutter &nbsp💬</a></span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+---
+
 ## Visión general
 
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
