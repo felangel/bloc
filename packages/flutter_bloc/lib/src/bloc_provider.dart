@@ -74,7 +74,7 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
     Widget child,
   }) : this._(
           key: key,
-          create: (_) => value,
+          value: value,
           child: child,
         );
 
@@ -82,12 +82,18 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   /// Used by the [BlocProvider] default and value constructors.
   BlocProvider._({
     Key key,
-    @required Create<T> create,
+    Create<T> create,
+    T value,
     Dispose<T> dispose,
     this.child,
     this.lazy,
   })  : _create = create,
         _dispose = dispose,
+        _value = value,
+        assert(
+          create != null || value != null,
+          'either create or value must not be null',
+        ),
         super(key: key, child: child);
 
   /// Widget which will have access to the [Bloc] or [Cubit].
@@ -100,6 +106,8 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
   final Dispose<T> _dispose;
 
   final Create<T> _create;
+
+  final T _value;
 
   /// Method that allows widgets to access a [Bloc] or [Cubit] instance
   /// as long as their `BuildContext` contains a [BlocProvider] instance.
@@ -133,13 +141,20 @@ class BlocProvider<T extends Cubit<Object>> extends SingleChildStatelessWidget
 
   @override
   Widget buildWithChild(BuildContext context, Widget child) {
-    return InheritedProvider<T>(
-      create: _create,
-      dispose: _dispose,
-      startListening: _startListening,
-      child: child,
-      lazy: lazy,
-    );
+    return _value != null
+        ? InheritedProvider<T>.value(
+            value: _value,
+            startListening: _startListening,
+            lazy: lazy,
+            child: child,
+          )
+        : InheritedProvider<T>(
+            create: _create,
+            dispose: _dispose,
+            startListening: _startListening,
+            child: child,
+            lazy: lazy,
+          );
   }
 
   static VoidCallback _startListening(
