@@ -1,3 +1,7 @@
+# 6.1.1
+
+- fix: `close` should always emit done
+
 # 6.1.0
 
 - feat: add `onCreate` and `onClose` to `BlocObserver`

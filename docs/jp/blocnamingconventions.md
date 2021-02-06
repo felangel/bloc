@@ -10,7 +10,7 @@
 
 [event](../_snippets/bloc_naming_conventions/event_anatomy.md ':include')
 
-￥?> 初期ロード用の event はこの構造であるべき: `ブロックの種名` + `Started`
+?> 初期ロード用の event はこの構造であるべき: `ブロックの種名` + `Started`
 
 #### 例
 
@@ -30,8 +30,6 @@
 
 [state](../_snippets/bloc_naming_conventions/state_anatomy.md ':include')
 
-?> `State` should be one of the following: `Initial` | `Success` | `Failure` | `InProgress` and
-initial states should follow the convention: `BlocSubject` + `Initial`.
 ?> `State` はこれらのどれかであるべき: `Initial` | `Success` | `Failure` | `InProgress` かつ初期 state はこの規則に沿うべき: `ブロックの種名` + `Initial`.
 
 #### 例

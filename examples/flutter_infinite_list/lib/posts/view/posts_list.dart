@@ -20,12 +20,7 @@ class _PostsListState extends State<PostsList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<PostBloc, PostState>(
-      listener: (context, state) {
-        if (!state.hasReachedMax && _isBottom) {
-          _postBloc.add(PostFetched());
-        }
-      },
+    return BlocBuilder<PostBloc, PostState>(
       builder: (context, state) {
         switch (state.status) {
           case PostStatus.failure:

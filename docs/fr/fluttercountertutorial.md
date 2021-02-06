@@ -24,6 +24,26 @@ et ensuite nous allons installer toutes les dépendances
 flutter packages get
 ```
 
+## Structure du projet
+
+  ```
+ ├── lib
+ │   ├── app.dart
+ │   ├── counter
+ │   │   ├── counter.dart
+ │   │   ├── cubit
+ │   │   │   └── counter_cubit.dart
+ │   │   └── view
+ │   │       ├── counter_page.dart
+ │   │       └── counter_view.dart
+ │   ├── counter_observer.dart
+ │   └── main.dart
+ ├── pubspec.lock
+ ├── pubspec.yaml
+ ```
+
+  L'application utilise une structure de répertoires basée sur les fonctionnalités. Si votre projet grossit, ce découpage par fonctionnalités permet de les garder autonomes. Dans cet exemple, nous n'aurons que la fonctionnalité du compteur mais dans des applications plus complexes, nous pouvons avoir des centaines de fonctionnalités différentes.
+
 ## BlocObserver
 
 La première chose que nous allons regarder et comment créer un `BlocObserver` qui va nous aider à observer tous les changements de states (d'états) dans l'application.
@@ -73,13 +93,13 @@ Le type du state de `CounterCubit` est un simple `int` et son state initial est 
 
 [counter_cubit.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/cubit/counter_cubit.dart ':include')
 
-?> **Tip**: Utilisez la [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) ou [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) pour créer vos cubits automatiquement.
+?> **Conseil**: Utilisez la [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) ou [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) pour créer vos cubits automatiquement.
 
 Ensuite, regardons le `CounterView` qui sera responsable pour consommer le state et intéragir avec le `CounterCubit`.
 
 ## Counter View
 
-Le `CounterView` est responsable de l'affichage du compteur et il va afficher deux FloatingActionButtons pour ajouter/soustraire le compteur.
+Le `CounterView` est responsable de l'affichage du compteur et va afficher deux FloatingActionButtons pour ajouter/soustraire le compteur.
 
 [counter_view.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_view.dart ':include')
 
@@ -87,7 +107,13 @@ Un `BlocBuilder` est utilisé pour envelopper le widget `Text` dans le but d'act
 
 ?> **Note**: Seulement le widget `Text` est enveloppé dans un `BlocBuilder` car c'est le seul widget qui a besoin d'être reconstruit en réponse aux changements de states qui ont lieu dans le `CounterCubit`. Évitez d'envelopper des widgets non nécessaires qui n'ont pas besoin de se reconstruire quand un state change.
 
-C'est tout! Nous avons séparer la couche de présentation de celle qui s'occupe de la logique. Le `CounterView` n'a aucune idée de ce qui ce passe quand un utilisateur presse le boutton; cela notifie juste le `CounterCubit`. D'autant plus que le `CounterCubit` n'a pas idée de ce qui se passe à l'intérieur du state (la valeur du compteur); cela envoie simplement des nouveaux states en réponse aux méthodes qui sont appelées.
+## Barrel (regroupement de modules)
+
+  Créons enfin un fichier `counter.dart` pour exporter tous les fichiers de notre fonctionnalité compteur et ainsi faciliter leur import plus tard.
+
+  [counter.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/counter.dart ':include')
+
+C'est tout ! Nous avons séparé la couche de présentation de celle qui s'occupe de la logique. Le `CounterView` n'a aucune idée de ce qui ce passe quand un utilisateur presse le boutton; cela notifie juste le `CounterCubit`. D'autant plus que le `CounterCubit` n'a pas idée de ce qui se passe à l'intérieur du state (la valeur du compteur); cela envoie simplement des nouveaux states en réponse aux méthodes qui sont appelées.
 
 Nous pouvons lancer notre appli avec `flutter run` et la voir sur notre simulateur/émulateur.
 
