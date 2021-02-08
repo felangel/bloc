@@ -1,3 +1,7 @@
+# 6.1.2
+
+- fix: `BlocProvider.value` use `InheritedProvider.value`
+
 # 6.1.1
 
 - fix: `BlocConsumer` does not respect `buildWhen` and results in unnecessary rebuilds
