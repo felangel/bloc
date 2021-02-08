@@ -14,7 +14,7 @@
 - [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
 - Using Bloc instead of Cubit. [Want to know the difference?](/coreconcepts?id=cubit-vs-bloc)
 - Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
-- Use the `transformEvents` method with Redux.
+- Use the `transformEvents` method with Rx.
 
 ## Common Github Search Library
 

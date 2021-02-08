@@ -14,7 +14,7 @@
 - Using Cubit instead of Bloc. [Want to know the difference?](/coreconcepts?id=cubit-vs-bloc)
 - Adding events with [context.read](/migration?id=❗contextbloc-and-contextrepository-are-deprecated-in-favor-of-contextread-and-contextwatch).⚡
 - Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
-- Use the `transformEvents` method with Redux.
+- Use the `transformEvents` method with Rx.
 
 ## Setup
 
