@@ -76,13 +76,13 @@ class _CartTotal extends StatelessWidget {
               return const Text('Something went wrong!');
             }),
             const SizedBox(width: 24),
-            FlatButton(
+            ElevatedButton(
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Buying not supported yet.')),
                 );
               },
-              color: Colors.white,
+              style: ElevatedButton.styleFrom(primary: Colors.white),
               child: const Text('BUY'),
             ),
           ],

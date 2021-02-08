@@ -161,7 +161,7 @@ class SubmitButton extends StatelessWidget {
     return BlocBuilder<MyFormBloc, MyFormState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return RaisedButton(
+        return ElevatedButton(
           onPressed: state.status.isValidated
               ? () => context.read<MyFormBloc>().add(FormSubmitted())
               : null,
@@ -199,7 +199,7 @@ class SuccessDialog extends StatelessWidget {
                 ),
               ],
             ),
-            RaisedButton(
+            ElevatedButton(
               child: const Text('OK'),
               onPressed: () => Navigator.of(context).pop(),
             ),

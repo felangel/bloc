@@ -37,7 +37,7 @@ void main() {
             Uri.https(
               'www.metaweather.com',
               '/api/location/search',
-              {'query': query},
+              <String, String>{'query': query},
             ),
           ),
         ).called(1);

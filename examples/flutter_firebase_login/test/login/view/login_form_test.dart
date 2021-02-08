@@ -178,7 +178,7 @@ void main() {
             ),
           ),
         );
-        final loginButton = tester.widget<RaisedButton>(
+        final loginButton = tester.widget<ElevatedButton>(
           find.byKey(loginButtonKey),
         );
         expect(loginButton.enabled, isFalse);
@@ -199,7 +199,7 @@ void main() {
             ),
           ),
         );
-        final loginButton = tester.widget<RaisedButton>(
+        final loginButton = tester.widget<ElevatedButton>(
           find.byKey(loginButtonKey),
         );
         expect(loginButton.enabled, isTrue);

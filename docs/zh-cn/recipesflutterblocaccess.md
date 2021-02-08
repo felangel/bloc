@@ -74,9 +74,9 @@ UI 由三部分组成：
 
 [home_page.dart](../_snippets/recipes_flutter_bloc_access/anonymous_route_access/home_page.dart.md ':include')
 
-`HomePage` 跟上面例子中的 `CounterPage` 类似；但它在中间渲染了一个 `RaisedButton`，而不是 `CounterText` 部件。该 `RaisedButton` 可以让用户导航到一个显示当前计数的新页面。
+`HomePage` 跟上面例子中的 `CounterPage` 类似；但它在中间渲染了一个 `ElevatedButton`，而不是 `CounterText` 部件。该 `ElevatedButton` 可以让用户导航到一个显示当前计数的新页面。
 
-当用户点击 `RaisedButton`，我们将一个新的 `MaterialPageRoute` 入栈，并返回 `CounterPage`；为了让下一个页面可以访问当前的 `CounterBloc` 实例，我们把 `CounterPage` 包装在 `BlocProvider` 中。
+当用户点击 `ElevatedButton`，我们将一个新的 `MaterialPageRoute` 入栈，并返回 `CounterPage`；为了让下一个页面可以访问当前的 `CounterBloc` 实例，我们把 `CounterPage` 包装在 `BlocProvider` 中。
 
 !> 值得注意的是，在这里我们使用了 `BlocProvider` 的 `value` 构造函数，因为我们提供的是一个已经存在的 `CounterBloc` 实例。只有在为子树提供一个已经存在的 bloc 时，才使用 `BlocProvider` 的 `value` 构造函数。另外，使用 `value` 构造函数不会自动关闭 bloc，这就是我们想在这个例子中实现的效果（因为我们仍然需要在祖先部件中使用 `CounterBloc`）。我们只需要将现有的 `CounterBloc` 实例作为已经存在的值（而不是在构建器中创建的值）传递给新页面。这就保证了不再需要 `CounterBloc` 时，只有顶层的 `BlocProvider` 负责关闭它。
 
@@ -122,7 +122,7 @@ UI 由三部分组成：
 
 [home_page.dart](../_snippets/recipes_flutter_bloc_access/named_route_access/home_page.dart.md ':include')
 
-`HomePage` 跟上个例子很相似；区别在于，当用户点击 `RaisedButton` 时，通过把一个新的命名路由入栈，来导航到之前定义的 `/counter` 路由。
+`HomePage` 跟上个例子很相似；区别在于，当用户点击 `ElevatedButton` 时，通过把一个新的命名路由入栈，来导航到之前定义的 `/counter` 路由。
 
 #### CounterPage
 
@@ -175,7 +175,7 @@ UI 由三部分组成：
 
 [home_page.dart](../_snippets/recipes_flutter_bloc_access/generated_route_access/home_page.dart.md ':include')
 
-`HomePage` 跟上面的例子一样。当用户点击 `RaisedButton`时，通过把一个新的命名路由入栈，来导航到之前定义的 `/counter` 路由。
+`HomePage` 跟上面的例子一样。当用户点击 `ElevatedButton`时，通过把一个新的命名路由入栈，来导航到之前定义的 `/counter` 路由。
 
 #### CounterPage
 

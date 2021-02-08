@@ -10,7 +10,7 @@ Widget build(BuildContext context) {
 class MyChild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
+    return ElevatedButton(
       onPressed: () {
         final blocA = BlocProvider.of<BlocA>(context);
         ...
