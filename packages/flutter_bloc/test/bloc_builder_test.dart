@@ -43,14 +43,16 @@ class MyThemeAppState extends State<MyThemeApp> {
           theme: theme,
           home: Column(
             children: [
-              RaisedButton(
+              ElevatedButton(
                 key: const Key('raised_button_1'),
+                child: const SizedBox(),
                 onPressed: () {
                   setState(() => _themeCubit = DarkThemeCubit());
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 key: const Key('raised_button_2'),
+                child: const SizedBox(),
                 onPressed: () {
                   setState(() => _themeCubit = _themeCubit);
                 },
@@ -113,8 +115,9 @@ class MyCounterAppState extends State<MyCounterApp> {
                 );
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               key: const Key('myCounterAppIncrementButton'),
+              child: const SizedBox(),
               onPressed: _cubit.increment,
             )
           ],
@@ -226,7 +229,8 @@ void main() {
                 return MaterialApp(
                   key: const Key('material_app'),
                   theme: theme,
-                  home: RaisedButton(
+                  home: ElevatedButton(
+                    child: const SizedBox(),
                     onPressed: () => setState(() {}),
                   ),
                 );
@@ -236,7 +240,7 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byType(RaisedButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final materialApp = tester.widget<MaterialApp>(
@@ -444,8 +448,9 @@ void main() {
               buildWhen: (previous, state) => state % 2 == 0,
               builder: (_, state) {
                 states.add(state);
-                return RaisedButton(
+                return ElevatedButton(
                   key: key,
+                  child: const SizedBox(),
                   onPressed: () => setState(() {}),
                 );
               },

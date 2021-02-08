@@ -74,9 +74,9 @@ Náš `App` widget bude stejný jako v předešlé ukázce.
 
 [home_page.dart](../_snippets/recipes_flutter_bloc_access/anonymous_route_access/home_page.dart.md ':include')
 
-`HomePage` je podobná `CounterPage` z předešlé ukázky, avšak namísto renderování `CounterText` widgetu renderuje uprostřed `RaisedButton`, který umožní uživatelovi navigovat na novout obrazovku, která zobrazí aktuální číslo.
+`HomePage` je podobná `CounterPage` z předešlé ukázky, avšak namísto renderování `CounterText` widgetu renderuje uprostřed `ElevatedButton`, který umožní uživatelovi navigovat na novout obrazovku, která zobrazí aktuální číslo.
 
-Když uživatel klepne na `RaisedButton`, přidáme novou `MaterialPageRoute` a vrátíme `CounterPage`, avšak musíme zabalit `CounterPage` v `BlocProvideru`, abychom zpřístupnili aktuální instanci `CounterBlocu` na další stránce.
+Když uživatel klepne na `ElevatedButton`, přidáme novou `MaterialPageRoute` a vrátíme `CounterPage`, avšak musíme zabalit `CounterPage` v `BlocProvideru`, abychom zpřístupnili aktuální instanci `CounterBlocu` na další stránce.
 
 !> Je důležité, abychom v tomto případě používali value konstruktor `BlocProvideru`, protože poskytujeme již existující instanci `CounterBlocu`. Hodnota konstruktoru `BlocProvideru` by měla být použita pouze v těch případech, kde chceme poskytovat existující blok do nového podstromu. Navíc, použitím value konstruktoru nebudeme ukončovat bloc automaticky, což je v tomto případě to, co chceme (jelikož potřebujeme, aby `CounterBloc` fungoval i v nadřazených widgetech). Namísto toho jednoduše předáme existující `CounterBloc` nové stránce jako existující hodnotu, a ne tedy předanou v builderu. To zajistí to, že když už `CounterBloc` není dále potřeba, pouze nejvyšší úroveň `BlocProvideru` zpracovává ukončení.
 

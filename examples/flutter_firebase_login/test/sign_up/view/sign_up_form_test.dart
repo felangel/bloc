@@ -202,7 +202,7 @@ void main() {
             ),
           ),
         );
-        final signUpButton = tester.widget<RaisedButton>(
+        final signUpButton = tester.widget<ElevatedButton>(
           find.byKey(signUpButtonKey),
         );
         expect(signUpButton.enabled, isFalse);
@@ -223,7 +223,7 @@ void main() {
             ),
           ),
         );
-        final signUpButton = tester.widget<RaisedButton>(
+        final signUpButton = tester.widget<ElevatedButton>(
           find.byKey(signUpButtonKey),
         );
         expect(signUpButton.enabled, isTrue);

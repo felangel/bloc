@@ -3,7 +3,7 @@
 Widget build(BuildContext context) {
   BlocProvider(
     create: (_) => BlocA(),
-    child: RaisedButton(
+    child: ElevatedButton(
       onPressed: () {
         final blocA = BlocProvider.of<BlocA>(context);
         ...
