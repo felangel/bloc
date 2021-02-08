@@ -26,7 +26,7 @@ class Home extends StatelessWidget {
       body: Center(
         child: Builder(
           builder: (context) {
-            return RaisedButton(
+            return ElevatedButton(
               onPressed: () async {
                 final profile = await Navigator.of(context).push(
                   ProfileWizard.route(),
@@ -120,7 +120,7 @@ class _ProfileNameFormState extends State<ProfileNameForm> {
                 hintText: 'John Doe',
               ),
             ),
-            RaisedButton(
+            ElevatedButton(
               child: const Text('Continue'),
               onPressed: _name.isNotEmpty
                   ? () => context
@@ -162,7 +162,7 @@ class _ProfileAgeFormState extends State<ProfileAgeForm> {
               ),
               keyboardType: TextInputType.number,
             ),
-            RaisedButton(
+            ElevatedButton(
               child: const Text('Continue'),
               onPressed: _age != null
                   ? () => context

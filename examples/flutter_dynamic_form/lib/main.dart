@@ -77,7 +77,7 @@ class MyForm extends StatelessWidget {
               hint: Text('Select a Year'),
               onChanged: _onYearChanged,
             ),
-            RaisedButton(
+            ElevatedButton(
               onPressed: state.isComplete
                   ? () {
                       return _onFormSubmitted(

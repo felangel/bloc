@@ -74,9 +74,9 @@ Again, our `App` widget is the same as before.
 
 [home_page.dart](../_snippets/recipes_flutter_bloc_access/anonymous_route_access/home_page.dart.md ':include')
 
-The `HomePage` is similar to the `CounterPage` in the above example; however, instead of rendering a `CounterText` widget, it renders a `RaisedButton` in the center which allows the user to navigate to a new screen which displays the current count.
+The `HomePage` is similar to the `CounterPage` in the above example; however, instead of rendering a `CounterText` widget, it renders a `ElevatedButton` in the center which allows the user to navigate to a new screen which displays the current count.
 
-When the user taps the `RaisedButton`, we push a new `MaterialPageRoute` and return the `CounterPage`; however, we are wrapping the `CounterPage` in a `BlocProvider` in order to make the current `CounterBloc` instance available on the next page.
+When the user taps the `ElevatedButton`, we push a new `MaterialPageRoute` and return the `CounterPage`; however, we are wrapping the `CounterPage` in a `BlocProvider` in order to make the current `CounterBloc` instance available on the next page.
 
 !> It is critical that we are using `BlocProvider's` value constructor in this case because we are providing an existing instance of `CounterBloc`. The value constructor of `BlocProvider` should be used only in cases where we want to provide an existing bloc to a new subtree. In addition, using the value constructor will not close the bloc automatically which, in this case, is what we want (since we still need the `CounterBloc` to function in the ancestor widgets). Instead, we simply pass the existing `CounterBloc` to the new page as an existing value as opposed to in a builder. This ensures that the only top level `BlocProvider` handles closing the `CounterBloc` when it is no longer needed.
 
@@ -122,7 +122,7 @@ Our `App` widget is responsible for managing the instance of the `CounterBloc` w
 
 [home_page.dart](../_snippets/recipes_flutter_bloc_access/named_route_access/home_page.dart.md ':include')
 
-The `HomePage` is similar above example; however, when the user taps the `RaisedButton`, we push a new named route to navigate to the `/counter` route we defined above.
+The `HomePage` is similar above example; however, when the user taps the `ElevatedButton`, we push a new named route to navigate to the `/counter` route we defined above.
 
 #### CounterPage
 
@@ -175,7 +175,7 @@ Our `AppRouter` is responsible for managing the instance of the `CounterBloc` an
 
 [home_page.dart](../_snippets/recipes_flutter_bloc_access/generated_route_access/home_page.dart.md ':include')
 
-The `HomePage` is identical to the above example. When the user taps the `RaisedButton`, we push a new named route to navigate to the `/counter` route we defined above.
+The `HomePage` is identical to the above example. When the user taps the `ElevatedButton`, we push a new named route to navigate to the `/counter` route we defined above.
 
 #### CounterPage
 

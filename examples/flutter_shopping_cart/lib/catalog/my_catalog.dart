@@ -52,11 +52,11 @@ class _AddButton extends StatelessWidget {
           return const CircularProgressIndicator();
         }
         if (state is CartLoaded) {
-          return FlatButton(
+          return TextButton(
+            style: TextButton.styleFrom(onSurface: theme.primaryColor),
             onPressed: state.cart.items.contains(item)
                 ? null
                 : () => context.read<CartBloc>().add(CartItemAdded(item)),
-            splashColor: theme.primaryColor,
             child: state.cart.items.contains(item)
                 ? const Icon(Icons.check, semanticLabel: 'ADDED')
                 : const Text('ADD'),

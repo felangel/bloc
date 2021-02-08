@@ -125,10 +125,7 @@ mixin HydratedMixin<Event, State> on Bloc<Event, State> {
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
-        storage
-            .write(storageToken, stateJson)
-            .then((_) {}, onError: onError)
-            .catchError(onError);
+        storage.write(storageToken, stateJson).then((_) {}, onError: onError);
       }
     } catch (error, stackTrace) {
       onError(error, stackTrace);
@@ -169,10 +166,7 @@ mixin HydratedMixin<Event, State> on Bloc<Event, State> {
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
-        storage
-            .write(storageToken, stateJson)
-            .then((_) {}, onError: onError)
-            .catchError(onError);
+        storage.write(storageToken, stateJson).then((_) {}, onError: onError);
       }
     } catch (error, stackTrace) {
       onError(error, stackTrace);

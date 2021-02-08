@@ -76,7 +76,7 @@ void main() {
           ),
         ),
       );
-      final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
       expect(button.enabled, isFalse);
     });
 
@@ -96,7 +96,7 @@ void main() {
           ),
         ),
       );
-      expect(find.byType(RaisedButton), findsNothing);
+      expect(find.byType(ElevatedButton), findsNothing);
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
@@ -115,7 +115,7 @@ void main() {
           ),
         ),
       );
-      final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
       expect(button.enabled, isTrue);
     });
 
@@ -134,7 +134,7 @@ void main() {
           ),
         ),
       );
-      await tester.tap(find.byType(RaisedButton));
+      await tester.tap(find.byType(ElevatedButton));
       verify(loginBloc.add(const LoginSubmitted())).called(1);
     });
 

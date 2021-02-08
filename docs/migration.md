@@ -81,19 +81,19 @@ Widget build(BuildContext context) {
 @override
 Widget build(BuildContext context) {
   final bloc = context.bloc<MyBloc>();
-  return RaisedButton(
+  return ElevatedButton(
     onPressed: () => bloc.add(MyEvent()),
     ...
   )
 }
 ```
 
-The above usage is inefficient because it results in a bloc lookup on each rebuild when the bloc is only needed when the user taps the `RaisedButton`. In this scenario, prefer to use `context.read` to access the bloc directly where it is needed (in this case, in the `onPressed` callback).
+The above usage is inefficient because it results in a bloc lookup on each rebuild when the bloc is only needed when the user taps the `ElevatedButton`. In this scenario, prefer to use `context.read` to access the bloc directly where it is needed (in this case, in the `onPressed` callback).
 
 ```dart
 @override
 Widget build(BuildContext context) {
-  return RaisedButton(
+  return ElevatedButton(
     onPressed: () => context.read<MyBloc>().add(MyEvent()),
     ...
   )
@@ -108,7 +108,7 @@ Widget build(BuildContext context) {
 @override
 Widget build(BuildContext context) {
   final bloc = context.bloc<MyBloc>();
-  return RaisedButton(
+  return ElevatedButton(
     onPressed: () => bloc.add(MyEvent()),
     ...
   )
@@ -120,7 +120,7 @@ Widget build(BuildContext context) {
 ```dart
 @override
 Widget build(BuildContext context) {
-  return RaisedButton(
+  return ElevatedButton(
     onPressed: () => context.read<MyBloc>().add(MyEvent()),
     ...
   )
