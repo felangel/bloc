@@ -6,6 +6,14 @@
 
 ![demo](./assets/gifs/flutter_counter.gif)
 
+## Key Topics
+
+- Observe state changes with [BlocObserver](/coreconcepts?id=blocobserver).
+- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
+- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
+- Using Cubit instead of Bloc. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
+- Adding events with [context.read](/migration?id=❗contextbloc-and-contextrepository-are-deprecated-in-favor-of-contextread-and-contextwatch).⚡
+
 ## Setup
 
 We'll start off by creating a brand new Flutter project

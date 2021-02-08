@@ -6,6 +6,10 @@
 
 ![demo](./assets/gifs/angular_counter.gif)
 
+## Key Topics
+
+- Using Cubit instead of Bloc. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
+
 ## Setup
 
 We'll start off by creating a brand new AngularDart project with [stagehand](https://github.com/dart-lang/stagehand).

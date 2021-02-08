@@ -6,6 +6,18 @@
 
 ![demo](./assets/gifs/flutter_weather.gif)
 
+## Key Topics
+
+- Observe state changes with [BlocObserver](/coreconcepts?id=blocobserver).
+- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
+- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
+- Using Bloc instead of Cubit. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
+- Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
+- [RepositoryProvider](/flutterbloccoreconcepts?id=repositoryprovider), a Flutter widget which provides a repository to its children.
+- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget which provides a repository to its children.
+- [MultiBlocProvider](/flutterbloccoreconcepts?id=multiblocprovider), a Flutter widget that merges multiple BlocProvider widgets into one.
+- [BlocConsumer](/flutterbloccoreconcepts?id=blocconsumer), exposes a builder and listener in order to react to new states.
+
 ## Setup
 
 We’ll start off by creating a brand new Flutter project

@@ -269,9 +269,7 @@ Al igual que antes, hay un barril `models.dart` para facilitar la importación d
 En esta aplicación hay tres tipos diferentes de `LoginEvent`:
 
 - `LoginUsernameChanged`: notifica al bloc que el nombre de usuario ha sido modificado.
-
 - `LoginPasswordChanged`: notifica al bloc que la contraseña ha sido modificada.
-
 - `LoginSubmitted`: notifica al bloc que el formulario ha sido enviado.
 
 [login_event.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/bloc/login_event.dart ':include')

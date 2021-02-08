@@ -20,7 +20,7 @@ Luego podemos reemplazar el contenido de pubspec.yaml con:
 
 A continuación, ejecute `flutter packages get` para instalar todas las dependencias.
 
-## Ticker 
+## Ticker
 
 > La clase ticker será nuestra fuente de datos para la aplicación del temporizador. Expondrá un flujo de ticks a los que podemos suscribirnos y reaccionar.
 

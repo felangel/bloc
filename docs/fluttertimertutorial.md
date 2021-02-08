@@ -6,6 +6,16 @@
 
 ![demo](./assets/gifs/flutter_timer.gif)
 
+## Key Topics
+
+- Observe state changes with [BlocObserver](/coreconcepts?id=blocobserver).
+- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
+- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
+- Using Cubit instead of Bloc. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
+- Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
+- Learn to use `StreamSubscription` in a Bloc.
+- Prevent unnecessary rebuilds with `buildWhen`.
+
 ## Setup
 
 We’ll start off by creating a brand new Flutter project

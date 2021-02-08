@@ -8,6 +8,14 @@
 
 ![demo](./assets/gifs/angular_github_search.gif)
 
+## Key Topics
+
+- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
+- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
+- Using Bloc instead of Cubit. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
+- Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
+- Use the `transformEvents` method with Rx.
+
 ## Common Github Search Library
 
 > The Common Github Search library will contain models, the data provider, the repository, as well as the bloc that will be shared between AngularDart and Flutter.

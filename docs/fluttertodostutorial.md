@@ -6,6 +6,15 @@
 
 ![demo](./assets/gifs/flutter_todos.gif)
 
+## Key Topics
+
+- Observe state changes with [BlocObserver](/coreconcepts?id=blocobserver).
+- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
+- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
+- Using Bloc instead of Cubit. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
+- Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
+- [MultiBlocProvider](/flutterbloccoreconcepts?id=multiblocprovider), a Flutter widget that merges multiple BlocProvider widgets into one.
+
 ## Setup
 
 We'll start off by creating a brand new Flutter project
