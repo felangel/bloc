@@ -74,9 +74,9 @@ Nuevamente, nuestro widget `App` es el mismo que antes.
 
 [home_page.dart](../_snippets/recipes_flutter_bloc_access/anonymous_route_access/home_page.dart.md ':include')
 
-El `HomePage` es similar al `CounterPage` del ejemplo anterior; sin embargo, en lugar de representar un widget `CounterText`, muestra un `RaisedButton` en el centro que permite al usuario navegar a una nueva pantalla que muestra el conteo actual.
+El `HomePage` es similar al `CounterPage` del ejemplo anterior; sin embargo, en lugar de representar un widget `CounterText`, muestra un `ElevatedButton` en el centro que permite al usuario navegar a una nueva pantalla que muestra el conteo actual.
 
-Cuando el usuario toca el `RaisedButton`, empujamos/insertamos un nuevo `MaterialPageRoute` y devolvemos el `CounterPage`; sin embargo, estamos envolviendo el `CounterPage` en un `BlocProvider` para que la instancia actual de `CounterBloc` esté disponible en la página siguiente.
+Cuando el usuario toca el `ElevatedButton`, empujamos/insertamos un nuevo `MaterialPageRoute` y devolvemos el `CounterPage`; sin embargo, estamos envolviendo el `CounterPage` en un `BlocProvider` para que la instancia actual de `CounterBloc` esté disponible en la página siguiente.
 
 !> Es crítico que estemos usando el constructor de valores `BlocProvider` en este caso porque estamos proporcionando una instancia existente de `CounterBloc`. El constructor de valor de `BlocProvider` debe usarse solo en los casos en que deseamos proporcionar un bloc existente a un nuevo subárbol. Además, el uso del constructor de valores no cerrará el bloc automáticamente, lo que, en este caso, es lo que queremos (ya que todavía necesitamos el `CounterBloc` para funcionar en los widgets ancestrales). En cambio, simplemente pasamos el `CounterBloc` existente a la nueva página como un valor existente en lugar de en un generador. Esto garantiza que el único nivel superior `BlocProvider` maneje el cierre del `CounterBloc` cuando ya no sea necesario.
 
@@ -122,7 +122,7 @@ Nuestro widget `App` es responsable de administrar la instancia del `CounterBloc
 
 [home_page.dart](../_snippets/recipes_flutter_bloc_access/named_route_access/home_page.dart.md ':include')
 
-El `HomePage` es similar al ejemplo anterior; sin embargo, cuando el usuario toca el `RaisedButton`, empujamos/insertamos una nueva ruta con nombre para navegar a la ruta `/counter` que definimos anteriormente.
+El `HomePage` es similar al ejemplo anterior; sin embargo, cuando el usuario toca el `ElevatedButton`, empujamos/insertamos una nueva ruta con nombre para navegar a la ruta `/counter` que definimos anteriormente.
 
 #### CounterPage
 
@@ -175,7 +175,7 @@ Nuestro `AppRouter` es responsable de gestionar la instancia del `CounterBloc` y
 
 [home_page.dart](../_snippets/recipes_flutter_bloc_access/generated_route_access/home_page.dart.md ':include')
 
-La `HomePage` es idéntica al ejemplo anterior. Cuando el usuario toca el `RaisedButton`, empujamos/insertamos una nueva ruta con nombre para navegar a la ruta `/counter` que definimos anteriormente.
+La `HomePage` es idéntica al ejemplo anterior. Cuando el usuario toca el `ElevatedButton`, empujamos/insertamos una nueva ruta con nombre para navegar a la ruta `/counter` que definimos anteriormente.
 
 #### CounterPage
 

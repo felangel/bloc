@@ -101,8 +101,9 @@ class RoutePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RaisedButton(
+      body: ElevatedButton(
         key: const Key('route_button'),
+        child: const SizedBox(),
         onPressed: () {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute<Widget>(builder: (context) => const SizedBox()),

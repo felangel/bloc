@@ -64,21 +64,24 @@ class HomePage extends StatelessWidget {
         builder: (context) {
           return Column(
             children: [
-              RaisedButton(
+              ElevatedButton(
                 key: const Key('pop_button'),
+                child: const SizedBox(),
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute<void>(builder: (_) => const SizedBox()),
                   );
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 key: const Key('increment_button'),
+                child: const SizedBox(),
                 onPressed: () =>
                     BlocProvider.of<CounterCubit>(context).increment(),
               ),
-              RaisedButton(
+              ElevatedButton(
                 key: const Key('toggle_theme_button'),
+                child: const SizedBox(),
                 onPressed: () => BlocProvider.of<ThemeCubit>(context).toggle(),
               ),
             ],

@@ -44,20 +44,23 @@ class _MyAppState extends State<MyApp> {
           },
           child: Column(
             children: [
-              RaisedButton(
+              ElevatedButton(
                 key: const Key('cubit_listener_reset_button'),
+                child: const SizedBox(),
                 onPressed: () {
                   setState(() => _counterCubit = CounterCubit());
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 key: const Key('cubit_listener_noop_button'),
+                child: const SizedBox(),
                 onPressed: () {
                   setState(() => _counterCubit = _counterCubit);
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 key: const Key('cubit_listener_increment_button'),
+                child: const SizedBox(),
                 onPressed: () => _counterCubit.increment(),
               ),
             ],

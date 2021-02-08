@@ -74,9 +74,9 @@ Novamente, nosso widget `App` é o mesmo de antes.
 
 [home_page.dart](../_snippets/recipes_flutter_bloc_access/anonymous_route_access/home_page.dart.md ':include')
 
-A `HomePage` é semelhante à `CounterPage` no exemplo acima; no entanto, em vez de renderizar um widget `CounterText`, ele renderiza um `RaisedButton` no centro, o que permite ao usuário navegar para uma nova tela que exibe a contagem atual.
+A `HomePage` é semelhante à `CounterPage` no exemplo acima; no entanto, em vez de renderizar um widget `CounterText`, ele renderiza um `ElevatedButton` no centro, o que permite ao usuário navegar para uma nova tela que exibe a contagem atual.
 
-Quando o usuário toca no `RaisedButton`, adicionamos uma nova `MaterialPageRoute` e retornamos o `CounterPage`; no entanto, estamos agrupando o `CounterPage` em um `BlocProvider` para disponibilizar a instância atual do `CounterBloc` na próxima página.
+Quando o usuário toca no `ElevatedButton`, adicionamos uma nova `MaterialPageRoute` e retornamos o `CounterPage`; no entanto, estamos agrupando o `CounterPage` em um `BlocProvider` para disponibilizar a instância atual do `CounterBloc` na próxima página.
 
 !> É fundamental que estejamos usando o construtor de valor do `BlocProvider` neste caso, porque estamos fornecendo uma instância existente do `CounterBloc`. O construtor de valor do `BlocProvider` deve ser usado apenas nos casos em que desejamos fornecer um bloc existente para uma nova subárvore. Além disso, o uso do construtor value não fechará o bloc automaticamente, o que, neste caso, é o que queremos (já que ainda precisamos do `CounterBloc` para funcionar nos widgets ancestrais). Em vez disso, simplesmente passamos o `CounterBloc` existente para a nova página como um valor existente, em oposição a um construtor. Isso garante que o único `BlocProvider` de nível superior lide com o fechamento do `CounterBloc` quando não for mais necessário.
 
@@ -122,9 +122,9 @@ Nosso widget `App` é responsável por gerenciar a instância do `CounterBloc` q
 
 [home_page.dart](../_snippets/recipes_flutter_bloc_access/named_route_access/home_page.dart.md ':include')
 
-A `HomePage` é semelhante à `CounterPage` no exemplo acima; no entanto, em vez de renderizar um widget `CounterText`, ele renderiza um `RaisedButton` no centro, o que permite ao usuário navegar para uma nova tela que exibe a contagem atual.
+A `HomePage` é semelhante à `CounterPage` no exemplo acima; no entanto, em vez de renderizar um widget `CounterText`, ele renderiza um `ElevatedButton` no centro, o que permite ao usuário navegar para uma nova tela que exibe a contagem atual.
 
-Quando o usuário toca no `RaisedButton`, empurramos uma nova rota nomeada para navegar até a rota `/counter` que definimos acima.
+Quando o usuário toca no `ElevatedButton`, empurramos uma nova rota nomeada para navegar até a rota `/counter` que definimos acima.
 
 #### CounterPage
 
