@@ -8,7 +8,7 @@
 
 ## Key Topics
 
-- Using Cubit instead of Bloc. [Want to know the difference?](/coreconcepts?id=cubit-vs-bloc)
+- Using Cubit instead of Bloc. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
 
 ## Setup
 
