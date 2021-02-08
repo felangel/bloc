@@ -8,7 +8,7 @@
 
 ![demo](./assets/gifs/angular_github_search.gif)
 
-## What's the point?
+## Key Topics
 
 - [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
 - [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.

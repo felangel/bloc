@@ -6,7 +6,7 @@
 
 ![demo](./assets/gifs/flutter_timer.gif)
 
-## What's the point?
+## Key Topics
 
 - Observe state changes with [BlocObserver](/coreconcepts?id=blocobserver).
 - [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.

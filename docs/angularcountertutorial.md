@@ -6,7 +6,7 @@
 
 ![demo](./assets/gifs/angular_counter.gif)
 
-## What's the point?
+## Key Topics
 
 - Using Cubit instead of Bloc. [Want to know the difference?](/coreconcepts?id=cubit-vs-bloc)
 

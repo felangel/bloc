@@ -6,7 +6,7 @@
 
 ![demo](./assets/gifs/flutter_firebase_login.gif)
 
-## What's the point?
+## Key Topics
 
 - [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
 - [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
