@@ -180,6 +180,18 @@ class CounterCubit extends Cubit<int> {
 
 void main() {
   group('BlocProvider', () {
+    testWidgets('throws AssertionError if initialized with no create or value',
+        (tester) async {
+      expect(
+        () => BlocProvider(child: const SizedBox(), create: null),
+        throwsAssertionError,
+      );
+      expect(
+        () => BlocProvider.value(child: const SizedBox(), value: null),
+        throwsAssertionError,
+      );
+    });
+
     testWidgets('throws if initialized with no create', (tester) async {
       await tester.pumpWidget(const MyApp(create: null, child: CounterPage()));
       expect(tester.takeException(), isInstanceOf<AssertionError>());
@@ -267,57 +279,93 @@ void main() {
       expect(counterText.data, '0');
     });
 
-    testWidgets(
-      'passes cubit to children within same build',
-      (tester) async {
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: BlocProvider(
-                create: (context) => CounterCubit(),
-                child: BlocBuilder<CounterCubit, int>(
-                  builder: (context, state) => Text('state: $state'),
-                ),
+    testWidgets('passes cubit to children within same build', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: BlocProvider(
+              create: (context) => CounterCubit(),
+              child: BlocBuilder<CounterCubit, int>(
+                builder: (context, state) => Text('state: $state'),
               ),
             ),
           ),
-        );
-        expect(find.text('state: 0'), findsOneWidget);
-      },
-    );
+        ),
+      );
+      expect(find.text('state: 0'), findsOneWidget);
+    });
 
     testWidgets(
-      'can access cubit directly within builder',
-      (tester) async {
-        await tester.pumpWidget(
-          MaterialApp(
+        'triggers updates in child with context.watch '
+        'when provided bloc instance changes,', (tester) async {
+      const buttonKey = Key('__button__');
+      var cubit = CounterCubit();
+      await tester.pumpWidget(
+        StatefulBuilder(
+          builder: (context, setState) => MaterialApp(
             home: Scaffold(
-              body: BlocProvider(
-                create: (_) => CounterCubit(),
-                child: BlocBuilder<CounterCubit, int>(
-                  builder: (context, state) => Column(
-                    children: [
-                      Text('state: $state'),
-                      RaisedButton(
-                        key: const Key('increment_button'),
-                        onPressed: () {
-                          BlocProvider.of<CounterCubit>(context).increment();
-                        },
-                      ),
-                    ],
-                  ),
+              body: BlocProvider.value(
+                value: cubit,
+                child: Builder(
+                  builder: (context) {
+                    final state = context.watch<CounterCubit>().state;
+                    return GestureDetector(
+                      onTap: () => cubit.increment(),
+                      child: Text('state: $state'),
+                    );
+                  },
+                ),
+              ),
+              floatingActionButton: FloatingActionButton(
+                key: buttonKey,
+                onPressed: () => setState(() => cubit = CounterCubit()),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.text('state: 0'), findsOneWidget);
+
+      cubit.increment();
+      await tester.pump();
+
+      expect(find.text('state: 1'), findsOneWidget);
+
+      await tester.tap(find.byKey(buttonKey));
+      await tester.pump();
+
+      expect(find.text('state: 0'), findsOneWidget);
+    });
+
+    testWidgets('can access cubit directly within builder', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: BlocProvider(
+              create: (_) => CounterCubit(),
+              child: BlocBuilder<CounterCubit, int>(
+                builder: (context, state) => Column(
+                  children: [
+                    Text('state: $state'),
+                    RaisedButton(
+                      key: const Key('increment_button'),
+                      onPressed: () {
+                        BlocProvider.of<CounterCubit>(context).increment();
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
-        );
-        expect(find.text('state: 0'), findsOneWidget);
-        await tester.tap(find.byKey(const Key('increment_button')));
-        await tester.pumpAndSettle();
-        expect(tester.takeException(), isNull);
-        expect(find.text('state: 1'), findsOneWidget);
-      },
-    );
+        ),
+      );
+      expect(find.text('state: 0'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('increment_button')));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(find.text('state: 1'), findsOneWidget);
+    });
 
     testWidgets('does not call close on cubit if it was not loaded (lazily)',
         (tester) async {
