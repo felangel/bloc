@@ -114,7 +114,7 @@ step.
 ## Getting in Touch
 
 If you want to just ask a question or get feedback on an idea you can post it
-on [Discord](https://discord.gg/Hc5KD3g).
+on [Discord](https://discord.gg/bloc).
 
 ## License
 
