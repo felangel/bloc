@@ -13,5 +13,11 @@ dependencies:
     path: ../../packages/flutter_bloc
   equatable: ">=2.0.0-nullsafety.1 <2.0.0"
 
+dependency_overrides:
+  bloc:
+    path: ../../packages/bloc
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
+
 flutter:
   uses-material-design: true

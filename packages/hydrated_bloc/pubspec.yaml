@@ -12,20 +12,24 @@ environment:
 dependencies:
   bloc: ">=7.0.0-nullsafety.1 <7.0.0"
   hive: ">=1.6.0-nullsafety.1 <1.6.0"
-  meta: ">=1.3.0-nullsafety.6 <1.3.0"
+  meta: ^1.3.0
   synchronized: ">=3.0.0-nullsafety.1 <3.0.0"
+
+dependency_overrides:
+  bloc:
+    path: ../bloc
 
 dev_dependencies:
   coverage: ^0.14.2
-  test: ">=1.16.0-nullsafety.12 <1.16.0"
+  test: ^1.16.0
   build_runner: ^1.10.0
-  collection: ">=1.15.0-nullsafety.5 <1.15.0"
-  crypto: ">=3.0.0-nullsafety.0 <3.0.0"
+  collection: ^1.15.0
+  crypto: ^3.0.0
   freezed_annotation: ">=0.13.0-nullsafety.0 <0.13.0"
   freezed: ">=0.13.0-nullsafety.1 <0.13.0"
   json_serializable: ">=4.0.0-nullsafety.0 <4.0.0"
   json_annotation: ">=4.0.0-nullsafety.0 <4.0.0"
-  mocktail: ^0.0.1-dev.10
-  path: ">=1.8.0-nullsafety.3 <1.8.0"
-  pedantic: ">=1.10.0-nullsafety.3 <1.10.0"
+  mocktail: ^0.0.1-dev.11
+  path: ^1.8.0
+  pedantic: ^1.10.0
   uuid: ">=3.0.0-nullsafety.0 <3.0.0"

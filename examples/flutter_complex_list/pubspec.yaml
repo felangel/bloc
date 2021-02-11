@@ -12,7 +12,7 @@ dependencies:
   flutter_bloc:
     path: ../../packages/flutter_bloc
   equatable: ">=2.0.0-nullsafety.1 <2.0.0"
-  pedantic: ">=1.10.0-nullsafety.3 <1.10.0"
+  pedantic: ^1.10.0
 
 dependency_overrides:
   bloc:
