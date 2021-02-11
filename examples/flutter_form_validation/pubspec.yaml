@@ -14,5 +14,11 @@ dependencies:
   equatable: ^1.2.5
   formz: ^0.3.1
 
+dependency_overrides:
+  bloc:
+    path: ../../packages/bloc
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
+
 flutter:
   uses-material-design: true
