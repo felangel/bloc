@@ -1,3 +1,7 @@
+# 7.0.0-nullsafety.2
+
+- chore: bump to `bloc: ^7.0.0-nullsafety.2`
+
 # 7.0.0-nullsafety.1
 
 - **BREAKING**: refactor: upgrade to `bloc ^7.0.0-nullsafety.1`
