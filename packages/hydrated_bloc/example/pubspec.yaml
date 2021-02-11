@@ -20,9 +20,5 @@ dependencies:
       path: plugins/flutter_plugins/path_provider_fde
       ref: 4ee135c8870c94aa462f2006025d5840e9ca82e2
 
-dependency_overrides:
-  bloc:
-    path: ../../bloc
-
 flutter:
   uses-material-design: true
