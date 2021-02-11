@@ -1,3 +1,7 @@
+# 0.0.1-nullsafety.1
+
+- chore: upgrade to `bloc ^7.0.0-nullsafety.2`
+
 # 0.0.1-nullsafety.0
 
 - **BREAKING**: opt into null safety
