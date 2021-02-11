@@ -1,3 +1,7 @@
+# 7.0.0-nullsafety.2
+
+- chore: bump to `meta: ^1.3.0`
+
 # 7.0.0-nullsafety.1
 
 - **BREAKING**: refactor: `Cubit` extends `Bloc`
@@ -6,7 +10,6 @@
   - refactor: `void onCreate(Cubit cubit)` -> `void onCreate(Bloc bloc)`
   - refactor: `void onClose(Cubit cubit)` -> `void onClose(Bloc bloc)`
   - refactor: `CubitUnhandledErrorException` -> `BlocUnhandledErrorException`
-  
 
 # 7.0.0-nullsafety.0
 

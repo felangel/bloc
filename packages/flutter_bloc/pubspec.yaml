@@ -15,6 +15,10 @@ dependencies:
   bloc: ">=7.0.0-nullsafety.1 <7.0.0"
   provider: ">=5.0.0-nullsafety.3 <5.0.0"
 
+dependency_overrides:
+  bloc:
+    path: ../bloc
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
