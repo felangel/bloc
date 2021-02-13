@@ -9,7 +9,7 @@ class PostsList extends StatefulWidget {
 
 class _PostsListState extends State<PostsList> {
   final _scrollController = ScrollController();
-  PostBloc _postBloc;
+  PostBloc? _postBloc;
 
   @override
   void initState() {
@@ -26,18 +26,18 @@ class _PostsListState extends State<PostsList> {
           case PostStatus.failure:
             return const Center(child: Text('failed to fetch posts'));
           case PostStatus.success:
-            if (state.posts.isEmpty) {
+            if (state.posts!.isEmpty) {
               return const Center(child: Text('no posts'));
             }
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
-                return index >= state.posts.length
+                return index >= state.posts!.length
                     ? BottomLoader()
-                    : PostListItem(post: state.posts[index]);
+                    : PostListItem(post: state.posts![index]);
               },
-              itemCount: state.hasReachedMax
-                  ? state.posts.length
-                  : state.posts.length + 1,
+              itemCount: state.hasReachedMax!
+                  ? state.posts!.length
+                  : state.posts!.length + 1,
               controller: _scrollController,
             );
           default:
@@ -54,7 +54,7 @@ class _PostsListState extends State<PostsList> {
   }
 
   void _onScroll() {
-    if (_isBottom) _postBloc.add(PostFetched());
+    if (_isBottom) _postBloc?.add(PostFetched());
   }
 
   bool get _isBottom {
