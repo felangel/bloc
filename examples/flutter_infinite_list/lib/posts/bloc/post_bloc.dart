@@ -36,7 +36,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   }
 
   Future<PostState> _mapPostFetchedToState(PostState state) async {
-    if (state.hasReachedMax!) return state;
+    if (state.hasReachedMax) return state;
     try {
       if (state.status == PostStatus.initial) {
         final posts = await _fetchPosts();
@@ -46,12 +46,12 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           hasReachedMax: _hasReachedMax(posts.length),
         );
       }
-      final posts = await _fetchPosts(state.posts!.length);
+      final posts = await _fetchPosts(state.posts.length);
       return posts.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
               status: PostStatus.success,
-              posts: List.of(state.posts!)..addAll(posts),
+              posts: List.of(state.posts)..addAll(posts),
               hasReachedMax: _hasReachedMax(posts.length),
             );
     } on Exception {
@@ -61,8 +61,11 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   Future<List<Post>> _fetchPosts([int startIndex = 0]) async {
     final response = await httpClient.get(
-      Uri.https('jsonplaceholder.typicode.com', '/posts',
-          <String, String>{'_start': '$startIndex', 'limit': '$_postLimit'}),
+      Uri.https(
+        'jsonplaceholder.typicode.com',
+        '/posts',
+        <String, String>{'_start': '$startIndex', 'limit': '$_postLimit'},
+      ),
     );
     if (response.statusCode == 200) {
       final body = json.decode(response.body) as List;
