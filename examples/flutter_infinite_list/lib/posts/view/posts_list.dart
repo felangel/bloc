@@ -9,7 +9,7 @@ class PostsList extends StatefulWidget {
 
 class _PostsListState extends State<PostsList> {
   final _scrollController = ScrollController();
-  PostBloc _postBloc;
+  late PostBloc _postBloc;
 
   @override
   void initState() {
