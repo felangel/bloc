@@ -80,7 +80,7 @@ public class WrapIntentionAction extends PsiElementBaseIntentionAction implement
         final Document document = editor.getDocument();
         final Selection selection = Utils.getSelection(editor);
 
-        final String selectedText = document.getText(TextRange.create(selection.offsetL, selection.offsetR + 1));
+        final String selectedText = document.getText(TextRange.create(selection.offsetL, selection.offsetR));
         final String replaceWith = new Snippets().blocBuilderSnippet(selectedText);
 
 
@@ -89,21 +89,6 @@ public class WrapIntentionAction extends PsiElementBaseIntentionAction implement
                     document.replaceString(selection.offsetL, selection.offsetR, replaceWith);
                 }
         );
-
-        // format file
-        ApplicationManager.getApplication().runWriteAction(() -> {
-            PsiDocumentManager.getInstance(project).commitDocument(document);
-            final FileEditorManagerEx fileEditorManagerEx = FileEditorManagerEx.getInstanceEx(project);
-            final VirtualFile currentFile = fileEditorManagerEx.getCurrentFile();
-            final PsiFile file;
-            if (currentFile != null) {
-                file = PsiManager.getInstance(project).findFile(currentFile);
-                if (file != null) {
-                    CodeStyleManager.getInstance(project).reformat(file);
-                }
-            }
-//            CodeStyleManager.getInstance(project).reformat(element);
-        });
 
         // place cursors to specify types
         final String documentText = document.getText();
@@ -129,7 +114,22 @@ public class WrapIntentionAction extends PsiElementBaseIntentionAction implement
         // TODO: refactor snippet key removal
         document.deleteString(startingCaretPos1, startingCaretPos1 + snippetKey1.length());
         document.deleteString(caretModel.getOffset(), caretModel.getOffset() + snippetKey2.length());
-        PsiDocumentManager.getInstance(project).commitDocument(document);
+
+        // TODO: weird issue when testing with Flutter & dart plugin installed it splits some code (without them it's not doing that)
+        // format file
+//        ApplicationManager.getApplication().runWriteAction(() -> {
+//            PsiDocumentManager.getInstance(project).commitDocument(document);
+//            final FileEditorManagerEx fileEditorManagerEx = FileEditorManagerEx.getInstanceEx(project);
+//            final VirtualFile currentFile = fileEditorManagerEx.getCurrentFile();
+//            final PsiFile file;
+//            if (currentFile != null) {
+//                file = PsiManager.getInstance(project).findFile(currentFile);
+//                if (file != null) {
+//                    CodeStyleManager.getInstance(project).reformat(file);
+//                }
+//            }
+////            CodeStyleManager.getInstance(project).reformat(element);
+//        });
     }
 
     /**
