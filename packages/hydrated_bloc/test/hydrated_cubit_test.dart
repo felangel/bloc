@@ -8,7 +8,7 @@ import 'package:uuid/uuid.dart';
 class MockStorage extends Mock implements Storage {}
 
 class MyUuidHydratedCubit extends HydratedCubit<String> {
-  MyUuidHydratedCubit() : super(Uuid().v4());
+  MyUuidHydratedCubit() : super(const Uuid().v4());
 
   @override
   Map<String, String> toJson(String state) => {'value': state};
