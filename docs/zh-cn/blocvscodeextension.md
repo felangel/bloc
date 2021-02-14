@@ -19,67 +19,67 @@
 
 ---
 
-## Overview
+## 总览
 
-[VSCode](https://code.visualstudio.com/) support for the [Bloc Library](https://bloclibrary.dev) and provides tools for effectively creating [Blocs](https://github.com/felangel/bloc) and [Cubits](https://github.com/felangel/cubit) for both [Flutter](https://flutter.dev/) and [AngularDart](https://angulardart.dev/) apps.
+[VSCode](https://code.visualstudio.com/) 支持 [Bloc Library](https://bloclibrary.dev)，并且为 [Flutter](https://flutter.dev/) 和 [AngularDart](https://angulardart.dev/) 移动端应用程序，提供有效的 [Blocs](https://github.com/felangel/bloc) 和 [Cubits](https://github.com/felangel/cubit) 支持。
 
-## Installation
+## 安装
 
-Bloc can be installed from the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) or by [searching within VSCode](https://code.visualstudio.com/docs/editor/extension-gallery#_search-for-an-extension).
+`bloc`可以从 [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) 或者 [searching within VSCode](https://code.visualstudio.com/docs/editor/extension-gallery#_search-for-an-extension) 安装。
 
-## Commands
+## 命令
 
-| Command            | Description          |
+| 命令                | 描述                  |
 | ------------------ | -------------------- |
-| `Bloc: New Bloc`   | Generate a new Bloc  |
-| `Cubit: New Cubit` | Generate a new Cubit |
+| `Bloc: New Bloc`   | 创建一个新的    `bloc` |
+| `Cubit: New Cubit` | 创建一个新的    `Cubit`|
 
-You can activate the commands by launching the command palette (View -> Command Palette) and running entering the command name or you can right click on the directory in which you'd like to create the bloc/cubit and select the command from the context menu.
+激活命令需要打开命令面板 (查看 -> 命令面板)，输入命令名称并执行命令，或者从下拉条中选择需要执行的命令。
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage.gif)
 
-## Code Actions
+## 代码操作
 
-| Action                         | Description                                    |
-| ------------------------------ | ---------------------------------------------- |
-| `Wrap with BlocBuilder`        | Wraps current widget in a `BlocBuilder`        |
-| `Wrap with BlocListener`       | Wraps current widget in a `BlocListener`       |
-| `Wrap with BlocConsumer`       | Wraps current widget in a `BlocConsumer`       |
-| `Wrap with BlocProvider`       | Wraps current widget in a `BlocProvider`       |
-| `Wrap with RepositoryProvider` | Wraps current widget in a `RepositoryProvider` |
+| 操作                            | 描述                               |
+| ------------------------------ | -----------------------------------|
+| `Wrap with BlocBuilder`        | 将现有插件包装成 `BlocBuilder`        |
+| `Wrap with BlocListener`       | 将现有插件包装成 `BlocListener`       |
+| `Wrap with BlocConsumer`       | 将现有插件包装成 `BlocConsumer`       |
+| `Wrap with BlocProvider`       | 将现有插件包装成 `BlocProvider`       |
+| `Wrap with RepositoryProvider` | 将现有插件包装成 `RepositoryProvider` |
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/wrap-with-usage.gif)
 
-## Snippets
+## 代码片段
 
 ### Bloc
 
-| Shortcut            | Description                                |
-| ------------------- | ------------------------------------------ |
-| `bloc`              | Creates a `Bloc` class                     |
-| `cubit`             | Creates a `Cubit` class                    |
-| `blocobserver`      | Creates a `BlocObserver` class             |
-| `blocprovider`      | Creates a `BlocProvider` widget            |
-| `multiblocprovider` | Creates a `MultiBlocProvider` widget       |
-| `repoprovider`      | Creates a `RepositoryProvider` widget      |
-| `multirepoprovider` | Creates a `MultiRepositoryProvider` widget |
-| `blocbuilder`       | Creates a `BlocBuilder` widget             |
-| `bloclistener`      | Creates a `BlocListener` widget            |
-| `multibloclistener` | Creates a `MultiBlocListener` widget       |
-| `blocconsumer`      | Creates a `BlocConsumer` widget            |
-| `blocof`            | Shortcut for `BlocProvider.of()`           |
-| `repoof`            | Shortcut for `RepositoryProvider.of()`     |
-| `read`              | Shortcut for `context.read()`              |
-| `watch`             | Shortcut for `context.watch()`             |
-| `select`            | Shortcut for `context.select()`            |
-| `blocstate`         | Creates a state class                      |
-| `blocevent`         | Creates an event class                     |
+| 捷径                  | 描述                                  |
+| ------------------- | --------------------------------------|
+| `bloc`              | 创建一个新的`Bloc`类                     |
+| `cubit`             | 创建一个新的`Cubit`类                    |
+| `blocobserver`      | 创建一个新的`BlocObserver`类             |
+| `blocprovider`      | 创建一个新的`BlocProvider`插件            |
+| `multiblocprovider` | 创建一个新的`MultiBlocProvider`插件       |
+| `repoprovider`      | 创建一个新的`RepositoryProvider`插件      |
+| `multirepoprovider` | 创建一个新的`MultiRepositoryProvider`插件 |
+| `blocbuilder`       | 创建一个新的`BlocBuilder`插件             |
+| `bloclistener`      | 创建一个新的`BlocListener`插件            |
+| `multibloclistener` | 创建一个新的`MultiBlocListener`插件       |
+| `blocconsumer`      | 创建一个新的`BlocConsumer`插件            |
+| `blocof`            | 捷径 `BlocProvider.of()`                |
+| `repoof`            | 捷径 `RepositoryProvider.of()`          |
+| `read`              | 捷径 `context.read()`                   |
+| `watch`             | 捷径 `context.watch()`                  |
+| `select`            | 捷径 `context.select()`                 |
+| `blocstate`         | 创建一个新的状态类                        |
+| `blocevent`         | 创建一个新的事件类                        |
 
-### Freezed Bloc
+### 冻结 Bloc
 
-| Shortcut     | Description                                                     |
-| ------------ | --------------------------------------------------------------- |
-| `feventwhen` | Creates a map event to state function with freeze.when function |
-| `feventmap`  | Creates a map event to state function with freeze.map function  |
-| `fstate`     | Creates a sub state                                             |
-| `fevent`     | Creates a sub event                                             |
+| 捷径          | 描述                                            |
+| ------------ | ---------------------------------------------- |
+| `feventwhen` | `freeze.when`函数用于创建对于状态函数的map事件      |
+| `feventmap`  | `freeze.map`函数用于创建对于状态函数的map事件       |
+| `fstate`     | 创建一个分类状态                                 |
+| `fevent`     | 创建一个分类事件                                 |
