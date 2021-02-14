@@ -3,7 +3,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_form_validation/models/models.dart';
 import 'package:formz/formz.dart';
-import 'package:meta/meta.dart';
 
 part 'my_form_event.dart';
 part 'my_form_state.dart';
