@@ -91,7 +91,7 @@ class _MyFormState extends State<MyForm> {
 }
 
 class EmailInput extends StatelessWidget {
-  const EmailInput({Key key, this.focusNode}) : super(key: key);
+  const EmailInput({Key? key, required this.focusNode}) : super(key: key);
 
   final FocusNode focusNode;
 
@@ -122,7 +122,7 @@ class EmailInput extends StatelessWidget {
 }
 
 class PasswordInput extends StatelessWidget {
-  const PasswordInput({Key key, this.focusNode}) : super(key: key);
+  const PasswordInput({Key? key, required this.focusNode}) : super(key: key);
 
   final FocusNode focusNode;
 

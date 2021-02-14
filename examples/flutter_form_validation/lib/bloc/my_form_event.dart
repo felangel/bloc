@@ -8,7 +8,7 @@ abstract class MyFormEvent extends Equatable {
 }
 
 class EmailChanged extends MyFormEvent {
-  const EmailChanged({@required this.email});
+  const EmailChanged({required this.email});
 
   final String email;
 
@@ -19,7 +19,7 @@ class EmailChanged extends MyFormEvent {
 class EmailUnfocused extends MyFormEvent {}
 
 class PasswordChanged extends MyFormEvent {
-  const PasswordChanged({@required this.password});
+  const PasswordChanged({required this.password});
 
   final String password;
 

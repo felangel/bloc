@@ -12,9 +12,9 @@ class MyFormState extends Equatable {
   final FormzStatus status;
 
   MyFormState copyWith({
-    Email email,
-    Password password,
-    FormzStatus status,
+    Email? email,
+    Password? password,
+    FormzStatus? status,
   }) {
     return MyFormState(
       email: email ?? this.email,
