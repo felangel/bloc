@@ -1,9 +1,9 @@
 import 'package:common_github_search/common_github_search.dart';
 
 class SearchResult {
-  final List<SearchResultItem> items;
+  const SearchResult({required this.items});
 
-  const SearchResult({this.items});
+  final List<SearchResultItem> items;
 
   static SearchResult fromJson(Map<String, dynamic> json) {
     final items = (json['items'] as List<dynamic>)
