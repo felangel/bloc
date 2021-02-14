@@ -70,7 +70,7 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 ///   builder: (context, state) {
 ///     // return widget here based on BlocA's state
 ///   }
-///)
+/// )
 /// ```
 /// {@endtemplate}
 class BlocBuilder<C extends Cubit<S>, S> extends BlocBuilderBase<C, S> {

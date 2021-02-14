@@ -9,8 +9,8 @@ Bloc是由以下包所组成:
 - [bloc](https://pub.dev/packages/bloc) - bloc的核心库
 - [flutter_bloc](https://pub.dev/packages/flutter_bloc) - 强大的Flutter Widgets可与`bloc`配合使用，以构建快速，反应灵活的移动端应用程序。
 - [angular_bloc](https://pub.dev/packages/angular_bloc) - 强大的Angular组件可与`bloc`配合使用，以构建快速的反应式Web应用程序。
-- [hydrated_bloc](https://pub.dev/packages/hydrated_bloc) - An extension to the bloc state management library which automatically persists and restores bloc states.
-- [replay_bloc](https://pub.dev/packages/replay_bloc) - An extension to the bloc state management library which adds support for undo and redo.
+- [hydrated_bloc](https://pub.dev/packages/hydrated_bloc) - `bloc`状态管理包的一个扩展，它可以自动持久化和转储`bloc`状态。
+- [replay_bloc](https://pub.dev/packages/replay_bloc) - `bloc`状态管理包的一个扩展，增加了对撤销和恢复的支持。
 
 ## 安装
 
