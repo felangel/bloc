@@ -14,9 +14,9 @@ class SearchStateEmpty extends GithubSearchState {}
 class SearchStateLoading extends GithubSearchState {}
 
 class SearchStateSuccess extends GithubSearchState {
-  final List<SearchResultItem> items;
-
   const SearchStateSuccess(this.items);
+
+  final List<SearchResultItem> items;
 
   @override
   List<Object> get props => [items];
@@ -26,9 +26,9 @@ class SearchStateSuccess extends GithubSearchState {
 }
 
 class SearchStateError extends GithubSearchState {
-  final String error;
-
   const SearchStateError(this.error);
+
+  final String error;
 
   @override
   List<Object> get props => [error];
