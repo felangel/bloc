@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 class MockStorage extends Mock implements Storage {}
 
 class MyUuidHydratedBloc extends HydratedBloc<String, String?> {
-  MyUuidHydratedBloc() : super(Uuid().v4());
+  MyUuidHydratedBloc() : super(const Uuid().v4());
 
   @override
   Stream<String> mapEventToState(String event) async* {}
