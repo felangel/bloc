@@ -31,7 +31,7 @@ public class Snippets {
     private static String blocListenerSnippet(String widget) {
         return String.format("BlocListener<${0-BlocSnippetKey}Bloc, ${1-BlocSnippetKey}State>(\n" +
                 "  listener: (context, state) {\n" +
-                "    \\${3:// TODO: implement listener}\n" +
+                "    // TODO: implement listener}\n" +
                 "  },\n" +
                 "  child: %s;\n" +
                 ")", widget);
