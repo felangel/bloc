@@ -40,7 +40,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <intentionAction>
-            <className>com.bloc.intellij_generator_plugin.intention_action.WrapIntentionAction</className>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapIntentionAction</className>
             <category>Bloc</category>
         </intentionAction>
     </extensions>

@@ -2,9 +2,11 @@ package com.bloc.intellij_generator_plugin.intention_action;
 
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
+import com.intellij.ide.IdeEventQueue;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.*;
+import com.intellij.openapi.editor.event.*;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
@@ -16,8 +18,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-
-public class WrapIntentionAction extends PsiElementBaseIntentionAction implements IntentionAction {
+public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction implements IntentionAction {
 
     /**
      * If this action is applicable, returns the text to be shown in the list of intention actions available.
@@ -40,9 +41,8 @@ public class WrapIntentionAction extends PsiElementBaseIntentionAction implement
     }
 
     /**
-     * Checks whether this intention is available at the caret offset in file - the caret must sit just before a "?"
-     * character in a ternary statement. If this condition is met, this intention's entry is shown in the available
-     * intentions list.
+     * Checks whether this intention is available at the caret offset in file - the caret must sit on a widget call.
+     * If this condition is met, this intention's entry is shown in the available intentions list.
      *
      * <p>Note: this method must do its checks quickly and return.</p>
      *
@@ -53,7 +53,6 @@ public class WrapIntentionAction extends PsiElementBaseIntentionAction implement
      * intention menu or {@code false} for all other types of caret positions
      */
     public boolean isAvailable(@NotNull Project project, Editor editor, @Nullable PsiElement element) {
-        // Quick sanity check
         if (element == null) {
             return false;
         }
@@ -63,8 +62,6 @@ public class WrapIntentionAction extends PsiElementBaseIntentionAction implement
     }
 
     /**
-     * Modifies the Psi to change a ternary expression to an if-then-else statement.
-     * If the ternary is part of a declaration, the declaration is separated and moved above the if-then-else statement.
      * Called when user selects this intention action from the available intentions list.
      *
      * @param project a reference to the Project object being edited.
@@ -72,7 +69,6 @@ public class WrapIntentionAction extends PsiElementBaseIntentionAction implement
      * @param element a reference to the PSI element currently under the caret
      * @throws IncorrectOperationException Thrown by underlying (Psi model) write action context
      *                                     when manipulation of the psi tree fails.
-     *                                     //     * @see ConditionalOperatorConverter#startInWriteAction()
      */
     public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element)
             throws IncorrectOperationException {
@@ -102,7 +98,7 @@ public class WrapIntentionAction extends PsiElementBaseIntentionAction implement
 
         final int startingCaretPos2 = (documentText.substring(lineStartOffset)).indexOf(snippetKey2);
 
-        // TODO: both carpets should be canceled with ESC (this key cancels one by one currently) or Enter key (this makes a new line currently)
+        // TODO: both carets ('cursor positions') should be canceled with ESC (this key cancels one by one currently) or Enter key (this makes a new line currently)
         final CaretModel caretModel = editor.getCaretModel();
         caretModel.removeSecondaryCarets();
         caretModel.moveToOffset(startingCaretPos1);
@@ -128,7 +124,6 @@ public class WrapIntentionAction extends PsiElementBaseIntentionAction implement
 //                    CodeStyleManager.getInstance(project).reformat(file);
 //                }
 //            }
-////            CodeStyleManager.getInstance(project).reformat(element);
 //        });
     }
 
