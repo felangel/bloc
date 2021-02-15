@@ -2,18 +2,15 @@ package com.bloc.intellij_generator_plugin.intention_action;
 
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
-import com.intellij.ide.IdeEventQueue;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.*;
-import com.intellij.openapi.editor.event.*;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.util.DocumentUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -82,15 +79,13 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
         final String replaceWith = Snippets.getSnippet(SnippetType.BlocBuilder, selectedText);
 
 
-        // wrap widget
+        // wrap the widget:
         WriteCommandAction.runWriteCommandAction(project, () -> {
                     document.replaceString(selection.offsetL, selection.offsetR, replaceWith);
                 }
         );
 
-        // place cursors to specify types
-        final String editedDocText = document.getText();
-
+        // place cursors to specify types:
         // snippet keys are used for locating snippets in the document and placing cursor(s)
         final String snippetKey1 = "${0-BlocSnippetKey}";
         final String snippetKey2 = "${1-BlocSnippetKey}";
@@ -100,26 +95,19 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
         final CaretModel caretModel = editor.getCaretModel();
         caretModel.removeSecondaryCarets();
 
-        final int startingCaretPos1 = editedDocText.indexOf(snippetKey1);
+        final int startingCaretPos1 = selection.offsetL + replaceWith.indexOf(snippetKey1);
         caretModel.moveToOffset(startingCaretPos1);
 
         if (replaceWith.contains(snippetKey2)) {
-            final int startingCaretPos2 = editedDocText.indexOf(snippetKey2);
-            final int lineNumber2 = document.getLineNumber(startingCaretPos2);
+            final VisualPosition visualPosition1 = caretModel.getCurrentCaret().getVisualPosition();
 
-            final int lineStartOffset2 = DocumentUtil.getLineStartOffset(startingCaretPos2, document);
-            final int column2 = editedDocText.substring(lineStartOffset2).indexOf(snippetKey2);
+            final int startingCaretPos2 = selection.offsetL + replaceWith.indexOf(snippetKey2);
+            caretModel.moveToOffset(startingCaretPos2);
 
-//            // TODO: find out whether VisualPosition ignores collapsed code?
-//            VisualPosition visualPosition = new VisualPosition(lineNumber2, column2);
-//            caretModel.addCaret(visualPosition, true);
-
-            LogicalPosition logicalPositionCaret2 = new LogicalPosition(lineNumber2, column2);
-            // TODO: toVisualPosition is deprecated, replace with ???
-            caretModel.addCaret(logicalPositionCaret2.toVisualPosition(), true);
+            caretModel.addCaret(visualPosition1);
         }
 
-        // safely remove snippet keys
+        // safely remove snippet keys:
         final List<Caret> allCarets = caretModel.getAllCarets();
         for (Caret caret : allCarets) {
             final int offset = caret.getOffset();
@@ -131,21 +119,19 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
             }
         }
 
-        // TODO: weird issue when testing with Flutter & dart plugin installed it splits some code
-        //  (without them it's not doing that)
-        // format file
-//        ApplicationManager.getApplication().runWriteAction(() -> {
-//            PsiDocumentManager.getInstance(project).commitDocument(document);
-//            final FileEditorManagerEx fileEditorManagerEx = FileEditorManagerEx.getInstanceEx(project);
-//            final VirtualFile currentFile = fileEditorManagerEx.getCurrentFile();
-//            final PsiFile file;
-//            if (currentFile != null) {
-//                file = PsiManager.getInstance(project).findFile(currentFile);
-//                if (file != null) {
-//                    CodeStyleManager.getInstance(project).reformat(file);
-//                }
-//            }
-//        });
+        // format file:
+        ApplicationManager.getApplication().runWriteAction(() -> {
+            PsiDocumentManager.getInstance(project).commitDocument(document);
+            final FileEditorManagerEx fileEditorManagerEx = FileEditorManagerEx.getInstanceEx(project);
+            final VirtualFile currentFile = fileEditorManagerEx.getCurrentFile();
+            final PsiFile file;
+            if (currentFile != null) {
+                file = PsiManager.getInstance(project).findFile(currentFile);
+                if (file != null) {
+                    CodeStyleManager.getInstance(project).reformat(file);
+                }
+            }
+        });
     }
 
     /**
