@@ -81,7 +81,7 @@ public class WrapIntentionAction extends PsiElementBaseIntentionAction implement
         final Selection selection = Utils.getSelection(editor);
 
         final String selectedText = document.getText(TextRange.create(selection.offsetL, selection.offsetR));
-        final String replaceWith = new Snippets().blocBuilderSnippet(selectedText);
+        final String replaceWith = Snippets.getSnippet(SnippetType.BlocBuilder, selectedText);
 
 
         // wrap widget
@@ -93,8 +93,8 @@ public class WrapIntentionAction extends PsiElementBaseIntentionAction implement
         // place cursors to specify types
         final String documentText = document.getText();
 
-        final String snippetKey1 = "${0-BlocSnippetExt}";
-        final String snippetKey2 = "${1-BlocSnippetExt}";
+        final String snippetKey1 = "${0-BlocSnippetKey}";
+        final String snippetKey2 = "${1-BlocSnippetKey}";
 
         final int startingCaretPos1 = documentText.indexOf(snippetKey1);
         final int lineStartOffset = DocumentUtil.getLineStartOffset(startingCaretPos1, document);
