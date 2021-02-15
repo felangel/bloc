@@ -92,20 +92,29 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
         final String snippetKey1 = "${0-BlocSnippetKey}";
         final String snippetKey2 = "${1-BlocSnippetKey}";
 
-        final int startingCaretPos1 = documentText.indexOf(snippetKey1);
-        final int lineStartOffset = DocumentUtil.getLineStartOffset(startingCaretPos1, document);
-        final int lineNumber = document.getLineNumber(lineStartOffset);
-
-        final int startingCaretPos2 = (documentText.substring(lineStartOffset)).indexOf(snippetKey2);
-
-        // TODO: both carets ('cursor positions') should be canceled with ESC (this key cancels one by one currently) or Enter key (this makes a new line currently)
+        // TODO: both carets ('cursor positions') should be canceled with ESC (this key cancels one by one currently) or
+        //  Enter key (this makes a new line currently)
         final CaretModel caretModel = editor.getCaretModel();
         caretModel.removeSecondaryCarets();
+
+        final int startingCaretPos1 = documentText.indexOf(snippetKey1);
         caretModel.moveToOffset(startingCaretPos1);
 
-        LogicalPosition logicalPositionCaret2 = new LogicalPosition(lineNumber, startingCaretPos2);
-        // TODO: toVisualPosition is deprecated, replace with ???
-        caretModel.addCaret(logicalPositionCaret2.toVisualPosition(), true);
+        if (replaceWith.contains(snippetKey2)) {
+            final int startingCaretPos2 = documentText.indexOf(snippetKey2);
+            final int lineNumber2 = document.getLineNumber(startingCaretPos2);
+
+            final int lineStartOffset2 = DocumentUtil.getLineStartOffset(startingCaretPos2, document);
+            final int column2 = documentText.substring(lineStartOffset2).indexOf(snippetKey2);
+
+            LogicalPosition logicalPositionCaret2 = new LogicalPosition(lineNumber2, column2);
+
+            // TODO: toVisualPosition is deprecated, replace with ???
+            caretModel.addCaret(logicalPositionCaret2.toVisualPosition(), true);
+        }
+        // select snippet keys
+//        caretModel.moveCaretRelatively(snippetKey1.length(), 0, true, true, true);
+
 
         // TODO: refactor snippet key removal
         document.deleteString(startingCaretPos1, startingCaretPos1 + snippetKey1.length());
