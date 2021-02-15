@@ -56,7 +56,11 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
             return false;
         }
 
-        // TODO: Add a condition whether should be menu 'Wrap with ...' displayed
+        final Selection selection = Utils.getSelection(editor);
+        if (selection.offsetL > selection.offsetR) {
+            return false;
+        }
+
         return true;
     }
 
