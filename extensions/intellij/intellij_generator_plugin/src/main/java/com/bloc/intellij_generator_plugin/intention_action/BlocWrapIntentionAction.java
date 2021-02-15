@@ -2,6 +2,7 @@ package com.bloc.intellij_generator_plugin.intention_action;
 
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.*;
@@ -76,12 +77,30 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
     public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element)
             throws IncorrectOperationException {
 
+        final DefaultActionGroup actionGroup = new DefaultActionGroup();
+        for (SnippetType snippetType : SnippetType.values()) {
+            actionGroup.add(new AnAction(snippetType.name()) {
+                @Override
+                public void actionPerformed(AnActionEvent e) {
+                    Runnable runnable = () -> invokeSnippetAction(project, editor, snippetType);
+                    WriteCommandAction.runWriteCommandAction(project, runnable);
+                }
+            });
+        }
+        final ActionPopupMenu popupMenu = ActionManager.getInstance().createActionPopupMenu(ActionPlaces.UNKNOWN, actionGroup);
+
+        final LogicalPosition logicalPosition = editor.getCaretModel().getLogicalPosition();
+        final int x = editor.logicalPositionToXY(logicalPosition).x + 50;
+        final int y = editor.logicalPositionToXY(logicalPosition).y;
+        popupMenu.getComponent().show(editor.getContentComponent(), x, y);
+    }
+
+    private void invokeSnippetAction(@NotNull Project project, Editor editor, SnippetType snippetType) {
         final Document document = editor.getDocument();
+
         final Selection selection = Utils.getSelection(editor);
-
         final String selectedText = document.getText(TextRange.create(selection.offsetL, selection.offsetR));
-        final String replaceWith = Snippets.getSnippet(SnippetType.BlocBuilder, selectedText);
-
+        final String replaceWith = Snippets.getSnippet(snippetType, selectedText);
 
         // wrap the widget:
         WriteCommandAction.runWriteCommandAction(project, () -> {
