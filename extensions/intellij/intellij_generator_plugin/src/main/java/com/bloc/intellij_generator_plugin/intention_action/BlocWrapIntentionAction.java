@@ -18,6 +18,8 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction implements IntentionAction {
 
     /**
@@ -87,8 +89,9 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
         );
 
         // place cursors to specify types
-        final String documentText = document.getText();
+        final String editedDocText = document.getText();
 
+        // snippet keys are used for locating snippets in the document and placing cursor(s)
         final String snippetKey1 = "${0-BlocSnippetKey}";
         final String snippetKey2 = "${1-BlocSnippetKey}";
 
@@ -97,30 +100,39 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
         final CaretModel caretModel = editor.getCaretModel();
         caretModel.removeSecondaryCarets();
 
-        final int startingCaretPos1 = documentText.indexOf(snippetKey1);
+        final int startingCaretPos1 = editedDocText.indexOf(snippetKey1);
         caretModel.moveToOffset(startingCaretPos1);
 
         if (replaceWith.contains(snippetKey2)) {
-            final int startingCaretPos2 = documentText.indexOf(snippetKey2);
+            final int startingCaretPos2 = editedDocText.indexOf(snippetKey2);
             final int lineNumber2 = document.getLineNumber(startingCaretPos2);
 
             final int lineStartOffset2 = DocumentUtil.getLineStartOffset(startingCaretPos2, document);
-            final int column2 = documentText.substring(lineStartOffset2).indexOf(snippetKey2);
+            final int column2 = editedDocText.substring(lineStartOffset2).indexOf(snippetKey2);
+
+//            // TODO: find out whether VisualPosition ignores collapsed code?
+//            VisualPosition visualPosition = new VisualPosition(lineNumber2, column2);
+//            caretModel.addCaret(visualPosition, true);
 
             LogicalPosition logicalPositionCaret2 = new LogicalPosition(lineNumber2, column2);
-
             // TODO: toVisualPosition is deprecated, replace with ???
             caretModel.addCaret(logicalPositionCaret2.toVisualPosition(), true);
         }
-        // select snippet keys
-//        caretModel.moveCaretRelatively(snippetKey1.length(), 0, true, true, true);
 
+        // safely remove snippet keys
+        final List<Caret> allCarets = caretModel.getAllCarets();
+        for (Caret caret : allCarets) {
+            final int offset = caret.getOffset();
+            caret.setSelection(offset, offset + snippetKey1.length());
+            if (caret.getSelectedText() != null) {
+                if (caret.getSelectedText().equals(snippetKey1) || caret.getSelectedText().equals(snippetKey2)) {
+                    document.deleteString(caret.getSelectionStart(), caret.getSelectionEnd());
+                }
+            }
+        }
 
-        // TODO: refactor snippet key removal
-        document.deleteString(startingCaretPos1, startingCaretPos1 + snippetKey1.length());
-        document.deleteString(caretModel.getOffset(), caretModel.getOffset() + snippetKey2.length());
-
-        // TODO: weird issue when testing with Flutter & dart plugin installed it splits some code (without them it's not doing that)
+        // TODO: weird issue when testing with Flutter & dart plugin installed it splits some code
+        //  (without them it's not doing that)
         // format file
 //        ApplicationManager.getApplication().runWriteAction(() -> {
 //            PsiDocumentManager.getInstance(project).commitDocument(document);

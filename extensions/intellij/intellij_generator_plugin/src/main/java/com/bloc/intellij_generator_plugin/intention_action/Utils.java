@@ -28,8 +28,7 @@ class Utils {
                     return new Selection(offsetL, offsetR);
                 }
 
-                final int lineStartOffset = DocumentUtil.getLineStartOffset(offsetL, document);
-                final int lineNumber = document.getLineNumber(lineStartOffset);
+                final int lineNumber = document.getLineNumber(offsetL);
                 final String lineText = document.getText(DocumentUtil.getLineTextRange(document, lineNumber));
 
                 if (lineText.indexOf("class") != -1 ||
