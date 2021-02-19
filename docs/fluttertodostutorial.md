@@ -481,3 +481,5 @@ The entire `main.dart` should look like this:
 That’s all there is to it! We’ve now successfully implemented a todos app in flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
 
 The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos).
+
+There is another implementation of this tutorial using `cubit` (instead of `bloc`), it can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos_cubit).
