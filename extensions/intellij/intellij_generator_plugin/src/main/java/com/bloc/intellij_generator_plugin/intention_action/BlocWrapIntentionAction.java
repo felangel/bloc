@@ -57,7 +57,8 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
             return false;
         }
 
-        final Selection selection = Utils.getSelection(editor);
+        // TODO: improve logic
+        final SnippetSelection selection = Utils.getSelection(editor);
         if (selection.offsetL > selection.offsetR) {
             return false;
         }
@@ -98,7 +99,7 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
     private void invokeSnippetAction(@NotNull Project project, Editor editor, SnippetType snippetType) {
         final Document document = editor.getDocument();
 
-        final Selection selection = Utils.getSelection(editor);
+        final SnippetSelection selection = Utils.getSelection(editor);
         final String selectedText = document.getText(TextRange.create(selection.offsetL, selection.offsetR));
         final String replaceWith = Snippets.getSnippet(snippetType, selectedText);
 
@@ -109,12 +110,9 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
         );
 
         // place cursors to specify types:
-        // snippet keys are used for locating snippets in the document and placing cursor(s)
-        final String snippetKey1 = "${0-BlocSnippetKey}";
-        final String snippetKey2 = "${1-BlocSnippetKey}";
+        final String snippetKey1 = Snippets.SNIPPET_KEY1;
+        final String snippetKey2 = Snippets.SNIPPET_KEY2;
 
-        // TODO: both carets ('cursor positions') should be canceled with ESC (this key cancels one by one currently) or
-        //  Enter key (this makes a new line currently)
         final CaretModel caretModel = editor.getCaretModel();
         caretModel.removeSecondaryCarets();
 

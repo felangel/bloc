@@ -9,7 +9,7 @@ import com.intellij.util.DocumentUtil;
 import java.util.regex.Pattern;
 
 class Utils {
-    static Selection getSelection(Editor editor) {
+    static SnippetSelection getSelection(Editor editor) {
         final Document document = editor.getDocument();
 
         SelectionModel selectionModel = editor.getSelectionModel();
@@ -25,7 +25,7 @@ class Utils {
             if (!textOff.equals(".") && Pattern.matches(pattern, textOff)) {
                 offsetL++;
                 if (Pattern.matches("[^A-Z]", getCharString(text.charAt(offsetL)))) {
-                    return new Selection(offsetL, offsetR);
+                    return new SnippetSelection(offsetL, offsetR);
                 }
 
                 final int lineNumber = document.getLineNumber(offsetL);
@@ -36,7 +36,7 @@ class Utils {
                         lineText.indexOf("with") != -1 ||
                         lineText.indexOf("implements") != -1 ||
                         lineText.indexOf("=") != -1) {
-                    return new Selection(offsetL, offsetR);
+                    return new SnippetSelection(offsetL, offsetR);
                 }
                 break;
             } else {
@@ -72,7 +72,7 @@ class Utils {
             offsetR++;
         }
 
-        return new Selection(offsetL, offsetR);
+        return new SnippetSelection(offsetL, offsetR);
     }
 
     private static boolean isNextElementValid(String code, int length) {
@@ -95,12 +95,3 @@ class Utils {
     }
 }
 
-class Selection {
-    int offsetL;
-    int offsetR;
-
-    public Selection(int offsetL, int offsetR) {
-        this.offsetL = offsetL;
-        this.offsetR = offsetR;
-    }
-}
