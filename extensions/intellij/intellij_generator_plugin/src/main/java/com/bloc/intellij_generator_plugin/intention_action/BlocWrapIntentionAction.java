@@ -165,4 +165,3 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
         return true;
     }
 }
-
