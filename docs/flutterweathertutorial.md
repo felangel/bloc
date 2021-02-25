@@ -14,7 +14,7 @@
 - Using Bloc instead of Cubit. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
 - Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
 - [RepositoryProvider](/flutterbloccoreconcepts?id=repositoryprovider), a Flutter widget which provides a repository to its children.
-- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget which provides a repository to its children.
+- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget which invokes the listener code in response to state changes in the bloc.
 - [MultiBlocProvider](/flutterbloccoreconcepts?id=multiblocprovider), a Flutter widget that merges multiple BlocProvider widgets into one.
 - [BlocConsumer](/flutterbloccoreconcepts?id=blocconsumer), exposes a builder and listener in order to react to new states.
 
