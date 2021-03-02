@@ -1,6 +1,7 @@
 # 6.1.3
 
 - fix: `BlocBuilder` updates when the provided bloc instance changes
+- chore: update to `provider: ^4.3.3`
 
 # 6.1.2
 
