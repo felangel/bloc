@@ -1,3 +1,7 @@
+# 6.1.3
+
+- fix: `BlocBuilder` updates when the provided bloc instance changes
+
 # 6.1.2
 
 - fix: `BlocProvider.value` use `InheritedProvider.value`

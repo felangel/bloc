@@ -155,12 +155,11 @@ class _BlocListenerBaseState<C extends Cubit<S>, S>
   @override
   void didUpdateWidget(BlocListenerBase<C, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final oldCubit = oldWidget.cubit ?? context.read<C>();
-    final currentCubit = widget.cubit ?? oldCubit;
-    if (oldCubit != currentCubit) {
+    final cubit = widget.cubit ?? context.read<C>();
+    if (_cubit != cubit) {
       if (_subscription != null) {
         _unsubscribe();
-        _cubit = currentCubit;
+        _cubit = cubit;
         _previousState = _cubit.state;
       }
       _subscribe();

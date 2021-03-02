@@ -489,5 +489,62 @@ void main() {
       await tester.pumpAndSettle();
       expect(states, [0, 2, 2]);
     });
+
+    testWidgets('rebuilds when provided bloc instance changes at runtime',
+        (tester) async {
+      const incrementKey = Key('_increment_button_');
+      const updateKey = Key('_update_button_');
+      final blocA = CounterCubit();
+      final blocB = CounterCubit();
+      var bloc = blocA;
+      var numBuilds = 0;
+
+      await tester.pumpWidget(
+        StatefulBuilder(
+          builder: (context, setState) {
+            return MaterialApp(
+              home: Scaffold(
+                body: BlocProvider.value(
+                  value: bloc,
+                  child: BlocBuilder<CounterCubit, int>(
+                    builder: (context, state) {
+                      numBuilds++;
+                      return Text('count is: $state');
+                    },
+                  ),
+                ),
+                floatingActionButton: Column(
+                  children: [
+                    FloatingActionButton(
+                      key: incrementKey,
+                      onPressed: blocA.increment,
+                    ),
+                    FloatingActionButton(
+                      key: updateKey,
+                      onPressed: () => setState(() => bloc = blocB),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      );
+
+      expect(find.text('count is: 0'), findsOneWidget);
+      expect(numBuilds, equals(1));
+
+      await tester.tap(find.byKey(incrementKey));
+      await tester.pump();
+
+      expect(find.text('count is: 1'), findsOneWidget);
+      expect(numBuilds, equals(2));
+
+      await tester.tap(find.byKey(updateKey));
+      await tester.pump();
+
+      expect(find.text('count is: 0'), findsOneWidget);
+      expect(numBuilds, equals(3));
+    });
   });
 }
