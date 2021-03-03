@@ -301,8 +301,7 @@ abstract class Bloc<Event, State> extends Stream<State>
     observer.onClose(this);
     if (this is! Cubit<State>) {
       await _eventController.close();
-      // ignore: unawaited_futures
-      _transitionSubscription?.cancel();
+      await _transitionSubscription?.cancel();
     }
     await _stateController.close();
   }
