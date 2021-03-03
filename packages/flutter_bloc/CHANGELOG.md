@@ -1,3 +1,8 @@
+# 7.0.0-nullsafety.3
+
+- chore: bump to `bloc: ^7.0.0-nullsafety.3`
+- chore: bump to `provider: ^5.0.0-nullsafety.5`
+
 # 7.0.0-nullsafety.2
 
 - chore: bump to `bloc: ^7.0.0-nullsafety.2`
