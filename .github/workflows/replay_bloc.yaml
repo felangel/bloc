@@ -20,7 +20,7 @@ jobs:
         working-directory: packages/replay_bloc
     runs-on: ubuntu-latest
     container:
-      image: google/dart:2.12-dev
+      image: google/dart:2.12
     steps:
       - uses: actions/checkout@v2
       - name: Install Dependencies

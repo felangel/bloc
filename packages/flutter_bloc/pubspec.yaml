@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   bloc: ">=7.0.0-nullsafety.2 <7.0.0"
-  provider: ">=5.0.0-nullsafety.3 <5.0.0"
+  provider: ">=5.0.0-nullsafety.5 <5.0.0"
 
 dev_dependencies:
   flutter_test:
