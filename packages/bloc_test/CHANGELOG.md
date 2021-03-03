@@ -1,3 +1,8 @@
+# 8.0.0-nullsafety.1
+
+- chore: upgrade to `bloc ^7.0.0-nullsafety.3`
+- chore: upgrade to `mocktail ^0.0.1-dev.12`
+
 # 8.0.0-nullsafety.0
 
 - **BREAKING**: feat: opt into null safety
