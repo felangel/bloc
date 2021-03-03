@@ -1,6 +1,6 @@
 # 6.1.3
 
-- fix: expose `ProviderNotFoundException`
+- feat: expose `ProviderNotFoundException`
 - chore: upgrade to `bloc ^6.1.3`
 - chore: upgrade to `provider ^4.3.3`
 
