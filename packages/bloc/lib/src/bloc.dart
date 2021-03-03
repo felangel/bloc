@@ -68,7 +68,7 @@ abstract class Bloc<Event, State> extends Stream<State>
 
   StreamController<Event>? __eventController;
   StreamController<Event> get _eventController {
-    return __eventController ??= StreamController<Event>();
+    return __eventController ??= StreamController<Event>.broadcast();
   }
 
   bool _emitted = false;
@@ -301,7 +301,8 @@ abstract class Bloc<Event, State> extends Stream<State>
     observer.onClose(this);
     if (this is! Cubit<State>) {
       await _eventController.close();
-      await _transitionSubscription?.cancel();
+      // ignore: unawaited_futures
+      _transitionSubscription?.cancel();
     }
     await _stateController.close();
   }
