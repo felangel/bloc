@@ -1,3 +1,8 @@
+# 6.1.3
+
+- chore: upgrade to `bloc ^6.1.2`
+- chore: upgrade to `provider ^4.3.3`
+
 # 6.1.2
 
 - fix: `BlocProvider.value` use `InheritedProvider.value`
