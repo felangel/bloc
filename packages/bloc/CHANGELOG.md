@@ -1,3 +1,8 @@
+# 7.0.0-nullsafety.3
+
+- fix: `transformEvents` multiple subscriptions issue
+- test: improve testing for advanced `transformEvents` behavior
+
 # 7.0.0-nullsafety.2
 
 - chore: bump to `meta: ^1.3.0`
