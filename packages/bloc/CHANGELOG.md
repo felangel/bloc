@@ -1,3 +1,7 @@
+# 6.1.3
+
+- fix: `transformEvents` multiple subscriptions issue due to `v6.1.2`
+
 # 6.1.2
 
 - fix: bloc memory leak due to internal event stream being a broadcast stream

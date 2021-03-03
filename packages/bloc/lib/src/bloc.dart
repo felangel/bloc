@@ -25,7 +25,7 @@ abstract class Bloc<Event, State> extends Cubit<State>
   /// The current [BlocObserver].
   static BlocObserver observer = BlocObserver();
 
-  final _eventController = StreamController<Event>();
+  final _eventController = StreamController<Event>.broadcast();
 
   StreamSubscription<Transition<Event, State>> _transitionSubscription;
 
@@ -211,7 +211,8 @@ abstract class Bloc<Event, State> extends Cubit<State>
   @mustCallSuper
   Future<void> close() async {
     await _eventController.close();
-    await _transitionSubscription?.cancel();
+    // ignore: unawaited_futures
+    _transitionSubscription?.cancel();
     return super.close();
   }
 
