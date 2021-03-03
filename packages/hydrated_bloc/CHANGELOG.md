@@ -1,3 +1,9 @@
+# 7.0.0-nullsafety.2
+
+- chore: upgrade to `bloc ^7.0.0-nullsafety.3`
+- chore: upgrade to `hive ^1.6.0-nullsafety.2`
+- chore: upgrade to `synchronized: ^3.0.0`
+
 # 7.0.0-nullsafety.1
 
 - chore: upgrade to `bloc ^7.0.0-nullsafety.2`
