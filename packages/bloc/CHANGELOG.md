@@ -1,3 +1,7 @@
+# 6.1.2
+
+- fix: bloc memory leak due to internal event stream being a broadcast stream
+
 # 6.1.1
 
 - fix: `close` should always emit done
