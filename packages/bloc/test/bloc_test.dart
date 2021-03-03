@@ -513,22 +513,14 @@ void main() {
             nextState: -1,
           ),
         ];
-        final expectedChanges = const <Change<int>>[
-          Change(currentState: 0, nextState: 1),
-          Change(currentState: 1, nextState: 0),
-          Change(currentState: 0, nextState: -1),
-        ];
         final expectedStates = [1, 0, -1, emitsDone];
-        final changes = <Change<int>>[];
         final transitions = <Transition<CounterEvent, int>>[];
 
         final bloc = MergeBloc(
-          onChangeCallback: changes.add,
           onTransitionCallback: transitions.add,
         );
 
         expectLater(bloc, emitsInOrder(expectedStates)).then((dynamic _) {
-          expect(changes, expectedChanges);
           expect(transitions, expectedTransitions);
         });
         bloc
