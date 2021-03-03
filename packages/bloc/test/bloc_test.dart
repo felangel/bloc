@@ -594,6 +594,52 @@ void main() {
       });
     });
 
+    group('mergeBloc', () {
+      test('maintains correct transition composition', () {
+        final expectedTransitions = <Transition<CounterEvent, int>>[
+          const Transition(
+            currentState: 0,
+            event: CounterEvent.increment,
+            nextState: 1,
+          ),
+          const Transition(
+            currentState: 1,
+            event: CounterEvent.decrement,
+            nextState: 0,
+          ),
+          const Transition(
+            currentState: 0,
+            event: CounterEvent.decrement,
+            nextState: -1,
+          ),
+        ];
+        final expectedChanges = const <Change<int>>[
+          Change(currentState: 0, nextState: 1),
+          Change(currentState: 1, nextState: 0),
+          Change(currentState: 0, nextState: -1),
+        ];
+        final expectedStates = [1, 0, -1, emitsDone];
+        final changes = <Change<int>>[];
+        final transitions = <Transition<CounterEvent, int>>[];
+
+        final bloc = MergeBloc(
+          onChangeCallback: changes.add,
+          onTransitionCallback: transitions.add,
+        );
+
+        expectLater(bloc, emitsInOrder(expectedStates)).then((dynamic _) {
+          expect(changes, expectedChanges);
+          expect(transitions, expectedTransitions);
+        });
+        bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.decrement)
+          ..add(CounterEvent.decrement)
+          ..close();
+      });
+    });
+
     group('SeededBloc', () {
       test('does not emit repeated states', () {
         final seededBloc = SeededBloc(seed: 0, states: [1, 2, 1, 1]);
