@@ -164,13 +164,14 @@
         </context>
     </template>
     <template name="bloctest"
-              value="blocTest&lt;$Subject$Bloc, $Subject$State&gt;(&#10;  $DESCRIPTION$,&#10;  build: () =&gt; $Subject$Bloc(),&#10;  act: (bloc) {&#10;    $TODO$&#10;  } &#10;  expect: () =&gt; const &lt;$Subject$State&gt;[&#10;    $TODO$&#10;  ],&#10;);"
+              value="blocTest&lt;$Subject$Bloc, $Subject$State&gt;(&#10;  $DESCRIPTION$,&#10;  build: () =&gt; $Subject$Bloc(),&#10;  act: (bloc) {&#10;    $TODO$&#10;  },&#10;  expect: () =&gt; const &lt;$Subject$State&gt;[&#10;    $TODO$&#10;  ],&#10;);"
               description="blocTest with build, act and expect" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <variable name="DESCRIPTION" expression="" defaultValue="&quot;'TODO: description'&quot;" alwaysStopAt="true"/>
         <variable name="TODO" expression="" defaultValue="&quot;// TODO: implement&quot;" alwaysStopAt="true"/>
         <context>
             <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
 
