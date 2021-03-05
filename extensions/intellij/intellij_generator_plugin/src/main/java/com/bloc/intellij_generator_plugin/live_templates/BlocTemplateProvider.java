@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 public class BlocTemplateProvider implements DefaultLiveTemplatesProvider {
     @Override
     public String[] getDefaultLiveTemplateFiles() {
-        return new String[]{"liveTemplates/bloc.xml"};
+        return new String[]{"liveTemplates/Bloc"};
     }
 
     @Nullable

@@ -12,6 +12,5 @@ public class BlocContext extends TemplateContextType {
     @Override
     public boolean isInContext(@NotNull PsiFile file, int offset) {
         return file.getName().endsWith(".dart");
-
     }
 }
