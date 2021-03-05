@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<templateSet group="bloc">
+<templateSet group="Bloc">
     <!--        WIDGETS        -->
     <template name="blocbuilder"
               value="BlocBuilder&lt;$Subject$Bloc, $Subject$State&gt;(&#10;  builder: (context, state) {&#10;    return $Container$;&#10;  },&#10;)"
