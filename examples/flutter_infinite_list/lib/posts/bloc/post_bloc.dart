@@ -64,7 +64,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       Uri.https(
         'jsonplaceholder.typicode.com',
         '/posts',
-        <String, String>{'_start': '$startIndex', 'limit': '$_postLimit'},
+        <String, String>{'_start': '$startIndex', '_limit': '$_postLimit'},
       ),
     );
     if (response.statusCode == 200) {
