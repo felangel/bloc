@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:test/test.dart' as test;
+// ignore: deprecated_member_use
+import 'package:test_api/test_api.dart' as test;
 
 /// Creates a new `bloc`-specific test case with the given [description].
 /// [blocTest] will handle asserting that the `bloc` emits the [expect]ed

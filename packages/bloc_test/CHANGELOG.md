@@ -1,6 +1,7 @@
 # 8.0.0-nullsafety.2
 
 - fix: restrict to `mocktail: ">=0.0.1-dev.12 <0.0.1"`
+- feat: use `package:test_api` instead of `package:test` for sound null safety
 
 # 8.0.0-nullsafety.1
 
