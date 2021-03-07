@@ -1,3 +1,7 @@
+# 8.0.0-nullsafety.2
+
+- fix: restrict to `mocktail: ">=0.0.1-dev.12 <0.0.1"`
+
 # 8.0.0-nullsafety.1
 
 - chore: upgrade to `bloc ^7.0.0-nullsafety.3`
