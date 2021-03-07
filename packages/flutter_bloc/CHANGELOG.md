@@ -1,44 +1,20 @@
 # 7.0.0
 
-- chore: bump to `bloc: ^7.0.0`
-- chore: bump to `provider: ^5.0.0`
-
-# 7.0.0-nullsafety.3
-
-- chore: bump to `bloc: ^7.0.0-nullsafety.3`
-- chore: bump to `provider: ^5.0.0-nullsafety.5`
-
-# 7.0.0-nullsafety.2
-
-- chore: bump to `bloc: ^7.0.0-nullsafety.2`
-
-# 7.0.0-nullsafety.1
-
-- **BREAKING**: refactor: upgrade to `bloc ^7.0.0-nullsafety.1`
+- **BREAKING**: opt into null safety
+- **BREAKING**: refactor: upgrade to `bloc ^7.0.0`
   - refactor: rename `cubit` parameter in `BlocListener` to `bloc`
   - refactor: rename `cubit` parameter in `BlocBuilder` to `bloc`
   - refactor: rename `cubit` parameter in `BlocConsumer` to `bloc`
-- feat: upgrade to `provider ^5.0.0-nullsafety.3`
-
-# 7.0.0-nullsafety.0
-
-- **BREAKING**: opt into null safety
-- feat!: upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
-
-# 7.0.0-dev.2
-
-- **BREAKING**: revert `7.0.0-dev.1`
 - **BREAKING**: remove `context.bloc` extension
 - **BREAKING**: rename `cubit` parameter in `BlocListener` to `value`
 - **BREAKING**: rename `cubit` parameter in `BlocBuilder` to `value`
 - **BREAKING**: rename `cubit` parameter in `BlocConsumer` to `value`
-- docs: update inline API docs
-
-# 7.0.0-dev.1
-
 - **BREAKING**: remove dependency on `package:provider`
+- chore: bump to `provider: ^5.0.0`
+- feat!: upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
 - feat: add optional listen to `BlocProvider`
 - feat: add ListenProviderExtension
+- docs: update inline API docs
 - docs: improve inline documentation for `BlocProvider` and `RepositoryProvider`
 
 # 6.1.3
