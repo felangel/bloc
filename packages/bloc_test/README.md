@@ -84,7 +84,7 @@ expect(counterBloc.state, equals(3));
 
 `build` should be used for all `bloc` initialization and preparation and must return the `bloc` under test.
 
-`seed` is an optional state which will be used to seed the `bloc` before `act` is called.
+`seed` is an optional `Function` that returns a state which will be used to seed the `bloc` before `act` is called.
 
 `act` is an optional callback which will be invoked with the `bloc` under test and should be used to interact with the `bloc`.
 
@@ -121,7 +121,7 @@ group('CounterBloc', () {
 blocTest(
   'CounterCubit emits [10] when seeded with 9',
   build: () => CounterCubit(),
-  seed: 9,
+  seed: () => 9,
   act: (cubit) => cubit.increment(),
   expect: () => [10],
 );
