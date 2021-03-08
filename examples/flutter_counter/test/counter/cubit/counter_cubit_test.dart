@@ -26,7 +26,7 @@ void main() {
       blocTest<CounterCubit, int>(
         'emits [42] when state is 41',
         build: () => CounterCubit(),
-        seed: 41,
+        seed: () => 41,
         act: (cubit) => cubit.increment(),
         expect: () => const <int>[42],
       );
@@ -50,7 +50,7 @@ void main() {
       blocTest<CounterCubit, int>(
         'emits [42] when state is 43',
         build: () => CounterCubit(),
-        seed: 43,
+        seed: () => 43,
         act: (cubit) => cubit.decrement(),
         expect: () => const <int>[42],
       );

@@ -25,8 +25,9 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  bloc_test: ^7.1.0
-  mocktail: ^0.0.2-dev.4
+  bloc_test:
+    path: ../../packages/bloc_test
+  mocktail: ^0.0.2-dev.5
   integration_test: ^1.0.0
 
 flutter:
