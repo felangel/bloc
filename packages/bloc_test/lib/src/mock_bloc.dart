@@ -44,8 +44,7 @@ class MockBloc<E, S> extends Mock implements Bloc<E, S> {
       );
     });
     when(() => isBroadcast).thenReturn(true);
-    // ignore: unnecessary_lambdas
-    when(() => close()).thenAnswer((_) => Future<void>.value());
+    when(close).thenAnswer((_) => Future<void>.value());
     when(() => mapEventToState(any())).thenAnswer((_) => Stream<S>.empty());
     when(() => add(any())).thenReturn(null);
     when(() => emit(any())).thenReturn(null);
