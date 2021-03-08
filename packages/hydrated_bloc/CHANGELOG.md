@@ -1,6 +1,6 @@
 # 7.0.0-nullsafety.3
 
-- fix: web support with `hydratedWebStorageDirectory`
+- fix: web support with `HydratedStorage.webStorageDirectory`
 - chore: upgrade to `hive ^2.0.0`
 - chore: upgrade to `mocktail ^0.0.2-dev.5`
 
