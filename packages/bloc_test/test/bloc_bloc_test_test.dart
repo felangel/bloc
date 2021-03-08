@@ -386,7 +386,7 @@ void main() {
 
       setUp(() {
         repository = MockRepository();
-        when(repository).calls(#sideEffect).thenReturn(null);
+        when(() => repository.sideEffect()).thenReturn(null);
       });
 
       blocTest<SideEffectCounterBloc, int>(
@@ -401,7 +401,7 @@ void main() {
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[1],
         verify: (_) {
-          verify(repository).called(#sideEffect).once();
+          verify(() => repository.sideEffect()).called(1);
         },
       );
 
@@ -420,7 +420,7 @@ void main() {
         build: () => SideEffectCounterBloc(repository),
         act: (bloc) => bloc.add(CounterEvent.increment),
         verify: (_) {
-          verify(repository).called(#sideEffect).times(1);
+          verify(() => repository.sideEffect()).called(1);
         },
       );
 
@@ -430,13 +430,13 @@ void main() {
         act: (bloc) => bloc.add(CounterEvent.increment),
         verify: (_) async {
           await Future<void>.delayed(Duration.zero);
-          verify(repository).called(#sideEffect).once();
+          verify(() => repository.sideEffect()).called(1);
         },
       );
 
       test('fails immediately when verify is incorrect', () async {
         const expectedError =
-            '''Expected MockRepository.sideEffect() to be called <2> time(s) but actual call count was <1>.''';
+            '''Expected: <2>\n  Actual: <1>\nUnexpected number of calls\n''';
         late Object actualError;
         final completer = Completer<void>();
         await runZonedGuarded(() async {
@@ -444,7 +444,7 @@ void main() {
             build: () => SideEffectCounterBloc(repository),
             act: (bloc) => bloc.add(CounterEvent.increment),
             verify: (_) {
-              verify(repository).called(#sideEffect).times(2);
+              verify(() => repository.sideEffect()).called(2);
             },
           ).then((_) => completer.complete()));
           await completer.future;
@@ -452,7 +452,7 @@ void main() {
           actualError = error;
           completer.complete();
         });
-        expect((actualError as MocktailFailure).message, expectedError);
+        expect((actualError as TestFailure).message, expectedError);
       });
 
       test('shows equality warning when strings are identical', () async {
