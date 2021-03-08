@@ -54,6 +54,22 @@ void main() {
         expect(instanceA, instanceB);
       });
 
+      test(
+          'does not call Hive.init '
+          'when storageDirectory is webStorageDirectory', () async {
+        final completer = Completer<void>();
+        await runZonedGuarded(() {
+          HydratedStorage.build(
+            storageDirectory: HydratedStorage.webStorageDirectory,
+          ).whenComplete(completer.complete);
+          return completer.future;
+        }, (Object _, StackTrace __) {});
+        expect(HiveImpl().homePath, isNull);
+        storage = await HydratedStorage.build(
+          storageDirectory: storageDirectory,
+        );
+      });
+
       test('creates internal HiveImpl with correct directory', () async {
         storage = await HydratedStorage.build(
           storageDirectory: storageDirectory,
