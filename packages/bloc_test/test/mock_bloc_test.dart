@@ -18,12 +18,16 @@ void main() {
   group('MockBloc', () {
     late CounterBloc counterBloc;
 
+    setUpAll(() {
+      registerFallbackValue<CounterEvent>(CounterEvent.increment);
+    });
+
     setUp(() {
       counterBloc = MockCounterBloc();
     });
 
     test('is compatible with when', () {
-      when(counterBloc).calls(#state).thenReturn(10);
+      when(() => counterBloc.state).thenReturn(10);
       expect(counterBloc.state, 10);
     });
 
@@ -105,7 +109,7 @@ void main() {
     });
 
     test('is compatible with when', () {
-      when(counterCubit).calls(#state).thenReturn(10);
+      when(() => counterCubit.state).thenReturn(10);
       expect(counterCubit.state, 10);
     });
 
