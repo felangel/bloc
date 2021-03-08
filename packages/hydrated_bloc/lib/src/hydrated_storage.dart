@@ -33,8 +33,38 @@ class HydratedStorage implements Storage {
   @visibleForTesting
   HydratedStorage(this._box);
 
+  /// Sentinel directory used to determine that web storage should be used
+  /// when initializing [HydratedStorage].
+  ///
+  /// ```dart
+  /// await HydratedStorage.build(
+  ///   storageDirectory: HydratedStorage.webStorageDirectory,
+  /// );
+  /// ```
+  static final webStorageDirectory = Directory('');
+
   /// Returns an instance of [HydratedStorage].
   /// [storageDirectory] is required.
+  ///
+  /// For web, use [webStorageDirectory] as the `storageDirectory`
+  ///
+  /// ```dart
+  /// import 'package:flutter/foundation.dart';
+  /// import 'package:flutter/material.dart';
+  ///
+  /// import 'package:hydrated_bloc/hydrated_bloc.dart';
+  /// import 'package:path_provider/path_provider.dart';
+  ///
+  /// void main() async {
+  ///   WidgetsFlutterBinding.ensureInitialized();
+  ///   HydratedBloc.storage = await HydratedStorage.build(
+  ///     storageDirectory: kIsWeb
+  ///      ? HydratedStorage.webStorageDirectory
+  ///      : await getTemporaryDirectory(),
+  ///   );
+  ///   runApp(App());
+  /// }
+  /// ```
   ///
   /// With [encryptionCipher] you can provide custom encryption.
   /// Following snippet shows how to make default one:
@@ -57,15 +87,19 @@ class HydratedStorage implements Storage {
       hive = HiveImpl();
       Box<dynamic> box;
 
-      try {
+      if (storageDirectory == webStorageDirectory) {
+        box = await hive.openBox<dynamic>(
+          'hydrated_box',
+          encryptionCipher: encryptionCipher,
+        );
+      } else {
         hive.init(storageDirectory.path);
-      } catch (_) {}
-
-      box = await hive.openBox<dynamic>(
-        'hydrated_box',
-        encryptionCipher: encryptionCipher,
-      );
-      await _migrate(storageDirectory, box);
+        box = await hive.openBox<dynamic>(
+          'hydrated_box',
+          encryptionCipher: encryptionCipher,
+        );
+        await _migrate(storageDirectory, box);
+      }
 
       return _instance = HydratedStorage(box);
     });
