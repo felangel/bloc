@@ -41,7 +41,7 @@ void main() {
         'emits [3] when increment is called and seed is 2'
         'with async act',
         build: () => CounterCubit(),
-        seed: 2,
+        seed: () => 2,
         act: (cubit) => cubit.increment(),
         expect: () => <int>[3],
       );

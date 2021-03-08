@@ -1,3 +1,7 @@
+# 8.0.0-nullsafety.4
+
+- **BREAKING**: feat: `seed` returns a `Function` to support dynamic seed values
+
 # 8.0.0-nullsafety.3
 
 - feat: upgrade to `mocktail: ">=0.0.2-dev.5 <0.0.2"`

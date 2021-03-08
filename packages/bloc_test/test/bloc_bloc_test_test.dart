@@ -90,7 +90,7 @@ void main() {
       blocTest<CounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and seed 10',
         build: () => CounterBloc(),
-        seed: 10,
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11],
       );

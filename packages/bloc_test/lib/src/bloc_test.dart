@@ -14,8 +14,8 @@ import 'package:test_api/test_api.dart' as test;
 /// [build] should be used for all `bloc` initialization and preparation
 /// and must return the `bloc` under test.
 ///
-/// [seed] is an optional state which will be used to seed the `bloc` before
-/// [act] is called.
+/// [seed] is an optional `Function` that returns a state
+/// which will be used to seed the `bloc` before [act] is called.
 ///
 /// [act] is an optional callback which will be invoked with the `bloc` under
 /// test and should be used to interact with the `bloc`.
@@ -51,7 +51,7 @@ import 'package:test_api/test_api.dart' as test;
 /// blocTest(
 ///   'CounterBloc emits [10] when seeded with 9',
 ///   build: () => CounterBloc(),
-///   seed: 9,
+///   seed: () => 9,
 ///   act: (bloc) => bloc.add(CounterEvent.increment),
 ///   expect: () => [10],
 /// );
@@ -118,7 +118,7 @@ import 'package:test_api/test_api.dart' as test;
 void blocTest<B extends Bloc<Object?, State>, State>(
   String description, {
   required B Function() build,
-  State? seed,
+  State Function()? seed,
   Function(B bloc)? act,
   Duration? wait,
   int skip = 0,
@@ -145,7 +145,7 @@ void blocTest<B extends Bloc<Object?, State>, State>(
 @visibleForTesting
 Future<void> testBloc<B extends Bloc<Object?, State>, State>({
   required B Function() build,
-  State? seed,
+  State Function()? seed,
   Function(B bloc)? act,
   Duration? wait,
   int skip = 0,
@@ -160,7 +160,7 @@ Future<void> testBloc<B extends Bloc<Object?, State>, State>({
       final states = <State>[];
       final bloc = build();
       // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-      if (seed != null) bloc.emit(seed);
+      if (seed != null) bloc.emit(seed());
       final subscription = bloc.skip(skip).listen(states.add);
       try {
         await act?.call(bloc);
