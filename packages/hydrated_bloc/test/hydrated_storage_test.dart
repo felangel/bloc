@@ -54,6 +54,22 @@ void main() {
         expect(instanceA, instanceB);
       });
 
+      test(
+          'does not call Hive.init '
+          'when storageDirectory is webStorageDirectory', () async {
+        final completer = Completer<void>();
+        await runZonedGuarded(() {
+          HydratedStorage.build(
+            storageDirectory: HydratedStorage.webStorageDirectory,
+          ).whenComplete(completer.complete);
+          return completer.future;
+        }, (Object _, StackTrace __) {});
+        expect(HiveImpl().homePath, isNull);
+        storage = await HydratedStorage.build(
+          storageDirectory: storageDirectory,
+        );
+      });
+
       test('creates internal HiveImpl with correct directory', () async {
         storage = await HydratedStorage.build(
           storageDirectory: storageDirectory,
@@ -71,65 +87,71 @@ void main() {
 
       setUp(() {
         box = MockBox();
-        when(box).calls(#deleteFromDisk).thenReturn(Future<void>.value());
+        when(() => box.deleteFromDisk()).thenAnswer(
+          (_) => Future<void>.value(),
+        );
         storage = HydratedStorage(box);
       });
 
       group('read', () {
         test('returns null when box is not open', () {
-          when(box).calls(#isOpen).thenReturn(false);
+          when(() => box.isOpen).thenReturn(false);
           expect(storage.read(key), isNull);
         });
 
         test('returns correct value when box is open', () {
-          when(box).calls(#isOpen).thenReturn(true);
-          when(box).calls(#get).thenReturn(value);
+          when(() => box.isOpen).thenReturn(true);
+          when<dynamic>(() => box.get(any<dynamic>())).thenReturn(value);
           expect(storage.read(key), value);
-          verify(box).called(#get).withArgs(positional: [key]).once();
+          verify<dynamic>(() => box.get(key)).called(1);
         });
       });
 
       group('write', () {
         test('does nothing when box is not open', () async {
-          when(box).calls(#isOpen).thenReturn(false);
+          when(() => box.isOpen).thenReturn(false);
           await storage.write(key, value);
-          verify(box).called(#put).never();
+          verifyNever(() => box.put(any<dynamic>(), any<dynamic>()));
         });
 
         test('puts key/value in box when box is open', () async {
-          when(box).calls(#isOpen).thenReturn(true);
-          when(box).calls(#put).thenReturn(Future<void>.value());
+          when(() => box.isOpen).thenReturn(true);
+          when(
+            () => box.put(any<dynamic>(), any<dynamic>()),
+          ).thenAnswer((_) => Future<void>.value());
           await storage.write(key, value);
-          verify(box).called(#put).withArgs(positional: [key, value]).once();
+          verify(() => box.put(key, value)).called(1);
         });
       });
 
       group('delete', () {
         test('does nothing when box is not open', () async {
-          when(box).calls(#isOpen).thenReturn(false);
+          when(() => box.isOpen).thenReturn(false);
           await storage.delete(key);
-          verify(box).called(#delete).never();
+          verifyNever(() => box.delete(any<dynamic>()));
         });
 
         test('puts key/value in box when box is open', () async {
-          when(box).calls(#isOpen).thenReturn(true);
-          when(box).calls(#delete).thenReturn(Future<void>.value());
+          when(() => box.isOpen).thenReturn(true);
+          when(
+            () => box.delete(any<dynamic>()),
+          ).thenAnswer((_) => Future<void>.value());
           await storage.delete(key);
-          verify(box).called(#delete).withArgs(positional: [key]).once();
+          verify(() => box.delete(key)).called(1);
         });
       });
 
       group('clear', () {
         test('does nothing when box is not open', () async {
-          when(box).calls(#isOpen).thenReturn(false);
+          when(() => box.isOpen).thenReturn(false);
           await storage.clear();
-          verify(box).called(#deleteFromDisk).never();
+          verifyNever(() => box.deleteFromDisk());
         });
 
         test('deletes box when box is open', () async {
-          when(box).calls(#isOpen).thenReturn(true);
+          when(() => box.isOpen).thenReturn(true);
           await storage.clear();
-          verify(box).called(#deleteFromDisk).once();
+          verify(() => box.deleteFromDisk()).called(1);
         });
       });
     });

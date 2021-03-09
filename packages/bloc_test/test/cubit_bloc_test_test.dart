@@ -41,7 +41,7 @@ void main() {
         'emits [3] when increment is called and seed is 2'
         'with async act',
         build: () => CounterCubit(),
-        seed: 2,
+        seed: () => 2,
         act: (cubit) => cubit.increment(),
         expect: () => <int>[3],
       );
@@ -162,7 +162,7 @@ void main() {
 
       setUp(() {
         repository = MockRepository();
-        when(repository).calls(#sideEffect).thenReturn(null);
+        when(() => repository.sideEffect()).thenReturn(null);
       });
 
       blocTest<SideEffectCounterCubit, int>(
@@ -177,7 +177,7 @@ void main() {
         act: (cubit) => cubit.increment(),
         expect: () => <int>[1],
         verify: (_) async {
-          verify(repository).called(#sideEffect).once();
+          verify(() => repository.sideEffect()).called(1);
         },
       );
 
@@ -186,7 +186,7 @@ void main() {
         build: () => SideEffectCounterCubit(repository),
         act: (cubit) => cubit.increment(),
         verify: (_) async {
-          verify(repository).called(#sideEffect).once();
+          verify(() => repository.sideEffect()).called(1);
         },
       );
     });
