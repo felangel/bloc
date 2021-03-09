@@ -92,7 +92,6 @@ Bloc을 사용하기 위해서는, `Stream`과 이것의 동작 원리를 제대
 
 [counter_bloc.dart](../_snippets/core_concepts/counter_bloc_initial_state.dart.md ':include')
 
-> Every Bloc must implement a function called `mapEventToState`. The function takes the incoming `event` as an argument and must return a `Stream` of new `states` which is consumed by the presentation layer. We can access the current bloc state at any time using the `state` property.
 > 모든 Bloc에는 반드시 `mapEventToState` 함수를 구현해야 합니다. 이 함수는 들어오는 `event`를 인자로 받아 presentation 층에서 쓰는 새로운 `state`의 `stream`을 반환하게 됩니다. 우리는 `state` 속성을 이용해서 현재 bloc의 state를 아무 때나 접근할 수 있습니다.
 
 [counter_bloc.dart](../_snippets/core_concepts/counter_bloc_map_event_to_state.dart.md ':include')
