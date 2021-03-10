@@ -80,5 +80,5 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     throw Exception('error fetching posts');
   }
 
-  bool _hasReachedMax(int postsCount) => postsCount < _postLimit ? false : true;
+  bool _hasReachedMax(int postsCount) => postsCount > 0 ? false : true;
 }
