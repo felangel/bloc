@@ -348,7 +348,7 @@ void main() {
     });
 
     testWidgets(
-        'should access repository instance'
+        'should access repository instance '
         'via context.read', (tester) async {
       await tester.pumpWidget(
         RepositoryProvider(
