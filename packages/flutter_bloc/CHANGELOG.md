@@ -1,3 +1,7 @@
+# 7.0.0-nullsafety.5
+
+- **BREAKING**: refactor: remove deprecated `context.repository`
+
 # 7.0.0-nullsafety.4
 
 - chore: bump to `provider: ^5.0.0`
