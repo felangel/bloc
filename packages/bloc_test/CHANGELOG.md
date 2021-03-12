@@ -1,3 +1,8 @@
+# 8.0.0-nullsafety.5
+
+- feat: upgrade to `mocktail: ^0.1.0`
+- feat: use `package:test` instead of `package:test_api`
+
 # 8.0.0-nullsafety.4
 
 - **BREAKING**: feat: `seed` returns a `Function` to support dynamic seed values
