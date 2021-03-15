@@ -63,7 +63,9 @@ void main() {
         await cubit.close();
         expect(
           transitions,
-          const [Transition<Null, int>(currentState: 0, nextState: 1)],
+          const [
+            Transition<Null, int>(currentState: 0, event: null, nextState: 1)
+          ],
         );
       });
 
@@ -77,8 +79,8 @@ void main() {
         expect(
           transitions,
           const [
-            Transition<Null, int>(currentState: 0, nextState: 1),
-            Transition<Null, int>(currentState: 1, nextState: 2),
+            Transition<Null, int>(currentState: 0, event: null, nextState: 1),
+            Transition<Null, int>(currentState: 1, event: null, nextState: 2),
           ],
         );
       });

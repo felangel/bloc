@@ -1,10 +1,11 @@
 # 7.0.0-nullsafety.4
 
-- **BREAKING**: refactor: `Bloc` and `Cubit` extend `BlocStream`
-  - refactor: `void onError(Bloc bloc, Object error, StackTrace stackTrace)` -> `void onError(BlocStream bloc, Object error, StackTrace stackTrace)`
-  - refactor: `void onEvent(Bloc bloc, Object? event)` -> `void onEvent(BlocStream bloc, Object? event)`
-  - refactor: `void onCreate(Bloc bloc)` -> `void onCreate(BlocStream bloc)`
-  - refactor: `void onClose(Bloc bloc)` -> `void onClose(BlocStream bloc)`
+- **BREAKING**: refactor: `Bloc` and `Cubit` extend `BlocBase`
+  - refactor: `void onError(Bloc bloc, Object error, StackTrace stackTrace)` -> `void onError(BlocBase bloc, Object error, StackTrace stackTrace)`
+  - refactor: `void onEvent(Bloc bloc, Object? event)` -> `void onEvent(BlocBase bloc, Object? event)`
+  - refactor: `void onCreate(Bloc bloc)` -> `void onCreate(BlocBase bloc)`
+  - refactor: `void onClose(Bloc bloc)` -> `void onClose(BlocBase bloc)`
+- **BREAKING**: refactor: `Transition` event is required
 - **BREAKING**: refactor: `Bloc` and `Cubit` do not extend `Stream` and implement `Sink`
   - refactor: use `bloc.stream` or `cubit.stream` to access `Stream<State>`
     - `myBloc.map(...)` -> `myBloc.stream.map(...)`

@@ -11,7 +11,7 @@ class Transition<Event, State> {
   /// {@macro transition}
   const Transition({
     required this.currentState,
-    this.event,
+    required this.event,
     required this.nextState,
   });
 
@@ -19,7 +19,7 @@ class Transition<Event, State> {
   final State currentState;
 
   /// The [Event] which triggered the current [Transition].
-  final Event? event;
+  final Event event;
 
   /// The next [State] at the time of the [Transition].
   final State nextState;

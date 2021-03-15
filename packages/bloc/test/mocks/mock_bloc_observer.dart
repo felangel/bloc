@@ -3,7 +3,7 @@ import 'package:bloc/bloc.dart';
 class OnCreateCall {
   const OnCreateCall(this.bloc);
 
-  final BlocStream bloc;
+  final BlocBase bloc;
 
   @override
   bool operator ==(Object o) {
@@ -19,7 +19,7 @@ class OnCreateCall {
 class OnTransitionCall {
   const OnTransitionCall(this.bloc, this.transition);
 
-  final BlocStream bloc;
+  final BlocBase bloc;
   final Transition transition;
 
   @override
@@ -38,7 +38,7 @@ class OnTransitionCall {
 class OnEventCall {
   const OnEventCall(this.bloc, this.event);
 
-  final BlocStream bloc;
+  final BlocBase bloc;
   final Object? event;
 
   @override
@@ -55,7 +55,7 @@ class OnEventCall {
 class OnErrorCall {
   const OnErrorCall(this.bloc, this.error, this.stackTrace);
 
-  final BlocStream bloc;
+  final BlocBase bloc;
   final Object error;
   final StackTrace? stackTrace;
 
@@ -76,7 +76,7 @@ class OnErrorCall {
 class OnCloseCall {
   const OnCloseCall(this.bloc);
 
-  final BlocStream bloc;
+  final BlocBase bloc;
 
   @override
   bool operator ==(Object o) {
@@ -97,27 +97,27 @@ class MockBlocObserver implements BlocObserver {
   final onCloseCalls = <OnCloseCall>[];
 
   @override
-  void onCreate(BlocStream bloc) {
+  void onCreate(BlocBase bloc) {
     onCreateCalls.add(OnCreateCall(bloc));
   }
 
   @override
-  void onTransition(BlocStream bloc, Transition transition) {
+  void onTransition(BlocBase bloc, Transition transition) {
     onTransitionCalls.add(OnTransitionCall(bloc, transition));
   }
 
   @override
-  void onEvent(BlocStream bloc, Object? event) {
+  void onEvent(BlocBase bloc, Object? event) {
     onEventCalls.add(OnEventCall(bloc, event));
   }
 
   @override
-  void onError(BlocStream bloc, Object error, StackTrace? stackTrace) {
+  void onError(BlocBase bloc, Object error, StackTrace? stackTrace) {
     onErrorCalls.add(OnErrorCall(bloc, error, stackTrace));
   }
 
   @override
-  void onClose(BlocStream bloc) {
+  void onClose(BlocBase bloc) {
     onCloseCalls.add(OnCloseCall(bloc));
   }
 }

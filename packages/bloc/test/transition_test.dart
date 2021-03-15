@@ -168,8 +168,9 @@ void main() {
       });
 
       test('should return correct string representation without event', () {
-        final transition = Transition<CounterEvent, CounterState>(
+        final transition = Transition<CounterEvent?, CounterState>(
           currentState: CounterState(0),
+          event: null,
           nextState: CounterState(1),
         );
 

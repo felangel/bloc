@@ -9,7 +9,7 @@ typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
     Function(Event);
 
 /// {@template bloc_unhandled_error_exception}
-/// Exception thrown when an unhandled error occurs within a [BlocStream].
+/// Exception thrown when an unhandled error occurs within a bloc.
 ///
 /// _Note: thrown in debug mode only_
 /// {@endtemplate}
@@ -21,8 +21,8 @@ class BlocUnhandledErrorException implements Exception {
     this.stackTrace = StackTrace.empty,
   ]);
 
-  /// The [BlocStream] in which the unhandled error occurred.
-  final BlocStream bloc;
+  /// The bloc in which the unhandled error occurred.
+  final BlocBase bloc;
 
   /// The unhandled [error] object.
   final Object error;
@@ -42,7 +42,7 @@ class BlocUnhandledErrorException implements Exception {
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
-abstract class Bloc<Event, State> extends BlocStream<Event, State> {
+abstract class Bloc<Event, State> extends BlocBase<Event, State> {
   /// {@macro bloc}
   Bloc(State initialState) : super(initialState) {
     _bindEventsToStates();
@@ -241,7 +241,7 @@ abstract class Bloc<Event, State> extends BlocStream<Event, State> {
 /// ```
 ///
 /// {@endtemplate}
-abstract class Cubit<State> extends BlocStream<Null, State> {
+abstract class Cubit<State> extends BlocBase<Null, State> {
   /// {@macro cubit}
   Cubit(State initialState) : super(initialState);
 
@@ -259,6 +259,7 @@ abstract class Cubit<State> extends BlocStream<Null, State> {
     onTransition(
       Transition<Null, State>(
         currentState: this.state,
+        event: null,
         nextState: state,
       ),
     );
@@ -272,9 +273,9 @@ abstract class Cubit<State> extends BlocStream<Null, State> {
 /// An interface for the core functionality implemented by
 /// both [Bloc] and [Cubit].
 /// {@endtemplate}
-abstract class BlocStream<Event, State> {
+abstract class BlocBase<Event, State> {
   /// {@macro bloc_stream}
-  BlocStream(this._state) {
+  BlocBase(this._state) {
     // ignore: invalid_use_of_protected_member
     Bloc.observer.onCreate(this);
   }
@@ -303,13 +304,14 @@ abstract class BlocStream<Event, State> {
     Function? onError,
     void Function()? onDone,
     bool? cancelOnError,
-  }) =>
-      stream.listen(
-        onData,
-        onError: onError,
-        onDone: onDone,
-        cancelOnError: cancelOnError,
-      );
+  }) {
+    return stream.listen(
+      onData,
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
+  }
 
   /// Updates the [state] to the provided [state].
   /// [emit] does nothing if the instance has been closed or if the
