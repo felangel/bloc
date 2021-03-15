@@ -84,24 +84,13 @@ void main() {
       });
     });
 
-    group('mapEventToState', () {
-      test('throws StateError', () {
-        final cubit = CounterCubit();
-        final message = 'mapEventToState should never be invoked '
-            'on an instance of type Cubit';
-        expect(
-          () => cubit.mapEventToState(null),
-          throwsA(
-            isA<StateError>().having((e) => e.message, 'message', message),
-          ),
-        );
-      });
-    });
-
     group('emit', () {
       test('does nothing if cubit is closed (indirect)', () {
         final cubit = CounterCubit();
-        expectLater(cubit, emitsInOrder(<Matcher>[equals(1), emitsDone]));
+        expectLater(
+          cubit.stream,
+          emitsInOrder(<Matcher>[equals(1), emitsDone]),
+        );
         cubit
           ..increment()
           ..close()
@@ -110,7 +99,10 @@ void main() {
 
       test('does nothing if cubit is closed (direct)', () {
         final cubit = CounterCubit();
-        expectLater(cubit, emitsInOrder(<Matcher>[equals(1), emitsDone]));
+        expectLater(
+          cubit.stream,
+          emitsInOrder(<Matcher>[equals(1), emitsDone]),
+        );
         cubit
           ..emit(1)
           ..close()
@@ -234,18 +226,14 @@ void main() {
 
       test('emits done (sync)', () {
         final cubit = CounterCubit()..close();
-        expect(cubit, emitsDone);
+        expect(cubit.stream, emitsDone);
       });
 
       test('emits done (async)', () async {
         final cubit = CounterCubit();
         await cubit.close();
-        expect(cubit, emitsDone);
+        expect(cubit.stream, emitsDone);
       });
-    });
-
-    test('isBroadcast returns true', () {
-      expect(CounterCubit().isBroadcast, isTrue);
     });
   });
 }

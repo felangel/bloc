@@ -33,7 +33,7 @@ void main() {
       test('close does not emit new states over the state stream', () async {
         final expectedStates = [emitsDone];
 
-        unawaited(expectLater(simpleBloc, emitsInOrder(expectedStates)));
+        unawaited(expectLater(simpleBloc.stream, emitsInOrder(expectedStates)));
 
         await simpleBloc.close();
       });
@@ -46,7 +46,7 @@ void main() {
         final expectedStates = ['data', emitsDone];
 
         expectLater(
-          simpleBloc,
+          simpleBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expect(observer.onTransitionCalls, [
@@ -71,7 +71,7 @@ void main() {
         final expectedStates = ['data', emitsDone];
 
         expectLater(
-          simpleBloc,
+          simpleBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expect(observer.onTransitionCalls, [
@@ -97,9 +97,9 @@ void main() {
       test('is a broadcast stream', () {
         final expectedStates = ['data', emitsDone];
 
-        expect(simpleBloc.isBroadcast, isTrue);
-        expectLater(simpleBloc, emitsInOrder(expectedStates));
-        expectLater(simpleBloc, emitsInOrder(expectedStates));
+        expect(simpleBloc.stream.isBroadcast, isTrue);
+        expectLater(simpleBloc.stream, emitsInOrder(expectedStates));
+        expectLater(simpleBloc.stream, emitsInOrder(expectedStates));
 
         simpleBloc
           ..add('event')
@@ -109,9 +109,9 @@ void main() {
       test('multiple subscribers receive the latest state', () {
         final expectedStates = const <String>['data'];
 
-        expectLater(simpleBloc, emitsInOrder(expectedStates));
-        expectLater(simpleBloc, emitsInOrder(expectedStates));
-        expectLater(simpleBloc, emitsInOrder(expectedStates));
+        expectLater(simpleBloc.stream, emitsInOrder(expectedStates));
+        expectLater(simpleBloc.stream, emitsInOrder(expectedStates));
+        expectLater(simpleBloc.stream, emitsInOrder(expectedStates));
 
         simpleBloc.add('event');
       });
@@ -130,7 +130,9 @@ void main() {
       test('close does not emit new states over the state stream', () async {
         final expectedStates = [emitsDone];
 
-        unawaited(expectLater(complexBloc, emitsInOrder(expectedStates)));
+        unawaited(
+          expectLater(complexBloc.stream, emitsInOrder(expectedStates)),
+        );
 
         await complexBloc.close();
       });
@@ -143,7 +145,7 @@ void main() {
         final expectedStates = [ComplexStateB()];
 
         expectLater(
-          complexBloc,
+          complexBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expect(observer.onTransitionCalls, [
@@ -170,7 +172,8 @@ void main() {
           ComplexStateC(),
         ];
 
-        unawaited(expectLater(complexBloc, emitsInOrder(expectedStates)));
+        unawaited(
+            expectLater(complexBloc.stream, emitsInOrder(expectedStates)));
 
         complexBloc.add(ComplexEventA());
         await Future<void>.delayed(const Duration(milliseconds: 20));
@@ -188,9 +191,9 @@ void main() {
       test('is a broadcast stream', () {
         final expectedStates = [ComplexStateB()];
 
-        expect(complexBloc.isBroadcast, isTrue);
-        expectLater(complexBloc, emitsInOrder(expectedStates));
-        expectLater(complexBloc, emitsInOrder(expectedStates));
+        expect(complexBloc.stream.isBroadcast, isTrue);
+        expectLater(complexBloc.stream, emitsInOrder(expectedStates));
+        expectLater(complexBloc.stream, emitsInOrder(expectedStates));
 
         complexBloc.add(ComplexEventB());
       });
@@ -198,9 +201,9 @@ void main() {
       test('multiple subscribers receive the latest state', () {
         final expected = <ComplexState>[ComplexStateB()];
 
-        expectLater(complexBloc, emitsInOrder(expected));
-        expectLater(complexBloc, emitsInOrder(expected));
-        expectLater(complexBloc, emitsInOrder(expected));
+        expectLater(complexBloc.stream, emitsInOrder(expected));
+        expectLater(complexBloc.stream, emitsInOrder(expected));
+        expectLater(complexBloc.stream, emitsInOrder(expected));
 
         complexBloc.add(ComplexEventB());
       });
@@ -238,7 +241,7 @@ void main() {
         ];
 
         expectLater(
-          counterBloc,
+          counterBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expectLater(transitions, expectedTransitions);
@@ -269,7 +272,7 @@ void main() {
         ];
 
         expectLater(
-          counterBloc,
+          counterBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expect(transitions, expectedTransitions);
@@ -311,9 +314,9 @@ void main() {
       test('is a broadcast stream', () {
         final expectedStates = [1, emitsDone];
 
-        expect(counterBloc.isBroadcast, isTrue);
-        expectLater(counterBloc, emitsInOrder(expectedStates));
-        expectLater(counterBloc, emitsInOrder(expectedStates));
+        expect(counterBloc.stream.isBroadcast, isTrue);
+        expectLater(counterBloc.stream, emitsInOrder(expectedStates));
+        expectLater(counterBloc.stream, emitsInOrder(expectedStates));
 
         counterBloc
           ..add(CounterEvent.increment)
@@ -323,9 +326,9 @@ void main() {
       test('multiple subscribers receive the latest state', () {
         const expected = <int>[1];
 
-        expectLater(counterBloc, emitsInOrder(expected));
-        expectLater(counterBloc, emitsInOrder(expected));
-        expectLater(counterBloc, emitsInOrder(expected));
+        expectLater(counterBloc.stream, emitsInOrder(expected));
+        expectLater(counterBloc.stream, emitsInOrder(expected));
+        expectLater(counterBloc.stream, emitsInOrder(expected));
 
         counterBloc.add(CounterEvent.increment);
       });
@@ -344,7 +347,7 @@ void main() {
       test('close does not emit new states over the state stream', () async {
         final expectedStates = [emitsDone];
 
-        unawaited(expectLater(asyncBloc, emitsInOrder(expectedStates)));
+        unawaited(expectLater(asyncBloc.stream, emitsInOrder(expectedStates)));
 
         await asyncBloc.close();
       });
@@ -380,7 +383,7 @@ void main() {
         ];
 
         expectLater(
-          asyncBloc,
+          asyncBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expect(observer.onTransitionCalls, [
@@ -439,9 +442,9 @@ void main() {
           emitsDone,
         ];
 
-        expect(asyncBloc.isBroadcast, isTrue);
-        expectLater(asyncBloc, emitsInOrder(expectedStates));
-        expectLater(asyncBloc, emitsInOrder(expectedStates));
+        expect(asyncBloc.stream.isBroadcast, isTrue);
+        expectLater(asyncBloc.stream, emitsInOrder(expectedStates));
+        expectLater(asyncBloc.stream, emitsInOrder(expectedStates));
 
         asyncBloc
           ..add(AsyncEvent())
@@ -454,9 +457,9 @@ void main() {
           AsyncState(isLoading: false, hasError: false, isSuccess: true),
         ];
 
-        expectLater(asyncBloc, emitsInOrder(expected));
-        expectLater(asyncBloc, emitsInOrder(expected));
-        expectLater(asyncBloc, emitsInOrder(expected));
+        expectLater(asyncBloc.stream, emitsInOrder(expected));
+        expectLater(asyncBloc.stream, emitsInOrder(expected));
+        expectLater(asyncBloc.stream, emitsInOrder(expected));
 
         asyncBloc.add(AsyncEvent());
       });
@@ -483,8 +486,10 @@ void main() {
           onTransitionCallback: transitions.add,
         );
 
-        expectLater(flatMapBloc, emitsInOrder(expectedStates))
-            .then((dynamic _) {
+        expectLater(
+          flatMapBloc.stream,
+          emitsInOrder(expectedStates),
+        ).then((dynamic _) {
           expect(transitions, expectedTransitions);
         });
         flatMapBloc
@@ -520,7 +525,10 @@ void main() {
           onTransitionCallback: transitions.add,
         );
 
-        expectLater(bloc, emitsInOrder(expectedStates)).then((dynamic _) {
+        expectLater(
+          bloc.stream,
+          emitsInOrder(expectedStates),
+        ).then((dynamic _) {
           expect(transitions, expectedTransitions);
         });
         bloc
@@ -537,7 +545,7 @@ void main() {
         final seededBloc = SeededBloc(seed: 0, states: [1, 2, 1, 1]);
         final expectedStates = [1, 2, 1, emitsDone];
 
-        expectLater(seededBloc, emitsInOrder(expectedStates));
+        expectLater(seededBloc.stream, emitsInOrder(expectedStates));
 
         seededBloc
           ..add('event')
@@ -548,7 +556,7 @@ void main() {
         final seededBloc = SeededBloc(seed: 0, states: [0, 0]);
         final expectedStates = [0, emitsDone];
 
-        expectLater(seededBloc, emitsInOrder(expectedStates));
+        expectLater(seededBloc.stream, emitsInOrder(expectedStates));
 
         seededBloc
           ..add('event')
@@ -561,7 +569,7 @@ void main() {
         final seededBloc = SeededBloc(seed: 0, states: [0, 0, 1]);
         final expectedStates = [0, 1, emitsDone];
 
-        expectLater(seededBloc, emitsInOrder(expectedStates));
+        expectLater(seededBloc.stream, emitsInOrder(expectedStates));
 
         seededBloc
           ..add('event')
@@ -572,7 +580,7 @@ void main() {
         final seededBloc = SeededBloc(seed: 0, states: [1, 1]);
         final expectedStates = [1, emitsDone];
 
-        expectLater(seededBloc, emitsInOrder(expectedStates));
+        expectLater(seededBloc.stream, emitsInOrder(expectedStates));
 
         seededBloc
           ..add('eventA')
@@ -585,7 +593,7 @@ void main() {
         final seededBloc = SeededBloc(seed: 0, states: [1, 1]);
         final expectedStates = [1, emitsDone];
 
-        expectLater(seededBloc, emitsInOrder(expectedStates));
+        expectLater(seededBloc.stream, emitsInOrder(expectedStates));
 
         seededBloc
           ..add('event')
@@ -601,7 +609,7 @@ void main() {
           final expectedStates = [-1, emitsDone];
           final counterBloc = CounterExceptionBloc();
 
-          expectLater(counterBloc, emitsInOrder(expectedStates));
+          expectLater(counterBloc.stream, emitsInOrder(expectedStates));
 
           counterBloc
             ..add(CounterEvent.increment)
@@ -655,7 +663,7 @@ void main() {
               });
 
           expectLater(
-            onExceptionBloc,
+            onExceptionBloc.stream,
             emitsInOrder(<Matcher>[emitsDone]),
           ).then((dynamic _) {
             expect(expectedError, exception);
@@ -711,7 +719,7 @@ void main() {
           );
 
           expectLater(
-            counterBloc,
+            counterBloc.stream,
             emitsInOrder(<Matcher>[emitsDone]),
           ).then((dynamic _) {
             expect(capturedError, isNull);
@@ -734,7 +742,7 @@ void main() {
             final expectedStates = [-1, emitsDone];
             final counterBloc = CounterErrorBloc();
 
-            expectLater(counterBloc, emitsInOrder(expectedStates));
+            expectLater(counterBloc.stream, emitsInOrder(expectedStates));
 
             counterBloc
               ..add(CounterEvent.increment)
@@ -761,7 +769,7 @@ void main() {
             );
 
             expectLater(
-              onErrorBloc,
+              onErrorBloc.stream,
               emitsInOrder(<Matcher>[emitsDone]),
             ).then((dynamic _) {
               expect(expectedError, error);
@@ -792,7 +800,7 @@ void main() {
             );
 
             expectLater(
-              onTransitionErrorBloc,
+              onTransitionErrorBloc.stream,
               emitsInOrder(<Matcher>[emitsDone]),
             ).then((dynamic _) {
               expect(expectedError, error);
@@ -812,7 +820,9 @@ void main() {
     group('emit', () {
       test('updates the state', () async {
         final counterBloc = CounterBloc();
-        unawaited(expectLater(counterBloc, emitsInOrder(const <int>[42])));
+        unawaited(
+          expectLater(counterBloc.stream, emitsInOrder(const <int>[42])),
+        );
         counterBloc.emit(42);
         expect(counterBloc.state, 42);
         await counterBloc.close();
@@ -822,13 +832,13 @@ void main() {
     group('close', () {
       test('emits done (sync)', () {
         final bloc = CounterBloc()..close();
-        expect(bloc, emitsDone);
+        expect(bloc.stream, emitsDone);
       });
 
       test('emits done (async)', () async {
         final bloc = CounterBloc();
         await bloc.close();
-        expect(bloc, emitsDone);
+        expect(bloc.stream, emitsDone);
       });
     });
   });

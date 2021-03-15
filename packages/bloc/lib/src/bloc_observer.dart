@@ -9,13 +9,13 @@ class BlocObserver {
   /// instance is created.
   @protected
   @mustCallSuper
-  void onCreate(Bloc bloc) {}
+  void onCreate(BlocStream bloc) {}
 
   /// Called whenever an [event] is `added` to any [bloc] with the given [bloc]
   /// and [event].
   @protected
   @mustCallSuper
-  void onEvent(Bloc bloc, Object? event) {}
+  void onEvent(BlocStream bloc, Object? event) {}
 
   /// Called whenever a transition occurs in any [bloc] with the given [bloc]
   /// and [transition].
@@ -24,14 +24,14 @@ class BlocObserver {
   /// [onTransition] is called before a [bloc]'s state has been updated.
   @protected
   @mustCallSuper
-  void onTransition(Bloc bloc, Transition transition) {}
+  void onTransition(BlocStream bloc, Transition transition) {}
 
   /// Called whenever an [error] is thrown in any [Bloc] or [Cubit].
   /// The [stackTrace] argument may be [StackTrace.empty] if an error
   /// was received without a stack trace.
   @protected
   @mustCallSuper
-  void onError(Bloc bloc, Object error, StackTrace stackTrace) {}
+  void onError(BlocStream bloc, Object error, StackTrace stackTrace) {}
 
   /// Called whenever a [Bloc] is closed.
   /// [onClose] is called just before the [Bloc] is closed
@@ -39,5 +39,5 @@ class BlocObserver {
   /// emit new states.
   @protected
   @mustCallSuper
-  void onClose(Bloc bloc) {}
+  void onClose(BlocStream bloc) {}
 }

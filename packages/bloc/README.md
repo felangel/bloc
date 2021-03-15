@@ -65,7 +65,7 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 ![Bloc Architecture](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture_full.png)
 
-A `Bloc` is a type of `Stream` which converts incoming `events` into outgoing `states`.
+A `Bloc` is a class which extends `BlocStream` and is primarily focused on converting incoming `events` into outgoing `states`.
 
 ![Bloc Flow](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_flow.png)
 
@@ -169,31 +169,31 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 ```dart
 class MyBlocObserver extends BlocObserver {
   @override
-  void onCreate(Bloc bloc) {
+  void onCreate(BlocStream bloc) {
     super.onCreate(bloc);
     print('onCreate -- bloc: ${bloc.runtimeType}');
   }
 
   @override
-  void onEvent(Bloc bloc, Object? event) {
+  void onEvent(BlocStream bloc, Object? event) {
     super.onEvent(bloc, event);
     print('onEvent -- bloc: ${bloc.runtimeType}, event: $event');
   }
 
   @override
-  void onTransition(Bloc bloc, Transition transition) {
+  void onTransition(BlocStream bloc, Transition transition) {
     super.onTransition(bloc, transition);
     print('onTransition -- bloc: ${bloc.runtimeType}, transition: $transition');
   }
 
   @override
-  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
+  void onError(BlocStream bloc, Object error, StackTrace stackTrace) {
     print('onError -- bloc: ${bloc.runtimeType}, error: $error');
     super.onError(bloc, error, stackTrace);
   }
 
   @override
-  void onClose(Bloc bloc) {
+  void onClose(BlocStream bloc) {
     super.onClose(bloc);
     print('onClose -- bloc: ${bloc.runtimeType}');
   }
@@ -211,7 +211,7 @@ void main() {
 
 ![Cubit Architecture](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/cubit_architecture_full.png)
 
-A `Cubit` is a simplified `Bloc` which eliminates the notion of events and instead relies on methods to trigger state changes. Since `Cubit` extends `Bloc`, `Cubit` has the same public API as `Bloc`; however, rather than overriding `mapEventToState`, cubits can directly `emit` new states.
+A `Cubit` is a simplified `Bloc` which eliminates the notion of events and instead relies on methods to trigger state changes. Since `Cubit` also extends `BlocStream`, `Cubit` has a very similar public API as `Bloc`; however, rather than overriding `mapEventToState`, cubits can directly `emit` new states.
 
 ![Cubit Flow](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/cubit_flow.png)
 
@@ -255,7 +255,7 @@ void main() {
 
 #### Observing a Cubit
 
-Since all `Cubits` are `Blocs`, `onTransition` and `onError` can be overridden in a `Cubit` as well.
+Since all `Cubits` are `BlocStreams`, `onTransition` and `onError` can be overridden in a `Cubit` as well.
 
 ```dart
 class CounterCubit extends Cubit<int> {
@@ -282,25 +282,25 @@ class CounterCubit extends Cubit<int> {
 ```dart
 class MyBlocObserver extends BlocObserver {
   @override
-  void onCreate(Bloc bloc) {
+  void onCreate(BlocStream bloc) {
     super.onCreate(bloc);
     print('onCreate -- bloc: ${bloc.runtimeType}');
   }
 
   @override
-  void onTransition(Bloc bloc, Transition transition) {
+  void onTransition(BlocStream bloc, Transition transition) {
     super.onTransition(bloc, transition);
     print('onTransition -- bloc: ${bloc.runtimeType}, transition: $transition');
   }
 
   @override
-  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
+  void onError(BlocStream bloc, Object error, StackTrace stackTrace) {
     print('onError -- bloc: ${bloc.runtimeType}, error: $error');
     super.onError(bloc, error, stackTrace);
   }
 
   @override
-  void onClose(Bloc bloc) {
+  void onClose(BlocStream bloc) {
     super.onClose(bloc);
     print('onClose -- bloc: ${bloc.runtimeType}');
   }

@@ -153,7 +153,7 @@ void main() {
     });
 
     group('toString', () {
-      test('should return correct string representation of Transition', () {
+      test('should return correct string representation with event', () {
         final transition = Transition<CounterEvent, CounterState>(
           currentState: CounterState(0),
           event: CounterEvent('increment'),
@@ -165,6 +165,18 @@ void main() {
             'Transition { currentState: ${transition.currentState.toString()}, '
             'event: ${transition.event.toString()}, '
             'nextState: ${transition.nextState.toString()} }');
+      });
+
+      test('should return correct string representation without event', () {
+        final transition = Transition<CounterEvent, CounterState>(
+          currentState: CounterState(0),
+          nextState: CounterState(1),
+        );
+
+        expect(
+          transition.toString(),
+          '''Transition { currentState: ${transition.currentState.toString()}, nextState: ${transition.nextState.toString()} }''',
+        );
       });
     });
   });

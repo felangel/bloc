@@ -40,6 +40,6 @@ class Transition<Event, State> {
 
   @override
   String toString() {
-    return '''Transition { currentState: $currentState, event: $event, nextState: $nextState }''';
+    return '''Transition { currentState: $currentState, ${event == null ? '' : 'event: $event, '}nextState: $nextState }''';
   }
 }
