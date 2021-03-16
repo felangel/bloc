@@ -224,7 +224,7 @@ abstract class Bloc<Event, State> extends BlocBase<Event, State> {
 }
 
 /// {@template cubit}
-/// A [Cubit] is a type of [Bloc] which has no notion of events
+/// A [Cubit] is similar to [Bloc] but has no notion of events
 /// and relies on methods to [emit] new states.
 ///
 /// Every [Cubit] requires an initial state which will be the
