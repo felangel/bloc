@@ -121,7 +121,7 @@ void main() {
       test('emits states in the correct order', () async {
         final states = <int>[];
         final cubit = CounterCubit();
-        final subscription = cubit.listen(states.add);
+        final subscription = cubit.stream.listen(states.add);
         cubit.increment();
         await cubit.close();
         await subscription.cancel();
@@ -131,7 +131,7 @@ void main() {
       test('can emit initial state only once', () async {
         final states = <int>[];
         final cubit = SeededCubit(initialState: 0);
-        final subscription = cubit.listen(states.add);
+        final subscription = cubit.stream.listen(states.add);
         cubit..emitState(0)..emitState(0);
         await cubit.close();
         await subscription.cancel();
@@ -143,7 +143,7 @@ void main() {
           'continue emitting distinct states', () async {
         final states = <int>[];
         final cubit = SeededCubit(initialState: 0);
-        final subscription = cubit.listen(states.add);
+        final subscription = cubit.stream.listen(states.add);
         cubit..emitState(0)..emitState(1);
         await cubit.close();
         await subscription.cancel();
@@ -153,7 +153,7 @@ void main() {
       test('does not emit duplicate states', () async {
         final states = <int>[];
         final cubit = SeededCubit(initialState: 0);
-        final subscription = cubit.listen(states.add);
+        final subscription = cubit.stream.listen(states.add);
         cubit
           ..emitState(1)
           ..emitState(1)
@@ -170,7 +170,7 @@ void main() {
     group('listen', () {
       test('returns a StreamSubscription', () {
         final cubit = CounterCubit();
-        final subscription = cubit.listen((_) {});
+        final subscription = cubit.stream.listen((_) {});
         expect(subscription, isA<StreamSubscription<int>>());
         subscription.cancel();
         cubit.close();
@@ -178,14 +178,14 @@ void main() {
 
       test('does not receive current state upon subscribing', () async {
         final states = <int>[];
-        final cubit = CounterCubit()..listen(states.add);
+        final cubit = CounterCubit()..stream.listen(states.add);
         await cubit.close();
         expect(states, isEmpty);
       });
 
       test('receives single async state', () async {
         final states = <int>[];
-        final cubit = FakeAsyncCounterCubit()..listen(states.add);
+        final cubit = FakeAsyncCounterCubit()..stream.listen(states.add);
         await cubit.increment();
         await cubit.close();
         expect(states, [equals(1)]);
@@ -193,7 +193,7 @@ void main() {
 
       test('receives multiple async states', () async {
         final states = <int>[];
-        final cubit = FakeAsyncCounterCubit()..listen(states.add);
+        final cubit = FakeAsyncCounterCubit()..stream.listen(states.add);
         await cubit.increment();
         await cubit.increment();
         await cubit.increment();
@@ -204,8 +204,8 @@ void main() {
       test('can call listen multiple times', () async {
         final states = <int>[];
         final cubit = CounterCubit()
-          ..listen(states.add)
-          ..listen(states.add)
+          ..stream.listen(states.add)
+          ..stream.listen(states.add)
           ..increment();
         await cubit.close();
         expect(states, [equals(1), equals(1)]);

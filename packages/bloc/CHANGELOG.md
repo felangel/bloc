@@ -9,6 +9,7 @@
 - **BREAKING**: refactor: `Bloc` and `Cubit` do not extend `Stream` and implement `Sink`
   - refactor: use `bloc.stream` or `cubit.stream` to access `Stream<State>`
     - `myBloc.map(...)` -> `myBloc.stream.map(...)`
+  - refactor: deprecate `bloc.listen` in favor of `bloc.stream.listen`
 - fix: `toString` on `Transition` excludes null `event`
 
 # 7.0.0-nullsafety.3

@@ -1,10 +1,8 @@
 import 'package:meta/meta.dart';
 
 /// {@template transition}
-/// Occurs when an [event] is `added` after `mapEventToState` has been called
-/// but before the bloc's [State] has been updated.
-/// A [Transition] consists of the [currentState], the [event] which was
-/// `added`, and the [nextState].
+/// A [Transition] is the change from one state to another.
+/// Consists of the [currentState], an [event], and the [nextState].
 /// {@endtemplate}
 @immutable
 class Transition<Event, State> {
