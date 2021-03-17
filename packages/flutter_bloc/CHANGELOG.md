@@ -1,3 +1,7 @@
+# 7.0.0-nullsafety.6
+
+- chore: bump to `bloc: ^7.0.0-nullsafety.4`
+
 # 7.0.0-nullsafety.5
 
 - **BREAKING**: refactor: remove deprecated `context.repository`
