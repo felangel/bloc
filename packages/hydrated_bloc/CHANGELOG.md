@@ -1,3 +1,8 @@
+# 7.0.0-nullsafety.4
+
+- chore: upgrade to `bloc ^7.0.0-nullsafety.4`
+- chore: upgrade to `mocktail ^0.1.0`
+
 # 7.0.0-nullsafety.3
 
 - fix: web support with `HydratedStorage.webStorageDirectory`
