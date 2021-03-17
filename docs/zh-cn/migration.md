@@ -82,19 +82,19 @@ Widget build(BuildContext context) {
 @override
 Widget build(BuildContext context) {
   final bloc = context.bloc<MyBloc>();
-  return RaisedButton(
+  return ElevatedButton(
     onPressed: () => bloc.add(MyEvent()),
     ...
   )
 }
 ```
 
-上面的用法效率低下，因为当仅在用户点击 `RaisedButton` 时才需要该 `bloc` 时，这会导致在每次重建时对块进行查找。在这种情况下，最好使用 `context.read` 在需要的地方直接访问该块（在这种情况下，在 `onPressed` 回调中）。
+上面的用法效率低下，因为当仅在用户点击 `ElevatedButton` 时才需要该 `bloc` 时，这会导致在每次重建时对块进行查找。在这种情况下，最好使用 `context.read` 在需要的地方直接访问该块（在这种情况下，在 `onPressed` 回调中）。
 
 ```dart
 @override
 Widget build(BuildContext context) {
-  return RaisedButton(
+  return ElevatedButton(
     onPressed: () => context.read<MyBloc>().add(MyEvent()),
     ...
   )
@@ -109,7 +109,7 @@ Widget build(BuildContext context) {
 @override
 Widget build(BuildContext context) {
   final bloc = context.bloc<MyBloc>();
-  return RaisedButton(
+  return ElevatedButton(
     onPressed: () => bloc.add(MyEvent()),
     ...
   )
@@ -121,7 +121,7 @@ Widget build(BuildContext context) {
 ```dart
 @override
 Widget build(BuildContext context) {
-  return RaisedButton(
+  return ElevatedButton(
     onPressed: () => context.read<MyBloc>().add(MyEvent()),
     ...
   )

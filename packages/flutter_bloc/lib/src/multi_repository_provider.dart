@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/src/repository_provider.dart';
 import 'package:provider/provider.dart';
-
-import 'repository_provider.dart';
 
 /// {@template multi_repository_provider}
 /// Merges multiple [RepositoryProvider] widgets into one widget tree.
@@ -45,10 +44,8 @@ import 'repository_provider.dart';
 class MultiRepositoryProvider extends MultiProvider {
   /// {@macro multi_repository_provider}
   MultiRepositoryProvider({
-    Key key,
-    @required List<RepositoryProviderSingleChildWidget> providers,
-    @required Widget child,
-  })  : assert(providers != null),
-        assert(child != null),
-        super(key: key, providers: providers, child: child);
+    Key? key,
+    required List<RepositoryProviderSingleChildWidget> providers,
+    required Widget child,
+  }) : super(key: key, providers: providers, child: child);
 }

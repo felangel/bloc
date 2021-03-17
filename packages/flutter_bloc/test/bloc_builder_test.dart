@@ -5,10 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 class MyThemeApp extends StatefulWidget {
   MyThemeApp({
-    Key key,
-    @required Cubit<ThemeData> themeCubit,
-    @required Function onBuild,
-  })  : _themeCubit = themeCubit,
+    Key? key,
+    required Cubit<ThemeData> themeCubit,
+    required Function onBuild,
+  })   : _themeCubit = themeCubit,
         _onBuild = onBuild,
         super(key: key);
 
@@ -24,9 +24,9 @@ class MyThemeApp extends StatefulWidget {
 
 class MyThemeAppState extends State<MyThemeApp> {
   MyThemeAppState({
-    @required Cubit<ThemeData> themeCubit,
-    @required Function onBuild,
-  })  : _themeCubit = themeCubit,
+    required Cubit<ThemeData> themeCubit,
+    required Function onBuild,
+  })   : _themeCubit = themeCubit,
         _onBuild = onBuild;
 
   Cubit<ThemeData> _themeCubit;
@@ -35,7 +35,7 @@ class MyThemeAppState extends State<MyThemeApp> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<Cubit<ThemeData>, ThemeData>(
-      cubit: _themeCubit,
+      bloc: _themeCubit,
       builder: ((context, theme) {
         _onBuild();
         return MaterialApp(
@@ -43,14 +43,16 @@ class MyThemeAppState extends State<MyThemeApp> {
           theme: theme,
           home: Column(
             children: [
-              RaisedButton(
+              ElevatedButton(
                 key: const Key('raised_button_1'),
+                child: const SizedBox(),
                 onPressed: () {
                   setState(() => _themeCubit = DarkThemeCubit());
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 key: const Key('raised_button_2'),
+                child: const SizedBox(),
                 onPressed: () {
                   setState(() => _themeCubit = _themeCubit);
                 },
@@ -93,7 +95,7 @@ class MyCounterAppState extends State<MyCounterApp> {
         body: Column(
           children: <Widget>[
             BlocBuilder<CounterCubit, int>(
-              cubit: _cubit,
+              bloc: _cubit,
               buildWhen: (previousState, state) {
                 return (previousState + state) % 3 == 0;
               },
@@ -105,7 +107,7 @@ class MyCounterAppState extends State<MyCounterApp> {
               },
             ),
             BlocBuilder<CounterCubit, int>(
-              cubit: _cubit,
+              bloc: _cubit,
               builder: (context, count) {
                 return Text(
                   '$count',
@@ -113,8 +115,9 @@ class MyCounterAppState extends State<MyCounterApp> {
                 );
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               key: const Key('myCounterAppIncrementButton'),
+              child: const SizedBox(),
               onPressed: _cubit.increment,
             )
           ],
@@ -133,33 +136,6 @@ class CounterCubit extends Cubit<int> {
 
 void main() {
   group('BlocBuilder', () {
-    testWidgets('throws if initialized with null cubit and builder',
-        (tester) async {
-      try {
-        await tester.pumpWidget(
-          BlocBuilder<ThemeCubit, ThemeData>(
-            cubit: null,
-            builder: null,
-          ),
-        );
-      } on dynamic catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
-    testWidgets('throws if initialized with null builder', (tester) async {
-      try {
-        await tester.pumpWidget(
-          BlocBuilder<ThemeCubit, ThemeData>(
-            cubit: ThemeCubit(),
-            builder: null,
-          ),
-        );
-      } on dynamic catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
     testWidgets('passes initial state to widget', (tester) async {
       final themeCubit = ThemeCubit();
       var numBuilds = 0;
@@ -253,7 +229,8 @@ void main() {
                 return MaterialApp(
                   key: const Key('material_app'),
                   theme: theme,
-                  home: RaisedButton(
+                  home: ElevatedButton(
+                    child: const SizedBox(),
                     onPressed: () => setState(() {}),
                   ),
                 );
@@ -263,7 +240,7 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byType(RaisedButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final materialApp = tester.widget<MaterialApp>(
@@ -432,7 +409,7 @@ void main() {
       final counterCubit = CounterCubit();
       await tester.pumpWidget(
         BlocBuilder<CounterCubit, int>(
-          cubit: counterCubit,
+          bloc: counterCubit,
           buildWhen: (previous, state) {
             if (state % 2 == 0) {
               buildWhenPreviousState.add(previous);
@@ -467,12 +444,13 @@ void main() {
           textDirection: TextDirection.ltr,
           child: StatefulBuilder(
             builder: (context, setState) => BlocBuilder<CounterCubit, int>(
-              cubit: counterCubit,
+              bloc: counterCubit,
               buildWhen: (previous, state) => state % 2 == 0,
               builder: (_, state) {
                 states.add(state);
-                return RaisedButton(
+                return ElevatedButton(
                   key: key,
+                  child: const SizedBox(),
                   onPressed: () => setState(() {}),
                 );
               },

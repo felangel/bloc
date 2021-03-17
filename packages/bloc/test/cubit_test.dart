@@ -1,30 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'cubits/cubits.dart';
-
-class MockBlocObserver extends Mock implements BlocObserver {}
+import 'mocks/mocks.dart';
 
 void main() {
   group('Cubit', () {
-    group('constructor', () {
-      BlocObserver observer;
-
-      setUp(() {
-        observer = MockBlocObserver();
-        Bloc.observer = observer;
-      });
-
-      test('triggers onCreate on observer', () {
-        final cubit = CounterCubit();
-        // ignore: invalid_use_of_protected_member
-        verify(observer.onCreate(cubit)).called(1);
-      });
-    });
-
     group('initial state', () {
       test('is correct', () {
         expect(CounterCubit().state, 0);
@@ -42,23 +25,24 @@ void main() {
       test('triggers onError', () async {
         final expectedError = Exception('fatal exception');
 
-        runZoned(() {
+        runZonedGuarded(() {
           CounterCubit().addError(expectedError, StackTrace.current);
-        }, onError: (Object error, StackTrace stackTrace) {
+        }, (Object error, StackTrace stackTrace) {
           expect(
-            (error as CubitUnhandledErrorException).toString(),
+            (error as BlocUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
               'in Instance of \'CounterCubit\'.',
             ),
           );
           expect(stackTrace, isNotNull);
+          expect(stackTrace, isNot(StackTrace.empty));
         });
       });
     });
 
-    group('onChange', () {
-      BlocObserver observer;
+    group('onTransition', () {
+      late MockBlocObserver observer;
 
       setUp(() {
         observer = MockBlocObserver();
@@ -66,53 +50,51 @@ void main() {
       });
 
       test('is not called for the initial state', () async {
-        final changes = <Change<int>>[];
-        final cubit = CounterCubit(onChangeCallback: changes.add);
+        final transitions = <Transition<Null, int>>[];
+        final cubit = CounterCubit(onTransitionCallback: transitions.add);
         await cubit.close();
-        expect(changes, isEmpty);
-        // ignore: invalid_use_of_protected_member
-        verifyNever(observer.onChange(any, any));
+        expect(transitions, isEmpty);
       });
 
       test('is called with correct change for a single state change', () async {
-        final changes = <Change<int>>[];
-        final cubit = CounterCubit(onChangeCallback: changes.add)..increment();
+        final transitions = <Transition<Null, int>>[];
+        final cubit = CounterCubit(onTransitionCallback: transitions.add)
+          ..increment();
         await cubit.close();
         expect(
-          changes,
-          const [Change<int>(currentState: 0, nextState: 1)],
+          transitions,
+          const [Transition<Null, int>(currentState: 0, nextState: 1)],
         );
-        // ignore: invalid_use_of_protected_member
-        verify(observer.onChange(
-          cubit,
-          const Change<int>(currentState: 0, nextState: 1),
-        )).called(1);
       });
 
-      test('is called with correct changes for multiple state changes',
+      test('is called with correct transitions for multiple state transitions',
           () async {
-        final changes = <Change<int>>[];
-        final cubit = CounterCubit(onChangeCallback: changes.add)
+        final transitions = <Transition<Null, int>>[];
+        final cubit = CounterCubit(onTransitionCallback: transitions.add)
           ..increment()
           ..increment();
         await cubit.close();
         expect(
-          changes,
+          transitions,
           const [
-            Change<int>(currentState: 0, nextState: 1),
-            Change<int>(currentState: 1, nextState: 2),
+            Transition<Null, int>(currentState: 0, nextState: 1),
+            Transition<Null, int>(currentState: 1, nextState: 2),
           ],
         );
-        // ignore: invalid_use_of_protected_member
-        verify(observer.onChange(
-          cubit,
-          const Change<int>(currentState: 0, nextState: 1),
-        )).called(1);
-        // ignore: invalid_use_of_protected_member
-        verify(observer.onChange(
-          cubit,
-          const Change<int>(currentState: 1, nextState: 2),
-        )).called(1);
+      });
+    });
+
+    group('mapEventToState', () {
+      test('throws StateError', () {
+        final cubit = CounterCubit();
+        final message = 'mapEventToState should never be invoked '
+            'on an instance of type Cubit';
+        expect(
+          () => cubit.mapEventToState(null),
+          throwsA(
+            isA<StateError>().having((e) => e.message, 'message', message),
+          ),
+        );
       });
     });
 
@@ -237,7 +219,7 @@ void main() {
     });
 
     group('close', () {
-      BlocObserver observer;
+      late MockBlocObserver observer;
 
       setUp(() {
         observer = MockBlocObserver();
@@ -247,8 +229,7 @@ void main() {
       test('triggers onClose on observer', () async {
         final cubit = CounterCubit();
         await cubit.close();
-        // ignore: invalid_use_of_protected_member
-        verify(observer.onClose(cubit)).called(1);
+        expect(observer.onCloseCalls, [OnCloseCall(cubit)]);
       });
 
       test('emits done (sync)', () {

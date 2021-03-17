@@ -39,7 +39,7 @@ class MyCatalog extends StatelessWidget {
 }
 
 class _AddButton extends StatelessWidget {
-  const _AddButton({Key key, @required this.item}) : super(key: key);
+  const _AddButton({Key? key, required this.item}) : super(key: key);
 
   final Item item;
 
@@ -52,11 +52,11 @@ class _AddButton extends StatelessWidget {
           return const CircularProgressIndicator();
         }
         if (state is CartLoaded) {
-          return FlatButton(
+          return TextButton(
+            style: TextButton.styleFrom(onSurface: theme.primaryColor),
             onPressed: state.cart.items.contains(item)
                 ? null
                 : () => context.read<CartBloc>().add(CartItemAdded(item)),
-            splashColor: theme.primaryColor,
             child: state.cart.items.contains(item)
                 ? const Icon(Icons.check, semanticLabel: 'ADDED')
                 : const Text('ADD'),
@@ -85,7 +85,7 @@ class _MyAppBar extends StatelessWidget {
 }
 
 class _MyListItem extends StatelessWidget {
-  const _MyListItem(this.item, {Key key}) : super(key: key);
+  const _MyListItem(this.item, {Key? key}) : super(key: key);
 
   final Item item;
 

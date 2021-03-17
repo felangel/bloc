@@ -51,7 +51,7 @@ void main() {
           'should not throw assertion error when initialized '
           'with a null currentState', () {
         expect(
-          () => Transition<TransitionEvent, TransitionState>(
+          () => Transition<TransitionEvent, TransitionState?>(
             currentState: null,
             event: SimpleTransitionEvent(),
             nextState: SimpleTransitionState(),
@@ -64,7 +64,7 @@ void main() {
           'should not throw assertion error when initialized with a null event',
           () {
         expect(
-          () => Transition<TransitionEvent, TransitionState>(
+          () => Transition<TransitionEvent?, TransitionState>(
             currentState: SimpleTransitionState(),
             event: null,
             nextState: SimpleTransitionState(),
@@ -77,7 +77,7 @@ void main() {
           'should not throw assertion error '
           'when initialized with a null nextState', () {
         expect(
-          () => Transition<TransitionEvent, TransitionState>(
+          () => Transition<TransitionEvent, TransitionState?>(
             currentState: SimpleTransitionState(),
             event: SimpleTransitionEvent(),
             nextState: null,
@@ -95,7 +95,7 @@ void main() {
             event: SimpleTransitionEvent(),
             nextState: SimpleTransitionState(),
           );
-        } on dynamic catch (_) {
+        } catch (_) {
           fail(
             'should not throw error when initialized '
             'with all required parameters',

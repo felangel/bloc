@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 import '../counter/counter_bloc.dart';
 
 class OnErrorBloc extends Bloc<CounterEvent, int> {
-  OnErrorBloc({this.error, this.onErrorCallback}) : super(0);
+  OnErrorBloc({required this.error, required this.onErrorCallback}) : super(0);
 
   final Function onErrorCallback;
   final Error error;

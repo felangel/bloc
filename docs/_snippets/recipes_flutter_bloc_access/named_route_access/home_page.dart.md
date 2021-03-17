@@ -6,7 +6,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Counter')),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           onPressed: () => Navigator.of(context).pushNamed('/counter'),
           child: Text('Counter'),
         ),

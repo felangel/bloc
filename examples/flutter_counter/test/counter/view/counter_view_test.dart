@@ -4,24 +4,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_counter/counter/counter.dart';
 import 'package:flutter_counter/counter/view/counter_view.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
-class MockCounterCubit extends MockBloc<int> implements CounterCubit {}
+class MockCounterCubit extends MockCubit<int> implements CounterCubit {}
 
 const _incrementButtonKey = Key('counterView_increment_floatingActionButton');
 const _decrementButtonKey = Key('counterView_decrement_floatingActionButton');
 
 void main() {
-  CounterCubit counterCubit;
+  late CounterCubit counterCubit;
 
   setUp(() {
     counterCubit = MockCounterCubit();
-    when(counterCubit.state).thenReturn(0);
   });
 
   group('CounterView', () {
     testWidgets('renders current CounterCubit state', (tester) async {
-      when(counterCubit.state).thenReturn(42);
+      when(() => counterCubit.state).thenReturn(42);
       await tester.pumpWidget(
         MaterialApp(
           home: BlocProvider.value(
@@ -34,6 +33,8 @@ void main() {
     });
 
     testWidgets('tapping increment button invokes increment', (tester) async {
+      when(() => counterCubit.state).thenReturn(0);
+      when(() => counterCubit.increment()).thenReturn(() {});
       await tester.pumpWidget(
         MaterialApp(
           home: BlocProvider.value(
@@ -43,10 +44,12 @@ void main() {
         ),
       );
       await tester.tap(find.byKey(_incrementButtonKey));
-      verify(counterCubit.increment()).called(1);
+      verify(() => counterCubit.increment()).called(1);
     });
 
     testWidgets('tapping decrement button invokes decrement', (tester) async {
+      when(() => counterCubit.state).thenReturn(0);
+      when(() => counterCubit.decrement()).thenReturn(() {});
       await tester.pumpWidget(
         MaterialApp(
           home: BlocProvider.value(
@@ -55,8 +58,10 @@ void main() {
           ),
         ),
       );
-      await tester.tap(find.byKey(_decrementButtonKey));
-      verify(counterCubit.decrement()).called(1);
+      final decrementFinder = find.byKey(_decrementButtonKey);
+      await tester.ensureVisible(decrementFinder);
+      await tester.tap(decrementFinder);
+      verify(() => counterCubit.decrement()).called(1);
     });
   });
 }

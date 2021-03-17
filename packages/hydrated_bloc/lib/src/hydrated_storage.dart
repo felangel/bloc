@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:meta/meta.dart';
 import 'package:synchronized/synchronized.dart';
 // ignore: implementation_imports
 import 'package:hive/src/hive_impl.dart';
@@ -25,52 +24,81 @@ abstract class Storage {
   Future<void> clear();
 }
 
-/// {@template hydrated_cubit_storage}
-/// Implementation of [Storage] which uses `PathProvider` and `dart.io`
+/// {@template hydrated_storage}
+/// Implementation of [Storage] which uses [package:hive](https://pub.dev/packages/hive)
 /// to persist and retrieve state changes from the local device.
 /// {@endtemplate}
 class HydratedStorage implements Storage {
-  /// {@macro hydrated_cubit_storage}
+  /// {@macro hydrated_storage}
   @visibleForTesting
   HydratedStorage(this._box);
 
+  /// Sentinel directory used to determine that web storage should be used
+  /// when initializing [HydratedStorage].
+  ///
+  /// ```dart
+  /// await HydratedStorage.build(
+  ///   storageDirectory: HydratedStorage.webStorageDirectory,
+  /// );
+  /// ```
+  static final webStorageDirectory = Directory('');
+
   /// Returns an instance of [HydratedStorage].
-  /// [storageDirectory] can optionally be provided.
-  /// By default, [getTemporaryDirectory] is used.
+  /// [storageDirectory] is required.
+  ///
+  /// For web, use [webStorageDirectory] as the `storageDirectory`
+  ///
+  /// ```dart
+  /// import 'package:flutter/foundation.dart';
+  /// import 'package:flutter/material.dart';
+  ///
+  /// import 'package:hydrated_bloc/hydrated_bloc.dart';
+  /// import 'package:path_provider/path_provider.dart';
+  ///
+  /// void main() async {
+  ///   WidgetsFlutterBinding.ensureInitialized();
+  ///   HydratedBloc.storage = await HydratedStorage.build(
+  ///     storageDirectory: kIsWeb
+  ///      ? HydratedStorage.webStorageDirectory
+  ///      : await getTemporaryDirectory(),
+  ///   );
+  ///   runApp(App());
+  /// }
+  /// ```
   ///
   /// With [encryptionCipher] you can provide custom encryption.
   /// Following snippet shows how to make default one:
   /// ```dart
   /// import 'package:crypto/crypto.dart';
-  /// import 'package:hydrated_cubit/hydrated_cubit.dart';
+  /// import 'package:hydrated_bloc/hydrated_bloc.dart';
   ///
   /// const password = 'hydration';
   /// final byteskey = sha256.convert(utf8.encode(password)).bytes;
   /// return HydratedAesCipher(byteskey);
   /// ```
   static Future<HydratedStorage> build({
-    Directory storageDirectory,
-    HydratedCipher encryptionCipher,
+    required Directory storageDirectory,
+    HydratedCipher? encryptionCipher,
   }) {
     return _lock.synchronized(() async {
-      if (_instance != null) return _instance;
+      if (_instance != null) return _instance!;
       // Use HiveImpl directly to avoid conflicts with existing Hive.init
       // https://github.com/hivedb/hive/issues/336
       hive = HiveImpl();
       Box<dynamic> box;
-      if (isWeb) {
+
+      if (storageDirectory == webStorageDirectory) {
         box = await hive.openBox<dynamic>(
           'hydrated_box',
           encryptionCipher: encryptionCipher,
         );
       } else {
-        final directory = storageDirectory ?? await getTemporaryDirectory();
-        hive.init(directory.path);
+        hive.init(storageDirectory.path);
         box = await hive.openBox<dynamic>(
           'hydrated_box',
           encryptionCipher: encryptionCipher,
         );
-        await _migrate(directory, box);
+        await _migrate(storageDirectory, box);
       }
 
       return _instance = HydratedStorage(box);
@@ -86,27 +114,22 @@ class HydratedStorage implements Storage {
         for (final key in cache.keys) {
           try {
             final string = cache[key];
-            final dynamic object = json.decode(string);
+            final dynamic object = json.decode(string ?? '');
             await box.put(key, object);
-          } on dynamic catch (_) {}
+          } catch (_) {}
         }
-      } on dynamic catch (_) {}
+      } catch (_) {}
       await file.delete();
     }
   }
 
-  /// Internal flag which determines if running on the web platform.
-  /// Defaults to [kIsWeb] and is only visible for testing purposes.
-  @visibleForTesting
-  static bool isWeb = kIsWeb;
-
   /// Internal instance of [HiveImpl].
   /// It should only be used for testing.
   @visibleForTesting
-  static HiveInterface hive;
+  static late HiveInterface hive;
 
   static final _lock = Lock();
-  static HydratedStorage _instance;
+  static HydratedStorage? _instance;
 
   final Box _box;
 

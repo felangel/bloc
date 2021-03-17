@@ -53,7 +53,9 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 ```dart
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  HydratedBloc.storage = await HydratedStorage.build();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: await getTemporaryDirectory(),
+  );
   runApp(App());
 }
 ```
@@ -121,9 +123,7 @@ class CounterCubit extends Cubit<int> with HydratedMixin {
 
 ## Custom Storage Directory
 
-By default, all data is written to [temporary storage](https://github.com/flutter/plugins/blob/61c39d1e79e8f36030162a5f85fb491c65f4e51c/packages/path_provider/lib/path_provider.dart#L24) which means it can be wiped by the operating system at any point in time.
-
-An optional `storageDirectory` can be provided to override the default temporary storage directory:
+Any `storageDirectory` can be used when creating an instance of `HydratedStorage`:
 
 ```dart
 HydratedBloc.storage = await HydratedStorage.build(

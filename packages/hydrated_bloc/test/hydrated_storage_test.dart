@@ -2,181 +2,156 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 import 'package:hive/hive.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:pedantic/pedantic.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+
+// ignore: implementation_imports
+import 'package:hive/src/hive_impl.dart';
 
 class MockBox extends Mock implements Box<dynamic> {}
 
-class MockPathProviderPlatform extends Mock
-    with MockPlatformInterfaceMixin
-    implements PathProviderPlatform {
-  MockPathProviderPlatform({
-    @required this.temporaryPath,
-    @required this.getTemporaryPathCalled,
-  });
-  final String temporaryPath;
-  final VoidCallback getTemporaryPathCalled;
-
-  @override
-  Future<String> getTemporaryPath() async {
-    getTemporaryPathCalled();
-    return temporaryPath;
-  }
-}
-
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-
   group('HydratedStorage', () {
     final cwd = Directory.current.absolute.path;
-    var getTemporaryDirectoryCallCount = 0;
+    final storageDirectory = Directory(cwd);
 
-    setUp(() async {
-      PathProviderPlatform.instance = MockPathProviderPlatform(
-        temporaryPath: cwd,
-        getTemporaryPathCalled: () => ++getTemporaryDirectoryCallCount,
-      );
-    });
-
-    Storage storage;
+    late Storage storage;
 
     tearDown(() async {
-      await storage?.clear();
+      await storage.clear();
     });
 
     group('migration', () {
       test('returns correct value when file exists', () async {
-        final directory = await getTemporaryDirectory();
-        File('${directory.path}/.hydrated_bloc.json')
+        File('${storageDirectory.path}/.hydrated_bloc.json')
           ..writeAsStringSync(json.encode({
             'CounterBloc': json.encode({'value': 4})
           }));
-        storage = await HydratedStorage.build();
+        storage = await HydratedStorage.build(
+          storageDirectory: storageDirectory,
+        );
         expect(storage.read('CounterBloc')['value'] as int, 4);
       });
     });
 
     group('build', () {
       setUp(() async {
-        await (await HydratedStorage.build()).clear();
-        getTemporaryDirectoryCallCount = 0;
-      });
-
-      test('calls getTemporaryDirectory when storageDirectory is null',
-          () async {
-        storage = await HydratedStorage.build();
-        expect(getTemporaryDirectoryCallCount, 1);
-      });
-
-      test(
-          'does not call getTemporaryDirectory '
-          'when storageDirectory is null and kIsWeb', () async {
-        HydratedStorage.isWeb = true;
-        final completer = Completer<void>();
-        await runZoned(() {
-          HydratedStorage.build().whenComplete(completer.complete);
-          return completer.future;
-        }, onError: (Object _) {});
-        HydratedStorage.isWeb = kIsWeb;
-        expect(getTemporaryDirectoryCallCount, 0);
-      });
-
-      test(
-          'does not call getTemporaryDirectory '
-          'when storageDirectory is defined', () async {
-        storage = await HydratedStorage.build(storageDirectory: Directory(cwd));
-        expect(getTemporaryDirectoryCallCount, 0);
+        await (await HydratedStorage.build(storageDirectory: storageDirectory))
+            .clear();
       });
 
       test('reuses existing instance when called multiple times', () async {
-        final instanceA = storage = await HydratedStorage.build();
-        final beforeCount = getTemporaryDirectoryCallCount;
-        final instanceB = await HydratedStorage.build();
-        final afterCount = getTemporaryDirectoryCallCount;
-        expect(beforeCount, afterCount);
+        final instanceA = storage = await HydratedStorage.build(
+          storageDirectory: storageDirectory,
+        );
+        final instanceB = await HydratedStorage.build(
+          storageDirectory: storageDirectory,
+        );
         expect(instanceA, instanceB);
       });
 
+      test(
+          'does not call Hive.init '
+          'when storageDirectory is webStorageDirectory', () async {
+        final completer = Completer<void>();
+        await runZonedGuarded(() {
+          HydratedStorage.build(
+            storageDirectory: HydratedStorage.webStorageDirectory,
+          ).whenComplete(completer.complete);
+          return completer.future;
+        }, (Object _, StackTrace __) {});
+        expect(HiveImpl().homePath, isNull);
+        storage = await HydratedStorage.build(
+          storageDirectory: storageDirectory,
+        );
+      });
+
       test('creates internal HiveImpl with correct directory', () async {
-        storage = await HydratedStorage.build();
-        final box = HydratedStorage.hive?.box<dynamic>('hydrated_box');
-        final directory = await getTemporaryDirectory();
+        storage = await HydratedStorage.build(
+          storageDirectory: storageDirectory,
+        );
+        final box = HydratedStorage.hive.box<dynamic>('hydrated_box');
         expect(box, isNotNull);
-        expect(box.path, p.join(directory.path, 'hydrated_box.hive'));
+        expect(box.path, p.join(storageDirectory.path, 'hydrated_box.hive'));
       });
     });
 
     group('default constructor', () {
       const key = '__key__';
       const value = '__value__';
-      Box box;
+      late Box box;
 
       setUp(() {
         box = MockBox();
+        when(() => box.deleteFromDisk()).thenAnswer(
+          (_) => Future<void>.value(),
+        );
         storage = HydratedStorage(box);
       });
 
       group('read', () {
         test('returns null when box is not open', () {
-          when(box.isOpen).thenReturn(false);
+          when(() => box.isOpen).thenReturn(false);
           expect(storage.read(key), isNull);
         });
 
         test('returns correct value when box is open', () {
-          when(box.isOpen).thenReturn(true);
-          when<dynamic>(box.get(any)).thenReturn(value);
+          when(() => box.isOpen).thenReturn(true);
+          when<dynamic>(() => box.get(any<dynamic>())).thenReturn(value);
           expect(storage.read(key), value);
-          verify<dynamic>(box.get(key)).called(1);
+          verify<dynamic>(() => box.get(key)).called(1);
         });
       });
 
       group('write', () {
         test('does nothing when box is not open', () async {
-          when(box.isOpen).thenReturn(false);
+          when(() => box.isOpen).thenReturn(false);
           await storage.write(key, value);
-          verifyNever(box.put(any, any));
+          verifyNever(() => box.put(any<dynamic>(), any<dynamic>()));
         });
 
         test('puts key/value in box when box is open', () async {
-          when(box.isOpen).thenReturn(true);
+          when(() => box.isOpen).thenReturn(true);
+          when(
+            () => box.put(any<dynamic>(), any<dynamic>()),
+          ).thenAnswer((_) => Future<void>.value());
           await storage.write(key, value);
-          verify(box.put(key, value)).called(1);
+          verify(() => box.put(key, value)).called(1);
         });
       });
 
       group('delete', () {
         test('does nothing when box is not open', () async {
-          when(box.isOpen).thenReturn(false);
+          when(() => box.isOpen).thenReturn(false);
           await storage.delete(key);
-          verifyNever(box.delete(any));
+          verifyNever(() => box.delete(any<dynamic>()));
         });
 
         test('puts key/value in box when box is open', () async {
-          when(box.isOpen).thenReturn(true);
+          when(() => box.isOpen).thenReturn(true);
+          when(
+            () => box.delete(any<dynamic>()),
+          ).thenAnswer((_) => Future<void>.value());
           await storage.delete(key);
-          verify(box.delete(key)).called(1);
+          verify(() => box.delete(key)).called(1);
         });
       });
 
       group('clear', () {
         test('does nothing when box is not open', () async {
-          when(box.isOpen).thenReturn(false);
+          when(() => box.isOpen).thenReturn(false);
           await storage.clear();
-          verifyNever(box.deleteFromDisk());
+          verifyNever(() => box.deleteFromDisk());
         });
 
         test('deletes box when box is open', () async {
-          when(box.isOpen).thenReturn(true);
+          when(() => box.isOpen).thenReturn(true);
           await storage.clear();
-          verify(box.deleteFromDisk()).called(1);
+          verify(() => box.deleteFromDisk()).called(1);
         });
       });
     });
@@ -213,6 +188,8 @@ void main() {
       final docs = p.join(cwd, 'docs');
 
       tearDown(() async {
+        await storage.clear();
+        await Hive.close();
         await Directory(temp).delete(recursive: true);
         await Directory(docs).delete(recursive: true);
       });
@@ -220,7 +197,7 @@ void main() {
       test('Hive and Hydrated default directories', () async {
         Hive.init(docs);
         storage = await HydratedStorage.build(
-          storageDirectory: Directory(temp),
+          storageDirectory: Directory(temp)..createSync(),
         );
 
         var box = await Hive.openBox<String>('hive');
@@ -228,15 +205,13 @@ void main() {
         expect(box.get('name'), 'hive');
         await Hive.close();
 
+        // https://github.com/hivedb/hive/pull/521#issuecomment-767903897
+        (Hive as HiveImpl).homePath = null;
+
         Hive.init(docs);
         box = await Hive.openBox<String>('hive');
-        try {
-          expect(box.get('name'), isNotNull);
-          expect(box.get('name'), 'hive');
-        } finally {
-          await storage.clear();
-          await Hive.close();
-        }
+        expect(box.get('name'), isNotNull);
+        expect(box.get('name'), 'hive');
       });
     });
   });

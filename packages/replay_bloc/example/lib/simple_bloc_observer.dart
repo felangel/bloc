@@ -3,26 +3,20 @@ import 'package:bloc/bloc.dart';
 /// Simple [BlocObserver] which just prints to the debug console.
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onEvent(Bloc bloc, Object event) {
-    print('${bloc.runtimeType} $event');
+  void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
+    print('${bloc.runtimeType} $event');
   }
 
   @override
-  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
-    print('${cubit.runtimeType} $error $stackTrace');
-    super.onError(cubit, error, stackTrace);
-  }
-
-  @override
-  void onChange(Cubit cubit, Change change) {
-    print('${cubit.runtimeType} $change');
-    super.onChange(cubit, change);
+  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
+    print('${bloc.runtimeType} $error $stackTrace');
+    super.onError(bloc, error, stackTrace);
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    print('${bloc.runtimeType} $transition');
     super.onTransition(bloc, transition);
+    print('${bloc.runtimeType} $transition');
   }
 }

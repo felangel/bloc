@@ -43,39 +43,6 @@ class RepositoryB {
 
 void main() {
   group('MultiRepositoryProvider', () {
-    testWidgets(
-        'throws if initialized with no RepositoryProviders and no child',
-        (tester) async {
-      try {
-        await tester.pumpWidget(
-          MultiRepositoryProvider(providers: null, child: null),
-        );
-      } on dynamic catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
-    testWidgets('throws if initialized with no RepositoryProviders',
-        (tester) async {
-      try {
-        await tester.pumpWidget(
-          MultiRepositoryProvider(providers: null, child: const SizedBox()),
-        );
-      } on dynamic catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
-    testWidgets('throws if initialized with no child', (tester) async {
-      try {
-        await tester.pumpWidget(
-          MultiRepositoryProvider(providers: [], child: null),
-        );
-      } on dynamic catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
     testWidgets('passes values to children', (tester) async {
       await tester.pumpWidget(
         MultiRepositoryProvider(

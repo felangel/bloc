@@ -11,7 +11,7 @@
 - Observe state changes with [BlocObserver](/coreconcepts?id=blocobserver).
 - [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
 - [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
-- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget which provides a repository to its children.
+- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget which invokes the listener code in response to state changes in the bloc.
 - [MultiBlocProvider](/flutterbloccoreconcepts?id=multiblocprovider), a Flutter widget that merges multiple BlocProvider widgets into one.
 - Using Bloc instead of Cubit. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
 - Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).

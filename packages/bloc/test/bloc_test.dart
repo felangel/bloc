@@ -1,19 +1,17 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:mockito/mockito.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 
-import './blocs/blocs.dart';
-
-class MockBlocObserver extends Mock implements BlocObserver {}
+import 'blocs/blocs.dart';
+import 'mocks/mocks.dart';
 
 void main() {
   group('Bloc Tests', () {
     group('Simple Bloc', () {
-      SimpleBloc simpleBloc;
-      BlocObserver observer;
+      late SimpleBloc simpleBloc;
+      late MockBlocObserver observer;
 
       setUp(() {
         simpleBloc = SimpleBloc();
@@ -23,15 +21,13 @@ void main() {
 
       test('triggers onCreate on observer when instantiated', () {
         final bloc = SimpleBloc();
-        // ignore: invalid_use_of_protected_member
-        verify(observer.onCreate(bloc)).called(1);
+        expect(observer.onCreateCalls, [OnCreateCall(bloc)]);
       });
 
       test('triggers onClose on observer when closed', () async {
         final bloc = SimpleBloc();
         await bloc.close();
-        // ignore: invalid_use_of_protected_member
-        verify(observer.onClose(bloc)).called(1);
+        expect(observer.onCloseCalls, [OnCloseCall(bloc)]);
       });
 
       test('close does not emit new states over the state stream', () async {
@@ -53,22 +49,16 @@ void main() {
           simpleBloc,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          verify(
-            // ignore: invalid_use_of_protected_member
-            observer.onTransition(
+          expect(observer.onTransitionCalls, [
+            OnTransitionCall(
               simpleBloc,
               const Transition<dynamic, String>(
                 currentState: '',
                 event: 'event',
                 nextState: 'data',
               ),
-            ),
-          ).called(1);
-          // ignore: invalid_use_of_protected_member
-          verify(observer.onChange(
-            simpleBloc,
-            const Change<String>(currentState: '', nextState: 'data'),
-          )).called(1);
+            )
+          ]);
           expect(simpleBloc.state, 'data');
         });
 
@@ -84,22 +74,16 @@ void main() {
           simpleBloc,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          verify(
-            // ignore: invalid_use_of_protected_member
-            observer.onTransition(
+          expect(observer.onTransitionCalls, [
+            OnTransitionCall(
               simpleBloc,
               const Transition<dynamic, String>(
                 currentState: '',
                 event: 'event1',
                 nextState: 'data',
               ),
-            ),
-          ).called(1);
-          // ignore: invalid_use_of_protected_member
-          verify(observer.onChange(
-            simpleBloc,
-            const Change<String>(currentState: '', nextState: 'data'),
-          )).called(1);
+            )
+          ]);
           expect(simpleBloc.state, 'data');
         });
 
@@ -134,8 +118,8 @@ void main() {
     });
 
     group('Complex Bloc', () {
-      ComplexBloc complexBloc;
-      BlocObserver observer;
+      late ComplexBloc complexBloc;
+      late MockBlocObserver observer;
 
       setUp(() {
         complexBloc = ComplexBloc();
@@ -162,27 +146,16 @@ void main() {
           complexBloc,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          verify(
-            // ignore: invalid_use_of_protected_member
-            observer.onTransition(
+          expect(observer.onTransitionCalls, [
+            OnTransitionCall(
               complexBloc,
               Transition<ComplexEvent, ComplexState>(
                 currentState: ComplexStateA(),
                 event: ComplexEventB(),
                 nextState: ComplexStateB(),
               ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
-            observer.onChange(
-              complexBloc,
-              Change<ComplexState>(
-                currentState: ComplexStateA(),
-                nextState: ComplexStateB(),
-              ),
-            ),
-          ).called(1);
+            )
+          ]);
           expect(complexBloc.state, ComplexStateB());
         });
 
@@ -234,10 +207,10 @@ void main() {
     });
 
     group('CounterBloc', () {
-      CounterBloc counterBloc;
-      BlocObserver observer;
-      List<String> transitions;
-      List<CounterEvent> events;
+      late CounterBloc counterBloc;
+      late MockBlocObserver observer;
+      late List<String> transitions;
+      late List<CounterEvent> events;
 
       setUp(() {
         events = [];
@@ -269,22 +242,16 @@ void main() {
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expectLater(transitions, expectedTransitions);
-          verify(
-            // ignore: invalid_use_of_protected_member
-            observer.onTransition(
+          expect(observer.onTransitionCalls, [
+            OnTransitionCall(
               counterBloc,
               const Transition<CounterEvent, int>(
                 currentState: 0,
                 event: CounterEvent.increment,
                 nextState: 1,
               ),
-            ),
-          ).called(1);
-          // ignore: invalid_use_of_protected_member
-          verify(observer.onChange(
-            counterBloc,
-            const Change<int>(currentState: 0, nextState: 1),
-          )).called(1);
+            )
+          ]);
           expect(counterBloc.state, 1);
         });
 
@@ -306,9 +273,8 @@ void main() {
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expect(transitions, expectedTransitions);
-          verify(
-            // ignore: invalid_use_of_protected_member
-            observer.onTransition(
+          expect(observer.onTransitionCalls, [
+            OnTransitionCall(
               counterBloc,
               const Transition<CounterEvent, int>(
                 currentState: 0,
@@ -316,15 +282,7 @@ void main() {
                 nextState: 1,
               ),
             ),
-          ).called(1);
-          // ignore: invalid_use_of_protected_member
-          verify(observer.onChange(
-            counterBloc,
-            const Change<int>(currentState: 0, nextState: 1),
-          )).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
-            observer.onTransition(
+            OnTransitionCall(
               counterBloc,
               const Transition<CounterEvent, int>(
                 currentState: 1,
@@ -332,15 +290,7 @@ void main() {
                 nextState: 2,
               ),
             ),
-          ).called(1);
-          // ignore: invalid_use_of_protected_member
-          verify(observer.onChange(
-            counterBloc,
-            const Change<int>(currentState: 1, nextState: 2),
-          )).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
-            observer.onTransition(
+            OnTransitionCall(
               counterBloc,
               const Transition<CounterEvent, int>(
                 currentState: 2,
@@ -348,13 +298,7 @@ void main() {
                 nextState: 3,
               ),
             ),
-          ).called(1);
-          // ignore: invalid_use_of_protected_member
-          verify(observer.onChange(
-            counterBloc,
-            const Change<int>(currentState: 2, nextState: 3),
-          )).called(1);
-          expect(counterBloc.state, 3);
+          ]);
         });
 
         counterBloc
@@ -388,8 +332,8 @@ void main() {
     });
 
     group('Async Bloc', () {
-      AsyncBloc asyncBloc;
-      BlocObserver observer;
+      late AsyncBloc asyncBloc;
+      late MockBlocObserver observer;
 
       setUp(() {
         asyncBloc = AsyncBloc();
@@ -421,8 +365,7 @@ void main() {
         await asyncBloc.close();
 
         expect(states, expectedStates);
-        // ignore: invalid_use_of_protected_member
-        verifyNever(observer.onError(any, any, any));
+        expect(observer.onErrorCalls, isEmpty);
       });
 
       test('state returns correct value initially', () {
@@ -440,9 +383,8 @@ void main() {
           asyncBloc,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          verify(
-            // ignore: invalid_use_of_protected_member
-            observer.onTransition(
+          expect(observer.onTransitionCalls, [
+            OnTransitionCall(
               asyncBloc,
               Transition<AsyncEvent, AsyncState>(
                 currentState: AsyncState(
@@ -458,26 +400,7 @@ void main() {
                 ),
               ),
             ),
-          ).called(1);
-          // ignore: invalid_use_of_protected_member
-          verify(observer.onChange(
-            asyncBloc,
-            Change<AsyncState>(
-              currentState: AsyncState(
-                isLoading: false,
-                hasError: false,
-                isSuccess: false,
-              ),
-              nextState: AsyncState(
-                isLoading: true,
-                hasError: false,
-                isSuccess: false,
-              ),
-            ),
-          )).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
-            observer.onTransition(
+            OnTransitionCall(
               asyncBloc,
               Transition<AsyncEvent, AsyncState>(
                 currentState: AsyncState(
@@ -492,24 +415,8 @@ void main() {
                   isSuccess: true,
                 ),
               ),
-            ),
-          ).called(1);
-          // ignore: invalid_use_of_protected_member
-          verify(observer.onChange(
-            asyncBloc,
-            Change<AsyncState>(
-              currentState: AsyncState(
-                isLoading: true,
-                hasError: false,
-                isSuccess: false,
-              ),
-              nextState: AsyncState(
-                isLoading: false,
-                hasError: false,
-                isSuccess: true,
-              ),
-            ),
-          )).called(1);
+            )
+          ]);
           expect(
             asyncBloc.state,
             AsyncState(
@@ -569,27 +476,58 @@ void main() {
             nextState: 0,
           ),
         ];
-        final expectedChanges = const <Change<int>>[
-          Change(currentState: 0, nextState: -1),
-          Change(currentState: -1, nextState: 0),
-        ];
-        final expectedStates = [-1, 0, emitsDone];
-        final changes = <Change<int>>[];
-        final transitions = <Transition<CounterEvent, int>>[];
 
+        final expectedStates = [-1, 0, emitsDone];
+        final transitions = <Transition<CounterEvent, int>>[];
         final flatMapBloc = FlatMapBloc(
-          onChangeCallback: changes.add,
           onTransitionCallback: transitions.add,
         );
 
         expectLater(flatMapBloc, emitsInOrder(expectedStates))
             .then((dynamic _) {
-          expect(changes, expectedChanges);
           expect(transitions, expectedTransitions);
         });
         flatMapBloc
           ..add(CounterEvent.decrement)
           ..add(CounterEvent.increment)
+          ..close();
+      });
+    });
+
+    group('mergeBloc', () {
+      test('maintains correct transition composition', () {
+        final expectedTransitions = <Transition<CounterEvent, int>>[
+          const Transition(
+            currentState: 0,
+            event: CounterEvent.increment,
+            nextState: 1,
+          ),
+          const Transition(
+            currentState: 1,
+            event: CounterEvent.decrement,
+            nextState: 0,
+          ),
+          const Transition(
+            currentState: 0,
+            event: CounterEvent.decrement,
+            nextState: -1,
+          ),
+        ];
+        final expectedStates = [1, 0, -1, emitsDone];
+        final transitions = <Transition<CounterEvent, int>>[];
+
+        final bloc = MergeBloc(
+          onTransitionCallback: transitions.add,
+        );
+
+        expectLater(bloc, emitsInOrder(expectedStates)).then((dynamic _) {
+          expect(transitions, expectedTransitions);
+        });
+        bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.decrement)
+          ..add(CounterEvent.decrement)
           ..close();
       });
     });
@@ -659,7 +597,7 @@ void main() {
 
     group('Exception', () {
       test('does not break stream', () {
-        runZoned(() {
+        runZonedGuarded(() {
           final expectedStates = [-1, emitsDone];
           final counterBloc = CounterExceptionBloc();
 
@@ -669,43 +607,45 @@ void main() {
             ..add(CounterEvent.increment)
             ..add(CounterEvent.decrement)
             ..close();
-        }, onError: (Object error, StackTrace stackTrace) {
+        }, (Object error, StackTrace stackTrace) {
           expect(
-            (error as CubitUnhandledErrorException).toString(),
+            (error as BlocUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
               'in Instance of \'CounterExceptionBloc\'.',
             ),
           );
           expect(stackTrace, isNotNull);
+          expect(stackTrace, isNot(StackTrace.empty));
         });
       });
 
       test('addError triggers onError', () async {
         final expectedError = Exception('fatal exception');
 
-        runZoned(() {
+        runZonedGuarded(() {
           OnExceptionBloc(
             exception: expectedError,
             onErrorCallback: (Object _, StackTrace __) {},
-          ).addError(expectedError, StackTrace.current);
-        }, onError: (Object error, StackTrace stackTrace) {
+          )..addError(expectedError, StackTrace.current);
+        }, (Object error, StackTrace stackTrace) {
           expect(
-            (error as CubitUnhandledErrorException).toString(),
+            (error as BlocUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
               'in Instance of \'OnExceptionBloc\'.',
             ),
           );
           expect(stackTrace, isNotNull);
+          expect(stackTrace, isNot(StackTrace.empty));
         });
       });
 
       test('triggers onError from mapEventToState', () {
-        runZoned(() {
+        runZonedGuarded(() {
           final exception = Exception('fatal exception');
-          Object expectedError;
-          StackTrace expectedStacktrace;
+          Object? expectedError;
+          StackTrace? expectedStacktrace;
 
           final onExceptionBloc = OnExceptionBloc(
               exception: exception,
@@ -720,46 +660,49 @@ void main() {
           ).then((dynamic _) {
             expect(expectedError, exception);
             expect(expectedStacktrace, isNotNull);
+            expect(expectedStacktrace, isNot(StackTrace.empty));
           });
 
           onExceptionBloc
             ..add(CounterEvent.increment)
             ..close();
-        }, onError: (Object error, StackTrace stackTrace) {
+        }, (Object error, StackTrace stackTrace) {
           expect(
-            (error as CubitUnhandledErrorException).toString(),
+            (error as BlocUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
               'in Instance of \'OnExceptionBloc\'.',
             ),
           );
           expect(stackTrace, isNotNull);
+          expect(stackTrace, isNot(StackTrace.empty));
         });
       });
 
       test('triggers onError from onEvent', () {
-        runZoned(() {
+        runZonedGuarded(() {
           final exception = Exception('fatal exception');
 
           OnEventErrorBloc(exception: exception)
             ..add(CounterEvent.increment)
             ..close();
-        }, onError: (Object error, StackTrace stackTrace) {
+        }, (Object error, StackTrace stackTrace) {
           expect(
-            (error as CubitUnhandledErrorException).toString(),
+            (error as BlocUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
               'in Instance of \'OnEventErrorBloc\'.',
             ),
           );
           expect(stackTrace, isNotNull);
+          expect(stackTrace, isNot(StackTrace.empty));
         });
       });
 
-      test('does not triggers onError from add', () {
-        runZoned(() {
-          Object capturedError;
-          StackTrace capturedStacktrace;
+      test('does not trigger onError from add', () {
+        runZonedGuarded(() {
+          Object? capturedError;
+          StackTrace? capturedStacktrace;
           final counterBloc = CounterBloc(
             onErrorCallback: (error, stackTrace) {
               capturedError = error;
@@ -778,7 +721,7 @@ void main() {
           counterBloc
             ..close()
             ..add(CounterEvent.increment);
-        }, onError: (Object _, StackTrace __) {
+        }, (Object _, StackTrace __) {
           fail('should not throw when add is called after bloc is closed');
         });
       });
@@ -786,7 +729,7 @@ void main() {
 
     group('Error', () {
       test('does not break stream', () {
-        runZoned(
+        runZonedGuarded(
           () {
             final expectedStates = [-1, emitsDone];
             final counterBloc = CounterErrorBloc();
@@ -798,16 +741,16 @@ void main() {
               ..add(CounterEvent.decrement)
               ..close();
           },
-          onError: (Object _, StackTrace __) {},
+          (Object _, StackTrace __) {},
         );
       });
 
       test('triggers onError from mapEventToState', () {
-        runZoned(
+        runZonedGuarded(
           () {
             final error = Error();
-            Object expectedError;
-            StackTrace expectedStacktrace;
+            Object? expectedError;
+            StackTrace? expectedStacktrace;
 
             final onErrorBloc = OnErrorBloc(
               error: error,
@@ -829,16 +772,16 @@ void main() {
               ..add(CounterEvent.increment)
               ..close();
           },
-          onError: (Object _, StackTrace __) {},
+          (Object _, StackTrace __) {},
         );
       });
 
       test('triggers onError from onTransition', () {
-        runZoned(
+        runZonedGuarded(
           () {
             final error = Error();
-            Object expectedError;
-            StackTrace expectedStacktrace;
+            Object? expectedError;
+            StackTrace? expectedStacktrace;
 
             final onTransitionErrorBloc = OnTransitionErrorBloc(
               error: error,
@@ -861,7 +804,7 @@ void main() {
               ..add(CounterEvent.increment)
               ..close();
           },
-          onError: (Object _, StackTrace __) {},
+          (Object _, StackTrace __) {},
         );
       });
     });

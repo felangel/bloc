@@ -1,7 +1,7 @@
 name: flutter_firestore_todos
 description: A new Flutter project.
-
 version: 1.0.0+1
+publish_to: none
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
@@ -16,6 +16,12 @@ dependencies:
   user_repository:
     path: user_repository
   equatable: ^1.0.0
+
+dependency_overrides:
+  bloc:
+    path: ../../packages/bloc
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
 
 flutter:
   uses-material-design: true

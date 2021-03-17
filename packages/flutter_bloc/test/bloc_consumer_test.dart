@@ -12,32 +12,6 @@ class CounterCubit extends Cubit<int> {
 
 void main() {
   group('BlocConsumer', () {
-    testWidgets('throws AssertionError if builder is null', (tester) async {
-      try {
-        await tester.pumpWidget(
-          BlocConsumer<CounterCubit, int>(
-            builder: null,
-            listener: (_, __) {},
-          ),
-        );
-      } on dynamic catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
-    testWidgets('throws AssertionError if listener is null', (tester) async {
-      try {
-        await tester.pumpWidget(
-          BlocConsumer<CounterCubit, int>(
-            builder: (_, __) => const SizedBox(),
-            listener: null,
-          ),
-        );
-      } on dynamic catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
     testWidgets(
         'accesses the bloc directly and passes initial state to builder and '
         'nothing to listener', (tester) async {
@@ -47,7 +21,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: BlocConsumer<CounterCubit, int>(
-              cubit: counterCubit,
+              bloc: counterCubit,
               builder: (context, state) {
                 return Text('State: $state');
               },
@@ -71,7 +45,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: BlocConsumer<CounterCubit, int>(
-              cubit: counterCubit,
+              bloc: counterCubit,
               builder: (context, state) {
                 return Text('State: $state');
               },
@@ -101,7 +75,7 @@ void main() {
           child: MaterialApp(
             home: Scaffold(
               body: BlocConsumer<CounterCubit, int>(
-                cubit: counterCubit,
+                bloc: counterCubit,
                 builder: (context, state) {
                   return Text('State: $state');
                 },
@@ -126,7 +100,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: BlocConsumer<CounterCubit, int>(
-              cubit: counterCubit,
+              bloc: counterCubit,
               builder: (context, state) {
                 return Text('State: $state');
               },
@@ -154,7 +128,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: BlocConsumer<CounterCubit, int>(
-              cubit: counterCubit,
+              bloc: counterCubit,
               buildWhen: (previous, current) => (previous + current) % 3 == 0,
               builder: (context, state) {
                 builderStates.add(state);
@@ -242,7 +216,7 @@ void main() {
             body: StatefulBuilder(
               builder: (context, setState) {
                 return BlocConsumer<CounterCubit, int>(
-                  cubit: counterCubit,
+                  bloc: counterCubit,
                   builder: (context, state) {
                     builderStates.add(state);
                     return TextButton(
@@ -289,7 +263,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: BlocConsumer<CounterCubit, int>(
-              cubit: counterCubit,
+              bloc: counterCubit,
               builder: (context, state) {
                 builderStates.add(state);
                 return Text('State: $state');
@@ -333,7 +307,7 @@ void main() {
       final counterCubit = CounterCubit();
       await tester.pumpWidget(
         BlocConsumer<CounterCubit, int>(
-          cubit: counterCubit,
+          bloc: counterCubit,
           listenWhen: (previous, current) {
             if (current % 3 == 0) {
               listenWhenPreviousState.add(previous);

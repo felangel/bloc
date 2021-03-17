@@ -58,7 +58,7 @@ class _CartTotal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hugeStyle =
-        Theme.of(context).textTheme.headline1.copyWith(fontSize: 48);
+        Theme.of(context).textTheme.headline1?.copyWith(fontSize: 48);
 
     return SizedBox(
       height: 200,
@@ -76,13 +76,13 @@ class _CartTotal extends StatelessWidget {
               return const Text('Something went wrong!');
             }),
             const SizedBox(width: 24),
-            FlatButton(
+            ElevatedButton(
               onPressed: () {
-                Scaffold.of(context).showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Buying not supported yet.')),
                 );
               },
-              color: Colors.white,
+              style: ElevatedButton.styleFrom(primary: Colors.white),
               child: const Text('BUY'),
             ),
           ],

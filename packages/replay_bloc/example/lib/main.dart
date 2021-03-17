@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 import 'package:example/simple_bloc_observer.dart';
 
 void main() async {
   Bloc.observer = SimpleBlocObserver();
-  WidgetsFlutterBinding.ensureInitialized();
-  HydratedBloc.storage = await HydratedStorage.build();
   runApp(App());
 }
 
@@ -98,7 +95,7 @@ class CounterPage extends StatelessWidget {
 /// and exposes three public methods to `increment`, `decrement`, and
 /// `reset` the value of the state.
 /// {@endtemplate}
-class CounterCubit extends HydratedCubit<int> with ReplayCubitMixin {
+class CounterCubit extends ReplayCubit<int> {
   /// {@macro replay_counter_cubit}
   CounterCubit() : super(0);
 
@@ -110,12 +107,6 @@ class CounterCubit extends HydratedCubit<int> with ReplayCubitMixin {
 
   /// Resets the [CounterCubit] state to 0.
   void reset() => emit(0);
-
-  @override
-  int fromJson(Map<String, dynamic> json) => json['value'] as int;
-
-  @override
-  Map<String, int> toJson(int state) => {'value': state};
 }
 
 /// Base event class for the [CounterBloc].
@@ -143,7 +134,7 @@ class Reset extends CounterEvent {
 /// A simple [ReplayBloc] which manages an `int` as its state
 /// and reacts to three events: [Increment], [Decrement], and [Reset].
 /// {@endtemplate}
-class CounterBloc extends HydratedBloc<CounterEvent, int> with ReplayBlocMixin {
+class CounterBloc extends ReplayBloc<CounterEvent, int> {
   /// {@macro replay_counter_bloc}
   CounterBloc() : super(0);
 
@@ -157,10 +148,4 @@ class CounterBloc extends HydratedBloc<CounterEvent, int> with ReplayBlocMixin {
       yield 0;
     }
   }
-
-  @override
-  int fromJson(Map<String, dynamic> json) => json['value'] as int;
-
-  @override
-  Map<String, int> toJson(int state) => {'value': state};
 }

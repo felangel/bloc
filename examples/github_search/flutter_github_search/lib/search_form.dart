@@ -8,7 +8,10 @@ class SearchForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[_SearchBar(), _SearchBody()],
+      children: <Widget>[
+        _SearchBar(),
+        _SearchBody(),
+      ],
     );
   }
 }
@@ -20,12 +23,12 @@ class _SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<_SearchBar> {
   final _textController = TextEditingController();
-  GithubSearchBloc _githubSearchBloc;
+  late GithubSearchBloc _githubSearchBloc;
 
   @override
   void initState() {
     super.initState();
-    _githubSearchBloc = BlocProvider.of<GithubSearchBloc>(context);
+    _githubSearchBloc = context.read<GithubSearchBloc>();
   }
 
   @override
@@ -85,9 +88,9 @@ class _SearchBody extends StatelessWidget {
 }
 
 class _SearchResults extends StatelessWidget {
-  final List<SearchResultItem> items;
+  const _SearchResults({Key? key, required this.items}) : super(key: key);
 
-  const _SearchResults({Key key, this.items}) : super(key: key);
+  final List<SearchResultItem> items;
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +104,9 @@ class _SearchResults extends StatelessWidget {
 }
 
 class _SearchResultItem extends StatelessWidget {
-  final SearchResultItem item;
+  const _SearchResultItem({Key? key, required this.item}) : super(key: key);
 
-  const _SearchResultItem({Key key, @required this.item}) : super(key: key);
+  final SearchResultItem item;
 
   @override
   Widget build(BuildContext context) {
