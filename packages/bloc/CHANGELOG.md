@@ -2,7 +2,6 @@
 
 - **BREAKING**: refactor: `Bloc` and `Cubit` extend `BlocBase`
   - refactor: `void onError(Bloc bloc, Object error, StackTrace stackTrace)` -> `void onError(BlocBase bloc, Object error, StackTrace stackTrace)`
-  - refactor: `void onEvent(Bloc bloc, Object? event)` -> `void onEvent(BlocBase bloc, Object? event)`
   - refactor: `void onCreate(Bloc bloc)` -> `void onCreate(BlocBase bloc)`
   - refactor: `void onClose(Bloc bloc)` -> `void onClose(BlocBase bloc)`
 - **BREAKING**: refactor: `Transition` event is required
@@ -11,7 +10,6 @@
     - `myBloc.map(...)` -> `myBloc.stream.map(...)`
   - refactor: deprecate `bloc.listen` in favor of `bloc.stream.listen`
 - **BREAKING**: revert: refactor: `Change` and `onChange` removed in favor of `Transition` and `onTransition`
-- fix: `toString` on `Transition` excludes null `event`
 
 # 7.0.0-nullsafety.3
 
