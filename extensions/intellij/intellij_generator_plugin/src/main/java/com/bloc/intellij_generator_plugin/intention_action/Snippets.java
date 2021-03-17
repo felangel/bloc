@@ -33,14 +33,14 @@ public class Snippets {
                 "  listener: (context, state) {\n" +
                 "    // TODO: implement listener}\n" +
                 "  },\n" +
-                "  child: %3$s;\n" +
+                "  child: %3$s,\n" +
                 ")", SNIPPET_KEY1, SNIPPET_KEY2, widget);
     }
 
     private static String blocProviderSnippet(String widget) {
         return String.format("BlocProvider(\n" +
                 "  create: (context) => %1$sBloc(),\n" +
-                "  child: %2$s;\n" +
+                "  child: %2$s,\n" +
                 ")", SNIPPET_KEY1, widget);
     }
 
@@ -58,7 +58,7 @@ public class Snippets {
     private static String repositoryProviderSnippet(String widget) {
         return String.format("RepositoryProvider(\n" +
                 "  create: (context) => %1$sRepository(),\n" +
-                "    child: %2$s;\n" +
+                "    child: %2$s,\n" +
                 ")", SNIPPET_KEY1, widget);
     }
 }
