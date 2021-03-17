@@ -57,7 +57,12 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
             return false;
         }
 
-        // TODO: improve logic
+        final PsiFile psiFile = getCurrentFile(project, editor);
+        if (psiFile != null && !psiFile.getName().endsWith(".dart")) {
+            return false;
+        }
+
+
         final SnippetSelection selection = Utils.getSelection(editor);
         if (selection.offsetL > selection.offsetR) {
             return false;
@@ -163,5 +168,9 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
      */
     public boolean startInWriteAction() {
         return true;
+    }
+
+    private PsiFile getCurrentFile(Project project, Editor editor) {
+        return PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
     }
 }
