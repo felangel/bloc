@@ -232,42 +232,40 @@ void main() {
     });
 
     group('SingleHydratedBloc', () {
-      test('should call storage.write when onTransition is called', () {
-        const transition = Transition(
+      test('should call storage.write when onChange is called', () {
+        const change = Change(
           currentState: 0,
-          event: 0,
           nextState: 0,
         );
         const expected = <String, int>{'value': 0};
-        MyHydratedBloc().onTransition(transition);
+        MyHydratedBloc().onChange(change);
         verify(() => storage.write('MyHydratedBloc', expected)).called(2);
       });
 
-      test('should call storage.write when onTransition is called with bloc id',
+      test('should call storage.write when onChange is called with bloc id',
           () {
         final bloc = MyHydratedBloc('A');
-        const transition = Transition(
+        const change = Change(
           currentState: 0,
-          event: 0,
           nextState: 0,
         );
         const expected = <String, int>{'value': 0};
-        bloc.onTransition(transition);
+        bloc.onChange(change);
         verify(() => storage.write('MyHydratedBlocA', expected)).called(2);
       });
 
       test('should call onError when storage.write throws', () {
         runZonedGuarded(() async {
           final expectedError = Exception('oops');
-          const transition = Transition(
+          const change = Change(
             currentState: 0,
-            event: 0,
             nextState: 0,
           );
           final bloc = MyHydratedBloc();
-          when(() => storage.write(any(), any<dynamic>()))
-              .thenThrow(expectedError);
-          bloc.onTransition(transition);
+          when(
+            () => storage.write(any(), any<dynamic>()),
+          ).thenThrow(expectedError);
+          bloc.onChange(change);
           await Future<void>.delayed(const Duration(milliseconds: 300));
           verify(() => bloc.onError(expectedError, any())).called(2);
         }, (error, _) {
