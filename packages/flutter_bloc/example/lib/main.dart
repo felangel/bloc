@@ -6,19 +6,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// Custom [BlocObserver] which observes all bloc and cubit instances.
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onEvent(Bloc bloc, Object? event) {
-    print(event);
+  void onEvent(BlocBase bloc, Object? event) {
     super.onEvent(bloc, event);
+    print(event);
   }
 
   @override
-  void onTransition(Bloc bloc, Transition transition) {
-    print(transition);
+  void onTransition(BlocBase bloc, Transition transition) {
     super.onTransition(bloc, transition);
+    print(transition);
   }
 
   @override
-  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     print(error);
     super.onError(bloc, error, stackTrace);
   }

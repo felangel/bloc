@@ -164,7 +164,7 @@ void main() {
       final bloc = MyCallbackHydratedBloc();
       expect(bloc.state, 42);
       bloc.add(CounterEvent.increment);
-      await expectLater(bloc, emitsInOrder(const <int>[43]));
+      await expectLater(bloc.stream, emitsInOrder(const <int>[43]));
       verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
     });
 
@@ -178,7 +178,7 @@ void main() {
       );
       expect(bloc.state, 42);
       bloc.add(CounterEvent.increment);
-      await expectLater(bloc, emitsInOrder(const <int>[43]));
+      await expectLater(bloc.stream, emitsInOrder(const <int>[43]));
       expect(fromJsonCalls, [
         {'value': 42}
       ]);
@@ -191,7 +191,7 @@ void main() {
       final bloc = MyCallbackHydratedBloc();
       expect(bloc.state, 0);
       bloc.add(CounterEvent.increment);
-      await expectLater(bloc, emitsInOrder(const <int>[1]));
+      await expectLater(bloc.stream, emitsInOrder(const <int>[1]));
       verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
     });
 
@@ -203,7 +203,7 @@ void main() {
       );
       expect(bloc.state, 0);
       bloc.add(CounterEvent.increment);
-      await expectLater(bloc, emitsInOrder(const <int>[1]));
+      await expectLater(bloc.stream, emitsInOrder(const <int>[1]));
       expect(fromJsonCalls, isEmpty);
     });
 
@@ -388,7 +388,7 @@ void main() {
           () async {
             final bloc = MyErrorThrowingBloc();
             final expectedStates = [0, 1, emitsDone];
-            unawaited(expectLater(bloc, emitsInOrder(expectedStates)));
+            unawaited(expectLater(bloc.stream, emitsInOrder(expectedStates)));
             bloc.add(Object);
             await bloc.close();
           },

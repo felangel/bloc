@@ -107,7 +107,7 @@ abstract class HydratedCubit<State> extends Cubit<State>
 /// * [HydratedBloc] to enable automatic state persistence/restoration with [Bloc]
 /// * [HydratedCubit] to enable automatic state persistence/restoration with [Cubit]
 ///
-mixin HydratedMixin<Event, State> on Bloc<Event, State> {
+mixin HydratedMixin<Event, State> on BlocBase<Event, State> {
   /// Populates the internal state storage with the latest state.
   /// This should be called when using the [HydratedMixin]
   /// directly within the constructor body.

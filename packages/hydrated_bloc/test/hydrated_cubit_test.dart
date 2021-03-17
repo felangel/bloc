@@ -197,6 +197,7 @@ void main() {
       test('should call storage.write when onTransition is called', () {
         final transition = const Transition<Null, int>(
           currentState: 0,
+          event: null,
           nextState: 0,
         );
         final expected = <String, int>{'value': 0};
@@ -210,6 +211,7 @@ void main() {
         final cubit = MyHydratedCubit('A');
         final transition = const Transition<Null, int>(
           currentState: 0,
+          event: null,
           nextState: 0,
         );
         final expected = <String, int>{'value': 0};
@@ -224,6 +226,7 @@ void main() {
             final expectedError = Exception('oops');
             final transition = const Transition<Null, int>(
               currentState: 0,
+              event: null,
               nextState: 0,
             );
             when(

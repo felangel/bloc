@@ -15,5 +15,9 @@ dependencies:
     path: ../../flutter_bloc
   path_provider: ^2.0.1
 
+dependency_overrides:
+  bloc:
+    path: ../../bloc
+
 flutter:
   uses-material-design: true

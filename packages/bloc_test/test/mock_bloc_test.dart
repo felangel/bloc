@@ -32,11 +32,9 @@ void main() {
     });
 
     test('is compatible with listen', () {
+      // ignore: deprecated_member_use
       expect(counterBloc.listen((_) {}), isA<StreamSubscription>());
-    });
-
-    test('is compatible with isBroadcast', () {
-      expect(counterBloc.isBroadcast, isTrue);
+      expect(counterBloc.stream.listen((_) {}), isA<StreamSubscription>());
     });
 
     test('is compatible with emit', () {
@@ -93,7 +91,7 @@ void main() {
         Stream<int>.fromIterable([0, 1, 2, 3]),
       );
       expectLater(
-        counterBloc,
+        counterBloc.stream,
         emitsInOrder(
           <Matcher>[equals(0), equals(1), equals(2), equals(3), emitsDone],
         ),
@@ -119,7 +117,7 @@ void main() {
         Stream<int>.fromIterable([0, 1, 2, 3]),
       );
       expectLater(
-        counterCubit,
+        counterCubit.stream,
         emitsInOrder(
           <Matcher>[equals(0), equals(1), equals(2), equals(3), emitsDone],
         ),

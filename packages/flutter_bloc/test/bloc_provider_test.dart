@@ -410,7 +410,7 @@ void main() {
       await tester.pumpWidget(const MyAppNoProvider(home: CounterPage()));
       final dynamic exception = tester.takeException();
       final expectedMessage = '''
-        BlocProvider.of() called with a context that does not contain a Bloc of type CounterCubit.
+        BlocProvider.of() called with a context that does not contain a CounterCubit.
         No ancestor could be found starting from the context that was passed to BlocProvider.of<CounterCubit>().
 
         This can happen if the context you used comes from a widget above the BlocProvider.
