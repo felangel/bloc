@@ -148,14 +148,9 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
         // format file:
         ApplicationManager.getApplication().runWriteAction(() -> {
             PsiDocumentManager.getInstance(project).commitDocument(document);
-            final FileEditorManagerEx fileEditorManagerEx = FileEditorManagerEx.getInstanceEx(project);
-            final VirtualFile currentFile = fileEditorManagerEx.getCurrentFile();
-            final PsiFile file;
+            final PsiFile currentFile = getCurrentFile(project, editor);
             if (currentFile != null) {
-                file = PsiManager.getInstance(project).findFile(currentFile);
-                if (file != null) {
-                    CodeStyleManager.getInstance(project).reformat(file);
-                }
+                CodeStyleManager.getInstance(project).reformat(currentFile);
             }
         });
     }
