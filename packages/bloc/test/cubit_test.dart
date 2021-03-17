@@ -8,6 +8,10 @@ import 'cubits/cubits.dart';
 
 class MockBlocObserver extends Mock implements BlocObserver {}
 
+class FakeBlocBase<S> extends Fake implements BlocBase<S> {}
+
+class FakeChange<S> extends Fake implements Change<S> {}
+
 void main() {
   group('Cubit', () {
     group('constructor', () {
@@ -60,6 +64,11 @@ void main() {
 
     group('onChange', () {
       late BlocObserver observer;
+
+      setUpAll(() {
+        registerFallbackValue<BlocBase<dynamic>>(FakeBlocBase<dynamic>());
+        registerFallbackValue<Change<dynamic>>(FakeChange<dynamic>());
+      });
 
       setUp(() {
         observer = MockBlocObserver();

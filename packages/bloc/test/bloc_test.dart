@@ -9,6 +9,8 @@ import 'blocs/blocs.dart';
 
 class MockBlocObserver extends Mock implements BlocObserver {}
 
+class FakeBlocBase<S> extends Fake implements BlocBase<S> {}
+
 void main() {
   group('Bloc Tests', () {
     group('Simple Bloc', () {
@@ -405,6 +407,11 @@ void main() {
     group('Async Bloc', () {
       late AsyncBloc asyncBloc;
       late MockBlocObserver observer;
+
+      setUpAll(() {
+        registerFallbackValue<BlocBase<dynamic>>(FakeBlocBase<dynamic>());
+        registerFallbackValue<StackTrace>(StackTrace.empty);
+      });
 
       setUp(() {
         asyncBloc = AsyncBloc();

@@ -145,13 +145,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   @protected
   @visibleForTesting
   @override
-  void emit(State state) {
-    if (_stateController.isClosed) return;
-    if (state == _state && _emitted) return;
-    _state = state;
-    _stateController.add(_state);
-    _emitted = true;
-  }
+  void emit(State state) => super.emit(state);
 
   /// Must be implemented when a class extends [Bloc].
   /// [mapEventToState] is called whenever an [event] is [add]ed
@@ -272,25 +266,6 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
 abstract class Cubit<State> extends BlocBase<State> {
   /// {@macro cubit}
   Cubit(State initialState) : super(initialState);
-
-  /// Updates the [state] to the provided [state].
-  /// [emit] does nothing if the [Cubit] has been closed or if the
-  /// [state] being emitted is equal to the current [state].
-  ///
-  /// To allow for the possibility of notifying listeners of the initial state,
-  /// emitting a state which is equal to the initial state is allowed as long
-  /// as it is the first thing emitted by the [Cubit].
-  @override
-  void emit(State state) {
-    if (_stateController.isClosed) return;
-    if (state == _state && _emitted) return;
-    onChange(
-      Change<State>(currentState: this.state, nextState: state),
-    );
-    _state = state;
-    _stateController.add(_state);
-    _emitted = true;
-  }
 }
 
 /// {@template bloc_stream}
@@ -347,7 +322,14 @@ abstract class BlocBase<State> {
   /// To allow for the possibility of notifying listeners of the initial state,
   /// emitting a state which is equal to the initial state is allowed as long
   /// as it is the first thing emitted by the instance.
-  void emit(State state);
+  void emit(State state) {
+    if (_stateController.isClosed) return;
+    if (state == _state && _emitted) return;
+    onChange(Change<State>(currentState: this.state, nextState: state));
+    _state = state;
+    _stateController.add(_state);
+    _emitted = true;
+  }
 
   /// Called whenever a [change] occurs with the given [change].
   /// A [change] occurs when a new `state` is emitted.
