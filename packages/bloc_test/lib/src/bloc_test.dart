@@ -114,7 +114,7 @@ import 'package:test/test.dart' as test;
 /// );
 /// ```
 @isTest
-void blocTest<B extends BlocBase<Object?, State>, State>(
+void blocTest<B extends BlocBase<State>, State>(
   String description, {
   required B Function() build,
   State Function()? seed,
@@ -142,7 +142,7 @@ void blocTest<B extends BlocBase<Object?, State>, State>(
 /// Internal [blocTest] runner which is only visible for testing.
 /// This should never be used directly -- please use [blocTest] instead.
 @visibleForTesting
-Future<void> testBloc<B extends BlocBase<Object?, State>, State>({
+Future<void> testBloc<B extends BlocBase<State>, State>({
   required B Function() build,
   State Function()? seed,
   Function(B bloc)? act,

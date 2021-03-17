@@ -34,7 +34,7 @@ mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 /// ```
 ///
 /// {@endtemplate}
-class BlocProvider<T extends BlocBase<Object?, Object?>>
+class BlocProvider<T extends BlocBase<Object?>>
     extends SingleChildStatelessWidget with BlocProviderSingleChildWidget {
   /// {@macro bloc_provider}
   BlocProvider({
@@ -92,7 +92,7 @@ class BlocProvider<T extends BlocBase<Object?, Object?>>
   /// ```dart
   /// BlocProvider.of<BlocA>(context);
   /// ```
-  static T of<T extends BlocBase<Object?, Object?>>(
+  static T of<T extends BlocBase<Object?>>(
     BuildContext context, {
     bool listen = false,
   }) {

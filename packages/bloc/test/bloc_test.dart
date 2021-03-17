@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 
 import 'blocs/blocs.dart';
-import 'mocks/mocks.dart';
+
+class MockBlocObserver extends Mock implements BlocObserver {}
 
 void main() {
   group('Bloc Tests', () {
@@ -21,13 +23,15 @@ void main() {
 
       test('triggers onCreate on observer when instantiated', () {
         final bloc = SimpleBloc();
-        expect(observer.onCreateCalls, [OnCreateCall(bloc)]);
+        // ignore: invalid_use_of_protected_member
+        verify(() => observer.onCreate(bloc)).called(1);
       });
 
       test('triggers onClose on observer when closed', () async {
         final bloc = SimpleBloc();
         await bloc.close();
-        expect(observer.onCloseCalls, [OnCloseCall(bloc)]);
+        // ignore: invalid_use_of_protected_member
+        verify(() => observer.onClose(bloc)).called(1);
       });
 
       test('close does not emit new states over the state stream', () async {
@@ -49,16 +53,24 @@ void main() {
           simpleBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          expect(observer.onTransitionCalls, [
-            OnTransitionCall(
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onTransition(
               simpleBloc,
               const Transition<dynamic, String>(
                 currentState: '',
                 event: 'event',
                 nextState: 'data',
               ),
-            )
-          ]);
+            ),
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              simpleBloc,
+              const Change<String>(currentState: '', nextState: 'data'),
+            ),
+          ).called(1);
           expect(simpleBloc.state, 'data');
         });
 
@@ -74,16 +86,24 @@ void main() {
           simpleBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          expect(observer.onTransitionCalls, [
-            OnTransitionCall(
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onTransition(
               simpleBloc,
               const Transition<dynamic, String>(
                 currentState: '',
                 event: 'event1',
                 nextState: 'data',
               ),
-            )
-          ]);
+            ),
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              simpleBloc,
+              const Change<String>(currentState: '', nextState: 'data'),
+            ),
+          ).called(1);
           expect(simpleBloc.state, 'data');
         });
 
@@ -148,16 +168,27 @@ void main() {
           complexBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          expect(observer.onTransitionCalls, [
-            OnTransitionCall(
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onTransition(
               complexBloc,
               Transition<ComplexEvent, ComplexState>(
                 currentState: ComplexStateA(),
                 event: ComplexEventB(),
                 nextState: ComplexStateB(),
               ),
-            )
-          ]);
+            ),
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              complexBloc,
+              Change<ComplexState>(
+                currentState: ComplexStateA(),
+                nextState: ComplexStateB(),
+              ),
+            ),
+          ).called(1);
           expect(complexBloc.state, ComplexStateB());
         });
 
@@ -246,16 +277,24 @@ void main() {
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expectLater(transitions, expectedTransitions);
-          expect(observer.onTransitionCalls, [
-            OnTransitionCall(
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onTransition(
               counterBloc,
               const Transition<CounterEvent, int>(
                 currentState: 0,
                 event: CounterEvent.increment,
                 nextState: 1,
               ),
-            )
-          ]);
+            ),
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              counterBloc,
+              const Change<int>(currentState: 0, nextState: 1),
+            ),
+          ).called(1);
           expect(counterBloc.state, 1);
         });
 
@@ -277,8 +316,9 @@ void main() {
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expect(transitions, expectedTransitions);
-          expect(observer.onTransitionCalls, [
-            OnTransitionCall(
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onTransition(
               counterBloc,
               const Transition<CounterEvent, int>(
                 currentState: 0,
@@ -286,7 +326,17 @@ void main() {
                 nextState: 1,
               ),
             ),
-            OnTransitionCall(
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              counterBloc,
+              const Change<int>(currentState: 0, nextState: 1),
+            ),
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onTransition(
               counterBloc,
               const Transition<CounterEvent, int>(
                 currentState: 1,
@@ -294,7 +344,17 @@ void main() {
                 nextState: 2,
               ),
             ),
-            OnTransitionCall(
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              counterBloc,
+              const Change<int>(currentState: 1, nextState: 2),
+            ),
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onTransition(
               counterBloc,
               const Transition<CounterEvent, int>(
                 currentState: 2,
@@ -302,7 +362,14 @@ void main() {
                 nextState: 3,
               ),
             ),
-          ]);
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              counterBloc,
+              const Change<int>(currentState: 2, nextState: 3),
+            ),
+          ).called(1);
         });
 
         counterBloc
@@ -370,7 +437,8 @@ void main() {
         await asyncBloc.close();
 
         expect(states, expectedStates);
-        expect(observer.onErrorCalls, isEmpty);
+        // ignore: invalid_use_of_protected_member
+        verifyNever(() => observer.onError(any(), any(), any()));
       });
 
       test('state returns correct value initially', () {
@@ -388,8 +456,9 @@ void main() {
           asyncBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          expect(observer.onTransitionCalls, [
-            OnTransitionCall(
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onTransition(
               asyncBloc,
               Transition<AsyncEvent, AsyncState>(
                 currentState: AsyncState(
@@ -405,7 +474,28 @@ void main() {
                 ),
               ),
             ),
-            OnTransitionCall(
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              asyncBloc,
+              Change<AsyncState>(
+                currentState: AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+                nextState: AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+              ),
+            ),
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onTransition(
               asyncBloc,
               Transition<AsyncEvent, AsyncState>(
                 currentState: AsyncState(
@@ -420,8 +510,26 @@ void main() {
                   isSuccess: true,
                 ),
               ),
-            )
-          ]);
+            ),
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              asyncBloc,
+              Change<AsyncState>(
+                currentState: AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+                nextState: AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: true,
+                ),
+              ),
+            ),
+          ).called(1);
           expect(
             asyncBloc.state,
             AsyncState(

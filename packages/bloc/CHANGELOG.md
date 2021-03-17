@@ -10,6 +10,7 @@
   - refactor: use `bloc.stream` or `cubit.stream` to access `Stream<State>`
     - `myBloc.map(...)` -> `myBloc.stream.map(...)`
   - refactor: deprecate `bloc.listen` in favor of `bloc.stream.listen`
+- **BREAKING**: revert: refactor: `Change` and `onChange` removed in favor of `Transition` and `onTransition`
 - fix: `toString` on `Transition` excludes null `event`
 
 # 7.0.0-nullsafety.3

@@ -17,6 +17,13 @@ class BlocObserver {
   @mustCallSuper
   void onEvent(BlocBase bloc, Object? event) {}
 
+  /// Called whenever a [Change] occurs in any [bloc]
+  /// A [change] occurs when a new state is emitted.
+  /// [onChange] is called before a bloc's state has been updated.
+  @protected
+  @mustCallSuper
+  void onChange(BlocBase bloc, Change change) {}
+
   /// Called whenever a transition occurs in any [bloc] with the given [bloc]
   /// and [transition].
   /// A [transition] occurs when a new `event` is `added` and `mapEventToState`

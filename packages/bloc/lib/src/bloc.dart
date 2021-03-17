@@ -42,7 +42,7 @@ class BlocUnhandledErrorException implements Exception {
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
-abstract class Bloc<Event, State> extends BlocBase<Event, State> {
+abstract class Bloc<Event, State> extends BlocBase<State> {
   /// {@macro bloc}
   Bloc(State initialState) : super(initialState) {
     _bindEventsToStates();
@@ -159,6 +159,34 @@ abstract class Bloc<Event, State> extends BlocBase<Event, State> {
   /// [mapEventToState] can `yield` zero, one, or multiple states for an event.
   Stream<State> mapEventToState(Event event);
 
+  /// Called whenever a [transition] occurs with the given [transition].
+  /// A [transition] occurs when a new `event` is [add]ed and [mapEventToState]
+  /// executed.
+  /// [onTransition] is called before a [Bloc]'s [state] has been updated.
+  /// A great spot to add logging/analytics at the individual [Bloc] level.
+  ///
+  /// **Note: `super.onTransition` should always be called first.**
+  /// ```dart
+  /// @override
+  /// void onTransition(Transition<Event, State> transition) {
+  ///   // Always call super.onTransition with the current transition
+  ///   super.onTransition(transition);
+  ///
+  ///   // Custom onTransition logic goes here
+  /// }
+  /// ```
+  ///
+  /// See also:
+  ///
+  /// * [BlocObserver.onTransition] for observing transitions globally.
+  ///
+  @protected
+  @mustCallSuper
+  void onTransition(Transition<Event, State> transition) {
+    // ignore: invalid_use_of_protected_member
+    Bloc.observer.onTransition(this, transition);
+  }
+
   /// Transforms the `Stream<Transition>` into a new `Stream<Transition>`.
   /// By default [transformTransitions] returns
   /// the incoming `Stream<Transition>`.
@@ -241,7 +269,7 @@ abstract class Bloc<Event, State> extends BlocBase<Event, State> {
 /// ```
 ///
 /// {@endtemplate}
-abstract class Cubit<State> extends BlocBase<Null, State> {
+abstract class Cubit<State> extends BlocBase<State> {
   /// {@macro cubit}
   Cubit(State initialState) : super(initialState);
 
@@ -256,12 +284,8 @@ abstract class Cubit<State> extends BlocBase<Null, State> {
   void emit(State state) {
     if (_stateController.isClosed) return;
     if (state == _state && _emitted) return;
-    onTransition(
-      Transition<Null, State>(
-        currentState: this.state,
-        event: null,
-        nextState: state,
-      ),
+    onChange(
+      Change<State>(currentState: this.state, nextState: state),
     );
     _state = state;
     _stateController.add(_state);
@@ -273,7 +297,7 @@ abstract class Cubit<State> extends BlocBase<Null, State> {
 /// An interface for the core functionality implemented by
 /// both [Bloc] and [Cubit].
 /// {@endtemplate}
-abstract class BlocBase<Event, State> {
+abstract class BlocBase<State> {
   /// {@macro bloc_stream}
   BlocBase(this._state) {
     // ignore: invalid_use_of_protected_member
@@ -325,30 +349,29 @@ abstract class BlocBase<Event, State> {
   /// as it is the first thing emitted by the instance.
   void emit(State state);
 
-  /// Called whenever a [transition] occurs with the given [transition].
-  /// [onTransition] is called before the [state] has been updated.
-  /// A great spot to add logging/analytics for a particular instance.
+  /// Called whenever a [change] occurs with the given [change].
+  /// A [change] occurs when a new `state` is emitted.
+  /// [onChange] is called before the `state` of the `cubit` is updated.
+  /// [onChange] is a great spot to add logging/analytics for a specific `cubit`.
   ///
-  /// **Note: `super.onTransition` should always be called first.**
+  /// **Note: `super.onChange` should always be called first.**
   /// ```dart
   /// @override
-  /// void onTransition(Transition<Event, State> transition) {
-  ///   // Always call super.onTransition with the current transition
-  ///   super.onTransition(transition);
+  /// void onChange(Change change) {
+  ///   // Always call super.onChange with the current change
+  ///   super.onChange(change);
   ///
-  ///   // Custom onTransition logic goes here
+  ///   // Custom onChange logic goes here
   /// }
   /// ```
   ///
   /// See also:
   ///
-  /// * [BlocObserver.onTransition] for observing transitions globally.
-  ///
-  @protected
+  /// * [BlocObserver] for observing [Cubit] behavior globally.
   @mustCallSuper
-  void onTransition(Transition<Event, State> transition) {
+  void onChange(Change<State> change) {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onTransition(this, transition);
+    Bloc.observer.onChange(this, change);
   }
 
   /// Reports an [error] which triggers [onError] with an optional [StackTrace].

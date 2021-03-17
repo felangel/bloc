@@ -1,16 +1,16 @@
 import 'package:bloc/bloc.dart';
 
 class CounterCubit extends Cubit<int> {
-  CounterCubit({this.onTransitionCallback}) : super(0);
+  CounterCubit({this.onChangeCallback}) : super(0);
 
-  final void Function(Transition<Null, int>)? onTransitionCallback;
+  final void Function(Change<int>)? onChangeCallback;
 
   void increment() => emit(state + 1);
   void decrement() => emit(state - 1);
 
   @override
-  void onTransition(Transition<Null, int> transition) {
-    super.onTransition(transition);
-    onTransitionCallback?.call(transition);
+  void onChange(Change<int> change) {
+    super.onChange(change);
+    onChangeCallback?.call(change);
   }
 }
