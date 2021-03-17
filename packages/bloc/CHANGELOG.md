@@ -4,7 +4,6 @@
   - refactor: `void onError(Bloc bloc, Object error, StackTrace stackTrace)` -> `void onError(BlocBase bloc, Object error, StackTrace stackTrace)`
   - refactor: `void onCreate(Bloc bloc)` -> `void onCreate(BlocBase bloc)`
   - refactor: `void onClose(Bloc bloc)` -> `void onClose(BlocBase bloc)`
-- **BREAKING**: refactor: `Transition` event is required
 - **BREAKING**: refactor: `Bloc` and `Cubit` do not extend `Stream` and implement `Sink`
   - refactor: use `bloc.stream` or `cubit.stream` to access `Stream<State>`
     - `myBloc.map(...)` -> `myBloc.stream.map(...)`
