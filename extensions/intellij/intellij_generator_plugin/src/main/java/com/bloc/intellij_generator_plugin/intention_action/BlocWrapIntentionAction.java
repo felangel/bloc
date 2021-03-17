@@ -115,34 +115,30 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
         );
 
         // place cursors to specify types:
-        final String snippetKey1 = Snippets.SNIPPET_KEY1;
-        final String snippetKey2 = Snippets.SNIPPET_KEY2;
+        final String prefixSelection = Snippets.PREFIX_SELECTION;
+        final String[] snippetArr = {Snippets.BLOC_SNIPPET_KEY, Snippets.STATE_SNIPPET_KEY, Snippets.REPOSITORY_SNIPPET_KEY};
 
         final CaretModel caretModel = editor.getCaretModel();
         caretModel.removeSecondaryCarets();
 
-        final int startingCaretPos1 = selection.offsetL + replaceWith.indexOf(snippetKey1);
-        caretModel.moveToOffset(startingCaretPos1);
+        for (String snippet : snippetArr) {
+            if (!replaceWith.contains(snippet)) {
+                continue;
+            }
 
-        if (replaceWith.contains(snippetKey2)) {
-            final VisualPosition visualPosition1 = caretModel.getCurrentCaret().getVisualPosition();
+            final int caretOffset = selection.offsetL + replaceWith.indexOf(snippet);
+            final VisualPosition visualPos = editor.offsetToVisualPosition(caretOffset);
+            caretModel.addCaret(visualPos);
 
-            final int startingCaretPos2 = selection.offsetL + replaceWith.indexOf(snippetKey2);
-            caretModel.moveToOffset(startingCaretPos2);
-
-            caretModel.addCaret(visualPosition1);
+            // select snippet prefix keys:
+            final Caret currentCaret = caretModel.getCurrentCaret();
+            currentCaret.setSelection(caretOffset, caretOffset + prefixSelection.length());
         }
 
-        // safely remove snippet keys:
-        final List<Caret> allCarets = caretModel.getAllCarets();
-        for (Caret caret : allCarets) {
-            final int offset = caret.getOffset();
-            caret.setSelection(offset, offset + snippetKey1.length());
-            if (caret.getSelectedText() != null) {
-                if (caret.getSelectedText().equals(snippetKey1) || caret.getSelectedText().equals(snippetKey2)) {
-                    document.deleteString(caret.getSelectionStart(), caret.getSelectionEnd());
-                }
-            }
+        final Caret initialCaret = caretModel.getAllCarets().get(0);
+        if (!initialCaret.hasSelection()) {
+            // initial position from where is triggered the intention menu
+            caretModel.removeCaret(initialCaret);
         }
 
         // format file:
