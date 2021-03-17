@@ -3,7 +3,7 @@ import 'package:bloc/bloc.dart';
 /// Simple [BlocObserver] which just prints to the debug console.
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onEvent(BlocBase bloc, Object? event) {
+  void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
     print('${bloc.runtimeType} $event');
   }
@@ -21,7 +21,7 @@ class SimpleBlocObserver extends BlocObserver {
   }
 
   @override
-  void onTransition(BlocBase bloc, Transition transition) {
+  void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
     print('${bloc.runtimeType} $transition');
   }

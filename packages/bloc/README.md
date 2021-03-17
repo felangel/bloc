@@ -292,7 +292,7 @@ class MyBlocObserver extends BlocObserver {
   }
 
   @override
-  void onEvent(BlocBase bloc, Object event) {
+  void onEvent(Bloc bloc, Object event) {
     super.onEvent(bloc, event);
     print('onEvent -- bloc: ${bloc.runtimeType}, event: $event');
   }
@@ -304,7 +304,7 @@ class MyBlocObserver extends BlocObserver {
   }
 
   @override
-  void onTransition(BlocBase bloc, Transition transition) {
+  void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
     print('onTransition -- bloc: ${bloc.runtimeType}, transition: $transition');
   }
