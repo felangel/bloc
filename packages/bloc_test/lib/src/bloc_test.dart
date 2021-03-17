@@ -114,7 +114,7 @@ import 'package:test/test.dart' as test;
 /// );
 /// ```
 @isTest
-void blocTest<B extends Bloc<Object?, State>, State>(
+void blocTest<B extends BlocBase<State>, State>(
   String description, {
   required B Function() build,
   State Function()? seed,
@@ -142,7 +142,7 @@ void blocTest<B extends Bloc<Object?, State>, State>(
 /// Internal [blocTest] runner which is only visible for testing.
 /// This should never be used directly -- please use [blocTest] instead.
 @visibleForTesting
-Future<void> testBloc<B extends Bloc<Object?, State>, State>({
+Future<void> testBloc<B extends BlocBase<State>, State>({
   required B Function() build,
   State Function()? seed,
   Function(B bloc)? act,
@@ -160,7 +160,7 @@ Future<void> testBloc<B extends Bloc<Object?, State>, State>({
       final bloc = build();
       // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
       if (seed != null) bloc.emit(seed());
-      final subscription = bloc.skip(skip).listen(states.add);
+      final subscription = bloc.stream.skip(skip).listen(states.add);
       try {
         await act?.call(bloc);
       } on Exception catch (error) {

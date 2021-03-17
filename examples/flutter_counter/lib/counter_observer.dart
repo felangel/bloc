@@ -6,7 +6,7 @@ import 'package:bloc/bloc.dart';
 /// {@endtemplate}
 class CounterObserver extends BlocObserver {
   @override
-  void onTransition(Bloc bloc, Transition transition) {
+  void onTransition(BlocBase bloc, Transition transition) {
     super.onTransition(bloc, transition);
     print('${bloc.runtimeType} $transition');
   }

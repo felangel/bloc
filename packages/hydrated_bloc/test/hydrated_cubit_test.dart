@@ -194,26 +194,25 @@ void main() {
         expect(HydratedBloc.storage, storage);
       });
 
-      test('should call storage.write when onTransition is called', () {
-        final transition = const Transition<Null, int>(
+      test('should call storage.write when onChange is called', () {
+        final transition = const Change<int>(
           currentState: 0,
           nextState: 0,
         );
         final expected = <String, int>{'value': 0};
-        MyHydratedCubit().onTransition(transition);
+        MyHydratedCubit().onChange(transition);
         verify(() => storage.write('MyHydratedCubit', expected)).called(2);
       });
 
-      test(
-          'should call storage.write when onTransition is called with cubit id',
+      test('should call storage.write when onChange is called with cubit id',
           () {
         final cubit = MyHydratedCubit('A');
-        final transition = const Transition<Null, int>(
+        final transition = const Change<int>(
           currentState: 0,
           nextState: 0,
         );
         final expected = <String, int>{'value': 0};
-        cubit.onTransition(transition);
+        cubit.onChange(transition);
         verify(() => storage.write('MyHydratedCubitA', expected)).called(2);
       });
 
@@ -222,14 +221,14 @@ void main() {
         runZonedGuarded(
           () async {
             final expectedError = Exception('oops');
-            final transition = const Transition<Null, int>(
+            final transition = const Change<int>(
               currentState: 0,
               nextState: 0,
             );
             when(
               () => storage.write(any(), any<dynamic>()),
             ).thenThrow(expectedError);
-            MyHydratedCubit().onTransition(transition);
+            MyHydratedCubit().onChange(transition);
             await Future<void>.delayed(const Duration(seconds: 300));
             fail('should throw');
           },

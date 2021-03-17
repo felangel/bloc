@@ -41,8 +41,8 @@ import 'package:mocktail/mocktail.dart';
 ///
 /// expect(counterBloc.state, equals(0));
 /// ```
-void whenListen<Event, State>(
-  Bloc<Event, State> bloc,
+void whenListen<State>(
+  BlocBase<State> bloc,
   Stream<State> stream, {
   State? initialState,
 }) {
@@ -53,6 +53,7 @@ void whenListen<Event, State>(
   }
 
   when(
+    // ignore: deprecated_member_use
     () => bloc.listen(
       any(),
       onDone: any(named: 'onDone'),
@@ -70,4 +71,11 @@ void whenListen<Event, State>(
       cancelOnError: invocation.namedArguments[#cancelOnError] as bool?,
     );
   });
+
+  when(() => bloc.stream).thenAnswer(
+    (_) => broadcastStream.map((state) {
+      when(() => bloc.state).thenReturn(state);
+      return state;
+    }),
+  );
 }
