@@ -53,32 +53,7 @@ class MockBloc<E, S> extends _MockBlocBase<E, S> implements Bloc<E, S> {
 /// class MockCounterCubit extends MockBloc implements CounterCubit {}
 /// ```
 /// {@endtemplate}
-class MockCubit<S> extends _MockBlocBase<Null, S> implements Cubit<S> {
-  /// {@macro mock_cubit}
-  MockCubit() {
-    registerFallbackValue<void Function(S)>((S _) {});
-    registerFallbackValue<void Function()>(() {});
-    when(
-      // ignore: deprecated_member_use
-      () => listen(
-        any(),
-        onDone: any(named: 'onDone'),
-        onError: any(named: 'onError'),
-        cancelOnError: any(named: 'cancelOnError'),
-      ),
-    ).thenAnswer((invocation) {
-      return Stream<S>.empty().listen(
-        invocation.positionalArguments.first as void Function(S data),
-        onError: invocation.namedArguments[#onError] as Function?,
-        onDone: invocation.namedArguments[#onDone] as void Function()?,
-        cancelOnError: invocation.namedArguments[#cancelOnError] as bool?,
-      );
-    });
-    when(() => stream).thenAnswer((_) => Stream<S>.empty());
-    when(close).thenAnswer((_) => Future<void>.value());
-    when(() => emit(any())).thenReturn(null);
-  }
-}
+class MockCubit<S> extends _MockBlocBase<Null, S> implements Cubit<S> {}
 
 class _MockBlocBase<E, S> extends Mock implements BlocBase<E, S> {
   _MockBlocBase() {
