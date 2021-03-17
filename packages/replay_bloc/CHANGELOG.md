@@ -1,3 +1,7 @@
+# 0.0.1-nullsafety.3
+
+- chore: upgrade to `bloc ^7.0.0-nullsafety.4`
+
 # 0.0.1-nullsafety.2
 
 - chore: upgrade to `bloc ^7.0.0-nullsafety.3`
