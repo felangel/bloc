@@ -487,7 +487,7 @@ MultiRepositoryProvider(
 
 ## Dart Versions
 
-- Dart 2: >= 2.12.0-0
+- Dart 2: >= 2.12
 
 ## Maintainers
 
