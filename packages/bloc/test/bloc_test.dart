@@ -173,7 +173,8 @@ void main() {
         ];
 
         unawaited(
-            expectLater(complexBloc.stream, emitsInOrder(expectedStates)));
+          expectLater(complexBloc.stream, emitsInOrder(expectedStates)),
+        );
 
         complexBloc.add(ComplexEventA());
         await Future<void>.delayed(const Duration(milliseconds: 20));
