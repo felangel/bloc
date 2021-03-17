@@ -24,7 +24,7 @@ class BlocObserver {
   /// [onTransition] is called before a [bloc]'s state has been updated.
   @protected
   @mustCallSuper
-  void onTransition(BlocBase bloc, Transition<Object?, Object?> transition) {}
+  void onTransition(BlocBase bloc, Transition transition) {}
 
   /// Called whenever an [error] is thrown in any [Bloc] or [Cubit].
   /// The [stackTrace] argument may be [StackTrace.empty] if an error
