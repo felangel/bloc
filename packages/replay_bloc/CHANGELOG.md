@@ -1,3 +1,10 @@
+# 0.0.1
+
+- **BREAKING**: opt into null safety
+  - feat!: upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+  - feat!: upgrade to `bloc ^7.0.0`
+  - chore: upgrade example to support sound null safety
+
 # 0.0.1-nullsafety.3
 
 - chore: upgrade to `bloc ^7.0.0-nullsafety.4`
