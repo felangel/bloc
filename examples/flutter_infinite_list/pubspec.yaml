@@ -12,8 +12,8 @@ dependencies:
   flutter_bloc:
     path: ../../packages/flutter_bloc
   http: ^0.13.0
-  equatable: ^2.0.0-nullsafety.3
-  rxdart: ^0.26.0-nullsafety.1
+  equatable: ^2.0.0
+  rxdart: ^0.26.0
 
 dependency_overrides:
   bloc:
