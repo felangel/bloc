@@ -7,11 +7,11 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.*;
-import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +20,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 
 public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction implements IntentionAction {
+
+    SnippetSelection wrapSelection;
 
     /**
      * If this action is applicable, returns the text to be shown in the list of intention actions available.
@@ -63,10 +65,12 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
             return false;
         }
 
-
         final SnippetSelection selection = Utils.getSelection(editor);
-        if (selection.offsetL > selection.offsetR) {
+        if (!selection.isValid || selection.offsetL >= selection.offsetR) {
+            wrapSelection = null;
             return false;
+        } else {
+            wrapSelection = selection;
         }
 
         final IntentionAction[] quickIntentionActions = Arrays.stream(IntentionManager.getInstance().getAvailableIntentionActions()).limit(10).toArray(IntentionAction[]::new);
@@ -97,6 +101,10 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
     public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element)
             throws IncorrectOperationException {
 
+        if (wrapSelection == null) {
+            return;
+        }
+
         final DefaultActionGroup actionGroup = new DefaultActionGroup();
         for (SnippetType snippetType : SnippetType.values()) {
             actionGroup.add(new AnAction(snippetType.name()) {
@@ -107,18 +115,18 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
                 }
             });
         }
-        final ActionPopupMenu popupMenu = ActionManager.getInstance().createActionPopupMenu(ActionPlaces.UNKNOWN, actionGroup);
-
         final LogicalPosition logicalPosition = editor.getCaretModel().getLogicalPosition();
         final int x = editor.logicalPositionToXY(logicalPosition).x + 50;
         final int y = editor.logicalPositionToXY(logicalPosition).y;
+
+        final ActionPopupMenu popupMenu = ActionManager.getInstance().createActionPopupMenu(ActionPlaces.UNKNOWN, actionGroup);
         popupMenu.getComponent().show(editor.getContentComponent(), x, y);
     }
 
     private void invokeSnippetAction(@NotNull Project project, Editor editor, SnippetType snippetType) {
         final Document document = editor.getDocument();
 
-        final SnippetSelection selection = Utils.getSelection(editor);
+        final SnippetSelection selection = wrapSelection;
         final String selectedText = document.getText(TextRange.create(selection.offsetL, selection.offsetR));
         final String replaceWith = Snippets.getSnippet(snippetType, selectedText);
 
@@ -151,7 +159,7 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
 
         final Caret initialCaret = caretModel.getAllCarets().get(0);
         if (!initialCaret.hasSelection()) {
-            // initial position from where is triggered the intention menu
+            // initial position from where was triggered the intention action
             caretModel.removeCaret(initialCaret);
         }
 
