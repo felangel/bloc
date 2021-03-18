@@ -97,7 +97,7 @@
         </context>
     </template>
     <template name="blocobserver"
-              value="import 'package:flutter_bloc/flutter_bloc.dart';&#10;&#10;class $My$BlocObserver extends BlocObserver {&#10;  @override&#10;  void onEvent(Bloc bloc, Object? event) {&#10;    super.onEvent(bloc, event);&#10;    // TODO: implement onEvent&#10;  }&#10;&#10;  @override&#10;  void onError(Bloc bloc, Object error, StackTrace stacktrace) {&#10;    // TODO: implement onError&#10;    super.onError(bloc, error, stacktrace);&#10;  }&#10;&#10;  @override&#10;  void onTransition(Bloc bloc, Transition transition) {&#10;    super.onTransition(bloc, transition);&#10;    // TODO: implement onTransition&#10;  }&#10;}"
+              value="import 'package:bloc/bloc.dart';&#10;&#10;class $My$BlocObserver extends BlocObserver {&#10;  @override&#10;  void onEvent(Bloc bloc, Object? event) {&#10;    super.onEvent(bloc, event);&#10;    print('${bloc.runtimeType} $event');&#10;  }&#10;&#10;  @override&#10;  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {&#10;    print('${bloc.runtimeType} $error $stackTrace');&#10;    super.onError(bloc, error, stackTrace);&#10;  }&#10;&#10;  @override&#10;  void onChange(BlocBase bloc, Change change) {&#10;    super.onChange(bloc, change);&#10;    print('${bloc.runtimeType} $change');&#10;  }&#10;&#10;  @override&#10;  void onTransition(Bloc bloc, Transition transition) {&#10;    super.onTransition(bloc, transition);&#10;    print('${bloc.runtimeType} $transition');&#10;  }&#10;}"
               description="BlocObserver class" toReformat="true" toShortenFQNames="true">
         <variable name="My" expression="" defaultValue="&quot;My&quot;" alwaysStopAt="true"/>
         <context>
@@ -164,7 +164,7 @@
         </context>
     </template>
     <template name="bloctest"
-              value="blocTest&lt;$Subject$Bloc, $Subject$State&gt;(&#10;  $DESCRIPTION$,&#10;  build: () =&gt; $Subject$Bloc(),&#10;  act: (bloc) {&#10;    // TODO: implement&#10;  },&#10;  expect: () =&gt; const &lt;$Subject$State&gt;[&#10;    // TODO: implement&#10;  ],&#10;);"
+              value="blocTest&lt;$Subject$Bloc, $Subject$State&gt;(&#10;  $DESCRIPTION$,&#10;  build: () =&gt; $Subject$Bloc(),&#10;  act: (bloc) {&#10;    // TODO: implement&#10;  },&#10;  expect: () =&gt; &lt;$Subject$State&gt;[&#10;    // TODO: implement&#10;  ],&#10;);"
               description="blocTest with build, act and expect" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <variable name="DESCRIPTION" expression="" defaultValue="&quot;'TODO: description'&quot;" alwaysStopAt="true"/>
