@@ -140,25 +140,25 @@ class MyBlocObserver extends BlocObserver {
   @override
   void onCreate(BlocBase bloc) {
     super.onCreate(bloc);
-    print('onCreate -- bloc: ${bloc.runtimeType}');
+    print('onCreate -- ${bloc.runtimeType}');
   }
 
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
-    print('onChange -- bloc: ${bloc.runtimeType}, change: $change');
+    print('onChange -- ${bloc.runtimeType}, $change');
   }
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    print('onError -- bloc: ${bloc.runtimeType}, error: $error');
+    print('onError -- ${bloc.runtimeType}, $error');
     super.onError(bloc, error, stackTrace);
   }
 
   @override
   void onClose(BlocBase bloc) {
     super.onClose(bloc);
-    print('onClose -- bloc: ${bloc.runtimeType}');
+    print('onClose -- ${bloc.runtimeType}');
   }
 }
 ```
@@ -288,37 +288,37 @@ class MyBlocObserver extends BlocObserver {
   @override
   void onCreate(BlocBase bloc) {
     super.onCreate(bloc);
-    print('onCreate -- bloc: ${bloc.runtimeType}');
+    print('onCreate -- ${bloc.runtimeType}');
   }
 
   @override
-  void onEvent(Bloc bloc, Object event) {
+  void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
-    print('onEvent -- bloc: ${bloc.runtimeType}, event: $event');
+    print('onEvent -- ${bloc.runtimeType}, $event');
   }
 
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
-    print('onChange -- bloc: ${bloc.runtimeType}, change: $change');
+    print('onChange -- ${bloc.runtimeType}, $change');
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    print('onTransition -- bloc: ${bloc.runtimeType}, transition: $transition');
+    print('onTransition -- ${bloc.runtimeType}, $transition');
   }
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    print('onError -- bloc: ${bloc.runtimeType}, error: $error');
+    print('onError -- ${bloc.runtimeType}, $error');
     super.onError(bloc, error, stackTrace);
   }
 
   @override
   void onClose(BlocBase bloc) {
     super.onClose(bloc);
-    print('onClose -- bloc: ${bloc.runtimeType}');
+    print('onClose -- ${bloc.runtimeType}');
   }
 }
 ```
