@@ -1,3 +1,19 @@
+# 8.0.0
+
+- **BREAKING**: feat: opt into null safety
+  - upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+- **BREAKING**: feat: `seed` returns a `Function` to support dynamic seed values
+- **BREAKING**: refactor: remove `emitsExactly`
+- **BREAKING**: feat: introduce `MockCubit`
+- **BREAKING**: refactor: `MockBloc` uses [package:mocktail](https://pub.dev/packages/mocktail)
+- **BREAKING**: refactor: `expect` returns a `Function` with `Matcher` support
+- **BREAKING**: refactor: `errors` returns a `Function` with `Matcher` support
+- **BREAKING**: refactor: `whenListen` does not stub `skip`
+- feat: `MockBloc` and `MockCubit` automatically stub core API
+- feat: add optional `initialState` to `whenListen`
+- feat: upgrade to `bloc ^7.0.0`
+- feat: upgrade to `mocktail: ^0.1.0`
+
 # 8.0.0-nullsafety.6
 
 - chore: upgrade to `bloc ^7.0.0-nullsafety.4`
