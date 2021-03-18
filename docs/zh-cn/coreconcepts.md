@@ -145,8 +145,8 @@ class CounterCubit extends Cubit<int> {
 
   @override
   void onChange(Change<int> change) {
-    print(change);
     super.onChange(change);
+    print(change);
   }
 }
 ```
@@ -178,9 +178,9 @@ Change { currentState: 0, nextState: 1 }
 ```dart
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onChange(Cubit cubit, Change change) {
-    print('${cubit.runtimeType} $change');
-    super.onChange(cubit, change);
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    print('${bloc.runtimeType} $change');
   }
 }
 ```
@@ -226,8 +226,8 @@ class CounterCubit extends Cubit<int> {
 
   @override
   void onChange(Change<int> change) {
-    print(change);
     super.onChange(change);
+    print(change);
   }
 
   @override
@@ -245,15 +245,15 @@ class CounterCubit extends Cubit<int> {
 ```dart
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onChange(Cubit cubit, Change change) {
-    print('${cubit.runtimeType} $change');
-    super.onChange(cubit, change);
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    print('${bloc.runtimeType} $change');
   }
 
   @override
-  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
-    print('${cubit.runtimeType} $error $stackTrace');
-    super.onError(cubit, error, stackTrace);
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
+    print('${bloc.runtimeType} $error $stackTrace');
+    super.onError(bloc, error, stackTrace);
   }
 }
 ```
@@ -404,8 +404,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   void onChange(Change<int> change) {
-    print(change);
     super.onChange(change);
+    print(change);
   }
 }
 ```
@@ -449,14 +449,14 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   void onChange(Change<int> change) {
-    print(change);
     super.onChange(change);
+    print(change);
   }
 
   @override
   void onTransition(Transition<CounterEvent, int> transition) {
-    print(transition);
     super.onTransition(transition);
+    print(transition);
   }
 }
 ```
@@ -477,21 +477,21 @@ Change { currentState: 0, nextState: 1 }
 ```dart
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onChange(Cubit cubit, Change change) {
-    print('${cubit.runtimeType} $change');
-    super.onChange(cubit, change);
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    print('${bloc.runtimeType} $change');
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    print('${bloc.runtimeType} $transition');
     super.onTransition(bloc, transition);
+    print('${bloc.runtimeType} $transition');
   }
 
   @override
-  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
-    print('${cubit.runtimeType} $error $stackTrace');
-    super.onError(cubit, error, stackTrace);
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
+    print('${bloc.runtimeType} $error $stackTrace');
+    super.onError(bloc, error, stackTrace);
   }
 }
 ```
@@ -537,20 +537,20 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   void onEvent(CounterEvent event) {
-    print(event);
     super.onEvent(event);
+    print(event);
   }
 
   @override
   void onChange(Change<int> change) {
-    print(change);
     super.onChange(change);
+    print(change);
   }
 
   @override
   void onTransition(Transition<CounterEvent, int> transition) {
-    print(transition);
     super.onTransition(transition);
+    print(transition);
   }
 }
 ```
@@ -558,21 +558,21 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 ```dart
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onEvent(Bloc bloc, Object event) {
-    print('${bloc.runtimeType} $event');
+  void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
+    print('${bloc.runtimeType} $event');
   }
 
   @override
-  void onChange(Cubit cubit, Change change) {
-    print('${cubit.runtimeType} $change');
-    super.onChange(cubit, change);
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    print('${bloc.runtimeType} $change');
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    print('${bloc.runtimeType} $transition');
     super.onTransition(bloc, transition);
+    print('${bloc.runtimeType} $transition');
   }
 }
 ```
@@ -612,14 +612,14 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   void onChange(Change<int> change) {
-    print(change);
     super.onChange(change);
+    print(change);
   }
 
   @override
   void onTransition(Transition<CounterEvent, int> transition) {
-    print(transition);
     super.onTransition(transition);
+    print(transition);
   }
 
   @override
