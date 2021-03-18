@@ -38,7 +38,7 @@ Now that we have a basic understanding of how `Streams` work in Dart we're ready
 
 ## Cubit
 
-> A `Cubit` is a special type of `Stream` which is used as the base for the `Bloc` class (which we will cover later on).
+> A `Cubit` is class which extends `BlocBase` and can be extended to manage any type of state.
 
 ![Cubit Architecture](assets/cubit_architecture_full.png)
 
@@ -116,7 +116,7 @@ Since a `Cubit` is a special type of `Stream`, we can also subscribe to a `Cubit
 ```dart
 Future<void> main() async {
   final cubit = CounterCubit();
-  final subscription = cubit.listen(print); // 1
+  final subscription = cubit.stream.listen(print); // 1
   cubit.increment();
   await Future.delayed(Duration.zero);
   await subscription.cancel();
@@ -274,7 +274,7 @@ CounterCubit Change { currentState: 0, nextState: 1 }
 
 ## Bloc
 
-> A `Bloc` is a special type of `Cubit` which transforms incoming events into outgoing states.
+> A `Bloc` is a more advanced class which relies on `events` to trigger `state` changes rather than functions. `Bloc` also extends `BlocBase` which means it has a similar public API as `Cubit`. However, rather than calling a `function` on a `Bloc` and directly emitting a new `state`, `Blocs` receive `events` and convert the incoming `events` into outgoing `states`.
 
 ![Bloc Architecture](assets/bloc_architecture_full.png)
 
@@ -366,7 +366,7 @@ Just like with `Cubit`, a `Bloc` is a special type of `Stream`, which means we c
 ```dart
 Future<void> main() async {
   final bloc = CounterBloc();
-  final subscription = bloc.listen(print); // 1
+  final subscription = bloc.stream.listen(print); // 1
   bloc.add(CounterEvent.increment);
   await Future.delayed(Duration.zero);
   await subscription.cancel();
