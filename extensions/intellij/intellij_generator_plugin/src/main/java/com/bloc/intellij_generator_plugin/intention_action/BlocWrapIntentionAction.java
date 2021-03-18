@@ -1,6 +1,7 @@
 package com.bloc.intellij_generator_plugin.intention_action;
 
 import com.intellij.codeInsight.intention.IntentionAction;
+import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
@@ -16,7 +17,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.Arrays;
 
 public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction implements IntentionAction {
 
@@ -68,7 +69,20 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
             return false;
         }
 
-        return true;
+        final IntentionAction[] quickIntentionActions = Arrays.stream(IntentionManager.getInstance().getAvailableIntentionActions()).limit(10).toArray(IntentionAction[]::new);
+        for (final IntentionAction action : quickIntentionActions) {
+            String actionText = null;
+            try {
+                actionText = action.getText();
+            } catch (Exception e) {
+            }
+            // should display when Wrap with Column from the Flutter plugin is available
+            if (actionText != null && actionText.contains("Wrap with Column")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
