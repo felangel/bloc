@@ -11,7 +11,7 @@ import 'package:mocktail/mocktail.dart';
 /// in sync with the emitted state.
 ///
 /// Return a canned state stream of `[0, 1, 2, 3]`
-/// when `counterBloc.listen` is called.
+/// when `counterBloc.stream.listen` is called.
 ///
 /// ```dart
 /// whenListen(counterBloc, Stream.fromIterable([0, 1, 2, 3]));
@@ -21,7 +21,7 @@ import 'package:mocktail/mocktail.dart';
 ///
 /// ```dart
 /// await expectLater(
-///   counterBloc,
+///   counterBloc.stream,
 ///   emitsInOrder(
 ///     <Matcher>[equals(0), equals(1), equals(2), equals(3), emitsDone],
 ///   )

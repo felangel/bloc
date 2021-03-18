@@ -96,7 +96,7 @@ import 'package:test/test.dart' as test;
 ///   act: (bloc) => bloc.add(CounterEvent.increment),
 ///   expect: () => [1],
 ///   verify: (_) {
-///     verify(repository.someMethod(any)).called(1);
+///     verify(() => repository.someMethod(any())).called(1);
 ///   }
 /// );
 /// ```
