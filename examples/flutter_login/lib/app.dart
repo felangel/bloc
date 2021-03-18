@@ -9,12 +9,10 @@ import 'package:user_repository/user_repository.dart';
 
 class App extends StatelessWidget {
   const App({
-    Key key,
-    @required this.authenticationRepository,
-    @required this.userRepository,
-  })  : assert(authenticationRepository != null),
-        assert(userRepository != null),
-        super(key: key);
+    Key? key,
+    required this.authenticationRepository,
+    required this.userRepository,
+  }) : super(key: key);
 
   final AuthenticationRepository authenticationRepository;
   final UserRepository userRepository;
@@ -42,7 +40,7 @@ class AppView extends StatefulWidget {
 class _AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
-  NavigatorState get _navigator => _navigatorKey.currentState;
+  NavigatorState get _navigator => _navigatorKey.currentState!;
 
   @override
   Widget build(BuildContext context) {
