@@ -1,4 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:meta_weather_api/meta_weather_api.dart';
 import 'package:test/test.dart';
 
@@ -31,13 +30,6 @@ void main() {
             'abbr',
             WeatherState.unknown,
           ),
-        );
-      });
-
-      test('throws CheckedFromJsonException when source is null', () {
-        expect(
-          () => Weather.fromJson(null),
-          throwsA(isA<CheckedFromJsonException>()),
         );
       });
     });

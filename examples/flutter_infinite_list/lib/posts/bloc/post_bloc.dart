@@ -43,7 +43,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         return state.copyWith(
           status: PostStatus.success,
           posts: posts,
-          hasReachedMax: _hasReachedMax(posts.length),
+          hasReachedMax: false,
         );
       }
       final posts = await _fetchPosts(state.posts.length);
@@ -52,7 +52,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           : state.copyWith(
               status: PostStatus.success,
               posts: List.of(state.posts)..addAll(posts),
-              hasReachedMax: _hasReachedMax(posts.length),
+              hasReachedMax: false,
             );
     } on Exception {
       return state.copyWith(status: PostStatus.failure);
@@ -64,7 +64,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       Uri.https(
         'jsonplaceholder.typicode.com',
         '/posts',
-        <String, String>{'_start': '$startIndex', 'limit': '$_postLimit'},
+        <String, String>{'_start': '$startIndex', '_limit': '$_postLimit'},
       ),
     );
     if (response.statusCode == 200) {
@@ -79,6 +79,4 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
     throw Exception('error fetching posts');
   }
-
-  bool _hasReachedMax(int postsCount) => postsCount < _postLimit ? false : true;
 }

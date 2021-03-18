@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:meta/meta.dart';
 
 part 'weather.g.dart';
 
@@ -28,7 +27,7 @@ enum WeatherState {
 }
 
 extension WeatherStateX on WeatherState {
-  String get abbr => _$WeatherStateEnumMap[this];
+  String? get abbr => _$WeatherStateEnumMap[this];
 }
 
 enum WindDirectionCompass {
@@ -54,21 +53,21 @@ enum WindDirectionCompass {
 @JsonSerializable()
 class Weather {
   const Weather({
-    @required this.id,
-    @required this.weatherStateName,
-    @required this.weatherStateAbbr,
-    @required this.windDirectionCompass,
-    @required this.created,
-    @required this.applicableDate,
-    @required this.minTemp,
-    @required this.maxTemp,
-    @required this.theTemp,
-    @required this.windSpeed,
-    @required this.windDirection,
-    @required this.airPressure,
-    @required this.humidity,
-    @required this.visibility,
-    @required this.predictability,
+    required this.id,
+    required this.weatherStateName,
+    required this.weatherStateAbbr,
+    required this.windDirectionCompass,
+    required this.created,
+    required this.applicableDate,
+    required this.minTemp,
+    required this.maxTemp,
+    required this.theTemp,
+    required this.windSpeed,
+    required this.windDirection,
+    required this.airPressure,
+    required this.humidity,
+    required this.visibility,
+    required this.predictability,
   });
 
   factory Weather.fromJson(Map<String, dynamic> json) =>

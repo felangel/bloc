@@ -1,13 +1,9 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_wizard/bloc/profile_wizard_bloc.dart';
 
-void main() {
-  EquatableConfig.stringify = kDebugMode;
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override

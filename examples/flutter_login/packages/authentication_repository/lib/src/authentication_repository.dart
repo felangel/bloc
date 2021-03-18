@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
-
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthenticationRepository {
@@ -14,12 +12,9 @@ class AuthenticationRepository {
   }
 
   Future<void> logIn({
-    @required String username,
-    @required String password,
+    required String username,
+    required String password,
   }) async {
-    assert(username != null);
-    assert(password != null);
-
     await Future.delayed(
       const Duration(milliseconds: 300),
       () => _controller.add(AuthenticationStatus.authenticated),

@@ -9,11 +9,11 @@ part 'weather_cubit.g.dart';
 part 'weather_state.dart';
 
 class WeatherCubit extends HydratedCubit<WeatherState> {
-  WeatherCubit(this._weatherRepository) : super(const WeatherState());
+  WeatherCubit(this._weatherRepository) : super(WeatherState());
 
   final WeatherRepository _weatherRepository;
 
-  Future<void> fetchWeather(String city) async {
+  Future<void> fetchWeather(String? city) async {
     if (city == null || city.isEmpty) return;
 
     emit(state.copyWith(status: WeatherStatus.loading));
@@ -41,7 +41,7 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
 
   Future<void> refreshWeather() async {
     if (!state.status.isSuccess) return;
-    if (state.weather?.location == null) return;
+    if (state.weather == Weather.empty) return;
     try {
       final weather = Weather.fromRepository(
         await _weatherRepository.getWeather(state.weather.location),
@@ -73,17 +73,19 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
       return;
     }
 
-    final temperature = state.weather.temperature;
-    final value = units.isCelsius
-        ? temperature.value.toCelsius()
-        : temperature.value.toFahrenheit();
-
-    emit(
-      state.copyWith(
-        temperatureUnits: units,
-        weather: state.weather.copyWith(temperature: Temperature(value: value)),
-      ),
-    );
+    final weather = state.weather;
+    if (weather != Weather.empty) {
+      final temperature = weather.temperature;
+      final value = units.isCelsius
+          ? temperature.value.toCelsius()
+          : temperature.value.toFahrenheit();
+      emit(
+        state.copyWith(
+          temperatureUnits: units,
+          weather: weather.copyWith(temperature: Temperature(value: value)),
+        ),
+      );
+    }
   }
 
   @override

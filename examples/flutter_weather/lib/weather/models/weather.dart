@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:weather_repository/weather_repository.dart' hide Weather;
 import 'package:weather_repository/weather_repository.dart'
@@ -16,7 +15,7 @@ extension TemperatureUnitsX on TemperatureUnits {
 
 @JsonSerializable()
 class Temperature extends Equatable {
-  const Temperature({@required this.value});
+  const Temperature({required this.value});
 
   factory Temperature.fromJson(Map<String, dynamic> json) =>
       _$TemperatureFromJson(json);
@@ -32,10 +31,10 @@ class Temperature extends Equatable {
 @JsonSerializable()
 class Weather extends Equatable {
   const Weather({
-    @required this.condition,
-    @required this.lastUpdated,
-    @required this.location,
-    @required this.temperature,
+    required this.condition,
+    required this.lastUpdated,
+    required this.location,
+    required this.temperature,
   });
 
   factory Weather.fromJson(Map<String, dynamic> json) =>
@@ -50,6 +49,13 @@ class Weather extends Equatable {
     );
   }
 
+  static final empty = Weather(
+    condition: WeatherCondition.unknown,
+    lastUpdated: DateTime(0),
+    temperature: const Temperature(value: 0),
+    location: '--',
+  );
+
   final WeatherCondition condition;
   final DateTime lastUpdated;
   final String location;
@@ -61,10 +67,10 @@ class Weather extends Equatable {
   Map<String, dynamic> toJson() => _$WeatherToJson(this);
 
   Weather copyWith({
-    WeatherCondition condition,
-    DateTime lastUpdated,
-    String location,
-    Temperature temperature,
+    WeatherCondition? condition,
+    DateTime? lastUpdated,
+    String? location,
+    Temperature? temperature,
   }) {
     return Weather(
       condition: condition ?? this.condition,

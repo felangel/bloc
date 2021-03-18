@@ -15,7 +15,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     }
 
     onTodosStateChanged(todosBloc.state);
-    todosSubscription = todosBloc.listen(onTodosStateChanged);
+    todosSubscription = todosBloc.stream.listen(onTodosStateChanged);
   }
 
   @override

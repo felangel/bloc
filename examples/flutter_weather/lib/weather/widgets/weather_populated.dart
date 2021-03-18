@@ -5,10 +5,10 @@ import 'package:weather_repository/weather_repository.dart'
 
 class WeatherPopulated extends StatelessWidget {
   const WeatherPopulated({
-    Key key,
-    @required this.weather,
-    @required this.units,
-    @required this.onRefresh,
+    Key? key,
+    required this.weather,
+    required this.units,
+    required this.onRefresh,
   }) : super(key: key);
 
   final Weather weather;
@@ -34,13 +34,13 @@ class WeatherPopulated extends StatelessWidget {
                   _WeatherIcon(condition: weather.condition),
                   Text(
                     weather.location,
-                    style: theme.textTheme.headline2.copyWith(
+                    style: theme.textTheme.headline2?.copyWith(
                       fontWeight: FontWeight.w200,
                     ),
                   ),
                   Text(
                     weather.formattedTemperature(units),
-                    style: theme.textTheme.headline3.copyWith(
+                    style: theme.textTheme.headline3?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -58,10 +58,7 @@ class WeatherPopulated extends StatelessWidget {
 }
 
 class _WeatherIcon extends StatelessWidget {
-  const _WeatherIcon({
-    Key key,
-    @required this.condition,
-  }) : super(key: key);
+  const _WeatherIcon({Key? key, required this.condition}) : super(key: key);
 
   static const _iconSize = 100.0;
 
