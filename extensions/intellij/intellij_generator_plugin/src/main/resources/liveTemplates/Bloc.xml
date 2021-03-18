@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templateSet group="Bloc">
+    <!--        WIDGETS        -->
+    <template name="blocbuilder"
+              value="BlocBuilder&lt;$Subject$Bloc, $Subject$State&gt;(&#10;  builder: (context, state) {&#10;    return $Container$;&#10;  },&#10;)"
+              description="BlocBuilder widget" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+        </context>
+    </template>
+    <template name="blocconsumer"
+              value="BlocConsumer&lt;$Subject$Bloc, $Subject$State&gt;(&#10;  listener: (context, state) {&#10;    // TODO: implement listener&#10;  },&#10;  builder: (context, state) {&#10;    return $Container$;&#10;  },&#10;)"
+              description="BlocConsumer widget" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+        </context>
+    </template>
+    <template name="bloclistener"
+              value="BlocListener&lt;$Subject$Bloc, $Subject$State&gt;(&#10;  listener: (context, state) {&#10;    // TODO: implement listener&#10;  },&#10;  child: $Container$,&#10;)"
+              description="BlocListener widget" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+        </context>
+    </template>
+    <template name="blocprovider"
+              value="BlocProvider&lt;$Subject$Bloc, $Subject$State&gt;(&#10;  create: (context) =&gt; $Subject$Bloc(),&#10;  child: $Container$,&#10;)"
+              description="BlocProvider widget" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+        </context>
+    </template>
+    <template name="multibloclistener"
+              value="MultiBlocListener(&#10;  listeners: [&#10;    BlocListener&lt;$Subject$Bloc, $Subject$State&gt;(&#10;      listener: (context, state) {&#10;        // TODO: implement listener&#10;      },&#10;    ),&#10;    BlocListener&lt;$Subject2$Bloc, $Subject2$State&gt;(&#10;      listener: (context, state) {&#10;        // TODO: implement listener&#10;      },&#10;    ),&#10;  ],&#10;  child: $Container$,&#10;)"
+              description="MultiBlocListener widget" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="Subject2" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+        </context>
+    </template>
+    <template name="multiblocprovider"
+              value="MultiBlocProvider(&#10;  providers: [&#10;    BlocProvider(&#10;      create: (context) =&gt; $Subject$Bloc(),&#10;    ),&#10;    BlocProvider(&#10;      create: (context) =&gt; $Subject2$Bloc(),&#10;    ),&#10;  ],&#10;  child: $Container$,&#10;)"
+              description="MultiBlocProvider widget" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="Subject2" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+        </context>
+    </template>
+    <template name="multirepoprovider"
+              value="MultiRepositoryProvider(&#10;  providers: [&#10;    RepositoryProvider(&#10;      create: (context) =&gt; $Subject$Repository(),&#10;    ),&#10;    RepositoryProvider(&#10;      create: (context) =&gt; $Subject2$Repository(),&#10;    ),&#10;  ],&#10;  child: $Container$,&#10;)"
+              description="MultiRepositoryProvider widget" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="Subject2" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+        </context>
+    </template>
+    <template name="repoprovider"
+              value="RepositoryProvider(&#10;  create: (context) =&gt; $Subject$Repository(),&#10;  child: $Container$,&#10;)"
+              description="RepositoryProvider widget" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+        </context>
+    </template>
+
+    <!--        CLASSES        -->
+    <template name="bloc"
+              value="class $Subject$Bloc extends Bloc&lt;$Subject$Event, $Subject$State&gt; {&#10;  $Subject$Bloc() : super($Subject$Initial());&#10;&#10;  @override&#10;  Stream&lt;$Subject$State&gt; mapEventToState($Subject$Event event) async* {&#10;    // TODO: implement mapEventToState&#10;  }&#10;}"
+              description="bloc class" toReformat="true" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART_TOPLEVEL" value="true"/>
+        </context>
+    </template>
+    <template name="blocevent"
+              value="class $Subject$$Noun$$Verb$ extends $Subject$Event {&#10;  const $Subject$$Noun$$Verb$();&#10;&#10;  &#10;&#10;  @override&#10;  List&lt;Object&gt; get props =&gt; [];&#10;}"
+              description="bloc event class" toReformat="true" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="Noun" expression="" defaultValue="&quot;Noun&quot;" alwaysStopAt="true"/>
+        <variable name="Verb" expression="" defaultValue="&quot;Verb&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART_TOPLEVEL" value="true"/>
+        </context>
+    </template>
+    <template name="blocobserver"
+              value="import 'package:bloc/bloc.dart';&#10;&#10;class $My$BlocObserver extends BlocObserver {&#10;  @override&#10;  void onEvent(Bloc bloc, Object? event) {&#10;    super.onEvent(bloc, event);&#10;    print('${bloc.runtimeType} $event');&#10;  }&#10;&#10;  @override&#10;  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {&#10;    print('${bloc.runtimeType} $error $stackTrace');&#10;    super.onError(bloc, error, stackTrace);&#10;  }&#10;&#10;  @override&#10;  void onChange(BlocBase bloc, Change change) {&#10;    super.onChange(bloc, change);&#10;    print('${bloc.runtimeType} $change');&#10;  }&#10;&#10;  @override&#10;  void onTransition(Bloc bloc, Transition transition) {&#10;    super.onTransition(bloc, transition);&#10;    print('${bloc.runtimeType} $transition');&#10;  }&#10;}"
+              description="BlocObserver class" toReformat="true" toShortenFQNames="true">
+        <variable name="My" expression="" defaultValue="&quot;My&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART_TOPLEVEL" value="true"/>
+        </context>
+    </template>
+    <template name="blocstate"
+              value="class $Subject$$Verb$State extends $Subject$State {&#10;  const $Subject$$Verb$State();&#10;&#10;  &#10;&#10;  @override&#10;  List&lt;Object&gt; get props =&gt; [];&#10;}"
+              description="bloc state class" toReformat="true" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="Verb" expression="" defaultValue="&quot;Verb&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART_TOPLEVEL" value="true"/>
+        </context>
+    </template>
+    <template name="cubit"
+              value="class $Subject$Cubit extends Cubit&lt;$Subject$State&gt; {&#10;  $Subject$Cubit() : super($Subject$Initial());&#10;}"
+              description="cubit class" toReformat="true" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART_TOPLEVEL" value="true"/>
+        </context>
+    </template>
+
+    <!--        MISC        -->
+    <template name="read" value="context.read&lt;$Subject$Bloc&gt;()" description="context.read()" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
+    <template name="repoof" value="RepositoryProvider.of&lt;$Subject$Repository&gt;(context)"
+              description="RepositoryProvider.of()" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
+    <template name="select" value="context.select(($Subject$Bloc element) =&gt; element.state)"
+              description="context.select()" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
+    <template name="watch" value="context.watch&lt;$Subject$Bloc&gt;()" description="context.watch()" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
+    <template name="blocof" value="BlocProvider.of&lt;$Subject$Bloc&gt;(context)" description="BlocProvider.of()"
+              toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
+    <template name="bloctest"
+              value="blocTest&lt;$Subject$Bloc, $Subject$State&gt;(&#10;  $DESCRIPTION$,&#10;  build: () =&gt; $Subject$Bloc(),&#10;  act: (bloc) {&#10;    // TODO: implement&#10;  },&#10;  expect: () =&gt; &lt;$Subject$State&gt;[&#10;    // TODO: implement&#10;  ],&#10;);"
+              description="blocTest with build, act and expect" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="DESCRIPTION" expression="" defaultValue="&quot;'TODO: description'&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
+
+    <!--        FREEZED        -->
+    <template name="fstate" value="const factory $CLASS_NAME$.$stateName$() = _$stateName$;"
+              description="freezed sub state" toReformat="false" toShortenFQNames="true">
+        <variable name="CLASS_NAME" expression="dartClassName()" defaultValue="&quot;&quot;" alwaysStopAt="false"/>
+        <variable name="stateName" expression="" defaultValue="&quot;stateName&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
+    <template name="fevent" value="const factory $CLASS_NAME$.$eventName$() = _$eventName$;"
+              description="freezed sub event" toReformat="false" toShortenFQNames="true">
+        <variable name="CLASS_NAME" expression="dartClassName()" defaultValue="&quot;&quot;" alwaysStopAt="false"/>
+        <variable name="eventName" expression="" defaultValue="&quot;eventName&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
+    <template name="feventmap"
+              value="Stream&lt;$BASE_CLASS_NAME$State&gt; _map$eventName$EventToState($eventName$Event event) async* {&#10;&#10;}"
+              description="map event to state function with freeze.map function" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="BASE_CLASS_NAME"
+                  expression="regularExpression(dartClassName(), &quot;(Bloc)|(Cubit)&quot;, &quot;&quot;)"
+                  defaultValue="&quot;&quot;" alwaysStopAt="true"/>
+        <variable name="eventName" expression="" defaultValue="&quot;eventName&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
+    <template name="feventwhen"
+              value="Stream&lt;$BASE_CLASS_NAME$State&gt; _map$eventName$EventToState() async* {&#10;&#10;}"
+              description="map event to state function with freeze.when function" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="BASE_CLASS_NAME"
+                  expression="regularExpression(dartClassName(), &quot;(Bloc)|(Cubit)&quot;, &quot;&quot;)"
+                  defaultValue="&quot;&quot;" alwaysStopAt="true"/>
+        <variable name="eventName" expression="" defaultValue="&quot;eventName&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
+</templateSet>
