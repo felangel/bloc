@@ -11,11 +11,11 @@ extension WeatherStatusX on WeatherStatus {
 
 @JsonSerializable()
 class WeatherState extends Equatable {
-  const WeatherState({
+  WeatherState({
     this.status = WeatherStatus.initial,
     this.temperatureUnits = TemperatureUnits.celsius,
-    this.weather,
-  });
+    Weather? weather,
+  }) : weather = weather ?? Weather.empty;
 
   factory WeatherState.fromJson(Map<String, dynamic> json) =>
       _$WeatherStateFromJson(json);
@@ -25,9 +25,9 @@ class WeatherState extends Equatable {
   final TemperatureUnits temperatureUnits;
 
   WeatherState copyWith({
-    WeatherStatus status,
-    TemperatureUnits temperatureUnits,
-    Weather weather,
+    WeatherStatus? status,
+    TemperatureUnits? temperatureUnits,
+    Weather? weather,
   }) {
     return WeatherState(
       status: status ?? this.status,
@@ -39,5 +39,5 @@ class WeatherState extends Equatable {
   Map<String, dynamic> toJson() => _$WeatherStateToJson(this);
 
   @override
-  List<Object> get props => [status, temperatureUnits, weather];
+  List<Object?> get props => [status, temperatureUnits, weather];
 }

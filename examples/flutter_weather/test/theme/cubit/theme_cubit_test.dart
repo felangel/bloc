@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/theme/cubit/theme_cubit.dart';
 import 'package:flutter_weather/weather/weather.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import '../../helpers/hydrated_bloc.dart';
@@ -20,7 +20,7 @@ class MockWeather extends Mock implements Weather {
 void main() {
   initHydratedBloc();
   group('ThemeCubit', () {
-    ThemeCubit themeCubit;
+    late ThemeCubit themeCubit;
 
     setUp(() {
       themeCubit = ThemeCubit();
@@ -54,35 +54,35 @@ void main() {
         'emits correct color for WeatherCondition.clear',
         build: () => ThemeCubit(),
         act: (cubit) => cubit.updateTheme(clearWeather),
-        expect: <Color>[Colors.orangeAccent],
+        expect: () => <Color>[Colors.orangeAccent],
       );
 
       blocTest<ThemeCubit, Color>(
         'emits correct color for WeatherCondition.snowy',
         build: () => ThemeCubit(),
         act: (cubit) => cubit.updateTheme(snowyWeather),
-        expect: <Color>[Colors.lightBlueAccent],
+        expect: () => <Color>[Colors.lightBlueAccent],
       );
 
       blocTest<ThemeCubit, Color>(
         'emits correct color for WeatherCondition.cloudy',
         build: () => ThemeCubit(),
         act: (cubit) => cubit.updateTheme(cloudyWeather),
-        expect: <Color>[Colors.blueGrey],
+        expect: () => <Color>[Colors.blueGrey],
       );
 
       blocTest<ThemeCubit, Color>(
         'emits correct color for WeatherCondition.rainy',
         build: () => ThemeCubit(),
         act: (cubit) => cubit.updateTheme(rainyWeather),
-        expect: <Color>[Colors.indigoAccent],
+        expect: () => <Color>[Colors.indigoAccent],
       );
 
       blocTest<ThemeCubit, Color>(
         'emits correct color for WeatherCondition.unknown',
         build: () => ThemeCubit(),
         act: (cubit) => cubit.updateTheme(unknownWeather),
-        expect: <Color>[ThemeCubit.defaultColor],
+        expect: () => <Color>[ThemeCubit.defaultColor],
       );
     });
   });

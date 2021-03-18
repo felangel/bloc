@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:meta/meta.dart';
 
 part 'location.g.dart';
 
@@ -21,10 +20,10 @@ enum LocationType {
 @JsonSerializable()
 class Location {
   const Location({
-    @required this.title,
-    @required this.locationType,
-    @required this.latLng,
-    @required this.woeid,
+    required this.title,
+    required this.locationType,
+    required this.latLng,
+    required this.woeid,
   });
 
   factory Location.fromJson(Map<String, dynamic> json) =>
@@ -38,15 +37,16 @@ class Location {
 }
 
 class LatLng {
-  const LatLng({@required this.latitude, @required this.longitude});
+  const LatLng({required this.latitude, required this.longitude});
 
-  factory LatLng.fromJson(String json) {
+  factory LatLng.fromJson(String? json) {
     assert(json != null);
-    final parts = json.split(',');
+    final parts = json!.split(',');
     assert(parts.length == 2);
     return LatLng(
-        latitude: double.tryParse(parts[0]),
-        longitude: double.tryParse(parts[1]));
+      latitude: double.tryParse(parts[0]) ?? 0,
+      longitude: double.tryParse(parts[1]) ?? 0,
+    );
   }
 
   final double latitude;

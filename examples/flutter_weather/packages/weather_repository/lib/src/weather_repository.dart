@@ -3,15 +3,18 @@ import 'dart:async';
 import 'package:meta_weather_api/meta_weather_api.dart' hide Weather;
 import 'package:weather_repository/weather_repository.dart';
 
+class WeatherFailure implements Exception {}
+
 class WeatherRepository {
-  WeatherRepository({MetaWeatherApiClient weatherApiClient})
+  WeatherRepository({MetaWeatherApiClient? weatherApiClient})
       : _weatherApiClient = weatherApiClient ?? MetaWeatherApiClient();
 
   final MetaWeatherApiClient _weatherApiClient;
 
   Future<Weather> getWeather(String city) async {
     final location = await _weatherApiClient.locationSearch(city);
-    final weather = await _weatherApiClient.getWeather(location?.woeid);
+    final woeid = location.woeid;
+    final weather = await _weatherApiClient.getWeather(woeid);
     return Weather(
       temperature: weather.theTemp,
       location: location.title,
