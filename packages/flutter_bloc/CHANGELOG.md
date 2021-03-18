@@ -1,3 +1,15 @@
+# 7.0.0
+
+- **BREAKING**: refactor: rename `cubit` parameter to `bloc`
+  - refactor: rename `cubit` parameter in `BlocListener` to `bloc`
+  - refactor: rename `cubit` parameter in `BlocBuilder` to `bloc`
+  - refactor: rename `cubit` parameter in `BlocConsumer` to `bloc`
+- **BREAKING**: opt into null safety
+  - upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+- **BREAKING**: refactor: remove deprecated `context.repository`
+- feat: upgrade to `bloc: ^7.0.0`
+- feat: upgrade to `provider: ^5.0.0`
+
 # 7.0.0-nullsafety.6
 
 - chore: bump to `bloc: ^7.0.0-nullsafety.4`
