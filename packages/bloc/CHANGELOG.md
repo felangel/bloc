@@ -1,3 +1,20 @@
+# 7.0.0
+
+- **BREAKING**: refactor: `Bloc` and `Cubit` extend `BlocBase`
+  - refactor: `void onError(Cubit cubit, Object error, StackTrace stackTrace)` -> `void onError(BlocBase bloc, Object error, StackTrace stackTrace)`
+  - refactor: `void onCreate(Cubit cubit)` -> `void onCreate(BlocBase bloc)`
+  - refactor: `void onClose(Cubit cubit)` -> `void onClose(BlocBase bloc)`
+- **BREAKING**: refactor: `Bloc` and `Cubit` do not extend `Stream` and implement `Sink`
+  - refactor: use `bloc.stream` or `cubit.stream` to access `Stream<State>`
+    - `myBloc.map(...)` -> `myBloc.stream.map(...)`
+  - refactor: deprecate `bloc.listen` in favor of `bloc.stream.listen`
+- **BREAKING**: refactor: `CubitUnhandledErrorException` -> `BlocUnhandledErrorException`
+- **BREAKING**: opt into null safety
+  - feat!: upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+- fix: `transformEvents` multiple subscriptions issue
+- test: improve testing for advanced `transformEvents` behavior
+- chore: bump to `meta: ^1.3.0`
+
 # 7.0.0-nullsafety.4
 
 - **BREAKING**: refactor: `Bloc` and `Cubit` extend `BlocBase`
