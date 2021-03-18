@@ -21,6 +21,8 @@ import java.util.Arrays;
 
 public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction implements IntentionAction {
 
+    SnippetSelection snippetSelection;
+
     /**
      * If this action is applicable, returns the text to be shown in the list of intention actions available.
      */
@@ -72,6 +74,11 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
             }
             // should display when Wrap with Column from the Flutter plugin is available
             if (actionText != null && actionText.contains("Wrap with Column")) {
+                snippetSelection = Utils.getSelection(editor);
+                if (!snippetSelection.isValid()) {
+                    snippetSelection = null;
+                    return false;
+                }
                 return true;
             }
         }
@@ -112,17 +119,13 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
     private void invokeSnippetAction(@NotNull Project project, Editor editor, SnippetType snippetType) {
         final Document document = editor.getDocument();
 
-        final SnippetSelection selection = Utils.getSelection(editor);
-        if (!selection.isValid || selection.offsetL >= selection.offsetR) {
-            return;
-        }
-
-        final String selectedText = document.getText(TextRange.create(selection.offsetL, selection.offsetR));
+        final SnippetSelection selection = snippetSelection;
+        final String selectedText = document.getText(TextRange.create(selection.getOffsetL(), selection.getOffsetR()));
         final String replaceWith = Snippets.getSnippet(snippetType, selectedText);
 
         // wrap the widget:
         WriteCommandAction.runWriteCommandAction(project, () -> {
-                    document.replaceString(selection.offsetL, selection.offsetR, replaceWith);
+                    document.replaceString(selection.getOffsetL(), selection.getOffsetR(), replaceWith);
                 }
         );
 
@@ -138,7 +141,7 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
                 continue;
             }
 
-            final int caretOffset = selection.offsetL + replaceWith.indexOf(snippet);
+            final int caretOffset = selection.getOffsetL() + replaceWith.indexOf(snippet);
             final VisualPosition visualPos = editor.offsetToVisualPosition(caretOffset);
             caretModel.addCaret(visualPos);
 

@@ -99,9 +99,8 @@ class Utils {
             if (!text.isEmpty()) {
                 if (Pattern.matches("[;),\\]]", text)) {
                     return true;
-                } else {
-                    return false;
                 }
+                return false;
             }
             length++;
         }
