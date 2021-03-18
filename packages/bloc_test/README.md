@@ -71,7 +71,7 @@ whenListen(
 expect(counterBloc.state, equals(0));
 
 // Assert that the stubbed stream is emitted.
-await expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3])))
+await expectLater(counterBloc.stream, emitsInOrder(<int>[0, 1, 2, 3])))
 
 // Assert that the current state is in sync with the stubbed stream.
 expect(counterBloc.state, equals(3));
@@ -84,7 +84,7 @@ expect(counterBloc.state, equals(3));
 
 `build` should be used for all `bloc` initialization and preparation and must return the `bloc` under test.
 
-`seed` is an optional state which will be used to seed the `bloc` before `act` is called.
+`seed` is an optional `Function` that returns a state which will be used to seed the `bloc` before `act` is called.
 
 `act` is an optional callback which will be invoked with the `bloc` under test and should be used to interact with the `bloc`.
 
@@ -121,7 +121,7 @@ group('CounterBloc', () {
 blocTest(
   'CounterCubit emits [10] when seeded with 9',
   build: () => CounterCubit(),
-  seed: 9,
+  seed: () => 9,
   act: (cubit) => cubit.increment(),
   expect: () => [10],
 );
@@ -160,7 +160,7 @@ blocTest(
   act: (bloc) => bloc.add(CounterEvent.increment),
   expect: () => [1],
   verify: (_) {
-    verify(repository.someMethod(any)).called(1);
+    verify(() => repository.someMethod(any())).called(1);
   }
 );
 ```
@@ -189,7 +189,7 @@ blocTest(
 
 ## Dart Versions
 
-- Dart 2: >= 2.12.0-0
+- Dart 2: >= 2.12
 
 ## Maintainers
 

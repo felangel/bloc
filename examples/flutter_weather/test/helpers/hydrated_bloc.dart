@@ -1,15 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
-class MockStorage extends Mock implements Storage {
-  @override
-  Future<void> write(String key, dynamic value) async {}
-}
+class MockStorage extends Mock implements Storage {}
 
-final hydratedStorage = MockStorage();
+late Storage hydratedStorage;
 
 void initHydratedBloc() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  hydratedStorage = MockStorage();
+  when(() => hydratedStorage.write(any(), any<dynamic>()))
+      .thenAnswer((_) async {});
   HydratedBloc.storage = hydratedStorage;
 }

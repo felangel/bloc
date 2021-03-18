@@ -15,7 +15,7 @@ class WeatherRequestFailure implements Exception {}
 /// {@endtemplate}
 class MetaWeatherApiClient {
   /// {@macro meta_weather_api_client}
-  MetaWeatherApiClient({http.Client httpClient})
+  MetaWeatherApiClient({http.Client? httpClient})
       : _httpClient = httpClient ?? http.Client();
 
   static const _baseUrl = 'www.metaweather.com';
@@ -37,9 +37,12 @@ class MetaWeatherApiClient {
     final locationJson = jsonDecode(
       locationResponse.body,
     ) as List;
-    return locationJson?.isNotEmpty == true
-        ? Location.fromJson(locationJson.first as Map<String, dynamic>)
-        : null;
+
+    if (locationJson.isEmpty) {
+      throw LocationIdRequestFailure();
+    }
+
+    return Location.fromJson(locationJson.first as Map<String, dynamic>);
   }
 
   /// Fetches [Weather] for a given [locationId].
@@ -54,8 +57,11 @@ class MetaWeatherApiClient {
     final weatherJson = jsonDecode(
       weatherResponse.body,
     )['consolidated_weather'] as List;
-    return weatherJson?.isNotEmpty == true
-        ? Weather.fromJson(weatherJson.first as Map<String, dynamic>)
-        : null;
+
+    if (weatherJson.isEmpty) {
+      throw WeatherRequestFailure();
+    }
+
+    return Weather.fromJson(weatherJson.first as Map<String, dynamic>);
   }
 }

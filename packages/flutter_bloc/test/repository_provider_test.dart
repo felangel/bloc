@@ -348,8 +348,8 @@ void main() {
     });
 
     testWidgets(
-        'should access repository instance'
-        'via RepositoryProviderExtension', (tester) async {
+        'should access repository instance '
+        'via context.read', (tester) async {
       await tester.pumpWidget(
         RepositoryProvider(
           create: (_) => const Repository(0),
@@ -358,8 +358,7 @@ void main() {
               body: Center(
                 child: Builder(
                   builder: (context) => Text(
-                    // ignore: deprecated_member_use_from_same_package
-                    '${context.repository<Repository>().data}',
+                    '${context.read<Repository>().data}',
                     key: const Key('value_data'),
                   ),
                 ),

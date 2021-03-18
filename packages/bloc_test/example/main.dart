@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 // Mock Cubit
@@ -12,6 +13,10 @@ class MockCounterBloc extends MockBloc<CounterEvent, int>
     implements CounterBloc {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue<CounterEvent>(CounterEvent.increment);
+  });
+
   mainCubit();
   mainBloc();
 }
@@ -27,7 +32,7 @@ void mainCubit() {
 
       // Expect that the CounterCubit instance emitted the stubbed Stream of
       // states
-      expectLater(cubit, emitsInOrder(<int>[0, 1, 2, 3]));
+      expectLater(cubit.stream, emitsInOrder(<int>[0, 1, 2, 3]));
     });
   });
 
@@ -58,7 +63,7 @@ void mainBloc() {
 
       // Expect that the CounterBloc instance emitted the stubbed Stream of
       // states
-      expectLater(bloc, emitsInOrder(<int>[0, 1, 2, 3]));
+      expectLater(bloc.stream, emitsInOrder(<int>[0, 1, 2, 3]));
     });
   });
 

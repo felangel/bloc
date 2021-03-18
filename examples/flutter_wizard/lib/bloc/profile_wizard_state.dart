@@ -1,7 +1,7 @@
 part of 'profile_wizard_bloc.dart';
 
 class Profile extends Equatable {
-  const Profile({@required this.name, @required this.age});
+  const Profile({required this.name, required this.age});
 
   final String? name;
   final int? age;

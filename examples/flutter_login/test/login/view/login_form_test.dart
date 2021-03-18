@@ -4,13 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:formz/formz.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
-class MockLoginBloc extends MockBloc<LoginState> implements LoginBloc {}
+class FakeLoginEvent extends Fake implements LoginEvent {}
+
+class FakeLoginState extends Fake implements LoginState {}
+
+class MockLoginBloc extends MockBloc<LoginEvent, LoginState>
+    implements LoginBloc {}
 
 void main() {
   group('LoginForm', () {
-    LoginBloc loginBloc;
+    late LoginBloc loginBloc;
+
+    setUpAll(() {
+      registerFallbackValue<LoginEvent>(FakeLoginEvent());
+      registerFallbackValue<LoginState>(FakeLoginState());
+    });
 
     setUp(() {
       loginBloc = MockLoginBloc();
@@ -20,7 +30,7 @@ void main() {
         'adds LoginUsernameChanged to LoginBloc when username is updated',
         (tester) async {
       const username = 'username';
-      when(loginBloc.state).thenReturn(const LoginState());
+      when(() => loginBloc.state).thenReturn(const LoginState());
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -36,7 +46,7 @@ void main() {
         username,
       );
       verify(
-        loginBloc.add(const LoginUsernameChanged(username)),
+        () => loginBloc.add(const LoginUsernameChanged(username)),
       ).called(1);
     });
 
@@ -44,7 +54,7 @@ void main() {
         'adds LoginPasswordChanged to LoginBloc when password is updated',
         (tester) async {
       const password = 'password';
-      when(loginBloc.state).thenReturn(const LoginState());
+      when(() => loginBloc.state).thenReturn(const LoginState());
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -60,12 +70,12 @@ void main() {
         password,
       );
       verify(
-        loginBloc.add(const LoginPasswordChanged(password)),
+        () => loginBloc.add(const LoginPasswordChanged(password)),
       ).called(1);
     });
 
     testWidgets('continue button is disabled by default', (tester) async {
-      when(loginBloc.state).thenReturn(const LoginState());
+      when(() => loginBloc.state).thenReturn(const LoginState());
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -83,7 +93,7 @@ void main() {
     testWidgets(
         'loading indicator is shown when status is submission in progress',
         (tester) async {
-      when(loginBloc.state).thenReturn(
+      when(() => loginBloc.state).thenReturn(
         const LoginState(status: FormzStatus.submissionInProgress),
       );
       await tester.pumpWidget(
@@ -102,7 +112,7 @@ void main() {
 
     testWidgets('continue button is enabled when status is validated',
         (tester) async {
-      when(loginBloc.state).thenReturn(
+      when(() => loginBloc.state).thenReturn(
         const LoginState(status: FormzStatus.valid),
       );
       await tester.pumpWidget(
@@ -121,7 +131,7 @@ void main() {
 
     testWidgets('LoginSubmitted is added to LoginBloc when continue is tapped',
         (tester) async {
-      when(loginBloc.state).thenReturn(
+      when(() => loginBloc.state).thenReturn(
         const LoginState(status: FormzStatus.valid),
       );
       await tester.pumpWidget(
@@ -135,7 +145,7 @@ void main() {
         ),
       );
       await tester.tap(find.byType(ElevatedButton));
-      verify(loginBloc.add(const LoginSubmitted())).called(1);
+      verify(() => loginBloc.add(const LoginSubmitted())).called(1);
     });
 
     testWidgets('shows SnackBar when status is submission failure',
@@ -147,7 +157,7 @@ void main() {
           const LoginState(status: FormzStatus.submissionFailure),
         ]),
       );
-      when(loginBloc.state).thenReturn(
+      when(() => loginBloc.state).thenReturn(
         const LoginState(status: FormzStatus.submissionFailure),
       );
       await tester.pumpWidget(

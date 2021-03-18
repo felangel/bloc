@@ -12,7 +12,9 @@ class SumEvent {
 
 class SumBloc extends Bloc<SumEvent, int> {
   SumBloc(CounterBloc counterBloc) : super(0) {
-    _countSubscription = counterBloc.listen((count) => add(SumEvent(count)));
+    _countSubscription = counterBloc.stream.listen(
+      (count) => add(SumEvent(count)),
+    );
   }
 
   late StreamSubscription<int> _countSubscription;

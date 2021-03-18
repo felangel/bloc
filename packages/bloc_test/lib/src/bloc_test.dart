@@ -13,8 +13,8 @@ import 'package:test/test.dart' as test;
 /// [build] should be used for all `bloc` initialization and preparation
 /// and must return the `bloc` under test.
 ///
-/// [seed] is an optional state which will be used to seed the `bloc` before
-/// [act] is called.
+/// [seed] is an optional `Function` that returns a state
+/// which will be used to seed the `bloc` before [act] is called.
 ///
 /// [act] is an optional callback which will be invoked with the `bloc` under
 /// test and should be used to interact with the `bloc`.
@@ -50,7 +50,7 @@ import 'package:test/test.dart' as test;
 /// blocTest(
 ///   'CounterBloc emits [10] when seeded with 9',
 ///   build: () => CounterBloc(),
-///   seed: 9,
+///   seed: () => 9,
 ///   act: (bloc) => bloc.add(CounterEvent.increment),
 ///   expect: () => [10],
 /// );
@@ -96,7 +96,7 @@ import 'package:test/test.dart' as test;
 ///   act: (bloc) => bloc.add(CounterEvent.increment),
 ///   expect: () => [1],
 ///   verify: (_) {
-///     verify(repository.someMethod(any)).called(1);
+///     verify(() => repository.someMethod(any())).called(1);
 ///   }
 /// );
 /// ```
@@ -114,10 +114,10 @@ import 'package:test/test.dart' as test;
 /// );
 /// ```
 @isTest
-void blocTest<B extends Bloc<Object?, State>, State>(
+void blocTest<B extends BlocBase<State>, State>(
   String description, {
   required B Function() build,
-  State? seed,
+  State Function()? seed,
   Function(B bloc)? act,
   Duration? wait,
   int skip = 0,
@@ -142,9 +142,9 @@ void blocTest<B extends Bloc<Object?, State>, State>(
 /// Internal [blocTest] runner which is only visible for testing.
 /// This should never be used directly -- please use [blocTest] instead.
 @visibleForTesting
-Future<void> testBloc<B extends Bloc<Object?, State>, State>({
+Future<void> testBloc<B extends BlocBase<State>, State>({
   required B Function() build,
-  State? seed,
+  State Function()? seed,
   Function(B bloc)? act,
   Duration? wait,
   int skip = 0,
@@ -159,8 +159,8 @@ Future<void> testBloc<B extends Bloc<Object?, State>, State>({
       final states = <State>[];
       final bloc = build();
       // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-      if (seed != null) bloc.emit(seed);
-      final subscription = bloc.skip(skip).listen(states.add);
+      if (seed != null) bloc.emit(seed());
+      final subscription = bloc.stream.skip(skip).listen(states.add);
       try {
         await act?.call(bloc);
       } on Exception catch (error) {

@@ -1,6 +1,6 @@
 ```dart
 group('CounterBloc', () {
-    CounterBloc counterBloc;
+    late CounterBloc counterBloc;
 
     setUp(() {
         counterBloc = CounterBloc();

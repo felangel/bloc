@@ -26,5 +26,10 @@ class PostState extends Equatable {
   }
 
   @override
+  String toString() {
+    return '''PostState { status: $status, hasReachedMax: $hasReachedMax, posts: ${posts.length} }''';
+  }
+
+  @override
   List<Object> get props => [status, posts, hasReachedMax];
 }

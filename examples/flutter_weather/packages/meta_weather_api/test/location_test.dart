@@ -16,13 +16,6 @@ void main() {
           throwsA(isA<CheckedFromJsonException>()),
         );
       });
-
-      test('throws CheckedFromJsonException when source is null', () {
-        expect(
-          () => Location.fromJson(null),
-          throwsA(isA<CheckedFromJsonException>()),
-        );
-      });
     });
   });
 

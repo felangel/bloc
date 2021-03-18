@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: implicit_dynamic_parameter
+
 part of 'weather_cubit.dart';
 
 // **************************************************************************
@@ -9,10 +11,10 @@ part of 'weather_cubit.dart';
 WeatherState _$WeatherStateFromJson(Map<String, dynamic> json) {
   return $checkedNew('WeatherState', json, () {
     final val = WeatherState(
-      status: $checkedConvert(json, 'status',
-          (v) => _$enumDecodeNullable(_$WeatherStatusEnumMap, v)),
+      status: $checkedConvert(
+          json, 'status', (v) => _$enumDecode(_$WeatherStatusEnumMap, v)),
       temperatureUnits: $checkedConvert(json, 'temperature_units',
-          (v) => _$enumDecodeNullable(_$TemperatureUnitsEnumMap, v)),
+          (v) => _$enumDecode(_$TemperatureUnitsEnumMap, v)),
       weather: $checkedConvert(
           json,
           'weather',
@@ -26,40 +28,34 @@ WeatherState _$WeatherStateFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$WeatherStateToJson(WeatherState instance) =>
     <String, dynamic>{
       'status': _$WeatherStatusEnumMap[instance.status],
-      'weather': instance.weather?.toJson(),
+      'weather': instance.weather.toJson(),
       'temperature_units': _$TemperatureUnitsEnumMap[instance.temperatureUnits],
     };
 
-T _$enumDecode<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
 }) {
   if (source == null) {
-    throw ArgumentError('A value must be provided. Supported values: '
-        '${enumValues.values.join(', ')}');
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
   }
 
-  final value = enumValues.entries
-      .singleWhere((e) => e.value == source, orElse: () => null)
-      ?.key;
-
-  if (value == null && unknownValue == null) {
-    throw ArgumentError('`$source` is not one of the supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-  return value ?? unknownValue;
-}
-
-T _$enumDecodeNullable<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
 }
 
 const _$WeatherStatusEnumMap = {
