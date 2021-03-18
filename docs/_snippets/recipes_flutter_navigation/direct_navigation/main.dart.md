@@ -57,7 +57,7 @@ class PageA extends StatelessWidget {
         title: Text('Page A'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Go to PageB'),
           onPressed: () {
             BlocProvider.of<MyBloc>(context).add(MyEvent.eventB);
@@ -76,7 +76,7 @@ class PageB extends StatelessWidget {
         title: Text('Page B'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Go to PageA'),
           onPressed: () {
             BlocProvider.of<MyBloc>(context).add(MyEvent.eventA);

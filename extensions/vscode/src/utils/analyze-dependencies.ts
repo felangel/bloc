@@ -20,7 +20,7 @@ export async function analyzeDependencies() {
   const dependenciesToAnalyze = [
     {
       name: "equatable",
-      version: "^1.2.5",
+      version: "^2.0.0",
       actions: [
         {
           name: "Open Migration Guide",
@@ -36,7 +36,7 @@ export async function analyzeDependencies() {
     },
     {
       name: "bloc",
-      version: "^6.1.0",
+      version: "^7.0.0",
       actions: [
         {
           name: "Open Migration Guide",
@@ -49,7 +49,7 @@ export async function analyzeDependencies() {
 
     {
       name: "flutter_bloc",
-      version: "^6.1.0",
+      version: "^7.0.0",
       actions: [
         {
           name: "Open Migration Guide",
@@ -62,7 +62,7 @@ export async function analyzeDependencies() {
     { name: "angular_bloc", version: "^6.0.1", actions: [] },
     {
       name: "hydrated_bloc",
-      version: "^6.0.3",
+      version: "^7.0.0",
       actions: [
         {
           name: "Open Migration Guide",
@@ -78,7 +78,7 @@ export async function analyzeDependencies() {
   const devDependenciesToAnalyze = [
     {
       name: "bloc_test",
-      version: "^7.1.0",
+      version: "^8.0.0",
       actions: [
         {
           name: "Open Migration Guide",
@@ -116,6 +116,8 @@ function checkForUpgrades(
         "0.0.0"
       );
       if (!semver.satisfies(minVersion, dependency.version)) {
+        console.log(minVersion)
+        console.log(dependency.version)
         window
           .showWarningMessage(
             `This workspace contains an unsupported version of ${dependency.name}. Please update to ${dependency.version}.`,

@@ -14,15 +14,20 @@ class PostState extends Equatable {
   final bool hasReachedMax;
 
   PostState copyWith({
-    PostStatus status,
-    List<Post> posts,
-    bool hasReachedMax,
+    PostStatus? status,
+    List<Post>? posts,
+    bool? hasReachedMax,
   }) {
     return PostState(
       status: status ?? this.status,
       posts: posts ?? this.posts,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
+  }
+
+  @override
+  String toString() {
+    return '''PostState { status: $status, hasReachedMax: $hasReachedMax, posts: ${posts.length} }''';
   }
 
   @override

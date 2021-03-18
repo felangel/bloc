@@ -6,20 +6,27 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_weather/settings/settings.dart';
 import 'package:flutter_weather/weather/cubit/weather_cubit.dart';
 import 'package:flutter_weather/weather/weather.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
-class MockWeatherCubit extends MockBloc<WeatherState> implements WeatherCubit {}
+class FakeWeatherState extends Fake implements WeatherState {}
+
+class MockWeatherCubit extends MockCubit<WeatherState> implements WeatherCubit {
+}
 
 void main() {
   group('SettingsPage', () {
-    WeatherCubit weatherCubit;
+    late WeatherCubit weatherCubit;
+
+    setUpAll(() {
+      registerFallbackValue<WeatherState>(FakeWeatherState());
+    });
 
     setUp(() {
       weatherCubit = MockWeatherCubit();
     });
 
     testWidgets('is routable', (tester) async {
-      when(weatherCubit.state).thenReturn(WeatherState());
+      when(() => weatherCubit.state).thenReturn(WeatherState());
       await tester.pumpWidget(
         MaterialApp(
           home: Builder(
@@ -48,7 +55,7 @@ void main() {
           WeatherState(temperatureUnits: TemperatureUnits.fahrenheit),
         ]),
       );
-      when(weatherCubit.state).thenReturn(WeatherState());
+      when(() => weatherCubit.state).thenReturn(WeatherState());
       await tester.pumpWidget(
         MaterialApp(
           home: Builder(
@@ -67,7 +74,7 @@ void main() {
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       await tester.tap(find.byType(Switch));
-      verify(weatherCubit.toggleUnits()).called(1);
+      verify(() => weatherCubit.toggleUnits()).called(1);
     });
   });
 }

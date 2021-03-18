@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 import 'package:hive/hive.dart';
 import 'package:path/path.dart' as p;
 
@@ -9,20 +9,29 @@ import 'package:hive/src/hive_impl.dart';
 
 void main() {
   group('Hive interference', () {
+    tearDown(() {
+      Hive.close();
+      (Hive as HiveImpl).homePath = null;
+    });
+
     test('odd singleton interference', () async {
       final cwd = Directory.current.absolute.path;
 
-      final impl1 = Hive..init(cwd);
+      var impl1 = HiveImpl()..init(cwd);
       var box1 = await impl1.openBox<dynamic>('impl1');
 
-      final impl2 = Hive..init(cwd);
+      var impl2 = HiveImpl()..init(cwd);
       var box2 = await impl2.openBox<dynamic>('impl2');
 
       await impl1.close();
 
-      expect(box1.isOpen, true);
-      expect(box2.isOpen, false);
+      expect(box1.isOpen, false);
+      expect(box2.isOpen, true);
 
+      impl1 = HiveImpl()..init(cwd);
+      box1 = await impl1.openBox<dynamic>('impl1');
+
+      Hive.init(cwd);
       await box1.deleteFromDisk();
       await Hive.deleteBoxFromDisk('impl2');
     });

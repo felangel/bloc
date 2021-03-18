@@ -6,26 +6,28 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_weather/app.dart';
 import 'package:flutter_weather/theme/theme.dart';
 import 'package:flutter_weather/weather/weather.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:weather_repository/weather_repository.dart';
 
 import 'helpers/hydrated_bloc.dart';
 
-class MockThemeCubit extends MockBloc<Color> implements ThemeCubit {}
+class FakeColor extends Fake implements Color {}
+
+class MockThemeCubit extends MockCubit<Color> implements ThemeCubit {}
 
 class MockWeatherRepository extends Mock implements WeatherRepository {}
 
 void main() {
-  initHydratedBloc();
+  setUpAll(() {
+    initHydratedBloc();
+    registerFallbackValue<Color>(FakeColor());
+  });
+
   group('WeatherApp', () {
-    WeatherRepository weatherRepository;
+    late WeatherRepository weatherRepository;
 
     setUp(() {
       weatherRepository = MockWeatherRepository();
-    });
-
-    test('requires a WeatherRepository', () async {
-      expect(() => WeatherApp(weatherRepository: null), throwsAssertionError);
     });
 
     testWidgets('renders WeatherAppView', (tester) async {
@@ -35,8 +37,8 @@ void main() {
   });
 
   group('WeatherAppView', () {
-    ThemeCubit themeCubit;
-    WeatherRepository weatherRepository;
+    late ThemeCubit themeCubit;
+    late WeatherRepository weatherRepository;
 
     setUp(() {
       themeCubit = MockThemeCubit();
@@ -44,6 +46,7 @@ void main() {
     });
 
     testWidgets('renders WeatherPage', (tester) async {
+      when(() => themeCubit.state).thenReturn(Colors.blue);
       await tester.pumpWidget(
         RepositoryProvider.value(
           value: weatherRepository,
@@ -55,7 +58,7 @@ void main() {
 
     testWidgets('has correct theme primary color', (tester) async {
       const color = Color(0xFFD2D2D2);
-      when(themeCubit.state).thenReturn(color);
+      when(() => themeCubit.state).thenReturn(color);
       await tester.pumpWidget(
         RepositoryProvider.value(
           value: weatherRepository,
@@ -63,7 +66,7 @@ void main() {
         ),
       );
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
-      expect(materialApp.theme.primaryColor, color);
+      expect(materialApp.theme?.primaryColor, color);
     });
   });
 }

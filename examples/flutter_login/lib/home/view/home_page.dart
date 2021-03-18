@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
                 return Text('UserID: $userId');
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: const Text('Logout'),
               onPressed: () {
                 context

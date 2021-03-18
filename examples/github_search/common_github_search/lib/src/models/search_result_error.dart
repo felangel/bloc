@@ -1,7 +1,7 @@
 class SearchResultError {
-  final String message;
+  const SearchResultError({required this.message});
 
-  const SearchResultError({this.message});
+  final String message;
 
   static SearchResultError fromJson(dynamic json) {
     return SearchResultError(

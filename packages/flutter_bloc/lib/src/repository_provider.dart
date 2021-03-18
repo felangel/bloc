@@ -34,10 +34,10 @@ class RepositoryProvider<T> extends Provider<T>
     with RepositoryProviderSingleChildWidget {
   /// {@macro repository_provider}
   RepositoryProvider({
-    Key key,
-    @required Create<T> create,
-    Widget child,
-    bool lazy,
+    Key? key,
+    required Create<T> create,
+    Widget? child,
+    bool? lazy,
   }) : super(
           key: key,
           create: create,
@@ -51,9 +51,9 @@ class RepositoryProvider<T> extends Provider<T>
   /// Repositories should always be created using the default constructor
   /// within the [Create] function.
   RepositoryProvider.value({
-    Key key,
-    @required T value,
-    Widget child,
+    Key? key,
+    required T value,
+    Widget? child,
   }) : super.value(
           key: key,
           value: value,
@@ -79,21 +79,4 @@ class RepositoryProvider<T> extends Provider<T>
       );
     }
   }
-}
-
-/// Extends the `BuildContext` class with the ability
-/// to perform a lookup based on a repository type.
-extension RepositoryProviderExtension on BuildContext {
-  /// Performs a lookup using the `BuildContext` to obtain
-  /// the nearest ancestor repository of type [T].
-  ///
-  /// Calling this method is equivalent to calling:
-  ///
-  /// ```dart
-  /// RepositoryProvider.of<T>(context)
-  /// ```
-  @Deprecated(
-    'Use context.read or context.watch instead. Will be removed in v7.0.0',
-  )
-  T repository<T>() => RepositoryProvider.of<T>(this);
 }

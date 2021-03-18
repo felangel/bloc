@@ -38,7 +38,7 @@ Now that we have a basic understanding of how `Streams` work in Dart we're ready
 
 ## Cubit
 
-> A `Cubit` is a special type of `Stream` which is used as the base for the `Bloc` class (which we will cover later on).
+> A `Cubit` is class which extends `BlocBase` and can be extended to manage any type of state.
 
 ![Cubit Architecture](assets/cubit_architecture_full.png)
 
@@ -116,7 +116,7 @@ Since a `Cubit` is a special type of `Stream`, we can also subscribe to a `Cubit
 ```dart
 Future<void> main() async {
   final cubit = CounterCubit();
-  final subscription = cubit.listen(print); // 1
+  final subscription = cubit.stream.listen(print); // 1
   cubit.increment();
   await Future.delayed(Duration.zero);
   await subscription.cancel();
@@ -175,9 +175,9 @@ If we want to be able to do something in response to all `Changes` we can simply
 ```dart
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onChange(Cubit cubit, Change change) {
-    print('${cubit.runtimeType} $change');
-    super.onChange(cubit, change);
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    print('${bloc.runtimeType} $change');
   }
 }
 ```
@@ -221,8 +221,8 @@ class CounterCubit extends Cubit<int> {
 
   @override
   void onChange(Change<int> change) {
-    print(change);
     super.onChange(change);
+    print(change);
   }
 
   @override
@@ -240,15 +240,15 @@ class CounterCubit extends Cubit<int> {
 ```dart
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onChange(Cubit cubit, Change change) {
-    print('${cubit.runtimeType} $change');
-    super.onChange(cubit, change);
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    print('${bloc.runtimeType} $change');
   }
 
   @override
-  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
-    print('${cubit.runtimeType} $error $stackTrace');
-    super.onError(cubit, error, stackTrace);
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
+    print('${bloc.runtimeType} $error $stackTrace');
+    super.onError(bloc, error, stackTrace);
   }
 }
 ```
@@ -274,7 +274,7 @@ CounterCubit Change { currentState: 0, nextState: 1 }
 
 ## Bloc
 
-> A `Bloc` is a special type of `Cubit` which transforms incoming events into outgoing states.
+> A `Bloc` is a more advanced class which relies on `events` to trigger `state` changes rather than functions. `Bloc` also extends `BlocBase` which means it has a similar public API as `Cubit`. However, rather than calling a `function` on a `Bloc` and directly emitting a new `state`, `Blocs` receive `events` and convert the incoming `events` into outgoing `states`.
 
 ![Bloc Architecture](assets/bloc_architecture_full.png)
 
@@ -366,7 +366,7 @@ Just like with `Cubit`, a `Bloc` is a special type of `Stream`, which means we c
 ```dart
 Future<void> main() async {
   final bloc = CounterBloc();
-  final subscription = bloc.listen(print); // 1
+  final subscription = bloc.stream.listen(print); // 1
   bloc.add(CounterEvent.increment);
   await Future.delayed(Duration.zero);
   await subscription.cancel();
@@ -444,14 +444,14 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   void onChange(Change<int> change) {
-    print(change);
     super.onChange(change);
+    print(change);
   }
 
   @override
   void onTransition(Transition<CounterEvent, int> transition) {
-    print(transition);
     super.onTransition(transition);
+    print(transition);
   }
 }
 ```
@@ -472,21 +472,21 @@ Just as before, we can override `onTransition` in a custom `BlocObserver` to obs
 ```dart
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onChange(Cubit cubit, Change change) {
-    print('${cubit.runtimeType} $change');
-    super.onChange(cubit, change);
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    print('${bloc.runtimeType} $change');
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    print('${bloc.runtimeType} $transition');
     super.onTransition(bloc, transition);
+    print('${bloc.runtimeType} $transition');
   }
 
   @override
-  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
-    print('${cubit.runtimeType} $error $stackTrace');
-    super.onError(cubit, error, stackTrace);
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
+    print('${bloc.runtimeType} $error $stackTrace');
+    super.onError(bloc, error, stackTrace);
   }
 }
 ```
@@ -532,20 +532,20 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   void onEvent(CounterEvent event) {
-    print(event);
     super.onEvent(event);
+    print(event);
   }
 
   @override
   void onChange(Change<int> change) {
-    print(change);
     super.onChange(change);
+    print(change);
   }
 
   @override
   void onTransition(Transition<CounterEvent, int> transition) {
-    print(transition);
     super.onTransition(transition);
+    print(transition);
   }
 }
 ```
@@ -553,21 +553,21 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 ```dart
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onEvent(Bloc bloc, Object event) {
-    print('${bloc.runtimeType} $event');
+  void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
+    print('${bloc.runtimeType} $event');
   }
 
   @override
-  void onChange(Cubit cubit, Change change) {
-    print('${cubit.runtimeType} $change');
-    super.onChange(cubit, change);
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    print('${bloc.runtimeType} $change');
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    print('${bloc.runtimeType} $transition');
     super.onTransition(bloc, transition);
+    print('${bloc.runtimeType} $transition');
   }
 }
 ```

@@ -2,6 +2,333 @@
 
 ?> **Tip**: Please refer to the [release log](https://github.com/felangel/bloc/releases) for more information regarding what changed in each release.
 
+## v7.0.0
+
+### package:bloc
+
+#### ❗ Bloc and Cubit extend BlocBase
+
+##### Rationale
+
+As a developer, the relationship between blocs and cubits was a bit awkward. When cubit was first introduced it began as the base class for blocs which made sense because it had a subset of the functionality and blocs would just extend Cubit and define additional APIs. This came with a few drawbacks:
+
+- All APIs would either have to be renamed to accept a cubit for accuracy or they would need to be kept as bloc for consistency even though hierarchically it is inaccurate ([#1708](https://github.com/felangel/bloc/issues/1708), [#1560](https://github.com/felangel/bloc/issues/1560)).
+
+- Cubit would need to extend Stream and implement EventSink in order to have a common base which widgets like BlocBuilder, BlocListener, etc. can be implemented against ([#1429](https://github.com/felangel/bloc/issues/1429)).
+
+Later, we experimented with inverting the relationship and making bloc the base class which partially resolved the first bullet above but introduced other issues:
+
+- The cubit API is bloated due to the underlying bloc APIs like mapEventToState, add, etc. ([#2228](https://github.com/felangel/bloc/issues/2228))
+  - Developers can technically invoke these APIs and break things
+- We still have the same issue of cubit exposing the entire stream API as before ([#1429](https://github.com/felangel/bloc/issues/1429))
+
+To address these issues we introduced a base class for both `Bloc` and `Cubit` called `BlocBase` so that upstream components can still interoperate with both bloc and cubit instances but without exposing the entire `Stream` and `EventSink` API directly.
+
+**Summary**
+
+**BlocObserver**
+
+**v6.1.x**
+
+```dart
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onCreate(Cubit cubit) {...}
+
+  @override
+  void onEvent(Bloc bloc, Object event) {...}
+
+  @override
+  void onChange(Cubit cubit, Object event) {...}
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {...}
+
+  @override
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {...}
+
+  @override
+  void onClose(Cubit cubit) {...}
+}
+```
+
+**v7.0.0**
+
+```dart
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onCreate(BlocBase bloc) {...}
+
+  @override
+  void onEvent(Bloc bloc, Object event) {...}
+
+  @override
+  void onChange(BlocBase bloc, Object? event) {...}
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {...}
+
+  @override
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {...}
+
+  @override
+  void onClose(BlocBase bloc) {...}
+}
+```
+
+**Bloc/Cubit**
+
+**v6.1.x**
+
+```dart
+final bloc = MyBloc();
+bloc.listen((state) {...});
+
+final cubit = MyCubit();
+cubit.listen((state) {...});
+```
+
+**v7.0.0**
+
+```dart
+final bloc = MyBloc();
+bloc.stream.listen((state) {...});
+
+final cubit = MyCubit();
+cubit.stream.listen((state) {...});
+```
+
+### package:bloc_test
+
+#### ❗seed returns a function to support dynamic values
+
+##### Rationale
+
+In order to support having a mutable seed value which can be updated dynamically in `setUp`, `seed` returns a function.
+
+**Summary**
+
+**v6.1.x**
+
+```dart
+blocTest(
+  '...',
+  seed: MyState(),
+  ...
+);
+```
+
+**v7.0.0**
+
+```dart
+blocTest(
+  '...',
+  seed: () => MyState(),
+  ...
+);
+```
+
+#### ❗expect returns a function to support dynamic values and includes matcher support
+
+##### Rationale
+
+In order to support having a mutable expectation which can be updated dynamically in `setUp`, `expect` returns a function. `expect` also supports `Matchers`.
+
+**Summary**
+
+**v6.1.x**
+
+```dart
+blocTest(
+  '...',
+  expect: [MyStateA(), MyStateB()],
+  ...
+);
+```
+
+**v7.0.0**
+
+```dart
+blocTest(
+  '...',
+  expect: () => [MyStateA(), MyStateB()],
+  ...
+);
+
+// It can also be a `Matcher`
+blocTest(
+  '...',
+  expect: () => contains(MyStateA()),
+  ...
+);
+```
+
+#### ❗errors returns a function to support dynamic values and includes matcher support
+
+##### Rationale
+
+In order to support having a mutable errors which can be updated dynamically in `setUp`, `errors` returns a function. `errors` also supports `Matchers`.
+
+**Summary**
+
+**v6.1.x**
+
+```dart
+blocTest(
+  '...',
+  errors: [MyError()],
+  ...
+);
+```
+
+**v7.0.0**
+
+```dart
+blocTest(
+  '...',
+  errors: () => [MyError()],
+  ...
+);
+
+// It can also be a `Matcher`
+blocTest(
+  '...',
+  errors: () => contains(MyError()),
+  ...
+);
+```
+
+#### ❗MockBloc and MockCubit
+
+##### Rationale
+
+To support stubbing of various core APIs, `MockBloc` and `MockCubit` are exported as part of the `bloc_test` package.
+Previously, `MockBloc` had to be used for both `Bloc` and `Cubit` instances which was not intuitive.
+
+**Summary**
+
+**v6.1.x**
+
+```dart
+class MockMyBloc extends MockBloc<MyState> implements MyBloc {}
+class MockMyCubit extends MockBloc<MyState> implements MyBloc {}
+```
+
+**v7.0.0**
+
+```dart
+class MockMyBloc extends MockBloc<MyEvent, MyState> implements MyBloc {}
+class MockMyCubit extends MockCubit<MyState> implements MyCubit {}
+```
+
+#### ❗Mocktail Integration
+
+##### Rationale
+
+Due to various limitations of the null-safe [package:mockito](https://pub.dev/packages/mockito) described [here](https://github.com/dart-lang/mockito/blob/master/NULL_SAFETY_README.md#problems-with-typical-mocking-and-stubbing), [package:mocktail](https://pub.dev/packages/mocktail) is used by `MockBloc` and `MockCubit`. This allows developers to continue using a familiar mocking API without the need to manually write stubs or rely on code generation.
+
+**Summary**
+
+**v6.1.x**
+
+```dart
+import 'package:mockito/mockito.dart';
+
+...
+
+when(bloc.state).thenReturn(MyState());
+verify(bloc.add(any)).called(1);
+```
+
+**v7.0.0**
+
+```dart
+import 'package:mocktail/mocktail.dart';
+
+...
+
+when(() => bloc.state).thenReturn(MyState());
+verify(() => bloc.add(any())).called(1);
+```
+
+> Please refer to [#347](https://github.com/dart-lang/mockito/issues/347) as well as the [mocktail documentation](https://github.com/felangel/mocktail/tree/main/packages/mocktail) for more information.
+
+### package:flutter_bloc
+
+#### ❗ rename `cubit` parameter to `bloc`
+
+##### Rationale
+
+As a result of the refactor in `package:bloc` to introduce `BlocBase` which `Bloc` and `Cubit` extend, the parameters of `BlocBuilder`, `BlocConsumer`, and `BlocListener` were renamed from `cubit` to `bloc` because the widgets operate on the `BlocBase` type. This also further aligns with the library name and hopefully improves readability.
+
+**Summary**
+
+**v6.1.x**
+
+```dart
+BlocBuilder(
+  cubit: myBloc,
+  ...
+)
+
+BlocListener(
+  cubit: myBloc,
+  ...
+)
+
+BlocConsumer(
+  cubit: myBloc,
+  ...
+)
+```
+
+**v7.0.0**
+
+```dart
+BlocBuilder(
+  bloc: myBloc,
+  ...
+)
+
+BlocListener(
+  bloc: myBloc,
+  ...
+)
+
+BlocConsumer(
+  bloc: myBloc,
+  ...
+)
+```
+
+### package:hydrated_bloc
+
+#### ❗storageDirectory is required when calling HydratedStorage.build
+
+##### Rationale
+
+In order to make `package:hydrated_bloc` a pure Dart package, the dependency on [package:path_provider](https://pub.dev/packages/path_provider) was removed and the `storageDirectory` parameter when calling `HydratedStorage.build` is required and no longer defaults to `getTemporaryDirectory`.
+
+**Summary**
+
+**v6.x.x**
+
+```dart
+HydratedBloc.storage = await HydratedStorage.build();
+```
+
+**v7.0.0**
+
+```dart
+import 'package:path_provider/path_provider.dart';
+
+...
+
+HydratedBloc.storage = await HydratedStorage.build(
+  storageDirectory: await getTemporaryDirectory(),
+);
+```
+
 ## v6.1.0
 
 ### package:flutter_bloc
@@ -81,19 +408,19 @@ Widget build(BuildContext context) {
 @override
 Widget build(BuildContext context) {
   final bloc = context.bloc<MyBloc>();
-  return RaisedButton(
+  return ElevatedButton(
     onPressed: () => bloc.add(MyEvent()),
     ...
   )
 }
 ```
 
-The above usage is inefficient because it results in a bloc lookup on each rebuild when the bloc is only needed when the user taps the `RaisedButton`. In this scenario, prefer to use `context.read` to access the bloc directly where it is needed (in this case, in the `onPressed` callback).
+The above usage is inefficient because it results in a bloc lookup on each rebuild when the bloc is only needed when the user taps the `ElevatedButton`. In this scenario, prefer to use `context.read` to access the bloc directly where it is needed (in this case, in the `onPressed` callback).
 
 ```dart
 @override
 Widget build(BuildContext context) {
-  return RaisedButton(
+  return ElevatedButton(
     onPressed: () => context.read<MyBloc>().add(MyEvent()),
     ...
   )
@@ -108,7 +435,7 @@ Widget build(BuildContext context) {
 @override
 Widget build(BuildContext context) {
   final bloc = context.bloc<MyBloc>();
-  return RaisedButton(
+  return ElevatedButton(
     onPressed: () => bloc.add(MyEvent()),
     ...
   )
@@ -120,7 +447,7 @@ Widget build(BuildContext context) {
 ```dart
 @override
 Widget build(BuildContext context) {
-  return RaisedButton(
+  return ElevatedButton(
     onPressed: () => context.read<MyBloc>().add(MyEvent()),
     ...
   )

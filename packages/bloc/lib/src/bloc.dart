@@ -1,46 +1,72 @@
 import 'dart:async';
 
+import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-
-import 'bloc_observer.dart';
-import 'cubit.dart';
-import 'transition.dart';
 
 /// Signature for a mapper function which takes an [Event] as input
 /// and outputs a [Stream] of [Transition] objects.
 typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
     Function(Event);
 
+/// {@template bloc_unhandled_error_exception}
+/// Exception thrown when an unhandled error occurs within a bloc.
+///
+/// _Note: thrown in debug mode only_
+/// {@endtemplate}
+class BlocUnhandledErrorException implements Exception {
+  /// {@macro bloc_unhandled_error_exception}
+  BlocUnhandledErrorException(
+    this.bloc,
+    this.error, [
+    this.stackTrace = StackTrace.empty,
+  ]);
+
+  /// The bloc in which the unhandled error occurred.
+  final BlocBase bloc;
+
+  /// The unhandled [error] object.
+  final Object error;
+
+  /// Stack trace which accompanied the error.
+  /// May be [StackTrace.empty] if no stack trace was provided.
+  final StackTrace stackTrace;
+
+  @override
+  String toString() {
+    return 'Unhandled error $error occurred in $bloc.\n'
+        '$stackTrace';
+  }
+}
+
 /// {@template bloc}
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
-abstract class Bloc<Event, State> extends Cubit<State>
-    implements EventSink<Event> {
+abstract class Bloc<Event, State> extends BlocBase<State> {
   /// {@macro bloc}
   Bloc(State initialState) : super(initialState) {
     _bindEventsToStates();
   }
 
-  /// The current [BlocObserver].
+  /// The current [BlocObserver] instance.
   static BlocObserver observer = BlocObserver();
 
-  final _eventController = StreamController<Event>.broadcast();
+  StreamSubscription<Transition<Event, State>>? _transitionSubscription;
 
-  StreamSubscription<Transition<Event, State>> _transitionSubscription;
-
-  bool _emitted = false;
+  StreamController<Event>? __eventController;
+  StreamController<Event> get _eventController {
+    return __eventController ??= StreamController<Event>.broadcast();
+  }
 
   /// Notifies the [Bloc] of a new [event] which triggers [mapEventToState].
   /// If [close] has already been called, any subsequent calls to [add] will
   /// be ignored and will not result in any subsequent state changes.
-  @override
   void add(Event event) {
     if (_eventController.isClosed) return;
     try {
       onEvent(event);
       _eventController.add(event);
-    } on dynamic catch (error, stackTrace) {
+    } catch (error, stackTrace) {
       onError(error, stackTrace);
     }
   }
@@ -61,7 +87,7 @@ abstract class Bloc<Event, State> extends Cubit<State>
   ///
   /// See also:
   ///
-  /// * [BlocObserver] for observing [Bloc] behavior globally.
+  /// * [BlocObserver.onEvent] for observing events globally.
   ///
   @protected
   @mustCallSuper
@@ -109,11 +135,51 @@ abstract class Bloc<Event, State> extends Cubit<State>
     return events.asyncExpand(transitionFn);
   }
 
+  /// {@template emit}
+  /// **[emit] should never be used outside of tests.**
+  ///
+  /// Updates the state of the bloc to the provided [state].
+  /// A bloc's state should only be updated by `yielding` a new `state`
+  /// from `mapEventToState` in response to an event.
+  /// {@endtemplate}
+  @protected
+  @visibleForTesting
+  @override
+  void emit(State state) => super.emit(state);
+
   /// Must be implemented when a class extends [Bloc].
   /// [mapEventToState] is called whenever an [event] is [add]ed
   /// and is responsible for converting that [event] into a new [state].
   /// [mapEventToState] can `yield` zero, one, or multiple states for an event.
   Stream<State> mapEventToState(Event event);
+
+  /// Called whenever a [transition] occurs with the given [transition].
+  /// A [transition] occurs when a new `event` is [add]ed and [mapEventToState]
+  /// executed.
+  /// [onTransition] is called before a [Bloc]'s [state] has been updated.
+  /// A great spot to add logging/analytics at the individual [Bloc] level.
+  ///
+  /// **Note: `super.onTransition` should always be called first.**
+  /// ```dart
+  /// @override
+  /// void onTransition(Transition<Event, State> transition) {
+  ///   // Always call super.onTransition with the current transition
+  ///   super.onTransition(transition);
+  ///
+  ///   // Custom onTransition logic goes here
+  /// }
+  /// ```
+  ///
+  /// See also:
+  ///
+  /// * [BlocObserver.onTransition] for observing transitions globally.
+  ///
+  @protected
+  @mustCallSuper
+  void onTransition(Transition<Event, State> transition) {
+    // ignore: invalid_use_of_protected_member
+    Bloc.observer.onTransition(this, transition);
+  }
 
   /// Transforms the `Stream<Transition>` into a new `Stream<Transition>`.
   /// By default [transformTransitions] returns
@@ -138,69 +204,6 @@ abstract class Bloc<Event, State> extends Cubit<State>
     return transitions;
   }
 
-  /// Called whenever a [transition] occurs with the given [transition].
-  /// A [transition] occurs when a new `event` is [add]ed and [mapEventToState]
-  /// executed.
-  /// [onTransition] is called before a [Bloc]'s [state] has been updated.
-  /// A great spot to add logging/analytics at the individual [Bloc] level.
-  ///
-  /// **Note: `super.onTransition` should always be called first.**
-  /// ```dart
-  /// @override
-  /// void onTransition(Transition<Event, State> transition) {
-  ///   // Always call super.onTransition with the current transition
-  ///   super.onTransition(transition);
-  ///
-  ///   // Custom onTransition logic goes here
-  /// }
-  /// ```
-  ///
-  /// See also:
-  ///
-  /// * [BlocObserver] for observing [Bloc] behavior globally.
-  ///
-  @protected
-  @mustCallSuper
-  void onTransition(Transition<Event, State> transition) {
-    // ignore: invalid_use_of_protected_member
-    observer.onTransition(this, transition);
-  }
-
-  /// Notifies the [Bloc] of an [error] which triggers [onError].
-  @override
-  void addError(Object error, [StackTrace stackTrace]) {
-    onError(error, stackTrace);
-  }
-
-  /// Called whenever an [error] is thrown within [mapEventToState].
-  /// By default all [error]s will be ignored and [Bloc] functionality will be
-  /// unaffected.
-  /// The [stackTrace] argument may be `null` if the [state] stream received
-  /// an error without a [stackTrace].
-  /// A great spot to handle errors at the individual [Bloc] level.
-  ///
-  /// **Note: `super.onError` should always be called last.**
-  /// ```dart
-  /// @override
-  /// void onError(Object error, StackTrace stackTrace) {
-  ///   // Custom onError logic goes here
-  ///
-  ///   // Always call super.onError with the current error and stackTrace
-  ///   super.onError(error, stackTrace);
-  /// }
-  /// ```
-  ///
-  /// See also:
-  ///
-  /// * [BlocObserver] for observing [Bloc] behavior globally.
-  ///
-  @protected
-  @mustCallSuper
-  @override
-  void onError(Object error, StackTrace stackTrace) {
-    super.onError(error, stackTrace);
-  }
-
   /// Closes the `event` and `state` `Streams`.
   /// This method should be called when a [Bloc] is no longer needed.
   /// Once [close] is called, `events` that are [add]ed will not be
@@ -214,15 +217,6 @@ abstract class Bloc<Event, State> extends Cubit<State>
     await _transitionSubscription?.cancel();
     return super.close();
   }
-
-  /// **[emit] should never be used outside of tests.**
-  ///
-  /// Updates the state of the bloc to the provided [state].
-  /// A bloc's state should only be updated by `yielding` a new `state`
-  /// from `mapEventToState` in response to an event.
-  @visibleForTesting
-  @override
-  void emit(State state) => super.emit(state);
 
   void _bindEventsToStates() {
     _transitionSubscription = transformTransitions(
@@ -242,12 +236,167 @@ abstract class Bloc<Event, State> extends Cubit<State>
         try {
           onTransition(transition);
           emit(transition.nextState);
-        } on dynamic catch (error, stackTrace) {
+        } catch (error, stackTrace) {
           onError(error, stackTrace);
         }
-        _emitted = true;
       },
       onError: onError,
     );
+  }
+}
+
+/// {@template cubit}
+/// A [Cubit] is similar to [Bloc] but has no notion of events
+/// and relies on methods to [emit] new states.
+///
+/// Every [Cubit] requires an initial state which will be the
+/// state of the [Cubit] before [emit] has been called.
+///
+/// The current state of a [Cubit] can be accessed via the [state] getter.
+///
+/// ```dart
+/// class CounterCubit extends Cubit<int> {
+///   CounterCubit() : super(0);
+///
+///   void increment() => emit(state + 1);
+/// }
+/// ```
+///
+/// {@endtemplate}
+abstract class Cubit<State> extends BlocBase<State> {
+  /// {@macro cubit}
+  Cubit(State initialState) : super(initialState);
+}
+
+/// {@template bloc_stream}
+/// An interface for the core functionality implemented by
+/// both [Bloc] and [Cubit].
+/// {@endtemplate}
+abstract class BlocBase<State> {
+  /// {@macro bloc_stream}
+  BlocBase(this._state) {
+    // ignore: invalid_use_of_protected_member
+    Bloc.observer.onCreate(this);
+  }
+
+  StreamController<State>? __stateController;
+  StreamController<State> get _stateController {
+    return __stateController ??= StreamController<State>.broadcast();
+  }
+
+  State _state;
+
+  bool _emitted = false;
+
+  /// The current [state].
+  State get state => _state;
+
+  /// The current state stream.
+  Stream<State> get stream => _stateController.stream;
+
+  /// Adds a subscription to the `Stream<State>`.
+  /// Returns a [StreamSubscription] which handles events from
+  /// the `Stream<State>` using the provided [onData], [onError] and [onDone]
+  /// handlers.
+  @Deprecated(
+    'Use stream.listen instead. Will be removed in v8.0.0',
+  )
+  StreamSubscription<State> listen(
+    void Function(State)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
+    return stream.listen(
+      onData,
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
+  }
+
+  /// Updates the [state] to the provided [state].
+  /// [emit] does nothing if the instance has been closed or if the
+  /// [state] being emitted is equal to the current [state].
+  ///
+  /// To allow for the possibility of notifying listeners of the initial state,
+  /// emitting a state which is equal to the initial state is allowed as long
+  /// as it is the first thing emitted by the instance.
+  void emit(State state) {
+    if (_stateController.isClosed) return;
+    if (state == _state && _emitted) return;
+    onChange(Change<State>(currentState: this.state, nextState: state));
+    _state = state;
+    _stateController.add(_state);
+    _emitted = true;
+  }
+
+  /// Called whenever a [change] occurs with the given [change].
+  /// A [change] occurs when a new `state` is emitted.
+  /// [onChange] is called before the `state` of the `cubit` is updated.
+  /// [onChange] is a great spot to add logging/analytics for a specific `cubit`.
+  ///
+  /// **Note: `super.onChange` should always be called first.**
+  /// ```dart
+  /// @override
+  /// void onChange(Change change) {
+  ///   // Always call super.onChange with the current change
+  ///   super.onChange(change);
+  ///
+  ///   // Custom onChange logic goes here
+  /// }
+  /// ```
+  ///
+  /// See also:
+  ///
+  /// * [BlocObserver] for observing [Cubit] behavior globally.
+  @mustCallSuper
+  void onChange(Change<State> change) {
+    // ignore: invalid_use_of_protected_member
+    Bloc.observer.onChange(this, change);
+  }
+
+  /// Reports an [error] which triggers [onError] with an optional [StackTrace].
+  @mustCallSuper
+  void addError(Object error, [StackTrace? stackTrace]) {
+    onError(error, stackTrace ?? StackTrace.current);
+  }
+
+  /// Called whenever an [error] occurs and notifies [BlocObserver.onError].
+  ///
+  /// In debug mode, [onError] throws a [BlocUnhandledErrorException] for
+  /// improved visibility.
+  ///
+  /// In release mode, [onError] does not throw and will instead only report
+  /// the error to [BlocObserver.onError].
+  ///
+  /// **Note: `super.onError` should always be called last.**
+  /// ```dart
+  /// @override
+  /// void onError(Object error, StackTrace stackTrace) {
+  ///   // Custom onError logic goes here
+  ///
+  ///   // Always call super.onError with the current error and stackTrace
+  ///   super.onError(error, stackTrace);
+  /// }
+  /// ```
+  @protected
+  @mustCallSuper
+  void onError(Object error, StackTrace stackTrace) {
+    // ignore: invalid_use_of_protected_member
+    Bloc.observer.onError(this, error, stackTrace);
+    assert(() {
+      throw BlocUnhandledErrorException(this, error, stackTrace);
+    }());
+  }
+
+  /// Closes the instance.
+  /// This method should be called when the instance is no longer needed.
+  /// Once [close] is called, the instance can no longer be used.
+  @mustCallSuper
+  Future<void> close() async {
+    // ignore: invalid_use_of_protected_member
+    Bloc.observer.onClose(this);
+    await _stateController.close();
   }
 }

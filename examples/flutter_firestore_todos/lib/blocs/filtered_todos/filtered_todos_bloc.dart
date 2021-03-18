@@ -19,7 +19,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
                 VisibilityFilter.all,
               )
             : FilteredTodosLoading()) {
-    _todosSubscription = todosBloc.listen((state) {
+    _todosSubscription = todosBloc.stream.listen((state) {
       if (state is TodosLoaded) {
         add(UpdateTodos((todosBloc.state as TodosLoaded).todos));
       }

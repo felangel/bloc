@@ -1,17 +1,21 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'cubits/cubits.dart';
 
 class MockBlocObserver extends Mock implements BlocObserver {}
 
+class FakeBlocBase<S> extends Fake implements BlocBase<S> {}
+
+class FakeChange<S> extends Fake implements Change<S> {}
+
 void main() {
   group('Cubit', () {
     group('constructor', () {
-      BlocObserver observer;
+      late BlocObserver observer;
 
       setUp(() {
         observer = MockBlocObserver();
@@ -21,7 +25,7 @@ void main() {
       test('triggers onCreate on observer', () {
         final cubit = CounterCubit();
         // ignore: invalid_use_of_protected_member
-        verify(observer.onCreate(cubit)).called(1);
+        verify(() => observer.onCreate(cubit)).called(1);
       });
     });
 
@@ -42,23 +46,29 @@ void main() {
       test('triggers onError', () async {
         final expectedError = Exception('fatal exception');
 
-        runZoned(() {
+        runZonedGuarded(() {
           CounterCubit().addError(expectedError, StackTrace.current);
-        }, onError: (Object error, StackTrace stackTrace) {
+        }, (Object error, StackTrace stackTrace) {
           expect(
-            (error as CubitUnhandledErrorException).toString(),
+            (error as BlocUnhandledErrorException).toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
               'in Instance of \'CounterCubit\'.',
             ),
           );
           expect(stackTrace, isNotNull);
+          expect(stackTrace, isNot(StackTrace.empty));
         });
       });
     });
 
     group('onChange', () {
-      BlocObserver observer;
+      late BlocObserver observer;
+
+      setUpAll(() {
+        registerFallbackValue<BlocBase<dynamic>>(FakeBlocBase<dynamic>());
+        registerFallbackValue<Change<dynamic>>(FakeChange<dynamic>());
+      });
 
       setUp(() {
         observer = MockBlocObserver();
@@ -71,7 +81,7 @@ void main() {
         await cubit.close();
         expect(changes, isEmpty);
         // ignore: invalid_use_of_protected_member
-        verifyNever(observer.onChange(any, any));
+        verifyNever(() => observer.onChange(any(), any()));
       });
 
       test('is called with correct change for a single state change', () async {
@@ -82,11 +92,13 @@ void main() {
           changes,
           const [Change<int>(currentState: 0, nextState: 1)],
         );
-        // ignore: invalid_use_of_protected_member
-        verify(observer.onChange(
-          cubit,
-          const Change<int>(currentState: 0, nextState: 1),
-        )).called(1);
+        verify(
+          // ignore: invalid_use_of_protected_member
+          () => observer.onChange(
+            cubit,
+            const Change<int>(currentState: 0, nextState: 1),
+          ),
+        ).called(1);
       });
 
       test('is called with correct changes for multiple state changes',
@@ -103,23 +115,30 @@ void main() {
             Change<int>(currentState: 1, nextState: 2),
           ],
         );
-        // ignore: invalid_use_of_protected_member
-        verify(observer.onChange(
-          cubit,
-          const Change<int>(currentState: 0, nextState: 1),
-        )).called(1);
-        // ignore: invalid_use_of_protected_member
-        verify(observer.onChange(
-          cubit,
-          const Change<int>(currentState: 1, nextState: 2),
-        )).called(1);
+        verify(
+          // ignore: invalid_use_of_protected_member
+          () => observer.onChange(
+            cubit,
+            const Change<int>(currentState: 0, nextState: 1),
+          ),
+        ).called(1);
+        verify(
+          // ignore: invalid_use_of_protected_member
+          () => observer.onChange(
+            cubit,
+            const Change<int>(currentState: 1, nextState: 2),
+          ),
+        ).called(1);
       });
     });
 
     group('emit', () {
       test('does nothing if cubit is closed (indirect)', () {
         final cubit = CounterCubit();
-        expectLater(cubit, emitsInOrder(<Matcher>[equals(1), emitsDone]));
+        expectLater(
+          cubit.stream,
+          emitsInOrder(<Matcher>[equals(1), emitsDone]),
+        );
         cubit
           ..increment()
           ..close()
@@ -128,7 +147,10 @@ void main() {
 
       test('does nothing if cubit is closed (direct)', () {
         final cubit = CounterCubit();
-        expectLater(cubit, emitsInOrder(<Matcher>[equals(1), emitsDone]));
+        expectLater(
+          cubit.stream,
+          emitsInOrder(<Matcher>[equals(1), emitsDone]),
+        );
         cubit
           ..emit(1)
           ..close()
@@ -145,7 +167,7 @@ void main() {
       test('emits states in the correct order', () async {
         final states = <int>[];
         final cubit = CounterCubit();
-        final subscription = cubit.listen(states.add);
+        final subscription = cubit.stream.listen(states.add);
         cubit.increment();
         await cubit.close();
         await subscription.cancel();
@@ -155,7 +177,7 @@ void main() {
       test('can emit initial state only once', () async {
         final states = <int>[];
         final cubit = SeededCubit(initialState: 0);
-        final subscription = cubit.listen(states.add);
+        final subscription = cubit.stream.listen(states.add);
         cubit..emitState(0)..emitState(0);
         await cubit.close();
         await subscription.cancel();
@@ -167,7 +189,7 @@ void main() {
           'continue emitting distinct states', () async {
         final states = <int>[];
         final cubit = SeededCubit(initialState: 0);
-        final subscription = cubit.listen(states.add);
+        final subscription = cubit.stream.listen(states.add);
         cubit..emitState(0)..emitState(1);
         await cubit.close();
         await subscription.cancel();
@@ -177,7 +199,7 @@ void main() {
       test('does not emit duplicate states', () async {
         final states = <int>[];
         final cubit = SeededCubit(initialState: 0);
-        final subscription = cubit.listen(states.add);
+        final subscription = cubit.stream.listen(states.add);
         cubit
           ..emitState(1)
           ..emitState(1)
@@ -194,6 +216,52 @@ void main() {
     group('listen', () {
       test('returns a StreamSubscription', () {
         final cubit = CounterCubit();
+        final subscription = cubit.stream.listen((_) {});
+        expect(subscription, isA<StreamSubscription<int>>());
+        subscription.cancel();
+        cubit.close();
+      });
+
+      test('does not receive current state upon subscribing', () async {
+        final states = <int>[];
+        final cubit = CounterCubit()..stream.listen(states.add);
+        await cubit.close();
+        expect(states, isEmpty);
+      });
+
+      test('receives single async state', () async {
+        final states = <int>[];
+        final cubit = FakeAsyncCounterCubit()..stream.listen(states.add);
+        await cubit.increment();
+        await cubit.close();
+        expect(states, [equals(1)]);
+      });
+
+      test('receives multiple async states', () async {
+        final states = <int>[];
+        final cubit = FakeAsyncCounterCubit()..stream.listen(states.add);
+        await cubit.increment();
+        await cubit.increment();
+        await cubit.increment();
+        await cubit.close();
+        expect(states, [equals(1), equals(2), equals(3)]);
+      });
+
+      test('can call listen multiple times', () async {
+        final states = <int>[];
+        final cubit = CounterCubit()
+          ..stream.listen(states.add)
+          ..stream.listen(states.add)
+          ..increment();
+        await cubit.close();
+        expect(states, [equals(1), equals(1)]);
+      });
+    });
+
+    group('listen (legacy)', () {
+      test('returns a StreamSubscription', () {
+        final cubit = CounterCubit();
+        // ignore: deprecated_member_use_from_same_package
         final subscription = cubit.listen((_) {});
         expect(subscription, isA<StreamSubscription<int>>());
         subscription.cancel();
@@ -202,6 +270,7 @@ void main() {
 
       test('does not receive current state upon subscribing', () async {
         final states = <int>[];
+        // ignore: deprecated_member_use_from_same_package
         final cubit = CounterCubit()..listen(states.add);
         await cubit.close();
         expect(states, isEmpty);
@@ -209,6 +278,7 @@ void main() {
 
       test('receives single async state', () async {
         final states = <int>[];
+        // ignore: deprecated_member_use_from_same_package
         final cubit = FakeAsyncCounterCubit()..listen(states.add);
         await cubit.increment();
         await cubit.close();
@@ -217,6 +287,7 @@ void main() {
 
       test('receives multiple async states', () async {
         final states = <int>[];
+        // ignore: deprecated_member_use_from_same_package
         final cubit = FakeAsyncCounterCubit()..listen(states.add);
         await cubit.increment();
         await cubit.increment();
@@ -228,7 +299,9 @@ void main() {
       test('can call listen multiple times', () async {
         final states = <int>[];
         final cubit = CounterCubit()
+          // ignore: deprecated_member_use_from_same_package
           ..listen(states.add)
+          // ignore: deprecated_member_use_from_same_package
           ..listen(states.add)
           ..increment();
         await cubit.close();
@@ -237,7 +310,7 @@ void main() {
     });
 
     group('close', () {
-      BlocObserver observer;
+      late MockBlocObserver observer;
 
       setUp(() {
         observer = MockBlocObserver();
@@ -248,23 +321,19 @@ void main() {
         final cubit = CounterCubit();
         await cubit.close();
         // ignore: invalid_use_of_protected_member
-        verify(observer.onClose(cubit)).called(1);
+        verify(() => observer.onClose(cubit)).called(1);
       });
 
       test('emits done (sync)', () {
         final cubit = CounterCubit()..close();
-        expect(cubit, emitsDone);
+        expect(cubit.stream, emitsDone);
       });
 
       test('emits done (async)', () async {
         final cubit = CounterCubit();
         await cubit.close();
-        expect(cubit, emitsDone);
+        expect(cubit.stream, emitsDone);
       });
-    });
-
-    test('isBroadcast returns true', () {
-      expect(CounterCubit().isBroadcast, isTrue);
     });
   });
 }

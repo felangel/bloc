@@ -24,7 +24,7 @@ void main() {
     });
 
     testWidgets('returns selected text when popped', (tester) async {
-      String location;
+      String? location;
       await tester.pumpWidget(
         MaterialApp(
           home: Builder(

@@ -2,15 +2,21 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 // Mock Cubit
-class MockCounterCubit extends MockBloc<int> implements CounterCubit {}
+class MockCounterCubit extends MockCubit<int> implements CounterCubit {}
 
 // Mock Bloc
-class MockCounterBloc extends MockBloc<int> implements CounterBloc {}
+class MockCounterBloc extends MockBloc<CounterEvent, int>
+    implements CounterBloc {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue<CounterEvent>(CounterEvent.increment);
+  });
+
   mainCubit();
   mainBloc();
 }
@@ -26,7 +32,7 @@ void mainCubit() {
 
       // Expect that the CounterCubit instance emitted the stubbed Stream of
       // states
-      expectLater(cubit, emitsInOrder(<int>[0, 1, 2, 3]));
+      expectLater(cubit.stream, emitsInOrder(<int>[0, 1, 2, 3]));
     });
   });
 
@@ -34,14 +40,14 @@ void mainCubit() {
     blocTest<CounterCubit, int>(
       'emits [] when nothing is called',
       build: () => CounterCubit(),
-      expect: const <int>[],
+      expect: () => const <int>[],
     );
 
     blocTest<CounterCubit, int>(
       'emits [1] when increment is called',
       build: () => CounterCubit(),
-      act: (cubit) async => cubit.increment(),
-      expect: const <int>[1],
+      act: (cubit) => cubit.increment(),
+      expect: () => const <int>[1],
     );
   });
 }
@@ -57,7 +63,7 @@ void mainBloc() {
 
       // Expect that the CounterBloc instance emitted the stubbed Stream of
       // states
-      expectLater(bloc, emitsInOrder(<int>[0, 1, 2, 3]));
+      expectLater(bloc.stream, emitsInOrder(<int>[0, 1, 2, 3]));
     });
   });
 
@@ -65,14 +71,14 @@ void mainBloc() {
     blocTest<CounterBloc, int>(
       'emits [] when nothing is added',
       build: () => CounterBloc(),
-      expect: const <int>[],
+      expect: () => const <int>[],
     );
 
     blocTest<CounterBloc, int>(
       'emits [1] when CounterEvent.increment is added',
       build: () => CounterBloc(),
-      act: (bloc) async => bloc.add(CounterEvent.increment),
-      expect: const <int>[1],
+      act: (bloc) => bloc.add(CounterEvent.increment),
+      expect: () => const <int>[1],
     );
   });
 }

@@ -45,13 +45,64 @@ class CounterState extends TransitionState {
 }
 
 void main() {
+  group('Change Tests', () {
+    group('constructor', () {
+      test(
+          'should return normally when initialized with '
+          'all required parameters', () {
+        expect(
+          () => const Change<int>(currentState: 0, nextState: 1),
+          returnsNormally,
+        );
+      });
+    });
+
+    group('== operator', () {
+      test('should return true if 2 Changes are equal', () {
+        final changeA = const Change<int>(currentState: 0, nextState: 1);
+        final changeB = const Change<int>(currentState: 0, nextState: 1);
+
+        expect(changeA == changeB, isTrue);
+      });
+
+      test('should return false if 2 Changes are not equal', () {
+        final changeA = const Change<int>(currentState: 0, nextState: 1);
+        final changeB = const Change<int>(currentState: 0, nextState: -1);
+
+        expect(changeA == changeB, isFalse);
+      });
+    });
+
+    group('hashCode', () {
+      test('should return correct hashCode', () {
+        final change = const Change<int>(currentState: 0, nextState: 1);
+        expect(
+          change.hashCode,
+          change.currentState.hashCode ^ change.nextState.hashCode,
+        );
+      });
+    });
+
+    group('toString', () {
+      test('should return correct string representation of Change', () {
+        final change = const Change<int>(currentState: 0, nextState: 1);
+
+        expect(
+          change.toString(),
+          'Change { currentState: ${change.currentState.toString()}, '
+          'nextState: ${change.nextState.toString()} }',
+        );
+      });
+    });
+  });
+
   group('Transition Tests', () {
     group('constructor', () {
       test(
           'should not throw assertion error when initialized '
           'with a null currentState', () {
         expect(
-          () => Transition<TransitionEvent, TransitionState>(
+          () => Transition<TransitionEvent, TransitionState?>(
             currentState: null,
             event: SimpleTransitionEvent(),
             nextState: SimpleTransitionState(),
@@ -64,7 +115,7 @@ void main() {
           'should not throw assertion error when initialized with a null event',
           () {
         expect(
-          () => Transition<TransitionEvent, TransitionState>(
+          () => Transition<TransitionEvent?, TransitionState>(
             currentState: SimpleTransitionState(),
             event: null,
             nextState: SimpleTransitionState(),
@@ -77,7 +128,7 @@ void main() {
           'should not throw assertion error '
           'when initialized with a null nextState', () {
         expect(
-          () => Transition<TransitionEvent, TransitionState>(
+          () => Transition<TransitionEvent, TransitionState?>(
             currentState: SimpleTransitionState(),
             event: SimpleTransitionEvent(),
             nextState: null,
@@ -95,7 +146,7 @@ void main() {
             event: SimpleTransitionEvent(),
             nextState: SimpleTransitionState(),
           );
-        } on dynamic catch (_) {
+        } catch (_) {
           fail(
             'should not throw error when initialized '
             'with all required parameters',
@@ -153,7 +204,7 @@ void main() {
     });
 
     group('toString', () {
-      test('should return correct string representation of Transition', () {
+      test('should return correct string representation for Transition', () {
         final transition = Transition<CounterEvent, CounterState>(
           currentState: CounterState(0),
           event: CounterEvent('increment'),

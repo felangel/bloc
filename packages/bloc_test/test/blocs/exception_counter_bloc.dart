@@ -15,7 +15,6 @@ class ExceptionCounterBloc extends Bloc<CounterEvent, int> {
       case CounterEvent.increment:
         yield state + 1;
         throw ExceptionCounterBlocException();
-        break;
     }
   }
 }

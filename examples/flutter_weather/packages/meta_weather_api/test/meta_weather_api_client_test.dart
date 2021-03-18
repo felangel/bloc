@@ -1,17 +1,23 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:http/http.dart' as http;
 import 'package:meta_weather_api/meta_weather_api.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 class MockHttpClient extends Mock implements http.Client {}
 
 class MockResponse extends Mock implements http.Response {}
 
+class FakeUri extends Fake implements Uri {}
+
 void main() {
   group('MetaWeatherApiClient', () {
-    http.Client httpClient;
-    MetaWeatherApiClient metaWeatherApiClient;
+    late http.Client httpClient;
+    late MetaWeatherApiClient metaWeatherApiClient;
+
+    setUpAll(() {
+      registerFallbackValue<Uri>(FakeUri());
+    });
 
     setUp(() {
       httpClient = MockHttpClient();
@@ -28,16 +34,16 @@ void main() {
       const query = 'mock-query';
       test('makes correct http request', () async {
         final response = MockResponse();
-        when(response.statusCode).thenReturn(200);
-        when(response.body).thenReturn('[]');
-        when(httpClient.get(any)).thenAnswer((_) async => response);
+        when(() => response.statusCode).thenReturn(200);
+        when(() => response.body).thenReturn('[]');
+        when(() => httpClient.get(any())).thenAnswer((_) async => response);
         await metaWeatherApiClient.locationSearch(query);
         verify(
-          httpClient.get(
+          () => httpClient.get(
             Uri.https(
               'www.metaweather.com',
               '/api/location/search',
-              {'query': query},
+              <String, String>{'query': query},
             ),
           ),
         ).called(1);
@@ -45,8 +51,8 @@ void main() {
 
       test('throws LocationIdRequestFailure on non-200 response', () async {
         final response = MockResponse();
-        when(response.statusCode).thenReturn(400);
-        when(httpClient.get(any)).thenAnswer((_) async => response);
+        when(() => response.statusCode).thenReturn(400);
+        when(() => httpClient.get(any())).thenAnswer((_) async => response);
         expect(
           () async => await metaWeatherApiClient.locationSearch(query),
           throwsA(isA<LocationIdRequestFailure>()),
@@ -55,17 +61,17 @@ void main() {
 
       test('returns null on empty response', () async {
         final response = MockResponse();
-        when(response.statusCode).thenReturn(200);
-        when(response.body).thenReturn('[]');
-        when(httpClient.get(any)).thenAnswer((_) async => response);
+        when(() => response.statusCode).thenReturn(200);
+        when(() => response.body).thenReturn('[]');
+        when(() => httpClient.get(any())).thenAnswer((_) async => response);
         final actual = await metaWeatherApiClient.locationSearch(query);
         expect(actual, isNull);
       });
 
       test('returns Location on valid response', () async {
         final response = MockResponse();
-        when(response.statusCode).thenReturn(200);
-        when(response.body).thenReturn(
+        when(() => response.statusCode).thenReturn(200);
+        when(() => response.body).thenReturn(
           '''[{
             "title": "mock-title",
             "location_type": "City",
@@ -73,7 +79,7 @@ void main() {
             "woeid": 42
           }]''',
         );
-        when(httpClient.get(any)).thenAnswer((_) async => response);
+        when(() => httpClient.get(any())).thenAnswer((_) async => response);
         final actual = await metaWeatherApiClient.locationSearch(query);
         expect(
           actual,
@@ -97,12 +103,12 @@ void main() {
 
       test('makes correct http request', () async {
         final response = MockResponse();
-        when(response.statusCode).thenReturn(200);
-        when(response.body).thenReturn('{}');
-        when(httpClient.get(any)).thenAnswer((_) async => response);
+        when(() => response.statusCode).thenReturn(200);
+        when(() => response.body).thenReturn('{}');
+        when(() => httpClient.get(any())).thenAnswer((_) async => response);
         await metaWeatherApiClient.getWeather(locationId);
         verify(
-          httpClient.get(
+          () => httpClient.get(
             Uri.https('www.metaweather.com', '/api/location/$locationId'),
           ),
         ).called(1);
@@ -110,8 +116,8 @@ void main() {
 
       test('throws WeatherRequestFailure on non-200 response', () async {
         final response = MockResponse();
-        when(response.statusCode).thenReturn(400);
-        when(httpClient.get(any)).thenAnswer((_) async => response);
+        when(() => response.statusCode).thenReturn(400);
+        when(() => httpClient.get(any())).thenAnswer((_) async => response);
         expect(
           () async => await metaWeatherApiClient.getWeather(locationId),
           throwsA(isA<WeatherRequestFailure>()),
@@ -120,8 +126,8 @@ void main() {
 
       test('returns weather on valid respponse', () async {
         final response = MockResponse();
-        when(response.statusCode).thenReturn(200);
-        when(response.body).thenReturn('''
+        when(() => response.statusCode).thenReturn(200);
+        when(() => response.body).thenReturn('''
           {"consolidated_weather":[{
             "id":4907479830888448,
             "weather_state_name":"Showers",
@@ -140,7 +146,7 @@ void main() {
             "predictability":73
           }]}
         ''');
-        when(httpClient.get(any)).thenAnswer((_) async => response);
+        when(() => httpClient.get(any())).thenAnswer((_) async => response);
         final actual = await metaWeatherApiClient.getWeather(locationId);
         expect(
           actual,

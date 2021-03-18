@@ -62,14 +62,14 @@ class _MyFormState extends State<MyForm> {
     return BlocListener<MyFormBloc, MyFormState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
-          Scaffold.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
           showDialog<void>(
             context: context,
             builder: (_) => SuccessDialog(),
           );
         }
         if (state.status.isSubmissionInProgress) {
-          Scaffold.of(context)
+          ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               const SnackBar(content: Text('Submitting...')),
@@ -91,7 +91,7 @@ class _MyFormState extends State<MyForm> {
 }
 
 class EmailInput extends StatelessWidget {
-  const EmailInput({Key key, this.focusNode}) : super(key: key);
+  const EmailInput({Key? key, required this.focusNode}) : super(key: key);
 
   final FocusNode focusNode;
 
@@ -122,7 +122,7 @@ class EmailInput extends StatelessWidget {
 }
 
 class PasswordInput extends StatelessWidget {
-  const PasswordInput({Key key, this.focusNode}) : super(key: key);
+  const PasswordInput({Key? key, required this.focusNode}) : super(key: key);
 
   final FocusNode focusNode;
 
@@ -161,7 +161,7 @@ class SubmitButton extends StatelessWidget {
     return BlocBuilder<MyFormBloc, MyFormState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return RaisedButton(
+        return ElevatedButton(
           onPressed: state.status.isValidated
               ? () => context.read<MyFormBloc>().add(FormSubmitted())
               : null,
@@ -199,7 +199,7 @@ class SuccessDialog extends StatelessWidget {
                 ),
               ],
             ),
-            RaisedButton(
+            ElevatedButton(
               child: const Text('OK'),
               onPressed: () => Navigator.of(context).pop(),
             ),

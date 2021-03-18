@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 
@@ -13,16 +13,39 @@ void main() {
   group('blocTest', () {
     group('CounterBloc', () {
       blocTest<CounterBloc, int>(
+        'supports matchers (contains)',
+        build: () => CounterBloc(),
+        act: (bloc) => bloc.add(CounterEvent.increment),
+        expect: () => contains(1),
+      );
+
+      blocTest<CounterBloc, int>(
+        'supports matchers (containsAll)',
+        build: () => CounterBloc(),
+        act: (bloc) =>
+            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        expect: () => containsAll(<int>[2, 1]),
+      );
+
+      blocTest<CounterBloc, int>(
+        'supports matchers (containsAllInOrder)',
+        build: () => CounterBloc(),
+        act: (bloc) =>
+            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        expect: () => containsAllInOrder(<int>[1, 2]),
+      );
+
+      blocTest<CounterBloc, int>(
         'emits [] when nothing is added',
         build: () => CounterBloc(),
-        expect: const <int>[],
+        expect: () => const <int>[],
       );
 
       blocTest<CounterBloc, int>(
         'emits [1] when CounterEvent.increment is added',
         build: () => CounterBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
-        expect: const <int>[1],
+        expect: () => const <int>[1],
       );
 
       blocTest<CounterBloc, int>(
@@ -32,7 +55,7 @@ void main() {
           await Future<void>.delayed(const Duration(seconds: 1));
           bloc.add(CounterEvent.increment);
         },
-        expect: const <int>[1],
+        expect: () => const <int>[1],
       );
 
       blocTest<CounterBloc, int>(
@@ -44,7 +67,7 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 10));
           bloc.add(CounterEvent.increment);
         },
-        expect: const <int>[1, 2],
+        expect: () => const <int>[1, 2],
       );
 
       blocTest<CounterBloc, int>(
@@ -54,22 +77,22 @@ void main() {
           bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
         },
         skip: 1,
-        expect: const <int>[2],
+        expect: () => const <int>[2],
       );
 
       blocTest<CounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and emitted 10',
         build: () => CounterBloc()..emit(10),
         act: (bloc) => bloc.add(CounterEvent.increment),
-        expect: const <int>[11],
+        expect: () => const <int>[11],
       );
 
       blocTest<CounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and seed 10',
         build: () => CounterBloc(),
-        seed: 10,
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
-        expect: const <int>[11],
+        expect: () => const <int>[11],
       );
 
       test('fails immediately when expectation is incorrect', () async {
@@ -77,17 +100,16 @@ void main() {
   Actual: [1]
    Which: at location [0] is <1> instead of <2>
 ''';
-        Object actualError;
+        late Object actualError;
         final completer = Completer<void>();
-        await runZoned(() async {
-          unawaited(runBlocTest<CounterBloc, int>(
-            'fails immediately',
+        await runZonedGuarded(() async {
+          unawaited(testBloc<CounterBloc, int>(
             build: () => CounterBloc(),
             act: (bloc) => bloc.add(CounterEvent.increment),
-            expect: const <int>[2],
+            expect: () => const <int>[2],
           ).then((_) => completer.complete()));
           await completer.future;
-        }, onError: (Object error) {
+        }, (Object error, _) {
           actualError = error;
           completer.complete();
         });
@@ -99,14 +121,14 @@ void main() {
       blocTest<AsyncCounterBloc, int>(
         'emits [] when nothing is added',
         build: () => AsyncCounterBloc(),
-        expect: const <int>[],
+        expect: () => const <int>[],
       );
 
       blocTest<AsyncCounterBloc, int>(
         'emits [1] when CounterEvent.increment is added',
         build: () => AsyncCounterBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
-        expect: const <int>[1],
+        expect: () => const <int>[1],
       );
 
       blocTest<AsyncCounterBloc, int>(
@@ -118,7 +140,7 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 10));
           bloc.add(CounterEvent.increment);
         },
-        expect: const <int>[1, 2],
+        expect: () => const <int>[1, 2],
       );
 
       blocTest<AsyncCounterBloc, int>(
@@ -127,14 +149,14 @@ void main() {
         act: (bloc) =>
             bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
         skip: 1,
-        expect: const <int>[2],
+        expect: () => const <int>[2],
       );
 
       blocTest<AsyncCounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and emitted 10',
         build: () => AsyncCounterBloc()..emit(10),
         act: (bloc) => bloc.add(CounterEvent.increment),
-        expect: const <int>[11],
+        expect: () => const <int>[11],
       );
     });
 
@@ -142,7 +164,7 @@ void main() {
       blocTest<DebounceCounterBloc, int>(
         'emits [] when nothing is added',
         build: () => DebounceCounterBloc(),
-        expect: const <int>[],
+        expect: () => const <int>[],
       );
 
       blocTest<DebounceCounterBloc, int>(
@@ -150,7 +172,7 @@ void main() {
         build: () => DebounceCounterBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
         wait: const Duration(milliseconds: 300),
-        expect: const <int>[1],
+        expect: () => const <int>[1],
       );
 
       blocTest<DebounceCounterBloc, int>(
@@ -164,7 +186,7 @@ void main() {
         },
         skip: 1,
         wait: const Duration(milliseconds: 300),
-        expect: const <int>[2],
+        expect: () => const <int>[2],
       );
 
       blocTest<DebounceCounterBloc, int>(
@@ -172,7 +194,7 @@ void main() {
         build: () => DebounceCounterBloc()..emit(10),
         act: (bloc) => bloc.add(CounterEvent.increment),
         wait: const Duration(milliseconds: 300),
-        expect: const <int>[11],
+        expect: () => const <int>[11],
       );
     });
 
@@ -180,14 +202,14 @@ void main() {
       blocTest<InstantEmitBloc, int>(
         'emits [1] when nothing is added',
         build: () => InstantEmitBloc(),
-        expect: const <int>[1],
+        expect: () => const <int>[1],
       );
 
       blocTest<InstantEmitBloc, int>(
         'emits [1, 2] when CounterEvent.increment is added',
         build: () => InstantEmitBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
-        expect: const <int>[1, 2],
+        expect: () => const <int>[1, 2],
       );
 
       blocTest<InstantEmitBloc, int>(
@@ -199,7 +221,7 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 10));
           bloc.add(CounterEvent.increment);
         },
-        expect: const <int>[1, 2, 3],
+        expect: () => const <int>[1, 2, 3],
       );
 
       blocTest<InstantEmitBloc, int>(
@@ -208,14 +230,14 @@ void main() {
         act: (bloc) =>
             bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
         skip: 2,
-        expect: const <int>[3],
+        expect: () => const <int>[3],
       );
 
       blocTest<InstantEmitBloc, int>(
         'emits [11, 12] when CounterEvent.increment is added and emitted 10',
         build: () => InstantEmitBloc()..emit(10),
         act: (bloc) => bloc.add(CounterEvent.increment),
-        expect: const <int>[11, 12],
+        expect: () => const <int>[11, 12],
       );
     });
 
@@ -223,14 +245,14 @@ void main() {
       blocTest<MultiCounterBloc, int>(
         'emits [] when nothing is added',
         build: () => MultiCounterBloc(),
-        expect: const <int>[],
+        expect: () => const <int>[],
       );
 
       blocTest<MultiCounterBloc, int>(
         'emits [1, 2] when CounterEvent.increment is added',
         build: () => MultiCounterBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
-        expect: const <int>[1, 2],
+        expect: () => const <int>[1, 2],
       );
 
       blocTest<MultiCounterBloc, int>(
@@ -242,7 +264,7 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 10));
           bloc.add(CounterEvent.increment);
         },
-        expect: const <int>[1, 2, 3, 4],
+        expect: () => const <int>[1, 2, 3, 4],
       );
 
       blocTest<MultiCounterBloc, int>(
@@ -251,14 +273,14 @@ void main() {
         act: (bloc) =>
             bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
         skip: 3,
-        expect: const <int>[4],
+        expect: () => const <int>[4],
       );
 
       blocTest<MultiCounterBloc, int>(
         'emits [11, 12] when CounterEvent.increment is added and emitted 10',
         build: () => MultiCounterBloc()..emit(10),
         act: (bloc) => bloc.add(CounterEvent.increment),
-        expect: const <int>[11, 12],
+        expect: () => const <int>[11, 12],
       );
     });
 
@@ -266,14 +288,14 @@ void main() {
       blocTest<ComplexBloc, ComplexState>(
         'emits [] when nothing is added',
         build: () => ComplexBloc(),
-        expect: const <ComplexState>[],
+        expect: () => const <ComplexState>[],
       );
 
       blocTest<ComplexBloc, ComplexState>(
         'emits [ComplexStateB] when ComplexEventB is added',
         build: () => ComplexBloc(),
         act: (bloc) => bloc.add(ComplexEventB()),
-        expect: <Matcher>[isA<ComplexStateB>()],
+        expect: () => <Matcher>[isA<ComplexStateB>()],
       );
 
       blocTest<ComplexBloc, ComplexState>(
@@ -282,7 +304,7 @@ void main() {
         build: () => ComplexBloc(),
         act: (bloc) => bloc..add(ComplexEventB())..add(ComplexEventA()),
         skip: 1,
-        expect: <Matcher>[isA<ComplexStateA>()],
+        expect: () => <Matcher>[isA<ComplexStateA>()],
       );
     });
 
@@ -290,7 +312,7 @@ void main() {
       blocTest<ExceptionCounterBloc, int>(
         'emits [] when nothing is added',
         build: () => ExceptionCounterBloc(),
-        expect: const <int>[],
+        expect: () => const <int>[],
       );
 
       blocTest<ExceptionCounterBloc, int>(
@@ -299,21 +321,21 @@ void main() {
         act: (bloc) =>
             bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
         skip: 1,
-        expect: const <int>[2],
+        expect: () => const <int>[2],
       );
 
       blocTest<ExceptionCounterBloc, int>(
         'emits [1] when increment is added',
         build: () => ExceptionCounterBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
-        expect: const <int>[1],
+        expect: () => const <int>[1],
       );
 
       blocTest<ExceptionCounterBloc, int>(
         'throws ExceptionCounterBlocException when increment is added',
         build: () => ExceptionCounterBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
-        errors: <Matcher>[isA<ExceptionCounterBlocException>()],
+        errors: () => <Matcher>[isA<ExceptionCounterBlocException>()],
       );
 
       blocTest<ExceptionCounterBloc, int>(
@@ -321,8 +343,8 @@ void main() {
         'when increment is added',
         build: () => ExceptionCounterBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
-        expect: const <int>[1],
-        errors: <Matcher>[isA<ExceptionCounterBlocException>()],
+        expect: () => const <int>[1],
+        errors: () => <Matcher>[isA<ExceptionCounterBlocException>()],
       );
 
       blocTest<ExceptionCounterBloc, int>(
@@ -330,7 +352,7 @@ void main() {
         build: () => ExceptionCounterBloc(),
         act: (bloc) =>
             bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
-        expect: const <int>[1, 2],
+        expect: () => const <int>[1, 2],
       );
 
       blocTest<ExceptionCounterBloc, int>(
@@ -339,7 +361,7 @@ void main() {
         build: () => ExceptionCounterBloc(),
         act: (bloc) =>
             bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
-        errors: <Matcher>[
+        errors: () => <Matcher>[
           isA<ExceptionCounterBlocException>(),
           isA<ExceptionCounterBlocException>(),
         ],
@@ -351,8 +373,8 @@ void main() {
         build: () => ExceptionCounterBloc(),
         act: (bloc) =>
             bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
-        expect: const <int>[1, 2],
-        errors: <Matcher>[
+        expect: () => const <int>[1, 2],
+        errors: () => <Matcher>[
           isA<ExceptionCounterBlocException>(),
           isA<ExceptionCounterBlocException>(),
         ],
@@ -360,25 +382,26 @@ void main() {
     });
 
     group('SideEffectCounterBloc', () {
-      Repository repository;
+      late Repository repository;
 
       setUp(() {
         repository = MockRepository();
+        when(() => repository.sideEffect()).thenReturn(null);
       });
 
       blocTest<SideEffectCounterBloc, int>(
         'emits [] when nothing is added',
         build: () => SideEffectCounterBloc(repository),
-        expect: const <int>[],
+        expect: () => const <int>[],
       );
 
       blocTest<SideEffectCounterBloc, int>(
         'emits [1] when CounterEvent.increment is added',
         build: () => SideEffectCounterBloc(repository),
         act: (bloc) => bloc.add(CounterEvent.increment),
-        expect: const <int>[1],
+        expect: () => const <int>[1],
         verify: (_) {
-          verify(repository.sideEffect()).called(1);
+          verify(() => repository.sideEffect()).called(1);
         },
       );
 
@@ -389,7 +412,7 @@ void main() {
         act: (bloc) =>
             bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
         skip: 1,
-        expect: const <int>[2],
+        expect: () => const <int>[2],
       );
 
       blocTest<SideEffectCounterBloc, int>(
@@ -397,7 +420,7 @@ void main() {
         build: () => SideEffectCounterBloc(repository),
         act: (bloc) => bloc.add(CounterEvent.increment),
         verify: (_) {
-          verify(repository.sideEffect()).called(1);
+          verify(() => repository.sideEffect()).called(1);
         },
       );
 
@@ -407,28 +430,25 @@ void main() {
         act: (bloc) => bloc.add(CounterEvent.increment),
         verify: (_) async {
           await Future<void>.delayed(Duration.zero);
-          verify(repository.sideEffect()).called(1);
+          verify(() => repository.sideEffect()).called(1);
         },
       );
 
       test('fails immediately when verify is incorrect', () async {
-        const expectedError = '''Expected: <2>
-  Actual: <1>
-Unexpected number of calls
-''';
-        Object actualError;
+        const expectedError =
+            '''Expected: <2>\n  Actual: <1>\nUnexpected number of calls\n''';
+        late Object actualError;
         final completer = Completer<void>();
-        await runZoned(() async {
-          unawaited(runBlocTest<SideEffectCounterBloc, int>(
-            'fails immediately',
+        await runZonedGuarded(() async {
+          unawaited(testBloc<SideEffectCounterBloc, int>(
             build: () => SideEffectCounterBloc(repository),
             act: (bloc) => bloc.add(CounterEvent.increment),
             verify: (_) {
-              verify(repository.sideEffect()).called(2);
+              verify(() => repository.sideEffect()).called(2);
             },
           ).then((_) => completer.complete()));
           await completer.future;
-        }, onError: (Object error) {
+        }, (Object error, _) {
           actualError = error;
           completer.complete();
         });
@@ -441,17 +461,16 @@ Unexpected number of calls
    Which: at location [0] is <Instance of \'ComplexStateA\'> instead of <Instance of \'ComplexStateA\'>\n
 WARNING: Please ensure state instances extend Equatable, override == and hashCode, or implement Comparable.
 Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''';
-        Object actualError;
+        late Object actualError;
         final completer = Completer<void>();
-        await runZoned(() async {
-          unawaited(runBlocTest<ComplexBloc, ComplexState>(
-            'fails immediately',
+        await runZonedGuarded(() async {
+          unawaited(testBloc<ComplexBloc, ComplexState>(
             build: () => ComplexBloc(),
             act: (bloc) => bloc.add(ComplexEventA()),
-            expect: <ComplexState>[ComplexStateA()],
+            expect: () => <ComplexState>[ComplexStateA()],
           ).then((_) => completer.complete()));
           await completer.future;
-        }, onError: (Object error) {
+        }, (Object error, _) {
           actualError = error;
           completer.complete();
         });

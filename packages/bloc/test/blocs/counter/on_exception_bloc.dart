@@ -5,7 +5,10 @@ import 'package:bloc/bloc.dart';
 import '../counter/counter_bloc.dart';
 
 class OnExceptionBloc extends Bloc<CounterEvent, int> {
-  OnExceptionBloc({this.exception, this.onErrorCallback}) : super(0);
+  OnExceptionBloc({
+    required this.exception,
+    required this.onErrorCallback,
+  }) : super(0);
 
   final Function onErrorCallback;
   final Exception exception;

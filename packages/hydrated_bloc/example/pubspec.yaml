@@ -1,9 +1,10 @@
 name: example
 description: A new Flutter project.
 version: 1.0.0+1
+publish_to: none
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
 
 dependencies:
   flutter:
@@ -12,11 +13,11 @@ dependencies:
     path: ../
   flutter_bloc:
     path: ../../flutter_bloc
-  path_provider_fde:
-    git:
-      url: https://github.com/google/flutter-desktop-embedding
-      path: plugins/flutter_plugins/path_provider_fde
-      ref: 4ee135c8870c94aa462f2006025d5840e9ca82e2
+  path_provider: ^2.0.1
+
+dependency_overrides:
+  bloc:
+    path: ../../bloc
 
 flutter:
   uses-material-design: true

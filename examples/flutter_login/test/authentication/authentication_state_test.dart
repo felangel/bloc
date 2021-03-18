@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter_login/authentication/authentication.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:user_repository/user_repository.dart';
 
-// ignore: must_be_immutable
 class MockUser extends Mock implements User {}
 
 void main() {

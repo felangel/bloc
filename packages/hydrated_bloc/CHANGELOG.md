@@ -1,3 +1,45 @@
+# 7.0.0
+
+- **BREAKING**: opt into null safety
+  - upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+- **BREAKING**: refactor: remove `flutter` dependency
+- **BREAKING**: `storageDirectory` is required when calling `HydratedStorage.build`
+- feat: upgrade to `bloc ^7.0.0`
+- fix: web support with `HydratedStorage.webStorageDirectory`
+- chore: upgrade to `mocktail ^0.1.0`
+- chore: upgrade to `hive ^2.0.0`
+- chore: upgrade to `synchronized: ^3.0.0`
+
+# 7.0.0-nullsafety.4
+
+- chore: upgrade to `bloc ^7.0.0-nullsafety.4`
+- chore: upgrade to `mocktail ^0.1.0`
+
+# 7.0.0-nullsafety.3
+
+- fix: web support with `HydratedStorage.webStorageDirectory`
+- chore: upgrade to `hive ^2.0.0`
+- chore: upgrade to `mocktail ^0.0.2-dev.5`
+
+# 7.0.0-nullsafety.2
+
+- chore: upgrade to `bloc ^7.0.0-nullsafety.3`
+- chore: upgrade to `hive ^1.6.0-nullsafety.2`
+- chore: upgrade to `synchronized: ^3.0.0`
+
+# 7.0.0-nullsafety.1
+
+- chore: upgrade to `bloc ^7.0.0-nullsafety.2`
+
+# 7.0.0-nullsafety.0
+
+- **BREAKING**: opt into null safety
+- **BREAKING**: refactor: upgrade to `bloc ^7.0.0-nullsafety.1`
+- **BREAKING**: refactor: remove `flutter` dependency
+- **BREAKING**: `storageDirectory` is required when calling `HydratedStorage.build`
+- **BREAKING**: `HydratedCubit.storage` is removed in favor of `HydratedBloc.storage`
+- feat!: upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+
 # 6.1.0
 
 - feat: export `package:bloc/bloc.dart`

@@ -1,33 +1,26 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Custom [BlocObserver] which observes all bloc and cubit instances.
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onEvent(Bloc bloc, Object event) {
-    print(event);
+  void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
-  }
-
-  @override
-  void onChange(Cubit cubit, Change change) {
-    print(change);
-    super.onChange(cubit, change);
+    print(event);
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    print(transition);
     super.onTransition(bloc, transition);
+    print(transition);
   }
 
   @override
-  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     print(error);
-    super.onError(cubit, error, stackTrace);
+    super.onError(bloc, error, stackTrace);
   }
 }
 
@@ -106,7 +99,8 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               backgroundColor: Colors.red,
               child: const Icon(Icons.error),
-              onPressed: () => context.read<CounterBloc>().add(null),
+              onPressed: () =>
+                  context.read<CounterBloc>().add(CounterEvent.error),
             ),
           ),
         ],
@@ -121,7 +115,10 @@ enum CounterEvent {
   increment,
 
   /// Notifies bloc to decrement state.
-  decrement
+  decrement,
+
+  /// Notifies the bloc of an error
+  error,
 }
 
 /// {@template counter_bloc}
@@ -140,7 +137,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       case CounterEvent.increment:
         yield state + 1;
         break;
-      default:
+      case CounterEvent.error:
         addError(Exception('unsupported event'));
     }
   }

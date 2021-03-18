@@ -1,3 +1,60 @@
+# 8.0.0
+
+- **BREAKING**: feat: opt into null safety
+  - upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+- **BREAKING**: feat: `seed` returns a `Function` to support dynamic seed values
+- **BREAKING**: refactor: remove `emitsExactly`
+- **BREAKING**: feat: introduce `MockCubit`
+- **BREAKING**: refactor: `MockBloc` uses [package:mocktail](https://pub.dev/packages/mocktail)
+- **BREAKING**: refactor: `expect` returns a `Function` with `Matcher` support
+- **BREAKING**: refactor: `errors` returns a `Function` with `Matcher` support
+- **BREAKING**: refactor: `whenListen` does not stub `skip`
+- feat: `MockBloc` and `MockCubit` automatically stub core API
+- feat: add optional `initialState` to `whenListen`
+- feat: upgrade to `bloc ^7.0.0`
+- feat: upgrade to `mocktail: ^0.1.0`
+
+# 8.0.0-nullsafety.6
+
+- chore: upgrade to `bloc ^7.0.0-nullsafety.4`
+
+# 8.0.0-nullsafety.5
+
+- feat: upgrade to `mocktail: ^0.1.0`
+- feat: use `package:test` instead of `package:test_api`
+
+# 8.0.0-nullsafety.4
+
+- **BREAKING**: feat: `seed` returns a `Function` to support dynamic seed values
+
+# 8.0.0-nullsafety.3
+
+- feat: upgrade to `mocktail: ">=0.0.2-dev.5 <0.0.2"`
+
+# 8.0.0-nullsafety.2
+
+- fix: restrict to `mocktail: ">=0.0.1-dev.12 <0.0.1"`
+- feat: use `package:test_api` instead of `package:test` for sound null safety
+
+# 8.0.0-nullsafety.1
+
+- chore: upgrade to `bloc ^7.0.0-nullsafety.3`
+- chore: upgrade to `mocktail ^0.0.1-dev.12`
+
+# 8.0.0-nullsafety.0
+
+- **BREAKING**: feat: opt into null safety
+- **BREAKING**: feat: upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+- **BREAKING**: refactor: remove `emitsExactly`
+- **BREAKING**: refactor: `MockBloc` uses [package:mocktail](https://pub.dev/packages/mocktail)
+- **BREAKING**: feat: introduce `MockCubit` which uses [package:mocktail](https://pub.dev/packages/mocktail)
+- **BREAKING**: refactor: `expect` returns a `Function` with `Matcher` support
+- **BREAKING**: refactor: `errors` returns a `Function` with `Matcher` support
+- **BREAKING**: refactor: `whenListen` does not stub `skip`
+- feat: introduce `MockCubit`
+- feat: `MockBloc` and `MockCubit` automatically stub core API
+- feat: add optional `initialState` to `whenListen`
+
 # 7.1.0
 
 - feat: add `seed` property to `blocTest`

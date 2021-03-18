@@ -49,10 +49,11 @@ class WeatherView extends StatelessWidget {
                 return const WeatherLoading();
               case WeatherStatus.success:
                 return WeatherPopulated(
-                  onRefresh: () =>
-                      context.read<WeatherCubit>().refreshWeather(),
                   weather: state.weather,
                   units: state.temperatureUnits,
+                  onRefresh: () {
+                    return context.read<WeatherCubit>().refreshWeather();
+                  },
                 );
               case WeatherStatus.failure:
               default:

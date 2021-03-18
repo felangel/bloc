@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: non_constant_identifier_names
 
 part of 'freezed_cubit.dart';
 
@@ -9,8 +8,8 @@ part of 'freezed_cubit.dart';
 
 _$_Question _$_$_QuestionFromJson(Map<String, dynamic> json) {
   return _$_Question(
-    id: json['id'] as int,
-    question: json['question'] as String,
+    id: json['id'] as int?,
+    question: json['question'] as String?,
   );
 }
 

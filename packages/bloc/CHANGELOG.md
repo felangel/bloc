@@ -1,3 +1,63 @@
+# 7.0.0
+
+- **BREAKING**: refactor: `Bloc` and `Cubit` extend `BlocBase`
+  - refactor: `void onError(Cubit cubit, Object error, StackTrace stackTrace)` -> `void onError(BlocBase bloc, Object error, StackTrace stackTrace)`
+  - refactor: `void onCreate(Cubit cubit)` -> `void onCreate(BlocBase bloc)`
+  - refactor: `void onClose(Cubit cubit)` -> `void onClose(BlocBase bloc)`
+- **BREAKING**: refactor: `Bloc` and `Cubit` do not extend `Stream` and implement `Sink`
+  - refactor: use `bloc.stream` or `cubit.stream` to access `Stream<State>`
+    - `myBloc.map(...)` -> `myBloc.stream.map(...)`
+  - refactor: deprecate `bloc.listen` in favor of `bloc.stream.listen`
+- **BREAKING**: refactor: `CubitUnhandledErrorException` -> `BlocUnhandledErrorException`
+- **BREAKING**: opt into null safety
+  - feat!: upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+- fix: `transformEvents` multiple subscriptions issue
+- test: improve testing for advanced `transformEvents` behavior
+- chore: bump to `meta: ^1.3.0`
+
+# 7.0.0-nullsafety.4
+
+- **BREAKING**: refactor: `Bloc` and `Cubit` extend `BlocBase`
+  - refactor: `void onError(Bloc bloc, Object error, StackTrace stackTrace)` -> `void onError(BlocBase bloc, Object error, StackTrace stackTrace)`
+  - refactor: `void onCreate(Bloc bloc)` -> `void onCreate(BlocBase bloc)`
+  - refactor: `void onClose(Bloc bloc)` -> `void onClose(BlocBase bloc)`
+- **BREAKING**: refactor: `Bloc` and `Cubit` do not extend `Stream` and implement `Sink`
+  - refactor: use `bloc.stream` or `cubit.stream` to access `Stream<State>`
+    - `myBloc.map(...)` -> `myBloc.stream.map(...)`
+  - refactor: deprecate `bloc.listen` in favor of `bloc.stream.listen`
+- **BREAKING**: revert: refactor: `Change` and `onChange` removed in favor of `Transition` and `onTransition`
+
+# 7.0.0-nullsafety.3
+
+- fix: `transformEvents` multiple subscriptions issue
+- test: improve testing for advanced `transformEvents` behavior
+
+# 7.0.0-nullsafety.2
+
+- chore: bump to `meta: ^1.3.0`
+
+# 7.0.0-nullsafety.1
+
+- **BREAKING**: refactor: `Cubit` extends `Bloc`
+  - refactor: `Change` and `onChange` removed in favor of `Transition` and `onTransition`
+  - refactor: `void onError(Cubit cubit, Object error, StackTrace stackTrace)` -> `void onError(Bloc bloc, Object error, StackTrace stackTrace)`
+  - refactor: `void onCreate(Cubit cubit)` -> `void onCreate(Bloc bloc)`
+  - refactor: `void onClose(Cubit cubit)` -> `void onClose(Bloc bloc)`
+  - refactor: `CubitUnhandledErrorException` -> `BlocUnhandledErrorException`
+
+# 7.0.0-nullsafety.0
+
+- **BREAKING**: opt into null safety
+- feat!: upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+
+# 6.1.3
+
+- fix: `transformEvents` multiple subscriptions issue due to `v6.1.2`
+
+# 6.1.2
+
+- fix: bloc memory leak due to internal event stream being a broadcast stream
+
 # 6.1.1
 
 - fix: `close` should always emit done

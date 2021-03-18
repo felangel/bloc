@@ -1,3 +1,71 @@
+# 7.0.0
+
+- **BREAKING**: refactor: rename `cubit` parameter to `bloc`
+  - refactor: rename `cubit` parameter in `BlocListener` to `bloc`
+  - refactor: rename `cubit` parameter in `BlocBuilder` to `bloc`
+  - refactor: rename `cubit` parameter in `BlocConsumer` to `bloc`
+- **BREAKING**: opt into null safety
+  - upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+- **BREAKING**: refactor: remove deprecated `context.repository`
+- feat: upgrade to `bloc: ^7.0.0`
+- feat: upgrade to `provider: ^5.0.0`
+
+# 7.0.0-nullsafety.6
+
+- chore: bump to `bloc: ^7.0.0-nullsafety.4`
+
+# 7.0.0-nullsafety.5
+
+- **BREAKING**: refactor: remove deprecated `context.repository`
+
+# 7.0.0-nullsafety.4
+
+- chore: bump to `provider: ^5.0.0`
+
+# 7.0.0-nullsafety.3
+
+- chore: bump to `bloc: ^7.0.0-nullsafety.3`
+- chore: bump to `provider: ^5.0.0-nullsafety.5`
+
+# 7.0.0-nullsafety.2
+
+- chore: bump to `bloc: ^7.0.0-nullsafety.2`
+
+# 7.0.0-nullsafety.1
+
+- **BREAKING**: refactor: upgrade to `bloc ^7.0.0-nullsafety.1`
+  - refactor: rename `cubit` parameter in `BlocListener` to `bloc`
+  - refactor: rename `cubit` parameter in `BlocBuilder` to `bloc`
+  - refactor: rename `cubit` parameter in `BlocConsumer` to `bloc`
+- feat: upgrade to `provider ^5.0.0-nullsafety.3`
+
+# 7.0.0-nullsafety.0
+
+- **BREAKING**: opt into null safety
+- feat!: upgrade Dart SDK constraints to `>=2.12.0-0 <3.0.0`
+
+# 7.0.0-dev.2
+
+- **BREAKING**: revert `7.0.0-dev.1`
+- **BREAKING**: remove `context.bloc` extension
+- **BREAKING**: rename `cubit` parameter in `BlocListener` to `value`
+- **BREAKING**: rename `cubit` parameter in `BlocBuilder` to `value`
+- **BREAKING**: rename `cubit` parameter in `BlocConsumer` to `value`
+- docs: update inline API docs
+
+# 7.0.0-dev.1
+
+- **BREAKING**: remove dependency on `package:provider`
+- feat: add optional listen to `BlocProvider`
+- feat: add ListenProviderExtension
+- docs: improve inline documentation for `BlocProvider` and `RepositoryProvider`
+
+# 6.1.3
+
+- feat: expose `ProviderNotFoundException`
+- chore: upgrade to `bloc ^6.1.3`
+- chore: upgrade to `provider ^4.3.3`
+
 # 6.1.2
 
 - fix: `BlocProvider.value` use `InheritedProvider.value`

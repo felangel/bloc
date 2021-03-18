@@ -1,19 +1,22 @@
 name: flutter_weather
 description: A new Flutter project.
-
 version: 1.0.0+1
+publish_to: none
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  equatable: ^1.2.5
-  flutter_bloc: ^6.1.0
-  google_fonts: ^1.1.0
-  hydrated_bloc: ^6.0.0
-  json_annotation: ^3.0.1
+  equatable: ^2.0.0
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
+  google_fonts: ^2.0.0
+  hydrated_bloc:
+    path: ../../packages/hydrated_bloc
+  json_annotation: ^4.0.0
+  path_provider: ^2.0.1
   pedantic: ^1.9.0
   weather_repository:
     path: packages/weather_repository
@@ -21,10 +24,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  bloc_test: ^7.1.0
+  bloc_test:
+    path: ../../packages/bloc_test
   build_runner: ^1.10.0
-  json_serializable: ^3.4.0
-  mockito: ^4.0.0
+  json_serializable: ^4.0.0
+  mocktail: ^0.1.0
 
 flutter:
   uses-material-design: true

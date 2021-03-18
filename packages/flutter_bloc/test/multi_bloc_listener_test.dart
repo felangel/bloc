@@ -11,37 +11,6 @@ class CounterCubit extends Cubit<int> {
 
 void main() {
   group('MultiBlocListener', () {
-    testWidgets('throws if initialized with no listeners and no child',
-        (tester) async {
-      try {
-        await tester.pumpWidget(
-          MultiBlocListener(listeners: null, child: null),
-        );
-      } on dynamic catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
-    testWidgets('throws if initialized with no listeners', (tester) async {
-      try {
-        await tester.pumpWidget(
-          MultiBlocListener(listeners: null, child: const SizedBox()),
-        );
-      } on dynamic catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
-    testWidgets('throws if initialized with no child', (tester) async {
-      try {
-        await tester.pumpWidget(
-          MultiBlocListener(listeners: [], child: null),
-        );
-      } on dynamic catch (error) {
-        expect(error, isAssertionError);
-      }
-    });
-
     testWidgets('calls listeners on state changes', (tester) async {
       final statesA = <int>[];
       const expectedStatesA = [1, 2];
@@ -55,11 +24,11 @@ void main() {
         MultiBlocListener(
           listeners: [
             BlocListener<CounterCubit, int>(
-              cubit: counterCubitA,
+              bloc: counterCubitA,
               listener: (context, state) => statesA.add(state),
             ),
             BlocListener<CounterCubit, int>(
-              cubit: counterCubitB,
+              bloc: counterCubitB,
               listener: (context, state) => statesB.add(state),
             ),
           ],
@@ -95,11 +64,11 @@ void main() {
         MultiBlocListener(
           listeners: [
             BlocListener(
-              cubit: counterCubitA,
+              bloc: counterCubitA,
               listener: (BuildContext context, int state) => statesA.add(state),
             ),
             BlocListener(
-              cubit: counterCubitB,
+              bloc: counterCubitB,
               listener: (BuildContext context, int state) => statesB.add(state),
             ),
           ],
