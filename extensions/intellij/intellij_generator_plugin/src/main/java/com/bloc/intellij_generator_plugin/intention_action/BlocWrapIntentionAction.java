@@ -141,12 +141,23 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
             caretModel.removeCaret(initialCaret);
         }
 
-        // format file:
+        // reformat file:
         ApplicationManager.getApplication().runWriteAction(() -> {
             PsiDocumentManager.getInstance(project).commitDocument(document);
             final PsiFile currentFile = getCurrentFile(project, editor);
             if (currentFile != null) {
+                final String unformattedText = document.getText();
+                final int unformattedLineCount = document.getLineCount();
+
                 CodeStyleManager.getInstance(project).reformat(currentFile);
+
+                final int formattedLineCount = document.getLineCount();
+
+                // file was incorrectly formatted, revert formatting
+                if (formattedLineCount > unformattedLineCount + 3) {
+                    document.setText(unformattedText);
+                    PsiDocumentManager.getInstance(project).commitDocument(document);
+                }
             }
         });
     }
