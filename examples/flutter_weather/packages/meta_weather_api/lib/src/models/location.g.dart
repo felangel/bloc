@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: implicit_dynamic_parameter
+
 part of 'location.dart';
 
 // **************************************************************************
@@ -10,10 +12,10 @@ Location _$LocationFromJson(Map<String, dynamic> json) {
   return $checkedNew('Location', json, () {
     final val = Location(
       title: $checkedConvert(json, 'title', (v) => v as String),
-      locationType: $checkedConvert(json, 'location_type',
-          (v) => _$enumDecodeNullable(_$LocationTypeEnumMap, v)),
-      latLng: $checkedConvert(json, 'latt_long',
-          (v) => v == null ? null : LatLng.fromJson(v as String)),
+      locationType: $checkedConvert(
+          json, 'location_type', (v) => _$enumDecode(_$LocationTypeEnumMap, v)),
+      latLng: $checkedConvert(
+          json, 'latt_long', (v) => LatLng.fromJson(v as String)),
       woeid: $checkedConvert(json, 'woeid', (v) => v as int),
     );
     return val;
@@ -23,36 +25,30 @@ Location _$LocationFromJson(Map<String, dynamic> json) {
   });
 }
 
-T _$enumDecode<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
 }) {
   if (source == null) {
-    throw ArgumentError('A value must be provided. Supported values: '
-        '${enumValues.values.join(', ')}');
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
   }
 
-  final value = enumValues.entries
-      .singleWhere((e) => e.value == source, orElse: () => null)
-      ?.key;
-
-  if (value == null && unknownValue == null) {
-    throw ArgumentError('`$source` is not one of the supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-  return value ?? unknownValue;
-}
-
-T _$enumDecodeNullable<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
 }
 
 const _$LocationTypeEnumMap = {

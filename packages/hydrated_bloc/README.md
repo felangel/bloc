@@ -167,6 +167,10 @@ class MyHydratedStorage implements Storage {
 HydratedBloc.storage = MyHydratedStorage();
 ```
 
+## Dart Versions
+
+- Dart 2: >= 2.12
+
 ## Maintainers
 
 - [Felix Angelov](https://github.com/felangel)

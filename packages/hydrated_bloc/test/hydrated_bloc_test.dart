@@ -132,12 +132,17 @@ void main() {
   group('HydratedBloc', () {
     late Storage storage;
 
+    setUpAll(() {
+      registerFallbackValue(StackTrace.empty);
+      registerFallbackValue(const <String, String?>{});
+    });
+
     setUp(() {
       storage = MockStorage();
-      when(storage).calls(#read).thenReturn(<String, dynamic>{});
-      when(storage).calls(#write).thenAnswer((_) async {});
-      when(storage).calls(#delete).thenAnswer((_) async {});
-      when(storage).calls(#clear).thenAnswer((_) async {});
+      when<dynamic>(() => storage.read(any())).thenReturn(<String, dynamic>{});
+      when(() => storage.write(any(), any<dynamic>())).thenAnswer((_) async {});
+      when(() => storage.delete(any())).thenAnswer((_) async {});
+      when(() => storage.clear()).thenAnswer((_) async {});
       HydratedBloc.storage = storage;
     });
 
@@ -149,35 +154,31 @@ void main() {
 
     test('reads from storage once upon initialization', () {
       MyCallbackHydratedBloc();
-      verify(storage)
-          .called(#read)
-          .withArgs(positional: ['MyCallbackHydratedBloc']).once();
+      verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
     });
 
     test(
         'does not read from storage on subsequent state changes '
         'when cache value exists', () async {
-      when(storage).calls(#read).thenReturn({'value': 42});
+      when<dynamic>(() => storage.read(any())).thenReturn({'value': 42});
       final bloc = MyCallbackHydratedBloc();
       expect(bloc.state, 42);
       bloc.add(CounterEvent.increment);
-      await expectLater(bloc, emitsInOrder(const <int>[43]));
-      verify(storage)
-          .called(#read)
-          .withArgs(positional: ['MyCallbackHydratedBloc']).once();
+      await expectLater(bloc.stream, emitsInOrder(const <int>[43]));
+      verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
     });
 
     test(
         'does not deserialize state on subsequent state changes '
         'when cache value exists', () async {
       final fromJsonCalls = <dynamic>[];
-      when(storage).calls(#read).thenReturn({'value': 42});
+      when<dynamic>(() => storage.read(any())).thenReturn({'value': 42});
       final bloc = MyCallbackHydratedBloc(
         onFromJsonCalled: fromJsonCalls.add,
       );
       expect(bloc.state, 42);
       bloc.add(CounterEvent.increment);
-      await expectLater(bloc, emitsInOrder(const <int>[43]));
+      await expectLater(bloc.stream, emitsInOrder(const <int>[43]));
       expect(fromJsonCalls, [
         {'value': 42}
       ]);
@@ -186,25 +187,23 @@ void main() {
     test(
         'does not read from storage on subsequent state changes '
         'when cache is empty', () async {
-      when(storage).calls(#read).thenReturn(null);
+      when<dynamic>(() => storage.read(any())).thenReturn(null);
       final bloc = MyCallbackHydratedBloc();
       expect(bloc.state, 0);
       bloc.add(CounterEvent.increment);
-      await expectLater(bloc, emitsInOrder(const <int>[1]));
-      verify(storage)
-          .called(#read)
-          .withArgs(positional: ['MyCallbackHydratedBloc']).once();
+      await expectLater(bloc.stream, emitsInOrder(const <int>[1]));
+      verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
     });
 
     test('does not deserialize state when cache is empty', () async {
       final fromJsonCalls = <dynamic>[];
-      when(storage).calls(#read).thenReturn(null);
+      when<dynamic>(() => storage.read(any())).thenReturn(null);
       final bloc = MyCallbackHydratedBloc(
         onFromJsonCalled: fromJsonCalls.add,
       );
       expect(bloc.state, 0);
       bloc.add(CounterEvent.increment);
-      await expectLater(bloc, emitsInOrder(const <int>[1]));
+      await expectLater(bloc.stream, emitsInOrder(const <int>[1]));
       expect(fromJsonCalls, isEmpty);
     });
 
@@ -212,19 +211,17 @@ void main() {
         'does not read from storage on subsequent state changes '
         'when cache is malformed', () async {
       unawaited(runZonedGuarded(() async {
-        when(storage).calls(#read).thenReturn('{');
+        when<dynamic>(() => storage.read(any())).thenReturn('{');
         MyCallbackHydratedBloc().add(CounterEvent.increment);
       }, (_, __) {
-        verify(storage)
-            .called(#read)
-            .withArgs(positional: ['MyCallbackHydratedBloc']).once();
+        verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
       }));
     });
 
     test('does not deserialize state when cache is malformed', () async {
       final fromJsonCalls = <dynamic>[];
       unawaited(runZonedGuarded(() async {
-        when(storage).calls(#read).thenReturn('{');
+        when<dynamic>(() => storage.read(any())).thenReturn('{');
         MyCallbackHydratedBloc(
           onFromJsonCalled: fromJsonCalls.add,
         ).add(CounterEvent.increment);
@@ -235,49 +232,42 @@ void main() {
     });
 
     group('SingleHydratedBloc', () {
-      test('should call storage.write when onTransition is called', () {
-        const transition = Transition(
+      test('should call storage.write when onChange is called', () {
+        const change = Change(
           currentState: 0,
-          event: 0,
           nextState: 0,
         );
         const expected = <String, int>{'value': 0};
-        MyHydratedBloc().onTransition(transition);
-        verify(storage)
-            .called(#write)
-            .withArgs(positional: ['MyHydratedBloc', expected]).times(2);
+        MyHydratedBloc().onChange(change);
+        verify(() => storage.write('MyHydratedBloc', expected)).called(2);
       });
 
-      test('should call storage.write when onTransition is called with bloc id',
+      test('should call storage.write when onChange is called with bloc id',
           () {
         final bloc = MyHydratedBloc('A');
-        const transition = Transition(
+        const change = Change(
           currentState: 0,
-          event: 0,
           nextState: 0,
         );
         const expected = <String, int>{'value': 0};
-        bloc.onTransition(transition);
-        verify(storage)
-            .called(#write)
-            .withArgs(positional: ['MyHydratedBlocA', expected]).times(2);
+        bloc.onChange(change);
+        verify(() => storage.write('MyHydratedBlocA', expected)).called(2);
       });
 
       test('should call onError when storage.write throws', () {
         runZonedGuarded(() async {
           final expectedError = Exception('oops');
-          const transition = Transition(
+          const change = Change(
             currentState: 0,
-            event: 0,
             nextState: 0,
           );
           final bloc = MyHydratedBloc();
-          when(storage).calls(#write).thenThrow(expectedError);
-          bloc.onTransition(transition);
+          when(
+            () => storage.write(any(), any<dynamic>()),
+          ).thenThrow(expectedError);
+          bloc.onChange(change);
           await Future<void>.delayed(const Duration(milliseconds: 300));
-          verify(bloc)
-              .called(#onError)
-              .withArgs(positional: [expectedError, any]).times(2);
+          verify(() => bloc.onError(expectedError, any())).called(2);
         }, (error, _) {
           expect(
             (error as BlocUnhandledErrorException).error.toString(),
@@ -289,114 +279,102 @@ void main() {
 
       test('stores initial state when instantiated', () {
         MyHydratedBloc();
-        verify(storage).called(#write).withArgs(
-          positional: [
-            'MyHydratedBloc',
-            {'value': 0}
-          ],
-        ).once();
+        verify(
+          () => storage.write('MyHydratedBloc', {'value': 0}),
+        ).called(1);
       });
 
       test('initial state should return 0 when fromJson returns null', () {
-        when(storage).calls(#read).thenReturn(null);
+        when<dynamic>(() => storage.read(any())).thenReturn(null);
         expect(MyHydratedBloc().state, 0);
-        verify(storage)
-            .called(#read)
-            .withArgs(positional: ['MyHydratedBloc']).once();
+        verify<dynamic>(() => storage.read('MyHydratedBloc')).called(1);
       });
 
       test('initial state should return 101 when fromJson returns 101', () {
-        when(storage).calls(#read).thenReturn({'value': 101});
+        when<dynamic>(() => storage.read(any())).thenReturn({'value': 101});
         expect(MyHydratedBloc().state, 101);
-        verify(storage)
-            .called(#read)
-            .withArgs(positional: ['MyHydratedBloc']).once();
+        verify<dynamic>(() => storage.read('MyHydratedBloc')).called(1);
       });
 
       group('clear', () {
         test('calls delete on storage', () async {
           await MyHydratedBloc().clear();
-          verify(storage)
-              .called(#delete)
-              .withArgs(positional: ['MyHydratedBloc']).once();
+          verify(() => storage.delete('MyHydratedBloc')).called(1);
         });
       });
     });
 
     group('MultiHydratedBloc', () {
       test('initial state should return 0 when fromJson returns null', () {
-        when(storage).calls(#read).thenReturn(null);
+        when<dynamic>(() => storage.read(any())).thenReturn(null);
         expect(MyMultiHydratedBloc('A').state, 0);
-        verify(storage)
-            .called(#read)
-            .withArgs(positional: ['MyMultiHydratedBlocA']).once();
+        verify<dynamic>(() => storage.read('MyMultiHydratedBlocA')).called(1);
 
         expect(MyMultiHydratedBloc('B').state, 0);
-        verify(storage)
-            .called(#read)
-            .withArgs(positional: ['MyMultiHydratedBlocB']).once();
+        verify<dynamic>(() => storage.read('MyMultiHydratedBlocB')).called(1);
       });
 
       test('initial state should return 101/102 when fromJson returns 101/102',
           () {
-        when(storage).calls(#read).withArgs(
-          positional: ['MyMultiHydratedBlocA'],
+        when<dynamic>(
+          () => storage.read('MyMultiHydratedBlocA'),
         ).thenReturn({'value': 101});
         expect(MyMultiHydratedBloc('A').state, 101);
-        verify(storage)
-            .called(#read)
-            .withArgs(positional: ['MyMultiHydratedBlocA']).once();
+        verify<dynamic>(() => storage.read('MyMultiHydratedBlocA')).called(1);
 
-        when(storage).calls(#read).withArgs(
-          positional: ['MyMultiHydratedBlocB'],
+        when<dynamic>(
+          () => storage.read('MyMultiHydratedBlocB'),
         ).thenReturn({'value': 102});
         expect(MyMultiHydratedBloc('B').state, 102);
-        verify(storage)
-            .called(#read)
-            .withArgs(positional: ['MyMultiHydratedBlocB']).once();
+        verify<dynamic>(() => storage.read('MyMultiHydratedBlocB')).called(1);
       });
 
       group('clear', () {
         test('calls delete on storage', () async {
           await MyMultiHydratedBloc('A').clear();
-          verify(storage)
-              .called(#delete)
-              .withArgs(positional: ['MyMultiHydratedBlocA']).once();
-          verify(storage)
-              .called(#delete)
-              .withArgs(positional: ['MyMultiHydratedBlocB']).never();
+          verify(() => storage.delete('MyMultiHydratedBlocA')).called(1);
+          verifyNever(() => storage.delete('MyMultiHydratedBlocB'));
 
           await MyMultiHydratedBloc('B').clear();
-          verify(storage)
-              .called(#delete)
-              .withArgs(positional: ['MyMultiHydratedBlocB']).once();
+          verify(() => storage.delete('MyMultiHydratedBlocB')).called(1);
         });
       });
     });
 
     group('MyUuidHydratedBloc', () {
-      test('stores initial state when instantiated', () {
+      test('stores initial state when instantiated', () async {
+        when(
+          () => storage.write(any<String>(), any<Map<String, String?>>()),
+        ).thenAnswer((_) async {});
         MyUuidHydratedBloc();
-        verify(storage)
-            .called(#write)
-            .withArgs(positional: ['MyUuidHydratedBloc', any]).once();
+        await untilCalled(
+          () => storage.write(any<String>(), any<Map<String, String?>>()),
+        );
+        verify(
+          () => storage.write(
+            'MyUuidHydratedBloc',
+            any<Map<String, String?>>(),
+          ),
+        ).called(1);
       });
 
       test('correctly caches computed initial state', () async {
         dynamic cachedState;
-        when(storage).calls(#read).thenReturn(cachedState);
-        when(storage).calls(#write).thenReturn(Future<void>.value());
+        when<dynamic>(() => storage.read(any())).thenReturn(cachedState);
+        when(
+          () => storage.write(any(), any<dynamic>()),
+        ).thenAnswer((_) => Future<void>.value());
         MyUuidHydratedBloc();
-        final captured = verify(storage)
-            .called(#write)
-            .withArgs(positional: ['MyUuidHydratedBloc', captureAny]).captured;
-        cachedState = captured.last.first;
-        when(storage).calls(#read).thenReturn(cachedState);
+        final captured = verify(
+          () => storage.write('MyUuidHydratedBloc', captureAny<dynamic>()),
+        ).captured;
+        cachedState = captured.first;
+        when<dynamic>(() => storage.read(any())).thenReturn(cachedState);
         MyUuidHydratedBloc();
-        final secondCaptured = verify(storage)
-            .called(#write)
-            .withArgs(positional: ['MyUuidHydratedBloc', captureAny]).captured;
-        final dynamic initialStateB = secondCaptured.last.first;
+        final secondCaptured = verify(
+          () => storage.write('MyUuidHydratedBloc', captureAny<dynamic>()),
+        ).captured;
+        final dynamic initialStateB = secondCaptured.first;
 
         expect(initialStateB, cachedState);
       });
@@ -408,7 +386,7 @@ void main() {
           () async {
             final bloc = MyErrorThrowingBloc();
             final expectedStates = [0, 1, emitsDone];
-            unawaited(expectLater(bloc, emitsInOrder(expectedStates)));
+            unawaited(expectLater(bloc.stream, emitsInOrder(expectedStates)));
             bloc.add(Object);
             await bloc.close();
           },
@@ -420,7 +398,7 @@ void main() {
         Object? lastError;
         StackTrace? lastStackTrace;
         unawaited(runZonedGuarded(() async {
-          when(storage).calls(#read).thenReturn('invalid json');
+          when<dynamic>(() => storage.read(any())).thenReturn('invalid json');
           MyErrorThrowingBloc(
             onErrorCallback: (error, stackTrace) {
               lastError = error;
@@ -441,7 +419,7 @@ void main() {
       test('returns super.state when json decode fails', () async {
         MyErrorThrowingBloc? bloc;
         unawaited(runZonedGuarded(() async {
-          when(storage).calls(#read).thenReturn('invalid json');
+          when<dynamic>(() => storage.read(any())).thenReturn('invalid json');
           bloc = MyErrorThrowingBloc(superOnError: false);
         }, (_, __) {
           expect(bloc?.state, 0);
@@ -453,7 +431,7 @@ void main() {
         StackTrace? lastStackTrace;
         final exception = Exception('oops');
         unawaited(runZonedGuarded(() async {
-          when(storage).calls(#write).thenThrow(exception);
+          when(() => storage.write(any(), any<dynamic>())).thenThrow(exception);
           MyErrorThrowingBloc(
             onErrorCallback: (error, stackTrace) {
               lastError = error;

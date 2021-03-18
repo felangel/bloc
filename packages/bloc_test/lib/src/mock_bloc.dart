@@ -23,62 +23,13 @@ import 'package:mocktail/mocktail.dart';
 /// class MockCounterBloc extends MockBloc implements CounterBloc {}
 /// ```
 /// {@endtemplate}
-class MockBloc<E, S> extends Mock implements Bloc<E, S> {
-  @override
-  dynamic noSuchMethod(Invocation invocation) {
-    try {
-      final dynamic result = super.noSuchMethod(invocation);
-      return result;
-    } on NoSuchMethodError {
-      final dynamic result = _noSuchMethod(invocation);
-      if (result == _unimplemented) rethrow;
-      return result;
-    }
-  }
-
-  dynamic _noSuchMethod(Invocation invocation) {
-    switch (invocation.memberName) {
-      case #listen:
-        return Stream<S>.empty().listen(
-          invocation.positionalArguments.first as void Function(S data),
-          onError: invocation.namedArguments[#onError] as Function?,
-          onDone: invocation.namedArguments[#onDone] as void Function()?,
-          cancelOnError: invocation.namedArguments[#cancelOnError] as bool?,
-        );
-      case #isBroadcast:
-        return true;
-      case #mapEventToState:
-        return Stream<S>.empty();
-      case #add:
-      case #onEvent:
-        return (E event) {}(invocation.positionalArguments.first as E);
-      case #addError:
-        return (Object error, [StackTrace? stackTrace]) {}(
-          invocation.positionalArguments.first as Object,
-          invocation.positionalArguments.length > 1
-              ? invocation.positionalArguments[1] as StackTrace?
-              : null,
-        );
-      case #onError:
-        return (Object error, StackTrace stackTrace) {}(
-          invocation.positionalArguments.first as Object,
-          invocation.positionalArguments[1] as StackTrace,
-        );
-      case #onTransition:
-        return (Transition<E, S> _) {}(
-          invocation.positionalArguments.first as Transition<E, S>,
-        );
-      case #emit:
-        return (S state) {}(invocation.positionalArguments.first as S);
-      case #close:
-        return Future<void>.value();
-      default:
-        return _unimplemented;
-    }
+class MockBloc<E, S> extends _MockBlocBase<S> implements Bloc<E, S> {
+  /// {@macro mock_bloc}
+  MockBloc() {
+    when(() => mapEventToState(any())).thenAnswer((_) => Stream<S>.empty());
+    when(() => add(any())).thenReturn(null);
   }
 }
-
-const _unimplemented = Object();
 
 /// {@template mock_cubit}
 /// Extend or mixin this class to mark the implementation as a [MockCubit].
@@ -102,4 +53,30 @@ const _unimplemented = Object();
 /// class MockCounterCubit extends MockBloc implements CounterCubit {}
 /// ```
 /// {@endtemplate}
-class MockCubit<S> extends MockBloc<Null, S> implements Cubit<S> {}
+class MockCubit<S> extends _MockBlocBase<S> implements Cubit<S> {}
+
+class _MockBlocBase<S> extends Mock implements BlocBase<S> {
+  _MockBlocBase() {
+    registerFallbackValue<void Function(S)>((S _) {});
+    registerFallbackValue<void Function()>(() {});
+    when(
+      // ignore: deprecated_member_use
+      () => listen(
+        any(),
+        onDone: any(named: 'onDone'),
+        onError: any(named: 'onError'),
+        cancelOnError: any(named: 'cancelOnError'),
+      ),
+    ).thenAnswer((invocation) {
+      return Stream<S>.empty().listen(
+        invocation.positionalArguments.first as void Function(S data),
+        onError: invocation.namedArguments[#onError] as Function?,
+        onDone: invocation.namedArguments[#onDone] as void Function()?,
+        cancelOnError: invocation.namedArguments[#cancelOnError] as bool?,
+      );
+    });
+    when(() => stream).thenAnswer((_) => Stream<S>.empty());
+    when(close).thenAnswer((_) => Future<void>.value());
+    when(() => emit(any())).thenReturn(null);
+  }
+}

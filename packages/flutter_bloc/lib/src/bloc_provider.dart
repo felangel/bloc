@@ -34,7 +34,7 @@ mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 /// ```
 ///
 /// {@endtemplate}
-class BlocProvider<T extends Bloc<Object?, Object?>>
+class BlocProvider<T extends BlocBase<Object?>>
     extends SingleChildStatelessWidget with BlocProviderSingleChildWidget {
   /// {@macro bloc_provider}
   BlocProvider({
@@ -92,7 +92,7 @@ class BlocProvider<T extends Bloc<Object?, Object?>>
   /// ```dart
   /// BlocProvider.of<BlocA>(context);
   /// ```
-  static T of<T extends Bloc<Object?, Object?>>(
+  static T of<T extends BlocBase<Object?>>(
     BuildContext context, {
     bool listen = false,
   }) {
@@ -102,7 +102,7 @@ class BlocProvider<T extends Bloc<Object?, Object?>>
       if (e.valueType != T) rethrow;
       throw FlutterError(
         '''
-        BlocProvider.of() called with a context that does not contain a Bloc of type $T.
+        BlocProvider.of() called with a context that does not contain a $T.
         No ancestor could be found starting from the context that was passed to BlocProvider.of<$T>().
 
         This can happen if the context you used comes from a widget above the BlocProvider.
@@ -133,10 +133,10 @@ class BlocProvider<T extends Bloc<Object?, Object?>>
   }
 
   static VoidCallback _startListening(
-    InheritedContext<Bloc> e,
-    Bloc value,
+    InheritedContext<BlocBase> e,
+    BlocBase value,
   ) {
-    final subscription = value.listen(
+    final subscription = value.stream.listen(
       (dynamic _) => e.markNeedsNotifyDependents(),
     );
     return subscription.cancel;

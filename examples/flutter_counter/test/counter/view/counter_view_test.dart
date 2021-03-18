@@ -18,13 +18,9 @@ void main() {
     counterCubit = MockCounterCubit();
   });
 
-  tearDown(() {
-    verifyMocks(counterCubit);
-  });
-
   group('CounterView', () {
     testWidgets('renders current CounterCubit state', (tester) async {
-      when(counterCubit).calls(#state).thenReturn(42);
+      when(() => counterCubit.state).thenReturn(42);
       await tester.pumpWidget(
         MaterialApp(
           home: BlocProvider.value(
@@ -37,8 +33,8 @@ void main() {
     });
 
     testWidgets('tapping increment button invokes increment', (tester) async {
-      when(counterCubit).calls(#state).thenReturn(0);
-      when(counterCubit).calls(#increment).thenReturn(() {});
+      when(() => counterCubit.state).thenReturn(0);
+      when(() => counterCubit.increment()).thenReturn(() {});
       await tester.pumpWidget(
         MaterialApp(
           home: BlocProvider.value(
@@ -48,12 +44,12 @@ void main() {
         ),
       );
       await tester.tap(find.byKey(_incrementButtonKey));
-      verify(counterCubit).called(#increment).once();
+      verify(() => counterCubit.increment()).called(1);
     });
 
     testWidgets('tapping decrement button invokes decrement', (tester) async {
-      when(counterCubit).calls(#state).thenReturn(0);
-      when(counterCubit).calls(#decrement).thenReturn(() {});
+      when(() => counterCubit.state).thenReturn(0);
+      when(() => counterCubit.decrement()).thenReturn(() {});
       await tester.pumpWidget(
         MaterialApp(
           home: BlocProvider.value(
@@ -65,7 +61,7 @@ void main() {
       final decrementFinder = find.byKey(_decrementButtonKey);
       await tester.ensureVisible(decrementFinder);
       await tester.tap(decrementFinder);
-      verify(counterCubit).called(#decrement).once();
+      verify(() => counterCubit.decrement()).called(1);
     });
   });
 }
