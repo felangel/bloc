@@ -21,8 +21,6 @@ import java.util.Arrays;
 
 public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction implements IntentionAction {
 
-    SnippetSelection wrapSelection;
-
     /**
      * If this action is applicable, returns the text to be shown in the list of intention actions available.
      */
@@ -65,20 +63,12 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
             return false;
         }
 
-        final SnippetSelection selection = Utils.getSelection(editor);
-        if (!selection.isValid || selection.offsetL >= selection.offsetR) {
-            wrapSelection = null;
-            return false;
-        } else {
-            wrapSelection = selection;
-        }
-
         final IntentionAction[] quickIntentionActions = Arrays.stream(IntentionManager.getInstance().getAvailableIntentionActions()).limit(10).toArray(IntentionAction[]::new);
         for (final IntentionAction action : quickIntentionActions) {
             String actionText = null;
             try {
                 actionText = action.getText();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
             // should display when Wrap with Column from the Flutter plugin is available
             if (actionText != null && actionText.contains("Wrap with Column")) {
@@ -101,10 +91,6 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
     public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element)
             throws IncorrectOperationException {
 
-        if (wrapSelection == null) {
-            return;
-        }
-
         final DefaultActionGroup actionGroup = new DefaultActionGroup();
         for (SnippetType snippetType : SnippetType.values()) {
             actionGroup.add(new AnAction(snippetType.name()) {
@@ -126,7 +112,11 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
     private void invokeSnippetAction(@NotNull Project project, Editor editor, SnippetType snippetType) {
         final Document document = editor.getDocument();
 
-        final SnippetSelection selection = wrapSelection;
+        final SnippetSelection selection = Utils.getSelection(editor);
+        if (!selection.isValid || selection.offsetL >= selection.offsetR) {
+            return;
+        }
+
         final String selectedText = document.getText(TextRange.create(selection.offsetL, selection.offsetR));
         final String replaceWith = Snippets.getSnippet(snippetType, selectedText);
 
