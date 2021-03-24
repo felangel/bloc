@@ -173,6 +173,22 @@
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
+    <template name="importB"
+              value="import 'package:bloc/bloc.dart';"
+              description="Import bloc" toReformat="false" toShortenFQNames="true">
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
+    <template name="importFB"
+              value="import 'package:flutter_bloc/flutter_bloc.dart';"
+              description="Import flutter_bloc" toReformat="false" toShortenFQNames="true">
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
 
     <!--        FREEZED        -->
     <template name="fstate" value="const factory $CLASS_NAME$.$stateName$() = _$stateName$;"
