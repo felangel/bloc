@@ -22,6 +22,8 @@ Simply right click on the File Project view, go to `New -> Bloc Class`, give it 
 
 | Shortcut            | Description                                     |
 | ------------------- | ----------------------------------------------- |
+| `importB`           | Imports `bloc`                                  |
+| `importFB`          | Imports `flutter_bloc`                          |
 | `bloc`              | Creates a bloc class                            |
 | `cubit`             | Creates a cubit class                           |
 | `blocobserver`      | Creates a `BlocObserver` class                  |
