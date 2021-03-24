@@ -79,5 +79,9 @@
       "}"
     ],
     "description": "Subject + Noun (optional) + Verb (event)"
+  },
+  "Import bloc": {
+    "prefix": "importB",
+    "body": "import 'package:bloc/bloc.dart';"
   }
 }

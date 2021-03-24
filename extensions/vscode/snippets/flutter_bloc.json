@@ -122,5 +122,9 @@
   "context.watch()": {
     "prefix": "watch",
     "body": "context.watch<${1:Subject}${2|Bloc,Cubit,Repository|}>()"
+  },
+  "Import flutter_bloc": {
+    "prefix": "importFB",
+    "body": "import 'package:flutter_bloc/flutter_bloc.dart';"
   }
 }
