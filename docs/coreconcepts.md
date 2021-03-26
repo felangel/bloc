@@ -380,7 +380,7 @@ In the above snippet, we are subscribing to the `CounterBloc` and calling print 
 
 ### Observing a Bloc
 
-Since all `Bloc` extends `Cubit` (meaning all blocs are also cubits), we can observe all state changes for a `Bloc` using `onChange`.
+Since `Bloc` extends `Cubit` (meaning all blocs are also cubits), we can observe all state changes for a `Bloc` using `onChange`.
 
 ```dart
 enum CounterEvent { increment }
