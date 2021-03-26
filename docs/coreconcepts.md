@@ -38,7 +38,7 @@ Now that we have a basic understanding of how `Streams` work in Dart we're ready
 
 ## Cubit
 
-> A `Cubit` is class which extends `BlocBase` and can be extended to manage any type of state.
+> A `Cubit` is a class which extends `BlocBase` and can be extended to manage any type of state.
 
 ![Cubit Architecture](assets/cubit_architecture_full.png)
 
