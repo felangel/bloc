@@ -3,14 +3,14 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_login/login/login.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:formz/formz.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockAuthenticationRepository extends Mock
     implements AuthenticationRepository {}
 
 void main() {
-  LoginBloc loginBloc;
-  MockAuthenticationRepository authenticationRepository;
+  late LoginBloc loginBloc;
+  late AuthenticationRepository authenticationRepository;
 
   setUp(() {
     authenticationRepository = MockAuthenticationRepository();
@@ -18,11 +18,6 @@ void main() {
   });
 
   group('LoginBloc', () {
-    test('throws AssertionError when authenticationRepository is null', () {
-      expect(() => LoginBloc(authenticationRepository: null),
-          throwsAssertionError);
-    });
-
     test('initial state is LoginState', () {
       expect(loginBloc.state, const LoginState());
     });
@@ -32,10 +27,12 @@ void main() {
         'emits [submissionInProgress, submissionSuccess] '
         'when login succeeds',
         build: () {
-          when(authenticationRepository.logIn(
-            username: 'username',
-            password: 'password',
-          )).thenAnswer((_) => Future.value('user'));
+          when(
+            () => authenticationRepository.logIn(
+              username: 'username',
+              password: 'password',
+            ),
+          ).thenAnswer((_) => Future.value('user'));
           return loginBloc;
         },
         act: (bloc) {
@@ -44,7 +41,7 @@ void main() {
             ..add(const LoginPasswordChanged('password'))
             ..add(const LoginSubmitted());
         },
-        expect: const <LoginState>[
+        expect: () => const <LoginState>[
           LoginState(
             username: Username.dirty('username'),
             status: FormzStatus.invalid,
@@ -70,10 +67,10 @@ void main() {
       blocTest<LoginBloc, LoginState>(
         'emits [LoginInProgress, LoginFailure] when logIn fails',
         build: () {
-          when(authenticationRepository.logIn(
-            username: 'username',
-            password: 'password',
-          )).thenThrow(Exception('oops'));
+          when(() => authenticationRepository.logIn(
+                username: 'username',
+                password: 'password',
+              )).thenThrow(Exception('oops'));
           return loginBloc;
         },
         act: (bloc) {
@@ -82,7 +79,7 @@ void main() {
             ..add(const LoginPasswordChanged('password'))
             ..add(const LoginSubmitted());
         },
-        expect: const <LoginState>[
+        expect: () => const <LoginState>[
           LoginState(
             username: Username.dirty('username'),
             status: FormzStatus.invalid,

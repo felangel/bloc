@@ -8,7 +8,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   StatsBloc({TodosBloc todosBloc})
       : assert(todosBloc != null),
         super(StatsLoading()) {
-    _todosSubscription = todosBloc.listen((state) {
+    _todosSubscription = todosBloc.stream.listen((state) {
       if (state is TodosLoaded) {
         add(UpdateStats(state.todos));
       }

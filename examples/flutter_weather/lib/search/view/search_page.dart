@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
-  SearchPage._({Key key}) : super(key: key);
+  SearchPage._({Key? key}) : super(key: key);
 
   static Route<String> route() {
     return MaterialPageRoute(builder: (_) => SearchPage._());

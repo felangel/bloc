@@ -11,7 +11,7 @@ import 'package:mocktail/mocktail.dart';
 /// in sync with the emitted state.
 ///
 /// Return a canned state stream of `[0, 1, 2, 3]`
-/// when `counterBloc.listen` is called.
+/// when `counterBloc.stream.listen` is called.
 ///
 /// ```dart
 /// whenListen(counterBloc, Stream.fromIterable([0, 1, 2, 3]));
@@ -21,7 +21,7 @@ import 'package:mocktail/mocktail.dart';
 ///
 /// ```dart
 /// await expectLater(
-///   counterBloc,
+///   counterBloc.stream,
 ///   emitsInOrder(
 ///     <Matcher>[equals(0), equals(1), equals(2), equals(3), emitsDone],
 ///   )
@@ -41,8 +41,8 @@ import 'package:mocktail/mocktail.dart';
 ///
 /// expect(counterBloc.state, equals(0));
 /// ```
-void whenListen<Event, State>(
-  Bloc<Event, State> bloc,
+void whenListen<State>(
+  BlocBase<State> bloc,
   Stream<State> stream, {
   State? initialState,
 }) {
@@ -53,6 +53,7 @@ void whenListen<Event, State>(
   }
 
   when(
+    // ignore: deprecated_member_use
     () => bloc.listen(
       any(),
       onDone: any(named: 'onDone'),
@@ -70,4 +71,11 @@ void whenListen<Event, State>(
       cancelOnError: invocation.namedArguments[#cancelOnError] as bool?,
     );
   });
+
+  when(() => bloc.stream).thenAnswer(
+    (_) => broadcastStream.map((state) {
+      when(() => bloc.state).thenReturn(state);
+      return state;
+    }),
+  );
 }

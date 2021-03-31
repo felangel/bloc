@@ -23,31 +23,11 @@ import 'package:mocktail/mocktail.dart';
 /// class MockCounterBloc extends MockBloc implements CounterBloc {}
 /// ```
 /// {@endtemplate}
-class MockBloc<E, S> extends Mock implements Bloc<E, S> {
+class MockBloc<E, S> extends _MockBlocBase<S> implements Bloc<E, S> {
   /// {@macro mock_bloc}
   MockBloc() {
-    registerFallbackValue<void Function(S)>((S _) {});
-    registerFallbackValue<void Function()>(() {});
-    when(
-      () => listen(
-        any(),
-        onDone: any(named: 'onDone'),
-        onError: any(named: 'onError'),
-        cancelOnError: any(named: 'cancelOnError'),
-      ),
-    ).thenAnswer((invocation) {
-      return Stream<S>.empty().listen(
-        invocation.positionalArguments.first as void Function(S data),
-        onError: invocation.namedArguments[#onError] as Function?,
-        onDone: invocation.namedArguments[#onDone] as void Function()?,
-        cancelOnError: invocation.namedArguments[#cancelOnError] as bool?,
-      );
-    });
-    when(() => isBroadcast).thenReturn(true);
-    when(close).thenAnswer((_) => Future<void>.value());
     when(() => mapEventToState(any())).thenAnswer((_) => Stream<S>.empty());
     when(() => add(any())).thenReturn(null);
-    when(() => emit(any())).thenReturn(null);
   }
 }
 
@@ -73,4 +53,30 @@ class MockBloc<E, S> extends Mock implements Bloc<E, S> {
 /// class MockCounterCubit extends MockBloc implements CounterCubit {}
 /// ```
 /// {@endtemplate}
-class MockCubit<S> extends MockBloc<Null, S> implements Cubit<S> {}
+class MockCubit<S> extends _MockBlocBase<S> implements Cubit<S> {}
+
+class _MockBlocBase<S> extends Mock implements BlocBase<S> {
+  _MockBlocBase() {
+    registerFallbackValue<void Function(S)>((S _) {});
+    registerFallbackValue<void Function()>(() {});
+    when(
+      // ignore: deprecated_member_use
+      () => listen(
+        any(),
+        onDone: any(named: 'onDone'),
+        onError: any(named: 'onError'),
+        cancelOnError: any(named: 'cancelOnError'),
+      ),
+    ).thenAnswer((invocation) {
+      return Stream<S>.empty().listen(
+        invocation.positionalArguments.first as void Function(S data),
+        onError: invocation.namedArguments[#onError] as Function?,
+        onDone: invocation.namedArguments[#onDone] as void Function()?,
+        cancelOnError: invocation.namedArguments[#cancelOnError] as bool?,
+      );
+    });
+    when(() => stream).thenAnswer((_) => Stream<S>.empty());
+    when(close).thenAnswer((_) => Future<void>.value());
+    when(() => emit(any())).thenReturn(null);
+  }
+}

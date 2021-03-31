@@ -18,7 +18,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
                 )
               : FilteredTodosLoadInProgress(),
         ) {
-    todosSubscription = todosBloc.listen((state) {
+    todosSubscription = todosBloc.stream.listen((state) {
       if (state is TodosLoadSuccess) {
         add(TodosUpdated((todosBloc.state as TodosLoadSuccess).todos));
       }

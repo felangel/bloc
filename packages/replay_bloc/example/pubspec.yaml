@@ -14,5 +14,9 @@ dependencies:
   replay_bloc:
     path: ../
 
+dependency_overrides:
+  bloc:
+    path: ../../bloc
+
 flutter:
   uses-material-design: true

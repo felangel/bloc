@@ -71,7 +71,7 @@ whenListen(
 expect(counterBloc.state, equals(0));
 
 // Assert that the stubbed stream is emitted.
-await expectLater(counterBloc, emitsInOrder(<int>[0, 1, 2, 3])))
+await expectLater(counterBloc.stream, emitsInOrder(<int>[0, 1, 2, 3])))
 
 // Assert that the current state is in sync with the stubbed stream.
 expect(counterBloc.state, equals(3));
@@ -160,7 +160,7 @@ blocTest(
   act: (bloc) => bloc.add(CounterEvent.increment),
   expect: () => [1],
   verify: (_) {
-    verify(repository.someMethod(any)).called(1);
+    verify(() => repository.someMethod(any())).called(1);
   }
 );
 ```
@@ -189,7 +189,7 @@ blocTest(
 
 ## Dart Versions
 
-- Dart 2: >= 2.12.0-0
+- Dart 2: >= 2.12
 
 ## Maintainers
 
