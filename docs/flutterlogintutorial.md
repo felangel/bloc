@@ -251,7 +251,7 @@ lib
 
 ### Login Models
 
-We are using [package:formz](https://pub.dev/packages/formz) to create reusable and standard models the the `username` and `password`.
+We are using [package:formz](https://pub.dev/packages/formz) to create reusable and standard models for the `username` and `password`.
 
 #### Username
 
@@ -313,7 +313,7 @@ Next let's take a look at the `LoginPage` and `LoginForm`.
 
 [login_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/view/login_page.dart ':include')
 
-?> **Note**: `context.read` is used to lookup the instance of `AuthenticationRepository` via the `BuildContext`.
+?> **Note**: `RepositoryProvider.of<AuthenticationRepository>(context)` is used to lookup the instance of `AuthenticationRepository` via the `BuildContext`.
 
 ### Login Form
 

@@ -11,6 +11,7 @@
 
     <change-notes><![CDATA[
         <ul>
+          <li>v2.1.0 - Live Template Support</li>
           <li>v2.0.0 - Support for Bloc v6.0.0</li>
           <li>v1.8.0 - Support for Cubit</li>
           <li>v1.7.1 - Fix handle trailing _bloc in name</li>
