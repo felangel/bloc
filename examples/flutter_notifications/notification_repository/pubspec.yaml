@@ -1,0 +1,17 @@
+name: notification_repository
+description: repository to handle displaying notificaiton and exposing a stream of notificaitons
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_messaging: ^9.1.0
+  flutter_local_notifications: ^5.0.0
+  firebase_core: ^1.0.2
+  rxdart: ^0.26.0
+  equatable: ^2.0.0
+  meta:
