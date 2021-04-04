@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'models/models.dart';
 
@@ -65,12 +67,24 @@ class AuthenticationRepository {
   /// Throws a [LogInWithGoogleFailure] if an exception occurs.
   Future<void> logInWithGoogle() async {
     try {
-      final googleUser = await _googleSignIn.signIn();
-      final googleAuth = await googleUser.authentication;
-      final credential = firebase_auth.GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+      firebase_auth.AuthCredential credential;
+
+      if (kIsWeb) {
+        final googleProvider = firebase_auth.GoogleAuthProvider();
+
+        var userCredential =
+            await _firebaseAuth.signInWithPopup(googleProvider);
+
+        credential = userCredential.credential;
+      } else {
+        final googleUser = await _googleSignIn.signIn();
+        final googleAuth = await googleUser.authentication;
+        credential = firebase_auth.GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+      }
+
       await _firebaseAuth.signInWithCredential(credential);
     } on Exception {
       throw LogInWithGoogleFailure();
@@ -103,7 +117,6 @@ class AuthenticationRepository {
     try {
       await Future.wait([
         _firebaseAuth.signOut(),
-        _googleSignIn.signOut(),
       ]);
     } on Exception {
       throw LogOutFailure();
