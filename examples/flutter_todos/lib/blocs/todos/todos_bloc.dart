@@ -62,7 +62,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     if (state is TodosLoadSuccess) {
       final updatedTodos = (state as TodosLoadSuccess)
           .todos
-          .where((todo) => todo.id != event.todo.id)
+          .where((todo) => todo.id == event.todo.id)
           .toList();
       yield TodosLoadSuccess(updatedTodos);
       _saveTodos(updatedTodos);
