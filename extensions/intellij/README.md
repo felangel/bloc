@@ -20,8 +20,8 @@ Simply right click on the File Project view, go to `New -> Bloc Class`, give it 
 Wrapping a widget is also possible with `Alt + ENTER` shortcut.
 If you wish to disable this quick code action `(Bloc) Wrap with` you can do it so by going to 
 `Settings - Editor - Intentions - Bloc`.
-// TODO: update this picture
-![intention_settings](https://user-images.githubusercontent.com/67197047/108888083-518f5d80-760b-11eb-9e5b-b11fc140a033.png)
+
+![intention_settings](https://github.com/felangel/bloc/raw/master/extensions/intellij/assets/intention_settings.png)
 
 ## Snippets
 

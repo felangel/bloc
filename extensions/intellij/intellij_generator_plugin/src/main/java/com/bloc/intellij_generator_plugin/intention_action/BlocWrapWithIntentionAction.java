@@ -3,7 +3,6 @@ package com.bloc.intellij_generator_plugin.intention_action;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
-import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.*;
@@ -19,16 +18,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction implements IntentionAction {
-
+public abstract class BlocWrapWithIntentionAction extends PsiElementBaseIntentionAction implements IntentionAction {
+    final SnippetType snippetType;
     SnippetSelection snippetSelection;
 
-    /**
-     * If this action is applicable, returns the text to be shown in the list of intention actions available.
-     */
-    @NotNull
-    public String getText() {
-        return "(Bloc) Wrap widget with ...";
+    public BlocWrapWithIntentionAction(SnippetType snippetType) {
+        this.snippetType = snippetType;
     }
 
     /**
@@ -40,7 +35,7 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
      */
     @NotNull
     public String getFamilyName() {
-        return "Wrap widget";
+        return getText();
     }
 
     /**
@@ -65,24 +60,15 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
             return false;
         }
 
-        final IntentionAction[] quickIntentionActions = Arrays.stream(IntentionManager.getInstance().getAvailableIntentionActions()).limit(10).toArray(IntentionAction[]::new);
-        for (final IntentionAction action : quickIntentionActions) {
-            String actionText = null;
-            try {
-                actionText = action.getText();
-            } catch (Exception ignored) {
+        final IntentionAction[] quickIntentionActions = Arrays.stream(IntentionManager.getInstance().getAvailableIntentionActions()).toArray(IntentionAction[]::new);
+        if (Arrays.stream(quickIntentionActions).anyMatch(intentionAction -> intentionAction.getText().contains("Wrap with"))) {
+            snippetSelection = Utils.getSelection(editor);
+            if (!snippetSelection.isValid()) {
+                snippetSelection = null;
+                return false;
             }
-            // should display when Wrap with Column from the Flutter plugin is available
-            if (actionText != null && actionText.contains("Wrap with Column")) {
-                snippetSelection = Utils.getSelection(editor);
-                if (!snippetSelection.isValid()) {
-                    snippetSelection = null;
-                    return false;
-                }
-                return true;
-            }
+            return true;
         }
-
         return false;
     }
 
@@ -97,26 +83,11 @@ public class BlocWrapIntentionAction extends PsiElementBaseIntentionAction imple
      */
     public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element)
             throws IncorrectOperationException {
-
-        final DefaultActionGroup actionGroup = new DefaultActionGroup();
-        for (SnippetType snippetType : SnippetType.values()) {
-            actionGroup.add(new AnAction(snippetType.name()) {
-                @Override
-                public void actionPerformed(AnActionEvent e) {
-                    Runnable runnable = () -> invokeSnippetAction(project, editor, snippetType);
-                    WriteCommandAction.runWriteCommandAction(project, runnable);
-                }
-            });
-        }
-        final LogicalPosition logicalPosition = editor.getCaretModel().getLogicalPosition();
-        final int x = editor.logicalPositionToXY(logicalPosition).x + 50;
-        final int y = editor.logicalPositionToXY(logicalPosition).y;
-
-        final ActionPopupMenu popupMenu = ActionManager.getInstance().createActionPopupMenu(ActionPlaces.UNKNOWN, actionGroup);
-        popupMenu.getComponent().show(editor.getContentComponent(), x, y);
+        Runnable runnable = () -> invokeSnippetAction(project, editor, snippetType);
+        WriteCommandAction.runWriteCommandAction(project, runnable);
     }
 
-    private void invokeSnippetAction(@NotNull Project project, Editor editor, SnippetType snippetType) {
+    protected void invokeSnippetAction(@NotNull Project project, Editor editor, SnippetType snippetType) {
         final Document document = editor.getDocument();
 
         final SnippetSelection selection = snippetSelection;

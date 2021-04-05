@@ -11,6 +11,7 @@
 
     <change-notes><![CDATA[
         <ul>
+          <li>v2.2.0 - Wrap With Quick Action Support</li>
           <li>v2.1.0 - Live Template Support</li>
           <li>v2.0.0 - Support for Bloc v6.0.0</li>
           <li>v1.8.0 - Support for Cubit</li>
@@ -65,7 +66,23 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <intentionAction>
-            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapIntentionAction</className>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocProviderIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocBuilderIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocListenerIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocConsumerIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithRepositoryProviderIntentionAction</className>
             <category>Bloc</category>
         </intentionAction>
     </extensions>
