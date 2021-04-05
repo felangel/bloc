@@ -1,0 +1,17 @@
+class CounterScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: BlocConsumer<SubjectBloc, SubjectState>(
+          listener: (context, state) {
+            // TODO: implement listener
+          },
+          builder: (context, state) {
+            return Text('Example');
+          },
+        ),
+      ),
+    );
+  }
+}

@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.bloc'
-version '2.1.0'
+version '2.2.0'
 
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
@@ -38,19 +38,5 @@ compileTestKotlin {
 }
 
 patchPluginXml {
-    changeNotes """
-      * v1.0 - Initial release
-      * v1.1 - Removed currentState from mapEventToState method
-      * v1.2 - Support for IntelliJ 2019
-      * v1.3 - Bug Fixes for IntelliJ and Android Studio Compatibility
-      * v1.4 - Bug Fixes for Bloc Generator Name (Case Sensitivity)
-      * v1.5 - Fix Overwrite Issue and Updates for implicit-dynamic support with Equatable
-      * v1.5.1 - Minor dependency updates
-      * v1.6.0 - Support for Equatable v0.6.0
-      * v1.7.0 - Support for Equatable v1.0.0 & Bloc v5.0.0
-      * v1.7.1 - Fix handle trailing _bloc in name
-      * v1.8.0 - Support for Cubit
-      * v2.0.0 - Support for Bloc v6.0.0
-      * v2.1.0 - Live Template Support
-      """
+
 }
