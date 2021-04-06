@@ -12,7 +12,7 @@ In the upcoming sections, we're going to discuss each of them in detail as well 
 
 > A stream is a sequence of asynchronous data.
 
-In order to use the bloc library, it is criticial to have a basic understanding of `Streams` and how they work.
+In order to use the bloc library, it is critical to have a basic understanding of `Streams` and how they work.
 
 > If you're unfamiliar with `Streams` just think of a pipe with water flowing through it. The pipe is the `Stream` and the water is the asynchronous data.
 
