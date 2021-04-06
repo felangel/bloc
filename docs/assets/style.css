@@ -11,6 +11,10 @@ section.cover {
   padding: 2em 0.5em;
 }
 
+section.cover .cover-main {
+  z-index: 0;
+}
+
 section.cover .cover-main > .buttons a {
   border-radius: 2rem;
   border: 1px solid var(--theme-color, #42b983);
