@@ -46,3 +46,11 @@ section.cover blockquote > .buttons > a {
 section.cover blockquote > .buttons > a:hover {
   color: var(--theme-color, #42b983);
 }
+
+#TOPBANNER {
+  height: 2.5rem;
+}
+
+#TOPBANNER p {
+  padding: 1.25rem 0;
+}
