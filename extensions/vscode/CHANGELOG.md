@@ -1,3 +1,7 @@
+# 5.6.1
+
+- feat: add snippets for `bloc_test`
+
 # 5.6.0
 
 - feat: freezed classes no longer require [abstract](https://pub.dev/packages/freezed#the-abstract-keyword) keyword when using freezed >= 0.14.0
