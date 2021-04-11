@@ -80,8 +80,8 @@
     ],
     "description": "Subject + Noun (optional) + Verb (event)"
   },
-  "Import bloc": {
-    "prefix": "importB",
+  "Import package:bloc": {
+    "prefix": "importbloc",
     "body": "import 'package:bloc/bloc.dart';"
   }
 }

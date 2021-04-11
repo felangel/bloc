@@ -22,8 +22,8 @@ Simply right click on the File Project view, go to `New -> Bloc Class`, give it 
 
 | Shortcut            | Description                                     |
 | ------------------- | ----------------------------------------------- |
-| `importB`           | Imports `bloc`                                  |
-| `importFB`          | Imports `flutter_bloc`                          |
+| `importbloc`        | Imports `package:bloc`                          |
+| `importflutterbloc` | Imports `package:flutter_bloc`                  |
 | `bloc`              | Creates a bloc class                            |
 | `cubit`             | Creates a cubit class                           |
 | `blocobserver`      | Creates a `BlocObserver` class                  |
@@ -51,8 +51,7 @@ Simply right click on the File Project view, go to `New -> Bloc Class`, give it 
 | `feventwhen` | Creates a map event to state function with freeze.when function |
 | `feventmap`  | Creates a map event to state function with freeze.map function  |
 | `fstate`     | Creates a sub state                                             |
-| `fevent`     | Creates a sub event     
-
+| `fevent`     | Creates a sub event                                             |
 
 ## Deployment
 
