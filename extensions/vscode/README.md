@@ -56,6 +56,8 @@ You can activate the commands by launching the command palette (View -> Command 
 
 | Shortcut            | Description                                |
 | ------------------- | ------------------------------------------ |
+| `importbloc`        | Imports `package:bloc`                     |
+| `importflutterbloc` | Imports `package:flutter_bloc`             |
 | `bloc`              | Creates a bloc class                       |
 | `cubit`             | Creates a cubit class                      |
 | `blocobserver`      | Creates a `BlocObserver` class             |

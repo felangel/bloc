@@ -29,6 +29,8 @@ If you wish to disable this quick code action `(Bloc) Wrap with` you can do it s
 
 | Shortcut            | Description                                     |
 | ------------------- | ----------------------------------------------- |
+| `importbloc`        | Imports `package:bloc`                          |
+| `importflutterbloc` | Imports `package:flutter_bloc`                  |
 | `bloc`              | Creates a bloc class                            |
 | `cubit`             | Creates a cubit class                           |
 | `blocobserver`      | Creates a `BlocObserver` class                  |
@@ -56,8 +58,7 @@ If you wish to disable this quick code action `(Bloc) Wrap with` you can do it s
 | `feventwhen` | Creates a map event to state function with freeze.when function |
 | `feventmap`  | Creates a map event to state function with freeze.map function  |
 | `fstate`     | Creates a sub state                                             |
-| `fevent`     | Creates a sub event     
-
+| `fevent`     | Creates a sub event                                             |
 
 ## Deployment
 
