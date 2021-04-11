@@ -9,8 +9,8 @@ import 'package:flutter_firebase_login/theme.dart';
 
 class App extends StatelessWidget {
   const App({
-    Key key,
-    @required this.authenticationRepository,
+    Key? key,
+    required this.authenticationRepository,
   })  : assert(authenticationRepository != null),
         super(key: key);
 
@@ -38,7 +38,7 @@ class AppView extends StatefulWidget {
 class _AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
-  NavigatorState get _navigator => _navigatorKey.currentState;
+  NavigatorState? get _navigator => _navigatorKey.currentState;
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +50,13 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-                _navigator.pushAndRemoveUntil<void>(
+                _navigator!.pushAndRemoveUntil<void>(
                   HomePage.route(),
                   (route) => false,
                 );
                 break;
               case AuthenticationStatus.unauthenticated:
-                _navigator.pushAndRemoveUntil<void>(
+                _navigator!.pushAndRemoveUntil<void>(
                   LoginPage.route(),
                   (route) => false,
                 );
