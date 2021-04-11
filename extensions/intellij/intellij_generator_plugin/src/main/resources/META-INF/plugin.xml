@@ -9,6 +9,26 @@
         ]]>
     </description>
 
+    <change-notes><![CDATA[
+        <ul>
+          <li>v2.2.0 - Wrap With Quick Action Support</li>
+          <li>v2.1.0 - Live Template Support</li>
+          <li>v2.0.0 - Support for Bloc v6.0.0</li>
+          <li>v1.8.0 - Support for Cubit</li>
+          <li>v1.7.1 - Fix handle trailing _bloc in name</li>
+          <li>v1.7.0 - Support for Equatable v1.0.0 & Bloc v5.0.0</li>
+          <li>v1.6.0 - Support for Equatable v0.6.0</li>
+          <li>v1.5.1 - Minor dependency updates</li>
+          <li>v1.5 - Fix Overwrite Issue and Updates for implicit-dynamic support with Equatable</li>
+          <li>v1.4 - Bug Fixes for Bloc Generator Name (Case Sensitivity)</li>
+          <li>v1.3 - Bug Fixes for IntelliJ and Android Studio Compatibility</li>
+          <li>v1.2 - Support for IntelliJ 2019</li>
+          <li>v1.1 - Removed currentState from mapEventToState method</li>
+          <li>v1.0 - Initial release</li>
+        </ul>
+        ]]>
+    </change-notes>
+
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="145.0"/>
 
@@ -42,5 +62,28 @@
         <defaultLiveTemplatesProvider
                 implementation="com.bloc.intellij_generator_plugin.live_templates.BlocTemplateProvider"/>
         <liveTemplateContext implementation="com.bloc.intellij_generator_plugin.live_templates.BlocContext"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocProviderIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocBuilderIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocListenerIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocConsumerIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithRepositoryProviderIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
     </extensions>
 </idea-plugin>

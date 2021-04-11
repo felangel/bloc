@@ -76,6 +76,7 @@ You can activate the commands by launching the command palette (View -> Command 
 | `select`            | Shortcut for `context.select()`            |
 | `blocstate`         | Creates a state class                      |
 | `blocevent`         | Creates an event class                     |
+| `bloctest`          | Creates a `blocTest`                       |
 
 ### Freezed Bloc
 

@@ -1,0 +1,13 @@
+{
+  "BlocTest": {
+    "prefix": "bloctest",
+    "body": [
+      "blocTest<${1:Subject}${2|Bloc,Cubit|}, $1State>(",
+      "\t'emits [${3:MyState}] when ${4:MyEvent} is added.',",
+      "\tbuild: () => ${1:Subject}${2|Bloc,Cubit|}(),",
+      "\tact: (bloc) => bloc.add(${4:MyEvent()}),",
+      "\texpect: () => const <$1State>[${3:MyState()}],",
+      ");"
+    ]
+  }
+}
