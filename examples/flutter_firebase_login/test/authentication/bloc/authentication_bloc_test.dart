@@ -20,13 +20,6 @@ void main() {
   });
 
   group('AuthenticationBloc', () {
-    test('throws when authenticationRepository is null', () {
-      expect(
-        () => AuthenticationBloc(authenticationRepository: null),
-        throwsAssertionError,
-      );
-    });
-
     test('initial state is AuthenticationState.unknown', () {
       final authenticationBloc = AuthenticationBloc(
         authenticationRepository: authenticationRepository,
