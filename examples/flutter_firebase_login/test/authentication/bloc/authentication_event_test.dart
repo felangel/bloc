@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter_firebase_login/authentication/authentication.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -16,8 +18,8 @@ void main() {
     group('AuthenticationUserChanged', () {
       test('supports value comparisons', () {
         expect(
-          AuthenticationUserChanged(null),
-          AuthenticationUserChanged(null),
+          AuthenticationUserChanged(User.empty),
+          AuthenticationUserChanged(User.empty),
         );
       });
     });

@@ -12,7 +12,7 @@ class MockUser extends Mock implements User {}
 
 void main() {
   final user = MockUser();
-  AuthenticationRepository authenticationRepository;
+  late AuthenticationRepository authenticationRepository;
 
   setUp(() {
     authenticationRepository = MockAuthenticationRepository();
@@ -38,7 +38,7 @@ void main() {
           authenticationRepository: authenticationRepository,
         );
       },
-      expect: <AuthenticationState>[
+      expect: () => <AuthenticationState>[
         AuthenticationState.authenticated(user),
       ],
     );
@@ -50,7 +50,7 @@ void main() {
           authenticationRepository: authenticationRepository,
         ),
         act: (bloc) => bloc.add(AuthenticationUserChanged(user)),
-        expect: <AuthenticationState>[
+        expect: () => <AuthenticationState>[
           AuthenticationState.authenticated(user),
         ],
       );
@@ -61,8 +61,8 @@ void main() {
           authenticationRepository: authenticationRepository,
         ),
         act: (bloc) => bloc.add(const AuthenticationUserChanged(User.empty)),
-        expect: const <AuthenticationState>[
-          AuthenticationState.unauthenticated(),
+        expect: () => <AuthenticationState>[
+          const AuthenticationState.unauthenticated(),
         ],
       );
     });
