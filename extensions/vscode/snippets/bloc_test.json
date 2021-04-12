@@ -9,5 +9,9 @@
       "\texpect: () => const <$1State>[${3:MyState()}],",
       ");"
     ]
+  },
+  "Import package:bloc_test": {
+    "prefix": "importbloctest",
+    "body": "import 'package:bloc_test/bloc_test.dart';"
   }
 }

@@ -189,6 +189,14 @@
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
+    <template name="importbloctest"
+              value="import 'package:bloc_test/bloc_test.dart';"
+              description="Import package:bloc_test" toReformat="false" toShortenFQNames="true">
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
 
     <!--        FREEZED        -->
     <template name="fstate" value="const factory $CLASS_NAME$.$stateName$() = _$stateName$;"
