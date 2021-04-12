@@ -17,8 +17,9 @@ You can find the plugin in the official IntelliJ and Android Studio marketplace:
 Simply right click on the File Project view, go to `New -> Bloc Class`, give it a name, select if you want to use [Equatable](https://github.com/felangel/equatable), and click on `OK` to see all the boilerplate generated.
 
 ### Quick code action
+
 Wrapping a widget is also possible with `Alt + ENTER` shortcut.
-If you wish to disable this quick code action `(Bloc) Wrap with` you can do it so by going to 
+If you wish to disable this quick code action `(Bloc) Wrap with` you can do it so by going to
 `Settings - Editor - Intentions - Bloc`.
 
 ![intention_settings](https://github.com/felangel/bloc/raw/master/extensions/intellij/assets/intention_settings.png)
@@ -31,6 +32,7 @@ If you wish to disable this quick code action `(Bloc) Wrap with` you can do it s
 | ------------------- | ----------------------------------------------- |
 | `importbloc`        | Imports `package:bloc`                          |
 | `importflutterbloc` | Imports `package:flutter_bloc`                  |
+| `importbloctest`    | Imports `package:bloc_test`                     |
 | `bloc`              | Creates a bloc class                            |
 | `cubit`             | Creates a cubit class                           |
 | `blocobserver`      | Creates a `BlocObserver` class                  |
