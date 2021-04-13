@@ -2,16 +2,18 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication/authentication.dart';
+import 'package:flutter_firebase_login/forms/forms.dart';
 import 'package:flutter_firebase_login/sign_up/sign_up.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:formz/formz.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockAuthenticationRepository extends Mock
     implements AuthenticationRepository {}
 
-class MockSignUpCubit extends MockBloc<SignUpState> implements SignUpCubit {}
+class MockSignUpCubit extends MockCubit<SignUpState> implements SignUpCubit {}
+
+class FakeSignUpState extends Fake implements SignUpState {}
 
 class MockEmail extends Mock implements Email {}
 
@@ -31,11 +33,17 @@ void main() {
   const testConfirmedPassword = 'testP@ssw0rd1';
 
   group('SignUpForm', () {
-    SignUpCubit signUpCubit;
+    late SignUpCubit signUpCubit;
+
+    setUpAll(() {
+      registerFallbackValue<SignUpState>(FakeSignUpState());
+    });
 
     setUp(() {
       signUpCubit = MockSignUpCubit();
-      when(signUpCubit.state).thenReturn(const SignUpState());
+      when(() => signUpCubit.state).thenReturn(const SignUpState());
+      when(() => signUpCubit.signUpFormSubmitted())
+          .thenAnswer((_) async => null);
     });
 
     group('calls', () {
@@ -51,7 +59,7 @@ void main() {
           ),
         );
         await tester.enterText(find.byKey(emailInputKey), testEmail);
-        verify(signUpCubit.emailChanged(testEmail)).called(1);
+        verify(() => signUpCubit.emailChanged(testEmail)).called(1);
       });
 
       testWidgets('passwordChanged when password changes', (tester) async {
@@ -66,7 +74,7 @@ void main() {
           ),
         );
         await tester.enterText(find.byKey(passwordInputKey), testPassword);
-        verify(signUpCubit.passwordChanged(testPassword)).called(1);
+        verify(() => signUpCubit.passwordChanged(testPassword)).called(1);
       });
 
       testWidgets('confirmedPasswordChanged when confirmedPassword changes',
@@ -83,13 +91,14 @@ void main() {
         );
         await tester.enterText(
             find.byKey(confirmedPasswordInputKey), testConfirmedPassword);
-        verify(signUpCubit.confirmedPasswordChanged(testConfirmedPassword))
+        verify(() =>
+                signUpCubit.confirmedPasswordChanged(testConfirmedPassword))
             .called(1);
       });
 
       testWidgets('signUpFormSubmitted when sign up button is pressed',
           (tester) async {
-        when(signUpCubit.state).thenReturn(
+        when(() => signUpCubit.state).thenReturn(
           const SignUpState(status: FormzStatus.valid),
         );
         await tester.pumpWidget(
@@ -103,7 +112,7 @@ void main() {
           ),
         );
         await tester.tap(find.byKey(signUpButtonKey));
-        verify(signUpCubit.signUpFormSubmitted()).called(1);
+        verify(() => signUpCubit.signUpFormSubmitted()).called(1);
       });
     });
 
@@ -134,8 +143,8 @@ void main() {
       testWidgets('invalid email error text when email is invalid',
           (tester) async {
         final email = MockEmail();
-        when(email.invalid).thenReturn(true);
-        when(signUpCubit.state).thenReturn(SignUpState(email: email));
+        when(() => email.invalid).thenReturn(true);
+        when(() => signUpCubit.state).thenReturn(SignUpState(email: email));
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -152,8 +161,9 @@ void main() {
       testWidgets('invalid password error text when password is invalid',
           (tester) async {
         final password = MockPassword();
-        when(password.invalid).thenReturn(true);
-        when(signUpCubit.state).thenReturn(SignUpState(password: password));
+        when(() => password.invalid).thenReturn(true);
+        when(() => signUpCubit.state)
+            .thenReturn(SignUpState(password: password));
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -171,8 +181,8 @@ void main() {
           'invalid confirmedPassword error text'
           ' when confirmedPassword is invalid', (tester) async {
         final confirmedPassword = MockConfirmedPassword();
-        when(confirmedPassword.invalid).thenReturn(true);
-        when(signUpCubit.state)
+        when(() => confirmedPassword.invalid).thenReturn(true);
+        when(() => signUpCubit.state)
             .thenReturn(SignUpState(confirmedPassword: confirmedPassword));
         await tester.pumpWidget(
           MaterialApp(
@@ -189,7 +199,7 @@ void main() {
 
       testWidgets('disabled sign up button when status is not validated',
           (tester) async {
-        when(signUpCubit.state).thenReturn(
+        when(() => signUpCubit.state).thenReturn(
           const SignUpState(status: FormzStatus.invalid),
         );
         await tester.pumpWidget(
@@ -210,7 +220,7 @@ void main() {
 
       testWidgets('enabled sign up button when status is validated',
           (tester) async {
-        when(signUpCubit.state).thenReturn(
+        when(() => signUpCubit.state).thenReturn(
           const SignUpState(status: FormzStatus.valid),
         );
         await tester.pumpWidget(

@@ -1,15 +1,13 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_firebase_login/authentication/authentication.dart';
+import 'package:flutter_firebase_login/forms/forms.dart';
 import 'package:formz/formz.dart';
 
 part 'sign_up_state.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {
-  SignUpCubit(this._authenticationRepository)
-      : assert(_authenticationRepository != null),
-        super(const SignUpState());
+  SignUpCubit(this._authenticationRepository) : super(const SignUpState());
 
   final AuthenticationRepository _authenticationRepository;
 

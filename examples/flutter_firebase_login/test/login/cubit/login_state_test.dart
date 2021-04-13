@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:flutter_firebase_login/authentication/authentication.dart';
+import 'package:flutter_firebase_login/forms/forms.dart';
 import 'package:flutter_firebase_login/login/login.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:formz/formz.dart';
@@ -7,6 +7,7 @@ import 'package:formz/formz.dart';
 void main() {
   const email = Email.dirty('email');
   const password = Password.dirty('password');
+
   group('LoginState', () {
     test('supports value comparisons', () {
       expect(LoginState(), LoginState());
