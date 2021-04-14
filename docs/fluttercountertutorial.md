@@ -60,9 +60,9 @@ Let's create `lib/counter_observer.dart`:
 
 [counter_observer.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter_observer.dart ':include')
 
-In this case, we're only overriding `onChange` to see all state changes that occur.
+In this case, we're only overriding `onTransition` to see all state changes that occur.
 
-?> **Note**: `onChange` works the same way for both `Bloc` and `Cubit` instances.
+?> **Note**: `onTransition` will listen for both `Bloc` and `Cubit` instances.
 
 ## main.dart
 
@@ -113,7 +113,7 @@ The `CounterView` is responsible for rendering the current count and rendering t
 
 A `BlocBuilder` is used to wrap the `Text` widget in order to update the text any time the `CounterCubit` state changes. In addition, `context.read<CounterCubit>()` is used to look-up the closest `CounterCubit` instance.
 
-?> **Note**: Only the `Text` widget is wrapped in a `BlocBuilder` because that is the only widget that needs to be rebuilt in response to state changes in the `CounterCubit`. Avoid unnecessarily wrapping widgets that don't need to be rebuilt when a state changes.
+?> **Note**: Only the `Text` widget is wrapped in a `BlocBuilder` because that is the only widget that needs to be rebuilt in response to state changes in the `CounterCubit`.  Avoid unnecessarily wrapping widgets that don't need to be rebuilt when a state changes.
 
 ## Barrel
 
