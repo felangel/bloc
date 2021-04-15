@@ -13,7 +13,9 @@ void main() async {
   EquatableConfig.stringify = kDebugMode;
   Bloc.observer = WeatherBlocObserver();
   HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory: await getTemporaryDirectory(),
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getTemporaryDirectory(),
   );
   runApp(WeatherApp(weatherRepository: WeatherRepository()));
 }
