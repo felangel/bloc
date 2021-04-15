@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/sign_up/sign_up.dart';
 
 class SignUpPage extends StatelessWidget {
-  const SignUpPage({Key key}) : super(key: key);
+  const SignUpPage({Key? key}) : super(key: key);
 
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => const SignUpPage());

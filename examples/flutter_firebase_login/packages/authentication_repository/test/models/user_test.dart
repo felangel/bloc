@@ -6,25 +6,30 @@ void main() {
   group('User', () {
     const id = 'mock-id';
     const email = 'mock-email';
-    test('throws AssertionError when email is null', () {
-      expect(
-        () => User(email: null, id: id, name: null, photo: null),
-        throwsAssertionError,
-      );
-    });
-
-    test('throws AssertionError when id is null', () {
-      expect(
-        () => User(email: email, id: null, name: null, photo: null),
-        throwsAssertionError,
-      );
-    });
 
     test('uses value equality', () {
       expect(
         User(email: email, id: id, name: null, photo: null),
         User(email: email, id: id, name: null, photo: null),
       );
+    });
+
+    test('isAnonymous returns true for anonymous user', () {
+      expect(User.anonymous.isAnonymous, isTrue);
+    });
+
+    test('isAnonymous returns false for non-anonymous user', () {
+      final user = User(email: email, id: id, name: null, photo: null);
+      expect(user.isAnonymous, isFalse);
+    });
+
+    test('isNotAnonymous returns false for anonymous user', () {
+      expect(User.anonymous.isNotAnonymous, isFalse);
+    });
+
+    test('isNotAnonymous returns true for non-anonymous user', () {
+      final user = User(email: email, id: id, name: null, photo: null);
+      expect(user.isNotAnonymous, isTrue);
     });
   });
 }
