@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_firebase_login/authentication/authentication.dart';
+import 'package:flutter_firebase_login/forms/forms.dart';
 import 'package:flutter_firebase_login/sign_up/sign_up.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:formz/formz.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockAuthenticationRepository extends Mock
     implements AuthenticationRepository {}
@@ -36,14 +36,16 @@ void main() {
   );
 
   group('SignUpCubit', () {
-    AuthenticationRepository authenticationRepository;
+    late AuthenticationRepository authenticationRepository;
 
     setUp(() {
       authenticationRepository = MockAuthenticationRepository();
-    });
-
-    test('throws AssertionError when authenticationRepository is null', () {
-      expect(() => SignUpCubit(null), throwsA(isA<AssertionError>()));
+      when(
+        () => authenticationRepository.signUp(
+          email: any(named: 'email'),
+          password: any(named: 'password'),
+        ),
+      ).thenAnswer((_) async => null);
     });
 
     test('initial state is SignUpState', () {
@@ -55,7 +57,7 @@ void main() {
         'emits [invalid] when email/password/confirmedPassword are invalid',
         build: () => SignUpCubit(authenticationRepository),
         act: (cubit) => cubit.emailChanged(invalidEmailString),
-        expect: const <SignUpState>[
+        expect: () => const <SignUpState>[
           SignUpState(email: invalidEmail, status: FormzStatus.invalid),
         ],
       );
@@ -63,12 +65,12 @@ void main() {
       blocTest<SignUpCubit, SignUpState>(
         'emits [valid] when email/password/confirmedPassword are valid',
         build: () => SignUpCubit(authenticationRepository),
-        seed: SignUpState(
+        seed: () => SignUpState(
           password: validPassword,
           confirmedPassword: validConfirmedPassword,
         ),
         act: (cubit) => cubit.emailChanged(validEmailString),
-        expect: const <SignUpState>[
+        expect: () => const <SignUpState>[
           SignUpState(
             email: validEmail,
             password: validPassword,
@@ -84,7 +86,7 @@ void main() {
         'emits [invalid] when email/password/confirmedPassword are invalid',
         build: () => SignUpCubit(authenticationRepository),
         act: (cubit) => cubit.passwordChanged(invalidPasswordString),
-        expect: const <SignUpState>[
+        expect: () => const <SignUpState>[
           SignUpState(
             confirmedPassword: ConfirmedPassword.dirty(
               password: invalidPasswordString,
@@ -99,12 +101,12 @@ void main() {
       blocTest<SignUpCubit, SignUpState>(
         'emits [valid] when email/password/confirmedPassword are valid',
         build: () => SignUpCubit(authenticationRepository),
-        seed: SignUpState(
+        seed: () => SignUpState(
           email: validEmail,
           confirmedPassword: validConfirmedPassword,
         ),
         act: (cubit) => cubit.passwordChanged(validPasswordString),
-        expect: const <SignUpState>[
+        expect: () => const <SignUpState>[
           SignUpState(
             email: validEmail,
             password: validPassword,
@@ -121,7 +123,7 @@ void main() {
         build: () => SignUpCubit(authenticationRepository),
         act: (cubit) =>
             cubit.confirmedPasswordChanged(invalidConfirmedPasswordString),
-        expect: const <SignUpState>[
+        expect: () => const <SignUpState>[
           SignUpState(
             confirmedPassword: invalidConfirmedPassword,
             status: FormzStatus.invalid,
@@ -132,11 +134,11 @@ void main() {
       blocTest<SignUpCubit, SignUpState>(
         'emits [valid] when email/password/confirmedPassword are valid',
         build: () => SignUpCubit(authenticationRepository),
-        seed: SignUpState(email: validEmail, password: validPassword),
+        seed: () => SignUpState(email: validEmail, password: validPassword),
         act: (cubit) => cubit.confirmedPasswordChanged(
           validConfirmedPasswordString,
         ),
-        expect: const <SignUpState>[
+        expect: () => const <SignUpState>[
           SignUpState(
             email: validEmail,
             password: validPassword,
@@ -152,13 +154,13 @@ void main() {
         'does nothing when status is not validated',
         build: () => SignUpCubit(authenticationRepository),
         act: (cubit) => cubit.signUpFormSubmitted(),
-        expect: const <SignUpState>[],
+        expect: () => const <SignUpState>[],
       );
 
       blocTest<SignUpCubit, SignUpState>(
         'calls signUp with correct email/password/confirmedPassword',
         build: () => SignUpCubit(authenticationRepository),
-        seed: SignUpState(
+        seed: () => SignUpState(
           status: FormzStatus.valid,
           email: validEmail,
           password: validPassword,
@@ -167,7 +169,7 @@ void main() {
         act: (cubit) => cubit.signUpFormSubmitted(),
         verify: (_) {
           verify(
-            authenticationRepository.signUp(
+            () => authenticationRepository.signUp(
               email: validEmailString,
               password: validPasswordString,
             ),
@@ -179,14 +181,14 @@ void main() {
         'emits [submissionInProgress, submissionSuccess] '
         'when signUp succeeds',
         build: () => SignUpCubit(authenticationRepository),
-        seed: SignUpState(
+        seed: () => SignUpState(
           status: FormzStatus.valid,
           email: validEmail,
           password: validPassword,
           confirmedPassword: validConfirmedPassword,
         ),
         act: (cubit) => cubit.signUpFormSubmitted(),
-        expect: const <SignUpState>[
+        expect: () => const <SignUpState>[
           SignUpState(
             status: FormzStatus.submissionInProgress,
             email: validEmail,
@@ -206,20 +208,22 @@ void main() {
         'emits [submissionInProgress, submissionFailure] '
         'when signUp fails',
         build: () {
-          when(authenticationRepository.signUp(
-            email: anyNamed('email'),
-            password: anyNamed('password'),
-          )).thenThrow(Exception('oops'));
+          when(
+            () => authenticationRepository.signUp(
+              email: any(named: 'email'),
+              password: any(named: 'password'),
+            ),
+          ).thenThrow(Exception('oops'));
           return SignUpCubit(authenticationRepository);
         },
-        seed: SignUpState(
+        seed: () => SignUpState(
           status: FormzStatus.valid,
           email: validEmail,
           password: validPassword,
           confirmedPassword: validConfirmedPassword,
         ),
         act: (cubit) => cubit.signUpFormSubmitted(),
-        expect: const <SignUpState>[
+        expect: () => const <SignUpState>[
           SignUpState(
             status: FormzStatus.submissionInProgress,
             email: validEmail,

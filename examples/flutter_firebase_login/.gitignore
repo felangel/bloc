@@ -27,7 +27,6 @@
 .pub-cache/
 .pub/
 build/
-.last_build_id
 
 # Android related
 **/android/**/gradle-wrapper.jar
