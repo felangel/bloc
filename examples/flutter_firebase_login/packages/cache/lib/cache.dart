@@ -6,6 +6,7 @@ library cache;
 class CacheClient {
   /// {@macro cache_client}
   CacheClient() : _cache = <String, Object>{};
+
   final Map<String, Object> _cache;
 
   /// Writes the provide [key], [value] pair to the in-memory cache.

@@ -12,9 +12,6 @@ class SignUpFailure implements Exception {}
 /// Thrown during the login process if a failure occurs.
 class LogInWithEmailAndPasswordFailure implements Exception {}
 
-/// Thrown during the sign in with apple process if a failure occurs.
-class LogInWithAppleFailure implements Exception {}
-
 /// Thrown during the sign in with google process if a failure occurs.
 class LogInWithGoogleFailure implements Exception {}
 
@@ -77,7 +74,7 @@ class AuthenticationRepository {
 
   /// Starts the Sign In with Google Flow.
   ///
-  /// Throws a [LogInWithEmailAndPasswordFailure] if an exception occurs.
+  /// Throws a [logInWithGoogle] if an exception occurs.
   Future<void> logInWithGoogle() async {
     try {
       final googleUser = await _googleSignIn.signIn();
