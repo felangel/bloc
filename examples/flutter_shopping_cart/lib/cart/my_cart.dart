@@ -83,7 +83,10 @@ class _CartTotal extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(primary: Colors.white),
-              child: const Text('BUY'),
+              child: const Text(
+                'BUY',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
           ],
         ),
