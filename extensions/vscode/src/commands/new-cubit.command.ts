@@ -68,7 +68,7 @@ async function generateCubitCode(
   targetDirectory: string,
   type: BlocType
 ) {
-  const cubitDirectoryPath = `${targetDirectory}/cubit`;
+  const cubitDirectoryPath = `${targetDirectory}/${cubitName}`;
   if (!existsSync(cubitDirectoryPath)) {
     await createDirectory(cubitDirectoryPath);
   }
