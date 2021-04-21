@@ -19,11 +19,8 @@ Existem várias soluções de gerência de estado e decidir qual utilizar pode s
 
 Bloc foi pensado com três valores principais em mente:
 
-- Simples
-  - Fácil de entender e pode ser utilizado por desenvolvedores de diferentes níveis de habilidade.
-- Poderosa
-  - Ajuda a construir aplicações incríveis e complexas decompondo-as em componentes menores.
-- Testável
-  - Teste facilmente todos os aspectos da aplicação para que possamos interagir com confiança.
+- **Simples:** Fácil de entender e pode ser usado por desenvolvedores com vários níveis de habilidade.
+- **Poderoso:** Ajudar a criar aplicativos complexos e incríveis, compondo-os de componentes menores.
+- **Testável:** Testar facilmente todos os aspectos de um aplicativo para que possamos iterar com confiança.
 
 Bloc tenta fazer mudanças de estado serem previsíveis ao regular quando uma mudança de estado pode acontecer e impondo uma única maneira de alterar estado na aplicação inteira.
