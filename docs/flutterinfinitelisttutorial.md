@@ -207,7 +207,7 @@ Even though in this application we only have one bloc, it's fairly common in lar
 
 If we want to be able to do something in response to all `Transitions` we can simply create our own `BlocObserver`.
 
-[simple_bloc_observer.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/simple_bloc_observer.dart':include')
+[simple_bloc_observer.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/simple_bloc_observer.dart ':include')
 
 ?> All we need to do is extend `BlocObserver` and override the `onTransition` method.
 
