@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.bloc'
-version '2.2.0'
+version '2.2.1'
 
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
