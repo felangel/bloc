@@ -61,8 +61,7 @@ flutter pub get
 ├── pubspec.yaml
 ```
 
-The application uses a feature-driven directory structure. This project structure enables us to scale the project by having self-contained features. In this example we will only have a single feature (the post feature) and it's split up into respective folders with barrel files, indicated by the asterisk (*).
-
+The application uses a feature-driven directory structure. This project structure enables us to scale the project by having self-contained features. In this example we will only have a single feature (the post feature) and it's split up into respective folders with barrel files, indicated by the asterisk (\*).
 
 ## REST API
 
@@ -121,7 +120,6 @@ We can now create `bloc/post_state.dart` and implement it like so.
 
 Now that we have our `Events` and `States` implemented, we can create our `PostBloc`.
 
-
 ## Post Bloc
 
 For simplicity, our `PostBloc` will have a direct dependency on an `http client`; however, in a production application we suggest instead you inject an api client and use the repository pattern [docs](./architecture.md).
@@ -157,7 +155,6 @@ Our finished `PostBloc` should now look like this:
 [post_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_bloc.dart ':include')
 
 Great! Now that we’ve finished implementing the business logic all that’s left to do is implement the presentation layer.
-
 
 ## Presentation Layer
 
