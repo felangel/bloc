@@ -50,7 +50,7 @@ flutter pub get
 │   │   |   └── posts_list.dart
 |   |   |   └── view.dart*
 |   |   └── widgets
-|   |   |   └── bottomloader.dart
+|   |   |   └── bottom_loader.dart
 |   |   |   └── post_list_item.dart
 |   |   |   └── widgets.dart*
 │   │   ├── posts.dart*
@@ -191,9 +191,9 @@ Next, we need to implement our `BottomLoader` widget which will indicate to the 
 
 [bottom_loader.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/widgets/bottom_loader.dart ':include')
 
-Lastly, we need to implement our `PostListIten` which will render an individual Post.
+Lastly, we need to implement our `PostListItem` which will render an individual Post.
 
-[post_list_iten.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/widgets/post_list_item.dart ':include')
+[post_list_item.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/widgets/post_list_item.dart ':include')
 
 At this point, we should be able to run our app and everything should work; however, there’s one more thing we can do.
 
