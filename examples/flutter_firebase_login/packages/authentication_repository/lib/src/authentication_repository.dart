@@ -43,19 +43,19 @@ class AuthenticationRepository {
   /// Stream of [User] which will emit the current user when
   /// the authentication state changes.
   ///
-  /// Emits [User.anonymous] if the user is not authenticated.
+  /// Emits [User.empty] if the user is not authenticated.
   Stream<User> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      final user = firebaseUser == null ? User.anonymous : firebaseUser.toUser;
+      final user = firebaseUser == null ? User.empty : firebaseUser.toUser;
       _cache.write(key: userCacheKey, value: user);
       return user;
     });
   }
 
   /// Returns the current cached user.
-  /// Defaults to [User.anonymous] if there is no cached user.
+  /// Defaults to [User.empty] if there is no cached user.
   User get currentUser {
-    return _cache.read<User>(key: userCacheKey) ?? User.anonymous;
+    return _cache.read<User>(key: userCacheKey) ?? User.empty;
   }
 
   /// Creates a new user with the provided [email] and [password].
@@ -107,7 +107,7 @@ class AuthenticationRepository {
   }
 
   /// Signs out the current user which will emit
-  /// [User.anonymous] from the [user] Stream.
+  /// [User.empty] from the [user] Stream.
   ///
   /// Throws a [LogOutFailure] if an exception occurs.
   Future<void> logOut() async {

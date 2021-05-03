@@ -14,22 +14,22 @@ void main() {
       );
     });
 
-    test('isAnonymous returns true for anonymous user', () {
-      expect(User.anonymous.isAnonymous, isTrue);
+    test('isEmpty returns true for empty user', () {
+      expect(User.empty.isEmpty, isTrue);
     });
 
-    test('isAnonymous returns false for non-anonymous user', () {
+    test('isEmpty returns false for non-empty user', () {
       final user = User(email: email, id: id, name: null, photo: null);
-      expect(user.isAnonymous, isFalse);
+      expect(user.isEmpty, isFalse);
     });
 
-    test('isNotAnonymous returns false for anonymous user', () {
-      expect(User.anonymous.isNotAnonymous, isFalse);
+    test('isNotEmpty returns false for empty user', () {
+      expect(User.empty.isNotEmpty, isFalse);
     });
 
-    test('isNotAnonymous returns true for non-anonymous user', () {
+    test('isNotEmpty returns true for non-empty user', () {
       final user = User(email: email, id: id, name: null, photo: null);
-      expect(user.isNotAnonymous, isTrue);
+      expect(user.isNotEmpty, isTrue);
     });
   });
 }
