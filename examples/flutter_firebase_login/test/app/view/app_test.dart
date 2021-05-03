@@ -36,8 +36,8 @@ void main() {
         (_) => const Stream.empty(),
       );
       when(() => authenticationRepository.currentUser).thenReturn(user);
-      when(() => user.isNotAnonymous).thenReturn(true);
-      when(() => user.isAnonymous).thenReturn(false);
+      when(() => user.isNotEmpty).thenReturn(true);
+      when(() => user.isEmpty).thenReturn(false);
       when(() => user.email).thenReturn('test@gmail.com');
     });
 
@@ -70,7 +70,7 @@ void main() {
         RepositoryProvider.value(
           value: authenticationRepository,
           child: MaterialApp(
-            home: BlocProvider.value(value: appBloc, child: AppView()),
+            home: BlocProvider.value(value: appBloc, child: const AppView()),
           ),
         ),
       );
@@ -86,7 +86,7 @@ void main() {
         RepositoryProvider.value(
           value: authenticationRepository,
           child: MaterialApp(
-            home: BlocProvider.value(value: appBloc, child: AppView()),
+            home: BlocProvider.value(value: appBloc, child: const AppView()),
           ),
         ),
       );

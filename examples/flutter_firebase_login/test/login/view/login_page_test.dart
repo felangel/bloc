@@ -18,7 +18,7 @@ void main() {
       await tester.pumpWidget(
         RepositoryProvider<AuthenticationRepository>(
           create: (_) => MockAuthenticationRepository(),
-          child: MaterialApp(home: LoginPage()),
+          child: const MaterialApp(home: LoginPage()),
         ),
       );
       expect(find.byType(LoginForm), findsOneWidget);

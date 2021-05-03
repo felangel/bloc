@@ -2,7 +2,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/forms/forms.dart';
+import 'package:form_inputs/form_inputs.dart';
 import 'package:flutter_firebase_login/login/login.dart';
 import 'package:flutter_firebase_login/sign_up/sign_up.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -52,7 +52,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: loginCubit,
-                child: LoginForm(),
+                child: const LoginForm(),
               ),
             ),
           ),
@@ -67,7 +67,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: loginCubit,
-                child: LoginForm(),
+                child: const LoginForm(),
               ),
             ),
           ),
@@ -86,7 +86,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: loginCubit,
-                child: LoginForm(),
+                child: const LoginForm(),
               ),
             ),
           ),
@@ -102,7 +102,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: loginCubit,
-                child: LoginForm(),
+                child: const LoginForm(),
               ),
             ),
           ),
@@ -127,7 +127,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: loginCubit,
-                child: LoginForm(),
+                child: const LoginForm(),
               ),
             ),
           ),
@@ -146,7 +146,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: loginCubit,
-                child: LoginForm(),
+                child: const LoginForm(),
               ),
             ),
           ),
@@ -164,7 +164,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: loginCubit,
-                child: LoginForm(),
+                child: const LoginForm(),
               ),
             ),
           ),
@@ -182,7 +182,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: loginCubit,
-                child: LoginForm(),
+                child: const LoginForm(),
               ),
             ),
           ),
@@ -203,7 +203,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: loginCubit,
-                child: LoginForm(),
+                child: const LoginForm(),
               ),
             ),
           ),
@@ -220,7 +220,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: loginCubit,
-                child: LoginForm(),
+                child: const LoginForm(),
               ),
             ),
           ),
@@ -239,7 +239,7 @@ void main() {
               home: Scaffold(
                 body: BlocProvider.value(
                   value: loginCubit,
-                  child: LoginForm(),
+                  child: const LoginForm(),
                 ),
               ),
             ),

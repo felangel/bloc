@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:flutter_firebase_login/forms/forms.dart';
+import 'package:form_inputs/form_inputs.dart';
 import 'package:flutter_firebase_login/sign_up/sign_up.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:formz/formz.dart';

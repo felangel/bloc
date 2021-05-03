@@ -5,7 +5,7 @@ labels: documentation, translation
 Update Translations to include changes from {{ sha }}.
 
 - [ ] az (@KenanYusubov)
-- [ ] cs (@tenhobi)
+- [ ] cs
 - [ ] es (@KingDarBoja or @Classy-Bear)
 - [ ] fr (@sachaarbonel or @StefanYYC)
 - [ ] jp (@dshukertjr)

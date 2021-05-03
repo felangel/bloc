@@ -22,10 +22,10 @@ void main() {
       );
       when(
         () => authenticationRepository.currentUser,
-      ).thenReturn(User.anonymous);
+      ).thenReturn(User.empty);
     });
 
-    test('initial state is unauthenticated when user is anonymous', () {
+    test('initial state is unauthenticated when user is empty', () {
       expect(
         AppBloc(authenticationRepository: authenticationRepository).state,
         AppState.unauthenticated(),
@@ -34,9 +34,9 @@ void main() {
 
     group('UserChanged', () {
       blocTest<AppBloc, AppState>(
-        'emits authenticated when user is not anonymous',
+        'emits authenticated when user is not empty',
         build: () {
-          when(() => user.isNotAnonymous).thenReturn(true);
+          when(() => user.isNotEmpty).thenReturn(true);
           when(() => authenticationRepository.user).thenAnswer(
             (_) => Stream.value(user),
           );
@@ -47,10 +47,10 @@ void main() {
       );
 
       blocTest<AppBloc, AppState>(
-        'emits unauthenticated when user is anonymous',
+        'emits unauthenticated when user is empty',
         build: () {
           when(() => authenticationRepository.user).thenAnswer(
-            (_) => Stream.value(User.anonymous),
+            (_) => Stream.value(User.empty),
           );
           return AppBloc(authenticationRepository: authenticationRepository);
         },
