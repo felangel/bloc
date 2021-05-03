@@ -4,6 +4,8 @@ import 'package:flutter_firebase_login/sign_up/sign_up.dart';
 import 'package:formz/formz.dart';
 
 class SignUpForm extends StatelessWidget {
+  const SignUpForm({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<SignUpCubit, SignUpState>(
@@ -115,7 +117,6 @@ class _SignUpButton extends StatelessWidget {
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 key: const Key('signUpForm_continue_raisedButton'),
-                child: const Text('SIGN UP'),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
@@ -125,6 +126,7 @@ class _SignUpButton extends StatelessWidget {
                 onPressed: state.status.isValidated
                     ? () => context.read<SignUpCubit>().signUpFormSubmitted()
                     : null,
+                child: const Text('SIGN UP'),
               );
       },
     );
