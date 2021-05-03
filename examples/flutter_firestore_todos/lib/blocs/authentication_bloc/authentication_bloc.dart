@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:user_repository/user_repository.dart';
 import 'package:flutter_firestore_todos/blocs/authentication_bloc/bloc.dart';
 
@@ -9,8 +8,7 @@ class AuthenticationBloc
   final UserRepository _userRepository;
 
   AuthenticationBloc({required UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository,
+      : _userRepository = userRepository,
         super(Uninitialized());
 
   @override
