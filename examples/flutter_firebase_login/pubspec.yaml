@@ -19,7 +19,7 @@ dependencies:
   formz: ^0.4.0-nullsafety.0
   google_fonts: ^2.0.0
   meta: ^1.3.0
-  very_good_analysis: ^2.0.0
+  very_good_analysis: ^2.0.3
 
 dev_dependencies:
   flutter_test:
