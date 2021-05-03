@@ -3,19 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firestore_todos/blocs/todos/todos.dart';
 import 'package:flutter_firestore_todos/screens/screens.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 class DetailsScreen extends StatelessWidget {
-  final String id;
+  final String? id;
 
-  DetailsScreen({Key key, @required this.id}) : super(key: key);
+  DetailsScreen({Key? key, required this.id}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TodosBloc, TodosState>(
       builder: (context, state) {
-        final todo = (state as TodosLoaded)
+        final Todo? todo = (state as TodosLoaded)
             .todos
-            .firstWhere((todo) => todo.id == id, orElse: () => null);
+            .firstWhere((todo) => todo.id == id, orElse: () {
+          return null as Todo;
+        });
         return Scaffold(
           appBar: AppBar(
             title: Text('Todo Details'),
@@ -24,7 +27,7 @@ class DetailsScreen extends StatelessWidget {
                 tooltip: 'Delete Todo',
                 icon: Icon(Icons.delete),
                 onPressed: () {
-                  BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
+                  BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo!));
                   Navigator.pop(context, todo);
                 },
               )
@@ -46,7 +49,8 @@ class DetailsScreen extends StatelessWidget {
                                 onChanged: (_) {
                                   BlocProvider.of<TodosBloc>(context).add(
                                     UpdateTodo(
-                                      todo.copyWith(complete: !todo.complete),
+                                      todo.copyWith(
+                                          complete: todo.complete == false),
                                     ),
                                   );
                                 }),
@@ -64,14 +68,14 @@ class DetailsScreen extends StatelessWidget {
                                       bottom: 16.0,
                                     ),
                                     child: Text(
-                                      todo.task,
+                                      todo.task ?? '',
                                       style:
                                           Theme.of(context).textTheme.headline5,
                                     ),
                                   ),
                                 ),
                                 Text(
-                                  todo.note,
+                                  todo.note ?? '',
                                   style: Theme.of(context).textTheme.subtitle1,
                                 ),
                               ],

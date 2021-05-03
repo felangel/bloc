@@ -8,11 +8,10 @@ import 'package:flutter_firestore_todos/models/models.dart';
 
 class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   final TodosBloc _todosBloc;
-  StreamSubscription _todosSubscription;
+  StreamSubscription? _todosSubscription;
 
-  FilteredTodosBloc({@required TodosBloc todosBloc})
-      : assert(todosBloc != null),
-        _todosBloc = todosBloc,
+  FilteredTodosBloc({required TodosBloc todosBloc})
+      : _todosBloc = todosBloc,
         super(todosBloc.state is TodosLoaded
             ? FilteredTodosLoaded(
                 (todosBloc.state as TodosLoaded).todos,
@@ -68,9 +67,9 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
       if (filter == VisibilityFilter.all) {
         return true;
       } else if (filter == VisibilityFilter.active) {
-        return !todo.complete;
+        return todo.complete == false;
       } else {
-        return todo.complete;
+        return todo.complete == true;
       }
     }).toList();
   }

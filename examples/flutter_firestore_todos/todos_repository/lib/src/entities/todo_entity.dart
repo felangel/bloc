@@ -6,24 +6,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class TodoEntity extends Equatable {
-  final bool complete;
-  final String id;
-  final String note;
-  final String task;
+  final bool? complete;
+  final String? id;
+  final String? note;
+  final String? task;
 
   const TodoEntity(this.task, this.id, this.note, this.complete);
 
   Map<String, Object> toJson() {
     return {
-      'complete': complete,
-      'task': task,
-      'note': note,
-      'id': id,
+      'complete': complete!,
+      'task': task!,
+      'note': note!,
+      'id': id!,
     };
   }
 
   @override
-  List<Object> get props => [complete, id, note, task];
+  List<Object> get props => [complete!, id!, note!, task!];
 
   @override
   String toString() {
@@ -41,18 +41,18 @@ class TodoEntity extends Equatable {
 
   static TodoEntity fromSnapshot(DocumentSnapshot snap) {
     return TodoEntity(
-      snap.data()['task'],
+      snap.data()!['task'],
       snap.id,
-      snap.data()['note'],
-      snap.data()['complete'],
+      snap.data()!['note'],
+      snap.data()!['complete'],
     );
   }
 
   Map<String, Object> toDocument() {
     return {
-      'complete': complete,
-      'task': task,
-      'note': note,
+      'complete': complete!,
+      'task': task!,
+      'note': note!,
     };
   }
 }
