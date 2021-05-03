@@ -256,12 +256,12 @@ void main() {
     });
 
     group('user', () {
-      test('emits User.anonymous when firebase user is null', () async {
+      test('emits User.empty when firebase user is null', () async {
         when(() => firebaseAuth.authStateChanges())
             .thenAnswer((_) => Stream.value(null));
         await expectLater(
           authenticationRepository.user,
-          emitsInOrder(const <User>[User.anonymous]),
+          emitsInOrder(const <User>[User.empty]),
         );
       });
 
@@ -286,13 +286,13 @@ void main() {
     });
 
     group('currentUser', () {
-      test('returns User.anonymous when cached user is null', () {
+      test('returns User.empty when cached user is null', () {
         when(
           () => cache.read(key: AuthenticationRepository.userCacheKey),
         ).thenReturn(null);
         expect(
           authenticationRepository.currentUser,
-          equals(User.anonymous),
+          equals(User.empty),
         );
       });
 

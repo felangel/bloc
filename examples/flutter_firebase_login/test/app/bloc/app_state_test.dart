@@ -12,7 +12,7 @@ void main() {
       test('has correct status', () {
         final state = AppState.unauthenticated();
         expect(state.status, AppStatus.unauthenticated);
-        expect(state.user, User.anonymous);
+        expect(state.user, User.empty);
       });
     });
 
