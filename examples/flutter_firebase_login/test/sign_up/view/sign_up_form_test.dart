@@ -53,7 +53,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: signUpCubit,
-                child: SignUpForm(),
+                child: const SignUpForm(),
               ),
             ),
           ),
@@ -68,7 +68,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: signUpCubit,
-                child: SignUpForm(),
+                child: const SignUpForm(),
               ),
             ),
           ),
@@ -84,7 +84,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: signUpCubit,
-                child: SignUpForm(),
+                child: const SignUpForm(),
               ),
             ),
           ),
@@ -106,7 +106,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: signUpCubit,
-                child: SignUpForm(),
+                child: const SignUpForm(),
               ),
             ),
           ),
@@ -131,7 +131,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: signUpCubit,
-                child: SignUpForm(),
+                child: const SignUpForm(),
               ),
             ),
           ),
@@ -150,7 +150,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: signUpCubit,
-                child: SignUpForm(),
+                child: const SignUpForm(),
               ),
             ),
           ),
@@ -169,7 +169,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: signUpCubit,
-                child: SignUpForm(),
+                child: const SignUpForm(),
               ),
             ),
           ),
@@ -189,7 +189,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: signUpCubit,
-                child: SignUpForm(),
+                child: const SignUpForm(),
               ),
             ),
           ),
@@ -207,7 +207,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: signUpCubit,
-                child: SignUpForm(),
+                child: const SignUpForm(),
               ),
             ),
           ),
@@ -228,7 +228,7 @@ void main() {
             home: Scaffold(
               body: BlocProvider.value(
                 value: signUpCubit,
-                child: SignUpForm(),
+                child: const SignUpForm(),
               ),
             ),
           ),
