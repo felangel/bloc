@@ -70,7 +70,7 @@ void main() {
         RepositoryProvider.value(
           value: authenticationRepository,
           child: MaterialApp(
-            home: BlocProvider.value(value: appBloc, child: AppView()),
+            home: BlocProvider.value(value: appBloc, child: const AppView()),
           ),
         ),
       );
@@ -86,7 +86,7 @@ void main() {
         RepositoryProvider.value(
           value: authenticationRepository,
           child: MaterialApp(
-            home: BlocProvider.value(value: appBloc, child: AppView()),
+            home: BlocProvider.value(value: appBloc, child: const AppView()),
           ),
         ),
       );

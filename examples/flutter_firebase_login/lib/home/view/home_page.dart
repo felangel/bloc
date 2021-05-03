@@ -4,7 +4,9 @@ import 'package:flutter_firebase_login/app/app.dart';
 import 'package:flutter_firebase_login/home/home.dart';
 
 class HomePage extends StatelessWidget {
-  static Page page() => MaterialPage<void>(child: HomePage());
+  const HomePage({Key? key}) : super(key: key);
+
+  static Page page() => const MaterialPage<void>(child: HomePage());
 
   @override
   Widget build(BuildContext context) {
