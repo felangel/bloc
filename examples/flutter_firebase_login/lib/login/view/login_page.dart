@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/login/login.dart';
 
 class LoginPage extends StatelessWidget {
-  static Page page() => MaterialPage<void>(child: LoginPage());
+  const LoginPage({Key? key}) : super(key: key);
+
+  static Page page() => const MaterialPage<void>(child: LoginPage());
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +16,7 @@ class LoginPage extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: BlocProvider(
           create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
-          child: LoginForm(),
+          child: const LoginForm(),
         ),
       ),
     );

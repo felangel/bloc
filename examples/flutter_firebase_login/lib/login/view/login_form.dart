@@ -6,6 +6,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
 
 class LoginForm extends StatelessWidget {
+  const LoginForm({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(
@@ -105,10 +107,10 @@ class _LoginButton extends StatelessWidget {
                   ),
                   primary: const Color(0xFFFFD600),
                 ),
-                child: const Text('LOGIN'),
                 onPressed: state.status.isValidated
                     ? () => context.read<LoginCubit>().logInWithCredentials()
                     : null,
+                child: const Text('LOGIN'),
               );
       },
     );
@@ -143,11 +145,11 @@ class _SignUpButton extends StatelessWidget {
     final theme = Theme.of(context);
     return TextButton(
       key: const Key('loginForm_createAccount_flatButton'),
+      onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
       child: Text(
         'CREATE ACCOUNT',
         style: TextStyle(color: theme.primaryColor),
       ),
-      onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
     );
   }
 }

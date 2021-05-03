@@ -108,7 +108,7 @@ In order to support having a mutable seed value which can be updated dynamically
 
 **Summary**
 
-**v6.1.x**
+**v7.x.x**
 
 ```dart
 blocTest(
@@ -118,7 +118,7 @@ blocTest(
 );
 ```
 
-**v7.0.0**
+**v8.0.0**
 
 ```dart
 blocTest(
@@ -136,7 +136,7 @@ In order to support having a mutable expectation which can be updated dynamicall
 
 **Summary**
 
-**v6.1.x**
+**v7.x.x**
 
 ```dart
 blocTest(
@@ -146,7 +146,7 @@ blocTest(
 );
 ```
 
-**v7.0.0**
+**v8.0.0**
 
 ```dart
 blocTest(
@@ -171,7 +171,7 @@ In order to support having a mutable errors which can be updated dynamically in 
 
 **Summary**
 
-**v6.1.x**
+**v7.x.x**
 
 ```dart
 blocTest(
@@ -181,7 +181,7 @@ blocTest(
 );
 ```
 
-**v7.0.0**
+**v8.0.0**
 
 ```dart
 blocTest(
@@ -207,14 +207,14 @@ Previously, `MockBloc` had to be used for both `Bloc` and `Cubit` instances whic
 
 **Summary**
 
-**v6.1.x**
+**v7.x.x**
 
 ```dart
 class MockMyBloc extends MockBloc<MyState> implements MyBloc {}
 class MockMyCubit extends MockBloc<MyState> implements MyBloc {}
 ```
 
-**v7.0.0**
+**v8.0.0**
 
 ```dart
 class MockMyBloc extends MockBloc<MyEvent, MyState> implements MyBloc {}
@@ -229,7 +229,7 @@ Due to various limitations of the null-safe [package:mockito](https://pub.dev/pa
 
 **Summary**
 
-**v6.1.x**
+**v7.x.x**
 
 ```dart
 import 'package:mockito/mockito.dart';
@@ -240,7 +240,7 @@ when(bloc.state).thenReturn(MyState());
 verify(bloc.add(any)).called(1);
 ```
 
-**v7.0.0**
+**v8.0.0**
 
 ```dart
 import 'package:mocktail/mocktail.dart';

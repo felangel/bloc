@@ -1,7 +1,6 @@
 package com.bloc.intellij_generator_plugin.intention_action;
 
 import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
@@ -16,11 +15,9 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-
 public abstract class BlocWrapWithIntentionAction extends PsiElementBaseIntentionAction implements IntentionAction {
     final SnippetType snippetType;
-    SnippetSelection snippetSelection;
+    PsiElement callExpressionElement;
 
     public BlocWrapWithIntentionAction(SnippetType snippetType) {
         this.snippetType = snippetType;
@@ -46,30 +43,30 @@ public abstract class BlocWrapWithIntentionAction extends PsiElementBaseIntentio
      *
      * @param project a reference to the Project object being edited.
      * @param editor  a reference to the object editing the project source
-     * @param element a reference to the PSI element currently under the caret
+     * @param psiElement a reference to the PSI element currently under the caret
      * @return {@code true} if the caret is in a literal string element, so this functionality should be added to the
      * intention menu or {@code false} for all other types of caret positions
      */
-    public boolean isAvailable(@NotNull Project project, Editor editor, @Nullable PsiElement element) {
-        if (element == null) {
+    public boolean isAvailable(@NotNull Project project, Editor editor, @Nullable PsiElement psiElement) {
+        if (psiElement == null) {
             return false;
         }
 
-        final PsiFile psiFile = getCurrentFile(project, editor);
-        if (psiFile != null && !psiFile.getName().endsWith(".dart")) {
+        final PsiFile currentFile = getCurrentFile(project, editor);
+        if (currentFile != null && !currentFile.getName().endsWith(".dart")) {
             return false;
         }
 
-        final IntentionAction[] quickIntentionActions = Arrays.stream(IntentionManager.getInstance().getAvailableIntentionActions()).toArray(IntentionAction[]::new);
-        if (Arrays.stream(quickIntentionActions).anyMatch(intentionAction -> intentionAction.getText().contains("Wrap with"))) {
-            snippetSelection = Utils.getSelection(editor);
-            if (!snippetSelection.isValid()) {
-                snippetSelection = null;
-                return false;
-            }
-            return true;
+        if (!psiElement.toString().equals("PsiElement(IDENTIFIER)")) {
+            return false;
         }
-        return false;
+
+        callExpressionElement = WrapHelper.callExpressionFinder(psiElement);
+        if (callExpressionElement == null) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -90,13 +87,21 @@ public abstract class BlocWrapWithIntentionAction extends PsiElementBaseIntentio
     protected void invokeSnippetAction(@NotNull Project project, Editor editor, SnippetType snippetType) {
         final Document document = editor.getDocument();
 
-        final SnippetSelection selection = snippetSelection;
-        final String selectedText = document.getText(TextRange.create(selection.getOffsetL(), selection.getOffsetR()));
+        final PsiElement element = callExpressionElement;
+        final TextRange elementSelectionRange = element.getTextRange();
+        final int offsetStart = elementSelectionRange.getStartOffset();
+        final int offsetEnd = elementSelectionRange.getEndOffset();
+
+        if (!WrapHelper.isSelectionValid(offsetStart, offsetEnd)) {
+            return;
+        }
+
+        final String selectedText = document.getText(TextRange.create(offsetStart, offsetEnd));
         final String replaceWith = Snippets.getSnippet(snippetType, selectedText);
 
         // wrap the widget:
         WriteCommandAction.runWriteCommandAction(project, () -> {
-                    document.replaceString(selection.getOffsetL(), selection.getOffsetR(), replaceWith);
+                    document.replaceString(offsetStart, offsetEnd, replaceWith);
                 }
         );
 
@@ -112,7 +117,7 @@ public abstract class BlocWrapWithIntentionAction extends PsiElementBaseIntentio
                 continue;
             }
 
-            final int caretOffset = selection.getOffsetL() + replaceWith.indexOf(snippet);
+            final int caretOffset = offsetStart + replaceWith.indexOf(snippet);
             final VisualPosition visualPos = editor.offsetToVisualPosition(caretOffset);
             caretModel.addCaret(visualPos);
 

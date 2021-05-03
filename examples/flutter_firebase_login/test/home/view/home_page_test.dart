@@ -39,9 +39,7 @@ void main() {
         await tester.pumpWidget(
           BlocProvider.value(
             value: appBloc,
-            child: MaterialApp(
-              home: HomePage(),
-            ),
+            child: const MaterialApp(home: HomePage()),
           ),
         );
         await tester.tap(find.byKey(logoutButtonKey));
@@ -54,9 +52,7 @@ void main() {
         await tester.pumpWidget(
           BlocProvider.value(
             value: appBloc,
-            child: MaterialApp(
-              home: HomePage(),
-            ),
+            child: const MaterialApp(home: HomePage()),
           ),
         );
         expect(find.byType(Avatar), findsOneWidget);
@@ -66,9 +62,7 @@ void main() {
         await tester.pumpWidget(
           BlocProvider.value(
             value: appBloc,
-            child: MaterialApp(
-              home: HomePage(),
-            ),
+            child: const MaterialApp(home: HomePage()),
           ),
         );
         expect(find.text('test@gmail.com'), findsOneWidget);
@@ -79,9 +73,7 @@ void main() {
         await tester.pumpWidget(
           BlocProvider.value(
             value: appBloc,
-            child: MaterialApp(
-              home: HomePage(),
-            ),
+            child: const MaterialApp(home: HomePage()),
           ),
         );
         expect(find.text('Joe'), findsOneWidget);
