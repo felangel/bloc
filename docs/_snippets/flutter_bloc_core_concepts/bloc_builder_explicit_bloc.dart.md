@@ -1,6 +1,6 @@
 ```dart
 BlocBuilder<BlocA, BlocAState>(
-  cubit: blocA, // provide the local cubit instance
+  bloc: blocA, // provide the local bloc instance
   builder: (context, state) {
     // return widget here based on BlocA's state
   }
