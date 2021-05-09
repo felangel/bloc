@@ -42,7 +42,7 @@ class BlocUnhandledErrorException implements Exception {
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
-abstract class Bloc<Event, State> extends BlocBase<State> {
+abstract class Bloc<Event, State> extends _BlocBaseImpl<State> {
   /// {@macro bloc}
   Bloc(State initialState) : super(initialState) {
     _bindEventsToStates();
@@ -263,7 +263,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
 /// ```
 ///
 /// {@endtemplate}
-abstract class Cubit<State> extends BlocBase<State> {
+abstract class Cubit<State> extends _BlocBaseImpl<State> {
   /// {@macro cubit}
   Cubit(State initialState) : super(initialState);
 }
@@ -273,8 +273,94 @@ abstract class Cubit<State> extends BlocBase<State> {
 /// both [Bloc] and [Cubit].
 /// {@endtemplate}
 abstract class BlocBase<State> {
+  /// The current [state].
+  State get state;
+
+  /// The current state stream.
+  Stream<State> get stream;
+
+  /// Adds a subscription to the `Stream<State>`.
+  /// Returns a [StreamSubscription] which handles events from
+  /// the `Stream<State>` using the provided [onData], [onError] and [onDone]
+  /// handlers.
+  @Deprecated(
+    'Use stream.listen instead. Will be removed in v8.0.0',
+  )
+  StreamSubscription<State> listen(
+    void Function(State)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  });
+
+  /// Updates the [state] to the provided [state].
+  /// [emit] does nothing if the instance has been closed or if the
+  /// [state] being emitted is equal to the current [state].
+  ///
+  /// To allow for the possibility of notifying listeners of the initial state,
+  /// emitting a state which is equal to the initial state is allowed as long
+  /// as it is the first thing emitted by the instance.
+  void emit(State state);
+
+  /// Called whenever a [change] occurs with the given [change].
+  /// A [change] occurs when a new `state` is emitted.
+  /// [onChange] is called before the `state` of the `cubit` is updated.
+  /// [onChange] is a great spot to add logging/analytics for a specific `cubit`.
+  ///
+  /// **Note: `super.onChange` should always be called first.**
+  /// ```dart
+  /// @override
+  /// void onChange(Change change) {
+  ///   // Always call super.onChange with the current change
+  ///   super.onChange(change);
+  ///
+  ///   // Custom onChange logic goes here
+  /// }
+  /// ```
+  ///
+  /// See also:
+  ///
+  /// * [BlocObserver] for observing [Cubit] behavior globally.
+  @mustCallSuper
+  void onChange(Change<State> change);
+
+  /// Reports an [error] which triggers [onError] with an optional [StackTrace].
+  @mustCallSuper
+  void addError(Object error, [StackTrace? stackTrace]);
+
+  /// Called whenever an [error] occurs and notifies [BlocObserver.onError].
+  ///
+  /// In debug mode, [onError] throws a [BlocUnhandledErrorException] for
+  /// improved visibility.
+  ///
+  /// In release mode, [onError] does not throw and will instead only report
+  /// the error to [BlocObserver.onError].
+  ///
+  /// **Note: `super.onError` should always be called last.**
+  /// ```dart
+  /// @override
+  /// void onError(Object error, StackTrace stackTrace) {
+  ///   // Custom onError logic goes here
+  ///
+  ///   // Always call super.onError with the current error and stackTrace
+  ///   super.onError(error, stackTrace);
+  /// }
+  /// ```
+  @protected
+  @mustCallSuper
+  void onError(Object error, StackTrace stackTrace);
+
+  /// Closes the instance.
+  /// This method should be called when the instance is no longer needed.
+  /// Once [close] is called, the instance can no longer be used.
+  @mustCallSuper
+  Future<void> close();
+}
+
+/// Actual implementation of the BlocBase iterface
+abstract class _BlocBaseImpl<State> implements BlocBase<State> {
   /// {@macro bloc_stream}
-  BlocBase(this._state) {
+  _BlocBaseImpl(this._state) {
     // ignore: invalid_use_of_protected_member
     Bloc.observer.onCreate(this);
   }
@@ -289,15 +375,18 @@ abstract class BlocBase<State> {
   bool _emitted = false;
 
   /// The current [state].
+  @override
   State get state => _state;
 
   /// The current state stream.
+  @override
   Stream<State> get stream => _stateController.stream;
 
   /// Adds a subscription to the `Stream<State>`.
   /// Returns a [StreamSubscription] which handles events from
   /// the `Stream<State>` using the provided [onData], [onError] and [onDone]
   /// handlers.
+  @override
   @Deprecated(
     'Use stream.listen instead. Will be removed in v8.0.0',
   )
@@ -322,6 +411,7 @@ abstract class BlocBase<State> {
   /// To allow for the possibility of notifying listeners of the initial state,
   /// emitting a state which is equal to the initial state is allowed as long
   /// as it is the first thing emitted by the instance.
+  @override
   void emit(State state) {
     if (_stateController.isClosed) return;
     if (state == _state && _emitted) return;
@@ -350,6 +440,7 @@ abstract class BlocBase<State> {
   /// See also:
   ///
   /// * [BlocObserver] for observing [Cubit] behavior globally.
+  @override
   @mustCallSuper
   void onChange(Change<State> change) {
     // ignore: invalid_use_of_protected_member
@@ -357,6 +448,7 @@ abstract class BlocBase<State> {
   }
 
   /// Reports an [error] which triggers [onError] with an optional [StackTrace].
+  @override
   @mustCallSuper
   void addError(Object error, [StackTrace? stackTrace]) {
     onError(error, stackTrace ?? StackTrace.current);
@@ -380,6 +472,7 @@ abstract class BlocBase<State> {
   ///   super.onError(error, stackTrace);
   /// }
   /// ```
+  @override
   @protected
   @mustCallSuper
   void onError(Object error, StackTrace stackTrace) {
@@ -393,6 +486,7 @@ abstract class BlocBase<State> {
   /// Closes the instance.
   /// This method should be called when the instance is no longer needed.
   /// Once [close] is called, the instance can no longer be used.
+  @override
   @mustCallSuper
   Future<void> close() async {
     // ignore: invalid_use_of_protected_member
