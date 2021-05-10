@@ -357,7 +357,7 @@ abstract class BlocBase<State> {
   Future<void> close();
 }
 
-/// Actual implementation of the BlocBase interface
+/// Default implementation of the BlocBase interface
 abstract class _BlocBaseImpl<State> implements BlocBase<State> {
   /// {@macro bloc_stream}
   _BlocBaseImpl(this._state) {
