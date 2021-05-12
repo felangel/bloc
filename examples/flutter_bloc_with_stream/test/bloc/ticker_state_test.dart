@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('TickerState', () {
-    group('TickerStarted', () {
+    group('TickerInitial', () {
       test('supports value comparison', () {
         expect(TickerInitial(), TickerInitial());
       });

@@ -10,7 +10,7 @@ void main() {
   group('TickerBloc', () {
     late Ticker ticker;
 
-    setUpAll(() {
+    setUp(() {
       ticker = MockTicker();
       when(ticker.tick)
         .thenAnswer((_) => Stream<int>.fromIterable([1, 2, 3]));
