@@ -13,7 +13,7 @@ void main() {
       test('supports value comparison', () {
         expect(const TickerTickSuccess(1), const TickerTickSuccess(1));
         expect(const TickerTickSuccess(1),
-          isNot(equals(const TickerTickSuccess(2))));
+            isNot(equals(const TickerTickSuccess(2))));
       });
     });
   });

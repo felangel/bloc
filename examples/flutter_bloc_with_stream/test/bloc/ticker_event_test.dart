@@ -8,12 +8,5 @@ void main() {
         expect(TickerStarted(), TickerStarted());
       });
     });
-
-    group('TickerTicked', () {
-      test('supports value comparison', () {
-        expect(const TickerTicked(1), const TickerTicked(1));
-        expect(const TickerTicked(1), isNot(equals(const TickerTicked(2))));
-      });
-    });
   });
 }
