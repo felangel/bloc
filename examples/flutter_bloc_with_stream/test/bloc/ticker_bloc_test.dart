@@ -12,31 +12,35 @@ void main() {
 
     setUp(() {
       ticker = MockTicker();
-      when(ticker.tick)
-        .thenAnswer((_) => Stream<int>.fromIterable([1, 2, 3]));
+      when(ticker.tick).thenAnswer(
+        (_) => Stream<int>.fromIterable([1, 2, 3]),
+      );
     });
 
     test('initial state is TickerInitial', () {
       expect(TickerBloc(ticker).state, TickerInitial());
     });
 
-    blocTest<TickerBloc, TickerState>('emits [] when ticker has not started',
+    blocTest<TickerBloc, TickerState>(
+      'emits [] when ticker has not started',
       build: () => TickerBloc(ticker),
-      expect: () => <TickerState>[]
+      expect: () => <TickerState>[],
     );
 
-    blocTest<TickerBloc, TickerState>('emits TickerTickSuccess from 1 to 3',
+    blocTest<TickerBloc, TickerState>(
+      'emits TickerTickSuccess from 1 to 3',
       build: () => TickerBloc(ticker),
       act: (bloc) => bloc.add(TickerStarted()),
       expect: () => <TickerState>[
         const TickerTickSuccess(1),
         const TickerTickSuccess(2),
         const TickerTickSuccess(3),
-      ]
+      ],
     );
 
-    blocTest<TickerBloc, TickerState>('emits TickerTickSuccess '
-        'from 1 to 3 and restarts',
+    blocTest<TickerBloc, TickerState>(
+      'emits TickerTickSuccess '
+      'from 1 to 3 and restarts',
       build: () => TickerBloc(ticker),
       act: (bloc) => bloc..add(TickerStarted())..add(TickerStarted()),
       expect: () => <TickerState>[
@@ -46,7 +50,7 @@ void main() {
         const TickerTickSuccess(1),
         const TickerTickSuccess(2),
         const TickerTickSuccess(3),
-      ]
+      ],
     );
   });
 }

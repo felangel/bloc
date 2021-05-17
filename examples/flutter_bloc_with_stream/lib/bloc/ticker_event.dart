@@ -16,10 +16,8 @@ abstract class TickerEvent extends Equatable {
 /// has requested to start the [Ticker].
 class TickerStarted extends TickerEvent {}
 
-///
-class TickerTicked extends TickerEvent {
-  /// {@macro ticker_ticked}
-  const TickerTicked(this.tickCount);
+class _TickerTicked extends TickerEvent {
+  const _TickerTicked(this.tickCount);
 
   /// The current tick count.
   final int tickCount;

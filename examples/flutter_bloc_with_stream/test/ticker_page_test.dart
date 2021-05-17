@@ -6,33 +6,36 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
-const _startTickerButtonKey =
-  Key('tickerPage_startTicker_floatingActionButton');
-
 class MockTickerBloc extends MockBloc<TickerEvent, TickerState>
     implements TickerBloc {}
 
-Widget wrapper({required Widget child, required TickerBloc tickerBloc}) {
-  return MaterialApp(
-    home: BlocProvider.value(value: tickerBloc, child: child),
-  );
+class FakeTickerEvent extends Fake implements TickerEvent {}
+
+class FakeTickerState extends Fake implements TickerState {}
+
+extension on WidgetTester {
+  Future<void> pumpTickerPage(TickerBloc tickerBloc) {
+    return pumpWidget(
+      MaterialApp(
+        home: BlocProvider.value(value: tickerBloc, child: TickerPage()),
+      ),
+    );
+  }
 }
 
 void main() {
   late TickerBloc tickerBloc;
 
-  setUp(() {
-    registerFallbackValue<TickerState>(TickerInitial());
-    registerFallbackValue<TickerEvent>(TickerStarted());
+  setUpAll(() {
+    registerFallbackValue<TickerEvent>(FakeTickerEvent());
+    registerFallbackValue<TickerState>(FakeTickerState());
     tickerBloc = MockTickerBloc();
   });
 
   group('TickerPage', () {
     testWidgets('renders initial TickerPage state', (tester) async {
       when(() => tickerBloc.state).thenReturn(TickerInitial());
-      await tester.pumpWidget(
-        wrapper(child: TickerPage(), tickerBloc: tickerBloc)
-      );
+      await tester.pumpTickerPage(tickerBloc);
 
       expect(find.text('Press the floating button to start'), findsOneWidget);
     });
@@ -40,36 +43,32 @@ void main() {
     testWidgets('renders tick count ', (tester) async {
       var tickCount = 5;
       when(() => tickerBloc.state).thenReturn(TickerTickSuccess(tickCount));
-      await tester.pumpWidget(
-        wrapper(child: TickerPage(), tickerBloc: tickerBloc)
-      );
+      await tester.pumpTickerPage(tickerBloc);
 
       expect(find.text('Tick #$tickCount'), findsOneWidget);
     });
 
-    testWidgets('ticker started '
+    testWidgets(
+        'adds ticker started '
         'when start ticker floating action button is pressed', (tester) async {
       when(() => tickerBloc.state).thenReturn(TickerInitial());
-      await tester.pumpWidget(
-          wrapper(child: TickerPage(), tickerBloc: tickerBloc)
-      );
+      await tester.pumpTickerPage(tickerBloc);
 
-      await tester.tap(find.byKey(_startTickerButtonKey));
+      await tester.tap(find.byType(FloatingActionButton));
       verify(() => tickerBloc.add(TickerStarted())).called(1);
     });
 
-    testWidgets('tick count periodically increments '
+    testWidgets(
+        'tick count periodically increments '
         'every 1 second', (tester) async {
-      whenListen(tickerBloc, Stream.periodic(
-        const Duration(seconds: 1),
-        (i) => TickerTickSuccess(i)).take(3),
+      whenListen(
+        tickerBloc,
+        Stream.periodic(const Duration(seconds: 1), (i) => TickerTickSuccess(i))
+            .take(3),
         initialState: TickerInitial(),
       );
 
-      await tester.pumpWidget(
-        wrapper(child: TickerPage(),
-        tickerBloc: tickerBloc..add(TickerStarted()))
-      );
+      await tester.pumpTickerPage(tickerBloc..add(TickerStarted()));
 
       await tester.pump(const Duration(seconds: 1));
       expect(find.text('Tick #0'), findsOneWidget);
