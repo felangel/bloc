@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc_with_stream/bloc/ticker_bloc.dart';
+import 'package:flutter_bloc_with_stream/main.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockTickerBloc extends MockBloc<TickerEvent, TickerState>
+    implements TickerBloc {}
+
+class FakeTickerEvent extends Fake implements TickerEvent {}
+
+class FakeTickerState extends Fake implements TickerState {}
+
+extension on WidgetTester {
+  Future<void> pumpTickerPage(TickerBloc tickerBloc) {
+    return pumpWidget(
+      MaterialApp(
+        home: BlocProvider.value(value: tickerBloc, child: TickerPage()),
+      ),
+    );
+  }
+}
+
+void main() {
+  late TickerBloc tickerBloc;
+
+  setUpAll(() {
+    registerFallbackValue<TickerEvent>(FakeTickerEvent());
+    registerFallbackValue<TickerState>(FakeTickerState());
+    tickerBloc = MockTickerBloc();
+  });
+
+  group('TickerPage', () {
+    testWidgets('renders initial TickerPage state', (tester) async {
+      when(() => tickerBloc.state).thenReturn(TickerInitial());
+      await tester.pumpTickerPage(tickerBloc);
+
+      expect(find.text('Press the floating button to start'), findsOneWidget);
+    });
+
+    testWidgets('renders tick count ', (tester) async {
+      final tickCount = 5;
+      when(() => tickerBloc.state).thenReturn(TickerTickSuccess(tickCount));
+      await tester.pumpTickerPage(tickerBloc);
+
+      expect(find.text('Tick #$tickCount'), findsOneWidget);
+    });
+
+    testWidgets(
+        'adds ticker started '
+        'when start ticker floating action button is pressed', (tester) async {
+      when(() => tickerBloc.state).thenReturn(TickerInitial());
+      await tester.pumpTickerPage(tickerBloc);
+
+      await tester.tap(find.byType(FloatingActionButton));
+      verify(() => tickerBloc.add(TickerStarted())).called(1);
+    });
+
+    testWidgets(
+        'tick count periodically increments '
+        'every 1 second', (tester) async {
+      whenListen(
+        tickerBloc,
+        Stream.periodic(
+          const Duration(seconds: 1),
+          (i) => TickerTickSuccess(i),
+        ).take(3),
+        initialState: TickerInitial(),
+      );
+
+      await tester.pumpTickerPage(tickerBloc..add(TickerStarted()));
+
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('Tick #0'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('Tick #1'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('Tick #2'), findsOneWidget);
+    });
+  });
+}

@@ -19,6 +19,7 @@ class TickerStarted extends TickerEvent {}
 class _TickerTicked extends TickerEvent {
   const _TickerTicked(this.tickCount);
 
+  /// The current tick count.
   final int tickCount;
 
   @override
