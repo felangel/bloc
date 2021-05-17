@@ -12,7 +12,7 @@
 
 See `BlocListener` if you want to "do" anything in response to state changes such as navigation, showing a dialog, etc...
 
-If the cubit parameter is omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+If the `bloc` parameter is omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
 
 [bloc_builder.dart](_snippets/flutter_bloc_core_concepts/bloc_builder.dart.md ':include')
 
@@ -64,7 +64,7 @@ to:
 
 `listener` is only called once for each state change (**NOT** including the initial state) unlike `builder` in `BlocBuilder` and is a `void` function.
 
-If the cubit parameter is omitted, `BlocListener` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+If the `bloc` parameter is omitted, `BlocListener` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
 
 [bloc_listener.dart](_snippets/flutter_bloc_core_concepts/bloc_listener.dart.md ':include')
 
@@ -90,14 +90,14 @@ to:
 
 ### BlocConsumer
 
-**BlocConsumer** exposes a `builder` and `listener` in order to react to new states. `BlocConsumer` is analogous to a nested `BlocListener` and `BlocBuilder` but reduces the amount of boilerplate needed. `BlocConsumer` should only be used when it is necessary to both rebuild UI and execute other reactions to state changes in the `cubit`. `BlocConsumer` takes a required `BlocWidgetBuilder` and `BlocWidgetListener` and an optional `cubit`, `BlocBuilderCondition`, and `BlocListenerCondition`.
+**BlocConsumer** exposes a `builder` and `listener` in order to react to new states. `BlocConsumer` is analogous to a nested `BlocListener` and `BlocBuilder` but reduces the amount of boilerplate needed. `BlocConsumer` should only be used when it is necessary to both rebuild UI and execute other reactions to state changes in the `bloc`. `BlocConsumer` takes a required `BlocWidgetBuilder` and `BlocWidgetListener` and an optional `bloc`, `BlocBuilderCondition`, and `BlocListenerCondition`.
 
-If the `cubit` parameter is omitted, `BlocConsumer` will automatically perform a lookup using
+If the `bloc` parameter is omitted, `BlocConsumer` will automatically perform a lookup using
 `BlocProvider` and the current `BuildContext`.
 
 [bloc_consumer.dart](_snippets/flutter_bloc_core_concepts/bloc_consumer.dart.md ':include')
 
-An optional `listenWhen` and `buildWhen` can be implemented for more granular control over when `listener` and `builder` are called. The `listenWhen` and `buildWhen` will be invoked on each `cubit` `state` change. They each take the previous `state` and current `state` and must return a `bool` which determines whether or not the `builder` and/or `listener` function will be invoked. The previous `state` will be initialized to the `state` of the `cubit` when the `BlocConsumer` is initialized. `listenWhen` and `buildWhen` are optional and if they aren't implemented, they will default to `true`.
+An optional `listenWhen` and `buildWhen` can be implemented for more granular control over when `listener` and `builder` are called. The `listenWhen` and `buildWhen` will be invoked on each `bloc` `state` change. They each take the previous `state` and current `state` and must return a `bool` which determines whether or not the `builder` and/or `listener` function will be invoked. The previous `state` will be initialized to the `state` of the `bloc` when the `BlocConsumer` is initialized. `listenWhen` and `buildWhen` are optional and if they aren't implemented, they will default to `true`.
 
 [bloc_consumer.dart](_snippets/flutter_bloc_core_concepts/bloc_consumer_condition.dart.md ':include')
 
