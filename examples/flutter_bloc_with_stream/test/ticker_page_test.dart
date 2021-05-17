@@ -41,7 +41,7 @@ void main() {
     });
 
     testWidgets('renders tick count ', (tester) async {
-      var tickCount = 5;
+      final tickCount = 5;
       when(() => tickerBloc.state).thenReturn(TickerTickSuccess(tickCount));
       await tester.pumpTickerPage(tickerBloc);
 
@@ -63,8 +63,10 @@ void main() {
         'every 1 second', (tester) async {
       whenListen(
         tickerBloc,
-        Stream.periodic(const Duration(seconds: 1), (i) => TickerTickSuccess(i))
-            .take(3),
+        Stream.periodic(
+          const Duration(seconds: 1),
+          (i) => TickerTickSuccess(i),
+        ).take(3),
         initialState: TickerInitial(),
       );
 
