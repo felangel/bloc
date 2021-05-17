@@ -29,8 +29,13 @@ void main() {
   setUpAll(() {
     registerFallbackValue<TickerEvent>(FakeTickerEvent());
     registerFallbackValue<TickerState>(FakeTickerState());
+  });
+
+  setUp(() {
     tickerBloc = MockTickerBloc();
   });
+
+  tearDown(() => reset(tickerBloc));
 
   group('TickerPage', () {
     testWidgets('renders initial TickerPage state', (tester) async {
