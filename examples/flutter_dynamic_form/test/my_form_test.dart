@@ -1,10 +1,10 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dynamic_form/bloc/new_car_bloc.dart';
-import 'package:flutter_dynamic_form/main.dart';
+import 'package:flutter_dynamic_form/app.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MockNewCarBloc extends MockBloc<NewCarEvent, NewCarState>
     implements NewCarBloc {}
@@ -41,11 +41,13 @@ void main() {
   const mockYears = ['2008', '2020'];
   final mockYear = mockYears[0];
 
-  setUpAll(() {
+  setUp(() {
     registerFallbackValue<NewCarState>(FakeNewCarState());
     registerFallbackValue<NewCarEvent>(FakeNewCarEvent());
     newCarBloc = MockNewCarBloc();
   });
+
+  tearDown(() => reset(newCarBloc));
 
   group('MyForm', () {
     testWidgets('loads car form', (tester) async {
@@ -63,7 +65,7 @@ void main() {
         year: mockYear,
       ));
       await tester.pumpMyForm(newCarBloc);
-      await tester.tap(find.text('Submit'));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
       expect(find.byType(SnackBar), findsOneWidget);
       expect(
@@ -75,7 +77,7 @@ void main() {
     testWidgets('cannot submit new car form', (tester) async {
       when(() => newCarBloc.state).thenReturn(const NewCarState.initial());
       await tester.pumpMyForm(newCarBloc);
-      await tester.tap(find.text('Submit'));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
       expect(find.byType(SnackBar), findsNothing);
     });
@@ -115,39 +117,6 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       await tester.tap(find.text(mockYear).first);
       verify(() => newCarBloc.add(NewCarYearChanged(year: mockYear))).called(1);
-    });
-
-    testWidgets('finds no brands under DropdownButton', (tester) async {
-      when(() => newCarBloc.state)
-          .thenReturn(const NewCarState.initial().copyWith(
-        brands: [],
-      ));
-      await tester.pumpMyForm(newCarBloc);
-      await tester.tap(find.byKey(_brandDropdownButtonKey));
-      await tester.pump(const Duration(seconds: 1));
-      expect(find.byType(DropdownMenuItem), findsNothing);
-    });
-
-    testWidgets('finds no models under DropdownButton', (tester) async {
-      when(() => newCarBloc.state)
-          .thenReturn(const NewCarState.initial().copyWith(
-        models: [],
-      ));
-      await tester.pumpMyForm(newCarBloc);
-      await tester.tap(find.byKey(_modelDropdownButtonKey));
-      await tester.pump(const Duration(seconds: 1));
-      expect(find.byType(DropdownMenuItem), findsNothing);
-    });
-
-    testWidgets('finds no years under DropdownButton', (tester) async {
-      when(() => newCarBloc.state)
-          .thenReturn(const NewCarState.initial().copyWith(
-        years: [],
-      ));
-      await tester.pumpMyForm(newCarBloc);
-      await tester.tap(find.byKey(_yearDropdownButtonKey));
-      await tester.pump(const Duration(seconds: 1));
-      expect(find.byType(DropdownMenuItem), findsNothing);
     });
   });
 }

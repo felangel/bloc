@@ -1,4 +1,4 @@
-import 'package:flutter_dynamic_form/main.dart';
+import 'package:flutter_dynamic_form/app.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

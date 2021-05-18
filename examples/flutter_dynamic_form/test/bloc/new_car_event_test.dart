@@ -5,7 +5,8 @@ void main() {
   group('NewCarEvent', () {
     group('NewCarFormLoaded', () {
       test('supports value comparison', () {
-        expect(const NewCarFormLoaded(), const NewCarFormLoaded());
+        // ignore: prefer_const_constructors
+        expect(const NewCarFormLoaded(), NewCarFormLoaded());
       });
     });
 

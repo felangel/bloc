@@ -1,6 +1,5 @@
 part of 'new_car_bloc.dart';
 
-@immutable
 abstract class NewCarEvent extends Equatable {
   const NewCarEvent();
 }
