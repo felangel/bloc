@@ -53,9 +53,7 @@ class MyForm extends StatelessWidget {
                 items: state.brands.isNotEmpty == true
                     ? state.brands.map((brand) {
                         return DropdownMenuItem(
-                          value: brand,
-                          child: Text(brand)
-                        );
+                            value: brand, child: Text(brand));
                       }).toList()
                     : const [],
                 value: state.brand,
@@ -69,9 +67,7 @@ class MyForm extends StatelessWidget {
                 items: state.models.isNotEmpty == true
                     ? state.models.map((model) {
                         return DropdownMenuItem(
-                          value: model,
-                          child: Text(model)
-                        );
+                            value: model, child: Text(model));
                       }).toList()
                     : const [],
                 value: state.model,
