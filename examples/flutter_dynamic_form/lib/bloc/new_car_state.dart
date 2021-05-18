@@ -1,6 +1,6 @@
 part of 'new_car_bloc.dart';
 
-class NewCarState {
+class NewCarState extends Equatable {
   const NewCarState({
     required this.brands,
     required this.brand,
@@ -122,4 +122,7 @@ class NewCarState {
       year: year ?? this.year,
     );
   }
+
+  @override
+  List<Object?> get props => [brands, brand, models, model, years, year];
 }

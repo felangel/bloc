@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_firebase_login/app/app.dart';
 import 'package:flutter_firebase_login/home/home.dart';
 import 'package:flutter_firebase_login/login/login.dart';
+import 'package:mocktail/mocktail.dart';
 
 void main() {
   group('onGenerateAppViewPages', () {
