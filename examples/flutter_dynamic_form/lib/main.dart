@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(title: const Text('Flutter Dynamic Form')),
         body: BlocProvider(
           create: (_) => NewCarBloc(newCarRepository: NewCarRepository())
-            ..add(NewCarFormLoaded()),
+            ..add(const NewCarFormLoaded()),
           child: MyForm(),
         ),
       ),
@@ -47,35 +47,50 @@ class MyForm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            DropdownButton<String>(
-              items: state.brands.isNotEmpty == true
-                  ? state.brands.map((brand) {
-                      return DropdownMenuItem(value: brand, child: Text(brand));
-                    }).toList()
-                  : const [],
-              value: state.brand,
-              hint: Text('Select a Brand'),
-              onChanged: _onBrandChanged,
+            Material(
+              child: DropdownButton<String>(
+                key: const Key('myForm_onBrandChanged'),
+                items: state.brands.isNotEmpty == true
+                    ? state.brands.map((brand) {
+                        return DropdownMenuItem(
+                          value: brand,
+                          child: Text(brand)
+                        );
+                      }).toList()
+                    : const [],
+                value: state.brand,
+                hint: const Text('Select a Brand'),
+                onChanged: _onBrandChanged,
+              ),
             ),
-            DropdownButton<String>(
-              items: state.models.isNotEmpty == true
-                  ? state.models.map((model) {
-                      return DropdownMenuItem(value: model, child: Text(model));
-                    }).toList()
-                  : const [],
-              value: state.model,
-              hint: Text('Select a Model'),
-              onChanged: _onModelChanged,
+            Material(
+              child: DropdownButton<String>(
+                key: const Key('myForm_onModelChanged'),
+                items: state.models.isNotEmpty == true
+                    ? state.models.map((model) {
+                        return DropdownMenuItem(
+                          value: model,
+                          child: Text(model)
+                        );
+                      }).toList()
+                    : const [],
+                value: state.model,
+                hint: const Text('Select a Model'),
+                onChanged: _onModelChanged,
+              ),
             ),
-            DropdownButton<String>(
-              items: state.years.isNotEmpty == true
-                  ? state.years.map((year) {
-                      return DropdownMenuItem(value: year, child: Text(year));
-                    }).toList()
-                  : const [],
-              value: state.year,
-              hint: Text('Select a Year'),
-              onChanged: _onYearChanged,
+            Material(
+              child: DropdownButton<String>(
+                key: const Key('myForm_onYearChanged'),
+                items: state.years.isNotEmpty == true
+                    ? state.years.map((year) {
+                        return DropdownMenuItem(value: year, child: Text(year));
+                      }).toList()
+                    : const [],
+                value: state.year,
+                hint: const Text('Select a Year'),
+                onChanged: _onYearChanged,
+              ),
             ),
             ElevatedButton(
               onPressed: state.isComplete
