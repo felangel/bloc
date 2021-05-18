@@ -41,7 +41,7 @@ void main() {
   const mockYears = ['2008', '2020'];
   final mockYear = mockYears[0];
 
-  setUpAll(() {
+  setUp(() {
     registerFallbackValue<NewCarState>(FakeNewCarState());
     registerFallbackValue<NewCarEvent>(FakeNewCarEvent());
     newCarBloc = MockNewCarBloc();

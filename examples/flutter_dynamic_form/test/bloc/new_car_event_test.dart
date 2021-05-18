@@ -31,7 +31,7 @@ void main() {
       });
     });
 
-    group('NewCarModelChanged', () {
+    group('NewCarYearChanged', () {
       final mockYear = '2021';
       test('supports value comparison', () {
         expect(const NewCarYearChanged(), const NewCarYearChanged());
