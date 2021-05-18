@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dynamic_form/new_car_repository.dart';
-import 'package:meta/meta.dart';
 
 part 'new_car_event.dart';
 part 'new_car_state.dart';

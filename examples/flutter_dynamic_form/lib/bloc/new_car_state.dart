@@ -10,17 +10,6 @@ class NewCarState extends Equatable {
     required this.year,
   });
 
-  final List<String> brands;
-  final String? brand;
-
-  final List<String> models;
-  final String? model;
-
-  final List<String> years;
-  final String? year;
-
-  bool get isComplete => brand != null && model != null && year != null;
-
   const NewCarState.initial()
       : this(
           brands: const <String>[],
@@ -122,6 +111,17 @@ class NewCarState extends Equatable {
       year: year ?? this.year,
     );
   }
+
+  final List<String> brands;
+  final String? brand;
+
+  final List<String> models;
+  final String? model;
+
+  final List<String> years;
+  final String? year;
+
+  bool get isComplete => brand != null && model != null && year != null;
 
   @override
   List<Object?> get props => [brands, brand, models, model, years, year];
