@@ -21,83 +21,112 @@ class NewCarPage extends StatelessWidget {
 class NewCarForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    void _onBrandChanged(String? brand) =>
-        context.read<NewCarBloc>().add(NewCarBrandChanged(brand: brand));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        const _BrandDropdownButton(),
+        const _ModelDropdownButton(),
+        const _YearDropdownButton(),
+        const _FormSubmitButton(),
+      ],
+    );
+  }
+}
 
-    void _onModelChanged(String? model) =>
-        context.read<NewCarBloc>().add(NewCarModelChanged(model: model));
+class _BrandDropdownButton extends StatelessWidget {
+  const _BrandDropdownButton({Key? key}) : super(key: key);
 
-    void _onYearChanged(String? year) =>
-        context.read<NewCarBloc>().add(NewCarYearChanged(year: year));
+  @override
+  Widget build(BuildContext context) {
+    final brands = context.select((NewCarBloc bloc) => bloc.state.brands);
+    final brand = context.select((NewCarBloc bloc) => bloc.state.brand);
+    return Material(
+      child: DropdownButton<String>(
+        key: const Key('newCarForm_brand_dropdownButton'),
+        items: brands.isNotEmpty
+            ? brands.map((brand) {
+                return DropdownMenuItem(value: brand, child: Text(brand));
+              }).toList()
+            : const [],
+        value: brand,
+        hint: const Text('Select a Brand'),
+        onChanged: (brand) {
+          context.read<NewCarBloc>().add(NewCarBrandChanged(brand: brand));
+        },
+      ),
+    );
+  }
+}
 
-    void _onFormSubmitted({String? brand, String? model, String? year}) {
+class _ModelDropdownButton extends StatelessWidget {
+  const _ModelDropdownButton({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final models = context.select((NewCarBloc bloc) => bloc.state.models);
+    final model = context.select((NewCarBloc bloc) => bloc.state.model);
+    return Material(
+      child: DropdownButton<String>(
+        key: const Key('newCarForm_model_dropdownButton'),
+        items: models.isNotEmpty
+            ? models.map((model) {
+                return DropdownMenuItem(value: model, child: Text(model));
+              }).toList()
+            : const [],
+        value: model,
+        hint: const Text('Select a Model'),
+        onChanged: (model) {
+          context.read<NewCarBloc>().add(NewCarModelChanged(model: model));
+        },
+      ),
+    );
+  }
+}
+
+class _YearDropdownButton extends StatelessWidget {
+  const _YearDropdownButton({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final years = context.select((NewCarBloc bloc) => bloc.state.years);
+    final year = context.select((NewCarBloc bloc) => bloc.state.year);
+    return Material(
+      child: DropdownButton<String>(
+        key: const Key('newCarForm_year_dropdownButton'),
+        items: years.isNotEmpty
+            ? years.map((year) {
+                return DropdownMenuItem(value: year, child: Text(year));
+              }).toList()
+            : const [],
+        value: year,
+        hint: const Text('Select a Year'),
+        onChanged: (year) {
+          context.read<NewCarBloc>().add(NewCarYearChanged(year: year));
+        },
+      ),
+    );
+  }
+}
+
+class _FormSubmitButton extends StatelessWidget {
+  const _FormSubmitButton({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final state = context.watch<NewCarBloc>().state;
+
+    void _onFormSubmitted() {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
-          SnackBar(content: Text('Submitted $brand $model $year')),
+          SnackBar(
+            content:
+                Text('Submitted ${state.brand} ${state.model} ${state.year}'),
+          ),
         );
     }
 
-    return BlocBuilder<NewCarBloc, NewCarState>(
-      builder: (context, state) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Material(
-              child: DropdownButton<String>(
-                key: const Key('newCarForm_brand_dropdownButton'),
-                items: state.brands.isNotEmpty
-                    ? state.brands.map((brand) {
-                        return DropdownMenuItem(
-                            value: brand, child: Text(brand));
-                      }).toList()
-                    : const [],
-                value: state.brand,
-                hint: const Text('Select a Brand'),
-                onChanged: _onBrandChanged,
-              ),
-            ),
-            Material(
-              child: DropdownButton<String>(
-                key: const Key('newCarForm_model_dropdownButton'),
-                items: state.models.isNotEmpty
-                    ? state.models.map((model) {
-                        return DropdownMenuItem(
-                            value: model, child: Text(model));
-                      }).toList()
-                    : const [],
-                value: state.model,
-                hint: const Text('Select a Model'),
-                onChanged: _onModelChanged,
-              ),
-            ),
-            Material(
-              child: DropdownButton<String>(
-                key: const Key('newCarForm_year_dropdownButton'),
-                items: state.years.isNotEmpty
-                    ? state.years.map((year) {
-                        return DropdownMenuItem(value: year, child: Text(year));
-                      }).toList()
-                    : const [],
-                value: state.year,
-                hint: const Text('Select a Year'),
-                onChanged: _onYearChanged,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: state.isComplete
-                  ? () => _onFormSubmitted(
-                        brand: state.brand,
-                        model: state.model,
-                        year: state.year,
-                      )
-                  : null,
-              child: const Text('Submit'),
-            ),
-          ],
-        );
-      },
+    return ElevatedButton(
+      onPressed: state.isComplete ? _onFormSubmitted : null,
+      child: const Text('Submit'),
     );
   }
 }
