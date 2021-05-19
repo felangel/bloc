@@ -1,4 +1,4 @@
-import 'package:flutter_timer/bloc/timer_bloc.dart';
+import 'package:flutter_timer/timer/timer.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -6,8 +6,8 @@ void main() {
     group('TimerStarted', () {
       test('supports value comparison', () {
         expect(
-          const TimerStarted(duration: 60),
-          const TimerStarted(duration: 60),
+          TimerStarted(duration: 60),
+          TimerStarted(duration: 60),
         );
       });
     });
@@ -29,8 +29,8 @@ void main() {
     group('TimerTicked', () {
       test('supports value comparison', () {
         expect(
-          const TimerTicked(duration: 60),
-          const TimerTicked(duration: 60),
+          TimerTicked(duration: 60),
+          TimerTicked(duration: 60),
         );
       });
     });

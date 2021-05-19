@@ -1,5 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_timer/bloc/timer_bloc.dart';
+import 'package:flutter_timer/timer/timer.dart';
 import 'package:flutter_timer/ticker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

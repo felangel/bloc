@@ -3,9 +3,9 @@ import 'package:flutter_timer/ticker.dart';
 
 void main() {
   group('Ticker', () {
-    final ticker = Ticker();
-    test('ticker emits 5 ticks from 4-0 every 1 second', () {
-      expectLater(ticker.tick(ticks: 5), emitsInOrder(<int>[4, 3, 2, 1, 0]));
+    const ticker = Ticker();
+    test('ticker emits 3 ticks from 2-0 every second', () {
+      expectLater(ticker.tick(ticks: 3), emitsInOrder(<int>[2, 1, 0]));
     });
   });
 }

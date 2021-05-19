@@ -1,11 +1,12 @@
 import 'package:flutter_timer/app.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_timer/timer/timer.dart';
 
 void main() {
-  group('MyApp', () {
-    testWidgets('renders Timer', (tester) async {
-      await tester.pumpWidget(MyApp());
-      expect(find.byType(Timer), findsOneWidget);
+  group('App', () {
+    testWidgets('renders TimerPage', (tester) async {
+      await tester.pumpWidget(App());
+      expect(find.byType(TimerPage), findsOneWidget);
     });
   });
 }

@@ -1,4 +1,4 @@
-import 'package:flutter_timer/bloc/timer_bloc.dart';
+import 'package:flutter_timer/timer/timer.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
