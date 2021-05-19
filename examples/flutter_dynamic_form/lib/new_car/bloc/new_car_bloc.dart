@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_dynamic_form/new_car_repository.dart';
-import 'package:meta/meta.dart';
 
 part 'new_car_event.dart';
 part 'new_car_state.dart';
@@ -10,7 +10,7 @@ part 'new_car_state.dart';
 class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
   NewCarBloc({required NewCarRepository newCarRepository})
       : _newCarRepository = newCarRepository,
-        super(NewCarState.initial());
+        super(const NewCarState.initial());
 
   final NewCarRepository _newCarRepository;
 
@@ -30,7 +30,7 @@ class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
   }
 
   Stream<NewCarState> _mapNewCarFormLoadedToState() async* {
-    yield NewCarState.brandsLoadInProgress();
+    yield const NewCarState.brandsLoadInProgress();
     final brands = await _newCarRepository.fetchBrands();
     yield NewCarState.brandsLoadSuccess(brands: brands);
   }
