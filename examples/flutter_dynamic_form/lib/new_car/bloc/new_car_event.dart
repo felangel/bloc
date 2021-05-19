@@ -2,13 +2,13 @@ part of 'new_car_bloc.dart';
 
 abstract class NewCarEvent extends Equatable {
   const NewCarEvent();
+
+  @override
+  List<Object?> get props => [];
 }
 
 class NewCarFormLoaded extends NewCarEvent {
   const NewCarFormLoaded();
-
-  @override
-  List<Object?> get props => [];
 }
 
 class NewCarBrandChanged extends NewCarEvent {

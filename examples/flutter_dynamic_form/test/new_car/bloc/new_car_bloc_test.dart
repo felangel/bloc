@@ -1,5 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_dynamic_form/bloc/new_car_bloc.dart';
+import 'package:flutter_dynamic_form/new_car/new_car.dart';
 import 'package:flutter_dynamic_form/new_car_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -31,8 +31,7 @@ void main() {
     blocTest<NewCarBloc, NewCarState>(
       'emits brands loading in progress and brands load success',
       build: () {
-        when(newCarRepository.fetchBrands)
-            .thenAnswer((_) => Future<List<String>>.value(mockBrands));
+        when(newCarRepository.fetchBrands).thenAnswer((_) async => mockBrands);
         return NewCarBloc(newCarRepository: newCarRepository);
       },
       act: (bloc) => bloc.add(const NewCarFormLoaded()),
@@ -46,8 +45,9 @@ void main() {
     blocTest<NewCarBloc, NewCarState>(
       'emits models loading in progress and models load success',
       build: () {
-        when(() => newCarRepository.fetchModels(brand: mockBrand))
-            .thenAnswer((_) => Future<List<String>>.value(mockModels));
+        when(() => newCarRepository.fetchModels(brand: mockBrand)).thenAnswer(
+          (_) async => mockModels,
+        );
         return NewCarBloc(newCarRepository: newCarRepository);
       },
       act: (bloc) => bloc.add(NewCarBrandChanged(brand: mockBrand)),
@@ -59,18 +59,17 @@ void main() {
           models: mockModels,
         ),
       ],
-      verify: (_) =>
-          verify(() => newCarRepository.fetchModels(brand: mockBrand))
-              .called(1),
+      verify: (_) {
+        verify(() => newCarRepository.fetchModels(brand: mockBrand)).called(1);
+      },
     );
 
     blocTest<NewCarBloc, NewCarState>(
       'emits years loading in progress and year load success',
       build: () {
-        when(() => newCarRepository.fetchYears(
-              brand: null,
-              model: mockModel,
-            )).thenAnswer((_) => Future.value(mockYears));
+        when(
+          () => newCarRepository.fetchYears(brand: null, model: mockModel),
+        ).thenAnswer((_) async => mockYears);
         return NewCarBloc(newCarRepository: newCarRepository);
       },
       act: (bloc) => bloc.add(NewCarModelChanged(model: mockModel)),
@@ -89,10 +88,11 @@ void main() {
           years: mockYears,
         ),
       ],
-      verify: (_) => verify(() => newCarRepository.fetchYears(
-            brand: null,
-            model: mockModel,
-          )).called(1),
+      verify: (_) {
+        verify(
+          () => newCarRepository.fetchYears(brand: null, model: mockModel),
+        ).called(1);
+      },
     );
 
     blocTest<NewCarBloc, NewCarState>(
@@ -103,17 +103,17 @@ void main() {
     );
 
     blocTest<NewCarBloc, NewCarState>(
-      'full NewCarBloc test',
+      'emits correct states when complete flow is executed',
       build: () {
-        when(newCarRepository.fetchBrands)
-            .thenAnswer((_) => Future.value(mockBrands));
-        when(() => newCarRepository.fetchModels(
-              brand: mockBrand,
-            )).thenAnswer((_) => Future.value(mockModels));
-        when(() => newCarRepository.fetchYears(
-              brand: mockBrand,
-              model: mockModel,
-            )).thenAnswer((_) => Future.value(mockYears));
+        when(newCarRepository.fetchBrands).thenAnswer(
+          (_) => Future.value(mockBrands),
+        );
+        when(
+          () => newCarRepository.fetchModels(brand: mockBrand),
+        ).thenAnswer((_) => Future.value(mockModels));
+        when(
+          () => newCarRepository.fetchYears(brand: mockBrand, model: mockModel),
+        ).thenAnswer((_) => Future.value(mockYears));
         return NewCarBloc(newCarRepository: newCarRepository);
       },
       act: (bloc) => bloc
@@ -143,22 +143,18 @@ void main() {
           model: mockModel,
           years: mockYears,
         ),
-        NewCarState(
+        NewCarState.yearsLoadSuccess(
           brands: mockBrands,
           brand: mockBrand,
           models: mockModels,
           model: mockModel,
           years: mockYears,
-          year: mockYear,
-        )
+        ).copyWith(year: mockYear)
       ],
       verify: (_) => verifyInOrder([
         newCarRepository.fetchBrands,
         () => newCarRepository.fetchModels(brand: mockBrand),
-        () => newCarRepository.fetchYears(
-              brand: mockBrand,
-              model: mockModel,
-            ),
+        () => newCarRepository.fetchYears(brand: mockBrand, model: mockModel),
       ]),
     );
   });

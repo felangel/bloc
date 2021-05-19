@@ -1,83 +1,39 @@
 part of 'new_car_bloc.dart';
 
 class NewCarState extends Equatable {
-  const NewCarState({
-    required this.brands,
-    required this.brand,
-    required this.models,
-    required this.model,
-    required this.years,
-    required this.year,
+  const NewCarState._({
+    this.brands = const <String>[],
+    this.brand,
+    this.models = const <String>[],
+    this.model,
+    this.years = const <String>[],
+    this.year,
   });
 
-  const NewCarState.initial()
-      : this(
-          brands: const <String>[],
-          brand: null,
-          models: const <String>[],
-          model: null,
-          years: const <String>[],
-          year: null,
-        );
+  const NewCarState.initial() : this._();
 
-  const NewCarState.brandsLoadInProgress()
-      : this(
-          brands: const <String>[],
-          brand: null,
-          models: const <String>[],
-          model: null,
-          years: const <String>[],
-          year: null,
-        );
+  const NewCarState.brandsLoadInProgress() : this._();
 
   const NewCarState.brandsLoadSuccess({required List<String> brands})
-      : this(
-          brands: brands,
-          brand: null,
-          models: const <String>[],
-          model: null,
-          years: const <String>[],
-          year: null,
-        );
+      : this._(brands: brands);
 
   const NewCarState.modelsLoadInProgress({
     required List<String> brands,
     String? brand,
-  }) : this(
-          brands: brands,
-          brand: brand,
-          models: const <String>[],
-          model: null,
-          years: const <String>[],
-          year: null,
-        );
+  }) : this._(brands: brands, brand: brand);
 
   const NewCarState.modelsLoadSuccess({
     required List<String> brands,
     required String? brand,
     required List<String> models,
-  }) : this(
-          brands: brands,
-          brand: brand,
-          models: models,
-          model: null,
-          years: const <String>[],
-          year: null,
-        );
+  }) : this._(brands: brands, brand: brand, models: models);
 
   const NewCarState.yearsLoadInProgress({
     required List<String> brands,
     required String? brand,
     required List<String> models,
     required String? model,
-  }) : this(
-          brands: brands,
-          brand: brand,
-          models: models,
-          model: model,
-          years: const <String>[],
-          year: null,
-        );
+  }) : this._(brands: brands, brand: brand, models: models, model: model);
 
   const NewCarState.yearsLoadSuccess({
     required List<String> brands,
@@ -85,13 +41,12 @@ class NewCarState extends Equatable {
     required List<String> models,
     required String? model,
     required List<String> years,
-  }) : this(
+  }) : this._(
           brands: brands,
           brand: brand,
           models: models,
           model: model,
           years: years,
-          year: null,
         );
 
   NewCarState copyWith({
@@ -102,7 +57,7 @@ class NewCarState extends Equatable {
     List<String>? years,
     String? year,
   }) {
-    return NewCarState(
+    return NewCarState._(
       brands: brands ?? this.brands,
       brand: brand ?? this.brand,
       models: models ?? this.models,

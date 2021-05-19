@@ -1,4 +1,5 @@
-import 'package:flutter_dynamic_form/bloc/new_car_bloc.dart';
+// ignore_for_file: prefer_const_constructors
+import 'package:flutter_dynamic_form/new_car/new_car.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -11,20 +12,18 @@ void main() {
 
     group('NewCarState', () {
       test('supports value comparison', () {
-        // ignore: prefer_const_constructors
-        expect(const NewCarState.initial(), NewCarState.initial());
+        expect(NewCarState.initial(), NewCarState.initial());
         expect(
-          const NewCarState.brandsLoadInProgress(),
-          // ignore: prefer_const_constructors
+          NewCarState.brandsLoadInProgress(),
           NewCarState.brandsLoadInProgress(),
         );
         expect(
-          const NewCarState.brandsLoadSuccess(brands: mockBrands),
-          const NewCarState.brandsLoadSuccess(brands: mockBrands),
+          NewCarState.brandsLoadSuccess(brands: mockBrands),
+          NewCarState.brandsLoadSuccess(brands: mockBrands),
         );
         expect(
-          const NewCarState.modelsLoadInProgress(brands: mockBrands),
-          const NewCarState.modelsLoadInProgress(brands: mockBrands),
+          NewCarState.modelsLoadInProgress(brands: mockBrands),
+          NewCarState.modelsLoadInProgress(brands: mockBrands),
         );
         expect(
           NewCarState.modelsLoadSuccess(

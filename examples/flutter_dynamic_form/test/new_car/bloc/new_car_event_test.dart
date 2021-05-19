@@ -1,19 +1,19 @@
-import 'package:flutter_dynamic_form/bloc/new_car_bloc.dart';
+// ignore_for_file: prefer_const_constructors
+import 'package:flutter_dynamic_form/new_car/new_car.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('NewCarEvent', () {
     group('NewCarFormLoaded', () {
       test('supports value comparison', () {
-        // ignore: prefer_const_constructors
-        expect(const NewCarFormLoaded(), NewCarFormLoaded());
+        expect(NewCarFormLoaded(), NewCarFormLoaded());
       });
     });
 
     group('NewCarBrandChanged', () {
-      final mockCarBrand = 'Chevy';
+      const mockCarBrand = 'Chevy';
       test('supports value comparison', () {
-        expect(const NewCarBrandChanged(), const NewCarBrandChanged());
+        expect(NewCarBrandChanged(), NewCarBrandChanged());
         expect(
           NewCarBrandChanged(brand: mockCarBrand),
           NewCarBrandChanged(brand: mockCarBrand),
@@ -22,9 +22,9 @@ void main() {
     });
 
     group('NewCarModelChanged', () {
-      final mockCarModel = 'Malibu';
+      const mockCarModel = 'Malibu';
       test('supports value comparison', () {
-        expect(const NewCarModelChanged(), const NewCarModelChanged());
+        expect(NewCarModelChanged(), NewCarModelChanged());
         expect(
           NewCarModelChanged(model: mockCarModel),
           NewCarModelChanged(model: mockCarModel),
@@ -33,9 +33,9 @@ void main() {
     });
 
     group('NewCarYearChanged', () {
-      final mockYear = '2021';
+      const mockYear = '2021';
       test('supports value comparison', () {
-        expect(const NewCarYearChanged(), const NewCarYearChanged());
+        expect(NewCarYearChanged(), NewCarYearChanged());
         expect(
           NewCarYearChanged(year: mockYear),
           NewCarYearChanged(year: mockYear),
