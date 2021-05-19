@@ -70,7 +70,7 @@ void main() {
       expect(find.byIcon(Icons.replay), findsOneWidget);
     });
 
-    testWidgets('timer started when play arrow button is pressed',
+    testWidgets('timer starts when play arrow button is pressed',
         (tester) async {
       when(() => timerBloc.state).thenReturn(TimerInitial(60));
       await tester.pumpTimer(timerBloc);
@@ -108,7 +108,7 @@ void main() {
     testWidgets(
         'timer resets when reset button is pressed '
         'while timer is paused', (tester) async {
-      when(() => timerBloc.state).thenReturn(TimerRunInProgress(30));
+      when(() => timerBloc.state).thenReturn(TimerRunPause(30));
       await tester.pumpTimer(timerBloc);
       await tester.tap(find.byIcon(Icons.replay));
       verify(() => timerBloc.add(TimerReset())).called(1);
