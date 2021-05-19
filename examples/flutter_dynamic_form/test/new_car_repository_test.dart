@@ -3,15 +3,20 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('NewCarRepository', () {
-    final newCarRepository = NewCarRepository();
+    late NewCarRepository newCarRepository;
+
+    setUp(() {
+      newCarRepository = NewCarRepository();
+    });
 
     group('fetchBrands', () {
       test('returns car brands', () async {
         expect(
-            newCarRepository.fetchBrands(),
-            completion(
-              equals(['Chevy', 'Toyota', 'Honda']),
-            ));
+          newCarRepository.fetchBrands(),
+          completion(
+            equals(['Chevy', 'Toyota', 'Honda']),
+          ),
+        );
       });
     });
 
@@ -66,7 +71,7 @@ void main() {
       });
 
       group('Toyota brand', () {
-        final brand = 'Toyota';
+        const brand = 'Toyota';
         test('returns years on Corolla model', () {
           expect(
             newCarRepository.fetchYears(brand: brand, model: 'Corolla'),
@@ -88,7 +93,7 @@ void main() {
       });
 
       group('Honda brand', () {
-        final brand = 'Honda';
+        const brand = 'Honda';
         test('returns years on Civic model', () {
           expect(
             newCarRepository.fetchYears(brand: brand, model: 'Civic'),
@@ -109,7 +114,7 @@ void main() {
         });
       });
       group('No brand', () {
-        final brand = 'Fake-Brand';
+        const brand = 'Fake-Brand';
         test('returns no years on non-existent model', () {
           expect(
             newCarRepository.fetchYears(brand: brand, model: 'Fake-Model'),
