@@ -87,7 +87,7 @@
         </context>
     </template>
     <template name="blocevent"
-              value="class $Subject$$Noun$$Verb$ extends $Subject$Event {&#10;  const $Subject$$Noun$$Verb$();&#10;&#10;  &#10;&#10;  @override&#10;  List&lt;Object&gt; get props =&gt; [];&#10;}"
+              value="class $Subject$$Noun$$Verb$ extends $Subject$Event {&#10;  const $Subject$$Noun$$Verb$();&#10;&#10;  &#10;&#10;  @override&#10;  List&lt;Object?&gt; get props =&gt; [];&#10;}"
               description="bloc event class" toReformat="true" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <variable name="Noun" expression="" defaultValue="&quot;Noun&quot;" alwaysStopAt="true"/>
@@ -105,7 +105,7 @@
         </context>
     </template>
     <template name="blocstate"
-              value="class $Subject$$Verb$State extends $Subject$State {&#10;  const $Subject$$Verb$State();&#10;&#10;  &#10;&#10;  @override&#10;  List&lt;Object&gt; get props =&gt; [];&#10;}"
+              value="class $Subject$$Verb$State extends $Subject$State {&#10;  const $Subject$$Verb$State();&#10;&#10;  &#10;&#10;  @override&#10;  List&lt;Object?&gt; get props =&gt; [];&#10;}"
               description="bloc state class" toReformat="true" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <variable name="Verb" expression="" defaultValue="&quot;Verb&quot;" alwaysStopAt="true"/>
