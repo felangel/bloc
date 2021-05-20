@@ -61,7 +61,7 @@
       "\t$4",
       "",
       "\t@override",
-      "\tList<Object> get props => [$6];",
+      "\tList<Object?> get props => [$6];",
       "}"
     ],
     "description": "Subject + Verb (action) + State"
@@ -75,7 +75,7 @@
       "\t$4",
       "",
       "\t@override",
-      "\tList<Object> get props => [$6];",
+      "\tList<Object?> get props => [$6];",
       "}"
     ],
     "description": "Subject + Noun (optional) + Verb (event)"
