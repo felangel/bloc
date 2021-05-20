@@ -4,11 +4,13 @@ import 'package:flutter_complex_list/list/list.dart';
 import 'package:flutter_complex_list/repository.dart';
 
 class App extends MaterialApp {
-  App()
+  App({required this.repository})
       : super(
           home: BlocProvider(
-            create: (_) => ListCubit(repository: Repository())..fetchList(),
+            create: (_) => ListCubit(repository: repository)..fetchList(),
             child: ListPage(),
           ),
         );
+
+  final Repository repository;
 }

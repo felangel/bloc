@@ -13,7 +13,7 @@ class ListPage extends StatelessWidget {
             case ListStatus.failure:
               return const Center(child: Text('Oops something went wrong!'));
             case ListStatus.success:
-              return _ListView(items: state.items);
+              return ItemView(items: state.items);
             default:
               return const Center(child: CircularProgressIndicator());
           }
@@ -23,8 +23,8 @@ class ListPage extends StatelessWidget {
   }
 }
 
-class _ListView extends StatelessWidget {
-  const _ListView({Key? key, required this.items}) : super(key: key);
+class ItemView extends StatelessWidget {
+  const ItemView({Key? key, required this.items}) : super(key: key);
 
   final List<Item> items;
 
@@ -34,7 +34,7 @@ class _ListView extends StatelessWidget {
         ? const Center(child: Text('no content'))
         : ListView.builder(
             itemBuilder: (BuildContext context, int index) {
-              return _ItemTile(
+              return ItemTile(
                 item: items[index],
                 onDeletePressed: (id) {
                   context.read<ListCubit>().deleteItem(id);
@@ -46,8 +46,8 @@ class _ListView extends StatelessWidget {
   }
 }
 
-class _ItemTile extends StatelessWidget {
-  const _ItemTile({
+class ItemTile extends StatelessWidget {
+  const ItemTile({
     Key? key,
     required this.item,
     required this.onDeletePressed,
@@ -58,15 +58,17 @@ class _ItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Text('#${item.id}'),
-      title: Text(item.value),
-      trailing: item.isDeleting
-          ? const CircularProgressIndicator()
-          : IconButton(
-              icon: const Icon(Icons.delete, color: Colors.red),
-              onPressed: () => onDeletePressed(item.id),
-            ),
+    return Material(
+      child: ListTile(
+        leading: Text('#${item.id}'),
+        title: Text(item.value),
+        trailing: item.isDeleting
+            ? const CircularProgressIndicator()
+            : IconButton(
+                icon: const Icon(Icons.delete, color: Colors.red),
+                onPressed: () => onDeletePressed(item.id),
+              ),
+      ),
     );
   }
 }
