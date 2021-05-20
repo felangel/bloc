@@ -24,7 +24,7 @@ abstract class ${pascalCaseCubitName}State extends Equatable {
   const ${pascalCaseCubitName}State();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ${pascalCaseCubitName}Initial extends ${pascalCaseCubitName}State {}

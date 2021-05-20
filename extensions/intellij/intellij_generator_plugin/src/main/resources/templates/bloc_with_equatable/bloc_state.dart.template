@@ -6,5 +6,5 @@ abstract class ${bloc_pascal_case}State extends Equatable {
 
 class ${bloc_pascal_case}Initial extends ${bloc_pascal_case}State {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
