@@ -21,7 +21,7 @@ abstract class ${pascalCaseBlocName}Event extends Equatable {
   const ${pascalCaseBlocName}Event();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 `;
 }
