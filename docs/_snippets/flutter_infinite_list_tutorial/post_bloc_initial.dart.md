@@ -14,7 +14,7 @@ const _postLimit = 20;
 class PostBloc extends Bloc<PostEvent, PostState> {
   final http.Client httpClient;
 
-  PostBloc({@required this.httpClient}) : super(PostInitial());
+  PostBloc({@required this.httpClient}) : super(const PostState());
 
   @override
   Stream<PostState> mapEventToState(PostEvent event) async* {
