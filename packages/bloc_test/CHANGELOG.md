@@ -1,3 +1,8 @@
+# 8.0.1
+
+- fix: allow `blocTest` to capture non-exceptions
+- feat: export `package:mocktail`
+
 # 8.0.0
 
 - **BREAKING**: feat: opt into null safety
