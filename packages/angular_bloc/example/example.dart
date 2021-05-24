@@ -6,8 +6,6 @@ import 'package:angular/angular.dart';
 
 import 'package:angular_bloc/angular_bloc.dart';
 
-import 'package:bloc/bloc.dart';
-
 @Component(
   selector: 'my-app',
   template: '<counter-page></counter-page>',
