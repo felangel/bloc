@@ -1,7 +1,7 @@
 # 8.0.1
 
 - feat: allow `blocTest` to capture non-exceptions
-- feat: export mocktail
+- feat: export `package:mocktail`
 
 # 8.0.0
 
