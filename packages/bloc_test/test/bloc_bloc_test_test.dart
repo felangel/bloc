@@ -366,16 +366,16 @@ void main() {
         ],
       );
 
-      blocTest<ExceptionCounterBloc, int>(
-        'emits [1, 2] and throws two ExceptionCounterBlocException '
+      blocTest<ErrorCounterBloc, int>(
+        'emits [1, 2] and throws two ErrorCounterBlocErrors '
         'when increment is added twice',
-        build: () => ExceptionCounterBloc(),
+        build: () => ErrorCounterBloc(),
         act: (bloc) =>
             bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
         expect: () => const <int>[1, 2],
         errors: () => <Matcher>[
-          isA<ExceptionCounterBlocException>(),
-          isA<ExceptionCounterBlocException>(),
+          isA<ErrorCounterBlocError>(),
+          isA<ErrorCounterBlocError>(),
         ],
       );
     });
