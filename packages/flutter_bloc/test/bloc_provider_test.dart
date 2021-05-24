@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
     CounterCubit Function(BuildContext context)? create,
     CounterCubit? value,
     required Widget child,
-  })   : _create = create,
+  })  : _create = create,
         _value = value,
         _child = child,
         super(key: key);
