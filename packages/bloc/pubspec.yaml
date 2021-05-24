@@ -13,7 +13,6 @@ dependencies:
   meta: ^1.3.0
 
 dev_dependencies:
-  coverage: ^1.0.1
   mocktail: ^0.1.0
   pedantic: ^1.10.0
   rxdart: ^0.26.0
