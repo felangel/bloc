@@ -31,28 +31,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install Dart SDK
-        run: |
-          sudo apt-get update
-          sudo apt-get install apt-transport-https
-          sudo sh -c 'wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
-          sudo sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_unstable.list > /etc/apt/sources.list.d/dart_unstable.list'
-          sudo apt-get update
-          sudo apt-get -y install dart
+      - uses: dart-lang/setup-dart@v1
       - name: Install Dependencies
         working-directory: ${{ matrix.folder }}
-        run: PATH="$PATH:/usr/lib/dart/bin" pub get
+        run: pub get
       - name: Format
         working-directory: ${{ matrix.folder }}
-        run: PATH="$PATH:/usr/lib/dart/bin" dartfmt --dry-run --set-exit-if-changed .
+        run: dart format --set-exit-if-changed .
       - name: Analyze
         working-directory: ${{ matrix.folder }}
-        run: PATH="$PATH:/usr/lib/dart/bin" dartanalyzer --fatal-infos --fatal-warnings .
+        run: dart analyze --fatal-infos --fatal-warnings .
       - name: Run tests
         working-directory: ${{ matrix.folder }}
         run: |
           if [ -d "test" ]; then
-            PATH="$PATH:/usr/lib/dart/bin" pub run build_runner test --fail-on-severe
+            dart run build_runner test --fail-on-severe
           fi
   build:
     needs: [examples]
