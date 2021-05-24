@@ -37,7 +37,7 @@ jobs:
         run: pub get
       - name: Format
         working-directory: ${{ matrix.folder }}
-        run: dart format --dry-run --set-exit-if-changed .
+        run: dart format --set-exit-if-changed .
       - name: Analyze
         working-directory: ${{ matrix.folder }}
         run: dart analyze --fatal-infos --fatal-warnings .
