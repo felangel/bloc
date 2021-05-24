@@ -12,5 +12,4 @@ dependencies:
   bloc: ^7.0.0
 
 dev_dependencies:
-  coverage: ^1.0.1
   test: ^1.16.0
