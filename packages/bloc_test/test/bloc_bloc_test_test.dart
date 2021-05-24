@@ -307,6 +307,78 @@ void main() {
         expect: () => <Matcher>[isA<ComplexStateA>()],
       );
     });
+    group('ErrorCounterBloc', () {
+      blocTest<ErrorCounterBloc, int>(
+        'emits [] when nothing is added',
+        build: () => ErrorCounterBloc(),
+        expect: () => const <int>[],
+      );
+
+      blocTest<ErrorCounterBloc, int>(
+        'emits [2] when increment is added twice and skip: 1',
+        build: () => ErrorCounterBloc(),
+        act: (bloc) =>
+            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        skip: 1,
+        expect: () => const <int>[2],
+      );
+
+      blocTest<ErrorCounterBloc, int>(
+        'emits [1] when increment is added',
+        build: () => ErrorCounterBloc(),
+        act: (bloc) => bloc.add(CounterEvent.increment),
+        expect: () => const <int>[1],
+      );
+
+      blocTest<ErrorCounterBloc, int>(
+        'throws ErrorCounterBlocException when increment is added',
+        build: () => ErrorCounterBloc(),
+        act: (bloc) => bloc.add(CounterEvent.increment),
+        errors: () => <Matcher>[isA<ErrorCounterBlocError>()],
+      );
+
+      blocTest<ErrorCounterBloc, int>(
+        'emits [1] and throws ErrorCounterBlocError '
+        'when increment is added',
+        build: () => ErrorCounterBloc(),
+        act: (bloc) => bloc.add(CounterEvent.increment),
+        expect: () => const <int>[1],
+        errors: () => <Matcher>[isA<ErrorCounterBlocError>()],
+      );
+
+      blocTest<ErrorCounterBloc, int>(
+        'emits [1, 2] when increment is added twice',
+        build: () => ErrorCounterBloc(),
+        act: (bloc) =>
+            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        expect: () => const <int>[1, 2],
+      );
+
+      blocTest<ErrorCounterBloc, int>(
+        'throws two ErrorCounterBlocErrors '
+        'when increment is added twice',
+        build: () => ErrorCounterBloc(),
+        act: (bloc) =>
+            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        errors: () => <Matcher>[
+          isA<ErrorCounterBlocError>(),
+          isA<ErrorCounterBlocError>(),
+        ],
+      );
+
+      blocTest<ErrorCounterBloc, int>(
+        'emits [1, 2] and throws two ErrorCounterBlocErrors '
+        'when increment is added twice',
+        build: () => ErrorCounterBloc(),
+        act: (bloc) =>
+            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        expect: () => const <int>[1, 2],
+        errors: () => <Matcher>[
+          isA<ErrorCounterBlocError>(),
+          isA<ErrorCounterBlocError>(),
+        ],
+      );
+    });
 
     group('ExceptionCounterBloc', () {
       blocTest<ExceptionCounterBloc, int>(
