@@ -16,7 +16,7 @@ jobs:
     defaults:
       run:
         working-directory: packages/bloc
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: dart-lang/setup-dart@v1
