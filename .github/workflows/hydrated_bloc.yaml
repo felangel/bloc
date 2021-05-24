@@ -2,16 +2,14 @@ name: hydrated_bloc
 
 on:
   push:
-    branches:
-      - master
     paths:
-      - ".github/workflows/hydrated_bloc.yaml"
       - "packages/hydrated_bloc/**"
+      - ".github/workflows/hydrated_bloc.yaml"
 
   pull_request:
     paths:
-      - ".github/workflows/hydrated_bloc.yaml"
       - "packages/hydrated_bloc/**"
+      - ".github/workflows/hydrated_bloc.yaml"
 
 jobs:
   build:
@@ -21,19 +19,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1
+      - uses: subosito/flutter-action@v1.5.0
       - name: Install Dependencies
-        run: pub get
+        run: flutter pub get
       - name: Format
-        run: dart format --set-exit-if-changed .
+        run: flutter format --set-exit-if-changed lib test example
       - name: Analyze
-        run: dart analyze --fatal-infos --fatal-warnings .
-      - name: Run Tests
-        run: |
-          pub global activate test_coverage
-          export PATH=$PATH:$HOME/.pub-cache/bin
-          test_coverage
+        run: flutter analyze lib test example
+      - name: Run tests
+        run: flutter test -j 1 --no-pub --coverage --test-randomize-ordering-seed random
       - name: Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           path: packages/hydrated_bloc/coverage/lcov.info
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
