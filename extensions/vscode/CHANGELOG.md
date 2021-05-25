@@ -1,6 +1,8 @@
 # 5.6.1
 
 - feat: add snippets for `bloc_test`
+- feat: add snippets for importing `bloc`, `bloc_test` and `flutter_bloc`
+- fix: show code actions in refactorings menu
 
 # 5.6.0
 

@@ -163,7 +163,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       final subscription = bloc.stream.skip(skip).listen(states.add);
       try {
         await act?.call(bloc);
-      } on Exception catch (error) {
+      } catch (error) {
         unhandledErrors.add(
           error is BlocUnhandledErrorException ? error.error : error,
         );

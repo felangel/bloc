@@ -1,8 +1,8 @@
-import { window, Command, CodeActionProvider } from "vscode";
+import { window, CodeAction, CodeActionProvider, CodeActionKind } from "vscode";
 import { getSelectedText } from "../utils";
 
 export class BlocCodeActionProvider implements CodeActionProvider {
-  public provideCodeActions(): Command[] {
+  public provideCodeActions(): CodeAction[] {
     const editor = window.activeTextEditor;
     if (!editor) return [];
 
@@ -29,6 +29,13 @@ export class BlocCodeActionProvider implements CodeActionProvider {
         command: "extension.wrap-repositoryprovider",
         title: "Wrap with RepositoryProvider",
       },
-    ];
+    ].map((c) => {
+      let action = new CodeAction(c.title, CodeActionKind.Refactor);
+      action.command = {
+        command: c.command,
+        title: c.title,
+      };
+      return action;
+    });
   }
 }

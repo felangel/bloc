@@ -8,7 +8,7 @@ class MyThemeApp extends StatefulWidget {
     Key? key,
     required Cubit<ThemeData> themeCubit,
     required Function onBuild,
-  })   : _themeCubit = themeCubit,
+  })  : _themeCubit = themeCubit,
         _onBuild = onBuild,
         super(key: key);
 
@@ -26,7 +26,7 @@ class MyThemeAppState extends State<MyThemeApp> {
   MyThemeAppState({
     required Cubit<ThemeData> themeCubit,
     required Function onBuild,
-  })   : _themeCubit = themeCubit,
+  })  : _themeCubit = themeCubit,
         _onBuild = onBuild;
 
   Cubit<ThemeData> _themeCubit;

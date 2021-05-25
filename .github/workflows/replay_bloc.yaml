@@ -2,16 +2,14 @@ name: replay_bloc
 
 on:
   push:
-    branches:
-      - master
     paths:
-      - ".github/workflows/replay_bloc.yaml"
       - "packages/replay_bloc/**"
+      - ".github/workflows/replay_bloc.yaml"
 
   pull_request:
     paths:
-      - ".github/workflows/replay_bloc.yaml"
       - "packages/replay_bloc/**"
+      - ".github/workflows/replay_bloc.yaml"
 
 jobs:
   build:
@@ -19,19 +17,22 @@ jobs:
       run:
         working-directory: packages/replay_bloc
     runs-on: ubuntu-latest
-    container:
-      image: google/dart:2.12
     steps:
       - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1.5.0
       - name: Install Dependencies
-        run: pub get
+        run: flutter pub get
       - name: Format
-        run: dartfmt --dry-run --set-exit-if-changed .
+        run: flutter format --set-exit-if-changed .
       - name: Analyze
-        run: dartanalyzer --fatal-infos --fatal-warnings lib test
+        run: flutter analyze lib test example
       - name: Run tests
-        run: dart test --coverage=coverage && pub run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
+        run: flutter test -j 1 --no-pub --coverage --test-randomize-ordering-seed random
       - name: Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           path: packages/replay_bloc/coverage/lcov.info
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

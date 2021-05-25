@@ -19,17 +19,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1.4.0
+      - uses: subosito/flutter-action@v1.5.0
       - name: Install Dependencies
         run: flutter packages get
       - name: Format
-        run: flutter format --set-exit-if-changed lib test example
+        run: flutter format --set-exit-if-changed .
       - name: Analyze
         run: flutter analyze lib test example
       - name: Run tests
         run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
       - name: Check Code Coverage
-        uses: ChicagoFlutter/lcov-cop@v1.0.0
+        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           path: packages/flutter_bloc/coverage/lcov.info
       - name: Upload coverage to Codecov

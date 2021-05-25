@@ -82,6 +82,7 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 class BlocListener<B extends BlocBase<S>, S> extends BlocListenerBase<B, S>
     with BlocListenerSingleChildWidget {
   /// {@macro bloc_listener}
+  /// {@macro bloc_listener_listen_when}
   const BlocListener({
     Key? key,
     required BlocWidgetListener<S> listener,

@@ -17,10 +17,9 @@ jobs:
       run:
         working-directory: packages/bloc_test
     runs-on: ubuntu-latest
-    container:
-      image: google/dart:2.12
     steps:
       - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1
       - name: Install Dependencies
         run: pub get
       - name: Format

@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:angular/angular.dart' show ChangeDetectorRef;
 import 'package:angular_bloc/angular_bloc.dart';
-import 'package:bloc/bloc.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
