@@ -1,25 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_complex_list/list/list.dart';
+import 'package:flutter_complex_list/complex_list/complex_list.dart';
+import 'package:flutter_complex_list/repository.dart';
 
-class ListPage extends StatelessWidget {
+class ComplexListPage extends StatelessWidget {
+  const ComplexListPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Complex List')),
-      body: BlocBuilder<ListCubit, ListState>(
-        builder: (context, state) {
-          switch (state.status) {
-            case ListStatus.failure:
-              return const Center(child: Text('Oops something went wrong!'));
-            case ListStatus.success:
-              return ItemView(items: state.items);
-            default:
-              return const Center(child: CircularProgressIndicator());
-          }
-        },
+      body: BlocProvider(
+        create: (_) => ComplexListCubit(
+          repository: context.read<Repository>(),
+        )..fetchList(),
+        child: ComplexListView(),
       ),
     );
+  }
+}
+
+class ComplexListView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final state = context.watch<ComplexListCubit>().state;
+    switch (state.status) {
+      case ListStatus.failure:
+        return const Center(child: Text('Oops something went wrong!'));
+      case ListStatus.success:
+        return ItemView(items: state.items);
+      default:
+        return const Center(child: CircularProgressIndicator());
+    }
   }
 }
 
@@ -37,7 +49,7 @@ class ItemView extends StatelessWidget {
               return ItemTile(
                 item: items[index],
                 onDeletePressed: (id) {
-                  context.read<ListCubit>().deleteItem(id);
+                  context.read<ComplexListCubit>().deleteItem(id);
                 },
               );
             },

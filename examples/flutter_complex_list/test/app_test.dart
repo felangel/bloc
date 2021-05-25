@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_complex_list/app.dart';
-import 'package:flutter_complex_list/list/list.dart';
+import 'package:flutter_complex_list/complex_list/complex_list.dart';
 import 'package:flutter_complex_list/repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -19,10 +19,10 @@ void main() {
       expect(App(repository: repository), isA<MaterialApp>());
     });
 
-    testWidgets('renders ListPage', (tester) async {
+    testWidgets('renders ComplexListPage', (tester) async {
       when(repository.fetchItems).thenAnswer((_) async => []);
       await tester.pumpWidget(App(repository: repository));
-      expect(find.byType(ListPage), findsOneWidget);
+      expect(find.byType(ComplexListPage), findsOneWidget);
     });
   });
 }

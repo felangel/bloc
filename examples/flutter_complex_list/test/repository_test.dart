@@ -1,4 +1,4 @@
-import 'package:flutter_complex_list/list/list.dart';
+import 'package:flutter_complex_list/complex_list/complex_list.dart';
 import 'package:flutter_complex_list/repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
