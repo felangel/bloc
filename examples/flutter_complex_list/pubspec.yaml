@@ -14,6 +14,12 @@ dependencies:
   equatable: ^2.0.0
   pedantic: ^1.10.0
 
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  bloc_test: ^8.0.0
+  mocktail: ^0.1.0
+
 dependency_overrides:
   bloc:
     path: ../../packages/bloc

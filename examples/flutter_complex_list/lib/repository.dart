@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter_complex_list/list/list.dart';
+import 'package:flutter_complex_list/complex_list/complex_list.dart';
 
 class Repository {
   final _random = Random();

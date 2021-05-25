@@ -1,22 +1,23 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_complex_list/list/list.dart';
+import 'package:flutter_complex_list/complex_list/complex_list.dart';
 import 'package:flutter_complex_list/repository.dart';
 import 'package:pedantic/pedantic.dart';
 
-part 'list_state.dart';
+part 'complex_list_state.dart';
 
-class ListCubit extends Cubit<ListState> {
-  ListCubit({required this.repository}) : super(const ListState.loading());
+class ComplexListCubit extends Cubit<ComplexListState> {
+  ComplexListCubit({required this.repository})
+      : super(const ComplexListState.loading());
 
   final Repository repository;
 
   Future<void> fetchList() async {
     try {
       final items = await repository.fetchItems();
-      emit(ListState.success(items));
+      emit(ComplexListState.success(items));
     } on Exception {
-      emit(const ListState.failure());
+      emit(const ComplexListState.failure());
     }
   }
 
@@ -25,12 +26,12 @@ class ListCubit extends Cubit<ListState> {
       return item.id == id ? item.copyWith(isDeleting: true) : item;
     }).toList();
 
-    emit(ListState.success(deleteInProgress));
+    emit(ComplexListState.success(deleteInProgress));
 
     unawaited(repository.deleteItem(id).then((_) {
       final deleteSuccess = List.of(state.items)
         ..removeWhere((element) => element.id == id);
-      emit(ListState.success(deleteSuccess));
+      emit(ComplexListState.success(deleteSuccess));
     }));
   }
 }
