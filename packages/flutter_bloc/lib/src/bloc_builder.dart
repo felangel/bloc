@@ -73,6 +73,7 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 /// {@endtemplate}
 class BlocBuilder<B extends BlocBase<S>, S> extends BlocBuilderBase<B, S> {
   /// {@macro bloc_builder}
+  /// {@macro bloc_builder_build_when}
   const BlocBuilder({
     Key? key,
     required this.builder,
