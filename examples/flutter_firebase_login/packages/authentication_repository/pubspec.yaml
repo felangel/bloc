@@ -17,6 +17,8 @@ dependencies:
   google_sign_in: ^5.0.7
   meta: ^1.3.0
   very_good_analysis: ^2.3.0
+  sign_in_with_apple: ^3.0.0
+  crypto: ^3.0.0
 
 dev_dependencies:
   flutter_test:
