@@ -440,7 +440,9 @@ void main() {
       expect(states, expectedStates);
     });
 
-    testWidgets('resubscribes when provided bloc is changed', (tester) async {
+    testWidgets(
+        'updates subscription '
+        'when provided bloc is changed', (tester) async {
       final firstCounterCubit = CounterCubit();
       final secondCounterCubit = CounterCubit()..emit(100);
 

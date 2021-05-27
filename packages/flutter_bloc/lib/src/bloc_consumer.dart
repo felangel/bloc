@@ -115,27 +115,19 @@ class _BlocConsumerState<B extends BlocBase<S>, S>
     super.didUpdateWidget(oldWidget);
     final oldBloc = oldWidget.bloc ?? context.read<B>();
     final currentBloc = widget.bloc ?? oldBloc;
-    if (oldBloc != currentBloc) {
-      _bloc = currentBloc;
-    }
+    if (oldBloc != currentBloc) _bloc = currentBloc;
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    final newBloc = widget.bloc ?? context.read<B>();
-    if (_bloc != newBloc) {
-      _bloc = newBloc;
-    }
+    final bloc = widget.bloc ?? context.read<B>();
+    if (_bloc != bloc) _bloc = bloc;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.bloc == null) {
-      context.select<B, int>((bloc) => bloc.hashCode);
-    }
-
+    if (widget.bloc == null) context.select<B, int>(identityHashCode);
     return BlocBuilder<B, S>(
       bloc: _bloc,
       builder: widget.builder,

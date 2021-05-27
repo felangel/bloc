@@ -346,8 +346,9 @@ void main() {
       expect(listenWhenCurrentState, [3]);
     });
 
-    testWidgets('rebuilds and resubscribes when provided bloc is changed',
-        (tester) async {
+    testWidgets(
+        'rebuilds and updates subscription '
+        'when provided bloc is changed', (tester) async {
       final firstCounterCubit = CounterCubit();
       final secondCounterCubit = CounterCubit()..emit(100);
 
@@ -373,6 +374,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Count 1'), findsOneWidget);
+      expect(find.text('Count 0'), findsNothing);
 
       await tester.pumpWidget(
         Directionality(

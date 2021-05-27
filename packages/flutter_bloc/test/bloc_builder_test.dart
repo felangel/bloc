@@ -486,6 +486,11 @@ void main() {
 
       expect(find.text('Count 0'), findsOneWidget);
 
+      firstCounterCubit.increment();
+      await tester.pumpAndSettle();
+      expect(find.text('Count 1'), findsOneWidget);
+      expect(find.text('Count 0'), findsNothing);
+
       await tester.pumpWidget(
         Directionality(
           textDirection: TextDirection.ltr,
@@ -499,7 +504,7 @@ void main() {
       );
 
       expect(find.text('Count 100'), findsOneWidget);
-      expect(find.text('Count 0'), findsNothing);
+      expect(find.text('Count 1'), findsNothing);
 
       secondCounterCubit.increment();
       await tester.pumpAndSettle();

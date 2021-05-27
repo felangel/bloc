@@ -135,10 +135,9 @@ class _BlocBuilderBaseState<B extends BlocBase<S>, S>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    final newBloc = widget.bloc ?? context.read<B>();
-    if (_bloc != newBloc) {
-      _bloc = newBloc;
+    final bloc = widget.bloc ?? context.read<B>();
+    if (_bloc != bloc) {
+      _bloc = bloc;
       _state = _bloc.state;
     }
   }
@@ -156,10 +155,7 @@ class _BlocBuilderBaseState<B extends BlocBase<S>, S>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.bloc == null) {
-      context.select<B, int>((bloc) => bloc.hashCode);
-    }
-
+    if (widget.bloc == null) context.select<B, int>(identityHashCode);
     return BlocListener<B, S>(
       bloc: _bloc,
       listenWhen: widget.buildWhen,
