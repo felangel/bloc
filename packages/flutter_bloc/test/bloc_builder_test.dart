@@ -467,5 +467,42 @@ void main() {
       await tester.pumpAndSettle();
       expect(states, [0, 2, 2]);
     });
+
+    testWidgets('rebuilds when provided bloc is changed', (tester) async {
+      final firstCounterCubit = CounterCubit();
+      final secondCounterCubit = CounterCubit()..emit(100);
+
+      await tester.pumpWidget(
+        Directionality(
+            textDirection: TextDirection.ltr,
+            child: BlocProvider.value(
+              value: firstCounterCubit,
+              child: BlocBuilder<CounterCubit, int>(
+                builder: (context, state) => Text('This is $state'),
+              ),
+            )),
+      );
+
+      expect(find.text('This is 0'), findsOneWidget);
+
+      await tester.pumpWidget(Directionality(
+        textDirection: TextDirection.ltr,
+        child: BlocProvider.value(
+          value: secondCounterCubit,
+          child: BlocBuilder<CounterCubit, int>(
+            builder: (context, state) => Text('This is $state'),
+          ),
+        ),
+      ));
+
+      expect(find.text('This is 100'), findsOneWidget);
+      expect(find.text('This is 0'), findsNothing);
+
+      secondCounterCubit.increment();
+      await tester.pumpAndSettle();
+
+      expect(find.text('This is 101'), findsOneWidget);
+      expect(find.text('This is 0'), findsNothing);
+    });
   });
 }
