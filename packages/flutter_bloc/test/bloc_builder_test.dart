@@ -474,35 +474,37 @@ void main() {
 
       await tester.pumpWidget(
         Directionality(
-            textDirection: TextDirection.ltr,
-            child: BlocProvider.value(
-              value: firstCounterCubit,
-              child: BlocBuilder<CounterCubit, int>(
-                builder: (context, state) => Text('This is $state'),
-              ),
-            )),
-      );
-
-      expect(find.text('This is 0'), findsOneWidget);
-
-      await tester.pumpWidget(Directionality(
-        textDirection: TextDirection.ltr,
-        child: BlocProvider.value(
-          value: secondCounterCubit,
-          child: BlocBuilder<CounterCubit, int>(
-            builder: (context, state) => Text('This is $state'),
+          textDirection: TextDirection.ltr,
+          child: BlocProvider.value(
+            value: firstCounterCubit,
+            child: BlocBuilder<CounterCubit, int>(
+              builder: (context, state) => Text('Count $state'),
+            ),
           ),
         ),
-      ));
+      );
 
-      expect(find.text('This is 100'), findsOneWidget);
-      expect(find.text('This is 0'), findsNothing);
+      expect(find.text('Count 0'), findsOneWidget);
+
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: BlocProvider.value(
+            value: secondCounterCubit,
+            child: BlocBuilder<CounterCubit, int>(
+              builder: (context, state) => Text('Count $state'),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Count 100'), findsOneWidget);
+      expect(find.text('Count 0'), findsNothing);
 
       secondCounterCubit.increment();
       await tester.pumpAndSettle();
 
-      expect(find.text('This is 101'), findsOneWidget);
-      expect(find.text('This is 0'), findsNothing);
+      expect(find.text('Count 101'), findsOneWidget);
     });
   });
 }
