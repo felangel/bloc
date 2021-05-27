@@ -345,5 +345,58 @@ void main() {
       expect(listenWhenPreviousState, [2]);
       expect(listenWhenCurrentState, [3]);
     });
+
+    testWidgets(
+        'rebuilds and updates subscription '
+        'when provided bloc is changed', (tester) async {
+      final firstCounterCubit = CounterCubit();
+      final secondCounterCubit = CounterCubit()..emit(100);
+
+      final states = <int>[];
+      const expectedStates = [1, 101];
+
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: BlocProvider.value(
+            value: firstCounterCubit,
+            child: BlocConsumer<CounterCubit, int>(
+              listener: (_, state) => states.add(state),
+              builder: (context, state) => Text('Count $state'),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Count 0'), findsOneWidget);
+
+      firstCounterCubit.increment();
+      await tester.pumpAndSettle();
+
+      expect(find.text('Count 1'), findsOneWidget);
+      expect(find.text('Count 0'), findsNothing);
+
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: BlocProvider.value(
+            value: secondCounterCubit,
+            child: BlocConsumer<CounterCubit, int>(
+              listener: (_, state) => states.add(state),
+              builder: (context, state) => Text('Count $state'),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Count 100'), findsOneWidget);
+      expect(find.text('Count 1'), findsNothing);
+
+      secondCounterCubit.increment();
+      await tester.pumpAndSettle();
+
+      expect(find.text('Count 101'), findsOneWidget);
+      expect(states, expectedStates);
+    });
   });
 }
