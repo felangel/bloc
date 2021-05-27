@@ -42,8 +42,7 @@ void main() {
     setUp(() {
       signUpCubit = MockSignUpCubit();
       when(() => signUpCubit.state).thenReturn(const SignUpState());
-      when(() => signUpCubit.signUpFormSubmitted())
-          .thenAnswer((_) async => null);
+      when(() => signUpCubit.signUpFormSubmitted()).thenAnswer((_) async {});
     });
 
     group('calls', () {

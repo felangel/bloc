@@ -45,7 +45,7 @@ void main() {
           email: any(named: 'email'),
           password: any(named: 'password'),
         ),
-      ).thenAnswer((_) async => null);
+      ).thenAnswer((_) async {});
     });
 
     test('initial state is SignUpState', () {
