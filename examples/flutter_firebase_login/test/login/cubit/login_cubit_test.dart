@@ -30,13 +30,13 @@ void main() {
       authenticationRepository = MockAuthenticationRepository();
       when(
         () => authenticationRepository.logInWithGoogle(),
-      ).thenAnswer((_) async => null);
+      ).thenAnswer((_) async {});
       when(
         () => authenticationRepository.logInWithEmailAndPassword(
           email: any(named: 'email'),
           password: any(named: 'password'),
         ),
-      ).thenAnswer((_) async => null);
+      ).thenAnswer((_) async {});
     });
 
     test('initial state is LoginState', () {
