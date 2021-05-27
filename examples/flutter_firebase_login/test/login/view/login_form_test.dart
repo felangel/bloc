@@ -40,9 +40,8 @@ void main() {
     setUp(() {
       loginCubit = MockLoginCubit();
       when(() => loginCubit.state).thenReturn(const LoginState());
-      when(() => loginCubit.logInWithGoogle()).thenAnswer((_) async => null);
-      when(() => loginCubit.logInWithCredentials())
-          .thenAnswer((_) async => null);
+      when(() => loginCubit.logInWithGoogle()).thenAnswer((_) async {});
+      when(() => loginCubit.logInWithCredentials()).thenAnswer((_) async {});
     });
 
     group('calls', () {

@@ -7,4 +7,4 @@ environment:
 
 dev_dependencies:
   test: ^1.16.4
-  very_good_analysis: ^2.0.0
+  very_good_analysis: ^2.1.0
