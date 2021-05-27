@@ -113,7 +113,7 @@ class _BlocConsumerState<B extends BlocBase<S>, S>
   @override
   void didUpdateWidget(BlocConsumer<B, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final oldBloc = oldWidget.bloc ?? context.watch<B>();
+    final oldBloc = oldWidget.bloc ?? context.read<B>();
     final currentBloc = widget.bloc ?? oldBloc;
     if (oldBloc != currentBloc) {
       _bloc = currentBloc;
@@ -124,7 +124,7 @@ class _BlocConsumerState<B extends BlocBase<S>, S>
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final newBloc = widget.bloc ?? context.watch<B>();
+    final newBloc = widget.bloc ?? context.read<B>();
     if (_bloc != newBloc) {
       _bloc = newBloc;
     }
@@ -132,6 +132,10 @@ class _BlocConsumerState<B extends BlocBase<S>, S>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.bloc == null) {
+      context.select<B, int>((bloc) => bloc.hashCode);
+    }
+
     return BlocBuilder<B, S>(
       bloc: _bloc,
       builder: widget.builder,

@@ -155,7 +155,7 @@ class _BlocListenerBaseState<B extends BlocBase<S>, S>
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final newBloc = widget.bloc ?? context.watch<B>();
+    final newBloc = widget.bloc ?? context.read<B>();
     if (_bloc != newBloc) {
       if (_subscription != null) {
         _unsubscribe();
@@ -169,7 +169,7 @@ class _BlocListenerBaseState<B extends BlocBase<S>, S>
   @override
   void didUpdateWidget(BlocListenerBase<B, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final oldBloc = oldWidget.bloc ?? context.watch<B>();
+    final oldBloc = oldWidget.bloc ?? context.read<B>();
     final currentBloc = widget.bloc ?? oldBloc;
     if (oldBloc != currentBloc) {
       if (_subscription != null) {
@@ -182,7 +182,13 @@ class _BlocListenerBaseState<B extends BlocBase<S>, S>
   }
 
   @override
-  Widget buildWithChild(BuildContext context, Widget? child) => child!;
+  Widget buildWithChild(BuildContext context, Widget? child) {
+    if (widget.bloc == null) {
+      context.select<B, int>((bloc) => bloc.hashCode);
+    }
+
+    return child!;
+  }
 
   @override
   void dispose() {
