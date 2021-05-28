@@ -92,16 +92,34 @@ void main() {
         expect(states, const <int>[1]);
       });
 
-      test('skips states filtered out by shouldReplay', () async {
+      test('skips states filtered out by shouldReplay at undo time', () async {
         final states = <int>[];
-        final cubit = CounterCubit(shouldReplayCallback: (i) => i != 2);
+        final cubit = CounterCubit(shouldReplayCallback: (i) => !i.isEven);
         final subscription = cubit.stream.listen(states.add);
         cubit..increment()..increment()..increment();
         await Future<void>.delayed(Duration.zero);
         cubit..undo()..undo()..undo();
         await cubit.close();
         await subscription.cancel();
-        expect(states, const <int>[1, 2, 3, 1, 0]);
+        expect(states, const <int>[1, 2, 3, 1]);
+      });
+
+      test(
+          'doesn\'t skip states that would be filtered out by shouldReplay '
+          'at transition time but not at undo time', () async {
+        var replayEvens = false;
+        final states = <int>[];
+        final cubit = CounterCubit(
+          shouldReplayCallback: (i) => !i.isEven || replayEvens,
+        );
+        final subscription = cubit.stream.listen(states.add);
+        cubit..increment()..increment()..increment();
+        await Future<void>.delayed(Duration.zero);
+        replayEvens = true;
+        cubit..undo()..undo()..undo();
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2, 3, 2, 1, 0]);
       });
 
       test('loses history outside of limit', () async {

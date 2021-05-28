@@ -77,7 +77,7 @@ abstract class ReplayBloc<Event extends ReplayEvent, State>
 /// A mixin which enables `undo` and `redo` operations
 /// for [Bloc] classes.
 mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
-  final _changeStack = _ChangeStack<State>();
+  late final _changeStack = _ChangeStack<State>(shouldReplay: shouldReplay);
 
   /// Sets the internal `undo`/`redo` size limit.
   /// By default there is no limit.
@@ -102,33 +102,31 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
 
   @override
   void emit(State state) {
-    if (shouldReplay(this.state)) {
-      _changeStack.add(_Change<State>(
-        this.state,
-        () {
-          final event = _Redo();
-          onEvent(event);
-          onTransition(Transition(
-            currentState: this.state,
-            event: event,
-            nextState: state,
-          ));
-          // ignore: invalid_use_of_visible_for_testing_member
-          super.emit(state);
-        },
-        (val) {
-          final event = _Undo();
-          onEvent(event);
-          onTransition(Transition(
-            currentState: this.state,
-            event: event,
-            nextState: val,
-          ));
-          // ignore: invalid_use_of_visible_for_testing_member
-          super.emit(val);
-        },
-      ));
-    }
+    _changeStack.add(_Change<State>(
+      this.state,
+      () {
+        final event = _Redo();
+        onEvent(event);
+        onTransition(Transition(
+          currentState: this.state,
+          event: event,
+          nextState: state,
+        ));
+        // ignore: invalid_use_of_visible_for_testing_member
+        super.emit(state);
+      },
+      (val) {
+        final event = _Undo();
+        onEvent(event);
+        onTransition(Transition(
+          currentState: this.state,
+          event: event,
+          nextState: val,
+        ));
+        // ignore: invalid_use_of_visible_for_testing_member
+        super.emit(val);
+      },
+    ));
     // ignore: invalid_use_of_visible_for_testing_member
     super.emit(state);
   }
@@ -148,8 +146,9 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
   /// Clear undo/redo history
   void clearHistory() => _changeStack.clear();
 
-  /// Checks whether the given state should be saved to the undo/redo stack.
+  /// Checks whether the given state should be replayed from the undo/redo stack
   ///
-  /// By default always returns `true`.
+  /// This is called at the time the state is being restored. By default
+  /// always returns `true`
   bool shouldReplay(State state) => true;
 }
