@@ -91,6 +91,18 @@ void main() {
         expect(states, const <int>[1]);
       });
 
+      test('skips states filtered out by shouldReplay', () async {
+        final states = <int>[];
+        final bloc = CounterBloc(shouldReplayCallback: (i) => i != 2);
+        final subscription = bloc.stream.listen(states.add);
+        bloc..add(Increment())..add(Increment())..add(Increment());
+        await Future<void>.delayed(Duration.zero);
+        bloc..undo()..undo()..undo();
+        await bloc.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2, 3, 1, 0]);
+      });
+
       test('loses history outside of limit', () async {
         final states = <int>[];
         final bloc = CounterBloc(limit: 1);

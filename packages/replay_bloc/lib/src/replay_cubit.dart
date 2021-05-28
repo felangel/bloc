@@ -64,11 +64,13 @@ mixin ReplayCubitMixin<State> on Cubit<State> {
 
   @override
   void emit(State state) {
-    _changeStack.add(_Change<State>(
-      this.state,
-      () => super.emit(state),
-      (val) => super.emit(val),
-    ));
+    if (shouldReplay(this.state)) {
+      _changeStack.add(_Change<State>(
+        this.state,
+        () => super.emit(state),
+        (val) => super.emit(val),
+      ));
+    }
     super.emit(state);
   }
 
@@ -81,9 +83,14 @@ mixin ReplayCubitMixin<State> on Cubit<State> {
   /// Checks whether the undo/redo stack is empty
   bool get canUndo => _changeStack.canUndo;
 
-  /// Checks wether the undo/redo stack is at the current change
+  /// Checks whether the undo/redo stack is at the current change
   bool get canRedo => _changeStack.canRedo;
 
   /// Clear undo/redo history
   void clearHistory() => _changeStack.clear();
+
+  /// Checks whether the given state should be saved to the undo/redo stack.
+  ///
+  /// By default always returns `true`.
+  bool shouldReplay(State state) => true;
 }

@@ -92,6 +92,18 @@ void main() {
         expect(states, const <int>[1]);
       });
 
+      test('skips states filtered out by shouldReplay', () async {
+        final states = <int>[];
+        final cubit = CounterCubit(shouldReplayCallback: (i) => i != 2);
+        final subscription = cubit.stream.listen(states.add);
+        cubit..increment()..increment()..increment();
+        await Future<void>.delayed(Duration.zero);
+        cubit..undo()..undo()..undo();
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2, 3, 1, 0]);
+      });
+
       test('loses history outside of limit', () async {
         final states = <int>[];
         final cubit = CounterCubit(limit: 1);
