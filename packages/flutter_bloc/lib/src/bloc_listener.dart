@@ -152,20 +152,6 @@ class _BlocListenerBaseState<B extends BlocBase<S>, S>
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final bloc = widget.bloc ?? context.read<B>();
-    if (_bloc != bloc) {
-      if (_subscription != null) {
-        _unsubscribe();
-        _bloc = bloc;
-        _previousState = _bloc.state;
-      }
-      _subscribe();
-    }
-  }
-
-  @override
   void didUpdateWidget(BlocListenerBase<B, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
     final oldBloc = oldWidget.bloc ?? context.read<B>();
@@ -174,6 +160,20 @@ class _BlocListenerBaseState<B extends BlocBase<S>, S>
       if (_subscription != null) {
         _unsubscribe();
         _bloc = currentBloc;
+        _previousState = _bloc.state;
+      }
+      _subscribe();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final bloc = widget.bloc ?? context.read<B>();
+    if (_bloc != bloc) {
+      if (_subscription != null) {
+        _unsubscribe();
+        _bloc = bloc;
         _previousState = _bloc.state;
       }
       _subscribe();

@@ -133,22 +133,22 @@ class _BlocBuilderBaseState<B extends BlocBase<S>, S>
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final bloc = widget.bloc ?? context.read<B>();
-    if (_bloc != bloc) {
-      _bloc = bloc;
-      _state = _bloc.state;
-    }
-  }
-
-  @override
   void didUpdateWidget(BlocBuilderBase<B, S> oldWidget) {
     super.didUpdateWidget(oldWidget);
     final oldBloc = oldWidget.bloc ?? context.read<B>();
     final currentBloc = widget.bloc ?? oldBloc;
     if (oldBloc != currentBloc) {
       _bloc = currentBloc;
+      _state = _bloc.state;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final bloc = widget.bloc ?? context.read<B>();
+    if (_bloc != bloc) {
+      _bloc = bloc;
       _state = _bloc.state;
     }
   }
