@@ -231,6 +231,27 @@ void main() {
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1, 0]);
       });
+
+      test(
+          'redo does not redo states which were'
+          ' filtered out by shouldReplay at undo time', () async {
+        final states = <int>[];
+        final cubit = CounterCubit(shouldReplayCallback: (i) => !i.isEven);
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..increment()
+          ..undo()
+          ..undo()
+          ..undo()
+          ..redo()
+          ..redo()
+          ..redo();
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2, 3, 1, 3]);
+      });
     });
   });
 

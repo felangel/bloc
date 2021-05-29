@@ -279,6 +279,26 @@ void main() {
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1, 0]);
       });
+
+      test(
+          'redo does not redo states which were'
+          ' filtered out by shouldReplay at undo time', () async {
+        final states = <int>[];
+        final bloc = CounterBloc(shouldReplayCallback: (i) => !i.isEven);
+        final subscription = bloc.stream.listen(states.add);
+        bloc..add(Increment())..add(Increment())..add(Increment());
+        await Future<void>.delayed(Duration.zero);
+        bloc
+          ..undo()
+          ..undo()
+          ..undo()
+          ..redo()
+          ..redo()
+          ..redo();
+        await bloc.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2, 3, 1, 3]);
+      });
     });
   });
 
