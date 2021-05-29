@@ -12,10 +12,12 @@ class CounterBloc extends ReplayBloc<CounterEvent, int> {
     int? limit,
     this.onEventCallback,
     this.onTransitionCallback,
+    this.shouldReplayCallback,
   }) : super(0, limit: limit);
 
   final void Function(ReplayEvent)? onEventCallback;
   final void Function(Transition<ReplayEvent, int>)? onTransitionCallback;
+  final bool Function(int)? shouldReplayCallback;
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
@@ -36,6 +38,11 @@ class CounterBloc extends ReplayBloc<CounterEvent, int> {
   void onTransition(Transition<ReplayEvent, int> transition) {
     onTransitionCallback?.call(transition);
     super.onTransition(transition);
+  }
+
+  @override
+  bool shouldReplay(int state) {
+    return shouldReplayCallback?.call(state) ?? super.shouldReplay(state);
   }
 }
 
