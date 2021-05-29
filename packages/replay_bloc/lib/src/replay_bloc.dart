@@ -104,6 +104,7 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
   void emit(State state) {
     _changeStack.add(_Change<State>(
       this.state,
+      state,
       () {
         final event = _Redo();
         onEvent(event);

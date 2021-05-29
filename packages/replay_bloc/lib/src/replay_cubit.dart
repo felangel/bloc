@@ -66,6 +66,7 @@ mixin ReplayCubitMixin<State> on Cubit<State> {
   void emit(State state) {
     _changeStack.add(_Change<State>(
       this.state,
+      state,
       () => super.emit(state),
       (val) => super.emit(val),
     ));
