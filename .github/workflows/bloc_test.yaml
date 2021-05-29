@@ -16,6 +16,7 @@ jobs:
     defaults:
       run:
         working-directory: packages/bloc_test
+
     runs-on: ubuntu-latest
 
     steps:
@@ -48,6 +49,10 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   pana:
+    defaults:
+      run:
+        working-directory: packages/bloc_test
+
     runs-on: ubuntu-latest
 
     steps:
