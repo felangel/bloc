@@ -45,12 +45,9 @@ class _ChangeStack<T> {
   void undo() {
     if (canUndo) {
       final change = _history.removeLast();
-      if (_shouldReplay(change._oldValue)) {
-        change.undo();
-        _redos.addFirst(change);
-      } else {
-        undo();
-      }
+      if (!_shouldReplay(change._oldValue)) return undo();
+      change.undo();
+      _redos.addFirst(change);
     }
   }
 }

@@ -8,13 +8,13 @@ abstract class ReplayEvent {
   const ReplayEvent();
 }
 
-/// Notifies a [ReplayBloc] of a Redo
+/// Notifies a [ReplayBloc] of a Redo.
 class _Redo extends ReplayEvent {
   @override
   String toString() => 'Redo';
 }
 
-/// Notifies a [ReplayBloc] of an Undo
+/// Notifies a [ReplayBloc] of an Undo.
 class _Undo extends ReplayEvent {
   @override
   String toString() => 'Undo';
@@ -131,24 +131,24 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
     super.emit(state);
   }
 
-  /// Undo the last change
+  /// Undo the last change.
   void undo() => _changeStack.undo();
 
-  /// Redo the previous change
+  /// Redo the previous change.
   void redo() => _changeStack.redo();
 
-  /// Checks whether the undo/redo stack is empty
+  /// Checks whether the undo/redo stack is empty.
   bool get canUndo => _changeStack.canUndo;
 
-  /// Checks wether the undo/redo stack is at the current change
+  /// Checks wether the undo/redo stack is at the current change.
   bool get canRedo => _changeStack.canRedo;
 
-  /// Clear undo/redo history
+  /// Clear undo/redo history.
   void clearHistory() => _changeStack.clear();
 
-  /// Checks whether the given state should be replayed from the undo/redo stack
+  /// Checks whether the given state should be replayed from the undo/redo stack.
   ///
-  /// This is called at the time the state is being restored. By default
-  /// always returns `true`
+  /// This is called at the time the state is being restored.
+  /// By default [shouldReplay] always returns `true`.
   bool shouldReplay(State state) => true;
 }
