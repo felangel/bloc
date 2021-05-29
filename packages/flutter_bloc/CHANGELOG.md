@@ -1,3 +1,9 @@
+# 7.0.1
+
+- fix: `BlocConsumer`, `BlocBuilder`, and `BlocListener` depend on bloc/cubit instance
+  - when a provided bloc instance changes, `BlocConsumer`, `BlocBuilder`, and `BlocListener` will all update to use the new instance
+- docs: update `BlocBuilder` and `BlocListener` inline API docs to include `buildWhen` and `listenWhen`
+
 # 7.0.0
 
 - **BREAKING**: refactor: rename `cubit` parameter to `bloc`
