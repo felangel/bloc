@@ -1,3 +1,7 @@
+# 7.0.1
+
+- fix: `HydratedStorage` clear behavior
+
 # 7.0.0
 
 - **BREAKING**: opt into null safety
