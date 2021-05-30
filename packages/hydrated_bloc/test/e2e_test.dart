@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:test/test.dart';
 import 'package:path/path.dart' as path;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -25,6 +26,12 @@ void main() {
 
     tearDown(() async {
       await storage.clear();
+      try {
+        Directory(
+          path.join(Directory.current.path, '.cache'),
+        ).deleteSync(recursive: true);
+        await HydratedStorage.hive.deleteFromDisk();
+      } catch (_) {}
     });
 
     test('NIL constructor', () {
