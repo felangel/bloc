@@ -16,7 +16,7 @@ jobs:
     defaults:
       run:
         working-directory: packages/flutter_bloc
-    
+
     runs-on: ubuntu-latest
 
     steps:
@@ -60,5 +60,6 @@ jobs:
         run: |
           flutter packages get
           flutter pub global activate pana
+
       - name: Verify Pub Score
         run: ../../tool/verify_pub_score.sh
