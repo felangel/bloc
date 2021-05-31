@@ -92,6 +92,36 @@ void main() {
         expect(states, const <int>[1]);
       });
 
+      test('skips states filtered out by shouldReplay at undo time', () async {
+        final states = <int>[];
+        final cubit = CounterCubit(shouldReplayCallback: (i) => !i.isEven);
+        final subscription = cubit.stream.listen(states.add);
+        cubit..increment()..increment()..increment();
+        await Future<void>.delayed(Duration.zero);
+        cubit..undo()..undo()..undo();
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2, 3, 1]);
+      });
+
+      test(
+          'doesn\'t skip states that would be filtered out by shouldReplay '
+          'at transition time but not at undo time', () async {
+        var replayEvens = false;
+        final states = <int>[];
+        final cubit = CounterCubit(
+          shouldReplayCallback: (i) => !i.isEven || replayEvens,
+        );
+        final subscription = cubit.stream.listen(states.add);
+        cubit..increment()..increment()..increment();
+        await Future<void>.delayed(Duration.zero);
+        replayEvens = true;
+        cubit..undo()..undo()..undo();
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2, 3, 2, 1, 0]);
+      });
+
       test('loses history outside of limit', () async {
         final states = <int>[];
         final cubit = CounterCubit(limit: 1);
@@ -200,6 +230,50 @@ void main() {
         await cubit.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1, 0]);
+      });
+
+      test(
+          'redo does not redo states which were'
+          ' filtered out by shouldReplay at undo time', () async {
+        final states = <int>[];
+        final cubit = CounterCubit(shouldReplayCallback: (i) => !i.isEven);
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..increment()
+          ..undo()
+          ..undo()
+          ..undo()
+          ..redo()
+          ..redo()
+          ..redo();
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2, 3, 1, 3]);
+      });
+
+      test(
+          'redo does not redo states which were'
+          ' filtered out by shouldReplay at transition time', () async {
+        var replayEvens = false;
+        final states = <int>[];
+        final cubit = CounterCubit(
+          shouldReplayCallback: (i) => !i.isEven || replayEvens,
+        );
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..increment()
+          ..undo()
+          ..undo()
+          ..undo();
+        replayEvens = true;
+        cubit..redo()..redo()..redo();
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2, 3, 1, 2, 3]);
       });
     });
   });

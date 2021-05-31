@@ -1,3 +1,7 @@
+# 0.0.2
+
+- feat: add support for conditional replays via `shouldReplay`
+
 # 0.0.1
 
 - **BREAKING**: opt into null safety
