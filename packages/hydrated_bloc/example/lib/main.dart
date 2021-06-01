@@ -22,22 +22,36 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => BrightnessCubit(),
-      child: BlocBuilder<BrightnessCubit, Brightness>(
-        builder: (context, brightness) {
-          return MaterialApp(
-            theme: ThemeData(brightness: brightness),
-            home: BlocProvider<CounterBloc>(
-              create: (_) => CounterBloc(),
-              child: CounterPage(),
-            ),
-          );
-        },
-      ),
+      child: AppView(),
+    );
+  }
+}
+
+class AppView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<BrightnessCubit, Brightness>(
+      builder: (context, brightness) {
+        return MaterialApp(
+          theme: ThemeData(brightness: brightness),
+          home: CounterPage(),
+        );
+      },
     );
   }
 }
 
 class CounterPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<CounterBloc>(
+      create: (_) => CounterBloc(),
+      child: CounterView(),
+    );
+  }
+}
+
+class CounterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -86,9 +100,8 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               child: const Icon(Icons.delete_forever),
               onPressed: () async {
-                final counterBloc = context.read<CounterBloc>();
-                await counterBloc.clear();
-                counterBloc.add(CounterEvent.reset);
+                await HydratedBloc.storage.clear();
+                context.read<CounterBloc>().add(CounterEvent.reset);
               },
             ),
           ),
@@ -100,10 +113,8 @@ class CounterPage extends StatelessWidget {
 
 enum CounterEvent { increment, decrement, reset }
 
-class CounterBloc extends Bloc<CounterEvent, int> with HydratedMixin {
-  CounterBloc() : super(0) {
-    hydrate();
-  }
+class CounterBloc extends HydratedBloc<CounterEvent, int> {
+  CounterBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {

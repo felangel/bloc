@@ -23,6 +23,9 @@ void main() {
 
     tearDown(() async {
       await storage.clear();
+      try {
+        await HydratedStorage.hive.deleteFromDisk();
+      } catch (_) {}
     });
 
     group('migration', () {
@@ -87,9 +90,7 @@ void main() {
 
       setUp(() {
         box = MockBox();
-        when(() => box.deleteFromDisk()).thenAnswer(
-          (_) => Future<void>.value(),
-        );
+        when(() => box.clear()).thenAnswer((_) async => 0);
         storage = HydratedStorage(box);
       });
 
@@ -145,13 +146,13 @@ void main() {
         test('does nothing when box is not open', () async {
           when(() => box.isOpen).thenReturn(false);
           await storage.clear();
-          verifyNever(() => box.deleteFromDisk());
+          verifyNever(() => box.clear());
         });
 
-        test('deletes box when box is open', () async {
+        test('clears box when box is open', () async {
           when(() => box.isOpen).thenReturn(true);
           await storage.clear();
-          verify(() => box.deleteFromDisk()).called(1);
+          verify(() => box.clear()).called(1);
         });
       });
     });
