@@ -18,15 +18,4 @@ void main() {
       });
     });
   });
-
-  group('LatLng', () {
-    group('fromJson', () {
-      test('throws AssertionError when json is null', () {
-        expect(
-          () => LatLng.fromJson(null),
-          throwsA(isA<AssertionError>()),
-        );
-      });
-    });
-  });
 }
