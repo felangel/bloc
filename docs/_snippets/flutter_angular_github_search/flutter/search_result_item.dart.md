@@ -1,8 +1,8 @@
 ```dart
 class _SearchResultItem extends StatelessWidget {
-  final SearchResultItem item;
+  const _SearchResultItem({Key? key, required this.item}) : super(key: key);
 
-  const _SearchResultItem({Key key, @required this.item}) : super(key: key);
+  final SearchResultItem item;
 
   @override
   Widget build(BuildContext context) {
