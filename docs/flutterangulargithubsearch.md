@@ -152,8 +152,6 @@ Create `github_search_bloc.dart`
 
 ?> **Note:** We override the `transformEvents` method to [debounce](http://reactivex.io/documentation/operators/debounce.html) the `GithubSearchEvents`.
 
-?> **Note:** We override `onTransition` so that we can log any time a state change occurs.
-
 Awesome! We're all done with our `common_github_search` package.
 The finished product should look like [this](https://github.com/felangel/Bloc/tree/master/examples/github_search/common_github_search).
 
@@ -202,7 +200,7 @@ Next, we'll implement `_SearchBar`.
 
 [search_form.dart](_snippets/flutter_angular_github_search/flutter/search_bar.dart.md ':include')
 
-?> **Note:** `_SearchBar` accesses `GitHubSearchBloc` via `BlocProvider.of<GithubSearchBloc>(context)` and notifies the bloc of `TextChanged` events.
+?> **Note:** `_SearchBar` accesses `GitHubSearchBloc` via `context.read<GithubSearchBloc>()` and notifies the bloc of `TextChanged` events.
 
 We're done with `_SearchBar`, now onto `_SearchBody`.
 
@@ -212,7 +210,7 @@ We're done with `_SearchBar`, now onto `_SearchBody`.
 
 [search_form.dart](_snippets/flutter_angular_github_search/flutter/search_body.dart.md ':include')
 
-?> **Note:** `_SearchBody` also accesses `GithubSearchBloc` via `BlocProvider` and uses `BlocBuilder` in order to rebuild in response to state changes.
+?> **Note:** `_SearchBody` also accesses `GithubSearchBloc` via `BlocProvider` and uses `BlocBuilder` in order to rebuild in response to state changes. Since the bloc parameter of the `BlocBuilder` object was omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`. Read more [here](https://bloclibrary.dev/#/flutterbloccoreconcepts?id=blocbuilder)
 
 If our state is `SearchStateSuccess` we render `_SearchResults` which we will implement next.
 
