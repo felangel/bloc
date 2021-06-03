@@ -6,12 +6,12 @@ class _SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<_SearchBar> {
   final _textController = TextEditingController();
-  GithubSearchBloc _githubSearchBloc;
+  late GithubSearchBloc _githubSearchBloc;
 
   @override
   void initState() {
     super.initState();
-    _githubSearchBloc = BlocProvider.of<GithubSearchBloc>(context);
+    _githubSearchBloc = context.read<GithubSearchBloc>();
   }
 
   @override
@@ -31,10 +31,10 @@ class _SearchBarState extends State<_SearchBar> {
         );
       },
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.search),
+        prefixIcon: const Icon(Icons.search),
         suffixIcon: GestureDetector(
-          child: Icon(Icons.clear),
           onTap: _onClearTapped,
+          child: const Icon(Icons.clear),
         ),
         border: InputBorder.none,
         hintText: 'Enter a search term',
@@ -44,7 +44,7 @@ class _SearchBarState extends State<_SearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    _githubSearchBloc.add(TextChanged(text: ''));
+    _githubSearchBloc.add(const TextChanged(text: ''));
   }
 }
 ```
