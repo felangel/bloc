@@ -73,7 +73,7 @@ The `woeid` for London is 44418. Navigate to [https://www.metaweather.com/api/lo
 
 ### Creating Our MetaWeather API Client Subpackage
 
-> Since our API client interacting MetaWeather should be independent of the rest of our app, we can create it as a subpackage. We can then import our plugin in our `pubspec.yaml`
+> Since our API client interacting MetaWeather should be independent of the rest of our app, we can create it as a subpackage. We can then import our package in our `pubspec.yaml`
 
 Create a new directory on the project level called `packages`. This directory will store all of our custom made subpackages.
 
@@ -1122,12 +1122,12 @@ flutter test --coverage
 
 The goal of our repository layer is to create a wrapper for our data layer, and facilitate communication with the Bloc layer. In doing this, the rest of our code base depends only on functions exposed by our repository layer, instead of specific data provider implementations. This makes it easier for data providers to be switched out in the long run, and even converted into Flutter plugins/packages.
 
-### Creating Our Weather Repository Plugin
+### Creating Our Weather Repository Package
 
 Inside the packages directory, run the following command
 
 ```
-flutter create --template=plugin weather_repository
+flutter create --template=package weather_repository
 ```
 
 Your directory structure should look like this:
@@ -1143,7 +1143,7 @@ flutter_weather
     |-- test/
 ```
 
-Next, we will be use the same packages as in the `meta_weather_api` plugin. In addition, we will also use the `meta_weather_api` package which we just created. Update your `pubspec.yaml` to look like the following and run `flutter packages get`
+Next, we will be use the same packages as in the `meta_weather_api` package. In addition, we will also use the `meta_weather_api` package which we just created. Update your `pubspec.yaml` to look like the following and run `flutter packages get`
 
 ```yaml
 # packages/weather_repository/pubspec.yaml (done)
@@ -1239,7 +1239,7 @@ As we did in the previous section, run the following command to use `build_runne
 flutter packages pub run build_runner build
 ```
 
-Let's also create a plugin-level barrel file to export our models.
+Let's also create a package-level barrel file to export our models.
 
 ```
 flutter_weather
@@ -1286,7 +1286,7 @@ flutter_weather
     |-- test/
 ```
 
-Create another `weather_repository.dart` file within the source code folder of our plugin. 
+Create another `weather_repository.dart` file within the source code folder of our package. 
 
 ```dart
 // packages/weather_repository/lib/src/weather_repository.dart (in progress)
@@ -1583,9 +1583,9 @@ void main() {
 
 ## Business Logic Layer: Weather Model
 
-In this section, we're going to implement our third weather model - this time for the weather feature of our main app. Note that we haven't been implementing the exact same model each time. In the API client plugin, our weather model contained all the info returned by the API. In the repository client plugin, our weather model contained only the data we wish to display in our app, and in this weather model, we will bake temperature settings into the weather model.
+In this section, we're going to implement our third weather model - this time for the weather feature of our main app. Note that we haven't been implementing the exact same model each time. In the API client package, our weather model contained all the info returned by the API. In the repository client package, our weather model contained only the data we wish to display in our app, and in this weather model, we will bake temperature settings into the weather model.
 
-Before we get started, lets update our project level dependencies to import the plugins we've created and also the serialization/deserialization dependencies.
+Before we get started, lets update our project level dependencies to import the packages we've created and also the serialization/deserialization dependencies.
 
 ```yaml
 # pubspec.yaml (in progress)
