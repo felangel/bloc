@@ -7,7 +7,7 @@ import 'package:mocktail/mocktail.dart';
 
 class MockClient extends Mock implements http.Client {}
 
-Uri _createPostUri({required int start}) {
+Uri _postsUrl({required int start}) {
   return Uri.https(
     'jsonplaceholder.typicode.com',
     '/posts',
@@ -17,15 +17,16 @@ Uri _createPostUri({required int start}) {
 
 void main() {
   group('PostBloc', () {
-    final mockPosts = [
-      const Post(id: 1, title: 'post title', body: 'post body')
-    ];
-
-    final extraMockPosts = [
-      const Post(id: 2, title: 'post title', body: 'post body')
+    const mockPosts = [Post(id: 1, title: 'post title', body: 'post body')];
+    const extraMockPosts = [
+      Post(id: 2, title: 'post title', body: 'post body')
     ];
 
     late http.Client httpClient;
+
+    setUpAll(() {
+      registerFallbackValue(Uri());
+    });
 
     setUp(() {
       httpClient = MockClient();
@@ -35,96 +36,112 @@ void main() {
       expect(PostBloc(httpClient: httpClient).state, const PostState());
     });
 
-    blocTest<PostBloc, PostState>(
-      'emits nothing when posts has reached maximum amount',
-      build: () => PostBloc(httpClient: httpClient),
-      seed: () => const PostState().copyWith(hasReachedMax: true),
-      act: (bloc) => bloc.add(PostFetched()),
-      expect: () => <PostState>[],
-    );
+    group('PostFetched', () {
+      blocTest<PostBloc, PostState>(
+        'emits nothing when posts has reached maximum amount',
+        build: () => PostBloc(httpClient: httpClient),
+        seed: () => const PostState(hasReachedMax: true),
+        act: (bloc) => bloc.add(PostFetched()),
+        expect: () => <PostState>[],
+      );
 
-    blocTest<PostBloc, PostState>(
-      'emits successful status when http fetches initial posts',
-      build: () {
-        when(() => httpClient.get(_createPostUri(start: 0)))
-            .thenAnswer((_) async => http.Response(
-                  '[{ "id": 1, "title": "post title", "body": "post body" }]',
-                  200,
-                ));
-        return PostBloc(httpClient: httpClient);
-      },
-      wait: const Duration(milliseconds: 500),
-      act: (bloc) => bloc.add(PostFetched()),
-      expect: () => <PostState>[
-        PostState(
-            status: PostStatus.success, posts: mockPosts, hasReachedMax: false)
-      ],
-      verify: (_) =>
-          verify(() => httpClient.get(_createPostUri(start: 0))).called(1),
-    );
+      blocTest<PostBloc, PostState>(
+        'emits successful status when http fetches initial posts',
+        build: () {
+          when(() => httpClient.get(any())).thenAnswer((_) async {
+            return http.Response(
+              '[{ "id": 1, "title": "post title", "body": "post body" }]',
+              200,
+            );
+          });
+          return PostBloc(httpClient: httpClient);
+        },
+        wait: const Duration(milliseconds: 500),
+        act: (bloc) => bloc.add(PostFetched()),
+        expect: () => const <PostState>[
+          PostState(
+            status: PostStatus.success,
+            posts: mockPosts,
+            hasReachedMax: false,
+          )
+        ],
+        verify: (_) {
+          verify(() => httpClient.get(_postsUrl(start: 0))).called(1);
+        },
+      );
 
-    blocTest<PostBloc, PostState>(
-      'emits failure status when http fetches posts and throw exception',
-      build: () {
-        when(() => httpClient.get(_createPostUri(start: 0)))
-            .thenAnswer((_) async => http.Response('', 500));
-        return PostBloc(httpClient: httpClient);
-      },
-      wait: const Duration(milliseconds: 500),
-      act: (bloc) => bloc.add(PostFetched()),
-      expect: () =>
-          <PostState>[const PostState().copyWith(status: PostStatus.failure)],
-      verify: (_) =>
-          verify(() => httpClient.get(_createPostUri(start: 0))).called(1),
-    );
+      blocTest<PostBloc, PostState>(
+        'emits failure status when http fetches posts and throw exception',
+        build: () {
+          when(() => httpClient.get(any())).thenAnswer(
+            (_) async => http.Response('', 500),
+          );
+          return PostBloc(httpClient: httpClient);
+        },
+        wait: const Duration(milliseconds: 500),
+        act: (bloc) => bloc.add(PostFetched()),
+        expect: () => <PostState>[const PostState(status: PostStatus.failure)],
+        verify: (_) {
+          verify(() => httpClient.get(_postsUrl(start: 0))).called(1);
+        },
+      );
 
-    blocTest<PostBloc, PostState>(
-      'emits successful status and reaches max posts when '
-      '0 additional posts are fetched',
-      build: () {
-        when(() => httpClient.get(_createPostUri(start: 1)))
-            .thenAnswer((_) async => http.Response('[]', 200));
-        return PostBloc(httpClient: httpClient);
-      },
-      seed: () => const PostState()
-          .copyWith(status: PostStatus.success, posts: mockPosts),
-      wait: const Duration(milliseconds: 500),
-      act: (bloc) => bloc.add(PostFetched()),
-      expect: () => <PostState>[
-        PostState(
+      blocTest<PostBloc, PostState>(
+        'emits successful status and reaches max posts when '
+        '0 additional posts are fetched',
+        build: () {
+          when(() => httpClient.get(any())).thenAnswer(
+            (_) async => http.Response('[]', 200),
+          );
+          return PostBloc(httpClient: httpClient);
+        },
+        seed: () => const PostState(
           status: PostStatus.success,
           posts: mockPosts,
-          hasReachedMax: true,
-        )
-      ],
-      verify: (_) =>
-          verify(() => httpClient.get(_createPostUri(start: 1))).called(1),
-    );
+        ),
+        wait: const Duration(milliseconds: 500),
+        act: (bloc) => bloc.add(PostFetched()),
+        expect: () => const <PostState>[
+          PostState(
+            status: PostStatus.success,
+            posts: mockPosts,
+            hasReachedMax: true,
+          )
+        ],
+        verify: (_) {
+          verify(() => httpClient.get(_postsUrl(start: 1))).called(1);
+        },
+      );
 
-    blocTest<PostBloc, PostState>(
-      'emits successful status and does not reach max posts'
-      'when additional posts are fetched',
-      build: () {
-        when(() => httpClient.get(_createPostUri(start: 1)))
-            .thenAnswer((_) async => http.Response(
-                  '[{ "id": 2, "title": "post title", "body": "post body" }]',
-                  200,
-                ));
-        return PostBloc(httpClient: httpClient);
-      },
-      seed: () => const PostState()
-          .copyWith(status: PostStatus.success, posts: mockPosts),
-      wait: const Duration(milliseconds: 500),
-      act: (bloc) => bloc.add(PostFetched()),
-      expect: () => <PostState>[
-        PostState(
+      blocTest<PostBloc, PostState>(
+        'emits successful status and does not reach max posts'
+        'when additional posts are fetched',
+        build: () {
+          when(() => httpClient.get(any())).thenAnswer((_) async {
+            return http.Response(
+              '[{ "id": 2, "title": "post title", "body": "post body" }]',
+              200,
+            );
+          });
+          return PostBloc(httpClient: httpClient);
+        },
+        seed: () => const PostState(
           status: PostStatus.success,
-          posts: [...mockPosts, ...extraMockPosts],
-          hasReachedMax: false,
-        )
-      ],
-      verify: (_) =>
-          verify(() => httpClient.get(_createPostUri(start: 1))).called(1),
-    );
+          posts: mockPosts,
+        ),
+        wait: const Duration(milliseconds: 500),
+        act: (bloc) => bloc.add(PostFetched()),
+        expect: () => <PostState>[
+          PostState(
+            status: PostStatus.success,
+            posts: [...mockPosts, ...extraMockPosts],
+            hasReachedMax: false,
+          )
+        ],
+        verify: (_) {
+          verify(() => httpClient.get(_postsUrl(start: 1))).called(1);
+        },
+      );
+    });
   });
 }

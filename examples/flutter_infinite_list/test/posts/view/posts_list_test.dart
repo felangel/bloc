@@ -24,16 +24,12 @@ extension on WidgetTester {
   }
 }
 
-List<Post> _createPosts(int n) {
-  final posts = <Post>[];
-  for (var i = 0; i < n; i++) {
-    posts.add(Post(id: i, title: 'post title', body: 'post body'));
-  }
-  return posts;
-}
-
 void main() {
-  final mockPosts = _createPosts(5);
+  final mockPosts = List.generate(
+    5,
+    (i) => Post(id: i, title: 'post title', body: 'post body'),
+  );
+
   late PostBloc postBloc;
 
   setUpAll(() {
@@ -57,7 +53,7 @@ void main() {
     testWidgets(
         'renders no posts text '
         'when post status is success but with 0 posts', (tester) async {
-      when(() => postBloc.state).thenReturn(const PostState().copyWith(
+      when(() => postBloc.state).thenReturn(const PostState(
         status: PostStatus.success,
         posts: [],
         hasReachedMax: true,
@@ -69,7 +65,7 @@ void main() {
     testWidgets(
         'renders 5 posts and a bottom loader when post max is not reached yet',
         (tester) async {
-      when(() => postBloc.state).thenReturn(const PostState().copyWith(
+      when(() => postBloc.state).thenReturn(PostState(
         status: PostStatus.success,
         posts: mockPosts,
       ));
@@ -80,7 +76,7 @@ void main() {
 
     testWidgets('does not render bottom loader when post max is reached',
         (tester) async {
-      when(() => postBloc.state).thenReturn(const PostState().copyWith(
+      when(() => postBloc.state).thenReturn(PostState(
         status: PostStatus.success,
         posts: mockPosts,
         hasReachedMax: true,
@@ -91,10 +87,15 @@ void main() {
 
     testWidgets('fetches more posts when scrolled to the bottom',
         (tester) async {
-      when(() => postBloc.state).thenReturn(const PostState().copyWith(
-        status: PostStatus.success,
-        posts: _createPosts(10),
-      ));
+      when(() => postBloc.state).thenReturn(
+        PostState(
+          status: PostStatus.success,
+          posts: List.generate(
+            10,
+            (i) => Post(id: i, title: 'post title', body: 'post body'),
+          ),
+        ),
+      );
       await tester.pumpPostsList(postBloc);
       await tester.drag(find.byType(PostsList), const Offset(0, -500));
       verify(() => postBloc.add(PostFetched())).called(1);
