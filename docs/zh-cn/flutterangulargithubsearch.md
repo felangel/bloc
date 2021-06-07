@@ -24,7 +24,7 @@ Next, we'll create the scaffold for the `common_github_search` library.
 
 We need to create a `pubspec.yaml` with the required dependencies.
 
-[pubspec.yaml](../_snippets/flutter_angular_github_search/common/pubspec.yaml.md ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/pubspec.yaml ':include')
 
 Lastly, we need to install our dependencies.
 
@@ -163,7 +163,7 @@ We need to start by creating a new Flutter project in our `github_search` direct
 
 Next, we need to update our `pubspec.yaml` to include all the necessary dependencies.
 
-[pubspec.yaml](../_snippets/flutter_angular_github_search/flutter/pubspec.yaml.md ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/pubspec.yaml ':include')
 
 ?> **Note:** We are including our newly created `common_github_search` library as a dependency.
 
@@ -258,7 +258,7 @@ We need to start by creating a new AngularDart project in our github_search dire
 
 We can then go ahead and replace the contents of `pubspec.yaml` with:
 
-[pubspec.yaml](../_snippets/flutter_angular_github_search/angular/pubspec.yaml.md ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/pubspec.yaml ':include')
 
 ### Search Form
 
