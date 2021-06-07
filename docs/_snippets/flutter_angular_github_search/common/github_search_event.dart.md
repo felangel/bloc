@@ -6,9 +6,9 @@ abstract class GithubSearchEvent extends Equatable {
 }
 
 class TextChanged extends GithubSearchEvent {
-  final String text;
+  const TextChanged({required this.text});
 
-  const TextChanged({this.text});
+  final String text;
 
   @override
   List<Object> get props => [text];
