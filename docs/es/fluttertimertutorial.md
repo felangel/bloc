@@ -14,7 +14,7 @@ Comenzaremos creando un nuevo proyecto de Flutter
 
 Luego podemos reemplazar el contenido de pubspec.yaml con:
 
-[pubspec.yaml](../_snippets/flutter_timer_tutorial/pubspec.yaml.md ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/pubspec.yaml ':include')
 
 ?> **Nota:** Utilizaremos [flutter_bloc](https://pub.dev/packages/flutter_bloc), [equatable](https://pub.dev/packages/equatable) y [wave](https://pub.dev/packages/wave) como paquetes en esta aplicación.
 
@@ -26,7 +26,7 @@ A continuación, ejecute `flutter packages get` para instalar todas las dependen
 
 Comienze creando `ticker.dart`.
 
-[ticker.dart](../_snippets/flutter_timer_tutorial/ticker.dart.md ':include')
+[ticker.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/ticker.dart ':include')
 
 Todo lo que hace nuestra clase `Ticker` es exponer una función de tick que toma el número de ticks (segundos) que queremos y devuelve una secuencia que emite los segundos restantes cada segundo.
 
@@ -56,7 +56,7 @@ Para mantener todos nuestros archivos de bloc juntos, creamos un directorio de b
 
 ?> **Consejo:** Puedes usar las extensiones de [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) o [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) para generar automáticamente los siguientes archivos de bloc para usted.
 
-[timer_state.dart](../_snippets/flutter_timer_tutorial/timer_state.dart.md ':include')
+[timer_state.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/bloc/timer_state.dart ':include')
 
 Tenga en cuenta que todos los `TimerStates` extienden la clase base abstracta `TimerState` que tiene una propiedad de duración. Esto se debe a que no importa en qué estado se encuentre nuestro `TimerBloc`, queremos saber cuánto tiempo nos queda.
 
@@ -74,7 +74,7 @@ Nuestro `TimerBloc` necesitará saber cómo procesar los siguientes eventos:
 
 Sino usaste las extensiones de [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) o [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) luego cree `bloc/timer_event.dart` y implementemos esos eventos.
 
-[timer_event.dart](../_snippets/flutter_timer_tutorial/timer_event.dart.md ':include')
+[timer_event.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/bloc/timer_event.dart ':include')
 
 ¡A continuación, implementemos el `TimerBloc`!
 
@@ -120,7 +120,7 @@ El controlador de eventos `TimerResumed` es muy similar al controlador de evento
 
 Por último, necesitamos implementar el controlador de eventos `TimerReset`.
 
-[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc.dart.md ':include')
+[timer_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/bloc/timer_bloc.dart ':include')
 
 Si el `TimerBloc` recibe un evento `TimerReset`, necesita cancelar la `_tickerSubscription` actual para que no se le notifique ningún tick adicional y empuje un estado `TimerInitial` con la duración original.
 
@@ -136,7 +136,7 @@ Eso es todo lo que hay para el `TimerBloc`. Ahora todo lo que queda es implement
 
 Podemos comenzar eliminando el contenido de `main.dart` y creando nuestro widget `MyApp` que será la raíz de nuestra aplicación.
 
-[main.dart](../_snippets/flutter_timer_tutorial/main1.dart.md ':include')
+[main.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/main.dart ':include')
 
 `MyApp` es un `StatelessWidget` que gestionará la inicialización y el cierre de una instancia de `TimerBloc`. Además, está utilizando el widget `BlocProvider` para que nuestra instancia `TimerBloc` esté disponible para los widgets de nuestro subárbol.
 
