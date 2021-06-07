@@ -24,7 +24,7 @@
 
 Нам нужно создать `pubspec.yaml` с необходимыми зависимостями.
 
-[pubspec.yaml](../_snippets/flutter_angular_github_search/common/pubspec.yaml.md ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/pubspec.yaml ':include')
 
 Наконец, нам нужно установить все зависимости.
 
@@ -168,7 +168,7 @@ Now that we have our Events and States implemented, we can create our `GithubSea
 
 Далее нам нужно обновить `pubspec.yaml`, чтобы включить все необходимые зависимости.
 
-[pubspec.yaml](../_snippets/flutter_angular_github_search/flutter/pubspec.yaml.md ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/pubspec.yaml ':include')
 
 ?> **Примечание:** Мы включаем вновь созданную библиотеку `common_github_search` в качестве зависимости.
 
@@ -263,7 +263,7 @@ Now that we have our Events and States implemented, we can create our `GithubSea
 
 Затем мы можем заменить содержимое `pubspec.yaml` на:
 
-[pubspec.yaml](../_snippets/flutter_angular_github_search/angular/pubspec.yaml.md ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/pubspec.yaml ':include')
 
 ### Форма поиска
 
