@@ -82,6 +82,7 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 class BlocListener<B extends BlocBase<S>, S> extends BlocListenerBase<B, S>
     with BlocListenerSingleChildWidget {
   /// {@macro bloc_listener}
+  /// {@macro bloc_listener_listen_when}
   const BlocListener({
     Key? key,
     required BlocWidgetListener<S> listener,
@@ -166,7 +167,24 @@ class _BlocListenerBaseState<B extends BlocBase<S>, S>
   }
 
   @override
-  Widget buildWithChild(BuildContext context, Widget? child) => child!;
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final bloc = widget.bloc ?? context.read<B>();
+    if (_bloc != bloc) {
+      if (_subscription != null) {
+        _unsubscribe();
+        _bloc = bloc;
+        _previousState = _bloc.state;
+      }
+      _subscribe();
+    }
+  }
+
+  @override
+  Widget buildWithChild(BuildContext context, Widget? child) {
+    if (widget.bloc == null) context.select<B, int>(identityHashCode);
+    return child!;
+  }
 
   @override
   void dispose() {

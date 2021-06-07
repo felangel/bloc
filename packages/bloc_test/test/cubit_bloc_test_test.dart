@@ -215,5 +215,30 @@ void main() {
         errors: () => <Matcher>[equals(exception)],
       );
     });
+
+    group('ErrorCubit', () {
+      final error = Error();
+
+      blocTest<ErrorCubit, int>(
+        'errors supports matchers',
+        build: () => ErrorCubit(),
+        act: (cubit) => cubit.throwError(error),
+        errors: () => contains(error),
+      );
+
+      blocTest<ErrorCubit, int>(
+        'captures uncaught errors',
+        build: () => ErrorCubit(),
+        act: (cubit) => cubit.throwError(error),
+        errors: () => <Matcher>[equals(error)],
+      );
+
+      blocTest<ErrorCubit, int>(
+        'captures calls to addError',
+        build: () => ErrorCubit(),
+        act: (cubit) => cubit.addError(error),
+        errors: () => <Matcher>[equals(error)],
+      );
+    });
   });
 }

@@ -25,6 +25,12 @@ void main() {
 
     tearDown(() async {
       await storage.clear();
+      try {
+        Directory(
+          path.join(Directory.current.path, '.cache'),
+        ).deleteSync(recursive: true);
+        await HydratedStorage.hive.deleteFromDisk();
+      } catch (_) {}
     });
 
     test('NIL constructor', () {

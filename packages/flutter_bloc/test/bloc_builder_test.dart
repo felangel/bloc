@@ -8,7 +8,7 @@ class MyThemeApp extends StatefulWidget {
     Key? key,
     required Cubit<ThemeData> themeCubit,
     required Function onBuild,
-  })   : _themeCubit = themeCubit,
+  })  : _themeCubit = themeCubit,
         _onBuild = onBuild,
         super(key: key);
 
@@ -26,7 +26,7 @@ class MyThemeAppState extends State<MyThemeApp> {
   MyThemeAppState({
     required Cubit<ThemeData> themeCubit,
     required Function onBuild,
-  })   : _themeCubit = themeCubit,
+  })  : _themeCubit = themeCubit,
         _onBuild = onBuild;
 
   Cubit<ThemeData> _themeCubit;
@@ -466,6 +466,50 @@ void main() {
       await tester.tap(find.byKey(key));
       await tester.pumpAndSettle();
       expect(states, [0, 2, 2]);
+    });
+
+    testWidgets('rebuilds when provided bloc is changed', (tester) async {
+      final firstCounterCubit = CounterCubit();
+      final secondCounterCubit = CounterCubit()..emit(100);
+
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: BlocProvider.value(
+            value: firstCounterCubit,
+            child: BlocBuilder<CounterCubit, int>(
+              builder: (context, state) => Text('Count $state'),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Count 0'), findsOneWidget);
+
+      firstCounterCubit.increment();
+      await tester.pumpAndSettle();
+      expect(find.text('Count 1'), findsOneWidget);
+      expect(find.text('Count 0'), findsNothing);
+
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: BlocProvider.value(
+            value: secondCounterCubit,
+            child: BlocBuilder<CounterCubit, int>(
+              builder: (context, state) => Text('Count $state'),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Count 100'), findsOneWidget);
+      expect(find.text('Count 1'), findsNothing);
+
+      secondCounterCubit.increment();
+      await tester.pumpAndSettle();
+
+      expect(find.text('Count 101'), findsOneWidget);
     });
   });
 }

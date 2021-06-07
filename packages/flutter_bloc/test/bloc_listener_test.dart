@@ -439,5 +439,44 @@ void main() {
 
       expect(states, expectedStates);
     });
+
+    testWidgets(
+        'updates subscription '
+        'when provided bloc is changed', (tester) async {
+      final firstCounterCubit = CounterCubit();
+      final secondCounterCubit = CounterCubit()..emit(100);
+
+      final states = <int>[];
+      const expectedStates = [1, 101];
+
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: firstCounterCubit,
+          child: BlocListener<CounterCubit, int>(
+            listener: (_, state) => states.add(state),
+            child: const SizedBox(),
+          ),
+        ),
+      );
+
+      firstCounterCubit.increment();
+
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: secondCounterCubit,
+          child: BlocListener<CounterCubit, int>(
+            listener: (_, state) => states.add(state),
+            child: const SizedBox(),
+          ),
+        ),
+      );
+
+      secondCounterCubit.increment();
+      await tester.pump();
+      firstCounterCubit.increment();
+      await tester.pump();
+
+      expect(states, expectedStates);
+    });
   });
 }

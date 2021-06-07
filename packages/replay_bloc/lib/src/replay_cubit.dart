@@ -56,7 +56,7 @@ abstract class ReplayCubit<State> extends Cubit<State>
 /// A mixin which enables `undo` and `redo` operations
 /// for [Cubit] classes.
 mixin ReplayCubitMixin<State> on Cubit<State> {
-  final _changeStack = _ChangeStack<State>();
+  late final _changeStack = _ChangeStack<State>(shouldReplay: shouldReplay);
 
   /// Sets the internal `undo`/`redo` size limit.
   /// By default there is no limit.
@@ -66,24 +66,31 @@ mixin ReplayCubitMixin<State> on Cubit<State> {
   void emit(State state) {
     _changeStack.add(_Change<State>(
       this.state,
+      state,
       () => super.emit(state),
       (val) => super.emit(val),
     ));
     super.emit(state);
   }
 
-  /// Undo the last change
+  /// Undo the last change.
   void undo() => _changeStack.undo();
 
-  /// Redo the previous change
+  /// Redo the previous change.
   void redo() => _changeStack.redo();
 
-  /// Checks whether the undo/redo stack is empty
+  /// Checks whether the undo/redo stack is empty.
   bool get canUndo => _changeStack.canUndo;
 
-  /// Checks wether the undo/redo stack is at the current change
+  /// Checks whether the undo/redo stack is at the current change.
   bool get canRedo => _changeStack.canRedo;
 
-  /// Clear undo/redo history
+  /// Clear undo/redo history.
   void clearHistory() => _changeStack.clear();
+
+  /// Checks whether the given state should be replayed from the undo/redo stack.
+  ///
+  /// This is called at the time the state is being restored.
+  /// By default [shouldReplay] always returns `true`.
+  bool shouldReplay(State state) => true;
 }

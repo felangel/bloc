@@ -73,6 +73,7 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 /// {@endtemplate}
 class BlocBuilder<B extends BlocBase<S>, S> extends BlocBuilderBase<B, S> {
   /// {@macro bloc_builder}
+  /// {@macro bloc_builder_build_when}
   const BlocBuilder({
     Key? key,
     required this.builder,
@@ -143,7 +144,18 @@ class _BlocBuilderBaseState<B extends BlocBase<S>, S>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final bloc = widget.bloc ?? context.read<B>();
+    if (_bloc != bloc) {
+      _bloc = bloc;
+      _state = _bloc.state;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (widget.bloc == null) context.select<B, int>(identityHashCode);
     return BlocListener<B, S>(
       bloc: _bloc,
       listenWhen: widget.buildWhen,

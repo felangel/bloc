@@ -22,8 +22,7 @@ class TickerBloc extends Bloc<TickerEvent, TickerState> {
     if (event is TickerStarted) {
       await _subscription?.cancel();
       _subscription = _ticker.tick().listen((tick) => add(_TickerTicked(tick)));
-    }
-    if (event is _TickerTicked) {
+    } else if (event is _TickerTicked) {
       yield TickerTickSuccess(event.tickCount);
     }
   }

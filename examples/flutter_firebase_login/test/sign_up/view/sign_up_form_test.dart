@@ -42,8 +42,7 @@ void main() {
     setUp(() {
       signUpCubit = MockSignUpCubit();
       when(() => signUpCubit.state).thenReturn(const SignUpState());
-      when(() => signUpCubit.signUpFormSubmitted())
-          .thenAnswer((_) async => null);
+      when(() => signUpCubit.signUpFormSubmitted()).thenAnswer((_) async {});
     });
 
     group('calls', () {
@@ -237,6 +236,32 @@ void main() {
           find.byKey(signUpButtonKey),
         );
         expect(signUpButton.enabled, isTrue);
+      });
+    });
+
+    group('navigates', () {
+      testWidgets('back to previous page when submission status is success',
+          (tester) async {
+        whenListen(
+          signUpCubit,
+          Stream.fromIterable(const <SignUpState>[
+            SignUpState(status: FormzStatus.submissionInProgress),
+            SignUpState(status: FormzStatus.submissionSuccess),
+          ]),
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: BlocProvider.value(
+                value: signUpCubit,
+                child: const SignUpForm(),
+              ),
+            ),
+          ),
+        );
+        expect(find.byType(SignUpForm), findsOneWidget);
+        await tester.pumpAndSettle();
+        expect(find.byType(SignUpForm), findsNothing);
       });
     });
   });
