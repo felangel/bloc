@@ -124,10 +124,6 @@ Por último, necesitamos implementar el controlador de eventos `TimerReset`.
 
 Si el `TimerBloc` recibe un evento `TimerReset`, necesita cancelar la `_tickerSubscription` actual para que no se le notifique ningún tick adicional y empuje un estado `TimerInitial` con la duración original.
 
-Si no usó [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) o [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) asegúrese de crear `bloc/bloc.dart` para exportar todos los archivos de bloque y hacer posible el uso de una sola importación por conveniencia.
-
-[bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_barrel.dart.md ':include')
-
 Eso es todo lo que hay para el `TimerBloc`. Ahora todo lo que queda es implementar la interfaz de usuario para nuestra aplicación de temporizador.
 
 ## UI de la aplicación
@@ -158,10 +154,6 @@ A continuación, implementaremos nuestro widget `Actions` que tendrá las accion
 
 El widget `Actions` es solo otro `StatelessWidget` que utiliza `BlocProvider` para acceder a la instancia de `TimerBloc` y luego devuelve diferentes `FloatingActionButtons` en función del estado actual de `TimerBloc`. Cada uno de los `FloatingActionButtons` agrega un evento en su devolución de llamada `onPressed` para notificar al `TimerBloc`.
 
-Ahora necesitamos conectar las `Acciones` a nuestro widget `Temporizador`.
-
-[timer.dart](../_snippets/flutter_timer_tutorial/timer2.dart.md ':include')
-
 Agregamos otro `BlocBuilder` que representará el widget `Actions`; sin embargo, esta vez estamos utilizando una función [flutter_bloc](https://pub.dev/packages/flutter_bloc) recientemente introducida para controlar con qué frecuencia se reconstruye el widget `Actions` (introducido en `v0.15.0`).
 
 Si desea un control detallado sobre cuándo se llama a la función `constructor`, puede proporcionar una `condición` opcional a `BlocBuilder`. La `condición` toma el estado de bloc anterior y el estado de bloc actual y devuelve un `booleano`. Si la `condición` devuelve `verdadero`, se llamará el `constructor` con `estado` y el widget se reconstruirá. Si `condición` devuelve `falso`, no se llamará a `constructor` con `estado` y no se producirá ninguna reconstrucción.
@@ -181,10 +173,6 @@ Por último, necesitamos agregar el súper genial fondo de onda usando el paquet
 [background.dart](../_snippets/flutter_timer_tutorial/background.dart.md ':include')
 
 ### Poniéndolo todo junto
-
-Nuestro acabado, `main.dart` debería verse así:
-
-[main.dart](../_snippets/flutter_timer_tutorial/main2.dart.md ':include')
 
 ¡Eso es todo al respecto! En este punto, tenemos una aplicación de temporizador bastante sólida que reconstruye eficientemente solo widgets que necesitan ser reconstruidos.
 

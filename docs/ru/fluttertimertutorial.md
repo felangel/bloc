@@ -124,10 +124,6 @@
 
 Если `TimerBloc` получает событие `TimerReset`, ему необходимо отменить текущую `_tickerSubscription`, чтобы он не уведомлялся о каких-либо дополнительных тиках и выставить состояние `TimerInitial` с первоначальной продолжительностью.
 
-Если вы не использовали [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) или [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) расширения, обязательно создайте `bloc/bloc.dart` для того, чтобы экспортировать все файлы блока и для удобства использовать один импорт.
-
-[bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_barrel.dart.md ':include')
-
 Это все, что есть в `TimerBloc`. Теперь осталось только реализовать пользовательский интерфейс для нашего приложения `Timer`.
 
 ## UI приложения
@@ -158,10 +154,6 @@
 
 Виджет `Actions` - это просто еще один `StatelessWidget`, который использует `BlocProvider` для доступа к экземпляру `TimerBloc`, а затем возвращает различные `FloatingActionButtons` в зависимости от текущего состояния `TimerBloc`. Каждый из `FloatingActionButtons` добавляет событие в свой обратный вызов `onPressed`, чтобы уведомить `TimerBloc`.
 
-Теперь нам нужно подключить `Actions` к нашему виджету `Timer`.
-
-[timer.dart](../_snippets/flutter_timer_tutorial/timer2.dart.md ':include')
-
 Мы добавили еще один `BlocBuilder`, который будет отображать виджет `Actions`, однако на этот раз мы используем недавно представленную функцию [flutter_bloc](https://pub.dev/packages/flutter_bloc), чтобы контролировать, как часто перестраивается виджет `Actions` (представлено в `v0.15.0`).
 
 Если вам нужен детальный контроль над тем, когда вызывается функция `builder`, вы можете предоставить необязательное условие для `BlocBuilder`. Условие принимает предыдущее и текущее состояние блока и возвращает логическое значение. Если `buildWhen` возвращает `true`, `builder` будет вызван со `state` и виджет будет перестроен. Если `buildWhen` возвращает `false`, `builder` не будет вызван со `state` и перестройка не произойдет.
@@ -181,10 +173,6 @@
 [background.dart](../_snippets/flutter_timer_tutorial/background.dart.md ':include')
 
 ### Собираем все вместе
-
-наш финальный `main.dart` должен выглядеть приблизительно так:
-
-[main.dart](../_snippets/flutter_timer_tutorial/main2.dart.md ':include')
 
 Вот и все, что нужно сделать! На данный момент у нас есть довольно солидное приложение таймера, которое эффективно перестраивает только те виджеты, для которых это действительно нужно.
 
