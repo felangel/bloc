@@ -144,7 +144,6 @@ class _GoogleLoginButton extends StatelessWidget {
 class _AppleLoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return ElevatedButton.icon(
       key: const Key('loginForm_appleLogin_raisedButton'),
       label: const Text(
