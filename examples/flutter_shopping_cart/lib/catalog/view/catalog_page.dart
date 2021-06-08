@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shopping_cart/cart/cart.dart';
 import 'package:flutter_shopping_cart/catalog/catalog.dart';
 
-class MyCatalog extends StatelessWidget {
+class CatalogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          _MyAppBar(),
+          CatalogAppBar(),
           const SliverToBoxAdapter(child: SizedBox(height: 12)),
           BlocBuilder<CatalogBloc, CatalogState>(
             builder: (context, state) {
@@ -23,13 +23,15 @@ class MyCatalog extends StatelessWidget {
               if (state is CatalogLoaded) {
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (context, index) => _MyListItem(
+                    (context, index) => CatalogListItem(
                       state.catalog.getByPosition(index),
                     ),
+                    childCount: state.catalog.itemNames.length,
                   ),
                 );
               }
-              return const Text('Something went wrong!');
+              return const SliverFillRemaining(
+                  child: Text('Something went wrong!'));
             },
           ),
         ],
@@ -38,8 +40,8 @@ class MyCatalog extends StatelessWidget {
   }
 }
 
-class _AddButton extends StatelessWidget {
-  const _AddButton({Key? key, required this.item}) : super(key: key);
+class AddButton extends StatelessWidget {
+  const AddButton({Key? key, required this.item}) : super(key: key);
 
   final Item item;
 
@@ -52,12 +54,13 @@ class _AddButton extends StatelessWidget {
           return const CircularProgressIndicator();
         }
         if (state is CartLoaded) {
+          final isInCart = state.cart.items.contains(item);
           return TextButton(
             style: TextButton.styleFrom(onSurface: theme.primaryColor),
-            onPressed: state.cart.items.contains(item)
+            onPressed: isInCart
                 ? null
                 : () => context.read<CartBloc>().add(CartItemAdded(item)),
-            child: state.cart.items.contains(item)
+            child: isInCart
                 ? const Icon(Icons.check, semanticLabel: 'ADDED')
                 : const Text('ADD'),
           );
@@ -68,7 +71,7 @@ class _AddButton extends StatelessWidget {
   }
 }
 
-class _MyAppBar extends StatelessWidget {
+class CatalogAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -84,8 +87,8 @@ class _MyAppBar extends StatelessWidget {
   }
 }
 
-class _MyListItem extends StatelessWidget {
-  const _MyListItem(this.item, {Key? key}) : super(key: key);
+class CatalogListItem extends StatelessWidget {
+  const CatalogListItem(this.item, {Key? key}) : super(key: key);
 
   final Item item;
 
@@ -102,7 +105,7 @@ class _MyListItem extends StatelessWidget {
             const SizedBox(width: 24),
             Expanded(child: Text(item.name, style: textTheme)),
             const SizedBox(width: 24),
-            _AddButton(item: item),
+            AddButton(item: item),
           ],
         ),
       ),

@@ -1,3 +1,3 @@
 export 'bloc/cart_bloc.dart';
 export 'models/models.dart';
-export 'my_cart.dart';
+export 'view/cart_page.dart';
