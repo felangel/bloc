@@ -9,7 +9,10 @@ class SearchForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[_SearchBar(), _SearchBody()],
+      children: <Widget>[
+        _SearchBar(),
+        _SearchBody(),
+      ],
     );
   }
 }
@@ -21,12 +24,12 @@ class _SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<_SearchBar> {
   final _textController = TextEditingController();
-  GithubSearchBloc _githubSearchBloc;
+  late GithubSearchBloc _githubSearchBloc;
 
   @override
   void initState() {
     super.initState();
-    _githubSearchBloc = BlocProvider.of<GithubSearchBloc>(context);
+    _githubSearchBloc = context.read<GithubSearchBloc>();
   }
 
   @override
@@ -46,10 +49,10 @@ class _SearchBarState extends State<_SearchBar> {
         );
       },
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.search),
+        prefixIcon: const Icon(Icons.search),
         suffixIcon: GestureDetector(
-          child: Icon(Icons.clear),
           onTap: _onClearTapped,
+          child: const Icon(Icons.clear),
         ),
         border: InputBorder.none,
         hintText: 'Enter a search term',
@@ -59,7 +62,7 @@ class _SearchBarState extends State<_SearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    _githubSearchBloc.add(TextChanged(text: ''));
+    _githubSearchBloc.add(const TextChanged(text: ''));
   }
 }
 
@@ -67,31 +70,28 @@ class _SearchBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GithubSearchBloc, GithubSearchState>(
-      bloc: BlocProvider.of<GithubSearchBloc>(context),
-      builder: (BuildContext context, GithubSearchState state) {
-        if (state is SearchStateEmpty) {
-          return Text('Please enter a term to begin');
-        }
+      builder: (context, state) {
         if (state is SearchStateLoading) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         if (state is SearchStateError) {
           return Text(state.error);
         }
         if (state is SearchStateSuccess) {
           return state.items.isEmpty
-              ? Text('No Results')
+              ? const Text('No Results')
               : Expanded(child: _SearchResults(items: state.items));
         }
+        return const Text('Please enter a term to begin');
       },
     );
   }
 }
 
 class _SearchResults extends StatelessWidget {
-  final List<SearchResultItem> items;
+  const _SearchResults({Key? key, required this.items}) : super(key: key);
 
-  const _SearchResults({Key key, this.items}) : super(key: key);
+  final List<SearchResultItem> items;
 
   @override
   Widget build(BuildContext context) {
@@ -105,9 +105,9 @@ class _SearchResults extends StatelessWidget {
 }
 
 class _SearchResultItem extends StatelessWidget {
-  final SearchResultItem item;
+  const _SearchResultItem({Key? key, required this.item}) : super(key: key);
 
-  const _SearchResultItem({Key key, @required this.item}) : super(key: key);
+  final SearchResultItem item;
 
   @override
   Widget build(BuildContext context) {

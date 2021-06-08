@@ -1,9 +1,9 @@
 ```dart
 class GithubUser {
+  const GithubUser({required this.login, required this.avatarUrl});
+
   final String login;
   final String avatarUrl;
-
-  const GithubUser({this.login, this.avatarUrl});
 
   static GithubUser fromJson(dynamic json) {
     return GithubUser(

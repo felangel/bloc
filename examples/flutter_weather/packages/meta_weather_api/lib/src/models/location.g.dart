@@ -14,8 +14,8 @@ Location _$LocationFromJson(Map<String, dynamic> json) {
       title: $checkedConvert(json, 'title', (v) => v as String),
       locationType: $checkedConvert(
           json, 'location_type', (v) => _$enumDecode(_$LocationTypeEnumMap, v)),
-      latLng: $checkedConvert(
-          json, 'latt_long', (v) => LatLng.fromJson(v as String)),
+      latLng: $checkedConvert(json, 'latt_long',
+          (v) => const LatLngConverter().fromJson(v as String)),
       woeid: $checkedConvert(json, 'woeid', (v) => v as int),
     );
     return val;
