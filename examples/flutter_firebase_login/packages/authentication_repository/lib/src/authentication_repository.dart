@@ -34,17 +34,14 @@ class AuthenticationRepository {
   AuthenticationRepository({
     CacheClient? cache,
     firebase_auth.FirebaseAuth? firebaseAuth,
-    GoogleSignIn? googleSignIn,
-    SignInWithApple? appleSignIn,
+    GoogleSignIn? googleSignIn
   })  : _cache = cache ?? CacheClient(),
         _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
-        _googleSignIn = googleSignIn ?? GoogleSignIn.standard(),
-        _appleSignIn = appleSignIn ?? SignInWithApple();
+        _googleSignIn = googleSignIn ?? GoogleSignIn.standard()
 
   final CacheClient _cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
-  final SignInWithApple _appleSignIn;
 
   /// Whether or not the current environment is web
   /// Should only be overriden for testing purposes. Otherwise,
@@ -141,7 +138,6 @@ class AuthenticationRepository {
         idToken: appleCredential.identityToken,
         rawNonce: rawNonce,
       );
-      print(credential);
 
       await _firebaseAuth.signInWithCredential(credential);
     } on Exception {
@@ -154,7 +150,7 @@ class AuthenticationRepository {
   String generateNonce([int length = 32]) {
     final charset =
         '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
-    final random = Random.secure();
+    const random = Random.secure();
     return List.generate(length, (_) => charset[random.nextInt(charset.length)])
         .join();
   }
