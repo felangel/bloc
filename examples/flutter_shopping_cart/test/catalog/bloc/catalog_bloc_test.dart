@@ -1,5 +1,4 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_shopping_cart/cart/cart.dart';
 import 'package:flutter_shopping_cart/catalog/catalog.dart';
 import 'package:flutter_shopping_cart/shopping_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -35,7 +34,7 @@ void main() {
         act: (bloc) => bloc.add(CatalogStarted()),
         expect: () => <CatalogState>[
               CatalogLoading(),
-              CatalogLoaded(Catalog(itemNames: mockItemNames))
+              CatalogLoaded(Catalog(itemNames: mockItemNames)),
             ],
         verify: (_) {
           return verify(shoppingRepository.fetchCatalog).called(1);
