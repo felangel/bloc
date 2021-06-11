@@ -23,11 +23,9 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapAppStartedToState() async* {
     try {
       final isSignedIn = await _userRepository.isAuthenticated();
-      if (!isSignedIn) {
-        await _userRepository.authenticate();
-      }
+      if (!isSignedIn) await _userRepository.authenticate();
       final userId = await _userRepository.getUserId();
-      yield Authenticated(userId);
+      yield userId == null ? Unauthenticated() : Authenticated(userId);
     } catch (_) {
       yield Unauthenticated();
     }

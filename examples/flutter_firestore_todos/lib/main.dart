@@ -73,9 +73,9 @@ class TodosApp extends StatelessWidget {
           '/addTodo': (context) {
             return AddEditScreen(
               onSave: (task, note) {
-                BlocProvider.of<TodosBloc>(context).add(
-                  AddTodo(Todo(task, note: note)),
-                );
+                context
+                    .read<TodosBloc>()
+                    .add(AddTodo(Todo(task: task, note: note)));
               },
               isEditing: false,
             );

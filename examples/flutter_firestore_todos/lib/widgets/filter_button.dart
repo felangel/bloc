@@ -4,9 +4,9 @@ import 'package:flutter_firestore_todos/blocs/filtered_todos/filtered_todos.dart
 import 'package:flutter_firestore_todos/models/models.dart';
 
 class FilterButton extends StatelessWidget {
-  final bool? visible;
+  final bool visible;
 
-  FilterButton({this.visible, Key? key}) : super(key: key);
+  FilterButton({this.visible = false, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,18 +19,18 @@ class FilterButton extends StatelessWidget {
         builder: (context, state) {
       final button = _Button(
         onSelected: (filter) {
-          BlocProvider.of<FilteredTodosBloc>(context).add(UpdateFilter(filter));
+          context.read<FilteredTodosBloc>().add(UpdateFilter(filter));
         },
         activeFilter: state is FilteredTodosLoaded
             ? state.activeFilter
             : VisibilityFilter.all,
-        activeStyle: activeStyle!,
-        defaultStyle: defaultStyle!,
+        activeStyle: activeStyle,
+        defaultStyle: defaultStyle,
       );
       return AnimatedOpacity(
-        opacity: visible == true ? 1.0 : 0.0,
+        opacity: visible ? 1.0 : 0.0,
         duration: Duration(milliseconds: 150),
-        child: visible == true ? button : IgnorePointer(child: button),
+        child: visible ? button : IgnorePointer(child: button),
       );
     });
   }
@@ -47,8 +47,8 @@ class _Button extends StatelessWidget {
 
   final PopupMenuItemSelected<VisibilityFilter> onSelected;
   final VisibilityFilter activeFilter;
-  final TextStyle activeStyle;
-  final TextStyle defaultStyle;
+  final TextStyle? activeStyle;
+  final TextStyle? defaultStyle;
 
   @override
   Widget build(BuildContext context) {

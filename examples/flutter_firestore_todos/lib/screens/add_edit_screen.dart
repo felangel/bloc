@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:todos_repository/todos_repository.dart';
 
-typedef OnSaveCallback = Function(String? task, String? note);
+typedef OnSaveCallback = Function(String task, String? note);
 
 class AddEditScreen extends StatefulWidget {
   final bool isEditing;
@@ -52,7 +52,9 @@ class _AddEditScreenState extends State<AddEditScreen> {
                   hintText: 'What needs to be done?',
                 ),
                 validator: (val) {
-                  return val!.trim().isEmpty ? 'Please enter some text' : null;
+                  if (val == null || val.trim().isEmpty) {
+                    return 'Please enter some text';
+                  }
                 },
                 onSaved: (value) => _task = value,
               ),
@@ -73,9 +75,11 @@ class _AddEditScreenState extends State<AddEditScreen> {
         tooltip: isEditing ? 'Save changes' : 'Add Todo',
         child: Icon(isEditing ? Icons.check : Icons.add),
         onPressed: () {
-          if (_formKey.currentState?.validate() == true) {
-            _formKey.currentState?.save();
-            widget.onSave(_task, _note);
+          final currentState = _formKey.currentState;
+          if (currentState != null && currentState.validate()) {
+            currentState.save();
+            final task = _task;
+            if (task != null) widget.onSave(task, _note);
             Navigator.pop(context);
           }
         },
