@@ -7,7 +7,7 @@ import 'package:flutter_firestore_todos/widgets/widgets.dart';
 import 'package:flutter_firestore_todos/screens/screens.dart';
 
 class FilteredTodos extends StatelessWidget {
-  FilteredTodos({Key key}) : super(key: key);
+  FilteredTodos({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

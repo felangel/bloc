@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,9 +6,9 @@ import 'package:flutter_firestore_todos/blocs/todos/todos.dart';
 import 'package:flutter_firestore_todos/screens/screens.dart';
 
 class DetailsScreen extends StatelessWidget {
-  final String id;
+  final String? id;
 
-  DetailsScreen({Key key, @required this.id}) : super(key: key);
+  DetailsScreen({Key? key, required this.id}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class DetailsScreen extends StatelessWidget {
       builder: (context, state) {
         final todo = (state as TodosLoaded)
             .todos
-            .firstWhere((todo) => todo.id == id, orElse: () => null);
+            .firstWhereOrNull((todo) => todo.id == id);
         return Scaffold(
           appBar: AppBar(
             title: Text('Todo Details'),
@@ -64,7 +65,7 @@ class DetailsScreen extends StatelessWidget {
                                       bottom: 16.0,
                                     ),
                                     child: Text(
-                                      todo.task,
+                                      todo.task!,
                                       style:
                                           Theme.of(context).textTheme.headline5,
                                     ),

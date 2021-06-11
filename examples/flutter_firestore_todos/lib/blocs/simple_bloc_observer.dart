@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 // in order to handle transitions and errors from all Blocs.
 class SimpleBlocObserver extends BlocObserver {
   @override
-  void onEvent(Bloc bloc, Object event) {
+  void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
     print(event);
   }

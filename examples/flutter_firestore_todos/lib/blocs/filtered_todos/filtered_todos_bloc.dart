@@ -8,9 +8,9 @@ import 'package:flutter_firestore_todos/models/models.dart';
 
 class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   final TodosBloc _todosBloc;
-  StreamSubscription _todosSubscription;
+  StreamSubscription? _todosSubscription;
 
-  FilteredTodosBloc({@required TodosBloc todosBloc})
+  FilteredTodosBloc({required TodosBloc todosBloc})
       : assert(todosBloc != null),
         _todosBloc = todosBloc,
         super(todosBloc.state is TodosLoaded
@@ -38,7 +38,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   Stream<FilteredTodosState> _mapUpdateFilterToState(
     UpdateFilter event,
   ) async* {
-    final currentState = _todosBloc.state;
+    final TodosState currentState = _todosBloc.state;
     if (currentState is TodosLoaded) {
       yield FilteredTodosLoaded(
         _mapTodosToFilteredTodos(currentState.todos, event.filter),

@@ -3,9 +3,9 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_firestore_todos/blocs/blocs.dart';
 
 class StatsBloc extends Bloc<StatsEvent, StatsState> {
-  StreamSubscription _todosSubscription;
+  StreamSubscription? _todosSubscription;
 
-  StatsBloc({TodosBloc todosBloc})
+  StatsBloc({required TodosBloc todosBloc})
       : assert(todosBloc != null),
         super(StatsLoading()) {
     _todosSubscription = todosBloc.stream.listen((state) {

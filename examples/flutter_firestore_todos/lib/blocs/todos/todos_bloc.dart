@@ -6,9 +6,9 @@ import 'package:todos_repository/todos_repository.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final TodosRepository _todosRepository;
-  StreamSubscription _todosSubscription;
+  StreamSubscription? _todosSubscription;
 
-  TodosBloc({@required TodosRepository todosRepository})
+  TodosBloc({required TodosRepository todosRepository})
       : assert(todosRepository != null),
         _todosRepository = todosRepository,
         super(TodosLoading());
@@ -48,11 +48,11 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
-    _todosRepository.deleteTodo(event.todo);
+    _todosRepository.deleteTodo(event.todo!);
   }
 
   Stream<TodosState> _mapToggleAllToState() async* {
-    final currentState = state;
+    final TodosState currentState = state;
     if (currentState is TodosLoaded) {
       final allComplete = currentState.todos.every((todo) => todo.complete);
       final List<Todo> updatedTodos = currentState.todos
@@ -65,7 +65,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapClearCompletedToState() async* {
-    final currentState = state;
+    final TodosState currentState = state;
     if (currentState is TodosLoaded) {
       final List<Todo> completedTodos =
           currentState.todos.where((todo) => todo.complete).toList();

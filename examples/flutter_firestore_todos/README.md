@@ -1,15 +1,11 @@
-[![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
-
 # flutter_firestore_todos
 
-A Flutter example showing how to use flutter_bloc with a firestore backend.
+A new Flutter project.
 
 ## Getting Started
 
-You will need to follow the firebase setup docs found [here](https://firebase.google.com/docs/flutter/setup#create_firebase_project).
-Once you've downloaded the .json and .plist files run the project.
+This project is a starting point for a Flutter application.
 
-Here are a few flutter resources.
 A few resources to get you started if this is your first Flutter project:
 
 - [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
