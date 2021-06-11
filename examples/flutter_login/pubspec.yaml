@@ -18,6 +18,12 @@ dependencies:
   user_repository:
     path: packages/user_repository
 
+dependency_overrides:
+  bloc:
+    path: ../../packages/bloc
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -12,19 +12,21 @@ part 'ticker_state.dart';
 /// {@endtemplate}
 class TickerBloc extends Bloc<TickerEvent, TickerState> {
   /// {@macro ticker_bloc}
-  TickerBloc(this._ticker) : super(TickerInitial());
+  TickerBloc(this._ticker) : super(TickerInitial()) {
+    on<TickerStarted>(_onTickerStarted);
+    on<_TickerTicked>(_onTickerTicked);
+  }
 
   final Ticker _ticker;
   StreamSubscription? _subscription;
 
-  @override
-  Stream<TickerState> mapEventToState(TickerEvent event) async* {
-    if (event is TickerStarted) {
-      await _subscription?.cancel();
-      _subscription = _ticker.tick().listen((tick) => add(_TickerTicked(tick)));
-    } else if (event is _TickerTicked) {
-      yield TickerTickSuccess(event.tickCount);
-    }
+  void _onTickerStarted(TickerStarted event, Emit<TickerState> emit) {
+    _subscription?.cancel();
+    _subscription = _ticker.tick().listen((tick) => add(_TickerTicked(tick)));
+  }
+
+  void _onTickerTicked(_TickerTicked event, Emit<TickerState> emit) {
+    emit(TickerTickSuccess(event.tickCount));
   }
 
   @override

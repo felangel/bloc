@@ -402,6 +402,36 @@ void main() {
 
         counterBloc.add(CounterEvent.increment);
       });
+
+      test('maintains correct transition composition', () {
+        final expectedTransitions = <Transition<CounterEvent, int>>[
+          const Transition(
+            currentState: 0,
+            event: CounterEvent.decrement,
+            nextState: -1,
+          ),
+          const Transition(
+            currentState: -1,
+            event: CounterEvent.increment,
+            nextState: 0,
+          ),
+        ];
+
+        final expectedStates = [-1, 0, emitsDone];
+        final transitions = <Transition<CounterEvent, int>>[];
+        final counterBloc = CounterBloc(onTransitionCallback: transitions.add);
+
+        expectLater(
+          counterBloc.stream,
+          emitsInOrder(expectedStates),
+        ).then((dynamic _) {
+          expect(transitions, expectedTransitions);
+        });
+        counterBloc
+          ..add(CounterEvent.decrement)
+          ..add(CounterEvent.increment)
+          ..close();
+      });
     });
 
     group('Async Bloc', () {
@@ -437,8 +467,7 @@ void main() {
         final states = <AsyncState>[];
 
         asyncBloc
-          // ignore: deprecated_member_use_from_same_package
-          ..listen(states.add)
+          ..stream.listen(states.add)
           ..add(AsyncEvent());
 
         await asyncBloc.close();
@@ -552,6 +581,109 @@ void main() {
           ..close();
       });
 
+      test('should map multiple events to correct states', () {
+        final expectedStates = [
+          AsyncState(isLoading: true, hasError: false, isSuccess: false),
+          AsyncState(isLoading: false, hasError: false, isSuccess: true),
+          AsyncState(isLoading: true, hasError: false, isSuccess: false),
+          AsyncState(isLoading: false, hasError: false, isSuccess: true),
+          emitsDone,
+        ];
+
+        expectLater(
+          asyncBloc.stream,
+          emitsInOrder(expectedStates),
+        ).then((dynamic _) {
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onTransition(
+              asyncBloc,
+              Transition<AsyncEvent, AsyncState>(
+                currentState: AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+                event: AsyncEvent(),
+                nextState: AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+              ),
+            ),
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              asyncBloc,
+              Change<AsyncState>(
+                currentState: AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+                nextState: AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+              ),
+            ),
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onTransition(
+              asyncBloc,
+              Transition<AsyncEvent, AsyncState>(
+                currentState: AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+                event: AsyncEvent(),
+                nextState: AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: true,
+                ),
+              ),
+            ),
+          ).called(2);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              asyncBloc,
+              Change<AsyncState>(
+                currentState: AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+                nextState: AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: true,
+                ),
+              ),
+            ),
+          ).called(2);
+          expect(
+            asyncBloc.state,
+            AsyncState(
+              isLoading: false,
+              hasError: false,
+              isSuccess: true,
+            ),
+          );
+        });
+
+        asyncBloc
+          ..add(AsyncEvent())
+          ..add(AsyncEvent())
+          ..close();
+      });
+
       test('is a broadcast stream', () {
         final expectedStates = [
           AsyncState(isLoading: true, hasError: false, isSuccess: false),
@@ -582,41 +714,7 @@ void main() {
       });
     });
 
-    group('flatMap', () {
-      test('maintains correct transition composition', () {
-        final expectedTransitions = <Transition<CounterEvent, int>>[
-          const Transition(
-            currentState: 0,
-            event: CounterEvent.decrement,
-            nextState: -1,
-          ),
-          const Transition(
-            currentState: -1,
-            event: CounterEvent.increment,
-            nextState: 0,
-          ),
-        ];
-
-        final expectedStates = [-1, 0, emitsDone];
-        final transitions = <Transition<CounterEvent, int>>[];
-        final flatMapBloc = FlatMapBloc(
-          onTransitionCallback: transitions.add,
-        );
-
-        expectLater(
-          flatMapBloc.stream,
-          emitsInOrder(expectedStates),
-        ).then((dynamic _) {
-          expect(transitions, expectedTransitions);
-        });
-        flatMapBloc
-          ..add(CounterEvent.decrement)
-          ..add(CounterEvent.increment)
-          ..close();
-      });
-    });
-
-    group('mergeBloc', () {
+    group('MergeBloc', () {
       test('maintains correct transition composition', () {
         final expectedTransitions = <Transition<CounterEvent, int>>[
           const Transition(
