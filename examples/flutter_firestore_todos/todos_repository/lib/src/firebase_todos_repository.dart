@@ -13,7 +13,7 @@ class FirebaseTodosRepository implements TodosRepository {
 
   @override
   Future<void> addNewTodo(Todo todo) {
-    return todoCollection.add(todo.toEntity().toDocument());
+    return todoCollection.doc(todo.id).set((todo.toEntity().toDocument()));
   }
 
   @override
@@ -31,7 +31,7 @@ class FirebaseTodosRepository implements TodosRepository {
   }
 
   @override
-  Future<void> updateTodo(Todo update) {
-    return todoCollection.doc(update.id).update(update.toEntity().toDocument());
+  Future<void> updateTodo(Todo todo) {
+    return todoCollection.doc(todo.id).update(todo.toEntity().toDocument());
   }
 }

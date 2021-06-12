@@ -6,6 +6,8 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   late StreamSubscription _todosSubscription;
 
   StatsBloc({required TodosBloc todosBloc}) : super(StatsLoading()) {
+    final todosState = todosBloc.state;
+    if (todosState is TodosLoaded) add(UpdateStats(todosState.todos));
     _todosSubscription = todosBloc.stream.listen((state) {
       if (state is TodosLoaded) {
         add(UpdateStats(state.todos));
