@@ -6,6 +6,15 @@
 
 ![demo](../assets/gifs/flutter_timer.gif)
 
+## Key Topics
+
+- Observe state changes with [BlocObserver](/coreconcepts?id=blocobserver).
+- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
+- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
+- Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
+- Learn to use `StreamSubscription` in a Bloc.
+- Prevent unnecessary rebuilds with `buildWhen`.
+
 ## Setup
 
 We’ll start off by creating a brand new Flutter project
@@ -14,9 +23,9 @@ We’ll start off by creating a brand new Flutter project
 
 We can then replace the contents of pubspec.yaml with:
 
-[pubspec.yaml](../_snippets/flutter_timer_tutorial/pubspec.yaml.md ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/pubspec.yaml ':include')
 
-?> **Note:** We’ll be using the [flutter_bloc](https://pub.dev/packages/flutter_bloc), [equatable](https://pub.dev/packages/equatable), and [wave](https://pub.dev/packages/wave) packages in this app.
+?> **Note:** We’ll be using the [flutter_bloc](https://pub.dev/packages/flutter_bloc) and [equatable](https://pub.dev/packages/equatable) packages in this app.
 
 Next, run `flutter packages get` to install all the dependencies.
 
@@ -26,7 +35,7 @@ Next, run `flutter packages get` to install all the dependencies.
 
 Start off by creating `ticker.dart`.
 
-[ticker.dart](../_snippets/flutter_timer_tutorial/ticker.dart.md ':include')
+[ticker.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/ticker.dart ':include')
 
 All our `Ticker` class does is expose a tick function which takes the number of ticks (seconds) we want and returns a stream which emits the remaining seconds every second.
 
@@ -56,7 +65,7 @@ In order to keep all of our bloc files together, let’s create a bloc directory
 
 ?> **Tip:** You can use the [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) or [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) extensions to autogenerate the following bloc files for you.
 
-[timer_state.dart](../_snippets/flutter_timer_tutorial/timer_state.dart.md ':include')
+[timer_state.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/bloc/timer_state.dart ':include')
 
 Note that all of the `TimerStates` extend the abstract base class `TimerState` which has a duration property. This is because no matter what state our `TimerBloc` is in, we want to know how much time is remaining.
 
@@ -74,7 +83,7 @@ Our `TimerBloc` will need to know how to process the following events:
 
 If you didn’t use the [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) or [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) extensions, then create `bloc/timer_event.dart` and let’s implement those events.
 
-[timer_event.dart](../_snippets/flutter_timer_tutorial/timer_event.dart.md ':include')
+[timer_event.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/bloc/timer_event.dart ':include')
 
 Next up, let’s implement the `TimerBloc`!
 
@@ -120,13 +129,9 @@ The `TimerResumed` event handler is very similar to the `TimerPaused` event hand
 
 Lastly, we need to implement the `TimerReset` event handler.
 
-[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc.dart.md ':include')
+[timer_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/bloc/timer_bloc.dart ':include')
 
 If the `TimerBloc` receives a `TimerReset` event, it needs to cancel the current `_tickerSubscription` so that it isn’t notified of any additional ticks and pushes a `TimerInitial` state with the original duration.
-
-If you didn’t use the [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) or [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) extensions be sure to create `bloc/bloc.dart` in order to export all the bloc files and make it possible to use a single import for convenience.
-
-[bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_barrel.dart.md ':include')
 
 That’s all there is to the `TimerBloc`. Now all that’s left is implement the UI for our Timer Application.
 
@@ -134,17 +139,19 @@ That’s all there is to the `TimerBloc`. Now all that’s left is implement the
 
 ### MyApp
 
-We can start off by deleting the contents of `main.dart` and creating our `MyApp` widget which will be the root of our application.
+We can start off by deleting the contents of `main.dart` and replacing it with the following.
 
-[main.dart](../_snippets/flutter_timer_tutorial/main1.dart.md ':include')
+[main.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/main.dart ':include')
 
-`MyApp` is a `StatelessWidget` which will manage initializing and closing an instance of `TimerBloc`. In addition, it’s using the `BlocProvider` widget in order to make our `TimerBloc` instance available to the widgets in our subtree.
+Next, let's create our 'App' widget in `app.dart`, which will be the root of our application.
+
+[app.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/app.dart ':include')
 
 Next, we need to implement our `Timer` widget.
 
 ### Timer
 
-Our `Timer` widget will be responsible for displaying the remaining time along with the proper buttons which will enable users to start, pause, and reset the timer.
+Our `Timer` widget (`/timer/view/timer_page.dart`) will be responsible for displaying the remaining time along with the proper buttons which will enable users to start, pause, and reset the timer.
 
 [timer.dart](../_snippets/flutter_timer_tutorial/timer1.dart.md ':include')
 
@@ -152,17 +159,17 @@ So far, we’re just using `BlocProvider` to access the instance of our `TimerBl
 
 Next, we’re going to implement our `Actions` widget which will have the proper actions (start, pause, and reset).
 
+### Barrel
+
+In order to clean up our imports from the `Timer` section, we need to create a barrel file `timer/timer.dart`.
+
+[timer.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/timer.dart ':include')
+
 ### Actions
 
 [actions.dart](../_snippets/flutter_timer_tutorial/actions.dart.md ':include')
 
-The `Actions` widget is just another `StatelessWidget` which uses `BlocProvider` to access the `TimerBloc` instance and then returns different `FloatingActionButtons` based on the current state of the `TimerBloc`. Each of the `FloatingActionButtons` adds an event in its `onPressed` callback to notify the `TimerBloc`.
-
-Now we need to hook up the `Actions` to our `Timer` widget.
-
-[timer.dart](../_snippets/flutter_timer_tutorial/timer2.dart.md ':include')
-
-We added another `BlocBuilder` which will render the `Actions` widget; however, this time we’re using a newly introduced [flutter_bloc](https://pub.dev/packages/flutter_bloc) feature to control how frequently the `Actions` widget is rebuilt (introduced in `v0.15.0`).
+The `Actions` widget is just another `StatelessWidget` which uses `context.read<TimerBloc>()` to access the `TimerBloc` instance and then returns different `FloatingActionButtons` based on the current state of the `TimerBloc`. Each of the `FloatingActionButtons` adds an event in its `onPressed` callback to notify the `TimerBloc`.
 
 If you want fine-grained control over when the `builder` function is called you can provide an optional `buildWhen` to `BlocBuilder`. The `buildWhen` takes the previous bloc state and current bloc state and returns a `boolean`. If `buildWhen` returns `true`, `builder` will be called with `state` and the widget will rebuild. If `buildWhen` returns `false`, `builder` will not be called with `state` and no rebuild will occur.
 
@@ -174,17 +181,13 @@ As a result, if we randomly colored the widgets on every rebuild, it would look 
 
 ?> **Notice:** Even though the `Text` widget is rebuilt on every tick, we only rebuild the `Actions` if they need to be rebuilt.
 
-Lastly, we need to add the super cool wave background using the [wave](https://pub.dev/packages/wave) package.
+### Background
 
-### Waves Background
+Lastly, add the background widget as follows
 
 [background.dart](../_snippets/flutter_timer_tutorial/background.dart.md ':include')
 
 ### Putting it all together
-
-Our finished, `main.dart` should look like:
-
-[main.dart](../_snippets/flutter_timer_tutorial/main2.dart.md ':include')
 
 That’s all there is to it! At this point we have a pretty solid timer application which efficiently rebuilds only widgets that need to be rebuilt.
 

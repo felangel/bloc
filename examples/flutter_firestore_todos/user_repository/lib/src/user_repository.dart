@@ -3,5 +3,5 @@ abstract class UserRepository {
 
   Future<void> authenticate();
 
-  Future<String> getUserId();
+  String? getUserId();
 }
