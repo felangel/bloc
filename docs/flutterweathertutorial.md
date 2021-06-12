@@ -19,13 +19,13 @@
 ## Key Concepts
 
 - Observe state changes with [BlocObserver](/coreconcepts?id=blocobserver).
-- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
+- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget that provides a bloc to its children.
 - [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
 - Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
-- [RepositoryProvider](/flutterbloccoreconcepts?id=repositoryprovider), a Flutter widget which provides a repository to its children.
-- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget which invokes the listener code in response to state changes in the bloc.
+- [RepositoryProvider](/flutterbloccoreconcepts?id=repositoryprovider), a Flutter widget that provides a repository to its children.
+- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget that invokes the listener code in response to state changes in the bloc.
 - [MultiBlocProvider](/flutterbloccoreconcepts?id=multiblocprovider), a Flutter widget that merges multiple BlocProvider widgets into one.
-- [BlocConsumer](/flutterbloccoreconcepts?id=blocconsumer), exposes a builder and listener in order to react to new states.
+- [BlocConsumer](/flutterbloccoreconcepts?id=blocconsumer), a Flutter widget that exposes a builder and listener in order to react to new states.
 - [HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc) to manage and persist state
 
 ## Setup
@@ -38,7 +38,7 @@ To begin, create a new flutter project
 
 > Our app will consist of isolated features in corresponding directories. This enables us to scale as the number of features increases and allows developers to work on different features in parallel.
 
-Our app can be broken down into 4 main features: **search, settings, theme, weather**. Let's create those directories.
+Our app can be broken down into four main features: **search, settings, theme, weather**. Let's create those directories.
 
 ```
 flutter_weather
@@ -97,7 +97,7 @@ flutter_weather
 
 ### Weather Data Model
 
-> Next, let's create `location.dart` and `weather.dart` which will contain the models for the `location` and `weather` API endpoint responses.
+Next, let's create `location.dart` and `weather.dart` which will contain the models for the `location` and `weather` API endpoint responses.
 
 ```
 flutter_weather
@@ -115,7 +115,7 @@ flutter_weather
 
 #### Location Model
 
-> Let's work out of `location.dart`. Our location model should store data returned by the location API, which looks like the following:
+Let's work out of `location.dart`. Our location model should store data returned by the location API, which looks like the following:
 
 ```json
 {
@@ -126,7 +126,7 @@ flutter_weather
 }
 ```
 
-> Here's the in-progress `location.dart` file which stores the above response:
+Here's the in-progress `location.dart` file which stores the above response:
 
 ```dart
 // packages/meta_weather_api/lib/src/models/location.dart (in progress)
@@ -165,7 +165,7 @@ class LatLng {
 
 #### Weather Model
 
-> Next, let's work on `weather.dart`. Our weather model should store data returned by the weather API, which looks like the following:
+Next, let's work on `weather.dart`. Our weather model should store data returned by the weather API, which looks like the following:
 
 ```json
 {
@@ -187,7 +187,7 @@ class LatLng {
 }
 ```
 
-> Here's the in-progress `weather.dart` file which stores the above response:
+Here's the in-progress `weather.dart` file which stores the above response:
 
 ```dart
 // packages/meta_weather_api/lib/src/models/weather.dart (in progress)
@@ -257,7 +257,7 @@ class Weather {
 
 ### Barrel Files
 
-> While we're here, let's quickly create a [barrel file](https://adrianfaciu.dev/posts/barrel-files/) to clean up some of our imports down the road.
+While we're here, let's quickly create a [barrel file](https://adrianfaciu.dev/posts/barrel-files/) to clean up some of our imports down the road.
 
 Create a `models.dart` barrel file
 
@@ -807,7 +807,7 @@ export 'src/models/models.dart';
 
 ### Unit Tests
 
-Let's unit test our data models, `location` and `weather`. We should focus on ensuring that they can represent our data, translate to and from json, and handle edge cases.
+> Let's unit test our data models, `location` and `weather`. We should focus on ensuring that they can represent our data, translate to and from json, and handle edge cases.
 
 #### Setup
 
@@ -1329,7 +1329,7 @@ export 'src/models/models.dart';
 
 > The main goal of our weather repository is to provide an interface which abstracts the data provider. In this case, the `WeatherRepository` will have a dependency on the `WeatherApiClient` and expose a single public method, `getWeather(String city)`.
 
-!> **Notice**: Consumers of the `WeatherRepository` are not privy to the underlying implementation details such as the fact that two network requests are made to the metaweather API. The goal of the `WeatherRepository` is to separate the "what" from the "how" -- in other words, we want to have a way to fetch weather for a given city but don't care about how or where that data is coming from.
+?> **Note**: Consumers of the `WeatherRepository` are not privy to the underlying implementation details such as the fact that two network requests are made to the metaweather API. The goal of the `WeatherRepository` is to separate the "what" from the "how" -- in other words, we want to have a way to fetch weather for a given city, but don't care about how or where that data is coming from.
 
 #### Setup
 
@@ -1648,7 +1648,7 @@ void main() {
 
 > In the business logic layer, we will be consuming the weather domain model from the `WeatherRepository` and exposing a feature-level model which will be surfaced to the user via the UI.
 
-!> Note that we have implemented three different types of weather models. In the API client, our weather model contained all the info returned by the API. In the repository layer, our weather model contained only the abstracted model based on our business case. In this layer, our weather model will contain relevant information needed specifically for the current feature set.
+?> **Note**: We have implemented three different types of weather models. In the API client, our weather model contained all the info returned by the API. In the repository layer, our weather model contained only the abstracted model based on our business case. In this layer, our weather model will contain relevant information needed specifically for the current feature set.
 
 ### Setup
 
@@ -1697,7 +1697,7 @@ flutter_weather
 
 ### Weather Model
 
-The goal of our weather model is to keep track of weather data displayed by our app as well as temperature settings (Celsius, Fahrenheit).
+The goal of our weather model is to keep track of weather data displayed by our app, as well as temperature settings (Celsius or Fahrenheit).
 
 ```dart
 // lib/weather/models/weather.dart (in progress)
@@ -1840,7 +1840,7 @@ export 'weather.dart';
 
 ### Weather
 
-In this section, we will use `HydratedCubit` to manage the weather state.
+We will use `HydratedCubit` to manage the weather state.
 
 ?> **Note**: `HydratedCubit` is an extension of `Cubit` which handles persisting and restoring state across sessions.
 
@@ -1857,12 +1857,12 @@ flutter_weather
       |-- weather_state.dart
 ```
 
-There are 4 states our weather app can be in:
+There are four states our weather app can be in:
 
 - `initial` (before anything loads)
 - `loading` (during the API call)
-- `success` (if our API call is successful)
-- `failure` (if our API call is unsuccessful)
+- `success` (if the API call is successful)
+- `failure` (if the API call is unsuccessful)
 
 The `WeatherStatus` enum will represent the above.
 
@@ -2039,7 +2039,7 @@ Next, we'll implement the business logic for the dynamic theming.
 
 #### Theme Cubit
 
-Next, let's create a `ThemeCubit` to manage the theme of our app. The theme will change based on the current weather conditions.
+Let's create a `ThemeCubit` to manage the theme of our app. The theme will change based on the current weather conditions.
 
 ```
 flutter_weather
@@ -2103,18 +2103,20 @@ extension on Weather {
 
 There are a few things we should test
 
-- If our weather states return correct `WeatherStatusX` values. [Here](https://github.com/felangel/bloc/blob/master/examples/flutter_weather/test/weather/cubit/weather_state_test.dart) is a completed test file
-- If our HydratedCubits respond to events properly and is able to convert fromJson and toJson
+- If our weather states return correct `WeatherStatusX` values (see [completed test file](https://github.com/felangel/bloc/blob/master/examples/flutter_weather/test/weather/cubit/weather_state_test.dart))
+- If our HydratedCubits respond to events properly and are able to convert fromJson and toJson
 
-In addition to using `Mocktail` for mocking and the standard testing library, it is also reccomended to use [bloc_test](https://pub.dev/packages/bloc_test) library. `bloc_test` allows us to easily prepare our blocs for testing, handle state changes, and check results.
+In addition to using the standard testing library and `mocktail` for mocking, we recommend using the [bloc_test](https://pub.dev/packages/bloc_test) library. `bloc_test` allows us to easily prepare our blocs for testing, handle state changes, and check results.
 
 [Here](https://github.com/felangel/bloc/blob/master/examples/flutter_weather/test/weather/cubit/weather_cubit_test.dart) is an example weather cubit testing file and [here](https://github.com/felangel/bloc/blob/master/examples/flutter_weather/test/theme/cubit/theme_cubit_test.dart) is an example theme cubit testing file
 
-## Presentation Layer: Weather Page, Settings Page, Search Page
+## Presentation Layer
 
 ### Weather Page
 
-With the core logic of our app put together, it's time to put together the UI! We will start with the weather page which uses `dependency injection` in order to provide cubits to widgets. This is accomplished using `BlocProvider` and `BlocConsumer`. These objects essentially inject our Cubits whenever widgets are (re)rendered.
+> With the core logic of our app put together, it's time to put together the UI! 
+
+We will start with the weather page which uses `dependency injection` in order to provide cubits to widgets. This is accomplished using `BlocProvider` and `BlocConsumer`. These objects inject Cubits whenever widgets are (re)rendered.
 
 ```dart
 // lib/weather/view/weather_page.dart
@@ -2195,9 +2197,11 @@ class WeatherView extends StatelessWidget {
 }
 ```
 
-This page depends on `SettingsPage, SearchPage` widgets, which we will create next
+You'll notice that page depends on `SettingsPage, SearchPage` widgets, which we will create next.
 
 ### SettingsPage
+
+TODO: The Settings Page does this...
 
 ```dart
 // lib/settings/view/settings_page.dart (done)
@@ -2247,6 +2251,8 @@ class SettingsPage extends StatelessWidget {
 ```
 
 ### SearchPage
+
+TODO: The Search Page does this...
 
 ```dart
 // lib/settings/view/search_page.dart (done)
@@ -2304,11 +2310,13 @@ class _SearchPageState extends State<SearchPage> {
 }
 ```
 
-## Presentation Layer: Individual Weather Widgets
+### Weather Widgets
 
-We will next create the UI for our app. Each individual widget corresponds to a particular state our Cubits can be in.
+The app will display different screens depending on the four possible states.
 
-### WeatherEmpty
+#### WeatherEmpty
+
+This screen will show when there is no data to display because the user has not yet selected a city.
 
 ```dart
 // lib/weather/widgets/weather_empty.dart (done)
@@ -2336,7 +2344,9 @@ class WeatherEmpty extends StatelessWidget {
 }
 ```
 
-### WeatherError
+#### WeatherError
+
+This screen will display if there is an error.
 
 ```dart
 // lib/weather/widgets/weather_error.dart (done)
@@ -2364,7 +2374,9 @@ class WeatherError extends StatelessWidget {
 }
 ```
 
-### WeatherLoading
+#### WeatherLoading
+
+This screen will display as the application fetches the data.
 
 ```dart
 // lib/weather/widgets/weather_loading.dart (done)
@@ -2396,9 +2408,9 @@ class WeatherLoading extends StatelessWidget {
 }
 ```
 
-### WeatherPopulated
+#### WeatherPopulated
 
-Next, lets create the UI for when a city has actually been queried for.
+This screen will display after the user has selected a city and we have retrieved the data.
 
 ```dart
 // lib/weather/widgets/weather_populated.dart
@@ -2537,7 +2549,9 @@ extension on Weather {
 }
 ```
 
-Lastly, let's add everything to a barrel file to clean up our imports.
+### Barrel File
+
+Let's add these states to a barrel file to clean up our imports.
 
 ```dart
 // lib/weather/widgets/widgets.dart (done)
@@ -2548,11 +2562,11 @@ export 'weather_loading.dart';
 export 'weather_populated.dart';
 ```
 
-## Presentation Layer: Views
+## Weather Views
 
-Let's glue the rest of our app together!
+> Let's put all of the piece of our app together!
 
-Our `main.dart` file should initialize our `WeatherApp`, initialize our `BlocObserver` (for debugging purposes), and setup our `HydratedStorage` to persist state across sessions.
+Our `main.dart` file should initialize our `WeatherApp` and `BlocObserver` (for debugging purposes), as well as setup our `HydratedStorage` to persist state across sessions.
 
 ```dart
 // lib/main.dart (done)
@@ -2580,7 +2594,7 @@ void main() async {
 }
 ```
 
-Next, our `app.dart` widget will handle building the `WeatherPage` view we previously created and also use `BlocProvider` to inject our `ThemeCubit` to handle theme data.
+Our `app.dart` widget will handle building the `WeatherPage` view we previously created and use `BlocProvider` to inject our `ThemeCubit` which handles theme data.
 
 ```dart
 // lib/app.dart (done)
@@ -2634,16 +2648,16 @@ class WeatherAppView extends StatelessWidget {
 }
 ```
 
-## Testing Our Widgets and Views
+## Tests
 
-In order to feel comfortable about our testing coverage, we should also test the widgets and view pages we have created. Again, we also reccomend using the `bloc_test` library for this.
+We also recommend using the `bloc_test` library for testing our widgets and views. `MockBlocs` and `MockCubits` make it easy to test UI based on particular states and events.
 
-The `bloc_test` library provides `MockBlocs` and `MockCubits` which make it easy to test UI based on particular states and events.
+Here is an [example test suite](https://github.com/felangel/bloc/tree/master/examples/flutter_weather/test) with tests for widgets, cubits, and views.
 
-[Here](https://github.com/felangel/bloc/tree/master/examples/flutter_weather/test) is an example test suite which includes widget tests, cubit tests, and view tests.
+## Final Step
 
-## Putting it all together. Visually testing functionality
+> Yay, we have completed the tutorial! 🎉 
 
-And that's it! We can test our functionality by using the `flutter run` command.
+As a final step, we can test to make sure the app works as intended by using the `flutter run` command.
 
-The full source can be found [here](https://github.com/felangel/bloc/tree/master/examples/flutter_weather)
+For reference, here is the [full source code](https://github.com/felangel/bloc/tree/master/examples/flutter_weather). 
