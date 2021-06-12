@@ -7,20 +7,20 @@ import 'package:flutter_firestore_todos/models/models.dart';
 
 class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   final TodosBloc _todosBloc;
-  StreamSubscription? _todosSubscription;
+  late StreamSubscription _todosSubscription;
 
   FilteredTodosBloc({required TodosBloc todosBloc})
       : _todosBloc = todosBloc,
-        super(todosBloc.state is TodosLoaded
-            ? FilteredTodosLoaded(
-                (todosBloc.state as TodosLoaded).todos,
-                VisibilityFilter.all,
-              )
-            : FilteredTodosLoading()) {
+        super(
+          todosBloc.state is TodosLoaded
+              ? FilteredTodosLoaded(
+                  (todosBloc.state as TodosLoaded).todos,
+                  VisibilityFilter.all,
+                )
+              : FilteredTodosLoading(),
+        ) {
     _todosSubscription = todosBloc.stream.listen((state) {
-      if (state is TodosLoaded) {
-        add(UpdateTodos((todosBloc.state as TodosLoaded).todos));
-      }
+      if (state is TodosLoaded) add(UpdateTodos(state.todos));
     });
   }
 
@@ -75,7 +75,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 
   @override
   Future<void> close() {
-    _todosSubscription?.cancel();
+    _todosSubscription.cancel();
     return super.close();
   }
 }

@@ -5,7 +5,7 @@ import 'package:flutter_firestore_todos/blocs/todos/todos.dart';
 import 'package:flutter_firestore_todos/screens/screens.dart';
 
 class DetailsScreen extends StatelessWidget {
-  final String? id;
+  final String id;
 
   DetailsScreen({Key? key, required this.id}) : super(key: key);
 
@@ -41,14 +41,15 @@ class DetailsScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(right: 8.0),
                       child: Checkbox(
-                          value: todo.complete,
-                          onChanged: (_) {
-                            BlocProvider.of<TodosBloc>(context).add(
-                              UpdateTodo(
-                                todo.copyWith(complete: todo.complete == false),
-                              ),
-                            );
-                          }),
+                        value: todo.complete,
+                        onChanged: (_) {
+                          context
+                              .read<TodosBloc>()
+                              .add(UpdateTodo(todo.copyWith(
+                                complete: todo.complete == false,
+                              )));
+                        },
+                      ),
                     ),
                     Expanded(
                       child: Column(
@@ -89,11 +90,9 @@ class DetailsScreen extends StatelessWidget {
                   builder: (context) {
                     return AddEditScreen(
                       onSave: (task, note) {
-                        BlocProvider.of<TodosBloc>(context).add(
-                          UpdateTodo(
-                            todo.copyWith(task: task, note: note),
-                          ),
-                        );
+                        context.read<TodosBloc>().add(
+                              UpdateTodo(todo.copyWith(task: task, note: note)),
+                            );
                       },
                       isEditing: true,
                       todo: todo,

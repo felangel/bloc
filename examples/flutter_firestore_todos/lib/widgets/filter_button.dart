@@ -4,9 +4,9 @@ import 'package:flutter_firestore_todos/blocs/filtered_todos/filtered_todos.dart
 import 'package:flutter_firestore_todos/models/models.dart';
 
 class FilterButton extends StatelessWidget {
-  final bool visible;
+  const FilterButton({Key? key, this.visible = false}) : super(key: key);
 
-  FilterButton({this.visible = false, Key? key}) : super(key: key);
+  final bool visible;
 
   @override
   Widget build(BuildContext context) {

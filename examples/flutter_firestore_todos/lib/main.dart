@@ -49,12 +49,12 @@ class TodosApp extends StatelessWidget {
                       ),
                       BlocProvider<FilteredTodosBloc>(
                         create: (context) => FilteredTodosBloc(
-                          todosBloc: BlocProvider.of<TodosBloc>(context),
+                          todosBloc: context.read<TodosBloc>(),
                         ),
                       ),
                       BlocProvider<StatsBloc>(
                         create: (context) => StatsBloc(
-                          todosBloc: BlocProvider.of<TodosBloc>(context),
+                          todosBloc: context.read<TodosBloc>(),
                         ),
                       ),
                     ],
