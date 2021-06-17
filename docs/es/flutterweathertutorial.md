@@ -2,13 +2,11 @@
 
 ![avanzado](https://img.shields.io/badge/nivel-avanzado-red.svg)
 
-## Tutorial Goals
-
 > In this tutorial, we're going to build a Weather app in Flutter which demonstrates how to manage multiple blocs to implement dynamic theming, pull-to-refresh, and much more. Our weather app will pull real data from an API and demonstrate how to separate our application into three layers (data, business logic, and presentation).
 
 ![demo](../assets/gifs/flutter_weather.gif)
 
-### Project Requirements
+## Project Requirements
 
 - User can search for cities on the search page
 - App displays weather information returned by [MetaWeather API](https://www.metaweather.com/api/)
