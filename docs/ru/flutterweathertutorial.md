@@ -2,508 +2,487 @@
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-> В следующем руководстве мы собираемся создать приложение `Weather` во Flutter, которое демонстрирует как управлять несколькими блоками для реализации динамического создания тем, обновления данных и многого другого. Наше приложение погоды будет извлекать реальные данные из API и демонстрировать, как разделить наше приложение на три уровня (данные, бизнес-логика и представление).
+> In this tutorial, we're going to build a Weather app in Flutter which demonstrates how to manage multiple blocs to implement dynamic theming, pull-to-refresh, and much more. Our weather app will pull real data from an API and demonstrate how to separate our application into three layers (data, business logic, and presentation).
 
 ![demo](../assets/gifs/flutter_weather.gif)
 
-## Настройка
+## Project Requirements
 
-Мы начнем с создания нового проекта Flutter
+- User can search for cities on the search page
+- App displays weather information returned by [MetaWeather API](https://www.metaweather.com/api/)
+- App theme changes depending on weather of the city
+- Settings page which allows users to change units
+- Persist state across sessions ([HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc))
+
+## Key Concepts
+
+- Observe state changes with [BlocObserver](/coreconcepts?id=blocobserver)
+- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget that provides a bloc to its children
+- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states
+- Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable)
+- [RepositoryProvider](/flutterbloccoreconcepts?id=repositoryprovider), a Flutter widget that provides a repository to its children
+- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget that invokes the listener code in response to state changes in the bloc
+- [MultiBlocProvider](/flutterbloccoreconcepts?id=multiblocprovider), a Flutter widget that merges multiple BlocProvider widgets into one
+- [BlocConsumer](/flutterbloccoreconcepts?id=blocconsumer), a Flutter widget that exposes a builder and listener in order to react to new states
+- [HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc) to manage and persist state
+
+## Setup
+
+To begin, create a new flutter project
 
 [script](../_snippets/flutter_weather_tutorial/flutter_create.sh.md ':include')
 
-Сначала нам нужно заменить содержимое файла `pubspec.yaml` на:
+### Project Structure
+
+> Our app will consist of isolated features in corresponding directories. This enables us to scale as the number of features increases and allows developers to work on different features in parallel.
+
+Our app can be broken down into four main features: **search, settings, theme, weather**. Let's create those directories.
+
+[script](../_snippets/flutter_weather_tutorial/feature_tree.md ':include')
+
+### Architecture
+
+> Following the [bloc architecture](https://bloclibrary.dev/#/architecture) guidelines, our application will consist of several layers.
+
+In this tutorial, here's what these layers will do:
+- **Data**: retrieve raw weather data from the API
+- **Repository**: abstract the data layer and expose domain models for the application to consume
+- **Business Logic**: manage the state of each feature (unit information, city details, themes, etc.)
+- **Presentation**: display weather information and collect input from users (settings page, search page etc.)
+
+## Data Layer
+
+For this application we'll be hitting the [MetaWeather API](https://www.metaweather.com).
+
+We'll be focusing on two endpoints:
+
+- `/api/location/search/?query=$city` to get a locationId for a given city name
+- `/api/location/$locationId` to get the weather for a given locationId
+
+Open [https://www.metaweather.com/api/location/search/?query=london](https://www.metaweather.com/api/location/search/?query=london) in your browser to see the response for the city of London. We will use the `woeid` (where-on-earth-id) in the return dictionary to hit the location endpoint.
+
+The `woeid` for London is `44418`. Navigate to [https://www.metaweather.com/api/location/44418](https://www.metaweather.com/api/location/44418) in your browser and you'll see the response for weather in London which contains all the data we will need for our app.
+
+### MetaWeather API Client
+
+> The MetaWeather API Client is independent of our application. As a result, we will create it as an internal package (and could even publish it on [pub.dev](https://pub.dev)). We can then use the package by adding it to our `pubspec.yaml`.
+
+Create a new directory on the project level called `packages`. This directory will store all of our internal packages.
+
+Within this directory, run the built-in `flutter create` command to create a new package called `meta_weather_api` for our API client.
+
+[script](../_snippets/flutter_weather_tutorial/data_layer/flutter_create_api_client.sh.md ':include')
+
+### Weather Data Model
+
+Next, let's create `location.dart` and `weather.dart` which will contain the models for the `location` and `weather` API endpoint responses.
+
+[script](../_snippets/flutter_weather_tutorial/data_layer/meta_weather_models_tree.md ':include')
+
+#### Location Model
+
+The `location.dart` model should store data returned by the location API, which looks like the following:
+
+[location.json](../_snippets/flutter_weather_tutorial/data_layer/location.json.md ':include')
+
+Here's the in-progress `location.dart` file which stores the above response:
+
+[location.dart](../_snippets/flutter_weather_tutorial/data_layer/location.dart.md ':include')
+
+#### Weather Model
+
+Next, let's work on `weather.dart`. Our weather model should store data returned by the weather API, which looks like the following:
+
+[weather.json](../_snippets/flutter_weather_tutorial/data_layer/weather.json.md ':include')
+
+Here's the in-progress `weather.dart` file which stores the above response:
+
+[weather.dart](../_snippets/flutter_weather_tutorial/data_layer/weather.dart.md ':include')
+
+### Barrel Files
+
+While we're here, let's quickly create a [barrel file](https://adrianfaciu.dev/posts/barrel-files/) to clean up some of our imports down the road.
+
+Create a `models.dart` barrel file and export the two models:
+
+[models.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/meta_weather_api/lib/src/models/models.dart ':include')
+
+Let's also create a package level barrel file, `meta_weather_api.dart`
+
+[script](../_snippets/flutter_weather_tutorial/data_layer/meta_weather_models_barrel_tree.md ':include')
+
+In the top level, `meta_weather_api.dart` let's export the models:
+
+[meta_weather_api.dart](../_snippets/flutter_weather_tutorial/data_layer/export_top_level_models.dart.md ':include')
+
+### (De)Serialization
+
+> We need to be able to [serialize and deserialize](https://en.wikipedia.org/wiki/Serialization) our models in order to work with the API data. To do this, we will add `toJson` and `fromJson` methods to our models.
+
+We will be using the [json_annotation](https://pub.dev/package/json_annotation), [json_serializable](https://pub.dev/package/json_serializable), [build_runner](https://pub.dev/package/build_runner) packages to generate the `toJson` and `fromJson` implementations for us.
+
+First, let's add these dependencies to the `pubspec.yaml`.
+
+[pubspec.yaml](../_snippets/flutter_weather_tutorial/data_layer/json_serializable_pubspec.yaml.md ':include')
+
+?> **Note**: Remember to run `flutter pub get` after adding the dependencies.
+
+In order for code generation to work, we need to annotate our code using the following:
+
+- `@JsonSerializable` to label classes which can be serialized
+- `@JsonKey` to provide string representations of field names
+- `@JsonValue` to provide string representations of field values
+- Implement `JSONConverter` to convert object representations into JSON representations
+
+For each file we also need to:
+
+- Import `json_annotation`
+- Include the generated code using the [part](https://dart.dev/guides/libraries/create-library-packages#organizing-a-library-package) keyword
+- Include `fromJson` methods for deserialization
+
+#### Location Model
+
+Here is our complete `location.dart` model file:
+
+[location.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/meta_weather_api/lib/src/models/location.dart ':include')
+
+#### Weather Model
+
+Here is our complete `weather.dart` model file:
+
+[weather.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/meta_weather_api/lib/src/models/weather.dart ':include')
+
+#### Code Generation
+
+Let's use `build_runner` to generate the code.
+
+[script](../_snippets/flutter_weather_tutorial/build_runner_builder.sh.md ':include')
+
+`build_runner` should generate the `location.g.dart` and `weather.g.dart` files.
+
+### MetaWeather API Client
+
+Let's create our API client in `meta_weather_api_client.dart` within the `src` directory. Our project structure should now look like this:
+
+[script](../_snippets/flutter_weather_tutorial/data_layer/meta_weather_api_client_tree.md ':include')
+
+We will also need to import the [http](https://pub.dev/packages/http) package. In your `packages/meta_weather_api/pubspec.yaml` file, add `http` to your list of dependencies. Your updated file should look like this:
+
+[pubspec.yaml](../_snippets/flutter_weather_tutorial/data_layer/http_pubspec.yaml.md ':include')
+
+?> **Note**: Make sure to run `flutter pub get` after saving the file.
+
+Our API client will expose two methods:
+
+- `locationSearch` which returns a `Future<Location>`
+- `getWeather` which returns a `Future<Weather>`
+
+#### Location Search
+
+The `locationSearch` method hits the location API and throws `LocationIdRequestFailiure` errors as applicable. The completed method looks as follows:
+
+[meta_weather_api_client.dart](../_snippets/flutter_weather_tutorial/data_layer/location_search_method.dart.md ':include')
+
+#### Get Weather
+
+Similarly, the `getWeather` method hits the weather API and throws `WeatherRequestFailiure` errors as applicable. The completed method looks as follows:
+
+[meta_weather_api_client.dart](../_snippets/flutter_weather_tutorial/data_layer/get_weather_method.dart.md ':include')
+
+The completed file looks like this:
+
+[meta_weather_api_client.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/meta_weather_api/lib/src/meta_weather_api_client.dart ':include')
+
+#### Barrel File Updates
+
+Let's wrap up this package by adding our API client to the barrel file.
+
+[meta_weather_api.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/meta_weather_api/lib/meta_weather_api.dart ':include')
+
+### Unit Tests
+
+> It's especially important to write unit tests for the data layer since it's the foundation of our application. Unit tests will give us confidence that the package behaves as expected.
+
+#### Setup
+
+Add the [test](https://pub.dev/packages/test) package to the `pubspec.yaml` and run `flutter pub get`.
+
+[pubspec.yaml](../_snippets/flutter_weather_tutorial/data_layer/test_pubspec.yaml.md ':include')
+
+We will be creating a test file for the api client as well as the two models.
+
+#### Location Tests
+
+[location_test.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/meta_weather_api/test/location_test.dart ':include')
+
+#### Weather Tests
+
+[weather_test.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/meta_weather_api/test/weather_test.dart ':include')
+
+#### API Client Tests
+
+Next, let's test our API client. We should test to ensure that our API client handles both API calls correctly, including edge cases.
+
+?> **Note**: We don't want our tests to make real API calls since our goal is to test the API client logic (including all edge cases) and not the API itself. In order to have a consistent, controlled test environment, we will use [mocktail](https://github.com/felangel/mocktail) to mock the `http` client.
+
+[pubspec.yaml](../_snippets/flutter_weather_tutorial/data_layer/mocktail_pubspec.yaml.md ':include')
+
+[meta_weather_api_client_test.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/meta_weather_api/test/meta_weather_api_client_test.dart ':include')
+
+#### Test Coverage
+
+Finally, let's gather test coverage to verify that we've covered each line of code with at least one test case.
+
+[script](../_snippets/flutter_weather_tutorial/test_coverage.sh.md ':include')
+
+## Repository Layer
+
+> The goal of our repository layer is to abstract our data layer and facilitate communication with the bloc layer. In doing this, the rest of our code base depends only on functions exposed by our repository layer instead of specific data provider implementations. This allows us to change data providers without disrupting any of the application-level code. For example, if we decide to migrate away from metaweather, we should be able to create a new API client and swap it out without having to make changes to the public API of the repository or application layers.
+
+### Setup
+
+Inside the packages directory, run the following command:
+
+[script](../_snippets/flutter_weather_tutorial/repository_layer/flutter_create_repository.sh.md ':include')
+
+We will use the same packages as in the `meta_weather_api` package including the `meta_weather_api` package from the last step. Update your `pubspec.yaml` and run `flutter packages get`.
+
+?> **Note**: We're using a `path` to specify the location of the `meta_weather_api` which allows us to treat it just like an external package from `pub.dev`.
+
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/pubspec.yaml ':include')
+
+### Weather Repository Models
+
+> We will be creating a new `weather.dart` file to expose a domain-specific weather model. This model will contain only data relevant to our business cases -- in other words it should be completely decoupled from the API client and raw data format. As usual, we will also create a `models.dart` barrel file.
+
+[script](../_snippets/flutter_weather_tutorial/repository_layer/repository_models_barrel_tree.md ':include')
+
+This time, our weather model will only store the `location, temperature, condition` properties. We will also continue to annotate our code to allow for serialization and deserialization.
+
+[weather.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/src/models/weather.dart ':include')
+
+Update the barrel file we created previously to include the models.
+
+[models.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/src/models/models.dart ':include')
+
+#### Code Generation
+
+As we have done previously, run the following command to generate the (de)serialization implementation.
+
+[script](../_snippets/flutter_weather_tutorial/build_runner_builder.sh.md ':include')
+
+#### Barrel File
+
+Let's also create a package-level barrel file to export our models. The directory structure should look like:
+
+[script](../_snippets/flutter_weather_tutorial/repository_layer/export_top_level_models.dart.md ':include')
+
+### Weather Repository
+
+> The main goal of the `WeatherRepository` is to provide an interface which abstracts the data provider. In this case, the `WeatherRepository` will have a dependency on the `WeatherApiClient` and expose a single public method, `getWeather(String city)`.
+
+?> **Note**: Consumers of the `WeatherRepository` are not privy to the underlying implementation details such as the fact that two network requests are made to the metaweather API. The goal of the `WeatherRepository` is to separate the "what" from the "how" -- in other words, we want to have a way to fetch weather for a given city, but don't care about how or where that data is coming from.
+
+#### Setup
+
+Let's create the `weather_repository.dart` file within the `src` directory of our package and work on the repository implementation.
+
+The main method we will focus on is `getWeather(String city)`. We can implement it using two calls to the API client as follows:
+
+[weather_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/src/weather_repository.dart ':include')
+
+#### Barrel File
+
+Update the barrel file we created previously.
+
+[weather_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/weather_repository.dart ':include')
+
+### Unit Tests
+
+> Just as with the data layer, it's critical to test the repository layer in order to make sure the domain level logic is correct. To test our `WeatherRepository`, we will use the [mocktail](https://github.com/felangel/mocktail) library. We will mock the underlying api client in order to unit test the `WeatherRepository` logic in an isolated, controlled environment.
+
+[weather_repository_test.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/test/weather_repository_test.dart ':include')
+
+## Business Logic Layer
+
+> In the business logic layer, we will be consuming the weather domain model from the `WeatherRepository` and exposing a feature-level model which will be surfaced to the user via the UI.
+
+?> **Note**: We have implemented three different types of weather models. In the API client, our weather model contained all the info returned by the API. In the repository layer, our weather model contained only the abstracted model based on our business case. In this layer, our weather model will contain relevant information needed specifically for the current feature set.
+
+### Setup
+
+Update the root `pubspec.yaml` to include the `weather_repository` as a dependency.
 
 [pubspec.yaml](../_snippets/flutter_weather_tutorial/pubspec.yaml.md ':include')
 
-?> **Примечание:** Мы собираемся добавить некоторые ресурсы (значки для типов погоды) в наше приложение, поэтому нам нужно подключить папку ресурсов в `pubspec.yaml`. Пожалуйста, создайте папку _assets_ в корне проекта.
+Next, we will be working on the application layer within the `weather` feature directory.
 
-а затем установить все наши зависимости
+### Weather Model
 
-[script](../_snippets/flutter_weather_tutorial/flutter_packages_get.sh.md ':include')
+> The goal of our weather model is to keep track of weather data displayed by our app, as well as temperature settings (Celsius or Fahrenheit).
 
-## REST API
+[weather.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/models/weather.dart ':include')
 
-Для этого приложения мы будем использовать [metaweather API](https://www.metaweather.com).
+### Code Generation
 
-Мы сосредоточимся на двух конечных ресурсах:
+Run `build_runner` to generate the (de)serialization implementations.
 
-- `/api/location/search/?query=$city` чтобы получить locationId для данного названия города
-- `/api/location/$locationId` чтобы узнать погоду для данного местоположения
+[script](../_snippets/flutter_weather_tutorial/build_runner_builder.sh.md ':include')
 
-Открыв [https://www.metaweather.com/api/location/search/?query=london](https://www.metaweather.com/api/location/search/?query=london) в своем браузере, мы увидим следующий ответ:
+### Barrel File
 
-[london_search.json](../_snippets/flutter_weather_tutorial/location_search.json.md ':include')
+Let's export our models from the barrel file:
 
-Затем мы можем получить идентификатор `where-on-earth-id` (woeid) и использовать его для получения местоположения.
+[models.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/models/models.dart ':include')
 
-Перейдите на [https://www.metaweather.com/api/location/44418](https://www.metaweather.com/api/location/44418) в своем браузере и вы увидите ответ на погоду в Лондоне. Это должно выглядеть примерно так:
+### Weather
 
-[london.json](../_snippets/flutter_weather_tutorial/location.json.md ':include')
+We will use `HydratedCubit` to manage the weather state.
 
-Отлично, теперь, когда мы знаем как будут выглядеть наши данные, давайте создадим необходимые модели данных.
+?> **Note**: `HydratedCubit` is an extension of `Cubit` which handles persisting and restoring state across sessions.
 
-## Создание модели данных
+#### Weather State
 
-Хотя API возвращает погоду на несколько дней, для простоты мы будем использовать только сегодняшний день.
+Using the [Bloc VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) or [Bloc IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc) extension, right click on the `weather` directory and create a new cubit called `Weather`. The project structure should look like this:
 
-Давайте начнем с создания папки для наших моделей `lib/models` и создадим там файл с именем `weather.dart`, который будет содержать нашу модель данных для нашего класса `Weather`. Затем внутри `lib/models` создадим файл с именем `models.dart`, который является индексным файлом, из которого мы экспортируем все модели.
+[script](../_snippets/flutter_weather_tutorial/business_logic_layer/weather_cubit_tree.md ':include')
 
-### Импорты
+There are four states our weather app can be in:
 
-Прежде всего нам нужно импортировать наши зависимости для нашего класса. В верхней части `weather.dart` добавьте:
+- `initial` before anything loads
+- `loading` during the API call
+- `success` if the API call is successful
+- `failure` if the API call is unsuccessful
 
-[weather.dart](../_snippets/flutter_weather_tutorial/equatable_import.dart.md ':include')
+The `WeatherStatus` enum will represent the above.
 
-- `equatable`: пакет, который позволяет сравнивать объекты без необходимости переопределять оператор `==`
+The complete weather state should look like this:
 
-#### Создание WeatherCondition перечисления
+[weather_state.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/cubit/weather_state.dart ':include')
 
-Далее нам нужно создать счетчик для всех возможных погодных условий. В следующей строке давайте добавим `enum`.
+#### Weather Cubit
 
-Эти условия берутся из определения [metaweather API](https://www.metaweather.com/api/)
+Now that we've defined the `WeatherState`, let's write the `WeatherCubit` which will expose the following methods:
 
-[weather.dart](../_snippets/flutter_weather_tutorial/weather_condition.dart.md ':include')
+- `fetchWeather(String? city)` uses our weather repository to try and retrieve a weather object for the given city
+- `refreshWeather()` retrieves a new weather object using the weather repository given the current weather state
+- `toggleUnits()` toggles the state between Celsius and Fahrenheit
+- `fromJson(Map<String, dynamic> json)`, `toJson(WeatherState state)` used for persistence
 
-#### Создание модели погоды
+[weather_cubit.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/cubit/weather_cubit.dart ':include')
 
-Далее нам нужно создать класс, который будет нашей моделью данных для объекта погоды, возвращаемого из API. Мы собираемся извлечь подмножество данных из API и создать модель `Weather`. Добавьте следующий код в файл `weather.dart` под перечислением `WeatherCondition`.
+?> **Note**: Remember to generate the (de)serialization code via `flutter packages pub run build_runner build`
 
-[weather.dart](../_snippets/flutter_weather_tutorial/weather.dart.md ':include')
+### Theme
 
-?> Мы расширяем [`Equatable`](https://pub.dev/packages/equatable), чтобы мы могли сравнивать экземпляры `Weather`. По умолчанию оператор равенства возвращает true если только этот и другие экземпляры являются одинаковыми.
+Next, we'll implement the business logic for the dynamic theming.
 
-Здесь мало что происходит; мы просто определяем нашу модель данных `Weather` и реализуем метод `fromJson`, чтобы мы могли создать экземпляр `Weather` из тела ответа API и создаем метод, который мапит необработанную строку в `WeatherCondition` в перечислении.
+#### Theme Cubit
 
-#### Экспорты в индексе
+Let's create a `ThemeCubit` to manage the theme of our app. The theme will change based on the current weather conditions.
 
-Теперь нам нужно экспортировать этот класс в индексный файл. Откройте `lib/models/models.dart` и добавьте следующую строку кода:
+[script](../_snippets/flutter_weather_tutorial/business_logic_layer/theme_cubit_tree.md ':include')
 
-[models.dart](../_snippets/flutter_weather_tutorial/weather_export.dart.md ':include')
+We will expose an `updateTheme` method to update the theme depending on the weather condition.
 
-## Поставщик данных
+[theme_cubit.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/theme/cubit/theme_cubit.dart ':include')
 
-Далее нам нужно создать  `WeatherApiClient`, который будет отвечать за http запросы к API погоды.
+### Unit Tests
 
-> WeatherApiClient - это самый низкий уровень в нашей прикладной архитектуре (поставщик данных). Он отвечает только за получение данных непосредственно из API.
+> Similar to the data and repository layers, it's critical to unit test the business logic layer to ensure that the feature-level logic behaves as we expect. We will be relying on the [bloc_test](https://pub.dev/packages/bloc_test) in addition to `mocktail` and `test`.
 
-Как мы упоминали ранее, мы собираемся запрашивать даные из двух ресурсов, поэтому нашему WeatherApiClient необходимо предоставить два публичных метода:
+Let's add the `test`, `bloc_test`, and `mocktail` packages to the `dev_dependencies`.
 
-- `getLocationId(String city)`
-- `fetchWeather(int locationId)`
+[pubspec.yaml.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/pubspec.yaml ':include')
 
-### Создание клиента API
+?> **Note**: The `bloc_test` package allows us to easily prepare our blocs for testing, handle state changes, and check results in a consistent way.
 
-Этот уровень приложения называется уровнем хранилища, поэтому давайте продолжим и создадим папку для наших хранилищ. Внутри `lib/` создайте папку с именем `repositories`, а затем создайте файл с именем `weather_api_client.dart`.
+#### Theme Cubit Tests
 
-#### Добавление индекса
+[theme_cubit_test.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/test/theme/cubit/theme_cubit_test.dart ':include')
 
-Как и в случае с нашими моделями, давайте создадим файл барреля для репозиториев. Внутри `lib/repositories` добавьте файл с именем `repositories.dart` и оставьте его пока пустым.
+#### Weather Cubit Tests
 
-- `models`: наконец, мы импортируем нашу модель `Weather`, созданную ранее.
+[weather_cubit_test.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/test/weather/cubit/weather_cubit_test.dart ':include')
 
-#### Создание класса клиента
+## Presentation Layer
 
-Давайте создадим класс. Сначала добавим этот код:
+### Weather Page
 
-[weather_api_client.dart](../_snippets/flutter_weather_tutorial/weather_api_client_constructor.dart.md ':include')
+We will start with the `WeatherPage` which uses `BlocProvider` in order to provide an instance of the `WeatherCubit` to the widget tree.
 
-Здесь мы создаем константу для нашего базового URL и http-клиент. Затем мы создаем конструктор и обязательный параметр для внедрения экземпляра `httpClient`. Вы увидите некоторые отсутствующие зависимости. Давайте продолжим и добавим их в начало файла:
+[weather_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/view/weather_page.dart ':include')
 
-[weather_api_client.dart](../_snippets/flutter_weather_tutorial/weather_api_client_imports.dart.md ':include')
+You'll notice that page depends on `SettingsPage` and `SearchPage` widgets, which we will create next.
 
-- `meta`: Defines annotations that can be used by the tools that are shipped with the Dart SDK.
-- `http`: A composable, Future-based library for making HTTP requests.
+### SettingsPage
 
-- `meta`: определяет аннотации, которые могут использоваться инструментами, поставляемыми с Dart SDK.
-- `http`: композитная, `Future based` библиотека для выполнения HTTP-запросов.
+The settings page allows users to update their preferences for the temperature units.
 
-#### Добавление метода getLocationId
+[settings_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/settings/view/settings_page.dart ':include')
 
-Теперь давайте добавим наш первый публичный метод, который получит `locationId` для данного города. Ниже конструктора добавьте:
+### SearchPage
 
-[weather_api_client.dart](../_snippets/flutter_weather_tutorial/get_location_id.dart.md ':include')
+The search page allows users to enter the name of their desired city and provides the search result to the previous route via `Navigator.of(context).pop`.
 
-Здесь мы делаем простой HTTP-запрос и затем декодируем ответ в виде списка. Говоря о декодировании, вы увидите, что `jsonDecode` это функция из зависимости, которую мы должны импортировать. Итак, давайте продолжим и сделаем это сейчас. В верхней части файла по другим импортам добавьте:
+[search_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/search/view/search_page.dart ':include')
 
-[weather_api_client.dart](../_snippets/flutter_weather_tutorial/dart_convert_import.dart.md ':include')
+### Weather Widgets
 
-- `dart:convert`: кодер/декодер для преобразования между различными представлениями данных, включая JSON и UTF-8.
+The app will display different screens depending on the four possible states of the `WeatherCubit`.
 
-#### Добавление метода fetchWeather
+#### WeatherEmpty
 
-Далее давайте добавим другой метод по выполнению запросов из `API metaweather`. Он будет получать погоду для города, учитывая его местоположение. Ниже уже реализованного метода `getLocationId` давайте продолжим и добавим:
+This screen will show when there is no data to display because the user has not yet selected a city.
 
-[weather_api_client.dart](../_snippets/flutter_weather_tutorial/fetch_weather.dart.md ':include')
+[weather_empty.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/weather_empty.dart ':include')
 
-Здесь мы снова делаем простой HTTP-запрос и декодируем ответ в JSON. Вы заметите, что нам снова нужно импортировать зависимость, но на этот раз модель `Weather`. В верхней части файла импортируем его так:
+#### WeatherError
 
-[weather_api_client.dart](../_snippets/flutter_weather_tutorial/models_import.dart.md ':include')
+This screen will display if there is an error.
 
-#### Экспорт WeatherApiClient
+[weather_error.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/weather_error.dart ':include')
 
-Теперь, когда у нас есть класс с двумя методами, давайте продолжим и экспортируем его в файл индекса. Внутри `repositories.dart` добавьте:
+#### WeatherLoading
 
-[repositories.dart](../_snippets/flutter_weather_tutorial/weather_api_client_export.dart.md ':include')
+This screen will display as the application fetches the data.
 
-#### Что далее
+[weather_loading.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/weather_loading.dart ':include')
 
-Мы сделали `DataProvider`, поэтому пришло время перейти на следующий уровень архитектуры нашего приложения: **уровень хранилища**.
+#### WeatherPopulated
 
-## Хранилище
+This screen will display after the user has selected a city and we have retrieved the data.
 
-> `WeatherRepository` служит абстракцией между клиентским кодом и поставщиком данных, поэтому разработчик, работающий над функционалом, не должен знать откуда поступают данные. Наш `WeatherRepository` будет зависеть от `WeatherApiClient`, который мы только что создали и предоставит единственный открытый метод, который, как вы уже догадались, называется `getWeather(String city)`. Никто не должен знать что нам нужно сделать два вызова API (один для locationId и один для погоды), потому что на самом деле это никого не волнует. Все, о чем мы заботимся, это получение `Weather` для данного города.
+[weather_populated.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/weather_populated.dart ':include')
 
-### Создание хранилища
+### Barrel File
 
-Этот файл может жить в папке хранилища. Итак, создайте файл с именем `weather_repository.dart` и откройте его.
+Let's add these states to a barrel file to clean up our imports.
 
-Наш `WeatherRepository` довольно прост и должен выглядеть примерно так:
+[widgets.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/widgets.dart ':include')
 
-[weather_repository.dart](../_snippets/flutter_weather_tutorial/weather_repository.dart.md ':include')
+### Entrypoint
 
-#### Экспорт хранилища в индекс
+Our `main.dart` file should initialize our `WeatherApp` and `BlocObserver` (for debugging purposes), as well as setup our `HydratedStorage` to persist state across sessions.
 
-Сначала откройте `repositories.dart` и сделайте экспорт так:
+[main.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/main.dart ':include')
 
-[repositories.dart](../_snippets/flutter_weather_tutorial/weather_repository_export.dart.md ':include')
+Our `app.dart` widget will handle building the `WeatherPage` view we previously created and use `BlocProvider` to inject our `ThemeCubit` which handles theme data.
 
-Потрясающие! Теперь мы готовы перейти на уровень бизнес-логики и приступить к созданию `WeatherBloc`.
+[app.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/app.dart ':include')
 
-## Бизнес логика (Bloc)
+### Widget Tests
 
-> Наш `WeatherBloc` отвечает за получение `WeatherEvents` и преобразование их в `WeatherStates`. Он будет зависеть от `WeatherRepository` чтобы получить `Weather` когда пользователь вводит город по своему выбору.
+The `bloc_test` library also exposes `MockBlocs` and `MockCubits` which make it easy to test UI. We can mock the states of the various cubits and ensure that the UI reacts correctly.
 
-### Создание первого блока
+[weather_page_test.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/test/weather/view/weather_page_test.dart ':include')
 
-В этом руководстве мы создадим несколько блоков, поэтому давайте создадим внутри `lib` папку с именем `blocs`. Опять же, поскольку у нас будет несколько блоков, давайте сначала создадим индексный файл с именем `blocs.dart` внутри нашей папки `blocs`.
+?> **Note**: We're using a `MockWeatherCubit` together with the `when` API from `mocktail` in order to stub the state of the cubit in each of the test cases. This allows us to simulate all states and verify the UI behaves correctly under all circumstances.
 
-Прежде чем перейти к блоку, нам нужно определить, какие события будет обрабатывать наш `WeatherBloc`, а также, как мы будем представлять `WeatherState`. Чтобы наши файлы были небольшими мы разделим `event`, `state` и `bloc` на три файла.
+## Summary
 
-#### Weather события
+That's it, we have completed the tutorial! 🎉
 
-Давайте создадим файл с именем `weather_event.dart` внутри папки `blocs`. Для простоты мы собираемся начать с одного события под названием `WeatherRequested`.
+We can run the final app using the `flutter run` command.
 
-Мы можем определить его так:
-
-[weather_event.dart](../_snippets/flutter_weather_tutorial/fetch_weather_event.dart.md ':include')
-
-Всякий раз, когда пользователь вводит город, мы `добавляем` событие `WeatherRequested` с указанным городом и наш блок будет отвечать за выяснение погоды и возвращать новый `WeatherState`.
-
-Теперь давайте экспортируем класс в наш индексный файл. Внутри `blocs.dart` добавьте:
-
-[blocs.dart](../_snippets/flutter_weather_tutorial/weather_event_export.dart.md ':include')
-
-#### Weather состояния
-
-Далее давайте создадим наш файл `state`. Внутри папки `blocs` создайте файл с именем `weather_state.dart` где будет жить наш `WeatherState`.
-
-Для текущего приложения у нас будет 4 возможных состояния:
-
-- `WeatherInitial` - начальное состояние, в котором не будет данных о погоде, потому что пользователь еще не выбрал город
-- `WeatherLoadInProgress` - состояние, которое будет происходить пока мы выбираем погоду для данного города
-- `WeatherLoadSuccess` - состояние, которое возникнет если мы сможем успешно выбрать погоду для данного города.
-- `WeatherLoadFailure` - состояние, которое возникнет если мы не сможем выбрать погоду для данного города.
-
-Мы можем представить эти состояния так:
-
-[weather_state.dart](../_snippets/flutter_weather_tutorial/weather_state.dart.md ':include')
-
-Теперь давайте экспортируем этот класс в наш индексный файл. Внутри `blocs.dart` добавьте:
-
-[blocs.dart](../_snippets/flutter_weather_tutorial/weather_state_export.dart.md ':include')
-
-Теперь когда у нас определены и реализованы наши `Events` и `States` мы готовы создать наш `WeatherBloc`.
-
-#### Блок погоды
-
-> `WeatherBloc` очень прост. Напомним, что он преобразует `WeatherEvents` в `WeatherStates` и зависит от `WeatherRepository`.
-
-?> **Совет:** Изучите [Расширение Bloc VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc#overview), чтобы воспользоваться фрагментами кода и улучшить вашу эффективность и скорость разработки.
-
-Теперь создайте файл внутри папки `blocs` с именем `weather_bloc.dart` и добавьте следующее:
-
-[weather_bloc.dart](../_snippets/flutter_weather_tutorial/weather_bloc.dart.md ':include')
-
-Мы установили для `initialState` значение `WeatherInitial` поскольку изначально пользователь не выбрал город. Теперь все, что осталось, это реализовать `mapEventToState`.
-
-Поскольку мы обрабатываем только событие `WeatherRequested`, все что нам нужно сделать, это выдать (`yield`) наше состояние `WeatherLoadInProgress` когда мы получим событие `WeatherRequested`, а затем попытаться получить погоду из `WeatherRepository`.
-
-Если мы можем успешно получить погоду, то мы выдаем состояние `WeatherLoadSuccess`, а если мы не можем получить погоду, мы выдаем состояние `WeatherLoadFailure`.
-
-Теперь экспортируйте этот класс в `blocs.dart`:
-
-[blocs.dart](../_snippets/flutter_weather_tutorial/weather_bloc_export.dart.md ':include')
-
-Это все что нужно сделать! Теперь мы готовы перейти к последнему слою: уровню представления.
-
-## Представление
-
-### Настройка
-
-Как вы, вероятно, уже видели в других руководствах, мы собираемся создать `SimpleBlocObserver`, чтобы мы могли видеть все переходы состояний в нашем приложении. Давайте продолжим, создадим `simple_bloc_observer.dart` и собственный пользовательский делегат.
-
-[simple_bloc_observer.dart](../_snippets/flutter_weather_tutorial/simple_bloc_observer.dart.md ':include')
-
-Теперь мы можем импортировать его в файл `main.dart` и установить наш делегат так:
-
-[main.dart](../_snippets/flutter_weather_tutorial/main1.dart.md ':include')
-
-Наконец, нам нужно создать `WeatherRepository` и добавить его в виджет `App` (который мы создадим на следующем шаге).
-
-[main.dart](../_snippets/flutter_weather_tutorial/main2.dart.md ':include')
-
-### Виджет App
-
-Наш виджет `App` будет `StatelessWidget` виджетом, в который внедряется `WeatherRepository` и который создает `MaterialApp` с виджетом `Weather` (который мы создадим на следующем шаге). Мы используем виджет `BlocProvider`, чтобы создать экземпляр `WeatherBloc` и сделать его доступным для виджета `Weather` и его дочерних элементов. Кроме того, `BlocProvider` управляет созданием и закрытием `WeatherBloc`.
-
-[main.dart](../_snippets/flutter_weather_tutorial/app.dart.md ':include')
-
-### Погода
-
-Теперь нам нужно создать виджет погоды. Создайте папку с именем `widgets` внутри `lib` и создайте индексный файл внутри с именем `widgets.dart`. Затем создайте файл с именем `weather.dart`.
-
-> Виджет `Weather` будет `StatelessWidget` виджетом, отвечающим за отображение различных данных о погоде.
-
-#### Создание Stateless виджета
-
-[weather.dart](../_snippets/flutter_weather_tutorial/weather_widget.dart.md ':include')
-
-Все, что происходит в этом виджете, это то, что мы используем `BlocBuilder` с нашим `WeatherBloc`, чтобы перестроить наш пользовательский интерфейс на основе изменений состояния нашего `WeatherBloc`.
-
-Экспортируем `Weather` в файл `widgets.dart`.
-
-Вы заметите, что мы ссылаемся на виджет `CitySelection`, `Location`, `LastUpdated` и `CombinedWeatherTemperature`, который мы создадим в следующих разделах.
-
-### Виджет местоположения
-
-Создайте файл с именем `location.dart` внутри папки `widgets`.
-
-> Виджет `Location` прост; он отображает текущее местоположение.
-
-[location.dart](../_snippets/flutter_weather_tutorial/location.dart.md ':include')
-
-Обязательно экспортируйте его в файле `widgets.dart`.
-
-### Последние обновления
-
-Затем создайте файл `last_updated.dart` внутри папки `widgets`.
-
-> Виджет `LastUpdated` также очень прост; он отображает время последнего обновления, чтобы пользователи знали, насколько свежи данные о погоде.
-
-[last_updated.dart](../_snippets/flutter_weather_tutorial/last_updated.dart.md ':include')
-
-Обязательно экспортируйте его в файл `widgets.dart`.
-
-?> **Примечание:** Мы используем [`TimeOfDay`](https://api.flutter.dev/flutter/material/TimeOfDay-class.html) для форматирования `DateTime` в более понятный для человека формат.
-
-### Комбинированная температура
-
-Теперь создайте файл `combined_weather_temperature.dart` внутри папки `widgets`.
-
-> Виджет `CombinedWeatherTemperature` - это составной виджет, который отображает текущую погоду вместе с температурой. Мы по-прежнему собираемся создать виджеты `Temperature` и `WeatherConditions` в виде модулей, чтобы их можно было повторно использовать.
-
-[combined_weather_temperature.dart](../_snippets/flutter_weather_tutorial/combined_weather_temperature.dart.md ':include')
-
-Обязательно экспортируйте его в файл `widgets.dart`.
-
-?> **Примечание:** Мы используем два еще не реализованных виджета: `WeatherConditions` и `Temperature`, которые мы создадим дальше.
-
-### Погодные условия
-
-Теперь создайте файл `weather_conditions.dart` внутри папки `widgets`.
-
-> Виджет `WeatherConditions` будет отвечать за отображение текущих погодных условий (ясно, ливни, грозы и т.д.) вместе с соответствующим значком.
-
-[weather_conditions.dart](../_snippets/flutter_weather_tutorial/weather_conditions.dart.md ':include')
-
-Обязательно экспортируйте его в файл `widgets.dart`.
-
-Здесь вы можете увидеть, что мы используем некоторые ресурсы. Пожалуйста, загрузите их [отсюда](https://github.com/felangel/bloc/tree/master/examples/flutter_weather/assets) и добавьте их в каталог `assets/`, который мы создали в начале проекта.
-
-?> **Совет:** Проверьте [icons8](https://icons8.com/icon/set/weather/office) ресурсы, используемые в этом руководстве.
-
-### Температура
-
-Теперь создайте файл `temperature.dart` внутри папки `widgets`.
-
-> Виджет `Temperature` будет отображать среднюю, минимальную и максимальную температуры.
-
-[temperature.dart](../_snippets/flutter_weather_tutorial/temperature.dart.md ':include')
-
-Обязательно экспортируйте его в файл `widgets.dart`.
-
-### Выбор города
-
-Последнее, что нам нужно реализовать для полнофункционального приложения - это виджет `CitySelection`, который позволяет пользователям вводить название города. Создайте файл `city_selection.dart` внутри папки `widgets`.
-
-> Виджет `CitySelection` позволит пользователям вводить название города и передавать выбранный город обратно в виджет `App`.
-
-[city_selection.dart](../_snippets/flutter_weather_tutorial/city_selection.dart.md ':include')
-
-Обязательно экспортируйте его в файл `widgets.dart`.
-
-Это должен быть `StatefulWidget`, потому что он должен поддерживать `TextController`.
-
-?> **Примечание:** Когда мы нажимаем кнопку поиска, мы используем `Navigator.pop` и передаем текущий текст из нашего `TextController` обратно в предыдущее представление.
-
-## Запуск приложения
-
-Теперь, когда мы создали все наши виджеты, давайте вернемся к файлу `main.dart`. Вы увидите, что нам нужно импортировать наш виджет `Weather`, поэтому добавьте эту строку вверху.
-
-[main.dart](../_snippets/flutter_weather_tutorial/widgets_import.dart.md ':include')
-
-Теперь вы можете запустить приложение и выполнить `flutter run` в терминале. Сначала выберите город и вы заметите, что у него есть несколько проблем:
-
-- Фон белый и текст очень тяжело читать
-- У нас нет возможности обновить данные о погоде после получения
-- Пользовательский интерфейс очень прост
-- Все в градусах Цельсия и у нас нет возможности поменять единицы
-
-Давайте рассмотрим эти проблемы и выведем наше приложение `Weather` на новый уровень!
-
-## Протягивание до обновления
-
-> Чтобы поддерживать функцию `протягивание до обновления` (`pull-to-refresh`), нам нужно обновить `WeatherEvent` для обработки второго события: `WeatherRefreshRequested`. Давайте добавим следующий код в `blocs/weather_event.dart`
-
-[weather_event.dart](../_snippets/flutter_weather_tutorial/refresh_weather_event.dart.md ':include')
-
-Теперь нам нужно обновить наш `mapEventToState` внутри `weather_bloc.dart` для обработки события `WeatherRefreshRequested`. Сначала добавьте еще одно выражение `if` ниже существующего.
-
-[weather_bloc.dart](../_snippets/flutter_weather_tutorial/refresh_weather_bloc.dart.md ':include')
-
-Здесь мы просто создаем новое событие, которое попросит наш `weatherRepository` сделать вызов API, чтобы узнать погоду для города.
-
-Мы можем реорганизовать `mapEventToState` для использования некоторых частных вспомогательных функций, чтобы сохранить код организованным и легким для понимания:
-
-[weather_bloc.dart](../_snippets/flutter_weather_tutorial/map_event_to_state_refactor.dart.md ':include')
-
-Наконец, нам нужно обновить наш уровень представления, чтобы использовать виджет `RefreshIndicator`. Давайте продолжим и изменим наш виджет `Weather` в `widgets/weather.dart`. Есть несколько вещей, которые нам нужно сделать.
-
-- Импортировать `async` в файл `weather.dart` для обработки `Future`
-
-[weather.dart](../_snippets/flutter_weather_tutorial/dart_async_import.dart.md ':include')
-
-- Добавить `Completer`
-
-[weather.dart](../_snippets/flutter_weather_tutorial/add_completer.dart.md ':include')
-
-Поскольку нашему виджету `Weather` нужно будет поддерживать экземпляр `Completer`, нам необходимо изменить его на `StatefulWidget`. Затем мы можем инициализировать `Completer` в `initState`.
-
-- Внутри метода `build` виджета давайте обернем `ListView` в виджет `RefreshIndicator` как показано ниже. Затем вернем `_refreshCompleter.future` когда произойдет обратный вызов `onRefresh`.
-
-[weather.dart](../_snippets/flutter_weather_tutorial/refresh_indicator.dart.md ':include')
-
-Чтобы использовать `RefreshIndicator`, нам нужно было создать [`Completer`](https://api.dart.dev/stable/dart-async/Completer-class.html), который позволяет нам создавать `Future` и мы сделаем это позже.
-
-Последнее, что нам нужно сделать, это завершить `Completer`, когда мы получим состояние `WeatherLoadSuccess`, чтобы отключить индикатор загрузки после обновления погоды.
-
-[weather.dart](../_snippets/flutter_weather_tutorial/bloc_consumer_refactor.dart.md ':include')
-
-Мы преобразовали наш `BlocBuilder` в `BlocConsumer`, потому что нам нужно обрабатывать как ребилдинг пользовательского интерфейса на основе изменений состояния, так и выполнение побочных эффектов (завершение `Completer`).
-
-?> **Примечание:** `BlocConsumer` идентичен вложенному `BlocBuilder` внутри `BlocListener`.
-
-Это оно! Теперь мы решили проблему N1 и пользователи могут обновить погоду, потянув вниз. Не стесняйтесь снова запустить `flutter run` и попробовать обновить погоду.
-
-Далее давайте займемся простым интерфейсом, создав `ThemeBloc`.
-
-## Динамические темы
-
-> `ThemeBloc` будет отвечать за преобразование `ThemeEvents` в `ThemeStates`.
-
-`ThemeEvents` будут состоять из одного события под названием `WeatherChanged`, которое будет добавляться при изменении погодных условий, которые мы отображаем.
-
-[theme_event.dart](../_snippets/flutter_weather_tutorial/weather_changed_event.dart.md ':include')
-
-`ThemeState` будет состоять из `ThemeData` и `MaterialColor`, которые мы будем использовать для улучшения нашего пользовательского интерфейса.
-
-[theme_state.dart](../_snippets/flutter_weather_tutorial/theme_state.dart.md ':include')
-
-Теперь мы можем реализовать `ThemeBloc`, который должен выглядеть следующим образом:
-
-[theme_bloc.dart](../_snippets/flutter_weather_tutorial/theme_bloc.dart.md ':include')
-
-Несмотря на то что кода много, единственная вещь здесь - это логика для преобразования условия `WeatherCondition` в новое состояние `ThemeState`.
-
-Теперь мы можем обновить `main`, `ThemeBloc` и предоставить его нашему `App`.
-
-[main.dart](../_snippets/flutter_weather_tutorial/main3.dart.md ':include')
-
-Виджет `App` может теперь использовать `BlocBuilder`, чтобы реагировать на изменения в `ThemeState`.
-
-[app.dart](../_snippets/flutter_weather_tutorial/app2.dart.md ':include')
-
-?> **Примечание:** Мы используем `BlocProvider`, чтобы сделать `ThemeBloc` глобально доступным, используя `BlocProvider.of<ThemeBloc>(context)`.
-
-Последнее, что нам нужно сделать, это создать классный виджет `GradientContainer`, который будет окрашивать наш фон в соответствии с текущими погодными условиями.
-
-[gradient_container.dart](../_snippets/flutter_weather_tutorial/gradient_container.dart.md ':include')
-
-Теперь мы можем использовать `GradientContainer` в виджете `Weather` следующим образом:
-
-[weather.dart](../_snippets/flutter_weather_tutorial/integrate_gradient_container.dart.md ':include')
-
-Поскольку мы хотим "что-то сделать" в ответ на изменения состояния в `WeatherBloc`, мы используем `BlocListener`. В этом случае мы завершаем и сбрасываем `Completer`, а также добавляем событие `WeatherChanged` в `ThemeBloc`.
-
-?> **Совет:** Проверьте [SnackBar Recipe](ru/recipesfluttershowsnackbar.md) для получения дополнительной информации о виджете `BlocListener`.
-
-Мы обращаемся к `ThemeBloc` через `BlocProvider.of<ThemeBloc>(context)` и добавляем событие `WeatherChanged` в каждый `WeatherLoad`.
-
-Мы также обернули виджет `GradientContainer` с помощью `BlocBuilder` из `ThemeBloc`, чтобы мы могли перестроить `GradientContainer` и его дочерние элементы в ответ на изменения `ThemeState`.
-
-Потрясающе! Теперь у нас есть приложение, которое выглядит намного лучше (на мой взгляд: P) и решает проблему N2.
-
-Осталось только перевести единицы в градусы Цельсия и Фаренгейта. Для этого мы создадим виджет `Settings` и `SettingsBloc`.
-
-## Преобразование единиц измерения
-
-Мы начнем с создания нашего `SettingsBloc`, который преобразует `SettingsEvents` в `SettingsStates`.
-
-`SettingsEvents` будут состоять из одного события: `TemperatureUnitsToggled`.
-
-[settings_event.dart](../_snippets/flutter_weather_tutorial/settings_event.dart.md ':include')
-
-`SettingsState` будет просто состоять из текущих `TemperatureUnits`.
-
-[settings_state.dart](../_snippets/flutter_weather_tutorial/settings_state.dart.md ':include')
-
-Наконец, нам нужно создать наш `SettingsBloc`:
-
-[settings_bloc.dart](../_snippets/flutter_weather_tutorial/settings_bloc.dart.md ':include')
-
-Все, что мы делаем, это используем `fahrenheit` если добавляется `TemperatureUnitsToggled` или наоборот - единицы измерения `celsius` в другом случае.
-
-Теперь нам нужно предоставить `SettingsBloc` виджету `App` в `main.dart`.
-
-[main.dart](../_snippets/flutter_weather_tutorial/main4.dart.md ':include')
-
-Опять же, мы делаем `SettingsBloc` глобально доступным, используя `BlocProvider` и мы также закрываем его в обратном вызове `close`. Однако на этот раз, поскольку мы выставляем более одного блока с помощью `BlocProvider` на одном уровне, мы можем устранить некоторую вложенность с помощью виджета `MultiBlocProvider`.
-
-Теперь нам нужно создать виджет `Settings`, в котором пользователи могут переключать единицы измерения.
-
-[settings.dart](../_snippets/flutter_weather_tutorial/settings.dart.md ':include')
-
-Мы используем `BlocProvider` для доступа к `SettingsBloc` через `BuildContext`, а затем с помощью `BlocBuilder` перестраиваем наш пользовательский интерфейс на основе измененного `SettingsState`.
-
-Наш пользовательский интерфейс состоит из `ListView` с одним `ListTile`, который содержит `Switch`, предназначенный для переключения единиц измерения либо в Цельсиях либо в Фаренгейтах.
-
-?> **Примечание:** В методе переключателя `onChanged` мы добавляем событие `TemperatureUnitsToggled`, чтобы уведомить `SettingsBloc` об изменении единиц температуры.
-
-Далее нам нужно разрешить пользователям получать доступ к виджету `Settings` из виджета `Weather`.
-
-Мы можем сделать это, добавив новый `IconButton` в `AppBar`.
-
-[weather.dart](../_snippets/flutter_weather_tutorial/settings_button.dart.md ':include')
-
-Мы почти закончили! Нам просто нужно обновить виджет `Temperature`, чтобы реагировать на текущие единицы измерения.
-
-[temperature.dart](../_snippets/flutter_weather_tutorial/update_temperature.dart.md ':include')
-
-И наконец, нам нужно добавить `TemperatureUnits` в виджет `Temperature`.
-
-[consolidated_weather_temperature.dart](../_snippets/flutter_weather_tutorial/inject_temperature_units.dart.md ':include')
-
-Вот и все, что нужно сделать! Теперь мы успешно внедрили приложение погоды во Flutter, используя пакеты [bloc](https://pub.dev/packages/bloc) и [flutter_bloc](https://pub.dev/packages/flutter_bloc) и мы успешно отделили наш уровень представления от нашей бизнес логики.
-
-Полный исходный код этого примера можно найти [здесь](https://github.com/felangel/Bloc/tree/master/examples/flutter_weather).
+The full source code for this example, including unit and widget tests, can be found [here](https://github.com/felangel/bloc/tree/master/examples/flutter_weather).
