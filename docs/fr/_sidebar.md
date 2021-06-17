@@ -18,7 +18,6 @@
     - [Timer](fr/fluttertimertutorial.md)
     - [Infinite List](fr/flutterinfinitelisttutorial.md)
     - [**Login** <sup>✨</sup>](fr/flutterlogintutorial.md)
-    - [Weather](fr/flutterweathertutorial.md)
     - [Todos](fr/fluttertodostutorial.md)
     - [**Firebase Login** <sup>✨</sup>](fr/flutterfirebaselogintutorial.md)
     - [Firestore Todos](fr/flutterfirestoretodostutorial.md)

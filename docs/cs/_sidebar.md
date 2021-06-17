@@ -17,7 +17,7 @@
     - [Časovač](cs/fluttertimertutorial.md)
     - [Nekonečný list](cs/flutterinfinitelisttutorial.md)
     - [**Přihlašování** <sup>✨</sup>](cs/flutterlogintutorial.md)
-    - [Počasí](cs/flutterweathertutorial.md)
+    - [**Počasí** <sup>✨</sup>](cs/flutterweathertutorial.md)
     - [Plánovač](cs/fluttertodostutorial.md)
     - [**Firebase přihlašování** <sup>✨</sup>](cs/flutterfirebaselogintutorial.md)
     - [Firestore plánovač](cs/flutterfirestoretodostutorial.md)

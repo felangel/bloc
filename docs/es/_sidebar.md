@@ -18,7 +18,7 @@
     - [Temporizador](es/fluttertimertutorial.md)
     - [Lista Infinita](es/flutterinfinitelisttutorial.md)
     - [**Iniciar Sesión** <sup>✨</sup>](es/flutterlogintutorial.md)
-    - [Clima](es/flutterweathertutorial.md)
+    - [**Clima** <sup>✨</sup>](es/flutterweathertutorial.md)
     - [Lista de quehaceres](es/fluttertodostutorial.md)
     - [**Iniciar sesión con Firebase** <sup>✨</sup>](es/flutterfirebaselogintutorial.md)
     - [Quehaceres con Firestore](es/flutterfirestoretodostutorial.md)

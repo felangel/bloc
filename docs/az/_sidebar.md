@@ -16,10 +16,10 @@
     - [**Sayğac** <sup>✨</sup>](fluttercountertutorial.md)
     - [Taymer](fluttertimertutorial.md)
     - [Sonsuz List](flutterinfinitelisttutorial.md)
-    - [Login](flutterlogintutorial.md)
+    - [**Login** <sup>✨</sup>](flutterlogintutorial.md)
     - [Hava](flutterweathertutorial.md)
     - [Todolar](fluttertodostutorial.md)
-    - [Firebase Login](flutterfirebaselogintutorial.md)
+    - [**Firebase Login** <sup>✨</sup>](flutterfirebaselogintutorial.md)
     - [Firestore Todo-lar](flutterfirestoretodostutorial.md)
   - AngularDart
     - [Sayğac](angularcountertutorial.md)
