@@ -16,14 +16,14 @@
 
 ## Key Concepts
 
-- Observe state changes with [BlocObserver](/coreconcepts?id=blocobserver).
-- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget that provides a bloc to its children.
-- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
-- Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
-- [RepositoryProvider](/flutterbloccoreconcepts?id=repositoryprovider), a Flutter widget that provides a repository to its children.
-- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget that invokes the listener code in response to state changes in the bloc.
-- [MultiBlocProvider](/flutterbloccoreconcepts?id=multiblocprovider), a Flutter widget that merges multiple BlocProvider widgets into one.
-- [BlocConsumer](/flutterbloccoreconcepts?id=blocconsumer), a Flutter widget that exposes a builder and listener in order to react to new states.
+- Observe state changes with [BlocObserver](/coreconcepts?id=blocobserver)
+- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget that provides a bloc to its children
+- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states
+- Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable)
+- [RepositoryProvider](/flutterbloccoreconcepts?id=repositoryprovider), a Flutter widget that provides a repository to its children
+- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget that invokes the listener code in response to state changes in the bloc
+- [MultiBlocProvider](/flutterbloccoreconcepts?id=multiblocprovider), a Flutter widget that merges multiple BlocProvider widgets into one
+- [BlocConsumer](/flutterbloccoreconcepts?id=blocconsumer), a Flutter widget that exposes a builder and listener in order to react to new states
 - [HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc) to manage and persist state
 
 ## Setup
@@ -44,6 +44,7 @@ Our app can be broken down into four main features: **search, settings, theme, w
 
 > Following the [bloc architecture](https://bloclibrary.dev/#/architecture) guidelines, our application will consist of several layers.
 
+In this tutorial, here's what these layers will do:
 - **Data**: retrieve raw weather data from the API
 - **Repository**: abstract the data layer and expose domain models for the application to consume
 - **Business Logic**: manage the state of each feature (unit information, city details, themes, etc.)
@@ -60,15 +61,15 @@ We'll be focusing on two endpoints:
 
 Open [https://www.metaweather.com/api/location/search/?query=london](https://www.metaweather.com/api/location/search/?query=london) in your browser to see the response for the city of London. We will use the `woeid` (where-on-earth-id) in the return dictionary to hit the location endpoint.
 
-For example, the `woeid` for London is `44418`. Navigate to [https://www.metaweather.com/api/location/44418](https://www.metaweather.com/api/location/44418) in your browser and you'll see the response for weather in London which contains all the data we will need for our app.
+The `woeid` for London is `44418`. Navigate to [https://www.metaweather.com/api/location/44418](https://www.metaweather.com/api/location/44418) in your browser and you'll see the response for weather in London which contains all the data we will need for our app.
 
 ### MetaWeather API Client
 
-> The MetaWeather API Client is independent of our application. As a result, we will create it as an internal package (and can even publish it on [pub.dev](https://pub.dev)). We can then use the package by adding it to our `pubspec.yaml`.
+> The MetaWeather API Client is independent of our application. As a result, we will create it as an internal package (and could even publish it on [pub.dev](https://pub.dev)). We can then use the package by adding it to our `pubspec.yaml`.
 
 Create a new directory on the project level called `packages`. This directory will store all of our internal packages.
 
-Within this directory, run the built-in `flutter create` command to create a new package called `meta_weather_api` for our api client.
+Within this directory, run the built-in `flutter create` command to create a new package called `meta_weather_api` for our API client.
 
 [script](_snippets/flutter_weather_tutorial/data_layer/flutter_create_api_client.sh.md ':include')
 
@@ -348,10 +349,10 @@ Using the [Bloc VSCode](https://marketplace.visualstudio.com/items?itemName=Feli
 
 There are four states our weather app can be in:
 
-- `initial` (before anything loads)
-- `loading` (during the API call)
-- `success` (if the API call is successful)
-- `failure` (if the API call is unsuccessful)
+- `initial` before anything loads
+- `loading` during the API call
+- `success` if the API call is successful
+- `failure` if the API call is unsuccessful
 
 The `WeatherStatus` enum will represent the above.
 
@@ -388,7 +389,7 @@ We will expose an `updateTheme` method to update the theme depending on the weat
 
 ### Unit Tests
 
-> Similar to the data and repository layers, it's critical to unit test the business logic layer to ensure that the feature level logic behaves as we expect. We will be relying on the [bloc_test](https://pub.dev/packages/bloc_test) in addition to `mocktail` and `test`.
+> Similar to the data and repository layers, it's critical to unit test the business logic layer to ensure that the feature-level logic behaves as we expect. We will be relying on the [bloc_test](https://pub.dev/packages/bloc_test) in addition to `mocktail` and `test`.
 
 Let's add the `test`, `bloc_test`, and `mocktail` packages to the `dev_dependencies`.
 
@@ -412,7 +413,7 @@ We will start with the `WeatherPage` which uses `BlocProvider` in order to provi
 
 [weather_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/view/weather_page.dart ':include')
 
-You'll notice that page depends on `SettingsPage, SearchPage` widgets, which we will create next.
+You'll notice that page depends on `SettingsPage` and `SearchPage` widgets, which we will create next.
 
 ### SettingsPage
 
@@ -480,8 +481,8 @@ The `bloc_test` library also exposes `MockBlocs` and `MockCubits` which make it 
 
 ## Summary
 
-Yay, we have completed the tutorial! 🎉
+That's it, we have completed the tutorial! 🎉
 
-We can run the app using the `flutter run` command.
+We can run the final app using the `flutter run` command.
 
-The full source (including unit and widget tests) for this example can be found [here](https://github.com/felangel/bloc/tree/master/examples/flutter_weather).
+The full source code for this example, including unit and widget tests, can be found [here](https://github.com/felangel/bloc/tree/master/examples/flutter_weather).
