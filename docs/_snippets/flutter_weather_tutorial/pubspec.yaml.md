@@ -1,23 +1,27 @@
 ```yaml
 name: flutter_weather
 description: A new Flutter project.
-
 version: 1.0.0+1
+publish_to: none
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^5.0.0
-  http: ^0.12.0
-  equatable: ^1.0.0
+  equatable: ^2.0.0
+  flutter_bloc: ^7.0.0
+  hydrated_bloc: ^7.0.0
+  json_annotation: ^4.0.0
+  weather_repository:
+    path: packages/weather_repository
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito: ^4.0.0
+  build_runner: ^1.10.0
+  json_serializable: ^4.0.0
 
 flutter:
   uses-material-design: true
