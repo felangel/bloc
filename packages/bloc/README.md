@@ -69,7 +69,7 @@ A `Cubit` is class which extends `BlocBase` and can be extended to manage any ty
 
 ![Cubit Flow](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/cubit_flow.png)
 
-State changes in cubit begin with predefined function calls which can use the `emit` method to output new states. `onChange` is called on each state change and contains the current and next state.
+State changes in cubit begin with predefined function calls which can use the `emit` method to output new states. `onChange` is called right before a state change occurs and contains the current and next state.
 
 #### Creating a Cubit
 
