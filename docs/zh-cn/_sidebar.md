@@ -17,7 +17,7 @@
     - [秒表](zh-cn/fluttertimertutorial.md)
     - [无限列表](zh-cn/flutterinfinitelisttutorial.md)
     - [**登陆** <sup>✨</sup>](zh-cn/flutterlogintutorial.md)
-    - [**天气** <sup>✨</sup>](zh-cn/flutterweathertutorial.md)
+    - [**天气** <sup>✨</sup>](flutterweathertutorial.md)
     - [备忘录](zh-cn/fluttertodostutorial.md)
     - [**Firebase 登陆** <sup>✨</sup>](zh-cn/flutterfirebaselogintutorial.md)
     - [Firestore 备忘录](zh-cn/flutterfirestoretodostutorial.md)
