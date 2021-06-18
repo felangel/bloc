@@ -1,3 +1,7 @@
+# 5.6.2
+
+- fix: "Wrap with..." selection issues
+
 # 5.6.1
 
 - feat: add snippets for `bloc_test`
