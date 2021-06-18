@@ -14,7 +14,7 @@ export const getSelectedText = (editor: TextEditor): Selection => {
   const line = editor.document.lineAt(editor.selection.start);
   const lineText = line.text;
   const openBracketIndex = line.text.indexOf(
-    "(",
+    openBracket,
     editor.selection.anchor.character
   );
 
@@ -23,7 +23,10 @@ export const getSelectedText = (editor: TextEditor): Selection => {
   let widgetStartIndex = openBracketIndex - 1;
   for (widgetStartIndex; widgetStartIndex > 0; widgetStartIndex--) {
     const currentChar = lineText.charAt(widgetStartIndex);
-    if (currentChar === " " || currentChar === openBracket) break;
+    const isBeginningOfWidget =
+      currentChar === openBracket ||
+      (currentChar === " " && lineText.charAt(widgetStartIndex - 1) !== ",");
+    if (isBeginningOfWidget) break;
   }
   widgetStartIndex++;
 
