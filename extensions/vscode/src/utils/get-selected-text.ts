@@ -22,7 +22,7 @@ export const getSelectedText = (editor: TextEditor): Selection => {
 
   let widgetStartIndex = openBracketIndex - 1;
   for (widgetStartIndex; widgetStartIndex > 0; widgetStartIndex--) {
-    let currentChar = lineText.charAt(widgetStartIndex);
+    const currentChar = lineText.charAt(widgetStartIndex);
     if (currentChar === " " || currentChar === openBracket) break;
   }
   widgetStartIndex++;
