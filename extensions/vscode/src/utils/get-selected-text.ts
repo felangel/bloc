@@ -34,7 +34,7 @@ export const getSelectedText = (editor: TextEditor): Selection => {
   if (openBracketIndex < 0) {
     const commaIndex = lineText.indexOf(",", widgetStartIndex);
     const bracketIndex = lineText.indexOf(closeBracket, widgetStartIndex);
-    let endIndex =
+    const endIndex =
       commaIndex >= 0
         ? commaIndex
         : bracketIndex >= 0
