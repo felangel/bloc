@@ -17,7 +17,7 @@
     - [Timer](pt-br/fluttertimertutorial.md)
     - [Lista infinita](pt-br/flutterinfinitelisttutorial.md)
     - [**Login** <sup>✨</sup>](pt-br/flutterlogintutorial.md)
-    - [Clima](pt-br/flutterweathertutorial.md)
+    - [**Clima** <sup>✨</sup>](pt-br/flutterweathertutorial.md)
     - [ToDos](pt-br/fluttertodostutorial.md)
     - [**Login com Firebase** <sup>✨</sup>](pt-br/flutterfirebaselogintutorial.md)
     - [ToDos com Firestore](pt-br/flutterfirestoretodostutorial.md)
