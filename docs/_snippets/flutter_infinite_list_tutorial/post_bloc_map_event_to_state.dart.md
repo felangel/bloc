@@ -50,5 +50,4 @@
     }
     throw Exception('error fetching posts');
   }
-}
 ```

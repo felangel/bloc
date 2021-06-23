@@ -158,7 +158,7 @@ Great! Now that we’ve finished implementing the business logic all that’s le
 
 ## Presentation Layer
 
-In our `main.dart` we can start by implementing our main function and calling `runApp` to render our root widget. Here, can can also include our bloc observer to log transitions and any errors.
+In our `main.dart` we can start by implementing our main function and calling `runApp` to render our root widget. Here, we can also include our bloc observer to log transitions and any errors.
 
 [main.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/main.dart ':include')
 
