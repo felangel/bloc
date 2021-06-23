@@ -1,12 +1,12 @@
 ```dart
 @override
-  Stream<PostState> mapEventToState(PostEvent event) async* {
+Stream<PostState> mapEventToState(PostEvent event) async* {
     if (event is PostFetched) {
       yield await _mapPostFetchedToState(state);
     }
   }
 
-  Future<PostState> _mapPostFetchedToState(PostState state) async {
+Future<PostState> _mapPostFetchedToState(PostState state) async {
     if (state.hasReachedMax) return state;
     try {
       if (state.status == PostStatus.initial) {
@@ -30,7 +30,7 @@
     }
   }
 
-  Future<List<Post>> _fetchPosts([int startIndex = 0]) async {
+Future<List<Post>> _fetchPosts([int startIndex = 0]) async {
     final response = await httpClient.get(
       Uri.https(
         'jsonplaceholder.typicode.com',
@@ -50,5 +50,4 @@
     }
     throw Exception('error fetching posts');
   }
-}
 ```
