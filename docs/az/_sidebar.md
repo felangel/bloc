@@ -14,8 +14,8 @@
 
   - Flutter
     - [**Sayğac** <sup>✨</sup>](fluttercountertutorial.md)
-    - [Taymer](fluttertimertutorial.md)
-    - [Sonsuz List](flutterinfinitelisttutorial.md)
+    - [**Taymer** <sup>✨</sup>](fluttertimertutorial.md)
+    - [**Sonsuz List** <sup>✨</sup>](flutterinfinitelisttutorial.md)
     - [**Login** <sup>✨</sup>](flutterlogintutorial.md)
     - [Hava](flutterweathertutorial.md)
     - [Todolar](fluttertodostutorial.md)
