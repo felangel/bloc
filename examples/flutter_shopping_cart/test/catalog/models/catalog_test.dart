@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Catalog', () {
-    final mockItemNames = ['Orange Juice', 'Milk', 'Macaroons', 'Cookies'];
+    const mockItemNames = ['Orange Juice', 'Milk', 'Macaroons', 'Cookies'];
 
     test('supports value comparison', () async {
       expect(

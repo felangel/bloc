@@ -40,10 +40,12 @@ void main() {
         child: CatalogPage(),
       );
       expect(
-          find.descendant(
-              of: find.byType(SliverFillRemaining),
-              matching: find.byType(CircularProgressIndicator)),
-          findsOneWidget);
+        find.descendant(
+          of: find.byType(SliverFillRemaining),
+          matching: find.byType(CircularProgressIndicator),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets(
@@ -103,8 +105,9 @@ void main() {
     testWidgets(
         'renders check icon '
         'when item is already added to cart', (tester) async {
-      when(() => cartBloc.state)
-          .thenReturn(CartLoaded(cart: Cart(items: [mockItem])));
+      when(() => cartBloc.state).thenReturn(
+        CartLoaded(cart: Cart(items: [mockItem])),
+      );
       await tester.pumpApp(
         cartBloc: cartBloc,
         child: AddButton(item: mockItem),

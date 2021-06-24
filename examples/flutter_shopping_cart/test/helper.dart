@@ -32,10 +32,18 @@ extension PumpApp on WidgetTester {
 
     return pumpWidget(
       MaterialApp(
-          home: MultiBlocProvider(providers: [
-        BlocProvider.value(value: cartBloc ?? MockCartBloc()),
-        BlocProvider.value(value: catalogBloc ?? MockCatalogBloc()),
-      ], child: child)),
+        home: MultiBlocProvider(
+          providers: [
+            cartBloc != null
+                ? BlocProvider.value(value: cartBloc)
+                : BlocProvider(create: (_) => MockCartBloc()),
+            catalogBloc != null
+                ? BlocProvider.value(value: catalogBloc)
+                : BlocProvider(create: (_) => MockCatalogBloc()),
+          ],
+          child: child,
+        ),
+      ),
     );
   }
 }

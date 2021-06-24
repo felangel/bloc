@@ -12,7 +12,7 @@ void main() {
 
     group('loadCatalog', () {
       test('returns list of item names', () {
-        final items = [
+        const items = [
           'Code Smell',
           'Control Flow',
           'Interpreter',
@@ -37,7 +37,7 @@ void main() {
     });
 
     group('loadCartItems', () {
-      test('return null after loading cart', () {
+      test('return empty list after loading cart items', () {
         expect(
           shoppingRepository.loadCartItems(),
           completion(equals(<Item>[])),
