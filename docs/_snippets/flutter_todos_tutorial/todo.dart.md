@@ -47,4 +47,5 @@ class Todo extends Equatable {
     );
   }
 }
+
 ```
