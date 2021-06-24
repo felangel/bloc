@@ -3,11 +3,11 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_firestore_todos/blocs/blocs.dart';
 
 class StatsBloc extends Bloc<StatsEvent, StatsState> {
-  StreamSubscription _todosSubscription;
+  late StreamSubscription _todosSubscription;
 
-  StatsBloc({TodosBloc todosBloc})
-      : assert(todosBloc != null),
-        super(StatsLoading()) {
+  StatsBloc({required TodosBloc todosBloc}) : super(StatsLoading()) {
+    final todosState = todosBloc.state;
+    if (todosState is TodosLoaded) add(UpdateStats(todosState.todos));
     _todosSubscription = todosBloc.stream.listen((state) {
       if (state is TodosLoaded) {
         add(UpdateStats(state.todos));
@@ -18,9 +18,9 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   @override
   Stream<StatsState> mapEventToState(StatsEvent event) async* {
     if (event is UpdateStats) {
-      int numActive =
+      final numActive =
           event.todos.where((todo) => !todo.complete).toList().length;
-      int numCompleted =
+      final numCompleted =
           event.todos.where((todo) => todo.complete).toList().length;
       yield StatsLoaded(numActive, numCompleted);
     }
@@ -28,7 +28,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
 
   @override
   Future<void> close() {
-    _todosSubscription?.cancel();
+    _todosSubscription.cancel();
     return super.close();
   }
 }

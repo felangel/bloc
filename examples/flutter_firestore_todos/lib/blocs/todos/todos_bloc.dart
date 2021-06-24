@@ -1,16 +1,14 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter_firestore_todos/blocs/todos/todos.dart';
 import 'package:todos_repository/todos_repository.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final TodosRepository _todosRepository;
-  StreamSubscription _todosSubscription;
+  StreamSubscription? _todosSubscription;
 
-  TodosBloc({@required TodosRepository todosRepository})
-      : assert(todosRepository != null),
-        _todosRepository = todosRepository,
+  TodosBloc({required TodosRepository todosRepository})
+      : _todosRepository = todosRepository,
         super(TodosLoading());
 
   @override

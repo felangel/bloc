@@ -37,7 +37,9 @@ void main() {
         when(() => response.statusCode).thenReturn(200);
         when(() => response.body).thenReturn('[]');
         when(() => httpClient.get(any())).thenAnswer((_) async => response);
-        await metaWeatherApiClient.locationSearch(query);
+        try {
+          await metaWeatherApiClient.locationSearch(query);
+        } catch (_) {}
         verify(
           () => httpClient.get(
             Uri.https(
@@ -59,13 +61,15 @@ void main() {
         );
       });
 
-      test('returns null on empty response', () async {
+      test('throws LocationNotFoundFailure on empty response', () async {
         final response = MockResponse();
         when(() => response.statusCode).thenReturn(200);
         when(() => response.body).thenReturn('[]');
         when(() => httpClient.get(any())).thenAnswer((_) async => response);
-        final actual = await metaWeatherApiClient.locationSearch(query);
-        expect(actual, isNull);
+        await expectLater(
+          metaWeatherApiClient.locationSearch(query),
+          throwsA(isA<LocationNotFoundFailure>()),
+        );
       });
 
       test('returns Location on valid response', () async {
@@ -106,7 +110,9 @@ void main() {
         when(() => response.statusCode).thenReturn(200);
         when(() => response.body).thenReturn('{}');
         when(() => httpClient.get(any())).thenAnswer((_) async => response);
-        await metaWeatherApiClient.getWeather(locationId);
+        try {
+          await metaWeatherApiClient.getWeather(locationId);
+        } catch (_) {}
         verify(
           () => httpClient.get(
             Uri.https('www.metaweather.com', '/api/location/$locationId'),
@@ -121,6 +127,29 @@ void main() {
         expect(
           () async => await metaWeatherApiClient.getWeather(locationId),
           throwsA(isA<WeatherRequestFailure>()),
+        );
+      });
+
+      test('throws WeatherNotFoundFailure on empty response', () async {
+        final response = MockResponse();
+        when(() => response.statusCode).thenReturn(200);
+        when(() => response.body).thenReturn('{}');
+        when(() => httpClient.get(any())).thenAnswer((_) async => response);
+        expect(
+          () async => await metaWeatherApiClient.getWeather(locationId),
+          throwsA(isA<WeatherNotFoundFailure>()),
+        );
+      });
+
+      test('throws WeatherNotFoundFailure on empty consolidated weather',
+          () async {
+        final response = MockResponse();
+        when(() => response.statusCode).thenReturn(200);
+        when(() => response.body).thenReturn('{"consolidated_weather": []}');
+        when(() => httpClient.get(any())).thenAnswer((_) async => response);
+        expect(
+          () async => await metaWeatherApiClient.getWeather(locationId),
+          throwsA(isA<WeatherNotFoundFailure>()),
         );
       });
 
