@@ -5,33 +5,31 @@ import 'package:flutter_shopping_cart/catalog/catalog.dart';
 import 'package:flutter_shopping_cart/shopping_repository.dart';
 
 class App extends StatelessWidget {
-  App({required this.shoppingRepository});
+  const App({Key? key, required this.shoppingRepository}) : super(key: key);
 
   final ShoppingRepository shoppingRepository;
 
   @override
   Widget build(BuildContext context) {
-    final catalogBloc = CatalogBloc(shoppingRepository: shoppingRepository)
-      ..add(CatalogStarted());
-
-    final cartBloc = CartBloc(shoppingRepository: shoppingRepository)
-      ..add(CartStarted());
-
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(
-          value: catalogBloc,
+        BlocProvider(
+          create: (_) => CatalogBloc(
+            shoppingRepository: shoppingRepository,
+          )..add(CatalogStarted()),
         ),
-        BlocProvider.value(
-          value: cartBloc,
+        BlocProvider(
+          create: (_) => CartBloc(
+            shoppingRepository: shoppingRepository,
+          )..add(CartStarted()),
         )
       ],
       child: MaterialApp(
         title: 'Flutter Bloc Shopping Cart',
         initialRoute: '/',
         routes: {
-          '/': (context) => CatalogPage(),
-          '/cart': (context) => CartPage(),
+          '/': (_) => CatalogPage(),
+          '/cart': (_) => CartPage(),
         },
       ),
     );

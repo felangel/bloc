@@ -1,6 +1,5 @@
 part of 'catalog_bloc.dart';
 
-@immutable
 abstract class CatalogState extends Equatable {
   const CatalogState();
 

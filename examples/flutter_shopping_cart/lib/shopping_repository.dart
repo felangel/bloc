@@ -3,35 +3,31 @@ import 'dart:async';
 import 'package:flutter_shopping_cart/catalog/catalog.dart';
 
 const _delay = Duration(milliseconds: 800);
-Future<void> wait() => Future.delayed(_delay);
+
+const _catalog = [
+  'Code Smell',
+  'Control Flow',
+  'Interpreter',
+  'Recursion',
+  'Sprint',
+  'Heisenbug',
+  'Spaghetti',
+  'Hydra Code',
+  'Off-By-One',
+  'Scope',
+  'Callback',
+  'Closure',
+  'Automata',
+  'Bit Shift',
+  'Currying',
+];
 
 class ShoppingRepository {
-  Future<List<String>> fetchCatalog() async {
-    await wait();
-    return [
-      'Code Smell',
-      'Control Flow',
-      'Interpreter',
-      'Recursion',
-      'Sprint',
-      'Heisenbug',
-      'Spaghetti',
-      'Hydra Code',
-      'Off-By-One',
-      'Scope',
-      'Callback',
-      'Closure',
-      'Automata',
-      'Bit Shift',
-      'Currying',
-    ];
-  }
+  final _items = <Item>[];
 
-  Future<void> loadCart() async {
-    return wait();
-  }
+  Future<List<String>> loadCatalog() => Future.delayed(_delay, () => _catalog);
 
-  Future<void> addItemToCart(Item item) async {
-    return wait();
-  }
+  Future<List<Item>> loadCartItems() => Future.delayed(_delay, () => _items);
+
+  void addItemToCart(Item item) => _items.add(item);
 }

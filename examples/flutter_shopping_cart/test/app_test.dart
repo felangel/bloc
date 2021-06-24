@@ -14,8 +14,9 @@ void main() {
 
     setUp(() {
       shoppingRepository = MockShoppingRepository();
-      when(shoppingRepository.fetchCatalog)
-          .thenAnswer((_) async => <String>['Orange Juice', 'Milk']);
+      when(shoppingRepository.loadCatalog).thenAnswer(
+        (_) async => <String>['Orange Juice', 'Milk'],
+      );
     });
 
     testWidgets('renders CatalogPage', (tester) async {

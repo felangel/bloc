@@ -28,8 +28,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   Stream<CartState> _mapCartStartedToState() async* {
     yield CartLoading();
     try {
-      await shoppingRepository.loadCart();
-      yield const CartLoaded();
+      final items = await shoppingRepository.loadCartItems();
+      yield CartLoaded(cart: Cart(items: [...items]));
     } catch (_) {
       yield CartError();
     }
@@ -41,10 +41,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) async* {
     if (state is CartLoaded) {
       try {
-        await shoppingRepository.addItemToCart(event.item);
-        yield CartLoaded(
-          cart: Cart(items: List.from(state.cart.items)..add(event.item)),
-        );
+        shoppingRepository.addItemToCart(event.item);
+        yield CartLoaded(cart: Cart(items: [...state.cart.items, event.item]));
       } on Exception {
         yield CartError();
       }

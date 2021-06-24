@@ -27,8 +27,9 @@ void main() {
         'emits [CatalogLoading, CatalogLoaded] '
         'when catalog is loaded successfully',
         build: () {
-          when(shoppingRepository.fetchCatalog)
-              .thenAnswer((_) async => mockItemNames);
+          when(shoppingRepository.loadCatalog).thenAnswer(
+            (_) async => mockItemNames,
+          );
           return CatalogBloc(shoppingRepository: shoppingRepository);
         },
         act: (bloc) => bloc.add(CatalogStarted()),
@@ -37,14 +38,14 @@ void main() {
               CatalogLoaded(Catalog(itemNames: mockItemNames)),
             ],
         verify: (_) {
-          return verify(shoppingRepository.fetchCatalog).called(1);
+          return verify(shoppingRepository.loadCatalog).called(1);
         });
 
     blocTest<CatalogBloc, CatalogState>(
         'emits [CatalogLoading, CatalogError] '
         'when loading the catalog throws an exception',
         build: () {
-          when(shoppingRepository.fetchCatalog).thenThrow(Exception('Error'));
+          when(shoppingRepository.loadCatalog).thenThrow(Exception('Error'));
           return CatalogBloc(shoppingRepository: shoppingRepository);
         },
         act: (bloc) => bloc.add(CatalogStarted()),
@@ -53,7 +54,7 @@ void main() {
               CatalogError(),
             ],
         verify: (_) {
-          return verify(shoppingRepository.fetchCatalog).called(1);
+          return verify(shoppingRepository.loadCatalog).called(1);
         });
   });
 }

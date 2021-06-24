@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_shopping_cart/catalog/catalog.dart';
 import 'package:flutter_shopping_cart/shopping_repository.dart';
-import 'package:meta/meta.dart';
 
 part 'catalog_event.dart';
 part 'catalog_state.dart';
@@ -26,7 +25,7 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   Stream<CatalogState> _mapCatalogStartedToState() async* {
     yield CatalogLoading();
     try {
-      final catalog = await shoppingRepository.fetchCatalog();
+      final catalog = await shoppingRepository.loadCatalog();
       yield CatalogLoaded(Catalog(itemNames: catalog));
     } catch (_) {
       yield CatalogError();

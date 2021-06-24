@@ -10,7 +10,7 @@ void main() {
       shoppingRepository = ShoppingRepository();
     });
 
-    group('fetchCatalog', () {
+    group('loadCatalog', () {
       test('returns list of item names', () {
         final items = [
           'Code Smell',
@@ -30,27 +30,28 @@ void main() {
           'Currying',
         ];
         expect(
-          shoppingRepository.fetchCatalog(),
+          shoppingRepository.loadCatalog(),
           completion(equals(items)),
         );
       });
     });
 
-    group('loadCart', () {
+    group('loadCartItems', () {
       test('return null after loading cart', () {
         expect(
-          shoppingRepository.loadCart(),
-          completion(equals(null)),
+          shoppingRepository.loadCartItems(),
+          completion(equals(<Item>[])),
         );
       });
     });
 
     group('addItemToCart', () {
-      test('return null after adding item to cart', () {
+      test('returns newly added item after adding item to cart', () {
         final item = Item(1, 'item #1');
+        shoppingRepository.addItemToCart(item);
         expect(
-          shoppingRepository.addItemToCart(item),
-          completion(equals(null)),
+          shoppingRepository.loadCartItems(),
+          completion(equals([item])),
         );
       });
     });

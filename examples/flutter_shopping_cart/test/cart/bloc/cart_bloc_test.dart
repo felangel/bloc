@@ -31,40 +31,38 @@ void main() {
     });
 
     blocTest<CartBloc, CartState>(
-        'emits [CartLoading, CartLoaded] when cart is loaded successfully',
-        build: () {
-          when(shoppingRepository.loadCart).thenAnswer((_) async => null);
-          return CartBloc(shoppingRepository: shoppingRepository);
-        },
-        act: (bloc) => bloc.add(CartStarted()),
-        expect: () => <CartState>[
-              CartLoading(),
-              const CartLoaded(),
-            ],
-        verify: (_) {
-          return verify(shoppingRepository.loadCart).called(1);
-        });
+      'emits [CartLoading, CartLoaded] when cart is loaded successfully',
+      build: () {
+        when(shoppingRepository.loadCartItems).thenAnswer((_) async => []);
+        return CartBloc(shoppingRepository: shoppingRepository);
+      },
+      act: (bloc) => bloc.add(CartStarted()),
+      expect: () => <CartState>[
+        CartLoading(),
+        const CartLoaded(),
+      ],
+      verify: (_) => verify(shoppingRepository.loadCartItems).called(1),
+    );
 
     blocTest<CartBloc, CartState>(
-        'emits [CartLoading, CartError] when loading the cart throws an error',
-        build: () {
-          when(shoppingRepository.loadCart).thenThrow(Exception('Error'));
-          return CartBloc(shoppingRepository: shoppingRepository);
-        },
-        act: (bloc) => bloc..add(CartStarted()),
-        expect: () => <CartState>[
-              CartLoading(),
-              CartError(),
-            ],
-        verify: (_) {
-          return verify(shoppingRepository.loadCart).called(1);
-        });
+      'emits [CartLoading, CartError] when loading the cart throws an error',
+      build: () {
+        when(shoppingRepository.loadCartItems).thenThrow(Exception('Error'));
+        return CartBloc(shoppingRepository: shoppingRepository);
+      },
+      act: (bloc) => bloc..add(CartStarted()),
+      expect: () => <CartState>[
+        CartLoading(),
+        CartError(),
+      ],
+      verify: (_) => verify(shoppingRepository.loadCartItems).called(1),
+    );
 
     blocTest<CartBloc, CartState>(
       'emits [] when cart is not finished loading and item is added',
       build: () {
         when(() => shoppingRepository.addItemToCart(mockItemToAdd))
-            .thenAnswer((_) async => null);
+            .thenAnswer((_) async {});
         return CartBloc(shoppingRepository: shoppingRepository);
       },
       act: (bloc) => bloc.add(CartItemAdded(mockItemToAdd)),
@@ -75,7 +73,7 @@ void main() {
         'emits [CartLoaded] when item is added successfully',
         build: () {
           when(() => shoppingRepository.addItemToCart(mockItemToAdd))
-              .thenAnswer((_) async => null);
+              .thenAnswer((_) async {});
           return CartBloc(shoppingRepository: shoppingRepository);
         },
         seed: () => CartLoaded(cart: Cart(items: mockItems)),
@@ -84,25 +82,27 @@ void main() {
               CartLoaded(cart: Cart(items: [...mockItems, mockItemToAdd]))
             ],
         verify: (_) {
-          return verify(() => shoppingRepository.addItemToCart(mockItemToAdd))
+          verify(() => shoppingRepository.addItemToCart(mockItemToAdd))
               .called(1);
         });
 
     blocTest<CartBloc, CartState>(
-        'emits [CartLoaded] when item is added successfully',
-        build: () {
-          when(() => shoppingRepository.addItemToCart(mockItemToAdd))
-              .thenThrow(Exception('Error'));
-          return CartBloc(shoppingRepository: shoppingRepository);
-        },
-        seed: () => CartLoaded(cart: Cart(items: mockItems)),
-        act: (bloc) => bloc.add(CartItemAdded(mockItemToAdd)),
-        expect: () => <CartState>[
-              CartError(),
-            ],
-        verify: (_) {
-          return verify(() => shoppingRepository.addItemToCart(mockItemToAdd))
-              .called(1);
-        });
+      'emits [CartLoaded] when item is added successfully',
+      build: () {
+        when(() => shoppingRepository.addItemToCart(mockItemToAdd))
+            .thenThrow(Exception('Error'));
+        return CartBloc(shoppingRepository: shoppingRepository);
+      },
+      seed: () => CartLoaded(cart: Cart(items: mockItems)),
+      act: (bloc) => bloc.add(CartItemAdded(mockItemToAdd)),
+      expect: () => <CartState>[
+        CartError(),
+      ],
+      verify: (_) {
+        verify(
+          () => shoppingRepository.addItemToCart(mockItemToAdd),
+        ).called(1);
+      },
+    );
   });
 }

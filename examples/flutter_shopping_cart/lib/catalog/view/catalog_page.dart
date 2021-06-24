@@ -15,9 +15,7 @@ class CatalogPage extends StatelessWidget {
             builder: (context, state) {
               if (state is CatalogLoading) {
                 return const SliverFillRemaining(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: Center(child: CircularProgressIndicator()),
                 );
               }
               if (state is CatalogLoaded) {
@@ -31,7 +29,8 @@ class CatalogPage extends StatelessWidget {
                 );
               }
               return const SliverFillRemaining(
-                  child: Text('Something went wrong!'));
+                child: Text('Something went wrong!'),
+              );
             },
           ),
         ],
