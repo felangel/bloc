@@ -9,8 +9,6 @@ class MockShoppingRepository extends Mock implements ShoppingRepository {}
 
 void main() {
   group('CartBloc', () {
-    late ShoppingRepository shoppingRepository;
-
     final mockItems = [
       Item(1, 'item #1'),
       Item(2, 'item #2'),
@@ -18,6 +16,8 @@ void main() {
     ];
 
     final mockItemToAdd = Item(4, 'item #4');
+
+    late ShoppingRepository shoppingRepository;
 
     setUp(() {
       shoppingRepository = MockShoppingRepository();
@@ -70,21 +70,21 @@ void main() {
     );
 
     blocTest<CartBloc, CartState>(
-        'emits [CartLoaded] when item is added successfully',
-        build: () {
-          when(() => shoppingRepository.addItemToCart(mockItemToAdd))
-              .thenAnswer((_) async {});
-          return CartBloc(shoppingRepository: shoppingRepository);
-        },
-        seed: () => CartLoaded(cart: Cart(items: mockItems)),
-        act: (bloc) => bloc.add(CartItemAdded(mockItemToAdd)),
-        expect: () => <CartState>[
-              CartLoaded(cart: Cart(items: [...mockItems, mockItemToAdd]))
-            ],
-        verify: (_) {
-          verify(() => shoppingRepository.addItemToCart(mockItemToAdd))
-              .called(1);
-        });
+      'emits [CartLoaded] when item is added successfully',
+      build: () {
+        when(() => shoppingRepository.addItemToCart(mockItemToAdd))
+            .thenAnswer((_) async {});
+        return CartBloc(shoppingRepository: shoppingRepository);
+      },
+      seed: () => CartLoaded(cart: Cart(items: mockItems)),
+      act: (bloc) => bloc.add(CartItemAdded(mockItemToAdd)),
+      expect: () => <CartState>[
+        CartLoaded(cart: Cart(items: [...mockItems, mockItemToAdd]))
+      ],
+      verify: (_) {
+        verify(() => shoppingRepository.addItemToCart(mockItemToAdd)).called(1);
+      },
+    );
 
     blocTest<CartBloc, CartState>(
       'emits [CartLoaded] when item is added successfully',
