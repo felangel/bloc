@@ -1,7 +1,7 @@
 - 介绍
 
   - [准备开始](zh-cn/gettingstarted.md)
-  - [为什么使用 Bloc?](zh-cn/whybloc.md)
+  - [为什么使用Bloc?](zh-cn/whybloc.md)
   - 核心思想
     - [bloc](zh-cn/coreconcepts.md)
     - [flutter_bloc](zh-cn/flutterbloccoreconcepts.md)
