@@ -9,6 +9,6 @@ environment:
 dependencies:
   bloc:
     path: ../../../packages/bloc
-  equatable: ^2.0.0
-  http: ^0.13.0
-  rxdart: ^0.26.0
+  equatable: ^2.0.3
+  http: ^0.13.3
+  rxdart: ^0.27.1
