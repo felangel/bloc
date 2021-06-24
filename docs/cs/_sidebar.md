@@ -24,7 +24,7 @@
   - AngularDart
     - [Počítadlo](cs/angularcountertutorial.md)
   - Flutter + AngularDart
-    - [Github vyhledávání](cs/flutterangulargithubsearch.md)
+    - [**Github vyhledávání** <sup>✨</sup>](cs/flutterangulargithubsearch.md)
 
 - Recepty
 

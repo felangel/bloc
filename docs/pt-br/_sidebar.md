@@ -24,7 +24,7 @@
   - AngularDart
     - [Contador](pt-br/angularcountertutorial.md)
   - Flutter + AngularDart
-    - [Pesquisa no GitHub](pt-br/flutterangulargithubsearch.md)
+    - [**Pesquisa no GitHub** <sup>✨</sup>](pt-br/flutterangulargithubsearch.md)
 
 - Exemplos reais
 
