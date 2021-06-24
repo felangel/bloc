@@ -15,8 +15,8 @@
 
   - Flutter
     - [**Counter** <sup>✨</sup>](fluttercountertutorial.md)
-    - [Timer](fluttertimertutorial.md)
-    - [Infinite List](flutterinfinitelisttutorial.md)
+    - [**Timer** <sup>✨</sup>](fluttertimertutorial.md)
+    - [**Infinite List** <sup>✨</sup>](flutterinfinitelisttutorial.md)
     - [**Login** <sup>✨</sup>](flutterlogintutorial.md)
     - [**Weather** <sup>✨</sup>](flutterweathertutorial.md)
     - [Todos](fluttertodostutorial.md)
