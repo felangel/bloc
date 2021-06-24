@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shopping_cart/cart/cart.dart';
 
-class MyCart extends StatelessWidget {
+class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,11 +14,11 @@ class MyCart extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(32),
-                child: _CartList(),
+                child: CartList(),
               ),
             ),
             const Divider(height: 4, color: Colors.black),
-            _CartTotal()
+            CartTotal()
           ],
         ),
       ),
@@ -26,7 +26,7 @@ class MyCart extends StatelessWidget {
   }
 }
 
-class _CartList extends StatelessWidget {
+class CartList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final itemNameStyle = Theme.of(context).textTheme.headline6;
@@ -39,11 +39,13 @@ class _CartList extends StatelessWidget {
         if (state is CartLoaded) {
           return ListView.builder(
             itemCount: state.cart.items.length,
-            itemBuilder: (context, index) => ListTile(
-              leading: const Icon(Icons.done),
-              title: Text(
-                state.cart.items[index].name,
-                style: itemNameStyle,
+            itemBuilder: (context, index) => Material(
+              child: ListTile(
+                leading: const Icon(Icons.done),
+                title: Text(
+                  state.cart.items[index].name,
+                  style: itemNameStyle,
+                ),
               ),
             ),
           );
@@ -54,7 +56,7 @@ class _CartList extends StatelessWidget {
   }
 }
 
-class _CartTotal extends StatelessWidget {
+class CartTotal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hugeStyle =
@@ -63,7 +65,7 @@ class _CartTotal extends StatelessWidget {
     return SizedBox(
       height: 200,
       child: Center(
-        child: Row(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             BlocBuilder<CartBloc, CartState>(builder: (context, state) {
