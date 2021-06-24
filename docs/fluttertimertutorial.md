@@ -17,7 +17,7 @@
 
 ## Setup
 
-We’ll start off by creating a brand new Flutter project
+We’ll start off by creating a brand new Flutter project:
 
 [script](_snippets/flutter_timer_tutorial/flutter_create.sh.md ':include')
 
@@ -54,7 +54,7 @@ Our `TimerBloc` state can be one of the following:
 - TimerRunPause — paused at some remaining duration.
 - TimerRunComplete — completed with a remaining duration of 0.
 
-Each of these states will have an implication on what the user sees. For example:
+Each of these states will have an implication on the user interface and actions that the user can perform. For example:
 
 - if the state is `TimerInitial` the user will be able to start the timer.
 - if the state is `TimerRunInProgress` the user will be able to pause and reset the timer as well as see the remaining duration.
@@ -67,7 +67,7 @@ In order to keep all of our bloc files together, let’s create a bloc directory
 
 [timer_state.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/bloc/timer_state.dart ':include')
 
-Note that all of the `TimerStates` extend the abstract base class `TimerState` which has a duration property. This is because no matter what state our `TimerBloc` is in, we want to know how much time is remaining.
+Note that all of the `TimerStates` extend the abstract base class `TimerState` which has a duration property. This is because no matter what state our `TimerBloc` is in, we want to know how much time is remaining. Additionally, `TimerState` extends `Equatable` to optimize our code by ensuring that our app does not trigger rebuilds if the same state occurs. 
 
 Next up, let’s define and implement the `TimerEvents` which our `TimerBloc` will be processing.
 
@@ -155,7 +155,7 @@ Our `Timer` widget (`/timer/view/timer_page.dart`) will be responsible for displ
 
 [timer.dart](_snippets/flutter_timer_tutorial/timer1.dart.md ':include')
 
-So far, we’re just using `BlocProvider` to access the instance of our `TimerBloc` and using a `BlocBuilder` widget in order to rebuild the UI every time we get a new `TimerState`.
+So far, we’re just using `BlocProvider` to access the instance of our `TimerBloc`.
 
 Next, we’re going to implement our `Actions` widget which will have the proper actions (start, pause, and reset).
 
@@ -169,7 +169,7 @@ In order to clean up our imports from the `Timer` section, we need to create a b
 
 [actions.dart](_snippets/flutter_timer_tutorial/actions.dart.md ':include')
 
-The `Actions` widget is just another `StatelessWidget` which uses `context.read<TimerBloc>()` to access the `TimerBloc` instance and then returns different `FloatingActionButtons` based on the current state of the `TimerBloc`. Each of the `FloatingActionButtons` adds an event in its `onPressed` callback to notify the `TimerBloc`.
+The `Actions` widget is just another `StatelessWidget` which uses a `BlocBuilder` to rebuild the UI every time we get a new `TimerState`. `Actions` uses `context.read<TimerBloc>()` to access the `TimerBloc` instance and returns different `FloatingActionButtons` based on the current state of the `TimerBloc`. Each of the `FloatingActionButtons` adds an event in its `onPressed` callback to notify the `TimerBloc`.
 
 If you want fine-grained control over when the `builder` function is called you can provide an optional `buildWhen` to `BlocBuilder`. The `buildWhen` takes the previous bloc state and current bloc state and returns a `boolean`. If `buildWhen` returns `true`, `builder` will be called with `state` and the widget will rebuild. If `buildWhen` returns `false`, `builder` will not be called with `state` and no rebuild will occur.
 
@@ -183,7 +183,7 @@ As a result, if we randomly colored the widgets on every rebuild, it would look 
 
 ### Background
 
-Lastly, add the background widget as follows
+Lastly, add the background widget as follows:
 
 [background.dart](_snippets/flutter_timer_tutorial/background.dart.md ':include')
 
