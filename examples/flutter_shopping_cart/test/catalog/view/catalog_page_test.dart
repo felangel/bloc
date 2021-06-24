@@ -32,7 +32,7 @@ void main() {
 
   group('CatalogPage', () {
     testWidgets(
-        'renders SliverFillRemaining with loading indicator'
+        'renders SliverFillRemaining with loading indicator '
         'when catalog is loading', (tester) async {
       when(() => catalogBloc.state).thenReturn(CatalogLoading());
       await tester.pumpApp(
