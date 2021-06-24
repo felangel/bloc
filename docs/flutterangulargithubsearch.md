@@ -15,7 +15,7 @@
 - Using Bloc instead of Cubit. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
 - Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
 - Use the `transformEvents` method with Rx.
-- Creating network requests using the `http` package.
+- Making network requests using the `http` package.
 
 ## Common Github Search Library
 
