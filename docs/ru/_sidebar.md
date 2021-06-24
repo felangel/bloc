@@ -24,7 +24,7 @@
   - AngularDart
     - [Счетчик](ru/angularcountertutorial.md)
   - Flutter + AngularDart
-    - [Github поиск](ru/flutterangulargithubsearch.md)
+    - [**Github поиск** <sup>✨</sup>](ru/flutterangulargithubsearch.md)
 
 - Рецепты
 

@@ -24,7 +24,7 @@
   - AngularDart
     - [Sayğac](angularcountertutorial.md)
   - Flutter + AngularDart
-    - [Github-da Axtarış](flutterangulargithubsearch.md)
+    - [**Github-da Axtarış** <sup>✨</sup>](flutterangulargithubsearch.md)
 
 - Tariflər
 

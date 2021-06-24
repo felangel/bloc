@@ -25,7 +25,7 @@
   - AngularDart
     - [Counter](es/angularcountertutorial.md)
   - Flutter + AngularDart
-    - [Github Search](es/flutterangulargithubsearch.md)
+    - [**Github Search** <sup>✨</sup>](es/flutterangulargithubsearch.md)
 
 - Recetas
 
