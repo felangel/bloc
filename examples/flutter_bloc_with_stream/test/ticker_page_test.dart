@@ -9,10 +9,6 @@ import 'package:mocktail/mocktail.dart';
 class MockTickerBloc extends MockBloc<TickerEvent, TickerState>
     implements TickerBloc {}
 
-class FakeTickerEvent extends Fake implements TickerEvent {}
-
-class FakeTickerState extends Fake implements TickerState {}
-
 extension on WidgetTester {
   Future<void> pumpTickerPage(TickerBloc tickerBloc) {
     return pumpWidget(
@@ -25,11 +21,6 @@ extension on WidgetTester {
 
 void main() {
   late TickerBloc tickerBloc;
-
-  setUpAll(() {
-    registerFallbackValue<TickerEvent>(FakeTickerEvent());
-    registerFallbackValue<TickerState>(FakeTickerState());
-  });
 
   setUp(() {
     tickerBloc = MockTickerBloc();

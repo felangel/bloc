@@ -19,8 +19,6 @@ class FakeColor extends Fake implements Color {}
 
 class MockThemeCubit extends MockCubit<Color> implements ThemeCubit {}
 
-class FakeWeatherState extends Fake implements WeatherState {}
-
 class MockWeatherCubit extends MockCubit<WeatherState> implements WeatherCubit {
 }
 
@@ -28,7 +26,6 @@ void main() {
   setUpAll(() {
     initHydratedBloc();
     registerFallbackValue<Color>(FakeColor());
-    registerFallbackValue<WeatherState>(FakeWeatherState());
   });
 
   group('WeatherPage', () {
