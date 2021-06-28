@@ -4,17 +4,17 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 /// Signature for the callbacks registered via `on<E>()`
-/// Predicate allows for type comparisons to support inheritance
+/// isType allows for type comparisons to support inheritance
 /// The handler is an [EventHandler] which is responsible for event processing.
 /// The modifier if an [EventModifier] which determines if/how the event is processed.
 class _OnEvent<Event, State> {
   const _OnEvent({
-    required this.predicate,
+    required this.isType,
     required this.handler,
     required this.modifier,
   });
 
-  final bool Function(Event) predicate;
+  final bool Function(Event) isType;
   final EventHandler<Event, State> handler;
   final EventModifier<Event> modifier;
 }
@@ -182,11 +182,11 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// which triggers any registered handlers.
   /// If [close] has already been called, any subsequent calls to [add] will
   /// be ignored and will not result in any subsequent state changes.
-  void add<E extends Event>(E event) {
+  void add(Event event) {
     if (isClosed) return;
     try {
       onEvent(event);
-      _onEvent<E>(event);
+      _onEvent(event);
     } catch (error, stackTrace) {
       onError(error, stackTrace);
     }
@@ -245,7 +245,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   ]) {
     modifier = modifier ?? concurrent<E>();
     final onEvent = _OnEvent<E, State>(
-      predicate: (Event e) => e is E,
+      isType: (Event e) => e is E,
       handler: handler,
       modifier: modifier,
     );
@@ -310,8 +310,8 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     await super.close();
   }
 
-  Future<void> _onEvent<E extends Event>(E event) async {
-    final callbacks = _onEventCallbacks.where((e) => e.predicate(event));
+  Future<void> _onEvent(Event event) async {
+    final callbacks = _onEventCallbacks.where((e) => e.isType(event));
 
     if (callbacks.isEmpty) {
       final eventType = event.runtimeType;
@@ -349,9 +349,8 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
       }
 
       _pendingEvents.putIfAbsent(onEvent, () => {});
-      final modifier = onEvent.modifier as EventModifier<E>;
       final events = _pendingEvents[onEvent]!;
-      modifier(event, events, next);
+      onEvent.modifier(event, events, next);
     }
   }
 }
