@@ -5,16 +5,17 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_infinite_list/posts/posts.dart';
 import 'package:http/http.dart' as http;
-import 'package:rxdart/rxdart.dart';
 
 part 'post_event.dart';
 part 'post_state.dart';
 
 const _postLimit = 20;
 
+const _debounceDuration = Duration(milliseconds: 500);
+
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({required this.httpClient}) : super(const PostState()) {
-    on<PostFetched>(_onPostFetched, drop);
+    on<PostFetched>(_onPostFetched, debounceTime(_debounceDuration));
   }
 
   final http.Client httpClient;
@@ -24,7 +25,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     try {
       if (state.status == PostStatus.initial) {
         final posts = await _fetchPosts();
-        emit(state.copyWith(
+        return emit(state.copyWith(
           status: PostStatus.success,
           posts: posts,
           hasReachedMax: false,
@@ -44,7 +45,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   }
 
   Future<List<Post>> _fetchPosts([int startIndex = 0]) async {
-    print('fetching posts!');
     final response = await httpClient.get(
       Uri.https(
         'jsonplaceholder.typicode.com',

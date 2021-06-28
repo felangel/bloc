@@ -9,13 +9,17 @@ class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
   NewCarBloc({required NewCarRepository newCarRepository})
       : _newCarRepository = newCarRepository,
         super(const NewCarState.initial()) {
-    on<NewCarFormLoaded>(_onNewCarFormLoaded);
-    on<NewCarBrandChanged>(_onNewCarBrandChanged);
-    on<NewCarModelChanged>(_onNewCarModelChanged);
-    on<NewCarYearChanged>(_onNewCarYearChanged);
+    on<NewCarEvent>(_onEvent, enqueue());
   }
 
   final NewCarRepository _newCarRepository;
+
+  void _onEvent(NewCarEvent event, Emit<NewCarState> emit) {
+    if (event is NewCarFormLoaded) return _onNewCarFormLoaded(event, emit);
+    if (event is NewCarBrandChanged) return _onNewCarBrandChanged(event, emit);
+    if (event is NewCarModelChanged) return _onNewCarModelChanged(event, emit);
+    if (event is NewCarYearChanged) return _onNewCarYearChanged(event, emit);
+  }
 
   void _onNewCarFormLoaded(
     NewCarFormLoaded event,

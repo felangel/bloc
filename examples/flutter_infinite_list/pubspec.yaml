@@ -13,7 +13,6 @@ dependencies:
     path: ../../packages/flutter_bloc
   http: ^0.13.0
   equatable: ^2.0.0
-  rxdart: ^0.26.0
 
 dev_dependencies:
   flutter_test:
@@ -26,6 +25,8 @@ dependency_overrides:
     path: ../../packages/bloc
   flutter_bloc:
     path: ../../packages/flutter_bloc
+  bloc_test:
+    path: ../../packages/bloc_test
 
 flutter:
   uses-material-design: true

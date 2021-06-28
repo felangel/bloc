@@ -26,6 +26,8 @@ dependency_overrides:
     path: ../../packages/bloc
   flutter_bloc:
     path: ../../packages/flutter_bloc
+  bloc_test:
+    path: ../../packages/bloc_test
 
 flutter:
   uses-material-design: true
