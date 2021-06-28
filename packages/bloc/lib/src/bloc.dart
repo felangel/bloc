@@ -334,9 +334,8 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
             });
           };
 
-          final placeholder = Future<void>.value();
-          _pendingEvents.putIfAbsent(onEvent, () => {key: placeholder});
-          _pendingEvents[onEvent]![key] = placeholder;
+          _pendingEvents.putIfAbsent(onEvent, () => {});
+          _pendingEvents[onEvent]![key] = Future<void>.value();
           _pendingEvents[onEvent]![key] = eventHandler();
           await _pendingEvents[onEvent]![key];
         } catch (error, stackTrace) {
