@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 
 import 'blocs.dart';
@@ -9,17 +7,17 @@ class Repository {
 }
 
 class SideEffectCounterBloc extends Bloc<CounterEvent, int> {
-  SideEffectCounterBloc(this.repository) : super(0);
+  SideEffectCounterBloc(this.repository) : super(0) {
+    on<CounterEvent>(_onEvent);
+  }
 
   final Repository repository;
 
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
+  void _onEvent(CounterEvent event, Emit<int> emit) {
     switch (event) {
       case CounterEvent.increment:
         repository.sideEffect();
-        yield state + 1;
-        break;
+        return emit(state + 1);
     }
   }
 }

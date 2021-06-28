@@ -92,14 +92,14 @@ class CounterCubit extends Cubit<int> {
 enum CounterEvent { increment }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  CounterBloc() : super(0);
+  CounterBloc() : super(0) {
+    on<CounterEvent>(_onEvent);
+  }
 
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
+  void _onEvent(CounterEvent event, Emit<int> emit) {
     switch (event) {
       case CounterEvent.increment:
-        yield state + 1;
-        break;
+        return emit(state + 1);
     }
   }
 }

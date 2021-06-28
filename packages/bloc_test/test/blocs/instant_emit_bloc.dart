@@ -1,18 +1,19 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 
 import 'blocs.dart';
 
 class InstantEmitBloc extends Bloc<CounterEvent, int> {
   InstantEmitBloc() : super(0) {
-    add(CounterEvent.increment);
+    on<CounterEvent>(_onEvent);
+    scheduleMicrotask(() => add(CounterEvent.increment));
   }
 
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
+  void _onEvent(CounterEvent event, Emit<int> emit) async {
     switch (event) {
       case CounterEvent.increment:
-        yield state + 1;
-        break;
+        return emit(state + 1);
     }
   }
 }
