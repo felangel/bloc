@@ -131,9 +131,6 @@ typedef EventHandler<Event, State> = FutureOr<void> Function(
   Emit<State>,
 );
 
-/// Signature of the `on` closure used to add event handlers.
-typedef On<Event, State> = void Function(Event, void Function(Emit<State>));
-
 /// {@template bloc_unhandled_error_exception}
 /// Exception thrown when an unhandled error occurs within a bloc.
 ///
