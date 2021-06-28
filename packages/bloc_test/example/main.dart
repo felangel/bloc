@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 // Mock Cubit
@@ -13,10 +12,6 @@ class MockCounterBloc extends MockBloc<CounterEvent, int>
     implements CounterBloc {}
 
 void main() {
-  setUpAll(() {
-    registerFallbackValue<CounterEvent>(CounterEvent.increment);
-  });
-
   mainCubit();
   mainBloc();
 }

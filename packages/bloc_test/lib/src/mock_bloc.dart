@@ -25,9 +25,7 @@ import 'package:mocktail/mocktail.dart';
 /// {@endtemplate}
 class MockBloc<E, S> extends _MockBlocBase<S> implements Bloc<E, S> {
   /// {@macro mock_bloc}
-  MockBloc() {
-    when(() => add<E>(any())).thenReturn(null);
-  }
+  MockBloc();
 }
 
 /// {@template mock_cubit}
@@ -56,10 +54,7 @@ class MockCubit<S> extends _MockBlocBase<S> implements Cubit<S> {}
 
 class _MockBlocBase<S> extends Mock implements BlocBase<S> {
   _MockBlocBase() {
-    registerFallbackValue<void Function(S)>((S _) {});
-    registerFallbackValue<void Function()>(() {});
     when(() => stream).thenAnswer((_) => Stream<S>.empty());
     when(close).thenAnswer((_) => Future<void>.value());
-    when(() => emit(any())).thenReturn(null);
   }
 }
