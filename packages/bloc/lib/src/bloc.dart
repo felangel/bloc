@@ -295,14 +295,15 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   @override
   @mustCallSuper
   Future<void> close() async {
+    Iterable<Future<void>> futures() {
+      return _pendingEvents.values.fold(
+        [],
+        (prev, element) => [...prev, ...element.values],
+      );
+    }
+
     try {
-      final futures = () => _pendingEvents.values.fold<Iterable<Future>>(
-            [],
-            (prev, element) => <Future>[...prev, ...element.values],
-          );
-      while (futures().isNotEmpty) {
-        await Future.wait<void>(futures());
-      }
+      while (futures().isNotEmpty) await Future.wait<void>(futures());
     } catch (_) {}
     await super.close();
   }
