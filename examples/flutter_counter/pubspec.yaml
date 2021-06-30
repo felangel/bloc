@@ -28,7 +28,8 @@ dev_dependencies:
   bloc_test:
     path: ../../packages/bloc_test
   mocktail: ^0.1.0
-  integration_test: ^1.0.0
+  integration_test:
+    sdk: flutter
 
 flutter:
   uses-material-design: true
