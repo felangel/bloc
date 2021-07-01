@@ -57,6 +57,13 @@
                     group-id="NewGroup"
                     anchor="first"/>
         </action>
+        <action class="com.bloc.intellij_generator_plugin.action.GenerateEquatablePropsAction"
+                description="Generate Equatable props"
+                id="GenerateEquatablePropsId"
+                text="Equatable props">
+            <add-to-group group-id="GenerateGroup"
+                          anchor="last"/>
+        </action>
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
