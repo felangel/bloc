@@ -40,7 +40,9 @@ class GenerateEquatablePropsAction : AnAction() {
         val memberNames = getPropsList(editor.document, members)
 
         val nullStr = if (propsNullable) "?" else ""
-        val props: String = reformatProps(memberNames)
+        propsNullable = false
+
+        val props: String = reformatProps(memberNames.filter { s -> s != "" })
         val propsStr = "@override\nList<Object$nullStr> get props => [$props];"
 
         WriteCommandAction.runWriteCommandAction(project) {
@@ -66,6 +68,9 @@ class GenerateEquatablePropsAction : AnAction() {
             ?.getChildren(null)?.find { astNode -> astNode.toString() == "Element(CLASS_MEMBERS)" }?.getChildren(null)
             ?.filter { astNode -> astNode.toString() == "Element(VAR_DECLARATION_LIST)" }
 
+    private fun findNonAccessModifiers(memberNode: ASTNode) = memberNode.getChildren(null)
+        .filter { astNode -> astNode.toString().startsWith("PsiElement(") }
+
     private fun findMemberType(memberNode: ASTNode) = memberNode.getChildren(null)
         .find { astNode -> astNode.toString() == "Element(TYPE)" }
 
@@ -81,15 +86,19 @@ class GenerateEquatablePropsAction : AnAction() {
     ) = members.map { n ->
         val memberNode = n.firstChildNode
         if (memberNode.toString() == "Element(VAR_ACCESS_DECLARATION)") {
-            val type = findMemberType(memberNode)?.psi
+            val accessModifiers = findNonAccessModifiers(memberNode)
 
-            if (!propsNullable && type != null && doc.getText(type.textRange).endsWith("?")) {
-                propsNullable = true
+            // list only class members with non-access modifier "final", but not with "static final" or without any
+            if (accessModifiers.size == 1 && accessModifiers[0].toString() == "PsiElement(final)") {
+                val type = findMemberType(memberNode)?.psi
+                if (!propsNullable && type != null && doc.getText(type.textRange).endsWith("?")) {
+                    propsNullable = true
+                }
+
+                val member = findMemberName(memberNode)?.psi
+
+                return@map if (member == null) "" else doc.getText(member.textRange)
             }
-
-            val member = findMemberName(memberNode)?.psi
-
-            return@map if (member == null) "" else doc.getText(member.textRange)
         }
         return@map ""
     }
@@ -97,12 +106,10 @@ class GenerateEquatablePropsAction : AnAction() {
     private fun reformatProps(memberNames: List<String>): String {
         var props = ""
         for ((i, s) in memberNames.withIndex()) {
-            if (s != "") {
-                if (memberNames.size == 1 || (i == memberNames.size - 1)) {
-                    props += s
-                } else {
-                    props += "$s, "
-                }
+            if (memberNames.size == 1 || (i == memberNames.size - 1)) {
+                props += s
+            } else {
+                props += "$s, "
             }
         }
 
