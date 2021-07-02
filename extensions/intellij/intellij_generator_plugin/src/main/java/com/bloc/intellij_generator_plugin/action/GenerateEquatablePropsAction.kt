@@ -1,88 +1,116 @@
 package com.bloc.intellij_generator_plugin.action
 
+import com.intellij.lang.ASTNode
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.command.WriteCommandAction
+import com.intellij.openapi.editor.Document
+import com.intellij.psi.PsiDocumentManager
+import com.intellij.psi.PsiElement
+import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiUtilBase
 
 
 class GenerateEquatablePropsAction : AnAction() {
 
-//    override fun update(event: AnActionEvent?) {
-//        super.update(event)
-//        val action = event?.presentation;
-//        if (action != null) {
-//            val editor = event.getRequiredData(CommonDataKeys.EDITOR)
-//            val project = event.project ?: return
-//            val currentFile = PsiUtilBase.getPsiFileInEditor(editor, project)
-//            action.isVisible = currentFile?.name?.endsWith(".dart") == true
-//            action.isEnabledAndVisible
-//        }
-//    }
+    var propsNullable = false
+
+    override fun update(event: AnActionEvent?) {
+        super.update(event)
+        val action = event?.presentation;
+        if (action != null) {
+            val editor = event.getRequiredData(CommonDataKeys.EDITOR)
+            val project = event.project ?: return
+            val currentFile = PsiUtilBase.getPsiFileInEditor(editor, project)
+            action.isEnabledAndVisible = currentFile?.name?.endsWith(".dart") == true
+        }
+    }
 
     override fun actionPerformed(event: AnActionEvent) {
-        val editor = event.getRequiredData(CommonDataKeys.EDITOR)
         val project = event.project ?: return
-        val currentFile = PsiUtilBase.getPsiFileInEditor(editor, project) ?: return
+        val editor = event.getRequiredData(CommonDataKeys.EDITOR)
 
-        val currentOffset = editor.caretModel.currentCaret.offset;
+        val currentFile = PsiUtilBase.getPsiFileInEditor(editor, project) ?: return
+        val currentOffset = editor.caretModel.currentCaret.offset
         val element = currentFile.findElementAt(currentOffset) ?: return
-        var node = element.node;
+
+        val classNode = findClassDefinition(element) ?: return
+        val members = findAllClassMembers(classNode) ?: return
+        val memberNames = getPropsList(editor.document, members)
+
+        val nullStr = if (propsNullable) "?" else ""
+        val props: String = reformatProps(memberNames)
+        val propsStr = "@override\nList<Object$nullStr> get props => [$props];"
+
+        WriteCommandAction.runWriteCommandAction(project) {
+            editor.document.insertString(currentOffset, propsStr)
+            PsiDocumentManager.getInstance(project).commitDocument(editor.document)
+            CodeStyleManager.getInstance(project).reformat(currentFile)
+        }
+    }
+
+    private fun findClassDefinition(element: PsiElement): ASTNode? {
+        var node: ASTNode? = element.node
         while (node != null) {
             if (node.toString() == "Element(CLASS_DEFINITION)") {
                 break
             }
             node = node.treeParent
         }
+        return node
+    }
 
-        if (node == null) return
-        val members = node.getChildren(null).find { astNode -> astNode.toString() == "Element(CLASS_BODY)" }
+    private fun findAllClassMembers(node: ASTNode) =
+        node.getChildren(null).find { astNode -> astNode.toString() == "Element(CLASS_BODY)" }
             ?.getChildren(null)?.find { astNode -> astNode.toString() == "Element(CLASS_MEMBERS)" }?.getChildren(null)
             ?.filter { astNode -> astNode.toString() == "Element(VAR_DECLARATION_LIST)" }
 
-        if (members == null) return
+    private fun findMemberType(memberNode: ASTNode) = memberNode.getChildren(null)
+        .find { astNode -> astNode.toString() == "Element(TYPE)" }
 
-        var isNullable = false
-        val memberNames = members.map { n ->
-            val memberNode = n.firstChildNode;
-            if (memberNode.toString() == "Element(VAR_ACCESS_DECLARATION)") {
-                val type =
-                    memberNode.getChildren(null)
-                        .find { astNode -> astNode.toString() == "Element(TYPE)" }?.psi
+    private fun findMemberName(memberNode: ASTNode) =
+        memberNode.getChildren(null).find { astNode -> astNode.toString() == "Element(COMPONENT_NAME)" }
+            ?.getChildren(null)
+            ?.find { astNode -> astNode.toString() == "Element(ID)" }?.getChildren(null)
+            ?.find { astNode -> astNode.toString() == "PsiElement(IDENTIFIER)" }
 
-                if (!isNullable && type != null && editor.document.getText(type.textRange).endsWith("?")) {
-                    isNullable = true
-                }
+    private fun getPropsList(
+        doc: Document,
+        members: List<ASTNode>
+    ) = members.map { n ->
+        val memberNode = n.firstChildNode
+        if (memberNode.toString() == "Element(VAR_ACCESS_DECLARATION)") {
+            val type = findMemberType(memberNode)?.psi
 
-                val member =
-                    memberNode.getChildren(null).find { astNode -> astNode.toString() == "Element(COMPONENT_NAME)" }
-                        ?.getChildren(null)
-                        ?.find { astNode -> astNode.toString() == "Element(ID)" }?.getChildren(null)
-                        ?.find { astNode -> astNode.toString() == "PsiElement(IDENTIFIER)" }?.psi
-
-                return@map if (member == null) "" else editor.document.getText(member.textRange)
+            if (!propsNullable && type != null && doc.getText(type.textRange).endsWith("?")) {
+                propsNullable = true
             }
-            return@map ""
-        }
 
-        val nullStr = if (isNullable) "?" else ""
-        var props: String = "";
+            val member = findMemberName(memberNode)?.psi
+
+            return@map if (member == null) "" else doc.getText(member.textRange)
+        }
+        return@map ""
+    }
+
+    private fun reformatProps(memberNames: List<String>): String {
+        var props = ""
         for ((i, s) in memberNames.withIndex()) {
             if (s != "") {
-                if (i == 0 && memberNames.size == 1) {
-                    props += s
-                } else if (i == memberNames.size - 1) {
+                if (memberNames.size == 1 || (i == memberNames.size - 1)) {
                     props += s
                 } else {
                     props += "$s, "
                 }
             }
         }
-        val propsStr = "@override\nList<Object$nullStr> get props => [$props];"
 
-        WriteCommandAction.runWriteCommandAction(project) {
-            editor.document.insertString(currentOffset, propsStr)
+        if (props.length >= 45) {
+            // line probably longer than 80 chars
+            props += ","
         }
+
+        return props
     }
 }
