@@ -9,7 +9,7 @@ abstract class TodosEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class TodosLoadSuccess extends TodosEvent {}
+class TodosLoaded extends TodosEvent {}
 
 class TodoAdded extends TodosEvent {
   final Todo todo;

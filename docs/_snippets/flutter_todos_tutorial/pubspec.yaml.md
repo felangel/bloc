@@ -1,16 +1,19 @@
 ```yaml
 name: flutter_todos
 description: A new Flutter project.
+version: 1.0.0+1
+publish_to: none
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
-  meta: ^1.1.6
-  equatable: ^1.0.0
-  flutter_bloc: ^5.0.0
   flutter:
     sdk: flutter
+  bloc: ^7.0.0
+  equatable: ^2.0.0
+  flutter_bloc: ^7.0.0
+  meta: ^1.3.0
 
 dependency_overrides:
   todos_app_core:
