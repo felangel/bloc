@@ -32,7 +32,7 @@ class TodoUpdated extends TodosEvent {
   List<Object> get props => [todo];
 
   @override
-  String toString() => 'TodoUpdated { updatedTodo: $todo }';
+  String toString() => 'TodoUpdated { todo: $todo }';
 }
 
 class TodoDeleted extends TodosEvent {
@@ -50,5 +50,4 @@ class TodoDeleted extends TodosEvent {
 class ClearCompleted extends TodosEvent {}
 
 class ToggleAll extends TodosEvent {}
-
 ```

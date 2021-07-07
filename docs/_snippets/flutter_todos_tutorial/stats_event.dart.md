@@ -15,6 +15,6 @@ class StatsUpdated extends StatsEvent {
   List<Object> get props => [todos];
 
   @override
-  String toString() => 'UpdateStats { todos: $todos }';
+  String toString() => 'StatsUpdated { todos: $todos }';
 }
 ```

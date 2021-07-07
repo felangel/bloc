@@ -10,18 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc:
-    path: ../../packages/bloc
+  bloc: ^7.0.0
   equatable: ^2.0.0
-  flutter_bloc:
-    path: ../../packages/flutter_bloc
+  flutter_bloc: ^7.0.0
   meta: ^1.3.0
 
 dependency_overrides:
-  bloc:
-    path: ../../packages/bloc
-  flutter_bloc:
-    path: ../../packages/flutter_bloc
   todos_app_core:
     git:
       url: https://github.com/felangel/flutter_architecture_samples
@@ -40,5 +34,4 @@ dependency_overrides:
 
 flutter:
   uses-material-design: true
-
 ```

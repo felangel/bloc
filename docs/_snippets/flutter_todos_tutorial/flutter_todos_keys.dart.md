@@ -14,5 +14,4 @@ class FlutterTodosKeys {
   static final emptyDetailsContainer = const Key('__emptyDetailsContainer__');
   static final detailsScreenCheckBox = const Key('__detailsScreenCheckBox__');
 }
-
 ```
