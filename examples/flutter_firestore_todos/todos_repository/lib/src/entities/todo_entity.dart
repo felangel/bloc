@@ -6,24 +6,29 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class TodoEntity extends Equatable {
-  final bool complete;
   final String id;
-  final String note;
+  final bool complete;
   final String task;
+  final String? note;
 
-  const TodoEntity(this.task, this.id, this.note, this.complete);
+  const TodoEntity({
+    required this.id,
+    required this.task,
+    required this.complete,
+    this.note,
+  });
 
-  Map<String, Object> toJson() {
+  Map<String, Object?> toJson() {
     return {
-      'complete': complete,
-      'task': task,
-      'note': note,
       'id': id,
+      'task': task,
+      'complete': complete,
+      'note': note,
     };
   }
 
   @override
-  List<Object> get props => [complete, id, note, task];
+  List<Object?> get props => [id, task, complete, note];
 
   @override
   String toString() {
@@ -32,24 +37,27 @@ class TodoEntity extends Equatable {
 
   static TodoEntity fromJson(Map<String, Object> json) {
     return TodoEntity(
-      json['task'] as String,
-      json['id'] as String,
-      json['note'] as String,
-      json['complete'] as bool,
+      id: json['id'] as String,
+      task: json['task'] as String,
+      complete: json['complete'] as bool,
+      note: json['note'] as String?,
     );
   }
 
   static TodoEntity fromSnapshot(DocumentSnapshot snap) {
+    final data = snap.data();
+    if (data == null) throw Exception();
     return TodoEntity(
-      snap.data()['task'],
-      snap.id,
-      snap.data()['note'],
-      snap.data()['complete'],
+      id: data['id'],
+      task: data['task'],
+      complete: data['complete'],
+      note: data['note'],
     );
   }
 
-  Map<String, Object> toDocument() {
+  Map<String, Object?> toDocument() {
     return {
+      'id': id,
       'complete': complete,
       'task': task,
       'note': note,

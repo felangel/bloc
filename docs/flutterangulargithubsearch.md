@@ -15,6 +15,7 @@
 - Using Bloc instead of Cubit. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
 - Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
 - Use the `transformEvents` method with Rx.
+- Making network requests using the `http` package.
 
 ## Common Github Search Library
 
@@ -52,11 +53,13 @@ Let's create `github_client.dart`.
 
 ?> **Note:** Our `GithubClient` is simply making a network request to Github's Repository Search API and converting the result into either a `SearchResult` or `SearchResultError` as a `Future`.
 
+?> **Note:** The `GithubClient` implementation depends on `SearchResult.fromJson` which we have not yet implemented.
+
 Next we need to define our `SearchResult` and `SearchResultError` models.
 
 #### Search Result Model
 
-Create `search_result.dart`.
+Create `search_result.dart`, which represents a list of `SearchResultItems` based on the user's query:
 
 [search_result.dart](_snippets/flutter_angular_github_search/common/search_result.dart.md ':include')
 
@@ -150,7 +153,7 @@ Create `github_search_bloc.dart`
 
 ?> **Note:** Our `GithubSearchBloc` converts `GithubSearchEvent` to `GithubSearchState` and has a dependency on the `GithubRepository`.
 
-?> **Note:** We override the `transformEvents` method to [debounce](http://reactivex.io/documentation/operators/debounce.html) the `GithubSearchEvents`.
+?> **Note:** We override the `transformEvents` method to [debounce](http://reactivex.io/documentation/operators/debounce.html) the `GithubSearchEvents`. One of the reasons why we created a `Bloc` instead of a `Cubit` was to take advantage of these reactive operators. 
 
 Awesome! We're all done with our `common_github_search` package.
 The finished product should look like [this](https://github.com/felangel/Bloc/tree/master/examples/github_search/common_github_search).
@@ -210,7 +213,7 @@ We're done with `_SearchBar`, now onto `_SearchBody`.
 
 [search_form.dart](_snippets/flutter_angular_github_search/flutter/search_body.dart.md ':include')
 
-?> **Note:** `_SearchBody` also accesses `GithubSearchBloc` via `BlocProvider` and uses `BlocBuilder` in order to rebuild in response to state changes. Since the bloc parameter of the `BlocBuilder` object was omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`. Read more [here](https://bloclibrary.dev/#/flutterbloccoreconcepts?id=blocbuilder)
+?> **Note:** `_SearchBody` uses `BlocBuilder` in order to rebuild in response to state changes. Since the bloc parameter of the `BlocBuilder` object was omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`. Read more [here.](https://bloclibrary.dev/#/flutterbloccoreconcepts?id=blocbuilder)
 
 If our state is `SearchStateSuccess` we render `_SearchResults` which we will implement next.
 

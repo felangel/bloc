@@ -7,7 +7,7 @@ import 'package:flutter_firestore_todos/widgets/widgets.dart';
 import 'package:flutter_firestore_todos/screens/screens.dart';
 
 class FilteredTodos extends StatelessWidget {
-  FilteredTodos({Key key}) : super(key: key);
+  FilteredTodos({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +24,13 @@ class FilteredTodos extends StatelessWidget {
               return TodoItem(
                 todo: todo,
                 onDismissed: (direction) {
-                  BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
+                  context.read<TodosBloc>().add(DeleteTodo(todo));
                   ScaffoldMessenger.of(context).showSnackBar(
                     DeleteTodoSnackBar(
                       todo: todo,
-                      onUndo: () => BlocProvider.of<TodosBloc>(context)
-                          .add(AddTodo(todo)),
+                      onUndo: () {
+                        context.read<TodosBloc>().add(AddTodo(todo));
+                      },
                     ),
                   );
                 },
@@ -43,16 +44,17 @@ class FilteredTodos extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       DeleteTodoSnackBar(
                         todo: todo,
-                        onUndo: () => BlocProvider.of<TodosBloc>(context)
-                            .add(AddTodo(todo)),
+                        onUndo: () {
+                          context.read<TodosBloc>().add(AddTodo(todo));
+                        },
                       ),
                     );
                   }
                 },
                 onCheckboxChanged: (_) {
-                  BlocProvider.of<TodosBloc>(context).add(
-                    UpdateTodo(todo.copyWith(complete: !todo.complete)),
-                  );
+                  context
+                      .read<TodosBloc>()
+                      .add(UpdateTodo(todo.copyWith(complete: !todo.complete)));
                 },
               );
             },

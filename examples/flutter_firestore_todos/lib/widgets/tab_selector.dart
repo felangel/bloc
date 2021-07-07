@@ -8,9 +8,9 @@ class TabSelector extends StatelessWidget {
   final Function(AppTab) onTabSelected;
 
   TabSelector({
-    Key key,
-    @required this.activeTab,
-    @required this.onTabSelected,
+    Key? key,
+    required this.activeTab,
+    required this.onTabSelected,
   }) : super(key: key);
 
   @override

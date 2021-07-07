@@ -17,14 +17,14 @@
     - [タイマー](jp/fluttertimertutorial.md)
     - [無限リスト](jp/flutterinfinitelisttutorial.md)
     - [**ログイン** <sup>✨</sup>](jp/flutterlogintutorial.md)
-    - [天気](jp/flutterweathertutorial.md)
+    - [**天気** <sup>✨</sup>](flutterweathertutorial.md)
     - [やることリスト](jp/fluttertodostutorial.md)
     - [**Firebaseログイン** <sup>✨</sup>](jp/flutterfirebaselogintutorial.md)
     - [Firestoreやることリスト](jp/flutterfirestoretodostutorial.md)
   - AngularDart
     - [カウンター](jp/angularcountertutorial.md)
   - Flutter + AngularDart
-    - [Github検索](jp/flutterangulargithubsearch.md)
+    - [**Github検索** <sup>✨</sup>](jp/flutterangulargithubsearch.md)
 
 - レシピ
 

@@ -13,18 +13,18 @@
 - 튜토리얼
 
   - Flutter
-    - [Counter](fluttercountertutorial.md)
-    - [Timer](fluttertimertutorial.md)
-    - [Infinite List](flutterinfinitelisttutorial.md)
-    - [Login](flutterlogintutorial.md)
-    - [Weather](flutterweathertutorial.md)
+    - [**Counter** <sup>✨</sup>](fluttercountertutorial.md)
+    - [**Timer** <sup>✨</sup>](fluttertimertutorial.md)
+    - [**Infinite List** <sup>✨</sup>](flutterinfinitelisttutorial.md)
+    - [**Login** <sup>✨</sup>](flutterlogintutorial.md)
+    - [**Weather** <sup>✨</sup>](flutterweathertutorial.md)
     - [Todos](fluttertodostutorial.md)
-    - [Firebase Login](flutterfirebaselogintutorial.md)
+    - [**Firebase Login** <sup>✨</sup>](flutterfirebaselogintutorial.md)
     - [Firestore Todos](flutterfirestoretodostutorial.md)
   - AngularDart
     - [Counter](angularcountertutorial.md)
   - Flutter + AngularDart
-    - [Github Search](flutterangulargithubsearch.md)
+    - [**Github Search** <sup>✨</sup>](flutterangulargithubsearch.md)
 
 - Recipes
 

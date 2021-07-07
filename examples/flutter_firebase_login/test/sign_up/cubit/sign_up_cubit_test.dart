@@ -115,6 +115,32 @@ void main() {
           ),
         ],
       );
+
+      blocTest<SignUpCubit, SignUpState>(
+        'emits [valid] when confirmedPasswordChanged is called first and then '
+        'passwordChanged is called',
+        build: () => SignUpCubit(authenticationRepository),
+        seed: () => SignUpState(
+          email: validEmail,
+        ),
+        act: (cubit) => cubit
+          ..confirmedPasswordChanged(validConfirmedPasswordString)
+          ..passwordChanged(validPasswordString),
+        expect: () => const <SignUpState>[
+          SignUpState(
+            email: validEmail,
+            password: Password.pure(),
+            confirmedPassword: validConfirmedPassword,
+            status: FormzStatus.invalid,
+          ),
+          SignUpState(
+            email: validEmail,
+            password: validPassword,
+            confirmedPassword: validConfirmedPassword,
+            status: FormzStatus.valid,
+          ),
+        ],
+      );
     });
 
     group('confirmedPasswordChanged', () {
@@ -139,6 +165,34 @@ void main() {
           validConfirmedPasswordString,
         ),
         expect: () => const <SignUpState>[
+          SignUpState(
+            email: validEmail,
+            password: validPassword,
+            confirmedPassword: validConfirmedPassword,
+            status: FormzStatus.valid,
+          ),
+        ],
+      );
+
+      blocTest<SignUpCubit, SignUpState>(
+        'emits [valid] when passwordChanged is called first and then '
+        'confirmedPasswordChanged is called',
+        build: () => SignUpCubit(authenticationRepository),
+        seed: () => SignUpState(
+          email: validEmail,
+        ),
+        act: (cubit) => cubit
+          ..passwordChanged(validPasswordString)
+          ..confirmedPasswordChanged(validConfirmedPasswordString),
+        expect: () => const <SignUpState>[
+          SignUpState(
+            email: validEmail,
+            password: validPassword,
+            confirmedPassword: ConfirmedPassword.dirty(
+              password: validPasswordString,
+            ),
+            status: FormzStatus.invalid,
+          ),
           SignUpState(
             email: validEmail,
             password: validPassword,
