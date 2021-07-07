@@ -35,7 +35,7 @@ class SignUpCubit extends Cubit<SignUpState> {
       status: Formz.validate([
         state.email,
         password,
-        state.confirmedPassword,
+        confirmedPassword,
       ]),
     ));
   }
