@@ -152,6 +152,12 @@ Here is our complete `weather.dart` model file:
 
 [weather.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/meta_weather_api/lib/src/models/weather.dart ':include')
 
+#### Create Build File
+
+In the `meta_weather_api` folder, create a `build.yaml` file. The purpose of this file is to handle discrepancies between naming conventions in the `json_serializable` field names.
+
+[script](_snippets/flutter_weather_tutorial/data_layer/build.yaml_data.md ':include')
+
 #### Code Generation
 
 Let's use `build_runner` to generate the code.
@@ -265,6 +271,12 @@ Update the barrel file we created previously to include the models.
 
 [models.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/src/models/models.dart ':include')
 
+#### Create Build File
+
+As before, we need to create a `build.yaml` file with the following contents:
+
+[script](_snippets/flutter_weather_tutorial/repository_layer/build.yaml_repository.md ':include')
+
 #### Code Generation
 
 As we have done previously, run the following command to generate the (de)serialization implementation.
@@ -322,6 +334,12 @@ Next, we will be working on the application layer within the `weather` feature d
 > The goal of our weather model is to keep track of weather data displayed by our app, as well as temperature settings (Celsius or Fahrenheit).
 
 [weather.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/models/weather.dart ':include')
+
+### Create Build File
+
+Create a `build.yaml` file for the business logic layer.
+
+[script](_snippets/flutter_weather_tutorial/business_logic_layer/build.yaml_business.md ':include')
 
 ### Code Generation
 

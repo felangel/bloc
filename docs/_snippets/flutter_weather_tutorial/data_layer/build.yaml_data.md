@@ -1,0 +1,14 @@
+```yaml
+targets:
+  $default:
+    builders:
+      source_gen|combining_builder:
+        options:
+          ignore_for_file:
+            - implicit_dynamic_parameter
+      json_serializable:
+        options:
+          field_rename: snake
+          create_to_json: false
+          checked: true
+```
