@@ -19,7 +19,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
                 )
               : FilteredTodosLoadInProgress(),
         ) {
-    todosSubscription = todosBloc.listen((state) {
+    todosSubscription = todosBloc.stream.listen((state) {
       if (state is TodosLoadSuccess) {
         add(TodosUpdated((todosBloc.state as TodosLoadSuccess).todos));
       }
@@ -29,13 +29,13 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   @override
   Stream<FilteredTodosState> mapEventToState(FilteredTodosEvent event) async* {
     if (event is FilterUpdated) {
-      yield* _mapUpdateFilterToState(event);
+      yield* _mapFilterUpdatedToState(event);
     } else if (event is TodosUpdated) {
       yield* _mapTodosUpdatedToState(event);
     }
   }
 
-  Stream<FilteredTodosState> _mapUpdateFilterToState(
+  Stream<FilteredTodosState> _mapFilterUpdatedToState(
     FilterUpdated event,
   ) async* {
     if (todosBloc.state is TodosLoadSuccess) {

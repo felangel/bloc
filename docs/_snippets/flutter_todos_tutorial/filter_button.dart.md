@@ -21,7 +21,8 @@ class FilterButton extends StatelessWidget {
         builder: (context, state) {
       final button = _Button(
         onSelected: (filter) {
-          BlocProvider.of<FilteredTodosBloc>(context).add(FilterUpdated(filter));
+          BlocProvider.of<FilteredTodosBloc>(context)
+              .add(FilterUpdated(filter));
         },
         activeFilter: state is FilteredTodosLoadSuccess
             ? state.activeFilter
@@ -59,37 +60,37 @@ class _Button extends StatelessWidget {
       tooltip: ArchSampleLocalizations.of(context).filterTodos,
       onSelected: onSelected,
       itemBuilder: (BuildContext context) => <PopupMenuItem<VisibilityFilter>>[
-            PopupMenuItem<VisibilityFilter>(
-              key: ArchSampleKeys.allFilter,
-              value: VisibilityFilter.all,
-              child: Text(
-                ArchSampleLocalizations.of(context).showAll,
-                style: activeFilter == VisibilityFilter.all
-                    ? activeStyle
-                    : defaultStyle,
-              ),
-            ),
-            PopupMenuItem<VisibilityFilter>(
-              key: ArchSampleKeys.activeFilter,
-              value: VisibilityFilter.active,
-              child: Text(
-                ArchSampleLocalizations.of(context).showActive,
-                style: activeFilter == VisibilityFilter.active
-                    ? activeStyle
-                    : defaultStyle,
-              ),
-            ),
-            PopupMenuItem<VisibilityFilter>(
-              key: ArchSampleKeys.completedFilter,
-              value: VisibilityFilter.completed,
-              child: Text(
-                ArchSampleLocalizations.of(context).showCompleted,
-                style: activeFilter == VisibilityFilter.completed
-                    ? activeStyle
-                    : defaultStyle,
-              ),
-            ),
-          ],
+        PopupMenuItem<VisibilityFilter>(
+          key: ArchSampleKeys.allFilter,
+          value: VisibilityFilter.all,
+          child: Text(
+            ArchSampleLocalizations.of(context).showAll,
+            style: activeFilter == VisibilityFilter.all
+                ? activeStyle
+                : defaultStyle,
+          ),
+        ),
+        PopupMenuItem<VisibilityFilter>(
+          key: ArchSampleKeys.activeFilter,
+          value: VisibilityFilter.active,
+          child: Text(
+            ArchSampleLocalizations.of(context).showActive,
+            style: activeFilter == VisibilityFilter.active
+                ? activeStyle
+                : defaultStyle,
+          ),
+        ),
+        PopupMenuItem<VisibilityFilter>(
+          key: ArchSampleKeys.completedFilter,
+          value: VisibilityFilter.completed,
+          child: Text(
+            ArchSampleLocalizations.of(context).showCompleted,
+            style: activeFilter == VisibilityFilter.completed
+                ? activeStyle
+                : defaultStyle,
+          ),
+        ),
+      ],
       icon: Icon(Icons.filter_list),
     );
   }
