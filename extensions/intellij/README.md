@@ -24,6 +24,9 @@ If you wish to disable this quick code action `(Bloc) Wrap with` you can do it s
 
 ![intention_settings](https://github.com/felangel/bloc/raw/master/extensions/intellij/assets/intention_settings.png)
 
+### Equatable props generator
+// TODO: Add an image?
+
 ## Snippets
 
 ### Bloc
