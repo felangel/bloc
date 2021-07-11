@@ -25,7 +25,10 @@ If you wish to disable this quick code action `(Bloc) Wrap with` you can do it s
 ![intention_settings](https://github.com/felangel/bloc/raw/master/extensions/intellij/assets/intention_settings.png)
 
 ### Equatable props generator
-// TODO: Add an image?
+
+Right click and use `Generate -> Equatable Props` to automatically generate the `props` override when using `Equatable`.
+
+![equatable_props_override](https://github.com/felangel/bloc/raw/master/extensions/intellij/assets/equatable_props_override.png)
 
 ## Snippets
 
