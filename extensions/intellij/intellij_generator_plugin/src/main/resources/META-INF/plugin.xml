@@ -11,6 +11,7 @@
 
     <change-notes><![CDATA[
         <ul>
+          <li>v2.3.0 - Add Equatable Props Generator and Live Templates Bloc/Cubit selection support</li>
           <li>v2.2.1 - Fix Wrapping Errors</li>
           <li>v2.2.0 - Wrap With Quick Action Support</li>
           <li>v2.1.0 - Live Template Support</li>
