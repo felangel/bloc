@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -126,17 +124,16 @@ enum CounterEvent {
 /// {@endtemplate}
 class CounterBloc extends Bloc<CounterEvent, int> {
   /// {@macro counter_bloc}
-  CounterBloc() : super(0);
+  CounterBloc() : super(0) {
+    on<CounterEvent>(_onEvent);
+  }
 
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
+  void _onEvent(CounterEvent event, Emit<int> emit) {
     switch (event) {
       case CounterEvent.decrement:
-        yield state - 1;
-        break;
+        return emit(state - 1);
       case CounterEvent.increment:
-        yield state + 1;
-        break;
+        return emit(state + 1);
       case CounterEvent.error:
         addError(Exception('unsupported event'));
     }

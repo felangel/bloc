@@ -1,10 +1,19 @@
 import 'package:bloc/bloc.dart';
-import 'package:rxdart/rxdart.dart';
 
 import '../blocs.dart';
 
+EventModifier<CounterEvent> custom() {
+  return (event, events, next) async {
+    if (event == CounterEvent.decrement) return next();
+    if (events.isEmpty) return next();
+    await Future<void>.delayed(const Duration(milliseconds: 100), next);
+  };
+}
+
 class MergeBloc extends Bloc<CounterEvent, int> {
-  MergeBloc({this.onTransitionCallback}) : super(0);
+  MergeBloc({this.onTransitionCallback}) : super(0) {
+    on<CounterEvent>(_onCounterEvent, custom());
+  }
 
   final void Function(Transition<CounterEvent, int>)? onTransitionCallback;
 
@@ -14,35 +23,12 @@ class MergeBloc extends Bloc<CounterEvent, int> {
     onTransitionCallback?.call(transition);
   }
 
-  @override
-  Stream<Transition<CounterEvent, int>> transformEvents(
-    Stream<CounterEvent> events,
-    TransitionFunction<CounterEvent, int> transitionFn,
-  ) {
-    final nonDebounceStream =
-        events.where((event) => event != CounterEvent.increment);
-
-    final debounceStream = events
-        .where((event) => event == CounterEvent.increment)
-        .throttleTime(const Duration(milliseconds: 100));
-
-    return super.transformEvents(
-      MergeStream([nonDebounceStream, debounceStream]),
-      transitionFn,
-    );
-  }
-
-  @override
-  Stream<int> mapEventToState(
-    CounterEvent event,
-  ) async* {
+  void _onCounterEvent(CounterEvent event, Emit<int> emit) {
     switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
       case CounterEvent.increment:
-        yield state + 1;
-        break;
+        return emit(state + 1);
+      case CounterEvent.decrement:
+        return emit(state - 1);
     }
   }
 }

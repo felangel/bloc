@@ -6,8 +6,11 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   late StreamSubscription _todosSubscription;
 
   StatsBloc({required TodosBloc todosBloc}) : super(StatsLoading()) {
+    on<UpdateStats>(_onUpdateStats);
     final todosState = todosBloc.state;
-    if (todosState is TodosLoaded) add(UpdateStats(todosState.todos));
+    if (todosState is TodosLoaded) {
+      scheduleMicrotask(() => add(UpdateStats(todosState.todos)));
+    }
     _todosSubscription = todosBloc.stream.listen((state) {
       if (state is TodosLoaded) {
         add(UpdateStats(state.todos));
@@ -15,14 +18,13 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     });
   }
 
-  @override
-  Stream<StatsState> mapEventToState(StatsEvent event) async* {
+  void _onUpdateStats(UpdateStats event, Emit<StatsState> emit) async {
     if (event is UpdateStats) {
       final numActive =
           event.todos.where((todo) => !todo.complete).toList().length;
       final numCompleted =
           event.todos.where((todo) => todo.complete).toList().length;
-      yield StatsLoaded(numActive, numCompleted);
+      emit(StatsLoaded(numActive, numCompleted));
     }
   }
 

@@ -2,12 +2,13 @@ import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 
 import 'blocs/blocs.dart';
 
 class MockRepository extends Mock implements Repository {}
+
+void unawaited(Future<void>? _) {}
 
 void main() {
   group('blocTest', () {
@@ -198,7 +199,7 @@ void main() {
       );
     });
 
-    group('InstanceEmitBloc', () {
+    group('InstantEmitBloc', () {
       blocTest<InstantEmitBloc, int>(
         'emits [1] when nothing is added',
         build: () => InstantEmitBloc(),

@@ -21,6 +21,16 @@ dependencies:
   weather_repository:
     path: packages/weather_repository
 
+dependency_overrides:
+  bloc:
+    path: ../../packages/bloc
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
+  hydrated_bloc:
+    path: ../../packages/hydrated_bloc
+  bloc_test:
+    path: ../../packages/bloc_test
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

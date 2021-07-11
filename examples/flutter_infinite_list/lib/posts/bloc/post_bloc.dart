@@ -5,57 +5,42 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_infinite_list/posts/posts.dart';
 import 'package:http/http.dart' as http;
-import 'package:rxdart/rxdart.dart';
 
 part 'post_event.dart';
 part 'post_state.dart';
 
 const _postLimit = 20;
 
+const _debounceDuration = Duration(milliseconds: 500);
+
 class PostBloc extends Bloc<PostEvent, PostState> {
-  PostBloc({required this.httpClient}) : super(const PostState());
+  PostBloc({required this.httpClient}) : super(const PostState()) {
+    on<PostFetched>(_onPostFetched, debounceTime(_debounceDuration));
+  }
 
   final http.Client httpClient;
 
-  @override
-  Stream<Transition<PostEvent, PostState>> transformEvents(
-    Stream<PostEvent> events,
-    TransitionFunction<PostEvent, PostState> transitionFn,
-  ) {
-    return super.transformEvents(
-      events.debounceTime(const Duration(milliseconds: 500)),
-      transitionFn,
-    );
-  }
-
-  @override
-  Stream<PostState> mapEventToState(PostEvent event) async* {
-    if (event is PostFetched) {
-      yield await _mapPostFetchedToState(state);
-    }
-  }
-
-  Future<PostState> _mapPostFetchedToState(PostState state) async {
-    if (state.hasReachedMax) return state;
+  void _onPostFetched(PostFetched event, Emit<PostState> emit) async {
+    if (state.hasReachedMax) return;
     try {
       if (state.status == PostStatus.initial) {
         final posts = await _fetchPosts();
-        return state.copyWith(
+        return emit(state.copyWith(
           status: PostStatus.success,
           posts: posts,
           hasReachedMax: false,
-        );
+        ));
       }
       final posts = await _fetchPosts(state.posts.length);
-      return posts.isEmpty
+      emit(posts.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
               status: PostStatus.success,
               posts: List.of(state.posts)..addAll(posts),
               hasReachedMax: false,
-            );
+            ));
     } on Exception {
-      return state.copyWith(status: PostStatus.failure);
+      emit(state.copyWith(status: PostStatus.failure));
     }
   }
 

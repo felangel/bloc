@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter_graphql_jobs/api/api.dart';
 import 'package:flutter_graphql_jobs/api/job_api_client.dart';
@@ -12,22 +10,19 @@ class JobsBloc extends Bloc<JobsEvent, JobsState> {
   JobsBloc({@required JobsApiClient jobsApiClient})
       : assert(jobsApiClient != null),
         _jobsApiClient = jobsApiClient,
-        super(JobsLoadInProgress());
+        super(JobsLoadInProgress()) {
+    on<JobsFetchStarted>(_onJobsFetchStarted);
+  }
 
   final JobsApiClient _jobsApiClient;
 
-  @override
-  Stream<JobsState> mapEventToState(
-    JobsEvent event,
-  ) async* {
-    if (event is JobsFetchStarted) {
-      yield JobsLoadInProgress();
-      try {
-        final jobs = await _jobsApiClient.getJobs();
-        yield JobsLoadSuccess(jobs);
-      } on Exception catch (_) {
-        yield JobsLoadFailure();
-      }
+  void _onJobsFetchStarted(JobsFetchStarted event, Emit<JobsState> emit) async {
+    emit(JobsLoadInProgress());
+    try {
+      final jobs = await _jobsApiClient.getJobs();
+      emit(JobsLoadSuccess(jobs));
+    } on Exception catch (_) {
+      emit(JobsLoadFailure());
     }
   }
 }

@@ -52,26 +52,6 @@ void whenListen<State>(
     when(() => bloc.state).thenReturn(initialState);
   }
 
-  when(
-    // ignore: deprecated_member_use
-    () => bloc.listen(
-      any(),
-      onDone: any(named: 'onDone'),
-      onError: any(named: 'onError'),
-      cancelOnError: any(named: 'cancelOnError'),
-    ),
-  ).thenAnswer((invocation) {
-    return broadcastStream.listen(
-      (state) {
-        when(() => bloc.state).thenReturn(state);
-        (invocation.positionalArguments.first as Function(State)).call(state);
-      },
-      onError: invocation.namedArguments[#onError] as Function?,
-      onDone: invocation.namedArguments[#onDone] as void Function()?,
-      cancelOnError: invocation.namedArguments[#cancelOnError] as bool?,
-    );
-  });
-
   when(() => bloc.stream).thenAnswer(
     (_) => broadcastStream.map((state) {
       when(() => bloc.state).thenReturn(state);
