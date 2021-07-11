@@ -2,56 +2,72 @@
 <templateSet group="Bloc">
     <!--        WIDGETS        -->
     <template name="blocbuilder"
-              value="BlocBuilder&lt;$Subject$Bloc, $Subject$State&gt;(&#10;  builder: (context, state) {&#10;    return $Container$;&#10;  },&#10;)"
+              value="BlocBuilder&lt;$Subject$$EnumBloc$, $Subject$State&gt;(&#10;  builder: (context, state) {&#10;    return $Container$;&#10;  },&#10;)"
               description="BlocBuilder widget" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
+                  alwaysStopAt="true"/>
         <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
         <context>
             <option name="DART" value="true"/>
         </context>
     </template>
     <template name="blocconsumer"
-              value="BlocConsumer&lt;$Subject$Bloc, $Subject$State&gt;(&#10;  listener: (context, state) {&#10;    // TODO: implement listener&#10;  },&#10;  builder: (context, state) {&#10;    return $Container$;&#10;  },&#10;)"
+              value="BlocConsumer&lt;$Subject$$EnumBloc$, $Subject$State&gt;(&#10;  listener: (context, state) {&#10;    // TODO: implement listener&#10;  },&#10;  builder: (context, state) {&#10;    return $Container$;&#10;  },&#10;)"
               description="BlocConsumer widget" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
+                  alwaysStopAt="true"/>
         <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
         <context>
             <option name="DART" value="true"/>
         </context>
     </template>
     <template name="bloclistener"
-              value="BlocListener&lt;$Subject$Bloc, $Subject$State&gt;(&#10;  listener: (context, state) {&#10;    // TODO: implement listener&#10;  },&#10;  child: $Container$,&#10;)"
+              value="BlocListener&lt;$Subject$$EnumBloc$, $Subject$State&gt;(&#10;  listener: (context, state) {&#10;    // TODO: implement listener&#10;  },&#10;  child: $Container$,&#10;)"
               description="BlocListener widget" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
+                  alwaysStopAt="true"/>
         <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
         <context>
             <option name="DART" value="true"/>
         </context>
     </template>
     <template name="blocprovider"
-              value="BlocProvider&lt;$Subject$Bloc&gt;(&#10;  create: (context) =&gt; $Subject$Bloc(),&#10;  child: $Container$,&#10;)"
+              value="BlocProvider&lt;$Subject$$EnumBloc$&gt;(&#10;  create: (context) =&gt; $Subject$$EnumBloc$(),&#10;  child: $Container$,&#10;)"
               description="BlocProvider widget" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
+                  alwaysStopAt="true"/>
         <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
         <context>
             <option name="DART" value="true"/>
         </context>
     </template>
     <template name="multibloclistener"
-              value="MultiBlocListener(&#10;  listeners: [&#10;    BlocListener&lt;$Subject$Bloc, $Subject$State&gt;(&#10;      listener: (context, state) {&#10;        // TODO: implement listener&#10;      },&#10;    ),&#10;    BlocListener&lt;$Subject2$Bloc, $Subject2$State&gt;(&#10;      listener: (context, state) {&#10;        // TODO: implement listener&#10;      },&#10;    ),&#10;  ],&#10;  child: $Container$,&#10;)"
+              value="MultiBlocListener(&#10;  listeners: [&#10;    BlocListener&lt;$Subject$$EnumBloc$, $Subject$State&gt;(&#10;      listener: (context, state) {&#10;        // TODO: implement listener&#10;      },&#10;    ),&#10;    BlocListener&lt;$Subject2$$EnumBloc2$, $Subject2$State&gt;(&#10;      listener: (context, state) {&#10;        // TODO: implement listener&#10;      },&#10;    ),&#10;  ],&#10;  child: $Container$,&#10;)"
               description="MultiBlocListener widget" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
+                  alwaysStopAt="true"/>
         <variable name="Subject2" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="EnumBloc2" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
+                  alwaysStopAt="true"/>
         <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
         <context>
             <option name="DART" value="true"/>
         </context>
     </template>
     <template name="multiblocprovider"
-              value="MultiBlocProvider(&#10;  providers: [&#10;    BlocProvider(&#10;      create: (context) =&gt; $Subject$Bloc(),&#10;    ),&#10;    BlocProvider(&#10;      create: (context) =&gt; $Subject2$Bloc(),&#10;    ),&#10;  ],&#10;  child: $Container$,&#10;)"
+              value="MultiBlocProvider(&#10;  providers: [&#10;    BlocProvider&lt;$Subject$$EnumBloc$&gt;(&#10;      create: (context) =&gt; $Subject$$EnumBloc$(),&#10;    ),&#10;    BlocProvider&lt;$Subject2$$EnumBloc2$&gt;(&#10;      create: (context) =&gt; $Subject2$$EnumBloc2$(),&#10;    ),&#10;  ],&#10;  child: $Container$,&#10;)"
               description="MultiBlocProvider widget" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
+                  alwaysStopAt="true"/>
         <variable name="Subject2" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="EnumBloc2" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
+                  alwaysStopAt="true"/>
         <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
         <context>
             <option name="DART" value="true"/>
@@ -123,9 +139,11 @@
     </template>
 
     <!--        MISC        -->
-    <template name="read" value="context.read&lt;$Subject$Bloc&gt;()" description="context.read()" toReformat="false"
-              toShortenFQNames="true">
+    <template name="read" value="context.read&lt;$Subject$$EnumBloc$&gt;()" description="context.read()"
+              toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
+                  alwaysStopAt="true"/>
         <context>
             <option name="DART" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
@@ -139,62 +157,69 @@
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
-    <template name="select" value="context.select(($Subject$Bloc element) =&gt; element.state)"
+    <template name="select"
+              value="context.select(($Subject$$EnumBloc$ $enumBlocLowercase$) =&gt; $enumBlocLowercase$.state)"
               description="context.select()" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
+                  alwaysStopAt="true"/>
+        <variable name="enumBlocLowercase" expression="lowercaseAndDash(EnumBloc)" defaultValue="&quot;bloc&quot;"
+                  alwaysStopAt="false"/>
         <context>
             <option name="DART" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
-    <template name="watch" value="context.watch&lt;$Subject$Bloc&gt;()" description="context.watch()" toReformat="false"
-              toShortenFQNames="true">
-        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
-        <context>
-            <option name="DART" value="true"/>
-            <option name="DART_TOPLEVEL" value="false"/>
-        </context>
-    </template>
-    <template name="blocof" value="BlocProvider.of&lt;$Subject$Bloc&gt;(context)" description="BlocProvider.of()"
+    <template name="watch" value="context.watch&lt;$Subject$$EnumBloc$&gt;()" description="context.watch()"
               toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
+                  alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
+    <template name="blocof" value="BlocProvider.of&lt;$Subject$$EnumBloc$&gt;(context)" description="BlocProvider.of()"
+              toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
+                  alwaysStopAt="true"/>
         <context>
             <option name="DART" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
     <template name="bloctest"
-              value="blocTest&lt;$Subject$Bloc, $Subject$State&gt;(&#10;  $DESCRIPTION$,&#10;  build: () =&gt; $Subject$Bloc(),&#10;  act: (bloc) {&#10;    // TODO: implement&#10;  },&#10;  expect: () =&gt; &lt;$Subject$State&gt;[&#10;    // TODO: implement&#10;  ],&#10;);"
+              value="blocTest&lt;$Subject$$EnumBloc$, $Subject$State&gt;(&#10;  $DESCRIPTION$,&#10;  build: () =&gt; $Subject$$EnumBloc$(),&#10;  act: ($enumBlocLowercase$) {&#10;    // TODO: implement&#10;  },&#10;  expect: () =&gt; &lt;$Subject$State&gt;[&#10;    // TODO: implement&#10;  ],&#10;);"
               description="blocTest with build, act and expect" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
+                  alwaysStopAt="true"/>
         <variable name="DESCRIPTION" expression="" defaultValue="&quot;'TODO: description'&quot;" alwaysStopAt="true"/>
+        <variable name="enumBlocLowercase" expression="lowercaseAndDash(EnumBloc)" defaultValue="&quot;bloc&quot;"
+                  alwaysStopAt="false"/>
         <context>
             <option name="DART" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
-    <template name="importbloc"
-              value="import 'package:bloc/bloc.dart';"
-              description="Import package:bloc" toReformat="false" toShortenFQNames="true">
+    <template name="importbloc" value="import 'package:bloc/bloc.dart';" description="Import package:bloc"
+              toReformat="false" toShortenFQNames="true">
         <context>
-            <option name="DART" value="true"/>
-            <option name="DART_TOPLEVEL" value="false"/>
+            <option name="DART_TOPLEVEL" value="true"/>
         </context>
     </template>
-    <template name="importflutterbloc"
-              value="import 'package:flutter_bloc/flutter_bloc.dart';"
+    <template name="importflutterbloc" value="import 'package:flutter_bloc/flutter_bloc.dart';"
               description="Import package:flutter_bloc" toReformat="false" toShortenFQNames="true">
         <context>
-            <option name="DART" value="true"/>
-            <option name="DART_TOPLEVEL" value="false"/>
+            <option name="DART_TOPLEVEL" value="true"/>
         </context>
     </template>
-    <template name="importbloctest"
-              value="import 'package:bloc_test/bloc_test.dart';"
+    <template name="importbloctest" value="import 'package:bloc_test/bloc_test.dart';"
               description="Import package:bloc_test" toReformat="false" toShortenFQNames="true">
         <context>
-            <option name="DART" value="true"/>
-            <option name="DART_TOPLEVEL" value="false"/>
+            <option name="DART_TOPLEVEL" value="true"/>
         </context>
     </template>
 
