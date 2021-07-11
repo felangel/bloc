@@ -1,0 +1,9 @@
+```yaml
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          field_rename: snake
+          checked: true
+```

@@ -31,13 +31,15 @@ class FilteredTodos extends StatelessWidget {
                 todo: todo,
                 onDismissed: (direction) {
                   BlocProvider.of<TodosBloc>(context).add(TodoDeleted(todo));
-                  ScaffoldMessenger.of(context).showSnackBar(DeleteTodoSnackBar(
-                    key: ArchSampleKeys.snackbar,
-                    todo: todo,
-                    onUndo: () =>
-                        BlocProvider.of<TodosBloc>(context).add(TodoAdded(todo)),
-                    localizations: localizations,
-                  ));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    DeleteTodoSnackBar(
+                      key: ArchSampleKeys.snackbar,
+                      todo: todo,
+                      onUndo: () => BlocProvider.of<TodosBloc>(context)
+                          .add(TodoAdded(todo)),
+                      localizations: localizations,
+                    ),
+                  );
                 },
                 onTap: () async {
                   final removedTodo = await Navigator.of(context).push(
@@ -46,13 +48,15 @@ class FilteredTodos extends StatelessWidget {
                     }),
                   );
                   if (removedTodo != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(DeleteTodoSnackBar(
-                      key: ArchSampleKeys.snackbar,
-                      todo: todo,
-                      onUndo: () => BlocProvider.of<TodosBloc>(context)
-                          .add(TodoAdded(todo)),
-                      localizations: localizations,
-                    ));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      DeleteTodoSnackBar(
+                        key: ArchSampleKeys.snackbar,
+                        todo: todo,
+                        onUndo: () => BlocProvider.of<TodosBloc>(context)
+                            .add(TodoAdded(todo)),
+                        localizations: localizations,
+                      ),
+                    );
                   }
                 },
                 onCheckboxChanged: (_) {
