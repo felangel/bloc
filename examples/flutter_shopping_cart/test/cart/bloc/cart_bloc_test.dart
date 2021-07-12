@@ -87,7 +87,7 @@ void main() {
     );
 
     blocTest<CartBloc, CartState>(
-      'emits [CartLoaded] when item is added successfully',
+      'emits [CartError] when item is not added successfully',
       build: () {
         when(() => shoppingRepository.addItemToCart(mockItemToAdd))
             .thenThrow(Exception('Error'));
