@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'package:test/test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
+
 import 'package:bloc/bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
 class MockStorage extends Mock implements Storage {}
@@ -68,6 +69,16 @@ class MyMultiHydratedCubit extends HydratedCubit<int> {
 
   @override
   String get id => _id;
+
+  @override
+  Map<String, int> toJson(int state) => {'value': state};
+
+  @override
+  int? fromJson(dynamic json) => json['value'] as int?;
+}
+
+class MyHydratedCubitWithCustomStorage extends HydratedCubit<int> {
+  MyHydratedCubitWithCustomStorage([Storage? storage]) : super(0, storage);
 
   @override
   Map<String, int> toJson(int state) => {'value': state};
@@ -268,6 +279,83 @@ void main() {
         test('calls delete on storage', () async {
           await MyHydratedCubit().clear();
           verify(() => storage.delete('MyHydratedCubit')).called(1);
+        });
+      });
+    });
+
+    group('MyHydratedCubitWithCustomStorage', () {
+      setUp(() {
+        HydratedBloc.storage = null;
+      });
+
+      test('should throw StorageNotFound when storage is null', () {
+        expect(
+          () => MyHydratedCubitWithCustomStorage(),
+          throwsA(isA<StorageNotFound>()),
+        );
+      });
+
+      test('should call storage.write when onChange is called', () {
+        final transition = const Change<int>(currentState: 0, nextState: 0);
+        final expected = <String, int>{'value': 0};
+        MyHydratedCubitWithCustomStorage(storage).onChange(transition);
+        verify(
+          () => storage.write('MyHydratedCubitWithCustomStorage', expected),
+        ).called(2);
+      });
+
+      test('should throw BlocUnhandledErrorException when storage.write throws',
+          () {
+        runZonedGuarded(
+          () async {
+            final expectedError = Exception('oops');
+            final transition = const Change<int>(
+              currentState: 0,
+              nextState: 0,
+            );
+            when(
+              () => storage.write(any(), any<dynamic>()),
+            ).thenThrow(expectedError);
+            MyHydratedCubitWithCustomStorage(storage).onChange(transition);
+            await Future<void>.delayed(const Duration(seconds: 300));
+            fail('should throw');
+          },
+          (error, _) {
+            expect(
+              (error as BlocUnhandledErrorException).error.toString(),
+              'Exception: oops',
+            );
+            expect(error.stackTrace, isNotNull);
+          },
+        );
+      });
+
+      test('stores initial state when instantiated', () {
+        MyHydratedCubitWithCustomStorage(storage);
+        verify(
+          () => storage.write('MyHydratedCubitWithCustomStorage', {'value': 0}),
+        ).called(1);
+      });
+
+      test('initial state should return 0 when fromJson returns null', () {
+        when<dynamic>(() => storage.read(any())).thenReturn(null);
+        expect(MyHydratedCubitWithCustomStorage(storage).state, 0);
+        verify<dynamic>(() => storage.read('MyHydratedCubitWithCustomStorage'))
+            .called(1);
+      });
+
+      test('initial state should return 101 when fromJson returns 101', () {
+        when<dynamic>(() => storage.read(any())).thenReturn({'value': 101});
+        expect(MyHydratedCubitWithCustomStorage(storage).state, 101);
+        verify<dynamic>(() => storage.read('MyHydratedCubitWithCustomStorage'))
+            .called(1);
+      });
+
+      group('clear', () {
+        test('calls delete on storage', () async {
+          await MyHydratedCubitWithCustomStorage(storage).clear();
+          verify(() => storage.delete('MyHydratedCubitWithCustomStorage'))
+              .called(1);
         });
       });
     });

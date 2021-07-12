@@ -1,10 +1,11 @@
 // ignore_for_file: invalid_use_of_protected_member
 import 'dart:async';
-import 'package:test/test.dart';
+
+import 'package:bloc/bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:bloc/bloc.dart';
 import 'package:pedantic/pedantic.dart';
+import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
 class MockStorage extends Mock implements Storage {}
@@ -62,6 +63,21 @@ class MyHydratedBloc extends HydratedBloc<int, int> {
 
   @override
   String get id => _id ?? '';
+
+  @override
+  Stream<int> mapEventToState(int event) async* {}
+
+  @override
+  Map<String, int>? toJson(int state) {
+    return {'value': state};
+  }
+
+  @override
+  int? fromJson(Map<String, dynamic> json) => json['value'] as int?;
+}
+
+class MyHydratedBlocWithCustomStorage extends HydratedBloc<int, int> {
+  MyHydratedBlocWithCustomStorage(Storage storage) : super(0, storage);
 
   @override
   Stream<int> mapEventToState(int event) async* {}
@@ -469,6 +485,69 @@ void main() {
           },
           (_, __) {},
         ));
+      });
+    });
+
+    group('MyHydratedBlocWithCustomStorage', () {
+      setUp(() {
+        HydratedBloc.storage = null;
+      });
+
+      test('should call storage.write when onChange is called', () {
+        const expected = <String, int>{'value': 0};
+        const change = Change(currentState: 0, nextState: 0);
+        MyHydratedBlocWithCustomStorage(storage).onChange(change);
+        verify(() => storage.write('MyHydratedBlocWithCustomStorage', expected))
+            .called(2);
+      });
+
+      test('should call onError when storage.write throws', () {
+        runZonedGuarded(() async {
+          final expectedError = Exception('oops');
+          const change = Change(currentState: 0, nextState: 0);
+          final bloc = MyHydratedBlocWithCustomStorage(storage);
+          when(
+            () => storage.write(any(), any<dynamic>()),
+          ).thenThrow(expectedError);
+          bloc.onChange(change);
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+          verify(() => bloc.onError(expectedError, any())).called(2);
+        }, (error, _) {
+          expect(
+            (error as BlocUnhandledErrorException).error.toString(),
+            'Exception: oops',
+          );
+          expect((error).stackTrace, isNotNull);
+        });
+      });
+
+      test('stores initial state when instantiated', () {
+        MyHydratedBlocWithCustomStorage(storage);
+        verify(
+          () => storage.write('MyHydratedBlocWithCustomStorage', {'value': 0}),
+        ).called(1);
+      });
+
+      test('initial state should return 0 when fromJson returns null', () {
+        when<dynamic>(() => storage.read(any())).thenReturn(null);
+        expect(MyHydratedBlocWithCustomStorage(storage).state, 0);
+        verify<dynamic>(() => storage.read('MyHydratedBlocWithCustomStorage'))
+            .called(1);
+      });
+
+      test('initial state should return 101 when fromJson returns 101', () {
+        when<dynamic>(() => storage.read(any())).thenReturn({'value': 101});
+        expect(MyHydratedBlocWithCustomStorage(storage).state, 101);
+        verify<dynamic>(() => storage.read('MyHydratedBlocWithCustomStorage'))
+            .called(1);
+      });
+
+      group('clear', () {
+        test('calls delete on storage', () async {
+          await MyHydratedBlocWithCustomStorage(storage).clear();
+          verify(() => storage.delete('MyHydratedBlocWithCustomStorage'))
+              .called(1);
+        });
       });
     });
   });
