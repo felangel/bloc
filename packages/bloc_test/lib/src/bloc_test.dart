@@ -116,6 +116,7 @@ import 'package:test/test.dart' as test;
 @isTest
 void blocTest<B extends BlocBase<State>, State>(
   String description, {
+  FutureOr<void> Function()? setUp,
   required B Function() build,
   State Function()? seed,
   Function(B bloc)? act,
@@ -124,9 +125,11 @@ void blocTest<B extends BlocBase<State>, State>(
   dynamic Function()? expect,
   Function(B bloc)? verify,
   dynamic Function()? errors,
+  FutureOr<void> Function()? tearDown,
 }) {
   test.test(description, () async {
     await testBloc<B, State>(
+      setUp: setUp,
       build: build,
       seed: seed,
       act: act,
@@ -135,6 +138,7 @@ void blocTest<B extends BlocBase<State>, State>(
       expect: expect,
       verify: verify,
       errors: errors,
+      tearDown: tearDown,
     );
   });
 }
@@ -143,6 +147,7 @@ void blocTest<B extends BlocBase<State>, State>(
 /// This should never be used directly -- please use [blocTest] instead.
 @visibleForTesting
 Future<void> testBloc<B extends BlocBase<State>, State>({
+  FutureOr<void> Function()? setUp,
   required B Function() build,
   State Function()? seed,
   Function(B bloc)? act,
@@ -151,11 +156,13 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
   dynamic Function()? expect,
   Function(B bloc)? verify,
   dynamic Function()? errors,
+  FutureOr<void> Function()? tearDown,
 }) async {
   final unhandledErrors = <Object>[];
   var shallowEquality = false;
   await runZonedGuarded(
     () async {
+      await setUp?.call();
       final states = <State>[];
       final bloc = build();
       // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
@@ -178,6 +185,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       }
       await subscription.cancel();
       await verify?.call(bloc);
+      await tearDown?.call();
     },
     (Object error, _) {
       if (error is BlocUnhandledErrorException) {

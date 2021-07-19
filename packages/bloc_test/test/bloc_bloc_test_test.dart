@@ -506,6 +506,17 @@ void main() {
         },
       );
 
+      blocTest<SideEffectCounterBloc, int>(
+        'custom setUp is executed before build/act',
+        setUp: () {
+          when(() => repository.sideEffect()).thenThrow(Exception());
+        },
+        build: () => SideEffectCounterBloc(repository),
+        act: (bloc) => bloc.add(CounterEvent.increment),
+        expect: () => const <int>[],
+        errors: () => [isException],
+      );
+
       test('fails immediately when verify is incorrect', () async {
         const expectedError =
             '''Expected: <2>\n  Actual: <1>\nUnexpected number of calls\n''';
