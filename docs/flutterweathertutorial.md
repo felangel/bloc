@@ -185,13 +185,13 @@ Our API client will expose two methods:
 
 #### Location Search
 
-The `locationSearch` method hits the location API and throws `LocationIdRequestFailiure` errors as applicable. The completed method looks as follows:
+The `locationSearch` method hits the location API and throws `LocationIdRequestFailure` errors as applicable. The completed method looks as follows:
 
 [meta_weather_api_client.dart](_snippets/flutter_weather_tutorial/data_layer/location_search_method.dart.md ':include')
 
 #### Get Weather
 
-Similarly, the `getWeather` method hits the weather API and throws `WeatherRequestFailiure` errors as applicable. The completed method looks as follows:
+Similarly, the `getWeather` method hits the weather API and throws `WeatherRequestFailure` errors as applicable. The completed method looks as follows:
 
 [meta_weather_api_client.dart](_snippets/flutter_weather_tutorial/data_layer/get_weather_method.dart.md ':include')
 
