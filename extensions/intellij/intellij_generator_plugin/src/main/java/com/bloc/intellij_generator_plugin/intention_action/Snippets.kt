@@ -12,12 +12,15 @@ object Snippets {
     const val REPOSITORY_SNIPPET_KEY = PREFIX_SELECTION + SUFFIX_REPOSITORY
 
     @JvmStatic
-    fun getSnippet(snippetType: SnippetType?, widget: String): String {
+    fun getSnippet(snippetType: SnippetType?, blocWidget: String, widget: String): String {
         return when (snippetType) {
             SnippetType.BlocListener -> blocListenerSnippet(widget)
             SnippetType.BlocProvider -> blocProviderSnippet(widget)
             SnippetType.BlocConsumer -> blocConsumerSnippet(widget)
             SnippetType.RepositoryProvider -> repositoryProviderSnippet(widget)
+            SnippetType.MultiBlocProvider -> multiBlocProviderSnippet(blocWidget, widget)
+            SnippetType.MultiBlocListener -> multiBlocListenerSnippet(blocWidget, widget)
+            SnippetType.MultiRepositoryProvider -> multiRepositoryProviderSnippet(blocWidget, widget)
             else -> blocBuilderSnippet(widget)
         }
     }
@@ -61,6 +64,44 @@ object Snippets {
         return "RepositoryProvider(\n" +
                 "  create: (context) => $REPOSITORY_SNIPPET_KEY(),\n" +
                 "    child: $widget,\n" +
+                ")"
+    }
+
+    private fun multiBlocProviderSnippet(blocWidget: String, widget: String): String {
+        return "MultiBlocProvider(\n" +
+                "  providers: [\n" +
+                "    $blocWidget,\n" +
+                "    BlocProvider<SubjectBloc>(\n" +
+                "      create: (context) => SubjectBloc(),\n" +
+                "    ),\n" +
+                "  ],\n" +
+                "  child: $widget,\n" +
+                ")"
+    }
+
+    private fun multiBlocListenerSnippet(blocWidget: String, widget: String): String {
+        return "MultiBlocListener(\n" +
+                "  listeners: [\n" +
+                "    $blocWidget,\n" +
+                "    BlocListener<SubjectBloc, SubjectState>(\n" +
+                "      listener: (context, state) {\n" +
+                "        // TODO: implement listener\n" +
+                "      },\n" +
+                "    ),\n" +
+                "  ],\n" +
+                "  child: $widget,\n" +
+                ")"
+    }
+
+    private fun multiRepositoryProviderSnippet(blocWidget: String, widget: String): String {
+        return "MultiRepositoryProvider(\n" +
+                "  providers: [\n" +
+                "    $blocWidget,\n" +
+                "    RepositoryProvider(\n" +
+                "      create: (context) => SubjectRepository(),\n" +
+                "    ),\n" +
+                "  ],\n" +
+                "  child: $widget,\n" +
                 ")"
     }
 }
