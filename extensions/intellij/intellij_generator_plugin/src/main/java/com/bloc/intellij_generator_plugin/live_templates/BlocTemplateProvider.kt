@@ -1,17 +1,13 @@
-package com.bloc.intellij_generator_plugin.live_templates;
+package com.bloc.intellij_generator_plugin.live_templates
 
-import com.intellij.codeInsight.template.impl.DefaultLiveTemplatesProvider;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInsight.template.impl.DefaultLiveTemplatesProvider
 
-public class BlocTemplateProvider implements DefaultLiveTemplatesProvider {
-    @Override
-    public String[] getDefaultLiveTemplateFiles() {
-        return new String[]{"liveTemplates/Bloc"};
+class BlocTemplateProvider : DefaultLiveTemplatesProvider {
+    override fun getDefaultLiveTemplateFiles(): Array<String> {
+        return arrayOf("liveTemplates/Bloc")
     }
 
-    @Nullable
-    @Override
-    public String[] getHiddenLiveTemplateFiles() {
-        return null;
+    override fun getHiddenLiveTemplateFiles(): Array<String>? {
+        return null
     }
 }

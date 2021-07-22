@@ -1,70 +1,66 @@
-package com.bloc.intellij_generator_plugin.intention_action;
+package com.bloc.intellij_generator_plugin.intention_action
 
-public class Snippets {
-    public static final String PREFIX_SELECTION = "Subject";
+object Snippets {
+    const val PREFIX_SELECTION = "Subject"
 
-    public static final String SUFFIX1 = "Bloc";
-    public static final String SUFFIX2 = "State";
-    public static final String SUFFIX3 = "Repository";
+    private const val SUFFIX_BLOC = "Bloc"
+    private const val SUFFIX_STATE = "State"
+    private const val SUFFIX_REPOSITORY = "Repository"
 
-    public static final String BLOC_SNIPPET_KEY = PREFIX_SELECTION + SUFFIX1;
-    public static final String STATE_SNIPPET_KEY = PREFIX_SELECTION + SUFFIX2;
-    public static final String REPOSITORY_SNIPPET_KEY = PREFIX_SELECTION + SUFFIX3;
+    const val BLOC_SNIPPET_KEY = PREFIX_SELECTION + SUFFIX_BLOC
+    const val STATE_SNIPPET_KEY = PREFIX_SELECTION + SUFFIX_STATE
+    const val REPOSITORY_SNIPPET_KEY = PREFIX_SELECTION + SUFFIX_REPOSITORY
 
-    static String getSnippet(SnippetType snippetType, String widget) {
-        switch (snippetType) {
-            case BlocListener:
-                return blocListenerSnippet(widget);
-            case BlocProvider:
-                return blocProviderSnippet(widget);
-            case BlocConsumer:
-                return blocConsumerSnippet(widget);
-            case RepositoryProvider:
-                return repositoryProviderSnippet(widget);
-            default:
-                return blocBuilderSnippet(widget);
+    @JvmStatic
+    fun getSnippet(snippetType: SnippetType?, widget: String): String {
+        return when (snippetType) {
+            SnippetType.BlocListener -> blocListenerSnippet(widget)
+            SnippetType.BlocProvider -> blocProviderSnippet(widget)
+            SnippetType.BlocConsumer -> blocConsumerSnippet(widget)
+            SnippetType.RepositoryProvider -> repositoryProviderSnippet(widget)
+            else -> blocBuilderSnippet(widget)
         }
     }
 
-    private static String blocBuilderSnippet(String widget) {
-        return String.format("BlocBuilder<%1$s, %2$s>(\n" +
+    private fun blocBuilderSnippet(widget: String): String {
+        return "BlocBuilder<$BLOC_SNIPPET_KEY, $STATE_SNIPPET_KEY>(\n" +
                 "  builder: (context, state) {\n" +
-                "    return %3$s;\n" +
+                "    return $widget;\n" +
                 "  },\n" +
-                ")", BLOC_SNIPPET_KEY, STATE_SNIPPET_KEY, widget);
+                ")"
     }
 
-    private static String blocListenerSnippet(String widget) {
-        return String.format("BlocListener<%1$s, %2$s>(\n" +
+    private fun blocListenerSnippet(widget: String): String {
+        return "BlocListener<$BLOC_SNIPPET_KEY, $STATE_SNIPPET_KEY>(\n" +
                 "  listener: (context, state) {\n" +
-                "    // TODO: implement listener}\n" +
+                "    // TODO: implement listener\n" +
                 "  },\n" +
-                "  child: %3$s,\n" +
-                ")", BLOC_SNIPPET_KEY, STATE_SNIPPET_KEY, widget);
+                "  child: $widget,\n" +
+                ")"
     }
 
-    private static String blocProviderSnippet(String widget) {
-        return String.format("BlocProvider(\n" +
-                "  create: (context) => %1$s(),\n" +
-                "  child: %2$s,\n" +
-                ")", BLOC_SNIPPET_KEY, widget);
+    private fun blocProviderSnippet(widget: String): String {
+        return "BlocProvider(\n" +
+                "  create: (context) => $BLOC_SNIPPET_KEY(),\n" +
+                "  child: $widget,\n" +
+                ")"
     }
 
-    private static String blocConsumerSnippet(String widget) {
-        return String.format("BlocConsumer<%1$s, %2$s>(\n" +
+    private fun blocConsumerSnippet(widget: String): String {
+        return "BlocConsumer<$BLOC_SNIPPET_KEY, $STATE_SNIPPET_KEY>(\n" +
                 "  listener: (context, state) {\n" +
                 "    // TODO: implement listener\n" +
                 "  },\n" +
                 "  builder: (context, state) {\n" +
-                "    return %3$s;\n" +
+                "    return $widget;\n" +
                 "  },\n" +
-                ")", BLOC_SNIPPET_KEY, STATE_SNIPPET_KEY, widget);
+                ")"
     }
 
-    private static String repositoryProviderSnippet(String widget) {
-        return String.format("RepositoryProvider(\n" +
-                "  create: (context) => %1$s(),\n" +
-                "    child: %2$s,\n" +
-                ")", REPOSITORY_SNIPPET_KEY, widget);
+    private fun repositoryProviderSnippet(widget: String): String {
+        return "RepositoryProvider(\n" +
+                "  create: (context) => $REPOSITORY_SNIPPET_KEY(),\n" +
+                "    child: $widget,\n" +
+                ")"
     }
 }
