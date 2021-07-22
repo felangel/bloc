@@ -20,21 +20,24 @@ abstract class BlocConvertToMultiIntentionAction(private val snippetType: Snippe
     override fun getFamilyName(): String = text
 
     override fun isAvailable(project: Project, editor: Editor?, psiElement: PsiElement): Boolean {
-        val shouldDisplay = Common.shouldDisplayWrapMenu(editor, project, psiElement)
-        if (!shouldDisplay) return false
+        val shouldDisplayWrapMenu = Common.shouldDisplayWrapMenu(editor, project, psiElement)
+        if (!shouldDisplayWrapMenu) return false
 
         callExpressionElement = callExpressionFinder(psiElement)
         if (callExpressionElement == null) return false
 
+        return shouldDisplayConvertMenu()
+    }
+
+    private fun shouldDisplayConvertMenu(): Boolean {
         val widgetName = callExpressionElement?.text ?: return false
         if (widgetName.startsWith(snippetType.toString().removePrefix("Multi"))
         ) {
-            val blocChildWidget = blocWidgetChildFinder(project, callExpressionElement!!) ?: return false
+            val blocChildWidget = blocWidgetChildFinder(callExpressionElement!!) ?: return false
             blocChildCallExpressionElement = blocChildWidget
             return true
         }
         return false
-
     }
 
     @Throws(IncorrectOperationException::class)
@@ -45,7 +48,7 @@ abstract class BlocConvertToMultiIntentionAction(private val snippetType: Snippe
                 editor,
                 snippetType,
                 callExpressionElement!!,
-                blocChildCallExpressionElement!!.text
+                blocChildCallExpressionElement!!
             )
         }
         WriteCommandAction.runWriteCommandAction(project, runnable)

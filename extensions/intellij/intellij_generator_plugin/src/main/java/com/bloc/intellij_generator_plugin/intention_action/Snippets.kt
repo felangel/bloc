@@ -67,41 +67,41 @@ object Snippets {
                 ")"
     }
 
-    private fun multiBlocProviderSnippet(blocWidget: String, widget: String): String {
+    private fun multiBlocProviderSnippet(blocChildWidget: String, widget: String): String {
         return "MultiBlocProvider(\n" +
                 "  providers: [\n" +
-                "    $blocWidget,\n" +
-                "    BlocProvider<SubjectBloc>(\n" +
-                "      create: (context) => SubjectBloc(),\n" +
+                "    $widget,\n" +
+                "    BlocProvider(\n" +
+                "      create: (context) => $BLOC_SNIPPET_KEY(),\n" +
                 "    ),\n" +
                 "  ],\n" +
-                "  child: $widget,\n" +
+                "  child: $blocChildWidget,\n" +
                 ")"
     }
 
-    private fun multiBlocListenerSnippet(blocWidget: String, widget: String): String {
+    private fun multiBlocListenerSnippet(blocChildWidget: String, widget: String): String {
         return "MultiBlocListener(\n" +
                 "  listeners: [\n" +
-                "    $blocWidget,\n" +
-                "    BlocListener<SubjectBloc, SubjectState>(\n" +
+                "    $widget,\n" +
+                "    BlocListener<$BLOC_SNIPPET_KEY, $STATE_SNIPPET_KEY>(\n" +
                 "      listener: (context, state) {\n" +
                 "        // TODO: implement listener\n" +
                 "      },\n" +
                 "    ),\n" +
                 "  ],\n" +
-                "  child: $widget,\n" +
+                "  child: $blocChildWidget,\n" +
                 ")"
     }
 
-    private fun multiRepositoryProviderSnippet(blocWidget: String, widget: String): String {
+    private fun multiRepositoryProviderSnippet(blocChildWidget: String, widget: String): String {
         return "MultiRepositoryProvider(\n" +
                 "  providers: [\n" +
-                "    $blocWidget,\n" +
+                "    $widget,\n" +
                 "    RepositoryProvider(\n" +
-                "      create: (context) => SubjectRepository(),\n" +
+                "      create: (context) => $REPOSITORY_SNIPPET_KEY(),\n" +
                 "    ),\n" +
                 "  ],\n" +
-                "  child: $widget,\n" +
+                "  child: $blocChildWidget,\n" +
                 ")"
     }
 }

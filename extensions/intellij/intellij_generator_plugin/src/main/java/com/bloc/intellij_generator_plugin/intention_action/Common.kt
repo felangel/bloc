@@ -38,18 +38,26 @@ class Common {
             editor: Editor,
             snippetType: SnippetType?,
             callExpressionElement: PsiElement,
-            blocChildWidget: String?
+            blocChildWidget: PsiElement?
         ) {
             val document = editor.document
-            val element = callExpressionElement
-            val elementSelectionRange = element.textRange
+            val elementSelectionRange = callExpressionElement.textRange
             val offsetStart = elementSelectionRange.startOffset
             val offsetEnd = elementSelectionRange.endOffset
             if (!WrapHelper.isSelectionValid(offsetStart, offsetEnd)) {
                 return
             }
             val selectedText = document.getText(TextRange.create(offsetStart, offsetEnd))
-            val replaceWith = Snippets.getSnippet(snippetType, blocChildWidget ?: "", selectedText)
+
+            val replaceWith: String
+            if (blocChildWidget != null) {
+                val blocChildWidgetText = blocChildWidget.text
+                val movedBlocWithoutChild = selectedText.replaceFirst(blocChildWidgetText, "")
+                    .replaceFirst("child: ,", "")
+                replaceWith = Snippets.getSnippet(snippetType, blocChildWidgetText, movedBlocWithoutChild)
+            } else {
+                replaceWith = Snippets.getSnippet(snippetType, "", selectedText)
+            }
 
             // wrap the widget:
             WriteCommandAction.runWriteCommandAction(project) {
@@ -62,7 +70,8 @@ class Common {
 
             // place cursors to specify types:
             val prefixSelection = Snippets.PREFIX_SELECTION
-            val snippetArr = arrayOf(Snippets.BLOC_SNIPPET_KEY, Snippets.STATE_SNIPPET_KEY, Snippets.REPOSITORY_SNIPPET_KEY)
+            val snippetArr =
+                arrayOf(Snippets.BLOC_SNIPPET_KEY, Snippets.STATE_SNIPPET_KEY, Snippets.REPOSITORY_SNIPPET_KEY)
             val caretModel = editor.caretModel
             caretModel.removeSecondaryCarets()
             for (snippet in snippetArr) {
