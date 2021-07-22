@@ -1,7 +1,7 @@
 ```dart
 class MyBloc extends Bloc {
   final OtherBloc otherBloc;
-  late StreamSubscription otherBlocSubscription;
+  late final StreamSubscription otherBlocSubscription;
 
   MyBloc(this.otherBloc) {
     otherBlocSubscription = otherBloc.stream.listen((state) {
