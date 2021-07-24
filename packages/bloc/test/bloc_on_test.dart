@@ -74,7 +74,7 @@ void main() {
       );
     });
 
-    test('invokes all on<T> when event E is added where E is T', () async {
+    test('invokes all on<T> when event E is added where E is T', () {
       var onEventCallCount = 0;
       var onACallCount = 0;
       var onBCallCount = 0;
@@ -119,7 +119,7 @@ void main() {
       expect(onAACallCount, equals(1));
       expect(onBACallCount, equals(1));
 
-      await bloc.close();
+      bloc.close();
     });
   });
 }
