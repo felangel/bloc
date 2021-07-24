@@ -15,9 +15,9 @@ class TestEventBA extends TestEventB {}
 
 class TestState {}
 
-typedef OnEvent<E, S> = void Function(E event, Emit<S> emit);
+typedef OnEvent<E, S> = void Function(E event, Emitter<S> emit);
 
-void defaultOnEvent<E, S>(E event, Emit<S> emit) {}
+void defaultOnEvent<E, S>(E event, Emitter<S> emit) {}
 
 class TestBloc extends Bloc<TestEvent, TestState> {
   TestBloc({

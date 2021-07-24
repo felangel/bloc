@@ -818,6 +818,28 @@ void main() {
       });
     });
 
+    group('StreamBloc', () {
+      test('cancels subscriptions correctly', () async {
+        const expectedStates = [3, 4];
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final streamBloc = StreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(StreamEvent());
+
+        controller..add(0)..add(1)..add(2);
+
+        streamBloc..add(StreamEvent());
+
+        controller..add(3)..add(4);
+
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        await streamBloc.close();
+        expect(states, equals(expectedStates));
+      });
+    });
+
     group('Exception', () {
       test('does not break stream', () {
         runZonedGuarded(() {

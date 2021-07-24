@@ -25,7 +25,7 @@ class OnTransitionErrorBloc extends Bloc<CounterEvent, int> {
     throw error;
   }
 
-  void _onCounterEvent(CounterEvent event, Emit<int> emit) {
+  void _onCounterEvent(CounterEvent event, Emitter<int> emit) {
     switch (event) {
       case CounterEvent.increment:
         return emit(state + 1);

@@ -7,7 +7,7 @@ class CounterExceptionBloc extends Bloc<CounterEvent, int> {
     on<CounterEvent>(_onCounterEvent);
   }
 
-  void _onCounterEvent(CounterEvent event, Emit<int> emit) {
+  void _onCounterEvent(CounterEvent event, Emitter<int> emit) {
     switch (event) {
       case CounterEvent.decrement:
         return emit(state - 1);

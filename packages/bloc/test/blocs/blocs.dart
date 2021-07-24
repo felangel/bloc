@@ -3,3 +3,4 @@ export './complex/complex_bloc.dart';
 export './counter/counter.dart';
 export './seeded/seeded_bloc.dart';
 export './simple/simple_bloc.dart';
+export './stream/stream_bloc.dart';

@@ -19,7 +19,7 @@ class OnExceptionBloc extends Bloc<CounterEvent, int> {
     super.onError(error, stackTrace);
   }
 
-  void _onCounterEvent(CounterEvent event, Emit<int> emit) {
+  void _onCounterEvent(CounterEvent event, Emitter<int> emit) {
     throw exception;
   }
 }

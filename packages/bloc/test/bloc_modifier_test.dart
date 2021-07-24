@@ -301,4 +301,49 @@ void main() {
       expect(states, equals([1]));
     });
   });
+
+  group('throttleTime', () {
+    test('throttles based on provided duration', () async {
+      final duration = const Duration(milliseconds: 300);
+      final states = <int>[];
+      final bloc = CounterBloc(throttleTime(duration))
+        ..stream.listen(states.add)
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment);
+
+      await Future<void>.delayed(delay);
+      expect(bloc.onCalls, equals([CounterEvent.increment]));
+      expect(states, equals([1]));
+
+      bloc
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment);
+
+      await Future<void>.delayed(delay);
+      expect(bloc.onCalls, equals([CounterEvent.increment]));
+      expect(states, equals([1]));
+
+      bloc
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment);
+
+      await Future<void>.delayed(const Duration(milliseconds: 350));
+      expect(
+        bloc.onCalls,
+        equals([CounterEvent.increment, CounterEvent.increment]),
+      );
+      expect(states, equals([1, 2]));
+
+      await bloc.close();
+
+      expect(
+        bloc.onCalls,
+        equals([CounterEvent.increment, CounterEvent.increment]),
+      );
+      expect(states, equals([1, 2]));
+    });
+  });
 }

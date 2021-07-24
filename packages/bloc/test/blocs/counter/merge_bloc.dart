@@ -1,18 +1,25 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 
 import '../blocs.dart';
 
-EventModifier<CounterEvent> custom() {
-  return (event, events, next) async {
+class CustomEventModifier extends EventModifier<CounterEvent> {
+  @override
+  FutureOr<void> call(
+    CounterEvent event,
+    List<PendingEvent> events,
+    void Function() next,
+  ) async {
     if (event == CounterEvent.decrement) return next();
     if (events.isEmpty) return next();
     await Future<void>.delayed(const Duration(milliseconds: 100), next);
-  };
+  }
 }
 
 class MergeBloc extends Bloc<CounterEvent, int> {
   MergeBloc({this.onTransitionCallback}) : super(0) {
-    on<CounterEvent>(_onCounterEvent, custom());
+    on<CounterEvent>(_onCounterEvent, CustomEventModifier());
   }
 
   final void Function(Transition<CounterEvent, int>)? onTransitionCallback;
@@ -23,7 +30,7 @@ class MergeBloc extends Bloc<CounterEvent, int> {
     onTransitionCallback?.call(transition);
   }
 
-  void _onCounterEvent(CounterEvent event, Emit<int> emit) {
+  void _onCounterEvent(CounterEvent event, Emitter<int> emit) {
     switch (event) {
       case CounterEvent.increment:
         return emit(state + 1);
