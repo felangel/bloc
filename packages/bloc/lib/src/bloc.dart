@@ -167,13 +167,17 @@ class BlocUnhandledErrorException implements Exception {
 /// {@endtemplate}
 abstract class Bloc<Event, State> extends BlocBase<State> {
   /// {@macro bloc}
-  Bloc(State initialState) : super(initialState);
+  Bloc(State initialState) : super(initialState) {
+    _eventSubscription = _eventController.stream.listen(_onEvent);
+  }
 
   /// The current [BlocObserver] instance.
   static BlocObserver observer = BlocObserver();
 
   late final _onEventCallbacks = <_OnEvent<Event, State>>{};
-  final _pendingEvents = <dynamic, Map<Object, Future<void>>>{};
+  late final _pendingEvents = <dynamic, Map<Object, Future<void>>>{};
+  final _eventController = StreamController<Event>.broadcast(sync: true);
+  late final StreamSubscription<Event> _eventSubscription;
 
   /// Notifies the [Bloc] of a new [event]
   /// which triggers any registered handlers.
@@ -183,7 +187,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     if (isClosed) return;
     try {
       onEvent(event);
-      _onEvent(event);
+      _eventController.add(event);
     } catch (error, stackTrace) {
       onError(error, stackTrace);
     }
@@ -302,6 +306,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
       );
     }
 
+    await _eventSubscription.cancel();
     try {
       while (futures().isNotEmpty) await Future.wait<void>(futures());
     } catch (_) {}

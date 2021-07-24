@@ -74,7 +74,7 @@ void main() {
       );
     });
 
-    test('invokes all on<T> when event E is added where E is T', () {
+    test('invokes all on<T> when event E is added where E is T', () async {
       var onEventCallCount = 0;
       var onACallCount = 0;
       var onBCallCount = 0;
@@ -89,6 +89,8 @@ void main() {
         onTestEventBA: (_, __) => onBACallCount++,
       )..add(TestEventA());
 
+      await Future<void>.delayed(Duration.zero);
+
       expect(onEventCallCount, equals(1));
       expect(onACallCount, equals(1));
       expect(onBCallCount, equals(0));
@@ -96,6 +98,8 @@ void main() {
       expect(onBACallCount, equals(0));
 
       bloc.add(TestEventAA());
+
+      await Future<void>.delayed(Duration.zero);
 
       expect(onEventCallCount, equals(2));
       expect(onACallCount, equals(2));
@@ -105,6 +109,8 @@ void main() {
 
       bloc.add(TestEventB());
 
+      await Future<void>.delayed(Duration.zero);
+
       expect(onEventCallCount, equals(3));
       expect(onACallCount, equals(2));
       expect(onBCallCount, equals(1));
@@ -113,13 +119,15 @@ void main() {
 
       bloc.add(TestEventBA());
 
+      await Future<void>.delayed(Duration.zero);
+
       expect(onEventCallCount, equals(4));
       expect(onACallCount, equals(2));
       expect(onBCallCount, equals(2));
       expect(onAACallCount, equals(1));
       expect(onBACallCount, equals(1));
 
-      bloc.close();
+      await bloc.close();
     });
   });
 }
