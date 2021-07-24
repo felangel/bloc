@@ -8,12 +8,10 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   StatsBloc({required TodosBloc todosBloc}) : super(StatsLoading()) {
     on<UpdateStats>(_onUpdateStats);
     final todosState = todosBloc.state;
-    if (todosState is TodosLoaded) {
-      scheduleMicrotask(() => add(UpdateStats(todosState.todos)));
-    }
+    if (todosState is TodosLoaded) add(StatsUpdated(todosState.todos));
     _todosSubscription = todosBloc.stream.listen((state) {
       if (state is TodosLoaded) {
-        add(UpdateStats(state.todos));
+        add(StatsUpdated(state.todos));
       }
     });
   }

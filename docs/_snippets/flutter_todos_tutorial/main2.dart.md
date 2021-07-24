@@ -10,7 +10,9 @@ import 'package:flutter_todos/blocs/blocs.dart';
 import 'package:flutter_todos/models/models.dart';
 import 'package:flutter_todos/screens/screens.dart';
 
-void main() {  
+void main() {
+  // We can set a Bloc's observer to an instance of `SimpleBlocObserver`.
+  // This will allow us to handle all transitions and errors in SimpleBlocObserver.
   Bloc.observer = SimpleBlocObserver();
   runApp(
     BlocProvider(
@@ -22,7 +24,7 @@ void main() {
               getApplicationDocumentsDirectory,
             ),
           ),
-        )..add(TodosLoadSuccess());
+        )..add(TodosLoaded());
       },
       child: TodosApp(),
     ),

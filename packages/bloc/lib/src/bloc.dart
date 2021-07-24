@@ -181,6 +181,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
 
   /// Notifies the [Bloc] of a new [event]
   /// which triggers any registered handlers.
+
   /// If [close] has already been called, any subsequent calls to [add] will
   /// be ignored and will not result in any subsequent state changes.
   void add(Event event) {
