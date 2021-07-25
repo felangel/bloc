@@ -10,8 +10,10 @@ import 'package:test/test.dart' as test;
 /// [blocTest] also handles ensuring that no additional states are emitted
 /// by closing the `bloc` stream before evaluating the [expect]ation.
 ///
-/// [build] should be used for all `bloc` initialization and preparation
-/// and must return the `bloc` under test.
+/// [setUp] is optional and should be used to set up
+/// any dependencies prior to initializing the `bloc` under test.
+///
+/// [build] should construct and return the `bloc` under test.
 ///
 /// [seed] is an optional `Function` that returns a state
 /// which will be used to seed the `bloc` before [act] is called.
@@ -34,6 +36,9 @@ import 'package:test/test.dart' as test;
 ///
 /// [errors] is an optional `Function` that returns a `Matcher` which the `bloc`
 /// under test is expected to throw after [act] is executed.
+///
+/// [tearDown] is optional and can be used to
+/// execute any code after the test has run.
 ///
 /// ```dart
 /// blocTest(

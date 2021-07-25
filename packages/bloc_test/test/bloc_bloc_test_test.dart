@@ -507,7 +507,7 @@ void main() {
       );
 
       blocTest<SideEffectCounterBloc, int>(
-        'custom setUp is executed before build/act',
+        'setUp is executed before build/act',
         setUp: () {
           when(() => repository.sideEffect()).thenThrow(Exception());
         },
@@ -560,5 +560,31 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
         expect((actualError as TestFailure).message, expectedError);
       });
     });
+  });
+
+  group('tearDown', () {
+    late int tearDownCallCount;
+    int? state;
+
+    setUp(() {
+      tearDownCallCount = 0;
+    });
+
+    tearDown(() {
+      expect(tearDownCallCount, equals(1));
+    });
+
+    blocTest<CounterBloc, int>(
+      'is called after the test is run',
+      build: () => CounterBloc(),
+      act: (bloc) => bloc.add(CounterEvent.increment),
+      verify: (bloc) {
+        state = bloc.state;
+      },
+      tearDown: () {
+        tearDownCallCount++;
+        expect(state, equals(1));
+      },
+    );
   });
 }
