@@ -53,10 +53,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
 
   StreamSubscription<Transition<Event, State>>? _transitionSubscription;
 
-  StreamController<Event>? __eventController;
-  StreamController<Event> get _eventController {
-    return __eventController ??= StreamController<Event>.broadcast();
-  }
+  final _eventController = StreamController<Event>.broadcast();
 
   /// Notifies the [Bloc] of a new [event] which triggers [mapEventToState].
   /// If [close] has already been called, any subsequent calls to [add] will
