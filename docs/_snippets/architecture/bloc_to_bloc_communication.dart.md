@@ -1,10 +1,10 @@
 ```dart
 class MyBloc extends Bloc {
   final OtherBloc otherBloc;
-  StreamSubscription otherBlocSubscription;
+  late final StreamSubscription otherBlocSubscription;
 
   MyBloc(this.otherBloc) {
-    otherBlocSubscription = otherBloc.listen((state) {
+    otherBlocSubscription = otherBloc.stream.listen((state) {
         // React to state changes here.
         // Add events here to trigger changes in MyBloc.
     });
