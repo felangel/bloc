@@ -19,26 +19,26 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final TodosRepository _todosRepository;
   StreamSubscription? _todosSubscription;
 
-  void _onLoadTodos(LoadTodos event, Emit<TodosState> emit) {
+  void _onLoadTodos(LoadTodos event, Emitter<TodosState> emit) {
     _todosSubscription?.cancel();
     _todosSubscription = _todosRepository.todos().listen((todos) {
       add(TodosUpdated(todos));
     });
   }
 
-  void _onAddTodo(AddTodo event, Emit<TodosState> emit) {
+  void _onAddTodo(AddTodo event, Emitter<TodosState> emit) {
     _todosRepository.addNewTodo(event.todo);
   }
 
-  void _onUpdateTodo(UpdateTodo event, Emit<TodosState> emit) {
+  void _onUpdateTodo(UpdateTodo event, Emitter<TodosState> emit) {
     _todosRepository.updateTodo(event.updatedTodo);
   }
 
-  void _onDeleteTodo(DeleteTodo event, Emit<TodosState> emit) {
+  void _onDeleteTodo(DeleteTodo event, Emitter<TodosState> emit) {
     _todosRepository.deleteTodo(event.todo);
   }
 
-  void _onToggleAll(ToggleAll event, Emit<TodosState> emit) {
+  void _onToggleAll(ToggleAll event, Emitter<TodosState> emit) {
     final currentState = state;
     if (currentState is TodosLoaded) {
       final allComplete = currentState.todos.every((todo) => todo.complete);
@@ -51,7 +51,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  void _onClearCompleted(ClearCompleted event, Emit<TodosState> emit) {
+  void _onClearCompleted(ClearCompleted event, Emitter<TodosState> emit) {
     final currentState = state;
     if (currentState is TodosLoaded) {
       final List<Todo> completedTodos =
@@ -62,7 +62,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  void _onTodosUpdated(TodosUpdated event, Emit<TodosState> emit) {
+  void _onTodosUpdated(TodosUpdated event, Emitter<TodosState> emit) {
     emit(TodosLoaded(event.todos));
   }
 

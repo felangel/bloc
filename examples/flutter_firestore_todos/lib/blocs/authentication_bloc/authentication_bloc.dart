@@ -12,7 +12,7 @@ class AuthenticationBloc
     on<AppStarted>(_onAppStarted);
   }
 
-  void _onAppStarted(AppStarted event, Emit<AuthenticationState> emit) async {
+  void _onAppStarted(AppStarted event, Emitter<AuthenticationState> emit) async {
     try {
       final isSignedIn = await _userRepository.isAuthenticated();
       if (!isSignedIn) await _userRepository.authenticate();

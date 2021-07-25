@@ -21,7 +21,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _onUsernameChanged(
     LoginUsernameChanged event,
-    Emit<LoginState> emit,
+    Emitter<LoginState> emit,
   ) {
     final username = Username.dirty(event.username);
     emit(state.copyWith(
@@ -32,7 +32,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _onPasswordChanged(
     LoginPasswordChanged event,
-    Emit<LoginState> emit,
+    Emitter<LoginState> emit,
   ) {
     final password = Password.dirty(event.password);
     emit(state.copyWith(
@@ -43,7 +43,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _onSubmitted(
     LoginSubmitted event,
-    Emit<LoginState> emit,
+    Emitter<LoginState> emit,
   ) async {
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));

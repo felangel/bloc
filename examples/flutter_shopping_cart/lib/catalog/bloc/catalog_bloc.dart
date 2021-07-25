@@ -13,7 +13,7 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
 
   final ShoppingRepository shoppingRepository;
 
-  void _onStarted(CatalogStarted event, Emit<CatalogState> emit) async {
+  void _onStarted(CatalogStarted event, Emitter<CatalogState> emit) async {
     emit(CatalogLoading());
     try {
       final catalog = await shoppingRepository.loadCatalog();

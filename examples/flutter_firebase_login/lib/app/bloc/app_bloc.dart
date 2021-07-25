@@ -27,13 +27,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationRepository _authenticationRepository;
   late final StreamSubscription<User> _userSubscription;
 
-  void _onUserChanged(AppUserChanged event, Emit<AppState> emit) {
+  void _onUserChanged(AppUserChanged event, Emitter<AppState> emit) {
     emit(event.user.isNotEmpty
         ? AppState.authenticated(event.user)
         : const AppState.unauthenticated());
   }
 
-  void _onLogoutRequested(AppLogoutRequested event, Emit<AppState> emit) {
+  void _onLogoutRequested(AppLogoutRequested event, Emitter<AppState> emit) {
     unawaited(_authenticationRepository.logOut());
   }
 

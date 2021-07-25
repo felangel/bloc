@@ -6,7 +6,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   late StreamSubscription _todosSubscription;
 
   StatsBloc({required TodosBloc todosBloc}) : super(StatsLoading()) {
-    on<UpdateStats>(_onUpdateStats);
+    on<StatsUpdated>(_onStatsUpdated);
     final todosState = todosBloc.state;
     if (todosState is TodosLoaded) add(StatsUpdated(todosState.todos));
     _todosSubscription = todosBloc.stream.listen((state) {
@@ -16,14 +16,12 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     });
   }
 
-  void _onUpdateStats(UpdateStats event, Emit<StatsState> emit) async {
-    if (event is UpdateStats) {
-      final numActive =
-          event.todos.where((todo) => !todo.complete).toList().length;
-      final numCompleted =
-          event.todos.where((todo) => todo.complete).toList().length;
-      emit(StatsLoaded(numActive, numCompleted));
-    }
+  void _onStatsUpdated(StatsUpdated event, Emitter<StatsState> emit) async {
+    final numActive =
+        event.todos.where((todo) => !todo.complete).toList().length;
+    final numCompleted =
+        event.todos.where((todo) => todo.complete).toList().length;
+    emit(StatsLoaded(numActive, numCompleted));
   }
 
   @override

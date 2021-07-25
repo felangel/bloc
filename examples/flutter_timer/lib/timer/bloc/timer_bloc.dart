@@ -28,7 +28,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     return super.close();
   }
 
-  void _onStarted(TimerStarted event, Emit<TimerState> emit) async {
+  void _onStarted(TimerStarted event, Emitter<TimerState> emit) async {
     emit(TimerRunInProgress(event.duration));
     _tickerSubscription?.cancel();
     _tickerSubscription = _ticker
@@ -36,26 +36,26 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
         .listen((duration) => add(TimerTicked(duration: duration)));
   }
 
-  void _onPaused(TimerPaused event, Emit<TimerState> emit) {
+  void _onPaused(TimerPaused event, Emitter<TimerState> emit) {
     if (state is TimerRunInProgress) {
       _tickerSubscription?.pause();
       emit(TimerRunPause(state.duration));
     }
   }
 
-  void _onResumed(TimerResumed resume, Emit<TimerState> emit) {
+  void _onResumed(TimerResumed resume, Emitter<TimerState> emit) {
     if (state is TimerRunPause) {
       _tickerSubscription?.resume();
       emit(TimerRunInProgress(state.duration));
     }
   }
 
-  void _onReset(TimerReset event, Emit<TimerState> emit) {
+  void _onReset(TimerReset event, Emitter<TimerState> emit) {
     _tickerSubscription?.cancel();
     emit(TimerInitial(_duration));
   }
 
-  void _onTicked(TimerTicked event, Emit<TimerState> emit) {
+  void _onTicked(TimerTicked event, Emitter<TimerState> emit) {
     emit(
       event.duration > 0
           ? TimerRunInProgress(event.duration)

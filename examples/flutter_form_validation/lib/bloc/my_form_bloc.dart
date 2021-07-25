@@ -22,7 +22,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     super.onTransition(transition);
   }
 
-  void _onEmailChanged(EmailChanged event, Emit<MyFormState> emit) {
+  void _onEmailChanged(EmailChanged event, Emitter<MyFormState> emit) {
     final email = Email.dirty(event.email);
     emit(state.copyWith(
       email: email.valid ? email : Email.pure(event.email),
@@ -30,7 +30,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     ));
   }
 
-  void _onPasswordChanged(PasswordChanged event, Emit<MyFormState> emit) {
+  void _onPasswordChanged(PasswordChanged event, Emitter<MyFormState> emit) {
     final password = Password.dirty(event.password);
     emit(state.copyWith(
       password: password.valid ? password : Password.pure(event.password),
@@ -38,7 +38,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     ));
   }
 
-  void _onEmailUnfocused(EmailUnfocused event, Emit<MyFormState> emit) {
+  void _onEmailUnfocused(EmailUnfocused event, Emitter<MyFormState> emit) {
     final email = Email.dirty(state.email.value);
     emit(state.copyWith(
       email: email,
@@ -46,7 +46,10 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     ));
   }
 
-  void _onPasswordUnfocused(PasswordUnfocused event, Emit<MyFormState> emit) {
+  void _onPasswordUnfocused(
+    PasswordUnfocused event,
+    Emitter<MyFormState> emit,
+  ) {
     final password = Password.dirty(state.password.value);
     emit(state.copyWith(
       password: password,
@@ -54,7 +57,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     ));
   }
 
-  void _onFormSubmitted(FormSubmitted event, Emit<MyFormState> emit) async {
+  void _onFormSubmitted(FormSubmitted event, Emitter<MyFormState> emit) async {
     final email = Email.dirty(state.email.value);
     final password = Password.dirty(state.password.value);
     emit(state.copyWith(

@@ -2,17 +2,20 @@ import 'package:bloc/bloc.dart';
 
 import 'package:common_github_search/common_github_search.dart';
 
-const _debounceDuration = const Duration(milliseconds: 300);
+const _duration = const Duration(milliseconds: 300);
 
 class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   GithubSearchBloc({required this.githubRepository})
       : super(SearchStateEmpty()) {
-    on<TextChanged>(_onTextChanged, debounceTime(_debounceDuration));
+    on<TextChanged>(_onTextChanged, throttleTime(_duration));
   }
 
   final GithubRepository githubRepository;
 
-  void _onTextChanged(TextChanged event, Emit<GithubSearchState> emit) async {
+  void _onTextChanged(
+    TextChanged event,
+    Emitter<GithubSearchState> emit,
+  ) async {
     final searchTerm = event.text;
 
     if (searchTerm.isEmpty) return emit(SearchStateEmpty());

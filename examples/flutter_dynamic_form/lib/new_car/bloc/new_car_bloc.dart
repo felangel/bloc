@@ -14,7 +14,7 @@ class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
 
   final NewCarRepository _newCarRepository;
 
-  void _onEvent(NewCarEvent event, Emit<NewCarState> emit) {
+  void _onEvent(NewCarEvent event, Emitter<NewCarState> emit) {
     if (event is NewCarFormLoaded) return _onNewCarFormLoaded(event, emit);
     if (event is NewCarBrandChanged) return _onNewCarBrandChanged(event, emit);
     if (event is NewCarModelChanged) return _onNewCarModelChanged(event, emit);
@@ -23,7 +23,7 @@ class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
 
   void _onNewCarFormLoaded(
     NewCarFormLoaded event,
-    Emit<NewCarState> emit,
+    Emitter<NewCarState> emit,
   ) async {
     emit(const NewCarState.brandsLoadInProgress());
     final brands = await _newCarRepository.fetchBrands();
@@ -32,7 +32,7 @@ class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
 
   void _onNewCarBrandChanged(
     NewCarBrandChanged event,
-    Emit<NewCarState> emit,
+    Emitter<NewCarState> emit,
   ) async {
     emit(NewCarState.modelsLoadInProgress(
       brands: state.brands,
@@ -48,7 +48,7 @@ class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
 
   void _onNewCarModelChanged(
     NewCarModelChanged event,
-    Emit<NewCarState> emit,
+    Emitter<NewCarState> emit,
   ) async {
     emit(NewCarState.yearsLoadInProgress(
       brands: state.brands,
@@ -69,7 +69,10 @@ class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
     ));
   }
 
-  void _onNewCarYearChanged(NewCarYearChanged event, Emit<NewCarState> emit) {
+  void _onNewCarYearChanged(
+    NewCarYearChanged event,
+    Emitter<NewCarState> emit,
+  ) {
     emit(state.copyWith(year: event.year));
   }
 }

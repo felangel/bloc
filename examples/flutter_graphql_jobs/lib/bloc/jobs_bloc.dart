@@ -16,7 +16,10 @@ class JobsBloc extends Bloc<JobsEvent, JobsState> {
 
   final JobsApiClient _jobsApiClient;
 
-  void _onJobsFetchStarted(JobsFetchStarted event, Emit<JobsState> emit) async {
+  void _onJobsFetchStarted(
+    JobsFetchStarted event,
+    Emitter<JobsState> emit,
+  ) async {
     emit(JobsLoadInProgress());
     try {
       final jobs = await _jobsApiClient.getJobs();

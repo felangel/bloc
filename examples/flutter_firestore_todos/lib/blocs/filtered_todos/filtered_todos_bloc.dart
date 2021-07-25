@@ -26,7 +26,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
     });
   }
 
-  void _onUpdateFilter(UpdateFilter event, Emit<FilteredTodosState> emit) {
+  void _onUpdateFilter(UpdateFilter event, Emitter<FilteredTodosState> emit) {
     final state = _todosBloc.state;
     if (state is TodosLoaded) {
       emit(FilteredTodosLoaded(
@@ -36,7 +36,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
     }
   }
 
-  void _onUpdateTodos(UpdateTodos event, Emit<FilteredTodosState> emit) {
+  void _onUpdateTodos(UpdateTodos event, Emitter<FilteredTodosState> emit) {
     final state = this.state;
     final visibilityFilter = state is FilteredTodosLoaded
         ? state.activeFilter

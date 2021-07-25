@@ -37,7 +37,7 @@ class AuthenticationBloc
 
   void _onAuthenticationStatusChanged(
     AuthenticationStatusChanged event,
-    Emit<AuthenticationState> emit,
+    Emitter<AuthenticationState> emit,
   ) async {
     switch (event.status) {
       case AuthenticationStatus.unauthenticated:
@@ -57,7 +57,7 @@ class AuthenticationBloc
 
   void _onAuthenticationLogoutRequested(
     AuthenticationLogoutRequested event,
-    Emit<AuthenticationState> emit,
+    Emitter<AuthenticationState> emit,
   ) {
     _authenticationRepository.logOut();
   }

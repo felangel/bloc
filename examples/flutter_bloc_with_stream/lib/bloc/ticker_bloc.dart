@@ -20,12 +20,12 @@ class TickerBloc extends Bloc<TickerEvent, TickerState> {
   final Ticker _ticker;
   StreamSubscription? _subscription;
 
-  void _onTickerStarted(TickerStarted event, Emit<TickerState> emit) {
+  void _onTickerStarted(TickerStarted event, Emitter<TickerState> emit) {
     _subscription?.cancel();
     _subscription = _ticker.tick().listen((tick) => add(_TickerTicked(tick)));
   }
 
-  void _onTickerTicked(_TickerTicked event, Emit<TickerState> emit) {
+  void _onTickerTicked(_TickerTicked event, Emitter<TickerState> emit) {
     emit(TickerTickSuccess(event.tickCount));
   }
 
