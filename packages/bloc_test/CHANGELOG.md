@@ -1,3 +1,7 @@
+# 8.1.0
+
+- feat: add `setUp` and `tearDown` to `blocTest`
+
 # 8.0.2
 
 - fix: revert `package:mocktail` export to reduce conflicts with `package:mockito`
