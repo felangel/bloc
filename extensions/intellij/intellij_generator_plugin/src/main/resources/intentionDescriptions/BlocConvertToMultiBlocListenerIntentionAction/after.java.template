@@ -7,7 +7,7 @@ class CounterScreen extends StatelessWidget {
           listeners: [
             BlocListener<CounterBloc, CounterState>(
               listener: (context, state) {
-                // TODO: implement listener
+                print(state);
               },
             ),
             BlocListener<SubjectBloc, SubjectState>(
