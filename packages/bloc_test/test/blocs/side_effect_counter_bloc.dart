@@ -13,7 +13,7 @@ class SideEffectCounterBloc extends Bloc<CounterEvent, int> {
 
   final Repository repository;
 
-  void _onEvent(CounterEvent event, Emit<int> emit) {
+  void _onEvent(CounterEvent event, Emitter<int> emit) {
     switch (event) {
       case CounterEvent.increment:
         repository.sideEffect();

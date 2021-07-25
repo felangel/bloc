@@ -91,7 +91,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
     on<CounterEvent>(_onEvent);
   }
 
-  void _onEvent(CounterEvent event, Emit<int> emit) {
+  void _onEvent(CounterEvent event, Emitter<int> emit) {
     switch (event) {
       case CounterEvent.increment:
         return emit(state + 1);

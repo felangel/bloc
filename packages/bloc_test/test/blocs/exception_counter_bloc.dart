@@ -9,7 +9,7 @@ class ExceptionCounterBloc extends Bloc<CounterEvent, int> {
     on<CounterEvent>(_onEvent);
   }
 
-  void _onEvent(CounterEvent event, Emit<int> emit) async {
+  void _onEvent(CounterEvent event, Emitter<int> emit) async {
     switch (event) {
       case CounterEvent.increment:
         emit(state + 1);

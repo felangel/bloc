@@ -171,6 +171,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       if (wait != null) await Future<void>.delayed(wait);
       await Future<void>.delayed(Duration.zero);
       await bloc.close();
+      await Future<void>.delayed(Duration.zero);
       if (expect != null) {
         final dynamic expected = expect();
         shallowEquality = '$states' == '$expected';
