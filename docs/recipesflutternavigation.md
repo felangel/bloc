@@ -1,6 +1,6 @@
 # Recipes: Navigation
 
-> In this recipe, we're going to take a look at how to use `BlocBuilder` and/or `BlocListener` to do navigation. We're going to explore two approaches: Direct Navigation and Route Navigation.
+> In this recipe, we're going to take a look at how to use `BlocBuilder` and/or `BlocListener` to do navigation. We're going to explore three approaches: Direct Navigation, Route Navigation, and Navigator.
 
 ## Direct Navigation
 
@@ -61,8 +61,34 @@ Let's take a look at how to route to a different page based on the state of `MyB
 
 [main.dart](_snippets/recipes_flutter_navigation/route_navigation/main.dart.md ':include')
 
+
 ?> We use the `BlocListener` widget in order to push a new route in response to state changes in our `MyBloc`.
 
 !> For the sake of this example we are adding an event just for navigation. In a real application, you should not create explicit navigation events. If there is no "business logic" necessary in order to trigger navigation you should always directly navigate in response to user input (in the `onPressed` callback, etc...). Only navigate in response to state changes if some "business logic" is required in order to determine where to navigate.
 
 The full source for this recipe can be found [here](https://gist.github.com/felangel/6bcd4be10c046ceb33eecfeb380135dd).
+
+## Navigation 2.0
+
+> In this example, we're going to take a look at how to use Navigation 2.0's `Navigator` widget to do navigation. 
+
+### Bloc
+For the sake of showcasing Navigator's advantages, we will build a slightly more complex example. 
+Let's build `BookBloc` which will take `BookEvents` and convert them into `BookStates`.
+
+#### BookEvent
+`BookEvent` will respond to two events: selecting a book, and returning to the home page. 
+[book_event.dart](_snippets/recipes_flutter_navigation/navigation2/book_event.dart.md ':include')
+
+#### BookState
+`BookState` will have two states: the initial home page, and the book detail page. 
+[book_state.dart](_snippets/recipes_flutter_navigation/navigation2/book_state.dart.md ':include')
+
+#### BookBloc
+`BookBloc` should look something like this:
+[book_bloc.dart](_snippets/recipes_flutter_navigation/navigation2/book_bloc.dart.md ':include')
+
+### UI Layer
+Let's take a look at how to take advantage of `Navigator`'s pages attribute to control the navigation flow our app.
+[main.dart](_snippets/recipes_flutter_navigation/navigation2/main.dart.md ':include')
+
