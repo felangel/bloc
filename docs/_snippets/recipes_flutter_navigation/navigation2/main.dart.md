@@ -1,11 +1,10 @@
 ```dart
+import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/book_bloc.dart';
 
 void main() {
-  Bloc.observer = SimpleBlocObserver();
-
   runApp(
     BlocProvider(
       create: (context) => BookBloc(),
@@ -14,87 +13,45 @@ void main() {
   );
 }
 
-class SimpleBlocObserver extends BlocObserver {
-  @override
-  void onEvent(Bloc bloc, Object? event) {
-    super.onEvent(bloc, event);
-    print(event);
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-
-  @override
-  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    print(error);
-    super.onError(bloc, error, stackTrace);
-  }
-}
-
-class Book {
-  final String title;
-  final String author;
-
-  Book(this.title, this.author);
+List<Page> onGeneratePages(BookState state, List<Page> pages) {
+  final selectedBook = state.selectedBook;
+  return [
+    BooksListPage(books: state.books).page(),
+    if (selectedBook != null) BookDetailsPage(book: selectedBook).page()
+  ];
 }
 
 class BooksApp extends StatelessWidget {
-  final List<Book> books = [
-    Book('Left Hand of Darkness', 'Ursula K. Le Guin'),
-    Book('Too Like the Lightning', 'Ada Palmer'),
-    Book('Kindred', 'Octavia E. Butler'),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Books App',
-      home: BlocBuilder<BookBloc, BookState>(
-        builder: (context, state) {
-          return Navigator(
-            pages: [
-              MaterialPage(
-                key: ValueKey('BooksListPage'),
-                child: BooksListScreen(
-                  books: books,
-                ),
-              ),
-              if (state is SelectedBook)
-                MaterialPage(
-                    key: ValueKey(state.selectedBook),
-                    child: BookDetailsScreen(book: state.selectedBook))
-            ],
-            onPopPage: (route, result) {
-              if (!route.didPop(result)) {
-                return false;
-              }
-
-              BlocProvider.of<BookBloc>(context).add(BackToList());
-
-              return true;
-            },
-          );
-        },
+      home: FlowBuilder(
+        state: context.watch<BookBloc>().state,
+        onGeneratePages: onGeneratePages,
       ),
     );
   }
 }
 
-class BooksListScreen extends StatelessWidget {
+class BooksListPage extends StatelessWidget {
+  Page page() => MaterialPage<void>(
+          child: BooksListPage(
+        books: books,
+      ));
+
   final List<Book> books;
-  BooksListScreen({
+  const BooksListPage({
+    Key? key,
     required this.books,
-  });
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: ListView(
         children: [
-          for (var book in books)
+          for (final book in books)
             ListTile(
               title: Text(book.title),
               subtitle: Text(book.author),
@@ -108,15 +65,22 @@ class BooksListScreen extends StatelessWidget {
   }
 }
 
-class BookDetailsScreen extends StatelessWidget {
+class BookDetailsPage extends StatelessWidget {
+  Page page() => MaterialPage<void>(
+          child: BookDetailsPage(
+        book: book,
+      ));
+
   final Book book;
 
-  BookDetailsScreen({
+  const BookDetailsPage({
+    Key? key,
     required this.book,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -124,8 +88,8 @@ class BookDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(book.title, style: Theme.of(context).textTheme.headline6),
-            Text(book.author, style: Theme.of(context).textTheme.subtitle1),
+            Text(book.title, style: theme.textTheme.headline6),
+            Text(book.author, style: theme.textTheme.subtitle1),
           ],
         ),
       ),
