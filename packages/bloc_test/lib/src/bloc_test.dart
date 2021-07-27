@@ -10,8 +10,12 @@ import 'package:test/test.dart' as test;
 /// [blocTest] also handles ensuring that no additional states are emitted
 /// by closing the `bloc` stream before evaluating the [expect]ation.
 ///
-/// [build] should be used for all `bloc` initialization and preparation
-/// and must return the `bloc` under test.
+/// [setUp] is optional and should be used to set up
+/// any dependencies prior to initializing the `bloc` under test.
+/// [setUp] should be used to set up state necessary for a particular test case.
+/// For common set up code, prefer to use `setUp` from `package:test/test.dart`.
+///
+/// [build] should construct and return the `bloc` under test.
 ///
 /// [seed] is an optional `Function` that returns a state
 /// which will be used to seed the `bloc` before [act] is called.
@@ -34,6 +38,11 @@ import 'package:test/test.dart' as test;
 ///
 /// [errors] is an optional `Function` that returns a `Matcher` which the `bloc`
 /// under test is expected to throw after [act] is executed.
+///
+/// [tearDown] is optional and can be used to
+/// execute any code after the test has run.
+/// [tearDown] should be used to clean up after a particular test case.
+/// For common tear down code, prefer to use `tearDown` from `package:test/test.dart`.
 ///
 /// ```dart
 /// blocTest(
@@ -116,6 +125,7 @@ import 'package:test/test.dart' as test;
 @isTest
 void blocTest<B extends BlocBase<State>, State>(
   String description, {
+  FutureOr<void> Function()? setUp,
   required B Function() build,
   State Function()? seed,
   Function(B bloc)? act,
@@ -124,9 +134,11 @@ void blocTest<B extends BlocBase<State>, State>(
   dynamic Function()? expect,
   Function(B bloc)? verify,
   dynamic Function()? errors,
+  FutureOr<void> Function()? tearDown,
 }) {
   test.test(description, () async {
     await testBloc<B, State>(
+      setUp: setUp,
       build: build,
       seed: seed,
       act: act,
@@ -135,6 +147,7 @@ void blocTest<B extends BlocBase<State>, State>(
       expect: expect,
       verify: verify,
       errors: errors,
+      tearDown: tearDown,
     );
   });
 }
@@ -143,6 +156,7 @@ void blocTest<B extends BlocBase<State>, State>(
 /// This should never be used directly -- please use [blocTest] instead.
 @visibleForTesting
 Future<void> testBloc<B extends BlocBase<State>, State>({
+  FutureOr<void> Function()? setUp,
   required B Function() build,
   State Function()? seed,
   Function(B bloc)? act,
@@ -151,11 +165,13 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
   dynamic Function()? expect,
   Function(B bloc)? verify,
   dynamic Function()? errors,
+  FutureOr<void> Function()? tearDown,
 }) async {
   final unhandledErrors = <Object>[];
   var shallowEquality = false;
   await runZonedGuarded(
     () async {
+      await setUp?.call();
       final states = <State>[];
       final bloc = build();
       // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
@@ -178,6 +194,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       }
       await subscription.cancel();
       await verify?.call(bloc);
+      await tearDown?.call();
     },
     (Object error, _) {
       if (error is BlocUnhandledErrorException) {

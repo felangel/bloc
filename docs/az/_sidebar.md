@@ -14,17 +14,17 @@
 
   - Flutter
     - [**Sayğac** <sup>✨</sup>](fluttercountertutorial.md)
-    - [Taymer](fluttertimertutorial.md)
-    - [Sonsuz List](flutterinfinitelisttutorial.md)
-    - [Login](flutterlogintutorial.md)
+    - [**Taymer** <sup>✨</sup>](fluttertimertutorial.md)
+    - [**Sonsuz List** <sup>✨</sup>](flutterinfinitelisttutorial.md)
+    - [**Login** <sup>✨</sup>](flutterlogintutorial.md)
     - [Hava](flutterweathertutorial.md)
     - [Todolar](fluttertodostutorial.md)
-    - [Firebase Login](flutterfirebaselogintutorial.md)
+    - [**Firebase Login** <sup>✨</sup>](flutterfirebaselogintutorial.md)
     - [Firestore Todo-lar](flutterfirestoretodostutorial.md)
   - AngularDart
     - [Sayğac](angularcountertutorial.md)
   - Flutter + AngularDart
-    - [Github-da Axtarış](flutterangulargithubsearch.md)
+    - [**Github-da Axtarış** <sup>✨</sup>](flutterangulargithubsearch.md)
 
 - Tariflər
 

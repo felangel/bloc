@@ -10,23 +10,24 @@ class ExtraActions extends StatelessWidget {
     return BlocBuilder<TodosBloc, TodosState>(
       builder: (context, state) {
         if (state is TodosLoaded) {
-          bool allComplete = state.todos.every((todo) => todo.complete);
+          final allComplete = state.todos.every((todo) => todo.complete);
           return PopupMenuButton<ExtraAction>(
             onSelected: (action) {
               switch (action) {
                 case ExtraAction.clearCompleted:
-                  BlocProvider.of<TodosBloc>(context).add(ClearCompleted());
+                  context.read<TodosBloc>().add(ClearCompleted());
                   break;
                 case ExtraAction.toggleAllComplete:
-                  BlocProvider.of<TodosBloc>(context).add(ToggleAll());
+                  context.read<TodosBloc>().add(ToggleAll());
                   break;
               }
             },
-            itemBuilder: (BuildContext context) => <PopupMenuItem<ExtraAction>>[
+            itemBuilder: (context) => <PopupMenuItem<ExtraAction>>[
               PopupMenuItem<ExtraAction>(
                 value: ExtraAction.toggleAllComplete,
                 child: Text(
-                    allComplete ? 'Mark all incomplete' : 'Mark all complete'),
+                  allComplete ? 'Mark all incomplete' : 'Mark all complete',
+                ),
               ),
               PopupMenuItem<ExtraAction>(
                 value: ExtraAction.clearCompleted,

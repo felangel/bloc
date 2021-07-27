@@ -17,14 +17,14 @@
     - [Таймер](ru/fluttertimertutorial.md)
     - [Бесконечный список](ru/flutterinfinitelisttutorial.md)
     - [**Логин** <sup>✨</sup>](ru/flutterlogintutorial.md)
-    - [Погода](ru/flutterweathertutorial.md)
+    - [**Погода** <sup>✨</sup>](ru/flutterweathertutorial.md)
     - [Задачи](ru/fluttertodostutorial.md)
     - [**Firebase логин** <sup>✨</sup>](ru/flutterfirebaselogintutorial.md)
     - [Firestore задачи](ru/flutterfirestoretodostutorial.md)
   - AngularDart
     - [Счетчик](ru/angularcountertutorial.md)
   - Flutter + AngularDart
-    - [Github поиск](ru/flutterangulargithubsearch.md)
+    - [**Github поиск** <sup>✨</sup>](ru/flutterangulargithubsearch.md)
 
 - Рецепты
 

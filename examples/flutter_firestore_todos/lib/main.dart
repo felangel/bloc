@@ -49,12 +49,12 @@ class TodosApp extends StatelessWidget {
                       ),
                       BlocProvider<FilteredTodosBloc>(
                         create: (context) => FilteredTodosBloc(
-                          todosBloc: BlocProvider.of<TodosBloc>(context),
+                          todosBloc: context.read<TodosBloc>(),
                         ),
                       ),
                       BlocProvider<StatsBloc>(
                         create: (context) => StatsBloc(
-                          todosBloc: BlocProvider.of<TodosBloc>(context),
+                          todosBloc: context.read<TodosBloc>(),
                         ),
                       ),
                     ],
@@ -73,9 +73,9 @@ class TodosApp extends StatelessWidget {
           '/addTodo': (context) {
             return AddEditScreen(
               onSave: (task, note) {
-                BlocProvider.of<TodosBloc>(context).add(
-                  AddTodo(Todo(task, note: note)),
-                );
+                context
+                    .read<TodosBloc>()
+                    .add(AddTodo(Todo(task: task, note: note)));
               },
               isEditing: false,
             );

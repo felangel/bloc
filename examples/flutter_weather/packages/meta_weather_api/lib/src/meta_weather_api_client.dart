@@ -7,8 +7,14 @@ import 'package:meta_weather_api/meta_weather_api.dart';
 /// Exception thrown when locationSearch fails.
 class LocationIdRequestFailure implements Exception {}
 
+/// Exception thrown when the provided location is not found.
+class LocationNotFoundFailure implements Exception {}
+
 /// Exception thrown when getWeather fails.
 class WeatherRequestFailure implements Exception {}
+
+/// Exception thrown when weather for provided location is not found.
+class WeatherNotFoundFailure implements Exception {}
 
 /// {@template meta_weather_api_client}
 /// Dart API Client which wraps the [MetaWeather API](https://www.metaweather.com/api/).
@@ -39,7 +45,7 @@ class MetaWeatherApiClient {
     ) as List;
 
     if (locationJson.isEmpty) {
-      throw LocationIdRequestFailure();
+      throw LocationNotFoundFailure();
     }
 
     return Location.fromJson(locationJson.first as Map<String, dynamic>);
@@ -54,12 +60,16 @@ class MetaWeatherApiClient {
       throw WeatherRequestFailure();
     }
 
-    final weatherJson = jsonDecode(
-      weatherResponse.body,
-    )['consolidated_weather'] as List;
+    final bodyJson = jsonDecode(weatherResponse.body) as Map<String, dynamic>;
+
+    if (bodyJson.isEmpty) {
+      throw WeatherNotFoundFailure();
+    }
+
+    final weatherJson = bodyJson['consolidated_weather'] as List;
 
     if (weatherJson.isEmpty) {
-      throw WeatherRequestFailure();
+      throw WeatherNotFoundFailure();
     }
 
     return Weather.fromJson(weatherJson.first as Map<String, dynamic>);
