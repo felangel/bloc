@@ -145,6 +145,23 @@ BlocBuilder<BlocA, BlocAState>(
 )
 ```
 
+### BlocSelector
+
+**BlocSelector** is a Flutter widget which is analogous to `BlocBuilder` but allows developers to filter updates by selecting a new value based on the current bloc state. Unnecessary builds are prevented if the selected value does not change. The selected value must be immutable in order for `BlocSelector` to accurately determine whether `builder` should be called again.
+
+If the `bloc` parameter is omitted, `BlocSelector` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+
+```dart
+BlocSelector<BlocA, BlocAState, SelectedState>(
+  selector: (state) {
+    // return selected state based on the provided state.
+  },
+  builder: (context, state) {
+    // return widget here based on the selected state.
+  },
+)
+```
+
 ### BlocProvider
 
 **BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
@@ -205,7 +222,7 @@ In addition, `context.select` can be used to retrieve part of a state and react 
 final isPositive = context.select((CounterBloc b) => b.state >= 0);
 ```
 
-The snippet above will only rebuild if the state of the `CounterBloc` changes from positive to negative or vice versa.
+The snippet above will only rebuild if the state of the `CounterBloc` changes from positive to negative or vice versa and is functionally identical to using a `BlocSelector`.
 
 ### MultiBlocProvider
 
