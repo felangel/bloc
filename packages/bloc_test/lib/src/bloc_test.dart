@@ -12,6 +12,8 @@ import 'package:test/test.dart' as test;
 ///
 /// [setUp] is optional and should be used to set up
 /// any dependencies prior to initializing the `bloc` under test.
+/// [setUp] should be used to set up state necessary for a particular test case.
+/// For common set up code, prefer to use `setUp` from `package:test/test.dart`.
 ///
 /// [build] should construct and return the `bloc` under test.
 ///
@@ -39,6 +41,8 @@ import 'package:test/test.dart' as test;
 ///
 /// [tearDown] is optional and can be used to
 /// execute any code after the test has run.
+/// [tearDown] should be used to clean up after a particular test case.
+/// For common tear down code, prefer to use `tearDown` from `package:test/test.dart`.
 ///
 /// ```dart
 /// blocTest(
