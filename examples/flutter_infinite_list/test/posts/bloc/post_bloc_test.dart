@@ -56,7 +56,6 @@ void main() {
           });
           return PostBloc(httpClient: httpClient);
         },
-        wait: const Duration(milliseconds: 500),
         act: (bloc) => bloc.add(PostFetched()),
         expect: () => const <PostState>[
           PostState(
