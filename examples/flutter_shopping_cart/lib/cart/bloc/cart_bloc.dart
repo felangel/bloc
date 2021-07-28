@@ -22,6 +22,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       yield* _mapCartStartedToState();
     } else if (event is CartItemAdded) {
       yield* _mapCartItemAddedToState(event, state);
+    } else if (event is CartItemRemoved) {
+      yield* _mapCartItemRemovedToState(event, state);
     }
   }
 
@@ -43,6 +45,29 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       try {
         shoppingRepository.addItemToCart(event.item);
         yield CartLoaded(cart: Cart(items: [...state.cart.items, event.item]));
+      } on Exception {
+        yield CartError();
+      }
+    }
+  }
+
+  Stream<CartState> _mapCartItemRemovedToState(
+    CartItemRemoved event,
+    CartState state,
+  ) async* {
+    if (state is CartLoaded) {
+      try {
+        shoppingRepository.removeItemFromCart(event.item);
+
+        final newList = state.cart.items
+          ..removeWhere(
+            (cartItem) => cartItem == event.item,
+          );
+        yield CartLoaded(
+          cart: Cart(
+            items: []..addAll(newList),
+          ),
+        );
       } on Exception {
         yield CartError();
       }

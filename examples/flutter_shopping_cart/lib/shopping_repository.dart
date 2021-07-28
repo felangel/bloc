@@ -30,4 +30,8 @@ class ShoppingRepository {
   Future<List<Item>> loadCartItems() => Future.delayed(_delay, () => _items);
 
   void addItemToCart(Item item) => _items.add(item);
+
+  void removeItemFromCart(Item item) => _items.removeWhere(
+        (cartItem) => cartItem == item,
+      );
 }
