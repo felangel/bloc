@@ -1,6 +1,6 @@
 # 7.1.0
 
-- feat: add `BlocSelector`
+- feat: add `BlocSelector` widget
 
 # 7.0.1
 
