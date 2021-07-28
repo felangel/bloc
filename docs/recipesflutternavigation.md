@@ -97,6 +97,6 @@ Let's build `BookBloc` which will take `BookEvents` and convert them into `BookS
 
 ### UI Layer
 
-Let's take a look at how to take advantage of `Navigator`'s pages attribute to control the navigation flow our app.
+Let's take a look at how to take advantage of FlowBuilder to simplify the UI responses to state changes. 
 
 [main.dart](_snippets/recipes_flutter_navigation/navigation2/main.dart.md ':include')
