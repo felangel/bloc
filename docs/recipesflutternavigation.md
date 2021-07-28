@@ -1,6 +1,6 @@
 # Recipes: Navigation
 
-> In this recipe, we're going to take a look at how to use `BlocBuilder` and/or `BlocListener` to do navigation. We're going to explore three approaches: Direct Navigation, Route Navigation, and Navigator.
+> In this recipe, we're going to take a look at how to use `BlocBuilder` and/or `BlocListener` to do navigation. We're going to explore three approaches: Direct Navigation, Route Navigation, and Declarative Navigation using Navigator 2.0.
 
 ## Direct Navigation
 
@@ -100,4 +100,3 @@ Let's build `BookBloc` which will take `BookEvents` and convert them into `BookS
 Let's take a look at how to take advantage of `Navigator`'s pages attribute to control the navigation flow our app.
 
 [main.dart](_snippets/recipes_flutter_navigation/navigation2/main.dart.md ':include')
-
