@@ -67,6 +67,7 @@ You can activate the commands by launching the command palette (View -> Command 
 | `repoprovider`      | Creates a `RepositoryProvider` widget      |
 | `multirepoprovider` | Creates a `MultiRepositoryProvider` widget |
 | `blocbuilder`       | Creates a `BlocBuilder` widget             |
+| `blocselector`      | Creates a `BlocSelector` widget            |
 | `bloclistener`      | Creates a `BlocListener` widget            |
 | `multibloclistener` | Creates a `MultiBlocListener` widget       |
 | `blocconsumer`      | Creates a `BlocConsumer` widget            |
