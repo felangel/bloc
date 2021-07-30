@@ -59,13 +59,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       try {
         shoppingRepository.removeItemFromCart(event.item);
 
-        final newList = state.cart.items
-          ..removeWhere(
-            (cartItem) => cartItem == event.item,
-          );
         yield CartLoaded(
           cart: Cart(
-            items: []..addAll(newList),
+            items: [
+              for (final item in state.cart.items)
+                if (item != event.item) item
+            ],
           ),
         );
       } on Exception {
