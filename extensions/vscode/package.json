@@ -97,6 +97,10 @@
         "title": "Wrap with BlocBuilder"
       },
       {
+        "command": "extension.wrap-blocselector",
+        "title": "Wrap with BlocSelector"
+      },
+      {
         "command": "extension.wrap-bloclistener",
         "title": "Wrap with BlocListener"
       },
@@ -129,6 +133,10 @@
       "commandPalette": [
         {
           "command": "extension.wrap-blocbuilder",
+          "when": "editorLangId == dart"
+        },
+        {
+          "command": "extension.wrap-blocselector",
           "when": "editorLangId == dart"
         },
         {

@@ -14,6 +14,10 @@ export class BlocCodeActionProvider implements CodeActionProvider {
         title: "Wrap with BlocBuilder",
       },
       {
+        command: "extension.wrap-blocselector",
+        title: "Wrap with BlocSelector",
+      },
+      {
         command: "extension.wrap-bloclistener",
         title: "Wrap with BlocListener",
       },

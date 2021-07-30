@@ -43,6 +43,7 @@ You can activate the commands by launching the command palette (View -> Command 
 | Action                         | Description                                    |
 | ------------------------------ | ---------------------------------------------- |
 | `Wrap with BlocBuilder`        | Wraps current widget in a `BlocBuilder`        |
+| `Wrap with BlocSelector`       | Wraps current widget in a `BlocSelector`       |
 | `Wrap with BlocListener`       | Wraps current widget in a `BlocListener`       |
 | `Wrap with BlocConsumer`       | Wraps current widget in a `BlocConsumer`       |
 | `Wrap with BlocProvider`       | Wraps current widget in a `BlocProvider`       |
