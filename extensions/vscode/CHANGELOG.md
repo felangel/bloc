@@ -1,3 +1,14 @@
+# 5.7.0
+
+- feat: add snippets for `BlocSelector`
+- feat: add `Wrap with BlocSelector` action
+- feat: update to latest packages
+  - bloc_test -> ^8.1.0
+  - equatable -> ^2.0.3
+  - flutter_bloc -> ^7.1.0
+  - hydrated_bloc -> ^7.0.1
+  - sealed_flutter_bloc -> ^7.0.0
+
 # 5.6.2
 
 - fix: "Wrap with..." selection issues

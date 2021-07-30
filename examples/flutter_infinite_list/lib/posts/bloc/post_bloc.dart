@@ -15,7 +15,7 @@ const _debounceDuration = Duration(milliseconds: 500);
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({required this.httpClient}) : super(const PostState()) {
-    on<PostFetched>(_onPostFetched, debounceTime(_debounceDuration));
+    on<PostFetched>(_onPostFetched, throttleTime(_debounceDuration));
   }
 
   final http.Client httpClient;

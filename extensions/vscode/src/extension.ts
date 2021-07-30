@@ -10,6 +10,7 @@ import {
   wrapWithBlocConsumer,
   wrapWithBlocProvider,
   wrapWithRepositoryProvider,
+  wrapWithBlocSelector,
 } from "./commands";
 import { BlocCodeActionProvider } from "./code-actions";
 
@@ -24,6 +25,10 @@ export function activate(_context: ExtensionContext) {
     commands.registerCommand("extension.new-bloc", newBloc),
     commands.registerCommand("extension.new-cubit", newCubit),
     commands.registerCommand("extension.wrap-blocbuilder", wrapWithBlocBuilder),
+    commands.registerCommand(
+      "extension.wrap-blocselector",
+      wrapWithBlocSelector
+    ),
     commands.registerCommand(
       "extension.wrap-bloclistener",
       wrapWithBlocListener

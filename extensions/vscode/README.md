@@ -43,6 +43,7 @@ You can activate the commands by launching the command palette (View -> Command 
 | Action                         | Description                                    |
 | ------------------------------ | ---------------------------------------------- |
 | `Wrap with BlocBuilder`        | Wraps current widget in a `BlocBuilder`        |
+| `Wrap with BlocSelector`       | Wraps current widget in a `BlocSelector`       |
 | `Wrap with BlocListener`       | Wraps current widget in a `BlocListener`       |
 | `Wrap with BlocConsumer`       | Wraps current widget in a `BlocConsumer`       |
 | `Wrap with BlocProvider`       | Wraps current widget in a `BlocProvider`       |
@@ -67,6 +68,7 @@ You can activate the commands by launching the command palette (View -> Command 
 | `repoprovider`      | Creates a `RepositoryProvider` widget      |
 | `multirepoprovider` | Creates a `MultiRepositoryProvider` widget |
 | `blocbuilder`       | Creates a `BlocBuilder` widget             |
+| `blocselector`      | Creates a `BlocSelector` widget            |
 | `bloclistener`      | Creates a `BlocListener` widget            |
 | `multibloclistener` | Creates a `MultiBlocListener` widget       |
 | `blocconsumer`      | Creates a `BlocConsumer` widget            |
