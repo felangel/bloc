@@ -116,8 +116,6 @@ function checkForUpgrades(
         "0.0.0"
       );
       if (!semver.satisfies(minVersion, dependency.version)) {
-        console.log(minVersion);
-        console.log(dependency.version);
         window
           .showWarningMessage(
             `This workspace contains an unsupported version of ${dependency.name}. Please update to ${dependency.version}.`,
