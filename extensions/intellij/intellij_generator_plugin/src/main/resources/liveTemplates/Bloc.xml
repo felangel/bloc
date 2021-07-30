@@ -45,6 +45,19 @@
             <option name="DART" value="true"/>
         </context>
     </template>
+    <template name="blocselector"
+              value="BlocSelector&lt;$Subject$$EnumBloc$, $Subject$State, $SelectedState$&gt;(&#10;  // TODO: change dynamic type&#10;  selector: (state) {&#10;    // TODO: return selected state based on the provided state.&#10;    return state.$completion$;&#10;  },&#10;  builder: (context, state) {&#10;    // TODO: return widget here based on the selected state.&#10;    return $Widget$;&#10;  },&#10;)&#10;"
+              description="BlocSelector widget" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
+                  alwaysStopAt="true"/>
+        <variable name="completion" expression="complete()" defaultValue="" alwaysStopAt="true"/>
+        <variable name="SelectedState" expression="" defaultValue="&quot;dynamic&quot;" alwaysStopAt="true"/>
+        <variable name="Widget" expression="" defaultValue="&quot;Text(state.toString())&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+        </context>
+    </template>
     <template name="multibloclistener"
               value="MultiBlocListener(&#10;  listeners: [&#10;    BlocListener&lt;$Subject$$EnumBloc$, $Subject$State&gt;(&#10;      listener: (context, state) {&#10;        // TODO: implement listener&#10;      },&#10;    ),&#10;    BlocListener&lt;$Subject2$$EnumBloc2$, $Subject2$State&gt;(&#10;      listener: (context, state) {&#10;        // TODO: implement listener&#10;      },&#10;    ),&#10;  ],&#10;  child: $Container$,&#10;)"
               description="MultiBlocListener widget" toReformat="false" toShortenFQNames="true">

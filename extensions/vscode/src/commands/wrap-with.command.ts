@@ -8,6 +8,17 @@ const blocBuilderSnippet = (widget: string) => {
 )`;
 };
 
+const blocSelectorSnippet = (widget: string) => {
+  return `BlocSelector<\${1:Subject}\${2|Bloc,Cubit|}, $1State, \${3:SelectedState}>(
+  selector: (state) {
+    return \${4:state};
+  },
+  builder: (context, state) {
+    return ${widget};
+  },
+)`;
+};
+
 const blocListenerSnippet = (widget: string) => {
   return `BlocListener<\${1:Subject}\${2|Bloc,Cubit|}, $1State>(
   listener: (context, state) {
@@ -43,6 +54,7 @@ const repositoryProviderSnippet = (widget: string) => {
 };
 
 export const wrapWithBlocBuilder = async () => wrapWith(blocBuilderSnippet);
+export const wrapWithBlocSelector = async () => wrapWith(blocSelectorSnippet);
 export const wrapWithBlocListener = async () => wrapWith(blocListenerSnippet);
 export const wrapWithBlocConsumer = async () => wrapWith(blocConsumerSnippet);
 export const wrapWithBlocProvider = async () => wrapWith(blocProviderSnippet);

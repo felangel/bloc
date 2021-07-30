@@ -59,6 +59,19 @@
       ")"
     ]
   },
+  "BlocSelector": {
+    "prefix": "blocselector",
+    "body": [
+      "BlocSelector<${1:Subject}${2|Bloc,Cubit|}, $1State, ${3:Selected}>(",
+      "\tselector: (state) {",
+      "\t\treturn ${4:state};",
+      "\t},",
+      "\tbuilder: (context, state) {",
+      "\t\treturn ${5:Container()};",
+      "\t},",
+      ")"
+    ]
+  },
   "BlocListener": {
     "prefix": "bloclistener",
     "body": [
