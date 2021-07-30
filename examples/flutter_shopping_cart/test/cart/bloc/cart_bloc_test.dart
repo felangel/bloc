@@ -16,6 +16,7 @@ void main() {
     ];
 
     final mockItemToAdd = Item(4, 'item #4');
+    final mockItemToRemove = mockItems.last;
 
     late ShoppingRepository shoppingRepository;
 
@@ -101,6 +102,46 @@ void main() {
       verify: (_) {
         verify(
           () => shoppingRepository.addItemToCart(mockItemToAdd),
+        ).called(1);
+      },
+    );
+
+    blocTest<CartBloc, CartState>(
+      'emits [CartLoaded] when item is removed successfully',
+      build: () {
+        when(() => shoppingRepository.removeItemFromCart(mockItemToRemove))
+            .thenAnswer((_) async {});
+        return CartBloc(shoppingRepository: shoppingRepository);
+      },
+      seed: () => CartLoaded(cart: Cart(items: mockItems)),
+      act: (bloc) => bloc.add(CartItemRemoved(mockItemToRemove)),
+      expect: () => <CartState>[
+        CartLoaded(
+          cart: Cart(items: mockItems..removeLast()),
+        )
+      ],
+      verify: (_) {
+        verify(
+          () => shoppingRepository.removeItemFromCart(mockItemToRemove),
+        ).called(1);
+      },
+    );
+
+    blocTest<CartBloc, CartState>(
+      'emits [CartError] when item is not removed successfully',
+      build: () {
+        when(() => shoppingRepository.removeItemFromCart(mockItemToRemove))
+            .thenThrow(Exception('Error'));
+        return CartBloc(shoppingRepository: shoppingRepository);
+      },
+      seed: () => CartLoaded(cart: Cart(items: mockItems)),
+      act: (bloc) => bloc.add(CartItemRemoved(mockItemToRemove)),
+      expect: () => <CartState>[
+        CartError(),
+      ],
+      verify: (_) {
+        verify(
+          () => shoppingRepository.removeItemFromCart(mockItemToRemove),
         ).called(1);
       },
     );
