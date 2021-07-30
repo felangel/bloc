@@ -277,16 +277,8 @@ class _ThrottleTime<E> extends EventModifier<E> {
     void Function() next,
   ) async {
     if (_timer?.isActive == true) return;
-
-    void callback() {
-      if (events.isEmpty) return;
-      for (final e in events) e.cancel();
-      next();
-      _timer = Timer(duration, callback);
-    }
-
     next();
-    _timer = Timer(duration, callback);
+    _timer = Timer(duration, () {});
   }
 
   @override

@@ -325,12 +325,16 @@ void main() {
       expect(bloc.onCalls, equals([CounterEvent.increment]));
       expect(states, equals([1]));
 
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+      print('delayed');
+
       bloc
         ..add(CounterEvent.increment)
         ..add(CounterEvent.increment)
         ..add(CounterEvent.increment);
 
-      await Future<void>.delayed(const Duration(milliseconds: 350));
+      await Future<void>.delayed(delay);
+
       expect(
         bloc.onCalls,
         equals([CounterEvent.increment, CounterEvent.increment]),
