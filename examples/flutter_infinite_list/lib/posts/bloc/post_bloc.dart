@@ -39,7 +39,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
               posts: List.of(state.posts)..addAll(posts),
               hasReachedMax: false,
             ));
-    } on Exception {
+    } catch (_) {
       emit(state.copyWith(status: PostStatus.failure));
     }
   }

@@ -279,6 +279,7 @@ class _ThrottleTime<E> extends EventModifier<E> {
     if (_timer?.isActive == true) return;
 
     void callback() {
+      if (events.isEmpty) return;
       for (final e in events) e.cancel();
       next();
       _timer = Timer(duration, callback);
@@ -289,9 +290,7 @@ class _ThrottleTime<E> extends EventModifier<E> {
   }
 
   @override
-  void dispose() {
-    _timer?.cancel();
-  }
+  void dispose() => _timer?.cancel();
 }
 
 /// Signature for a a mapper function which is invoked with a specific [Event].
@@ -478,12 +477,11 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
       );
     }
 
-    await _eventSubscription.cancel();
+    // ignore: unawaited_futures
+    _eventSubscription.cancel();
 
     for (final pendingEvents in _pendingEvents.values) {
-      for (final pendingEvent in pendingEvents) {
-        pendingEvent._close();
-      }
+      for (final pendingEvent in pendingEvents) pendingEvent._close();
     }
 
     try {
@@ -491,9 +489,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     } catch (_) {}
     _pendingEvents.clear();
 
-    for (final callback in _onEventCallbacks) {
-      callback.modifier.dispose();
-    }
+    for (final callback in _onEventCallbacks) callback.modifier.dispose();
 
     await super.close();
   }

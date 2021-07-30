@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -114,21 +111,17 @@ class CounterView extends StatelessWidget {
 enum CounterEvent { increment, decrement, reset }
 
 class CounterBloc extends HydratedBloc<CounterEvent, int> {
-  CounterBloc() : super(0);
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-      case CounterEvent.reset:
-        yield 0;
-        break;
-    }
+  CounterBloc() : super(0) {
+    on<CounterEvent>((event, emit) {
+      switch (event) {
+        case CounterEvent.decrement:
+          return emit(state - 1);
+        case CounterEvent.increment:
+          return emit(state + 1);
+        case CounterEvent.reset:
+          return emit(0);
+      }
+    });
   }
 
   @override

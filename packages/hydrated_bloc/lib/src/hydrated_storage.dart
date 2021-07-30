@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:hive/hive.dart';
-import 'package:meta/meta.dart';
-import 'package:synchronized/synchronized.dart';
 // ignore: implementation_imports
 import 'package:hive/src/hive_impl.dart';
+import 'package:meta/meta.dart';
+import 'package:synchronized/synchronized.dart';
 
 import 'hydrated_cipher.dart';
 

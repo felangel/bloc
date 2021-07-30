@@ -1,5 +1,5 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/login/login.dart';
 import 'package:flutter_firebase_login/sign_up/sign_up.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -131,7 +131,7 @@ class _GoogleLoginButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
-        primary: theme.accentColor,
+        primary: theme.colorScheme.secondary,
       ),
       icon: const Icon(FontAwesomeIcons.google, color: Colors.white),
       onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
