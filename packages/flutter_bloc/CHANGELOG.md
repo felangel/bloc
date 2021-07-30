@@ -1,3 +1,7 @@
+# 7.1.0
+
+- feat: add `BlocSelector` widget
+
 # 7.0.1
 
 - fix: `BlocConsumer`, `BlocBuilder`, and `BlocListener` depend on bloc/cubit instance
