@@ -139,6 +139,7 @@ void main() {
       await tester.tap(find.text('BUY'));
       await tester.pumpAndSettle();
       expect(find.byType(SnackBar), findsOneWidget);
+      expect(find.text('Buying not supported yet.'), findsOneWidget);
     });
   });
 }
