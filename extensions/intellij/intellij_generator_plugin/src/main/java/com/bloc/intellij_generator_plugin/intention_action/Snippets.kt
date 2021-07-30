@@ -14,6 +14,7 @@ object Snippets {
     @JvmStatic
     fun getSnippet(snippetType: SnippetType?, blocWidget: String, widget: String): String {
         return when (snippetType) {
+            // TODO: Add BlocSelector
             SnippetType.BlocListener -> blocListenerSnippet(widget)
             SnippetType.BlocProvider -> blocProviderSnippet(widget)
             SnippetType.BlocConsumer -> blocConsumerSnippet(widget)
