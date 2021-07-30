@@ -84,15 +84,13 @@ class AuthenticationRepository {
   /// Throws a [LogInWithGoogleFailure] if an exception occurs.
   Future<void> logInWithGoogle() async {
     try {
-      firebase_auth.AuthCredential? credential;
-
+      late final firebase_auth.AuthCredential credential;
       if (isWeb) {
         final googleProvider = firebase_auth.GoogleAuthProvider();
-
-        var userCredential =
-            await _firebaseAuth.signInWithPopup(googleProvider);
-
-        credential = userCredential.credential;
+        var userCredential = await _firebaseAuth.signInWithPopup(
+          googleProvider,
+        );
+        credential = userCredential.credential!;
       } else {
         final googleUser = await _googleSignIn.signIn();
         final googleAuth = await googleUser!.authentication;
@@ -102,7 +100,7 @@ class AuthenticationRepository {
         );
       }
 
-      await _firebaseAuth.signInWithCredential(credential!);
+      await _firebaseAuth.signInWithCredential(credential);
     } catch (_) {
       throw LogInWithGoogleFailure();
     }
