@@ -19,6 +19,8 @@ void main() {
     Item(3, 'item #3'),
   ];
 
+  final mockItemToRemove = mockItems.last;
+
   setUpAll(() {
     registerFallbackValue<CartState>(FakeCartState());
     registerFallbackValue<CartEvent>(FakeCartEvent());
@@ -112,6 +114,20 @@ void main() {
     });
 
     testWidgets(
+        'removes item from cart items '
+        'after long press', (tester) async {
+      when(() => cartBloc.state)
+          .thenReturn(CartLoaded(cart: Cart(items: mockItems)));
+      await tester.pumpApp(
+        cartBloc: cartBloc,
+        child: Scaffold(body: CartList()),
+      );
+      await tester.longPress(find.text(mockItemToRemove.name));
+      await tester.pumpAndSettle();
+      verify(() => cartBloc.add(CartItemRemoved(mockItemToRemove))).called(1);
+    });
+
+    testWidgets(
         'renders SnackBar after '
         'tapping the \'BUY\' button', (tester) async {
       when(() => cartBloc.state)
@@ -123,7 +139,6 @@ void main() {
       await tester.tap(find.text('BUY'));
       await tester.pumpAndSettle();
       expect(find.byType(SnackBar), findsOneWidget);
-      expect(find.text('Buying not supported yet.'), findsOneWidget);
     });
   });
 }
