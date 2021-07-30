@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -19,11 +18,11 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 /// reduce the amount of boilerplate code needed as well as [bloc]-specific
 /// performance improvements.
 
-/// Please refer to `BlocListener` if you want to "do" anything in response to
+/// Please refer to [BlocListener] if you want to "do" anything in response to
 /// `state` changes such as navigation, showing a dialog, etc...
 ///
 /// If the [bloc] parameter is omitted, [BlocBuilder] will automatically
-/// perform a lookup using [BlocProvider] and the current `BuildContext`.
+/// perform a lookup using [BlocProvider] and the current [BuildContext].
 ///
 /// ```dart
 /// BlocBuilder<BlocA, BlocAState>(
@@ -34,7 +33,7 @@ typedef BlocBuilderCondition<S> = bool Function(S previous, S current);
 /// ```
 ///
 /// Only specify the [bloc] if you wish to provide a [bloc] that is otherwise
-/// not accessible via [BlocProvider] and the current `BuildContext`.
+/// not accessible via [BlocProvider] and the current [BuildContext].
 ///
 /// ```dart
 /// BlocBuilder<BlocA, BlocAState>(
