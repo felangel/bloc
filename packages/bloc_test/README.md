@@ -82,7 +82,9 @@ expect(counterBloc.state, equals(3));
 **blocTest** creates a new `bloc`-specific test case with the given `description`.
 `blocTest` will handle asserting that the `bloc` emits the `expect`ed states (in order) after `act` is executed. `blocTest` also handles ensuring that no additional states are emitted by closing the `bloc` stream before evaluating the `expect`ation.
 
-`build` should be used for all `bloc` initialization and preparation and must return the `bloc` under test.
+`setUp` is optional and should be used to set up any dependencies prior to initializing the `bloc` under test. `setUp` should be used to set up state necessary for a particular test case. For common set up code, prefer to use `setUp` from `package:test/test.dart`.
+
+`build` should construct and return the `bloc` under test.
 
 `seed` is an optional `Function` that returns a state which will be used to seed the `bloc` before `act` is called.
 
@@ -97,6 +99,8 @@ expect(counterBloc.state, equals(3));
 `verify` is an optional callback which is invoked after `expect` and can be used for additional verification/assertions. `verify` is called with the `bloc` returned by `build`.
 
 `errors` is an optional `Function` that returns a `Matcher` which the `bloc` under test is expected to throw after `act` is executed.
+
+`tearDown` is optional and can be used to execute any code after the test has run. `tearDown` should be used to clean up after a particular test case. For common tear down code, prefer to use `tearDown` from `package:test/test.dart`.
 
 ```dart
 group('CounterBloc', () {
