@@ -87,7 +87,7 @@ class AuthenticationRepository {
       late final firebase_auth.AuthCredential credential;
       if (isWeb) {
         final googleProvider = firebase_auth.GoogleAuthProvider();
-        var userCredential = await _firebaseAuth.signInWithPopup(
+        final userCredential = await _firebaseAuth.signInWithPopup(
           googleProvider,
         );
         credential = userCredential.credential!;
