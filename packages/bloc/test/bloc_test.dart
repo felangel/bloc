@@ -829,7 +829,7 @@ void main() {
 
         controller..add(0)..add(1)..add(2);
 
-        streamBloc..add(StreamEvent());
+        streamBloc.add(StreamEvent());
 
         controller..add(3)..add(4);
 

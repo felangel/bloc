@@ -22,7 +22,7 @@ abstract class PendingEvent {
 /// {@template emitter}
 ///
 /// {@endtemplate}
-class Emitter<State> with PendingEvent {
+class Emitter<State> implements PendingEvent {
   /// {@macro emitter}
   Emitter(this._emit);
 
@@ -35,11 +35,23 @@ class Emitter<State> with PendingEvent {
   ///
   /// [listen] completes when the event handler is cancelled or when
   /// the provided [stream] has ended.
-  Future<void> listen<T>(Stream<T> stream, void Function(T) onData) {
+  Future<void> listen<T>(Stream<T> stream, void Function(T) onData) async {
     final whenDone = Completer<void>();
     final sub = stream.listen(onData, onDone: whenDone.complete);
     _disposables.add(sub.cancel);
     return Future.any([whenCompleted, whenDone.future]);
+  }
+
+  // Subscribes to the provided [stream] and invokes the [onData] callback
+  /// when the [stream] emits new data and the result of [onData] is emitted.
+  ///
+  /// [forEach] completes when the event handler is cancelled or when
+  /// the provided [stream] has ended.
+  Future<void> forEach<T>(
+    Stream<T> stream,
+    FutureOr<State> Function(T) onData,
+  ) {
+    return listen<T>(stream, (x) async => _emit(await onData(x)));
   }
 
   /// Emits the provided [state].
@@ -52,10 +64,8 @@ class Emitter<State> with PendingEvent {
   bool get isCompleted => _completer.isCompleted;
 
   @override
-  Future<void> cancel() async {
-    for (final d in _disposables) {
-      await d();
-    }
+  void cancel() {
+    for (final dispose in _disposables) dispose();
     _disposables.clear();
     if (isCompleted) return;
     _completer.complete();
@@ -519,7 +529,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
         } catch (error, stackTrace) {
           onError(error, stackTrace);
         } finally {
-          await emitter.cancel();
+          emitter.cancel();
         }
       }
 
