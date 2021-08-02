@@ -527,6 +527,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
         late final _Emitter<State> emitter;
         emitter = _Emitter((state) {
           if (emitter.isCompleted) return;
+          if (this.state == state && _emitted) return;
           onTransition(Transition(
             currentState: this.state,
             event: event,
