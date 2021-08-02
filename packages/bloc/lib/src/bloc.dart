@@ -13,34 +13,22 @@ abstract class PendingEvent {
   void cancel();
 
   /// The future that is completed by the current event handler.
-  Future<void> get whenCompleted;
+  Future<void> get future;
 
   /// Whether the current event handler has completed.
   bool get isCompleted;
 }
 
 /// {@template emitter}
-///
+/// Base interface for emitting states in response to events.
 /// {@endtemplate}
-class Emitter<State> implements PendingEvent {
-  /// {@macro emitter}
-  Emitter(this._emit);
-
-  final _completer = Completer<void>();
-  final _disposables = <FutureOr<void> Function()>[];
-  final void Function(State state) _emit;
-
+abstract class Emitter<State> {
   /// Subscribes to the provided [stream] and invokes the [onData] callback
   /// when the [stream] emits new data.
   ///
   /// [listen] completes when the event handler is cancelled or when
   /// the provided [stream] has ended.
-  Future<void> listen<T>(Stream<T> stream, void Function(T) onData) async {
-    final whenDone = Completer<void>();
-    final sub = stream.listen(onData, onDone: whenDone.complete);
-    _disposables.add(sub.cancel);
-    return Future.any([whenCompleted, whenDone.future]);
-  }
+  Future<void> listen<T>(Stream<T> stream, void Function(T) onData);
 
   // Subscribes to the provided [stream] and invokes the [onData] callback
   /// when the [stream] emits new data and the result of [onData] is emitted.
@@ -50,15 +38,42 @@ class Emitter<State> implements PendingEvent {
   Future<void> forEach<T>(
     Stream<T> stream,
     FutureOr<State> Function(T) onData,
+  );
+
+  /// Emits the provided [state].
+  void call(State state);
+}
+
+class _Emitter<State> extends _PendingEvent implements Emitter<State> {
+  _Emitter(this._emit);
+  final void Function(State) _emit;
+
+  @override
+  Future<void> listen<T>(Stream<T> stream, void Function(T) onData) async {
+    final whenDone = Completer<void>();
+    final sub = stream.listen(onData, onDone: whenDone.complete);
+    _disposables.add(sub.cancel);
+    return Future.any([future, whenDone.future]);
+  }
+
+  @override
+  Future<void> forEach<T>(
+    Stream<T> stream,
+    FutureOr<State> Function(T) onData,
   ) {
     return listen<T>(stream, (x) async => _emit(await onData(x)));
   }
 
-  /// Emits the provided [state].
+  @override
   void call(State state) => _emit(state);
+}
+
+class _PendingEvent implements PendingEvent {
+  final _completer = Completer<void>();
+  final _disposables = <FutureOr<void> Function()>[];
 
   @override
-  Future<void> get whenCompleted => _completer.future;
+  Future<void> get future => _completer.future;
 
   @override
   bool get isCompleted => _completer.isCompleted;
@@ -170,7 +185,7 @@ class _Enqueue<E> extends EventModifier<E> {
     void Function() next,
   ) async {
     while (events.isNotEmpty) {
-      await Future.wait<void>(events.map((e) => e.whenCompleted));
+      await Future.wait<void>(events.map((e) => e.future));
     }
     next();
   }
@@ -224,7 +239,7 @@ class _KeepLatest<E> extends EventModifier<E> {
   ) async {
     if (events.isEmpty) return next();
     events.sublist(1).forEach((e) => e.cancel());
-    await events.first.whenCompleted;
+    await events.first.future;
     if (events.isEmpty) return next();
   }
 }
@@ -345,7 +360,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   static BlocObserver observer = BlocObserver();
 
   late final _onEventCallbacks = <_OnEvent<Event, State>>{};
-  late final _pendingEvents = <dynamic, List<Emitter>>{};
+  late final _pendingEvents = <dynamic, List<_PendingEvent>>{};
   final _eventController = StreamController<Event>.broadcast(sync: true);
   late final StreamSubscription<Event> _eventSubscription;
 
@@ -474,7 +489,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
         [],
         (prev, element) => [
           ...prev,
-          ...element.where((e) => !e.isCompleted).map((e) => e.whenCompleted)
+          ...element.where((e) => !e.isCompleted).map((e) => e.future)
         ],
       );
     }
@@ -509,8 +524,8 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
 
     for (final dynamic onEvent in callbacks) {
       void next() async {
-        late final Emitter<State> emitter;
-        emitter = Emitter((state) {
+        late final _Emitter<State> emitter;
+        emitter = _Emitter((state) {
           if (emitter.isCompleted) return;
           onTransition(Transition(
             currentState: this.state,
@@ -520,7 +535,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
           emit(state);
         })
           // ignore: unawaited_futures
-          ..whenCompleted.then((_) => _pendingEvents[onEvent]?.remove(emitter));
+          ..future.then((_) => _pendingEvents[onEvent]?.remove(emitter));
 
         try {
           _pendingEvents.putIfAbsent(onEvent, () => []);

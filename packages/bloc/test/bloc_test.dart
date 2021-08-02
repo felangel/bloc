@@ -823,19 +823,61 @@ void main() {
         const expectedStates = [3, 4];
         final states = <int>[];
         final controller = StreamController<int>.broadcast();
-        final streamBloc = StreamBloc(controller.stream)
+        final bloc = StreamBloc(controller.stream)
           ..stream.listen(states.add)
-          ..add(StreamEvent());
+          ..add(Subscribe());
 
         controller..add(0)..add(1)..add(2);
 
-        streamBloc.add(StreamEvent());
+        bloc.add(Subscribe());
 
         controller..add(3)..add(4);
 
         await Future<void>.delayed(const Duration(milliseconds: 300));
 
-        await streamBloc.close();
+        await bloc.close();
+        expect(states, equals(expectedStates));
+      });
+    });
+
+    group('RestartableStreamBloc', () {
+      test('forEach cancels subscriptions correctly', () async {
+        const expectedStates = [3, 4];
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final bloc = RestartableStreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(ForEach());
+
+        controller..add(0)..add(1)..add(2);
+
+        bloc.add(ForEach());
+
+        controller..add(3)..add(4);
+
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        await bloc.close();
+        expect(states, equals(expectedStates));
+      });
+
+      test('listen cancels subscriptions correctly', () async {
+        const expectedStates = [3, 4];
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final bloc = RestartableStreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(Listen());
+
+        controller..add(0)..add(1)..add(2);
+
+        bloc.add(Listen());
+
+        controller..add(3)..add(4);
+
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        await bloc.close();
         expect(states, equals(expectedStates));
       });
     });
