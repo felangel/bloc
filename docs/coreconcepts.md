@@ -332,7 +332,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 In the above snippet, we are switching on the incoming event and if it is an increment event, we are yielding a new state (similar to `emit`).
 
-?> **Note**: Since the `Bloc` class extends `Cubit`, we have access to the current state of the bloc at any point in time via the `state` getter.
+?> **Note**: Since the `Bloc` class extends `BlocBase`, we have access to the current state of the bloc at any point in time via the `state` getter.
 
 !> Blocs should never directly `emit` new states. Instead every state change must be output in response to an incoming event within `mapEventToState`.
 
