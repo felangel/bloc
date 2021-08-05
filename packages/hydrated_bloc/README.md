@@ -44,7 +44,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 `hydrated_bloc` exports a `Storage` interface which means it can work with any storage provider. Out of the box, it comes with its own implementation: `HydratedStorage`.
 
-`HydratedStorage` is built on top of [hive](https://pub.dev/packages/hive) for a platform-agnostic, performant storage layer. See the complete [example](example) for more details.
+`HydratedStorage` is built on top of [hive](https://pub.dev/packages/hive) for a platform-agnostic, performant storage layer. See the complete [example](https://github.com/felangel/bloc/blob/master/packages/hydrated_bloc/example) for more details.
 
 ## Usage
 
