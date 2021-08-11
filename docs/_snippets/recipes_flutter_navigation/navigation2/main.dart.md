@@ -69,7 +69,7 @@ class BookDetailsPage extends StatelessWidget {
   Page page() => MaterialPage<void>(
           child: BookDetailsPage(
         book: book,
-      ));
+      ),);
 
   final Book book;
 
