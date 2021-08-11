@@ -22,7 +22,5 @@ class BookSelected extends BookEvent {
 class BookDeselected extends BookEvent {
   const BookDeselected();
 
-  @override
-  List<Object> get props => [];
 }
 ```
