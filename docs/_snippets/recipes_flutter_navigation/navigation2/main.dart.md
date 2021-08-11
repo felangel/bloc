@@ -38,7 +38,7 @@ class BooksListPage extends StatelessWidget {
   Page page() => MaterialPage<void>(
           child: BooksListPage(
         books: books,
-      ));
+      ),);
 
   final List<Book> books;
 
