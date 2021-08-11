@@ -41,10 +41,12 @@ class BooksListPage extends StatelessWidget {
       ));
 
   final List<Book> books;
+
   const BooksListPage({
     Key? key,
     required this.books,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
