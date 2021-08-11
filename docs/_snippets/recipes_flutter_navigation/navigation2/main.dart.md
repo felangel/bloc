@@ -7,7 +7,7 @@ import 'bloc/book_bloc.dart';
 void main() {
   runApp(
     BlocProvider(
-      create: (context) => BookBloc(),
+      create: (_) => BookBloc(),
       child: BooksApp(),
     ),
   );
