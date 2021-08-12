@@ -326,7 +326,6 @@ void main() {
       expect(states, equals([1]));
 
       await Future<void>.delayed(const Duration(milliseconds: 300));
-      print('delayed');
 
       bloc
         ..add(CounterEvent.increment)

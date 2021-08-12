@@ -108,8 +108,13 @@ class _PendingEvent implements PendingEvent {
 /// Custom event modifiers can be created like:
 ///
 /// ```dart
-/// EventModifier<E> customEventModifier<E>() {
-///  return ((event, events, next) { ... });
+/// class CustomModifier<E> extends EventModifier<E> {
+///   @override
+///   FutureOr<void> call(
+///     E event,
+///     List<PendingEvent> events,
+///     void Function() next,
+///   ) {...}
 /// }
 /// ```
 ///
@@ -273,9 +278,7 @@ class _DebounceTime<E> extends EventModifier<E> {
   }
 
   @override
-  void dispose() {
-    _timer?.cancel();
-  }
+  void dispose() => _timer?.cancel();
 }
 
 /// Process only one event at a time dropping all events which
@@ -361,8 +364,8 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
 
   late final _onEventCallbacks = <_OnEvent<Event, State>>{};
   late final _pendingEvents = <dynamic, List<_PendingEvent>>{};
-  final _eventController = StreamController<Event>.broadcast(sync: true);
   late final StreamSubscription<Event> _eventSubscription;
+  final _eventController = StreamController<Event>.broadcast(sync: true);
 
   /// Notifies the [Bloc] of a new [event]
   /// which triggers any registered handlers.
