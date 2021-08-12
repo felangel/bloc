@@ -40,10 +40,10 @@ class SimpleBlocObserver extends BlocObserver {
   }
 }
 
-void main() async {
+void main() {
   Bloc.observer = SimpleBlocObserver();
 
-  // cubitMain();
+  cubitMain();
   blocMain();
 }
 
@@ -67,44 +67,26 @@ void cubitMain() {
 }
 
 void blocMain() async {
-  // print('----------BLOC----------');
+  print('----------BLOC----------');
 
-  // /// Create a `CounterBloc` instance.
-  // final bloc = CounterBloc();
+  /// Create a `CounterBloc` instance.
+  final bloc = CounterBloc();
 
-  // /// Access the state of the `bloc` via `state`.
-  // print(bloc.state);
+  /// Access the state of the `bloc` via `state`.
+  print(bloc.state);
 
-  // /// Interact with the `bloc` to trigger `state` changes.
-  // bloc.add(Increment());
+  /// Interact with the `bloc` to trigger `state` changes.
+  bloc.add(CounterEvent.increment);
 
-  // /// Wait for next iteration of the event-loop
-  // /// to ensure event has been processed.
-  // await Future<void>.delayed(Duration.zero);
+  /// Wait for next iteration of the event-loop
+  /// to ensure event has been processed.
+  await Future<void>.delayed(Duration.zero);
 
-  // /// Access the new `state`.
-  // print(bloc.state);
+  /// Access the new `state`.
+  print(bloc.state);
 
-  // /// Close the `bloc` when it is no longer needed.
-  // await bloc.close();
-  final controller = StreamController<int>.broadcast(
-    onListen: () => print('onListen'),
-    onCancel: () => print('onCancel'),
-  );
-  final sub = Stream<void>.periodic(
-    const Duration(seconds: 1),
-    (_) => controller.add(_ + 1),
-  ).listen(null);
-  final bloc = StreamBloc(controller.stream)
-    ..add(StreamEvent())
-    ..add(StreamEvent())
-    ..add(StreamEvent());
-
-  await Future<void>.delayed(const Duration(seconds: 5));
-
+  /// Close the `bloc` when it is no longer needed.
   await bloc.close();
-  await sub.cancel();
-  await controller.close();
 }
 
 /// A `CounterCubit` which manages an `int` as its state.
@@ -118,27 +100,24 @@ class CounterCubit extends Cubit<int> {
   void increment() => emit(state + 1);
 }
 
-/// The type of event which `CounterBloc` will react to.
-abstract class CounterEvent {}
-
-/// The concrete increment counter event.
-class Increment extends CounterEvent {}
+/// The events which `CounterBloc` will react to.
+enum CounterEvent { increment }
 
 /// A `CounterBloc` which handles converting `CounterEvent`s into `int`s.
 class CounterBloc extends Bloc<CounterEvent, int> {
   /// The initial state of the `CounterBloc` is 0.
   CounterBloc() : super(0) {
-    on<Increment>((event, emit) => emit(state + 1));
+    on<CounterEvent>(_onCounterEvent);
   }
-}
 
-class StreamEvent {}
+  void _onCounterEvent(CounterEvent event, Emitter<int> emit) {
+    switch (event) {
 
-class StreamBloc extends Bloc<StreamEvent, int> {
-  StreamBloc(Stream<int> stream) : super(0) {
-    on<StreamEvent>(
-      (_, emit) => emit.forEach<int>(stream, (i) => i),
-      concurrent(),
-    );
+      /// When a `CounterEvent.increment` event is added,
+      /// the current `state` of the bloc is accessed via the `state` property
+      /// and a new state is emitted via `emit`.
+      case CounterEvent.increment:
+        return emit(state + 1);
+    }
   }
 }
