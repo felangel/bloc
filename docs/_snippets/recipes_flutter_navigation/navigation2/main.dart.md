@@ -35,17 +35,17 @@ class BooksApp extends StatelessWidget {
 }
 
 class BooksListPage extends StatelessWidget {
+  const BooksListPage({
+    Key? key,
+    required this.books,
+  }) : super(key: key);
+  
   Page page() => MaterialPage<void>(
           child: BooksListPage(
         books: books,
       ),);
 
   final List<Book> books;
-
-  const BooksListPage({
-    Key? key,
-    required this.books,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,17 +68,17 @@ class BooksListPage extends StatelessWidget {
 }
 
 class BookDetailsPage extends StatelessWidget {
+  const BookDetailsPage({
+    Key? key,
+    required this.book,
+  });
+  
   Page page() => MaterialPage<void>(
           child: BookDetailsPage(
         book: book,
       ),);
 
   final Book book;
-
-  const BookDetailsPage({
-    Key? key,
-    required this.book,
-  });
 
   @override
   Widget build(BuildContext context) {
