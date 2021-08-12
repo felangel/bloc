@@ -90,7 +90,6 @@ void main() {
           SignUpState(
             confirmedPassword: ConfirmedPassword.dirty(
               password: invalidPasswordString,
-              value: '',
             ),
             password: invalidPassword,
             status: FormzStatus.invalid,
@@ -129,7 +128,6 @@ void main() {
         expect: () => const <SignUpState>[
           SignUpState(
             email: validEmail,
-            password: Password.pure(),
             confirmedPassword: validConfirmedPassword,
             status: FormzStatus.invalid,
           ),

@@ -25,7 +25,7 @@ void main() {
     test('returns object with updated status when status is passed', () {
       expect(
         SignUpState().copyWith(status: FormzStatus.pure),
-        SignUpState(status: FormzStatus.pure),
+        SignUpState(),
       );
     });
 

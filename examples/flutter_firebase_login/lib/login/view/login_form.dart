@@ -30,15 +30,15 @@ class LoginForm extends StatelessWidget {
                 'assets/bloc_logo_small.png',
                 height: 120,
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 16),
               _EmailInput(),
-              const SizedBox(height: 8.0),
+              const SizedBox(height: 8),
               _PasswordInput(),
-              const SizedBox(height: 8.0),
+              const SizedBox(height: 8),
               _LoginButton(),
-              const SizedBox(height: 8.0),
+              const SizedBox(height: 8),
               _GoogleLoginButton(),
-              const SizedBox(height: 4.0),
+              const SizedBox(height: 4),
               _SignUpButton(),
             ],
           ),
@@ -103,7 +103,7 @@ class _LoginButton extends StatelessWidget {
                 key: const Key('loginForm_continue_raisedButton'),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+                    borderRadius: BorderRadius.circular(30),
                   ),
                   primary: const Color(0xFFFFD600),
                 ),
@@ -129,7 +129,7 @@ class _GoogleLoginButton extends StatelessWidget {
       ),
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(30),
         ),
         primary: theme.colorScheme.secondary,
       ),
