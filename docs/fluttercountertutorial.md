@@ -24,32 +24,7 @@ flutter create flutter_counter
 
 We can then go ahead and replace the contents of `pubspec.yaml` with
 
-```
-name: flutter_counter
-description: A new Flutter project.
-version: 1.0.0+1
-publish_to: none
-
-environment:
-  sdk: ">=2.13.4 <3.0.0"
-
-dependencies:
-  flutter:
-    sdk: flutter
-  bloc: ^7.0.0
-  flutter_bloc: ^7.1.0
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  bloc_test: ^8.1.0
-  mocktail: ^0.1.4
-  integration_test:
-    sdk: flutter
-
-flutter:
-  uses-material-design: true
-```
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/pubspec.yaml ':include')
 
 and then install all of our dependencies
 
