@@ -24,7 +24,32 @@ flutter create flutter_counter
 
 We can then go ahead and replace the contents of `pubspec.yaml` with
 
-[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/pubspec.yaml ':include')
+```
+name: flutter_counter
+description: A new Flutter project.
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.13.4 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  bloc: ^7.0.0
+  flutter_bloc: ^7.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  bloc_test: ^8.1.0
+  mocktail: ^0.1.4
+  integration_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+```
 
 and then install all of our dependencies
 
@@ -74,6 +99,8 @@ We're initializing the `CounterObserver` we just created and calling `runApp` wi
 
 ## Counter App
 
+Let's create `lib/app.dart`:
+
 `CounterApp` will be a `MaterialApp` and is specifying the `home` as `CounterPage`.
 
 [app.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/app.dart ':include')
@@ -84,6 +111,8 @@ Let's take a look at `CounterPage` next!
 
 ## Counter Page
 
+Let's create `lib/counter/view/counter_page.dart`:
+
 The `CounterPage` widget is responsible for creating a `CounterCubit` (which we will look at next) and providing it to the `CounterView`.
 
 [counter_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_page.dart ':include')
@@ -91,6 +120,8 @@ The `CounterPage` widget is responsible for creating a `CounterCubit` (which we 
 ?> **Note**: It's important to separate or decouple the creation of a `Cubit` from the consumption of a `Cubit` in order to have code that is much more testable and reusable.
 
 ## Counter Cubit
+
+Let's create `lib/counter/cubit/counter_cubit.dart`:
 
 The `CounterCubit` class will expose two methods:
 
@@ -107,6 +138,8 @@ Next, let's take a look at the `CounterView` which will be responsible for consu
 
 ## Counter View
 
+Let's create `lib/counter/view/counter_view.dart`:
+
 The `CounterView` is responsible for rendering the current count and rendering two FloatingActionButtons to increment/decrement the counter.
 
 [counter_view.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_view.dart ':include')
@@ -116,6 +149,8 @@ A `BlocBuilder` is used to wrap the `Text` widget in order to update the text an
 ?> **Note**: Only the `Text` widget is wrapped in a `BlocBuilder` because that is the only widget that needs to be rebuilt in response to state changes in the `CounterCubit`. Avoid unnecessarily wrapping widgets that don't need to be rebuilt when a state changes.
 
 ## Barrel
+
+Let's create `lib/counter/counter.dart`:
 
 Add `counter.dart` to export all the public facing parts of the counter feature.
 
