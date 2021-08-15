@@ -53,7 +53,7 @@ class Common {
             if (blocChildWidget != null) {
                 val blocChildWidgetText = blocChildWidget.text
                 val movedBlocWithoutChild = selectedText.replaceFirst(blocChildWidgetText, "")
-                    .replaceFirst("child: ,", "")
+                    .replaceFirst("[^\\S\\r\\n]*child: ,\\s*".toRegex(), "")
                 replaceWith = Snippets.getSnippet(snippetType, blocChildWidgetText, movedBlocWithoutChild)
             } else {
                 replaceWith = Snippets.getSnippet(snippetType, "", selectedText)
