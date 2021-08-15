@@ -79,8 +79,6 @@ void main() {
   const user = User(
     id: _mockFirebaseUserUid,
     email: _mockFirebaseUserEmail,
-    name: null,
-    photo: null,
   );
 
   group('AuthenticationRepository', () {
@@ -183,7 +181,7 @@ void main() {
           () async {
         authenticationRepository.isWeb = true;
         await expectLater(
-          () async => await authenticationRepository.logInWithGoogle(),
+          () => authenticationRepository.logInWithGoogle(),
           throwsA(isA<LogInWithGoogleFailure>()),
         );
         verifyNever(() => googleSignIn.signIn());
