@@ -94,5 +94,17 @@
             <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithRepositoryProviderIntentionAction</className>
             <category>Bloc</category>
         </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocConvertToMultiBlocProviderIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocConvertToMultiBlocListenerIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocConvertToMultiRepositoryProviderIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
     </extensions>
 </idea-plugin>
