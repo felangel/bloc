@@ -26,11 +26,11 @@ class SignUpForm extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             _EmailInput(),
-            const SizedBox(height: 8.0),
+            const SizedBox(height: 8),
             _PasswordInput(),
-            const SizedBox(height: 8.0),
+            const SizedBox(height: 8),
             _ConfirmPasswordInput(),
-            const SizedBox(height: 8.0),
+            const SizedBox(height: 8),
             _SignUpButton(),
           ],
         ),
@@ -121,7 +121,7 @@ class _SignUpButton extends StatelessWidget {
                 key: const Key('signUpForm_continue_raisedButton'),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+                    borderRadius: BorderRadius.circular(30),
                   ),
                   primary: Colors.orangeAccent,
                 ),

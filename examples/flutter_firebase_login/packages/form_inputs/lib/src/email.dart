@@ -1,9 +1,19 @@
 import 'package:formz/formz.dart';
 
-enum EmailValidationError { invalid }
+/// Validation errors for the [Email] [FormzInput].
+enum EmailValidationError {
+  /// Generic invalid error.
+  invalid
+}
 
+/// {@template email}
+/// Form input for an email input.
+/// {@endtemplate}
 class Email extends FormzInput<String, EmailValidationError> {
+  /// {@macro email}
   const Email.pure() : super.pure('');
+
+  /// {@macro email}
   const Email.dirty([String value = '']) : super.dirty(value);
 
   static final RegExp _emailRegExp = RegExp(
