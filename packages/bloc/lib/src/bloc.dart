@@ -710,7 +710,6 @@ abstract class BlocBase<State> {
   /// Once [close] is called, the instance can no longer be used.
   @mustCallSuper
   Future<void> close() async {
-    _isClosed = true;
     // ignore: invalid_use_of_protected_member
     Bloc.observer.onClose(this);
     await _stateController.close();
