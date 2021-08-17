@@ -335,5 +335,14 @@ void main() {
         expect(cubit.stream, emitsDone);
       });
     });
+
+    group('isClosed', () {
+      test('returns true after cubit is closed', () async {
+        final cubit = CounterCubit();
+        expect(cubit.isClosed, isFalse);
+        await cubit.close();
+        expect(cubit.isClosed, isTrue);
+      });
+    });
   });
 }

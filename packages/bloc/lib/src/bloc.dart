@@ -291,6 +291,12 @@ abstract class BlocBase<State> {
   /// The current state stream.
   Stream<State> get stream => _stateController.stream;
 
+  /// Whether the bloc is closed.
+  ///
+  /// A bloc is considered closed once [close] is called.
+  /// Subsequent state changes cannot occur within a closed bloc.
+  bool get isClosed => _stateController.isClosed;
+
   /// Adds a subscription to the `Stream<State>`.
   /// Returns a [StreamSubscription] which handles events from
   /// the `Stream<State>` using the provided [onData], [onError] and [onDone]

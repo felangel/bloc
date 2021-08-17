@@ -958,5 +958,14 @@ void main() {
         expect(bloc.stream, emitsDone);
       });
     });
+
+    group('isClosed', () {
+      test('returns true after bloc is closed', () async {
+        final bloc = CounterBloc();
+        expect(bloc.isClosed, isFalse);
+        await bloc.close();
+        expect(bloc.isClosed, isTrue);
+      });
+    });
   });
 }
