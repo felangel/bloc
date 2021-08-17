@@ -607,6 +607,12 @@ abstract class BlocBase<State> {
   /// The current state stream.
   Stream<State> get stream => transformStates(_stateController.stream);
 
+  /// Whether the bloc is closed.
+  ///
+  /// A bloc is considered closed once [close] is called.
+  /// Subsequent state changes cannot occur within a closed bloc.
+  bool get isClosed => _stateController.isClosed;
+
   /// Updates the [state] to the provided [state].
   /// [emit] does nothing if the instance has been closed or if the
   /// [state] being emitted is equal to the current [state].
@@ -709,9 +715,4 @@ abstract class BlocBase<State> {
     Bloc.observer.onClose(this);
     await _stateController.close();
   }
-
-  bool _isClosed = false;
-
-  /// Whether the bloc is closed.
-  bool get isClosed => _isClosed;
 }
