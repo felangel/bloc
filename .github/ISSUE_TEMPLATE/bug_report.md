@@ -1,30 +1,25 @@
 ---
-name: Bug report
+name: Bug Report
 about: Create a report to help us improve
-
+title: "fix: "
+labels: bug
 ---
 
-**Describe the bug**
+**Description**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
-Steps to reproduce the behavior:
+**Steps To Reproduce**
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
+**Expected Behavior**
 A clear and concise description of what you expected to happen.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Logs **
-Run `flutter analyze` and attach any output of that command below.
-If there are any analysis errors, try resolving them before filing this issue.
-
-Paste the output of running `flutter doctor -v` here.
-
-**Additional context**
+**Additional Context**
 Add any other context about the problem here.
