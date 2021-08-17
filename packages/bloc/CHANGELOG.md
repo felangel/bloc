@@ -1,3 +1,10 @@
+# 7.1.0
+
+- feat: expose `isClosed` getter on `BlocBase`
+- refactor: simplify internal event controller initialization
+- docs: update `onChange` description in README
+- docs: update GetStream sponsorship urls
+
 # 7.0.0
 
 - **BREAKING**: refactor: `Bloc` and `Cubit` extend `BlocBase`
