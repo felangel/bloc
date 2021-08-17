@@ -319,7 +319,7 @@ Update the barrel file we created previously.
 
 > In the business logic layer, we will be consuming the weather domain model from the `WeatherRepository` and exposing a feature-level model which will be surfaced to the user via the UI.
 
-?> **Note**: We have implemented three different types of weather models. In the API client, our weather model contained all the info returned by the API. In the repository layer, our weather model contained only the abstracted model based on our business case. In this layer, our weather model will contain relevant information needed specifically for the current feature set.
+?> **Note**: This is the third different type of weather model we're implementing. In the API client, our weather model contained all the info returned by the API. In the repository layer, our weather model contained only the abstracted model based on our business case. In this layer, our weather model will contain relevant information needed specifically for the current feature set.
 
 ### Setup
 
@@ -332,6 +332,8 @@ Next, we will be working on the application layer within the `weather` feature d
 ### Weather Model
 
 > The goal of our weather model is to keep track of weather data displayed by our app, as well as temperature settings (Celsius or Fahrenheit).
+
+Create `flutter_weather/lib/weather/models/weather.dart`:
 
 [weather.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/models/weather.dart ':include')
 
@@ -349,7 +351,7 @@ Run `build_runner` to generate the (de)serialization implementations.
 
 ### Barrel File
 
-Let's export our models from the barrel file:
+Let's export our models from the barrel file (flutter_weather/lib/weather/models/models.dart):
 
 [models.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/models/models.dart ':include')
 
