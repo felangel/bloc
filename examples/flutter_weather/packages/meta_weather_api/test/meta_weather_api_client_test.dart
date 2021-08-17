@@ -153,7 +153,7 @@ void main() {
         );
       });
 
-      test('returns weather on valid respponse', () async {
+      test('returns weather on valid response', () async {
         final response = MockResponse();
         when(() => response.statusCode).thenReturn(200);
         when(() => response.body).thenReturn('''
