@@ -285,7 +285,7 @@ As we have done previously, run the following command to generate the (de)serial
 
 #### Barrel File
 
-Let's also create a package-level barrel file to export our models. The directory structure should look like:
+Let's also create a package-level barrel file named `packages/weather_repository/lib/weather_repository.dart` to export our models:
 
 [script](_snippets/flutter_weather_tutorial/repository_layer/export_top_level_models.dart.md ':include')
 
