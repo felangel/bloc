@@ -22,22 +22,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1
+      - uses: subosito/flutter-action@v1.5.3
 
       - name: Install Dependencies
-        run: dart pub get
+        run: flutter packages get
 
       - name: Format
-        run: dart format --set-exit-if-changed .
+        run: flutter format --set-exit-if-changed .
 
       - name: Analyze
-        run: dart analyze --fatal-infos --fatal-warnings .
+        run: flutter analyze .
+
+      - name: Verify Build
+        run: flutter pub run test --run-skipped -t pull-request-only
 
       - name: Run Tests
-        run: |
-          pub global activate test_coverage
-          export PATH=$PATH:$HOME/.pub-cache/bin
-          test_coverage
+        run: flutter test -x pull-request-only --no-pub --coverage --test-randomize-ordering-seed random
 
       - name: Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
@@ -58,7 +58,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2.3.4
-      - uses: subosito/flutter-action@v1.5.0
+      - uses: subosito/flutter-action@v1.5.3
 
       - name: Install Dependencies
         run: |
