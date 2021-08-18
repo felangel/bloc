@@ -59,7 +59,7 @@ jobs:
       - name: Install Dependencies
         run: |
           flutter packages get
-          flutter pub global activate pana
+          flutter pub global activate pana 0.19.1
 
       - name: Verify Pub Score
         run: ../../tool/verify_pub_score.sh 110
