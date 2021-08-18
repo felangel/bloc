@@ -1,5 +1,5 @@
-import 'package:universal_io/io.dart';
 import 'package:bloc_tools/src/command_runner.dart';
+import 'package:universal_io/io.dart';
 
 Future<void> main(List<String> args) async {
   await _flushThenExit(await BlocToolsCommandRunner().run(args));
@@ -12,6 +12,7 @@ Future<void> main(List<String> args) async {
 /// exited already. This is useful to prevent Future chains from proceeding
 /// after you've decided to exit.
 Future _flushThenExit(int status) {
-  return Future.wait<void>([stdout.close(), stderr.close()])
-      .then<void>((_) => exit(status));
+  return Future.wait<void>([stdout.close(), stderr.close()]).then<void>(
+    (_) => exit(status),
+  );
 }

@@ -14,7 +14,6 @@ dependencies:
   io: ^1.0.0
   mason: ^0.0.1-dev.45
   universal_io: ^2.0.4
-  very_good_analysis: ^2.3.0
 
 dev_dependencies:
   build_runner: ^2.0.0
@@ -22,6 +21,7 @@ dev_dependencies:
   build_version: ^2.0.0
   mocktail: ^0.1.1
   test: ^1.17.0
+  very_good_analysis: ^2.3.0
 
 executables:
   bloc:
