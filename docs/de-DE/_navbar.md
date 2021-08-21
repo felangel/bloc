@@ -9,4 +9,4 @@
   - [:cn: zh-cn](/zh-cn/)
   - [:azerbaijan: az](/az/)
   - [:jp: jp](/jp/)
-  - [:de: de-DE](/de-DE/)
+  - [:de: de-DE](/de/)
