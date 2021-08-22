@@ -2,7 +2,7 @@
   "name": "bloc",
   "displayName": "bloc",
   "description": "Support for the bloc library and provides tools for effectively creating blocs for both Flutter and AngularDart apps.",
-  "version": "5.7.0",
+  "version": "5.8.0",
   "publisher": "FelixAngelov",
   "bugs": {
     "url": "https://github.com/felangel/bloc/issues",
@@ -93,6 +93,18 @@
         "icon": "assets/logo.png"
       },
       {
+        "command": "extension.convert-multibloclistener",
+        "title": "Convert to MultiBlocListener"
+      },
+      {
+        "command": "extension.convert-multiblocprovider",
+        "title": "Convert to MultiBlocProvider"
+      },
+      {
+        "command": "extension.convert-multirepositoryprovider",
+        "title": "Convert to MultiRepositoryProvider"
+      },
+      {
         "command": "extension.wrap-blocbuilder",
         "title": "Wrap with BlocBuilder"
       },
@@ -131,6 +143,18 @@
         }
       ],
       "commandPalette": [
+        {
+          "command": "extension.convert-multibloclistener",
+          "when": "editorLangId == dart"
+        },
+        {
+          "command": "extension.convert-multiblocprovider",
+          "when": "editorLangId == dart"
+        },
+        {
+          "command": "extension.convert-multirepositoryprovider",
+          "when": "editorLangId == dart"
+        },
         {
           "command": "extension.wrap-blocbuilder",
           "when": "editorLangId == dart"
