@@ -40,14 +40,17 @@ You can activate the commands by launching the command palette (View -> Command 
 
 ## Code Actions
 
-| Action                         | Description                                    |
-| ------------------------------ | ---------------------------------------------- |
-| `Wrap with BlocBuilder`        | Wraps current widget in a `BlocBuilder`        |
-| `Wrap with BlocSelector`       | Wraps current widget in a `BlocSelector`       |
-| `Wrap with BlocListener`       | Wraps current widget in a `BlocListener`       |
-| `Wrap with BlocConsumer`       | Wraps current widget in a `BlocConsumer`       |
-| `Wrap with BlocProvider`       | Wraps current widget in a `BlocProvider`       |
-| `Wrap with RepositoryProvider` | Wraps current widget in a `RepositoryProvider` |
+| Action                               | Description                                                            |
+| ------------------------------------ | ---------------------------------------------------------------------- |
+| `Convert to MultiBlocListener`       | Converts current `BlocListener` into a `MultiBlocListener`             |
+| `Convert to MultiBlocProvider`       | Converts current `BlocProvider` into a `MultiBlocProvider`             |
+| `Convert to MultiRepositoryProvider` | Converts current `RepositoryProvider` into a `MultiRepositoryProvider` |
+| `Wrap with BlocBuilder`              | Wraps current widget in a `BlocBuilder`                                |
+| `Wrap with BlocSelector`             | Wraps current widget in a `BlocSelector`                               |
+| `Wrap with BlocListener`             | Wraps current widget in a `BlocListener`                               |
+| `Wrap with BlocConsumer`             | Wraps current widget in a `BlocConsumer`                               |
+| `Wrap with BlocProvider`             | Wraps current widget in a `BlocProvider`                               |
+| `Wrap with RepositoryProvider`       | Wraps current widget in a `RepositoryProvider`                         |
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/wrap-with-usage.gif)
 
