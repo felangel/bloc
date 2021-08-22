@@ -1,9 +1,9 @@
 - Einführung
 
-  - [Erste Schritte](gettingstarted.md)
-  - [Wieso Bloc?](whybloc.md)
+  - [Erste Schritte](de-de/gettingstarted.md)
+  - [Wieso Bloc?](de-de/whybloc.md)
   - Grundlegende Konzepte
-    - [package:bloc](coreconcepts.md)
+    - [package:bloc](de-de/coreconcepts.md)
     - [package:flutter_bloc](flutterbloccoreconcepts.md)
   - [Architektur](architecture.md)
   - [Testen](testing.md)
