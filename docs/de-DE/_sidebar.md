@@ -4,12 +4,12 @@
   - [Wieso Bloc?](de-de/whybloc.md)
   - Grundlegende Konzepte
     - [package:bloc](de-de/coreconcepts.md)
-    - [package:flutter_bloc](flutterbloccoreconcepts.md)
-  - [Architektur](architecture.md)
-  - [Testen](testing.md)
-  - [Konventionen zur Namensgebung](blocnamingconventions.md)
-  - [HÄUFIG GESTELLTE FRAGEN (FAQs)](faqs.md)
-  - [Migration](migration.md)
+    - [package:flutter_bloc](de-de/flutterbloccoreconcepts.md)
+  - [Architektur](de-de/architecture.md)
+  - [Testen](de-de/testing.md)
+  - [Konventionen zur Namensgebung](de-de/blocnamingconventions.md)
+  - [HÄUFIG GESTELLTE FRAGEN (FAQs)](de-de/faqs.md)
+  - [Migration](de-de/migration.md)
 
 - Tutorials
 
