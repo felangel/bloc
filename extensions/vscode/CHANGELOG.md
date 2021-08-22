@@ -1,3 +1,10 @@
+# 5.8.0
+
+- feat: add "Convert to..." Multi-Widget Actions
+  - `Convert to MultiBlocListener`
+  - `Convert to MultiBlocProvider`
+  - `Convert to MultiRepositoryProvider`
+
 # 5.7.0
 
 - feat: add snippets for `BlocSelector`
