@@ -93,6 +93,18 @@
         "icon": "assets/logo.png"
       },
       {
+        "command": "extension.convert-multibloclistener",
+        "title": "Convert to MultiBlocListener"
+      },
+      {
+        "command": "extension.convert-multiblocprovider",
+        "title": "Convert to MultiBlocProvider"
+      },
+      {
+        "command": "extension.convert-multirepositoryprovider",
+        "title": "Convert to MultiRepositoryProvider"
+      },
+      {
         "command": "extension.wrap-blocbuilder",
         "title": "Wrap with BlocBuilder"
       },
@@ -131,6 +143,18 @@
         }
       ],
       "commandPalette": [
+        {
+          "command": "extension.convert-multibloclistener",
+          "when": "editorLangId == dart"
+        },
+        {
+          "command": "extension.convert-multiblocprovider",
+          "when": "editorLangId == dart"
+        },
+        {
+          "command": "extension.convert-multirepositoryprovider",
+          "when": "editorLangId == dart"
+        },
         {
           "command": "extension.wrap-blocbuilder",
           "when": "editorLangId == dart"
