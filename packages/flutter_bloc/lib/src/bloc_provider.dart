@@ -133,7 +133,7 @@ class BlocProvider<T extends BlocBase<Object?>>
   }
 
   static VoidCallback _startListening(
-    InheritedContext<BlocBase> e,
+    InheritedContext<BlocBase?> e,
     BlocBase value,
   ) {
     final subscription = value.stream.listen(
