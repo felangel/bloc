@@ -5,6 +5,9 @@ import { analyzeDependencies } from "./utils";
 import {
   newBloc,
   newCubit,
+  convertToMultiBlocListener,
+  convertToMultiBlocProvider,
+  convertToMultiRepositoryProvider,
   wrapWithBlocBuilder,
   wrapWithBlocListener,
   wrapWithBlocConsumer,
@@ -24,6 +27,18 @@ export function activate(_context: ExtensionContext) {
   _context.subscriptions.push(
     commands.registerCommand("extension.new-bloc", newBloc),
     commands.registerCommand("extension.new-cubit", newCubit),
+    commands.registerCommand(
+      "extension.convert-multibloclistener",
+      convertToMultiBlocListener
+    ),
+    commands.registerCommand(
+      "extension.convert-multiblocprovider",
+      convertToMultiBlocProvider
+    ),
+    commands.registerCommand(
+      "extension.convert-multirepositoryprovider",
+      convertToMultiRepositoryProvider
+    ),
     commands.registerCommand("extension.wrap-blocbuilder", wrapWithBlocBuilder),
     commands.registerCommand(
       "extension.wrap-blocselector",
