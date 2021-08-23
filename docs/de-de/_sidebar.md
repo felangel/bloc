@@ -7,8 +7,8 @@
     - [package:flutter_bloc](de-de/flutterbloccoreconcepts.md)
   - [Architektur](de-de/architecture.md)
   - [Testen](de-de/testing.md)
-  - [Konventionen zur Namensgebung](de-de/blocnamingconventions.md)
-  - [HÄUFIG GESTELLTE FRAGEN (FAQs)](de-de/faqs.md)
+  - [Namenskonventionen](de-de/blocnamingconventions.md)
+  - [Häufig gestellte Fragen (FAQs)](de-de/faqs.md)
   - [Migration](de-de/migration.md)
 
 - Tutorials
