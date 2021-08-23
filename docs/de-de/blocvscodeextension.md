@@ -34,8 +34,6 @@ Bloc kann über den [VSCode-Marktplatz](https://marketplace.visualstudio.com/ite
 | `Bloc: New Bloc`   | Einen neuen Bloc erzeugen  |
 | `Cubit: New Cubit` | Einen neuen Cubit erzeugen |
 
-You can activate the commands by launching the command palette (View -> Command Palette) and running entering the command name or you can right click on the directory in which you'd like to create the bloc/cubit and select the command from the context menu.
-
 Sie können die Befehle aktivieren, indem Sie die `command palette` aufrufen `(View -> Command Palette)` und den Befehlsnamen eingeben, oder Sie können mit der rechten Maustaste auf das Verzeichnis klicken, in dem Sie den Bloc/Cubit erstellen möchten, und den Befehl aus dem Kontextmenü auswählen.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage.gif)
