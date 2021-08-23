@@ -1,4 +1,4 @@
-# Architecture
+# Architektur
 
 ![Bloc Architecture](../assets/bloc_architecture_full.png)
 
@@ -56,7 +56,7 @@ Blocs können Abhängigkeiten von anderen Blocs haben, um auf deren Zustandsänd
 
 [bloc_to_bloc_communication.dart](../_snippets/architecture/bloc_to_bloc_communication.dart.md ':include')
 
-## Presentation Layer
+## Präsentationsschicht
 
 > Die Präsentationsschicht hat die Aufgabe herauszufinden, wie sie sich selbst auf der Grundlage eines oder mehrerer Bloc-Zustände darstellen soll. Darüber hinaus sollte sie Benutzereingaben und Ereignisse im Lebenszyklus der Anwendung verarbeiten.
 
