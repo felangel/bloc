@@ -83,7 +83,8 @@ void main() {
 
       blocTest<CounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and emitted 10',
-        build: () => CounterBloc()..emit(10),
+        build: () => CounterBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11],
       );
@@ -155,7 +156,8 @@ void main() {
 
       blocTest<AsyncCounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and emitted 10',
-        build: () => AsyncCounterBloc()..emit(10),
+        build: () => AsyncCounterBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11],
       );
@@ -192,7 +194,8 @@ void main() {
 
       blocTest<DebounceCounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and emitted 10',
-        build: () => DebounceCounterBloc()..emit(10),
+        build: () => DebounceCounterBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         wait: const Duration(milliseconds: 300),
         expect: () => const <int>[11],
@@ -279,7 +282,8 @@ void main() {
 
       blocTest<MultiCounterBloc, int>(
         'emits [11, 12] when CounterEvent.increment is added and emitted 10',
-        build: () => MultiCounterBloc()..emit(10),
+        build: () => MultiCounterBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11, 12],
       );
