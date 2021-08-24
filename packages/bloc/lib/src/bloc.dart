@@ -50,10 +50,10 @@ class _Emitter<State> extends _PendingEvent implements Emitter<State> {
 
   @override
   Future<void> listen<T>(Stream<T> stream, void Function(T) onData) async {
-    final whenDone = Completer<void>();
-    final sub = stream.listen(onData, onDone: whenDone.complete);
-    _disposables.add(sub.cancel);
-    return Future.any([future, whenDone.future]);
+    final completer = Completer<void>();
+    final subscription = stream.listen(onData, onDone: completer.complete);
+    _disposables.add(subscription.cancel);
+    return Future.any([future, completer.future]);
   }
 
   @override
@@ -363,7 +363,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   static BlocObserver observer = BlocObserver();
 
   late final _onEventCallbacks = <_OnEvent<Event, State>>{};
-  late final _pendingEvents = <dynamic, List<_PendingEvent>>{};
+  late final _pendingEvents = <_OnEvent<Event, State>, List<_PendingEvent>>{};
   late final StreamSubscription<Event> _eventSubscription;
   final _eventController = StreamController<Event>.broadcast(sync: true);
 
@@ -525,7 +525,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
       );
     }
 
-    for (final dynamic onEvent in callbacks) {
+    for (final onEvent in callbacks) {
       void next() async {
         late final _Emitter<State> emitter;
         emitter = _Emitter((state) {
@@ -544,7 +544,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
         try {
           _pendingEvents.putIfAbsent(onEvent, () => []);
           _pendingEvents[onEvent]!.add(emitter);
-          await onEvent.handler(event, emitter);
+          await (onEvent as dynamic).handler(event, emitter);
         } catch (error, stackTrace) {
           onError(error, stackTrace);
         } finally {
