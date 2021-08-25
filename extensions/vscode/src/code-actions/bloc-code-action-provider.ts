@@ -1,6 +1,16 @@
 import { window, CodeAction, CodeActionProvider, CodeActionKind } from "vscode";
 import { getSelectedText } from "../utils";
 
+const blocListenerRegExp = new RegExp("^BlocListener(\\<.*\\>)*\\(.*\\)", "ms");
+const blocProviderRegExp = new RegExp(
+  "^BlocProvider(\\<.*\\>)*(\\.value)*\\(.*\\)",
+  "ms"
+);
+const repositoryProviderRegExp = new RegExp(
+  "^RepositoryProvider(\\<.*\\>)*(\\.value)*\\(.*\\)",
+  "ms"
+);
+
 export class BlocCodeActionProvider implements CodeActionProvider {
   public provideCodeActions(): CodeAction[] {
     const editor = window.activeTextEditor;
@@ -8,7 +18,36 @@ export class BlocCodeActionProvider implements CodeActionProvider {
 
     const selectedText = editor.document.getText(getSelectedText(editor));
     if (selectedText === "") return [];
+
+    const isBlocListener = blocListenerRegExp.test(selectedText);
+    const isBlocProvider = blocProviderRegExp.test(selectedText);
+    const isRepositoryProvider = repositoryProviderRegExp.test(selectedText);
+
     return [
+      ...(isBlocListener
+        ? [
+            {
+              command: "extension.convert-multibloclistener",
+              title: "Convert to MultiBlocListener",
+            },
+          ]
+        : []),
+      ...(isBlocProvider
+        ? [
+            {
+              command: "extension.convert-multiblocprovider",
+              title: "Convert to MultiBlocProvider",
+            },
+          ]
+        : []),
+      ...(isRepositoryProvider
+        ? [
+            {
+              command: "extension.convert-multirepositoryprovider",
+              title: "Convert to MultiRepositoryProvider",
+            },
+          ]
+        : []),
       {
         command: "extension.wrap-blocbuilder",
         title: "Wrap with BlocBuilder",
