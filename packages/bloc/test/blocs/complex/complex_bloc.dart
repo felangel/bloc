@@ -22,7 +22,7 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
   }
 
   @override
-  Stream<ComplexState> transformStates(Stream<ComplexState> states) {
-    return states.debounceTime(const Duration(milliseconds: 50));
+  Stream<ComplexState> get stream {
+    return super.stream.debounceTime(const Duration(milliseconds: 50));
   }
 }

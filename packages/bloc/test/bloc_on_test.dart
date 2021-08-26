@@ -64,7 +64,7 @@ void main() {
 
     test('throws StateError when handler is missing', () {
       const expectedMessage =
-          '''add<TestEventA> was called without a registered event handler.\n'''
+          '''add(TestEventA) was called without a registered event handler.\n'''
           '''Make sure to register a handler via on<TestEventA>((event, emit) {...})''';
       final expected = isA<StateError>()
           .having((e) => e.message, 'message', expectedMessage);

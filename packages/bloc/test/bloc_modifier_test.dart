@@ -4,9 +4,10 @@ import 'package:test/test.dart';
 enum CounterEvent { increment }
 
 const delay = Duration(milliseconds: 30);
+const offset = Duration(milliseconds: 10);
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  CounterBloc(EventModifier<CounterEvent> modifier) : super(0) {
+  CounterBloc(EventTransformer<CounterEvent> modifier) : super(0) {
     on<CounterEvent>(
       (event, emit) {
         return Future<void>.delayed(delay, () {
@@ -31,7 +32,7 @@ void main() {
         ..add(CounterEvent.increment)
         ..add(CounterEvent.increment);
 
-      await Future<void>.delayed(delay);
+      await Future<void>.delayed(delay + offset);
       expect(
         bloc.onCalls,
         equals([
@@ -55,21 +56,21 @@ void main() {
         ..add(CounterEvent.increment)
         ..add(CounterEvent.increment);
 
-      await Future<void>.delayed(delay);
+      await Future<void>.delayed(delay + offset);
       expect(
         bloc.onCalls,
         equals([CounterEvent.increment]),
       );
       expect(states, equals([1]));
 
-      await Future<void>.delayed(delay);
+      await Future<void>.delayed(delay + offset);
       expect(
         bloc.onCalls,
         equals([CounterEvent.increment, CounterEvent.increment]),
       );
       expect(states, equals([1, 2]));
 
-      await Future<void>.delayed(delay);
+      await Future<void>.delayed(delay + offset);
       expect(
         bloc.onCalls,
         equals([
@@ -101,7 +102,7 @@ void main() {
         ..add(CounterEvent.increment)
         ..add(CounterEvent.increment);
 
-      await Future<void>.delayed(delay);
+      await Future<void>.delayed(delay + offset);
       expect(bloc.onCalls, equals([CounterEvent.increment]));
       expect(states, equals([1]));
 
@@ -110,7 +111,7 @@ void main() {
         ..add(CounterEvent.increment)
         ..add(CounterEvent.increment);
 
-      await Future<void>.delayed(delay);
+      await Future<void>.delayed(delay + offset);
       expect(
         bloc.onCalls,
         equals([CounterEvent.increment, CounterEvent.increment]),
@@ -122,7 +123,7 @@ void main() {
         ..add(CounterEvent.increment)
         ..add(CounterEvent.increment);
 
-      await Future<void>.delayed(delay);
+      await Future<void>.delayed(delay + offset);
       expect(
         bloc.onCalls,
         equals([
@@ -155,14 +156,10 @@ void main() {
         ..add(CounterEvent.increment)
         ..add(CounterEvent.increment);
 
-      await Future<void>.delayed(delay);
+      await Future<void>.delayed(delay + offset);
       expect(
         bloc.onCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment
-        ]),
+        equals([CounterEvent.increment]),
       );
       expect(states, equals([1]));
 
@@ -171,14 +168,10 @@ void main() {
         ..add(CounterEvent.increment)
         ..add(CounterEvent.increment);
 
-      await Future<void>.delayed(delay);
+      await Future<void>.delayed(delay + offset);
       expect(
         bloc.onCalls,
         equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
           CounterEvent.increment,
           CounterEvent.increment,
         ]),
@@ -190,19 +183,13 @@ void main() {
         ..add(CounterEvent.increment)
         ..add(CounterEvent.increment);
 
-      await Future<void>.delayed(delay);
+      await Future<void>.delayed(delay + offset);
       expect(
         bloc.onCalls,
         equals([
           CounterEvent.increment,
           CounterEvent.increment,
           CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment
         ]),
       );
       expect(states, equals([1, 2, 3]));
@@ -214,139 +201,9 @@ void main() {
           CounterEvent.increment,
           CounterEvent.increment,
           CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment
         ]),
       );
       expect(states, equals([1, 2, 3]));
-    });
-  });
-
-  group('keepLatest', () {
-    test('drops all intermediate events and enqueues latest event', () async {
-      final states = <int>[];
-      final bloc = CounterBloc(keepLatest())
-        ..stream.listen(states.add)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await Future<void>.delayed(delay);
-      expect(
-        bloc.onCalls,
-        equals([CounterEvent.increment]),
-      );
-      expect(states, equals([1]));
-
-      await Future<void>.delayed(delay);
-      expect(
-        bloc.onCalls,
-        equals([CounterEvent.increment, CounterEvent.increment]),
-      );
-      expect(states, equals([1, 2]));
-
-      await bloc.close();
-      expect(
-        bloc.onCalls,
-        equals([CounterEvent.increment, CounterEvent.increment]),
-      );
-      expect(states, equals([1, 2]));
-    });
-  });
-
-  group('debounceTime', () {
-    test('debounces based on provided duration', () async {
-      final debounceDuration = const Duration(milliseconds: 300);
-      final states = <int>[];
-      final bloc = CounterBloc(debounceTime(debounceDuration))
-        ..stream.listen(states.add)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await Future<void>.delayed(delay);
-      expect(bloc.onCalls, isEmpty);
-      expect(states, isEmpty);
-
-      bloc
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await Future<void>.delayed(delay);
-      expect(bloc.onCalls, isEmpty);
-      expect(states, isEmpty);
-
-      bloc
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await Future<void>.delayed(const Duration(milliseconds: 350));
-      expect(
-        bloc.onCalls,
-        equals([CounterEvent.increment]),
-      );
-      expect(states, equals([1]));
-
-      await bloc.close();
-      expect(
-        bloc.onCalls,
-        equals([CounterEvent.increment]),
-      );
-      expect(states, equals([1]));
-    });
-  });
-
-  group('throttleTime', () {
-    test('throttles based on provided duration', () async {
-      final duration = const Duration(milliseconds: 300);
-      final states = <int>[];
-      final bloc = CounterBloc(throttleTime(duration))
-        ..stream.listen(states.add)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await Future<void>.delayed(delay);
-      expect(bloc.onCalls, equals([CounterEvent.increment]));
-      expect(states, equals([1]));
-
-      bloc
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await Future<void>.delayed(delay);
-      expect(bloc.onCalls, equals([CounterEvent.increment]));
-      expect(states, equals([1]));
-
-      await Future<void>.delayed(const Duration(milliseconds: 300));
-
-      bloc
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await Future<void>.delayed(delay);
-
-      expect(
-        bloc.onCalls,
-        equals([CounterEvent.increment, CounterEvent.increment]),
-      );
-      expect(states, equals([1, 2]));
-
-      await bloc.close();
-
-      expect(
-        bloc.onCalls,
-        equals([CounterEvent.increment, CounterEvent.increment]),
-      );
-      expect(states, equals([1, 2]));
     });
   });
 }

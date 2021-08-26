@@ -1,25 +1,26 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../blocs.dart';
 
-class CustomEventModifier extends EventModifier<CounterEvent> {
-  @override
-  FutureOr<void> call(
-    CounterEvent event,
-    List<PendingEvent> events,
-    void Function() next,
-  ) async {
-    if (event == CounterEvent.decrement) return next();
-    if (events.isEmpty) return next();
-    await Future<void>.delayed(const Duration(milliseconds: 100), next);
-  }
+EventTransformer<CounterEvent> custom() {
+  return (Stream<CounterEvent> events, Convert<CounterEvent> convert) {
+    final nonDebounceStream =
+        events.where((event) => event != CounterEvent.increment);
+
+    final debounceStream = events
+        .where((event) => event == CounterEvent.increment)
+        .throttleTime(const Duration(milliseconds: 100));
+
+    return Rx.merge([nonDebounceStream, debounceStream]).asyncExpand(convert);
+  };
 }
 
 class MergeBloc extends Bloc<CounterEvent, int> {
   MergeBloc({this.onTransitionCallback}) : super(0) {
-    on<CounterEvent>(_onCounterEvent, CustomEventModifier());
+    on<CounterEvent>(_onCounterEvent, custom());
   }
 
   final void Function(Transition<CounterEvent, int>)? onTransitionCallback;
