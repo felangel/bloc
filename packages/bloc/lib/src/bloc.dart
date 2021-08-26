@@ -170,14 +170,19 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// be ignored and will not result in any subsequent state changes.
   void add(Event event) {
     if (_eventController.isClosed) return;
-    final handlerExists = _handlerTests.any((handler) => handler.test(event));
-    if (!handlerExists) {
-      final eventType = event.runtimeType;
-      throw StateError(
-        '''add($eventType) was called without a registered event handler.\n'''
-        '''Make sure to register a handler via on<$eventType>((event, emit) {...})''',
-      );
-    }
+
+    assert(() {
+      final handlerExists = _handlerTests.any((handler) => handler.test(event));
+      if (!handlerExists) {
+        final eventType = event.runtimeType;
+        throw StateError(
+          '''add($eventType) was called without a registered event handler.\n'''
+          '''Make sure to register a handler via on<$eventType>((event, emit) {...})''',
+        );
+      }
+      return true;
+    }());
+
     try {
       onEvent(event);
       _eventController.add(event);
@@ -237,13 +242,17 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     EventHandler<E, State> handler, [
     EventTransformer<Event>? transform,
   ]) {
-    final handlerExists = _handlerTests.any((handler) => handler.type == E);
-    if (handlerExists) {
-      throw StateError(
-        'on<$E> was called multiple times. '
-        'There should only be a single event handler for each event.',
-      );
-    }
+    assert(() {
+      final handlerExists = _handlerTests.any((handler) => handler.type == E);
+      if (handlerExists) {
+        throw StateError(
+          'on<$E> was called multiple times. '
+          'There should only be a single event handler for each event.',
+        );
+      }
+      return true;
+    }());
+
     _handlerTests.add(_HandlerTest(test: (dynamic e) => e is E, type: E));
     final subscription = (transform ?? concurrent())(
       _eventController.stream.where((event) => event is E),
