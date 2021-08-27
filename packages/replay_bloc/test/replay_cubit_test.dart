@@ -96,15 +96,9 @@ void main() {
         final states = <int>[];
         final cubit = CounterCubit(shouldReplayCallback: (i) => !i.isEven);
         final subscription = cubit.stream.listen(states.add);
-        cubit
-          ..increment()
-          ..increment()
-          ..increment();
+        cubit..increment()..increment()..increment();
         await Future<void>.delayed(Duration.zero);
-        cubit
-          ..undo()
-          ..undo()
-          ..undo();
+        cubit..undo()..undo()..undo();
         await cubit.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 3, 1]);
@@ -119,16 +113,10 @@ void main() {
           shouldReplayCallback: (i) => !i.isEven || replayEvens,
         );
         final subscription = cubit.stream.listen(states.add);
-        cubit
-          ..increment()
-          ..increment()
-          ..increment();
+        cubit..increment()..increment()..increment();
         await Future<void>.delayed(Duration.zero);
         replayEvens = true;
-        cubit
-          ..undo()
-          ..undo()
-          ..undo();
+        cubit..undo()..undo()..undo();
         await cubit.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 3, 2, 1, 0]);
@@ -282,10 +270,7 @@ void main() {
           ..undo()
           ..undo();
         replayEvens = true;
-        cubit
-          ..redo()
-          ..redo()
-          ..redo();
+        cubit..redo()..redo()..redo();
         await cubit.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 3, 1, 2, 3]);

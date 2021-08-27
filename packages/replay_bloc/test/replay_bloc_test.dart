@@ -95,15 +95,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc(shouldReplayCallback: (i) => !i.isEven);
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
-        bloc
-          ..undo()
-          ..undo()
-          ..undo();
+        bloc..undo()..undo()..undo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 3, 1]);
@@ -118,16 +112,10 @@ void main() {
           shouldReplayCallback: (i) => !i.isEven || replayEvens,
         );
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         replayEvens = true;
-        bloc
-          ..undo()
-          ..undo()
-          ..undo();
+        bloc..undo()..undo()..undo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 3, 2, 1, 0]);
@@ -137,13 +125,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc(limit: 1);
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
-        bloc
-          ..undo()
-          ..undo();
+        bloc..undo()..undo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1]);
@@ -165,9 +149,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
         await bloc.close();
@@ -214,9 +196,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.redo();
         await bloc.close();
@@ -228,9 +208,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -273,9 +251,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -292,9 +268,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -312,10 +286,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc(shouldReplayCallback: (i) => !i.isEven);
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -338,20 +309,11 @@ void main() {
           shouldReplayCallback: (i) => !i.isEven || replayEvens,
         );
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
-        bloc
-          ..undo()
-          ..undo()
-          ..undo();
+        bloc..undo()..undo()..undo();
         replayEvens = true;
-        bloc
-          ..redo()
-          ..redo()
-          ..redo();
+        bloc..redo()..redo()..redo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 3, 1, 2, 3]);
@@ -447,13 +409,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin(limit: 1);
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
-        bloc
-          ..undo()
-          ..undo();
+        bloc..undo()..undo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1]);
@@ -475,9 +433,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
         await bloc.close();
@@ -501,9 +457,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.redo();
         await bloc.close();
@@ -515,9 +469,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -531,9 +483,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -550,9 +500,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -594,13 +542,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc(limit: 1);
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
-        bloc
-          ..undo()
-          ..undo();
+        bloc..undo()..undo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1]);
@@ -622,9 +566,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
         await bloc.close();
@@ -648,9 +590,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.redo();
         await bloc.close();
@@ -662,9 +602,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -678,9 +616,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -697,9 +633,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -741,13 +675,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin(limit: 1);
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
-        bloc
-          ..undo()
-          ..undo();
+        bloc..undo()..undo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1]);
@@ -769,9 +699,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
         await bloc.close();
@@ -795,9 +723,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.redo();
         await bloc.close();
@@ -809,9 +735,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -825,9 +749,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -844,9 +766,7 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc
-          ..add(Increment())
-          ..add(Increment());
+        bloc..add(Increment())..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
