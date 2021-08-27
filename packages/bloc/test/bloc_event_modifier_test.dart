@@ -258,7 +258,11 @@ void main() {
 
       expect(
         bloc.onCalls,
-        equals([CounterEvent.increment]),
+        equals([
+          CounterEvent.increment,
+          CounterEvent.increment,
+          CounterEvent.increment
+        ]),
       );
 
       await wait();
@@ -275,7 +279,14 @@ void main() {
 
       expect(
         bloc.onCalls,
-        equals([CounterEvent.increment, CounterEvent.increment]),
+        equals([
+          CounterEvent.increment,
+          CounterEvent.increment,
+          CounterEvent.increment,
+          CounterEvent.increment,
+          CounterEvent.increment,
+          CounterEvent.increment
+        ]),
       );
 
       await wait();
@@ -303,6 +314,12 @@ void main() {
           CounterEvent.increment,
           CounterEvent.increment,
           CounterEvent.increment,
+          CounterEvent.increment,
+          CounterEvent.increment,
+          CounterEvent.increment,
+          CounterEvent.increment,
+          CounterEvent.increment,
+          CounterEvent.increment
         ]),
       );
 
@@ -324,6 +341,12 @@ void main() {
       expect(
         bloc.onCalls,
         equals([
+          CounterEvent.increment,
+          CounterEvent.increment,
+          CounterEvent.increment,
+          CounterEvent.increment,
+          CounterEvent.increment,
+          CounterEvent.increment,
           CounterEvent.increment,
           CounterEvent.increment,
           CounterEvent.increment,
