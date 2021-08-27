@@ -19,6 +19,7 @@ dependency_overrides:
     path: ../../packages/bloc
   flutter_bloc:
     path: ../../packages/flutter_bloc
+  rxdart: ^0.27.0
 
 dev_dependencies:
   build_runner: ^1.8.1
