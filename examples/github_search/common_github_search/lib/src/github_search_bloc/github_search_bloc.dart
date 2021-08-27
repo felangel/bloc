@@ -1,13 +1,20 @@
 import 'package:bloc/bloc.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'package:common_github_search/common_github_search.dart';
 
 const _duration = const Duration(milliseconds: 300);
 
+EventTransformer<Event> throttleTime<Event>(Duration duration) {
+  return (Stream<Event> events, EventMapper<Event> mapper) {
+    return events.throttleTime(duration).switchMap(mapper);
+  };
+}
+
 class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   GithubSearchBloc({required this.githubRepository})
       : super(SearchStateEmpty()) {
-    on<TextChanged>(_onTextChanged, throttleTime(_duration));
+    on<TextChanged>(_onTextChanged, transform: throttleTime(_duration));
   }
 
   final GithubRepository githubRepository;

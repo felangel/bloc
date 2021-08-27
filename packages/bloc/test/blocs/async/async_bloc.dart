@@ -8,10 +8,13 @@ part 'async_state.dart';
 
 class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
   AsyncBloc() : super(AsyncState.initial()) {
-    on<AsyncEvent>((event, emit) async {
-      emit(state.copyWith(isLoading: true, isSuccess: false));
-      await Future<void>.delayed(Duration.zero);
-      emit(state.copyWith(isLoading: false, isSuccess: true));
-    }, enqueue());
+    on<AsyncEvent>(
+      (event, emit) async {
+        emit(state.copyWith(isLoading: true, isSuccess: false));
+        await Future<void>.delayed(Duration.zero);
+        emit(state.copyWith(isLoading: false, isSuccess: true));
+      },
+      transform: enqueue(),
+    );
   }
 }

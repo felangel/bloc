@@ -12,18 +12,24 @@ const _delay = Duration(milliseconds: 100);
 
 class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
   RestartableStreamBloc(Stream<int> stream) : super(0) {
-    on<ForEach>((_, emit) async {
-      await emit.forEach<int>(
-        stream,
-        (i) => Future<int>.delayed(_delay, () => i),
-      );
-    }, restartable());
+    on<ForEach>(
+      (_, emit) async {
+        await emit.forEach<int>(
+          stream,
+          (i) => Future<int>.delayed(_delay, () => i),
+        );
+      },
+      transform: restartable(),
+    );
 
-    on<OnEach>((_, emit) async {
-      await emit.onEach<int>(
-        stream,
-        (i) => Future<void>.delayed(_delay, () => emit(i)),
-      );
-    }, restartable());
+    on<OnEach>(
+      (_, emit) async {
+        await emit.onEach<int>(
+          stream,
+          (i) => Future<void>.delayed(_delay, () => emit(i)),
+        );
+      },
+      transform: restartable(),
+    );
   }
 }

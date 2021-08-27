@@ -15,6 +15,9 @@ dependencies:
   mocktail: ^0.1.1
   test: ^1.16.0
 
+dev_dependencies:
+  rxdart: ^0.27.0
+
 dependency_overrides:
   bloc:
     path: ../bloc

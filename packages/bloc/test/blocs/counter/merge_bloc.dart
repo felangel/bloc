@@ -5,8 +5,8 @@ import 'package:rxdart/rxdart.dart';
 
 import '../blocs.dart';
 
-EventTransformer<CounterEvent> custom() {
-  return (Stream<CounterEvent> events, Convert<CounterEvent> convert) {
+EventTransformer<CounterEvent> customTransform() {
+  return (Stream<CounterEvent> events, EventMapper<CounterEvent> mapper) {
     final nonDebounceStream =
         events.where((event) => event != CounterEvent.increment);
 
@@ -14,13 +14,13 @@ EventTransformer<CounterEvent> custom() {
         .where((event) => event == CounterEvent.increment)
         .throttleTime(const Duration(milliseconds: 100));
 
-    return Rx.merge([nonDebounceStream, debounceStream]).asyncExpand(convert);
+    return Rx.merge([nonDebounceStream, debounceStream]).asyncExpand(mapper);
   };
 }
 
 class MergeBloc extends Bloc<CounterEvent, int> {
   MergeBloc({this.onTransitionCallback}) : super(0) {
-    on<CounterEvent>(_onCounterEvent, custom());
+    on<CounterEvent>(_onCounterEvent, transform: customTransform());
   }
 
   final void Function(Transition<CounterEvent, int>)? onTransitionCallback;

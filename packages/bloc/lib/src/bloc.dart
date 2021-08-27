@@ -45,7 +45,7 @@ typedef EventHandler<Event, State> = FutureOr<void> Function(
 /// Signature for a function which converts an incoming event
 /// into an outbound stream of events.
 /// Used when defining custom [EventTransformer]s.
-typedef Convert<Event> = Stream<Event> Function(Event);
+typedef EventMapper<Event> = Stream<Event> Function(Event);
 
 /// {@template event_transformer}
 /// Used to change how events are processed.
@@ -56,18 +56,16 @@ typedef Convert<Event> = Stream<Event> Function(Event);
 /// * [restartable]
 /// * [drop]
 /// * [enqueue]
-/// * [debounceTime]
-/// * [throttleTime]
 /// {@endtemplate}
 typedef EventTransformer<Event> = Stream<Event> Function(
   Stream<Event>,
-  Convert<Event>,
+  EventMapper<Event>,
 );
 
 /// Process events concurrently. This is the default behavior.
 EventTransformer<Event> concurrent<Event>() {
-  return (Stream<Event> events, Convert<Event> convert) {
-    return events.flatMap(convert);
+  return (Stream<Event> events, EventMapper<Event> mapper) {
+    return events.flatMap(mapper);
   };
 }
 
@@ -77,8 +75,8 @@ EventTransformer<Event> concurrent<Event>() {
 /// **Note**: there is no event handler overlap and every event is guaranteed
 /// to be handled in the order it was received.
 EventTransformer<Event> enqueue<Event>() {
-  return (Stream<Event> events, Convert<Event> convert) {
-    return events.asyncExpand(convert);
+  return (Stream<Event> events, EventMapper<Event> mapper) {
+    return events.asyncExpand(mapper);
   };
 }
 
@@ -91,8 +89,8 @@ EventTransformer<Event> enqueue<Event>() {
 /// **Note**: avoid using [restartable] if you expect an event to have
 /// immediate results -- it should only be used with asynchronous APIs.
 EventTransformer<Event> restartable<Event>() {
-  return (Stream<Event> events, Convert<Event> convert) {
-    return events.switchMap(convert);
+  return (Stream<Event> events, EventMapper<Event> mapper) {
+    return events.switchMap(mapper);
   };
 }
 
@@ -100,33 +98,8 @@ EventTransformer<Event> restartable<Event>() {
 /// until the current event is done.
 /// Dropped events never trigger the event handler.
 EventTransformer<Event> drop<Event>() {
-  return (Stream<Event> events, Convert<Event> convert) {
-    return events.exhaustMap(convert);
-  };
-}
-
-/// Process only one event at a time dropping all events which
-/// are added less than [duration] apart.
-///
-/// **Note**: `debounceTime` is very useful in cases where the rate
-/// of input must be controlled such as type-ahead scenarios.
-EventTransformer<Event> debounceTime<Event>(Duration duration) {
-  return (Stream<Event> events, Convert<Event> convert) {
-    return events.debounceTime(duration).flatMap(convert);
-  };
-}
-
-/// Process only one event at a time dropping all events which
-/// are added less than [duration] apart.
-///
-/// It starts by emitting the first values of the input stream
-/// Then, it limits the rate of values to at most one per [duration].
-///
-/// **Note**: `throttleTime` is very useful in cases where the rate
-/// of input must be controlled such as type-ahead scenarios.
-EventTransformer<Event> throttleTime<Event>(Duration duration) {
-  return (Stream<Event> events, Convert<Event> convert) {
-    return events.throttleTime(duration).flatMap(convert);
+  return (Stream<Event> events, EventMapper<Event> mapper) {
+    return events.exhaustMap(mapper);
   };
 }
 
@@ -225,8 +198,6 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// If [close] has already been called, any subsequent calls to [add] will
   /// be ignored and will not result in any subsequent state changes.
   void add(Event event) {
-    if (_eventController.isClosed) return;
-
     assert(() {
       final handlerExists = _handlerTests.any((handler) => handler.test(event));
       if (!handlerExists) {
@@ -238,6 +209,8 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
       }
       return true;
     }());
+
+    if (_eventController.isClosed) return;
 
     try {
       onEvent(event);
@@ -295,9 +268,9 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   ///
   /// By default, the [concurrent] modifier will be used.
   void on<E extends Event>(
-    EventHandler<E, State> handler, [
+    EventHandler<E, State> handler, {
     EventTransformer<Event>? transform,
-  ]) {
+  }) {
     assert(() {
       final handlerExists = _handlerTests.any((handler) => handler.type == E);
       if (handlerExists) {

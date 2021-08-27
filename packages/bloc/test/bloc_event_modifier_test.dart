@@ -9,7 +9,7 @@ Future<void> wait() => Future.delayed(delay);
 Future<void> tick() => Future.delayed(Duration.zero);
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  CounterBloc(EventTransformer<CounterEvent> modifier) : super(0) {
+  CounterBloc(EventTransformer<CounterEvent> transformer) : super(0) {
     on<CounterEvent>(
       (event, emit) {
         onCalls.add(event);
@@ -19,7 +19,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
           emit(state + 1);
         });
       },
-      modifier,
+      transform: transformer,
     );
   }
 
@@ -362,107 +362,6 @@ void main() {
       );
 
       expect(states, equals([1, 2, 3]));
-    });
-  });
-
-  group('debounceTime', () {
-    test('debounces based on provided duration', () async {
-      final debounceDuration = const Duration(milliseconds: 300);
-      final states = <int>[];
-      final bloc = CounterBloc(debounceTime(debounceDuration))
-        ..stream.listen(states.add)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await tick();
-      await Future<void>.delayed(delay);
-
-      expect(bloc.onCalls, isEmpty);
-      expect(states, isEmpty);
-
-      bloc
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await tick();
-      await Future<void>.delayed(delay);
-      expect(bloc.onCalls, isEmpty);
-      expect(states, isEmpty);
-
-      bloc
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await tick();
-      await Future<void>.delayed(const Duration(milliseconds: 350));
-      expect(
-        bloc.onCalls,
-        equals([CounterEvent.increment]),
-      );
-      expect(states, equals([1]));
-
-      await tick();
-      await bloc.close();
-      expect(
-        bloc.onCalls,
-        equals([CounterEvent.increment]),
-      );
-      expect(states, equals([1]));
-    });
-  });
-
-  group('throttleTime', () {
-    test('throttles based on provided duration', () async {
-      final duration = const Duration(milliseconds: 300);
-      final states = <int>[];
-      final bloc = CounterBloc(throttleTime(duration))
-        ..stream.listen(states.add)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await tick();
-      await Future<void>.delayed(delay);
-      expect(bloc.onCalls, equals([CounterEvent.increment]));
-      expect(states, equals([1]));
-
-      bloc
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await tick();
-      await Future<void>.delayed(delay);
-      expect(bloc.onCalls, equals([CounterEvent.increment]));
-      expect(states, equals([1]));
-
-      await tick();
-      await Future<void>.delayed(const Duration(milliseconds: 300));
-
-      bloc
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await tick();
-      await Future<void>.delayed(delay);
-
-      expect(
-        bloc.onCalls,
-        equals([CounterEvent.increment, CounterEvent.increment]),
-      );
-      expect(states, equals([1, 2]));
-
-      await bloc.close();
-
-      expect(
-        bloc.onCalls,
-        equals([CounterEvent.increment, CounterEvent.increment]),
-      );
-      expect(states, equals([1, 2]));
     });
   });
 }

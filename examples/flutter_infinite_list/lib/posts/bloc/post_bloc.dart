@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_infinite_list/posts/posts.dart';
 import 'package:http/http.dart' as http;
+import 'package:rxdart/rxdart.dart';
 
 part 'post_event.dart';
 part 'post_state.dart';
@@ -13,9 +14,15 @@ const _postLimit = 20;
 
 const _debounceDuration = Duration(milliseconds: 500);
 
+EventTransformer<Event> throttleTime<Event>(Duration duration) {
+  return (Stream<Event> events, EventMapper<Event> mapper) {
+    return events.throttleTime(duration).flatMap(mapper);
+  };
+}
+
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({required this.httpClient}) : super(const PostState()) {
-    on<PostFetched>(_onPostFetched, throttleTime(_debounceDuration));
+    on<PostFetched>(_onPostFetched, transform: throttleTime(_debounceDuration));
   }
 
   final http.Client httpClient;
