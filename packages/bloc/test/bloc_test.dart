@@ -820,16 +820,22 @@ void main() {
 
     group('StreamBloc', () {
       test('cancels subscriptions correctly', () async {
-        const expectedStates = [3, 4];
+        const expectedStates = [0, 1, 2, 3, 4];
         final states = <int>[];
         final controller = StreamController<int>.broadcast();
         final bloc = StreamBloc(controller.stream)
           ..stream.listen(states.add)
           ..add(Subscribe());
 
+        await Future<void>.delayed(Duration.zero);
+
         controller..add(0)..add(1)..add(2);
 
+        await Future<void>.delayed(Duration.zero);
+
         bloc.add(Subscribe());
+
+        await Future<void>.delayed(Duration.zero);
 
         controller..add(3)..add(4);
 
@@ -849,9 +855,13 @@ void main() {
           ..stream.listen(states.add)
           ..add(ForEach());
 
+        await Future<void>.delayed(Duration.zero);
+
         controller..add(0)..add(1)..add(2);
 
         bloc.add(ForEach());
+
+        await Future<void>.delayed(Duration.zero);
 
         controller..add(3)..add(4);
 
@@ -861,17 +871,20 @@ void main() {
         expect(states, equals(expectedStates));
       });
 
-      test('listen cancels subscriptions correctly', () async {
+      test('onEach cancels subscriptions correctly', () async {
         const expectedStates = [3, 4];
         final states = <int>[];
         final controller = StreamController<int>.broadcast();
         final bloc = RestartableStreamBloc(controller.stream)
           ..stream.listen(states.add)
-          ..add(Listen());
+          ..add(OnEach());
+
+        await Future<void>.delayed(Duration.zero);
 
         controller..add(0)..add(1)..add(2);
 
-        bloc.add(Listen());
+        bloc.add(OnEach());
+        await Future<void>.delayed(Duration.zero);
 
         controller..add(3)..add(4);
 
@@ -928,7 +941,7 @@ void main() {
         });
       });
 
-      test('triggers onError from mapEventToState', () {
+      test('triggers onError from on<E>', () {
         runZonedGuarded(() {
           final exception = Exception('fatal exception');
           Object? expectedError;

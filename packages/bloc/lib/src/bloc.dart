@@ -2,22 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-
-/// {@template pending_event}
-/// A pending event which exposes APIs to cancel the event,
-/// determine whether the event is complete, and wait for the event
-/// to be complete.
-/// {@endtemplate}
-abstract class PendingEvent {
-  /// Cancels the current event handler.
-  void cancel();
-
-  /// The future that is completed by the current event handler.
-  Future<void> get future;
-
-  /// Whether the current event handler has completed.
-  bool get isCompleted;
-}
+import 'package:rxdart/rxdart.dart';
 
 /// {@template emitter}
 /// Base interface for emitting states in response to events.
@@ -26,9 +11,9 @@ abstract class Emitter<State> {
   /// Subscribes to the provided [stream] and invokes the [onData] callback
   /// when the [stream] emits new data.
   ///
-  /// [listen] completes when the event handler is cancelled or when
+  /// [onEach] completes when the event handler is cancelled or when
   /// the provided [stream] has ended.
-  Future<void> listen<T>(Stream<T> stream, void Function(T) onData);
+  Future<void> onEach<T>(Stream<T> stream, void Function(T) onData);
 
   // Subscribes to the provided [stream] and invokes the [onData] callback
   /// when the [stream] emits new data and the result of [onData] is emitted.
@@ -40,16 +25,93 @@ abstract class Emitter<State> {
     FutureOr<State> Function(T) onData,
   );
 
+  /// Whether the [EventHandler] associated with this [Emitter]
+  /// has completed.
+  /// [isCompleted] will be true either when the [EventHandler] has
+  /// completed normally or if it has been cancelled.
+  bool get isCompleted;
+
   /// Emits the provided [state].
   void call(State state);
 }
 
-class _Emitter<State> extends _PendingEvent implements Emitter<State> {
+/// An event handler is responsible for reacting to an incoming [Event]
+/// and can emit zero or more states via the [Emitter].
+typedef EventHandler<Event, State> = FutureOr<void> Function(
+  Event,
+  Emitter<State>,
+);
+
+/// Signature for a function which converts an incoming event
+/// into an outbound stream of events.
+/// Used when defining custom [EventTransformer]s.
+typedef Convert<Event> = Stream<Event> Function(Event);
+
+/// {@template event_transformer}
+/// Used to change how events are processed.
+/// By default events are processed concurrently.
+///
+/// See also:
+/// * [concurrent]
+/// * [restartable]
+/// * [drop]
+/// * [enqueue]
+/// {@endtemplate}
+typedef EventTransformer<Event> = Stream<Event> Function(
+  Stream<Event>,
+  Convert<Event>,
+);
+
+/// Process events concurrently. This is the default behavior.
+EventTransformer<Event> concurrent<Event>() {
+  return (Stream<Event> events, Convert<Event> convert) {
+    return events.flatMap(convert);
+  };
+}
+
+/// Process events one at a time by maintaining a queue of added events
+/// and processing the events sequentially.
+///
+/// **Note**: there is no event handler overlap and every event is guaranteed
+/// to be handled in the order it was received.
+EventTransformer<Event> enqueue<Event>() {
+  return (Stream<Event> events, Convert<Event> convert) {
+    return events.asyncExpand(convert);
+  };
+}
+
+/// Process only one event by cancelling any pending events and
+/// processing the new event immediately.
+///
+/// **Note**: there is no event handler overlap and any currently running tasks
+/// will be aborted if a new event is added before a prior one completes.
+///
+/// **Note**: avoid using [restartable] if you expect an event to have
+/// immediate results -- it should only be used with asynchronous APIs.
+EventTransformer<Event> restartable<Event>() {
+  return (Stream<Event> events, Convert<Event> convert) {
+    return events.switchMap(convert);
+  };
+}
+
+/// Process only one event and drop any new events
+/// until the current event is done.
+/// Dropped events never trigger the event handler.
+EventTransformer<Event> drop<Event>() {
+  return (Stream<Event> events, Convert<Event> convert) {
+    return events.exhaustMap(convert);
+  };
+}
+
+class _Emitter<State> implements Emitter<State> {
   _Emitter(this._emit);
   final void Function(State) _emit;
 
+  final _completer = Completer<void>();
+  final _disposables = <FutureOr<void> Function()>[];
+
   @override
-  Future<void> listen<T>(Stream<T> stream, void Function(T) onData) async {
+  Future<void> onEach<T>(Stream<T> stream, void Function(T) onData) async {
     final completer = Completer<void>();
     final subscription = stream.listen(onData, onDone: completer.complete);
     _disposables.add(subscription.cancel);
@@ -61,263 +123,29 @@ class _Emitter<State> extends _PendingEvent implements Emitter<State> {
     Stream<T> stream,
     FutureOr<State> Function(T) onData,
   ) {
-    return listen<T>(stream, (x) async => _emit(await onData(x)));
+    return onEach<T>(stream, (x) async => _emit(await onData(x)));
   }
 
   @override
   void call(State state) => _emit(state);
-}
-
-class _PendingEvent implements PendingEvent {
-  final _completer = Completer<void>();
-  final _disposables = <FutureOr<void> Function()>[];
-
-  @override
-  Future<void> get future => _completer.future;
 
   @override
   bool get isCompleted => _completer.isCompleted;
 
-  @override
   void cancel() {
     for (final dispose in _disposables) dispose();
     _disposables.clear();
-    if (isCompleted) return;
-    _completer.complete();
+    if (!isCompleted) _completer.complete();
   }
 
-  void _close() {
-    if (_disposables.isNotEmpty) cancel();
-  }
+  Future<void> get future => _completer.future;
 }
 
-/// {@template event_modifier}
-/// An event modifier which can be used to change
-/// how events are processed.
-///
-/// An [EventModifier] is called when an event of type `E` is added
-/// and the modifier can determine if/how the event should be processed
-/// based on the event itself and the outstanding events of type `E`.
-/// Calling the `next` function signifies that the `event` should be processed.
-///
-/// **Note**: it is possible to alter the outstanding events by modifying the
-/// `events` map.
-///
-/// By default events are processed concurrently.
-///
-/// Custom event modifiers can be created like:
-///
-/// ```dart
-/// class CustomModifier<E> extends EventModifier<E> {
-///   @override
-///   FutureOr<void> call(
-///     E event,
-///     List<PendingEvent> events,
-///     void Function() next,
-///   ) {...}
-/// }
-/// ```
-///
-/// See also:
-/// * [concurrent]
-/// * [restartable]
-/// * [drop]
-/// * [enqueue]
-/// * [keepLatest]
-/// * [debounceTime]
-/// * [throttleTime]
-/// {@endtemplate}
-abstract class EventModifier<Event> {
-  /// Function invoked when an event is added to the bloc that matches
-  /// the associated registered event handler.
-  ///
-  /// `call` is invoked with the current [event], a list of pending [events],
-  /// and a [next] function. [events] can be cancelled and the current [event]
-  /// can be forwarded to the respective handler via [next].
-  FutureOr<void> call(
-    Event event,
-    List<PendingEvent> events,
-    void Function() next,
-  );
-
-  /// Dispose is called when the bloc is closed and can be overridden to
-  /// dispose any internal resources maintained by the [EventModifier].
-  void dispose() {}
+class _HandlerTest {
+  const _HandlerTest({required this.test, required this.type});
+  final bool Function(dynamic) test;
+  final Type type;
 }
-
-/// Signature for the callbacks registered via `on<E>()`
-/// isType allows for type comparisons to support inheritance
-/// The handler is an [EventHandler] which is responsible for event processing.
-/// The modifier if an [EventModifier] which determines if/how the event is processed.
-class _OnEvent<Event, State> {
-  const _OnEvent({
-    required this.isType,
-    required this.handler,
-    required this.modifier,
-  });
-
-  final bool Function(Event) isType;
-  final EventHandler<Event, State> handler;
-  final EventModifier<Event> modifier;
-}
-
-/// Process events concurrently. This is the default behavior.
-EventModifier<E> concurrent<E>() => _Concurrent();
-
-class _Concurrent<E> extends EventModifier<E> {
-  @override
-  FutureOr<void> call(
-    E event,
-    List<PendingEvent> events,
-    void Function() next,
-  ) {
-    next();
-  }
-}
-
-/// Process events one at a time by maintaining a queue of added events
-/// and processing the events sequentially.
-///
-/// **Note**: there is no event handler overlap and every event is guaranteed
-/// to be handled in the order it was received.
-EventModifier<E> enqueue<E>() => _Enqueue();
-
-class _Enqueue<E> extends EventModifier<E> {
-  @override
-  FutureOr<void> call(
-    E event,
-    List<PendingEvent> events,
-    void Function() next,
-  ) async {
-    while (events.isNotEmpty) {
-      await Future.wait<void>(events.map((e) => e.future));
-    }
-    next();
-  }
-}
-
-/// Process only one event by cancelling any pending events and
-/// processing the new event immediately.
-///
-/// **Note**: there is no event handler overlap and any currently running tasks
-/// will be aborted if a new event is added before a prior one completes.
-EventModifier<E> restartable<E>() => _Restartable();
-
-class _Restartable<E> extends EventModifier<E> {
-  @override
-  FutureOr<void> call(
-    E event,
-    List<PendingEvent> events,
-    void Function() next,
-  ) {
-    for (final event in events) event.cancel();
-    next();
-  }
-}
-
-/// Process only one event and drop any new events
-/// until the current event is done.
-/// Dropped events never trigger the event handler.
-EventModifier<E> drop<E>() => _Drop();
-
-class _Drop<E> extends EventModifier<E> {
-  @override
-  FutureOr<void> call(
-    E event,
-    List<PendingEvent> events,
-    void Function() next,
-  ) async {
-    if (events.isEmpty) next();
-  }
-}
-
-/// Process the current event and enqueue the most recent event
-/// once the current event is done. All intermediate events are dropped.
-EventModifier<E> keepLatest<E>() => _KeepLatest();
-
-class _KeepLatest<E> extends EventModifier<E> {
-  @override
-  FutureOr<void> call(
-    E event,
-    List<PendingEvent> events,
-    void Function() next,
-  ) async {
-    if (events.isEmpty) return next();
-    events.sublist(1).forEach((e) => e.cancel());
-    await events.first.future;
-    if (events.isEmpty) return next();
-  }
-}
-
-/// {@template debounce_time}
-/// Process only one event at a time dropping all events which
-/// are added less than [duration] apart.
-///
-/// **Note**: `debounceTime` is very useful in cases where the rate
-/// of input must be controlled such as type-ahead scenarios.
-/// {@endtemplate}
-EventModifier<E> debounceTime<E>(Duration duration) =>
-    _DebounceTime(duration: duration);
-
-class _DebounceTime<E> extends EventModifier<E> {
-  _DebounceTime({required this.duration});
-
-  final Duration duration;
-  Timer? _timer;
-
-  @override
-  FutureOr<void> call(
-    E event,
-    List<PendingEvent> events,
-    void Function() next,
-  ) {
-    _timer?.cancel();
-    _timer = Timer(duration, () {
-      if (events.isEmpty) next();
-    });
-  }
-
-  @override
-  void dispose() => _timer?.cancel();
-}
-
-/// Process only one event at a time dropping all events which
-/// are added less than [duration] apart.
-///
-/// It starts by emitting the first values of the input stream
-/// Then, it limits the rate of values to at most one per [duration].
-///
-/// **Note**: `throttleTime` is very useful in cases where the rate
-/// of input must be controlled such as type-ahead scenarios.
-EventModifier<E> throttleTime<E>(Duration duration) =>
-    _ThrottleTime(duration: duration);
-
-class _ThrottleTime<E> extends EventModifier<E> {
-  _ThrottleTime({required this.duration});
-
-  final Duration duration;
-  Timer? _timer;
-
-  @override
-  FutureOr<void> call(
-    E event,
-    List<PendingEvent> events,
-    void Function() next,
-  ) async {
-    if (_timer?.isActive == true) return;
-    next();
-    _timer = Timer(duration, () {});
-  }
-
-  @override
-  void dispose() => _timer?.cancel();
-}
-
-/// Signature for a a mapper function which is invoked with a specific [Event].
-typedef EventHandler<Event, State> = FutureOr<void> Function(
-  Event,
-  Emitter<State>,
-);
 
 /// {@template bloc_unhandled_error_exception}
 /// Exception thrown when an unhandled error occurs within a bloc.
@@ -355,24 +183,35 @@ class BlocUnhandledErrorException implements Exception {
 /// {@endtemplate}
 abstract class Bloc<Event, State> extends BlocBase<State> {
   /// {@macro bloc}
-  Bloc(State initialState) : super(initialState) {
-    _eventSubscription = _eventController.stream.listen(_onEvent);
-  }
+  Bloc(State initialState) : super(initialState);
 
   /// The current [BlocObserver] instance.
   static BlocObserver observer = BlocObserver();
 
-  late final _onEventCallbacks = <_OnEvent<Event, State>>{};
-  late final _pendingEvents = <_OnEvent<Event, State>, List<_PendingEvent>>{};
-  late final StreamSubscription<Event> _eventSubscription;
   final _eventController = StreamController<Event>.broadcast(sync: true);
+  final _subscriptions = <StreamSubscription<Event>>[];
+  final _handlerTests = <_HandlerTest>[];
+  final _emitters = <_Emitter>[];
 
   /// Notifies the [Bloc] of a new [event]
   /// which triggers any registered handlers.
   /// If [close] has already been called, any subsequent calls to [add] will
   /// be ignored and will not result in any subsequent state changes.
   void add(Event event) {
-    if (isClosed) return;
+    if (_eventController.isClosed) return;
+
+    assert(() {
+      final handlerExists = _handlerTests.any((handler) => handler.test(event));
+      if (!handlerExists) {
+        final eventType = event.runtimeType;
+        throw StateError(
+          '''add($eventType) was called without a registered event handler.\n'''
+          '''Make sure to register a handler via on<$eventType>((event, emit) {...})''',
+        );
+      }
+      return true;
+    }());
+
     try {
       onEvent(event);
       _eventController.add(event);
@@ -428,26 +267,59 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// an event of type [E] when [add] is called.
   ///
   /// By default, the [concurrent] modifier will be used.
-  FutureOr<void> on<E extends Event>(
+  void on<E extends Event>(
     EventHandler<E, State> handler, [
-    EventModifier<E>? modifier,
+    EventTransformer<Event>? transform,
   ]) {
-    modifier = modifier ?? concurrent<E>();
-    final onEvent = _OnEvent<E, State>(
-      isType: (Event e) => e is E,
-      handler: handler,
-      modifier: modifier,
-    );
-    final callbacks = _onEventCallbacks.where(
-      (e) => e.runtimeType == onEvent.runtimeType,
-    );
-    if (callbacks.isNotEmpty) {
-      throw StateError(
-        'on<$E> was called multiple times. '
-        'There should only be a single event handler for each event.',
-      );
-    }
-    _onEventCallbacks.add(onEvent);
+    assert(() {
+      final handlerExists = _handlerTests.any((handler) => handler.type == E);
+      if (handlerExists) {
+        throw StateError(
+          'on<$E> was called multiple times. '
+          'There should only be a single event handler for each event.',
+        );
+      }
+      _handlerTests.add(_HandlerTest(test: (dynamic e) => e is E, type: E));
+      return true;
+    }());
+
+    final subscription = (transform ?? concurrent())(
+      _eventController.stream.where((event) => event is E),
+      (event) async* {
+        void onDone(_Emitter<State> emitter) {
+          emitter.cancel();
+          _emitters.remove(emitter);
+        }
+
+        void onEmit(State state, _Emitter<State> emitter) {
+          if (isClosed) return;
+          if (emitter.isCompleted) return;
+          if (this.state == state && _emitted) return;
+          onTransition(Transition(
+            currentState: this.state,
+            event: event,
+            nextState: state,
+          ));
+          emit(state);
+        }
+
+        Stream<Event> handleEvent(_Emitter<State> emitter) async* {
+          try {
+            _emitters.add(emitter);
+            await (handler as dynamic)(event, emitter);
+          } catch (error, stackTrace) {
+            onError(error, stackTrace);
+          } finally {
+            onDone(emitter);
+          }
+        }
+
+        late final _Emitter<State> emitter;
+        emitter = _Emitter((state) => onEmit(state, emitter));
+        yield* handleEvent(emitter).doOnCancel(() => onDone(emitter));
+      },
+    ).listen(null);
+    _subscriptions.add(subscription);
   }
 
   /// Called whenever a [transition] occurs with the given [transition].
@@ -487,74 +359,11 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   @override
   @mustCallSuper
   Future<void> close() async {
-    Iterable<Future<void>> futures() {
-      return _pendingEvents.values.fold(
-        [],
-        (prev, element) => [
-          ...prev,
-          ...element.where((e) => !e.isCompleted).map((e) => e.future)
-        ],
-      );
-    }
-
-    // ignore: unawaited_futures
-    _eventSubscription.cancel();
-
-    for (final pendingEvents in _pendingEvents.values) {
-      for (final pendingEvent in pendingEvents) pendingEvent._close();
-    }
-
-    try {
-      while (futures().isNotEmpty) await Future.wait<void>(futures());
-    } catch (_) {}
-    _pendingEvents.clear();
-
-    for (final callback in _onEventCallbacks) callback.modifier.dispose();
-
+    await _eventController.close();
+    for (final emitter in _emitters) emitter.cancel();
+    await Future.wait<void>(_emitters.map((e) => e.future));
+    await Future.wait<void>(_subscriptions.map((s) => s.cancel()));
     await super.close();
-  }
-
-  Future<void> _onEvent(Event event) async {
-    final callbacks = _onEventCallbacks.where((e) => e.isType(event));
-
-    if (callbacks.isEmpty) {
-      final eventType = event.runtimeType;
-      throw StateError(
-        '''add<$eventType> was called without a registered event handler.\n'''
-        '''Make sure to register a handler via on<$eventType>((event, emit) {...})''',
-      );
-    }
-
-    for (final onEvent in callbacks) {
-      void next() async {
-        late final _Emitter<State> emitter;
-        emitter = _Emitter((state) {
-          if (emitter.isCompleted) return;
-          if (this.state == state && _emitted) return;
-          onTransition(Transition(
-            currentState: this.state,
-            event: event,
-            nextState: state,
-          ));
-          emit(state);
-        })
-          // ignore: unawaited_futures
-          ..future.then((_) => _pendingEvents[onEvent]?.remove(emitter));
-
-        try {
-          _pendingEvents.putIfAbsent(onEvent, () => []);
-          _pendingEvents[onEvent]!.add(emitter);
-          await (onEvent as dynamic).handler(event, emitter);
-        } catch (error, stackTrace) {
-          onError(error, stackTrace);
-        } finally {
-          emitter.cancel();
-        }
-      }
-
-      _pendingEvents.putIfAbsent(onEvent, () => []);
-      await onEvent.modifier(event, _pendingEvents[onEvent]!, next);
-    }
   }
 }
 
@@ -605,7 +414,7 @@ abstract class BlocBase<State> {
   State get state => _state;
 
   /// The current state stream.
-  Stream<State> get stream => transformStates(_stateController.stream);
+  Stream<State> get stream => _stateController.stream;
 
   /// Whether the bloc is closed.
   ///
@@ -628,23 +437,6 @@ abstract class BlocBase<State> {
     _stateController.add(_state);
     _emitted = true;
   }
-
-  /// Transforms the `Stream<States>` into a new `Stream<State>`.
-  /// By default [transformStates] returns
-  /// the incoming `Stream<State>`.
-  /// You can override [transformStates] for advanced usage in order to
-  /// manipulate the frequency and specificity at which
-  /// state changes occur.
-  ///
-  /// For example, if you want to debounce outgoing state changes:
-  ///
-  /// ```dart
-  /// @override
-  /// Stream<State> transformStates(Stream<State> states) {
-  ///   return states.debounceTime(const Duration(seconds: 1));
-  /// }
-  /// ```
-  Stream<State> transformStates(Stream<State> states) => states;
 
   /// Called whenever a [change] occurs with the given [change].
   /// A [change] occurs when a new `state` is emitted.
