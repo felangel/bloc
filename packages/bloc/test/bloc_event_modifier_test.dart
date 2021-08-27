@@ -248,13 +248,20 @@ void main() {
   group('restartable', () {
     test('processes only the latest event and cancels remaining', () async {
       final states = <int>[];
-      final bloc = CounterBloc(restartable())
-        ..stream.listen(states.add)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
+      final bloc = CounterBloc(restartable())..stream.listen(states.add);
+      Future<void> addEvents() async {
+        const spacer = Duration(milliseconds: 10);
+        await Future<void>.delayed(spacer);
+        bloc.add(CounterEvent.increment);
+        await Future<void>.delayed(spacer);
+        bloc.add(CounterEvent.increment);
+        await Future<void>.delayed(spacer);
+        bloc.add(CounterEvent.increment);
+        await Future<void>.delayed(spacer);
+      }
 
       await tick();
+      await addEvents();
 
       expect(
         bloc.onCalls,
@@ -270,12 +277,8 @@ void main() {
       expect(bloc.onEmitCalls, equals([CounterEvent.increment]));
       expect(states, equals([1]));
 
-      bloc
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
       await tick();
+      await addEvents();
 
       expect(
         bloc.onCalls,
@@ -301,12 +304,8 @@ void main() {
 
       expect(states, equals([1, 2]));
 
-      bloc
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
       await tick();
+      await addEvents();
 
       expect(
         bloc.onCalls,

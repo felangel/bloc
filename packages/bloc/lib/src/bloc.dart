@@ -85,6 +85,9 @@ EventTransformer<Event> enqueue<Event>() {
 ///
 /// **Note**: there is no event handler overlap and any currently running tasks
 /// will be aborted if a new event is added before a prior one completes.
+///
+/// **Note**: avoid using [restartable] if you expect an event to have
+/// immediate results -- it should only be used with asynchronous APIs.
 EventTransformer<Event> restartable<Event>() {
   return (Stream<Event> events, Convert<Event> convert) {
     return events.switchMap(convert);
@@ -130,12 +133,9 @@ class _Emitter<State> implements Emitter<State> {
   bool get isCompleted => _completer.isCompleted;
 
   void cancel() {
-    if (_disposables.isNotEmpty) {
-      for (final dispose in _disposables) dispose();
-      _disposables.clear();
-      if (isCompleted) return;
-      _completer.complete();
-    }
+    for (final dispose in _disposables) dispose();
+    _disposables.clear();
+    if (!isCompleted) _completer.complete();
   }
 
   Future<void> get future => _completer.future;
@@ -286,16 +286,14 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     final subscription = (transform ?? concurrent())(
       _eventController.stream.where((event) => event is E),
       (event) async* {
-        _Emitter<State>? emitter;
-
-        void onDone() {
-          emitter?.cancel();
+        void onDone(_Emitter<State> emitter) {
+          emitter.cancel();
           _emitters.remove(emitter);
         }
 
-        void onEmit(State state) {
+        void onEmit(State state, _Emitter<State> emitter) {
           if (isClosed) return;
-          if (emitter!.isCompleted) return;
+          if (emitter.isCompleted) return;
           if (this.state == state && _emitted) return;
           onTransition(Transition(
             currentState: this.state,
@@ -305,19 +303,20 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
           emit(state);
         }
 
-        Stream<Event> handleEvent() async* {
-          emitter = _Emitter(onEmit);
+        Stream<Event> handleEvent(_Emitter<State> emitter) async* {
           try {
-            _emitters.add(emitter!);
+            _emitters.add(emitter);
             await (handler as dynamic)(event, emitter);
           } catch (error, stackTrace) {
             onError(error, stackTrace);
           } finally {
-            onDone();
+            onDone(emitter);
           }
         }
 
-        yield* handleEvent().doOnCancel(onDone);
+        late final _Emitter<State> emitter;
+        emitter = _Emitter((state) => onEmit(state, emitter));
+        yield* handleEvent(emitter).doOnCancel(() => onDone(emitter));
       },
     ).listen(null);
     _subscriptions.add(subscription);
@@ -362,6 +361,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   Future<void> close() async {
     await _eventController.close();
     for (final emitter in _emitters) emitter.cancel();
+    await Future.wait<void>(_emitters.map((e) => e.future));
     await Future.wait<void>(_subscriptions.map((s) => s.cancel()));
     await super.close();
   }
