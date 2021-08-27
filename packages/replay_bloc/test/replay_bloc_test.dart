@@ -95,9 +95,15 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc(shouldReplayCallback: (i) => !i.isEven);
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
-        bloc..undo()..undo()..undo();
+        bloc
+          ..undo()
+          ..undo()
+          ..undo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 3, 1]);
@@ -112,10 +118,16 @@ void main() {
           shouldReplayCallback: (i) => !i.isEven || replayEvens,
         );
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         replayEvens = true;
-        bloc..undo()..undo()..undo();
+        bloc
+          ..undo()
+          ..undo()
+          ..undo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 3, 2, 1, 0]);
@@ -125,9 +137,13 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc(limit: 1);
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
-        bloc..undo()..undo();
+        bloc
+          ..undo()
+          ..undo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1]);
@@ -149,7 +165,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
         await bloc.close();
@@ -196,7 +214,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.redo();
         await bloc.close();
@@ -208,7 +228,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -251,7 +273,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -268,7 +292,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc();
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -286,7 +312,10 @@ void main() {
         final states = <int>[];
         final bloc = CounterBloc(shouldReplayCallback: (i) => !i.isEven);
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -309,11 +338,20 @@ void main() {
           shouldReplayCallback: (i) => !i.isEven || replayEvens,
         );
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
-        bloc..undo()..undo()..undo();
+        bloc
+          ..undo()
+          ..undo()
+          ..undo();
         replayEvens = true;
-        bloc..redo()..redo()..redo();
+        bloc
+          ..redo()
+          ..redo()
+          ..redo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 3, 1, 2, 3]);
@@ -409,9 +447,13 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin(limit: 1);
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
-        bloc..undo()..undo();
+        bloc
+          ..undo()
+          ..undo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1]);
@@ -433,7 +475,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
         await bloc.close();
@@ -457,7 +501,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.redo();
         await bloc.close();
@@ -469,7 +515,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -483,7 +531,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -500,7 +550,9 @@ void main() {
         final states = <int>[];
         final bloc = CounterBlocMixin();
         final subscription = bloc.stream.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -519,8 +571,7 @@ void main() {
       test('does nothing when no state changes have occurred', () async {
         final states = <int>[];
         final bloc = CounterBloc();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
+        final subscription = bloc.stream.listen(states.add);
         bloc.undo();
         await bloc.close();
         await subscription.cancel();
@@ -530,8 +581,7 @@ void main() {
       test('does nothing when limit is 0', () async {
         final states = <int>[];
         final bloc = CounterBloc(limit: 0);
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
+        final subscription = bloc.stream.listen(states.add);
         bloc.add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
@@ -543,11 +593,14 @@ void main() {
       test('loses history outside of limit', () async {
         final states = <int>[];
         final bloc = CounterBloc(limit: 1);
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        final subscription = bloc.stream.listen(states.add);
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
-        bloc..undo()..undo();
+        bloc
+          ..undo()
+          ..undo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1]);
@@ -556,8 +609,7 @@ void main() {
       test('reverts to initial state', () async {
         final states = <int>[];
         final bloc = CounterBloc();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
+        final subscription = bloc.stream.listen(states.add);
         bloc.add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
@@ -569,9 +621,10 @@ void main() {
       test('reverts to previous state with multiple state changes ', () async {
         final states = <int>[];
         final bloc = CounterBloc();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        final subscription = bloc.stream.listen(states.add);
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
         await bloc.close();
@@ -584,8 +637,7 @@ void main() {
       test('does nothing when no state changes have occurred', () async {
         final states = <int>[];
         final bloc = CounterBloc();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
+        final subscription = bloc.stream.listen(states.add);
         bloc.redo();
         await bloc.close();
         await subscription.cancel();
@@ -595,9 +647,10 @@ void main() {
       test('does nothing when no undos have occurred', () async {
         final states = <int>[];
         final bloc = CounterBloc();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        final subscription = bloc.stream.listen(states.add);
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.redo();
         await bloc.close();
@@ -608,9 +661,10 @@ void main() {
       test('works when one undo has occurred', () async {
         final states = <int>[];
         final bloc = CounterBloc();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        final subscription = bloc.stream.listen(states.add);
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -623,9 +677,10 @@ void main() {
       test('does nothing when undos have been exhausted', () async {
         final states = <int>[];
         final bloc = CounterBloc();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        final subscription = bloc.stream.listen(states.add);
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -641,9 +696,10 @@ void main() {
           'followed by a new state change', () async {
         final states = <int>[];
         final bloc = CounterBloc();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        final subscription = bloc.stream.listen(states.add);
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -662,8 +718,7 @@ void main() {
       test('does nothing when no state changes have occurred', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
+        final subscription = bloc.stream.listen(states.add);
         bloc.undo();
         await bloc.close();
         await subscription.cancel();
@@ -673,8 +728,7 @@ void main() {
       test('does nothing when limit is 0', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin(limit: 0);
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
+        final subscription = bloc.stream.listen(states.add);
         bloc.add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
@@ -686,11 +740,14 @@ void main() {
       test('loses history outside of limit', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin(limit: 1);
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        final subscription = bloc.stream.listen(states.add);
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
-        bloc..undo()..undo();
+        bloc
+          ..undo()
+          ..undo();
         await bloc.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1]);
@@ -699,8 +756,7 @@ void main() {
       test('reverts to initial state', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
+        final subscription = bloc.stream.listen(states.add);
         bloc.add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
@@ -712,9 +768,10 @@ void main() {
       test('reverts to previous state with multiple state changes ', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        final subscription = bloc.stream.listen(states.add);
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.undo();
         await bloc.close();
@@ -727,8 +784,7 @@ void main() {
       test('does nothing when no state changes have occurred', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
+        final subscription = bloc.stream.listen(states.add);
         bloc.redo();
         await bloc.close();
         await subscription.cancel();
@@ -738,9 +794,10 @@ void main() {
       test('does nothing when no undos have occurred', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        final subscription = bloc.stream.listen(states.add);
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc.redo();
         await bloc.close();
@@ -751,9 +808,10 @@ void main() {
       test('works when one undo has occurred', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        final subscription = bloc.stream.listen(states.add);
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -766,9 +824,10 @@ void main() {
       test('does nothing when undos have been exhausted', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        final subscription = bloc.stream.listen(states.add);
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()
@@ -784,9 +843,10 @@ void main() {
           'followed by a new state change', () async {
         final states = <int>[];
         final bloc = CounterBlocMixin();
-        // ignore: deprecated_member_use
-        final subscription = bloc.listen(states.add);
-        bloc..add(Increment())..add(Increment());
+        final subscription = bloc.stream.listen(states.add);
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(Duration.zero);
         bloc
           ..undo()

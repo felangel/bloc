@@ -136,16 +136,9 @@ class Reset extends CounterEvent {
 /// {@endtemplate}
 class CounterBloc extends ReplayBloc<CounterEvent, int> {
   /// {@macro replay_counter_bloc}
-  CounterBloc() : super(0);
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    if (event is Increment) {
-      yield state + 1;
-    } else if (event is Decrement) {
-      yield state - 1;
-    } else if (event is Reset) {
-      yield 0;
-    }
+  CounterBloc() : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
+    on<Decrement>((event, emit) => emit(state - 1));
+    on<Reset>((event, emit) => emit(0));
   }
 }

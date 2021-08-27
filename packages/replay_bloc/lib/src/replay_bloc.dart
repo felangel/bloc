@@ -84,9 +84,6 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
   set limit(int limit) => _changeStack.limit = limit;
 
   @override
-  Stream<State> mapEventToState(covariant Event event);
-
-  @override
   // ignore: must_call_super
   void onTransition(covariant Transition<ReplayEvent, State> transition) {
     // ignore: invalid_use_of_protected_member
@@ -113,7 +110,7 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
           event: event,
           nextState: state,
         ));
-        // ignore: invalid_use_of_visible_for_testing_member
+        // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_internal_member
         super.emit(state);
       },
       (val) {
@@ -124,11 +121,11 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
           event: event,
           nextState: val,
         ));
-        // ignore: invalid_use_of_visible_for_testing_member
+        // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_internal_member
         super.emit(val);
       },
     ));
-    // ignore: invalid_use_of_visible_for_testing_member
+    // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_internal_member
     super.emit(state);
   }
 

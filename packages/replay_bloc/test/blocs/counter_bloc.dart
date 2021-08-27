@@ -13,20 +13,14 @@ class CounterBloc extends ReplayBloc<CounterEvent, int> {
     this.onEventCallback,
     this.onTransitionCallback,
     this.shouldReplayCallback,
-  }) : super(0, limit: limit);
+  }) : super(0, limit: limit) {
+    on<Increment>((event, emit) => emit(state + 1));
+    on<Decrement>((event, emit) => emit(state - 1));
+  }
 
   final void Function(ReplayEvent)? onEventCallback;
   final void Function(Transition<ReplayEvent, int>)? onTransitionCallback;
   final bool Function(int)? shouldReplayCallback;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    if (event is Increment) {
-      yield state + 1;
-    } else if (event is Decrement) {
-      yield state - 1;
-    }
-  }
 
   @override
   void onEvent(ReplayEvent event) {
@@ -52,14 +46,7 @@ class CounterBlocMixin extends Bloc<CounterEvent, int>
     if (limit != null) {
       this.limit = limit;
     }
-  }
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    if (event is Increment) {
-      yield state + 1;
-    } else if (event is Decrement) {
-      yield state - 1;
-    }
+    on<Increment>((event, emit) => emit(state + 1));
+    on<Decrement>((event, emit) => emit(state - 1));
   }
 }
