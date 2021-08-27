@@ -10,12 +10,12 @@
 [![Discord](https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue)](https://discord.gg/bloc)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
-> une bibliothèque de gestion d'état prévisible pour Dart.
+> eine vorhersagbare Zustandsverwaltungsbibliothek für Dart.
 
-- Simple et léger
-- Hautement testable
-- Pour Dart, Flutter et AngularDart
+- Einfach & leichtgewichtig
+- Hochgradig testfähig
+- Für Dart, Flutter, und AngularDart
 
-[Migrer vers v6.1.0](fr/migration.md)
+[Leitfaden zur Migration](de-de/migration)
 [GitHub](https://github.com/felangel/bloc/)
-[Commencer](fr/gettingstarted.md)
+[Los geht's](de-de/gettingstarted.md)
