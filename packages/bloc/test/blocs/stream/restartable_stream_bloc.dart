@@ -6,7 +6,7 @@ abstract class RestartableStreamEvent {}
 
 class ForEach extends RestartableStreamEvent {}
 
-class Listen extends RestartableStreamEvent {}
+class OnEach extends RestartableStreamEvent {}
 
 const _delay = Duration(milliseconds: 100);
 
@@ -19,8 +19,8 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
       );
     }, restartable());
 
-    on<Listen>((_, emit) async {
-      await emit.listen<int>(
+    on<OnEach>((_, emit) async {
+      await emit.onEach<int>(
         stream,
         (i) => Future<void>.delayed(_delay, () => emit(i)),
       );

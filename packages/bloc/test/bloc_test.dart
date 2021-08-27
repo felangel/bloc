@@ -871,19 +871,19 @@ void main() {
         expect(states, equals(expectedStates));
       });
 
-      test('listen cancels subscriptions correctly', () async {
+      test('onEach cancels subscriptions correctly', () async {
         const expectedStates = [3, 4];
         final states = <int>[];
         final controller = StreamController<int>.broadcast();
         final bloc = RestartableStreamBloc(controller.stream)
           ..stream.listen(states.add)
-          ..add(Listen());
+          ..add(OnEach());
 
         await Future<void>.delayed(Duration.zero);
 
         controller..add(0)..add(1)..add(2);
 
-        bloc.add(Listen());
+        bloc.add(OnEach());
         await Future<void>.delayed(Duration.zero);
 
         controller..add(3)..add(4);

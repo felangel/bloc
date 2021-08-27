@@ -11,9 +11,9 @@ abstract class Emitter<State> {
   /// Subscribes to the provided [stream] and invokes the [onData] callback
   /// when the [stream] emits new data.
   ///
-  /// [listen] completes when the event handler is cancelled or when
+  /// [onEach] completes when the event handler is cancelled or when
   /// the provided [stream] has ended.
-  Future<void> listen<T>(Stream<T> stream, void Function(T) onData);
+  Future<void> onEach<T>(Stream<T> stream, void Function(T) onData);
 
   // Subscribes to the provided [stream] and invokes the [onData] callback
   /// when the [stream] emits new data and the result of [onData] is emitted.
@@ -25,47 +25,75 @@ abstract class Emitter<State> {
     FutureOr<State> Function(T) onData,
   );
 
+  /// Whether the [EventHandler] associated with this [Emitter]
+  /// has completed.
+  /// [isCompleted] will be true either when the [EventHandler] has
+  /// completed normally or if it has been cancelled.
+  bool get isCompleted;
+
   /// Emits the provided [state].
   void call(State state);
 }
 
-/// Docs
+/// An event handler is responsible for reacting to an incoming [Event]
+/// and can emit zero or more states via the [Emitter].
 typedef EventHandler<Event, State> = FutureOr<void> Function(
   Event,
   Emitter<State>,
 );
 
-/// Docs
+/// Signature for a function which converts an incoming event
+/// into an outbound stream of events.
+/// Used when defining custom [EventTransformer]s.
 typedef Convert<Event> = Stream<Event> Function(Event);
 
-/// Docs
+/// {@template event_transformer}
+/// Used to change how events are processed.
+/// By default events are processed concurrently.
+///
+/// See also:
+/// * [concurrent]
+/// * [restartable]
+/// * [drop]
+/// * [enqueue]
+/// {@endtemplate}
 typedef EventTransformer<Event> = Stream<Event> Function(
   Stream<Event>,
   Convert<Event>,
 );
 
-/// Docs
-EventTransformer<Event> enqueue<Event>() {
-  return (Stream<Event> events, Convert<Event> convert) {
-    return events.asyncExpand(convert);
-  };
-}
-
-/// Docs
+/// Process events concurrently. This is the default behavior.
 EventTransformer<Event> concurrent<Event>() {
   return (Stream<Event> events, Convert<Event> convert) {
     return events.flatMap(convert);
   };
 }
 
-/// Docs
+/// Process events one at a time by maintaining a queue of added events
+/// and processing the events sequentially.
+///
+/// **Note**: there is no event handler overlap and every event is guaranteed
+/// to be handled in the order it was received.
+EventTransformer<Event> enqueue<Event>() {
+  return (Stream<Event> events, Convert<Event> convert) {
+    return events.asyncExpand(convert);
+  };
+}
+
+/// Process only one event by cancelling any pending events and
+/// processing the new event immediately.
+///
+/// **Note**: there is no event handler overlap and any currently running tasks
+/// will be aborted if a new event is added before a prior one completes.
 EventTransformer<Event> restartable<Event>() {
   return (Stream<Event> events, Convert<Event> convert) {
     return events.switchMap(convert);
   };
 }
 
-/// Docs
+/// Process only one event and drop any new events
+/// until the current event is done.
+/// Dropped events never trigger the event handler.
 EventTransformer<Event> drop<Event>() {
   return (Stream<Event> events, Convert<Event> convert) {
     return events.exhaustMap(convert);
@@ -80,7 +108,7 @@ class _Emitter<State> implements Emitter<State> {
   final _disposables = <FutureOr<void> Function()>[];
 
   @override
-  Future<void> listen<T>(Stream<T> stream, void Function(T) onData) async {
+  Future<void> onEach<T>(Stream<T> stream, void Function(T) onData) async {
     final completer = Completer<void>();
     final subscription = stream.listen(onData, onDone: completer.complete);
     _disposables.add(subscription.cancel);
@@ -92,11 +120,14 @@ class _Emitter<State> implements Emitter<State> {
     Stream<T> stream,
     FutureOr<State> Function(T) onData,
   ) {
-    return listen<T>(stream, (x) async => _emit(await onData(x)));
+    return onEach<T>(stream, (x) async => _emit(await onData(x)));
   }
 
   @override
   void call(State state) => _emit(state);
+
+  @override
+  bool get isCompleted => _completer.isCompleted;
 
   void cancel() {
     if (_disposables.isNotEmpty) {
@@ -108,8 +139,6 @@ class _Emitter<State> implements Emitter<State> {
   }
 
   Future<void> get future => _completer.future;
-
-  bool get isCompleted => _completer.isCompleted;
 }
 
 class _HandlerTest {
@@ -257,38 +286,38 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     final subscription = (transform ?? concurrent())(
       _eventController.stream.where((event) => event is E),
       (event) async* {
-        var cancelled = false;
-
         _Emitter<State>? emitter;
-        Stream<Event> processEvent() async* {
-          emitter = _Emitter((State state) {
-            if (cancelled) return;
-            if (emitter!.isCompleted) return;
-            if (this.state == state && _emitted) return;
-            onTransition(Transition(
-              currentState: this.state,
-              event: event,
-              nextState: state,
-            ));
-            emit(state);
-          });
 
+        void onDone() {
+          emitter?.cancel();
+          _emitters.remove(emitter);
+        }
+
+        void onEmit(State state) {
+          if (isClosed) return;
+          if (emitter!.isCompleted) return;
+          if (this.state == state && _emitted) return;
+          onTransition(Transition(
+            currentState: this.state,
+            event: event,
+            nextState: state,
+          ));
+          emit(state);
+        }
+
+        Stream<Event> handleEvent() async* {
+          emitter = _Emitter(onEmit);
           try {
             _emitters.add(emitter!);
             await (handler as dynamic)(event, emitter);
           } catch (error, stackTrace) {
             onError(error, stackTrace);
           } finally {
-            emitter?.cancel();
-            _emitters.remove(emitter);
+            onDone();
           }
         }
 
-        yield* processEvent().doOnCancel(() {
-          cancelled = true;
-          emitter?.cancel();
-          _emitters.remove(emitter);
-        });
+        yield* handleEvent().doOnCancel(onDone);
       },
     ).listen(null);
     _subscriptions.add(subscription);
