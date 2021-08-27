@@ -279,10 +279,10 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
           'There should only be a single event handler for each event.',
         );
       }
+      _handlerTests.add(_HandlerTest(test: (dynamic e) => e is E, type: E));
       return true;
     }());
 
-    _handlerTests.add(_HandlerTest(test: (dynamic e) => e is E, type: E));
     final subscription = (transform ?? concurrent())(
       _eventController.stream.where((event) => event is E),
       (event) async* {
