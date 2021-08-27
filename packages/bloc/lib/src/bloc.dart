@@ -56,6 +56,8 @@ typedef Convert<Event> = Stream<Event> Function(Event);
 /// * [restartable]
 /// * [drop]
 /// * [enqueue]
+/// * [debounceTime]
+/// * [throttleTime]
 /// {@endtemplate}
 typedef EventTransformer<Event> = Stream<Event> Function(
   Stream<Event>,
@@ -100,6 +102,31 @@ EventTransformer<Event> restartable<Event>() {
 EventTransformer<Event> drop<Event>() {
   return (Stream<Event> events, Convert<Event> convert) {
     return events.exhaustMap(convert);
+  };
+}
+
+/// Process only one event at a time dropping all events which
+/// are added less than [duration] apart.
+///
+/// **Note**: `debounceTime` is very useful in cases where the rate
+/// of input must be controlled such as type-ahead scenarios.
+EventTransformer<Event> debounceTime<Event>(Duration duration) {
+  return (Stream<Event> events, Convert<Event> convert) {
+    return events.debounceTime(duration).flatMap(convert);
+  };
+}
+
+/// Process only one event at a time dropping all events which
+/// are added less than [duration] apart.
+///
+/// It starts by emitting the first values of the input stream
+/// Then, it limits the rate of values to at most one per [duration].
+///
+/// **Note**: `throttleTime` is very useful in cases where the rate
+/// of input must be controlled such as type-ahead scenarios.
+EventTransformer<Event> throttleTime<Event>(Duration duration) {
+  return (Stream<Event> events, Convert<Event> convert) {
+    return events.throttleTime(duration).flatMap(convert);
   };
 }
 
