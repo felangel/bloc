@@ -44,10 +44,10 @@ typedef EventHandler<Event, State> = FutureOr<void> Function(
 
 /// Signature for a function which converts an incoming event
 /// into an outbound stream of events.
-/// Used when defining custom [EventTransformer]s.
+/// Used when defining custom [EventTransform]s.
 typedef EventMapper<Event> = Stream<Event> Function(Event);
 
-/// {@template event_transformer}
+/// {@template event_transform}
 /// Used to change how events are processed.
 /// By default events are processed concurrently.
 ///
@@ -57,16 +57,14 @@ typedef EventMapper<Event> = Stream<Event> Function(Event);
 /// * [drop]
 /// * [enqueue]
 /// {@endtemplate}
-typedef EventTransformer<Event> = Stream<Event> Function(
+typedef EventTransform<Event> = Stream<Event> Function(
   Stream<Event>,
   EventMapper<Event>,
 );
 
 /// Process events concurrently. This is the default behavior.
-EventTransformer<Event> concurrent<Event>() {
-  return (Stream<Event> events, EventMapper<Event> mapper) {
-    return events.concurrentAsyncExpand(mapper);
-  };
+EventTransform<Event> concurrent<Event>() {
+  return (events, mapper) => events.concurrentAsyncExpand(mapper);
 }
 
 /// Process events one at a time by maintaining a queue of added events
@@ -74,10 +72,8 @@ EventTransformer<Event> concurrent<Event>() {
 ///
 /// **Note**: there is no event handler overlap and every event is guaranteed
 /// to be handled in the order it was received.
-EventTransformer<Event> enqueue<Event>() {
-  return (Stream<Event> events, EventMapper<Event> mapper) {
-    return events.asyncExpand(mapper);
-  };
+EventTransform<Event> enqueue<Event>() {
+  return (events, mapper) => events.asyncExpand(mapper);
 }
 
 /// Process only one event by cancelling any pending events and
@@ -88,19 +84,15 @@ EventTransformer<Event> enqueue<Event>() {
 ///
 /// **Note**: avoid using [restartable] if you expect an event to have
 /// immediate results -- it should only be used with asynchronous APIs.
-EventTransformer<Event> restartable<Event>() {
-  return (Stream<Event> events, EventMapper<Event> mapper) {
-    return events.switchMap(mapper);
-  };
+EventTransform<Event> restartable<Event>() {
+  return (events, mapper) => events.switchMap(mapper);
 }
 
 /// Process only one event and drop any new events
 /// until the current event is done.
 /// Dropped events never trigger the event handler.
-EventTransformer<Event> drop<Event>() {
-  return (Stream<Event> events, EventMapper<Event> mapper) {
-    return events.exhaustMap(mapper);
-  };
+EventTransform<Event> drop<Event>() {
+  return (events, mapper) => events.exhaustMap(mapper);
 }
 
 class _Emitter<State> implements Emitter<State> {
@@ -269,7 +261,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// By default, the [concurrent] modifier will be used.
   void on<E extends Event>(
     EventHandler<E, State> handler, {
-    EventTransformer<Event>? transform,
+    EventTransform<Event>? transform,
   }) {
     assert(() {
       final handlerExists = _handlerTests.any((handler) => handler.type == E);

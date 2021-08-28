@@ -5,10 +5,8 @@ import 'blocs.dart';
 
 const _debounceDuration = Duration(milliseconds: 300);
 
-EventTransformer<Event> debounceTime<Event>(Duration duration) {
-  return (Stream<Event> events, EventMapper<Event> mapper) {
-    return events.debounceTime(duration).switchMap(mapper);
-  };
+EventTransform<Event> debounceTime<Event>(Duration duration) {
+  return (events, mapper) => events.debounceTime(duration).switchMap(mapper);
 }
 
 class DebounceCounterBloc extends Bloc<CounterEvent, int> {

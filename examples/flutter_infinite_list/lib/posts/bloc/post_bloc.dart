@@ -14,10 +14,8 @@ const _postLimit = 20;
 
 const _debounceDuration = Duration(milliseconds: 500);
 
-EventTransformer<Event> throttleTime<Event>(Duration duration) {
-  return (Stream<Event> events, EventMapper<Event> mapper) {
-    return events.throttleTime(duration).flatMap(mapper);
-  };
+EventTransform<Event> throttleTime<Event>(Duration duration) {
+  return (events, mapper) => events.throttleTime(duration).flatMap(mapper);
 }
 
 class PostBloc extends Bloc<PostEvent, PostState> {

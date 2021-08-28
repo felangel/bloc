@@ -9,7 +9,7 @@ Future<void> wait() => Future.delayed(delay);
 Future<void> tick() => Future.delayed(Duration.zero);
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  CounterBloc(EventTransformer<CounterEvent> transform) : super(0) {
+  CounterBloc(EventTransform<CounterEvent> transform) : super(0) {
     on<CounterEvent>(
       (event, emit) {
         onCalls.add(event);
