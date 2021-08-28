@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 part 'complex_event.dart';
 part 'complex_state.dart';
@@ -23,6 +23,6 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
 
   @override
   Stream<ComplexState> get stream {
-    return super.stream.debounceTime(const Duration(milliseconds: 50));
+    return super.stream.debounce(const Duration(milliseconds: 50));
   }
 }

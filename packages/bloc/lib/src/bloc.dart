@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 /// {@template emitter}
 /// Base interface for emitting states in response to events.
@@ -65,7 +65,7 @@ typedef EventTransformer<Event> = Stream<Event> Function(
 /// Process events concurrently. This is the default behavior.
 EventTransformer<Event> concurrent<Event>() {
   return (Stream<Event> events, EventMapper<Event> mapper) {
-    return events.flatMap(mapper);
+    return events.concurrentAsyncExpand(mapper);
   };
 }
 
@@ -316,7 +316,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
 
         late final _Emitter<State> emitter;
         emitter = _Emitter((state) => onEmit(state, emitter));
-        yield* handleEvent(emitter).doOnCancel(() => onDone(emitter));
+        yield* handleEvent(emitter).onCancel(() => onDone(emitter));
       },
     ).listen(null);
     _subscriptions.add(subscription);
@@ -505,5 +505,79 @@ abstract class BlocBase<State> {
     // ignore: invalid_use_of_protected_member
     Bloc.observer.onClose(this);
     await _stateController.close();
+  }
+}
+
+extension _StreamX<T> on Stream<T> {
+  Stream<T> onCancel(void Function() onCancel) {
+    return transform(_OnCancelStreamTransformer(onCancel));
+  }
+
+  Stream<T> exhaustMap(EventMapper<T> mapper) {
+    return transform(_ExhaustMapStreamTransformer(mapper));
+  }
+}
+
+class _OnCancelStreamTransformer<T> extends StreamTransformerBase<T, T> {
+  const _OnCancelStreamTransformer(this.onCancel);
+
+  final void Function() onCancel;
+
+  @override
+  Stream<T> bind(Stream<T> stream) {
+    late StreamSubscription<T> subscription;
+    final controller = StreamController<T>(
+      onCancel: () {
+        onCancel();
+        return subscription.cancel();
+      },
+      sync: true,
+    );
+
+    subscription = stream.listen(
+      controller.add,
+      onError: controller.addError,
+      onDone: controller.close,
+    );
+
+    return controller.stream;
+  }
+}
+
+class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
+  _ExhaustMapStreamTransformer(this.mapper);
+
+  final EventMapper<T> mapper;
+
+  @override
+  Stream<T> bind(Stream<T> stream) {
+    late StreamSubscription<T> subscription;
+    StreamSubscription<T>? mappedSubscription;
+
+    final controller = StreamController<T>(
+      onCancel: () async {
+        await mappedSubscription?.cancel();
+        return subscription.cancel();
+      },
+      sync: true,
+    );
+
+    subscription = stream.listen(
+      (data) {
+        if (mappedSubscription != null) return;
+        final Stream<T> mappedStream;
+
+        mappedStream = mapper(data);
+        mappedSubscription = mappedStream.listen(
+          controller.add,
+          onError: controller.addError,
+          onDone: () => mappedSubscription = null,
+        );
+      },
+      onError: controller.addError,
+      onDone: () => mappedSubscription ?? controller.close(),
+    );
+
+    return controller.stream;
   }
 }

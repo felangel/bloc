@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 import '../blocs.dart';
 
@@ -12,9 +12,11 @@ EventTransformer<CounterEvent> customTransform() {
 
     final debounceStream = events
         .where((event) => event == CounterEvent.increment)
-        .throttleTime(const Duration(milliseconds: 100));
+        .throttle(const Duration(milliseconds: 100));
 
-    return Rx.merge([nonDebounceStream, debounceStream]).asyncExpand(mapper);
+    return nonDebounceStream
+        .merge(debounceStream)
+        .concurrentAsyncExpand(mapper);
   };
 }
 

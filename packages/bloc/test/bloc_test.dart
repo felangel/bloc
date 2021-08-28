@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 
 import 'blocs/blocs.dart';
@@ -1144,3 +1143,5 @@ void main() {
     });
   });
 }
+
+void unawaited(Future<void> future) {}

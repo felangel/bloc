@@ -13,6 +13,7 @@ dependencies:
     path: ../../packages/flutter_bloc
   http: ^0.13.0
   equatable: ^2.0.0
+  rxdart: ^0.27.0
 
 dev_dependencies:
   flutter_test:
