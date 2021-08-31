@@ -66,7 +66,7 @@ void cubitMain() {
   cubit.close();
 }
 
-void blocMain() async {
+Future<void> blocMain() async {
   print('----------BLOC----------');
 
   /// Create a `CounterBloc` instance.
@@ -76,7 +76,7 @@ void blocMain() async {
   print(bloc.state);
 
   /// Interact with the `bloc` to trigger `state` changes.
-  bloc.add(CounterEvent.increment);
+  bloc.add(CounterIncremented());
 
   /// Wait for next iteration of the event-loop
   /// to ensure event has been processed.
@@ -101,23 +101,18 @@ class CounterCubit extends Cubit<int> {
 }
 
 /// The events which `CounterBloc` will react to.
-enum CounterEvent { increment }
+abstract class CounterEvent {}
+
+/// Notifies bloc to increment state.
+class CounterIncremented extends CounterEvent {}
 
 /// A `CounterBloc` which handles converting `CounterEvent`s into `int`s.
 class CounterBloc extends Bloc<CounterEvent, int> {
   /// The initial state of the `CounterBloc` is 0.
   CounterBloc() : super(0) {
-    on<CounterEvent>(_onCounterEvent);
-  }
-
-  void _onCounterEvent(CounterEvent event, Emitter<int> emit) {
-    switch (event) {
-
-      /// When a `CounterEvent.increment` event is added,
-      /// the current `state` of the bloc is accessed via the `state` property
-      /// and a new state is emitted via `emit`.
-      case CounterEvent.increment:
-        return emit(state + 1);
-    }
+    /// When a `CounterIncremented` event is added,
+    /// the current `state` of the bloc is accessed via the `state` property
+    /// and a new state is emitted via `emit`.
+    on<CounterIncremented>((event, emit) => emit(state + 1));
   }
 }

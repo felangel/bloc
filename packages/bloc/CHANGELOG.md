@@ -1,3 +1,28 @@
+# 8.0.0-dev.1
+
+- **BREAKING**: fix: `mapEventToState` removed
+  - register event handlers via `on<E>`
+- **BREAKING**: refactor: `transformEvents` removed
+  - use a built in `EventTransformer` or define your own
+- **BREAKING**: refactor: `transformTransitions` removed
+  - override `Stream<State> get stream` to modify the outbound stream
+- **BREAKING**: refactor: remove deprecated `bloc.listen`
+  - use `bloc.stream.listen` instead
+- **BREAKING**: feat: by default events are processed concurrently
+  - to process events sequentially use the `concurrent` event transformer
+- feat: introduce `Emitter<State>` to trigger state changes
+  - `call` to trigger a state change (alignment with `Cubit`)
+  - `forEach` as an analogue for `await for`
+  - `onEach` to simplify subscription management
+  - `isCompleted` to abort expensive async operations
+- feat: include core `EventTransformer` options
+  - `concurrent` (default) - process events concurrently
+  - `enqueue` (legacy) - process events sequentially
+  - `drop` - ignore any events added while an event is processing
+  - `restartable` - process only the latest event and cancel previous handlers
+- feat: throw `StateError` if an event is added without a registered handler
+- feat: throw `StateError` if duplicate event handlers are registered
+
 # 7.1.0
 
 - feat: expose `isClosed` getter on `BlocBase`

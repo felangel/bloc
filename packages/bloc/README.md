@@ -184,21 +184,19 @@ State changes in bloc begin when events are added which triggers `onEvent`. The 
 
 ```dart
 /// The events which `CounterBloc` will react to.
-enum CounterEvent { increment }
+abstract class CounterEvent {}
+
+/// Notifies bloc to increment state.
+class CounterIncremented extends CounterEvent {}
 
 /// A `CounterBloc` which handles converting `CounterEvent`s into `int`s.
 class CounterBloc extends Bloc<CounterEvent, int> {
   /// The initial state of the `CounterBloc` is 0.
   CounterBloc() : super(0) {
-    on<CounterEvent>((event, emit) {
-      switch (event) {
-        /// When a `CounterEvent.increment` event is added,
-        /// the current `state` of the bloc is accessed via the `state` property
-        /// and a new state is emitted via `emit`.
-        case CounterEvent.increment:
-          return emit(state + 1);
-      }
-    });
+    /// When a `CounterIncremented` event is added,
+    /// the current `state` of the bloc is accessed via the `state` property
+    /// and a new state is emitted via `emit`.
+    on<CounterIncremented>((event, emit) => emit(state + 1));
   }
 }
 ```
@@ -206,7 +204,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 #### Using a Bloc
 
 ```dart
-void main() async {
+Future<void> main() async {
   /// Create a `CounterBloc` instance.
   final bloc = CounterBloc();
 
@@ -214,7 +212,7 @@ void main() async {
   print(bloc.state); // 0
 
   /// Interact with the `bloc` to trigger `state` changes.
-  bloc.add(CounterEvent.increment);
+  bloc.add(CounterIncremented());
 
   /// Wait for next iteration of the event-loop
   /// to ensure event has been processed.
@@ -224,7 +222,7 @@ void main() async {
   print(bloc.state); // 1
 
   /// Close the `bloc` when it is no longer needed.
-  bloc.close();
+  await bloc.close();
 }
 ```
 
@@ -239,16 +237,13 @@ In addition, `Blocs` can also override `onEvent` and `onTransition`.
 `onTransition` is similar to `onChange`, however, it contains the `event` which triggered the state change in addition to the `currentState` and `nextState`.
 
 ```dart
-enum CounterEvent { increment }
+abstract class CounterEvent {}
+
+class CounterIncremented extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0) {
-    on<CounterEvent>((event, emit) {
-      switch (event) {
-        case CounterEvent.increment:
-          return emit(state + 1);
-      }
-    });
+    on<CounterIncremented>((event, emit) => emit(state + 1));
   }
 
   @override
