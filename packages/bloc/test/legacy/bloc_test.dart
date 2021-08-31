@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 
 import 'blocs/blocs.dart';
@@ -401,36 +402,6 @@ void main() {
 
         counterBloc.add(CounterEvent.increment);
       });
-
-      test('maintains correct transition composition', () {
-        final expectedTransitions = <Transition<CounterEvent, int>>[
-          const Transition(
-            currentState: 0,
-            event: CounterEvent.decrement,
-            nextState: -1,
-          ),
-          const Transition(
-            currentState: -1,
-            event: CounterEvent.increment,
-            nextState: 0,
-          ),
-        ];
-
-        final expectedStates = [-1, 0, emitsDone];
-        final transitions = <Transition<CounterEvent, int>>[];
-        final counterBloc = CounterBloc(onTransitionCallback: transitions.add);
-
-        expectLater(
-          counterBloc.stream,
-          emitsInOrder(expectedStates),
-        ).then((dynamic _) {
-          expect(transitions, expectedTransitions);
-        });
-        counterBloc
-          ..add(CounterEvent.decrement)
-          ..add(CounterEvent.increment)
-          ..close();
-      });
     });
 
     group('Async Bloc', () {
@@ -466,7 +437,8 @@ void main() {
         final states = <AsyncState>[];
 
         asyncBloc
-          ..stream.listen(states.add)
+          // ignore: deprecated_member_use_from_same_package
+          ..listen(states.add)
           ..add(AsyncEvent());
 
         await asyncBloc.close();
@@ -580,109 +552,6 @@ void main() {
           ..close();
       });
 
-      test('should map multiple events to correct states', () {
-        final expectedStates = [
-          AsyncState(isLoading: true, hasError: false, isSuccess: false),
-          AsyncState(isLoading: false, hasError: false, isSuccess: true),
-          AsyncState(isLoading: true, hasError: false, isSuccess: false),
-          AsyncState(isLoading: false, hasError: false, isSuccess: true),
-          emitsDone,
-        ];
-
-        expectLater(
-          asyncBloc.stream,
-          emitsInOrder(expectedStates),
-        ).then((dynamic _) {
-          verify(
-            // ignore: invalid_use_of_protected_member
-            () => observer.onTransition(
-              asyncBloc,
-              Transition<AsyncEvent, AsyncState>(
-                currentState: AsyncState(
-                  isLoading: false,
-                  hasError: false,
-                  isSuccess: false,
-                ),
-                event: AsyncEvent(),
-                nextState: AsyncState(
-                  isLoading: true,
-                  hasError: false,
-                  isSuccess: false,
-                ),
-              ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
-            () => observer.onChange(
-              asyncBloc,
-              Change<AsyncState>(
-                currentState: AsyncState(
-                  isLoading: false,
-                  hasError: false,
-                  isSuccess: false,
-                ),
-                nextState: AsyncState(
-                  isLoading: true,
-                  hasError: false,
-                  isSuccess: false,
-                ),
-              ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
-            () => observer.onTransition(
-              asyncBloc,
-              Transition<AsyncEvent, AsyncState>(
-                currentState: AsyncState(
-                  isLoading: true,
-                  hasError: false,
-                  isSuccess: false,
-                ),
-                event: AsyncEvent(),
-                nextState: AsyncState(
-                  isLoading: false,
-                  hasError: false,
-                  isSuccess: true,
-                ),
-              ),
-            ),
-          ).called(2);
-          verify(
-            // ignore: invalid_use_of_protected_member
-            () => observer.onChange(
-              asyncBloc,
-              Change<AsyncState>(
-                currentState: AsyncState(
-                  isLoading: true,
-                  hasError: false,
-                  isSuccess: false,
-                ),
-                nextState: AsyncState(
-                  isLoading: false,
-                  hasError: false,
-                  isSuccess: true,
-                ),
-              ),
-            ),
-          ).called(2);
-          expect(
-            asyncBloc.state,
-            AsyncState(
-              isLoading: false,
-              hasError: false,
-              isSuccess: true,
-            ),
-          );
-        });
-
-        asyncBloc
-          ..add(AsyncEvent())
-          ..add(AsyncEvent())
-          ..close();
-      });
-
       test('is a broadcast stream', () {
         final expectedStates = [
           AsyncState(isLoading: true, hasError: false, isSuccess: false),
@@ -713,7 +582,41 @@ void main() {
       });
     });
 
-    group('MergeBloc', () {
+    group('flatMap', () {
+      test('maintains correct transition composition', () {
+        final expectedTransitions = <Transition<CounterEvent, int>>[
+          const Transition(
+            currentState: 0,
+            event: CounterEvent.decrement,
+            nextState: -1,
+          ),
+          const Transition(
+            currentState: -1,
+            event: CounterEvent.increment,
+            nextState: 0,
+          ),
+        ];
+
+        final expectedStates = [-1, 0, emitsDone];
+        final transitions = <Transition<CounterEvent, int>>[];
+        final flatMapBloc = FlatMapBloc(
+          onTransitionCallback: transitions.add,
+        );
+
+        expectLater(
+          flatMapBloc.stream,
+          emitsInOrder(expectedStates),
+        ).then((dynamic _) {
+          expect(transitions, expectedTransitions);
+        });
+        flatMapBloc
+          ..add(CounterEvent.decrement)
+          ..add(CounterEvent.increment)
+          ..close();
+      });
+    });
+
+    group('mergeBloc', () {
       test('maintains correct transition composition', () {
         final expectedTransitions = <Transition<CounterEvent, int>>[
           const Transition(
@@ -817,83 +720,6 @@ void main() {
       });
     });
 
-    group('StreamBloc', () {
-      test('cancels subscriptions correctly', () async {
-        const expectedStates = [0, 1, 2, 3, 4];
-        final states = <int>[];
-        final controller = StreamController<int>.broadcast();
-        final bloc = StreamBloc(controller.stream)
-          ..stream.listen(states.add)
-          ..add(Subscribe());
-
-        await Future<void>.delayed(Duration.zero);
-
-        controller..add(0)..add(1)..add(2);
-
-        await Future<void>.delayed(Duration.zero);
-
-        bloc.add(Subscribe());
-
-        await Future<void>.delayed(Duration.zero);
-
-        controller..add(3)..add(4);
-
-        await Future<void>.delayed(const Duration(milliseconds: 300));
-
-        await bloc.close();
-        expect(states, equals(expectedStates));
-      });
-    });
-
-    group('RestartableStreamBloc', () {
-      test('forEach cancels subscriptions correctly', () async {
-        const expectedStates = [3, 4];
-        final states = <int>[];
-        final controller = StreamController<int>.broadcast();
-        final bloc = RestartableStreamBloc(controller.stream)
-          ..stream.listen(states.add)
-          ..add(ForEach());
-
-        await Future<void>.delayed(Duration.zero);
-
-        controller..add(0)..add(1)..add(2);
-
-        bloc.add(ForEach());
-
-        await Future<void>.delayed(Duration.zero);
-
-        controller..add(3)..add(4);
-
-        await Future<void>.delayed(const Duration(milliseconds: 300));
-
-        await bloc.close();
-        expect(states, equals(expectedStates));
-      });
-
-      test('onEach cancels subscriptions correctly', () async {
-        const expectedStates = [3, 4];
-        final states = <int>[];
-        final controller = StreamController<int>.broadcast();
-        final bloc = RestartableStreamBloc(controller.stream)
-          ..stream.listen(states.add)
-          ..add(OnEach());
-
-        await Future<void>.delayed(Duration.zero);
-
-        controller..add(0)..add(1)..add(2);
-
-        bloc.add(OnEach());
-        await Future<void>.delayed(Duration.zero);
-
-        controller..add(3)..add(4);
-
-        await Future<void>.delayed(const Duration(milliseconds: 300));
-
-        await bloc.close();
-        expect(states, equals(expectedStates));
-      });
-    });
-
     group('Exception', () {
       test('does not break stream', () {
         runZonedGuarded(() {
@@ -940,7 +766,7 @@ void main() {
         });
       });
 
-      test('triggers onError from on<E>', () {
+      test('triggers onError from mapEventToState', () {
         runZonedGuarded(() {
           final exception = Exception('fatal exception');
           Object? expectedError;
@@ -1143,5 +969,3 @@ void main() {
     });
   });
 }
-
-void unawaited(Future<void> future) {}

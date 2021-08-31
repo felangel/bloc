@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 import '../blocs.dart';
 
@@ -19,7 +19,7 @@ class FlatMapBloc extends Bloc<CounterEvent, int> {
     Stream<CounterEvent> events,
     TransitionFunction<CounterEvent, int> transitionFn,
   ) {
-    return events.flatMap(transitionFn);
+    return events.concurrentAsyncExpand(transitionFn);
   }
 
   @override
