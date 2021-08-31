@@ -1,16 +1,18 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 
 import '../counter/counter_bloc.dart';
 
 class CounterErrorBloc extends Bloc<CounterEvent, int> {
-  CounterErrorBloc() : super(0) {
-    on<CounterEvent>(_onCounterEvent);
-  }
+  CounterErrorBloc() : super(0);
 
-  void _onCounterEvent(CounterEvent event, Emitter<int> emit) {
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
     switch (event) {
       case CounterEvent.decrement:
-        return emit(state - 1);
+        yield state - 1;
+        break;
       case CounterEvent.increment:
         throw Error();
     }
