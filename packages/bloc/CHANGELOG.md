@@ -18,7 +18,7 @@
 - **DEPRECATE**: fix: `mapEventToState` deprecated in favor of `on<Event>`
 - **DEPRECATE**: fix: `transformEvents` deprecated in favor of `EventTransformer`
   - use a built in `EventTransformer` or define your own
-- **DEPRECATION**: fix: `transformTransitions` deprecated
+- **DEPRECATE**: fix: `transformTransitions` deprecated
   - override `Stream<State> get stream` to modify the outbound stream
 
 # 7.1.0
