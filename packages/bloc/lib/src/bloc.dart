@@ -184,7 +184,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// The current [BlocObserver] instance.
   static BlocObserver observer = BlocObserver();
 
-  final _eventController = StreamController<Event>.broadcast(sync: true);
+  final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<Event>>[];
   final _handlerTests = <_HandlerTest>[];
   final _emitters = <_Emitter>[];

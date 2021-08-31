@@ -66,12 +66,10 @@ void main() {
       const expectedMessage =
           '''add(TestEventA) was called without a registered event handler.\n'''
           '''Make sure to register a handler via on<TestEventA>((event, emit) {...})''';
-      final expected = isA<StateError>()
-          .having((e) => e.message, 'message', expectedMessage);
-      runZonedGuarded(
-        () => MissingHandlerBloc()..add(TestEventA()),
-        (error, _) => expect(error, expected),
+      final expected = throwsA(
+        isA<StateError>().having((e) => e.message, 'message', expectedMessage),
       );
+      expect(() => MissingHandlerBloc()..add(TestEventA()), expected);
     });
 
     test('invokes all on<T> when event E is added where E is T', () async {
