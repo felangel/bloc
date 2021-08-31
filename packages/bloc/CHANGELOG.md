@@ -1,15 +1,15 @@
 # 8.0.0-dev.1
 
 - **BREAKING**: fix: `mapEventToState` removed
-  - register event handlers via `on<E>`
+  - register event handlers via `on<Event>`
+- **BREAKING**: feat: by default events are processed concurrently
+  - to process events sequentially use the `concurrent()` event transformer
 - **BREAKING**: refactor: `transformEvents` removed
   - use a built in `EventTransformer` or define your own
 - **BREAKING**: refactor: `transformTransitions` removed
   - override `Stream<State> get stream` to modify the outbound stream
 - **BREAKING**: refactor: remove deprecated `bloc.listen`
   - use `bloc.stream.listen` instead
-- **BREAKING**: feat: by default events are processed concurrently
-  - to process events sequentially use the `concurrent` event transformer
 - feat: introduce `Emitter<State>` to trigger state changes
   - `call` to trigger a state change (alignment with `Cubit`)
   - `forEach` as an analogue for `await for`
