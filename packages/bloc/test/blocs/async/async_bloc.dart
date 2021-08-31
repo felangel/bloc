@@ -14,7 +14,7 @@ class AsyncBloc extends Bloc<AsyncEvent, AsyncState> {
         await Future<void>.delayed(Duration.zero);
         emit(state.copyWith(isLoading: false, isSuccess: true));
       },
-      transform: enqueue(),
+      transformer: enqueue(),
     );
   }
 }

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:stream_transform/stream_transform.dart';
 
 /// {@template emitter}
 /// Base interface for emitting states in response to events.
@@ -44,27 +43,31 @@ typedef EventHandler<Event, State> = FutureOr<void> Function(
 
 /// Signature for a function which converts an incoming event
 /// into an outbound stream of events.
-/// Used when defining custom [EventTransform]s.
+/// Used when defining custom [EventTransformer]s.
 typedef EventMapper<Event> = Stream<Event> Function(Event);
 
-/// {@template event_transform}
 /// Used to change how events are processed.
 /// By default events are processed concurrently.
 ///
 /// See also:
+///
 /// * [concurrent]
-/// * [restartable]
 /// * [drop]
 /// * [enqueue]
-/// {@endtemplate}
-typedef EventTransform<Event> = Stream<Event> Function(
+/// * [restartable]
+typedef EventTransformer<Event> = Stream<Event> Function(
   Stream<Event>,
   EventMapper<Event>,
 );
 
 /// Process events concurrently. This is the default behavior.
-EventTransform<Event> concurrent<Event>() {
-  return (events, mapper) => events.concurrentAsyncExpand(mapper);
+///
+/// **Note**: there may be event handler overlap and state changes will occur
+/// as soon as they are emitted. This means that states may be emitted in
+/// an order that does not match the order in which the corresponding events
+/// were added.
+EventTransformer<Event> concurrent<Event>() {
+  return (events, mapper) => events.flatMap(mapper);
 }
 
 /// Process events one at a time by maintaining a queue of added events
@@ -72,26 +75,27 @@ EventTransform<Event> concurrent<Event>() {
 ///
 /// **Note**: there is no event handler overlap and every event is guaranteed
 /// to be handled in the order it was received.
-EventTransform<Event> enqueue<Event>() {
+EventTransformer<Event> enqueue<Event>() {
   return (events, mapper) => events.asyncExpand(mapper);
 }
 
 /// Process only one event by cancelling any pending events and
 /// processing the new event immediately.
 ///
+/// Avoid using [restartable] if you expect an event to have
+/// immediate results -- it should only be used with asynchronous APIs.
+///
 /// **Note**: there is no event handler overlap and any currently running tasks
 /// will be aborted if a new event is added before a prior one completes.
-///
-/// **Note**: avoid using [restartable] if you expect an event to have
-/// immediate results -- it should only be used with asynchronous APIs.
-EventTransform<Event> restartable<Event>() {
+EventTransformer<Event> restartable<Event>() {
   return (events, mapper) => events.switchMap(mapper);
 }
 
 /// Process only one event and drop any new events
 /// until the current event is done.
-/// Dropped events never trigger the event handler.
-EventTransform<Event> drop<Event>() {
+///
+/// **Note**: dropped events never trigger the event handler.
+EventTransformer<Event> drop<Event>() {
   return (events, mapper) => events.exhaustMap(mapper);
 }
 
@@ -229,7 +233,6 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// See also:
   ///
   /// * [BlocObserver.onEvent] for observing events globally.
-  ///
   @protected
   @mustCallSuper
   void onEvent(Event event) {
@@ -250,7 +253,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   void emit(State state) => super.emit(state);
 
   /// Register event handler for an event [E].
-  /// There should only ever be one event handler for each event.
+  /// There should only ever be one event handler per event type [E].
   ///
   /// * A [StateError] will be thrown if there are multiple event handlers
   /// registered for the same type [E].
@@ -258,10 +261,14 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// * A [StateError] will be thrown if there is a missing event handler for
   /// an event of type [E] when [add] is called.
   ///
-  /// By default, the [concurrent] modifier will be used.
+  /// By default, events will be processed concurrently.
+  ///
+  /// See also:
+  ///
+  /// * [EventTransformer] to customize how events are processed.
   void on<E extends Event>(
     EventHandler<E, State> handler, {
-    EventTransform<Event>? transform,
+    EventTransformer<Event>? transformer,
   }) {
     assert(() {
       final handlerExists = _handlerTests.any((handler) => handler.type == E);
@@ -275,7 +282,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
       return true;
     }());
 
-    final subscription = (transform ?? concurrent())(
+    final subscription = (transformer ?? concurrent())(
       _eventController.stream.where((event) => event is E),
       (event) async* {
         void onDone(_Emitter<State> emitter) {
@@ -334,7 +341,6 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// See also:
   ///
   /// * [BlocObserver.onTransition] for observing transitions globally.
-  ///
   @protected
   @mustCallSuper
   void onTransition(Transition<Event, State> transition) {
@@ -501,12 +507,20 @@ abstract class BlocBase<State> {
 }
 
 extension _StreamX<T> on Stream<T> {
-  Stream<T> onCancel(void Function() onCancel) {
-    return transform(_OnCancelStreamTransformer(onCancel));
+  Stream<T> flatMap(EventMapper<T> mapper) {
+    return map(mapper).transform(_FlatMapStreamTransformer<T>());
+  }
+
+  Stream<T> switchMap(EventMapper<T> mapper) {
+    return map(mapper).transform(_SwitchMapStreamTransformer<T>());
   }
 
   Stream<T> exhaustMap(EventMapper<T> mapper) {
     return transform(_ExhaustMapStreamTransformer(mapper));
+  }
+
+  Stream<T> onCancel(void Function() onCancel) {
+    return transform(_OnCancelStreamTransformer(onCancel));
   }
 }
 
@@ -569,6 +583,92 @@ class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
       onError: controller.addError,
       onDone: () => mappedSubscription ?? controller.close(),
     );
+
+    return controller.stream;
+  }
+}
+
+class _SwitchMapStreamTransformer<T>
+    extends StreamTransformerBase<Stream<T>, T> {
+  const _SwitchMapStreamTransformer();
+
+  @override
+  Stream<T> bind(Stream<Stream<T>> stream) {
+    final controller = StreamController<T>.broadcast(sync: true);
+
+    controller.onListen = () {
+      StreamSubscription<T>? innerSubscription;
+
+      final outerSubscription = stream.listen(
+        (innerStream) {
+          innerSubscription?.cancel();
+          innerSubscription = innerStream.listen(
+            controller.add,
+            onError: controller.addError,
+            onDone: () => innerSubscription = null,
+          );
+        },
+        onError: controller.addError,
+        onDone: () {
+          if (innerSubscription == null) controller.close();
+        },
+      );
+
+      controller.onCancel = () {
+        final cancels = [
+          outerSubscription.cancel(),
+          if (innerSubscription != null) innerSubscription!.cancel(),
+        ]..removeWhere((Object? f) => f == null);
+        if (cancels.isEmpty) return null;
+        return Future.wait(cancels).then((_) {});
+      };
+    };
+
+    return controller.stream;
+  }
+}
+
+class _FlatMapStreamTransformer<T> extends StreamTransformerBase<Stream<T>, T> {
+  const _FlatMapStreamTransformer();
+
+  @override
+  Stream<T> bind(Stream<Stream<T>> stream) {
+    final controller = StreamController<T>.broadcast(sync: true);
+
+    controller.onListen = () {
+      final subscriptions = <StreamSubscription<dynamic>>[];
+
+      final outerSubscription = stream.listen(
+        (inner) {
+          final subscription = inner.listen(
+            controller.add,
+            onError: controller.addError,
+          );
+
+          subscription.onDone(() {
+            subscriptions.remove(subscription);
+            if (subscriptions.isEmpty) controller.close();
+          });
+
+          subscriptions.add(subscription);
+        },
+        onError: controller.addError,
+      );
+
+      outerSubscription.onDone(() {
+        subscriptions.remove(outerSubscription);
+        if (subscriptions.isEmpty) controller.close();
+      });
+
+      subscriptions.add(outerSubscription);
+
+      controller.onCancel = () {
+        if (subscriptions.isEmpty) return null;
+        final cancels = [for (final s in subscriptions) s.cancel()]
+          ..removeWhere((Object? f) => f == null);
+        return Future.wait(cancels).then((_) {});
+      };
+    };
 
     return controller.stream;
   }

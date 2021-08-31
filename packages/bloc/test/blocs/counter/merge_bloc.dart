@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../blocs.dart';
 
-EventTransform<CounterEvent> customTransform() {
-  return (Stream<CounterEvent> events, EventMapper<CounterEvent> mapper) {
+EventTransformer<CounterEvent> customTransformer() {
+  return (events, mapper) {
     final nonDebounceStream =
         events.where((event) => event != CounterEvent.increment);
 
@@ -22,7 +20,7 @@ EventTransform<CounterEvent> customTransform() {
 
 class MergeBloc extends Bloc<CounterEvent, int> {
   MergeBloc({this.onTransitionCallback}) : super(0) {
-    on<CounterEvent>(_onCounterEvent, transform: customTransform());
+    on<CounterEvent>(_onCounterEvent, transformer: customTransformer());
   }
 
   final void Function(Transition<CounterEvent, int>)? onTransitionCallback;

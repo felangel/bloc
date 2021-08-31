@@ -12,15 +12,15 @@ part 'post_state.dart';
 
 const _postLimit = 20;
 
-const _debounceDuration = Duration(milliseconds: 500);
+const _throttleDuration = Duration(milliseconds: 500);
 
-EventTransform<Event> throttleTime<Event>(Duration duration) {
+EventTransformer<Event> throttle<Event>(Duration duration) {
   return (events, mapper) => events.throttleTime(duration).flatMap(mapper);
 }
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({required this.httpClient}) : super(const PostState()) {
-    on<PostFetched>(_onPostFetched, transform: throttleTime(_debounceDuration));
+    on<PostFetched>(_onPostFetched, transformer: throttle(_throttleDuration));
   }
 
   final http.Client httpClient;

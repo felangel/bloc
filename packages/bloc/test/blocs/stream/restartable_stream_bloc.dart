@@ -19,7 +19,7 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
           (i) => Future<int>.delayed(_delay, () => i),
         );
       },
-      transform: restartable(),
+      transformer: restartable(),
     );
 
     on<OnEach>(
@@ -29,7 +29,7 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
           (i) => Future<void>.delayed(_delay, () => emit(i)),
         );
       },
-      transform: restartable(),
+      transformer: restartable(),
     );
   }
 }

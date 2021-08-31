@@ -5,14 +5,14 @@ import 'package:common_github_search/common_github_search.dart';
 
 const _duration = const Duration(milliseconds: 300);
 
-EventTransform<Event> throttleTime<Event>(Duration duration) {
+EventTransformer<Event> throttle<Event>(Duration duration) {
   return (events, mapper) => events.throttleTime(duration).switchMap(mapper);
 }
 
 class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
   GithubSearchBloc({required this.githubRepository})
       : super(SearchStateEmpty()) {
-    on<TextChanged>(_onTextChanged, transform: throttleTime(_duration));
+    on<TextChanged>(_onTextChanged, transformer: throttle(_duration));
   }
 
   final GithubRepository githubRepository;

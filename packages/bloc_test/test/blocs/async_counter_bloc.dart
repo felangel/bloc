@@ -6,7 +6,7 @@ import 'blocs.dart';
 
 class AsyncCounterBloc extends Bloc<CounterEvent, int> {
   AsyncCounterBloc() : super(0) {
-    on<CounterEvent>(_onEvent, transform: enqueue());
+    on<CounterEvent>(_onEvent, transformer: enqueue());
   }
 
   void _onEvent(CounterEvent event, Emitter<int> emit) async {
