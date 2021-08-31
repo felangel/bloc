@@ -73,16 +73,18 @@ class CounterPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: const Icon(Icons.add),
-              onPressed: () =>
-                  context.read<CounterBloc>().add(CounterEvent.increment),
+              onPressed: () {
+                context.read<CounterBloc>().add(CounterIncremented());
+              },
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: const Icon(Icons.remove),
-              onPressed: () =>
-                  context.read<CounterBloc>().add(CounterEvent.decrement),
+              onPressed: () {
+                context.read<CounterBloc>().add(CounterDecremented());
+              },
             ),
           ),
           Padding(
@@ -97,8 +99,9 @@ class CounterPage extends StatelessWidget {
             child: FloatingActionButton(
               backgroundColor: Colors.red,
               child: const Icon(Icons.error),
-              onPressed: () =>
-                  context.read<CounterBloc>().add(CounterEvent.error),
+              onPressed: () {
+                context.read<CounterBloc>().add(CounterErrored());
+              },
             ),
           ),
         ],
@@ -108,16 +111,16 @@ class CounterPage extends StatelessWidget {
 }
 
 /// Event being processed by [CounterBloc].
-enum CounterEvent {
-  /// Notifies bloc to increment state.
-  increment,
+abstract class CounterEvent {}
 
-  /// Notifies bloc to decrement state.
-  decrement,
+/// Notifies bloc to increment state.
+class CounterIncremented extends CounterEvent {}
 
-  /// Notifies the bloc of an error
-  error,
-}
+/// Notifies bloc to decrement state.
+class CounterDecremented extends CounterEvent {}
+
+/// Notifies the bloc of an error
+class CounterErrored extends CounterEvent {}
 
 /// {@template counter_bloc}
 /// A simple [Bloc] which manages an `int` as its state.
@@ -125,18 +128,9 @@ enum CounterEvent {
 class CounterBloc extends Bloc<CounterEvent, int> {
   /// {@macro counter_bloc}
   CounterBloc() : super(0) {
-    on<CounterEvent>(_onEvent);
-  }
-
-  void _onEvent(CounterEvent event, Emitter<int> emit) {
-    switch (event) {
-      case CounterEvent.decrement:
-        return emit(state - 1);
-      case CounterEvent.increment:
-        return emit(state + 1);
-      case CounterEvent.error:
-        addError(Exception('unsupported event'));
-    }
+    on<CounterIncremented>((event, emit) => emit(state + 1));
+    on<CounterDecremented>((event, emit) => emit(state - 1));
+    on<CounterErrored>((event, emit) => addError(Exception('oops')));
   }
 }
 
