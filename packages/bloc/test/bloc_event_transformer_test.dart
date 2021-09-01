@@ -14,7 +14,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       (event, emit) {
         onCalls.add(event);
         return Future<void>.delayed(delay, () {
-          if (emit.isCompleted) return;
+          if (emit.isCanceled) return;
           onEmitCalls.add(event);
           emit(state + 1);
         });

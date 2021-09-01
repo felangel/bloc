@@ -26,10 +26,8 @@ abstract class Emitter<State> {
   );
 
   /// Whether the [EventHandler] associated with this [Emitter]
-  /// has completed.
-  /// [isCompleted] will be true either when the [EventHandler] has
-  /// completed normally or if it has been cancelled.
-  bool get isCompleted;
+  /// has been canceled.
+  bool get isCanceled;
 
   /// Emits the provided [state].
   void call(State state);
@@ -127,12 +125,12 @@ class _Emitter<State> implements Emitter<State> {
   void call(State state) => _emit(state);
 
   @override
-  bool get isCompleted => _completer.isCompleted;
+  bool get isCanceled => _completer.isCompleted;
 
   void cancel() {
     for (final dispose in _disposables) dispose();
     _disposables.clear();
-    if (!isCompleted) _completer.complete();
+    if (!isCanceled) _completer.complete();
   }
 
   Future<void> get future => _completer.future;
@@ -329,7 +327,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
 
         void onEmit(State state, _Emitter<State> emitter) {
           if (isClosed) return;
-          if (emitter.isCompleted) return;
+          if (emitter.isCanceled) return;
           if (this.state == state && _emitted) return;
           onTransition(Transition(
             currentState: this.state,
