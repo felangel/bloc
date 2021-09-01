@@ -442,6 +442,18 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   }
 
   void _bindEventsToStates() {
+    void assertNoMixedUsage() {
+      assert(() {
+        if (_handlerTypes.isNotEmpty) {
+          throw StateError(
+            'mapEventToState cannot be overridden in '
+            'conjunction with on<Event>.',
+          );
+        }
+        return true;
+      }());
+    }
+
     _transitionSubscription = transformTransitions(
       transformEvents(
         _eventController.stream,
@@ -457,6 +469,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
       (transition) {
         if (transition.nextState == state && _emitted) return;
         try {
+          assertNoMixedUsage();
           onTransition(transition);
           emit(transition.nextState);
         } catch (error, stackTrace) {
