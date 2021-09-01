@@ -7,7 +7,7 @@
   - `call` to trigger a state change (alignment with `Cubit`)
   - `forEach` as an analogue for `await for`
   - `onEach` to simplify subscription management
-  - `isCompleted` to abort expensive async operations
+  - `isCanceled` to abort expensive async operations
 - feat: include core `EventTransformer` options
   - `concurrent` (default) - process events concurrently
   - `enqueue` (legacy) - process events sequentially
