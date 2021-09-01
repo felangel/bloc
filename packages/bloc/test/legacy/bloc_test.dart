@@ -720,6 +720,25 @@ void main() {
       });
     });
 
+    group('MixedCounterBloc', () {
+      test(
+          'throws StateError when on<E> and mapEventToState '
+          'are used in conjunction', () {
+        runZonedGuarded(
+          () => MixedCounterBloc()..add(CounterEvent.increment),
+          (Object error, StackTrace stackTrace) {
+            expect(
+              (error as BlocUnhandledErrorException).toString(),
+              contains(
+                'mapEventToState cannot be overridden in '
+                'conjunction with on<Event>.',
+              ),
+            );
+          },
+        );
+      });
+    });
+
     group('Exception', () {
       test('does not break stream', () {
         runZonedGuarded(() {
