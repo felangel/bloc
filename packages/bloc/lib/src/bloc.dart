@@ -119,7 +119,7 @@ class _Emitter<State> implements Emitter<State> {
     Stream<T> stream,
     FutureOr<State> Function(T) onData,
   ) {
-    return onEach<T>(stream, (x) async => _emit(await onData(x)));
+    return onEach<T>(stream, (data) async => _emit(await onData(data)));
   }
 
   @override
@@ -137,9 +137,9 @@ class _Emitter<State> implements Emitter<State> {
   Future<void> get future => _completer.future;
 }
 
-class _HandlerTest {
-  const _HandlerTest({required this.test, required this.type});
-  final bool Function(dynamic) test;
+class _Handler {
+  const _Handler({required this.isType, required this.type});
+  final bool Function(dynamic) isType;
   final Type type;
 }
 
@@ -186,7 +186,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
 
   final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<Event>>[];
-  final _handlerTests = <_HandlerTest>[];
+  final _handlers = <_Handler>[];
   final _emitters = <_Emitter>[];
 
   /// Notifies the [Bloc] of a new [event]
@@ -195,7 +195,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// be ignored and will not result in any subsequent state changes.
   void add(Event event) {
     assert(() {
-      final handlerExists = _handlerTests.any((handler) => handler.test(event));
+      final handlerExists = _handlers.any((handler) => handler.isType(event));
       if (!handlerExists) {
         final eventType = event.runtimeType;
         throw StateError(
@@ -252,7 +252,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   @override
   void emit(State state) => super.emit(state);
 
-  /// Register event handler for an event [E].
+  /// Register event handler for an event of type [E].
   /// There should only ever be one event handler per event type [E].
   ///
   /// * A [StateError] will be thrown if there are multiple event handlers
@@ -271,14 +271,14 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     EventTransformer<Event>? transformer,
   }) {
     assert(() {
-      final handlerExists = _handlerTests.any((handler) => handler.type == E);
+      final handlerExists = _handlers.any((handler) => handler.type == E);
       if (handlerExists) {
         throw StateError(
           'on<$E> was called multiple times. '
           'There should only be a single event handler for each event.',
         );
       }
-      _handlerTests.add(_HandlerTest(test: (dynamic e) => e is E, type: E));
+      _handlers.add(_Handler(isType: (dynamic e) => e is E, type: E));
       return true;
     }());
 
@@ -305,7 +305,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
         Stream<Event> handleEvent(_Emitter<State> emitter) async* {
           try {
             _emitters.add(emitter);
-            await (handler as dynamic)(event, emitter);
+            await (handler)(event as E, emitter);
           } catch (error, stackTrace) {
             onError(error, stackTrace);
           } finally {
@@ -315,7 +315,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
 
         late final _Emitter<State> emitter;
         emitter = _Emitter((state) => onEmit(state, emitter));
-        yield* handleEvent(emitter).onCancel(() => onDone(emitter));
+        yield* handleEvent(emitter).doOnCancel(() => onDone(emitter));
       },
     ).listen(null);
     _subscriptions.add(subscription);
@@ -519,13 +519,13 @@ extension _StreamX<T> on Stream<T> {
     return transform(_ExhaustMapStreamTransformer(mapper));
   }
 
-  Stream<T> onCancel(void Function() onCancel) {
-    return transform(_OnCancelStreamTransformer(onCancel));
+  Stream<T> doOnCancel(void Function() onCancel) {
+    return transform(_DoOnCancelStreamTransformer(onCancel));
   }
 }
 
-class _OnCancelStreamTransformer<T> extends StreamTransformerBase<T, T> {
-  const _OnCancelStreamTransformer(this.onCancel);
+class _DoOnCancelStreamTransformer<T> extends StreamTransformerBase<T, T> {
+  const _DoOnCancelStreamTransformer(this.onCancel);
 
   final void Function() onCancel;
 
