@@ -30,6 +30,7 @@ This package is built to work with:
 
 - [flutter_bloc](https://pub.dev/packages/flutter_bloc)
 - [angular_bloc](https://pub.dev/packages/angular_bloc)
+- [bloc_concurrency](https://pub.dev/packages/bloc_concurrency)
 - [bloc_test](https://pub.dev/packages/bloc_test)
 - [hydrated_bloc](https://pub.dev/packages/hydrated_bloc)
 - [replay_bloc](https://pub.dev/packages/replay_bloc)
@@ -176,7 +177,7 @@ void main() {
 
 A `Bloc` is a more advanced class which relies on `events` to trigger `state` changes rather than functions. `Bloc` also extends `BlocBase` which means it has a similar public API as `Cubit`. However, rather than calling a `function` on a `Bloc` and directly emitting a new `state`, `Blocs` receive `events` and convert the incoming `events` into outgoing `states`.
 
-![Bloc Flow](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_flow.png)
+![Bloc Flow](https://raw.githubusercontent.com/felangel/bloc/feat/bloc-v7.2.0/docs/assets/bloc_flow.png)
 
 State changes in bloc begin when events are added which triggers `onEvent`. The events are then funnelled through `transformEvents`. By default, `transformEvents` uses `asyncExpand` to ensure each event is processed in the order it was added but it can be overridden to manipulate the incoming event stream. `mapEventToState` is then invoked with the transformed events and is responsible for yielding states in response to the incoming events. `transitions` are then funnelled through `transformTransitions` which can be overridden to manipulation the outgoing state changes. Lastly, `onTransition` is called just before the state is updated and contains the current state, event, and next state.
 
