@@ -4,6 +4,7 @@
 /// Get started at [bloclibrary.dev](https://bloclibrary.dev) 🚀
 library bloc_concurrency;
 
+export 'src/concurrent.dart';
 export 'src/droppable.dart';
 export 'src/restartable.dart';
 export 'src/sequential.dart';

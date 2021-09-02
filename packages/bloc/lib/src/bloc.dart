@@ -36,20 +36,20 @@ abstract class Emitter<State> {
 /// An event handler is responsible for reacting to an incoming [Event]
 /// and can emit zero or more states via the [Emitter].
 typedef EventHandler<Event, State> = FutureOr<void> Function(
-  Event,
-  Emitter<State>,
+  Event event,
+  Emitter<State> emit,
 );
 
 /// Signature for a function which converts an incoming event
 /// into an outbound stream of events.
 /// Used when defining custom [EventTransformer]s.
-typedef EventMapper<Event> = Stream<Event> Function(Event);
+typedef EventMapper<Event> = Stream<Event> Function(Event event);
 
 /// Used to change how events are processed.
 /// By default events are processed concurrently.
 typedef EventTransformer<Event> = Stream<Event> Function(
-  Stream<Event>,
-  EventMapper<Event>,
+  Stream<Event> events,
+  EventMapper<Event> mapper,
 );
 
 EventTransformer<Event> _concurrent<Event>() {
@@ -142,10 +142,17 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// The current [BlocObserver] instance.
   static BlocObserver observer = BlocObserver();
 
+  /// The default [EventTransformer] used for all event handlers.
+  /// By default all events are processed concurrently.
+  ///
+  /// If a custom transformer is specified for a particular event handler,
+  /// it will take precendence over the global transformer.
+  static EventTransformer<dynamic> transformer = _concurrent<dynamic>();
+
   StreamSubscription<Transition<Event, State>>? _transitionSubscription;
 
   final _eventController = StreamController<Event>.broadcast();
-  final _subscriptions = <StreamSubscription<Event>>[];
+  final _subscriptions = <StreamSubscription<dynamic>>[];
   final _handlerTypes = <Type>[];
   final _emitters = <_Emitter>[];
 
@@ -275,9 +282,10 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
       return true;
     }());
 
-    final subscription = (transformer ?? _concurrent())(
+    final _transformer = transformer ?? Bloc.transformer;
+    final subscription = _transformer(
       _eventController.stream.where((event) => event is E),
-      (event) async* {
+      (dynamic event) async* {
         void onDone(_Emitter<State> emitter) {
           emitter.cancel();
           _emitters.remove(emitter);
@@ -289,7 +297,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
           if (this.state == state && _emitted) return;
           onTransition(Transition(
             currentState: this.state,
-            event: event,
+            event: event as E,
             nextState: state,
           ));
           emit(state);
