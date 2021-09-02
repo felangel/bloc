@@ -275,7 +275,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
       if (handlerExists) {
         throw StateError(
           'on<$E> was called multiple times. '
-          'There should only be a single event handler for each event.',
+          'There should only be a single event handler per event type.',
         );
       }
       _handlerTypes.add(E);
