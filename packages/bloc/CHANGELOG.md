@@ -2,7 +2,7 @@
 
 - feat: introduce `on<Event>` API to register event handlers
   - by default events are processed concurrently
-- feat: introduce `Bloc.transformer` API to configure the default [EventTransformer]
+- feat: introduce `Bloc.transformer` API to configure the default `EventTransformer`
 - feat: introduce `Emitter<State>` to trigger state changes
   - `call` to trigger a state change (alignment with `Cubit`)
   - `forEach` as an analogue for `await for`
