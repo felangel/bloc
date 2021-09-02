@@ -51,9 +51,9 @@ typedef EventMapper<Event> = Stream<Event> Function(Event);
 /// See also:
 ///
 /// * [concurrent]
-/// * [drop]
-/// * [enqueue]
+/// * [droppable]
 /// * [restartable]
+/// * [sequential]
 typedef EventTransformer<Event> = Stream<Event> Function(
   Stream<Event>,
   EventMapper<Event>,
@@ -74,7 +74,7 @@ EventTransformer<Event> concurrent<Event>() {
 ///
 /// **Note**: there is no event handler overlap and every event is guaranteed
 /// to be handled in the order it was received.
-EventTransformer<Event> enqueue<Event>() {
+EventTransformer<Event> sequential<Event>() {
   return (events, mapper) => events.asyncExpand(mapper);
 }
 
@@ -90,11 +90,11 @@ EventTransformer<Event> restartable<Event>() {
   return (events, mapper) => events.switchMap(mapper);
 }
 
-/// Process only one event and drop any new events
+/// Process only one event and ignore (drop) any new events
 /// until the current event is done.
 ///
 /// **Note**: dropped events never trigger the event handler.
-EventTransformer<Event> drop<Event>() {
+EventTransformer<Event> droppable<Event>() {
   return (events, mapper) => events.exhaustMap(mapper);
 }
 

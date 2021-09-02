@@ -2,7 +2,7 @@
 
 - feat: introduce `on<Event>` API to register event handlers
   - feat: by default events are processed concurrently
-    - to process events sequentially use the `enqueue()` event transformer
+    - to process events sequentially use the `sequential` event transformer
 - feat: introduce `Emitter<State>` to trigger state changes
   - `call` to trigger a state change (alignment with `Cubit`)
   - `forEach` as an analogue for `await for`
@@ -10,8 +10,8 @@
   - `isCanceled` to abort expensive async operations
 - feat: include core `EventTransformer` options
   - `concurrent` (default) - process events concurrently
-  - `enqueue` (legacy) - process events sequentially
-  - `drop` - ignore any events added while an event is processing
+  - `sequential` (legacy) - process events sequentially
+  - `droppable` - ignore any events added while an event is processing
   - `restartable` - process only the latest event and cancel previous handlers
 - feat: throw `StateError` if `mapEventToState` is used in conjunction with `on<Event>`
 - feat: throw `StateError` if duplicate event handlers are registered
