@@ -1,4 +1,4 @@
-/// Custom concurrency modes inspired by ember concurrency.
+/// Custom event transformers inspired by ember concurrency.
 /// Built to be used with the [bloc](https://pub.dev/packages/bloc) state management package.
 ///
 /// Get started at [bloclibrary.dev](https://bloclibrary.dev) 🚀
