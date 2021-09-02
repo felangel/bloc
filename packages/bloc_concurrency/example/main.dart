@@ -5,6 +5,8 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 Future<void> tick() => Future<void>.delayed(Duration.zero);
 
 Future<void> main() async {
+  Bloc.transformer = sequential<dynamic>();
+
   /// Create a `CounterBloc` instance.
   final bloc = CounterBloc();
 
@@ -18,11 +20,13 @@ Future<void> main() async {
   bloc.add(CounterIncremented());
   await tick();
 
-  /// Cancel the subscription.
-  await subscription.cancel();
+  await Future<void>.delayed(const Duration(seconds: 1));
 
   /// Close the `bloc` when it is no longer needed.
   await bloc.close();
+
+  /// Cancel the subscription.
+  await subscription.cancel();
 }
 
 /// The events which `CounterBloc` will react to.
@@ -44,9 +48,9 @@ class CounterBloc extends Bloc<CounterEvent, int> {
         emit(state + 1);
       },
 
-      /// Specify a custom event transformer
-      /// in this case events will be processed sequentially.
-      transformer: sequential(),
+      // /// Specify a custom event transformer
+      // /// in this case events will be processed sequentially.
+      // transformer: sequential(),
     );
   }
 }

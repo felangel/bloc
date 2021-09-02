@@ -82,4 +82,95 @@ void main() {
 
     expect(states, equals([1, 2, 3]));
   });
+
+  test(
+      'processes events sequentially when '
+      'Bloc.transformer is overridden.', () async {
+    final defaultTransformer = Bloc.transformer;
+    Bloc.transformer = (events, mapper) => events.asyncExpand<dynamic>(mapper);
+    final states = <int>[];
+    final bloc = CounterBloc()
+      ..stream.listen(states.add)
+      ..add(CounterEvent.increment)
+      ..add(CounterEvent.increment)
+      ..add(CounterEvent.increment);
+
+    await tick();
+
+    expect(
+      bloc.onCalls,
+      equals([CounterEvent.increment]),
+    );
+
+    await wait();
+
+    expect(
+      bloc.onEmitCalls,
+      equals([CounterEvent.increment]),
+    );
+    expect(states, equals([1]));
+
+    await tick();
+
+    expect(
+      bloc.onCalls,
+      equals([CounterEvent.increment, CounterEvent.increment]),
+    );
+
+    await wait();
+
+    expect(
+      bloc.onEmitCalls,
+      equals([CounterEvent.increment, CounterEvent.increment]),
+    );
+
+    expect(states, equals([1, 2]));
+
+    await tick();
+
+    expect(
+      bloc.onCalls,
+      equals([
+        CounterEvent.increment,
+        CounterEvent.increment,
+        CounterEvent.increment,
+      ]),
+    );
+
+    await wait();
+
+    expect(
+      bloc.onEmitCalls,
+      equals([
+        CounterEvent.increment,
+        CounterEvent.increment,
+        CounterEvent.increment,
+      ]),
+    );
+
+    expect(states, equals([1, 2, 3]));
+
+    await bloc.close();
+
+    expect(
+      bloc.onCalls,
+      equals([
+        CounterEvent.increment,
+        CounterEvent.increment,
+        CounterEvent.increment,
+      ]),
+    );
+
+    expect(
+      bloc.onEmitCalls,
+      equals([
+        CounterEvent.increment,
+        CounterEvent.increment,
+        CounterEvent.increment,
+      ]),
+    );
+
+    expect(states, equals([1, 2, 3]));
+    Bloc.transformer = defaultTransformer;
+  });
 }
