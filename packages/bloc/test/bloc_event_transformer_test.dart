@@ -9,7 +9,7 @@ Future<void> wait() => Future.delayed(delay);
 Future<void> tick() => Future.delayed(Duration.zero);
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  CounterBloc(EventTransformer<CounterEvent> transformer) : super(0) {
+  CounterBloc([EventTransformer<CounterEvent>? transformer]) : super(0) {
     on<CounterEvent>(
       (event, emit) {
         onCalls.add(event);
@@ -28,358 +28,58 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 
 void main() {
-  group('concurrent', () {
-    test('processes events concurrently', () async {
-      final states = <int>[];
-      final bloc = CounterBloc(concurrent())
-        ..stream.listen(states.add)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await tick();
-
-      expect(
-        bloc.onCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      await wait();
-
-      expect(
-        bloc.onEmitCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      expect(states, equals([1, 2, 3]));
-
-      await bloc.close();
-
-      expect(
-        bloc.onCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      expect(
-        bloc.onEmitCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      expect(states, equals([1, 2, 3]));
-    });
-  });
-
-  group('sequential', () {
-    test('processes events one at a time', () async {
-      final states = <int>[];
-      final bloc = CounterBloc(sequential())
-        ..stream.listen(states.add)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await tick();
-
-      expect(
-        bloc.onCalls,
-        equals([CounterEvent.increment]),
-      );
-
-      await wait();
-
-      expect(
-        bloc.onEmitCalls,
-        equals([CounterEvent.increment]),
-      );
-      expect(states, equals([1]));
-
-      await tick();
-
-      expect(
-        bloc.onCalls,
-        equals([CounterEvent.increment, CounterEvent.increment]),
-      );
-
-      await wait();
-
-      expect(
-        bloc.onEmitCalls,
-        equals([CounterEvent.increment, CounterEvent.increment]),
-      );
-
-      expect(states, equals([1, 2]));
-
-      await tick();
-
-      expect(
-        bloc.onCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      await wait();
-
-      expect(
-        bloc.onEmitCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      expect(states, equals([1, 2, 3]));
-
-      await bloc.close();
-
-      expect(
-        bloc.onCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      expect(
-        bloc.onEmitCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      expect(states, equals([1, 2, 3]));
-    });
-  });
-
-  group('droppable', () {
-    test('processes only the current event and ignores remaining', () async {
-      final states = <int>[];
-      final bloc = CounterBloc(droppable())
-        ..stream.listen(states.add)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await tick();
-
-      expect(bloc.onCalls, equals([CounterEvent.increment]));
-
-      await wait();
-
-      expect(bloc.onEmitCalls, equals([CounterEvent.increment]));
-      expect(states, equals([1]));
-
-      bloc
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await tick();
-
-      expect(
-        bloc.onCalls,
-        equals([CounterEvent.increment, CounterEvent.increment]),
-      );
-
-      await wait();
-
-      expect(
-        bloc.onEmitCalls,
-        equals([CounterEvent.increment, CounterEvent.increment]),
-      );
-      expect(states, equals([1, 2]));
-
-      bloc
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
-
-      await tick();
-
-      expect(
-        bloc.onCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      await wait();
-
-      expect(
-        bloc.onEmitCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-      expect(states, equals([1, 2, 3]));
-
-      await bloc.close();
-
-      expect(
-        bloc.onCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      expect(
-        bloc.onEmitCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      expect(states, equals([1, 2, 3]));
-    });
-  });
-
-  group('restartable', () {
-    test('processes only the latest event and cancels remaining', () async {
-      final states = <int>[];
-      final bloc = CounterBloc(restartable())..stream.listen(states.add);
-      Future<void> addEvents() async {
-        const spacer = Duration(milliseconds: 10);
-        await Future<void>.delayed(spacer);
-        bloc.add(CounterEvent.increment);
-        await Future<void>.delayed(spacer);
-        bloc.add(CounterEvent.increment);
-        await Future<void>.delayed(spacer);
-        bloc.add(CounterEvent.increment);
-        await Future<void>.delayed(spacer);
-      }
-
-      await tick();
-      await addEvents();
-
-      expect(
-        bloc.onCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment
-        ]),
-      );
-
-      await wait();
-
-      expect(bloc.onEmitCalls, equals([CounterEvent.increment]));
-      expect(states, equals([1]));
-
-      await tick();
-      await addEvents();
-
-      expect(
-        bloc.onCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment
-        ]),
-      );
-
-      await wait();
-
-      expect(
-        bloc.onEmitCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      expect(states, equals([1, 2]));
-
-      await tick();
-      await addEvents();
-
-      expect(
-        bloc.onCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment
-        ]),
-      );
-
-      await wait();
-
-      expect(
-        bloc.onEmitCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      expect(states, equals([1, 2, 3]));
-
-      await bloc.close();
-
-      expect(
-        bloc.onCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      expect(
-        bloc.onEmitCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
-      );
-
-      expect(states, equals([1, 2, 3]));
-    });
+  test('processes events concurrently by default', () async {
+    final states = <int>[];
+    final bloc = CounterBloc()
+      ..stream.listen(states.add)
+      ..add(CounterEvent.increment)
+      ..add(CounterEvent.increment)
+      ..add(CounterEvent.increment);
+
+    await tick();
+
+    expect(
+      bloc.onCalls,
+      equals([
+        CounterEvent.increment,
+        CounterEvent.increment,
+        CounterEvent.increment,
+      ]),
+    );
+
+    await wait();
+
+    expect(
+      bloc.onEmitCalls,
+      equals([
+        CounterEvent.increment,
+        CounterEvent.increment,
+        CounterEvent.increment,
+      ]),
+    );
+
+    expect(states, equals([1, 2, 3]));
+
+    await bloc.close();
+
+    expect(
+      bloc.onCalls,
+      equals([
+        CounterEvent.increment,
+        CounterEvent.increment,
+        CounterEvent.increment,
+      ]),
+    );
+
+    expect(
+      bloc.onEmitCalls,
+      equals([
+        CounterEvent.increment,
+        CounterEvent.increment,
+        CounterEvent.increment,
+      ]),
+    );
+
+    expect(states, equals([1, 2, 3]));
   });
 }

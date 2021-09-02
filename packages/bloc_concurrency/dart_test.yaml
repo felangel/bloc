@@ -1,0 +1,3 @@
+tags:
+  pull-request-only:
+    skip: "Should only be run during pull request"

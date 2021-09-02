@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 abstract class RestartableStreamEvent {}
 
@@ -19,7 +20,7 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
           (i) => Future<int>.delayed(_delay, () => i),
         );
       },
-      transformer: restartable(),
+      transformer: (events, mapper) => events.switchMap(mapper),
     );
 
     on<OnEach>(
@@ -29,7 +30,7 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
           (i) => Future<void>.delayed(_delay, () => emit(i)),
         );
       },
-      transformer: restartable(),
+      transformer: (events, mapper) => events.switchMap(mapper),
     );
   }
 }

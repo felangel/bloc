@@ -47,55 +47,13 @@ typedef EventMapper<Event> = Stream<Event> Function(Event);
 
 /// Used to change how events are processed.
 /// By default events are processed concurrently.
-///
-/// See also:
-///
-/// * [concurrent]
-/// * [droppable]
-/// * [restartable]
-/// * [sequential]
 typedef EventTransformer<Event> = Stream<Event> Function(
   Stream<Event>,
   EventMapper<Event>,
 );
 
-/// Process events concurrently. This is the default behavior.
-///
-/// **Note**: there may be event handler overlap and state changes will occur
-/// as soon as they are emitted. This means that states may be emitted in
-/// an order that does not match the order in which the corresponding events
-/// were added.
-EventTransformer<Event> concurrent<Event>() {
+EventTransformer<Event> _concurrent<Event>() {
   return (events, mapper) => events.flatMap(mapper);
-}
-
-/// Process events one at a time by maintaining a queue of added events
-/// and processing the events sequentially.
-///
-/// **Note**: there is no event handler overlap and every event is guaranteed
-/// to be handled in the order it was received.
-EventTransformer<Event> sequential<Event>() {
-  return (events, mapper) => events.asyncExpand(mapper);
-}
-
-/// Process only one event by cancelling any pending events and
-/// processing the new event immediately.
-///
-/// Avoid using [restartable] if you expect an event to have
-/// immediate results -- it should only be used with asynchronous APIs.
-///
-/// **Note**: there is no event handler overlap and any currently running tasks
-/// will be aborted if a new event is added before a prior one completes.
-EventTransformer<Event> restartable<Event>() {
-  return (events, mapper) => events.switchMap(mapper);
-}
-
-/// Process only one event and ignore (drop) any new events
-/// until the current event is done.
-///
-/// **Note**: dropped events never trigger the event handler.
-EventTransformer<Event> droppable<Event>() {
-  return (events, mapper) => events.exhaustMap(mapper);
 }
 
 class _Emitter<State> implements Emitter<State> {
@@ -317,7 +275,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
       return true;
     }());
 
-    final subscription = (transformer ?? concurrent())(
+    final subscription = (transformer ?? _concurrent())(
       _eventController.stream.where((event) => event is E),
       (event) async* {
         void onDone(_Emitter<State> emitter) {
@@ -646,14 +604,6 @@ extension _StreamX<T> on Stream<T> {
     return map(mapper).transform(_FlatMapStreamTransformer<T>());
   }
 
-  Stream<T> switchMap(EventMapper<T> mapper) {
-    return map(mapper).transform(_SwitchMapStreamTransformer<T>());
-  }
-
-  Stream<T> exhaustMap(EventMapper<T> mapper) {
-    return transform(_ExhaustMapStreamTransformer(mapper));
-  }
-
   Stream<T> doOnCancel(void Function() onCancel) {
     return transform(_DoOnCancelStreamTransformer(onCancel));
   }
@@ -680,84 +630,6 @@ class _DoOnCancelStreamTransformer<T> extends StreamTransformerBase<T, T> {
       onError: controller.addError,
       onDone: controller.close,
     );
-
-    return controller.stream;
-  }
-}
-
-class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
-  _ExhaustMapStreamTransformer(this.mapper);
-
-  final EventMapper<T> mapper;
-
-  @override
-  Stream<T> bind(Stream<T> stream) {
-    late StreamSubscription<T> subscription;
-    StreamSubscription<T>? mappedSubscription;
-
-    final controller = StreamController<T>(
-      onCancel: () async {
-        await mappedSubscription?.cancel();
-        return subscription.cancel();
-      },
-      sync: true,
-    );
-
-    subscription = stream.listen(
-      (data) {
-        if (mappedSubscription != null) return;
-        final Stream<T> mappedStream;
-
-        mappedStream = mapper(data);
-        mappedSubscription = mappedStream.listen(
-          controller.add,
-          onError: controller.addError,
-          onDone: () => mappedSubscription = null,
-        );
-      },
-      onError: controller.addError,
-      onDone: () => mappedSubscription ?? controller.close(),
-    );
-
-    return controller.stream;
-  }
-}
-
-class _SwitchMapStreamTransformer<T>
-    extends StreamTransformerBase<Stream<T>, T> {
-  const _SwitchMapStreamTransformer();
-
-  @override
-  Stream<T> bind(Stream<Stream<T>> stream) {
-    final controller = StreamController<T>.broadcast(sync: true);
-
-    controller.onListen = () {
-      StreamSubscription<T>? innerSubscription;
-
-      final outerSubscription = stream.listen(
-        (innerStream) {
-          innerSubscription?.cancel();
-          innerSubscription = innerStream.listen(
-            controller.add,
-            onError: controller.addError,
-            onDone: () => innerSubscription = null,
-          );
-        },
-        onError: controller.addError,
-        onDone: () {
-          if (innerSubscription == null) controller.close();
-        },
-      );
-
-      controller.onCancel = () {
-        final cancels = [
-          outerSubscription.cancel(),
-          if (innerSubscription != null) innerSubscription!.cancel(),
-        ]..removeWhere((Object? f) => f == null);
-        if (cancels.isEmpty) return null;
-        return Future.wait(cancels).then((_) {});
-      };
-    };
 
     return controller.stream;
   }

@@ -115,7 +115,4 @@ class CounterBloc extends Bloc<CounterEvent, int> {
     /// and a new state is emitted via `emit`.
     on<CounterIncremented>((event, emit) => emit(state + 1));
   }
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {}
 }
