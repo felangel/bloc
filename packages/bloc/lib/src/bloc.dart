@@ -252,14 +252,14 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   @override
   void emit(State state) => super.emit(state);
 
-  /// Register event handler for an event of type [E].
-  /// There should only ever be one event handler per event type [E].
+  /// Register event handler for an event of type `E`.
+  /// There should only ever be one event handler per event type `E`.
   ///
   /// * A [StateError] will be thrown if there are multiple event handlers
-  /// registered for the same type [E].
+  /// registered for the same type `E`.
   ///
   /// * A [StateError] will be thrown if there is a missing event handler for
-  /// an event of type [E] when [add] is called.
+  /// an event of type `E` when [add] is called.
   ///
   /// By default, events will be processed concurrently.
   ///
