@@ -9,7 +9,7 @@ class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
   NewCarBloc({required NewCarRepository newCarRepository})
       : _newCarRepository = newCarRepository,
         super(const NewCarState.initial()) {
-    on<NewCarEvent>(_onEvent, transformer: enqueue());
+    on<NewCarEvent>(_onEvent, transformer: sequential());
   }
 
   final NewCarRepository _newCarRepository;

@@ -85,10 +85,10 @@ void main() {
     });
   });
 
-  group('enqueue', () {
+  group('sequential', () {
     test('processes events one at a time', () async {
       final states = <int>[];
-      final bloc = CounterBloc(enqueue())
+      final bloc = CounterBloc(sequential())
         ..stream.listen(states.add)
         ..add(CounterEvent.increment)
         ..add(CounterEvent.increment)
@@ -173,10 +173,10 @@ void main() {
     });
   });
 
-  group('drop', () {
+  group('droppable', () {
     test('processes only the current event and ignores remaining', () async {
       final states = <int>[];
-      final bloc = CounterBloc(drop())
+      final bloc = CounterBloc(droppable())
         ..stream.listen(states.add)
         ..add(CounterEvent.increment)
         ..add(CounterEvent.increment)
