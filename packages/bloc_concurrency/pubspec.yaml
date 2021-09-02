@@ -1,19 +1,16 @@
 name: bloc_concurrency
-description: Custom concurrency modes inspired by ember concurrency. Built to be used with the bloc state management package.
+description: Custom event transformers inspired by ember concurrency. Built to be used with the bloc state management package.
 version: 0.1.0-dev.1
-repository: https://github.com/felangel/bloc/tree/master/packages/bloc_concurrency
+repository: https://github.com/felangel/bloc/tree/feat/bloc-v7.2.0/packages/bloc_concurrency
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://github.com/felangel/bloc
 documentation: https://bloclibrary.dev
-
-publish_to: none
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  bloc:
-    path: ../bloc
+  bloc: ^7.2.0-dev.1
   stream_transform: ^2.0.0
 
 dev_dependencies:
