@@ -1,18 +1,13 @@
-# 7.2.0
+# 7.2.0-dev.1
 
 - feat: introduce `on<Event>` API to register event handlers
-  - feat: by default events are processed concurrently
-    - to process events sequentially use the `sequential` event transformer
+  - by default events are processed concurrently
+- feat: introduce `Bloc.transformer` API to configure the default [EventTransformer]
 - feat: introduce `Emitter<State>` to trigger state changes
   - `call` to trigger a state change (alignment with `Cubit`)
   - `forEach` as an analogue for `await for`
   - `onEach` to simplify subscription management
   - `isCanceled` to abort expensive async operations
-- feat: include core `EventTransformer` options
-  - `concurrent` (default) - process events concurrently
-  - `sequential` (legacy) - process events sequentially
-  - `droppable` - ignore any events added while an event is processing
-  - `restartable` - process only the latest event and cancel previous handlers
 - feat: throw `StateError` if `mapEventToState` is used in conjunction with `on<Event>`
 - feat: throw `StateError` if duplicate event handlers are registered
 - **DEPRECATE**: fix: `mapEventToState` deprecated in favor of `on<Event>`
