@@ -2,17 +2,20 @@
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-> In this tutorial, we're going to build a Weather app in Flutter which demonstrates how to manage multiple blocs to implement dynamic theming, pull-to-refresh, and much more. Our weather app will pull real data from an API and demonstrate how to separate our application into layers (data, repository, business logic, and presentation).
+> In this tutorial, we're going to build a Weather app in Flutter which demonstrates how to manage multiple cubits to implement dynamic theming, pull-to-refresh, and much more. Our weather app will pull live weather data from the public MetaWeather API and demonstrate how to separate our application into layers (data, repository, business logic, and presentation).
 
 ![demo](./assets/gifs/flutter_weather.gif)
 
 ## Project Requirements
 
-- User can search for cities on the search page
-- App displays weather information returned by [MetaWeather API](https://www.metaweather.com/api/)
-- App theme changes depending on weather of the city
-- Settings page which allows users to change units
-- Persist state across sessions ([HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc))
+Our app should let users
+- Search for a city on a dedicated search page
+- See a pleasant depiction of the weather data returned by [MetaWeather API](https://www.metaweather.com/api/)
+- Change the units displayed (metric vs imperial)
+
+Additionally,
+- The theme of the application should reflect the weather for the chosen city
+- Application state should persist across sessions: i.e., the app should remember its state after closing and reopening it (using [HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc))
 
 ## Key Concepts
 
@@ -119,7 +122,7 @@ In the top level, `meta_weather_api.dart` let's export the models:
 
 > We need to be able to [serialize and deserialize](https://en.wikipedia.org/wiki/Serialization) our models in order to work with the API data. To do this, we will add `toJson` and `fromJson` methods to our models.
 
-We will be using the [json_annotation](https://pub.dev/packages/json_annotation), [json_serializable](https://pub.dev/packages/json_serializable), [build_runner](https://pub.dev/packages/build_runner) packages to generate the `toJson` and `fromJson` implementations for us.
+We will be using the [json_annotation](https://pub.dev/packages/json_annotation), [json_serializable](https://pub.dev/packages/json_serializable), and [build_runner](https://pub.dev/packages/build_runner) packages to generate the `toJson` and `fromJson` implementations for us.
 
 First, let's add these dependencies to the `pubspec.yaml`.
 
