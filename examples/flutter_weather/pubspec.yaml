@@ -9,14 +9,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  equatable: ^2.0.0
+  equatable: ^2.0.3
   flutter_bloc:
     path: ../../packages/flutter_bloc
-  google_fonts: ^2.0.0
+  google_fonts: ^2.1.0
   hydrated_bloc:
     path: ../../packages/hydrated_bloc
   json_annotation: ^4.0.0
-  path_provider: ^2.0.1
+  path_provider: ^2.0.3
   weather_repository:
     path: packages/weather_repository
 
