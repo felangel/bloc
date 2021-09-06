@@ -59,7 +59,9 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   }
 
   List<Todo> _mapTodosToFilteredTodos(
-      List<Todo> todos, VisibilityFilter filter) {
+    List<Todo> todos,
+    VisibilityFilter filter,
+  ) {
     return todos.where((todo) {
       if (filter == VisibilityFilter.all) {
         return true;
