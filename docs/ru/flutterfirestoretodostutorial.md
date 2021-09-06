@@ -159,11 +159,11 @@
 
 Основное различие между новым `TodosBloc` и оригинальным заключается в том, что теперь все основано на `Stream`, а не на `Future`.
 
-[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/map_load_todos_to_state.dart.md ':include')
+[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/on_load_todos.dart.md ':include')
 
 ?> Когда мы загружаем задачи, мы подписываемся на `TodosRepository` и каждый раз, когда появляется новая задача, мы добавляем событие `TodosUpdated`. Затем мы обрабатываем все `TodosUpdates` через:
 
-[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/map_todos_updated_to_state.dart.md ':include')
+[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/on_todos_updated.dart.md ':include')
 
 ## Собираем все вместе
 
@@ -175,4 +175,4 @@
 
 Вот и все, что нужно сделать! Теперь мы успешно внедрили приложение todos для Firestore во Flutter, используя пакеты [bloc](https://pub.dev/packages/bloc) и [flutter_bloc](https://pub.dev/packages/flutter_bloc) и мы успешно отделили уровень представления от бизнес-логики, а также создали приложение, которое обновляется в режиме реального времени.
 
-Полный исходный код этого примера можно найти [здесь](https://github.com/felangel/Bloc/tree/master/examples/flutter_firestore_todos).
+Полный исходный код этого примера можно найти [здесь](https://github.com/felangel/bloc/tree/master/examples/flutter_firestore_todos).

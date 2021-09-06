@@ -160,11 +160,11 @@ Now that our `AuthenticationBloc` is finished, we need to modify the `TodosBloc`
 
 The main difference between our new `TodosBloc` and the original one is in the new one, everything is `Stream` based rather than `Future` based.
 
-[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/map_load_todos_to_state.dart.md ':include')
+[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/on_load_todos.dart.md ':include')
 
 ?> When we load our todos, we are subscribing to the `TodosRepository` and every time a new todo comes in, we add a `TodosUpdated` event. We then handle all `TodosUpdates` via:
 
-[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/map_todos_updated_to_state.dart.md ':include')
+[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/on_todos_updated.dart.md ':include')
 
 ## Putting it all together
 
@@ -176,4 +176,4 @@ The main differences to note are the fact that we've wrapped our entire applicat
 
 That’s all there is to it! We’ve now successfully implemented a firestore todos app in flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic while also building an app that updates in real-time.
 
-The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_firestore_todos).
+The full source for this example can be found [here](https://github.com/felangel/bloc/tree/master/examples/flutter_firestore_todos).
