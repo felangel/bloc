@@ -9,8 +9,9 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   final TodosBloc todosBloc;
   StreamSubscription todosSubscription;
 
-  FilteredTodosBloc({@required this.todosBloc})
-      : super(
+  FilteredTodosBloc({
+    @required this.todosBloc,
+  }) : super(
           todosBloc.state is TodosLoadSuccess
               ? FilteredTodosLoadSuccess(
                   (todosBloc.state as TodosLoadSuccess).todos,
@@ -23,43 +24,37 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
         add(TodosUpdated((todosBloc.state as TodosLoadSuccess).todos));
       }
     });
+
+    on<FilterUpdated>(_onFilterUpdated);
+    on<TodosUpdated>(_onTodosUpdated);
   }
 
-  @override
-  Stream<FilteredTodosState> mapEventToState(FilteredTodosEvent event) async* {
-    if (event is FilterUpdated) {
-      yield* _mapFilterUpdatedToState(event);
-    } else if (event is TodosUpdated) {
-      yield* _mapTodosUpdatedToState(event);
-    }
-  }
-
-  Stream<FilteredTodosState> _mapFilterUpdatedToState(
-    FilterUpdated event,
-  ) async* {
+  void _onFilterUpdated(FilterUpdated event, Emitter emit) {
     if (todosBloc.state is TodosLoadSuccess) {
-      yield FilteredTodosLoadSuccess(
-        _mapTodosToFilteredTodos(
-          (todosBloc.state as TodosLoadSuccess).todos,
+      emit(
+        FilteredTodosLoadSuccess(
+          _mapTodosToFilteredTodos(
+            (todosBloc.state as TodosLoadSuccess).todos,
+            event.filter,
+          ),
           event.filter,
         ),
-        event.filter,
       );
     }
   }
 
-  Stream<FilteredTodosState> _mapTodosUpdatedToState(
-    TodosUpdated event,
-  ) async* {
+  void _onTodosUpdated(TodosUpdated event, Emitter emit) {
     final visibilityFilter = state is FilteredTodosLoadSuccess
         ? (state as FilteredTodosLoadSuccess).activeFilter
         : VisibilityFilter.all;
-    yield FilteredTodosLoadSuccess(
-      _mapTodosToFilteredTodos(
-        (todosBloc.state as TodosLoadSuccess).todos,
+    emit(
+      FilteredTodosLoadSuccess(
+        _mapTodosToFilteredTodos(
+          (todosBloc.state as TodosLoadSuccess).todos,
+          visibilityFilter,
+        ),
         visibilityFilter,
       ),
-      visibilityFilter,
     );
   }
 
