@@ -25,5 +25,11 @@ dev_dependencies:
     path: ../../packages/bloc_test
   mocktail: ^0.1.0
 
+dependency_overrides:
+  bloc:
+    path: ../../packages/bloc
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
+
 flutter:
   uses-material-design: true
