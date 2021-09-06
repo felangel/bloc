@@ -9,26 +9,19 @@ part 'catalog_event.dart';
 part 'catalog_state.dart';
 
 class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
-  CatalogBloc({required this.shoppingRepository}) : super(CatalogLoading());
+  CatalogBloc({required this.shoppingRepository}) : super(CatalogLoading()) {
+    on<CatalogStarted>(_onCatalogStarted);
+  }
 
   final ShoppingRepository shoppingRepository;
 
-  @override
-  Stream<CatalogState> mapEventToState(
-    CatalogEvent event,
-  ) async* {
-    if (event is CatalogStarted) {
-      yield* _mapCatalogStartedToState();
-    }
-  }
-
-  Stream<CatalogState> _mapCatalogStartedToState() async* {
-    yield CatalogLoading();
+  Future<void> _onCatalogStarted(CatalogStarted event, Emitter emit) async {
+    emit(CatalogLoading());
     try {
       final catalog = await shoppingRepository.loadCatalog();
-      yield CatalogLoaded(Catalog(itemNames: catalog));
+      emit(CatalogLoaded(Catalog(itemNames: catalog)));
     } catch (_) {
-      yield CatalogError();
+      emit(CatalogError());
     }
   }
 }
