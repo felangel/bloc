@@ -16,11 +16,6 @@ class AuthenticationBloc
   })  : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
-    on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
-    on<AuthenticationLogoutRequested>(
-      (_, __) => _authenticationRepository.logOut(),
-    );
-
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
       (status) => add(AuthenticationStatusChanged(status)),
     );
@@ -32,28 +27,36 @@ class AuthenticationBloc
       _authenticationStatusSubscription;
 
   @override
+  Stream<AuthenticationState> mapEventToState(
+    AuthenticationEvent event,
+  ) async* {
+    if (event is AuthenticationStatusChanged) {
+      yield await _mapAuthenticationStatusChangedToState(event);
+    } else if (event is AuthenticationLogoutRequested) {
+      _authenticationRepository.logOut();
+    }
+  }
+
+  @override
   Future<void> close() {
     _authenticationStatusSubscription.cancel();
     _authenticationRepository.dispose();
     return super.close();
   }
 
-  void _onAuthenticationStatusChanged(
+  Future<AuthenticationState> _mapAuthenticationStatusChangedToState(
     AuthenticationStatusChanged event,
-    Emitter emit,
   ) async {
     switch (event.status) {
       case AuthenticationStatus.unauthenticated:
-        return emit(const AuthenticationState.unauthenticated());
+        return const AuthenticationState.unauthenticated();
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
-        return emit(
-          user != null
-              ? AuthenticationState.authenticated(user)
-              : const AuthenticationState.unauthenticated(),
-        );
+        return user != null
+            ? AuthenticationState.authenticated(user)
+            : const AuthenticationState.unauthenticated();
       default:
-        return emit(const AuthenticationState.unknown());
+        return const AuthenticationState.unknown();
     }
   }
 
