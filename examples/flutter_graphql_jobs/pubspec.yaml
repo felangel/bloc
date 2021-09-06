@@ -4,15 +4,15 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_bloc:
     path: ../../packages/flutter_bloc
-  graphql: ^3.0.2
-  json_annotation: ^3.0.1
+  graphql: ^5.0.0
+  json_annotation: ^4.0.0
 
 dependency_overrides:
   bloc:
@@ -21,8 +21,8 @@ dependency_overrides:
     path: ../../packages/flutter_bloc
 
 dev_dependencies:
-  build_runner: ^1.8.1
-  json_serializable: ^3.3.0
+  build_runner: ^2.0.0
+  json_serializable: ^4.0.0
 
 flutter:
   uses-material-design: true

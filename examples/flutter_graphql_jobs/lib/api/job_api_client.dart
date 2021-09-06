@@ -5,15 +5,14 @@ import 'package:graphql/client.dart';
 class GetJobsRequestFailure implements Exception {}
 
 class JobsApiClient {
-  const JobsApiClient({GraphQLClient graphQLClient})
-      : assert(graphQLClient != null),
-        _graphQLClient = graphQLClient;
+  const JobsApiClient({required GraphQLClient graphQLClient})
+      : _graphQLClient = graphQLClient;
 
   factory JobsApiClient.create() {
-    final httpLink = HttpLink(uri: 'https://api.graphql.jobs');
+    final httpLink = HttpLink('https://api.graphql.jobs');
     final link = Link.from([httpLink]);
     return JobsApiClient(
-      graphQLClient: GraphQLClient(cache: InMemoryCache(), link: link),
+      graphQLClient: GraphQLClient(cache: GraphQLCache(), link: link),
     );
   }
 
@@ -21,12 +20,10 @@ class JobsApiClient {
 
   Future<List<Job>> getJobs() async {
     final result = await _graphQLClient.query(
-      QueryOptions(documentNode: gql(queries.getJobs)),
+      QueryOptions(document: gql(queries.getJobs)),
     );
-    if (result.hasException) {
-      throw GetJobsRequestFailure();
-    }
-    final data = result.data['jobs'] as List;
+    if (result.hasException) throw GetJobsRequestFailure();
+    final data = result.data?['jobs'] as List;
     return data.map((e) => Job.fromJson(e)).toList();
   }
 }
