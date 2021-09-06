@@ -19,49 +19,43 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
                 )
               : FilteredTodosLoading(),
         ) {
+    on<UpdateFilter>(_onUpdateFilter);
+    on<UpdateTodos>(_onUpdateTodos);
     _todosSubscription = todosBloc.stream.listen((state) {
       if (state is TodosLoaded) add(UpdateTodos(state.todos));
     });
   }
 
-  @override
-  Stream<FilteredTodosState> mapEventToState(FilteredTodosEvent event) async* {
-    if (event is UpdateFilter) {
-      yield* _mapUpdateFilterToState(event);
-    } else if (event is UpdateTodos) {
-      yield* _mapTodosUpdatedToState(event);
-    }
-  }
-
-  Stream<FilteredTodosState> _mapUpdateFilterToState(
-    UpdateFilter event,
-  ) async* {
-    final currentState = _todosBloc.state;
-    if (currentState is TodosLoaded) {
-      yield FilteredTodosLoaded(
-        _mapTodosToFilteredTodos(currentState.todos, event.filter),
+  void _onUpdateFilter(UpdateFilter event, Emitter<FilteredTodosState> emit) {
+    final state = _todosBloc.state;
+    if (state is TodosLoaded) {
+      emit(FilteredTodosLoaded(
+        _mapTodosToFilteredTodos(state.todos, event.filter),
         event.filter,
-      );
+      ));
     }
   }
 
-  Stream<FilteredTodosState> _mapTodosUpdatedToState(
-    UpdateTodos event,
-  ) async* {
+  void _onUpdateTodos(UpdateTodos event, Emitter<FilteredTodosState> emit) {
+    final state = this.state;
     final visibilityFilter = state is FilteredTodosLoaded
-        ? (state as FilteredTodosLoaded).activeFilter
+        ? state.activeFilter
         : VisibilityFilter.all;
-    yield FilteredTodosLoaded(
-      _mapTodosToFilteredTodos(
-        (_todosBloc.state as TodosLoaded).todos,
+    emit(
+      FilteredTodosLoaded(
+        _mapTodosToFilteredTodos(
+          (_todosBloc.state as TodosLoaded).todos,
+          visibilityFilter,
+        ),
         visibilityFilter,
       ),
-      visibilityFilter,
     );
   }
 
   List<Todo> _mapTodosToFilteredTodos(
-      List<Todo> todos, VisibilityFilter filter) {
+    List<Todo> todos,
+    VisibilityFilter filter,
+  ) {
     return todos.where((todo) {
       if (filter == VisibilityFilter.all) {
         return true;
