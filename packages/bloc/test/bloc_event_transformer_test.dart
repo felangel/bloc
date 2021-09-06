@@ -84,6 +84,43 @@ void main() {
   });
 
   test(
+      'when processing events concurrently '
+      'all subscriptions are canceled on close', () async {
+    final states = <int>[];
+    final bloc = CounterBloc()
+      ..stream.listen(states.add)
+      ..add(CounterEvent.increment)
+      ..add(CounterEvent.increment)
+      ..add(CounterEvent.increment);
+
+    await tick();
+
+    expect(
+      bloc.onCalls,
+      equals([
+        CounterEvent.increment,
+        CounterEvent.increment,
+        CounterEvent.increment,
+      ]),
+    );
+
+    await bloc.close();
+
+    expect(
+      bloc.onCalls,
+      equals([
+        CounterEvent.increment,
+        CounterEvent.increment,
+        CounterEvent.increment,
+      ]),
+    );
+
+    expect(bloc.onEmitCalls, isEmpty);
+
+    expect(states, isEmpty);
+  });
+
+  test(
       'processes events sequentially when '
       'Bloc.transformer is overridden.', () async {
     final defaultTransformer = Bloc.transformer;

@@ -52,10 +52,6 @@ typedef EventTransformer<Event> = Stream<Event> Function(
   EventMapper<Event> mapper,
 );
 
-EventTransformer<Event> _concurrent<Event>() {
-  return (events, mapper) => events.flatMap(mapper);
-}
-
 class _Emitter<State> implements Emitter<State> {
   _Emitter(this._emit);
   final void Function(State) _emit;
@@ -147,7 +143,11 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   ///
   /// If a custom transformer is specified for a particular event handler,
   /// it will take precendence over the global transformer.
-  static EventTransformer<dynamic> transformer = _concurrent<dynamic>();
+  static EventTransformer<dynamic> transformer = (events, mapper) {
+    return events
+        .map(mapper)
+        .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
+  };
 
   StreamSubscription<Transition<Event, State>>? _transitionSubscription;
 
@@ -285,8 +285,12 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     final _transformer = transformer ?? Bloc.transformer;
     final subscription = _transformer(
       _eventController.stream.where((event) => event is E),
-      (dynamic event) async* {
+      (dynamic event) {
+        late final _Emitter<State> emitter;
+        late final StreamController<Event> controller;
+
         void onDone(_Emitter<State> emitter) {
+          if (!controller.isClosed) controller.close();
           emitter.cancel();
           _emitters.remove(emitter);
         }
@@ -303,10 +307,11 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
           emit(state);
         }
 
-        Stream<Event> handleEvent(_Emitter<State> emitter) async* {
+        void handleEvent(_Emitter<State> emitter) async {
           try {
             _emitters.add(emitter);
-            await handler(event as E, emitter);
+            final result = handler(event as E, emitter);
+            if (result is Future) await result;
           } catch (error, stackTrace) {
             onError(error, stackTrace);
           } finally {
@@ -314,9 +319,14 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
           }
         }
 
-        late final _Emitter<State> emitter;
         emitter = _Emitter((state) => onEmit(state, emitter));
-        yield* handleEvent(emitter).doOnCancel(() => onDone(emitter));
+        controller = StreamController<Event>.broadcast(
+          sync: true,
+          onCancel: () => onDone(emitter),
+        );
+
+        handleEvent(emitter);
+        return controller.stream;
       },
     ).listen(null);
     _subscriptions.add(subscription);
@@ -607,42 +617,6 @@ abstract class BlocBase<State> {
   }
 }
 
-extension _StreamX<T> on Stream<T> {
-  Stream<T> flatMap(EventMapper<T> mapper) {
-    return map(mapper).transform(_FlatMapStreamTransformer<T>());
-  }
-
-  Stream<T> doOnCancel(void Function() onCancel) {
-    return transform(_DoOnCancelStreamTransformer(onCancel));
-  }
-}
-
-class _DoOnCancelStreamTransformer<T> extends StreamTransformerBase<T, T> {
-  const _DoOnCancelStreamTransformer(this.onCancel);
-
-  final void Function() onCancel;
-
-  @override
-  Stream<T> bind(Stream<T> stream) {
-    late StreamSubscription<T> subscription;
-    final controller = StreamController<T>(
-      onCancel: () {
-        onCancel();
-        return subscription.cancel();
-      },
-      sync: true,
-    );
-
-    subscription = stream.listen(
-      controller.add,
-      onError: controller.addError,
-      onDone: controller.close,
-    );
-
-    return controller.stream;
-  }
-}
-
 class _FlatMapStreamTransformer<T> extends StreamTransformerBase<Stream<T>, T> {
   const _FlatMapStreamTransformer();
 
@@ -679,8 +653,7 @@ class _FlatMapStreamTransformer<T> extends StreamTransformerBase<Stream<T>, T> {
 
       controller.onCancel = () {
         if (subscriptions.isEmpty) return null;
-        final cancels = [for (final s in subscriptions) s.cancel()]
-          ..removeWhere((Object? f) => f == null);
+        final cancels = [for (final s in subscriptions) s.cancel()];
         return Future.wait(cancels).then((_) {});
       };
     };
