@@ -4,7 +4,7 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0-0 <3.0.0"
+  sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -12,7 +12,7 @@ dependencies:
   flutter_bloc:
     path: ../../packages/flutter_bloc
   equatable: ^2.0.0
-  formz: ^0.4.0-nullsafety.0
+  formz: ^0.4.0
 
 dependency_overrides:
   bloc:
