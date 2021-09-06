@@ -17,11 +17,11 @@ abstract class TickerEvent extends Equatable {
 class TickerStarted extends TickerEvent {}
 
 class _TickerTicked extends TickerEvent {
-  const _TickerTicked(this.tickCount);
+  const _TickerTicked(this.tick);
 
   /// The current tick count.
-  final int tickCount;
+  final int tick;
 
   @override
-  List<Object> get props => [tickCount];
+  List<Object> get props => [tick];
 }

@@ -40,13 +40,10 @@ void main() {
 
     blocTest<TickerBloc, TickerState>(
       'emits TickerTickSuccess '
-      'from 1 to 3 and restarts',
+      'from 1 to 3 and cancels previous subscription',
       build: () => TickerBloc(ticker),
       act: (bloc) => bloc..add(TickerStarted())..add(TickerStarted()),
       expect: () => <TickerState>[
-        const TickerTickSuccess(1),
-        const TickerTickSuccess(2),
-        const TickerTickSuccess(3),
         const TickerTickSuccess(1),
         const TickerTickSuccess(2),
         const TickerTickSuccess(3),
