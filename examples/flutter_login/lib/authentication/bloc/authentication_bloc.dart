@@ -16,6 +16,8 @@ class AuthenticationBloc
   })  : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
+    on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
+    on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
       (status) => add(AuthenticationStatusChanged(status)),
     );
@@ -27,44 +29,41 @@ class AuthenticationBloc
       _authenticationStatusSubscription;
 
   @override
-  Stream<AuthenticationState> mapEventToState(
-    AuthenticationEvent event,
-  ) async* {
-    if (event is AuthenticationStatusChanged) {
-      yield await _mapAuthenticationStatusChangedToState(event);
-    } else if (event is AuthenticationLogoutRequested) {
-      _authenticationRepository.logOut();
-    }
-  }
-
-  @override
   Future<void> close() {
     _authenticationStatusSubscription.cancel();
     _authenticationRepository.dispose();
     return super.close();
   }
 
-  Future<AuthenticationState> _mapAuthenticationStatusChangedToState(
+  void _onAuthenticationStatusChanged(
     AuthenticationStatusChanged event,
+    Emitter<AuthenticationState> emit,
   ) async {
     switch (event.status) {
       case AuthenticationStatus.unauthenticated:
-        return const AuthenticationState.unauthenticated();
+        return emit(const AuthenticationState.unauthenticated());
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
-        return user != null
+        return emit(user != null
             ? AuthenticationState.authenticated(user)
-            : const AuthenticationState.unauthenticated();
+            : const AuthenticationState.unauthenticated());
       default:
-        return const AuthenticationState.unknown();
+        return emit(const AuthenticationState.unknown());
     }
+  }
+
+  void _onAuthenticationLogoutRequested(
+    AuthenticationLogoutRequested event,
+    Emitter<AuthenticationState> emit,
+  ) {
+    _authenticationRepository.logOut();
   }
 
   Future<User?> _tryGetUser() async {
     try {
       final user = await _userRepository.getUser();
       return user;
-    } on Exception {
+    } catch (_) {
       return null;
     }
   }
