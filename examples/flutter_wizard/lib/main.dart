@@ -1,20 +1,20 @@
-import 'package:flutter/foundation.dart';
+import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_wizard/bloc/profile_wizard_bloc.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Home(),
-    );
-  }
+  Widget build(BuildContext context) => const MaterialApp(home: Home());
 }
 
 class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,59 +41,53 @@ class Home extends StatelessWidget {
 }
 
 class ProfileWizard extends StatelessWidget {
+  const ProfileWizard({Key? key}) : super(key: key);
+
   static Route<Profile> route() {
-    return MaterialPageRoute(builder: (_) => ProfileWizard());
+    return MaterialPageRoute(builder: (_) => const ProfileWizard());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ProfileWizardBloc(),
-      child: ProfileWizardController(
+      child: ProfileWizardFlow(
         onComplete: (profile) => Navigator.of(context).pop(profile),
       ),
     );
   }
 }
 
-class ProfileWizardController extends StatefulWidget {
-  const ProfileWizardController({Key? key, required this.onComplete})
-      : super(key: key);
+class ProfileWizardFlow extends StatelessWidget {
+  const ProfileWizardFlow({
+    Key? key,
+    required this.onComplete,
+  }) : super(key: key);
 
   final ValueSetter<Profile> onComplete;
 
   @override
-  _ProfileWizardControllerState createState() =>
-      _ProfileWizardControllerState();
-}
-
-class _ProfileWizardControllerState extends State<ProfileWizardController> {
-  final _navigatorKey = GlobalKey<NavigatorState>();
-
-  NavigatorState? get _navigator => _navigatorKey.currentState;
-
-  @override
   Widget build(BuildContext context) {
     return BlocListener<ProfileWizardBloc, ProfileWizardState>(
-      listener: (context, state) async {
-        if (state.profile.age != null) {
-          widget.onComplete(state.profile);
-        } else if (state.profile.name?.isNotEmpty == true) {
-          _navigator?.push(ProfileAgeForm.route());
-        }
-      },
-      child: Navigator(
-        key: _navigatorKey,
-        onGenerateRoute: (_) => ProfileNameForm.route(),
+      listenWhen: (_, state) => state.profile.isComplete,
+      listener: (context, state) => onComplete(state.profile),
+      child: FlowBuilder<ProfileWizardState>(
+        state: context.watch<ProfileWizardBloc>().state,
+        onGeneratePages: (state, pages) {
+          return [
+            ProfileNameForm.page(),
+            if (state.profile.name != null) ProfileAgeForm.page(),
+          ];
+        },
       ),
     );
   }
 }
 
 class ProfileNameForm extends StatefulWidget {
-  static Route route() {
-    return MaterialPageRoute(builder: (_) => ProfileNameForm());
-  }
+  const ProfileNameForm({Key? key}) : super(key: key);
+
+  static Page page() => const MaterialPage(child: ProfileNameForm());
 
   @override
   _ProfileNameFormState createState() => _ProfileNameFormState();
@@ -132,9 +126,9 @@ class _ProfileNameFormState extends State<ProfileNameForm> {
 }
 
 class ProfileAgeForm extends StatefulWidget {
-  static Route route() {
-    return MaterialPageRoute(builder: (_) => ProfileAgeForm());
-  }
+  const ProfileAgeForm({Key? key}) : super(key: key);
+
+  static Page page() => const MaterialPage(child: ProfileAgeForm());
 
   @override
   _ProfileAgeFormState createState() => _ProfileAgeFormState();
@@ -171,4 +165,8 @@ class _ProfileAgeFormState extends State<ProfileAgeForm> {
       ),
     );
   }
+}
+
+extension on Profile {
+  bool get isComplete => name != null && age != null;
 }
