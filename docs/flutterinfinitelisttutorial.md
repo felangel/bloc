@@ -130,29 +130,27 @@ Let’s create `post_bloc.dart` and create our empty `PostBloc`.
 
 ?> **Note:** Just from the class declaration we can tell that our PostBloc will be taking PostEvents as input and outputting PostStates.
 
-Next, we need to implement `mapEventToState` which will be fired every time a `PostEvent` is added.
+Next, we need to register handlers for as many `PostEvent` we have in our bloc. In this case we will register a handler for `PostFetched`. This handler will call `_fetchPosts` that will get the data from API.
 
-[post_bloc.dart](_snippets/flutter_infinite_list_tutorial/post_bloc_map_event_to_state.dart.md ':include')
+[post_bloc.dart](_snippets/flutter_infinite_list_tutorial/post_bloc_on_post_fetched.dart.md ':include')
 
-Our `PostBloc` will `yield` whenever there is a new state because it returns a `Stream<PostState>`. Check out [core concepts](https://bloclibrary.dev/#/coreconcepts?id=streams) for more information about `Streams` and other core concepts.
+Our `PostBloc` will `emit` whenever there is a new state because we will use a `Emitter<PostState`. Check out [core concepts](https://bloclibrary.dev/#/coreconcepts?id=streams) for more information about `Streams` and other core concepts.
 
 Now every time a `PostEvent` is added, if it is a `PostFetched` event and there are more posts to fetch, our `PostBloc` will fetch the next 20 posts.
 
-The API will return an empty array if we try to fetch beyond the maximum number of posts (100), so if we get back an empty array, our bloc will `yield` the currentState except we will set `hasReachedMax` to true.
+The API will return an empty array if we try to fetch beyond the maximum number of posts (100), so if we get back an empty array, our bloc will `emit` the currentState except we will set `hasReachedMax` to true.
 
-If we cannot retrieve the posts, we throw an exception and `yield` `PostFailure()`.
+If we cannot retrieve the posts, we throw an exception and `emit` `PostFailure()`.
 
 If we can retrieve the posts, we return `PostSuccess()` which takes the entire list of posts.
 
 One optimization we can make is to `debounce` the `Events` in order to prevent spamming our API unnecessarily. We can do this by overriding the `transform` method in our `PostBloc`.
 
-?> **Note:** Overriding transform allows us to transform the Stream<Event> before mapEventToState is called. This allows for operations like distinct(), debounceTime(), etc... to be applied.
-
-[post_bloc.dart](_snippets/flutter_infinite_list_tutorial/post_bloc_transform_events.dart.md ':include')
+?> **Note:** Passing a `transformer` to `on<PostFetched>` allows us customizing how events are processed. This allows for operations like distinct(), debounceTime(), etc... to be applied.
 
 Our finished `PostBloc` should now look like this:
 
-[post_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_bloc.dart ':include')
+[post_bloc.dart](_snippets/flutter_infinite_list_tutorial/post_bloc.dart.md ':include')
 
 Great! Now that we’ve finished implementing the business logic all that’s left to do is implement the presentation layer.
 
