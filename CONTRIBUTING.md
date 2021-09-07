@@ -50,7 +50,7 @@ that your changes look good by running the docs locally.
 cd ./docs
 
 # run a local http server on port 8080
-python -m http.server 8080 .
+python3 -m http.server 8080
 
 # navigate to http://localhost:8080
 ```
