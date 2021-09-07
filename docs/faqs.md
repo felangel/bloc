@@ -16,7 +16,7 @@
 
 [my_state.dart](_snippets/faqs/state_not_updating_bad_2.dart.md ':include')
 
-In addition, make sure you are yielding a new instance of the state in your bloc.
+In addition, make sure you are emitting a new instance of the state in your bloc.
 
 ✅ **GOOD**
 
@@ -38,7 +38,7 @@ In addition, make sure you are yielding a new instance of the state in your bloc
 
 [my_bloc.dart](_snippets/faqs/equatable_yield.dart.md ':include')
 
-In the above scenario if `StateA` extends `Equatable` only one state change will occur (the second yield will be ignored).
+In the above scenario if `StateA` extends `Equatable` only one state change will occur (the second emit will be ignored).
 In general, you should use `Equatable` if you want to optimize your code to reduce the number of rebuilds.
 You should not use `Equatable` if you want the same state back-to-back to trigger multiple transitions.
 
@@ -85,14 +85,14 @@ class MyState {
 This will allow widgets to have access to the `data` and `error` properties simultaneously and the bloc can use `state.copyWith` to retain old data even when an error has occurred.
 
 ```dart
-if (event is DataRequested) {
+on<DataRequested>((event, emit) {
   try {
     final data = await _repository.getData();
-    yield state.copyWith(status: Status.success, data: data);
+    emit(state.copyWith(status: Status.success, data: data));
   } on Exception {
-    yield state.copyWith(status: Status.failure, error: 'Something went wrong!');
+    emit(state.copyWith(status: Status.failure, error: 'Something went wrong!'));
   }
-}
+});
 ```
 
 ## Bloc vs. Redux
