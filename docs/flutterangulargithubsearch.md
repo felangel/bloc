@@ -81,7 +81,7 @@ Next, we'll create `github_user.dart`.
 
 [github_user.dart](_snippets/flutter_angular_github_search/common/github_user.dart.md ':include')
 
-At this point we have finished implementing `SearchResult` and its dependencies, so we'll move onto `SearchResultError`.
+At this point, we have finished implementing `SearchResult` and its dependencies. Now we'll move onto `SearchResultError`.
 
 #### Search Result Error Model
 
