@@ -2,7 +2,7 @@
 
 ## State Not Updating
 
-❔ **Question**: I'm yielding a state in my bloc but the UI is not updating. What am I doing wrong?
+❔ **Question**: I'm emitting a state in my bloc but the UI is not updating. What am I doing wrong?
 
 💡 **Answer**: If you're using Equatable make sure to pass all properties to the props getter.
 
