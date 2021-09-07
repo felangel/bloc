@@ -81,7 +81,7 @@ That's it for the `AuthenticationRepository`. Next, let's take a look at how to 
 
 ## Firebase Setup
 
-We need to follow the [firebase_auth usage instructions](https://pub.dev/packages/firebase_auth#usage) in order to hook up our application to Firebase and enable [google_signin](https://pub.dev/packages/google_sign_in).
+We need to follow the [firebase_auth usage instructions](https://pub.dev/packages/firebase_auth#usage) in order to hook up our application to Firebase and enable [google_sign_in](https://pub.dev/packages/google_sign_in).
 
 !> Remember to update the `google-services.json` on Android and the `GoogleService-Info.plist` & `Info.plist` on iOS, otherwise the application will crash.
 
@@ -99,7 +99,7 @@ Then install all of the dependencies:
 flutter packages get
 ```
 
-?> **Note**: We are depending on the `authentication_repository` package via path which will allow us to iterate quickly while still maintaining a clear separation.
+?> **Note**: We are depending on the `authentication_repository` package via path,n which will allow us to iterate quickly while still maintaining a clear separation.
 
 ## main.dart
 
