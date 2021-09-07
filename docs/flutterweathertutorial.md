@@ -68,7 +68,7 @@ The `woeid` for London is `44418`. Navigate to [https://www.metaweather.com/api/
 
 ### MetaWeather API Client
 
-> The MetaWeather API Client is independent of our application. As a result, we will create it as an internal package (and could even publish it on [pub.dev](https://pub.dev)). We can then use the package by adding it to our `pubspec.yaml`.
+> The MetaWeather API Client is independent of our application. As a result, we will create it as an internal package (and could even publish it on [pub.dev](https://pub.dev)). We can then use the package by adding it to the `pubspec.yaml` for the repository layer, which will handle data requests for our main weather application.
 
 Create a new directory on the project level called `packages`. This directory will store all of our internal packages.
 
@@ -118,17 +118,23 @@ In the top level, `meta_weather_api.dart` let's export the models:
 
 [meta_weather_api.dart](_snippets/flutter_weather_tutorial/data_layer/export_top_level_models.dart.md ':include')
 
-### (De)Serialization
+### Setup
 
 > We need to be able to [serialize and deserialize](https://en.wikipedia.org/wiki/Serialization) our models in order to work with the API data. To do this, we will add `toJson` and `fromJson` methods to our models.
 
+> Additionally, we need a way to [make HTTP network requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods) to fetch data from an API. Fortunately, there are a number of popular packages for doing just that.
+
 We will be using the [json_annotation](https://pub.dev/packages/json_annotation), [json_serializable](https://pub.dev/packages/json_serializable), and [build_runner](https://pub.dev/packages/build_runner) packages to generate the `toJson` and `fromJson` implementations for us.
 
-First, let's add these dependencies to the `pubspec.yaml`.
+In a later step, we will also use the [http](https://pub.dev/packages/http) package to send network requests to the MetaWeather API so our application can display the current weather data.
 
-[pubspec.yaml](_snippets/flutter_weather_tutorial/data_layer/json_serializable_pubspec.yaml.md ':include')
+Let's add these dependencies to the `pubspec.yaml`.
+
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/pubspec.yaml ':include')
 
 ?> **Note**: Remember to run `flutter pub get` after adding the dependencies.
+
+### (De)Serialization
 
 In order for code generation to work, we need to annotate our code using the following:
 
@@ -159,7 +165,7 @@ Here is our complete `weather.dart` model file:
 
 In the `meta_weather_api` folder, create a `build.yaml` file. The purpose of this file is to handle discrepancies between naming conventions in the `json_serializable` field names.
 
-[script](_snippets/flutter_weather_tutorial/data_layer/build.yaml_data.md ':include')
+[script](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/meta_weather_api/build.yaml ':include')
 
 #### Code Generation
 
@@ -175,11 +181,7 @@ Let's create our API client in `meta_weather_api_client.dart` within the `src` d
 
 [script](_snippets/flutter_weather_tutorial/data_layer/meta_weather_api_client_tree.md ':include')
 
-We will also need to import the [http](https://pub.dev/packages/http) package. In your `packages/meta_weather_api/pubspec.yaml` file, add `http` to your list of dependencies. Your updated file should look like this:
-
-[pubspec.yaml](_snippets/flutter_weather_tutorial/data_layer/http_pubspec.yaml.md ':include')
-
-?> **Note**: Make sure to run `flutter pub get` after saving the file.
+We can now use the [http](https://pub.dev/packages/http) package we added earlier to the `pubspec.yaml` file to make HTTP requests to the Metaweather API and use this information in our application.
 
 Our API client will expose two methods:
 
@@ -214,9 +216,7 @@ Let's wrap up this package by adding our API client to the barrel file.
 
 #### Setup
 
-Add the [test](https://pub.dev/packages/test) package to the `pubspec.yaml` and run `flutter pub get`.
-
-[pubspec.yaml](_snippets/flutter_weather_tutorial/data_layer/test_pubspec.yaml.md ':include')
+Earlier, we added the [test](https://pub.dev/packages/test) package to our pubspec.yaml which allows to easily write unit tests.
 
 We will be creating a test file for the api client as well as the two models.
 
@@ -232,9 +232,7 @@ We will be creating a test file for the api client as well as the two models.
 
 Next, let's test our API client. We should test to ensure that our API client handles both API calls correctly, including edge cases.
 
-?> **Note**: We don't want our tests to make real API calls since our goal is to test the API client logic (including all edge cases) and not the API itself. In order to have a consistent, controlled test environment, we will use [mocktail](https://github.com/felangel/mocktail) to mock the `http` client.
-
-[pubspec.yaml](_snippets/flutter_weather_tutorial/data_layer/mocktail_pubspec.yaml.md ':include')
+?> **Note**: We don't want our tests to make real API calls since our goal is to test the API client logic (including all edge cases) and not the API itself. In order to have a consistent, controlled test environment, we will use [mocktail](https://github.com/felangel/mocktail) (which we added to the pubspec.yaml file earlier) to mock the `http` client.
 
 [meta_weather_api_client_test.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/meta_weather_api/test/meta_weather_api_client_test.dart ':include')
 
@@ -278,7 +276,7 @@ Update the barrel file we created previously to include the models.
 
 As before, we need to create a `build.yaml` file with the following contents:
 
-[script](_snippets/flutter_weather_tutorial/repository_layer/build.yaml_repository.md ':include')
+[script](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/build.yaml ':include')
 
 #### Code Generation
 
@@ -326,9 +324,16 @@ Update the barrel file we created previously.
 
 ### Setup
 
-Update the root `pubspec.yaml` to include the `weather_repository` as a dependency.
+Because our business logic layer resides in our main app, we need to edit the `pubspec.yaml` for the entire `flutter_weather` project and include all the packages we'll be using.
 
-[pubspec.yaml](_snippets/flutter_weather_tutorial/pubspec.yaml.md ':include')
+- Using [equatable](https://pub.dev/packages/equatable) enables our app's state class instances to be compared using the equals `==` operator. Under the hood, bloc will compare our states to see if they're equal, and if they're not, it will trigger a rebuild. This guarantees that our widget tree will only rebuild when necessary to keep performance fast and responsive.
+- We can spice up our user interface with [google_fonts](https://pub.dev/packages/google_fonts).
+- [HydratedBloc](https://pub.dev/packages/hydrated_bloc) allows us to persist application state when the app is closed and reopened.
+- We'll include the `weather_repository` package we just created to allow us to fetch the current weather data!
+
+For testing, we'll want to include the usual `test` package, along with `mocktail` for mocking dependencies and [bloc_test](https://pub.dev/packages/bloc_test), to enable easy testing of business logic units, or blocs!
+
+[pubspec.yaml.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/pubspec.yaml ':include')
 
 Next, we will be working on the application layer within the `weather` feature directory.
 
@@ -344,7 +349,7 @@ Create `flutter_weather/lib/weather/models/weather.dart`:
 
 Create a `build.yaml` file for the business logic layer.
 
-[script](_snippets/flutter_weather_tutorial/business_logic_layer/build.yaml_business.md ':include')
+[script](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/build.yaml ':include')
 
 ### Code Generation
 
@@ -360,7 +365,7 @@ Let's export our models from the barrel file (flutter_weather/lib/weather/models
 
 ### Weather
 
-We will use `HydratedCubit` to manage the weather state.
+We will use `HydratedCubit` to enable our app to remember its application state, even after it's been closed and reopened.
 
 ?> **Note**: `HydratedCubit` is an extension of `Cubit` which handles persisting and restoring state across sessions.
 
