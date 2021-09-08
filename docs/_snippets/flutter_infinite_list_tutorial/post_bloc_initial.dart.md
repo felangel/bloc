@@ -12,7 +12,7 @@ part 'post_state.dart';
 const _postLimit = 20;
 
 class PostBloc extends Bloc<PostEvent, PostState> {
- PostBloc({required this.httpClient}) : super(const PostState()) {
+  PostBloc({required this.httpClient}) : super(const PostState()) {
    /// TODO: register on<PostFetched> event
   }
 
