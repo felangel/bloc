@@ -13,31 +13,6 @@ void main() {
   );
 }
 
-enum MyEvent { eventA, eventB }
-
-@immutable
-abstract class MyState {}
-
-class StateA extends MyState {}
-
-class StateB extends MyState {}
-
-class MyBloc extends Bloc<MyEvent, MyState> {
-  MyBloc() : super(StateA());
-
-  @override
-  Stream<MyState> mapEventToState(MyEvent event) async* {
-    switch (event) {
-      case MyEvent.eventA:
-        yield StateA();
-        break;
-      case MyEvent.eventB:
-        yield StateB();
-        break;
-    }
-  }
-}
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -68,7 +43,7 @@ class PageA extends StatelessWidget {
           child: ElevatedButton(
             child: Text('Go to PageB'),
             onPressed: () {
-              BlocProvider.of<MyBloc>(context).add(MyEvent.eventB);
+              BlocProvider.of<MyBloc>(context).add(EventB());
             },
           ),
         ),

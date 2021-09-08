@@ -1,7 +1,5 @@
 ```dart
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
@@ -11,31 +9,6 @@ void main() {
       child: MyApp(),
     ),
   );
-}
-
-enum MyEvent { eventA, eventB }
-
-@immutable
-abstract class MyState {}
-
-class StateA extends MyState {}
-
-class StateB extends MyState {}
-
-class MyBloc extends Bloc<MyEvent, MyState> {
-  MyBloc() : super(StateA());
-
-  @override
-  Stream<MyState> mapEventToState(MyEvent event) async* {
-    switch (event) {
-      case MyEvent.eventA:
-        yield StateA();
-        break;
-      case MyEvent.eventB:
-        yield StateB();
-        break;
-    }
-  }
 }
 
 class MyApp extends StatelessWidget {
@@ -60,7 +33,7 @@ class PageA extends StatelessWidget {
         child: ElevatedButton(
           child: Text('Go to PageB'),
           onPressed: () {
-            BlocProvider.of<MyBloc>(context).add(MyEvent.eventB);
+            BlocProvider.of<MyBloc>(context).add(EventB());
           },
         ),
       ),
@@ -79,7 +52,7 @@ class PageB extends StatelessWidget {
         child: ElevatedButton(
           child: Text('Go to PageA'),
           onPressed: () {
-            BlocProvider.of<MyBloc>(context).add(MyEvent.eventA);
+            BlocProvider.of<MyBloc>(context).add(EventA());
           },
         ),
       ),

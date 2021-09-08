@@ -1,3 +1,7 @@
 ```dart
-enum MyEvent { eventA, eventB }
+abstract class MyEvent {}
+
+class EventA extends MyEvent {}
+
+class EventB extends MyEvent {}
 ```
