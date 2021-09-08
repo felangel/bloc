@@ -1,0 +1,38 @@
+name: todos_api
+
+on:
+  pull_request:
+    paths:
+      - "packages/todos_api/**"
+      - ".github/workflows/todos_api.yaml"
+
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: packages/todos_api
+
+    runs-on: ubuntu-latest
+    container:
+      image: google/dart:2.13.4
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: pub get
+
+      - name: Format
+        run: dartfmt --dry-run --set-exit-if-changed lib test
+
+      - name: Analyze
+        run: dart analyze --fatal-infos --fatal-warnings .
+
+      - name: Run tests
+        run: dart test --coverage=coverage && pub run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
+
+      - name: Check Code Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
+        with:
+          path: packages/spacex_api/coverage/lcov.info
+          exclude: "**/*.g.dart **/*.gen.dart"
