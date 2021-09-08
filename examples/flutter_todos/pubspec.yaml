@@ -1,5 +1,5 @@
 name: flutter_todos
-description: A Very Good Project created by Very Good CLI.
+description: An example todos app that showcases bloc state management patterns.
 version: 1.0.0+1
 publish_to: none
 
@@ -14,6 +14,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
+  local_storage_todos_api:
+    path: packages/local_storage_todos_api
 
 dev_dependencies:
   bloc_test: ^8.1.0

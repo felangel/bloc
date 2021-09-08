@@ -27,8 +27,5 @@ abstract class TodosApi {
   Future<int> deleteCompleted();
 }
 
-/// Error thrown when an error occurs while saving a [Todo].
-class TodoSavingException implements Exception {}
-
 /// Error thrown when a [Todo] with a given id is not found.
 class TodoNotFoundException implements Exception {}
