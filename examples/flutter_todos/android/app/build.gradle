@@ -21,34 +21,80 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    lintOptions {
-        disable 'InvalidPackage'
-    }
-
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.flutter_todos"
+        applicationId "com.example.verygoodcore"
         minSdkVersion 16
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
+    // TODO: Remove when below fix is available in stable channel.
+    // https://github.com/flutter/flutter/pull/82309
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
+    signingConfigs {
+        if (System.getenv("ANDROID_KEYSTORE_PATH")) {
+            release {
+                storeFile file(System.getenv("ANDROID_KEYSTORE_PATH"))
+                keyAlias System.getenv("ANDROID_KEYSTORE_ALIAS")
+                keyPassword System.getenv("ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
+                storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+            }
+        } else {
+            release {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+                storePassword keystoreProperties['storePassword']
+            }
+        }
+    }
+
+    flavorDimensions "default"
+    productFlavors { 
+        production {
+            dimension "default"
+            applicationIdSuffix ""
+        }
+        staging {
+            dimension "default"
+            applicationIdSuffix ".stg"
+        }        
+        development {
+            dimension "default"
+            applicationIdSuffix ".dev"
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+        }
+        debug {
             signingConfig signingConfigs.debug
         }
     }
