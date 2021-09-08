@@ -160,11 +160,11 @@ Agora que nosso `AuthenticationBloc` foi concluído, precisamos modificar o `Tod
 
 A principal diferença entre o nosso novo `TodosBloc` e o original está no fato de que no novo tudo é baseado em `Stream` e não em `Future`.
 
-[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/map_load_todos_to_state.dart.md ':include')
+[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/on_load_todos.dart.md ':include')
 
 ?> Quando carregamos nosso Todos, estamos assinando o `TodosRepository` e toda vez que um novo Todo entra, adicionamos um evento `TodosUpdated`. Em seguida, lidamos com todos os `TodosUpdates` via:
 
-[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/map_todos_updated_to_state.dart.md ':include')
+[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/on_todos_updated.dart.md ':include')
 
 ## Juntando tudo
 
@@ -176,4 +176,4 @@ As principais diferenças a serem observadas são o fato de envolvermos todo o n
 
 Isso é tudo! Agora implementamos com sucesso um aplicativo firestore todos no flutter usando os pacotes [bloc](https://pub.dev/packages/bloc) e [flutter_bloc](https://pub.dev/packages/flutter_bloc) e nós separamos com êxito a camada de apresentação da lógica de negócios e também criamos um aplicativo que é atualizado em tempo real.
 
-O código fonte completo deste exemplo pode ser encontrada [aqui](https://github.com/felangel/Bloc/tree/master/examples/flutter_firestore_todos).
+O código fonte completo deste exemplo pode ser encontrada [aqui](https://github.com/felangel/bloc/tree/master/examples/flutter_firestore_todos).
