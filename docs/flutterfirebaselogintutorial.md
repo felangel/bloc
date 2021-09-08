@@ -99,7 +99,7 @@ Then install all of the dependencies:
 flutter packages get
 ```
 
-?> **Note**: We are depending on the `authentication_repository` package via path,n which will allow us to iterate quickly while still maintaining a clear separation.
+?> **Note**: We are depending on the `authentication_repository` package via path which will allow us to iterate quickly while still maintaining a clear separation.
 
 ## main.dart
 
