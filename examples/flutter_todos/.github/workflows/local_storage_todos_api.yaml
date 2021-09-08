@@ -8,6 +8,10 @@ on:
 
 jobs:
   build:
+    defaults:
+      run:
+        working-directory: packages/local_storage_todos_api
+
     runs-on: ubuntu-latest
 
     steps:
