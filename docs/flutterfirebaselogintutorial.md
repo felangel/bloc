@@ -39,7 +39,7 @@ We'll start by creating `packages/authentication_repository` and a `pubspec.yaml
 
 [pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/pubspec.yaml ':include')
 
-Next, we can install the dependencies by running...
+Next, we can install the dependencies by running:
 
 ```sh
 flutter packages get
