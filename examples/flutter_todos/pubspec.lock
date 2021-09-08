@@ -509,6 +509,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0+1"
+  todos_repository:
+    dependency: "direct main"
+    description:
+      path: "packages/todos_repository"
+      relative: true
+    source: path
+    version: "1.0.0+1"
   typed_data:
     dependency: transitive
     description:
