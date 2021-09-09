@@ -7,7 +7,7 @@ environment:
   sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
-  bloc: ^7.1.0
+  bloc: ^7.2.0-dev.1
   flutter:
     sdk: flutter
   flutter_bloc: ^7.2.0
@@ -16,6 +16,8 @@ dependencies:
   intl: ^0.17.0
   local_storage_todos_api:
     path: packages/local_storage_todos_api
+  todos_api:
+    path: packages/todos_api
   todos_repository:
     path: packages/todos_repository
 

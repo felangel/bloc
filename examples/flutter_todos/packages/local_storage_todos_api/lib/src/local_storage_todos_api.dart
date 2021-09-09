@@ -11,11 +11,14 @@ import 'package:todos_api/todos_api.dart';
 /// {@endtemplate}
 class LocalStorageTodosApi extends TodosApi {
   /// {@macro local_storage_todos_api}
-  LocalStorageTodosApi(SharedPreferences plugin) : _plugin = plugin {
+  LocalStorageTodosApi({
+    required SharedPreferences plugin,
+  }) : _plugin = plugin {
     _init();
   }
 
   final SharedPreferences _plugin;
+
   final _todoStreamController = BehaviorSubject<List<Todo>>.seeded(const []);
 
   /// The key used for storing the todos locally.
@@ -36,15 +39,17 @@ class LocalStorageTodosApi extends TodosApi {
           .map((jsonMap) => Todo.fromJson(Map<String, dynamic>.from(jsonMap)))
           .toList();
       _todoStreamController.add(todos);
+    } else {
+      _todoStreamController.add(const []);
     }
   }
 
   @override
-  Stream<List<Todo>> getTodos() => _todoStreamController.stream;
+  Stream<List<Todo>> getTodos() => _todoStreamController.asBroadcastStream();
 
   @override
   Future<void> saveTodo(Todo todo) {
-    final todos = _todoStreamController.value;
+    final todos = [..._todoStreamController.value];
     final todoIndex = todos.indexWhere((t) => t.id == todo.id);
     if (todoIndex >= 0) {
       todos[todoIndex] = todo;
@@ -58,7 +63,7 @@ class LocalStorageTodosApi extends TodosApi {
 
   @override
   Future<void> deleteTodo(String id) async {
-    final todos = _todoStreamController.value;
+    final todos = [..._todoStreamController.value];
     final todoIndex = todos.indexWhere((t) => t.id == id);
     if (todoIndex == -1) {
       throw TodoNotFoundException();
@@ -71,7 +76,7 @@ class LocalStorageTodosApi extends TodosApi {
 
   @override
   Future<int> deleteCompleted() async {
-    final todos = _todoStreamController.value;
+    final todos = [..._todoStreamController.value];
     final completedTodos = todos.where((t) => t.completed).toList();
     todos.removeWhere((t) => t.completed);
     _todoStreamController.add(todos);

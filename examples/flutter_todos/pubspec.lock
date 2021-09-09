@@ -35,7 +35,7 @@ packages:
       name: bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.1.0"
+    version: "7.2.0-dev.1"
   bloc_test:
     dependency: "direct dev"
     description:
@@ -503,7 +503,7 @@ packages:
     source: hosted
     version: "0.3.19"
   todos_api:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "packages/todos_api"
       relative: true

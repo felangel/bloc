@@ -1,7 +1,80 @@
 {
-    "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
+  "@@locale": "en",
+  "todosOverviewAppBarTitle": "Flutter Todos",
+  "@todosOverviewAppBarTitle": {
+    "description": "Title text shown in the AppBar of the Todos Overview Page"
+  },
+  "todosOverviewFilterTooltip": "Filter",
+  "@todosOverviewFilterTooltip": {
+    "description": "Tooltip text shown in the filter dropdown of the Todos Overview Page"
+  },
+  "todosOverviewFilterAll": "All",
+  "@todosOverviewFilterAll": {
+    "description": "Text shown in the filter dropdown of the Todos Overview Page for the option to display all todos"
+  },
+  "todosOverviewFilterActiveOnly": "Active only",
+  "@todosOverviewFilterActiveOnly": {
+    "description": "Text shown in the filter dropdown of the Todos Overview Page for the option to display active todos only"
+  },
+  "todosOverviewFilterCompletedOnly": "Completed only",
+  "@todosOverviewFilterCompletedOnly": {
+    "description": "Text shown in the filter dropdown of the Todos Overview Page for the option to display completed todos only"
+  },
+  "todosOverviewMarkAllCompleteButtonText": "Mark all complete",
+  "@todosOverviewMarkAllCompleteButtonText": {
+    "description": "Button text shown in the options dropdown of the Todos Overview Page that marks all current todos as complete"
+  },
+  "todosOverviewClearCompletedButtonText": "Clear completed",
+  "@todosOverviewClearCompletedButtonText": {
+    "description": "Button text shown in the options dropdown of the Todos Overview Page that deletes all completed todos"
+  },
+  "todosOverviewEmptyText": "No todos found with the selected filters.",
+  "@todosOverviewEmptyText": {
+    "description": "Text shown in the Todos Overview Page when no todos are found with the selected filters"
+  },
+  "todosOverviewTodoDeletedSnackbarText": "Todo \"{todoTitle}\" deleted.",
+  "@todosOverviewTodoDeletedSnackbarText": {
+    "description": "Snackbar text shown when a todo is deleted from the Todos Overview Page",
+    "placeholders": {
+      "todoTitle": {
+        "description": "The title of the todo that was deleted"
+      }
     }
+  },
+  "todosOverviewUndoDeletionButtonText": "Undo",
+  "@todosOverviewUndoDeletionButtonText": {
+    "description": "Button text shown in the snackbar that undoes a deletion of a todo"
+  },
+  "todosOverviewErrorSnackbarText": "An error occurred while loading todos.",
+  "@todosOverviewErrorSnackbarText": {
+    "description": "Snackbar text shown when an error occurs while loading todos"
+  },
+  "todoDetailsAppBarTitle": "Todo Details",
+  "@todoDetailsAppBarTitle": {
+    "description": "Title text shown in the AppBar of the Todo Details Page"
+  },
+  "todoDetailsDeleteButtonTooltip": "Delete",
+  "@todoDetailsDeleteButtonTooltip": {
+    "description": "Tooltip text shown in the delete button on the Todo Details Page"
+  },
+  "todoDetailsEditButtonTooltip": "Edit",
+  "@todoDetailsEditButtonTooltip": {
+    "description": "Tooltip text shown in the edit button on the Todo Details Page"
+  },
+  "todoEditAppBarTitle": "Edit Todo",
+  "@todoEditAppBarTitle": {
+    "description": "Title text shown in the AppBar of the Todo Edit Page"
+  },
+  "todoEditTitleLabel": "Title",
+  "@todoEditTitleLabel": {
+    "description": "Label text shown in the title input field of the Todo Edit Page"
+  },
+  "todoEditDescriptionLabel": "Description",
+  "@todoEditDescriptionLabel": {
+    "description": "Label text shown in the description input field of the Todo Edit Page"
+  },
+  "todoEditSaveButtonTooltip": "Save changes",
+  "@todoEditSaveButtonTooltip": {
+    "description": "Tooltip text shown in the save button on the Todo Edit Page"
+  }
 }

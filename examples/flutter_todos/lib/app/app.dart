@@ -1,22 +1,27 @@
-// Copyright (c) 2021, Very Good Ventures
-// https://verygood.ventures
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file or at
-// https://opensource.org/licenses/MIT.
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_todos/counter/counter.dart';
+import 'package:flutter_todos/home/home.dart';
 import 'package:flutter_todos/l10n/l10n.dart';
 import 'package:flutter_todos/theme/theme.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({
+    Key? key,
+    required this.todosRepository,
+  }) : super(key: key);
+
+  final TodosRepository todosRepository;
 
   @override
   Widget build(BuildContext context) {
-    return const AppView();
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(value: todosRepository),
+      ],
+      child: const AppView(),
+    );
   }
 }
 
@@ -33,7 +38,7 @@ class AppView extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const CounterPage(),
+      home: const HomePage(),
     );
   }
 }

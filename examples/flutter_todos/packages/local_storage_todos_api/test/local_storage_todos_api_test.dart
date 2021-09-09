@@ -38,7 +38,9 @@ void main() {
     });
 
     LocalStorageTodosApi createSubject() {
-      return LocalStorageTodosApi(plugin);
+      return LocalStorageTodosApi(
+        plugin: plugin,
+      );
     }
 
     group('constructor', () {

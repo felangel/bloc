@@ -7,6 +7,9 @@ class FlutterTodosTheme {
       colorScheme: ColorScheme.fromSwatch(
         accentColor: const Color(0xFF13B9FF),
       ),
+      snackBarTheme: const SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 
@@ -16,6 +19,9 @@ class FlutterTodosTheme {
       colorScheme: ColorScheme.fromSwatch(
         brightness: Brightness.dark,
         accentColor: const Color(0xFF13B9FF),
+      ),
+      snackBarTheme: const SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
