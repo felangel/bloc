@@ -1,3 +1,12 @@
+# 7.2.0-dev.2
+
+- **BREAKING**: refactor!: make `onData` callback in `emit.onEach` and `emit.forEach` named
+- **BREAKING**: feat!: rename `emit.isCanceled` to `emit.isDone` to encapsulate completion and cancelation
+- feat: introduce optional `onError` in `emit.onEach` and `emit.forEach`
+- feat: throw `AssertionError` when `emit` is called in a completed `EventHandler`
+- feat: throw `AssertionError` when `emit.onEach` and `emit.forEach` are unawaited
+- fix: `emit.onEach` and `emit.forEach` error propagation when stream emits an error
+
 # 7.2.0-dev.1
 
 - feat: introduce `on<Event>` API to register event handlers
