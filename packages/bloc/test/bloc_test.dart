@@ -216,7 +216,9 @@ void main() {
         await Future<void>.delayed(const Duration(milliseconds: 20));
         complexBloc.add(ComplexEventD());
         await Future<void>.delayed(const Duration(milliseconds: 200));
-        complexBloc..add(ComplexEventC())..add(ComplexEventA());
+        complexBloc
+          ..add(ComplexEventC())
+          ..add(ComplexEventA());
         await Future<void>.delayed(const Duration(milliseconds: 120));
         complexBloc.add(ComplexEventC());
       });
@@ -828,7 +830,10 @@ void main() {
 
         await Future<void>.delayed(Duration.zero);
 
-        controller..add(0)..add(1)..add(2);
+        controller
+          ..add(0)
+          ..add(1)
+          ..add(2);
 
         await Future<void>.delayed(Duration.zero);
 
@@ -836,7 +841,9 @@ void main() {
 
         await Future<void>.delayed(Duration.zero);
 
-        controller..add(3)..add(4);
+        controller
+          ..add(3)
+          ..add(4);
 
         await Future<void>.delayed(const Duration(milliseconds: 300));
 
@@ -856,13 +863,18 @@ void main() {
 
         await Future<void>.delayed(Duration.zero);
 
-        controller..add(0)..add(1)..add(2);
+        controller
+          ..add(0)
+          ..add(1)
+          ..add(2);
 
         bloc.add(ForEach());
 
         await Future<void>.delayed(Duration.zero);
 
-        controller..add(3)..add(4);
+        controller
+          ..add(3)
+          ..add(4);
 
         await Future<void>.delayed(const Duration(milliseconds: 300));
 
@@ -880,12 +892,17 @@ void main() {
 
         await Future<void>.delayed(Duration.zero);
 
-        controller..add(0)..add(1)..add(2);
+        controller
+          ..add(0)
+          ..add(1)
+          ..add(2);
 
         bloc.add(OnEach());
         await Future<void>.delayed(Duration.zero);
 
-        controller..add(3)..add(4);
+        controller
+          ..add(3)
+          ..add(4);
 
         await Future<void>.delayed(const Duration(milliseconds: 300));
 
