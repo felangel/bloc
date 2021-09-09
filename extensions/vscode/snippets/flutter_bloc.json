@@ -128,13 +128,13 @@
     "prefix": "read",
     "body": "context.read<${1:Subject}${2|Bloc,Cubit,Repository|}>()"
   },
-  "context.select()": {
-    "prefix": "select",
-    "body": "context.select((${1:Subject}${2|Bloc,Cubit|} ${3:element}) => $3$4)"
-  },
   "context.watch()": {
     "prefix": "watch",
     "body": "context.watch<${1:Subject}${2|Bloc,Cubit,Repository|}>()"
+  },
+  "context.select()": {
+    "prefix": "select",
+    "body": "context.select<${1:Subject}${2|Bloc,Cubit|}, ${1:Subject}State> ((${3:element}) => $3$0)"
   },
   "Import package:flutter_bloc": {
     "prefix": "importflutterbloc",
