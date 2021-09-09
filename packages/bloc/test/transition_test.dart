@@ -1,6 +1,6 @@
+import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
-import 'package:bloc/bloc.dart';
 
 @immutable
 abstract class TransitionEvent {}
