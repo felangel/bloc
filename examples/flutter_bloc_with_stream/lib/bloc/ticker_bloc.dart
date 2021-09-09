@@ -17,7 +17,7 @@ class TickerBloc extends Bloc<TickerEvent, TickerState> {
       (event, emit) {
         return emit.onEach<int>(
           ticker.tick(),
-          (tick) => add(_TickerTicked(tick)),
+          onData: (tick) => add(_TickerTicked(tick)),
         );
       },
       transformer: restartable(),
