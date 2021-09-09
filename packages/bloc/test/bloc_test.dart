@@ -6,6 +6,8 @@ import 'package:test/test.dart';
 
 import 'blocs/blocs.dart';
 
+Future<void> tick() => Future<void>.delayed(Duration.zero);
+
 class MockBlocObserver extends Mock implements BlocObserver {}
 
 class FakeBlocBase<S> extends Fake implements BlocBase<S> {}
@@ -433,6 +435,29 @@ void main() {
           ..add(CounterEvent.increment)
           ..close();
       });
+
+      test('events are processed asynchronously', () async {
+        expect(counterBloc.state, 0);
+        expect(events.isEmpty, true);
+        expect(transitions.isEmpty, true);
+
+        counterBloc.add(CounterEvent.increment);
+
+        expect(counterBloc.state, 0);
+        expect(events, [CounterEvent.increment]);
+        expect(transitions.isEmpty, true);
+
+        await tick();
+
+        expect(counterBloc.state, 1);
+        expect(events, [CounterEvent.increment]);
+        expect(
+          transitions,
+          const [
+            '''Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }'''
+          ],
+        );
+      });
     });
 
     group('Async Bloc', () {
@@ -828,18 +853,18 @@ void main() {
           ..stream.listen(states.add)
           ..add(Subscribe());
 
-        await Future<void>.delayed(Duration.zero);
+        await tick();
 
         controller
           ..add(0)
           ..add(1)
           ..add(2);
 
-        await Future<void>.delayed(Duration.zero);
+        await tick();
 
         bloc.add(Subscribe());
 
-        await Future<void>.delayed(Duration.zero);
+        await tick();
 
         controller
           ..add(3)
@@ -853,6 +878,29 @@ void main() {
     });
 
     group('RestartableStreamBloc', () {
+      test('unawaited forEach throws AssertionError', () async {
+        late final Object blocError;
+        await runZonedGuarded(() async {
+          final controller = StreamController<int>.broadcast();
+          final bloc = RestartableStreamBloc(controller.stream)
+            ..add(UnawaitedForEach());
+
+          await tick();
+
+          controller.add(0);
+
+          await tick();
+
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+
+          await bloc.close();
+        }, (error, stackTrace) {
+          blocError = error;
+        });
+
+        expect(blocError, isA<AssertionError>());
+      });
+
       test('forEach cancels subscriptions correctly', () async {
         const expectedStates = [3, 4];
         final states = <int>[];
@@ -861,7 +909,7 @@ void main() {
           ..stream.listen(states.add)
           ..add(ForEach());
 
-        await Future<void>.delayed(Duration.zero);
+        await tick();
 
         controller
           ..add(0)
@@ -870,7 +918,7 @@ void main() {
 
         bloc.add(ForEach());
 
-        await Future<void>.delayed(Duration.zero);
+        await tick();
 
         controller
           ..add(3)
@@ -882,23 +930,141 @@ void main() {
         expect(states, equals(expectedStates));
       });
 
-      test('onEach cancels subscriptions correctly', () async {
+      test(
+          'forEach with try/catch handles errors '
+          'emitted by stream and cancels delayed emits', () async {
+        const expectedStates = [-1];
+        final error = Exception('oops');
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final bloc = RestartableStreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(ForEachTryCatch());
+
+        await tick();
+
+        controller
+          ..add(1)
+          ..add(2)
+          ..add(3)
+          ..addError(error);
+
+        await tick();
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        expect(states, equals(expectedStates));
+
+        await bloc.close();
+      });
+
+      test(
+          'forEach with onError handles errors emitted by stream '
+          'and does not cancel the subscription', () async {
+        const expectedStates = [1, 2, 3, -1, 4, 5, 6];
+        final error = Exception('oops');
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final bloc = RestartableStreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(ForEachOnError());
+
+        await tick();
+
+        controller
+          ..add(1)
+          ..add(2)
+          ..add(3);
+
+        await tick();
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        controller
+          ..addError(error)
+          ..add(4)
+          ..add(5)
+          ..add(6);
+        await tick();
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        expect(states, equals(expectedStates));
+
+        await bloc.close();
+      });
+
+      test('forEach with try/catch handles errors emitted by stream', () async {
+        const expectedStates = [1, 2, 3, -1];
+        final error = Exception('oops');
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final bloc = RestartableStreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(ForEachTryCatch());
+
+        await tick();
+
+        controller
+          ..add(1)
+          ..add(2)
+          ..add(3);
+
+        await tick();
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        controller.addError(error);
+        await tick();
+
+        expect(states, equals(expectedStates));
+
+        await bloc.close();
+      });
+
+      test(
+          'forEach with catchError '
+          'handles errors emitted by stream', () async {
+        const expectedStates = [1, 2, 3, -1];
+        final error = Exception('oops');
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final bloc = RestartableStreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(ForEachCatchError());
+
+        await tick();
+
+        controller
+          ..add(1)
+          ..add(2)
+          ..add(3);
+
+        await tick();
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        controller.addError(error);
+        await tick();
+
+        expect(states, equals(expectedStates));
+
+        await bloc.close();
+      });
+
+      test('forEach cancels subscriptions correctly', () async {
         const expectedStates = [3, 4];
         final states = <int>[];
         final controller = StreamController<int>.broadcast();
         final bloc = RestartableStreamBloc(controller.stream)
           ..stream.listen(states.add)
-          ..add(OnEach());
+          ..add(ForEach());
 
-        await Future<void>.delayed(Duration.zero);
+        await tick();
 
         controller
           ..add(0)
           ..add(1)
           ..add(2);
 
-        bloc.add(OnEach());
-        await Future<void>.delayed(Duration.zero);
+        bloc.add(ForEach());
+
+        await tick();
 
         controller
           ..add(3)
@@ -908,6 +1074,268 @@ void main() {
 
         await bloc.close();
         expect(states, equals(expectedStates));
+      });
+
+      test('forEach throws when stream emits error', () async {
+        const expectedStates = [1, 2, 3];
+        final error = Exception('oops');
+        final states = <int>[];
+        late final dynamic uncaughtError;
+
+        await runZonedGuarded(() async {
+          final controller = StreamController<int>.broadcast();
+          final bloc = RestartableStreamBloc(controller.stream)
+            ..stream.listen(states.add)
+            ..add(ForEach());
+
+          await tick();
+
+          controller
+            ..add(1)
+            ..add(2)
+            ..add(3);
+
+          await tick();
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+
+          controller
+            ..addError(error)
+            ..add(3)
+            ..add(4)
+            ..add(5);
+
+          await bloc.close();
+        }, (error, stackTrace) => uncaughtError = error);
+        expect(states, equals(expectedStates));
+        expect(
+          uncaughtError,
+          isA<BlocUnhandledErrorException>()
+              .having((e) => e.error, 'error', error),
+        );
+      });
+
+      test('unawaited onEach throws AssertionError', () async {
+        late final Object blocError;
+        await runZonedGuarded(() async {
+          final controller = StreamController<int>.broadcast();
+          final bloc = RestartableStreamBloc(controller.stream)
+            ..add(UnawaitedOnEach());
+
+          await bloc.close();
+        }, (error, stackTrace) {
+          blocError = error;
+        });
+
+        expect(blocError, isA<AssertionError>());
+      });
+
+      test(
+          'onEach with onError handles errors emitted by stream '
+          'and does not cancel subscription', () async {
+        const expectedStates = [1, 2, 3, -1, 4, 5, 6];
+        final error = Exception('oops');
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final bloc = RestartableStreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(OnEachOnError());
+
+        await tick();
+
+        controller
+          ..add(1)
+          ..add(2)
+          ..add(3);
+
+        await tick();
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        controller
+          ..addError(error)
+          ..add(4)
+          ..add(5)
+          ..add(6);
+        await tick();
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        expect(states, equals(expectedStates));
+
+        await bloc.close();
+      });
+
+      test('onEach with try/catch handles errors emitted by stream', () async {
+        const expectedStates = [1, 2, 3, -1];
+        final error = Exception('oops');
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final bloc = RestartableStreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(OnEachTryCatch());
+
+        await tick();
+
+        controller
+          ..add(1)
+          ..add(2)
+          ..add(3);
+
+        await tick();
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        controller.addError(error);
+        await tick();
+
+        expect(states, equals(expectedStates));
+
+        await bloc.close();
+      });
+
+      test(
+          'onEach with try/catch handles errors '
+          'emitted by stream and cancels delayed emits', () async {
+        const expectedStates = [-1];
+        final error = Exception('oops');
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final bloc = RestartableStreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(OnEachTryCatchAbort());
+
+        await tick();
+
+        controller
+          ..add(1)
+          ..add(2)
+          ..add(3)
+          ..addError(error);
+
+        await tick();
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        expect(states, equals(expectedStates));
+
+        await bloc.close();
+      });
+
+      test(
+          'onEach with catchError '
+          'handles errors emitted by stream', () async {
+        const expectedStates = [1, 2, 3, -1];
+        final error = Exception('oops');
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final bloc = RestartableStreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(OnEachCatchError());
+
+        await tick();
+
+        controller
+          ..add(1)
+          ..add(2)
+          ..add(3);
+
+        await tick();
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        controller.addError(error);
+        await tick();
+
+        expect(states, equals(expectedStates));
+
+        await bloc.close();
+      });
+
+      test('onEach cancels subscriptions correctly', () async {
+        const expectedStates = [3, 4];
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final bloc = RestartableStreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(OnEach());
+
+        await tick();
+
+        controller
+          ..add(0)
+          ..add(1)
+          ..add(2);
+
+        bloc.add(OnEach());
+        await tick();
+
+        controller
+          ..add(3)
+          ..add(4);
+
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        await bloc.close();
+        expect(states, equals(expectedStates));
+      });
+
+      test('onEach throws when stream emits error', () async {
+        const expectedStates = [1, 2, 3];
+        final error = Exception('oops');
+        final states = <int>[];
+        late final dynamic uncaughtError;
+
+        await runZonedGuarded(() async {
+          final controller = StreamController<int>.broadcast();
+          final bloc = RestartableStreamBloc(controller.stream)
+            ..stream.listen(states.add)
+            ..add(OnEach());
+
+          await tick();
+
+          controller
+            ..add(1)
+            ..add(2)
+            ..add(3);
+
+          await tick();
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+
+          controller
+            ..addError(error)
+            ..add(4)
+            ..add(5)
+            ..add(6);
+
+          await tick();
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+
+          await bloc.close();
+        }, (error, stack) => uncaughtError = error);
+
+        expect(states, equals(expectedStates));
+        expect(
+          uncaughtError,
+          isA<BlocUnhandledErrorException>()
+              .having((e) => e.error, 'error', error),
+        );
+      });
+    });
+
+    group('UnawaitedBloc', () {
+      test(
+          'throws AssertionError when emit is called '
+          'after the event handler completed normally', () async {
+        late final Object blocError;
+        await runZonedGuarded(() async {
+          final completer = Completer<void>();
+          final bloc = UnawaitedBloc(completer.future)..add(UnawaitedEvent());
+
+          await tick();
+
+          completer.complete();
+
+          await tick();
+
+          await bloc.close();
+        }, (error, stackTrace) => blocError = error);
+
+        expect(blocError, isA<AssertionError>());
       });
     });
 

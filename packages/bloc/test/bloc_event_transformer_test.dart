@@ -14,7 +14,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       (event, emit) {
         onCalls.add(event);
         return Future<void>.delayed(delay, () {
-          if (emit.isCanceled) return;
+          if (emit.isDone) return;
           onEmitCalls.add(event);
           emit(state + 1);
         });
@@ -28,6 +28,16 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 
 void main() {
+  late EventTransformer transformer;
+
+  setUp(() {
+    transformer = Bloc.transformer;
+  });
+
+  tearDown(() {
+    Bloc.transformer = transformer;
+  });
+
   test('processes events concurrently by default', () async {
     final states = <int>[];
     final bloc = CounterBloc()
@@ -123,7 +133,6 @@ void main() {
   test(
       'processes events sequentially when '
       'Bloc.transformer is overridden.', () async {
-    final defaultTransformer = Bloc.transformer;
     Bloc.transformer = (events, mapper) => events.asyncExpand<dynamic>(mapper);
     final states = <int>[];
     final bloc = CounterBloc()
@@ -208,6 +217,5 @@ void main() {
     );
 
     expect(states, equals([1, 2, 3]));
-    Bloc.transformer = defaultTransformer;
   });
 }
