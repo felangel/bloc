@@ -10,11 +10,11 @@
 
 ## Key Topics
 
-- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
-- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
+- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), a Flutter widget which provides a bloc to its children.
+- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), a Flutter widget that handles building the widget in response to new states.
 - Using Bloc instead of Cubit. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
 - Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
-- Use the `transformEvents` method with Rx.
+- Use a custom `EventTransformer` with [`bloc_concurrency`](https://pub.dev/packages/bloc_concurrency).
 - Making network requests using the `http` package.
 
 ## Common Github Search Library
@@ -53,7 +53,7 @@ Let's create `github_client.dart`.
 
 ?> **Note:** Our `GithubClient` is simply making a network request to Github's Repository Search API and converting the result into either a `SearchResult` or `SearchResultError` as a `Future`.
 
-?> **Note:** The `GithubClient` implementation depends on `SearchResult.fromJson` which we have not yet implemented.
+?> **Note:** The `GithubClient` implementation depends on `SearchResult.fromJson`, which we have not yet implemented.
 
 Next we need to define our `SearchResult` and `SearchResultError` models.
 
@@ -63,7 +63,7 @@ Create `search_result.dart`, which represents a list of `SearchResultItems` base
 
 [search_result.dart](_snippets/flutter_angular_github_search/common/search_result.dart.md ':include')
 
-?> **Note:** The `SearchResult` implementation depends on `SearchResultItem.fromJson` which we have not yet implemented.
+?> **Note:** The `SearchResult` implementation depends on `SearchResultItem.fromJson`, which we have not yet implemented.
 
 ?> **Note:** We aren't including properties that aren't going to be used in our model.
 
@@ -73,7 +73,7 @@ Next, we'll create `search_result_item.dart`.
 
 [search_result_item.dart](_snippets/flutter_angular_github_search/common/search_result_item.dart.md ':include')
 
-?> **Note:** Again, the `SearchResultItem` implementation dependes on `GithubUser.fromJson` which we have not yet implemented.
+?> **Note:** Again, the `SearchResultItem` implementation dependes on `GithubUser.fromJson`, which we have not yet implemented.
 
 #### Github User Model
 
@@ -81,7 +81,7 @@ Next, we'll create `github_user.dart`.
 
 [github_user.dart](_snippets/flutter_angular_github_search/common/github_user.dart.md ':include')
 
-At this point we have finished implementing `SearchResult` and its dependencies so next we'll move onto `SearchResultError`.
+At this point, we have finished implementing `SearchResult` and its dependencies. Now we'll move onto `SearchResultError`.
 
 #### Search Result Error Model
 
@@ -89,7 +89,7 @@ Create `search_result_error.dart`.
 
 [search_result_error.dart](_snippets/flutter_angular_github_search/common/search_result_error.dart.md ':include')
 
-Our `GithubClient` is finished so next we'll move onto the `GithubCache` which will be responsible for [memoizing](https://en.wikipedia.org/wiki/Memoization) as a performance optimization.
+Our `GithubClient` is finished so next we'll move onto the `GithubCache`, which will be responsible for [memoizing](https://en.wikipedia.org/wiki/Memoization) as a performance optimization.
 
 ### Github Cache
 
@@ -121,42 +121,44 @@ Create `github_search_event.dart`.
 
 [github_search_event.dart](_snippets/flutter_angular_github_search/common/github_search_event.dart.md ':include')
 
-?> **Note:** We extend [`Equatable`](https://pub.dev/packages/equatable) so that we can compare instances of `GithubSearchEvent`; by default, the equality operator returns true if and only if this and other are the same instance.
+?> **Note:** We extend [`Equatable`](https://pub.dev/packages/equatable) so that we can compare instances of `GithubSearchEvent`. By default, the equality operator returns true if and only if this and other are the same instance.
 
 ### Github Search State
 
 Our presentation layer will need to have several pieces of information in order to properly lay itself out:
 
-- `SearchStateEmpty`- will tell the presentation layer that no input has been given by the user
+- `SearchStateEmpty`- will tell the presentation layer that no input has been given by the user.
 
-- `SearchStateLoading`- will tell the presentation layer it has to display some sort of loading indicator
-- `SearchStateSuccess`- will tell the presentation layer that it has data to present
+- `SearchStateLoading`- will tell the presentation layer it has to display some sort of loading indicator.
 
-  - `items`- will be the `List<SearchResultItem>` which will be displayed
+- `SearchStateSuccess`- will tell the presentation layer that it has data to present.
+  
+  - `items`- will be the `List<SearchResultItem>` which will be displayed.
 
-- `SearchStateError`- will tell the presentation layer that an error has occurred while fetching repositories
-  - `error`- will be the exact error that occurred
+- `SearchStateError`- will tell the presentation layer that an error has occurred while fetching repositories.
+  
+  - `error`- will be the exact error that occurred.
 
 We can now create `github_search_state.dart` and implement it like so.
 
 [github_search_state.dart](_snippets/flutter_angular_github_search/common/github_search_state.dart.md ':include')
 
-?> **Note:** We extend [`Equatable`](https://pub.dev/packages/equatable) so that we can compare instances of `GithubSearchState`; by default, the equality operator returns true if and only if this and other are the same instance.
+?> **Note:** We extend [`Equatable`](https://pub.dev/packages/equatable) so that we can compare instances of `GithubSearchState`. By default, the equality operator returns true if and only if this and other are the same instance.
 
 Now that we have our Events and States implemented, we can create our `GithubSearchBloc`.
 
 ### Github Search Bloc
 
-Create `github_search_bloc.dart`
+Create `github_search_bloc.dart`:
 
 [github_search_bloc.dart](_snippets/flutter_angular_github_search/common/github_search_bloc.dart.md ':include')
 
 ?> **Note:** Our `GithubSearchBloc` converts `GithubSearchEvent` to `GithubSearchState` and has a dependency on the `GithubRepository`.
 
-?> **Note:** We override the `transformEvents` method to [debounce](http://reactivex.io/documentation/operators/debounce.html) the `GithubSearchEvents`. One of the reasons why we created a `Bloc` instead of a `Cubit` was to take advantage of these reactive operators. 
+?> **Note:** We create a custom `EventTransformer` to [debounce](https://pub.dev/documentation/stream_transform/latest/stream_transform/RateLimit/debounce.html) the `GithubSearchEvents`. One of the reasons why we created a `Bloc` instead of a `Cubit` was to take advantage of stream transformers.
 
 Awesome! We're all done with our `common_github_search` package.
-The finished product should look like [this](https://github.com/felangel/Bloc/tree/master/examples/github_search/common_github_search).
+The finished product should look like [this](https://github.com/felangel/bloc/tree/master/examples/github_search/common_github_search).
 
 Next, we'll work on the Flutter implementation.
 
@@ -176,22 +178,22 @@ Next, we need to update our `pubspec.yaml` to include all the necessary dependen
 
 ?> **Note:** We are including our newly created `common_github_search` library as a dependency.
 
-Now we need to install the dependencies.
+Now, we need to install the dependencies.
 
 [flutter_packages_get.sh](_snippets/flutter_angular_github_search/flutter/flutter_packages_get.sh.md ':include')
 
-That's it for project setup and since the `common_github_search` package contains our data layer as well as our business logic layer all we need to build is the presentation layer.
+That's it for project setup. Since the `common_github_search` package contains our data layer as well as our business logic layer, all we need to build is the presentation layer.
 
 ### Search Form
 
-We're going to need to create a form with a `SearchBar` and `SearchBody` widget.
+We're going to need to create a form with a `_SearchBar` and `_SearchBody` widget.
 
-- `SearchBar` will be responsible for taking user input.
-- `SearchBody` will be responsible for displaying search results, loading indicators, and errors.
+- `_SearchBar` will be responsible for taking user input.
+- `_SearchBody` will be responsible for displaying search results, loading indicators, and errors.
 
 Let's create `search_form.dart`.
 
-> Our `SearchForm` will be a `StatelessWidget` which renders the `SearchBar` and `SearchBody` widgets.
+> Our `SearchForm` will be a `StatelessWidget` which renders the `_SearchBar` and `_SearchBody` widgets.
 
 [search_form.dart](_snippets/flutter_angular_github_search/flutter/search_form.dart.md ':include')
 
@@ -199,7 +201,7 @@ Next, we'll implement `_SearchBar`.
 
 ### Search Bar
 
-> `SearchBar` is also going to be a `StatefulWidget` because it will need to maintain its own `TextController` so that we can keep track of what a user has entered as input.
+> `_SearchBar` is also going to be a `StatefulWidget` because it will need to maintain its own `TextEditingController` so that we can keep track of what a user has entered as input.
 
 [search_form.dart](_snippets/flutter_angular_github_search/flutter/search_bar.dart.md ':include')
 
@@ -209,27 +211,27 @@ We're done with `_SearchBar`, now onto `_SearchBody`.
 
 ### Search Body
 
-> `SearchBody` is a `StatelessWidget` which will be responsible for displaying search results, errors, and loading indicators. It will be the consumer of the `GithubSearchBloc`.
+> `_SearchBody` is a `StatelessWidget` which will be responsible for displaying search results, errors, and loading indicators. It will be the consumer of the `GithubSearchBloc`.
 
 [search_form.dart](_snippets/flutter_angular_github_search/flutter/search_body.dart.md ':include')
 
 ?> **Note:** `_SearchBody` uses `BlocBuilder` in order to rebuild in response to state changes. Since the bloc parameter of the `BlocBuilder` object was omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`. Read more [here.](https://bloclibrary.dev/#/flutterbloccoreconcepts?id=blocbuilder)
 
-If our state is `SearchStateSuccess` we render `_SearchResults` which we will implement next.
+If our state is `SearchStateSuccess`, we render `_SearchResults` which we will implement next.
 
 ### Search Results
 
-> `SearchResults` is a `StatelessWidget` which takes a `List<SearchResultItem>` and displays them as a list of `SearchResultItems`.
+> `_SearchResults` is a `StatelessWidget` which takes a `List<SearchResultItem>` and displays them as a list of `_SearchResultItems`.
 
 [search_form.dart](_snippets/flutter_angular_github_search/flutter/search_results.dart.md ':include')
 
-?> **Note:** We use `ListView.builder` in order to construct a scrollable list of `SearchResultItem`.
+?> **Note:** We use `ListView.builder` in order to construct a scrollable list of `_SearchResultItem`.
 
 It's time to implement `_SearchResultItem`.
 
 ### Search Result Item
 
-> `SearchResultItem` is a `StatelessWidget` and is responsible for rendering the information for a single search result. It is also responsible for handling user interaction and navigating to the repository url on a user tap.
+> `_SearchResultItem` is a `StatelessWidget` and is responsible for rendering the information for a single search result. It is also responsible for handling user interaction and navigating to the repository url on a user tap.
 
 [search_form.dart](_snippets/flutter_angular_github_search/flutter/search_result_item.dart.md ':include')
 
@@ -247,9 +249,9 @@ Now all that's left to do is implement our main app in `main.dart`.
 
 ?> **Note:** Our `GithubRepository` is created in `main` and injected into our `App`. Our `SearchForm` is wrapped in a `BlocProvider` which is responsible for initializing, closing, and making the instance of `GithubSearchBloc` available to the `SearchForm` widget and its children.
 
-That’s all there is to it! We’ve now successfully implemented a github search app in Flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
+That’s all there is to it! We’ve now successfully implemented a GitHub search app in Flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
 
-The full source can be found [here](https://github.com/felangel/Bloc/tree/master/examples/github_search/flutter_github_search).
+The full source can be found [here](https://github.com/felangel/bloc/tree/master/examples/github_search/flutter_github_search).
 
 Finally, we're going to build our AngularDart Github Search app.
 
@@ -263,7 +265,7 @@ We need to start by creating a new AngularDart project in our github_search dire
 
 [stagehand.sh](_snippets/flutter_angular_github_search/angular/stagehand.sh.md ':include')
 
-!> Activate stagehand by running `pub global activate stagehand`
+!> Activate stagehand by running `pub global activate stagehand`.
 
 We can then go ahead and replace the contents of `pubspec.yaml` with:
 
@@ -290,7 +292,7 @@ Our template (`search_form_component.html`) will look like:
 
 [search_form_component.html](_snippets/flutter_angular_github_search/angular/search_form_component.html.md ':include')
 
-Next, we'll implement the `SearchBar` Component.
+Next, we'll implement the `SearchBar` component.
 
 ### Search Bar
 
@@ -312,23 +314,23 @@ We're done with `SearchBar`, now onto `SearchBody`.
 
 > `SearchBody` is a component which will be responsible for displaying search results, errors, and loading indicators. It will be the consumer of the `GithubSearchBloc`.
 
-Create `search_body_component.dart`
+Create `search_body_component.dart`.
 
 [search_body_component.dart](_snippets/flutter_angular_github_search/angular/search_body_component.dart.md ':include')
 
 ?> **Note:** `SearchBodyComponent` has a dependency on `GithubSearchState` which is provided by the `GithubSearchBloc` using the `angular_bloc` bloc pipe.
 
-Create `search_body_component.html`
+Create `search_body_component.html`.
 
 [search_body_component.html](_snippets/flutter_angular_github_search/angular/search_body_component.html.md ':include')
 
-If our state `isSuccess` we render `SearchResults` which we will implement next.
+If our state `isSuccess`, we render `SearchResults`. We will implement it next.
 
 ### Search Results
 
 > `SearchResults` is a component which takes a `List<SearchResultItem>` and displays them as a list of `SearchResultItems`.
 
-Create `search_results_component.dart`
+Create `search_results_component.dart`.
 
 [search_results_component.dart](_snippets/flutter_angular_github_search/angular/search_results_component.dart.md ':include')
 
@@ -362,7 +364,7 @@ We have all of our components and now it's time to put them all together in our 
 
 That’s all there is to it! We’ve now successfully implemented a github search app in AngularDart using the `bloc` and `angular_bloc` packages and we’ve successfully separated our presentation layer from our business logic.
 
-The full source can be found [here](https://github.com/felangel/Bloc/tree/master/examples/github_search/angular_github_search).
+The full source can be found [here](https://github.com/felangel/bloc/tree/master/examples/github_search/angular_github_search).
 
 ## Summary
 
@@ -370,4 +372,4 @@ In this tutorial we created a Flutter and AngularDart app while sharing all of t
 
 The only thing we actually had to write twice was the presentation layer (UI) which is awesome in terms of efficiency and development speed. In addition, it's fairly common for web apps and mobile apps to have different user experiences and styles and this approach really demonstrates how easy it is to build two apps that look totally different but share the same data and business logic layers.
 
-The full source can be found [here](https://github.com/felangel/Bloc/tree/master/examples/github_search).
+The full source can be found [here](https://github.com/felangel/bloc/tree/master/examples/github_search).
