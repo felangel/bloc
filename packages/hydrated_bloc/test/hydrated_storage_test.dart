@@ -2,15 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:test/test.dart';
 import 'package:hive/hive.dart';
+// ignore: implementation_imports
+import 'package:hive/src/hive_impl.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:path/path.dart' as p;
 import 'package:pedantic/pedantic.dart';
-
-// ignore: implementation_imports
-import 'package:hive/src/hive_impl.dart';
+import 'package:test/test.dart';
 
 class MockBox extends Mock implements Box<dynamic> {}
 

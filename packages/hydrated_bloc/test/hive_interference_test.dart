@@ -1,11 +1,10 @@
 import 'dart:io';
 
-import 'package:test/test.dart';
 import 'package:hive/hive.dart';
-import 'package:path/path.dart' as p;
-
 // ignore: implementation_imports
 import 'package:hive/src/hive_impl.dart';
+import 'package:path/path.dart' as p;
+import 'package:test/test.dart';
 
 void main() {
   group('Hive interference', () {

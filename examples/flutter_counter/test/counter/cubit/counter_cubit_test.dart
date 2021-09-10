@@ -19,7 +19,9 @@ void main() {
       blocTest<CounterCubit, int>(
         'emits [1, 2] when state is 0 and invoked twice',
         build: () => CounterCubit(),
-        act: (cubit) => cubit..increment()..increment(),
+        act: (cubit) => cubit
+          ..increment()
+          ..increment(),
         expect: () => const <int>[1, 2],
       );
 
@@ -43,7 +45,9 @@ void main() {
       blocTest<CounterCubit, int>(
         'emits [-1, -2] when state is 0 and invoked twice',
         build: () => CounterCubit(),
-        act: (cubit) => cubit..decrement()..decrement(),
+        act: (cubit) => cubit
+          ..decrement()
+          ..decrement(),
         expect: () => const <int>[-1, -2],
       );
 

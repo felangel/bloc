@@ -333,7 +333,10 @@ void main() {
         ),
       );
       await tester.pump();
-      counterCubit..increment()..increment()..increment();
+      counterCubit
+        ..increment()
+        ..increment()
+        ..increment();
       await tester.pumpAndSettle();
 
       expect(buildStates, [0, 2]);
