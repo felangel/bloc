@@ -4,7 +4,7 @@
 
 For the sake of simplicity, let's write tests for the `CounterBloc` we created in [Core Concepts](coreconcepts.md).
 
-To recap, the `CounterBloc` implementation looks like
+To recap, the `CounterBloc` implementation looks like:
 
 [counter_bloc.dart](_snippets/testing/counter_bloc.dart.md ':include')
 
