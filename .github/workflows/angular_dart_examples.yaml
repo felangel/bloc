@@ -31,22 +31,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: "2.12.0"
+
       - name: Install Dependencies
         working-directory: ${{ matrix.folder }}
         run: pub get
+
       - name: Format
         working-directory: ${{ matrix.folder }}
         run: dart format --set-exit-if-changed .
+
       - name: Analyze
         working-directory: ${{ matrix.folder }}
         run: dart analyze --fatal-infos --fatal-warnings .
+
       - name: Run tests
         working-directory: ${{ matrix.folder }}
         run: |
           if [ -d "test" ]; then
             dart run build_runner test --fail-on-severe
           fi
+
   build:
     needs: [examples]
     runs-on: ubuntu-latest
