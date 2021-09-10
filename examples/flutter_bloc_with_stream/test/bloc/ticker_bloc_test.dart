@@ -42,7 +42,9 @@ void main() {
       'emits TickerTickSuccess '
       'from 1 to 3 and restarts',
       build: () => TickerBloc(ticker),
-      act: (bloc) => bloc..add(TickerStarted())..add(TickerStarted()),
+      act: (bloc) => bloc
+        ..add(TickerStarted())
+        ..add(TickerStarted()),
       expect: () => <TickerState>[
         const TickerTickSuccess(1),
         const TickerTickSuccess(2),

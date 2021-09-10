@@ -217,7 +217,9 @@ void main() {
         await Future<void>.delayed(const Duration(milliseconds: 20));
         complexBloc.add(ComplexEventD());
         await Future<void>.delayed(const Duration(milliseconds: 200));
-        complexBloc..add(ComplexEventC())..add(ComplexEventA());
+        complexBloc
+          ..add(ComplexEventC())
+          ..add(ComplexEventA());
         await Future<void>.delayed(const Duration(milliseconds: 120));
         complexBloc.add(ComplexEventC());
       });
