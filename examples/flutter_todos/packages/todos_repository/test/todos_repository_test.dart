@@ -102,13 +102,23 @@ void main() {
       });
     });
 
-    group('deleteIsCompleted', () {
+    group('clearCompleted', () {
       test('makes correct request', () {
         final subject = createSubject();
 
         expect(subject.clearCompleted(), completes);
 
         verify(() => api.clearCompleted()).called(1);
+      });
+    });
+
+    group('completeAll', () {
+      test('makes correct request', () {
+        final subject = createSubject();
+
+        expect(subject.completeAll(true), completes);
+
+        verify(() => api.completeAll(true)).called(1);
       });
     });
   });

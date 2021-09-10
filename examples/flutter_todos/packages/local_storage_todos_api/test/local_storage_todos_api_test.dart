@@ -51,12 +51,26 @@ void main() {
         );
       });
 
-      test('initializes the todos stream', () {
-        final subject = createSubject();
+      group('initializes the todos stream', () {
+        test('with existing todos if present', () {
+          final subject = createSubject();
 
-        expect(subject.getTodos(), emits(todos));
-        verify(() => plugin.getString(LocalStorageTodosApi.kTodosCollectionKey))
-            .called(1);
+          expect(subject.getTodos(), emits(todos));
+          verify(() => plugin.getString(
+                LocalStorageTodosApi.kTodosCollectionKey,
+              )).called(1);
+        });
+
+        test('with empty list if no todos present', () {
+          when(() => plugin.getString(any())).thenReturn(null);
+
+          final subject = createSubject();
+
+          expect(subject.getTodos(), emits(const <Todo>[]));
+          verify(() => plugin.getString(
+                LocalStorageTodosApi.kTodosCollectionKey,
+              )).called(1);
+        });
       });
     });
 
@@ -138,13 +152,39 @@ void main() {
       );
     });
 
-    group('deleteIsCompleted', () {
-      test('deletes all isCompleted todos', () {
+    group('clearCompleted', () {
+      test('deletes all completed todos', () {
         final newTodos = todos.where((todo) => !todo.isCompleted).toList();
+        final deletedTodosAmount = todos.length - newTodos.length;
 
         final subject = createSubject();
 
-        expect(subject.clearCompleted(), completes);
+        expect(
+          subject.clearCompleted(),
+          completion(equals(deletedTodosAmount)),
+        );
+        expect(subject.getTodos(), emits(newTodos));
+
+        verify(() => plugin.setString(
+              LocalStorageTodosApi.kTodosCollectionKey,
+              json.encode(newTodos),
+            )).called(1);
+      });
+    });
+
+    group('completeAll', () {
+      test('sets isCompleted on all todos to provided value', () {
+        final newTodos =
+            todos.map((todo) => todo.copyWith(isCompleted: true)).toList();
+        final changedTodosAmount =
+            todos.where((todo) => !todo.isCompleted).length;
+
+        final subject = createSubject();
+
+        expect(
+          subject.completeAll(true),
+          completion(equals(changedTodosAmount)),
+        );
         expect(subject.getTodos(), emits(newTodos));
 
         verify(() => plugin.setString(
