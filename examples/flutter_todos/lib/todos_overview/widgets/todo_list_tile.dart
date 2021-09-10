@@ -35,6 +35,7 @@ class TodoListTile extends StatelessWidget {
       ),
       child: ListTile(
         isThreeLine: true,
+        onTap: onTap,
         title: Text(
           todo.title,
           maxLines: 1,

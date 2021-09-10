@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_todos/edit_todo/view/edit_todo_page.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart';
 import 'package:flutter_todos/l10n/l10n.dart';
 import 'package:todos_api/todos_api.dart';
@@ -35,7 +36,15 @@ class TodosOverviewView extends StatelessWidget {
           TodosOverviewOptionsButton()
         ],
       ),
-      floatingActionButton: const AddTodoButton(),
+      floatingActionButton: FloatingActionButton(
+        shape: const ContinuousRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(32)),
+        ),
+        onPressed: () {
+          Navigator.of(context).push(EditTodoPage.route());
+        },
+        child: const Icon(Icons.add),
+      ),
       body: MultiBlocListener(
         listeners: [
           BlocListener<TodosOverviewBloc, TodosOverviewState>(
@@ -111,6 +120,10 @@ class TodosOverviewView extends StatelessWidget {
                             .read<TodosOverviewBloc>()
                             .add(TodosOverviewTodoDeleted(todo));
                       },
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(EditTodoPage.route(initialTodo: todo));
+                      },
                     ),
                 ],
               ),
@@ -118,41 +131,6 @@ class TodosOverviewView extends StatelessWidget {
           },
         ),
       ),
-    );
-  }
-}
-
-class AddTodoButton extends StatelessWidget {
-  const AddTodoButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      shape: const ContinuousRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(32)),
-      ),
-      onPressed: () {
-        final todo = Todo(
-          id: DateTime.now().toIso8601String(),
-          title: ([
-            'Foo',
-            'Bar',
-            'Baz',
-            'Quux',
-            'Xyzzy',
-            'Plugh',
-            'Bletch',
-          ]..shuffle())
-              .first,
-          description:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, '
-              'sed do eiusmod tempor incididunt ut labore et dolore magna '
-              'aliqua. Ut enim ad minim veniam, quis nostrud exercitation '
-              'ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-        );
-        context.read<TodosOverviewBloc>().add(TodosOverviewTodoSaved(todo));
-      },
-      child: const Icon(Icons.add),
     );
   }
 }

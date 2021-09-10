@@ -77,20 +77,24 @@
   "@todoDetailsEditButtonTooltip": {
     "description": "Tooltip text shown in the edit button on the Todo Details Page"
   },
-  "todoEditAppBarTitle": "Edit Todo",
-  "@todoEditAppBarTitle": {
-    "description": "Title text shown in the AppBar of the Todo Edit Page"
+  "editTodoEditAppBarTitle": "Edit Todo",
+  "@editTodoEditAppBarTitle": {
+    "description": "Title text shown in the AppBar of the Todo Edit Page when editing an existing todo"
   },
-  "todoEditTitleLabel": "Title",
-  "@todoEditTitleLabel": {
+  "editTodoAddAppBarTitle": "Add Todo",
+  "@editTodoAddAppBarTitle": {
+    "description": "Title text shown in the AppBar of the Todo Edit Page when adding a new todo"
+  },
+  "editTodoTitleLabel": "Title",
+  "@editTodoTitleLabel": {
     "description": "Label text shown in the title input field of the Todo Edit Page"
   },
-  "todoEditDescriptionLabel": "Description",
-  "@todoEditDescriptionLabel": {
+  "editTodoDescriptionLabel": "Description",
+  "@editTodoDescriptionLabel": {
     "description": "Label text shown in the description input field of the Todo Edit Page"
   },
-  "todoEditSaveButtonTooltip": "Save changes",
-  "@todoEditSaveButtonTooltip": {
+  "editTodoSaveButtonTooltip": "Save changes",
+  "@editTodoSaveButtonTooltip": {
     "description": "Tooltip text shown in the save button on the Todo Edit Page"
   }
 }
