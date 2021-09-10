@@ -1,3 +1,8 @@
+# 7.2.0-dev.3
+
+- **BREAKING**: refactor!: require `emit.forEach` `onData` to be synchronous
+- refactor: minor internal optimizations in `on<Event>` implementation
+
 # 7.2.0-dev.2
 
 - **BREAKING**: refactor!: make `onData` callback in `emit.onEach` and `emit.forEach` named
