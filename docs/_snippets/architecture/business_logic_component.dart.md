@@ -1,16 +1,16 @@
 ```dart
 class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
-    final Repository repository;
-
-    Stream mapEventToState(event) async* {
-        if (event is AppStarted) {
+    BusinessLogicComponent(this.repository) {
+        on<AppStarted>((event, emit) {
             try {
                 final data = await repository.getAllDataThatMeetsRequirements();
-                yield Success(data);
+                emit(Success(data));
             } catch (error) {
-                yield Failure(error);
+                emit(Failure(error));
             }
-        }
+        });
     }
+
+    final Repository repository;
 }
 ```
