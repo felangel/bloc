@@ -18,9 +18,9 @@ For simplicity, our `DataBloc` will only respond to a single `DataEvent` called 
 
 Our `DataBloc` can have one of three different `DataStates`:
 
-- `Initial` - the initial state before any events are added
-- `Loading` - the state of the bloc while it is asynchronously "fetching data"
-- `Success` - the state of the bloc when it has successfully "fetched data"
+- `Initial` - the initial state before any events are added.
+- `Loading` - the state of the bloc while it is asynchronously "fetching data".
+- `Success` - the state of the bloc when it has successfully "fetched data".
 
 [data_state.dart](_snippets/recipes_flutter_show_snack_bar/data_state.dart.md ':include')
 
