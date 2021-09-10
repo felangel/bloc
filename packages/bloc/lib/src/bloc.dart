@@ -151,7 +151,7 @@ ensure the event handler has not completed.
   });
 ''',
     );
-    _emit(state);
+    if (!isCanceled) _emit(state);
   }
 
   @override
@@ -405,24 +405,8 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     final subscription = _transformer(
       _eventController.stream.where((event) => event is E),
       (dynamic event) {
-        late final _Emitter<State> emitter;
-        late final StreamController<Event> controller;
-
-        void onDone(_Emitter<State> emitter) {
-          emitter.complete();
-          _emitters.remove(emitter);
-          if (!controller.isClosed) controller.close();
-        }
-
-        void onCancel(_Emitter<State> emitter) {
-          emitter.cancel();
-          _emitters.remove(emitter);
-          if (!controller.isClosed) controller.close();
-        }
-
-        void onEmit(State state, _Emitter<State> emitter) {
+        void onEmit(State state) {
           if (isClosed) return;
-          if (emitter.isCanceled) return;
           if (this.state == state && _emitted) return;
           onTransition(Transition(
             currentState: this.state,
@@ -432,24 +416,36 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
           emit(state);
         }
 
-        void handleEvent(_Emitter<State> emitter) async {
+        final emitter = _Emitter(onEmit);
+
+        void onCancel() {
+          emitter.cancel();
+          _emitters.remove(emitter);
+        }
+
+        final controller = StreamController<Event>.broadcast(
+          sync: true,
+          onCancel: onCancel,
+        );
+
+        void onDone() {
+          emitter.complete();
+          _emitters.remove(emitter);
+          if (!controller.isClosed) controller.close();
+        }
+
+        void handleEvent() async {
           try {
             _emitters.add(emitter);
             await handler(event as E, emitter);
           } catch (error, stackTrace) {
             onError(error, stackTrace);
           } finally {
-            onDone(emitter);
+            onDone();
           }
         }
 
-        emitter = _Emitter((state) => onEmit(state, emitter));
-        controller = StreamController<Event>.broadcast(
-          sync: true,
-          onCancel: () => onCancel(emitter),
-        );
-
-        handleEvent(emitter);
+        handleEvent();
         return controller.stream;
       },
     ).listen(null);
