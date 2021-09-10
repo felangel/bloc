@@ -208,7 +208,7 @@ CounterCubit Change { currentState: 0, nextState: 1 }
 
 ### Error Handling
 
-> Every `Cubit` has an `addError` method which can be used to indicate that an error has occurred.
+> Every `Cubit` has an `onError` method which can be used to indicate that an error has occurred.
 
 ```dart
 class CounterCubit extends Cubit<int> {
