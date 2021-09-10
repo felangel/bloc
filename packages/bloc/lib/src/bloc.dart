@@ -433,8 +433,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
         void handleEvent() async {
           try {
             _emitters.add(emitter);
-            final result = handler(event as E, emitter);
-            if (result is Future) await result;
+            await handler(event as E, emitter);
           } catch (error, stackTrace) {
             onError(error, stackTrace);
           } finally {
