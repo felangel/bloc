@@ -9,7 +9,7 @@ part 'todo.g.dart';
 /// {@template todo}
 /// A single todo item.
 ///
-/// Contains a [title], [description] and [id], in addition to a [completed]
+/// Contains a [title], [description] and [id], in addition to a [isCompleted]
 /// flag.
 ///
 /// If an [id] is provided, it cannot be empty. If no [id] is provided, one
@@ -27,7 +27,7 @@ class Todo extends Equatable {
     String? id,
     required this.title,
     this.description = '',
-    this.completed = false,
+    this.isCompleted = false,
   })  : assert(id == null || id.isNotEmpty),
         id = id ?? const Uuid().v4();
 
@@ -49,7 +49,7 @@ class Todo extends Equatable {
   /// Whether the todo is completed.
   ///
   /// Defaults to `false`.
-  final bool completed;
+  final bool isCompleted;
 
   /// Returns a copy of this todo with the given values updated.
   ///
@@ -58,13 +58,13 @@ class Todo extends Equatable {
     String? id,
     String? title,
     String? description,
-    bool? completed,
+    bool? isCompleted,
   }) {
     return Todo(
       id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
-      completed: completed ?? this.completed,
+      isCompleted: isCompleted ?? this.isCompleted,
     );
   }
 
@@ -75,5 +75,5 @@ class Todo extends Equatable {
   JsonMap toJson() => _$TodoToJson(this);
 
   @override
-  List<Object> get props => [id, title, description, completed];
+  List<Object> get props => [id, title, description, isCompleted];
 }

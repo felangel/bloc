@@ -27,7 +27,7 @@ void main() {
         id: '3',
         title: 'title 3',
         description: 'description 3',
-        completed: true,
+        isCompleted: true,
       ),
     ];
 
@@ -93,7 +93,7 @@ void main() {
           id: '1',
           title: 'new title 1',
           description: 'new description 1',
-          completed: true,
+          isCompleted: true,
         );
         final newTodos = [updatedTodo, ...todos.sublist(1)];
 
@@ -138,13 +138,13 @@ void main() {
       );
     });
 
-    group('deleteCompleted', () {
-      test('deletes all completed todos', () {
-        final newTodos = todos.where((todo) => !todo.completed).toList();
+    group('deleteIsCompleted', () {
+      test('deletes all isCompleted todos', () {
+        final newTodos = todos.where((todo) => !todo.isCompleted).toList();
 
         final subject = createSubject();
 
-        expect(subject.deleteCompleted(), completes);
+        expect(subject.clearCompleted(), completes);
         expect(subject.getTodos(), emits(newTodos));
 
         verify(() => plugin.setString(

@@ -8,13 +8,13 @@ void main() {
       String? id = '1',
       String title = 'title',
       String description = 'description',
-      bool completed = true,
+      bool isCompleted = true,
     }) {
       return Todo(
         id: id,
         title: title,
         description: description,
-        completed: completed,
+        isCompleted: isCompleted,
       );
     }
 
@@ -55,7 +55,7 @@ void main() {
           '1', // id
           'title', // title
           'description', // description
-          true, // completed
+          true, // isCompleted
         ]),
       );
     });
@@ -74,7 +74,7 @@ void main() {
             id: null,
             title: null,
             description: null,
-            completed: null,
+            isCompleted: null,
           ),
           equals(createSubject()),
         );
@@ -86,13 +86,13 @@ void main() {
             id: '2',
             title: 'new title',
             description: 'new description',
-            completed: false,
+            isCompleted: false,
           ),
           equals(createSubject(
             id: '2',
             title: 'new title',
             description: 'new description',
-            completed: false,
+            isCompleted: false,
           )),
         );
       });
@@ -105,7 +105,7 @@ void main() {
             'id': '1',
             'title': 'title',
             'description': 'description',
-            'completed': true,
+            'isCompleted': true,
           }),
           equals(createSubject()),
         );
@@ -120,7 +120,7 @@ void main() {
             'id': '1',
             'title': 'title',
             'description': 'description',
-            'completed': true,
+            'isCompleted': true,
           }),
         );
       });

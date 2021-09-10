@@ -24,7 +24,12 @@ abstract class TodosApi {
   /// Deletes all completed todos.
   ///
   /// Returns the number of deleted todos.
-  Future<int> deleteCompleted();
+  Future<int> clearCompleted();
+
+  /// Sets the `isCompleted` state of all todos to the given value.
+  ///
+  /// Returns the number of updated todos.
+  Future<int> completeAll(bool isCompleted);
 }
 
 /// Error thrown when a [Todo] with a given id is not found.

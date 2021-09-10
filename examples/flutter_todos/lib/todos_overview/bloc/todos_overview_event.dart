@@ -23,11 +23,11 @@ class TodosOverviewTodoSaved extends TodosOverviewEvent {
 class TodosOverviewTodoCompletionToggled extends TodosOverviewEvent {
   const TodosOverviewTodoCompletionToggled({
     required this.todo,
-    required this.completed,
+    required this.isCompleted,
   });
 
   final Todo todo;
-  final bool completed;
+  final bool isCompleted;
 }
 
 class TodosOverviewTodoDeleted extends TodosOverviewEvent {
@@ -41,4 +41,21 @@ class TodosOverviewTodoDeleted extends TodosOverviewEvent {
 
 class TodosOverviewUndoDeletionRequested extends TodosOverviewEvent {
   const TodosOverviewUndoDeletionRequested();
+}
+
+class TodosOverviewFilterChanged extends TodosOverviewEvent {
+  const TodosOverviewFilterChanged(this.filter);
+
+  final TodosViewFilter filter;
+
+  @override
+  List<Object> get props => [filter];
+}
+
+class TodosOverviewToggleAllRequested extends TodosOverviewEvent {
+  const TodosOverviewToggleAllRequested();
+}
+
+class TodosOverviewClearCompletedRequested extends TodosOverviewEvent {
+  const TodosOverviewClearCompletedRequested();
 }

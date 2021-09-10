@@ -27,7 +27,7 @@ void main() {
         id: '3',
         title: 'title 3',
         description: 'description 3',
-        completed: true,
+        isCompleted: true,
       ),
     ];
 
@@ -40,8 +40,8 @@ void main() {
       when(() => api.getTodos()).thenAnswer((_) => Stream.value(todos));
       when(() => api.saveTodo(any())).thenAnswer((_) async {});
       when(() => api.deleteTodo(any())).thenAnswer((_) async {});
-      when(() => api.deleteCompleted()).thenAnswer(
-        (_) async => todos.where((todo) => todo.completed).length,
+      when(() => api.clearCompleted()).thenAnswer(
+        (_) async => todos.where((todo) => todo.isCompleted).length,
       );
     });
 
@@ -102,13 +102,13 @@ void main() {
       });
     });
 
-    group('deleteCompleted', () {
+    group('deleteIsCompleted', () {
       test('makes correct request', () {
         final subject = createSubject();
 
-        expect(subject.deleteCompleted(), completes);
+        expect(subject.clearCompleted(), completes);
 
-        verify(() => api.deleteCompleted()).called(1);
+        verify(() => api.clearCompleted()).called(1);
       });
     });
   });

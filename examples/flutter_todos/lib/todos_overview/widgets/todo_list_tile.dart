@@ -17,13 +17,16 @@ class TodoListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final captionColor = theme.textTheme.caption?.color;
+
     return Dismissible(
       key: Key('todoListTile_dismissible_${todo.id}'),
       onDismissed: onDismissed == null ? null : (_) => onDismissed!(),
       direction: DismissDirection.endToStart,
       background: Container(
         alignment: Alignment.centerRight,
-        color: Theme.of(context).colorScheme.error,
+        color: theme.colorScheme.error,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: const Icon(
           Icons.delete,
@@ -31,16 +34,28 @@ class TodoListTile extends StatelessWidget {
         ),
       ),
       child: ListTile(
+        isThreeLine: true,
         title: Text(
           todo.title,
           maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: !todo.isCompleted
+              ? null
+              : TextStyle(
+                  color: captionColor,
+                  decoration: TextDecoration.lineThrough,
+                ),
         ),
         subtitle: Text(
           todo.description,
-          maxLines: 1,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
         leading: Checkbox(
-          value: todo.completed,
+          shape: const ContinuousRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          value: todo.isCompleted,
           onChanged: onToggleCompleted == null
               ? null
               : (value) => onToggleCompleted!(value!),

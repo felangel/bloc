@@ -28,5 +28,11 @@ class TodosRepository {
   /// Deletes all completed todos.
   ///
   /// Returns the number of deleted todos.
-  Future<int> deleteCompleted() => _todosApi.deleteCompleted();
+  Future<int> clearCompleted() => _todosApi.clearCompleted();
+
+  /// Sets the `isCompleted` state of all todos to the given value.
+  ///
+  /// Returns the number of updated todos.
+  Future<int> completeAll(bool isCompleted) =>
+      _todosApi.completeAll(isCompleted);
 }

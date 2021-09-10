@@ -49,6 +49,22 @@
   "@todosOverviewErrorSnackbarText": {
     "description": "Snackbar text shown when an error occurs while loading todos"
   },
+  "todosOverviewOptionsTooltip": "Options",
+  "@todosOverviewOptionsTooltip": {
+    "description": "Tooltip text shown in the options dropdown of the Todos Overview Page"
+  },
+  "todosOverviewOptionsMarkAllComplete": "Mark all as completed",
+  "@todosOverviewOptionsMarkAllComplete": {
+    "description": "Button text shown in the options dropdown of the Todos Overview Page that marks all todos as complete"
+  },
+  "todosOverviewOptionsMarkAllIncomplete": "Mark all as incomplete",
+  "@todosOverviewOptionsMarkAllIncomplete": {
+    "description": "Button text shown in the options dropdown of the Todos Overview Page that marks all todos as incomplete"
+  },
+  "todosOverviewOptionsClearCompleted": "Clear completed",
+  "@todosOverviewOptionsClearCompleted": {
+    "description": "Button text shown in the options dropdown of the Todos Overview Page that deletes all completed todos"
+  },
   "todoDetailsAppBarTitle": "Todo Details",
   "@todoDetailsAppBarTitle": {
     "description": "Title text shown in the AppBar of the Todo Details Page"
