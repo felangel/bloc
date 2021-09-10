@@ -178,7 +178,9 @@ void main() {
         final states = <int>[];
         final cubit = SeededCubit(initialState: 0);
         final subscription = cubit.stream.listen(states.add);
-        cubit..emitState(0)..emitState(0);
+        cubit
+          ..emitState(0)
+          ..emitState(0);
         await cubit.close();
         await subscription.cancel();
         expect(states, [0]);
@@ -190,7 +192,9 @@ void main() {
         final states = <int>[];
         final cubit = SeededCubit(initialState: 0);
         final subscription = cubit.stream.listen(states.add);
-        cubit..emitState(0)..emitState(1);
+        cubit
+          ..emitState(0)
+          ..emitState(1);
         await cubit.close();
         await subscription.cancel();
         expect(states, [0, 1]);

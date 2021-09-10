@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2.3.4
-      - uses: subosito/flutter-action@v1.5.0
+      - uses: subosito/flutter-action@v1.5.3
 
       - name: Install Dependencies
         run: |

@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:meta/meta.dart';
 
 /// {@template hydrated_bloc}
 /// Specialized [Bloc] which handles initializing the [Bloc] state

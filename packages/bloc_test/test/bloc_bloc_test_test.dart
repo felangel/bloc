@@ -22,16 +22,18 @@ void main() {
       blocTest<CounterBloc, int>(
         'supports matchers (containsAll)',
         build: () => CounterBloc(),
-        act: (bloc) =>
-            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        act: (bloc) => bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment),
         expect: () => containsAll(<int>[2, 1]),
       );
 
       blocTest<CounterBloc, int>(
         'supports matchers (containsAllInOrder)',
         build: () => CounterBloc(),
-        act: (bloc) =>
-            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        act: (bloc) => bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment),
         expect: () => containsAllInOrder(<int>[1, 2]),
       );
 
@@ -74,7 +76,9 @@ void main() {
         'emits [2] when CounterEvent.increment is added twice and skip: 1',
         build: () => CounterBloc(),
         act: (bloc) {
-          bloc..add(CounterEvent.increment)..add(CounterEvent.increment);
+          bloc
+            ..add(CounterEvent.increment)
+            ..add(CounterEvent.increment);
         },
         skip: 1,
         expect: () => const <int>[2],
@@ -146,8 +150,9 @@ void main() {
       blocTest<AsyncCounterBloc, int>(
         'emits [2] when CounterEvent.increment is added twice and skip: 1',
         build: () => AsyncCounterBloc(),
-        act: (bloc) =>
-            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        act: (bloc) => bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment),
         skip: 1,
         expect: () => const <int>[2],
       );
@@ -227,8 +232,9 @@ void main() {
       blocTest<InstantEmitBloc, int>(
         'emits [3] when CounterEvent.increment is added twice and skip: 2',
         build: () => InstantEmitBloc(),
-        act: (bloc) =>
-            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        act: (bloc) => bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment),
         skip: 2,
         expect: () => const <int>[3],
       );
@@ -270,8 +276,9 @@ void main() {
       blocTest<MultiCounterBloc, int>(
         'emits [4] when CounterEvent.increment is added twice and skip: 3',
         build: () => MultiCounterBloc(),
-        act: (bloc) =>
-            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        act: (bloc) => bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment),
         skip: 3,
         expect: () => const <int>[4],
       );
@@ -302,7 +309,9 @@ void main() {
         'emits [ComplexStateA] when [ComplexEventB, ComplexEventA] '
         'is added and skip: 1',
         build: () => ComplexBloc(),
-        act: (bloc) => bloc..add(ComplexEventB())..add(ComplexEventA()),
+        act: (bloc) => bloc
+          ..add(ComplexEventB())
+          ..add(ComplexEventA()),
         skip: 1,
         expect: () => <Matcher>[isA<ComplexStateA>()],
       );
@@ -317,8 +326,9 @@ void main() {
       blocTest<ErrorCounterBloc, int>(
         'emits [2] when increment is added twice and skip: 1',
         build: () => ErrorCounterBloc(),
-        act: (bloc) =>
-            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        act: (bloc) => bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment),
         skip: 1,
         expect: () => const <int>[2],
       );
@@ -349,8 +359,9 @@ void main() {
       blocTest<ErrorCounterBloc, int>(
         'emits [1, 2] when increment is added twice',
         build: () => ErrorCounterBloc(),
-        act: (bloc) =>
-            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        act: (bloc) => bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment),
         expect: () => const <int>[1, 2],
       );
 
@@ -358,8 +369,9 @@ void main() {
         'throws two ErrorCounterBlocErrors '
         'when increment is added twice',
         build: () => ErrorCounterBloc(),
-        act: (bloc) =>
-            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        act: (bloc) => bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment),
         errors: () => <Matcher>[
           isA<ErrorCounterBlocError>(),
           isA<ErrorCounterBlocError>(),
@@ -370,8 +382,9 @@ void main() {
         'emits [1, 2] and throws two ErrorCounterBlocErrors '
         'when increment is added twice',
         build: () => ErrorCounterBloc(),
-        act: (bloc) =>
-            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        act: (bloc) => bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment),
         expect: () => const <int>[1, 2],
         errors: () => <Matcher>[
           isA<ErrorCounterBlocError>(),
@@ -390,8 +403,9 @@ void main() {
       blocTest<ExceptionCounterBloc, int>(
         'emits [2] when increment is added twice and skip: 1',
         build: () => ExceptionCounterBloc(),
-        act: (bloc) =>
-            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        act: (bloc) => bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment),
         skip: 1,
         expect: () => const <int>[2],
       );
@@ -422,8 +436,9 @@ void main() {
       blocTest<ExceptionCounterBloc, int>(
         'emits [1, 2] when increment is added twice',
         build: () => ExceptionCounterBloc(),
-        act: (bloc) =>
-            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        act: (bloc) => bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment),
         expect: () => const <int>[1, 2],
       );
 
@@ -431,8 +446,9 @@ void main() {
         'throws two ExceptionCounterBlocExceptions '
         'when increment is added twice',
         build: () => ExceptionCounterBloc(),
-        act: (bloc) =>
-            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        act: (bloc) => bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment),
         errors: () => <Matcher>[
           isA<ExceptionCounterBlocException>(),
           isA<ExceptionCounterBlocException>(),
@@ -443,8 +459,9 @@ void main() {
         'emits [1, 2] and throws two ExceptionCounterBlocException '
         'when increment is added twice',
         build: () => ExceptionCounterBloc(),
-        act: (bloc) =>
-            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        act: (bloc) => bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment),
         expect: () => const <int>[1, 2],
         errors: () => <Matcher>[
           isA<ExceptionCounterBlocException>(),
@@ -481,8 +498,9 @@ void main() {
         'emits [2] when CounterEvent.increment '
         'is added twice and skip: 1',
         build: () => SideEffectCounterBloc(repository),
-        act: (bloc) =>
-            bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+        act: (bloc) => bloc
+          ..add(CounterEvent.increment)
+          ..add(CounterEvent.increment),
         skip: 1,
         expect: () => const <int>[2],
       );

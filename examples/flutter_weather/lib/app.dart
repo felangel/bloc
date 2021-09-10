@@ -35,9 +35,9 @@ class WeatherAppView extends StatelessWidget {
             primaryColor: color,
             textTheme: GoogleFonts.rajdhaniTextTheme(),
             appBarTheme: AppBarTheme(
-              textTheme: GoogleFonts.rajdhaniTextTheme(textTheme).apply(
-                bodyColor: Colors.white,
-              ),
+              titleTextStyle: GoogleFonts.rajdhaniTextTheme(textTheme)
+                  .apply(bodyColor: Colors.white)
+                  .headline6,
             ),
           ),
           home: WeatherPage(),

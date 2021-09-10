@@ -1,7 +1,7 @@
+import 'package:example/simple_bloc_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:replay_bloc/replay_bloc.dart';
-import 'package:example/simple_bloc_observer.dart';
 
 void main() async {
   Bloc.observer = SimpleBlocObserver();
