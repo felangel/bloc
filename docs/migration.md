@@ -1,6 +1,134 @@
 # Migration Guide
 
-?> **Tip**: Please refer to the [release log](https://github.com/felangel/bloc/releases) for more information regarding what changed in each release.
+?> 💡 **Tip**: Please refer to the [release log](https://github.com/felangel/bloc/releases) for more information regarding what changed in each release.
+
+## v7.2.0
+
+### package:bloc
+
+#### ✨ Introduce new `on<Event>` API
+
+!> In bloc v7.2.0, `mapEventToState` was deprecated in favor of `on<Event>`. `mapEventToState` will be removed in bloc v8.0.0.
+
+##### Rationale
+
+The `on<Event>` API was introduced as part of [[Proposal] Replace mapEventToState with on<Event> in Bloc](https://github.com/felangel/bloc/issues/2526). Due to [an issue in Dart](https://github.com/dart-lang/sdk/issues/44616) it's not always obvious what the value of `state` will be when dealing with nested async generators (`async*`). Even though there are ways to work around the issue, one of the core principles of the bloc library is to be predictable. The `on<Event>` API was created to make the library as safe as possible to use and to eliminate any uncertainty when it comes to state changes.
+
+?> 💡 **Tip**: For more information, [read the full proposal](https://github.com/felangel/bloc/issues/2526).
+
+**Summary**
+
+`on<E>` allows you to register an event handler for all events of type `E`. By default, events will be processed concurrently when using `on<E>` as opposed to `mapEventToState` which processes events `sequentially`.
+
+**v7.1.0**
+
+```dart
+abstract class CounterEvent {}
+class Increment extends CounterEvent {}
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    if (event is Increment) {
+      yield state + 1;
+    }
+  }
+}
+```
+
+**v7.2.0**
+
+```dart
+abstract class CounterEvent {}
+class Increment extends CounterEvent {}
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
+  }
+}
+```
+
+#### ✨ Introduce new `EventTransformer` API
+
+!> In bloc v7.2.0, `transformEvents` was deprecated in favor of the `EventTransformer` API. `transformEvents` will be removed in bloc v8.0.0.
+
+##### Rationale
+
+The `on<Event>` API opened the door to being able to provide a custom event transformer per event handler. A new `EventTransformer` typedef was introduced which enables developers to transform the incoming event stream for each event handler rather than having to specify a single event transformer for all events.
+
+**Summary**
+
+An `EventTransformer` is responsible for taking the incoming stream of events along with an `EventMapper` (your event handler) and returning a new stream of events.
+
+```dart
+typedef EventTransformer<Event> = Stream<Event> Function(Stream<Event> events, EventMapper<Event> mapper)
+```
+
+The default `EventTransformer` processes all events concurrently and looks something like:
+
+```dart
+EventTransformer<E> concurrent<E>() {
+  return (events, mapper) => events.flatMap(mapper);
+}
+```
+
+?> 💡 **Tip**: Check out [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an opinionated set of custom event transformers
+
+**v7.1.0**
+
+```dart
+@override
+Stream<Transition<MyEvent, MyState>> transformEvents(events, transitionFn) {
+  return events
+    .debounceTime(const Duration(milliseconds: 300))
+    .flatMap(transitionFn);
+}
+```
+
+**v7.2.0**
+
+```dart
+/// Define a custom `EventTransformer`
+EventTransformer<MyEvent> debounce<MyEvent>(Duration duration) {
+  return (events, mapper) => events.debounce(duration).flatMap(mapper);
+}
+
+MyBloc() : super(MyState()) {
+  /// Apply the custom `EventTransformer` to the `EventHandler`
+  on<MyEvent>(_onEvent, transformer: debounce(const Duration(milliseconds: 300)))
+}
+```
+
+#### ⚠️ Deprecate `transformTransitions` API
+
+!> In bloc v7.2.0, `transformTransitions` was deprecated in favor of overriding the `stream` API. `transformTransitions` will be removed in bloc v8.0.0.
+
+##### Rationale
+
+The `stream` getter on `Bloc` makes it easy to override the outbound stream of states therefore it's no longer valuable to maintain a separate `transformTransitions` API.
+
+**Summary**
+
+**v7.1.0**
+
+```dart
+@override
+Stream<Transition<Event, State>> transformTransitions(
+  Stream<Transition<Event, State>> transitions,
+) {
+  return transitions.debounceTime(const Duration(milliseconds: 42));
+}
+```
+
+**v7.2.0**
+
+```dart
+@override
+Stream<State> get stream => super.stream.debounceTime(const Duration(milliseconds: 42));
+```
 
 ## v7.0.0
 
