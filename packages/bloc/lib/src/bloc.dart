@@ -413,24 +413,18 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
         }
 
         final emitter = _Emitter(onEmit);
-
-        void onCancel() {
-          emitter.cancel();
-          _emitters.remove(emitter);
-        }
-
         final controller = StreamController<Event>.broadcast(
           sync: true,
-          onCancel: onCancel,
+          onCancel: emitter.cancel,
         );
 
-        void onDone() {
-          emitter.complete();
-          _emitters.remove(emitter);
-          if (!controller.isClosed) controller.close();
-        }
-
         void handleEvent() async {
+          void onDone() {
+            emitter.complete();
+            _emitters.remove(emitter);
+            if (!controller.isClosed) controller.close();
+          }
+
           try {
             _emitters.add(emitter);
             await handler(event as E, emitter);
