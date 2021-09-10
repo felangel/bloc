@@ -132,7 +132,7 @@ class _Emitter<State> implements Emitter<State> {
   @override
   void call(State state) {
     assert(
-      !isCompleted,
+      !_isCompleted,
       '''\n\n
 emit was called after an event handler completed normally.
 This is usually due to an unawaited future in an event handler.
@@ -151,15 +151,11 @@ ensure the event handler has not completed.
   });
 ''',
     );
-    if (!isCanceled) _emit(state);
+    if (!_isCanceled) _emit(state);
   }
 
   @override
-  bool get isDone => isCanceled || isCompleted;
-
-  bool get isCompleted => _isCompleted;
-
-  bool get isCanceled => _isCanceled;
+  bool get isDone => _isCanceled || _isCompleted;
 
   void cancel() {
     if (isDone) return;
@@ -437,7 +433,8 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
         void handleEvent() async {
           try {
             _emitters.add(emitter);
-            await handler(event as E, emitter);
+            final result = handler(event as E, emitter);
+            if (result is Future) await result;
           } catch (error, stackTrace) {
             onError(error, stackTrace);
           } finally {

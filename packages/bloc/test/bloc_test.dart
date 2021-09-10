@@ -898,7 +898,16 @@ void main() {
           blocError = error;
         });
 
-        expect(blocError, isA<AssertionError>());
+        expect(
+          blocError,
+          isA<AssertionError>().having(
+            (e) => e.message,
+            'message',
+            contains(
+              '''An event handler completed but left pending subscriptions behind.''',
+            ),
+          ),
+        );
       });
 
       test('forEach cancels subscriptions correctly', () async {
@@ -1126,7 +1135,16 @@ void main() {
           blocError = error;
         });
 
-        expect(blocError, isA<AssertionError>());
+        expect(
+          blocError,
+          isA<AssertionError>().having(
+            (e) => e.message,
+            'message',
+            contains(
+              '''An event handler completed but left pending subscriptions behind.''',
+            ),
+          ),
+        );
       });
 
       test(
@@ -1335,7 +1353,16 @@ void main() {
           await bloc.close();
         }, (error, stackTrace) => blocError = error);
 
-        expect(blocError, isA<AssertionError>());
+        expect(
+          blocError,
+          isA<AssertionError>().having(
+            (e) => e.message,
+            'message',
+            contains(
+              'emit was called after an event handler completed normally.',
+            ),
+          ),
+        );
       });
     });
 
@@ -1392,11 +1419,12 @@ void main() {
           StackTrace? expectedStacktrace;
 
           final onExceptionBloc = OnExceptionBloc(
-              exception: exception,
-              onErrorCallback: (Object error, StackTrace stackTrace) {
-                expectedError = error;
-                expectedStacktrace = stackTrace;
-              });
+            exception: exception,
+            onErrorCallback: (Object error, StackTrace stackTrace) {
+              expectedError = error;
+              expectedStacktrace = stackTrace;
+            },
+          );
 
           expectLater(
             onExceptionBloc.stream,
