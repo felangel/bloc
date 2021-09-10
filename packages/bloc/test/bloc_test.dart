@@ -911,7 +911,7 @@ void main() {
       });
 
       test('forEach cancels subscriptions correctly', () async {
-        const expectedStates = [3, 4];
+        const expectedStates = [0, 1, 2, 3, 4];
         final states = <int>[];
         final controller = StreamController<int>.broadcast();
         final bloc = RestartableStreamBloc(controller.stream)
@@ -925,6 +925,8 @@ void main() {
           ..add(1)
           ..add(2);
 
+        await tick();
+
         bloc.add(ForEach());
 
         await tick();
@@ -933,37 +935,8 @@ void main() {
           ..add(3)
           ..add(4);
 
-        await Future<void>.delayed(const Duration(milliseconds: 300));
-
         await bloc.close();
         expect(states, equals(expectedStates));
-      });
-
-      test(
-          'forEach with try/catch handles errors '
-          'emitted by stream and cancels delayed emits', () async {
-        const expectedStates = [-1];
-        final error = Exception('oops');
-        final states = <int>[];
-        final controller = StreamController<int>.broadcast();
-        final bloc = RestartableStreamBloc(controller.stream)
-          ..stream.listen(states.add)
-          ..add(ForEachTryCatch());
-
-        await tick();
-
-        controller
-          ..add(1)
-          ..add(2)
-          ..add(3)
-          ..addError(error);
-
-        await tick();
-        await Future<void>.delayed(const Duration(milliseconds: 300));
-
-        expect(states, equals(expectedStates));
-
-        await bloc.close();
       });
 
       test(
@@ -985,15 +958,14 @@ void main() {
           ..add(3);
 
         await tick();
-        await Future<void>.delayed(const Duration(milliseconds: 300));
 
         controller
           ..addError(error)
           ..add(4)
           ..add(5)
           ..add(6);
+
         await tick();
-        await Future<void>.delayed(const Duration(milliseconds: 300));
 
         expect(states, equals(expectedStates));
 
@@ -1017,9 +989,9 @@ void main() {
           ..add(3);
 
         await tick();
-        await Future<void>.delayed(const Duration(milliseconds: 300));
 
         controller.addError(error);
+
         await tick();
 
         expect(states, equals(expectedStates));
@@ -1046,43 +1018,14 @@ void main() {
           ..add(3);
 
         await tick();
-        await Future<void>.delayed(const Duration(milliseconds: 300));
 
         controller.addError(error);
+
         await tick();
 
         expect(states, equals(expectedStates));
 
         await bloc.close();
-      });
-
-      test('forEach cancels subscriptions correctly', () async {
-        const expectedStates = [3, 4];
-        final states = <int>[];
-        final controller = StreamController<int>.broadcast();
-        final bloc = RestartableStreamBloc(controller.stream)
-          ..stream.listen(states.add)
-          ..add(ForEach());
-
-        await tick();
-
-        controller
-          ..add(0)
-          ..add(1)
-          ..add(2);
-
-        bloc.add(ForEach());
-
-        await tick();
-
-        controller
-          ..add(3)
-          ..add(4);
-
-        await Future<void>.delayed(const Duration(milliseconds: 300));
-
-        await bloc.close();
-        expect(states, equals(expectedStates));
       });
 
       test('forEach throws when stream emits error', () async {
@@ -1105,7 +1048,6 @@ void main() {
             ..add(3);
 
           await tick();
-          await Future<void>.delayed(const Duration(milliseconds: 300));
 
           controller
             ..addError(error)

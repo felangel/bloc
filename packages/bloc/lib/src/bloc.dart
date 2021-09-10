@@ -48,7 +48,7 @@ abstract class Emitter<State> {
   /// if the [stream] received an error without a stack trace.
   Future<void> forEach<T>(
     Stream<T> stream, {
-    required FutureOr<State> Function(T data) onData,
+    required State Function(T data) onData,
     State Function(Object error, StackTrace stackTrace)? onError,
   });
 
@@ -112,15 +112,12 @@ class _Emitter<State> implements Emitter<State> {
   @override
   Future<void> forEach<T>(
     Stream<T> stream, {
-    required FutureOr<State> Function(T) onData,
+    required State Function(T) onData,
     State Function(Object error, StackTrace stackTrace)? onError,
   }) {
     return onEach<T>(
       stream,
-      onData: (data) async {
-        final state = await onData(data);
-        if (!isDone) call(state);
-      },
+      onData: (data) => call(onData(data)),
       onError: onError != null
           ? (Object error, StackTrace stackTrace) {
               call(onError(error, stackTrace));
