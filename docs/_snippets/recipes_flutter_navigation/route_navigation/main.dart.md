@@ -1,6 +1,8 @@
 ```dart
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meta/meta.dart';
 
 void main() {
   runApp(
@@ -9,6 +11,31 @@ void main() {
       child: MyApp(),
     ),
   );
+}
+
+@immutable
+abstract class MyEvent {}
+
+class EventA extends MyEvent {}
+
+class EventB extends MyEvent {}
+
+@immutable
+abstract class MyState {}
+
+class StateA extends MyState {}
+
+class StateB extends MyState {}
+
+class MyBloc extends Bloc<MyEvent, MyState> {
+  MyBloc() : super(StateA()) {
+    on<EventA>((event, emit) {
+      emit(StateA());
+    });
+    on<EventB>((event, emit) {
+      emit(StateB());
+    });
+  }
 }
 
 class MyApp extends StatelessWidget {
