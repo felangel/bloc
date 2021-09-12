@@ -179,7 +179,7 @@ A `Bloc` is a more advanced class which relies on `events` to trigger `state` ch
 
 ![Bloc Flow](https://raw.githubusercontent.com/felangel/bloc/feat/bloc-v7.2.0/docs/assets/bloc_flow.png)
 
-State changes in bloc begin when events are added which triggers `onEvent`. The events are then funnelled through `transformEvents`. By default, `transformEvents` uses `asyncExpand` to ensure each event is processed in the order it was added but it can be overridden to manipulate the incoming event stream. `mapEventToState` is then invoked with the transformed events and is responsible for yielding states in response to the incoming events. `transitions` are then funnelled through `transformTransitions` which can be overridden to manipulation the outgoing state changes. Lastly, `onTransition` is called just before the state is updated and contains the current state, event, and next state.
+State changes in bloc begin when events are added which triggers `onEvent`. The events are then funnelled through an `EventTransformer`. By default, each event is processed concurrently but a custom `EventTransformer` can be provided to manipulate the incoming event stream. All registered `EventHandlers` for that event type are then invoked with the incoming event. Each `EventHandler` is responsible for emitting zero or more states in response to the event. Lastly, `onTransition` is called just before the state is updated and contains the current state, event, and next state.
 
 #### Creating a Bloc
 
