@@ -52,7 +52,7 @@ class TodosOverviewOptionsButton extends StatelessWidget {
           ),
         ];
       },
-      child: const Icon(Icons.more_vert_rounded),
+      icon: const Icon(Icons.more_vert_rounded),
     );
   }
 }

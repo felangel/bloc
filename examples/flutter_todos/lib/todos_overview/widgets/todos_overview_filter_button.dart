@@ -56,7 +56,7 @@ class TodosOverviewFilterButton extends StatelessWidget {
           ),
         ];
       },
-      child: const Icon(Icons.filter_list_rounded),
+      icon: const Icon(Icons.filter_list_rounded),
     );
   }
 }

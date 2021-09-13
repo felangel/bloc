@@ -34,7 +34,6 @@ class TodoListTile extends StatelessWidget {
         ),
       ),
       child: ListTile(
-        isThreeLine: true,
         onTap: onTap,
         title: Text(
           todo.title,
@@ -49,7 +48,7 @@ class TodoListTile extends StatelessWidget {
         ),
         subtitle: Text(
           todo.description,
-          maxLines: 2,
+          maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         leading: Checkbox(

@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todos/edit_todo/view/edit_todo_page.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart';
 import 'package:flutter_todos/l10n/l10n.dart';
-import 'package:todos_api/todos_api.dart';
 import 'package:todos_repository/todos_repository.dart';
 
 class TodosOverviewPage extends StatelessWidget {
@@ -33,7 +32,7 @@ class TodosOverviewView extends StatelessWidget {
         title: Text(l10n.todosOverviewAppBarTitle),
         actions: const [
           TodosOverviewFilterButton(),
-          TodosOverviewOptionsButton()
+          TodosOverviewOptionsButton(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
