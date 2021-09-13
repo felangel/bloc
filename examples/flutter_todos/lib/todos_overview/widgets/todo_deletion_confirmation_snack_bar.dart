@@ -9,15 +9,16 @@ class TodoDeletionConfirmationSnackBar extends SnackBar {
     required VoidCallback onUndo,
   }) : super(
           key: key,
-          content: _Content(
+          content: TodoDeletionConfirmationSnackBarContent(
             todo: todo,
             onUndo: onUndo,
           ),
         );
 }
 
-class _Content extends StatelessWidget {
-  const _Content({
+@visibleForTesting
+class TodoDeletionConfirmationSnackBarContent extends StatelessWidget {
+  const TodoDeletionConfirmationSnackBarContent({
     Key? key,
     required this.todo,
     required this.onUndo,

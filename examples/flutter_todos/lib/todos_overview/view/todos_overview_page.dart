@@ -36,6 +36,7 @@ class TodosOverviewView extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        key: const Key('todoOverviewView_addTodo_floatingActionButton'),
         shape: const ContinuousRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(32)),
         ),

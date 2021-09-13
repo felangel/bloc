@@ -1,3 +1,5 @@
+import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_todos/todos_overview/todos_overview.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:todos_api/todos_api.dart';
 import 'package:todos_repository/todos_repository.dart';
@@ -38,3 +40,18 @@ class MockTodosRepository extends Mock implements TodosRepository {
 }
 
 class FakeTodo extends Fake implements Todo {}
+
+class MockTodosOverviewBloc
+    extends MockBloc<TodosOverviewEvent, TodosOverviewState>
+    implements TodosOverviewBloc {
+  MockTodosOverviewBloc() {
+    when(() => state).thenReturn(TodosOverviewState(
+      status: TodosOverviewStatus.success,
+      todos: mockTodos,
+    ));
+  }
+}
+
+class MockTodosOverviewEvent extends Mock implements TodosOverviewEvent {}
+
+class MockTodosOverviewState extends Mock implements TodosOverviewState {}
