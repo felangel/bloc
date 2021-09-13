@@ -28,6 +28,9 @@ class TodosOverviewTodoCompletionToggled extends TodosOverviewEvent {
 
   final Todo todo;
   final bool isCompleted;
+
+  @override
+  List<Object> get props => [todo, isCompleted];
 }
 
 class TodosOverviewTodoDeleted extends TodosOverviewEvent {

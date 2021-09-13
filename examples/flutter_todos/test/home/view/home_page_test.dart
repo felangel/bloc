@@ -7,6 +7,8 @@ import '../../helpers/helpers.dart';
 
 void main() {
   group('HomePage', () {
+    setUpAll(commonSetUpAll);
+
     testWidgets(
       'renders TodosOverviewPage inside IndexedStack',
       (tester) async {
