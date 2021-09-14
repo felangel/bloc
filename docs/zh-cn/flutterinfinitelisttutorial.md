@@ -117,7 +117,8 @@
 
 ?> **附注:** 重写`transform`让我们能在调用`mapEventToState`前对`Stream<Event>`进行变换. 这些变换包括`distinct()`, `debounceTime()`等等.
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transform_events.dart.md ':include')
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
+
 
 `PostBloc`的完成品应该看起来像是这样
 

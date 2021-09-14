@@ -111,7 +111,8 @@ API вернет пустой массив, если мы попытаемся �
 
 ?> **Примечание:** Переопределение позволяет нам преобразовать `Stream<Event>` до вызова `mapEventToState`. Это позволяет применять такие операции, как Different(), debounceTime() и т.д.
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transform_events.dart.md ':include')
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
+
 
 Наш готовый `PostBloc` теперь должен выглядеть так:
 

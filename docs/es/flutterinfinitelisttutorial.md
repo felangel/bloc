@@ -111,7 +111,8 @@ Una optimización que podemos hacer es `rebotar` los `Eventos` para evitar spam 
 
 ?> **Nota:** La transformación de anulación nos permite transformar el Stream<Event> antes de llamar a mapEventToState. Esto permite que se apliquen operaciones como distinct(), debounceTime(), etc.
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transform_events.dart.md ':include')
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
+
 
 Nuestro `PostBloc` terminado debería verse así:
 

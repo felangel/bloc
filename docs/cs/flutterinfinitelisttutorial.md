@@ -116,7 +116,8 @@ One optimization we can make is to `debounce` the `Events` in order to prevent s
 
 ?> **Note:** Overriding transform allows us to transform the Stream<Event> before mapEventToState is called. This allows for operations like distinct(), debounceTime(), etc... to be applied.
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transform_events.dart.md ':include')
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
+
 
 Our finished `PostBloc` should now look like this:
 

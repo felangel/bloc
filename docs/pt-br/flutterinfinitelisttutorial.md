@@ -111,7 +111,8 @@ Uma otimização que podemos fazer é `rejeitar` os `Eventos` para evitar spam d
 
 ?> **Nota:** Sobrescrevendo o `transform` nos permite transformar a Stream<Event> antes que o mapEventToState seja chamado. Isso permite que operações como distinct(), debounceTime(), etc ... sejam aplicadas.
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transform_events.dart.md ':include')
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
+
 
 Nosso `PostBloc` finalizado deve ficar assim:
 

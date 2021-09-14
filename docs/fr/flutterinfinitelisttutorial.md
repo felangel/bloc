@@ -110,7 +110,8 @@ Une optimisation que nous pouvons faire est de `rebondir` les `Events` afin d'é
 
 ?> **Note:** Surpasser transform nous permet de transformer le Stream<Event> avant que mapEventToState ne soit appelé. Ceci permet d'appliquer des opérations comme distinct(), debounceTime(), etc......
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transform_events.dart.md ':include')
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
+
 
 Notre `PostBloc` fini devrait maintenant ressembler à ceci :
 
