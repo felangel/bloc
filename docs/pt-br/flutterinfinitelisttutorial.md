@@ -115,7 +115,7 @@ Uma otimização que podemos fazer é `rejeitar` os `Eventos` para evitar spam d
 
 Nosso `PostBloc` finalizado deve ficar assim:
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc.dart.md ':include')
+[post_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_bloc.dart ':include')
 
 Não se esqueça de atualizar o `bloc/bloc.dart` para incluir o nosso` PostBloc`!
 

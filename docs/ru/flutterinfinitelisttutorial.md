@@ -115,7 +115,7 @@ API вернет пустой массив, если мы попытаемся �
 
 Наш готовый `PostBloc` теперь должен выглядеть так:
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc.dart.md ':include')
+[post_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_bloc.dart ':include')
 
 Не забудьте обновить `bloc/bloc.dart` и включить наш `PostBloc`!
 
