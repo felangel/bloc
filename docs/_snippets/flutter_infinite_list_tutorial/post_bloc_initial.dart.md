@@ -9,7 +9,6 @@ import 'package:flutter_infinite_list/post.dart';
 part 'post_event.dart';
 part 'post_state.dart';
 
-const _postLimit = 20;
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({required this.httpClient}) : super(const PostState()) {
