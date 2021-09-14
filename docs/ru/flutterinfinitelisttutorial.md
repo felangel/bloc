@@ -95,7 +95,7 @@
 
 Затем нам нужно реализовать `mapEventToState`, который будет запускаться каждый раз, когда добавляется `PostEvent`.
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_map_event_to_state.dart.md ':include')
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_on_post_fetched.dart.md ':include')
 
 Наш `PostBloc` будет производить `yield` всякий раз, когда появляется новое состояние, потому что он возвращает `Stream <PostState>`. Проверьте [Основные понятия](ru/coreconcepts?id=streams-Потоки) для получения дополнительной информации о `Streams` и других основах.
 

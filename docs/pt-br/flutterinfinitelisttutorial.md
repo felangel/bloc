@@ -95,7 +95,7 @@ Vamos criar `post_bloc.dart` e criar nossoc`PostBloc` vazio.
 
 Em seguida, precisamos implementar o `mapEventToState`, que será acionado toda vez que um `PostEvent` for adicionado.
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_map_event_to_state.dart.md ':include')
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_on_post_fetched.dart.md ':include')
 
 Nosso `PostBloc` renderá sempre que houver um novo estado, pois retorna um `Stream <PostState>`. Confira os [principais conceitos](https://bloclibrary.dev/#/coreconcepts?id=streams) para obter mais informações sobre `Streams` e outros conceitos principais.
 
