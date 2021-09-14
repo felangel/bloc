@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todos/todos_overview/todos_overview.dart';
 import 'package:flutter_todos/l10n/l10n.dart';
+import 'package:flutter_todos/todos_overview/todos_overview.dart';
 
 class TodosOverviewFilterButton extends StatelessWidget {
   const TodosOverviewFilterButton({Key? key}) : super(key: key);
@@ -12,7 +12,6 @@ class TodosOverviewFilterButton extends StatelessWidget {
 
     final activeFilter =
         context.select((TodosOverviewBloc bloc) => bloc.state.filter);
-    final activeColor = Theme.of(context).accentColor;
 
     return PopupMenuButton<TodosViewFilter>(
       shape: const ContinuousRectangleBorder(
@@ -29,30 +28,15 @@ class TodosOverviewFilterButton extends StatelessWidget {
         return [
           PopupMenuItem(
             value: TodosViewFilter.all,
-            child: Text(
-              l10n.todosOverviewFilterAll,
-              style: activeFilter != TodosViewFilter.all
-                  ? null
-                  : TextStyle(color: activeColor),
-            ),
+            child: Text(l10n.todosOverviewFilterAll),
           ),
           PopupMenuItem(
             value: TodosViewFilter.activeOnly,
-            child: Text(
-              l10n.todosOverviewFilterActiveOnly,
-              style: activeFilter != TodosViewFilter.activeOnly
-                  ? null
-                  : TextStyle(color: activeColor),
-            ),
+            child: Text(l10n.todosOverviewFilterActiveOnly),
           ),
           PopupMenuItem(
             value: TodosViewFilter.completedOnly,
-            child: Text(
-              l10n.todosOverviewFilterCompletedOnly,
-              style: activeFilter != TodosViewFilter.completedOnly
-                  ? null
-                  : TextStyle(color: activeColor),
-            ),
+            child: Text(l10n.todosOverviewFilterCompletedOnly),
           ),
         ];
       },

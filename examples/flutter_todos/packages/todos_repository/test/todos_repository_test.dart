@@ -43,6 +43,7 @@ void main() {
       when(() => api.clearCompleted()).thenAnswer(
         (_) async => todos.where((todo) => todo.isCompleted).length,
       );
+      when(() => api.completeAll(any())).thenAnswer((_) async => 0);
     });
 
     TodosRepository createSubject() => TodosRepository(todosApi: api);

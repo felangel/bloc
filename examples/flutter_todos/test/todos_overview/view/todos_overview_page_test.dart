@@ -155,10 +155,8 @@ void main() {
       },
     );
 
-    testWidgets(
-      'renders TodoDeletionConfirmationSnackBar snackbar '
-      'when lastDeletedTodo changes',
-      (tester) async {
+    group('TodoDeletionConfirmationSnackBar', () {
+      setUp(() {
         when(() => todosOverviewBloc.state).thenReturn(
           TodosOverviewState(
             lastDeletedTodo: mockTodos.first,
@@ -173,7 +171,9 @@ void main() {
             ),
           ]),
         );
+      });
 
+      testWidgets('is rendered when lastDeletedTodo changes', (tester) async {
         await pumpSubject(tester);
         await tester.pumpAndSettle();
 
@@ -181,12 +181,37 @@ void main() {
           find.byType(TodoDeletionConfirmationSnackBarContent),
           findsOneWidget,
         );
-        expect(
-          find.textContaining(mockTodos.first.title),
-          findsOneWidget,
+
+        final snackBar = tester.widget<TodoDeletionConfirmationSnackBarContent>(
+          find.byType(TodoDeletionConfirmationSnackBarContent),
         );
-      },
-    );
+
+        expect(
+          snackBar.todo,
+          equals(mockTodos.first),
+        );
+      });
+
+      testWidgets(
+        'adds TodosOverviewUndoDeletionRequested '
+        'to TodosOverviewBloc '
+        'when onUndo is called',
+        (tester) async {
+          await pumpSubject(tester);
+          await tester.pumpAndSettle();
+
+          final snackBar =
+              tester.widget<TodoDeletionConfirmationSnackBarContent>(
+            find.byType(TodoDeletionConfirmationSnackBarContent),
+          );
+
+          snackBar.onUndo();
+
+          verify(() => todosOverviewBloc
+              .add(const TodosOverviewUndoDeletionRequested())).called(1);
+        },
+      );
+    });
 
     group('when todos is empty', () {
       setUp(() {
