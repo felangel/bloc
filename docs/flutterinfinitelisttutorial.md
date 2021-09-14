@@ -126,13 +126,13 @@ For simplicity, our `PostBloc` will have a direct dependency on an `http client`
 
 Let’s create `post_bloc.dart` and create our empty `PostBloc`.
 
-[post_bloc.dart](_snippets/flutter_infinite_list_tutorial/post_bloc_initial.dart.md ':include')
+[post_bloc_initial.dart](_snippets/flutter_infinite_list_tutorial/post_bloc_initial.dart.md ':include')
 
 ?> **Note:** Just from the class declaration we can tell that our PostBloc will be taking PostEvents as input and outputting PostStates.
 
 Next, we need to register handlers for as many `PostEvent` we have in our bloc. In this case we will register a handler for `PostFetched`. This handler will call `_fetchPosts` that will get the data from API.
 
-[post_bloc.dart](_snippets/flutter_infinite_list_tutorial/post_bloc_on_post_fetched.dart.md ':include')
+[post_bloc_on_post_fetched.dart](_snippets/flutter_infinite_list_tutorial/post_bloc_on_post_fetched.dart.md ':include')
 
 Our `PostBloc` will `emit` whenever there is a new state because we will use a `Emitter<PostState`. Check out [core concepts](https://bloclibrary.dev/#/coreconcepts?id=streams) for more information about `Streams` and other core concepts.
 
@@ -148,7 +148,7 @@ One optimization we can make is to `debounce` the `Events` in order to prevent s
 
 ?> **Note:** Passing a `transformer` to `on<PostFetched>` allows us customizing how events are processed. This allows for operations like distinct(), debounceTime(), etc... to be applied.
 
-[post_bloc.dart](_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
+[post_bloc_transformer.dart.dart](_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
 
 
 Our finished `PostBloc` should now look like this:
