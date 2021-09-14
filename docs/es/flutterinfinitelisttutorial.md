@@ -130,7 +130,6 @@ En nuestro `main.dart` podemos comenzar implementando nuestra función principal
 
 [main.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/main.dart ':include')
 
-
 En nuestro widget `App`, usamos `BlocProvider` para crear y proporcionar una instancia de `PostBloc` al subárbol. Además, agregamos un evento `PostFetched` para que cuando se cargue la aplicación, solicite el lote inicial de publicaciones.
 
 [app.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/app.dart ':include')
