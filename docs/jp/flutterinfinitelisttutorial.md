@@ -113,7 +113,6 @@ One optimization we can make is to `debounce` the `Events` in order to prevent s
 
 [post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
 
-
 Our finished `PostBloc` should now look like this:
 
 [post_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_bloc.dart ':include')

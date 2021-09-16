@@ -112,7 +112,6 @@ Une optimisation que nous pouvons faire est de `rebondir` les `Events` afin d'é
 
 [post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
 
-
 Notre `PostBloc` fini devrait maintenant ressembler à ceci :
 
 [post_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_bloc.dart ':include')

@@ -146,7 +146,7 @@ If we can retrieve the posts, we return `PostSuccess()` which takes the entire l
 
 One optimization we can make is to `debounce` the `Events` in order to prevent spamming our API unnecessarily. We can do this by overriding the `transform` method in our `PostBloc`.
 
-?> **Note:** Passing a `transformer` to `on<PostFetched>` allows us customizing how events are processed. This allows for operations like distinct(), debounceTime(), etc... to be applied.
+?> **Note:** Passing a `transformer` to `on<PostFetched>` allows us to customize how events are processed.
 
 [post_bloc_transformer.dart.dart](_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
 
