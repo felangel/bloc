@@ -130,7 +130,7 @@ Let’s create `post_bloc.dart` and create our empty `PostBloc`.
 
 ?> **Note:** Just from the class declaration we can tell that our PostBloc will be taking PostEvents as input and outputting PostStates.
 
-Next, we need to register handlers for as many `PostEvent` we have in our bloc. In this case we will register a handler for `PostFetched`. This handler will call `_fetchPosts` that will get the data from API.
+Next, we need to register an event handler to handle incoming `PostFetched` events. In response to a `PostFetched` event, we will call `_fetchPosts` to fetch posts from the API.
 
 [post_bloc_on_post_fetched.dart](_snippets/flutter_infinite_list_tutorial/post_bloc_on_post_fetched.dart.md ':include')
 
