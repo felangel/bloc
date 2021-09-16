@@ -3,7 +3,7 @@
     on<PostFetched>(_onPostFetched);
   }
 
-  void _onPostFetched(PostFetched event, Emitter<PostState> emit) async {
+  Future<void> _onPostFetched(PostFetched event, Emitter<PostState> emit) async {
     if (state.hasReachedMax) return;
     try {
       if (state.status == PostStatus.initial) {
