@@ -10,15 +10,19 @@
 
 Comenzaremos creando un nuevo proyecto Flutter
 
-[script](../_snippets/flutter_infinite_list_tutorial/flutter_create.sh.md ':include')
+```sh
+flutter create flutter_infinite_list
+```
 
 Luego podemos continuar y reemplazar el contenido de pubspec.yaml con
 
-[pubspec.yaml](../_snippets/flutter_infinite_list_tutorial/pubspec.yaml.md ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/pubspec.yaml ':include')
 
 y luego instalar todas nuestras dependencias
 
-[script](../_snippets/flutter_infinite_list_tutorial/flutter_packages_get.sh.md ':include')
+```sh
+flutter pub get
+```
 
 ## REST API
 
@@ -38,7 +42,7 @@ Genial, ahora que sabemos cómo se verán nuestros datos, creemos el modelo.
 
 Cree `post.dart` y comencemos a crear el modelo de nuestro objeto Post.
 
-[post.dart](../_snippets/flutter_infinite_list_tutorial/post.dart.md ':include')
+[post.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/models/post.dart ':include')
 
 `Post` es solo una clase con un` id`, `title` y` body`.
 
@@ -56,7 +60,7 @@ En un nivel alto, responderá a la entrada del usuario (deslizar) y buscará má
 
 Nuestro `PostBloc` solo responderá a un solo evento; `PostFetched` que será agregado por la capa de presentación cada vez que necesite más publicaciones para presentar. Dado que nuestro evento `PostFetched` es un tipo de `PostEvent` podemos crear `bloc/post_event.dart` e implementar el evento así.
 
-[post_event.dart](../_snippets/flutter_infinite_list_tutorial/post_event.dart.md ':include')
+[post_event.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_event.dart ':include')
 
 En resumen, nuestro `PostBloc` recibirá `PostEvents` y los convertirá en `PostStates`. Hemos definido todos nuestros `PostEvents` (PostFetched), así que a continuación definamos nuestro` PostState`.
 
@@ -73,15 +77,12 @@ Nuestra capa de presentación necesitará tener varias piezas de información pa
 
 Ahora podemos crear `bloc/post_state.dart` e implementarlo así.
 
-[post_state.dart](../_snippets/flutter_infinite_list_tutorial/post_state.dart.md ':include')
+[post_state.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_state.dart ':include')
 
 ?> Implementamos `copyWith` para que podamos copiar una instancia de `PostSuccess` y actualizar cero o más propiedades convenientemente (esto será útil más adelante).
 
 Ahora que tenemos implementados nuestros `Eventos` y `Estados`, podemos crear nuestro `PostBloc`.
 
-Para que sea conveniente importar nuestros estados y eventos con una sola importación, podemos crear `bloc/bloc.dart` que los exporta a todos (agregaremos nuestra exportación `post_bloc.dart` en la siguiente sección).
-
-[bloc.dart](../_snippets/flutter_infinite_list_tutorial/bloc_initial.dart.md ':include')
 
 ## Post Bloc
 
@@ -115,11 +116,11 @@ Una optimización que podemos hacer es `rebotar` los `Eventos` para evitar spam 
 
 Nuestro `PostBloc` terminado debería verse así:
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc.dart.md ':include')
+[post_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_bloc.dart ':include')
 
 ¡No olvide actualizar `bloc/bloc.dart` para incluir nuestro` PostBloc`!
 
-[bloc.dart](../_snippets/flutter_infinite_list_tutorial/bloc.dart.md ':include')
+[post_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_bloc.dart ':include')
 
 ¡Excelente! Ahora que hemos terminado de implementar la lógica de negocios, todo lo que queda por hacer es implementar la capa de presentación.
 
@@ -127,15 +128,22 @@ Nuestro `PostBloc` terminado debería verse así:
 
 En nuestro `main.dart` podemos comenzar implementando nuestra función principal y llamando a` runApp` para representar nuestro widget raíz.
 
+[main.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/main.dart ':include')
+
 En nuestro widget `App`, usamos `BlocProvider` para crear y proporcionar una instancia de `PostBloc` al subárbol. Además, agregamos un evento `PostFetched` para que cuando se cargue la aplicación, solicite el lote inicial de publicaciones.
 
-[main.dart](../_snippets/flutter_infinite_list_tutorial/main.dart.md ':include')
+[app.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/app.dart ':include')
 
-A continuación, necesitamos implementar nuestro widget `HomePage` que presentará nuestras publicaciones y se conectará a nuestro `PostBloc`.
+En nuestro `PostsPage`widget usamos `BlocProvider` para crear una instancia de `PostBloc` el sub-árbol. Añadimos el evento `PostFetched` para cargar los primeros Posts cuando la app comience.
 
-[home_page.dart](../_snippets/flutter_infinite_list_tutorial/home_page.dart.md ':include')
 
-?> `HomePage` es un` StatefulWidget` porque necesitará mantener un `ScrollController`. En `initState`, agregamos un oyente a nuestro `ScrollController` para que podamos responder a los eventos de desplazamiento. También accedemos a nuestra instancia de `PostBloc` a través de `BlocProvider.of<PostBloc>(context) `.
+[posts_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/view/posts_page.dart ':include')
+
+Implementamos la vista de `PostsList` que mostrará los posts de nuestro `PostBloc`
+
+[posts_list.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/view/posts_list.dart ':include')
+
+?> `PostsList` es un` StatefulWidget` porque necesitará mantener un `ScrollController`. En `initState`, agregamos un oyente a nuestro `ScrollController` para que podamos responder a los eventos de desplazamiento. También accedemos a nuestra instancia de `PostBloc` a través de `context.read<PostBloc>()`.
 
 Avanzando, nuestro método de construcción que retorna un `BlocBuilder`. `BlocBuilder` es un widget de Flutter del [paquete flutter_bloc](https://pub.dev/packages/flutter_bloc) que maneja la construcción de un widget en respuesta a los nuevos estados de bloque. Cada vez que cambie nuestro estado `PostBloc`, se llamará a nuestra función de creación con el nuevo `PostState`.
 
@@ -145,10 +153,11 @@ Cada vez que el usuario se desplaza, calculamos qué tan lejos están de la part
 
 A continuación, necesitamos implementar nuestro widget `Bottom Loader` que le indicará al usuario que estamos cargando más publicaciones.
 
-[bottom_loader.dart](../_snippets/flutter_infinite_list_tutorial/bottom_loader.dart.md ':include')
-Por último, necesitamos implementar nuestro `PostWidget` que representará una publicación individual.
+[bottom_loader.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/widgets/bottom_loader.dart ':include')
 
-[post.dart](../_snippets/flutter_infinite_list_tutorial/post_widget.dart.md ':include')
+Por último, necesitamos implementar nuestro `PostListItem` que representará una publicación individual.
+
+[post_list_item.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/widgets/post_list_item.dart ':include')
 
 En este punto, deberíamos poder ejecutar nuestra aplicación y todo debería funcionar; Sin embargo, hay una cosa más que podemos hacer.
 
@@ -162,13 +171,11 @@ Aunque en esta aplicación solo tenemos un bloque, es bastante común en aplicac
 
 Si queremos poder hacer algo en respuesta a todas las `Transiciones`, simplemente podemos crear nuestro propio `BlocObserver`.
 
-[main.dart](../_snippets/flutter_infinite_list_tutorial/bloc_observer_main.dart.md ':include')
+[simple_bloc_observer.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/simple_bloc_observer.dart ':include')
 
 ?> Todo lo que necesitamos hacer es extender `BlocObserver` y anular el método `onTransition`.
 
 Para decirle a Bloc que use nuestro `SimpleBlocObserver`, solo necesitamos ajustar nuestra función principal.
-
-[main.dart](../_snippets/flutter_infinite_list_tutorial/bloc_observer_main.dart.md ':include')
 
 Ahora, cuando ejecutamos nuestra aplicación, cada vez que se produce un Bloc 'Transition' podemos ver la transición impresa en la consola.
 
