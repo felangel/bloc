@@ -134,7 +134,7 @@ Next, we need to register an event handler to handle incoming `PostFetched` even
 
 [post_bloc_on_post_fetched.dart](_snippets/flutter_infinite_list_tutorial/post_bloc_on_post_fetched.dart.md ':include')
 
-Our `PostBloc` will `emit` whenever there is a new state because we will use a `Emitter<PostState`. Check out [core concepts](https://bloclibrary.dev/#/coreconcepts?id=streams) for more information about `Streams` and other core concepts.
+Our `PostBloc` will `emit` new states via the `Emitter<PostState>` provided in the event handler. Check out [core concepts](https://bloclibrary.dev/#/coreconcepts?id=streams) for more information.
 
 Now every time a `PostEvent` is added, if it is a `PostFetched` event and there are more posts to fetch, our `PostBloc` will fetch the next 20 posts.
 
