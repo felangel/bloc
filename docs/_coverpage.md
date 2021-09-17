@@ -28,7 +28,7 @@
     <tbody>
         <tr>
             <td align="center" style="padding-right: 0.5em">
-                <a href="https://verygood.ventures"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="80"/></a>
+                <a href="https://verygood.ventures"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo_transparent.png" width="80"/></a>
             </td>
             <td align="center" style="padding-left: 0.5em">
                 <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=https://github.com/felangel/bloc&utm_medium=github&utm_content=developer&utm_term=flutter" target="_blank"><img width="120" src="https://stream-blog-v2.imgix.net/blog/wp-content/uploads/bae8c920a484d1c49dbd148306aa1335/stream-bloc-flutter.png?auto=compress&fit=clip&w=120"/></a><br/><span><a href="https://getstream.io/chat/flutter/tutorial/?utm_source=https://github.com/felangel/bloc&utm_medium=github&utm_content=developer&utm_term=flutter" target="_blank">Try the Flutter Chat Tutorial &nbsp💬</a></span>
