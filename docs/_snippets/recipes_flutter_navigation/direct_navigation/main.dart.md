@@ -29,12 +29,8 @@ class StateB extends MyState {}
 
 class MyBloc extends Bloc<MyEvent, MyState> {
   MyBloc() : super(StateA()) {
-    on<EventA>((event, emit) {
-      emit(StateA());
-    });
-    on<EventB>((event, emit) {
-      emit(StateB());
-    });
+    on<EventA>((event, emit) => emit(StateA()));
+    on<EventB>((event, emit) => emit(StateB()));
   }
 }
 
@@ -60,7 +56,7 @@ class PageA extends StatelessWidget {
         child: ElevatedButton(
           child: Text('Go to PageB'),
           onPressed: () {
-            BlocProvider.of<MyBloc>(context).add(EventB());
+            context.read<MyBloc>().add(EventB());
           },
         ),
       ),
@@ -79,7 +75,7 @@ class PageB extends StatelessWidget {
         child: ElevatedButton(
           child: Text('Go to PageA'),
           onPressed: () {
-            BlocProvider.of<MyBloc>(context).add(EventA());
+            context.read<MyBloc>().add(EventA());
           },
         ),
       ),
