@@ -95,7 +95,7 @@
 
 Затем нам нужно реализовать `mapEventToState`, который будет запускаться каждый раз, когда добавляется `PostEvent`.
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_map_event_to_state.dart.md ':include')
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_on_post_fetched.dart.md ':include')
 
 Наш `PostBloc` будет производить `yield` всякий раз, когда появляется новое состояние, потому что он возвращает `Stream <PostState>`. Проверьте [Основные понятия](ru/coreconcepts?id=streams-Потоки) для получения дополнительной информации о `Streams` и других основах.
 
@@ -111,11 +111,11 @@ API вернет пустой массив, если мы попытаемся �
 
 ?> **Примечание:** Переопределение позволяет нам преобразовать `Stream<Event>` до вызова `mapEventToState`. Это позволяет применять такие операции, как Different(), debounceTime() и т.д.
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transform_events.dart.md ':include')
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
 
 Наш готовый `PostBloc` теперь должен выглядеть так:
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc.dart.md ':include')
+[post_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_bloc.dart ':include')
 
 Не забудьте обновить `bloc/bloc.dart` и включить наш `PostBloc`!
 
