@@ -95,7 +95,7 @@ Vamos criar `post_bloc.dart` e criar nossoc`PostBloc` vazio.
 
 Em seguida, precisamos implementar o `mapEventToState`, que será acionado toda vez que um `PostEvent` for adicionado.
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_map_event_to_state.dart.md ':include')
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_on_post_fetched.dart.md ':include')
 
 Nosso `PostBloc` renderá sempre que houver um novo estado, pois retorna um `Stream <PostState>`. Confira os [principais conceitos](https://bloclibrary.dev/#/coreconcepts?id=streams) para obter mais informações sobre `Streams` e outros conceitos principais.
 
@@ -111,11 +111,11 @@ Uma otimização que podemos fazer é `rejeitar` os `Eventos` para evitar spam d
 
 ?> **Nota:** Sobrescrevendo o `transform` nos permite transformar a Stream<Event> antes que o mapEventToState seja chamado. Isso permite que operações como distinct(), debounceTime(), etc ... sejam aplicadas.
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transform_events.dart.md ':include')
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
 
 Nosso `PostBloc` finalizado deve ficar assim:
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc.dart.md ':include')
+[post_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_bloc.dart ':include')
 
 Não se esqueça de atualizar o `bloc/bloc.dart` para incluir o nosso` PostBloc`!
 
