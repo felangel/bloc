@@ -79,7 +79,7 @@ import './counter_cubit.dart';
   pipes: [BlocPipe],
 )
 class CounterPageComponent implements OnInit, OnDestroy {
-  late final CounterCubit counterCubit;
+  late CounterCubit counterCubit;
 
   @override
   void ngOnInit() {
@@ -148,7 +148,7 @@ import './counter_bloc.dart';
   pipes: [BlocPipe],
 )
 class CounterPageComponent implements OnInit, OnDestroy {
-  late final CounterBloc counterBloc;
+  late CounterBloc counterBloc;
 
   @override
   void ngOnInit() {
