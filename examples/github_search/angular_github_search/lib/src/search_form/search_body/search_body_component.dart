@@ -13,7 +13,7 @@ import 'package:angular_github_search/src/github_search.dart';
 )
 class SearchBodyComponent {
   @Input()
-  GithubSearchState state;
+  late GithubSearchState state;
 
   bool get isEmpty => state is SearchStateEmpty;
   bool get isLoading => state is SearchStateLoading;

@@ -79,7 +79,7 @@ import './counter_cubit.dart';
   pipes: [BlocPipe],
 )
 class CounterPageComponent implements OnInit, OnDestroy {
-  CounterCubit counterCubit;
+  late final CounterCubit counterCubit;
 
   @override
   void ngOnInit() {
@@ -148,7 +148,7 @@ import './counter_bloc.dart';
   pipes: [BlocPipe],
 )
 class CounterPageComponent implements OnInit, OnDestroy {
-  CounterBloc counterBloc;
+  late final CounterBloc counterBloc;
 
   @override
   void ngOnInit() {
@@ -175,7 +175,7 @@ class CounterPageComponent implements OnInit, OnDestroy {
 ```html
 <div class="counter-page-container">
   <h1>Counter App</h1>
-  <h2>Current Count: {{ counterBloc | bloc }}</h2>
+  <h2>Current Count: {{ $pipe.bloc(counterBloc) }}</h2>
   <button class="counter-button" (click)="increment()">+</button>
   <button class="counter-button" (click)="decrement()">-</button>
 </div>
@@ -185,7 +185,7 @@ At this point we have successfully separated our presentational layer from our b
 
 ## Dart Versions
 
-- Dart 2: >= 2.6.0
+- Dart 2: >= 2.12.0
 
 ## Examples
 

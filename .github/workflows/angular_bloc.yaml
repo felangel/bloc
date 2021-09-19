@@ -22,11 +22,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: dart-lang/setup-dart@v1
-        with:
-          sdk: "2.12.0"
 
       - name: Install Dependencies
-        run: pub get
+        run: dart pub get
 
       - name: Format
         run: dart format --set-exit-if-changed .
@@ -54,4 +52,4 @@ jobs:
           flutter pub global activate pana 0.19.1
 
       - name: Verify Pub Score
-        run: ../../tool/verify_pub_score.sh 90
+        run: ../../tool/verify_pub_score.sh 110
