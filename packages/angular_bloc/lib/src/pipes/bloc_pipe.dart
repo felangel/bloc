@@ -4,12 +4,16 @@ import 'package:angular/angular.dart' show ChangeDetectorRef, OnDestroy, Pipe;
 import 'package:bloc/bloc.dart';
 
 /// {@template bloc_pipe}
-/// A `pipe` which helps bind [Bloc] and [Cubit]
+/// A `pipe` which helps bind [BlocBase] ([Bloc] and [Cubit])
 /// state changes to the presentation layer.
 ///
 /// [BlocPipe] handles rendering the html element in response to new states.
-/// [BlocPipe] is very similar to `AsyncPipe` but has simplified API
-/// to reduce the amount of boilerplate code needed.
+/// [BlocPipe] is very similar to `AsyncPipe` but is designed
+/// specifically for blocs.
+///
+/// ```html
+/// <p>Current Count: {{ $pipe.bloc(counterBloc) }}</p>
+/// ```
 ///
 /// See also:
 ///
