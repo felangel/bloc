@@ -38,11 +38,10 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 
 const String template =
-    r'''<div class="counter-page-container"><h1>Counter App</h1><h2>Current Count: {{ $pipe.bloc(counterBloc) }}</h2><button (click)="increment()">+</button><button (click)="decrement()">-</button></div>''';
+    r'''<div><h1>Counter App</h1><h2>Current Count: {{ $pipe.bloc(counterBloc) }}</h2><button (click)="increment()">+</button><button (click)="decrement()">-</button></div>''';
 
 @Component(
   selector: 'counter-page',
-  styleUrls: ['counter_page_component.css'],
   pipes: [BlocPipe],
   template: template,
 )

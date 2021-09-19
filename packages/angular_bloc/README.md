@@ -75,11 +75,10 @@ import './counter_cubit.dart';
 @Component(
   selector: 'counter-page',
   templateUrl: 'counter_page_component.html',
-  styleUrls: ['counter_page_component.css'],
   pipes: [BlocPipe],
 )
 class CounterPageComponent implements OnInit, OnDestroy {
-  late CounterCubit counterCubit;
+  late final CounterCubit counterCubit;
 
   @override
   void ngOnInit() {
@@ -96,9 +95,9 @@ class CounterPageComponent implements OnInit, OnDestroy {
 ### `counter_page_component.html`
 
 ```html
-<div class="counter-page-container">
+<div>
   <h1>Counter App</h1>
-  <h2>Current Count: {{ counterCubit | bloc }}</h2>
+  <h2>Current Count: {{ $pipe.bloc(counterCubit) }}</h2>
   <button class="counter-button" (click)="counterCubit.increment()">➕</button>
   <button class="counter-button" (click)="counterCubit.decrement()">➖</button>
 </div>
@@ -144,11 +143,10 @@ import './counter_bloc.dart';
 @Component(
   selector: 'counter-page',
   templateUrl: 'counter_page_component.html',
-  styleUrls: ['counter_page_component.css'],
   pipes: [BlocPipe],
 )
 class CounterPageComponent implements OnInit, OnDestroy {
-  late CounterBloc counterBloc;
+  late final CounterBloc counterBloc;
 
   @override
   void ngOnInit() {
@@ -160,20 +158,16 @@ class CounterPageComponent implements OnInit, OnDestroy {
     counterBloc.close();
   }
 
-  void increment() {
-    counterBloc.add(CounterEvent.increment);
-  }
+  void increment() => counterBloc.add(CounterEvent.increment);
 
-  void decrement() {
-    counterBloc.add(CounterEvent.decrement);
-  }
+  void decrement() => counterBloc.add(CounterEvent.decrement);
 }
 ```
 
 ### `counter_page_component.html`
 
 ```html
-<div class="counter-page-container">
+<div>
   <h1>Counter App</h1>
   <h2>Current Count: {{ $pipe.bloc(counterBloc) }}</h2>
   <button class="counter-button" (click)="increment()">+</button>
