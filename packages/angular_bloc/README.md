@@ -18,7 +18,7 @@
 
 ---
 
-An Angular package that helps implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc). Built to work with [package:bloc](https://pub.dev/packages/bloc).
+A Dart package that helps implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc) in [AngularDart](https://pub.dev/packages/angular). Built to work with [package:bloc](https://pub.dev/packages/bloc).
 
 **Learn more at [bloclibrary.dev](https://bloclibrary.dev)!**
 
@@ -45,7 +45,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ## Angular Components
 
-**BlocPipe** is an Angular pipe which helps bind `Bloc` state changes to the presentation layer. `BlocPipe` handles rendering the html element in response to new states. `BlocPipe` is very similar to `AsyncPipe` but has a more simple API to reduce the amount of boilerplate code needed.
+**BlocPipe** is an Angular pipe which helps bind `Bloc` state changes to the presentation layer. `BlocPipe` handles rendering the html element in response to new states. `BlocPipe` is very similar to `AsyncPipe` but is designed specifically for blocs.
 
 ## Cubit Usage
 
