@@ -98,8 +98,8 @@ class CounterPageComponent implements OnInit, OnDestroy {
 <div>
   <h1>Counter App</h1>
   <h2>Current Count: {{ $pipe.bloc(counterCubit) }}</h2>
-  <button class="counter-button" (click)="counterCubit.increment()">➕</button>
-  <button class="counter-button" (click)="counterCubit.decrement()">➖</button>
+  <button (click)="counterCubit.increment()">➕</button>
+  <button (click)="counterCubit.decrement()">➖</button>
 </div>
 ```
 
@@ -170,8 +170,8 @@ class CounterPageComponent implements OnInit, OnDestroy {
 <div>
   <h1>Counter App</h1>
   <h2>Current Count: {{ $pipe.bloc(counterBloc) }}</h2>
-  <button class="counter-button" (click)="increment()">+</button>
-  <button class="counter-button" (click)="decrement()">-</button>
+  <button (click)="increment()">+</button>
+  <button (click)="decrement()">-</button>
 </div>
 ```
 
