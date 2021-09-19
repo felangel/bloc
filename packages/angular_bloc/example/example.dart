@@ -38,16 +38,15 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 
 const String template =
-    '<div class="counter-page-container"><h1>Counter App</h1><h2>Current Count: {{ counterBloc | bloc }}</h2><button (click)="increment()">+</button><button (click)="decrement()">-</button></div>';
+    r'''<div><h1>Counter App</h1><h2>Current Count: {{ $pipe.bloc(counterBloc) }}</h2><button (click)="increment()">+</button><button (click)="decrement()">-</button></div>''';
 
 @Component(
   selector: 'counter-page',
-  styleUrls: ['counter_page_component.css'],
   pipes: [BlocPipe],
   template: template,
 )
 class CounterPageComponent implements OnInit, OnDestroy {
-  CounterBloc counterBloc;
+  late final CounterBloc counterBloc;
 
   @override
   void ngOnInit() {

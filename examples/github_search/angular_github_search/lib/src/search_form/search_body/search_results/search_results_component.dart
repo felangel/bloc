@@ -10,5 +10,5 @@ import 'package:angular_github_search/src/github_search.dart';
 )
 class SearchResultsComponent {
   @Input()
-  List<SearchResultItem> items;
+  late List<SearchResultItem> items;
 }
