@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'package:angular/angular.dart' show ChangeDetectorRef;
 import 'package:angular_bloc/angular_bloc.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 class MockChangeDetectorRef extends Mock implements ChangeDetectorRef {}
@@ -29,9 +29,9 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 void main() {
   group('Stream', () {
-    Bloc bloc;
-    BlocPipe pipe;
-    ChangeDetectorRef ref;
+    late Bloc bloc;
+    late BlocPipe pipe;
+    late ChangeDetectorRef ref;
 
     setUp(() {
       bloc = CounterBloc();
@@ -90,7 +90,7 @@ void main() {
         pipe.transform(bloc);
         bloc.add(CounterEvent.increment);
         Timer(const Duration(milliseconds: 10), expectAsync0(() {
-          verify(ref.markForCheck()).called(1);
+          verify(() => ref.markForCheck()).called(1);
         }));
       });
     });
@@ -108,12 +108,6 @@ void main() {
           expect(pipe.transform(bloc), 1);
         }));
       });
-    });
-  });
-  group('null', () {
-    test('should return null when given null', () {
-      var pipe = BlocPipe(null);
-      expect(pipe.transform(null), isNull);
     });
   });
 }

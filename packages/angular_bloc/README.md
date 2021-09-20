@@ -18,7 +18,7 @@
 
 ---
 
-An Angular package that helps implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc). Built to work with [package:bloc](https://pub.dev/packages/bloc).
+A Dart package that helps implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc) in [AngularDart](https://pub.dev/packages/angular). Built to work with [package:bloc](https://pub.dev/packages/bloc).
 
 **Learn more at [bloclibrary.dev](https://bloclibrary.dev)!**
 
@@ -45,7 +45,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ## Angular Components
 
-**BlocPipe** is an Angular pipe which helps bind `Bloc` state changes to the presentation layer. `BlocPipe` handles rendering the html element in response to new states. `BlocPipe` is very similar to `AsyncPipe` but has a more simple API to reduce the amount of boilerplate code needed.
+**BlocPipe** is an Angular pipe which helps bind `Bloc` state changes to the presentation layer. `BlocPipe` handles rendering the html element in response to new states. `BlocPipe` is very similar to `AsyncPipe` but is designed specifically for blocs.
 
 ## Cubit Usage
 
@@ -75,11 +75,10 @@ import './counter_cubit.dart';
 @Component(
   selector: 'counter-page',
   templateUrl: 'counter_page_component.html',
-  styleUrls: ['counter_page_component.css'],
   pipes: [BlocPipe],
 )
 class CounterPageComponent implements OnInit, OnDestroy {
-  CounterCubit counterCubit;
+  late final CounterCubit counterCubit;
 
   @override
   void ngOnInit() {
@@ -96,11 +95,11 @@ class CounterPageComponent implements OnInit, OnDestroy {
 ### `counter_page_component.html`
 
 ```html
-<div class="counter-page-container">
+<div>
   <h1>Counter App</h1>
-  <h2>Current Count: {{ counterCubit | bloc }}</h2>
-  <button class="counter-button" (click)="counterCubit.increment()">➕</button>
-  <button class="counter-button" (click)="counterCubit.decrement()">➖</button>
+  <h2>Current Count: {{ $pipe.bloc(counterCubit) }}</h2>
+  <button (click)="counterCubit.increment()">➕</button>
+  <button (click)="counterCubit.decrement()">➖</button>
 </div>
 ```
 
@@ -144,11 +143,10 @@ import './counter_bloc.dart';
 @Component(
   selector: 'counter-page',
   templateUrl: 'counter_page_component.html',
-  styleUrls: ['counter_page_component.css'],
   pipes: [BlocPipe],
 )
 class CounterPageComponent implements OnInit, OnDestroy {
-  CounterBloc counterBloc;
+  late final CounterBloc counterBloc;
 
   @override
   void ngOnInit() {
@@ -160,24 +158,20 @@ class CounterPageComponent implements OnInit, OnDestroy {
     counterBloc.close();
   }
 
-  void increment() {
-    counterBloc.add(CounterEvent.increment);
-  }
+  void increment() => counterBloc.add(CounterEvent.increment);
 
-  void decrement() {
-    counterBloc.add(CounterEvent.decrement);
-  }
+  void decrement() => counterBloc.add(CounterEvent.decrement);
 }
 ```
 
 ### `counter_page_component.html`
 
 ```html
-<div class="counter-page-container">
+<div>
   <h1>Counter App</h1>
-  <h2>Current Count: {{ counterBloc | bloc }}</h2>
-  <button class="counter-button" (click)="increment()">+</button>
-  <button class="counter-button" (click)="decrement()">-</button>
+  <h2>Current Count: {{ $pipe.bloc(counterBloc) }}</h2>
+  <button (click)="increment()">+</button>
+  <button (click)="decrement()">-</button>
 </div>
 ```
 
@@ -185,7 +179,7 @@ At this point we have successfully separated our presentational layer from our b
 
 ## Dart Versions
 
-- Dart 2: >= 2.6.0
+- Dart 2: >= 2.12.0
 
 ## Examples
 

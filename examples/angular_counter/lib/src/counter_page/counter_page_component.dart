@@ -21,11 +21,7 @@ class CounterPageComponent implements OnDestroy {
     counterBloc.close();
   }
 
-  void increment() {
-    counterBloc.add(CounterEvent.increment);
-  }
+  void increment() => counterBloc.add(CounterEvent.increment);
 
-  void decrement() {
-    counterBloc.add(CounterEvent.decrement);
-  }
+  void decrement() => counterBloc.add(CounterEvent.decrement);
 }
