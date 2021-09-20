@@ -22,18 +22,14 @@ class CounterPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: Icon(Icons.add),
-              onPressed: () {
-                context.read<CounterBloc>().add(CounterEvent.increment);
-              },
+              onPressed: () => context.read<CounterBloc>().add(Increment()),
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: Icon(Icons.remove),
-              onPressed: () {
-                context.read<CounterBloc>().add(CounterEvent.decrement);
-              },
+              onPressed: () => context.read<CounterBloc>().add(Decrement()),
             ),
           ),
         ],
