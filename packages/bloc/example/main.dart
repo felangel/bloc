@@ -76,7 +76,7 @@ Future<void> blocMain() async {
   print(bloc.state);
 
   /// Interact with the `bloc` to trigger `state` changes.
-  bloc.add(CounterIncremented());
+  bloc.add(Increment());
 
   /// Wait for next iteration of the event-loop
   /// to ensure event has been processed.
@@ -104,15 +104,15 @@ class CounterCubit extends Cubit<int> {
 abstract class CounterEvent {}
 
 /// Notifies bloc to increment state.
-class CounterIncremented extends CounterEvent {}
+class Increment extends CounterEvent {}
 
 /// A `CounterBloc` which handles converting `CounterEvent`s into `int`s.
 class CounterBloc extends Bloc<CounterEvent, int> {
   /// The initial state of the `CounterBloc` is 0.
   CounterBloc() : super(0) {
-    /// When a `CounterIncremented` event is added,
+    /// When a `Increment` event is added,
     /// the current `state` of the bloc is accessed via the `state` property
     /// and a new state is emitted via `emit`.
-    on<CounterIncremented>((event, emit) => emit(state + 1));
+    on<Increment>((event, emit) => emit(state + 1));
   }
 }
