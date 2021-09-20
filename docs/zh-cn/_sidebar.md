@@ -22,7 +22,7 @@
     - [**Firebase 登陆** <sup>✨</sup>](zh-cn/flutterfirebaselogintutorial.md)
     - [Firestore 备忘录](zh-cn/flutterfirestoretodostutorial.md)
   - AngularDart
-    - [计数器](zh-cn/angularcountertutorial.md)
+    - [计数器](angularcountertutorial.md)
   - Flutter + AngularDart
     - [**Github 搜索** <sup>✨</sup>](zh-cn/flutterangulargithubsearch.md)
 

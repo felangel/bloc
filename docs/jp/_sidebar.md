@@ -22,7 +22,7 @@
     - [**Firebaseログイン** <sup>✨</sup>](jp/flutterfirebaselogintutorial.md)
     - [Firestoreやることリスト](jp/flutterfirestoretodostutorial.md)
   - AngularDart
-    - [カウンター](jp/angularcountertutorial.md)
+    - [カウンター](angularcountertutorial.md)
   - Flutter + AngularDart
     - [**Github検索** <sup>✨</sup>](jp/flutterangulargithubsearch.md)
 

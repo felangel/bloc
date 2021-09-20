@@ -22,7 +22,7 @@
     - [**Firebase přihlašování** <sup>✨</sup>](cs/flutterfirebaselogintutorial.md)
     - [Firestore plánovač](cs/flutterfirestoretodostutorial.md)
   - AngularDart
-    - [Počítadlo](cs/angularcountertutorial.md)
+    - [Počítadlo](angularcountertutorial.md)
   - Flutter + AngularDart
     - [**Github vyhledávání** <sup>✨</sup>](cs/flutterangulargithubsearch.md)
 
