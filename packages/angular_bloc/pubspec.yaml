@@ -11,7 +11,7 @@ environment:
 
 dependencies:
   angular: ^7.0.0
-  bloc: ^7.1.0
+  bloc: ^7.2.0-dev.3
 
 dev_dependencies:
   angular_test: ^4.0.0
