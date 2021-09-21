@@ -1,7 +1,7 @@
 ```dart
 void main() {
   CounterBloc()
-    ..add(CounterIncremented())
+    ..add(Increment())
     ..close();
 }
 ```

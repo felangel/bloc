@@ -4,7 +4,7 @@ EventTransformer<T> debounce<T>(Duration duration) {
 }
 
 CounterBloc() : super(0) {
-  on<CounterIncremented>(
+  on<Increment>(
     (event, emit) => emit(state + 1),
     /// Apply the custom `EventTransformer` to the `EventHandler`.
     transformer: debounce(const Duration(milliseconds: 300)),

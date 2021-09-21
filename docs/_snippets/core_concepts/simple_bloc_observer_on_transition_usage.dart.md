@@ -2,7 +2,7 @@
 void main() {
   Bloc.observer = SimpleBlocObserver();
   CounterBloc()
-    ..add(CounterIncremented())
+    ..add(Increment())
     ..close();
 }
 ```

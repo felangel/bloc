@@ -180,7 +180,7 @@
 
 [counter_bloc.dart](../_snippets/core_concepts/counter_bloc_increment.dart.md ':include')
 
-在上面的赛段中，我们已经注册了一个 `EventHandler` 管理所有人 `CounterIncremented` 活动. 每个收入 `CounterIncremented` 事件 我们可以通过 `state` 吸气剂访问BLOC的当前状态 和 `emit(state + 1)`.
+在上面的赛段中，我们已经注册了一个 `EventHandler` 管理所有人 `Increment` 活动. 每个收入 `Increment` 事件 我们可以通过 `state` 吸气剂访问BLOC的当前状态 和 `emit(state + 1)`.
 
 ?> **注意**：由于 `Bloc` 类扩展了 `Cubit`，因此我们可以随时通过 `state` getter 来访问 `bloc` 的当前状态。
 
@@ -206,7 +206,7 @@
 
 [main.dart](../_snippets/core_concepts/counter_bloc_stream_usage.dart.md ':include')
 
-在以上代码段中，我们正在订阅 `CounterBloc`，并在每次状态更改时调用 print 函数。然后，我们添加增量事件，该事件触发 `on<CounterIncremented>` 并产生一个新状态。最后，当我们不再希望接收更新并关闭` Bloc` 时，我们在订阅上调用了 `cancel`。
+在以上代码段中，我们正在订阅 `CounterBloc`，并在每次状态更改时调用 print 函数。然后，我们添加增量事件，该事件触发 `on<Increment>` 并产生一个新状态。最后，当我们不再希望接收更新并关闭` Bloc` 时，我们在订阅上调用了 `cancel`。
 
 ?> **注意**：在此示例中添加了 `await Future.delayed（Duration.zero`，以避免立即取消订阅。
 

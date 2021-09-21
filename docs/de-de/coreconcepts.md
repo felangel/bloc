@@ -176,11 +176,11 @@ Genau wie bei der Erstellung des `CounterCubits` müssen wir einen Anfangszustan
 
 ?> 💡 **Tipp**: Ein `EventHandler` hat Zugriff auf das zusätzliche Ereignis sowie einen `Emitter` , der verwendet werden kann, um Null- oder mehr Zustände als Reaktion auf das eingehende Ereignis auszusetzen.
 
-Wir können dann den `Event-Handler` aktualisieren, um das `CounterIncremented` Ereignis zu behandeln:
+Wir können dann den `Event-Handler` aktualisieren, um das `Increment` Ereignis zu behandeln:
 
 [counter_bloc.dart](../_snippets/core_concepts/counter_bloc_increment.dart.md ':include')
 
-In the above snippet, we have registered an `EventHandler` to manage all `CounterIncremented` events. For each incoming `CounterIncremented` event we can access the current state of the bloc via the `state` getter and `emit(state + 1)`.
+In the above snippet, we have registered an `EventHandler` to manage all `Increment` events. For each incoming `Increment` event we can access the current state of the bloc via the `state` getter and `emit(state + 1)`.
 
 ?> **Hinweis**: Da die Klasse `Bloc` die Klasse `BlocBase` erweitert, haben wir über den Getter `state` zu jedem Zeitpunkt Zugriff auf den aktuellen Zustand des Blocs.
 
@@ -206,7 +206,7 @@ Genau wie bei `Cubit` ist ein `Bloc` ein spezieller Typ von `Stream`, was bedeut
 
 [main.dart](../_snippets/core_concepts/counter_bloc_stream_usage.dart.md ':include')
 
-Im obigen Ausschnitt abonnieren wir den `CounterBloc` und rufen print bei jeder Zustandsänderung auf. Wir fügen dann das `CounterIncremented` Ereignis hinzu, das auf `on<CounterIncremented>` `EventHandler` löst und einen neuen Zustand emittiert. Schließlich rufen wir `cancel()` bei der `subscription` auf, wenn wir keine Aktualisierungen mehr erhalten wollen, und schließen den `Bloc`.
+Im obigen Ausschnitt abonnieren wir den `CounterBloc` und rufen print bei jeder Zustandsänderung auf. Wir fügen dann das `Increment` Ereignis hinzu, das auf `on<Increment>` `EventHandler` löst und einen neuen Zustand emittiert. Schließlich rufen wir `cancel()` bei der `subscription` auf, wenn wir keine Aktualisierungen mehr erhalten wollen, und schließen den `Bloc`.
 
 ?> **Hinweis**: Für dieses Beispiel wurde `await Future.delayed(Duration.zero)` hinzugefügt, um zu vermeiden, dass das Subscription sofort abgebrochen wird.
 

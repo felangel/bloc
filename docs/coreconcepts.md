@@ -176,11 +176,11 @@ Just like when creating the `CounterCubit`, we must specify an initial state by 
 
 ?> 💡 **Tip**: an `EventHandler` has access to the added event as well as an `Emitter` which can be used to emit zero or more states in response to the incoming event.
 
-We can then update the `EventHandler` to handle the `CounterIncremented` event:
+We can then update the `EventHandler` to handle the `Increment` event:
 
 [counter_bloc.dart](_snippets/core_concepts/counter_bloc_increment.dart.md ':include')
 
-In the above snippet, we have registered an `EventHandler` to manage all `CounterIncremented` events. For each incoming `CounterIncremented` event we can access the current state of the bloc via the `state` getter and `emit(state + 1)`.
+In the above snippet, we have registered an `EventHandler` to manage all `Increment` events. For each incoming `Increment` event we can access the current state of the bloc via the `state` getter and `emit(state + 1)`.
 
 ?> **Note**: Since the `Bloc` class extends `BlocBase`, we have access to the current state of the bloc at any point in time via the `state` getter just like in `Cubit`.
 
@@ -196,7 +196,7 @@ At this point, we can create an instance of our `CounterBloc` and put it to use!
 
 [main.dart](_snippets/core_concepts/counter_bloc_usage.dart.md ':include')
 
-In the above snippet, we start by creating an instance of the `CounterBloc`. We then print the current state of the `Bloc` which is the initial state (since no new states have been emitted yet). Next, we add the `CounterIncremented` event to trigger a state change. Finally, we print the state of the `Bloc` again which went from `0` to `1` and call `close` on the `Bloc` to close the internal state stream.
+In the above snippet, we start by creating an instance of the `CounterBloc`. We then print the current state of the `Bloc` which is the initial state (since no new states have been emitted yet). Next, we add the `Increment` event to trigger a state change. Finally, we print the state of the `Bloc` again which went from `0` to `1` and call `close` on the `Bloc` to close the internal state stream.
 
 ?> **Note**: `await Future.delayed(Duration.zero)` is added to ensure we wait for the next event-loop iteration (allowing the `EventHandler` to process the event).
 
@@ -206,7 +206,7 @@ Just like with `Cubit`, a `Bloc` is a special type of `Stream`, which means we c
 
 [main.dart](_snippets/core_concepts/counter_bloc_stream_usage.dart.md ':include')
 
-In the above snippet, we are subscribing to the `CounterBloc` and calling print on each state change. We are then adding the `CounterIncremented` event which triggers `on<CounterIncremented>` `EventHandler` and emits a new state. Lastly, we are calling `cancel` on the subscription when we no longer want to receive updates and closing the `Bloc`.
+In the above snippet, we are subscribing to the `CounterBloc` and calling print on each state change. We are then adding the `Increment` event which triggers `on<Increment>` `EventHandler` and emits a new state. Lastly, we are calling `cancel` on the subscription when we no longer want to receive updates and closing the `Bloc`.
 
 ?> **Note**: `await Future.delayed(Duration.zero)` is added for this example to avoid canceling the subscription immediately.
 
