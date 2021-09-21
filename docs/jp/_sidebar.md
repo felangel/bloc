@@ -20,7 +20,7 @@
     - [**天気** <sup>✨</sup>](flutterweathertutorial.md)
     - [やることリスト](jp/fluttertodostutorial.md)
     - [**Firebaseログイン** <sup>✨</sup>](flutterfirebaselogintutorial.md)
-    - [Firestoreやることリスト](jp/flutterfirestoretodostutorial.md)
+    - [Firestoreやることリスト](flutterfirestoretodostutorial.md)
   - AngularDart
     - [カウンター](angularcountertutorial.md)
   - Flutter + AngularDart
