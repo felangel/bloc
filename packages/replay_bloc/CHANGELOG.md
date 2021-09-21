@@ -1,3 +1,7 @@
+# 0.1.0
+
+- feat: upgrade to `bloc ^7.2.0`
+
 # 0.0.2
 
 - feat: add support for conditional replays via `shouldReplay`
