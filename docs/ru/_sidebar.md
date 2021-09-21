@@ -3,7 +3,7 @@
   - [Начинаем](ru/gettingstarted.md)
   - [Почему bloc?](ru/whybloc.md)
   - Основные понятия
-    - [bloc](ru/coreconcepts.md)
+    - [bloc](coreconcepts.md)
     - [flutter_bloc](ru/flutterbloccoreconcepts.md)
   - [Архитектура](ru/architecture.md)
   - [Тестирование](ru/testing.md)

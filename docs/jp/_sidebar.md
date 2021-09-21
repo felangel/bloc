@@ -3,7 +3,7 @@
   - [まずはじめに](jp/gettingstarted.md)
   - [なぜBlocを使う?](jp/whybloc.md)
   - 基本的なコンセプト
-    - [bloc](jp/coreconcepts.md)
+    - [bloc](coreconcepts.md)
     - [flutter_bloc](jp/flutterbloccoreconcepts.md)
   - [アーキテクチャー](jp/architecture.md)
   - [テスト](jp/testing.md)
