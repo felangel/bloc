@@ -96,7 +96,7 @@
 
 ?> **附注:**  只是从类的声明看, 我们就可以知道PostBloc会接受`PostEvents`的输入, 并输出`PostStates`.
 
-下一步, 我们需要实现`mapEventToState`方法. 每次加入新的`PostEvent`的时候我们都会调用这个函数.
+下一步, 我们需要实现`on<PostFetched>`方法. 每次加入新的`PostEvent`的时候我们都会调用这个函数.
 
 [post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_on_post_fetched.dart.md ':include')
 
@@ -115,7 +115,7 @@
 这里我们可以做一个优化: 我们可以给`Event(事件)``debounce(消除抖动)`, 从而防止给API发出过多的请求.
 通过重写`PostBloc`的`transform`方法达成这一点.
 
-?> **附注:** 重写`transform`让我们能在调用`mapEventToState`前对`Stream<Event>`进行变换. 这些变换包括`distinct()`, `debounceTime()`等等.
+?> **附注:** 重写`transform`让我们能在调用`on<PostFetched>`前对`Stream<Event>`进行变换. 这些变换包括`distinct()`, `debounceTime()`等等.
 
 [post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
 

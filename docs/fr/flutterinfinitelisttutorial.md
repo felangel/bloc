@@ -92,7 +92,7 @@ Créons `post_bloc.dart` et créons notre `PostBloc` vide.
 
 ?> **Note:** À partir de la déclaration de classe nous pouvons dire que notre PostBloc prendra PostEvents comme entrée et des PostStates en sortie.
 
-Ensuite, nous devons implémenter `mapEventToState` qui sera lancé chaque fois qu'un `PostEvent` est envoyé.
+Ensuite, nous devons implémenter `on<PostFetched>` qui sera lancé chaque fois qu'un `PostEvent` est envoyé.
 
 [post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_on_post_fetched.dart.md ':include')
 
@@ -108,7 +108,7 @@ Si nous pouvons récupérer les messages, nous retournons `PostSuccess()` qui pr
 
 Une optimisation que nous pouvons faire est de `rebondir` les `Events` afin d'éviter le spamming de notre API inutilement. Nous pouvons le faire en surchargeant la méthode `transform` dans notre `PostBloc`.
 
-?> **Note:** Surpasser transform nous permet de transformer le Stream<Event> avant que mapEventToState ne soit appelé. Ceci permet d'appliquer des opérations comme distinct(), debounceTime(), etc......
+?> **Note:** Surpasser transform nous permet de transformer le Stream<Event> avant que `on<PostFetched>` ne soit appelé. Ceci permet d'appliquer des opérations comme distinct(), debounceTime(), etc......
 
 [post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
 
