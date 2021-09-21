@@ -11,6 +11,7 @@ class DebounceCounterBloc extends Bloc<CounterEvent, int> {
   @override
   Stream<Transition<CounterEvent, int>> transformEvents(
     Stream<CounterEvent> events,
+    // ignore: deprecated_member_use
     TransitionFunction<CounterEvent, int> transitionFn,
   ) {
     return events
