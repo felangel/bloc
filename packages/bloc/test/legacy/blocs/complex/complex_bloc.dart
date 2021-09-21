@@ -13,6 +13,7 @@ class ComplexBloc extends Bloc<ComplexEvent, ComplexState> {
   @override
   Stream<Transition<ComplexEvent, ComplexState>> transformEvents(
     Stream<ComplexEvent> events,
+    // ignore: deprecated_member_use_from_same_package
     TransitionFunction<ComplexEvent, ComplexState> transitionFn,
   ) {
     return events.switchMap(transitionFn);

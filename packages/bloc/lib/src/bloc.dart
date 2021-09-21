@@ -5,7 +5,12 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 /// {@template emitter}
-/// Base interface for emitting states in response to events.
+/// An [Emitter] is a class which is capable of emitting new states.
+///
+/// See also:
+///
+/// * [EventHandler] which has access to an [Emitter].
+///
 /// {@endtemplate}
 abstract class Emitter<State> {
   /// Subscribes to the provided [stream] and invokes the [onData] callback
@@ -202,8 +207,15 @@ Please make sure to await all asynchronous operations within event handlers.
   Future<void> get future => _completer.future;
 }
 
+/// **@Deprecated - Use `on<Event>` with an `EventTransformer` instead.
+/// Will be removed in v8.0.0**
+///
 /// Signature for a mapper function which takes an [Event] as input
 /// and outputs a [Stream] of [Transition] objects.
+@Deprecated(
+  'Use `on<Event>` with an `EventTransformer` instead. '
+  'Will be removed in v8.0.0',
+)
 typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
     Function(Event);
 
@@ -255,6 +267,12 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   ///
   /// If a custom transformer is specified for a particular event handler,
   /// it will take precendence over the global transformer.
+  ///
+  /// See also:
+  ///
+  /// * [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
+  /// opinionated set of event transformers.
+  ///
   static EventTransformer<dynamic> transformer = (events, mapper) {
     return events
         .map(mapper)
@@ -367,17 +385,28 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// Register event handler for an event of type `E`.
   /// There should only ever be one event handler per event type `E`.
   ///
+  /// ```dart
+  /// abstract class CounterEvent {}
+  /// class Increment extends CounterEvent {}
+  ///
+  /// class CounterBloc extends Bloc<CounterEvent, int> {
+  ///   CounterBloc() : super(0) {
+  ///     on<Increment>((event, emit) => emit(state + 1));
+  ///   }
+  /// }
+  /// ```
+  ///
   /// * A [StateError] will be thrown if there are multiple event handlers
   /// registered for the same type `E`.
-  ///
-  /// * A [StateError] will be thrown if there is a missing event handler for
-  /// an event of type `E` when [add] is called.
   ///
   /// By default, events will be processed concurrently.
   ///
   /// See also:
   ///
   /// * [EventTransformer] to customize how events are processed.
+  /// * [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
+  /// opinionated set of event transformers.
+  ///
   void on<E extends Event>(
     EventHandler<E, State> handler, {
     EventTransformer<Event>? transformer,
@@ -674,6 +703,7 @@ abstract class BlocBase<State> {
   /// See also:
   ///
   /// * [BlocObserver] for observing [Cubit] behavior globally.
+  ///
   @mustCallSuper
   void onChange(Change<State> change) {
     // ignore: invalid_use_of_protected_member

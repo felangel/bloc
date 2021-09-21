@@ -1,3 +1,23 @@
+# 7.2.0
+
+- feat: introduce `on<Event>` API to register event handlers
+  - by default events are processed concurrently
+- feat: introduce `Bloc.transformer` API to configure the default `EventTransformer`
+- feat: introduce `Emitter<State>` to trigger state changes
+  - `call` to trigger a state change (alignment with `Cubit`)
+  - `forEach` as an analogue for `await for`
+  - `onEach` to simplify subscription management
+  - `isDone` to abort expensive async operations
+- feat: throw `StateError` if `mapEventToState` is used in conjunction with `on<Event>`
+- feat: throw `StateError` if duplicate event handlers are registered
+- feat: throw `AssertionError` when `emit` is called in a completed `EventHandler`
+- feat: throw `AssertionError` when `emit.onEach` and `emit.forEach` are unawaited
+- **DEPRECATE**: fix: `mapEventToState` deprecated in favor of `on<Event>`
+- **DEPRECATE**: fix: `transformEvents` deprecated in favor of `EventTransformer`
+  - use a built in `EventTransformer` or define your own
+- **DEPRECATE**: fix: `transformTransitions` deprecated
+  - override `Stream<State> get stream` to modify the outbound stream
+
 # 7.2.0-dev.3
 
 - **BREAKING**: refactor!: require `emit.forEach` `onData` to be synchronous
