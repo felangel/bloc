@@ -12,9 +12,14 @@ abstract class TickerEvent extends Equatable {
   List<Object> get props => [];
 }
 
+/// {@template ticker_started}
 /// Signifies to the [TickerBloc] that the user
 /// has requested to start the [Ticker].
-class TickerStarted extends TickerEvent {}
+/// {@endtemplate}
+class TickerStarted extends TickerEvent {
+  /// {@macro ticker_started}
+  const TickerStarted();
+}
 
 class _TickerTicked extends TickerEvent {
   const _TickerTicked(this.tick);

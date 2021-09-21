@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_bloc_with_stream/bloc/ticker_bloc.dart';
 import 'package:flutter_bloc_with_stream/ticker/ticker.dart';
@@ -32,9 +34,10 @@ void main() {
       build: () => TickerBloc(ticker),
       act: (bloc) => bloc.add(TickerStarted()),
       expect: () => <TickerState>[
-        const TickerTickSuccess(1),
-        const TickerTickSuccess(2),
-        const TickerTickSuccess(3),
+        TickerTickSuccess(1),
+        TickerTickSuccess(2),
+        TickerTickSuccess(3),
+        TickerComplete(),
       ],
     );
 
@@ -46,9 +49,10 @@ void main() {
         ..add(TickerStarted())
         ..add(TickerStarted()),
       expect: () => <TickerState>[
-        const TickerTickSuccess(1),
-        const TickerTickSuccess(2),
-        const TickerTickSuccess(3),
+        TickerTickSuccess(1),
+        TickerTickSuccess(2),
+        TickerTickSuccess(3),
+        TickerComplete(),
       ],
     );
   });

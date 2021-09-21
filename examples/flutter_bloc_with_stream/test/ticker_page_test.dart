@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,11 +40,11 @@ void main() {
   tearDown(() => reset(tickerBloc));
 
   group('TickerPage', () {
-    testWidgets('renders initial TickerPage state', (tester) async {
+    testWidgets('renders initial state', (tester) async {
       when(() => tickerBloc.state).thenReturn(TickerInitial());
       await tester.pumpTickerPage(tickerBloc);
 
-      expect(find.text('Press the floating button to start'), findsOneWidget);
+      expect(find.text('Press the floating button to start.'), findsOneWidget);
     });
 
     testWidgets('renders tick count ', (tester) async {
@@ -69,7 +71,7 @@ void main() {
       whenListen(
         tickerBloc,
         Stream.periodic(
-          const Duration(seconds: 1),
+          Duration(seconds: 1),
           (i) => TickerTickSuccess(i),
         ).take(3),
         initialState: TickerInitial(),
@@ -77,12 +79,24 @@ void main() {
 
       await tester.pumpTickerPage(tickerBloc..add(TickerStarted()));
 
-      await tester.pump(const Duration(seconds: 1));
+      await tester.pump(Duration(seconds: 1));
       expect(find.text('Tick #0'), findsOneWidget);
-      await tester.pump(const Duration(seconds: 1));
+      await tester.pump(Duration(seconds: 1));
       expect(find.text('Tick #1'), findsOneWidget);
-      await tester.pump(const Duration(seconds: 1));
+      await tester.pump(Duration(seconds: 1));
       expect(find.text('Tick #2'), findsOneWidget);
+    });
+
+    testWidgets('renders complete state', (tester) async {
+      when(() => tickerBloc.state).thenReturn(TickerComplete());
+
+      await tester.pumpTickerPage(tickerBloc);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Complete! Press the floating button to restart.'),
+        findsOneWidget,
+      );
     });
   });
 }
