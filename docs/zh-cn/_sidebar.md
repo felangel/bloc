@@ -14,7 +14,7 @@
 
   - Flutter
     - [**计数器** <sup>✨</sup>](fluttercountertutorial.md)
-    - [秒表](zh-cn/fluttertimertutorial.md)
+    - [秒表](fluttertimertutorial.md)
     - [无限列表](zh-cn/flutterinfinitelisttutorial.md)
     - [**登陆** <sup>✨</sup>](flutterlogintutorial.md)
     - [**天气** <sup>✨</sup>](flutterweathertutorial.md)
