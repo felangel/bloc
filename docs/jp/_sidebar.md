@@ -38,7 +38,7 @@
   - 拡張機能
 
     - [IntelliJ](blocintellijextension.md)
-    - [VSCode](jp/blocvscodeextension.md)
+    - [VSCode](blocvscodeextension.md)
 
 - APIリファレンス
   - [bloc](https://pub.dev/documentation/bloc/latest/bloc/bloc-library.html)
