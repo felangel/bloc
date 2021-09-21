@@ -29,9 +29,9 @@
 - レシピ
 
   - Flutter
-    - [SnackBarを表示](jp/recipesfluttershowsnackbar.md)
-    - [ナビゲーション](jp/recipesflutternavigation.md)
-    - [Blocにアクセス](jp/recipesflutterblocaccess.md)
+    - [SnackBarを表示](recipesfluttershowsnackbar.md)
+    - [ナビゲーション](recipesflutternavigation.md)
+    - [Blocにアクセス](recipesflutterblocaccess.md)
 
 - ツール
 
