@@ -15,7 +15,7 @@
   - Flutter
     - [**Počítadlo** <sup>✨</sup>](cs/fluttercountertutorial.md)
     - [Časovač](cs/fluttertimertutorial.md)
-    - [Nekonečný list](cs/flutterinfinitelisttutorial.md)
+    - [Nekonečný list](flutterinfinitelisttutorial.md)
     - [**Přihlašování** <sup>✨</sup>](cs/flutterlogintutorial.md)
     - [**Počasí** <sup>✨</sup>](flutterweathertutorial.md)
     - [Plánovač](cs/fluttertodostutorial.md)

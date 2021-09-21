@@ -15,7 +15,7 @@
   - Flutter
     - [**カウンター** <sup>✨</sup>](jp/fluttercountertutorial.md)
     - [タイマー](jp/fluttertimertutorial.md)
-    - [無限リスト](jp/flutterinfinitelisttutorial.md)
+    - [無限リスト](flutterinfinitelisttutorial.md)
     - [**ログイン** <sup>✨</sup>](jp/flutterlogintutorial.md)
     - [**天気** <sup>✨</sup>](flutterweathertutorial.md)
     - [やることリスト](jp/fluttertodostutorial.md)
