@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter_bloc_with_stream/bloc/ticker_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,11 +13,17 @@ void main() {
 
     group('TickerTickSuccess', () {
       test('supports value comparison', () {
-        expect(const TickerTickSuccess(1), const TickerTickSuccess(1));
+        expect(TickerTickSuccess(1), TickerTickSuccess(1));
         expect(
-          const TickerTickSuccess(1),
-          isNot(equals(const TickerTickSuccess(2))),
+          TickerTickSuccess(1),
+          isNot(equals(TickerTickSuccess(2))),
         );
+      });
+    });
+
+    group('TickerComplete', () {
+      test('supports value comparison', () {
+        expect(TickerComplete(), equals(TickerComplete()));
       });
     });
   });
