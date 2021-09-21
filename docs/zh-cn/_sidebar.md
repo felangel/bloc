@@ -19,7 +19,7 @@
     - [**登陆** <sup>✨</sup>](flutterlogintutorial.md)
     - [**天气** <sup>✨</sup>](flutterweathertutorial.md)
     - [备忘录](zh-cn/fluttertodostutorial.md)
-    - [**Firebase 登陆** <sup>✨</sup>](zh-cn/flutterfirebaselogintutorial.md)
+    - [**Firebase 登陆** <sup>✨</sup>](flutterfirebaselogintutorial.md)
     - [Firestore 备忘录](zh-cn/flutterfirestoretodostutorial.md)
   - AngularDart
     - [计数器](angularcountertutorial.md)

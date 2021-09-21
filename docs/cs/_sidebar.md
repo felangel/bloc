@@ -19,7 +19,7 @@
     - [**Přihlašování** <sup>✨</sup>](flutterlogintutorial.md)
     - [**Počasí** <sup>✨</sup>](flutterweathertutorial.md)
     - [Plánovač](cs/fluttertodostutorial.md)
-    - [**Firebase přihlašování** <sup>✨</sup>](cs/flutterfirebaselogintutorial.md)
+    - [**Firebase přihlašování** <sup>✨</sup>](flutterfirebaselogintutorial.md)
     - [Firestore plánovač](cs/flutterfirestoretodostutorial.md)
   - AngularDart
     - [Počítadlo](angularcountertutorial.md)
