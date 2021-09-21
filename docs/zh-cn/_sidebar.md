@@ -24,7 +24,7 @@
   - AngularDart
     - [计数器](angularcountertutorial.md)
   - Flutter + AngularDart
-    - [**Github 搜索** <sup>✨</sup>](zh-cn/flutterangulargithubsearch.md)
+    - [**Github 搜索** <sup>✨</sup>](flutterangulargithubsearch.md)
 
 - 配方 (Recipes)
 

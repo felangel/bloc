@@ -24,7 +24,7 @@
   - AngularDart
     - [カウンター](angularcountertutorial.md)
   - Flutter + AngularDart
-    - [**Github検索** <sup>✨</sup>](jp/flutterangulargithubsearch.md)
+    - [**Github検索** <sup>✨</sup>](flutterangulargithubsearch.md)
 
 - レシピ
 
