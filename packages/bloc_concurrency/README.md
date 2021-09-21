@@ -45,6 +45,8 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ## Event Transformers
 
+![Event Transformers](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_concurrency_diagram.png)
+
 `bloc_concurrency` provides an opinionated set of event transformers:
 
 - `concurrent` - process events concurrently
@@ -60,11 +62,11 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 
 abstract class CounterEvent {}
 
-class CounterIncremented extends CounterEvent {}
+class Increment extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0) {
-    on<CounterIncremented>(
+    on<Increment>(
       (event, emit) async {
         await Future.delayed(Duration(seconds: 1));
         emit(state + 1);
