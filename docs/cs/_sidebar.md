@@ -13,7 +13,7 @@
 - Tutoriály
 
   - Flutter
-    - [**Počítadlo** <sup>✨</sup>](cs/fluttercountertutorial.md)
+    - [**Počítadlo** <sup>✨</sup>](fluttercountertutorial.md)
     - [Časovač](cs/fluttertimertutorial.md)
     - [Nekonečný list](flutterinfinitelisttutorial.md)
     - [**Přihlašování** <sup>✨</sup>](flutterlogintutorial.md)

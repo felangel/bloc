@@ -13,7 +13,7 @@
 - Руководства
 
   - Flutter
-    - [**Счетчик** <sup>✨</sup>](ru/fluttercountertutorial.md)
+    - [**Счетчик** <sup>✨</sup>](fluttercountertutorial.md)
     - [Таймер](ru/fluttertimertutorial.md)
     - [Бесконечный список](ru/flutterinfinitelisttutorial.md)
     - [**Логин** <sup>✨</sup>](flutterlogintutorial.md)
