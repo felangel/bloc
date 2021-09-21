@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/felangel/bloc/feat/bloc-v7.2.0/docs/assets/bloc_concurrency_logo_full.png" height="100" alt="Bloc Concurrency" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_concurrency_logo_full.png" height="100" alt="Bloc Concurrency" />
 </p>
 
 <p align="center">
