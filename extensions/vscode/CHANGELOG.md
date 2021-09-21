@@ -2,9 +2,15 @@
 
 - **BREAKING**: update to bloc ^7.2.0
   - update snippets to use `on<Event>` instead of deprecated `mapEventToState`
+- feat: add `onevent` snippet to register a new `EventHandler`
 - feat: update to latest packages
   - bloc -> ^7.2.0
-  - flutter_bloc -> ^7.2.0
+  - flutter_bloc -> ^7.3.0
+  - angular_bloc -> ^7.1.0
+  - bloc_test -> ^8.2.0
+  - replay_bloc -> ^0.1.0
+  - bloc_concurrency -> ^0.1.0
+  - sealed_flutter_bloc -> ^7.1.0
 
 # 5.8.0
 

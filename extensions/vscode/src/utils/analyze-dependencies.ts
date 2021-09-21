@@ -17,6 +17,12 @@ interface Action {
 }
 
 export async function analyzeDependencies() {
+  const openBlocMigrationGuide = {
+    name: "Open Migration Guide",
+    callback: () => {
+      env.openExternal(Uri.parse("https://bloclibrary.dev/#/migration"));
+    },
+  };
   const dependenciesToAnalyze = [
     {
       name: "equatable",
@@ -37,56 +43,46 @@ export async function analyzeDependencies() {
     {
       name: "bloc",
       version: "^7.2.0",
-      actions: [
-        {
-          name: "Open Migration Guide",
-          callback: () => {
-            env.openExternal(Uri.parse("https://bloclibrary.dev/#/migration"));
-          },
-        },
-      ],
+      actions: [openBlocMigrationGuide],
     },
 
     {
       name: "flutter_bloc",
-      version: "^7.2.0",
-      actions: [
-        {
-          name: "Open Migration Guide",
-          callback: () => {
-            env.openExternal(Uri.parse("https://bloclibrary.dev/#/migration"));
-          },
-        },
-      ],
+      version: "^7.3.0",
+      actions: [openBlocMigrationGuide],
     },
-    { name: "angular_bloc", version: "^6.0.1", actions: [] },
+    {
+      name: "angular_bloc",
+      version: "^7.1.0",
+      actions: [openBlocMigrationGuide],
+    },
     {
       name: "hydrated_bloc",
-      version: "^7.0.1",
-      actions: [
-        {
-          name: "Open Migration Guide",
-          callback: () => {
-            env.openExternal(Uri.parse("https://bloclibrary.dev/#/migration"));
-          },
-        },
-      ],
+      version: "^7.1.0",
+      actions: [openBlocMigrationGuide],
     },
-    { name: "sealed_flutter_bloc", version: "^7.0.0", actions: [] },
+    {
+      name: "sealed_flutter_bloc",
+      version: "^7.1.0",
+      actions: [openBlocMigrationGuide],
+    },
+    {
+      name: "replay_bloc",
+      version: "^0.1.0",
+      actions: [openBlocMigrationGuide],
+    },
+    {
+      name: "bloc_concurrency",
+      version: "^0.1.0",
+      actions: [],
+    },
   ];
 
   const devDependenciesToAnalyze = [
     {
       name: "bloc_test",
-      version: "^8.1.0",
-      actions: [
-        {
-          name: "Open Migration Guide",
-          callback: () => {
-            env.openExternal(Uri.parse("https://bloclibrary.dev/#/migration"));
-          },
-        },
-      ],
+      version: "^8.2.0",
+      actions: [openBlocMigrationGuide],
     },
   ];
 
@@ -118,7 +114,7 @@ function checkForUpgrades(
       if (!semver.satisfies(minVersion, dependency.version)) {
         window
           .showWarningMessage(
-            `This workspace contains an unsupported version of ${dependency.name}. Please update to ${dependency.version}.`,
+            `This workspace contains an outdated version of ${dependency.name}. Please update to ${dependency.version}.`,
             ...dependency.actions.map((action) => action.name).concat("Update")
           )
           .then((invokedAction) => {
