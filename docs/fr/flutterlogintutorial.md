@@ -173,7 +173,7 @@ Dans le corps du constructeur, l'`AuthenticationBloc` suit le `status` du stream
 
 !> L'`AuthenticationBloc` surcharge `close` dans le but de dispose à la fois `StreamSubscription` mais aussi `AuthenticationRepository`.
 
-Ensuite, `mapEventToState` s'occupe de transformer un `AuthenticationEvent` arrivant en une nouvelle instance d'`AuthenticationState`.
+Ensuite, la `EventHandler` s'occupe de transformer un `AuthenticationEvent` arrivant en une nouvelle instance d'`AuthenticationState`.
 
 Quand un événement `AuthenticationStatusChanged` est ajouté, si le statut associé est `AuthenticationStatus.authenticated`, l'`AuthentictionBloc` va requêter l'utilisateur `UserRepository`.
 
