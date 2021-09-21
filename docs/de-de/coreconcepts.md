@@ -280,7 +280,7 @@ Wenn wir dieselbe `main.dart` wie zuvor erneut ausführen, können wir sehen, wi
 
 ?> **Hinweis**: `onError` und `onChange` funktionieren für `Bloc` und `Cubit` Instanzen genau gleich.
 
-!> Alle unbehandelten Ausnahmen, die innerhalb von `mapEventToState` auftreten, werden auch an `onError` gemeldet.
+!> Alle unbehandelten Ausnahmen, die innerhalb von `EventHandler` auftreten, werden auch an `onError` gemeldet.
 
 ## Cubit vs. Bloc
 
