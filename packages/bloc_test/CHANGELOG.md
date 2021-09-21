@@ -1,3 +1,7 @@
+# 8.2.0
+
+- feat: upgrade to `bloc ^7.2.0`
+
 # 8.1.0
 
 - feat: add `setUp` and `tearDown` to `blocTest`
