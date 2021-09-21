@@ -1,8 +1,8 @@
 ```dart
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meta/meta.dart';
 
 void main() {
   runApp(
@@ -13,7 +13,12 @@ void main() {
   );
 }
 
-enum MyEvent { eventA, eventB }
+@immutable
+abstract class MyEvent {}
+
+class EventA extends MyEvent {}
+
+class EventB extends MyEvent {}
 
 @immutable
 abstract class MyState {}
@@ -23,18 +28,9 @@ class StateA extends MyState {}
 class StateB extends MyState {}
 
 class MyBloc extends Bloc<MyEvent, MyState> {
-  MyBloc() : super(StateA());
-
-  @override
-  Stream<MyState> mapEventToState(MyEvent event) async* {
-    switch (event) {
-      case MyEvent.eventA:
-        yield StateA();
-        break;
-      case MyEvent.eventB:
-        yield StateB();
-        break;
-    }
+  MyBloc() : super(StateA()) {
+    on<EventA>((event, emit) => emit(StateA()));
+    on<EventB>((event, emit) => emit(StateB()));
   }
 }
 
@@ -60,7 +56,7 @@ class PageA extends StatelessWidget {
         child: ElevatedButton(
           child: Text('Go to PageB'),
           onPressed: () {
-            BlocProvider.of<MyBloc>(context).add(MyEvent.eventB);
+            context.read<MyBloc>().add(EventB());
           },
         ),
       ),
@@ -79,7 +75,7 @@ class PageB extends StatelessWidget {
         child: ElevatedButton(
           child: Text('Go to PageA'),
           onPressed: () {
-            BlocProvider.of<MyBloc>(context).add(MyEvent.eventA);
+            context.read<MyBloc>().add(EventA());
           },
         ),
       ),

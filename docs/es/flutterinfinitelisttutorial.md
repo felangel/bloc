@@ -94,9 +94,9 @@ Creemos `post_bloc.dart` y creemos nuestro `PostBloc` vacío.
 
 ?> **Nota:** solo a partir de la declaración de la clase podemos decir que nuestro PostBloc tomará PostEvents como entrada y como salida PostStates.
 
-A continuación, necesitamos implementar `mapEventToState` que se disparará cada vez que se agregue un `PostEvent`.
+A continuación, necesitamos implementar `on<PostFetched>` que se disparará cada vez que se agregue un `PostEvent`.
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_map_event_to_state.dart.md ':include')
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_on_post_fetched.dart.md ':include')
 
 Nuestro `PostBloc` hará `yield` siempre que haya un nuevo estado porque devuelve un `Stream<PostState>`. Consulte [conceptos básicos](https://bloclibrary.dev/#/es/coreconcepts?id=streams) para obtener más información sobre `Streams` y otros conceptos básicos.
 
@@ -110,9 +110,9 @@ Si podemos recuperar las publicaciones, devolvemos `PostSuccess()` que toma la l
 
 Una optimización que podemos hacer es `rebotar` los `Eventos` para evitar spam innecesariamente en nuestra API. Podemos hacer esto anulando el método `transform` en nuestro` PostBloc`.
 
-?> **Nota:** La transformación de anulación nos permite transformar el Stream<Event> antes de llamar a mapEventToState. Esto permite que se apliquen operaciones como distinct(), debounceTime(), etc.
+?> **Nota:** La transformación de anulación nos permite transformar el Stream<Event> antes de llamar a `on<PostFetched>`. Esto permite que se apliquen operaciones como distinct(), debounceTime(), etc.
 
-[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transform_events.dart.md ':include')
+[post_bloc.dart](../_snippets/flutter_infinite_list_tutorial/post_bloc_transformer.dart.md ':include')
 
 Nuestro `PostBloc` terminado debería verse así:
 

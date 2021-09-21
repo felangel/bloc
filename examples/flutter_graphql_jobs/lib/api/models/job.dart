@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'job.g.dart';
@@ -6,9 +5,9 @@ part 'job.g.dart';
 @JsonSerializable(createToJson: false)
 class Job {
   const Job({
-    @required this.id,
-    @required this.title,
-    @required this.locationNames,
+    required this.id,
+    required this.title,
+    this.locationNames,
     this.isFeatured = false,
   });
 
@@ -16,6 +15,8 @@ class Job {
 
   final String id;
   final String title;
-  final String locationNames;
+  @JsonKey(includeIfNull: true)
+  final String? locationNames;
+  @JsonKey(defaultValue: false)
   final bool isFeatured;
 }

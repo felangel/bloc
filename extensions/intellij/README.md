@@ -61,12 +61,12 @@ Right click and use `Generate -> Equatable Props` to automatically generate the 
 
 ### Freezed Bloc
 
-| Shortcut     | Description                                                     |
-| ------------ | --------------------------------------------------------------- |
-| `feventwhen` | Creates a map event to state function with freeze.when function |
-| `feventmap`  | Creates a map event to state function with freeze.map function  |
-| `fstate`     | Creates a sub state                                             |
-| `fevent`     | Creates a sub event                                             |
+| Shortcut     | Description                                        |
+| ------------ | -------------------------------------------------- |
+| `feventwhen` | Creates an event handler with freeze.when function |
+| `feventmap`  | Creates an event handler with freeze.map function  |
+| `fstate`     | Creates a sub state                                |
+| `fevent`     | Creates a sub event                                |
 
 ## Deployment
 

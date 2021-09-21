@@ -14,15 +14,8 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 
   TimerBloc({required Ticker ticker})
       : _ticker = ticker,
-        super(TimerInitial(_duration));
-
-  @override
-  Stream<TimerState> mapEventToState(
-    TimerEvent event,
-  ) async* {
-    if (event is TimerStarted) {
-      yield* _mapTimerStartedToState(event);
-    }
+        super(TimerInitial(_duration)) {
+    on<TimerStarted>(_onStarted);
   }
 
   @override
@@ -31,11 +24,11 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     return super.close();
   }
 
-  Stream<TimerState> _mapTimerStartedToState(TimerStarted start) async* {
-     yield TimerRunInProgress(start.duration);
+  void _onStarted(TimerStarted event, Emitter<TimerState> emit) async {
+    emit(TimerRunInProgress(event.duration));
     _tickerSubscription?.cancel();
     _tickerSubscription = _ticker
-        .tick(ticks: start.duration)
+        .tick(ticks: event.duration)
         .listen((duration) => add(TimerTicked(duration: duration)));
   }
 }

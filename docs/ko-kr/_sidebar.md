@@ -3,7 +3,7 @@
   - [시작하기](/ko-kr/gettingstarted.md)
   - [왜 Bloc인가?](/ko-kr/whybloc.md)
   - 주요 개념
-    - [bloc](/ko-kr/coreconcepts.md)
+    - [bloc](coreconcepts.md)
     - [flutter_bloc](/ko-kr/flutterbloccoreconcepts.md)
   - [구조](/ko-kr/architecture.md)
   - [테스트](/ko-kr/testing.md)

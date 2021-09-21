@@ -4,13 +4,15 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0-0 <3.0.0"
+  sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   bloc:
     path: ../../packages/bloc
+  bloc_concurrency:
+    path: ../../packages/bloc_concurrency
   flutter_bloc:
     path: ../../packages/flutter_bloc
   equatable: ^2.0.0
@@ -26,6 +28,8 @@ dependency_overrides:
     path: ../../packages/bloc
   flutter_bloc:
     path: ../../packages/flutter_bloc
+  bloc_test:
+    path: ../../packages/bloc_test
 
 flutter:
   uses-material-design: true

@@ -5,9 +5,6 @@ abstract class ProfileWizardEvent extends Equatable {
 
   @override
   List<Object?> get props => [];
-
-  @override
-  bool get stringify => true;
 }
 
 class ProfileWizardNameSubmitted extends ProfileWizardEvent {

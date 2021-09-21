@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_shopping_cart/catalog/catalog.dart';
@@ -9,26 +7,19 @@ part 'catalog_event.dart';
 part 'catalog_state.dart';
 
 class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
-  CatalogBloc({required this.shoppingRepository}) : super(CatalogLoading());
+  CatalogBloc({required this.shoppingRepository}) : super(CatalogLoading()) {
+    on<CatalogStarted>(_onStarted);
+  }
 
   final ShoppingRepository shoppingRepository;
 
-  @override
-  Stream<CatalogState> mapEventToState(
-    CatalogEvent event,
-  ) async* {
-    if (event is CatalogStarted) {
-      yield* _mapCatalogStartedToState();
-    }
-  }
-
-  Stream<CatalogState> _mapCatalogStartedToState() async* {
-    yield CatalogLoading();
+  void _onStarted(CatalogStarted event, Emitter<CatalogState> emit) async {
+    emit(CatalogLoading());
     try {
       final catalog = await shoppingRepository.loadCatalog();
-      yield CatalogLoaded(Catalog(itemNames: catalog));
+      emit(CatalogLoaded(Catalog(itemNames: catalog)));
     } catch (_) {
-      yield CatalogError();
+      emit(CatalogError());
     }
   }
 }

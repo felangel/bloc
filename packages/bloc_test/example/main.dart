@@ -12,9 +12,12 @@ class MockCounterCubit extends MockCubit<int> implements CounterCubit {}
 class MockCounterBloc extends MockBloc<CounterEvent, int>
     implements CounterBloc {}
 
+// Fake Counter Event
+class FakeCounterEvent extends Fake implements CounterEvent {}
+
 void main() {
   setUpAll(() {
-    registerFallbackValue<CounterEvent>(CounterEvent.increment);
+    registerFallbackValue(FakeCounterEvent());
   });
 
   mainCubit();
@@ -75,9 +78,9 @@ void mainBloc() {
     );
 
     blocTest<CounterBloc, int>(
-      'emits [1] when CounterEvent.increment is added',
+      'emits [1] when Increment is added',
       build: () => CounterBloc(),
-      act: (bloc) => bloc.add(CounterEvent.increment),
+      act: (bloc) => bloc.add(Increment()),
       expect: () => const <int>[1],
     );
   });
@@ -89,17 +92,12 @@ class CounterCubit extends Cubit<int> {
   void increment() => emit(state + 1);
 }
 
-enum CounterEvent { increment }
+abstract class CounterEvent {}
+
+class Increment extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  CounterBloc() : super(0);
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
+  CounterBloc() : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
   }
 }

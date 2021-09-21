@@ -98,15 +98,9 @@ class Increment extends CounterEvent {}
 class Decrement extends CounterEvent {}
 
 class CounterBloc extends ReplayBloc<CounterEvent, int> {
-  CounterBloc() : super(0);
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    if (event is Increment) {
-      yield state + 1;
-    } else if (event is Decrement) {
-      yield state - 1;
-    }
+  CounterBloc() : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
+    on<Decrement>((event, emit) => emit(state - 1));
   }
 }
 ```
@@ -144,15 +138,9 @@ class Increment extends CounterEvent {}
 class Decrement extends CounterEvent {}
 
 class CounterBloc extends HydratedBloc<CounterEvent, int> with ReplayBlocMixin {
-  CounterBloc() : super(0);
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    if (event is Increment) {
-      yield state + 1;
-    } else if (event is Decrement) {
-      yield state - 1;
-    }
+  CounterBloc() : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
+    on<Decrement>((event, emit) => emit(state - 1));
   }
 
   @override

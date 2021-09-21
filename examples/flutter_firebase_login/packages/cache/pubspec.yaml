@@ -1,6 +1,7 @@
 name: cache
 description: A simple in memory cache made for dart
 version: 1.0.0
+publish_to: none
 
 environment:
   sdk: ">=2.13.0 <3.0.0"

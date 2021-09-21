@@ -1,3 +1,11 @@
+# 6.0.0
+
+- **BREAKING**: update to bloc ^7.2.0
+  - update snippets to use `on<Event>` instead of deprecated `mapEventToState`
+- feat: update to latest packages
+  - bloc -> ^7.2.0
+  - flutter_bloc -> ^7.2.0
+
 # 5.8.0
 
 - feat: add "Convert to..." Multi-Widget Actions

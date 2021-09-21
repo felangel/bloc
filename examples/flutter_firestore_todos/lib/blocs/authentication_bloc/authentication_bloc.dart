@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:user_repository/user_repository.dart';
 import 'package:flutter_firestore_todos/blocs/authentication_bloc/bloc.dart';
@@ -9,25 +8,21 @@ class AuthenticationBloc
 
   AuthenticationBloc({required UserRepository userRepository})
       : _userRepository = userRepository,
-        super(Uninitialized());
-
-  @override
-  Stream<AuthenticationState> mapEventToState(
-    AuthenticationEvent event,
-  ) async* {
-    if (event is AppStarted) {
-      yield* _mapAppStartedToState();
-    }
+        super(Uninitialized()) {
+    on<AppStarted>(_onAppStarted);
   }
 
-  Stream<AuthenticationState> _mapAppStartedToState() async* {
+  void _onAppStarted(
+    AppStarted event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     try {
       final isSignedIn = await _userRepository.isAuthenticated();
       if (!isSignedIn) await _userRepository.authenticate();
       final userId = _userRepository.getUserId();
-      yield userId == null ? Unauthenticated() : Authenticated(userId);
+      emit(userId == null ? Unauthenticated() : Authenticated(userId));
     } catch (_) {
-      yield Unauthenticated();
+      emit(Unauthenticated());
     }
   }
 }

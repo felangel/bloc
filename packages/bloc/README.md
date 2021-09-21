@@ -30,6 +30,7 @@ This package is built to work with:
 
 - [flutter_bloc](https://pub.dev/packages/flutter_bloc)
 - [angular_bloc](https://pub.dev/packages/angular_bloc)
+- [bloc_concurrency](https://pub.dev/packages/bloc_concurrency)
 - [bloc_test](https://pub.dev/packages/bloc_test)
 - [hydrated_bloc](https://pub.dev/packages/hydrated_bloc)
 - [replay_bloc](https://pub.dev/packages/replay_bloc)
@@ -176,31 +177,27 @@ void main() {
 
 A `Bloc` is a more advanced class which relies on `events` to trigger `state` changes rather than functions. `Bloc` also extends `BlocBase` which means it has a similar public API as `Cubit`. However, rather than calling a `function` on a `Bloc` and directly emitting a new `state`, `Blocs` receive `events` and convert the incoming `events` into outgoing `states`.
 
-![Bloc Flow](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_flow.png)
+![Bloc Flow](https://raw.githubusercontent.com/felangel/bloc/feat/bloc-v7.2.0/docs/assets/bloc_flow.png)
 
-State changes in bloc begin when events are added which triggers `onEvent`. The events are then funnelled through `transformEvents`. By default, `transformEvents` uses `asyncExpand` to ensure each event is processed in the order it was added but it can be overridden to manipulate the incoming event stream. `mapEventToState` is then invoked with the transformed events and is responsible for yielding states in response to the incoming events. `transitions` are then funnelled through `transformTransitions` which can be overridden to manipulation the outgoing state changes. Lastly, `onTransition` is called just before the state is updated and contains the current state, event, and next state.
+State changes in bloc begin when events are added which triggers `onEvent`. The events are then funnelled through an `EventTransformer`. By default, each event is processed concurrently but a custom `EventTransformer` can be provided to manipulate the incoming event stream. All registered `EventHandlers` for that event type are then invoked with the incoming event. Each `EventHandler` is responsible for emitting zero or more states in response to the event. Lastly, `onTransition` is called just before the state is updated and contains the current state, event, and next state.
 
 #### Creating a Bloc
 
 ```dart
 /// The events which `CounterBloc` will react to.
-enum CounterEvent { increment }
+abstract class CounterEvent {}
+
+/// Notifies bloc to increment state.
+class Increment extends CounterEvent {}
 
 /// A `CounterBloc` which handles converting `CounterEvent`s into `int`s.
 class CounterBloc extends Bloc<CounterEvent, int> {
   /// The initial state of the `CounterBloc` is 0.
-  CounterBloc() : super(0);
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      /// When a `CounterEvent.increment` event is added,
-      /// the current `state` of the bloc is accessed via the `state` property
-      /// and a new state is emitted via `yield`.
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
+  CounterBloc() : super(0) {
+    /// When an `Increment` event is added,
+    /// the current `state` of the bloc is accessed via the `state` property
+    /// and a new state is emitted via `emit`.
+    on<Increment>((event, emit) => emit(state + 1));
   }
 }
 ```
@@ -208,7 +205,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 #### Using a Bloc
 
 ```dart
-void main() async {
+Future<void> main() async {
   /// Create a `CounterBloc` instance.
   final bloc = CounterBloc();
 
@@ -216,7 +213,7 @@ void main() async {
   print(bloc.state); // 0
 
   /// Interact with the `bloc` to trigger `state` changes.
-  bloc.add(CounterEvent.increment);
+  bloc.add(Increment());
 
   /// Wait for next iteration of the event-loop
   /// to ensure event has been processed.
@@ -226,7 +223,7 @@ void main() async {
   print(bloc.state); // 1
 
   /// Close the `bloc` when it is no longer needed.
-  bloc.close();
+  await bloc.close();
 }
 ```
 
@@ -241,18 +238,13 @@ In addition, `Blocs` can also override `onEvent` and `onTransition`.
 `onTransition` is similar to `onChange`, however, it contains the `event` which triggered the state change in addition to the `currentState` and `nextState`.
 
 ```dart
-enum CounterEvent { increment }
+abstract class CounterEvent {}
+
+class Increment extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  CounterBloc() : super(0);
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
+  CounterBloc() : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
   }
 
   @override

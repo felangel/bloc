@@ -13,21 +13,17 @@ import './counter_bloc.dart';
   pipes: [BlocPipe],
 )
 class CounterPageComponent implements OnDestroy {
-  final CounterBloc counterBloc;
+  const CounterPageComponent(this.counterBloc);
 
-  CounterPageComponent(this.counterBloc) {}
+  final CounterBloc counterBloc;
 
   @override
   void ngOnDestroy() {
     counterBloc.close();
   }
 
-  void increment() {
-    counterBloc.add(CounterEvent.increment);
-  }
+  void increment() => counterBloc.add(Increment());
 
-  void decrement() {
-    counterBloc.add(CounterEvent.decrement);
-  }
+  void decrement() => counterBloc.add(Decrement());
 }
 ```
