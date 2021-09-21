@@ -1,6 +1,6 @@
 ```dart
 EventTransformer<T> debounce<T>(Duration duration) {
-  return (events, mapper) => events.debounce(duration).flatMap(mapper);
+  return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
 }
 
 CounterBloc() : super(0) {

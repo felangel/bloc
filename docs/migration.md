@@ -93,7 +93,7 @@ Stream<Transition<MyEvent, MyState>> transformEvents(events, transitionFn) {
 ```dart
 /// Define a custom `EventTransformer`
 EventTransformer<MyEvent> debounce<MyEvent>(Duration duration) {
-  return (events, mapper) => events.debounce(duration).flatMap(mapper);
+  return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
 }
 
 MyBloc() : super(MyState()) {
