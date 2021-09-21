@@ -37,7 +37,7 @@
 
   - 扩展 (Extensions)
 
-    - [IntelliJ](zh-cn/blocintellijextension.md)
+    - [IntelliJ](blocintellijextension.md)
     - [VSCode](zh-cn/blocvscodeextension.md)
 
 - 接口文献 (API Reference)

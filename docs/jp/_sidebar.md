@@ -37,7 +37,7 @@
 
   - 拡張機能
 
-    - [IntelliJ](jp/blocintellijextension.md)
+    - [IntelliJ](blocintellijextension.md)
     - [VSCode](jp/blocvscodeextension.md)
 
 - APIリファレンス
