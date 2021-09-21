@@ -1,3 +1,7 @@
+# 7.1.0
+
+- feat: upgrade to `bloc ^7.2.0`
+
 # 7.0.0
 
 - **BREAKING**: refactor: upgrade to `angular ^7.0.0`
