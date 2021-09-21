@@ -9,16 +9,21 @@ import 'package:test/test.dart';
 
 class MockChangeDetectorRef extends Mock implements ChangeDetectorRef {}
 
-abstract class CounterEvent {}
-
-class Increment extends CounterEvent {}
-
-class Decrement extends CounterEvent {}
+enum CounterEvent { increment, decrement }
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  CounterBloc() : super(0) {
-    on<Increment>((event, emit) => emit(state + 1));
-    on<Decrement>((event, emit) => emit(state - 1));
+  CounterBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.decrement:
+        yield state - 1;
+        break;
+      case CounterEvent.increment:
+        yield state + 1;
+        break;
+    }
   }
 }
 
@@ -40,7 +45,7 @@ void main() {
       });
       test('should return the latest available value', () async {
         pipe.transform(bloc);
-        bloc.add(Increment());
+        bloc.add(CounterEvent.increment);
         Timer.run(expectAsync0(() {
           final dynamic res = pipe.transform(bloc);
           expect(res, 1);
@@ -51,7 +56,7 @@ void main() {
           'should return same value when nothing has changed '
           'since the last call', () async {
         pipe.transform(bloc);
-        bloc.add(Increment());
+        bloc.add(CounterEvent.increment);
         Timer.run(expectAsync0(() {
           pipe.transform(bloc);
           expect(pipe.transform(bloc), 1);
@@ -65,7 +70,7 @@ void main() {
         var newBloc = CounterBloc();
         expect(pipe.transform(newBloc), 0);
         // this should not affect the pipe
-        bloc.add(Increment());
+        bloc.add(CounterEvent.increment);
         Timer.run(expectAsync0(() {
           expect(pipe.transform(newBloc), 0);
         }));
@@ -75,7 +80,7 @@ void main() {
         // See https://github.com/dart-lang/angular2/issues/260
         final _bloc = CounterBloc();
         expect(pipe.transform(_bloc), 0);
-        _bloc.add(Increment());
+        _bloc.add(CounterEvent.increment);
         Timer.run(expectAsync0(() {
           expect(pipe.transform(_bloc), 1);
         }));
@@ -83,7 +88,7 @@ void main() {
       test('should request a change detection check upon receiving a new value',
           () async {
         pipe.transform(bloc);
-        bloc.add(Increment());
+        bloc.add(CounterEvent.increment);
         Timer(const Duration(milliseconds: 10), expectAsync0(() {
           verify(() => ref.markForCheck()).called(1);
         }));
@@ -98,7 +103,7 @@ void main() {
         pipe
           ..transform(bloc)
           ..ngOnDestroy();
-        bloc.add(Increment());
+        bloc.add(CounterEvent.increment);
         Timer.run(expectAsync0(() {
           expect(pipe.transform(bloc), 1);
         }));
