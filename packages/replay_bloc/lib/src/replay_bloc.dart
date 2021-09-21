@@ -29,18 +29,12 @@ class _Undo extends ReplayEvent {
 /// A custom [ReplayBloc] can be created by extending [ReplayBloc].
 ///
 /// ```dart
-/// enum CounterEvent { increment }
+/// abstract class CounterEvent {}
+/// class Increment extends CounterEvent {}
 ///
 /// class CounterBloc extends ReplayBloc<CounterEvent, int> {
-///   CounterBloc() : super(0);
-///
-///   @override
-///   Stream<int> mapEventToState(CounterEvent event) async* {
-///     switch (event) {
-///       case CounterEvent.increment:
-///         yield state + 1;
-///         break;
-///     }
+///   CounterBloc() : super(0) {
+///     on<Increment>((event, emit) => emit(state + 1));
 ///   }
 /// }
 /// ```
@@ -50,7 +44,7 @@ class _Undo extends ReplayEvent {
 /// ```dart
 /// final bloc = CounterBloc();
 ///
-/// bloc.add(CounterEvent.increment);
+/// bloc.add(Increment());
 ///
 /// bloc.undo();
 ///
@@ -82,9 +76,6 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
   /// Sets the internal `undo`/`redo` size limit.
   /// By default there is no limit.
   set limit(int limit) => _changeStack.limit = limit;
-
-  @override
-  Stream<State> mapEventToState(covariant Event event);
 
   @override
   // ignore: must_call_super
