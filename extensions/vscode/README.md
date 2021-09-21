@@ -65,6 +65,7 @@ You can activate the commands by launching the command palette (View -> Command 
 | `importbloctest`    | Imports `package:bloc_test`                |
 | `bloc`              | Creates a bloc class                       |
 | `cubit`             | Creates a cubit class                      |
+| `onevent`           | Register a new `EventHandler`              |
 | `blocobserver`      | Creates a `BlocObserver` class             |
 | `blocprovider`      | Creates a `BlocProvider` widget            |
 | `multiblocprovider` | Creates a `MultiBlocProvider` widget       |

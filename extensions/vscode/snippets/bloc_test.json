@@ -8,10 +8,12 @@
       "\tact: (bloc) => bloc.add(${4:MyEvent()}),",
       "\texpect: () => const <$1State>[${3:MyState()}],",
       ");"
-    ]
+    ],
+    "description": "create a new blocTest"
   },
   "Import package:bloc_test": {
     "prefix": "importbloctest",
-    "body": "import 'package:bloc_test/bloc_test.dart';"
+    "body": "import 'package:bloc_test/bloc_test.dart';",
+    "description": "import package:bloc_test/bloc_test.dart;"
   }
 }

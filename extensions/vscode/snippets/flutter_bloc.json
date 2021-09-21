@@ -138,6 +138,7 @@
   },
   "Import package:flutter_bloc": {
     "prefix": "importflutterbloc",
-    "body": "import 'package:flutter_bloc/flutter_bloc.dart';"
+    "body": "import 'package:flutter_bloc/flutter_bloc.dart';",
+    "description": "import package:flutter_bloc/flutter_bloc.dart;"
   }
 }
