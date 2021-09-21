@@ -268,7 +268,8 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   final _handlerTypes = <Type>[];
   final _emitters = <_Emitter>[];
 
-  /// Notifies the [Bloc] of a new [event] which triggers [mapEventToState].
+  /// Notifies the [Bloc] of a new [event] which triggers
+  /// all corresponding [EventHandler] instances.
   /// If [close] has already been called, any subsequent calls to [add] will
   /// be ignored and will not result in any subsequent state changes.
   void add(Event event) {
@@ -356,8 +357,8 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// **[emit] should never be used outside of tests.**
   ///
   /// Updates the state of the bloc to the provided [state].
-  /// A bloc's state should only be updated by `yielding` a new `state`
-  /// from `mapEventToState` in response to an event.
+  /// A bloc's state should only be updated by `emitting` a new `state`
+  /// from an [EventHandler] in response to an incoming event.
   /// {@endtemplate}
   @protected
   @visibleForTesting
@@ -449,7 +450,8 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   Stream<State> mapEventToState(Event event) async* {}
 
   /// Called whenever a [transition] occurs with the given [transition].
-  /// A [transition] occurs when a new `event` is [add]ed and [mapEventToState]
+  /// A [transition] occurs when a new `event` is added
+  /// and a new state is `emitted` from a corresponding [EventHandler].
   /// executed.
   /// [onTransition] is called before a [Bloc]'s [state] has been updated.
   /// A great spot to add logging/analytics at the individual [Bloc] level.
