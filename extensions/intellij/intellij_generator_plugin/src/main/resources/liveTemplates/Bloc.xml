@@ -115,6 +115,16 @@
             <option name="DART_TOPLEVEL" value="true"/>
         </context>
     </template>
+    <template name="onevent"
+              value="on&lt;$eventName$&gt;((event, emit) {&#10;  // TODO: implement event handler&#10;});"
+              description="register a new event handler" toReformat="false"
+              toShortenFQNames="true">
+        <variable name="eventName" expression="" defaultValue="&quot;EventName&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
     <template name="blocevent"
               value="class $Subject$$Noun$$Verb$ extends $Subject$Event {&#10;  const $Subject$$Noun$$Verb$();&#10;&#10;  &#10;&#10;  @override&#10;  List&lt;Object&gt; get props =&gt; [];&#10;}"
               description="bloc event class" toReformat="true" toShortenFQNames="true">

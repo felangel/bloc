@@ -11,6 +11,7 @@
 
     <change-notes><![CDATA[
         <ul>
+          <li>v3.0.0 - Support for Bloc v7.2.0 (on<Event> API)</li>
           <li>v2.4.0 - Add Convert to Multi Widget Actions</li>
           <li>v2.3.0 - Add Equatable Props Generator and Live Templates Bloc/Cubit selection support</li>
           <li>v2.2.1 - Fix Wrapping Errors</li>
