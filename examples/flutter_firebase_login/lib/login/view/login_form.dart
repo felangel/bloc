@@ -6,7 +6,6 @@ import 'package:flutter_firebase_login/sign_up/sign_up.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
 
-
 class LoginForm extends StatelessWidget {
   const LoginForm({Key? key}) : super(key: key);
 
