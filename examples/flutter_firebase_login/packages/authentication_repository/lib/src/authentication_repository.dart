@@ -3,18 +3,73 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cache/cache.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
 
 /// Thrown if during the sign up process if a failure occurs.
-class SignUpFailure implements Exception {}
+class SignUpWithEmailAndPasswordFailure implements Exception {
+  SignUpWithEmailAndPasswordFailure(this.message);
+
+  final String message;
+
+  /// Create an authentication message from a firebase authentication exception code.
+  /// https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/createUserWithEmailAndPassword.html
+  factory SignUpWithEmailAndPasswordFailure.fromCode(String code) {
+    switch(code) {
+      case 'invalid-email': return SignUpWithEmailAndPasswordFailure('Email is not valid or badly formatted.');
+      case 'user-disabled': return SignUpWithEmailAndPasswordFailure('This user has been disabled. Please contact support for help.');
+      case 'email-already-in-use' : return SignUpWithEmailAndPasswordFailure('An account already exists for that email.');
+      case 'operation-not-allowed' : return SignUpWithEmailAndPasswordFailure('Operation is not allowed.  Please contact support.');
+      case 'weak-password' : return SignUpWithEmailAndPasswordFailure('Please enter a stronger password.');
+      default: return SignUpWithEmailAndPasswordFailure('An unknown exception occurred.');
+    }
+  }
+}
+
 
 /// Thrown during the login process if a failure occurs.
-class LogInWithEmailAndPasswordFailure implements Exception {}
+/// https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/signInWithEmailAndPassword.html
+class LogInWithEmailAndPasswordFailure implements Exception {
+  LogInWithEmailAndPasswordFailure(this.message);
+
+  final String message;
+
+  /// Create an authentication message from a firebase authentication exception code.
+  factory LogInWithEmailAndPasswordFailure.fromCode(String code) {
+    switch(code) {
+      case 'invalid-email': return LogInWithEmailAndPasswordFailure('Email is not valid or badly formatted.');
+      case 'user-disabled': return LogInWithEmailAndPasswordFailure('This user has been disabled. Please contact support for help.');
+      case 'user-not-found': return LogInWithEmailAndPasswordFailure('Email is not found, please create an account.');
+      case 'wrong-password': return LogInWithEmailAndPasswordFailure('Incorrect password, please try again.');
+      default: return LogInWithEmailAndPasswordFailure('An unknown exception occurred.');
+    }
+  }
+}
 
 /// Thrown during the sign in with google process if a failure occurs.
-class LogInWithGoogleFailure implements Exception {}
+/// https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/signInWithCredential.html
+class LogInWithGoogleFailure implements Exception {
+  LogInWithGoogleFailure(this.message);
+
+  final String message;
+
+  /// Create an authentication message from a firebase authentication exception code.
+  factory LogInWithGoogleFailure.fromCode(String code) {
+    switch(code) {
+      case 'account-exists-with-different-credential': return LogInWithGoogleFailure('Account exists with different credentials.');
+      case 'invalid-credential': return LogInWithGoogleFailure('The credential received is malformed or has expired.');
+      case 'operation-not-allowed' : return LogInWithGoogleFailure('Operation is not allowed.  Please contact support.');
+      case 'user-disabled': return LogInWithGoogleFailure('This user has been disabled. Please contact support for help.');
+      case 'user-not-found': return LogInWithGoogleFailure('Email is not found, please create an account.');
+      case 'wrong-password': return LogInWithGoogleFailure('Incorrect password, please try again.');
+      case 'invalid-verification-code': return LogInWithGoogleFailure('The credential verification code received is invalid.');
+      case 'invalid-verification-id': return LogInWithGoogleFailure('The credential verification ID received is invalid.');
+      default: return LogInWithGoogleFailure('An unknown exception occurred.');
+    }
+  }
+}
 
 /// Thrown during the logout process if a failure occurs.
 class LogOutFailure implements Exception {}
@@ -74,8 +129,8 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on Exception {
-      throw SignUpFailure();
+    } on FirebaseAuthException catch (e) {
+      throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     }
   }
 
@@ -101,8 +156,8 @@ class AuthenticationRepository {
       }
 
       await _firebaseAuth.signInWithCredential(credential);
-    } catch (_) {
-      throw LogInWithGoogleFailure();
+    } on FirebaseAuthException catch (e) {
+      throw LogInWithGoogleFailure.fromCode(e.code);
     }
   }
 
@@ -118,8 +173,8 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on Exception {
-      throw LogInWithEmailAndPasswordFailure();
+    } on FirebaseAuthException catch (e) {
+      throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
     }
   }
 
