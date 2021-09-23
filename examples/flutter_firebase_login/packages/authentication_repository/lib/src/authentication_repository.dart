@@ -8,11 +8,11 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
 
-
 /// Thrown if during the sign up process if a failure occurs.
 class SignUpWithEmailAndPasswordFailure implements Exception {
-  final String message;
   SignUpWithEmailAndPasswordFailure(this.message);
+
+  final String message;
 
   /// Create an authentication message from a firebase authentication exception code.
   /// https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/createUserWithEmailAndPassword.html
@@ -32,8 +32,9 @@ class SignUpWithEmailAndPasswordFailure implements Exception {
 /// Thrown during the login process if a failure occurs.
 /// https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/signInWithEmailAndPassword.html
 class LogInWithEmailAndPasswordFailure implements Exception {
-  final String message;
   LogInWithEmailAndPasswordFailure(this.message);
+
+  final String message;
 
   /// Create an authentication message from a firebase authentication exception code.
   factory LogInWithEmailAndPasswordFailure.fromCode(String code) {
@@ -50,8 +51,9 @@ class LogInWithEmailAndPasswordFailure implements Exception {
 /// Thrown during the sign in with google process if a failure occurs.
 /// https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/signInWithCredential.html
 class LogInWithGoogleFailure implements Exception {
-  final String message;
   LogInWithGoogleFailure(this.message);
+
+  final String message;
 
   /// Create an authentication message from a firebase authentication exception code.
   factory LogInWithGoogleFailure.fromCode(String code) {
