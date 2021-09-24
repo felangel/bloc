@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todos_app_core/todos_app_core.dart';
 import 'package:flutter_todos/blocs/stats/stats.dart';
-import 'package:flutter_todos/widgets/widgets.dart';
 import 'package:flutter_todos/flutter_todos_keys.dart';
+import 'package:flutter_todos/widgets/widgets.dart';
+import 'package:todos_app_core/todos_app_core.dart';
 
 class Stats extends StatelessWidget {
   Stats({Key key}) : super(key: key);

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 import 'package:test/test.dart';
 

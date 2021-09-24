@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 /// Mixin which allows `MultiBlocListener` to infer the types
