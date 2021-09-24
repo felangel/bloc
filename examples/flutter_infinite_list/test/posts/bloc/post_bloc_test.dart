@@ -128,7 +128,7 @@ void main() {
         ),
         act: (bloc) => bloc.add(PostFetched()),
         expect: () => <PostState>[
-          const PostState(
+          PostState(
             status: PostStatus.success,
             posts: [...mockPosts, ...extraMockPosts],
             hasReachedMax: false,
