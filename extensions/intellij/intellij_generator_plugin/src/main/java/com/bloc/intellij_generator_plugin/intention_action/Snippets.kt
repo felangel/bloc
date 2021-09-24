@@ -7,6 +7,7 @@ object Snippets {
     private const val SUFFIX_STATE = "State"
     private const val SUFFIX_REPOSITORY = "Repository"
 
+    const val SELECTED_STATE_SNIPPET_KEY = "SelectedState"
     const val BLOC_SNIPPET_KEY = PREFIX_SELECTION + SUFFIX_BLOC
     const val STATE_SNIPPET_KEY = PREFIX_SELECTION + SUFFIX_STATE
     const val REPOSITORY_SNIPPET_KEY = PREFIX_SELECTION + SUFFIX_REPOSITORY
@@ -14,7 +15,7 @@ object Snippets {
     @JvmStatic
     fun getSnippet(snippetType: SnippetType?, blocWidget: String, widget: String): String {
         return when (snippetType) {
-            // TODO: Add BlocSelector
+            SnippetType.BlocSelector -> blocSelectorSnippet(widget)
             SnippetType.BlocListener -> blocListenerSnippet(widget)
             SnippetType.BlocProvider -> blocProviderSnippet(widget)
             SnippetType.BlocConsumer -> blocConsumerSnippet(widget)
@@ -28,6 +29,17 @@ object Snippets {
 
     private fun blocBuilderSnippet(widget: String): String {
         return "BlocBuilder<$BLOC_SNIPPET_KEY, $STATE_SNIPPET_KEY>(\n" +
+                "  builder: (context, state) {\n" +
+                "    return $widget;\n" +
+                "  },\n" +
+                ")"
+    }
+
+    private fun blocSelectorSnippet(widget: String): String {
+        return "BlocSelector<$BLOC_SNIPPET_KEY, $STATE_SNIPPET_KEY, $SELECTED_STATE_SNIPPET_KEY>(\n" +
+                "  selector: (state) {\n" +
+                "    // TODO: return selected state\n" +
+                "  },\n" +
                 "  builder: (context, state) {\n" +
                 "    return $widget;\n" +
                 "  },\n" +
