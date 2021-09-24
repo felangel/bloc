@@ -11,6 +11,7 @@
 
     <change-notes><![CDATA[
         <ul>
+          <li>v3.1.0 - Support for Wrap with BlocSelector</li>
           <li>v3.0.0 - Support for Bloc v7.2.0 (on<Event> API)</li>
           <li>v2.4.0 - Add Convert to Multi Widget Actions</li>
           <li>v2.3.0 - Add Equatable Props Generator and Live Templates Bloc/Cubit selection support</li>
@@ -82,6 +83,10 @@
         </intentionAction>
         <intentionAction>
             <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocBuilderIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocSelectorIntentionAction</className>
             <category>Bloc</category>
         </intentionAction>
         <intentionAction>
