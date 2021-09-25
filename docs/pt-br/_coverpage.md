@@ -16,5 +16,8 @@
 - Altamente testável
 - Para Dart, Flutter e AngularDart
 
-[GitHub](https://github.com/felangel/bloc/)
-[Iniciar](pt-br/gettingstarted.md)
+<p class="buttons">
+    <a href="#/pt-br/migration">Guia de Migração</a>
+    <a href="https://github.com/felangel/bloc/" target="_blank" rel="noopener">GitHub</a>
+    <a href="#/pt-br/gettingstarted">Iniciar</a>
+</p>
