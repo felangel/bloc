@@ -9,64 +9,56 @@ void main() {
       final states = <int>[];
       final bloc = CounterBloc(droppable())
         ..stream.listen(states.add)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
+        ..add(Increment())
+        ..add(Increment())
+        ..add(Increment());
 
       await tick();
 
-      expect(bloc.onCalls, equals([CounterEvent.increment]));
+      expect(bloc.onCalls, equals([Increment()]));
 
       await wait();
 
-      expect(bloc.onEmitCalls, equals([CounterEvent.increment]));
+      expect(bloc.onEmitCalls, equals([Increment()]));
       expect(states, equals([1]));
 
       bloc
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
+        ..add(Increment())
+        ..add(Increment())
+        ..add(Increment());
 
       await tick();
 
       expect(
         bloc.onCalls,
-        equals([CounterEvent.increment, CounterEvent.increment]),
+        equals([Increment(), Increment()]),
       );
 
       await wait();
 
       expect(
         bloc.onEmitCalls,
-        equals([CounterEvent.increment, CounterEvent.increment]),
+        equals([Increment(), Increment()]),
       );
       expect(states, equals([1, 2]));
 
       bloc
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment)
-        ..add(CounterEvent.increment);
+        ..add(Increment())
+        ..add(Increment())
+        ..add(Increment());
 
       await tick();
 
       expect(
         bloc.onCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
+        equals([Increment(), Increment(), Increment()]),
       );
 
       await wait();
 
       expect(
         bloc.onEmitCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
+        equals([Increment(), Increment(), Increment()]),
       );
       expect(states, equals([1, 2, 3]));
 
@@ -74,20 +66,12 @@ void main() {
 
       expect(
         bloc.onCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
+        equals([Increment(), Increment(), Increment()]),
       );
 
       expect(
         bloc.onEmitCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
+        equals([Increment(), Increment(), Increment()]),
       );
 
       expect(states, equals([1, 2, 3]));
