@@ -1,4 +1,4 @@
-# Migration Guide
+# Guia de Migração
 
 ?> **Tip**: Por favor, consulte o [release log](https://github.com/felangel/bloc/releases) para obter mais informações sobre o que mudou em cada versão.
 
