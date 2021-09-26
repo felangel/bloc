@@ -11,11 +11,11 @@ void main() {
       Future<void> addEvents() async {
         const spacer = Duration(milliseconds: 10);
         await Future<void>.delayed(spacer);
-        bloc.add(CounterEvent.increment);
+        bloc.add(Increment());
         await Future<void>.delayed(spacer);
-        bloc.add(CounterEvent.increment);
+        bloc.add(Increment());
         await Future<void>.delayed(spacer);
-        bloc.add(CounterEvent.increment);
+        bloc.add(Increment());
         await Future<void>.delayed(spacer);
       }
 
@@ -24,16 +24,12 @@ void main() {
 
       expect(
         bloc.onCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment
-        ]),
+        equals([Increment(), Increment(), Increment()]),
       );
 
       await wait();
 
-      expect(bloc.onEmitCalls, equals([CounterEvent.increment]));
+      expect(bloc.onEmitCalls, equals([Increment()]));
       expect(states, equals([1]));
 
       await tick();
@@ -42,12 +38,12 @@ void main() {
       expect(
         bloc.onCalls,
         equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment()
         ]),
       );
 
@@ -55,10 +51,7 @@ void main() {
 
       expect(
         bloc.onEmitCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
+        equals([Increment(), Increment()]),
       );
 
       expect(states, equals([1, 2]));
@@ -69,15 +62,15 @@ void main() {
       expect(
         bloc.onCalls,
         equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment()
         ]),
       );
 
@@ -85,11 +78,7 @@ void main() {
 
       expect(
         bloc.onEmitCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
+        equals([Increment(), Increment(), Increment()]),
       );
 
       expect(states, equals([1, 2, 3]));
@@ -99,25 +88,21 @@ void main() {
       expect(
         bloc.onCalls,
         equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment(),
+          Increment(),
         ]),
       );
 
       expect(
         bloc.onEmitCalls,
-        equals([
-          CounterEvent.increment,
-          CounterEvent.increment,
-          CounterEvent.increment,
-        ]),
+        equals([Increment(), Increment(), Increment()]),
       );
 
       expect(states, equals([1, 2, 3]));
