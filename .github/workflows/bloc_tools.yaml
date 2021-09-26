@@ -40,7 +40,7 @@ jobs:
         run: flutter test -x pull-request-only --no-pub --coverage --test-randomize-ordering-seed random
 
       - name: Check Code Coverage
-        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
+        uses: VeryGoodOpenSource/very_good_coverage@v1.2.0
         with:
           path: packages/bloc_tools/coverage/lcov.info
 
