@@ -207,18 +207,6 @@ Please make sure to await all asynchronous operations within event handlers.
   Future<void> get future => _completer.future;
 }
 
-/// **@Deprecated - Use `on<Event>` with an `EventTransformer` instead.
-/// Will be removed in v8.0.0**
-///
-/// Signature for a mapper function which takes an [Event] as input
-/// and outputs a [Stream] of [Transition] objects.
-@Deprecated(
-  'Use `on<Event>` with an `EventTransformer` instead. '
-  'Will be removed in v8.0.0',
-)
-typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
-    Function(Event);
-
 /// {@template bloc_unhandled_error_exception}
 /// Exception thrown when an unhandled error occurs within a bloc.
 ///
@@ -249,15 +237,19 @@ class BlocUnhandledErrorException implements Exception {
   }
 }
 
+class _Handler {
+  const _Handler({required this.isType, required this.type});
+  final bool Function(dynamic) isType;
+  final Type type;
+}
+
 /// {@template bloc}
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
 abstract class Bloc<Event, State> extends BlocBase<State> {
   /// {@macro bloc}
-  Bloc(State initialState) : super(initialState) {
-    _bindEventsToStates();
-  }
+  Bloc(State initialState) : super(initialState);
 
   /// The current [BlocObserver] instance.
   static BlocObserver observer = BlocObserver();
@@ -279,18 +271,30 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
         .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
   };
 
-  StreamSubscription<Transition<Event, State>>? _transitionSubscription;
-
   final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<dynamic>>[];
-  final _handlerTypes = <Type>[];
+  final _handlers = <_Handler>[];
   final _emitters = <_Emitter>[];
 
   /// Notifies the [Bloc] of a new [event] which triggers
   /// all corresponding [EventHandler] instances.
   /// If [close] has already been called, any subsequent calls to [add] will
   /// be ignored and will not result in any subsequent state changes.
+  ///
+  /// * A [StateError] will be thrown if there is no event handler
+  /// registered for the incoming [event].
   void add(Event event) {
+    assert(() {
+      final handlerExists = _handlers.any((handler) => handler.isType(event));
+      if (!handlerExists) {
+        final eventType = event.runtimeType;
+        throw StateError(
+          '''add($eventType) was called without a registered event handler.\n'''
+          '''Make sure to register a handler via on<$eventType>((event, emit) {...})''',
+        );
+      }
+      return true;
+    }());
     if (_eventController.isClosed) return;
     try {
       onEvent(event);
@@ -323,52 +327,6 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   void onEvent(Event event) {
     // ignore: invalid_use_of_protected_member
     observer.onEvent(this, event);
-  }
-
-  /// **@Deprecated - Use `on<Event>` with an `EventTransformer` instead.
-  /// Will be removed in v8.0.0**
-  ///
-  /// Transforms the [events] stream along with a [transitionFn] function into
-  /// a `Stream<Transition>`.
-  /// Events that should be processed by [mapEventToState] need to be passed to
-  /// [transitionFn].
-  /// By default `asyncExpand` is used to ensure all [events] are processed in
-  /// the order in which they are received.
-  /// You can override [transformEvents] for advanced usage in order to
-  /// manipulate the frequency and specificity with which [mapEventToState] is
-  /// called as well as which [events] are processed.
-  ///
-  /// For example, if you only want [mapEventToState] to be called on the most
-  /// recent [Event] you can use `switchMap` instead of `asyncExpand`.
-  ///
-  /// ```dart
-  /// @override
-  /// Stream<Transition<Event, State>> transformEvents(events, transitionFn) {
-  ///   return events.switchMap(transitionFn);
-  /// }
-  /// ```
-  ///
-  /// Alternatively, if you only want [mapEventToState] to be called for
-  /// distinct [events]:
-  ///
-  /// ```dart
-  /// @override
-  /// Stream<Transition<Event, State>> transformEvents(events, transitionFn) {
-  ///   return super.transformEvents(
-  ///     events.distinct(),
-  ///     transitionFn,
-  ///   );
-  /// }
-  /// ```
-  @Deprecated(
-    'Use `on<Event>` with an `EventTransformer` instead. '
-    'Will be removed in v8.0.0',
-  )
-  Stream<Transition<Event, State>> transformEvents(
-    Stream<Event> events,
-    TransitionFunction<Event, State> transitionFn,
-  ) {
-    return events.asyncExpand(transitionFn);
   }
 
   /// {@template emit}
@@ -412,14 +370,14 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     EventTransformer<E>? transformer,
   }) {
     assert(() {
-      final handlerExists = _handlerTypes.any((type) => type == E);
+      final handlerExists = _handlers.any((handler) => handler.type == E);
       if (handlerExists) {
         throw StateError(
           'on<$E> was called multiple times. '
           'There should only be a single event handler per event type.',
         );
       }
-      _handlerTypes.add(E);
+      _handlers.add(_Handler(isType: (dynamic e) => e is E, type: E));
       return true;
     }());
 
@@ -468,15 +426,6 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     _subscriptions.add(subscription);
   }
 
-  /// **@Deprecated - Use on<Event> instead. Will be removed in v8.0.0**
-  ///
-  /// Must be implemented when a class extends [Bloc].
-  /// [mapEventToState] is called whenever an [event] is [add]ed
-  /// and is responsible for converting that [event] into a new [state].
-  /// [mapEventToState] can `yield` zero, one, or multiple states for an event.
-  @Deprecated('Use on<Event> instead. Will be removed in v8.0.0')
-  Stream<State> mapEventToState(Event event) async* {}
-
   /// Called whenever a [transition] occurs with the given [transition].
   /// A [transition] occurs when a new `event` is added
   /// and a new state is `emitted` from a corresponding [EventHandler].
@@ -506,35 +455,6 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     Bloc.observer.onTransition(this, transition);
   }
 
-  /// **@Deprecated - Override `Stream<State> get stream` instead.
-  /// Will be removed in v8.0.0**
-  ///
-  /// Transforms the `Stream<Transition>` into a new `Stream<Transition>`.
-  /// By default [transformTransitions] returns
-  /// the incoming `Stream<Transition>`.
-  /// You can override [transformTransitions] for advanced usage in order to
-  /// manipulate the frequency and specificity at which `transitions`
-  /// (state changes) occur.
-  ///
-  /// For example, if you want to debounce outgoing state changes:
-  ///
-  /// ```dart
-  /// @override
-  /// Stream<Transition<Event, State>> transformTransitions(
-  ///   Stream<Transition<Event, State>> transitions,
-  /// ) {
-  ///   return transitions.debounceTime(Duration(seconds: 1));
-  /// }
-  /// ```
-  @Deprecated(
-    'Override `Stream<State> get stream` instead. Will be removed in v8.0.0',
-  )
-  Stream<Transition<Event, State>> transformTransitions(
-    Stream<Transition<Event, State>> transitions,
-  ) {
-    return transitions;
-  }
-
   /// Closes the `event` and `state` `Streams`.
   /// This method should be called when a [Bloc] is no longer needed.
   /// Once [close] is called, `events` that are [add]ed will not be
@@ -548,47 +468,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     for (final emitter in _emitters) emitter.cancel();
     await Future.wait<void>(_emitters.map((e) => e.future));
     await Future.wait<void>(_subscriptions.map((s) => s.cancel()));
-    await _transitionSubscription?.cancel();
     return super.close();
-  }
-
-  void _bindEventsToStates() {
-    void assertNoMixedUsage() {
-      assert(() {
-        if (_handlerTypes.isNotEmpty) {
-          throw StateError(
-            'mapEventToState cannot be overridden in '
-            'conjunction with on<Event>.',
-          );
-        }
-        return true;
-      }());
-    }
-
-    _transitionSubscription = transformTransitions(
-      transformEvents(
-        _eventController.stream,
-        (event) => mapEventToState(event).map(
-          (nextState) => Transition(
-            currentState: state,
-            event: event,
-            nextState: nextState,
-          ),
-        ),
-      ),
-    ).listen(
-      (transition) {
-        if (transition.nextState == state && _emitted) return;
-        try {
-          assertNoMixedUsage();
-          onTransition(transition);
-          emit(transition.nextState);
-        } catch (error, stackTrace) {
-          onError(error, stackTrace);
-        }
-      },
-      onError: onError,
-    );
   }
 }
 

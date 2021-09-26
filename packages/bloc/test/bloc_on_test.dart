@@ -53,13 +53,23 @@ class MissingHandlerBloc extends Bloc<TestEvent, TestState> {
 }
 
 void main() {
-  group('on', () {
+  group('on<Event>', () {
     test('throws StateError when handler is registered more than once', () {
       const expectedMessage = 'on<TestEvent> was called multiple times. '
           'There should only be a single event handler per event type.';
       final expected = throwsA(isA<StateError>()
           .having((e) => e.message, 'message', expectedMessage));
       expect(() => DuplicateHandlerBloc(), expected);
+    });
+
+    test('throws StateError when handler is missing', () {
+      const expectedMessage =
+          '''add(TestEventA) was called without a registered event handler.\n'''
+          '''Make sure to register a handler via on<TestEventA>((event, emit) {...})''';
+      final expected = throwsA(
+        isA<StateError>().having((e) => e.message, 'message', expectedMessage),
+      );
+      expect(() => MissingHandlerBloc()..add(TestEventA()), expected);
     });
 
     test('invokes all on<T> when event E is added where E is T', () async {
