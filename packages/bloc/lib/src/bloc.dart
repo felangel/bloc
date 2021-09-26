@@ -409,7 +409,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   ///
   void on<E extends Event>(
     EventHandler<E, State> handler, {
-    EventTransformer<Event>? transformer,
+    EventTransformer<E>? transformer,
   }) {
     assert(() {
       final handlerExists = _handlerTypes.any((type) => type == E);
@@ -425,7 +425,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
 
     final _transformer = transformer ?? Bloc.transformer;
     final subscription = _transformer(
-      _eventController.stream.where((event) => event is E),
+      _eventController.stream.where((event) => event is E).cast<E>(),
       (dynamic event) {
         void onEmit(State state) {
           if (isClosed) return;
@@ -439,7 +439,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
         }
 
         final emitter = _Emitter(onEmit);
-        final controller = StreamController<Event>.broadcast(
+        final controller = StreamController<E>.broadcast(
           sync: true,
           onCancel: emitter.cancel,
         );
