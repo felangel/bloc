@@ -1,3 +1,7 @@
+# 7.2.1
+
+- fix: `on<E extends Event>` should have an `EventTransformer<E>` instead of `EventTransformer<Event>`
+
 # 7.2.0
 
 - feat: introduce `on<Event>` API to register event handlers
