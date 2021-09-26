@@ -1,3 +1,11 @@
+# 8.0.0-dev.1
+
+- **BREAKING**: refactor: remove deprecated `TransitionFunction`
+- **BREAKING**: refactor: remove deprecated `transformEvents`
+- **BREAKING**: refactor: remove deprecated `mapEventToState`
+- **BREAKING**: refactor: remove deprecated `transformTransitions`
+- feat: throw `StateError` if an event is added without a registered event handler
+
 # 7.2.1
 
 - fix: `on<E extends Event>` should have an `EventTransformer<E>` instead of `EventTransformer<Event>`
@@ -24,7 +32,7 @@
 
 # 7.2.0-dev.3
 
-- **BREAKING**: refactor!: require `emit.forEach` `onData` to be synchronous
+- **BREAKING**: refactor: require `emit.forEach` `onData` to be synchronous
 - refactor: minor internal optimizations in `on<Event>` implementation
 
 # 7.2.0-dev.2
