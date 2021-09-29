@@ -1,3 +1,8 @@
+# 9.0.0-dev.1
+
+- **BREAKING**: feat: upgrade to `bloc v8.0.0-dev.2`
+- feat: `MockBloc` no longer implicitly requires `registerFallbackValue` for events and states
+
 # 8.4.0
 
 - feat: upgrade to `mocktail ^0.2.0`
