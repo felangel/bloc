@@ -60,6 +60,8 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 
 - [Official Documentation](https://bloclibrary.dev)
 - [Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/bloc/README.md)
+- [Bloc Test Package](https://github.com/felangel/Bloc/tree/master/packages/bloc_test/README.md)
+- [Bloc Concurrency Package](https://github.com/felangel/Bloc/tree/master/packages/bloc_concurrency/README.md)
 - [Flutter Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/flutter_bloc/README.md)
 - [Angular Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/angular_bloc/README.md)
 - [Hydrated Bloc Package](https://github.com/felangel/Bloc/tree/master/packages/hydrated_bloc/README.md)
