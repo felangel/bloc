@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 
 import 'cubits/cubits.dart';
 
 class MockCounterCubit extends MockCubit<int> implements CounterCubit {}
+
+void unawaited(Future<void>? _) {}
 
 void main() {
   group('whenListen', () {
