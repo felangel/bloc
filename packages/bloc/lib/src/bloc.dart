@@ -1,4 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
@@ -526,27 +525,6 @@ abstract class BlocBase<State> {
   /// A bloc is considered closed once [close] is called.
   /// Subsequent state changes cannot occur within a closed bloc.
   bool get isClosed => _stateController.isClosed;
-
-  /// Adds a subscription to the `Stream<State>`.
-  /// Returns a [StreamSubscription] which handles events from
-  /// the `Stream<State>` using the provided [onData], [onError] and [onDone]
-  /// handlers.
-  @Deprecated(
-    'Use stream.listen instead. Will be removed in v8.0.0',
-  )
-  StreamSubscription<State> listen(
-    void Function(State)? onData, {
-    Function? onError,
-    void Function()? onDone,
-    bool? cancelOnError,
-  }) {
-    return stream.listen(
-      onData,
-      onError: onError,
-      onDone: onDone,
-      cancelOnError: cancelOnError,
-    );
-  }
 
   /// Updates the [state] to the provided [state].
   /// [emit] does nothing if the instance has been closed or if the
