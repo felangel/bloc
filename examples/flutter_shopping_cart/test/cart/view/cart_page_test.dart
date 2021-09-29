@@ -114,20 +114,6 @@ void main() {
     });
 
     testWidgets(
-        'removes item from cart items '
-        'after long press', (tester) async {
-      when(() => cartBloc.state)
-          .thenReturn(CartLoaded(cart: Cart(items: mockItems)));
-      await tester.pumpApp(
-        cartBloc: cartBloc,
-        child: Scaffold(body: CartList()),
-      );
-      await tester.longPress(find.text(mockItemToRemove.name));
-      await tester.pumpAndSettle();
-      verify(() => cartBloc.add(CartItemRemoved(mockItemToRemove))).called(1);
-    });
-
-    testWidgets(
         'renders SnackBar after '
         'tapping the \'BUY\' button', (tester) async {
       when(() => cartBloc.state)
@@ -140,6 +126,20 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(SnackBar), findsOneWidget);
       expect(find.text('Buying not supported yet.'), findsOneWidget);
+    });
+
+    testWidgets(
+        'removes item from cart items '
+        'after long press', (tester) async {
+      when(() => cartBloc.state)
+          .thenReturn(CartLoaded(cart: Cart(items: mockItems)));
+      await tester.pumpApp(
+        cartBloc: cartBloc,
+        child: Scaffold(body: CartList()),
+      );
+      await tester.longPress(find.text(mockItemToRemove.name));
+      await tester.pumpAndSettle();
+      verify(() => cartBloc.add(CartItemRemoved(mockItemToRemove))).called(1);
     });
   });
 }

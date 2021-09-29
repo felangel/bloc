@@ -31,7 +31,7 @@ class ShoppingRepository {
 
   void addItemToCart(Item item) => _items.add(item);
 
-  void removeItemFromCart(Item item) => _items.removeWhere(
-        (cartItem) => cartItem == item,
-      );
+  void removeItemFromCart(Item item) {
+    _items.removeWhere((cartItem) => cartItem == item);
+  }
 }
