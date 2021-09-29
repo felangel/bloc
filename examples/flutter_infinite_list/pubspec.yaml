@@ -14,12 +14,13 @@ dependencies:
   flutter_bloc:
     path: ../../packages/flutter_bloc
   http: ^0.13.0
-  equatable: ^2.0.0
+  equatable: ^2.0.3
+  stream_transform: ^2.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  bloc_test: ^8.0.0
+  bloc_test: ^8.2.0
   mocktail: ^0.1.0
 
 dependency_overrides:
