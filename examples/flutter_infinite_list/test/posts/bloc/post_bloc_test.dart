@@ -70,6 +70,60 @@ void main() {
       );
 
       blocTest<PostBloc, PostState>(
+        'drops new events when processing current event',
+        setUp: () {
+          when(() => httpClient.get(any())).thenAnswer((_) async {
+            return http.Response(
+              '[{ "id": 1, "title": "post title", "body": "post body" }]',
+              200,
+            );
+          });
+        },
+        build: () => PostBloc(httpClient: httpClient),
+        act: (bloc) => bloc
+          ..add(PostFetched())
+          ..add(PostFetched()),
+        expect: () => const <PostState>[
+          PostState(
+            status: PostStatus.success,
+            posts: mockPosts,
+            hasReachedMax: false,
+          )
+        ],
+        verify: (_) {
+          verify(() => httpClient.get(any())).called(1);
+        },
+      );
+
+      blocTest<PostBloc, PostState>(
+        'throttles events',
+        setUp: () {
+          when(() => httpClient.get(any())).thenAnswer((_) async {
+            return http.Response(
+              '[{ "id": 1, "title": "post title", "body": "post body" }]',
+              200,
+            );
+          });
+        },
+        build: () => PostBloc(httpClient: httpClient),
+        act: (bloc) async {
+          bloc.add(PostFetched());
+          await Future<void>.delayed(Duration.zero);
+          bloc.add(PostFetched());
+        },
+        expect: () => const <PostState>[
+          PostState(
+            status: PostStatus.success,
+            posts: mockPosts,
+            hasReachedMax: false,
+          )
+        ],
+        verify: (_) {
+          verify(() => httpClient.get(any())).called(1);
+        },
+      );
+
+      blocTest<PostBloc, PostState>(
         'emits failure status when http fetches posts and throw exception',
         setUp: () {
           when(() => httpClient.get(any())).thenAnswer(
