@@ -70,7 +70,7 @@ class MyBloc extends Bloc<MyEvent, MyState> {
 }
 ```
 
-You can also override the default `EventTransformer`:
+You can also override the default `EventTransformer` for all blocs in your application:
 
 ```dart
 import 'package:bloc/bloc.dart';
