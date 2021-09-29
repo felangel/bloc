@@ -51,6 +51,37 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
+!> Each registered `EventHandler` functions independently so it's important to register event handlers based on the type of transformer you'd like applied.
+
+If you want to retain the exact same behavior as in v7.1.0 you can register a single event handler for all events and apply a `sequential` transformer:
+
+```dart
+import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+
+class MyBloc extends Bloc<MyEvent, MyState> {
+  MyBloc() : super(MyState()) {
+    on<MyEvent>(_onEvent, transformer: sequential())
+  }
+
+  FutureOr<void> _onEvent(MyEvent event, Emitter<MyState> emit) async {
+    // TODO: logic goes here...
+  }
+}
+```
+
+You can also override the default `EventTransformer` for all blocs in your application:
+
+```dart
+import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+
+void main() {
+  Bloc.transformer = sequential<dynamic>();
+  ...
+}
+```
+
 #### ✨ Introduce new `EventTransformer` API
 
 !> In bloc v7.2.0, `transformEvents` was deprecated in favor of the `EventTransformer` API. `transformEvents` will be removed in bloc v8.0.0.
