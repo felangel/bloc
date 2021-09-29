@@ -1,3 +1,7 @@
+# 8.0.0-dev.2
+
+- **BREAKING**: refactor: remove deprecated `listen` on `BlocBase`
+
 # 8.0.0-dev.1
 
 - **BREAKING**: refactor: remove deprecated `TransitionFunction`
