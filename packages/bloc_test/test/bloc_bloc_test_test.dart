@@ -244,8 +244,9 @@ void main() {
       );
 
       blocTest<InstantEmitBloc, int>(
-        'emits [11, 12] when CounterEvent.increment is added and emitted 10',
-        build: () => InstantEmitBloc(seed: 10),
+        'emits [11, 12] when CounterEvent.increment is added and seeded 10',
+        build: () => InstantEmitBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11, 12],
       );
