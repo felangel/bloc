@@ -2,12 +2,13 @@ import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 
 import 'blocs/blocs.dart';
 
 class MockRepository extends Mock implements Repository {}
+
+void unawaited(Future<void>? _) {}
 
 void main() {
   group('blocTest', () {
@@ -86,7 +87,8 @@ void main() {
 
       blocTest<CounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and emitted 10',
-        build: () => CounterBloc()..emit(10),
+        build: () => CounterBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11],
       );
@@ -165,7 +167,8 @@ void main() {
 
       blocTest<AsyncCounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and emitted 10',
-        build: () => AsyncCounterBloc()..emit(10),
+        build: () => AsyncCounterBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11],
       );
@@ -202,14 +205,15 @@ void main() {
 
       blocTest<DebounceCounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and emitted 10',
-        build: () => DebounceCounterBloc()..emit(10),
+        build: () => DebounceCounterBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         wait: const Duration(milliseconds: 300),
         expect: () => const <int>[11],
       );
     });
 
-    group('InstanceEmitBloc', () {
+    group('InstantEmitBloc', () {
       blocTest<InstantEmitBloc, int>(
         'emits [1] when nothing is added',
         build: () => InstantEmitBloc(),
@@ -246,8 +250,9 @@ void main() {
       );
 
       blocTest<InstantEmitBloc, int>(
-        'emits [11, 12] when CounterEvent.increment is added and emitted 10',
-        build: () => InstantEmitBloc()..emit(10),
+        'emits [11, 12] when CounterEvent.increment is added and seeded 10',
+        build: () => InstantEmitBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11, 12],
       );
@@ -291,7 +296,8 @@ void main() {
 
       blocTest<MultiCounterBloc, int>(
         'emits [11, 12] when CounterEvent.increment is added and emitted 10',
-        build: () => MultiCounterBloc()..emit(10),
+        build: () => MultiCounterBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11, 12],
       );
