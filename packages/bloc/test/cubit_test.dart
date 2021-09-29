@@ -262,57 +262,6 @@ void main() {
       });
     });
 
-    group('listen (legacy)', () {
-      test('returns a StreamSubscription', () {
-        final cubit = CounterCubit();
-        // ignore: deprecated_member_use_from_same_package
-        final subscription = cubit.listen((_) {});
-        expect(subscription, isA<StreamSubscription<int>>());
-        subscription.cancel();
-        cubit.close();
-      });
-
-      test('does not receive current state upon subscribing', () async {
-        final states = <int>[];
-        // ignore: deprecated_member_use_from_same_package
-        final cubit = CounterCubit()..listen(states.add);
-        await cubit.close();
-        expect(states, isEmpty);
-      });
-
-      test('receives single async state', () async {
-        final states = <int>[];
-        // ignore: deprecated_member_use_from_same_package
-        final cubit = FakeAsyncCounterCubit()..listen(states.add);
-        await cubit.increment();
-        await cubit.close();
-        expect(states, [equals(1)]);
-      });
-
-      test('receives multiple async states', () async {
-        final states = <int>[];
-        // ignore: deprecated_member_use_from_same_package
-        final cubit = FakeAsyncCounterCubit()..listen(states.add);
-        await cubit.increment();
-        await cubit.increment();
-        await cubit.increment();
-        await cubit.close();
-        expect(states, [equals(1), equals(2), equals(3)]);
-      });
-
-      test('can call listen multiple times', () async {
-        final states = <int>[];
-        final cubit = CounterCubit()
-          // ignore: deprecated_member_use_from_same_package
-          ..listen(states.add)
-          // ignore: deprecated_member_use_from_same_package
-          ..listen(states.add)
-          ..increment();
-        await cubit.close();
-        expect(states, [equals(1), equals(1)]);
-      });
-    });
-
     group('close', () {
       late MockBlocObserver observer;
 
