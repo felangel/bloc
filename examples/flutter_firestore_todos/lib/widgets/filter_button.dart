@@ -10,11 +10,6 @@ class FilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultStyle = Theme.of(context).textTheme.bodyText2;
-    final activeStyle = Theme.of(context)
-        .textTheme
-        .bodyText2
-        ?.copyWith(color: Theme.of(context).colorScheme.secondary);
     return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
         builder: (context, state) {
       final button = _Button(
@@ -24,8 +19,6 @@ class FilterButton extends StatelessWidget {
         activeFilter: state is FilteredTodosLoaded
             ? state.activeFilter
             : VisibilityFilter.all,
-        activeStyle: activeStyle,
-        defaultStyle: defaultStyle,
       );
       return AnimatedOpacity(
         opacity: visible ? 1.0 : 0.0,
@@ -41,17 +34,19 @@ class _Button extends StatelessWidget {
     Key? key,
     required this.onSelected,
     required this.activeFilter,
-    required this.activeStyle,
-    required this.defaultStyle,
   }) : super(key: key);
 
   final PopupMenuItemSelected<VisibilityFilter> onSelected;
   final VisibilityFilter activeFilter;
-  final TextStyle? activeStyle;
-  final TextStyle? defaultStyle;
 
   @override
   Widget build(BuildContext context) {
+    final defaultStyle = Theme.of(context).textTheme.bodyText2;
+    final activeStyle = Theme.of(context)
+        .textTheme
+        .bodyText2
+        ?.copyWith(color: Theme.of(context).colorScheme.secondary);
+    
     return PopupMenuButton<VisibilityFilter>(
       tooltip: 'Filter Todos',
       onSelected: onSelected,
