@@ -1,5 +1,5 @@
 name: notification_repository
-description: repository to handle displaying notificaiton and exposing a stream of notificaitons
+description: A repository to handle displaying and exposing a stream of notifications.
 
 version: 1.0.0+1
 
