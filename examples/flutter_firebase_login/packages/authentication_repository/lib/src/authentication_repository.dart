@@ -1,15 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:math';
 
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:authentication_repository/src/crypto.dart';
 import 'package:cache/cache.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:meta/meta.dart';
-import 'package:crypto/crypto.dart';
 
 /// Thrown if during the sign up process if a failure occurs.
 class SignUpFailure implements Exception {}
@@ -42,6 +40,7 @@ class AuthenticationRepository {
   final CacheClient _cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+  final Crypto _crypto = Crypto();
 
   /// Whether or not the current environment is web
   /// Should only be overriden for testing purposes. Otherwise,
@@ -121,8 +120,8 @@ class AuthenticationRepository {
     // include a nonce in the credential request. When signing in with
     // Firebase, the nonce in the id token returned by Apple, is expected to
     // match the sha256 hash of `rawNonce`.
-    final rawNonce = generateNonce();
-    final nonce = sha256ofString(rawNonce);
+    final rawNonce = _crypto.generateNonce();
+    final nonce = _crypto.sha256ofString(rawNonce);
 
     try {
       final appleCredential = await SignInWithApple.getAppleIDCredential(
@@ -143,23 +142,6 @@ class AuthenticationRepository {
     } on Exception {
       throw LogInWithAppleFailure();
     }
-  }
-
-  /// Generates a cryptographically secure random nonce, to be included in a
-  /// credential request.
-  String generateNonce([int length = 32]) {
-    final charset =
-        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
-    const random = Random.secure();
-    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
-        .join();
-  }
-
-  /// Returns the sha256 hash of [input] in hex notation.
-  String sha256ofString(String input) {
-    final bytes = utf8.encode(input);
-    final digest = sha256.convert(bytes);
-    return digest.toString();
   }
 
   /// Signs in with the provided [email] and [password].
