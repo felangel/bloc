@@ -131,6 +131,7 @@ void blocTest<B extends BlocBase<State>, State>(
   Function(B bloc)? act,
   Duration? wait,
   int skip = 0,
+  dynamic Function(State state)? map,
   dynamic Function()? expect,
   Function(B bloc)? verify,
   dynamic Function()? errors,
@@ -144,6 +145,7 @@ void blocTest<B extends BlocBase<State>, State>(
       act: act,
       wait: wait,
       skip: skip,
+      map: map,
       expect: expect,
       verify: verify,
       errors: errors,
@@ -162,6 +164,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
   Function(B bloc)? act,
   Duration? wait,
   int skip = 0,
+  dynamic Function(State state)? map,
   dynamic Function()? expect,
   Function(B bloc)? verify,
   dynamic Function()? errors,
@@ -172,11 +175,18 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
   await runZonedGuarded(
     () async {
       await setUp?.call();
-      final states = <State>[];
+      final states = <dynamic>[];
       final bloc = build();
       // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
       if (seed != null) bloc.emit(seed());
-      final subscription = bloc.stream.skip(skip).listen(states.add);
+      final subscription = bloc.stream.skip(skip).listen((State state) {
+        if (map != null) {
+          states.add(map(state));
+        } else {
+          states.add(state);
+        }
+      });
+
       try {
         await act?.call(bloc);
       } catch (error) {
