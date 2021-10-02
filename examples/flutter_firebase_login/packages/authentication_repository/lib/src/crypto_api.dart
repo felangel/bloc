@@ -3,13 +3,14 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 
-class Crypto {
+class CryptoApi {
+
+  static const charset =
+      '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
 
   /// Generates a cryptographically secure random nonce, to be included in a
   /// credential request.
   String generateNonce([int length = 32]) {
-    const charset =
-        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     var random = Random.secure();
     return List.generate(length, (_) => charset[random.nextInt(charset.length)])
         .join();

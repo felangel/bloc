@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:authentication_repository/src/crypto.dart';
+import 'package:authentication_repository/src/crypto_api.dart';
 import 'package:cache/cache.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -32,15 +32,17 @@ class AuthenticationRepository {
   AuthenticationRepository({
     CacheClient? cache,
     firebase_auth.FirebaseAuth? firebaseAuth,
-    GoogleSignIn? googleSignIn
+    GoogleSignIn? googleSignIn,
+    CryptoApi? cryptoApi
   })  : _cache = cache ?? CacheClient(),
         _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
-        _googleSignIn = googleSignIn ?? GoogleSignIn.standard()
+        _googleSignIn = googleSignIn ?? GoogleSignIn.standard(),
+        _crypto = cryptoApi ?? CryptoApi()
 
   final CacheClient _cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
-  final Crypto _crypto = Crypto();
+  final Crypto _crypto;
 
   /// Whether or not the current environment is web
   /// Should only be overriden for testing purposes. Otherwise,
