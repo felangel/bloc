@@ -134,8 +134,9 @@ void main() {
         );
       });
 
-      test('throws SignUpFailure when createUserWithEmailAndPassword throws',
-          () async {
+      test(
+          'throws SignUpWithEmailAndPasswordFailure '
+          'when createUserWithEmailAndPassword throws', () async {
         when(
           () => firebaseAuth.createUserWithEmailAndPassword(
             email: any(named: 'email'),
@@ -144,7 +145,7 @@ void main() {
         ).thenThrow(Exception());
         expect(
           authenticationRepository.signUp(email: email, password: password),
-          throwsA(isA<SignUpFailure>()),
+          throwsA(isA<SignUpWithEmailAndPasswordFailure>()),
         );
       });
     });
