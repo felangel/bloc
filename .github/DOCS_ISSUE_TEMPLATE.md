@@ -10,6 +10,6 @@ Update Translations to include changes from {{ sha }}.
 - [ ] fr (@sachaarbonel or @StefanYYC)
 - [ ] jp (@dshukertjr)
 - [ ] ko-kr (@zoomKoding)
-- [ ] pt-br (@rodrigobastosv)
+- [ ] pt-br (@rodrigobastosv or @alisson-suzigan)
 - [ ] ru (@basilex)
 - [ ] zh-cn (@jakecastelli)
