@@ -1,11 +1,11 @@
-// ignore_for_file: invalid_use_of_protected_member
 import 'dart:async';
 
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
+
+void unawaited(Future<void>? _) {}
 
 class MockStorage extends Mock implements Storage {}
 
@@ -250,6 +250,7 @@ void main() {
           ).thenThrow(expectedError);
           bloc.onChange(change);
           await Future<void>.delayed(const Duration(milliseconds: 300));
+          // ignore: invalid_use_of_protected_member
           verify(() => bloc.onError(expectedError, any())).called(2);
         }, (error, _) {
           expect(
