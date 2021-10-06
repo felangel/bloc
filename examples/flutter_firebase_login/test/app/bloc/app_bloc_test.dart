@@ -35,25 +35,29 @@ void main() {
     group('UserChanged', () {
       blocTest<AppBloc, AppState>(
         'emits authenticated when user is not empty',
-        build: () {
+        setUp: () {
           when(() => user.isNotEmpty).thenReturn(true);
           when(() => authenticationRepository.user).thenAnswer(
             (_) => Stream.value(user),
           );
-          return AppBloc(authenticationRepository: authenticationRepository);
         },
+        build: () => AppBloc(
+          authenticationRepository: authenticationRepository,
+        ),
         seed: () => AppState.unauthenticated(),
         expect: () => [AppState.authenticated(user)],
       );
 
       blocTest<AppBloc, AppState>(
         'emits unauthenticated when user is empty',
-        build: () {
+        setUp: () {
           when(() => authenticationRepository.user).thenAnswer(
             (_) => Stream.value(User.empty),
           );
-          return AppBloc(authenticationRepository: authenticationRepository);
         },
+        build: () => AppBloc(
+          authenticationRepository: authenticationRepository,
+        ),
         expect: () => [AppState.unauthenticated()],
       );
     });
@@ -61,9 +65,9 @@ void main() {
     group('LogoutRequested', () {
       blocTest<AppBloc, AppState>(
         'invokes logOut',
-        build: () {
-          return AppBloc(authenticationRepository: authenticationRepository);
-        },
+        build: () => AppBloc(
+          authenticationRepository: authenticationRepository,
+        ),
         act: (bloc) => bloc.add(AppLogoutRequested()),
         verify: (_) {
           verify(() => authenticationRepository.logOut()).called(1);

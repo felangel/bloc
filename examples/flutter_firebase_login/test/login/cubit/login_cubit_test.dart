@@ -150,15 +150,15 @@ void main() {
       blocTest<LoginCubit, LoginState>(
         'emits [submissionInProgress, submissionFailure] '
         'when logInWithEmailAndPassword fails',
-        build: () {
+        setUp: () {
           when(
             () => authenticationRepository.logInWithEmailAndPassword(
               email: any(named: 'email'),
               password: any(named: 'password'),
             ),
           ).thenThrow(Exception('oops'));
-          return LoginCubit(authenticationRepository);
         },
+        build: () => LoginCubit(authenticationRepository),
         seed: () => LoginState(
           status: FormzStatus.valid,
           email: validEmail,
@@ -204,12 +204,12 @@ void main() {
       blocTest<LoginCubit, LoginState>(
         'emits [submissionInProgress, submissionFailure] '
         'when logInWithGoogle fails',
-        build: () {
+        setUp: () {
           when(
             () => authenticationRepository.logInWithGoogle(),
           ).thenThrow(Exception('oops'));
-          return LoginCubit(authenticationRepository);
         },
+        build: () => LoginCubit(authenticationRepository),
         act: (cubit) => cubit.logInWithGoogle(),
         expect: () => const <LoginState>[
           LoginState(status: FormzStatus.submissionInProgress),
