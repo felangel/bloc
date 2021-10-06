@@ -1,10 +1,6 @@
 ```dart
-part of 'book_bloc.dart';
-
 abstract class BookEvent extends Equatable {
-  const BookEvent({this.book});
-
-  final Book? book;
+  const BookEvent();
 
   @override
   List<Object> get props => [];
@@ -21,6 +17,5 @@ class BookSelected extends BookEvent {
 
 class BookDeselected extends BookEvent {
   const BookDeselected();
-
 }
 ```

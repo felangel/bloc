@@ -70,7 +70,9 @@ The full source for this recipe can be found [here](https://gist.github.com/fela
 
 ## Navigation 2.0
 
-> In this example, we're going to take a look at how to use Navigation 2.0 to do navigation. 
+> In this example, we're going to take a look at how to use the Navigator 2.0 pages API to handle routing in response to state changes in a bloc.
+
+?> Note: We're going to use [package:flow_builder](https://pub.dev/packages/flow_builder) to make working with the Navigator 2.0 API simpler.
 
 ### Bloc
 
@@ -79,24 +81,26 @@ Let's build `BookBloc` which will take `BookEvents` and convert them into `BookS
 
 #### BookEvent
 
-`BookEvent` will respond to two events: selecting a book, and returning to the home page. 
+`BookEvent` will respond to two events: selecting a book, and deselecting a book. 
 
 [book_event.dart](_snippets/recipes_flutter_navigation/navigation2/book_event.dart.md ':include')
 
 #### BookState
 
-`BookState` will have two states: the initial home page, and the book detail page. 
+`BookState` will contain the list of books and an optional selected book if the user taps a book.
 
 [book_state.dart](_snippets/recipes_flutter_navigation/navigation2/book_state.dart.md ':include')
 
 #### BookBloc
 
-`BookBloc` should look something like this:
+`BookBloc` will handle responding to each `BookEvent` and will emit the appropriate `BookState` in response:
 
 [book_bloc.dart](_snippets/recipes_flutter_navigation/navigation2/book_bloc.dart.md ':include')
 
 ### UI Layer
 
-Let's take a look at how to take advantage of FlowBuilder to simplify the UI responses to state changes. 
+Now let's hook up the bloc to our UI using `FlowBuilder`!
 
 [main.dart](_snippets/recipes_flutter_navigation/navigation2/main.dart.md ':include')
+
+The full source for this recipe can be found [here](https://gist.github.com/felangel/bd3cf504a10c0763a32f7a94e2649369).
