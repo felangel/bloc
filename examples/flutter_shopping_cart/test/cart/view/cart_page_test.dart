@@ -19,8 +19,6 @@ void main() {
     Item(3, 'item #3'),
   ];
 
-  final mockItemToRemove = mockItems.last;
-
   setUpAll(() {
     registerFallbackValue<CartState>(FakeCartState());
     registerFallbackValue<CartEvent>(FakeCartEvent());
@@ -131,6 +129,8 @@ void main() {
     testWidgets(
         'removes item from cart items '
         'after long press', (tester) async {
+      final mockItemToRemove = mockItems.last;
+
       when(() => cartBloc.state)
           .thenReturn(CartLoaded(cart: Cart(items: mockItems)));
       await tester.pumpApp(
