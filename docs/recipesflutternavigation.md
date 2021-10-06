@@ -61,7 +61,6 @@ Let's take a look at how to route to a different page based on the state of `MyB
 
 [main.dart](_snippets/recipes_flutter_navigation/route_navigation/main.dart.md ':include')
 
-
 ?> We use the `BlocListener` widget in order to push a new route in response to state changes in our `MyBloc`.
 
 !> For the sake of this example, we are adding an event just for navigation. In a real application, you should not create explicit navigation events. If there is no "business logic" necessary in order to trigger navigation, you should always directly navigate in response to user input (in the `onPressed` callback, etc...). Only navigate in response to state changes if some "business logic" is required in order to determine where to navigate.
