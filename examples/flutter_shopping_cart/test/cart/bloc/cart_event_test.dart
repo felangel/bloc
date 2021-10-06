@@ -19,5 +19,12 @@ void main() {
         expect(CartItemAdded(item), CartItemAdded(item));
       });
     });
+
+    group('CartItemRemoved', () {
+      final item = FakeItem();
+      test('supports value comparison', () {
+        expect(CartItemRemoved(item), CartItemRemoved(item));
+      });
+    });
   });
 }

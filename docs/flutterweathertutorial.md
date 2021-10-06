@@ -130,7 +130,7 @@ In a later step, we will also use the [http](https://pub.dev/packages/http) pack
 
 Let's add these dependencies to the `pubspec.yaml`.
 
-[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/pubspec.yaml ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/meta_weather_api/pubspec.yaml ':include')
 
 ?> **Note**: Remember to run `flutter pub get` after adding the dependencies.
 

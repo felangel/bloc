@@ -125,5 +125,18 @@ void main() {
       expect(find.byType(SnackBar), findsOneWidget);
       expect(find.text('Buying not supported yet.'), findsOneWidget);
     });
+
+    testWidgets('adds CartItemRemoved on long press', (tester) async {
+      when(() => cartBloc.state).thenReturn(
+        CartLoaded(cart: Cart(items: mockItems)),
+      );
+      final mockItemToRemove = mockItems.last;
+      await tester.pumpApp(
+        cartBloc: cartBloc,
+        child: Scaffold(body: CartList()),
+      );
+      await tester.longPress(find.text(mockItemToRemove.name));
+      verify(() => cartBloc.add(CartItemRemoved(mockItemToRemove))).called(1);
+    });
   });
 }

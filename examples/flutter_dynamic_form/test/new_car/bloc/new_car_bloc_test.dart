@@ -30,10 +30,10 @@ void main() {
 
     blocTest<NewCarBloc, NewCarState>(
       'emits brands loading in progress and brands load success',
-      build: () {
+      setUp: () {
         when(newCarRepository.fetchBrands).thenAnswer((_) async => mockBrands);
-        return NewCarBloc(newCarRepository: newCarRepository);
       },
+      build: () => NewCarBloc(newCarRepository: newCarRepository),
       act: (bloc) => bloc.add(const NewCarFormLoaded()),
       expect: () => [
         const NewCarState.brandsLoadInProgress(),
@@ -44,12 +44,12 @@ void main() {
 
     blocTest<NewCarBloc, NewCarState>(
       'emits models loading in progress and models load success',
-      build: () {
-        when(() => newCarRepository.fetchModels(brand: mockBrand)).thenAnswer(
-          (_) async => mockModels,
-        );
-        return NewCarBloc(newCarRepository: newCarRepository);
+      setUp: () {
+        when(
+          () => newCarRepository.fetchModels(brand: mockBrand),
+        ).thenAnswer((_) async => mockModels);
       },
+      build: () => NewCarBloc(newCarRepository: newCarRepository),
       act: (bloc) => bloc.add(NewCarBrandChanged(brand: mockBrand)),
       expect: () => [
         NewCarState.modelsLoadInProgress(brands: [], brand: mockBrand),
@@ -66,12 +66,12 @@ void main() {
 
     blocTest<NewCarBloc, NewCarState>(
       'emits years loading in progress and year load success',
-      build: () {
+      setUp: () {
         when(
           () => newCarRepository.fetchYears(brand: null, model: mockModel),
         ).thenAnswer((_) async => mockYears);
-        return NewCarBloc(newCarRepository: newCarRepository);
       },
+      build: () => NewCarBloc(newCarRepository: newCarRepository),
       act: (bloc) => bloc.add(NewCarModelChanged(model: mockModel)),
       expect: () => [
         NewCarState.yearsLoadInProgress(
@@ -104,18 +104,18 @@ void main() {
 
     blocTest<NewCarBloc, NewCarState>(
       'emits correct states when complete flow is executed',
-      build: () {
-        when(newCarRepository.fetchBrands).thenAnswer(
-          (_) => Future.value(mockBrands),
-        );
+      setUp: () {
+        when(
+          newCarRepository.fetchBrands,
+        ).thenAnswer((_) => Future.value(mockBrands));
         when(
           () => newCarRepository.fetchModels(brand: mockBrand),
         ).thenAnswer((_) => Future.value(mockModels));
         when(
           () => newCarRepository.fetchYears(brand: mockBrand, model: mockModel),
         ).thenAnswer((_) => Future.value(mockYears));
-        return NewCarBloc(newCarRepository: newCarRepository);
       },
+      build: () => NewCarBloc(newCarRepository: newCarRepository),
       act: (bloc) => bloc
         ..add(const NewCarFormLoaded())
         ..add(NewCarBrandChanged(brand: mockBrand))
