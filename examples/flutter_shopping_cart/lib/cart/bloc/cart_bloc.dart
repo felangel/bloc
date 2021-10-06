@@ -12,6 +12,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc({required this.shoppingRepository}) : super(CartLoading()) {
     on<CartStarted>(_onStarted);
     on<CartItemAdded>(_onItemAdded);
+    on<CartItemRemoved>(_onItemRemoved);
   }
 
   final ShoppingRepository shoppingRepository;
@@ -32,7 +33,25 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       try {
         shoppingRepository.addItemToCart(event.item);
         emit(CartLoaded(cart: Cart(items: [...state.cart.items, event.item])));
-      } on Exception {
+      } catch (_) {
+        emit(CartError());
+      }
+    }
+  }
+
+  void _onItemRemoved(CartItemRemoved event, Emitter<CartState> emit) {
+    final state = this.state;
+    if (state is CartLoaded) {
+      try {
+        shoppingRepository.removeItemFromCart(event.item);
+        emit(
+          CartLoaded(
+            cart: Cart(
+              items: [...state.cart.items]..remove(event.item),
+            ),
+          ),
+        );
+      } catch (_) {
         emit(CartError());
       }
     }
