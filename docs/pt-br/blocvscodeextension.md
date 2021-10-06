@@ -25,29 +25,29 @@ Plugin Bloc para [IntelliJ](https://www.jetbrains.com/idea/) e [Android Studio](
 
 ## Instalação
 
-Bloc pode ser instalado a partir de [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) ou [searching within VSCode](https://code.visualstudio.com/docs/editor/extension-gallery#_search-for-an-extension).
+Bloc pode ser instalado a partir do [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) ou [pesquisando no VSCode](https://code.visualstudio.com/docs/editor/extension-gallery#_search-for-an-extension).
 
 ## Comandos
 
-| Comando            | Description   |
-| ------------------ | ------------- |
-| `Bloc: New Bloc`   | Criar o Bloc  |
-| `Cubit: New Cubit` | Criar o Cubit |
+| Comando            | Descrição           |
+| ------------------ | ------------------- |
+| `Bloc: New Bloc`   | Criar um novo Bloc  |
+| `Cubit: New Cubit` | Criar um novo Cubit |
 
 Você pode ativar o comando iniciando a paleta de comandos (Exibir -> Paleta de Comandos) e executando o comando.
 Ou você pode clicar com o botão direito do mouse no diretório em que deseja criar o bloc/cubit e selecionar o comando no menu de contexto.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage.gif)
 
-## Code Actions
+## Ações de código
 
-| Action                         | Description                                    |
-| ------------------------------ | ---------------------------------------------- |
-| `Wrap with BlocBuilder`        | Wraps current widget in a `BlocBuilder`        |
-| `Wrap with BlocListener`       | Wraps current widget in a `BlocListener`       |
-| `Wrap with BlocConsumer`       | Wraps current widget in a `BlocConsumer`       |
-| `Wrap with BlocProvider`       | Wraps current widget in a `BlocProvider`       |
-| `Wrap with RepositoryProvider` | Wraps current widget in a `RepositoryProvider` |
+| Ação                           | Descrição                                         |
+| ------------------------------ | ------------------------------------------------- |
+| `Wrap with BlocBuilder`        | Envolve o widget atual em um `BlocBuilder`        |
+| `Wrap with BlocListener`       | Envolve o widget atual em um `BlocListener`       |
+| `Wrap with BlocConsumer`       | Envolve o widget atual em um `BlocConsumer`       |
+| `Wrap with BlocProvider`       | Envolve o widget atual em um `BlocProvider`       |
+| `Wrap with RepositoryProvider` | Envolve o widget atual em um `RepositoryProvider` |
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/wrap-with-usage.gif)
 
@@ -55,32 +55,32 @@ Ou você pode clicar com o botão direito do mouse no diretório em que deseja c
 
 ### Bloc
 
-| Shortcut            | Description                                |
+| Atalho              | Descrição                                  |
 | ------------------- | ------------------------------------------ |
-| `bloc`              | Creates a `Bloc` class                     |
-| `cubit`             | Creates a `Cubit` class                    |
-| `blocobserver`      | Creates a `BlocObserver` class             |
-| `blocprovider`      | Creates a `BlocProvider` widget            |
-| `multiblocprovider` | Creates a `MultiBlocProvider` widget       |
-| `repoprovider`      | Creates a `RepositoryProvider` widget      |
-| `multirepoprovider` | Creates a `MultiRepositoryProvider` widget |
-| `blocbuilder`       | Creates a `BlocBuilder` widget             |
-| `bloclistener`      | Creates a `BlocListener` widget            |
-| `multibloclistener` | Creates a `MultiBlocListener` widget       |
-| `blocconsumer`      | Creates a `BlocConsumer` widget            |
-| `blocof`            | Shortcut for `BlocProvider.of()`           |
-| `repoof`            | Shortcut for `RepositoryProvider.of()`     |
-| `read`              | Shortcut for `context.read()`              |
-| `watch`             | Shortcut for `context.watch()`             |
-| `select`            | Shortcut for `context.select()`            |
-| `blocstate`         | Creates a state class                      |
-| `blocevent`         | Creates an event class                     |
+| `bloc`              | Cria uma classe `Bloc`                     |
+| `cubit`             | Cria uma classe `Cubit`                    |
+| `blocobserver`      | Cria uma classe `BlocObserver`             |
+| `blocprovider`      | Cria um widget `BlocProvider`              |
+| `multiblocprovider` | Cria um widget `MultiBlocProvider`         |
+| `repoprovider`      | Cria um widget `RepositoryProvider`        |
+| `multirepoprovider` | Cria um widget `MultiRepositoryProvider`   |
+| `blocbuilder`       | Cria um widget `BlocBuilder`               |
+| `bloclistener`      | Cria um widget `BlocListener`              |
+| `multibloclistener` | Cria um widget `MultiBlocListener`         |
+| `blocconsumer`      | Cria um widget `BlocConsumer`              |
+| `blocof`            | Atalho para `BlocProvider.of()`            |
+| `repoof`            | Atalho para `RepositoryProvider.of()`      |
+| `read`              | Atalho para `context.read()`               |
+| `watch`             | Atalho para `context.watch()`              |
+| `select`            | Atalho para `context.select()`             |
+| `blocstate`         | Cria uma classe state                      |
+| `blocevent`         | Cria uma classe event                      |
 
 ### Freezed Bloc
 
-| Shortcut     | Description                                                     |
-| ------------ | --------------------------------------------------------------- |
-| `feventwhen` | Creates a map event to state function with freeze.when function |
-| `feventmap`  | Creates a map event to state function with freeze.map function  |
-| `fstate`     | Creates a sub state                                             |
-| `fevent`     | Creates a sub event                                             |
+| Atalho       | Descrição                                                             |
+| ------------ | --------------------------------------------------------------------- |
+| `feventwhen` | Cria uma função de mapear evento para estado com a função freeze.when |
+| `feventmap`  | Cria uma função de mapear evento para estado com a função freeze.map  |
+| `fstate`     | Cria um sub state                                                     |
+| `fevent`     | Cria um sub event                                                     |
