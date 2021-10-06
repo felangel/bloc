@@ -11,6 +11,9 @@
 
     <change-notes><![CDATA[
         <ul>
+          <li>v3.1.0 - Support for Wrap with BlocSelector</li>
+          <li>v3.0.0 - Support for Bloc v7.2.0 (on<Event> API)</li>
+          <li>v2.4.0 - Add Convert to Multi Widget Actions</li>
           <li>v2.3.0 - Add Equatable Props Generator and Live Templates Bloc/Cubit selection support</li>
           <li>v2.2.1 - Fix Wrapping Errors</li>
           <li>v2.2.0 - Wrap With Quick Action Support</li>
@@ -83,6 +86,10 @@
             <category>Bloc</category>
         </intentionAction>
         <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocSelectorIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
             <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocListenerIntentionAction</className>
             <category>Bloc</category>
         </intentionAction>
@@ -92,6 +99,18 @@
         </intentionAction>
         <intentionAction>
             <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithRepositoryProviderIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocConvertToMultiBlocProviderIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocConvertToMultiBlocListenerIntentionAction</className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocConvertToMultiRepositoryProviderIntentionAction</className>
             <category>Bloc</category>
         </intentionAction>
     </extensions>

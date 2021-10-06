@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -60,12 +58,12 @@ class CounterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Counter')),
-      body: BlocBuilder<CounterBloc, int>(
-        builder: (_, count) {
-          return Center(
-            child: Text('$count', style: Theme.of(context).textTheme.headline1),
-          );
-        },
+      body: Center(
+        child: BlocBuilder<CounterBloc, int>(
+          builder: (context, count) {
+            return Text('$count', style: Theme.of(context).textTheme.headline1);
+          },
+        ),
       ),
       floatingActionButton: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -75,16 +73,14 @@ class CounterPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: const Icon(Icons.add),
-              onPressed: () =>
-                  context.read<CounterBloc>().add(CounterEvent.increment),
+              onPressed: () => context.read<CounterBloc>().add(Increment()),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: const Icon(Icons.remove),
-              onPressed: () =>
-                  context.read<CounterBloc>().add(CounterEvent.decrement),
+              onPressed: () => context.read<CounterBloc>().add(Decrement()),
             ),
           ),
           Padding(
@@ -94,15 +90,6 @@ class CounterPage extends StatelessWidget {
               onPressed: () => context.read<ThemeCubit>().toggleTheme(),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              backgroundColor: Colors.red,
-              child: const Icon(Icons.error),
-              onPressed: () =>
-                  context.read<CounterBloc>().add(CounterEvent.error),
-            ),
-          ),
         ],
       ),
     );
@@ -110,36 +97,22 @@ class CounterPage extends StatelessWidget {
 }
 
 /// Event being processed by [CounterBloc].
-enum CounterEvent {
-  /// Notifies bloc to increment state.
-  increment,
+abstract class CounterEvent {}
 
-  /// Notifies bloc to decrement state.
-  decrement,
+/// Notifies bloc to increment state.
+class Increment extends CounterEvent {}
 
-  /// Notifies the bloc of an error
-  error,
-}
+/// Notifies bloc to decrement state.
+class Decrement extends CounterEvent {}
 
 /// {@template counter_bloc}
 /// A simple [Bloc] which manages an `int` as its state.
 /// {@endtemplate}
 class CounterBloc extends Bloc<CounterEvent, int> {
   /// {@macro counter_bloc}
-  CounterBloc() : super(0);
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-      case CounterEvent.error:
-        addError(Exception('unsupported event'));
-    }
+  CounterBloc() : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
+    on<Decrement>((event, emit) => emit(state - 1));
   }
 }
 

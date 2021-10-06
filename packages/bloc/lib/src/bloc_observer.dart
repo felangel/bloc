@@ -26,8 +26,8 @@ class BlocObserver {
 
   /// Called whenever a transition occurs in any [bloc] with the given [bloc]
   /// and [transition].
-  /// A [transition] occurs when a new `event` is `added` and `mapEventToState`
-  /// executed.
+  /// A [transition] occurs when a new `event` is added
+  /// and a new state is `emitted` from a corresponding [EventHandler].
   /// [onTransition] is called before a [bloc]'s state has been updated.
   @protected
   @mustCallSuper

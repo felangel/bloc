@@ -9,8 +9,8 @@ O Bloc consiste em vários packages disponíveis no pub:
 - [bloc](https://pub.dev/packages/bloc) - Package principal para o bloc
 - [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Poderosos Widgets para Flutter desenvolvidos para trabalhar com bloc e construir aplicações mobile rápidas e reativas.
 - [angular_bloc](https://pub.dev/packages/angular_bloc) - Poderosos Componentes para Angular desenvolvidos para trabalhar com bloc e construir aplicações web rápidas e reativas.
-- [hydrated_bloc](https://pub.dev/packages/hydrated_bloc) - An extension to the bloc state management library which automatically persists and restores bloc states.
-- [replay_bloc](https://pub.dev/packages/replay_bloc) - An extension to the bloc state management library which adds support for undo and redo.
+- [hydrated_bloc](https://pub.dev/packages/hydrated_bloc) - Uma extensão da biblioteca de gerenciamento de estado bloc que persiste e restaura automaticamente os estados do bloc.
+- [replay_bloc](https://pub.dev/packages/replay_bloc) - Uma extensão da biblioteca de gerenciamento de estado bloc que adiciona suporte para desfazer e refazer.
 
 ## Instalação
 

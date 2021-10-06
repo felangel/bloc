@@ -8,7 +8,7 @@
 
 ### Bloc
 
-For the sake of simplicity we're going to use a `Counter` as our example application.
+For the sake of simplicity, we're going to use a `Counter` as our example application.
 
 Our `CounterBloc` implementation will look like:
 
@@ -18,8 +18,8 @@ Our `CounterBloc` implementation will look like:
 
 We're going to have 3 parts to our UI:
 
-- App: the root application widget
-- CounterPage: the container widget which will manage the `CounterBloc` and exposes `FloatingActionButtons` to `increment` and `decrement` the counter.
+- App: the root application widget.
+- CounterPage: the container widget which will manage the `CounterBloc` and exposes `FloatingActionButtons` to `Increment` and `Decrement` the counter.
 - CounterText: a text widget which is responsible for displaying the current `count`.
 
 #### App
@@ -28,7 +28,7 @@ We're going to have 3 parts to our UI:
 
 Our `App` widget is a `StatelessWidget` that uses a `MaterialApp` and sets our `CounterPage` as the home widget. The `App` widget is responsible for creating and closing the `CounterBloc` as well as making it available to the `CounterPage` using a `BlocProvider`.
 
-?> **Note:** When we wrap a widget with `BlocProvider` we can then provide a bloc to all widgets within that subtree. In this case, we can access the `CounterBloc` from within the `CounterPage` widget and any children of the `CounterPage` widget using `BlocProvider.of<CounterBloc>(context)`.
+?> **Note:** When we wrap a widget with `BlocProvider`, we can then provide a bloc to all widgets within that subtree. In this case, we can access the `CounterBloc` from within the `CounterPage` widget and any children of the `CounterPage` widget using `BlocProvider.of<CounterBloc>(context)`.
 
 #### CounterPage
 
@@ -60,8 +60,8 @@ Again, we're going to use the `CounterBloc` for simplicity.
 
 Again, we're going to have three parts to our application's UI:
 
-- App: the root application widget
-- HomePage: the container widget which will manage the `CounterBloc` and exposes `FloatingActionButtons` to `increment` and `decrement` the counter.
+- App: the root application widget.
+- HomePage: the container widget which will manage the `CounterBloc` and exposes `FloatingActionButtons` to `Increment` and `Decrement` the counter.
 - CounterPage: a widget which is responsible for displaying the current `count` as a separate route.
 
 #### App
@@ -76,7 +76,7 @@ Again, our `App` widget is the same as before.
 
 The `HomePage` is similar to the `CounterPage` in the above example; however, instead of rendering a `CounterText` widget, it renders a `ElevatedButton` in the center which allows the user to navigate to a new screen which displays the current count.
 
-When the user taps the `ElevatedButton`, we push a new `MaterialPageRoute` and return the `CounterPage`; however, we are wrapping the `CounterPage` in a `BlocProvider` in order to make the current `CounterBloc` instance available on the next page.
+When the user taps the `ElevatedButton`, we push a new `MaterialPageRoute` and return the `CounterPage`. However, we are wrapping the `CounterPage` in a `BlocProvider` in order to make the current `CounterBloc` instance available on the next page.
 
 !> It is critical that we are using `BlocProvider's` value constructor in this case because we are providing an existing instance of `CounterBloc`. The value constructor of `BlocProvider` should be used only in cases where we want to provide an existing bloc to a new subtree. In addition, using the value constructor will not close the bloc automatically which, in this case, is what we want (since we still need the `CounterBloc` to function in the ancestor widgets). Instead, we simply pass the existing `CounterBloc` to the new page as an existing value as opposed to in a builder. This ensures that the only top level `BlocProvider` handles closing the `CounterBloc` when it is no longer needed.
 
@@ -112,7 +112,7 @@ Again, we're going to have three parts to our application's UI:
 
 [main.dart](_snippets/recipes_flutter_bloc_access/named_route_access/main.dart.md ':include')
 
-Our `App` widget is responsible for managing the instance of the `CounterBloc` which we'll be providing to the root (`/`) and counter (`/counter`) routes.
+Our `App` widget is responsible for managing the instance of the `CounterBloc`, which we'll be providing to the root (`/`) and counter (`/counter`) routes.
 
 !> It's critical to understand that since the `_AppState` is creating the `CounterBloc` instance it should also be closing it in the `dispose` override.
 
@@ -150,7 +150,7 @@ Again, we're going to have three parts to our application's UI but we're also go
 
 - App: the root application widget which manages the `AppRouter`.
 - AppRouter: class which will manage and provide the `CounterBloc` to the appropriate generated routes.
-- HomePage: the container widget which accesses the `CounterBloc` and exposes `FloatingActionButtons` to `increment` and `decrement` the counter.
+- HomePage: the container widget which accesses the `CounterBloc` and exposes `FloatingActionButtons` to `Increment` and `Decrement` the counter.
 - CounterPage: a widget which is responsible for displaying the current `count` as a separate route.
 
 #### App
@@ -202,7 +202,7 @@ As usual, we're going to use the `CounterBloc` as our example for simplicity.
 We're going to follow the same application structure as in the "Local Access" example. As a result, we're going to have three parts to our UI:
 
 - App: the root application widget which manages the global instance of our `CounterBloc`.
-- CounterPage: the container widget which exposes `FloatingActionButtons` to `increment` and `decrement` the counter.
+- CounterPage: the container widget which exposes `FloatingActionButtons` to `Increment` and `Decrement` the counter.
 - CounterText: a text widget which is responsible for displaying the current `count`.
 
 #### App
@@ -211,7 +211,7 @@ We're going to follow the same application structure as in the "Local Access" ex
 
 Much like in the local access example above, the `App` manages creating, closing, and providing the `CounterBloc` to the subtree using `BlocProvider`. The main difference is in this case, `MaterialApp` is a child of `BlocProvider`.
 
-Wrapping the entire `MaterialApp` in a `BlocProvider` is the key to making our `CounterBloc` instance globally accessible. Now we can access our `CounterBloc` from anywhere in our application where we have a `BuildContext` using `BlocProvider.of<CounterBloc>(context);`
+Wrapping the entire `MaterialApp` in a `BlocProvider` is the key to making our `CounterBloc` instance globally accessible. Now we can access our `CounterBloc` from anywhere in our application where we have a `BuildContext` using `BlocProvider.of<CounterBloc>(context);`.
 
 ?> **Note:** This approach still works if you're using a `CupertinoApp` or `WidgetsApp`.
 

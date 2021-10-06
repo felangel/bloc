@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_firebase_login/app/app.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_firebase_login/app/app.dart';
 
 class MockAuthenticationRepository extends Mock
     implements AuthenticationRepository {}

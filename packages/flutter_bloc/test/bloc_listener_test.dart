@@ -247,7 +247,10 @@ void main() {
           child: const SizedBox(),
         ),
       );
-      counterCubit..increment()..increment()..increment();
+      counterCubit
+        ..increment()
+        ..increment()
+        ..increment();
       await tester.pump();
 
       expect(states, expectedStates);
@@ -276,7 +279,10 @@ void main() {
           child: const SizedBox(),
         ),
       );
-      counterCubit..increment()..increment()..increment();
+      counterCubit
+        ..increment()
+        ..increment()
+        ..increment();
       await tester.pump();
 
       expect(states, [3]);

@@ -1,3 +1,11 @@
+# 7.3.0
+
+- feat: upgrade to `bloc: ^7.2.0`
+
+# 7.2.0
+
+- feat: upgrade to `provider: ^6.0.0`
+
 # 7.1.0
 
 - feat: add `BlocSelector` widget

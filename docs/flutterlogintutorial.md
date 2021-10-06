@@ -187,7 +187,7 @@ In the constructor body, the `AuthenticationBloc` subscribes to the `status` str
 
 !> The `AuthenticationBloc` overrides `close` in order to dispose both the `StreamSubscription` as well as the `AuthenticationRepository`.
 
-Next, `mapEventToState` handles transforming the incoming `AuthenticationEvent` instances into new `AuthenticationState` instances.
+Next, the `EventHandler` handles transforming the incoming `AuthenticationEvent` instances into new `AuthenticationState` instances.
 
 When an `AuthenticationStatusChanged` event is added if the associated status is `AuthenticationStatus.authenticated`, the `AuthentictionBloc` queries the user via the `UserRepository`.
 

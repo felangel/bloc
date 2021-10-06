@@ -6,9 +6,7 @@ import 'package:flutter_graphql_jobs/bloc/jobs_bloc.dart';
 void main() => runApp(MyApp(jobsApiClient: JobsApiClient.create()));
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key key, @required this.jobsApiClient})
-      : assert(jobsApiClient != null),
-        super(key: key);
+  const MyApp({Key? key, required this.jobsApiClient}) : super(key: key);
 
   final JobsApiClient jobsApiClient;
 
@@ -35,7 +33,8 @@ class JobsPage extends StatelessWidget {
           builder: (context, state) {
             if (state is JobsLoadInProgress) {
               return CircularProgressIndicator();
-            } else if (state is JobsLoadSuccess) {
+            }
+            if (state is JobsLoadSuccess) {
               return ListView.builder(
                 itemCount: state.jobs.length,
                 itemBuilder: (context, index) {
@@ -49,14 +48,13 @@ class JobsPage extends StatelessWidget {
                       color: Colors.orangeAccent,
                     ),
                     subtitle: job.locationNames != null
-                        ? Text(job.locationNames)
+                        ? Text(job.locationNames!)
                         : null,
                   );
                 },
               );
-            } else {
-              return Text('Oops something went wrong!');
             }
+            return Text('Oops something went wrong!');
           },
         ),
       ),

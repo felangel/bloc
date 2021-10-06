@@ -9,13 +9,11 @@ class PostsList extends StatefulWidget {
 
 class _PostsListState extends State<PostsList> {
   final _scrollController = ScrollController();
-  late PostBloc _postBloc;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _postBloc = context.read<PostBloc>();
   }
 
   @override
@@ -49,12 +47,14 @@ class _PostsListState extends State<PostsList> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 
   void _onScroll() {
-    if (_isBottom) _postBloc.add(PostFetched());
+    if (_isBottom) context.read<PostBloc>().add(PostFetched());
   }
 
   bool get _isBottom {

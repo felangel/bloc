@@ -1,7 +1,7 @@
+import 'package:example/simple_bloc_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:replay_bloc/replay_bloc.dart';
-import 'package:example/simple_bloc_observer.dart';
 
 void main() async {
   Bloc.observer = SimpleBlocObserver();
@@ -54,10 +54,12 @@ class CounterPage extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<CounterBloc, int>(
-        builder: (context, state) {
-          return Center(child: Text('$state', style: textTheme.headline2));
-        },
+      body: Center(
+        child: BlocBuilder<CounterBloc, int>(
+          builder: (context, state) {
+            return Text('$state', style: textTheme.headline2);
+          },
+        ),
       ),
       floatingActionButton: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -136,16 +138,9 @@ class Reset extends CounterEvent {
 /// {@endtemplate}
 class CounterBloc extends ReplayBloc<CounterEvent, int> {
   /// {@macro replay_counter_bloc}
-  CounterBloc() : super(0);
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    if (event is Increment) {
-      yield state + 1;
-    } else if (event is Decrement) {
-      yield state - 1;
-    } else if (event is Reset) {
-      yield 0;
-    }
+  CounterBloc() : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
+    on<Decrement>((event, emit) => emit(state - 1));
+    on<Reset>((event, emit) => emit(0));
   }
 }

@@ -3,7 +3,7 @@
   - [Начинаем](ru/gettingstarted.md)
   - [Почему bloc?](ru/whybloc.md)
   - Основные понятия
-    - [bloc](ru/coreconcepts.md)
+    - [bloc](coreconcepts.md)
     - [flutter_bloc](ru/flutterbloccoreconcepts.md)
   - [Архитектура](ru/architecture.md)
   - [Тестирование](ru/testing.md)
@@ -13,13 +13,13 @@
 - Руководства
 
   - Flutter
-    - [**Счетчик** <sup>✨</sup>](ru/fluttercountertutorial.md)
+    - [**Счетчик** <sup>✨</sup>](fluttercountertutorial.md)
     - [Таймер](ru/fluttertimertutorial.md)
     - [Бесконечный список](ru/flutterinfinitelisttutorial.md)
-    - [**Логин** <sup>✨</sup>](ru/flutterlogintutorial.md)
-    - [**Погода** <sup>✨</sup>](ru/flutterweathertutorial.md)
+    - [**Логин** <sup>✨</sup>](flutterlogintutorial.md)
+    - [**Погода** <sup>✨</sup>](flutterweathertutorial.md)
     - [Задачи](ru/fluttertodostutorial.md)
-    - [**Firebase логин** <sup>✨</sup>](ru/flutterfirebaselogintutorial.md)
+    - [**Firebase логин** <sup>✨</sup>](flutterfirebaselogintutorial.md)
     - [Firestore задачи](ru/flutterfirestoretodostutorial.md)
   - AngularDart
     - [Счетчик](ru/angularcountertutorial.md)

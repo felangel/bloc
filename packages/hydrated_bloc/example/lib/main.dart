@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -57,12 +55,12 @@ class CounterView extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(title: const Text('Counter')),
-      body: BlocBuilder<CounterBloc, int>(
-        builder: (BuildContext context, int state) {
-          return Center(
-            child: Text('$state', style: textTheme.headline2),
-          );
-        },
+      body: Center(
+        child: BlocBuilder<CounterBloc, int>(
+          builder: (context, state) {
+            return Text('$state', style: textTheme.headline2);
+          },
+        ),
       ),
       floatingActionButton: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -81,18 +79,14 @@ class CounterView extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: const Icon(Icons.add),
-              onPressed: () {
-                context.read<CounterBloc>().add(CounterEvent.increment);
-              },
+              onPressed: () => context.read<CounterBloc>().add(Increment()),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0),
             child: FloatingActionButton(
               child: const Icon(Icons.remove),
-              onPressed: () {
-                context.read<CounterBloc>().add(CounterEvent.decrement);
-              },
+              onPressed: () => context.read<CounterBloc>().add(Decrement()),
             ),
           ),
           Padding(
@@ -101,7 +95,7 @@ class CounterView extends StatelessWidget {
               child: const Icon(Icons.delete_forever),
               onPressed: () async {
                 await HydratedBloc.storage.clear();
-                context.read<CounterBloc>().add(CounterEvent.reset);
+                context.read<CounterBloc>().add(Reset());
               },
             ),
           ),
@@ -111,24 +105,19 @@ class CounterView extends StatelessWidget {
   }
 }
 
-enum CounterEvent { increment, decrement, reset }
+abstract class CounterEvent {}
+
+class Increment extends CounterEvent {}
+
+class Decrement extends CounterEvent {}
+
+class Reset extends CounterEvent {}
 
 class CounterBloc extends HydratedBloc<CounterEvent, int> {
-  CounterBloc() : super(0);
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-      case CounterEvent.reset:
-        yield 0;
-        break;
-    }
+  CounterBloc() : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
+    on<Decrement>((event, emit) => emit(state - 1));
+    on<Reset>((event, emit) => emit(0));
   }
 
   @override

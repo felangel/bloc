@@ -33,7 +33,9 @@ void main() {
         'emits [1, 2] when increment is called multiple times'
         'with async act',
         build: () => CounterCubit(),
-        act: (cubit) => cubit..increment()..increment(),
+        act: (cubit) => cubit
+          ..increment()
+          ..increment(),
         expect: () => <int>[1, 2],
       );
 
@@ -114,7 +116,9 @@ void main() {
         'emits [2, 3] when increment is called'
         'multiple times with async act',
         build: () => InstantEmitCubit(),
-        act: (cubit) => cubit..increment()..increment(),
+        act: (cubit) => cubit
+          ..increment()
+          ..increment(),
         expect: () => <int>[2, 3],
       );
     });
@@ -137,7 +141,9 @@ void main() {
         'emits [1, 2, 3, 4] when increment is called'
         'multiple times with async act',
         build: () => MultiCounterCubit(),
-        act: (cubit) => cubit..increment()..increment(),
+        act: (cubit) => cubit
+          ..increment()
+          ..increment(),
         expect: () => <int>[1, 2, 3, 4],
       );
     });

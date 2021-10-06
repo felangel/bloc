@@ -12,19 +12,14 @@ class SumEvent {
 
 class SumBloc extends Bloc<SumEvent, int> {
   SumBloc(CounterBloc counterBloc) : super(0) {
+    on<SumEvent>((event, emit) => emit(state + event.value));
+
     _countSubscription = counterBloc.stream.listen(
       (count) => add(SumEvent(count)),
     );
   }
 
   late StreamSubscription<int> _countSubscription;
-
-  @override
-  Stream<int> mapEventToState(
-    SumEvent event,
-  ) async* {
-    yield state + event.value;
-  }
 
   @override
   Future<void> close() {

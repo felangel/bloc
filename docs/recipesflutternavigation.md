@@ -14,7 +14,7 @@ Let's build `MyBloc` which will take `MyEvents` and convert them into `MyStates`
 
 #### MyEvent
 
-For simplicity, our `MyBloc` will only respond to a two `MyEvents`: `eventA` and `eventB`.
+For simplicity, our `MyBloc` will only respond to two `MyEvents`: `EventA` and `EventB`.
 
 [my_event.dart](_snippets/recipes_flutter_navigation/my_event.dart.md ':include')
 
@@ -63,6 +63,6 @@ Let's take a look at how to route to a different page based on the state of `MyB
 
 ?> We use the `BlocListener` widget in order to push a new route in response to state changes in our `MyBloc`.
 
-!> For the sake of this example we are adding an event just for navigation. In a real application, you should not create explicit navigation events. If there is no "business logic" necessary in order to trigger navigation you should always directly navigate in response to user input (in the `onPressed` callback, etc...). Only navigate in response to state changes if some "business logic" is required in order to determine where to navigate.
+!> For the sake of this example, we are adding an event just for navigation. In a real application, you should not create explicit navigation events. If there is no "business logic" necessary in order to trigger navigation, you should always directly navigate in response to user input (in the `onPressed` callback, etc...). Only navigate in response to state changes if some "business logic" is required in order to determine where to navigate.
 
 The full source for this recipe can be found [here](https://gist.github.com/felangel/6bcd4be10c046ceb33eecfeb380135dd).

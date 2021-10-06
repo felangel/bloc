@@ -29,3 +29,11 @@ class TickerTickSuccess extends TickerState {
   @override
   List<Object> get props => [count];
 }
+
+/// {@template ticker_complete}
+/// The state of the [TickerBloc] after the [Ticker] has completed.
+/// {@endtemplate}
+class TickerComplete extends TickerState {
+  /// {@macro ticker_complete}
+  const TickerComplete();
+}

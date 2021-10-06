@@ -39,7 +39,7 @@ jobs:
           test_coverage
 
       - name: Check Code Coverage
-        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
+        uses: VeryGoodOpenSource/very_good_coverage@v1.2.0
         with:
           path: packages/bloc/coverage/lcov.info
 
@@ -57,7 +57,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2.3.4
-      - uses: subosito/flutter-action@v1.5.0
+      - uses: subosito/flutter-action@v1.5.3
 
       - name: Install Dependencies
         run: |

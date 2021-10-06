@@ -1,3 +1,3 @@
 ```bash
-pub get
+dart pub get
 ```

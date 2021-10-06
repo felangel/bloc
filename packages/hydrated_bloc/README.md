@@ -44,7 +44,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 `hydrated_bloc` exports a `Storage` interface which means it can work with any storage provider. Out of the box, it comes with its own implementation: `HydratedStorage`.
 
-`HydratedStorage` is built on top of [hive](https://pub.dev/packages/hive) for a platform-agnostic, performant storage layer. See the complete [example](example) for more details.
+`HydratedStorage` is built on top of [hive](https://pub.dev/packages/hive) for a platform-agnostic, performant storage layer. See the complete [example](https://github.com/felangel/bloc/blob/master/packages/hydrated_bloc/example) for more details.
 
 ## Usage
 
@@ -79,19 +79,13 @@ class CounterCubit extends HydratedCubit<int> {
 ### Create a HydratedBloc
 
 ```dart
-enum CounterEvent { increment }
+abstract class CounterEvent {}
+class Increment extends CounterEvent {}
 
 class CounterBloc extends HydratedBloc<CounterEvent, int> {
-  CounterBloc() : super(0);
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-  }
+  CounterBloc() : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
+  }  
 
   @override
   int fromJson(Map<String, dynamic> json) => json['value'] as int;

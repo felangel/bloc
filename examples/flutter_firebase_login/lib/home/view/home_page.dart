@@ -29,9 +29,9 @@ class HomePage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Avatar(photo: user.photo),
-            const SizedBox(height: 4.0),
+            const SizedBox(height: 4),
             Text(user.email ?? '', style: textTheme.headline6),
-            const SizedBox(height: 4.0),
+            const SizedBox(height: 4),
             Text(user.name ?? '', style: textTheme.headline5),
           ],
         ),

@@ -10,7 +10,7 @@ Job _$JobFromJson(Map<String, dynamic> json) {
   return Job(
     id: json['id'] as String,
     title: json['title'] as String,
-    locationNames: json['locationNames'] as String,
-    isFeatured: json['isFeatured'] as bool,
+    locationNames: json['locationNames'] as String?,
+    isFeatured: json['isFeatured'] as bool? ?? false,
   );
 }

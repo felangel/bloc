@@ -3,7 +3,7 @@
   - [Para empezar](es/gettingstarted.md)
   - [¿Por qué Bloc?](es/whybloc.md)
   - Conceptos básicos
-    - [bloc](es/coreconcepts.md)
+    - [bloc](coreconcepts.md)
     - [flutter_bloc](es/flutterbloccoreconcepts.md)
   - [Arquitectura](es/architecture.md)
   - [Testeo](es/testing.md)
@@ -18,7 +18,7 @@
     - [Temporizador](es/fluttertimertutorial.md)
     - [Lista Infinita](es/flutterinfinitelisttutorial.md)
     - [**Iniciar Sesión** <sup>✨</sup>](es/flutterlogintutorial.md)
-    - [**Clima** <sup>✨</sup>](es/flutterweathertutorial.md)
+    - [**Clima** <sup>✨</sup>](flutterweathertutorial.md)
     - [Lista de quehaceres](es/fluttertodostutorial.md)
     - [**Iniciar sesión con Firebase** <sup>✨</sup>](es/flutterfirebaselogintutorial.md)
     - [Quehaceres con Firestore](es/flutterfirestoretodostutorial.md)

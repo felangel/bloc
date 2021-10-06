@@ -103,7 +103,7 @@ Next, we need to define the dependency on our `Ticker`.
 
 We are also defining a `StreamSubscription` for our `Ticker` which we will get to in a bit.
 
-At this point, all that’s left to do is implement `mapEventToState`. For improved readability, I like to break out each event handler into its own helper function. We’ll start with the `TimerStarted` event.
+At this point, all that’s left to do is implement the event handlers. For improved readability, I like to break out each event handler into its own helper function. We’ll start with the `TimerStarted` event.
 
 [timer_bloc.dart](_snippets/flutter_timer_tutorial/timer_bloc_start.dart.md ':include')
 

@@ -80,6 +80,7 @@ void main() {
 
     test('is compatible with mapEventToState', () {
       expect(
+        // ignore: deprecated_member_use
         counterBloc.mapEventToState(CounterEvent.increment),
         isA<Stream<int>>(),
       );

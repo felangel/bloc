@@ -1,5 +1,5 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/login/login.dart';
 import 'package:flutter_firebase_login/sign_up/sign_up.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,7 +16,9 @@ class LoginForm extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('Authentication Failure')),
+              SnackBar(
+                content: Text(state.errorMessage ?? 'Authentication Failure'),
+              ),
             );
         }
       },
@@ -30,15 +32,15 @@ class LoginForm extends StatelessWidget {
                 'assets/bloc_logo_small.png',
                 height: 120,
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 16),
               _EmailInput(),
-              const SizedBox(height: 8.0),
+              const SizedBox(height: 8),
               _PasswordInput(),
-              const SizedBox(height: 8.0),
+              const SizedBox(height: 8),
               _LoginButton(),
-              const SizedBox(height: 8.0),
+              const SizedBox(height: 8),
               _GoogleLoginButton(),
-              const SizedBox(height: 4.0),
+              const SizedBox(height: 4),
               _SignUpButton(),
             ],
           ),
@@ -103,7 +105,7 @@ class _LoginButton extends StatelessWidget {
                 key: const Key('loginForm_continue_raisedButton'),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+                    borderRadius: BorderRadius.circular(30),
                   ),
                   primary: const Color(0xFFFFD600),
                 ),
@@ -129,9 +131,9 @@ class _GoogleLoginButton extends StatelessWidget {
       ),
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(30),
         ),
-        primary: theme.accentColor,
+        primary: theme.colorScheme.secondary,
       ),
       icon: const Icon(FontAwesomeIcons.google, color: Colors.white),
       onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
