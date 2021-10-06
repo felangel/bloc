@@ -126,19 +126,16 @@ void main() {
       expect(find.text('Buying not supported yet.'), findsOneWidget);
     });
 
-    testWidgets(
-        'removes item from cart items '
-        'after long press', (tester) async {
+    testWidgets('adds CartItemRemoved on long press', (tester) async {
+      when(() => cartBloc.state).thenReturn(
+        CartLoaded(cart: Cart(items: mockItems)),
+      );
       final mockItemToRemove = mockItems.last;
-
-      when(() => cartBloc.state)
-          .thenReturn(CartLoaded(cart: Cart(items: mockItems)));
       await tester.pumpApp(
         cartBloc: cartBloc,
         child: Scaffold(body: CartList()),
       );
       await tester.longPress(find.text(mockItemToRemove.name));
-      await tester.pumpAndSettle();
       verify(() => cartBloc.add(CartItemRemoved(mockItemToRemove))).called(1);
     });
   });
