@@ -59,10 +59,9 @@ void main() {
     group('removeItemFromCart', () {
       test('removes item from cart', () {
         final item = Item(1, 'item #1');
-        shoppingRepository.addItemToCart(item);
-
-        // ignore: cascade_invocations
-        shoppingRepository.removeItemFromCart(item);
+        shoppingRepository
+          ..addItemToCart(item)
+          ..removeItemFromCart(item);
         expect(
           shoppingRepository.loadCartItems(),
           completion(equals(<Item>[])),
