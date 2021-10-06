@@ -1,3 +1,7 @@
+# 8.0.0-dev.1
+
+- **BREAKING**: feat: upgrade to `bloc v8.0.0-dev.2`
+
 # 7.3.3
 
 - fix: add missing child assertion to `BlocListener` and `BlocProvider` ([#2924](https://github.com/felangel/bloc/pull/2924))
