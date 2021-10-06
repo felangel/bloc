@@ -55,5 +55,18 @@ void main() {
         );
       });
     });
+
+    group('removeItemFromCart', () {
+      test('removes item from cart', () {
+        final item = Item(1, 'item #1');
+        shoppingRepository
+          ..addItemToCart(item)
+          ..removeItemFromCart(item);
+        expect(
+          shoppingRepository.loadCartItems(),
+          completion(equals(<Item>[])),
+        );
+      });
+    });
   });
 }
