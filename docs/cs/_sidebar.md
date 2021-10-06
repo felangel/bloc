@@ -13,18 +13,18 @@
 - Tutoriály
 
   - Flutter
-    - [**Počítadlo** <sup>✨</sup>](cs/fluttercountertutorial.md)
-    - [Časovač](cs/fluttertimertutorial.md)
-    - [Nekonečný list](cs/flutterinfinitelisttutorial.md)
-    - [**Přihlašování** <sup>✨</sup>](cs/flutterlogintutorial.md)
+    - [**Počítadlo** <sup>✨</sup>](fluttercountertutorial.md)
+    - [Časovač](fluttertimertutorial.md)
+    - [Nekonečný list](flutterinfinitelisttutorial.md)
+    - [**Přihlašování** <sup>✨</sup>](flutterlogintutorial.md)
     - [**Počasí** <sup>✨</sup>](flutterweathertutorial.md)
-    - [Plánovač](cs/fluttertodostutorial.md)
-    - [**Firebase přihlašování** <sup>✨</sup>](cs/flutterfirebaselogintutorial.md)
-    - [Firestore plánovač](cs/flutterfirestoretodostutorial.md)
+    - [Plánovač](fluttertodostutorial.md)
+    - [**Firebase přihlašování** <sup>✨</sup>](flutterfirebaselogintutorial.md)
+    - [Firestore plánovač](flutterfirestoretodostutorial.md)
   - AngularDart
-    - [Počítadlo](cs/angularcountertutorial.md)
+    - [Počítadlo](angularcountertutorial.md)
   - Flutter + AngularDart
-    - [**Github vyhledávání** <sup>✨</sup>](cs/flutterangulargithubsearch.md)
+    - [**Github vyhledávání** <sup>✨</sup>](flutterangulargithubsearch.md)
 
 - Recepty
 

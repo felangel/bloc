@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_weather/weather/cubit/weather_cubit.dart';
 import 'package:flutter_weather/weather/weather.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';

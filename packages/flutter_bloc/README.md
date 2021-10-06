@@ -51,7 +51,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ## Usage
 
-Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterCubit`.
+Lets take a look at how to use `BlocProvider` to provide a `CounterCubit` to a `CounterPage` and react to state changes with `BlocBuilder`.
 
 ### counter_cubit.dart
 
@@ -61,6 +61,24 @@ class CounterCubit extends Cubit<int> {
 
   void increment() => emit(state + 1);
   void decrement() => emit(state - 1);
+}
+```
+
+### main.dart
+
+```dart
+void main() => runApp(CounterApp());
+
+class CounterApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: BlocProvider(
+        create: (_) => CounterCubit(),
+        child: CounterPage(),
+      ),
+    );
+  }
 }
 ```
 
@@ -100,7 +118,7 @@ class CounterPage extends StatelessWidget {
 }
 ```
 
-At this point we have successfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply tells the `CounterCubit` that the user has pressed either the increment or decrement button.
+At this point we have successfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply notifies the `CounterCubit` that the user has pressed either the increment or decrement button.
 
 ## Bloc Widgets
 

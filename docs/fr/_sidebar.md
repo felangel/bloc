@@ -3,7 +3,7 @@
   - [Commencer](fr/gettingstarted.md)
   - [Pourquoi Bloc ?](fr/whybloc.md)
   - Concepts de base
-    - [bloc](fr/coreconcepts.md)
+    - [bloc](coreconcepts.md)
     - [flutter_bloc](fr/flutterbloccoreconcepts.md)
   - [Architecture](fr/architecture.md)
   - [Testing](fr/testing.md)

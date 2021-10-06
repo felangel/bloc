@@ -26,6 +26,7 @@ import 'package:mocktail/mocktail.dart';
 class MockBloc<E, S> extends _MockBlocBase<S> implements Bloc<E, S> {
   /// {@macro mock_bloc}
   MockBloc() {
+    // ignore: deprecated_member_use
     when(() => mapEventToState(any())).thenAnswer((_) => Stream<S>.empty());
     when(() => add(any())).thenReturn(null);
   }

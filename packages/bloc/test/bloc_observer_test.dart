@@ -5,6 +5,8 @@ import 'blocs/blocs.dart';
 
 void main() {
   final bloc = CounterBloc();
+  final error = Exception();
+  const stackTrace = StackTrace.empty;
   const event = CounterEvent.increment;
   const change = Change(currentState: 0, nextState: 1);
   const transition = Transition(
@@ -44,7 +46,7 @@ void main() {
     group('onError', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
-        BlocObserver().onError(bloc, event, StackTrace.current);
+        BlocObserver().onError(bloc, error, stackTrace);
       });
     });
 

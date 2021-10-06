@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -333,7 +332,10 @@ void main() {
         ),
       );
       await tester.pump();
-      counterCubit..increment()..increment()..increment();
+      counterCubit
+        ..increment()
+        ..increment()
+        ..increment();
       await tester.pumpAndSettle();
 
       expect(buildStates, [0, 2]);

@@ -1,10 +1,27 @@
 import 'package:bloc/bloc.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 import '../blocs.dart';
 
+EventTransformer<CounterEvent> customTransformer() {
+  return (events, mapper) {
+    final nonDebounceStream =
+        events.where((event) => event != CounterEvent.increment);
+
+    final debounceStream = events
+        .where((event) => event == CounterEvent.increment)
+        .throttle(const Duration(milliseconds: 100));
+
+    return nonDebounceStream
+        .merge(debounceStream)
+        .concurrentAsyncExpand(mapper);
+  };
+}
+
 class MergeBloc extends Bloc<CounterEvent, int> {
-  MergeBloc({this.onTransitionCallback}) : super(0);
+  MergeBloc({this.onTransitionCallback}) : super(0) {
+    on<CounterEvent>(_onCounterEvent, transformer: customTransformer());
+  }
 
   final void Function(Transition<CounterEvent, int>)? onTransitionCallback;
 
@@ -14,35 +31,12 @@ class MergeBloc extends Bloc<CounterEvent, int> {
     onTransitionCallback?.call(transition);
   }
 
-  @override
-  Stream<Transition<CounterEvent, int>> transformEvents(
-    Stream<CounterEvent> events,
-    TransitionFunction<CounterEvent, int> transitionFn,
-  ) {
-    final nonDebounceStream =
-        events.where((event) => event != CounterEvent.increment);
-
-    final debounceStream = events
-        .where((event) => event == CounterEvent.increment)
-        .throttleTime(const Duration(milliseconds: 100));
-
-    return super.transformEvents(
-      MergeStream([nonDebounceStream, debounceStream]),
-      transitionFn,
-    );
-  }
-
-  @override
-  Stream<int> mapEventToState(
-    CounterEvent event,
-  ) async* {
+  void _onCounterEvent(CounterEvent event, Emitter<int> emit) {
     switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
       case CounterEvent.increment:
-        yield state + 1;
-        break;
+        return emit(state + 1);
+      case CounterEvent.decrement:
+        return emit(state - 1);
     }
   }
 }

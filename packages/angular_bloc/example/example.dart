@@ -1,9 +1,6 @@
 // This example is one-pager for the [angular_bloc](https://github.com/felangel/bloc/tree/master/examples/angular_counter) example.
 
-import 'dart:async';
-
 import 'package:angular/angular.dart';
-
 import 'package:angular_bloc/angular_bloc.dart';
 
 @Component(
@@ -13,41 +10,35 @@ import 'package:angular_bloc/angular_bloc.dart';
 )
 class AppComponent {}
 
-enum CounterEvent { increment, decrement }
+abstract class CounterEvent {}
+
+class Increment extends CounterEvent {}
+
+class Decrement extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  CounterBloc() : super(0);
-
-  @override
-  void onTransition(Transition<CounterEvent, int> transition) {
-    print(transition);
-    super.onTransition(transition);
+  CounterBloc() : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
+    on<Decrement>((event, emit) => emit(state - 1));
   }
 
   @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
+  void onTransition(Transition<CounterEvent, int> transition) {
+    super.onTransition(transition);
+    print(transition);
   }
 }
 
 const String template =
-    '<div class="counter-page-container"><h1>Counter App</h1><h2>Current Count: {{ counterBloc | bloc }}</h2><button (click)="increment()">+</button><button (click)="decrement()">-</button></div>';
+    r'''<div><h1>Counter App</h1><h2>Current Count: {{ $pipe.bloc(counterBloc) }}</h2><button (click)="increment()">+</button><button (click)="decrement()">-</button></div>''';
 
 @Component(
   selector: 'counter-page',
-  styleUrls: ['counter_page_component.css'],
   pipes: [BlocPipe],
   template: template,
 )
 class CounterPageComponent implements OnInit, OnDestroy {
-  CounterBloc counterBloc;
+  late final CounterBloc counterBloc;
 
   @override
   void ngOnInit() {
@@ -59,11 +50,7 @@ class CounterPageComponent implements OnInit, OnDestroy {
     counterBloc.close();
   }
 
-  void increment() {
-    counterBloc.add(CounterEvent.increment);
-  }
+  void increment() => counterBloc.add(Increment());
 
-  void decrement() {
-    counterBloc.add(CounterEvent.decrement);
-  }
+  void decrement() => counterBloc.add(Decrement());
 }

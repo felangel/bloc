@@ -1,5 +1,5 @@
-import 'package:test/test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('HydratedCyclicError', () {

@@ -158,11 +158,11 @@ Ahora que nuestro `AuthenticationBloc` está terminado, necesitamos modificar el
 
 La principal diferencia entre nuestro nuevo `TodosBloc` y el original es que el nuevo está todo basado en `Stream` en lugar de `Future`.
 
-[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/map_load_todos_to_state.dart.md ':include')
+[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/on_load_todos.dart.md ':include')
 
 ?> Cuando cargamos nuestros quehaceres, nos suscribimos al `TodosRepository` y cada vez que entra un nuevo quehacer, agregamos un evento `TodosUpdated`. Luego manejamos todos los `TodosUpdates` a través de:
 
-[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/map_todos_updated_to_state.dart.md ':include')
+[todos_bloc.dart](../_snippets/flutter_firestore_todos_tutorial/on_todos_updated.dart.md ':include')
 
 ## Poniéndolo todo junto
 
@@ -174,4 +174,4 @@ Las principales diferencias a tener en cuenta son el hecho de que hemos envuelto
 
 ¡Eso es todo al respecto! Ahora hemos implementado con éxito una aplicación firestore de quehaceres en flutter usando los paquetes [bloc](https://pub.dev/packages/bloc) y [flutter_bloc](https://pub.dev/packages/flutter_bloc) y nosotros Hemos separado con éxito nuestra capa de presentación de nuestra lógica empresarial al tiempo que creamos una aplicación que se actualiza en tiempo real.
 
-La fuente completa de este ejemplo se puede encontrar [aquí](https://github.com/felangel/Bloc/tree/master/examples/flutter_firestore_todos).
+La fuente completa de este ejemplo se puede encontrar [aquí](https://github.com/felangel/bloc/tree/master/examples/flutter_firestore_todos).

@@ -1,3 +1,7 @@
+# 7.1.0
+
+- feat: upgrade to `bloc ^7.2.0`
+
 # 7.0.1
 
 - fix: `HydratedStorage` clear behavior

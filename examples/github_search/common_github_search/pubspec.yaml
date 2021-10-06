@@ -4,11 +4,11 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0-0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   bloc:
     path: ../../../packages/bloc
   equatable: ^2.0.3
   http: ^0.13.3
-  rxdart: ^0.27.1
+  stream_transform: ^2.0.0

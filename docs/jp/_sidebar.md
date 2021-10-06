@@ -3,7 +3,7 @@
   - [まずはじめに](jp/gettingstarted.md)
   - [なぜBlocを使う?](jp/whybloc.md)
   - 基本的なコンセプト
-    - [bloc](jp/coreconcepts.md)
+    - [bloc](coreconcepts.md)
     - [flutter_bloc](jp/flutterbloccoreconcepts.md)
   - [アーキテクチャー](jp/architecture.md)
   - [テスト](jp/testing.md)
@@ -13,32 +13,32 @@
 - チュートリアル
 
   - Flutter
-    - [**カウンター** <sup>✨</sup>](jp/fluttercountertutorial.md)
-    - [タイマー](jp/fluttertimertutorial.md)
-    - [無限リスト](jp/flutterinfinitelisttutorial.md)
-    - [**ログイン** <sup>✨</sup>](jp/flutterlogintutorial.md)
+    - [**カウンター** <sup>✨</sup>](fluttercountertutorial.md)
+    - [タイマー](fluttertimertutorial.md)
+    - [無限リスト](flutterinfinitelisttutorial.md)
+    - [**ログイン** <sup>✨</sup>](flutterlogintutorial.md)
     - [**天気** <sup>✨</sup>](flutterweathertutorial.md)
-    - [やることリスト](jp/fluttertodostutorial.md)
-    - [**Firebaseログイン** <sup>✨</sup>](jp/flutterfirebaselogintutorial.md)
-    - [Firestoreやることリスト](jp/flutterfirestoretodostutorial.md)
+    - [やることリスト](fluttertodostutorial.md)
+    - [**Firebaseログイン** <sup>✨</sup>](flutterfirebaselogintutorial.md)
+    - [Firestoreやることリスト](flutterfirestoretodostutorial.md)
   - AngularDart
-    - [カウンター](jp/angularcountertutorial.md)
+    - [カウンター](angularcountertutorial.md)
   - Flutter + AngularDart
-    - [**Github検索** <sup>✨</sup>](jp/flutterangulargithubsearch.md)
+    - [**Github検索** <sup>✨</sup>](flutterangulargithubsearch.md)
 
 - レシピ
 
   - Flutter
-    - [SnackBarを表示](jp/recipesfluttershowsnackbar.md)
-    - [ナビゲーション](jp/recipesflutternavigation.md)
-    - [Blocにアクセス](jp/recipesflutterblocaccess.md)
+    - [SnackBarを表示](recipesfluttershowsnackbar.md)
+    - [ナビゲーション](recipesflutternavigation.md)
+    - [Blocにアクセス](recipesflutterblocaccess.md)
 
 - ツール
 
   - 拡張機能
 
-    - [IntelliJ](jp/blocintellijextension.md)
-    - [VSCode](jp/blocvscodeextension.md)
+    - [IntelliJ](blocintellijextension.md)
+    - [VSCode](blocvscodeextension.md)
 
 - APIリファレンス
   - [bloc](https://pub.dev/documentation/bloc/latest/bloc/bloc-library.html)

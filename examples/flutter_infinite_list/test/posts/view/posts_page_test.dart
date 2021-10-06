@@ -6,6 +6,7 @@ void main() {
   group('PostsPage', () {
     testWidgets('renders PostList', (tester) async {
       await tester.pumpWidget(MaterialApp(home: PostsPage()));
+      await tester.pumpAndSettle();
       expect(find.byType(PostsList), findsOneWidget);
     });
   });

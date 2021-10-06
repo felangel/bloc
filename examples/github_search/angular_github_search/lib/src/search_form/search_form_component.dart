@@ -16,9 +16,9 @@ import 'package:angular_github_search/src/github_search.dart';
     ])
 class SearchFormComponent implements OnInit, OnDestroy {
   @Input()
-  GithubRepository githubRepository;
+  late GithubRepository githubRepository;
 
-  GithubSearchBloc githubSearchBloc;
+  late GithubSearchBloc githubSearchBloc;
 
   @override
   void ngOnInit() {

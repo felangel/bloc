@@ -3,11 +3,10 @@
     "prefix": "bloc",
     "body": [
       "class ${1:Subject}Bloc extends Bloc<$1Event, $1State> {",
-      "\t${1:Subject}Bloc() : super(${1:Subject}Initial());",
-      "",
-      "\t@override",
-      "\tStream<$1State> mapEventToState($1Event event) async* {",
-      "\t\t${3:// TODO: implement mapEventToState}",
+      "\t${1:Subject}Bloc() : super(${1:Subject}Initial()) {",
+      "\t\ton<$1Event>((event, emit) {",
+      "\t\t\t${2:// TODO: implement event handler}",
+      "\t\t});",
       "\t}",
       "}"
     ]
@@ -82,6 +81,16 @@
   },
   "Import package:bloc": {
     "prefix": "importbloc",
-    "body": "import 'package:bloc/bloc.dart';"
+    "body": "import 'package:bloc/bloc.dart';",
+    "description": "import package:bloc/bloc.dart;"
+  },
+  "Add Event Handler": {
+    "prefix": "onevent",
+    "body": [
+      "on<${1:Event}>((event, emit) {",
+      "\t${2:// TODO: implement event handler}",
+      "});"
+    ],
+    "description": "Register a new EventHandler"
   }
 }

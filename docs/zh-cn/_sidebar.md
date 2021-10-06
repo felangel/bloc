@@ -13,18 +13,18 @@
 - 教程 (Tutorials)
 
   - Flutter
-    - [**计数器** <sup>✨</sup>](zh-cn/fluttercountertutorial.md)
-    - [秒表](zh-cn/fluttertimertutorial.md)
+    - [**计数器** <sup>✨</sup>](fluttercountertutorial.md)
+    - [秒表](fluttertimertutorial.md)
     - [无限列表](zh-cn/flutterinfinitelisttutorial.md)
-    - [**登陆** <sup>✨</sup>](zh-cn/flutterlogintutorial.md)
+    - [**登陆** <sup>✨</sup>](flutterlogintutorial.md)
     - [**天气** <sup>✨</sup>](flutterweathertutorial.md)
-    - [备忘录](zh-cn/fluttertodostutorial.md)
-    - [**Firebase 登陆** <sup>✨</sup>](zh-cn/flutterfirebaselogintutorial.md)
-    - [Firestore 备忘录](zh-cn/flutterfirestoretodostutorial.md)
+    - [备忘录](fluttertodostutorial.md)
+    - [**Firebase 登陆** <sup>✨</sup>](flutterfirebaselogintutorial.md)
+    - [Firestore 备忘录](flutterfirestoretodostutorial.md)
   - AngularDart
-    - [计数器](zh-cn/angularcountertutorial.md)
+    - [计数器](angularcountertutorial.md)
   - Flutter + AngularDart
-    - [**Github 搜索** <sup>✨</sup>](zh-cn/flutterangulargithubsearch.md)
+    - [**Github 搜索** <sup>✨</sup>](flutterangulargithubsearch.md)
 
 - 配方 (Recipes)
 
@@ -37,7 +37,7 @@
 
   - 扩展 (Extensions)
 
-    - [IntelliJ](zh-cn/blocintellijextension.md)
+    - [IntelliJ](blocintellijextension.md)
     - [VSCode](zh-cn/blocvscodeextension.md)
 
 - 接口文献 (API Reference)

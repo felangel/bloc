@@ -1,19 +1,16 @@
 // ignore_for_file: invalid_use_of_protected_member
 import 'dart:async';
-import 'package:test/test.dart';
+
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:bloc/bloc.dart';
 import 'package:pedantic/pedantic.dart';
+import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
 class MockStorage extends Mock implements Storage {}
 
 class MyUuidHydratedBloc extends HydratedBloc<String, String?> {
   MyUuidHydratedBloc() : super(const Uuid().v4());
-
-  @override
-  Stream<String> mapEventToState(String event) async* {}
 
   @override
   Map<String, String?> toJson(String? state) => {'value': state};
@@ -29,21 +26,16 @@ class MyUuidHydratedBloc extends HydratedBloc<String, String?> {
   }
 }
 
-enum CounterEvent { increment }
+abstract class CounterEvent {}
+
+class Increment extends CounterEvent {}
 
 class MyCallbackHydratedBloc extends HydratedBloc<CounterEvent, int> {
-  MyCallbackHydratedBloc({this.onFromJsonCalled}) : super(0);
+  MyCallbackHydratedBloc({this.onFromJsonCalled}) : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
+  }
 
   final void Function(dynamic)? onFromJsonCalled;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-  }
 
   @override
   Map<String, int> toJson(int state) => {'value': state};
@@ -62,9 +54,6 @@ class MyHydratedBloc extends HydratedBloc<int, int> {
 
   @override
   String get id => _id ?? '';
-
-  @override
-  Stream<int> mapEventToState(int event) async* {}
 
   @override
   Map<String, int>? toJson(int state) {
@@ -86,9 +75,6 @@ class MyMultiHydratedBloc extends HydratedBloc<int, int> {
   String get id => _id;
 
   @override
-  Stream<int> mapEventToState(int event) async* {}
-
-  @override
   Map<String, int> toJson(int state) {
     return {'value': state};
   }
@@ -99,15 +85,12 @@ class MyMultiHydratedBloc extends HydratedBloc<int, int> {
 
 class MyErrorThrowingBloc extends HydratedBloc<Object, int> {
   MyErrorThrowingBloc({this.onErrorCallback, this.superOnError = true})
-      : super(0);
+      : super(0) {
+    on<Object>((event, emit) => emit(state + 1));
+  }
 
   final Function(Object error, StackTrace stackTrace)? onErrorCallback;
   final bool superOnError;
-
-  @override
-  Stream<int> mapEventToState(Object event) async* {
-    yield state + 1;
-  }
 
   @override
   void onError(Object error, StackTrace stackTrace) {
@@ -163,7 +146,7 @@ void main() {
       when<dynamic>(() => storage.read(any())).thenReturn({'value': 42});
       final bloc = MyCallbackHydratedBloc();
       expect(bloc.state, 42);
-      bloc.add(CounterEvent.increment);
+      bloc.add(Increment());
       await expectLater(bloc.stream, emitsInOrder(const <int>[43]));
       verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
     });
@@ -177,7 +160,7 @@ void main() {
         onFromJsonCalled: fromJsonCalls.add,
       );
       expect(bloc.state, 42);
-      bloc.add(CounterEvent.increment);
+      bloc.add(Increment());
       await expectLater(bloc.stream, emitsInOrder(const <int>[43]));
       expect(fromJsonCalls, [
         {'value': 42}
@@ -190,7 +173,7 @@ void main() {
       when<dynamic>(() => storage.read(any())).thenReturn(null);
       final bloc = MyCallbackHydratedBloc();
       expect(bloc.state, 0);
-      bloc.add(CounterEvent.increment);
+      bloc.add(Increment());
       await expectLater(bloc.stream, emitsInOrder(const <int>[1]));
       verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
     });
@@ -202,7 +185,7 @@ void main() {
         onFromJsonCalled: fromJsonCalls.add,
       );
       expect(bloc.state, 0);
-      bloc.add(CounterEvent.increment);
+      bloc.add(Increment());
       await expectLater(bloc.stream, emitsInOrder(const <int>[1]));
       expect(fromJsonCalls, isEmpty);
     });
@@ -212,7 +195,7 @@ void main() {
         'when cache is malformed', () async {
       unawaited(runZonedGuarded(() async {
         when<dynamic>(() => storage.read(any())).thenReturn('{');
-        MyCallbackHydratedBloc().add(CounterEvent.increment);
+        MyCallbackHydratedBloc().add(Increment());
       }, (_, __) {
         verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
       }));
@@ -224,7 +207,7 @@ void main() {
         when<dynamic>(() => storage.read(any())).thenReturn('{');
         MyCallbackHydratedBloc(
           onFromJsonCalled: fromJsonCalls.add,
-        ).add(CounterEvent.increment);
+        ).add(Increment());
         expect(fromJsonCalls, isEmpty);
       }, (_, __) {
         expect(fromJsonCalls, isEmpty);

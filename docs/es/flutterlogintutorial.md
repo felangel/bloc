@@ -176,7 +176,7 @@ En el cuerpo del constructor, el `AuthenticationBloc` se suscribe al flujo de `s
 
 !> El `AuthenticationBloc` anula el método `close` para eliminar tanto el `StreamSubscription` como el `AuthenticationRepository`.
 
-A continuación, `mapEventToState` maneja la transformación de las instancias de`AuthenticationEvent` entrantes en nuevas instancias de `AuthenticationState`.
+A continuación, la `EventHandler` maneja la transformación de las instancias de`AuthenticationEvent` entrantes en nuevas instancias de `AuthenticationState`.
 
 Cuando se agrega un evento `AuthenticationStatusChanged` si el estado asociado es `AuthenticationStatus.authenticated`, el `AuthentictionBloc` consulta al usuario a través del `UserRepository`.
 

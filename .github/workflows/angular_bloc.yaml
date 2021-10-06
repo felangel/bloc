@@ -24,7 +24,7 @@ jobs:
       - uses: dart-lang/setup-dart@v1
 
       - name: Install Dependencies
-        run: pub get
+        run: dart pub get
 
       - name: Format
         run: dart format --set-exit-if-changed .
@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2.3.4
-      - uses: subosito/flutter-action@v1.5.0
+      - uses: subosito/flutter-action@v1.5.3
 
       - name: Install Dependencies
         run: |
@@ -52,4 +52,4 @@ jobs:
           flutter pub global activate pana
 
       - name: Verify Pub Score
-        run: ../../tool/verify_pub_score.sh 90
+        run: ../../tool/verify_pub_score.sh 110

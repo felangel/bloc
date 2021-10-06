@@ -1,7 +1,7 @@
-import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
-import '../ticker/ticker.dart';
+import 'package:flutter_bloc_with_stream/ticker/ticker.dart';
 
 part 'ticker_event.dart';
 part 'ticker_state.dart';
@@ -12,24 +12,18 @@ part 'ticker_state.dart';
 /// {@endtemplate}
 class TickerBloc extends Bloc<TickerEvent, TickerState> {
   /// {@macro ticker_bloc}
-  TickerBloc(this._ticker) : super(TickerInitial());
+  TickerBloc(Ticker ticker) : super(TickerInitial()) {
+    on<TickerStarted>(
+      (event, emit) async {
+        await emit.onEach<int>(
+          ticker.tick(),
+          onData: (tick) => add(_TickerTicked(tick)),
+        );
+        emit(const TickerComplete());
+      },
+      transformer: restartable(),
+    );
 
-  final Ticker _ticker;
-  StreamSubscription? _subscription;
-
-  @override
-  Stream<TickerState> mapEventToState(TickerEvent event) async* {
-    if (event is TickerStarted) {
-      await _subscription?.cancel();
-      _subscription = _ticker.tick().listen((tick) => add(_TickerTicked(tick)));
-    } else if (event is _TickerTicked) {
-      yield TickerTickSuccess(event.tickCount);
-    }
-  }
-
-  @override
-  Future<void> close() {
-    _subscription?.cancel();
-    return super.close();
+    on<_TickerTicked>((event, emit) => emit(TickerTickSuccess(event.tick)));
   }
 }

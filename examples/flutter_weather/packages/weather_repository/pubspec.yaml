@@ -7,13 +7,13 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  equatable: ^2.0.0
+  equatable: ^2.0.3
   json_annotation: ^4.0.0
   meta_weather_api:
     path: ../meta_weather_api
 
 dev_dependencies:
-  coverage: ^0.14.1
+  coverage: ^1.0.3
   build_runner: ^1.10.0
   json_serializable: ^4.0.0
   mocktail: ^0.1.0

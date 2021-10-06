@@ -1,9 +1,10 @@
 ```dart
-@override
-Stream<MyState> mapEventToState(MyEvent event) async* {
-    // never modify/mutate state
-    state.property = event.property;
-    // never yield the same instance of state
-    yield state;
+MyBloc() {
+    on<MyEvent>((event, emit) {
+        // never modify/mutate state
+        state.property = event.property;
+        // never emit the same instance of state
+        emit(state);
+    })
 }
 ```

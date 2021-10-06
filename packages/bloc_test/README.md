@@ -111,9 +111,9 @@ group('CounterBloc', () {
   );
 
   blocTest(
-    'emits [1] when CounterEvent.increment is added',
+    'emits [1] when Increment is added',
     build: () => CounterBloc(),
-    act: (bloc) => bloc.add(CounterEvent.increment),
+    act: (bloc) => bloc.add(Increment()),
     expect: () => [1],
   );
 });
@@ -135,9 +135,9 @@ blocTest(
 
 ```dart
 blocTest(
-  'CounterBloc emits [2] when CounterEvent.increment is added twice',
+  'CounterBloc emits [2] when Increment is added twice',
   build: () => CounterBloc(),
-  act: (bloc) => bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+  act: (bloc) => bloc..add(Increment())..add(Increment()),
   skip: 1,
   expect: () => [2],
 );
@@ -147,9 +147,9 @@ blocTest(
 
 ```dart
 blocTest(
-  'CounterBloc emits [1] when CounterEvent.increment is added',
+  'CounterBloc emits [1] when Increment is added',
   build: () => CounterBloc(),
-  act: (bloc) => bloc.add(CounterEvent.increment),
+  act: (bloc) => bloc.add(Increment()),
   wait: const Duration(milliseconds: 300),
   expect: () => [1],
 );
@@ -159,9 +159,9 @@ blocTest(
 
 ```dart
 blocTest(
-  'CounterBloc emits [1] when CounterEvent.increment is added',
+  'CounterBloc emits [1] when Increment is added',
   build: () => CounterBloc(),
-  act: (bloc) => bloc.add(CounterEvent.increment),
+  act: (bloc) => bloc.add(Increment()),
   expect: () => [1],
   verify: (_) {
     verify(() => repository.someMethod(any())).called(1);
