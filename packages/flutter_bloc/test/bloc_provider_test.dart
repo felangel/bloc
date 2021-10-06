@@ -8,19 +8,7 @@ class MockCubit<S> extends Cubit<S> {
   MockCubit(S state) : super(state);
 
   @override
-  StreamSubscription<S> listen(
-    void Function(S p1)? onData, {
-    Function? onError,
-    void Function()? onDone,
-    bool? cancelOnError,
-  }) {
-    return Stream<S>.empty().listen(
-      onData,
-      onError: onError,
-      onDone: onDone,
-      cancelOnError: cancelOnError,
-    );
-  }
+  Stream<S> get stream => Stream<S>.empty();
 }
 
 class MyApp extends StatelessWidget {
