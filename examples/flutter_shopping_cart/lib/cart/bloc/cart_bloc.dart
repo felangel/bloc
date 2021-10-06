@@ -33,7 +33,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       try {
         shoppingRepository.addItemToCart(event.item);
         emit(CartLoaded(cart: Cart(items: [...state.cart.items, event.item])));
-      } on Exception {
+      } catch (_) {
         emit(CartError());
       }
     }
@@ -47,14 +47,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(
           CartLoaded(
             cart: Cart(
-              items: [
-                for (final item in state.cart.items)
-                  if (item != event.item) item
-              ],
+              items: [...state.cart.items]..remove(event.item),
             ),
           ),
         );
-      } on Exception {
+      } catch (_) {
         emit(CartError());
       }
     }
