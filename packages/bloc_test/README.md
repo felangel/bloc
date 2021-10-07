@@ -102,6 +102,19 @@ expect(counterBloc.state, equals(3));
 
 `tearDown` is optional and can be used to execute any code after the test has run. `tearDown` should be used to clean up after a particular test case. For common tear down code, prefer to use `tearDown` from `package:test/test.dart`.
 
+Furthermore, all following optional parameters of the `test` function from `package:test` are supported and passed on to it. 
+ 
+`testOn` is optional and is parsed as a platform selector to run the test only on matching platforms.
+
+`timeOut` is optional and if it is passed it's used to modify or replace the default timeout of 30 seconds.
+
+`skipTest` is optional and if it is a `String` or `true`, the test is skipped.
+
+`tags` is optional and if it is passed, it declares user-defined tags that are applied to the test. These tags can be used to select or skip the test on the command line, or to do bulk test configuration. 
+
+`retry` is optional and if it is passed it will retry the test the provided number of times before being marked as a failure.
+
+`onPlatform` is optional and it allows tests to be configured on a platform-by-platform basis. It's a map from strings that are parsed as PlatformSelectors (from package:test_api) to annotation classes.
 ```dart
 group('CounterBloc', () {
   blocTest(

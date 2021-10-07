@@ -122,6 +122,56 @@ import 'package:test/test.dart' as test;
 ///  expect: () => [isA<StateB>()],
 /// );
 /// ```
+///
+/// The following parameters are from the test function from package:test
+/// and are passed on directly to it.
+///
+/// [testOn] is optional. If is passed, it's parsed as a [platform selector][];
+/// the test will only be run on matching platforms.
+///
+/// [platform selector]: https://github.com/dart-lang/test/tree/master/pkgs/test#platform-selectors
+///
+/// [timeout] is optional. If it is passed, it's used to modify or replace
+/// the default timeout of 30 seconds. Timeout modifications take precedence
+/// in suite-group-test order, so [timeout] will also modify any timeouts
+/// set on the group or suite.
+///
+/// [skipTest] is optional. If it is a String or `true`, the test is skipped.
+/// If it's a String, it should explain why the test is skipped;
+/// this reason will be printed instead of running the test.
+///
+/// [tags] is optional. If it is passed, it declares user-defined tags
+/// that are applied to the test. These tags can be used to select or skip
+/// the test on the command line, or to do bulk test configuration.
+/// All tags should be declared in the
+/// [package configuration file][configuring tags].
+/// The parameter can be an [Iterable] of tag names,
+/// or a [String] representing a single tag.
+/// [configuring tags]: https://github.com/dart-lang/test/blob/master/pkgs/test/doc/configuration.md#configuring-tags
+///
+/// [retry] is optional. If it is passed, the test will be retried
+/// the provided number of times before being marked as a failure.
+///
+/// [onPlatform] is optional. It allows tests to be configured
+/// on a platform-by-platform basis. It's a map from strings that are parsed
+/// as PlatformSelectors (from package:test_api) to annotation classes:
+/// [test.Timeout], [test.Skip], or lists of those. These
+/// annotations apply only on the given platforms. For example:
+///
+///     blocTest('potentially slow test', () {
+///       // ...
+///     }, onPlatform: {
+///       // This test is especially slow on Windows.
+///       'windows': Timeout.factor(2),
+///       'browser': [
+///         test.Skip('TODO: add browser support'),
+///         // This will be slow on browsers once it works on them.
+///         Timeout.factor(2)
+///       ]
+///     });
+///
+/// If multiple platforms match, the annotations apply in order as through
+/// they were in nested groups.
 @isTest
 void blocTest<B extends BlocBase<State>, State>(
   String description, {
@@ -135,21 +185,36 @@ void blocTest<B extends BlocBase<State>, State>(
   Function(B bloc)? verify,
   dynamic Function()? errors,
   FutureOr<void> Function()? tearDown,
+  String? testOn,
+  test.Timeout? timeout,
+  dynamic skipTest,
+  dynamic tags,
+  int? retry,
+  Map<String, dynamic>? onPlatform,
 }) {
-  test.test(description, () async {
-    await testBloc<B, State>(
-      setUp: setUp,
-      build: build,
-      seed: seed,
-      act: act,
-      wait: wait,
-      skip: skip,
-      expect: expect,
-      verify: verify,
-      errors: errors,
-      tearDown: tearDown,
-    );
-  });
+  test.test(
+    description,
+    () async {
+      await testBloc<B, State>(
+        setUp: setUp,
+        build: build,
+        seed: seed,
+        act: act,
+        wait: wait,
+        skip: skip,
+        expect: expect,
+        verify: verify,
+        errors: errors,
+        tearDown: tearDown,
+      );
+    },
+    testOn: testOn,
+    timeout: timeout,
+    skip: skipTest,
+    tags: tags,
+    retry: retry,
+    onPlatform: onPlatform,
+  );
 }
 
 /// Internal [blocTest] runner which is only visible for testing.
