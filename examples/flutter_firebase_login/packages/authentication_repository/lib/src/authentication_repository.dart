@@ -166,12 +166,12 @@ class AuthenticationRepository {
   })  : _cache = cache ?? CacheClient(),
         _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
         _googleSignIn = googleSignIn ?? GoogleSignIn.standard(),
-        _crypto = cryptoApi ?? CryptoApi()
+        _crypto = cryptoApi ?? CryptoApi();
 
   final CacheClient _cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
-  final Crypto _crypto;
+  final CryptoApi _crypto;
 
   /// Whether or not the current environment is web
   /// Should only be overriden for testing purposes. Otherwise,
