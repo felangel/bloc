@@ -102,6 +102,8 @@ expect(counterBloc.state, equals(3));
 
 `tearDown` is optional and can be used to execute any code after the test has run. `tearDown` should be used to clean up after a particular test case. For common tear down code, prefer to use `tearDown` from `package:test/test.dart`.
 
+`tags` is optional and if it is passed, it declares user-defined tags that are applied to the test. These tags can be used to select or skip the test on the command line, or to do bulk test configuration.
+
 ```dart
 group('CounterBloc', () {
   blocTest(

@@ -44,6 +44,10 @@ import 'package:test/test.dart' as test;
 /// [tearDown] should be used to clean up after a particular test case.
 /// For common tear down code, prefer to use `tearDown` from `package:test/test.dart`.
 ///
+/// [tags] is optional and if it is passed, it declares user-defined tags
+/// that are applied to the test. These tags can be used to select or
+/// skip the test on the command line, or to do bulk test configuration.
+///
 /// ```dart
 /// blocTest(
 ///   'CounterBloc emits [1] when increment is added',
@@ -122,6 +126,14 @@ import 'package:test/test.dart' as test;
 ///  expect: () => [isA<StateB>()],
 /// );
 /// ```
+///
+/// If [tags] is passed, it declares user-defined tags that are applied to the
+/// test. These tags can be used to select or skip the test on the command line,
+/// or to do bulk test configuration. All tags should be declared in the
+/// [package configuration file][configuring tags]. The parameter can be an
+/// [Iterable] of tag names, or a [String] representing a single tag.
+///
+/// [configuring tags]: https://github.com/dart-lang/test/blob/master/pkgs/test/doc/configuration.md#configuring-tags
 @isTest
 void blocTest<B extends BlocBase<State>, State>(
   String description, {
@@ -135,21 +147,26 @@ void blocTest<B extends BlocBase<State>, State>(
   Function(B bloc)? verify,
   dynamic Function()? errors,
   FutureOr<void> Function()? tearDown,
+  dynamic tags,
 }) {
-  test.test(description, () async {
-    await testBloc<B, State>(
-      setUp: setUp,
-      build: build,
-      seed: seed,
-      act: act,
-      wait: wait,
-      skip: skip,
-      expect: expect,
-      verify: verify,
-      errors: errors,
-      tearDown: tearDown,
-    );
-  });
+  test.test(
+    description,
+    () async {
+      await testBloc<B, State>(
+        setUp: setUp,
+        build: build,
+        seed: seed,
+        act: act,
+        wait: wait,
+        skip: skip,
+        expect: expect,
+        verify: verify,
+        errors: errors,
+        tearDown: tearDown,
+      );
+    },
+    tags: tags,
+  );
 }
 
 /// Internal [blocTest] runner which is only visible for testing.
