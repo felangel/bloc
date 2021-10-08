@@ -32,18 +32,18 @@ const blocImports = [
 
 function updatePubspec() {
   const container = Docsify.dom.getNode("#main");
-  const scripts = Docsify.dom.findAll(container, ".lang-yaml");
+  const yamlCode = Docsify.dom.findAll(container, ".lang-yaml");
 
-  for (let i = scripts.length; i--; ) {
-    const script = scripts[i];
-    var innerHtml = script.innerHTML.replaceAll(dependencyOverrides, "");
+  for (let i = yamlCode.length; i--; ) {
+    const code = yamlCode[i];
+    var innerHtml = code.innerHTML.replaceAll(dependencyOverrides, "");
     blocImports.forEach(function (blocImport) {
       innerHtml = innerHtml.replaceAll(
         blocImport.value,
         ` ${blocImport.version}\n`
       );
     });
-    script.innerHTML = innerHtml;
+    code.innerHTML = innerHtml;
   }
 }
 
