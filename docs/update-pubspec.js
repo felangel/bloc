@@ -21,9 +21,9 @@ const sealedFlutterBlocImport = getRelativeImportRegExp("sealed_flutter_bloc");
 
 const blocImports = [
   { value: angularBlocImport, version: "^7.1.0" },
-  { value: blocImport, version: "^7.2.0" },
-  { value: blocConcurrencyImport, version: "^0.1.0" },
   { value: blocTestImport, version: "^8.3.0" },
+  { value: blocConcurrencyImport, version: "^0.1.0" },
+  { value: blocImport, version: "^7.2.0" },
   { value: flutterBlocImport, version: "^7.3.0" },
   { value: hydratedBlocImport, version: "^7.1.0" },
   { value: replayBlocImport, version: "^0.1.0" },
