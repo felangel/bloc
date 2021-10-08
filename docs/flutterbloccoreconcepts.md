@@ -111,6 +111,8 @@ then from `ChildA` we can retrieve the `Repository` instance with:
 
 [repository_provider.dart](_snippets/flutter_bloc_core_concepts/repository_provider_lookup.dart.md ':include')
 
+?> **Note**: `RepositoryProvider` extends the `Provider` class from `package:provider`, so it can basically be of any type. Nevertheless, it is intended to be used for repository data access classes and not any type of object being injected to the widget tree. 
+
 ### MultiRepositoryProvider
 
 **MultiRepositoryProvider** is a Flutter widget that merges multiple `RepositoryProvider` widgets into one.
