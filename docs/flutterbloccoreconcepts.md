@@ -127,7 +127,7 @@ to:
 
 ## Usage
 
-Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
+Let's take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
 
 ### counter_bloc.dart
 
@@ -138,3 +138,17 @@ Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget t
 [counter_page.dart](_snippets/flutter_bloc_core_concepts/counter_page.dart.md ':include')
 
 At this point we have successfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
+
+## Advanced usage
+
+We are going to take a look at how `RepositoryProviders` should be structured in order to provide an instance to our blocs. To showcase this, we are using the [`flutter_shopping_cart`][flutter_shopping_cart_example_link] example.
+
+[shopping_repository.dart](_snippets/flutter_bloc_core_concepts/shopping_repository.dart.md ':include')
+
+Then, we pass the repository as a dependency of our app. This should be done with every repository we use throughout our app.
+
+[main.dart](_snippets/flutter_bloc_core_concepts/main.dart.md ':include')
+
+
+
+[flutter_shopping_cart_example_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_shopping_cart
