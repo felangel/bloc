@@ -32,7 +32,7 @@ const blocImports = [
 
 function updatePubspec() {
   const container = Docsify.dom.getNode("#main");
-  const yamlCode = Docsify.dom.findAll(container, ".lang-yaml");
+  const yamlCode = Docsify.dom.findAll(container, "code.lang-yaml");
 
   for (let i = yamlCode.length; i--; ) {
     const code = yamlCode[i];
