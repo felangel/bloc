@@ -465,8 +465,8 @@ void main() {
       late MockBlocObserver observer;
 
       setUpAll(() {
-        registerFallbackValue<BlocBase<dynamic>>(FakeBlocBase<dynamic>());
-        registerFallbackValue<StackTrace>(StackTrace.empty);
+        registerFallbackValue(FakeBlocBase<dynamic>());
+        registerFallbackValue(StackTrace.empty);
       });
 
       setUp(() {
