@@ -88,8 +88,8 @@ void main() {
     late AuthenticationRepository authenticationRepository;
 
     setUpAll(() {
-      registerFallbackValue<firebase_auth.AuthCredential>(FakeAuthCredential());
-      registerFallbackValue<AuthProvider>(FakeAuthProvider());
+      registerFallbackValue(FakeAuthCredential());
+      registerFallbackValue(FakeAuthProvider());
     });
 
     setUp(() {

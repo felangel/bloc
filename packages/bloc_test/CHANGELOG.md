@@ -1,3 +1,7 @@
+# 9.0.0-dev.2
+
+- **BREAKING**: feat: upgrade to `mocktail v0.2.0`
+
 # 9.0.0-dev.1
 
 - **BREAKING**: feat: upgrade to `bloc v8.0.0-dev.2`

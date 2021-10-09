@@ -16,7 +16,7 @@ void main() {
     late MetaWeatherApiClient metaWeatherApiClient;
 
     setUpAll(() {
-      registerFallbackValue<Uri>(FakeUri());
+      registerFallbackValue(FakeUri());
     });
 
     setUp(() {
