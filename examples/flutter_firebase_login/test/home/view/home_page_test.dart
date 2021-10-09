@@ -9,10 +9,6 @@ import 'package:mocktail/mocktail.dart';
 
 class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
 
-class FakeAppEvent extends Fake implements AppEvent {}
-
-class FakeAppState extends Fake implements AppState {}
-
 class MockUser extends Mock implements User {}
 
 void main() {
@@ -20,11 +16,6 @@ void main() {
   group('HomePage', () {
     late AppBloc appBloc;
     late User user;
-
-    setUpAll(() {
-      registerFallbackValue(FakeAppEvent());
-      registerFallbackValue(FakeAppState());
-    });
 
     setUp(() {
       appBloc = MockAppBloc();
