@@ -15,19 +15,10 @@ class MockAuthenticationRepository extends Mock
 
 class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
 
-class FakeAppEvent extends Fake implements AppEvent {}
-
-class FakeAppState extends Fake implements AppState {}
-
 void main() {
   group('App', () {
     late AuthenticationRepository authenticationRepository;
     late User user;
-
-    setUpAll(() {
-      registerFallbackValue(FakeAppEvent());
-      registerFallbackValue(FakeAppState());
-    });
 
     setUp(() {
       authenticationRepository = MockAuthenticationRepository();
@@ -53,11 +44,6 @@ void main() {
   group('AppView', () {
     late AuthenticationRepository authenticationRepository;
     late AppBloc appBloc;
-
-    setUpAll(() {
-      registerFallbackValue(FakeAppEvent());
-      registerFallbackValue(FakeAppState());
-    });
 
     setUp(() {
       authenticationRepository = MockAuthenticationRepository();
