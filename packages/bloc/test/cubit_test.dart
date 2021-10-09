@@ -66,8 +66,8 @@ void main() {
       late BlocObserver observer;
 
       setUpAll(() {
-        registerFallbackValue<BlocBase<dynamic>>(FakeBlocBase<dynamic>());
-        registerFallbackValue<Change<dynamic>>(FakeChange<dynamic>());
+        registerFallbackValue(FakeBlocBase<dynamic>());
+        registerFallbackValue(FakeChange<dynamic>());
       });
 
       setUp(() {
