@@ -18,10 +18,6 @@ void main() {
   group('MockBloc', () {
     late CounterBloc counterBloc;
 
-    setUpAll(() {
-      registerFallbackValue(CounterEvent.increment);
-    });
-
     setUp(() {
       counterBloc = MockCounterBloc();
     });

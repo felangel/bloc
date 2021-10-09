@@ -15,21 +15,13 @@ import '../../helpers/hydrated_bloc.dart';
 
 class MockWeatherRepository extends Mock implements WeatherRepository {}
 
-class FakeColor extends Fake implements Color {}
-
 class MockThemeCubit extends MockCubit<Color> implements ThemeCubit {}
-
-class FakeWeatherState extends Fake implements WeatherState {}
 
 class MockWeatherCubit extends MockCubit<WeatherState> implements WeatherCubit {
 }
 
 void main() {
-  setUpAll(() {
-    initHydratedBloc();
-    registerFallbackValue(FakeColor());
-    registerFallbackValue(FakeWeatherState());
-  });
+  setUpAll(initHydratedBloc);
 
   group('WeatherPage', () {
     late WeatherRepository weatherRepository;
