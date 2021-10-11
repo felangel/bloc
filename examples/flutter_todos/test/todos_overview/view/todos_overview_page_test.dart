@@ -42,9 +42,6 @@ void main() {
   });
 
   group('TodosOverviewView', () {
-    const addTodoFloatingActionButtonKey =
-        Key('todoOverviewView_addTodo_floatingActionButton');
-
     late MockNavigator navigator;
     late TodosOverviewBloc todosOverviewBloc;
 
@@ -55,14 +52,12 @@ void main() {
       todosOverviewBloc = MockTodosOverviewBloc();
     });
 
-    Future<void> pumpSubject(WidgetTester tester) async {
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: BlocProvider.value(
-            value: todosOverviewBloc,
-            child: const TodosOverviewView(),
-          ),
+    Widget buildSubject() {
+      return MockNavigatorProvider(
+        navigator: navigator,
+        child: BlocProvider.value(
+          value: todosOverviewBloc,
+          child: const TodosOverviewView(),
         ),
       );
     }
@@ -70,7 +65,7 @@ void main() {
     testWidgets(
       'renders AppBar with title text',
       (tester) async {
-        await pumpSubject(tester);
+        await tester.pumpApp(buildSubject());
 
         expect(find.byType(AppBar), findsOneWidget);
         expect(
@@ -82,50 +77,6 @@ void main() {
         );
       },
     );
-
-    group('add todo floating action button', () {
-      testWidgets(
-        'is rendered',
-        (tester) async {
-          await pumpSubject(tester);
-
-          expect(
-            find.byKey(addTodoFloatingActionButtonKey),
-            findsOneWidget,
-          );
-
-          final addTodoFloatingActionButton =
-              tester.widget(find.byKey(addTodoFloatingActionButtonKey));
-          expect(
-            addTodoFloatingActionButton,
-            isA<FloatingActionButton>(),
-          );
-        },
-      );
-
-      testWidgets('renders add icon', (tester) async {
-        await pumpSubject(tester);
-
-        expect(
-          find.descendant(
-            of: find.byKey(addTodoFloatingActionButtonKey),
-            matching: find.byIcon(Icons.add),
-          ),
-          findsOneWidget,
-        );
-      });
-
-      testWidgets(
-        'navigates to the EditTodoPage when pressed',
-        (tester) async {
-          await pumpSubject(tester);
-
-          await tester.tap(find.byKey(addTodoFloatingActionButtonKey));
-
-          verify(() => navigator.push(any(that: isRoute<void>()))).called(1);
-        },
-      );
-    });
 
     testWidgets(
       'renders error snackbar '
@@ -141,7 +92,7 @@ void main() {
           ]),
         );
 
-        await pumpSubject(tester);
+        await tester.pumpApp(buildSubject());
         await tester.pumpAndSettle();
 
         expect(find.byType(SnackBar), findsOneWidget);
@@ -174,7 +125,7 @@ void main() {
       });
 
       testWidgets('is rendered when lastDeletedTodo changes', (tester) async {
-        await pumpSubject(tester);
+        await tester.pumpApp(buildSubject());
         await tester.pumpAndSettle();
 
         expect(
@@ -197,7 +148,7 @@ void main() {
         'to TodosOverviewBloc '
         'when onUndo is called',
         (tester) async {
-          await pumpSubject(tester);
+          await tester.pumpApp(buildSubject());
           await tester.pumpAndSettle();
 
           final snackBar =
@@ -223,7 +174,7 @@ void main() {
         'renders nothing '
         'when status is initial or error',
         (tester) async {
-          await pumpSubject(tester);
+          await tester.pumpApp(buildSubject());
 
           expect(find.byType(ListView), findsNothing);
           expect(find.byType(CupertinoActivityIndicator), findsNothing);
@@ -240,7 +191,7 @@ void main() {
             ),
           );
 
-          await pumpSubject(tester);
+          await tester.pumpApp(buildSubject());
 
           expect(find.byType(CupertinoActivityIndicator), findsOneWidget);
         },
@@ -256,7 +207,7 @@ void main() {
             ),
           );
 
-          await pumpSubject(tester);
+          await tester.pumpApp(buildSubject());
 
           expect(find.text(l10n.todosOverviewEmptyText), findsOneWidget);
         },
@@ -274,7 +225,7 @@ void main() {
       });
 
       testWidgets('renders ListView with TodoListTiles', (tester) async {
-        await pumpSubject(tester);
+        await tester.pumpApp(buildSubject());
 
         expect(find.byType(ListView), findsOneWidget);
         expect(find.byType(TodoListTile), findsNWidgets(mockTodos.length));
@@ -285,7 +236,7 @@ void main() {
         'to TodosOverviewBloc '
         'when TodoListTile.onToggleCompleted is called',
         (tester) async {
-          await pumpSubject(tester);
+          await tester.pumpApp(buildSubject());
 
           final todo = mockTodos.first;
 
@@ -307,7 +258,7 @@ void main() {
         'to TodosOverviewBloc '
         'when TodoListTile.onDismissed is called',
         (tester) async {
-          await pumpSubject(tester);
+          await tester.pumpApp(buildSubject());
 
           final todo = mockTodos.first;
 
@@ -324,7 +275,7 @@ void main() {
         'navigates to EditTodoPage '
         'when TodoListTile.onTap is called',
         (tester) async {
-          await pumpSubject(tester);
+          await tester.pumpApp(buildSubject());
 
           final todoListTile =
               tester.widget<TodoListTile>(find.byType(TodoListTile).first);
