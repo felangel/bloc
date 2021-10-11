@@ -96,5 +96,17 @@
   "editTodoSaveButtonTooltip": "Save changes",
   "@editTodoSaveButtonTooltip": {
     "description": "Tooltip text shown in the save button on the Todo Edit Page"
+  },
+  "statsAppBarTitle": "Stats",
+  "@statsAppBarTitle": {
+    "description": "Title text shown in the AppBar of the Stats Page"
+  },
+  "statsCompletedTodoCountLabel": "Completed todos",
+  "@statsCompletedTodoCountLabel": {
+    "description": "Label text shown in the completed todos count section of the Stats Page"
+  },
+  "statsActiveTodoCountLabel": "Active todos",
+  "@statsActiveTodoCountLabel": {
+    "description": "Label text shown in the active todos count section of the Stats Page"
   }
 }

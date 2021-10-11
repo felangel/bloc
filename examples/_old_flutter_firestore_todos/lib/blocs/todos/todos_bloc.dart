@@ -19,9 +19,12 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final TodosRepository _todosRepository;
 
   Future<void> _onLoadTodos(LoadTodos event, Emitter<TodosState> emit) {
-    return emit.onEach<List<Todo>>(_todosRepository.todos(), (todos) {
-      add(TodosUpdated(todos));
-    });
+    return emit.onEach<List<Todo>>(
+      _todosRepository.todos(),
+      onData: (todos) {
+        add(TodosUpdated(todos));
+      },
+    );
   }
 
   void _onAddTodo(AddTodo event, Emitter<TodosState> emit) {

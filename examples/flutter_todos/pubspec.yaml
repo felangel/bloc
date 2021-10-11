@@ -7,10 +7,12 @@ environment:
   sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
-  bloc: ^7.2.0-dev.2
+  bloc:
+    path: ../../packages/bloc
   flutter:
     sdk: flutter
-  flutter_bloc: ^7.2.0
+  flutter_bloc:
+    path: ../../packages/flutter_bloc
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
