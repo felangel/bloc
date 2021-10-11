@@ -1,3 +1,7 @@
+# 6.0.1
+
+- chore: remove unnecessary abstract keyword from freezed template
+
 # 6.0.0
 
 - **BREAKING**: update to bloc ^7.2.0

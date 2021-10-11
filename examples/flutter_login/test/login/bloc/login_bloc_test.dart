@@ -9,16 +9,17 @@ class MockAuthenticationRepository extends Mock
     implements AuthenticationRepository {}
 
 void main() {
-  late LoginBloc loginBloc;
   late AuthenticationRepository authenticationRepository;
 
   setUp(() {
     authenticationRepository = MockAuthenticationRepository();
-    loginBloc = LoginBloc(authenticationRepository: authenticationRepository);
   });
 
   group('LoginBloc', () {
     test('initial state is LoginState', () {
+      final loginBloc = LoginBloc(
+        authenticationRepository: authenticationRepository,
+      );
       expect(loginBloc.state, const LoginState());
     });
 
@@ -26,15 +27,17 @@ void main() {
       blocTest<LoginBloc, LoginState>(
         'emits [submissionInProgress, submissionSuccess] '
         'when login succeeds',
-        build: () {
+        setUp: () {
           when(
             () => authenticationRepository.logIn(
               username: 'username',
               password: 'password',
             ),
           ).thenAnswer((_) => Future.value('user'));
-          return loginBloc;
         },
+        build: () => LoginBloc(
+          authenticationRepository: authenticationRepository,
+        ),
         act: (bloc) {
           bloc
             ..add(const LoginUsernameChanged('username'))
@@ -66,13 +69,17 @@ void main() {
 
       blocTest<LoginBloc, LoginState>(
         'emits [LoginInProgress, LoginFailure] when logIn fails',
-        build: () {
-          when(() => authenticationRepository.logIn(
-                username: 'username',
-                password: 'password',
-              )).thenThrow(Exception('oops'));
-          return loginBloc;
+        setUp: () {
+          when(
+            () => authenticationRepository.logIn(
+              username: 'username',
+              password: 'password',
+            ),
+          ).thenThrow(Exception('oops'));
         },
+        build: () => LoginBloc(
+          authenticationRepository: authenticationRepository,
+        ),
         act: (bloc) {
           bloc
             ..add(const LoginUsernameChanged('username'))

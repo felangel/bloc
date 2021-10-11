@@ -20,22 +20,13 @@ class MockWeather extends Mock implements Weather {
 void main() {
   initHydratedBloc();
   group('ThemeCubit', () {
-    late ThemeCubit themeCubit;
-
-    setUp(() {
-      themeCubit = ThemeCubit();
-    });
-
-    tearDown(() {
-      themeCubit.close();
-    });
-
     test('initial state is correct', () {
-      expect(themeCubit.state, ThemeCubit.defaultColor);
+      expect(ThemeCubit().state, ThemeCubit.defaultColor);
     });
 
     group('toJson/fromJson', () {
       test('work properly', () {
+        final themeCubit = ThemeCubit();
         expect(
           themeCubit.fromJson(themeCubit.toJson(themeCubit.state)),
           themeCubit.state,

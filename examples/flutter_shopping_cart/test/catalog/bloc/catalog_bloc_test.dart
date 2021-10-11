@@ -26,12 +26,12 @@ void main() {
     blocTest<CatalogBloc, CatalogState>(
       'emits [CatalogLoading, CatalogLoaded] '
       'when catalog is loaded successfully',
-      build: () {
+      setUp: () {
         when(shoppingRepository.loadCatalog).thenAnswer(
           (_) async => mockItemNames,
         );
-        return CatalogBloc(shoppingRepository: shoppingRepository);
       },
+      build: () => CatalogBloc(shoppingRepository: shoppingRepository),
       act: (bloc) => bloc.add(CatalogStarted()),
       expect: () => <CatalogState>[
         CatalogLoading(),
@@ -43,10 +43,10 @@ void main() {
     blocTest<CatalogBloc, CatalogState>(
       'emits [CatalogLoading, CatalogError] '
       'when loading the catalog throws an exception',
-      build: () {
+      setUp: () {
         when(shoppingRepository.loadCatalog).thenThrow(Exception('Error'));
-        return CatalogBloc(shoppingRepository: shoppingRepository);
       },
+      build: () => CatalogBloc(shoppingRepository: shoppingRepository),
       act: (bloc) => bloc.add(CatalogStarted()),
       expect: () => <CatalogState>[
         CatalogLoading(),

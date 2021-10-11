@@ -37,17 +37,25 @@ class CartList extends StatelessWidget {
           return const CircularProgressIndicator();
         }
         if (state is CartLoaded) {
-          return ListView.builder(
+          return ListView.separated(
             itemCount: state.cart.items.length,
-            itemBuilder: (context, index) => Material(
-              child: ListTile(
-                leading: const Icon(Icons.done),
-                title: Text(
-                  state.cart.items[index].name,
-                  style: itemNameStyle,
+            separatorBuilder: (_, __) => const SizedBox(height: 4),
+            itemBuilder: (context, index) {
+              final item = state.cart.items[index];
+              return Material(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-              ),
-            ),
+                clipBehavior: Clip.hardEdge,
+                child: ListTile(
+                  leading: const Icon(Icons.done),
+                  title: Text(item.name, style: itemNameStyle),
+                  onLongPress: () {
+                    context.read<CartBloc>().add(CartItemRemoved(item));
+                  },
+                ),
+              );
+            },
           );
         }
         return const Text('Something went wrong!');

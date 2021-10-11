@@ -30,10 +30,10 @@ void main() {
     group('fetchList', () {
       blocTest<ComplexListCubit, ComplexListState>(
         'emits ComplexListState.success after fetching list',
-        build: () {
+        setUp: () {
           when(repository.fetchItems).thenAnswer((_) async => mockItems);
-          return ComplexListCubit(repository: repository);
         },
+        build: () => ComplexListCubit(repository: repository),
         act: (cubit) => cubit.fetchList(),
         expect: () => [
           const ComplexListState.success(mockItems),
@@ -43,10 +43,10 @@ void main() {
 
       blocTest<ComplexListCubit, ComplexListState>(
         'emits ComplexListState.failure after failing to fetch list',
-        build: () {
+        setUp: () {
           when(repository.fetchItems).thenThrow(Exception('Error'));
-          return ComplexListCubit(repository: repository);
         },
+        build: () => ComplexListCubit(repository: repository),
         act: (cubit) => cubit.fetchList(),
         expect: () => [
           const ComplexListState.failure(),
@@ -58,10 +58,10 @@ void main() {
     group('deleteItem', () {
       blocTest<ComplexListCubit, ComplexListState>(
         'emits corrects states when deleting an item',
-        build: () {
+        setUp: () {
           when(() => repository.deleteItem('2')).thenAnswer((_) async => null);
-          return ComplexListCubit(repository: repository);
         },
+        build: () => ComplexListCubit(repository: repository),
         seed: () => const ComplexListState.success(mockItems),
         act: (cubit) => cubit.deleteItem('2'),
         expect: () => [

@@ -145,8 +145,9 @@ void main() {
       blocTest<SignUpCubit, SignUpState>(
         'emits [invalid] when email/password/confirmedPassword are invalid',
         build: () => SignUpCubit(authenticationRepository),
-        act: (cubit) =>
-            cubit.confirmedPasswordChanged(invalidConfirmedPasswordString),
+        act: (cubit) {
+          cubit.confirmedPasswordChanged(invalidConfirmedPasswordString);
+        },
         expect: () => const <SignUpState>[
           SignUpState(
             confirmedPassword: invalidConfirmedPassword,
@@ -176,9 +177,7 @@ void main() {
         'emits [valid] when passwordChanged is called first and then '
         'confirmedPasswordChanged is called',
         build: () => SignUpCubit(authenticationRepository),
-        seed: () => SignUpState(
-          email: validEmail,
-        ),
+        seed: () => SignUpState(email: validEmail),
         act: (cubit) => cubit
           ..passwordChanged(validPasswordString)
           ..confirmedPasswordChanged(validConfirmedPasswordString),
@@ -259,15 +258,15 @@ void main() {
       blocTest<SignUpCubit, SignUpState>(
         'emits [submissionInProgress, submissionFailure] '
         'when signUp fails',
-        build: () {
+        setUp: () {
           when(
             () => authenticationRepository.signUp(
               email: any(named: 'email'),
               password: any(named: 'password'),
             ),
           ).thenThrow(Exception('oops'));
-          return SignUpCubit(authenticationRepository);
         },
+        build: () => SignUpCubit(authenticationRepository),
         seed: () => SignUpState(
           status: FormzStatus.valid,
           email: validEmail,
