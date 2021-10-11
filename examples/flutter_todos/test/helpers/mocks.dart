@@ -1,4 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_todos/home/home.dart';
+import 'package:flutter_todos/stats/stats.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:todos_api/todos_api.dart';
@@ -41,6 +43,14 @@ class MockTodosRepository extends Mock implements TodosRepository {
 
 class FakeTodo extends Fake implements Todo {}
 
+class MockHomeCubit extends MockCubit<HomeState> implements HomeCubit {
+  MockHomeCubit() {
+    when(() => state).thenReturn(const HomeState());
+  }
+}
+
+class MockHomeState extends Mock implements HomeState {}
+
 class MockTodosOverviewBloc
     extends MockBloc<TodosOverviewEvent, TodosOverviewState>
     implements TodosOverviewBloc {
@@ -55,3 +65,18 @@ class MockTodosOverviewBloc
 class MockTodosOverviewEvent extends Mock implements TodosOverviewEvent {}
 
 class MockTodosOverviewState extends Mock implements TodosOverviewState {}
+
+class MockStatsBloc extends MockBloc<StatsEvent, StatsState>
+    implements StatsBloc {
+  MockStatsBloc() {
+    when(() => state).thenReturn(StatsState(
+      status: StatsStatus.success,
+      completedTodos: mockTodos.where((todo) => todo.isCompleted).length,
+      activeTodos: mockTodos.where((todo) => !todo.isCompleted).length,
+    ));
+  }
+}
+
+class MockStatsEvent extends Mock implements StatsEvent {}
+
+class MockStatsState extends Mock implements StatsState {}

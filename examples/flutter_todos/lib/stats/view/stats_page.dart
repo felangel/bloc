@@ -35,6 +35,7 @@ class StatsView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ListTile(
+            key: const Key('statsView_completedTodos_listTile'),
             leading: const Icon(Icons.check_rounded),
             title: Text(l10n.statsCompletedTodoCountLabel),
             trailing: Text(
@@ -43,7 +44,8 @@ class StatsView extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.radio_button_unchecked),
+            key: const Key('statsView_activeTodos_listTile'),
+            leading: const Icon(Icons.radio_button_unchecked_rounded),
             title: Text(l10n.statsActiveTodoCountLabel),
             trailing: Text(
               '${state.activeTodos}',

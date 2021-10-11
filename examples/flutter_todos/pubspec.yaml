@@ -7,12 +7,10 @@ environment:
   sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
-  bloc:
-    path: ../../packages/bloc
+  bloc: ^8.0.0-dev.2
   flutter:
     sdk: flutter
-  flutter_bloc:
-    path: ../../packages/flutter_bloc
+  flutter_bloc: ^8.0.0-dev.1
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
@@ -24,11 +22,11 @@ dependencies:
     path: packages/todos_repository
 
 dev_dependencies:
-  bloc_test: ^8.1.0
+  bloc_test: ^9.0.0-dev.1
   flutter_test:
     sdk: flutter
   mockingjay: ^0.1.1
-  mocktail: ^0.1.0
+  mocktail: ^0.1.4
   very_good_analysis: ^2.3.0
 
 flutter:
