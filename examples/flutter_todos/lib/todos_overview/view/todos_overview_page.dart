@@ -35,16 +35,6 @@ class TodosOverviewView extends StatelessWidget {
           TodosOverviewOptionsButton(),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        key: const Key('todoOverviewView_addTodo_floatingActionButton'),
-        shape: const ContinuousRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(32)),
-        ),
-        onPressed: () {
-          Navigator.of(context).push(EditTodoPage.route());
-        },
-        child: const Icon(Icons.add),
-      ),
       body: MultiBlocListener(
         listeners: [
           BlocListener<TodosOverviewBloc, TodosOverviewState>(
