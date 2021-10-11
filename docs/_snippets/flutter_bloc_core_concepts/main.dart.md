@@ -1,10 +1,9 @@
 ```dart
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_shopping_cart/app.dart';
-import 'package:flutter_shopping_cart/shopping_repository.dart';
+import 'package:flutter_weather/app.dart';
+import 'package:weather_repository/weather_repository.dart';
 
-void main() {
-  runApp(App(shoppingRepository: ShoppingRepository()));
+void main() async {
+  runApp(WeatherApp(weatherRepository: WeatherRepository()));
 }
 ```

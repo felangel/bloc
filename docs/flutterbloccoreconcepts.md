@@ -141,14 +141,32 @@ At this point we have successfully separated our presentational layer from our b
 
 ## Advanced usage
 
-We are going to take a look at how `RepositoryProviders` should be structured in order to provide an instance to our blocs. To showcase this, we are using the [`flutter_shopping_cart`][flutter_shopping_cart_example_link] example.
+We are going to take a look at how `RepositoryProviders` should be structured to provide an instance to our blocs. To showcase this, we are using the [`flutter_weather`][flutter_weather_link] example.
 
-[shopping_repository.dart](_snippets/flutter_bloc_core_concepts/shopping_repository.dart.md ':include')
+### weather_repository.dart
 
-Then, we pass the repository as a dependency of our app. This should be done with every repository we use throughout our app.
+[weather_repository.dart](_snippets/flutter_bloc_core_concepts/weather_repository.dart.md ':include')
+
+We pass an instance of the repository as a dependency of our app so we can initialize asynchronous dependencies, in case we have any. This should be done with every repository we use throughout our app.
+
+### main.dart
 
 [main.dart](_snippets/flutter_bloc_core_concepts/main.dart.md ':include')
 
+As we only have one repository in our app, we will inject it into our widget tree with `RepositoryProvider.value`. If you have more than one repository to inject, you can use this same approach with `MultiRepositoryProvider` and inject your providers with `RepositoryProvider.value` too.
+
+### app.dart
+
+[app.dart](_snippets/flutter_bloc_core_concepts/app.dart.md ':include')
+
+For every repository you use in your apps, it's recommended to inject it in your App widget and later access it through `context.read<MyRepository>()`, as we will next.
+
+### weather_page.dart
+
+[weather_page.dart](_snippets/flutter_bloc_core_concepts/weather_page.dart.md ':include')
+
+Now, every time we need the instance of one of our repositories when instantiating a bloc, we can just get it through `context.read`.
 
 
-[flutter_shopping_cart_example_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_shopping_cart
+
+[flutter_weather_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_weather
