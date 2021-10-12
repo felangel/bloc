@@ -19,17 +19,12 @@ void main() {
 
     setUpAll(commonSetUpAll);
 
-    Future<void> pumpSubject(
-      WidgetTester tester, {
-      Todo? todo,
-    }) async {
-      await tester.pumpApp(
-        TodoListTile(
-          todo: todo ?? uncompletedTodo,
-          onToggleCompleted: onToggleCompletedCalls.add,
-          onDismissed: () => onDismissedCallCount++,
-          onTap: () => onTapCallCount++,
-        ),
+    Widget buildSubject({Todo? todo}) {
+      return TodoListTile(
+        todo: todo ?? uncompletedTodo,
+        onToggleCompleted: onToggleCompletedCalls.add,
+        onDismissed: () => onDismissedCallCount++,
+        onTap: () => onTapCallCount++,
       );
     }
 
@@ -44,26 +39,24 @@ void main() {
 
     group('checkbox', () {
       testWidgets('is rendered', (tester) async {
-        await pumpSubject(tester);
+        await tester.pumpApp(buildSubject());
 
         expect(find.byType(Checkbox), findsOneWidget);
       });
 
       testWidgets('is checked when todo is completed', (tester) async {
-        await pumpSubject(
-          tester,
+        await tester.pumpApp(buildSubject(
           todo: completedTodo,
-        );
+        ));
 
         final checkbox = tester.widget<Checkbox>(find.byType(Checkbox));
         expect(checkbox.value, isTrue);
       });
 
       testWidgets('is unchecked when todo is not completed', (tester) async {
-        await pumpSubject(
-          tester,
+        await tester.pumpApp(buildSubject(
           todo: uncompletedTodo,
-        );
+        ));
 
         final checkbox = tester.widget<Checkbox>(find.byType(Checkbox));
         expect(checkbox.value, isFalse);
@@ -72,10 +65,9 @@ void main() {
       testWidgets(
         'calls onToggleCompleted with correct value when tapped',
         (tester) async {
-          await pumpSubject(
-            tester,
+          await tester.pumpApp(buildSubject(
             todo: uncompletedTodo,
-          );
+          ));
 
           await tester.tap(find.byType(Checkbox));
 
@@ -86,14 +78,14 @@ void main() {
 
     group('dismissible', () {
       testWidgets('is rendered', (tester) async {
-        await pumpSubject(tester);
+        await tester.pumpApp(buildSubject());
 
         expect(find.byType(Dismissible), findsOneWidget);
         expect(find.byKey(dismissibleKey), findsOneWidget);
       });
 
       testWidgets('calls onDismissed when swiped to the left', (tester) async {
-        await pumpSubject(tester);
+        await tester.pumpApp(buildSubject());
 
         await tester.fling(
           find.byKey(dismissibleKey),
@@ -107,7 +99,7 @@ void main() {
     });
 
     testWidgets('calls onTap when pressed', (tester) async {
-      await pumpSubject(tester);
+      await tester.pumpApp(buildSubject());
 
       await tester.tap(find.byType(TodoListTile));
 
@@ -116,16 +108,15 @@ void main() {
 
     group('todo title', () {
       testWidgets('is rendered', (tester) async {
-        await pumpSubject(tester);
+        await tester.pumpApp(buildSubject());
 
         expect(find.text(uncompletedTodo.title), findsOneWidget);
       });
 
       testWidgets('is struckthrough when todo is completed', (tester) async {
-        await pumpSubject(
-          tester,
+        await tester.pumpApp(buildSubject(
           todo: completedTodo,
-        );
+        ));
 
         final text = tester.widget<Text>(find.text(completedTodo.title));
         expect(
@@ -141,7 +132,7 @@ void main() {
 
     group('todo description', () {
       testWidgets('is rendered', (tester) async {
-        await pumpSubject(tester);
+        await tester.pumpApp(buildSubject());
 
         expect(find.text(uncompletedTodo.description), findsOneWidget);
       });

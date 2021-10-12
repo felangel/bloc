@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todos/l10n/l10n.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart';
 
-enum _TodosOverviewOption { toggleAll, clearCompleted }
+@visibleForTesting
+enum TodosOverviewOption { toggleAll, clearCompleted }
 
 class TodosOverviewOptionsButton extends StatelessWidget {
   const TodosOverviewOptionsButton({Key? key}) : super(key: key);
@@ -16,19 +17,19 @@ class TodosOverviewOptionsButton extends StatelessWidget {
     final hasTodos = todos.isNotEmpty;
     final completedTodosAmount = todos.where((todo) => todo.isCompleted).length;
 
-    return PopupMenuButton<_TodosOverviewOption>(
+    return PopupMenuButton<TodosOverviewOption>(
       shape: const ContinuousRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
       tooltip: l10n.todosOverviewOptionsTooltip,
       onSelected: (options) {
         switch (options) {
-          case _TodosOverviewOption.toggleAll:
+          case TodosOverviewOption.toggleAll:
             context
                 .read<TodosOverviewBloc>()
                 .add(const TodosOverviewToggleAllRequested());
             break;
-          case _TodosOverviewOption.clearCompleted:
+          case TodosOverviewOption.clearCompleted:
             context
                 .read<TodosOverviewBloc>()
                 .add(const TodosOverviewClearCompletedRequested());
@@ -37,7 +38,7 @@ class TodosOverviewOptionsButton extends StatelessWidget {
       itemBuilder: (context) {
         return [
           PopupMenuItem(
-            value: _TodosOverviewOption.toggleAll,
+            value: TodosOverviewOption.toggleAll,
             enabled: hasTodos,
             child: Text(
               completedTodosAmount == todos.length
@@ -46,7 +47,7 @@ class TodosOverviewOptionsButton extends StatelessWidget {
             ),
           ),
           PopupMenuItem(
-            value: _TodosOverviewOption.clearCompleted,
+            value: TodosOverviewOption.clearCompleted,
             enabled: hasTodos && completedTodosAmount > 0,
             child: Text(l10n.todosOverviewOptionsClearCompleted),
           ),

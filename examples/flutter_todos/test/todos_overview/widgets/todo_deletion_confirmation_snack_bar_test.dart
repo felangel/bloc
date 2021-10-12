@@ -45,12 +45,10 @@ void main() {
   });
 
   group('TodoDeletionConfirmationSnackBarContent', () {
-    Future<void> pumpSubject(WidgetTester tester) async {
-      await tester.pumpApp(
-        TodoDeletionConfirmationSnackBarContent(
-          todo: todo,
-          onUndo: () => onUndoCallCount++,
-        ),
+    Widget buildSubject() {
+      return TodoDeletionConfirmationSnackBarContent(
+        todo: todo,
+        onUndo: () => onUndoCallCount++,
       );
     }
 
@@ -67,7 +65,7 @@ void main() {
     });
 
     testWidgets('renders title with todo title', (tester) async {
-      await pumpSubject(tester);
+      await tester.pumpApp(buildSubject());
 
       expect(
         find.text(l10n.todosOverviewTodoDeletedSnackbarText(todo.title)),
@@ -77,7 +75,7 @@ void main() {
 
     group('undo TextButton', () {
       testWidgets('is rendered', (tester) async {
-        await pumpSubject(tester);
+        await tester.pumpApp(buildSubject());
 
         expect(find.byType(TextButton), findsOneWidget);
         expect(
@@ -90,7 +88,7 @@ void main() {
       });
 
       testWidgets('calls onUndo when pressed', (tester) async {
-        await pumpSubject(tester);
+        await tester.pumpApp(buildSubject());
 
         await tester.tap(find.byType(TextButton));
 
