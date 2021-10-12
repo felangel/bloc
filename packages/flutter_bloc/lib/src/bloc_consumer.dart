@@ -125,6 +125,7 @@ class _BlocConsumerState<B extends BlocBase<S>, S>
 
   @override
   Widget build(BuildContext context) {
+    // See https://github.com/felangel/bloc/pull/2482.
     if (widget.bloc == null) context.select<B, int>(identityHashCode);
     return BlocBuilder<B, S>(
       bloc: _bloc,
