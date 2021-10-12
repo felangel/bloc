@@ -1,3 +1,8 @@
+# 8.3.0
+
+- feat: accept optional tags in `blocTest`
+  - `tags` is optional and if it is passed, it declares user-defined tags that are applied to the test. These tags can be used to select or skip the test on the command line, or to do bulk test configuration.
+
 # 8.2.0
 
 - feat: upgrade to `bloc ^7.2.0`
