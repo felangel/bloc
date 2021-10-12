@@ -1,1 +1,0 @@
-enum ExtraAction { toggleAllComplete, clearCompleted }
