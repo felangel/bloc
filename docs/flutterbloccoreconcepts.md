@@ -111,8 +111,6 @@ then from `ChildA` we can retrieve the `Repository` instance with:
 
 [repository_provider.dart](_snippets/flutter_bloc_core_concepts/repository_provider_lookup.dart.md ':include')
 
-?> **Note**: `RepositoryProvider` extends the `Provider` class from `package:provider`, so it can basically be of any type. Nevertheless, it is intended to be used for repository data access classes and not any type of object being injected to the widget tree. 
-
 ### MultiRepositoryProvider
 
 **MultiRepositoryProvider** is a Flutter widget that merges multiple `RepositoryProvider` widgets into one.
@@ -139,15 +137,15 @@ Let's take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget 
 
 At this point we have successfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
 
-## Advanced usage
+## Example Usage
 
-We are going to take a look at how `RepositoryProviders` should be structured to provide an instance to our blocs. To showcase this, we are using the [`flutter_weather`][flutter_weather_link] example.
+We are going to take a look at how to use `RepositoryProviders` within the context of the [`flutter_weather`][flutter_weather_link] example.
 
 ### weather_repository.dart
 
 [weather_repository.dart](_snippets/flutter_bloc_core_concepts/weather_repository.dart.md ':include')
 
-We pass an instance of the repository as a dependency of our app so we can initialize asynchronous dependencies, in case we have any. This should be done with every repository we use throughout our app.
+Since the app has an explicit dependency on the `WeatherRepository` we inject an instance via constructor. This allows us to inject different instances of `WeatherRepository` based on the build flavor or environment.
 
 ### main.dart
 
@@ -159,14 +157,12 @@ As we only have one repository in our app, we will inject it into our widget tre
 
 [app.dart](_snippets/flutter_bloc_core_concepts/app.dart.md ':include')
 
-For every repository you use in your apps, it's recommended to inject it in your App widget and later access it through `context.read<MyRepository>()`, as we will next.
+ In most cases, the root app widget will expose one or more repositories to the sub-tree via `RepositoryProvider`.
 
 ### weather_page.dart
 
 [weather_page.dart](_snippets/flutter_bloc_core_concepts/weather_page.dart.md ':include')
 
-Now, every time we need the instance of one of our repositories when instantiating a bloc, we can just get it through `context.read`.
-
-
+Now when instantiating a bloc, when can access the instance of a repository via `context.read` and inject the repository into the bloc via constructor.
 
 [flutter_weather_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_weather
