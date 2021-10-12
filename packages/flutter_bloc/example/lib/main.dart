@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// Custom [BlocObserver] which observes all bloc and cubit instances.
-class SimpleBlocObserver extends BlocObserver {
+void main() {
+  Bloc.observer = AppBlocObserver();
+  runApp(App());
+}
+
+/// Custom [BlocObserver] which observes all bloc and cubit state changes.
+class AppBlocObserver extends BlocObserver {
   @override
-  void onEvent(Bloc bloc, Object? event) {
-    super.onEvent(bloc, event);
-    print(event);
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    if (bloc is Cubit) print(change);
   }
 
   @override
@@ -14,17 +19,6 @@ class SimpleBlocObserver extends BlocObserver {
     super.onTransition(bloc, transition);
     print(transition);
   }
-
-  @override
-  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    print(error);
-    super.onError(bloc, error, stackTrace);
-  }
-}
-
-void main() {
-  Bloc.observer = SimpleBlocObserver();
-  runApp(App());
 }
 
 /// A [StatelessWidget] which uses:
@@ -69,26 +63,19 @@ class CounterPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: const Icon(Icons.add),
-              onPressed: () => context.read<CounterBloc>().add(Increment()),
-            ),
+          FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () => context.read<CounterBloc>().add(Increment()),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: const Icon(Icons.remove),
-              onPressed: () => context.read<CounterBloc>().add(Decrement()),
-            ),
+          const SizedBox(height: 4),
+          FloatingActionButton(
+            child: const Icon(Icons.remove),
+            onPressed: () => context.read<CounterBloc>().add(Decrement()),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: const Icon(Icons.brightness_6),
-              onPressed: () => context.read<ThemeCubit>().toggleTheme(),
-            ),
+          const SizedBox(height: 4),
+          FloatingActionButton(
+            child: const Icon(Icons.brightness_6),
+            onPressed: () => context.read<ThemeCubit>().toggleTheme(),
           ),
         ],
       ),
