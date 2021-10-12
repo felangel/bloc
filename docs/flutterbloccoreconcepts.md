@@ -139,7 +139,7 @@ At this point we have successfully separated our presentational layer from our b
 
 ## Example Usage
 
-We are going to take a look at how to use `RepositoryProviders` within the context of the [`flutter_weather`][flutter_weather_link] example.
+We are going to take a look at how to use `RepositoryProvider` within the context of the [`flutter_weather`][flutter_weather_link] example.
 
 ### weather_repository.dart
 
