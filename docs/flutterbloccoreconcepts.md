@@ -163,6 +163,6 @@ Since we only have one repository in our app, we will inject it into our widget 
 
 [weather_page.dart](_snippets/flutter_bloc_core_concepts/weather_page.dart.md ':include')
 
-Now when instantiating a bloc, when can access the instance of a repository via `context.read` and inject the repository into the bloc via constructor.
+Now when instantiating a bloc, we can access the instance of a repository via `context.read` and inject the repository into the bloc via constructor.
 
 [flutter_weather_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_weather
