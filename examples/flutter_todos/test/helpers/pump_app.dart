@@ -33,4 +33,14 @@ extension PumpApp on WidgetTester {
       ),
     );
   }
+
+  Future<void> pumpRoute(
+    Route<dynamic> route, {
+    TodosRepository? todosRepository,
+  }) {
+    return pumpApp(
+      Navigator(onGenerateRoute: (_) => route),
+      todosRepository: todosRepository,
+    );
+  }
 }

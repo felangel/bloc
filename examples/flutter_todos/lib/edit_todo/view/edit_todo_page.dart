@@ -107,6 +107,7 @@ class _TitleField extends StatelessWidget {
     final hintText = state.initialTodo?.title ?? '';
 
     return TextFormField(
+      key: const Key('editTodoView_title_textFormField'),
       initialValue: state.title,
       decoration: InputDecoration(
         enabled: !state.status.isLoadingOrSuccess,
@@ -136,6 +137,7 @@ class _DescriptionField extends StatelessWidget {
     final hintText = state.initialTodo?.description ?? '';
 
     return TextFormField(
+      key: const Key('editTodoView_description_textFormField'),
       initialValue: state.description,
       decoration: InputDecoration(
         enabled: !state.status.isLoadingOrSuccess,
