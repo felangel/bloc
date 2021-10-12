@@ -9,18 +9,23 @@ import 'package:mocktail/mocktail.dart';
 import '../../helpers/helpers.dart';
 
 extension on CommonFinders {
-  Finder bySpecificType<T>() => find.byType(T);
   Finder filterMenuItem({
     required TodosViewFilter filter,
     required String title,
   }) {
-    return find.byWidgetPredicate(
-      (w) =>
-          w is PopupMenuItem &&
-          w.value == filter &&
-          w.child is Text &&
-          (w.child as Text?)!.data == title,
+    return find.descendant(
+      of: find.byWidgetPredicate(
+        (w) => w is PopupMenuItem && w.value == filter,
+      ),
+      matching: find.text(title),
     );
+  }
+}
+
+extension on WidgetTester {
+  Future<void> openPopup() async {
+    await tap(find.byType(TodosOverviewFilterButton));
+    await pumpAndSettle();
   }
 }
 
@@ -34,12 +39,10 @@ void main() {
       todosOverviewBloc = MockTodosOverviewBloc();
     });
 
-    Future<void> pumpSubject(WidgetTester tester) async {
-      await tester.pumpApp(
-        BlocProvider.value(
-          value: todosOverviewBloc,
-          child: const TodosOverviewFilterButton(),
-        ),
+    Widget buildSubject() {
+      return BlocProvider.value(
+        value: todosOverviewBloc,
+        child: const TodosOverviewFilterButton(),
       );
     }
 
@@ -53,7 +56,7 @@ void main() {
     });
 
     testWidgets('renders filter list icon', (tester) async {
-      await pumpSubject(tester);
+      await tester.pumpApp(buildSubject());
 
       expect(
         find.byIcon(Icons.filter_list_rounded),
@@ -63,7 +66,7 @@ void main() {
 
     group('internal PopupMenuButton', () {
       testWidgets('is rendered', (tester) async {
-        await pumpSubject(tester);
+        await tester.pumpApp(buildSubject());
 
         expect(
           find.bySpecificType<PopupMenuButton<TodosViewFilter>>(),
@@ -78,7 +81,7 @@ void main() {
           ),
         );
 
-        await pumpSubject(tester);
+        await tester.pumpApp(buildSubject());
 
         final popupMenuButton = tester.widget<PopupMenuButton<TodosViewFilter>>(
           find.bySpecificType<PopupMenuButton<TodosViewFilter>>(),
@@ -92,10 +95,8 @@ void main() {
       testWidgets(
         'renders items for each filter type when pressed',
         (tester) async {
-          await pumpSubject(tester);
-
-          await tester.tap(find.byType(TodosOverviewFilterButton));
-          await tester.pumpAndSettle();
+          await tester.pumpApp(buildSubject());
+          await tester.openPopup();
 
           expect(
             find.filterMenuItem(
@@ -131,10 +132,8 @@ void main() {
             filter: TodosViewFilter.all,
           ));
 
-          await pumpSubject(tester);
-
-          await tester.tap(find.byType(TodosOverviewFilterButton));
-          await tester.pumpAndSettle();
+          await tester.pumpApp(buildSubject());
+          await tester.openPopup();
 
           await tester.tap(find.text(l10n.todosOverviewFilterCompletedOnly));
           await tester.pumpAndSettle();
