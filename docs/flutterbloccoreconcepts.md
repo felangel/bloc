@@ -151,7 +151,7 @@ Since the app has an explicit dependency on the `WeatherRepository` we inject an
 
 [main.dart](_snippets/flutter_bloc_core_concepts/main.dart.md ':include')
 
-As we only have one repository in our app, we will inject it into our widget tree with `RepositoryProvider.value`. If you have more than one repository to inject, you can use this same approach with `MultiRepositoryProvider` and inject your providers with `RepositoryProvider.value` too.
+Since we only have one repository in our app, we will inject it into our widget tree via `RepositoryProvider.value`. If you have more than one repository, you can use `MultiRepositoryProvider` to provide multiple repository instances to the subtree.
 
 ### app.dart
 
