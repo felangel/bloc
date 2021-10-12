@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_todos/edit_todo/edit_todo.dart';
 import 'package:flutter_todos/home/home.dart';
 import 'package:flutter_todos/stats/stats.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart';
@@ -65,6 +66,21 @@ class MockTodosOverviewBloc
 class MockTodosOverviewEvent extends Mock implements TodosOverviewEvent {}
 
 class MockTodosOverviewState extends Mock implements TodosOverviewState {}
+
+class MockEditTodoBloc extends MockBloc<EditTodoEvent, EditTodoState>
+    implements EditTodoBloc {
+  MockEditTodoBloc() {
+    when(() => state).thenReturn(EditTodoState(
+      initialTodo: mockTodos.first,
+      title: mockTodos.first.title,
+      description: mockTodos.first.description,
+    ));
+  }
+}
+
+class MockEditTodoEvent extends Mock implements EditTodoEvent {}
+
+class MockEditTodoState extends Mock implements EditTodoState {}
 
 class MockStatsBloc extends MockBloc<StatsEvent, StatsState>
     implements StatsBloc {

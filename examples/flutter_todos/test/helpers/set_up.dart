@@ -7,6 +7,8 @@ void commonSetUpAll() {
   registerFallbackValue(MockHomeState());
   registerFallbackValue(MockTodosOverviewState());
   registerFallbackValue(MockTodosOverviewEvent());
+  registerFallbackValue(MockEditTodoState());
+  registerFallbackValue(MockEditTodoEvent());
   registerFallbackValue(MockStatsState());
   registerFallbackValue(MockStatsEvent());
 }
