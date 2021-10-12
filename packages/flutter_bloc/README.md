@@ -97,19 +97,14 @@ class CounterPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: const Icon(Icons.add),
-              onPressed: () => context.read<CounterCubit>().increment(),
-            ),
+          FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () => context.read<CounterCubit>().increment(),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: const Icon(Icons.remove),
-              onPressed: () => context.read<CounterCubit>().decrement(),
-            ),
+          const SizedBox(height: 4),
+          FloatingActionButton(
+            child: const Icon(Icons.remove),
+            onPressed: () => context.read<CounterCubit>().decrement(),
           ),
         ],
       ),
