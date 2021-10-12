@@ -157,7 +157,7 @@ Since we only have one repository in our app, we will inject it into our widget 
 
 [app.dart](_snippets/flutter_bloc_core_concepts/app.dart.md ':include')
 
- In most cases, the root app widget will expose one or more repositories to the sub-tree via `RepositoryProvider`.
+ In most cases, the root app widget will expose one or more repositories to the subtree via `RepositoryProvider`.
 
 ### weather_page.dart
 
