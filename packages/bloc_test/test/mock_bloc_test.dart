@@ -32,6 +32,7 @@ void main() {
     });
 
     test('is compatible with emit', () {
+      // ignore: invalid_use_of_internal_member
       counterBloc.emit(10);
     });
 
