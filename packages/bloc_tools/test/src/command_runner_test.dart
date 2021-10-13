@@ -36,8 +36,8 @@ const expectedUsage = [
 final updatePrompt = '''
 +------------------------------------------------------------------------------------+
 |                                                                                    |
-|                     ${lightYellow.wrap('Update available!')} ${lightCyan.wrap(packageVersion)} \u2192 ${lightCyan.wrap(latestVersion)}                    |
-| ${lightYellow.wrap('Changelog:')} ${lightCyan.wrap('https://github.com/felangel/bloc/releases/tag/$packageName-v$latestVersion')}   |
+|                    ${lightYellow.wrap('Update available!')} ${lightCyan.wrap(packageVersion)} \u2192 ${lightCyan.wrap(latestVersion)}                     |
+|  ${lightYellow.wrap('Changelog:')} ${lightCyan.wrap('https://github.com/felangel/bloc/releases/tag/$packageName-v$latestVersion')}  |
 |                                                                                    |
 +------------------------------------------------------------------------------------+
 ''';
