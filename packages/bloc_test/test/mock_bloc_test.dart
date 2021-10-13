@@ -31,10 +31,6 @@ void main() {
       expect(counterBloc.stream.listen((_) {}), isA<StreamSubscription>());
     });
 
-    test('is compatible with emit', () {
-      counterBloc.emit(10);
-    });
-
     test('is compatible with add', () {
       counterBloc.add(CounterEvent.increment);
     });
