@@ -1,3 +1,9 @@
+# 8.0.0-dev.3
+
+- **BREAKING**: feat: restrict scope of `emit` in `Bloc` and `Cubit`
+  - In `Cubit`, `emit` is `protected` so it can only be used within the `Cubit` instance.
+  - In `Bloc`, `emit` is `internal` so it cannot be used outside of the internal package implementation.
+
 # 8.0.0-dev.2
 
 - **BREAKING**: refactor: remove deprecated `listen` on `BlocBase`
