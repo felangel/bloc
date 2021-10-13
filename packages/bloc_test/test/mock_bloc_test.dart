@@ -31,11 +31,6 @@ void main() {
       expect(counterBloc.stream.listen((_) {}), isA<StreamSubscription>());
     });
 
-    test('is compatible with emit', () {
-      // ignore: invalid_use_of_internal_member
-      counterBloc.emit(10);
-    });
-
     test('is compatible with add', () {
       counterBloc.add(CounterEvent.increment);
     });
