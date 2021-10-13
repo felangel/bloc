@@ -79,9 +79,9 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
 ''');
         final response = _logger.prompt('Would you like to update? (y/n) ');
         if (response.isYes()) {
-          final done = _logger.progress('Updating to $latestVersion');
+          final updateDone = _logger.progress('Updating to $latestVersion');
           await _pubUpdater.update(packageName: packageName);
-          done('Updated to $latestVersion');
+          updateDone('Updated to $latestVersion');
         }
       }
     } catch (_) {}
