@@ -153,6 +153,7 @@ class _BlocBuilderBaseState<B extends BlocBase<S>, S>
 
   @override
   Widget build(BuildContext context) {
+    // See https://github.com/felangel/bloc/pull/2482.
     if (widget.bloc == null) context.select<B, int>(identityHashCode);
     return BlocListener<B, S>(
       bloc: _bloc,
