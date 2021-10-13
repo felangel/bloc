@@ -329,13 +329,26 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   }
 
   /// {@template emit}
-  /// **[emit] should never be used outside of tests.**
+  /// **[emit] is only for internal use and should never be called directly.
+  /// The [Emitter] instance provided to each [EventHandler]
+  /// should be used instead.**
+  ///
+  /// ```dart
+  /// class MyBloc extends Bloc<MyEvent, MyState> {
+  ///   MyBloc() : super(MyInitialState()) {
+  ///     on<MyEvent>((event, emit) {
+  ///       // use `emit` to update the state.
+  ///       emit(MyOtherState());
+  ///     });
+  ///   }
+  /// }
+  /// ```
   ///
   /// Updates the state of the bloc to the provided [state].
   /// A bloc's state should only be updated by `emitting` a new `state`
   /// from an [EventHandler] in response to an incoming event.
   /// {@endtemplate}
-  @visibleForTesting
+  @internal
   @override
   void emit(State state) => super.emit(state);
 
@@ -533,6 +546,7 @@ abstract class BlocBase<State> {
   /// To allow for the possibility of notifying listeners of the initial state,
   /// emitting a state which is equal to the initial state is allowed as long
   /// as it is the first thing emitted by the instance.
+  @protected
   void emit(State state) {
     if (_stateController.isClosed) return;
     if (state == _state && _emitted) return;
