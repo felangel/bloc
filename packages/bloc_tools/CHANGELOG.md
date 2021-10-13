@@ -1,3 +1,7 @@
+# 0.1.0-dev.3
+
+- fix: upgrade to `pub_updater ^0.2.1`
+
 # 0.1.0-dev.2
 
 - feat: automatic update support
