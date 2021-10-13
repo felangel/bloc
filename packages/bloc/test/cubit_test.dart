@@ -145,25 +145,6 @@ void main() {
           ..increment();
       });
 
-      test('does nothing if cubit is closed (direct)', () {
-        final cubit = CounterCubit();
-        expectLater(
-          cubit.stream,
-          emitsInOrder(<Matcher>[equals(1), emitsDone]),
-        );
-        cubit
-          ..emit(1)
-          ..close()
-          ..emit(2);
-      });
-
-      test('can be invoked directly within a test', () {
-        final cubit = CounterCubit()
-          ..emit(100)
-          ..close();
-        expect(cubit.state, 100);
-      });
-
       test('emits states in the correct order', () async {
         final states = <int>[];
         final cubit = CounterCubit();
