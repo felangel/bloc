@@ -192,7 +192,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       await setUp?.call();
       final states = <State>[];
       final bloc = build();
-      // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+      // ignore: invalid_use_of_protected_member
       if (seed != null) bloc.emit(seed());
       final subscription = bloc.stream.skip(skip).listen(states.add);
       try {
