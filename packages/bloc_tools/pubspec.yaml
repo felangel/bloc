@@ -13,6 +13,7 @@ dependencies:
   args: ^2.1.0
   io: ^1.0.0
   mason: ^0.0.1-dev.51
+  pub_updater: ^0.2.0
   universal_io: ^2.0.4
 
 dev_dependencies:
