@@ -1,32 +1,55 @@
-import 'package:example/simple_bloc_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 
-void main() async {
-  Bloc.observer = SimpleBlocObserver();
-  runApp(App());
+void main() {
+  Bloc.observer = AppBlocObserver();
+  runApp(const App());
 }
 
-/// A [StatelessWidget] which uses:
-/// * [replay_bloc](https://pub.dev/packages/replay_bloc)
-/// * [flutter_bloc](https://pub.dev/packages/flutter_bloc)
+/// Custom [BlocObserver] that observes all bloc and cubit state changes.
+class AppBlocObserver extends BlocObserver {
+  @override
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    if (bloc is Cubit) print(change);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    print(transition);
+  }
+}
+
+/// {@template app}
+/// A [StatelessWidget] that:
+/// * uses [replay_bloc](https://pub.dev/packages/replay_bloc)
+/// and [flutter_bloc](https://pub.dev/packages/flutter_bloc)
 /// to manage the state of a counter.
+/// {@endtemplate}
 class App extends StatelessWidget {
+  /// {@macro app}
+  const App({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => CounterBloc(),
-      child: MaterialApp(
+      child: const MaterialApp(
         home: CounterPage(),
       ),
     );
   }
 }
 
-/// A [StatelessWidget] which demonstrates
-/// how to consume and interact with a [ReplayBloc] or [ReplayCubit].
+/// {@template counter_page}
+/// A [StatelessWidget] that:
+/// * demonstrates how to consume and interact with a [ReplayBloc]/[ReplayCubit].
+/// {@endtemplate}
 class CounterPage extends StatelessWidget {
+  /// {@macro counter_page}
+  const CounterPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -65,26 +88,19 @@ class CounterPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: FloatingActionButton(
-              child: const Icon(Icons.add),
-              onPressed: () => context.read<CounterBloc>().add(Increment()),
-            ),
+          FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () => context.read<CounterBloc>().add(Increment()),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: FloatingActionButton(
-              child: const Icon(Icons.remove),
-              onPressed: () => context.read<CounterBloc>().add(Decrement()),
-            ),
+          const SizedBox(height: 4),
+          FloatingActionButton(
+            child: const Icon(Icons.remove),
+            onPressed: () => context.read<CounterBloc>().add(Decrement()),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: FloatingActionButton(
-              child: const Icon(Icons.delete_forever),
-              onPressed: () => context.read<CounterBloc>().add(Reset()),
-            ),
+          const SizedBox(height: 4),
+          FloatingActionButton(
+            child: const Icon(Icons.delete_forever),
+            onPressed: () => context.read<CounterBloc>().add(Reset()),
           ),
         ],
       ),
