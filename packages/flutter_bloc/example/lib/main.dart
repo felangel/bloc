@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   Bloc.observer = AppBlocObserver();
-  runApp(App());
+  runApp(const App());
 }
 
-/// Custom [BlocObserver] which observes all bloc and cubit state changes.
+/// Custom [BlocObserver] that observes all bloc and cubit state changes.
 class AppBlocObserver extends BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {
@@ -21,33 +21,73 @@ class AppBlocObserver extends BlocObserver {
   }
 }
 
-/// A [StatelessWidget] which uses:
-/// * [bloc](https://pub.dev/packages/bloc)
-/// * [flutter_bloc](https://pub.dev/packages/flutter_bloc)
-/// to manage the state of a counter.
+/// {@template app}
+/// A [StatelessWidget] that:
+/// * uses [bloc](https://pub.dev/packages/bloc) and
+/// [flutter_bloc](https://pub.dev/packages/flutter_bloc)
+/// to manage the state of a counter and the app theme.
+/// {@endtemplate}
 class App extends StatelessWidget {
+  /// {@macro app}
+  const App({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ThemeCubit(),
-      child: BlocBuilder<ThemeCubit, ThemeData>(
-        builder: (_, theme) {
-          return MaterialApp(
-            theme: theme,
-            home: BlocProvider(
-              create: (_) => CounterBloc(),
-              child: CounterPage(),
-            ),
-          );
-        },
-      ),
+      child: const AppView(),
     );
   }
 }
 
-/// A [StatelessWidget] which demonstrates
-/// how to consume and interact with a [CounterBloc].
+/// {@template app_view}
+/// A [StatelessWidget] that:
+/// * reacts to state changes in the [ThemeCubit]
+/// and updates the theme of the [MaterialApp].
+/// * renders the [CounterPage].
+/// {@endtemplate}
+class AppView extends StatelessWidget {
+  /// {@macro app_view}
+  const AppView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ThemeCubit, ThemeData>(
+      builder: (_, theme) {
+        return MaterialApp(
+          theme: theme,
+          home: const CounterPage(),
+        );
+      },
+    );
+  }
+}
+
+/// {@template counter_page}
+/// A [StatelessWidget] that:
+/// * provides a [CounterBloc] to the [CounterView].
+/// {@endtemplate}
 class CounterPage extends StatelessWidget {
+  /// {@macro counter_page}
+  const CounterPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => CounterBloc(),
+      child: const CounterView(),
+    );
+  }
+}
+
+/// {@template counter_view}
+/// A [StatelessWidget] that:
+/// * demonstrates how to consume and interact with a [CounterBloc].
+/// {@endtemplate}
+class CounterView extends StatelessWidget {
+  /// {@macro counter_view}
+  const CounterView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +133,7 @@ class Increment extends CounterEvent {}
 class Decrement extends CounterEvent {}
 
 /// {@template counter_bloc}
-/// A simple [Bloc] which manages an `int` as its state.
+/// A simple [Bloc] that manages an `int` as its state.
 /// {@endtemplate}
 class CounterBloc extends Bloc<CounterEvent, int> {
   /// {@macro counter_bloc}
@@ -104,7 +144,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 
 /// {@template brightness_cubit}
-/// A simple [Cubit] which manages the [ThemeData] as its state.
+/// A simple [Cubit] that manages the [ThemeData] as its state.
 /// {@endtemplate}
 class ThemeCubit extends Cubit<ThemeData> {
   /// {@macro brightness_cubit}
