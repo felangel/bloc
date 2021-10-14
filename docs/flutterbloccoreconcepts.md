@@ -137,7 +137,7 @@ Let's take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget 
 
 At this point we have successfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
 
-## Usage
+## RepositoryProvider Usage
 
 We are going to take a look at how to use `RepositoryProvider` within the context of the [`flutter_weather`][flutter_weather_link] example.
 
