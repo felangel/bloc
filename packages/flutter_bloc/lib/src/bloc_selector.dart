@@ -89,8 +89,11 @@ class _BlocSelectorState<B extends BlocBase<S>, S, T>
 
   @override
   Widget build(BuildContext context) {
-    // See https://github.com/felangel/bloc/pull/2482.
-    if (widget.bloc == null) context.select<B, int>(identityHashCode);
+    if (widget.bloc == null) {
+      // Trigger a rebuild if the bloc reference has changed.
+      // See https://github.com/felangel/bloc/issues/2127.
+      context.select<B, bool>((bloc) => identical(_bloc, bloc));
+    }
     return BlocListener<B, S>(
       bloc: _bloc,
       listener: (context, state) {
