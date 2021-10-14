@@ -127,6 +127,7 @@ class _BlocConsumerState<B extends BlocBase<S>, S>
   Widget build(BuildContext context) {
     if (widget.bloc == null) {
       // Trigger a rebuild if the bloc reference has changed.
+      // See https://github.com/felangel/bloc/issues/2127.
       context.select<B, bool>((bloc) => identical(_bloc, bloc));
     }
     return BlocBuilder<B, S>(
