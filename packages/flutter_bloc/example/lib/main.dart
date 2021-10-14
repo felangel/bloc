@@ -43,7 +43,7 @@ class App extends StatelessWidget {
 /// {@template app_view}
 /// A [StatelessWidget] which:
 /// * reacts to state changes in
-/// the [ThemeCubit] and updates the theme of the [MaterialApp]
+/// the [ThemeCubit] and updates the theme of the [MaterialApp].
 /// * renders the [CounterPage]
 /// {@endtemplate}
 class AppView extends StatelessWidget {
