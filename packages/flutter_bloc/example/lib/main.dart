@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   Bloc.observer = AppBlocObserver();
-  runApp(App());
+  runApp(const App());
 }
 
 /// Custom [BlocObserver] which observes all bloc and cubit state changes.
@@ -21,33 +21,73 @@ class AppBlocObserver extends BlocObserver {
   }
 }
 
+/// {@template app}
 /// A [StatelessWidget] which uses:
 /// * [bloc](https://pub.dev/packages/bloc)
 /// * [flutter_bloc](https://pub.dev/packages/flutter_bloc)
-/// to manage the state of a counter.
+/// to manage the state of a counter and the app theme.
+/// {@endtemplate}
 class App extends StatelessWidget {
+  /// {@macro app}
+  const App({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ThemeCubit(),
-      child: BlocBuilder<ThemeCubit, ThemeData>(
-        builder: (_, theme) {
-          return MaterialApp(
-            theme: theme,
-            home: BlocProvider(
-              create: (_) => CounterBloc(),
-              child: CounterPage(),
-            ),
-          );
-        },
-      ),
+      child: const AppView(),
     );
   }
 }
 
+/// {@template app_view}
+/// A [StatelessWidget] which:
+/// * reacts to state changes in
+/// the [ThemeCubit] and updates the theme of the [MaterialApp]
+/// * renders the [CounterPage]
+/// {@endtemplate}
+class AppView extends StatelessWidget {
+  /// {@macro app_view}
+  const AppView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ThemeCubit, ThemeData>(
+      builder: (_, theme) {
+        return MaterialApp(
+          theme: theme,
+          home: const CounterPage(),
+        );
+      },
+    );
+  }
+}
+
+/// {@template counter_page}
+/// A [StatelessWidget] which provides
+/// a [CounterBloc] to the [CounterView].
+/// {@endtemplate}
+class CounterPage extends StatelessWidget {
+  /// {@macro counter_page}
+  const CounterPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => CounterBloc(),
+      child: const CounterView(),
+    );
+  }
+}
+
+/// {@template counter_view}
 /// A [StatelessWidget] which demonstrates
 /// how to consume and interact with a [CounterBloc].
-class CounterPage extends StatelessWidget {
+/// {@endtemplate}
+class CounterView extends StatelessWidget {
+  /// {@macro counter_view}
+  const CounterView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
