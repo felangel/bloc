@@ -23,7 +23,7 @@ class AppBlocObserver extends BlocObserver {
 
 /// {@template app}
 /// A [StatelessWidget] which uses:
-/// * [bloc](https://pub.dev/packages/bloc)
+/// * [bloc](https://pub.dev/packages/bloc).
 /// * [flutter_bloc](https://pub.dev/packages/flutter_bloc)
 /// to manage the state of a counter and the app theme.
 /// {@endtemplate}
