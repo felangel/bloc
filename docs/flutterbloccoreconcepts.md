@@ -125,7 +125,7 @@ to:
 
 ## Usage
 
-Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
+Let's take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
 
 ### counter_bloc.dart
 
@@ -136,3 +136,33 @@ Lets take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget t
 [counter_page.dart](_snippets/flutter_bloc_core_concepts/counter_page.dart.md ':include')
 
 At this point we have successfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
+
+## Usage
+
+We are going to take a look at how to use `RepositoryProvider` within the context of the [`flutter_weather`][flutter_weather_link] example.
+
+### weather_repository.dart
+
+[weather_repository.dart](_snippets/flutter_bloc_core_concepts/weather_repository.dart.md ':include')
+
+Since the app has an explicit dependency on the `WeatherRepository` we inject an instance via constructor. This allows us to inject different instances of `WeatherRepository` based on the build flavor or environment.
+
+### main.dart
+
+[main.dart](_snippets/flutter_bloc_core_concepts/main.dart.md ':include')
+
+Since we only have one repository in our app, we will inject it into our widget tree via `RepositoryProvider.value`. If you have more than one repository, you can use `MultiRepositoryProvider` to provide multiple repository instances to the subtree.
+
+### app.dart
+
+[app.dart](_snippets/flutter_bloc_core_concepts/app.dart.md ':include')
+
+ In most cases, the root app widget will expose one or more repositories to the subtree via `RepositoryProvider`.
+
+### weather_page.dart
+
+[weather_page.dart](_snippets/flutter_bloc_core_concepts/weather_page.dart.md ':include')
+
+Now when instantiating a bloc, we can access the instance of a repository via `context.read` and inject the repository into the bloc via constructor.
+
+[flutter_weather_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_weather

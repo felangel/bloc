@@ -19,3 +19,20 @@
 ---
 
 Tools for building applications using the bloc state management library.
+
+## Usage
+
+```sh
+Command Line Tools for the Bloc Library.
+
+Usage: bloc <command> [arguments]
+
+Global options:
+-h, --help       Print this usage information.
+    --version    Print the current version.
+
+Available commands:
+  help   Display help information for bloc.
+
+Run "bloc help <command>" for more information about a command.
+```
