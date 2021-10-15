@@ -1,3 +1,7 @@
+# 8.0.0-dev.2
+
+- **BREAKING**: feat: upgrade to `bloc v8.0.0-dev.3`
+
 # 8.0.0-dev.1
 
 - **BREAKING**: feat: upgrade to `bloc v8.0.0-dev.2`
