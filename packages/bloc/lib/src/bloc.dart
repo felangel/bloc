@@ -83,8 +83,70 @@ typedef EventTransformer<Event> = Stream<Event> Function(
   EventMapper<Event> mapper,
 );
 
-class _Emitter<State> implements Emitter<State> {
-  _Emitter(this._emit);
+class _BlocEmitter<State> extends _BaseEmitter<State>
+    implements Emitter<State> {
+  _BlocEmitter(void Function(State) emit) : super(emit);
+
+  @override
+  void call(State state) {
+    assert(
+      !_isCompleted,
+      '''\n\n
+emit was called after an event handler completed normally.
+This is usually due to an unawaited future in an event handler.
+Please make sure to await all asynchronous operations with event handlers
+and use emit.isDone after asynchronous operations before calling emit() to
+ensure the event handler has not completed.
+
+  **BAD**
+  on<Event>((event, emit) {
+    future.whenComplete(() => emit(...));
+  });
+
+  **GOOD**
+  on<Event>((event, emit) async {
+    await future.whenComplete(() => emit(...));
+  });
+''',
+    );
+    super.call(state);
+  }
+
+  @override
+  void complete() {
+    assert(
+      _disposables.isEmpty,
+      '''\n\n
+An event handler completed but left pending subscriptions behind.
+This is most likely due to an unawaited emit.forEach or emit.onEach. 
+Please make sure to await all asynchronous operations within event handlers.
+
+  **BAD**
+  on<Event>((event, emit) {
+    emit.forEach(...);
+  });  
+  
+  **GOOD**
+  on<Event>((event, emit) async {
+    await emit.forEach(...);
+  });
+
+  **GOOD**
+  on<Event>((event, emit) {
+    return emit.forEach(...);
+  });
+
+  **GOOD**
+  on<Event>((event, emit) => emit.forEach(...));
+
+''',
+    );
+    super.complete();
+  }
+}
+
+class _BaseEmitter<State> implements Emitter<State> {
+  _BaseEmitter(this._emit);
 
   final void Function(State) _emit;
   final _completer = Completer<void>();
@@ -132,26 +194,6 @@ class _Emitter<State> implements Emitter<State> {
 
   @override
   void call(State state) {
-    assert(
-      !_isCompleted,
-      '''\n\n
-emit was called after an event handler completed normally.
-This is usually due to an unawaited future in an event handler.
-Please make sure to await all asynchronous operations with event handlers
-and use emit.isDone after asynchronous operations before calling emit() to
-ensure the event handler has not completed.
-
-  **BAD**
-  on<Event>((event, emit) {
-    future.whenComplete(() => emit(...));
-  });
-
-  **GOOD**
-  on<Event>((event, emit) async {
-    await future.whenComplete(() => emit(...));
-  });
-''',
-    );
     if (!_isCanceled) _emit(state);
   }
 
@@ -166,33 +208,6 @@ ensure the event handler has not completed.
 
   void complete() {
     if (isDone) return;
-    assert(
-      _disposables.isEmpty,
-      '''\n\n
-An event handler completed but left pending subscriptions behind.
-This is most likely due to an unawaited emit.forEach or emit.onEach. 
-Please make sure to await all asynchronous operations within event handlers.
-
-  **BAD**
-  on<Event>((event, emit) {
-    emit.forEach(...);
-  });  
-  
-  **GOOD**
-  on<Event>((event, emit) async {
-    await emit.forEach(...);
-  });
-
-  **GOOD**
-  on<Event>((event, emit) {
-    return emit.forEach(...);
-  });
-
-  **GOOD**
-  on<Event>((event, emit) => emit.forEach(...));
-
-''',
-    );
     _isCompleted = true;
     _close();
   }
@@ -273,7 +288,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<dynamic>>[];
   final _handlers = <_Handler>[];
-  final _emitters = <_Emitter>[];
+  final _emitters = <_BlocEmitter>[];
 
   /// Notifies the [Bloc] of a new [event] which triggers
   /// all corresponding [EventHandler] instances.
@@ -350,7 +365,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// {@endtemplate}
   @internal
   @override
-  void emit(State state) => super.emit(state);
+  Emitter<State> get emit => _BlocEmitter(_emit);
 
   /// Register event handler for an event of type `E`.
   /// There should only ever be one event handler per event type `E`.
@@ -408,7 +423,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
           emit(state);
         }
 
-        final emitter = _Emitter(onEmit);
+        final emitter = _BlocEmitter(onEmit);
         final controller = StreamController<E>.broadcast(
           sync: true,
           onCancel: emitter.cancel,
@@ -505,6 +520,23 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
 abstract class Cubit<State> extends BlocBase<State> {
   /// {@macro cubit}
   Cubit(State initialState) : super(initialState);
+
+  final _emitters = <_BaseEmitter>[];
+
+  @override
+  Emitter<State> get emit {
+    final emitter = _BaseEmitter(_emit);
+    _emitters.add(emitter);
+    emitter.future.whenComplete(() => _emitters.remove(emitter));
+    return emitter;
+  }
+
+  @override
+  Future<void> close() async {
+    for (final emitter in _emitters) emitter.cancel();
+    await Future.wait<void>(_emitters.map((e) => e.future));
+    return super.close();
+  }
 }
 
 /// {@template bloc_stream}
@@ -539,7 +571,8 @@ abstract class BlocBase<State> {
   /// Subsequent state changes cannot occur within a closed bloc.
   bool get isClosed => _stateController.isClosed;
 
-  /// Updates the [state] to the provided [state].
+  /// An [Emitter] instance which can be used to trigger state changes.
+  /// [emit] updates the [state] to the provided [state].
   /// [emit] does nothing if the instance has been closed or if the
   /// [state] being emitted is equal to the current [state].
   ///
@@ -547,7 +580,9 @@ abstract class BlocBase<State> {
   /// emitting a state which is equal to the initial state is allowed as long
   /// as it is the first thing emitted by the instance.
   @protected
-  void emit(State state) {
+  Emitter<State> get emit;
+
+  void _emit(State state) {
     if (_stateController.isClosed) return;
     if (state == _state && _emitted) return;
     onChange(Change<State>(currentState: this.state, nextState: state));

@@ -6,11 +6,21 @@ import 'package:test/test.dart';
 
 import 'cubits/cubits.dart';
 
+Future<void> tick() => Future<void>.delayed(Duration.zero);
+
 class MockBlocObserver extends Mock implements BlocObserver {}
 
 class FakeBlocBase<S> extends Fake implements BlocBase<S> {}
 
 class FakeChange<S> extends Fake implements Change<S> {}
+
+class UniqueObject {
+  @override
+  bool operator ==(Object value) => false;
+
+  @override
+  int get hashCode => 0;
+}
 
 void main() {
   group('Cubit', () {
@@ -133,16 +143,15 @@ void main() {
     });
 
     group('emit', () {
-      test('does nothing if cubit is closed (indirect)', () {
+      test('does nothing if cubit is closed', () async {
+        final states = <int>[];
         final cubit = CounterCubit();
-        expectLater(
-          cubit.stream,
-          emitsInOrder(<Matcher>[equals(1), emitsDone]),
-        );
-        cubit
-          ..increment()
-          ..close()
-          ..increment();
+        final subscription = cubit.stream.listen(states.add);
+        cubit.increment();
+        await cubit.close();
+        cubit.increment();
+        expect(states, [1]);
+        await subscription.cancel();
       });
 
       test('emits states in the correct order', () async {
@@ -195,6 +204,50 @@ void main() {
         await cubit.close();
         await subscription.cancel();
         expect(states, [1, 2, 3]);
+      });
+
+      test('forEach emits correct states (single subscription)', () async {
+        const expectedStates = [0, 1, 2];
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final cubit = StreamCubit(state: 0, stream: controller.stream)
+          ..stream.listen(states.add)
+          ..forEach();
+
+        await tick();
+
+        controller
+          ..add(0)
+          ..add(1)
+          ..add(2);
+
+        await tick();
+
+        await cubit.close();
+
+        expect(states, equals(expectedStates));
+      });
+
+      test('forEach emits correct states (multiple subscriptions)', () async {
+        final states = <UniqueObject>[];
+        final controller = StreamController<UniqueObject>.broadcast();
+        final cubit =
+            StreamCubit(state: UniqueObject(), stream: controller.stream)
+              ..stream.listen(states.add)
+              ..forEach()
+              ..forEach();
+
+        await tick();
+
+        controller.add(UniqueObject());
+
+        await tick();
+
+        await cubit.close();
+
+        expect(states.length, equals(2));
+        expect(states.first, isA<UniqueObject>());
+        expect(states.last, isA<UniqueObject>());
       });
     });
 
