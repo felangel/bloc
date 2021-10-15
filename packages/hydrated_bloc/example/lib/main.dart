@@ -66,38 +66,27 @@ class CounterView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: const Icon(Icons.brightness_6),
-              onPressed: () {
-                context.read<BrightnessCubit>().toggleBrightness();
-              },
-            ),
+          FloatingActionButton(
+            child: const Icon(Icons.brightness_6),
+            onPressed: () => context.read<BrightnessCubit>().toggleBrightness(),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: const Icon(Icons.add),
-              onPressed: () => context.read<CounterBloc>().add(Increment()),
-            ),
+          const SizedBox(height: 4),
+          FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () => context.read<CounterBloc>().add(Increment()),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: const Icon(Icons.remove),
-              onPressed: () => context.read<CounterBloc>().add(Decrement()),
-            ),
+          const SizedBox(height: 4),
+          FloatingActionButton(
+            child: const Icon(Icons.remove),
+            onPressed: () => context.read<CounterBloc>().add(Decrement()),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: FloatingActionButton(
-              child: const Icon(Icons.delete_forever),
-              onPressed: () async {
-                await HydratedBloc.storage.clear();
-                context.read<CounterBloc>().add(Reset());
-              },
-            ),
+          const SizedBox(height: 4),
+          FloatingActionButton(
+            child: const Icon(Icons.delete_forever),
+            onPressed: () async {
+              await HydratedBloc.storage.clear();
+              context.read<CounterBloc>().add(Reset());
+            },
           ),
         ],
       ),
