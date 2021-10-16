@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 ///
 /// See also:
 ///
-/// * [EventHandler] which has access to an [Emitter].
+/// * [EventHandler] which has access to an [Emitter] in [Bloc].
 ///
 /// {@endtemplate}
 abstract class Emitter<State> {
@@ -261,7 +261,7 @@ class _Handler {
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
-abstract class Bloc<Event, State> extends BlocBase<State> {
+abstract class Bloc<Event, State> extends _BlocBase<State> {
   /// {@macro bloc}
   Bloc(State initialState) : super(initialState);
 
@@ -517,7 +517,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
 /// ```
 ///
 /// {@endtemplate}
-abstract class Cubit<State> extends BlocBase<State> {
+abstract class Cubit<State> extends _BlocBase<State> {
   /// {@macro cubit}
   Cubit(State initialState) : super(initialState);
 
@@ -525,7 +525,12 @@ abstract class Cubit<State> extends BlocBase<State> {
 
   @override
   Emitter<State> get emit {
-    final emitter = _BaseEmitter(_emit);
+    _BaseEmitter<State>? emitter;
+    emitter = _BaseEmitter<State>((state) {
+      _emit(state);
+      if (emitter == null) return;
+      if (emitter._disposables.isEmpty) emitter.complete();
+    });
     _emitters.add(emitter);
     emitter.future.whenComplete(() => _emitters.remove(emitter));
     return emitter;
@@ -539,13 +544,10 @@ abstract class Cubit<State> extends BlocBase<State> {
   }
 }
 
-/// {@template bloc_stream}
-/// An interface for the core functionality implemented by
+/// A concrete implementation of [BlocBase] shared by
 /// both [Bloc] and [Cubit].
-/// {@endtemplate}
-abstract class BlocBase<State> {
-  /// {@macro bloc_stream}
-  BlocBase(this._state) {
+abstract class _BlocBase<State> implements BlocBase<State> {
+  _BlocBase(this._state) {
     // ignore: invalid_use_of_protected_member
     Bloc.observer.onCreate(this);
   }
@@ -559,17 +561,73 @@ abstract class BlocBase<State> {
 
   bool _emitted = false;
 
-  /// The current [state].
+  @override
   State get state => _state;
 
-  /// The current state stream.
+  @override
   Stream<State> get stream => _stateController.stream;
+
+  @override
+  bool get isClosed => _stateController.isClosed;
+
+  void _emit(State state) {
+    if (_stateController.isClosed) return;
+    if (state == _state && _emitted) return;
+    onChange(Change<State>(currentState: this.state, nextState: state));
+    _state = state;
+    _stateController.add(_state);
+    _emitted = true;
+  }
+
+  @override
+  @mustCallSuper
+  void onChange(Change<State> change) {
+    // ignore: invalid_use_of_protected_member
+    Bloc.observer.onChange(this, change);
+  }
+
+  @override
+  @mustCallSuper
+  void addError(Object error, [StackTrace? stackTrace]) {
+    onError(error, stackTrace ?? StackTrace.current);
+  }
+
+  @override
+  @protected
+  @mustCallSuper
+  void onError(Object error, StackTrace stackTrace) {
+    // ignore: invalid_use_of_protected_member
+    Bloc.observer.onError(this, error, stackTrace);
+    assert(() {
+      throw BlocUnhandledErrorException(this, error, stackTrace);
+    }());
+  }
+
+  @override
+  @mustCallSuper
+  Future<void> close() async {
+    // ignore: invalid_use_of_protected_member
+    Bloc.observer.onClose(this);
+    await _stateController.close();
+  }
+}
+
+/// {@template bloc_base}
+/// An interface for the core functionality implemented by
+/// both [Bloc] and [Cubit].
+/// {@endtemplate}
+abstract class BlocBase<State> {
+  /// The current [state].
+  State get state;
+
+  /// The current state stream.
+  Stream<State> get stream;
 
   /// Whether the bloc is closed.
   ///
   /// A bloc is considered closed once [close] is called.
   /// Subsequent state changes cannot occur within a closed bloc.
-  bool get isClosed => _stateController.isClosed;
+  bool get isClosed;
 
   /// An [Emitter] instance which can be used to trigger state changes.
   /// [emit] updates the [state] to the provided [state].
@@ -581,15 +639,6 @@ abstract class BlocBase<State> {
   /// as it is the first thing emitted by the instance.
   @protected
   Emitter<State> get emit;
-
-  void _emit(State state) {
-    if (_stateController.isClosed) return;
-    if (state == _state && _emitted) return;
-    onChange(Change<State>(currentState: this.state, nextState: state));
-    _state = state;
-    _stateController.add(_state);
-    _emitted = true;
-  }
 
   /// Called whenever a [change] occurs with the given [change].
   /// A [change] occurs when a new `state` is emitted.
@@ -612,16 +661,11 @@ abstract class BlocBase<State> {
   /// * [BlocObserver] for observing [Cubit] behavior globally.
   ///
   @mustCallSuper
-  void onChange(Change<State> change) {
-    // ignore: invalid_use_of_protected_member
-    Bloc.observer.onChange(this, change);
-  }
+  void onChange(Change<State> change);
 
   /// Reports an [error] which triggers [onError] with an optional [StackTrace].
   @mustCallSuper
-  void addError(Object error, [StackTrace? stackTrace]) {
-    onError(error, stackTrace ?? StackTrace.current);
-  }
+  void addError(Object error, [StackTrace? stackTrace]);
 
   /// Called whenever an [error] occurs and notifies [BlocObserver.onError].
   ///
@@ -643,23 +687,13 @@ abstract class BlocBase<State> {
   /// ```
   @protected
   @mustCallSuper
-  void onError(Object error, StackTrace stackTrace) {
-    // ignore: invalid_use_of_protected_member
-    Bloc.observer.onError(this, error, stackTrace);
-    assert(() {
-      throw BlocUnhandledErrorException(this, error, stackTrace);
-    }());
-  }
+  void onError(Object error, StackTrace stackTrace);
 
   /// Closes the instance.
   /// This method should be called when the instance is no longer needed.
   /// Once [close] is called, the instance can no longer be used.
   @mustCallSuper
-  Future<void> close() async {
-    // ignore: invalid_use_of_protected_member
-    Bloc.observer.onClose(this);
-    await _stateController.close();
-  }
+  Future<void> close();
 }
 
 class _FlatMapStreamTransformer<T> extends StreamTransformerBase<Stream<T>, T> {

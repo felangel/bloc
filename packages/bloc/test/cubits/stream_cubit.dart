@@ -10,4 +10,6 @@ class StreamCubit<T> extends Cubit<T> {
   final Stream<T> _stream;
 
   void forEach() => emit.forEach<T>(_stream, onData: ((i) => i));
+
+  void onEach() => emit.onEach<T>(_stream, onData: ((i) => emit(i)));
 }

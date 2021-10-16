@@ -249,6 +249,50 @@ void main() {
         expect(states.first, isA<UniqueObject>());
         expect(states.last, isA<UniqueObject>());
       });
+
+      test('onEach emits correct states (single subscription)', () async {
+        const expectedStates = [0, 1, 2];
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final cubit = StreamCubit(state: 0, stream: controller.stream)
+          ..stream.listen(states.add)
+          ..onEach();
+
+        await tick();
+
+        controller
+          ..add(0)
+          ..add(1)
+          ..add(2);
+
+        await tick();
+
+        await cubit.close();
+
+        expect(states, equals(expectedStates));
+      });
+
+      test('onEach emits correct states (multiple subscriptions)', () async {
+        final states = <UniqueObject>[];
+        final controller = StreamController<UniqueObject>.broadcast();
+        final cubit =
+            StreamCubit(state: UniqueObject(), stream: controller.stream)
+              ..stream.listen(states.add)
+              ..onEach()
+              ..onEach();
+
+        await tick();
+
+        controller.add(UniqueObject());
+
+        await tick();
+
+        await cubit.close();
+
+        expect(states.length, equals(2));
+        expect(states.first, isA<UniqueObject>());
+        expect(states.last, isA<UniqueObject>());
+      });
     });
 
     group('listen', () {
