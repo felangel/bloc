@@ -145,10 +145,20 @@ Please make sure to await all asynchronous operations within event handlers.
   }
 }
 
+class _CubitEmitter<State> extends _BaseEmitter<State> {
+  _CubitEmitter(void Function(State state) emit) : super(emit);
+
+  @override
+  void call(State state) {
+    super.call(state);
+    if (_disposables.isEmpty) complete();
+  }
+}
+
 class _BaseEmitter<State> implements Emitter<State> {
   _BaseEmitter(this._emit);
 
-  final void Function(State) _emit;
+  final void Function(State state) _emit;
   final _completer = Completer<void>();
   final _disposables = <FutureOr<void> Function()>[];
 
@@ -288,7 +298,7 @@ abstract class Bloc<Event, State> extends _BlocBase<State> {
   final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<dynamic>>[];
   final _handlers = <_Handler>[];
-  final _emitters = <_BlocEmitter>[];
+  final _emitters = <_BlocEmitter<State>>[];
 
   /// Notifies the [Bloc] of a new [event] which triggers
   /// all corresponding [EventHandler] instances.
@@ -521,19 +531,13 @@ abstract class Cubit<State> extends _BlocBase<State> {
   /// {@macro cubit}
   Cubit(State initialState) : super(initialState);
 
-  final _emitters = <_BaseEmitter>[];
+  final _emitters = <_CubitEmitter<State>>[];
 
   @override
   Emitter<State> get emit {
-    _BaseEmitter<State>? emitter;
-    emitter = _BaseEmitter<State>((state) {
-      _emit(state);
-      if (emitter == null) return;
-      if (emitter._disposables.isEmpty) emitter.complete();
-    });
+    final emitter = _CubitEmitter<State>(_emit);
     _emitters.add(emitter);
-    emitter.future.whenComplete(() => _emitters.remove(emitter));
-    return emitter;
+    return emitter..future.whenComplete(() => _emitters.remove(emitter));
   }
 
   @override
