@@ -12,7 +12,7 @@ class TodoListTile extends StatelessWidget {
 
   final Todo todo;
   final ValueChanged<bool>? onToggleCompleted;
-  final VoidCallback? onDismissed;
+  final DismissDirectionCallback? onDismissed;
   final VoidCallback? onTap;
 
   @override
@@ -22,7 +22,7 @@ class TodoListTile extends StatelessWidget {
 
     return Dismissible(
       key: Key('todoListTile_dismissible_${todo.id}'),
-      onDismissed: onDismissed == null ? null : (_) => onDismissed!(),
+      onDismissed: onDismissed,
       direction: DismissDirection.endToStart,
       background: Container(
         alignment: Alignment.centerRight,

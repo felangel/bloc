@@ -264,7 +264,7 @@ void main() {
 
           final todoListTile =
               tester.widget<TodoListTile>(find.byType(TodoListTile).first);
-          todoListTile.onDismissed!();
+          todoListTile.onDismissed!(DismissDirection.startToEnd);
 
           verify(() => todosOverviewBloc.add(TodosOverviewTodoDeleted(todo)))
               .called(1);

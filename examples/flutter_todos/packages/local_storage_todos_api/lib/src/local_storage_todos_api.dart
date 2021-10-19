@@ -26,7 +26,7 @@ class LocalStorageTodosApi extends TodosApi {
   /// This is only exposed for testing and shouldn't be used by consumers of
   /// this library.
   @visibleForTesting
-  static const kTodosCollectionKey = 'todos';
+  static const kTodosCollectionKey = '__todos_collection_key__';
 
   String? _getValue(String key) => _plugin.getString(key);
   Future<void> _setValue(String key, String value) =>

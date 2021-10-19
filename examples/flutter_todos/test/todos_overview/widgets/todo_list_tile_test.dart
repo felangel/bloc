@@ -23,7 +23,7 @@ void main() {
       return TodoListTile(
         todo: todo ?? uncompletedTodo,
         onToggleCompleted: onToggleCompletedCalls.add,
-        onDismissed: () => onDismissedCallCount++,
+        onDismissed: (_) => onDismissedCallCount++,
         onTap: () => onTapCallCount++,
       );
     }
