@@ -17,7 +17,7 @@ dependencies:
 
 dev_dependencies:
   test: ^1.18.2
-  build_runner: ^2.1.4 
+  build_runner: ^2.1.4
   collection: ^1.15.0
   crypto: ^3.0.0
   freezed_annotation: ^0.15.0
