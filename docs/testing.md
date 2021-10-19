@@ -42,4 +42,4 @@ We should be able to run the tests and see that all are passing.
 
 That's all there is to it, testing should be a breeze and we should feel confident when making changes and refactoring our code.
 
-You can refer to the [Todos App](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library) for an example of a fully tested application.
+You can refer to the [Weather App](https://github.com/felangel/bloc/tree/master/examples/flutter_weather) for an example of a fully tested application.
