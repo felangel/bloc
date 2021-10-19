@@ -105,7 +105,7 @@ class TodosOverviewView extends StatelessWidget {
                               isCompleted: isCompleted,
                             ));
                       },
-                      onDismissed: () {
+                      onDismissed: (_) {
                         context
                             .read<TodosOverviewBloc>()
                             .add(TodosOverviewTodoDeleted(todo));
