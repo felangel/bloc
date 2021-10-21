@@ -113,7 +113,7 @@ void main() {
   final bloc = CounterBloc()..add(Increment());
 
   // wait for state to update
-  await bloc.first;
+  await bloc.stream.first;
   print(bloc.state); // 1
 
   // undo the change
