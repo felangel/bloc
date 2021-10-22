@@ -56,8 +56,9 @@ abstract class Emitter<State> {
     State Function(Object error, StackTrace stackTrace)? onError,
   });
 
-  /// Whether the [EventHandler] associated with this [Emitter]
-  /// has been completed or canceled.
+  /// Whether the [Emitter] has been canceled or completed.
+  /// [isDone] can be used to determine whether to initiate an expensive
+  /// asynchronous operation following an asynchronous operation.
   bool get isDone;
 
   /// Emits the provided [state].
