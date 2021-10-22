@@ -299,7 +299,6 @@ abstract class Bloc<Event, State> extends _BlocBase<State> {
   final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<dynamic>>[];
   final _handlers = <_Handler>[];
-  final _emitters = <_BlocEmitter<State>>[];
 
   /// Notifies the [Bloc] of a new [event] which triggers
   /// all corresponding [EventHandler] instances.
@@ -503,8 +502,6 @@ abstract class Bloc<Event, State> extends _BlocBase<State> {
   @mustCallSuper
   Future<void> close() async {
     await _eventController.close();
-    for (final emitter in _emitters) emitter.cancel();
-    await Future.wait<void>(_emitters.map((e) => e.future));
     await Future.wait<void>(_subscriptions.map((s) => s.cancel()));
     return super.close();
   }
@@ -532,20 +529,11 @@ abstract class Cubit<State> extends _BlocBase<State> {
   /// {@macro cubit}
   Cubit(State initialState) : super(initialState);
 
-  final _emitters = <_CubitEmitter<State>>[];
-
   @override
   Emitter<State> get emit {
     final emitter = _CubitEmitter<State>(_emit);
     _emitters.add(emitter);
     return emitter..future.whenComplete(() => _emitters.remove(emitter));
-  }
-
-  @override
-  Future<void> close() async {
-    for (final emitter in _emitters) emitter.cancel();
-    await Future.wait<void>(_emitters.map((e) => e.future));
-    return super.close();
   }
 }
 
@@ -556,6 +544,8 @@ abstract class _BlocBase<State> implements BlocBase<State> {
     // ignore: invalid_use_of_protected_member
     Bloc.observer.onCreate(this);
   }
+
+  final _emitters = <_BaseEmitter<State>>[];
 
   StreamController<State>? __stateController;
   StreamController<State> get _stateController {
@@ -613,6 +603,8 @@ abstract class _BlocBase<State> implements BlocBase<State> {
   Future<void> close() async {
     // ignore: invalid_use_of_protected_member
     Bloc.observer.onClose(this);
+    for (final emitter in _emitters) emitter.cancel();
+    await Future.wait<void>(_emitters.map((e) => e.future));
     await _stateController.close();
   }
 }
