@@ -50,7 +50,7 @@ void main() {
           CounterCubit().addError(expectedError, StackTrace.current);
         }, (Object error, StackTrace stackTrace) {
           expect(
-            (error as BlocUnhandledErrorException).toString(),
+            error.toString(),
             contains(
               'Unhandled error Exception: fatal exception occurred '
               'in Instance of \'CounterCubit\'.',
