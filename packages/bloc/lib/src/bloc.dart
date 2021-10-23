@@ -86,7 +86,7 @@ typedef EventTransformer<Event> = Stream<Event> Function(
 class _Emitter<State> implements Emitter<State> {
   _Emitter(this._emit);
 
-  final void Function(State) _emit;
+  final void Function(State state) _emit;
   final _completer = Completer<void>();
   final _disposables = <FutureOr<void> Function()>[];
 
@@ -96,7 +96,7 @@ class _Emitter<State> implements Emitter<State> {
   @override
   Future<void> onEach<T>(
     Stream<T> stream, {
-    required void Function(T) onData,
+    required void Function(T data) onData,
     void Function(Object error, StackTrace stackTrace)? onError,
   }) async {
     final completer = Completer<void>();
@@ -116,7 +116,7 @@ class _Emitter<State> implements Emitter<State> {
   @override
   Future<void> forEach<T>(
     Stream<T> stream, {
-    required State Function(T) onData,
+    required State Function(T data) onData,
     State Function(Object error, StackTrace stackTrace)? onError,
   }) {
     return onEach<T>(
@@ -238,7 +238,7 @@ class BlocUnhandledErrorException implements Exception {
 
 class _Handler {
   const _Handler({required this.isType, required this.type});
-  final bool Function(dynamic) isType;
+  final bool Function(dynamic value) isType;
   final Type type;
 }
 
