@@ -563,6 +563,7 @@ abstract class BlocBase<State> {
   /// Called whenever an [error] occurs and notifies [BlocObserver.onError].
   ///
   /// **Note: `super.onError` should always be called last.**
+  ///
   /// ```dart
   /// @override
   /// void onError(Object error, StackTrace stackTrace) {
