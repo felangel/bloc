@@ -397,7 +397,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
             await handler(event as E, emitter);
           } catch (error, stackTrace) {
             onError(error, stackTrace);
-            controller.addError(error, stackTrace);
+            rethrow;
           } finally {
             onDone();
           }
