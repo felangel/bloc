@@ -1368,14 +1368,13 @@ void main() {
       });
 
       test('triggers onError from onEvent', () {
+        final exception = Exception('fatal exception');
         runZonedGuarded(() {
-          final exception = Exception('fatal exception');
-
           OnEventErrorBloc(exception: exception)
             ..add(CounterEvent.increment)
             ..close();
         }, (Object error, StackTrace stackTrace) {
-          expect(error.toString(), equals('Exception: fatal exception'));
+          expect(error, equals(exception));
           expect(stackTrace, isNotNull);
           expect(stackTrace, isNot(StackTrace.empty));
         });
