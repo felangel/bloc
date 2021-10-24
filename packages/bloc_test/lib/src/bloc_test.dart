@@ -222,8 +222,10 @@ WARNING: Please ensure state instances extend Equatable, override == and hashCod
 Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''',
         );
       }
-      // ignore: only_throw_errors
-      throw error;
+      if (!unhandledErrors.contains(error)) {
+        // ignore: only_throw_errors
+        throw error;
+      }
     },
   );
   if (errors != null) test.expect(unhandledErrors, test.wrapMatcher(errors()));
