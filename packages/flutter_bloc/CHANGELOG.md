@@ -1,3 +1,11 @@
+# 7.3.1
+
+- fix: determine bloc reference changes via `identical`
+  - Previously `identityHashCode` was used to determine if the bloc reference had changed to trigger a rebuild ([#2482](https://github.com/felangel/bloc/pull/2482)) however, it's possible for different bloc references to have the same `hashCode` as a result of hash collisions. The fix uses `identical` to determine whether the bloc reference has changed.
+- docs: add inline docs to library
+- docs: minor improvements to example and `README`
+- chore: remove unneeded imports
+
 # 7.3.0
 
 - feat: upgrade to `bloc: ^7.2.0`

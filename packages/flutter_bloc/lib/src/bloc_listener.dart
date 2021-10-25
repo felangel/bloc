@@ -180,8 +180,11 @@ class _BlocListenerBaseState<B extends BlocBase<S>, S>
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
-    // See https://github.com/felangel/bloc/pull/2482.
-    if (widget.bloc == null) context.select<B, int>(identityHashCode);
+    if (widget.bloc == null) {
+      // Trigger a rebuild if the bloc reference has changed.
+      // See https://github.com/felangel/bloc/issues/2127.
+      context.select<B, bool>((bloc) => identical(_bloc, bloc));
+    }
     return child!;
   }
 
