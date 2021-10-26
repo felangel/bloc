@@ -206,36 +206,6 @@ Please make sure to await all asynchronous operations within event handlers.
   Future<void> get future => _completer.future;
 }
 
-/// {@template bloc_unhandled_error_exception}
-/// Exception thrown when an unhandled error occurs within a bloc.
-///
-/// _Note: thrown in debug mode only_
-/// {@endtemplate}
-class BlocUnhandledErrorException implements Exception {
-  /// {@macro bloc_unhandled_error_exception}
-  BlocUnhandledErrorException(
-    this.bloc,
-    this.error, [
-    this.stackTrace = StackTrace.empty,
-  ]);
-
-  /// The bloc in which the unhandled error occurred.
-  final BlocBase bloc;
-
-  /// The unhandled [error] object.
-  final Object error;
-
-  /// Stack trace which accompanied the error.
-  /// May be [StackTrace.empty] if no stack trace was provided.
-  final StackTrace stackTrace;
-
-  @override
-  String toString() {
-    return 'Unhandled error $error occurred in $bloc.\n'
-        '$stackTrace';
-  }
-}
-
 class _Handler {
   const _Handler({required this.isType, required this.type});
   final bool Function(dynamic value) isType;
@@ -300,6 +270,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
       _eventController.add(event);
     } catch (error, stackTrace) {
       onError(error, stackTrace);
+      rethrow;
     }
   }
 
@@ -426,6 +397,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
             await handler(event as E, emitter);
           } catch (error, stackTrace) {
             onError(error, stackTrace);
+            rethrow;
           } finally {
             onDone();
           }
@@ -590,13 +562,8 @@ abstract class BlocBase<State> {
 
   /// Called whenever an [error] occurs and notifies [BlocObserver.onError].
   ///
-  /// In debug mode, [onError] throws a [BlocUnhandledErrorException] for
-  /// improved visibility.
-  ///
-  /// In release mode, [onError] does not throw and will instead only report
-  /// the error to [BlocObserver.onError].
-  ///
   /// **Note: `super.onError` should always be called last.**
+  ///
   /// ```dart
   /// @override
   /// void onError(Object error, StackTrace stackTrace) {
@@ -611,9 +578,6 @@ abstract class BlocBase<State> {
   void onError(Object error, StackTrace stackTrace) {
     // ignore: invalid_use_of_protected_member
     Bloc.observer.onError(this, error, stackTrace);
-    assert(() {
-      throw BlocUnhandledErrorException(this, error, stackTrace);
-    }());
   }
 
   /// Closes the instance.
