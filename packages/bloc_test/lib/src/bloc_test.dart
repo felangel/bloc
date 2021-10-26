@@ -187,6 +187,8 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
 }) async {
   final unhandledErrors = <Object>[];
   var shallowEquality = false;
+  final testObserver = _TestBlocObserver(Bloc.observer, unhandledErrors.add);
+  Bloc.observer = testObserver;
   await runZonedGuarded(
     () async {
       await setUp?.call();
@@ -198,9 +200,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       try {
         await act?.call(bloc);
       } catch (error) {
-        unhandledErrors.add(
-          error is BlocUnhandledErrorException ? error.error : error,
-        );
+        unhandledErrors.add(error);
       }
       if (wait != null) await Future<void>.delayed(wait);
       await Future<void>.delayed(Duration.zero);
@@ -223,22 +223,36 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       await tearDown?.call();
     },
     (Object error, _) {
-      if (error is BlocUnhandledErrorException) {
-        unhandledErrors.add(error.error);
-      } else if (shallowEquality && error is test.TestFailure) {
+      if (shallowEquality && error is test.TestFailure) {
         // ignore: only_throw_errors
         throw test.TestFailure(
           '''${error.message}
 WARNING: Please ensure state instances extend Equatable, override == and hashCode, or implement Comparable.
 Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''',
         );
-      } else {
+      }
+      if (!unhandledErrors.contains(error)) {
         // ignore: only_throw_errors
         throw error;
       }
     },
   );
   if (errors != null) test.expect(unhandledErrors, test.wrapMatcher(errors()));
+  Bloc.observer = testObserver.localObserver;
+}
+
+class _TestBlocObserver extends BlocObserver {
+  _TestBlocObserver(this.localObserver, this._onError);
+
+  final BlocObserver localObserver;
+  final void Function(Object error) _onError;
+
+  @override
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
+    localObserver.onError(bloc, error, stackTrace);
+    _onError(error);
+    super.onError(bloc, error, stackTrace);
+  }
 }
 
 String _diff({required dynamic expected, required dynamic actual}) {
