@@ -45,20 +45,20 @@ void main() {
 
       test('triggers onError', () async {
         final expectedError = Exception('fatal exception');
+        final errors = <Object>[];
+        final stackTraces = <StackTrace>[];
+        CounterCubit(
+          onErrorCallback: (error, stackTrace) {
+            errors.add(error);
+            stackTraces.add(stackTrace);
+          },
+        ).addError(expectedError, StackTrace.current);
 
-        runZonedGuarded(() {
-          CounterCubit().addError(expectedError, StackTrace.current);
-        }, (Object error, StackTrace stackTrace) {
-          expect(
-            (error as BlocUnhandledErrorException).toString(),
-            contains(
-              'Unhandled error Exception: fatal exception occurred '
-              'in Instance of \'CounterCubit\'.',
-            ),
-          );
-          expect(stackTrace, isNotNull);
-          expect(stackTrace, isNot(StackTrace.empty));
-        });
+        expect(errors.length, equals(1));
+        expect(errors.first, equals(expectedError));
+        expect(stackTraces.length, equals(1));
+        expect(stackTraces.first, isNotNull);
+        expect(stackTraces.first, isNot(StackTrace.empty));
       });
     });
 
