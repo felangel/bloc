@@ -1058,11 +1058,7 @@ void main() {
           await bloc.close();
         }, (error, stackTrace) => uncaughtError = error);
         expect(states, equals(expectedStates));
-        expect(
-          uncaughtError,
-          isA<BlocUnhandledErrorException>()
-              .having((e) => e.error, 'error', error),
-        );
+        expect(uncaughtError, equals(error));
       });
 
       test('unawaited onEach throws AssertionError', () async {
@@ -1269,11 +1265,7 @@ void main() {
         }, (error, stack) => uncaughtError = error);
 
         expect(states, equals(expectedStates));
-        expect(
-          uncaughtError,
-          isA<BlocUnhandledErrorException>()
-              .having((e) => e.error, 'error', error),
-        );
+        expect(uncaughtError, equals(error));
       });
     });
 
@@ -1321,13 +1313,7 @@ void main() {
             ..add(CounterEvent.decrement)
             ..close();
         }, (Object error, StackTrace stackTrace) {
-          expect(
-            (error as BlocUnhandledErrorException).toString(),
-            contains(
-              'Unhandled error Exception: fatal exception occurred '
-              'in Instance of \'CounterExceptionBloc\'.',
-            ),
-          );
+          expect(error.toString(), equals('Exception: fatal exception'));
           expect(stackTrace, isNotNull);
           expect(stackTrace, isNot(StackTrace.empty));
         });
@@ -1342,21 +1328,15 @@ void main() {
             onErrorCallback: (Object _, StackTrace __) {},
           )..addError(expectedError, StackTrace.current);
         }, (Object error, StackTrace stackTrace) {
-          expect(
-            (error as BlocUnhandledErrorException).toString(),
-            contains(
-              'Unhandled error Exception: fatal exception occurred '
-              'in Instance of \'OnExceptionBloc\'.',
-            ),
-          );
+          expect(error, equals(expectedError));
           expect(stackTrace, isNotNull);
           expect(stackTrace, isNot(StackTrace.empty));
         });
       });
 
       test('triggers onError from on<E>', () {
+        final exception = Exception('fatal exception');
         runZonedGuarded(() {
-          final exception = Exception('fatal exception');
           Object? expectedError;
           StackTrace? expectedStacktrace;
 
@@ -1381,33 +1361,20 @@ void main() {
             ..add(CounterEvent.increment)
             ..close();
         }, (Object error, StackTrace stackTrace) {
-          expect(
-            (error as BlocUnhandledErrorException).toString(),
-            contains(
-              'Unhandled error Exception: fatal exception occurred '
-              'in Instance of \'OnExceptionBloc\'.',
-            ),
-          );
+          expect(error, equals(exception));
           expect(stackTrace, isNotNull);
           expect(stackTrace, isNot(StackTrace.empty));
         });
       });
 
       test('triggers onError from onEvent', () {
+        final exception = Exception('fatal exception');
         runZonedGuarded(() {
-          final exception = Exception('fatal exception');
-
           OnEventErrorBloc(exception: exception)
             ..add(CounterEvent.increment)
             ..close();
         }, (Object error, StackTrace stackTrace) {
-          expect(
-            (error as BlocUnhandledErrorException).toString(),
-            contains(
-              'Unhandled error Exception: fatal exception occurred '
-              'in Instance of \'OnEventErrorBloc\'.',
-            ),
-          );
+          expect(error, equals(exception));
           expect(stackTrace, isNotNull);
           expect(stackTrace, isNot(StackTrace.empty));
         });
