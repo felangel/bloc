@@ -24,6 +24,14 @@ Si desea un control detallado sobre cuándo se llama a la función builder, pued
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_condition.dart.md ':include')
 
+### BlocSelector
+
+**BlocSelector** es un widget de Flutter que es análogo a `BlocBuilder` pero permite a los desarrolladores filtrar actualizaciones seleccionando un nuevo valor basado en el estado actual del bloc. Si el valor seleccionado no cambia, se previenen construcciones innecesarias. El valor seleccionado debe ser inmutable para que `BlocSelector` determine precisamente si `builder` debe ser llamado de nuevo.
+
+Si el parámetro del `bloc` es omitido, `BlocSelector` lo buscará automáticamente usando `BlocProvider` y el `BuildContext` actual.
+
+[bloc_selector.dart](../_snippets/flutter_bloc_core_concepts/bloc_selector.dart.md ':include')
+
 ### BlocProvider
 
 **BlocProvider** es un widget de Flutter que proporciona un bloc a sus hijos a través de `BlocProvider.of<T>(context)`. Se utiliza como un widget de inyección de dependencia (DI en inglés) para que se pueda proporcionar una sola instancia de un bloc a múltiples widgets dentro de un subárbol.
