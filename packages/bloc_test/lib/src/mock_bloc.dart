@@ -58,8 +58,8 @@ class MockCubit<S> extends _MockBlocBase<S> implements Cubit<S> {}
 
 class _MockBlocBase<S> extends Mock implements BlocBase<S> {
   _MockBlocBase() {
-    registerFallbackValue<void Function(S)>((S _) {});
-    registerFallbackValue<void Function()>(() {});
+    registerFallbackValue((S _) {});
+    registerFallbackValue(() {});
     when(
       // ignore: deprecated_member_use
       () => listen(
