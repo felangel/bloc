@@ -1,3 +1,10 @@
+# 8.0.0-dev.4
+
+- **BREAKING**: feat: improve error handling/reporting
+  - `BlocUnhandledErrorException` is removed
+  - Uncaught exceptions are always reported to `onError` and rethrown
+  - `addError` reports error to `onError` but does not propagate as an uncaught exception
+
 # 8.0.0-dev.3
 
 - **BREAKING**: feat: restrict scope of `emit` in `Bloc` and `Cubit`
