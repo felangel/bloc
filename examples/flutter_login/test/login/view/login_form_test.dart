@@ -18,8 +18,8 @@ void main() {
     late LoginBloc loginBloc;
 
     setUpAll(() {
-      registerFallbackValue<LoginEvent>(FakeLoginEvent());
-      registerFallbackValue<LoginState>(FakeLoginState());
+      registerFallbackValue(FakeLoginEvent());
+      registerFallbackValue(FakeLoginState());
     });
 
     setUp(() {

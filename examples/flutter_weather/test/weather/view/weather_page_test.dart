@@ -27,8 +27,8 @@ class MockWeatherCubit extends MockCubit<WeatherState> implements WeatherCubit {
 void main() {
   setUpAll(() {
     initHydratedBloc();
-    registerFallbackValue<Color>(FakeColor());
-    registerFallbackValue<WeatherState>(FakeWeatherState());
+    registerFallbackValue(FakeColor());
+    registerFallbackValue(FakeWeatherState());
   });
 
   group('WeatherPage', () {
