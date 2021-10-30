@@ -1380,10 +1380,13 @@ void main() {
         });
       });
 
-      test('does not trigger onError from add', () {
+      test(
+          'add throws StateError and triggers onError '
+          'when bloc is closed', () {
+        Object? capturedError;
+        StackTrace? capturedStacktrace;
+        var didThrow = false;
         runZonedGuarded(() {
-          Object? capturedError;
-          StackTrace? capturedStacktrace;
           final counterBloc = CounterBloc(
             onErrorCallback: (error, stackTrace) {
               capturedError = error;
@@ -1394,17 +1397,27 @@ void main() {
           expectLater(
             counterBloc.stream,
             emitsInOrder(<Matcher>[emitsDone]),
-          ).then((dynamic _) {
-            expect(capturedError, isNull);
-            expect(capturedStacktrace, isNull);
-          });
+          );
 
           counterBloc
             ..close()
             ..add(CounterEvent.increment);
-        }, (Object _, StackTrace __) {
-          fail('should not throw when add is called after bloc is closed');
+        }, (Object error, StackTrace stackTrace) {
+          didThrow = true;
+          expect(error, equals(capturedError));
+          expect(stackTrace, equals(capturedStacktrace));
         });
+
+        expect(didThrow, isTrue);
+        expect(
+          capturedError,
+          isA<StateError>().having(
+            (e) => e.message,
+            'message',
+            'Cannot add new events after calling close',
+          ),
+        );
+        expect(capturedStacktrace, isNotNull);
       });
     });
 
