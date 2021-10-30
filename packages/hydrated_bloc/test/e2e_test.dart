@@ -307,15 +307,13 @@ void main() {
         expect(cubit.state, isNull);
         expect(
           () => cubit.setCyclic(cycle1),
-          throwsA(isA<BlocUnhandledErrorException>().having(
-            (dynamic e) => e.error,
-            'inner error of cubit error',
+          throwsA(
             isA<HydratedUnsupportedError>().having(
               (dynamic e) => e.cause,
               'cycle2 -> cycle1 -> cycle2 ->',
               isA<HydratedCyclicError>(),
             ),
-          )),
+          ),
         );
       });
     });
@@ -326,15 +324,13 @@ void main() {
         expect(cubit.state, isNull);
         expect(
           cubit.setBad,
-          throwsA(isA<BlocUnhandledErrorException>().having(
-            (dynamic e) => e.error,
-            'inner error of cubit error',
+          throwsA(
             isA<HydratedUnsupportedError>().having(
               (dynamic e) => e.cause,
               'Object has no `toJson`',
               isA<NoSuchMethodError>(),
             ),
-          )),
+          ),
         );
       });
 
@@ -343,11 +339,7 @@ void main() {
         expect(cubit.state, isNull);
         expect(
           () => cubit.setBad(VeryBadObject()),
-          throwsA(isA<BlocUnhandledErrorException>().having(
-            (dynamic e) => e.error,
-            'inner error of cubit error',
-            isA<HydratedUnsupportedError>(),
-          )),
+          throwsA(isA<HydratedUnsupportedError>()),
         );
       });
     });
