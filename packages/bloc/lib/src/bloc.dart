@@ -247,11 +247,12 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
 
   /// Notifies the [Bloc] of a new [event] which triggers
   /// all corresponding [EventHandler] instances.
-  /// If [close] has already been called, any subsequent calls to [add] will
-  /// be ignored and will not result in any subsequent state changes.
   ///
   /// * A [StateError] will be thrown if there is no event handler
   /// registered for the incoming [event].
+  ///
+  /// * A [StateError] will be thrown if the bloc is closed and the
+  /// [event] will not be processed.
   void add(Event event) {
     assert(() {
       final handlerExists = _handlers.any((handler) => handler.isType(event));
@@ -264,7 +265,6 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
       }
       return true;
     }());
-    if (_eventController.isClosed) return;
     try {
       onEvent(event);
       _eventController.add(event);
