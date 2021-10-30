@@ -233,11 +233,7 @@ void main() {
             fail('should throw');
           },
           (error, _) {
-            expect(
-              (error as BlocUnhandledErrorException).error.toString(),
-              'Exception: oops',
-            );
-            expect(error.stackTrace, isNotNull);
+            expect(error.toString(), 'Exception: oops');
           },
         );
       });

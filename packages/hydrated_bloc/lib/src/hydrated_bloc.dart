@@ -162,6 +162,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
       }
     } catch (error, stackTrace) {
       onError(error, stackTrace);
+      rethrow;
     }
     _state = state;
   }

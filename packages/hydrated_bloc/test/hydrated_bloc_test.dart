@@ -253,11 +253,7 @@ void main() {
           // ignore: invalid_use_of_protected_member
           verify(() => bloc.onError(expectedError, any())).called(2);
         }, (error, _) {
-          expect(
-            (error as BlocUnhandledErrorException).error.toString(),
-            'Exception: oops',
-          );
-          expect((error).stackTrace, isNotNull);
+          expect(error.toString(), 'Exception: oops');
         });
       });
 
@@ -426,10 +422,9 @@ void main() {
           expect(lastError, isA<HydratedUnsupportedError>());
           expect(lastStackTrace, isNotNull);
           expect(
-            (error as BlocUnhandledErrorException).error.toString(),
+            error.toString(),
             '''Converting object to an encodable object failed: Object''',
           );
-          expect(error.stackTrace, isNotNull);
         }));
       });
 
