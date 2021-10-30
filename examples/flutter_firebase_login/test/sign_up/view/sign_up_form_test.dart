@@ -36,7 +36,7 @@ void main() {
     late SignUpCubit signUpCubit;
 
     setUpAll(() {
-      registerFallbackValue<SignUpState>(FakeSignUpState());
+      registerFallbackValue(FakeSignUpState());
     });
 
     setUp(() {

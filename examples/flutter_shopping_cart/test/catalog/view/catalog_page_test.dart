@@ -19,10 +19,10 @@ void main() {
   late CatalogBloc catalogBloc;
 
   setUpAll(() {
-    registerFallbackValue<CartState>(FakeCartState());
-    registerFallbackValue<CartEvent>(FakeCartEvent());
-    registerFallbackValue<CatalogState>(FakeCatalogState());
-    registerFallbackValue<CatalogEvent>(FakeCatalogEvent());
+    registerFallbackValue(FakeCartState());
+    registerFallbackValue(FakeCartEvent());
+    registerFallbackValue(FakeCatalogState());
+    registerFallbackValue(FakeCatalogEvent());
   });
 
   setUp(() {

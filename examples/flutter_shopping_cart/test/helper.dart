@@ -25,10 +25,10 @@ extension PumpApp on WidgetTester {
     CatalogBloc? catalogBloc,
     required Widget child,
   }) {
-    registerFallbackValue<CartState>(FakeCartState());
-    registerFallbackValue<CartEvent>(FakeCartEvent());
-    registerFallbackValue<CatalogState>(FakeCatalogState());
-    registerFallbackValue<CatalogEvent>(FakeCatalogEvent());
+    registerFallbackValue(FakeCartState());
+    registerFallbackValue(FakeCartEvent());
+    registerFallbackValue(FakeCatalogState());
+    registerFallbackValue(FakeCatalogEvent());
 
     return pumpWidget(
       MaterialApp(

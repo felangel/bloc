@@ -19,7 +19,7 @@ class MockWeatherRepository extends Mock implements WeatherRepository {}
 void main() {
   setUpAll(() {
     initHydratedBloc();
-    registerFallbackValue<Color>(FakeColor());
+    registerFallbackValue(FakeColor());
   });
 
   group('WeatherApp', () {

@@ -17,7 +17,7 @@ void main() {
     late WeatherCubit weatherCubit;
 
     setUpAll(() {
-      registerFallbackValue<WeatherState>(FakeWeatherState());
+      registerFallbackValue(FakeWeatherState());
     });
 
     setUp(() {

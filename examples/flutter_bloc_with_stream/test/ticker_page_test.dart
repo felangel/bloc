@@ -29,8 +29,8 @@ void main() {
   late TickerBloc tickerBloc;
 
   setUpAll(() {
-    registerFallbackValue<TickerEvent>(FakeTickerEvent());
-    registerFallbackValue<TickerState>(FakeTickerState());
+    registerFallbackValue(FakeTickerEvent());
+    registerFallbackValue(FakeTickerState());
   });
 
   setUp(() {

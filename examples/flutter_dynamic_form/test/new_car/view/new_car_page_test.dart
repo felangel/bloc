@@ -56,8 +56,8 @@ void main() {
   final mockYear = mockYears[0];
 
   setUp(() {
-    registerFallbackValue<NewCarState>(FakeNewCarState());
-    registerFallbackValue<NewCarEvent>(FakeNewCarEvent());
+    registerFallbackValue(FakeNewCarState());
+    registerFallbackValue(FakeNewCarEvent());
     newCarRepository = MockNewCarRepository();
     newCarBloc = MockNewCarBloc();
   });
