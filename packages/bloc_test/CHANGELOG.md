@@ -1,3 +1,7 @@
+# 8.4.0
+
+- feat: upgrade to `mocktail ^0.2.0`
+
 # 8.3.0
 
 - feat: accept optional tags in `blocTest`
