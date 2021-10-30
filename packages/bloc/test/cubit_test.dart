@@ -133,16 +133,30 @@ void main() {
     });
 
     group('emit', () {
-      test('does nothing if cubit is closed (indirect)', () {
-        final cubit = CounterCubit();
-        expectLater(
-          cubit.stream,
-          emitsInOrder(<Matcher>[equals(1), emitsDone]),
-        );
-        cubit
-          ..increment()
-          ..close()
-          ..increment();
+      test('throws StateError if cubit is closed', () {
+        var didThrow = false;
+        runZonedGuarded(() {
+          final cubit = CounterCubit();
+          expectLater(
+            cubit.stream,
+            emitsInOrder(<Matcher>[equals(1), emitsDone]),
+          );
+          cubit
+            ..increment()
+            ..close()
+            ..increment();
+        }, (error, _) {
+          didThrow = true;
+          expect(
+            error,
+            isA<StateError>().having(
+              (e) => e.message,
+              'message',
+              'Cannot emit new states after calling close',
+            ),
+          );
+        });
+        expect(didThrow, isTrue);
       });
 
       test('emits states in the correct order', () async {
