@@ -1385,6 +1385,7 @@ void main() {
           'when bloc is closed', () {
         Object? capturedError;
         StackTrace? capturedStacktrace;
+        var didThrow = false;
         runZonedGuarded(() {
           final counterBloc = CounterBloc(
             onErrorCallback: (error, stackTrace) {
@@ -1401,10 +1402,13 @@ void main() {
           counterBloc
             ..close()
             ..add(CounterEvent.increment);
-        }, (Object error, StackTrace __) {
+        }, (Object error, StackTrace stackTrace) {
+          didThrow = true;
           expect(error, equals(capturedError));
+          expect(stackTrace, equals(capturedStacktrace));
         });
 
+        expect(didThrow, isTrue);
         expect(
           capturedError,
           isA<StateError>().having(
