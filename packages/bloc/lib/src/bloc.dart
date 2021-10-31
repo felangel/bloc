@@ -512,20 +512,29 @@ abstract class BlocBase<State> {
   bool get isClosed => _stateController.isClosed;
 
   /// Updates the [state] to the provided [state].
-  /// [emit] does nothing if the instance has been closed or if the
-  /// [state] being emitted is equal to the current [state].
+  /// [emit] does nothing if the [state] being emitted
+  /// is equal to the current [state].
   ///
   /// To allow for the possibility of notifying listeners of the initial state,
   /// emitting a state which is equal to the initial state is allowed as long
   /// as it is the first thing emitted by the instance.
+  ///
+  /// * Throws a [StateError] if the bloc is closed.
   @protected
   void emit(State state) {
-    if (_stateController.isClosed) return;
-    if (state == _state && _emitted) return;
-    onChange(Change<State>(currentState: this.state, nextState: state));
-    _state = state;
-    _stateController.add(_state);
-    _emitted = true;
+    try {
+      if (isClosed) {
+        throw StateError('Cannot emit new states after calling close');
+      }
+      if (state == _state && _emitted) return;
+      onChange(Change<State>(currentState: this.state, nextState: state));
+      _state = state;
+      _stateController.add(_state);
+      _emitted = true;
+    } catch (error, stackTrace) {
+      onError(error, stackTrace);
+      rethrow;
+    }
   }
 
   /// Called whenever a [change] occurs with the given [change].
