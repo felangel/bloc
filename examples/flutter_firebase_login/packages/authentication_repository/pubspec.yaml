@@ -9,6 +9,8 @@ environment:
 dependencies:
   cache:
     path: ../cache
+  crypto_api:
+    path: ../crypto_api
   equatable: ^2.0.3
   firebase_auth: ^3.0.2
   firebase_core: ^1.5.0
@@ -16,9 +18,8 @@ dependencies:
     sdk: flutter
   google_sign_in: ^5.0.7
   meta: ^1.3.0
-  very_good_analysis: ^2.3.0
   sign_in_with_apple: ^3.0.0
-  crypto: ^3.0.0
+  very_good_analysis: ^2.3.0
 
 dev_dependencies:
   flutter_test:

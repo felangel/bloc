@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:authentication_repository/src/crypto_api.dart';
 import 'package:cache/cache.dart';
+import 'package:crypto_api/crypto_api.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:meta/meta.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 /// {@template sign_up_with_email_and_password_failure}
 /// Thrown if during the sign up process if a failure occurs.
@@ -162,7 +162,7 @@ class AuthenticationRepository {
     CacheClient? cache,
     firebase_auth.FirebaseAuth? firebaseAuth,
     GoogleSignIn? googleSignIn,
-    CryptoApi? cryptoApi
+    CryptoApi? cryptoApi,
   })  : _cache = cache ?? CacheClient(),
         _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
         _googleSignIn = googleSignIn ?? GoogleSignIn.standard(),

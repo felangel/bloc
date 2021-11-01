@@ -89,10 +89,12 @@ void main() {
           ),
         );
         await tester.enterText(
-            find.byKey(confirmedPasswordInputKey), testConfirmedPassword);
-        verify(() =>
-                signUpCubit.confirmedPasswordChanged(testConfirmedPassword))
-            .called(1);
+          find.byKey(confirmedPasswordInputKey),
+          testConfirmedPassword,
+        );
+        verify(
+          () => signUpCubit.confirmedPasswordChanged(testConfirmedPassword),
+        ).called(1);
       });
 
       testWidgets('signUpFormSubmitted when sign up button is pressed',
