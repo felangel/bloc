@@ -25,8 +25,8 @@ void main() {
     late User user;
 
     setUpAll(() {
-      registerFallbackValue<AppEvent>(FakeAppEvent());
-      registerFallbackValue<AppState>(FakeAppState());
+      registerFallbackValue(FakeAppEvent());
+      registerFallbackValue(FakeAppState());
     });
 
     setUp(() {
@@ -55,8 +55,8 @@ void main() {
     late AppBloc appBloc;
 
     setUpAll(() {
-      registerFallbackValue<AppEvent>(FakeAppEvent());
-      registerFallbackValue<AppState>(FakeAppState());
+      registerFallbackValue(FakeAppEvent());
+      registerFallbackValue(FakeAppState());
     });
 
     setUp(() {

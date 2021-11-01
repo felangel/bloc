@@ -33,8 +33,8 @@ void main() {
   late PostBloc postBloc;
 
   setUpAll(() {
-    registerFallbackValue<PostState>(FakePostState());
-    registerFallbackValue<PostEvent>(FakePostEvent());
+    registerFallbackValue(FakePostState());
+    registerFallbackValue(FakePostEvent());
   });
 
   setUp(() {

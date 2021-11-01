@@ -26,8 +26,8 @@ void main() {
   late TimerBloc timerBloc;
 
   setUpAll(() {
-    registerFallbackValue<TimerState>(FakeTimerState());
-    registerFallbackValue<TimerEvent>(FakeTimerEvent());
+    registerFallbackValue(FakeTimerState());
+    registerFallbackValue(FakeTimerEvent());
   });
 
   setUp(() {

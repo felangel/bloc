@@ -19,7 +19,7 @@ void main() {
     late CounterBloc counterBloc;
 
     setUpAll(() {
-      registerFallbackValue<CounterEvent>(CounterEvent.increment);
+      registerFallbackValue(CounterEvent.increment);
     });
 
     setUp(() {

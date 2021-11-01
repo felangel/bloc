@@ -20,8 +20,8 @@ void main() {
   ];
 
   setUpAll(() {
-    registerFallbackValue<CartState>(FakeCartState());
-    registerFallbackValue<CartEvent>(FakeCartEvent());
+    registerFallbackValue(FakeCartState());
+    registerFallbackValue(FakeCartEvent());
   });
 
   setUp(() {
