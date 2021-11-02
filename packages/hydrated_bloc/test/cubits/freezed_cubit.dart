@@ -17,7 +17,7 @@ class FreezedCubit extends HydratedCubit<Tree?> {
 }
 
 @freezed
-abstract class Question with _$Question {
+class Question with _$Question {
   const factory Question({
     int? id,
     String? question,
@@ -28,7 +28,7 @@ abstract class Question with _$Question {
 }
 
 @freezed
-abstract class Tree with _$Tree {
+class Tree with _$Tree {
   const factory Tree({
     Question? question,
     Tree? left,

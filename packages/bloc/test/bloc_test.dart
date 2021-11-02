@@ -1380,10 +1380,13 @@ void main() {
         });
       });
 
-      test('does not trigger onError from add', () {
+      test(
+          'add throws StateError and triggers onError '
+          'when bloc is closed', () {
+        Object? capturedError;
+        StackTrace? capturedStacktrace;
+        var didThrow = false;
         runZonedGuarded(() {
-          Object? capturedError;
-          StackTrace? capturedStacktrace;
           final counterBloc = CounterBloc(
             onErrorCallback: (error, stackTrace) {
               capturedError = error;
@@ -1394,17 +1397,27 @@ void main() {
           expectLater(
             counterBloc.stream,
             emitsInOrder(<Matcher>[emitsDone]),
-          ).then((dynamic _) {
-            expect(capturedError, isNull);
-            expect(capturedStacktrace, isNull);
-          });
+          );
 
           counterBloc
             ..close()
             ..add(CounterEvent.increment);
-        }, (Object _, StackTrace __) {
-          fail('should not throw when add is called after bloc is closed');
+        }, (Object error, StackTrace stackTrace) {
+          didThrow = true;
+          expect(error, equals(capturedError));
+          expect(stackTrace, equals(capturedStacktrace));
         });
+
+        expect(didThrow, isTrue);
+        expect(
+          capturedError,
+          isA<StateError>().having(
+            (e) => e.message,
+            'message',
+            'Cannot add new events after calling close',
+          ),
+        );
+        expect(capturedStacktrace, isNotNull);
       });
     });
 
@@ -1499,6 +1512,38 @@ void main() {
         counterBloc.emit(42);
         expect(counterBloc.state, 42);
         await counterBloc.close();
+      });
+
+      test(
+          'throws StateError and triggers onError '
+          'when bloc is closed', () async {
+        Object? capturedError;
+        StackTrace? capturedStacktrace;
+
+        final states = <int>[];
+        final expectedStateError = isA<StateError>().having(
+          (e) => e.message,
+          'message',
+          'Cannot emit new states after calling close',
+        );
+
+        final counterBloc = CounterBloc(
+          onErrorCallback: (error, stackTrace) {
+            capturedError = error;
+            capturedStacktrace = stackTrace;
+          },
+        )..stream.listen(states.add);
+
+        await counterBloc.close();
+
+        expect(counterBloc.isClosed, isTrue);
+        expect(counterBloc.state, equals(0));
+        expect(states, isEmpty);
+        expect(() => counterBloc.emit(1), throwsA(expectedStateError));
+        expect(counterBloc.state, equals(0));
+        expect(states, isEmpty);
+        expect(capturedError, expectedStateError);
+        expect(capturedStacktrace, isNotNull);
       });
     });
 
