@@ -184,18 +184,20 @@ class CounterCubit extends Cubit<int> {
 
 void main() {
   group('BlocProvider', () {
-    testWidgets('lazily loads cubits by default', (tester) async {
-      var createCalled = false;
-      await tester.pumpWidget(
-        BlocProvider(
-          create: (_) {
-            createCalled = true;
-            return CounterCubit();
-          },
-          child: const SizedBox(),
-        ),
+    testWidgets('.create lazy is true by default', (tester) async {
+      final blocProvider = BlocProvider(
+        create: (_) => CounterCubit(),
+        child: const SizedBox(),
       );
-      expect(createCalled, isFalse);
+      expect(blocProvider.lazy, isTrue);
+    });
+
+    testWidgets('.value lazy is true', (tester) async {
+      final blocProvider = BlocProvider.value(
+        value: CounterCubit(),
+        child: const SizedBox(),
+      );
+      expect(blocProvider.lazy, isTrue);
     });
 
     testWidgets('lazily loads cubits by default', (tester) async {
