@@ -37,11 +37,11 @@ mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 class BlocProvider<T extends BlocBase<Object?>>
     extends SingleChildStatelessWidget with BlocProviderSingleChildWidget {
   /// {@macro bloc_provider}
-  BlocProvider({
+  const BlocProvider({
     Key? key,
     required Create<T> create,
     this.child,
-    this.lazy,
+    this.lazy = true,
   })  : _create = create,
         _value = null,
         super(key: key, child: child);
@@ -63,13 +63,13 @@ class BlocProvider<T extends BlocBase<Object?>>
   ///   child: ScreenA(),
   /// );
   /// ```
-  BlocProvider.value({
+  const BlocProvider.value({
     Key? key,
     required T value,
     this.child,
   })  : _value = value,
         _create = null,
-        lazy = null,
+        lazy = true,
         super(key: key, child: child);
 
   /// Widget which will have access to the [Bloc] or [Cubit].
@@ -77,7 +77,7 @@ class BlocProvider<T extends BlocBase<Object?>>
 
   /// Whether the [Bloc] or [Cubit] should be created lazily.
   /// Defaults to `true`.
-  final bool? lazy;
+  final bool lazy;
 
   final Create<T>? _create;
 
