@@ -69,7 +69,7 @@ void main() {
       final expected = throwsA(
         isA<StateError>().having((e) => e.message, 'message', expectedMessage),
       );
-      expect(() => MissingHandlerBloc()..add(TestEventA()), expected);
+      expect(() => MissingHandlerBloc().add(TestEventA()), expected);
     });
 
     test('invokes all on<T> when event E is added where E is T', () async {
