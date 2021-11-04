@@ -180,6 +180,10 @@ class _BlocListenerBaseState<B extends BlocBase<S>, S>
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
+    assert(
+      child != null,
+      '''${widget.runtimeType} used outside of MultiBlocListener must specify a child''',
+    );
     if (widget.bloc == null) {
       // Trigger a rebuild if the bloc reference has changed.
       // See https://github.com/felangel/bloc/issues/2127.
