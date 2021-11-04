@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:diff_match_patch/diff_match_patch.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart' as test;
 
@@ -207,7 +208,14 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       if (expect != null) {
         final dynamic expected = expect();
         shallowEquality = '$states' == '$expected';
-        test.expect(states, test.wrapMatcher(expected));
+        try {
+          test.expect(states, test.wrapMatcher(expected));
+        } on test.TestFailure catch (e) {
+          final diff = _stringDiff(expected: expected, actual: states);
+          final message = '${e.message}\n$diff';
+          // ignore: only_throw_errors
+          throw test.TestFailure(message);
+        }
       }
       await subscription.cancel();
       await verify?.call(bloc);
@@ -230,4 +238,36 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
     },
   );
   if (errors != null) test.expect(unhandledErrors, test.wrapMatcher(errors()));
+}
+
+String _stringDiff({required dynamic expected, required dynamic actual}) {
+  final buffer = StringBuffer();
+  final differences = diff(expected.toString(), actual.toString());
+  buffer
+    ..writeln('${"=" * 4} diff ${"=" * 40}')
+    ..writeln('')
+    ..writeln('${_diffToString(differences: differences)}')
+    ..writeln('')
+    ..writeln('${"=" * 4} end diff ${"=" * 36}');
+  return buffer.toString();
+}
+
+String _diffToString({required List<Diff> differences}) {
+  String identical(String str) => '\u001b[90m$str\u001B[0m';
+  String deletion(String str) => '\u001b[31m[-$str-]\u001B[0m';
+  String insertion(String str) => '\u001b[32m{+$str+}\u001B[0m';
+
+  final buffer = StringBuffer();
+  for (final difference in differences) {
+    if (difference.operation == DIFF_EQUAL) {
+      buffer.write(identical(difference.text));
+    }
+    if (difference.operation == DIFF_DELETE) {
+      buffer.write(deletion(difference.text));
+    }
+    if (difference.operation == DIFF_INSERT) {
+      buffer.write(insertion(difference.text));
+    }
+  }
+  return buffer.toString();
 }
