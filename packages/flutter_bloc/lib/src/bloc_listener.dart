@@ -185,7 +185,7 @@ class _BlocListenerBaseState<B extends BlocBase<S>, S>
       // See https://github.com/felangel/bloc/issues/2127.
       context.select<B, bool>((bloc) => identical(_bloc, bloc));
     }
-    return child!;
+    return child ?? const SizedBox.shrink();
   }
 
   @override
