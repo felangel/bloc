@@ -100,10 +100,16 @@ void main() {
       );
 
       test('fails immediately when expectation is incorrect', () async {
-        const expectedError = '''Expected: [2]
-  Actual: [1]
-   Which: at location [0] is <1> instead of <2>
-''';
+        const expectedError = 'Expected: [2]\n'
+            '  Actual: [1]\n'
+            '   Which: at location [0] is <1> instead of <2>\n'
+            '\n'
+            '==== diff ========================================\n'
+            '\n'
+            '''\x1B[90m[\x1B[0m\x1B[31m[-2-]\x1B[0m\x1B[32m{+1+}\x1B[0m\x1B[90m]\x1B[0m\n'''
+            '\n'
+            '==== end diff ====================================\n'
+            '';
         late Object actualError;
         final completer = Completer<void>();
         await runZonedGuarded(() async {

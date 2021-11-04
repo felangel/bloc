@@ -211,6 +211,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
         try {
           test.expect(states, test.wrapMatcher(expected));
         } on test.TestFailure catch (e) {
+          if (shallowEquality) rethrow;
           final diff = _stringDiff(expected: expected, actual: states);
           final message = '${e.message}\n$diff';
           // ignore: only_throw_errors
