@@ -212,7 +212,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
           test.expect(states, test.wrapMatcher(expected));
         } on test.TestFailure catch (e) {
           if (shallowEquality) rethrow;
-          final diff = _stringDiff(expected: expected, actual: states);
+          final diff = _diff(expected: expected, actual: states);
           final message = '${e.message}\n$diff';
           // ignore: only_throw_errors
           throw test.TestFailure(message);
@@ -241,7 +241,7 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
   if (errors != null) test.expect(unhandledErrors, test.wrapMatcher(errors()));
 }
 
-String _stringDiff({required dynamic expected, required dynamic actual}) {
+String _diff({required dynamic expected, required dynamic actual}) {
   final buffer = StringBuffer();
   final differences = diff(expected.toString(), actual.toString());
   buffer
