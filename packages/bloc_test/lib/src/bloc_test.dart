@@ -247,28 +247,30 @@ String _stringDiff({required dynamic expected, required dynamic actual}) {
   buffer
     ..writeln('${"=" * 4} diff ${"=" * 40}')
     ..writeln('')
-    ..writeln('${_diffToString(differences: differences)}')
+    ..writeln(differences.toPrettyString())
     ..writeln('')
     ..writeln('${"=" * 4} end diff ${"=" * 36}');
   return buffer.toString();
 }
 
-String _diffToString({required List<Diff> differences}) {
-  String identical(String str) => '\u001b[90m$str\u001B[0m';
-  String deletion(String str) => '\u001b[31m[-$str-]\u001B[0m';
-  String insertion(String str) => '\u001b[32m{+$str+}\u001B[0m';
+extension on List<Diff> {
+  String toPrettyString() {
+    String identical(String str) => '\u001b[90m$str\u001B[0m';
+    String deletion(String str) => '\u001b[31m[-$str-]\u001B[0m';
+    String insertion(String str) => '\u001b[32m{+$str+}\u001B[0m';
 
-  final buffer = StringBuffer();
-  for (final difference in differences) {
-    if (difference.operation == DIFF_EQUAL) {
-      buffer.write(identical(difference.text));
+    final buffer = StringBuffer();
+    for (final difference in this) {
+      if (difference.operation == DIFF_EQUAL) {
+        buffer.write(identical(difference.text));
+      }
+      if (difference.operation == DIFF_DELETE) {
+        buffer.write(deletion(difference.text));
+      }
+      if (difference.operation == DIFF_INSERT) {
+        buffer.write(insertion(difference.text));
+      }
     }
-    if (difference.operation == DIFF_DELETE) {
-      buffer.write(deletion(difference.text));
-    }
-    if (difference.operation == DIFF_INSERT) {
-      buffer.write(insertion(difference.text));
-    }
+    return buffer.toString();
   }
-  return buffer.toString();
 }
