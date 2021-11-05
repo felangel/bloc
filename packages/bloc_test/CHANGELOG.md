@@ -1,3 +1,7 @@
+# 8.5.0
+
+- feat: prettier diffing when using `blocTest` and `expect` does not match emitted states ([#1783](https://github.com/felangel/bloc/issues/1783))
+
 # 8.4.0
 
 - feat: upgrade to `mocktail ^0.2.0`
