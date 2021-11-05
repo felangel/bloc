@@ -184,7 +184,31 @@ class CounterCubit extends Cubit<int> {
 
 void main() {
   group('BlocProvider', () {
-    testWidgets('.create lazy is true by default', (tester) async {
+    testWidgets(
+        'throws AssertionError '
+        'when child is not specified', (tester) async {
+      const expected =
+          '''BlocProvider<CounterCubit> used outside of MultiBlocProvider must specify a child''';
+      await tester.pumpWidget(BlocProvider(create: (_) => CounterCubit()));
+      expect(
+        tester.takeException(),
+        isA<AssertionError>().having((e) => e.message, 'message', expected),
+      );
+    });
+
+    testWidgets(
+        '.value throws AssertionError '
+        'when child is not specified', (tester) async {
+      const expected =
+          '''BlocProvider<CounterCubit> used outside of MultiBlocProvider must specify a child''';
+      await tester.pumpWidget(BlocProvider.value(value: CounterCubit()));
+      expect(
+        tester.takeException(),
+        isA<AssertionError>().having((e) => e.message, 'message', expected),
+      );
+    });
+
+    testWidgets('lazy is true by default', (tester) async {
       final blocProvider = BlocProvider(
         create: (_) => CounterCubit(),
         child: const SizedBox(),
