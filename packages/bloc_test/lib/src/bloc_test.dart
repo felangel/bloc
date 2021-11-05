@@ -261,14 +261,16 @@ extension on List<Diff> {
 
     final buffer = StringBuffer();
     for (final difference in this) {
-      if (difference.operation == DIFF_EQUAL) {
-        buffer.write(identical(difference.text));
-      }
-      if (difference.operation == DIFF_DELETE) {
-        buffer.write(deletion(difference.text));
-      }
-      if (difference.operation == DIFF_INSERT) {
-        buffer.write(insertion(difference.text));
+      switch (difference.operation) {
+        case DIFF_EQUAL:
+          buffer.write(identical(difference.text));
+          break;
+        case DIFF_DELETE:
+          buffer.write(deletion(difference.text));
+          break;
+        case DIFF_INSERT:
+          buffer.write(insertion(difference.text));
+          break;
       }
     }
     return buffer.toString();
