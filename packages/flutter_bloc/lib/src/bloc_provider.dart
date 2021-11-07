@@ -115,6 +115,10 @@ class BlocProvider<T extends BlocBase<Object?>>
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
+    assert(
+      child != null,
+      '$runtimeType used outside of MultiBlocProvider must specify a child',
+    );
     final value = _value;
     return value != null
         ? InheritedProvider<T>.value(

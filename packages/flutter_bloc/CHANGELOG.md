@@ -1,3 +1,7 @@
+# 7.3.3
+
+- fix: add missing child assertion to `BlocListener` and `BlocProvider` ([#2924](https://github.com/felangel/bloc/pull/2924))
+
 # 7.3.2
 
 - fix: `BlocProvider` explicitly default `lazy` to `true` to support `avoid_redundant_argument_values` ([#2917](https://github.com/felangel/bloc/pull/2917))
