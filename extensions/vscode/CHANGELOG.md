@@ -1,3 +1,11 @@
+# 6.1.0
+
+- feat: update to latest packages
+  - bloc -> ^7.2.1
+  - flutter_bloc -> ^7.3.3
+  - bloc_test -> ^8.5.0
+- fix:(vscode): escape $ in "wrap with" and "convert to"
+
 # 6.0.1
 
 - chore: remove unnecessary abstract keyword from freezed template
