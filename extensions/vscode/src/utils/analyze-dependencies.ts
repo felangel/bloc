@@ -42,13 +42,13 @@ export async function analyzeDependencies() {
     },
     {
       name: "bloc",
-      version: "^7.2.0",
+      version: "^7.2.1",
       actions: [openBlocMigrationGuide],
     },
 
     {
       name: "flutter_bloc",
-      version: "^7.3.0",
+      version: "^7.3.3",
       actions: [openBlocMigrationGuide],
     },
     {
@@ -81,7 +81,7 @@ export async function analyzeDependencies() {
   const devDependenciesToAnalyze = [
     {
       name: "bloc_test",
-      version: "^8.2.0",
+      version: "^8.5.0",
       actions: [openBlocMigrationGuide],
     },
   ];
