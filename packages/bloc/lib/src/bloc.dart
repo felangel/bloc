@@ -220,26 +220,6 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// {@macro bloc}
   Bloc(State initialState) : super(initialState);
 
-  /// The current [BlocObserver] instance.
-  static BlocObserver observer = BlocObserver();
-
-  /// The default [EventTransformer] used for all event handlers.
-  /// By default all events are processed concurrently.
-  ///
-  /// If a custom transformer is specified for a particular event handler,
-  /// it will take precendence over the global transformer.
-  ///
-  /// See also:
-  ///
-  /// * [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
-  /// opinionated set of event transformers.
-  ///
-  static EventTransformer<dynamic> transformer = (events, mapper) {
-    return events
-        .map(mapper)
-        .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
-  };
-
   final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<dynamic>>[];
   final _handlers = <_Handler>[];
@@ -296,7 +276,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   @mustCallSuper
   void onEvent(Event event) {
     // ignore: invalid_use_of_protected_member
-    observer.onEvent(this, event);
+    BlocOverrides.current.blocObserver.onEvent(this, event);
   }
 
   /// {@template emit}
@@ -364,7 +344,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
       return true;
     }());
 
-    final _transformer = transformer ?? Bloc.transformer;
+    final _transformer = transformer ?? BlocOverrides.current.eventTransformer;
     final subscription = _transformer(
       _eventController.stream.where((event) => event is E).cast<E>(),
       (dynamic event) {
@@ -436,7 +416,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   @mustCallSuper
   void onTransition(Transition<Event, State> transition) {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onTransition(this, transition);
+    BlocOverrides.current.blocObserver.onTransition(this, transition);
   }
 
   /// Closes the `event` and `state` `Streams`.
@@ -487,7 +467,7 @@ abstract class BlocBase<State> {
   /// {@macro bloc_stream}
   BlocBase(this._state) {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onCreate(this);
+    BlocOverrides.current.blocObserver.onCreate(this);
   }
 
   StreamController<State>? __stateController;
@@ -560,7 +540,7 @@ abstract class BlocBase<State> {
   @mustCallSuper
   void onChange(Change<State> change) {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onChange(this, change);
+    BlocOverrides.current.blocObserver.onChange(this, change);
   }
 
   /// Reports an [error] which triggers [onError] with an optional [StackTrace].
@@ -586,7 +566,7 @@ abstract class BlocBase<State> {
   @mustCallSuper
   void onError(Object error, StackTrace stackTrace) {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onError(this, error, stackTrace);
+    BlocOverrides.current.blocObserver.onError(this, error, stackTrace);
   }
 
   /// Closes the instance.
@@ -595,52 +575,7 @@ abstract class BlocBase<State> {
   @mustCallSuper
   Future<void> close() async {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onClose(this);
+    BlocOverrides.current.blocObserver.onClose(this);
     await _stateController.close();
-  }
-}
-
-class _FlatMapStreamTransformer<T> extends StreamTransformerBase<Stream<T>, T> {
-  const _FlatMapStreamTransformer();
-
-  @override
-  Stream<T> bind(Stream<Stream<T>> stream) {
-    final controller = StreamController<T>.broadcast(sync: true);
-
-    controller.onListen = () {
-      final subscriptions = <StreamSubscription<dynamic>>[];
-
-      final outerSubscription = stream.listen(
-        (inner) {
-          final subscription = inner.listen(
-            controller.add,
-            onError: controller.addError,
-          );
-
-          subscription.onDone(() {
-            subscriptions.remove(subscription);
-            if (subscriptions.isEmpty) controller.close();
-          });
-
-          subscriptions.add(subscription);
-        },
-        onError: controller.addError,
-      );
-
-      outerSubscription.onDone(() {
-        subscriptions.remove(outerSubscription);
-        if (subscriptions.isEmpty) controller.close();
-      });
-
-      subscriptions.add(outerSubscription);
-
-      controller.onCancel = () {
-        if (subscriptions.isEmpty) return null;
-        final cancels = [for (final s in subscriptions) s.cancel()];
-        return Future.wait(cancels).then((_) {});
-      };
-    };
-
-    return controller.stream;
   }
 }
