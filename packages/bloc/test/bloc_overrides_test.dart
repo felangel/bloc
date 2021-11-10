@@ -72,6 +72,8 @@ void main() {
         final rootBlocObserver = FakeBlocObserver();
         BlocOverrides.runZoned(() {
           final nestedBlocObserver = FakeBlocObserver();
+          final overrides = BlocOverrides.current;
+          expect(overrides!.blocObserver, equals(rootBlocObserver));
           BlocOverrides.runZoned(() {
             final overrides = BlocOverrides.current;
             expect(overrides!.blocObserver, equals(nestedBlocObserver));
@@ -89,6 +91,8 @@ void main() {
           final nestedEventTransformer = (Stream events, EventMapper mapper) {
             return events.asyncExpand<dynamic>(mapper);
           };
+          final overrides = BlocOverrides.current;
+          expect(overrides!.eventTransformer, equals(rootEventTransformer));
           BlocOverrides.runZoned(() {
             final overrides = BlocOverrides.current;
             expect(overrides!.eventTransformer, equals(nestedEventTransformer));
