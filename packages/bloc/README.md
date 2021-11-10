@@ -166,8 +166,9 @@ class MyBlocObserver extends BlocObserver {
 
 ```dart
 void main() {
-  Bloc.observer = MyBlocObserver();
-  // Use cubits...
+  BlocOverrides.runZoned(() {
+    // Use cubits...
+  }, blocObserver: MyBlocObserver());
 }
 ```
 
@@ -317,8 +318,9 @@ class MyBlocObserver extends BlocObserver {
 
 ```dart
 void main() {
-  Bloc.observer = MyBlocObserver();
-  // Use blocs...
+  BlocOverrides.runZoned(() {
+    // Use blocs...
+  }, blocObserver: MyBlocObserver());
 }
 ```
 

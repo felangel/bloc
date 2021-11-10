@@ -41,13 +41,10 @@ class SimpleBlocObserver extends BlocObserver {
 }
 
 void main() {
-  BlocOverrides.runZoned(
-    () {
-      cubitMain();
-      blocMain();
-    },
-    blocObserver: SimpleBlocObserver(),
-  );
+  BlocOverrides.runZoned(() {
+    cubitMain();
+    blocMain();
+  }, blocObserver: SimpleBlocObserver());
 }
 
 void cubitMain() {
