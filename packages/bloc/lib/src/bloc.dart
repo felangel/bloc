@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 
 const _asyncRunZoned = runZoned;
 
-/// {@template bloc_overrides}
 /// This class facilitates overriding [BlocObserver] and [EventTransformer].
 /// It should be extended by another class in client code with overrides
 /// that construct a custom implementation. The implementation in this class
@@ -27,11 +26,7 @@ const _asyncRunZoned = runZoned;
 ///   }, blocObserver: MyBlocObserver());
 /// }
 /// ```
-/// {@endtemplate}
 abstract class BlocOverrides {
-  /// {@macro bloc_overrides}
-  const BlocOverrides();
-
   static final _token = Object();
 
   /// Returns the current [BlocOverrides] instance.
