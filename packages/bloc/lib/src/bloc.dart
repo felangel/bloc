@@ -83,14 +83,24 @@ class _BlocOverridesScope extends BlocOverrides {
 
   @override
   BlocObserver get blocObserver {
-    return _blocObserver ?? _previous?.blocObserver ?? super.blocObserver;
+    final blocObserver = _blocObserver;
+    if (blocObserver != null) return blocObserver;
+
+    final previous = _previous;
+    if (previous != null) return previous.blocObserver;
+
+    return super.blocObserver;
   }
 
   @override
   EventTransformer get eventTransformer {
-    return _eventTransformer ??
-        _previous?.eventTransformer ??
-        super.eventTransformer;
+    final eventTransformer = _eventTransformer;
+    if (eventTransformer != null) return eventTransformer;
+
+    final previous = _previous;
+    if (previous != null) return previous.eventTransformer;
+
+    return super.eventTransformer;
   }
 }
 
