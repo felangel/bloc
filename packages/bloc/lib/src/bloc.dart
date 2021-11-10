@@ -43,9 +43,7 @@ abstract class BlocOverrides {
   /// * [BlocOverrides.runZoned] to provide [BlocOverrides]
   /// in a fresh [Zone].
   ///
-  static BlocOverrides? get current {
-    return Zone.current[_token] as BlocOverrides?;
-  }
+  static BlocOverrides? get current => Zone.current[_token] as BlocOverrides?;
 
   /// Runs [body] in a fresh [Zone] using the provided overrides.
   static R runZoned<R>(
@@ -61,6 +59,7 @@ abstract class BlocOverrides {
   BlocObserver get blocObserver => Bloc._defaultBlocObserver;
 
   /// The default [EventTransformer] used for all event handlers.
+  ///
   /// By default all events are processed concurrently.
   ///
   /// If a custom transformer is specified for a particular event handler,
@@ -321,19 +320,19 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// {@macro bloc}
   Bloc(State initialState) : super(initialState);
 
-  final _eventController = StreamController<Event>.broadcast();
-  final _subscriptions = <StreamSubscription<dynamic>>[];
-  final _handlers = <_Handler>[];
-  final _emitters = <_Emitter>[];
-  final _eventTransformer =
-      BlocOverrides.current?.eventTransformer ?? _defaultEventTransformer;
-
   static final _defaultBlocObserver = BlocObserver();
   static final _defaultEventTransformer = (Stream events, EventMapper mapper) {
     return events
         .map(mapper)
         .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
   };
+
+  final _eventController = StreamController<Event>.broadcast();
+  final _subscriptions = <StreamSubscription<dynamic>>[];
+  final _handlers = <_Handler>[];
+  final _emitters = <_Emitter>[];
+  final _eventTransformer =
+      BlocOverrides.current?.eventTransformer ?? _defaultEventTransformer;
 
   /// Notifies the [Bloc] of a new [event] which triggers
   /// all corresponding [EventHandler] instances.
