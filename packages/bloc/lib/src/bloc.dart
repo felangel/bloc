@@ -40,8 +40,7 @@ abstract class BlocOverrides {
   /// any [BlocOverrides].
   ///
   /// See also:
-  /// * [BlocOverrides.runZoned] to provide [BlocOverrides]
-  /// in a fresh [Zone].
+  /// * [BlocOverrides.runZoned] to provide [BlocOverrides] in a fresh [Zone].
   ///
   static BlocOverrides? get current => Zone.current[_token] as BlocOverrides?;
 
