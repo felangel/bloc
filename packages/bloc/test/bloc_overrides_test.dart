@@ -99,6 +99,18 @@ void main() {
           }, eventTransformer: nestedEventTransformer);
         }, eventTransformer: rootEventTransformer);
       });
+
+      test('overrides cannot be mutated after zone is created', () {
+        final originalBlocObserver = FakeBlocObserver();
+        final otherBlocObserver = FakeBlocObserver();
+        var blocObserver = originalBlocObserver;
+        BlocOverrides.runZoned(() {
+          blocObserver = otherBlocObserver;
+          final overrides = BlocOverrides.current!;
+          expect(overrides.blocObserver, equals(originalBlocObserver));
+          expect(overrides.blocObserver, isNot(equals(otherBlocObserver)));
+        }, blocObserver: blocObserver);
+      });
     });
   });
 }
