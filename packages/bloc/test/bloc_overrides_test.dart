@@ -54,7 +54,7 @@ void main() {
 
       test(
           'uses current EventTransformer when not specified '
-          'and zone already contains a EventTransformer', () {
+          'and zone already contains an EventTransformer', () {
         final eventTransformer = (Stream events, EventMapper mapper) {
           return events.asyncExpand<dynamic>(mapper);
         };
