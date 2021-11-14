@@ -166,9 +166,12 @@ class MyBlocObserver extends BlocObserver {
 
 ```dart
 void main() {
-  BlocOverrides.runZoned(() {
-    // Use cubits...
-  }, blocObserver: MyBlocObserver());
+  BlocOverrides.runZoned(
+    () {
+      // Use cubits...
+    },
+    blocObserver: MyBlocObserver(),
+  );
 }
 ```
 
@@ -318,9 +321,12 @@ class MyBlocObserver extends BlocObserver {
 
 ```dart
 void main() {
-  BlocOverrides.runZoned(() {
-    // Use blocs...
-  }, blocObserver: MyBlocObserver());
+  BlocOverrides.runZoned(
+    () {
+      // Use blocs...
+    },
+    blocObserver: MyBlocObserver(),
+  );
 }
 ```
 
@@ -330,7 +336,7 @@ void main() {
 
 ## Examples
 
-- [Counter](https://github.com/felangel/Bloc/tree/master/packages/bloc/example) - an example of how to create a `CounterBloc` in a pure Dart app.
+- [Counter](https://github.com/felangel/bloc/tree/master/packages/bloc/example) - an example of how to create a `CounterBloc` in a pure Dart app.
 
 ## Maintainers
 

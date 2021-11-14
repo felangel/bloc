@@ -1,3 +1,10 @@
+# 8.0.0-dev.5
+
+- **BREAKING**: feat: introduce `BlocOverrides` API ([#2932](https://github.com/felangel/bloc/pull/2932))
+  - `Bloc.observer` removed in favor of `BlocOverrides.runZoned` and `BlocOverrides.current.blocObserver`
+  - `Bloc.transformer` removed in favor of `BlocOverrides.runZoned` and `BlocOverrides.current.eventTransformer`
+- **BREAKING**: refactor: make `BlocObserver` an abstract class
+
 # 8.0.0-dev.4
 
 - **BREAKING**: feat: improve error handling/reporting
