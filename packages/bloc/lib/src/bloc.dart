@@ -49,10 +49,12 @@ abstract class BlocOverrides {
     return _asyncRunZoned(body, zoneValues: {_token: overrides});
   }
 
-  /// The default [BlocObserver] instance.
-  BlocObserver get blocObserver => Bloc._defaultBlocObserver;
+  /// The [BlocObserver] that will be used within the current [Zone].
+  ///
+  /// Defaults to [BlocObserver.instance].
+  BlocObserver get blocObserver => BlocObserver.instance;
 
-  /// The default [EventTransformer] used for all event handlers.
+  /// The [EventTransformer] that will be used within the current [Zone].
   ///
   /// By default all events are processed concurrently.
   ///
@@ -64,7 +66,7 @@ abstract class BlocOverrides {
   /// * [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
   /// opinionated set of event transformers.
   ///
-  EventTransformer get eventTransformer => Bloc._defaultEventTransformer;
+  EventTransformer get eventTransformer => _defaultEventTransformer;
 }
 
 class _BlocOverridesScope extends BlocOverrides {
@@ -313,13 +315,6 @@ class _Handler {
 abstract class Bloc<Event, State> extends BlocBase<State> {
   /// {@macro bloc}
   Bloc(State initialState) : super(initialState);
-
-  static final _defaultBlocObserver = BlocObserver();
-  static final _defaultEventTransformer = (Stream events, EventMapper mapper) {
-    return events
-        .map(mapper)
-        .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
-  };
 
   final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<dynamic>>[];
@@ -574,7 +569,7 @@ abstract class BlocBase<State> {
   }
 
   final _blocObserver =
-      BlocOverrides.current?.blocObserver ?? Bloc._defaultBlocObserver;
+      BlocOverrides.current?.blocObserver ?? BlocObserver.instance;
 
   StreamController<State>? __stateController;
   StreamController<State> get _stateController {
@@ -685,6 +680,12 @@ abstract class BlocBase<State> {
     await _stateController.close();
   }
 }
+
+late final _defaultEventTransformer = (Stream events, EventMapper mapper) {
+  return events
+      .map(mapper)
+      .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
+};
 
 class _FlatMapStreamTransformer<T> extends StreamTransformerBase<Stream<T>, T> {
   const _FlatMapStreamTransformer();

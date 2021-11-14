@@ -187,58 +187,64 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
 }) async {
   final unhandledErrors = <Object>[];
   var shallowEquality = false;
-  final testObserver = _TestBlocObserver(Bloc.observer, unhandledErrors.add);
-  Bloc.observer = testObserver;
-  await runZonedGuarded(
+  final testObserver = _TestBlocObserver(
+    BlocOverrides.current?.blocObserver ?? BlocObserver.instance,
+    unhandledErrors.add,
+  );
+  await BlocOverrides.runZoned(
     () async {
-      await setUp?.call();
-      final states = <State>[];
-      final bloc = build();
-      // ignore: invalid_use_of_protected_member
-      if (seed != null) bloc.emit(seed());
-      final subscription = bloc.stream.skip(skip).listen(states.add);
-      try {
-        await act?.call(bloc);
-      } catch (error) {
-        unhandledErrors.add(error);
-      }
-      if (wait != null) await Future<void>.delayed(wait);
-      await Future<void>.delayed(Duration.zero);
-      await bloc.close();
-      if (expect != null) {
-        final dynamic expected = expect();
-        shallowEquality = '$states' == '$expected';
-        try {
-          test.expect(states, test.wrapMatcher(expected));
-        } on test.TestFailure catch (e) {
-          if (shallowEquality || expected is! List<State>) rethrow;
-          final diff = _diff(expected: expected, actual: states);
-          final message = '${e.message}\n$diff';
-          // ignore: only_throw_errors
-          throw test.TestFailure(message);
-        }
-      }
-      await subscription.cancel();
-      await verify?.call(bloc);
-      await tearDown?.call();
-    },
-    (Object error, _) {
-      if (shallowEquality && error is test.TestFailure) {
-        // ignore: only_throw_errors
-        throw test.TestFailure(
-          '''${error.message}
+      await runZonedGuarded(
+        () async {
+          await setUp?.call();
+          final states = <State>[];
+          final bloc = build();
+          // ignore: invalid_use_of_protected_member
+          if (seed != null) bloc.emit(seed());
+          final subscription = bloc.stream.skip(skip).listen(states.add);
+          try {
+            await act?.call(bloc);
+          } catch (error) {
+            unhandledErrors.add(error);
+          }
+          if (wait != null) await Future<void>.delayed(wait);
+          await Future<void>.delayed(Duration.zero);
+          await bloc.close();
+          if (expect != null) {
+            final dynamic expected = expect();
+            shallowEquality = '$states' == '$expected';
+            try {
+              test.expect(states, test.wrapMatcher(expected));
+            } on test.TestFailure catch (e) {
+              if (shallowEquality || expected is! List<State>) rethrow;
+              final diff = _diff(expected: expected, actual: states);
+              final message = '${e.message}\n$diff';
+              // ignore: only_throw_errors
+              throw test.TestFailure(message);
+            }
+          }
+          await subscription.cancel();
+          await verify?.call(bloc);
+          await tearDown?.call();
+        },
+        (Object error, _) {
+          if (shallowEquality && error is test.TestFailure) {
+            // ignore: only_throw_errors
+            throw test.TestFailure(
+              '''${error.message}
 WARNING: Please ensure state instances extend Equatable, override == and hashCode, or implement Comparable.
 Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''',
-        );
-      }
-      if (!unhandledErrors.contains(error)) {
-        // ignore: only_throw_errors
-        throw error;
-      }
+            );
+          }
+          if (!unhandledErrors.contains(error)) {
+            // ignore: only_throw_errors
+            throw error;
+          }
+        },
+      );
     },
+    blocObserver: testObserver,
   );
   if (errors != null) test.expect(unhandledErrors, test.wrapMatcher(errors()));
-  Bloc.observer = testObserver.localObserver;
 }
 
 class _TestBlocObserver extends BlocObserver {

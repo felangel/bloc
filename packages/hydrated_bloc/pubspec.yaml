@@ -27,3 +27,7 @@ dev_dependencies:
   mocktail: ^0.2.0
   path: ^1.8.0
   uuid: ^3.0.0
+
+dependency_overrides:
+  bloc:
+    path: ../bloc

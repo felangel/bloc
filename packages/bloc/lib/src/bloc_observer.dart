@@ -3,6 +3,9 @@ import 'package:meta/meta.dart';
 
 /// An interface for observing the behavior of [Bloc] instances.
 class BlocObserver {
+  /// The default [BlocObserver] instance.
+  static final instance = BlocObserver();
+
   /// Called whenever a [Bloc] is instantiated.
   /// In many cases, a cubit may be lazily instantiated and
   /// [onCreate] can be used to observe exactly when the cubit
