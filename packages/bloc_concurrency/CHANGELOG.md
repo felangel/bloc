@@ -1,3 +1,7 @@
+# 0.2.0-dev.2
+
+- feat: upgrade to `bloc: ^8.0.0-dev.5`
+
 # 0.2.0-dev.1
 
 - feat: upgrade to `bloc: ^8.0.0-dev.3`
