@@ -3,6 +3,102 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
+const _asyncRunZoned = runZoned;
+
+/// This class facilitates overriding [BlocObserver] and [EventTransformer].
+/// It should be extended by another class in client code with overrides
+/// that construct a custom implementation. The implementation in this class
+/// defaults to the base [blocObserver] and [eventTransformer] implementation.
+/// For example:
+///
+/// ```dart
+/// class MyBlocObserver extends BlocObserver {
+///   ...
+///   // A custom BlocObserver implementation.
+///   ...
+/// }
+///
+/// void main() {
+///   BlocOverrides.runZoned(() {
+///     ...
+///     // Bloc instances will use MyBlocObserver instead of the default BlocObserver.
+///     ...
+///   }, blocObserver: MyBlocObserver());
+/// }
+/// ```
+abstract class BlocOverrides {
+  static final _token = Object();
+
+  /// Returns the current [BlocOverrides] instance.
+  ///
+  /// This will return `null` if the current [Zone] does not contain
+  /// any [BlocOverrides].
+  ///
+  /// See also:
+  /// * [BlocOverrides.runZoned] to provide [BlocOverrides] in a fresh [Zone].
+  ///
+  static BlocOverrides? get current => Zone.current[_token] as BlocOverrides?;
+
+  /// Runs [body] in a fresh [Zone] using the provided overrides.
+  static R runZoned<R>(
+    R Function() body, {
+    BlocObserver? blocObserver,
+    EventTransformer? eventTransformer,
+  }) {
+    final overrides = _BlocOverridesScope(blocObserver, eventTransformer);
+    return _asyncRunZoned(body, zoneValues: {_token: overrides});
+  }
+
+  /// The [BlocObserver] that will be used within the current [Zone].
+  ///
+  /// By default, a base [BlocObserver] implementation is used.
+  BlocObserver get blocObserver => _defaultBlocObserver;
+
+  /// The [EventTransformer] that will be used within the current [Zone].
+  ///
+  /// By default, all events are processed concurrently.
+  ///
+  /// If a custom transformer is specified for a particular event handler,
+  /// it will take precendence over the global transformer.
+  ///
+  /// See also:
+  ///
+  /// * [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
+  /// opinionated set of event transformers.
+  ///
+  EventTransformer get eventTransformer => _defaultEventTransformer;
+}
+
+class _BlocOverridesScope extends BlocOverrides {
+  _BlocOverridesScope(this._blocObserver, this._eventTransformer);
+
+  final BlocOverrides? _previous = BlocOverrides.current;
+  final BlocObserver? _blocObserver;
+  final EventTransformer? _eventTransformer;
+
+  @override
+  BlocObserver get blocObserver {
+    final blocObserver = _blocObserver;
+    if (blocObserver != null) return blocObserver;
+
+    final previous = _previous;
+    if (previous != null) return previous.blocObserver;
+
+    return super.blocObserver;
+  }
+
+  @override
+  EventTransformer get eventTransformer {
+    final eventTransformer = _eventTransformer;
+    if (eventTransformer != null) return eventTransformer;
+
+    final previous = _previous;
+    if (previous != null) return previous.eventTransformer;
+
+    return super.eventTransformer;
+  }
+}
+
 /// {@template emitter}
 /// An [Emitter] is a class which is capable of emitting new states.
 ///
@@ -220,30 +316,12 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// {@macro bloc}
   Bloc(State initialState) : super(initialState);
 
-  /// The current [BlocObserver] instance.
-  static BlocObserver observer = BlocObserver();
-
-  /// The default [EventTransformer] used for all event handlers.
-  /// By default all events are processed concurrently.
-  ///
-  /// If a custom transformer is specified for a particular event handler,
-  /// it will take precendence over the global transformer.
-  ///
-  /// See also:
-  ///
-  /// * [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
-  /// opinionated set of event transformers.
-  ///
-  static EventTransformer<dynamic> transformer = (events, mapper) {
-    return events
-        .map(mapper)
-        .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
-  };
-
   final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<dynamic>>[];
   final _handlers = <_Handler>[];
   final _emitters = <_Emitter>[];
+  final _eventTransformer =
+      BlocOverrides.current?.eventTransformer ?? _defaultEventTransformer;
 
   /// Notifies the [Bloc] of a new [event] which triggers
   /// all corresponding [EventHandler] instances.
@@ -296,7 +374,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   @mustCallSuper
   void onEvent(Event event) {
     // ignore: invalid_use_of_protected_member
-    observer.onEvent(this, event);
+    _blocObserver?.onEvent(this, event);
   }
 
   /// {@template emit}
@@ -364,7 +442,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
       return true;
     }());
 
-    final _transformer = transformer ?? Bloc.transformer;
+    final _transformer = transformer ?? _eventTransformer;
     final subscription = _transformer(
       _eventController.stream.where((event) => event is E).cast<E>(),
       (dynamic event) {
@@ -436,7 +514,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   @mustCallSuper
   void onTransition(Transition<Event, State> transition) {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onTransition(this, transition);
+    _blocObserver?.onTransition(this, transition);
   }
 
   /// Closes the `event` and `state` `Streams`.
@@ -487,8 +565,10 @@ abstract class BlocBase<State> {
   /// {@macro bloc_stream}
   BlocBase(this._state) {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onCreate(this);
+    _blocObserver?.onCreate(this);
   }
+
+  final _blocObserver = BlocOverrides.current?.blocObserver;
 
   StreamController<State>? __stateController;
   StreamController<State> get _stateController {
@@ -560,7 +640,7 @@ abstract class BlocBase<State> {
   @mustCallSuper
   void onChange(Change<State> change) {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onChange(this, change);
+    _blocObserver?.onChange(this, change);
   }
 
   /// Reports an [error] which triggers [onError] with an optional [StackTrace].
@@ -586,7 +666,7 @@ abstract class BlocBase<State> {
   @mustCallSuper
   void onError(Object error, StackTrace stackTrace) {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onError(this, error, stackTrace);
+    _blocObserver?.onError(this, error, stackTrace);
   }
 
   /// Closes the instance.
@@ -595,10 +675,19 @@ abstract class BlocBase<State> {
   @mustCallSuper
   Future<void> close() async {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onClose(this);
+    _blocObserver?.onClose(this);
     await _stateController.close();
   }
 }
+
+late final _defaultBlocObserver = _DefaultBlocObserver();
+late final _defaultEventTransformer = (Stream events, EventMapper mapper) {
+  return events
+      .map(mapper)
+      .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
+};
+
+class _DefaultBlocObserver extends BlocObserver {}
 
 class _FlatMapStreamTransformer<T> extends StreamTransformerBase<Stream<T>, T> {
   const _FlatMapStreamTransformer();
