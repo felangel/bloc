@@ -9,9 +9,11 @@ import 'package:user_repository/user_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Bloc.observer = SimpleBlocObserver();
   await Firebase.initializeApp();
-  runApp(TodosApp());
+  BlocOverrides.runZoned(
+    () => runApp(TodosApp()),
+    blocObserver: SimpleBlocObserver(),
+  );
 }
 
 class TodosApp extends StatelessWidget {

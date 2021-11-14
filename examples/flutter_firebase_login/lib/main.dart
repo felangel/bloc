@@ -5,10 +5,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_firebase_login/app/app.dart';
 
 Future<void> main() async {
-  Bloc.observer = AppBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   final authenticationRepository = AuthenticationRepository();
   await authenticationRepository.user.first;
-  runApp(App(authenticationRepository: authenticationRepository));
+  BlocOverrides.runZoned(
+    () => runApp(App(authenticationRepository: authenticationRepository)),
+    blocObserver: AppBlocObserver(),
+  );
 }

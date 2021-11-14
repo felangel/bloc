@@ -13,3 +13,7 @@ dependencies:
 
 dev_dependencies:
   test: ^1.16.0
+
+dependency_overrides:
+  bloc:
+    path: ../bloc
