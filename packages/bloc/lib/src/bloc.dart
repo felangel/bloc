@@ -51,12 +51,12 @@ abstract class BlocOverrides {
 
   /// The [BlocObserver] that will be used within the current [Zone].
   ///
-  /// Defaults to [BlocObserver.instance].
-  BlocObserver get blocObserver => BlocObserver.instance;
+  /// By default, a base [BlocObserver] implementation is used.
+  BlocObserver get blocObserver => _defaultBlocObserver;
 
   /// The [EventTransformer] that will be used within the current [Zone].
   ///
-  /// By default all events are processed concurrently.
+  /// By default, all events are processed concurrently.
   ///
   /// If a custom transformer is specified for a particular event handler,
   /// it will take precendence over the global transformer.
@@ -374,7 +374,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   @mustCallSuper
   void onEvent(Event event) {
     // ignore: invalid_use_of_protected_member
-    _blocObserver.onEvent(this, event);
+    _blocObserver?.onEvent(this, event);
   }
 
   /// {@template emit}
@@ -514,7 +514,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   @mustCallSuper
   void onTransition(Transition<Event, State> transition) {
     // ignore: invalid_use_of_protected_member
-    _blocObserver.onTransition(this, transition);
+    _blocObserver?.onTransition(this, transition);
   }
 
   /// Closes the `event` and `state` `Streams`.
@@ -565,11 +565,10 @@ abstract class BlocBase<State> {
   /// {@macro bloc_stream}
   BlocBase(this._state) {
     // ignore: invalid_use_of_protected_member
-    _blocObserver.onCreate(this);
+    _blocObserver?.onCreate(this);
   }
 
-  final _blocObserver =
-      BlocOverrides.current?.blocObserver ?? BlocObserver.instance;
+  final _blocObserver = BlocOverrides.current?.blocObserver;
 
   StreamController<State>? __stateController;
   StreamController<State> get _stateController {
@@ -641,7 +640,7 @@ abstract class BlocBase<State> {
   @mustCallSuper
   void onChange(Change<State> change) {
     // ignore: invalid_use_of_protected_member
-    _blocObserver.onChange(this, change);
+    _blocObserver?.onChange(this, change);
   }
 
   /// Reports an [error] which triggers [onError] with an optional [StackTrace].
@@ -667,7 +666,7 @@ abstract class BlocBase<State> {
   @mustCallSuper
   void onError(Object error, StackTrace stackTrace) {
     // ignore: invalid_use_of_protected_member
-    _blocObserver.onError(this, error, stackTrace);
+    _blocObserver?.onError(this, error, stackTrace);
   }
 
   /// Closes the instance.
@@ -676,16 +675,19 @@ abstract class BlocBase<State> {
   @mustCallSuper
   Future<void> close() async {
     // ignore: invalid_use_of_protected_member
-    _blocObserver.onClose(this);
+    _blocObserver?.onClose(this);
     await _stateController.close();
   }
 }
 
+late final _defaultBlocObserver = _DefaultBlocObserver();
 late final _defaultEventTransformer = (Stream events, EventMapper mapper) {
   return events
       .map(mapper)
       .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
 };
+
+class _DefaultBlocObserver extends BlocObserver {}
 
 class _FlatMapStreamTransformer<T> extends StreamTransformerBase<Stream<T>, T> {
   const _FlatMapStreamTransformer();

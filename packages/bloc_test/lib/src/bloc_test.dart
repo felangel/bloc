@@ -185,12 +185,8 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
   dynamic Function()? errors,
   FutureOr<void> Function()? tearDown,
 }) async {
-  final unhandledErrors = <Object>[];
   var shallowEquality = false;
-  final testObserver = _TestBlocObserver(
-    BlocOverrides.current?.blocObserver ?? BlocObserver.instance,
-    unhandledErrors.add,
-  );
+  final unhandledErrors = <Object>[];
   await BlocOverrides.runZoned(
     () async {
       await runZonedGuarded(
@@ -242,20 +238,20 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
         },
       );
     },
-    blocObserver: testObserver,
+    blocObserver: _TestBlocObserver(unhandledErrors.add),
   );
   if (errors != null) test.expect(unhandledErrors, test.wrapMatcher(errors()));
 }
 
 class _TestBlocObserver extends BlocObserver {
-  _TestBlocObserver(this.localObserver, this._onError);
+  _TestBlocObserver(this._onError);
 
-  final BlocObserver localObserver;
+  final _localObserver = BlocOverrides.current?.blocObserver;
   final void Function(Object error) _onError;
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    localObserver.onError(bloc, error, stackTrace);
+    _localObserver?.onError(bloc, error, stackTrace);
     _onError(error);
     super.onError(bloc, error, stackTrace);
   }
