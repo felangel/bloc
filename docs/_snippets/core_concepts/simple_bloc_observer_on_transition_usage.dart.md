@@ -1,8 +1,12 @@
 ```dart
 void main() {
-  Bloc.observer = SimpleBlocObserver();
-  CounterBloc()
-    ..add(Increment())
-    ..close();
+  BlocOverrides.runZoned(
+    () {
+      CounterBloc()
+        ..add(Increment())
+        ..close();
+    },
+    blocObserver: SimpleBlocObserver(),
+  );
 }
 ```
