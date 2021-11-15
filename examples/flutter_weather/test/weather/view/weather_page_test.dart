@@ -21,8 +21,6 @@ class MockWeatherCubit extends MockCubit<WeatherState> implements WeatherCubit {
 }
 
 void main() {
-  setUpAll(initHydratedBloc);
-
   group('WeatherPage', () {
     late WeatherRepository weatherRepository;
 
@@ -31,11 +29,13 @@ void main() {
     });
 
     testWidgets('renders WeatherView', (tester) async {
-      await tester.pumpWidget(RepositoryProvider.value(
-        value: weatherRepository,
-        child: MaterialApp(home: WeatherPage()),
-      ));
-      expect(find.byType(WeatherView), findsOneWidget);
+      await mockHydratedStorage(() async {
+        await tester.pumpWidget(RepositoryProvider.value(
+          value: weatherRepository,
+          child: MaterialApp(home: WeatherPage()),
+        ));
+        expect(find.byType(WeatherView), findsOneWidget);
+      });
     });
   });
 
@@ -102,18 +102,21 @@ void main() {
     });
 
     testWidgets('state is cached', (tester) async {
-      when<dynamic>(() => hydratedStorage.read('WeatherCubit')).thenReturn(
+      final storage = MockStorage();
+      when<dynamic>(() => storage.read('WeatherCubit')).thenReturn(
         WeatherState(
           status: WeatherStatus.success,
           weather: weather,
           temperatureUnits: TemperatureUnits.fahrenheit,
         ).toJson(),
       );
-      await tester.pumpWidget(BlocProvider.value(
-        value: WeatherCubit(MockWeatherRepository()),
-        child: MaterialApp(home: WeatherView()),
-      ));
-      expect(find.byType(WeatherPopulated), findsOneWidget);
+      await mockHydratedStorage(() async {
+        await tester.pumpWidget(BlocProvider.value(
+          value: WeatherCubit(MockWeatherRepository()),
+          child: MaterialApp(home: WeatherView()),
+        ));
+        expect(find.byType(WeatherPopulated), findsOneWidget);
+      }, storage: storage);
     });
 
     testWidgets('navigates to SettingsPage when settings icon is tapped',
