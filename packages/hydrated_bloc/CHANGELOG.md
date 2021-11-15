@@ -1,3 +1,8 @@
+# 8.0.0-dev.5
+
+- **BREAKING**: feat: introduce `HydratedBlocOverrides` API ([#2947](https://github.com/felangel/bloc/pull/2947))
+  - `HydratedBloc.storage` removed in favor of `HydratedBlocOverrides.runZoned` and `HydratedBlocOverrides.current.storage`
+
 # 8.0.0-dev.4
 
 - **BREAKING**: feat: upgrade to `bloc v8.0.0-dev.5`
