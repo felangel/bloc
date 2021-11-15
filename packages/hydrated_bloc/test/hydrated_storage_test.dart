@@ -6,7 +6,6 @@ import 'package:hive/hive.dart';
 // ignore: implementation_imports
 import 'package:hive/src/hive_impl.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:hydrated_bloc/src/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
@@ -15,8 +14,11 @@ class MockBox extends Mock implements Box<dynamic> {}
 
 void main() {
   group('DefaultStorage', () {
-    test('throws noSuchMethod', () {
-      expect(() => DefaultStorage().read(''), throwsNoSuchMethodError);
+    test('throws NoSuchMethodError', () {
+      HydratedBlocOverrides.runZoned(() {
+        final overrides = HydratedBlocOverrides.current!;
+        expect(() => overrides.storage.read(''), throwsNoSuchMethodError);
+      });
     });
   });
 

@@ -180,7 +180,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
   Storage get _storage {
     final storage = _overrides?.storage;
     if (storage == null) throw const StorageNotFound();
-    if (storage is DefaultStorage) throw const StorageNotFound();
+    if (storage is _DefaultStorage) throw const StorageNotFound();
     return storage;
   }
 
@@ -499,11 +499,9 @@ class _Traversed {
   final dynamic value;
 }
 
-late final _defaultStorage = DefaultStorage();
+late final _defaultStorage = _DefaultStorage();
 
-/// Default, unimplemented [Storage] implementation.
-@visibleForTesting
-class DefaultStorage implements Storage {
+class _DefaultStorage implements Storage {
   @override
   dynamic noSuchMethod(Invocation invocation) {
     return super.noSuchMethod(invocation);

@@ -34,8 +34,8 @@ void main() {
           value: weatherRepository,
           child: MaterialApp(home: WeatherPage()),
         ));
-        expect(find.byType(WeatherView), findsOneWidget);
       });
+      expect(find.byType(WeatherView), findsOneWidget);
     });
   });
 
@@ -115,8 +115,8 @@ void main() {
           value: WeatherCubit(MockWeatherRepository()),
           child: MaterialApp(home: WeatherView()),
         ));
-        expect(find.byType(WeatherPopulated), findsOneWidget);
       }, storage: storage);
+      expect(find.byType(WeatherPopulated), findsOneWidget);
     });
 
     testWidgets('navigates to SettingsPage when settings icon is tapped',
