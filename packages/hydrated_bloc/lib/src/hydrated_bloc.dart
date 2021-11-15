@@ -1,5 +1,93 @@
+import 'dart:async';
+
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
+
+const _asyncRunZoned = runZoned;
+
+/// This class extends [BlocOverrides] and facilitates overriding
+/// [Storage] in addition to [BlocObserver] and [EventTransformer].
+/// It should be extended by another class in client code with overrides
+/// that construct a custom implementation.
+/// For example:
+///
+/// ```dart
+/// class MyStorage extends Storage {
+///   ...
+///   // A custom Storage implementation.
+///   ...
+/// }
+///
+/// void main() {
+///   HydratedBlocOverrides.runZoned(() {
+///     ...
+///     // HydratedBloc instances will use MyStorage.
+///     ...
+///   }, storage: MyStorage());
+/// }
+/// ```
+class HydratedBlocOverrides extends BlocOverrides {
+  static final _token = Object();
+
+  /// Returns the current [HydratedBlocOverrides] instance.
+  ///
+  /// This will return `null` if the current [Zone] does not contain
+  /// any [HydratedBlocOverrides].
+  ///
+  /// See also:
+  /// * [HydratedBlocOverrides.runZoned] to provide [HydratedBlocOverrides]
+  /// in a fresh [Zone].
+  ///
+  static HydratedBlocOverrides? get current {
+    return Zone.current[_token] as HydratedBlocOverrides?;
+  }
+
+  /// Runs [body] in a fresh [Zone] using the provided overrides.
+  static R runZoned<R>(
+    R Function() body, {
+    BlocObserver? blocObserver,
+    EventTransformer? eventTransformer,
+    Storage? storage,
+  }) {
+    final overrides = _HydratedBlocOverridesScope(storage);
+    return BlocOverrides.runZoned(
+      () => _asyncRunZoned(body, zoneValues: {_token: overrides}),
+      blocObserver: blocObserver,
+      eventTransformer: eventTransformer,
+    );
+  }
+
+  @override
+  BlocObserver get blocObserver {
+    return BlocOverrides.current?.blocObserver ?? super.blocObserver;
+  }
+
+  @override
+  EventTransformer get eventTransformer {
+    return BlocOverrides.current?.eventTransformer ?? super.eventTransformer;
+  }
+
+  /// The [Storage] that will be used within the current [Zone].
+  Storage get storage => _defaultStorage;
+}
+
+class _HydratedBlocOverridesScope extends HydratedBlocOverrides {
+  _HydratedBlocOverridesScope(this._storage);
+
+  final HydratedBlocOverrides? _previous = HydratedBlocOverrides.current;
+  final Storage? _storage;
+
+  @override
+  Storage get storage {
+    final storage = _storage;
+    if (storage != null) return storage;
+
+    final previous = _previous;
+    if (previous != null) return previous.storage;
+
+    return super.storage;
+  }
+}
 
 /// {@template hydrated_bloc}
 /// Specialized [Bloc] which handles initializing the [Bloc] state
@@ -31,19 +119,6 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
   /// {@macro hydrated_bloc}
   HydratedBloc(State state) : super(state) {
     hydrate();
-  }
-
-  /// Setter for instance of [Storage] which will be used to
-  /// manage persisting/restoring the [Bloc] state.
-  static Storage? _storage;
-
-  static set storage(Storage? storage) => _storage = storage;
-
-  /// Instance of [Storage] which will be used to
-  /// manage persisting/restoring the [Bloc] state.
-  static Storage get storage {
-    if (_storage == null) throw const StorageNotFound();
-    return _storage!;
   }
 }
 
@@ -100,6 +175,15 @@ abstract class HydratedCubit<State> extends Cubit<State>
 /// * [HydratedCubit] to enable automatic state persistence/restoration with [Cubit]
 ///
 mixin HydratedMixin<State> on BlocBase<State> {
+  late final _overrides = HydratedBlocOverrides.current;
+
+  Storage get _storage {
+    final storage = _overrides?.storage;
+    if (storage == null) throw const StorageNotFound();
+    if (storage is _DefaultStorage) throw const StorageNotFound();
+    return storage;
+  }
+
   /// Populates the internal state storage with the latest state.
   /// This should be called when using the [HydratedMixin]
   /// directly within the constructor body.
@@ -113,14 +197,14 @@ mixin HydratedMixin<State> on BlocBase<State> {
   /// }
   /// ```
   void hydrate() {
-    final storage = HydratedBloc.storage;
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
-        storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+        _storage.write(storageToken, stateJson).then((_) {}, onError: onError);
       }
     } catch (error, stackTrace) {
       onError(error, stackTrace);
+      if (error is StorageNotFound) rethrow;
     }
   }
 
@@ -128,10 +212,9 @@ mixin HydratedMixin<State> on BlocBase<State> {
 
   @override
   State get state {
-    final storage = HydratedBloc.storage;
     if (_state != null) return _state!;
     try {
-      final stateJson = storage.read(storageToken) as Map<dynamic, dynamic>?;
+      final stateJson = _storage.read(storageToken) as Map<dynamic, dynamic>?;
       if (stateJson == null) {
         _state = super.state;
         return super.state;
@@ -153,12 +236,11 @@ mixin HydratedMixin<State> on BlocBase<State> {
   @override
   void onChange(Change<State> change) {
     super.onChange(change);
-    final storage = HydratedBloc.storage;
     final state = change.nextState;
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
-        storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+        _storage.write(storageToken, stateJson).then((_) {}, onError: onError);
       }
     } catch (error, stackTrace) {
       onError(error, stackTrace);
@@ -310,7 +392,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
   /// [clear] is used to wipe or invalidate the cache of a [HydratedBloc].
   /// Calling [clear] will delete the cached state of the bloc
   /// but will not modify the current state of the bloc.
-  Future<void> clear() => HydratedBloc.storage.delete(storageToken);
+  Future<void> clear() => _storage.delete(storageToken);
 
   /// Responsible for converting the `Map<String, dynamic>` representation
   /// of the bloc state into a concrete instance of the bloc state.
@@ -355,7 +437,11 @@ class StorageNotFound implements Exception {
     return 'Storage was accessed before it was initialized.\n'
         'Please ensure that storage has been initialized.\n\n'
         'For example:\n\n'
-        'HydratedBloc.storage = await HydratedStorage.build();';
+        'final storage = await HydratedStorage.build();\n'
+        'HydratedBlocOverrides.runZoned(\n'
+        '  () => runApp(MyApp()),\n'
+        '  storage: storage,\n'
+        ');';
   }
 }
 
@@ -411,4 +497,13 @@ class _Traversed {
       : this._(outcome: _Outcome.complex, value: value);
   final _Outcome outcome;
   final dynamic value;
+}
+
+late final _defaultStorage = _DefaultStorage();
+
+class _DefaultStorage implements Storage {
+  @override
+  dynamic noSuchMethod(Invocation invocation) {
+    return super.noSuchMethod(invocation);
+  }
 }
