@@ -27,7 +27,7 @@ const _asyncRunZoned = runZoned;
 /// }
 /// ```
 class HydratedBlocOverrides extends BlocOverrides {
-  static final _token = Object();
+  static const _token = Object();
 
   /// Returns the current [HydratedBlocOverrides] instance.
   ///
