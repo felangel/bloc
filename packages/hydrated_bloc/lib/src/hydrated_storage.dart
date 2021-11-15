@@ -58,12 +58,15 @@ class HydratedStorage implements Storage {
   ///
   /// void main() async {
   ///   WidgetsFlutterBinding.ensureInitialized();
-  ///   HydratedBloc.storage = await HydratedStorage.build(
+  ///   final storage = await HydratedStorage.build(
   ///     storageDirectory: kIsWeb
-  ///      ? HydratedStorage.webStorageDirectory
-  ///      : await getTemporaryDirectory(),
+  ///       ? HydratedStorage.webStorageDirectory
+  ///       : await getTemporaryDirectory(),
   ///   );
-  ///   runApp(App());
+  ///   HydratedBlocOverrides.runZoned(
+  ///     () => runApp(App()),
+  ///     storage: storage,
+  ///   );
   /// }
   /// ```
   ///

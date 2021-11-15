@@ -53,10 +53,13 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 ```dart
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  HydratedBloc.storage = await HydratedStorage.build(
+  final storage = await HydratedStorage.build(
     storageDirectory: await getTemporaryDirectory(),
   );
-  runApp(App());
+  HydratedBlocOverrides.runZoned(
+    () => runApp(App()),
+    storage: storage,
+  );
 }
 ```
 
@@ -85,7 +88,7 @@ class Increment extends CounterEvent {}
 class CounterBloc extends HydratedBloc<CounterEvent, int> {
   CounterBloc() : super(0) {
     on<Increment>((event, emit) => emit(state + 1));
-  }  
+  }
 
   @override
   int fromJson(Map<String, dynamic> json) => json['value'] as int;
@@ -120,7 +123,7 @@ class CounterCubit extends Cubit<int> with HydratedMixin {
 Any `storageDirectory` can be used when creating an instance of `HydratedStorage`:
 
 ```dart
-HydratedBloc.storage = await HydratedStorage.build(
+final storage = await HydratedStorage.build(
   storageDirectory: await getApplicationDocumentsDirectory(),
 );
 ```
@@ -158,7 +161,10 @@ class MyHydratedStorage implements Storage {
 ```dart
 // main.dart
 
-HydratedBloc.storage = MyHydratedStorage();
+HydratedBlocOverrides.runZoned(
+  () => runApp(MyApp()),
+  storage: MyHydratedStorage(),
+);
 ```
 
 ## Dart Versions
