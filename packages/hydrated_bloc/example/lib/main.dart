@@ -7,12 +7,15 @@ import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  HydratedBloc.storage = await HydratedStorage.build(
+  final storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
         ? HydratedStorage.webStorageDirectory
         : await getTemporaryDirectory(),
   );
-  runApp(App());
+  HydratedBlocOverrides.runZoned(
+    () => runApp(App()),
+    storage: storage,
+  );
 }
 
 class App extends StatelessWidget {
@@ -84,7 +87,7 @@ class CounterView extends StatelessWidget {
           FloatingActionButton(
             child: const Icon(Icons.delete_forever),
             onPressed: () async {
-              await HydratedBloc.storage.clear();
+              await HydratedBlocOverrides.current?.storage.clear();
               context.read<CounterBloc>().add(Reset());
             },
           ),

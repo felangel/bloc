@@ -15,8 +15,6 @@ class MockThemeCubit extends MockCubit<Color> implements ThemeCubit {}
 class MockWeatherRepository extends Mock implements WeatherRepository {}
 
 void main() {
-  setUpAll(initHydratedBloc);
-
   group('WeatherApp', () {
     late WeatherRepository weatherRepository;
 
@@ -25,7 +23,11 @@ void main() {
     });
 
     testWidgets('renders WeatherAppView', (tester) async {
-      await tester.pumpWidget(WeatherApp(weatherRepository: weatherRepository));
+      await mockHydratedStorage(() async {
+        await tester.pumpWidget(
+          WeatherApp(weatherRepository: weatherRepository),
+        );
+      });
       expect(find.byType(WeatherAppView), findsOneWidget);
     });
   });
@@ -41,24 +43,34 @@ void main() {
 
     testWidgets('renders WeatherPage', (tester) async {
       when(() => themeCubit.state).thenReturn(Colors.blue);
-      await tester.pumpWidget(
-        RepositoryProvider.value(
-          value: weatherRepository,
-          child: BlocProvider.value(value: themeCubit, child: WeatherAppView()),
-        ),
-      );
+      await mockHydratedStorage(() async {
+        await tester.pumpWidget(
+          RepositoryProvider.value(
+            value: weatherRepository,
+            child: BlocProvider.value(
+              value: themeCubit,
+              child: WeatherAppView(),
+            ),
+          ),
+        );
+      });
       expect(find.byType(WeatherPage), findsOneWidget);
     });
 
     testWidgets('has correct theme primary color', (tester) async {
       const color = Color(0xFFD2D2D2);
       when(() => themeCubit.state).thenReturn(color);
-      await tester.pumpWidget(
-        RepositoryProvider.value(
-          value: weatherRepository,
-          child: BlocProvider.value(value: themeCubit, child: WeatherAppView()),
-        ),
-      );
+      await mockHydratedStorage(() async {
+        await tester.pumpWidget(
+          RepositoryProvider.value(
+            value: weatherRepository,
+            child: BlocProvider.value(
+              value: themeCubit,
+              child: WeatherAppView(),
+            ),
+          ),
+        );
+      });
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(materialApp.theme?.primaryColor, color);
     });
