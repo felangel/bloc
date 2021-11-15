@@ -86,9 +86,9 @@ class CounterView extends StatelessWidget {
           const SizedBox(height: 4),
           FloatingActionButton(
             child: const Icon(Icons.delete_forever),
-            onPressed: () async {
-              await HydratedBlocOverrides.current?.storage.clear();
-              context.read<CounterBloc>().add(Reset());
+            onPressed: () {
+              context.read<BrightnessCubit>().clear();
+              context.read<CounterBloc>().clear();
             },
           ),
         ],
@@ -103,13 +103,10 @@ class Increment extends CounterEvent {}
 
 class Decrement extends CounterEvent {}
 
-class Reset extends CounterEvent {}
-
 class CounterBloc extends HydratedBloc<CounterEvent, int> {
   CounterBloc() : super(0) {
     on<Increment>((event, emit) => emit(state + 1));
     on<Decrement>((event, emit) => emit(state - 1));
-    on<Reset>((event, emit) => emit(0));
   }
 
   @override
