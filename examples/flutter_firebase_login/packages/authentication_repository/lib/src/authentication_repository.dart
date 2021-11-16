@@ -203,7 +203,7 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on FirebaseAuthException catch (e) {
+    } on firebase_auth.FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
       throw const SignUpWithEmailAndPasswordFailure();
@@ -232,7 +232,7 @@ class AuthenticationRepository {
       }
 
       await _firebaseAuth.signInWithCredential(credential);
-    } on FirebaseAuthException catch (e) {
+    } on firebase_auth.FirebaseAuthException catch (e) {
       throw LogInWithGoogleFailure.fromCode(e.code);
     } catch (_) {
       throw const LogInWithGoogleFailure();
@@ -251,7 +251,7 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on FirebaseAuthException catch (e) {
+    } on firebase_auth.FirebaseAuthException catch (e) {
       throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
       throw const LogInWithEmailAndPasswordFailure();
