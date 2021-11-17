@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// Signature for the `builder` function which takes the `BuildContext` and
 /// [state] and is responsible for returning a widget which is to be rendered.
 /// This is analogous to the `builder` function in [StreamBuilder].
-typedef BlocWidgetBuilder<S> = Widget Function(BuildContext context, S state);
+typedef BlocWidgetBuilder<S> = Widget? Function(BuildContext context, S state);
 
 /// Signature for the `buildWhen` function which takes the previous `state` and
 /// the current `state` and is responsible for returning a [bool] which
@@ -86,7 +86,8 @@ class BlocBuilder<B extends BlocBase<S>, S> extends BlocBuilderBase<B, S> {
   final BlocWidgetBuilder<S> builder;
 
   @override
-  Widget build(BuildContext context, S state) => builder(context, state);
+  Widget build(BuildContext context, S state) =>
+      builder(context, state) ?? Container();
 }
 
 /// {@template bloc_builder_base}
