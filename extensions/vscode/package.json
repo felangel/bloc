@@ -215,6 +215,7 @@
     "@types/mkdirp": "^0.5.2",
     "@types/mocha": "^2.2.42",
     "@types/node": "^12.7.8",
+    "@types/node-fetch": "^2.0.0",
     "@types/rimraf": "^2.0.2",
     "@types/semver": "^6.0.2",
     "@types/vscode": "^1.56.0",
@@ -229,6 +230,7 @@
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.19",
     "mkdirp": "^0.5.1",
+    "node-fetch": "^2.0.0",
     "semver": "^6.3.0"
   }
 }
