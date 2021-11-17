@@ -4,6 +4,8 @@
   - `Bloc.observer` removed in favor of `BlocOverrides.runZoned` and `BlocOverrides.current.blocObserver`
   - `Bloc.transformer` removed in favor of `BlocOverrides.runZoned` and `BlocOverrides.current.eventTransformer`
 - **BREAKING**: refactor: make `BlocObserver` an abstract class
+- **BREAKING**: feat: `add` throws `StateError` when bloc is closed ([#2912](https://github.com/felangel/bloc/pull/2912))
+- **BREAKING**: feat: `emit` throws `StateError` when bloc is closed ([#2913](https://github.com/felangel/bloc/pull/2913))
 
 # 8.0.0-dev.4
 
