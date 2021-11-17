@@ -2,6 +2,243 @@
 
 ?> 💡 **Tip**: Please refer to the [release log](https://github.com/felangel/bloc/releases) for more information regarding what changed in each release.
 
+## v8.0.0
+
+### package:bloc
+
+#### ❗✨ Introduce new `BlocOverrides` API
+
+!> In bloc v8.0.0, `Bloc.observer` and `Bloc.transformer` were removed in favor of the `BlocOverrides` API.
+
+##### Rationale
+
+The previous API used to override the default `BlocObserver` and `EventTransformer` relied on a global singleton for both the `BlocObserver` and `EventTransformer`.
+
+As a result, it was not possible to:
+
+- Have multiple `BlocObserver` or `EventTransformer` implementations scoped to different parts of the application
+- Have `BlocObserver` or `EventTransformer` overrides be scoped to a package
+  - If a package were to depend on `package:bloc` and registered its own `BlocObserver`, any consumer of the package would either have to overwrite the package's `BlocObserver` or report to the package's `BlocObserver`.
+
+It was also more difficult to test because of the shared global state across tests.
+
+Bloc v8.0.0 introduces a `BlocOverrides` class which allows developers to override `BlocObserver` and/or `EventTransformer` for a specific `Zone` rather than relying on a global mutable singleton.
+
+**v7.x.x**
+
+```dart
+void main() {
+  Bloc.observer = CustomBlocObserver();
+  Bloc.transformer = customEventTransformer();
+
+  // ...
+}
+```
+
+**v8.0.0**
+
+```dart
+void main() {
+  BlocOverrides.runZoned(
+    () {
+      // ...
+    },
+    blocObserver: CustomBlocObserver(),
+    eventTransformer: customEventTransformer(),
+  );
+}
+```
+
+`Bloc` instances will use the `BlocObserver` and/or `EventTransformer` for the current `Zone` via `BlocOverrides.current`. If there are no `BlocOverrides` for the zone, they will use the existing internal defaults (no change in behavior/functionality).
+
+This allows allow each `Zone` to function independently with its own `BlocOverrides`.
+
+```dart
+BlocOverrides.runZoned(
+  () {
+    // BlocObserverA and eventTransformerA
+    final overrides = BlocOverrides.current;
+
+    // Blocs in this zone report to BlocObserverA
+    // and use eventTransformerA as the default transformer.
+    // ...
+
+    // Later...
+    BlocOverrides.runZoned(
+      () {
+        // BlocObserverB and eventTransformerB
+        final overrides = BlocOverrides.current;
+
+        // Blocs in this zone report to BlocObserverB
+        // and use eventTransformerB as the default transformer.
+        // ...
+      },
+      blocObserver: BlocObserverB(),
+      eventTransformer: eventTransformerB(),
+    );
+  },
+  blocObserver: BlocObserverA(),
+  eventTransformer: eventTransformerA(),
+);
+```
+
+#### ❗✨ Improve Error Handling and Reporting
+
+!> In bloc v8.0.0, `BlocUnhandledErrorException` is removed. In addition, any uncaught exceptions are always reported to `onError` and rethrown (regardless of debug or release mode). The `addError` API reports errors to `onError`, but does not treat reported errors as uncaught exceptions.
+
+##### Rationale
+
+The goal of these changes is:
+
+- make internal unhandled exceptions extremely obvious while still preserving bloc functionality
+- support `addError` without disrupting control flow
+
+Previously, error handling and reporting varied depending on whether the application was running in debug or release mode. In addition, errors reported via `addError` were treated as uncaught exceptions in debug mode which led to a poor developer experience when using the `addError` API (specifically when writing unit tests).
+
+In v8.0.0, `addError` can be safely used to report errors and `blocTest` can be used to verify that errors are reported. All errors are still reported to `onError`, however, only uncaught exceptions are rethrown (regardless of debug or release mode).
+
+#### ❗🧹 Make `BlocObserver` abstract
+
+!> In bloc v8.0.0, `BlocObserver` was converted into an `abstract` class which means an instance of `BlocObserver` cannot be instantiated.
+
+##### Rationale
+
+`BlocObserver` was intended to be an interface. Since the default API implementation are no-ops, `BlocObserver` is now an `abstract` class to clearly communicate that the class is meant to be extended and not directly instantiated.
+
+**v7.x.x**
+
+```dart
+void main() {
+  // It was possible to create an instance of the base class.
+  final observer = BlocObserver();
+}
+```
+
+**v8.0.0**
+
+```dart
+class MyBlocObserver extends BlocObserver {...}
+
+void main() {
+  // Cannot instantiate the base class.
+  final observer = BlocObserver(); // ERROR
+
+  // Extend `BlocObserver` instead.
+  final observer = MyBlocObserver(); // OK
+}
+```
+
+#### ❗✨ `add` throws `StateError` if Bloc is closed
+
+!> In bloc v8.0.0, calling `add` on a closed bloc will result in a `StateError`.
+
+##### Rationale
+
+Previously, it was possible to call `add` on a closed bloc and the internal error would get swallowed, making it difficult to debug why the added event was not being processed. In order to make this scenario more visible, in v8.0.0, calling `add` on a closed bloc will throw a `StateError` which will be reported as an uncaught exception and propagated to `onError`.
+
+#### ❗✨ `emit` throws `StateError` if Bloc is closed
+
+!> In bloc v8.0.0, calling `emit` within a closed bloc will result in a `StateError`.
+
+##### Rationale
+
+Previously, it was possible to call `emit` within a closed bloc and no state change would occur but there would also be no indication of what went wrong, making it difficult to debug. In order to make this scenario more visible, in v8.0.0, calling `emit` within a closed bloc will throw a `StateError` which will be reported as an uncaught exception and propagated to `onError`.
+
+#### ❗🧹 Remove Deprecated APIs
+
+!> In bloc v8.0.0, all previously deprecated APIs were removed.
+
+##### Summary
+
+- `mapEventToState` removed in favor of `on<Event>`
+- `transformEvents` removed in favor of `EventTransformer` API
+- `TransitionFunction` typedef removed in favor of `EventTransformer` API
+- `listen` removed in favor of `stream.listen`
+
+### package:bloc_test
+
+#### ✨ `MockBloc` and `MockCubit` no longer require `registerFallbackValue`
+
+!> In bloc_test v9.0.0, developers no longer need to explicitly call `registerFallbackValue` when using `MockBloc` or `MockCubit`.
+
+##### Summary
+
+`registerFallbackValue` is only needed when using the `any()` matcher from `package:mocktail` for a custom type. Previously, `registerFallbackValue` was needed for every `Event` and `State` when using `MockBloc` or `MockCubit`.
+
+**v8.x.x**
+
+```dart
+class FakeMyEvent extends Fake implements MyEvent {}
+class FakeMyState extends Fake implements MyState {}
+class MyMockBloc extends MockBloc<MyEvent, MyState> implements MyBloc {}
+
+void main() {
+  setUpAll(() {
+    registerFallbackValue(FakeMyEvent());
+    registerFallbackValue(FakeMyState());
+  });
+
+  // Tests...
+}
+```
+
+**v9.0.0**
+
+```dart
+class MyMockBloc extends MockBloc<MyEvent, MyState> implements MyBloc {}
+
+void main() {
+  // Tests...
+}
+```
+
+### package:hydrated_bloc
+
+#### ❗✨ Introduce new `HydratedBlocOverrides` API
+
+!> In hydrated_bloc v8.0.0, `HydratedBloc.storage` was removed in favor of the `HydratedBlocOverrides` API.
+
+##### Rationale
+
+Previously, a global singleton was used to override the `Storage` implementation.
+
+As a result, it was not possible to have multiple `Storage` implementations scoped to different parts of the application. It was also more difficult to test because of the shared global state across tests.
+
+`HydratedBloc` v8.0.0 introduces a `HydratedBlocOverrides` class which allows developers to override `Storage` for a specific `Zone` rather than relying on a global mutable singleton.
+
+**v7.x.x**
+
+```dart
+void main() async {
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationSupportDirectory(),
+  );
+
+  // ...
+}
+```
+
+**v8.0.0**
+
+```dart
+void main() {
+  final storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationSupportDirectory(),
+  );
+
+  HydratedBlocOverrides.runZoned(
+    () {
+      // ...
+    },
+    storage: storage,
+  );
+}
+```
+
+`HydratedBloc` instances will use the `Storage` for the current `Zone` via `HydratedBlocOverrides.current`.
+
+This allows allow each `Zone` to function independently with its own `BlocOverrides`.
+
 ## v7.2.0
 
 ### package:bloc
