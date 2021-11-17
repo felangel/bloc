@@ -46,25 +46,29 @@ const deps = [
 const devDeps = [{ name: "bloc_test", actions: [openBlocMigrationGuide] }];
 
 export async function analyzeDependencies() {
-  const dependenciesToAnalyze = await getDependenciesToAnalyze(deps);
-  const devDependenciesToAnalyze = await getDependenciesToAnalyze(devDeps);
+  const dependencies = await getDependencies(deps);
+  const devDependencies = await getDependencies(devDeps);
   const pubspec = await getPubspec();
-  const dependencies = _.get(pubspec, "dependencies", {});
-  const devDependencies = _.get(pubspec, "dev_dependencies", {});
+  const pubspecDependencies = _.get(pubspec, "dependencies", {});
+  const pubspecDevDependencies = _.get(pubspec, "dev_dependencies", {});
 
-  checkForUpgrades(dependenciesToAnalyze, dependencies);
-  checkForUpgrades(devDependenciesToAnalyze, devDependencies);
+  checkForUpgrades(dependencies, pubspecDependencies);
+  checkForUpgrades(devDependencies, pubspecDevDependencies);
 }
 
 function checkForUpgrades(
-  dependenciesToAnalyze: Dependency[],
-  dependencies: object[]
+  dependencies: Dependency[],
+  pubspecDependencies: object[]
 ) {
-  for (let i = 0; i < dependenciesToAnalyze.length; i++) {
-    const dependency = dependenciesToAnalyze[i];
+  for (let i = 0; i < dependencies.length; i++) {
+    const dependency = dependencies[i];
     if (_.isEmpty(dependency.version)) continue;
-    if (_.has(dependencies, dependency.name)) {
-      const dependencyVersion = _.get(dependencies, dependency.name, "latest");
+    if (_.has(pubspecDependencies, dependency.name)) {
+      const dependencyVersion = _.get(
+        pubspecDependencies,
+        dependency.name,
+        "latest"
+      );
       if (dependencyVersion === "latest") continue;
       if (dependencyVersion === "any") continue;
       if (dependencyVersion == null) continue;
@@ -100,9 +104,9 @@ function checkForUpgrades(
   }
 }
 
-async function getDependenciesToAnalyze(
+async function getDependencies(
   dependencies: { name: string; actions: Action[] }[]
-): Promise<Array<Dependency>> {
+): Promise<Dependency[]> {
   const futures: Promise<Dependency>[] = dependencies.map(
     async (dependency) => {
       return {
