@@ -15,9 +15,39 @@ interface Action {
   callback: Function;
 }
 
+const openBlocMigrationGuide = {
+  name: "Open Migration Guide",
+  callback: () => {
+    env.openExternal(Uri.parse("https://bloclibrary.dev/#/migration"));
+  },
+};
+const openEquatableMigrationGuide = {
+  name: "Open Migration Guide",
+  callback: () => {
+    env.openExternal(
+      Uri.parse(
+        "https://github.com/felangel/equatable/blob/master/doc/migration_guides/migration-0.6.0.md"
+      )
+    );
+  },
+};
+
+const deps = [
+  { name: "angular_bloc", actions: [openBlocMigrationGuide] },
+  { name: "bloc", actions: [openBlocMigrationGuide] },
+  { name: "bloc_concurrency", actions: [openBlocMigrationGuide] },
+  { name: "equatable", actions: [openEquatableMigrationGuide] },
+  { name: "flutter_bloc", actions: [openBlocMigrationGuide] },
+  { name: "hydrated_bloc", actions: [openBlocMigrationGuide] },
+  { name: "replay_bloc", actions: [openBlocMigrationGuide] },
+  { name: "sealed_flutter_bloc", actions: [openBlocMigrationGuide] },
+];
+
+const devDeps = [{ name: "bloc_test", actions: [openBlocMigrationGuide] }];
+
 export async function analyzeDependencies() {
-  const dependenciesToAnalyze = await getDependenciesToAnalyze();
-  const devDependenciesToAnalyze = await getDevDependenciesToAnalyze();
+  const dependenciesToAnalyze = await getDependenciesToAnalyze(deps);
+  const devDependenciesToAnalyze = await getDependenciesToAnalyze(devDeps);
   const pubspec = await getPubspec();
   const dependencies = _.get(pubspec, "dependencies", {});
   const devDependencies = _.get(pubspec, "dev_dependencies", {});
@@ -70,57 +100,10 @@ function checkForUpgrades(
   }
 }
 
-async function getDependenciesToAnalyze(): Promise<Array<Dependency>> {
-  const openBlocMigrationGuide = {
-    name: "Open Migration Guide",
-    callback: () => {
-      env.openExternal(Uri.parse("https://bloclibrary.dev/#/migration"));
-    },
-  };
-  const openEquatableMigrationGuide = {
-    name: "Open Migration Guide",
-    callback: () => {
-      env.openExternal(
-        Uri.parse(
-          "https://github.com/felangel/equatable/blob/master/doc/migration_guides/migration-0.6.0.md"
-        )
-      );
-    },
-  };
-  const dependencies = [
-    { name: "angular_bloc", actions: [openBlocMigrationGuide] },
-    { name: "bloc", actions: [openBlocMigrationGuide] },
-    { name: "bloc_concurrency", actions: [openBlocMigrationGuide] },
-    { name: "equatable", actions: [openEquatableMigrationGuide] },
-    { name: "flutter_bloc", actions: [openBlocMigrationGuide] },
-    { name: "hydrated_bloc", actions: [openBlocMigrationGuide] },
-    { name: "replay_bloc", actions: [openBlocMigrationGuide] },
-    { name: "sealed_flutter_bloc", actions: [openBlocMigrationGuide] },
-  ];
+async function getDependenciesToAnalyze(
+  dependencies: { name: string; actions: Action[] }[]
+): Promise<Array<Dependency>> {
   const futures: Promise<Dependency>[] = dependencies.map(
-    async (dependency) => {
-      return {
-        name: dependency.name,
-        actions: dependency.actions,
-        version: await getLatestPackageVersion(dependency.name),
-      };
-    }
-  );
-
-  return Promise.all(futures);
-}
-
-async function getDevDependenciesToAnalyze(): Promise<Array<Dependency>> {
-  const openBlocMigrationGuide = {
-    name: "Open Migration Guide",
-    callback: () => {
-      env.openExternal(Uri.parse("https://bloclibrary.dev/#/migration"));
-    },
-  };
-  const devDependencies = [
-    { name: "bloc_test", actions: [openBlocMigrationGuide] },
-  ];
-  const futures: Promise<Dependency>[] = devDependencies.map(
     async (dependency) => {
       return {
         name: dependency.name,
