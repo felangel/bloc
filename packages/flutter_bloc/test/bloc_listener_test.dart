@@ -72,6 +72,23 @@ class _MyAppState extends State<MyApp> {
 
 void main() {
   group('BlocListener', () {
+    testWidgets(
+        'throws AssertionError '
+        'when child is not specified', (tester) async {
+      const expected =
+          '''BlocListener<CounterCubit, int> used outside of MultiBlocListener must specify a child''';
+      await tester.pumpWidget(
+        BlocListener<CounterCubit, int>(
+          bloc: CounterCubit(),
+          listener: (context, state) {},
+        ),
+      );
+      expect(
+        tester.takeException(),
+        isA<AssertionError>().having((e) => e.message, 'message', expected),
+      );
+    });
+
     testWidgets('renders child properly', (tester) async {
       const targetKey = Key('cubit_listener_container');
       await tester.pumpWidget(

@@ -9,7 +9,7 @@ export const convertTo = async (
   let editor = window.activeTextEditor;
   if (!editor) return;
   const selection = getSelectedText(editor);
-  const rawWidget = editor.document.getText(selection);
+  const rawWidget = editor.document.getText(selection).replace("$", "//$");
   const match = rawWidget.match(childRegExp);
   if (!match || !match.length) return;
   const child = match[0];

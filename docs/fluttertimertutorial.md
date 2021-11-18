@@ -119,7 +119,7 @@ Now let’s implement the `TimerPaused` event handler.
 
 [timer_bloc.dart](_snippets/flutter_timer_tutorial/timer_bloc_pause.dart.md ':include')
 
-In `_mapTimerPausedToState` if the `state` of our `TimerBloc` is `TimerRunInProgress`, then we can pause the `_tickerSubscription` and push a `TimerRunPause` state with the current timer duration.
+In `_onPaused` if the `state` of our `TimerBloc` is `TimerRunInProgress`, then we can pause the `_tickerSubscription` and push a `TimerRunPause` state with the current timer duration.
 
 Next, let’s implement the `TimerResumed` event handler so that we can unpause the timer.
 

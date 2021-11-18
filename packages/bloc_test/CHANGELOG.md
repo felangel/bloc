@@ -1,3 +1,12 @@
+# 9.0.0
+
+- **BREAKING**: feat: upgrade to `bloc v8.0.0`
+- feat: `MockBloc` no longer implicitly requires `registerFallbackValue` for events and states
+
+# 9.0.0-dev.5
+
+- **BREAKING**: feat: upgrade to `bloc v8.0.0-dev.5`
+
 # 9.0.0-dev.4
 
 - **BREAKING**: feat: upgrade to `bloc v8.0.0-dev.4`
@@ -14,6 +23,10 @@
 
 - **BREAKING**: feat: upgrade to `bloc v8.0.0-dev.2`
 - feat: `MockBloc` no longer implicitly requires `registerFallbackValue` for events and states
+
+# 8.5.0
+
+- feat: prettier diffing when using `blocTest` and `expect` does not match emitted states ([#1783](https://github.com/felangel/bloc/issues/1783))
 
 # 8.4.0
 
