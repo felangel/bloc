@@ -1,3 +1,25 @@
+# 8.0.0
+
+- **BREAKING**: feat: introduce `BlocOverrides` API ([#2932](https://github.com/felangel/bloc/pull/2932))
+  - `Bloc.observer` removed in favor of `BlocOverrides.runZoned` and `BlocOverrides.current.blocObserver`
+  - `Bloc.transformer` removed in favor of `BlocOverrides.runZoned` and `BlocOverrides.current.eventTransformer`
+- **BREAKING**: refactor: make `BlocObserver` an abstract class
+- **BREAKING**: feat: `add` throws `StateError` when bloc is closed ([#2912](https://github.com/felangel/bloc/pull/2912))
+- **BREAKING**: feat: `emit` throws `StateError` when bloc is closed ([#2913](https://github.com/felangel/bloc/pull/2913))
+- **BREAKING**: feat: improve error handling/reporting
+  - `BlocUnhandledErrorException` is removed
+  - Uncaught exceptions are always reported to `onError` and rethrown
+  - `addError` reports error to `onError` but does not propagate as an uncaught exception
+- **BREAKING**: feat: restrict scope of `emit` in `Bloc` and `Cubit`
+  - In `Cubit`, `emit` is `protected` so it can only be used within the `Cubit` instance.
+  - In `Bloc`, `emit` is `internal` so it cannot be used outside of the internal package implementation.
+- **BREAKING**: refactor: remove deprecated `TransitionFunction`
+- **BREAKING**: refactor: remove deprecated `transformEvents`
+- **BREAKING**: refactor: remove deprecated `mapEventToState`
+- **BREAKING**: refactor: remove deprecated `transformTransitions`
+- **BREAKING**: refactor: remove deprecated `listen` on `BlocBase`
+- feat: throw `StateError` if an event is added without a registered event handler
+
 # 8.0.0-dev.5
 
 - **BREAKING**: feat: introduce `BlocOverrides` API ([#2932](https://github.com/felangel/bloc/pull/2932))
