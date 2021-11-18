@@ -54,3 +54,15 @@ section.cover blockquote > .buttons > a:hover {
 #TOPBANNER p {
   padding: 1.25rem 0;
 }
+
+#cover-sponsors-grid {
+  display: grid;
+  grid-auto-rows: 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0px 1em;
+  max-width: 600px;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  font-size: 0.8em;
+}
