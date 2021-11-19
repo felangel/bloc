@@ -397,7 +397,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// A bloc's state should only be updated by `emitting` a new `state`
   /// from an [EventHandler] in response to an incoming event.
   /// {@endtemplate}
-  @internal
+  @visibleForTesting
   @override
   void emit(State state) => super.emit(state);
 
