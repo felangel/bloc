@@ -16,6 +16,22 @@
 - Altamente Testeable
 - Para Dart, Flutter y AngularDart
 
-[Migrar a v6.1.0](es/migration.md)
-[GitHub](https://github.com/felangel/bloc/)
-[Comenzar](es/gettingstarted.md)
+<p class="buttons">
+    <a href="#/es/migration">Guía de migración</a>
+    <a href="https://github.com/felangel/bloc/" target="_blank" rel="noopener">GitHub</a>
+    <a href="#/es/gettingstarted">Comenzar</a>
+</p>
+
+<p align="center" style="margin-top: 2em; margin-bottom: 1em"><b>Sponsored with 💖 by</b></p>
+
+<div id="cover-sponsors-grid">
+    <div>
+        <a href="https://verygood.ventures"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo_transparent.png" width="65"/></a>
+    </div>
+    <div>
+        <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=https://github.com/felangel/bloc&utm_medium=github&utm_content=developer&utm_term=flutter" target="_blank"><img width="120" src="https://stream-blog-v2.imgix.net/blog/wp-content/uploads/bae8c920a484d1c49dbd148306aa1335/stream-bloc-flutter.png?auto=compress&fit=clip&w=120"/></a><br/><span><a href="https://getstream.io/chat/flutter/tutorial/?utm_source=https://github.com/felangel/bloc&utm_medium=github&utm_content=developer&utm_term=flutter" target="_blank">Try the Flutter Chat Tutorial &nbsp💬</a></span>
+    </div>
+    <div>
+        <a href="https://www.miquido.com/flutter-development-company/?utm_source=github&utm_medium=sponsorship&utm_campaign=bloc-silver-tier&utm_term=flutter-development-company&utm_content=miquido-logo"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/miquido_logo_transparent.png" width="225"/></a>
+    </div>
+</div>
