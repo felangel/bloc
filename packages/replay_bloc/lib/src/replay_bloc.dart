@@ -105,7 +105,7 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
           event: event,
           nextState: state,
         ));
-        // ignore: invalid_use_of_internal_member
+        // ignore: invalid_use_of_visible_for_testing_member
         super.emit(state);
       },
       (val) {
@@ -116,11 +116,11 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
           event: event,
           nextState: val,
         ));
-        // ignore: invalid_use_of_internal_member
+        // ignore: invalid_use_of_visible_for_testing_member
         super.emit(val);
       },
     ));
-    // ignore: invalid_use_of_internal_member
+    // ignore: invalid_use_of_visible_for_testing_member
     super.emit(state);
   }
 

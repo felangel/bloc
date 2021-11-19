@@ -378,8 +378,8 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   }
 
   /// {@template emit}
-  /// **[emit] is only for internal use and should never be called directly.
-  /// The [Emitter] instance provided to each [EventHandler]
+  /// **[emit] is only for internal use and should never be called directly
+  /// outside of tests. The [Emitter] instance provided to each [EventHandler]
   /// should be used instead.**
   ///
   /// ```dart
@@ -397,7 +397,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// A bloc's state should only be updated by `emitting` a new `state`
   /// from an [EventHandler] in response to an incoming event.
   /// {@endtemplate}
-  @internal
+  @visibleForTesting
   @override
   void emit(State state) => super.emit(state);
 
@@ -601,6 +601,7 @@ abstract class BlocBase<State> {
   ///
   /// * Throws a [StateError] if the bloc is closed.
   @protected
+  @visibleForTesting
   void emit(State state) {
     try {
       if (isClosed) {
