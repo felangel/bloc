@@ -1,3 +1,7 @@
+# 6.2.0
+
+- feat: query latest package versions from pub.dev
+
 # 6.1.0
 
 - feat: update to latest packages

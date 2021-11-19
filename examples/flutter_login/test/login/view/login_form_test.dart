@@ -6,21 +6,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:formz/formz.dart';
 import 'package:mocktail/mocktail.dart';
 
-class FakeLoginEvent extends Fake implements LoginEvent {}
-
-class FakeLoginState extends Fake implements LoginState {}
-
 class MockLoginBloc extends MockBloc<LoginEvent, LoginState>
     implements LoginBloc {}
 
 void main() {
   group('LoginForm', () {
     late LoginBloc loginBloc;
-
-    setUpAll(() {
-      registerFallbackValue(FakeLoginEvent());
-      registerFallbackValue(FakeLoginState());
-    });
 
     setUp(() {
       loginBloc = MockLoginBloc();

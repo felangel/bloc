@@ -15,22 +15,12 @@ import '../../helpers/hydrated_bloc.dart';
 
 class MockWeatherRepository extends Mock implements WeatherRepository {}
 
-class FakeColor extends Fake implements Color {}
-
 class MockThemeCubit extends MockCubit<Color> implements ThemeCubit {}
-
-class FakeWeatherState extends Fake implements WeatherState {}
 
 class MockWeatherCubit extends MockCubit<WeatherState> implements WeatherCubit {
 }
 
 void main() {
-  setUpAll(() {
-    initHydratedBloc();
-    registerFallbackValue(FakeColor());
-    registerFallbackValue(FakeWeatherState());
-  });
-
   group('WeatherPage', () {
     late WeatherRepository weatherRepository;
 
@@ -39,10 +29,12 @@ void main() {
     });
 
     testWidgets('renders WeatherView', (tester) async {
-      await tester.pumpWidget(RepositoryProvider.value(
-        value: weatherRepository,
-        child: MaterialApp(home: WeatherPage()),
-      ));
+      await mockHydratedStorage(() async {
+        await tester.pumpWidget(RepositoryProvider.value(
+          value: weatherRepository,
+          child: MaterialApp(home: WeatherPage()),
+        ));
+      });
       expect(find.byType(WeatherView), findsOneWidget);
     });
   });
@@ -110,17 +102,20 @@ void main() {
     });
 
     testWidgets('state is cached', (tester) async {
-      when<dynamic>(() => hydratedStorage.read('WeatherCubit')).thenReturn(
+      final storage = MockStorage();
+      when<dynamic>(() => storage.read('WeatherCubit')).thenReturn(
         WeatherState(
           status: WeatherStatus.success,
           weather: weather,
           temperatureUnits: TemperatureUnits.fahrenheit,
         ).toJson(),
       );
-      await tester.pumpWidget(BlocProvider.value(
-        value: WeatherCubit(MockWeatherRepository()),
-        child: MaterialApp(home: WeatherView()),
-      ));
+      await mockHydratedStorage(() async {
+        await tester.pumpWidget(BlocProvider.value(
+          value: WeatherCubit(MockWeatherRepository()),
+          child: MaterialApp(home: WeatherView()),
+        ));
+      }, storage: storage);
       expect(find.byType(WeatherPopulated), findsOneWidget);
     });
 

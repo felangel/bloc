@@ -38,6 +38,7 @@ void main() {
       test('should return initialState when subscribing to an bloc', () {
         expect(pipe.transform(bloc), 0);
       });
+
       test('should return the latest available value', () async {
         pipe.transform(bloc);
         bloc.add(Increment());
@@ -70,6 +71,7 @@ void main() {
           expect(pipe.transform(newBloc), 0);
         }));
       });
+
       test('should not dispose of existing subscription when Streams are equal',
           () async {
         // See https://github.com/dart-lang/angular2/issues/260
@@ -80,6 +82,7 @@ void main() {
           expect(pipe.transform(_bloc), 1);
         }));
       });
+
       test('should request a change detection check upon receiving a new value',
           () async {
         pipe.transform(bloc);
@@ -89,11 +92,13 @@ void main() {
         }));
       });
     });
+
     group('ngOnDestroy', () {
       test('should do nothing when no subscription and not throw exception',
           () {
         pipe.ngOnDestroy();
       });
+
       test('should dispose of the existing subscription', () async {
         pipe
           ..transform(bloc)

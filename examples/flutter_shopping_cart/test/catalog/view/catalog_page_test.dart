@@ -6,24 +6,9 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../helper.dart';
 
-class FakeCartState extends Fake implements CartState {}
-
-class FakeCartEvent extends Fake implements CartEvent {}
-
-class FakeCatalogState extends Fake implements CatalogState {}
-
-class FakeCatalogEvent extends Fake implements CatalogEvent {}
-
 void main() {
   late CartBloc cartBloc;
   late CatalogBloc catalogBloc;
-
-  setUpAll(() {
-    registerFallbackValue(FakeCartState());
-    registerFallbackValue(FakeCartEvent());
-    registerFallbackValue(FakeCatalogState());
-    registerFallbackValue(FakeCatalogEvent());
-  });
 
   setUp(() {
     catalogBloc = MockCatalogBloc();

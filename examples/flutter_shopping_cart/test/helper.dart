@@ -4,15 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shopping_cart/cart/cart.dart';
 import 'package:flutter_shopping_cart/catalog/catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
-class FakeCartState extends Fake implements CartState {}
-
-class FakeCartEvent extends Fake implements CartEvent {}
-
-class FakeCatalogState extends Fake implements CatalogState {}
-
-class FakeCatalogEvent extends Fake implements CatalogEvent {}
 
 class MockCartBloc extends MockBloc<CartEvent, CartState> implements CartBloc {}
 
@@ -25,11 +16,6 @@ extension PumpApp on WidgetTester {
     CatalogBloc? catalogBloc,
     required Widget child,
   }) {
-    registerFallbackValue(FakeCartState());
-    registerFallbackValue(FakeCartEvent());
-    registerFallbackValue(FakeCatalogState());
-    registerFallbackValue(FakeCatalogEvent());
-
     return pumpWidget(
       MaterialApp(
         home: MultiBlocProvider(

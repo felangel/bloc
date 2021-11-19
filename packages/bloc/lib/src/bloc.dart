@@ -1,8 +1,103 @@
-// ignore_for_file: deprecated_member_use_from_same_package
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+
+const _asyncRunZoned = runZoned;
+
+/// This class facilitates overriding [BlocObserver] and [EventTransformer].
+/// It should be extended by another class in client code with overrides
+/// that construct a custom implementation. The implementation in this class
+/// defaults to the base [blocObserver] and [eventTransformer] implementation.
+/// For example:
+///
+/// ```dart
+/// class MyBlocObserver extends BlocObserver {
+///   ...
+///   // A custom BlocObserver implementation.
+///   ...
+/// }
+///
+/// void main() {
+///   BlocOverrides.runZoned(() {
+///     ...
+///     // Bloc instances will use MyBlocObserver instead of the default BlocObserver.
+///     ...
+///   }, blocObserver: MyBlocObserver());
+/// }
+/// ```
+abstract class BlocOverrides {
+  static final _token = Object();
+
+  /// Returns the current [BlocOverrides] instance.
+  ///
+  /// This will return `null` if the current [Zone] does not contain
+  /// any [BlocOverrides].
+  ///
+  /// See also:
+  /// * [BlocOverrides.runZoned] to provide [BlocOverrides] in a fresh [Zone].
+  ///
+  static BlocOverrides? get current => Zone.current[_token] as BlocOverrides?;
+
+  /// Runs [body] in a fresh [Zone] using the provided overrides.
+  static R runZoned<R>(
+    R Function() body, {
+    BlocObserver? blocObserver,
+    EventTransformer? eventTransformer,
+  }) {
+    final overrides = _BlocOverridesScope(blocObserver, eventTransformer);
+    return _asyncRunZoned(body, zoneValues: {_token: overrides});
+  }
+
+  /// The [BlocObserver] that will be used within the current [Zone].
+  ///
+  /// By default, a base [BlocObserver] implementation is used.
+  BlocObserver get blocObserver => _defaultBlocObserver;
+
+  /// The [EventTransformer] that will be used within the current [Zone].
+  ///
+  /// By default, all events are processed concurrently.
+  ///
+  /// If a custom transformer is specified for a particular event handler,
+  /// it will take precendence over the global transformer.
+  ///
+  /// See also:
+  ///
+  /// * [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
+  /// opinionated set of event transformers.
+  ///
+  EventTransformer get eventTransformer => _defaultEventTransformer;
+}
+
+class _BlocOverridesScope extends BlocOverrides {
+  _BlocOverridesScope(this._blocObserver, this._eventTransformer);
+
+  final BlocOverrides? _previous = BlocOverrides.current;
+  final BlocObserver? _blocObserver;
+  final EventTransformer? _eventTransformer;
+
+  @override
+  BlocObserver get blocObserver {
+    final blocObserver = _blocObserver;
+    if (blocObserver != null) return blocObserver;
+
+    final previous = _previous;
+    if (previous != null) return previous.blocObserver;
+
+    return super.blocObserver;
+  }
+
+  @override
+  EventTransformer get eventTransformer {
+    final eventTransformer = _eventTransformer;
+    if (eventTransformer != null) return eventTransformer;
+
+    final previous = _previous;
+    if (previous != null) return previous.eventTransformer;
+
+    return super.eventTransformer;
+  }
+}
 
 /// {@template emitter}
 /// An [Emitter] is a class which is capable of emitting new states.
@@ -87,7 +182,7 @@ typedef EventTransformer<Event> = Stream<Event> Function(
 class _Emitter<State> implements Emitter<State> {
   _Emitter(this._emit);
 
-  final void Function(State) _emit;
+  final void Function(State state) _emit;
   final _completer = Completer<void>();
   final _disposables = <FutureOr<void> Function()>[];
 
@@ -97,7 +192,7 @@ class _Emitter<State> implements Emitter<State> {
   @override
   Future<void> onEach<T>(
     Stream<T> stream, {
-    required void Function(T) onData,
+    required void Function(T data) onData,
     void Function(Object error, StackTrace stackTrace)? onError,
   }) async {
     final completer = Completer<void>();
@@ -117,7 +212,7 @@ class _Emitter<State> implements Emitter<State> {
   @override
   Future<void> forEach<T>(
     Stream<T> stream, {
-    required State Function(T) onData,
+    required State Function(T data) onData,
     State Function(Object error, StackTrace stackTrace)? onError,
   }) {
     return onEach<T>(
@@ -207,46 +302,10 @@ Please make sure to await all asynchronous operations within event handlers.
   Future<void> get future => _completer.future;
 }
 
-/// **@Deprecated - Use `on<Event>` with an `EventTransformer` instead.
-/// Will be removed in v8.0.0**
-///
-/// Signature for a mapper function which takes an [Event] as input
-/// and outputs a [Stream] of [Transition] objects.
-@Deprecated(
-  'Use `on<Event>` with an `EventTransformer` instead. '
-  'Will be removed in v8.0.0',
-)
-typedef TransitionFunction<Event, State> = Stream<Transition<Event, State>>
-    Function(Event);
-
-/// {@template bloc_unhandled_error_exception}
-/// Exception thrown when an unhandled error occurs within a bloc.
-///
-/// _Note: thrown in debug mode only_
-/// {@endtemplate}
-class BlocUnhandledErrorException implements Exception {
-  /// {@macro bloc_unhandled_error_exception}
-  BlocUnhandledErrorException(
-    this.bloc,
-    this.error, [
-    this.stackTrace = StackTrace.empty,
-  ]);
-
-  /// The bloc in which the unhandled error occurred.
-  final BlocBase bloc;
-
-  /// The unhandled [error] object.
-  final Object error;
-
-  /// Stack trace which accompanied the error.
-  /// May be [StackTrace.empty] if no stack trace was provided.
-  final StackTrace stackTrace;
-
-  @override
-  String toString() {
-    return 'Unhandled error $error occurred in $bloc.\n'
-        '$stackTrace';
-  }
+class _Handler {
+  const _Handler({required this.isType, required this.type});
+  final bool Function(dynamic value) isType;
+  final Type type;
 }
 
 /// {@template bloc}
@@ -255,48 +314,41 @@ class BlocUnhandledErrorException implements Exception {
 /// {@endtemplate}
 abstract class Bloc<Event, State> extends BlocBase<State> {
   /// {@macro bloc}
-  Bloc(State initialState) : super(initialState) {
-    _bindEventsToStates();
-  }
-
-  /// The current [BlocObserver] instance.
-  static BlocObserver observer = BlocObserver();
-
-  /// The default [EventTransformer] used for all event handlers.
-  /// By default all events are processed concurrently.
-  ///
-  /// If a custom transformer is specified for a particular event handler,
-  /// it will take precendence over the global transformer.
-  ///
-  /// See also:
-  ///
-  /// * [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
-  /// opinionated set of event transformers.
-  ///
-  static EventTransformer<dynamic> transformer = (events, mapper) {
-    return events
-        .map(mapper)
-        .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
-  };
-
-  StreamSubscription<Transition<Event, State>>? _transitionSubscription;
+  Bloc(State initialState) : super(initialState);
 
   final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<dynamic>>[];
-  final _handlerTypes = <Type>[];
+  final _handlers = <_Handler>[];
   final _emitters = <_Emitter>[];
+  final _eventTransformer =
+      BlocOverrides.current?.eventTransformer ?? _defaultEventTransformer;
 
   /// Notifies the [Bloc] of a new [event] which triggers
   /// all corresponding [EventHandler] instances.
-  /// If [close] has already been called, any subsequent calls to [add] will
-  /// be ignored and will not result in any subsequent state changes.
+  ///
+  /// * A [StateError] will be thrown if there is no event handler
+  /// registered for the incoming [event].
+  ///
+  /// * A [StateError] will be thrown if the bloc is closed and the
+  /// [event] will not be processed.
   void add(Event event) {
-    if (_eventController.isClosed) return;
+    assert(() {
+      final handlerExists = _handlers.any((handler) => handler.isType(event));
+      if (!handlerExists) {
+        final eventType = event.runtimeType;
+        throw StateError(
+          '''add($eventType) was called without a registered event handler.\n'''
+          '''Make sure to register a handler via on<$eventType>((event, emit) {...})''',
+        );
+      }
+      return true;
+    }());
     try {
       onEvent(event);
       _eventController.add(event);
     } catch (error, stackTrace) {
       onError(error, stackTrace);
+      rethrow;
     }
   }
 
@@ -322,63 +374,30 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   @mustCallSuper
   void onEvent(Event event) {
     // ignore: invalid_use_of_protected_member
-    observer.onEvent(this, event);
-  }
-
-  /// **@Deprecated - Use `on<Event>` with an `EventTransformer` instead.
-  /// Will be removed in v8.0.0**
-  ///
-  /// Transforms the [events] stream along with a [transitionFn] function into
-  /// a `Stream<Transition>`.
-  /// Events that should be processed by [mapEventToState] need to be passed to
-  /// [transitionFn].
-  /// By default `asyncExpand` is used to ensure all [events] are processed in
-  /// the order in which they are received.
-  /// You can override [transformEvents] for advanced usage in order to
-  /// manipulate the frequency and specificity with which [mapEventToState] is
-  /// called as well as which [events] are processed.
-  ///
-  /// For example, if you only want [mapEventToState] to be called on the most
-  /// recent [Event] you can use `switchMap` instead of `asyncExpand`.
-  ///
-  /// ```dart
-  /// @override
-  /// Stream<Transition<Event, State>> transformEvents(events, transitionFn) {
-  ///   return events.switchMap(transitionFn);
-  /// }
-  /// ```
-  ///
-  /// Alternatively, if you only want [mapEventToState] to be called for
-  /// distinct [events]:
-  ///
-  /// ```dart
-  /// @override
-  /// Stream<Transition<Event, State>> transformEvents(events, transitionFn) {
-  ///   return super.transformEvents(
-  ///     events.distinct(),
-  ///     transitionFn,
-  ///   );
-  /// }
-  /// ```
-  @Deprecated(
-    'Use `on<Event>` with an `EventTransformer` instead. '
-    'Will be removed in v8.0.0',
-  )
-  Stream<Transition<Event, State>> transformEvents(
-    Stream<Event> events,
-    TransitionFunction<Event, State> transitionFn,
-  ) {
-    return events.asyncExpand(transitionFn);
+    _blocObserver?.onEvent(this, event);
   }
 
   /// {@template emit}
-  /// **[emit] should never be used outside of tests.**
+  /// **[emit] is only for internal use and should never be called directly.
+  /// The [Emitter] instance provided to each [EventHandler]
+  /// should be used instead.**
+  ///
+  /// ```dart
+  /// class MyBloc extends Bloc<MyEvent, MyState> {
+  ///   MyBloc() : super(MyInitialState()) {
+  ///     on<MyEvent>((event, emit) {
+  ///       // use `emit` to update the state.
+  ///       emit(MyOtherState());
+  ///     });
+  ///   }
+  /// }
+  /// ```
   ///
   /// Updates the state of the bloc to the provided [state].
   /// A bloc's state should only be updated by `emitting` a new `state`
   /// from an [EventHandler] in response to an incoming event.
   /// {@endtemplate}
-  @visibleForTesting
+  @internal
   @override
   void emit(State state) => super.emit(state);
 
@@ -412,18 +431,18 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     EventTransformer<E>? transformer,
   }) {
     assert(() {
-      final handlerExists = _handlerTypes.any((type) => type == E);
+      final handlerExists = _handlers.any((handler) => handler.type == E);
       if (handlerExists) {
         throw StateError(
           'on<$E> was called multiple times. '
           'There should only be a single event handler per event type.',
         );
       }
-      _handlerTypes.add(E);
+      _handlers.add(_Handler(isType: (dynamic e) => e is E, type: E));
       return true;
     }());
 
-    final _transformer = transformer ?? Bloc.transformer;
+    final _transformer = transformer ?? _eventTransformer;
     final subscription = _transformer(
       _eventController.stream.where((event) => event is E).cast<E>(),
       (dynamic event) {
@@ -456,6 +475,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
             await handler(event as E, emitter);
           } catch (error, stackTrace) {
             onError(error, stackTrace);
+            rethrow;
           } finally {
             onDone();
           }
@@ -467,15 +487,6 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     ).listen(null);
     _subscriptions.add(subscription);
   }
-
-  /// **@Deprecated - Use on<Event> instead. Will be removed in v8.0.0**
-  ///
-  /// Must be implemented when a class extends [Bloc].
-  /// [mapEventToState] is called whenever an [event] is [add]ed
-  /// and is responsible for converting that [event] into a new [state].
-  /// [mapEventToState] can `yield` zero, one, or multiple states for an event.
-  @Deprecated('Use on<Event> instead. Will be removed in v8.0.0')
-  Stream<State> mapEventToState(Event event) async* {}
 
   /// Called whenever a [transition] occurs with the given [transition].
   /// A [transition] occurs when a new `event` is added
@@ -503,36 +514,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   @mustCallSuper
   void onTransition(Transition<Event, State> transition) {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onTransition(this, transition);
-  }
-
-  /// **@Deprecated - Override `Stream<State> get stream` instead.
-  /// Will be removed in v8.0.0**
-  ///
-  /// Transforms the `Stream<Transition>` into a new `Stream<Transition>`.
-  /// By default [transformTransitions] returns
-  /// the incoming `Stream<Transition>`.
-  /// You can override [transformTransitions] for advanced usage in order to
-  /// manipulate the frequency and specificity at which `transitions`
-  /// (state changes) occur.
-  ///
-  /// For example, if you want to debounce outgoing state changes:
-  ///
-  /// ```dart
-  /// @override
-  /// Stream<Transition<Event, State>> transformTransitions(
-  ///   Stream<Transition<Event, State>> transitions,
-  /// ) {
-  ///   return transitions.debounceTime(Duration(seconds: 1));
-  /// }
-  /// ```
-  @Deprecated(
-    'Override `Stream<State> get stream` instead. Will be removed in v8.0.0',
-  )
-  Stream<Transition<Event, State>> transformTransitions(
-    Stream<Transition<Event, State>> transitions,
-  ) {
-    return transitions;
+    _blocObserver?.onTransition(this, transition);
   }
 
   /// Closes the `event` and `state` `Streams`.
@@ -548,47 +530,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
     for (final emitter in _emitters) emitter.cancel();
     await Future.wait<void>(_emitters.map((e) => e.future));
     await Future.wait<void>(_subscriptions.map((s) => s.cancel()));
-    await _transitionSubscription?.cancel();
     return super.close();
-  }
-
-  void _bindEventsToStates() {
-    void assertNoMixedUsage() {
-      assert(() {
-        if (_handlerTypes.isNotEmpty) {
-          throw StateError(
-            'mapEventToState cannot be overridden in '
-            'conjunction with on<Event>.',
-          );
-        }
-        return true;
-      }());
-    }
-
-    _transitionSubscription = transformTransitions(
-      transformEvents(
-        _eventController.stream,
-        (event) => mapEventToState(event).map(
-          (nextState) => Transition(
-            currentState: state,
-            event: event,
-            nextState: nextState,
-          ),
-        ),
-      ),
-    ).listen(
-      (transition) {
-        if (transition.nextState == state && _emitted) return;
-        try {
-          assertNoMixedUsage();
-          onTransition(transition);
-          emit(transition.nextState);
-        } catch (error, stackTrace) {
-          onError(error, stackTrace);
-        }
-      },
-      onError: onError,
-    );
   }
 }
 
@@ -623,8 +565,10 @@ abstract class BlocBase<State> {
   /// {@macro bloc_stream}
   BlocBase(this._state) {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onCreate(this);
+    _blocObserver?.onCreate(this);
   }
+
+  final _blocObserver = BlocOverrides.current?.blocObserver;
 
   StreamController<State>? __stateController;
   StreamController<State> get _stateController {
@@ -647,41 +591,30 @@ abstract class BlocBase<State> {
   /// Subsequent state changes cannot occur within a closed bloc.
   bool get isClosed => _stateController.isClosed;
 
-  /// Adds a subscription to the `Stream<State>`.
-  /// Returns a [StreamSubscription] which handles events from
-  /// the `Stream<State>` using the provided [onData], [onError] and [onDone]
-  /// handlers.
-  @Deprecated(
-    'Use stream.listen instead. Will be removed in v8.0.0',
-  )
-  StreamSubscription<State> listen(
-    void Function(State)? onData, {
-    Function? onError,
-    void Function()? onDone,
-    bool? cancelOnError,
-  }) {
-    return stream.listen(
-      onData,
-      onError: onError,
-      onDone: onDone,
-      cancelOnError: cancelOnError,
-    );
-  }
-
   /// Updates the [state] to the provided [state].
-  /// [emit] does nothing if the instance has been closed or if the
-  /// [state] being emitted is equal to the current [state].
+  /// [emit] does nothing if the [state] being emitted
+  /// is equal to the current [state].
   ///
   /// To allow for the possibility of notifying listeners of the initial state,
   /// emitting a state which is equal to the initial state is allowed as long
   /// as it is the first thing emitted by the instance.
+  ///
+  /// * Throws a [StateError] if the bloc is closed.
+  @protected
   void emit(State state) {
-    if (_stateController.isClosed) return;
-    if (state == _state && _emitted) return;
-    onChange(Change<State>(currentState: this.state, nextState: state));
-    _state = state;
-    _stateController.add(_state);
-    _emitted = true;
+    try {
+      if (isClosed) {
+        throw StateError('Cannot emit new states after calling close');
+      }
+      if (state == _state && _emitted) return;
+      onChange(Change<State>(currentState: this.state, nextState: state));
+      _state = state;
+      _stateController.add(_state);
+      _emitted = true;
+    } catch (error, stackTrace) {
+      onError(error, stackTrace);
+      rethrow;
+    }
   }
 
   /// Called whenever a [change] occurs with the given [change].
@@ -707,7 +640,7 @@ abstract class BlocBase<State> {
   @mustCallSuper
   void onChange(Change<State> change) {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onChange(this, change);
+    _blocObserver?.onChange(this, change);
   }
 
   /// Reports an [error] which triggers [onError] with an optional [StackTrace].
@@ -718,13 +651,8 @@ abstract class BlocBase<State> {
 
   /// Called whenever an [error] occurs and notifies [BlocObserver.onError].
   ///
-  /// In debug mode, [onError] throws a [BlocUnhandledErrorException] for
-  /// improved visibility.
-  ///
-  /// In release mode, [onError] does not throw and will instead only report
-  /// the error to [BlocObserver.onError].
-  ///
   /// **Note: `super.onError` should always be called last.**
+  ///
   /// ```dart
   /// @override
   /// void onError(Object error, StackTrace stackTrace) {
@@ -738,10 +666,7 @@ abstract class BlocBase<State> {
   @mustCallSuper
   void onError(Object error, StackTrace stackTrace) {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onError(this, error, stackTrace);
-    assert(() {
-      throw BlocUnhandledErrorException(this, error, stackTrace);
-    }());
+    _blocObserver?.onError(this, error, stackTrace);
   }
 
   /// Closes the instance.
@@ -750,10 +675,19 @@ abstract class BlocBase<State> {
   @mustCallSuper
   Future<void> close() async {
     // ignore: invalid_use_of_protected_member
-    Bloc.observer.onClose(this);
+    _blocObserver?.onClose(this);
     await _stateController.close();
   }
 }
+
+late final _defaultBlocObserver = _DefaultBlocObserver();
+late final _defaultEventTransformer = (Stream events, EventMapper mapper) {
+  return events
+      .map(mapper)
+      .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
+};
+
+class _DefaultBlocObserver extends BlocObserver {}
 
 class _FlatMapStreamTransformer<T> extends StreamTransformerBase<Stream<T>, T> {
   const _FlatMapStreamTransformer();

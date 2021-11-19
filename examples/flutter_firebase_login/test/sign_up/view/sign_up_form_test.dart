@@ -13,8 +13,6 @@ class MockAuthenticationRepository extends Mock
 
 class MockSignUpCubit extends MockCubit<SignUpState> implements SignUpCubit {}
 
-class FakeSignUpState extends Fake implements SignUpState {}
-
 class MockEmail extends Mock implements Email {}
 
 class MockPassword extends Mock implements Password {}
@@ -34,10 +32,6 @@ void main() {
 
   group('SignUpForm', () {
     late SignUpCubit signUpCubit;
-
-    setUpAll(() {
-      registerFallbackValue(FakeSignUpState());
-    });
 
     setUp(() {
       signUpCubit = MockSignUpCubit();

@@ -5,10 +5,6 @@ import 'package:flutter_infinite_list/posts/posts.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class FakePostState extends Fake implements PostState {}
-
-class FakePostEvent extends Fake implements PostEvent {}
-
 class MockPostBloc extends MockBloc<PostEvent, PostState> implements PostBloc {}
 
 extension on WidgetTester {
@@ -31,11 +27,6 @@ void main() {
   );
 
   late PostBloc postBloc;
-
-  setUpAll(() {
-    registerFallbackValue(FakePostState());
-    registerFallbackValue(FakePostEvent());
-  });
 
   setUp(() {
     postBloc = MockPostBloc();
