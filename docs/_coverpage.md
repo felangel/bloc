@@ -16,7 +16,7 @@
 - Highly Testable
 - For Dart, Flutter, and AngularDart
 
-<p class="buttons">    
+<p class="buttons">
     <a href="#/migration">Migration Guide</a>
     <a href="https://github.com/felangel/bloc/" target="_blank" rel="noopener">GitHub</a>
     <a href="#/gettingstarted">Get Started</a>    
