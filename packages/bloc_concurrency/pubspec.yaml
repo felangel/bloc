@@ -17,7 +17,3 @@ dev_dependencies:
   mocktail: ^0.2.0
   test: ^1.17.0
   very_good_analysis: ^2.4.0
-
-dependency_overrides:
-  bloc:
-    path: ../bloc
