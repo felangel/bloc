@@ -12,8 +12,8 @@ environment:
 dependencies:
   args: ^2.1.0
   io: ^1.0.0
-  mason: ^0.0.1-dev.51
-  pub_updater: ^0.2.1
+  mason: ^0.0.1-dev.57
+  pub_updater: ^0.2.2
   universal_io: ^2.0.4
 
 dev_dependencies:
@@ -22,7 +22,7 @@ dev_dependencies:
   build_version: ^2.0.0
   mocktail: ^0.2.0
   test: ^1.17.0
-  very_good_analysis: ^2.3.0
+  very_good_analysis: ^2.4.0
 
 executables:
   bloc:
