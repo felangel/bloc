@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firestore_todos/blocs/todos/todos.dart';
 import 'package:flutter_firestore_todos/screens/screens.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 class DetailsScreen extends StatelessWidget {
   final String id;
@@ -15,7 +16,10 @@ class DetailsScreen extends StatelessWidget {
         if (state is! TodosLoaded) {
           throw StateError('Cannot render details without a valid todo');
         }
-        final todo = state.todos.firstWhere((todo) => todo.id == id);
+        final todo = state.todos.firstWhere(
+          (todo) => todo.id == id,
+          orElse: () => Todo(task: ''),
+        );
         return Scaffold(
           appBar: AppBar(
             title: Text('Todo Details'),
