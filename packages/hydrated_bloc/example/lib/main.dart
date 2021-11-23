@@ -87,7 +87,7 @@ class CounterView extends StatelessWidget {
           const SizedBox(height: 4),
           FloatingActionButton(
             child: const Icon(Icons.delete_forever),
-            onPressed: () => HydratedBlocOverrides.current!.storage.clear(),
+            onPressed: () => HydratedBlocOverrides.current?.storage.clear(),
           ),
         ],
       ),
