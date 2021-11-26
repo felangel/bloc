@@ -62,15 +62,17 @@ class TodosOverviewView extends StatelessWidget {
               final messenger = ScaffoldMessenger.of(context);
               messenger
                 ..hideCurrentSnackBar()
-                ..showSnackBar(TodoDeletionConfirmationSnackBar(
-                  todo: deletedTodo,
-                  onUndo: () {
-                    messenger.hideCurrentSnackBar();
-                    context
-                        .read<TodosOverviewBloc>()
-                        .add(const TodosOverviewUndoDeletionRequested());
-                  },
-                ),);
+                ..showSnackBar(
+                  TodoDeletionConfirmationSnackBar(
+                    todo: deletedTodo,
+                    onUndo: () {
+                      messenger.hideCurrentSnackBar();
+                      context
+                          .read<TodosOverviewBloc>()
+                          .add(const TodosOverviewUndoDeletionRequested());
+                    },
+                  ),
+                );
             },
           ),
         ],
@@ -100,12 +102,12 @@ class TodosOverviewView extends StatelessWidget {
                     TodoListTile(
                       todo: todo,
                       onToggleCompleted: (isCompleted) {
-                        context
-                            .read<TodosOverviewBloc>()
-                            .add(TodosOverviewTodoCompletionToggled(
-                              todo: todo,
-                              isCompleted: isCompleted,
-                            ),);
+                        context.read<TodosOverviewBloc>().add(
+                              TodosOverviewTodoCompletionToggled(
+                                todo: todo,
+                                isCompleted: isCompleted,
+                              ),
+                            );
                       },
                       onDismissed: (_) {
                         context
@@ -113,8 +115,9 @@ class TodosOverviewView extends StatelessWidget {
                             .add(TodosOverviewTodoDeleted(todo));
                       },
                       onTap: () {
-                        Navigator.of(context)
-                            .push(EditTodoPage.route(initialTodo: todo));
+                        Navigator.of(context).push(
+                          EditTodoPage.route(initialTodo: todo),
+                        );
                       },
                     ),
                 ],
