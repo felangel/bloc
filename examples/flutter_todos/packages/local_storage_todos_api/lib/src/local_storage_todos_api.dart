@@ -85,7 +85,7 @@ class LocalStorageTodosApi extends TodosApi {
   }
 
   @override
-  Future<int> completeAll(bool isCompleted) async {
+  Future<int> completeAll({required bool isCompleted}) async {
     final todos = [..._todoStreamController.value];
     final changedTodosAmount =
         todos.where((t) => t.isCompleted != isCompleted).length;

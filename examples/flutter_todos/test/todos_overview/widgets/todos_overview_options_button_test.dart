@@ -96,7 +96,7 @@ void main() {
                 Todo(title: 'a', isCompleted: true),
                 Todo(title: 'b', isCompleted: false),
               ],
-            ));
+            ),);
             await tester.pumpApp(buildSubject());
             await tester.openPopup();
 
@@ -118,7 +118,7 @@ void main() {
                 Todo(title: 'a', isCompleted: true),
                 Todo(title: 'b', isCompleted: true),
               ],
-            ));
+            ),);
             await tester.pumpApp(buildSubject());
             await tester.openPopup();
 
@@ -141,16 +141,16 @@ void main() {
                 Todo(title: 'a', isCompleted: true),
                 Todo(title: 'b', isCompleted: false),
               ],
-            ));
+            ),);
             await tester.pumpApp(buildSubject());
             await tester.openPopup();
 
             await tester.tap(find.optionMenuItem(
               title: l10n.todosOverviewOptionsMarkAllComplete,
-            ));
+            ),);
 
             verify(() => todosOverviewBloc
-                .add(const TodosOverviewToggleAllRequested())).called(1);
+                .add(const TodosOverviewToggleAllRequested()),).called(1);
           },
         );
       });
@@ -183,7 +183,7 @@ void main() {
                 Todo(title: 'a', isCompleted: true),
                 Todo(title: 'b', isCompleted: false),
               ],
-            ));
+            ),);
             await tester.pumpApp(buildSubject());
             await tester.openPopup();
 
@@ -207,16 +207,16 @@ void main() {
                 Todo(title: 'a', isCompleted: true),
                 Todo(title: 'b', isCompleted: false),
               ],
-            ));
+            ),);
             await tester.pumpApp(buildSubject());
             await tester.openPopup();
 
             await tester.tap(find.optionMenuItem(
               title: l10n.todosOverviewOptionsClearCompleted,
-            ));
+            ),);
 
             verify(() => todosOverviewBloc
-                .add(const TodosOverviewClearCompletedRequested())).called(1);
+                .add(const TodosOverviewClearCompletedRequested()),).called(1);
           },
         );
       });

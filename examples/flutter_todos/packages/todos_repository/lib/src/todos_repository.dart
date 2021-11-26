@@ -33,6 +33,6 @@ class TodosRepository {
   /// Sets the `isCompleted` state of all todos to the given value.
   ///
   /// Returns the number of updated todos.
-  Future<int> completeAll(bool isCompleted) =>
-      _todosApi.completeAll(isCompleted);
+  Future<int> completeAll({required bool isCompleted}) =>
+      _todosApi.completeAll(isCompleted: isCompleted);
 }

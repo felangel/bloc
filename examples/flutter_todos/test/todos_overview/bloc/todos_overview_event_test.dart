@@ -51,7 +51,7 @@ void main() {
           equals(TodosOverviewTodoCompletionToggled(
             todo: mockTodos.first,
             isCompleted: true,
-          )),
+          ),),
         );
       });
 

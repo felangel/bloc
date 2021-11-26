@@ -5,7 +5,6 @@ import 'package:flutter_todos/home/home.dart';
 import 'package:flutter_todos/stats/stats.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart';
 import 'package:mockingjay/mockingjay.dart';
-import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -23,8 +22,9 @@ void main() {
   });
 
   group('HomeView', () {
-    const addTodoFloatingActionButtonKey =
-        Key('homeView_addTodo_floatingActionButton');
+    const addTodoFloatingActionButtonKey = Key(
+      'homeView_addTodo_floatingActionButton',
+    );
 
     late MockNavigator navigator;
     late HomeCubit cubit;

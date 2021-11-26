@@ -93,7 +93,7 @@ void main() {
             title: 'new title',
             description: 'new description',
             isCompleted: false,
-          )),
+          ),),
         );
       });
     });

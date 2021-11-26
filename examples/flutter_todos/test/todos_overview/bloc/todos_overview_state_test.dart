@@ -89,7 +89,7 @@ void main() {
             todos: [],
             filter: TodosViewFilter.completedOnly,
             lastDeletedTodo: mockTodos.first,
-          )),
+          ),),
         );
       });
     });
@@ -101,7 +101,7 @@ void main() {
         ).withoutLastDeletedTodo(),
         equals(createSubject(
           lastDeletedTodo: null,
-        )),
+        ),),
       );
     });
   });

@@ -40,10 +40,12 @@ void main() {
       when(() => api.getTodos()).thenAnswer((_) => Stream.value(todos));
       when(() => api.saveTodo(any())).thenAnswer((_) async {});
       when(() => api.deleteTodo(any())).thenAnswer((_) async {});
-      when(() => api.clearCompleted()).thenAnswer(
-        (_) async => todos.where((todo) => todo.isCompleted).length,
-      );
-      when(() => api.completeAll(any())).thenAnswer((_) async => 0);
+      when(
+        () => api.clearCompleted(),
+      ).thenAnswer((_) async => todos.where((todo) => todo.isCompleted).length);
+      when(
+        () => api.completeAll(isCompleted: any(named: 'isCompleted')),
+      ).thenAnswer((_) async => 0);
     });
 
     TodosRepository createSubject() => TodosRepository(todosApi: api);
@@ -117,9 +119,9 @@ void main() {
       test('makes correct request', () {
         final subject = createSubject();
 
-        expect(subject.completeAll(true), completes);
+        expect(subject.completeAll(isCompleted: true), completes);
 
-        verify(() => api.completeAll(true)).called(1);
+        verify(() => api.completeAll(isCompleted: true)).called(1);
       });
     });
   });

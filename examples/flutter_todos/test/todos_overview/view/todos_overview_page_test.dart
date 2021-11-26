@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart';
 import 'package:mockingjay/mockingjay.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:todos_repository/todos_repository.dart';
 
 import '../../helpers/helpers.dart';
@@ -159,7 +158,7 @@ void main() {
           snackBar.onUndo();
 
           verify(() => todosOverviewBloc
-              .add(const TodosOverviewUndoDeletionRequested())).called(1);
+              .add(const TodosOverviewUndoDeletionRequested()),).called(1);
         },
       );
     });
@@ -249,7 +248,7 @@ void main() {
                   todo: todo,
                   isCompleted: !todo.isCompleted,
                 ),
-              )).called(1);
+              ),).called(1);
         },
       );
 

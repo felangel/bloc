@@ -34,7 +34,9 @@ class MockTodosRepository extends Mock implements TodosRepository {
     when(clearCompleted).thenAnswer(
       (_) async => mockTodos.where((todo) => !todo.isCompleted).length,
     );
-    when(() => completeAll(captureAny())).thenAnswer(
+    when(
+      () => completeAll(isCompleted: captureAny(named: 'isCompleted')),
+    ).thenAnswer(
       (i) async => mockTodos
           .where((todo) => todo.isCompleted != i.positionalArguments.first)
           .length,
@@ -56,10 +58,12 @@ class MockTodosOverviewBloc
     extends MockBloc<TodosOverviewEvent, TodosOverviewState>
     implements TodosOverviewBloc {
   MockTodosOverviewBloc() {
-    when(() => state).thenReturn(TodosOverviewState(
-      status: TodosOverviewStatus.success,
-      todos: mockTodos,
-    ));
+    when(() => state).thenReturn(
+      TodosOverviewState(
+        status: TodosOverviewStatus.success,
+        todos: mockTodos,
+      ),
+    );
   }
 }
 
@@ -70,11 +74,13 @@ class MockTodosOverviewState extends Mock implements TodosOverviewState {}
 class MockEditTodoBloc extends MockBloc<EditTodoEvent, EditTodoState>
     implements EditTodoBloc {
   MockEditTodoBloc() {
-    when(() => state).thenReturn(EditTodoState(
-      initialTodo: mockTodos.first,
-      title: mockTodos.first.title,
-      description: mockTodos.first.description,
-    ));
+    when(() => state).thenReturn(
+      EditTodoState(
+        initialTodo: mockTodos.first,
+        title: mockTodos.first.title,
+        description: mockTodos.first.description,
+      ),
+    );
   }
 }
 
@@ -85,11 +91,13 @@ class MockEditTodoState extends Mock implements EditTodoState {}
 class MockStatsBloc extends MockBloc<StatsEvent, StatsState>
     implements StatsBloc {
   MockStatsBloc() {
-    when(() => state).thenReturn(StatsState(
-      status: StatsStatus.success,
-      completedTodos: mockTodos.where((todo) => todo.isCompleted).length,
-      activeTodos: mockTodos.where((todo) => !todo.isCompleted).length,
-    ));
+    when(() => state).thenReturn(
+      StatsState(
+        status: StatsStatus.success,
+        completedTodos: mockTodos.where((todo) => todo.isCompleted).length,
+        activeTodos: mockTodos.where((todo) => !todo.isCompleted).length,
+      ),
+    );
   }
 }
 

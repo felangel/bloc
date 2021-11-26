@@ -11,11 +11,13 @@ class EditTodoBloc extends Bloc<EditTodoEvent, EditTodoState> {
     required TodosRepository todosRepository,
     required Todo? initialTodo,
   })  : _todosRepository = todosRepository,
-        super(EditTodoState(
-          initialTodo: initialTodo,
-          title: initialTodo?.title ?? '',
-          description: initialTodo?.description ?? '',
-        )) {
+        super(
+          EditTodoState(
+            initialTodo: initialTodo,
+            title: initialTodo?.title ?? '',
+            description: initialTodo?.description ?? '',
+          ),
+        ) {
     on<EditTodoTitleChanged>((event, emit) {
       emit(state.copyWith(title: event.title));
     });
