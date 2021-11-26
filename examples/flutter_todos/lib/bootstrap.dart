@@ -11,7 +11,6 @@ import 'package:todos_repository/todos_repository.dart';
 void bootstrap({
   required TodosApi todosApi,
 }) {
-  Bloc.observer = AppBlocObserver();
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
@@ -21,9 +20,14 @@ void bootstrap({
   );
 
   runZonedGuarded(
-    () => runApp(App(
-      todosRepository: todosRepository,
-    )),
+    () async {
+      await BlocOverrides.runZoned(
+        () async => runApp(
+          App(todosRepository: todosRepository),
+        ),
+        blocObserver: AppBlocObserver(),
+      );
+    },
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );
 }

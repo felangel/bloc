@@ -28,7 +28,10 @@ class Todo extends Equatable {
     required this.title,
     this.description = '',
     this.isCompleted = false,
-  })  : assert(id == null || id.isNotEmpty),
+  })  : assert(
+          id == null || id.isNotEmpty,
+          'id can not be null and should be empty',
+        ),
         id = id ?? const Uuid().v4();
 
   /// The unique identifier of the todo.

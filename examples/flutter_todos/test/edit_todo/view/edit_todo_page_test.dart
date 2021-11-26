@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_todos/edit_todo/edit_todo.dart';
 import 'package:mockingjay/mockingjay.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:todos_api/todos_api.dart';
 
 import '../../helpers/helpers.dart';
@@ -44,7 +43,7 @@ void main() {
             id: 'initial-id',
             title: 'initial',
           ),
-        ));
+        ),);
         expect(find.byType(EditTodoPage), findsOneWidget);
         expect(
           find.byWidgetPredicate(
@@ -119,7 +118,7 @@ void main() {
       (tester) async {
         when(() => editTodoBloc.state).thenReturn(EditTodoState(
           initialTodo: Todo(title: 'title'),
-        ));
+        ),);
         await tester.pumpApp(buildSubject());
 
         expect(find.byType(AppBar), findsOneWidget);
@@ -143,7 +142,7 @@ void main() {
       testWidgets('is disabled when loading', (tester) async {
         when(() => editTodoBloc.state).thenReturn(const EditTodoState(
           status: EditTodoStatus.loading,
-        ));
+        ),);
         await tester.pumpApp(buildSubject());
 
         final textField =
@@ -179,7 +178,7 @@ void main() {
       testWidgets('is disabled when loading', (tester) async {
         when(() => editTodoBloc.state).thenReturn(const EditTodoState(
           status: EditTodoStatus.loading,
-        ));
+        ),);
         await tester.pumpApp(buildSubject());
 
         final textField =

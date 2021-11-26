@@ -44,9 +44,11 @@ class TodosOverviewView extends StatelessWidget {
               if (state.status == TodosOverviewStatus.failure) {
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
-                  ..showSnackBar(SnackBar(
-                    content: Text(l10n.todosOverviewErrorSnackbarText),
-                  ));
+                  ..showSnackBar(
+                    SnackBar(
+                      content: Text(l10n.todosOverviewErrorSnackbarText),
+                    ),
+                  );
               }
             },
           ),
@@ -68,7 +70,7 @@ class TodosOverviewView extends StatelessWidget {
                         .read<TodosOverviewBloc>()
                         .add(const TodosOverviewUndoDeletionRequested());
                   },
-                ));
+                ),);
             },
           ),
         ],
@@ -103,7 +105,7 @@ class TodosOverviewView extends StatelessWidget {
                             .add(TodosOverviewTodoCompletionToggled(
                               todo: todo,
                               isCompleted: isCompleted,
-                            ));
+                            ),);
                       },
                       onDismissed: (_) {
                         context

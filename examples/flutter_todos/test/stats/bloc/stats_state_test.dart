@@ -69,7 +69,7 @@ void main() {
             status: StatsStatus.success,
             completedTodos: 1,
             activeTodos: 2,
-          )),
+          ),),
         );
       });
     });

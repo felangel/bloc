@@ -29,7 +29,7 @@ abstract class TodosApi {
   /// Sets the `isCompleted` state of all todos to the given value.
   ///
   /// Returns the number of updated todos.
-  Future<int> completeAll(bool isCompleted);
+  Future<int> completeAll({required bool isCompleted});
 }
 
 /// Error thrown when a [Todo] with a given id is not found.

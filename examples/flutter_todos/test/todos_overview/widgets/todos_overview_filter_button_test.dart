@@ -130,7 +130,7 @@ void main() {
           when(() => todosOverviewBloc.state)
               .thenReturn(const TodosOverviewState(
             filter: TodosViewFilter.all,
-          ));
+          ),);
 
           await tester.pumpApp(buildSubject());
           await tester.openPopup();
@@ -140,7 +140,7 @@ void main() {
 
           verify(() => todosOverviewBloc.add(
                 const TodosOverviewFilterChanged(TodosViewFilter.completedOnly),
-              )).called(1);
+              ),).called(1);
         },
       );
     });

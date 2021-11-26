@@ -96,14 +96,18 @@ void main() {
         seed: () => TodosOverviewState(
           todos: mockTodos,
         ),
-        act: (bloc) => bloc.add(TodosOverviewTodoCompletionToggled(
-          todo: mockTodos.first,
-          isCompleted: true,
-        )),
+        act: (bloc) => bloc.add(
+          TodosOverviewTodoCompletionToggled(
+            todo: mockTodos.first,
+            isCompleted: true,
+          ),
+        ),
         verify: (bloc) {
-          verify(() => todosRepository.saveTodo(
-                mockTodos.first.copyWith(isCompleted: true),
-              )).called(1);
+          verify(
+            () => todosRepository.saveTodo(
+              mockTodos.first.copyWith(isCompleted: true),
+            ),
+          ).called(1);
         },
       );
     });
@@ -164,7 +168,9 @@ void main() {
         ),
         act: (bloc) => bloc.add(const TodosOverviewToggleAllRequested()),
         verify: (bloc) {
-          verify(() => todosRepository.completeAll(true)).called(1);
+          verify(
+            () => todosRepository.completeAll(isCompleted: true),
+          ).called(1);
         },
       );
 
@@ -178,7 +184,9 @@ void main() {
         ),
         act: (bloc) => bloc.add(const TodosOverviewToggleAllRequested()),
         verify: (bloc) {
-          verify(() => todosRepository.completeAll(false)).called(1);
+          verify(
+            () => todosRepository.completeAll(isCompleted: false),
+          ).called(1);
         },
       );
     });

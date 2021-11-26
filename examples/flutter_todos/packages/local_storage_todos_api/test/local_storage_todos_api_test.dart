@@ -56,9 +56,11 @@ void main() {
           final subject = createSubject();
 
           expect(subject.getTodos(), emits(todos));
-          verify(() => plugin.getString(
-                LocalStorageTodosApi.kTodosCollectionKey,
-              )).called(1);
+          verify(
+            () => plugin.getString(
+              LocalStorageTodosApi.kTodosCollectionKey,
+            ),
+          ).called(1);
         });
 
         test('with empty list if no todos present', () {
@@ -67,9 +69,11 @@ void main() {
           final subject = createSubject();
 
           expect(subject.getTodos(), emits(const <Todo>[]));
-          verify(() => plugin.getString(
-                LocalStorageTodosApi.kTodosCollectionKey,
-              )).called(1);
+          verify(
+            () => plugin.getString(
+              LocalStorageTodosApi.kTodosCollectionKey,
+            ),
+          ).called(1);
         });
       });
     });
@@ -96,10 +100,12 @@ void main() {
         expect(subject.saveTodo(newTodo), completes);
         expect(subject.getTodos(), emits(newTodos));
 
-        verify(() => plugin.setString(
-              LocalStorageTodosApi.kTodosCollectionKey,
-              json.encode(newTodos),
-            )).called(1);
+        verify(
+          () => plugin.setString(
+            LocalStorageTodosApi.kTodosCollectionKey,
+            json.encode(newTodos),
+          ),
+        ).called(1);
       });
 
       test('updates existing todos', () {
@@ -116,10 +122,12 @@ void main() {
         expect(subject.saveTodo(updatedTodo), completes);
         expect(subject.getTodos(), emits(newTodos));
 
-        verify(() => plugin.setString(
-              LocalStorageTodosApi.kTodosCollectionKey,
-              json.encode(newTodos),
-            )).called(1);
+        verify(
+          () => plugin.setString(
+            LocalStorageTodosApi.kTodosCollectionKey,
+            json.encode(newTodos),
+          ),
+        ).called(1);
       });
     });
 
@@ -132,10 +140,12 @@ void main() {
         expect(subject.deleteTodo(todos[0].id), completes);
         expect(subject.getTodos(), emits(newTodos));
 
-        verify(() => plugin.setString(
-              LocalStorageTodosApi.kTodosCollectionKey,
-              json.encode(newTodos),
-            )).called(1);
+        verify(
+          () => plugin.setString(
+            LocalStorageTodosApi.kTodosCollectionKey,
+            json.encode(newTodos),
+          ),
+        ).called(1);
       });
 
       test(
@@ -165,10 +175,12 @@ void main() {
         );
         expect(subject.getTodos(), emits(newTodos));
 
-        verify(() => plugin.setString(
-              LocalStorageTodosApi.kTodosCollectionKey,
-              json.encode(newTodos),
-            )).called(1);
+        verify(
+          () => plugin.setString(
+            LocalStorageTodosApi.kTodosCollectionKey,
+            json.encode(newTodos),
+          ),
+        ).called(1);
       });
     });
 
@@ -182,15 +194,17 @@ void main() {
         final subject = createSubject();
 
         expect(
-          subject.completeAll(true),
+          subject.completeAll(isCompleted: true),
           completion(equals(changedTodosAmount)),
         );
         expect(subject.getTodos(), emits(newTodos));
 
-        verify(() => plugin.setString(
-              LocalStorageTodosApi.kTodosCollectionKey,
-              json.encode(newTodos),
-            )).called(1);
+        verify(
+          () => plugin.setString(
+            LocalStorageTodosApi.kTodosCollectionKey,
+            json.encode(newTodos),
+          ),
+        ).called(1);
       });
     });
   });

@@ -42,7 +42,10 @@ class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
     });
 
     on<TodosOverviewUndoDeletionRequested>((event, emit) async {
-      assert(state.lastDeletedTodo != null);
+      assert(
+        state.lastDeletedTodo != null,
+        'Last deleted todo can not be null.',
+      );
 
       final todo = state.lastDeletedTodo!;
       emit(state.withoutLastDeletedTodo());
@@ -55,7 +58,7 @@ class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
 
     on<TodosOverviewToggleAllRequested>((event, emit) async {
       final areAllCompleted = state.todos.every((todo) => todo.isCompleted);
-      await _todosRepository.completeAll(!areAllCompleted);
+      await _todosRepository.completeAll(isCompleted: !areAllCompleted);
     });
 
     on<TodosOverviewClearCompletedRequested>((event, emit) async {

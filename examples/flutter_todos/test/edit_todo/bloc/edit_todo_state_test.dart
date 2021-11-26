@@ -90,7 +90,7 @@ void main() {
             initialTodo: mockInitialTodo,
             title: 'title',
             description: 'description',
-          )),
+          ),),
         );
       });
     });
