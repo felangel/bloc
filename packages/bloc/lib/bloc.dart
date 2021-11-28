@@ -3,6 +3,14 @@
 /// Get started at [bloclibrary.dev](https://bloclibrary.dev) 🚀
 library bloc;
 
-export './src/bloc.dart';
-export './src/bloc_observer.dart';
-export './src/transition.dart';
+import 'dart:async';
+
+import 'package:meta/meta.dart';
+
+part 'src/bloc.dart';
+part 'src/bloc_base.dart';
+part 'src/bloc_observer.dart';
+part 'src/bloc_overrides.dart';
+part 'src/cubit.dart';
+part 'src/emitter.dart';
+part 'src/transition.dart';
