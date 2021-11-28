@@ -34,7 +34,7 @@ mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 /// ```
 ///
 /// {@endtemplate}
-class BlocProvider<T extends BlocBase<Object?>>
+class BlocProvider<T extends StateStreamable<Object?>>
     extends SingleChildStatelessWidget with BlocProviderSingleChildWidget {
   /// {@macro bloc_provider}
   const BlocProvider({
@@ -92,7 +92,7 @@ class BlocProvider<T extends BlocBase<Object?>>
   /// ```dart
   /// BlocProvider.of<BlocA>(context);
   /// ```
-  static T of<T extends BlocBase<Object?>>(
+  static T of<T extends StateStreamable<Object?>>(
     BuildContext context, {
     bool listen = false,
   }) {
@@ -129,7 +129,11 @@ class BlocProvider<T extends BlocBase<Object?>>
           )
         : InheritedProvider<T>(
             create: _create,
-            dispose: (_, bloc) => bloc.close(),
+            dispose: (_, bloc) {
+              if (bloc is Closable) {
+                (bloc as Closable).close();
+              }
+            },
             startListening: _startListening,
             child: child,
             lazy: lazy,
@@ -137,8 +141,8 @@ class BlocProvider<T extends BlocBase<Object?>>
   }
 
   static VoidCallback _startListening(
-    InheritedContext<BlocBase?> e,
-    BlocBase value,
+    InheritedContext<StateStreamable?> e,
+    StateStreamable value,
   ) {
     final subscription = value.stream.listen(
       (dynamic _) => e.markNeedsNotifyDependents(),

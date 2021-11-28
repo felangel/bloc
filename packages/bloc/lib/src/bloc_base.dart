@@ -1,10 +1,46 @@
 part of bloc;
 
+/// An object that provides access to a stream of states over time.
+abstract class Streamable<State> {
+  /// The current [stream] of states.
+  Stream<State> get stream;
+}
+
+/// A [Streamable] that provides synchronous access to the current [state].
+abstract class StateStreamable<State> extends Streamable<State> {
+  /// The current [state].
+  State get state;
+}
+
+/// An object which can emit new states.
+abstract class Emittable<State> {
+  /// Emits a new [state].
+  void emit(State state);
+}
+
+/// An object which must be closed when no longer in use.
+abstract class Closable {
+  /// Closes the current instance.
+  /// The returned future completes when the instance has been closed.
+  Future<void> close();
+}
+
+/// A generic destination for errors.
+///
+/// Multiple errors can be reported to the sink via `addError`.
+abstract class ErrorSink extends Closable {
+  /// Adds an [error] to the sink with an optional [stackTrace].
+  ///
+  /// Must not be called on a closed sink.
+  void addError(Object error, [StackTrace? stackTrace]);
+}
+
 /// {@template bloc_base}
 /// An interface for the core functionality implemented by
 /// both [Bloc] and [Cubit].
 /// {@endtemplate}
-abstract class BlocBase<State> {
+abstract class BlocBase<State>
+    implements StateStreamable<State>, Emittable<State>, ErrorSink {
   /// {@macro bloc_base}
   BlocBase(this._state) {
     // ignore: invalid_use_of_protected_member
@@ -22,10 +58,10 @@ abstract class BlocBase<State> {
 
   bool _emitted = false;
 
-  /// The current [state].
+  @override
   State get state => _state;
 
-  /// The current state stream.
+  @override
   Stream<State> get stream => _stateController.stream;
 
   /// Whether the bloc is closed.
@@ -45,6 +81,7 @@ abstract class BlocBase<State> {
   /// * Throws a [StateError] if the bloc is closed.
   @protected
   @visibleForTesting
+  @override
   void emit(State state) {
     try {
       if (isClosed) {
@@ -89,6 +126,7 @@ abstract class BlocBase<State> {
 
   /// Reports an [error] which triggers [onError] with an optional [StackTrace].
   @mustCallSuper
+  @override
   void addError(Object error, [StackTrace? stackTrace]) {
     onError(error, stackTrace ?? StackTrace.current);
   }
@@ -117,6 +155,7 @@ abstract class BlocBase<State> {
   /// This method should be called when the instance is no longer needed.
   /// Once [close] is called, the instance can no longer be used.
   @mustCallSuper
+  @override
   Future<void> close() async {
     // ignore: invalid_use_of_protected_member
     _blocObserver?.onClose(this);
