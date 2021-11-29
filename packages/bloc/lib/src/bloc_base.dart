@@ -12,17 +12,21 @@ abstract class StateStreamable<State> implements Streamable<State> {
   State get state;
 }
 
-/// An object which can emit new states.
-abstract class Emittable<State extends Object?> {
-  /// Emits a new [state].
-  void emit(State state);
-}
+/// A [StateStreamable] that must be closed when no longer in use.
+abstract class StateStreamableSource<State>
+    implements StateStreamable<State>, Closable {}
 
-/// An object which must be closed when no longer in use.
+/// An object that must be closed when no longer in use.
 abstract class Closable {
   /// Closes the current instance.
   /// The returned future completes when the instance has been closed.
   FutureOr<void> close();
+}
+
+/// An object that can emit new states.
+abstract class Emittable<State extends Object?> {
+  /// Emits a new [state].
+  void emit(State state);
 }
 
 /// A generic destination for errors.
@@ -40,7 +44,7 @@ abstract class ErrorSink implements Closable {
 /// both [Bloc] and [Cubit].
 /// {@endtemplate}
 abstract class BlocBase<State>
-    implements StateStreamable<State>, Emittable<State>, ErrorSink {
+    implements StateStreamableSource<State>, Emittable<State>, ErrorSink {
   /// {@macro bloc_base}
   BlocBase(this._state) {
     // ignore: invalid_use_of_protected_member

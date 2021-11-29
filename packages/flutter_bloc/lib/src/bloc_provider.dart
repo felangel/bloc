@@ -34,7 +34,7 @@ mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 /// ```
 ///
 /// {@endtemplate}
-class BlocProvider<T extends StateStreamable<Object?>>
+class BlocProvider<T extends StateStreamableSource<Object?>>
     extends SingleChildStatelessWidget with BlocProviderSingleChildWidget {
   /// {@macro bloc_provider}
   const BlocProvider({
@@ -92,7 +92,7 @@ class BlocProvider<T extends StateStreamable<Object?>>
   /// ```dart
   /// BlocProvider.of<BlocA>(context);
   /// ```
-  static T of<T extends StateStreamable<Object?>>(
+  static T of<T extends StateStreamableSource<Object?>>(
     BuildContext context, {
     bool listen = false,
   }) {
@@ -129,11 +129,7 @@ class BlocProvider<T extends StateStreamable<Object?>>
           )
         : InheritedProvider<T>(
             create: _create,
-            dispose: (_, bloc) {
-              if (bloc is Closable) {
-                (bloc as Closable).close();
-              }
-            },
+            dispose: (_, bloc) => bloc.close(),
             startListening: _startListening,
             child: child,
             lazy: lazy,
