@@ -1,4 +1,11 @@
-part of bloc;
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
+
+part 'bloc_base.dart';
+part 'bloc_overrides.dart';
+part 'emitter.dart';
 
 /// An [ErrorSink] that supports adding events.
 ///

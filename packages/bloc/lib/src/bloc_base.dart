@@ -1,4 +1,4 @@
-part of bloc;
+part of 'bloc.dart';
 
 /// An object that provides access to a stream of states over time.
 abstract class Streamable<State extends Object?> {
