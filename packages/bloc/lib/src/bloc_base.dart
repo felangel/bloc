@@ -1,4 +1,4 @@
-part of bloc;
+part of 'bloc.dart';
 
 /// {@template bloc_base}
 /// An interface for the core functionality implemented by

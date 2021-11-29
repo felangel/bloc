@@ -1,4 +1,4 @@
-part of bloc;
+import 'package:meta/meta.dart';
 
 /// {@template change}
 /// A [Change] represents the change from one [State] to another.

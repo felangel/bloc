@@ -1,4 +1,5 @@
-part of bloc;
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
 
 /// {@template transition}
 /// A [Transition] is the change from one state to another.

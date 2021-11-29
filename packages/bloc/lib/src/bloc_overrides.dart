@@ -1,4 +1,4 @@
-part of bloc;
+part of 'bloc.dart';
 
 const _asyncRunZoned = runZoned;
 

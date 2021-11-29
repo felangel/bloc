@@ -1,4 +1,4 @@
-part of bloc;
+import 'package:bloc/bloc.dart';
 
 /// {@template cubit}
 /// A [Cubit] is similar to [Bloc] but has no notion of events
