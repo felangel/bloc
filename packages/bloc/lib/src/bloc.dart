@@ -1,5 +1,15 @@
 part of bloc;
 
+/// An [ErrorSink] that supports adding events.
+///
+/// Multiple events can be reported to the sink via `add`.
+abstract class EventSink<Event extends Object?> implements ErrorSink {
+  /// Adds an [event] to the sink.
+  ///
+  /// Must not be called on a closed sink.
+  void add(Event event);
+}
+
 /// An event handler is responsible for reacting to an incoming [Event]
 /// and can emit zero or more states via the [Emitter].
 typedef EventHandler<Event, State> = FutureOr<void> Function(

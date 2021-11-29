@@ -1,19 +1,19 @@
 part of bloc;
 
 /// An object that provides access to a stream of states over time.
-abstract class Streamable<State> {
+abstract class Streamable<State extends Object?> {
   /// The current [stream] of states.
   Stream<State> get stream;
 }
 
 /// A [Streamable] that provides synchronous access to the current [state].
-abstract class StateStreamable<State> extends Streamable<State> {
+abstract class StateStreamable<State> implements Streamable<State> {
   /// The current [state].
   State get state;
 }
 
 /// An object which can emit new states.
-abstract class Emittable<State> {
+abstract class Emittable<State extends Object?> {
   /// Emits a new [state].
   void emit(State state);
 }
@@ -22,13 +22,13 @@ abstract class Emittable<State> {
 abstract class Closable {
   /// Closes the current instance.
   /// The returned future completes when the instance has been closed.
-  Future<void> close();
+  FutureOr<void> close();
 }
 
 /// A generic destination for errors.
 ///
 /// Multiple errors can be reported to the sink via `addError`.
-abstract class ErrorSink extends Closable {
+abstract class ErrorSink implements Closable {
   /// Adds an [error] to the sink with an optional [stackTrace].
   ///
   /// Must not be called on a closed sink.
