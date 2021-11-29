@@ -1,4 +1,11 @@
-part of bloc;
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
+
+part 'bloc_base.dart';
+part 'bloc_overrides.dart';
+part 'emitter.dart';
 
 /// An event handler is responsible for reacting to an incoming [Event]
 /// and can emit zero or more states via the [Emitter].

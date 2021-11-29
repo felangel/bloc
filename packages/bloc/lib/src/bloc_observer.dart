@@ -1,4 +1,5 @@
-part of bloc;
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
 
 /// An interface for observing the behavior of [Bloc] instances.
 abstract class BlocObserver {

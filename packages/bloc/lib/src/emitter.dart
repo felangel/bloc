@@ -1,4 +1,4 @@
-part of bloc;
+part of 'bloc.dart';
 
 /// {@template emitter}
 /// An [Emitter] is a class which is capable of emitting new states.
