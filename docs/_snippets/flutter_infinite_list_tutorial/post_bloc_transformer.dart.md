@@ -1,11 +1,17 @@
 ```dart
-const _throttleDuration = Duration(milliseconds: 500);
+const throttleDuration = Duration(milliseconds: 100);
 
-EventTransformer<Event> throttle<Event>(Duration duration) {
-  return (events, mapper) => events.throttleTime(duration).flatMap(mapper);
+EventTransformer<E> throttleDroppable<E>(Duration duration) {
+  return (events, mapper) {
+    return droppable<E>().call(events.throttle(duration), mapper);
+  };
 }
 
-PostBloc({required this.httpClient}) : super(const PostState()) {
-    on<PostFetched>(_onPostFetched, transformer: throttle(_throttleDuration));
+class PostBloc extends Bloc<PostEvent, PostState> {
+  PostBloc({required this.httpClient}) : super(const PostState()) {
+    on<PostFetched>(
+      _onPostFetched,
+      transformer: throttleDroppable(throttleDuration),
+    );
   }
 ```
