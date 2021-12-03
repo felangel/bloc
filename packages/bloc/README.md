@@ -195,16 +195,16 @@ State changes in bloc begin when events are added which triggers `onEvent`. The 
 abstract class CounterEvent {}
 
 /// Notifies bloc to increment state.
-class CounterIncrementRequested extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
 
 /// A `CounterBloc` which handles converting `CounterEvent`s into `int`s.
 class CounterBloc extends Bloc<CounterEvent, int> {
   /// The initial state of the `CounterBloc` is 0.
   CounterBloc() : super(0) {
-    /// When a `CounterIncrementRequested` event is added,
+    /// When a `CounterIncrementPressed` event is added,
     /// the current `state` of the bloc is accessed via the `state` property
     /// and a new state is emitted via `emit`.
-    on<CounterIncrementRequested>((event, emit) => emit(state + 1));
+    on<CounterIncrementPressed>((event, emit) => emit(state + 1));
   }
 }
 ```
@@ -220,7 +220,7 @@ Future<void> main() async {
   print(bloc.state); // 0
 
   /// Interact with the `bloc` to trigger `state` changes.
-  bloc.add(CounterIncrementRequested());
+  bloc.add(CounterIncrementPressed());
 
   /// Wait for next iteration of the event-loop
   /// to ensure event has been processed.
@@ -247,11 +247,11 @@ In addition, `Blocs` can also override `onEvent` and `onTransition`.
 ```dart
 abstract class CounterEvent {}
 
-class CounterIncrementRequested extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0) {
-    on<CounterIncrementRequested>((event, emit) => emit(state + 1));
+    on<CounterIncrementPressed>((event, emit) => emit(state + 1));
   }
 
   @override
