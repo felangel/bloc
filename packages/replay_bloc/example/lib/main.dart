@@ -92,17 +92,23 @@ class CounterPage extends StatelessWidget {
         children: <Widget>[
           FloatingActionButton(
             child: const Icon(Icons.add),
-            onPressed: () => context.read<CounterBloc>().add(Increment()),
+            onPressed: () {
+              context.read<CounterBloc>().add(CounterIncrementPressed());
+            },
           ),
           const SizedBox(height: 4),
           FloatingActionButton(
             child: const Icon(Icons.remove),
-            onPressed: () => context.read<CounterBloc>().add(Decrement()),
+            onPressed: () {
+              context.read<CounterBloc>().add(CounterDecrementPressed());
+            },
           ),
           const SizedBox(height: 4),
           FloatingActionButton(
             child: const Icon(Icons.delete_forever),
-            onPressed: () => context.read<CounterBloc>().add(Reset()),
+            onPressed: () {
+              context.read<CounterBloc>().add(CounterResetPressed());
+            },
           ),
         ],
       ),
@@ -133,32 +139,35 @@ class CounterCubit extends ReplayCubit<int> {
 class CounterEvent extends ReplayEvent {}
 
 /// Notifies [CounterBloc] to increment its state.
-class Increment extends CounterEvent {
+class CounterIncrementPressed extends CounterEvent {
   @override
-  String toString() => 'Increment';
+  String toString() => 'CounterIncrementPressed';
 }
 
 /// Notifies [CounterBloc] to decrement its state.
-class Decrement extends CounterEvent {
+class CounterDecrementPressed extends CounterEvent {
   @override
-  String toString() => 'Decrement';
+  String toString() => 'CounterDecrementPressed';
 }
 
 /// Notifies [CounterBloc] to reset its state.
-class Reset extends CounterEvent {
+class CounterResetPressed extends CounterEvent {
   @override
-  String toString() => 'Reset';
+  String toString() => 'CounterResetPressed';
 }
 
 /// {@template replay_counter_bloc}
 /// A simple [ReplayBloc] which manages an `int` as its state
-/// and reacts to three events: [Increment], [Decrement], and [Reset].
+/// and reacts to three events:
+/// * [CounterIncrementPressed]
+/// * [CounterDecrementPressed]
+/// * [CounterResetPressed]
 /// {@endtemplate}
 class CounterBloc extends ReplayBloc<CounterEvent, int> {
   /// {@macro replay_counter_bloc}
   CounterBloc() : super(0) {
-    on<Increment>((event, emit) => emit(state + 1));
-    on<Decrement>((event, emit) => emit(state - 1));
-    on<Reset>((event, emit) => emit(0));
+    on<CounterIncrementPressed>((event, emit) => emit(state + 1));
+    on<CounterDecrementPressed>((event, emit) => emit(state - 1));
+    on<CounterResetPressed>((event, emit) => emit(0));
   }
 }

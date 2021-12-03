@@ -1,11 +1,11 @@
 ```dart
 abstract class CounterEvent {}
 
-class Increment extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0) {
-    on<Increment>((event, emit) {
+    on<CounterIncrementPressed>((event, emit) {
       addError(Exception('increment error!'), StackTrace.current);
       emit(state + 1);
     });

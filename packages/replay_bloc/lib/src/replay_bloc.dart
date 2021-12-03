@@ -30,11 +30,11 @@ class _Undo extends ReplayEvent {
 ///
 /// ```dart
 /// abstract class CounterEvent {}
-/// class Increment extends CounterEvent {}
+/// class CounterIncrementPressed extends CounterEvent {}
 ///
 /// class CounterBloc extends ReplayBloc<CounterEvent, int> {
 ///   CounterBloc() : super(0) {
-///     on<Increment>((event, emit) => emit(state + 1));
+///     on<CounterIncrementPressed>((event, emit) => emit(state + 1));
 ///   }
 /// }
 /// ```
@@ -44,7 +44,7 @@ class _Undo extends ReplayEvent {
 /// ```dart
 /// final bloc = CounterBloc();
 ///
-/// bloc.add(Increment());
+/// bloc.add(CounterIncrementPressed());
 ///
 /// bloc.undo();
 ///
