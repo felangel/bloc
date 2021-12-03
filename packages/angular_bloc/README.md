@@ -153,9 +153,9 @@ class CounterPageComponent implements OnInit, OnDestroy {
     counterBloc.close();
   }
 
-  void increment() => counterBloc.add(Increment());
+  void increment() => counterBloc.add(CounterIncrementPressed());
 
-  void decrement() => counterBloc.add(Decrement());
+  void decrement() => counterBloc.add(CounterDecrementPressed());
 }
 ```
 

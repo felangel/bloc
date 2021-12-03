@@ -3,7 +3,7 @@ void main() {
   BlocOverrides.runZoned(
     () {
       CounterBloc()
-        ..add(Increment())
+        ..add(CounterIncrementPressed())
         ..close();
     },
     blocObserver: SimpleBlocObserver(),

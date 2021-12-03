@@ -1,15 +1,15 @@
 ```dart
 blocTest(
-    'emits [1] when CounterEvent.increment is added',
+    'emits [1] when CounterIncrementPressed is added',
     build: () => counterBloc,
-    act: (bloc) => bloc.add(Increment()),
+    act: (bloc) => bloc.add(CounterIncrementPressed()),
     expect: () => [1],
 );
 
 blocTest(
-    'emits [-1] when CounterEvent.decrement is added',
+    'emits [-1] when CounterDecrementPressed is added',
     build: () => counterBloc,
-    act: (bloc) => bloc.add(Decrement()),
+    act: (bloc) => bloc.add(CounterDecrementPressed()),
     expect: () => [-1],
 );
 ```
