@@ -96,14 +96,14 @@ class CounterCubit extends HydratedCubit<int> with ReplayCubitMixin {
 ```dart
 class CounterEvent extends ReplayEvent {}
 
-class Increment extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
 
-class Decrement extends CounterEvent {}
+class CounterDecrementPressed extends CounterEvent {}
 
 class CounterBloc extends ReplayBloc<CounterEvent, int> {
   CounterBloc() : super(0) {
-    on<Increment>((event, emit) => emit(state + 1));
-    on<Decrement>((event, emit) => emit(state - 1));
+    on<CounterIncrementPressed>((event, emit) => emit(state + 1));
+    on<CounterDecrementPressed>((event, emit) => emit(state - 1));
   }
 }
 ```
@@ -113,7 +113,7 @@ class CounterBloc extends ReplayBloc<CounterEvent, int> {
 ```dart
 void main() {
   // trigger a state change
-  final bloc = CounterBloc()..add(Increment());
+  final bloc = CounterBloc()..add(CounterIncrementPressed());
 
   // wait for state to update
   await bloc.stream.first;
@@ -136,14 +136,14 @@ If you wish to be able to use a `ReplayBloc` in conjuction with a different type
 ```dart
 abstract class CounterEvent with ReplayEvent {}
 
-class Increment extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
 
-class Decrement extends CounterEvent {}
+class CounterDecrementPressed extends CounterEvent {}
 
 class CounterBloc extends HydratedBloc<CounterEvent, int> with ReplayBlocMixin {
   CounterBloc() : super(0) {
-    on<Increment>((event, emit) => emit(state + 1));
-    on<Decrement>((event, emit) => emit(state - 1));
+    on<CounterIncrementPressed>((event, emit) => emit(state + 1));
+    on<CounterDecrementPressed>((event, emit) => emit(state - 1));
   }
 
   @override
