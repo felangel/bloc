@@ -12,11 +12,11 @@ Future<void> main() async {
   final subscription = bloc.stream.listen(print);
 
   /// Interact with the `bloc` to trigger `state` changes.
-  bloc.add(Increment());
+  bloc.add(CounterIncrementPressed());
   await tick();
-  bloc.add(Increment());
+  bloc.add(CounterIncrementPressed());
   await tick();
-  bloc.add(Increment());
+  bloc.add(CounterIncrementPressed());
   await tick();
 
   /// Wait 1 second...
@@ -33,16 +33,16 @@ Future<void> main() async {
 abstract class CounterEvent {}
 
 /// Notifies bloc to increment state.
-class Increment extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
 
 /// A `CounterBloc` which handles converting `CounterEvent`s into `int`s.
 class CounterBloc extends Bloc<CounterEvent, int> {
   /// The initial state of the `CounterBloc` is 0.
   CounterBloc() : super(0) {
-    /// When an `Increment` event is added,
+    /// When a `CounterIncrementPressed` event is added,
     /// the current `state` of the bloc is accessed via the `state` property
     /// and a new state is emitted via `emit`.
-    on<Increment>(
+    on<CounterIncrementPressed>(
       (event, emit) async {
         await Future<void>.delayed(const Duration(seconds: 1));
         emit(state + 1);
