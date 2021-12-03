@@ -116,9 +116,9 @@ group('CounterBloc', () {
   );
 
   blocTest(
-    'emits [1] when Increment is added',
+    'emits [1] when CounterIncrementPressed is added',
     build: () => CounterBloc(),
-    act: (bloc) => bloc.add(Increment()),
+    act: (bloc) => bloc.add(CounterIncrementPressed()),
     expect: () => [1],
   );
 });
@@ -128,10 +128,10 @@ group('CounterBloc', () {
 
 ```dart
 blocTest(
-  'CounterCubit emits [10] when seeded with 9',
-  build: () => CounterCubit(),
+  'emits [10] when seeded with 9',
+  build: () => CounterBloc(),
   seed: () => 9,
-  act: (cubit) => cubit.increment(),
+  act: (bloc) => bloc.add(CounterIncrementPressed()),
   expect: () => [10],
 );
 ```
@@ -140,9 +140,9 @@ blocTest(
 
 ```dart
 blocTest(
-  'CounterBloc emits [2] when Increment is added twice',
+  'emits [2] when CounterIncrementPressed is added twice',
   build: () => CounterBloc(),
-  act: (bloc) => bloc..add(Increment())..add(Increment()),
+  act: (bloc) => bloc..add(CounterIncrementPressed())..add(CounterIncrementPressed()),
   skip: 1,
   expect: () => [2],
 );
@@ -152,11 +152,11 @@ blocTest(
 
 ```dart
 blocTest(
-  'CounterBloc emits [1] when Increment is added',
-  build: () => CounterBloc(),
-  act: (bloc) => bloc.add(Increment()),
+  'emits [MyState] when MyEvent is added',
+  build: () => MyBloc(),
+  act: (bloc) => bloc.add(MyEvent()),
   wait: const Duration(milliseconds: 300),
-  expect: () => [1],
+  expect: () => [isA<MyState>()],
 );
 ```
 
@@ -164,10 +164,10 @@ blocTest(
 
 ```dart
 blocTest(
-  'CounterBloc emits [1] when Increment is added',
-  build: () => CounterBloc(),
-  act: (bloc) => bloc.add(Increment()),
-  expect: () => [1],
+  'emits [MyState] when MyEvent is added',
+  build: () => MyBloc(),
+  act: (bloc) => bloc.add(MyEvent()),
+  expect: () => [isA<MyState>()],
   verify: (_) {
     verify(() => repository.someMethod(any())).called(1);
   }
@@ -178,8 +178,8 @@ blocTest(
 
 ```dart
 blocTest(
-  'CounterBloc throws Exception when null is added',
-  build: () => CounterBloc(),
+  'throws Exception when null is added',
+  build: () => MyBloc(),
   act: (bloc) => bloc.add(null),
   errors: () => [isA<Exception>()]
 );
@@ -189,10 +189,10 @@ blocTest(
 
 ```dart
 blocTest(
-  'emits [StateB] when MyEvent is added',
+  'emits [MyState] when MyEvent is added',
   build: () => MyBloc(),
   act: (bloc) => bloc.add(MyEvent()),
-  expect: () => [isA<StateB>()],
+  expect: () => [isA<MyState>()],
 );
 ```
 
