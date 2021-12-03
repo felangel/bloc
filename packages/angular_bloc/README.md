@@ -116,13 +116,13 @@ Lets take a look at how to use `BlocPipe` to hook up a `CounterPage` html templa
 import 'package:bloc/bloc.dart';
 
 abstract class CounterEvent {}
-class Increment extends CounterEvent {}
-class Decrement extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
+class CounterDecrementPressed extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0) {
-    on<Increment>((event, emit) => emit(state + 1));
-    on<Decrement>((event, emit) => emit(state - 1));
+    on<CounterIncrementPressed>((event, emit) => emit(state + 1));
+    on<CounterDecrementPressed>((event, emit) => emit(state - 1));
   }
 }
 ```
@@ -153,9 +153,9 @@ class CounterPageComponent implements OnInit, OnDestroy {
     counterBloc.close();
   }
 
-  void increment() => counterBloc.add(Increment());
+  void increment() => counterBloc.add(CounterIncrementPressed());
 
-  void decrement() => counterBloc.add(Decrement());
+  void decrement() => counterBloc.add(CounterDecrementPressed());
 }
 ```
 

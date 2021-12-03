@@ -1,5 +1,5 @@
 ```dart
 abstract class CounterEvent {}
-class Increment extends CounterEvent {}
-class Decrement extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
+class CounterDecrementPressed extends CounterEvent {}
 ```
