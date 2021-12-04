@@ -2,11 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_services_binding/flutter_services_binding.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  FlutterServicesBinding.ensureInitialized();
   final storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
         ? HydratedStorage.webStorageDirectory
@@ -76,19 +77,22 @@ class CounterView extends StatelessWidget {
           const SizedBox(height: 4),
           FloatingActionButton(
             child: const Icon(Icons.add),
-            onPressed: () => context.read<CounterBloc>().add(Increment()),
+            onPressed: () {
+              context.read<CounterBloc>().add(CounterIncrementPressed());
+            },
           ),
           const SizedBox(height: 4),
           FloatingActionButton(
             child: const Icon(Icons.remove),
-            onPressed: () => context.read<CounterBloc>().add(Decrement()),
+            onPressed: () {
+              context.read<CounterBloc>().add(CounterDecrementPressed());
+            },
           ),
           const SizedBox(height: 4),
           FloatingActionButton(
             child: const Icon(Icons.delete_forever),
             onPressed: () {
-              context.read<BrightnessCubit>().clear();
-              context.read<CounterBloc>().clear();
+              HydratedBlocOverrides.current?.storage.clear();
             },
           ),
         ],
@@ -99,14 +103,14 @@ class CounterView extends StatelessWidget {
 
 abstract class CounterEvent {}
 
-class Increment extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
 
-class Decrement extends CounterEvent {}
+class CounterDecrementPressed extends CounterEvent {}
 
 class CounterBloc extends HydratedBloc<CounterEvent, int> {
   CounterBloc() : super(0) {
-    on<Increment>((event, emit) => emit(state + 1));
-    on<Decrement>((event, emit) => emit(state - 1));
+    on<CounterIncrementPressed>((event, emit) => emit(state + 1));
+    on<CounterDecrementPressed>((event, emit) => emit(state - 1));
   }
 
   @override

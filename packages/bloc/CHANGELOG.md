@@ -1,3 +1,7 @@
+# 8.0.1
+
+- fix: allow `emit` usage within tests ([#2982](https://github.com/felangel/bloc/pull/2982))
+
 # 8.0.0
 
 - **BREAKING**: feat: introduce `BlocOverrides` API ([#2932](https://github.com/felangel/bloc/pull/2932))

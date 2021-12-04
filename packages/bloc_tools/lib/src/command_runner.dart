@@ -69,14 +69,16 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
       if (!isUpToDate) {
         _logger
           ..info('')
-          ..info('''
+          ..info(
+            '''
 +------------------------------------------------------------------------------------+
 |                                                                                    |
 |                    ${lightYellow.wrap('Update available!')} ${lightCyan.wrap(packageVersion)} \u2192 ${lightCyan.wrap(latestVersion)}                     |
 |  ${lightYellow.wrap('Changelog:')} ${lightCyan.wrap('https://github.com/felangel/bloc/releases/tag/$packageName-v$latestVersion')}  |
 |                                                                                    |
 +------------------------------------------------------------------------------------+
-''');
+''',
+          );
         final response = _logger.prompt('Would you like to update? (y/n) ');
         if (response.isYes()) {
           final updateDone = _logger.progress('Updating to $latestVersion');

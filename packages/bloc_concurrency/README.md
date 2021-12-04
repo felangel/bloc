@@ -65,11 +65,11 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 
 abstract class CounterEvent {}
 
-class Increment extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0) {
-    on<Increment>(
+    on<CounterIncrementPressed>(
       (event, emit) async {
         await Future.delayed(Duration(seconds: 1));
         emit(state + 1);

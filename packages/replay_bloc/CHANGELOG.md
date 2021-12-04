@@ -1,3 +1,7 @@
+# 0.2.1
+
+- chore: upgrade to `bloc v8.0.1`
+
 # 0.2.0
 
 - **BREAKING**: feat: upgrade to `bloc v8.0.0`

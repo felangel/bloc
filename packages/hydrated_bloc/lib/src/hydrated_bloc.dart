@@ -96,13 +96,13 @@ class _HydratedBlocOverridesScope extends HydratedBlocOverrides {
 ///
 /// ```dart
 /// abstract class CounterEvent {}
-/// class Increment extends CounterEvent {}
-/// class Decrement extends CounterEvent {}
+/// class CounterIncrementPressed extends CounterEvent {}
+/// class CounterDecrementPressed extends CounterEvent {}
 ///
 /// class CounterBloc extends HydratedBloc<CounterEvent, int> {
 ///   CounterBloc() : super(0) {
-///     on<Increment>((event, emit) => emit(state + 1));
-///     on<Decrement>((event, emit) => emit(state - 1));
+///     on<CounterIncrementPressed>((event, emit) => emit(state + 1));
+///     on<CounterDecrementPressed>((event, emit) => emit(state - 1));
 ///   }
 ///
 ///   @override

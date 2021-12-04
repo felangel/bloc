@@ -30,11 +30,11 @@ class _Undo extends ReplayEvent {
 ///
 /// ```dart
 /// abstract class CounterEvent {}
-/// class Increment extends CounterEvent {}
+/// class CounterIncrementPressed extends CounterEvent {}
 ///
 /// class CounterBloc extends ReplayBloc<CounterEvent, int> {
 ///   CounterBloc() : super(0) {
-///     on<Increment>((event, emit) => emit(state + 1));
+///     on<CounterIncrementPressed>((event, emit) => emit(state + 1));
 ///   }
 /// }
 /// ```
@@ -44,7 +44,7 @@ class _Undo extends ReplayEvent {
 /// ```dart
 /// final bloc = CounterBloc();
 ///
-/// bloc.add(Increment());
+/// bloc.add(CounterIncrementPressed());
 ///
 /// bloc.undo();
 ///
@@ -105,7 +105,7 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
           event: event,
           nextState: state,
         ));
-        // ignore: invalid_use_of_internal_member
+        // ignore: invalid_use_of_visible_for_testing_member
         super.emit(state);
       },
       (val) {
@@ -116,11 +116,11 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
           event: event,
           nextState: val,
         ));
-        // ignore: invalid_use_of_internal_member
+        // ignore: invalid_use_of_visible_for_testing_member
         super.emit(val);
       },
     ));
-    // ignore: invalid_use_of_internal_member
+    // ignore: invalid_use_of_visible_for_testing_member
     super.emit(state);
   }
 

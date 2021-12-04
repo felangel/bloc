@@ -55,10 +55,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ```dart
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final storage = await HydratedStorage.build(
-    storageDirectory: await getTemporaryDirectory(),
-  );
+  final storage = await HydratedStorage.build(storageDirectory: ...);
   HydratedBlocOverrides.runZoned(
     () => runApp(App()),
     storage: storage,
@@ -86,11 +83,11 @@ class CounterCubit extends HydratedCubit<int> {
 
 ```dart
 abstract class CounterEvent {}
-class Increment extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
 
 class CounterBloc extends HydratedBloc<CounterEvent, int> {
   CounterBloc() : super(0) {
-    on<Increment>((event, emit) => emit(state + 1));
+    on<CounterIncrementPressed>((event, emit) => emit(state + 1));
   }
 
   @override

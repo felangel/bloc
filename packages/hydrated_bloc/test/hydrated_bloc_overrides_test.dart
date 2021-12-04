@@ -1,5 +1,3 @@
-import 'package:bloc/bloc.dart';
-import 'package:bloc/src/bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
