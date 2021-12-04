@@ -1,23 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart';
-import 'package:todos_api/todos_api.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 import '../../helpers/helpers.dart';
 
 void main() {
   group('TodoListTile', () {
-    final uncompletedTodo = mockTodos.first.copyWith(isCompleted: false);
-    final completedTodo = mockTodos.first.copyWith(isCompleted: true);
-
+    final uncompletedTodo = Todo(
+      id: '1',
+      title: 'title 1',
+      description: 'description 1',
+    );
+    final completedTodo = Todo(
+      id: '1',
+      title: 'title 1',
+      description: 'description 1',
+      isCompleted: true,
+    );
     final onToggleCompletedCalls = <bool>[];
-    var onDismissedCallCount = 0;
-    var onTapCallCount = 0;
+    final dismissibleKey = Key(
+      'todoListTile_dismissible_${uncompletedTodo.id}',
+    );
 
-    final dismissibleKey =
-        Key('todoListTile_dismissible_${uncompletedTodo.id}');
-
-    setUpAll(commonSetUpAll);
+    late int onDismissedCallCount;
+    late int onTapCallCount;
 
     Widget buildSubject({Todo? todo}) {
       return TodoListTile(
@@ -27,6 +34,11 @@ void main() {
         onTap: () => onTapCallCount++,
       );
     }
+
+    setUp(() {
+      onDismissedCallCount = 0;
+      onTapCallCount = 0;
+    });
 
     group('constructor', () {
       test('works properly', () {
@@ -46,9 +58,7 @@ void main() {
 
       testWidgets('is checked when todo is completed', (tester) async {
         await tester.pumpApp(
-          buildSubject(
-            todo: completedTodo,
-          ),
+          buildSubject(todo: completedTodo),
         );
 
         final checkbox = tester.widget<Checkbox>(find.byType(Checkbox));
@@ -57,9 +67,7 @@ void main() {
 
       testWidgets('is unchecked when todo is not completed', (tester) async {
         await tester.pumpApp(
-          buildSubject(
-            todo: uncompletedTodo,
-          ),
+          buildSubject(todo: uncompletedTodo),
         );
 
         final checkbox = tester.widget<Checkbox>(find.byType(Checkbox));
@@ -70,9 +78,7 @@ void main() {
         'calls onToggleCompleted with correct value when tapped',
         (tester) async {
           await tester.pumpApp(
-            buildSubject(
-              todo: uncompletedTodo,
-            ),
+            buildSubject(todo: uncompletedTodo),
           );
 
           await tester.tap(find.byType(Checkbox));
@@ -121,9 +127,7 @@ void main() {
 
       testWidgets('is struckthrough when todo is completed', (tester) async {
         await tester.pumpApp(
-          buildSubject(
-            todo: completedTodo,
-          ),
+          buildSubject(todo: completedTodo),
         );
 
         final text = tester.widget<Text>(find.text(completedTodo.title));

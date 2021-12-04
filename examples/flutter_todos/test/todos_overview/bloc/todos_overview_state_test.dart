@@ -2,11 +2,15 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart';
-import 'package:todos_api/todos_api.dart';
-
-import '../../helpers/helpers.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 void main() {
+  final mockTodo = Todo(
+    id: '1',
+    title: 'title 1',
+    description: 'description 1',
+  );
+  final mockTodos = [mockTodo];
   group('TodosOverviewState', () {
     TodosOverviewState createSubject({
       TodosOverviewStatus status = TodosOverviewStatus.initial,
@@ -82,14 +86,14 @@ void main() {
             status: () => TodosOverviewStatus.success,
             todos: () => [],
             filter: () => TodosViewFilter.completedOnly,
-            lastDeletedTodo: () => mockTodos.first,
+            lastDeletedTodo: () => mockTodo,
           ),
           equals(
             createSubject(
               status: TodosOverviewStatus.success,
               todos: [],
               filter: TodosViewFilter.completedOnly,
-              lastDeletedTodo: mockTodos.first,
+              lastDeletedTodo: mockTodo,
             ),
           ),
         );
@@ -98,9 +102,9 @@ void main() {
 
     test('can copyWith null lastDeletedTodo', () {
       expect(
-        createSubject(
-          lastDeletedTodo: mockTodos.first,
-        ).copyWith(lastDeletedTodo: () => null),
+        createSubject(lastDeletedTodo: mockTodo).copyWith(
+          lastDeletedTodo: () => null,
+        ),
         equals(createSubject(lastDeletedTodo: null)),
       );
     });

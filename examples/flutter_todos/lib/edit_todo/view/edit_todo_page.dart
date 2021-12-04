@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todos/edit_todo/edit_todo.dart';
 import 'package:flutter_todos/l10n/l10n.dart';
-import 'package:todos_api/todos_api.dart';
 import 'package:todos_repository/todos_repository.dart';
 
 class EditTodoPage extends StatelessWidget {

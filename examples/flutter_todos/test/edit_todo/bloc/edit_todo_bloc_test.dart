@@ -2,16 +2,19 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_todos/edit_todo/edit_todo.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:todos_api/todos_api.dart';
 import 'package:todos_repository/todos_repository.dart';
 
-import '../../helpers/helpers.dart';
+class MockTodosRepository extends Mock implements TodosRepository {}
+
+class FakeTodo extends Fake implements Todo {}
 
 void main() {
   group('EditTodoBloc', () {
     late TodosRepository todosRepository;
 
-    setUpAll(commonSetUpAll);
+    setUpAll(() {
+      registerFallbackValue(FakeTodo());
+    });
 
     setUp(() {
       todosRepository = MockTodosRepository();
@@ -64,6 +67,9 @@ void main() {
       blocTest<EditTodoBloc, EditTodoState>(
         'attempts to save new todo to repository '
         'if no initial todo was provided',
+        setUp: () {
+          when(() => todosRepository.saveTodo(any())).thenAnswer((_) async {});
+        },
         build: buildBloc,
         seed: () => const EditTodoState(
           title: 'title',
@@ -102,6 +108,9 @@ void main() {
       blocTest<EditTodoBloc, EditTodoState>(
         'attempts to save updated todo to repository '
         'if an initial todo was provided',
+        setUp: () {
+          when(() => todosRepository.saveTodo(any())).thenAnswer((_) async {});
+        },
         build: buildBloc,
         seed: () => EditTodoState(
           initialTodo: Todo(

@@ -9,19 +9,44 @@ import 'package:todos_repository/todos_repository.dart';
 
 import '../../helpers/helpers.dart';
 
+class MockTodosRepository extends Mock implements TodosRepository {}
+
+class MockTodosOverviewBloc
+    extends MockBloc<TodosOverviewEvent, TodosOverviewState>
+    implements TodosOverviewBloc {}
+
 void main() {
-  setUpAll(commonSetUpAll);
+  final mockTodos = [
+    Todo(
+      id: '1',
+      title: 'title 1',
+      description: 'description 1',
+    ),
+    Todo(
+      id: '2',
+      title: 'title 2',
+      description: 'description 2',
+    ),
+    Todo(
+      id: '3',
+      title: 'title 3',
+      description: 'description 3',
+      isCompleted: true,
+    ),
+  ];
+
+  late TodosRepository todosRepository;
 
   group('TodosOverviewPage', () {
-    late TodosRepository todosRepository;
-
     setUp(() {
       todosRepository = MockTodosRepository();
+      when(todosRepository.getTodos).thenAnswer((_) => const Stream.empty());
     });
 
     testWidgets('renders TodosOverviewView', (tester) async {
       await tester.pumpApp(
         const TodosOverviewPage(),
+        todosRepository: todosRepository,
       );
 
       expect(find.byType(TodosOverviewView), findsOneWidget);
@@ -49,6 +74,15 @@ void main() {
       when(() => navigator.push(any())).thenAnswer((_) async {});
 
       todosOverviewBloc = MockTodosOverviewBloc();
+      when(() => todosOverviewBloc.state).thenReturn(
+        TodosOverviewState(
+          status: TodosOverviewStatus.success,
+          todos: mockTodos,
+        ),
+      );
+
+      todosRepository = MockTodosRepository();
+      when(todosRepository.getTodos).thenAnswer((_) => const Stream.empty());
     });
 
     Widget buildSubject() {
@@ -64,7 +98,10 @@ void main() {
     testWidgets(
       'renders AppBar with title text',
       (tester) async {
-        await tester.pumpApp(buildSubject());
+        await tester.pumpApp(
+          buildSubject(),
+          todosRepository: todosRepository,
+        );
 
         expect(find.byType(AppBar), findsOneWidget);
         expect(
@@ -91,7 +128,10 @@ void main() {
           ]),
         );
 
-        await tester.pumpApp(buildSubject());
+        await tester.pumpApp(
+          buildSubject(),
+          todosRepository: todosRepository,
+        );
         await tester.pumpAndSettle();
 
         expect(find.byType(SnackBar), findsOneWidget);
@@ -124,7 +164,10 @@ void main() {
       });
 
       testWidgets('is rendered when lastDeletedTodo changes', (tester) async {
-        await tester.pumpApp(buildSubject());
+        await tester.pumpApp(
+          buildSubject(),
+          todosRepository: todosRepository,
+        );
         await tester.pumpAndSettle();
 
         expect(
@@ -147,7 +190,10 @@ void main() {
         'to TodosOverviewBloc '
         'when onUndo is called',
         (tester) async {
-          await tester.pumpApp(buildSubject());
+          await tester.pumpApp(
+            buildSubject(),
+            todosRepository: todosRepository,
+          );
           await tester.pumpAndSettle();
 
           final snackBar =
@@ -158,8 +204,9 @@ void main() {
           snackBar.onUndo();
 
           verify(
-            () => todosOverviewBloc
-                .add(const TodosOverviewUndoDeletionRequested()),
+            () => todosOverviewBloc.add(
+              const TodosOverviewUndoDeletionRequested(),
+            ),
           ).called(1);
         },
       );
@@ -167,15 +214,19 @@ void main() {
 
     group('when todos is empty', () {
       setUp(() {
-        when(() => todosOverviewBloc.state)
-            .thenReturn(const TodosOverviewState());
+        when(
+          () => todosOverviewBloc.state,
+        ).thenReturn(const TodosOverviewState());
       });
 
       testWidgets(
         'renders nothing '
         'when status is initial or error',
         (tester) async {
-          await tester.pumpApp(buildSubject());
+          await tester.pumpApp(
+            buildSubject(),
+            todosRepository: todosRepository,
+          );
 
           expect(find.byType(ListView), findsNothing);
           expect(find.byType(CupertinoActivityIndicator), findsNothing);
@@ -187,12 +238,13 @@ void main() {
         'when status is loading',
         (tester) async {
           when(() => todosOverviewBloc.state).thenReturn(
-            const TodosOverviewState(
-              status: TodosOverviewStatus.loading,
-            ),
+            const TodosOverviewState(status: TodosOverviewStatus.loading),
           );
 
-          await tester.pumpApp(buildSubject());
+          await tester.pumpApp(
+            buildSubject(),
+            todosRepository: todosRepository,
+          );
 
           expect(find.byType(CupertinoActivityIndicator), findsOneWidget);
         },
@@ -208,7 +260,10 @@ void main() {
             ),
           );
 
-          await tester.pumpApp(buildSubject());
+          await tester.pumpApp(
+            buildSubject(),
+            todosRepository: todosRepository,
+          );
 
           expect(find.text(l10n.todosOverviewEmptyText), findsOneWidget);
         },
@@ -226,7 +281,10 @@ void main() {
       });
 
       testWidgets('renders ListView with TodoListTiles', (tester) async {
-        await tester.pumpApp(buildSubject());
+        await tester.pumpApp(
+          buildSubject(),
+          todosRepository: todosRepository,
+        );
 
         expect(find.byType(ListView), findsOneWidget);
         expect(find.byType(TodoListTile), findsNWidgets(mockTodos.length));
@@ -237,7 +295,10 @@ void main() {
         'to TodosOverviewBloc '
         'when TodoListTile.onToggleCompleted is called',
         (tester) async {
-          await tester.pumpApp(buildSubject());
+          await tester.pumpApp(
+            buildSubject(),
+            todosRepository: todosRepository,
+          );
 
           final todo = mockTodos.first;
 
@@ -261,16 +322,21 @@ void main() {
         'to TodosOverviewBloc '
         'when TodoListTile.onDismissed is called',
         (tester) async {
-          await tester.pumpApp(buildSubject());
+          await tester.pumpApp(
+            buildSubject(),
+            todosRepository: todosRepository,
+          );
 
           final todo = mockTodos.first;
 
-          final todoListTile =
-              tester.widget<TodoListTile>(find.byType(TodoListTile).first);
+          final todoListTile = tester.widget<TodoListTile>(
+            find.byType(TodoListTile).first,
+          );
           todoListTile.onDismissed!(DismissDirection.startToEnd);
 
-          verify(() => todosOverviewBloc.add(TodosOverviewTodoDeleted(todo)))
-              .called(1);
+          verify(
+            () => todosOverviewBloc.add(TodosOverviewTodoDeleted(todo)),
+          ).called(1);
         },
       );
 
@@ -278,10 +344,14 @@ void main() {
         'navigates to EditTodoPage '
         'when TodoListTile.onTap is called',
         (tester) async {
-          await tester.pumpApp(buildSubject());
+          await tester.pumpApp(
+            buildSubject(),
+            todosRepository: todosRepository,
+          );
 
-          final todoListTile =
-              tester.widget<TodoListTile>(find.byType(TodoListTile).first);
+          final todoListTile = tester.widget<TodoListTile>(
+            find.byType(TodoListTile).first,
+          );
           todoListTile.onTap!();
 
           verify(() => navigator.push(any(that: isRoute<void>()))).called(1);

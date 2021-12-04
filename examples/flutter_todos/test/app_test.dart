@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_todos/app/app.dart';
 import 'package:flutter_todos/home/home.dart';
 import 'package:flutter_todos/theme/theme.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:todos_repository/todos_repository.dart';
 
 import 'helpers/helpers.dart';
@@ -11,18 +12,17 @@ import 'helpers/helpers.dart';
 void main() {
   late TodosRepository todosRepository;
 
-  setUpAll(commonSetUpAll);
-
   setUp(() {
     todosRepository = MockTodosRepository();
+    when(
+      () => todosRepository.getTodos(),
+    ).thenAnswer((_) => const Stream.empty());
   });
 
   group('App', () {
     testWidgets('renders AppView', (tester) async {
       await tester.pumpWidget(
-        App(
-          todosRepository: todosRepository,
-        ),
+        App(todosRepository: todosRepository),
       );
 
       expect(find.byType(AppView), findsOneWidget);

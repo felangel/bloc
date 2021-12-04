@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -5,16 +6,25 @@ import 'package:flutter_todos/home/home.dart';
 import 'package:flutter_todos/stats/stats.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart';
 import 'package:mockingjay/mockingjay.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 import '../../helpers/helpers.dart';
 
+class MockHomeCubit extends MockCubit<HomeState> implements HomeCubit {}
+
 void main() {
-  setUpAll(commonSetUpAll);
+  late TodosRepository todosRepository;
 
   group('HomePage', () {
+    setUp(() {
+      todosRepository = MockTodosRepository();
+      when(todosRepository.getTodos).thenAnswer((_) => const Stream.empty());
+    });
+
     testWidgets('renders HomeView', (tester) async {
       await tester.pumpApp(
         const HomePage(),
+        todosRepository: todosRepository,
       );
 
       expect(find.byType(HomeView), findsOneWidget);
@@ -34,6 +44,10 @@ void main() {
       when(() => navigator.push(any())).thenAnswer((_) async {});
 
       cubit = MockHomeCubit();
+      when(() => cubit.state).thenReturn(const HomeState());
+
+      todosRepository = MockTodosRepository();
+      when(todosRepository.getTodos).thenAnswer((_) => const Stream.empty());
     });
 
     Widget buildSubject() {
@@ -52,7 +66,10 @@ void main() {
       (tester) async {
         when(() => cubit.state).thenReturn(const HomeState());
 
-        await tester.pumpApp(buildSubject());
+        await tester.pumpApp(
+          buildSubject(),
+          todosRepository: todosRepository,
+        );
 
         expect(find.byType(TodosOverviewPage), findsOneWidget);
       },
@@ -64,7 +81,10 @@ void main() {
       (tester) async {
         when(() => cubit.state).thenReturn(const HomeState(tab: HomeTab.stats));
 
-        await tester.pumpApp(buildSubject());
+        await tester.pumpApp(
+          buildSubject(),
+          todosRepository: todosRepository,
+        );
 
         expect(find.byType(StatsPage), findsOneWidget);
       },
@@ -74,7 +94,11 @@ void main() {
       'calls setTab with HomeTab.todos on HomeCubit '
       'when todos navigation button is pressed',
       (tester) async {
-        await tester.pumpApp(buildSubject());
+        await tester.pumpApp(
+          buildSubject(),
+          todosRepository: todosRepository,
+        );
+
         await tester.tap(find.byIcon(Icons.list_rounded));
 
         verify(() => cubit.setTab(HomeTab.todos)).called(1);
@@ -85,7 +109,11 @@ void main() {
       'calls setTab with HomeTab.stats on HomeCubit '
       'when stats navigation button is pressed',
       (tester) async {
-        await tester.pumpApp(buildSubject());
+        await tester.pumpApp(
+          buildSubject(),
+          todosRepository: todosRepository,
+        );
+
         await tester.tap(find.byIcon(Icons.show_chart_rounded));
 
         verify(() => cubit.setTab(HomeTab.stats)).called(1);
@@ -96,7 +124,10 @@ void main() {
       testWidgets(
         'is rendered',
         (tester) async {
-          await tester.pumpApp(buildSubject());
+          await tester.pumpApp(
+            buildSubject(),
+            todosRepository: todosRepository,
+          );
 
           expect(
             find.byKey(addTodoFloatingActionButtonKey),
@@ -113,7 +144,10 @@ void main() {
       );
 
       testWidgets('renders add icon', (tester) async {
-        await tester.pumpApp(buildSubject());
+        await tester.pumpApp(
+          buildSubject(),
+          todosRepository: todosRepository,
+        );
 
         expect(
           find.descendant(
@@ -127,7 +161,10 @@ void main() {
       testWidgets(
         'navigates to the EditTodoPage when pressed',
         (tester) async {
-          await tester.pumpApp(buildSubject());
+          await tester.pumpApp(
+            buildSubject(),
+            todosRepository: todosRepository,
+          );
 
           await tester.tap(find.byKey(addTodoFloatingActionButtonKey));
 

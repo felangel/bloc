@@ -1,14 +1,19 @@
 // ignore_for_file: avoid_redundant_argument_values
 
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart'
     hide TodosViewFilter;
 import 'package:mocktail/mocktail.dart';
-import 'package:todos_api/todos_api.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 import '../../helpers/helpers.dart';
+
+class MockTodosOverviewBloc
+    extends MockBloc<TodosOverviewEvent, TodosOverviewState>
+    implements TodosOverviewBloc {}
 
 extension on CommonFinders {
   Finder optionMenuItem({
@@ -35,10 +40,14 @@ void main() {
   group('TodosOverviewOptionsButton', () {
     late TodosOverviewBloc todosOverviewBloc;
 
-    setUpAll(commonSetUpAll);
-
     setUp(() {
       todosOverviewBloc = MockTodosOverviewBloc();
+      when(() => todosOverviewBloc.state).thenReturn(
+        const TodosOverviewState(
+          status: TodosOverviewStatus.success,
+          todos: [],
+        ),
+      );
     });
 
     Widget buildSubject() {

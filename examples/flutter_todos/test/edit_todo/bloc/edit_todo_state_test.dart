@@ -2,13 +2,15 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_todos/edit_todo/edit_todo.dart';
-import 'package:todos_api/todos_api.dart';
-
-import '../../helpers/helpers.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 void main() {
   group('EditTodoState', () {
-    final mockInitialTodo = mockTodos.first;
+    final mockInitialTodo = Todo(
+      id: '1',
+      title: 'title 1',
+      description: 'description 1',
+    );
 
     EditTodoState createSubject({
       EditTodoStatus status = EditTodoStatus.initial,
