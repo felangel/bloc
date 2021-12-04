@@ -18,24 +18,17 @@ class TodosOverviewState extends Equatable {
   Iterable<Todo> get filteredTodos => filter.applyAll(todos);
 
   TodosOverviewState copyWith({
-    TodosOverviewStatus? status,
-    List<Todo>? todos,
-    TodosViewFilter? filter,
-    Todo? lastDeletedTodo,
+    TodosOverviewStatus Function()? status,
+    List<Todo> Function()? todos,
+    TodosViewFilter Function()? filter,
+    Todo? Function()? lastDeletedTodo,
   }) {
     return TodosOverviewState(
-      status: status ?? this.status,
-      todos: todos ?? this.todos,
-      filter: filter ?? this.filter,
-      lastDeletedTodo: lastDeletedTodo ?? this.lastDeletedTodo,
-    );
-  }
-
-  TodosOverviewState withoutLastDeletedTodo() {
-    return TodosOverviewState(
-      status: status,
-      todos: todos,
-      filter: filter,
+      status: status != null ? status() : this.status,
+      todos: todos != null ? todos() : this.todos,
+      filter: filter != null ? filter() : this.filter,
+      lastDeletedTodo:
+          lastDeletedTodo != null ? lastDeletedTodo() : this.lastDeletedTodo,
     );
   }
 

@@ -65,11 +65,13 @@ void main() {
             completedTodos: 1,
             activeTodos: 2,
           ),
-          equals(createSubject(
-            status: StatsStatus.success,
-            completedTodos: 1,
-            activeTodos: 2,
-          ),),
+          equals(
+            createSubject(
+              status: StatsStatus.success,
+              completedTodos: 1,
+              activeTodos: 2,
+            ),
+          ),
         );
       });
     });

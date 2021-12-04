@@ -11,22 +11,25 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     required TodosRepository todosRepository,
   })  : _todosRepository = todosRepository,
         super(const StatsState()) {
-    on<StatsSubscriptionRequested>((event, emit) async {
-      emit(state.copyWith(status: StatsStatus.loading));
-
-      await emit.forEach<List<Todo>>(
-        _todosRepository.getTodos(),
-        onData: (todos) => state.copyWith(
-          status: StatsStatus.success,
-          completedTodos: todos.where((todo) => todo.isCompleted).length,
-          activeTodos: todos.where((todo) => !todo.isCompleted).length,
-        ),
-        onError: (e, st) => state.copyWith(
-          status: StatsStatus.failure,
-        ),
-      );
-    });
+    on<StatsSubscriptionRequested>(_onSubscriptionRequested);
   }
 
   final TodosRepository _todosRepository;
+
+  Future<void> _onSubscriptionRequested(
+    StatsSubscriptionRequested event,
+    Emitter<StatsState> emit,
+  ) async {
+    emit(state.copyWith(status: StatsStatus.loading));
+
+    await emit.forEach<List<Todo>>(
+      _todosRepository.getTodos(),
+      onData: (todos) => state.copyWith(
+        status: StatsStatus.success,
+        completedTodos: todos.where((todo) => todo.isCompleted).length,
+        activeTodos: todos.where((todo) => !todo.isCompleted).length,
+      ),
+      onError: (_, __) => state.copyWith(status: StatsStatus.failure),
+    );
+  }
 }

@@ -45,18 +45,22 @@ void main() {
       });
 
       testWidgets('is checked when todo is completed', (tester) async {
-        await tester.pumpApp(buildSubject(
-          todo: completedTodo,
-        ),);
+        await tester.pumpApp(
+          buildSubject(
+            todo: completedTodo,
+          ),
+        );
 
         final checkbox = tester.widget<Checkbox>(find.byType(Checkbox));
         expect(checkbox.value, isTrue);
       });
 
       testWidgets('is unchecked when todo is not completed', (tester) async {
-        await tester.pumpApp(buildSubject(
-          todo: uncompletedTodo,
-        ),);
+        await tester.pumpApp(
+          buildSubject(
+            todo: uncompletedTodo,
+          ),
+        );
 
         final checkbox = tester.widget<Checkbox>(find.byType(Checkbox));
         expect(checkbox.value, isFalse);
@@ -65,9 +69,11 @@ void main() {
       testWidgets(
         'calls onToggleCompleted with correct value when tapped',
         (tester) async {
-          await tester.pumpApp(buildSubject(
-            todo: uncompletedTodo,
-          ),);
+          await tester.pumpApp(
+            buildSubject(
+              todo: uncompletedTodo,
+            ),
+          );
 
           await tester.tap(find.byType(Checkbox));
 
@@ -114,9 +120,11 @@ void main() {
       });
 
       testWidgets('is struckthrough when todo is completed', (tester) async {
-        await tester.pumpApp(buildSubject(
-          todo: completedTodo,
-        ),);
+        await tester.pumpApp(
+          buildSubject(
+            todo: completedTodo,
+          ),
+        );
 
         final text = tester.widget<Text>(find.text(completedTodo.title));
         expect(
