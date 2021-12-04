@@ -10,7 +10,7 @@ part 'emitter.dart';
 /// An [ErrorSink] that supports adding events.
 ///
 /// Multiple events can be reported to the sink via `add`.
-abstract class EventSink<Event extends Object?> implements ErrorSink {
+abstract class BlocEventSink<Event extends Object?> implements ErrorSink {
   /// Adds an [event] to the sink.
   ///
   /// Must not be called on a closed sink.
@@ -47,7 +47,7 @@ class _Handler {
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
 abstract class Bloc<Event, State> extends BlocBase<State>
-    implements EventSink<Event> {
+    implements BlocEventSink<Event> {
   /// {@macro bloc}
   Bloc(State initialState) : super(initialState);
 
