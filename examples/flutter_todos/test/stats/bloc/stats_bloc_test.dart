@@ -4,16 +4,21 @@ import 'package:flutter_todos/stats/stats.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:todos_repository/todos_repository.dart';
 
-import '../../helpers/helpers.dart';
+class MockTodosRepository extends Mock implements TodosRepository {}
 
 void main() {
+  final todo = Todo(
+    id: '1',
+    title: 'title 1',
+    description: 'description 1',
+  );
+
   group('StatsBloc', () {
     late TodosRepository todosRepository;
 
-    setUpAll(commonSetUpAll);
-
     setUp(() {
       todosRepository = MockTodosRepository();
+      when(todosRepository.getTodos).thenAnswer((_) => const Stream.empty());
     });
 
     StatsBloc buildBloc() => StatsBloc(todosRepository: todosRepository);
@@ -24,10 +29,7 @@ void main() {
       });
 
       test('has correct initial state', () {
-        expect(
-          buildBloc().state,
-          equals(const StatsState()),
-        );
+        expect(buildBloc().state, equals(const StatsState()));
       });
     });
 
@@ -44,16 +46,18 @@ void main() {
       blocTest<StatsBloc, StatsState>(
         'emits state with updated status, completed todo and active todo count '
         'when repository getTodos stream emits new todos',
+        setUp: () {
+          when(
+            todosRepository.getTodos,
+          ).thenAnswer((_) => Stream.value([todo]));
+        },
         build: buildBloc,
         act: (bloc) => bloc.add(const StatsSubscriptionRequested()),
         expect: () => [
+          const StatsState(status: StatsStatus.loading),
           const StatsState(
-            status: StatsStatus.loading,
-          ),
-          StatsState(
             status: StatsStatus.success,
-            completedTodos: mockTodos.where((todo) => todo.isCompleted).length,
-            activeTodos: mockTodos.where((todo) => !todo.isCompleted).length,
+            activeTodos: 1,
           ),
         ],
       );
@@ -62,18 +66,15 @@ void main() {
         'emits state with failure status '
         'when repository getTodos stream emits error',
         setUp: () {
-          when(() => todosRepository.getTodos())
-              .thenAnswer((_) => Stream.error(Exception('oops')));
+          when(
+            () => todosRepository.getTodos(),
+          ).thenAnswer((_) => Stream.error(Exception('oops')));
         },
         build: buildBloc,
         act: (bloc) => bloc.add(const StatsSubscriptionRequested()),
         expect: () => [
-          const StatsState(
-            status: StatsStatus.loading,
-          ),
-          const StatsState(
-            status: StatsStatus.failure,
-          ),
+          const StatsState(status: StatsStatus.loading),
+          const StatsState(status: StatsStatus.failure),
         ],
       );
     });

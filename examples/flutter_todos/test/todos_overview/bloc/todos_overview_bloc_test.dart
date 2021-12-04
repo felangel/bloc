@@ -4,25 +4,43 @@ import 'package:flutter_todos/todos_overview/todos_overview.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:todos_repository/todos_repository.dart';
 
-import '../../helpers/helpers.dart';
+class MockTodosRepository extends Mock implements TodosRepository {}
 
 void main() {
+  final mockTodos = [
+    Todo(
+      id: '1',
+      title: 'title 1',
+      description: 'description 1',
+    ),
+    Todo(
+      id: '2',
+      title: 'title 2',
+      description: 'description 2',
+    ),
+    Todo(
+      id: '3',
+      title: 'title 3',
+      description: 'description 3',
+      isCompleted: true,
+    ),
+  ];
   group('TodosOverviewBloc', () {
     late TodosRepository todosRepository;
 
-    setUpAll(commonSetUpAll);
-
     setUp(() {
       todosRepository = MockTodosRepository();
+      when(
+        () => todosRepository.getTodos(),
+      ).thenAnswer((_) => Stream.value(mockTodos));
     });
 
-    TodosOverviewBloc buildBloc() =>
-        TodosOverviewBloc(todosRepository: todosRepository);
+    TodosOverviewBloc buildBloc() {
+      return TodosOverviewBloc(todosRepository: todosRepository);
+    }
 
     group('constructor', () {
-      test('works properly', () {
-        expect(buildBloc, returnsNormally);
-      });
+      test('works properly', () => expect(buildBloc, returnsNormally));
 
       test('has correct initial state', () {
         expect(
@@ -62,18 +80,15 @@ void main() {
         'emits state with failure status '
         'when repository getTodos stream emits error',
         setUp: () {
-          when(() => todosRepository.getTodos())
-              .thenAnswer((_) => Stream.error(Exception('oops')));
+          when(
+            () => todosRepository.getTodos(),
+          ).thenAnswer((_) => Stream.error(Exception('oops')));
         },
         build: buildBloc,
         act: (bloc) => bloc.add(const TodosOverviewSubscriptionRequested()),
         expect: () => [
-          const TodosOverviewState(
-            status: TodosOverviewStatus.loading,
-          ),
-          const TodosOverviewState(
-            status: TodosOverviewStatus.failure,
-          ),
+          const TodosOverviewState(status: TodosOverviewStatus.loading),
+          const TodosOverviewState(status: TodosOverviewStatus.failure),
         ],
       );
     });
@@ -93,9 +108,7 @@ void main() {
       blocTest<TodosOverviewBloc, TodosOverviewState>(
         'saves todo with isCompleted set to event isCompleted flag',
         build: buildBloc,
-        seed: () => TodosOverviewState(
-          todos: mockTodos,
-        ),
+        seed: () => TodosOverviewState(todos: mockTodos),
         act: (bloc) => bloc.add(
           TodosOverviewTodoCompletionToggled(
             todo: mockTodos.first,
@@ -116,13 +129,12 @@ void main() {
       blocTest<TodosOverviewBloc, TodosOverviewState>(
         'deletes todo using repository',
         build: buildBloc,
-        seed: () => TodosOverviewState(
-          todos: mockTodos,
-        ),
+        seed: () => TodosOverviewState(todos: mockTodos),
         act: (bloc) => bloc.add(TodosOverviewTodoDeleted(mockTodos.first)),
         verify: (bloc) {
-          verify(() => todosRepository.deleteTodo(mockTodos.first.id))
-              .called(1);
+          verify(
+            () => todosRepository.deleteTodo(mockTodos.first.id),
+          ).called(1);
         },
       );
     });
@@ -131,13 +143,9 @@ void main() {
       blocTest<TodosOverviewBloc, TodosOverviewState>(
         'restores last deleted undo and clears lastDeletedUndo field',
         build: buildBloc,
-        seed: () => TodosOverviewState(
-          lastDeletedTodo: mockTodos.first,
-        ),
+        seed: () => TodosOverviewState(lastDeletedTodo: mockTodos.first),
         act: (bloc) => bloc.add(const TodosOverviewUndoDeletionRequested()),
-        expect: () => const [
-          TodosOverviewState(),
-        ],
+        expect: () => const [TodosOverviewState()],
         verify: (bloc) {
           verify(() => todosRepository.saveTodo(mockTodos.first)).called(1);
         },
@@ -152,9 +160,7 @@ void main() {
           const TodosOverviewFilterChanged(TodosViewFilter.completedOnly),
         ),
         expect: () => const [
-          TodosOverviewState(
-            filter: TodosViewFilter.completedOnly,
-          ),
+          TodosOverviewState(filter: TodosViewFilter.completedOnly),
         ],
       );
     });
@@ -163,9 +169,7 @@ void main() {
       blocTest<TodosOverviewBloc, TodosOverviewState>(
         'toggles all todos to completed when some or none are uncompleted',
         build: buildBloc,
-        seed: () => TodosOverviewState(
-          todos: mockTodos,
-        ),
+        seed: () => TodosOverviewState(todos: mockTodos),
         act: (bloc) => bloc.add(const TodosOverviewToggleAllRequested()),
         verify: (bloc) {
           verify(

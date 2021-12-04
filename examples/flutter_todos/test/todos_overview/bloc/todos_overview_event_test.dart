@@ -2,11 +2,16 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart';
-
-import '../../helpers/helpers.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 void main() {
   group('TodosOverviewEvent', () {
+    final mockTodo = Todo(
+      id: '1',
+      title: 'title 1',
+      description: 'description 1',
+    );
+
     group('TodosOverviewSubscriptionRequested', () {
       test('supports value equality', () {
         expect(
@@ -26,16 +31,16 @@ void main() {
     group('TodosOverviewTodoSaved', () {
       test('supports value equality', () {
         expect(
-          TodosOverviewTodoSaved(mockTodos.first),
-          equals(TodosOverviewTodoSaved(mockTodos.first)),
+          TodosOverviewTodoSaved(mockTodo),
+          equals(TodosOverviewTodoSaved(mockTodo)),
         );
       });
 
       test('props are correct', () {
         expect(
-          TodosOverviewTodoSaved(mockTodos.first).props,
+          TodosOverviewTodoSaved(mockTodo).props,
           equals(<Object?>[
-            mockTodos.first, // todo
+            mockTodo, // todo
           ]),
         );
       });
@@ -45,12 +50,12 @@ void main() {
       test('supports value equality', () {
         expect(
           TodosOverviewTodoCompletionToggled(
-            todo: mockTodos.first,
+            todo: mockTodo,
             isCompleted: true,
           ),
           equals(
             TodosOverviewTodoCompletionToggled(
-              todo: mockTodos.first,
+              todo: mockTodo,
               isCompleted: true,
             ),
           ),
@@ -60,11 +65,11 @@ void main() {
       test('props are correct', () {
         expect(
           TodosOverviewTodoCompletionToggled(
-            todo: mockTodos.first,
+            todo: mockTodo,
             isCompleted: true,
           ).props,
           equals(<Object?>[
-            mockTodos.first, // todo
+            mockTodo, // todo
             true, // isCompleted
           ]),
         );
@@ -74,16 +79,16 @@ void main() {
     group('TodosOverviewTodoDeleted', () {
       test('supports value equality', () {
         expect(
-          TodosOverviewTodoDeleted(mockTodos.first),
-          equals(TodosOverviewTodoDeleted(mockTodos.first)),
+          TodosOverviewTodoDeleted(mockTodo),
+          equals(TodosOverviewTodoDeleted(mockTodo)),
         );
       });
 
       test('props are correct', () {
         expect(
-          TodosOverviewTodoDeleted(mockTodos.first).props,
+          TodosOverviewTodoDeleted(mockTodo).props,
           equals(<Object?>[
-            mockTodos.first, // todo
+            mockTodo, // todo
           ]),
         );
       });

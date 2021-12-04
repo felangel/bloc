@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 import '../../helpers/helpers.dart';
 
 void main() {
-  final todo = mockTodos.first;
-  var onUndoCallCount = 0;
-
-  setUpAll(commonSetUpAll);
+  final todo = Todo(
+    id: '1',
+    title: 'title 1',
+    description: 'description 1',
+  );
 
   group('TodoDeletionConfirmationSnackBar', () {
     group('constructor', () {
@@ -45,12 +47,18 @@ void main() {
   });
 
   group('TodoDeletionConfirmationSnackBarContent', () {
+    late int onUndoCallCount;
+
     Widget buildSubject() {
       return TodoDeletionConfirmationSnackBarContent(
         todo: todo,
         onUndo: () => onUndoCallCount++,
       );
     }
+
+    setUp(() {
+      onUndoCallCount = 0;
+    });
 
     group('constructor', () {
       test('works properly', () {

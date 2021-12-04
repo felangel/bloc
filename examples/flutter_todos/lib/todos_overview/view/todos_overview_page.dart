@@ -58,7 +58,6 @@ class TodosOverviewView extends StatelessWidget {
                 current.lastDeletedTodo != null,
             listener: (context, state) {
               final deletedTodo = state.lastDeletedTodo!;
-
               final messenger = ScaffoldMessenger.of(context);
               messenger
                 ..hideCurrentSnackBar()
@@ -80,9 +79,7 @@ class TodosOverviewView extends StatelessWidget {
           builder: (context, state) {
             if (state.todos.isEmpty) {
               if (state.status == TodosOverviewStatus.loading) {
-                return const Center(
-                  child: CupertinoActivityIndicator(),
-                );
+                return const Center(child: CupertinoActivityIndicator());
               } else if (state.status != TodosOverviewStatus.success) {
                 return const SizedBox();
               } else {

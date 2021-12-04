@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,19 +8,22 @@ import 'package:todos_repository/todos_repository.dart';
 
 import '../../helpers/helpers.dart';
 
-void main() {
-  setUpAll(commonSetUpAll);
+class MockStatsBloc extends MockBloc<StatsEvent, StatsState>
+    implements StatsBloc {}
 
+void main() {
   group('StatsPage', () {
     late TodosRepository todosRepository;
 
     setUp(() {
       todosRepository = MockTodosRepository();
+      when(todosRepository.getTodos).thenAnswer((_) => const Stream.empty());
     });
 
     testWidgets('renders StatsView', (tester) async {
       await tester.pumpApp(
         const StatsPage(),
+        todosRepository: todosRepository,
       );
 
       expect(find.byType(StatsView), findsOneWidget);
@@ -51,11 +55,7 @@ void main() {
 
       statsBloc = MockStatsBloc();
       when(() => statsBloc.state).thenReturn(
-        StatsState(
-          status: StatsStatus.success,
-          completedTodos: mockTodos.where((todo) => todo.isCompleted).length,
-          activeTodos: mockTodos.where((todo) => !todo.isCompleted).length,
-        ),
+        const StatsState(status: StatsStatus.success),
       );
     });
 
@@ -89,6 +89,13 @@ void main() {
       'renders completed todos ListTile '
       'with correct icon, label and value',
       (tester) async {
+        const completedTodos = 42;
+        when(() => statsBloc.state).thenReturn(
+          const StatsState(
+            status: StatsStatus.success,
+            completedTodos: completedTodos,
+          ),
+        );
         await tester.pumpApp(buildSubject());
 
         expect(find.byKey(completedTodosListTileKey), findsOneWidget);
@@ -112,9 +119,7 @@ void main() {
         expect(
           find.descendant(
             of: find.byKey(completedTodosListTileKey),
-            matching: find.text(
-              mockTodos.where((todo) => todo.isCompleted).length.toString(),
-            ),
+            matching: find.text('$completedTodos'),
           ),
           findsOneWidget,
         );
@@ -125,6 +130,13 @@ void main() {
       'renders active todos ListTile '
       'with correct icon, label and value',
       (tester) async {
+        const activeTodos = 42;
+        when(() => statsBloc.state).thenReturn(
+          const StatsState(
+            status: StatsStatus.success,
+            activeTodos: activeTodos,
+          ),
+        );
         await tester.pumpApp(buildSubject());
 
         expect(find.byKey(activeTodosListTileKey), findsOneWidget);
@@ -148,9 +160,7 @@ void main() {
         expect(
           find.descendant(
             of: find.byKey(activeTodosListTileKey),
-            matching: find.text(
-              mockTodos.where((todo) => !todo.isCompleted).length.toString(),
-            ),
+            matching: find.text('$activeTodos'),
           ),
           findsOneWidget,
         );

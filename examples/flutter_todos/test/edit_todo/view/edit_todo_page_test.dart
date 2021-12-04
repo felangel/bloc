@@ -4,20 +4,35 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_todos/edit_todo/edit_todo.dart';
 import 'package:mockingjay/mockingjay.dart';
-import 'package:todos_api/todos_api.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 import '../../helpers/helpers.dart';
 
+class MockEditTodoBloc extends MockBloc<EditTodoEvent, EditTodoState>
+    implements EditTodoBloc {}
+
 void main() {
+  final mockTodo = Todo(
+    id: '1',
+    title: 'title 1',
+    description: 'description 1',
+  );
+
   late MockNavigator navigator;
   late EditTodoBloc editTodoBloc;
-
-  setUpAll(commonSetUpAll);
 
   setUp(() {
     navigator = MockNavigator();
     when(() => navigator.push(any())).thenAnswer((_) async {});
+
     editTodoBloc = MockEditTodoBloc();
+    when(() => editTodoBloc.state).thenReturn(
+      EditTodoState(
+        initialTodo: mockTodo,
+        title: mockTodo.title,
+        description: mockTodo.description,
+      ),
+    );
   });
 
   group('EditTodoPage', () {

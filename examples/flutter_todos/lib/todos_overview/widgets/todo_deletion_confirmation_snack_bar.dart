@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todos/l10n/l10n.dart';
-import 'package:todos_api/todos_api.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 class TodoDeletionConfirmationSnackBar extends SnackBar {
   TodoDeletionConfirmationSnackBar({
