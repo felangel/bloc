@@ -29,9 +29,7 @@ class EditTodoPage extends StatelessWidget {
       listenWhen: (previous, current) =>
           previous.status != current.status &&
           current.status == EditTodoStatus.success,
-      listener: (context, state) {
-        Navigator.of(context).pop();
-      },
+      listener: (context, state) => Navigator.of(context).pop(),
       child: const EditTodoView(),
     );
   }
@@ -43,14 +41,12 @@ class EditTodoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-
     final status = context.select((EditTodoBloc bloc) => bloc.state.status);
-    final isNewTodo =
-        context.select((EditTodoBloc bloc) => bloc.state.isNewTodo);
-
+    final isNewTodo = context.select(
+      (EditTodoBloc bloc) => bloc.state.isNewTodo,
+    );
     final theme = Theme.of(context);
     final floatingActionButtonTheme = theme.floatingActionButtonTheme;
-
     final fabBackgroundColor = floatingActionButtonTheme.backgroundColor ??
         theme.colorScheme.secondary;
 
@@ -72,9 +68,7 @@ class EditTodoView extends StatelessWidget {
             : fabBackgroundColor,
         onPressed: status.isLoadingOrSuccess
             ? null
-            : () {
-                context.read<EditTodoBloc>().add(const EditTodoSubmitted());
-              },
+            : () => context.read<EditTodoBloc>().add(const EditTodoSubmitted()),
         child: status.isLoadingOrSuccess
             ? const CupertinoActivityIndicator()
             : const Icon(Icons.check_rounded),
@@ -84,10 +78,7 @@ class EditTodoView extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
-              children: const [
-                _TitleField(),
-                _DescriptionField(),
-              ],
+              children: const [_TitleField(), _DescriptionField()],
             ),
           ),
         ),
@@ -102,7 +93,6 @@ class _TitleField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-
     final state = context.watch<EditTodoBloc>().state;
     final hintText = state.initialTodo?.title ?? '';
 

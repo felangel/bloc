@@ -79,29 +79,29 @@ void main() {
       test('replaces every non-null parameter', () {
         expect(
           createSubject().copyWith(
-            status: TodosOverviewStatus.success,
-            todos: [],
-            filter: TodosViewFilter.completedOnly,
-            lastDeletedTodo: mockTodos.first,
+            status: () => TodosOverviewStatus.success,
+            todos: () => [],
+            filter: () => TodosViewFilter.completedOnly,
+            lastDeletedTodo: () => mockTodos.first,
           ),
-          equals(createSubject(
-            status: TodosOverviewStatus.success,
-            todos: [],
-            filter: TodosViewFilter.completedOnly,
-            lastDeletedTodo: mockTodos.first,
-          ),),
+          equals(
+            createSubject(
+              status: TodosOverviewStatus.success,
+              todos: [],
+              filter: TodosViewFilter.completedOnly,
+              lastDeletedTodo: mockTodos.first,
+            ),
+          ),
         );
       });
     });
 
-    test('withoutLastDeletedTodo copies state without lastDeletedTodo', () {
+    test('can copyWith null lastDeletedTodo', () {
       expect(
         createSubject(
           lastDeletedTodo: mockTodos.first,
-        ).withoutLastDeletedTodo(),
-        equals(createSubject(
-          lastDeletedTodo: null,
-        ),),
+        ).copyWith(lastDeletedTodo: () => null),
+        equals(createSubject(lastDeletedTodo: null)),
       );
     });
   });

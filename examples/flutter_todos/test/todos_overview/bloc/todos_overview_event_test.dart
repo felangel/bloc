@@ -48,10 +48,12 @@ void main() {
             todo: mockTodos.first,
             isCompleted: true,
           ),
-          equals(TodosOverviewTodoCompletionToggled(
-            todo: mockTodos.first,
-            isCompleted: true,
-          ),),
+          equals(
+            TodosOverviewTodoCompletionToggled(
+              todo: mockTodos.first,
+              isCompleted: true,
+            ),
+          ),
         );
       });
 

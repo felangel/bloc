@@ -38,12 +38,14 @@ void main() {
       });
 
       testWidgets('supports providing an initial todo', (tester) async {
-        await tester.pumpRoute(EditTodoPage.route(
-          initialTodo: Todo(
-            id: 'initial-id',
-            title: 'initial',
+        await tester.pumpRoute(
+          EditTodoPage.route(
+            initialTodo: Todo(
+              id: 'initial-id',
+              title: 'initial',
+            ),
           ),
-        ),);
+        );
         expect(find.byType(EditTodoPage), findsOneWidget);
         expect(
           find.byWidgetPredicate(
@@ -116,9 +118,11 @@ void main() {
       'renders AppBar with title text for editing todos '
       'when an existing todo is being edited',
       (tester) async {
-        when(() => editTodoBloc.state).thenReturn(EditTodoState(
-          initialTodo: Todo(title: 'title'),
-        ),);
+        when(() => editTodoBloc.state).thenReturn(
+          EditTodoState(
+            initialTodo: Todo(title: 'title'),
+          ),
+        );
         await tester.pumpApp(buildSubject());
 
         expect(find.byType(AppBar), findsOneWidget);
@@ -140,9 +144,11 @@ void main() {
       });
 
       testWidgets('is disabled when loading', (tester) async {
-        when(() => editTodoBloc.state).thenReturn(const EditTodoState(
-          status: EditTodoStatus.loading,
-        ),);
+        when(() => editTodoBloc.state).thenReturn(
+          const EditTodoState(
+            status: EditTodoStatus.loading,
+          ),
+        );
         await tester.pumpApp(buildSubject());
 
         final textField =
@@ -176,9 +182,11 @@ void main() {
       });
 
       testWidgets('is disabled when loading', (tester) async {
-        when(() => editTodoBloc.state).thenReturn(const EditTodoState(
-          status: EditTodoStatus.loading,
-        ),);
+        when(() => editTodoBloc.state).thenReturn(
+          const EditTodoState(
+            status: EditTodoStatus.loading,
+          ),
+        );
         await tester.pumpApp(buildSubject());
 
         final textField =

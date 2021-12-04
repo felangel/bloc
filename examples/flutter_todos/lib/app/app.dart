@@ -6,10 +6,7 @@ import 'package:flutter_todos/theme/theme.dart';
 import 'package:todos_repository/todos_repository.dart';
 
 class App extends StatelessWidget {
-  const App({
-    Key? key,
-    required this.todosRepository,
-  }) : super(key: key);
+  const App({Key? key, required this.todosRepository}) : super(key: key);
 
   final TodosRepository todosRepository;
 

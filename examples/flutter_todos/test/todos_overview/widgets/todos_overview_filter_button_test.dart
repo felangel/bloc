@@ -127,10 +127,11 @@ void main() {
         'to TodosOverviewBloc '
         'when new filter is pressed',
         (tester) async {
-          when(() => todosOverviewBloc.state)
-              .thenReturn(const TodosOverviewState(
-            filter: TodosViewFilter.all,
-          ),);
+          when(() => todosOverviewBloc.state).thenReturn(
+            const TodosOverviewState(
+              filter: TodosViewFilter.all,
+            ),
+          );
 
           await tester.pumpApp(buildSubject());
           await tester.openPopup();
@@ -138,9 +139,11 @@ void main() {
           await tester.tap(find.text(l10n.todosOverviewFilterCompletedOnly));
           await tester.pumpAndSettle();
 
-          verify(() => todosOverviewBloc.add(
-                const TodosOverviewFilterChanged(TodosViewFilter.completedOnly),
-              ),).called(1);
+          verify(
+            () => todosOverviewBloc.add(
+              const TodosOverviewFilterChanged(TodosViewFilter.completedOnly),
+            ),
+          ).called(1);
         },
       );
     });

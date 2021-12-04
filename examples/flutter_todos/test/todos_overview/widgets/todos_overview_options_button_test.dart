@@ -91,12 +91,14 @@ void main() {
           'renders mark all complete button '
           'when not all todos are marked completed',
           (tester) async {
-            when(() => todosOverviewBloc.state).thenReturn(TodosOverviewState(
-              todos: [
-                Todo(title: 'a', isCompleted: true),
-                Todo(title: 'b', isCompleted: false),
-              ],
-            ),);
+            when(() => todosOverviewBloc.state).thenReturn(
+              TodosOverviewState(
+                todos: [
+                  Todo(title: 'a', isCompleted: true),
+                  Todo(title: 'b', isCompleted: false),
+                ],
+              ),
+            );
             await tester.pumpApp(buildSubject());
             await tester.openPopup();
 
@@ -113,12 +115,14 @@ void main() {
           'renders mark all incomplete button '
           'when all todos are marked completed',
           (tester) async {
-            when(() => todosOverviewBloc.state).thenReturn(TodosOverviewState(
-              todos: [
-                Todo(title: 'a', isCompleted: true),
-                Todo(title: 'b', isCompleted: true),
-              ],
-            ),);
+            when(() => todosOverviewBloc.state).thenReturn(
+              TodosOverviewState(
+                todos: [
+                  Todo(title: 'a', isCompleted: true),
+                  Todo(title: 'b', isCompleted: true),
+                ],
+              ),
+            );
             await tester.pumpApp(buildSubject());
             await tester.openPopup();
 
@@ -136,21 +140,27 @@ void main() {
           'to TodosOverviewBloc '
           'when tapped',
           (tester) async {
-            when(() => todosOverviewBloc.state).thenReturn(TodosOverviewState(
-              todos: [
-                Todo(title: 'a', isCompleted: true),
-                Todo(title: 'b', isCompleted: false),
-              ],
-            ),);
+            when(() => todosOverviewBloc.state).thenReturn(
+              TodosOverviewState(
+                todos: [
+                  Todo(title: 'a', isCompleted: true),
+                  Todo(title: 'b', isCompleted: false),
+                ],
+              ),
+            );
             await tester.pumpApp(buildSubject());
             await tester.openPopup();
 
-            await tester.tap(find.optionMenuItem(
-              title: l10n.todosOverviewOptionsMarkAllComplete,
-            ),);
+            await tester.tap(
+              find.optionMenuItem(
+                title: l10n.todosOverviewOptionsMarkAllComplete,
+              ),
+            );
 
-            verify(() => todosOverviewBloc
-                .add(const TodosOverviewToggleAllRequested()),).called(1);
+            verify(
+              () => todosOverviewBloc
+                  .add(const TodosOverviewToggleAllRequested()),
+            ).called(1);
           },
         );
       });
@@ -178,12 +188,14 @@ void main() {
           'renders clear completed button '
           'when there are completed todos',
           (tester) async {
-            when(() => todosOverviewBloc.state).thenReturn(TodosOverviewState(
-              todos: [
-                Todo(title: 'a', isCompleted: true),
-                Todo(title: 'b', isCompleted: false),
-              ],
-            ),);
+            when(() => todosOverviewBloc.state).thenReturn(
+              TodosOverviewState(
+                todos: [
+                  Todo(title: 'a', isCompleted: true),
+                  Todo(title: 'b', isCompleted: false),
+                ],
+              ),
+            );
             await tester.pumpApp(buildSubject());
             await tester.openPopup();
 
@@ -202,21 +214,27 @@ void main() {
           'to TodosOverviewBloc '
           'when tapped',
           (tester) async {
-            when(() => todosOverviewBloc.state).thenReturn(TodosOverviewState(
-              todos: [
-                Todo(title: 'a', isCompleted: true),
-                Todo(title: 'b', isCompleted: false),
-              ],
-            ),);
+            when(() => todosOverviewBloc.state).thenReturn(
+              TodosOverviewState(
+                todos: [
+                  Todo(title: 'a', isCompleted: true),
+                  Todo(title: 'b', isCompleted: false),
+                ],
+              ),
+            );
             await tester.pumpApp(buildSubject());
             await tester.openPopup();
 
-            await tester.tap(find.optionMenuItem(
-              title: l10n.todosOverviewOptionsClearCompleted,
-            ),);
+            await tester.tap(
+              find.optionMenuItem(
+                title: l10n.todosOverviewOptionsClearCompleted,
+              ),
+            );
 
-            verify(() => todosOverviewBloc
-                .add(const TodosOverviewClearCompletedRequested()),).called(1);
+            verify(
+              () => todosOverviewBloc
+                  .add(const TodosOverviewClearCompletedRequested()),
+            ).called(1);
           },
         );
       });

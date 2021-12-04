@@ -157,8 +157,10 @@ void main() {
 
           snackBar.onUndo();
 
-          verify(() => todosOverviewBloc
-              .add(const TodosOverviewUndoDeletionRequested()),).called(1);
+          verify(
+            () => todosOverviewBloc
+                .add(const TodosOverviewUndoDeletionRequested()),
+          ).called(1);
         },
       );
     });
@@ -243,12 +245,14 @@ void main() {
               tester.widget<TodoListTile>(find.byType(TodoListTile).first);
           todoListTile.onToggleCompleted!(!todo.isCompleted);
 
-          verify(() => todosOverviewBloc.add(
-                TodosOverviewTodoCompletionToggled(
-                  todo: todo,
-                  isCompleted: !todo.isCompleted,
-                ),
-              ),).called(1);
+          verify(
+            () => todosOverviewBloc.add(
+              TodosOverviewTodoCompletionToggled(
+                todo: todo,
+                isCompleted: !todo.isCompleted,
+              ),
+            ),
+          ).called(1);
         },
       );
 

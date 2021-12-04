@@ -85,12 +85,14 @@ void main() {
             title: 'title',
             description: 'description',
           ),
-          equals(createSubject(
-            status: EditTodoStatus.success,
-            initialTodo: mockInitialTodo,
-            title: 'title',
-            description: 'description',
-          ),),
+          equals(
+            createSubject(
+              status: EditTodoStatus.success,
+              initialTodo: mockInitialTodo,
+              title: 'title',
+              description: 'description',
+            ),
+          ),
         );
       });
     });

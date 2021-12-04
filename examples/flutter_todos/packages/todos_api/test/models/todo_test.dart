@@ -88,12 +88,14 @@ void main() {
             description: 'new description',
             isCompleted: false,
           ),
-          equals(createSubject(
-            id: '2',
-            title: 'new title',
-            description: 'new description',
-            isCompleted: false,
-          ),),
+          equals(
+            createSubject(
+              id: '2',
+              title: 'new title',
+              description: 'new description',
+              isCompleted: false,
+            ),
+          ),
         );
       });
     });
