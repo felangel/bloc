@@ -11,7 +11,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
     this.onEventCallback,
     this.onTransitionCallback,
     this.onErrorCallback,
-  }) : super(0) {
+    bool emitFailsWhenClosed = true,
+  }) : super(0, emitFailsWhenClosed: emitFailsWhenClosed) {
     on<CounterEvent>(_onCounterEvent);
   }
 

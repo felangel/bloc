@@ -6,7 +6,10 @@ part of 'bloc.dart';
 /// {@endtemplate}
 abstract class BlocBase<State> {
   /// {@macro bloc_base}
-  BlocBase(this._state) {
+  BlocBase(
+    this._state, {
+    this.emitFailsWhenClosed = true,
+  }) {
     // ignore: invalid_use_of_protected_member
     _blocObserver?.onCreate(this);
   }
@@ -17,6 +20,11 @@ abstract class BlocBase<State> {
   StreamController<State> get _stateController {
     return __stateController ??= StreamController<State>.broadcast();
   }
+
+  /// Whether the bloc should throw [StateError] when a new [State] is about to
+  /// emit while bloc is closed.
+  /// Note: [Bloc.add] is not affected by this.
+  final bool emitFailsWhenClosed;
 
   State _state;
 
@@ -48,7 +56,11 @@ abstract class BlocBase<State> {
   void emit(State state) {
     try {
       if (isClosed) {
-        throw StateError('Cannot emit new states after calling close');
+        if (emitFailsWhenClosed) {
+          throw StateError('Cannot emit new states after calling close');
+        } else {
+          return;
+        }
       }
       if (state == _state && _emitted) return;
       onChange(Change<State>(currentState: this.state, nextState: state));

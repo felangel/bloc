@@ -172,6 +172,26 @@ void main() {
         expect(didThrow, isTrue);
       });
 
+      test(
+          'won\'t throw StateError if cubit is closed and '
+          'emitFailsWhenClosed == false', () async {
+        final states = <int>[];
+        final cubit = SeededCubit(
+          initialState: 0,
+          emitFailsWhenClosed: false,
+        );
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..emitState(1)
+          ..emitState(2);
+
+        await cubit.close();
+        cubit.emitState(3);
+
+        await subscription.cancel();
+        expect(states, [1, 2]);
+      });
+
       test('emits states in the correct order', () async {
         final states = <int>[];
         final cubit = CounterCubit();

@@ -1579,6 +1579,58 @@ void main() {
       });
     });
 
+    test(
+        'won\'t throw StateError during emit if bloc is closed and '
+        'emitFailsWhenClosed == false, however should throw when bloc is '
+        'closed and new event being added', () async {
+      Object? capturedError;
+      StackTrace? capturedStacktrace;
+
+      final states = <int>[];
+
+      final counterBloc = CounterBloc(
+        emitFailsWhenClosed: false,
+        onErrorCallback: (error, stackTrace) {
+          capturedError = error;
+          capturedStacktrace = stackTrace;
+        },
+      );
+      final subscription = counterBloc.stream.listen(states.add);
+      counterBloc
+        ..add(CounterEvent.increment)
+        ..add(CounterEvent.increment);
+
+      await counterBloc.close();
+      counterBloc.emit(3);
+
+      final expectedResults = [1, 2];
+      final expectedState = 2;
+
+      expect(counterBloc.isClosed, isTrue);
+      expect(counterBloc.state, equals(expectedState));
+      expect(states, expectedResults);
+      expect(capturedError, isNull);
+      expect(capturedStacktrace, isNull);
+
+      final expectedStateError = isA<StateError>().having(
+        (e) => e.message,
+        'message',
+        'Cannot add new events after calling close',
+      );
+
+      expect(() async {
+        counterBloc.add(CounterEvent.increment);
+        await tick();
+      }, throwsA(expectedStateError));
+      expect(counterBloc.state, equals(expectedState));
+      expect(states, expectedResults);
+      expect(capturedError, expectedStateError);
+      expect(capturedStacktrace, isNotNull);
+
+      await subscription.cancel();
+      expect(states, [1, 2]);
+    });
+
     group('close', () {
       test('emits done (sync)', () {
         final bloc = CounterBloc()..close();
