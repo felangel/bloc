@@ -1,0 +1,3 @@
+```yaml
+include: package:very_good_analysis/analysis_options.2.4.0.yaml
+```
