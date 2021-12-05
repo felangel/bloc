@@ -5,15 +5,18 @@
 > In the following tutorial, we're going to build a Todos App in Flutter using the Bloc library.
 
 ![demo](./assets/gifs/flutter_todos.gif)
+> ZTODO: Update gif
 
 ## Key Topics
 
 - Observe state changes with [BlocObserver](/coreconcepts?id=blocobserver).
 - [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
 - [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
-- Using Bloc instead of Cubit. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
+- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget which invokes the listener code in response to state changes in the bloc.
+- Using 3 Blocs and only 1 Cubit. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
 - Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
 - [MultiBlocProvider](/flutterbloccoreconcepts?id=multiblocprovider), a Flutter widget that merges multiple BlocProvider widgets into one.
+- Using `context.read<Bloc>` instead of `BlocProvider.of` in certain callbacks.
 
 ## Setup
 
