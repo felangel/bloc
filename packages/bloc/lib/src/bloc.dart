@@ -38,10 +38,7 @@ class _Handler {
 /// {@endtemplate}
 abstract class Bloc<Event, State> extends BlocBase<State> {
   /// {@macro bloc}
-  Bloc(
-    State initialState, {
-    bool emitFailsWhenClosed = true,
-  }) : super(initialState, emitFailsWhenClosed: emitFailsWhenClosed);
+  Bloc(State initialState) : super(initialState, emitFailsWhenClosed: true);
 
   final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<dynamic>>[];

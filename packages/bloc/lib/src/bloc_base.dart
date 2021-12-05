@@ -8,7 +8,7 @@ abstract class BlocBase<State> {
   /// {@macro bloc_base}
   BlocBase(
     this._state, {
-    this.emitFailsWhenClosed = true,
+    required this.emitFailsWhenClosed,
   }) {
     // ignore: invalid_use_of_protected_member
     _blocObserver?.onCreate(this);
@@ -23,7 +23,6 @@ abstract class BlocBase<State> {
 
   /// Whether the bloc should throw [StateError] when a new [State] is about to
   /// emit while bloc is closed.
-  /// Note: [Bloc.add] is not affected by this.
   final bool emitFailsWhenClosed;
 
   State _state;
