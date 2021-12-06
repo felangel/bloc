@@ -1,0 +1,37 @@
+```yaml
+name: flutter_todos
+description: An example todos app that showcases bloc state management patterns.
+version: 1.0.0+1
+publish_to: none
+
+environment:
+sdk: ">=2.13.0 <3.0.0"
+
+dependencies:
+bloc: ^8.0.1
+flutter:
+sdk: flutter
+flutter_bloc: ^8.0.0
+flutter_localizations:
+sdk: flutter
+flutter_services_binding: ^0.1.0
+intl: ^0.17.0
+local_storage_todos_api:
+path: packages/local_storage_todos_api
+todos_api:
+path: packages/todos_api
+todos_repository:
+path: packages/todos_repository
+
+dev_dependencies:
+bloc_test: ^9.0.1
+flutter_test:
+sdk: flutter
+mockingjay: ^0.2.0
+mocktail: ^0.2.0
+very_good_analysis: ^2.4.0
+
+flutter:
+uses-material-design: true
+generate: true
+```

@@ -1,3 +1,4 @@
+
 # Flutter Todos Tutorial
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
@@ -5,7 +6,7 @@
 > In the following tutorial, we're going to build a Todos App in Flutter using the Bloc library.
 
 ![demo](./assets/gifs/flutter_todos.gif)
-> ZTODO: Update gif
+> ZZTODO: Update gif with the movie in the issue tracker.
 
 ## Key Topics
 
@@ -13,16 +14,20 @@
 - [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
 - [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
 - [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget which invokes the listener code in response to state changes in the bloc.
-- Using 3 Blocs and only 1 Cubit. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
+- Using 3 Blocs and  1 Cubit. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
+- Uses a [Repository and API layer](architecture/repository) separately for the data.
+- [RespositoryProvider](/flutterbloccoreconcepts?id=respositoryprovider), a flutter widget to provide a repository to its children
 - Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
-- [MultiBlocProvider](/flutterbloccoreconcepts?id=multiblocprovider), a Flutter widget that merges multiple BlocProvider widgets into one.
-- Using `context.read<Bloc>` instead of `BlocProvider.of` in certain callbacks.
+- [MultiBlocListener](/flutterbloccoreconcepts?id=multibloclistener), a Flutter widget that merges multiple BlocListener widgets into one.
+
 
 ## Setup
 
 We'll start off by creating a brand new Flutter project
 
-[script](_snippets/flutter_todos_tutorial/flutter_create.sh.md ':include')
+```shell
+flutter create flutter_login
+```
 
 We can then replace the contents of `pubspec.yaml` with
 
@@ -30,457 +35,1396 @@ We can then replace the contents of `pubspec.yaml` with
 
 and then install all of the dependencies
 
-[script](_snippets/flutter_todos_tutorial/flutter_packages_get.sh.md ':include')
+```shell
+flutter pacakages get
+```
 
-?> **Note:** We're overriding some dependencies because we're going to be reusing them from [Brian Egan's Flutter Architecture Samples](https://github.com/brianegan/flutter_architecture_samples).
+[comment]: <> (> ZTODO: Is below still true? I think so, but I don't know the history of this.)
+[comment]: <> (> **Note:** We're overriding some dependencies because we're going to be reusing them from [Brian Egan's Flutter Architecture Samples]&#40;https://github.com/brianegan/flutter_architecture_samples&#41;.)
 
-## App Keys
+## Directory Structure
 
-Before we jump into the application code, let's create `flutter_todos_keys.dart`. This file will contain keys which we will use to uniquely identify important widgets. We can later write tests that find widgets based on keys.
+Because this is a long tutorial, presenting the directory structure is helpful.
 
-[flutter_todos_keys.dart](_snippets/flutter_todos_tutorial/flutter_todos_keys.dart.md ':include')
+> Alternatively, explore the files on github or clone them locally and open in your IDE. The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos).
 
-We will reference these keys throughout the rest of the tutorial.
+We will be using 3 blocs, 1 cubit, and 3 packages.
 
-?> **Note:** You can check out the integration tests for the application [here](https://github.com/brianegan/flutter_architecture_samples/tree/master/integration_tests). You can also check out unit and widget tests [here](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library/test).
+At a high level, the directory structure should look like this:
+```sh
+├── android
+├── ios
+├── lib
+├── packages
+└── test
+```
 
-## Localization
+### `lib/`
+The `lib/` directory will have the following structure:
 
-One last concept that we will touch on before going into the application itself is localization. Create `localization.dart` and we'll create the foundation for multi-language support.
+```sh
+|-app
+|-edit_todo
+|---bloc
+|---view
+|-home
+|---cubit
+|---view
+|-l10n
+|---arb
+|-stats
+|---bloc
+|---view
+|-theme
+|-todos_overview
+|---bloc
+|---models
+|---view
+|---widgets
+```
 
-[localization.dart](_snippets/flutter_todos_tutorial/localization.dart.md ':include')
+The three blocs are associated with `edit_todo`, `stats`, and `todos_overview` directories. Files are organized first by features and then by function (bloc, view, model, etc.)
 
-We can now import and provide our `FlutterBlocLocalizationsDelegate` to our `MaterialApp` (later in this tutorial).
+The one cubit is for the `home` screen which will handle navigation.
 
-For more information on localization check out the [official flutter docs](https://flutter.dev/docs/development/accessibility-and-localization/internationalization).
+Note also the four view directories.
+
+`li0n` is for international localization. `theme` is for theming, and `app` has initialization/startup elements.
+
+The tree with filenames is here:
+```shell
+|-edit_todo
+| |-view
+| | |-edit_todo_page.dart
+| | |-view.dart
+| |-edit_todo.dart
+| |-bloc
+| | |-edit_todo_event.dart
+| | |-edit_todo_bloc.dart
+| | |-edit_todo_state.dart
+|-home
+| |-home.dart
+| |-cubit
+| | |-home_state.dart
+| | |-home_cubit.dart
+| |-view
+| | |-view.dart
+| | |-home_page.dart
+|-main_development.dart
+|-l10n
+| |-l10n.dart
+| |-arb
+| | |-app_en.arb
+|-bootstrap.dart
+|-app
+| |-app_bloc_observer.dart
+| |-app.dart
+|-todos_overview
+| |-todos_overview.dart
+| |-models
+| | |-todos_view_filter.dart
+| | |-models.dart
+| |-view
+| | |-todos_overview_page.dart
+| | |-view.dart
+| |-widgets
+| | |-widgets.dart
+| | |-todo_deletion_confirmation_snack_bar.dart
+| | |-todos_overview_options_button.dart
+| | |-todos_overview_filter_button.dart
+| | |-todo_list_tile.dart
+| |-bloc
+| | |-todos_overview_bloc.dart
+| | |-todos_overview_event.dart
+| | |-todos_overview_state.dart
+|-main_production.dart
+|-generated_plugin_registrant.dart
+|-theme
+| |-theme.dart
+|-main_staging.dart
+|-stats
+| |-stats.dart
+| |-view
+| | |-stats_page.dart
+| | |-view.dart
+| |-bloc
+| | |-stats_state.dart
+| | |-stats_event.dart
+| | |-stats_bloc.dart
+
+```
+### `packages/`
+
+The `packages/` directory  will have the following structure:
+```sh
+|-local_storage_todos_api
+|---lib
+|-----src
+|---test
+|-todos_api
+|---lib
+|-----src
+|-------models
+|---test
+|-----models
+|-todos_repository
+|---lib
+|-----src
+|---test
+```
+
+The three packages are `todos_repository`, `todos_api`, `local_storage_todos_api`.
+
+---
+
+## Architecture
+
+![Bloc Architecture](assets/bloc_architecture_full.png)
+
+The architecture follows the [Bloc Architecture](/architecture), as diagrammed above.
+- The UI layer never talks directly to the Data layer. The UI layer only talks to the Bloc layer.
+- (not diagrammed) The Data layer in this project is split up into a Repository Layer and an DataProvider/API layer. The Bloc never directly talks to the APIs. It talks to the Repository layer.
+
+Each of the three Blocs talks to the `todos_repository` package. In fact, they do so independently and communicate to each other through the repository.
+
+The `todos_repository` package communicates with the `todos_api` package. The `todos_api` package is an implementation-agnostic specification of what an API will need to provide.
+
+`local_storage_todos_api` package is a specific implementation of the `todos_api`, as we will see later. If we want to use Firebase cloudFirestore or another database/datastore provider, we would implement another `todos_api` with that provider.
+
+
+[comment]: <> (## App Keys)  Present in previous tutorial. REMOVED HERE.
 
 ## Todos Repository
 
-In this tutorial we're not going to go into the implementation details of the `TodosRepository` because it was implemented by [Brian Egan](https://github.com/brianegan) and is shared among all of the [Todo Architecture Samples](https://github.com/brianegan/flutter_architecture_samples). At a high level, the `TodosRepository` will expose a method to `loadTodos` and to `saveTodos`. That's pretty much all we need to know so for the rest of the tutorial we'll focus on the Bloc and Presentation layers.
+### Defining interface
+A [repository](/architecture?id=repository) should specify the interface that the application uses and may provide some other logic.  The `TodosRepository` in this project has 3 files.
 
-## Todos Bloc
+The main file `todos_repository.dart` defines the interface. The 5 methods are described in the source code comments.
 
-> Our `TodosBloc` will be responsible for converting `TodosEvents` into `TodosStates` and will manage the list of todos.
+[todos_repository.dart2.md](_snippets/flutter_todos_tutorial/packages/todos_repository.dart2.md ':include') [//]: # (HCTOKEN)
 
-### Model
+Instantiating the repository requires specifying a TodosApi, which we will discuss [later](#main) in this tutorial.
 
-The first thing we need to do is define our `Todo` model. Each todo will need to have an id, a task, an optional note, and an optional completed flag.
+These are discussed further in the Commentary section, shortly below.
 
-Let's create a `models` directory and create `todo.dart`.
+### Helper files
+This file defines the exports. Notice that the `Todo` model is exported and exposed to the main app via the repository.
 
-[todo.dart](_snippets/flutter_todos_tutorial/todo.dart.md ':include')
+[todos_repository.dart.md](_snippets/flutter_todos_tutorial/packages/todos_repository.dart.md ':include') [//]: # (HCTOKEN)
 
-?> **Note:** We're using the [Equatable](https://pub.dev/packages/equatable) package so that we can compare instances of `Todos` without having to manually override `==` and `hashCode`.
+A second helper file provides mocking for tests. It is in the source code, but which we don't include it in this tutorial.
+[todos_repository_test.dart.md](_snippets/flutter_todos_tutorial/packages/todos_repository_test.dart.md)
 
-Next up, we need to create the `TodosState` which our presentation layer will receive.
+### Commentary
 
-### States
+#### Older way
 
-Let's create `blocs/todos/todos_state.dart` and define the different states we'll need to handle.
+In an older version of this tutorial, Streams were not used. It is instructive to look at the difference between a Stream approach and a "fetch" approach.
 
-The three states we will implement are:
+The repository interface in the old version was like this:
 
-- `TodosLoadInProgress` - the state while our application is fetching todos from the repository.
-- `TodosLoadSuccess` - the state of our application after the todos have successfully been loaded.
-- `TodosLoadFailure` - the state of our application if the todos were not successfully loaded.
+```dart
+// NOT USED, SHOWN FOR COMPARISON
+abstract class OldTodosRepository {
+  /// Loads todos first from File storage. If they don't exist or encounter an
+  /// error, it attempts to load the Todos from a Web Client.
+  Future<List<TodoEntity>> loadTodos();
 
-[todos_state.dart](_snippets/flutter_todos_tutorial/todos_state.dart.md ':include')
+  // Persists todos to local disk and the web
+  Future saveTodos(List<TodoEntity> todos);
+}
+```
 
-Next, let's implement the events we will need to handle.
+The above is based on the implementation by [Brian Egan](https://github.com/brianegan).
+His TodosRepository is [described here](https://github.com/brianegan/flutter_architecture_samples/tree/master/todos_repository_core).
+It is shared among all of the [Todo Architecture Samples](https://github.com/brianegan/flutter_architecture_samples).
 
-### Events
+Brian Egan's original `TodosRepository` had only two methods to `loadTodos` and to `saveTodos` (note the plural). Hence, a full list of Todos must be sent each time.
+- One limitation of this approach is that the standard CRUD (Create, Read, Update, and Delete) operation requires sending the full list of todos with each repository call. For example, on an AddTodo type of screen, one cannot just send the added item. One must send the full list with the added item.
+- A second limitation is that `loadTodos` is a one-time delivery of data. `loadToDos` is not a stream. The app must ask for updates. This is okay if an app is for a single-user, on a single device, and not connected to the cloud. However, many modern apps allow
+  - one user signed in on multiple devices at once
+  - multiple users adding to the same data repository (like a group todo-list)
 
-The events we will need to handle in our `TodosBloc` are:
+#### Newer way, used here
 
-- `TodosLoadSuccess` - tells the bloc that it needs to load the todos from the `TodosRepository`.
-- `TodoAdded` - tells the bloc that it needs to add a new todo to the list of todos.
-- `TodoUpdated` - tells the bloc that it needs to update an existing todo.
-- `TodoDeleted` - tells the bloc that it needs to remove an existing todo.
-- `ClearCompleted` - tells the bloc that it needs to remove all completed todos.
-- `ToggleAll` - tells the bloc that it needs to toggle the completed state of all todos.
+The new way used here for `TodosRepository` has two defining differences from the original:
+1. The list of Todos is a stream that can be subscribed to. (see `getTodos()` below)
+```dart
+/// Provides a [Stream] of all todos.
+Stream<List<Todo>> getTodos() => _todosApi.getTodos();
+```
 
-Create `blocs/todos/todos_event.dart` and let's implement the events we described above.
+2. Individual todos can be created, deleted, or updated. For example, deleting and saving a Todo is done with only the `todo` as the argument.
+```dart
+  Future<void> saveTodo(Todo todo) => _todosApi.saveTodo(todo);
+  Future<void> deleteTodo(String id) => _todosApi.deleteTodo(id);
+```
 
-[todos_event.dart](_snippets/flutter_todos_tutorial/todos_event.dart.md ':include')
+For now all that is needed to understand the 5 interfaces. Let's move to talking about the blocs.
 
-Now that we have our `TodosStates` and `TodosEvents` implemented we can implement our `TodosBloc`.
 
-### Bloc
 
-Let's create `blocs/todos/todos_bloc.dart` and get started! We just need to set the initial state and implement `mapEventToState`.
+## TodosOverview Bloc
 
-[todos_bloc.dart](_snippets/flutter_todos_tutorial/todos_bloc.dart.md ':include')
+> Our `TodosOverviewBloc` will be responsible for converting `TodosOverviewEvents` into `TodosOverviewStates`. The "overview" in the name refers to how this bloc will manage both the list of `Todos` and the views and possibly other things. 
+> 
+> A special feature of this tutorial is that it will also implement an Undo feature.
 
-!> When we yield a state in the private `mapEventToState` handlers, we are always yielding a new state instead of mutating the `state`. This is because every time we yield, bloc will compare the `state` to the `nextState` and will only trigger a state change (`transition`) if the two states are **not equal**. If we just mutate and yield the same instance of state, then `state == nextState` would evaluate to true and no state change would occur.
+### todos_overview_event.dart
 
-Our `TodosBloc` will have a dependency on the `TodosRepository` so that it can load and save todos. It will have an initial state of `TodosLoadInProgress` and defines the private handlers for each of the events. Whenever the `TodosBloc` changes the list of todos it calls the `saveTodos` method in the `TodosRepository` in order to keep everything persisted locally.
+Although it is typical to start with describing the underlying `Todo` model, it is instructive to wait. We can understand `TodosOverviewEvents` without understanding the underlying structure of a `Todo`. This way, if we change our `Todo` model, we don't have to change the associated Events.
 
-### Barrel File
+There are 8 events. Here is the code first, and a detailed discussion below.
 
-Now that we're done with our `TodosBloc` we can create a barrel file to export all of our bloc files and make it convenient to import them later on.
+Let's create `todos_overview/bloc/todos_overview_event.dart` and define the events.
 
-Create `blocs/todos/todos.dart` and export the bloc, events, and states:
+[todos_overview_event.dart.md](_snippets/flutter_todos_tutorial/lib/todos_overview_event.dart.md ':include') [//]: # (HCTOKEN)
 
-[bloc.dart](_snippets/flutter_todos_tutorial/todos_bloc_barrel.dart.md ':include')
+Here is a discussion of events grouped by function:
+- Startup events (no arguments)
+  - `TodosOverviewSubscriptionRequested` - This is the startup event. The intention is to have the bloc get a subscription to the `TodosRepository`. In this case, that will be a `Stream`.
+- Modifying a single Todo (these take a Todo as an argument)
+  - `TodosOverviewTodoSaved` - This saves a Todo. Note: The Todo could be either a new Todo (create) or an existing Todo (update).
+  - `TodosOverviewTodoDeleted` - This deletes a Todo.
+  - `TodosOverviewTodoCompletionToggled` - This toggles a Todo's completed. It also takes `isCompleted` as a second argument. <!--- 'HCcomment, the event maybe should be renamed TodosOverviewTodoCompletionSet. A toggle wouldn't take the 2nd argument' -->
+- Modifying multiple Todos (these operate on multiple Todos, no arguments)
+  - `TodosOverviewToggleAllRequested` - Toggles completion for all. Like "Mark all as Done". If all Todos are marked as done, then this event will toggle them to not done.
+  - `TodosOverviewClearCompletedRequested` - Deletes all completed Todos.
+- Special
+  - `TodosOverviewUndoDeletionRequested` - This undoes a Todo delete, e.g. an accidental deletion. Note: As implemented, this doesn't provide a Todo. So, this suggest that the `TodosOverviewState` will have to keep track of the most recently deleted Todo.
+  - `TodosOverviewFilterChanged` - This takes a `TodosViewFilter` as an argument and changes the view to filter. This suggests that `TodosOverviewState` will keep track of the current view.
 
-## Filtered Todos Bloc
+  
+### todos_overview_state.dart
 
-> The `FilteredTodosBloc` will be responsible for reacting to state changes in the `TodosBloc` we just created and will maintain the state of filtered todos in our application.
+Let's create `todos_overview/bloc/todos_overview_state.dart` and define the different states we'll need to handle.
 
-### Model
+Here is the code first, and a detailed discussion below.
 
-Before we start defining and implementing the `TodosStates`, we will need to implement a `VisibilityFilter` model that will determine which todos our `FilteredTodosState` will contain. In this case, we will have three filters:
+[todos_overview_state.dart.md](_snippets/flutter_todos_tutorial/lib/todos_overview_state.dart.md ':include') [//]: # (HCTOKEN)
 
-- `all` - show all Todos (default)
-- `active` - only show Todos which have not been completed
-- `completed` only show Todos which have been completed
+!> As discussed when explaining the events, `TodosOverviewState` will keep track of a list of Todos, but also the view filter state, the `lastDeletedTodo`, and the status.
 
-We can create `models/visibility_filter.dart` and define our filter as an enum:
+Looking at the annotated default Constructor below, we see the 4 elements of the state.
 
-[visibility_filter.dart](_snippets/flutter_todos_tutorial/visibility_filter.dart.md ':include')
+```dart
+const TodosOverviewState({
+  this.status = TodosOverviewStatus.initial,
+  this.todos = const [],
+  this.filter = TodosViewFilter.all,
+  this.lastDeletedTodo,
+});
 
-### States
+final TodosOverviewStatus status;   // The status
+final List<Todo> todos;             // The list of Todos.
+final TodosViewFilter filter;       // A filter for the view
+final Todo? lastDeletedTodo;        // A Todo of the last deleted item, used for Undo
+```
 
-Just like we did with the `TodosBloc`, we'll need to define the different states for our `FilteredTodosBloc`.
+`TodosOverviewStatus` has the following four states. Because we are using Streams and async calls to the TodosRepository, this keeps track of the lifecycle of async calls. The instantiation sets it to `initial`. The business logic of the bloc will use the other 3.
 
-In this case, we only have two states:
+```dart
+enum TodosOverviewStatus { initial, loading, success, failure }
+```
 
-- `FilteredTodosLoadInProgress` - the state while we are fetching todos
-- `FilteredTodosLoadSuccess` - the state when we are no longer fetching todos
+Lastly, notice that in addition to the default getters and setters, we have a custom getter called `filteredTodos`. 
+```dart
+Iterable<Todo> get filteredTodos => filter.applyAll(todos);
+```
 
-Let's create `blocs/filtered_todos/filtered_todos_state.dart` and implement the two states.
+- Thinking ahead to Widgets and views using `BlocBuilder`, we can use  `state.filteredTodos` or `state.todos`.
 
-[filtered_todos_state.dart](_snippets/flutter_todos_tutorial/filtered_todos_state.dart.md ':include')
 
-?> **Note:** The `FilteredTodosLoadSuccess` state contains the list of filtered todos as well as the active visibility filter.
+### todos_overview_bloc.dart
 
-### Events
+Let's create `todos_overview/bloc/todos_overview_bloc.dart` and get started defining the business logic! 
 
-We're going to implement two events for our `FilteredTodosBloc`:
+Here is the code first, and a detailed discussion below.
 
-- `FilterUpdated` - which notifies the bloc that the visibility filter has changed
-- `TodosUpdated` - which notifies the bloc that the list of todos has changed
+[todos_overview_bloc.dart.md](_snippets/flutter_todos_tutorial/lib/todos_overview_bloc.dart.md ':include') [//]: # (HCTOKEN)
 
-Create `blocs/filtered_todos/filtered_todos_event.dart` and let's implement the two events.
 
-[filtered_todos_event.dart](_snippets/flutter_todos_tutorial/filtered_todos_event.dart.md ':include')
+> To review, this bloc is like all blocs: `TodosOverviewBloc` will <br />
+(1) respond to UI events, <br /> 
+(2) emit states, <br />
+(3) listen to non-UI messages, like input data Streams (AKA "sinks"), and <br />
+(4) implement the business logic of what to do.
 
-We're ready to implement our `FilteredTodosBloc` next!
+Breaking the code down, we first have the Constructor.
 
-### Bloc
+```dart
+class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
+  TodosOverviewBloc({
+    required TodosRepository todosRepository,
+  })  : _todosRepository = todosRepository,
+        super(const TodosOverviewState()) {
+    on<TodosOverviewSubscriptionRequested>(_onSubscriptionRequested);
+    on<TodosOverviewTodoSaved>(_onTodoSaved);
+    on<TodosOverviewTodoCompletionToggled>(_onTodoCompletionToggled);
+    on<TodosOverviewTodoDeleted>(_onTodoDeleted);
+    on<TodosOverviewUndoDeletionRequested>(_onUndoDeletionRequested);
+    on<TodosOverviewFilterChanged>(_onFilterChanged);
+    on<TodosOverviewToggleAllRequested>(_onToggleAllRequested);
+    on<TodosOverviewClearCompletedRequested>(_onClearCompletedRequested);
+  }
 
-Our `FilteredTodosBloc` will be similar to our `TodosBloc`; however, instead of having a dependency on the `TodosRepository`, it will have a dependency on the `TodosBloc` itself. This will allow the `FilteredTodosBloc` to update its state in response to state changes in the `TodosBloc`.
+  final TodosRepository _todosRepository;
+```
 
-Create `blocs/filtered_todos/filtered_todos_bloc.dart` and let's get started.
+The Constructor creates handlers for the UI events. Notice that the 8 events in `TodosOverviewEvent` exactly match the 8 `on` handlers here. They are then mapped to 8 callback methods for the class.
 
-[filtered_todos_bloc.dart](_snippets/flutter_todos_tutorial/filtered_todos_bloc.dart.md ':include')
+Another thing to notice is that `TodosRepository` needs to be passed as an argument when the `TodosOverviewBloc` is created, like in a `BlocProvider` widget. The bloc is not handling the connection to the Repository. Instead, the startup process of the app (or something that happens before loading this bloc) will create the repository connection.
 
-!> We create a `StreamSubscription` for the stream of `TodosStates` so that we can listen to the state changes in the `TodosBloc`. We override the bloc's close method and cancel the subscription so that we can clean up after the bloc is closed.
+The next section is the the `_onSubscriptionRequested` method.
+```dart
+  Future<void> _onSubscriptionRequested(
+    TodosOverviewSubscriptionRequested event,
+    Emitter<TodosOverviewState> emit,
+    ) async {
+  emit(state.copyWith(status: () => TodosOverviewStatus.loading));
 
-### Barrel File
+  await emit.forEach<List<Todo>>(
+    _todosRepository.getTodos(),
+    onData: (todos) => state.copyWith(
+      status: () => TodosOverviewStatus.success,
+      todos: () => todos,
+    ),
+    onError: (_, __) => state.copyWith(
+      status: () => TodosOverviewStatus.failure,
+    ),
+  );
+}
+```
 
-Just like before, we can create a barrel file to make it more convenient to import the various filtered todos classes.
+The first statement emits a state of `loading`. The UI widget can then create an appropriate loading state, like a circle progress indicator.
 
-Create `blocs/filtered_todos/filtered_todos.dart` and export the three files:
+The second statement is `emit.forEach<List<Todo>>( ... )`. This sets up the listener for the data stream (i.e. a "sink" for the bloc). This is the data stream from the repository.
 
-[bloc.dart](_snippets/flutter_todos_tutorial/filtered_todos_bloc_barrel.dart.md ':include')
+!> `emit.forEach()` is not the `forEach()` used by lists. This forEach is for a Stream. It can be thought of as "forEach item yielded by the stream, do these tasks...". It has nothing to do with traversing the list of Todos.
 
-Next, we're going to implement the `StatsBloc`.
+!> The `await` can here be confusing. The `await` is needed to keep the subscription alive. _onSubscriptionRequest doesn't complete until the stream is closed by the repository or the event handler is closed, for example when the bloc is closed.
+
+> You don't see `stream.listen` called directly in this tutorial. Using `await emit.forEach()` is a new standard canonical pattern for subscribing to a stream.
+
+> Even though the callback is named `_onSubscriptionRequested()` suggesting this code only runs on startup, the effect is long lasting. It creates the subscription but also processes future items generated by the subscription.
+
+<!--- Consider renaming `_onSubscriptionRequested` to `_createSubscriptionAndListen` -->
+
+The result of the _onSubscriptionRequested event is that the callback set to `onData` is called each time the list of Todos in the `TodosRepository` changes. The `onData` callback emits a the new state and the Flutter framework determines what widgets need to be re-rendered.
+
+---
+
+Now that the subscription is handled, we handle the other events, like adding, modifying, and deleting Todos.
+
+```dart
+  Future<void> _onTodoSaved(
+    TodosOverviewTodoSaved event,
+    Emitter<TodosOverviewState> emit,
+    ) async {
+  await _todosRepository.saveTodo(event.todo);
+}
+```
+
+`onTodoSaved()` simply fires a `_todosRepository.saveTodo(event.todo)`.  
+
+> Notice that no `emit` happens to set the new state. This raises the question, how does the state get updated? If the state isn't updated, the UI won't update.
+
+!> The answer is that the repository will send/stream an updated `List<Todo>`. That update is handled in the `await emit.forEach<List<Todo>>()` in `_onSubscriptionRequested()`. When that happens, then the `emit()` occurs.
+
+!> In fact, *none* of the other event handlers emit states with modified `List<Todos>` directly. The pattern is always that (1) the handlers change the Todo list with the `TodosRepository`, and then (2) the new state is streamed from `TodosRepository` , to `TodosOverviewBloc._onSubscriptionRequested` and then finally to the UI via BlocBuilders and BlocListeners.
+
+<!--- consider adding a TodosOverviewStatus.processing status that is set until the handlers are completed. -->
+
+The other methods
+
+#### Undo
+
+The undo feature allows undeleting the last deleted item. This business logic is not handled by the repository. This is handled via the bloc.
+
+Review the `TodosOverviewState`, re-annotated below. List<Todo> is handled via the repository. Notice that the other 3 parts of the state need to be handled by the bloc.
+
+```dart
+const TodosOverviewState({
+...
+});
+
+final TodosOverviewStatus status;   // handled via the bloc
+final List<Todo> todos;             // handled via the repository
+final TodosViewFilter filter;       // handled via the bloc
+final Todo? lastDeletedTodo;        // handled via the bloc
+```
+
+`_onTodoDeleted` in the bloc does two things. First, it emits a new state in line `//1` with the Todo to be deleted. Then, it deletes the Todo in line `//2` via the repository, and the state is emitted via the stream.
+
+```dart
+  Future<void> _onTodoDeleted(
+    TodosOverviewTodoDeleted event,
+    Emitter<TodosOverviewState> emit,
+  ) async {
+    emit(state.copyWith(lastDeletedTodo: () => event.todo)); // 1
+    await _todosRepository.deleteTodo(event.todo.id);        // 2
+  }
+
+```
+
+---
+
+When the undeletion request event comes from the UI, `_onUndoDeletionRequested()` is run.
+- Line `//3` temporarily saves a copy of the last deleted Todo. 
+- Line `//4` updates the state by removing the lastDeletedTodo from the state. 
+- Finally, line `//5` does the undeletion.
+
+
+```dart
+  Future<void> _onUndoDeletionRequested(
+    TodosOverviewUndoDeletionRequested event,
+    Emitter<TodosOverviewState> emit,
+  ) async {
+    assert(
+      state.lastDeletedTodo != null,
+      'Last deleted todo can not be null.',
+    );
+
+    final todo = state.lastDeletedTodo!;               //3
+    emit(state.copyWith(lastDeletedTodo: () => null)); //4
+    await _todosRepository.saveTodo(todo);             //5
+  }
+```
+
+!> Notice, like in other bloc event handler methods, the undeletion doesn't directly modify the List. <!--- like via a TodosOverviewState.todos.remove(todo); --> It goes through the repository, which then updates via the stream.
+
+
+#### ViewFilter
+
+View filtering is handled via `_onFilterChanged()`. The code below emits a new state with the new event filter. Note that the list in `TodosOverviewState.todos` is not modified and the bloc doesn't send a filtered list as part of the state. It merely provides the information. The UI decides what needs to be displayed in line with UI=f(state).
+
+```dart
+  void _onFilterChanged(
+    TodosOverviewFilterChanged event,
+    Emitter<TodosOverviewState> emit,
+  ) {
+    emit(state.copyWith(filter: () => event.filter));
+  }
+```
+
+## Todo Model
+Now is a good time to introduce the model for a Todo.
+
+!> Notice that we've completely discussed the TodosOverviewBloc *without* every defining the `Todo`. This level of abstraction is a helpful feature of the chosen architecture and the bloc. This means that if we change the model for the Todo, we do not have to change anything in the TodosObserverBloc
+
+The first thing of note is that the `Todo` model doesn't live in our App. It is set in a separate package, in this case the `todos_api`.
+
+The Constructor shows the fields associated with a Todo are four:
+- `id` - either provided or set by Uuid in line `//1`.
+- `title`,
+- `description`,
+- `isCompleted`
+
+and described in the code comments.
+
+```dart
+class Todo extends Equatable {
+  /// {@macro todo}
+  Todo({
+    String? id,
+    required this.title,
+    this.description = '',
+    this.isCompleted = false,
+  }) : 
+        id = id ?? const Uuid().v4(); //1
+  ...
+  
+  /// The unique identifier of the todo.
+  ///
+  /// Cannot be empty.
+  final String id;
+
+  /// The title of the todo.
+  ///
+  /// Note that the title may be empty.
+  final String title;
+
+  /// The description of the todo.
+  ///
+  /// Defaults to an empty string.
+  final String description;
+
+  /// Whether the todo is completed.
+  ///
+  /// Defaults to `false`.
+  final bool isCompleted;
+}
+```
+
+<!--- there is an error. The assertion is two parts. If none is provided, it should be null or not empty. After the Uuid, it should check that (id != null && id.isNotEmpty). -->
+
+
+Here is the full file that includes `@JsonSerializable()` annotations. To build the project, you will have to run the [code generation](https://pub.dev/packages/json_serializable#running-the-code-generator) before building your package.
+
+`packages/todos_api/lib/src/models/todo.dart`:
+
+[todo.dart.md](_snippets/flutter_todos_tutorial/packages/todo.dart.md ':include') [//]: # (HCTOKEN)
+
+
+
+
+## TodosOverview Other
+
+There are multiple other files organized into the `models/`, `view/`, and `widget` directories. We've already covered the files in the `bloc/` folder.
+
+```shell
+|-todos_overview
+| |-todos_overview.dart
+| |-models
+| | |-todos_view_filter.dart
+| | |-models.dart
+| |-view
+| | |-todos_overview_page.dart
+| | |-view.dart
+| |-widgets
+| | |-widgets.dart
+| | |-todo_deletion_confirmation_snack_bar.dart
+| | |-todos_overview_options_button.dart
+| | |-todos_overview_filter_button.dart
+| | |-todo_list_tile.dart
+| |-bloc
+| | |-todos_overview_bloc.dart         // alrady covered in tutorial
+| | |-todos_overview_event.dart        // alrady covered in tutorial
+| | |-todos_overview_state.dart        // alrady covered in tutorial
+```
+
+### Barrel file
+The main barrel file manages exports of the four subdirectories.
+
+`todos_overview.dart`
+
+[todos_overview.dart.md](_snippets/flutter_todos_tutorial/lib/todos_overview.dart.md ':include') [//]: # (HCTOKEN)
+
+
+### Models
+
+`todos_view_filter.dart` enums the 3 view filters and the methods to apply the filter.
+
+[todos_view_filter.dart.md](_snippets/flutter_todos_tutorial/lib/todos_view_filter.dart.md ':include') [//]: # (HCTOKEN)
+
+`models.dart` is the barrel file for exports.
+
+[models.dart.md](_snippets/flutter_todos_tutorial/lib/models.dart.md ':include') [//]: # (HCTOKEN)
+
+!> Note: The overall "model" for ToolsOverview is the bloc for ToolsOverview, specifically [ToolsOverviewState](#TodosOverview-States), which holds the Todo list and 3 other state variables.
+
+### View
+
+The full `todos_overview_page.dart` is first presented and then discussed below.
+
+[todos_overview_page.dart.md](_snippets/flutter_todos_tutorial/lib/todos_overview_page.dart.md ':include') [//]: # (HCTOKEN)
+
+It is instructive to look at the structure using Flutter Inspector. This is the widget tree:
+
+![TodosOverviewPage_widget_tree.png](_snippets/flutter_todos_tutorial/images/TodosOverviewPage_widget_tree.png)
+
+Notice where `BlocProvider<TodosOverviewBloc>` is. Every widget below access to the `TodosOverviewBloc`. Any other widget (for example, above) will not have access to it. 
+
+!> Notably, `EditTodoPage`, described later, won't have access to `TodosOverviewBloc`.  `EditTodoPage` will use the repository to adjust with the list of todos. And the repository's stream will talk to the `TodosOverviewBloc`, which then will tell `TodosOverviewPage` to re-render. The key is using the Stream.
+
+`BlocProvider<TodosOverviewBloc>` is accessed three times under `MultiBlocListener`
+1. The first is a `BlocListener` dealing with errors, as shown below. `listenWhen` restricts this listener will be called. <br>
+   It won't be called for all state changes, only those that correspond to line `//1`.
+   Also, the `SnackBar` is only displayed when TodosOverviewStatus.failure at line `//2`. (Challenge: Add a success snackBar by modifying the if statement.)
+
+```dart
+          BlocListener<TodosOverviewBloc, TodosOverviewState>(
+            listenWhen: (previous, current) =>
+                previous.status != current.status,   //1
+            listener: (context, state) {
+              if (state.status == TodosOverviewStatus.failure) { //2
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(
+                      content: Text(l10n.todosOverviewErrorSnackbarText),
+                    ),
+                  );
+              }
+            },
+```
+
+2. The second is a `BlocListener` dealing with deletions, as shown below. `listenWhen` restricts listening so we don't react to unnecessary state changes, like added Todo items or changes of the view. It shows a snack bar and if Undo is selected, it will send a message of `TodosOverviewUndoDeletionRequested` to the bloc.
+
+```dart
+         BlocListener<TodosOverviewBloc, TodosOverviewState>(
+            listenWhen: (previous, current) =>
+                previous.lastDeletedTodo != current.lastDeletedTodo &&
+                current.lastDeletedTodo != null,
+            listener: (context, state) {
+              final deletedTodo = state.lastDeletedTodo!;
+              final messenger = ScaffoldMessenger.of(context);
+              messenger
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  TodoDeletionConfirmationSnackBar(
+                    todo: deletedTodo,
+                    onUndo: () {
+                      messenger.hideCurrentSnackBar();
+                      context
+                          .read<TodosOverviewBloc>()
+                          .add(const TodosOverviewUndoDeletionRequested());
+                    },
+                  ),
+                );
+            },
+          ),
+```
+
+3. The third is a `BlocBuilder` which builds the ListView that displays the todos. In focusing on the bloc pattern, notice how when the  `TodosOverviewTodoCompletionToggled()` and `TodosOverviewTodoDeleted()` events are sent to the bloc.
+
+```dart
+                    TodoListTile(
+                      todo: todo,
+                      onToggleCompleted: (isCompleted) {
+                        context.read<TodosOverviewBloc>().add(
+                              TodosOverviewTodoCompletionToggled(
+                                todo: todo,
+                                isCompleted: isCompleted,
+                              ),
+                            );
+                      },
+                      onDismissed: (_) {
+                        context
+                            .read<TodosOverviewBloc>()
+                            .add(TodosOverviewTodoDeleted(todo));
+                      },
+                      onTap: () {
+                        Navigator.of(context).push(
+                          EditTodoPage.route(initialTodo: todo),
+                        );
+                      },
+                    )
+```
+
+The `AppBar` of this scaffold also has two actions which are the top-right dropdowns. These are covered below in Widgets.
+```dart
+        actions: const [
+          TodosOverviewFilterButton(),
+          TodosOverviewOptionsButton(),
+        ],
+```
+
+`view.dart` is the export barrel file.
+
+[view.dart3.md todos_overview](_snippets/flutter_todos_tutorial/lib/view.dart3.md ':include') [//]: # (HCTOKEN)
+
+
+### Widgets
+
+```shell
+| |-widgets
+| | |-widgets.dart
+| | |-todo_deletion_confirmation_snack_bar.dart
+| | |-todos_overview_options_button.dart
+| | |-todos_overview_filter_button.dart
+| | |-todo_list_tile.dart
+```
+
+`widgets.dart` is a barrel file
+
+[widgets.dart.md](_snippets/flutter_todos_tutorial/lib/widgets.dart.md ':include') [//]: # (HCTOKEN)
+
+`todo_deletion_confirmation_snack_bar.dart` is the deletion snack bar that also implements undelete.
+
+[todo_deletion_confirmation_snack_bar.dart.md](_snippets/flutter_todos_tutorial/lib/todo_deletion_confirmation_snack_bar.dart.md ':include') [//]: # (HCTOKEN)
+
+`todo_list_tile.dart` is the ListTile for each Todo.
+
+[todo_list_tile.dart.md](_snippets/flutter_todos_tutorial/lib/todo_list_tile.dart.md ':include') [//]: # (HCTOKEN)
+
+`todos_overview_options_button.dart` exposes two options. Paying attention to the bloc pattern, notice how events are passed to the bloc in `onSelected`.
+
+[todos_overview_options_button.dart.md](_snippets/flutter_todos_tutorial/lib/todos_overview_options_button.dart.md ':include') [//]: # (HCTOKEN)
+
+`todos_overview_filter_button.dart` exposes three filter options. Paying attention to the bloc pattern, notice how events are passed to the bloc in `onSelected`.
+
+[todos_overview_filter_button.dart.md](_snippets/flutter_todos_tutorial/lib/todos_overview_filter_button.dart.md ':include') [//]: # (HCTOKEN)
+
 
 ## Stats Bloc
+```shell
+|-stats
+| |-stats.dart
+| |-view
+| | |-stats_page.dart
+| | |-view.dart
+| |-bloc
+| | |-stats_state.dart
+| | |-stats_event.dart
+| | |-stats_bloc.dart
+```
 
-> The `StatsBloc` will be responsible for maintaining the statistics for number of active todos and number of completed todos. Similarly, to the `FilteredTodosBloc`, it will have a dependency on the `TodosBloc` itself so that it can react to changes in the `TodosBloc` state.
+### stats_state.dart
 
-### State
+`StatsState` keeps track of summary information and the current `StatsStatus`.
 
-Our `StatsBloc` will have two states that it can be in:
+[stats_state.dart.md](_snippets/flutter_todos_tutorial/lib/stats_state.dart.md ':include') [//]: # (HCTOKEN)
 
-- `StatsLoadInProgress` - the state when the statistics have not yet been calculated.
-- `StatsLoadSuccess` - the state when the statistics have been calculated.
+### stats_event.dart
 
-Create `blocs/stats/stats_state.dart` and let's implement our `StatsState`.
+`StatsEvent` has only one event, the subscription event. 
 
-[stats_state.dart](_snippets/flutter_todos_tutorial/stats_state.dart.md ':include')
+[stats_event.dart.md](_snippets/flutter_todos_tutorial/lib/stats_event.dart.md ':include') [//]: # (HCTOKEN)
 
-Next, let's define and implement the `StatsEvents`.
+### stats_bloc.dart
 
-### Events
+`StatsBloc` does connect to `TodosRepository`, just like `TodosOverviewBloc`. It subscribes via `_todosRepository.getTodos()`.
 
-There will just be a single event our `StatsBloc` will respond to: `StatsUpdated`. This event will be added whenever the `TodosBloc` state changes so that our `StatsBloc` can recalculate the new statistics.
+> How does StatsBloc know to update? Updates are triggered by the stream, not by any UI event.
 
-Create `blocs/stats/stats_event.dart` and let's implement it.
+> How will the the Stats UI know to update? It gets a state change notification via the `onData` in `emit.forEach()`. When state changes, the `BlocBuilder<StatsBloc>` in [stats_page.dart](#stats-view) knows to rebuild.
 
-[stats_event.dart](_snippets/flutter_todos_tutorial/stats_event.dart.md ':include')
 
-Now we're ready to implement our `StatsBloc` which will look very similar to the `FilteredTodosBloc`.
+[stats_bloc.dart.md](_snippets/flutter_todos_tutorial/lib/stats_bloc.dart.md ':include') [//]: # (HCTOKEN)
 
-### Bloc
-
-Our `StatsBloc` will have a dependency on the `TodosBloc` itself which will allow it to update its state in response to state changes in the `TodosBloc`.
-
-Create `blocs/stats/stats_bloc.dart` and let's get started.
-
-[stats_bloc.dart](_snippets/flutter_todos_tutorial/stats_bloc.dart.md ':include')
-
-That's all there is to it! Our `StatsBloc` recalculates its state which contains the number of active todos and the number of completed todos on each state change of our `TodosBloc`.
-
-Now that we're done with the `StatsBloc` we just have one last bloc to implement: the `TabBloc`.
-
-## Tab Bloc
-
-> The `TabBloc` will be responsible for maintaining the state of the tabs in our application. It will be taking `TabEvents` as input and outputting `AppTabs`.
-
-### Model / State
-
-We need to define an `AppTab` model which we will also use to represent the `TabState`. The `AppTab` will just be an `enum` which represents the active tab in our application. Since the app we're building will only have two tabs: todos and stats, we just need two values.
-
-Create `models/app_tab.dart`:
-
-[app_tab.dart](_snippets/flutter_todos_tutorial/app_tab.dart.md ':include')
-
-### Event
-
-Our `TabBloc` will be responsible for handling a single `TabEvent`:
-
-- `TabUpdated` - which notifies the bloc that the active tab has updated
-
-Create `blocs/tab/tab_event.dart`:
-
-[tab_event.dart](_snippets/flutter_todos_tutorial/tab_event.dart.md ':include')
-
-### Bloc
-
-Our `TabBloc` implementation will be super simple. As always, we just need to set the initial state and implement `mapEventToState`.
-
-Create `blocs/tab/tab_bloc.dart` and let's quickly do the implementation.
-
-[tab_bloc.dart](_snippets/flutter_todos_tutorial/tab_bloc.dart.md ':include')
-
-I told you it'd be simple. All the `TabBloc` is doing is setting the initial state to the todos tab and handling the `TabUpdated` event by yielding a new `AppTab` instance.
+## Stats Other
 
 ### Barrel File
 
-Lastly, we'll create another barrel file for our `TabBloc` exports. Create `blocs/tab/tab.dart` and export the two files:
+The main barrel file manages exports of the two subdirectories.
 
-[bloc.dart](_snippets/flutter_todos_tutorial/tab_bloc_barrel.dart.md ':include')
+[stats.dart.md](_snippets/flutter_todos_tutorial/lib/stats.dart.md ':include') [//]: # (HCTOKEN)
 
-## Bloc Observer
+### Stats View
 
-Before we move on to the presentation layer, we will implement our own `BlocObserver` which will allow us to handle all state changes and errors in a single place. It's really useful for things like developer logs or analytics.
+`view.dart` manages the export.
 
-Create `blocs/simple_bloc_observer.dart` and let's get started.
+[view.dart4.md stats](_snippets/flutter_todos_tutorial/lib/view.dart4.md ':include') [//]: # (HCTOKEN)
 
-[simple_bloc_observer.dart](_snippets/flutter_todos_tutorial/simple_bloc_observer.dart.md ':include')
+`stats_page.dart` is the UI page view.
+
+[stats_page.dart.md](_snippets/flutter_todos_tutorial/lib/stats_page.dart.md ':include') [//]: # (HCTOKEN)
+
+It is instructive to look at the structure using Flutter Inspector. This is the widget tree:
+
+![StatsPage_widget_tree.png](_snippets/flutter_todos_tutorial/images/StatsPage_widget_tree.png)
+
+Notice how it does not directly get any information from the `List<Todos>` which lives in `TodosOverviewState`. The UI gets all the information from the `StatsBloc` and the `StatsState`. 
+
+!> The commonality between `TodosOverviewBloc` and `StatsBloc` is that they both communicate with the `TodosRepository`. There is no direct communication between the blocs.
+
+
+## EditTodo Bloc
+
+```shell
+|-edit_todo
+| |-view
+| | |-edit_todo_page.dart
+| | |-view.dart
+| |-edit_todo.dart
+| |-bloc
+| | |-edit_todo_event.dart
+| | |-edit_todo_bloc.dart
+| | |-edit_todo_state.dart
+```
+
+### edit_todo_state.dart
+
+`EditTodoState` keeps track of the information needed when editing a todo. It has four variables:
+1. `status` - Tracks the status, mindful of the async possibilities that the repository or data providers are offline.
+2. `initialTodo` - The initial Todo that we are editing.  <br> NOTE: This bloc will also handled creation of a new Todo. In that case, the initial Todo could be null, hence the nullable `Todo?` in the code below.   
+
+3. `title` - The title. Note: This will be continuosly updated as the UI is updated. Hence we avoid needing to use a TextController.
+4. `description` - The description.
+
+[edit_todo_state.dart.md](_snippets/flutter_todos_tutorial/lib/edit_todo_state.dart.md ':include') [//]: # (HCTOKEN)
+
+### edit_todo_event.dart
+
+`EditTodoEvent` has 4 events:
+1. `EditTodoEvent` - When the UI starts an edit (or a new Todo). Note: No arguments. The Todo's information is provided to the state of the bloc.
+2. `EditTodoTitleChanged` - When the title changes, even if by one character. Note: requires one argument, the title from the UI. The bloc will later change the state and emit a new state.
+3. `EditTodoDescriptionChanged` - When the description changes, even if by one character. Note: requires one argument, the title from the UI. The bloc will later change the state and emit a new state.
+4. `EditTodoSubmitted` - Submitting, when editing is complete. Note: No arguments. The Todo's edits are stored in the state of the bloc.
+
+
+[edit_todo_event.dart.md](_snippets/flutter_todos_tutorial/lib/edit_todo_event.dart.md ':include') [//]: # (HCTOKEN)
+
+### edit_todo_bloc.dart
+
+`EditTodoBloc` does connect to `TodosRepository`, just like `TodosOverviewBloc` and `StatsBloc`. 
+
+!> Unlike the other Blocs, `EditTodoBloc` does not subscribe to `_todosRepository.getTodos()`. It is a "write-only" bloc. It doesn't need to read any information from the repository.
+
+[edit_todo_bloc.dart.md](_snippets/flutter_todos_tutorial/lib/edit_todo_bloc.dart.md ':include') [//]: # (HCTOKEN)
+
+> How will the the Stats UI and the main list of Todos UI know to update? Where in the code does it tell the other screens to redraw? <br>
+   The other parts of the UI gets a state change notification because of their subscription to `TodosRepository`. ANSWER: There is no direct bloc-to-bloc communication. EditTodosBloc has zero logic about what needs to be done elsewhere. Everything goes through the repository.
+
+
+## EditTodo Other
+
+### Barrel File
+
+The main barrel file manages exports of the one subdirectory.
+
+[edit_todo.dart.md](_snippets/flutter_todos_tutorial/lib/edit_todo.dart.md ':include') [//]: # (HCTOKEN)
+
+### EditTodo View
+
+`view.dart` manages the export.
+
+[view.dart.md edit](_snippets/flutter_todos_tutorial/lib/view.dart.md ':include') [//]: # (HCTOKEN)
+
+`edit_todo_page.dart` is the UI page view.
+
+[edit_todo_page.dart.md](_snippets/flutter_todos_tutorial/lib/edit_todo_page.dart.md ':include') [//]: # (HCTOKEN)
+
+It is instructive to look at the structure using Flutter Inspector. This is the widget tree:
+
+![EditTodosPage_widget_tree.png](_snippets/flutter_todos_tutorial/images/EditTodosPage_widget_tree.png)
+
+Notice how `EditTodosPage` is in the bottom half of the displayed widget tree. It is a sibling to `HomePage`. 
+
+!> Does `EditTodosPage` need access to the whole list of Todos or other state? It has no access to the list of Todos provided by `ToolsOverviewBloc` because it isn't under the `BlocProvider<ToolsOverviewBloc>`. (Not displayed in the widget tree, because it is under `TodosOverviewPage`)
+But, importantly, because of the [architectural decisions](#commentary), it doesn't need any access to that.
+
+## Home Cubit
+
+The following is the directory stucture for the home page and corresponding `HomeCubit`. We first present the cubit code, and then the other 3 files.
+```dart
+|-home
+| |-home.dart
+| |-cubit
+| | |-home_state.dart
+| | |-home_cubit.dart
+| |-view
+| | |-view.dart
+| | |-home_page.dart
+```
+
+### home_state.dart
+
+There are only two states associated with the two screens: `todos` and `stats`. EditTodo is not a screen controlled by the Home Cubit.
+
+[home_state.dart.md](_snippets/flutter_todos_tutorial/lib/home_state.dart.md ':include') [//]: # (HCTOKEN)
+
+### home_cubit.dart
+
+A cubit is appropriate due to the simplicity of the business logic. We have one function `setTab` to change the tab.
+
+[home_cubit.dart.md](_snippets/flutter_todos_tutorial/lib/home_cubit.dart.md ':include') [//]: # (HCTOKEN)
+
+
+## Home Other
+
+### Barrel File
+
+[home.dart.md](_snippets/flutter_todos_tutorial/lib/home.dart.md ':include') [//]: # (HCTOKEN)
+
+### Home View
+
+`view.dart` manages the export.
+
+[view.dart2.md edit](_snippets/flutter_todos_tutorial/lib/view.dart2.md ':include') [//]: # (HCTOKEN)
+
+`home_page.dart` is the UI page view.
+
+[home_page.dart.md](_snippets/flutter_todos_tutorial/lib/home_page.dart.md ':include') [//]: # (HCTOKEN)
+
+It is instructive to look at the structure using Flutter Inspector. This is the widget tree:
+
+![HomePage_widget_tree.png](_snippets/flutter_todos_tutorial/images/HomePage_widget_tree.png)
+
+`HomePage` is near the top, followed by `BlocProvider<HomeCubit>`. The next widget, `Homeview` uses the `HomeCubit` state via the following line:
+
+```dart
+Widget build(BuildContext context) {
+  final selectedTab = context.select((HomeCubit cubit) => cubit.state.tab);
+  //...
+```
+
+BlocBuilders and BlocListeners could be used, but they are unnecessary. The `context.select` will listen for any changes and trigger a rebuild.
+
+---
+
+`BottomAppBar` is several steps below. The key line for is when the cubit function call is sent from the UI to the cubit. 
+
+```dart
+    onPressed: () => context.read<HomeCubit>().setTab(value),
+```
+
+This is the key line, and uses a `context.read`.
+
+!> `context.read` doesn't listen for changes, but this is just used to access to `HomeCubit` to call the `setTab`, so no updating is needed.
+
+## Packages
+
+### Files and directories
+
+```sh
+packages
+|-local_storage_todos_api
+|---lib
+|-----src
+|---test
+|-todos_api
+|---lib
+|-----src
+|-------models
+|---test
+|-----models
+|-todos_repository
+|---lib
+|-----src
+|---test
+```
+
+
+Under `packages/`, there are three packages.
+1. `todos_repository` - was presented [earlier](#todos-repository) and talks to the blocs.
+2. `todos_api` - abstractly specifies the data interface (sometimes called "data providers", not to be confused with the provider package)
+   that `todos_repository` uses to actually set and get data.
+3. `local_storage_todos_api` - implements the data interface with an actual provider. In this case, it uses local storage.
+
+### todos_repository
+```shell
+|-todos_repository
+| |-test
+| | |-todos_repository_test.dart
+| |-README.md
+| |-pubspec.yaml
+| |-.gitignore
+| |-lib
+| | |-todos_repository.dart
+| | |-src
+| | | |-todos_repository.dart
+| |-analysis_options.yaml
+```
+
+The main `todos_repository.dart` file was described [earlier](#todos-repository)
+
+Here, we just present the directory structure. The pubspec.yaml for all three packages is provided later below.
+
+
+
+
+
+
+### todos_api
+
+```shell
+|-todos_api
+| |-test
+| | |-todos_api_test.dart
+| | |-models
+| | | |-todo_test.dart
+| |-README.md
+| |-pubspec.yaml
+| |-.gitignore
+| |-lib
+| | |-todos_api.dart
+| | |-src
+| | | |-todos_api.dart
+| | | |-models
+| | | | |-json_map.dart
+| | | | |-todo.dart
+| | | | |-todo.g.dart
+| | | | |-models.dart
+| |-analysis_options.yaml
+```
+
+The main `todos_api.dart` file specifies the interfaces that an API is expected to have. If we add another data provider, like cloud_firestore or mongoDB or AWS, all we have to do is make sure this API interface is followed. If we do that, then almost no other code needs to change. The  only change needed is that we will need to establish the connection to the service at App startup.
+
+The methods are well documents in the code comments.
+
+[todos_api.dart2.md](_snippets/flutter_todos_tutorial/packages/todos_api.dart2.md ':include') [//]: # (HCTOKEN)
+
+---
+
+The model of the `Todo` is specified in one place only: `todos_api/models/todo.dart`. 
+By specifying in one place, we know that if we make any changes, they will propogate everywhere needed. If there is a breaking change, we will know either via our linter, a failed test, or a runtime error.
+
+(Note: This file was presented [earlier](#todo-model))
+
+
+---
+
+#### Miscellaneous
+
+And the following file is the barrel file for the export.
+
+[todos_api.dart.md](_snippets/flutter_todos_tutorial/packages/todos_api.dart.md ':include') [//]: # (HCTOKEN)
+
+
+`todo.g.dart` code is generated code, by json serialization
+
+[todo.g.dart.md](_snippets/flutter_todos_tutorial/packages/todo.g.dart.md ':include') [//]: # (HCTOKEN)
+
+`json_map.dart` provides a typeDef for code checking and linting.
+
+[json_map.dart.md](_snippets/flutter_todos_tutorial/packages/json_map.dart.md ':include') [//]: # (HCTOKEN)
+
+
+A barrel file for the `models.dart`
+
+[models.dart.md](_snippets/flutter_todos_tutorial/packages/models.dart.md ':include') [//]: # (HCTOKEN)
+
+
+
+
+
+
+
+
+#### Test files
+
+There are two test files for this package. We don't include them, but you can view them via the link to markdown or the source code.
+
+[todo_test.dart.md](_snippets/flutter_todos_tutorial/packages/todo_test.dart.md) 
+
+[todos_api_test.dart.md](_snippets/flutter_todos_tutorial/packages/todos_api_test.dart.md) 
+
+
+### local_storage_todos_api
+
+```shell
+|-local_storage_todos_api
+| |-test
+| | |-local_storage_todos_api_test.dart
+| |-README.md
+| |-pubspec.yaml
+| |-.gitignore
+| |-lib
+| | |-local_storage_todos_api.dart
+| | |-src
+| | | |-local_storage_todos_api.dart
+| |-analysis_options.yaml
+```
+
+This package implements the todos_api using local storage. `local_storage_todos_api.dart` is the main file.
+
+[local_storage_todos_api.dart2.md](_snippets/flutter_todos_tutorial/packages/local_storage_todos_api.dart2.md ':include') [//]: # (HCTOKEN)
+
+This is the associated barrel file.
+
+[local_storage_todos_api.dart.md](_snippets/flutter_todos_tutorial/packages/local_storage_todos_api.dart.md ':include') [//]: # (HCTOKEN)
+
+
+#### Test files
+
+There are two test files for this package. We don't include them, but you can view them via the link to markdown or the source code.
+
+[local_storage_todos_api_test.dart.md](_snippets/flutter_todos_tutorial/packages/local_storage_todos_api_test.dart.md) 
+
+
+### pubspec.yaml's
+These are the 3 pubspec.yaml files for the three packages
+
+[pubspec.yaml.md](_snippets/flutter_todos_tutorial/packages/pubspec.yaml.md ':include') [//]: # (HCTOKEN)
+
+[pubspec.yaml2.md](_snippets/flutter_todos_tutorial/packages/pubspec.yaml2.md ':include') [//]: # (HCTOKEN)
+
+[pubspec.yaml3.md](_snippets/flutter_todos_tutorial/packages/pubspec.yaml3.md ':include') [//]: # (HCTOKEN)
+
+
+## Internationalization
+
+```
+|-l10n
+| |-l10n.dart
+| |-arb
+| | |-app_en.arb
+```
+
+Package 'package:flutter_gen/gen_l10n/app_localizations.dart' is used to handle localizations.
+
+ZZTODO: I'm not sure how to test or demonstrate this. The tutorial is already huge, so I recommend just directing them to the docs.
+
+ZZTODO: This is stale, from the old tutorial. One last concept that we will touch on before going into the application itself is localization.
+Create `localization.dart` and we'll create the foundation for multi-language support.
+
+For more information on localization check out the [official flutter docs](https://flutter.dev/docs/development/accessibility-and-localization/internationalization).
+
+`l10n.dart`
+
+[l10n.dart.md](_snippets/flutter_todos_tutorial/lib/l10n.dart.md ':include') [//]: # (HCTOKEN)
+
+
+
+`app_en.arb` is a localization file
+
+```json
+{
+  "@@locale": "en",
+  "todosOverviewAppBarTitle": "Flutter Todos",
+  "@todosOverviewAppBarTitle": {
+    "description": "Title text shown in the AppBar of the Todos Overview Page"
+  },
+  "todosOverviewFilterTooltip": "Filter",
+  "@todosOverviewFilterTooltip": {
+    "description": "Tooltip text shown in the filter dropdown of the Todos Overview Page"
+  },
+  "todosOverviewFilterAll": "All",
+  "@todosOverviewFilterAll": {
+    "description": "Text shown in the filter dropdown of the Todos Overview Page for the option to display all todos"
+  },
+  "todosOverviewFilterActiveOnly": "Active only",
+  "@todosOverviewFilterActiveOnly": {
+    "description": "Text shown in the filter dropdown of the Todos Overview Page for the option to display active todos only"
+  },
+  "todosOverviewFilterCompletedOnly": "Completed only",
+  "@todosOverviewFilterCompletedOnly": {
+    "description": "Text shown in the filter dropdown of the Todos Overview Page for the option to display completed todos only"
+  },
+  "todosOverviewMarkAllCompleteButtonText": "Mark all complete",
+  "@todosOverviewMarkAllCompleteButtonText": {
+    "description": "Button text shown in the options dropdown of the Todos Overview Page that marks all current todos as complete"
+  },
+  "todosOverviewClearCompletedButtonText": "Clear completed",
+  "@todosOverviewClearCompletedButtonText": {
+    "description": "Button text shown in the options dropdown of the Todos Overview Page that deletes all completed todos"
+  },
+  "todosOverviewEmptyText": "No todos found with the selected filters.",
+  "@todosOverviewEmptyText": {
+    "description": "Text shown in the Todos Overview Page when no todos are found with the selected filters"
+  },
+  "todosOverviewTodoDeletedSnackbarText": "Todo \"{todoTitle}\" deleted.",
+  "@todosOverviewTodoDeletedSnackbarText": {
+    "description": "Snackbar text shown when a todo is deleted from the Todos Overview Page",
+    "placeholders": {
+      "todoTitle": {
+        "description": "The title of the todo that was deleted"
+      }
+    }
+  },
+  "todosOverviewUndoDeletionButtonText": "Undo",
+  "@todosOverviewUndoDeletionButtonText": {
+    "description": "Button text shown in the snackbar that undoes a deletion of a todo"
+  },
+  "todosOverviewErrorSnackbarText": "An error occurred while loading todos.",
+  "@todosOverviewErrorSnackbarText": {
+    "description": "Snackbar text shown when an error occurs while loading todos"
+  },
+  "todosOverviewOptionsTooltip": "Options",
+  "@todosOverviewOptionsTooltip": {
+    "description": "Tooltip text shown in the options dropdown of the Todos Overview Page"
+  },
+  "todosOverviewOptionsMarkAllComplete": "Mark all as completed",
+  "@todosOverviewOptionsMarkAllComplete": {
+    "description": "Button text shown in the options dropdown of the Todos Overview Page that marks all todos as complete"
+  },
+  "todosOverviewOptionsMarkAllIncomplete": "Mark all as incomplete",
+  "@todosOverviewOptionsMarkAllIncomplete": {
+    "description": "Button text shown in the options dropdown of the Todos Overview Page that marks all todos as incomplete"
+  },
+  "todosOverviewOptionsClearCompleted": "Clear completed",
+  "@todosOverviewOptionsClearCompleted": {
+    "description": "Button text shown in the options dropdown of the Todos Overview Page that deletes all completed todos"
+  },
+  "todoDetailsAppBarTitle": "Todo Details",
+  "@todoDetailsAppBarTitle": {
+    "description": "Title text shown in the AppBar of the Todo Details Page"
+  },
+  "todoDetailsDeleteButtonTooltip": "Delete",
+  "@todoDetailsDeleteButtonTooltip": {
+    "description": "Tooltip text shown in the delete button on the Todo Details Page"
+  },
+  "todoDetailsEditButtonTooltip": "Edit",
+  "@todoDetailsEditButtonTooltip": {
+    "description": "Tooltip text shown in the edit button on the Todo Details Page"
+  },
+  "editTodoEditAppBarTitle": "Edit Todo",
+  "@editTodoEditAppBarTitle": {
+    "description": "Title text shown in the AppBar of the Todo Edit Page when editing an existing todo"
+  },
+  "editTodoAddAppBarTitle": "Add Todo",
+  "@editTodoAddAppBarTitle": {
+    "description": "Title text shown in the AppBar of the Todo Edit Page when adding a new todo"
+  },
+  "editTodoTitleLabel": "Title",
+  "@editTodoTitleLabel": {
+    "description": "Label text shown in the title input field of the Todo Edit Page"
+  },
+  "editTodoDescriptionLabel": "Description",
+  "@editTodoDescriptionLabel": {
+    "description": "Label text shown in the description input field of the Todo Edit Page"
+  },
+  "editTodoSaveButtonTooltip": "Save changes",
+  "@editTodoSaveButtonTooltip": {
+    "description": "Tooltip text shown in the save button on the Todo Edit Page"
+  },
+  "statsAppBarTitle": "Stats",
+  "@statsAppBarTitle": {
+    "description": "Title text shown in the AppBar of the Stats Page"
+  },
+  "statsCompletedTodoCountLabel": "Completed todos",
+  "@statsCompletedTodoCountLabel": {
+    "description": "Label text shown in the completed todos count section of the Stats Page"
+  },
+  "statsActiveTodoCountLabel": "Active todos",
+  "@statsActiveTodoCountLabel": {
+    "description": "Label text shown in the active todos count section of the Stats Page"
+  }
+}
+```
+
+Not included: app_en.arb
+
+## Putting it together
+
+### App directory
+```shell
+|-app
+| |-app_bloc_observer.dart
+| |-app.dart
+```
+
+#### Bloc Observer
+
+We will implement our own `BlocObserver` which will allow us to handle all state changes and errors in a single place. It's really useful for things like developer logs or analytics.
+
+Create `app/app_bloc_observer.dart` and let's get started.
+
+[app_bloc_observer.dart.md](_snippets/flutter_todos_tutorial/lib/app_bloc_observer.dart.md ':include') [//]: # (HCTOKEN)
 
 All we're doing in this case is printing all state changes (`transitions`) and errors to the console just so that we can see what's going on when we're running our app. You can hook up your `BlocObserver` to google analytics, sentry, crashlytics, etc...
 
-## Blocs Barrel
+#### App
 
-Now that we have all of our blocs implemented we can create a barrel file.
-Create `blocs/blocs.dart` and export all of our blocs so that we can conveniently import any bloc code with a single import.
+`App` and `AppView` are near top-level widgets.
 
-[blocs.dart](_snippets/flutter_todos_tutorial/blocs_barrel.dart.md ':include')
+`App` wraps a `RepositoryProvider` widget that provides the repository to all children/descendents. Since both `EditTodoPage` subtree and the `HomePage` subtree's are descendents, all the blocs and cubits can access the repository.
 
-Up next, we'll focus on implementing the major screens in our Todos application.
+`AppView` sets the MaterialApp and deals with them and localizations.
 
-## Screens
+[app.dart.md](_snippets/flutter_todos_tutorial/lib/app.dart.md ':include') [//]: # (HCTOKEN)
 
-### Home Screen
 
-> Our `HomeScreen` will be responsible for creating the `Scaffold` of our application. It will maintain the `AppBar`, `BottomNavigationBar`, as well as the `Stats`/`FilteredTodos` widgets (depending on the active tab).
+### Theme
+```shell
+|-theme
+| |-theme.dart
+```
+This provides theme information for light and dark themes.
 
-Let's create a new directory called `screens` where we will put all of our new screen widgets and then create `screens/home_screen.dart`.
+[theme.dart.md](_snippets/flutter_todos_tutorial/lib/theme.dart.md ':include') [//]: # (HCTOKEN)
 
-[home_screen.dart](_snippets/flutter_todos_tutorial/home_screen.dart.md ':include')
+### Startup Bootstrapping
+`bootstrap.dart` loads our BlocObserver and creates the instance of `TodosRepository()` via a constructor call.
 
-The `HomeScreen` accesses the `TabBloc` using `BlocProvider.of<TabBloc>(context)` which will be made available from our root `TodosApp` widget (we'll get to it later in this tutorial).
+[bootstrap.dart.md](_snippets/flutter_todos_tutorial/lib/bootstrap.dart.md ':include') [//]: # (HCTOKEN)
 
-Next, we'll implement the `DetailsScreen`.
+### Main
 
-### Details Screen
+At the very top is `main.dart`. In this case, there are three versions.
 
-> The `DetailsScreen` displays the full details of the selected todo and allows the user to either edit or delete the todo.
+The most notable thing is that this is where the implementation of the `todos_api` is imported. In this case, it is `local_storage_todos_api`.
 
-Create `screens/details_screen.dart` and let's build it.
+>ZZTODO: I don't know why there are three versions. They are currently identical.
 
-[details_screen.dart](_snippets/flutter_todos_tutorial/details_screen.dart.md ':include')
+|-main_development.dart
 
-?> **Note:** The `DetailsScreen` requires a todo id so that it can pull the todo details from the `TodosBloc` and so that it can update whenever a todo's details have been changed (a todo's id cannot be changed).
+[main_development.dart.md](_snippets/flutter_todos_tutorial/lib/main_development.dart.md ':include') [//]: # (HCTOKEN)
 
-The main things to note are that there is an `IconButton` which adds a `TodoDeleted` event as well as a checkbox which adds an `TodoUpdated` event.
+|-main_production.dart
 
-There is also another `FloatingActionButton` which navigates the user to the `AddEditScreen` with `isEditing` set to `true`. We'll take a look at the `AddEditScreen` next.
+[main_production.dart.md](_snippets/flutter_todos_tutorial/lib/main_production.dart.md ':include') [//]: # (HCTOKEN)
 
-### Add/Edit Screen
+|-main_staging.dart
 
-> The `AddEditScreen` widget allows the user to either create a new todo or update an existing todo based on the `isEditing` flag that is passed via the constructor.
+[main_staging.dart.md](_snippets/flutter_todos_tutorial/lib/main_staging.dart.md ':include') [//]: # (HCTOKEN)
 
-Create `screens/add_edit_screen.dart` and let's have a look at the implementation.
 
-[add_edit_screen.dart](_snippets/flutter_todos_tutorial/add_edit_screen.dart.md ':include')
+### Misc
 
-There's nothing bloc-specific in this widget. It's simply presenting a form and:
+|-generated_plugin_registrant.dart
 
-- if `isEditing` is true the form is populated it with the existing todo details.
-- otherwise the inputs are empty so that the user can create a new todo.
+[generated_plugin_registrant.dart.md](_snippets/flutter_todos_tutorial/lib/generated_plugin_registrant.dart.md ':include') [//]: # (HCTOKEN)
 
-It uses an `onSave` callback function to notify its parent of the updated or newly created todo.
 
-That's it for the screens in our application so before we forget, let's create a barrel file to export them.
 
-### Screens Barrel
 
-Create `screens/screens.dart` and export all three.
 
-[screens.dart](_snippets/flutter_todos_tutorial/screens_barrel.dart.md ':include')
+-----
+=====
 
-Next, let's implement all of the "widgets" (anything that isn't a screen).
 
-## Widgets
+ZZZZZZ
 
-### Filter Button
 
-> The `FilterButton` widget will be responsible for providing the user with a list of filter options and will notify the `FilteredTodosBloc` when a new filter is selected.
 
-Let's create a new directory called `widgets` and put our `FilterButton` implementation in `widgets/filter_button.dart`.
 
-[filter_button.dart](_snippets/flutter_todos_tutorial/filter_button.dart.md ':include')
 
-The `FilterButton` needs to respond to state changes in the `FilteredTodosBloc` so it uses `BlocProvider` to access the `FilteredTodosBloc` from the `BuildContext`. It then uses `BlocBuilder` to re-render whenever the `FilteredTodosBloc` changes state.
+## Older Stuff
 
-The rest of the implementation is pure Flutter and there isn't much going on so we can move on to the `ExtraActions` widget.
+> Commented out
 
-### Extra Actions
+[comment]: <> (ZZZZZ)
 
-> Similarly to the `FilterButton`, the `ExtraActions` widget is responsible for providing the user with a list of extra options: Toggling Todos and Clearing Completed Todos.
 
-Since this widget doesn't care about the filters it will interact with the `TodosBloc` instead of the `FilteredTodosBloc`.
 
-Let's create the `ExtraAction` model in `models/extra_action.dart`.
+[comment]: <> (## Localization)
 
-[extra_action.dart](_snippets/flutter_todos_tutorial/extra_action.dart.md ':include')
+[comment]: <> (ZTODO: Consider moving this to the end.)
 
-And don't forget to export it from the `models/models.dart` barrel file.
+[comment]: <> (One last concept that we will touch on before going into the application itself is localization. Create `localization.dart` and we'll create the foundation for multi-language support.)
 
-Next, let's create `widgets/extra_actions.dart` and implement it.
+[comment]: <> ([localization.dart]&#40;_snippets/flutter_todos_tutorial/localization.dart.md ZZZinclude&#41;)
 
-[extra_actions.dart](_snippets/flutter_todos_tutorial/extra_actions.dart.md ':include')
+[comment]: <> (We can now import and provide our `FlutterBlocLocalizationsDelegate` to our `MaterialApp` &#40;later in this tutorial&#41;.)
 
-Just like with the `FilterButton`, we use `BlocProvider` to access the `TodosBloc` from the `BuildContext` and `BlocBuilder` to respond to state changes in the `TodosBloc`.
+[comment]: <> (For more information on localization check out the [official flutter docs]&#40;https://flutter.dev/docs/development/accessibility-and-localization/internationalization&#41;.)
 
-Based on the action selected, the widget adds an event to the `TodosBloc` to either `ToggleAll` todos' completion states or `ClearCompleted` todos.
 
-Next we'll take a look at the `TabSelector` widget.
 
-### Tab Selector
 
-> The `TabSelector` widget is responsible for displaying the tabs in the `BottomNavigationBar` and handling user input.
 
-Let's create `widgets/tab_selector.dart` and implement it.
 
-[tab_selector.dart](_snippets/flutter_todos_tutorial/tab_selector.dart.md ':include')
+[comment]: <> (## Miscellaneous)
 
-You can see that there is no dependency on blocs in this widget; it just calls `onTabSelected` when a tab is selected and also takes an `activeTab` as input so it knows which tab is currently selected.
+[comment]: <> (Themes File)
 
-Next, we'll take a look at the `FilteredTodos` widget.
+[comment]: <> (## Putting it all together)
 
-### Filtered Todos
+[comment]: <> (Let's create `main.dart` and our `TodosApp` widget. We need to create a `main` function and run our `TodosApp`.)
 
-> The `FilteredTodos` widget is responsible for showing a list of todos based on the current active filter.
 
-Create `widgets/filtered_todos.dart` and let's implement it.
+[comment]: <> (### main.dart)
 
-[filtered_todos.dart](_snippets/flutter_todos_tutorial/filtered_todos.dart.md ':include')
+[comment]: <> ([main.dart]&#40;_snippets/flutter_todos_tutorial/main1.dart.md ZZZinclude&#41;)
 
-Just like the previous widgets we've written, the `FilteredTodos` widget uses `BlocProvider` to access blocs (in this case both the `FilteredTodosBloc` and the `TodosBloc` are needed).
+[comment]: <> (> **Note:** We are setting our observer to the `SimpleBlocObserver` we created earlier so that we can hook into all transitions and errors.)
 
-?> The `FilteredTodosBloc` is needed to help us render the correct todos based on the current filter
+[comment]: <> (> **Note:** We are also wrapping our `TodosApp` widget in a `BlocProvider` which manages initializing, closing, and providing the `TodosBloc` to our entire widget tree from [flutter_bloc]&#40;https://pub.dev/packages/flutter_bloc&#41;. We immediately add the `TodosLoadSuccess` event in order to request the latest todos.)
 
-?> The `TodosBloc` is needed to allow us to add/delete todos in response to user interactions such as swiping on an individual todo.
+[comment]: <> (Next, let's implement our `TodosApp` widget.)
 
-From the `FilteredTodos` widget, the user can navigate to the `DetailsScreen` where it is possible to edit or delete the selected todo. Since our `FilteredTodos` widget renders a list of `TodoItem` widgets, we'll take a look at those next.
+[comment]: <> (### app.dart)
 
-### Todo Item
+[comment]: <> ([appZZZ.dart]&#40;_snippets/flutter_todos_tutorial/todos_app.dart.md ZZZinclude&#41;)
 
-> `TodoItem` is a stateless widget which is responsible for rendering a single todo and handling user interactions (taps/swipes).
+[comment]: <> (Our `TodosApp` is a `StatelessWidget` which accesses the provided `TodosBloc` via the `BuildContext`.)
 
-Create `widgets/todo_item.dart` and let's build it.
+[comment]: <> (The `TodosApp` has two routes:)
 
-[todo_item.dart](_snippets/flutter_todos_tutorial/todo_item.dart.md ':include')
+[comment]: <> (- `Home` - which renders a `HomeScreen`)
 
-Again, notice that the `TodoItem` has no bloc-specific code in it. It simply renders based on the todo we pass via the constructor and calls the injected callback functions whenever the user interacts with the todo.
+[comment]: <> (- `TodoAdded` - which renders a `AddEditScreen` with `isEditing` set to `false`.)
 
-Next up, we'll create the `DeleteTodoSnackBar`.
+[comment]: <> (The `TodosApp` also makes the `TabBloc`, `FilteredTodosBloc`, and `StatsBloc` available to the widgets in its subtree by using the `MultiBlocProvider` widget from [flutter_bloc]&#40;https://pub.dev/packages/flutter_bloc&#41;.)
 
-### Delete Todo SnackBar
+[comment]: <> ([multi_bloc_provider.dart]&#40;_snippets/flutter_todos_tutorial/multi_bloc_provider.dart.md ZZZinclude&#41;)
 
-> The `DeleteTodoSnackBar` is responsible for indicating to the user that a todo was deleted and allows the user to undo his/her action.
+[comment]: <> (is equivalent to writing)
 
-Create `widgets/delete_todo_snack_bar.dart` and let's implement it.
+[comment]: <> ([nested_bloc_providers.dart]&#40;_snippets/flutter_todos_tutorial/nested_bloc_providers.dart.md ZZZinclude&#41;)
 
-[delete_todo_snack_bar.dart](_snippets/flutter_todos_tutorial/delete_todo_snack_bar.dart.md ':include')
+[comment]: <> (You can see how using `MultiBlocProvider` helps reduce the levels of nesting and makes the code easier to read and maintain.)
 
-By now, you're probably noticing a pattern: this widget also has no bloc-specific code. It simply takes in a todo in order to render the task and calls a callback function called `onUndo` if a user presses the undo button.
+[comment]: <> (The entire `main.dart` should look like this:)
 
-We're almost done; just two more widgets to go!
+[comment]: <> ([main.dart]&#40;_snippets/flutter_todos_tutorial/main2.dart.md ZZZinclude&#41;)
 
-### Loading Indicator
+[comment]: <> (That’s all there is to it! We’ve now successfully implemented a todos app in flutter using the [bloc]&#40;https://pub.dev/packages/bloc&#41; and [flutter_bloc]&#40;https://pub.dev/packages/flutter_bloc&#41; packages and we’ve successfully separated our presentation layer from our business logic.)
 
-> The `LoadingIndicator` widget is a stateless widget that is responsible for indicating to the user that something is in progress.
 
-Create `widgets/loading_indicator.dart` and let's write it.
-
-[loading_indicator.dart](_snippets/flutter_todos_tutorial/loading_indicator.dart.md ':include')
-
-Not much to discuss here; we're just using a `CircularProgressIndicator` wrapped in a `Center` widget (again no bloc-specific code).
-
-Lastly, we need to build our `Stats` widget.
-
-### Stats
-
-> The `Stats` widget is responsible for showing the user how many todos are active (in progress) vs. completed.
-
-Let's create `widgets/stats.dart` and take a look at the implementation.
-
-[stats.dart](_snippets/flutter_todos_tutorial/stats.dart.md ':include')
-
-We're accessing the `StatsBloc` using `BlocProvider` and using `BlocBuilder` to rebuild in response to state changes in the `StatsBloc` state.
-
-## Putting it all together
-
-Let's create `main.dart` and our `TodosApp` widget. We need to create a `main` function and run our `TodosApp`.
-
-[main.dart](_snippets/flutter_todos_tutorial/main1.dart.md ':include')
-
-?> **Note:** We are setting our observer to the `SimpleBlocObserver` we created earlier so that we can hook into all transitions and errors.
-
-?> **Note:** We are also wrapping our `TodosApp` widget in a `BlocProvider` which manages initializing, closing, and providing the `TodosBloc` to our entire widget tree from [flutter_bloc](https://pub.dev/packages/flutter_bloc). We immediately add the `TodosLoadSuccess` event in order to request the latest todos.
-
-Next, let's implement our `TodosApp` widget.
-
-[main.dart](_snippets/flutter_todos_tutorial/todos_app.dart.md ':include')
-
-Our `TodosApp` is a `StatelessWidget` which accesses the provided `TodosBloc` via the `BuildContext`.
-
-The `TodosApp` has two routes:
-
-- `Home` - which renders a `HomeScreen`
-- `TodoAdded` - which renders a `AddEditScreen` with `isEditing` set to `false`.
-
-The `TodosApp` also makes the `TabBloc`, `FilteredTodosBloc`, and `StatsBloc` available to the widgets in its subtree by using the `MultiBlocProvider` widget from [flutter_bloc](https://pub.dev/packages/flutter_bloc).
-
-[multi_bloc_provider.dart](_snippets/flutter_todos_tutorial/multi_bloc_provider.dart.md ':include')
-
-is equivalent to writing
-
-[nested_bloc_providers.dart](_snippets/flutter_todos_tutorial/nested_bloc_providers.dart.md ':include')
-
-You can see how using `MultiBlocProvider` helps reduce the levels of nesting and makes the code easier to read and maintain.
-
-The entire `main.dart` should look like this:
-
-[main.dart](_snippets/flutter_todos_tutorial/main2.dart.md ':include')
-
-That’s all there is to it! We’ve now successfully implemented a todos app in flutter using the [bloc](https://pub.dev/packages/bloc) and [flutter_bloc](https://pub.dev/packages/flutter_bloc) packages and we’ve successfully separated our presentation layer from our business logic.
+## Full Source
 
 The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos).
