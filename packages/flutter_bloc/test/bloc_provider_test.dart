@@ -206,6 +206,7 @@ void main() {
 
     testWidgets('propagates stack trace of BloC constructor exception',
         (tester) async {
+      // ignore: unused_local_variable
       const expected = '''Catch me, if you can!''';
       await tester.pumpWidget(BlocProvider(
         lazy: false,
