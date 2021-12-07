@@ -161,12 +161,20 @@ class CounterCubit extends Cubit<int> {
   final Function? onClose;
 
   void increment() => emit(state + 1);
+
   void decrement() => emit(state - 1);
 
   @override
   Future<void> close() {
     onClose?.call();
     return super.close();
+  }
+}
+
+class CounterCubitWithBrokenConstructor extends CounterCubit {
+  CounterCubitWithBrokenConstructor() {
+    // ignore: only_throw_errors
+    throw 'Catch me, if you can!';
   }
 }
 
@@ -194,6 +202,17 @@ void main() {
         tester.takeException(),
         isA<AssertionError>().having((e) => e.message, 'message', expected),
       );
+    });
+
+    testWidgets(
+        'propagates stack trace of BloC constructor exception', (tester) async {
+      const expected =
+          '''Catch me, if you can!''';
+      await tester.pumpWidget(BlocProvider(
+        lazy: false,
+        create: (_) => CounterCubitWithBrokenConstructor(),
+        child: const SizedBox(),
+      ));
     });
 
     testWidgets('lazy is true by default', (tester) async {
