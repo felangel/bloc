@@ -204,10 +204,9 @@ void main() {
       );
     });
 
-    testWidgets(
-        'propagates stack trace of BloC constructor exception', (tester) async {
-      const expected =
-          '''Catch me, if you can!''';
+    testWidgets('propagates stack trace of BloC constructor exception',
+        (tester) async {
+      const expected = '''Catch me, if you can!''';
       await tester.pumpWidget(BlocProvider(
         lazy: false,
         create: (_) => CounterCubitWithBrokenConstructor(),
