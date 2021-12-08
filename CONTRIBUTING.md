@@ -57,6 +57,16 @@ python3 -m http.server 8080
 
 If you want to help maintain translations in the future, add yourself to `.github/DOCS_ISSUE_TEMPLATE.md`.
 
+### Style suggestions
+
+We are grateful for whatever help we can get. Here are a few tips:
+- We use docsfiy for document rendering. See that syntax for ways to include code fragments.
+- We prefer includes to code files rather than generating new snippets and including. (Some old examples make snippets, which we are slowly migrating.)
+  This is to keep the docs in sync if we modify the tutorial. 
+  - If the code changes but the tutorial doesn't get updated, we also get out of sync. To avoid this, you might add a section linking to a specific commit/version that reflects the state of the tutorial at the time you write the doc.
+
+## Pull requests
+
 To make PRs more readable, please provide this checklist to the PR description
 so other contributors can easily see what's already done.
 
