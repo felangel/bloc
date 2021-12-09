@@ -24,7 +24,7 @@ typedef BlocWidgetSelector<S, T> = T Function(S state);
 /// )
 /// ```
 /// {@endtemplate}
-class BlocSelector<B extends BlocBase<S>, S, T> extends StatefulWidget {
+class BlocSelector<B extends StateStreamable<S>, S, T> extends StatefulWidget {
   /// {@macro bloc_selector}
   const BlocSelector({
     Key? key,
@@ -54,7 +54,7 @@ class BlocSelector<B extends BlocBase<S>, S, T> extends StatefulWidget {
   State<BlocSelector<B, S, T>> createState() => _BlocSelectorState<B, S, T>();
 }
 
-class _BlocSelectorState<B extends BlocBase<S>, S, T>
+class _BlocSelectorState<B extends StateStreamable<S>, S, T>
     extends State<BlocSelector<B, S, T>> {
   late B _bloc;
   late T _state;

@@ -18,3 +18,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+dependency_overrides:
+  bloc:
+    path: ../bloc

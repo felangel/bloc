@@ -7,6 +7,16 @@ part 'bloc_base.dart';
 part 'bloc_overrides.dart';
 part 'emitter.dart';
 
+/// An [ErrorSink] that supports adding events.
+///
+/// Multiple events can be reported to the sink via `add`.
+abstract class BlocEventSink<Event extends Object?> implements ErrorSink {
+  /// Adds an [event] to the sink.
+  ///
+  /// Must not be called on a closed sink.
+  void add(Event event);
+}
+
 /// An event handler is responsible for reacting to an incoming [Event]
 /// and can emit zero or more states via the [Emitter].
 typedef EventHandler<Event, State> = FutureOr<void> Function(
@@ -36,7 +46,8 @@ class _Handler {
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
 /// {@endtemplate}
-abstract class Bloc<Event, State> extends BlocBase<State> {
+abstract class Bloc<Event, State> extends BlocBase<State>
+    implements BlocEventSink<Event> {
   /// {@macro bloc}
   Bloc(State initialState) : super(initialState);
 
@@ -55,6 +66,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   ///
   /// * A [StateError] will be thrown if the bloc is closed and the
   /// [event] will not be processed.
+  @override
   void add(Event event) {
     assert(() {
       final handlerExists = _handlers.any((handler) => handler.isType(event));
@@ -247,8 +259,8 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   /// processed.
   /// In addition, if [close] is called while `events` are still being
   /// processed, the [Bloc] will finish processing the pending `events`.
-  @override
   @mustCallSuper
+  @override
   Future<void> close() async {
     await _eventController.close();
     for (final emitter in _emitters) emitter.cancel();
