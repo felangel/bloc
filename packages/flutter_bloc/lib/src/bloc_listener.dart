@@ -77,8 +77,8 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 /// )
 /// ```
 /// {@endtemplate}
-class BlocListener<B extends BlocBase<S>, S> extends BlocListenerBase<B, S>
-    with BlocListenerSingleChildWidget {
+class BlocListener<B extends StateStreamable<S>, S>
+    extends BlocListenerBase<B, S> with BlocListenerSingleChildWidget {
   /// {@macro bloc_listener}
   /// {@macro bloc_listener_listen_when}
   const BlocListener({
@@ -103,7 +103,7 @@ class BlocListener<B extends BlocBase<S>, S> extends BlocListenerBase<B, S>
 /// The type of the state and what happens with each state change
 /// is defined by sub-classes.
 /// {@endtemplate}
-abstract class BlocListenerBase<B extends BlocBase<S>, S>
+abstract class BlocListenerBase<B extends StateStreamable<S>, S>
     extends SingleChildStatefulWidget {
   /// {@macro bloc_listener_base}
   const BlocListenerBase({
@@ -135,7 +135,7 @@ abstract class BlocListenerBase<B extends BlocBase<S>, S>
       _BlocListenerBaseState<B, S>();
 }
 
-class _BlocListenerBaseState<B extends BlocBase<S>, S>
+class _BlocListenerBaseState<B extends StateStreamable<S>, S>
     extends SingleChildState<BlocListenerBase<B, S>> {
   StreamSubscription<S>? _subscription;
   late B _bloc;
