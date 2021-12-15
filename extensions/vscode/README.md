@@ -84,7 +84,9 @@ You can activate the commands by launching the command palette (View -> Command 
 | `blocstate`         | Creates a state class                      |
 | `blocevent`         | Creates an event class                     |
 | `bloctest`          | Creates a `blocTest`                       |
-
+| `mockbloc`          | Creates a `mockBloc` class                      |
+| `mockcubit`         | Creates a `mockCubit` class                     |
+| `fakeclass`         | Creates a `fakeClass`                           |
 ### Freezed Bloc
 
 | Shortcut     | Description                                        |

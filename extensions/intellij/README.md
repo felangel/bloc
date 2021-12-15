@@ -58,6 +58,9 @@ Right click and use `Generate -> Equatable Props` to automatically generate the 
 | `blocstate`         | Creates a state class                           |
 | `blocevent`         | Creates an event class                          |
 | `bloctest`          | Creates a `blocTest` with build, act and expect |
+| `mockbloc`          | Creates a `mockBloc` class                      |
+| `mockcubit`         | Creates a `mockCubit` class                     |
+| `fakeclass`         | Creates a `fakeClass`                           |
 
 ### Freezed Bloc
 
