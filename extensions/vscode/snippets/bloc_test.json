@@ -17,24 +17,22 @@
     "description": "import package:bloc_test/bloc_test.dart;"
   },
   "MockBloc": {
-		"prefix": "mockbloc",
-		"body": [
-			"class Mock${1:Subject}Bloc extends MockBloc<${1}Event, ${1}State> implements ${1}Bloc {}"
-		],
+    "prefix": "mockbloc",
+    "body": [
+      "class Mock${1:Subject}Bloc extends MockBloc<${1}Event, ${1}State> implements ${1}Bloc {}"
+    ],
     "description": "create a mock of a bloc"
-	},
-	"MockCubit": {
-		"prefix": "mockcubit",
-		"body": [
-			"class Mock${1:Subject}Cubit extends MockCubit<${1}State> implements ${1}Cubit {}"
-		],
+  },
+  "MockCubit": {
+    "prefix": "mockcubit",
+    "body": [
+      "class Mock${1:Subject}Cubit extends MockCubit<${1}State> implements ${1}Cubit {}"
+    ],
     "description": "create a mock of a cubit"
-	},
-  "FakeClass":{
-		"prefix": "fakeclass",
-		"body": [
-			"class Fake${1:Subject} extends Fake implements ${1} {}"
-		],
-    "description": "create fake class of an object e.g. BlocState"
-	}
+  },
+  "Fake": {
+    "prefix": "fake",
+    "body": ["class Fake${1:Subject} extends Fake implements ${1} {}"],
+    "description": "create a fake object"
+  }
 }
