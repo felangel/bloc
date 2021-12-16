@@ -261,8 +261,8 @@
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
-    <template name="fakeclass" value="class Fake$Subject$ extends Fake implements $Subject$ {}"
-              description="Create fake class of an object e.g. BlocState" toReformat="false" toShortenFQNames="true">
+    <template name="fake" value="class Fake$Subject$ extends Fake implements $Subject$ {}"
+              description="Create a fake object" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <context>
             <option name="DART" value="true" />
