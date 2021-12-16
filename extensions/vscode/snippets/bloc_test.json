@@ -21,14 +21,14 @@
     "body": [
       "class Mock${1:Subject}Bloc extends MockBloc<${1}Event, ${1}State> implements ${1}Bloc {}"
     ],
-    "description": "create a mock of a bloc"
+    "description": "create a mock bloc"
   },
   "MockCubit": {
     "prefix": "mockcubit",
     "body": [
       "class Mock${1:Subject}Cubit extends MockCubit<${1}State> implements ${1}Cubit {}"
     ],
-    "description": "create a mock of a cubit"
+    "description": "create a mock cubit"
   },
   "Fake": {
     "prefix": "fake",
