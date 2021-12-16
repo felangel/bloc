@@ -388,7 +388,7 @@ void main() {
         build: () => ErrorCounterBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[1],
-        errors: () => [isA<ErrorCounterBlocError>()],
+        errors: () => isNotEmpty,
       );
 
       blocTest<ErrorCounterBloc, int>(
