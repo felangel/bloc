@@ -54,6 +54,7 @@ void main() {
               errors.add(error);
               stackTraces.add(stackTrace);
             },
+            // ignore: invalid_use_of_protected_member
           )..addError(expectedError, expectedStackTrace);
 
           expect(errors.length, equals(1));

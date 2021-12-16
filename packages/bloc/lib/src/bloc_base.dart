@@ -122,6 +122,7 @@ abstract class BlocBase<State>
   ///
   /// * [BlocObserver] for observing [Cubit] behavior globally.
   ///
+  @protected
   @mustCallSuper
   void onChange(Change<State> change) {
     // ignore: invalid_use_of_protected_member
@@ -129,6 +130,7 @@ abstract class BlocBase<State>
   }
 
   /// Reports an [error] which triggers [onError] with an optional [StackTrace].
+  @protected
   @mustCallSuper
   @override
   void addError(Object error, [StackTrace? stackTrace]) {

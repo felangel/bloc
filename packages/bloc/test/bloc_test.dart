@@ -1358,6 +1358,7 @@ void main() {
           OnExceptionBloc(
             exception: expectedError,
             onErrorCallback: (Object _, StackTrace __) {},
+            // ignore: invalid_use_of_protected_member
           )..addError(expectedError, StackTrace.current);
         }, (Object error, StackTrace stackTrace) {
           expect(error, equals(expectedError));
