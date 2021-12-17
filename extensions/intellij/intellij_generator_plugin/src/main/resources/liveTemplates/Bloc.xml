@@ -245,6 +245,30 @@
             <option name="DART_TOPLEVEL" value="true"/>
         </context>
     </template>
+    <template name="mockbloc" value="class Mock$Subject$Bloc extends MockBloc&lt;$Subject$Event, $Subject$State&gt; implements $Subject$Bloc {}"
+              description="Create a mock bloc" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
+    <template name="mockcubit" value="class Mock$Subject$Cubit extends MockCubit&lt;$Subject$State&gt; implements $Subject$Cubit {}"
+              description="Create a mock cubit" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="false"/>
+        </context>
+    </template>
+    <template name="fake" value="class Fake$Subject$ extends Fake implements $Subject$ {}"
+              description="Create a fake object" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true" />
+            <option name="DART_TOPLEVEL" value="false" />
+        </context>
+    </template>
 
     <!--        FREEZED        -->
     <template name="fstate" value="const factory $CLASS_NAME$.$stateName$() = _$stateName$;"
