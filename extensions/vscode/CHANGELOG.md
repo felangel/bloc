@@ -1,3 +1,10 @@
+# 6.3.0
+
+- feat: add snippets for:
+  - `MockBloc`
+  - `MockCubit`
+  - `Fake`
+
 # 6.2.0
 
 - feat: query latest package versions from pub.dev
