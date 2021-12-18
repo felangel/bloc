@@ -21,6 +21,11 @@ abstract class Closable {
   /// Closes the current instance.
   /// The returned future completes when the instance has been closed.
   FutureOr<void> close();
+
+  /// Whether the object is closed.
+  ///
+  /// An object is considered closed once [close] is called.
+  bool get isClosed;
 }
 
 /// An object that can emit new states.
@@ -72,6 +77,7 @@ abstract class BlocBase<State>
   ///
   /// A bloc is considered closed once [close] is called.
   /// Subsequent state changes cannot occur within a closed bloc.
+  @override
   bool get isClosed => _stateController.isClosed;
 
   /// Updates the [state] to the provided [state].
