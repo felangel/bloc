@@ -200,6 +200,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
           try {
             await act?.call(bloc);
           } catch (error) {
+            if (errors == null) rethrow;
             unhandledErrors.add(error);
           }
           if (wait != null) await Future<void>.delayed(wait);
@@ -231,7 +232,7 @@ WARNING: Please ensure state instances extend Equatable, override == and hashCod
 Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''',
             );
           }
-          if (!unhandledErrors.contains(error)) {
+          if (errors == null || !unhandledErrors.contains(error)) {
             // ignore: only_throw_errors
             throw error;
           }
