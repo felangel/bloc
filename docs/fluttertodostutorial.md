@@ -25,8 +25,8 @@
 
 We'll start off by creating a brand new Flutter project
 
-```shell
-flutter create flutter_login
+```sh
+flutter create flutter_todos
 ```
 
 We can then replace the contents of `pubspec.yaml` with
