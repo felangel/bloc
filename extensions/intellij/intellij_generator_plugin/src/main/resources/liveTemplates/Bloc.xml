@@ -250,7 +250,7 @@
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <context>
             <option name="DART" value="true"/>
-            <option name="DART_TOPLEVEL" value="false"/>
+            <option name="DART_TOPLEVEL" value="true"/>
         </context>
     </template>
     <template name="mockcubit" value="class Mock$Subject$Cubit extends MockCubit&lt;$Subject$State&gt; implements $Subject$Cubit {}"
@@ -258,7 +258,7 @@
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <context>
             <option name="DART" value="true"/>
-            <option name="DART_TOPLEVEL" value="false"/>
+            <option name="DART_TOPLEVEL" value="true"/>
         </context>
     </template>
     <template name="fake" value="class Fake$Subject$ extends Fake implements $Subject$ {}"
@@ -266,7 +266,7 @@
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <context>
             <option name="DART" value="true" />
-            <option name="DART_TOPLEVEL" value="false" />
+            <option name="DART_TOPLEVEL" value="true" />
         </context>
     </template>
 
