@@ -65,6 +65,11 @@ void main() {
     group('LogoutRequested', () {
       blocTest<AppBloc, AppState>(
         'invokes logOut',
+        setUp: () {
+          when(
+            () => authenticationRepository.logOut(),
+          ).thenAnswer((_) async {});
+        },
         build: () => AppBloc(
           authenticationRepository: authenticationRepository,
         ),
