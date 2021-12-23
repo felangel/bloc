@@ -142,6 +142,67 @@ Stream<List<Todo>> getTodos() => _todosApi.getTodos();
   Future<void> deleteTodo(String id) => _todosApi.deleteTodo(id);
 ```
 
+
+---
+<!-- BEGIN OPTIONAL -->
+
+## Architecture
+
+!> NOTE TO REVIEWERS: THIS SECTION IS OPTIONAL. Giving a high level overview is very helpful, as is the widget tree.
+
+### Why it matters
+
+To readers: This section gives an architectural overview.
+- If you are expert in architecture and just want to see how the bloc code works, you can skip this section.
+- If not, this section is important to understand things like:
+  - Should API calls be made from the widget, the bloc, or the respository?
+  - Where should I put BlocProviders and BlocBuilders/BlocListeners?
+  - How do I decide how blocs (eventually) communicate with other blocs?
+    - In this case, does the `EditTodo` feature directly tell the list of todos in `TodosOverviewBloc` to update? (Answer: no)
+
+### Data layers
+The three packages are `todos_repository`, `todos_api`, `local_storage_todos_api`. It is helpful to review how these relate to the general patterns for bloc architecture.
+
+![Bloc Architecture](assets/bloc_architecture_full.png)
+
+The architecture follows the [Bloc Architecture](/architecture), as diagrammed above. To review:
+- The UI layer never talks directly to the Data layer. The UI layer only talks to the Bloc layer.
+- (not diagrammed above) The Data layer in this project is split up into a Repository Layer and an DataProvider/API layer.
+
+!>  As a recommended best practice the Bloc never directly talks to the APIs. It talks to the Repository layer.
+
+---
+### Widget tree
+
+It is also instructive to look at the Widget Tree to get a sense of *where* the BlocProviders and RepositoryProviders live in the widget tree. This is because programmers don't start out jumping straight to code. They think about how to organize their Blocs and the hierarchy of widgets. Some blocs may be in separate subtrees. Other blocs may be under other blocs. 
+
+![Overview_widget_tree.png](_snippets/flutter_todos_tutorial/images/Overview_widget_tree.png)
+
+Each of the three Blocs talks to the `todos_repository` package. In fact, they do so independently and communicate to each other *through* the repository. In the widget tree, these are marked:
+- Yellow markers
+  - The three yellow stars are the BlocProviders for the 3 blocs
+  - The yellow circles are BlocListeners. They listen only to their specific bloc. The cluster of three in the middle listen to `TodosOverviewBloc`. The single circle on the bottom is for `EditTodoBloc`.
+  - The yellow rectangle is used to denote consumers/listeners not displayed in the widget tree. In this case, they use a `context.read<TodosOverviewBloc>()` pattern to access the bloc, rather than a BlocListener/BlocBuilder. In this case, it is because these don't require the state to change the UI. They are fixed menus that interact with `TodosOverviewBloc`.
+- Red markers
+  - The one red star is the BlocProvider for the 1 cubit. The `HomeCubit` is for navigating the Home page. In this case, it navigates the index of the `IndexedStack` widget. NOTE: This is not using a Navigator which is a different pattern which often uses `push` and `pop`.
+  - The two rectangles denote consumers/listeners not displayed in the widget three. 
+    - In HomeView, it changes the index of the IndexedStack.
+    - In BottomAppBar, it calls the cubit function that changes the displayed page.
+      > Note: `EditTodoBloc` is not part of the IndexedStack and in a different widget subtree. It appears via a Navigator.push() style event. Note how `HomePage` and `EditTodoPage` are "siblings" and both children of `MaterialApp'. 
+- Blue marker
+  - The one blue star is the `RepositoryProvider` for the `TodosRepository`, the Apps datastore for the Todos list. It is that high in the widget tree because  all three blocs (yellow stars) need access. So, it is placed above the most common parent widget, i.e. above MaterialApp.
+
+!> The recommended best practice used is that BlocProviders should be put as low in the widget tree as possible. Note that `EditTodoPage` is not a descendent of `TodosOverviewBloc`'s BlocProvider. Hence, the edit page doesn't have direct access to the TodosOverviewBloc which is what holds the state of the whole Todo list. This is a subtle design choice.
+
+---
+
+The `todos_repository` package communicates with the `todos_api` package. The `todos_api` package is an implementation-agnostic specification of what an API will need to provide.
+
+`local_storage_todos_api` package is a specific implementation of the `todos_api`, as discussed in that section of this tutorial. If we want to use Firebase cloudFirestore or another database/datastore provider, we would implement another `todos_api` with that provider.
+
+<!-- END OPTIONAL -->
+
+
 ## todos_repository
 
 A [repository](/architecture?id=repository) should specify the interface that the application uses and may provide some other logic.
