@@ -57,6 +57,16 @@ python3 -m http.server 8080
 
 If you want to help maintain translations in the future, add yourself to `.github/DOCS_ISSUE_TEMPLATE.md`.
 
+### Tips
+
+Here are a few tips when contributing to the documentation:
+- We use [docsify](https://docsify.js.org) for document rendering. Refer to the docsify documentation for more context/examples regarding the syntax, usage, and capabilities.
+- We prefer to reference real files in GitHub rather than creating snippets (some old examples make use of snippets but we are slowly migrating away).
+  This is to keep the docs in sync if we modify the tutorial. 
+  - If the code changes but the tutorial doesn't get updated, we also get out of sync. To avoid this, you might add a section linking to a specific commit/version that reflects the state of the tutorial at the time you write the doc.
+
+## Pull requests
+
 To make PRs more readable, please provide this checklist to the PR description
 so other contributors can easily see what's already done.
 

@@ -6,7 +6,9 @@ class DelayedCounterCubit extends Cubit<int> {
   void increment() {
     Future<void>.delayed(
       const Duration(milliseconds: 300),
-      () => emit(state + 1),
+      () {
+        if (!isClosed) emit(state + 1);
+      },
     );
   }
 }

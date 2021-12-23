@@ -58,7 +58,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// )
 /// ```
 /// {@endtemplate}
-class BlocConsumer<B extends BlocBase<S>, S> extends StatefulWidget {
+class BlocConsumer<B extends StateStreamable<S>, S> extends StatefulWidget {
   /// {@macro bloc_consumer}
   const BlocConsumer({
     Key? key,
@@ -98,7 +98,7 @@ class BlocConsumer<B extends BlocBase<S>, S> extends StatefulWidget {
   State<BlocConsumer<B, S>> createState() => _BlocConsumerState<B, S>();
 }
 
-class _BlocConsumerState<B extends BlocBase<S>, S>
+class _BlocConsumerState<B extends StateStreamable<S>, S>
     extends State<BlocConsumer<B, S>> {
   late B _bloc;
 
