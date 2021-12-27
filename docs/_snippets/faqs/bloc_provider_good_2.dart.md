@@ -1,7 +1,7 @@
 ```dart
 @override
 Widget build(BuildContext context) {
-  BlocProvider(
+  return BlocProvider(
     create: (_) => BlocA(),
     child: Builder(
       builder: (context) => ElevatedButton(
