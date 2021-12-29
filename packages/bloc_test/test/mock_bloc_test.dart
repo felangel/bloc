@@ -36,10 +36,12 @@ void main() {
     });
 
     test('is compatible with addError without StackTrace', () {
+      // ignore: invalid_use_of_protected_member
       counterBloc.addError(Exception('oops'));
     });
 
     test('is compatible with addError with StackTrace', () {
+      // ignore: invalid_use_of_protected_member
       counterBloc.addError(Exception('oops'), StackTrace.empty);
     });
 
