@@ -58,10 +58,7 @@ abstract class BlocBase<State>
 
   final _blocObserver = BlocOverrides.current?.blocObserver;
 
-  StreamController<State>? __stateController;
-  StreamController<State> get _stateController {
-    return __stateController ??= StreamController<State>.broadcast();
-  }
+  late final _stateController = StreamController<State>.broadcast();
 
   State _state;
 
