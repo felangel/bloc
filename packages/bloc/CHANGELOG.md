@@ -1,7 +1,8 @@
 # 8.0.2
 
 - fix: make `onChange` and `addError` protected ([#3071](https://github.com/felangel/bloc/pull/3071))
-- refactor: add isClosed to Closable ([#3066](https://github.com/felangel/bloc/pull/3066))
+- refactor: use `late` keyword for internal state controller ([#3100](https://github.com/felangel/bloc/pull/3100))
+- refactor: add `isClosed` to `Closable` ([#3066](https://github.com/felangel/bloc/pull/3066))
 - refactor: add core interfaces ([#3012](https://github.com/felangel/bloc/pull/3012))
 - refactor: internal reorganization ([#3011](https://github.com/felangel/bloc/pull/3011))
 - docs: update example to follow naming conventions ([#3029](https://github.com/felangel/bloc/pull/3029))
