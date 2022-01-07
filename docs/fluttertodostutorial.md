@@ -18,11 +18,65 @@
 - [Equatable](/faqs?id=when-to-use-equatable) to prevent unnecessary rebuilds.
 - [MultiBlocListener](/flutterbloccoreconcepts?id=multibloclistener), a Flutter widget that reduces nesting when using multiple BlocListeners.
 
-## Overview
+## Setup
 
-[INSERT LAYERED ARCHITECTURE DIAGRAM HERE]
+We'll start off by creating a brand new Flutter project using the [`very_good_cli`](https://pub.dev/packages/very_good_cli). We'll use the default `very_good_core` template:
 
-## todos_api
+```sh
+very_good create flutter_todos --desc "An example todos app that showcases bloc state management patterns."
+```
+
+?> **💡 Tip**: you can install `very_good_cli` via `dart pub global activate very_good_cli`.
+
+Next we'll create the `todos_api`, `local_storage_todos_api`, and `todos_repository` packages:
+
+```sh
+# create package:todos_api under packages/todos_api
+very_good create packages/todos_api -t dart_pkg --desc "The interface and models for an API providing access to todos."
+
+# create package:local_storage_todos_api under packages/local_storage_todos_api
+very_good create packages/local_storage_todos_api -t flutter_pkg --desc "A Flutter implementation of the TodosApi that uses local storage."
+
+# create package:todos_repository under packages/todos_repository
+very_good create packages/todos_repository -t dart_pkg --desc "A repository that handles todo related requests."
+```
+
+We can then replace the contents of `pubspec.yaml` with:
+
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/pubspec.yaml ':include')
+
+and finally install all the dependencies:
+
+```sh
+very_good packages get --recursive
+```
+
+## Project Structure
+
+Our application project structure should look like:
+
+```sh
+├── lib
+├── packages
+│   ├── local_storage_todos_api
+│   ├── todos_api
+│   └── todos_repository
+└── test
+```
+
+We split the project into multiple packages in order to maintain explicit dependencies for each package with clear boundaries that enforce the single responsibility principle.
+Modularizing our project like this has many benefits including but not limited to:
+- easy to reuse packages across multiple projects
+- CI/CD improvements in terms of efficiency (run checks on only the code that has changed)
+- easy to maintain the packages in isolation with their dedicated test suites, semantic versioning, and release cycle/cadence
+
+## Architecture
+
+![Todos Architecture Diagram](_snippets/flutter_todos_tutorial/images/todos_architecture_light.png)
+
+## Data Layer
+
+### TodosApi
 
 The `todos_api` package will export a generic interface for interacting/managing todos. Later we'll implement the `TodosApi` using `shared_preferences` but having an abstraction will make it easy to support other implementations without having to change any other part of our application. For example, we can later add a `FirestoreTodosApi` which uses `cloud_firestore` instead of `shared_preferences` with minimal code changes to the rest of the application. 
 
@@ -30,7 +84,7 @@ The `todos_api` package will export a generic interface for interacting/managing
 
 [todos_api.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_api/lib/src/todos_api.dart ':include')
 
-### Todo model
+#### Todo model
 
 Now is a good time to introduce the model for a `Todo`.
 
@@ -45,7 +99,8 @@ The `Todo` model uses [json_serializable](https://pub.dev/packages/json_serializ
 [json_map.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_api/lib/src/models/json_map.dart ':include')
 
 The model of the `Todo` is defined in: `todos_api/models/todo.dart` and is exported by `package:todos_api/todos_api.dart`.
-### Streams vs Futures
+
+#### Streams vs Futures
 
 In a previous version of this tutorial, the `TodosApi` was `Future`-based rather than `Stream`-based.
 
@@ -62,7 +117,7 @@ As a result, in the current implementation, the `TodosApi` exposes a `Stream<Lis
 
 In addition, Todos can be created, deleted, or updated individually. For example, both deleting and saving a Todo are done with only the `todo` as the argument. It's not necessary to provide the newly updated list of todos each time.
 
-## local_storage_todos_api
+### LocalStorageTodosApi
 
 This package implements the `todos_api` using the [`shared_preferences`](https://pub.dev/packages/shared_preferences) package.
 
@@ -70,7 +125,9 @@ This package implements the `todos_api` using the [`shared_preferences`](https:/
 
 [local_storage_todos_api.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/local_storage_todos_api/lib/src/local_storage_todos_api.dart ':include')
 
-## todos_repository
+## Repository Layer
+
+### TodosRepository
 
 A [repository](/architecture?id=repository) is part of the "business layer". A repository depends on one or more data providers that have no business value, and composes their public API into APIs that represent business value. In addition, having a repository layer helps abstract data-acquisition from the rest of the application allowing us to change where/how data is being stored without affecting other parts of the app.
 
@@ -80,7 +137,7 @@ Instantiating or constructing the repository requires specifying a `TodosApi`, w
 
 [pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_repository/pubspec.yaml ':include')
 
-### Library Exports.
+#### Library Exports
 
 In addition to exporting the `TodosRepository` class, we also export the `Todo` model from the `todos_api` package from the `todos_repository` in order to prevent tight coupling between the application and the data providers.
 
@@ -88,49 +145,10 @@ In addition to exporting the `TodosRepository` class, we also export the `Todo` 
 
 We decided to re-export the same `Todo` model from the `todos_api` rather than re-defining a separate model in the `todos_repository` because in this case we are in complete control of the data model. In many cases, the data provider will not be something that you as a developer can control and in those cases it becomes increasingly important to maintain your own model definitions in the repository layer in order to maintain full control of the interface and API contract.
 
-## App
+### Feature Layer
 
-We'll start off by creating a brand new Flutter project using the [`very_good_cli`](https://pub.dev/packages/very_good_cli). We'll use the default `very_good_core` template:
 
-```sh
-very_good create flutter_todos --desc "An example todos app that showcases bloc state management patterns."
-```
-
-?> **💡 Tip**: you can install `very_good_cli` via `dart pub global activate very_good_cli`.
-
-We can then replace the contents of `pubspec.yaml` with:
-
-[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/pubspec.yaml ':include')
-
-and then install all the dependencies:
-
-```sh
-very_good packages get --recursive
-```
-
-### App widget
-
-`App` and `AppView` are near top-level widgets.
-
-`App` wraps a `RepositoryProvider` widget that provides the repository to all children/descendents. Since both `EditTodoPage` subtree and the `HomePage` subtree's are descendents, all the blocs and cubits can access the repository.
-
-`AppView` creates the `MaterialApp` and configures the theme and localizations.
-
-[app.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/app/app.dart ':include')
-
-### Theme
-
-This provides theme definition for light and dark mode.
-
-[theme.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/theme/theme.dart ':include')
-
-### Bootstrapping
-
-`bootstrap.dart` loads our `BlocObserver` and creates the instance of `TodosRepository`.
-
-[bootstrap.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/bootstrap.dart ':include')
-
-### Main
+#### Entrypoint
 
 Our app's entrypoint is `main.dart`. In this case, there are three versions:
 
@@ -147,6 +165,78 @@ The most notable thing is that this is where the concrete implementation of the 
 #### `main_production.dart`
 
 [main_production.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/main_production.dart ':include')
+
+### Bootstrapping
+
+`bootstrap.dart` loads our `BlocObserver` and creates the instance of `TodosRepository`.
+
+[bootstrap.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/bootstrap.dart ':include')
+
+### App
+
+`App` and `AppView` are near top-level widgets.
+
+`App` wraps a `RepositoryProvider` widget that provides the repository to all children/descendents. Since both `EditTodoPage` subtree and the `HomePage` subtree's are descendents, all the blocs and cubits can access the repository.
+
+`AppView` creates the `MaterialApp` and configures the theme and localizations.
+
+[app.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/app/app.dart ':include')
+
+### Theme
+
+This provides theme definition for light and dark mode.
+
+[theme.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/theme/theme.dart ':include')
+
+## Home
+
+### HomeState
+
+There are only two states associated with the two screens: `todos` and `stats`. EditTodo is not a screen controlled by the Home Cubit.
+
+[home_state.dart.md](_snippets/flutter_todos_tutorial/lib/home_state.dart.md ':include') [//]: # (HCTOKEN)
+
+### HomeCubit
+
+A cubit is appropriate due to the simplicity of the business logic. We have one function `setTab` to change the tab.
+
+[home_cubit.dart.md](_snippets/flutter_todos_tutorial/lib/home_cubit.dart.md ':include') [//]: # (HCTOKEN)
+
+### HomeView
+
+`view.dart` manages the export.
+
+[view.dart2.md edit](_snippets/flutter_todos_tutorial/lib/view.dart2.md ':include') [//]: # (HCTOKEN)
+
+`home_page.dart` is the UI page view.
+
+[home_page.dart.md](_snippets/flutter_todos_tutorial/lib/home_page.dart.md ':include') [//]: # (HCTOKEN)
+
+It is instructive to look at the structure using Flutter Inspector. This is the widget tree:
+
+![HomePage_widget_tree.png](_snippets/flutter_todos_tutorial/images/HomePage_widget_tree.png)
+
+`HomePage` is near the top, followed by `BlocProvider<HomeCubit>`. The next widget, `Homeview` uses the `HomeCubit` state via the following line:
+
+```dart
+Widget build(BuildContext context) {
+  final selectedTab = context.select((HomeCubit cubit) => cubit.state.tab);
+  //...
+```
+
+BlocBuilders and BlocListeners could be used, but they are unnecessary. The `context.select` will listen for any changes and trigger a rebuild.
+
+---
+
+`BottomAppBar` is several steps below. The key line for is when the cubit function call is sent from the UI to the cubit. 
+
+```dart
+    onPressed: () => context.read<HomeCubit>().setTab(value),
+```
+
+This is the key line, and uses a `context.read`.
+
+!> `context.read` doesn't listen for changes, but this is just used to access to `HomeCubit` to call the `setTab`, so no updating is needed.
 
 ### TodosOverview
 
@@ -637,58 +727,6 @@ Notice how `EditTodosPage` is in the bottom half of the displayed widget tree. I
 
 !> Does `EditTodosPage` need access to the whole list of Todos or other state? It has no access to the list of Todos provided by `ToolsOverviewBloc` because it isn't under the `BlocProvider<ToolsOverviewBloc>`. (Not displayed in the widget tree, because it is under `TodosOverviewPage`)
 But, importantly, because of the [architectural decisions](#commentary), it doesn't need any access to that.
-
-
-## Home
-
-### HomeState
-
-There are only two states associated with the two screens: `todos` and `stats`. EditTodo is not a screen controlled by the Home Cubit.
-
-[home_state.dart.md](_snippets/flutter_todos_tutorial/lib/home_state.dart.md ':include') [//]: # (HCTOKEN)
-
-### HomeCubit
-
-A cubit is appropriate due to the simplicity of the business logic. We have one function `setTab` to change the tab.
-
-[home_cubit.dart.md](_snippets/flutter_todos_tutorial/lib/home_cubit.dart.md ':include') [//]: # (HCTOKEN)
-
-### HomeView
-
-`view.dart` manages the export.
-
-[view.dart2.md edit](_snippets/flutter_todos_tutorial/lib/view.dart2.md ':include') [//]: # (HCTOKEN)
-
-`home_page.dart` is the UI page view.
-
-[home_page.dart.md](_snippets/flutter_todos_tutorial/lib/home_page.dart.md ':include') [//]: # (HCTOKEN)
-
-It is instructive to look at the structure using Flutter Inspector. This is the widget tree:
-
-![HomePage_widget_tree.png](_snippets/flutter_todos_tutorial/images/HomePage_widget_tree.png)
-
-`HomePage` is near the top, followed by `BlocProvider<HomeCubit>`. The next widget, `Homeview` uses the `HomeCubit` state via the following line:
-
-```dart
-Widget build(BuildContext context) {
-  final selectedTab = context.select((HomeCubit cubit) => cubit.state.tab);
-  //...
-```
-
-BlocBuilders and BlocListeners could be used, but they are unnecessary. The `context.select` will listen for any changes and trigger a rebuild.
-
----
-
-`BottomAppBar` is several steps below. The key line for is when the cubit function call is sent from the UI to the cubit. 
-
-```dart
-    onPressed: () => context.read<HomeCubit>().setTab(value),
-```
-
-This is the key line, and uses a `context.read`.
-
-!> `context.read` doesn't listen for changes, but this is just used to access to `HomeCubit` to call the `setTab`, so no updating is needed.
-
 
 ## Full Source
 
