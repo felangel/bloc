@@ -18,9 +18,8 @@
     - [Nekonečný list](flutterinfinitelisttutorial.md)
     - [**Přihlašování** <sup>✨</sup>](flutterlogintutorial.md)
     - [**Počasí** <sup>✨</sup>](flutterweathertutorial.md)
-    - [Plánovač](fluttertodostutorial.md)
+    - [**Plánovač** <sup>✨</sup>](fluttertodostutorial.md)
     - [**Firebase přihlašování** <sup>✨</sup>](flutterfirebaselogintutorial.md)
-    - [Firestore plánovač](flutterfirestoretodostutorial.md)
   - AngularDart
     - [Počítadlo](angularcountertutorial.md)
   - Flutter + AngularDart

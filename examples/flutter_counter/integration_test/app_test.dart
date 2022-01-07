@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_counter/main.dart' as app;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
   group('CounterApp', () {
     testWidgets('renders correct AppBar text', (tester) async {
-      await tester.pumpApp();
+      mockHydratedStorage(app.e2e);
 
       expect(find.text('Counter'), findsOneWidget);
     });
@@ -49,7 +48,7 @@ void main() {
 
 extension on WidgetTester {
   Future<void> pumpApp() async {
-    app.main();
+    mockHydratedStorage(app.e2e);
     await pumpAndSettle();
   }
 
@@ -66,4 +65,19 @@ extension on WidgetTester {
     );
     await pump();
   }
+}
+
+class MockStorage extends Mock implements Storage {}
+
+T mockHydratedStorage<T>(T Function() body, {Storage? storage}) {
+  return HydratedBlocOverrides.runZoned<T>(
+    body,
+    storage: storage ?? _buildMockStorage(),
+  );
+}
+
+Storage _buildMockStorage() {
+  final storage = MockStorage();
+  when(() => storage.write(any(), any<dynamic>())).thenAnswer((_) async {});
+  return storage;
 }

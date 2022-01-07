@@ -18,9 +18,8 @@
     - [**Infinite List** <sup>✨</sup>](flutterinfinitelisttutorial.md)
     - [**Login** <sup>✨</sup>](flutterlogintutorial.md)
     - [**Weather** <sup>✨</sup>](flutterweathertutorial.md)
-    - [Todos](fluttertodostutorial.md)
-    - [**Firebase Login** <sup>✨</sup>](flutterfirebaselogintutorial.md)
-    - [Firestore Todos](flutterfirestoretodostutorial.md)
+    - [**Todos** <sup>✨</sup>](fluttertodostutorial.md)
+    - [**Firebase Login** <sup>✨</sup>](flutterfirebaselogintutorial.md)    
   - AngularDart
     - [Counter](angularcountertutorial.md)
   - Flutter + AngularDart
