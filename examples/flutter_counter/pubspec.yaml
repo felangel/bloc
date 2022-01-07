@@ -13,18 +13,12 @@ dependencies:
     path: ../../packages/bloc
   flutter_bloc:
     path: ../../packages/flutter_bloc
-  flutter_services_binding: ^0.1.0
-  hydrated_bloc:
-    path: ../../packages/hydrated_bloc
-  path_provider: ^2.0.0
 
 dependency_overrides:
   bloc:
     path: ../../packages/bloc
   flutter_bloc:
     path: ../../packages/flutter_bloc
-  hydrated_bloc:
-    path: ../../packages/hydrated_bloc
   bloc_test:
     path: ../../packages/bloc_test
 
@@ -34,8 +28,6 @@ dev_dependencies:
   bloc_test:
     path: ../../packages/bloc_test
   mocktail: ^0.2.0
-  test_flutter_services_binding:
-    path: /Users/felix/Development/github.com/felangel/test_flutter_services_binding
   integration_test:
     sdk: flutter
 
