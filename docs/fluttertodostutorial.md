@@ -8,178 +8,104 @@
 
 ## Key Topics
 
-- Observe state changes with [BlocObserver](/coreconcepts?id=blocobserver).
-- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
-- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
-- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget which invokes the listener code in response to state changes in the bloc.
-- Using 3 Blocs and  1 Cubit. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
-- Uses a [Repository and API layer](architecture/repository) separately for the data.
-- [RespositoryProvider](/flutterbloccoreconcepts?id=respositoryprovider), a flutter widget to provide a repository to its children.
-- Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
-- [MultiBlocListener](/flutterbloccoreconcepts?id=multibloclistener), a Flutter widget that merges multiple BlocListener widgets into one.
+- [Bloc and Cubit](/coreconcepts?id=cubit-vs-bloc) to manage the various feature states.
+- [Layered Architecture](/architecture) for separation of concerns and to facilitate reusability.
+- [BlocObserver](/coreconcepts?id=blocobserver) to observe state changes.
+- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), a Flutter widget which provides a bloc to its children.
+- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), a Flutter widget that handles building the widget in response to new states.
+- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget that handlers performing side-effects in response to state changes.
+- [RespositoryProvider](/flutterbloccoreconcepts?id=respositoryprovider), a Flutter widget to provide a repository to its children.
+- [Equatable](/faqs?id=when-to-use-equatable) to prevent unnecessary rebuilds.
+- [MultiBlocListener](/flutterbloccoreconcepts?id=multibloclistener), a Flutter widget that reduces nesting when using multiple BlocListeners.
+
+## Overview
+
+[INSERT LAYERED ARCHITECTURE DIAGRAM HERE]
 
 ## todos_api
 
-[pubspec.yaml](_snippets/flutter_todos_tutorial/packages/pubspec.yaml.md ':include')
+The `todos_api` package will export a generic interface for interacting/managing todos. Later we'll implement the `TodosApi` using `shared_preferences` but having an abstraction will make it easy to support other implementations without having to change any other part of our application. For example, we can later add a `FirestoreTodosApi` which uses `cloud_firestore` instead of `shared_preferences` with minimal code changes to the rest of the application. 
 
-The main `todos_api.dart` file specifies the interfaces that an API is expected to have. 
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_api/pubspec.yaml ':include')
 
-If we add another data provider, like `cloud_firestore`, all we have to do is make sure this API interface is followed. If we do that, then almost no other code needs to change. The  only change needed is that we will need to establish the connection to the service at app startup.
-
-[todos_api.dart.md](_snippets/flutter_todos_tutorial/packages/todos_api.dart2.md ':include')
+[todos_api.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_api/lib/src/todos_api.dart ':include')
 
 ### Todo model
 
-Now is a good time to introduce the model for a Todo.
+Now is a good time to introduce the model for a `Todo`.
 
-The first thing of note is that the `Todo` model doesn't live in our app. It is set in a separate package, in this case the `todos_api`.
+The first thing of note is that the `Todo` model doesn't live in our app -- it's part of the `todos_api` package. This is because the `TodosApi` defines APIs that returns/accept `Todo` objects and the model is a Dart representation of the raw Todo object that will be stored/retrieved.
 
-The Constructor shows the fields associated with a Todo are four:
-- `id` - either provided or set by Uuid in line `//1`.
-- `title`,
-- `description`, and
-- `isCompleted`
+The `Todo` model uses [json_serializable](https://pub.dev/packages/json_serializable) to handle the json (de)serialization. If you are following along you will have to run the [code generation step](https://pub.dev/packages/json_serializable#running-the-code-generator) to resolve the compiler errors.
 
-and described in the code comments.
-
-```dart
-class Todo extends Equatable {
-  /// {@macro todo}
-  Todo({
-    String? id,
-    required this.title,
-    this.description = '',
-    this.isCompleted = false,
-  }) : 
-        id = id ?? const Uuid().v4(); // 1
-  ...
-  
-  /// The unique identifier of the todo.
-  ///
-  /// Cannot be empty.
-  final String id;
-
-  /// The title of the todo.
-  ///
-  /// Note that the title may be empty.
-  final String title;
-
-  /// The description of the todo.
-  ///
-  /// Defaults to an empty string.
-  final String description;
-
-  /// Whether the todo is completed.
-  ///
-  /// Defaults to `false`.
-  final bool isCompleted;
-}
-```
-
-<!--- there is an error. The assertion is two parts. If none is provided, it should be null or not empty. After the Uuid, it should check that (id != null && id.isNotEmpty). -->
-
-Here is the complete file that includes `@JsonSerializable()` annotations. To build the project, you will have to run the [code generation](https://pub.dev/packages/json_serializable#running-the-code-generator) before building your package.
-
-[todo.dart.md](_snippets/flutter_todos_tutorial/packages/todo.dart.md ':include')
+[todo.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_api/lib/src/models/todo.dart ':include')
 
 `json_map.dart` provides a `typedef` for code checking and linting.
 
-[json_map.dart.md](_snippets/flutter_todos_tutorial/packages/json_map.dart.md ':include')
+[json_map.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_api/lib/src/models/json_map.dart ':include')
 
-The model of the `Todo` is specified in one place only: `todos_api/models/todo.dart`.
+The model of the `Todo` is defined in: `todos_api/models/todo.dart` and is exported by `package:todos_api/todos_api.dart`.
+### Streams vs Futures
 
-By specifying in one place, we know that if we make any changes, they will propagate everywhere needed. If there is a breaking change, we will know either via our linter, a failed test, or a runtime error.
+In a previous version of this tutorial, the `TodosApi` was `Future`-based rather than `Stream`-based.
+
+For an example of a `Future`-based API see [Brian Egan's implementation in his Architecture Samples](https://github.com/brianegan/flutter_architecture_samples/tree/master/todos_repository_core).
+
+A `Future`-based implementation could consist of two methods: `loadTodos` and `saveTodos` (note the plural). This means, a full list of Todos must be provided to the method each time.
+
+- One limitation of this approach is that the standard CRUD (Create, Read, Update, and Delete) operation requires sending the full list of Todos with each call. For example, on an Add Todo screen, one cannot just send the added todo item. Instead, we must keep track of the entire list and provide the entire new list of todos when persisting the updated list.
+- A second limitation is that `loadTodos` is a one-time delivery of data. The app must contain logic to ask for updates periodically. This is okay if an app is for a single-user, on a single device, and not connected to the cloud; however, many modern apps support
+  - a single user signed in on multiple devices at once
+  - multiple users adding to the same data-set (like a group todo-list)
+
+As a result, in the current implementation, the `TodosApi` exposes a `Stream<List<Todo>>` via `getTodos()` which will report real-time updates to all subscribers when the list of todos has changed.
+
+In addition, Todos can be created, deleted, or updated individually. For example, both deleting and saving a Todo are done with only the `todo` as the argument. It's not necessary to provide the newly updated list of todos each time.
 
 ## local_storage_todos_api
 
-This package implements the todos_api using local storage.
+This package implements the `todos_api` using the [`shared_preferences`](https://pub.dev/packages/shared_preferences) package.
 
-[pubspec.yaml2.md](_snippets/flutter_todos_tutorial/packages/pubspec.yaml2.md ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/local_storage_todos_api/pubspec.yaml ':include')
 
-[local_storage_todos_api.dart2.md](_snippets/flutter_todos_tutorial/packages/local_storage_todos_api.dart2.md ':include')
-
-### Stream vs Fetch
-
-In an older version of this tutorial, Streams were not used. Instead a "fetch" pattern is used. It is instructive to look at the difference between a Stream approach and a "fetch" approach.
-
-The repository interface in a fetch might be:
-
-```dart
-// NOT USED, SHOWN FOR COMPARISON
-abstract class OldTodosRepository {
-  /// Loads todos first from File storage. If they don't exist or encounter an
-  /// error, it attempts to load the Todos from a Web Client.
-  Future<List<TodoEntity>> loadTodos();
-
-  // Persists todos to local disk and the web
-  Future saveTodos(List<TodoEntity> todos);
-}
-```
-
-The above is based on the implementation by [Brian Egan](https://github.com/brianegan).
-His TodosRepository is [described here](https://github.com/brianegan/flutter_architecture_samples/tree/master/todos_repository_core).
-It is shared among all of the [Todo Architecture Samples](https://github.com/brianegan/flutter_architecture_samples).
-
-Brian Egan's `TodosRepository` has only two methods to `loadTodos` and to `saveTodos` (note the plural). Hence, a full list of Todos must be sent each time.
-
-- One limitation of this approach is that the standard CRUD (Create, Read, Update, and Delete) operation requires sending the full list of Todos with each repository call. For example, on an AddTodo type of screen, one cannot just send the added item. One must send the full list with the added item.
-- A second limitation is that `loadTodos` is a one-time delivery of data. `loadToDos` is not a Stream. The app must ask for updates. This is okay if an app is for a single-user, on a single device, and not connected to the cloud. However, many modern apps allow
-  - one user signed in on multiple devices at once
-  - multiple users adding to the same data repository (like a group todo-list)
-
-#### Stream approach
-
-The new way used here for `TodosRepository` has two defining differences from the original:
-1. The list of Todos is a Stream that can be subscribed to. (see `getTodos()` below)
-```dart
-/// Provides a [Stream] of all Todos.
-Stream<List<Todo>> getTodos() => _todosApi.getTodos();
-```
-
-2. Individual Todos can be created, deleted, or updated. For example, both deleting and saving a Todo are done with only the `todo` as the argument. The whole list isn't needed.
-```dart
-  Future<void> saveTodo(Todo todo) => _todosApi.saveTodo(todo);
-  Future<void> deleteTodo(String id) => _todosApi.deleteTodo(id);
-```
+[local_storage_todos_api.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/local_storage_todos_api/lib/src/local_storage_todos_api.dart ':include')
 
 ## todos_repository
 
-A [repository](/architecture?id=repository) should specify the interface that the application uses and may provide some other logic.
+A [repository](/architecture?id=repository) is part of the "business layer". A repository depends on one or more data providers that have no business value, and composes their public API into APIs that represent business value. In addition, having a repository layer helps abstract data-acquisition from the rest of the application allowing us to change where/how data is being stored without affecting other parts of the app.
 
-The main file `todos_repository.dart` defines the interface. The interface methods are described in the source code comments.
-
-[todos_repository.dart2.md](_snippets/flutter_todos_tutorial/packages/todos_repository.dart2.md ':include')
+[todos_repository.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_repository/lib/src/todos_repository.dart ':include')
 
 Instantiating or constructing the repository requires specifying a `TodosApi`, which we discussed earlier in this tutorial, so we added it as a dependency in our `pubspec.yaml`:
 
-[pubspec.yaml3.md](_snippets/flutter_todos_tutorial/packages/pubspec.yaml3.md ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_repository/pubspec.yaml ':include')
 
-### Helpers
+### Library Exports.
 
-This is the barrel file for our repository. Notice that the `Todo` model is exported and exposed to the main app via the repository.
+In addition to exporting the `TodosRepository` class, we also export the `Todo` model from the `todos_api` package from the `todos_repository` in order to prevent tight coupling between the application and the data providers.
 
-[todos_repository.dart.md](_snippets/flutter_todos_tutorial/packages/todos_repository.dart.md ':include')
+[todos_repository.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_repository/lib/todos_repository.dart ':include')
 
-A second helper file provides mocking for tests. It is in the source code, which we don't discuss in this tutorial. It can be viewed here:
-
-[todos_repository_test.dart.md](_snippets/flutter_todos_tutorial/packages/todos_repository_test.dart.md)
+We decided to re-export the same `Todo` model from the `todos_api` rather than re-defining a separate model in the `todos_repository` because in this case we are in complete control of the data model. In many cases, the data provider will not be something that you as a developer can control and in those cases it becomes increasingly important to maintain your own model definitions in the repository layer in order to maintain full control of the interface and API contract.
 
 ## App
 
-We'll start off by creating a brand new Flutter project using the `very_good_cli`. We'll use the default `very_good_core` template:
+We'll start off by creating a brand new Flutter project using the [`very_good_cli`](https://pub.dev/packages/very_good_cli). We'll use the default `very_good_core` template:
 
 ```sh
-very_good create flutter_todos
+very_good create flutter_todos --desc "An example todos app that showcases bloc state management patterns."
 ```
+
+?> **💡 Tip**: you can install `very_good_cli` via `dart pub global activate very_good_cli`.
 
 We can then replace the contents of `pubspec.yaml` with:
 
-[pubspec.yaml](_snippets/flutter_todos_tutorial/pubspec.yaml.md ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/pubspec.yaml ':include')
 
 and then install all the dependencies:
 
 ```sh
-very_good packages get
+very_good packages get --recursive
 ```
 
 ### App widget
@@ -188,40 +114,39 @@ very_good packages get
 
 `App` wraps a `RepositoryProvider` widget that provides the repository to all children/descendents. Since both `EditTodoPage` subtree and the `HomePage` subtree's are descendents, all the blocs and cubits can access the repository.
 
-`AppView` sets the MaterialApp and deals with them and localizations.
+`AppView` creates the `MaterialApp` and configures the theme and localizations.
 
-[app.dart.md](_snippets/flutter_todos_tutorial/lib/app.dart.md ':include') [//]: # (HCTOKEN)
-
+[app.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/app/app.dart ':include')
 
 ### Theme
 
-This provides theme information for light and dark themes.
+This provides theme definition for light and dark mode.
 
-[theme.dart.md](_snippets/flutter_todos_tutorial/lib/theme.dart.md ':include') [//]: # (HCTOKEN)
+[theme.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/theme/theme.dart ':include')
 
 ### Bootstrapping
 
-`bootstrap.dart` loads our BlocObserver and creates the instance of `TodosRepository()` via a constructor call.
+`bootstrap.dart` loads our `BlocObserver` and creates the instance of `TodosRepository`.
 
-[bootstrap.dart.md](_snippets/flutter_todos_tutorial/lib/bootstrap.dart.md ':include') [//]: # (HCTOKEN)
+[bootstrap.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/bootstrap.dart ':include')
 
 ### Main
 
-At the very top is `main.dart`. In this case, there are three versions.
+Our app's entrypoint is `main.dart`. In this case, there are three versions:
 
-The most notable thing is that this is where the implementation of the `todos_api` is imported. In this case, it is `local_storage_todos_api`.
+The most notable thing is that this is where the concrete implementation of the `todos_api` is instantiated -- in our case it's the `local_storage_todos_api`.
 
-|-main_development.dart
+#### `main_development.dart`
 
-[main_development.dart.md](_snippets/flutter_todos_tutorial/lib/main_development.dart.md ':include') [//]: # (HCTOKEN)
+[main_development.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/main_development.dart ':include')
 
-|-main_production.dart
+#### `main_staging.dart`
 
-[main_production.dart.md](_snippets/flutter_todos_tutorial/lib/main_production.dart.md ':include') [//]: # (HCTOKEN)
+[main_staging.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/main_staging.dart ':include')
 
-|-main_staging.dart
+#### `main_production.dart`
 
-[main_staging.dart.md](_snippets/flutter_todos_tutorial/lib/main_staging.dart.md ':include') [//]: # (HCTOKEN)
+[main_production.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/main_production.dart ':include')
 
 ### TodosOverview
 
