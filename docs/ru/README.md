@@ -95,7 +95,6 @@
 - [Weather](https://bloclibrary.dev/#/ru/flutterweathertutorial) - пример как создать приложение Weather с использованием пакетов `bloc` и `flutter_bloc`. Приложение использует `RefreshIndicator` для реализации "pull-to-refresh", а также динамическое создание тем.
 - [Todos](https://bloclibrary.dev/#/ru/fluttertodostutorial) - пример как создать приложение Todos с использованием пакетов `bloc` и `flutter_bloc`.
 - [Timer](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - пример как создать Timer, используя пакеты `bloc` и `flutter_bloc`.
-- [Firestore Todos](https://bloclibrary.dev/#/ru/flutterfirestoretodostutorial) - пример как создать приложение Todos, используя пакеты `bloc` и `flutter_bloc`, которые интегрируются с облачным сервисом Firestore.
 - [Shopping Cart](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - пример как создать приложение Shopping Cart с использованием пакетов `bloc` и `flutter_bloc` на основе [Flutter Samples](https://github.com/flutter/samples/tree/master/provider_shopper).
 - [Dynamic Form](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - пример использования пакетов `bloc` и `flutter_bloc` по реализации динамической формы, которая извлекает данные из хранилища.
 

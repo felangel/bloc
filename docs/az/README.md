@@ -95,7 +95,6 @@ Kitabxananın məqsədi _presentation_-ın (dizaynın) _businesss logic_-dən (h
 - [Hava](https://bloclibrary.dev/#/flutterweathertutorial) - `bloc` və `flutter_bloc` paketlərini istifadə edərək Hava tətbiqinin yaradılması haqqında nümunə. Tətbiq aşağı sürükləməklə yenilənmə üçün `RefreshIndicator` və dinamik mövzu (theme) dəyişilməsini istifadə edir.
 - [Todo-lar](https://bloclibrary.dev/#/fluttertodostutorial) -`bloc` və `flutter_bloc` paketlərindən istifadə edərək Todo-lar Tətbiqinin necə yaradılması haqqında nümunə.
 - [Taymer](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - `bloc` və `flutter_bloc` paketlərindən istifadə edərək Taymerin necə yaradılması haqqında nümunə.
-- [Firestore Todo-lar](https://bloclibrary.dev/#/flutterfirestoretodostutorial) `bloc` və `flutter_bloc` paketlərindən istifadə edərək və onları cloud firestore-a inteqrasiya edərək Todo-lar Tətbiqinin necə yaradılması haqqında nümunə.
 - [Alış-veriş səbəti](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - [flutter nümunələri](https://github.com/flutter/samples/tree/master/provider_shopper) əsasında `bloc` və `flutter_bloc` paketlərini istifadə edərək Alış-Veriş Səbəti tətbiqinin necə yaradılması haqqında nümunə.
 - [Dinamik Form](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - `bloc` və `flutter_bloc` paketlərini istifadə edərək repository-dən məlumatı əldə edən dinamik formun həyata keçirilməsi haqqında nümunə.
 

@@ -18,9 +18,8 @@
     - [Бесконечный список](ru/flutterinfinitelisttutorial.md)
     - [**Логин** <sup>✨</sup>](flutterlogintutorial.md)
     - [**Погода** <sup>✨</sup>](flutterweathertutorial.md)
-    - [Задачи](ru/fluttertodostutorial.md)
-    - [**Firebase логин** <sup>✨</sup>](flutterfirebaselogintutorial.md)
-    - [Firestore задачи](ru/flutterfirestoretodostutorial.md)
+    - [**Задачи** <sup>✨</sup>](ru/fluttertodostutorial.md)
+    - [**Firebase логин** <sup>✨</sup>](flutterfirebaselogintutorial.md)    
   - AngularDart
     - [Счетчик](ru/angularcountertutorial.md)
   - Flutter + AngularDart

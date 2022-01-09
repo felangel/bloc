@@ -95,7 +95,6 @@
 - [天气预报](https://bloclibrary.dev/#/flutterweathertutorial) - 如何使用`bloc`和`flutter_bloc`的包来制作一个天气预报的程序， 这个程序使用了`RefreshIndicator`从而实现了“下拉更新”，同时还有动态主题展示。
 - [备忘录](https://bloclibrary.dev/#/fluttertodostutorial) - 如何使用`bloc`和`flutter_bloc`的包来制作一个备忘录程序的示例
 - [计时器](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - 如何使用`bloc`和`flutter_bloc`的包来制作一个计时器的示例
-- [使用 Firebase 制作备忘录](https://bloclibrary.dev/#/flutterfirestoretodostutorial) - 如何使用`bloc`和`flutter_bloc`的包并整合 Firebase 来制作一个备忘录程序的示例
 - [购物车](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - 如何使用 `bloc` 和 `flutter_bloc`的包来制作一个购物车的示例 - 可参考(https://github.com/flutter/samples/tree/master/provider_shopper)
 - [动态表单（Dynamic Form )](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - 如何使用`bloc`和`flutter_bloc`的包来实现动态表单从而使得表单中的数据来自于一个存储库
 
