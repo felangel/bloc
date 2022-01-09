@@ -170,18 +170,17 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        expect(
-          find.byType(TodoDeletionConfirmationSnackBarContent),
-          findsOneWidget,
-        );
+        expect(find.byType(SnackBar), findsOneWidget);
 
-        final snackBar = tester.widget<TodoDeletionConfirmationSnackBarContent>(
-          find.byType(TodoDeletionConfirmationSnackBarContent),
-        );
+        final snackBar = tester.widget<SnackBar>(find.byType(SnackBar));
 
         expect(
-          snackBar.todo,
-          equals(mockTodos.first),
+          snackBar.content,
+          isA<Text>().having(
+            (text) => text.data,
+            'text',
+            contains(mockTodos.first.title),
+          ),
         );
       });
 
@@ -196,12 +195,11 @@ void main() {
           );
           await tester.pumpAndSettle();
 
-          final snackBar =
-              tester.widget<TodoDeletionConfirmationSnackBarContent>(
-            find.byType(TodoDeletionConfirmationSnackBarContent),
+          final snackBarAction = tester.widget<SnackBarAction>(
+            find.byType(SnackBarAction),
           );
 
-          snackBar.onUndo();
+          snackBarAction.onPressed();
 
           verify(
             () => todosOverviewBloc.add(

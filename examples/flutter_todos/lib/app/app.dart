@@ -25,8 +25,8 @@ class AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: FlutterTodosTheme.lightTheme,
-      darkTheme: FlutterTodosTheme.darkTheme,
+      theme: FlutterTodosTheme.light,
+      darkTheme: FlutterTodosTheme.dark,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: const HomePage(),

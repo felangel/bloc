@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class FlutterTodosTheme {
-  static ThemeData get lightTheme {
+  static ThemeData get light {
     return ThemeData(
       appBarTheme: const AppBarTheme(
         color: Color(0xFF13B9FF),
@@ -16,7 +16,7 @@ class FlutterTodosTheme {
     );
   }
 
-  static ThemeData get darkTheme {
+  static ThemeData get dark {
     return ThemeData(
       appBarTheme: const AppBarTheme(
         color: Color(0xFF13B9FF),

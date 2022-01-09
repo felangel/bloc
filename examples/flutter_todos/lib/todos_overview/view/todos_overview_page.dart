@@ -62,14 +62,21 @@ class TodosOverviewView extends StatelessWidget {
               messenger
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
-                  TodoDeletionConfirmationSnackBar(
-                    todo: deletedTodo,
-                    onUndo: () {
-                      messenger.hideCurrentSnackBar();
-                      context
-                          .read<TodosOverviewBloc>()
-                          .add(const TodosOverviewUndoDeletionRequested());
-                    },
+                  SnackBar(
+                    content: Text(
+                      l10n.todosOverviewTodoDeletedSnackbarText(
+                        deletedTodo.title,
+                      ),
+                    ),
+                    action: SnackBarAction(
+                      label: l10n.todosOverviewUndoDeletionButtonText,
+                      onPressed: () {
+                        messenger.hideCurrentSnackBar();
+                        context
+                            .read<TodosOverviewBloc>()
+                            .add(const TodosOverviewUndoDeletionRequested());
+                      },
+                    ),
                   ),
                 );
             },
