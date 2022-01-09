@@ -20,7 +20,7 @@
 
 ## Setup
 
-We'll start off by creating a brand new Flutter project using the [`very_good_cli`](https://pub.dev/packages/very_good_cli). We'll use the default `very_good_core` template:
+We'll start off by creating a brand new Flutter project using the [very_good_cli](https://pub.dev/packages/very_good_cli).
 
 ```sh
 very_good create flutter_todos --desc "An example todos app that showcases bloc state management patterns."
@@ -28,7 +28,7 @@ very_good create flutter_todos --desc "An example todos app that showcases bloc 
 
 ?> **💡 Tip**: you can install `very_good_cli` via `dart pub global activate very_good_cli`.
 
-Next we'll create the `todos_api`, `local_storage_todos_api`, and `todos_repository` packages:
+Next we'll create the `todos_api`, `local_storage_todos_api`, and `todos_repository` packages using `very_good_cli`:
 
 ```sh
 # create package:todos_api under packages/todos_api
@@ -45,7 +45,7 @@ We can then replace the contents of `pubspec.yaml` with:
 
 [pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/pubspec.yaml ':include')
 
-and finally install all the dependencies:
+Finally, we can install all the dependencies:
 
 ```sh
 very_good packages get --recursive
@@ -74,7 +74,33 @@ Modularizing our project like this has many benefits including but not limited t
 
 ![Todos Architecture Diagram](_snippets/flutter_todos_tutorial/images/todos_architecture_light.png)
 
+> Layering our code is incredibly important and helps us iterate quickly and with confidence. Each layer has a single responsibility and can be used and tested in isolation. This allows us to keep changes contained to a specific layer in order to minimize the impact on the entire application. In addition, layering our application allows us to easily reuse libraries across multiple projects (especially with respect to the data layer).
+
+Our application consists of three main layers:
+
+- The Data Layer
+- The Domain Layer
+- The Feature Layer
+  - Presentation/UI (Widgets)
+  - Business Logic (Blocs/Cubits)
+
+**Data Layer**
+
+This layer is the lowest layer and is responsible for retrieving raw data from external sources such as a databases, APIs, etc. Packages in the data layer generally should not depend on any UI and can be reused and even published on [pub.dev](https://pub.dev) as a standalone package. In this example, our data layer consists of the `todos_api` and `local_storage_todos_api` packages.
+
+**Domain Layer**
+
+This layer composes one or more data providers and applies "business rules" to the data. Each component in this layer is called a repository and each repository generally manages a single domain. Packages in the repository layer should generally only interact with the data layer. In this example, our repository layer consists of the `todos_repository` package.
+
+**Feature Layer**
+
+This layer contains all of the application-specific features/use-cases. Each feature generally consists of some UI and business logic. Features should generally be independent of other features so that they can easily be added/removed without impacting the rest of the codebase. Within each feature, the state of the feature along with any business logic is managed by blocs. Blocs interact with zero or more repositories and react to events to emit states which the UI components react to. Widgets within each feature should generally only depend on the corresponding bloc and render UI based on the current state. The UI can notify the bloc of user input via events. In this example, our application will consist of the `home`, `todos_overview`, `stats`, and `edit_todos` features.
+
+Now that we've gone over the layers at a high level, let's start building our application from the bottom-up starting with the data layer!
+
 ## Data Layer
+
+The data layer is the lowest layer in our application and consists of raw data providers. Packages in this layer are primarily concerned with where/how data is coming from. In this case our data layer will consist of the `TodosApi` which is an interface and the `LocalStorageTodosApi` which is an implementation of the `TodosApi` backed by `shared_preferences`.
 
 ### TodosApi
 
@@ -86,7 +112,7 @@ The `todos_api` package will export a generic interface for interacting/managing
 
 #### Todo model
 
-Now is a good time to introduce the model for a `Todo`.
+Next we'll define our `Todo` model.
 
 The first thing of note is that the `Todo` model doesn't live in our app -- it's part of the `todos_api` package. This is because the `TodosApi` defines APIs that returns/accept `Todo` objects and the model is a Dart representation of the raw Todo object that will be stored/retrieved.
 
@@ -253,7 +279,7 @@ Let's create `todos_overview/bloc/todos_overview_event.dart` and define the even
 
 #### TodosOverviewState
 
-Let's create `todos_overview/bloc/todos_overview_state.dart` and define the different states we'll need to handle.
+Let's create `todos_overview/bloc/todos_overview_state.dart` and define the state.
 
 [todos_overview_state.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_state.dart ':include')
 
@@ -271,16 +297,15 @@ Let's create `todos_overview/bloc/todos_overview_bloc.dart` and get started defi
 
 [todos_overview_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_bloc.dart ':include')
 
-> To review, this bloc is like all blocs: `TodosOverviewBloc` will:
+Just like all blocs, the `TodosOverviewBloc` will:
 
-1. Respond to UI events.
-2. Emit states.
-3. React to data from the repository layer
-4. Implement the business logic needed to transform incoming events into zero or more states.
+- React to data from the repository layer.
+- Handle events from the UI.
+- Contain the logic needed to transform incoming events into zero or more states.
 
-The constructor creates handlers for the UI events. Notice that the events in the earlier section [TodosOverviewEvent](#todos_overview_event.dart) exactly match the `on` handlers here. They are then mapped to private methods for the class.
+?> **Note**: Event handlers are registered in the constructor body. Each event handler corresponds to a private method which contains logic to emit zero or more states in response to the respective event.
 
-Another thing to notice is that `TodosRepository` needs to be passed as an argument when the `TodosOverviewBloc` is created, like in a `BlocProvider` widget. The bloc is not creating an instance of the repository internally. Instead, it relies on an instance of the repository to be injected via constructor.
+?> **Note**: The bloc does not create an instance of the `TodosRepository` internally. Instead, it relies on an instance of the repository to be injected via constructor.
 
 ##### onSubscriptionRequested
 
@@ -304,11 +329,7 @@ Now that the subscription is handled, we handle the other events, like adding, m
 
 `_onTodoSaved` simply calls `_todosRepository.saveTodo(event.todo)`.
 
-> Notice that `emit` is never called. This raises the question, how does the state get updated? If the state isn't updated, the UI won't update.
-
-!> The answer is that the repository will send/stream an updated `List<Todo>`. That update is handled in the `await emit.forEach<List<Todo>>()` in `_onSubscriptionRequested()`. When that happens, then the `emit()` occurs.
-
-!> In fact, *none* of the other event handlers emit states with modified `List<Todos>` directly. The pattern is always that (1) the handlers change the Todo list with the `TodosRepository`, and then (2) the new state is streamed from `TodosRepository` , to `TodosOverviewBloc._onSubscriptionRequested` and then finally to the UI via `BlocBuilders` and `BlocListeners`.
+?> **Note**: `emit` is never called. This raises the question, how does the state get updated? If the state isn't updated, the UI won't update. The answer is that the repository will send/stream an updated `List<Todo>`. That update is handled in the `await emit.forEach<List<Todo>>()` in `_onSubscriptionRequested()`. When that happens, then the `emit()` occurs. In fact, *none* of the other event handlers emit states with modified `List<Todos>` directly. The pattern is always that (1) the handlers change the Todo list with the `TodosRepository`, and then (2) the new state is streamed from `TodosRepository` , to `TodosOverviewBloc._onSubscriptionRequested` and then finally to the UI via `BlocBuilders` and `BlocListeners`.
 
 Let's now cover the other methods for Undo and ViewFiltering.
 
@@ -318,7 +339,7 @@ The undo feature allows undeleting the last deleted item. This business logic is
 
 `_onTodoDeleted` in the bloc does two things. First, it emits a new state with the `Todo` to be deleted. Then, it deletes the `Todo` via a call to the repository.
 
-Eventually (outside of this code), the state is emitted via the Stream. For more details on this, see a discussion of [event flow](#commentary-event-flow)
+Eventually (outside of this code), the state is emitted via the Stream. For more details on this, see a discussion of [data flow](#data-flow)
 
 When the undo deletion request event comes from the UI, `_onUndoDeletionRequested` is run.
 
@@ -329,7 +350,7 @@ When the undo deletion request event comes from the UI, `_onUndoDeletionRequeste
 - Finally, reverts the deletion.
 
 
-!> Notice: like in other bloc event handler methods, the _onUndoDeletionRequested doesn't directly modify the List. It goes through the repository, which then updates via the stream.
+?> **Note**: `_onUndoDeletionRequested` and other event handlers don't directly modify the list of todos. Instead, they notify the repository which emits an updated list via the todos stream.
 
 ##### Filtering
 
@@ -337,7 +358,7 @@ View filtering is handled via `_onFilterChanged`. The relevant code emits a new 
 
 #### Models
 
-!> Note: You might be expecting a model for a list of Todos or for `TodosOverview` here. They aren't here. Why? Because we are using bloc, the overall "model" for ToolsOverview is the bloc for ToolsOverview, specifically [ToolsOverviewState](#TodosOverview-States), which holds the Todo list and 3 other state variables.
+?> **Note**: You might be expecting a model for a list of Todos or for `TodosOverview` here. They aren't here. Why? Because we are using bloc, the overall "model" for ToolsOverview is the bloc for ToolsOverview, specifically [ToolsOverviewState](#TodosOverviewState), which holds the Todo list and 3 other state variables.
 
 There is one model file and that deals with the view filtering.
 
@@ -369,7 +390,7 @@ A simplified representation of the widget tree for the `TodosOverviewPage` is:
 
 Notice that just as with the `Home` feature, the page provides and instance of the `TodosOverviewBloc` to the subtree via `BlocProvider<TodosOverviewBloc>`. This scopes the `TodosOverviewBloc` to just the widgets below `TodosOverviewPage`.
 
-> Notably, `EditTodoPage`, described later, won't have direct access to `TodosOverviewBloc`.  `EditTodoPage` will use communicate with a separate bloc to adjust with the list of Todos. And the repository's stream will push updates to the `TodosOverviewBloc`, which then will tell `TodosOverviewPage` to re-render. The key is the use of Streams. See a discussion of [event flow](#commentary-event-flow).
+> Notably, `EditTodoPage`, described later, won't have direct access to `TodosOverviewBloc`.  `EditTodoPage` will use communicate with a separate bloc to adjust with the list of Todos. And the repository's stream will push updates to the `TodosOverviewBloc`, which then will tell `TodosOverviewPage` to re-render. The key is the use of Streams. See the discussion of [data flow](#data-flow).
 
 There are three widgets that are listening for changes in the `TodosOverviewBloc`.
 
@@ -434,9 +455,9 @@ The stats feature displays statistics about the active and completed todos.
 
 `StatsBloc` depends on the `TodosRepository` just like `TodosOverviewBloc`. It subscribes to the todos stream via `_todosRepository.getTodos`.
 
-> How does state change? State changes are triggered by the stream, not by any UI event. See a discussion of [event flow](#commentary-event-flow).
+> How does state change? State changes are triggered by the stream, not by any UI event. See the discussion of [data flow](#data-flow).
 
-> How will the the UI update? The StatsBloc gets notified of todos updates via the `onData` in `emit.forEach()` and emits a new state. When the state changes, the `BlocBuilder<StatsBloc>` in [stats_page.dart](#stats-view) will rebuild. See a discussion of [event flow](#commentary-event-flow).
+> How will the the UI update? The StatsBloc gets notified of todos updates via the `onData` in `emit.forEach()` and emits a new state. When the state changes, the `BlocBuilder<StatsBloc>` in [stats_page.dart](#stats-view) will rebuild. See the discussion of [data flow](#data-flow).
 
 [stats_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/stats/bloc/stats_bloc.dart ':include')
 
@@ -462,87 +483,77 @@ A simplified representation of the widget tree for the `StatsPage` is:
 
 Notice how it does not directly get any information from the `List<Todos>` which lives in `TodosOverviewState`. The stats feature is self-contained -- the UI gets all the information from the `StatsBloc` and the `StatsState`.
 
-!> The `TodosOverviewBloc` and `StatsBloc` both communicate with the `TodosRepository` but it is important to note there is no direct communication between the blocs. See a discussion of [event flow](#commentary-event-flow).
+!> The `TodosOverviewBloc` and `StatsBloc` both communicate with the `TodosRepository` but it is important to note there is no direct communication between the blocs. See the discussion of [data flow](#data-flow).
 
 ### EditTodo
+
+The `EditTodo` feature allows users to edit an existing todo item and save the changes.
 
 #### EditTodoState
 
 `EditTodoState` keeps track of the information needed when editing a Todo. It has the following properties:
 
-1. `status` - Tracks the status, mindful of the async possibilities that the repository or data providers are offline.
-2. `initialTodo` - The initial Todo that we are editing.  
+- `status` - Tracks the async status.
+- `initialTodo` - The initial Todo that we are editing.
+- `title` - The title of the Todo. This will be continuosly updated as the UI is updated.
+- `description` - The description of the Todo.
 
-  > NOTE: This bloc will also handled creation of a new Todo. In that case, the initial Todo could be null, hence the nullable `Todo?` in the code below.
+?> **Note**: This bloc will also handle creating a new todo which is why the todo is nullable.
 
-3. `title` - The title of the Todo. Note: This will be continuosly updated as the UI is updated. Hence we avoid needing to use a TextEditingController.
-4. `description` - The description of the Todo.
-
-[edit_todo_state.dart.md](_snippets/flutter_todos_tutorial/lib/edit_todo_state.dart.md ':include')
+[edit_todo_state.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_state.dart ':include')
 
 #### EditTodoEvent
 
-1. `EditTodoEvent` - When the UI starts an edit (or a new Todo). Note: No arguments. The Todo's information is provided to the state of the bloc.
-2. `EditTodoTitleChanged` - When the title changes, even if by one character. Note: requires one argument, the title from the UI. The bloc will later change the state and emit a new state.
-3. `EditTodoDescriptionChanged` - When the description changes, even if by one character. Note: requires one argument, the title from the UI. The bloc will later change the state and emit a new state.
-4. `EditTodoSubmitted` - Submitting, when editing is complete. Note: No arguments. The Todo's edits are stored in the state of the bloc.
+The different events the bloc will react to are:
 
-[edit_todo_event.dart.md](_snippets/flutter_todos_tutorial/lib/edit_todo_event.dart.md ':include')
+- `EditTodoTitleChanged` - When the title changes, even if by one character. Requires one argument: the title from the UI. The bloc will later change the state and emit a new state.
+- `EditTodoDescriptionChanged` - When the description changes, even if by one character. Requires one argument: the title from the UI. The bloc will later change the state and emit a new state.
+- `EditTodoSubmitted` - Submitting, when editing is complete. The Todo's edits are stored in the state of the bloc.
+
+[edit_todo_event.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_event.dart ':include')
 
 #### EditTodoBloc
 
-`EditTodoBloc` does connect to `TodosRepository`, just like `TodosOverviewBloc` and `StatsBloc`. 
+`EditTodoBloc` depends on the `TodosRepository`, just like `TodosOverviewBloc` and `StatsBloc`. 
 
-!> Unlike the other Blocs, `EditTodoBloc` does not subscribe to `_todosRepository.getTodos()`. It is a "write-only" bloc. It doesn't need to read any information from the repository.
+!> Unlike the other Blocs, `EditTodoBloc` does not subscribe to `_todosRepository.getTodos`. It is a "write-only" bloc meaning it doesn't need to read any information from the repository.
 
-[edit_todo_bloc.dart.md](_snippets/flutter_todos_tutorial/lib/edit_todo_bloc.dart.md ':include')
+[edit_todo_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_bloc.dart ':include')
 
-##### Event Flow
+##### Data Flow
 
-> How will the the Stats UI and the main list of Todos UI know to update? Where in the code does it tell the other screens to redraw?
+> It's important to note that even though there are many features that depend on the same list of todos, there is no bloc-to-bloc communication. Instead, all features are independent of each other and rely on the `TodosRepository` to listen for changes in the list of todos as well as perform mutations on the todos list.
 
- The other parts of the UI gets a state change notification because of their subscription to `TodosRepository`.  There is no direct bloc-to-bloc communication. EditTodosBloc has zero logic about what needs to be done elsewhere. Everything goes through the repository.
+For example, the `EditTodos` doesn't know anything about the `TodosOverview` or `Stats` features.
 
 This is best explained with the help of a widget tree diagram:
 
-![EditTodoSubmitted_widget_tree_flow.png](_snippets/flutter_todos_tutorial/images/EditTodoSubmitted_widget_tree_flow.png)
+When the UI submits a `EditTodoSubmitted` event:
 
-This is the flow when the UI submits a `EditTodoSubmitted` event. 
-
-1. The `EditTodoBloc` handles the business logic to update the `TodosRepository`. (In the diagram, the arrow and the Blue box labelled 1. It starts in the bottom left.)
-2. `TodosRepository` then notifies `TodosOverviewBloc`. (Blue box 2 and arrow.)
-3. `TodosOverviewBloc` notifies the listeners which then re-render widgets. (Blue box 3 and arrow.)
-4. `TodosRepository` also notifies `StatsBloc`. (Blue box 4 and arrow.) The listening widgets will also re-render.
+1. The `EditTodoBloc` handles the business logic to update the `TodosRepository`.
+2. `TodosRepository` then notifies `TodosOverviewBloc` and `StatsBloc`.
+3. `TodosOverviewBloc` and `StatsBloc` notify the UI which then re-renders with the updated state.
 
 #### EditTodoPage
 
-[edit_todo_page.dart.md](_snippets/flutter_todos_tutorial/lib/edit_todo_page.dart.md ':include')
+[edit_todo_page.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/edit_todo/view/edit_todo_page.dart ':include')
 
-This page uses `BlocListener` rather than `BlocBuilder` for a very specific reason. `BlocListener` here is restricting re-rendering to after we submit via `current.status == EditTodoStatus.success` in the code snippet below.
+Just like with the previous features, the `EditTodosPage` provides an instance of the `EditTodosBloc` via `BlocProvider`. Unlike the other features, the `EditTodosPage` is a separate route which is why it exposes a `static` `route` method. This makes it easy to push the `EditTodosPage` onto the navigation stack via `Navigator.of(context).push(...)`.
 
-```dart
-return BlocListener<EditTodoBloc, EditTodoState>(
-  listenWhen: (previous, current) =>
-    previous.status != current.status &&
-    current.status == EditTodoStatus.success,
-// ...
+A simplified representation of the widget tree for the `EditTodosPage` is:
+
 ```
-
-> What happens if we use `BlocBuilder` instead? Our UI will re-render with every keystroke. For example, if we type "LUNCH", it will re-render 5 times. Each modification generates a new `EditTodoState` which stores the current working string.
- The 5 changes are for "L", "LU", "LUN", "LUNC", and "LUNCH".
-
-> Another common approach is to use a TextEditingController to store the local state, but that [requires a StatefulWidget](https://stackoverflow.com/questions/59652639/why-is-texteditingcontroller-always-used-in-stateful-widgets). In this tutorial, we construct zero stateful widgets to demonstrate that bloc can eliminate most needs to use a stateful widget directly. (Stateful widgets are still used in the underlying abstraction layers (aka packages), like [provider](https://pub.dev/documentation/provider/latest/). But those low-level details are abstracted away by bloc.)
-
-
-It is instructive to look at the structure using Flutter Inspector. This is the widget tree:
-
-![EditTodosPage_widget_tree.png](_snippets/flutter_todos_tutorial/images/EditTodosPage_widget_tree.png)
-
-Notice how `EditTodosPage` is in the bottom half of the displayed widget tree. It is a sibling to `HomePage`. 
-
-!> Does `EditTodosPage` need access to the whole list of Todos or other state? It has no access to the list of Todos provided by `ToolsOverviewBloc` because it isn't under the `BlocProvider<ToolsOverviewBloc>`. (Not displayed in the widget tree, because it is under `TodosOverviewPage`)
-But, importantly, because of the [architectural decisions](#commentary), it doesn't need any access to that.
+├── BlocProvider<EditTodosBloc>
+│   └── EditTodosPage
+│       └── BlocListener<EditTodosBloc>
+│           └── EditTodosView
+│               ├── TitleField
+│               ├── DescriptionField
+│               └── Floating Action Button
+```
 
 ## Summary
 
-The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos).
+That's it, we have completed the tutorial! 🎉
+
+The full source code for this example, including unit and widget tests, can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos).
