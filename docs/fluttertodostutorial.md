@@ -43,7 +43,7 @@ very_good create packages/todos_repository -t dart_pkg —desc "A repository tha
 
 We can then replace the contents of `pubspec.yaml` with:
 
-[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/pubspec.yaml ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/pubspec.yaml ':include')
 
 Finally, we can install all the dependencies:
 
@@ -106,9 +106,9 @@ The data layer is the lowest layer in our application and consists of raw data p
 
 The `todos_api` package will export a generic interface for interacting/managing todos. Later we'll implement the `TodosApi` using `shared_preferences`. Having an abstraction will make it easy to support other implementations without having to change any other part of our application. For example, we can later add a `FirestoreTodosApi`, which uses `cloud_firestore` instead of `shared_preferences`, with minimal code changes to the rest of the application. 
 
-[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_api/pubspec.yaml ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/pubspec.yaml ':include')
 
-[todos_api.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_api/lib/src/todos_api.dart ':include')
+[todos_api.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/todos_api.dart ':include')
 
 #### Todo model
 
@@ -118,11 +118,11 @@ The first thing of note is that the `Todo` model doesn't live in our app — it'
 
 The `Todo` model uses [json_serializable](https://pub.dev/packages/json_serializable) to handle the json (de)serialization. If you are following along, you will have to run the [code generation step](https://pub.dev/packages/json_serializable#running-the-code-generator) to resolve the compiler errors.
 
-[todo.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_api/lib/src/models/todo.dart ':include')
+[todo.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/models/todo.dart ':include')
 
 `json_map.dart` provides a `typedef` for code checking and linting.
 
-[json_map.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_api/lib/src/models/json_map.dart ':include')
+[json_map.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/models/json_map.dart ':include')
 
 The model of the `Todo` is defined in `todos_api/models/todo.dart` and is exported by `package:todos_api/todos_api.dart`.
 
@@ -145,9 +145,9 @@ In addition, todos can be created, deleted, or updated individually. For example
 
 This package implements the `todos_api` using the [`shared_preferences`](https://pub.dev/packages/shared_preferences) package.
 
-[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/local_storage_todos_api/pubspec.yaml ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/local_storage_todos_api/pubspec.yaml ':include')
 
-[local_storage_todos_api.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/local_storage_todos_api/lib/src/local_storage_todos_api.dart ':include')
+[local_storage_todos_api.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/local_storage_todos_api/lib/src/local_storage_todos_api.dart ':include')
 
 ## Repository Layer
 
@@ -156,17 +156,17 @@ A [repository](/architecture?id=repository) is part of the business layer. A rep
 ### TodosRepository
 
 
-[todos_repository.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_repository/lib/src/todos_repository.dart ':include')
+[todos_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_repository/lib/src/todos_repository.dart ':include')
 
 Instantiating the repository requires specifying a `TodosApi`, which we discussed earlier in this tutorial, so we added it as a dependency in our `pubspec.yaml`:
 
-[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_repository/pubspec.yaml ':include')
+[pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_repository/pubspec.yaml ':include')
 
 #### Library Exports
 
 In addition to exporting the `TodosRepository` class, we also export the `Todo` model from the `todos_api` package. This step prevents tight coupling between the application and the data providers.
 
-[todos_repository.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/packages/todos_repository/lib/todos_repository.dart ':include')
+[todos_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_repository/lib/todos_repository.dart ':include')
 
 We decided to re-export the same `Todo` model from the `todos_api`, rather than redefining a separate model in the `todos_repository`, because in this case we are in complete control of the data model. In many cases, the data provider will not be something that you can control. In those cases, it becomes increasingly important to maintain your own model definitions in the repository layer to maintain full control of the interface and API contract.
 
@@ -178,15 +178,15 @@ Our app's entrypoint is `main.dart`. In this case, there are three versions:
 
 #### `main_development.dart`
 
-[main_development.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/main_development.dart ':include')
+[main_development.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/main_development.dart ':include')
 
 #### `main_staging.dart`
 
-[main_staging.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/main_staging.dart ':include')
+[main_staging.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/main_staging.dart ':include')
 
 #### `main_production.dart`
 
-[main_production.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/main_production.dart ':include')
+[main_production.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/main_production.dart ':include')
 
 The most notable thing is the concrete implementation of the `local_storage_todos_api` is instantiated within each entrypoint.
 
@@ -194,7 +194,7 @@ The most notable thing is the concrete implementation of the `local_storage_todo
 
 `bootstrap.dart` loads our `BlocObserver` and creates the instance of `TodosRepository`.
 
-[bootstrap.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/bootstrap.dart ':include')
+[bootstrap.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/bootstrap.dart ':include')
 
 ### App
 
@@ -202,13 +202,13 @@ The most notable thing is the concrete implementation of the `local_storage_todo
 
 `AppView` creates the `MaterialApp` and configures the theme and localizations.
 
-[app.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/app/app.dart ':include')
+[app.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/app/app.dart ':include')
 
 ### Theme
 
 This provides theme definition for light and dark mode.
 
-[theme.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/theme/theme.dart ':include')
+[theme.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/theme/theme.dart ':include')
 
 ### Home
 
@@ -220,23 +220,23 @@ There are only two states associated with the two screens: `todos` and `stats`.
 
 ?> **Note**: `EditTodo` is a separate route therefore it isn't part of the `HomeState`.
 
-[home_state.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/home/cubit/home_state.dart ':include')
+[home_state.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/cubit/home_state.dart ':include')
 
 #### HomeCubit
 
 A cubit is appropriate in this case due to the simplicity of the business logic. We have one method `setTab` to change the tab.
 
-[home_cubit.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/home/cubit/home_cubit.dart ':include')
+[home_cubit.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/cubit/home_cubit.dart ':include')
 
 #### HomeView
 
 `view.dart` is a barrel file that exports all relevant UI components for the home feature.
 
-[view.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/home/view/view.dart ':include')
+[view.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/view/view.dart ':include')
 
 `home_page.dart` contains the UI for the root page that the user will see when the app is launched.
 
-[home_page.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/home/view/home_page.dart ':include')
+[home_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/view/home_page.dart ':include')
 
 A simplified representation of the widget tree for the `HomePage` is:
 
@@ -265,7 +265,7 @@ The todos overview feature allows users to manage their todos by creating, editi
 
 Let's create `todos_overview/bloc/todos_overview_event.dart` and define the events.
 
-[todos_overview_event.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_event.dart ':include')
+[todos_overview_event.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_event.dart ':include')
 
 - `TodosOverviewSubscriptionRequested`: This is the startup event. In response, the bloc subscribes to the stream of todos from the `TodosRepository`.
 - `TodosOverviewTodoSaved`: This saves a todo.
@@ -280,7 +280,7 @@ Let's create `todos_overview/bloc/todos_overview_event.dart` and define the even
 
 Let's create `todos_overview/bloc/todos_overview_state.dart` and define the state.
 
-[todos_overview_state.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_state.dart ':include')
+[todos_overview_state.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_state.dart ':include')
 
 `TodosOverviewState` will keep track of a list of todos, the active filter, the `lastDeletedTodo`, and the status.
 
@@ -290,7 +290,7 @@ Let's create `todos_overview/bloc/todos_overview_state.dart` and define the stat
 
 Let's create `todos_overview/bloc/todos_overview_bloc.dart`.
 
-[todos_overview_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_bloc.dart ':include')
+[todos_overview_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_bloc.dart ':include')
 
 ?> **Note**: The bloc does not create an instance of the `TodosRepository` internally. Instead, it relies on an instance of the repository to be injected via constructor.
 
@@ -336,17 +336,17 @@ There is one model file that deals with the view filtering.
 
 `todos_view_filter.dart` is an enum that represents the three view filters and the methods to apply the filter.
 
-[todos_view_filter.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/todos_overview/models/todos_view_filter.dart ':include')
+[todos_view_filter.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/models/todos_view_filter.dart ':include')
 
 `models.dart` is the barrel file for exports.
 
-[models.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/todos_overview/models/models.dart ':include')
+[models.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/models/models.dart ':include')
 
 Next, let's take a look at the `TodosOverviewPage`.
 
 #### TodosOverviewPage
 
-[todos_overview_page.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/todos_overview/view/todos_overview_page.dart ':include')
+[todos_overview_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/view/todos_overview_page.dart ':include')
 
 A simplified representation of the widget tree for the `TodosOverviewPage` is:
 
@@ -376,34 +376,30 @@ The `AppBar`contains two actions which are dropdowns for filtering and manipulat
 
 `view.dart` is the barrel file that exports `todos_overview_page.dart`.
 
-[view.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/todos_overview/view/view.dart ':include')
+[view.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/view/view.dart ':include')
 
 #### Widgets
 
 `widgets.dart` is another barrel file that exports all the components used within the `todos_overview` feature.
 
-[widgets.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/todos_overview/widgets/widgets.dart ':include')
-
-`todo_deletion_confirmation_snack_bar.dart` is the deletion snack bar that supports undo.
-
-[todo_deletion_confirmation_snack_bar.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/todos_overview/widgets/todo_deletion_confirmation_snack_bar.dart ':include')
+[widgets.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/widgets.dart ':include')
 
 `todo_list_tile.dart` is the `ListTile` for each todo item.
 
-[todo_list_tile.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/todos_overview/widgets/todo_list_tile.dart ':include')
+[todo_list_tile.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/todo_list_tile.dart ':include')
 
 `todos_overview_options_button.dart` exposes two options for manipulating todos:
   - `toggleAll`
   - `clearCompleted`
 
-[todos_overview_options_button.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/todos_overview/widgets/todos_overview_options_button.dart ':include')
+[todos_overview_options_button.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/todos_overview_options_button.dart ':include')
 
 `todos_overview_filter_button.dart` exposes three filter options:
   - `all`
   - `activeOnly`
   - `completedOnly`
 
-[todos_overview_filter_button.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/todos_overview/widgets/todos_overview_filter_button.dart ':include')
+[todos_overview_filter_button.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/todos_overview_filter_button.dart ':include')
 
 ### Stats
 
@@ -413,29 +409,29 @@ The stats feature displays statistics about the active and completed todos.
 
 `StatsState` keeps track of summary information and the current `StatsStatus`.
 
-[stats_state.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/stats/bloc/stats_state.dart ':include')
+[stats_state.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/bloc/stats_state.dart ':include')
 
 #### StatsEvent
 
 `StatsEvent` has only one event called `StatsSubscriptionRequested`: 
 
-[stats_event.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/stats/bloc/stats_event.dart ':include')
+[stats_event.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/bloc/stats_event.dart ':include')
 
 #### StatsBloc
 
 `StatsBloc` depends on the `TodosRepository` just like `TodosOverviewBloc`. It subscribes to the todos stream via `_todosRepository.getTodos`.
 
-[stats_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/stats/bloc/stats_bloc.dart ':include')
+[stats_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/bloc/stats_bloc.dart ':include')
 
 #### Stats View
 
 `view.dart` is the barrel file for the `stats_page`.
 
-[view.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/stats/view/view.dart ':include')
+[view.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/view/view.dart ':include')
 
 `stats_page.dart` contains the UI for the page that displays the todos statistics.
 
-[stats_page.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/stats/view/stats_page.dart ':include')
+[stats_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/view/stats_page.dart ':include')
 
 A simplified representation of the widget tree for the `StatsPage` is:
 
@@ -457,7 +453,7 @@ The `EditTodo` feature allows users to edit an existing todo item and save the c
 
 `EditTodoState` keeps track of the information needed when editing a todo.
 
-[edit_todo_state.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_state.dart ':include')
+[edit_todo_state.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_state.dart ':include')
 
 #### EditTodoEvent
 
@@ -467,7 +463,7 @@ The different events the bloc will react to are:
 - `EditTodoDescriptionChanged`
 - `EditTodoSubmitted`
 
-[edit_todo_event.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_event.dart ':include')
+[edit_todo_event.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_event.dart ':include')
 
 #### EditTodoBloc
 
@@ -475,7 +471,7 @@ The different events the bloc will react to are:
 
 !> Unlike the other Blocs, `EditTodoBloc` does not subscribe to `_todosRepository.getTodos`. It is a "write-only" bloc meaning it doesn't need to read any information from the repository.
 
-[edit_todo_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_bloc.dart ':include')
+[edit_todo_bloc.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_bloc.dart ':include')
 
 ##### Data Flow
 
@@ -491,7 +487,7 @@ When the UI submits a `EditTodoSubmitted` event:
 
 #### EditTodoPage
 
-[edit_todo_page.dart](https://raw.githubusercontent.com/felangel/bloc/docs/flutter-todos-v8.0.0/examples/flutter_todos/lib/edit_todo/view/edit_todo_page.dart ':include')
+[edit_todo_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/view/edit_todo_page.dart ':include')
 
 Just like with the previous features, the `EditTodosPage` provides an instance of the `EditTodosBloc` via `BlocProvider`. Unlike the other features, the `EditTodosPage` is a separate route which is why it exposes a `static` `route` method. This makes it easy to push the `EditTodosPage` onto the navigation stack via `Navigator.of(context).push(...)`.
 
@@ -511,4 +507,4 @@ A simplified representation of the widget tree for the `EditTodosPage` is:
 
 That's it, we have completed the tutorial! 🎉
 
-The full source code for this example, including unit and widget tests, can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_todos).
+The full source code for this example, including unit and widget tests, can be found [here](https://github.com/felangel/bloc/tree/master/examples/flutter_todos).
