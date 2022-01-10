@@ -2,7 +2,7 @@
   "name": "bloc",
   "displayName": "bloc",
   "description": "Support for the bloc library and provides tools for effectively creating blocs for both Flutter and AngularDart apps.",
-  "version": "6.3.0",
+  "version": "6.4.0",
   "publisher": "FelixAngelov",
   "bugs": {
     "url": "https://github.com/felangel/bloc/issues",
@@ -43,8 +43,9 @@
             "default": true,
             "description": "Whether to check if you are using the latest package versions at startup."
           },
-          "bloc.newBlocTemplate": {
+          "bloc.newBlocTemplate.type": {
             "type": "string",
+            "default": "auto",
             "enum": [
               "auto",
               "equatable",
@@ -57,14 +58,15 @@
               "always use freezed template",
               "always use simple template"
             ]
-          }
-        }
-      },
-      {
-        "title": "Bloc",
-        "properties": {
-          "bloc.newCubitTemplate": {
+          },
+          "bloc.newBlocTemplate.createDirectory": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to create a bloc directory when creating a new bloc."
+          },
+          "bloc.newCubitTemplate.type": {
             "type": "string",
+            "default": "auto",
             "enum": [
               "auto",
               "equatable",
@@ -77,6 +79,11 @@
               "always use freezed template",
               "always use simple template"
             ]
+          },
+          "bloc.newCubitTemplate.createDirectory": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to create a cubit directory when creating a new cubit."
           }
         }
       }
