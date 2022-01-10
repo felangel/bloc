@@ -29,11 +29,14 @@ Una librería de administración de estado predecible que ayuda a implementar el
 <table>
     <tbody>
         <tr>
-            <td align="center">
-                <a href="https://verygood.ventures"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120"/></a>
+            <td align="center" style="background-color: white">
+                <a href="https://verygood.ventures"><img src="https://raw.githubusercontent.com/VGVentures/very_good_brand/main/styles/README/vgv_logo_black.png" width="225"/></a>
             </td>
-            <td align="center">
-                <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=https://github.com/felangel/bloc&utm_medium=github&utm_content=developer&utm_term=flutter" target="_blank"><img width="250px" src="https://stream-blog.s3.amazonaws.com/blog/wp-content/uploads/fc148f0fc75d02841d017bb36e14e388/Stream-logo-with-background-.png"/></a><br/><span><a href="https://getstream.io/chat/flutter/tutorial/?utm_source=https://github.com/felangel/bloc&utm_medium=github&utm_content=developer&utm_term=flutter" target="_blank">Prueba el tutorial de Chat en Flutter &nbsp💬</a></span>
+            <td align="center" style="background-color: white">
+                <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=https://github.com/felangel/bloc&utm_medium=github&utm_content=developer&utm_term=flutter" target="_blank"><img width="250px" src="https://stream-blog.s3.amazonaws.com/blog/wp-content/uploads/fc148f0fc75d02841d017bb36e14e388/Stream-logo-with-background-.png"/></a><br/><span><a href="https://getstream.io/chat/flutter/tutorial/?utm_source=https://github.com/felangel/bloc&utm_medium=github&utm_content=developer&utm_term=flutter" target="_blank">Try the Flutter Chat Tutorial &nbsp💬</a></span>
+            </td>
+            <td align="center" style="background-color: white">
+                <a href="https://www.miquido.com/flutter-development-company/?utm_source=github&utm_medium=sponsorship&utm_campaign=bloc-silver-tier&utm_term=flutter-development-company&utm_content=miquido-logo"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/miquido_logo.png" width="225"/></a>
             </td>
         </tr>
     </tbody>
@@ -118,7 +121,6 @@ El objetivo de esta librería es facilitar la separación de la _presentación_ 
 - [Clima](https://bloclibrary.dev/#/es/flutterweathertutorial) - un ejemplo de cómo crear una aplicación sobre el clima utilizando los paquetes `bloc` y `flutter_bloc`. La aplicación utiliza un inidicador (`RefreshIndicator`) para implementar "desliza para refrescar" (del inglés "pull-to-refresh"), así como temas dinámicos.
 - [Todos](https://bloclibrary.dev/#/es/fluttertodostutorial) - un ejemplo de cómo crear una aplicación de quehaceres(TODO app) usando los paquetes `bloc` y `flutter_bloc`.
 - [Temporizador](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - un ejemplo de cómo crear un temporizador usando los paquetes `bloc` y `flutter_bloc`.
-- [Todos con Firestore](https://bloclibrary.dev/#/es/flutterfirestoretodostutorial) - un ejemplo de cómo crear una aplicación de quehaceres (TODO app) usando los paquetes `bloc` y `flutter_bloc` que se integra con Cloud Firestore.
 - [Carro de Compras](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - un ejemplo de cómo crear una aplicación de carrito de compras utilizando los paquetes `bloc` y `flutter_bloc` basado en [ejemplos de flutter](https://github.com/flutter/samples/tree/master/provider_shopper).
 - [Formulario Dinámico](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para implementar un formulario dinámico que extrae datos de un repositorio.
 - [Wizard](https://github.com/felangel/bloc/tree/master/examples/flutter_wizard) - Construye un wizard de varios pasos utilizando los paquetes `bloc` y` flutter_bloc`.
@@ -193,7 +195,3 @@ Obtenga más información en los siguientes enlaces, que han sido aportados por 
 ## Mantenedores
 
 - [Felix Angelov](https://github.com/felangel)
-
-## Partidarios
-
-[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120" />](https://verygood.ventures)

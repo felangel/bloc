@@ -21,6 +21,28 @@ Eine vorhersagbare Zustandsverwaltungsbibliothek, die bei der Implementierung de
 | [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc) | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc) |
 | [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc) | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc) |
 
+## Sponsoren
+
+Unsere Top-Sponsoren sind unten gezeigt! [[Ein Sponsor werden](https://github.com/sponsors/felangel)]
+
+<table>
+    <tbody>
+        <tr>
+            <td align="center" style="background-color: white">
+                <a href="https://verygood.ventures"><img src="https://raw.githubusercontent.com/VGVentures/very_good_brand/main/styles/README/vgv_logo_black.png" width="225"/></a>
+            </td>
+            <td align="center" style="background-color: white">
+                <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=https://github.com/felangel/bloc&utm_medium=github&utm_content=developer&utm_term=flutter" target="_blank"><img width="250px" src="https://stream-blog.s3.amazonaws.com/blog/wp-content/uploads/fc148f0fc75d02841d017bb36e14e388/Stream-logo-with-background-.png"/></a><br/><span><a href="https://getstream.io/chat/flutter/tutorial/?utm_source=https://github.com/felangel/bloc&utm_medium=github&utm_content=developer&utm_term=flutter" target="_blank">Try the Flutter Chat Tutorial &nbsp💬</a></span>
+            </td>
+            <td align="center" style="background-color: white">
+                <a href="https://www.miquido.com/flutter-development-company/?utm_source=github&utm_medium=sponsorship&utm_campaign=bloc-silver-tier&utm_term=flutter-development-company&utm_content=miquido-logo"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/miquido_logo.png" width="225"/></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+---
+
 ## Überblick
 
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
@@ -95,7 +117,6 @@ Das Ziel dieser Bibliothek ist es, eine erleichterte Trennung von _Präsentation
 - [Wetter](https://bloclibrary.dev/#/flutterweathertutorial) - ein Beispiel für die Erstellung einer Wetteranwendung unter Verwendung der Pakete `bloc` und `flutter_bloc`. Die Anwendung verwendet einen `RefreshIndicator`, um "pull-to-refresh" sowie dynamische Themes
 - [Todos](https://bloclibrary.dev/#/fluttertodostutorial) - ein Beispiel für die Erstellung einer Todo-Anwendung unter Verwendung der Pakete `bloc` und `flutter_bloc`.
 - [Timer](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - ein Beispiel für die Erstellung eines Timers unter Verwendung der Pakete `bloc` und `flutter_bloc`.
-- [Firestore Todos](https://bloclibrary.dev/#/flutterfirestoretodostutorial) - ein Beispiel für die Erstellung einer Todo-Anwendung unter Verwendung der Pakete `bloc` und `flutter_bloc`, die mit der Firestore Cloud integriert ist.
 - [Warenkorb](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - ein Beispiel für die Erstellung einer Warenkorb-Anwendung unter Verwendung der Pakete `bloc` und `flutter_bloc`, basierend auf [flutter samples](https://github.com/flutter/samples/tree/master/provider_shopper).
 - [Dynamische Formular](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - ein Beispiel für die Verwendung der Pakete `bloc` und `flutter_bloc` zur Implementierung eines dynamischen Formulars, das Daten aus einem Repository abruft.
 

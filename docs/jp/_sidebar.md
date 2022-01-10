@@ -18,9 +18,8 @@
     - [無限リスト](flutterinfinitelisttutorial.md)
     - [**ログイン** <sup>✨</sup>](flutterlogintutorial.md)
     - [**天気** <sup>✨</sup>](flutterweathertutorial.md)
-    - [やることリスト](fluttertodostutorial.md)
+    - [**やることリスト** <sup>✨</sup>](fluttertodostutorial.md)
     - [**Firebaseログイン** <sup>✨</sup>](flutterfirebaselogintutorial.md)
-    - [Firestoreやることリスト](flutterfirestoretodostutorial.md)
   - AngularDart
     - [カウンター](angularcountertutorial.md)
   - Flutter + AngularDart
