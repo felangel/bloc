@@ -1,6 +1,6 @@
 # 6.4.0
 
-- feat: add `_onevent` snippet for creating an internal event handler methood
+- feat: add `_onevent` snippet for creating an internal event handler
 - feat: improve `onevent` snippet to infer default event type
 - feat: add new extension settings:
   - `bloc.newBlocTemplate.createDirectory` (defaults to true)
