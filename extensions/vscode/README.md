@@ -66,6 +66,7 @@ You can activate the commands by launching the command palette (View -> Command 
 | `bloc`              | Creates a bloc class                       |
 | `cubit`             | Creates a cubit class                      |
 | `onevent`           | Register a new `EventHandler`              |
+| `_onevent`          | Define a new `EventHandler`                |
 | `blocobserver`      | Creates a `BlocObserver` class             |
 | `blocprovider`      | Creates a `BlocProvider` widget            |
 | `multiblocprovider` | Creates a `MultiBlocProvider` widget       |
@@ -84,15 +85,13 @@ You can activate the commands by launching the command palette (View -> Command 
 | `blocstate`         | Creates a state class                      |
 | `blocevent`         | Creates an event class                     |
 | `bloctest`          | Creates a `blocTest`                       |
-| `mockbloc`          | Creates a class extenting `MockBloc`        |
+| `mockbloc`          | Creates a class extenting `MockBloc`       |
 | `mockcubit`         | Creates a class extending `MockCubit`      |
 | `fake`              | Creates a class extending `Fake`           |
 
 ### Freezed Bloc
 
-| Shortcut     | Description                                        |
-| ------------ | -------------------------------------------------- |
-| `feventwhen` | Creates an event handler with freeze.when function |
-| `feventmap`  | Creates an event handler with freeze.map function  |
-| `fstate`     | Creates a sub state                                |
-| `fevent`     | Creates a sub event                                |
+| Shortcut | Description             |
+| -------- | ----------------------- |
+| `fstate` | Creates a freezed state |
+| `fevent` | Creates a freezed event |
