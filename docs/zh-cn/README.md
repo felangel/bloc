@@ -158,7 +158,3 @@
 ## 维护者
 
 - [Felix Angelov](https://github.com/felangel)
-
-## 赞助商
-
-[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120" />](https://verygood.ventures)
