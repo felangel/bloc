@@ -91,9 +91,7 @@ You can activate the commands by launching the command palette (View -> Command 
 
 ### Freezed Bloc
 
-| Shortcut     | Description                                        |
-| ------------ | -------------------------------------------------- |
-| `feventwhen` | Creates an event handler with freeze.when function |
-| `feventmap`  | Creates an event handler with freeze.map function  |
-| `fstate`     | Creates a sub state                                |
-| `fevent`     | Creates a sub event                                |
+| Shortcut | Description             |
+| -------- | ----------------------- |
+| `fstate` | Creates a freezed state |
+| `fevent` | Creates a freezed event |

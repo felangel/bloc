@@ -5,6 +5,9 @@
 - feat: add new extension settings:
   - `bloc.newBlocTemplate.createDirectory` (defaults to true)
   - `bloc.newCubitTemplate.createDirectory` (defaults to true)
+- refactor: remove deprecated snippets:
+  - `feventwhen`
+  - `feventmap`
 
 # 6.3.0
 
