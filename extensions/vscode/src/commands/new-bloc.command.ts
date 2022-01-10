@@ -2,7 +2,13 @@ import * as _ from "lodash";
 import * as changeCase from "change-case";
 import * as mkdirp from "mkdirp";
 
-import { InputBoxOptions, OpenDialogOptions, Uri, window } from "vscode";
+import {
+  InputBoxOptions,
+  OpenDialogOptions,
+  Uri,
+  window,
+  workspace,
+} from "vscode";
 import { existsSync, lstatSync, writeFile } from "fs";
 import {
   getBlocEventTemplate,
@@ -72,15 +78,20 @@ async function generateBlocCode(
   targetDirectory: string,
   type: BlocType
 ) {
-  const blocDirectoryPath = `${targetDirectory}/bloc`;
+  const shouldCreateDirectory = workspace
+    .getConfiguration("bloc")
+    .get<boolean>("newBlocTemplate.createDirectory");
+  const blocDirectoryPath = shouldCreateDirectory
+    ? `${targetDirectory}/bloc`
+    : targetDirectory;
   if (!existsSync(blocDirectoryPath)) {
     await createDirectory(blocDirectoryPath);
   }
 
   await Promise.all([
-    createBlocEventTemplate(blocName, targetDirectory, type),
-    createBlocStateTemplate(blocName, targetDirectory, type),
-    createBlocTemplate(blocName, targetDirectory, type),
+    createBlocEventTemplate(blocName, blocDirectoryPath, type),
+    createBlocStateTemplate(blocName, blocDirectoryPath, type),
+    createBlocTemplate(blocName, blocDirectoryPath, type),
   ]);
 }
 
@@ -101,7 +112,7 @@ function createBlocEventTemplate(
   type: BlocType
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
-  const targetPath = `${targetDirectory}/bloc/${snakeCaseBlocName}_event.dart`;
+  const targetPath = `${targetDirectory}/${snakeCaseBlocName}_event.dart`;
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseBlocName}_event.dart already exists`);
   }
@@ -127,7 +138,7 @@ function createBlocStateTemplate(
   type: BlocType
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
-  const targetPath = `${targetDirectory}/bloc/${snakeCaseBlocName}_state.dart`;
+  const targetPath = `${targetDirectory}/${snakeCaseBlocName}_state.dart`;
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseBlocName}_state.dart already exists`);
   }
@@ -153,7 +164,7 @@ function createBlocTemplate(
   type: BlocType
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
-  const targetPath = `${targetDirectory}/bloc/${snakeCaseBlocName}_bloc.dart`;
+  const targetPath = `${targetDirectory}/${snakeCaseBlocName}_bloc.dart`;
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseBlocName}_bloc.dart already exists`);
   }
