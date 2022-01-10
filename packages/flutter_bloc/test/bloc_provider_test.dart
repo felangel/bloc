@@ -8,19 +8,7 @@ class MockCubit<S> extends Cubit<S> {
   MockCubit(S state) : super(state);
 
   @override
-  StreamSubscription<S> listen(
-    void Function(S p1)? onData, {
-    Function? onError,
-    void Function()? onDone,
-    bool? cancelOnError,
-  }) {
-    return Stream<S>.empty().listen(
-      onData,
-      onError: onError,
-      onDone: onDone,
-      cancelOnError: cancelOnError,
-    );
-  }
+  Stream<S> get stream => Stream<S>.empty();
 }
 
 class MyApp extends StatelessWidget {
@@ -184,18 +172,44 @@ class CounterCubit extends Cubit<int> {
 
 void main() {
   group('BlocProvider', () {
-    testWidgets('lazily loads cubits by default', (tester) async {
-      var createCalled = false;
-      await tester.pumpWidget(
-        BlocProvider(
-          create: (_) {
-            createCalled = true;
-            return CounterCubit();
-          },
-          child: const SizedBox(),
-        ),
+    testWidgets(
+        'throws AssertionError '
+        'when child is not specified', (tester) async {
+      const expected =
+          '''BlocProvider<CounterCubit> used outside of MultiBlocProvider must specify a child''';
+      await tester.pumpWidget(BlocProvider(create: (_) => CounterCubit()));
+      expect(
+        tester.takeException(),
+        isA<AssertionError>().having((e) => e.message, 'message', expected),
       );
-      expect(createCalled, isFalse);
+    });
+
+    testWidgets(
+        '.value throws AssertionError '
+        'when child is not specified', (tester) async {
+      const expected =
+          '''BlocProvider<CounterCubit> used outside of MultiBlocProvider must specify a child''';
+      await tester.pumpWidget(BlocProvider.value(value: CounterCubit()));
+      expect(
+        tester.takeException(),
+        isA<AssertionError>().having((e) => e.message, 'message', expected),
+      );
+    });
+
+    testWidgets('lazy is true by default', (tester) async {
+      final blocProvider = BlocProvider(
+        create: (_) => CounterCubit(),
+        child: const SizedBox(),
+      );
+      expect(blocProvider.lazy, isTrue);
+    });
+
+    testWidgets('.value lazy is true', (tester) async {
+      final blocProvider = BlocProvider.value(
+        value: CounterCubit(),
+        child: const SizedBox(),
+      );
+      expect(blocProvider.lazy, isTrue);
     });
 
     testWidgets('lazily loads cubits by default', (tester) async {
@@ -434,7 +448,7 @@ void main() {
           child: const SizedBox(),
         ),
       );
-
+      FlutterError.onError = onError;
       expect(
         flutterErrors,
         contains(
@@ -444,13 +458,11 @@ void main() {
             isA<StateError>().having(
               (e) => e.message,
               'message',
-              expected,
+              contains(expected),
             ),
           ),
         ),
       );
-
-      FlutterError.onError = onError;
     });
 
     testWidgets(
@@ -472,19 +484,21 @@ void main() {
           child: const SizedBox(),
         ),
       );
-
+      FlutterError.onError = onError;
       expect(
         flutterErrors,
         contains(
           isA<FlutterErrorDetails>().having(
             (d) => d.exception,
             'exception',
-            isA<StateError>().having((e) => e.message, 'message', expected),
+            isA<StateError>().having(
+              (e) => e.message,
+              'message',
+              contains(expected),
+            ),
           ),
         ),
       );
-
-      FlutterError.onError = onError;
     });
 
     testWidgets(

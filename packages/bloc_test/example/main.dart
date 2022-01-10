@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 // Mock Cubit
@@ -12,14 +11,7 @@ class MockCounterCubit extends MockCubit<int> implements CounterCubit {}
 class MockCounterBloc extends MockBloc<CounterEvent, int>
     implements CounterBloc {}
 
-// Fake Counter Event
-class FakeCounterEvent extends Fake implements CounterEvent {}
-
 void main() {
-  setUpAll(() {
-    registerFallbackValue(FakeCounterEvent());
-  });
-
   mainCubit();
   mainBloc();
 }
@@ -78,9 +70,9 @@ void mainBloc() {
     );
 
     blocTest<CounterBloc, int>(
-      'emits [1] when Increment is added',
+      'emits [1] when CounterIncrementPressed is added',
       build: () => CounterBloc(),
-      act: (bloc) => bloc.add(Increment()),
+      act: (bloc) => bloc.add(CounterIncrementPressed()),
       expect: () => const <int>[1],
     );
   });
@@ -94,10 +86,10 @@ class CounterCubit extends Cubit<int> {
 
 abstract class CounterEvent {}
 
-class Increment extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0) {
-    on<Increment>((event, emit) => emit(state + 1));
+    on<CounterIncrementPressed>((event, emit) => emit(state + 1));
   }
 }

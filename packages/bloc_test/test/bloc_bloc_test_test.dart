@@ -2,12 +2,13 @@ import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 
 import 'blocs/blocs.dart';
 
 class MockRepository extends Mock implements Repository {}
+
+void unawaited(Future<void>? _) {}
 
 void main() {
   group('blocTest', () {
@@ -86,7 +87,8 @@ void main() {
 
       blocTest<CounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and emitted 10',
-        build: () => CounterBloc()..emit(10),
+        build: () => CounterBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11],
       );
@@ -100,10 +102,16 @@ void main() {
       );
 
       test('fails immediately when expectation is incorrect', () async {
-        const expectedError = '''Expected: [2]
-  Actual: [1]
-   Which: at location [0] is <1> instead of <2>
-''';
+        const expectedError = 'Expected: [2]\n'
+            '  Actual: [1]\n'
+            '   Which: at location [0] is <1> instead of <2>\n'
+            '\n'
+            '==== diff ========================================\n'
+            '\n'
+            '''\x1B[90m[\x1B[0m\x1B[31m[-2-]\x1B[0m\x1B[32m{+1+}\x1B[0m\x1B[90m]\x1B[0m\n'''
+            '\n'
+            '==== end diff ====================================\n'
+            '';
         late Object actualError;
         final completer = Completer<void>();
         await runZonedGuarded(() async {
@@ -115,9 +123,46 @@ void main() {
           await completer.future;
         }, (Object error, _) {
           actualError = error;
-          completer.complete();
+          if (!completer.isCompleted) completer.complete();
         });
         expect((actualError as TestFailure).message, expectedError);
+      });
+
+      test(
+          'fails immediately when '
+          'uncaught exception occurs within bloc', () async {
+        late Object actualError;
+        final completer = Completer<void>();
+        await runZonedGuarded(() async {
+          unawaited(testBloc<ErrorCounterBloc, int>(
+            build: () => ErrorCounterBloc(),
+            act: (bloc) => bloc.add(CounterEvent.increment),
+            expect: () => const <int>[1],
+          ).then((_) => completer.complete()));
+          await completer.future;
+        }, (Object error, _) {
+          actualError = error;
+          if (!completer.isCompleted) completer.complete();
+        });
+        expect(actualError, isA<ErrorCounterBlocError>());
+      });
+
+      test('fails immediately when exception occurs in act', () async {
+        final exception = Exception('oops');
+        late Object actualError;
+        final completer = Completer<void>();
+        await runZonedGuarded(() async {
+          unawaited(testBloc<ErrorCounterBloc, int>(
+            build: () => ErrorCounterBloc(),
+            act: (_) => throw exception,
+            expect: () => const <int>[1],
+          ).then((_) => completer.complete()));
+          await completer.future;
+        }, (Object error, _) {
+          actualError = error;
+          if (!completer.isCompleted) completer.complete();
+        });
+        expect(actualError, exception);
       });
     });
 
@@ -159,7 +204,8 @@ void main() {
 
       blocTest<AsyncCounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and emitted 10',
-        build: () => AsyncCounterBloc()..emit(10),
+        build: () => AsyncCounterBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11],
       );
@@ -196,14 +242,15 @@ void main() {
 
       blocTest<DebounceCounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and emitted 10',
-        build: () => DebounceCounterBloc()..emit(10),
+        build: () => DebounceCounterBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         wait: const Duration(milliseconds: 300),
         expect: () => const <int>[11],
       );
     });
 
-    group('InstanceEmitBloc', () {
+    group('InstantEmitBloc', () {
       blocTest<InstantEmitBloc, int>(
         'emits [1] when nothing is added',
         build: () => InstantEmitBloc(),
@@ -240,8 +287,9 @@ void main() {
       );
 
       blocTest<InstantEmitBloc, int>(
-        'emits [11, 12] when CounterEvent.increment is added and emitted 10',
-        build: () => InstantEmitBloc()..emit(10),
+        'emits [11, 12] when CounterEvent.increment is added and seeded 10',
+        build: () => InstantEmitBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11, 12],
       );
@@ -285,7 +333,8 @@ void main() {
 
       blocTest<MultiCounterBloc, int>(
         'emits [11, 12] when CounterEvent.increment is added and emitted 10',
-        build: () => MultiCounterBloc()..emit(10),
+        build: () => MultiCounterBloc(),
+        seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11, 12],
       );
@@ -302,7 +351,7 @@ void main() {
         'emits [ComplexStateB] when ComplexEventB is added',
         build: () => ComplexBloc(),
         act: (bloc) => bloc.add(ComplexEventB()),
-        expect: () => <Matcher>[isA<ComplexStateB>()],
+        expect: () => [isA<ComplexStateB>()],
       );
 
       blocTest<ComplexBloc, ComplexState>(
@@ -313,7 +362,7 @@ void main() {
           ..add(ComplexEventB())
           ..add(ComplexEventA()),
         skip: 1,
-        expect: () => <Matcher>[isA<ComplexStateA>()],
+        expect: () => [isA<ComplexStateA>()],
       );
     });
     group('ErrorCounterBloc', () {
@@ -331,6 +380,7 @@ void main() {
           ..add(CounterEvent.increment),
         skip: 1,
         expect: () => const <int>[2],
+        errors: () => isNotEmpty,
       );
 
       blocTest<ErrorCounterBloc, int>(
@@ -338,13 +388,14 @@ void main() {
         build: () => ErrorCounterBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[1],
+        errors: () => isNotEmpty,
       );
 
       blocTest<ErrorCounterBloc, int>(
         'throws ErrorCounterBlocException when increment is added',
         build: () => ErrorCounterBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
-        errors: () => <Matcher>[isA<ErrorCounterBlocError>()],
+        errors: () => [isA<ErrorCounterBlocError>()],
       );
 
       blocTest<ErrorCounterBloc, int>(
@@ -353,7 +404,7 @@ void main() {
         build: () => ErrorCounterBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[1],
-        errors: () => <Matcher>[isA<ErrorCounterBlocError>()],
+        errors: () => [isA<ErrorCounterBlocError>()],
       );
 
       blocTest<ErrorCounterBloc, int>(
@@ -363,6 +414,7 @@ void main() {
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
         expect: () => const <int>[1, 2],
+        errors: () => isNotEmpty,
       );
 
       blocTest<ErrorCounterBloc, int>(
@@ -372,7 +424,7 @@ void main() {
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
-        errors: () => <Matcher>[
+        errors: () => [
           isA<ErrorCounterBlocError>(),
           isA<ErrorCounterBlocError>(),
         ],
@@ -386,7 +438,7 @@ void main() {
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
         expect: () => const <int>[1, 2],
-        errors: () => <Matcher>[
+        errors: () => [
           isA<ErrorCounterBlocError>(),
           isA<ErrorCounterBlocError>(),
         ],
@@ -408,6 +460,7 @@ void main() {
           ..add(CounterEvent.increment),
         skip: 1,
         expect: () => const <int>[2],
+        errors: () => isNotEmpty,
       );
 
       blocTest<ExceptionCounterBloc, int>(
@@ -415,13 +468,14 @@ void main() {
         build: () => ExceptionCounterBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[1],
+        errors: () => isNotEmpty,
       );
 
       blocTest<ExceptionCounterBloc, int>(
         'throws ExceptionCounterBlocException when increment is added',
         build: () => ExceptionCounterBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
-        errors: () => <Matcher>[isA<ExceptionCounterBlocException>()],
+        errors: () => [isA<ExceptionCounterBlocException>()],
       );
 
       blocTest<ExceptionCounterBloc, int>(
@@ -430,7 +484,7 @@ void main() {
         build: () => ExceptionCounterBloc(),
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[1],
-        errors: () => <Matcher>[isA<ExceptionCounterBlocException>()],
+        errors: () => [isA<ExceptionCounterBlocException>()],
       );
 
       blocTest<ExceptionCounterBloc, int>(
@@ -440,6 +494,7 @@ void main() {
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
         expect: () => const <int>[1, 2],
+        errors: () => isNotEmpty,
       );
 
       blocTest<ExceptionCounterBloc, int>(
@@ -449,7 +504,7 @@ void main() {
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
-        errors: () => <Matcher>[
+        errors: () => [
           isA<ExceptionCounterBlocException>(),
           isA<ExceptionCounterBlocException>(),
         ],
@@ -463,7 +518,7 @@ void main() {
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
         expect: () => const <int>[1, 2],
-        errors: () => <Matcher>[
+        errors: () => [
           isA<ExceptionCounterBlocException>(),
           isA<ExceptionCounterBlocException>(),
         ],
@@ -551,7 +606,7 @@ void main() {
           await completer.future;
         }, (Object error, _) {
           actualError = error;
-          completer.complete();
+          if (!completer.isCompleted) completer.complete();
         });
         expect((actualError as TestFailure).message, expectedError);
       });

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class CounterCubit extends Cubit<int> {
-  CounterCubit() : super(0);
+  CounterCubit({int seed = 0}) : super(seed);
 
   void increment() => emit(state + 1);
 }
@@ -72,6 +72,23 @@ class _MyAppState extends State<MyApp> {
 
 void main() {
   group('BlocListener', () {
+    testWidgets(
+        'throws AssertionError '
+        'when child is not specified', (tester) async {
+      const expected =
+          '''BlocListener<CounterCubit, int> used outside of MultiBlocListener must specify a child''';
+      await tester.pumpWidget(
+        BlocListener<CounterCubit, int>(
+          bloc: CounterCubit(),
+          listener: (context, state) {},
+        ),
+      );
+      expect(
+        tester.takeException(),
+        isA<AssertionError>().having((e) => e.message, 'message', expected),
+      );
+    });
+
     testWidgets('renders child properly', (tester) async {
       const targetKey = Key('cubit_listener_container');
       await tester.pumpWidget(
@@ -449,7 +466,7 @@ void main() {
         'updates subscription '
         'when provided bloc is changed', (tester) async {
       final firstCounterCubit = CounterCubit();
-      final secondCounterCubit = CounterCubit()..emit(100);
+      final secondCounterCubit = CounterCubit(seed: 100);
 
       final states = <int>[];
       const expectedStates = [1, 101];

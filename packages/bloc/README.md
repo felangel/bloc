@@ -49,7 +49,10 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
             </td>
             <td align="center">
                 <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=https://github.com/felangel/bloc&utm_medium=github&utm_content=developer&utm_term=flutter" target="_blank"><img width="250px" src="https://stream-blog.s3.amazonaws.com/blog/wp-content/uploads/fc148f0fc75d02841d017bb36e14e388/Stream-logo-with-background-.png"/></a><br/><span><a href="https://getstream.io/chat/flutter/tutorial/?utm_source=https://github.com/felangel/bloc&utm_medium=github&utm_content=developer&utm_term=flutter" target="_blank">Try the Flutter Chat Tutorial &nbsp💬</a></span>
-            </td>            
+            </td>
+            <td align="center">
+                <a href="https://www.miquido.com/flutter-development-company/?utm_source=github&utm_medium=sponsorship&utm_campaign=bloc-silver-tier&utm_term=flutter-development-company&utm_content=miquido-logo"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/miquido_logo.png" width="225"/></a>
+            </td>
         </tr>
     </tbody>
 </table>
@@ -166,8 +169,12 @@ class MyBlocObserver extends BlocObserver {
 
 ```dart
 void main() {
-  Bloc.observer = MyBlocObserver();
-  // Use cubits...
+  BlocOverrides.runZoned(
+    () {
+      // Use cubits...
+    },
+    blocObserver: MyBlocObserver(),
+  );
 }
 ```
 
@@ -188,16 +195,16 @@ State changes in bloc begin when events are added which triggers `onEvent`. The 
 abstract class CounterEvent {}
 
 /// Notifies bloc to increment state.
-class Increment extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
 
 /// A `CounterBloc` which handles converting `CounterEvent`s into `int`s.
 class CounterBloc extends Bloc<CounterEvent, int> {
   /// The initial state of the `CounterBloc` is 0.
   CounterBloc() : super(0) {
-    /// When an `Increment` event is added,
+    /// When a `CounterIncrementPressed` event is added,
     /// the current `state` of the bloc is accessed via the `state` property
     /// and a new state is emitted via `emit`.
-    on<Increment>((event, emit) => emit(state + 1));
+    on<CounterIncrementPressed>((event, emit) => emit(state + 1));
   }
 }
 ```
@@ -213,7 +220,7 @@ Future<void> main() async {
   print(bloc.state); // 0
 
   /// Interact with the `bloc` to trigger `state` changes.
-  bloc.add(Increment());
+  bloc.add(CounterIncrementPressed());
 
   /// Wait for next iteration of the event-loop
   /// to ensure event has been processed.
@@ -240,11 +247,11 @@ In addition, `Blocs` can also override `onEvent` and `onTransition`.
 ```dart
 abstract class CounterEvent {}
 
-class Increment extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0) {
-    on<Increment>((event, emit) => emit(state + 1));
+    on<CounterIncrementPressed>((event, emit) => emit(state + 1));
   }
 
   @override
@@ -317,8 +324,12 @@ class MyBlocObserver extends BlocObserver {
 
 ```dart
 void main() {
-  Bloc.observer = MyBlocObserver();
-  // Use blocs...
+  BlocOverrides.runZoned(
+    () {
+      // Use blocs...
+    },
+    blocObserver: MyBlocObserver(),
+  );
 }
 ```
 
@@ -328,7 +339,7 @@ void main() {
 
 ## Examples
 
-- [Counter](https://github.com/felangel/Bloc/tree/master/packages/bloc/example) - an example of how to create a `CounterBloc` in a pure Dart app.
+- [Counter](https://github.com/felangel/bloc/tree/master/packages/bloc/example) - an example of how to create a `CounterBloc` in a pure Dart app.
 
 ## Maintainers
 

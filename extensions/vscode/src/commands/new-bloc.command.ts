@@ -105,7 +105,7 @@ function createBlocEventTemplate(
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseBlocName}_event.dart already exists`);
   }
-  return new Promise(async (resolve, reject) => {
+  return new Promise<void>(async (resolve, reject) => {
     writeFile(
       targetPath,
       getBlocEventTemplate(blocName, type),
@@ -131,7 +131,7 @@ function createBlocStateTemplate(
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseBlocName}_state.dart already exists`);
   }
-  return new Promise(async (resolve, reject) => {
+  return new Promise<void>(async (resolve, reject) => {
     writeFile(
       targetPath,
       getBlocStateTemplate(blocName, type),
@@ -157,7 +157,7 @@ function createBlocTemplate(
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseBlocName}_bloc.dart already exists`);
   }
-  return new Promise(async (resolve, reject) => {
+  return new Promise<void>(async (resolve, reject) => {
     writeFile(targetPath, getBlocTemplate(blocName, type), "utf8", (error) => {
       if (error) {
         reject(error);

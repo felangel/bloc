@@ -19,13 +19,14 @@ void main() {
 
       setUp(() {
         observer = MockBlocObserver();
-        Bloc.observer = observer;
       });
 
       test('triggers onCreate on observer', () {
-        final cubit = CounterCubit();
-        // ignore: invalid_use_of_protected_member
-        verify(() => observer.onCreate(cubit)).called(1);
+        BlocOverrides.runZoned(() {
+          final cubit = CounterCubit();
+          // ignore: invalid_use_of_protected_member
+          verify(() => observer.onCreate(cubit)).called(1);
+        }, blocObserver: observer);
       });
     });
 
@@ -36,29 +37,36 @@ void main() {
     });
 
     group('addError', () {
-      BlocObserver observer;
+      late BlocObserver observer;
 
       setUp(() {
         observer = MockBlocObserver();
-        Bloc.observer = observer;
       });
 
       test('triggers onError', () async {
-        final expectedError = Exception('fatal exception');
+        BlocOverrides.runZoned(() {
+          final expectedError = Exception('fatal exception');
+          final expectedStackTrace = StackTrace.current;
+          final errors = <Object>[];
+          final stackTraces = <StackTrace>[];
+          final cubit = CounterCubit(
+            onErrorCallback: (error, stackTrace) {
+              errors.add(error);
+              stackTraces.add(stackTrace);
+            },
+            // ignore: invalid_use_of_protected_member
+          )..addError(expectedError, expectedStackTrace);
 
-        runZonedGuarded(() {
-          CounterCubit().addError(expectedError, StackTrace.current);
-        }, (Object error, StackTrace stackTrace) {
-          expect(
-            (error as BlocUnhandledErrorException).toString(),
-            contains(
-              'Unhandled error Exception: fatal exception occurred '
-              'in Instance of \'CounterCubit\'.',
-            ),
-          );
-          expect(stackTrace, isNotNull);
-          expect(stackTrace, isNot(StackTrace.empty));
-        });
+          expect(errors.length, equals(1));
+          expect(errors.first, equals(expectedError));
+          expect(stackTraces.length, equals(1));
+          expect(stackTraces.first, isNotNull);
+          expect(stackTraces.first, isNot(StackTrace.empty));
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onError(cubit, expectedError, expectedStackTrace),
+          ).called(1);
+        }, blocObserver: observer);
       });
     });
 
@@ -66,102 +74,103 @@ void main() {
       late BlocObserver observer;
 
       setUpAll(() {
-        registerFallbackValue<BlocBase<dynamic>>(FakeBlocBase<dynamic>());
-        registerFallbackValue<Change<dynamic>>(FakeChange<dynamic>());
+        registerFallbackValue(FakeBlocBase<dynamic>());
+        registerFallbackValue(FakeChange<dynamic>());
       });
 
       setUp(() {
         observer = MockBlocObserver();
-        Bloc.observer = observer;
       });
 
       test('is not called for the initial state', () async {
-        final changes = <Change<int>>[];
-        final cubit = CounterCubit(onChangeCallback: changes.add);
-        await cubit.close();
-        expect(changes, isEmpty);
-        // ignore: invalid_use_of_protected_member
-        verifyNever(() => observer.onChange(any(), any()));
+        await BlocOverrides.runZoned(() async {
+          final changes = <Change<int>>[];
+          final cubit = CounterCubit(onChangeCallback: changes.add);
+          await cubit.close();
+          expect(changes, isEmpty);
+          // ignore: invalid_use_of_protected_member
+          verifyNever(() => observer.onChange(any(), any()));
+        }, blocObserver: observer);
       });
 
       test('is called with correct change for a single state change', () async {
-        final changes = <Change<int>>[];
-        final cubit = CounterCubit(onChangeCallback: changes.add)..increment();
-        await cubit.close();
-        expect(
-          changes,
-          const [Change<int>(currentState: 0, nextState: 1)],
-        );
-        verify(
-          // ignore: invalid_use_of_protected_member
-          () => observer.onChange(
-            cubit,
-            const Change<int>(currentState: 0, nextState: 1),
-          ),
-        ).called(1);
+        await BlocOverrides.runZoned(() async {
+          final changes = <Change<int>>[];
+          final cubit = CounterCubit(onChangeCallback: changes.add)
+            ..increment();
+          await cubit.close();
+          expect(
+            changes,
+            const [Change<int>(currentState: 0, nextState: 1)],
+          );
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              cubit,
+              const Change<int>(currentState: 0, nextState: 1),
+            ),
+          ).called(1);
+        }, blocObserver: observer);
       });
 
       test('is called with correct changes for multiple state changes',
           () async {
-        final changes = <Change<int>>[];
-        final cubit = CounterCubit(onChangeCallback: changes.add)
-          ..increment()
-          ..increment();
-        await cubit.close();
-        expect(
-          changes,
-          const [
-            Change<int>(currentState: 0, nextState: 1),
-            Change<int>(currentState: 1, nextState: 2),
-          ],
-        );
-        verify(
-          // ignore: invalid_use_of_protected_member
-          () => observer.onChange(
-            cubit,
-            const Change<int>(currentState: 0, nextState: 1),
-          ),
-        ).called(1);
-        verify(
-          // ignore: invalid_use_of_protected_member
-          () => observer.onChange(
-            cubit,
-            const Change<int>(currentState: 1, nextState: 2),
-          ),
-        ).called(1);
+        await BlocOverrides.runZoned(() async {
+          final changes = <Change<int>>[];
+          final cubit = CounterCubit(onChangeCallback: changes.add)
+            ..increment()
+            ..increment();
+          await cubit.close();
+          expect(
+            changes,
+            const [
+              Change<int>(currentState: 0, nextState: 1),
+              Change<int>(currentState: 1, nextState: 2),
+            ],
+          );
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              cubit,
+              const Change<int>(currentState: 0, nextState: 1),
+            ),
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              cubit,
+              const Change<int>(currentState: 1, nextState: 2),
+            ),
+          ).called(1);
+        }, blocObserver: observer);
       });
     });
 
     group('emit', () {
-      test('does nothing if cubit is closed (indirect)', () {
-        final cubit = CounterCubit();
-        expectLater(
-          cubit.stream,
-          emitsInOrder(<Matcher>[equals(1), emitsDone]),
-        );
-        cubit
-          ..increment()
-          ..close()
-          ..increment();
-      });
-
-      test('does nothing if cubit is closed (direct)', () {
-        final cubit = CounterCubit();
-        expectLater(
-          cubit.stream,
-          emitsInOrder(<Matcher>[equals(1), emitsDone]),
-        );
-        cubit
-          ..emit(1)
-          ..close()
-          ..emit(2);
-      });
-
-      test('can be invoked directly within a test', () {
-        final cubit = CounterCubit()
-          ..emit(100)
-          ..close();
-        expect(cubit.state, 100);
+      test('throws StateError if cubit is closed', () {
+        var didThrow = false;
+        runZonedGuarded(() {
+          final cubit = CounterCubit();
+          expectLater(
+            cubit.stream,
+            emitsInOrder(<Matcher>[equals(1), emitsDone]),
+          );
+          cubit
+            ..increment()
+            ..close()
+            ..increment();
+        }, (error, _) {
+          didThrow = true;
+          expect(
+            error,
+            isA<StateError>().having(
+              (e) => e.message,
+              'message',
+              'Cannot emit new states after calling close',
+            ),
+          );
+        });
+        expect(didThrow, isTrue);
       });
 
       test('emits states in the correct order', () async {
@@ -262,70 +271,20 @@ void main() {
       });
     });
 
-    group('listen (legacy)', () {
-      test('returns a StreamSubscription', () {
-        final cubit = CounterCubit();
-        // ignore: deprecated_member_use_from_same_package
-        final subscription = cubit.listen((_) {});
-        expect(subscription, isA<StreamSubscription<int>>());
-        subscription.cancel();
-        cubit.close();
-      });
-
-      test('does not receive current state upon subscribing', () async {
-        final states = <int>[];
-        // ignore: deprecated_member_use_from_same_package
-        final cubit = CounterCubit()..listen(states.add);
-        await cubit.close();
-        expect(states, isEmpty);
-      });
-
-      test('receives single async state', () async {
-        final states = <int>[];
-        // ignore: deprecated_member_use_from_same_package
-        final cubit = FakeAsyncCounterCubit()..listen(states.add);
-        await cubit.increment();
-        await cubit.close();
-        expect(states, [equals(1)]);
-      });
-
-      test('receives multiple async states', () async {
-        final states = <int>[];
-        // ignore: deprecated_member_use_from_same_package
-        final cubit = FakeAsyncCounterCubit()..listen(states.add);
-        await cubit.increment();
-        await cubit.increment();
-        await cubit.increment();
-        await cubit.close();
-        expect(states, [equals(1), equals(2), equals(3)]);
-      });
-
-      test('can call listen multiple times', () async {
-        final states = <int>[];
-        final cubit = CounterCubit()
-          // ignore: deprecated_member_use_from_same_package
-          ..listen(states.add)
-          // ignore: deprecated_member_use_from_same_package
-          ..listen(states.add)
-          ..increment();
-        await cubit.close();
-        expect(states, [equals(1), equals(1)]);
-      });
-    });
-
     group('close', () {
       late MockBlocObserver observer;
 
       setUp(() {
         observer = MockBlocObserver();
-        Bloc.observer = observer;
       });
 
       test('triggers onClose on observer', () async {
-        final cubit = CounterCubit();
-        await cubit.close();
-        // ignore: invalid_use_of_protected_member
-        verify(() => observer.onClose(cubit)).called(1);
+        await BlocOverrides.runZoned(() async {
+          final cubit = CounterCubit();
+          await cubit.close();
+          // ignore: invalid_use_of_protected_member
+          verify(() => observer.onClose(cubit)).called(1);
+        }, blocObserver: observer);
       });
 
       test('emits done (sync)', () {

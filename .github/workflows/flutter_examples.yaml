@@ -10,7 +10,6 @@ on:
       - "examples/flutter_counter/**"
       - "examples/flutter_dynamic_form/**"
       - "examples/flutter_firebase_login/**"
-      - "examples/flutter_firestore_todos/**"
       - "examples/flutter_form_validation/**"
       - "examples/flutter_graphql_jobs/**"
       - "examples/flutter_infinite_list/**"
@@ -31,7 +30,6 @@ on:
       - "examples/flutter_counter/**"
       - "examples/flutter_dynamic_form/**"
       - "examples/flutter_firebase_login/**"
-      - "examples/flutter_firestore_todos/**"
       - "examples/flutter_form_validation/**"
       - "examples/flutter_graphql_jobs/**"
       - "examples/flutter_infinite_list/**"
@@ -55,7 +53,6 @@ jobs:
             "examples/flutter_counter",
             "examples/flutter_dynamic_form",
             "examples/flutter_firebase_login",
-            "examples/flutter_firestore_todos",
             "examples/flutter_form_validation",
             "examples/flutter_graphql_jobs",
             "examples/flutter_infinite_list",
@@ -63,6 +60,9 @@ jobs:
             "examples/flutter_shopping_cart",
             "examples/flutter_timer",
             "examples/flutter_todos",
+            "examples/flutter_todos/packages/local_storage_todos_api",
+            "examples/flutter_todos/packages/todos_api",
+            "examples/flutter_todos/packages/todos_repository",
             "examples/flutter_weather",
             "examples/flutter_wizard",
             "examples/github_search/flutter_github_search",

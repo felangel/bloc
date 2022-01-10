@@ -11,10 +11,6 @@ class MockNewCarRepository extends Mock implements NewCarRepository {}
 class MockNewCarBloc extends MockBloc<NewCarEvent, NewCarState>
     implements NewCarBloc {}
 
-class FakeNewCarEvent extends Fake implements NewCarEvent {}
-
-class FakeNewCarState extends Fake implements NewCarState {}
-
 extension on WidgetTester {
   Future<void> pumpNewCarPage(NewCarRepository newCarRepository) {
     return pumpWidget(
@@ -56,8 +52,6 @@ void main() {
   final mockYear = mockYears[0];
 
   setUp(() {
-    registerFallbackValue(FakeNewCarState());
-    registerFallbackValue(FakeNewCarEvent());
     newCarRepository = MockNewCarRepository();
     newCarBloc = MockNewCarBloc();
   });

@@ -4,12 +4,16 @@ import 'package:mocktail/mocktail.dart';
 
 class MockStorage extends Mock implements Storage {}
 
-late Storage hydratedStorage;
+T mockHydratedStorage<T>(T Function() body, {Storage? storage}) {
+  return HydratedBlocOverrides.runZoned<T>(
+    body,
+    storage: storage ?? _buildMockStorage(),
+  );
+}
 
-void initHydratedBloc() {
+Storage _buildMockStorage() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  hydratedStorage = MockStorage();
-  when(() => hydratedStorage.write(any(), any<dynamic>()))
-      .thenAnswer((_) async {});
-  HydratedBloc.storage = hydratedStorage;
+  final storage = MockStorage();
+  when(() => storage.write(any(), any<dynamic>())).thenAnswer((_) async {});
+  return storage;
 }

@@ -1,3 +1,72 @@
+# 8.0.2
+
+- fix: make `onChange` and `addError` protected ([#3071](https://github.com/felangel/bloc/pull/3071))
+- refactor: use `late` keyword for internal state controller ([#3100](https://github.com/felangel/bloc/pull/3100))
+- refactor: add `isClosed` to `Closable` ([#3066](https://github.com/felangel/bloc/pull/3066))
+- refactor: add core interfaces ([#3012](https://github.com/felangel/bloc/pull/3012))
+- refactor: internal reorganization ([#3011](https://github.com/felangel/bloc/pull/3011))
+- docs: update example to follow naming conventions ([#3029](https://github.com/felangel/bloc/pull/3029))
+
+# 8.0.1
+
+- fix: allow `emit` usage within tests ([#2982](https://github.com/felangel/bloc/pull/2982))
+
+# 8.0.0
+
+- **BREAKING**: feat: introduce `BlocOverrides` API ([#2932](https://github.com/felangel/bloc/pull/2932))
+  - `Bloc.observer` removed in favor of `BlocOverrides.runZoned` and `BlocOverrides.current.blocObserver`
+  - `Bloc.transformer` removed in favor of `BlocOverrides.runZoned` and `BlocOverrides.current.eventTransformer`
+- **BREAKING**: refactor: make `BlocObserver` an abstract class
+- **BREAKING**: feat: `add` throws `StateError` when bloc is closed ([#2912](https://github.com/felangel/bloc/pull/2912))
+- **BREAKING**: feat: `emit` throws `StateError` when bloc is closed ([#2913](https://github.com/felangel/bloc/pull/2913))
+- **BREAKING**: feat: improve error handling/reporting
+  - `BlocUnhandledErrorException` is removed
+  - Uncaught exceptions are always reported to `onError` and rethrown
+  - `addError` reports error to `onError` but does not propagate as an uncaught exception
+- **BREAKING**: feat: restrict scope of `emit` in `Bloc` and `Cubit`
+  - In `Cubit`, `emit` is `protected` so it can only be used within the `Cubit` instance.
+  - In `Bloc`, `emit` is `internal` so it cannot be used outside of the internal package implementation.
+- **BREAKING**: refactor: remove deprecated `TransitionFunction`
+- **BREAKING**: refactor: remove deprecated `transformEvents`
+- **BREAKING**: refactor: remove deprecated `mapEventToState`
+- **BREAKING**: refactor: remove deprecated `transformTransitions`
+- **BREAKING**: refactor: remove deprecated `listen` on `BlocBase`
+- feat: throw `StateError` if an event is added without a registered event handler
+
+# 8.0.0-dev.5
+
+- **BREAKING**: feat: introduce `BlocOverrides` API ([#2932](https://github.com/felangel/bloc/pull/2932))
+  - `Bloc.observer` removed in favor of `BlocOverrides.runZoned` and `BlocOverrides.current.blocObserver`
+  - `Bloc.transformer` removed in favor of `BlocOverrides.runZoned` and `BlocOverrides.current.eventTransformer`
+- **BREAKING**: refactor: make `BlocObserver` an abstract class
+- **BREAKING**: feat: `add` throws `StateError` when bloc is closed ([#2912](https://github.com/felangel/bloc/pull/2912))
+- **BREAKING**: feat: `emit` throws `StateError` when bloc is closed ([#2913](https://github.com/felangel/bloc/pull/2913))
+
+# 8.0.0-dev.4
+
+- **BREAKING**: feat: improve error handling/reporting
+  - `BlocUnhandledErrorException` is removed
+  - Uncaught exceptions are always reported to `onError` and rethrown
+  - `addError` reports error to `onError` but does not propagate as an uncaught exception
+
+# 8.0.0-dev.3
+
+- **BREAKING**: feat: restrict scope of `emit` in `Bloc` and `Cubit`
+  - In `Cubit`, `emit` is `protected` so it can only be used within the `Cubit` instance.
+  - In `Bloc`, `emit` is `internal` so it cannot be used outside of the internal package implementation.
+
+# 8.0.0-dev.2
+
+- **BREAKING**: refactor: remove deprecated `listen` on `BlocBase`
+
+# 8.0.0-dev.1
+
+- **BREAKING**: refactor: remove deprecated `TransitionFunction`
+- **BREAKING**: refactor: remove deprecated `transformEvents`
+- **BREAKING**: refactor: remove deprecated `mapEventToState`
+- **BREAKING**: refactor: remove deprecated `transformTransitions`
+- feat: throw `StateError` if an event is added without a registered event handler
+
 # 7.2.1
 
 - fix: `on<E extends Event>` should have an `EventTransformer<E>` instead of `EventTransformer<Event>`
@@ -24,7 +93,7 @@
 
 # 7.2.0-dev.3
 
-- **BREAKING**: refactor!: require `emit.forEach` `onData` to be synchronous
+- **BREAKING**: refactor: require `emit.forEach` `onData` to be synchronous
 - refactor: minor internal optimizations in `on<Event>` implementation
 
 # 7.2.0-dev.2

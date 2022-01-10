@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  Bloc.observer = AppBlocObserver();
-  runApp(const App());
+  BlocOverrides.runZoned(
+    () => runApp(const App()),
+    blocObserver: AppBlocObserver(),
+  );
 }
 
 /// Custom [BlocObserver] that observes all bloc and cubit state changes.
@@ -105,17 +107,23 @@ class CounterView extends StatelessWidget {
         children: <Widget>[
           FloatingActionButton(
             child: const Icon(Icons.add),
-            onPressed: () => context.read<CounterBloc>().add(Increment()),
+            onPressed: () {
+              context.read<CounterBloc>().add(CounterIncrementPressed());
+            },
           ),
           const SizedBox(height: 4),
           FloatingActionButton(
             child: const Icon(Icons.remove),
-            onPressed: () => context.read<CounterBloc>().add(Decrement()),
+            onPressed: () {
+              context.read<CounterBloc>().add(CounterDecrementPressed());
+            },
           ),
           const SizedBox(height: 4),
           FloatingActionButton(
             child: const Icon(Icons.brightness_6),
-            onPressed: () => context.read<ThemeCubit>().toggleTheme(),
+            onPressed: () {
+              context.read<ThemeCubit>().toggleTheme();
+            },
           ),
         ],
       ),
@@ -127,10 +135,10 @@ class CounterView extends StatelessWidget {
 abstract class CounterEvent {}
 
 /// Notifies bloc to increment state.
-class Increment extends CounterEvent {}
+class CounterIncrementPressed extends CounterEvent {}
 
 /// Notifies bloc to decrement state.
-class Decrement extends CounterEvent {}
+class CounterDecrementPressed extends CounterEvent {}
 
 /// {@template counter_bloc}
 /// A simple [Bloc] that manages an `int` as its state.
@@ -138,8 +146,8 @@ class Decrement extends CounterEvent {}
 class CounterBloc extends Bloc<CounterEvent, int> {
   /// {@macro counter_bloc}
   CounterBloc() : super(0) {
-    on<Increment>((event, emit) => emit(state + 1));
-    on<Decrement>((event, emit) => emit(state - 1));
+    on<CounterIncrementPressed>((event, emit) => emit(state + 1));
+    on<CounterDecrementPressed>((event, emit) => emit(state - 1));
   }
 }
 

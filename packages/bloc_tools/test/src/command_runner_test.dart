@@ -53,9 +53,11 @@ void main() {
 
     void Function() overridePrint(void Function() fn) {
       return () {
-        final spec = ZoneSpecification(print: (_, __, ___, String msg) {
-          printLogs.add(msg);
-        });
+        final spec = ZoneSpecification(
+          print: (_, __, ___, String msg) {
+            printLogs.add(msg);
+          },
+        );
         return Zone.current.fork(specification: spec).run<void>(fn);
       };
     }
@@ -152,24 +154,30 @@ void main() {
         verify(() => logger.info(commandRunner.usage)).called(1);
       });
 
-      test('handles no command', overridePrint(() async {
-        final result = await commandRunner.run([]);
-        expect(printLogs, equals(expectedUsage));
-        expect(result, equals(ExitCode.success.code));
-      }));
-
-      group('--help', () {
-        test('outputs usage', overridePrint(() async {
-          final result = await commandRunner.run(['--help']);
+      test(
+        'handles no command',
+        overridePrint(() async {
+          final result = await commandRunner.run([]);
           expect(printLogs, equals(expectedUsage));
           expect(result, equals(ExitCode.success.code));
+        }),
+      );
 
-          printLogs.clear();
+      group('--help', () {
+        test(
+          'outputs usage',
+          overridePrint(() async {
+            final result = await commandRunner.run(['--help']);
+            expect(printLogs, equals(expectedUsage));
+            expect(result, equals(ExitCode.success.code));
 
-          final resultAbbr = await commandRunner.run(['-h']);
-          expect(printLogs, equals(expectedUsage));
-          expect(resultAbbr, equals(ExitCode.success.code));
-        }));
+            printLogs.clear();
+
+            final resultAbbr = await commandRunner.run(['-h']);
+            expect(printLogs, equals(expectedUsage));
+            expect(resultAbbr, equals(ExitCode.success.code));
+          }),
+        );
       });
 
       group('--version', () {

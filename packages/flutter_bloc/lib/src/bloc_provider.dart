@@ -34,14 +34,14 @@ mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 /// ```
 ///
 /// {@endtemplate}
-class BlocProvider<T extends BlocBase<Object?>>
+class BlocProvider<T extends StateStreamableSource<Object?>>
     extends SingleChildStatelessWidget with BlocProviderSingleChildWidget {
   /// {@macro bloc_provider}
-  BlocProvider({
+  const BlocProvider({
     Key? key,
     required Create<T> create,
     this.child,
-    this.lazy,
+    this.lazy = true,
   })  : _create = create,
         _value = null,
         super(key: key, child: child);
@@ -63,13 +63,13 @@ class BlocProvider<T extends BlocBase<Object?>>
   ///   child: ScreenA(),
   /// );
   /// ```
-  BlocProvider.value({
+  const BlocProvider.value({
     Key? key,
     required T value,
     this.child,
   })  : _value = value,
         _create = null,
-        lazy = null,
+        lazy = true,
         super(key: key, child: child);
 
   /// Widget which will have access to the [Bloc] or [Cubit].
@@ -77,7 +77,7 @@ class BlocProvider<T extends BlocBase<Object?>>
 
   /// Whether the [Bloc] or [Cubit] should be created lazily.
   /// Defaults to `true`.
-  final bool? lazy;
+  final bool lazy;
 
   final Create<T>? _create;
 
@@ -92,7 +92,7 @@ class BlocProvider<T extends BlocBase<Object?>>
   /// ```dart
   /// BlocProvider.of<BlocA>(context);
   /// ```
-  static T of<T extends BlocBase<Object?>>(
+  static T of<T extends StateStreamableSource<Object?>>(
     BuildContext context, {
     bool listen = false,
   }) {
@@ -115,6 +115,10 @@ class BlocProvider<T extends BlocBase<Object?>>
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
+    assert(
+      child != null,
+      '$runtimeType used outside of MultiBlocProvider must specify a child',
+    );
     final value = _value;
     return value != null
         ? InheritedProvider<T>.value(
@@ -133,8 +137,8 @@ class BlocProvider<T extends BlocBase<Object?>>
   }
 
   static VoidCallback _startListening(
-    InheritedContext<BlocBase?> e,
-    BlocBase value,
+    InheritedContext<StateStreamable?> e,
+    StateStreamable value,
   ) {
     final subscription = value.stream.listen(
       (dynamic _) => e.markNeedsNotifyDependents(),

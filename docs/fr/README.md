@@ -95,7 +95,6 @@ Le but de cette architecte est de facilité la séparation entre _présentation_
 - [Météo](https://bloclibrary.dev/#/flutterweathertutorial) - un exemple pour créer une application météorologique en utilisant les packages `bloc` et `flutter_bloc`. L'app utiliser un `RefreshIndicator` pour implémenter un "tirer pour rafraichir la page" ainsi qu'un thème dynamique.
 - [Liste de choses à faire](https://bloclibrary.dev/#/fluttertodostutorial) - un exemple pour créer une application "Liste de choses à faire" en utilisant les packages `bloc` et `flutter_bloc`.
 - [Minuteur](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - un exemple pour créer un Minuteur en utilisant les packages `bloc` et `flutter_bloc`.
-- [Liste de choses à faire avec Firestore](https://bloclibrary.dev/#/flutterfirestoretodostutorial) - un exemple pour créer une application "Liste de choses à faire" en utilisant les packages `bloc` et `flutter_bloc` qui intègre le cloud firestore.
 - [Panier Shopping](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - un exemple pour créer une application contenant un panier de Shopping en utilisant les packages `bloc`et `flutter_bloc` basé sur les [flutter samples](https://github.com/flutter/samples/tree/master/provider_shopper).
 - [Formulaire dynamique](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - un exemple pour créer utiliser les packages `bloc` et `flutter_bloc` afin d'implémenter un formulaire dynamique qui extrait des données depuis un répertoire.
 

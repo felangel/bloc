@@ -217,6 +217,7 @@ void main() {
       blocTest<ExceptionCubit, int>(
         'captures calls to addError',
         build: () => ExceptionCubit(),
+        // ignore: invalid_use_of_protected_member
         act: (cubit) => cubit.addError(exception),
         errors: () => <Matcher>[equals(exception)],
       );
@@ -242,6 +243,7 @@ void main() {
       blocTest<ErrorCubit, int>(
         'captures calls to addError',
         build: () => ErrorCubit(),
+        // ignore: invalid_use_of_protected_member
         act: (cubit) => cubit.addError(error),
         errors: () => <Matcher>[equals(error)],
       );

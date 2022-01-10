@@ -1,3 +1,23 @@
+# 0.2.1
+
+- chore: upgrade to `bloc v8.0.1`
+
+# 0.2.0
+
+- **BREAKING**: feat: upgrade to `bloc v8.0.0`
+
+# 0.2.0-dev.3
+
+- **BREAKING**: feat: upgrade to `bloc v8.0.0-dev.5`
+
+# 0.2.0-dev.2
+
+- **BREAKING**: feat: upgrade to `bloc v8.0.0-dev.3`
+
+# 0.2.0-dev.1
+
+- **BREAKING**: feat: upgrade to `bloc v8.0.0-dev.2`
+
 # 0.1.0
 
 - feat: upgrade to `bloc ^7.2.0`

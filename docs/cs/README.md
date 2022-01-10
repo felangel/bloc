@@ -97,7 +97,6 @@ V rámci této dokumentace se budeme držet originálního názvu `Bloc` (čti _
 - [Počasí](https://bloclibrary.dev/#/cs/flutterweathertutorial) - ukázka jak vytvořit aplikaci počasí použitím balíčků `bloc` a `flutter_bloc`. Aplikace používá `RefreshIndicator` k implementaci "zatáhnout pro obnovení" a také dynamické motivy.
 - [Plánovač](https://bloclibrary.dev/#/cs/fluttertodostutorial) - ukázka jak vytvořit aplikaci plánování použitím balíčků `bloc` a `flutter_bloc`.
 - [Časovač](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - ukázka jak vytvořit časovač použitím balíčků `bloc` a `flutter_bloc`.
-- [Firestore plánovač](https://bloclibrary.dev/#/cs/flutterfirestoretodostutorial) - ukázka jak vytvořit aplikaci plánovaní použitím balíčků `bloc` a `flutter_bloc`, s využitím Cloud Firestore.
 - [Nákupní košík](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - ukázka jak vytvořit aplikaci nákupního košíku použitím balíčků `bloc` a `flutter_bloc` založených na [flutter ukázkách](https://github.com/flutter/samples/tree/master/provider_shopper).
 
 ### Web

@@ -95,7 +95,6 @@ Das Ziel dieser Bibliothek ist es, eine erleichterte Trennung von _Präsentation
 - [Wetter](https://bloclibrary.dev/#/flutterweathertutorial) - ein Beispiel für die Erstellung einer Wetteranwendung unter Verwendung der Pakete `bloc` und `flutter_bloc`. Die Anwendung verwendet einen `RefreshIndicator`, um "pull-to-refresh" sowie dynamische Themes
 - [Todos](https://bloclibrary.dev/#/fluttertodostutorial) - ein Beispiel für die Erstellung einer Todo-Anwendung unter Verwendung der Pakete `bloc` und `flutter_bloc`.
 - [Timer](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - ein Beispiel für die Erstellung eines Timers unter Verwendung der Pakete `bloc` und `flutter_bloc`.
-- [Firestore Todos](https://bloclibrary.dev/#/flutterfirestoretodostutorial) - ein Beispiel für die Erstellung einer Todo-Anwendung unter Verwendung der Pakete `bloc` und `flutter_bloc`, die mit der Firestore Cloud integriert ist.
 - [Warenkorb](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - ein Beispiel für die Erstellung einer Warenkorb-Anwendung unter Verwendung der Pakete `bloc` und `flutter_bloc`, basierend auf [flutter samples](https://github.com/flutter/samples/tree/master/provider_shopper).
 - [Dynamische Formular](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - ein Beispiel für die Verwendung der Pakete `bloc` und `flutter_bloc` zur Implementierung eines dynamischen Formulars, das Daten aus einem Repository abruft.
 
