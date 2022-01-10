@@ -195,7 +195,3 @@ Obtenga más información en los siguientes enlaces, que han sido aportados por 
 ## Mantenedores
 
 - [Felix Angelov](https://github.com/felangel)
-
-## Partidarios
-
-[<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/vgv_logo.png" width="120" />](https://verygood.ventures)
