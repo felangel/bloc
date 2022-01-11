@@ -1,13 +1,13 @@
 # vim-bloc-plugin
 
-This plugin was designed to be similar the [vscode extension](https://github.com/felangel/bloc/tree/master/extensions/vscode).
+This plugin was designed to be similar as the [vscode extension](https://github.com/felangel/bloc/tree/master/extensions/vscode).
 
 Generating the Flutter Bloc or Cubit files.
 
 
 ## Installation
 
-Assuming you are using vim-plug as plugin manager, you can just put it in yout `init.vim`
+Assuming you are using vim-plug as plugin manager, you can just put it in your `init.vim`
 
 ```bash
 Plug 'felangel/bloc', { 'rtp': 'extension/vim' }
@@ -17,13 +17,13 @@ run `:PlugInstall`, after that, you must source your `.vimrc`
 
 ## Usage
 
-After your had installed the plugin, it enable two new commands
+After your have installed the plugin, it enables two new commands
 
 ```bash
 :Bloc <BlocName> <DestinationFolder>
 ```
 
-- BlocName: Is the name will be used to generate all bloc files and classes
+- BlocName: Is the name that will be used to generate all bloc files and classes
     - **This name must be a CamelCase**
 - DestinationFolder: Is the path to generate the files, like: `lib/posts`
     - **Don't start with `/`**
@@ -33,7 +33,7 @@ After your had installed the plugin, it enable two new commands
 :Cubit <CubitName> <DestinationFolder>
 ```
 
-- CubitName: Is the name will be used to generate all cubit files and classes
+- CubitName: Is the name that will be used to generate all cubit files and classes
     - **This name must be a CamelCase**
 - DestinationFolder: Is the path to generate the files, like: `lib/posts`
     - **Don't start with `/`**
