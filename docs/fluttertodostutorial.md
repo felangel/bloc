@@ -48,7 +48,7 @@ We can then replace the contents of `pubspec.yaml` with:
 Finally, we can install all the dependencies:
 
 ```sh
-very_good packages get —-recursive
+very_good packages get --recursive
 ```
 
 ## Project Structure
