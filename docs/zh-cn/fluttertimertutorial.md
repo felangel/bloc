@@ -17,7 +17,7 @@
 ## 新建项目和配置文件yaml
 我们先新建一个全新的flutter应用
 
-[script](_snippets/flutter_timer_tutorial/flutter_create.sh.md ':include')
+[script](../_snippets/flutter_timer_tutorial/flutter_create.sh.md ':include')
 
 将下面代码复制粘贴到 `pubspec.yaml` 文件中
 
@@ -86,39 +86,39 @@
 
 如果你还没有创建bloc文件夹下的`timer_bloc.dart`，你需要创建此文件，并且创建一个空的`TimerBloc`。
 
-[timer_bloc.dart](_snippets/flutter_timer_tutorial/timer_bloc_initial_state.dart.md ':include')
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_initial_state.dart.md ':include')
 
 首先我们需要定义`TimerBloc`的初始状态。我们想`TimerBloc`从`TimerInitial`开始，默认时间1分钟（60秒）。
 
-[timer_bloc.dart](_snippets/flutter_timer_tutorial/timer_bloc_initial_state.dart.md ':include')
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_initial_state.dart.md ':include')
 
 接下来，我们需要定义对`Ticker`的依赖关系。
 
-[timer_bloc.dart](_snippets/flutter_timer_tutorial/timer_bloc_ticker.dart.md ':include')
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_ticker.dart.md ':include')
 
 我们也定义了一个`StreamSubscription`，一会儿会讲到。
 
 现在剩下的就是实现事件的处理，为了增加可读性我喜欢将每个事件的处理放进它自己的帮助方法中。我们开始`TimerStarted`事件。
 
-[timer_bloc.dart](_snippets/flutter_timer_tutorial/timer_bloc_start.dart.md ':include')
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_start.dart.md ':include')
 
 如果`TimerBloc`收到`TimerStarted`事件，它会发送一个带有开始时间的`TimerRunInProgress`状态。此外，如果已经打开了`_tickerSubscription`我们需要取消它释放内存。我们也需要在`TimerBloc`中重载`close`方法，当`TimerBloc`被关闭的时候能取消`_tickerSubscription `。最后我们监听`_ticker.tick`流并且在每个触发时间我们添加一个包含剩余时间的`TimerTicked`事件。
 
 下一步我们实现`TimerTicked`事件的处理。
 
-[timer_bloc.dart](_snippets/flutter_timer_tutorial/timer_bloc_tick.dart.md ':include')
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_tick.dart.md ':include')
 
 每次接收到`TimerTicked`事件，如果剩余时间大于0，我们需要发送一个带有新的剩余时间的`TimerRunInProgress`事件来更新状态。否则，如果剩余时间等于0，那么倒计时已经结束，我们需要发送`TimerRunComplete`状态。
 
 现在让我们实现`TimerPaused`事件的处理。
 
-[timer_bloc.dart](_snippets/flutter_timer_tutorial/timer_bloc_pause.dart.md ':include')
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_pause.dart.md ':include')
 
 在`_onPaused`中如果我们`TimerBloc`中的状态是`TimerRunInProgress`，我们可以暂停`_tickerSubscription`并且发送一个带有当前时间的`TimerRunPause`状态。
 
 下一步，我们实现`TimerResumed`事件的处理，这样我们就可以取消计时器的暂停。
 
-[timer_bloc.dart](_snippets/flutter_timer_tutorial/timer_bloc_resume.dart.md ':include')
+[timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_resume.dart.md ':include')
 
 `TimerResumed`事件处理和`TimerPaused`事件的处理非常相似。如果`TimerBloc`的`state`是`TimerRunPause`并且它接收到一个`TimerResumed`事件，它恢复`_tickerSubscription`并且发送一个带有当前时间的`TimerRunInProgress`状态。
 
@@ -148,7 +148,7 @@
 
 我们的`Timer`(`/timer/view/timer_page.dart `)组件将负责显示剩余时间和适当的按钮允许用户开始、暂停和重置秒表。
 
-[timer.dart](_snippets/flutter_timer_tutorial/timer1.dart.md ':include')
+[timer.dart](../_snippets/flutter_timer_tutorial/timer1.dart.md ':include')
 
 到目前为止，我们只使用`BlocProvider`来访问我们的`TimerBloc`实例。
 
@@ -161,7 +161,7 @@
 
 ### Actions
 
-[actions.dart](_snippets/flutter_timer_tutorial/actions.dart.md ':include')
+[actions.dart](../_snippets/flutter_timer_tutorial/actions.dart.md ':include')
 
 `Actions`小部件只是另一个`StatelessWidget`，每当我们获取到一个新的TimerState时，它使用`BlocBuilder`来重建UI。`Actions`使用`context.read<TimerBloc>()`访问`TimerBloc`实例并且基于当前`TimerBloc`状态返回不同的`FloatingActionButtons`。每个`FloatingActionButtons`的`onPressed`回调中都添加一个事件通知`TimerBloc`。
 
@@ -179,7 +179,7 @@
 
 最后添加下面的背景组件：
 
-[background.dart](_snippets/flutter_timer_tutorial/background.dart.md ':include')
+[background.dart](../_snippets/flutter_timer_tutorial/background.dart.md ':include')
 
 ### 把它们结合起来
 
