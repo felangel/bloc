@@ -185,6 +185,5 @@
 
 这就是所有的东西了！目前我们有一个相当可靠的计时器应用程序，它只高效地重建需要重建的小部件。
 
-这个示例所有的源码在 [这里](https://github.com/felangel/Bloc/tree/master/examples/flutter_timer)。
-
+这个示例所有的源码在 [这里](https://github.com/felangel/bloc/tree/master/examples/flutter_timer)。
 
