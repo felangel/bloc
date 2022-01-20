@@ -16,10 +16,10 @@ export function getTemplateSetting(type: TemplateType): TemplateSetting {
   let config: string | undefined;
   switch (type) {
     case TemplateType.Bloc:
-      config = workspace.getConfiguration("bloc").get("newBlocTemplate");
+      config = workspace.getConfiguration("bloc").get("newBlocTemplate.type");
       break;
     case TemplateType.Cubit:
-      config = workspace.getConfiguration("bloc").get("newCubitTemplate");
+      config = workspace.getConfiguration("bloc").get("newCubitTemplate.type");
       break;
     default:
       return TemplateSetting.Auto;
