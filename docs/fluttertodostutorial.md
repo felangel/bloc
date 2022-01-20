@@ -23,7 +23,7 @@
 We'll start off by creating a brand new Flutter project using the [very_good_cli](https://pub.dev/packages/very_good_cli).
 
 ```sh
-very_good create flutter_todos —desc "An example todos app that showcases bloc state management patterns."
+very_good create flutter_todos --desc "An example todos app that showcases bloc state management patterns."
 ```
 
 ?> **💡 Tip**: You can install `very_good_cli` via `dart pub global activate very_good_cli`.
@@ -32,13 +32,13 @@ Next we'll create the `todos_api`, `local_storage_todos_api`, and `todos_reposit
 
 ```sh
 # create package:todos_api under packages/todos_api
-very_good create packages/todos_api -t dart_pkg —desc "The interface and models for an API providing access to todos."
+very_good create packages/todos_api -t dart_pkg --desc "The interface and models for an API providing access to todos."
 
 # create package:local_storage_todos_api under packages/local_storage_todos_api
-very_good create packages/local_storage_todos_api -t flutter_pkg —desc "A Flutter implementation of the TodosApi that uses local storage."
+very_good create packages/local_storage_todos_api -t flutter_pkg --desc "A Flutter implementation of the TodosApi that uses local storage."
 
 # create package:todos_repository under packages/todos_repository
-very_good create packages/todos_repository -t dart_pkg —desc "A repository that handles todo related requests."
+very_good create packages/todos_repository -t dart_pkg --desc "A repository that handles todo related requests."
 ```
 
 We can then replace the contents of `pubspec.yaml` with:
