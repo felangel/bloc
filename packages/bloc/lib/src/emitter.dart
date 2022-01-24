@@ -31,7 +31,7 @@ abstract class Emitter<State> {
     void Function(Object error, StackTrace stackTrace)? onError,
   });
 
-  // Subscribes to the provided [stream] and invokes the [onData] callback
+  /// Subscribes to the provided [stream] and invokes the [onData] callback
   /// when the [stream] emits new data and the result of [onData] is emitted.
   ///
   /// [forEach] completes when the event handler is cancelled or when
