@@ -185,11 +185,13 @@ Importing the `flutter_bloc` package includes different extension methods and th
 
 ### Provider
 
-`flutter_bloc` besides depending on `flutter` also depends on the [provider](https://pub.dev/packages/provider) package. Provider aims to wrap `InheritedWidget` and simplify its usage. 
+`flutter_bloc` besides depending on `flutter` also depends on the [provider](https://pub.dev/packages/provider) package. Provider aims to wrap `InheritedWidget` and simplify its usage.
+
+?> Check out the official [Flutter Documentation](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html) to learn more about `InheritedWidget`.
 
 In essence, `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `MultiRepositoryProvider` widgets are including an `InheritedProvider` to the widget tree.
 
-?> Check out the official [Flutter Documentation](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html) to learn more about `InheritedWidget`.
+In addition, `flutter_bloc` exports `ReadContext`, `WatchContext` and `SelectContext`, all extensions from `package:provider`.
 
 #### ReadContext extension
 
