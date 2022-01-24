@@ -177,7 +177,7 @@ Now when instantiating a bloc, we can access the instance of a repository via `c
 
 ## Extension Methods Usage
 
-Extension methods, introduced in Dart 2.7, allows to add functionalities to existing classes. 
+Extension methods, introduced in Dart 2.7, allow to add functionalities to existing classes. 
 
 Importing the `flutter_bloc` package includes different extension methods and this section aims to describe what and how these should be used.
 
@@ -187,7 +187,7 @@ Importing the `flutter_bloc` package includes different extension methods and th
 
 `flutter_bloc` besides depending on `flutter` also depends on the [provider](https://pub.dev/packages/provider) package. Provider aims to wrap `InheritedWidget` and simplify its usage. 
 
-In essence, when using `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `MultiRepositoryProvider` widgets are including an `InheritedProvider` to the widget tree. 
+In essence, `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `MultiRepositoryProvider` widgets are including an `InheritedProvider` to the widget tree.
 
 ?> Check out the official [Flutter Documentation](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html) to learn more about `InheritedWidget`.
 
