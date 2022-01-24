@@ -174,3 +174,37 @@ Since we only have one repository in our app, we will inject it into our widget 
 Now when instantiating a bloc, we can access the instance of a repository via `context.read` and inject the repository into the bloc via constructor.
 
 [flutter_weather_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_weather
+
+## Extension Methods Usage
+
+Extension methods, introduced in Dart 2.7, allows to add functionalities to existing classes. 
+
+Importing the `flutter_bloc` package includes different extension methods and this section aims to describe what and how these should be used.
+
+?> Check out the official [Dart Documentation](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html) for more information about extension methods.
+
+### Provider
+
+`flutter_bloc` besides depending on `flutter` also depends on the [provider](https://pub.dev/packages/provider) package. Provider aims to wrap `InheritedWidget` and simplify its usage. 
+
+In essence, when using `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `MultiRepositoryProvider` widgets are including an `InheritedProvider` to the widget tree. 
+
+?> Check out the official [Flutter Documentation](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html) to learn more about `InheritedWidget`.
+
+#### ReadContext extension
+
+##### What is `context.read<T>`?
+
+`Provider` is a wrapper over `InheritedWidget`. The convention for `InheritedWidget`s is to expose a `static` method named `of`. This method usually searches the widget tree for the nearest `InheritedWidget` which matches a given `Type`. This is exactly what `BlocProvider.of<T>(context)` does.
+
+Some developers consider `BlocProvider.of<T>(context)` too verbose and take advantage of *extension methods*. Thus, the provider package creates an extension on `BuildContext` (named `ReadContext`) that includes the `read<T>()` method.
+
+It is important to note that `BlocProvider.of<T>(context)` and `context.read<T>` do not listen to `T`. In other words, if the provided `Object` changes `read` will not be called to update the value after this change.
+
+?> `BlocProvider.of<T>(context)` and `context.read<T>` are equivalent.
+
+##### How to use `context.read<T>`?
+
+#### WatchContext extension
+
+#### SelectContext extension
