@@ -175,7 +175,7 @@ Now when instantiating a bloc, we can access the instance of a repository via `c
 
 [flutter_weather_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_weather
 
-## Extension Methods Usage
+## Extension Methods
 
 Importing the `flutter_bloc` package includes different extension methods and this section aims to describe what and how these should be used. This type of methods, included in Dart 2.7, allow to add functionalities to existing classes.
 
