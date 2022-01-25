@@ -189,7 +189,7 @@ Importing the `flutter_bloc` package includes different extension methods and th
 
 In essence, `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `MultiRepositoryProvider` widgets are including an `InheritedProvider` to the widget tree.
 
-In addition, `flutter_bloc` exports `ReadContext`, `WatchContext` and `SelectContext`, all extensions from `package:provider`. This means that when importing `package:flutter_bloc` we have access to these extensions.
+In addition, `flutter_bloc` exports `ReadContext`, `WatchContext` and `SelectContext`, all extensions from `package:provider`. This means that importing `package:flutter_bloc` exposes these extensions.
 
 ?> Check out [Provider's pub page](https://pub.dev/packages/provider) to learn more about `Provider`.
 
@@ -269,13 +269,13 @@ Builder(
 
 As in  `context.watch<T>()`, `context.select<T, R>(R function(T value))` provides the closest `T` provided in the widget tree. And also listens to changes on `T`, unlike `context.read<T>()`. However, the `select` method allows to be more selective, and avoid unnecessary rebuilds by specifying which property should be listened.
 
-For example, the code below will only rebuild the widget when the property `name` of `Unicorn` changes value. It will not rebuild if some other property of `Unicorn` changes.
-
 ```dart
 Widget build(BuildContext context) {
   final name = context.select((Unicorn unicorn) => unicorn.name);
   return Text(name);
 }
 ```
+
+The above, will only rebuild the widget when the property `name` of `Unicorn` changes value. It will not rebuild if some other property of `Unicorn` changes.
 
 ##### How to use `context.select<T, R>`?
