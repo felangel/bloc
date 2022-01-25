@@ -195,8 +195,6 @@ In addition, `flutter_bloc` exports `ReadContext`, `WatchContext` and `SelectCon
 
 ### ReadContext
 
-#### What is `context.read<T>`?
-
 `package:provider` creates an extension, named `ReadContext` on `BuildContext` that defines the `read<T>()` method. 
 
 `context.read<T>()` provides the closest `T` provided in the widget tree. However, `context.read<T>()` does not listen to `T`. In other words, if the provided `Object` of type `T` changes `read` will not trigger a rebuild.
@@ -232,8 +230,6 @@ The above usage is error prone because the `Text` widget will not be rebuilt if 
 
 ### WatchContext
 
-#### What is `context.watch<T>`?
-
 `package:provider` creates an extension, named `WatchContext` on `BuildContext` that defines the `watch<T>()` method. 
 
 Not only `context.watch<T>()` provides the closest `T` provided in the widget tree. But it also listens to changes on `T`, unlike `context.read<T>()`. This means that, if the provided `Object` of type `T` changes, `watch` will trigger a rebuild. Thus, this method is only accessible inside a `StatelessWidget`'s or `State`'s `build` method.
@@ -268,8 +264,6 @@ Builder(
 !> Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes. If the entire widget does not need to be rebuilt, either use `BlocBuilder` to wrap the parts that should rebuild, use a `Builder` with `context.watch` to scope the rebuilds, or decompose the widget into smaller widgets.
 
 ### SelectContext
-
-#### What is `context.select<T, R>`?
 
 `package:provider` creates an extension, named `SelectContext` on `BuildContext` that defines the `select<T, R>(R function(T value))` method. 
 
