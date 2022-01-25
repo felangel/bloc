@@ -261,7 +261,7 @@ Builder(
 );
 ```
 
-!> Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes. If the entire widget does not need to be rebuilt, either use `BlocBuilder` to wrap the parts that should rebuild, use a `Builder` with `context.watch` to scope the rebuilds, or decompose the widget into smaller widgets.
+!> Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes. If the entire widget does not need to be rebuilt, either use `BlocBuilder` to wrap the parts that should rebuild, or use a `Builder` with `context.watch` to scope the rebuilds, or decompose the widget into smaller widgets.
 
 ### SelectContext
 
@@ -279,3 +279,13 @@ Widget build(BuildContext context) {
 The above, will only rebuild the widget when the property `name` of `Unicorn` changes value. It will not rebuild if some other property of `Unicorn` changes.
 
 ##### How to use `context.select<T, R>`?
+
+Whenever it is required to only listen to specific changes of a bloc state, it is preferred to be selective and avoid unnecessary rebuilds.
+
+```dart
+
+```
+
+?> Check out the [Bloc Selector](flutterbloccoreconcepts?id=blocselector) for more information about `BlocSelector`.
+
+!> Using `context.select` at the root of the `build` method will result in the entire widget being rebuilt when the selected bloc property changes. If the entire widget does not need to be rebuilt, either use `BlocSelector` to wrap the parts that should rebuild, or use a `Builder` with `context.select` to scope the rebuilds, or decompose the widget into smaller widgets.
