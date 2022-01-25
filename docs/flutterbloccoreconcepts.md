@@ -177,35 +177,35 @@ Now when instantiating a bloc, we can access the instance of a repository via `c
 
 ## Extension Methods
 
-Importing the `flutter_bloc` package includes different extension methods and this section aims to describe what and how these should be used. This type of methods, included in Dart 2.7, allow to add functionalities to existing classes.
+Importing the `flutter_bloc` package includes different extension methods and this section aims to describe what they do and how they should be used. This type of method, included since Dart 2.7, allows adding functionalities to existing classes.
 
 ?> Check out the official [Dart Documentation](https://dart.dev/guides/language/extension-methods) for more information about extension methods.
 
 ### Provider
 
-`flutter_bloc` besides depending on `flutter` also depends on the [provider](https://pub.dev/packages/provider) package. Provider aims to wrap `InheritedWidget` and simplify its usage.
+`flutter_bloc` besides depending on `flutter` also depends on the [provider](https://pub.dev/packages/provider) package. Provider wraps `InheritedWidget` and simplifies its usage.
 
 ?> Check out the official [Flutter Documentation](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html) to learn more about `InheritedWidget`.
 
-In essence, `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `MultiRepositoryProvider` widgets are including an `InheritedProvider` to the widget tree.
+In essence; `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `MultiRepositoryProvider` widgets are injecting one or more `InheritedProviders` to the widget tree.
 
-In addition, `flutter_bloc` exports `ReadContext`, `WatchContext` and `SelectContext`, all extensions from `package:provider`. This means that importing `package:flutter_bloc` exposes these extensions.
+In addition, `flutter_bloc` exports `ReadContext`, `WatchContext` and `SelectContext`, all extension methods from `package:provider`. This means that importing `package:flutter_bloc` exposes these extensions.
 
 ?> Check out [Provider's pub page](https://pub.dev/packages/provider) to learn more about `Provider`.
 
 ### ReadContext
 
-`package:provider` creates an extension, named `ReadContext` on `BuildContext` that defines the `read<T>()` method. 
+`package:provider` creates an extension named `ReadContext` on `BuildContext` that defines the `read<T>()` method. 
 
-`context.read<T>()` provides the closest `T` provided in the widget tree. However, `context.read<T>()` does not listen to `T`. In other words, if the provided `Object` of type `T` changes `read` will not trigger a rebuild.
+`context.read<T>()` provides the closest `T` provided in the widget tree. However, `context.read<T>()` does not listen to `T`. In other words, if the provided `Object` of type `T` changes, `read` will not trigger a rebuild.
 
-In essence, `Provider` is a wrapper over `InheritedWidget`. The convention for `InheritedWidget`s is to expose a `static` method named `of`. This method usually searches the widget tree for the nearest `InheritedWidget` which matches a given `Type`. This is exactly what `BlocProvider.of<T>(context)` and `context.read<T>()` do.
+The convention for `InheritedWidgets` is to expose a `static` method named `of`. This method usually searches the widget tree via `BuildContext` for the nearest `InheritedWidget` which matches a given `Type`. This is exactly what `BlocProvider.of<T>(context)` and `context.read<T>()` do.
 
 ?> `BlocProvider.of<T>(context)` and `context.read<T>()` are equivalent.
 
 #### How to use `context.read<T>`?
 
-Both, `BlocProvider.of<T>(context)` and `context.read<T>()` are equally valid. Is up to the developer to go with the most convenient method. Although, it is preferred to be consistent with the given choice.
+Both, `BlocProvider.of<T>(context)` and `context.read<T>()` are equally valid. It is up to the developer to go with the most convenient method. Although, it is preferred to be consistent with the given choice.
 
 **DO** use `context.read<T>()` to add events.
 
@@ -232,7 +232,7 @@ The above usage is error prone because the `Text` widget will not be rebuilt if 
 
 `package:provider` creates an extension, named `WatchContext` on `BuildContext` that defines the `watch<T>()` method. 
 
-Not only `context.watch<T>()` provides the closest `T` provided in the widget tree. But it also listens to changes on `T`, unlike `context.read<T>()`. This means that, if the provided `Object` of type `T` changes, `watch` will trigger a rebuild. Thus, this method is only accessible inside a `StatelessWidget`'s or `State`'s `build` method.
+Not only `context.watch<T>()` provides the closest `T` provided in the widget tree, it also listens to changes on `T`, unlike `context.read<T>()`. This means that, if the provided `Object` of type `T` changes, `watch` will trigger a rebuild. Thus, this method is only accessible inside a `StatelessWidget`'s or `State`'s `build` method.
 
 ?> `BlocProvider.of<T>(context, listen: true)` and `context.watch<T>()` are equivalent.
 
@@ -261,13 +261,13 @@ Builder(
 );
 ```
 
-!> Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes. If the entire widget does not need to be rebuilt, either use `BlocBuilder` to wrap the parts that should rebuild, or use a `Builder` with `context.watch` to scope the rebuilds, or decompose the widget into smaller widgets.
+!> Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes. If the entire widget does not need to be rebuilt, either use `BlocBuilder` to wrap the parts that should rebuild, use a `Builder` with `context.watch` to scope the rebuilds, or decompose the widget into smaller widgets.
 
 ### SelectContext
 
 `package:provider` creates an extension, named `SelectContext` on `BuildContext` that defines the `select<T, R>(R function(T value))` method. 
 
-As in  `context.watch<T>()`, `context.select<T, R>(R function(T value))` provides the closest `T` provided in the widget tree. And also listens to changes on `T`, unlike `context.read<T>()`. However, the `select` method allows to be more selective, and avoid unnecessary rebuilds by specifying which property should be listened.
+As in  `context.watch<T>()`, `context.select<T, R>(R function(T value))` provides the closest `T` provided in the widget tree. And also listens to changes on `T`, unlike `context.read<T>()`. However, the `select` method allows you to be more selective, and avoid unnecessary rebuilds by specifying which property should be listened to.
 
 ```dart
 Widget build(BuildContext context) {
@@ -276,16 +276,33 @@ Widget build(BuildContext context) {
 }
 ```
 
-The above, will only rebuild the widget when the property `name` of `Unicorn` changes value. It will not rebuild if some other property of `Unicorn` changes.
+The above will only rebuild the widget when the property `name` of `Unicorn` changes value. It will not rebuild if some other property of `Unicorn` changes.
 
 ##### How to use `context.select<T, R>`?
 
 Whenever it is required to only listen to specific changes of a bloc state, it is preferred to be selective and avoid unnecessary rebuilds.
 
 ```dart
+class Input extends StatelessWidget {
+  const Input({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<BlocA, BlocAState, String>(
+      selector: (state) => state.input,
+      builder: (context, state) {
+        return TextField(
+          onChanged: (value) => context.read<BlocA>().add(InputChanged(value)),
+          decoration: InputDecoration(
+            errorText: state.length < 1 ? 'input is too short' : null,
+          ),
+        );
+      },
+    );
+  }
+}
 
 ```
 
 ?> Check out the [Bloc Selector](flutterbloccoreconcepts?id=blocselector) for more information about `BlocSelector`.
 
-!> Using `context.select` at the root of the `build` method will result in the entire widget being rebuilt when the selected bloc property changes. If the entire widget does not need to be rebuilt, either use `BlocSelector` to wrap the parts that should rebuild, or use a `Builder` with `context.select` to scope the rebuilds, or decompose the widget into smaller widgets.
+!> Using `context.select` at the root of the `build` method will result in the entire widget being rebuilt when the selected bloc property changes. If the entire widget does not need to be rebuilt, either use `BlocSelector` to wrap the parts that should rebuild, use a `Builder` with `context.select` to scope the rebuilds, or decompose the widget into smaller widgets.
