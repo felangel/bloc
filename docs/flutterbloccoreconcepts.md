@@ -179,7 +179,7 @@ Now when instantiating a bloc, we can access the instance of a repository via `c
 
 Importing the `flutter_bloc` package includes different extension methods and this section aims to describe what and how these should be used. This type of methods, included in Dart 2.7, allow to add functionalities to existing classes.
 
-?> Check out the official [Dart Documentation](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html) for more information about extension methods.
+?> Check out the official [Dart Documentation](https://dart.dev/guides/language/extension-methods) for more information about extension methods.
 
 ### Provider
 
