@@ -191,6 +191,8 @@ In essence, `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `Multi
 
 In addition, `flutter_bloc` exports `ReadContext`, `WatchContext` and `SelectContext`, all extensions from `package:provider`. This means that when importing `package:flutter_bloc` we have access to these extensions.
 
+?> Check out [Provider's pub page](https://pub.dev/packages/provider) to learn more about `Provider`.
+
 ### ReadContext
 
 #### What is `context.read<T>`?
