@@ -177,9 +177,7 @@ Now when instantiating a bloc, we can access the instance of a repository via `c
 
 ## Extension Methods Usage
 
-Extension methods, introduced in Dart 2.7, allow to add functionalities to existing classes. 
-
-Importing the `flutter_bloc` package includes different extension methods and this section aims to describe what and how these should be used.
+Importing the `flutter_bloc` package includes different extension methods and this section aims to describe what and how these should be used. This type of methods, included in Dart 2.7, allow to add functionalities to existing classes.
 
 ?> Check out the official [Dart Documentation](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html) for more information about extension methods.
 
@@ -191,7 +189,7 @@ Importing the `flutter_bloc` package includes different extension methods and th
 
 In essence, `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `MultiRepositoryProvider` widgets are including an `InheritedProvider` to the widget tree.
 
-In addition, `flutter_bloc` exports `ReadContext`, `WatchContext` and `SelectContext`, all extensions from `package:provider`.
+In addition, `flutter_bloc` exports `ReadContext`, `WatchContext` and `SelectContext`, all extensions from `package:provider`. This means that when importing `package:flutter_bloc` we have access to these extensions.
 
 #### ReadContext extension
 
@@ -199,7 +197,7 @@ In addition, `flutter_bloc` exports `ReadContext`, `WatchContext` and `SelectCon
 
 `Provider` is a wrapper over `InheritedWidget`. The convention for `InheritedWidget`s is to expose a `static` method named `of`. This method usually searches the widget tree for the nearest `InheritedWidget` which matches a given `Type`. This is exactly what `BlocProvider.of<T>(context)` does.
 
-Some developers consider `BlocProvider.of<T>(context)` too verbose and take advantage of *extension methods*. Thus, the provider package creates an extension on `BuildContext` (named `ReadContext`) that includes the `read<T>()` method.
+Some developers consider `BlocProvider.of<T>(context)` too verbose and take advantage of *extension methods*. Thus, `package:provider` creates an extension, named `ReadContext` on `BuildContext` that includes the `read<T>()` method.
 
 It is important to note that `BlocProvider.of<T>(context)` and `context.read<T>` do not listen to `T`. In other words, if the provided `Object` changes `read` will not be called to update the value after this change.
 
