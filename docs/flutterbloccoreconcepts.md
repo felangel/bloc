@@ -191,9 +191,9 @@ In essence, `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `Multi
 
 In addition, `flutter_bloc` exports `ReadContext`, `WatchContext` and `SelectContext`, all extensions from `package:provider`. This means that when importing `package:flutter_bloc` we have access to these extensions.
 
-#### ReadContext extension
+### ReadContext
 
-##### What is `context.read<T>`?
+#### What is `context.read<T>`?
 
 `Provider` is a wrapper over `InheritedWidget`. The convention for `InheritedWidget`s is to expose a `static` method named `of`. This method usually searches the widget tree for the nearest `InheritedWidget` which matches a given `Type`. This is exactly what `BlocProvider.of<T>(context)` does.
 
@@ -203,11 +203,11 @@ It is important to note that `BlocProvider.of<T>(context)` and `context.read<T>(
 
 ?> `BlocProvider.of<T>(context)` and `context.read<T>()` are equivalent.
 
-##### How to use `context.read<T>`?
+#### How to use `context.read<T>`?
 
-#### WatchContext extension
+### WatchContext
 
-##### What is `context.watch<T>`?
+#### What is `context.watch<T>`?
 
 `package:provider` creates an extension, named `WatchContext` on `BuildContext` that defines the `watch<T>()` method. 
 
@@ -215,11 +215,11 @@ Not only `context.watch<T>()` provides the closest `T` provided in the widget tr
 
 ?> `BlocProvider.of<T>(context, listen: true)` and `context.watch<T>()` are equivalent.
 
-##### How to use `context.watch<T>`?
+#### How to use `context.watch<T>`?
 
-#### SelectContext extension
+### SelectContext
 
-##### What is `context.select<T, R>`?
+#### What is `context.select<T, R>`?
 
 `package:provider` creates an extension, named `SelectContext` on `BuildContext` that defines the `select<T, R>(R function(T value))` method. 
 
