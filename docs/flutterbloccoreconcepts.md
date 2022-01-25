@@ -197,14 +197,41 @@ In addition, `flutter_bloc` exports `ReadContext`, `WatchContext` and `SelectCon
 
 `Provider` is a wrapper over `InheritedWidget`. The convention for `InheritedWidget`s is to expose a `static` method named `of`. This method usually searches the widget tree for the nearest `InheritedWidget` which matches a given `Type`. This is exactly what `BlocProvider.of<T>(context)` does.
 
-Some developers consider `BlocProvider.of<T>(context)` too verbose and take advantage of *extension methods*. Thus, `package:provider` creates an extension, named `ReadContext` on `BuildContext` that includes the `read<T>()` method.
+Some developers consider `BlocProvider.of<T>(context)` too verbose and take advantage of *extension methods*. Thus, `package:provider` creates an extension, named `ReadContext` on `BuildContext` that defines the `read<T>()` method.
 
-It is important to note that `BlocProvider.of<T>(context)` and `context.read<T>` do not listen to `T`. In other words, if the provided `Object` changes `read` will not be called to update the value after this change.
+It is important to note that `BlocProvider.of<T>(context)` and `context.read<T>()` do not listen to `T`. In other words, if the provided `Object` of type `T` changes `read` will not be called to update the value after this change.
 
-?> `BlocProvider.of<T>(context)` and `context.read<T>` are equivalent.
+?> `BlocProvider.of<T>(context)` and `context.read<T>()` are equivalent.
 
 ##### How to use `context.read<T>`?
 
 #### WatchContext extension
 
+##### What is `context.watch<T>`?
+
+`package:provider` creates an extension, named `WatchContext` on `BuildContext` that defines the `watch<T>()` method. 
+
+Not only `context.watch<T>()` provides the closest `T` provided in the widget tree. But it also listens to changes on `T`, unlike `context.read<T>()`. This means that, if the provided `Object` of type `T` changes, `watch` will trigger a rebuild. Thus, this method is only accesible inside a `StatelessWidget`'s or `State`'s `build` method.
+
+?> `BlocProvider.of<T>(context, listen: true)` and `context.watch<T>()` are equivalent.
+
+##### How to use `context.watch<T>`?
+
 #### SelectContext extension
+
+##### What is `context.select<T, R>`?
+
+`package:provider` creates an extension, named `SelectContext` on `BuildContext` that defines the `select<T, R>(R function(T value))` method. 
+
+As in  `context.watch<T>()`, `context.select<T, R>(R function(T value))` provides the closest `T` provided in the widget tree. And also listens to changes on `T`, unlike `context.read<T>()`. However, the `select` method allows to be more selective, and avoid uneccesary rebuilds by specifying which property should be listened.
+
+For example, the code below will only rebuild the widget when the property `name` of `Unicorn` changes value. It will not rebuild if some other property of `Unicorn` changes.
+
+```dart
+Widget build(BuildContext context) {
+  final name = context.select((Unicorn unicorn) => unicorn.name);
+  return Text(name);
+}
+```
+
+##### How to use `context.select<T, R>`?
