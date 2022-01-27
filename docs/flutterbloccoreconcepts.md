@@ -210,8 +210,7 @@ Both, `BlocProvider.of<T>(context)` and `context.read<T>()` are functionally equ
 context.read<CounterBloc>().add(CounterIncrementPressed()),
 ```
 
-It is common to use these methods to retrieve a bloc in order to add events.
-However, it is preferred to use, where appropriate, a `BlocBuilder`, `BlocSelector`, `BlocListener` or `BlocConsumer` to access the `state` of a bloc instead of `context.read<FooBloc>().state`.
+`context.read` is most commonly used for retrieving a bloc instance in order to add an event within `onPressed` callbacks. `context.read` should not be used to retrieve a bloc's state directly within the build method.
 
 **AVOID** using `context.read<T>()` to retrieve state.
 
