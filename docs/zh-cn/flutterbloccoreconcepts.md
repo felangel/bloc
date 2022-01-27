@@ -1,12 +1,14 @@
 # Flutter Bloc的核心理念
 
-?> 使用前请确保仔细阅读并理解以下部分 [flutter_bloc](https://pub.dev/packages/flutter_bloc).
+?> 在使用[package:flutter_bloc](https://pub.dev/packages/flutter_bloc)前请确保仔细阅读并理解以下部分.
+
+?> **注意**: 所有通过 `flutter_bloc` 包导出的组件都有集成 `Cubit` 和 `Bloc`。
 
 ## Bloc Widgets
 
 ### BlocBuilder
 
-**BlocBuilder** 是一个Flutter部件(`Widget`)，它需要`Bloc`和`builder`两个方法。处理构建部件用来响应新的状态(`State`)。`BlocBuilder` 与 `StreamBuilder`十分相像，但是它有一个简单的接口来减少一部分必须的模版代码。`builder`方法会被潜在的触发很多次并且应该是一个返回一个部件(`Widget`)以响应该状态(`State`)的[纯方法](https://en.wikipedia.org/wiki/Pure_function)
+**BlocBuilder** 是一个Flutter部件(`Widget`)，它需要`Bloc`和`builder`两个方法。`BlocBuilder` 在接收到新的状态(`State`)时处理构建部件。`BlocBuilder` 与 `StreamBuilder`十分相像，但是它有一个简单的接口来减少一部分必须的模版代码。`builder`方法会被潜在的触发很多次并且应该是一个返回一个部件(`Widget`)以响应该状态(`State`)的[纯方法](https://en.wikipedia.org/wiki/Pure_function)
 
 如果要响应状态(`State`)更改（例如导航，显示对话框等) 而执行任何操作，请参见`BlocListener`。
 
@@ -22,12 +24,27 @@
 
 [bloc_builder.dart](../_snippets/flutter_bloc_core_concepts/bloc_builder_condition.dart.md ':include')
 
+### BlocSelector
+
+**BlocSelector** 是一个和 `BlocBuilder` 类似的组件，但它可以允许开发者选择一个基于当前bloc状态的新值来过滤更新。如果所选值不更改，则会阻止不必要的构建。选中的值必须是不可变的，以便 `BlocSelector` 准确地判断是否应该再次调用 `builder`。
+
+如果省略了 `bloc` 参数，`BlocSelector` 将自动使用 `BlocProvider` 和当前的 `BuildContext` 执行查找。
+
+[bloc_selector.dart](../_snippets/flutter_bloc_core_concepts/bloc_selector.dart.md ':include')
+
 ### BlocProvider
 
 **BlocProvider** 是Flutter部件(widget)，可通过`BlocProvider.of <T>（context)`向其子级提bloc。它被作为依赖项注入（DI)部件(widget)，以便可以将一个bloc的单个实例提供给子树中的多个部件(widgets)。
 
 在大多数情况下，应该使用`BlocProvider`来创建新的`blocs`，并将其提供给其余子树。在这种情况下，由于`BlocProvider`负责创建bloc，它将自动处理关闭bloc。
+
 [bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider.dart.md ':include')
+
+默认情况下，`BlocProvider` 将在需要的时候创建bloc，意味着 `create` 将在 `BlocProvider.of<BlocA>(context)` 查找bloc时执行。
+
+要覆盖这个行为并强制 `create` 立即运行，`lazy` 可以设置为 `false`。
+
+[bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider_lazy.dart.md ':include')
 
 在某些情况下，`BlocProvider`可用于向部件树(widget tree)的新部分提供现有的bloc。当需要将现有的`bloc`提供给新路线时，这将是最常用的。在这种情况下，`BlocProvider`不会自动关闭该bloc，因为它没有创建它。
 [bloc_provider.dart](../_snippets/flutter_bloc_core_concepts/bloc_provider_value.dart.md ':include')
@@ -126,3 +143,34 @@
 [counter_page.dart](../_snippets/flutter_bloc_core_concepts/counter_page.dart.md ':include')
 
 至此，我们已经成功地将表示层（Presentation) 与业务逻辑层分离了。请注意，`CounterPage`部件(widget)对用户点击按钮时会发生的情况一无所知。窗口小部件只是告诉`CounterBloc`用户已按下了加号或减号按钮。
+
+## RepositoryProvider 用法
+
+我们将看看如何在['flutter_weather'][flutter_weather_link]示例中使用 `RepositoryProvider`。
+
+### weather_repository.dart
+
+[weather_repository.dart](../_snippets/flutter_bloc_core_concepts/weather_repository.dart.md ':include')
+
+由于app对 `WeatherRepository` 有显式的依赖，我们通过构造函数注入一个实例。这允许我们根据构建风格和环境为 `WeatherRepository` 注入不同的实例。
+
+### main.dart
+
+[main.dart](../_snippets/flutter_bloc_core_concepts/main.dart.md ':include')
+
+因为我们的应用中只有一个仓库，所以我们将通过 `RepositoryProvider.value` 将它注入到我们的组件(widget)树中。如果你有多个仓库，你可以使用 `MultiRepositoryProvider` 提供多个存储库实例到子树中。
+
+### app.dart
+
+[app.dart](../_snippets/flutter_bloc_core_concepts/app.dart.md ':include')
+
+在大多数情况下，app的根组件将通过 `RepositoryProvider` 公开一个或多个仓库到子树。
+
+### weather_page.dart
+
+[weather_page.dart](../_snippets/flutter_bloc_core_concepts/weather_page.dart.md ':include')
+
+现在当初始化一个bloc时，我们能通过 `context.read` 来访问仓库(repository)的实例，并且通过构造器注入仓库(repository)到bloc中。
+
+[flutter_weather_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_weather
+
