@@ -260,7 +260,6 @@ Builder(
 
 ### SelectContext
 
-`package:provider` creates an extension, named `SelectContext` on `BuildContext` that defines the `select<T, R>(R function(T value))` method. 
 
 As in  `context.watch<T>()`, `context.select<T, R>(R function(T value))` provides the closest `T` provided in the widget tree. And also listens to changes on `T`, unlike `context.read<T>()`. However, the `select` method allows you to be more selective, and avoid unnecessary rebuilds by specifying which property should be listened to.
 
