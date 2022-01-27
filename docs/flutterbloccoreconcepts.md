@@ -198,7 +198,7 @@ In addition, `package:flutter_bloc` exports the `ReadContext`, `WatchContext` an
 
 The convention for `InheritedWidgets` is to expose a `static` method named `of`. This method usually searches the widget tree via `BuildContext` for the nearest `InheritedWidget` which matches a given `Type`. This is exactly what `BlocProvider.of<T>(context)` and `context.read<T>()` do.
 
-?> `BlocProvider.of<T>(context)` and `context.read<T>()` are equivalent.
+?> `BlocProvider.of<T>(context)` and `context.read<T>()` are functionally equivalent.
 
 #### How to use `context.read<T>`?
 
@@ -229,7 +229,7 @@ The above usage is error prone because the `Text` widget will not be rebuilt if 
 
 Like `context.read<T>(), `context.watch<T>()` provides the closest `T` provided in the widget tree, however it also listens to changes on `T`. This means that, if the provided `Object` of type `T` changes, `watch` will trigger a rebuild. Thus, this method is only accessible inside a `StatelessWidget`'s or `State`'s `build` method.
 
-?> `BlocProvider.of<T>(context, listen: true)` and `context.watch<T>()` are equivalent.
+?> `BlocProvider.of<T>(context, listen: true)` and `context.watch<T>()` are functionally equivalent.
 
 #### How to use `context.watch<T>`?
 
