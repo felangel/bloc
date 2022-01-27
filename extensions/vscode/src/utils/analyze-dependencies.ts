@@ -69,7 +69,6 @@ function checkForUpgrades(
       const currentDependencyVersion = _.get(
         pubspecDependencies,
         dependency.name,
-        DEFAULT_VERSION_VALUE
       ).version;
       
       const hasLatestVestion = currentDependencyVersion === dependency.version;
