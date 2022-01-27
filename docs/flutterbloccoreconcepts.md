@@ -261,7 +261,7 @@ Builder(
 ### SelectContext
 
 
-As in  `context.watch<T>()`, `context.select<T, R>(R function(T value))` provides the closest `T` provided in the widget tree. And also listens to changes on `T`, unlike `context.read<T>()`. However, the `select` method allows you to be more selective, and avoid unnecessary rebuilds by specifying which property should be listened to.
+As with `context.watch<T>()`, `context.select<T, R>(R function(T value))` provides the closest `T` provided in the widget tree and also listens to changes on `T`. In addition, the `select` method allows you to be more selective, and avoid unnecessary rebuilds by specifying which state property should be accessed.
 
 ```dart
 Widget build(BuildContext context) {
