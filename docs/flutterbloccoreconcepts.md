@@ -179,7 +179,6 @@ Now when instantiating a bloc, we can access the instance of a repository via `c
 
 [Extension methods](https://dart.dev/guides/language/extension-methods), introduced in Dart 2.7, are a way to add functionality to existing libraries. In this section, we'll take a look at extension methods included in `package:flutter_bloc` and how they can be used.
 
-?> Check out the official [Dart Documentation](https://dart.dev/guides/language/extension-methods) for more information about extension methods.
 
 ### Provider
 
