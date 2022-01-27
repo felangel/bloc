@@ -226,7 +226,6 @@ The above usage is error prone because the `Text` widget will not be rebuilt if 
 
 ### WatchContext
 
-`package:provider` creates an extension, named `WatchContext` on `BuildContext` that defines the `watch<T>()` method. 
 
 Not only `context.watch<T>()` provides the closest `T` provided in the widget tree, it also listens to changes on `T`, unlike `context.read<T>()`. This means that, if the provided `Object` of type `T` changes, `watch` will trigger a rebuild. Thus, this method is only accessible inside a `StatelessWidget`'s or `State`'s `build` method.
 
