@@ -184,7 +184,6 @@ Now when instantiating a bloc, we can access the instance of a repository via `c
 
 `flutter_bloc` has a dependency on [package:provider](https://pub.dev/packages/provider) which simplifies the usage of [`InheritedWidget`](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html).
 
-?> Check out the official [Flutter Documentation](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html) to learn more about `InheritedWidget`.
 
 In essence; `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `MultiRepositoryProvider` widgets are injecting one or more `InheritedProviders` to the widget tree.
 
