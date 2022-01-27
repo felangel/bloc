@@ -73,34 +73,40 @@ function checkForUpgrades(
       if (dependencyVersion === "any") continue;
       if (dependencyVersion == null) continue;
       if (typeof dependencyVersion !== "string") continue;
-      const minVersion = _.get(
-        semver.minVersion(dependencyVersion),
-        "version",
-        "0.0.0"
-      );
-      if (!semver.satisfies(minVersion, dependency.version)) {
-        window
-          .showWarningMessage(
-            `This workspace contains an outdated version of ${dependency.name}. Please update to ${dependency.version}.`,
-            ...dependency.actions.map((action) => action.name).concat("Update")
-          )
-          .then((invokedAction) => {
-            if (invokedAction === "Update") {
-              return updatePubspecDependency({
-                name: dependency.name,
-                latestVersion: `^${dependency.version}`,
-                currentVersion: dependencyVersion,
-              });
-            }
-            const action = dependency.actions.find(
-              (action) => action.name === invokedAction
-            );
-            if (!_.isNil(action)) {
-              action.callback();
-            }
-          });
-      }
+      
+      showUpdateMessage(dependency, dependencyVersion);
     }
+  }
+}
+
+function showUpdateMessage(dependency : Dependency, dependencyVersion : string) {
+  const minVersion = _.get(
+    semver.minVersion(dependencyVersion),
+    "version",
+    "0.0.0"
+  );
+  
+  if (!semver.satisfies(minVersion, dependency.version)) {
+    window
+      .showWarningMessage(
+        `This workspace contains an outdated version of ${dependency.name}. Please update to ${dependency.version}.`,
+        ...dependency.actions.map((action) => action.name).concat("Update")
+      )
+      .then((invokedAction) => {
+        if (invokedAction === "Update") {
+          return updatePubspecDependency({
+            name: dependency.name,
+            latestVersion: `^${dependency.version}`,
+            currentVersion: dependencyVersion,
+          });
+        }
+        const action = dependency.actions.find(
+          (action) => action.name === invokedAction
+        );
+        if (!_.isNil(action)) {
+          action.callback();
+        }
+      });
   }
 }
 
