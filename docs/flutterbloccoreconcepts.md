@@ -182,7 +182,7 @@ Now when instantiating a bloc, we can access the instance of a repository via `c
 
 ### Provider
 
-`flutter_bloc` besides depending on `flutter` also depends on the [provider](https://pub.dev/packages/provider) package. Provider wraps `InheritedWidget` and simplifies its usage.
+`flutter_bloc` has a dependency on [package:provider](https://pub.dev/packages/provider) which simplifies the usage of [`InheritedWidget`](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html).
 
 ?> Check out the official [Flutter Documentation](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html) to learn more about `InheritedWidget`.
 
