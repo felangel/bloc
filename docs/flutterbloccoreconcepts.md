@@ -193,7 +193,6 @@ In addition, `package:flutter_bloc` exports the `ReadContext`, `WatchContext` an
 
 ### ReadContext
 
-`package:provider` creates an extension named `ReadContext` on `BuildContext` that defines the `read<T>()` method. 
 
 `context.read<T>()` provides the closest `T` provided in the widget tree. However, `context.read<T>()` does not listen to `T`. In other words, if the provided `Object` of type `T` changes, `read` will not trigger a rebuild.
 
