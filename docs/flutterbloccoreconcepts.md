@@ -203,7 +203,7 @@ The convention for `InheritedWidgets` is to expose a `static` method named `of`.
 
 #### How to use `context.read<T>`?
 
-Both, `BlocProvider.of<T>(context)` and `context.read<T>()` are equally valid. It is up to the developer to go with the most convenient method. Although, it is preferred to be consistent with the given choice.
+Both, `BlocProvider.of<T>(context)` and `context.read<T>()` are functionally equivalent. It is up to the developer to go with the most convenient method. Although, it is preferred to be consistent with the given choice.
 
 **DO** use `context.read<T>()` to add events.
 
