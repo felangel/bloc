@@ -227,7 +227,7 @@ The above usage is error prone because the `Text` widget will not be rebuilt if 
 ### WatchContext
 
 
-Not only `context.watch<T>()` provides the closest `T` provided in the widget tree, it also listens to changes on `T`, unlike `context.read<T>()`. This means that, if the provided `Object` of type `T` changes, `watch` will trigger a rebuild. Thus, this method is only accessible inside a `StatelessWidget`'s or `State`'s `build` method.
+Like `context.read<T>(), `context.watch<T>()` provides the closest `T` provided in the widget tree, however it also listens to changes on `T`. This means that, if the provided `Object` of type `T` changes, `watch` will trigger a rebuild. Thus, this method is only accessible inside a `StatelessWidget`'s or `State`'s `build` method.
 
 ?> `BlocProvider.of<T>(context, listen: true)` and `context.watch<T>()` are equivalent.
 
