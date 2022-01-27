@@ -187,7 +187,7 @@ Now when instantiating a bloc, we can access the instance of a repository via `c
 
 Internally, `package:flutter_bloc` uses `package:provider` to implement: `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `MultiRepositoryProvider` widgets. Ultimately, each of these widgets uses `Provider` (`InheritedWidget`) to provide instances of various objects to the widget tree.
 
-In addition, `flutter_bloc` exports `ReadContext`, `WatchContext` and `SelectContext`, all extension methods from `package:provider`. This means that importing `package:flutter_bloc` exposes these extensions.
+In addition, `package:flutter_bloc` exports the `ReadContext`, `WatchContext` and `SelectContext`, extensions from `package:provider`.
 
 ?> Check out [Provider's pub page](https://pub.dev/packages/provider) to learn more about `Provider`.
 
