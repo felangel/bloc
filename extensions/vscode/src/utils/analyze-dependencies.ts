@@ -71,8 +71,8 @@ function checkForUpgrades(
         dependency.name,
       ).version;
       
-      const hasLatestVestion = currentDependencyVersion === dependency.version;
-      if (hasLatestVestion) continue;
+      const hasLatestVersion = currentDependencyVersion === dependency.version;
+      if (hasLatestVersion) continue;
       
       showUpdateMessage(dependency, currentDependencyVersion);
     }
