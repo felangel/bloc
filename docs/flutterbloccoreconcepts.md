@@ -193,7 +193,6 @@ In addition, `package:flutter_bloc` exports the `ReadContext`, `WatchContext` an
 
 ### ReadContext
 
-
 `context.read<T>()` provides the closest `T` provided in the widget tree. However, `context.read<T>()` does not listen to `T`. In other words, if the provided `Object` of type `T` changes, `read` will not trigger a rebuild.
 
 The convention for `InheritedWidgets` is to expose a `static` method named `of`. This method usually searches the widget tree via `BuildContext` for the nearest `InheritedWidget` which matches a given `Type`. This is exactly what `BlocProvider.of<T>(context)` and `context.read<T>()` do.
@@ -204,7 +203,7 @@ The convention for `InheritedWidgets` is to expose a `static` method named `of`.
 
 Both, `BlocProvider.of<T>(context)` and `context.read<T>()` are functionally equivalent. It is up to the developer to go with the most convenient method. Although, it is preferred to be consistent with the given choice.
 
-**DO** use `context.read<T>()` to add events.
+**DO** use `context.read` to add events.
 
 ```dart
 context.read<CounterBloc>().add(CounterIncrementPressed()),
@@ -212,7 +211,7 @@ context.read<CounterBloc>().add(CounterIncrementPressed()),
 
 `context.read` is most commonly used for retrieving a bloc instance in order to add an event within `onPressed` callbacks. `context.read` should not be used to retrieve a bloc's state directly within the build method.
 
-**AVOID** using `context.read<T>()` to retrieve state.
+**AVOID** using `context.read` to retrieve state.
 
 ```dart
 @override
@@ -230,9 +229,9 @@ Like `context.read<T>()`, `context.watch<T>()` provides the closest `T` provided
 
 ?> `BlocProvider.of<T>(context, listen: true)` and `context.watch<T>()` are functionally equivalent.
 
-#### How to use `context.watch<T>`?
+#### How to use `context.watch`?
 
-**DON'T** use `context.watch<T>()` when parent widget in build method doesn't depend on state.
+**DON'T** use `context.watch` when parent widget in build method doesn't depend on state.
 
 ```dart
 @override
@@ -250,7 +249,7 @@ Widget build(BuildContext context) {
 
 !> Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes.
 
-**PREFER** use `BlocBuilder` instead of `context.watch<T>()` to explicitly scope rebuilds.
+**PREFER** use `BlocBuilder` instead of `context.watch` to explicitly scope rebuilds.
 
 ```dart
 Widget build(BuildContext context) {
@@ -313,11 +312,11 @@ Widget build(BuildContext context) {
 
 The above will only rebuild the widget when the property `value` of `MyBloc` changes value. It will not rebuild if some other property of `MyBloc` changes.
 
-##### How to use `context.select<T, R>`?
+##### How to use `context.select`?
 
 Whenever it is required to only listen to specific changes of a bloc state, it is preferred to be selective and avoid unnecessary rebuilds.
 
-**DON'T** use `context.select<T>()` when parent widget in build method doesn't depend on state.
+**DON'T** use `context.select` when parent widget in build method doesn't depend on state.
 
 ```dart
 @override
@@ -335,7 +334,7 @@ Widget build(BuildContext context) {
 
 !> Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes.
 
-**PREFER** use `BlocSelector` instead of `context.select<T>()` to explicitly scope rebuilds.
+**PREFER** use `BlocSelector` instead of `context.select` to explicitly scope rebuilds.
 
 ```dart
 Widget build(BuildContext context) {
