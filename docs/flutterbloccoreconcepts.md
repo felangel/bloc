@@ -226,23 +226,67 @@ The above usage is error prone because the `Text` widget will not be rebuilt if 
 
 ### WatchContext
 
-
-Like `context.read<T>(), `context.watch<T>()` provides the closest `T` provided in the widget tree, however it also listens to changes on `T`. This means that, if the provided `Object` of type `T` changes, `watch` will trigger a rebuild. Thus, this method is only accessible inside a `StatelessWidget`'s or `State`'s `build` method.
+Like `context.read<T>()`, `context.watch<T>()` provides the closest `T` provided in the widget tree, however it also listens to changes on `T`. This means that, if the provided `Object` of type `T` changes, `watch` will trigger a rebuild. Thus, this method is only accessible inside a `StatelessWidget`'s or `State`'s `build` method.
 
 ?> `BlocProvider.of<T>(context, listen: true)` and `context.watch<T>()` are functionally equivalent.
 
 #### How to use `context.watch<T>`?
 
-**PREFER** using `BlocBuilder` instead of `context.watch<T>()`.
+**DON'T** use `context.watch<T>()` when parent widget in build method doesn't depend on state.
 
 ```dart
-BlocBuilder<BlocA, BlocAState>(
-  builder: (context, state) {
-    // return widget here based on BlocA's state
-  }
-)
+@override
+Widget build(BuildContext context) {
+  // Whenever the state changes, the MaterialApp is rebuilt
+  // even though it is only used in the Text widget.
+  final state = context.watch<MyBloc>().state;
+  return MaterialApp(
+    home: Scaffold(
+      body: Text(state.value),
+    ),
+  );
+}
 ```
-It is unusual to see `context.watch<T>()`. The use of `BlocBuilder` achieves equivalent functionality. However, the absence of a `MultiBlocBuilder` suggests that the following can be valid:
+
+!> Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes.
+
+**PREFER** use `BlocBuilder` instead of `context.watch<T>()` to explicitly scope rebuilds.
+
+```dart
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: BlocBuilder<MyBloc, MyState>(
+        builder: (context, state) {
+          // Whenever the state changes, only the Text is rebuilt.
+          return Text(state.value);
+        },
+      ),
+    ),
+  );
+}
+```
+
+The above is preferred over:
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: Builder(
+        builder: (context) {
+          // Whenever the state changes, only the Text is rebuilt.
+          final state = context.watch<MyBloc>().state;
+          return Text(state.value);
+        },
+      ),
+    ),
+  );
+}
+```
+
+**DO** use `Builder` and `context.watch` as `MultiBlocBuilder`.
 
 ```dart
 Builder(
@@ -256,47 +300,74 @@ Builder(
 );
 ```
 
-!> Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes. If the entire widget does not need to be rebuilt, either use `BlocBuilder` to wrap the parts that should rebuild, use a `Builder` with `context.watch` to scope the rebuilds, or decompose the widget into smaller widgets.
-
 ### SelectContext
-
 
 As with `context.watch<T>()`, `context.select<T, R>(R function(T value))` provides the closest `T` provided in the widget tree and also listens to changes on `T`. In addition, the `select` method allows you to be more selective, and avoid unnecessary rebuilds by specifying which state property should be accessed.
 
 ```dart
 Widget build(BuildContext context) {
-  final name = context.select((Unicorn unicorn) => unicorn.name);
-  return Text(name);
+  final value = context.select((MyBloc bloc) => bloc.value);
+  return Text(value);
 }
 ```
 
-The above will only rebuild the widget when the property `name` of `Unicorn` changes value. It will not rebuild if some other property of `Unicorn` changes.
+The above will only rebuild the widget when the property `value` of `MyBloc` changes value. It will not rebuild if some other property of `MyBloc` changes.
 
 ##### How to use `context.select<T, R>`?
 
 Whenever it is required to only listen to specific changes of a bloc state, it is preferred to be selective and avoid unnecessary rebuilds.
 
-```dart
-class Input extends StatelessWidget {
-  const Input({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return BlocSelector<BlocA, BlocAState, String>(
-      selector: (state) => state.input,
-      builder: (context, state) {
-        return TextField(
-          onChanged: (value) => context.read<BlocA>().add(InputChanged(value)),
-          decoration: InputDecoration(
-            errorText: state.length < 1 ? 'input is too short' : null,
-          ),
-        );
-      },
-    );
-  }
-}
+**DON'T** use `context.select<T>()` when parent widget in build method doesn't depend on state.
 
+```dart
+@override
+Widget build(BuildContext context) {
+  // Whenever the state.value changes, the MaterialApp is rebuilt
+  // even though it is only used in the Text widget.
+  final value = context.select((MyBloc bloc) => bloc.value);
+  return MaterialApp(
+    home: Scaffold(
+      body: Text(value),
+    ),
+  );
+}
 ```
 
-?> Check out the [Bloc Selector](flutterbloccoreconcepts?id=blocselector) for more information about `BlocSelector`.
+!> Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes.
 
-!> Using `context.select` at the root of the `build` method will result in the entire widget being rebuilt when the selected bloc property changes. If the entire widget does not need to be rebuilt, either use `BlocSelector` to wrap the parts that should rebuild, use a `Builder` with `context.select` to scope the rebuilds, or decompose the widget into smaller widgets.
+**PREFER** use `BlocSelector` instead of `context.select<T>()` to explicitly scope rebuilds.
+
+```dart
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: BlocSelector<MyBloc, MyState, String>(
+        selector: (state) => state.value,
+        builder: (context, state) {
+          // Whenever the state.value changes, only the Text is rebuilt.
+          return Text(state.value);
+        },
+      ),
+    ),
+  );
+}
+```
+
+The above is preferred over:
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: Builder(
+        builder: (context) {
+          // Whenever the state.value changes, only the Text is rebuilt.
+          final value = context.select((MyBloc bloc) => bloc.value);
+          return Text(value);
+        },
+      ),
+    ),
+  );
+}
+```
