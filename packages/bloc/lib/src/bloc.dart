@@ -263,7 +263,9 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   @override
   Future<void> close() async {
     await _eventController.close();
-    for (final emitter in _emitters) emitter.cancel();
+    for (final emitter in _emitters) {
+      emitter.cancel();
+    }
     await Future.wait<void>(_emitters.map((e) => e.future));
     await Future.wait<void>(_subscriptions.map((s) => s.cancel()));
     return super.close();
