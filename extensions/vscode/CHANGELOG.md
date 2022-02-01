@@ -1,3 +1,10 @@
+# 6.5.0
+
+- fix: update `BlocObserver` snippet to resolve Dart analyzer warning
+- feat: determine versions via `pubspec.lock`
+- feat: add `Mock` snippet
+- chore: upgrade dependencies
+
 # 6.4.0
 
 - feat: add `_onevent` snippet for creating an internal event handler
