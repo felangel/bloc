@@ -34,5 +34,10 @@
     "prefix": "fake",
     "body": ["class Fake${1:Subject} extends Fake implements ${1} {}"],
     "description": "create a fake object"
+  },
+  "Mock": {
+    "prefix": "mock",
+    "body": ["class Mock${1:Subject} extends Mock implements ${1} {}"],
+    "description": "create a mock object"
   }
 }
