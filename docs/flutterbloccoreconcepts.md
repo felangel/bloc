@@ -308,7 +308,6 @@ The above will only rebuild the widget when the property `name` of the `ProfileB
 
 #### Usage
 
-
 ✅ **DO** use `BlocSelector` instead of `context.select` to explicitly scope rebuilds.
 
 ```dart
