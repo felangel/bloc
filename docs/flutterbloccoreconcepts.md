@@ -177,41 +177,31 @@ Now when instantiating a bloc, we can access the instance of a repository via `c
 
 ## Extension Methods
 
-[Extension methods](https://dart.dev/guides/language/extension-methods), introduced in Dart 2.7, are a way to add functionality to existing libraries. In this section, we'll take a look at extension methods included in `package:flutter_bloc` and how they can be used.
+> [Extension methods](https://dart.dev/guides/language/extension-methods), introduced in Dart 2.7, are a way to add functionality to existing libraries. In this section, we'll take a look at extension methods included in `package:flutter_bloc` and how they can be used.
 
+`flutter_bloc` has a dependency on [package:provider](https://pub.dev/packages/provider) which simplifies the use of [`InheritedWidget`](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html).
 
-### Provider
+Internally, `package:flutter_bloc` uses `package:provider` to implement: `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `MultiRepositoryProvider` widgets. `package:flutter_bloc` exports the `ReadContext`, `WatchContext` and `SelectContext`, extensions from `package:provider`.
 
-`flutter_bloc` has a dependency on [package:provider](https://pub.dev/packages/provider) which simplifies the usage of [`InheritedWidget`](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html).
+?> Learn more about [package:provider](https://pub.dev/packages/provider).
 
+### context.read
 
-Internally, `package:flutter_bloc` uses `package:provider` to implement: `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `MultiRepositoryProvider` widgets. Ultimately, each of these widgets uses `Provider` (`InheritedWidget`) to provide instances of various objects to the widget tree.
+`context.read<T>()` looks up the closest ancestor instance of type `T` and is functionally equivalent to `BlocProvider.of<T>(context)`. `context.read` is most commonly used for retrieving a bloc instance in order to add an event within `onPressed` callbacks.
 
-In addition, `package:flutter_bloc` exports the `ReadContext`, `WatchContext` and `SelectContext`, extensions from `package:provider`.
+!> **Note**: `context.read<T>()` does not listen to `T` -- if the provided `Object` of type `T` changes, `context.read` will not trigger a widget rebuild.
 
-?> Check out [Provider's pub page](https://pub.dev/packages/provider) to learn more about `Provider`.
+#### Usage
 
-### ReadContext
-
-`context.read<T>()` provides the closest `T` provided in the widget tree. However, `context.read<T>()` does not listen to `T`. In other words, if the provided `Object` of type `T` changes, `read` will not trigger a rebuild.
-
-The convention for `InheritedWidgets` is to expose a `static` method named `of`. This method usually searches the widget tree via `BuildContext` for the nearest `InheritedWidget` which matches a given `Type`. This is exactly what `BlocProvider.of<T>(context)` and `context.read<T>()` do.
-
-?> `BlocProvider.of<T>(context)` and `context.read<T>()` are functionally equivalent.
-
-#### How to use `context.read<T>`?
-
-Both, `BlocProvider.of<T>(context)` and `context.read<T>()` are functionally equivalent. It is up to the developer to go with the most convenient method. Although, it is preferred to be consistent with the given choice.
-
-**DO** use `context.read` to add events.
+✅ **DO** use `context.read` to add events in callbacks.
 
 ```dart
-context.read<CounterBloc>().add(CounterIncrementPressed()),
+onPressed() {
+  context.read<CounterBloc>().add(CounterIncrementPressed()),
+}
 ```
 
-`context.read` is most commonly used for retrieving a bloc instance in order to add an event within `onPressed` callbacks. `context.read` should not be used to retrieve a bloc's state directly within the build method.
-
-**AVOID** using `context.read` to retrieve state.
+❌ **AVOID** using `context.read` to retrieve state within a `build` method.
 
 ```dart
 @override
@@ -221,35 +211,21 @@ Widget build(BuildContext context) {
 }
 ```
 
-The above usage is error prone because the `Text` widget will not be rebuilt if the state of the bloc changes. In this scenario, either a `BlocBuilder` or `context.watch` should be used.
+The above usage is error prone because the `Text` widget will not be rebuilt if the state of the bloc changes.
 
-### WatchContext
+!> Use `BlocBuilder` or `context.watch` instead in order to rebuild in response to state changes.
 
-Like `context.read<T>()`, `context.watch<T>()` provides the closest `T` provided in the widget tree, however it also listens to changes on `T`. This means that, if the provided `Object` of type `T` changes, `watch` will trigger a rebuild. Thus, this method is only accessible inside a `StatelessWidget`'s or `State`'s `build` method.
+### context.watch
 
-?> `BlocProvider.of<T>(context, listen: true)` and `context.watch<T>()` are functionally equivalent.
+Like `context.read<T>()`, `context.watch<T>()` provides the closest ancestor instance of type `T`, however it also listens to changes on the instance. It is functionally equivalent to `BlocProvider.of<T>(context, listen: true)`.
 
-#### How to use `context.watch`?
+If the provided `Object` of type `T` changes, `context.watch` will trigger a rebuild.
 
-**DON'T** use `context.watch` when parent widget in build method doesn't depend on state.
+!> `context.watch` is only accessible within the `build` method of a `StatelessWidget` or `State` class.
 
-```dart
-@override
-Widget build(BuildContext context) {
-  // Whenever the state changes, the MaterialApp is rebuilt
-  // even though it is only used in the Text widget.
-  final state = context.watch<MyBloc>().state;
-  return MaterialApp(
-    home: Scaffold(
-      body: Text(state.value),
-    ),
-  );
-}
-```
+#### Usage
 
-!> Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes.
-
-**PREFER** use `BlocBuilder` instead of `context.watch` to explicitly scope rebuilds.
+✅ **DO** use `BlocBuilder` instead of `context.watch` to explicitly scope rebuilds.
 
 ```dart
 Widget build(BuildContext context) {
@@ -266,7 +242,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-The above is preferred over:
+Alternatively, use a `Builder` to scope rebuilds.
 
 ```dart
 @override
@@ -285,7 +261,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-**DO** use `Builder` and `context.watch` as `MultiBlocBuilder`.
+✅ **DO** use `Builder` and `context.watch` as `MultiBlocBuilder`.
 
 ```dart
 Builder(
@@ -299,34 +275,17 @@ Builder(
 );
 ```
 
-### SelectContext
-
-As with `context.watch<T>()`, `context.select<T, R>(R function(T value))` provides the closest `T` provided in the widget tree and also listens to changes on `T`. In addition, the `select` method allows you to be more selective, and avoid unnecessary rebuilds by specifying which state property should be accessed.
-
-```dart
-Widget build(BuildContext context) {
-  final value = context.select((MyBloc bloc) => bloc.value);
-  return Text(value);
-}
-```
-
-The above will only rebuild the widget when the property `value` of `MyBloc` changes value. It will not rebuild if some other property of `MyBloc` changes.
-
-##### How to use `context.select`?
-
-Whenever it is required to only listen to specific changes of a bloc state, it is preferred to be selective and avoid unnecessary rebuilds.
-
-**DON'T** use `context.select` when parent widget in build method doesn't depend on state.
+❌ **AVOID** using `context.watch` when the parent widget in the `build` method doesn't depend on the state.
 
 ```dart
 @override
 Widget build(BuildContext context) {
-  // Whenever the state.value changes, the MaterialApp is rebuilt
+  // Whenever the state changes, the MaterialApp is rebuilt
   // even though it is only used in the Text widget.
-  final value = context.select((MyBloc bloc) => bloc.value);
+  final state = context.watch<MyBloc>().state;
   return MaterialApp(
     home: Scaffold(
-      body: Text(value),
+      body: Text(state.value),
     ),
   );
 }
@@ -334,17 +293,33 @@ Widget build(BuildContext context) {
 
 !> Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes.
 
-**PREFER** use `BlocSelector` instead of `context.select` to explicitly scope rebuilds.
+### context.select
+
+Just like `context.watch<T>()`, `context.select<T, R>(R function(T value))` provides the closest ancestor instance of type `T` and listens to changes on `T`. Unlike `context.watch`, `context.select` allows you listen for changes in a smaller part of a state.
+
+```dart
+Widget build(BuildContext context) {
+  final name = context.select((ProfileBloc bloc) => bloc.state.name);
+  return Text(name);
+}
+```
+
+The above will only rebuild the widget when the property `name` of the `ProfileBloc`'s state changes.
+
+#### Usage
+
+
+✅ **DO** use `BlocSelector` instead of `context.select` to explicitly scope rebuilds.
 
 ```dart
 Widget build(BuildContext context) {
   return MaterialApp(
     home: Scaffold(
-      body: BlocSelector<MyBloc, MyState, String>(
-        selector: (state) => state.value,
-        builder: (context, state) {
-          // Whenever the state.value changes, only the Text is rebuilt.
-          return Text(state.value);
+      body: BlocSelector<ProfileBloc, ProfileState, String>(
+        selector: (state) => state.name,
+        builder: (context, name) {
+          // Whenever the state.name changes, only the Text is rebuilt.
+          return Text(name);
         },
       ),
     ),
@@ -352,7 +327,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-The above is preferred over:
+Alternatively, use a `Builder` to scope rebuilds.
 
 ```dart
 @override
@@ -361,12 +336,30 @@ Widget build(BuildContext context) {
     home: Scaffold(
       body: Builder(
         builder: (context) {
-          // Whenever the state.value changes, only the Text is rebuilt.
-          final value = context.select((MyBloc bloc) => bloc.value);
-          return Text(value);
+          // Whenever state.name changes, only the Text is rebuilt.
+          final name = context.select((ProfileBloc bloc) => bloc.state.name);
+          return Text(name);
         },
       ),
     ),
   );
 }
 ```
+
+❌ **AVOID** using `context.select` when the parent widget in a build method doesn't depend on the state.
+
+```dart
+@override
+Widget build(BuildContext context) {
+  // Whenever the state.value changes, the MaterialApp is rebuilt
+  // even though it is only used in the Text widget.
+  final name = context.select((ProfileBloc bloc) => bloc.state.name);
+  return MaterialApp(
+    home: Scaffold(
+      body: Text(name),
+    ),
+  );
+}
+```
+
+!> Using `context.select` at the root of the `build` method will result in the entire widget being rebuilt when the selection changes.
