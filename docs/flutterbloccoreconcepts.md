@@ -133,11 +133,16 @@ to:
 
 ## Usage
 
-Let's take a look at how to use `BlocBuilder` to hook up a `CounterPage` widget to a `CounterBloc`.
+Lets take a look at how to use `BlocProvider` to provide a `CounterBloc` to a `CounterPage` and react to state changes with `BlocBuilder`.
+
 
 ### counter_bloc.dart
 
 [counter_bloc.dart](_snippets/flutter_bloc_core_concepts/counter_bloc.dart.md ':include')
+
+### main.dart
+
+[main.dart](_snippets/flutter_bloc_core_concepts/counter_main.dart.md ':include')
 
 ### counter_page.dart
 
