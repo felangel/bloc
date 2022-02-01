@@ -269,6 +269,14 @@
             <option name="DART_TOPLEVEL" value="true" />
         </context>
     </template>
+    <template name="mock" value="class Mock$Subject$ extends Mock implements $Subject$ {}"
+              description="Create a mock object" toReformat="false" toShortenFQNames="true">
+        <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="DART" value="true" />
+            <option name="DART_TOPLEVEL" value="true" />
+        </context>
+    </template>
 
     <!--        FREEZED        -->
     <template name="fstate" value="const factory $CLASS_NAME$.$stateName$() = _$stateName$;"
