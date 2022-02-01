@@ -275,7 +275,7 @@ void main() {
     group('logOut', () {
       test('calls signOut', () async {
         when(() => firebaseAuth.signOut()).thenAnswer((_) async {});
-        when(() => googleSignIn.signOut()).thenAnswer((_) async {});
+        when(() => googleSignIn.signOut()).thenAnswer((_) async => null);
         await authenticationRepository.logOut();
         verify(() => firebaseAuth.signOut()).called(1);
         verify(() => googleSignIn.signOut()).called(1);

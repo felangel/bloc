@@ -41,7 +41,7 @@ void main() {
 
     setUp(() {
       navigator = MockNavigator();
-      when(() => navigator.push(any())).thenAnswer((_) async {});
+      when(() => navigator.push(any())).thenAnswer((_) async => null);
 
       cubit = MockHomeCubit();
       when(() => cubit.state).thenReturn(const HomeState());
