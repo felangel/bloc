@@ -23,7 +23,7 @@ void main() {
 
   setUp(() {
     navigator = MockNavigator();
-    when(() => navigator.push(any())).thenAnswer((_) async {});
+    when(() => navigator.push(any())).thenAnswer((_) async => null);
 
     editTodoBloc = MockEditTodoBloc();
     when(() => editTodoBloc.state).thenReturn(
