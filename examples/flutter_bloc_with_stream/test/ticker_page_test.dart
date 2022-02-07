@@ -61,10 +61,7 @@ void main() {
         'every 1 second', (tester) async {
       whenListen(
         tickerBloc,
-        Stream.periodic(
-          Duration(seconds: 1),
-          (i) => TickerTickSuccess(i),
-        ).take(3),
+        Stream.periodic(Duration(seconds: 1), TickerTickSuccess.new).take(3),
         initialState: TickerInitial(),
       );
 
