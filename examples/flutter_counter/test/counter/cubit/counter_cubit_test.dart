@@ -11,14 +11,14 @@ void main() {
     group('increment', () {
       blocTest<CounterCubit, int>(
         'emits [1] when state is 0',
-        build: () => CounterCubit(),
+        build: CounterCubit.new,
         act: (cubit) => cubit.increment(),
         expect: () => const <int>[1],
       );
 
       blocTest<CounterCubit, int>(
         'emits [1, 2] when state is 0 and invoked twice',
-        build: () => CounterCubit(),
+        build: CounterCubit.new,
         act: (cubit) => cubit
           ..increment()
           ..increment(),
@@ -27,7 +27,7 @@ void main() {
 
       blocTest<CounterCubit, int>(
         'emits [42] when state is 41',
-        build: () => CounterCubit(),
+        build: CounterCubit.new,
         seed: () => 41,
         act: (cubit) => cubit.increment(),
         expect: () => const <int>[42],
@@ -37,14 +37,14 @@ void main() {
     group('decrement', () {
       blocTest<CounterCubit, int>(
         'emits [-1] when state is 0',
-        build: () => CounterCubit(),
+        build: CounterCubit.new,
         act: (cubit) => cubit.decrement(),
         expect: () => const <int>[-1],
       );
 
       blocTest<CounterCubit, int>(
         'emits [-1, -2] when state is 0 and invoked twice',
-        build: () => CounterCubit(),
+        build: CounterCubit.new,
         act: (cubit) => cubit
           ..decrement()
           ..decrement(),
@@ -53,7 +53,7 @@ void main() {
 
       blocTest<CounterCubit, int>(
         'emits [42] when state is 43',
-        build: () => CounterCubit(),
+        build: CounterCubit.new,
         seed: () => 43,
         act: (cubit) => cubit.decrement(),
         expect: () => const <int>[42],
