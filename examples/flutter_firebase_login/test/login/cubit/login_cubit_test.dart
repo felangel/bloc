@@ -216,6 +216,25 @@ void main() {
           LoginState(status: FormzStatus.submissionFailure)
         ],
       );
+
+      blocTest<LoginCubit, LoginState>(
+        'emits [submissionInProgress, pure] '
+        'when logInWithGoogle is cancelled',
+        build: () {
+          when(() => authenticationRepository.logInWithGoogle()).thenThrow(
+            NoSuchMethodError.withInvocation(
+              null,
+              Invocation.getter(#logInWithGoogle),
+            ),
+          );
+          return LoginCubit(authenticationRepository);
+        },
+        act: (cubit) => cubit.logInWithGoogle(),
+        expect: () => const <LoginState>[
+          LoginState(status: FormzStatus.submissionInProgress),
+          LoginState()
+        ],
+      );
     });
   });
 }

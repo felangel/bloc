@@ -1,10 +1,13 @@
-name: cache
-description: A simple in memory cache made for Dart.
+name: crypto_api
+description: A crypto API with common encryption methods.
 version: 1.0.0
 publish_to: none
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
+
+dependencies:
+  crypto: ^3.0.1
 
 dev_dependencies:
   test: ^1.17.11
