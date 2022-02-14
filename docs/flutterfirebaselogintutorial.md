@@ -10,7 +10,7 @@
 
 - [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), a Flutter widget which provides a bloc to its children.
 - [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), a Flutter widget that handles building the widget in response to new states.
-- Using Bloc instead of Cubit. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
+- Using Cubit instead of Bloc. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
 - Adding events with [context.read](/migration?id=❗contextbloc-and-contextrepository-are-deprecated-in-favor-of-contextread-and-contextwatch).⚡
 - Prevent unnecessary rebuilds with [Equatable](/faqs?id=when-to-use-equatable).
 - [RepositoryProvider](/flutterbloccoreconcepts?id=repositoryprovider), a Flutter widget which provides a repository to its children.
@@ -35,14 +35,14 @@ The `AuthenticationRepository` will be responsible for abstracting the internal 
 
 ### Setup
 
-We'll start by creating `packages/authentication_repository` and a `pubspec.yaml`.
+We'll start by creating `packages/authentication_repository` in the root project folder and a `pubspec.yaml` under it.
 
 [pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/pubspec.yaml ':include')
 
 Next, we can install the dependencies by running:
 
 ```sh
-flutter packages get
+flutter pub get
 ```
 
 in the `authentication_repository` directory.
