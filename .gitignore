@@ -20,7 +20,7 @@
 .classpath
 .project
 .settings/
-.vscode/
+.vscode/*
 
 # Flutter repo-specific
 /bin/cache/
@@ -101,6 +101,7 @@ coverage_badge.svg
 nohup.out
 
 # Exceptions to above rules.
+!.vscode/launch.json
 !**/ios/**/default.mode1v3
 !**/ios/**/default.mode2v3
 !**/ios/**/default.pbxuser
