@@ -39,7 +39,9 @@ class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
         mappedSubscription = mappedStream.listen(
           controller.add,
           onError: controller.addError,
-          onDone: () => mappedSubscription = null,
+          onDone: () => Timer.run(() {
+              mappedSubscription = null;
+            });,
         );
       },
       onError: controller.addError,
