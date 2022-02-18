@@ -21,6 +21,28 @@
 | [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc) | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc) |
 | [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc) | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc) |
 
+## Спонсоры
+
+Наши лучшие спонсоры показаны ниже! [[Стать спонсором](https://github.com/sponsors/felangel)]
+
+<table>
+    <tbody>
+        <tr>
+            <td align="center" style="background-color: white">
+                <a href="https://verygood.ventures"><img src="https://raw.githubusercontent.com/VGVentures/very_good_brand/main/styles/README/vgv_logo_black.png" width="225"/></a>
+            </td>
+            <td align="center" style="background-color: white">
+                <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc" target="_blank"><img width="250px" src="https://stream-blog.s3.amazonaws.com/blog/wp-content/uploads/fc148f0fc75d02841d017bb36e14e388/Stream-logo-with-background-.png"/></a><br/><span><a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc" target="_blank">Try the Flutter Chat Tutorial &nbsp💬</a></span>
+            </td>
+            <td align="center" style="background-color: white">
+                <a href="https://www.miquido.com/flutter-development-company/?utm_source=github&utm_medium=sponsorship&utm_campaign=bloc-silver-tier&utm_term=flutter-development-company&utm_content=miquido-logo"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/miquido_logo.png" width="225"/></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+---
+
 ## Обзор
 
 <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" alt="Bloc Architecture" />
@@ -95,7 +117,6 @@
 - [Weather](https://bloclibrary.dev/#/ru/flutterweathertutorial) - пример как создать приложение Weather с использованием пакетов `bloc` и `flutter_bloc`. Приложение использует `RefreshIndicator` для реализации "pull-to-refresh", а также динамическое создание тем.
 - [Todos](https://bloclibrary.dev/#/ru/fluttertodostutorial) - пример как создать приложение Todos с использованием пакетов `bloc` и `flutter_bloc`.
 - [Timer](https://github.com/felangel/bloc/tree/master/examples/flutter_timer) - пример как создать Timer, используя пакеты `bloc` и `flutter_bloc`.
-- [Firestore Todos](https://bloclibrary.dev/#/ru/flutterfirestoretodostutorial) - пример как создать приложение Todos, используя пакеты `bloc` и `flutter_bloc`, которые интегрируются с облачным сервисом Firestore.
 - [Shopping Cart](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - пример как создать приложение Shopping Cart с использованием пакетов `bloc` и `flutter_bloc` на основе [Flutter Samples](https://github.com/flutter/samples/tree/master/provider_shopper).
 - [Dynamic Form](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - пример использования пакетов `bloc` и `flutter_bloc` по реализации динамической формы, которая извлекает данные из хранилища.
 

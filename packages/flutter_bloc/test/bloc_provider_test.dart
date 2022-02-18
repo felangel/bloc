@@ -448,7 +448,7 @@ void main() {
           child: const SizedBox(),
         ),
       );
-
+      FlutterError.onError = onError;
       expect(
         flutterErrors,
         contains(
@@ -458,13 +458,11 @@ void main() {
             isA<StateError>().having(
               (e) => e.message,
               'message',
-              expected,
+              contains(expected),
             ),
           ),
         ),
       );
-
-      FlutterError.onError = onError;
     });
 
     testWidgets(
@@ -486,19 +484,21 @@ void main() {
           child: const SizedBox(),
         ),
       );
-
+      FlutterError.onError = onError;
       expect(
         flutterErrors,
         contains(
           isA<FlutterErrorDetails>().having(
             (d) => d.exception,
             'exception',
-            isA<StateError>().having((e) => e.message, 'message', expected),
+            isA<StateError>().having(
+              (e) => e.message,
+              'message',
+              contains(expected),
+            ),
           ),
         ),
       );
-
-      FlutterError.onError = onError;
     });
 
     testWidgets(

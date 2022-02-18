@@ -44,7 +44,7 @@ void main() {
         build: () => AppBloc(
           authenticationRepository: authenticationRepository,
         ),
-        seed: () => AppState.unauthenticated(),
+        seed: AppState.unauthenticated,
         expect: () => [AppState.authenticated(user)],
       );
 
@@ -65,6 +65,11 @@ void main() {
     group('LogoutRequested', () {
       blocTest<AppBloc, AppState>(
         'invokes logOut',
+        setUp: () {
+          when(
+            () => authenticationRepository.logOut(),
+          ).thenAnswer((_) async {});
+        },
         build: () => AppBloc(
           authenticationRepository: authenticationRepository,
         ),

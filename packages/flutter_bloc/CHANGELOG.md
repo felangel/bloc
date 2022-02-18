@@ -1,3 +1,8 @@
+# 8.0.1
+
+- refactor: use core interfaces from `bloc v8.0.2` ([#3012](https://github.com/felangel/bloc/pull/3012))
+- docs: update example to follow naming conventions ([#3027](https://github.com/felangel/bloc/pull/3027))
+
 # 8.0.0
 
 - **BREAKING**: feat: upgrade to `bloc v8.0.0`

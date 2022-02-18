@@ -21,6 +21,11 @@ abstract class Closable {
   /// Closes the current instance.
   /// The returned future completes when the instance has been closed.
   FutureOr<void> close();
+
+  /// Whether the object is closed.
+  ///
+  /// An object is considered closed once [close] is called.
+  bool get isClosed;
 }
 
 /// An object that can emit new states.
@@ -53,10 +58,7 @@ abstract class BlocBase<State>
 
   final _blocObserver = BlocOverrides.current?.blocObserver;
 
-  StreamController<State>? __stateController;
-  StreamController<State> get _stateController {
-    return __stateController ??= StreamController<State>.broadcast();
-  }
+  late final _stateController = StreamController<State>.broadcast();
 
   State _state;
 
@@ -72,6 +74,7 @@ abstract class BlocBase<State>
   ///
   /// A bloc is considered closed once [close] is called.
   /// Subsequent state changes cannot occur within a closed bloc.
+  @override
   bool get isClosed => _stateController.isClosed;
 
   /// Updates the [state] to the provided [state].
@@ -122,6 +125,7 @@ abstract class BlocBase<State>
   ///
   /// * [BlocObserver] for observing [Cubit] behavior globally.
   ///
+  @protected
   @mustCallSuper
   void onChange(Change<State> change) {
     // ignore: invalid_use_of_protected_member
@@ -129,6 +133,7 @@ abstract class BlocBase<State>
   }
 
   /// Reports an [error] which triggers [onError] with an optional [StackTrace].
+  @protected
   @mustCallSuper
   @override
   void addError(Object error, [StackTrace? stackTrace]) {

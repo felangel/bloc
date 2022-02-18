@@ -18,9 +18,8 @@
     - [**Sonsuz List** <sup>✨</sup>](flutterinfinitelisttutorial.md)
     - [**Login** <sup>✨</sup>](flutterlogintutorial.md)
     - [Hava](flutterweathertutorial.md)
-    - [Todolar](fluttertodostutorial.md)
+    - [**Todolar** <sup>✨</sup>](fluttertodostutorial.md)
     - [**Firebase Login** <sup>✨</sup>](flutterfirebaselogintutorial.md)
-    - [Firestore Todo-lar](flutterfirestoretodostutorial.md)
   - AngularDart
     - [Sayğac](angularcountertutorial.md)
   - Flutter + AngularDart

@@ -1,3 +1,28 @@
+# 6.5.0
+
+- fix: update `BlocObserver` snippet to resolve Dart analyzer warning
+- feat: determine versions via `pubspec.lock`
+- feat: add `Mock` snippet
+- chore: upgrade dependencies
+
+# 6.4.0
+
+- feat: add `_onevent` snippet for creating an internal event handler
+- feat: improve `onevent` snippet to infer default event type
+- feat: add new extension settings:
+  - `bloc.newBlocTemplate.createDirectory` (defaults to true)
+  - `bloc.newCubitTemplate.createDirectory` (defaults to true)
+- refactor: remove deprecated snippets:
+  - `feventwhen`
+  - `feventmap`
+
+# 6.3.0
+
+- feat: add snippets for:
+  - `MockBloc`
+  - `MockCubit`
+  - `Fake`
+
 # 6.2.0
 
 - feat: query latest package versions from pub.dev

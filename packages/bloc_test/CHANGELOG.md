@@ -1,3 +1,9 @@
+# 9.0.2
+
+- fix: throw uncaught exceptions ([#3070](https://github.com/felangel/bloc/pull/3070))
+- chore: upgrade to `bloc v8.0.2`
+- docs: update example to follow naming conventions ([#3032](https://github.com/felangel/bloc/pull/3032))
+
 # 9.0.1
 
 - chore: upgrade to `bloc v8.0.1`

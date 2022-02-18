@@ -19,9 +19,8 @@
     - [**Unbegrenzte Liste** <sup>✨</sup>](flutterinfinitelisttutorial.md)
     - [**Anmeldung** <sup>✨</sup>](flutterlogintutorial.md)
     - [**Wetter** <sup>✨</sup>](flutterweathertutorial.md)
-    - [Todos](fluttertodostutorial.md)
+    - [**Todos** <sup>✨</sup>](fluttertodostutorial.md)
     - [**Firebase Anmeldung** <sup>✨</sup>](flutterfirebaselogintutorial.md)
-    - [Firestore Todos](flutterfirestoretodostutorial.md)
   - AngularDart
     - [Counter](angularcountertutorial.md)
   - Flutter + AngularDart

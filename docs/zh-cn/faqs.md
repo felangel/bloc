@@ -49,6 +49,52 @@
 
 [my_bloc_test.dart](../_snippets/faqs/without_equatable_bloc_test.dart.md ':include')
 
+## 错误处理
+
+❔ **问题**: 我怎么处理一个错误并且还显示之前的数据？
+
+💡 **答案**:
+
+这个更多的依赖于bloc的状态是怎么设计的。如果数据在出现错误时仍需要保留，则考虑使用单个状态类。
+
+```dart
+enum Status { initial, loading, success, failure }
+
+class MyState {
+  const MyState({
+    this.data = Data.empty,
+    this.error = '',
+    this.status = Status.initial,
+  });
+
+  final Data data;
+  final String error;
+  final Status status;
+
+  MyState copyWith({Data data, String error, Status status}) {
+    return MyState(
+      data: data ?? this.data,
+      error: error ?? this.error,
+      status: status ?? this.status,
+    );
+  }
+}
+```
+
+这将允许组件同时访问 `data` 和 `error` 属性，即使发生错误，bloc也可以使用 `state.copyWith` 保留旧数据。
+
+```dart
+on<DataRequested>((event, emit) {
+  try {
+    final data = await _repository.getData();
+    emit(state.copyWith(status: Status.success, data: data));
+  } on Exception {
+    emit(state.copyWith(status: Status.failure, error: 'Something went wrong!'));
+  }
+});
+```
+
+
 ## Bloc vs. Redux
 
 ❔ **问题**: Bloc和Redux有什么区别?

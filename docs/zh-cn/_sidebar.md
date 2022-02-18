@@ -14,13 +14,12 @@
 
   - Flutter
     - [**计数器** <sup>✨</sup>](zh-cn/fluttercountertutorial.md)
-    - [秒表](fluttertimertutorial.md)
+    - [**秒表** <sup>✨</sup>](zh-cn/fluttertimertutorial.md)
     - [无限列表](zh-cn/flutterinfinitelisttutorial.md)
     - [**登陆** <sup>✨</sup>](flutterlogintutorial.md)
     - [**天气** <sup>✨</sup>](flutterweathertutorial.md)
-    - [备忘录](fluttertodostutorial.md)
-    - [**Firebase 登陆** <sup>✨</sup>](flutterfirebaselogintutorial.md)
-    - [Firestore 备忘录](flutterfirestoretodostutorial.md)
+    - [**备忘录** <sup>✨</sup>](fluttertodostutorial.md)
+    - [**Firebase 登陆** <sup>✨</sup>](flutterfirebaselogintutorial.md)    
   - AngularDart
     - [计数器](angularcountertutorial.md)
   - Flutter + AngularDart

@@ -31,7 +31,7 @@ abstract class Emitter<State> {
     void Function(Object error, StackTrace stackTrace)? onError,
   });
 
-  // Subscribes to the provided [stream] and invokes the [onData] callback
+  /// Subscribes to the provided [stream] and invokes the [onData] callback
   /// when the [stream] emits new data and the result of [onData] is emitted.
   ///
   /// [forEach] completes when the event handler is cancelled or when
@@ -176,7 +176,9 @@ Please make sure to await all asynchronous operations within event handlers.
   }
 
   void _close() {
-    for (final disposable in _disposables) disposable.call();
+    for (final disposable in _disposables) {
+      disposable.call();
+    }
     _disposables.clear();
     if (!_completer.isCompleted) _completer.complete();
   }
