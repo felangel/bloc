@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -7,7 +9,7 @@ class FakeBlocObserver extends Fake implements BlocObserver {}
 class FakeStorage extends Fake implements Storage {}
 
 void main() {
-  group('HydratedBlocOverrides', () {
+  group('HydratedBlocOverrides (legacy)', () {
     group('runZoned', () {
       test('uses default BlocObserver when not specified', () {
         HydratedBlocOverrides.runZoned(() {
@@ -53,7 +55,7 @@ void main() {
         HydratedBlocOverrides.runZoned(() {
           final overrides = HydratedBlocOverrides.current;
           expect(overrides!.storage, equals(storage));
-        }, createStorage: () => storage);
+        }, storage: storage);
       });
 
       test(
@@ -127,8 +129,8 @@ void main() {
           HydratedBlocOverrides.runZoned(() {
             final overrides = HydratedBlocOverrides.current;
             expect(overrides!.storage, equals(nestedStorage));
-          }, createStorage: () => nestedStorage);
-        }, createStorage: () => rootStorage);
+          }, storage: nestedStorage);
+        }, storage: rootStorage);
       });
 
       test('uses parent storage when nested zone does not specify', () {
@@ -138,7 +140,7 @@ void main() {
             final overrides = HydratedBlocOverrides.current;
             expect(overrides!.storage, equals(storage));
           });
-        }, createStorage: () => storage);
+        }, storage: storage);
       });
 
       test(
@@ -172,7 +174,7 @@ void main() {
               expect(overrides.storage, equals(storage));
             },
             blocObserver: nestedBlocObserver,
-            createStorage: () => storage,
+            storage: storage,
           );
         }, blocObserver: rootBlocObserver);
       });
@@ -186,7 +188,7 @@ void main() {
           final overrides = HydratedBlocOverrides.current!;
           expect(overrides.storage, equals(originalStorage));
           expect(overrides.storage, isNot(equals(otherStorage)));
-        }, createStorage: () => storage);
+        }, storage: storage);
       });
     });
   });
