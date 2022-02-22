@@ -104,7 +104,7 @@ void main() {
     });
 
     test('creates FirebaseAuth instance internally when not injected', () {
-      expect(() => AuthenticationRepository(), isNot(throwsException));
+      expect(AuthenticationRepository.new, isNot(throwsException));
     });
 
     group('signUp', () {

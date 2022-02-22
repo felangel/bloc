@@ -44,7 +44,7 @@ void main() {
         build: () => AppBloc(
           authenticationRepository: authenticationRepository,
         ),
-        seed: () => AppState.unauthenticated(),
+        seed: AppState.unauthenticated,
         expect: () => [AppState.authenticated(user)],
       );
 
