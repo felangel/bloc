@@ -35,7 +35,7 @@ The `AuthenticationRepository` will be responsible for abstracting the internal 
 
 ### Setup
 
-We'll start by creating `packages/authentication_repository` in the root project folder and a `pubspec.yaml` under it.
+We'll start by creating `packages/authentication_repository` and a `pubspec.yaml` at the root of the project.
 
 [pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/pubspec.yaml ':include')
 

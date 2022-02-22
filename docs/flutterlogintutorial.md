@@ -29,7 +29,7 @@ flutter create flutter_login
 
 The first thing we're going to do is create an `authentication_repository` package which will be responsible for managing the authentication domain.
 
-We'll start by creating `packages/authentication_repository` directory at the root of the project which will contain all internal packages.
+We'll start by creating a `packages/authentication_repository` directory at the root of the project which will contain all internal packages.
 
 At a high level, the directory structure should look like this:
 
