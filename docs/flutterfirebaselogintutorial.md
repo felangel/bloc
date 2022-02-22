@@ -42,7 +42,7 @@ We'll start by creating `packages/authentication_repository` and a `pubspec.yaml
 Next, we can install the dependencies by running:
 
 ```sh
-flutter pub get
+flutter packages get
 ```
 
 in the `authentication_repository` directory.

@@ -117,7 +117,7 @@ Let's start by updating the generated `pubspec.yaml` at the root of our project:
 We can install the dependencies by running:
 
 ```sh
-flutter pub get
+flutter packages get
 ```
 
 ## Authentication Bloc
