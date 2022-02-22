@@ -29,6 +29,9 @@ Next, we can install all of our dependencies
 
 ```sh
 flutter packages get
+```
+
+## Authentication Repository
 
 The first thing we're going to do is create an `authentication_repository` package which will be responsible for managing the authentication domain.
 
