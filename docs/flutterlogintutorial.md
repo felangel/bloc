@@ -25,7 +25,10 @@ We'll start off by creating a brand new Flutter project
 flutter create flutter_login
 ```
 
-## Authentication Repository
+Next, we can install all of our dependencies
+
+```sh
+flutter packages get
 
 The first thing we're going to do is create an `authentication_repository` package which will be responsible for managing the authentication domain.
 
