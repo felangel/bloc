@@ -13,8 +13,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
   @override
   void onChange(Change<int> change) {
-    print(change);
     super.onChange(change);
+    print(change);
   }
 
   @override
