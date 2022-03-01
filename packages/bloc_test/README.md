@@ -28,8 +28,6 @@ A Dart package that makes testing blocs and cubits easy. Built to work with [blo
 
 Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsors/felangel)]
 
-Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsors/felangel)]
-
 <table>
     <tbody>
         <tr>
