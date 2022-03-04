@@ -210,13 +210,17 @@ mixin HydratedMixin<State> on BlocBase<State> {
 
   State? _state;
 
+  /// Read state from storage using legacy storage token first.
+  Map<dynamic, dynamic>? _read() {
+    return _storage.read(_legacyStorageToken) as Map<dynamic, dynamic>? ??
+        _storage.read(storageToken) as Map<dynamic, dynamic>?;
+  }
+
   @override
   State get state {
     if (_state != null) return _state!;
     try {
-      final stateJson =
-          _storage.read(_legacyStorageToken) as Map<dynamic, dynamic>? ??
-              _storage.read(storageToken) as Map<dynamic, dynamic>?;
+      final stateJson = _read();
       if (stateJson == null) {
         _state = super.state;
         return super.state;
