@@ -214,7 +214,9 @@ mixin HydratedMixin<State> on BlocBase<State> {
   State get state {
     if (_state != null) return _state!;
     try {
-      final stateJson = _storage.read(storageToken) as Map<dynamic, dynamic>?;
+      final stateJson =
+          _storage.read(_legacyStorageToken) as Map<dynamic, dynamic>? ??
+              _storage.read(storageToken) as Map<dynamic, dynamic>?;
       if (stateJson == null) {
         _state = super.state;
         return super.state;
@@ -385,9 +387,13 @@ mixin HydratedMixin<State> on BlocBase<State> {
   /// in order to keep the caches independent of each other.
   String get id => '';
 
+  /// Legacy storage token for backward compatibility.
+  /// Will be removed in future releases.
+  String get _legacyStorageToken => '${runtimeType.toString()}$id';
+
   /// `storageToken` is used as registration token for hydrated storage.
   @nonVirtual
-  String get storageToken => '${runtimeType.toString()}$id';
+  String get storageToken => '${identityHashCode(this)}$id';
 
   /// [clear] is used to wipe or invalidate the cache of a [HydratedBloc].
   /// Calling [clear] will delete the cached state of the bloc

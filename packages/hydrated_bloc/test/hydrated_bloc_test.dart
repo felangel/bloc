@@ -142,6 +142,17 @@ void main() {
       }, storage: storage);
     });
 
+    test('reads from storage with support for legacy storage token', () {
+      final legacyStorageToken = 'MyCallbackHydratedBloc';
+      when<dynamic>(() => storage.read(legacyStorageToken)).thenReturn(null);
+      HydratedBlocOverrides.runZoned(() {
+        final bloc = MyCallbackHydratedBloc();
+        final storageToken = identityHashCode(bloc);
+        verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
+        verify<dynamic>(() => storage.read('$storageToken')).called(1);
+      }, storage: storage);
+    });
+
     test(
         'does not read from storage on subsequent state changes '
         'when cache value exists', () async {
@@ -237,22 +248,25 @@ void main() {
             nextState: 0,
           );
           const expected = <String, int>{'value': 0};
-          MyHydratedBloc().onChange(change);
-          verify(() => storage.write('MyHydratedBloc', expected)).called(2);
+          final bloc = MyHydratedBloc()..onChange(change);
+          final storageToken = identityHashCode(bloc);
+          verify(() => storage.write('$storageToken', expected)).called(2);
         }, storage: storage);
       });
 
       test('should call storage.write when onChange is called with bloc id',
           () {
         HydratedBlocOverrides.runZoned(() {
-          final bloc = MyHydratedBloc('A');
+          const id = 'A';
+          final bloc = MyHydratedBloc(id);
           const change = Change(
             currentState: 0,
             nextState: 0,
           );
           const expected = <String, int>{'value': 0};
           bloc.onChange(change);
-          verify(() => storage.write('MyHydratedBlocA', expected)).called(2);
+          final storageToken = '${identityHashCode(bloc)}$id';
+          verify(() => storage.write('$storageToken', expected)).called(2);
         }, storage: storage);
       });
 
@@ -280,9 +294,9 @@ void main() {
 
       test('stores initial state when instantiated', () {
         HydratedBlocOverrides.runZoned(() {
-          MyHydratedBloc();
+          final bloc = MyHydratedBloc();
           verify(
-            () => storage.write('MyHydratedBloc', {'value': 0}),
+            () => storage.write(bloc.storageToken, {'value': 0}),
           ).called(1);
         }, storage: storage);
       });
@@ -306,8 +320,10 @@ void main() {
       group('clear', () {
         test('calls delete on storage', () async {
           await HydratedBlocOverrides.runZoned(() async {
-            await MyHydratedBloc().clear();
-            verify(() => storage.delete('MyHydratedBloc')).called(1);
+            final bloc = MyHydratedBloc();
+            await bloc.clear();
+            final storageToken = identityHashCode(bloc);
+            verify(() => storage.delete('$storageToken')).called(1);
           }, storage: storage);
         });
       });
@@ -345,12 +361,18 @@ void main() {
       group('clear', () {
         test('calls delete on storage', () async {
           await HydratedBlocOverrides.runZoned(() async {
-            await MyMultiHydratedBloc('A').clear();
-            verify(() => storage.delete('MyMultiHydratedBlocA')).called(1);
+            final idA = 'A';
+            final blocA = MyMultiHydratedBloc(idA);
+            final storageTokenA = '${identityHashCode(blocA)}$idA';
+            await blocA.clear();
+            verify(() => storage.delete('$storageTokenA')).called(1);
             verifyNever(() => storage.delete('MyMultiHydratedBlocB'));
 
-            await MyMultiHydratedBloc('B').clear();
-            verify(() => storage.delete('MyMultiHydratedBlocB')).called(1);
+            final idB = 'B';
+            final blocB = MyMultiHydratedBloc(idB);
+            final storageTokenB = '${identityHashCode(blocB)}$idB';
+            await blocB.clear();
+            verify(() => storage.delete('$storageTokenB')).called(1);
           }, storage: storage);
         });
       });
@@ -362,15 +384,12 @@ void main() {
           when(
             () => storage.write(any<String>(), any<Map<String, String?>>()),
           ).thenAnswer((_) async {});
-          MyUuidHydratedBloc();
+          final bloc = MyUuidHydratedBloc();
           await untilCalled(
             () => storage.write(any<String>(), any<Map<String, String?>>()),
           );
           verify(
-            () => storage.write(
-              'MyUuidHydratedBloc',
-              any<Map<String, String?>>(),
-            ),
+            () => storage.write(bloc.storageToken, any<Map<String, String?>>()),
           ).called(1);
         }, storage: storage);
       });
@@ -382,15 +401,15 @@ void main() {
           when(
             () => storage.write(any(), any<dynamic>()),
           ).thenAnswer((_) => Future<void>.value());
-          MyUuidHydratedBloc();
+          final blocA = MyUuidHydratedBloc();
           final captured = verify(
-            () => storage.write('MyUuidHydratedBloc', captureAny<dynamic>()),
+            () => storage.write(blocA.storageToken, captureAny<dynamic>()),
           ).captured;
           cachedState = captured.first;
           when<dynamic>(() => storage.read(any())).thenReturn(cachedState);
-          MyUuidHydratedBloc();
+          final blocB = MyUuidHydratedBloc();
           final secondCaptured = verify(
-            () => storage.write('MyUuidHydratedBloc', captureAny<dynamic>()),
+            () => storage.write(blocB.storageToken, captureAny<dynamic>()),
           ).captured;
           final dynamic initialStateB = secondCaptured.first;
 
