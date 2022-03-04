@@ -111,6 +111,19 @@ void main() {
       }, storage: storage);
     });
 
+    test('reads from storage with support for legacy storage token', () {
+      final legacyStorageToken = 'MyCallbackHydratedCubit';
+      when<dynamic>(() => storage.read(legacyStorageToken)).thenReturn(null);
+      HydratedBlocOverrides.runZoned(() {
+        final cubit = MyCallbackHydratedCubit();
+        final storageToken = identityHashCode(cubit);
+        verify<dynamic>(
+          () => storage.read('MyCallbackHydratedCubit'),
+        ).called(1);
+        verify<dynamic>(() => storage.read('$storageToken')).called(1);
+      }, storage: storage);
+    });
+
     test(
         'does not deserialize state on subsequent state changes '
         'when cache value exists', () {
@@ -232,22 +245,25 @@ void main() {
             nextState: 0,
           );
           final expected = <String, int>{'value': 0};
-          MyHydratedCubit().onChange(transition);
-          verify(() => storage.write('MyHydratedCubit', expected)).called(2);
+          final cubit = MyHydratedCubit()..onChange(transition);
+          final storageToken = '${identityHashCode(cubit)}';
+          verify(() => storage.write(storageToken, expected)).called(2);
         }, storage: storage);
       });
 
       test('should call storage.write when onChange is called with cubit id',
           () {
         HydratedBlocOverrides.runZoned(() {
-          final cubit = MyHydratedCubit('A');
+          final id = 'A';
+          final cubit = MyHydratedCubit(id);
           final transition = const Change<int>(
             currentState: 0,
             nextState: 0,
           );
           final expected = <String, int>{'value': 0};
           cubit.onChange(transition);
-          verify(() => storage.write('MyHydratedCubitA', expected)).called(2);
+          final storageToken = '${identityHashCode(cubit)}$id';
+          verify(() => storage.write(storageToken, expected)).called(2);
         }, storage: storage);
       });
 
@@ -277,9 +293,9 @@ void main() {
 
       test('stores initial state when instantiated', () {
         HydratedBlocOverrides.runZoned(() {
-          MyHydratedCubit();
+          final cubit = MyHydratedCubit();
           verify(
-            () => storage.write('MyHydratedCubit', {'value': 0}),
+            () => storage.write(cubit.storageToken, {'value': 0}),
           ).called(1);
         }, storage: storage);
       });
@@ -287,8 +303,9 @@ void main() {
       test('initial state should return 0 when fromJson returns null', () {
         HydratedBlocOverrides.runZoned(() {
           when<dynamic>(() => storage.read(any())).thenReturn(null);
-          expect(MyHydratedCubit().state, 0);
-          verify<dynamic>(() => storage.read('MyHydratedCubit')).called(1);
+          final cubit = MyHydratedCubit();
+          expect(cubit.state, 0);
+          verify<dynamic>(() => storage.read(cubit.storageToken)).called(1);
         }, storage: storage);
       });
 
@@ -302,16 +319,19 @@ void main() {
       test('initial state should return 101 when fromJson returns 101', () {
         HydratedBlocOverrides.runZoned(() {
           when<dynamic>(() => storage.read(any())).thenReturn({'value': 101});
-          expect(MyHydratedCubit().state, 101);
-          verify<dynamic>(() => storage.read('MyHydratedCubit')).called(1);
+          when<dynamic>(() => storage.read('MyHydratedCubit')).thenReturn(null);
+          final cubit = MyHydratedCubit();
+          expect(cubit.state, 101);
+          verify<dynamic>(() => storage.read(cubit.storageToken)).called(1);
         }, storage: storage);
       });
 
       group('clear', () {
         test('calls delete on storage', () async {
           await HydratedBlocOverrides.runZoned(() async {
-            await MyHydratedCubit().clear();
-            verify(() => storage.delete('MyHydratedCubit')).called(1);
+            final cubit = MyHydratedCubit();
+            await cubit.clear();
+            verify(() => storage.delete(cubit.storageToken)).called(1);
           }, storage: storage);
         });
       });
@@ -321,48 +341,52 @@ void main() {
       test('initial state should return 0 when fromJson returns null', () {
         HydratedBlocOverrides.runZoned(() {
           when<dynamic>(() => storage.read(any())).thenReturn(null);
-          expect(MyMultiHydratedCubit('A').state, 0);
-          verify<dynamic>(
-            () => storage.read('MyMultiHydratedCubitA'),
-          ).called(1);
+          final idA = 'A';
+          final cubitA = MyMultiHydratedCubit(idA);
+          final storageTokenA = '${identityHashCode(cubitA)}$idA';
+          expect(cubitA.state, 0);
+          verify<dynamic>(() => storage.read(storageTokenA)).called(1);
 
-          expect(MyMultiHydratedCubit('B').state, 0);
-          verify<dynamic>(
-            () => storage.read('MyMultiHydratedCubitB'),
-          ).called(1);
+          final idB = 'B';
+          final cubitB = MyMultiHydratedCubit(idB);
+          final storageTokenB = '${identityHashCode(cubitB)}$idB';
+          expect(cubitB.state, 0);
+          verify<dynamic>(() => storage.read(storageTokenB)).called(1);
         }, storage: storage);
       });
 
       test('initial state should return 101/102 when fromJson returns 101/102',
           () {
         HydratedBlocOverrides.runZoned(() {
+          when<dynamic>(() => storage.read(any())).thenReturn({'value': 101});
           when<dynamic>(
             () => storage.read('MyMultiHydratedCubitA'),
-          ).thenReturn({'value': 101});
-          expect(MyMultiHydratedCubit('A').state, 101);
-          verify<dynamic>(
-            () => storage.read('MyMultiHydratedCubitA'),
-          ).called(1);
+          ).thenReturn(null);
+          final cubitA = MyMultiHydratedCubit('A');
+          expect(cubitA.state, 101);
+          verify<dynamic>(() => storage.read(cubitA.storageToken)).called(1);
 
+          when<dynamic>(() => storage.read(any())).thenReturn({'value': 102});
           when<dynamic>(
             () => storage.read('MyMultiHydratedCubitB'),
-          ).thenReturn({'value': 102});
-          expect(MyMultiHydratedCubit('B').state, 102);
-          verify<dynamic>(
-            () => storage.read('MyMultiHydratedCubitB'),
-          ).called(1);
+          ).thenReturn(null);
+          final cubitB = MyMultiHydratedCubit('B');
+          expect(cubitB.state, 102);
+          verify<dynamic>(() => storage.read(cubitB.storageToken)).called(1);
         }, storage: storage);
       });
 
       group('clear', () {
         test('calls delete on storage', () async {
           await HydratedBlocOverrides.runZoned(() async {
-            await MyMultiHydratedCubit('A').clear();
-            verify(() => storage.delete('MyMultiHydratedCubitA')).called(1);
-            verifyNever(() => storage.delete('MyMultiHydratedCubitB'));
+            final cubitA = MyMultiHydratedCubit('A');
+            final cubitB = MyMultiHydratedCubit('B');
+            await cubitA.clear();
+            verify(() => storage.delete(cubitA.storageToken)).called(1);
+            verifyNever(() => storage.delete(cubitB.storageToken));
 
-            await MyMultiHydratedCubit('B').clear();
-            verify(() => storage.delete('MyMultiHydratedCubitB')).called(1);
+            await cubitB.clear();
+            verify(() => storage.delete(cubitB.storageToken)).called(1);
           }, storage: storage);
         });
       });
@@ -371,9 +395,9 @@ void main() {
     group('MyUuidHydratedCubit', () {
       test('stores initial state when instantiated', () {
         HydratedBlocOverrides.runZoned(() {
-          MyUuidHydratedCubit();
+          final cubit = MyUuidHydratedCubit();
           verify(
-            () => storage.write('MyUuidHydratedCubit', any<dynamic>()),
+            () => storage.write(cubit.storageToken, any<dynamic>()),
           ).called(1);
         }, storage: storage);
       });
@@ -385,15 +409,15 @@ void main() {
           when(
             () => storage.write(any(), any<dynamic>()),
           ).thenAnswer((_) => Future<void>.value());
-          MyUuidHydratedCubit();
+          final cubitA = MyUuidHydratedCubit();
           final captured = verify(
-            () => storage.write('MyUuidHydratedCubit', captureAny<dynamic>()),
+            () => storage.write(cubitA.storageToken, captureAny<dynamic>()),
           ).captured;
           cachedState = captured.first;
           when<dynamic>(() => storage.read(any())).thenReturn(cachedState);
-          MyUuidHydratedCubit();
+          final cubitB = MyUuidHydratedCubit();
           final secondCaptured = verify(
-            () => storage.write('MyUuidHydratedCubit', captureAny<dynamic>()),
+            () => storage.write(cubitB.storageToken, captureAny<dynamic>()),
           ).captured;
           final dynamic initialStateB = secondCaptured.first;
 
