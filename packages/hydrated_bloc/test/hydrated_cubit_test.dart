@@ -39,13 +39,21 @@ class MyCallbackHydratedCubit extends HydratedCubit<int> {
 }
 
 class MyHydratedCubit extends HydratedCubit<int> {
-  MyHydratedCubit([this._id, this._callSuper = true]) : super(0);
+  MyHydratedCubit([
+    this._id,
+    this._callSuper = true,
+    this._storagePrefix,
+  ]) : super(0);
 
   final String? _id;
   final bool _callSuper;
+  final String? _storagePrefix;
 
   @override
   String get id => _id ?? '';
+
+  @override
+  String get storagePrefix => _storagePrefix ?? super.storagePrefix;
 
   @override
   Map<String, int> toJson(int state) => {'value': state};
@@ -94,6 +102,32 @@ void main() {
         verify<dynamic>(
           () => storage.read('MyCallbackHydratedCubit'),
         ).called(1);
+      }, storage: storage);
+    });
+
+    test(
+        'reads from storage once upon initialization w/custom storagePrefix/id',
+        () {
+      HydratedBlocOverrides.runZoned(() {
+        const storagePrefix = '__storagePrefix__';
+        const id = '__id__';
+        MyHydratedCubit(id, true, storagePrefix);
+        verify<dynamic>(() => storage.read('$storagePrefix$id')).called(1);
+      }, storage: storage);
+    });
+
+    test('writes to storage when onChange is called w/custom storagePrefix/id',
+        () {
+      HydratedBlocOverrides.runZoned(() {
+        const change = Change(
+          currentState: 0,
+          nextState: 0,
+        );
+        const expected = <String, int>{'value': 0};
+        const storagePrefix = '__storagePrefix__';
+        const id = '__id__';
+        MyHydratedCubit(id, true, storagePrefix).onChange(change);
+        verify(() => storage.write('$storagePrefix$id', expected)).called(2);
       }, storage: storage);
     });
 
