@@ -101,17 +101,6 @@ void main() {
       );
     });
 
-    group('TodosOverviewTodoSaved', () {
-      blocTest<TodosOverviewBloc, TodosOverviewState>(
-        'saves todo using repository',
-        build: buildBloc,
-        act: (bloc) => bloc.add(TodosOverviewTodoSaved(mockTodos.first)),
-        verify: (_) {
-          verify(() => todosRepository.saveTodo(mockTodos.first)).called(1);
-        },
-      );
-    });
-
     group('TodosOverviewTodoCompletionToggled', () {
       blocTest<TodosOverviewBloc, TodosOverviewState>(
         'saves todo with isCompleted set to event isCompleted flag',
