@@ -28,9 +28,6 @@ void main() {
       });
     });
 
-
-    });
-
     group('TodosOverviewTodoCompletionToggled', () {
       test('supports value equality', () {
         expect(
