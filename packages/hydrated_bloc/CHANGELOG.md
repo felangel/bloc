@@ -1,3 +1,7 @@
+# 8.1.0
+
+- feat: add `storagePrefix` to support obfuscation tolerance ([#3262](https://github.com/felangel/bloc/pull/3262))
+
 # 8.0.0
 
 - **BREAKING**: feat: introduce `HydratedBlocOverrides` API ([#2947](https://github.com/felangel/bloc/pull/2947))
