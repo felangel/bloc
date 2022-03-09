@@ -48,12 +48,16 @@ class MyCallbackHydratedBloc extends HydratedBloc<CounterEvent, int> {
 }
 
 class MyHydratedBloc extends HydratedBloc<int, int> {
-  MyHydratedBloc([this._id]) : super(0);
+  MyHydratedBloc([this._id, this._storagePrefix]) : super(0);
 
   final String? _id;
+  final String? _storagePrefix;
 
   @override
   String get id => _id ?? '';
+
+  @override
+  String get storagePrefix => _storagePrefix ?? super.storagePrefix;
 
   @override
   Map<String, int>? toJson(int state) {
@@ -139,6 +143,32 @@ void main() {
       HydratedBlocOverrides.runZoned(() {
         MyCallbackHydratedBloc();
         verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
+      }, storage: storage);
+    });
+
+    test(
+        'reads from storage once upon initialization w/custom storagePrefix/id',
+        () {
+      HydratedBlocOverrides.runZoned(() {
+        const storagePrefix = '__storagePrefix__';
+        const id = '__id__';
+        MyHydratedBloc(id, storagePrefix);
+        verify<dynamic>(() => storage.read('$storagePrefix$id')).called(1);
+      }, storage: storage);
+    });
+
+    test('writes to storage when onChange is called w/custom storagePrefix/id',
+        () {
+      HydratedBlocOverrides.runZoned(() {
+        const change = Change(
+          currentState: 0,
+          nextState: 0,
+        );
+        const expected = <String, int>{'value': 0};
+        const storagePrefix = '__storagePrefix__';
+        const id = '__id__';
+        MyHydratedBloc(id, storagePrefix).onChange(change);
+        verify(() => storage.write('$storagePrefix$id', expected)).called(2);
       }, storage: storage);
     });
 
