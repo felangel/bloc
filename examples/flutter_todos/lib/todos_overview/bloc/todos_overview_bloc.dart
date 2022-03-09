@@ -12,7 +12,6 @@ class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
   })  : _todosRepository = todosRepository,
         super(const TodosOverviewState()) {
     on<TodosOverviewSubscriptionRequested>(_onSubscriptionRequested);
-    on<TodosOverviewTodoSaved>(_onTodoSaved);
     on<TodosOverviewTodoCompletionToggled>(_onTodoCompletionToggled);
     on<TodosOverviewTodoDeleted>(_onTodoDeleted);
     on<TodosOverviewUndoDeletionRequested>(_onUndoDeletionRequested);
@@ -39,13 +38,6 @@ class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
         status: () => TodosOverviewStatus.failure,
       ),
     );
-  }
-
-  Future<void> _onTodoSaved(
-    TodosOverviewTodoSaved event,
-    Emitter<TodosOverviewState> emit,
-  ) async {
-    await _todosRepository.saveTodo(event.todo);
   }
 
   Future<void> _onTodoCompletionToggled(
