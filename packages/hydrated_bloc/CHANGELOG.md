@@ -1,6 +1,8 @@
 # 8.1.0
 
 - feat: add `storagePrefix` to support obfuscation tolerance ([#3262](https://github.com/felangel/bloc/pull/3262))
+- docs: update GetStream utm tags ([#3136](https://github.com/felangel/bloc/pull/3136))
+- docs: update VGV sponsors logo ([#3125](https://github.com/felangel/bloc/pull/3125))
 
 # 8.0.0
 
