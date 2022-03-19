@@ -4,6 +4,7 @@ import { commands, ExtensionContext, languages, workspace } from "vscode";
 import { analyzeDependencies } from "./utils";
 import {
   newBloc,
+  newBlocArchitecure,
   newCubit,
   convertToMultiBlocListener,
   convertToMultiBlocProvider,
@@ -16,6 +17,7 @@ import {
   wrapWithBlocSelector,
 } from "./commands";
 import { BlocCodeActionProvider } from "./code-actions";
+import { newCubitArchitecture } from "./commands/new-cubit-architecture.command";
 
 const DART_MODE = { language: "dart", scheme: "file" };
 
@@ -26,7 +28,15 @@ export function activate(_context: ExtensionContext) {
 
   _context.subscriptions.push(
     commands.registerCommand("extension.new-bloc", newBloc),
+    commands.registerCommand(
+      "extension.new-bloc-architecture",
+      newBlocArchitecure
+    ),
     commands.registerCommand("extension.new-cubit", newCubit),
+    commands.registerCommand(
+      "extension.new-cubit-architecture",
+      newCubitArchitecture
+    ),
     commands.registerCommand(
       "extension.convert-multibloclistener",
       convertToMultiBlocListener

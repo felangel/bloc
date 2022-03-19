@@ -3,3 +3,7 @@ export * from "./bloc-state.template";
 export * from "./bloc.template";
 export * from "./cubit-state.template";
 export * from "./cubit.template";
+export * from "./data-provider.template";
+export * from "./repository.template";
+export * from "./view.template";
+export * from "./bloc-architecture-barrel";

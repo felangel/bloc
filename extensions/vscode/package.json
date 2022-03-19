@@ -64,6 +64,27 @@
             "default": true,
             "description": "Whether to create a bloc directory when creating a new bloc."
           },
+          "bloc.newBlocArchitectureTemplate.type": {
+            "type": "string",
+            "default": "auto",
+            "enum": [
+              "auto",
+              "equatable",
+              "freezed",
+              "simple"
+            ],
+            "enumDescriptions": [
+              "automatically pick template based on dependencies",
+              "always use equatable template",
+              "always use freezed template",
+              "always use simple template"
+            ]
+          },
+          "bloc.newBlocArchitectureTemplate.createDirectory": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to create a architecture directory when creating a new bloc architecture."
+          },
           "bloc.newCubitTemplate.type": {
             "type": "string",
             "default": "auto",
@@ -84,6 +105,27 @@
             "type": "boolean",
             "default": true,
             "description": "Whether to create a cubit directory when creating a new cubit."
+          },
+          "bloc.newCubitArchitectureTemplate.type": {
+            "type": "string",
+            "default": "auto",
+            "enum": [
+              "auto",
+              "equatable",
+              "freezed",
+              "simple"
+            ],
+            "enumDescriptions": [
+              "automatically pick template based on dependencies",
+              "always use equatable template",
+              "always use freezed template",
+              "always use simple template"
+            ]
+          },
+          "bloc.newCubitArchitectureTemplate.createDirectory": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to create a cubit directory when creating a new cubit."
           }
         }
       }
@@ -95,8 +137,18 @@
         "icon": "assets/logo.png"
       },
       {
+        "command": "extension.new-bloc-architecture",
+        "title": "Bloc: New Bloc Architecture",
+        "icon": "assets/logo.png"
+      },
+      {
         "command": "extension.new-cubit",
         "title": "Cubit: New Cubit",
+        "icon": "assets/logo.png"
+      },
+      {
+        "command": "extension.new-cubit-architecture",
+        "title": "Cubit: New Cubit Architecture",
         "icon": "assets/logo.png"
       },
       {
@@ -144,7 +196,17 @@
           "when": "explorerResourceIsFolder"
         },
         {
+          "command": "extension.new-bloc-architecture",
+          "group": "blocGroup@1",
+          "when": "explorerResourceIsFolder"
+        },
+        {
           "command": "extension.new-cubit",
+          "group": "blocGroup@1",
+          "when": "explorerResourceIsFolder"
+        },
+        {
+          "command": "extension.new-cubit-architecture",
           "group": "blocGroup@1",
           "when": "explorerResourceIsFolder"
         }
