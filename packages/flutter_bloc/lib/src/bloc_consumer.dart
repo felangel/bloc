@@ -62,12 +62,37 @@ class BlocConsumer<B extends StateStreamable<S>, S> extends StatefulWidget {
   /// {@macro bloc_consumer}
   const BlocConsumer({
     Key? key,
-    required this.builder,
+    required BlocWidgetBuilder<S> builder,
     required this.listener,
     this.bloc,
     this.buildWhen,
     this.listenWhen,
-  }) : super(key: key);
+  })  : builder = builder,
+        builderChild = null,
+        child = null,
+        super(key: key);
+
+  /// Similar to [BlocConsumer] but gives a [child] parameter
+  /// as a pre-built subtree and pass it back to the `builderChild` function.
+  /// The [child] is built only the first time. This is good for whene
+  /// a part of your widget doesn't depend on the state, so you want
+  /// to prevent it from rebuilding every time the state changes.
+  const BlocConsumer.child({
+    Key? key,
+    required BlocWidgetBuilderChild<S> builderChild,
+    required this.listener,
+    this.bloc,
+    this.buildWhen,
+    this.listenWhen,
+    required this.child,
+  })  : builderChild = builderChild,
+        builder = null,
+        super(key: key);
+
+  /// If the pre-built subtree is passed as the [child] parameter, the
+  /// [BlocConsumer] will pass it back to the `builderChild` function so that it
+  /// can be incorporated into the build.
+  final Widget? child;
 
   /// The [bloc] that the [BlocConsumer] will interact with.
   /// If omitted, [BlocConsumer] will automatically perform a lookup using
@@ -78,7 +103,15 @@ class BlocConsumer<B extends StateStreamable<S>, S> extends StatefulWidget {
   /// The [builder] takes the `BuildContext` and current `state` and
   /// must return a widget.
   /// This is analogous to the [builder] function in [StreamBuilder].
-  final BlocWidgetBuilder<S> builder;
+  final BlocWidgetBuilder<S>? builder;
+
+  /// The [builderChild] function which will be invoked on each widget build.
+  /// The [builderChild] takes the `BuildContext` and current `state` and
+  /// `child` and must return a widget. The child should typically be part
+  /// of the returned widget tree.
+  /// This is analogous to the [builder] function in [StreamBuilder] but with
+  /// a [child] parameter wich is built only the first time.
+  final BlocWidgetBuilderChild<S>? builderChild;
 
   /// Takes the `BuildContext` along with the [bloc] `state`
   /// and is responsible for executing in response to `state` changes.
@@ -130,15 +163,27 @@ class _BlocConsumerState<B extends StateStreamable<S>, S>
       // See https://github.com/felangel/bloc/issues/2127.
       context.select<B, bool>((bloc) => identical(_bloc, bloc));
     }
-    return BlocBuilder<B, S>(
-      bloc: _bloc,
-      builder: widget.builder,
-      buildWhen: (previous, current) {
-        if (widget.listenWhen?.call(previous, current) ?? true) {
-          widget.listener(context, current);
-        }
-        return widget.buildWhen?.call(previous, current) ?? true;
-      },
-    );
+    return widget.builder != null
+        ? BlocBuilder<B, S>(
+            bloc: _bloc,
+            builder: widget.builder!,
+            buildWhen: (previous, current) {
+              if (widget.listenWhen?.call(previous, current) ?? true) {
+                widget.listener(context, current);
+              }
+              return widget.buildWhen?.call(previous, current) ?? true;
+            },
+          )
+        : BlocBuilder<B, S>.child(
+            bloc: _bloc,
+            child: widget.child!,
+            builderChild: widget.builderChild!,
+            buildWhen: (previous, current) {
+              if (widget.listenWhen?.call(previous, current) ?? true) {
+                widget.listener(context, current);
+              }
+              return widget.buildWhen?.call(previous, current) ?? true;
+            },
+          );
   }
 }

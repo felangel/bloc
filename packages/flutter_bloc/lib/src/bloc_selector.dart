@@ -29,9 +29,32 @@ class BlocSelector<B extends StateStreamable<S>, S, T> extends StatefulWidget {
   const BlocSelector({
     Key? key,
     required this.selector,
-    required this.builder,
+    required BlocWidgetBuilder<T> builder,
     this.bloc,
-  }) : super(key: key);
+  })  : child = null,
+        builder = builder,
+        builderChild = null,
+        super(key: key);
+
+  /// Similar to [BlocSelector] but gives a [child] parameter
+  /// as a pre-built subtree and pass it back to the `builderChild` function.
+  /// The [child] is built only the first time. This is good for whene
+  /// a part of your widget doesn't depend on the state, so you want
+  /// to prevent it from rebuilding every time the state changes.
+  const BlocSelector.child({
+    Key? key,
+    required this.selector,
+    required BlocWidgetBuilderChild<T> builderChild,
+    this.bloc,
+    required this.child,
+  })  : builderChild = builderChild,
+        builder = null,
+        super(key: key);
+
+  /// If the pre-built subtree is passed as the [child] parameter, the
+  /// [BlocConsumer] will pass it back to the `builderChild` function so that it
+  /// can be incorporated into the build.
+  final Widget? child;
 
   /// The [bloc] that the [BlocSelector] will interact with.
   /// If omitted, [BlocSelector] will automatically perform a lookup using
@@ -43,7 +66,15 @@ class BlocSelector<B extends StateStreamable<S>, S, T> extends StatefulWidget {
   /// The [builder] takes the [BuildContext] and selected `state` and
   /// must return a widget.
   /// This is analogous to the [builder] function in [BlocBuilder].
-  final BlocWidgetBuilder<T> builder;
+  final BlocWidgetBuilder<T>? builder;
+
+  /// The [builderChild] function which will be invoked on each widget build.
+  /// The [builderChild] takes the `BuildContext` and current `state` and
+  /// `child` and must return a widget. The child should typically be part
+  /// of the returned widget tree.
+  /// This is analogous to the [builder] function in [StreamBuilder] but with
+  /// a [child] parameter wich is built only the first time.
+  final BlocWidgetBuilderChild<T>? builderChild;
 
   /// The [selector] function which will be invoked on each widget build
   /// and is responsible for returning a selected value of type [T] based on
@@ -100,7 +131,8 @@ class _BlocSelectorState<B extends StateStreamable<S>, S, T>
         final selectedState = widget.selector(state);
         if (_state != selectedState) setState(() => _state = selectedState);
       },
-      child: widget.builder(context, _state),
+      child: widget.builder?.call(context, _state) ??
+          widget.builderChild!.call(context, _state, widget.child!),
     );
   }
 }

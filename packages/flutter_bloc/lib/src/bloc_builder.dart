@@ -6,6 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// This is analogous to the `builder` function in [StreamBuilder].
 typedef BlocWidgetBuilder<S> = Widget Function(BuildContext context, S state);
 
+/// Signature for the `builderChild` function which takes the `BuildContext`
+/// ,[child] and [state] and is responsible for returning a widget which is to
+/// be rendered. The child should typically be part of the returned widget tree.
+/// This is analogous to the `builder` function in [StreamBuilder] but with
+/// a [child] parameter wich is built only the first time.
+typedef BlocWidgetBuilderChild<S> = Widget Function(
+    BuildContext context, S state, Widget child);
+
 /// Signature for the `buildWhen` function which takes the previous `state` and
 /// the current `state` and is responsible for returning a [bool] which
 /// determines whether to rebuild [BlocBuilder] with the current `state`.
@@ -75,19 +83,46 @@ class BlocBuilder<B extends StateStreamable<S>, S>
   /// {@macro bloc_builder_build_when}
   const BlocBuilder({
     Key? key,
-    required this.builder,
+    required BlocWidgetBuilder<S> builder,
     B? bloc,
     BlocBuilderCondition<S>? buildWhen,
-  }) : super(key: key, bloc: bloc, buildWhen: buildWhen);
+  })  : builder = builder,
+        builderChild = null,
+        super(key: key, bloc: bloc, buildWhen: buildWhen, child: null);
+
+  /// Similar to [BlocBuilder] but gives a [child] parameter
+  /// as a pre-built subtree and pass it back to the `builderChild` function.
+  /// The [child] is built only the first time. This is good for whene
+  /// a part of your widget doesn't depend on the state, so you want
+  /// to prevent it from rebuilding every time the state changes.
+  const BlocBuilder.child({
+    required Widget child,
+    Key? key,
+    required BlocWidgetBuilderChild<S> builderChild,
+    B? bloc,
+    BlocBuilderCondition<S>? buildWhen,
+  })  : builder = null,
+        builderChild = builderChild,
+        super(key: key, bloc: bloc, buildWhen: buildWhen, child: child);
 
   /// The [builder] function which will be invoked on each widget build.
   /// The [builder] takes the `BuildContext` and current `state` and
   /// must return a widget.
   /// This is analogous to the [builder] function in [StreamBuilder].
-  final BlocWidgetBuilder<S> builder;
+  final BlocWidgetBuilder<S>? builder;
+
+  /// The [builderChild] function which will be invoked on each widget build.
+  /// The [builderChild] takes the `BuildContext` and current `state` and
+  /// `child` and must return a widget. The child should typically be part
+  /// of the returned widget tree.
+  /// This is analogous to the [builder] function in [StreamBuilder] but with
+  /// a [child] parameter wich is built only the first time.
+  final BlocWidgetBuilderChild<S>? builderChild;
 
   @override
-  Widget build(BuildContext context, S state) => builder(context, state);
+  Widget build(BuildContext context, S state, Widget? child) =>
+      builder?.call(context, state) ??
+      builderChild!.call(context, state, child!);
 }
 
 /// {@template bloc_builder_base}
@@ -101,7 +136,8 @@ class BlocBuilder<B extends StateStreamable<S>, S>
 abstract class BlocBuilderBase<B extends StateStreamable<S>, S>
     extends StatefulWidget {
   /// {@macro bloc_builder_base}
-  const BlocBuilderBase({Key? key, this.bloc, this.buildWhen})
+  const BlocBuilderBase(
+      {Key? key, this.bloc, this.buildWhen, required this.child})
       : super(key: key);
 
   /// The [bloc] that the [BlocBuilderBase] will interact with.
@@ -109,11 +145,16 @@ abstract class BlocBuilderBase<B extends StateStreamable<S>, S>
   /// [BlocProvider] and the current `BuildContext`.
   final B? bloc;
 
+  /// If the pre-built subtree is passed as the [child] parameter, the
+  /// [BlocBuilder] will pass it back to the `builderChild` function so that it
+  /// can be incorporated into the build.
+  final Widget? child;
+
   /// {@macro bloc_builder_build_when}
   final BlocBuilderCondition<S>? buildWhen;
 
   /// Returns a widget based on the `BuildContext` and current [state].
-  Widget build(BuildContext context, S state);
+  Widget build(BuildContext context, S state, Widget? child);
 
   @override
   State<BlocBuilderBase<B, S>> createState() => _BlocBuilderBaseState<B, S>();
@@ -163,7 +204,7 @@ class _BlocBuilderBaseState<B extends StateStreamable<S>, S>
       bloc: _bloc,
       listenWhen: widget.buildWhen,
       listener: (context, state) => setState(() => _state = state),
-      child: widget.build(context, _state),
+      child: widget.build(context, _state, widget.child),
     );
   }
 }
