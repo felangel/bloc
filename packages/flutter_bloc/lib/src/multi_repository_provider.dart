@@ -46,6 +46,7 @@ class MultiRepositoryProvider extends MultiProvider {
   MultiRepositoryProvider({
     Key? key,
     required List<RepositoryProviderSingleChildWidget> providers,
-    required Widget child,
-  }) : super(key: key, providers: providers, child: child);
+    required Widget? child,
+    TransitionBuilder? builder,
+  }) : super(key: key, providers: providers, child: child, builder: builder);
 }

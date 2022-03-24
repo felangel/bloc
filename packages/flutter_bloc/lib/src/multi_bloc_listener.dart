@@ -52,6 +52,7 @@ class MultiBlocListener extends MultiProvider {
   MultiBlocListener({
     Key? key,
     required List<BlocListenerSingleChildWidget> listeners,
-    required Widget child,
-  }) : super(key: key, providers: listeners, child: child);
+    required Widget? child,
+    TransitionBuilder? builder,
+  }) : super(key: key, providers: listeners, child: child, builder: builder);
 }

@@ -52,6 +52,7 @@ class MultiBlocProvider extends MultiProvider {
   MultiBlocProvider({
     Key? key,
     required List<BlocProviderSingleChildWidget> providers,
-    required Widget child,
-  }) : super(key: key, providers: providers, child: child);
+    required Widget? child,
+    TransitionBuilder? builder,
+  }) : super(key: key, providers: providers, child: child, builder: builder);
 }
