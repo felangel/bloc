@@ -1,3 +1,5 @@
 bricks:
   bloc:
     path: ./bloc
+  cubit:
+    path: ./cubit
