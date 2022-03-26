@@ -1,12 +1,18 @@
 # bloc
 
-Generate a new Bloc in Dart. Built for the [bloc state management library][1].
+Generate a new Bloc in [Dart][1]. Built for the [bloc state management library][2].
 
 ## Usage 🚀
 
 ```sh
 mason make bloc --name counter
 ```
+
+## Variables ✨
+
+| Variable | Description                | Default   | Type     |
+| -------- | -------------------------- | --------- | -------- |
+| `name`   | The name of the bloc class | `counter` | `string` |
 
 ## Output 📦
 
@@ -16,4 +22,5 @@ mason make bloc --name counter
 └── counter_state.dart
 ```
 
-[1]: https://github.com/felangel/bloc
+[1]: https://dart.dev
+[2]: https://github.com/felangel/bloc
