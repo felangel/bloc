@@ -4,7 +4,7 @@
 
 ## Installation
 
-Ensure you have the [mason_cli](https://github.com/felangel/mason/packages/mason_cli) installed. Bricks can be installed from [brickhub.dev](https://brickhub.dev).
+Ensure you have the [mason_cli](https://github.com/felangel/mason/tree/master/packages/mason_cli) installed. Bricks can be installed from [brickhub.dev](https://brickhub.dev).
 
 ```sh
 mason add <BRICK>
