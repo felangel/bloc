@@ -211,7 +211,7 @@ onPressed() {
 ```dart
 @override
 Widget build(BuildContext context) {
-  final state = context.bloc<MyBloc>().state;
+  final state = context.read<MyBloc>().state;
   return Text('$state');
 }
 ```
