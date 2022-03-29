@@ -1,3 +1,7 @@
+# 6.5.1
+
+- fix: reduce bundle size
+
 # 6.5.0
 
 - fix: update `BlocObserver` snippet to resolve Dart analyzer warning
