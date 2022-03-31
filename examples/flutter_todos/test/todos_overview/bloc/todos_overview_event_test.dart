@@ -28,24 +28,6 @@ void main() {
       });
     });
 
-    group('TodosOverviewTodoSaved', () {
-      test('supports value equality', () {
-        expect(
-          TodosOverviewTodoSaved(mockTodo),
-          equals(TodosOverviewTodoSaved(mockTodo)),
-        );
-      });
-
-      test('props are correct', () {
-        expect(
-          TodosOverviewTodoSaved(mockTodo).props,
-          equals(<Object?>[
-            mockTodo, // todo
-          ]),
-        );
-      });
-    });
-
     group('TodosOverviewTodoCompletionToggled', () {
       test('supports value equality', () {
         expect(

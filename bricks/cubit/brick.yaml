@@ -1,0 +1,13 @@
+name: cubit
+description: Generate a new Cubit in Dart | Built for the bloc state management library.
+version: 0.1.0
+
+environment:
+  mason: ">=0.1.0-dev <0.1.0"
+
+vars:
+  name:
+    type: string
+    description: The name of the cubit class.
+    default: counter
+    prompt: Please enter the cubit name.
