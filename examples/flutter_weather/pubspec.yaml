@@ -12,7 +12,6 @@ dependencies:
   equatable: ^2.0.3
   flutter_bloc:
     path: ../../packages/flutter_bloc
-  flutter_services_binding: ^0.1.0
   google_fonts: ^2.1.0
   hydrated_bloc:
     path: ../../packages/hydrated_bloc

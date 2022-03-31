@@ -1,13 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockStorage extends Mock implements Storage {}
 
-T mockHydratedStorage<T>(T Function() body, {Storage? storage}) {
+FutureOr<T> mockHydratedStorage<T>(
+  FutureOr<T> Function() body, {
+  Storage? storage,
+}) {
   return HydratedBlocOverrides.runZoned<T>(
     body,
-    storage: storage ?? _buildMockStorage(),
+    createStorage: () => storage ?? _buildMockStorage(),
   );
 }
 
