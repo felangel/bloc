@@ -154,7 +154,7 @@ void main() {
         const id = '__id__';
         MyHydratedBloc(id, storagePrefix);
         verify<dynamic>(() => storage.read('$storagePrefix$id')).called(1);
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     test('writes to storage when onChange is called w/custom storagePrefix/id',
@@ -169,7 +169,7 @@ void main() {
         const id = '__id__';
         MyHydratedBloc(id, storagePrefix).onChange(change);
         verify(() => storage.write('$storagePrefix$id', expected)).called(2);
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     test(
