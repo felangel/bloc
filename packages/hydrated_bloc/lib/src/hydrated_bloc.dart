@@ -88,8 +88,7 @@ class _HydratedBlocOverridesScope extends HydratedBlocOverrides {
   final HydratedBlocOverrides? _previous = HydratedBlocOverrides.current;
   final Storage? _storage;
   final FutureOr<Storage> Function()? createStorage;
-
-  Storage? _storageValue;
+  late final Storage? _storageValue;
 
   Future<void> _init() async {
     _storageValue = await createStorage?.call();
