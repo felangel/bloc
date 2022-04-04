@@ -1,3 +1,8 @@
+# 9.0.0-dev.1
+
+- **BREAKING**: feat!: add `createStorage` to `HydratedBlocOverrides.runZoned` ([#3240](https://github.com/felangel/bloc/pull/3240))
+  - deprecate `storage` parameter in `HydratedBlocoverrides.runZoned` in favor of `createStorage`
+
 # 8.1.0
 
 - feat: add `storagePrefix` to support obfuscation tolerance ([#3262](https://github.com/felangel/bloc/pull/3262))
