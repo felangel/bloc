@@ -55,10 +55,11 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ```dart
 void main() async {
-  final storage = await HydratedStorage.build(storageDirectory: ...);
   HydratedBlocOverrides.runZoned(
     () => runApp(App()),
-    storage: storage,
+    createStorage: async () {
+      return HydratedStorage.build(storageDirectory: ...);
+    },
   );
 }
 ```
@@ -163,7 +164,7 @@ class MyHydratedStorage implements Storage {
 
 HydratedBlocOverrides.runZoned(
   () => runApp(MyApp()),
-  storage: MyHydratedStorage(),
+  createStorage: () => MyHydratedStorage(),
 );
 ```
 
