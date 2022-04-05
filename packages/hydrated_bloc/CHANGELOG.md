@@ -1,3 +1,7 @@
+# 9.0.0-dev.2
+
+- fix: update `StorageNotFound` implementation for `toString` ([#3314](https://github.com/felangel/bloc/pull/3314))
+
 # 9.0.0-dev.1
 
 - **BREAKING**: feat!: add `createStorage` to `HydratedBlocOverrides.runZoned` ([#3240](https://github.com/felangel/bloc/pull/3240))
