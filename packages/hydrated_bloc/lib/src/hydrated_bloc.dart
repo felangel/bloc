@@ -462,10 +462,9 @@ class StorageNotFound implements Exception {
     return 'Storage was accessed before it was initialized.\n'
         'Please ensure that storage has been initialized.\n\n'
         'For example:\n\n'
-        'final storage = await HydratedStorage.build();\n'
         'HydratedBlocOverrides.runZoned(\n'
         '  () => runApp(MyApp()),\n'
-        '  storage: storage,\n'
+        '  createStorage: () => HydratedStorage.build(...),\n'
         ');';
   }
 }
