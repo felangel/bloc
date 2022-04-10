@@ -1,10 +1,10 @@
 name: cubit
-description: Generate a new Cubit in Dart | Built for the bloc state management library.
-version: 0.1.0
+description: Generate a new Cubit in Dart. Built for the bloc state management library.
+version: 0.1.1
 repository: https://github.com/felangel/bloc/tree/master/bricks/cubit
 
 environment:
-  mason: ">=0.1.0-dev <0.1.0"
+  mason: ">=0.1.0-dev.15 <0.1.0"
 
 vars:
   name:
