@@ -199,6 +199,7 @@ Learn more at the following links, which have been contributed by the community.
 - [Learning the Flutter Bloc Package](https://www.youtube.com/watch?v=eAiCPl3yk9A&t=1s) - Learning the flutter_bloc package live, by [Robert Brunhage](https://www.youtube.com/channel/UCSLIg5O0JiYO1i2nD4RclaQ)
 - [Bloc Test Tutorial](https://www.youtube.com/watch?v=S6jFBiiP0Mc) - Tutorial on how to unit test blocs using the bloc_test package, by [Reso Coder](https://resocoder.com).
 - [Bloc - from Zero to Hero](https://www.youtube.com/playlist?list=PLptHs0ZDJKt_T-oNj_6Q98v-tBnVf-S_o) - Playlist which includes everything needed to get started with bloc, by [Flutterly](https://www.youtube.com/channel/UC5PYcSe3to4mtm3SPCUmjvw).
+- [Bloc (Full Course, 11+ Hours) - Flutter State Management Course](https://youtu.be/Mn254cnduOY) - 11+ hour video tutorial on Bloc and Flutter Bloc. In this video you will learn how to create fully fledged production-ready apps with Bloc and Firebase as your backend, by [Vandad Nahavandipoor](https://www.youtube.com/channel/UC8NpGP0AOQ0kX9ZRcohiPeQ).
 
 ### Written Resources
 
