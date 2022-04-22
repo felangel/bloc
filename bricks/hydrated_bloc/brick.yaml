@@ -1,7 +1,7 @@
 name: hydrated_bloc
 description: Generate a new HydratedBloc in Dart. Built for the bloc state management library.
 version: 0.1.0
-repository: https://github.com/felangel/bloc/tree/master/bricks/bloc
+repository: https://github.com/felangel/bloc/tree/master/bricks/hydrated_bloc
 
 environment:
   mason: ">=0.1.0-dev.15 <0.1.0"
