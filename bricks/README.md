@@ -12,7 +12,9 @@ mason add <BRICK>
 
 ## Bricks
 
-| Brick   | Description          |
-| ------- | -------------------- |
-| `bloc`  | Generate a new Bloc  |
-| `cubit` | Generate a new Cubit |
+| Brick            | Description                  |
+| ---------------- | ---------------------------- |
+| `bloc`           | Generate a new Bloc          |
+| `cubit`          | Generate a new Cubit         |
+| `hydrated_bloc`  | Generate a new HydratedBloc  |
+| `hydrated_cubit` | Generate a new HydratedCubit |
