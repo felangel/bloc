@@ -3,3 +3,5 @@ bricks:
     path: ./bloc
   cubit:
     path: ./cubit
+  hydrated_bloc:
+    path: ./hydrated_bloc
