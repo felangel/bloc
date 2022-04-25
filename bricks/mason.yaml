@@ -9,3 +9,5 @@ bricks:
     path: ./hydrated_cubit
   replay_bloc:
     path: ./replay_bloc
+  replay_cubit:
+    path: ./replay_cubit

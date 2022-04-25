@@ -1,0 +1,14 @@
+name: replay_cubit
+description: Generate a new ReplayCubit in Dart. Built for the bloc state management library.
+version: 0.1.0
+repository: https://github.com/felangel/bloc/tree/master/bricks/replay_cubit
+
+environment:
+  mason: ">=0.1.0-dev.15 <0.1.0"
+
+vars:
+  name:
+    type: string
+    description: The name of the cubit class.
+    default: counter
+    prompt: Please enter the cubit name.
