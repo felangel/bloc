@@ -18,3 +18,4 @@ mason add <BRICK>
 | `cubit`          | Generate a new Cubit         |
 | `hydrated_bloc`  | Generate a new HydratedBloc  |
 | `hydrated_cubit` | Generate a new HydratedCubit |
+| `replay_bloc`    | Generate a new ReplayBloc    |
