@@ -116,8 +116,9 @@ class _SearchResultItem extends StatelessWidget {
       ),
       title: Text(item.fullName),
       onTap: () async {
-        if (await canLaunch(item.htmlUrl)) {
-          await launch(item.htmlUrl);
+        final uri = Uri.parse(item.htmlUrl);
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri);
         }
       },
     );
