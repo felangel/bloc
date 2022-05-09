@@ -72,7 +72,7 @@ You can use a `BlocListener` to listen to one bloc and add an event to another b
 
 The code above prevents `SecondBloc` from needing to know about `FirstBloc`, encouraging loose-coupling. The [flutter_weather](flutter_weather_tutorial.md) application [uses this technique](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42) to change the app's theme based on the weather information that is received.
 
-In some situations, you may not want to connect two blocs through presentation. Instead, it can often makes sense for two blocs to share the same source of data and update whenever the data changes.
+In some situations, you may not want to couple two blocs in the presentation layer. Instead, it can often make sense for two blocs to share the same source of data and update whenever the data changes.
 
 #### Connecting Blocs through Domain
 
