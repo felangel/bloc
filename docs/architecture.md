@@ -50,11 +50,43 @@ Think of the business logic layer as the bridge between the user interface (pres
 
 ### Bloc-to-Bloc Communication
 
-> ​Every bloc has a state stream which other blocs can subscribe to in order to react to changes within the bloc.
+Because blocs expose streams, it may be tempting to make a bloc which listens to another bloc. You should **not** do this. There are better alternatives than resorting to the code below:
 
-Blocs can have dependencies on other blocs in order to react to their state changes. In the following example, `MyBloc` has a dependency on `OtherBloc` and can `add` events in response to state changes in `OtherBloc`. The `StreamSubscription` is closed in the `close` override in `MyBloc` in order to avoid memory leaks.
+[do_not_do_this_at_home.dart](_snippets/architecture/do_not_do_this_at_home.dart.md ':include')
 
-[bloc_to_bloc_communication.dart](_snippets/architecture/bloc_to_bloc_communication.dart.md ':include')
+While the code above is error free (and even cleans up after itself), it has a bigger problem: it creates a dependency between two blocs.
+
+Generally, sibling dependencies between two entities in the same architectural layer should be avoided at all costs, as it creates tight-coupling which is hard to maintain. Since blocs reside in the business logic architectural layer, no bloc should know about any other bloc.
+
+![Application Architecture Layers](assets/architecture.png)
+
+A bloc should only receive information through events and from injected repositories (i.e., repositories given to the bloc in its constructor).
+
+If you're in a situation where a bloc needs to respond to another bloc, you have two other options. You can push the problem up a layer (into the presentation layer), or down a layer (into the domain layer).
+
+#### Connecting Blocs through Presentation
+
+You can use a `BlocListener` to listen to one bloc and add an event to another bloc whenever the first bloc changes.
+
+[blocs_presentation.dart.md](_snippets/architecture/blocs_presentation.dart.md ':include')
+
+The code above prevents `SecondBloc` from needing to know about `FirstBloc`, encouraging loose-coupling. The [flutter_weather](flutter_weather_tutorial.md) application [uses this technique](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42) to change the app's theme based on the weather information that is received.
+
+In some situations, you may not want to couple two blocs in the presentation layer. Instead, it can often make sense for two blocs to share the same source of data and update whenever the data changes.
+
+#### Connecting Blocs through Domain
+
+Two blocs can listen to a stream from a repository and update their states independent of each other whenever the repository data changes. Using reactive repositories to keep state synchronized is common in large-scale enterprise applications.
+
+First, create or use a repository which provides a data `Stream`. For example, the following repository exposes a never-ending stream of the same few app ideas:
+
+[app_ideas_repo.dart.md](_snippets/architecture/app_ideas_repo.dart.md ':include')
+
+The same repository can be injected into each bloc that needs to react to new app ideas. Below is an `AppIdeaRankingBloc` which yields a state out for each incoming app idea from the repository above:
+
+[blocs_domain.dart.md](_snippets/architecture/blocs_domain.dart.md ':include')
+
+For more about using streams with Bloc, see [How to use Bloc with streams and concurrency](https://verygood.ventures/blog/how-to-use-bloc-with-streams-and-concurrency).
 
 ## Presentation Layer
 
