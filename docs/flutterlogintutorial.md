@@ -102,7 +102,7 @@ Next, we can create a `models.dart` in `packages/user_repository/lib/src/models`
 
 [models.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/src/models/models.dart ':include')
 
-Now that the models have been defined, we can implement the `UserRepository` class in `packages/user_respository/lib/src/user_repository.dart`.
+Now that the models have been defined, we can implement the `UserRepository` class in `packages/user_repository/lib/src/user_repository.dart`.
 
 [user_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/src/user_repository.dart ':include')
 
