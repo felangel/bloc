@@ -89,6 +89,10 @@ You can activate the commands by launching the command palette (View -> Command 
 | `mockcubit`         | Creates a class extending `MockCubit`      |
 | `fake`              | Creates a class extending `Fake`           |
 | `mock`              | Creates a class extending `Mock`           |
+| `_mockbloc`         | Creates a private class extenting `MockBloc` |
+| `_mockcubit`        | Creates a private class extending `MockCubit`|
+| `_fake`             | Creates a private class extending `Fake`     |
+| `_mock`             | Creates a private class extending `Mock`     |
 
 ### Freezed Bloc
 
