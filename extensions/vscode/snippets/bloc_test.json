@@ -41,7 +41,7 @@
     "description": "create a mock object"
   },
   "_MockBloc": {
-    "prefix": "mockbloc",
+    "prefix": "_mockbloc",
     "body": [
       "class _Mock${1:Subject}Bloc extends MockBloc<${1}Event, ${1}State> implements ${1}Bloc {}"
     ],
