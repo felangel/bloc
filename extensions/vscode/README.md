@@ -86,12 +86,12 @@ You can activate the commands by launching the command palette (View -> Command 
 | `blocevent`         | Creates an event class                        |
 | `bloctest`          | Creates a `blocTest`                          |
 | `mockbloc`          | Creates a class extenting `MockBloc`          |
-| `mockcubit`         | Creates a class extending `MockCubit`         |
-| `fake`              | Creates a class extending `Fake`              |
-| `mock`              | Creates a class extending `Mock`              |
 | `_mockbloc`         | Creates a private class extenting `MockBloc`  |
+| `mockcubit`         | Creates a class extending `MockCubit`         |
 | `_mockcubit`        | Creates a private class extending `MockCubit` |
+| `fake`              | Creates a class extending `Fake`              |
 | `_fake`             | Creates a private class extending `Fake`      |
+| `mock`              | Creates a class extending `Mock`              |
 | `_mock`             | Creates a private class extending `Mock`      |
 
 ### Freezed Bloc
