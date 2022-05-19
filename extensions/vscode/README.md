@@ -58,37 +58,41 @@ You can activate the commands by launching the command palette (View -> Command 
 
 ### Bloc
 
-| Shortcut            | Description                                |
-| ------------------- | ------------------------------------------ |
-| `importbloc`        | Imports `package:bloc`                     |
-| `importflutterbloc` | Imports `package:flutter_bloc`             |
-| `importbloctest`    | Imports `package:bloc_test`                |
-| `bloc`              | Creates a bloc class                       |
-| `cubit`             | Creates a cubit class                      |
-| `onevent`           | Register a new `EventHandler`              |
-| `_onevent`          | Define a new `EventHandler`                |
-| `blocobserver`      | Creates a `BlocObserver` class             |
-| `blocprovider`      | Creates a `BlocProvider` widget            |
-| `multiblocprovider` | Creates a `MultiBlocProvider` widget       |
-| `repoprovider`      | Creates a `RepositoryProvider` widget      |
-| `multirepoprovider` | Creates a `MultiRepositoryProvider` widget |
-| `blocbuilder`       | Creates a `BlocBuilder` widget             |
-| `blocselector`      | Creates a `BlocSelector` widget            |
-| `bloclistener`      | Creates a `BlocListener` widget            |
-| `multibloclistener` | Creates a `MultiBlocListener` widget       |
-| `blocconsumer`      | Creates a `BlocConsumer` widget            |
-| `blocof`            | Shortcut for `BlocProvider.of()`           |
-| `repoof`            | Shortcut for `RepositoryProvider.of()`     |
-| `read`              | Shortcut for `context.read()`              |
-| `watch`             | Shortcut for `context.watch()`             |
-| `select`            | Shortcut for `context.select()`            |
-| `blocstate`         | Creates a state class                      |
-| `blocevent`         | Creates an event class                     |
-| `bloctest`          | Creates a `blocTest`                       |
-| `mockbloc`          | Creates a class extenting `MockBloc`       |
-| `mockcubit`         | Creates a class extending `MockCubit`      |
-| `fake`              | Creates a class extending `Fake`           |
-| `mock`              | Creates a class extending `Mock`           |
+| Shortcut            | Description                                   |
+| ------------------- | --------------------------------------------- |
+| `importbloc`        | Imports `package:bloc`                        |
+| `importflutterbloc` | Imports `package:flutter_bloc`                |
+| `importbloctest`    | Imports `package:bloc_test`                   |
+| `bloc`              | Creates a bloc class                          |
+| `cubit`             | Creates a cubit class                         |
+| `onevent`           | Register a new `EventHandler`                 |
+| `_onevent`          | Define a new `EventHandler`                   |
+| `blocobserver`      | Creates a `BlocObserver` class                |
+| `blocprovider`      | Creates a `BlocProvider` widget               |
+| `multiblocprovider` | Creates a `MultiBlocProvider` widget          |
+| `repoprovider`      | Creates a `RepositoryProvider` widget         |
+| `multirepoprovider` | Creates a `MultiRepositoryProvider` widget    |
+| `blocbuilder`       | Creates a `BlocBuilder` widget                |
+| `blocselector`      | Creates a `BlocSelector` widget               |
+| `bloclistener`      | Creates a `BlocListener` widget               |
+| `multibloclistener` | Creates a `MultiBlocListener` widget          |
+| `blocconsumer`      | Creates a `BlocConsumer` widget               |
+| `blocof`            | Shortcut for `BlocProvider.of()`              |
+| `repoof`            | Shortcut for `RepositoryProvider.of()`        |
+| `read`              | Shortcut for `context.read()`                 |
+| `watch`             | Shortcut for `context.watch()`                |
+| `select`            | Shortcut for `context.select()`               |
+| `blocstate`         | Creates a state class                         |
+| `blocevent`         | Creates an event class                        |
+| `bloctest`          | Creates a `blocTest`                          |
+| `mockbloc`          | Creates a class extending `MockBloc`          |
+| `_mockbloc`         | Creates a private class extending `MockBloc`  |
+| `mockcubit`         | Creates a class extending `MockCubit`         |
+| `_mockcubit`        | Creates a private class extending `MockCubit` |
+| `fake`              | Creates a class extending `Fake`              |
+| `_fake`             | Creates a private class extending `Fake`      |
+| `mock`              | Creates a class extending `Mock`              |
+| `_mock`             | Creates a private class extending `Mock`      |
 
 ### Freezed Bloc
 

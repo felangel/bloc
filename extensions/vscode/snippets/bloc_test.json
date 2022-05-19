@@ -23,6 +23,13 @@
     ],
     "description": "create a mock bloc"
   },
+  "_MockBloc": {
+    "prefix": "_mockbloc",
+    "body": [
+      "class _Mock${1:Subject}Bloc extends MockBloc<${1}Event, ${1}State> implements ${1}Bloc {}"
+    ],
+    "description": "create a private mock bloc"
+  },
   "MockCubit": {
     "prefix": "mockcubit",
     "body": [
@@ -30,14 +37,31 @@
     ],
     "description": "create a mock cubit"
   },
+  "_MockCubit": {
+    "prefix": "_mockcubit",
+    "body": [
+      "class _Mock${1:Subject}Cubit extends MockCubit<${1}State> implements ${1}Cubit {}"
+    ],
+    "description": "create a private mock cubit"
+  },
   "Fake": {
     "prefix": "fake",
     "body": ["class Fake${1:Subject} extends Fake implements ${1} {}"],
     "description": "create a fake object"
   },
+  "_Fake": {
+    "prefix": "_fake",
+    "body": ["class _Fake${1:Subject} extends Fake implements ${1} {}"],
+    "description": "create a private fake object"
+  },
   "Mock": {
     "prefix": "mock",
     "body": ["class Mock${1:Subject} extends Mock implements ${1} {}"],
     "description": "create a mock object"
+  },
+  "_Mock": {
+    "prefix": "_mock",
+    "body": ["class _Mock${1:Subject} extends Mock implements ${1} {}"],
+    "description": "create a private mock object"
   }
 }
