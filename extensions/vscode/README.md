@@ -85,8 +85,8 @@ You can activate the commands by launching the command palette (View -> Command 
 | `blocstate`         | Creates a state class                         |
 | `blocevent`         | Creates an event class                        |
 | `bloctest`          | Creates a `blocTest`                          |
-| `mockbloc`          | Creates a class extenting `MockBloc`          |
-| `_mockbloc`         | Creates a private class extenting `MockBloc`  |
+| `mockbloc`          | Creates a class extending `MockBloc`          |
+| `_mockbloc`         | Creates a private class extending `MockBloc`  |
 | `mockcubit`         | Creates a class extending `MockCubit`         |
 | `_mockcubit`        | Creates a private class extending `MockCubit` |
 | `fake`              | Creates a class extending `Fake`              |
