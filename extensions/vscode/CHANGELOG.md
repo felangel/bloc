@@ -1,3 +1,11 @@
+# 6.6.0
+
+- feat: add private mock snippets
+  - `_mockbloc`
+  - `_mockcubit`
+  - `_fake`
+  - `_mock`
+
 # 6.5.1
 
 - fix: reduce bundle size
