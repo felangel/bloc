@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_counter/counter_list/counter_list_screen.dart';
 
 import 'counter/counter.dart';
 
@@ -7,5 +8,5 @@ import 'counter/counter.dart';
 /// {@endtemplate}
 class CounterApp extends MaterialApp {
   /// {@macro counter_app}
-  const CounterApp({Key? key}) : super(key: key, home: const CounterPage());
+  const CounterApp({Key? key}) : super(key: key, home: const CounterListScreen());
 }
