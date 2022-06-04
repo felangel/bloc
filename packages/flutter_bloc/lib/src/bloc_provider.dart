@@ -5,7 +5,7 @@ import 'package:provider/single_child_widget.dart';
 
 /// Mixin which allows `MultiBlocProvider` to infer the types
 /// of multiple [BlocProvider]s.
-mixin BlocProviderSingleChildWidget on SingleChildWidget {}
+mixin BlocProviderSingleChildWidget on SingleChildWidget {} 
 
 /// {@template bloc_provider}
 /// Takes a [Create] function that is responsible for
@@ -141,7 +141,7 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
     StateStreamable value,
   ) {
     final subscription = value.stream.listen(
-      (dynamic _) => e.markNeedsNotifyDependents(),
+      (dynamic _) => e.markNeedsNotifyDependents(), 
     );
     return subscription.cancel;
   }
