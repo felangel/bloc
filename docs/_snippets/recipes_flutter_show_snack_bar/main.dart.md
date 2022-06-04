@@ -25,7 +25,7 @@ class Home extends StatelessWidget {
       body: BlocListener<DataBloc, DataState>(
         listener: (context, state) {
           if (state is Success) {
-            Scaffold.of(context).showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: Colors.green,
                 content: Text('Success'),
