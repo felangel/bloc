@@ -29,10 +29,12 @@ class ComplexListCubit extends Cubit<ComplexListState> {
 
     emit(ComplexListState.success(deleteInProgress));
 
-    unawaited(repository.deleteItem(id).then((_) {
-      final deleteSuccess = List.of(state.items)
-        ..removeWhere((element) => element.id == id);
-      emit(ComplexListState.success(deleteSuccess));
-    }));
+    unawaited(
+      repository.deleteItem(id).then((_) {
+        final deleteSuccess = List.of(state.items)
+          ..removeWhere((element) => element.id == id);
+        emit(ComplexListState.success(deleteSuccess));
+      }),
+    );
   }
 }

@@ -14,13 +14,15 @@ class ComplexListPage extends StatelessWidget {
         create: (_) => ComplexListCubit(
           repository: context.read<Repository>(),
         )..fetchList(),
-        child: ComplexListView(),
+        child: const ComplexListView(),
       ),
     );
   }
 }
 
 class ComplexListView extends StatelessWidget {
+  const ComplexListView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final state = context.watch<ComplexListCubit>().state;
@@ -29,7 +31,7 @@ class ComplexListView extends StatelessWidget {
         return const Center(child: Text('Oops something went wrong!'));
       case ListStatus.success:
         return ItemView(items: state.items);
-      default:
+      case ListStatus.loading:
         return const Center(child: CircularProgressIndicator());
     }
   }
