@@ -39,7 +39,7 @@ void main() {
     });
 
     testWidgets('renders tick count ', (tester) async {
-      final tickCount = 5;
+      const tickCount = 5;
       when(() => tickerBloc.state).thenReturn(TickerTickSuccess(tickCount));
       await tester.pumpTickerPage(tickerBloc);
 
