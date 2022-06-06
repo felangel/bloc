@@ -4,7 +4,7 @@ import 'package:flutter_complex_list/complex_list/complex_list.dart';
 import 'package:flutter_complex_list/repository.dart';
 
 class ComplexListPage extends StatelessWidget {
-  const ComplexListPage({Key? key}) : super(key: key);
+  const ComplexListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class ComplexListPage extends StatelessWidget {
 }
 
 class ComplexListView extends StatelessWidget {
-  const ComplexListView({Key? key}) : super(key: key);
+  const ComplexListView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class ComplexListView extends StatelessWidget {
 }
 
 class ItemView extends StatelessWidget {
-  const ItemView({Key? key, required this.items}) : super(key: key);
+  const ItemView({super.key, required this.items});
 
   final List<Item> items;
 
@@ -62,10 +62,10 @@ class ItemView extends StatelessWidget {
 
 class ItemTile extends StatelessWidget {
   const ItemTile({
-    Key? key,
+    super.key,
     required this.item,
     required this.onDeletePressed,
-  }) : super(key: key);
+  });
 
   final Item item;
   final ValueSetter<String> onDeletePressed;
