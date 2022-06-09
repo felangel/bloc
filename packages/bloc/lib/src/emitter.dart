@@ -76,7 +76,7 @@ class _Emitter<State> implements Emitter<State> {
     Stream<T> stream, {
     required void Function(T data) onData,
     void Function(Object error, StackTrace stackTrace)? onError,
-  }) async {
+  }) {
     final completer = Completer<void>();
     final subscription = stream.listen(
       onData,
