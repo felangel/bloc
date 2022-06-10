@@ -1,3 +1,7 @@
+# 0.1.2
+
+- docs: minor README update
+
 # 0.1.1
 
 - refactor: upgrade to shorthand lambda syntax (`mason >= 0.1.0-dev.15`)

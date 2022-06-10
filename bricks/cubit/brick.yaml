@@ -1,6 +1,6 @@
 name: cubit
 description: Generate a new Cubit in Dart. Built for the bloc state management library.
-version: 0.1.1
+version: 0.1.2
 repository: https://github.com/felangel/bloc/tree/master/bricks/cubit
 
 environment:
