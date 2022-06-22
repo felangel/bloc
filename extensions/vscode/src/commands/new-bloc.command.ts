@@ -36,7 +36,7 @@ export const newBloc = async (uri: Uri) => {
   }
 
   const blocType = await getBlocType(TemplateType.Bloc);
-  const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
+  const pascalCaseBlocName = changeCase.pascalCase(blocName);
   try {
     await generateBlocCode(blocName, targetDirectory, blocType);
     window.showInformationMessage(

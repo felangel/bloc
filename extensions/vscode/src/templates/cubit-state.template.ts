@@ -16,7 +16,7 @@ export function getCubitStateTemplate(
 }
 
 function getEquatableCubitStateTemplate(cubitName: string): string {
-  const pascalCaseCubitName = changeCase.pascalCase(cubitName).toLowerCase();
+  const pascalCaseCubitName = changeCase.pascalCase(cubitName);
   const snakeCaseCubitName = changeCase.snakeCase(cubitName).toLowerCase();
   return `part of '${snakeCaseCubitName}_cubit.dart';
 
@@ -32,7 +32,7 @@ class ${pascalCaseCubitName}Initial extends ${pascalCaseCubitName}State {}
 }
 
 function getDefaultCubitStateTemplate(cubitName: string): string {
-  const pascalCaseCubitName = changeCase.pascalCase(cubitName).toLowerCase();
+  const pascalCaseCubitName = changeCase.pascalCase(cubitName);
   const snakeCaseCubitName = changeCase.snakeCase(cubitName).toLowerCase();
   return `part of '${snakeCaseCubitName}_cubit.dart';
 
@@ -44,7 +44,7 @@ class ${pascalCaseCubitName}Initial extends ${pascalCaseCubitName}State {}
 }
 
 function getFreezedCubitStateTemplate(cubitName: string): string {
-  const pascalCaseCubitName = changeCase.pascalCase(cubitName).toLowerCase();
+  const pascalCaseCubitName = changeCase.pascalCase(cubitName);
   const snakeCaseCubitName = changeCase.snakeCase(cubitName).toLowerCase();
   return `part of '${snakeCaseCubitName}_cubit.dart';
 

@@ -32,7 +32,7 @@ export const newCubit = async (uri: Uri) => {
   }
 
   const blocType = await getBlocType(TemplateType.Cubit);
-  const pascalCaseCubitName = changeCase.pascalCase(cubitName).toLowerCase();
+  const pascalCaseCubitName = changeCase.pascalCase(cubitName);
   try {
     await generateCubitCode(cubitName, targetDirectory, blocType);
     window.showInformationMessage(
