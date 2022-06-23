@@ -1,3 +1,7 @@
+# 6.6.1
+
+- fix: bloc and cubit template casing
+
 # 6.6.0
 
 - feat: add private mock snippets
