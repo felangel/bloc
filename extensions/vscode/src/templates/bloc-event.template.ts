@@ -14,7 +14,7 @@ export function getBlocEventTemplate(blocName: string, type: BlocType): string {
 
 function getEquatableBlocEventTemplate(blocName: string): string {
   const pascalCaseBlocName = changeCase.pascalCase(blocName);
-  const snakeCaseBlocName = changeCase.snakeCase(blocName).toLowerCase();
+  const snakeCaseBlocName = changeCase.snakeCase(blocName);
   return `part of '${snakeCaseBlocName}_bloc.dart';
 
 abstract class ${pascalCaseBlocName}Event extends Equatable {
@@ -28,7 +28,7 @@ abstract class ${pascalCaseBlocName}Event extends Equatable {
 
 function getDefaultBlocEventTemplate(blocName: string): string {
   const pascalCaseBlocName = changeCase.pascalCase(blocName);
-  const snakeCaseBlocName = changeCase.snakeCase(blocName).toLowerCase();
+  const snakeCaseBlocName = changeCase.snakeCase(blocName);
   return `part of '${snakeCaseBlocName}_bloc.dart';
 
 @immutable
@@ -37,9 +37,8 @@ abstract class ${pascalCaseBlocName}Event {}
 }
 
 function getFreezedBlocEvent(blocName: string): string {
-  const pascalCaseBlocName =
-    changeCase.pascalCase(blocName) + "Event";
-  const snakeCaseBlocName = changeCase.snakeCase(blocName).toLowerCase();
+  const pascalCaseBlocName = changeCase.pascalCase(blocName) + "Event";
+  const snakeCaseBlocName = changeCase.snakeCase(blocName);
   return `part of '${snakeCaseBlocName}_bloc.dart';
 
 @freezed
