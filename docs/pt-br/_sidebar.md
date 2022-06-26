@@ -3,7 +3,7 @@
   - [Iniciando](pt-br/gettingstarted.md)
   - [Por quê Bloc?](pt-br/whybloc.md)
   - Conceitos principais
-    - [bloc](coreconcepts.md)
+    - [bloc](pt-br/coreconcepts.md)
     - [flutter_bloc](pt-br/flutterbloccoreconcepts.md)
   - [Arquitetura](pt-br/architecture.md)
   - [Testando](pt-br/testing.md)
@@ -20,7 +20,7 @@
     - [**Login** <sup>✨</sup>](pt-br/flutterlogintutorial.md)
     - [**Clima** <sup>✨</sup>](flutterweathertutorial.md)
     - [**ToDos** <sup>✨</sup>](pt-br/fluttertodostutorial.md)
-    - [**Login com Firebase** <sup>✨</sup>](flutterfirebaselogintutorial.md)    
+    - [**Login com Firebase** <sup>✨</sup>](flutterfirebaselogintutorial.md)
   - AngularDart
     - [Contador](pt-br/angularcountertutorial.md)
   - Flutter + AngularDart
