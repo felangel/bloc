@@ -37,6 +37,9 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
             <td align="center" style="background-color: white">
                 <a href="https://www.miquido.com/flutter-development-company/?utm_source=github&utm_medium=sponsorship&utm_campaign=bloc-silver-tier&utm_term=flutter-development-company&utm_content=miquido-logo"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/miquido_logo.png" width="225"/></a>
             </td>
+            <td align="center" style="background-color: white">
+                <a href="https://bit.ly/parabeac_flutterbloc"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/parabeac_logo.png" width="225"/></a>
+            </td>
         </tr>
     </tbody>
 </table>
@@ -55,10 +58,11 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ```dart
 void main() async {
-  final storage = await HydratedStorage.build(storageDirectory: ...);
   HydratedBlocOverrides.runZoned(
     () => runApp(App()),
-    storage: storage,
+    createStorage: async () {
+      return HydratedStorage.build(storageDirectory: ...);
+    },
   );
 }
 ```
@@ -163,7 +167,7 @@ class MyHydratedStorage implements Storage {
 
 HydratedBlocOverrides.runZoned(
   () => runApp(MyApp()),
-  storage: MyHydratedStorage(),
+  createStorage: () => MyHydratedStorage(),
 );
 ```
 

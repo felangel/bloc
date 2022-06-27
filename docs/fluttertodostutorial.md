@@ -268,7 +268,6 @@ Let's create `todos_overview/bloc/todos_overview_event.dart` and define the even
 [todos_overview_event.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_event.dart ':include')
 
 - `TodosOverviewSubscriptionRequested`: This is the startup event. In response, the bloc subscribes to the stream of todos from the `TodosRepository`.
-- `TodosOverviewTodoSaved`: This saves a todo.
 - `TodosOverviewTodoDeleted`: This deletes a Todo.
 - `TodosOverviewTodoCompletionToggled`: This toggles a todo's completed status.
 - `TodosOverviewToggleAllRequested`: This toggles completion for all todos.

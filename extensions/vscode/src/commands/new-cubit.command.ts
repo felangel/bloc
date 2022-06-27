@@ -32,7 +32,7 @@ export const newCubit = async (uri: Uri) => {
   }
 
   const blocType = await getBlocType(TemplateType.Cubit);
-  const pascalCaseCubitName = changeCase.pascalCase(cubitName.toLowerCase());
+  const pascalCaseCubitName = changeCase.pascalCase(cubitName);
   try {
     await generateCubitCode(cubitName, targetDirectory, blocType);
     window.showInformationMessage(
@@ -106,7 +106,7 @@ function createCubitStateTemplate(
   targetDirectory: string,
   type: BlocType
 ) {
-  const snakeCaseCubitName = changeCase.snakeCase(cubitName.toLowerCase());
+  const snakeCaseCubitName = changeCase.snakeCase(cubitName);
   const targetPath = `${targetDirectory}/${snakeCaseCubitName}_state.dart`;
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseCubitName}_state.dart already exists`);
@@ -132,7 +132,7 @@ function createCubitTemplate(
   targetDirectory: string,
   type: BlocType
 ) {
-  const snakeCaseCubitName = changeCase.snakeCase(cubitName.toLowerCase());
+  const snakeCaseCubitName = changeCase.snakeCase(cubitName);
   const targetPath = `${targetDirectory}/${snakeCaseCubitName}_cubit.dart`;
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseCubitName}_cubit.dart already exists`);

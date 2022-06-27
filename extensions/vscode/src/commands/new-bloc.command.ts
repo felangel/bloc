@@ -36,7 +36,7 @@ export const newBloc = async (uri: Uri) => {
   }
 
   const blocType = await getBlocType(TemplateType.Bloc);
-  const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
+  const pascalCaseBlocName = changeCase.pascalCase(blocName);
   try {
     await generateBlocCode(blocName, targetDirectory, blocType);
     window.showInformationMessage(
@@ -111,7 +111,7 @@ function createBlocEventTemplate(
   targetDirectory: string,
   type: BlocType
 ) {
-  const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
+  const snakeCaseBlocName = changeCase.snakeCase(blocName);
   const targetPath = `${targetDirectory}/${snakeCaseBlocName}_event.dart`;
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseBlocName}_event.dart already exists`);
@@ -137,7 +137,7 @@ function createBlocStateTemplate(
   targetDirectory: string,
   type: BlocType
 ) {
-  const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
+  const snakeCaseBlocName = changeCase.snakeCase(blocName);
   const targetPath = `${targetDirectory}/${snakeCaseBlocName}_state.dart`;
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseBlocName}_state.dart already exists`);
@@ -163,7 +163,7 @@ function createBlocTemplate(
   targetDirectory: string,
   type: BlocType
 ) {
-  const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
+  const snakeCaseBlocName = changeCase.snakeCase(blocName);
   const targetPath = `${targetDirectory}/${snakeCaseBlocName}_bloc.dart`;
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseBlocName}_bloc.dart already exists`);

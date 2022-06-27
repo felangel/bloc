@@ -39,13 +39,21 @@ class MyCallbackHydratedCubit extends HydratedCubit<int> {
 }
 
 class MyHydratedCubit extends HydratedCubit<int> {
-  MyHydratedCubit([this._id, this._callSuper = true]) : super(0);
+  MyHydratedCubit([
+    this._id,
+    this._callSuper = true,
+    this._storagePrefix,
+  ]) : super(0);
 
   final String? _id;
   final bool _callSuper;
+  final String? _storagePrefix;
 
   @override
   String get id => _id ?? '';
+
+  @override
+  String get storagePrefix => _storagePrefix ?? super.storagePrefix;
 
   @override
   Map<String, int> toJson(int state) => {'value': state};
@@ -94,7 +102,33 @@ void main() {
         verify<dynamic>(
           () => storage.read('MyCallbackHydratedCubit'),
         ).called(1);
-      }, storage: storage);
+      }, createStorage: () => storage);
+    });
+
+    test(
+        'reads from storage once upon initialization w/custom storagePrefix/id',
+        () {
+      HydratedBlocOverrides.runZoned(() {
+        const storagePrefix = '__storagePrefix__';
+        const id = '__id__';
+        MyHydratedCubit(id, true, storagePrefix);
+        verify<dynamic>(() => storage.read('$storagePrefix$id')).called(1);
+      }, createStorage: () => storage);
+    });
+
+    test('writes to storage when onChange is called w/custom storagePrefix/id',
+        () {
+      HydratedBlocOverrides.runZoned(() {
+        const change = Change(
+          currentState: 0,
+          nextState: 0,
+        );
+        const expected = <String, int>{'value': 0};
+        const storagePrefix = '__storagePrefix__';
+        const id = '__id__';
+        MyHydratedCubit(id, true, storagePrefix).onChange(change);
+        verify(() => storage.write('$storagePrefix$id', expected)).called(2);
+      }, createStorage: () => storage);
     });
 
     test(
@@ -108,7 +142,7 @@ void main() {
         expect(cubit.state, 43);
         verify<dynamic>(() => storage.read('MyCallbackHydratedCubit'))
             .called(1);
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     test(
@@ -126,7 +160,7 @@ void main() {
         expect(fromJsonCalls, [
           {'value': 42}
         ]);
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     test(
@@ -140,7 +174,7 @@ void main() {
         expect(cubit.state, 1);
         verify<dynamic>(() => storage.read('MyCallbackHydratedCubit'))
             .called(1);
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     test('does not deserialize state when cache is empty', () {
@@ -154,7 +188,7 @@ void main() {
         cubit.increment();
         expect(cubit.state, 1);
         expect(fromJsonCalls, isEmpty);
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     test(
@@ -168,7 +202,7 @@ void main() {
         expect(cubit.state, 1);
         verify<dynamic>(() => storage.read('MyCallbackHydratedCubit'))
             .called(1);
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     test('does not deserialize state when cache is malformed', () {
@@ -183,7 +217,7 @@ void main() {
             expect(fromJsonCalls, isEmpty);
           },
         );
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     group('SingleHydratedCubit', () {
@@ -208,12 +242,13 @@ void main() {
           // ignore: prefer_const_constructors
           StorageNotFound().toString(),
           'Storage was accessed before it was initialized.\n'
-          'Please ensure that storage has been initialized.\n\n'
-          'For example:\n\n'
-          'final storage = await HydratedStorage.build();\n'
+          'Please ensure that storage has been initialized.\n'
+          '\n'
+          'For example:\n'
+          '\n'
           'HydratedBlocOverrides.runZoned(\n'
           '  () => runApp(MyApp()),\n'
-          '  storage: storage,\n'
+          '  createStorage: () => HydratedStorage.build(...),\n'
           ');',
         );
       });
@@ -222,7 +257,7 @@ void main() {
         final storage = MockStorage();
         HydratedBlocOverrides.runZoned(() {
           expect(HydratedBlocOverrides.current!.storage, equals(storage));
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('should call storage.write when onChange is called', () {
@@ -234,7 +269,7 @@ void main() {
           final expected = <String, int>{'value': 0};
           MyHydratedCubit().onChange(transition);
           verify(() => storage.write('MyHydratedCubit', expected)).called(2);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('should call storage.write when onChange is called with cubit id',
@@ -248,7 +283,7 @@ void main() {
           final expected = <String, int>{'value': 0};
           cubit.onChange(transition);
           verify(() => storage.write('MyHydratedCubitA', expected)).called(2);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('should throw BlocUnhandledErrorException when storage.write throws',
@@ -272,7 +307,7 @@ void main() {
               expect(error.toString(), 'Exception: oops');
             },
           );
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('stores initial state when instantiated', () {
@@ -281,7 +316,7 @@ void main() {
           verify(
             () => storage.write('MyHydratedCubit', {'value': 0}),
           ).called(1);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('initial state should return 0 when fromJson returns null', () {
@@ -289,14 +324,14 @@ void main() {
           when<dynamic>(() => storage.read(any())).thenReturn(null);
           expect(MyHydratedCubit().state, 0);
           verify<dynamic>(() => storage.read('MyHydratedCubit')).called(1);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('initial state should return 0 when deserialization fails', () {
         HydratedBlocOverrides.runZoned(() {
           when<dynamic>(() => storage.read(any())).thenThrow(Exception('oops'));
           expect(MyHydratedCubit('', false).state, 0);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('initial state should return 101 when fromJson returns 101', () {
@@ -304,7 +339,7 @@ void main() {
           when<dynamic>(() => storage.read(any())).thenReturn({'value': 101});
           expect(MyHydratedCubit().state, 101);
           verify<dynamic>(() => storage.read('MyHydratedCubit')).called(1);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       group('clear', () {
@@ -312,7 +347,7 @@ void main() {
           await HydratedBlocOverrides.runZoned(() async {
             await MyHydratedCubit().clear();
             verify(() => storage.delete('MyHydratedCubit')).called(1);
-          }, storage: storage);
+          }, createStorage: () => storage);
         });
       });
     });
@@ -330,7 +365,7 @@ void main() {
           verify<dynamic>(
             () => storage.read('MyMultiHydratedCubitB'),
           ).called(1);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('initial state should return 101/102 when fromJson returns 101/102',
@@ -351,7 +386,7 @@ void main() {
           verify<dynamic>(
             () => storage.read('MyMultiHydratedCubitB'),
           ).called(1);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       group('clear', () {
@@ -363,7 +398,7 @@ void main() {
 
             await MyMultiHydratedCubit('B').clear();
             verify(() => storage.delete('MyMultiHydratedCubitB')).called(1);
-          }, storage: storage);
+          }, createStorage: () => storage);
         });
       });
     });
@@ -375,7 +410,7 @@ void main() {
           verify(
             () => storage.write('MyUuidHydratedCubit', any<dynamic>()),
           ).called(1);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('correctly caches computed initial state', () {
@@ -398,7 +433,7 @@ void main() {
           final dynamic initialStateB = secondCaptured.first;
 
           expect(initialStateB, cachedState);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
     });
   });

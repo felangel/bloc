@@ -76,7 +76,7 @@ class _Emitter<State> implements Emitter<State> {
     Stream<T> stream, {
     required void Function(T data) onData,
     void Function(Object error, StackTrace stackTrace)? onError,
-  }) async {
+  }) {
     final completer = Completer<void>();
     final subscription = stream.listen(
       onData,
@@ -176,7 +176,9 @@ Please make sure to await all asynchronous operations within event handlers.
   }
 
   void _close() {
-    for (final disposable in _disposables) disposable.call();
+    for (final disposable in _disposables) {
+      disposable.call();
+    }
     _disposables.clear();
     if (!_completer.isCompleted) _completer.complete();
   }

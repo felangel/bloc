@@ -1,3 +1,9 @@
+# 9.0.3
+
+- chore: support for mocktail v0.3.0 ([#3252](https://github.com/felangel/bloc/pull/3252))
+- docs: update GetStream utm tags ([#3136](https://github.com/felangel/bloc/pull/3136))
+- docs: update VGV sponsors logo ([#3125](https://github.com/felangel/bloc/pull/3125))
+
 # 9.0.2
 
 - fix: throw uncaught exceptions ([#3070](https://github.com/felangel/bloc/pull/3070))

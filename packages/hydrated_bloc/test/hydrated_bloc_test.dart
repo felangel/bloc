@@ -48,12 +48,16 @@ class MyCallbackHydratedBloc extends HydratedBloc<CounterEvent, int> {
 }
 
 class MyHydratedBloc extends HydratedBloc<int, int> {
-  MyHydratedBloc([this._id]) : super(0);
+  MyHydratedBloc([this._id, this._storagePrefix]) : super(0);
 
   final String? _id;
+  final String? _storagePrefix;
 
   @override
   String get id => _id ?? '';
+
+  @override
+  String get storagePrefix => _storagePrefix ?? super.storagePrefix;
 
   @override
   Map<String, int>? toJson(int state) {
@@ -132,14 +136,40 @@ void main() {
       final storage = MockStorage();
       HydratedBlocOverrides.runZoned(() {
         expect(HydratedBlocOverrides.current!.storage, equals(storage));
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     test('reads from storage once upon initialization', () {
       HydratedBlocOverrides.runZoned(() {
         MyCallbackHydratedBloc();
         verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
-      }, storage: storage);
+      }, createStorage: () => storage);
+    });
+
+    test(
+        'reads from storage once upon initialization w/custom storagePrefix/id',
+        () {
+      HydratedBlocOverrides.runZoned(() {
+        const storagePrefix = '__storagePrefix__';
+        const id = '__id__';
+        MyHydratedBloc(id, storagePrefix);
+        verify<dynamic>(() => storage.read('$storagePrefix$id')).called(1);
+      }, createStorage: () => storage);
+    });
+
+    test('writes to storage when onChange is called w/custom storagePrefix/id',
+        () {
+      HydratedBlocOverrides.runZoned(() {
+        const change = Change(
+          currentState: 0,
+          nextState: 0,
+        );
+        const expected = <String, int>{'value': 0};
+        const storagePrefix = '__storagePrefix__';
+        const id = '__id__';
+        MyHydratedBloc(id, storagePrefix).onChange(change);
+        verify(() => storage.write('$storagePrefix$id', expected)).called(2);
+      }, createStorage: () => storage);
     });
 
     test(
@@ -152,7 +182,7 @@ void main() {
         bloc.add(Increment());
         await expectLater(bloc.stream, emitsInOrder(const <int>[43]));
         verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     test(
@@ -170,7 +200,7 @@ void main() {
         expect(fromJsonCalls, [
           {'value': 42}
         ]);
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     test(
@@ -183,7 +213,7 @@ void main() {
         bloc.add(Increment());
         await expectLater(bloc.stream, emitsInOrder(const <int>[1]));
         verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     test('does not deserialize state when cache is empty', () async {
@@ -197,7 +227,7 @@ void main() {
         bloc.add(Increment());
         await expectLater(bloc.stream, emitsInOrder(const <int>[1]));
         expect(fromJsonCalls, isEmpty);
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     test(
@@ -211,7 +241,7 @@ void main() {
           verify<dynamic>(() => storage.read('MyCallbackHydratedBloc'))
               .called(1);
         }));
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     test('does not deserialize state when cache is malformed', () async {
@@ -226,7 +256,7 @@ void main() {
         }, (_, __) {
           expect(fromJsonCalls, isEmpty);
         }));
-      }, storage: storage);
+      }, createStorage: () => storage);
     });
 
     group('SingleHydratedBloc', () {
@@ -239,7 +269,7 @@ void main() {
           const expected = <String, int>{'value': 0};
           MyHydratedBloc().onChange(change);
           verify(() => storage.write('MyHydratedBloc', expected)).called(2);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('should call storage.write when onChange is called with bloc id',
@@ -253,7 +283,7 @@ void main() {
           const expected = <String, int>{'value': 0};
           bloc.onChange(change);
           verify(() => storage.write('MyHydratedBlocA', expected)).called(2);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('should call onError when storage.write throws', () {
@@ -275,7 +305,7 @@ void main() {
           }, (error, _) {
             expect(error.toString(), 'Exception: oops');
           });
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('stores initial state when instantiated', () {
@@ -284,7 +314,7 @@ void main() {
           verify(
             () => storage.write('MyHydratedBloc', {'value': 0}),
           ).called(1);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('initial state should return 0 when fromJson returns null', () {
@@ -292,7 +322,7 @@ void main() {
           when<dynamic>(() => storage.read(any())).thenReturn(null);
           expect(MyHydratedBloc().state, 0);
           verify<dynamic>(() => storage.read('MyHydratedBloc')).called(1);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('initial state should return 101 when fromJson returns 101', () {
@@ -300,7 +330,7 @@ void main() {
           when<dynamic>(() => storage.read(any())).thenReturn({'value': 101});
           expect(MyHydratedBloc().state, 101);
           verify<dynamic>(() => storage.read('MyHydratedBloc')).called(1);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       group('clear', () {
@@ -308,7 +338,7 @@ void main() {
           await HydratedBlocOverrides.runZoned(() async {
             await MyHydratedBloc().clear();
             verify(() => storage.delete('MyHydratedBloc')).called(1);
-          }, storage: storage);
+          }, createStorage: () => storage);
         });
       });
     });
@@ -322,7 +352,7 @@ void main() {
 
           expect(MyMultiHydratedBloc('B').state, 0);
           verify<dynamic>(() => storage.read('MyMultiHydratedBlocB')).called(1);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('initial state should return 101/102 when fromJson returns 101/102',
@@ -339,7 +369,7 @@ void main() {
           ).thenReturn({'value': 102});
           expect(MyMultiHydratedBloc('B').state, 102);
           verify<dynamic>(() => storage.read('MyMultiHydratedBlocB')).called(1);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       group('clear', () {
@@ -351,7 +381,7 @@ void main() {
 
             await MyMultiHydratedBloc('B').clear();
             verify(() => storage.delete('MyMultiHydratedBlocB')).called(1);
-          }, storage: storage);
+          }, createStorage: () => storage);
         });
       });
     });
@@ -372,7 +402,7 @@ void main() {
               any<Map<String, String?>>(),
             ),
           ).called(1);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('correctly caches computed initial state', () async {
@@ -395,7 +425,7 @@ void main() {
           final dynamic initialStateB = secondCaptured.first;
 
           expect(initialStateB, cachedState);
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
     });
 
@@ -412,7 +442,7 @@ void main() {
             },
             (_, __) {},
           );
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('calls onError when json decode fails', () async {
@@ -436,7 +466,7 @@ void main() {
               isTrue,
             );
           });
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('returns super.state when json decode fails', () async {
@@ -448,7 +478,7 @@ void main() {
           }, (_, __) {
             expect(bloc?.state, 0);
           });
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('calls onError when storage.write fails', () async {
@@ -473,7 +503,7 @@ void main() {
               '''Converting object to an encodable object failed: Object''',
             );
           });
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test('calls onError when json encode fails', () async {
@@ -497,7 +527,7 @@ void main() {
             },
             (_, __) {},
           );
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
     });
   });

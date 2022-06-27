@@ -13,8 +13,8 @@ export function getBlocStateTemplate(blocName: string, type: BlocType): string {
 }
 
 function getEquatableBlocStateTemplate(blocName: string): string {
-  const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
-  const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
+  const pascalCaseBlocName = changeCase.pascalCase(blocName);
+  const snakeCaseBlocName = changeCase.snakeCase(blocName);
   return `part of '${snakeCaseBlocName}_bloc.dart';
 
 abstract class ${pascalCaseBlocName}State extends Equatable {
@@ -29,8 +29,8 @@ class ${pascalCaseBlocName}Initial extends ${pascalCaseBlocName}State {}
 }
 
 function getDefaultBlocStateTemplate(blocName: string): string {
-  const pascalCaseBlocName = changeCase.pascalCase(blocName.toLowerCase());
-  const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
+  const pascalCaseBlocName = changeCase.pascalCase(blocName);
+  const snakeCaseBlocName = changeCase.snakeCase(blocName);
   return `part of '${snakeCaseBlocName}_bloc.dart';
 
 @immutable
@@ -41,9 +41,8 @@ class ${pascalCaseBlocName}Initial extends ${pascalCaseBlocName}State {}
 }
 
 function getFreezedBlocStateTemplate(blocName: string): string {
-  const pascalCaseBlocName =
-    changeCase.pascalCase(blocName.toLowerCase()) + "State";
-  const snakeCaseBlocName = changeCase.snakeCase(blocName.toLowerCase());
+  const pascalCaseBlocName = changeCase.pascalCase(blocName) + "State";
+  const snakeCaseBlocName = changeCase.snakeCase(blocName);
   return `part of '${snakeCaseBlocName}_bloc.dart';
 
 @freezed

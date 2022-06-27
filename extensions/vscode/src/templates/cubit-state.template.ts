@@ -16,8 +16,8 @@ export function getCubitStateTemplate(
 }
 
 function getEquatableCubitStateTemplate(cubitName: string): string {
-  const pascalCaseCubitName = changeCase.pascalCase(cubitName.toLowerCase());
-  const snakeCaseCubitName = changeCase.snakeCase(cubitName.toLowerCase());
+  const pascalCaseCubitName = changeCase.pascalCase(cubitName);
+  const snakeCaseCubitName = changeCase.snakeCase(cubitName);
   return `part of '${snakeCaseCubitName}_cubit.dart';
 
 abstract class ${pascalCaseCubitName}State extends Equatable {
@@ -32,8 +32,8 @@ class ${pascalCaseCubitName}Initial extends ${pascalCaseCubitName}State {}
 }
 
 function getDefaultCubitStateTemplate(cubitName: string): string {
-  const pascalCaseCubitName = changeCase.pascalCase(cubitName.toLowerCase());
-  const snakeCaseCubitName = changeCase.snakeCase(cubitName.toLowerCase());
+  const pascalCaseCubitName = changeCase.pascalCase(cubitName);
+  const snakeCaseCubitName = changeCase.snakeCase(cubitName);
   return `part of '${snakeCaseCubitName}_cubit.dart';
 
 @immutable
@@ -44,8 +44,8 @@ class ${pascalCaseCubitName}Initial extends ${pascalCaseCubitName}State {}
 }
 
 function getFreezedCubitStateTemplate(cubitName: string): string {
-  const pascalCaseCubitName = changeCase.pascalCase(cubitName.toLowerCase());
-  const snakeCaseCubitName = changeCase.snakeCase(cubitName.toLowerCase());
+  const pascalCaseCubitName = changeCase.pascalCase(cubitName);
+  const snakeCaseCubitName = changeCase.snakeCase(cubitName);
   return `part of '${snakeCaseCubitName}_cubit.dart';
 
 @freezed

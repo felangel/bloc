@@ -1,3 +1,10 @@
+# 8.0.3
+
+- refactor: resolve analysis warnings ([#3189](https://github.com/felangel/bloc/pull/3189))
+- docs: fix inline doc comment ([#3167](https://github.com/felangel/bloc/pull/3167))
+- docs: update GetStream utm tags ([#3136](https://github.com/felangel/bloc/pull/3136))
+- docs: update VGV sponsors logo ([#3125](https://github.com/felangel/bloc/pull/3125))
+
 # 8.0.2
 
 - fix: make `onChange` and `addError` protected ([#3071](https://github.com/felangel/bloc/pull/3071))

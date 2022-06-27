@@ -59,20 +59,20 @@ void main() {
       blocTest<ComplexListCubit, ComplexListState>(
         'emits corrects states when deleting an item',
         setUp: () {
-          when(() => repository.deleteItem('2')).thenAnswer((_) async => null);
+          when(() => repository.deleteItem('2')).thenAnswer((_) async {});
         },
         build: () => ComplexListCubit(repository: repository),
         seed: () => const ComplexListState.success(mockItems),
         act: (cubit) => cubit.deleteItem('2'),
         expect: () => [
           const ComplexListState.success([
-            Item(id: '1', value: '1', isDeleting: false),
+            Item(id: '1', value: '1'),
             Item(id: '2', value: '2', isDeleting: true),
-            Item(id: '3', value: '3', isDeleting: false),
+            Item(id: '3', value: '3'),
           ]),
           const ComplexListState.success([
-            Item(id: '1', value: '1', isDeleting: false),
-            Item(id: '3', value: '3', isDeleting: false),
+            Item(id: '1', value: '1'),
+            Item(id: '3', value: '3'),
           ]),
         ],
         verify: (_) => verify(() => repository.deleteItem('2')).called(1),

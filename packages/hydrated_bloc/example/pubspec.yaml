@@ -13,7 +13,6 @@ dependencies:
     path: ../
   flutter_bloc:
     path: ../../flutter_bloc
-  flutter_services_binding: ^0.1.0
   path_provider: ^2.0.1
 
 dependency_overrides:

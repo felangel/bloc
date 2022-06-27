@@ -13,8 +13,8 @@ export function getCubitTemplate(cubitName: string, type: BlocType): string {
 }
 
 function getEquatableCubitTemplate(cubitName: string) {
-  const pascalCaseCubitName = changeCase.pascalCase(cubitName.toLowerCase());
-  const snakeCaseCubitName = changeCase.snakeCase(cubitName.toLowerCase());
+  const pascalCaseCubitName = changeCase.pascalCase(cubitName);
+  const snakeCaseCubitName = changeCase.snakeCase(cubitName);
   const cubitState = `${pascalCaseCubitName}State`;
   return `import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -28,8 +28,8 @@ class ${pascalCaseCubitName}Cubit extends Cubit<${cubitState}> {
 }
 
 function getDefaultCubitTemplate(cubitName: string) {
-  const pascalCaseCubitName = changeCase.pascalCase(cubitName.toLowerCase());
-  const snakeCaseCubitName = changeCase.snakeCase(cubitName.toLowerCase());
+  const pascalCaseCubitName = changeCase.pascalCase(cubitName);
+  const snakeCaseCubitName = changeCase.snakeCase(cubitName);
   const cubitState = `${pascalCaseCubitName}State`;
   return `import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -43,8 +43,8 @@ class ${pascalCaseCubitName}Cubit extends Cubit<${cubitState}> {
 }
 
 export function getFreezedCubitTemplate(cubitName: string) {
-  const pascalCaseCubitName = changeCase.pascalCase(cubitName.toLowerCase());
-  const snakeCaseCubitName = changeCase.snakeCase(cubitName.toLowerCase());
+  const pascalCaseCubitName = changeCase.pascalCase(cubitName);
+  const snakeCaseCubitName = changeCase.snakeCase(cubitName);
   const cubitState = `${pascalCaseCubitName}State`;
   return `import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
