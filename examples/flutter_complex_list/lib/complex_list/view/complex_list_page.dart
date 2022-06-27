@@ -4,7 +4,7 @@ import 'package:flutter_complex_list/complex_list/complex_list.dart';
 import 'package:flutter_complex_list/repository.dart';
 
 class ComplexListPage extends StatelessWidget {
-  const ComplexListPage({Key? key}) : super(key: key);
+  const ComplexListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +14,15 @@ class ComplexListPage extends StatelessWidget {
         create: (_) => ComplexListCubit(
           repository: context.read<Repository>(),
         )..fetchList(),
-        child: ComplexListView(),
+        child: const ComplexListView(),
       ),
     );
   }
 }
 
 class ComplexListView extends StatelessWidget {
+  const ComplexListView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final state = context.watch<ComplexListCubit>().state;
@@ -29,14 +31,14 @@ class ComplexListView extends StatelessWidget {
         return const Center(child: Text('Oops something went wrong!'));
       case ListStatus.success:
         return ItemView(items: state.items);
-      default:
+      case ListStatus.loading:
         return const Center(child: CircularProgressIndicator());
     }
   }
 }
 
 class ItemView extends StatelessWidget {
-  const ItemView({Key? key, required this.items}) : super(key: key);
+  const ItemView({super.key, required this.items});
 
   final List<Item> items;
 
@@ -60,10 +62,10 @@ class ItemView extends StatelessWidget {
 
 class ItemTile extends StatelessWidget {
   const ItemTile({
-    Key? key,
+    super.key,
     required this.item,
     required this.onDeletePressed,
-  }) : super(key: key);
+  });
 
   final Item item;
   final ValueSetter<String> onDeletePressed;

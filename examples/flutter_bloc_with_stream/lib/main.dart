@@ -12,21 +12,25 @@ void main() => runApp(TickerApp());
 /// {@endtemplate}
 class TickerApp extends MaterialApp {
   /// {@macro ticker_app}
-  TickerApp({Key? key})
+  TickerApp({super.key})
       : super(
-          key: key,
           home: BlocProvider(
             create: (_) => TickerBloc(Ticker()),
-            child: TickerPage(),
+            child: const TickerPage(),
           ),
         );
 }
 
+/// {@template ticker_page}
 /// [StatelessWidget] which consumes a [TickerBloc]
 /// and responds to changes in the [TickerState].
 /// [TickerPage] also notifies the [TickerBloc] when
 /// the user taps on the start button.
+/// {@endtemplate}
 class TickerPage extends StatelessWidget {
+  /// {@macro ticker_page}
+  const TickerPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

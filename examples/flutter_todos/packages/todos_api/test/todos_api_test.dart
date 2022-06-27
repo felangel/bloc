@@ -13,10 +13,7 @@ class TestTodosApi extends TodosApi {
 void main() {
   group('TodosApi', () {
     test('can be constructed', () {
-      expect(
-        () => TestTodosApi(),
-        returnsNormally,
-      );
+      expect(TestTodosApi.new, returnsNormally);
     });
   });
 }

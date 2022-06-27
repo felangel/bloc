@@ -6,8 +6,8 @@ class CounterCubit extends Cubit<int> {
 
   @override
   void onChange(Change<int> change) {
-    print(change);
     super.onChange(change);
+    print(change);
   }
 }
 ```

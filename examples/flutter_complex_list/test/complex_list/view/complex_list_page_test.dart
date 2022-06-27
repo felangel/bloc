@@ -30,7 +30,7 @@ extension on WidgetTester {
       MaterialApp(
         home: BlocProvider.value(
           value: listCubit,
-          child: ComplexListView(),
+          child: const ComplexListView(),
         ),
       ),
     );
@@ -111,7 +111,7 @@ void main() {
       when(() => listCubit.state).thenReturn(
         const ComplexListState.success(mockItems),
       );
-      when(() => listCubit.deleteItem('1')).thenAnswer((_) async => null);
+      when(() => listCubit.deleteItem('1')).thenAnswer((_) async {});
       await tester.pumpListView(listCubit);
       await tester.tap(find.byIcon(Icons.delete).first);
       verify(() => listCubit.deleteItem('1')).called(1);
@@ -120,7 +120,7 @@ void main() {
 
   group('ItemTile', () {
     testWidgets('renders id and value text', (tester) async {
-      const mockItem = Item(id: '1', value: 'Item 1', isDeleting: false);
+      const mockItem = Item(id: '1', value: 'Item 1');
       when(() => listCubit.state).thenReturn(
         const ComplexListState.success([mockItem]),
       );
@@ -130,9 +130,9 @@ void main() {
     });
 
     testWidgets(
-        'renders delete icon button'
+        'renders delete icon button '
         'when item is not being deleted', (tester) async {
-      const mockItem = Item(id: '1', value: 'Item 1', isDeleting: false);
+      const mockItem = Item(id: '1', value: 'Item 1');
       when(() => listCubit.state).thenReturn(
         const ComplexListState.success([mockItem]),
       );
@@ -141,7 +141,7 @@ void main() {
     });
 
     testWidgets(
-        'renders CircularProgressIndicator'
+        'renders CircularProgressIndicator '
         'when item is being deleting', (tester) async {
       const mockItem = Item(id: '1', value: 'Item 1', isDeleting: true);
       when(() => listCubit.state).thenReturn(

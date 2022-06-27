@@ -43,15 +43,26 @@ class HydratedBlocOverrides extends BlocOverrides {
   }
 
   /// Runs [body] in a fresh [Zone] using the provided overrides.
-  static R runZoned<R>(
-    R Function() body, {
+  static FutureOr<R> runZoned<R>(
+    FutureOr<R> Function() body, {
     BlocObserver? blocObserver,
     EventTransformer? eventTransformer,
-    Storage? storage,
+    @Deprecated('Use createStorage instead.') Storage? storage,
+    FutureOr<Storage> Function()? createStorage,
   }) {
-    final overrides = _HydratedBlocOverridesScope(storage);
+    assert(
+      storage == null || createStorage == null,
+      'Cannot specify both storage and createStorage',
+    );
+    final overrides = _HydratedBlocOverridesScope(storage, createStorage);
     return BlocOverrides.runZoned(
-      () => _asyncRunZoned(body, zoneValues: {_token: overrides}),
+      () => _asyncRunZoned(
+        () async {
+          await overrides._init();
+          return body();
+        },
+        zoneValues: {_token: overrides},
+      ),
       blocObserver: blocObserver,
       eventTransformer: eventTransformer,
     );
@@ -72,14 +83,20 @@ class HydratedBlocOverrides extends BlocOverrides {
 }
 
 class _HydratedBlocOverridesScope extends HydratedBlocOverrides {
-  _HydratedBlocOverridesScope(this._storage);
+  _HydratedBlocOverridesScope(this._storage, this.createStorage);
 
   final HydratedBlocOverrides? _previous = HydratedBlocOverrides.current;
   final Storage? _storage;
+  final FutureOr<Storage> Function()? createStorage;
+  late final Storage? _storageValue;
+
+  Future<void> _init() async {
+    _storageValue = await createStorage?.call();
+  }
 
   @override
   Storage get storage {
-    final storage = _storage;
+    final storage = _storage ?? _storageValue;
     if (storage != null) return storage;
 
     final previous = _previous;
@@ -385,9 +402,17 @@ mixin HydratedMixin<State> on BlocBase<State> {
   /// in order to keep the caches independent of each other.
   String get id => '';
 
+  /// Storage prefix which can be overridden to provide a custom
+  /// storage namespace.
+  /// Defaults to [runtimeType] but should be overridden in cases
+  /// where stored data should be resilient to obfuscation or persist
+  /// between debug/release builds.
+  String get storagePrefix => runtimeType.toString();
+
   /// `storageToken` is used as registration token for hydrated storage.
+  /// Composed of [storagePrefix] and [id].
   @nonVirtual
-  String get storageToken => '${runtimeType.toString()}$id';
+  String get storageToken => '$storagePrefix$id';
 
   /// [clear] is used to wipe or invalidate the cache of a [HydratedBloc].
   /// Calling [clear] will delete the cached state of the bloc
@@ -437,10 +462,9 @@ class StorageNotFound implements Exception {
     return 'Storage was accessed before it was initialized.\n'
         'Please ensure that storage has been initialized.\n\n'
         'For example:\n\n'
-        'final storage = await HydratedStorage.build();\n'
         'HydratedBlocOverrides.runZoned(\n'
         '  () => runApp(MyApp()),\n'
-        '  storage: storage,\n'
+        '  createStorage: () => HydratedStorage.build(...),\n'
         ');';
   }
 }

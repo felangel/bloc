@@ -1,3 +1,18 @@
+# 9.0.0-dev.2
+
+- fix: update `StorageNotFound` implementation for `toString` ([#3314](https://github.com/felangel/bloc/pull/3314))
+
+# 9.0.0-dev.1
+
+- **BREAKING**: feat!: add `createStorage` to `HydratedBlocOverrides.runZoned` ([#3240](https://github.com/felangel/bloc/pull/3240))
+  - deprecate `storage` parameter in `HydratedBlocoverrides.runZoned` in favor of `createStorage`
+
+# 8.1.0
+
+- feat: add `storagePrefix` to support obfuscation tolerance ([#3262](https://github.com/felangel/bloc/pull/3262))
+- docs: update GetStream utm tags ([#3136](https://github.com/felangel/bloc/pull/3136))
+- docs: update VGV sponsors logo ([#3125](https://github.com/felangel/bloc/pull/3125))
+
 # 8.0.0
 
 - **BREAKING**: feat: introduce `HydratedBlocOverrides` API ([#2947](https://github.com/felangel/bloc/pull/2947))

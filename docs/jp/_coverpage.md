@@ -10,11 +10,11 @@
 [![Discord](https://img.shields.io/discord/649708778631200778.svg?logo=discord&color=blue)](https://discord.gg/bloc)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
-> 思い通りに動くDartの状態管理用ライブラリー
+> 思い通りに動く Dart の状態管理用ライブラリー
 
 - シンプルで軽い
 - テストにも考慮した
-- Dart, Flutter, AngularDartのため
+- Dart, Flutter, AngularDart のため
 
 <p class="buttons">
     <a href="#/migration">移行ガイド</a>
@@ -34,4 +34,9 @@
     <div>
         <a href="https://www.miquido.com/flutter-development-company/?utm_source=github&utm_medium=sponsorship&utm_campaign=bloc-silver-tier&utm_term=flutter-development-company&utm_content=miquido-logo"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/miquido_logo_transparent.png" width="225"/></a>
     </div>
+    <div></div>
+    <div>
+        <a href="https://bit.ly/parabeac_flutterbloc"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/parabeac_logo.png" width="225"/></a>
+    </div>
+    <div></div>
 </div>

@@ -71,7 +71,7 @@ void main() {
 
     setUp(() {
       navigator = MockNavigator();
-      when(() => navigator.push(any())).thenAnswer((_) async {});
+      when(() => navigator.push(any())).thenAnswer((_) async => null);
 
       todosOverviewBloc = MockTodosOverviewBloc();
       when(() => todosOverviewBloc.state).thenReturn(

@@ -53,7 +53,7 @@ void main() {
         HydratedBlocOverrides.runZoned(() {
           final overrides = HydratedBlocOverrides.current;
           expect(overrides!.storage, equals(storage));
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test(
@@ -127,8 +127,8 @@ void main() {
           HydratedBlocOverrides.runZoned(() {
             final overrides = HydratedBlocOverrides.current;
             expect(overrides!.storage, equals(nestedStorage));
-          }, storage: nestedStorage);
-        }, storage: rootStorage);
+          }, createStorage: () => nestedStorage);
+        }, createStorage: () => rootStorage);
       });
 
       test('uses parent storage when nested zone does not specify', () {
@@ -138,7 +138,7 @@ void main() {
             final overrides = HydratedBlocOverrides.current;
             expect(overrides!.storage, equals(storage));
           });
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
 
       test(
@@ -172,7 +172,7 @@ void main() {
               expect(overrides.storage, equals(storage));
             },
             blocObserver: nestedBlocObserver,
-            storage: storage,
+            createStorage: () => storage,
           );
         }, blocObserver: rootBlocObserver);
       });
@@ -186,7 +186,7 @@ void main() {
           final overrides = HydratedBlocOverrides.current!;
           expect(overrides.storage, equals(originalStorage));
           expect(overrides.storage, isNot(equals(otherStorage)));
-        }, storage: storage);
+        }, createStorage: () => storage);
       });
     });
   });

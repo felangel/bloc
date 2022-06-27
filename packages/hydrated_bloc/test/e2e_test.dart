@@ -55,7 +55,7 @@ void main() {
           cubit.setQuestion(tree);
           await sleep();
           expect(FreezedCubit().state, tree);
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
     });
 
@@ -70,7 +70,7 @@ void main() {
           cubit.updateFavoriteColor(Color.green);
           await sleep();
           expect(JsonSerializableCubit().state, expected);
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
     });
 
@@ -83,7 +83,7 @@ void main() {
           cubit.addItem(item);
           await sleep();
           expect(ListCubit().state, const <String>[item]);
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('persists and restores object->map list correctly', () async {
@@ -98,7 +98,7 @@ void main() {
             ListCubitMap<MapObject, int>(fromJson).state,
             const <MapObject>[item],
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('persists and restores object-*>map list correctly', () async {
@@ -113,7 +113,7 @@ void main() {
             ListCubitMap<MapObject, int>(fromJson).state,
             const <MapObject>[item],
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('persists and restores obj->map<custom> list correctly', () async {
@@ -128,7 +128,7 @@ void main() {
             ListCubitMap<MapCustomObject, CustomObject>(fromJson).state,
             <MapCustomObject>[item],
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('persists and restores obj-*>map<custom> list correctly', () async {
@@ -144,7 +144,7 @@ void main() {
             ListCubitMap<MapCustomObject, CustomObject>(fromJson).state,
             <MapCustomObject>[item],
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('persists and restores object->list list correctly', () async {
@@ -159,7 +159,7 @@ void main() {
             ListCubitList<ListObject, int>(fromJson).state,
             const <ListObject>[item],
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('persists and restores object-*>list list correctly', () async {
@@ -174,7 +174,7 @@ void main() {
             ListCubitList<ListObject, int>(fromJson).state,
             const <ListObject>[item],
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('persists and restores object->list<map> list correctly', () async {
@@ -189,7 +189,7 @@ void main() {
             ListCubitList<ListMapObject, MapObject>(fromJson).state,
             <ListMapObject>[item],
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('persists and restores obj-*>list<map> list correctly', () async {
@@ -204,7 +204,7 @@ void main() {
             ListCubitList<ListMapObject, MapObject>(fromJson).state,
             <ListMapObject>[item],
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('persists and restores obj->list<list> list correctly', () async {
@@ -219,7 +219,7 @@ void main() {
             ListCubitList<ListListObject, ListObject>(fromJson).state,
             <ListListObject>[item],
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('persists and restores obj-*>list<list> list correctly', () async {
@@ -237,7 +237,7 @@ void main() {
             ListCubitList<ListListObject, ListObject>(fromJson).state,
             <ListListObject>[item],
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('persists and restores obj->list<custom> list correctly', () async {
@@ -252,7 +252,7 @@ void main() {
             ListCubitList<ListCustomObject, CustomObject>(fromJson).state,
             <ListCustomObject>[item],
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('persists and restores obj-*>list<custom> list correctly', () async {
@@ -268,7 +268,7 @@ void main() {
             ListCubitList<ListCustomObject, CustomObject>(fromJson).state,
             <ListCustomObject>[item],
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('persists and restores obj->list<custom> empty list correctly',
@@ -283,7 +283,7 @@ void main() {
             ListCubitList<ListCustomObject, CustomObject>(fromJson).state,
             isEmpty,
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('persists and restores obj-*>list<custom> empty list correctly',
@@ -299,7 +299,7 @@ void main() {
             ListCubitList<ListCustomObject, CustomObject>(fromJson).state,
             isEmpty,
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
     });
 
@@ -312,7 +312,7 @@ void main() {
           cubit.setDog(dog);
           await sleep();
           expect(ManualCubit().state, dog);
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
     });
 
@@ -325,7 +325,7 @@ void main() {
           expect(cubit.state, 1);
           await sleep();
           expect(SimpleCubit().state, 1);
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('does not throw after clear', () async {
@@ -336,7 +336,7 @@ void main() {
           expect(cubit.state, 1);
           await storage.clear();
           expect(SimpleCubit().state, 0);
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
     });
 
@@ -358,7 +358,7 @@ void main() {
               ),
             ),
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
     });
 
@@ -377,7 +377,7 @@ void main() {
               ),
             ),
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
 
       test('throws unsupported object: bad `toJson`', () async {
@@ -388,7 +388,7 @@ void main() {
             () => cubit.setBad(VeryBadObject()),
             throwsA(isA<HydratedUnsupportedError>()),
           );
-        }, storage: storage);
+        }, createStorage: () async => storage);
       });
     });
   });

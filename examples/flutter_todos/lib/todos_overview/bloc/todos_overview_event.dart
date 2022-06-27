@@ -11,15 +11,6 @@ class TodosOverviewSubscriptionRequested extends TodosOverviewEvent {
   const TodosOverviewSubscriptionRequested();
 }
 
-class TodosOverviewTodoSaved extends TodosOverviewEvent {
-  const TodosOverviewTodoSaved(this.todo);
-
-  final Todo todo;
-
-  @override
-  List<Object> get props => [todo];
-}
-
 class TodosOverviewTodoCompletionToggled extends TodosOverviewEvent {
   const TodosOverviewTodoCompletionToggled({
     required this.todo,
