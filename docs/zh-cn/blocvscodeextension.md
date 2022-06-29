@@ -34,7 +34,7 @@
 | `Bloc: New Bloc`   | 创建一个新的    `bloc` |
 | `Cubit: New Cubit` | 创建一个新的    `Cubit`|
 
-激活命令需要打开命令面板 (查看 -> 命令面板)，输入命令名称并执行命令，或者从下拉条中选择需要执行的命令。
+你可以通过启动命令面板(查看 -> 命令面板)并输入命令名运行来激活这些命令，或者你可以右键单击你想要创建 bloc/cubit 的目录并从上下文菜单中选择该命令。
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage.gif)
 
@@ -67,11 +67,11 @@
 | `bloclistener`      | 创建一个新的`BlocListener`插件            |
 | `multibloclistener` | 创建一个新的`MultiBlocListener`插件       |
 | `blocconsumer`      | 创建一个新的`BlocConsumer`插件            |
-| `blocof`            | 捷径 `BlocProvider.of()`                |
-| `repoof`            | 捷径 `RepositoryProvider.of()`          |
-| `read`              | 捷径 `context.read()`                   |
-| `watch`             | 捷径 `context.watch()`                  |
-| `select`            | 捷径 `context.select()`                 |
+| `blocof`            | `BlocProvider.of()`的快捷方式            |
+| `repoof`            | `RepositoryProvider.of()`的快捷方式          |
+| `read`              | `context.read()`的快捷方式                   |
+| `watch`             | `context.watch()`的快捷方式         |
+| `select`            | `context.select()`的快捷方式       |
 | `blocstate`         | 创建一个新的状态类                        |
 | `blocevent`         | 创建一个新的事件类                        |
 

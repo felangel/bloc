@@ -1,4 +1,4 @@
-# 核心思想
+# 核心思想 (package:bloc)
 
 ?> 使用前请确保仔细阅读并理解以下部分 [package:bloc](https://pub.dev/packages/bloc).
 
@@ -154,7 +154,7 @@
 
 ## Bloc
 
-> `Bloc` 是 `Cubit` 的一种特殊类型，可将传入事件转换为传出状态。
+> `Bloc` 是一个更高级的类，它依赖`事件`来触发`状态`的改变而不是函数。 `Bloc` 也扩展了 `BlocBase` ，这意味着它有着类似于 `Cubit` 的API。然而， `Blocs` 不是在 `Bloc` 上调用`函数`然后直接发出一个新的`状态`，而是接收`事件`并且将传入的`事件`转换为`状态`传出。
 
 ![Bloc Architecture](../assets/bloc_architecture_full.png)
 
@@ -176,7 +176,7 @@
 
 ?> 💡 **提示**: `EventHandler` 可以访问添加的活动以及一个 `Emitter` 它可以用于响应传入事件而发出零个或多个状态.
 
-然后我们可以更新 `EventHandler` 来处理 `CounterEvent.increment` 事件：
+然后我们可以更新 `EventHandler` 来处理 `CounterIncrementPressed` 事件：
 
 [counter_bloc.dart](../_snippets/core_concepts/counter_bloc_increment.dart.md ':include')
 
@@ -196,7 +196,7 @@
 
 [main.dart](../_snippets/core_concepts/counter_bloc_usage.dart.md ':include')
 
-在上面的代码片段中，我们首先创建一个 `CounterBloc` 实例。然后，我们打印 `Bloc` 的当前状态，该状态为初始状态（因为尚未发出新状态）。接下来，我们添加增量事件以触发状态更改。最后，我们再次打印从 0 到 1 的 Bloc 状态，然后关闭 Bloc 以关闭内部状态流。
+在上面的代码片段中，我们首先创建一个 `CounterBloc` 实例。然后，我们打印 `Bloc` 的当前状态，该状态为初始状态（因为尚未发出新状态）。接下来，我们添加 `CounterIncrementPressed` 事件来触发状态改变。最后，我们再次打印从 `0` 到 `1` 的 `Bloc` 状态，并且在 `Bloc` 上调用 `close` 关闭内部状态流。
 
 ?> **注意**：添加了 `await Future.delayed(Duration.zero)` 以确保我们等待下一个事件循环迭代（允许 `EventHandler` 处理增量事件）。
 
@@ -206,7 +206,7 @@
 
 [main.dart](../_snippets/core_concepts/counter_bloc_stream_usage.dart.md ':include')
 
-在以上代码段中，我们正在订阅 `CounterBloc`，并在每次状态更改时调用 print 函数。然后，我们添加增量事件，该事件触发 `on<CounterIncrementPressed>` 并产生一个新状态。最后，当我们不再希望接收更新并关闭 `Bloc` 时，我们在订阅上调用了 `cancel`。
+在上面的片段中，我们订阅了 `CounterBloc` 并在每个状态改变时调用 print 。然后我们添加 `CounterIncrementPressed` 事件，该事件触发 `on<CounterIncrementPressed>` `EventHandler` 并且发出一个新的状态。最后，当我们不想再接收更新时，我们在订阅上调用 `cancel` ，并关闭 `Bloc`。
 
 ?> **注意**：在此示例中添加了 `await Future.delayed(Duration.zero)`，以避免立即取消订阅。
 
