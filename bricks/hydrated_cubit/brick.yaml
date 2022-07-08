@@ -1,6 +1,6 @@
 name: hydrated_cubit
 description: Generate a new HydratedCubit in Dart. Built for the bloc state management library.
-version: 0.1.1
+version: 0.1.2
 repository: https://github.com/felangel/bloc/tree/master/bricks/hydrated_cubit
 
 environment:
