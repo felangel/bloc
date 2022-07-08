@@ -1,6 +1,6 @@
 name: replay_bloc
 description: Generate a new ReplayBloc in Dart. Built for the bloc state management library.
-version: 0.1.1
+version: 0.1.2
 repository: https://github.com/felangel/bloc/tree/master/bricks/replay_bloc
 
 environment:

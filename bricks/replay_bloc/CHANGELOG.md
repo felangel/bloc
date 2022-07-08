@@ -1,3 +1,8 @@
+# 0.1.2
+
+- docs: add badges to README
+- docs: use dark logo variant
+
 # 0.1.1
 
 - docs: minor README update
