@@ -4,6 +4,8 @@ import 'package:flutter_dynamic_form/new_car/new_car.dart';
 import 'package:flutter_dynamic_form/new_car_repository.dart';
 
 class NewCarPage extends StatelessWidget {
+  const NewCarPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,30 +14,31 @@ class NewCarPage extends StatelessWidget {
         create: (_) => NewCarBloc(
           newCarRepository: context.read<NewCarRepository>(),
         )..add(const NewCarFormLoaded()),
-        child: NewCarForm(),
+        child: const NewCarForm(),
       ),
     );
   }
 }
 
 class NewCarForm extends StatelessWidget {
+  const NewCarForm({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        const _BrandDropdownButton(),
-        const _ModelDropdownButton(),
-        const _YearDropdownButton(),
-        const _FormSubmitButton(),
+      children: const <Widget>[
+        _BrandDropdownButton(),
+        _ModelDropdownButton(),
+        _YearDropdownButton(),
+        _FormSubmitButton(),
       ],
     );
   }
 }
 
 class _BrandDropdownButton extends StatelessWidget {
-  const _BrandDropdownButton({Key? key}) : super(key: key);
+  const _BrandDropdownButton();
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +63,8 @@ class _BrandDropdownButton extends StatelessWidget {
 }
 
 class _ModelDropdownButton extends StatelessWidget {
-  const _ModelDropdownButton({Key? key}) : super(key: key);
+  const _ModelDropdownButton();
+
   @override
   Widget build(BuildContext context) {
     final models = context.select((NewCarBloc bloc) => bloc.state.models);
@@ -84,7 +88,8 @@ class _ModelDropdownButton extends StatelessWidget {
 }
 
 class _YearDropdownButton extends StatelessWidget {
-  const _YearDropdownButton({Key? key}) : super(key: key);
+  const _YearDropdownButton();
+
   @override
   Widget build(BuildContext context) {
     final years = context.select((NewCarBloc bloc) => bloc.state.years);
@@ -108,7 +113,8 @@ class _YearDropdownButton extends StatelessWidget {
 }
 
 class _FormSubmitButton extends StatelessWidget {
-  const _FormSubmitButton({Key? key}) : super(key: key);
+  const _FormSubmitButton();
+
   @override
   Widget build(BuildContext context) {
     final state = context.watch<NewCarBloc>().state;
