@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,7 +36,7 @@ void main() {
 
     testWidgets('tapping increment button invokes increment', (tester) async {
       when(() => counterCubit.state).thenReturn(0);
-      when(() => counterCubit.increment()).thenReturn(() {});
+      when(() => counterCubit.increment()).thenReturn(null);
       await tester.pumpWidget(
         MaterialApp(
           home: BlocProvider.value(
@@ -49,7 +51,7 @@ void main() {
 
     testWidgets('tapping decrement button invokes decrement', (tester) async {
       when(() => counterCubit.state).thenReturn(0);
-      when(() => counterCubit.decrement()).thenReturn(() {});
+      when(() => counterCubit.decrement()).thenReturn(null);
       await tester.pumpWidget(
         MaterialApp(
           home: BlocProvider.value(
