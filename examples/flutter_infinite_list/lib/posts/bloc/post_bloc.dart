@@ -38,11 +38,13 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     try {
       if (state.status == PostStatus.initial) {
         final posts = await _fetchPosts();
-        return emit(state.copyWith(
-          status: PostStatus.success,
-          posts: posts,
-          hasReachedMax: false,
-        ));
+        return emit(
+          state.copyWith(
+            status: PostStatus.success,
+            posts: posts,
+            hasReachedMax: false,
+          ),
+        );
       }
       final posts = await _fetchPosts(state.posts.length);
       posts.isEmpty

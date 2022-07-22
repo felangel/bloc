@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_infinite_list/posts/posts.dart';
 
 class PostsList extends StatefulWidget {
+  const PostsList({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _PostsListState createState() => _PostsListState();
 }
 
@@ -38,7 +41,7 @@ class _PostsListState extends State<PostsList> {
                   : state.posts.length + 1,
               controller: _scrollController,
             );
-          default:
+          case PostStatus.initial:
             return const Center(child: CircularProgressIndicator());
         }
       },
