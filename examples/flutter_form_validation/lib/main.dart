@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_validation/bloc/my_form_bloc.dart';
 import 'package:formz/formz.dart';
 
-void main() => runApp(App());
+void main() => runApp(const App());
 
 class App extends StatelessWidget {
+  const App({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,7 +15,7 @@ class App extends StatelessWidget {
         appBar: AppBar(title: const Text('Flutter Form Validation')),
         body: BlocProvider(
           create: (_) => MyFormBloc(),
-          child: MyForm(),
+          child: const MyForm(),
         ),
       ),
     );
@@ -21,7 +23,10 @@ class App extends StatelessWidget {
 }
 
 class MyForm extends StatefulWidget {
+  const MyForm({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _MyFormState createState() => _MyFormState();
 }
 
@@ -60,7 +65,7 @@ class _MyFormState extends State<MyForm> {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           showDialog<void>(
             context: context,
-            builder: (_) => SuccessDialog(),
+            builder: (_) => const SuccessDialog(),
           );
         }
         if (state.status.isSubmissionInProgress) {
@@ -72,12 +77,12 @@ class _MyFormState extends State<MyForm> {
         }
       },
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8),
         child: Column(
           children: <Widget>[
             EmailInput(focusNode: _emailFocusNode),
             PasswordInput(focusNode: _passwordFocusNode),
-            SubmitButton(),
+            const SubmitButton(),
           ],
         ),
       ),
@@ -86,7 +91,7 @@ class _MyFormState extends State<MyForm> {
 }
 
 class EmailInput extends StatelessWidget {
-  const EmailInput({Key? key, required this.focusNode}) : super(key: key);
+  const EmailInput({super.key, required this.focusNode});
 
   final FocusNode focusNode;
 
@@ -117,7 +122,7 @@ class EmailInput extends StatelessWidget {
 }
 
 class PasswordInput extends StatelessWidget {
-  const PasswordInput({Key? key, required this.focusNode}) : super(key: key);
+  const PasswordInput({super.key, required this.focusNode});
 
   final FocusNode focusNode;
 
@@ -151,6 +156,8 @@ class PasswordInput extends StatelessWidget {
 }
 
 class SubmitButton extends StatelessWidget {
+  const SubmitButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MyFormBloc, MyFormState>(
@@ -168,6 +175,8 @@ class SubmitButton extends StatelessWidget {
 }
 
 class SuccessDialog extends StatelessWidget {
+  const SuccessDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -175,15 +184,14 @@ class SuccessDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Row(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                const Icon(Icons.info),
-                const Flexible(
+              children: const <Widget>[
+                Icon(Icons.info),
+                Flexible(
                   child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Text(
