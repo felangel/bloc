@@ -24,10 +24,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) {
     final username = Username.dirty(event.username);
-    emit(state.copyWith(
-      username: username,
-      status: Formz.validate([state.password, username]),
-    ));
+    emit(
+      state.copyWith(
+        username: username,
+        status: Formz.validate([state.password, username]),
+      ),
+    );
   }
 
   void _onPasswordChanged(
@@ -35,13 +37,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) {
     final password = Password.dirty(event.password);
-    emit(state.copyWith(
-      password: password,
-      status: Formz.validate([password, state.username]),
-    ));
+    emit(
+      state.copyWith(
+        password: password,
+        status: Formz.validate([password, state.username]),
+      ),
+    );
   }
 
-  void _onSubmitted(
+  Future<void> _onSubmitted(
     LoginSubmitted event,
     Emitter<LoginState> emit,
   ) async {

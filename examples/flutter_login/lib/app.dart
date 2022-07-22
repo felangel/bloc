@@ -9,10 +9,10 @@ import 'package:user_repository/user_repository.dart';
 
 class App extends StatelessWidget {
   const App({
-    Key? key,
+    super.key,
     required this.authenticationRepository,
     required this.userRepository,
-  }) : super(key: key);
+  });
 
   final AuthenticationRepository authenticationRepository;
   final UserRepository userRepository;
@@ -26,14 +26,17 @@ class App extends StatelessWidget {
           authenticationRepository: authenticationRepository,
           userRepository: userRepository,
         ),
-        child: AppView(),
+        child: const AppView(),
       ),
     );
   }
 }
 
 class AppView extends StatefulWidget {
+  const AppView({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _AppViewState createState() => _AppViewState();
 }
 
@@ -62,7 +65,7 @@ class _AppViewState extends State<AppView> {
                   (route) => false,
                 );
                 break;
-              default:
+              case AuthenticationStatus.unknown:
                 break;
             }
           },
