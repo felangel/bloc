@@ -171,6 +171,44 @@ HydratedBlocOverrides.runZoned(
 );
 ```
 
+## Testing 
+In order to successfully test your code - you need to use a Mock for your storage.
+For example - [Taken from Flutter Weather Example](https://github.com/felangel/bloc/blob/master/examples/flutter_weather/test/helpers/hydrated_bloc.dart)
+
+Define a Mock Storage
+
+```dart
+class MockStorage extends Mock implements Storage {}
+
+FutureOr<T> mockHydratedStorage<T>(
+  FutureOr<T> Function() body, {
+  Storage? storage,
+}) {
+  return HydratedBlocOverrides.runZoned<T>(
+    body,
+    createStorage: () => storage ?? _buildMockStorage(),
+  );
+}
+
+Storage _buildMockStorage() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  final storage = MockStorage();
+  when(() => storage.write(any(), any<dynamic>())).thenAnswer((_) async {});
+  return storage;
+}
+```
+
+Wrap your tests with `mockHydratedStorage` - a `setUp` block could come in handy:
+```dart
+setUp(() {
+  mockHydratedStorage(() {
+    preferencesCubit = PreferencesCubit();
+    geolocationRepository = MockGeolocationRepository();
+    userPositionCubit = UserPositionCubit(geolocationRepository: geolocationRepository);
+  });
+});
+```
+
 ## Dart Versions
 
 - Dart 2: >= 2.12
