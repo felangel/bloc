@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors,
+// prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'package:flutter_shopping_cart/cart/cart.dart';
 import 'package:flutter_shopping_cart/catalog/catalog.dart';
@@ -36,7 +39,7 @@ void main() {
     testWidgets(
         'renders SliverList with two items '
         'when catalog is loaded', (tester) async {
-      final catalog = Catalog(itemNames: ['item #1', 'item #2']);
+      final catalog = Catalog(itemNames: const ['item #1', 'item #2']);
       when(() => catalogBloc.state).thenReturn(CatalogLoaded(catalog));
       when(() => cartBloc.state).thenReturn(CartLoading());
       await tester.pumpApp(
@@ -76,7 +79,7 @@ void main() {
     });
 
     testWidgets(
-        'renders \'Add\' text button '
+        "renders 'Add' text button "
         'when item is not in the cart', (tester) async {
       when(() => cartBloc.state).thenReturn(const CartLoaded());
       await tester.pumpApp(
