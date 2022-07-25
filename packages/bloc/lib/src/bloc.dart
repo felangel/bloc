@@ -54,6 +54,7 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   StreamSubscription<Transition<Event, State>>? _transitionSubscription;
 
   StreamController<Event>? __eventController;
+
   StreamController<Event> get _eventController {
     return __eventController ??= StreamController<Event>.broadcast();
   }
@@ -145,7 +146,14 @@ abstract class Bloc<Event, State> extends BlocBase<State> {
   @protected
   @visibleForTesting
   @override
-  void emit(State state) => super.emit(state);
+  void emit(
+    State state, {
+    bool allowEmitSameState = false,
+  }) =>
+      super.emit(
+        state,
+        allowEmitSameState: allowEmitSameState,
+      );
 
   /// Must be implemented when a class extends [Bloc].
   /// [mapEventToState] is called whenever an [event] is [add]ed
@@ -280,6 +288,7 @@ abstract class BlocBase<State> {
   }
 
   StreamController<State>? __stateController;
+
   StreamController<State> get _stateController {
     return __stateController ??= StreamController<State>.broadcast();
   }
@@ -322,9 +331,12 @@ abstract class BlocBase<State> {
   /// To allow for the possibility of notifying listeners of the initial state,
   /// emitting a state which is equal to the initial state is allowed as long
   /// as it is the first thing emitted by the instance.
-  void emit(State state) {
+  ///
+  /// If [allowEmitSameState] is true then the state will be emitted,
+  /// even if it is the same as the current state.
+  void emit(State state, {bool allowEmitSameState = false}) {
     if (_stateController.isClosed) return;
-    if (state == _state && _emitted) return;
+    if (state == _state && _emitted && !allowEmitSameState) return;
     onChange(Change<State>(currentState: this.state, nextState: state));
     _state = state;
     _stateController.add(_state);
