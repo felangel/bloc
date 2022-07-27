@@ -3,11 +3,11 @@ import 'package:flutter_weather/weather/weather.dart';
 
 class WeatherPopulated extends StatelessWidget {
   const WeatherPopulated({
-    Key? key,
+    super.key,
     required this.weather,
     required this.units,
     required this.onRefresh,
-  }) : super(key: key);
+  });
 
   final Weather weather;
   final TemperatureUnits units;
@@ -26,7 +26,6 @@ class WeatherPopulated extends StatelessWidget {
             clipBehavior: Clip.none,
             child: Center(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 48),
                   _WeatherIcon(condition: weather.condition),
@@ -56,7 +55,7 @@ class WeatherPopulated extends StatelessWidget {
 }
 
 class _WeatherIcon extends StatelessWidget {
-  const _WeatherIcon({Key? key, required this.condition}) : super(key: key);
+  const _WeatherIcon({required this.condition});
 
   static const _iconSize = 100.0;
 
@@ -83,7 +82,6 @@ extension on WeatherCondition {
       case WeatherCondition.snowy:
         return '🌨️';
       case WeatherCondition.unknown:
-      default:
         return '❓';
     }
   }
@@ -93,15 +91,15 @@ class _WeatherBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).primaryColor;
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          stops: [0.25, 0.75, 0.90, 1.0],
+          stops: const [0.25, 0.75, 0.90, 1.0],
           colors: [
             color,
-            color.brighten(10),
+            color.brighten(),
             color.brighten(33),
             color.brighten(50),
           ],

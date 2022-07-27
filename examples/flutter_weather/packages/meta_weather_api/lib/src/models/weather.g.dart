@@ -18,16 +18,16 @@ Weather _$WeatherFromJson(Map<String, dynamic> json) {
           json,
           'weather_state_abbr',
           (v) => _$enumDecode(_$WeatherStateEnumMap, v,
-              unknownValue: WeatherState.unknown)),
+              unknownValue: WeatherState.unknown,),),
       windDirectionCompass: $checkedConvert(
           json,
           'wind_direction_compass',
           (v) => _$enumDecode(_$WindDirectionCompassEnumMap, v,
-              unknownValue: WindDirectionCompass.unknown)),
+              unknownValue: WindDirectionCompass.unknown,),),
       created:
           $checkedConvert(json, 'created', (v) => DateTime.parse(v as String)),
       applicableDate: $checkedConvert(
-          json, 'applicable_date', (v) => DateTime.parse(v as String)),
+          json, 'applicable_date', (v) => DateTime.parse(v as String),),
       minTemp: $checkedConvert(json, 'min_temp', (v) => (v as num).toDouble()),
       maxTemp: $checkedConvert(json, 'max_temp', (v) => (v as num).toDouble()),
       theTemp: $checkedConvert(json, 'the_temp', (v) => (v as num).toDouble()),
@@ -54,7 +54,7 @@ Weather _$WeatherFromJson(Map<String, dynamic> json) {
     'windSpeed': 'wind_speed',
     'windDirection': 'wind_direction',
     'airPressure': 'air_pressure'
-  });
+  },);
 }
 
 K _$enumDecode<K, V>(

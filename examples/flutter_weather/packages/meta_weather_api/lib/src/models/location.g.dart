@@ -9,20 +9,28 @@ part of 'location.dart';
 // **************************************************************************
 
 Location _$LocationFromJson(Map<String, dynamic> json) {
-  return $checkedNew('Location', json, () {
-    final val = Location(
-      title: $checkedConvert(json, 'title', (v) => v as String),
-      locationType: $checkedConvert(
-          json, 'location_type', (v) => _$enumDecode(_$LocationTypeEnumMap, v)),
-      latLng: $checkedConvert(json, 'latt_long',
-          (v) => const LatLngConverter().fromJson(v as String)),
-      woeid: $checkedConvert(json, 'woeid', (v) => v as int),
-    );
-    return val;
-  }, fieldKeyMap: const {
-    'locationType': 'location_type',
-    'latLng': 'latt_long'
-  });
+  return $checkedNew(
+    'Location',
+    json,
+    () {
+      final val = Location(
+        title: $checkedConvert(json, 'title', (v) => v as String),
+        locationType: $checkedConvert(
+          json,
+          'location_type',
+          (v) => _$enumDecode(_$LocationTypeEnumMap, v),
+        ),
+        latLng: $checkedConvert(
+          json,
+          'latt_long',
+          (v) => const LatLngConverter().fromJson(v as String),
+        ),
+        woeid: $checkedConvert(json, 'woeid', (v) => v as int),
+      );
+      return val;
+    },
+    fieldKeyMap: const {'locationType': 'location_type', 'latLng': 'latt_long'},
+  );
 }
 
 K _$enumDecode<K, V>(
