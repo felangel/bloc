@@ -7,10 +7,9 @@ import 'package:flutter_firebase_login/theme.dart';
 
 class App extends StatelessWidget {
   const App({
-    Key? key,
+    super.key,
     required AuthenticationRepository authenticationRepository,
-  })  : _authenticationRepository = authenticationRepository,
-        super(key: key);
+  }) : _authenticationRepository = authenticationRepository;
 
   final AuthenticationRepository _authenticationRepository;
 
@@ -29,7 +28,7 @@ class App extends StatelessWidget {
 }
 
 class AppView extends StatelessWidget {
-  const AppView({Key? key}) : super(key: key);
+  const AppView({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -190,7 +190,7 @@ void main() {
       });
 
       test(
-          'sucessfully calls signIn authentication, and '
+          'successfully calls signIn authentication, and '
           'signInWithPopup when authCredential is not null and kIsWeb is true',
           () async {
         final credential = MockUserCredential();

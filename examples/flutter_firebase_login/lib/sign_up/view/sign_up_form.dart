@@ -4,7 +4,7 @@ import 'package:flutter_firebase_login/sign_up/sign_up.dart';
 import 'package:formz/formz.dart';
 
 class SignUpForm extends StatelessWidget {
-  const SignUpForm({Key? key}) : super(key: key);
+  const SignUpForm({super.key});
 
   @override
   Widget build(BuildContext context) {

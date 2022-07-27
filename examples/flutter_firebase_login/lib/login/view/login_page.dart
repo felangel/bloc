@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/login/login.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
-  static Page page() => const MaterialPage<void>(child: LoginPage());
+  static Page<void> page() => const MaterialPage<void>(child: LoginPage());
 
   @override
   Widget build(BuildContext context) {
