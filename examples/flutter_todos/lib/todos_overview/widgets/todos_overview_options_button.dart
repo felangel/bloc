@@ -7,7 +7,7 @@ import 'package:flutter_todos/todos_overview/todos_overview.dart';
 enum TodosOverviewOption { toggleAll, clearCompleted }
 
 class TodosOverviewOptionsButton extends StatelessWidget {
-  const TodosOverviewOptionsButton({Key? key}) : super(key: key);
+  const TodosOverviewOptionsButton({super.key});
 
   @override
   Widget build(BuildContext context) {
