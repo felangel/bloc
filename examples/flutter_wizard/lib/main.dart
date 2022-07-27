@@ -6,14 +6,14 @@ import 'package:flutter_wizard/bloc/profile_wizard_bloc.dart';
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) => const MaterialApp(home: Home());
 }
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +27,7 @@ class Home extends StatelessWidget {
                 final profile = await Navigator.of(context).push(
                   ProfileWizard.route(),
                 );
+                // ignore: use_build_context_synchronously
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(SnackBar(content: Text('$profile')));
@@ -41,7 +42,7 @@ class Home extends StatelessWidget {
 }
 
 class ProfileWizard extends StatelessWidget {
-  const ProfileWizard({Key? key}) : super(key: key);
+  const ProfileWizard({super.key});
 
   static Route<Profile> route() {
     return MaterialPageRoute(builder: (_) => const ProfileWizard());
@@ -60,9 +61,9 @@ class ProfileWizard extends StatelessWidget {
 
 class ProfileWizardFlow extends StatelessWidget {
   const ProfileWizardFlow({
-    Key? key,
+    super.key,
     required this.onComplete,
-  }) : super(key: key);
+  });
 
   final ValueSetter<Profile> onComplete;
 
@@ -85,12 +86,13 @@ class ProfileWizardFlow extends StatelessWidget {
 }
 
 class ProfileNameForm extends StatefulWidget {
-  const ProfileNameForm({Key? key}) : super(key: key);
+  const ProfileNameForm({super.key});
 
-  static Page page() => const MaterialPage(child: ProfileNameForm());
+  static Page<void> page() =>
+      const MaterialPage<void>(child: ProfileNameForm());
 
   @override
-  _ProfileNameFormState createState() => _ProfileNameFormState();
+  State<ProfileNameForm> createState() => _ProfileNameFormState();
 }
 
 class _ProfileNameFormState extends State<ProfileNameForm> {
@@ -105,18 +107,18 @@ class _ProfileNameFormState extends State<ProfileNameForm> {
           children: <Widget>[
             TextField(
               onChanged: (value) => setState(() => _name = value),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Name',
                 hintText: 'John Doe',
               ),
             ),
             ElevatedButton(
-              child: const Text('Continue'),
               onPressed: _name.isNotEmpty
                   ? () => context
                       .read<ProfileWizardBloc>()
                       .add(ProfileWizardNameSubmitted(_name))
                   : null,
+              child: const Text('Continue'),
             )
           ],
         ),
@@ -126,12 +128,12 @@ class _ProfileNameFormState extends State<ProfileNameForm> {
 }
 
 class ProfileAgeForm extends StatefulWidget {
-  const ProfileAgeForm({Key? key}) : super(key: key);
+  const ProfileAgeForm({super.key});
 
-  static Page page() => const MaterialPage(child: ProfileAgeForm());
+  static Page<void> page() => const MaterialPage<void>(child: ProfileAgeForm());
 
   @override
-  _ProfileAgeFormState createState() => _ProfileAgeFormState();
+  State<ProfileAgeForm> createState() => _ProfileAgeFormState();
 }
 
 class _ProfileAgeFormState extends State<ProfileAgeForm> {
@@ -146,19 +148,19 @@ class _ProfileAgeFormState extends State<ProfileAgeForm> {
           children: <Widget>[
             TextField(
               onChanged: (value) => setState(() => _age = int.parse(value)),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Age',
                 hintText: '42',
               ),
               keyboardType: TextInputType.number,
             ),
             ElevatedButton(
-              child: const Text('Continue'),
               onPressed: _age != null
                   ? () => context
                       .read<ProfileWizardBloc>()
                       .add(ProfileWizardAgeSubmitted(_age))
                   : null,
+              child: const Text('Continue'),
             )
           ],
         ),
