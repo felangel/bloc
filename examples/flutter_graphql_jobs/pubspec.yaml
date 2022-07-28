@@ -23,7 +23,7 @@ dependency_overrides:
 dev_dependencies:
   build_runner: ^2.0.0
   json_serializable: ^6.0.0
-  very_good_analysis: ^3.0.0
+  very_good_analysis: ^3.0.1
 
 flutter:
   uses-material-design: true
