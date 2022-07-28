@@ -26,8 +26,7 @@ class MyForm extends StatefulWidget {
   const MyForm({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _MyFormState createState() => _MyFormState();
+  State<MyForm> createState() => _MyFormState();
 }
 
 class _MyFormState extends State<MyForm> {
