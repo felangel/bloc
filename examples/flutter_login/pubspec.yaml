@@ -9,7 +9,7 @@ environment:
 dependencies:
   authentication_repository:
     path: packages/authentication_repository
-  equatable: ^2.0.0
+  equatable: ^2.0.3
   flutter:
     sdk: flutter
   flutter_bloc:
@@ -30,7 +30,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mocktail: ^0.3.0
-  very_good_analysis: ^3.0.0
+  very_good_analysis: ^3.0.1
 
 flutter:
   uses-material-design: true

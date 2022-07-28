@@ -36,8 +36,7 @@ class AppView extends StatefulWidget {
   const AppView({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _AppViewState createState() => _AppViewState();
+  State<AppView> createState() => _AppViewState();
 }
 
 class _AppViewState extends State<AppView> {
