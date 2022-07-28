@@ -6,8 +6,7 @@ class PostsList extends StatefulWidget {
   const PostsList({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _PostsListState createState() => _PostsListState();
+  Sate<PostsList> createState() => _PostsListState();
 }
 
 class _PostsListState extends State<PostsList> {

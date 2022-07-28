@@ -22,7 +22,7 @@ dev_dependencies:
     sdk: flutter
   bloc_test: ^9.0.0
   mocktail: ^0.3.0
-  very_good_analysis: ^3.0.0
+  very_good_analysis: ^3.0.1
 
 dependency_overrides:
   bloc:
