@@ -17,13 +17,6 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     on<FormSubmitted>(_onFormSubmitted);
   }
 
-  @override
-  void onTransition(Transition<MyFormEvent, MyFormState> transition) {
-    // ignore: avoid_print
-    print(transition);
-    super.onTransition(transition);
-  }
-
   void _onEmailChanged(EmailChanged event, Emitter<MyFormState> emit) {
     final email = Email.dirty(event.email);
     emit(
