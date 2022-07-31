@@ -4,7 +4,7 @@ import 'package:flutter_todos/l10n/l10n.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart';
 
 class TodosOverviewFilterButton extends StatelessWidget {
-  const TodosOverviewFilterButton({Key? key}) : super(key: key);
+  const TodosOverviewFilterButton({super.key});
 
   @override
   Widget build(BuildContext context) {

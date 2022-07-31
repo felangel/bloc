@@ -7,7 +7,7 @@ import 'package:flutter_todos/todos_overview/todos_overview.dart';
 import 'package:todos_repository/todos_repository.dart';
 
 class TodosOverviewPage extends StatelessWidget {
-  const TodosOverviewPage({Key? key}) : super(key: key);
+  const TodosOverviewPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class TodosOverviewPage extends StatelessWidget {
 }
 
 class TodosOverviewView extends StatelessWidget {
-  const TodosOverviewView({Key? key}) : super(key: key);
+  const TodosOverviewView({super.key});
 
   @override
   Widget build(BuildContext context) {
