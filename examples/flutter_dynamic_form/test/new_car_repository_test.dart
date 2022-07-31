@@ -49,7 +49,7 @@ void main() {
 
     group('fetchYears', () {
       group('Chevy brand', () {
-        final brand = 'Chevy';
+        const brand = 'Chevy';
         test('returns years on Malibu model', () {
           expect(
             newCarRepository.fetchYears(brand: brand, model: 'Malibu'),

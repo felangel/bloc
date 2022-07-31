@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_shopping_cart/cart/cart.dart';
 import 'package:flutter_shopping_cart/catalog/catalog.dart';
@@ -104,7 +106,7 @@ void main() {
 
     testWidgets(
         'renders SnackBar after '
-        'tapping the \'BUY\' button', (tester) async {
+        "tapping the 'BUY' button", (tester) async {
       when(() => cartBloc.state)
           .thenReturn(CartLoaded(cart: Cart(items: mockItems)));
       await tester.pumpApp(

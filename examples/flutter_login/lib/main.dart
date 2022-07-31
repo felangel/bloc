@@ -4,8 +4,10 @@ import 'package:flutter_login/app.dart';
 import 'package:user_repository/user_repository.dart';
 
 void main() {
-  runApp(App(
-    authenticationRepository: AuthenticationRepository(),
-    userRepository: UserRepository(),
-  ));
+  runApp(
+    App(
+      authenticationRepository: AuthenticationRepository(),
+      userRepository: UserRepository(),
+    ),
+  );
 }

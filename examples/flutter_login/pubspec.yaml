@@ -4,17 +4,17 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
+  authentication_repository:
+    path: packages/authentication_repository
+  equatable: ^2.0.3
   flutter:
     sdk: flutter
   flutter_bloc:
     path: ../../packages/flutter_bloc
   formz: ^0.4.0
-  equatable: ^2.0.0
-  authentication_repository:
-    path: packages/authentication_repository
   user_repository:
     path: packages/user_repository
 
@@ -25,11 +25,12 @@ dependency_overrides:
     path: ../../packages/flutter_bloc
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   bloc_test:
     path: ../../packages/bloc_test
-  mocktail: ^0.2.0
+  flutter_test:
+    sdk: flutter
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.0.1
 
 flutter:
   uses-material-design: true

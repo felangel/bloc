@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shopping_cart/cart/cart.dart';
 
 class CartPage extends StatelessWidget {
+  const CartPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,14 +12,14 @@ class CartPage extends StatelessWidget {
       body: ColoredBox(
         color: Colors.yellow,
         child: Column(
-          children: [
+          children: const [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(32),
+                padding: EdgeInsets.all(32),
                 child: CartList(),
               ),
             ),
-            const Divider(height: 4, color: Colors.black),
+            Divider(height: 4, color: Colors.black),
             CartTotal()
           ],
         ),
@@ -27,6 +29,8 @@ class CartPage extends StatelessWidget {
 }
 
 class CartList extends StatelessWidget {
+  const CartList({super.key});
+
   @override
   Widget build(BuildContext context) {
     final itemNameStyle = Theme.of(context).textTheme.headline6;
@@ -65,6 +69,8 @@ class CartList extends StatelessWidget {
 }
 
 class CartTotal extends StatelessWidget {
+  const CartTotal({super.key});
+
   @override
   Widget build(BuildContext context) {
     final hugeStyle =
@@ -76,15 +82,17 @@ class CartTotal extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            BlocBuilder<CartBloc, CartState>(builder: (context, state) {
-              if (state is CartLoading) {
-                return const CircularProgressIndicator();
-              }
-              if (state is CartLoaded) {
-                return Text('\$${state.cart.totalPrice}', style: hugeStyle);
-              }
-              return const Text('Something went wrong!');
-            }),
+            BlocBuilder<CartBloc, CartState>(
+              builder: (context, state) {
+                if (state is CartLoading) {
+                  return const CircularProgressIndicator();
+                }
+                if (state is CartLoaded) {
+                  return Text('\$${state.cart.totalPrice}', style: hugeStyle);
+                }
+                return const Text('Something went wrong!');
+              },
+            ),
             const SizedBox(width: 24),
             ElevatedButton(
               onPressed: () {

@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_shopping_cart/catalog/catalog.dart';
 
 class Catalog extends Equatable {
-  Catalog({required this.itemNames});
+  const Catalog({required this.itemNames});
 
   final List<String> itemNames;
 

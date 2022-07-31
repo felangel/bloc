@@ -35,7 +35,7 @@ class AuthenticationBloc
     return super.close();
   }
 
-  void _onAuthenticationStatusChanged(
+  Future<void> _onAuthenticationStatusChanged(
     AuthenticationStatusChanged event,
     Emitter<AuthenticationState> emit,
   ) async {
@@ -44,10 +44,12 @@ class AuthenticationBloc
         return emit(const AuthenticationState.unauthenticated());
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
-        return emit(user != null
-            ? AuthenticationState.authenticated(user)
-            : const AuthenticationState.unauthenticated());
-      default:
+        return emit(
+          user != null
+              ? AuthenticationState.authenticated(user)
+              : const AuthenticationState.unauthenticated(),
+        );
+      case AuthenticationStatus.unknown:
         return emit(const AuthenticationState.unknown());
     }
   }
