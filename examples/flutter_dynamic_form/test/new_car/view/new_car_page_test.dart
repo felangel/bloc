@@ -18,7 +18,7 @@ extension on WidgetTester {
         home: Scaffold(
           body: RepositoryProvider.value(
             value: newCarRepository,
-            child: NewCarPage(),
+            child: const NewCarPage(),
           ),
         ),
       ),
@@ -29,7 +29,10 @@ extension on WidgetTester {
     return pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: BlocProvider.value(value: newCarBloc, child: NewCarForm()),
+          body: BlocProvider.value(
+            value: newCarBloc,
+            child: const NewCarForm(),
+          ),
         ),
       ),
     );
