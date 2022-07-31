@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login/authentication/authentication.dart';
 
 class HomePage extends StatelessWidget {
-  static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => HomePage());
+  const HomePage({super.key});
+
+  static Route<void> route() {
+    return MaterialPageRoute<void>(builder: (_) => const HomePage());
   }
 
   @override

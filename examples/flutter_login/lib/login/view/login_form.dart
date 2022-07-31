@@ -4,6 +4,8 @@ import 'package:flutter_login/login/login.dart';
 import 'package:formz/formz.dart';
 
 class LoginForm extends StatelessWidget {
+  const LoginForm({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
@@ -84,12 +86,12 @@ class _LoginButton extends StatelessWidget {
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 key: const Key('loginForm_continue_raisedButton'),
-                child: const Text('Login'),
                 onPressed: state.status.isValidated
                     ? () {
                         context.read<LoginBloc>().add(const LoginSubmitted());
                       }
                     : null,
+                child: const Text('Login'),
               );
       },
     );
