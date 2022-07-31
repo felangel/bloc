@@ -6,7 +6,7 @@ class PostsList extends StatefulWidget {
   const PostsList({super.key});
 
   @override
-  Sate<PostsList> createState() => _PostsListState();
+  State<PostsList> createState() => _PostsListState();
 }
 
 class _PostsListState extends State<PostsList> {
@@ -32,7 +32,7 @@ class _PostsListState extends State<PostsList> {
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
                 return index >= state.posts.length
-                    ? BottomLoader()
+                    ? const BottomLoader()
                     : PostListItem(post: state.posts[index]);
               },
               itemCount: state.hasReachedMax
