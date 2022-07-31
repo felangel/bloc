@@ -22,7 +22,7 @@ void main() {
     group('validator', () {
       test('returns empty error when username is empty', () {
         expect(
-          Username.dirty('').error,
+          Username.dirty().error,
           UsernameValidationError.empty,
         );
       });
