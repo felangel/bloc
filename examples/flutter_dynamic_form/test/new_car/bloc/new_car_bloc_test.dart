@@ -52,9 +52,9 @@ void main() {
       build: () => NewCarBloc(newCarRepository: newCarRepository),
       act: (bloc) => bloc.add(NewCarBrandChanged(brand: mockBrand)),
       expect: () => [
-        NewCarState.modelsLoadInProgress(brands: [], brand: mockBrand),
+        NewCarState.modelsLoadInProgress(brands: const [], brand: mockBrand),
         NewCarState.modelsLoadSuccess(
-          brands: [],
+          brands: const [],
           brand: mockBrand,
           models: mockModels,
         ),
@@ -68,29 +68,29 @@ void main() {
       'emits years loading in progress and year load success',
       setUp: () {
         when(
-          () => newCarRepository.fetchYears(brand: null, model: mockModel),
+          () => newCarRepository.fetchYears(model: mockModel),
         ).thenAnswer((_) async => mockYears);
       },
       build: () => NewCarBloc(newCarRepository: newCarRepository),
       act: (bloc) => bloc.add(NewCarModelChanged(model: mockModel)),
       expect: () => [
         NewCarState.yearsLoadInProgress(
-          brands: [],
+          brands: const [],
           brand: null,
-          models: [],
+          models: const [],
           model: mockModel,
         ),
         NewCarState.yearsLoadSuccess(
-          brands: [],
+          brands: const [],
           brand: null,
-          models: [],
+          models: const [],
           model: mockModel,
           years: mockYears,
         ),
       ],
       verify: (_) {
         verify(
-          () => newCarRepository.fetchYears(brand: null, model: mockModel),
+          () => newCarRepository.fetchYears(model: mockModel),
         ).called(1);
       },
     );

@@ -24,6 +24,8 @@ class JobsApiClient {
     );
     if (result.hasException) throw GetJobsRequestFailure();
     final data = result.data?['jobs'] as List;
-    return data.map((e) => Job.fromJson(e)).toList();
+    return data
+        .map((dynamic e) => Job.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 }

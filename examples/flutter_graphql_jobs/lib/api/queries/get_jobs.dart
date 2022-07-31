@@ -1,4 +1,4 @@
-const getJobs = r'''
+const getJobs = '''
   query GetJobs() {
     jobs {
       id,
