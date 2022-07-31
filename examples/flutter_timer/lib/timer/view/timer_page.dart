@@ -5,6 +5,7 @@ import 'package:flutter_timer/timer/timer.dart';
 
 class TimerPage extends StatelessWidget {
   const TimerPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -16,6 +17,7 @@ class TimerPage extends StatelessWidget {
 
 class TimerView extends StatelessWidget {
   const TimerView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +43,7 @@ class TimerView extends StatelessWidget {
 
 class TimerText extends StatelessWidget {
   const TimerText({super.key});
+
   @override
   Widget build(BuildContext context) {
     final duration = context.select((TimerBloc bloc) => bloc.state.duration);
@@ -56,6 +59,7 @@ class TimerText extends StatelessWidget {
 
 class Actions extends StatelessWidget {
   const Actions({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TimerBloc, TimerState>(
@@ -112,17 +116,20 @@ class Actions extends StatelessWidget {
 
 class Background extends StatelessWidget {
   const Background({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.blue.shade50,
-            Colors.blue.shade500,
-          ],
+    return SizedBox.expand(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.blue.shade50,
+              Colors.blue.shade500,
+            ],
+          ),
         ),
       ),
     );
