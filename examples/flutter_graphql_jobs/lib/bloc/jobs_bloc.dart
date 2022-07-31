@@ -14,7 +14,7 @@ class JobsBloc extends Bloc<JobsEvent, JobsState> {
 
   final JobsApiClient _jobsApiClient;
 
-  void _onJobsFetchStarted(
+  Future<void> _onJobsFetchStarted(
     JobsFetchStarted event,
     Emitter<JobsState> emit,
   ) async {
