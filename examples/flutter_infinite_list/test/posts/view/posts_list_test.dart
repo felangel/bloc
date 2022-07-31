@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,11 +46,9 @@ void main() {
     testWidgets(
         'renders no posts text '
         'when post status is success but with 0 posts', (tester) async {
-      when(() => postBloc.state).thenReturn(const PostState(
-        status: PostStatus.success,
-        posts: [],
-        hasReachedMax: true,
-      ));
+      when(() => postBloc.state).thenReturn(
+        const PostState(status: PostStatus.success, hasReachedMax: true),
+      );
       await tester.pumpPostsList(postBloc);
       expect(find.text('no posts'), findsOneWidget);
     });
@@ -56,10 +56,12 @@ void main() {
     testWidgets(
         'renders 5 posts and a bottom loader when post max is not reached yet',
         (tester) async {
-      when(() => postBloc.state).thenReturn(PostState(
-        status: PostStatus.success,
-        posts: mockPosts,
-      ));
+      when(() => postBloc.state).thenReturn(
+        PostState(
+          status: PostStatus.success,
+          posts: mockPosts,
+        ),
+      );
       await tester.pumpPostsList(postBloc);
       expect(find.byType(PostListItem), findsNWidgets(5));
       expect(find.byType(BottomLoader), findsOneWidget);
@@ -67,11 +69,13 @@ void main() {
 
     testWidgets('does not render bottom loader when post max is reached',
         (tester) async {
-      when(() => postBloc.state).thenReturn(PostState(
-        status: PostStatus.success,
-        posts: mockPosts,
-        hasReachedMax: true,
-      ));
+      when(() => postBloc.state).thenReturn(
+        PostState(
+          status: PostStatus.success,
+          posts: mockPosts,
+          hasReachedMax: true,
+        ),
+      );
       await tester.pumpPostsList(postBloc);
       expect(find.byType(BottomLoader), findsNothing);
     });
