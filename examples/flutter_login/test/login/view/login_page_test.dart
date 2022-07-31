@@ -19,7 +19,7 @@ void main() {
     });
 
     test('is routable', () {
-      expect(LoginPage.route(), isA<MaterialPageRoute>());
+      expect(LoginPage.route(), isA<MaterialPageRoute<void>>());
     });
 
     testWidgets('renders a LoginForm', (tester) async {

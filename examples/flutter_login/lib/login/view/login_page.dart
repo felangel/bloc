@@ -6,7 +6,7 @@ import 'package:flutter_login/login/login.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
-  static Route route() {
+  static Route<void> route() {
     return MaterialPageRoute<void>(builder: (_) => const LoginPage());
   }
 

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, avoid_redundant_argument_values
+// ignore_for_file: prefer_const_constructors
 import 'package:flutter_login/login/login.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -22,7 +22,7 @@ void main() {
     group('validator', () {
       test('returns empty error when password is empty', () {
         expect(
-          Password.dirty('').error,
+          Password.dirty().error,
           PasswordValidationError.empty,
         );
       });
