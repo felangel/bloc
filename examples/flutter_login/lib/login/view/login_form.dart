@@ -80,7 +80,7 @@ class _LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.status != current.status,
+      buildWhen: (_, current) => current.isValid,
       builder: (context, state) {
         return state.status.isInProgress
             ? const CircularProgressIndicator()
