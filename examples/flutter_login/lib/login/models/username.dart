@@ -11,3 +11,12 @@ class Username extends FormzInput<String, UsernameValidationError> {
     return value?.isNotEmpty == true ? null : UsernameValidationError.empty;
   }
 }
+
+extension UsernameValidationErrorExtension on UsernameValidationError {
+  String text() {
+    switch (this) {
+      case UsernameValidationError.empty:
+        return 'Username is required';
+    }
+  }
+}

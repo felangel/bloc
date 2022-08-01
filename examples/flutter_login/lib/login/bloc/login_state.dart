@@ -1,18 +1,18 @@
 part of 'login_bloc.dart';
 
-class LoginState extends Equatable {
+class LoginState extends Equatable with FormzMixin {
   const LoginState({
-    this.status = FormzStatus.pure,
+    this.status = FormzSubmissionStatus.initial,
     this.username = const Username.pure(),
     this.password = const Password.pure(),
   });
 
-  final FormzStatus status;
+  final FormzSubmissionStatus status;
   final Username username;
   final Password password;
 
   LoginState copyWith({
-    FormzStatus? status,
+    FormzSubmissionStatus? status,
     Username? username,
     Password? password,
   }) {
@@ -25,4 +25,9 @@ class LoginState extends Equatable {
 
   @override
   List<Object> get props => [status, username, password];
+  
+  @override
+  List<FormzInput> get inputs => [username, password];
+
+  
 }
