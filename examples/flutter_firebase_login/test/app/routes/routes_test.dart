@@ -10,8 +10,11 @@ void main() {
       expect(
         onGenerateAppViewPages(AppStatus.authenticated, []),
         [
-          isA<MaterialPage<void>>()
-              .having((p) => p.child, 'child', isA<HomePage>())
+          isA<MaterialPage<void>>().having(
+            (p) => p.child,
+            'child',
+            isA<HomePage>(),
+          )
         ],
       );
     });
@@ -20,8 +23,11 @@ void main() {
       expect(
         onGenerateAppViewPages(AppStatus.unauthenticated, []),
         [
-          isA<MaterialPage<void>>()
-              .having((p) => p.child, 'child', isA<LoginPage>())
+          isA<MaterialPage<void>>().having(
+            (p) => p.child,
+            'child',
+            isA<LoginPage>(),
+          )
         ],
       );
     });
