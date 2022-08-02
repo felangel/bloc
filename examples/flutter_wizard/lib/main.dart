@@ -12,9 +12,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => const MaterialApp(home: Home());
 }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +32,7 @@ class Home extends StatelessWidget {
                 final profile = await Navigator.of(context).push(
                   ProfileWizard.route(),
                 );
-                // ignore: use_build_context_synchronously
+                if (!mounted) return;
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(SnackBar(content: Text('$profile')));
@@ -88,8 +93,9 @@ class ProfileWizardFlow extends StatelessWidget {
 class ProfileNameForm extends StatefulWidget {
   const ProfileNameForm({super.key});
 
-  static Page<void> page() =>
-      const MaterialPage<void>(child: ProfileNameForm());
+  static Page<void> page() {
+    return const MaterialPage<void>(child: ProfileNameForm());
+  }
 
   @override
   State<ProfileNameForm> createState() => _ProfileNameFormState();
