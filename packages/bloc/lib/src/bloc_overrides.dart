@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 part of 'bloc.dart';
 
 const _asyncRunZoned = runZoned;
@@ -34,9 +36,13 @@ abstract class BlocOverrides {
   /// See also:
   /// * [BlocOverrides.runZoned] to provide [BlocOverrides] in a fresh [Zone].
   ///
+  @Deprecated('This will be removed in bloc v9.0.0.')
   static BlocOverrides? get current => Zone.current[_token] as BlocOverrides?;
 
   /// Runs [body] in a fresh [Zone] using the provided overrides.
+  @Deprecated(
+    'This will be removed in bloc v9.0.0. Please use Bloc.observer/Bloc.transformer instead.',
+  )
   static R runZoned<R>(
     R Function() body, {
     BlocObserver? blocObserver,
@@ -49,6 +55,9 @@ abstract class BlocOverrides {
   /// The [BlocObserver] that will be used within the current [Zone].
   ///
   /// By default, a base [BlocObserver] implementation is used.
+  @Deprecated(
+    'This will be removed in bloc v9.0.0. Please use Bloc.observer instead.',
+  )
   BlocObserver get blocObserver => _defaultBlocObserver;
 
   /// The [EventTransformer] that will be used within the current [Zone].
@@ -63,6 +72,9 @@ abstract class BlocOverrides {
   /// * [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
   /// opinionated set of event transformers.
   ///
+  @Deprecated(
+    'This will be removed in bloc v9.0.0. Please use Bloc.transformer instead.',
+  )
   EventTransformer get eventTransformer => _defaultEventTransformer;
 }
 
@@ -102,8 +114,6 @@ late final _defaultEventTransformer = (Stream events, EventMapper mapper) {
       .map(mapper)
       .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
 };
-
-class _DefaultBlocObserver extends BlocObserver {}
 
 class _FlatMapStreamTransformer<T> extends StreamTransformerBase<Stream<T>, T> {
   const _FlatMapStreamTransformer();
