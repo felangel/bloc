@@ -40,7 +40,7 @@ extension on WeatherState {
       case WeatherState.heavyCloud:
       case WeatherState.lightCloud:
         return WeatherCondition.cloudy;
-      default:
+      case WeatherState.unknown:
         return WeatherCondition.unknown;
     }
   }

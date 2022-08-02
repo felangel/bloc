@@ -22,7 +22,7 @@ void main() {
     group('validator', () {
       test('returns empty error when password is empty', () {
         expect(
-          Password.dirty('').error,
+          Password.dirty().error,
           PasswordValidationError.empty,
         );
       });

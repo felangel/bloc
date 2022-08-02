@@ -7,7 +7,7 @@ import 'package:flutter_todos/l10n/l10n.dart';
 import 'package:todos_repository/todos_repository.dart';
 
 class EditTodoPage extends StatelessWidget {
-  const EditTodoPage({Key? key}) : super(key: key);
+  const EditTodoPage({super.key});
 
   static Route<void> route({Todo? initialTodo}) {
     return MaterialPageRoute(
@@ -35,7 +35,7 @@ class EditTodoPage extends StatelessWidget {
 }
 
 class EditTodoView extends StatelessWidget {
-  const EditTodoView({Key? key}) : super(key: key);
+  const EditTodoView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,7 @@ class EditTodoView extends StatelessWidget {
 }
 
 class _TitleField extends StatelessWidget {
-  const _TitleField({Key? key}) : super(key: key);
+  const _TitleField();
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +116,7 @@ class _TitleField extends StatelessWidget {
 }
 
 class _DescriptionField extends StatelessWidget {
-  const _DescriptionField({Key? key}) : super(key: key);
+  const _DescriptionField();
 
   @override
   Widget build(BuildContext context) {

@@ -4,12 +4,14 @@ import 'package:flutter_shopping_cart/cart/cart.dart';
 import 'package:flutter_shopping_cart/catalog/catalog.dart';
 
 class CatalogPage extends StatelessWidget {
+  const CatalogPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          CatalogAppBar(),
+          const CatalogAppBar(),
           const SliverToBoxAdapter(child: SizedBox(height: 12)),
           BlocBuilder<CatalogBloc, CatalogState>(
             builder: (context, state) {
@@ -40,7 +42,7 @@ class CatalogPage extends StatelessWidget {
 }
 
 class AddButton extends StatelessWidget {
-  const AddButton({Key? key, required this.item}) : super(key: key);
+  const AddButton({super.key, required this.item});
 
   final Item item;
 
@@ -71,6 +73,8 @@ class AddButton extends StatelessWidget {
 }
 
 class CatalogAppBar extends StatelessWidget {
+  const CatalogAppBar({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -87,7 +91,7 @@ class CatalogAppBar extends StatelessWidget {
 }
 
 class CatalogListItem extends StatelessWidget {
-  const CatalogListItem(this.item, {Key? key}) : super(key: key);
+  const CatalogListItem(this.item, {super.key});
 
   final Item item;
 

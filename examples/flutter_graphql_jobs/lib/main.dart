@@ -6,7 +6,7 @@ import 'package:flutter_graphql_jobs/bloc/jobs_bloc.dart';
 void main() => runApp(MyApp(jobsApiClient: JobsApiClient.create()));
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key, required this.jobsApiClient}) : super(key: key);
+  const MyApp({super.key, required this.jobsApiClient});
 
   final JobsApiClient jobsApiClient;
 
@@ -17,22 +17,24 @@ class MyApp extends StatelessWidget {
         create: (_) => JobsBloc(
           jobsApiClient: jobsApiClient,
         )..add(JobsFetchStarted()),
-        child: JobsPage(),
+        child: const JobsPage(),
       ),
     );
   }
 }
 
 class JobsPage extends StatelessWidget {
+  const JobsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Jobs')),
+      appBar: AppBar(title: const Text('Jobs')),
       body: Center(
         child: BlocBuilder<JobsBloc, JobsState>(
           builder: (context, state) {
             if (state is JobsLoadInProgress) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             }
             if (state is JobsLoadSuccess) {
               return ListView.builder(
@@ -41,7 +43,7 @@ class JobsPage extends StatelessWidget {
                   final job = state.jobs[index];
                   return ListTile(
                     key: Key(job.id),
-                    leading: Icon(Icons.location_city),
+                    leading: const Icon(Icons.location_city),
                     title: Text(job.title),
                     trailing: Icon(
                       job.isFeatured == true ? Icons.star : Icons.star_border,
@@ -54,7 +56,7 @@ class JobsPage extends StatelessWidget {
                 },
               );
             }
-            return Text('Oops something went wrong!');
+            return const Text('Oops something went wrong!');
           },
         ),
       ),

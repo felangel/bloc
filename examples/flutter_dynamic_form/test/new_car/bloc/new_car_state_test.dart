@@ -27,21 +27,29 @@ void main() {
         );
         expect(
           NewCarState.modelsLoadSuccess(
-              brands: mockBrands, brand: mockBrand, models: mockModels),
+            brands: mockBrands,
+            brand: mockBrand,
+            models: mockModels,
+          ),
           NewCarState.modelsLoadSuccess(
-              brands: mockBrands, brand: mockBrand, models: mockModels),
+            brands: mockBrands,
+            brand: mockBrand,
+            models: mockModels,
+          ),
         );
         expect(
           NewCarState.yearsLoadInProgress(
-              brands: mockBrands,
-              brand: mockBrand,
-              models: mockModels,
-              model: mockModel),
+            brands: mockBrands,
+            brand: mockBrand,
+            models: mockModels,
+            model: mockModel,
+          ),
           NewCarState.yearsLoadInProgress(
-              brands: mockBrands,
-              brand: mockBrand,
-              models: mockModels,
-              model: mockModel),
+            brands: mockBrands,
+            brand: mockBrand,
+            models: mockModels,
+            model: mockModel,
+          ),
         );
         expect(
           NewCarState.yearsLoadSuccess(

@@ -45,7 +45,7 @@ void main() {
         when(() => metaWeatherApiClient.locationSearch(any()))
             .thenThrow(exception);
         expect(
-          () async => await weatherRepository.getWeather(city),
+          () async => weatherRepository.getWeather(city),
           throwsA(exception),
         );
       });
@@ -71,7 +71,7 @@ void main() {
         );
         when(() => metaWeatherApiClient.getWeather(any())).thenThrow(exception);
         expect(
-          () async => await weatherRepository.getWeather(city),
+          () async => weatherRepository.getWeather(city),
           throwsA(exception),
         );
       });

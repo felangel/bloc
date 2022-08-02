@@ -71,7 +71,7 @@ void main() {
 
     setUp(() {
       navigator = MockNavigator();
-      when(() => navigator.push(any())).thenAnswer((_) async => null);
+      when(() => navigator.push<void>(any())).thenAnswer((_) async {});
 
       todosOverviewBloc = MockTodosOverviewBloc();
       when(() => todosOverviewBloc.state).thenReturn(
@@ -352,7 +352,9 @@ void main() {
           );
           todoListTile.onTap!();
 
-          verify(() => navigator.push(any(that: isRoute<void>()))).called(1);
+          verify(
+            () => navigator.push<void>(any(that: isRoute<void>())),
+          ).called(1);
         },
       );
     });
