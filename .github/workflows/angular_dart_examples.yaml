@@ -38,6 +38,13 @@ jobs:
         working-directory: ${{ matrix.folder }}
         run: dart pub get
 
+      - name: Install webdev
+        if: matrix.folder == 'examples/github_search/angular_github_search'
+        working-directory: ${{ matrix.folder }}
+        run: |
+          dart pub global activate webdev
+          webdev build
+
       - name: Format
         working-directory: ${{ matrix.folder }}
         run: dart format --set-exit-if-changed .
