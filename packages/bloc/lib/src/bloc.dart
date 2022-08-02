@@ -67,11 +67,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   /// * [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
   /// opinionated set of event transformers.
   ///
-  static EventTransformer<dynamic> transformer = (events, mapper) {
-    return events
-        .map(mapper)
-        .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
-  };
+  static EventTransformer<dynamic> transformer = _defaultEventTransformer;
 
   final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<dynamic>>[];
