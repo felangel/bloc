@@ -4,17 +4,20 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.13.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
   bloc:
     path: ../../packages/bloc
   equatable: ^2.0.0
   flow_builder: ^0.0.4
+  flutter:
+    sdk: flutter
   flutter_bloc:
     path: ../../packages/flutter_bloc
+
+dev_dependencies:
+  very_good_analysis: ^3.0.1
 
 dependency_overrides:
   bloc:
