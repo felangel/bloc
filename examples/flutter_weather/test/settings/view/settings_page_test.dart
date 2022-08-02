@@ -44,7 +44,7 @@ void main() {
       whenListen(
         weatherCubit,
         Stream.fromIterable([
-          WeatherState(temperatureUnits: TemperatureUnits.celsius),
+          WeatherState(),
           WeatherState(temperatureUnits: TemperatureUnits.fahrenheit),
         ]),
       );

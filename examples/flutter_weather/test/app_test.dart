@@ -49,7 +49,7 @@ void main() {
             value: weatherRepository,
             child: BlocProvider.value(
               value: themeCubit,
-              child: WeatherAppView(),
+              child: const WeatherAppView(),
             ),
           ),
         );
@@ -66,7 +66,7 @@ void main() {
             value: weatherRepository,
             child: BlocProvider.value(
               value: themeCubit,
-              child: WeatherAppView(),
+              child: const WeatherAppView(),
             ),
           ),
         );

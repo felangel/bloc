@@ -34,7 +34,6 @@ extension on Weather {
       case WeatherCondition.rainy:
         return Colors.indigoAccent;
       case WeatherCondition.unknown:
-      default:
         return ThemeCubit.defaultColor;
     }
   }
