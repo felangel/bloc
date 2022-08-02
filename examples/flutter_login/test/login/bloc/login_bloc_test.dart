@@ -33,7 +33,7 @@ void main() {
               username: 'username',
               password: 'password',
             ),
-          ).thenAnswer((_) => Future.value('user'));
+          ).thenAnswer((_) => Future<String>.value('user'));
         },
         build: () => LoginBloc(
           authenticationRepository: authenticationRepository,

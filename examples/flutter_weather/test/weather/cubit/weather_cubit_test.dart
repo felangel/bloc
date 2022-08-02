@@ -216,7 +216,7 @@ void main() {
           status: WeatherStatus.success,
           weather: Weather(
             location: weatherLocation,
-            temperature: Temperature(value: 0.0),
+            temperature: Temperature(value: 0),
             lastUpdated: DateTime(2020),
             condition: weatherCondition,
           ),
@@ -249,7 +249,7 @@ void main() {
           status: WeatherStatus.success,
           weather: Weather(
             location: weatherLocation,
-            temperature: Temperature(value: 0.0),
+            temperature: Temperature(value: 0),
             lastUpdated: DateTime(2020),
             condition: weatherCondition,
           ),
@@ -303,7 +303,6 @@ void main() {
         expect: () => <WeatherState>[
           WeatherState(
             status: WeatherStatus.success,
-            temperatureUnits: TemperatureUnits.celsius,
             weather: Weather(
               location: weatherLocation,
               temperature: Temperature(value: weatherTemperature.toCelsius()),
@@ -320,7 +319,6 @@ void main() {
         build: () => weatherCubit,
         seed: () => WeatherState(
           status: WeatherStatus.success,
-          temperatureUnits: TemperatureUnits.celsius,
           weather: Weather(
             location: weatherLocation,
             temperature: Temperature(value: weatherTemperature),
@@ -349,6 +347,6 @@ void main() {
 }
 
 extension on double {
-  double toFahrenheit() => ((this * 9 / 5) + 32);
-  double toCelsius() => ((this - 32) * 5 / 9);
+  double toFahrenheit() => (this * 9 / 5) + 32;
+  double toCelsius() => (this - 32) * 5 / 9;
 }

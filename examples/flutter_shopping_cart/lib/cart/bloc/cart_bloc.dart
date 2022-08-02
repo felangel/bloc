@@ -17,7 +17,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   final ShoppingRepository shoppingRepository;
 
-  void _onStarted(CartStarted event, Emitter<CartState> emit) async {
+  Future<void> _onStarted(CartStarted event, Emitter<CartState> emit) async {
     emit(CartLoading());
     try {
       final items = await shoppingRepository.loadCartItems();
@@ -27,7 +27,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     }
   }
 
-  void _onItemAdded(CartItemAdded event, Emitter<CartState> emit) async {
+  Future<void> _onItemAdded(
+    CartItemAdded event,
+    Emitter<CartState> emit,
+  ) async {
     final state = this.state;
     if (state is CartLoaded) {
       try {

@@ -20,7 +20,8 @@ class Profile extends Equatable {
 class ProfileWizardState extends Equatable {
   ProfileWizardState({required this.profile}) : lastUpdated = DateTime.now();
 
-  ProfileWizardState.initial() : this(profile: Profile(name: null, age: null));
+  ProfileWizardState.initial()
+      : this(profile: const Profile(name: null, age: null));
 
   final Profile profile;
   final DateTime lastUpdated;
