@@ -10,7 +10,7 @@ dependencies:
     path: ../../../packages/angular_bloc
   bloc:
     path: ../../../packages/bloc
-  
+
   common_github_search:
     path: ../common_github_search
 

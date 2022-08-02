@@ -18,7 +18,7 @@ dependencies:
   url_launcher: ^6.0.0
 
 dev_dependencies:
-    very_good_analysis: ^3.0.1
+  very_good_analysis: ^3.0.1
 
 dependency_overrides:
   bloc:
