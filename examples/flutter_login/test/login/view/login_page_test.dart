@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +19,7 @@ void main() {
     });
 
     test('is routable', () {
-      expect(LoginPage.route(), isA<MaterialPageRoute>());
+      expect(LoginPage.route(), isA<MaterialPageRoute<void>>());
     });
 
     testWidgets('renders a LoginForm', (tester) async {

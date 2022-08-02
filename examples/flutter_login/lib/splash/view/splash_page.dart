@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatelessWidget {
-  static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => SplashPage());
+  const SplashPage({super.key});
+
+  static Route<void> route() {
+    return MaterialPageRoute<void>(builder: (_) => const SplashPage());
   }
 
   @override

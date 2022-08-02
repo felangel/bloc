@@ -6,7 +6,7 @@ import 'package:flutter_todos/theme/theme.dart';
 import 'package:todos_repository/todos_repository.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key, required this.todosRepository}) : super(key: key);
+  const App({super.key, required this.todosRepository});
 
   final TodosRepository todosRepository;
 
@@ -20,7 +20,7 @@ class App extends StatelessWidget {
 }
 
 class AppView extends StatelessWidget {
-  const AppView({Key? key}) : super(key: key);
+  const AppView({super.key});
 
   @override
   Widget build(BuildContext context) {

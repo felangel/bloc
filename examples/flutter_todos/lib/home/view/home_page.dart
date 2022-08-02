@@ -6,7 +6,7 @@ import 'package:flutter_todos/stats/stats.dart';
 import 'package:flutter_todos/todos_overview/todos_overview.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
 }
 
 class HomeView extends StatelessWidget {
-  const HomeView({Key? key}) : super(key: key);
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +59,10 @@ class HomeView extends StatelessWidget {
 
 class _HomeTabButton extends StatelessWidget {
   const _HomeTabButton({
-    Key? key,
     required this.groupValue,
     required this.value,
     required this.icon,
-  }) : super(key: key);
+  });
 
   final HomeTab groupValue;
   final HomeTab value;

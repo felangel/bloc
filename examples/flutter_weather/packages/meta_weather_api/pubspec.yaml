@@ -3,15 +3,16 @@ description: A Dart API Client for the MetaWeather API.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   http: ^0.13.0
   json_annotation: ^4.4.0
 
 dev_dependencies:
-  coverage: ^1.0.3
   build_runner: ^2.0.0
+  coverage: ^1.0.3
   json_serializable: ^6.0.0
-  mocktail: ^0.2.0
+  mocktail: ^0.3.0
   test: ^1.16.4
+  very_good_analysis: ^3.0.1

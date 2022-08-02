@@ -1,7 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_timer/timer/timer.dart';
-import 'package:flutter_timer/ticker.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_timer/ticker.dart';
+import 'package:flutter_timer/timer/timer.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockTicker extends Mock implements Ticker {}

@@ -23,7 +23,7 @@ void main() {
 
   setUp(() {
     navigator = MockNavigator();
-    when(() => navigator.push(any())).thenAnswer((_) async => null);
+    when(() => navigator.push<void>(any())).thenAnswer((_) async {});
 
     editTodoBloc = MockEditTodoBloc();
     when(() => editTodoBloc.state).thenReturn(
@@ -91,7 +91,7 @@ void main() {
         );
         await tester.pumpApp(buildSubject());
 
-        verify(() => navigator.pop(any<dynamic>())).called(1);
+        verify(() => navigator.pop<Object?>(any<dynamic>())).called(1);
       },
     );
   });

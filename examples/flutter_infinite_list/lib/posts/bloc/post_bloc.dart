@@ -38,11 +38,13 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     try {
       if (state.status == PostStatus.initial) {
         final posts = await _fetchPosts();
-        return emit(state.copyWith(
-          status: PostStatus.success,
-          posts: posts,
-          hasReachedMax: false,
-        ));
+        return emit(
+          state.copyWith(
+            status: PostStatus.success,
+            posts: posts,
+            hasReachedMax: false,
+          ),
+        );
       }
       final posts = await _fetchPosts(state.posts.length);
       posts.isEmpty
@@ -70,10 +72,11 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     if (response.statusCode == 200) {
       final body = json.decode(response.body) as List;
       return body.map((dynamic json) {
+        final map = json as Map<String, dynamic>;
         return Post(
-          id: json['id'] as int,
-          title: json['title'] as String,
-          body: json['body'] as String,
+          id: map['id'] as int,
+          title: map['title'] as String,
+          body: map['body'] as String,
         );
       }).toList();
     }

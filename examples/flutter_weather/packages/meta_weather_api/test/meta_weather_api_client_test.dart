@@ -56,7 +56,7 @@ void main() {
         when(() => response.statusCode).thenReturn(400);
         when(() => httpClient.get(any())).thenAnswer((_) async => response);
         expect(
-          () async => await metaWeatherApiClient.locationSearch(query),
+          () async => metaWeatherApiClient.locationSearch(query),
           throwsA(isA<LocationIdRequestFailure>()),
         );
       });
@@ -76,7 +76,8 @@ void main() {
         final response = MockResponse();
         when(() => response.statusCode).thenReturn(200);
         when(() => response.body).thenReturn(
-          '''[{
+          '''
+[{
             "title": "mock-title",
             "location_type": "City",
             "latt_long": "-34.75,83.28",
@@ -125,7 +126,7 @@ void main() {
         when(() => response.statusCode).thenReturn(400);
         when(() => httpClient.get(any())).thenAnswer((_) async => response);
         expect(
-          () async => await metaWeatherApiClient.getWeather(locationId),
+          () async => metaWeatherApiClient.getWeather(locationId),
           throwsA(isA<WeatherRequestFailure>()),
         );
       });
@@ -136,7 +137,7 @@ void main() {
         when(() => response.body).thenReturn('{}');
         when(() => httpClient.get(any())).thenAnswer((_) async => response);
         expect(
-          () async => await metaWeatherApiClient.getWeather(locationId),
+          () async => metaWeatherApiClient.getWeather(locationId),
           throwsA(isA<WeatherNotFoundFailure>()),
         );
       });
@@ -148,7 +149,7 @@ void main() {
         when(() => response.body).thenReturn('{"consolidated_weather": []}');
         when(() => httpClient.get(any())).thenAnswer((_) async => response);
         expect(
-          () async => await metaWeatherApiClient.getWeather(locationId),
+          () async => metaWeatherApiClient.getWeather(locationId),
           throwsA(isA<WeatherNotFoundFailure>()),
         );
       });
@@ -156,7 +157,8 @@ void main() {
       test('returns weather on valid response', () async {
         final response = MockResponse();
         when(() => response.statusCode).thenReturn(200);
-        when(() => response.body).thenReturn('''
+        when(() => response.body).thenReturn(
+          '''
           {"consolidated_weather":[{
             "id":4907479830888448,
             "weather_state_name":"Showers",
@@ -174,7 +176,8 @@ void main() {
             "visibility":11.037727173307882,
             "predictability":73
           }]}
-        ''');
+        ''',
+        );
         when(() => httpClient.get(any())).thenAnswer((_) async => response);
         final actual = await metaWeatherApiClient.getWeather(locationId);
         expect(
@@ -183,18 +186,30 @@ void main() {
               .having((w) => w.id, 'id', 4907479830888448)
               .having((w) => w.weatherStateName, 'state', 'Showers')
               .having((w) => w.weatherStateAbbr, 'abbr', WeatherState.showers)
-              .having((w) => w.windDirectionCompass, 'wind',
-                  WindDirectionCompass.southWest)
-              .having((w) => w.created, 'created',
-                  DateTime.parse('2020-10-26T00:20:01.840132Z'))
-              .having((w) => w.applicableDate, 'applicableDate',
-                  DateTime.parse('2020-10-26'))
+              .having(
+                (w) => w.windDirectionCompass,
+                'wind',
+                WindDirectionCompass.southWest,
+              )
+              .having(
+                (w) => w.created,
+                'created',
+                DateTime.parse('2020-10-26T00:20:01.840132Z'),
+              )
+              .having(
+                (w) => w.applicableDate,
+                'applicableDate',
+                DateTime.parse('2020-10-26'),
+              )
               .having((w) => w.minTemp, 'minTemp', 7.9399999999999995)
               .having((w) => w.maxTemp, 'maxTemp', 13.239999999999998)
               .having((w) => w.theTemp, 'theTemp', 12.825)
               .having((w) => w.windSpeed, 'windSpeed', 7.876886316914553)
               .having(
-                  (w) => w.windDirection, 'windDirection', 246.17046093256732)
+                (w) => w.windDirection,
+                'windDirection',
+                246.17046093256732,
+              )
               .having((w) => w.airPressure, 'airPressure', 997.0)
               .having((w) => w.humidity, 'humidity', 73)
               .having((w) => w.visibility, 'visibility', 11.037727173307882)

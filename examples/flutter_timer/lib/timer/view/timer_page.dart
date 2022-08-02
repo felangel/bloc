@@ -4,18 +4,20 @@ import 'package:flutter_timer/ticker.dart';
 import 'package:flutter_timer/timer/timer.dart';
 
 class TimerPage extends StatelessWidget {
-  const TimerPage({Key? key}) : super(key: key);
+  const TimerPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => TimerBloc(ticker: Ticker()),
+      create: (_) => TimerBloc(ticker: const Ticker()),
       child: const TimerView(),
     );
   }
 }
 
 class TimerView extends StatelessWidget {
-  const TimerView({Key? key}) : super(key: key);
+  const TimerView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,10 +27,9 @@ class TimerView extends StatelessWidget {
           const Background(),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: const <Widget>[
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 100.0),
+                padding: EdgeInsets.symmetric(vertical: 100),
                 child: Center(child: TimerText()),
               ),
               Actions(),
@@ -41,13 +42,14 @@ class TimerView extends StatelessWidget {
 }
 
 class TimerText extends StatelessWidget {
-  const TimerText({Key? key}) : super(key: key);
+  const TimerText({super.key});
+
   @override
   Widget build(BuildContext context) {
     final duration = context.select((TimerBloc bloc) => bloc.state.duration);
     final minutesStr =
         ((duration / 60) % 60).floor().toString().padLeft(2, '0');
-    final secondsStr = (duration % 60).floor().toString().padLeft(2, '0');
+    final secondsStr = (duration % 60).toString().padLeft(2, '0');
     return Text(
       '$minutesStr:$secondsStr',
       style: Theme.of(context).textTheme.headline1,
@@ -56,7 +58,8 @@ class TimerText extends StatelessWidget {
 }
 
 class Actions extends StatelessWidget {
-  const Actions({Key? key}) : super(key: key);
+  const Actions({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TimerBloc, TimerState>(
@@ -67,7 +70,7 @@ class Actions extends StatelessWidget {
           children: [
             if (state is TimerInitial) ...[
               FloatingActionButton(
-                child: Icon(Icons.play_arrow),
+                child: const Icon(Icons.play_arrow),
                 onPressed: () => context
                     .read<TimerBloc>()
                     .add(TimerStarted(duration: state.duration)),
@@ -75,28 +78,33 @@ class Actions extends StatelessWidget {
             ],
             if (state is TimerRunInProgress) ...[
               FloatingActionButton(
-                child: Icon(Icons.pause),
-                onPressed: () => context.read<TimerBloc>().add(TimerPaused()),
+                child: const Icon(Icons.pause),
+                onPressed: () =>
+                    context.read<TimerBloc>().add(const TimerPaused()),
               ),
               FloatingActionButton(
-                child: Icon(Icons.replay),
-                onPressed: () => context.read<TimerBloc>().add(TimerReset()),
+                child: const Icon(Icons.replay),
+                onPressed: () =>
+                    context.read<TimerBloc>().add(const TimerReset()),
               ),
             ],
             if (state is TimerRunPause) ...[
               FloatingActionButton(
-                child: Icon(Icons.play_arrow),
-                onPressed: () => context.read<TimerBloc>().add(TimerResumed()),
+                child: const Icon(Icons.play_arrow),
+                onPressed: () =>
+                    context.read<TimerBloc>().add(const TimerResumed()),
               ),
               FloatingActionButton(
-                child: Icon(Icons.replay),
-                onPressed: () => context.read<TimerBloc>().add(TimerReset()),
+                child: const Icon(Icons.replay),
+                onPressed: () =>
+                    context.read<TimerBloc>().add(const TimerReset()),
               ),
             ],
             if (state is TimerRunComplete) ...[
               FloatingActionButton(
-                child: Icon(Icons.replay),
-                onPressed: () => context.read<TimerBloc>().add(TimerReset()),
+                child: const Icon(Icons.replay),
+                onPressed: () =>
+                    context.read<TimerBloc>().add(const TimerReset()),
               ),
             ]
           ],
@@ -107,18 +115,21 @@ class Actions extends StatelessWidget {
 }
 
 class Background extends StatelessWidget {
-  const Background({Key? key}) : super(key: key);
+  const Background({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.blue.shade50,
-            Colors.blue.shade500,
-          ],
+    return SizedBox.expand(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.blue.shade50,
+              Colors.blue.shade500,
+            ],
+          ),
         ),
       ),
     );

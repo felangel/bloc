@@ -5,7 +5,7 @@ import 'package:flutter_todos/stats/stats.dart';
 import 'package:todos_repository/todos_repository.dart';
 
 class StatsPage extends StatelessWidget {
-  const StatsPage({Key? key}) : super(key: key);
+  const StatsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class StatsPage extends StatelessWidget {
 }
 
 class StatsView extends StatelessWidget {
-  const StatsView({Key? key}) : super(key: key);
+  const StatsView({super.key});
 
   @override
   Widget build(BuildContext context) {

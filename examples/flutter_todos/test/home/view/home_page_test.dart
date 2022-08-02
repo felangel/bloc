@@ -41,7 +41,7 @@ void main() {
 
     setUp(() {
       navigator = MockNavigator();
-      when(() => navigator.push(any())).thenAnswer((_) async => null);
+      when(() => navigator.push<void>(any())).thenAnswer((_) async {});
 
       cubit = MockHomeCubit();
       when(() => cubit.state).thenReturn(const HomeState());
@@ -168,7 +168,9 @@ void main() {
 
           await tester.tap(find.byKey(addTodoFloatingActionButtonKey));
 
-          verify(() => navigator.push(any(that: isRoute<void>()))).called(1);
+          verify(
+            () => navigator.push<void>(any(that: isRoute<void>())),
+          ).called(1);
         },
       );
     });
