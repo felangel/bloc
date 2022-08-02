@@ -91,18 +91,20 @@ class _WeatherBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).primaryColor;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: const [0.25, 0.75, 0.90, 1.0],
-          colors: [
-            color,
-            color.brighten(),
-            color.brighten(33),
-            color.brighten(50),
-          ],
+    return SizedBox.expand(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: const [0.25, 0.75, 0.90, 1.0],
+            colors: [
+              color,
+              color.brighten(),
+              color.brighten(33),
+              color.brighten(50),
+            ],
+          ),
         ),
       ),
     );
@@ -111,7 +113,10 @@ class _WeatherBackground extends StatelessWidget {
 
 extension on Color {
   Color brighten([int percent = 10]) {
-    assert(1 <= percent && percent <= 100);
+    assert(
+      1 <= percent && percent <= 100,
+      'percentage must be between 1 and 100',
+    );
     final p = percent / 100;
     return Color.fromARGB(
       alpha,

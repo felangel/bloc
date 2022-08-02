@@ -18,9 +18,14 @@ class WeatherPage extends StatelessWidget {
   }
 }
 
-class WeatherView extends StatelessWidget {
+class WeatherView extends StatefulWidget {
   const WeatherView({super.key});
 
+  @override
+  State<WeatherView> createState() => _WeatherViewState();
+}
+
+class _WeatherViewState extends State<WeatherView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +75,7 @@ class WeatherView extends StatelessWidget {
         child: const Icon(Icons.search),
         onPressed: () async {
           final city = await Navigator.of(context).push(SearchPage.route());
-          // ignore: use_build_context_synchronously
+          if (!mounted) return;
           await context.read<WeatherCubit>().fetchWeather(city);
         },
       ),
