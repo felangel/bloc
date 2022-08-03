@@ -6,6 +6,8 @@ import 'package:test/test.dart';
 
 import 'cubits/cubits.dart';
 
+// ignore_for_file: invalid_use_of_protected_member
+
 class MockBlocObserver extends Mock implements BlocObserver {}
 
 class FakeBlocBase<S> extends Fake implements BlocBase<S> {}
@@ -24,7 +26,6 @@ void main() {
 
       test('triggers onCreate on observer', () {
         final cubit = CounterCubit();
-        // ignore: invalid_use_of_protected_member
         verify(() => observer.onCreate(cubit)).called(1);
       });
     });
@@ -80,7 +81,6 @@ void main() {
         final cubit = CounterCubit(onChangeCallback: changes.add);
         await cubit.close();
         expect(changes, isEmpty);
-        // ignore: invalid_use_of_protected_member
         verifyNever(() => observer.onChange(any(), any()));
       });
 
@@ -93,13 +93,60 @@ void main() {
           const [Change<int>(currentState: 0, nextState: 1)],
         );
         verify(
-          // ignore: invalid_use_of_protected_member
           () => observer.onChange(
             cubit,
             const Change<int>(currentState: 0, nextState: 1),
           ),
         ).called(1);
       });
+
+      test(
+        'does state change even previous state is same as next state with '
+        'allowEmitSameState emit parameter',
+        () async {
+          final changes = <Change<int>>[];
+          final calledSameEmitStateCount = 2;
+          final cubit = CounterCubit(onChangeCallback: changes.add);
+
+          for (var i = 0; i < calledSameEmitStateCount; i++) {
+            cubit.emitSameState();
+          }
+
+          expect(
+            calledSameEmitStateCount,
+            changes.length,
+          );
+
+          verify(
+            () => observer.onChange(
+              cubit,
+              const Change<int>(currentState: 0, nextState: 0),
+            ),
+          ).called(calledSameEmitStateCount);
+          await cubit.close();
+        },
+      );
+
+      test(
+        'does not state change if previous state is same as next state',
+        () async {
+          final changes = <Change<int>>[];
+          final cubit = CounterCubit(onChangeCallback: changes.add)
+            ..emitWithoutParameter()
+            ..emitWithoutParameter();
+
+          expect(changes.length, 1);
+
+          verify(() {
+            observer.onChange(
+              cubit,
+              const Change<int>(currentState: 0, nextState: 0),
+            );
+          }).called(1);
+
+          await cubit.close();
+        },
+      );
 
       test('is called with correct changes for multiple state changes',
           () async {
@@ -116,14 +163,12 @@ void main() {
           ],
         );
         verify(
-          // ignore: invalid_use_of_protected_member
           () => observer.onChange(
             cubit,
             const Change<int>(currentState: 0, nextState: 1),
           ),
         ).called(1);
         verify(
-          // ignore: invalid_use_of_protected_member
           () => observer.onChange(
             cubit,
             const Change<int>(currentState: 1, nextState: 2),
@@ -178,7 +223,9 @@ void main() {
         final states = <int>[];
         final cubit = SeededCubit(initialState: 0);
         final subscription = cubit.stream.listen(states.add);
-        cubit..emitState(0)..emitState(0);
+        cubit
+          ..emitState(0)
+          ..emitState(0);
         await cubit.close();
         await subscription.cancel();
         expect(states, [0]);
@@ -190,7 +237,9 @@ void main() {
         final states = <int>[];
         final cubit = SeededCubit(initialState: 0);
         final subscription = cubit.stream.listen(states.add);
-        cubit..emitState(0)..emitState(1);
+        cubit
+          ..emitState(0)
+          ..emitState(1);
         await cubit.close();
         await subscription.cancel();
         expect(states, [0, 1]);
@@ -320,7 +369,6 @@ void main() {
       test('triggers onClose on observer', () async {
         final cubit = CounterCubit();
         await cubit.close();
-        // ignore: invalid_use_of_protected_member
         verify(() => observer.onClose(cubit)).called(1);
       });
 
