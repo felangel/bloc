@@ -36,12 +36,14 @@ abstract class BlocOverrides {
   /// See also:
   /// * [BlocOverrides.runZoned] to provide [BlocOverrides] in a fresh [Zone].
   ///
-  @Deprecated('This will be removed in bloc v9.0.0.')
+  @Deprecated(
+    'This will be removed in v9.0.0. Use Bloc.observer/Bloc.transformer instead.',
+  )
   static BlocOverrides? get current => Zone.current[_token] as BlocOverrides?;
 
   /// Runs [body] in a fresh [Zone] using the provided overrides.
   @Deprecated(
-    'This will be removed in bloc v9.0.0. Please use Bloc.observer/Bloc.transformer instead.',
+    'This will be removed in v9.0.0. Use Bloc.observer/Bloc.transformer instead.',
   )
   static R runZoned<R>(
     R Function() body, {
@@ -55,9 +57,7 @@ abstract class BlocOverrides {
   /// The [BlocObserver] that will be used within the current [Zone].
   ///
   /// By default, a base [BlocObserver] implementation is used.
-  @Deprecated(
-    'This will be removed in bloc v9.0.0. Please use Bloc.observer instead.',
-  )
+  @Deprecated('This will be removed in v9.0.0. Use Bloc.observer instead.')
   BlocObserver get blocObserver => Bloc.observer;
 
   /// The [EventTransformer] that will be used within the current [Zone].
@@ -72,9 +72,7 @@ abstract class BlocOverrides {
   /// * [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
   /// opinionated set of event transformers.
   ///
-  @Deprecated(
-    'This will be removed in bloc v9.0.0. Please use Bloc.transformer instead.',
-  )
+  @Deprecated('This will be removed in v9.0.0. Use Bloc.transformer instead.')
   EventTransformer get eventTransformer => Bloc.transformer;
 }
 
