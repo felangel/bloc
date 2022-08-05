@@ -1,10 +1,11 @@
+import 'package:common_github_search/common_github_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:common_github_search/common_github_search.dart';
-
 class SearchForm extends StatelessWidget {
+  const SearchForm({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -88,7 +89,7 @@ class _SearchBody extends StatelessWidget {
 }
 
 class _SearchResults extends StatelessWidget {
-  const _SearchResults({Key? key, required this.items}) : super(key: key);
+  const _SearchResults({required this.items});
 
   final List<SearchResultItem> items;
 
@@ -104,7 +105,7 @@ class _SearchResults extends StatelessWidget {
 }
 
 class _SearchResultItem extends StatelessWidget {
-  const _SearchResultItem({Key? key, required this.item}) : super(key: key);
+  const _SearchResultItem({required this.item});
 
   final SearchResultItem item;
 

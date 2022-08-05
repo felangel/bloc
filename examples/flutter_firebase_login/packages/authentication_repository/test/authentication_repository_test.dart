@@ -8,29 +8,24 @@ import 'package:firebase_core_platform_interface/firebase_core_platform_interfac
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 const _mockFirebaseUserUid = 'mock-uid';
 const _mockFirebaseUserEmail = 'mock-email';
-
-mixin LegacyEquality {
-  @override
-  bool operator ==(dynamic other) => false;
-
-  @override
-  int get hashCode => 0;
-}
 
 class MockCacheClient extends Mock implements CacheClient {}
 
 class MockFirebaseAuth extends Mock implements firebase_auth.FirebaseAuth {}
 
+class MockFirebaseCore extends Mock
+    with MockPlatformInterfaceMixin
+    implements FirebasePlatform {}
+
 class MockFirebaseUser extends Mock implements firebase_auth.User {}
 
 class MockGoogleSignIn extends Mock implements GoogleSignIn {}
 
-class MockGoogleSignInAccount extends Mock
-    with LegacyEquality
-    implements GoogleSignInAccount {}
+class MockGoogleSignInAccount extends Mock implements GoogleSignInAccount {}
 
 class MockGoogleSignInAuthentication extends Mock
     implements GoogleSignInAuthentication {}
@@ -43,36 +38,6 @@ class FakeAuthProvider extends Fake implements AuthProvider {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  MethodChannelFirebase.channel.setMockMethodCallHandler((call) async {
-    if (call.method == 'Firebase#initializeCore') {
-      return [
-        {
-          'name': defaultFirebaseAppName,
-          'options': {
-            'apiKey': '123',
-            'appId': '123',
-            'messagingSenderId': '123',
-            'projectId': '123',
-          },
-          'pluginConstants': const <String, String>{},
-        }
-      ];
-    }
-
-    if (call.method == 'Firebase#initializeApp') {
-      final arguments = call.arguments as Map<String, dynamic>;
-      return <String, dynamic>{
-        'name': arguments['appName'],
-        'options': arguments['options'],
-        'pluginConstants': const <String, String>{},
-      };
-    }
-
-    return null;
-  });
-
-  TestWidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
 
   const email = 'test@gmail.com';
   const password = 't0ps3cret42';
@@ -93,6 +58,26 @@ void main() {
     });
 
     setUp(() {
+      const options = FirebaseOptions(
+        apiKey: 'apiKey',
+        appId: 'appId',
+        messagingSenderId: 'messagingSenderId',
+        projectId: 'projectId',
+      );
+      final platformApp = FirebaseAppPlatform(defaultFirebaseAppName, options);
+      final firebaseCore = MockFirebaseCore();
+
+      when(() => firebaseCore.apps).thenReturn([platformApp]);
+      when(firebaseCore.app).thenReturn(platformApp);
+      when(
+        () => firebaseCore.initializeApp(
+          name: defaultFirebaseAppName,
+          options: options,
+        ),
+      ).thenAnswer((_) async => platformApp);
+
+      Firebase.delegatePackingProperty = firebaseCore;
+
       cache = MockCacheClient();
       firebaseAuth = MockFirebaseAuth();
       googleSignIn = MockGoogleSignIn();
@@ -190,7 +175,7 @@ void main() {
       });
 
       test(
-          'sucessfully calls signIn authentication, and '
+          'successfully calls signIn authentication, and '
           'signInWithPopup when authCredential is not null and kIsWeb is true',
           () async {
         final credential = MockUserCredential();
@@ -333,7 +318,7 @@ void main() {
 
       test('returns User when cached user is not null', () async {
         when(
-          () => cache.read(key: AuthenticationRepository.userCacheKey),
+          () => cache.read<User>(key: AuthenticationRepository.userCacheKey),
         ).thenReturn(user);
         expect(authenticationRepository.currentUser, equals(user));
       });

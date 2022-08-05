@@ -7,16 +7,25 @@ import 'package:flutter_weather/weather/weather.dart';
 import 'package:weather_repository/weather_repository.dart';
 
 class WeatherPage extends StatelessWidget {
+  const WeatherPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => WeatherCubit(context.read<WeatherRepository>()),
-      child: WeatherView(),
+      child: const WeatherView(),
     );
   }
 }
 
-class WeatherView extends StatelessWidget {
+class WeatherView extends StatefulWidget {
+  const WeatherView({super.key});
+
+  @override
+  State<WeatherView> createState() => _WeatherViewState();
+}
+
+class _WeatherViewState extends State<WeatherView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,9 +35,11 @@ class WeatherView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              Navigator.of(context).push<void>(SettingsPage.route(
-                context.read<WeatherCubit>(),
-              ));
+              Navigator.of(context).push<void>(
+                SettingsPage.route(
+                  context.read<WeatherCubit>(),
+                ),
+              );
             },
           ),
         ],
@@ -55,7 +66,6 @@ class WeatherView extends StatelessWidget {
                   },
                 );
               case WeatherStatus.failure:
-              default:
                 return const WeatherError();
             }
           },
@@ -65,6 +75,7 @@ class WeatherView extends StatelessWidget {
         child: const Icon(Icons.search),
         onPressed: () async {
           final city = await Navigator.of(context).push(SearchPage.route());
+          if (!mounted) return;
           await context.read<WeatherCubit>().fetchWeather(city);
         },
       ),
