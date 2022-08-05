@@ -113,6 +113,62 @@ void main() {
         }, blocObserver: observer);
       });
 
+      test(
+        'does state change even previous state is same as next state with allowEmitSameState emit parameter',
+        () async {
+          await BlocOverrides.runZoned(
+            () async {
+              final changes = <Change<int>>[];
+              final cubit = CounterCubit(onChangeCallback: changes.add)
+                ..emitSameState()
+                ..emitSameState();
+
+              expect(2, changes.length);
+
+              verify(
+                // ignore: invalid_use_of_protected_member
+                () => observer.onChange(
+                  cubit,
+                  const Change<int>(currentState: 0, nextState: 0),
+                ),
+              ).called(2);
+
+              await cubit.close();
+            },
+            blocObserver: observer,
+          );
+        },
+      );
+
+      test(
+        'does not state change if previous state is same as next state',
+        () async {
+          await BlocOverrides.runZoned(
+            () async {
+              final changes = <Change<int>>[];
+              final cubit = CounterCubit(onChangeCallback: changes.add)
+                ..emitWithoutParameter()
+                ..emitWithoutParameter();
+
+              expect(changes.length, 1);
+
+              verify(
+                () {
+                  // ignore: invalid_use_of_protected_member
+                  observer.onChange(
+                    cubit,
+                    const Change<int>(currentState: 0, nextState: 0),
+                  );
+                },
+              ).called(1);
+
+              await cubit.close();
+            },
+            blocObserver: observer,
+          );
+        },
+      );
+
       test('is called with correct changes for multiple state changes',
           () async {
         await BlocOverrides.runZoned(() async {
