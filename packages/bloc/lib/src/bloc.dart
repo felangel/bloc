@@ -135,7 +135,8 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   /// {@endtemplate}
   @visibleForTesting
   @override
-  void emit(State state) => super.emit(state);
+  void emit(State state, {bool allowEmitSameState = false}) =>
+      super.emit(state);
 
   /// Register event handler for an event of type `E`.
   /// There should only ever be one event handler per event type `E`.
@@ -165,6 +166,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   void on<E extends Event>(
     EventHandler<E, State> handler, {
     EventTransformer<E>? transformer,
+    bool allowEmitSameState = false,
   }) {
     assert(() {
       final handlerExists = _handlers.any((handler) => handler.type == E);
@@ -184,7 +186,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
       (dynamic event) {
         void onEmit(State state) {
           if (isClosed) return;
-          if (this.state == state && _emitted) return;
+          if (this.state == state && _emitted && !allowEmitSameState) return;
           onTransition(Transition(
             currentState: this.state,
             event: event as E,
