@@ -36,14 +36,6 @@ typedef EventTransformer<Event> = Stream<Event> Function(
   EventMapper<Event> mapper,
 );
 
-class _Handler {
-  const _Handler({required this.isType, required this.type});
-  final bool Function(dynamic value) isType;
-  final Type type;
-}
-
-class _DefaultBlocObserver extends BlocObserver {}
-
 /// {@template bloc}
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
@@ -67,7 +59,11 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   /// * [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
   /// opinionated set of event transformers.
   ///
-  static EventTransformer<dynamic> transformer = _defaultEventTransformer;
+  static EventTransformer<dynamic> transformer = (events, mapper) {
+    return events
+        .map(mapper)
+        .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
+  };
 
   final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<dynamic>>[];
@@ -288,5 +284,58 @@ abstract class Bloc<Event, State> extends BlocBase<State>
     await Future.wait<void>(_emitters.map((e) => e.future));
     await Future.wait<void>(_subscriptions.map((s) => s.cancel()));
     return super.close();
+  }
+}
+
+class _Handler {
+  const _Handler({required this.isType, required this.type});
+  final bool Function(dynamic value) isType;
+  final Type type;
+}
+
+class _DefaultBlocObserver extends BlocObserver {}
+
+class _FlatMapStreamTransformer<T> extends StreamTransformerBase<Stream<T>, T> {
+  const _FlatMapStreamTransformer();
+
+  @override
+  Stream<T> bind(Stream<Stream<T>> stream) {
+    final controller = StreamController<T>.broadcast(sync: true);
+
+    controller.onListen = () {
+      final subscriptions = <StreamSubscription<dynamic>>[];
+
+      final outerSubscription = stream.listen(
+        (inner) {
+          final subscription = inner.listen(
+            controller.add,
+            onError: controller.addError,
+          );
+
+          subscription.onDone(() {
+            subscriptions.remove(subscription);
+            if (subscriptions.isEmpty) controller.close();
+          });
+
+          subscriptions.add(subscription);
+        },
+        onError: controller.addError,
+      );
+
+      outerSubscription.onDone(() {
+        subscriptions.remove(outerSubscription);
+        if (subscriptions.isEmpty) controller.close();
+      });
+
+      subscriptions.add(outerSubscription);
+
+      controller.onCancel = () {
+        if (subscriptions.isEmpty) return null;
+        final cancels = [for (final s in subscriptions) s.cancel()];
+        return Future.wait(cancels).then((_) {});
+      };
+    };
+
+    return controller.stream;
   }
 }
