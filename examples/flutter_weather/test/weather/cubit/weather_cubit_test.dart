@@ -18,6 +18,8 @@ class MockWeatherRepository extends Mock
 class MockWeather extends Mock implements weather_repository.Weather {}
 
 void main() {
+  initHydratedStorage();
+
   group('WeatherCubit', () {
     late weather_repository.Weather weather;
     late weather_repository.WeatherRepository weatherRepository;
@@ -32,27 +34,21 @@ void main() {
       when(
         () => weatherRepository.getWeather(any()),
       ).thenAnswer((_) async => weather);
-      weatherCubit = await mockHydratedStorage(
-        () => WeatherCubit(weatherRepository),
-      );
+      weatherCubit = WeatherCubit(weatherRepository);
     });
 
     test('initial state is correct', () {
-      mockHydratedStorage(() {
-        final weatherCubit = WeatherCubit(weatherRepository);
-        expect(weatherCubit.state, WeatherState());
-      });
+      final weatherCubit = WeatherCubit(weatherRepository);
+      expect(weatherCubit.state, WeatherState());
     });
 
     group('toJson/fromJson', () {
       test('work properly', () {
-        mockHydratedStorage(() {
-          final weatherCubit = WeatherCubit(weatherRepository);
-          expect(
-            weatherCubit.fromJson(weatherCubit.toJson(weatherCubit.state)),
-            weatherCubit.state,
-          );
-        });
+        final weatherCubit = WeatherCubit(weatherRepository);
+        expect(
+          weatherCubit.fromJson(weatherCubit.toJson(weatherCubit.state)),
+          weatherCubit.state,
+        );
       });
     });
 

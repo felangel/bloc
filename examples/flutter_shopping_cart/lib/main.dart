@@ -5,8 +5,6 @@ import 'package:flutter_shopping_cart/shopping_repository.dart';
 import 'package:flutter_shopping_cart/simple_bloc_observer.dart';
 
 void main() {
-  BlocOverrides.runZoned(
-    () => runApp(App(shoppingRepository: ShoppingRepository())),
-    blocObserver: SimpleBlocObserver(),
-  );
+  Bloc.observer = SimpleBlocObserver();
+  runApp(App(shoppingRepository: ShoppingRepository()));
 }
