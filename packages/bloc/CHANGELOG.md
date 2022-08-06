@@ -1,3 +1,10 @@
+# 8.1.0
+
+- feat: reintroduce `Bloc.observer` and `Bloc.transformer` ([#3469](https://github.com/felangel/bloc/pull/3469))
+  - deprecate: `BlocOverrides`
+- fix: remove unnecessary `async` from `Emitter.onEach` ([#3392](https://github.com/felangel/bloc/pull/3392))
+- chore: upgrade to `mocktail ^0.3.0` ([#3477](https://github.com/felangel/bloc/pull/3477))
+
 # 8.0.3
 
 - refactor: resolve analysis warnings ([#3189](https://github.com/felangel/bloc/pull/3189))
