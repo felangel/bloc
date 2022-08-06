@@ -18,9 +18,9 @@ class MockWeather extends Mock implements Weather {
 }
 
 void main() {
-  group('ThemeCubit', () {
-    setUpAll(initHydratedStorage);
+  initHydratedStorage();
 
+  group('ThemeCubit', () {
     test('initial state is correct', () {
       expect(ThemeCubit().state, ThemeCubit.defaultColor);
     });

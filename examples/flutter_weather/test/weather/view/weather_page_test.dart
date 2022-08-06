@@ -21,10 +21,10 @@ class MockWeatherCubit extends MockCubit<WeatherState> implements WeatherCubit {
 }
 
 void main() {
+  initHydratedStorage();
+
   group('WeatherPage', () {
     late WeatherRepository weatherRepository;
-
-    setUpAll(initHydratedStorage);
 
     setUp(() {
       weatherRepository = MockWeatherRepository();

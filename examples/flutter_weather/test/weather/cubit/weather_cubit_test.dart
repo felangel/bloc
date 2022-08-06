@@ -18,12 +18,12 @@ class MockWeatherRepository extends Mock
 class MockWeather extends Mock implements weather_repository.Weather {}
 
 void main() {
+  initHydratedStorage();
+
   group('WeatherCubit', () {
     late weather_repository.Weather weather;
     late weather_repository.WeatherRepository weatherRepository;
     late WeatherCubit weatherCubit;
-
-    setUpAll(initHydratedStorage);
 
     setUp(() async {
       weather = MockWeather();

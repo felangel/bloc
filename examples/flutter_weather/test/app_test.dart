@@ -15,10 +15,10 @@ class MockThemeCubit extends MockCubit<Color> implements ThemeCubit {}
 class MockWeatherRepository extends Mock implements WeatherRepository {}
 
 void main() {
+  initHydratedStorage();
+
   group('WeatherApp', () {
     late WeatherRepository weatherRepository;
-
-    setUpAll(initHydratedStorage);
 
     setUp(() {
       weatherRepository = MockWeatherRepository();
