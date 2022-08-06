@@ -23,8 +23,6 @@ class SimpleBlocObserver extends BlocObserver {
 }
 
 void main() {
-  BlocOverrides.runZoned(
-    () => runApp(ng.AppComponentNgFactory),
-    blocObserver: SimpleBlocObserver(),
-  );
+  Bloc.observer = SimpleBlocObserver();
+  runApp(ng.AppComponentNgFactory);
 }
