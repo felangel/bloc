@@ -18,7 +18,7 @@ void main() {
   group('WeatherApp', () {
     late WeatherRepository weatherRepository;
 
-    setUpAll(initHydratedBloc);
+    setUpAll(initHydratedStorage);
 
     setUp(() {
       weatherRepository = MockWeatherRepository();

@@ -23,7 +23,7 @@ void main() {
     late weather_repository.WeatherRepository weatherRepository;
     late WeatherCubit weatherCubit;
 
-    setUpAll(initHydratedBloc);
+    setUpAll(initHydratedStorage);
 
     setUp(() async {
       weather = MockWeather();

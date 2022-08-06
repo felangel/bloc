@@ -6,7 +6,7 @@ class MockStorage extends Mock implements Storage {}
 
 late Storage hydratedStorage;
 
-void initHydratedBloc() {
+void initHydratedStorage() {
   TestWidgetsFlutterBinding.ensureInitialized();
   hydratedStorage = MockStorage();
   when(
