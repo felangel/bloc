@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 part of 'bloc.dart';
 
 const _asyncRunZoned = runZoned;
@@ -34,9 +36,15 @@ abstract class BlocOverrides {
   /// See also:
   /// * [BlocOverrides.runZoned] to provide [BlocOverrides] in a fresh [Zone].
   ///
+  @Deprecated(
+    'This will be removed in v9.0.0. Use Bloc.observer/Bloc.transformer instead.',
+  )
   static BlocOverrides? get current => Zone.current[_token] as BlocOverrides?;
 
   /// Runs [body] in a fresh [Zone] using the provided overrides.
+  @Deprecated(
+    'This will be removed in v9.0.0. Use Bloc.observer/Bloc.transformer instead.',
+  )
   static R runZoned<R>(
     R Function() body, {
     BlocObserver? blocObserver,
@@ -49,7 +57,8 @@ abstract class BlocOverrides {
   /// The [BlocObserver] that will be used within the current [Zone].
   ///
   /// By default, a base [BlocObserver] implementation is used.
-  BlocObserver get blocObserver => _defaultBlocObserver;
+  @Deprecated('This will be removed in v9.0.0. Use Bloc.observer instead.')
+  BlocObserver get blocObserver => Bloc.observer;
 
   /// The [EventTransformer] that will be used within the current [Zone].
   ///
@@ -63,7 +72,8 @@ abstract class BlocOverrides {
   /// * [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
   /// opinionated set of event transformers.
   ///
-  EventTransformer get eventTransformer => _defaultEventTransformer;
+  @Deprecated('This will be removed in v9.0.0. Use Bloc.transformer instead.')
+  EventTransformer get eventTransformer => Bloc.transformer;
 }
 
 class _BlocOverridesScope extends BlocOverrides {
@@ -93,59 +103,5 @@ class _BlocOverridesScope extends BlocOverrides {
     if (previous != null) return previous.eventTransformer;
 
     return super.eventTransformer;
-  }
-}
-
-late final _defaultBlocObserver = _DefaultBlocObserver();
-late final _defaultEventTransformer = (Stream events, EventMapper mapper) {
-  return events
-      .map(mapper)
-      .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
-};
-
-class _DefaultBlocObserver extends BlocObserver {}
-
-class _FlatMapStreamTransformer<T> extends StreamTransformerBase<Stream<T>, T> {
-  const _FlatMapStreamTransformer();
-
-  @override
-  Stream<T> bind(Stream<Stream<T>> stream) {
-    final controller = StreamController<T>.broadcast(sync: true);
-
-    controller.onListen = () {
-      final subscriptions = <StreamSubscription<dynamic>>[];
-
-      final outerSubscription = stream.listen(
-        (inner) {
-          final subscription = inner.listen(
-            controller.add,
-            onError: controller.addError,
-          );
-
-          subscription.onDone(() {
-            subscriptions.remove(subscription);
-            if (subscriptions.isEmpty) controller.close();
-          });
-
-          subscriptions.add(subscription);
-        },
-        onError: controller.addError,
-      );
-
-      outerSubscription.onDone(() {
-        subscriptions.remove(outerSubscription);
-        if (subscriptions.isEmpty) controller.close();
-      });
-
-      subscriptions.add(outerSubscription);
-
-      controller.onCancel = () {
-        if (subscriptions.isEmpty) return null;
-        final cancels = [for (final s in subscriptions) s.cancel()];
-        return Future.wait(cancels).then((_) {});
-      };
-    };
-
-    return controller.stream;
   }
 }
