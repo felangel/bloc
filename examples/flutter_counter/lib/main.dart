@@ -4,8 +4,6 @@ import 'package:flutter_counter/app.dart';
 import 'package:flutter_counter/counter_observer.dart';
 
 void main() {
-  BlocOverrides.runZoned(
-    () => runApp(const CounterApp()),
-    blocObserver: CounterObserver(),
-  );
+  Bloc.observer = CounterObserver();
+  runApp(const CounterApp());
 }

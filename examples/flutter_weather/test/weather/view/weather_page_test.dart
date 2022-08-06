@@ -24,19 +24,19 @@ void main() {
   group('WeatherPage', () {
     late WeatherRepository weatherRepository;
 
+    setUpAll(initHydratedBloc);
+
     setUp(() {
       weatherRepository = MockWeatherRepository();
     });
 
     testWidgets('renders WeatherView', (tester) async {
-      await mockHydratedStorage(() async {
-        await tester.pumpWidget(
-          RepositoryProvider.value(
-            value: weatherRepository,
-            child: MaterialApp(home: WeatherPage()),
-          ),
-        );
-      });
+      await tester.pumpWidget(
+        RepositoryProvider.value(
+          value: weatherRepository,
+          child: MaterialApp(home: WeatherPage()),
+        ),
+      );
       expect(find.byType(WeatherView), findsOneWidget);
     });
   });
@@ -118,24 +118,18 @@ void main() {
     });
 
     testWidgets('state is cached', (tester) async {
-      final storage = MockStorage();
-      when<dynamic>(() => storage.read('WeatherCubit')).thenReturn(
+      when<dynamic>(() => hydratedStorage.read('WeatherCubit')).thenReturn(
         WeatherState(
           status: WeatherStatus.success,
           weather: weather,
           temperatureUnits: TemperatureUnits.fahrenheit,
         ).toJson(),
       );
-      await mockHydratedStorage(
-        () async {
-          await tester.pumpWidget(
-            BlocProvider.value(
-              value: WeatherCubit(MockWeatherRepository()),
-              child: MaterialApp(home: WeatherView()),
-            ),
-          );
-        },
-        storage: storage,
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: WeatherCubit(MockWeatherRepository()),
+          child: MaterialApp(home: WeatherView()),
+        ),
       );
       expect(find.byType(WeatherPopulated), findsOneWidget);
     });

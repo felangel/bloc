@@ -6,8 +6,6 @@ import 'package:flutter_complex_list/repository.dart';
 import 'package:flutter_complex_list/simple_bloc_observer.dart';
 
 void main() {
-  BlocOverrides.runZoned(
-    () => runApp(App(repository: Repository())),
-    blocObserver: SimpleBlocObserver(),
-  );
+  Bloc.observer = SimpleBlocObserver();
+  runApp(App(repository: Repository()));
 }

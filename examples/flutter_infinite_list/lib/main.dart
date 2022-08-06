@@ -5,8 +5,6 @@ import 'package:flutter_infinite_list/app.dart';
 import 'package:flutter_infinite_list/simple_bloc_observer.dart';
 
 void main() {
-  BlocOverrides.runZoned(
-    () => runApp(const App()),
-    blocObserver: SimpleBlocObserver(),
-  );
+  Bloc.observer = SimpleBlocObserver();
+  runApp(const App());
 }
