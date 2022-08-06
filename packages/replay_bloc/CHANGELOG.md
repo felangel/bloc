@@ -1,3 +1,7 @@
+# 0.2.2
+
+- chore: upgrade to `bloc v8.1.0`
+
 # 0.2.1
 
 - chore: upgrade to `bloc v8.0.1`
