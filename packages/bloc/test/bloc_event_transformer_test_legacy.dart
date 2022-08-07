@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'package:bloc/bloc.dart';
 import 'package:test/test.dart';
 
@@ -39,16 +41,6 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 
 void main() {
-  late EventTransformer transformer;
-
-  setUp(() {
-    transformer = Bloc.transformer;
-  });
-
-  tearDown(() {
-    Bloc.transformer = transformer;
-  });
-
   test('processes events concurrently by default', () async {
     final states = <int>[];
     final bloc = CounterBloc()
@@ -196,77 +188,81 @@ void main() {
   test(
       'processes events sequentially when '
       'Bloc.transformer is overridden.', () async {
-    Bloc.transformer = (events, mapper) => events.asyncExpand<dynamic>(mapper);
-    final states = <int>[];
-    final bloc = CounterBloc()
-      ..stream.listen(states.add)
-      ..add(Increment())
-      ..add(Increment())
-      ..add(Increment());
+    await BlocOverrides.runZoned(
+      () async {
+        final states = <int>[];
+        final bloc = CounterBloc()
+          ..stream.listen(states.add)
+          ..add(Increment())
+          ..add(Increment())
+          ..add(Increment());
 
-    await tick();
+        await tick();
 
-    expect(
-      bloc.onCalls,
-      equals([Increment()]),
+        expect(
+          bloc.onCalls,
+          equals([Increment()]),
+        );
+
+        await wait();
+
+        expect(
+          bloc.onEmitCalls,
+          equals([Increment()]),
+        );
+        expect(states, equals([1]));
+
+        await tick();
+
+        expect(
+          bloc.onCalls,
+          equals([Increment(), Increment()]),
+        );
+
+        await wait();
+
+        expect(
+          bloc.onEmitCalls,
+          equals([Increment(), Increment()]),
+        );
+
+        expect(states, equals([1, 2]));
+
+        await tick();
+
+        expect(
+          bloc.onCalls,
+          equals([
+            Increment(),
+            Increment(),
+            Increment(),
+          ]),
+        );
+
+        await wait();
+
+        expect(
+          bloc.onEmitCalls,
+          equals([Increment(), Increment(), Increment()]),
+        );
+
+        expect(states, equals([1, 2, 3]));
+
+        await bloc.close();
+
+        expect(
+          bloc.onCalls,
+          equals([Increment(), Increment(), Increment()]),
+        );
+
+        expect(
+          bloc.onEmitCalls,
+          equals([Increment(), Increment(), Increment()]),
+        );
+
+        expect(states, equals([1, 2, 3]));
+      },
+      eventTransformer: (events, mapper) => events.asyncExpand<dynamic>(mapper),
     );
-
-    await wait();
-
-    expect(
-      bloc.onEmitCalls,
-      equals([Increment()]),
-    );
-    expect(states, equals([1]));
-
-    await tick();
-
-    expect(
-      bloc.onCalls,
-      equals([Increment(), Increment()]),
-    );
-
-    await wait();
-
-    expect(
-      bloc.onEmitCalls,
-      equals([Increment(), Increment()]),
-    );
-
-    expect(states, equals([1, 2]));
-
-    await tick();
-
-    expect(
-      bloc.onCalls,
-      equals([
-        Increment(),
-        Increment(),
-        Increment(),
-      ]),
-    );
-
-    await wait();
-
-    expect(
-      bloc.onEmitCalls,
-      equals([Increment(), Increment(), Increment()]),
-    );
-
-    expect(states, equals([1, 2, 3]));
-
-    await bloc.close();
-
-    expect(
-      bloc.onCalls,
-      equals([Increment(), Increment(), Increment()]),
-    );
-
-    expect(
-      bloc.onEmitCalls,
-      equals([Increment(), Increment(), Increment()]),
-    );
-
-    expect(states, equals([1, 2, 3]));
   });
 }

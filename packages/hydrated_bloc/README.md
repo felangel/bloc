@@ -57,13 +57,10 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 ### Setup `HydratedStorage`
 
 ```dart
-void main() async {
-  HydratedBlocOverrides.runZoned(
-    () => runApp(App()),
-    createStorage: async () {
-      return HydratedStorage.build(storageDirectory: ...);
-    },
-  );
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(storageDirectory: ...);
+  runApp(App());
 }
 ```
 
@@ -164,11 +161,8 @@ class MyHydratedStorage implements Storage {
 
 ```dart
 // main.dart
-
-HydratedBlocOverrides.runZoned(
-  () => runApp(MyApp()),
-  createStorage: () => MyHydratedStorage(),
-);
+HydratedBloc.storage = MyHydratedStorage();
+runApp(MyApp());
 ```
 
 ## Dart Versions

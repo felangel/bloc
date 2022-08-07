@@ -13,17 +13,12 @@ void bootstrap({required TodosApi todosApi}) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
+  Bloc.observer = AppBlocObserver();
+
   final todosRepository = TodosRepository(todosApi: todosApi);
 
   runZonedGuarded(
-    () async {
-      await BlocOverrides.runZoned(
-        () async => runApp(
-          App(todosRepository: todosRepository),
-        ),
-        blocObserver: AppBlocObserver(),
-      );
-    },
+    () => runApp(App(todosRepository: todosRepository)),
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );
 }

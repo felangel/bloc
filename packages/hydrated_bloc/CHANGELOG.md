@@ -1,3 +1,8 @@
+# 9.0.0-dev.3
+
+- **BREAKING**: feat!: reintroduce `HydratedBloc.storage` and remove `HydratedBlocOverrides` ([#3479](https://github.com/felangel/bloc/pull/3479))
+  - upgrade to `bloc: ^8.1.0`
+
 # 9.0.0-dev.2
 
 - fix: update `StorageNotFound` implementation for `toString` ([#3314](https://github.com/felangel/bloc/pull/3314))

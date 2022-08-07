@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'package:bloc/bloc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';

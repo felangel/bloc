@@ -71,8 +71,11 @@ abstract class ReplayBloc<Event extends ReplayEvent, State>
 /// A mixin which enables `undo` and `redo` operations
 /// for [Bloc] classes.
 mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
+  // ignore: deprecated_member_use
   late final _blocObserver = BlocOverrides.current?.blocObserver;
   late final _changeStack = _ChangeStack<State>(shouldReplay: shouldReplay);
+
+  BlocObserver get _observer => _blocObserver ?? Bloc.observer;
 
   /// Sets the internal `undo`/`redo` size limit.
   /// By default there is no limit.
@@ -82,14 +85,14 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
   // ignore: must_call_super
   void onTransition(covariant Transition<ReplayEvent, State> transition) {
     // ignore: invalid_use_of_protected_member
-    _blocObserver?.onTransition(this, transition);
+    _observer.onTransition(this, transition);
   }
 
   @override
   // ignore: must_call_super
   void onEvent(covariant ReplayEvent event) {
     // ignore: invalid_use_of_protected_member
-    _blocObserver?.onEvent(this, event);
+    _observer.onEvent(this, event);
   }
 
   @override

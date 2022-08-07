@@ -3,10 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 
 void main() {
-  BlocOverrides.runZoned(
-    () => runApp(const App()),
-    blocObserver: AppBlocObserver(),
-  );
+  Bloc.observer = AppBlocObserver();
+  runApp(const App());
 }
 
 /// Custom [BlocObserver] that observes all bloc and cubit state changes.

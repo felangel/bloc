@@ -15,6 +15,8 @@ class MockThemeCubit extends MockCubit<Color> implements ThemeCubit {}
 class MockWeatherRepository extends Mock implements WeatherRepository {}
 
 void main() {
+  initHydratedStorage();
+
   group('WeatherApp', () {
     late WeatherRepository weatherRepository;
 
@@ -23,11 +25,9 @@ void main() {
     });
 
     testWidgets('renders WeatherAppView', (tester) async {
-      await mockHydratedStorage(() async {
-        await tester.pumpWidget(
-          WeatherApp(weatherRepository: weatherRepository),
-        );
-      });
+      await tester.pumpWidget(
+        WeatherApp(weatherRepository: weatherRepository),
+      );
       expect(find.byType(WeatherAppView), findsOneWidget);
     });
   });
@@ -43,34 +43,30 @@ void main() {
 
     testWidgets('renders WeatherPage', (tester) async {
       when(() => themeCubit.state).thenReturn(Colors.blue);
-      await mockHydratedStorage(() async {
-        await tester.pumpWidget(
-          RepositoryProvider.value(
-            value: weatherRepository,
-            child: BlocProvider.value(
-              value: themeCubit,
-              child: const WeatherAppView(),
-            ),
+      await tester.pumpWidget(
+        RepositoryProvider.value(
+          value: weatherRepository,
+          child: BlocProvider.value(
+            value: themeCubit,
+            child: const WeatherAppView(),
           ),
-        );
-      });
+        ),
+      );
       expect(find.byType(WeatherPage), findsOneWidget);
     });
 
     testWidgets('has correct theme primary color', (tester) async {
       const color = Color(0xFFD2D2D2);
       when(() => themeCubit.state).thenReturn(color);
-      await mockHydratedStorage(() async {
-        await tester.pumpWidget(
-          RepositoryProvider.value(
-            value: weatherRepository,
-            child: BlocProvider.value(
-              value: themeCubit,
-              child: const WeatherAppView(),
-            ),
+      await tester.pumpWidget(
+        RepositoryProvider.value(
+          value: weatherRepository,
+          child: BlocProvider.value(
+            value: themeCubit,
+            child: const WeatherAppView(),
           ),
-        );
-      });
+        ),
+      );
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(materialApp.theme?.primaryColor, color);
     });

@@ -7,16 +7,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:weather_repository/weather_repository.dart';
 
 void main() async {
-  HydratedBlocOverrides.runZoned(
-    () => runApp(WeatherApp(weatherRepository: WeatherRepository())),
-    blocObserver: WeatherBlocObserver(),
-    createStorage: () async {
-      WidgetsFlutterBinding.ensureInitialized();
-      return HydratedStorage.build(
-        storageDirectory: kIsWeb
-            ? HydratedStorage.webStorageDirectory
-            : await getTemporaryDirectory(),
-      );
-    },
+  WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = WeatherBlocObserver();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getTemporaryDirectory(),
   );
+  runApp(WeatherApp(weatherRepository: WeatherRepository()));
 }

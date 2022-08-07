@@ -6,17 +6,13 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() async {
-  HydratedBlocOverrides.runZoned(
-    () => runApp(App()),
-    createStorage: () async {
-      WidgetsFlutterBinding.ensureInitialized();
-      return HydratedStorage.build(
-        storageDirectory: kIsWeb
-            ? HydratedStorage.webStorageDirectory
-            : await getTemporaryDirectory(),
-      );
-    },
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getTemporaryDirectory(),
   );
+  runApp(App());
 }
 
 class App extends StatelessWidget {
@@ -91,9 +87,7 @@ class CounterView extends StatelessWidget {
           const SizedBox(height: 4),
           FloatingActionButton(
             child: const Icon(Icons.delete_forever),
-            onPressed: () {
-              HydratedBlocOverrides.current?.storage.clear();
-            },
+            onPressed: () => HydratedBloc.storage.clear(),
           ),
         ],
       ),
