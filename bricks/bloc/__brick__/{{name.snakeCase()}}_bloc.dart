@@ -1,3 +1,4 @@
+{{#use_equatable}}import 'package:equatable/equatable.dart';{{/use_equatable}}
 import 'package:bloc/bloc.dart';
 
 part '{{name.snakeCase()}}_event.dart';

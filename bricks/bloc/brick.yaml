@@ -12,3 +12,8 @@ vars:
     description: The name of the bloc class.
     default: counter
     prompt: Please enter the bloc name.
+  use_equatable:
+    default: true
+    type: boolean
+    description: Has equatable
+    prompt: Does this bloc use equatable?
