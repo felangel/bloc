@@ -25,6 +25,9 @@ mason make bloc --name counter
 | Variable | Description                | Default   | Type     |
 | -------- | -------------------------- | --------- | -------- |
 | `name`   | The name of the bloc class | `counter` | `string` |
+| `use_equatable` | Creates the equatable override | `true`   | `bool` |
+| `add events` | Add events to the bloc | `false`   | `bool` |
+| `add states` | Add states to the bloc | `false`   | `bool` |
 
 ## Output 📦
 
