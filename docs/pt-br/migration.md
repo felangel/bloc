@@ -2,6 +2,79 @@
 
 ?> 💡 **Dica**: Por favor, consulte o [release log](https://github.com/felangel/bloc/releases) para obter mais informações sobre o que mudou em cada versão.
 
+
+## v8.1.0
+
+### package:bloc
+
+
+#### ✨ Reintroduz as APIs `Bloc.observer` e `Bloc.transformer`
+
+!> No bloc v8.1.0, `BlocOverrides` foi descontinuado em favor das APIs `Bloc.observer` e `Bloc.transformer`.
+
+##### Justificativa
+
+A API `BlocOverrides` foi introduzida na v8.0.0 em uma tentativa de oferecer suporte a configurações específicas do escopo do bloc, como `BlocObserver`, `EventTransformer` e `HydratedStorage`. Em aplicativos Dart puros, as mudanças funcionaram bem; no entanto, em aplicativos Flutter a nova API causou mais problemas do que resolveu.
+
+A API `BlocOverrides` foi inspirada em APIs semelhantes em Flutter/Dart:
+
+- [HttpOverrides](https://api.flutter.dev/flutter/dart-io/HttpOverrides-class.html)
+- [IOOverrides](https://api.flutter.dev/flutter/dart-io/IOOverrides-class.html)
+
+**Problemas**
+
+Embora não tenha sido a principal razão para essas mudanças, a API `BlocOverrides` introduziu complexidade adicional para os desenvolvedores. Além de aumentar a quantidade de aninhamento e linhas de código necessárias para obter o mesmo efeito, a API `BlocOverrides` exigia que os desenvolvedores tivessem um conhecimento sólido de [Zones](https://api.dart.dev/stable/2.17.6/dart-async/Zone-class.html) no Dart. `Zones` não é um conceito amigável para iniciantes e a falha em entender como as Zones funcionam pode levar à introdução de bugs (como observadores não inicializados, transformadores, instâncias de armazenamento).
+
+Por exemplo, muitos desenvolvedores teriam algo como:
+
+```dart
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  BlocOverrides.runZoned(...);
+}
+```
+
+O código acima, embora pareça inofensivo, pode realmente levar a muitos bugs difíceis de rastrear. Qualquer que seja a zona `WidgetsFlutterBinding.ensureInitialized` inicialmente chamada, será a zona na qual os eventos de gesto são tratados (por exemplo, os callbacks `onTap`, `onPressed`) devido a `GestureBinding.initInstances`. Este é apenas um dos muitos problemas causados pelo uso de `zoneValues`.
+
+Além disso, o Flutter faz muitas coisas nos bastidores que envolvem bifurcação/manipulação de Zones (especialmente ao executar testes) que podem levar a comportamentos inesperados (e em muitos casos, comportamentos que estão fora do controle do desenvolvedor -- veja os problemas abaixo).
+
+Devido ao uso do [runZoned](https://api.flutter.dev/flutter/dart-async/runZoned.html), a transição para a API `BlocOverrides` levou à descoberta de vários bugs/limitações no Flutter (especificamente em torno de Testes de Widget e Integração):
+
+- https://github.com/flutter/flutter/issues/96939
+- https://github.com/flutter/flutter/issues/94123
+- https://github.com/flutter/flutter/issues/93676
+
+que afetou muitos desenvolvedores usando a biblioteca bloc:
+
+- https://github.com/felangel/bloc/issues/3394
+- https://github.com/felangel/bloc/issues/3350
+- https://github.com/felangel/bloc/issues/3319
+
+**v8.0.x**
+
+```dart
+void main() {
+  BlocOverrides.runZoned(
+    () {
+      // ...
+    },
+    blocObserver: CustomBlocObserver(),
+    eventTransformer: customEventTransformer(),
+  );
+}
+```
+
+**v8.1.0**
+
+```dart
+void main() {
+  Bloc.observer = CustomBlocObserver();
+  Bloc.transformer = customEventTransformer();
+
+  // ...
+}
+```
+
 ## v8.0.0
 
 ### package:bloc
@@ -702,7 +775,7 @@ HydratedBloc.storage = await HydratedStorage.build(
 
 ##### Justificativa
 
-`context.read`,` context.watch` e `context.select` foram adicionados para alinhar com o existente [provider](https://pub.dev/packages/provider) 
+`context.read`,` context.watch` e `context.select` foram adicionados para alinhar com o existente [provider](https://pub.dev/packages/provider)
 API com a qual muitos desenvolvedores estão familiarizados e para resolver problemas que foram levantados pela comunidade. Para melhorar a segurança do código e manter a consistência, `context.bloc` foi descontinuado porque pode ser substituído por` context.read` ou `context.watch` dependendo se for usado diretamente no` build`.
 
 **context.watch**
@@ -1184,7 +1257,7 @@ class MyBlocObserver extends BlocObserver {
 
 O `BlocSupervisor` era outro componente que os desenvolvedores precisavam conhecer e interagir com o único propósito de especificar um` BlocDelegate` personalizado. Com a mudança para `BlocObserver`, sentimos que melhorou a experiência do desenvolvedor ao definir o observador diretamente no próprio bloc.
 
-?> 
+?>
 
 **v4.x.x**
 
