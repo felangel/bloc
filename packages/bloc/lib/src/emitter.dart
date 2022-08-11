@@ -23,11 +23,14 @@ abstract class Emitter<State> {
   /// [onError] and will not result in unhandled exceptions or cancelations to
   /// the internal stream subscription.
   ///
+  /// If [onDone] is provided, when the [stream] ends, [onDone] will be invoked.
+  ///
   /// **Note**: The stack trace argument may be [StackTrace.empty]
   /// if the [stream] received an error without a stack trace.
   Future<void> onEach<T>(
     Stream<T> stream, {
     required void Function(T data) onData,
+    void Function()? onDone,
     void Function(Object error, StackTrace stackTrace)? onError,
   });
 
@@ -45,11 +48,14 @@ abstract class Emitter<State> {
   /// [onError] and will not result in unhandled exceptions or cancelations to
   /// the internal stream subscription.
   ///
+  /// If [onDone] is provided, when the [stream] ends, [onDone] will be invoked.
+  ///
   /// **Note**: The stack trace argument may be [StackTrace.empty]
   /// if the [stream] received an error without a stack trace.
   Future<void> forEach<T>(
     Stream<T> stream, {
     required State Function(T data) onData,
+    State Function()? onDone,
     State Function(Object error, StackTrace stackTrace)? onError,
   });
 
@@ -75,12 +81,16 @@ class _Emitter<State> implements Emitter<State> {
   Future<void> onEach<T>(
     Stream<T> stream, {
     required void Function(T data) onData,
+    void Function()? onDone,
     void Function(Object error, StackTrace stackTrace)? onError,
   }) {
     final completer = Completer<void>();
     final subscription = stream.listen(
       onData,
-      onDone: completer.complete,
+      onDone: () {
+        if (onDone != null) onDone();
+        completer.complete();
+      },
       onError: onError ?? completer.completeError,
       cancelOnError: onError == null,
     );
@@ -95,10 +105,14 @@ class _Emitter<State> implements Emitter<State> {
   Future<void> forEach<T>(
     Stream<T> stream, {
     required State Function(T data) onData,
+    State Function()? onDone,
     State Function(Object error, StackTrace stackTrace)? onError,
   }) {
     return onEach<T>(
       stream,
+      onDone: () {
+        if (onDone != null) call(onDone());
+      },
       onData: (data) => call(onData(data)),
       onError: onError != null
           ? (Object error, StackTrace stackTrace) {

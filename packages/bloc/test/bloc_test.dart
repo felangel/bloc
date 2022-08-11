@@ -955,6 +955,27 @@ void main() {
         expect(states, equals(expectedStates));
       });
 
+      test('forEach executes onDone when the stream is over', () async {
+        const expectedStates = [0, 1, 2, -1];
+        final states = <int>[];
+        final controller = StreamController<int>.broadcast();
+        final bloc = RestartableStreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(ForEachOnDone());
+
+        await tick();
+
+        controller
+          ..add(0)
+          ..add(1)
+          ..add(2);
+
+        await controller.close();
+
+        await bloc.close();
+        expect(states, equals(expectedStates));
+      });
+
       test(
           'forEach with onError handles errors emitted by stream '
           'and does not cancel the subscription', () async {

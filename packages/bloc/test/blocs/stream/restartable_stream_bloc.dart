@@ -7,6 +7,8 @@ abstract class RestartableStreamEvent {}
 
 class ForEach extends RestartableStreamEvent {}
 
+class ForEachOnDone extends RestartableStreamEvent {}
+
 class ForEachOnError extends RestartableStreamEvent {}
 
 class ForEachTryCatch extends RestartableStreamEvent {}
@@ -36,6 +38,17 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
         await emit.forEach<int>(
           stream,
           onData: (i) => i,
+        );
+      },
+      transformer: (events, mapper) => events.switchMap(mapper),
+    );
+
+    on<ForEachOnDone>(
+      (_, emit) async {
+        await emit.forEach<int>(
+          stream,
+          onData: (i) => i,
+          onDone: () => -1,
         );
       },
       transformer: (events, mapper) => events.switchMap(mapper),
