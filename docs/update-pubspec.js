@@ -24,7 +24,7 @@ const blocImports = [
   { value: blocTestImport, version: "^9.0.3" },
   { value: blocConcurrencyImport, version: "^0.2.0" },
   { value: blocImport, version: "^8.1.0" },
-  { value: flutterBlocImport, version: "^8.0.1" },
+  { value: flutterBlocImport, version: "^8.1.0" },
   { value: hydratedBlocImport, version: "^8.1.0" },
   { value: replayBlocImport, version: "^0.2.2" },
   { value: sealedFlutterBlocImport, version: "^8.0.0" },
