@@ -1,3 +1,7 @@
+# 8.1.1
+
+- chore: remove dependency overrides from example to fix pana score
+
 # 8.1.0
 
 - feat: upgrade to `bloc: ^8.1.0`
