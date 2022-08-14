@@ -1,3 +1,10 @@
+# 8.1.0
+
+- feat: upgrade to `bloc: ^8.1.0`
+- chore: upgrade example to latest bloc and hydrated_bloc ([#3481](https://github.com/felangel/bloc/pull/3481))
+- docs: update GetStream utm tags ([#3136](https://github.com/felangel/bloc/pull/3136))
+- docs: update VGV sponsors logo ([#3125](https://github.com/felangel/bloc/pull/3125))
+
 # 8.0.1
 
 - refactor: use core interfaces from `bloc v8.0.2` ([#3012](https://github.com/felangel/bloc/pull/3012))
