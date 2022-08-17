@@ -16,7 +16,7 @@ packages:
     source: hosted
     version: "4.6.0"
   args:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: args
       url: "https://pub.dartlang.org"
@@ -218,7 +218,7 @@ packages:
     source: hosted
     version: "4.6.0"
   local_storage_todos_api:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: "packages/local_storage_todos_api"
       relative: true
@@ -534,6 +534,13 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/todos_api"
+      relative: true
+    source: path
+    version: "1.0.0+1"
+  todos_api_factory:
+    dependency: "direct main"
+    description:
+      path: "packages/todos_api_factory"
       relative: true
     source: path
     version: "1.0.0+1"
