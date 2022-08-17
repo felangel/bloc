@@ -9,7 +9,7 @@ environment:
 dependencies:
   equatable: ^2.0.3
   json_annotation: ^4.6.0
-  meta: ^1.8.0
+  meta: ^1.7.0
   uuid: ^3.0.6
 
 dev_dependencies:
