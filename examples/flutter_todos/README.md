@@ -31,7 +31,7 @@ $ flutter run --flavor staging --target lib/main_staging.dart
 $ flutter run --flavor production --target lib/main_production.dart
 ```
 
-_\*Flutter Todos works on iOS, Android, Web, and Windows._
+_\*Flutter Todos works on iOS, Android, and Web._
 
 ---
 
