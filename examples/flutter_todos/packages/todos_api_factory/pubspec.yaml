@@ -7,6 +7,8 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
+  firestore_todos_api:
+    path: ../firestore_todos_api
   flutter:
     sdk: flutter
   local_storage_todos_api:
