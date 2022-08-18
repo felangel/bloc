@@ -31,7 +31,7 @@ extension TodosApiFactory on TodosApi {
 
         /// # Firestore 😱🥰
         ///
-        /// THIS WAS SECTION WAS WRITTEN BY A DRUNK CODER.
+        /// THIS WAS SECTION WAS WRITTEN WAS BY A DRUNK CODER.
         ///
         /// Flutter Firebase supports 2 approches for initialisation:
         ///  1. "as code" (Reading from DefaultFirebaseOptions)
