@@ -29,6 +29,40 @@
       "type": "dart",
       "program": "lib/main_production.dart",
       "args": ["--flavor", "production", "--target", "lib/main_production.dart"]
+    },
+    {
+      "name": "Launch development (Firebase)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_development.dart",
+      "args": [
+        "--flavor",
+        "development",
+        "--target",
+        "lib/main_development.dart"
+      ],
+      "toolArgs": ["--dart-define", "todos_api=firestore"]
+    },
+    {
+      "name": "Launch staging (Firebase)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_staging.dart",
+      "args": ["--flavor", "staging", "--target", "lib/main_staging.dart"],
+      "toolArgs": ["--dart-define", "todos_api=firestore"]
+    },
+    {
+      "name": "Launch production (Firebase)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_production.dart",
+      "args": [
+        "--flavor",
+        "production",
+        "--target",
+        "lib/main_production.dart"
+      ],
+      "toolArgs": ["--dart-define", "todos_api=firestore"]
     }
   ]
 }
