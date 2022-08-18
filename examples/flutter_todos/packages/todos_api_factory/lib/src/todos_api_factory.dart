@@ -12,21 +12,8 @@ extension TodosApiFactory on TodosApi {
   /// Provide concreate [implementation] of TodosApi. Use [options] to pass
   /// initialisation options.
   ///
-  /// # firestore
-  /// THIS WAS SECTION WAS WRITTEN BY A DRUNK CODER.
+  /// implementation is [localStorage | firestore]
   ///
-  /// Flutter Firebase supports initialisation in 2 methods:
-  ///  1. as code (Reading from DefaultFirebaseOptions)
-  ///  2. creds file (Native lib reads from google-service.json)
-  ///
-  /// All native firebase  modules (firestore, auth, crashlytics, etc..)
-  /// support `creds file` approach. Some (firestore, auth) native modules
-  /// support `as code` initialisation, while others (for ex. crashlytics) do
-  /// not. NONE of the firebase web modules support the `creds file` approch.
-  ///
-  /// As such Flutter Firebase de-facto ships with support for both options,
-  /// and we follow suite. However better error handling can be offered for the
-  /// case when we on Web without `as code` initialisation provided.
   static Future<TodosApi> factory(
     String implementation, {
     dynamic options,
@@ -41,6 +28,29 @@ extension TodosApiFactory on TodosApi {
 
         return todosApi;
       case _Implementation.firestore:
+
+        /// # Firestore 😱🥰
+        ///
+        /// THIS WAS SECTION WAS WRITTEN BY A DRUNK CODER.
+        ///
+        /// Flutter Firebase supports 2 approches for initialisation:
+        ///  1. "as code" (Reading from DefaultFirebaseOptions)
+        ///  2. "creds file" (Native library reads google-service)
+        ///
+        /// *All* native firebase  modules (firestore, auth, crashlytics, etc..)
+        /// support `creds file` approach.
+        ///
+        /// *Some* native firebase  modules (firestore, auth) support `as code`
+        /// approach, while others (for ex. crashlytics) do not.
+        ///
+        /// *None* of the firebase web modules support the `creds file` approch.
+        ///
+        /// As such, Flutter Firebase de-facto ships with best effort dual
+        /// initialisation + runtime error handling. We follow suite.
+        ///
+        /// Better compile time error handling could be offered here as we hold
+        /// more context, i.e. For the case when the target platform is Web but
+        /// and [options] is null.
         final firebaseOptions = (options is FirebaseOptions) ? options : null;
 
         await Firebase.initializeApp(options: firebaseOptions);
