@@ -39,8 +39,6 @@ class FirestoreTodosApi implements TodosApi {
     final check = await todosCollection.where('id', isEqualTo: todo.id).get();
 
     if (check.docs.isEmpty) {
-      // final output =
-      //     todo.copyWith(id: Timestamp.now().millisecondsSinceEpoch.toString());
       await todosCollection.add(todo);
     } else {
       final currentTodoId = check.docs[0].reference.id;
