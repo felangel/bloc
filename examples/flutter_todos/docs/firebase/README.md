@@ -57,6 +57,62 @@ _\*Flutter Todos works on iOS, Android, and Web._
 
 ## FAQ
 
-Q: What does `flutterfire configure` does to my project?
+Q: What does `flutterfire configure` changes in my project?
 
-A: The command fetchs credentails from Firebase API and writen them locally into the project directories.
+A: The command registers app bundles and fetchs credentails from Firebase API required to communicate with the service.
+The credentials are writen locally into the project directories to be shipped with the app.
+
+**VALID to commit changes**
+
+```bash
+$ git status
+Changes not staged for commit:
+        modified:   examples/flutter_todos/android/app/build.gradle
+        modified:   examples/flutter_todos/android/build.gradle
+```
+
+```git
+$ git diff
+diff --git a/examples/flutter_todos/android/app/build.gradle b/examples/flutter_todos/android/app/build.gradle
+--- a/examples/flutter_todos/android/app/build.gradle
++++ b/examples/flutter_todos/android/app/build.gradle
+@@ -28,6 +28,9 @@ if (keystorePropertiesFile.exists()) {
+ }
+
+ apply plugin: 'com.android.application'
++// START: FlutterFire Configuration
++apply plugin: 'com.google.gms.google-services'
++// END: FlutterFire Configuration
+ apply plugin: 'kotlin-android'
+ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
+diff --git a/examples/flutter_todos/android/build.gradle b/examples/flutter_todos/android/build.gradle
+index ba6fe4a4..4f69aab2 100644
+--- a/examples/flutter_todos/android/build.gradle
++++ b/examples/flutter_todos/android/build.gradle
+@@ -7,6 +7,9 @@ buildscript {
+
+     dependencies {
+         classpath 'com.android.tools.build:gradle:7.1.2'
++        // START: FlutterFire Configuration
++        classpath 'com.google.gms:google-services:4.3.10'
++        // END: FlutterFire Configuration
+         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+     }
+ }
+```
+
+**DO NOT Commit these changes**
+
+⚠️ Note: For both security and flavored app considerations credential **should not** be committed into git repo.
+
+```bash
+$ git status
+Untracked files:
+        examples/flutter_todos/android/app/google-services.json
+        examples/flutter_todos/ios/Runner/GoogleService-Info.plist
+        examples/flutter_todos/ios/firebase_app_id_file.json
+        examples/flutter_todos/lib/firebase_options.dart
+```
+
+_Use CI to integrate them into the artifact at runtime during the build phase of the app._
