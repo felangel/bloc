@@ -1,3 +1,7 @@
+# 9.1.0
+
+- feat: upgrade to `bloc: ^8.1.0` ([#3502](https://github.com/felangel/bloc/pull/3502))
+
 # 9.0.3
 
 - chore: support for mocktail v0.3.0 ([#3252](https://github.com/felangel/bloc/pull/3252))

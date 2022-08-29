@@ -187,72 +187,76 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
 }) async {
   var shallowEquality = false;
   final unhandledErrors = <Object>[];
-  await BlocOverrides.runZoned(
+  final localBlocObserver =
+      // ignore: deprecated_member_use
+      BlocOverrides.current?.blocObserver ?? Bloc.observer;
+  final testObserver = _TestBlocObserver(
+    localBlocObserver,
+    unhandledErrors.add,
+  );
+  Bloc.observer = testObserver;
+
+  await runZonedGuarded(
     () async {
-      await runZonedGuarded(
-        () async {
-          await setUp?.call();
-          final states = <State>[];
-          final bloc = build();
-          // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-          if (seed != null) bloc.emit(seed());
-          final subscription = bloc.stream.skip(skip).listen(states.add);
-          try {
-            await act?.call(bloc);
-          } catch (error) {
-            if (errors == null) rethrow;
-            unhandledErrors.add(error);
-          }
-          if (wait != null) await Future<void>.delayed(wait);
-          await Future<void>.delayed(Duration.zero);
-          await bloc.close();
-          if (expect != null) {
-            final dynamic expected = expect();
-            shallowEquality = '$states' == '$expected';
-            try {
-              test.expect(states, test.wrapMatcher(expected));
-            } on test.TestFailure catch (e) {
-              if (shallowEquality || expected is! List<State>) rethrow;
-              final diff = _diff(expected: expected, actual: states);
-              final message = '${e.message}\n$diff';
-              // ignore: only_throw_errors
-              throw test.TestFailure(message);
-            }
-          }
-          await subscription.cancel();
-          await verify?.call(bloc);
-          await tearDown?.call();
-        },
-        (Object error, _) {
-          if (shallowEquality && error is test.TestFailure) {
-            // ignore: only_throw_errors
-            throw test.TestFailure(
-              '''${error.message}
+      await setUp?.call();
+      final states = <State>[];
+      final bloc = build();
+      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+      if (seed != null) bloc.emit(seed());
+      final subscription = bloc.stream.skip(skip).listen(states.add);
+      try {
+        await act?.call(bloc);
+      } catch (error) {
+        if (errors == null) rethrow;
+        unhandledErrors.add(error);
+      }
+      if (wait != null) await Future<void>.delayed(wait);
+      await Future<void>.delayed(Duration.zero);
+      await bloc.close();
+      if (expect != null) {
+        final dynamic expected = expect();
+        shallowEquality = '$states' == '$expected';
+        try {
+          test.expect(states, test.wrapMatcher(expected));
+        } on test.TestFailure catch (e) {
+          if (shallowEquality || expected is! List<State>) rethrow;
+          final diff = _diff(expected: expected, actual: states);
+          final message = '${e.message}\n$diff';
+          // ignore: only_throw_errors
+          throw test.TestFailure(message);
+        }
+      }
+      await subscription.cancel();
+      await verify?.call(bloc);
+      await tearDown?.call();
+    },
+    (Object error, _) {
+      if (shallowEquality && error is test.TestFailure) {
+        // ignore: only_throw_errors
+        throw test.TestFailure(
+          '''${error.message}
 WARNING: Please ensure state instances extend Equatable, override == and hashCode, or implement Comparable.
 Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''',
-            );
-          }
-          if (errors == null || !unhandledErrors.contains(error)) {
-            // ignore: only_throw_errors
-            throw error;
-          }
-        },
-      );
+        );
+      }
+      if (errors == null || !unhandledErrors.contains(error)) {
+        // ignore: only_throw_errors
+        throw error;
+      }
     },
-    blocObserver: _TestBlocObserver(unhandledErrors.add),
   );
   if (errors != null) test.expect(unhandledErrors, test.wrapMatcher(errors()));
 }
 
 class _TestBlocObserver extends BlocObserver {
-  _TestBlocObserver(this._onError);
+  _TestBlocObserver(this._localObserver, this._onError);
 
-  final _localObserver = BlocOverrides.current?.blocObserver;
+  final BlocObserver _localObserver;
   final void Function(Object error) _onError;
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    _localObserver?.onError(bloc, error, stackTrace);
+    _localObserver.onError(bloc, error, stackTrace);
     _onError(error);
     super.onError(bloc, error, stackTrace);
   }
