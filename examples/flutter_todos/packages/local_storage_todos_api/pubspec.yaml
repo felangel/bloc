@@ -9,9 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  meta: ^1.3.0
-  rxdart: ^0.27.2
-  shared_preferences: ^2.0.7
+  meta: ^1.7.0
+  rxdart: ^0.27.5
+  shared_preferences: ^2.0.15
   todos_api:
     path: ../todos_api
 
