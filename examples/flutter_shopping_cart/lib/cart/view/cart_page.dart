@@ -100,7 +100,7 @@ class CartTotal extends StatelessWidget {
                   const SnackBar(content: Text('Buying not supported yet.')),
                 );
               },
-              style: ElevatedButton.styleFrom(primary: Colors.black),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
               child: const Text('BUY'),
             ),
           ],
