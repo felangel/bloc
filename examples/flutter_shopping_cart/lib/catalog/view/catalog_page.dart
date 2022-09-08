@@ -57,7 +57,9 @@ class AddButton extends StatelessWidget {
         if (state is CartLoaded) {
           final isInCart = state.cart.items.contains(item);
           return TextButton(
-            style: TextButton.styleFrom(onSurface: theme.primaryColor),
+            style: TextButton.styleFrom(
+              disabledForegroundColor: theme.primaryColor,
+            ),
             onPressed: isInCart
                 ? null
                 : () => context.read<CartBloc>().add(CartItemAdded(item)),
