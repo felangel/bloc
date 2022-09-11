@@ -70,9 +70,6 @@ void main() {
     blocTest<AuthenticationBloc, AuthenticationState>(
       'emits [authenticated] when status is authenticated',
       setUp: () {
-        when(() => authenticationRepository.status).thenAnswer(
-          (_) => Stream.value(AuthenticationStatus.authenticated),
-        );
         when(() => userRepository.getUser()).thenAnswer((_) async => user);
       },
       build: () => AuthenticationBloc(
@@ -89,11 +86,6 @@ void main() {
 
     blocTest<AuthenticationBloc, AuthenticationState>(
       'emits [unauthenticated] when status is unauthenticated',
-      setUp: () {
-        when(() => authenticationRepository.status).thenAnswer(
-          (_) => Stream.value(AuthenticationStatus.unauthenticated),
-        );
-      },
       build: () => AuthenticationBloc(
         authenticationRepository: authenticationRepository,
         userRepository: userRepository,
@@ -143,11 +135,6 @@ void main() {
 
     blocTest<AuthenticationBloc, AuthenticationState>(
       'emits [unknown] when status is unknown',
-      setUp: () {
-        when(() => authenticationRepository.status).thenAnswer(
-          (_) => Stream.value(AuthenticationStatus.unknown),
-        );
-      },
       build: () => AuthenticationBloc(
         authenticationRepository: authenticationRepository,
         userRepository: userRepository,
