@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:open_meteo_api/open_meteo_api.dart';
 
 /// Exception thrown when locationSearch fails.
-class LocationIdRequestFailure implements Exception {}
+class LocationRequestFailure implements Exception {}
 
 /// Exception thrown when the provided location is not found.
 class LocationNotFoundFailure implements Exception {}
@@ -40,7 +40,7 @@ class OpenMeteoApiClient {
     final locationResponse = await _httpClient.get(locationRequest);
 
     if (locationResponse.statusCode != 200) {
-      throw LocationIdRequestFailure();
+      throw LocationRequestFailure();
     }
 
     final locationJson = jsonDecode(locationResponse.body) as Map;

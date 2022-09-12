@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:open_meteo_api/open_meteo_api.dart' hide Weather;
 import 'package:weather_repository/weather_repository.dart';
 
-class WeatherFailure implements Exception {}
-
 class WeatherRepository {
   WeatherRepository({OpenMeteoApiClient? weatherApiClient})
       : _weatherApiClient = weatherApiClient ?? OpenMeteoApiClient();
