@@ -29,7 +29,7 @@ class OpenMeteoApiClient {
 
   final http.Client _httpClient;
 
-  /// Finds a [Location] `/api/location/search/?query=(query)`.
+  /// Finds a [Location] `/v1/search/?name=(query)`.
   Future<Location> locationSearch(String query) async {
     final locationRequest = Uri.https(
       _baseUrlGeocoding,
