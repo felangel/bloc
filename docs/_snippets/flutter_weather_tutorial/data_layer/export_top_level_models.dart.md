@@ -1,5 +1,5 @@
 ```dart
-library meta_weather_api;
+library open_meteo_api;
 
 export 'src/models/models.dart';
 ```
