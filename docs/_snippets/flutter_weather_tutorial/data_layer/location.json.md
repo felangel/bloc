@@ -1,8 +1,12 @@
 ```json
 {
-  "title": "London",
-  "location_type": "City",
-  "woeid": 44418,
-  "latt_long": "51.506321,-0.12714"
+  "results": [
+    {
+      "id": 4887398,
+      "name": "Chicago",
+      "latitude": 41.85003,
+      "longitude": -87.65005
+    }
+  ]
 }
 ```

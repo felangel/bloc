@@ -1,3 +1,3 @@
 ```sh
-flutter create --template=package meta_weather_api
+flutter create --template=package open_meteo_api
 ```

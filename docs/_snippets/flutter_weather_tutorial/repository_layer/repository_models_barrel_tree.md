@@ -3,7 +3,7 @@ flutter_weather
 |-- lib/
 |-- test/
 |-- packages/
-  |-- meta_weather_api/
+  |-- open_meteo_api/
   |-- weather_repository/
     |-- lib/
       |-- src/
