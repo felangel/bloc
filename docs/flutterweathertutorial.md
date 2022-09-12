@@ -2,7 +2,7 @@
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-> In this tutorial, we're going to build a Weather app in Flutter which demonstrates how to manage multiple cubits to implement dynamic theming, pull-to-refresh, and much more. Our weather app will pull live weather data from the public MetaWeather API and demonstrate how to separate our application into layers (data, repository, business logic, and presentation).
+> In this tutorial, we're going to build a Weather app in Flutter which demonstrates how to manage multiple cubits to implement dynamic theming, pull-to-refresh, and much more. Our weather app will pull live weather data from the public OpenMeteo API and demonstrate how to separate our application into layers (data, repository, business logic, and presentation).
 
 ![demo](./assets/gifs/flutter_weather.gif)
 
