@@ -1,0 +1,6 @@
+import 'package:bloc/bloc.dart';
+import '^{cubit_snake_case}_state.dart';
+
+class ^{cubit_pascal_case}Cubit extends Cubit<^{cubit_pascal_case}Event, ^{cubit_pascal_case}State> {
+  ^{cubit_pascal_case}Cubit() : super(const ^{cubit_pascal_case}InitialState());
+}

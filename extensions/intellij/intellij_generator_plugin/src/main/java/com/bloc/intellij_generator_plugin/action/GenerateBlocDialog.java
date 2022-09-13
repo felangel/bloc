@@ -9,8 +9,10 @@ public class GenerateBlocDialog extends DialogWrapper {
 
     private final Listener listener;
     private JTextField blocNameTextField;
-    private JCheckBox useEquatableCheckbox;
     private JPanel contentPanel;
+    private JRadioButton useEquatable;
+    private JRadioButton useFreezed;
+    private JRadioButton useNone;
 
     public GenerateBlocDialog(final Listener listener) {
         super(null);
@@ -27,7 +29,17 @@ public class GenerateBlocDialog extends DialogWrapper {
     @Override
     protected void doOKAction() {
         super.doOKAction();
-        this.listener.onGenerateBlocClicked(blocNameTextField.getText(), useEquatableCheckbox.isSelected());
+        BlocStatePackage blocStatePackage;
+        if (useEquatable.isSelected()) {
+            blocStatePackage = BlocStatePackage.EQUATABLE;
+        } else if (useFreezed.isSelected()) {
+            blocStatePackage = BlocStatePackage.FREEZED;
+        } else if (useNone.isSelected()) {
+            blocStatePackage = BlocStatePackage.NONE;
+        } else {
+            blocStatePackage = BlocStatePackage.NONE;
+        }
+        this.listener.onGenerateBlocClicked(blocNameTextField.getText(), blocStatePackage);
     }
 
     @Nullable
@@ -37,6 +49,6 @@ public class GenerateBlocDialog extends DialogWrapper {
     }
 
     public interface Listener {
-        void onGenerateBlocClicked(String blocName, boolean shouldUseEquatable);
+        void onGenerateBlocClicked(String blocName, BlocStatePackage blocStatePackage);
     }
 }
