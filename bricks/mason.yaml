@@ -11,3 +11,5 @@ bricks:
     path: ./replay_bloc
   replay_cubit:
     path: ./replay_cubit
+  flutter_bloc_feature:
+    path: ./flutter_bloc_feature
