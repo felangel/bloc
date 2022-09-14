@@ -12,11 +12,12 @@ mason add <BRICK>
 
 ## Bricks
 
-| Brick            | Description                  |
-| ---------------- | ---------------------------- |
-| `bloc`           | Generate a new Bloc          |
-| `cubit`          | Generate a new Cubit         |
-| `hydrated_bloc`  | Generate a new HydratedBloc  |
-| `hydrated_cubit` | Generate a new HydratedCubit |
-| `replay_bloc`    | Generate a new ReplayBloc    |
-| `replay_cubit`   | Generate a new ReplayCubit   |
+| Brick                  | Description                              |
+| ---------------------- | ---------------------------------------- |
+| `bloc`                 | Generate a new Bloc                      |
+| `cubit`                | Generate a new Cubit                     |
+| `hydrated_bloc`        | Generate a new HydratedBloc              |
+| `hydrated_cubit`       | Generate a new HydratedCubit             |
+| `replay_bloc`          | Generate a new ReplayBloc                |
+| `replay_cubit`         | Generate a new ReplayCubit               |
+| `flutter_bloc_feature` | Generate a new Flutter feature with bloc |
