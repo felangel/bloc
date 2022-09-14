@@ -18,9 +18,9 @@ class GenerateBlocAction : AnAction(), GenerateBlocDialog.Listener {
         dialog.show()
     }
 
-    override fun onGenerateBlocClicked(blocName: String?, blocStatePackage: BlocStatePackage) {
+    override fun onGenerateBlocClicked(blocName: String?, blocTemplateType: BlocTemplateType) {
         blocName?.let { name ->
-            val generators = BlocGeneratorFactory.getBlocGenerators(name, blocStatePackage)
+            val generators = BlocGeneratorFactory.getBlocGenerators(name, blocTemplateType)
             generate(generators)
         }
     }

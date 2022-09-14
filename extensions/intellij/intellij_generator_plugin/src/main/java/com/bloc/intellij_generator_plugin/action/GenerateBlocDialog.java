@@ -29,17 +29,17 @@ public class GenerateBlocDialog extends DialogWrapper {
     @Override
     protected void doOKAction() {
         super.doOKAction();
-        BlocStatePackage blocStatePackage;
+        BlocTemplateType blocTemplateType;
         if (useEquatable.isSelected()) {
-            blocStatePackage = BlocStatePackage.EQUATABLE;
+            blocTemplateType = BlocTemplateType.EQUATABLE;
         } else if (useFreezed.isSelected()) {
-            blocStatePackage = BlocStatePackage.FREEZED;
+            blocTemplateType = BlocTemplateType.FREEZED;
         } else if (useNone.isSelected()) {
-            blocStatePackage = BlocStatePackage.NONE;
+            blocTemplateType = BlocTemplateType.NONE;
         } else {
-            blocStatePackage = BlocStatePackage.NONE;
+            blocTemplateType = BlocTemplateType.NONE;
         }
-        this.listener.onGenerateBlocClicked(blocNameTextField.getText(), blocStatePackage);
+        this.listener.onGenerateBlocClicked(blocNameTextField.getText(), blocTemplateType);
     }
 
     @Nullable
@@ -49,6 +49,6 @@ public class GenerateBlocDialog extends DialogWrapper {
     }
 
     public interface Listener {
-        void onGenerateBlocClicked(String blocName, BlocStatePackage blocStatePackage);
+        void onGenerateBlocClicked(String blocName, BlocTemplateType blocTemplateType);
     }
 }

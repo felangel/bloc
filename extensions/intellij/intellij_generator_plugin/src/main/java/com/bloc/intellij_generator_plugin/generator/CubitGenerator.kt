@@ -1,14 +1,14 @@
 package com.bloc.intellij_generator_plugin.generator
 
-import com.bloc.intellij_generator_plugin.action.BlocStatePackage
+import com.bloc.intellij_generator_plugin.action.BlocTemplateType
+import com.fleshgrinder.extensions.kotlin.toLowerSnakeCase
+import com.fleshgrinder.extensions.kotlin.toUpperCamelCase
 import com.google.common.io.CharStreams
-import com.fleshgrinder.extensions.kotlin.*
 import org.apache.commons.lang.text.StrSubstitutor
 import java.io.InputStreamReader
-import java.lang.RuntimeException
 
 abstract class CubitGenerator(private val name: String,
-                              blocStatePackage: BlocStatePackage,
+                              blocTemplateType: BlocTemplateType,
                               templateName: String) {
 
     private val TEMPLATE_CUBIT_PASCAL_CASE = "cubit_pascal_case"
@@ -23,10 +23,10 @@ abstract class CubitGenerator(private val name: String,
                 TEMPLATE_CUBIT_SNAKE_CASE to snakeCase()
         )
         try {
-            val templateFolder = when (blocStatePackage) {
-                BlocStatePackage.EQUATABLE -> "cubit_with_equatable"
-                BlocStatePackage.FREEZED -> "cubit_with_freezed"
-                BlocStatePackage.NONE -> "cubit_without_equatable"
+            val templateFolder = when (blocTemplateType) {
+                BlocTemplateType.EQUATABLE -> "cubit_with_equatable"
+                BlocTemplateType.FREEZED -> "cubit_with_freezed"
+                BlocTemplateType.NONE -> "cubit_without_equatable"
             }
             val resource = "/templates/$templateFolder/$templateName.dart.template"
             val resourceAsStream = CubitGenerator::class.java.getResourceAsStream(resource)

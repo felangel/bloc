@@ -1,14 +1,14 @@
 package com.bloc.intellij_generator_plugin.generator
 
-import com.bloc.intellij_generator_plugin.action.BlocStatePackage
+import com.bloc.intellij_generator_plugin.action.BlocTemplateType
+import com.fleshgrinder.extensions.kotlin.toLowerSnakeCase
+import com.fleshgrinder.extensions.kotlin.toUpperCamelCase
 import com.google.common.io.CharStreams
-import com.fleshgrinder.extensions.kotlin.*
 import org.apache.commons.lang.text.StrSubstitutor
 import java.io.InputStreamReader
-import java.lang.RuntimeException
 
 abstract class BlocGenerator(private val name: String,
-                             blocStatePackage: BlocStatePackage,
+                             blocTemplateType: BlocTemplateType,
                              templateName: String) {
 
     private val TEMPLATE_BLOC_PASCAL_CASE = "bloc_pascal_case"
@@ -23,10 +23,10 @@ abstract class BlocGenerator(private val name: String,
                 TEMPLATE_BLOC_SNAKE_CASE to snakeCase()
         )
         try {
-            val templateFolder = when (blocStatePackage) {
-                BlocStatePackage.NONE -> "bloc_without_equatable"
-                BlocStatePackage.EQUATABLE -> "bloc_with_equatable"
-                BlocStatePackage.FREEZED -> "bloc_with_freezed"
+            val templateFolder = when (blocTemplateType) {
+                BlocTemplateType.NONE -> "bloc_without_equatable"
+                BlocTemplateType.EQUATABLE -> "bloc_with_equatable"
+                BlocTemplateType.FREEZED -> "bloc_with_freezed"
             }
             val resource = "/templates/$templateFolder/$templateName.dart.template"
             val resourceAsStream = BlocGenerator::class.java.getResourceAsStream(resource)
