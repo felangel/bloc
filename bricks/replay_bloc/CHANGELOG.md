@@ -1,3 +1,7 @@
+# 0.1.3
+
+- fix: add missing `extends ReplayEvent`
+
 # 0.1.2
 
 - docs: add badges to README
