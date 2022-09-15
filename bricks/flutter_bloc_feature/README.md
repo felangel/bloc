@@ -12,28 +12,33 @@
 <a href="https://github.com/felangel/mason"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Ftinyurl.com%2Fmason-badge" alt="Powered by Mason"></a>
 </p>
 
-Generate a new Bloc in [Dart][1]. Built for the [bloc state management library][2].
+Generate a new Flutter feature with bloc. Built for the [bloc state management library][1].
 
 ## Usage 🚀
 
 ```sh
-mason make bloc --name counter --style basic
+mason make flutter_bloc_feature --name counter --type bloc
 ```
 
 ## Variables ✨
 
-| Variable | Description                 | Default                             | Type     |
-| -------- | --------------------------- | ----------------------------------- | -------- |
-| `name`   | The name of the bloc class  | `counter`                           | `string` |
-| `style`  | The style of bloc generated | `basic (basic, equatable, freezed)` | `enum`   |
+| Variable | Description             | Default   | Type     |
+| -------- | ----------------------- | --------- | -------- |
+| `name`   | The name of the feature | `counter` | `string` |
+| `type`   | The type of the bloc    | `bloc`    | `enum`   |
 
 ## Output 📦
 
 ```sh
-├── counter_bloc.dart
-├── counter_event.dart
-└── counter_state.dart
+── counter
+│   ├── bloc
+│   │   ├── counter_bloc.dart
+│   │   ├── counter_event.dart
+│   │   └── counter_state.dart
+│   ├── counter.dart
+│   └── view
+│       ├── counter_page.dart
+│       └── view.dart
 ```
 
-[1]: https://dart.dev
-[2]: https://github.com/felangel/bloc
+[1]: https://github.com/felangel/bloc

@@ -1,0 +1,9 @@
+name: flutter_bloc_feature_hooks
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  mason: ^0.1.0-dev
+  path: ^1.8.2
+  recase: ^4.0.0
