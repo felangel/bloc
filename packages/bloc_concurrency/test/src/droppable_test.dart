@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:test/test.dart';
 
@@ -75,6 +77,33 @@ void main() {
       );
 
       expect(states, equals([1, 2, 3]));
+    });
+
+    test('cancels the mapped subscription when it is active.', () async {
+      final states = <int>[];
+      final controller = StreamController<int>.broadcast();
+      final stream = droppable<int>()(controller.stream, (x) async* {
+        await wait();
+        yield x;
+      });
+
+      final subscription = stream.listen(states.add);
+
+      controller.add(0);
+
+      await wait();
+
+      expect(states, isEmpty);
+      expect(controller.hasListener, isTrue);
+
+      await subscription.cancel();
+
+      expect(states, isEmpty);
+      expect(controller.hasListener, isFalse);
+
+      await controller.close();
+
+      expect(states, isEmpty);
     });
   });
 }
