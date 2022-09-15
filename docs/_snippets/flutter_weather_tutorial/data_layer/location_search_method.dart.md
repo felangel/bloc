@@ -1,25 +1,26 @@
 ```dart
-/// Finds a [Location] `/api/location/search/?query=(query)`.
+/// Finds a [Location] `/v1/search/?name=(query)`.
 Future<Location> locationSearch(String query) async {
   final locationRequest = Uri.https(
-    _baseUrl,
-    '/api/location/search',
-    <String, String>{'query': query},
+    _baseUrlGeocoding,
+    '/v1/search',
+    {'name': query, 'count': '1'},
   );
+
   final locationResponse = await _httpClient.get(locationRequest);
 
   if (locationResponse.statusCode != 200) {
-    throw LocationIdRequestFailure();
+    throw LocationRequestFailure();
   }
 
-  final locationJson = jsonDecode(
-    locationResponse.body,
-  ) as List;
+  final locationJson = jsonDecode(locationResponse.body) as Map;
 
-  if (locationJson.isEmpty) {
-    throw LocationIdRequestFailure();
-  }
+  if (!locationJson.containsKey('results')) throw LocationNotFoundFailure();
 
-  return Location.fromJson(locationJson.first as Map<String, dynamic>);
+  final results = locationJson['results'] as List;
+
+  if (results.isEmpty) throw LocationNotFoundFailure();
+
+  return Location.fromJson(results.first as Map<String, dynamic>);
 }
 ```
