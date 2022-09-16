@@ -44,12 +44,16 @@ abstract class ErrorSink implements Closable {
   void addError(Object error, [StackTrace? stackTrace]);
 }
 
+/// The basic interface with minimal access to both:
+/// synchronous access to the current [state] and states emitting.
+abstract class BlocBaseInterface<State>
+    implements StateStreamableSource<State>, Emittable<State> {}
+
 /// {@template bloc_base}
 /// An interface for the core functionality implemented by
 /// both [Bloc] and [Cubit].
 /// {@endtemplate}
-abstract class BlocBase<State>
-    implements StateStreamableSource<State>, Emittable<State>, ErrorSink {
+abstract class BlocBase<State> implements BlocBaseInterface<State>, ErrorSink {
   /// {@macro bloc_base}
   BlocBase(this._state) {
     // ignore: invalid_use_of_protected_member
