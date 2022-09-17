@@ -1,17 +1,1 @@
-import 'package:hydrated_bloc/hydrated_bloc.dart';
-
-part '{{name.snakeCase()}}_state.dart';
-
-class {{name.pascalCase()}}Cubit extends HydratedCubit<{{name.pascalCase()}}State> {
-  {{name.pascalCase()}}Cubit() : super(const {{name.pascalCase()}}State());
-
-  @override
-  Map<String, dynamic> toJson({{name.pascalCase()}}State state) {
-    // TODO: implement toJson
-  }
-
-  @override
-  {{name.pascalCase()}}State fromJson(Map<String, dynamic> json) {
-    // TODO: implement fromJson
-  }
-}
+{{#use_freezed}}{{> freezed_cubit }}{{/use_freezed}}{{#use_equatable}}{{> equatable_cubit }}{{/use_equatable}}{{#use_basic}}{{> basic_cubit }}{{/use_basic}}
