@@ -1,7 +1,1 @@
-import 'package:bloc/bloc.dart';
-
-part '{{name.snakeCase()}}_state.dart';
-
-class {{name.pascalCase()}}Cubit extends Cubit<{{name.pascalCase()}}State> {
-  {{name.pascalCase()}}Cubit() : super(const {{name.pascalCase()}}State());
-}
+{{#use_freezed}}{{> freezed_cubit }}{{/use_freezed}}{{#use_equatable}}{{> equatable_cubit }}{{/use_equatable}}{{#use_basic}}{{> basic_cubit }}{{/use_basic}}
