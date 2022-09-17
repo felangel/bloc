@@ -17,20 +17,23 @@ Future<void> run(HookContext context) async {
   final blocType = _blocTypeFromContext(context);
   final progress = context.logger.progress('Making brick ${blocType.name}');
   final name = context.vars['name'] as String;
-  final brick = Brick.version(name: blocType.name, version: '^0.1.0');
+  final style = context.vars['style'] as String;
+  final brick = Brick.version(name: blocType.name, version: '^0.2.0');
   final generator = await MasonGenerator.fromBrick(brick);
   final blocDirectoryName = blocType.toDirectoryName();
   final directory = Directory(
     path.join(Directory.current.path, name.snakeCase, blocDirectoryName),
   );
   final target = DirectoryGeneratorTarget(directory);
-  final vars = {'name': name};
+  var vars = <String, dynamic>{'name': name, 'style': style};
+  await generator.hooks.preGen(vars: vars, onVarsChanged: (v) => vars = v);
   final files = await generator.generate(
     target,
     vars: vars,
     logger: context.logger,
     fileConflictResolution: FileConflictResolution.overwrite,
   );
+  await generator.hooks.postGen(vars: vars);
   final blocExport =
       './${blocDirectoryName}/${name.snakeCase}_${blocDirectoryName}.dart';
   progress.complete('Made brick ${blocType.name}');
