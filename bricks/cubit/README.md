@@ -17,14 +17,15 @@ Generate a new Cubit in [Dart][1]. Built for the [bloc state management library]
 ## Usage 🚀
 
 ```sh
-mason make cubit --name counter
+mason make cubit --name counter --style basic
 ```
 
 ## Variables ✨
 
-| Variable | Description                 | Default   | Type     |
-| -------- | --------------------------- | --------- | -------- |
-| `name`   | The name of the cubit class | `counter` | `string` |
+| Variable | Description                  | Default                             | Type     |
+| -------- | ---------------------------- | ----------------------------------- | -------- |
+| `name`   | The name of the cubit class  | `counter`                           | `string` |
+| `style`  | The style of cubit generated | `basic (basic, equatable, freezed)` | `enum`   |
 
 ## Output 📦
 
