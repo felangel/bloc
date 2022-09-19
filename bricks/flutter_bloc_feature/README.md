@@ -17,15 +17,16 @@ Generate a new Flutter feature with bloc. Built for the [bloc state management l
 ## Usage 🚀
 
 ```sh
-mason make flutter_bloc_feature --name counter --type bloc
+mason make flutter_bloc_feature --name counter --type bloc --style basic
 ```
 
 ## Variables ✨
 
-| Variable | Description             | Default   | Type     |
-| -------- | ----------------------- | --------- | -------- |
-| `name`   | The name of the feature | `counter` | `string` |
-| `type`   | The type of the bloc    | `bloc`    | `enum`   |
+| Variable | Description                 | Default                             | Type     |
+| -------- | --------------------------- | ----------------------------------- | -------- |
+| `name`   | The name of the feature     | `counter`                           | `string` |
+| `type`   | The type of the bloc        | `bloc`                              | `enum`   |
+| `style`  | The style of bloc generated | `basic (basic, equatable, freezed)` | `enum`   |
 
 ## Output 📦
 

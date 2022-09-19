@@ -77,7 +77,7 @@ whenListen(
 expect(counterBloc.state, equals(0));
 
 // Assert that the stubbed stream is emitted.
-await expectLater(counterBloc.stream, emitsInOrder(<int>[0, 1, 2, 3])))
+await expectLater(counterBloc.stream, emitsInOrder(<int>[0, 1, 2, 3]));
 
 // Assert that the current state is in sync with the stubbed stream.
 expect(counterBloc.state, equals(3));
