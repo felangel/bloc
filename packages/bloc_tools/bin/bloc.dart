@@ -11,7 +11,7 @@ Future<void> main(List<String> args) async {
 /// This returns a Future that will never complete, since the program will have
 /// exited already. This is useful to prevent Future chains from proceeding
 /// after you've decided to exit.
-Future _flushThenExit(int status) {
+Future<void> _flushThenExit(int status) {
   return Future.wait<void>([stdout.close(), stderr.close()]).then<void>(
     (_) => exit(status),
   );
