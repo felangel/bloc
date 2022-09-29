@@ -29,6 +29,25 @@ We can then replace the contents of pubspec.yaml with:
 
 Next, run `flutter packages get` to install all the dependencies.
 
+## Project Structure
+
+```
+├── lib
+|   ├── timer
+│   │   ├── bloc
+│   │   │   └── timer_bloc.dart
+|   |   |   └── timer_event.dart
+|   |   |   └── timer_state.dart
+│   │   └── view
+│   │   |   ├── timer_page.dart
+│   │   ├── timer.dart
+│   ├── app.dart
+│   ├── ticker.dart
+│   └── main.dart
+├── pubspec.lock
+├── pubspec.yaml
+```
+
 ## Ticker
 
 > The ticker will be our data source for the timer application. It will expose a stream of ticks which we can subscribe and react to.
