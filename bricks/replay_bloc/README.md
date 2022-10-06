@@ -17,14 +17,15 @@ Generate a new ReplayBloc in [Dart][1]. Built for the [bloc state management lib
 ## Usage 🚀
 
 ```sh
-mason make replay_bloc --name counter
+mason make replay_bloc --name counter --style basic
 ```
 
 ## Variables ✨
 
-| Variable | Description                | Default   | Type     |
-| -------- | -------------------------- | --------- | -------- |
-| `name`   | The name of the bloc class | `counter` | `string` |
+| Variable | Description                 | Default                             | Type     |
+| -------- | --------------------------- | ----------------------------------- | -------- |
+| `name`   | The name of the bloc class  | `counter`                           | `string` |
+| `style`  | The style of bloc generated | `basic (basic, equatable, freezed)` | `enum`   |
 
 ## Output 📦
 

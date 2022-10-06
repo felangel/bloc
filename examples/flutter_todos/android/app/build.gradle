@@ -34,23 +34,26 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 android {
     compileSdkVersion flutter.compileSdkVersion
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.verygoodcore"
+        applicationId "com.example.verygoodcore.flutter_todos"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-    }
-
-    // TODO: Remove when below fix is available in stable channel.
-    // https://github.com/flutter/flutter/pull/82309
-    lintOptions {
-        checkReleaseBuilds false
     }
 
     signingConfigs {
@@ -76,14 +79,17 @@ android {
         production {
             dimension "default"
             applicationIdSuffix ""
+            manifestPlaceholders = [appName: "Flutter Todos"]
         }
         staging {
             dimension "default"
             applicationIdSuffix ".stg"
-        }        
+            manifestPlaceholders = [appName: "[STG] Flutter Todos"]
+        }
         development {
             dimension "default"
             applicationIdSuffix ".dev"
+            manifestPlaceholders = [appName: "[DEV] Flutter Todos"]
         }
     }
 
@@ -91,7 +97,6 @@ android {
         release {
             signingConfig signingConfigs.release
             minifyEnabled true
-            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt')
         }
         debug {

@@ -1,0 +1,4 @@
+    return BlocProvider(
+      create: (_) => {{name.pascalCase()}}Cubit(),
+      child: const {{name.pascalCase()}}View(),
+    );

@@ -1,0 +1,35 @@
+name: flutter_bloc_feature
+description: Generate a new Flutter feature with bloc. Built for the bloc state management library.
+repository: https://github.com/felangel/bloc/tree/master/bricks/flutter_bloc_feature
+version: 0.2.0
+
+environment:
+  mason: ">=0.1.0-dev.32 <0.1.0"
+
+vars:
+  name:
+    type: string
+    description: The name of the feature
+    default: counter
+    prompt: What is your feature called?
+  type:
+    type: enum
+    description: The type of bloc used.
+    default: bloc
+    prompt: What type of bloc do you want to use?
+    values:
+      - bloc
+      - cubit
+      - hydrated_bloc
+      - hydrated_cubit
+      - replay_bloc
+      - replay_cubit
+  style:
+    type: enum
+    description: The style of bloc generated.
+    default: basic
+    prompt: What is the bloc style?
+    values:
+      - basic
+      - equatable
+      - freezed

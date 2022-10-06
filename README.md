@@ -143,6 +143,7 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [GraphQL](https://github.com/felangel/bloc/tree/master/examples/flutter_graphql_jobs) - an example of how to use the `bloc` and `flutter_bloc` packages with `graphql` to retrieve data from [api.graphql.jobs](https://api.graphql.jobs).
 - [Fluttersaurus](https://github.com/felangel/fluttersaurus) - an example of how to use the `bloc` and `flutter_bloc` packages to create a thesaurus app -- made for Bytconf Flutter 2020.
 - [I/O Photo Booth](https://github.com/flutter/photobooth) - an example of how to use the `bloc` and `flutter_bloc` packages to create a virtual photo booth web app -- made for Google I/O 2021.
+- [I/O Pinball](https://github.com/flutter/pinball) - an example of how to use the `bloc` and `flutter_bloc` packages to create a pinball web app -- made for Google I/O 2022.
 
 ### Web
 
@@ -185,6 +186,7 @@ Learn more at the following links, which have been contributed by the community.
 - [Bloc Code Generator](https://pub.dev/packages/bloc_code_generator) - A code generator that makes working with bloc easier, by [Adson Leal](https://github.com/adsonpleal).
 - [Firebase Auth](https://pub.dev/packages/fb_auth) - A Web, Mobile Firebase Auth Plugin, by [Rody Davis](https://github.com/AppleEducate).
 - [Form Bloc](https://pub.dev/packages/form_bloc) - An easy way to create forms with BLoC pattern without writing a lot of boilerplate code, by [Giancarlo](https://github.com/GiancarloCode).
+- [Flame Bloc](https://pub.dev/packages/flame_bloc) - Bloc integration for the Flame game engine, by [Flame Engine](https://github.com/flame-engine).
 
 ### Video Tutorials
 

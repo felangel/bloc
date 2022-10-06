@@ -9,14 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc:
-    path: ../
-
-dependency_overrides:
-  bloc:
-    path: ../../bloc
-  flutter_bloc:
-    path: ../
+  flutter_bloc: ^8.1.0
 
 flutter:
   uses-material-design: true

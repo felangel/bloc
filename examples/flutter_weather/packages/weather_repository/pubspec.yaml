@@ -4,18 +4,18 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=2.18.0 <3.0.0"
 
 dependencies:
-  equatable: ^2.0.3
-  json_annotation: ^4.4.0
-  meta_weather_api:
-    path: ../meta_weather_api
+  equatable: ^2.0.5
+  json_annotation: ^4.6.0
+  open_meteo_api:
+    path: ../open_meteo_api
 
 dev_dependencies:
   build_runner: ^2.0.0
   coverage: ^1.0.3
-  json_serializable: ^6.0.0
+  json_serializable: ^6.3.1
   mocktail: ^0.3.0
   test: ^1.16.4
-  very_good_analysis: ^3.0.1
+  very_good_analysis: ^3.0.2

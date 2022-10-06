@@ -17,14 +17,15 @@ Generate a new ReplayCubit in [Dart][1]. Built for the [bloc state management li
 ## Usage 🚀
 
 ```sh
-mason make replay_cubit --name counter
+mason make replay_cubit --name counter --style basic
 ```
 
 ## Variables ✨
 
-| Variable | Description                | Default   | Type     |
-| -------- | -------------------------- | --------- | -------- |
-| `name`   | The name of the cubit class | `counter` | `string` |
+| Variable | Description                  | Default                             | Type     |
+| -------- | ---------------------------- | ----------------------------------- | -------- |
+| `name`   | The name of the cubit class  | `counter`                           | `string` |
+| `style`  | The style of cubit generated | `basic (basic, equatable, freezed)` | `enum`   |
 
 ## Output 📦
 
