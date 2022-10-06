@@ -72,7 +72,7 @@ class _WeatherViewState extends State<WeatherView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.search),
+        child: const Icon(Icons.search, semanticLabel: 'Search'),
         onPressed: () async {
           final city = await Navigator.of(context).push(SearchPage.route());
           if (!mounted) return;
