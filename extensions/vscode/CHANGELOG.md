@@ -1,3 +1,7 @@
+# 6.6.2
+
+- fix: rename element to bloc in `context.select` snippet
+
 # 6.6.1
 
 - fix: bloc and cubit template casing

@@ -6,13 +6,15 @@ import 'package:bloc_tools/src/command_runner.dart';
 import 'package:bloc_tools/src/version.dart';
 import 'package:io/ansi.dart';
 import 'package:io/io.dart';
-import 'package:mason/mason.dart' show Logger;
+import 'package:mason/mason.dart' show Logger, Progress;
 import 'package:mocktail/mocktail.dart';
 import 'package:pub_updater/pub_updater.dart';
 import 'package:test/test.dart';
 import 'package:universal_io/io.dart';
 
 class MockLogger extends Mock implements Logger {}
+
+class MockProgress extends Mock implements Progress {}
 
 class MockPubUpdater extends Mock implements PubUpdater {}
 
@@ -112,12 +114,13 @@ void main() {
       });
 
       test('updates on "y" response when newer version exists', () async {
+        final progress = MockProgress();
         when(
           () => pubUpdater.getLatestVersion(any()),
         ).thenAnswer((_) async => latestVersion);
 
         when(() => logger.prompt(any())).thenReturn('y');
-        when(() => logger.progress(any())).thenReturn(([String? message]) {});
+        when(() => logger.progress(any())).thenReturn(progress);
 
         final result = await commandRunner.run(['--version']);
         expect(result, equals(ExitCode.success.code));
