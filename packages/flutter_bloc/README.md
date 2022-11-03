@@ -180,6 +180,22 @@ BlocSelector<BlocA, BlocAState, SelectedState>(
 )
 ```
 
+For fine-grained control over when the `builder` function is called an optional `selectWhen` can be provided. `selectWhen` takes the previous bloc state and current bloc state and returns a boolean. If `selectWhen` returns true, `builder` will be called with `state` and the widget will rebuild. If `selectWhen` returns false, `builder` will not be called with `state` and no rebuild will occur.
+
+```dart
+BlocSelector<BlocA, BlocAState, SelectedState>(
+  selector: (state) {
+    // return selected state based on the provided state.
+  },
+  selectWhen: (previousState, state) {
+    // return true/false to determine whether or not
+    // to rebuild the widget with state
+  },
+  builder: (context, state) {
+    // return widget here based on selected state
+  }
+)
+
 ### BlocProvider
 
 **BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.

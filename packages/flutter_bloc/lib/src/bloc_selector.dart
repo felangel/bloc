@@ -5,6 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// is responsible for returning a selected value, [T], based on [state].
 typedef BlocWidgetSelector<S, T> = T Function(S state);
 
+/// Signature for the `selectWhen` function which takes the previous `state` and
+/// the current `state` and is responsible for returning a [bool] which
+/// determines whether to rebuild [BlocSelector] with the current `state`
+typedef BlocSelectorCondition<S> = bool Function(S previous, S current);
+
 /// {@template bloc_selector}
 /// [BlocSelector] is analogous to [BlocBuilder] but allows developers to
 /// filter updates by selecting a new value based on the bloc state.
@@ -24,12 +29,43 @@ typedef BlocWidgetSelector<S, T> = T Function(S state);
 /// )
 /// ```
 /// {@endtemplate}
+///
+/// {@template bloc_selector_select_when}
+/// An optional [selectWhen] can be implemented for more granualr control
+/// over how often [BlocSelector] rebuilds.
+/// [selectWhen] should only be used for performance optimizations as it
+/// provides no security about the state passed to the [builder] function.
+/// [selectWhen] will be invoked on each [bloc] `state` change.
+/// [selectWhen] takes the previous `state` and current `state` and must
+/// return a [bool] which determines whether or not the [builder] function will
+/// be invoked.
+/// The previous `state` will be initialized to the `state` of the [bloc] when
+/// the [BlocSelector] is initialized.
+/// [selectWhen] is optional and if omitted, it will default to `true`.
+///
+/// /// ```dart
+/// BlocSelector<BlocA, BlocAState, SelectedState>(
+///   selector: (state) {
+///     // return selected state based on the provided state.
+///   },
+///   selectWhen: (previous, current) {
+///     // return true/false to determine whether or not
+///     // to invoke selector with state
+///   },
+///   builder: (context, state) {
+///     // return widget here based on the selected state.
+///   },
+/// )
+/// ```
+/// {@endtemplate}
 class BlocSelector<B extends StateStreamable<S>, S, T> extends StatefulWidget {
   /// {@macro bloc_selector}
+  /// {@macro bloc_selector_select_when}
   const BlocSelector({
     Key? key,
     required this.selector,
     required this.builder,
+    this.selectWhen,
     this.bloc,
   }) : super(key: key);
 
@@ -49,6 +85,9 @@ class BlocSelector<B extends StateStreamable<S>, S, T> extends StatefulWidget {
   /// and is responsible for returning a selected value of type [T] based on
   /// the current state.
   final BlocWidgetSelector<S, T> selector;
+
+  /// {@macro bloc_selector_select_when}
+  final BlocSelectorCondition<S>? selectWhen;
 
   @override
   State<BlocSelector<B, S, T>> createState() => _BlocSelectorState<B, S, T>();
@@ -96,6 +135,7 @@ class _BlocSelectorState<B extends StateStreamable<S>, S, T>
     }
     return BlocListener<B, S>(
       bloc: _bloc,
+      listenWhen: widget.selectWhen,
       listener: (context, state) {
         final selectedState = widget.selector(state);
         if (_state != selectedState) setState(() => _state = selectedState);
