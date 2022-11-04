@@ -164,6 +164,42 @@ HydratedBloc.storage = MyHydratedStorage();
 runApp(MyApp());
 ```
 
+## Testing
+
+When writing unit tests for code that uses `HydratedBloc`, it is recommended to stub the `Storage` implementation using `package:mocktail`.
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockStorage extends Mock implements Storage {}
+
+void main() {
+  late Storage storage;
+
+  setUp(() {
+    storage = MockStorage();
+    when(
+      () => storage.write(any(), any<dynamic>()),
+    ).thenAnswer((_) async {});
+    HydratedBloc.storage = storage;
+  });
+
+  // ...
+}
+```
+
+You can also stub the `storage.read` API in individual tests to return cached state:
+
+```dart
+testWidgets('...', (tester) async {
+  when<dynamic>(() => storage.read('$MyBloc')).thenReturn(MyState().toJson());
+
+  // ...
+});
+```
+
 ## Dart Versions
 
 - Dart 2: >= 2.12
