@@ -21,8 +21,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1.5.3
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2.8.0
 
       - name: Install Dependencies
         run: flutter packages get
@@ -40,7 +40,7 @@ jobs:
         run: flutter test -x pull-request-only --no-pub --coverage --test-randomize-ordering-seed random
 
       - name: Check Code Coverage
-        uses: VeryGoodOpenSource/very_good_coverage@v1.2.0
+        uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
           path: packages/bloc_tools/coverage/lcov.info
 
@@ -57,8 +57,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2.3.4
-      - uses: subosito/flutter-action@v1.5.3
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2.8.0
 
       - name: Install Dependencies
         run: |
