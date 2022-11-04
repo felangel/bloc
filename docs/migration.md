@@ -12,7 +12,7 @@
 
 ##### Rationale
 
-Refer to the [rationale for reintroducing the Bloc.observer and Bloc.transformer overrides](/migration?id=rationale-1)
+Refer to the [rationale for reintroducing the Bloc.observer and Bloc.transformer overrides](/migration?id=rationale-1).
 
 **v8.x.x**
 
