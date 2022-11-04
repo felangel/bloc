@@ -17,7 +17,7 @@ Refer to the [rationale for reintroducing the Bloc.observer and Bloc.transformer
 **v8.x.x**
 
 ```dart
-void main() {
+Future<void> main() async {
   final storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
         ? HydratedStorage.webStorageDirectory
@@ -33,7 +33,7 @@ void main() {
 **v9.0.0**
 
 ```dart
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
