@@ -24,6 +24,6 @@ dev_dependencies:
   freezed: ^0.15.0+1
   json_serializable: ^6.0.0
   json_annotation: ^4.3.0
-  mocktail: ^0.2.0
+  mocktail: ^0.3.0
   path: ^1.8.0
   uuid: ^3.0.0
