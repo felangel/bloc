@@ -12,21 +12,11 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.1
   google_fonts: ^3.0.1
-  hydrated_bloc: ^9.0.0-dev.3
+  hydrated_bloc: ^9.0.0
   json_annotation: ^4.4.0
   path_provider: ^2.0.8
   weather_repository:
     path: packages/weather_repository
-
-dependency_overrides:
-  bloc:
-    path: ../../packages/bloc
-  bloc_test:
-    path: ../../packages/bloc_test
-  flutter_bloc:
-    path: ../../packages/flutter_bloc
-  hydrated_bloc:
-    path: ../../packages/hydrated_bloc
 
 dev_dependencies:
   bloc_test:

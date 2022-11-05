@@ -130,7 +130,7 @@
   },
   "context.select()": {
     "prefix": "select",
-    "body": "context.select((${1:Subject}${2|Bloc,Cubit|} ${3:element}) => $3$4)"
+    "body": "context.select((${1:Subject}${2|Bloc,Cubit|} ${3:bloc}) => $3$4)"
   },
   "context.watch()": {
     "prefix": "watch",

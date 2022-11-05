@@ -31,8 +31,8 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
   @override
   Future<int> run(Iterable<String> args) async {
     try {
-      final _argResults = parse(args);
-      return await runCommand(_argResults) ?? ExitCode.success.code;
+      final argResults = parse(args);
+      return await runCommand(argResults) ?? ExitCode.success.code;
     } on FormatException catch (e, stackTrace) {
       _logger
         ..err(e.message)
@@ -81,9 +81,9 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
           );
         final response = _logger.prompt('Would you like to update? (y/n) ');
         if (response.isYes()) {
-          final updateDone = _logger.progress('Updating to $latestVersion');
+          final progress = _logger.progress('Updating to $latestVersion');
           await _pubUpdater.update(packageName: packageName);
-          updateDone('Updated to $latestVersion');
+          progress.complete('Updated to $latestVersion');
         }
       }
     } catch (_) {}

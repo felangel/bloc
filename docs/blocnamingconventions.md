@@ -34,8 +34,7 @@
 
 [state](_snippets/bloc_naming_conventions/state_anatomy.md ':include')
 
-?> When representing the state as multiple subclasses `State` should be one of the following: `Initial` | `Success` | `Failure` | `InProgress` and
-initial states should follow the convention: `BlocSubject` + `Initial`.
+?> When representing the state as multiple subclasses `State` should be one of the following: `Initial` | `Success` | `Failure` | `InProgress` and initial states should follow the convention: `BlocSubject` + `Initial`.
 
 #### Single Class
 

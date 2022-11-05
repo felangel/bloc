@@ -17,14 +17,15 @@ Generate a new HydratedBloc in [Dart][1]. Built for the [bloc state management l
 ## Usage 🚀
 
 ```sh
-mason make hydrated_bloc --name counter
+mason make hydrated_bloc --name counter --style basic
 ```
 
 ## Variables ✨
 
-| Variable | Description                | Default   | Type     |
-| -------- | -------------------------- | --------- | -------- |
-| `name`   | The name of the bloc class | `counter` | `string` |
+| Variable | Description                 | Default                             | Type     |
+| -------- | --------------------------- | ----------------------------------- | -------- |
+| `name`   | The name of the bloc class  | `counter`                           | `string` |
+| `style`  | The style of bloc generated | `basic (basic, equatable, freezed)` | `enum`   |
 
 ## Output 📦
 
