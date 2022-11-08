@@ -1,0 +1,7 @@
+dependency_overrides:
+  bloc:
+    path: ../../bloc
+  flutter_bloc:
+    path: ../../flutter_bloc
+  hydrated_bloc:
+    path: ../

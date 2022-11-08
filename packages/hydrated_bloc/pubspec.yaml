@@ -1,6 +1,6 @@
 name: hydrated_bloc
 description: An extension to the bloc state management library which automatically persists and restores bloc states.
-version: 9.0.0-dev.3
+version: 9.0.0
 repository: https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://bloclibrary.dev
@@ -24,6 +24,6 @@ dev_dependencies:
   freezed: ^0.15.0+1
   json_serializable: ^6.0.0
   json_annotation: ^4.3.0
-  mocktail: ^0.2.0
+  mocktail: ^0.3.0
   path: ^1.8.0
   uuid: ^3.0.0

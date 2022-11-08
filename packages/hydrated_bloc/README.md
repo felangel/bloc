@@ -6,7 +6,6 @@
   <a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/workflows/build/badge.svg" alt="build"></a>
   <a href="https://codecov.io/gh/felangel/bloc"><img src="https://codecov.io/gh/felangel/bloc/branch/master/graph/badge.svg" alt="codecov"></a>
   <a href="https://github.com/felangel/bloc"><img src="https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on Github"></a>
-  <a href="https://github.com/tenhobi/effective_dart"><img src="https://img.shields.io/badge/style-effective_dart-40c4ff.svg" alt="style: effective dart"></a>
   <a href="https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx"><img src="https://img.shields.io/badge/flutter-website-deepskyblue.svg" alt="Flutter Website"></a>
   <a href="https://github.com/Solido/awesome-flutter#standard"><img src="https://img.shields.io/badge/awesome-flutter-blue.svg?longCache=true" alt="Awesome Flutter"></a>
   <a href="https://fluttersamples.com"><img src="https://img.shields.io/badge/flutter-samples-teal.svg?longCache=true" alt="Flutter Samples"></a>
@@ -163,6 +162,42 @@ class MyHydratedStorage implements Storage {
 // main.dart
 HydratedBloc.storage = MyHydratedStorage();
 runApp(MyApp());
+```
+
+## Testing
+
+When writing unit tests for code that uses `HydratedBloc`, it is recommended to stub the `Storage` implementation using `package:mocktail`.
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockStorage extends Mock implements Storage {}
+
+void main() {
+  late Storage storage;
+
+  setUp(() {
+    storage = MockStorage();
+    when(
+      () => storage.write(any(), any<dynamic>()),
+    ).thenAnswer((_) async {});
+    HydratedBloc.storage = storage;
+  });
+
+  // ...
+}
+```
+
+You can also stub the `storage.read` API in individual tests to return cached state:
+
+```dart
+testWidgets('...', (tester) async {
+  when<dynamic>(() => storage.read('$MyBloc')).thenReturn(MyState().toJson());
+
+  // ...
+});
 ```
 
 ## Dart Versions

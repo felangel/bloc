@@ -2,6 +2,48 @@
 
 ?> 💡 **Tip**: Please refer to the [release log](https://github.com/felangel/bloc/releases) for more information regarding what changed in each release.
 
+## v9.0.0
+
+### package:hydrated_bloc
+
+#### ✨ Reintroduce `HydratedBloc.storage` API
+
+!> In hydrated_bloc v9.0.0, `HydratedBlocOverrides` was removed in favor of the `HydratedBloc.storage` API.
+
+##### Rationale
+
+Refer to the [rationale for reintroducing the Bloc.observer and Bloc.transformer overrides](/migration?id=rationale-1).
+
+**v8.x.x**
+
+```dart
+Future<void> main() async {
+  final storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getTemporaryDirectory(),
+  );
+  HydratedBlocOverrides.runZoned(
+    () => runApp(App()),
+    storage: storage,
+  );
+}
+```
+
+**v9.0.0**
+
+```dart
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getTemporaryDirectory(),
+  );
+  runApp(App());
+}
+```
+
 ## v8.1.0
 
 ### package:bloc
