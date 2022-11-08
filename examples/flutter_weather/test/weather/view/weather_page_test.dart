@@ -118,7 +118,7 @@ void main() {
     });
 
     testWidgets('state is cached', (tester) async {
-      when<dynamic>(() => hydratedStorage.read('WeatherCubit')).thenReturn(
+      when<dynamic>(() => hydratedStorage.read('$WeatherCubit')).thenReturn(
         WeatherState(
           status: WeatherStatus.success,
           weather: weather,

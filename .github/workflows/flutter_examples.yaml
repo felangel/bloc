@@ -70,8 +70,8 @@ jobs:
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1.5.3
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2.8.0
       - name: Install Dependencies
         working-directory: ${{ matrix.folder }}
         run: flutter packages get

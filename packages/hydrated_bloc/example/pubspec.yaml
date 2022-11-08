@@ -9,15 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  hydrated_bloc:
-    path: ../
-  flutter_bloc:
-    path: ../../flutter_bloc
+  hydrated_bloc: ^9.0.0
+  flutter_bloc: ^8.1.1
   path_provider: ^2.0.1
-
-dependency_overrides:
-  bloc:
-    path: ../../bloc
 
 flutter:
   uses-material-design: true
