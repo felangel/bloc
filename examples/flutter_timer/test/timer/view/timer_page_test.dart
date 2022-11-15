@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,8 +7,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_timer/timer/timer.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockTimerBloc extends MockBloc<TimerEvent, TimerState>
+class _MockTimerBloc extends MockBloc<TimerEvent, TimerState>
     implements TimerBloc {}
+
+class _FakeTimerEvent extends Fake implements TimerEvent {}
 
 extension on WidgetTester {
   Future<void> pumpTimerView(TimerBloc timerBloc) {
@@ -21,8 +25,12 @@ extension on WidgetTester {
 void main() {
   late TimerBloc timerBloc;
 
+  setUpAll(() {
+    registerFallbackValue(_FakeTimerEvent());
+  });
+
   setUp(() {
-    timerBloc = MockTimerBloc();
+    timerBloc = _MockTimerBloc();
   });
 
   tearDown(() => reset(timerBloc));
@@ -72,7 +80,13 @@ void main() {
       when(() => timerBloc.state).thenReturn(const TimerInitial(60));
       await tester.pumpTimerView(timerBloc);
       await tester.tap(find.byIcon(Icons.play_arrow));
-      verify(() => timerBloc.add(const TimerStarted(duration: 60))).called(1);
+      verify(
+        () => timerBloc.add(
+          any(
+            that: isA<TimerStarted>().having((e) => e.duration, 'duration', 60),
+          ),
+        ),
+      ).called(1);
     });
 
     testWidgets(
@@ -118,6 +132,33 @@ void main() {
       await tester.pumpTimerView(timerBloc);
       await tester.tap(find.byIcon(Icons.replay));
       verify(() => timerBloc.add(const TimerReset())).called(1);
+    });
+
+    testWidgets('actions are not rebuilt when timer is running',
+        (tester) async {
+      final controller = StreamController<TimerState>();
+      whenListen(
+        timerBloc,
+        controller.stream,
+        initialState: const TimerRunInProgress(10),
+      );
+      await tester.pumpTimerView(timerBloc);
+
+      FloatingActionButton findPauseButton() {
+        return tester.widget<FloatingActionButton>(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is FloatingActionButton &&
+                widget.child is Icon &&
+                (widget.child! as Icon).icon == Icons.pause,
+          ),
+        );
+      }
+
+      final pauseButton = findPauseButton();
+      controller.add(const TimerRunInProgress(9));
+      await tester.pump();
+      expect(pauseButton, equals(findPauseButton()));
     });
   });
 }
