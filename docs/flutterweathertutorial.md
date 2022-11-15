@@ -59,10 +59,10 @@ For this application we'll be hitting the [Open Meteo API](https://open-meteo.co
 
 We'll be focusing on two endpoints:
 
-- `https://geocoding-api.open-meteo.com/v1/search?name=$city&limit=1` to get a location for a given city name
+- `https://geocoding-api.open-meteo.com/v1/search?name=$city&count=1` to get a location for a given city name
 - `https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&current_weather=true` to get the weather for a given location
 
-Open [https://geocoding-api.open-meteo.com/v1/search?name=chicago&limit=1](https://geocoding-api.open-meteo.com/v1/search?name=chicago&limit=1) in your browser to see the response for the city of Chicago. We will use the `latitude` and `longitude` in the response to hit the weather endpoint.
+Open [https://geocoding-api.open-meteo.com/v1/search?name=chicago&count=1](https://geocoding-api.open-meteo.com/v1/search?name=chicago&count=1) in your browser to see the response for the city of Chicago. We will use the `latitude` and `longitude` in the response to hit the weather endpoint.
 
 The `latitude`/`longitutde` for Chicago is `41.85003`/`-87.65005`. Navigate to [https://api.open-meteo.com/v1/forecast?latitude=43.0389&longitude=-87.90647&current_weather=true](https://api.open-meteo.com/v1/forecast?latitude=43.0389&longitude=-87.90647&current_weather=true) in your browser and you'll see the response for weather in Chicago which contains all the data we will need for our app.
 
