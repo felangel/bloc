@@ -33,7 +33,7 @@ void main() {
           ),
         );
         await tester.tap(find.byKey(logoutButtonKey));
-        verify(() => appBloc.add(AppLogoutRequested())).called(1);
+        verify(() => appBloc.add(const AppLogoutRequested())).called(1);
       });
     });
 

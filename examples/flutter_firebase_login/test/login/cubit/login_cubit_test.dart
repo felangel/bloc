@@ -149,7 +149,41 @@ void main() {
 
       blocTest<LoginCubit, LoginState>(
         'emits [submissionInProgress, submissionFailure] '
-        'when logInWithEmailAndPassword fails',
+        'when logInWithEmailAndPassword fails '
+        'due to LogInWithEmailAndPasswordFailure',
+        setUp: () {
+          when(
+            () => authenticationRepository.logInWithEmailAndPassword(
+              email: any(named: 'email'),
+              password: any(named: 'password'),
+            ),
+          ).thenThrow(LogInWithEmailAndPasswordFailure('oops'));
+        },
+        build: () => LoginCubit(authenticationRepository),
+        seed: () => LoginState(
+          status: FormzStatus.valid,
+          email: validEmail,
+          password: validPassword,
+        ),
+        act: (cubit) => cubit.logInWithCredentials(),
+        expect: () => const <LoginState>[
+          LoginState(
+            status: FormzStatus.submissionInProgress,
+            email: validEmail,
+            password: validPassword,
+          ),
+          LoginState(
+            status: FormzStatus.submissionFailure,
+            errorMessage: 'oops',
+            email: validEmail,
+            password: validPassword,
+          )
+        ],
+      );
+
+      blocTest<LoginCubit, LoginState>(
+        'emits [submissionInProgress, submissionFailure] '
+        'when logInWithEmailAndPassword fails due to generic exception',
         setUp: () {
           when(
             () => authenticationRepository.logInWithEmailAndPassword(
@@ -203,7 +237,26 @@ void main() {
 
       blocTest<LoginCubit, LoginState>(
         'emits [submissionInProgress, submissionFailure] '
-        'when logInWithGoogle fails',
+        'when logInWithGoogle fails due to LogInWithGoogleFailure',
+        setUp: () {
+          when(
+            () => authenticationRepository.logInWithGoogle(),
+          ).thenThrow(LogInWithGoogleFailure('oops'));
+        },
+        build: () => LoginCubit(authenticationRepository),
+        act: (cubit) => cubit.logInWithGoogle(),
+        expect: () => const <LoginState>[
+          LoginState(status: FormzStatus.submissionInProgress),
+          LoginState(
+            status: FormzStatus.submissionFailure,
+            errorMessage: 'oops',
+          )
+        ],
+      );
+
+      blocTest<LoginCubit, LoginState>(
+        'emits [submissionInProgress, submissionFailure] '
+        'when logInWithGoogle fails due to generic exception',
         setUp: () {
           when(
             () => authenticationRepository.logInWithGoogle(),
