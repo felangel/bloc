@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cache/cache.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
@@ -203,7 +202,7 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on FirebaseAuthException catch (e) {
+    } on firebase_auth.FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
       throw const SignUpWithEmailAndPasswordFailure();
@@ -232,7 +231,7 @@ class AuthenticationRepository {
       }
 
       await _firebaseAuth.signInWithCredential(credential);
-    } on FirebaseAuthException catch (e) {
+    } on firebase_auth.FirebaseAuthException catch (e) {
       throw LogInWithGoogleFailure.fromCode(e.code);
     } catch (_) {
       throw const LogInWithGoogleFailure();
@@ -251,7 +250,7 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on FirebaseAuthException catch (e) {
+    } on firebase_auth.FirebaseAuthException catch (e) {
       throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
       throw const LogInWithEmailAndPasswordFailure();
