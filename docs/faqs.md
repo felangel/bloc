@@ -167,3 +167,69 @@ The Bloc Library uses `provider` internally to make it easy to provide and acces
 - [Flutter TDD Course - ResoCoder](https://github.com/ResoCoder/flutter-tdd-clean-architecture-course)
 
 The most important thing is having a **consistent** and **intentional** project structure.
+
+## Adding Events within a Bloc
+
+❔ **Question**: Is it okay to add events within a bloc?
+
+💡 **Answer**: In most cases, events should be added externally but in some select cases it may make sense for events to be added internally.
+
+The most common situation in which internal events are used is when state changes must occur in response to real-time updates from a repository. In these situations, the repository is the stimulus for the state change instead of an external event such as a button tap.
+
+In the following example, the state of `MyBloc` is dependent on the current user which is exposed via the `Stream<User>` from the `UserRepository`. `MyBloc` listens for changes in the current user and adds an internal `_UserChanged` event whenever a user is emitted from the user stream.
+
+```dart
+class MyBloc extends Bloc<MyEvent, MyState> {
+  MyBloc({required UserRepository userRepository}) : super(...) {
+    on<_UserChanged>(_onUserChanged);
+    _userSubscription = userRepository.user.listen(
+      (user) => add(_UserChanged(user)),
+    );
+  }
+```
+
+By adding an internal event, we are also able to specify a custom `transformer` for the event to determine how multiple `_UserChanged` events will be processed -- by default they will be processed concurrently.
+
+It's highly recommended that internal events are private. This is an explicit way of signaling that a specific event is used only within the bloc itself and prevents external components from knowing about the event.
+
+```dart
+abstract class MyEvent {}
+
+// `EventA` is an external event.
+class EventA extends MyEvent {}
+
+// `EventB` is an internal event.
+// We are explicitly making `EventB` private so that it can only be used
+// within the bloc.
+class _EventB extends MyEvent {}
+```
+
+We can alternatively define an external `Started` event and use the `emit.forEach` API to handle reacting to real-time user updates:
+
+```dart
+class MyBloc extends Bloc<MyEvent, MyState> {
+  MyBloc({required UserRepository userRepository})
+    : _userRepository = userRepository, super(...) {
+    on<Started>(_onStarted);
+  }
+
+  Future<void> _onStarted(Started event, Emitter<MyState> emit) {
+    return emit.forEach(
+      _userRepository.user,
+      onData: (user) => MyState(...)
+    );
+  }
+}
+```
+
+The benefits of the above approach are:
+
+- We do not need an internal `_UserChanged` event
+- We do not need to manage the `StreamSubscription` manually
+- We have full control over when the bloc subscribes to the stream of user updates
+
+The drawbacks of the above approach are:
+
+- We cannot easily `pause` or `resume` the subscription
+- We need to expose a public `Started` event which must be added externally
+- We cannot use a custom `transformer` to adjust how we react to user updates
