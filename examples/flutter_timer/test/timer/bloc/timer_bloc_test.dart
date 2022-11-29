@@ -6,14 +6,14 @@ import 'package:flutter_timer/ticker.dart';
 import 'package:flutter_timer/timer/timer.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockTicker extends Mock implements Ticker {}
+class _MockTicker extends Mock implements Ticker {}
 
 void main() {
   group('TimerBloc', () {
     late Ticker ticker;
 
     setUp(() {
-      ticker = MockTicker();
+      ticker = _MockTicker();
       when(() => ticker.tick(ticks: 5)).thenAnswer(
         (_) => Stream<int>.fromIterable([5, 4, 3, 2, 1]),
       );
@@ -65,16 +65,26 @@ void main() {
 
     blocTest<TimerBloc, TimerState>(
       'emits [TimerRunInProgress(3)] when timer ticks to 3',
+      setUp: () {
+        when(() => ticker.tick(ticks: 3)).thenAnswer(
+          (_) => Stream<int>.value(3),
+        );
+      },
       build: () => TimerBloc(ticker: ticker),
-      act: (bloc) => bloc.add(TimerTicked(duration: 3)),
+      act: (bloc) => bloc.add(TimerStarted(duration: 3)),
       expect: () => [TimerRunInProgress(3)],
     );
 
     blocTest<TimerBloc, TimerState>(
-      'emits [TimerRunComplete()] when timer ticks to 0',
+      'emits [TimerRunInProgress(1), TimerRunComplete()] when timer ticks to 0',
+      setUp: () {
+        when(() => ticker.tick(ticks: 1)).thenAnswer(
+          (_) => Stream<int>.fromIterable([1, 0]),
+        );
+      },
       build: () => TimerBloc(ticker: ticker),
-      act: (bloc) => bloc.add(TimerTicked(duration: 0)),
-      expect: () => [TimerRunComplete()],
+      act: (bloc) => bloc.add(TimerStarted(duration: 1)),
+      expect: () => [TimerRunInProgress(1), TimerRunComplete()],
     );
   });
 }
