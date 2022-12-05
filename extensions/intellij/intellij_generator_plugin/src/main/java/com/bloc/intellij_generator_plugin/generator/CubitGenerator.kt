@@ -39,7 +39,7 @@ abstract class CubitGenerator(private val name: String,
     abstract fun fileName(): String
 
     fun generate(): String {
-        val substitutor = StrSubstitutor(templateValues, "^{", "}", '\\')
+        val substitutor = StrSubstitutor(templateValues, "{{", "}}", '\\')
         return substitutor.replace(templateString)
     }
 

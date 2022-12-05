@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part '^{bloc_snake_case}_state.freezed.dart';
+part '{{bloc_snake_case}}_state.freezed.dart';
 
 @freezed
-class ^{bloc_pascal_case}State with _$^{bloc_pascal_case}State {
-  const factory ^{bloc_pascal_case}State.initial() = ^{bloc_pascal_case}InitialState;
+class {{bloc_pascal_case}}State with _${{bloc_pascal_case}}State {
+  const factory {{bloc_pascal_case}}State.initial() = {{bloc_pascal_case}}InitialState;
 }

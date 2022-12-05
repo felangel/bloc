@@ -1,9 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part '^{bloc_snake_case}_event.freezed.dart';
+part '{{bloc_snake_case}}_event.freezed.dart';
 
 @freezed
-class ^{bloc_pascal_case}Event with _$^{bloc_pascal_case}Event {
-  const factory ^{bloc_pascal_case}Event.loadData() = ^{bloc_pascal_case}LoadDataEvent;
+class {{bloc_pascal_case}}Event with _${{bloc_pascal_case}}Event {
+  const factory {{bloc_pascal_case}}Event.loadData() = {{bloc_pascal_case}}LoadDataEvent;
 }
 
