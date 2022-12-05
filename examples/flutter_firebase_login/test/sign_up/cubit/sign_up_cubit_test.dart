@@ -257,7 +257,43 @@ void main() {
 
       blocTest<SignUpCubit, SignUpState>(
         'emits [submissionInProgress, submissionFailure] '
-        'when signUp fails',
+        'when signUp fails due to SignUpWithEmailAndPasswordFailure',
+        setUp: () {
+          when(
+            () => authenticationRepository.signUp(
+              email: any(named: 'email'),
+              password: any(named: 'password'),
+            ),
+          ).thenThrow(SignUpWithEmailAndPasswordFailure('oops'));
+        },
+        build: () => SignUpCubit(authenticationRepository),
+        seed: () => SignUpState(
+          status: FormzStatus.valid,
+          email: validEmail,
+          password: validPassword,
+          confirmedPassword: validConfirmedPassword,
+        ),
+        act: (cubit) => cubit.signUpFormSubmitted(),
+        expect: () => const <SignUpState>[
+          SignUpState(
+            status: FormzStatus.submissionInProgress,
+            email: validEmail,
+            password: validPassword,
+            confirmedPassword: validConfirmedPassword,
+          ),
+          SignUpState(
+            status: FormzStatus.submissionFailure,
+            errorMessage: 'oops',
+            email: validEmail,
+            password: validPassword,
+            confirmedPassword: validConfirmedPassword,
+          )
+        ],
+      );
+
+      blocTest<SignUpCubit, SignUpState>(
+        'emits [submissionInProgress, submissionFailure] '
+        'when signUp fails due to generic exception',
         setUp: () {
           when(
             () => authenticationRepository.signUp(
