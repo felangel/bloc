@@ -19,8 +19,8 @@ class GenerateCubitAction : AnAction(), GenerateBlocDialog.Listener {
     }
 
     override fun onGenerateBlocClicked(name: String?, blocTemplateType: BlocTemplateType) {
-        name?.let { name ->
-            val generators = CubitGeneratorFactory.getCubitGenerators(name, blocTemplateType)
+        name?.let {
+            val generators = CubitGeneratorFactory.getCubitGenerators(it, blocTemplateType)
             generate(generators)
         }
     }

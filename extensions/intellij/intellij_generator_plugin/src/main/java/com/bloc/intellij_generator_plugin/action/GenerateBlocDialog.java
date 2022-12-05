@@ -10,9 +10,7 @@ public class GenerateBlocDialog extends DialogWrapper {
     private final Listener listener;
     private JTextField blocNameTextField;
     private JPanel contentPanel;
-    private JRadioButton useEquatable;
-    private JRadioButton useFreezed;
-    private JRadioButton useNone;
+    private JComboBox<String> style;
 
     public GenerateBlocDialog(final Listener listener) {
         super(null);
@@ -30,12 +28,11 @@ public class GenerateBlocDialog extends DialogWrapper {
     protected void doOKAction() {
         super.doOKAction();
         BlocTemplateType blocTemplateType;
-        if (useEquatable.isSelected()) {
+        final String selectedStyle = style.getSelectedItem().toString();
+        if (selectedStyle == "Equatable") {
             blocTemplateType = BlocTemplateType.EQUATABLE;
-        } else if (useFreezed.isSelected()) {
+        } else if (selectedStyle == "Freezed") {
             blocTemplateType = BlocTemplateType.FREEZED;
-        } else if (useNone.isSelected()) {
-            blocTemplateType = BlocTemplateType.NONE;
         } else {
             blocTemplateType = BlocTemplateType.NONE;
         }
