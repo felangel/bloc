@@ -1,8 +1,6 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part '{{cubit_snake_case}}_state.freezed.dart';
+part of '{{cubit_snake_case}}_cubit.dart';
 
 @freezed
 class {{cubit_pascal_case}}State with _${{cubit_pascal_case}}State {
-  const factory {{cubit_pascal_case}}State.initial() = {{cubit_pascal_case}}InitialState;
+  const factory {{cubit_pascal_case}}State.initial() = _Initial;
 }
