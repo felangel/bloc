@@ -34,7 +34,7 @@ public class GenerateBlocDialog extends DialogWrapper {
         } else if (selectedStyle == "Freezed") {
             blocTemplateType = BlocTemplateType.FREEZED;
         } else {
-            blocTemplateType = BlocTemplateType.NONE;
+            blocTemplateType = BlocTemplateType.BASIC;
         }
         this.listener.onGenerateBlocClicked(blocNameTextField.getText(), blocTemplateType);
     }

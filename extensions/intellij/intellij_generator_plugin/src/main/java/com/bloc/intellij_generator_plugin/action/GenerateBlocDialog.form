@@ -32,7 +32,7 @@
         </constraints>
         <properties>
           <model>
-            <item value="None"/>
+            <item value="Basic"/>
             <item value="Equatable"/>
             <item value="Freezed"/>
           </model>

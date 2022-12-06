@@ -24,9 +24,9 @@ abstract class BlocGenerator(private val name: String,
         )
         try {
             val templateFolder = when (blocTemplateType) {
-                BlocTemplateType.NONE -> "bloc_without_equatable"
-                BlocTemplateType.EQUATABLE -> "bloc_with_equatable"
-                BlocTemplateType.FREEZED -> "bloc_with_freezed"
+                BlocTemplateType.BASIC -> "bloc_basic"
+                BlocTemplateType.EQUATABLE -> "bloc_equatable"
+                BlocTemplateType.FREEZED -> "bloc_freezed"
             }
             val resource = "/templates/$templateFolder/$templateName.dart.template"
             val resourceAsStream = BlocGenerator::class.java.getResourceAsStream(resource)

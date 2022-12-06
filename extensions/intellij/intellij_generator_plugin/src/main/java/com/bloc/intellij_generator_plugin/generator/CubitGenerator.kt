@@ -24,9 +24,9 @@ abstract class CubitGenerator(private val name: String,
         )
         try {
             val templateFolder = when (blocTemplateType) {
-                BlocTemplateType.EQUATABLE -> "cubit_with_equatable"
-                BlocTemplateType.FREEZED -> "cubit_with_freezed"
-                BlocTemplateType.NONE -> "cubit_without_equatable"
+                BlocTemplateType.BASIC -> "cubit_basic"
+                BlocTemplateType.EQUATABLE -> "cubit_equatable"
+                BlocTemplateType.FREEZED -> "cubit_freezed"
             }
             val resource = "/templates/$templateFolder/$templateName.dart.template"
             val resourceAsStream = CubitGenerator::class.java.getResourceAsStream(resource)
