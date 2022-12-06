@@ -11,6 +11,7 @@
 
     <change-notes><![CDATA[
         <ul>
+          <li>v3.4.0 - Support for Freezed</li>
           <li>v3.3.0 - Support for Mock snippet</li>
           <li>v3.2.0 - Support for MockBloc, MockCubit, and Fake snippets</li>
           <li>v3.1.0 - Support for Wrap with BlocSelector</li>
