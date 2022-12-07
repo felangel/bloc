@@ -4,21 +4,21 @@ version: 1.0.0
 publish_to: none
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=2.18.5 <3.0.0"
 
 dependencies:
   cache:
     path: ../cache
-  equatable: ^2.0.3
-  firebase_auth: ^3.11.2
-  firebase_core: ^1.17.1  
   # Unfortunately, a breaking change was introduced in 4.5.2.
   # https://github.com/firebase/flutterfire/issues/9806
-  firebase_core_platform_interface: 4.5.1
+  equatable: ^2.0.5
+  firebase_auth: ^4.1.5
+  firebase_core: ^2.3.0
+  firebase_core_platform_interface: ^4.5.2
   flutter:
     sdk: flutter
-  google_sign_in: ^5.3.3
-  meta: ^1.7.0
+  google_sign_in: ^5.4.2
+  meta: ^1.8.0
 
 dev_dependencies:
   flutter_test:
