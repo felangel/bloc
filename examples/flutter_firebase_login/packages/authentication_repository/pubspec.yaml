@@ -10,7 +10,7 @@ dependencies:
   cache:
     path: ../cache
   equatable: ^2.0.3
-  firebase_auth: ^3.4.0
+  firebase_auth: ^3.11.2
   firebase_core: ^1.17.1  
   # Unfortunately, a breaking change was introduced in 4.5.2.
   # https://github.com/firebase/flutterfire/issues/9806
