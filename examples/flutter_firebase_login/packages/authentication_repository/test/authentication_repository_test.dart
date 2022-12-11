@@ -153,7 +153,6 @@ void main() {
             .thenAnswer((_) => Future.value(MockUserCredential()));
         when(() => firebaseAuth.signInWithPopup(any()))
             .thenAnswer((_) => Future.value(MockUserCredential()));
-
       });
 
       test('calls signIn authentication, and signInWithCredential', () async {
