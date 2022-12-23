@@ -146,3 +146,8 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
     return subscription.cancel;
   }
 }
+
+extension BlocProviderContext on BuildContext{
+  T readBloc<T> => BlocProvider.of<T>(this);
+  T watchBloc<T> => BlocProvider.of<T>(this, listen: true);
+}

@@ -80,3 +80,8 @@ class RepositoryProvider<T> extends Provider<T>
     }
   }
 }
+
+extension RepositoryProviderContext on BuildContext{
+  T readRepository<T> => RepositoryProvider.of<T>(this);
+  T watchRepository<T> => RepositoryProvider.of<T>(this, listen: true);
+}
