@@ -208,6 +208,8 @@ The most notable thing is the concrete implementation of the `local_storage_todo
 
 This provides theme definition for light and dark mode.
 
+Let's create `lib/theme/theme.dart` with the following contents:
+
 [theme.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/theme/theme.dart ':include')
 
 ### Home
