@@ -10,26 +10,26 @@ props getter.
 
 ✅ **GOOD**
 
-[my_state.dart](_snippets/faqs/state_not_updating_good_1.dart.md ":include")
+[my_state.dart](_snippets/faqs/state_not_updating_good_1.dart.md ':include')
 
 ❌ **BAD**
 
-[my_state.dart](_snippets/faqs/state_not_updating_bad_1.dart.md ":include")
+[my_state.dart](_snippets/faqs/state_not_updating_bad_1.dart.md ':include')
 
-[my_state.dart](_snippets/faqs/state_not_updating_bad_2.dart.md ":include")
+[my_state.dart](_snippets/faqs/state_not_updating_bad_2.dart.md ':include')
 
 In addition, make sure you are emitting a new instance of the state in your
 bloc.
 
 ✅ **GOOD**
 
-[my_bloc.dart](_snippets/faqs/state_not_updating_good_2.dart.md ":include")
+[my_bloc.dart](_snippets/faqs/state_not_updating_good_2.dart.md ':include')
 
-[my_bloc.dart](_snippets/faqs/state_not_updating_good_3.dart.md ":include")
+[my_bloc.dart](_snippets/faqs/state_not_updating_good_3.dart.md ':include')
 
 ❌ **BAD**
 
-[my_bloc.dart](_snippets/faqs/state_not_updating_bad_3.dart.md ":include")
+[my_bloc.dart](_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
 
 !> `Equatable` properties should always be copied rather than modified. If an
 `Equatable` class contains a `List` or `Map` as properties, be sure to use
@@ -42,7 +42,7 @@ based on the values of the properties rather than the reference.
 
 💡**Answer**:
 
-[my_bloc.dart](_snippets/faqs/equatable_yield.dart.md ":include")
+[my_bloc.dart](_snippets/faqs/equatable_yield.dart.md ':include')
 
 In the above scenario if `StateA` extends `Equatable` only one state change will
 occur (the second emit will be ignored). In general, you should use `Equatable`
@@ -54,12 +54,12 @@ In addition, using `Equatable` makes it much easier to test blocs since we can
 expect specific instances of bloc states rather than using `Matchers` or
 `Predicates`.
 
-[my_bloc_test.dart](_snippets/faqs/equatable_bloc_test.dart.md ":include")
+[my_bloc_test.dart](_snippets/faqs/equatable_bloc_test.dart.md ':include')
 
 Without `Equatable` the above test would fail and would need to be rewritten
 like:
 
-[my_bloc_test.dart](_snippets/faqs/without_equatable_bloc_test.dart.md ":include")
+[my_bloc_test.dart](_snippets/faqs/without_equatable_bloc_test.dart.md ':include')
 
 ## Handling Errors
 
@@ -172,13 +172,13 @@ provided so you must ensure `BlocProvider.of()` is called within a child
 
 ✅ **GOOD**
 
-[my_page.dart](_snippets/faqs/bloc_provider_good_1.dart.md ":include")
+[my_page.dart](_snippets/faqs/bloc_provider_good_1.dart.md ':include')
 
-[my_page.dart](_snippets/faqs/bloc_provider_good_2.dart.md ":include")
+[my_page.dart](_snippets/faqs/bloc_provider_good_2.dart.md ':include')
 
 ❌ **BAD**
 
-[my_page.dart](_snippets/faqs/bloc_provider_bad_1.dart.md ":include")
+[my_page.dart](_snippets/faqs/bloc_provider_bad_1.dart.md ':include')
 
 ## Project Structure
 
