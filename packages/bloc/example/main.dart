@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc/src/linked_bloc.dart';
 
 class SimpleBlocObserver extends BlocObserver {
   @override
@@ -43,6 +44,7 @@ class SimpleBlocObserver extends BlocObserver {
 void main() {
   Bloc.observer = SimpleBlocObserver();
   cubitMain();
+  linkedStateBlocMain();
   blocMain();
 }
 
@@ -88,6 +90,39 @@ Future<void> blocMain() async {
   await bloc.close();
 }
 
+void linkedStateBlocMain() {
+  print('----------linkedStateBlocMain----------');
+
+  /// Create a `CounterBloc` instance.
+  final bloc = LinkedCounterBloc(0, CounterInitEvent());
+
+  /// Access the state of the `bloc` via `state`.
+  print(bloc.state.data);
+
+  /// Increment counter twice and decrement it once.
+  bloc
+    ..increment()
+    ..increment()
+    ..decrement();
+
+  /// Print the timeline of the events
+  print(bloc.timeline());
+
+  /// Go to previous state once
+  bloc.pop();
+
+  /// Increment and decrement again to start a new history from this node.
+  bloc
+    ..increment()
+    ..increment()
+    ..increment()
+    ..decrement()
+    ..increment();
+
+  /// Print again the timeline to see the difference.
+  print(bloc.timeline());
+}
+
 /// A `CounterCubit` which manages an `int` as its state.
 class CounterCubit extends Cubit<int> {
   /// The initial state of the `CounterCubit` is 0.
@@ -100,10 +135,16 @@ class CounterCubit extends Cubit<int> {
 }
 
 /// The events which `CounterBloc` will react to.
-abstract class CounterEvent {}
+abstract class CounterEvent extends Event {}
+
+/// Initial CounterEvent.
+class CounterInitEvent extends CounterEvent {}
 
 /// Notifies bloc to increment state.
 class CounterIncrementPressed extends CounterEvent {}
+
+/// Notifies bloc to decrement state.
+class CounterDecrementPressed extends CounterEvent {}
 
 /// A `CounterBloc` which handles converting `CounterEvent`s into `int`s.
 class CounterBloc extends Bloc<CounterEvent, int> {
@@ -114,4 +155,16 @@ class CounterBloc extends Bloc<CounterEvent, int> {
     /// and a new state is emitted via `emit`.
     on<CounterIncrementPressed>((event, emit) => emit(state + 1));
   }
+}
+
+/// A `LinkedCounterBloc` which manages an `int` as its state and `CounterEvent`
+/// as its event.
+class LinkedCounterBloc extends LinkedStateBloc<int, CounterEvent> {
+  LinkedCounterBloc(int data, CounterEvent event) : super(data, event);
+
+  /// This one increment the counter
+  void increment() => emit(state.data + 1, CounterIncrementPressed());
+
+  /// And this one decrement the counter
+  void decrement() => emit(state.data - 1, CounterIncrementPressed());
 }
