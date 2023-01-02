@@ -1,6 +1,6 @@
 # Bloc Bricks 🧱
 
-[Mason](https://github.com/felange/mason) support for the [Bloc Library](https://bloclibrary.dev). A collection of bricks for effectively working with the bloc state management library.
+[Mason](https://github.com/felangel/mason) support for the [Bloc Library](https://bloclibrary.dev). A collection of bricks for effectively working with the bloc state management library.
 
 ## Installation
 
