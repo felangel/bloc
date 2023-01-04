@@ -7,7 +7,7 @@ import 'package:flutter_login/login/login.dart';
 import 'package:flutter_login/splash/splash.dart';
 import 'package:user_repository/user_repository.dart';
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   const App({
     super.key,
     required this.authenticationRepository,
@@ -18,24 +18,13 @@ class App extends StatefulWidget {
   final UserRepository userRepository;
 
   @override
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  @override
-  void dispose() {
-    widget.authenticationRepository.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-      value: widget.authenticationRepository,
+      value: authenticationRepository,
       child: BlocProvider(
         create: (_) => AuthenticationBloc(
-          authenticationRepository: widget.authenticationRepository,
-          userRepository: widget.userRepository,
+          authenticationRepository: authenticationRepository,
+          userRepository: userRepository,
         ),
         child: const AppView(),
       ),
