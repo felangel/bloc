@@ -1,18 +1,32 @@
-body .app-nav {
-  color: #34495e !important;
-}
-.cover {
-  color: #34495e !important;
+:root {
+  --base-background-color: #091a28;
+  --base-color: #b4b4b4;
+  --link-color: #42b983;
+  --link-text-decoration: none;
+  --heading-color: #b4b4b4;
+  --table-body-border-color: #eeeeee;
+  --table-body-border-width: 0.5;
+  --table-cell-border-color: #eeeeee;
+  --table-cell-border-width: 0.5;
+  --table-row-odd-background: #0e2233;
+  --code-inline-background: #0e2233;
+  --code-theme-text: #d22778;
+  --cover-background-color: linear-gradient(
+    to left bottom,
+    hsl(118, 100%, 85%) 0%,
+    hsl(181, 100%, 85%) 100%
+  );
+  --cover-background-mask-opacity: 0;
 }
 
-section.cover {
+a {
+  font-weight: 600;
+}
+.cover {
+  color: #34495e;
   min-height: 100vh;
   height: auto !important;
   padding: 2em 0.5em;
-}
-
-section.cover .cover-main {
-  z-index: 0;
 }
 
 section.cover .cover-main > .buttons a {
