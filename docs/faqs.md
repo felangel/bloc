@@ -2,9 +2,11 @@
 
 ## State Not Updating
 
-❔ **Question**: I'm emitting a state in my bloc but the UI is not updating. What am I doing wrong?
+❔ **Question**: I'm emitting a state in my bloc but the UI is not updating. What
+am I doing wrong?
 
-💡 **Answer**: If you're using Equatable make sure to pass all properties to the props getter.
+💡 **Answer**: If you're using Equatable make sure to pass all properties to the
+props getter.
 
 ✅ **GOOD**
 
@@ -16,7 +18,8 @@
 
 [my_state.dart](_snippets/faqs/state_not_updating_bad_2.dart.md ':include')
 
-In addition, make sure you are emitting a new instance of the state in your bloc.
+In addition, make sure you are emitting a new instance of the state in your
+bloc.
 
 ✅ **GOOD**
 
@@ -28,7 +31,10 @@ In addition, make sure you are emitting a new instance of the state in your bloc
 
 [my_bloc.dart](_snippets/faqs/state_not_updating_bad_3.dart.md ':include')
 
-!> `Equatable` properties should always be copied rather than modified. If an `Equatable` class contains a `List` or `Map` as properties, be sure to use `List.from` or `Map.from` respectively to ensure that equality is evaluated based on the values of the properties rather than the reference.
+!> `Equatable` properties should always be copied rather than modified. If an
+`Equatable` class contains a `List` or `Map` as properties, be sure to use
+`List.from` or `Map.from` respectively to ensure that equality is evaluated
+based on the values of the properties rather than the reference.
 
 ## When to use Equatable
 
@@ -38,15 +44,20 @@ In addition, make sure you are emitting a new instance of the state in your bloc
 
 [my_bloc.dart](_snippets/faqs/equatable_yield.dart.md ':include')
 
-In the above scenario if `StateA` extends `Equatable` only one state change will occur (the second emit will be ignored).
-In general, you should use `Equatable` if you want to optimize your code to reduce the number of rebuilds.
-You should not use `Equatable` if you want the same state back-to-back to trigger multiple transitions.
+In the above scenario if `StateA` extends `Equatable` only one state change will
+occur (the second emit will be ignored). In general, you should use `Equatable`
+if you want to optimize your code to reduce the number of rebuilds. You should
+not use `Equatable` if you want the same state back-to-back to trigger multiple
+transitions.
 
-In addition, using `Equatable` makes it much easier to test blocs since we can expect specific instances of bloc states rather than using `Matchers` or `Predicates`.
+In addition, using `Equatable` makes it much easier to test blocs since we can
+expect specific instances of bloc states rather than using `Matchers` or
+`Predicates`.
 
 [my_bloc_test.dart](_snippets/faqs/equatable_bloc_test.dart.md ':include')
 
-Without `Equatable` the above test would fail and would need to be rewritten like:
+Without `Equatable` the above test would fail and would need to be rewritten
+like:
 
 [my_bloc_test.dart](_snippets/faqs/without_equatable_bloc_test.dart.md ':include')
 
@@ -56,7 +67,9 @@ Without `Equatable` the above test would fail and would need to be rewritten lik
 
 💡 **Answer**:
 
-This highly depends on how the state of the bloc has been modeled. In cases where data should still be retained even in the presence of an error, consider using a single state class.
+This highly depends on how the state of the bloc has been modeled. In cases
+where data should still be retained even in the presence of an error, consider
+using a single state class.
 
 ```dart
 enum Status { initial, loading, success, failure }
@@ -82,7 +95,9 @@ class MyState {
 }
 ```
 
-This will allow widgets to have access to the `data` and `error` properties simultaneously and the bloc can use `state.copyWith` to retain old data even when an error has occurred.
+This will allow widgets to have access to the `data` and `error` properties
+simultaneously and the bloc can use `state.copyWith` to retain old data even
+when an error has occurred.
 
 ```dart
 on<DataRequested>((event, emit) {
@@ -106,7 +121,8 @@ BLoC is a design pattern that is defined by the following rules:
 1. Input and Output of the BLoC are simple Streams and Sinks.
 2. Dependencies must be injectable and Platform agnostic.
 3. No platform branching is allowed.
-4. Implementation can be whatever you want as long as you follow the above rules.
+4. Implementation can be whatever you want as long as you follow the above
+   rules.
 
 The UI guidelines are:
 
@@ -115,7 +131,8 @@ The UI guidelines are:
 3. Components should show outputs as close as possible to "as is".
 4. All branching should be based on simple BLoC boolean outputs.
 
-The Bloc Library implements the BLoC Design Pattern and aims to abstract RxDart in order to simplify the developer experience.
+The Bloc Library implements the BLoC Design Pattern and aims to abstract RxDart
+in order to simplify the developer experience.
 
 The three principles of Redux are:
 
@@ -123,16 +140,20 @@ The three principles of Redux are:
 2. State is read-only
 3. Changes are made with pure functions
 
-The bloc library violates the first principle; with bloc state is distributed across multiple blocs.
-Furthermore, there is no concept of middleware in bloc and bloc is designed to make async state changes very easy, allowing you to emit multiple states for a single event.
+The bloc library violates the first principle; with bloc state is distributed
+across multiple blocs. Furthermore, there is no concept of middleware in bloc
+and bloc is designed to make async state changes very easy, allowing you to emit
+multiple states for a single event.
 
 ## Bloc vs. Provider
 
 ❔ **Question**: What's the difference between Bloc and Provider?
 
-💡 **Answer**: `provider` is designed for dependency injection (it wraps `InheritedWidget`).
-You still need to figure out how to manage your state (via `ChangeNotifier`, `Bloc`, `Mobx`, etc...).
-The Bloc Library uses `provider` internally to make it easy to provide and access blocs throughout the widget tree.
+💡 **Answer**: `provider` is designed for dependency injection (it wraps
+`InheritedWidget`). You still need to figure out how to manage your state (via
+`ChangeNotifier`, `Bloc`, `Mobx`, etc...). The Bloc Library uses `provider`
+internally to make it easy to provide and access blocs throughout the widget
+tree.
 
 ## Navigation with Bloc
 
@@ -142,9 +163,12 @@ The Bloc Library uses `provider` internally to make it easy to provide and acces
 
 ## BlocProvider.of() Fails to Find Bloc
 
-❔ **Question**: When using `BlocProvider.of(context)` it cannot find the bloc. How can I fix this?
+❔ **Question**: When using `BlocProvider.of(context)` it cannot find the bloc.
+How can I fix this?
 
-💡 **Answer**: You cannot access a bloc from the same context in which it was provided so you must ensure `BlocProvider.of()` is called within a child `BuildContext`.
+💡 **Answer**: You cannot access a bloc from the same context in which it was
+provided so you must ensure `BlocProvider.of()` is called within a child
+`BuildContext`.
 
 ✅ **GOOD**
 
@@ -160,23 +184,32 @@ The Bloc Library uses `provider` internally to make it easy to provide and acces
 
 ❔ **Question**: How should I structure my project?
 
-💡 **Answer**: While there is really no right/wrong answer to this question, some recommended references are
+💡 **Answer**: While there is really no right/wrong answer to this question, some
+recommended references are
 
 - [Flutter Architecture Samples - Brian Egan](https://github.com/brianegan/flutter_architecture_samples/tree/master/bloc_library)
 - [Flutter Shopping Card Example](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart)
 - [Flutter TDD Course - ResoCoder](https://github.com/ResoCoder/flutter-tdd-clean-architecture-course)
 
-The most important thing is having a **consistent** and **intentional** project structure.
+The most important thing is having a **consistent** and **intentional** project
+structure.
 
 ## Adding Events within a Bloc
 
 ❔ **Question**: Is it okay to add events within a bloc?
 
-💡 **Answer**: In most cases, events should be added externally but in some select cases it may make sense for events to be added internally.
+💡 **Answer**: In most cases, events should be added externally but in some
+select cases it may make sense for events to be added internally.
 
-The most common situation in which internal events are used is when state changes must occur in response to real-time updates from a repository. In these situations, the repository is the stimulus for the state change instead of an external event such as a button tap.
+The most common situation in which internal events are used is when state
+changes must occur in response to real-time updates from a repository. In these
+situations, the repository is the stimulus for the state change instead of an
+external event such as a button tap.
 
-In the following example, the state of `MyBloc` is dependent on the current user which is exposed via the `Stream<User>` from the `UserRepository`. `MyBloc` listens for changes in the current user and adds an internal `_UserChanged` event whenever a user is emitted from the user stream.
+In the following example, the state of `MyBloc` is dependent on the current user
+which is exposed via the `Stream<User>` from the `UserRepository`. `MyBloc`
+listens for changes in the current user and adds an internal `_UserChanged`
+event whenever a user is emitted from the user stream.
 
 ```dart
 class MyBloc extends Bloc<MyEvent, MyState> {
@@ -188,9 +221,13 @@ class MyBloc extends Bloc<MyEvent, MyState> {
   }
 ```
 
-By adding an internal event, we are also able to specify a custom `transformer` for the event to determine how multiple `_UserChanged` events will be processed -- by default they will be processed concurrently.
+By adding an internal event, we are also able to specify a custom `transformer`
+for the event to determine how multiple `_UserChanged` events will be processed
+-- by default they will be processed concurrently.
 
-It's highly recommended that internal events are private. This is an explicit way of signaling that a specific event is used only within the bloc itself and prevents external components from knowing about the event.
+It's highly recommended that internal events are private. This is an explicit
+way of signaling that a specific event is used only within the bloc itself and
+prevents external components from knowing about the event.
 
 ```dart
 abstract class MyEvent {}
@@ -204,7 +241,8 @@ class EventA extends MyEvent {}
 class _EventB extends MyEvent {}
 ```
 
-We can alternatively define an external `Started` event and use the `emit.forEach` API to handle reacting to real-time user updates:
+We can alternatively define an external `Started` event and use the
+`emit.forEach` API to handle reacting to real-time user updates:
 
 ```dart
 class MyBloc extends Bloc<MyEvent, MyState> {
@@ -226,10 +264,25 @@ The benefits of the above approach are:
 
 - We do not need an internal `_UserChanged` event
 - We do not need to manage the `StreamSubscription` manually
-- We have full control over when the bloc subscribes to the stream of user updates
+- We have full control over when the bloc subscribes to the stream of user
+  updates
 
 The drawbacks of the above approach are:
 
 - We cannot easily `pause` or `resume` the subscription
 - We need to expose a public `Started` event which must be added externally
 - We cannot use a custom `transformer` to adjust how we react to user updates
+
+## Exposing Public Methods
+
+❔ **Question**: Is it okay to expose public methods on my bloc and cubit
+instances?
+
+💡 **Answer**
+
+When creating a cubit, it's recommended to only expose public methods for the
+purposes of triggering state changes. As a result, generally all public methods
+on a cubit instance should return `void` or `Future<void>`.
+
+When creating a bloc, it's recommended to avoid exposing any custom public
+methods and instead notify the bloc of events by calling `add`.

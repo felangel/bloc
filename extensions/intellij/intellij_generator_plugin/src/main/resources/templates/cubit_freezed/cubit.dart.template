@@ -1,0 +1,9 @@
+import 'package:bloc/bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part '{{cubit_snake_case}}_state.dart';
+part '{{cubit_snake_case}}_cubit.freezed.dart';
+
+class {{cubit_pascal_case}}Cubit extends Cubit<{{cubit_pascal_case}}State> {
+  {{cubit_pascal_case}}Cubit() : super(const {{cubit_pascal_case}}State.initial());
+}

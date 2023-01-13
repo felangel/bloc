@@ -9,16 +9,16 @@ environment:
 dependencies:
   cache:
     path: ../cache
-  equatable: ^2.0.3
-  firebase_auth: ^3.4.0
-  firebase_core: ^1.17.1  
+  equatable: ^2.0.5
+  firebase_auth: ^4.0.2
+  firebase_core: ^2.1.0
   # Unfortunately, a breaking change was introduced in 4.5.2.
   # https://github.com/firebase/flutterfire/issues/9806
   firebase_core_platform_interface: 4.5.1
   flutter:
     sdk: flutter
-  google_sign_in: ^5.3.3
-  meta: ^1.7.0
+  google_sign_in: ^5.4.2
+  meta: ^1.8.0
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cache/cache.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -33,6 +34,8 @@ class MockUserCredential extends Mock implements firebase_auth.UserCredential {}
 
 class FakeAuthCredential extends Fake implements firebase_auth.AuthCredential {}
 
+class FakeAuthProvider extends Fake implements AuthProvider {}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -51,6 +54,7 @@ void main() {
 
     setUpAll(() {
       registerFallbackValue(FakeAuthCredential());
+      registerFallbackValue(FakeAuthProvider());
     });
 
     setUp(() {
