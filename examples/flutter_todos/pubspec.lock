@@ -211,7 +211,7 @@ packages:
     source: hosted
     version: "4.6.0"
   local_storage_todos_api:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: "packages/local_storage_todos_api"
       relative: true
@@ -357,6 +357,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.0"
   rxdart:
     dependency: transitive
     description:
@@ -527,6 +534,13 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/todos_api"
+      relative: true
+    source: path
+    version: "1.0.0+1"
+  todos_api_factory:
+    dependency: "direct main"
+    description:
+      path: "packages/todos_api_factory"
       relative: true
     source: path
     version: "1.0.0+1"

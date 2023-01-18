@@ -1,0 +1,21 @@
+name: firestore_todos_api
+description: My new Firestore package
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  cloud_firestore: ^3.2.0
+  fake_cloud_firestore: ^1.2.4
+  flutter:
+    sdk: flutter
+  todos_api:
+    path: ../todos_api
+
+dev_dependencies:
+  coverage: ^1.3.2
+  mocktail: ^0.3.0
+  test: ^1.21.1
+  very_good_analysis: ^3.0.1
