@@ -77,7 +77,7 @@ jobs:
         run: flutter packages get
       - name: Format
         working-directory: ${{ matrix.folder }}
-        run: flutter format --set-exit-if-changed lib
+        run: dart format --set-exit-if-changed lib
       - name: Analyze
         working-directory: ${{ matrix.folder }}
         run: flutter analyze lib
