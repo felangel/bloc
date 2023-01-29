@@ -2,10 +2,13 @@ name: angular_counter
 description: A web app that uses angular_bloc
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   angular: ^7.0.0
+  angular_bloc: ^8.0.0
+
+dependency_overrides:
   angular_bloc:
     path: ../../packages/angular_bloc
 
