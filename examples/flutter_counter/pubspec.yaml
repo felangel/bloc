@@ -7,12 +7,10 @@ environment:
   sdk: ">=2.19.0 <3.0.0"
 
 dependencies:
-  bloc:
-    path: ../../packages/bloc
+  bloc: ^8.1.0
   flutter:
     sdk: flutter
-  flutter_bloc:
-    path: ../../packages/flutter_bloc
+  flutter_bloc: ^8.1.1
 
 dependency_overrides:
   bloc:
@@ -23,8 +21,7 @@ dependency_overrides:
     path: ../../packages/flutter_bloc
 
 dev_dependencies:
-  bloc_test:
-    path: ../../packages/bloc_test
+  bloc_test: ^9.1.0
   flutter_test:
     sdk: flutter
   integration_test:
