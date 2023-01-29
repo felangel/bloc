@@ -12,7 +12,6 @@ class FlutterTodosTheme {
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
       ),
-      toggleableActiveColor: const Color(0xFF13B9FF),
     );
   }
 
@@ -28,7 +27,6 @@ class FlutterTodosTheme {
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
       ),
-      toggleableActiveColor: const Color(0xFF13B9FF),
     );
   }
 }

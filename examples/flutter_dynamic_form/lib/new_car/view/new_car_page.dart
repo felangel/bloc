@@ -119,7 +119,7 @@ class _FormSubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.watch<NewCarBloc>().state;
 
-    void _onFormSubmitted() {
+    void onFormSubmitted() {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
@@ -131,7 +131,7 @@ class _FormSubmitButton extends StatelessWidget {
     }
 
     return ElevatedButton(
-      onPressed: state.isComplete ? _onFormSubmitted : null,
+      onPressed: state.isComplete ? onFormSubmitted : null,
       child: const Text('Submit'),
     );
   }

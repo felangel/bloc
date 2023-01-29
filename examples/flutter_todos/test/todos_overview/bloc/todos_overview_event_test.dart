@@ -51,7 +51,7 @@ void main() {
             isCompleted: true,
           ).props,
           equals(<Object?>[
-            mockTodo, // todo
+            mockTodo, // `todo`
             true, // isCompleted
           ]),
         );
@@ -70,7 +70,7 @@ void main() {
         expect(
           TodosOverviewTodoDeleted(mockTodo).props,
           equals(<Object?>[
-            mockTodo, // todo
+            mockTodo, // `todo`
           ]),
         );
       });

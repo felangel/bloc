@@ -21,6 +21,7 @@ dependencies:
   meta: ^1.8.0
 
 dev_dependencies:
+  firebase_auth_platform_interface: ^6.10.4
   flutter_test:
     sdk: flutter
   mocktail: ^0.3.0

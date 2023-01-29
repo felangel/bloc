@@ -40,7 +40,7 @@ class StatsView extends StatelessWidget {
             title: Text(l10n.statsCompletedTodoCountLabel),
             trailing: Text(
               '${state.completedTodos}',
-              style: textTheme.headline5,
+              style: textTheme.headlineSmall,
             ),
           ),
           ListTile(
@@ -49,7 +49,7 @@ class StatsView extends StatelessWidget {
             title: Text(l10n.statsActiveTodoCountLabel),
             trailing: Text(
               '${state.activeTodos}',
-              style: textTheme.headline5,
+              style: textTheme.headlineSmall,
             ),
           ),
         ],
