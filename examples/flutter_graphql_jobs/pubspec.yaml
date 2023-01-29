@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
-  graphql: ^5.0.0
+  graphql: ^5.1.3
   json_annotation: ^4.4.0
   meta: ^1.8.0
 
