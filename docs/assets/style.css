@@ -66,3 +66,7 @@ section.cover blockquote > .buttons > a:hover {
   margin: 0 auto;
   font-size: 0.8em;
 }
+
+.sidebar-toggle {
+  width: 36px !important;
+}

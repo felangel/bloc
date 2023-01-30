@@ -12,7 +12,7 @@ class WeatherError extends StatelessWidget {
         const Text('🙈', style: TextStyle(fontSize: 64)),
         Text(
           'Something went wrong!',
-          style: theme.textTheme.headline5,
+          style: theme.textTheme.headlineSmall,
         ),
       ],
     );

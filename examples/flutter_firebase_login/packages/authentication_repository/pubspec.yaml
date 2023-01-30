@@ -4,7 +4,7 @@ version: 1.0.0
 publish_to: none
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=2.19.0 <3.0.0"
 
 dependencies:
   cache:
@@ -21,6 +21,7 @@ dependencies:
   meta: ^1.8.0
 
 dev_dependencies:
+  firebase_auth_platform_interface: ^6.10.4
   flutter_test:
     sdk: flutter
   mocktail: ^0.3.0

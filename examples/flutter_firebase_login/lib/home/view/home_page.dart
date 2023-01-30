@@ -32,9 +32,9 @@ class HomePage extends StatelessWidget {
           children: <Widget>[
             Avatar(photo: user.photo),
             const SizedBox(height: 4),
-            Text(user.email ?? '', style: textTheme.headline6),
+            Text(user.email ?? '', style: textTheme.titleLarge),
             const SizedBox(height: 4),
-            Text(user.name ?? '', style: textTheme.headline5),
+            Text(user.name ?? '', style: textTheme.headlineSmall),
           ],
         ),
       ),

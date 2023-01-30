@@ -80,7 +80,7 @@ class CounterPage extends StatelessWidget {
       body: Center(
         child: BlocBuilder<CounterBloc, int>(
           builder: (context, state) {
-            return Text('$state', style: textTheme.headline2);
+            return Text('$state', style: textTheme.displayMedium);
           },
         ),
       ),

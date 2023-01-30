@@ -93,7 +93,7 @@ class TodosOverviewView extends StatelessWidget {
                 return Center(
                   child: Text(
                     l10n.todosOverviewEmptyText,
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 );
               }
