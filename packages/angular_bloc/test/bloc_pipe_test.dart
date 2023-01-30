@@ -2,9 +2,9 @@
 
 import 'dart:async';
 
-import 'package:angular/angular.dart' show ChangeDetectorRef;
 import 'package:angular_bloc/angular_bloc.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:ngdart/angular.dart' show ChangeDetectorRef;
 import 'package:test/test.dart';
 
 class MockChangeDetectorRef extends Mock implements ChangeDetectorRef {}

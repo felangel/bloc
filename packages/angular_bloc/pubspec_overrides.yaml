@@ -1,0 +1,18 @@
+dependency_overrides:
+  angular_bloc:
+    path: ../../packages/angular_bloc
+  ngcompiler:
+    git:
+      url: https://github.com/angulardart-community/angular
+      path: ngcompiler
+      ref: f08e678
+  ngdart:
+    git:
+      url: https://github.com/angulardart-community/angular
+      path: ngdart
+      ref: f08e678
+  ngtest:
+    git:
+      url: https://github.com/angulardart-community/angular
+      path: ngtest
+      ref: f08e678
