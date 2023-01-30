@@ -6,6 +6,9 @@ environment:
 
 dependencies:
   angular: ^7.0.0
+  angular_bloc: ^8.0.0
+
+dependency_overrides:
   angular_bloc:
     path: ../../packages/angular_bloc
 

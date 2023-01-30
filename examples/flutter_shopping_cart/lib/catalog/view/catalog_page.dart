@@ -99,7 +99,7 @@ class CatalogListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme.headline6;
+    final textTheme = Theme.of(context).textTheme.titleLarge;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: LimitedBox(

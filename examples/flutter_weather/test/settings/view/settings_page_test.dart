@@ -7,8 +7,8 @@ import 'package:flutter_weather/settings/settings.dart';
 import 'package:flutter_weather/weather/weather.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockWeatherCubit extends MockCubit<WeatherState> implements WeatherCubit {
-}
+class MockWeatherCubit extends MockCubit<WeatherState>
+    implements WeatherCubit {}
 
 void main() {
   group('SettingsPage', () {

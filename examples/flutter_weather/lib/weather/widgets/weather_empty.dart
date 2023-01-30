@@ -12,7 +12,7 @@ class WeatherEmpty extends StatelessWidget {
         const Text('🏙️', style: TextStyle(fontSize: 64)),
         Text(
           'Please Select a City!',
-          style: theme.textTheme.headline5,
+          style: theme.textTheme.headlineSmall,
         ),
       ],
     );

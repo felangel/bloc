@@ -17,8 +17,8 @@ class MockWeatherRepository extends Mock implements WeatherRepository {}
 
 class MockThemeCubit extends MockCubit<Color> implements ThemeCubit {}
 
-class MockWeatherCubit extends MockCubit<WeatherState> implements WeatherCubit {
-}
+class MockWeatherCubit extends MockCubit<WeatherState>
+    implements WeatherCubit {}
 
 void main() {
   initHydratedStorage();

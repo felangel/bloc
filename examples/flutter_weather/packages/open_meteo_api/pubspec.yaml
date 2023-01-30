@@ -3,7 +3,7 @@ description: A Dart API Client for the Open-Meteo API.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=2.19.0 <3.0.0"
 
 dependencies:
   http: ^0.13.0

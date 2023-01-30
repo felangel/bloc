@@ -52,7 +52,7 @@ class TimerText extends StatelessWidget {
     final secondsStr = (duration % 60).toString().padLeft(2, '0');
     return Text(
       '$minutesStr:$secondsStr',
-      style: Theme.of(context).textTheme.headline1,
+      style: Theme.of(context).textTheme.displayLarge,
     );
   }
 }

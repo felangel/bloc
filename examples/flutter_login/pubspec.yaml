@@ -4,7 +4,7 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=2.19.0 <3.0.0"
 
 dependencies:
   authentication_repository:
@@ -13,8 +13,7 @@ dependencies:
   equatable: ^2.0.3
   flutter:
     sdk: flutter
-  flutter_bloc:
-    path: ../../packages/flutter_bloc
+  flutter_bloc: ^8.1.1
   formz: ^0.4.0
   user_repository:
     path: packages/user_repository
