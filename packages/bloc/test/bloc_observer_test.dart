@@ -3,7 +3,9 @@ import 'package:test/test.dart';
 
 import 'blocs/blocs.dart';
 
-class DefaultBlocObserver extends BlocObserver {}
+class DefaultBlocObserver extends BlocObserver {
+  const DefaultBlocObserver();
+}
 
 void main() {
   final bloc = CounterBloc();
@@ -20,42 +22,42 @@ void main() {
     group('onCreate', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
-        DefaultBlocObserver().onCreate(bloc);
+        const DefaultBlocObserver().onCreate(bloc);
       });
     });
 
     group('onEvent', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
-        DefaultBlocObserver().onEvent(bloc, event);
+        const DefaultBlocObserver().onEvent(bloc, event);
       });
     });
 
     group('onChange', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
-        DefaultBlocObserver().onChange(bloc, change);
+        const DefaultBlocObserver().onChange(bloc, change);
       });
     });
 
     group('onTransition', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
-        DefaultBlocObserver().onTransition(bloc, transition);
+        const DefaultBlocObserver().onTransition(bloc, transition);
       });
     });
 
     group('onError', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
-        DefaultBlocObserver().onError(bloc, error, stackTrace);
+        const DefaultBlocObserver().onError(bloc, error, stackTrace);
       });
     });
 
     group('onClose', () {
       test('does nothing by default', () {
         // ignore: invalid_use_of_protected_member
-        DefaultBlocObserver().onClose(bloc);
+        const DefaultBlocObserver().onClose(bloc);
       });
     });
   });
