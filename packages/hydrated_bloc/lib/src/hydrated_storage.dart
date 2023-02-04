@@ -23,6 +23,9 @@ abstract class Storage {
 
   /// Clears all key value pairs from storage
   Future<void> clear();
+
+  /// Close storage
+  Future<void> close();
 }
 
 /// {@template hydrated_storage}
@@ -158,8 +161,14 @@ class HydratedStorage implements Storage {
   Future<void> clear() async {
     if (_box.isOpen) {
       _instance = null;
-      return _lock
-          .synchronized(() async => _box.clear().then((value) => _box.close()));
+      return _lock.synchronized(_box.clear);
+    }
+  }
+
+  @override
+  Future<void> close() async {
+    if (_box.isOpen) {
+      return _lock.synchronized(_box.close);
     }
   }
 }
