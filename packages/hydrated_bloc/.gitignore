@@ -1,5 +1,5 @@
 # Miscellaneous
-*.class
+pubspec.yaml*.class
 *.lock
 *.log
 *.pyc

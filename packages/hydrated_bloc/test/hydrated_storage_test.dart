@@ -89,6 +89,7 @@ void main() {
       setUp(() {
         box = MockBox();
         when(() => box.clear()).thenAnswer((_) async => 0);
+        when(() => box.close()).thenAnswer((_) async => 0);
         storage = HydratedStorage(box);
       });
 
