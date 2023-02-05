@@ -50,6 +50,7 @@ class HydratedStorage implements Storage {
   /// For web, use [webStorageDirectory] as the `storageDirectory`
   ///
   /// ```dart
+  /// import 'package:flutter/foundation.dart';
   /// import 'package:flutter/material.dart';
   ///
   /// import 'package:hydrated_bloc/hydrated_bloc.dart';
