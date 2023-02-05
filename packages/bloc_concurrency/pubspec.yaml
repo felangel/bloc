@@ -17,3 +17,7 @@ dev_dependencies:
   mocktail: ^0.3.0
   test: ^1.17.0
   very_good_analysis: ^3.1.0
+
+screenshots:
+  - description: The bloc concurrency package logo.
+    path: screenshots/logo.png
