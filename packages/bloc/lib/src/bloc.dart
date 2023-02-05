@@ -46,7 +46,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   Bloc(State initialState) : super(initialState);
 
   /// The current [BlocObserver] instance.
-  static BlocObserver observer = _DefaultBlocObserver();
+  static BlocObserver observer = const _DefaultBlocObserver();
 
   /// The default [EventTransformer] used for all event handlers.
   /// By default all events are processed concurrently.
@@ -293,7 +293,9 @@ class _Handler {
   final Type type;
 }
 
-class _DefaultBlocObserver extends BlocObserver {}
+class _DefaultBlocObserver extends BlocObserver {
+  const _DefaultBlocObserver();
+}
 
 class _FlatMapStreamTransformer<T> extends StreamTransformerBase<Stream<T>, T> {
   const _FlatMapStreamTransformer();
