@@ -16,3 +16,7 @@ dev_dependencies:
   mocktail: ^0.3.0
   stream_transform: ^2.0.0
   test: ^1.18.2
+
+screenshots:
+  - description: The bloc package logo.
+    path: screenshots/logo.png
