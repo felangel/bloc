@@ -7,7 +7,6 @@ void main() {
 }
 
 /// {@template app_bloc_observer}
-
 /// Custom [BlocObserver] that observes all bloc and cubit state changes.
 /// {@endtemplate}
 class AppBlocObserver extends BlocObserver {
