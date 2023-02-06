@@ -3,6 +3,8 @@
 import 'package:bloc/bloc.dart';
 
 class SimpleBlocObserver extends BlocObserver {
+  const SimpleBlocObserver();
+
   @override
   void onTransition(
     Bloc<dynamic, dynamic> bloc,

@@ -249,7 +249,7 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
 }
 
 class _TestBlocObserver extends BlocObserver {
-  _TestBlocObserver(this._localObserver, this._onError);
+  const _TestBlocObserver(this._localObserver, this._onError);
 
   final BlocObserver _localObserver;
   final void Function(Object error) _onError;

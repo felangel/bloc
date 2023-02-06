@@ -6,6 +6,6 @@ import 'package:flutter_complex_list/repository.dart';
 import 'package:flutter_complex_list/simple_bloc_observer.dart';
 
 void main() {
-  Bloc.observer = SimpleBlocObserver();
+  Bloc.observer = const SimpleBlocObserver();
   runApp(App(repository: Repository()));
 }
