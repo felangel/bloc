@@ -13,6 +13,7 @@ void main() {
 class AppBlocObserver extends BlocObserver {
   /// {@macro app_bloc_observer}
   const AppBlocObserver();
+
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
