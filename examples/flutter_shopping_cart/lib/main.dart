@@ -5,6 +5,6 @@ import 'package:flutter_shopping_cart/shopping_repository.dart';
 import 'package:flutter_shopping_cart/simple_bloc_observer.dart';
 
 void main() {
-  Bloc.observer = SimpleBlocObserver();
+  Bloc.observer = const SimpleBlocObserver();
   runApp(App(shoppingRepository: ShoppingRepository()));
 }
