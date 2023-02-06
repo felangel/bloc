@@ -24,7 +24,8 @@ abstract class Storage {
   /// Clears all key value pairs from storage
   Future<void> clear();
 
-  /// Close storage
+  /// Close the storage instance which will free any allocated resources.
+  /// A storage instance can no longer be used once it is closed.
   Future<void> close();
 }
 
