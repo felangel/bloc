@@ -1,3 +1,11 @@
+# 9.1.1
+
+- chore: upgrade to `bloc ^8.1.1` ([#3723](https://github.com/felangel/bloc/pull/3723))
+  - refactor: `BlocObserver` instances to use `const` constructors ([#3713](https://github.com/felangel/bloc/pull/3713))
+- refactor: upgrade to Dart 2.19 ([#3699](https://github.com/felangel/bloc/pull/3699))
+  - remove deprecated `invariant_booleans` lint rule
+- docs: fix snippet in `README` ([#3552](https://github.com/felangel/bloc/pull/3552))
+
 # 9.1.0
 
 - feat: upgrade to `bloc: ^8.1.0` ([#3502](https://github.com/felangel/bloc/pull/3502))
