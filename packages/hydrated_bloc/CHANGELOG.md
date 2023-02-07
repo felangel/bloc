@@ -1,3 +1,13 @@
+# 9.1.0
+
+- chore: add screenshots to `pubspec.yaml` ([#3721](https://github.com/felangel/bloc/pull/3721))
+- chore: update example to Dart 2.19 ([#3720](https://github.com/felangel/bloc/pull/3720))
+- chore: update to `bloc ^8.1.1` ([#3719](https://github.com/felangel/bloc/pull/3719))
+- feat: add `storage.close` ([#3705](https://github.com/felangel/bloc/pull/3705))
+- docs: updated docs to reflect v9.0.0 changes ([#3701](https://github.com/felangel/bloc/pull/3701))
+- refactor: upgrade to Dart 2.19 ([#3699](https://github.com/felangel/bloc/pull/3699))
+  - remove deprecated `invariant_booleans` lint rule
+
 # 9.0.0
 
 - **BREAKING**: feat!: reintroduce `HydratedBloc.storage` and remove `HydratedBlocOverrides` ([#3479](https://github.com/felangel/bloc/pull/3479))
