@@ -12,7 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^8.1.0
+  bloc: ^8.1.1
   provider: ^6.0.0
 
 dev_dependencies:
