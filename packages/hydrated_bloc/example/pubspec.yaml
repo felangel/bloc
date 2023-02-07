@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   hydrated_bloc: ^9.0.0
   flutter_bloc: ^8.1.1
-  path_provider: ^2.0.1
+  path_provider: ^2.0.12
 
 flutter:
   uses-material-design: true

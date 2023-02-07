@@ -20,7 +20,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'name': instance.name,
       'age': instance.age,
-      'favoriteColor': _$ColorEnumMap[instance.favoriteColor],
+      'favoriteColor': _$ColorEnumMap[instance.favoriteColor]!,
       'todos': instance.todos.map((e) => e.toJson()).toList(),
     };
 

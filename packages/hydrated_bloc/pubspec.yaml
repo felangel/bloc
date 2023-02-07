@@ -16,14 +16,14 @@ dependencies:
   synchronized: ^3.0.0
 
 dev_dependencies:
-  test: ^1.18.2
-  build_runner: ^2.1.4
-  collection: ^1.15.0
-  crypto: ^3.0.0
-  freezed_annotation: ^0.15.0
-  freezed: ^0.15.0+1
-  json_serializable: ^6.0.0
-  json_annotation: ^4.3.0
+  test: ^1.22.2
+  build_runner: ^2.3.3
+  collection: ^1.17.1
+  crypto: ^3.0.2
+  freezed_annotation: ^2.2.0
+  freezed: ^2.3.2
+  json_serializable: ^6.6.1
+  json_annotation: ^4.8.0
   mocktail: ^0.3.0
-  path: ^1.8.0
-  uuid: ^3.0.0
+  path: ^1.8.3
+  uuid: ^3.0.7
