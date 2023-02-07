@@ -1,3 +1,10 @@
+# 8.1.1
+
+- chore: add screenshots to `pubspec.yaml` ([#3708](https://github.com/felangel/bloc/pull/3708))
+- refactor: `const` constructor support for `BlocObserver` ([#3704](https://github.com/felangel/bloc/pull/3704))
+- refactor: upgrade to Dart 2.19 ([#3699](https://github.com/felangel/bloc/pull/3699))
+  - remove deprecated `invariant_booleans` lint rule
+
 # 8.1.0
 
 - feat: reintroduce `Bloc.observer` and `Bloc.transformer` ([#3469](https://github.com/felangel/bloc/pull/3469))
