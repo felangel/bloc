@@ -18,3 +18,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+screenshots:
+  - description: The flutter bloc package logo.
+    path: screenshots/logo.png
