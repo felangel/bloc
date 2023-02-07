@@ -27,3 +27,7 @@ dev_dependencies:
   mocktail: ^0.3.0
   path: ^1.8.3
   uuid: ^3.0.7
+
+screenshots:
+  - description: The hydrated bloc package logo.
+    path: screenshots/logo.png
