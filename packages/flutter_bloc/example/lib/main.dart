@@ -34,7 +34,7 @@ class AppBlocObserver extends BlocObserver {
 /// {@endtemplate}
 class App extends StatelessWidget {
   /// {@macro app}
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class App extends StatelessWidget {
 /// {@endtemplate}
 class AppView extends StatelessWidget {
   /// {@macro app_view}
-  const AppView({Key? key}) : super(key: key);
+  const AppView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class AppView extends StatelessWidget {
 /// {@endtemplate}
 class CounterPage extends StatelessWidget {
   /// {@macro counter_page}
-  const CounterPage({Key? key}) : super(key: key);
+  const CounterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,7 @@ class CounterPage extends StatelessWidget {
 /// {@endtemplate}
 class CounterView extends StatelessWidget {
   /// {@macro counter_view}
-  const CounterView({Key? key}) : super(key: key);
+  const CounterView({super.key});
 
   @override
   Widget build(BuildContext context) {
