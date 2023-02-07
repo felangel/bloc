@@ -1,3 +1,13 @@
+# 8.1.2
+
+- chore: add screenshots to `pubspec.yaml` ([#3717](https://github.com/felangel/bloc/pull/3717))
+- chore(deps): upgrade to `bloc ^8.1.1` ([#3716](https://github.com/felangel/bloc/pull/3716))
+- chore: update example to Dart 2.19 ([#3715](https://github.com/felangel/bloc/pull/3715))
+- refactor: `BlocObserver` instances to use `const` constructors ([#3713](https://github.com/felangel/bloc/pull/3713))
+- refactor: remove unnecessary single child widget mixins ([#3675](https://github.com/felangel/bloc/pull/3675))
+- refactor: upgrade to Flutter 3.7 ([#3699](https://github.com/felangel/bloc/pull/3699))
+  - remove deprecated `invariant_booleans` lint rule
+
 # 8.1.1
 
 - chore: remove dependency overrides from example to fix pana score
