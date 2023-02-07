@@ -4,13 +4,13 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.19.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   hydrated_bloc: ^9.0.0
-  flutter_bloc: ^8.1.1
+  flutter_bloc: ^8.1.2
   path_provider: ^2.0.12
 
 flutter:
