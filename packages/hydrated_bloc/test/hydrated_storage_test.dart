@@ -41,8 +41,9 @@ void main() {
 
     group('build', () {
       setUp(() async {
-        final storage =
-            await HydratedStorage.build(storageDirectory: storageDirectory);
+        final storage = await HydratedStorage.build(
+          storageDirectory: storageDirectory,
+        );
         await storage.clear();
         await storage.close();
       });

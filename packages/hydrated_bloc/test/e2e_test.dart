@@ -26,7 +26,6 @@ void main() {
       await storage.clear();
       try {
         await HydratedStorage.hive.deleteFromDisk();
-
         Directory(
           path.join(Directory.current.path, '.cache'),
         ).deleteSync(recursive: true);
