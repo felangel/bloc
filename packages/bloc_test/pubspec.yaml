@@ -18,3 +18,7 @@ dependencies:
 
 dev_dependencies:
   rxdart: ^0.27.2
+
+screenshots:
+  - description: The bloc test package logo.
+    path: screenshots/logo.png
