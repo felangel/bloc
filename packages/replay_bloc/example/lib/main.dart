@@ -35,7 +35,7 @@ class AppBlocObserver extends BlocObserver {
 /// {@endtemplate}
 class App extends StatelessWidget {
   /// {@macro app}
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,8 @@ class App extends StatelessWidget {
 /// {@endtemplate}
 class CounterPage extends StatelessWidget {
   /// {@macro counter_page}
-  const CounterPage({Key? key}) : super(key: key);
+  const CounterPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;

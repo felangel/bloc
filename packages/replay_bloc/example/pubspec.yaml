@@ -4,19 +4,14 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.19.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc:
-    path: ../../flutter_bloc
-  replay_bloc:
-    path: ../
-
-dependency_overrides:
-  bloc:
-    path: ../../bloc
+  bloc: ^8.1.1
+  flutter_bloc: ^8.1.2
+  replay_bloc: ^0.2.2
 
 flutter:
   uses-material-design: true
