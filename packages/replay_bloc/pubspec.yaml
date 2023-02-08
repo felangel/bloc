@@ -13,3 +13,7 @@ dependencies:
 
 dev_dependencies:
   test: ^1.16.0
+
+screenshots:
+  - description: The replay bloc package logo.
+    path: screenshots/logo.png
