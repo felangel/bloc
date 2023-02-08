@@ -13,7 +13,7 @@ void bootstrap({required TodosApi todosApi}) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
-  Bloc.observer = AppBlocObserver();
+  Bloc.observer = const AppBlocObserver();
 
   final todosRepository = TodosRepository(todosApi: todosApi);
 

@@ -6,7 +6,7 @@ import 'package:flutter_firebase_login/app/app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Bloc.observer = AppBlocObserver();
+  Bloc.observer = const AppBlocObserver();
 
   await Firebase.initializeApp();
 

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 
 class SimpleBlocObserver extends BlocObserver {
+  const SimpleBlocObserver();
+
   @override
   void onCreate(BlocBase bloc) {
     super.onCreate(bloc);
@@ -41,7 +43,7 @@ class SimpleBlocObserver extends BlocObserver {
 }
 
 void main() {
-  Bloc.observer = SimpleBlocObserver();
+  Bloc.observer = const SimpleBlocObserver();
   cubitMain();
   blocMain();
 }

@@ -23,6 +23,10 @@ abstract class Storage {
 
   /// Clears all key value pairs from storage
   Future<void> clear();
+
+  /// Close the storage instance which will free any allocated resources.
+  /// A storage instance can no longer be used once it is closed.
+  Future<void> close();
 }
 
 /// {@template hydrated_storage}
@@ -56,17 +60,14 @@ class HydratedStorage implements Storage {
   /// import 'package:hydrated_bloc/hydrated_bloc.dart';
   /// import 'package:path_provider/path_provider.dart';
   ///
-  /// void main() async {
+  /// Future<void> main() async {
   ///   WidgetsFlutterBinding.ensureInitialized();
-  ///   final storage = await HydratedStorage.build(
+  ///   HydratedBloc.storage = await HydratedStorage.build(
   ///     storageDirectory: kIsWeb
-  ///       ? HydratedStorage.webStorageDirectory
-  ///       : await getTemporaryDirectory(),
+  ///         ? HydratedStorage.webStorageDirectory
+  ///         : await getTemporaryDirectory(),
   ///   );
-  ///   HydratedBlocOverrides.runZoned(
-  ///     () => runApp(App()),
-  ///     storage: storage,
-  ///   );
+  ///   runApp(App());
   /// }
   /// ```
   ///
@@ -159,6 +160,13 @@ class HydratedStorage implements Storage {
     if (_box.isOpen) {
       _instance = null;
       return _lock.synchronized(_box.clear);
+    }
+  }
+
+  @override
+  Future<void> close() async {
+    if (_box.isOpen) {
+      return _lock.synchronized(_box.close);
     }
   }
 }

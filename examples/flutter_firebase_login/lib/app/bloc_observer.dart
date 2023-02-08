@@ -2,6 +2,8 @@
 import 'package:bloc/bloc.dart';
 
 class AppBlocObserver extends BlocObserver {
+  const AppBlocObserver();
+
   @override
   void onEvent(Bloc<dynamic, dynamic> bloc, Object? event) {
     super.onEvent(bloc, event);

@@ -41,8 +41,11 @@ void main() {
 
     group('build', () {
       setUp(() async {
-        await (await HydratedStorage.build(storageDirectory: storageDirectory))
-            .clear();
+        final storage = await HydratedStorage.build(
+          storageDirectory: storageDirectory,
+        );
+        await storage.clear();
+        await storage.close();
       });
 
       test('reuses existing instance when called multiple times', () async {
@@ -89,6 +92,7 @@ void main() {
       setUp(() {
         box = MockBox();
         when(() => box.clear()).thenAnswer((_) async => 0);
+        when(() => box.close()).thenAnswer((_) async {});
         storage = HydratedStorage(box);
       });
 
@@ -188,6 +192,7 @@ void main() {
 
       tearDown(() async {
         await storage.clear();
+        await storage.close();
         await Hive.close();
         await Directory(temp).delete(recursive: true);
         await Directory(docs).delete(recursive: true);

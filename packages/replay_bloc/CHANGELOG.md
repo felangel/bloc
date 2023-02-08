@@ -1,3 +1,11 @@
+# 0.2.3
+
+- chore: add screenshots to pubspec.yaml ([#3728](https://github.com/felangel/bloc/pull/3728))
+- chore: update example to Dart 2.19 ([#3727](https://github.com/felangel/bloc/pull/3727))
+- chore: upgrade to `bloc ^8.1.1` ([#3726](https://github.com/felangel/bloc/pull/3726))
+- refactor: upgrade to Dart 2.19 ([#3699](https://github.com/felangel/bloc/pull/3699))
+  - remove deprecated `invariant_booleans` lint rule
+
 # 0.2.2
 
 - chore: upgrade to `bloc v8.1.0`

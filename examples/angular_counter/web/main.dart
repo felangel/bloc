@@ -1,8 +1,11 @@
-import 'package:ngdart/angular.dart';
 import 'package:bloc/bloc.dart';
+import 'package:ngdart/angular.dart';
+
 import 'package:angular_counter/app_component.template.dart' as ng;
 
 class SimpleBlocObserver extends BlocObserver {
+  const SimpleBlocObserver();
+
   @override
   void onEvent(Bloc bloc, Object? event) {
     print(event);
@@ -23,6 +26,6 @@ class SimpleBlocObserver extends BlocObserver {
 }
 
 void main() {
-  Bloc.observer = SimpleBlocObserver();
+  Bloc.observer = const SimpleBlocObserver();
   runApp(ng.AppComponentNgFactory);
 }
