@@ -1,3 +1,10 @@
+# 9.0.0
+
+- **BREAKING**: feat: upgrade to `ngdart v7.0.0`
+- refactor: remove deprecated `invariant_booleans` lint rule
+- docs: update example to follow naming conventions
+- chore: add screenshots to `pubspec.yaml`
+
 # 8.0.0
 
 - **BREAKING**: feat: upgrade to `bloc v8.0.0`
