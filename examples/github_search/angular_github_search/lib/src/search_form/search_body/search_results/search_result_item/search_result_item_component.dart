@@ -1,5 +1,5 @@
-import 'package:angular/angular.dart';
 import 'package:common_github_search/common_github_search.dart';
+import 'package:ngdart/angular.dart';
 
 @Component(
   selector: 'search-result-item',

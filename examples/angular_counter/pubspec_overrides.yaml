@@ -1,0 +1,3 @@
+dependency_overrides:
+  angular_bloc:
+    path: ../../packages/angular_bloc

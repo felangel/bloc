@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:angular/angular.dart' show ChangeDetectorRef, OnDestroy, Pipe;
 import 'package:bloc/bloc.dart';
+import 'package:ngdart/angular.dart' show ChangeDetectorRef, OnDestroy, Pipe;
 
 /// {@template bloc_pipe}
 /// A `pipe` which helps bind [BlocBase] ([Bloc] and [Cubit])

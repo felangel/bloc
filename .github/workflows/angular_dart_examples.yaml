@@ -34,7 +34,7 @@ jobs:
 
       - uses: dart-lang/setup-dart@v1
         with:
-          sdk: 2.18.6
+          sdk: 2.17.6
 
       - name: Install Dependencies
         working-directory: ${{ matrix.folder }}

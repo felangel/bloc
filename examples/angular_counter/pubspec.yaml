@@ -5,12 +5,9 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  angular: ^7.0.0
   angular_bloc: ^8.0.0
-
-dependency_overrides:
-  angular_bloc:
-    path: ../../packages/angular_bloc
+  bloc: ^8.1.1
+  ngdart: ^7.0.0
 
 dev_dependencies:
   build_runner: ^2.0.0
