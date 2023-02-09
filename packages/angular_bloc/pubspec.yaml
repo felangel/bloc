@@ -21,3 +21,7 @@ dev_dependencies:
   meta: ^1.8.0
   mocktail: ^0.3.0
   test: ^1.16.0
+
+screenshots:
+  - description: The angular bloc package logo.
+    path: screenshots/logo.png
