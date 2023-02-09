@@ -6,6 +6,7 @@ environment:
 
 dependencies:
   angular_bloc: ^8.0.0
+  bloc: ^8.1.1
   ngdart: ^7.0.0
 
 dev_dependencies:
