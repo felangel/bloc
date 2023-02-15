@@ -7,14 +7,14 @@ homepage: https://bloclibrary.dev
 documentation: https://bloclibrary.dev/#/gettingstarted
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=2.19.0 <3.0.0"
 
 dependencies:
-  ngdart: ^7.0.0
+  ngdart: ^8.0.0-dev.0
   bloc: ^8.0.0
 
 dev_dependencies:
-  ngtest: ^4.1.1
+  ngtest: ^5.0.0-dev.0
   build_runner: ^2.0.0
   build_test: ^2.0.0
   build_web_compilers: ^3.0.0
