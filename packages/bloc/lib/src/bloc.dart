@@ -242,7 +242,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   /// Called whenever a [transition] occurs with the given [transition].
   /// A [transition] occurs when a new `event` is added
   /// and a new state is `emitted` from a corresponding [EventHandler].
-  /// executed.
+  ///
   /// [onTransition] is called before a [Bloc]'s [state] has been updated.
   /// A great spot to add logging/analytics at the individual [Bloc] level.
   ///
