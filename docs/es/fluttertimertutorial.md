@@ -70,7 +70,7 @@ Nuestro `TimerBloc` necesitará saber cómo procesar los siguientes eventos:
 - TimerPaused — informa al TimerBloc que el temporizador debe pausarse.
 - TimerResumed — informa al TimerBloc que se debe resumir el temporizador.
 - TimerReset — informa al TimerBloc que el temporizador debe reiniciar al estado original.
-- TimerTicked — informa al TimerBloc que se ha producido un tick y que necesita actualizar su estado en consecuencia.
+- _TimerTicked — informa al TimerBloc que se ha producido un tick y que necesita actualizar su estado en consecuencia.
 
 Sino usaste las extensiones de [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) o [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) luego cree `bloc/timer_event.dart` y implementemos esos eventos.
 
@@ -98,13 +98,13 @@ En este punto, todo lo que queda por hacer es implementar los `EventHandlers`. P
 
 [timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_start.dart.md ':include')
 
-Si el `TimerBloc` recibe un evento `TimerStarted`, empuja un estado `TimerRunInProgress` con la duración de inicio. Además, si ya había una `_tickerSubscription` abierto, debemos cancelarla para desasignar la memoria. También tenemos que anular el método `close` en nuestro `TimerBloc` para que podamos cancelar la `_tickerSubscription` cuando el `TimerBloc` está cerrado. Por último, escuchamos la transmisión `_ticker.tick` y en cada tic agregamos un evento `TimerTicked` con la duración restante.
+Si el `TimerBloc` recibe un evento `TimerStarted`, empuja un estado `TimerRunInProgress` con la duración de inicio. Además, si ya había una `_tickerSubscription` abierto, debemos cancelarla para desasignar la memoria. También tenemos que anular el método `close` en nuestro `TimerBloc` para que podamos cancelar la `_tickerSubscription` cuando el `TimerBloc` está cerrado. Por último, escuchamos la transmisión `_ticker.tick` y en cada tic agregamos un evento `_TimerTicked` con la duración restante.
 
-A continuación, implementemos el controlador de eventos `TimerTicked`.
+A continuación, implementemos el controlador de eventos `_TimerTicked`.
 
 [timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_tick.dart.md ':include')
 
-Cada vez que se recibe un evento `TimerTicked`, si la duración del tick es mayor que 0, debemos impulsar un estado actualizado `TimerRunInProgress` con la nueva duración. De lo contrario, si la duración de la marca es 0, nuestro temporizador ha finalizado y debemos presionar un estado `TimerRunComplete`.
+Cada vez que se recibe un evento `_TimerTicked`, si la duración del tick es mayor que 0, debemos impulsar un estado actualizado `TimerRunInProgress` con la nueva duración. De lo contrario, si la duración de la marca es 0, nuestro temporizador ha finalizado y debemos presionar un estado `TimerRunComplete`.
 
 Ahora implementemos el controlador de eventos `TimerPaused`.
 
