@@ -1,3 +1,7 @@
+# 10.0.0-dev.0
+
+- **BREAKING**: refactor: upgrade `ngdart` to v8 pre-release
+
 # 9.0.0
 
 - **BREAKING**: feat: upgrade to `ngdart v7.0.0`
