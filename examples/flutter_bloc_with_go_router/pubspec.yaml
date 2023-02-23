@@ -34,7 +34,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
-  go_router: ^5.1.1
+  go_router: ^6.0.10
 
 dev_dependencies:
   flutter_lints: ^2.0.0
