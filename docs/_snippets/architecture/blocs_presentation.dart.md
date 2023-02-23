@@ -4,7 +4,7 @@ class MyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WeatherCubit, WeatherState>(
+    return BlocListener<FirstBloc, FirstState>(
       listener: (context, state) {
         // When the first bloc's state changes, this will be called.
         //
