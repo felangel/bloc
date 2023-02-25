@@ -7,7 +7,7 @@ class BadBloc extends Bloc {
     // No matter how much you are tempted to do this, you should not do this!
     // Keep reading for better alternatives!
     otherBlocSubscription = otherBloc.stream.listen((state) {
-      add(MyEvent())
+      add(MyEvent());
     });
   }
 
