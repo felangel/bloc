@@ -148,6 +148,7 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [Fluttersaurus](https://github.com/felangel/fluttersaurus) - an example of how to use the `bloc` and `flutter_bloc` packages to create a thesaurus app -- made for Bytconf Flutter 2020.
 - [I/O Photo Booth](https://github.com/flutter/photobooth) - an example of how to use the `bloc` and `flutter_bloc` packages to create a virtual photo booth web app -- made for Google I/O 2021.
 - [I/O Pinball](https://github.com/flutter/pinball) - an example of how to use the `bloc` and `flutter_bloc` packages to create a pinball web app -- made for Google I/O 2022.
+- [Shopping UI](https://github.com/Yczar/shopping-ui-BLoC) is an example of how to use the `bloc` and `flutter_bloc` packages to create a Shoe shop app with cart animations. The app demonstrates how to update and listen to bloc states in order to trigger animations. -- made by [Yczar](https://github.com/Yczar).
 
 ### Web
 
