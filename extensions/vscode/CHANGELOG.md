@@ -1,3 +1,8 @@
+# 6.6.3
+
+- fix: wrap with interpolation
+- deps: upgrade various dependencies
+
 # 6.6.2
 
 - fix: rename element to bloc in `context.select` snippet
