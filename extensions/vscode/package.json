@@ -32,7 +32,7 @@
     "onCommand:extension.new-bloc",
     "workspaceContains:**/pubspec.yaml"
   ],
-  "main": "./dist/extension",
+  "main": "./out/extension",
   "contributes": {
     "configuration": [
       {
