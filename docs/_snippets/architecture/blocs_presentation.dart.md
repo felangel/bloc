@@ -4,18 +4,18 @@ class MyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WeatherCubit, WeatherState>(
+    return BlocListener<FirstBloc, FirstState>(
       listener: (context, state) {
         // When the first bloc's state changes, this will be called.
         //
         // Now we can add an event to the second bloc without it having
         // to know about the first bloc.
-        BlocProvider.of<SecondBloc>(context).add(SecondBlocEvent());
+        BlocProvider.of<SecondBloc>(context).add(SecondEvent());
       },
       child: TextButton(
         child: const Text('Hello'),
         onPressed: () {
-          BlocProvider.of<FirstBloc>(context).add(FirstBlocEvent());
+          BlocProvider.of<FirstBloc>(context).add(FirstEvent());
         },
       ),
     );
