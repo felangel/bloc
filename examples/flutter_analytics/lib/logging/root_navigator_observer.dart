@@ -7,15 +7,12 @@ class RootNavigatorObserver extends NavigatorObserver {
   final AnalyticsRepository _analyticsRepository;
 
   void _maybeSendAnalytic(Route<dynamic>? route) {
-    final arguments = route?.settings.arguments;
-    if (arguments is Analytic) _analyticsRepository.send(arguments);
+/*     final arguments = route?.settings.arguments;
+    if (arguments is Analytic) _analyticsRepository.send(arguments); */
   }
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    // Prevents sending an analytic without user interaction
-    // for the initial route.
-    if (route.settings.name == Navigator.defaultRouteName) return;
     _maybeSendAnalytic(route);
   }
 

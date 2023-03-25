@@ -7,7 +7,7 @@ class ProductInfoPage extends StatelessWidget {
   static Route<void> route(BuildContext context) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(
-        arguments: Analytic('product_info_page_viewed'),
+        arguments: RouteAnalytic('product_info_page_viewed'),
       ),
       builder: (context) => const ProductInfoPage(),
     );

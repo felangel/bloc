@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:analytics_repository/analytics_repository.dart';
 
 /// {@template analytics_repository}
-/// A repository that handles analytics
+/// A repository that handles analytics.
 /// {@endtemplate}
 class AnalyticsRepository {
   /// {@macro analytics_repository}

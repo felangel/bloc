@@ -1,16 +1,12 @@
 /// {@template analytic}
-/// A mixin that provides an [eventName] and [parameters] for analytics.
+/// An interface that represents an analytics event.
 /// {@endtemplate}
-class Analytic {
+abstract class Analytic {
   /// {@macro analytic}
-  const Analytic(
-    this.eventName, [
-    this.parameters = const {},
-  ]);
 
   /// The name of the event.
-  final String eventName;
+  String get eventName;
 
   /// The parameters to send with the event.
-  final Map<String, dynamic> parameters;
+  Map<String, dynamic> get parameters => const {};
 }

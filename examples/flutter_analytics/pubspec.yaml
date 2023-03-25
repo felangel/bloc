@@ -10,6 +10,7 @@ dependencies:
   analytics_repository:
     path: packages/analytics_repository
   bloc: ^8.1.1
+  equatable: ^2.0.5  
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.2

@@ -8,7 +8,7 @@ class CartDialog extends StatelessWidget {
     return DialogRoute<void>(
       context: context,
       settings: const RouteSettings(
-        arguments: Analytic('alert_dialog_viewed'),
+        arguments: RouteAnalytic('alert_dialog_viewed'),
       ),
       builder: (context) => const CartDialog(),
     );

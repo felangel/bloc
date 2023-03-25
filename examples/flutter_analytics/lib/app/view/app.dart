@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Tab;
+import 'package:flutter_analytics/app/bloc/app_bloc.dart';
 import 'package:flutter_analytics/app/models/tab_item.dart';
 import 'package:flutter_analytics/cart/view/cart_tab.dart';
 import 'package:flutter_analytics/logging/app_bloc_observer.dart';
@@ -32,33 +31,30 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
       value: _analyticsRepository,
-      child: MaterialApp(
-        navigatorObservers: [
-          RootNavigatorObserver(_analyticsRepository),
-        ],
-        theme: ThemeData(
-          appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
-          colorScheme: ColorScheme.fromSwatch(
-            accentColor: const Color(0xFF13B9FF),
+      child: BlocProvider(
+        create: (context) => AppBloc(),
+        child: MaterialApp(
+          navigatorObservers: [
+            RootNavigatorObserver(_analyticsRepository),
+          ],
+          theme: ThemeData(
+            appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
+            colorScheme: ColorScheme.fromSwatch(
+              accentColor: const Color(0xFF13B9FF),
+            ),
           ),
+          home: const _AppBody(),
         ),
-        home: const _AppBody(),
       ),
     );
   }
 }
 
-class _AppBody extends StatefulWidget {
+class _AppBody extends StatelessWidget {
   const _AppBody();
 
-  @override
-  State<_AppBody> createState() => _AppBodyState();
-}
-
-class _AppBodyState extends State<_AppBody> {
   static const _tabItems = [
     TabItem(
-      analytic: Analytic('offer_tab_viewed'),
       widget: OfferTab(),
       tab: BottomNavigationBarItem(
         icon: Icon(Icons.sell),
@@ -67,7 +63,6 @@ class _AppBodyState extends State<_AppBody> {
       ),
     ),
     TabItem(
-      analytic: Analytic('shopping_tab_viewed'),
       widget: ShoppingTab(),
       tab: BottomNavigationBarItem(
         icon: Icon(Icons.shopping_bag),
@@ -76,7 +71,6 @@ class _AppBodyState extends State<_AppBody> {
       ),
     ),
     TabItem(
-      analytic: Analytic('cart_tab_viewed'),
       widget: CartTab(),
       tab: BottomNavigationBarItem(
         icon: Icon(Icons.shopping_cart),
@@ -86,39 +80,38 @@ class _AppBodyState extends State<_AppBody> {
     ),
   ];
 
-  final _tabController = CupertinoTabController();
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController.addListener(() {
-      final analytic = _tabItems.elementAt(_tabController.index).analytic;
-      context.read<AnalyticsRepository>().send(analytic);
-    });
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final currentIndex = context.select(
+      (AppBloc bloc) => bloc.state.currentTab.index,
+    );
+
     return CupertinoTabScaffold(
-      controller: _tabController,
       tabBar: CupertinoTabBar(
+        currentIndex: currentIndex,
+        onTap: (index) {
+          context.read<AppBloc>().add(
+                AppTabPressed(
+                  Tab.values.elementAt(index),
+                ),
+              );
+        },
         items: [for (final item in _tabItems) item.tab],
       ),
       tabBuilder: (BuildContext context, int index) {
+        final tab = Tab.values.elementAt(index);
+        final tabItem = _tabItems.elementAt(index);
+
         return CupertinoTabView(
           navigatorObservers: [
             TabNavigatorObserver(
-              tabAnalytic: _tabItems.elementAt(index).analytic,
-              analyticsRepository: context.read<AnalyticsRepository>(),
+              context.read<AnalyticsRepository>(),
             ),
           ],
-          builder: (_) => _tabItems.elementAt(index).widget,
+          onGenerateRoute: (_) => MaterialPageRoute<void>(
+            builder: (_) => tabItem.widget,
+            settings: RouteSettings(arguments: tab.routeAnalytic),
+          ),
         );
       },
     );

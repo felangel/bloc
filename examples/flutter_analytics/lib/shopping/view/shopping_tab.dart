@@ -12,7 +12,7 @@ class ShoppingTab extends StatelessWidget {
           MaterialPageRoute<void>(
             builder: (_) => const Placeholder(),
             settings: const RouteSettings(
-              arguments: Analytic('placeholder_page_viewed'),
+              arguments: RouteAnalytic('placeholder_page_viewed'),
             ),
           ),
         );
