@@ -8,7 +8,7 @@ class CartTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        Navigator.of(context).push(
+        Navigator.of(context, rootNavigator: true).push(
           CartDialog.route(context),
         );
       },

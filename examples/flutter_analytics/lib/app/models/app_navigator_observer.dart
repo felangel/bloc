@@ -1,34 +1,35 @@
 import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/widgets.dart';
 
-class TabNavigatorObserver extends NavigatorObserver {
-  TabNavigatorObserver(this._analyticsRepository);
+class AppNavigatorObserver extends NavigatorObserver {
+  AppNavigatorObserver(this._analyticsRepository);
 
   final AnalyticsRepository _analyticsRepository;
 
-  void _maybeSendAnalytic(Route<dynamic>? route) {
-    final arguments = route?.settings.arguments;
-    if (arguments is Analytic) _analyticsRepository.send(arguments);
+  void _maybeSendScreenView(Route<dynamic>? route) {
+    final name = route?.settings.name;
+    if (name == null || name.isEmpty) return;
+    _analyticsRepository.send(ScreenView(name));
   }
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     if (route.isFirst) return;
-    _maybeSendAnalytic(route);
+    _maybeSendScreenView(route);
   }
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    _maybeSendAnalytic(previousRoute);
+    _maybeSendScreenView(previousRoute);
   }
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    _maybeSendAnalytic(previousRoute);
+    _maybeSendScreenView(previousRoute);
   }
 
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
-    _maybeSendAnalytic(newRoute);
+    _maybeSendScreenView(newRoute);
   }
 }

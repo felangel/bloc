@@ -1,4 +1,3 @@
-import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/material.dart';
 
 class ProductInfoPage extends StatelessWidget {
@@ -6,9 +5,7 @@ class ProductInfoPage extends StatelessWidget {
 
   static Route<void> route(BuildContext context) {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(
-        arguments: RouteAnalytic('product_info_page_viewed'),
-      ),
+      settings: const RouteSettings(name: 'product_info'),
       builder: (context) => const ProductInfoPage(),
     );
   }

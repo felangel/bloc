@@ -1,4 +1,3 @@
-import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/material.dart';
 
 class ShoppingTab extends StatelessWidget {
@@ -11,9 +10,7 @@ class ShoppingTab extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute<void>(
             builder: (_) => const Placeholder(),
-            settings: const RouteSettings(
-              arguments: RouteAnalytic('placeholder_page_viewed'),
-            ),
+            settings: const RouteSettings(name: 'placeholder_page'),
           ),
         );
       },

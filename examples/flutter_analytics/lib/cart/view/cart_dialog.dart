@@ -1,4 +1,3 @@
-import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/material.dart';
 
 class CartDialog extends StatelessWidget {
@@ -7,15 +6,26 @@ class CartDialog extends StatelessWidget {
   static DialogRoute<void> route(BuildContext context) {
     return DialogRoute<void>(
       context: context,
-      settings: const RouteSettings(
-        arguments: RouteAnalytic('alert_dialog_viewed'),
-      ),
+      settings: const RouteSettings(name: 'alert_dialog'),
       builder: (context) => const CartDialog(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () => Navigator.of(context).push(
+            CartDialog.route(context),
+          ),
+          child: const Text('push'),
+        ),
+        ElevatedButton(
+          onPressed: Navigator.of(context).pop,
+          child: const Text('pop'),
+        ),
+      ],
+    );
   }
 }

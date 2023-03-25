@@ -1,1 +1,1 @@
-export 'offer_page.dart';
+export 'offer_tab.dart';
