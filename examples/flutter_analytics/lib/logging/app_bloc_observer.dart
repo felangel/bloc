@@ -19,4 +19,10 @@ class AppBlocObserver extends BlocObserver {
     log('onError(${bloc.runtimeType}, $error, $stackTrace)');
     super.onError(bloc, error, stackTrace);
   }
+
+  @override
+  void onEvent(Bloc<dynamic, dynamic> bloc, Object? event) {
+    super.onEvent(bloc, event);
+    if (event is Analytic) _analyticsRepository.send(event);
+  }
 }

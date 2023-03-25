@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/widgets.dart';
 
@@ -8,31 +6,31 @@ class RootNavigatorObserver extends NavigatorObserver {
 
   final AnalyticsRepository _analyticsRepository;
 
+  void _maybeSendAnalytic(Route<dynamic>? route) {
+    final arguments = route?.settings.arguments;
+    if (arguments is Analytic) _analyticsRepository.send(arguments);
+  }
+
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    final name = route.settings.name;
-    if (name == Navigator.defaultRouteName) return;
-    log('${name}_viewed');
+    // Prevents sending an analytic without user interaction
+    // for the initial route.
+    if (route.settings.name == Navigator.defaultRouteName) return;
+    _maybeSendAnalytic(route);
   }
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    final name = previousRoute?.settings.name;
-    if (name == Navigator.defaultRouteName) return;
-    log('${name}_viewed');
+    _maybeSendAnalytic(previousRoute);
   }
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    final name = previousRoute?.settings.name;
-    if (name == Navigator.defaultRouteName) return;
-    log('${name}_viewed');
+    _maybeSendAnalytic(previousRoute);
   }
 
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
-    final name = newRoute?.settings.name;
-    if (name == Navigator.defaultRouteName) return;
-    log('${name}_viewed');
+    _maybeSendAnalytic(newRoute);
   }
 }

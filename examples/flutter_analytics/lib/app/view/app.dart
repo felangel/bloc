@@ -4,12 +4,12 @@ import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_analytics/app/models/tab_item.dart';
-import 'package:flutter_analytics/app_bloc_observer.dart';
-import 'package:flutter_analytics/root_navigator_observer.dart';
-import 'package:flutter_analytics/tab_observer.dart';
-import 'package:flutter_analytics/cart/view/cart_page.dart';
+import 'package:flutter_analytics/cart/view/cart_tab.dart';
+import 'package:flutter_analytics/logging/app_bloc_observer.dart';
+import 'package:flutter_analytics/logging/root_navigator_observer.dart';
+import 'package:flutter_analytics/logging/tab_observer.dart';
 import 'package:flutter_analytics/offer/view/offer_page.dart';
-import 'package:flutter_analytics/product/view/product_list_page.dart';
+import 'package:flutter_analytics/shopping/view/shopping_tab.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class App extends StatefulWidget {
@@ -58,28 +58,31 @@ class _AppBody extends StatefulWidget {
 class _AppBodyState extends State<_AppBody> {
   static const _tabItems = [
     TabItem(
+      analytic: Analytic('offer_tab_viewed'),
+      widget: OfferTab(),
       tab: BottomNavigationBarItem(
         icon: Icon(Icons.sell),
         label: 'Offers',
         backgroundColor: Colors.red,
       ),
-      widget: OfferPage(),
     ),
     TabItem(
+      analytic: Analytic('shopping_tab_viewed'),
+      widget: ShoppingTab(),
       tab: BottomNavigationBarItem(
         icon: Icon(Icons.shopping_bag),
         label: 'Shopping',
         backgroundColor: Colors.green,
       ),
-      widget: ProductListPage(),
     ),
     TabItem(
+      analytic: Analytic('cart_tab_viewed'),
+      widget: CartTab(),
       tab: BottomNavigationBarItem(
         icon: Icon(Icons.shopping_cart),
         label: 'Cart',
         backgroundColor: Colors.purple,
       ),
-      widget: CartPage(),
     ),
   ];
 
@@ -89,14 +92,8 @@ class _AppBodyState extends State<_AppBody> {
   void initState() {
     super.initState();
     _tabController.addListener(() {
-      log(
-        _tabItems
-            .elementAt(_tabController.index)
-            .tab
-            .label
-            .toString()
-            .toLowerCase(),
-      );
+      final analytic = _tabItems.elementAt(_tabController.index).analytic;
+      context.read<AnalyticsRepository>().send(analytic);
     });
   }
 
@@ -117,11 +114,11 @@ class _AppBodyState extends State<_AppBody> {
         return CupertinoTabView(
           navigatorObservers: [
             TabNavigatorObserver(
-              tabName: _tabItems.elementAt(index).tab.label,
+              tabAnalytic: _tabItems.elementAt(index).analytic,
               analyticsRepository: context.read<AnalyticsRepository>(),
             ),
           ],
-          builder: (BuildContext context) => _tabItems.elementAt(index).widget,
+          builder: (_) => _tabItems.elementAt(index).widget,
         );
       },
     );

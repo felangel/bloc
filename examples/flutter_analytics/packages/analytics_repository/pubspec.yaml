@@ -6,6 +6,10 @@ publish_to: none
 environment:
   sdk: ">=2.18.0 <3.0.0"
 
+dependencies:
+  flutter:
+    sdk: flutter
+
 dev_dependencies:
   mocktail: ^0.3.0
   test: ^1.19.2
