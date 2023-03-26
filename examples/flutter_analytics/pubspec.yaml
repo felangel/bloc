@@ -10,10 +10,14 @@ dependencies:
   analytics_repository:
     path: packages/analytics_repository
   bloc: ^8.1.1
+  bloc_concurrency: ^0.2.1
   equatable: ^2.0.5  
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.2
+  shopping_repository:
+    path: packages/shopping_repository
+  stream_transform: ^2.1.0
 
 dev_dependencies:
   bloc_test: ^9.1.1

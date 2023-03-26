@@ -1,7 +1,9 @@
 import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/material.dart' hide Tab;
 import 'package:flutter_analytics/app/app.dart';
+import 'package:flutter_analytics/cart/cart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_repository/shopping_repository.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -21,10 +23,26 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: _analyticsRepository,
-      child: BlocProvider(
-        create: (context) => AppBloc(),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(value: _analyticsRepository),
+        RepositoryProvider(
+          create: (_) => ShoppingRepository(),
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => AppBloc(),
+          ),
+          BlocProvider(
+            create: (context) => CartBloc(
+              context.read<ShoppingRepository>(),
+            )..add(
+                const CartStarted(),
+              ),
+          ),
+        ],
         child: MaterialApp(
           navigatorObservers: [
             AppNavigatorObserver(_analyticsRepository),

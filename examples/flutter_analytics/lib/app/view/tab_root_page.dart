@@ -39,10 +39,7 @@ class TabRootPage extends StatelessWidget {
               context.read<AnalyticsRepository>(),
             ),
           ],
-          onGenerateRoute: (_) => MaterialPageRoute<void>(
-            builder: (_) => currentTab.item.widget,
-            settings: RouteSettings(name: currentTab.item.routeName),
-          ),
+          onGenerateRoute: (_) => currentTab.item.route,
         );
       },
     );

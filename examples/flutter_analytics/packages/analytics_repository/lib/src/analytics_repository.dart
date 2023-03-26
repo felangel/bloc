@@ -11,6 +11,8 @@ class AnalyticsRepository {
 
   /// Sends an [Analytic] to an analytics service.
   void send(Analytic analytic) {
-    log('${analytic.eventName}, ${analytic.parameters}');
+    var event = analytic.eventName;
+    if (analytic.parameters.isNotEmpty) event += ', ${analytic.parameters}';
+    log(event);
   }
 }
