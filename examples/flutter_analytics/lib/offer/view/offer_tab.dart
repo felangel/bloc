@@ -1,3 +1,4 @@
+import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_analytics/cart/bloc/cart_bloc.dart';
@@ -10,7 +11,9 @@ class OfferTab extends StatelessWidget {
 
   static Route<void> route() {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: 'offer_tab'),
+      settings: const AnalyticRouteSettings(
+        screenView: ScreenView(routeName: 'offer_tab'),
+      ),
       builder: (_) => BlocProvider(
         create: (context) => OfferBloc(
           context.read<ShoppingRepository>(),

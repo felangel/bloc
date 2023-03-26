@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Tab;
+import 'package:flutter/material.dart';
 import 'package:flutter_analytics/app/app.dart';
 import 'package:flutter_analytics/cart/view/cart_tab.dart';
 import 'package:flutter_analytics/offer/offer.dart';
@@ -14,10 +14,10 @@ class TabItem {
   final BottomNavigationBarItem bottomNavigationBarItem;
 }
 
-extension TabExtension on Tab {
+extension AppTabExtension on AppTab {
   TabItem get item {
     switch (this) {
-      case Tab.offers:
+      case AppTab.offers:
         return TabItem(
           route: OfferTab.route(),
           bottomNavigationBarItem: const BottomNavigationBarItem(
@@ -25,7 +25,7 @@ extension TabExtension on Tab {
             label: 'Offers',
           ),
         );
-      case Tab.shopping:
+      case AppTab.shopping:
         return TabItem(
           route: ShoppingTab.route(),
           bottomNavigationBarItem: const BottomNavigationBarItem(
@@ -33,7 +33,7 @@ extension TabExtension on Tab {
             label: 'Shopping',
           ),
         );
-      case Tab.cart:
+      case AppTab.cart:
         return TabItem(
           route: CartTab.route(),
           bottomNavigationBarItem: const BottomNavigationBarItem(

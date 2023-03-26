@@ -1,3 +1,4 @@
+import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_analytics/cart/bloc/cart_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,9 @@ class CheckoutDialog extends StatelessWidget {
   static DialogRoute<void> route(BuildContext context) {
     return DialogRoute<void>(
       context: context,
-      settings: const RouteSettings(name: 'checkout_dialog'),
+      settings: const AnalyticRouteSettings(
+        screenView: ScreenView(routeName: 'checkout_dialog'),
+      ),
       builder: (context) => const CheckoutDialog(),
     );
   }

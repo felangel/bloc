@@ -10,16 +10,16 @@ abstract class AppEvent extends Equatable {
 class AppTabPressed extends AppEvent with Analytic {
   const AppTabPressed(this.tab);
 
-  final Tab tab;
+  final AppTab tab;
 
   @override
   String get eventName {
     switch (tab) {
-      case Tab.offers:
+      case AppTab.offers:
         return 'offers_tab_pressed';
-      case Tab.shopping:
+      case AppTab.shopping:
         return 'shopping_tab_pressed';
-      case Tab.cart:
+      case AppTab.cart:
         return 'cart_tab_pressed';
     }
   }

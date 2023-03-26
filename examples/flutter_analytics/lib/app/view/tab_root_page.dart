@@ -1,6 +1,6 @@
 import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' hide Tab;
+import 'package:flutter/material.dart';
 import 'package:flutter_analytics/app/app.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,7 +9,9 @@ class TabRootPage extends StatelessWidget {
 
   static Route<void> route() {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: 'tab_root_page'),
+      settings: const AnalyticRouteSettings(
+        screenView: ScreenView(routeName: 'tab_root_page'),
+      ),
       builder: (_) => const TabRootPage(),
     );
   }
@@ -26,13 +28,15 @@ class TabRootPage extends StatelessWidget {
         onTap: (index) {
           context.read<AppBloc>().add(
                 AppTabPressed(
-                  Tab.values.elementAt(index),
+                  AppTab.values.elementAt(index),
                 ),
               );
         },
-        items: [for (final tab in Tab.values) tab.item.bottomNavigationBarItem],
+        items: [
+          for (final tab in AppTab.values) tab.item.bottomNavigationBarItem,
+        ],
       ),
-      tabBuilder: (BuildContext context, _) {
+      tabBuilder: (context, _) {
         return CupertinoTabView(
           navigatorObservers: [
             AppNavigatorObserver(

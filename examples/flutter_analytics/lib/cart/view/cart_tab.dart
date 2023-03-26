@@ -1,3 +1,4 @@
+import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_analytics/cart/cart.dart';
@@ -9,7 +10,9 @@ class CartTab extends StatelessWidget {
 
   static Route<void> route() {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: 'cart_tab'),
+      settings: const AnalyticRouteSettings(
+        screenView: ScreenView(routeName: 'cart_tab'),
+      ),
       builder: (_) => const CartTab(),
     );
   }

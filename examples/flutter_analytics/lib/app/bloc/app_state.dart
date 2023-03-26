@@ -1,22 +1,22 @@
 part of 'app_bloc.dart';
 
-enum Tab {
+enum AppTab {
   offers,
   shopping,
   cart;
 
-  static const initial = Tab.offers;
+  static const initial = AppTab.offers;
 }
 
 class AppState extends Equatable {
   const AppState({
-    this.currentTab = Tab.initial,
+    this.currentTab = AppTab.initial,
   });
 
-  final Tab currentTab;
+  final AppTab currentTab;
 
   AppState copyWith({
-    Tab? currentTab,
+    AppTab? currentTab,
   }) {
     return AppState(
       currentTab: currentTab ?? this.currentTab,
