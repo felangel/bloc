@@ -29,9 +29,20 @@ class ProductInfoPage extends StatelessWidget {
       appBar: CupertinoNavigationBar(
         middle: Text(product.name),
       ),
-      body: const SafeArea(
+      body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'About',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(product.description),
+            ],
+          ),
         ),
       ),
     );

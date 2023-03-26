@@ -5,9 +5,10 @@ import 'package:equatable/equatable.dart';
 /// {@endtemplate}
 class Product extends Equatable {
   /// {@macro product}
-  const Product(
-    this.id,
-    this.name, {
+  const Product({
+    required this.id,
+    required this.name,
+    required this.description,
     this.price = 42,
   });
 
@@ -20,8 +21,11 @@ class Product extends Equatable {
   /// The price of the product.
   final int price;
 
+  /// The description of the product.
+  final String description;
+
   /// Represents an empty product.
-  static const empty = Product(0, '');
+  static const empty = Product(id: 0, name: '', description: '');
 
   @override
   List<Object> get props => [id, name, price];
