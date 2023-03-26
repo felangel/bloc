@@ -7,12 +7,12 @@ part 'product_list_state.dart';
 
 class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
   ProductListBloc(this._shoppingRepository) : super(const ProductListState()) {
-    on<ProductListStarted>(_onProductListStarted);
+    on<ProductListStarted>(_onStarted);
   }
 
   final ShoppingRepository _shoppingRepository;
 
-  Future<void> _onProductListStarted(
+  Future<void> _onStarted(
     ProductListStarted event,
     Emitter<ProductListState> emit,
   ) async {
@@ -25,7 +25,7 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
           products: products,
         ),
       );
-    } catch (e) {
+    } catch (_) {
       emit(
         state.copyWith(
           status: ProductListStatus.failure,

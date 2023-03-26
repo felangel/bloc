@@ -1,7 +1,9 @@
+import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_analytics/cart/bloc/cart_bloc.dart';
 import 'package:flutter_analytics/product_list/bloc/product_list_bloc.dart';
+import 'package:flutter_analytics/product_list/view/product_info_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_repository/shopping_repository.dart';
 
@@ -10,7 +12,9 @@ class ShoppingTab extends StatelessWidget {
 
   static Route<void> route() {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: 'shopping_tab'),
+      settings: const AnalyticRouteSettings(
+        screenView: ScreenView(routeName: 'shopping_tab'),
+      ),
       builder: (_) => BlocProvider(
         create: (context) => ProductListBloc(
           context.read<ShoppingRepository>(),
@@ -102,6 +106,17 @@ class _ProductItem extends StatelessWidget {
       },
       title: Text(product.name),
       subtitle: Text('\$${product.price}'),
+      leading: IconButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            ProductInfoPage.route(product),
+          );
+        },
+        icon: const Icon(
+          Icons.info,
+          color: Colors.black54,
+        ),
+      ),
       trailing: isAdded
           ? const Icon(
               Icons.check,

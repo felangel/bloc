@@ -7,9 +7,10 @@ class AppNavigatorObserver extends NavigatorObserver {
   final AnalyticsRepository _analyticsRepository;
 
   void _maybeSendScreenView(Route<dynamic>? route) {
-    final name = route?.settings.name;
-    if (name == null || name.isEmpty) return;
-    _analyticsRepository.send(ScreenView(name));
+    final settings = route?.settings;
+    if (settings is AnalyticRouteSettings) {
+      _analyticsRepository.send(settings.screenView);
+    }
   }
 
   @override

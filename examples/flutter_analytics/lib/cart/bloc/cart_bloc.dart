@@ -11,12 +11,12 @@ part 'cart_state.dart';
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc(this._shoppingRepository) : super(const CartState()) {
     on<_CartProductsChanged>(_onProductsChanged);
-    on<CartStarted>(_onCartStarted);
+    on<CartStarted>(_onStarted);
     on<CartProductAdded>(_onProductAdded);
     on<CartProductRemoved>(_onProductRemoved);
-    on<CartClearRequested>(_onCartClearRequested);
-    on<CartCheckoutRequested>(_onCartCheckoutRequested);
-    on<CartCheckoutCanceled>(_onCartCheckoutCanceled);
+    on<CartClearRequested>(_onClearRequested);
+    on<CartCheckoutRequested>(_onCheckoutRequested);
+    on<CartCheckoutCanceled>(_onCheckoutCanceled);
 
     _productSubscription = _shoppingRepository.selectedProducts.listen(
       (products) => add(
@@ -45,7 +45,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     );
   }
 
-  Future<void> _onCartStarted(
+  Future<void> _onStarted(
     CartStarted event,
     Emitter<CartState> emit,
   ) async {
@@ -58,7 +58,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           products: products,
         ),
       );
-    } catch (e) {
+    } catch (_) {
       emit(
         state.copyWith(
           status: CartStatus.failure,
@@ -113,7 +113,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     }
   }
 
-  Future<void> _onCartClearRequested(
+  Future<void> _onClearRequested(
     CartClearRequested event,
     Emitter<CartState> emit,
   ) async {
@@ -134,7 +134,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           status: CartStatus.success,
         ),
       );
-    } catch (e) {
+    } catch (_) {
       emit(
         state.copyWith(
           status: CartStatus.failure,
@@ -143,7 +143,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     }
   }
 
-  Future<void> _onCartCheckoutRequested(
+  Future<void> _onCheckoutRequested(
     CartCheckoutRequested event,
     Emitter<CartState> emit,
   ) async {
@@ -154,7 +154,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     );
   }
 
-  void _onCartCheckoutCanceled(
+  void _onCheckoutCanceled(
     CartCheckoutCanceled event,
     Emitter<CartState> emit,
   ) {

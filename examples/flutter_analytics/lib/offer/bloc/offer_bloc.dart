@@ -8,13 +8,13 @@ part 'offer_state.dart';
 
 class OfferBloc extends Bloc<OfferEvent, OfferState> {
   OfferBloc(this._shoppingRepository) : super(const OfferState()) {
-    on<OfferStarted>(_onOfferStarted);
-    on<OfferSelected>(_onOfferSelected);
+    on<OfferStarted>(_onStarted);
+    on<OfferSelected>(_onSelected);
   }
 
   final ShoppingRepository _shoppingRepository;
 
-  Future<void> _onOfferStarted(
+  Future<void> _onStarted(
     OfferStarted event,
     Emitter<OfferState> emit,
   ) async {
@@ -27,7 +27,7 @@ class OfferBloc extends Bloc<OfferEvent, OfferState> {
           offers: offers,
         ),
       );
-    } catch (e) {
+    } catch (_) {
       emit(
         state.copyWith(
           status: OfferStatus.failure,
@@ -36,7 +36,7 @@ class OfferBloc extends Bloc<OfferEvent, OfferState> {
     }
   }
 
-  Future<void> _onOfferSelected(
+  Future<void> _onSelected(
     OfferSelected event,
     Emitter<OfferState> emit,
   ) async {

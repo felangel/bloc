@@ -18,6 +18,7 @@ class ProductListState extends Equatable {
   ProductListState copyWith({
     ProductListStatus? status,
     List<Product>? products,
+    Product? selectedProduct,
   }) {
     return ProductListState(
       status: status ?? this.status,

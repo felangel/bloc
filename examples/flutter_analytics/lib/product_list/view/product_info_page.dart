@@ -1,22 +1,39 @@
+import 'package:analytics_repository/analytics_repository.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shopping_repository/shopping_repository.dart';
 
 class ProductInfoPage extends StatelessWidget {
-  const ProductInfoPage({super.key});
+  const ProductInfoPage(
+    this.product, {
+    super.key,
+  });
 
-  static Route<void> route(BuildContext context) {
+  final Product product;
+
+  static Route<void> route(Product product) {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: 'product_info'),
-      builder: (context) => const ProductInfoPage(),
+      settings: AnalyticRouteSettings(
+        screenView: ScreenView(
+          routeName: 'product_info',
+          parameters: {'product': product},
+        ),
+      ),
+      builder: (context) => ProductInfoPage(product),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Product Info'),
+      appBar: CupertinoNavigationBar(
+        middle: Text(product.name),
       ),
-      body: const Text('Hi'),
+      body: const SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+        ),
+      ),
     );
   }
 }

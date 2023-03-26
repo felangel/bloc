@@ -5,10 +5,16 @@ import 'package:analytics_repository/analytics_repository.dart';
 /// {@endtemplate}
 class ScreenView with Analytic {
   /// {@macro screen_view}
-  const ScreenView(this.routeName);
+  const ScreenView({
+    required this.routeName,
+    this.parameters = const {},
+  });
 
   /// The name of the route.
   final String routeName;
+
+  @override
+  final Map<String, dynamic> parameters;
 
   @override
   String get eventName => '${routeName}_viewed';
