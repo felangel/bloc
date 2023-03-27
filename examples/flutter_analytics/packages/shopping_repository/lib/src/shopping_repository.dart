@@ -115,46 +115,44 @@ const _allProducts = [
   Product(
     id: 0,
     name: 'Speculative Generality',
-    description: 'Sometimes code is created “just in case” to support '
-        'anticipated future features that never get implemented. As a result, '
-        'code becomes hard to understand and support.',
+    description: 'A code smell that occurs when developers create code '
+        'that is overly abstract or generic, in anticipation of future '
+        'requirements or use cases that may never materialize. '
+        'This can result in code that is more complex and harder to '
+        'understand than necessary, leading to increased maintenance '
+        'costs and potential bugs. The term "speculative" refers to the '
+        'fact that developers are trying to anticipate future needs '
+        'rather than focusing on the current requirements.',
   ),
   Product(
     id: 1,
     name: 'Primitive Obsession',
-    description: 'Like most other smells, primitive obsessions are born '
-        'in moments of weakness. “Just a field for storing some data!” '
-        'the programmer said. Creating a primitive field is so much easier '
-        'than making a whole new class, right? And so it was done. '
-        'Then another field was needed and added in the same way. '
-        'Lo and behold, the class became huge and unwieldy.',
+    description: 'When developers use primitive data types, such as strings '
+        'or integers, to represent complex concepts or entities instead of '
+        'creating new domain-specific classes. This can lead to code that is '
+        'hard to understand, maintain, and extend. The term "obsession" '
+        'refers to the fact that developers are fixated on using primitive '
+        'types and fail to create appropriate abstractions. ',
     price: 21,
   ),
   Product(
     id: 2,
     name: 'Data Clumps',
-    description: 'Often these data groups are due to poor program '
-        'structure or "copypasta programming”. '
-        'If you want to make sure whether or not some data is a data clump, '
-        'just delete one of the data values and see whether the other '
-        'values still make sense. If this isnt the case, this is a good sign '
-        'that this group of variables should be combined into an object.',
+    description: 'This code smell occurs when developers repeatedly use '
+        'the same group of data fields in different parts of the code, leading '
+        'to code that is verbose and harder to maintain. To address this, '
+        'new classes can be created to represent the related data fields and '
+        'encapsulate their behavior, improving modularity and maintainability.',
   ),
   Product(
     id: 3,
     name: 'Divergent Change',
-    description: 'You find yourself having to change many unrelated '
-        'methods when you make changes to a class. For example, '
-        'when adding a new product type you have to change the methods '
-        'for finding, displaying, and ordering products.',
+    description: _loremIpsum,
   ),
   Product(
     id: 4,
     name: 'Long Parameter List',
-    description: 'Lorem Ipsum is simply dummy text of the printing '
-        'and typesetting industry. Lorem Ipsum has been the industrys '
-        'standard dummy text ever since the 1500s, when an unknown printer '
-        'took a galley of type and scrambled it to make a type specimen book. ',
+    description: _loremIpsum,
   ),
   Product(
     id: 5,
