@@ -35,11 +35,6 @@ class AppNavigatorObserver extends NavigatorObserver {
   }
 
   @override
-  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    _maybeSendScreenView(previousRoute);
-  }
-
-  @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     _maybeSendScreenView(newRoute);
   }

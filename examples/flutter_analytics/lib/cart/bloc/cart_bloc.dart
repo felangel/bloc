@@ -69,17 +69,24 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     CartProductAdded event,
     Emitter<CartState> emit,
   ) async {
-    if (state.pendingProduct == event.product) return;
+    final product = event.product;
 
     emit(
       state.copyWith(
-        pendingProduct: event.product,
+        pendingProduct: product,
       ),
     );
 
     try {
-      await _shoppingRepository.addProductToCart(event.product);
-    } finally {
+      await _shoppingRepository.addProductToCart(product);
+
+      emit(
+        state.copyWith(
+          pendingProduct: Product.empty,
+          products: [product, ...state.products],
+        ),
+      );
+    } catch (_) {
       emit(
         state.copyWith(
           pendingProduct: Product.empty,
@@ -92,17 +99,24 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     CartProductRemoved event,
     Emitter<CartState> emit,
   ) async {
-    if (state.pendingProduct == event.product) return;
+    final product = event.product;
 
     emit(
       state.copyWith(
-        pendingProduct: event.product,
+        pendingProduct: product,
       ),
     );
 
     try {
-      await _shoppingRepository.removeProductFromCart(event.product);
-    } finally {
+      await _shoppingRepository.removeProductFromCart(product);
+
+      emit(
+        state.copyWith(
+          pendingProduct: Product.empty,
+          products: [...state.products]..remove(product),
+        ),
+      );
+    } catch (_) {
       emit(
         state.copyWith(
           pendingProduct: Product.empty,
@@ -115,9 +129,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     CartClearRequested event,
     Emitter<CartState> emit,
   ) async {
-    if (state.status == CartStatus.loading) return;
-    if (state.products.isEmpty) return;
-
     emit(
       state.copyWith(
         status: CartStatus.loading,
@@ -130,6 +141,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(
         state.copyWith(
           status: CartStatus.success,
+          products: [],
         ),
       );
     } catch (_) {

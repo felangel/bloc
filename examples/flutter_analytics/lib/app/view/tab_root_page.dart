@@ -7,7 +7,7 @@ import 'package:flutter_analytics/offer/view/offer_tab.dart';
 import 'package:flutter_analytics/product_list/view/shopping_tab.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-extension on AppTab {
+extension AppTabExtension on AppTab {
   Route<dynamic> get route {
     switch (this) {
       case AppTab.offers:

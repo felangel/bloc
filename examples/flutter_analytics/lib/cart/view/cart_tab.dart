@@ -82,7 +82,7 @@ class Cart extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const CartProducts(),
+        const CartProductList(),
         Column(
           children: const [
             _Total(),
@@ -95,8 +95,8 @@ class Cart extends StatelessWidget {
   }
 }
 
-class CartProducts extends StatelessWidget {
-  const CartProducts({super.key});
+class CartProductList extends StatelessWidget {
+  const CartProductList({super.key});
 
   @override
   Widget build(BuildContext context) {

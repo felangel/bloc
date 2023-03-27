@@ -5,30 +5,23 @@ import 'package:flutter_analytics/cart/cart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_repository/shopping_repository.dart';
 
-class App extends StatefulWidget {
-  const App({super.key});
+class App extends StatelessWidget {
+  const App({
+    required AnalyticsRepository analyticsRepository,
+    required ShoppingRepository shoppingRepository,
+    super.key,
+  })  : _analyticsRepository = analyticsRepository,
+        _shoppingRepository = shoppingRepository;
 
-  @override
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  final _analyticsRepository = const AnalyticsRepository();
-
-  @override
-  void initState() {
-    super.initState();
-    Bloc.observer = AppBlocObserver(_analyticsRepository);
-  }
+  final AnalyticsRepository _analyticsRepository;
+  final ShoppingRepository _shoppingRepository;
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: _analyticsRepository),
-        RepositoryProvider(
-          create: (_) => ShoppingRepository(),
-        ),
+        RepositoryProvider.value(value: _shoppingRepository),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -36,9 +29,8 @@ class _AppState extends State<App> {
             create: (_) => AppBloc(),
           ),
           BlocProvider(
-            create: (context) => CartBloc(
-              context.read<ShoppingRepository>(),
-            )..add(
+            create: (_) => CartBloc(_shoppingRepository)
+              ..add(
                 const CartStarted(),
               ),
           ),

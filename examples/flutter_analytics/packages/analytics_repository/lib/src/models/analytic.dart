@@ -2,8 +2,6 @@
 /// An interface that represents an analytics event.
 /// {@endtemplate}
 abstract class Analytic {
-  /// {@macro analytic}
-
   /// The name of the event.
   String get eventName;
 

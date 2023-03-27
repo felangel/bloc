@@ -64,17 +64,3 @@ class CartClearRequested extends CartEvent with Analytic {
   @override
   String get eventName => 'cart_cleared';
 }
-
-class CartCheckoutRequested extends CartEvent with Analytic {
-  const CartCheckoutRequested();
-
-  @override
-  String get eventName => 'cart_checkout_requested';
-}
-
-class CartCheckoutCanceled extends CartEvent with Analytic {
-  const CartCheckoutCanceled();
-
-  @override
-  String get eventName => 'cart_checkout_canceled';
-}
