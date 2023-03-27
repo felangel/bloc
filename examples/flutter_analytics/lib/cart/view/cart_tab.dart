@@ -1,6 +1,7 @@
 import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_analytics/app/app.dart';
 import 'package:flutter_analytics/cart/cart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_repository/shopping_repository.dart';
@@ -19,24 +20,15 @@ class CartTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CartBloc, CartState>(
-      listenWhen: (previous, current) =>
-          !previous.isCheckout && current.isCheckout,
-      listener: (context, state) {
-        Navigator.of(context, rootNavigator: true).push(
-          CheckoutDialog.route(context),
-        );
-      },
-      child: const Scaffold(
-        appBar: CupertinoNavigationBar(
-          middle: Text('Cart'),
-          trailing: _ClearCartButton(),
-        ),
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Cart(),
-          ),
+    return const Scaffold(
+      appBar: CupertinoNavigationBar(
+        middle: Text('Cart'),
+        trailing: _ClearCartButton(),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Cart(),
         ),
       ),
     );
@@ -168,9 +160,9 @@ class _CheckoutButton extends StatelessWidget {
           child: CupertinoButton(
             color: Colors.blue,
             onPressed: () {
-              context.read<CartBloc>().add(
-                    const CartCheckoutRequested(),
-                  );
+              Navigator.of(context, rootNavigator: true).push(
+                CheckoutDialog.route(context),
+              );
             },
             child: const Text('Purchase'),
           ),

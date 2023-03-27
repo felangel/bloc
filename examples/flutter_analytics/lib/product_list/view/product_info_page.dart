@@ -1,6 +1,7 @@
 import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_analytics/app/app.dart';
 import 'package:shopping_repository/shopping_repository.dart';
 
 class ProductInfoPage extends StatelessWidget {
@@ -16,7 +17,11 @@ class ProductInfoPage extends StatelessWidget {
       settings: AnalyticRouteSettings(
         screenView: ScreenView(
           routeName: 'product_info',
-          parameters: {'product': product},
+          parameters: {
+            'product_id': product.id,
+            'product_name': product.name,
+            'product_price': product.price,
+          },
         ),
       ),
       builder: (context) => ProductInfoPage(product),

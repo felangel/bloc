@@ -1,6 +1,16 @@
 import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/widgets.dart';
 
+class AnalyticRouteSettings extends RouteSettings {
+  const AnalyticRouteSettings({
+    required this.screenView,
+    super.name,
+    super.arguments,
+  });
+
+  final ScreenView screenView;
+}
+
 class AppNavigatorObserver extends NavigatorObserver {
   AppNavigatorObserver(this._analyticsRepository);
 

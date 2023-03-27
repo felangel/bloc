@@ -1,6 +1,7 @@
 import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_analytics/app/app.dart';
 import 'package:flutter_analytics/cart/bloc/cart_bloc.dart';
 import 'package:flutter_analytics/product_list/product_list.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

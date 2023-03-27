@@ -15,8 +15,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<CartProductAdded>(_onProductAdded);
     on<CartProductRemoved>(_onProductRemoved);
     on<CartClearRequested>(_onClearRequested);
-    on<CartCheckoutRequested>(_onCheckoutRequested);
-    on<CartCheckoutCanceled>(_onCheckoutCanceled);
 
     _productSubscription = _shoppingRepository.selectedProducts.listen(
       (products) => add(
@@ -141,27 +139,5 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         ),
       );
     }
-  }
-
-  Future<void> _onCheckoutRequested(
-    CartCheckoutRequested event,
-    Emitter<CartState> emit,
-  ) async {
-    emit(
-      state.copyWith(
-        isCheckout: true,
-      ),
-    );
-  }
-
-  void _onCheckoutCanceled(
-    CartCheckoutCanceled event,
-    Emitter<CartState> emit,
-  ) {
-    emit(
-      state.copyWith(
-        isCheckout: false,
-      ),
-    );
   }
 }
