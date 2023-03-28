@@ -8,7 +8,11 @@ import 'package:shopping_repository/shopping_repository.dart';
 class MockShoppingRepository extends Mock implements ShoppingRepository {}
 
 void main() {
-  const product = Product(id: 0, name: 'name', description: 'description');
+  const product = Product(
+    id: 0,
+    name: 'name',
+    description: 'description',
+  );
 
   group('CartBloc', () {
     late ShoppingRepository shoppingRepository;

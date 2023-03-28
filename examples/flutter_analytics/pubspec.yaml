@@ -22,6 +22,7 @@ dev_dependencies:
   bloc_test: ^9.1.1
   flutter_test:
     sdk: flutter
+  mockingjay: ^0.3.0
   mocktail: ^0.3.0
   very_good_analysis: ^4.0.0
 

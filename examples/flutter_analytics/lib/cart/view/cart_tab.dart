@@ -23,7 +23,7 @@ class CartTab extends StatelessWidget {
     return const Scaffold(
       appBar: CupertinoNavigationBar(
         middle: Text('Cart'),
-        trailing: _ClearCartButton(),
+        trailing: ClearCartButton(),
       ),
       body: SafeArea(
         child: Padding(
@@ -35,8 +35,8 @@ class CartTab extends StatelessWidget {
   }
 }
 
-class _ClearCartButton extends StatelessWidget {
-  const _ClearCartButton();
+class ClearCartButton extends StatelessWidget {
+  const ClearCartButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +73,16 @@ class Cart extends StatelessWidget {
       (CartBloc bloc) => bloc.state.products,
     );
 
+    final isLoading = context.select(
+      (CartBloc bloc) => bloc.state.status == CartStatus.loading,
+    );
+
+    if (isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     if (products.isEmpty) {
       return const Center(
         child: Text('No products in cart.'),
@@ -87,7 +97,7 @@ class Cart extends StatelessWidget {
           children: const [
             _Total(),
             Divider(color: Colors.black26, height: 32),
-            _CheckoutButton(),
+            CheckoutButton(),
           ],
         ),
       ],
@@ -108,14 +118,14 @@ class CartProductList extends StatelessWidget {
       shrinkWrap: true,
       itemBuilder: (context, index) {
         if (index >= products.length) return null;
-        return _CartItem(products[index]);
+        return CartItem(products[index]);
       },
     );
   }
 }
 
-class _CartItem extends StatelessWidget {
-  const _CartItem(this.product);
+class CartItem extends StatelessWidget {
+  const CartItem(this.product, {super.key});
 
   final Product product;
 
@@ -149,8 +159,8 @@ class _Total extends StatelessWidget {
   }
 }
 
-class _CheckoutButton extends StatelessWidget {
-  const _CheckoutButton();
+class CheckoutButton extends StatelessWidget {
+  const CheckoutButton({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -16,7 +16,7 @@ class ProductInfoPage extends StatelessWidget {
     return MaterialPageRoute<void>(
       settings: AnalyticRouteSettings(
         screenView: ScreenView(
-          routeName: 'product_info',
+          routeName: 'product_info_page',
           parameters: {
             'product_id': product.id,
             'product_name': product.name,
