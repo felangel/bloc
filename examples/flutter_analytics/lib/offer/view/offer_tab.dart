@@ -47,8 +47,8 @@ class OfferList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final offers = context.select(
-      (OfferBloc bloc) => bloc.state.offers,
+    final allOffers = context.select(
+      (OfferBloc bloc) => bloc.state.allOffers,
     );
 
     final status = context.select(
@@ -67,7 +67,7 @@ class OfferList extends StatelessWidget {
         child: Text('Something went wrong.'),
       );
     }
-    if (offers.isEmpty) {
+    if (allOffers.isEmpty) {
       return const Center(
         child: Text('No offers currently!'),
       );
@@ -76,7 +76,7 @@ class OfferList extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          for (final offer in offers) _OfferItem(offer),
+          for (final offer in allOffers) _OfferItem(offer),
         ],
       ),
     );
@@ -141,7 +141,7 @@ class _OfferAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isSelected = context.select(
-      (CartBloc bloc) => bloc.state.products.contains(offer.product),
+      (OfferBloc bloc) => bloc.state.selectedOffers.contains(offer),
     );
 
     final isPending = context.select(

@@ -9,23 +9,35 @@ enum ProductListStatus {
 class ProductListState extends Equatable {
   const ProductListState({
     this.status = ProductListStatus.loading,
-    this.products = const [],
+    this.allProducts = const [],
+    this.selectedProducts = const [],
+    this.pendingProduct = Product.empty,
   });
 
   final ProductListStatus status;
-  final List<Product> products;
+  final List<Product> allProducts;
+  final List<Product> selectedProducts;
+  final Product pendingProduct;
 
   ProductListState copyWith({
     ProductListStatus? status,
-    List<Product>? products,
-    Product? selectedProduct,
+    List<Product>? allProducts,
+    List<Product>? selectedProducts,
+    Product? pendingProduct,
   }) {
     return ProductListState(
       status: status ?? this.status,
-      products: products ?? this.products,
+      allProducts: allProducts ?? this.allProducts,
+      selectedProducts: selectedProducts ?? this.selectedProducts,
+      pendingProduct: pendingProduct ?? this.pendingProduct,
     );
   }
 
   @override
-  List<Object?> get props => [status, products];
+  List<Object?> get props => [
+        status,
+        allProducts,
+        selectedProducts,
+        pendingProduct,
+      ];
 }

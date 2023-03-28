@@ -7,6 +7,15 @@ abstract class OfferEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class _OfferCartProductsChanged extends OfferEvent {
+  const _OfferCartProductsChanged(this.cartProducts);
+
+  final List<Product> cartProducts;
+
+  @override
+  List<Object> get props => [cartProducts];
+}
+
 class OfferStarted extends OfferEvent {
   const OfferStarted();
 }

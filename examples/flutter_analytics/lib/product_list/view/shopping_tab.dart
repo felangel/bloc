@@ -47,8 +47,8 @@ class ProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final products = context.select(
-      (ProductListBloc bloc) => bloc.state.products,
+    final allProducts = context.select(
+      (ProductListBloc bloc) => bloc.state.allProducts,
     );
 
     final status = context.select(
@@ -67,7 +67,7 @@ class ProductList extends StatelessWidget {
         child: Text('Something went wrong.'),
       );
     }
-    if (products.isEmpty) {
+    if (allProducts.isEmpty) {
       return const Center(
         child: Text('No products available!'),
       );
@@ -75,8 +75,8 @@ class ProductList extends StatelessWidget {
 
     return ListView.builder(
       itemBuilder: (context, index) {
-        if (index >= products.length) return null;
-        return _ProductItem(products[index]);
+        if (index >= allProducts.length) return null;
+        return _ProductItem(allProducts[index]);
       },
     );
   }
@@ -90,18 +90,20 @@ class _ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isAdded = context.select(
-      (CartBloc bloc) => bloc.state.products.contains(product),
+      (ProductListBloc bloc) => bloc.state.selectedProducts.contains(product),
     );
 
     final isPending = context.select(
-      (CartBloc bloc) => bloc.state.pendingProduct == product,
+      (ProductListBloc bloc) => bloc.state.pendingProduct == product,
     );
 
     return ListTile(
       onTap: () {
         if (isPending) return;
-        context.read<CartBloc>().add(
-              isAdded ? CartProductRemoved(product) : CartProductAdded(product),
+        context.read<ProductListBloc>().add(
+              isAdded
+                  ? ProductListProductRemoved(product)
+                  : ProductListProductAdded(product),
             );
       },
       title: Text(product.name),

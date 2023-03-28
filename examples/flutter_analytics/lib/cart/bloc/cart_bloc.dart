@@ -12,7 +12,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc(this._shoppingRepository) : super(const CartState()) {
     on<_CartProductsChanged>(_onProductsChanged);
     on<CartStarted>(_onStarted);
-    on<CartProductAdded>(_onProductAdded);
     on<CartProductRemoved>(_onProductRemoved);
     on<CartClearRequested>(_onClearRequested);
 
@@ -60,36 +59,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(
         state.copyWith(
           status: CartStatus.failure,
-        ),
-      );
-    }
-  }
-
-  Future<void> _onProductAdded(
-    CartProductAdded event,
-    Emitter<CartState> emit,
-  ) async {
-    final product = event.product;
-
-    emit(
-      state.copyWith(
-        pendingProduct: product,
-      ),
-    );
-
-    try {
-      await _shoppingRepository.addProductToCart(product);
-
-      emit(
-        state.copyWith(
-          pendingProduct: Product.empty,
-          products: [product, ...state.products],
-        ),
-      );
-    } catch (_) {
-      emit(
-        state.copyWith(
-          pendingProduct: Product.empty,
         ),
       );
     }

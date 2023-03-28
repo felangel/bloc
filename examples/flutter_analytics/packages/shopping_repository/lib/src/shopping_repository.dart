@@ -23,6 +23,18 @@ class ShoppingRepository {
     _controller.add(products);
   }
 
+  /// Fetches a list of all products.
+  Future<List<Product>> fetchAllProducts() async {
+    final allProducts = await Future.delayed(_longDelay, () => _allProducts);
+    return allProducts;
+  }
+
+  /// Fetches a list of all offers.
+  Future<List<Offer>> fetchAllOffers() async {
+    final offers = await Future.delayed(_longDelay, () => _offers);
+    return offers;
+  }
+
   /// Fetches a list of products in the cart.
   Future<List<Product>> fetchCartProducts() async {
     final products = await Future.delayed(_shortDelay, () => [..._products]);
@@ -64,18 +76,6 @@ class ShoppingRepository {
   Future<void> clearCart() async {
     final products = await Future.delayed(_shortDelay, () => <Product>[]);
     _update(products);
-  }
-
-  /// Fetches a list of all products.
-  Future<List<Product>> fetchAllProducts() async {
-    final allProducts = await Future.delayed(_longDelay, () => _allProducts);
-    return allProducts;
-  }
-
-  /// Fetches a list of offers.
-  Future<List<Offer>> fetchOffers() async {
-    final offers = await Future.delayed(_longDelay, () => _offers);
-    return offers;
   }
 }
 

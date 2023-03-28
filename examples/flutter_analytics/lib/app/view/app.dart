@@ -28,12 +28,6 @@ class App extends StatelessWidget {
           BlocProvider(
             create: (_) => AppBloc(),
           ),
-          BlocProvider(
-            create: (_) => CartBloc(_shoppingRepository)
-              ..add(
-                const CartStarted(),
-              ),
-          ),
         ],
         child: MaterialApp(
           navigatorObservers: [

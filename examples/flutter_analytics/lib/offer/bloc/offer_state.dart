@@ -10,22 +10,26 @@ enum OfferStatus {
 class OfferState extends Equatable {
   const OfferState({
     this.status = OfferStatus.loading,
-    this.offers = const [],
+    this.allOffers = const [],
+    this.selectedOffers = const [],
     this.pendingOffer = Offer.empty,
   });
 
   final OfferStatus status;
-  final List<Offer> offers;
+  final List<Offer> allOffers;
+  final List<Offer> selectedOffers;
   final Offer pendingOffer;
 
   OfferState copyWith({
     OfferStatus? status,
-    List<Offer>? offers,
+    List<Offer>? allOffers,
+    List<Offer>? selectedOffers,
     Offer? pendingOffer,
   }) {
     return OfferState(
       status: status ?? this.status,
-      offers: offers ?? this.offers,
+      allOffers: allOffers ?? this.allOffers,
+      selectedOffers: selectedOffers ?? this.selectedOffers,
       pendingOffer: pendingOffer ?? this.pendingOffer,
     );
   }
@@ -33,7 +37,8 @@ class OfferState extends Equatable {
   @override
   List<Object?> get props => [
         status,
-        offers,
+        allOffers,
+        selectedOffers,
         pendingOffer,
       ];
 }

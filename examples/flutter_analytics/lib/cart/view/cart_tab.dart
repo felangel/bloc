@@ -14,7 +14,14 @@ class CartTab extends StatelessWidget {
       settings: const AnalyticRouteSettings(
         screenView: ScreenView(routeName: 'cart_tab'),
       ),
-      builder: (_) => const CartTab(),
+      builder: (_) => BlocProvider(
+        create: (context) => CartBloc(
+          context.read<ShoppingRepository>(),
+        )..add(
+            const CartStarted(),
+          ),
+        child: const CartTab(),
+      ),
     );
   }
 
@@ -79,7 +86,9 @@ class Cart extends StatelessWidget {
 
     if (isLoading) {
       return const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: Colors.black,
+        ),
       );
     }
 
