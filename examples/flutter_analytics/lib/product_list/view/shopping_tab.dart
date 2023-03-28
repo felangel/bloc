@@ -1,8 +1,9 @@
+import 'dart:developer';
+
 import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_analytics/app/app.dart';
-import 'package:flutter_analytics/cart/bloc/cart_bloc.dart';
 import 'package:flutter_analytics/product_list/product_list.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_repository/shopping_repository.dart';
@@ -76,14 +77,14 @@ class ProductList extends StatelessWidget {
     return ListView.builder(
       itemBuilder: (context, index) {
         if (index >= allProducts.length) return null;
-        return _ProductItem(allProducts[index]);
+        return ProductItem(allProducts[index]);
       },
     );
   }
 }
 
-class _ProductItem extends StatelessWidget {
-  const _ProductItem(this.product);
+class ProductItem extends StatelessWidget {
+  const ProductItem(this.product, {super.key});
 
   final Product product;
 
@@ -108,17 +109,7 @@ class _ProductItem extends StatelessWidget {
       },
       title: Text(product.name),
       subtitle: Text('\$${product.price}'),
-      leading: IconButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            ProductInfoPage.route(product),
-          );
-        },
-        icon: const Icon(
-          Icons.info,
-          color: Colors.black54,
-        ),
-      ),
+      leading: InfoButton(product: product),
       trailing: isAdded
           ? const Icon(
               Icons.check,
@@ -128,6 +119,30 @@ class _ProductItem extends StatelessWidget {
               Icons.add,
               color: Colors.black87,
             ),
+    );
+  }
+}
+
+class InfoButton extends StatelessWidget {
+  const InfoButton({
+    required this.product,
+    super.key,
+  });
+
+  final Product product;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        Navigator.of(context).push(
+          ProductInfoPage.route(product),
+        );
+      },
+      icon: const Icon(
+        Icons.info,
+        color: Colors.black54,
+      ),
     );
   }
 }

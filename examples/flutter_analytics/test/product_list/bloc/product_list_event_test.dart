@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:flutter_analytics/cart/cart.dart';
+import 'package:flutter_analytics/product_list/product_list.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shopping_repository/shopping_repository.dart';
 
@@ -10,34 +10,34 @@ void main() {
     description: 'description',
   );
 
-  group('CartEvent', () {
-    group('CartStarted', () {
+  group('ProductListEvent', () {
+    group('ProductListStarted', () {
       test('supports value comparison', () {
         expect(
-          CartStarted(),
-          CartStarted(),
+          ProductListStarted(),
+          ProductListStarted(),
         );
       });
     });
 
-    group('CartProductRemoved', () {
+    group('ProductListProductAdded', () {
       test('supports value comparison', () {
         expect(
-          CartProductRemoved(product),
-          CartProductRemoved(product),
+          ProductListProductAdded(product),
+          ProductListProductAdded(product),
         );
       });
 
       test('has event name', () {
         expect(
-          CartProductRemoved(product).eventName,
+          ProductListProductAdded(product).eventName,
           isNotEmpty,
         );
       });
 
       test('has event parameters', () {
         expect(
-          CartProductRemoved(product).parameters,
+          ProductListProductAdded(product).parameters,
           isMap.having(
             (map) => map.isNotEmpty,
             'is not empty',
@@ -47,34 +47,29 @@ void main() {
       });
     });
 
-    group('CartProductRemoved', () {
+    group('ProductListProductRemoved', () {
       test('supports value comparison', () {
         expect(
-          CartProductRemoved(product),
-          CartProductRemoved(product),
+          ProductListProductRemoved(product),
+          ProductListProductRemoved(product),
         );
       });
 
       test('has event name', () {
         expect(
-          CartProductRemoved(product).eventName,
+          ProductListProductRemoved(product).eventName,
           isNotEmpty,
         );
       });
-    });
 
-    group('CartClearRequested', () {
-      test('supports value comparison', () {
+      test('has event parameters', () {
         expect(
-          CartClearRequested(),
-          CartClearRequested(),
-        );
-      });
-
-      test('has event name', () {
-        expect(
-          CartClearRequested().eventName,
-          isNotEmpty,
+          ProductListProductRemoved(product).parameters,
+          isMap.having(
+            (map) => map.isNotEmpty,
+            'is not empty',
+            true,
+          ),
         );
       });
     });

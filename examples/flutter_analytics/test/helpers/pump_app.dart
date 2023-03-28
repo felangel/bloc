@@ -1,7 +1,6 @@
 import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_analytics/app/app.dart';
-import 'package:flutter_analytics/cart/cart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -13,15 +12,12 @@ class MockAnalyticsRepository extends Mock implements AnalyticsRepository {}
 
 class MockAppBloc extends Mock implements AppBloc {}
 
-class MockCartBloc extends Mock implements CartBloc {}
-
 extension PumpApp on WidgetTester {
   Widget createSubject({
     required Widget child,
     ShoppingRepository? shoppingRepository,
     AnalyticsRepository? analyticsRepository,
     AppBloc? appBloc,
-    CartBloc? cartBloc,
   }) {
     return MultiRepositoryProvider(
       providers: [
@@ -32,15 +28,8 @@ extension PumpApp on WidgetTester {
           value: analyticsRepository ?? MockAnalyticsRepository(),
         ),
       ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider.value(
-            value: appBloc ?? MockAppBloc(),
-          ),
-          BlocProvider.value(
-            value: cartBloc ?? MockCartBloc(),
-          ),
-        ],
+      child: BlocProvider.value(
+        value: appBloc ?? MockAppBloc(),
         child: MaterialApp(
           home: Scaffold(body: child),
         ),
@@ -53,7 +42,6 @@ extension PumpApp on WidgetTester {
     ShoppingRepository? shoppingRepository,
     AnalyticsRepository? analyticsRepository,
     AppBloc? appBloc,
-    CartBloc? cartBloc,
   }) {
     return pumpWidget(
       createSubject(
@@ -61,7 +49,6 @@ extension PumpApp on WidgetTester {
         shoppingRepository: shoppingRepository,
         analyticsRepository: analyticsRepository,
         appBloc: appBloc,
-        cartBloc: cartBloc,
       ),
     );
   }
@@ -71,14 +58,12 @@ extension PumpApp on WidgetTester {
     ShoppingRepository? shoppingRepository,
     AnalyticsRepository? analyticsRepository,
     AppBloc? appBloc,
-    CartBloc? cartBloc,
   }) {
     return pumpApp(
       Navigator(onGenerateRoute: (_) => route),
       shoppingRepository: shoppingRepository,
       analyticsRepository: analyticsRepository,
       appBloc: appBloc,
-      cartBloc: cartBloc,
     );
   }
 }

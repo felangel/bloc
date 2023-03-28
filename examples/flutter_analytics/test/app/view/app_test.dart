@@ -22,7 +22,7 @@ void main() {
       when(shoppingRepository.fetchCartProducts).thenAnswer(
         (_) => Future.value([]),
       );
-      when(shoppingRepository.fetchOffers).thenAnswer(
+      when(shoppingRepository.fetchAllOffers).thenAnswer(
         (_) => Future.value([]),
       );
       when(shoppingRepository.fetchAllProducts).thenAnswer(

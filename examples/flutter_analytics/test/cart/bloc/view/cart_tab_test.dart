@@ -1,8 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:analytics_repository/analytics_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_analytics/cart/cart.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:shopping_repository/shopping_repository.dart';
@@ -10,8 +11,6 @@ import 'package:shopping_repository/shopping_repository.dart';
 import '../../../helpers/helpers.dart';
 
 class MockShoppingRepository extends Mock implements ShoppingRepository {}
-
-class MockAnalyticsRepository extends Mock implements AnalyticsRepository {}
 
 class MockCartBloc extends MockBloc<CartEvent, CartState> implements CartBloc {}
 
@@ -35,9 +34,31 @@ void main() {
       when(() => navigator.push<void>(any())).thenAnswer((_) async {});
     });
 
-    testWidgets('renders CartTab', (tester) async {
-      await tester.pumpRoute(CartTab.route(), cartBloc: cartBloc);
-      expect(find.byType(CartTab), findsOneWidget);
+    Widget buildSubject() {
+      return MockNavigatorProvider(
+        navigator: navigator,
+        child: BlocProvider.value(
+          value: cartBloc,
+          child: const CartTab(),
+        ),
+      );
+    }
+
+    group('route', () {
+      testWidgets('renders CartTab', (tester) async {
+        when(() => shoppingRepository.fetchCartProducts()).thenAnswer(
+          (_) => Future.value([product]),
+        );
+        when(() => shoppingRepository.selectedProducts).thenAnswer(
+          (_) => Stream.empty(),
+        );
+
+        await tester.pumpRoute(
+          CartTab.route(),
+          shoppingRepository: shoppingRepository,
+        );
+        expect(find.byType(CartTab), findsOneWidget);
+      });
     });
 
     testWidgets('renders CartItems when there are products', (tester) async {
@@ -47,7 +68,7 @@ void main() {
           status: CartStatus.success,
         ),
       );
-      await tester.pumpRoute(CartTab.route(), cartBloc: cartBloc);
+      await tester.pumpApp(buildSubject());
       expect(find.byType(CartItem), findsWidgets);
     });
 
@@ -59,13 +80,7 @@ void main() {
           products: const [product],
         ),
       );
-
-      await tester.pumpRoute(
-        CartTab.route(),
-        shoppingRepository: shoppingRepository,
-        cartBloc: cartBloc,
-      );
-
+      await tester.pumpApp(buildSubject());
       await tester.longPress(find.byType(CartItem));
       verify(() => cartBloc.add(CartProductRemoved(product))).called(1);
     });
@@ -79,12 +94,7 @@ void main() {
         ),
       );
 
-      await tester.pumpRoute(
-        CartTab.route(),
-        shoppingRepository: shoppingRepository,
-        cartBloc: cartBloc,
-      );
-
+      await tester.pumpApp(buildSubject());
       await tester.tap(find.byType(ClearCartButton));
       verify(() => cartBloc.add(CartClearRequested())).called(1);
     });
@@ -97,18 +107,16 @@ void main() {
         ),
       );
 
+      // MockNavigator wraps MaterialApp to mock the root Navigator.
       await tester.pumpWidget(
         MockNavigatorProvider(
           navigator: navigator,
           child: tester.createSubject(
-            cartBloc: cartBloc,
-            child: CartTab(),
+            child: buildSubject(),
           ),
         ),
       );
-
       await tester.tap(find.byType(CheckoutButton));
-
       verify(() => navigator.push<void>(any())).called(1);
     });
   });

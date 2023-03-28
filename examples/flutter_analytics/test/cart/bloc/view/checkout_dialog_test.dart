@@ -19,7 +19,7 @@ class MockAnalyticsRepository extends Mock implements AnalyticsRepository {}
 class MockCartBloc extends MockBloc<CartEvent, CartState> implements CartBloc {}
 
 void main() {
-  group('CartTab', () {
+  group('CheckoutDialog', () {
     late MockNavigator navigator;
     late CartBloc cartBloc;
 

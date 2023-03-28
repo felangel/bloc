@@ -58,42 +58,6 @@ void main() {
     );
 
     blocTest<CartBloc, CartState>(
-      'updates correctly when adding a product',
-      setUp: () {
-        when(
-          () => shoppingRepository.addProductToCart(product),
-        ).thenAnswer((_) async {});
-      },
-      build: () => CartBloc(shoppingRepository),
-      act: (bloc) => bloc.add(CartProductAdded(product)),
-      expect: () => [
-        CartState(pendingProduct: product),
-        CartState(products: const [product]),
-      ],
-      verify: (_) {
-        verify(() => shoppingRepository.addProductToCart(product)).called(1);
-      },
-    );
-
-    blocTest<CartBloc, CartState>(
-      'updates correctly when adding a product fails',
-      setUp: () {
-        when(
-          () => shoppingRepository.addProductToCart(product),
-        ).thenThrow(Exception('oops'));
-      },
-      build: () => CartBloc(shoppingRepository),
-      act: (bloc) => bloc.add(CartProductAdded(product)),
-      expect: () => [
-        CartState(pendingProduct: product),
-        CartState(),
-      ],
-      verify: (_) {
-        verify(() => shoppingRepository.addProductToCart(product)).called(1);
-      },
-    );
-
-    blocTest<CartBloc, CartState>(
       'updates correctly when removing a product',
       setUp: () {
         when(
