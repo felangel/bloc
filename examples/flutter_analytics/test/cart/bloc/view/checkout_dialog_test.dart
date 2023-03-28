@@ -1,9 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:analytics_repository/analytics_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_analytics/cart/cart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,8 +11,6 @@ import 'package:shopping_repository/shopping_repository.dart';
 import '../../../helpers/helpers.dart';
 
 class MockShoppingRepository extends Mock implements ShoppingRepository {}
-
-class MockAnalyticsRepository extends Mock implements AnalyticsRepository {}
 
 class MockCartBloc extends MockBloc<CartEvent, CartState> implements CartBloc {}
 

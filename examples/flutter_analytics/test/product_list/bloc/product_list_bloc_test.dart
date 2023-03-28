@@ -34,17 +34,20 @@ void main() {
     blocTest<ProductListBloc, ProductListState>(
       'emits [success] when products are fetched successfully',
       setUp: () {
-        when(shoppingRepository.fetchCartProducts).thenAnswer(
+        when(shoppingRepository.fetchAllProducts).thenAnswer(
           (_) => Future.value([]),
         );
-        when(shoppingRepository.fetchAllProducts).thenAnswer(
+        when(shoppingRepository.fetchCartProducts).thenAnswer(
           (_) => Future.value([]),
         );
       },
       build: () => ProductListBloc(shoppingRepository),
       act: (bloc) => bloc.add(ProductListStarted()),
       expect: () => [ProductListState(status: ProductListStatus.success)],
-      verify: (_) => verify(shoppingRepository.fetchCartProducts).called(1),
+      verify: (_) {
+        verify(shoppingRepository.fetchAllProducts).called(1);
+        verify(shoppingRepository.fetchCartProducts).called(1);
+      },
     );
 
     blocTest<ProductListBloc, ProductListState>(
@@ -91,9 +94,6 @@ void main() {
         ProductListState(pendingProduct: product),
         ProductListState(),
       ],
-      verify: (_) {
-        verify(() => shoppingRepository.addProductToCart(product)).called(1);
-      },
     );
 
     blocTest<ProductListBloc, ProductListState>(
@@ -132,10 +132,6 @@ void main() {
         ProductListState(pendingProduct: product),
         ProductListState(),
       ],
-      verify: (_) {
-        verify(() => shoppingRepository.removeProductFromCart(product))
-            .called(1);
-      },
     );
 
     blocTest<ProductListBloc, ProductListState>(

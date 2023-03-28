@@ -2,7 +2,6 @@ import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_analytics/app/app.dart';
-import 'package:flutter_analytics/cart/bloc/cart_bloc.dart';
 import 'package:flutter_analytics/offer/offer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_repository/shopping_repository.dart';
@@ -76,15 +75,15 @@ class OfferList extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          for (final offer in allOffers) _OfferItem(offer),
+          for (final offer in allOffers) OfferItem(offer),
         ],
       ),
     );
   }
 }
 
-class _OfferItem extends StatelessWidget {
-  const _OfferItem(this.offer);
+class OfferItem extends StatelessWidget {
+  const OfferItem(this.offer, {super.key});
 
   final Offer offer;
 
@@ -101,21 +100,17 @@ class _OfferItem extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Text(
-                  offer.title,
-                  style: Theme.of(context).textTheme.titleLarge,
-                  textAlign: TextAlign.center,
-                ),
+              Text(
+                offer.title,
+                style: Theme.of(context).textTheme.titleLarge,
+                textAlign: TextAlign.center,
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Text(
-                  offer.subtitle,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+              const SizedBox(height: 8),
+              Text(
+                offer.subtitle,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
+              const SizedBox(height: 4),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
@@ -124,7 +119,7 @@ class _OfferItem extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              _OfferAction(offer),
+              OfferActionButton(offer),
             ],
           ),
         ),
@@ -133,8 +128,8 @@ class _OfferItem extends StatelessWidget {
   }
 }
 
-class _OfferAction extends StatelessWidget {
-  const _OfferAction(this.offer);
+class OfferActionButton extends StatelessWidget {
+  const OfferActionButton(this.offer, {super.key});
 
   final Offer offer;
 

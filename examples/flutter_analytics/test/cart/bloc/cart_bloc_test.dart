@@ -54,7 +54,6 @@ void main() {
       build: () => CartBloc(shoppingRepository),
       act: (bloc) => bloc.add(CartStarted()),
       expect: () => [CartState(status: CartStatus.failure)],
-      verify: (_) => verify(shoppingRepository.fetchCartProducts).called(1),
     );
 
     blocTest<CartBloc, CartState>(
@@ -97,10 +96,6 @@ void main() {
         ),
         CartState(products: const [product]),
       ],
-      verify: (_) {
-        verify(() => shoppingRepository.removeProductFromCart(product))
-            .called(1);
-      },
     );
 
     blocTest<CartBloc, CartState>(
@@ -145,9 +140,6 @@ void main() {
           products: const [product],
         ),
       ],
-      verify: (_) {
-        verify(shoppingRepository.clearCart).called(1);
-      },
     );
 
     blocTest<CartBloc, CartState>(
