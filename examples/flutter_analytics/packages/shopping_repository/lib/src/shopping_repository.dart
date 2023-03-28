@@ -48,7 +48,6 @@ class ShoppingRepository {
       _shortDelay,
       () => [product, ..._products],
     );
-
     _update(products);
   }
 
@@ -58,7 +57,6 @@ class ShoppingRepository {
       _shortDelay,
       () => [offer.product, ..._products],
     );
-
     _update(products);
   }
 
@@ -68,7 +66,6 @@ class ShoppingRepository {
       _shortDelay,
       () => [..._products]..remove(product),
     );
-
     _update(products);
   }
 
