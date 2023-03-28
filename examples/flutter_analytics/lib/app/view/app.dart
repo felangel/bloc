@@ -1,7 +1,6 @@
 import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/material.dart' hide Tab;
 import 'package:flutter_analytics/app/app.dart';
-import 'package:flutter_analytics/cart/cart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_repository/shopping_repository.dart';
 

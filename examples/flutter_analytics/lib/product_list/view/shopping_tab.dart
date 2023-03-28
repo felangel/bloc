@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:analytics_repository/analytics_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

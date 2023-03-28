@@ -1,6 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_analytics/cart/cart.dart';
 import 'package:flutter_analytics/product_list/view/product_info_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
