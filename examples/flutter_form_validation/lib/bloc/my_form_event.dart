@@ -7,6 +7,17 @@ abstract class MyFormEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class PhoneFieldChanged extends MyFormEvent {
+  const PhoneFieldChanged({required this.phoneField});
+
+  final String phoneField;
+
+  @override
+  List<Object> get props => [phoneField];
+}
+
+class PhoneFieldUnfocused extends MyFormEvent {}
+
 class EmailChanged extends MyFormEvent {
   const EmailChanged({required this.email});
 

@@ -10,11 +10,25 @@ part 'my_form_state.dart';
 
 class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
   MyFormBloc() : super(const MyFormState()) {
+    on<PhoneFieldChanged>(_onPhoneFieldChanged);
     on<EmailChanged>(_onEmailChanged);
+    on<PhoneFieldUnfocused>(_onPhoneFieldUnfocused);
     on<PasswordChanged>(_onPasswordChanged);
     on<EmailUnfocused>(_onEmailUnfocused);
     on<PasswordUnfocused>(_onPasswordUnfocused);
     on<FormSubmitted>(_onFormSubmitted);
+  }
+
+  void _onPhoneFieldChanged(
+      PhoneFieldChanged event, Emitter<MyFormState> emit) {
+    final phoneField = PhoneField.dirty(event.phoneField);
+    emit(
+      state.copyWith(
+        phoneField:
+            phoneField.valid ? phoneField : PhoneField.pure(event.phoneField),
+        status: Formz.validate([phoneField, state.email, state.password]),
+      ),
+    );
   }
 
   void _onEmailChanged(EmailChanged event, Emitter<MyFormState> emit) {
@@ -22,7 +36,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     emit(
       state.copyWith(
         email: email.valid ? email : Email.pure(event.email),
-        status: Formz.validate([email, state.password]),
+        status: Formz.validate([state.phoneField, email, state.password]),
       ),
     );
   }
@@ -32,7 +46,19 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     emit(
       state.copyWith(
         password: password.valid ? password : Password.pure(event.password),
-        status: Formz.validate([state.email, password]),
+        status: Formz.validate([state.phoneField, state.email, password]),
+      ),
+    );
+  }
+
+  void _onPhoneFieldUnfocused(
+      PhoneFieldUnfocused event, Emitter<MyFormState> emit) {
+    final phoneField = PhoneField.dirty(state.phoneField.value);
+
+    emit(
+      state.copyWith(
+        phoneField: phoneField,
+        status: Formz.validate([phoneField, state.email, state.password]),
       ),
     );
   }
@@ -42,7 +68,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     emit(
       state.copyWith(
         email: email,
-        status: Formz.validate([email, state.password]),
+        status: Formz.validate([state.phoneField, email, state.password]),
       ),
     );
   }
@@ -55,7 +81,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     emit(
       state.copyWith(
         password: password,
-        status: Formz.validate([state.email, password]),
+        status: Formz.validate([state.phoneField, state.email, password]),
       ),
     );
   }
@@ -64,13 +90,15 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     FormSubmitted event,
     Emitter<MyFormState> emit,
   ) async {
+    final phoneField = PhoneField.dirty(state.phoneField.value);
     final email = Email.dirty(state.email.value);
     final password = Password.dirty(state.password.value);
     emit(
       state.copyWith(
+        phoneField: phoneField,
         email: email,
         password: password,
-        status: Formz.validate([email, password]),
+        status: Formz.validate([phoneField, email, password]),
       ),
     );
     if (state.status.isValidated) {

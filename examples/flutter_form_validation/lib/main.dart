@@ -30,12 +30,19 @@ class MyForm extends StatefulWidget {
 }
 
 class _MyFormState extends State<MyForm> {
+  final _phoneFieldFocusNode = FocusNode();
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    _phoneFieldFocusNode.addListener(() {
+      if (!_phoneFieldFocusNode.hasFocus) {
+        context.read<MyFormBloc>().add(PhoneFieldUnfocused());
+        FocusScope.of(context).requestFocus(_emailFocusNode);
+      }
+    });
     _emailFocusNode.addListener(() {
       if (!_emailFocusNode.hasFocus) {
         context.read<MyFormBloc>().add(EmailUnfocused());
@@ -51,6 +58,7 @@ class _MyFormState extends State<MyForm> {
 
   @override
   void dispose() {
+    _phoneFieldFocusNode.dispose();
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
     super.dispose();
@@ -79,6 +87,7 @@ class _MyFormState extends State<MyForm> {
         padding: const EdgeInsets.all(8),
         child: Column(
           children: <Widget>[
+            PhoneFieldInput(focusNode: _phoneFieldFocusNode),
             EmailInput(focusNode: _emailFocusNode),
             PasswordInput(focusNode: _passwordFocusNode),
             const SubmitButton(),
@@ -86,6 +95,59 @@ class _MyFormState extends State<MyForm> {
         ),
       ),
     );
+  }
+}
+
+class PhoneFieldInput extends StatelessWidget {
+  const PhoneFieldInput({super.key, required this.focusNode});
+
+  final FocusNode focusNode;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<MyFormBloc, MyFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          initialValue: state.phoneField.value,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            icon: const Icon(Icons.phone),
+            labelText: 'Phone',
+            helperText: 'A complete, valid phone number e.g. 0779571619',
+            errorText: state.phoneField.invalid
+                ? 'Please ensure the phone entered is valid'
+                : null,
+          ),
+          keyboardType: TextInputType.phone,
+          onChanged: (value) {
+            final val = _formatPhoneField(value);
+            value = val ?? '';
+
+            context
+                .read<MyFormBloc>()
+                .add(PhoneFieldChanged(phoneField: value));
+          },
+          textInputAction: TextInputAction.next,
+        );
+      },
+    );
+  }
+
+  String? _formatPhoneField(String? phoneNumber) {
+    if (phoneNumber == null) {
+      return null;
+    }
+    String formattedPhoneNumber = '';
+
+    if (phoneNumber.length == 10) {
+      formattedPhoneNumber =
+          '${phoneNumber.substring(0, 3)}-${phoneNumber.substring(3, 6)}-${phoneNumber.substring(6)}';
+    } else {
+      // Handle invalid phone number length
+      formattedPhoneNumber = phoneNumber;
+    }
+
+    return formattedPhoneNumber;
   }
 }
 
