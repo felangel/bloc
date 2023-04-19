@@ -172,18 +172,18 @@ void blocTest<B extends BlocBase<State>, State>(
 }
 
 /// Creates a new `bloc`-specific test case with the given [description].
-/// [fakeAsyncBlocTest] will handle asserting that the `bloc` emits the [expect]ed
-/// states (in order) after [act] is executed.
+/// [fakeAsyncBlocTest] will handle asserting that the `bloc` emits the
+/// [expect]ed states (in order) after [act] is executed.
 ///
 /// The main difference of [fakeAsyncBlocTest] from [blocTest] is that [setUp],
-/// [act] and [tearDown] 'Functions' has parameter of type [FakeAsync] which provide
-/// explicitly control Dart's notion of the "current time". When the time is
-/// advanced, FakeAsync fires all asynchronous events that are scheduled for
-/// that time period without actually needing the test to wait for real time to
-/// elapse.
+/// [act] and [tearDown] 'Functions' has parameter of type [FakeAsync] which
+/// provide explicitly control Dart's notion of the "current time". When the
+/// time is advanced, FakeAsync fires all asynchronous events that are scheduled
+/// for that time period without actually needing the test to wait for real time
+/// to elapse.
 ///
-/// [fakeAsyncBlocTest] also handles ensuring that no additional states are emitted
-/// by closing the `bloc` stream before evaluating the [expect]ation.
+/// [fakeAsyncBlocTest] also handles ensuring that no additional states are
+/// emitted by closing the `bloc` stream before evaluating the [expect]ation.
 ///
 /// [setUp] is optional and should be used to set up
 /// any dependencies prior to initializing the `bloc` under test.
@@ -275,7 +275,8 @@ void blocTest<B extends BlocBase<State>, State>(
 /// );
 /// ```
 ///
-/// [fakeAsyncBlocTest] can also be used to [verify] internal bloc functionality.
+/// [fakeAsyncBlocTest] can also be used to [verify] internal bloc
+/// functionality.
 ///
 /// ```dart
 /// blocTest(
@@ -289,9 +290,9 @@ void blocTest<B extends BlocBase<State>, State>(
 /// );
 /// ```
 ///
-/// **Note:** when using [fakeAsyncBlocTest] with state classes which don't override
-/// `==` and `hashCode` you can provide an `Iterable` of matchers instead of
-/// explicit state instances.
+/// **Note:** when using [fakeAsyncBlocTest] with state classes which don't
+/// override `==` and `hashCode` you can provide an `Iterable` of matchers
+/// instead of explicit state instances.
 ///
 /// ```dart
 /// blocTest(
