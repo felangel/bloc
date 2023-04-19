@@ -176,7 +176,7 @@ void blocTest<B extends BlocBase<State>, State>(
 /// [expect]ed states (in order) after [act] is executed.
 ///
 /// The main difference of [fakeAsyncBlocTest] from [blocTest] is that [setUp],
-/// [act] and [tearDown] 'Functions' has parameter of type [FakeAsync] which
+/// [act] and [tearDown] 'Functions' have parameter of type [FakeAsync] which
 /// provide explicitly control Dart's notion of the "current time". When the
 /// time is advanced, FakeAsync fires all asynchronous events that are scheduled
 /// for that time period without actually needing the test to wait for real time
@@ -185,8 +185,9 @@ void blocTest<B extends BlocBase<State>, State>(
 /// [fakeAsyncBlocTest] also handles ensuring that no additional states are
 /// emitted by closing the `bloc` stream before evaluating the [expect]ation.
 ///
-/// [setUp] is optional and should be used to set up
-/// any dependencies prior to initializing the `bloc` under test.
+/// [setUp] is optional and should be used to set up any dependencies prior to
+/// initializing the `bloc` under test and 'fakeAsync' to fire asynchronous
+/// events that are scheduled for that time period.
 /// [setUp] should be used to set up state necessary for a particular test case.
 /// For common set up code, prefer to use `setUp` from `package:test/test.dart`.
 ///
@@ -196,7 +197,8 @@ void blocTest<B extends BlocBase<State>, State>(
 /// which will be used to seed the `bloc` before [act] is called.
 ///
 /// [act] is an optional callback which will be invoked with the `bloc` under
-/// test and should be used to interact with the `bloc`.
+/// test and should be used to interact with the `bloc` and 'fakeAsync' to
+/// fire asynchronous events that are scheduled for that time period.
 ///
 /// [skip] is an optional `int` which can be used to skip any number of states.
 /// [skip] defaults to 0.
@@ -214,8 +216,8 @@ void blocTest<B extends BlocBase<State>, State>(
 /// [errors] is an optional `Function` that returns a `Matcher` which the `bloc`
 /// under test is expected to throw after [act] is executed.
 ///
-/// [tearDown] is optional and can be used to
-/// execute any code after the test has run.
+/// [tearDown] is optional and can be used to execute any code after the
+/// test has run
 /// [tearDown] should be used to clean up after a particular test case.
 /// For common tear down code, prefer to use `tearDown` from `package:test/test.dart`.
 ///
@@ -249,7 +251,7 @@ void blocTest<B extends BlocBase<State>, State>(
 /// [skip] defaults to 0.
 ///
 /// ```dart
-/// blocTest(
+/// fakeAsyncBlocTest(
 ///   'CounterBloc emits [2] when increment is added twice',
 ///   build: () => CounterBloc(),
 ///   act: (bloc, fakeAsync) {
@@ -266,10 +268,10 @@ void blocTest<B extends BlocBase<State>, State>(
 /// by optionally providing a `Duration` to [wait].
 ///
 /// ```dart
-/// blocTest(
+/// fakeAsyncBlocTest(
 ///   'CounterBloc emits [1] when increment is added',
 ///   build: () => CounterBloc(),
-///   act: (bloc) => bloc.add(CounterEvent.increment),
+///   act: (bloc, fakeAsync) => bloc.add(CounterEvent.increment),
 ///   wait: const Duration(milliseconds: 300),
 ///   expect: () => [1],
 /// );
@@ -279,7 +281,7 @@ void blocTest<B extends BlocBase<State>, State>(
 /// functionality.
 ///
 /// ```dart
-/// blocTest(
+/// fakeAsyncBlocTest(
 ///   'CounterBloc emits [1] when increment is added',
 ///   build: () => CounterBloc(),
 ///   act: (bloc, fakeAsync) => bloc.add(CounterEvent.increment),
@@ -295,7 +297,7 @@ void blocTest<B extends BlocBase<State>, State>(
 /// instead of explicit state instances.
 ///
 /// ```dart
-/// blocTest(
+/// fakeAsyncBlocTest(
 ///  'emits [StateB] when EventB is added',
 ///  build: () => MyBloc(),
 ///  act: (bloc, fakeAsync) => bloc.add(EventB()),
