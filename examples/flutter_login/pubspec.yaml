@@ -4,7 +4,7 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=3.0.0-417.1.beta <3.0.0"
 
 dependencies:
   authentication_repository:
@@ -14,7 +14,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
-  formz: ^0.4.0
+  formz: ^0.6.0
   user_repository:
     path: packages/user_repository
 
@@ -30,7 +30,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mocktail: ^0.3.0
-  very_good_analysis: ^3.1.0
+  very_good_analysis: ^4.0.0
 
 flutter:
   uses-material-design: true

@@ -10,7 +10,7 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -47,7 +47,8 @@ class _UsernameInput extends StatelessWidget {
               context.read<LoginBloc>().add(LoginUsernameChanged(username)),
           decoration: InputDecoration(
             labelText: 'username',
-            errorText: state.username.invalid ? 'invalid username' : null,
+            errorText:
+                state.username.displayError != null ? 'invalid username' : null,
           ),
         );
       },
@@ -68,7 +69,8 @@ class _PasswordInput extends StatelessWidget {
           obscureText: true,
           decoration: InputDecoration(
             labelText: 'password',
-            errorText: state.password.invalid ? 'invalid password' : null,
+            errorText:
+                state.password.displayError != null ? 'invalid password' : null,
           ),
         );
       },
@@ -80,13 +82,12 @@ class _LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return state.status.isSubmissionInProgress
+        return state.status.isInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 key: const Key('loginForm_continue_raisedButton'),
-                onPressed: state.status.isValidated
+                onPressed: state.isValid
                     ? () {
                         context.read<LoginBloc>().add(const LoginSubmitted());
                       }
