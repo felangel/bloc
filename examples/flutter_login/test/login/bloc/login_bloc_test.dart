@@ -45,24 +45,23 @@ void main() {
             ..add(const LoginSubmitted());
         },
         expect: () => const <LoginState>[
+          LoginState(username: Username.dirty('username')),
           LoginState(
             username: Username.dirty('username'),
-            status: FormzStatus.invalid,
+            password: Password.dirty('password'),
+            isValid: true,
           ),
           LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
-            status: FormzStatus.valid,
+            isValid: true,
+            status: FormzSubmissionStatus.inProgress,
           ),
           LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
-            status: FormzStatus.submissionInProgress,
-          ),
-          LoginState(
-            username: Username.dirty('username'),
-            password: Password.dirty('password'),
-            status: FormzStatus.submissionSuccess,
+            isValid: true,
+            status: FormzSubmissionStatus.success,
           ),
         ],
       );
@@ -89,22 +88,23 @@ void main() {
         expect: () => const <LoginState>[
           LoginState(
             username: Username.dirty('username'),
-            status: FormzStatus.invalid,
           ),
           LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
-            status: FormzStatus.valid,
+            isValid: true,
           ),
           LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
-            status: FormzStatus.submissionInProgress,
+            isValid: true,
+            status: FormzSubmissionStatus.inProgress,
           ),
           LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
-            status: FormzStatus.submissionFailure,
+            isValid: true,
+            status: FormzSubmissionStatus.failure,
           ),
         ],
       );
