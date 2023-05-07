@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_infinite_list/posts/posts.dart';
 
 class PostListItem extends StatelessWidget {
-  const PostListItem({super.key, required this.post});
+  const PostListItem({required this.post, super.key});
 
   final Post post;
 
