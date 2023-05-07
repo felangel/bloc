@@ -1,17 +1,17 @@
 part of 'todos_overview_bloc.dart';
 
-abstract class TodosOverviewEvent extends Equatable {
+sealed class TodosOverviewEvent extends Equatable {
   const TodosOverviewEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class TodosOverviewSubscriptionRequested extends TodosOverviewEvent {
+final class TodosOverviewSubscriptionRequested extends TodosOverviewEvent {
   const TodosOverviewSubscriptionRequested();
 }
 
-class TodosOverviewTodoCompletionToggled extends TodosOverviewEvent {
+final class TodosOverviewTodoCompletionToggled extends TodosOverviewEvent {
   const TodosOverviewTodoCompletionToggled({
     required this.todo,
     required this.isCompleted,
@@ -24,7 +24,7 @@ class TodosOverviewTodoCompletionToggled extends TodosOverviewEvent {
   List<Object> get props => [todo, isCompleted];
 }
 
-class TodosOverviewTodoDeleted extends TodosOverviewEvent {
+final class TodosOverviewTodoDeleted extends TodosOverviewEvent {
   const TodosOverviewTodoDeleted(this.todo);
 
   final Todo todo;
@@ -33,7 +33,7 @@ class TodosOverviewTodoDeleted extends TodosOverviewEvent {
   List<Object> get props => [todo];
 }
 
-class TodosOverviewUndoDeletionRequested extends TodosOverviewEvent {
+final class TodosOverviewUndoDeletionRequested extends TodosOverviewEvent {
   const TodosOverviewUndoDeletionRequested();
 }
 

@@ -3,8 +3,8 @@ import 'package:todos_repository/todos_repository.dart';
 
 class TodoListTile extends StatelessWidget {
   const TodoListTile({
-    super.key,
     required this.todo,
+    super.key,
     this.onToggleCompleted,
     this.onDismissed,
     this.onTap,
