@@ -16,10 +16,12 @@ class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
   final NewCarRepository _newCarRepository;
 
   Future<void> _onEvent(NewCarEvent event, Emitter<NewCarState> emit) async {
-    if (event is NewCarFormLoaded) return _onNewCarFormLoaded(event, emit);
-    if (event is NewCarBrandChanged) return _onNewCarBrandChanged(event, emit);
-    if (event is NewCarModelChanged) return _onNewCarModelChanged(event, emit);
-    if (event is NewCarYearChanged) return _onNewCarYearChanged(event, emit);
+    return switch (event) {
+      final NewCarFormLoaded e => _onNewCarFormLoaded(e, emit),
+      final NewCarBrandChanged e => _onNewCarBrandChanged(e, emit),
+      final NewCarModelChanged e => _onNewCarModelChanged(e, emit),
+      final NewCarYearChanged e => _onNewCarYearChanged(e, emit),
+    };
   }
 
   Future<void> _onNewCarFormLoaded(
