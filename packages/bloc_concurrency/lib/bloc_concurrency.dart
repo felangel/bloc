@@ -8,3 +8,4 @@ export 'src/concurrent.dart';
 export 'src/droppable.dart';
 export 'src/restartable.dart';
 export 'src/sequential.dart';
+export 'src/sequential_droppable.dart';

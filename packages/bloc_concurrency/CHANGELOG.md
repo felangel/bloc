@@ -1,3 +1,7 @@
+# 0.3.1
+
+- feat: added sequentialDroppable transformer
+ 
 # 0.2.1
 
 - chore: add screenshots to `pubspec.yaml`

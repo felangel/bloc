@@ -63,6 +63,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 - `sequential` - process events sequentially
 - `droppable` - ignore any events added while an event is processing
 - `restartable` - process only the latest event and cancel previous event handlers
+- `sequentialDroppable` - a combination of `sequential` and `droppable` which will drop specified events by type if one is already being processed in sequence
 
 ## Usage
 
