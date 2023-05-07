@@ -38,7 +38,7 @@ class _SequentialAndDroppable<Event>
         ? StreamController<Event>.broadcast(sync: true)
         : StreamController<Event>(sync: true);
     Completer<void>? completer;
-    Type? activeDroppableEvenType;
+    Type? activeDroppableEventType;
 
     final subscription = stream.listen(
       null,
@@ -58,7 +58,7 @@ class _SequentialAndDroppable<Event>
     void disposeDroppable() {
       completer!.complete();
       completer = null;
-      activeDroppableEvenType = null;
+      activeDroppableEventType = null;
     }
 
     controller.onListen = () {
@@ -81,16 +81,16 @@ class _SequentialAndDroppable<Event>
         }
 
         final isDifferentDroppableEventInProgress =
-            completer != null && activeDroppableEvenType != event.runtimeType;
+            completer != null && activeDroppableEventType != event.runtimeType;
 
         if (isDifferentDroppableEventInProgress) await freeze();
 
         final shouldDrop =
-            completer != null && activeDroppableEvenType == event.runtimeType;
+            completer != null && activeDroppableEventType == event.runtimeType;
 
         if (shouldDrop) return;
 
-        activeDroppableEvenType = event.runtimeType;
+        activeDroppableEventType = event.runtimeType;
         completer = Completer<void>();
 
         final mappedStream = _mapEventToStream(event, controller);
