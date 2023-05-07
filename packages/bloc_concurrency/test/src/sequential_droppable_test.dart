@@ -288,6 +288,35 @@ void main() {
         states: [1, 2, 3, 4, 5, 6],
       );
     });
+
+    test('process droppable events after one is processed in correct order',
+        () async {
+      final states = <int>[];
+      final bloc = CounterBloc(
+        sequentialDroppable(droppableEvents: [_EventA]),
+      )
+        ..stream.listen(states.add)
+        ..add(_EventA())
+        ..add(_EventA())
+        ..add(_EventA());
+
+      await verifyEventsAndStates(
+        bloc: bloc,
+        events: [_EventA()],
+        states: [1],
+      );
+
+      bloc.add(_EventA());
+
+      await verifyEventsAndStates(
+        bloc: bloc,
+        events: [
+          _EventA(),
+          _EventA(),
+        ],
+        states: [1, 2],
+      );
+    });
   });
 }
 

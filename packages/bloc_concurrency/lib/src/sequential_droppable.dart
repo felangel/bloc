@@ -55,54 +55,49 @@ class _SequentialAndDroppable<Event>
       subscription.resume();
     }
 
-    void unfreeze() {
+    void disposeDroppable() {
       completer!.complete();
       completer = null;
-    }
-
-    void disposeDroppable() {
-      unfreeze();
       activeDroppableEvenType = null;
     }
 
     controller.onListen = () {
       subscription.onData((Event event) async {
         final isDroppable = _droppableTypes.contains(event.runtimeType);
-        if (completer != null && !isDroppable) await freeze();
 
-        if (isDroppable) {
-          final isDifferentDroppableEventInProgress =
-              completer != null && activeDroppableEvenType != event.runtimeType;
-
-          if (isDifferentDroppableEventInProgress) await freeze();
-
-          final shouldDrop =
-              completer != null && activeDroppableEvenType == event.runtimeType;
-
-          if (shouldDrop) return;
-
-          activeDroppableEvenType = event.runtimeType;
-          completer = Completer<void>();
+        if (!isDroppable) {
+          if (completer != null) await freeze();
 
           final mappedStream = _mapEventToStream(event, controller);
 
           if (mappedStream == null) return;
 
+          subscription.pause();
           await controller
               .addStream(mappedStream)
-              .whenComplete(disposeDroppable);
+              .whenComplete(subscription.resume);
 
           return;
         }
+
+        final isDifferentDroppableEventInProgress =
+            completer != null && activeDroppableEvenType != event.runtimeType;
+
+        if (isDifferentDroppableEventInProgress) await freeze();
+
+        final shouldDrop =
+            completer != null && activeDroppableEvenType == event.runtimeType;
+
+        if (shouldDrop) return;
+
+        activeDroppableEvenType = event.runtimeType;
+        completer = Completer<void>();
 
         final mappedStream = _mapEventToStream(event, controller);
 
         if (mappedStream == null) return;
 
-        subscription.pause();
-        await controller
-            .addStream(mappedStream)
-            .whenComplete(subscription.resume);
+        await controller.addStream(mappedStream).whenComplete(disposeDroppable);
       });
 
       controller.onCancel = subscription.cancel;
