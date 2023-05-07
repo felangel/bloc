@@ -4,7 +4,7 @@ part of 'ticker_bloc.dart';
 /// Base class for all [TickerEvent]s which are
 /// handled by the [TickerBloc].
 /// {@endtemplate}
-abstract class TickerEvent extends Equatable {
+sealed class TickerEvent extends Equatable {
   /// {@macro ticker_event}
   const TickerEvent();
 

@@ -4,7 +4,7 @@ part of 'ticker_bloc.dart';
 /// Base class for all [TickerState]s which are
 /// managed by the [TickerBloc].
 /// {@endtemplate}
-abstract class TickerState extends Equatable {
+sealed class TickerState extends Equatable {
   /// {@macro ticker_state}
   const TickerState();
 
