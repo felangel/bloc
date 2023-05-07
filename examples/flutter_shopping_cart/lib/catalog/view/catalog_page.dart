@@ -42,7 +42,7 @@ class CatalogPage extends StatelessWidget {
 }
 
 class AddButton extends StatelessWidget {
-  const AddButton({super.key, required this.item});
+  const AddButton({required this.item, super.key});
 
   final Item item;
 

@@ -5,7 +5,7 @@ import 'package:flutter_shopping_cart/catalog/catalog.dart';
 import 'package:flutter_shopping_cart/shopping_repository.dart';
 
 class App extends StatelessWidget {
-  const App({super.key, required this.shoppingRepository});
+  const App({required this.shoppingRepository, super.key});
 
   final ShoppingRepository shoppingRepository;
 
