@@ -4,7 +4,7 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=3.0.0-417.1.beta <3.0.0"
 
 dependencies:
   todos_api:
@@ -13,4 +13,4 @@ dependencies:
 dev_dependencies:
   mocktail: ^0.3.0
   test: ^1.21.4
-  very_good_analysis: ^3.0.2
+  very_good_analysis: ^4.0.0
