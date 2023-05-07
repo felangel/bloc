@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
 
-abstract class CounterEvent {}
+sealed class CounterEvent {}
 
-class CounterIncrementPressed extends CounterEvent {}
+final class CounterIncrementPressed extends CounterEvent {}
 
-class CounterDecrementPressed extends CounterEvent {}
+final class CounterDecrementPressed extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0) {
