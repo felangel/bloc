@@ -11,8 +11,6 @@ class MockRepository extends Mock implements Repository {}
 class MockComplexListCubit extends MockCubit<ComplexListState>
     implements ComplexListCubit {}
 
-class FakeComplexListState extends Fake implements ComplexListState {}
-
 extension on WidgetTester {
   Future<void> pumpListPage(Repository repository) {
     return pumpWidget(
@@ -43,12 +41,9 @@ void main() {
     Item(id: '2', value: 'Item 2'),
     Item(id: '3', value: 'Item 3'),
   ];
+
   late Repository repository;
   late ComplexListCubit listCubit;
-
-  setUpAll(() {
-    registerFallbackValue(FakeComplexListState());
-  });
 
   setUp(() {
     repository = MockRepository();
