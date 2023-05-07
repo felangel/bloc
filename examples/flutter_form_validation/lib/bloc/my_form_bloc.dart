@@ -21,8 +21,8 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     final email = Email.dirty(event.email);
     emit(
       state.copyWith(
-        email: email.valid ? email : Email.pure(event.email),
-        status: Formz.validate([email, state.password]),
+        email: email.isValid ? email : Email.pure(event.email),
+        isValid: Formz.validate([email, state.password]),
       ),
     );
   }
@@ -31,8 +31,8 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     final password = Password.dirty(event.password);
     emit(
       state.copyWith(
-        password: password.valid ? password : Password.pure(event.password),
-        status: Formz.validate([state.email, password]),
+        password: password.isValid ? password : Password.pure(event.password),
+        isValid: Formz.validate([state.email, password]),
       ),
     );
   }
@@ -42,7 +42,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     emit(
       state.copyWith(
         email: email,
-        status: Formz.validate([email, state.password]),
+        isValid: Formz.validate([email, state.password]),
       ),
     );
   }
@@ -55,7 +55,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     emit(
       state.copyWith(
         password: password,
-        status: Formz.validate([state.email, password]),
+        isValid: Formz.validate([state.email, password]),
       ),
     );
   }
@@ -70,13 +70,13 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
       state.copyWith(
         email: email,
         password: password,
-        status: Formz.validate([email, password]),
+        isValid: Formz.validate([email, password]),
       ),
     );
-    if (state.status.isValidated) {
-      emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    if (state.isValid) {
+      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       await Future<void>.delayed(const Duration(seconds: 1));
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      emit(state.copyWith(status: FormzSubmissionStatus.success));
     }
   }
 }
