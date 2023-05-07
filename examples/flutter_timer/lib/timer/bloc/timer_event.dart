@@ -1,19 +1,19 @@
 part of 'timer_bloc.dart';
 
-abstract class TimerEvent {
+sealed class TimerEvent {
   const TimerEvent();
 }
 
-class TimerStarted extends TimerEvent {
+final class TimerStarted extends TimerEvent {
   const TimerStarted({required this.duration});
   final int duration;
 }
 
-class TimerPaused extends TimerEvent {
+final class TimerPaused extends TimerEvent {
   const TimerPaused();
 }
 
-class TimerResumed extends TimerEvent {
+final class TimerResumed extends TimerEvent {
   const TimerResumed();
 }
 
