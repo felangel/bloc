@@ -423,10 +423,8 @@ enum _Outcome { atomic, complex }
 
 class _Traversed {
   _Traversed._({required this.outcome, required this.value});
-
   _Traversed.atomic(dynamic value)
       : this._(outcome: _Outcome.atomic, value: value);
-
   _Traversed.complex(dynamic value)
       : this._(outcome: _Outcome.complex, value: value);
   final _Outcome outcome;
