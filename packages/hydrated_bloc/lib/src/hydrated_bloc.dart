@@ -102,6 +102,13 @@ abstract class HydratedCubit<State> extends Cubit<State>
 /// * [HydratedCubit] to enable automatic state persistence/restoration with [Cubit]
 ///
 mixin HydratedMixin<State> on BlocBase<State> {
+
+  /// state of bloc
+  /// Calling this getter won't call _fromJson.
+  /// Use this if you want to get state of bloc inside fromJson method
+  @protected
+  State get blocState => super.state;
+
   /// Populates the internal state storage with the latest state.
   /// This should be called when using the [HydratedMixin]
   /// directly within the constructor body.
@@ -416,8 +423,10 @@ enum _Outcome { atomic, complex }
 
 class _Traversed {
   _Traversed._({required this.outcome, required this.value});
+
   _Traversed.atomic(dynamic value)
       : this._(outcome: _Outcome.atomic, value: value);
+
   _Traversed.complex(dynamic value)
       : this._(outcome: _Outcome.complex, value: value);
   final _Outcome outcome;
