@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:bloc_tools/src/command_runner.dart';
-import 'package:universal_io/io.dart';
 
 Future<void> main(List<String> args) async {
   await _flushThenExit(await BlocToolsCommandRunner().run(args));

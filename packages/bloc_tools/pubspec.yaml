@@ -13,8 +13,7 @@ dependencies:
   args: ^2.1.0
   io: ^1.0.0
   mason: ^0.1.0-dev.33
-  pub_updater: ^0.2.2
-  universal_io: ^2.0.4
+  pub_updater: ^0.3.0
 
 dev_dependencies:
   build_runner: ^2.0.0
