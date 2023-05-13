@@ -87,7 +87,7 @@ void main() {
     group('default constructor', () {
       const key = '__key__';
       const value = '__value__';
-      late Box box;
+      late Box<dynamic> box;
 
       setUp(() {
         box = MockBox();

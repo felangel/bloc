@@ -1,7 +1,8 @@
 analyzer:
-  strong-mode:
-    implicit-casts: false
-    implicit-dynamic: false
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
   errors:
     close_sinks: ignore
   exclude:
@@ -19,7 +20,6 @@ linter:
     - avoid_relative_lib_imports
     - avoid_renaming_method_parameters
     - avoid_return_types_on_setters
-    - avoid_returning_null
     - avoid_types_as_parameter_names
     - avoid_unused_constructor_parameters
     - await_only_futures

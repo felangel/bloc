@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
+@immutable
 abstract class CounterEvent {}
 
 class Increment extends CounterEvent {
@@ -39,7 +41,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 
 void main() {
-  late EventTransformer transformer;
+  late EventTransformer<dynamic> transformer;
 
   setUp(() {
     transformer = Bloc.transformer;

@@ -24,11 +24,14 @@ void main() {
       });
 
       test('triggers onCreate on observer', () {
-        BlocOverrides.runZoned(() {
-          final cubit = CounterCubit();
-          // ignore: invalid_use_of_protected_member
-          verify(() => observer.onCreate(cubit)).called(1);
-        }, blocObserver: observer);
+        BlocOverrides.runZoned(
+          () {
+            final cubit = CounterCubit();
+            // ignore: invalid_use_of_protected_member
+            verify(() => observer.onCreate(cubit)).called(1);
+          },
+          blocObserver: observer,
+        );
       });
     });
 
@@ -46,29 +49,32 @@ void main() {
       });
 
       test('triggers onError', () async {
-        BlocOverrides.runZoned(() {
-          final expectedError = Exception('fatal exception');
-          final expectedStackTrace = StackTrace.current;
-          final errors = <Object>[];
-          final stackTraces = <StackTrace>[];
-          final cubit = CounterCubit(
-            onErrorCallback: (error, stackTrace) {
-              errors.add(error);
-              stackTraces.add(stackTrace);
-            },
-            // ignore: invalid_use_of_protected_member
-          )..addError(expectedError, expectedStackTrace);
+        BlocOverrides.runZoned(
+          () {
+            final expectedError = Exception('fatal exception');
+            final expectedStackTrace = StackTrace.current;
+            final errors = <Object>[];
+            final stackTraces = <StackTrace>[];
+            final cubit = CounterCubit(
+              onErrorCallback: (error, stackTrace) {
+                errors.add(error);
+                stackTraces.add(stackTrace);
+              },
+              // ignore: invalid_use_of_protected_member
+            )..addError(expectedError, expectedStackTrace);
 
-          expect(errors.length, equals(1));
-          expect(errors.first, equals(expectedError));
-          expect(stackTraces.length, equals(1));
-          expect(stackTraces.first, isNotNull);
-          expect(stackTraces.first, isNot(StackTrace.empty));
-          verify(
-            // ignore: invalid_use_of_protected_member
-            () => observer.onError(cubit, expectedError, expectedStackTrace),
-          ).called(1);
-        }, blocObserver: observer);
+            expect(errors.length, equals(1));
+            expect(errors.first, equals(expectedError));
+            expect(stackTraces.length, equals(1));
+            expect(stackTraces.first, isNotNull);
+            expect(stackTraces.first, isNot(StackTrace.empty));
+            verify(
+              // ignore: invalid_use_of_protected_member
+              () => observer.onError(cubit, expectedError, expectedStackTrace),
+            ).called(1);
+          },
+          blocObserver: observer,
+        );
       });
     });
 
@@ -85,66 +91,75 @@ void main() {
       });
 
       test('is not called for the initial state', () async {
-        await BlocOverrides.runZoned(() async {
-          final changes = <Change<int>>[];
-          final cubit = CounterCubit(onChangeCallback: changes.add);
-          await cubit.close();
-          expect(changes, isEmpty);
-          // ignore: invalid_use_of_protected_member
-          verifyNever(() => observer.onChange(any(), any()));
-        }, blocObserver: observer);
+        await BlocOverrides.runZoned(
+          () async {
+            final changes = <Change<int>>[];
+            final cubit = CounterCubit(onChangeCallback: changes.add);
+            await cubit.close();
+            expect(changes, isEmpty);
+            // ignore: invalid_use_of_protected_member
+            verifyNever(() => observer.onChange(any(), any()));
+          },
+          blocObserver: observer,
+        );
       });
 
       test('is called with correct change for a single state change', () async {
-        await BlocOverrides.runZoned(() async {
-          final changes = <Change<int>>[];
-          final cubit = CounterCubit(onChangeCallback: changes.add)
-            ..increment();
-          await cubit.close();
-          expect(
-            changes,
-            const [Change<int>(currentState: 0, nextState: 1)],
-          );
-          verify(
-            // ignore: invalid_use_of_protected_member
-            () => observer.onChange(
-              cubit,
-              const Change<int>(currentState: 0, nextState: 1),
-            ),
-          ).called(1);
-        }, blocObserver: observer);
+        await BlocOverrides.runZoned(
+          () async {
+            final changes = <Change<int>>[];
+            final cubit = CounterCubit(onChangeCallback: changes.add)
+              ..increment();
+            await cubit.close();
+            expect(
+              changes,
+              const [Change<int>(currentState: 0, nextState: 1)],
+            );
+            verify(
+              // ignore: invalid_use_of_protected_member
+              () => observer.onChange(
+                cubit,
+                const Change<int>(currentState: 0, nextState: 1),
+              ),
+            ).called(1);
+          },
+          blocObserver: observer,
+        );
       });
 
       test('is called with correct changes for multiple state changes',
           () async {
-        await BlocOverrides.runZoned(() async {
-          final changes = <Change<int>>[];
-          final cubit = CounterCubit(onChangeCallback: changes.add)
-            ..increment()
-            ..increment();
-          await cubit.close();
-          expect(
-            changes,
-            const [
-              Change<int>(currentState: 0, nextState: 1),
-              Change<int>(currentState: 1, nextState: 2),
-            ],
-          );
-          verify(
-            // ignore: invalid_use_of_protected_member
-            () => observer.onChange(
-              cubit,
-              const Change<int>(currentState: 0, nextState: 1),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
-            () => observer.onChange(
-              cubit,
-              const Change<int>(currentState: 1, nextState: 2),
-            ),
-          ).called(1);
-        }, blocObserver: observer);
+        await BlocOverrides.runZoned(
+          () async {
+            final changes = <Change<int>>[];
+            final cubit = CounterCubit(onChangeCallback: changes.add)
+              ..increment()
+              ..increment();
+            await cubit.close();
+            expect(
+              changes,
+              const [
+                Change<int>(currentState: 0, nextState: 1),
+                Change<int>(currentState: 1, nextState: 2),
+              ],
+            );
+            verify(
+              // ignore: invalid_use_of_protected_member
+              () => observer.onChange(
+                cubit,
+                const Change<int>(currentState: 0, nextState: 1),
+              ),
+            ).called(1);
+            verify(
+              // ignore: invalid_use_of_protected_member
+              () => observer.onChange(
+                cubit,
+                const Change<int>(currentState: 1, nextState: 2),
+              ),
+            ).called(1);
+          },
+          blocObserver: observer,
+        );
       });
     });
 
@@ -281,12 +296,15 @@ void main() {
       });
 
       test('triggers onClose on observer', () async {
-        await BlocOverrides.runZoned(() async {
-          final cubit = CounterCubit();
-          await cubit.close();
-          // ignore: invalid_use_of_protected_member
-          verify(() => observer.onClose(cubit)).called(1);
-        }, blocObserver: observer);
+        await BlocOverrides.runZoned(
+          () async {
+            final cubit = CounterCubit();
+            await cubit.close();
+            // ignore: invalid_use_of_protected_member
+            verify(() => observer.onClose(cubit)).called(1);
+          },
+          blocObserver: observer,
+        );
       });
 
       test('emits done (sync)', () {

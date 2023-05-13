@@ -110,7 +110,7 @@ class HydratedStorage implements Storage {
     });
   }
 
-  static Future _migrate(Directory directory, Box box) async {
+  static Future<dynamic> _migrate(Directory directory, Box<dynamic> box) async {
     final file = File('${directory.path}/.hydrated_bloc.json');
     if (await file.exists()) {
       try {
@@ -136,7 +136,7 @@ class HydratedStorage implements Storage {
   static final _lock = Lock();
   static HydratedStorage? _instance;
 
-  final Box _box;
+  final Box<dynamic> _box;
 
   @override
   dynamic read(String key) => _box.isOpen ? _box.get(key) : null;

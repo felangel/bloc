@@ -93,7 +93,7 @@ class MyErrorThrowingBloc extends HydratedBloc<Object, int> {
     on<Object>((event, emit) => emit(state + 1));
   }
 
-  final Function(Object error, StackTrace stackTrace)? onErrorCallback;
+  final void Function(Object error, StackTrace stackTrace)? onErrorCallback;
   final bool superOnError;
 
   @override

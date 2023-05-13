@@ -57,8 +57,9 @@ void main() {
     test('throws StateError when handler is registered more than once', () {
       const expectedMessage = 'on<TestEvent> was called multiple times. '
           'There should only be a single event handler per event type.';
-      final expected = throwsA(isA<StateError>()
-          .having((e) => e.message, 'message', expectedMessage));
+      final expected = throwsA(
+        isA<StateError>().having((e) => e.message, 'message', expectedMessage),
+      );
       expect(() => DuplicateHandlerBloc(), expected);
     });
 

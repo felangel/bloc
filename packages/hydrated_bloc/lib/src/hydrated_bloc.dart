@@ -280,7 +280,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
 
   dynamic _toEncodable(dynamic object) => object.toJson();
 
-  final List _seen = <dynamic>[];
+  final _seen = <dynamic>[];
 
   void _checkCycle(Object? object) {
     for (var i = 0; i < _seen.length; i++) {

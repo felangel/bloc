@@ -141,11 +141,11 @@ void blocTest<B extends BlocBase<State>, State>(
   FutureOr<void> Function()? setUp,
   required B Function() build,
   State Function()? seed,
-  Function(B bloc)? act,
+  dynamic Function(B bloc)? act,
   Duration? wait,
   int skip = 0,
   dynamic Function()? expect,
-  Function(B bloc)? verify,
+  dynamic Function(B bloc)? verify,
   dynamic Function()? errors,
   FutureOr<void> Function()? tearDown,
   dynamic tags,
@@ -177,11 +177,11 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
   FutureOr<void> Function()? setUp,
   required B Function() build,
   State Function()? seed,
-  Function(B bloc)? act,
+  dynamic Function(B bloc)? act,
   Duration? wait,
   int skip = 0,
   dynamic Function()? expect,
-  Function(B bloc)? verify,
+  dynamic Function(B bloc)? verify,
   dynamic Function()? errors,
   FutureOr<void> Function()? tearDown,
 }) async {
@@ -255,7 +255,7 @@ class _TestBlocObserver extends BlocObserver {
   final void Function(Object error) _onError;
 
   @override
-  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
+  void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
     _localObserver.onError(bloc, error, stackTrace);
     _onError(error);
     super.onError(bloc, error, stackTrace);
