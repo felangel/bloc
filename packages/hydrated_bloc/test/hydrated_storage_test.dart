@@ -173,7 +173,8 @@ void main() {
             (i) => Iterable.generate(i, (j) => 'Point($i,$j);').toList(),
           ).toList();
 
-          unawaited(storage.write(token, record));
+          // ignore: unawaited_futures
+          storage.write(token, record);
 
           storage = await HydratedStorage.build(
             storageDirectory: Directory(cwd),
