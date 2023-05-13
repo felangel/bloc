@@ -2,7 +2,7 @@ name: angular_counter
 description: A web app that uses angular_bloc
 
 environment:
-  sdk: ">=3.0.0-417.1.beta <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   angular_bloc: ^10.0.0-dev.0

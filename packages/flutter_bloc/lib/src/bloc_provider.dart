@@ -133,8 +133,8 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
   }
 
   static VoidCallback _startListening(
-    InheritedContext<StateStreamable?> e,
-    StateStreamable value,
+    InheritedContext<StateStreamable<dynamic>?> e,
+    StateStreamable<dynamic> value,
   ) {
     final subscription = value.stream.listen(
       (dynamic _) => e.markNeedsNotifyDependents(),

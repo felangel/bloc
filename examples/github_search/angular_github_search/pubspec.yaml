@@ -2,7 +2,7 @@ name: angular_github_search
 description: A web app that uses AngularDart Components
 
 environment:
-  sdk: ">=3.0.0-417.1.beta <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   angular_bloc: ^8.0.0

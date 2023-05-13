@@ -68,7 +68,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<dynamic>>[];
   final _handlers = <_Handler>[];
-  final _emitters = <_Emitter>[];
+  final _emitters = <_Emitter<dynamic>>[];
   final _eventTransformer =
       // ignore: deprecated_member_use_from_same_package
       BlocOverrides.current?.eventTransformer ?? Bloc.transformer;
@@ -83,6 +83,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   /// [event] will not be processed.
   @override
   void add(Event event) {
+    // ignore: prefer_asserts_with_message
     assert(() {
       final handlerExists = _handlers.any((handler) => handler.isType(event));
       if (!handlerExists) {
@@ -181,6 +182,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
     EventHandler<E, State> handler, {
     EventTransformer<E>? transformer,
   }) {
+    // ignore: prefer_asserts_with_message
     assert(() {
       final handlerExists = _handlers.any((handler) => handler.type == E);
       if (handlerExists) {
@@ -193,18 +195,19 @@ abstract class Bloc<Event, State> extends BlocBase<State>
       return true;
     }());
 
-    final _transformer = transformer ?? _eventTransformer;
-    final subscription = _transformer(
+    final subscription = (transformer ?? _eventTransformer)(
       _eventController.stream.where((event) => event is E).cast<E>(),
       (dynamic event) {
         void onEmit(State state) {
           if (isClosed) return;
           if (this.state == state && _emitted) return;
-          onTransition(Transition(
-            currentState: this.state,
-            event: event as E,
-            nextState: state,
-          ));
+          onTransition(
+            Transition(
+              currentState: this.state,
+              event: event as E,
+              nextState: state,
+            ),
+          );
           emit(state);
         }
 
@@ -214,7 +217,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
           onCancel: emitter.cancel,
         );
 
-        void handleEvent() async {
+        Future<void> handleEvent() async {
           void onDone() {
             emitter.complete();
             _emitters.remove(emitter);

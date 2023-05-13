@@ -29,6 +29,7 @@ abstract class Closable {
 }
 
 /// An object that can emit new states.
+// ignore: one_member_abstracts
 abstract class Emittable<State extends Object?> {
   /// Emits a new [state].
   void emit(State state);

@@ -24,7 +24,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 void main() {
   group('Stream', () {
-    late Bloc bloc;
+    late Bloc<dynamic, dynamic> bloc;
     late BlocPipe pipe;
     late ChangeDetectorRef ref;
 

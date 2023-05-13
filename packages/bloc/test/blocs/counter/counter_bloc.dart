@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 
-typedef OnEventCallback = Function(CounterEvent);
-typedef OnTransitionCallback = Function(Transition<CounterEvent, int>);
-typedef OnErrorCallback = Function(Object error, StackTrace? stackTrace);
+typedef OnEventCallback = void Function(CounterEvent);
+typedef OnTransitionCallback = void Function(Transition<CounterEvent, int>);
+typedef OnErrorCallback = void Function(Object error, StackTrace? stackTrace);
 
 enum CounterEvent { increment, decrement }
 
