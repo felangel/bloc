@@ -4,7 +4,7 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=3.0.0-417.1.beta <3.0.0"
 
 dependencies:
   authentication_repository:
@@ -19,8 +19,8 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   form_inputs:
     path: packages/form_inputs
-  formz: ^0.4.0
-  google_fonts: ^3.0.1
+  formz: ^0.6.0
+  google_fonts: ^4.0.0
   meta: ^1.7.0
 
 dev_dependencies:
@@ -28,7 +28,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mocktail: ^0.3.0
-  very_good_analysis: ^3.1.0
+  very_good_analysis: ^4.0.0
 
 flutter:
   uses-material-design: true

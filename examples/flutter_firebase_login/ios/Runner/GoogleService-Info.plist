@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>979633879366-7fh9utsod6e5pfjh2l01fh6dk2chjc8d.apps.googleusercontent.com</string>
+	<string>979633879366-ctkb3hh1kse9ljd4c3lhs9djigaukmu2.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.979633879366-7fh9utsod6e5pfjh2l01fh6dk2chjc8d</string>
+	<string>com.googleusercontent.apps.979633879366-ctkb3hh1kse9ljd4c3lhs9djigaukmu2</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDVqdUKRfDx2AJbcbGp9MDMq_GdYqlOBXA</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.bloclibrary.flutterFirebaseLogin</string>
+	<string>com.example.flutterFirebaseLogin</string>
 	<key>PROJECT_ID</key>
 	<string>flutter-firebase-auth-2b1c3</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:979633879366:ios:ff401cff86859619d98d47</string>
+	<string>1:979633879366:ios:45c728c386ca2b9bd98d47</string>
 	<key>DATABASE_URL</key>
 	<string>https://flutter-firebase-auth-2b1c3.firebaseio.com</string>
 </dict>
