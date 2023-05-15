@@ -15,6 +15,3 @@ dependencies:
 dependency_overrides:
   bloc:
     path: ../../../packages/bloc
-
-dev_dependencies:
-  very_good_analysis: ^4.0.0

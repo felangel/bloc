@@ -35,12 +35,14 @@ void main() {
       final counterCubit = MockCounterCubit();
       final controller = StreamController<int>();
       whenListen(counterCubit, controller.stream);
-      unawaited(expectLater(
-        counterCubit.stream,
-        emitsInOrder(
-          <Matcher>[equals(0), equals(1), equals(2), equals(3), emitsDone],
+      unawaited(
+        expectLater(
+          counterCubit.stream,
+          emitsInOrder(
+            <Matcher>[equals(0), equals(1), equals(2), equals(3), emitsDone],
+          ),
         ),
-      ));
+      );
       controller.add(0);
       await Future<void>.delayed(Duration.zero);
       controller.add(1);
@@ -55,14 +57,16 @@ void main() {
       final counterCubit = MockCounterCubit();
       final controller = StreamController<int>();
       whenListen(counterCubit, controller.stream);
-      unawaited(expectLater(
-        counterCubit.stream,
-        emitsInOrder(
-          <Matcher>[equals(0), equals(1), equals(2), equals(3), emitsDone],
-        ),
-      ).then((dynamic _) {
-        expect(counterCubit.state, equals(3));
-      }));
+      unawaited(
+        expectLater(
+          counterCubit.stream,
+          emitsInOrder(
+            <Matcher>[equals(0), equals(1), equals(2), equals(3), emitsDone],
+          ),
+        ).then((dynamic _) {
+          expect(counterCubit.state, equals(3));
+        }),
+      );
       controller.add(0);
       await Future<void>.delayed(Duration.zero);
       controller.add(1);

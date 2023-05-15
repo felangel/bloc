@@ -1,5 +1,4 @@
-analyzer:
-  language:
-    strict-casts: true
-    strict-inference: true
-    strict-raw-types: true
+include: ../../../analysis_options.yaml
+linter:
+  rules:
+    public_member_api_docs: false

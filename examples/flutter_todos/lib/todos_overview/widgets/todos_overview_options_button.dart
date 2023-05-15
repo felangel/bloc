@@ -27,8 +27,7 @@ class TodosOverviewOptionsButton extends StatelessWidget {
           case TodosOverviewOption.toggleAll:
             context
                 .read<TodosOverviewBloc>()
-                .add(const TodosOverviewToggleAllRequested());
-            break;
+                .add(const TodosOverviewToggleAllRequested());            
           case TodosOverviewOption.clearCompleted:
             context
                 .read<TodosOverviewBloc>()

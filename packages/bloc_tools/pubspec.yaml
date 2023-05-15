@@ -21,7 +21,6 @@ dev_dependencies:
   build_version: ^2.0.0
   mocktail: ^0.3.0
   test: ^1.17.0
-  very_good_analysis: ^3.1.0
 
 executables:
   bloc:

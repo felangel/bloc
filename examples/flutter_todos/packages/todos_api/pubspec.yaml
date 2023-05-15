@@ -16,4 +16,3 @@ dev_dependencies:
   build_runner: ^2.2.0
   json_serializable: ^6.3.1
   test: ^1.21.4
-  very_good_analysis: ^4.0.0

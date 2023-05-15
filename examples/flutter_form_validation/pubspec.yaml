@@ -13,7 +13,6 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.1
   formz: ^0.6.0
-  very_good_analysis: ^4.0.0
 
 dependency_overrides:
   bloc:

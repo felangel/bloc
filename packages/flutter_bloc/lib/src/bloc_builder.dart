@@ -74,8 +74,8 @@ class BlocBuilder<B extends StateStreamable<S>, S>
   /// {@macro bloc_builder}
   /// {@macro bloc_builder_build_when}
   const BlocBuilder({
-    Key? key,
     required this.builder,
+    Key? key,
     B? bloc,
     BlocBuilderCondition<S>? buildWhen,
   }) : super(key: key, bloc: bloc, buildWhen: buildWhen);

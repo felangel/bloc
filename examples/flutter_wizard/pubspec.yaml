@@ -14,9 +14,6 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.1
 
-dev_dependencies:
-  very_good_analysis: ^4.0.0
-
 dependency_overrides:
   bloc:
     path: ../../packages/bloc

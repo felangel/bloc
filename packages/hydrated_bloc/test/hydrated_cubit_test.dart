@@ -30,6 +30,7 @@ class MyCallbackHydratedCubit extends HydratedCubit<int> {
   @override
   int? fromJson(dynamic json) {
     onFromJsonCalled?.call(json);
+    // ignore: avoid_dynamic_calls
     return json['value'] as int?;
   }
 
@@ -41,6 +42,7 @@ class MyCallbackHydratedCubit extends HydratedCubit<int> {
 class MyHydratedCubit extends HydratedCubit<int> {
   MyHydratedCubit([
     this._id,
+    // ignore: avoid_positional_boolean_parameters
     this._callSuper = true,
     this._storagePrefix,
   ]) : super(0);
@@ -59,6 +61,7 @@ class MyHydratedCubit extends HydratedCubit<int> {
   Map<String, int> toJson(int state) => {'value': state};
 
   @override
+  // ignore: avoid_dynamic_calls
   int? fromJson(dynamic json) => json['value'] as int?;
 
   @override
@@ -81,6 +84,7 @@ class MyMultiHydratedCubit extends HydratedCubit<int> {
   Map<String, int> toJson(int state) => {'value': state};
 
   @override
+  // ignore: avoid_dynamic_calls
   int? fromJson(dynamic json) => json['value'] as int?;
 }
 
@@ -226,7 +230,7 @@ void main() {
       });
 
       test('should call storage.write when onChange is called', () {
-        final transition = const Change<int>(
+        const transition = Change<int>(
           currentState: 0,
           nextState: 0,
         );
@@ -238,7 +242,7 @@ void main() {
       test('should call storage.write when onChange is called with cubit id',
           () {
         final cubit = MyHydratedCubit('A');
-        final transition = const Change<int>(
+        const transition = Change<int>(
           currentState: 0,
           nextState: 0,
         );
@@ -252,7 +256,7 @@ void main() {
         runZonedGuarded(
           () async {
             final expectedError = Exception('oops');
-            final transition = const Change<int>(
+            const transition = Change<int>(
               currentState: 0,
               nextState: 0,
             );

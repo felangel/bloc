@@ -15,9 +15,6 @@ dependencies:
   flutter_bloc: ^8.1.1
   url_launcher: ^6.0.0
 
-dev_dependencies:
-  very_good_analysis: ^4.0.0
-
 dependency_overrides:
   bloc:
     path: ../../../packages/bloc
