@@ -15,18 +15,19 @@ import 'package:ngdart/angular.dart';
 )
 class CounterPageComponent implements OnDestroy {
   /// {@macro counter_page}
-  const CounterPageComponent(this._counterBloc);
+  const CounterPageComponent(this.counterBloc);
 
-  final CounterBloc _counterBloc;
+  /// The associated [CounterBloc] which manages the count.
+  final CounterBloc counterBloc;
 
   @override
   void ngOnDestroy() {
-    _counterBloc.close();
+    counterBloc.close();
   }
 
   /// Increment the count.
-  void increment() => _counterBloc.add(CounterIncrementPressed());
+  void increment() => counterBloc.add(CounterIncrementPressed());
 
   /// Decrement the count.
-  void decrement() => _counterBloc.add(CounterDecrementPressed());
+  void decrement() => counterBloc.add(CounterDecrementPressed());
 }
