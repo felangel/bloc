@@ -39,6 +39,16 @@ jobs:
           dart pub global activate coverage 1.2.0
           dart test --coverage=coverage && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.dart_tool/package_config.json --report-on=lib
 
+      - name: Check Code Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v2
+        with:
+          path: packages/angular_bloc/coverage/lcov.info
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
   pana:
     defaults:
       run:
