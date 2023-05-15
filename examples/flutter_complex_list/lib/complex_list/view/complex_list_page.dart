@@ -38,7 +38,7 @@ class ComplexListView extends StatelessWidget {
 }
 
 class ItemView extends StatelessWidget {
-  const ItemView({super.key, required this.items});
+  const ItemView({required this.items, super.key});
 
   final List<Item> items;
 
@@ -62,9 +62,9 @@ class ItemView extends StatelessWidget {
 
 class ItemTile extends StatelessWidget {
   const ItemTile({
-    super.key,
     required this.item,
     required this.onDeletePressed,
+    super.key,
   });
 
   final Item item;

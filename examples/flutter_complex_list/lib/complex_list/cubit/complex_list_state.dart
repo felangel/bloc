@@ -2,7 +2,7 @@ part of 'complex_list_cubit.dart';
 
 enum ListStatus { loading, success, failure }
 
-class ComplexListState extends Equatable {
+final class ComplexListState extends Equatable {
   const ComplexListState._({
     this.status = ListStatus.loading,
     this.items = const <Item>[],

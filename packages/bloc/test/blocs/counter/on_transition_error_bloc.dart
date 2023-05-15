@@ -10,7 +10,7 @@ class OnTransitionErrorBloc extends Bloc<CounterEvent, int> {
     on<CounterEvent>(_onCounterEvent);
   }
 
-  final Function onErrorCallback;
+  final void Function(Object, StackTrace) onErrorCallback;
   final Error error;
 
   @override

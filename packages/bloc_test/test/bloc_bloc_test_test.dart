@@ -110,16 +110,17 @@ void main() {
             '\n'
             '''\x1B[90m[\x1B[0m\x1B[31m[-2-]\x1B[0m\x1B[32m{+1+}\x1B[0m\x1B[90m]\x1B[0m\n'''
             '\n'
-            '==== end diff ====================================\n'
-            '';
+            '==== end diff ====================================\n';
         late Object actualError;
         final completer = Completer<void>();
         await runZonedGuarded(() async {
-          unawaited(testBloc<CounterBloc, int>(
-            build: () => CounterBloc(),
-            act: (bloc) => bloc.add(CounterEvent.increment),
-            expect: () => const <int>[2],
-          ).then((_) => completer.complete()));
+          unawaited(
+            testBloc<CounterBloc, int>(
+              build: () => CounterBloc(),
+              act: (bloc) => bloc.add(CounterEvent.increment),
+              expect: () => const <int>[2],
+            ).then((_) => completer.complete()),
+          );
           await completer.future;
         }, (Object error, _) {
           actualError = error;
@@ -134,11 +135,13 @@ void main() {
         late Object actualError;
         final completer = Completer<void>();
         await runZonedGuarded(() async {
-          unawaited(testBloc<ErrorCounterBloc, int>(
-            build: () => ErrorCounterBloc(),
-            act: (bloc) => bloc.add(CounterEvent.increment),
-            expect: () => const <int>[1],
-          ).then((_) => completer.complete()));
+          unawaited(
+            testBloc<ErrorCounterBloc, int>(
+              build: () => ErrorCounterBloc(),
+              act: (bloc) => bloc.add(CounterEvent.increment),
+              expect: () => const <int>[1],
+            ).then((_) => completer.complete()),
+          );
           await completer.future;
         }, (Object error, _) {
           actualError = error;
@@ -152,11 +155,13 @@ void main() {
         late Object actualError;
         final completer = Completer<void>();
         await runZonedGuarded(() async {
-          unawaited(testBloc<ErrorCounterBloc, int>(
-            build: () => ErrorCounterBloc(),
-            act: (_) => throw exception,
-            expect: () => const <int>[1],
-          ).then((_) => completer.complete()));
+          unawaited(
+            testBloc<ErrorCounterBloc, int>(
+              build: () => ErrorCounterBloc(),
+              act: (_) => throw exception,
+              expect: () => const <int>[1],
+            ).then((_) => completer.complete()),
+          );
           await completer.future;
         }, (Object error, _) {
           actualError = error;
@@ -181,7 +186,7 @@ void main() {
       );
 
       blocTest<AsyncCounterBloc, int>(
-        'emits [1, 2] when CounterEvent.increment is called multiple'
+        'emits [1, 2] when CounterEvent.increment is called multiple '
         'times with async act',
         build: () => AsyncCounterBloc(),
         act: (bloc) async {
@@ -265,7 +270,7 @@ void main() {
       );
 
       blocTest<InstantEmitBloc, int>(
-        'emits [1, 2, 3] when CounterEvent.increment is called'
+        'emits [1, 2, 3] when CounterEvent.increment is called '
         'multiple times with async act',
         build: () => InstantEmitBloc(),
         act: (bloc) async {
@@ -310,7 +315,7 @@ void main() {
       );
 
       blocTest<MultiCounterBloc, int>(
-        'emits [1, 2, 3, 4] when CounterEvent.increment is called'
+        'emits [1, 2, 3, 4] when CounterEvent.increment is called '
         'multiple times with async act',
         build: () => MultiCounterBloc(),
         act: (bloc) async {
@@ -596,13 +601,15 @@ void main() {
         late Object actualError;
         final completer = Completer<void>();
         await runZonedGuarded(() async {
-          unawaited(testBloc<SideEffectCounterBloc, int>(
-            build: () => SideEffectCounterBloc(repository),
-            act: (bloc) => bloc.add(CounterEvent.increment),
-            verify: (_) {
-              verify(() => repository.sideEffect()).called(2);
-            },
-          ).then((_) => completer.complete()));
+          unawaited(
+            testBloc<SideEffectCounterBloc, int>(
+              build: () => SideEffectCounterBloc(repository),
+              act: (bloc) => bloc.add(CounterEvent.increment),
+              verify: (_) {
+                verify(() => repository.sideEffect()).called(2);
+              },
+            ).then((_) => completer.complete()),
+          );
           await completer.future;
         }, (Object error, _) {
           actualError = error;
@@ -612,19 +619,22 @@ void main() {
       });
 
       test('shows equality warning when strings are identical', () async {
-        const expectedError = '''Expected: [Instance of \'ComplexStateA\']
-  Actual: [Instance of \'ComplexStateA\']
-   Which: at location [0] is <Instance of \'ComplexStateA\'> instead of <Instance of \'ComplexStateA\'>\n
+        const expectedError = '''
+Expected: [Instance of 'ComplexStateA']
+  Actual: [Instance of 'ComplexStateA']
+   Which: at location [0] is <Instance of 'ComplexStateA'> instead of <Instance of 'ComplexStateA'>\n
 WARNING: Please ensure state instances extend Equatable, override == and hashCode, or implement Comparable.
 Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''';
         late Object actualError;
         final completer = Completer<void>();
         await runZonedGuarded(() async {
-          unawaited(testBloc<ComplexBloc, ComplexState>(
-            build: () => ComplexBloc(),
-            act: (bloc) => bloc.add(ComplexEventA()),
-            expect: () => <ComplexState>[ComplexStateA()],
-          ).then((_) => completer.complete()));
+          unawaited(
+            testBloc<ComplexBloc, ComplexState>(
+              build: () => ComplexBloc(),
+              act: (bloc) => bloc.add(ComplexEventA()),
+              expect: () => <ComplexState>[ComplexStateA()],
+            ).then((_) => completer.complete()),
+          );
           await completer.future;
         }, (Object error, _) {
           actualError = error;

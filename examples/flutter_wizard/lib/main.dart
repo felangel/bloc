@@ -65,10 +65,7 @@ class ProfileWizard extends StatelessWidget {
 }
 
 class ProfileWizardFlow extends StatelessWidget {
-  const ProfileWizardFlow({
-    super.key,
-    required this.onComplete,
-  });
+  const ProfileWizardFlow({required this.onComplete, super.key});
 
   final ValueSetter<Profile> onComplete;
 

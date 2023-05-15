@@ -8,6 +8,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:979633879366:android:91dc73f56b484d46d98d47",
+        "android_client_info": {
+          "package_name": "com.example.flutter_firebase_login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "979633879366-lucrjde7auulec5l2pouo6aa34u4576d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUqu6Uggf0FRSPljkCT8GNlgPO9OzSa2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "979633879366-lucrjde7auulec5l2pouo6aa34u4576d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "979633879366-7fh9utsod6e5pfjh2l01fh6dk2chjc8d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bloclibrary.flutterFirebaseLogin"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:979633879366:android:cd6c9969cbe46460",
         "android_client_info": {
           "package_name": "com.example.flutterfirebaselogin"

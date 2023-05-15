@@ -5,10 +5,9 @@ import 'dart:io';
 import 'package:hive/hive.dart';
 // ignore: implementation_imports
 import 'package:hive/src/hive_impl.dart';
+import 'package:hydrated_bloc/src/hydrated_cipher.dart';
 import 'package:meta/meta.dart';
 import 'package:synchronized/synchronized.dart';
-
-import 'hydrated_cipher.dart';
 
 /// Interface which is used to persist and retrieve state changes.
 abstract class Storage {
@@ -110,9 +109,9 @@ class HydratedStorage implements Storage {
     });
   }
 
-  static Future _migrate(Directory directory, Box box) async {
+  static Future<dynamic> _migrate(Directory directory, Box<dynamic> box) async {
     final file = File('${directory.path}/.hydrated_bloc.json');
-    if (await file.exists()) {
+    if (file.existsSync()) {
       try {
         final dynamic storageJson = json.decode(await file.readAsString());
         final cache = (storageJson as Map).cast<String, String>();
@@ -136,7 +135,7 @@ class HydratedStorage implements Storage {
   static final _lock = Lock();
   static HydratedStorage? _instance;
 
-  final Box _box;
+  final Box<dynamic> _box;
 
   @override
   dynamic read(String key) => _box.isOpen ? _box.get(key) : null;

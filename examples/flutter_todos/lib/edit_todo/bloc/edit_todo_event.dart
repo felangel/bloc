@@ -1,13 +1,13 @@
 part of 'edit_todo_bloc.dart';
 
-abstract class EditTodoEvent extends Equatable {
+sealed class EditTodoEvent extends Equatable {
   const EditTodoEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class EditTodoTitleChanged extends EditTodoEvent {
+final class EditTodoTitleChanged extends EditTodoEvent {
   const EditTodoTitleChanged(this.title);
 
   final String title;
@@ -16,7 +16,7 @@ class EditTodoTitleChanged extends EditTodoEvent {
   List<Object> get props => [title];
 }
 
-class EditTodoDescriptionChanged extends EditTodoEvent {
+final class EditTodoDescriptionChanged extends EditTodoEvent {
   const EditTodoDescriptionChanged(this.description);
 
   final String description;
@@ -25,6 +25,6 @@ class EditTodoDescriptionChanged extends EditTodoEvent {
   List<Object> get props => [description];
 }
 
-class EditTodoSubmitted extends EditTodoEvent {
+final class EditTodoSubmitted extends EditTodoEvent {
   const EditTodoSubmitted();
 }

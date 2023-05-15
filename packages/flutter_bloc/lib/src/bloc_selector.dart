@@ -27,9 +27,9 @@ typedef BlocWidgetSelector<S, T> = T Function(S state);
 class BlocSelector<B extends StateStreamable<S>, S, T> extends StatefulWidget {
   /// {@macro bloc_selector}
   const BlocSelector({
-    Key? key,
     required this.selector,
     required this.builder,
+    Key? key,
     this.bloc,
   }) : super(key: key);
 

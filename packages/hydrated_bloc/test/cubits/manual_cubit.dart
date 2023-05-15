@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:meta/meta.dart';
 
 class ManualCubit extends HydratedCubit<Dog?> {
   ManualCubit() : super(null);
@@ -13,6 +14,7 @@ class ManualCubit extends HydratedCubit<Dog?> {
   Dog fromJson(Map<String, dynamic> json) => Dog.fromJson(json);
 }
 
+@immutable
 class Dog {
   const Dog(this.name, this.age, this.toys);
 
@@ -56,6 +58,7 @@ class Dog {
   int get hashCode => name.hashCode ^ age.hashCode ^ toys.hashCode;
 }
 
+@immutable
 class Toy {
   const Toy(this.name);
 

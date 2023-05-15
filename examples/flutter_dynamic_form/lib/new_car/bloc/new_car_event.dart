@@ -1,17 +1,17 @@
 part of 'new_car_bloc.dart';
 
-abstract class NewCarEvent extends Equatable {
+sealed class NewCarEvent extends Equatable {
   const NewCarEvent();
 
   @override
   List<Object?> get props => [];
 }
 
-class NewCarFormLoaded extends NewCarEvent {
+final class NewCarFormLoaded extends NewCarEvent {
   const NewCarFormLoaded();
 }
 
-class NewCarBrandChanged extends NewCarEvent {
+final class NewCarBrandChanged extends NewCarEvent {
   const NewCarBrandChanged({this.brand});
 
   final String? brand;
@@ -20,7 +20,7 @@ class NewCarBrandChanged extends NewCarEvent {
   List<Object?> get props => [brand];
 }
 
-class NewCarModelChanged extends NewCarEvent {
+final class NewCarModelChanged extends NewCarEvent {
   const NewCarModelChanged({this.model});
 
   final String? model;
@@ -29,7 +29,7 @@ class NewCarModelChanged extends NewCarEvent {
   List<Object?> get props => [model];
 }
 
-class NewCarYearChanged extends NewCarEvent {
+final class NewCarYearChanged extends NewCarEvent {
   const NewCarYearChanged({this.year});
 
   final String? year;

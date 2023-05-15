@@ -2,7 +2,7 @@ part of 'stats_bloc.dart';
 
 enum StatsStatus { initial, loading, success, failure }
 
-class StatsState extends Equatable {
+final class StatsState extends Equatable {
   const StatsState({
     this.status = StatsStatus.initial,
     this.completedTodos = 0,

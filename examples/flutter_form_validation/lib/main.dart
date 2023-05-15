@@ -60,14 +60,14 @@ class _MyFormState extends State<MyForm> {
   Widget build(BuildContext context) {
     return BlocListener<MyFormBloc, MyFormState>(
       listener: (context, state) {
-        if (state.status.isSubmissionSuccess) {
+        if (state.status.isSuccess) {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           showDialog<void>(
             context: context,
             builder: (_) => const SuccessDialog(),
           );
         }
-        if (state.status.isSubmissionInProgress) {
+        if (state.status.isInProgress) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -90,7 +90,7 @@ class _MyFormState extends State<MyForm> {
 }
 
 class EmailInput extends StatelessWidget {
-  const EmailInput({super.key, required this.focusNode});
+  const EmailInput({required this.focusNode, super.key});
 
   final FocusNode focusNode;
 
@@ -105,7 +105,7 @@ class EmailInput extends StatelessWidget {
             icon: const Icon(Icons.email),
             labelText: 'Email',
             helperText: 'A complete, valid email e.g. joe@gmail.com',
-            errorText: state.email.invalid
+            errorText: state.email.displayError != null
                 ? 'Please ensure the email entered is valid'
                 : null,
           ),
@@ -121,7 +121,7 @@ class EmailInput extends StatelessWidget {
 }
 
 class PasswordInput extends StatelessWidget {
-  const PasswordInput({super.key, required this.focusNode});
+  const PasswordInput({required this.focusNode, super.key});
 
   final FocusNode focusNode;
 
@@ -139,7 +139,7 @@ class PasswordInput extends StatelessWidget {
             helperMaxLines: 2,
             labelText: 'Password',
             errorMaxLines: 2,
-            errorText: state.password.invalid
+            errorText: state.password.displayError != null
                 ? '''Password must be at least 8 characters and contain at least one letter and number'''
                 : null,
           ),
@@ -159,16 +159,12 @@ class SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MyFormBloc, MyFormState>(
-      buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
-        return ElevatedButton(
-          onPressed: state.status.isValidated
-              ? () => context.read<MyFormBloc>().add(FormSubmitted())
-              : null,
-          child: const Text('Submit'),
-        );
-      },
+    final isValid = context.select((MyFormBloc bloc) => bloc.state.isValid);
+    return ElevatedButton(
+      onPressed: isValid
+          ? () => context.read<MyFormBloc>().add(FormSubmitted())
+          : null,
+      child: const Text('Submit'),
     );
   }
 }
@@ -187,8 +183,8 @@ class SuccessDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Row(
-              children: const <Widget>[
+            const Row(
+              children: <Widget>[
                 Icon(Icons.info),
                 Flexible(
                   child: Padding(
