@@ -78,8 +78,8 @@ class BlocListener<B extends StateStreamable<S>, S>
   /// {@macro bloc_listener}
   /// {@macro bloc_listener_listen_when}
   const BlocListener({
-    Key? key,
     required BlocWidgetListener<S> listener,
+    Key? key,
     B? bloc,
     BlocListenerCondition<S>? listenWhen,
     Widget? child,
@@ -103,8 +103,8 @@ abstract class BlocListenerBase<B extends StateStreamable<S>, S>
     extends SingleChildStatefulWidget {
   /// {@macro bloc_listener_base}
   const BlocListenerBase({
-    Key? key,
     required this.listener,
+    Key? key,
     this.bloc,
     this.child,
     this.listenWhen,

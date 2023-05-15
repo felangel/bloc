@@ -109,7 +109,7 @@ void main() {
       });
 
       test(
-          'doesn\'t skip states that would be filtered out by shouldReplay '
+          "doesn't skip states that would be filtered out by shouldReplay "
           'at transition time but not at undo time', () async {
         var replayEvens = false;
         final states = <int>[];

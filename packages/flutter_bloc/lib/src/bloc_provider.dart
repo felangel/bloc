@@ -34,8 +34,8 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
     extends SingleChildStatelessWidget {
   /// {@macro bloc_provider}
   const BlocProvider({
-    Key? key,
     required Create<T> create,
+    Key? key,
     this.child,
     this.lazy = true,
   })  : _create = create,
@@ -60,8 +60,8 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
   /// );
   /// ```
   const BlocProvider.value({
-    Key? key,
     required T value,
+    Key? key,
     this.child,
   })  : _value = value,
         _create = null,
@@ -127,8 +127,8 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
             create: _create,
             dispose: (_, bloc) => bloc.close(),
             startListening: _startListening,
-            child: child,
             lazy: lazy,
+            child: child,
           );
   }
 

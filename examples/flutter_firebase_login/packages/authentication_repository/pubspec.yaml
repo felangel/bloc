@@ -24,4 +24,3 @@ dev_dependencies:
     sdk: flutter
   mocktail: ^0.3.0
   plugin_platform_interface: ^2.1.4
-  very_good_analysis: ^4.0.0

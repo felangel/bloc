@@ -28,13 +28,15 @@ void main() {
 
     group('migration', () {
       test('returns correct value when file exists', () async {
-        File('${storageDirectory.path}/.hydrated_bloc.json')
-          ..writeAsStringSync(json.encode({
+        File('${storageDirectory.path}/.hydrated_bloc.json').writeAsStringSync(
+          json.encode({
             'CounterBloc': json.encode({'value': 4})
-          }));
+          }),
+        );
         storage = await HydratedStorage.build(
           storageDirectory: storageDirectory,
         );
+        // ignore: avoid_dynamic_calls
         expect(storage.read('CounterBloc')['value'] as int, 4);
       });
     });
@@ -62,12 +64,15 @@ void main() {
           'does not call Hive.init '
           'when storageDirectory is webStorageDirectory', () async {
         final completer = Completer<void>();
-        await runZonedGuarded(() {
-          HydratedStorage.build(
-            storageDirectory: HydratedStorage.webStorageDirectory,
-          ).whenComplete(completer.complete);
-          return completer.future;
-        }, (Object _, StackTrace __) {});
+        await runZonedGuarded(
+          () {
+            HydratedStorage.build(
+              storageDirectory: HydratedStorage.webStorageDirectory,
+            ).whenComplete(completer.complete);
+            return completer.future;
+          },
+          (Object _, StackTrace __) {},
+        );
         expect(HiveImpl().homePath, isNull);
         storage = await HydratedStorage.build(
           storageDirectory: storageDirectory,

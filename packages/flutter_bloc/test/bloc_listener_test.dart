@@ -150,12 +150,14 @@ void main() {
       final resetCubitFinder = find.byKey(
         const Key('cubit_listener_reset_button'),
       );
-      await tester.pumpWidget(MyApp(
-        onListenerCalled: (_, state) {
-          listenerCallCount++;
-          latestState = state;
-        },
-      ));
+      await tester.pumpWidget(
+        MyApp(
+          onListenerCalled: (_, state) {
+            listenerCallCount++;
+            latestState = state;
+          },
+        ),
+      );
 
       await tester.tap(incrementFinder);
       await tester.pump();
@@ -186,12 +188,14 @@ void main() {
       final noopCubitFinder = find.byKey(
         const Key('cubit_listener_noop_button'),
       );
-      await tester.pumpWidget(MyApp(
-        onListenerCalled: (context, state) {
-          listenerCallCount++;
-          latestState = state;
-        },
-      ));
+      await tester.pumpWidget(
+        MyApp(
+          onListenerCalled: (context, state) {
+            listenerCallCount++;
+            latestState = state;
+          },
+        ),
+      );
 
       await tester.tap(incrementFinder);
       await tester.pump();

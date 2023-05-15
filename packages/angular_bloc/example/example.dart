@@ -25,6 +25,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   @override
   void onTransition(Transition<CounterEvent, int> transition) {
     super.onTransition(transition);
+    // ignore: avoid_print
     print(transition);
   }
 }

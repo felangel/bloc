@@ -45,8 +45,8 @@ import 'package:provider/single_child_widget.dart';
 class MultiRepositoryProvider extends MultiProvider {
   /// {@macro multi_repository_provider}
   MultiRepositoryProvider({
-    Key? key,
     required List<SingleChildWidget> providers,
     required Widget child,
+    Key? key,
   }) : super(key: key, providers: providers, child: child);
 }

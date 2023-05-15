@@ -18,6 +18,7 @@ class MyUuidHydratedBloc extends HydratedBloc<String, String?> {
   @override
   String? fromJson(dynamic json) {
     try {
+      // ignore: avoid_dynamic_calls
       return json['value'] as String;
     } catch (_) {
       // ignore: avoid_returning_null
@@ -84,6 +85,7 @@ class MyMultiHydratedBloc extends HydratedBloc<int, int> {
   }
 
   @override
+  // ignore: avoid_dynamic_calls
   int? fromJson(dynamic json) => json['value'] as int?;
 }
 
@@ -219,25 +221,30 @@ void main() {
     test(
         'does not read from storage on subsequent state changes '
         'when cache is malformed', () async {
-      unawaited(runZonedGuarded(() async {
-        when<dynamic>(() => storage.read(any())).thenReturn('{');
-        MyCallbackHydratedBloc().add(Increment());
-      }, (_, __) {
-        verify<dynamic>(() => storage.read('MyCallbackHydratedBloc')).called(1);
-      }));
+      unawaited(
+        runZonedGuarded(() async {
+          when<dynamic>(() => storage.read(any())).thenReturn('{');
+          MyCallbackHydratedBloc().add(Increment());
+        }, (_, __) {
+          verify<dynamic>(() => storage.read('MyCallbackHydratedBloc'))
+              .called(1);
+        }),
+      );
     });
 
     test('does not deserialize state when cache is malformed', () async {
       final fromJsonCalls = <dynamic>[];
-      unawaited(runZonedGuarded(() async {
-        when<dynamic>(() => storage.read(any())).thenReturn('{');
-        MyCallbackHydratedBloc(
-          onFromJsonCalled: fromJsonCalls.add,
-        ).add(Increment());
-        expect(fromJsonCalls, isEmpty);
-      }, (_, __) {
-        expect(fromJsonCalls, isEmpty);
-      }));
+      unawaited(
+        runZonedGuarded(() async {
+          when<dynamic>(() => storage.read(any())).thenReturn('{');
+          MyCallbackHydratedBloc(
+            onFromJsonCalled: fromJsonCalls.add,
+          ).add(Increment());
+          expect(fromJsonCalls, isEmpty);
+        }, (_, __) {
+          expect(fromJsonCalls, isEmpty);
+        }),
+      );
     });
 
     group('SingleHydratedBloc', () {
@@ -415,7 +422,7 @@ void main() {
           expect(lastStackTrace, isNotNull);
           expect(
             lastError.toString().startsWith(
-              '''Unhandled error type \'String\' is not a subtype of type \'Map<dynamic, dynamic>?\' in type cast''',
+              '''Unhandled error type 'String' is not a subtype of type 'Map<dynamic, dynamic>?' in type cast''',
             ),
             isTrue,
           );

@@ -138,8 +138,8 @@ import 'package:test/test.dart' as test;
 @isTest
 void blocTest<B extends BlocBase<State>, State>(
   String description, {
-  FutureOr<void> Function()? setUp,
   required B Function() build,
+  FutureOr<void> Function()? setUp,
   State Function()? seed,
   dynamic Function(B bloc)? act,
   Duration? wait,
@@ -174,8 +174,8 @@ void blocTest<B extends BlocBase<State>, State>(
 /// This should never be used directly -- please use [blocTest] instead.
 @visibleForTesting
 Future<void> testBloc<B extends BlocBase<State>, State>({
-  FutureOr<void> Function()? setUp,
   required B Function() build,
+  FutureOr<void> Function()? setUp,
   State Function()? seed,
   dynamic Function(B bloc)? act,
   Duration? wait,
@@ -234,7 +234,8 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       if (shallowEquality && error is test.TestFailure) {
         // ignore: only_throw_errors
         throw test.TestFailure(
-          '''${error.message}
+          '''
+${error.message}
 WARNING: Please ensure state instances extend Equatable, override == and hashCode, or implement Comparable.
 Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''',
         );
@@ -267,9 +268,9 @@ String _diff({required dynamic expected, required dynamic actual}) {
   final differences = diff(expected.toString(), actual.toString());
   buffer
     ..writeln('${"=" * 4} diff ${"=" * 40}')
-    ..writeln('')
+    ..writeln()
     ..writeln(differences.toPrettyString())
-    ..writeln('')
+    ..writeln()
     ..writeln('${"=" * 4} end diff ${"=" * 36}');
   return buffer.toString();
 }

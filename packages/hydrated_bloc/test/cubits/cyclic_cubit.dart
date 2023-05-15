@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
+
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class CyclicCubit extends HydratedCubit<Cycle1?> {
