@@ -41,7 +41,7 @@ jobs:
         run: dart pub get
 
       - name: Install webdev
-        if: matrix.folder == 'examples/github_search/angular_github_search'
+        if: matrix.folder != 'examples/github_search/common_github_search'
         working-directory: ${{ matrix.folder }}
         run: |
           dart pub global activate webdev
