@@ -2,9 +2,9 @@
 import 'package:meta/meta.dart';
 
 @immutable
-abstract class MyEvent {}
+sealed class MyEvent {}
 
-class EventA extends MyEvent {}
+final class EventA extends MyEvent {}
 
-class EventB extends MyEvent {}
+final class EventB extends MyEvent {}
 ```

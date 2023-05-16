@@ -1,11 +1,11 @@
 ```dart
 import 'package:equatable/equatable.dart';
 
-abstract class GithubSearchEvent extends Equatable {
+sealed class GithubSearchEvent extends Equatable {
   const GithubSearchEvent();
 }
 
-class TextChanged extends GithubSearchEvent {
+final class TextChanged extends GithubSearchEvent {
   const TextChanged({required this.text});
 
   final String text;

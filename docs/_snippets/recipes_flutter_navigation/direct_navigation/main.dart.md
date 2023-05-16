@@ -14,18 +14,18 @@ void main() {
 }
 
 @immutable
-abstract class MyEvent {}
+sealed class MyEvent {}
 
-class EventA extends MyEvent {}
+final class EventA extends MyEvent {}
 
-class EventB extends MyEvent {}
+final class EventB extends MyEvent {}
 
 @immutable
-abstract class MyState {}
+sealed class MyState {}
 
-class StateA extends MyState {}
+final class StateA extends MyState {}
 
-class StateB extends MyState {}
+final class StateB extends MyState {}
 
 class MyBloc extends Bloc<MyEvent, MyState> {
   MyBloc() : super(StateA()) {

@@ -1,9 +1,9 @@
 ```dart
 import 'package:equatable/equatable.dart';
 
-abstract class AuthenticationEvent extends Equatable {}
+sealed class AuthenticationEvent extends Equatable {}
 
-class AppStarted extends AuthenticationEvent {
+final class AppStarted extends AuthenticationEvent {
   @override
   List<Object> get props => [];
 }
