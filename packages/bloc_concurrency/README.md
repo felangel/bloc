@@ -70,9 +70,9 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 
-abstract class CounterEvent {}
+sealed class CounterEvent {}
 
-class CounterIncrementPressed extends CounterEvent {}
+final class CounterIncrementPressed extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0) {

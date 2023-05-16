@@ -2,11 +2,11 @@
 import 'package:meta/meta.dart';
 
 @immutable
-abstract class DataState {}
+sealed class DataState {}
 
-class Initial extends DataState {}
+final class Initial extends DataState {}
 
-class Loading extends DataState {}
+final class Loading extends DataState {}
 
-class Success extends DataState {}
+final class Success extends DataState {}
 ```

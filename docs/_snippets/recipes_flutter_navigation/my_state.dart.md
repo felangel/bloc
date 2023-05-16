@@ -2,9 +2,9 @@
 import 'package:meta/meta.dart';
 
 @immutable
-abstract class MyState {}
+sealed class MyState {}
 
-class StateA extends MyState {}
+final class StateA extends MyState {}
 
-class StateB extends MyState {}
+final class StateB extends MyState {}
 ```

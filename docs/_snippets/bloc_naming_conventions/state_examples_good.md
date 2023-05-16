@@ -1,7 +1,7 @@
 ```dart
-abstract class CounterState {}
-class CounterInitial extends CounterState {}
-class CounterLoadInProgress extends CounterState {}
-class CounterLoadSuccess extends CounterState {}
-class CounterLoadFailure extends CounterState {}
+sealed class CounterState {}
+final class CounterInitial extends CounterState {}
+final class CounterLoadInProgress extends CounterState {}
+final class CounterLoadSuccess extends CounterState {}
+final class CounterLoadFailure extends CounterState {}
 ```

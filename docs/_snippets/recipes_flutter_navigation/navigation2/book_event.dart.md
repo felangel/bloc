@@ -1,12 +1,12 @@
 ```dart
-abstract class BookEvent extends Equatable {
+sealed class BookEvent extends Equatable {
   const BookEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class BookSelected extends BookEvent {
+final class BookSelected extends BookEvent {
   const BookSelected({required this.book});
 
   final Book book;
@@ -15,7 +15,7 @@ class BookSelected extends BookEvent {
   List<Object> get props => [book];
 }
 
-class BookDeselected extends BookEvent {
+final class BookDeselected extends BookEvent {
   const BookDeselected();
 }
 ```
