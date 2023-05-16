@@ -38,17 +38,13 @@ class TickerPage extends StatelessWidget {
       body: Center(
         child: BlocBuilder<TickerBloc, TickerState>(
           builder: (context, state) {
-            if (state is TickerTickSuccess) {
-              return Text('Tick #${state.count}');
-            }
-
-            if (state is TickerComplete) {
-              return const Text(
-                'Complete! Press the floating button to restart.',
-              );
-            }
-
-            return const Text('Press the floating button to start.');
+            return switch (state) {
+              TickerInitial() =>
+                const Text('Press the floating button to start.'),
+              TickerTickSuccess() => Text('Tick #${state.count}'),
+              TickerComplete() =>
+                const Text('Complete! Press the floating button to restart.')
+            };
           },
         ),
       ),
