@@ -1,3 +1,10 @@
+# 0.1.0-dev.5
+
+- refactor: standardize analysis options
+- deps: remove `package:universal_io`
+- deps: upgrade to `pub_updater ^0.3.0`
+- deps: upgrade to `mason ^0.1.0-dev.33`
+
 # 0.1.0-dev.4
 
 - feat: improve update prompt style
