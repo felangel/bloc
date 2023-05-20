@@ -1,3 +1,9 @@
+# 8.1.2
+
+- docs: upgrade README snippets to Dart 3 ([#3826](https://github.com/felangel/bloc/pull/3826))
+- refactor: standardize analysis options and resolve warnings ([#3826](https://github.com/felangel/bloc/pull/3826))
+- docs: remove superfluous word from inline docs ([#3734](https://github.com/felangel/bloc/pull/3734))
+
 # 8.1.1
 
 - chore: add screenshots to `pubspec.yaml` ([#3708](https://github.com/felangel/bloc/pull/3708))
