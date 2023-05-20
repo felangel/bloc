@@ -1,3 +1,8 @@
+# 9.1.2
+
+- docs: upgrade to Dart 3
+- refactor: standardize analysis_options
+
 # 9.1.1
 
 - chore: upgrade to `bloc ^8.1.1` ([#3723](https://github.com/felangel/bloc/pull/3723))
