@@ -87,8 +87,8 @@ class CounterCubit extends HydratedCubit<int> {
 ### Create a HydratedBloc
 
 ```dart
-abstract class CounterEvent {}
-class CounterIncrementPressed extends CounterEvent {}
+sealed class CounterEvent {}
+final class CounterIncrementPressed extends CounterEvent {}
 
 class CounterBloc extends HydratedBloc<CounterEvent, int> {
   CounterBloc() : super(0) {

@@ -17,8 +17,8 @@ class MockTodosOverviewBloc
 
 extension on CommonFinders {
   Finder optionMenuItem({
-    bool enabled = true,
     required String title,
+    bool enabled = true,
   }) {
     return find.descendant(
       of: find.byWidgetPredicate(

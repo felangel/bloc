@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:weather_repository/weather_repository.dart';
 
 class WeatherApp extends StatelessWidget {
-  const WeatherApp({super.key, required WeatherRepository weatherRepository})
+  const WeatherApp({required WeatherRepository weatherRepository, super.key})
       : _weatherRepository = weatherRepository;
 
   final WeatherRepository _weatherRepository;

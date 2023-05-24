@@ -13,7 +13,7 @@ void main() {
 }
 
 class App extends StatelessWidget {
-  const App({super.key, required this.githubRepository});
+  const App({required this.githubRepository, super.key});
 
   final GithubRepository githubRepository;
 

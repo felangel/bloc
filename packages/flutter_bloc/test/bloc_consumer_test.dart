@@ -318,7 +318,7 @@ void main() {
             listenStates.add(state);
           },
           buildWhen: (previous, current) {
-            if (current % 2 == 0) {
+            if (current.isEven) {
               buildWhenPreviousState.add(previous);
               buildWhenCurrentState.add(current);
               return true;

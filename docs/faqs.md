@@ -230,15 +230,15 @@ way of signaling that a specific event is used only within the bloc itself and
 prevents external components from knowing about the event.
 
 ```dart
-abstract class MyEvent {}
+sealed class MyEvent {}
 
 // `EventA` is an external event.
-class EventA extends MyEvent {}
+final class EventA extends MyEvent {}
 
 // `EventB` is an internal event.
 // We are explicitly making `EventB` private so that it can only be used
 // within the bloc.
-class _EventB extends MyEvent {}
+final class _EventB extends MyEvent {}
 ```
 
 We can alternatively define an external `Started` event and use the

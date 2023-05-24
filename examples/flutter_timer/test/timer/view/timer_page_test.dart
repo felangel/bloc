@@ -10,8 +10,6 @@ import 'package:mocktail/mocktail.dart';
 class _MockTimerBloc extends MockBloc<TimerEvent, TimerState>
     implements TimerBloc {}
 
-class _FakeTimerEvent extends Fake implements TimerEvent {}
-
 extension on WidgetTester {
   Future<void> pumpTimerView(TimerBloc timerBloc) {
     return pumpWidget(
@@ -26,7 +24,7 @@ void main() {
   late TimerBloc timerBloc;
 
   setUpAll(() {
-    registerFallbackValue(_FakeTimerEvent());
+    registerFallbackValue(const TimerStarted(duration: 0));
   });
 
   setUp(() {

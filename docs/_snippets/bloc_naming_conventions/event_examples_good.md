@@ -1,7 +1,7 @@
 ```dart
-abstract class CounterEvent {}
-class CounterStarted extends CounterEvent {}
-class CounterIncrementPressed extends CounterEvent {}
-class CounterDecrementPressed extends CounterEvent {}
-class CounterIncrementRetried extends CounterEvent {}
+sealed class CounterEvent {}
+final class CounterStarted extends CounterEvent {}
+final class CounterIncrementPressed extends CounterEvent {}
+final class CounterDecrementPressed extends CounterEvent {}
+final class CounterIncrementRetried extends CounterEvent {}
 ```

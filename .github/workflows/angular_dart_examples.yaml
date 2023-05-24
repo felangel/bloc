@@ -34,14 +34,14 @@ jobs:
 
       - uses: dart-lang/setup-dart@v1
         with:
-          sdk: 2.19.0
+          sdk: 3.0.0
 
       - name: Install Dependencies
         working-directory: ${{ matrix.folder }}
         run: dart pub get
 
       - name: Install webdev
-        if: matrix.folder == 'examples/github_search/angular_github_search'
+        if: matrix.folder != 'examples/github_search/common_github_search'
         working-directory: ${{ matrix.folder }}
         run: |
           dart pub global activate webdev

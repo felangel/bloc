@@ -195,10 +195,10 @@ State changes in bloc begin when events are added which triggers `onEvent`. The 
 
 ```dart
 /// The events which `CounterBloc` will react to.
-abstract class CounterEvent {}
+sealed class CounterEvent {}
 
 /// Notifies bloc to increment state.
-class CounterIncrementPressed extends CounterEvent {}
+final class CounterIncrementPressed extends CounterEvent {}
 
 /// A `CounterBloc` which handles converting `CounterEvent`s into `int`s.
 class CounterBloc extends Bloc<CounterEvent, int> {
@@ -248,9 +248,9 @@ In addition, `Blocs` can also override `onEvent` and `onTransition`.
 `onTransition` is similar to `onChange`, however, it contains the `event` which triggered the state change in addition to the `currentState` and `nextState`.
 
 ```dart
-abstract class CounterEvent {}
+sealed class CounterEvent {}
 
-class CounterIncrementPressed extends CounterEvent {}
+final class CounterIncrementPressed extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0) {

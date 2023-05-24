@@ -51,8 +51,8 @@ import 'package:provider/single_child_widget.dart';
 class MultiBlocListener extends MultiProvider {
   /// {@macro multi_bloc_listener}
   MultiBlocListener({
-    Key? key,
     required List<SingleChildWidget> listeners,
     required Widget child,
+    Key? key,
   }) : super(key: key, providers: listeners, child: child);
 }

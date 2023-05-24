@@ -1,6 +1,6 @@
 part of 'profile_wizard_bloc.dart';
 
-class Profile extends Equatable {
+final class Profile extends Equatable {
   const Profile({required this.name, required this.age});
 
   final String? name;
@@ -17,7 +17,7 @@ class Profile extends Equatable {
   List<Object?> get props => [name, age];
 }
 
-class ProfileWizardState extends Equatable {
+final class ProfileWizardState extends Equatable {
   ProfileWizardState({required this.profile}) : lastUpdated = DateTime.now();
 
   ProfileWizardState.initial()

@@ -1,13 +1,13 @@
 ```dart
-abstract class CounterEvent {}
+sealed class CounterEvent {}
 
-class CounterIncrementPressed extends CounterEvent {}
+final class CounterIncrementPressed extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0) {
     on<CounterIncrementPressed>((event, emit) {
       // handle incoming `CounterIncrementPressed` event
-    })
+    });
   }
 }
 ```

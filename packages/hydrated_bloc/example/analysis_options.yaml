@@ -1,4 +1,4 @@
-analyzer:
-  strong-mode:
-    implicit-casts: false
-    implicit-dynamic: false
+include: ../../../analysis_options.yaml
+linter:
+  rules:
+    public_member_api_docs: false

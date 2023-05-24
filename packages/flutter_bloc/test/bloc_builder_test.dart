@@ -3,39 +3,39 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class MyThemeApp extends StatefulWidget {
-  MyThemeApp({
-    Key? key,
+  const MyThemeApp({
     required Cubit<ThemeData> themeCubit,
-    required Function onBuild,
+    required void Function() onBuild,
+    Key? key,
   })  : _themeCubit = themeCubit,
         _onBuild = onBuild,
         super(key: key);
 
   final Cubit<ThemeData> _themeCubit;
-  final Function _onBuild;
+  final void Function() _onBuild;
 
   @override
-  State<MyThemeApp> createState() => MyThemeAppState(
-        themeCubit: _themeCubit,
-        onBuild: _onBuild,
-      );
+  State<MyThemeApp> createState() => MyThemeAppState();
 }
 
 class MyThemeAppState extends State<MyThemeApp> {
-  MyThemeAppState({
-    required Cubit<ThemeData> themeCubit,
-    required Function onBuild,
-  })  : _themeCubit = themeCubit,
-        _onBuild = onBuild;
+  MyThemeAppState();
 
-  Cubit<ThemeData> _themeCubit;
-  final Function _onBuild;
+  @override
+  void initState() {
+    super.initState();
+    _themeCubit = widget._themeCubit;
+    _onBuild = widget._onBuild;
+  }
+
+  late Cubit<ThemeData> _themeCubit;
+  late final void Function() _onBuild;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<Cubit<ThemeData>, ThemeData>(
       bloc: _themeCubit,
-      builder: ((context, theme) {
+      builder: (context, theme) {
         _onBuild();
         return MaterialApp(
           key: const Key('material_app'),
@@ -59,7 +59,7 @@ class MyThemeAppState extends State<MyThemeApp> {
             ],
           ),
         );
-      }),
+      },
     );
   }
 }
@@ -79,6 +79,8 @@ class DarkThemeCubit extends Cubit<ThemeData> {
 }
 
 class MyCounterApp extends StatefulWidget {
+  const MyCounterApp({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => MyCounterAppState();
 }
@@ -116,8 +118,8 @@ class MyCounterAppState extends State<MyCounterApp> {
             ),
             ElevatedButton(
               key: const Key('myCounterAppIncrementButton'),
-              child: const SizedBox(),
               onPressed: _cubit.increment,
+              child: const SizedBox(),
             )
           ],
         ),
@@ -349,7 +351,7 @@ void main() {
 
     testWidgets('with buildWhen only rebuilds when buildWhen evaluates to true',
         (tester) async {
-      await tester.pumpWidget(MyCounterApp());
+      await tester.pumpWidget(const MyCounterApp());
       await tester.pumpAndSettle();
 
       expect(find.byKey(const Key('myCounterApp')), findsOneWidget);
@@ -410,7 +412,7 @@ void main() {
         BlocBuilder<CounterCubit, int>(
           bloc: counterCubit,
           buildWhen: (previous, state) {
-            if (state % 2 == 0) {
+            if (state.isEven) {
               buildWhenPreviousState.add(previous);
               buildWhenCurrentState.add(state);
               return true;
@@ -447,7 +449,7 @@ void main() {
           child: StatefulBuilder(
             builder: (context, setState) => BlocBuilder<CounterCubit, int>(
               bloc: counterCubit,
-              buildWhen: (previous, state) => state % 2 == 0,
+              buildWhen: (previous, state) => state.isEven,
               builder: (_, state) {
                 states.add(state);
                 return ElevatedButton(

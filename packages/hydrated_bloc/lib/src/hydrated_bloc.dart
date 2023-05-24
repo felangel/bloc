@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_catching_errors
+
 import 'dart:async';
 
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -285,9 +287,10 @@ mixin HydratedMixin<State> on BlocBase<State> {
         : _traverseComplexJson(object);
   }
 
+  // ignore: avoid_dynamic_calls
   dynamic _toEncodable(dynamic object) => object.toJson();
 
-  final List _seen = <dynamic>[];
+  final _seen = <dynamic>[];
 
   void _checkCycle(Object? object) {
     for (var i = 0; i < _seen.length; i++) {
@@ -299,8 +302,8 @@ mixin HydratedMixin<State> on BlocBase<State> {
   }
 
   void _removeSeen(dynamic object) {
-    assert(_seen.isNotEmpty);
-    assert(identical(_seen.last, object));
+    assert(_seen.isNotEmpty, 'seen must not be empty');
+    assert(identical(_seen.last, object), 'last seen object must be identical');
     _seen.removeLast();
   }
 

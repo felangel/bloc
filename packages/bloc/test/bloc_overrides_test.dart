@@ -19,98 +19,144 @@ void main() {
       test('uses default EventTransformer when not specified', () {
         BlocOverrides.runZoned(() {
           final overrides = BlocOverrides.current;
-          expect(overrides!.eventTransformer, isA<EventTransformer>());
+          expect(overrides!.eventTransformer, isA<EventTransformer<dynamic>>());
         });
       });
 
       test('uses custom BlocObserver when specified', () {
         final blocObserver = FakeBlocObserver();
-        BlocOverrides.runZoned(() {
-          final overrides = BlocOverrides.current;
-          expect(overrides!.blocObserver, equals(blocObserver));
-        }, blocObserver: blocObserver);
+        BlocOverrides.runZoned(
+          () {
+            final overrides = BlocOverrides.current;
+            expect(overrides!.blocObserver, equals(blocObserver));
+          },
+          blocObserver: blocObserver,
+        );
       });
 
       test('uses custom EventTransformer when specified', () {
-        final eventTransformer = (Stream events, EventMapper mapper) {
+        Stream<dynamic> eventTransformer(
+          Stream<dynamic> events,
+          EventMapper<dynamic> mapper,
+        ) {
           return events.asyncExpand<dynamic>(mapper);
-        };
-        BlocOverrides.runZoned(() {
-          final overrides = BlocOverrides.current;
-          expect(overrides!.eventTransformer, equals(eventTransformer));
-        }, eventTransformer: eventTransformer);
+        }
+
+        BlocOverrides.runZoned(
+          () {
+            final overrides = BlocOverrides.current;
+            expect(overrides!.eventTransformer, equals(eventTransformer));
+          },
+          eventTransformer: eventTransformer,
+        );
       });
 
       test(
           'uses current BlocObserver when not specified '
           'and zone already contains a BlocObserver', () {
         final blocObserver = FakeBlocObserver();
-        BlocOverrides.runZoned(() {
-          BlocOverrides.runZoned(() {
-            final overrides = BlocOverrides.current;
-            expect(overrides!.blocObserver, equals(blocObserver));
-          });
-        }, blocObserver: blocObserver);
+        BlocOverrides.runZoned(
+          () {
+            BlocOverrides.runZoned(() {
+              final overrides = BlocOverrides.current;
+              expect(overrides!.blocObserver, equals(blocObserver));
+            });
+          },
+          blocObserver: blocObserver,
+        );
       });
 
       test(
           'uses current EventTransformer when not specified '
           'and zone already contains an EventTransformer', () {
-        final eventTransformer = (Stream events, EventMapper mapper) {
+        Stream<dynamic> eventTransformer(
+          Stream<dynamic> events,
+          EventMapper<dynamic> mapper,
+        ) {
           return events.asyncExpand<dynamic>(mapper);
-        };
-        BlocOverrides.runZoned(() {
-          BlocOverrides.runZoned(() {
-            final overrides = BlocOverrides.current;
-            expect(overrides!.eventTransformer, equals(eventTransformer));
-          });
-        }, eventTransformer: eventTransformer);
+        }
+
+        BlocOverrides.runZoned(
+          () {
+            BlocOverrides.runZoned(() {
+              final overrides = BlocOverrides.current;
+              expect(overrides!.eventTransformer, equals(eventTransformer));
+            });
+          },
+          eventTransformer: eventTransformer,
+        );
       });
 
       test(
           'uses nested BlocObserver when specified '
           'and zone already contains a BlocObserver', () {
         final rootBlocObserver = FakeBlocObserver();
-        BlocOverrides.runZoned(() {
-          final nestedBlocObserver = FakeBlocObserver();
-          final overrides = BlocOverrides.current;
-          expect(overrides!.blocObserver, equals(rootBlocObserver));
-          BlocOverrides.runZoned(() {
+        BlocOverrides.runZoned(
+          () {
+            final nestedBlocObserver = FakeBlocObserver();
             final overrides = BlocOverrides.current;
-            expect(overrides!.blocObserver, equals(nestedBlocObserver));
-          }, blocObserver: nestedBlocObserver);
-        }, blocObserver: rootBlocObserver);
+            expect(overrides!.blocObserver, equals(rootBlocObserver));
+            BlocOverrides.runZoned(
+              () {
+                final overrides = BlocOverrides.current;
+                expect(overrides!.blocObserver, equals(nestedBlocObserver));
+              },
+              blocObserver: nestedBlocObserver,
+            );
+          },
+          blocObserver: rootBlocObserver,
+        );
       });
 
       test(
           'uses nested EventTransformer when specified '
           'and zone already contains an EventTransformer', () {
-        final rootEventTransformer = (Stream events, EventMapper mapper) {
+        Stream<dynamic> rootEventTransformer(
+          Stream<dynamic> events,
+          EventMapper<dynamic> mapper,
+        ) {
           return events.asyncExpand<dynamic>(mapper);
-        };
-        BlocOverrides.runZoned(() {
-          final nestedEventTransformer = (Stream events, EventMapper mapper) {
-            return events.asyncExpand<dynamic>(mapper);
-          };
-          final overrides = BlocOverrides.current;
-          expect(overrides!.eventTransformer, equals(rootEventTransformer));
-          BlocOverrides.runZoned(() {
+        }
+
+        BlocOverrides.runZoned(
+          () {
+            Stream<dynamic> nestedEventTransformer(
+              Stream<dynamic> events,
+              EventMapper<dynamic> mapper,
+            ) {
+              return events.asyncExpand<dynamic>(mapper);
+            }
+
             final overrides = BlocOverrides.current;
-            expect(overrides!.eventTransformer, equals(nestedEventTransformer));
-          }, eventTransformer: nestedEventTransformer);
-        }, eventTransformer: rootEventTransformer);
+            expect(overrides!.eventTransformer, equals(rootEventTransformer));
+            BlocOverrides.runZoned(
+              () {
+                final overrides = BlocOverrides.current;
+                expect(
+                  overrides!.eventTransformer,
+                  equals(nestedEventTransformer),
+                );
+              },
+              eventTransformer: nestedEventTransformer,
+            );
+          },
+          eventTransformer: rootEventTransformer,
+        );
       });
 
       test('overrides cannot be mutated after zone is created', () {
         final originalBlocObserver = FakeBlocObserver();
         final otherBlocObserver = FakeBlocObserver();
         var blocObserver = originalBlocObserver;
-        BlocOverrides.runZoned(() {
-          blocObserver = otherBlocObserver;
-          final overrides = BlocOverrides.current!;
-          expect(overrides.blocObserver, equals(originalBlocObserver));
-          expect(overrides.blocObserver, isNot(equals(otherBlocObserver)));
-        }, blocObserver: blocObserver);
+        BlocOverrides.runZoned(
+          () {
+            blocObserver = otherBlocObserver;
+            final overrides = BlocOverrides.current!;
+            expect(overrides.blocObserver, equals(originalBlocObserver));
+            expect(overrides.blocObserver, isNot(equals(otherBlocObserver)));
+          },
+          blocObserver: blocObserver,
+        );
       });
     });
   });

@@ -4,7 +4,7 @@ part of 'ticker_bloc.dart';
 /// Base class for all [TickerEvent]s which are
 /// handled by the [TickerBloc].
 /// {@endtemplate}
-abstract class TickerEvent extends Equatable {
+sealed class TickerEvent extends Equatable {
   /// {@macro ticker_event}
   const TickerEvent();
 
@@ -16,12 +16,12 @@ abstract class TickerEvent extends Equatable {
 /// Signifies to the [TickerBloc] that the user
 /// has requested to start the [Ticker].
 /// {@endtemplate}
-class TickerStarted extends TickerEvent {
+final class TickerStarted extends TickerEvent {
   /// {@macro ticker_started}
   const TickerStarted();
 }
 
-class _TickerTicked extends TickerEvent {
+final class _TickerTicked extends TickerEvent {
   const _TickerTicked(this.tick);
 
   /// The current tick count.

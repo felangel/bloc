@@ -94,7 +94,7 @@ void main() {
       testWidgets('signUpFormSubmitted when sign up button is pressed',
           (tester) async {
         when(() => signUpCubit.state).thenReturn(
-          const SignUpState(status: FormzStatus.valid),
+          const SignUpState(isValid: true),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -117,8 +117,8 @@ void main() {
         whenListen(
           signUpCubit,
           Stream.fromIterable(const <SignUpState>[
-            SignUpState(status: FormzStatus.submissionInProgress),
-            SignUpState(status: FormzStatus.submissionFailure),
+            SignUpState(status: FormzSubmissionStatus.inProgress),
+            SignUpState(status: FormzSubmissionStatus.failure),
           ]),
         );
         await tester.pumpWidget(
@@ -138,7 +138,7 @@ void main() {
       testWidgets('invalid email error text when email is invalid',
           (tester) async {
         final email = MockEmail();
-        when(() => email.invalid).thenReturn(true);
+        when(() => email.displayError).thenReturn(EmailValidationError.invalid);
         when(() => signUpCubit.state).thenReturn(SignUpState(email: email));
         await tester.pumpWidget(
           MaterialApp(
@@ -156,7 +156,9 @@ void main() {
       testWidgets('invalid password error text when password is invalid',
           (tester) async {
         final password = MockPassword();
-        when(() => password.invalid).thenReturn(true);
+        when(
+          () => password.displayError,
+        ).thenReturn(PasswordValidationError.invalid);
         when(() => signUpCubit.state)
             .thenReturn(SignUpState(password: password));
         await tester.pumpWidget(
@@ -176,7 +178,9 @@ void main() {
           'invalid confirmedPassword error text'
           ' when confirmedPassword is invalid', (tester) async {
         final confirmedPassword = MockConfirmedPassword();
-        when(() => confirmedPassword.invalid).thenReturn(true);
+        when(
+          () => confirmedPassword.displayError,
+        ).thenReturn(ConfirmedPasswordValidationError.invalid);
         when(() => signUpCubit.state)
             .thenReturn(SignUpState(confirmedPassword: confirmedPassword));
         await tester.pumpWidget(
@@ -194,9 +198,7 @@ void main() {
 
       testWidgets('disabled sign up button when status is not validated',
           (tester) async {
-        when(() => signUpCubit.state).thenReturn(
-          const SignUpState(status: FormzStatus.invalid),
-        );
+        when(() => signUpCubit.state).thenReturn(const SignUpState());
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -216,7 +218,7 @@ void main() {
       testWidgets('enabled sign up button when status is validated',
           (tester) async {
         when(() => signUpCubit.state).thenReturn(
-          const SignUpState(status: FormzStatus.valid),
+          const SignUpState(isValid: true),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -241,8 +243,8 @@ void main() {
         whenListen(
           signUpCubit,
           Stream.fromIterable(const <SignUpState>[
-            SignUpState(status: FormzStatus.submissionInProgress),
-            SignUpState(status: FormzStatus.submissionSuccess),
+            SignUpState(status: FormzSubmissionStatus.inProgress),
+            SignUpState(status: FormzSubmissionStatus.success),
           ]),
         );
         await tester.pumpWidget(

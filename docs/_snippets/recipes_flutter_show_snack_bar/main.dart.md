@@ -21,12 +21,12 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     final dataBloc = BlocProvider.of<DataBloc>(context);
     return Scaffold(
-      appBar: AppBar(title: Text('Home')),
+      appBar: AppBar(title: const Text('Home')),
       body: BlocListener<DataBloc, DataState>(
         listener: (context, state) {
           if (state is Success) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                 backgroundColor: Colors.green,
                 content: Text('Success'),
               ),
@@ -35,15 +35,11 @@ class Home extends StatelessWidget {
         },
         child: BlocBuilder<DataBloc, DataState>(
           builder: (context, state) {
-            if (state is Initial) {
-              return Center(child: Text('Press the Button'));
-            }
-            if (state is Loading) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (state is Success) {
-              return Center(child: Text('Success'));
-            }
+            return switch (state) {
+              Initial() => const Center(child: Text('Press the Button')),
+              Loading() => const Center(child: Text('Press the Button')),
+              Success() => const Center(child: Text('Success')),
+            };
           },
         ),
       ),
@@ -52,7 +48,7 @@ class Home extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           FloatingActionButton(
-            child: Icon(Icons.play_arrow),
+            child: const Icon(Icons.play_arrow),
             onPressed: () {
               dataBloc.add(FetchData());
             },

@@ -123,7 +123,6 @@ El objetivo de esta librería es facilitar la separación de la _presentación_ 
 - [Carro de Compras](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - un ejemplo de cómo crear una aplicación de carrito de compras utilizando los paquetes `bloc` y `flutter_bloc` basado en [ejemplos de flutter](https://github.com/flutter/samples/tree/master/provider_shopper).
 - [Formulario Dinámico](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para implementar un formulario dinámico que extrae datos de un repositorio.
 - [Wizard](https://github.com/felangel/bloc/tree/master/examples/flutter_wizard) - Construye un wizard de varios pasos utilizando los paquetes `bloc` y` flutter_bloc`.
-- [GraphQL](https://github.com/felangel/bloc/tree/master/examples/flutter_graphql_jobs) un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` con `graphql` para buscard datos de [api.graphql.jobs](https://api.graphql.jobs)
 - [Fluttersaurus] (https://github.com/felangel/fluttersaurus) - un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para crear una aplicación de tesauro - hecha para el Bytconf Flutter 2020.
 
 ### Web

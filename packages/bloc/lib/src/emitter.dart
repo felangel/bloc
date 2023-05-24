@@ -112,7 +112,9 @@ class _Emitter<State> implements Emitter<State> {
   void call(State state) {
     assert(
       !_isCompleted,
-      '''\n\n
+      '''
+
+
 emit was called after an event handler completed normally.
 This is usually due to an unawaited future in an event handler.
 Please make sure to await all asynchronous operations with event handlers
@@ -146,7 +148,9 @@ ensure the event handler has not completed.
     if (isDone) return;
     assert(
       _disposables.isEmpty,
-      '''\n\n
+      '''
+
+
 An event handler completed but left pending subscriptions behind.
 This is most likely due to an unawaited emit.forEach or emit.onEach. 
 Please make sure to await all asynchronous operations within event handlers.
