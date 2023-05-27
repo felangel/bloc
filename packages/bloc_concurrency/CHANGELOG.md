@@ -1,3 +1,8 @@
+# 0.2.2
+
+- docs: upgrade to Dart 3
+- refactor: standardize analysis_options
+
 # 0.2.1
 
 - chore: add screenshots to `pubspec.yaml`

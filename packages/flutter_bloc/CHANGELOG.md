@@ -1,3 +1,10 @@
+# 8.1.3
+
+- docs: remove graphql sample references from README ([#3820](https://github.com/felangel/bloc/pull/3820))
+- docs: upgrade to Dart 3 ([#3809](https://github.com/felangel/bloc/pull/3820))
+- refactor: standardize analysis_options ([#3809](https://github.com/felangel/bloc/pull/3820))
+- refactor: update sdk constraints and fix analysis warnings ([#3809](https://github.com/felangel/bloc/pull/3820))
+
 # 8.1.2
 
 - chore: add screenshots to `pubspec.yaml` ([#3717](https://github.com/felangel/bloc/pull/3717))

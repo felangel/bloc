@@ -145,22 +145,22 @@ class CounterCubit extends ReplayCubit<int> {
 }
 
 /// Base event class for the [CounterBloc].
-class CounterEvent extends ReplayEvent {}
+sealed class CounterEvent extends ReplayEvent {}
 
 /// Notifies [CounterBloc] to increment its state.
-class CounterIncrementPressed extends CounterEvent {
+final class CounterIncrementPressed extends CounterEvent {
   @override
   String toString() => 'CounterIncrementPressed';
 }
 
 /// Notifies [CounterBloc] to decrement its state.
-class CounterDecrementPressed extends CounterEvent {
+final class CounterDecrementPressed extends CounterEvent {
   @override
   String toString() => 'CounterDecrementPressed';
 }
 
 /// Notifies [CounterBloc] to reset its state.
-class CounterResetPressed extends CounterEvent {
+final class CounterResetPressed extends CounterEvent {
   @override
   String toString() => 'CounterResetPressed';
 }
