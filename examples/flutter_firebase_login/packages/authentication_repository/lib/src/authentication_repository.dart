@@ -8,7 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
 
 /// {@template sign_up_with_email_and_password_failure}
-/// Thrown if during the sign up process if a failure occurs.
+/// Thrown during the sign up process if a failure occurs.
 /// {@endtemplate}
 class SignUpWithEmailAndPasswordFailure implements Exception {
   /// {@macro sign_up_with_email_and_password_failure}
@@ -165,7 +165,7 @@ class AuthenticationRepository {
   final GoogleSignIn _googleSignIn;
 
   /// Whether or not the current environment is web
-  /// Should only be overriden for testing purposes. Otherwise,
+  /// Should only be overridden for testing purposes. Otherwise,
   /// defaults to [kIsWeb]
   @visibleForTesting
   bool isWeb = kIsWeb;
@@ -274,6 +274,7 @@ class AuthenticationRepository {
 }
 
 extension on firebase_auth.User {
+  /// Maps a [firebase_auth.User] into a [User].
   User get toUser {
     return User(id: uid, email: email, name: displayName, photo: photoURL);
   }
