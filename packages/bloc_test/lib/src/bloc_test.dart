@@ -374,14 +374,14 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
 @isTest
 void fakeAsyncBlocTest<B extends BlocBase<State>, State>(
   String description, {
-  void Function(FakeAsync async)? setUp,
   required B Function() build,
+  void Function(FakeAsync async)? setUp,
   State Function()? seed,
-  Function(B bloc, FakeAsync async)? act,
+  dynamic Function(B bloc, FakeAsync async)? act,
   Duration? wait,
   int skip = 0,
   dynamic Function()? expect,
-  Function(B bloc)? verify,
+  dynamic Function(B bloc)? verify,
   dynamic Function()? errors,
   void Function(FakeAsync async)? tearDown,
   dynamic tags,
@@ -411,14 +411,14 @@ void fakeAsyncBlocTest<B extends BlocBase<State>, State>(
 /// instead.
 @visibleForTesting
 void testBlocFakeAsync<B extends BlocBase<State>, State>({
-  void Function(FakeAsync async)? setUp,
   required B Function() build,
+  void Function(FakeAsync async)? setUp,
   State Function()? seed,
-  Function(B bloc, FakeAsync fakeAsync)? act,
+  dynamic Function(B bloc, FakeAsync fakeAsync)? act,
   Duration? wait,
   int skip = 0,
   dynamic Function()? expect,
-  Function(B bloc)? verify,
+  dynamic Function(B bloc)? verify,
   dynamic Function()? errors,
   void Function(FakeAsync async)? tearDown,
 }) {
@@ -434,53 +434,55 @@ void testBlocFakeAsync<B extends BlocBase<State>, State>({
   );
   Bloc.observer = testObserver;
 
-  fakeAsync((fakeAsync) => runZonedGuarded(
-        () {
-          setUp?.call(fakeAsync);
-          final states = <State>[];
-          final bloc = build();
-          // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-          if (seed != null) bloc.emit(seed());
-          final subscription = bloc.stream.skip(skip).listen(states.add);
+  fakeAsync(
+    (fakeAsync) => runZonedGuarded(
+      () {
+        setUp?.call(fakeAsync);
+        final states = <State>[];
+        final bloc = build();
+        // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+        if (seed != null) bloc.emit(seed());
+        final subscription = bloc.stream.skip(skip).listen(states.add);
 
-          try {
-            act?.call(bloc, fakeAsync);
-            fakeAsync.elapse(Duration.zero);
-          } catch (error) {
-            if (errors == null) rethrow;
-            unhandledErrors.add(error);
-          }
-          if (wait != null) fakeAsync.elapse(wait);
-
+        try {
+          act?.call(bloc, fakeAsync);
           fakeAsync.elapse(Duration.zero);
-          unawaited(bloc.close());
+        } catch (error) {
+          if (errors == null) rethrow;
+          unhandledErrors.add(error);
+        }
+        if (wait != null) fakeAsync.elapse(wait);
 
-          if (expect != null && !errorThrown) {
-            final dynamic expected = expect();
-            shallowEquality = '$states' == '$expected';
-            _validateBlocExpect<State>(expected, states, shallowEquality);
-          }
+        fakeAsync.elapse(Duration.zero);
+        unawaited(bloc.close());
 
-          unawaited(subscription.cancel());
-          verify?.call(bloc);
-          tearDown?.call(fakeAsync);
+        if (expect != null && !errorThrown) {
+          final dynamic expected = expect();
+          shallowEquality = '$states' == '$expected';
+          _validateBlocExpect<State>(expected, states, shallowEquality);
+        }
 
-          fakeAsync.flushMicrotasks();
-        },
-        (Object error, _) {
-          try {
-            _validateBlocErrors(
-              errors,
-              error,
-              unhandledErrors,
-              shallowEquality,
-            );
-          } catch (_) {
-            errorThrown = true;
-            rethrow;
-          }
-        },
-      ));
+        unawaited(subscription.cancel());
+        verify?.call(bloc);
+        tearDown?.call(fakeAsync);
+
+        fakeAsync.flushMicrotasks();
+      },
+      (Object error, _) {
+        try {
+          _validateBlocErrors(
+            errors,
+            error,
+            unhandledErrors,
+            shallowEquality,
+          );
+        } catch (_) {
+          errorThrown = true;
+          rethrow;
+        }
+      },
+    ),
+  );
   if (errors != null) {
     test.expect(unhandledErrors, test.wrapMatcher(errors()));
   }
@@ -495,7 +497,8 @@ void _validateBlocErrors(
   if (shallowEquality && error is test.TestFailure) {
     // ignore: only_throw_errors
     throw test.TestFailure(
-      '''${error.message}
+      '''
+${error.message}
 WARNING: Please ensure state instances extend Equatable, override == and hashCode, or implement Comparable.
 Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''',
     );
