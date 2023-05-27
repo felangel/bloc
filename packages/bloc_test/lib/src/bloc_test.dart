@@ -470,7 +470,11 @@ void testBlocFakeAsync<B extends BlocBase<State>, State>({
         (Object error, _) {
           try {
             _validateBlocErrors(
-                errors, error, unhandledErrors, shallowEquality);
+              errors,
+              error,
+              unhandledErrors,
+              shallowEquality,
+            );
           } catch (_) {
             errorThrown = true;
             rethrow;
@@ -482,8 +486,12 @@ void testBlocFakeAsync<B extends BlocBase<State>, State>({
   }
 }
 
-void _validateBlocErrors(dynamic Function()? errors, Object error,
-    List<Object> unhandledErrors, bool shallowEquality) {
+void _validateBlocErrors(
+  dynamic Function()? errors,
+  Object error,
+  List<Object> unhandledErrors,
+  bool shallowEquality,
+) {
   if (shallowEquality && error is test.TestFailure) {
     // ignore: only_throw_errors
     throw test.TestFailure(
@@ -499,7 +507,10 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
 }
 
 void _validateBlocExpect<State>(
-    dynamic expected, List<State> states, bool shallowEquality) {
+  dynamic expected,
+  List<State> states,
+  bool shallowEquality,
+) {
   try {
     test.expect(states, test.wrapMatcher(expected));
   } on test.TestFailure catch (e) {
