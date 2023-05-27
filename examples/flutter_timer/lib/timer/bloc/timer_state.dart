@@ -1,6 +1,6 @@
 part of 'timer_bloc.dart';
 
-abstract class TimerState extends Equatable {
+sealed class TimerState extends Equatable {
   const TimerState(this.duration);
   final int duration;
 
@@ -8,27 +8,27 @@ abstract class TimerState extends Equatable {
   List<Object> get props => [duration];
 }
 
-class TimerInitial extends TimerState {
+final class TimerInitial extends TimerState {
   const TimerInitial(super.duration);
 
   @override
   String toString() => 'TimerInitial { duration: $duration }';
 }
 
-class TimerRunPause extends TimerState {
+final class TimerRunPause extends TimerState {
   const TimerRunPause(super.duration);
 
   @override
   String toString() => 'TimerRunPause { duration: $duration }';
 }
 
-class TimerRunInProgress extends TimerState {
+final class TimerRunInProgress extends TimerState {
   const TimerRunInProgress(super.duration);
 
   @override
   String toString() => 'TimerRunInProgress { duration: $duration }';
 }
 
-class TimerRunComplete extends TimerState {
+final class TimerRunComplete extends TimerState {
   const TimerRunComplete() : super(0);
 }

@@ -87,7 +87,7 @@ void main() {
         'loading indicator is shown when status is submission in progress',
         (tester) async {
       when(() => loginBloc.state).thenReturn(
-        const LoginState(status: FormzStatus.submissionInProgress),
+        const LoginState(status: FormzSubmissionStatus.inProgress),
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -105,9 +105,7 @@ void main() {
 
     testWidgets('continue button is enabled when status is validated',
         (tester) async {
-      when(() => loginBloc.state).thenReturn(
-        const LoginState(status: FormzStatus.valid),
-      );
+      when(() => loginBloc.state).thenReturn(const LoginState(isValid: true));
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -124,9 +122,7 @@ void main() {
 
     testWidgets('LoginSubmitted is added to LoginBloc when continue is tapped',
         (tester) async {
-      when(() => loginBloc.state).thenReturn(
-        const LoginState(status: FormzStatus.valid),
-      );
+      when(() => loginBloc.state).thenReturn(const LoginState(isValid: true));
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -146,12 +142,10 @@ void main() {
       whenListen(
         loginBloc,
         Stream.fromIterable([
-          const LoginState(status: FormzStatus.submissionInProgress),
-          const LoginState(status: FormzStatus.submissionFailure),
+          const LoginState(status: FormzSubmissionStatus.inProgress),
+          const LoginState(status: FormzSubmissionStatus.failure),
         ]),
-      );
-      when(() => loginBloc.state).thenReturn(
-        const LoginState(status: FormzStatus.submissionFailure),
+        initialState: const LoginState(status: FormzSubmissionStatus.failure),
       );
       await tester.pumpWidget(
         MaterialApp(

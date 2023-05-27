@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
 
 part 'json_serializable_cubit.g.dart';
 
@@ -17,6 +18,7 @@ class JsonSerializableCubit extends HydratedCubit<User> {
   Map<String, dynamic> toJson(User state) => state.toJson();
 }
 
+@immutable
 @JsonSerializable(explicitToJson: true)
 class User {
   const User(this.name, this.age, this.favoriteColor, this.todos);
@@ -79,6 +81,7 @@ class User {
 
 enum Color { red, green, blue }
 
+@immutable
 @JsonSerializable(explicitToJson: true)
 class Todo {
   const Todo(this.id, this.task);

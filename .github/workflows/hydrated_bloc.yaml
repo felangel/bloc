@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2.8.0
+      - uses: subosito/flutter-action@v2.10.0
 
       - name: Install Dependencies
         run: flutter pub get
@@ -54,7 +54,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2.8.0
+      - uses: subosito/flutter-action@v2.10.0
 
       - name: Install Dependencies
         run: |

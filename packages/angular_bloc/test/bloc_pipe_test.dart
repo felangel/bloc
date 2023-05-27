@@ -1,4 +1,5 @@
 @TestOn('browser')
+library angular_bloc_test;
 
 import 'dart:async';
 
@@ -24,7 +25,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 void main() {
   group('Stream', () {
-    late Bloc bloc;
+    late Bloc<dynamic, dynamic> bloc;
     late BlocPipe pipe;
     late ChangeDetectorRef ref;
 
@@ -42,10 +43,12 @@ void main() {
       test('should return the latest available value', () async {
         pipe.transform(bloc);
         bloc.add(Increment());
-        Timer.run(expectAsync0(() {
-          final dynamic res = pipe.transform(bloc);
-          expect(res, 1);
-        }));
+        Timer.run(
+          expectAsync0(() {
+            final dynamic res = pipe.transform(bloc);
+            expect(res, 1);
+          }),
+        );
       });
 
       test(
@@ -53,43 +56,52 @@ void main() {
           'since the last call', () async {
         pipe.transform(bloc);
         bloc.add(Increment());
-        Timer.run(expectAsync0(() {
-          pipe.transform(bloc);
-          expect(pipe.transform(bloc), 1);
-        }));
+        Timer.run(
+          expectAsync0(() {
+            pipe.transform(bloc);
+            expect(pipe.transform(bloc), 1);
+          }),
+        );
       });
 
       test(
           'should dispose of the existing subscription when '
           'subscribing to a new bloc', () async {
         pipe.transform(bloc);
-        var newBloc = CounterBloc();
+        final newBloc = CounterBloc();
         expect(pipe.transform(newBloc), 0);
         // this should not affect the pipe
         bloc.add(Increment());
-        Timer.run(expectAsync0(() {
-          expect(pipe.transform(newBloc), 0);
-        }));
+        Timer.run(
+          expectAsync0(() {
+            expect(pipe.transform(newBloc), 0);
+          }),
+        );
       });
 
       test('should not dispose of existing subscription when Streams are equal',
           () async {
         // See https://github.com/dart-lang/angular2/issues/260
-        final _bloc = CounterBloc();
-        expect(pipe.transform(_bloc), 0);
-        _bloc.add(Increment());
-        Timer.run(expectAsync0(() {
-          expect(pipe.transform(_bloc), 1);
-        }));
+        final bloc = CounterBloc();
+        expect(pipe.transform(bloc), 0);
+        bloc.add(Increment());
+        Timer.run(
+          expectAsync0(() {
+            expect(pipe.transform(bloc), 1);
+          }),
+        );
       });
 
       test('should request a change detection check upon receiving a new value',
           () async {
         pipe.transform(bloc);
         bloc.add(Increment());
-        Timer(const Duration(milliseconds: 10), expectAsync0(() {
-          verify(() => ref.markForCheck()).called(1);
-        }));
+        Timer(
+          const Duration(milliseconds: 10),
+          expectAsync0(() {
+            verify(() => ref.markForCheck()).called(1);
+          }),
+        );
       });
     });
 
@@ -104,9 +116,11 @@ void main() {
           ..transform(bloc)
           ..ngOnDestroy();
         bloc.add(Increment());
-        Timer.run(expectAsync0(() {
-          expect(pipe.transform(bloc), 1);
-        }));
+        Timer.run(
+          expectAsync0(() {
+            expect(pipe.transform(bloc), 1);
+          }),
+        );
       });
     });
   });

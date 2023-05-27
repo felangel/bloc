@@ -61,9 +61,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class BlocConsumer<B extends StateStreamable<S>, S> extends StatefulWidget {
   /// {@macro bloc_consumer}
   const BlocConsumer({
-    Key? key,
     required this.builder,
     required this.listener,
+    Key? key,
     this.bloc,
     this.buildWhen,
     this.listenWhen,

@@ -64,12 +64,14 @@ mixin ReplayCubitMixin<State> on Cubit<State> {
 
   @override
   void emit(State state) {
-    _changeStack.add(_Change<State>(
-      this.state,
-      state,
-      () => super.emit(state),
-      (val) => super.emit(val),
-    ));
+    _changeStack.add(
+      _Change<State>(
+        this.state,
+        state,
+        () => super.emit(state),
+        (val) => super.emit(val),
+      ),
+    );
     super.emit(state);
   }
 

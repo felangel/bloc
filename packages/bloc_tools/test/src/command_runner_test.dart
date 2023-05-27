@@ -1,5 +1,6 @@
 // ignore_for_file: no_adjacent_strings_in_list
 import 'dart:async';
+import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:bloc_tools/src/command_runner.dart';
@@ -10,7 +11,6 @@ import 'package:mason/mason.dart' show Logger, Progress;
 import 'package:mocktail/mocktail.dart';
 import 'package:pub_updater/pub_updater.dart';
 import 'package:test/test.dart';
-import 'package:universal_io/io.dart';
 
 class MockLogger extends Mock implements Logger {}
 

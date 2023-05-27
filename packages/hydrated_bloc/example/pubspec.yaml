@@ -4,14 +4,14 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  hydrated_bloc: ^9.0.0
   flutter_bloc: ^8.1.2
-  path_provider: ^2.0.12
+  hydrated_bloc: ^9.0.0
+  path_provider: ^2.0.15
 
 flutter:
   uses-material-design: true

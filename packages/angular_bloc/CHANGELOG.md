@@ -1,3 +1,9 @@
+# 10.0.0-dev.1
+
+- docs: upgrade to Dart 3
+- refactor: standardize analysis_options
+- refactor: update sdk constraints and fix analysis warnings
+
 # 10.0.0-dev.0
 
 - **BREAKING**: refactor: upgrade `ngdart` to v8 pre-release

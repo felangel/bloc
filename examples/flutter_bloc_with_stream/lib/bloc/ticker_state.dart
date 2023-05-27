@@ -4,7 +4,7 @@ part of 'ticker_bloc.dart';
 /// Base class for all [TickerState]s which are
 /// managed by the [TickerBloc].
 /// {@endtemplate}
-abstract class TickerState extends Equatable {
+sealed class TickerState extends Equatable {
   /// {@macro ticker_state}
   const TickerState();
 
@@ -13,13 +13,13 @@ abstract class TickerState extends Equatable {
 }
 
 /// The initial state of the [TickerBloc].
-class TickerInitial extends TickerState {}
+final class TickerInitial extends TickerState {}
 
 /// {@template ticker_tick_success}
 /// The state of the [TickerBloc] after a [Ticker]
 /// has been started and includes the current tick count.
 /// {@endtemplate}
-class TickerTickSuccess extends TickerState {
+final class TickerTickSuccess extends TickerState {
   /// {@macro ticker_tick_success}
   const TickerTickSuccess(this.count);
 
@@ -33,7 +33,7 @@ class TickerTickSuccess extends TickerState {
 /// {@template ticker_complete}
 /// The state of the [TickerBloc] after the [Ticker] has completed.
 /// {@endtemplate}
-class TickerComplete extends TickerState {
+final class TickerComplete extends TickerState {
   /// {@macro ticker_complete}
   const TickerComplete();
 }

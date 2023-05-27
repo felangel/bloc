@@ -12,9 +12,9 @@ class MockCatalogBloc extends MockBloc<CatalogEvent, CatalogState>
 
 extension PumpApp on WidgetTester {
   Future<void> pumpApp({
+    required Widget child,
     CartBloc? cartBloc,
     CatalogBloc? catalogBloc,
-    required Widget child,
   }) {
     return pumpWidget(
       MaterialApp(

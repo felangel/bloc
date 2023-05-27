@@ -12,27 +12,31 @@ void main() async {
         ? HydratedStorage.webStorageDirectory
         : await getTemporaryDirectory(),
   );
-  runApp(App());
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
+  const App({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => BrightnessCubit(),
-      child: AppView(),
+      child: const AppView(),
     );
   }
 }
 
 class AppView extends StatelessWidget {
+  const AppView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BrightnessCubit, Brightness>(
       builder: (context, brightness) {
         return MaterialApp(
           theme: ThemeData(brightness: brightness),
-          home: CounterPage(),
+          home: const CounterPage(),
         );
       },
     );
@@ -40,16 +44,20 @@ class AppView extends StatelessWidget {
 }
 
 class CounterPage extends StatelessWidget {
+  const CounterPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CounterBloc>(
       create: (_) => CounterBloc(),
-      child: CounterView(),
+      child: const CounterView(),
     );
   }
 }
 
 class CounterView extends StatelessWidget {
+  const CounterView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -95,11 +103,11 @@ class CounterView extends StatelessWidget {
   }
 }
 
-abstract class CounterEvent {}
+sealed class CounterEvent {}
 
-class CounterIncrementPressed extends CounterEvent {}
+final class CounterIncrementPressed extends CounterEvent {}
 
-class CounterDecrementPressed extends CounterEvent {}
+final class CounterDecrementPressed extends CounterEvent {}
 
 class CounterBloc extends HydratedBloc<CounterEvent, int> {
   CounterBloc() : super(0) {

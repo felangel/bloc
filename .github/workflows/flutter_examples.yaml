@@ -11,7 +11,6 @@ on:
       - "examples/flutter_dynamic_form/**"
       - "examples/flutter_firebase_login/**"
       - "examples/flutter_form_validation/**"
-      - "examples/flutter_graphql_jobs/**"
       - "examples/flutter_infinite_list/**"
       - "examples/flutter_login/**"
       - "examples/flutter_shopping_cart/**"
@@ -31,7 +30,6 @@ on:
       - "examples/flutter_dynamic_form/**"
       - "examples/flutter_firebase_login/**"
       - "examples/flutter_form_validation/**"
-      - "examples/flutter_graphql_jobs/**"
       - "examples/flutter_infinite_list/**"
       - "examples/flutter_login/**"
       - "examples/flutter_shopping_cart/**"
@@ -54,7 +52,6 @@ jobs:
             "examples/flutter_dynamic_form",
             "examples/flutter_firebase_login",
             "examples/flutter_form_validation",
-            "examples/flutter_graphql_jobs",
             "examples/flutter_infinite_list",
             "examples/flutter_login",
             "examples/flutter_shopping_cart",
@@ -71,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2.8.0
+      - uses: subosito/flutter-action@v2.10.0
       - name: Install Dependencies
         working-directory: ${{ matrix.folder }}
         run: flutter packages get

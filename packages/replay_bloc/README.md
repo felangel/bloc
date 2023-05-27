@@ -141,11 +141,11 @@ void main() {
 If you wish to be able to use a `ReplayBloc` in conjuction with a different type of cubit like `HydratedBloc`, you can use the `ReplayBlocMixin`.
 
 ```dart
-abstract class CounterEvent with ReplayEvent {}
+sealed class CounterEvent with ReplayEvent {}
 
-class CounterIncrementPressed extends CounterEvent {}
+final class CounterIncrementPressed extends CounterEvent {}
 
-class CounterDecrementPressed extends CounterEvent {}
+final class CounterDecrementPressed extends CounterEvent {}
 
 class CounterBloc extends HydratedBloc<CounterEvent, int> with ReplayBlocMixin {
   CounterBloc() : super(0) {

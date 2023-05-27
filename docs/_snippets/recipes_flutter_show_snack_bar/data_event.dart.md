@@ -2,7 +2,7 @@
 import 'package:meta/meta.dart';
 
 @immutable
-abstract class DataEvent {}
+sealed class DataEvent {}
 
-class FetchData extends DataEvent {}
+final class FetchData extends DataEvent {}
 ```

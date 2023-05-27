@@ -18,7 +18,7 @@ void main() {
         MaterialApp(
           home: BlocSelector<CounterCubit, int, bool>(
             bloc: counterCubit,
-            selector: (state) => state % 2 == 0,
+            selector: (state) => state.isEven,
             builder: (context, state) {
               builderCallCount++;
               return Text('isEven: $state');
@@ -79,7 +79,7 @@ void main() {
           home: BlocProvider.value(
             value: counterCubit,
             child: BlocSelector<CounterCubit, int, bool>(
-              selector: (state) => state % 2 == 0,
+              selector: (state) => state.isEven,
               builder: (context, state) {
                 builderCallCount++;
                 return Text('isEven: $state');
@@ -103,7 +103,7 @@ void main() {
           child: BlocProvider.value(
             value: firstCounterCubit,
             child: BlocSelector<CounterCubit, int, bool>(
-              selector: (state) => state % 2 == 0,
+              selector: (state) => state.isEven,
               builder: (context, state) => Text('isEven: $state'),
             ),
           ),
@@ -123,7 +123,7 @@ void main() {
           child: BlocProvider.value(
             value: secondCounterCubit,
             child: BlocSelector<CounterCubit, int, bool>(
-              selector: (state) => state % 2 == 0,
+              selector: (state) => state.isEven,
               builder: (context, state) => Text('isEven: $state'),
             ),
           ),
@@ -149,7 +149,7 @@ void main() {
           textDirection: TextDirection.ltr,
           child: BlocSelector<CounterCubit, int, bool>(
             bloc: firstCounterCubit,
-            selector: (state) => state % 2 == 0,
+            selector: (state) => state.isEven,
             builder: (context, state) => Text('isEven: $state'),
           ),
         ),
@@ -167,7 +167,7 @@ void main() {
           textDirection: TextDirection.ltr,
           child: BlocSelector<CounterCubit, int, bool>(
             bloc: secondCounterCubit,
-            selector: (state) => state % 2 == 0,
+            selector: (state) => state.isEven,
             builder: (context, state) => Text('isEven: $state'),
           ),
         ),

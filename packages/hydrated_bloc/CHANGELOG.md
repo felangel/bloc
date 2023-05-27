@@ -1,3 +1,10 @@
+# 9.1.1
+
+- docs: upgrade to Dart 3 ([#3809](https://github.com/felangel/bloc/pull/3809))
+- refactor: standardize analysis_options ([#3809](https://github.com/felangel/bloc/pull/3809))
+- refactor: fix `unawaited` sdk constraint ([#3809](https://github.com/felangel/bloc/pull/3809))
+- refactor: update sdk constraints and fix analysis warnings ([#3809](https://github.com/felangel/bloc/pull/3809))
+
 # 9.1.0
 
 - chore: add screenshots to `pubspec.yaml` ([#3721](https://github.com/felangel/bloc/pull/3721))

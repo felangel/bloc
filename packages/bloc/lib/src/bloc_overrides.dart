@@ -48,7 +48,7 @@ abstract class BlocOverrides {
   static R runZoned<R>(
     R Function() body, {
     BlocObserver? blocObserver,
-    EventTransformer? eventTransformer,
+    EventTransformer<dynamic>? eventTransformer,
   }) {
     final overrides = _BlocOverridesScope(blocObserver, eventTransformer);
     return _asyncRunZoned(body, zoneValues: {_token: overrides});
@@ -73,7 +73,7 @@ abstract class BlocOverrides {
   /// opinionated set of event transformers.
   ///
   @Deprecated('This will be removed in v9.0.0. Use Bloc.transformer instead.')
-  EventTransformer get eventTransformer => Bloc.transformer;
+  EventTransformer<dynamic> get eventTransformer => Bloc.transformer;
 }
 
 class _BlocOverridesScope extends BlocOverrides {
@@ -81,7 +81,7 @@ class _BlocOverridesScope extends BlocOverrides {
 
   final BlocOverrides? _previous = BlocOverrides.current;
   final BlocObserver? _blocObserver;
-  final EventTransformer? _eventTransformer;
+  final EventTransformer<dynamic>? _eventTransformer;
 
   @override
   BlocObserver get blocObserver {
@@ -95,7 +95,7 @@ class _BlocOverridesScope extends BlocOverrides {
   }
 
   @override
-  EventTransformer get eventTransformer {
+  EventTransformer<dynamic> get eventTransformer {
     final eventTransformer = _eventTransformer;
     if (eventTransformer != null) return eventTransformer;
 

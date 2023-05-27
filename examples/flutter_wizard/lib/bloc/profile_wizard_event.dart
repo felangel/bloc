@@ -1,13 +1,13 @@
 part of 'profile_wizard_bloc.dart';
 
-abstract class ProfileWizardEvent extends Equatable {
+sealed class ProfileWizardEvent extends Equatable {
   const ProfileWizardEvent();
 
   @override
   List<Object?> get props => [];
 }
 
-class ProfileWizardNameSubmitted extends ProfileWizardEvent {
+final class ProfileWizardNameSubmitted extends ProfileWizardEvent {
   const ProfileWizardNameSubmitted(this.name);
 
   final String name;
@@ -16,7 +16,7 @@ class ProfileWizardNameSubmitted extends ProfileWizardEvent {
   List<Object> get props => [name];
 }
 
-class ProfileWizardAgeSubmitted extends ProfileWizardEvent {
+final class ProfileWizardAgeSubmitted extends ProfileWizardEvent {
   const ProfileWizardAgeSubmitted(this.age);
 
   final int? age;

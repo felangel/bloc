@@ -97,7 +97,7 @@ void main() {
       test('persists and restores object-*>map list correctly', () async {
         const item = MapObject(1);
         const fromJson = MapObject.fromJson;
-        final cubit = ListCubitMap<MapObject, int>(fromJson, true);
+        final cubit = ListCubitMap<MapObject, int>(fromJson, explicit: true);
         expect(cubit.state, isEmpty);
         cubit.addItem(item);
         await sleep();
@@ -123,8 +123,10 @@ void main() {
       test('persists and restores obj-*>map<custom> list correctly', () async {
         final item = MapCustomObject(1);
         const fromJson = MapCustomObject.fromJson;
-        final cubit =
-            ListCubitMap<MapCustomObject, CustomObject>(fromJson, true);
+        final cubit = ListCubitMap<MapCustomObject, CustomObject>(
+          fromJson,
+          explicit: true,
+        );
         expect(cubit.state, isEmpty);
         cubit.addItem(item);
         await sleep();
@@ -150,7 +152,10 @@ void main() {
       test('persists and restores object-*>list list correctly', () async {
         const item = ListObject(1);
         const fromJson = ListObject.fromJson;
-        final cubit = ListCubitList<ListObject, int>(fromJson, true);
+        final cubit = ListCubitList<ListObject, int>(
+          fromJson,
+          explicit: true,
+        );
         expect(cubit.state, isEmpty);
         cubit.addItem(item);
         await sleep();
@@ -176,7 +181,10 @@ void main() {
       test('persists and restores obj-*>list<map> list correctly', () async {
         final item = ListMapObject(1);
         const fromJson = ListMapObject.fromJson;
-        final cubit = ListCubitList<ListMapObject, MapObject>(fromJson, true);
+        final cubit = ListCubitList<ListMapObject, MapObject>(
+          fromJson,
+          explicit: true,
+        );
         expect(cubit.state, isEmpty);
         cubit.addItem(item);
         await sleep();
@@ -204,7 +212,7 @@ void main() {
         const fromJson = ListListObject.fromJson;
         final cubit = ListCubitList<ListListObject, ListObject>(
           fromJson,
-          true,
+          explicit: true,
         );
         expect(cubit.state, isEmpty);
         cubit.addItem(item);
@@ -231,8 +239,10 @@ void main() {
       test('persists and restores obj-*>list<custom> list correctly', () async {
         final item = ListCustomObject(1);
         const fromJson = ListCustomObject.fromJson;
-        final cubit =
-            ListCubitList<ListCustomObject, CustomObject>(fromJson, true);
+        final cubit = ListCubitList<ListCustomObject, CustomObject>(
+          fromJson,
+          explicit: true,
+        );
         expect(cubit.state, isEmpty);
         cubit.addItem(item);
         await sleep();
@@ -258,8 +268,10 @@ void main() {
       test('persists and restores obj-*>list<custom> empty list correctly',
           () async {
         const fromJson = ListCustomObject.fromJson;
-        final cubit =
-            ListCubitList<ListCustomObject, CustomObject>(fromJson, true);
+        final cubit = ListCubitList<ListCustomObject, CustomObject>(
+          fromJson,
+          explicit: true,
+        );
         expect(cubit.state, isEmpty);
         cubit.reset();
         await sleep();
@@ -312,7 +324,7 @@ void main() {
           () => cubit.setCyclic(cycle1),
           throwsA(
             isA<HydratedUnsupportedError>().having(
-              (dynamic e) => e.cause,
+              (e) => e.cause,
               'cycle2 -> cycle1 -> cycle2 ->',
               isA<HydratedCyclicError>(),
             ),
@@ -329,7 +341,7 @@ void main() {
           cubit.setBad,
           throwsA(
             isA<HydratedUnsupportedError>().having(
-              (dynamic e) => e.cause,
+              (e) => e.cause,
               'Object has no `toJson`',
               isA<NoSuchMethodError>(),
             ),
