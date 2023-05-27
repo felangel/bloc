@@ -274,8 +274,7 @@ class AuthenticationRepository {
 }
 
 extension on firebase_auth.User {
-  /// Handy way to use the [toUser] extension method,
-  /// mapping [firebase_auth.User] into custom [User] Model.
+  /// Maps a [firebase_auth.User] into a [User].
   User get toUser {
     return User(id: uid, email: email, name: displayName, photo: photoURL);
   }
