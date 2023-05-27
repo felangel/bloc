@@ -638,7 +638,7 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
           await completer.future;
         }, (Object error, _) {
           actualError = error;
-          completer.complete();
+          if (!completer.isCompleted) completer.complete();
         });
         expect((actualError as TestFailure).message, expectedError);
       });
