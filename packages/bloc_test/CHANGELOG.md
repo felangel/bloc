@@ -1,3 +1,7 @@
+# 9.1.3
+
+- fix: test timeouts due to uncaught exceptions which occur with `package:test ^1.22.2` ([#3854](https://github.com/felangel/bloc/pull/3854))
+
 # 9.1.2
 
 - docs: upgrade to Dart 3
