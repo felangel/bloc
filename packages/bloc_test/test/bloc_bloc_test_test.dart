@@ -169,6 +169,17 @@ void main() {
         });
         expect(actualError, exception);
       });
+
+      test('future still completes when uncaught exception occurs', () async {
+        await expectLater(
+          () => testBloc<ErrorCounterBloc, int>(
+            build: () => ErrorCounterBloc(),
+            act: (bloc) => bloc.add(CounterEvent.increment),
+            expect: () => const <int>[1],
+          ),
+          throwsA(isA<ErrorCounterBlocError>()),
+        );
+      });
     });
 
     group('AsyncCounterBloc', () {
@@ -638,7 +649,7 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
           await completer.future;
         }, (Object error, _) {
           actualError = error;
-          completer.complete();
+          if (!completer.isCompleted) completer.complete();
         });
         expect((actualError as TestFailure).message, expectedError);
       });
