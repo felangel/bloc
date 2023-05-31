@@ -253,8 +253,8 @@ Future<void> _runZonedGuarded(Future<void> Function() body) {
   runZonedGuarded(() async {
     await body();
     if (!completer.isCompleted) completer.complete();
-  }, (error, stack) {
-    if (!completer.isCompleted) completer.completeError(error);
+  }, (error, stackTrace) {
+    if (!completer.isCompleted) completer.completeError(error, stackTrace);
   });
   return completer.future;
 }
