@@ -169,6 +169,17 @@ void main() {
         });
         expect(actualError, exception);
       });
+
+      test('future still completes when uncaught exception occurs', () async {
+        await expectLater(
+          () => testBloc<ErrorCounterBloc, int>(
+            build: () => ErrorCounterBloc(),
+            act: (bloc) => bloc.add(CounterEvent.increment),
+            expect: () => const <int>[1],
+          ),
+          throwsA(isA<ErrorCounterBlocError>()),
+        );
+      });
     });
 
     group('AsyncCounterBloc', () {
