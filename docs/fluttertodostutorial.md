@@ -23,7 +23,7 @@
 We'll start off by creating a brand new Flutter project using the [very_good_cli](https://pub.dev/packages/very_good_cli).
 
 ```sh
-very_good create flutter_todos --desc "An example todos app that showcases bloc state management patterns."
+very_good create flutter_app flutter_todos --desc "An example todos app that showcases bloc state management patterns."
 ```
 
 ?> **💡 Tip**: You can install `very_good_cli` via `dart pub global activate very_good_cli`.
