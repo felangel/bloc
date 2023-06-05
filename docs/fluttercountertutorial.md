@@ -125,7 +125,11 @@ A `BlocBuilder` is used to wrap the `Text` widget in order to update the text an
 
 ## Barrel
 
-Let's create `lib/counter/counter.dart`:
+Let's create 'lib/counter/view/view.dart' first.
+
+Add 'counter_page.dart' and 'counter_view.dart' in that file.
+
+Then create `lib/counter/counter.dart`:
 
 Add `counter.dart` to export all the public facing parts of the counter feature.
 
