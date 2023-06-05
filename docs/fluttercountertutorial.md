@@ -43,7 +43,8 @@ flutter packages get
 │   │   │   └── counter_cubit.dart
 │   │   └── view
 │   │       ├── counter_page.dart
-│   │       └── counter_view.dart
+│   │       ├── counter_view.dart
+│   │       └── view.dart
 │   ├── counter_observer.dart
 │   └── main.dart
 ├── pubspec.lock
