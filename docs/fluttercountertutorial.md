@@ -125,6 +125,13 @@ A `BlocBuilder` is used to wrap the `Text` widget in order to update the text an
 
 ## Barrel
 
+Create `lib/counter/view/view.dart`:
+
+Add `view.dart` to export all public facing parts of counter view.
+
+[view.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/view.dart ':include')
+
+
 Let's create `lib/counter/counter.dart`:
 
 Add `counter.dart` to export all the public facing parts of the counter feature.
