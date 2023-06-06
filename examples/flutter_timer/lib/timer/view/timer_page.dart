@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_timer/ticker.dart';
 import 'package:flutter_timer/timer/timer.dart';
+import 'package:wave/wave.dart';
+import 'package:wave/config.dart';
 
 class TimerPage extends StatelessWidget {
   const TimerPage({super.key});
@@ -32,7 +34,11 @@ class TimerView extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 100),
                 child: Center(child: TimerText()),
               ),
-              Actions(),
+              SizedBox(
+                width: 300.0,
+                height: 50.0,
+                child: Actions(),
+              )
             ],
           ),
         ],
@@ -52,7 +58,10 @@ class TimerText extends StatelessWidget {
     final secondsStr = (duration % 60).toString().padLeft(2, '0');
     return Text(
       '$minutesStr:$secondsStr',
-      style: Theme.of(context).textTheme.displayLarge,
+      style: TextStyle(
+        color: Colors.white, // 设置文本颜色
+        fontSize: 48.0, // 设置字体大小
+      ),
     );
   }
 }
@@ -80,6 +89,8 @@ class Actions extends StatelessWidget {
               TimerRunInProgress() => [
                   FloatingActionButton(
                     child: const Icon(Icons.pause),
+                    // backgroundColor: Colors.white,
+                    // foregroundColor: Colors.black, // icon color
                     onPressed: () =>
                         context.read<TimerBloc>().add(const TimerPaused()),
                   ),
@@ -117,23 +128,37 @@ class Actions extends StatelessWidget {
 }
 
 class Background extends StatelessWidget {
-  const Background({super.key});
+  const Background({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.blue.shade50,
-              Colors.blue.shade500,
-            ],
-          ),
-        ),
+    return WaveWidget(
+      config: CustomConfig(
+        gradients: [
+          [
+            Color.fromRGBO(72, 74, 126, 1),
+            Color.fromRGBO(125, 170, 206, 1),
+            Color.fromRGBO(184, 189, 245, 0.7)
+          ],
+          [
+            Color.fromRGBO(72, 74, 126, 1),
+            Color.fromRGBO(125, 170, 206, 1),
+            Color.fromRGBO(172, 182, 219, 0.7)
+          ],
+          [
+            Color.fromRGBO(72, 73, 126, 1),
+            Color.fromRGBO(125, 170, 206, 1),
+            Color.fromRGBO(190, 238, 246, 0.7)
+          ],
+        ],
+        durations: [19440, 10800, 6000],
+        heightPercentages: [0.03, 0.01, 0.02],
+        gradientBegin: Alignment.bottomCenter,
+        gradientEnd: Alignment.topCenter,
       ),
+      size: Size(double.infinity, double.infinity),
+      waveAmplitude: 25,
+      backgroundColor: Colors.blue[50],
     );
   }
 }

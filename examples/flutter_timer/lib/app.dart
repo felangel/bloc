@@ -9,9 +9,11 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Timer',
       theme: ThemeData(
-        primaryColor: const Color.fromRGBO(109, 234, 255, 1),
-        colorScheme: const ColorScheme.light(
-          secondary: Color.fromRGBO(72, 74, 126, 1),
+        primarySwatch: Colors.blue,
+        // Set global FAB theme
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Color.fromARGB(255, 50, 42, 83),
+          foregroundColor: Colors.white,
         ),
       ),
       home: const TimerPage(),
