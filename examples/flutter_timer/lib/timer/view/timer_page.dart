@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_timer/ticker.dart';
 import 'package:flutter_timer/timer/timer.dart';
-import 'package:wave/wave.dart';
 import 'package:wave/config.dart';
+import 'package:wave/wave.dart';
 
 class TimerPage extends StatelessWidget {
   const TimerPage({super.key});
@@ -35,8 +35,8 @@ class TimerView extends StatelessWidget {
                 child: Center(child: TimerText()),
               ),
               SizedBox(
-                width: 300.0,
-                height: 50.0,
+                width: 300,
+                height: 50,
                 child: Actions(),
               )
             ],
@@ -58,9 +58,9 @@ class TimerText extends StatelessWidget {
     final secondsStr = (duration % 60).toString().padLeft(2, '0');
     return Text(
       '$minutesStr:$secondsStr',
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.white, 
-        fontSize: 48.0, 
+        fontSize: 48, 
       ),
     );
   }
@@ -126,7 +126,7 @@ class Actions extends StatelessWidget {
 }
 
 class Background extends StatelessWidget {
-  const Background({Key? key}) : super(key: key);
+  const Background({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -134,19 +134,19 @@ class Background extends StatelessWidget {
       config: CustomConfig(
         gradients: [
           [
-            Color.fromRGBO(72, 74, 126, 1),
-            Color.fromRGBO(125, 170, 206, 1),
-            Color.fromRGBO(184, 189, 245, 0.7)
+            const Color.fromRGBO(72, 74, 126, 1),
+            const Color.fromRGBO(125, 170, 206, 1),
+            const Color.fromRGBO(184, 189, 245, 0.7)
           ],
           [
-            Color.fromRGBO(72, 74, 126, 1),
-            Color.fromRGBO(125, 170, 206, 1),
-            Color.fromRGBO(172, 182, 219, 0.7)
+            const Color.fromRGBO(72, 74, 126, 1),
+            const Color.fromRGBO(125, 170, 206, 1),
+            const Color.fromRGBO(172, 182, 219, 0.7)
           ],
           [
-            Color.fromRGBO(72, 73, 126, 1),
-            Color.fromRGBO(125, 170, 206, 1),
-            Color.fromRGBO(190, 238, 246, 0.7)
+            const Color.fromRGBO(72, 73, 126, 1),
+            const Color.fromRGBO(125, 170, 206, 1),
+            const Color.fromRGBO(190, 238, 246, 0.7)
           ],
         ],
         durations: [19440, 10800, 6000],
@@ -154,7 +154,8 @@ class Background extends StatelessWidget {
         gradientBegin: Alignment.bottomCenter,
         gradientEnd: Alignment.topCenter,
       ),
-      size: Size(double.infinity, double.infinity),
+     
+      size: Size.infinite,
       waveAmplitude: 25,
       backgroundColor: Colors.blue[50],
     );

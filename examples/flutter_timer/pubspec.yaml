@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
+  wave: ^0.2.2
 
 dev_dependencies:
   bloc_test: ^9.0.0
