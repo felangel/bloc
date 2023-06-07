@@ -89,8 +89,6 @@ class Actions extends StatelessWidget {
               TimerRunInProgress() => [
                   FloatingActionButton(
                     child: const Icon(Icons.pause),
-                    // backgroundColor: Colors.white,
-                    // foregroundColor: Colors.black, // icon color
                     onPressed: () =>
                         context.read<TimerBloc>().add(const TimerPaused()),
                   ),

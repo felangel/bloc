@@ -10,7 +10,6 @@ class App extends StatelessWidget {
       title: 'Flutter Timer',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        // Set global FAB theme
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Color.fromARGB(255, 50, 42, 83),
           foregroundColor: Colors.white,
