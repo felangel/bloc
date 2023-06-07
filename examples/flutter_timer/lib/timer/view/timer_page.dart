@@ -59,8 +59,8 @@ class TimerText extends StatelessWidget {
     return Text(
       '$minutesStr:$secondsStr',
       style: TextStyle(
-        color: Colors.white, // 设置文本颜色
-        fontSize: 48.0, // 设置字体大小
+        color: Colors.white, 
+        fontSize: 48.0, 
       ),
     );
   }
