@@ -31,14 +31,19 @@ very_good create flutter_app flutter_todos --desc "An example todos app that sho
 Next we'll create the `todos_api`, `local_storage_todos_api`, and `todos_repository` packages using `very_good_cli`:
 
 ```sh
+# Create packages directory for setup of sub-projects.
+mkdir packages && cd packages
+```
+
+```sh
 # create package:todos_api under packages/todos_api
-very_good create todos_api -o packages -t dart_pkg --desc "The interface and models for an API providing access to todos."
+very_good create dart_package todos_api --desc "The interface and models for an API providing access to todos."
 
 # create package:local_storage_todos_api under packages/local_storage_todos_api
-very_good create local_storage_todos_api -o packages -t flutter_pkg --desc "A Flutter implementation of the TodosApi that uses local storage."
+very_good create flutter_package local_storage_todos_api --desc "A Flutter implementation of the TodosApi that uses local storage."
 
 # create package:todos_repository under packages/todos_repository
-very_good create todos_repository -o packages -t dart_pkg --desc "A repository that handles todo related requests."
+very_good create dart_package todos_repository --desc "A repository that handles todo related requests."
 ```
 
 We can then replace the contents of `pubspec.yaml` with:
