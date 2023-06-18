@@ -32,13 +32,13 @@ Next we'll create the `todos_api`, `local_storage_todos_api`, and `todos_reposit
 
 ```sh
 # create package:todos_api under packages/todos_api
-very_good create todos_api -o packages -t dart_pkg --desc "The interface and models for an API providing access to todos."
+very_good create dart_package todos_api --desc "The interface and models for an API providing access to todos." -o packages
 
 # create package:local_storage_todos_api under packages/local_storage_todos_api
-very_good create local_storage_todos_api -o packages -t flutter_pkg --desc "A Flutter implementation of the TodosApi that uses local storage."
+very_good create flutter_package local_storage_todos_api --desc "A Flutter implementation of the TodosApi that uses local storage." -o packages
 
 # create package:todos_repository under packages/todos_repository
-very_good create todos_repository -o packages -t dart_pkg --desc "A repository that handles todo related requests."
+very_good create dart_package todos_repository --desc "A repository that handles todo related requests." -o packages
 ```
 
 We can then replace the contents of `pubspec.yaml` with:
