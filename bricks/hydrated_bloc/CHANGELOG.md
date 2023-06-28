@@ -1,3 +1,7 @@
+# 0.3.0
+
+- feat: add support for `sealed` events using Dart 3
+
 # 0.2.0
 
 - feat: add support for `equatable`
