@@ -1,3 +1,8 @@
+# 0.3.0
+
+- feat: upgrade to Dart 3.0
+  - use `sealed` classes for bloc events
+
 # 0.2.1
 
 - fix: upgrade to mason v0.1.0-dev.40
