@@ -1,3 +1,9 @@
+# 0.2.4
+
+- docs: upgrade to Dart 3 ([#3825](https://github.com/felangel/bloc/pull/3825))
+- refactor: standardize analysis_options ([#3825](https://github.com/felangel/bloc/pull/3825))
+- chore: update sdk constraints and fix analysis warnings ([#3825](https://github.com/felangel/bloc/pull/3825))
+
 # 0.2.3
 
 - chore: add screenshots to pubspec.yaml ([#3728](https://github.com/felangel/bloc/pull/3728))

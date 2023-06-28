@@ -196,8 +196,8 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
   );
   Bloc.observer = testObserver;
 
-  await runZonedGuarded(
-    () async {
+  try {
+    await _runZonedGuarded(() async {
       await setUp?.call();
       final states = <State>[];
       final bloc = build();
@@ -229,24 +229,34 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       await subscription.cancel();
       await verify?.call(bloc);
       await tearDown?.call();
-    },
-    (Object error, _) {
-      if (shallowEquality && error is test.TestFailure) {
-        // ignore: only_throw_errors
-        throw test.TestFailure(
-          '''
+    });
+  } catch (error) {
+    if (shallowEquality && error is test.TestFailure) {
+      // ignore: only_throw_errors
+      throw test.TestFailure(
+        '''
 ${error.message}
 WARNING: Please ensure state instances extend Equatable, override == and hashCode, or implement Comparable.
 Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''',
-        );
-      }
-      if (errors == null || !unhandledErrors.contains(error)) {
-        // ignore: only_throw_errors
-        throw error;
-      }
-    },
-  );
+      );
+    }
+    if (errors == null || !unhandledErrors.contains(error)) {
+      rethrow;
+    }
+  }
+
   if (errors != null) test.expect(unhandledErrors, test.wrapMatcher(errors()));
+}
+
+Future<void> _runZonedGuarded(Future<void> Function() body) {
+  final completer = Completer<void>();
+  runZonedGuarded(() async {
+    await body();
+    if (!completer.isCompleted) completer.complete();
+  }, (error, stackTrace) {
+    if (!completer.isCompleted) completer.completeError(error, stackTrace);
+  });
+  return completer.future;
 }
 
 class _TestBlocObserver extends BlocObserver {

@@ -43,7 +43,8 @@ flutter packages get
 │   │   │   └── counter_cubit.dart
 │   │   └── view
 │   │       ├── counter_page.dart
-│   │       └── counter_view.dart
+│   │       ├── counter_view.dart
+│   │       └── view.dart
 │   ├── counter_observer.dart
 │   └── main.dart
 ├── pubspec.lock
@@ -124,6 +125,13 @@ A `BlocBuilder` is used to wrap the `Text` widget in order to update the text an
 ?> **Note**: Only the `Text` widget is wrapped in a `BlocBuilder` because that is the only widget that needs to be rebuilt in response to state changes in the `CounterCubit`. Avoid unnecessarily wrapping widgets that don't need to be rebuilt when a state changes.
 
 ## Barrel
+
+Create `lib/counter/view/view.dart`:
+
+Add `view.dart` to export all public facing parts of counter view.
+
+[view.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/view.dart ':include')
+
 
 Let's create `lib/counter/counter.dart`:
 

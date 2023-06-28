@@ -60,6 +60,17 @@ void main() {
         expect(instanceA, instanceB);
       });
 
+      test('creates new instance if storage was closed', () async {
+        final instanceA = await HydratedStorage.build(
+          storageDirectory: storageDirectory,
+        );
+        await instanceA.close();
+        final instanceB = storage = await HydratedStorage.build(
+          storageDirectory: storageDirectory,
+        );
+        expect(instanceA, isNot(instanceB));
+      });
+
       test(
           'does not call Hive.init '
           'when storageDirectory is webStorageDirectory', () async {

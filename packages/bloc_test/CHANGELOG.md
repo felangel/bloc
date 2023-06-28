@@ -1,3 +1,12 @@
+# 9.1.3
+
+- fix: test timeouts due to uncaught exceptions which occur with `package:test ^1.22.2` ([#3854](https://github.com/felangel/bloc/pull/3854))
+
+# 9.1.2
+
+- docs: upgrade to Dart 3
+- refactor: standardize analysis_options
+
 # 9.1.1
 
 - chore: upgrade to `bloc ^8.1.1` ([#3723](https://github.com/felangel/bloc/pull/3723))
