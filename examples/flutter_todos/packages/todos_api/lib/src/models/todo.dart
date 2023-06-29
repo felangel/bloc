@@ -30,7 +30,7 @@ class Todo extends Equatable {
     this.isCompleted = false,
   })  : assert(
           id == null || id.isNotEmpty,
-          'id can not be null and should be empty',
+          'id must either be null or not empty',
         ),
         id = id ?? const Uuid().v4();
 
