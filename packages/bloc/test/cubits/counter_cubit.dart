@@ -1,7 +1,11 @@
 import 'package:bloc/bloc.dart';
 
 class CounterCubit extends Cubit<int> {
-  CounterCubit({this.onChangeCallback, this.onErrorCallback}) : super(0);
+  CounterCubit({
+    this.onChangeCallback,
+    this.onErrorCallback,
+    bool syncStateController = false,
+  }) : super(0, syncStateController: syncStateController);
 
   final void Function(Change<int>)? onChangeCallback;
   final void Function(Object error, StackTrace stackTrace)? onErrorCallback;

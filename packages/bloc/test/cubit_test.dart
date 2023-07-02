@@ -261,6 +261,33 @@ void main() {
         await cubit.close();
         expect(states, [equals(1), equals(1)]);
       });
+
+      test('state changes are not available in the same event loop', () async {
+        final states = <int>[];
+        final cubit = CounterCubit()
+          ..stream.listen(states.add)
+          ..increment()
+          ..increment();
+
+        expect(states, isEmpty);
+        await cubit.close();
+        expect(states, [equals(1), equals(2)]);
+      });
+    });
+
+    group('sync listen', () {
+      test('state changes are available in the same event loop', () async {
+        final expectedStates = [equals(1), equals(2)];
+
+        final states = <int>[];
+        final cubit = CounterCubit(syncStateController: true)
+          ..stream.listen(states.add)
+          ..increment()
+          ..increment();
+        expect(states, expectedStates);
+        await cubit.close();
+        expect(states, expectedStates);
+      });
     });
 
     group('close', () {

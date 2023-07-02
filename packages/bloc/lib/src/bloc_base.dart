@@ -52,7 +52,9 @@ abstract class ErrorSink implements Closable {
 abstract class BlocBase<State>
     implements StateStreamableSource<State>, Emittable<State>, ErrorSink {
   /// {@macro bloc_base}
-  BlocBase(this._state) {
+  BlocBase(this._state, {bool syncStateController = false})
+      : _stateController =
+            StreamController<State>.broadcast(sync: syncStateController) {
     // ignore: invalid_use_of_protected_member
     _blocObserver.onCreate(this);
   }
@@ -60,7 +62,7 @@ abstract class BlocBase<State>
   // ignore: deprecated_member_use_from_same_package
   final _blocObserver = BlocOverrides.current?.blocObserver ?? Bloc.observer;
 
-  late final _stateController = StreamController<State>.broadcast();
+  final StreamController<State> _stateController;
 
   State _state;
 

@@ -20,5 +20,6 @@ import 'package:bloc/bloc.dart';
 /// {@endtemplate}
 abstract class Cubit<State> extends BlocBase<State> {
   /// {@macro cubit}
-  Cubit(State initialState) : super(initialState);
+  Cubit(State initialState, {bool syncStateController = false})
+      : super(initialState, syncStateController: syncStateController);
 }
