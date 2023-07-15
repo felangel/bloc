@@ -1,0 +1,2 @@
+// Register Event Handlers{{#events}}
+    on<{{name.pascalCase()}}{{..pascalCase()}}>(_on{{name.pascalCase()}}{{..pascalCase()}});{{/events}}
