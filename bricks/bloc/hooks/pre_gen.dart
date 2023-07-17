@@ -6,7 +6,8 @@ Future<void> run(HookContext context) async {
   final events = context.vars['events'] as List;
   context.vars = {
     ...context.vars,
-    'initial_state': states.firstOrNull ?? 'state',
+    'initial_state':
+        states.firstOrNull ?? style == 'freezed' ? 'initial' : 'state',
     'has_states': states.isNotEmpty,
     'has_events': events.isNotEmpty,
     'use_basic': style == 'basic',

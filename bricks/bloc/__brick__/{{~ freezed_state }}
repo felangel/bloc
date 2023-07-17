@@ -2,5 +2,7 @@ part of '{{name.snakeCase()}}_bloc.dart';
 
 @freezed
 class {{name.pascalCase()}}State with _${{name.pascalCase()}}State {
-  const factory {{name.pascalCase()}}State.initial() = _Initial;
+  {{^has_states}}const factory {{name.pascalCase()}}State.initial() = _Initial;{{/has_states}}{{#states}}
+  const factory {{name.pascalCase()}}State.{{..camelCase()}}() = _{{..pascalCase()}};
+  {{/states}}
 }

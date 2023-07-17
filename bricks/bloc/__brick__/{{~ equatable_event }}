@@ -6,3 +6,8 @@ sealed class {{name.pascalCase()}}Event extends Equatable {
   @override
   List<Object> get props => [];
 }
+{{#events}}
+final class {{name.pascalCase()}}{{..pascalCase()}} extends {{name.pascalCase()}}Event {
+  const {{name.pascalCase()}}{{..pascalCase()}}();
+}
+{{/events}}
