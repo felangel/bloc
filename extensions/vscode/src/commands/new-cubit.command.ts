@@ -12,6 +12,7 @@ import {
 import { existsSync, lstatSync, writeFile } from "fs";
 import { getCubitStateTemplate, getCubitTemplate } from "../templates";
 import { getBlocType, BlocType, TemplateType } from "../utils";
+import { getBlocImportPath } from "../utils/get-bloc-import-path";
 
 export const newCubit = async (uri: Uri) => {
   const cubitName = await promptForCubitName();
@@ -127,7 +128,7 @@ function createCubitStateTemplate(
   });
 }
 
-function createCubitTemplate(
+async function createCubitTemplate(
   cubitName: string,
   targetDirectory: string,
   type: BlocType
@@ -137,10 +138,13 @@ function createCubitTemplate(
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseCubitName}_cubit.dart already exists`);
   }
+
+  const blocImportPath = await getBlocImportPath();
+
   return new Promise<void>(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getCubitTemplate(cubitName, type),
+      getCubitTemplate(cubitName, type, blocImportPath),
       "utf8",
       (error) => {
         if (error) {

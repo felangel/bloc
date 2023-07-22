@@ -16,6 +16,7 @@ import {
   getBlocTemplate,
 } from "../templates";
 import { getBlocType, BlocType, TemplateType } from "../utils";
+import { getBlocImportPath } from "../utils/get-bloc-import-path";
 
 export const newBloc = async (uri: Uri) => {
   const blocName = await promptForBlocName();
@@ -158,7 +159,7 @@ function createBlocStateTemplate(
   });
 }
 
-function createBlocTemplate(
+async function createBlocTemplate(
   blocName: string,
   targetDirectory: string,
   type: BlocType
@@ -168,8 +169,11 @@ function createBlocTemplate(
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseBlocName}_bloc.dart already exists`);
   }
+
+  const blocImportPath = await getBlocImportPath();
+
   return new Promise<void>(async (resolve, reject) => {
-    writeFile(targetPath, getBlocTemplate(blocName, type), "utf8", (error) => {
+    writeFile(targetPath, getBlocTemplate(blocName, type, blocImportPath), "utf8", (error) => {
       if (error) {
         reject(error);
         return;
