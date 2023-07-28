@@ -5,6 +5,7 @@ repository: https://github.com/felangel/bloc/tree/master/packages/angular_bloc
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://bloclibrary.dev
 documentation: https://bloclibrary.dev/#/gettingstarted
+topics: [bloc, state-management]
 
 environment:
   sdk: ">=2.19.0 <4.0.0"
