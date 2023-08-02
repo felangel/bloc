@@ -1,3 +1,8 @@
+# 9.1.4
+
+- deps: support `mocktail: ^1.0.0` ([#3917](https://github.com/felangel/bloc/pull/3917))
+- chore: add topics to `pubspec.yaml` ([#3914](https://github.com/felangel/bloc/pull/3914))
+
 # 9.1.3
 
 - fix: test timeouts due to uncaught exceptions which occur with `package:test ^1.22.2` ([#3854](https://github.com/felangel/bloc/pull/3854))
