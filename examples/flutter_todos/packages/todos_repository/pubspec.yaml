@@ -11,5 +11,5 @@ dependencies:
     path: ../todos_api
 
 dev_dependencies:
-  mocktail: ^0.3.0
+  mocktail: ^1.0.0
   test: ^1.21.4

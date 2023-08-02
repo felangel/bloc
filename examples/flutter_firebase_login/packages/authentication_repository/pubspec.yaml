@@ -22,5 +22,5 @@ dev_dependencies:
   firebase_core_platform_interface: ^4.8.0
   flutter_test:
     sdk: flutter
-  mocktail: ^0.3.0
+  mocktail: ^1.0.0
   plugin_platform_interface: ^2.1.4

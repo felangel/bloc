@@ -15,7 +15,7 @@ dependencies:
   stream_transform: ^2.0.0
 
 dev_dependencies:
-  mocktail: ^0.3.0
+  mocktail: ^1.0.0
   test: ^1.17.0
 
 screenshots:
