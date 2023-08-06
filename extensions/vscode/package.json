@@ -2,7 +2,7 @@
   "name": "bloc",
   "displayName": "bloc",
   "description": "Support for the bloc library and provides tools for effectively creating blocs for both Flutter and AngularDart apps.",
-  "version": "6.6.3",
+  "version": "6.6.4",
   "publisher": "FelixAngelov",
   "bugs": {
     "url": "https://github.com/felangel/bloc/issues",
@@ -64,6 +64,11 @@
             "default": true,
             "description": "Whether to create a bloc directory when creating a new bloc."
           },
+          "bloc.newBlocTemplate.useSealedClasses": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to use sealed classes when creating a new bloc."
+          },
           "bloc.newCubitTemplate.type": {
             "type": "string",
             "default": "auto",
@@ -84,6 +89,11 @@
             "type": "boolean",
             "default": true,
             "description": "Whether to create a cubit directory when creating a new cubit."
+          },
+          "bloc.newCubitTemplate.useSealedClasses": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to use sealed classes when creating a new cubit."
           }
         }
       }
@@ -96,7 +106,7 @@
       },
       {
         "command": "extension.new-cubit",
-        "title": "Cubit: New Cubit",
+        "title": "Bloc: New Cubit",
         "icon": "assets/logo.png"
       },
       {
@@ -238,6 +248,6 @@
     "lodash": "^4.17.19",
     "mkdirp": "^0.5.1",
     "node-fetch": "^2.0.0",
-    "semver": "^6.3.0"
+    "semver": "^6.3.1"
   }
 }

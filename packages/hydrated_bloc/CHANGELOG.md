@@ -1,3 +1,7 @@
+# 9.1.2
+
+- fix: clear HydratedStorage instance on close ([#3879](https://github.com/felangel/bloc/pull/3879))
+
 # 9.1.1
 
 - docs: upgrade to Dart 3 ([#3809](https://github.com/felangel/bloc/pull/3809))

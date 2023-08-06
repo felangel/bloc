@@ -165,6 +165,7 @@ class HydratedStorage implements Storage {
   @override
   Future<void> close() async {
     if (_box.isOpen) {
+      _instance = null;
       return _lock.synchronized(_box.close);
     }
   }
