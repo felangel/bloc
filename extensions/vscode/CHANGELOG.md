@@ -1,3 +1,9 @@
+# 6.6.4
+
+- feat: add `useSealedClasses` to extension settings
+- docs: fix `README` badges
+- deps: upgrade various dependencies
+
 # 6.6.3
 
 - fix: wrap with interpolation
