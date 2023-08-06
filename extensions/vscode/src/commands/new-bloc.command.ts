@@ -87,10 +87,22 @@ async function generateBlocCode(
   if (!existsSync(blocDirectoryPath)) {
     await createDirectory(blocDirectoryPath);
   }
-
+  const useSealedClasses = workspace
+    .getConfiguration("bloc")
+    .get<boolean>("newBlocTemplate.useSealedClasses", true);
   await Promise.all([
-    createBlocEventTemplate(blocName, blocDirectoryPath, type),
-    createBlocStateTemplate(blocName, blocDirectoryPath, type),
+    createBlocEventTemplate(
+      blocName,
+      blocDirectoryPath,
+      type,
+      useSealedClasses
+    ),
+    createBlocStateTemplate(
+      blocName,
+      blocDirectoryPath,
+      type,
+      useSealedClasses
+    ),
     createBlocTemplate(blocName, blocDirectoryPath, type),
   ]);
 }
@@ -109,7 +121,8 @@ function createDirectory(targetDirectory: string): Promise<void> {
 function createBlocEventTemplate(
   blocName: string,
   targetDirectory: string,
-  type: BlocType
+  type: BlocType,
+  useSealedClasses: boolean
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName);
   const targetPath = `${targetDirectory}/${snakeCaseBlocName}_event.dart`;
@@ -119,7 +132,7 @@ function createBlocEventTemplate(
   return new Promise<void>(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getBlocEventTemplate(blocName, type),
+      getBlocEventTemplate(blocName, type, useSealedClasses),
       "utf8",
       (error) => {
         if (error) {
@@ -135,7 +148,8 @@ function createBlocEventTemplate(
 function createBlocStateTemplate(
   blocName: string,
   targetDirectory: string,
-  type: BlocType
+  type: BlocType,
+  useSealedClasses: boolean
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName);
   const targetPath = `${targetDirectory}/${snakeCaseBlocName}_state.dart`;
@@ -145,7 +159,7 @@ function createBlocStateTemplate(
   return new Promise<void>(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getBlocStateTemplate(blocName, type),
+      getBlocStateTemplate(blocName, type, useSealedClasses),
       "utf8",
       (error) => {
         if (error) {
