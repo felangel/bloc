@@ -64,6 +64,11 @@
             "default": true,
             "description": "Whether to create a bloc directory when creating a new bloc."
           },
+          "bloc.newBlocTemplate.useSealedClasses": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to use sealed classes when creating a new bloc."
+          },
           "bloc.newCubitTemplate.type": {
             "type": "string",
             "default": "auto",
@@ -84,6 +89,11 @@
             "type": "boolean",
             "default": true,
             "description": "Whether to create a cubit directory when creating a new cubit."
+          },
+          "bloc.newCubitTemplate.useSealedClasses": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to use sealed classes when creating a new cubit."
           }
         }
       }
@@ -96,7 +106,7 @@
       },
       {
         "command": "extension.new-cubit",
-        "title": "Cubit: New Cubit",
+        "title": "Bloc: New Cubit",
         "icon": "assets/logo.png"
       },
       {

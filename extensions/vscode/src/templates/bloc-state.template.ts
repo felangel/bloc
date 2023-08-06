@@ -1,42 +1,56 @@
 import * as changeCase from "change-case";
 import { BlocType } from "../utils";
 
-export function getBlocStateTemplate(blocName: string, type: BlocType): string {
+export function getBlocStateTemplate(
+  blocName: string,
+  type: BlocType,
+  useSealedClasses: boolean
+): string {
   switch (type) {
     case BlocType.Freezed:
       return getFreezedBlocStateTemplate(blocName);
     case BlocType.Equatable:
-      return getEquatableBlocStateTemplate(blocName);
+      return getEquatableBlocStateTemplate(blocName, useSealedClasses);
     default:
-      return getDefaultBlocStateTemplate(blocName);
+      return getDefaultBlocStateTemplate(blocName, useSealedClasses);
   }
 }
 
-function getEquatableBlocStateTemplate(blocName: string): string {
+function getEquatableBlocStateTemplate(
+  blocName: string,
+  useSealedClasses: boolean
+): string {
+  const classPrefix = useSealedClasses ? "sealed" : "abstract";
+  const subclassPrefix = useSealedClasses ? "final " : "";
   const pascalCaseBlocName = changeCase.pascalCase(blocName);
   const snakeCaseBlocName = changeCase.snakeCase(blocName);
   return `part of '${snakeCaseBlocName}_bloc.dart';
 
-abstract class ${pascalCaseBlocName}State extends Equatable {
+${classPrefix} class ${pascalCaseBlocName}State extends Equatable {
   const ${pascalCaseBlocName}State();
   
   @override
   List<Object> get props => [];
 }
 
-class ${pascalCaseBlocName}Initial extends ${pascalCaseBlocName}State {}
+${subclassPrefix}class ${pascalCaseBlocName}Initial extends ${pascalCaseBlocName}State {}
 `;
 }
 
-function getDefaultBlocStateTemplate(blocName: string): string {
+function getDefaultBlocStateTemplate(
+  blocName: string,
+  useSealedClasses: boolean
+): string {
+  const classPrefix = useSealedClasses ? "sealed" : "abstract";
+  const subclassPrefix = useSealedClasses ? "final " : "";
   const pascalCaseBlocName = changeCase.pascalCase(blocName);
   const snakeCaseBlocName = changeCase.snakeCase(blocName);
   return `part of '${snakeCaseBlocName}_bloc.dart';
 
 @immutable
-abstract class ${pascalCaseBlocName}State {}
+${classPrefix} class ${pascalCaseBlocName}State {}
 
-class ${pascalCaseBlocName}Initial extends ${pascalCaseBlocName}State {}
+${subclassPrefix}class ${pascalCaseBlocName}Initial extends ${pascalCaseBlocName}State {}
 `;
 }
 
