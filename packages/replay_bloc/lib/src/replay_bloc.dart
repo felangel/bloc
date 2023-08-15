@@ -96,42 +96,42 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
   }
 
   @override
-  void emit(State state) {
-    _changeStack.add(
-      _Change<State>(
-        this.state,
-        state,
-        () {
-          final event = _Redo();
-          onEvent(event);
-          onTransition(
-            Transition(
-              currentState: this.state,
-              event: event,
-              nextState: state,
-            ),
-          );
-          // ignore: invalid_use_of_visible_for_testing_member
-          super.emit(state);
-        },
-        (val) {
-          final event = _Undo();
-          onEvent(event);
-          onTransition(
-            Transition(
-              currentState: this.state,
-              event: event,
-              nextState: val,
-            ),
-          );
-          // ignore: invalid_use_of_visible_for_testing_member
-          super.emit(val);
-        },
-      ),
-    );
-    // ignore: invalid_use_of_visible_for_testing_member
-    super.emit(state);
-  }
+  Emitter<State> get emit => Emitter((state) {
+        _changeStack.add(
+          _Change<State>(
+            this.state,
+            state,
+            () {
+              final event = _Redo();
+              onEvent(event);
+              onTransition(
+                Transition(
+                  currentState: this.state,
+                  event: event,
+                  nextState: state,
+                ),
+              );
+              // ignore: invalid_use_of_visible_for_testing_member
+              super.emit(state);
+            },
+            (val) {
+              final event = _Undo();
+              onEvent(event);
+              onTransition(
+                Transition(
+                  currentState: this.state,
+                  event: event,
+                  nextState: val,
+                ),
+              );
+              // ignore: invalid_use_of_visible_for_testing_member
+              super.emit(val);
+            },
+          ),
+        );
+        // ignore: invalid_use_of_visible_for_testing_member
+        super.emit(state);
+      });
 
   /// Undo the last change.
   void undo() => _changeStack.undo();

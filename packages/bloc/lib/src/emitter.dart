@@ -9,6 +9,9 @@ part of 'bloc.dart';
 ///
 /// {@endtemplate}
 abstract class Emitter<State> {
+  /// {@macro emitter}
+  factory Emitter(void Function(State state) emit) => _Emitter(emit);
+
   /// Subscribes to the provided [stream] and invokes the [onData] callback
   /// when the [stream] emits new data.
   ///
