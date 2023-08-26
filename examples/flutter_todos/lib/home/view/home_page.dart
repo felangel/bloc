@@ -27,7 +27,7 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       body: IndexedStack(
         index: selectedTab.index,
-        children: const [TodosOverviewPage(), StatsPage()],
+        children: const [TodosOverviewPage(), StatsPage(), CollectionsPage()],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
@@ -50,6 +50,11 @@ class HomeView extends StatelessWidget {
               value: HomeTab.stats,
               icon: const Icon(Icons.show_chart_rounded),
             ),
+            _HomeTabButton(
+              groupValue: selectedTab,
+              value: HomeTab.collections,
+              icon: const Icon(Icons.collections),
+            )
           ],
         ),
       ),
