@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_infinite_list/posts/posts.dart';
+import 'package:flutter_infinite_list/posts/widgets/post_segment_item.dart';
 
 class PostsList extends StatefulWidget {
   const PostsList({super.key});
@@ -18,13 +19,13 @@ class _PostsListState extends State<PostsList> {
           case PostStatus.failure:
             return const Center(child: Text('failed to fetch posts'));
           case PostStatus.success:
-            if (state.posts.isEmpty) {
+            if (state.segments.isEmpty) {
               return const Center(child: Text('no posts'));
             }
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
-                return index < state.posts.length
-                    ? PostListItem(post: state.posts[index])
+                return index < state.segments.length
+                    ? PostSegmentItem(segment: state.segments[index])
                     : BottomLoader(
                         callback: () => context.read<PostBloc>().add(
                               PostFetched(),
@@ -32,8 +33,8 @@ class _PostsListState extends State<PostsList> {
                       );
               },
               itemCount: state.hasReachedMax
-                  ? state.posts.length
-                  : state.posts.length + 1,
+                  ? state.segments.length
+                  : state.segments.length + 1,
             );
           case PostStatus.initial:
             return const Center(child: CircularProgressIndicator());

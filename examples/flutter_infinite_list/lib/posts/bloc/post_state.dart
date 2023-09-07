@@ -5,31 +5,38 @@ enum PostStatus { initial, success, failure }
 final class PostState extends Equatable {
   const PostState({
     this.status = PostStatus.initial,
-    this.posts = const <Post>[],
+    this.segments = const <PostSegment>[],
     this.hasReachedMax = false,
   });
 
   final PostStatus status;
-  final List<Post> posts;
+  final List<PostSegment> segments;
   final bool hasReachedMax;
 
   PostState copyWith({
     PostStatus? status,
-    List<Post>? posts,
+    List<PostSegment>? segments,
     bool? hasReachedMax,
   }) {
     return PostState(
       status: status ?? this.status,
-      posts: posts ?? this.posts,
+      segments: segments ?? this.segments,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
 
+  int get countPosts =>
+      segments.first.startIndex +
+      segments.fold<int>(
+        segments.first.startIndex,
+        (count, nextSegment) => count + nextSegment.posts.length,
+      );
+
   @override
   String toString() {
-    return '''PostState { status: $status, hasReachedMax: $hasReachedMax, posts: ${posts.length} }''';
+    return '''PostState { status: $status, hasReachedMax: $hasReachedMax, posts: ${segments.length} }''';
   }
 
   @override
-  List<Object> get props => [status, posts, hasReachedMax];
+  List<Object> get props => [status, segments, hasReachedMax];
 }
