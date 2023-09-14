@@ -11,7 +11,7 @@
 
 ---
 
-[BLoC design pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc)-i həyata keçirməyə kömək edən gözlənilən vəziyyətin idarə edilməsi kitabxanası.
+[BLoC design pattern](https://www.flutteris.com/blog/en/reactive-programming-streams-blocc)-i həyata keçirməyə kömək edən gözlənilən vəziyyətin idarə edilməsi kitabxanası.
 
 | Paketlər                                                                           | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |

@@ -21,7 +21,7 @@
 
 ---
 
-A dart package that helps implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+A dart package that helps implement the [BLoC pattern](https://www.flutteris.com/blog/en/reactive-programming-streams-blocc).
 
 **Learn more at [bloclibrary.dev](https://bloclibrary.dev)!**
 

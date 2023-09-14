@@ -11,7 +11,7 @@
 
 ---
 
-Une librairie pour gérer le state de notre application en implémentant le [paterne BLoC](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+Une librairie pour gérer le state de notre application en implémentant le [paterne BLoC](https://www.flutteris.com/blog/en/reactive-programming-streams-blocc).
 
 | Package                                                                            | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |

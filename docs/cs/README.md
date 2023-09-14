@@ -11,7 +11,7 @@
 
 ---
 
-Prediktivní knihovna pro state management, která pomáhá implementovat [návrhový vzor BLoC](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+Prediktivní knihovna pro state management, která pomáhá implementovat [návrhový vzor BLoC](https://www.flutteris.com/blog/en/reactive-programming-streams-blocc).
 
 | Balíček                                                                            | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |

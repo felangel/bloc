@@ -11,7 +11,7 @@
 
 ---
 
-Eine vorhersagbare Zustandsverwaltungsbibliothek, die bei der Implementierung des [BLoC-Entwurfsmusters](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc) hilft.
+Eine vorhersagbare Zustandsverwaltungsbibliothek, die bei der Implementierung des [BLoC-Entwurfsmusters](https://www.flutteris.com/blog/en/reactive-programming-streams-blocc) hilft.
 
 | Paket                                                                              | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |

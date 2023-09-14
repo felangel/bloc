@@ -11,7 +11,7 @@
 
 ---
 
-Uma biblioteca previsível de gerenciamento de estado que ajuda a implementar o [padrão de projeto BLoC](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+Uma biblioteca previsível de gerenciamento de estado que ajuda a implementar o [padrão de projeto BLoC](https://www.flutteris.com/blog/en/reactive-programming-streams-blocc).
 
 | Package                                                                            | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |

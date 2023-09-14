@@ -16,7 +16,7 @@
 
 ---
 
-A predictable state management library that helps implement the [BLoC design pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+A predictable state management library that helps implement the [BLoC design pattern](https://www.flutteris.com/blog/en/reactive-programming-streams-blocc).
 
 | Package                                                                                    | Pub                                                                                                                  |
 | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
