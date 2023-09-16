@@ -13,7 +13,7 @@
 - [BlocObserver](/coreconcepts?id=blocobserver) to observe state changes.
 - [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), a Flutter widget which provides a bloc to its children.
 - [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), a Flutter widget that handles building the widget in response to new states.
-- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget that handlers performing side effects in response to state changes.
+- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget that handles performing side effects in response to state changes.
 - [RepositoryProvider](/flutterbloccoreconcepts?id=repositoryprovider), a Flutter widget to provide a repository to its children.
 - [Equatable](/faqs?id=when-to-use-equatable) to prevent unnecessary rebuilds.
 - [MultiBlocListener](/flutterbloccoreconcepts?id=multibloclistener), a Flutter widget that reduces nesting when using multiple BlocListeners.
