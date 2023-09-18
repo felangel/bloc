@@ -18,7 +18,7 @@ dev_dependencies:
   bloc_test: ^9.0.0
   flutter_test:
     sdk: flutter
-  mocktail: ^0.3.0
+  mocktail: ^1.0.0
 
 dependency_overrides:
   bloc:
