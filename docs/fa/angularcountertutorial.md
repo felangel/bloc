@@ -14,64 +14,64 @@
 
 !> برای فعال‌سازی ابزار stagehand دستور `dart pub global activate stagehand` را اجرا کنید.
 
-We can then go ahead and replace the contents of `pubspec.yaml` with:
+سپس می توانیم  محتوای `pubspec.yaml` را با موارد زیر جایگزین کنیم:
 
 [pubspec.yaml](_snippets/angular_counter_tutorial/pubspec.yaml.md ':include')
 
-and then install all of our dependencies
+و در ادامه وابستگی های را نصب کنید
 
 [script](_snippets/angular_counter_tutorial/install.sh.md ':include')
 
-Our counter app is just going to have two buttons to increment/decrement the counter value and an element to display the current value. Let's get started designing the `CounterEvents`.
+برنامه شمارنده ما فقط دو دکمه برای افزایش/کاهش مقدار شمارنده و یک عنصر برای نمایش مقدار فعلی دارد. بیایید طراحی `CounterEvents` را شروع کنیم.
 
-## Counter Events
+## رویدادهای شمارنده
 
 [counter_event.dart](_snippets/angular_counter_tutorial/counter_event.dart.md ':include')
 
-## Counter States
+## وضعیت‌های شمارنده
 
-Since our counter's state can be represented by an integer we don't need to create a custom class!
+از آنجایی که وضعیت شمارنده ما می تواند با یک عدد صحیح نمایش داده شود، نیازی به ایجاد یک کلاس سفارشی نداریم!
 
-## Counter Bloc
+## کلاس Bloc شمارنده
 
 [counter_bloc.dart](_snippets/angular_counter_tutorial/counter_bloc.dart.md ':include')
 
-?> **Note**: Just from the class declaration we can tell that our `CounterBloc` will be taking `CounterEvents` as input and outputting integers.
+?> **نکته**: فقط از تعریف کلاس می توانیم بگوییم که `CounterBloc` ما، `CounterEvents` را به عنوان ورودی و خروجی اعداد صحیح می گیرد.
 
-## Counter App
+## اپلیکیشن شمارنده
 
-Now that we have our `CounterBloc` fully implemented, we can get started creating our AngularDart App Component.
+اکنون که `CounterBloc` خود را به طور کامل پیاده‌سازی کرده‌ایم، می‌توانیم ایجاد کامپوننت برنامه انگولار دارت خود را شروع کنیم.
 
-Our `app.component.dart` should look like:
+ فایل `app.component.dart` ما باید به شکل زیر باشد:
 
 [app.component.dart](_snippets/angular_counter_tutorial/app_component.dart.md ':include')
 
-and our `app.component.html` should look like:
+ و فایل `app.component.html` باید به شکل زیر باشد:
 
 [app.component.html](_snippets/angular_counter_tutorial/app_component.html.md ':include')
 
-## Counter Page
+## صفحه‌ی شمارنده
 
-Finally, all that's left is to build our Counter Page Component.
+در نهایت، تنها چیزی که باقی می ماند ساختن کامپوننت صفحه شمارنده است.
 
-Our `counter_page_component.dart` should look like:
+ فایل `counter_page_component.dart` ما باید به شکل زیر باشد:
 
 [counter_page_component.dart](_snippets/angular_counter_tutorial/counter_page_component.dart.md ':include')
 
-?> **Note**: We are able to access the `CounterBloc` instance using AngularDart's dependency injection system. Because we have registered it as a `Provider`, AngularDart can properly resolve `CounterBloc`.
+?> **نکته**: ما می توانیم با استفاده از سیستم تزریق وابستگی انگولار دارت به نمونه `CounterBloc` دسترسی پیدا کنیم. از آنجایی که ما آن را به عنوان یک `Provider` ثبت کرده ایم، انگولار دارت می تواند `CounterBloc` را به درستی حل کند.
 
-?> **Note**: We are closing the `CounterBloc` in `ngOnDestroy`.
+?> **نکته**: ما `CounterBloc` را در `ngOnDestroy` می بندیم.
 
-?> **Note**: We are importing the `BlocPipe` so that we can use it in our template.
+?> **نکته**: ما `BlocPipe` را وارد می کنیم تا بتوانیم از آن در قالب خود استفاده کنیم.
 
-Lastly, our `counter_page_component.html` should look like:
+در نهایت، `counter_page_component.html` ما باید به شکل زیر باشد:
 
 [counter_page_component.html](_snippets/angular_counter_tutorial/counter_page_component.html.md ':include')
 
-?> **Note**: We are using the `BlocPipe` so that we can display our `CounterBloc` state as it is updated.
+?> **نکته**: ما از `BlocPipe` استفاده می‌کنیم تا بتوانیم حالت `CounterBloc` خود را هنگام به‌روزرسانی نمایش دهیم.
 
-That's it! We've separated our presentation layer from our business logic layer. Our `CounterPageComponent` has no idea what happens when a user presses a button; it just adds an event to notify the `CounterBloc`. Furthermore, our `CounterBloc` has no idea what is happening with the state (counter value); it's simply converting the `CounterEvents` into integers.
+خودشه! ما لایه ارائه خود را از لایه لاجیک (منطق تجاری) خود، جدا کرده ایم. `CounterPageComponent` ما نمی‌داند وقتی کاربر یک دکمه را فشار می‌دهد چه اتفاقی می‌افتد; فقط یک رویداد اضافه می کند تا به `CounterBloc` اطلاع دهد. به‌علاوه، `CounterBloc` ما هیچ اطلاعاتی از اینکه وضعیت چگونه است (مقدار شمارنده) ندارد؛ فقط `CounterEvents` را به اعداد صحیح تبدیل می‌کند.
 
-We can run our app with `webdev serve` and can view it [locally](http://localhost:8080).
+ما می توانیم برنامه خود را با `webdev serve` اجرا و آن را [به صورت محلی](http://localhost:8080) مشاهده کنیم.
 
-The full source for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/angular_counter).
+منبع کامل این مثال را می توانید در [اینجا](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) بیابید.
