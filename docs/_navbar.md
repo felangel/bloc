@@ -6,6 +6,7 @@
   - [:czech_republic: cs](/cs/)
   - [:es: es](/es/)
   - [:ru: ru](/ru/)
+  - [:fa: fa](/fa/)
   - [:cn: zh-cn](/zh-cn/)
   - [:azerbaijan: az](/az/)
   - [:jp: jp](/jp/)
