@@ -1,103 +1,103 @@
-# Architecture
+# معماری
 
 ![Bloc Architecture](assets/bloc_architecture_full.png)
 
-Using the bloc library allows us to separate our application into three layers:
+استفاده از کتابخانه Bloc به ما این امکان را می دهد که برنامه را به سه لایه جدا کنیم:
 
-- Presentation
-- Business Logic
-- Data
-  - Repository
-  - Data Provider
+- ارائه
+- لاجیک (منطق کسب و کار)
+- داده
+  - مخزن (Repository)
+  - ارائه دهنده داده (Data Provider)
 
-We're going to start at the lowest level layer (farthest from the user interface) and work our way up to the presentation layer.
+ما قصد داریم از لایه پایین‌ترین (دورترین از رابط کاربری) شروع کنیم و به سمت لایه ارائه حرکت کنیم.
 
-## Data Layer
+## لایه داده
 
-> The data layer's responsibility is to retrieve/manipulate data from one or more sources.
+> مسئولیت لایه داده بازیابی/دستکاری داده ها از یک یا چند منبع است.
 
-The data layer can be split into two parts:
+لایه داده را می توان به دو بخش تقسیم کرد:
 
-- Repository
-- Data Provider
+- مخزن (Repository)
+- ارائه دهنده داده (Data Provider)
 
-This layer is the lowest level of the application and interacts with databases, network requests, and other asynchronous data sources.
+این لایه پایین ترین سطح برنامه است و با پایگاه  داده، درخواست های شبکه و سایر منابع داده ناهمزمان (Asynchronous data sources) تعامل دارد.
 
-### Data Provider
+### ارائه دهنده داده
 
-> The data provider's responsibility is to provide raw data. The data provider should be generic and versatile.
+> مسئولیت ارائه دهنده داده، ارائه داده های خام است. ارائه دهنده داده باید عمومی (Generic) و انعطاف پذیر باشد.
 
-The data provider will usually expose simple APIs to perform [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
-We might have a `createData`, `readData`, `updateData`, and `deleteData` method as part of our data layer.
+ارائه‌دهنده داده معمولاً، API های ساده را برای انجام عملیات [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) فراهم خواهد کرد.
+ممکن است ما دارای متدهایی با نام‌های `createData`، `readData`، `updateData` و `deleteData` به عنوان بخشی از لایه داده باشیم.
 
 [data_provider.dart](_snippets/architecture/data_provider.dart.md ':include')
 
-### Repository
+### مخزن
 
-> The repository layer is a wrapper around one or more data providers with which the Bloc Layer communicates.
+> لایه مخزن (Repository) یک پوشش (Wrapper) بر روی یک یا چند ارائه‌دهنده داده (Data provider) است که لایه Bloc با آن ارتباط برقرار می کند.
 
 [repository.dart](_snippets/architecture/repository.dart.md ':include')
 
-As you can see, our repository layer can interact with multiple data providers and perform transformations on the data before handing the result to the business logic Layer.
+همانطور که می بینید، لایه مخزن ما می تواند با چندین ارائه دهنده داده تعامل داشته باشد و قبل از اینکه نتیجه را به لایه لاجیک تحویل دهد، روی داده ها تغییر شکل دهد.
 
-## Business Logic Layer
+## لایه لاجیک یا منطق کسب و کار
 
-> The business logic layer's responsibility is to respond to input from the presentation layer with new states. This layer can depend on one or more repositories to retrieve data needed to build up the application state.
+> مسئولیت لایه منطق کسب‌وکار پاسخگویی به ورودی‌های لایه ارائه با وضعیت‌های جدید است. این لایه ممکن است به یک یا چند مخزن وابسته باشد تا داده‌های مورد نیاز برای ساخت وضعیت برنامه را دریافت کند.
 
-Think of the business logic layer as the bridge between the user interface (presentation layer) and the data layer. The business logic layer is notified of events/actions from the presentation layer and then communicates with repository in order to build a new state for the presentation layer to consume.
+لایه منطق کسب‌وکار را به عنوان پلی بین رابط کاربری (لایه ارائه) و لایه داده در نظر بگیرید. لایه منطق کسب‌وکار از رویدادها (Events) / اقدامات (Actions) لایه ارائه مطلع می‌شود و سپس با مخزن ارتباط برقرار می کند تا یک حالت جدید برای لایه ارائه ایجاد کند.
 
 [business_logic_component.dart](_snippets/architecture/business_logic_component.dart.md ':include')
 
-### Bloc-to-Bloc Communication
+### ارتباط Bloc با Bloc
 
-Because blocs expose streams, it may be tempting to make a bloc which listens to another bloc. You should **not** do this. There are better alternatives than resorting to the code below:
+به دلیل آنکه Bloc ها جریان‌ها (Streams) را فراهم می‌کنند، ممکن است وسوسه انگیز باشد که Bloc بسازیم که به Bloc دیگری گوش دهد. شما نباید **نباید** این کار را انجام دهید. جایگزین های بهتری نسبت به کد زیر وجود دارد:
 
 [do_not_do_this_at_home.dart](_snippets/architecture/do_not_do_this_at_home.dart.md ':include')
 
-While the code above is error free (and even cleans up after itself), it has a bigger problem: it creates a dependency between two blocs.
+اگرچه کد فوق بدون خطا است (و حتی پس از اجرا کارهای، به تمیز کردن و بستن جریان ها نیز می‌پردازد)، اما یک مشکل بزرگ‌تر دارد و آن وابستگی بین دو Bloc است.
 
-Generally, sibling dependencies between two entities in the same architectural layer should be avoided at all costs, as it creates tight-coupling which is hard to maintain. Since blocs reside in the business logic architectural layer, no bloc should know about any other bloc.
+بطور کلی، وابستگی‌های هم‌سطح (Sibling dependencies) بین دو موجودیت (Entities) در یک لایه معماری باید با هر قیمتی اجتناب شود، زیرا این وابستگی‌ها باعث اتصال زنجیره‌ای می‌شوند که نگهداری (Maintain) را دشوار میکند. از آنجا که Bloc ها در لایه معماری منطق کسب‌وکار قرار دارند، هیچ Bloc نباید درباره Bloc دیگری اطلاع داشته باشد.
 
 ![Application Architecture Layers](assets/architecture.png)
 
-A bloc should only receive information through events and from injected repositories (i.e., repositories given to the bloc in its constructor).
+یک Bloc فقط باید اطلاعات را از طریق رویدادها (Events) و از مخازن تزریق‌شده (به عنوان مثال، مخازنی که در زمان ساخت Bloc به آن داده شده) دریافت کند.
 
-If you're in a situation where a bloc needs to respond to another bloc, you have two other options. You can push the problem up a layer (into the presentation layer), or down a layer (into the domain layer).
+اگر در شرایطی هستید که یک Bloc باید به یک Bloc دیگر پاسخ دهد، دو گزینه دیگر دارید. می‌توانید مشکل را به بالاترین لایه (در لایه ارائه) منتقل کنید یا به پایین‌ترین لایه (در لایه دامنه) انتقال دهید.
 
-#### Connecting Blocs through Presentation
+#### اتصال Bloc ها از طریق لایه ارائه
 
-You can use a `BlocListener` to listen to one bloc and add an event to another bloc whenever the first bloc changes.
+می‌توانید از `BlocListener` استفاده کنید تا به یک Bloc گوش داده و هر زمان که Bloc اول تغییر کند، یک رویداد به Bloc دیگر اضافه کنید.
 
 [blocs_presentation.dart.md](_snippets/architecture/blocs_presentation.dart.md ':include')
 
-The code above prevents `SecondBloc` from needing to know about `FirstBloc`, encouraging loose-coupling. The [flutter_weather](flutterweathertutorial.md) application [uses this technique](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42) to change the app's theme based on the weather information that is received.
+کد بالا از نیاز `SecondBloc` به دانستن در مورد `FirstBloc` جلوگیری می‌کند و تشویق به اتصال گسسته (loose-coupling) می‌کند. اپلیکیشن [flutter_weather](flutterweathertutorial.md) از این [تکنیک استفاده می‌کند](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42) تا بر اساس اطلاعات هواشناسی دریافتی، پوسته برنامه را تغییر دهد.
 
-In some situations, you may not want to couple two blocs in the presentation layer. Instead, it can often make sense for two blocs to share the same source of data and update whenever the data changes.
+در برخی مواقع، ممکن است نخواهید که دو Bloc در لایه ارائه به یکدیگر وابسته باشند. در عوض، اغلب منطقی است که دو Bloc از یک منبع مشترک داده استفاده کنند و هر زمان که داده تغییر می کند به روز شوند.
 
-#### Connecting Blocs through Domain
+#### اتصال Bloc ها از طریق دامنه
 
-Two blocs can listen to a stream from a repository and update their states independent of each other whenever the repository data changes. Using reactive repositories to keep state synchronized is common in large-scale enterprise applications.
+دو Bloc می‌توانند به جریانی از یک مخزن (Repository) گوش دهند و هر زمان که داده‌های مخزن تغییر کند، وضعیت‌های خود را مستقل از یکدیگر به‌روزرسانی کنند. استفاده از مخازن واکنشی (Reactive repositories) برای هماهنگ نگه داشتن حالت در برنامه های سازمانی در مقیاس بزرگ رایج است.
 
-First, create or use a repository which provides a data `Stream`. For example, the following repository exposes a never-ending stream of the same few app ideas:
+اولین گام، ایجاد یک مخزن (Repository) یا استفاده از یک مخزن است که یک جریان داده (`Stream`) فراهم می‌کند. به عنوان مثال، مخزن زیر یک جریان داده بی‌پایان (Never-ending stream) از چند ایده برنامه مشابه ارائه می‌دهد:
 
 [app_ideas_repo.dart.md](_snippets/architecture/app_ideas_repo.dart.md ':include')
 
-The same repository can be injected into each bloc that needs to react to new app ideas. Below is an `AppIdeaRankingBloc` which yields a state out for each incoming app idea from the repository above:
+همان مخزن (Repository) را می توان در هر Bloc ای که نیاز به واکنش به ایده های جدید برنامه دارد، تزریق کرد. در زیر یک `AppIdeaRankingBloc` وجود دارد که برای هر ایده برنامه جدیدی که از مخزن بالا می رسد، یک وضعیت (State) تولید می کند(به کمک yields):
 
 [blocs_domain.dart.md](_snippets/architecture/blocs_domain.dart.md ':include')
 
-For more about using streams with Bloc, see [How to use Bloc with streams and concurrency](https://verygood.ventures/blog/how-to-use-bloc-with-streams-and-concurrency).
+برای اطلاعات بیشتر در مورد استفاده از جریان با Bloc به [نحوه استفاده از بلوک با جریان و همزمانی](https://verygood.ventures/blog/how-to-use-bloc-with-streams-and-concurrency) مراجعه کنید.
 
-## Presentation Layer
+## لایه ارائه
 
-> The presentation layer's responsibility is to figure out how to render itself based on one or more bloc states. In addition, it should handle user input and application lifecycle events.
+> مسئوليت لایه‌ی ارائه این است که بر اساس یک یا چند حالت Bloc بفهمد، چگونه خود را نمایش دهد. علاوه بر این، باید ورودی کاربر و رویدادهای چرخه‌ی عمر برنامه را مدیریت کند.
 
-Most applications flows will start with a `AppStart` event which triggers the application to fetch some data to present to the user.
+بیشتر جریان های اپلیکیشن ها با یک رویداد با نام `AppStart` آغاز می‌شوند که باعث می‌شود برنامه اطلاعاتی را دریافت کند تا به کاربر ارائه دهد.
 
-In this scenario, the presentation layer would add an `AppStart` event.
+در این سناریو، لایه ارائه یک رویداد `AppStart` را اضافه می کند.
 
-In addition, the presentation layer will have to figure out what to render on the screen based on the state from the bloc layer.
+علاوه بر این، لایه ارائه باید بفهمد که بر اساس وضعیت لایه بلوک، چه چیزی روی صفحه نمایش داده می شود.
 
 [presentation_component.dart](_snippets/architecture/presentation_component.dart.md ':include')
 
-So far, even though we've had some code snippets, all of this has been fairly high level. In the tutorial section we're going to put all this together as we build several different example apps.
+تا اینجا، اگرچه ما چند قطعه کد داشته ایم، اما همه اینها در سطح نسبتاً بالایی بوده است. در بخش آموزش، ما همه اینها را در کنار هم قرار می دهیم و چندین برنامه نمونه مختلف را می سازیم.
