@@ -19,67 +19,67 @@
 
 ---
 
-## Overview
+## نمای کلی
 
-[VSCode](https://code.visualstudio.com/) support for the [Bloc Library](https://bloclibrary.dev) and provides tools for effectively creating [Blocs](https://github.com/felangel/bloc) and [Cubits](https://github.com/felangel/cubit) for both [Flutter](https://flutter.dev/) and [AngularDart](https://angulardart.dev/) apps.
+محیط [VSCode](https://code.visualstudio.com/) از [کتابخانه Bloc](https://bloclibrary.dev) پشتیبانی می کند و ابزارهایی را برای ایجاد مؤثر [Bloc ها](https://github.com/felangel/bloc) و [Cubits ها](https://github.com/felangel/cubit) برای هر دو برنامه [فلاتر](https://flutter.dev/) و [انگولار دارت](https://angulardart.dev/) فراهم می کند.
 
-## Installation
+## نصب
 
-Bloc can be installed from the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) or by [searching within VSCode](https://code.visualstudio.com/docs/editor/extension-gallery#_search-for-an-extension).
+افزونه Bloc را می توان از [بازارچه (Marketplace) VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) یا با [جستجو در VSCode](https://code.visualstudio.com/docs/editor/extension-gallery#_search-for-an-extension) نصب کرد.
 
-## Commands
+## فرمان ها
 
-| Command            | Description          |
+| فرمان            | توضیحات          |
 | ------------------ | -------------------- |
-| `Bloc: New Bloc`   | Generate a new Bloc  |
-| `Cubit: New Cubit` | Generate a new Cubit |
+| `Bloc: New Bloc`   | ایجاد یک Bloc جدید  |
+| `Cubit: New Cubit` | ایجاد یک Cubit جدید |
 
-You can activate the commands by launching the command palette (View -> Command Palette) and running entering the command name or you can right click on the directory in which you'd like to create the bloc/cubit and select the command from the context menu.
+می توانید فرمان ها یا دستورات را با اجرای پالت دستور (View -> Command Palette) و اجرای نام دستور فعال کنید، یا می توانید روی دایرکتوری که می خواهید Bloc/Cubit را در آن ایجاد کنید، راست کلیک کرده و دستور را از منوی میانبر انتخاب کنید.
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/new-bloc-usage.gif)
 
-## Code Actions
+## عملیات کد (Code Actions)
 
 | Action                         | Description                                    |
 | ------------------------------ | ---------------------------------------------- |
-| `Wrap with BlocBuilder`        | Wraps current widget in a `BlocBuilder`        |
-| `Wrap with BlocListener`       | Wraps current widget in a `BlocListener`       |
-| `Wrap with BlocConsumer`       | Wraps current widget in a `BlocConsumer`       |
-| `Wrap with BlocProvider`       | Wraps current widget in a `BlocProvider`       |
-| `Wrap with RepositoryProvider` | Wraps current widget in a `RepositoryProvider` |
+| `Wrap with BlocBuilder`        | ویجت فعلی را درون یک `BlocBuilder` قرار میدهد        |
+| `Wrap with BlocListener`       | ویجت فعلی را درون یک `BlocListener` قرار میدهد       |
+| `Wrap with BlocConsumer`       | ویجت فعلی را درون یک `BlocConsumer` قرار میدهد       |
+| `Wrap with BlocProvider`       | ویجت فعلی را درون یک `BlocProvider` قرار میدهد       |
+| `Wrap with RepositoryProvider` | ویجت فعلی را درون یک `RepositoryProvider` قرار میدهد |
 
 ![demo](https://raw.githubusercontent.com/felangel/bloc/master/extensions/vscode/assets/wrap-with-usage.gif)
 
-## Snippets
+## قطعه‌ کدها (Snippets)
 
 ### Bloc
 
-| Shortcut            | Description                                |
+| میانبر            | توضیحات                                |
 | ------------------- | ------------------------------------------ |
-| `bloc`              | Creates a `Bloc` class                     |
-| `cubit`             | Creates a `Cubit` class                    |
-| `blocobserver`      | Creates a `BlocObserver` class             |
-| `blocprovider`      | Creates a `BlocProvider` widget            |
-| `multiblocprovider` | Creates a `MultiBlocProvider` widget       |
-| `repoprovider`      | Creates a `RepositoryProvider` widget      |
-| `multirepoprovider` | Creates a `MultiRepositoryProvider` widget |
-| `blocbuilder`       | Creates a `BlocBuilder` widget             |
-| `bloclistener`      | Creates a `BlocListener` widget            |
-| `multibloclistener` | Creates a `MultiBlocListener` widget       |
-| `blocconsumer`      | Creates a `BlocConsumer` widget            |
-| `blocof`            | Shortcut for `BlocProvider.of()`           |
-| `repoof`            | Shortcut for `RepositoryProvider.of()`     |
-| `read`              | Shortcut for `context.read()`              |
-| `watch`             | Shortcut for `context.watch()`             |
-| `select`            | Shortcut for `context.select()`            |
-| `blocstate`         | Creates a state class                      |
-| `blocevent`         | Creates an event class                     |
+| `bloc`              | ایجاد یک کلاس `Bloc`                     |
+| `cubit`             | ایجاد یک کلاس `Cubit`                    |
+| `blocobserver`      | ایجاد یک کلاس `BlocObserver`             |
+| `blocprovider`      | ایجاد یک ویجت `BlocProvider`            |
+| `multiblocprovider` | ایجاد یک ویجت `MultiBlocProvider`       |
+| `repoprovider`      | ایجاد یک ویجت `RepositoryProvider`      |
+| `multirepoprovider` | ایجاد یک ویجت `MultiRepositoryProvider` |
+| `blocbuilder`       | ایجاد یک ویجت `BlocBuilder`             |
+| `bloclistener`      | ایجاد یک ویجت `BlocListener`            |
+| `multibloclistener` | ایجاد یک ویجت `MultiBlocListener`       |
+| `blocconsumer`      | ایجاد یک ویجت `BlocConsumer`            |
+| `blocof`            | میانبر برای `BlocProvider.of()`           |
+| `repoof`            | میانبر برای `RepositoryProvider.of()`     |
+| `read`              | میانبر برای `context.read()`              |
+| `watch`             | میانبر برای `context.watch()`             |
+| `select`            | میانبر برای `context.select()`            |
+| `blocstate`         | ایجاد یک کلاس وضعیت                      |
+| `blocevent`         | ایجاد یک کلاس ایونت                     |
 
 ### Freezed Bloc
 
-| Shortcut     | Description                                                     |
+| میانبر     | توضیحات                                                     |
 | ------------ | --------------------------------------------------------------- |
-| `feventwhen` | Creates a map event to state function with freeze.when function |
-| `feventmap`  | Creates a map event to state function with freeze.map function  |
-| `fstate`     | Creates a sub state                                             |
-| `fevent`     | Creates a sub event                                             |
+| `feventwhen` | ایجاد یک تابع Map Event to State با استفاده از freeze.when |
+| `feventmap`  | ایجاد یک تابع Map Event to State با استفاده از freeze.map  |
+| `fstate`     | ایجاد یک زیر وضعیت                                             |
+| `fevent`     | ایجاد یک زیر رویداد                                             |

@@ -1,21 +1,21 @@
-# Bloc Plugin for IntelliJ and Android Studio
+# پلاگین Bloc برای IntelliJ و Android Studio
 
 ![dialog](https://github.com/felangel/bloc/raw/master/extensions/intellij/assets/dialog.png)
 
-## Introduction
+## معرفی
 
-Bloc plugin for [IntelliJ](https://www.jetbrains.com/idea/) and [Android Studio](https://developer.android.com/studio/) with support for the [Bloc Library](https://bloclibrary.dev) and provides tools for effectively creating Blocs and Cubits for both [Flutter](https://flutter.dev/) and [AngularDart](https://angulardart.dev/) apps.
+پلاگین Bloc برای [IntelliJ](https://www.jetbrains.com/idea/) و [Android Studio](https://developer.android.com/studio/)، که از [کتابخانه Bloc](https://bloclibrary.dev) پشتیبانی می کند، ابزارهایی را برای ایجاد Bloc ها و Cubit ها برای برنامه های [فلاتر](https://flutter.dev/) و [انگولار دارت](https://angulardart.dev/) به طور موثر ارائه می دهد.
 
-## Installation
+## نصب
 
-You can find the plugin in the official IntelliJ and Android Studio marketplace:
+می‌توانید این افزونه را در بازارچه (Marketplace) رسمی IntelliJ و Android Studio پیدا کنید:
 
 - [Bloc](https://plugins.jetbrains.com/plugin/12129-bloc)
 
-### How to use
+### نحوه استفاده
 
-Simply right click on the File Project view, go to `New -> Bloc Class`, give it a name, select if you want to use [Equatable](https://github.com/felangel/equatable), and click on `OK` to see all the boilerplate generated.
+به سادگی، در نمای File Project راست کلیک کنید، به `New -> Bloc Class` بروید، یک نام برای آن انتخاب کنید، مشخص کنید که آیا می خواهید از [Equatable](https://github.com/felangel/equatable) استفاده کنید، و سپس روی OK کلیک کنید تا تمامی کدهای پیش‌فرض ایجاد شوند.
 
-## Deployment
+## راه‌اندازی
 
-Using [Plugin Repository](http://www.jetbrains.org/intellij/sdk/docs/plugin_repository/index.html)
+استفاده از [مخزن پلاگین](http://www.jetbrains.org/intellij/sdk/docs/plugin_repository/index.html)

@@ -1,61 +1,61 @@
-# Naming Conventions
+# قراردادهای نامگذاری
 
-!> The following naming conventions are simply recommendations and are completely optional. Feel free to use whatever naming conventions you prefer. You may find some of the examples/documentation do not follow the naming conventions mainly for simplicity/conciseness. These conventions are strongly recommended for large projects with multiple developers.
+!> قراردادهای نامگذاری زیر صرفاً توصیه شده و کاملاً اختیاری هستند. با خیال راحت از هر گونه قرارداد نامگذاری که ترجیح می دهید استفاده کنید. ممکن است دریابید که برخی از مثال‌ها/اسناد اصولاً به دلیل سادگی/مختصر بودن از قراردادهای نام‌گذاری پیروی نمی‌کنند. این قرارداد ها به شدت برای پروژه های بزرگ با توسعه دهندگان متعدد توصیه می شود.
 
-## Event Conventions
+## قراردادهای کلاس رویداد
 
-> Events should be named in the **past tense** because events are things that have already occurred from the bloc's perspective.
+> رویدادها باید با **گذشته ساده** نامگذاری شوند، زیرا رویدادها چیزهایی هستند که از دیدگاه Bloc قبلاً اتفاق افتاده اند.
 
-### Anatomy
+### ساختار
 
 [event](_snippets/bloc_naming_conventions/event_anatomy.md ':include')
 
-?> Initial load events should follow the convention: `BlocSubject` + `Started`
+?> رویدادهای لود اولیه باید این قرارداد را دنبال کنند: `BlocSubject` + `Started`
 
-!> The base event class should be name: `BlocSubject` + `Event`.
+!> کلاس های رویداد پایه باید این نامگذاری را داشته باشند: `BlocSubject` + `Event`.
 
-#### Examples
+#### مثال ها
 
-✅ **Good**
+✅ **خوب**
 
 [events_good](_snippets/bloc_naming_conventions/event_examples_good.md ':include')
 
-❌ **Bad**
+❌ **بد**
 
 [events_bad](_snippets/bloc_naming_conventions/event_examples_bad.md ':include')
 
-## State Conventions
+## قراردادهای کلاس وضعیت
 
-> States should be nouns because a state is just a snapshot at a particular point in time. There are two common ways to represent state: using subclasses or using a single class.
+> وضعیت‌ها باید اسم باشند، چرا که یک وضعیت فقط یک لحظه‌ی خاص در زمان را نمایان می‌کند. دو روش رایج برای نمایش وضعیت وجود دارد: استفاده از زیرکلاس‌ها(Subclasses) یا استفاده از یک کلاس تکی(Single class).
 
-### Anatomy
+### ساختار
 
-#### Subclasses
+#### زیرکلاس‌ها
 
 [state](_snippets/bloc_naming_conventions/state_anatomy.md ':include')
 
-?> When representing the state as multiple subclasses `State` should be one of the following: `Initial` | `Success` | `Failure` | `InProgress` and initial states should follow the convention: `BlocSubject` + `Initial`.
+?> هنگام نمایش وضعیت به عنوان چندین زیرکلاس، `State` باید یکی از موارد زیر را دارا باشد: `Initial` | `Success` | `Failure` | `InProgress` و وضعیت‌های اولیه باید طبق این قرار داد عمل کنند: `BlocSubject` + `Initial`.
 
-#### Single Class
+#### کلاس تکی
 
 [state](_snippets/bloc_naming_conventions/single_state_anatomy.md ':include')
 
-?> When representing the state as a single base class an enum named `BlocSubject` + `Status` should be used to represent the status of the state: `initial` | `success` | `failure` | `loading`.
+?> هنگام نمایش وضعیت به عنوان یک کلاس پایه تکی، باید از یک enum با نام `BlocSubject` + `Status` برای نمایش وضعیت‌های مختلف استفاده شود: `initial` | `success` | `failure` | `loading`.
 
-!> The base state class should always be named: `BlocSubject` + `State`.
+!> کلاس وضعیت پایه همیشه باید به این روش نام گذاری شوند: `BlocSubject` + `State`.
 
-#### Examples
+#### مثال ها
 
-✅ **Good**
+✅ **خوب**
 
-##### Subclasses
+##### زیرکلاس‌ها
 
 [states_good](_snippets/bloc_naming_conventions/state_examples_good.md ':include')
 
-##### Single Class
+##### کلاس تکی
 
 [states_good](_snippets/bloc_naming_conventions/single_state_examples_good.md ':include')
 
-❌ **Bad**
+❌ **بد**
 
 [states_bad](_snippets/bloc_naming_conventions/state_examples_bad.md ':include')
