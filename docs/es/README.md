@@ -11,7 +11,7 @@
 
 ---
 
-Una librería de administración de estado predecible que ayuda a implementar el [patrón de diseño BLoC](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+Una librería de administración de estado predecible que ayuda a implementar el patrón de diseño BLoC.
 
 | Package                                                                            | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |

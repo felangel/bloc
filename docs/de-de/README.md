@@ -11,7 +11,7 @@
 
 ---
 
-Eine vorhersagbare Zustandsverwaltungsbibliothek, die bei der Implementierung des [BLoC-Entwurfsmusters](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc) hilft.
+Eine vorhersagbare Zustandsverwaltungsbibliothek, die bei der Implementierung des BLoC-Entwurfsmusters hilft.
 
 | Paket                                                                              | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -68,7 +68,7 @@ Das Ziel dieser Bibliothek ist es, eine erleichterte Trennung von _Präsentation
                 <a href="https://bloclibrary.dev/#/fluttercountertutorial">
                     <img src="https://bloclibrary.dev/assets/gifs/flutter_counter.gif" width="200"/>
                 </a>
-            </td>            
+            </td>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/#/flutterinfinitelisttutorial">
                     <img src="https://bloclibrary.dev/assets/gifs/flutter_infinite_list.gif" width="200"/>
