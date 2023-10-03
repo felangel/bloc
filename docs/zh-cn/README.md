@@ -11,7 +11,7 @@
 
 ---
 
-一个可预测并控制状态的库来实现 [处理组件间业务逻辑(BLoC)的设计模式](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+一个可预测并控制状态的库来实现 处理组件间业务逻辑(BLoC)的设计模式.
 
 | Package                                                                            | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -68,7 +68,7 @@
                 <a href="https://bloclibrary.dev/#/fluttercountertutorial">
                     <img src="https://bloclibrary.dev/assets/gifs/flutter_counter.gif" width="200"/>
                 </a>
-            </td>            
+            </td>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/#/flutterinfinitelisttutorial">
                     <img src="https://bloclibrary.dev/assets/gifs/flutter_infinite_list.gif" width="200"/>
