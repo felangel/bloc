@@ -1,56 +1,56 @@
-# Core Concepts (package:bloc)
+# مفاهیم اصلی (پکیج :bloc)
 
-?> Please make sure to carefully read the following sections before working with [package:bloc](https://pub.dev/packages/bloc).
+?> لطفاً قبل از کار با [package:bloc](https://pub.dev/packages/bloc) حتماً بخش‌های زیر را به دقت بخوانید.
 
-There are several core concepts that are critical to understanding how to use the bloc package.
+چندین مفهوم اصلی وجود دارد که برای درک نحوه استفاده از بسته Bloc حیاتی است.
 
-In the upcoming sections, we're going to discuss each of them in detail as well as work through how they would apply to a counter app.
+در بخش‌های جلوتر، می‌خواهیم هر یک از آنها را با جزئیات کامل مورد بحث قرار دهیم و همچنین نحوه اعمال آنها در یک برنامه شمارنده را بررسی کنیم.
 
-## Streams
+## جریان‌ها (Streams)
 
-?> Check out the official [Dart Documentation](https://dart.dev/tutorials/language/streams) for more information about `Streams`.
+?> برای اطلاعات بیشتر در مورد `جریان ها`، [داکیومنت رسمی دارت](https://dart.dev/tutorials/language/streams) را بررسی کنید.
 
-> A stream is a sequence of asynchronous data.
+> جریان مجموعه ای از داده های ناهمزمان است.
 
-In order to use the bloc library, it is critical to have a basic understanding of `Streams` and how they work.
+برای استفاده از کتابخانه Bloc، داشتن درک اولیه از `جریان‌ها` و نحوه کار آنها بسیار مهم است.
 
-> If you're unfamiliar with `Streams` just think of a pipe with water flowing through it. The pipe is the `Stream` and the water is the asynchronous data.
+> اگر با جریان ها آشنا نیستید، کافی است به لوله‌ای فکر کنید که آب در آن جریان دارد. لوله، جریان (`Stream`) و آب، داده ناهمزمان (Asynchronous data) است.
 
-We can create a `Stream` in Dart by writing an `async*` (async generator) function.
+ما می‌توانیم با نوشتن یک تابع `async*` (تولید کننده async) در Dart، یک جریان ایجاد کنیم.
 
 [count_stream.dart](_snippets/core_concepts/count_stream.dart.md ':include')
 
-By marking a function as `async*` we are able to use the `yield` keyword and return a `Stream` of data. In the above example, we are returning a `Stream` of integers up to the `max` integer parameter.
+با مشخص کردن یک تابع به‌عنوان `async*`، می‌توانیم از کلمه کلیدی `yield` استفاده کنیم و یک `Stream` از داده‌ها را برگردانیم. در مثال بالا، ما یک جریانی (`Stream`) از اعداد را تا پارامتر `max` برمی گردانیم.
 
-Every time we `yield` in an `async*` function we are pushing that piece of data through the `Stream`.
+هر بار که در یک تابع `async*`، عمل `yield` را انجام میدهیم، آن قطعه داده را از طریق `Stream` هل می‌دهیم.
 
-We can consume the above `Stream` in several ways. If we wanted to write a function to return the sum of a `Stream` of integers it could look something like:
+ما می‌توانیم `Stream` فوق را به روش‌های مختلفی استفاده کنیم. اگر بخواهیم تابعی بنویسیم که مجموع یک `Stream` از اعداد را برگرداند، می تواند چیزی شبیه به زیر باشد:
 
 [sum_stream.dart](_snippets/core_concepts/sum_stream.dart.md ':include')
 
-By marking the above function as `async` we are able to use the `await` keyword and return a `Future` of integers. In this example, we are awaiting each value in the stream and returning the sum of all integers in the stream.
+با مشخص کردن تابع فوق به عنوان `async`، می توانیم از کلمه کلیدی `await` استفاده کرده و یک `Future` از اعداد صحیح را برگردانیم. در این مثال، ما منتظر هر مقدار در جریان هستیم و مجموع همه اعداد در جریان را برمی گردانیم.
 
-We can put it all together like so:
+ما می توانیم همه آن را به این صورت کنار هم بگذاریم:
 
 [main.dart](_snippets/core_concepts/streams_main.dart.md ':include')
 
-Now that we have a basic understanding of how `Streams` work in Dart we're ready to learn about the core component of the bloc package: a `Cubit`.
+اکنون که درک اولیه ای از نحوه عملکرد `Streams` در Dart داریم، آماده هستیم تا در مورد هسته اصلی بسته Bloc بیاموزیم: یک `Cubit`.
 
 ## Cubit
 
-> A `Cubit` is a class which extends `BlocBase` and can be extended to manage any type of state.
+> یک `Cubit` کلاسی است که از `BlocBase` ارث (extends) برده است و می تواند برای مدیریت هر نوع حالتی (State) گسترش یابد.
 
 ![Cubit Architecture](assets/cubit_architecture_full.png)
 
-A `Cubit` can expose functions which can be invoked to trigger state changes.
+یک `Cubit` می‌تواند توابعی داشته باشد که با فراخوانی آن‌ها، تغییرات در وضعیت ایجاد شود.
 
-> States are the output of a `Cubit` and represent a part of your application's state. UI components can be notified of states and redraw portions of themselves based on the current state.
+> وضعیت ها (States) خروجی یک `Cubit` هستند و بخشی از وضعیت برنامه شما را، نشان می دهند. اجزای UI می توانند از وضعیت ها مطلع شوند و بخش هایی از خود را بر اساس وضعیت فعلی دوباره ترسیم کنند (وضعیت را تغییر دهند).
 
-> **Note**: For more information about the origins of `Cubit` checkout [the following issue](https://github.com/felangel/cubit/issues/69).
+> **نکته**: برای کسب اطلاعات بیشتر در مورد ریشه `Cubit` [این Issue](https://github.com/felangel/cubit/issues/69) را بررسی کنید.
 
-### Creating a Cubit
+### ساخت یک Cubit
 
-We can create a `CounterCubit` like:
+ما می‌توانیم یک `CounterCubit` ایجاد کنیم مانند:
 
 [counter_cubit.dart](_snippets/core_concepts/counter_cubit.dart.md ':include')
 
