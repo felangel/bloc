@@ -11,7 +11,7 @@
 
 ---
 
-Une librairie pour gérer le state de notre application en implémentant le [paterne BLoC](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+Une librairie pour gérer le state de notre application en implémentant le paterne BLoC.
 
 | Package                                                                            | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -68,7 +68,7 @@ Le but de cette architecte est de facilité la séparation entre _présentation_
                 <a href="https://bloclibrary.dev/#/fluttercountertutorial">
                     <img src="https://bloclibrary.dev/assets/gifs/flutter_counter.gif" width="200"/>
                 </a>
-            </td>            
+            </td>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/#/flutterinfinitelisttutorial">
                     <img src="https://bloclibrary.dev/assets/gifs/flutter_infinite_list.gif" width="200"/>

@@ -11,7 +11,7 @@
 
 ---
 
-Prediktivní knihovna pro state management, která pomáhá implementovat [návrhový vzor BLoC](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+Prediktivní knihovna pro state management, která pomáhá implementovat návrhový vzor BLoC.
 
 | Balíček                                                                            | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -70,7 +70,7 @@ V rámci této dokumentace se budeme držet originálního názvu `Bloc` (čti _
                 <a href="https://bloclibrary.dev/#/cs/fluttercountertutorial">
                     <img src="https://bloclibrary.dev/assets/gifs/flutter_counter.gif" width="200"/>
                 </a>
-            </td>            
+            </td>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/#/cs/flutterinfinitelisttutorial">
                     <img src="https://bloclibrary.dev/assets/gifs/flutter_infinite_list.gif" width="200"/>
