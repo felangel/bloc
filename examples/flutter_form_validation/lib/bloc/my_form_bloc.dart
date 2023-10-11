@@ -21,7 +21,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     final email = Email.dirty(event.email);
     emit(
       state.copyWith(
-        email: email.isValid ? email : Email.pure(event.email),
+        email: email,
         isValid: Formz.validate([email, state.password]),
       ),
     );
@@ -31,7 +31,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
     final password = Password.dirty(event.password);
     emit(
       state.copyWith(
-        password: password.isValid ? password : Password.pure(event.password),
+        password: password,
         isValid: Formz.validate([state.email, password]),
       ),
     );
