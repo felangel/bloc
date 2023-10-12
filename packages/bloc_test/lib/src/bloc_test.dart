@@ -214,7 +214,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       await Future<void>.delayed(Duration.zero);
       await bloc.close();
       if (expect != null) {
-        final dynamic expected = expect();
+        final dynamic expected = await expect();
         shallowEquality = '$states' == '$expected';
         try {
           test.expect(states, test.wrapMatcher(expected));
