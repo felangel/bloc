@@ -287,11 +287,10 @@ packages:
   mockingjay:
     dependency: "direct dev"
     description:
-      path: "."
-      ref: edd8d6bdad615b47c0c447b6f8225716ab81c197
-      resolved-ref: edd8d6bdad615b47c0c447b6f8225716ab81c197
-      url: "https://github.com/verygoodopensource/mockingjay"
-    source: git
+      name: mockingjay
+      sha256: "9ef2c471ab3db0f19a8e9600e255297ac13d1130a9b8f1926294ee6d0cb7d68f"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.4.0"
   mocktail:
     dependency: "direct dev"

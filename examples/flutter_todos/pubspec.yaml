@@ -26,11 +26,7 @@ dev_dependencies:
   bloc_test: ^9.1.0
   flutter_test:
     sdk: flutter
-  # https://github.com/VeryGoodOpenSource/mockingjay/issues/62
-  mockingjay:
-    git:
-      url: https://github.com/verygoodopensource/mockingjay
-      ref: edd8d6bdad615b47c0c447b6f8225716ab81c197
+  mockingjay: ^0.4.0
   mocktail: ^1.0.0
 
 flutter:
