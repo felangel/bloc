@@ -151,7 +151,7 @@ void main() {
       cubit.increment();
       expect(cubit.state, 43);
       expect(fromJsonCalls, [
-        {'value': 42}
+        {'value': 42},
       ]);
     });
 

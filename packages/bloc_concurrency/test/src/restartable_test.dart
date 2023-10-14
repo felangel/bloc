@@ -43,7 +43,7 @@ void main() {
           Increment(),
           Increment(),
           Increment(),
-          Increment()
+          Increment(),
         ]),
       );
 
@@ -70,7 +70,7 @@ void main() {
           Increment(),
           Increment(),
           Increment(),
-          Increment()
+          Increment(),
         ]),
       );
 

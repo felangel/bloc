@@ -191,7 +191,7 @@ void main() {
       bloc.add(Increment());
       await expectLater(bloc.stream, emitsInOrder(const <int>[43]));
       expect(fromJsonCalls, [
-        {'value': 42}
+        {'value': 42},
       ]);
     });
 

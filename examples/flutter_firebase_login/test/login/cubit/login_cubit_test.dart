@@ -138,7 +138,7 @@ void main() {
             email: validEmail,
             password: validPassword,
             isValid: true,
-          )
+          ),
         ],
       );
 
@@ -174,7 +174,7 @@ void main() {
             email: validEmail,
             password: validPassword,
             isValid: true,
-          )
+          ),
         ],
       );
 
@@ -208,7 +208,7 @@ void main() {
             email: validEmail,
             password: validPassword,
             isValid: true,
-          )
+          ),
         ],
       );
     });
@@ -230,7 +230,7 @@ void main() {
         act: (cubit) => cubit.logInWithGoogle(),
         expect: () => const <LoginState>[
           LoginState(status: FormzSubmissionStatus.inProgress),
-          LoginState(status: FormzSubmissionStatus.success)
+          LoginState(status: FormzSubmissionStatus.success),
         ],
       );
 
@@ -249,7 +249,7 @@ void main() {
           LoginState(
             status: FormzSubmissionStatus.failure,
             errorMessage: 'oops',
-          )
+          ),
         ],
       );
 
@@ -265,7 +265,7 @@ void main() {
         act: (cubit) => cubit.logInWithGoogle(),
         expect: () => const <LoginState>[
           LoginState(status: FormzSubmissionStatus.inProgress),
-          LoginState(status: FormzSubmissionStatus.failure)
+          LoginState(status: FormzSubmissionStatus.failure),
         ],
       );
     });

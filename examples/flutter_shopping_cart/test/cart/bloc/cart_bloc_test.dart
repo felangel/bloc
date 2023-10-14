@@ -76,7 +76,7 @@ void main() {
       seed: () => CartLoaded(cart: Cart(items: mockItems)),
       act: (bloc) => bloc.add(CartItemAdded(mockItemToAdd)),
       expect: () => <CartState>[
-        CartLoaded(cart: Cart(items: [...mockItems, mockItemToAdd]))
+        CartLoaded(cart: Cart(items: [...mockItems, mockItemToAdd])),
       ],
       verify: (_) {
         verify(() => shoppingRepository.addItemToCart(mockItemToAdd)).called(1);
@@ -112,7 +112,7 @@ void main() {
       seed: () => CartLoaded(cart: Cart(items: mockItems)),
       act: (bloc) => bloc.add(CartItemRemoved(mockItemToRemove)),
       expect: () => <CartState>[
-        CartLoaded(cart: Cart(items: [...mockItems]..remove(mockItemToRemove)))
+        CartLoaded(cart: Cart(items: [...mockItems]..remove(mockItemToRemove))),
       ],
       verify: (_) {
         verify(

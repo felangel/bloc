@@ -30,7 +30,7 @@ void main() {
       test('returns correct value when file exists', () async {
         File('${storageDirectory.path}/.hydrated_bloc.json').writeAsStringSync(
           json.encode({
-            'CounterBloc': json.encode({'value': 4})
+            'CounterBloc': json.encode({'value': 4}),
           }),
         );
         storage = await HydratedStorage.build(
