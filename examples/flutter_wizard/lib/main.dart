@@ -122,7 +122,7 @@ class _ProfileNameFormState extends State<ProfileNameForm> {
                       .add(ProfileWizardNameSubmitted(_name))
                   : null,
               child: const Text('Continue'),
-            )
+            ),
           ],
         ),
       ),
@@ -164,7 +164,7 @@ class _ProfileAgeFormState extends State<ProfileAgeForm> {
                       .add(ProfileWizardAgeSubmitted(_age))
                   : null,
               child: const Text('Continue'),
-            )
+            ),
           ],
         ),
       ),

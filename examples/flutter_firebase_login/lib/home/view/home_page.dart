@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
             onPressed: () {
               context.read<AppBloc>().add(const AppLogoutRequested());
             },
-          )
+          ),
         ],
       ),
       body: Align(

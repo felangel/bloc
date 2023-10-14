@@ -129,7 +129,7 @@ void main() {
             Uri.https('api.open-meteo.com', 'v1/forecast', {
               'latitude': '$latitude',
               'longitude': '$longitude',
-              'current_weather': 'true'
+              'current_weather': 'true',
             }),
           ),
         ).called(1);

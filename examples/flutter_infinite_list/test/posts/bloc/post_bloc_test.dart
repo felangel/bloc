@@ -19,7 +19,7 @@ void main() {
   group('PostBloc', () {
     const mockPosts = [Post(id: 1, title: 'post title', body: 'post body')];
     const extraMockPosts = [
-      Post(id: 2, title: 'post title', body: 'post body')
+      Post(id: 2, title: 'post title', body: 'post body'),
     ];
 
     late http.Client httpClient;
@@ -58,7 +58,7 @@ void main() {
         build: () => PostBloc(httpClient: httpClient),
         act: (bloc) => bloc.add(PostFetched()),
         expect: () => const <PostState>[
-          PostState(status: PostStatus.success, posts: mockPosts)
+          PostState(status: PostStatus.success, posts: mockPosts),
         ],
         verify: (_) {
           verify(() => httpClient.get(_postsUrl(start: 0))).called(1);
@@ -80,7 +80,7 @@ void main() {
           ..add(PostFetched())
           ..add(PostFetched()),
         expect: () => const <PostState>[
-          PostState(status: PostStatus.success, posts: mockPosts)
+          PostState(status: PostStatus.success, posts: mockPosts),
         ],
         verify: (_) {
           verify(() => httpClient.get(any())).called(1);
@@ -104,7 +104,7 @@ void main() {
           bloc.add(PostFetched());
         },
         expect: () => const <PostState>[
-          PostState(status: PostStatus.success, posts: mockPosts)
+          PostState(status: PostStatus.success, posts: mockPosts),
         ],
         verify: (_) {
           verify(() => httpClient.get(any())).called(1);
@@ -145,7 +145,7 @@ void main() {
             status: PostStatus.success,
             posts: mockPosts,
             hasReachedMax: true,
-          )
+          ),
         ],
         verify: (_) {
           verify(() => httpClient.get(_postsUrl(start: 1))).called(1);
@@ -173,7 +173,7 @@ void main() {
           PostState(
             status: PostStatus.success,
             posts: [...mockPosts, ...extraMockPosts],
-          )
+          ),
         ],
         verify: (_) {
           verify(() => httpClient.get(_postsUrl(start: 1))).called(1);
