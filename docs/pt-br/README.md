@@ -11,7 +11,7 @@
 
 ---
 
-Uma biblioteca previsível de gerenciamento de estado que ajuda a implementar o [padrão de projeto BLoC](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+Uma biblioteca previsível de gerenciamento de estado que ajuda a implementar o padrão de projeto BLoC.
 
 | Package                                                                            | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -69,7 +69,7 @@ O objetivo dessa biblioteca é tornar fácil separar _apresentação_ da _lógic
                 <a href="https://bloclibrary.dev/#/fluttercountertutorial">
                     <img src="https://bloclibrary.dev/assets/gifs/flutter_counter.gif" width="200"/>
                 </a>
-            </td>            
+            </td>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/#/flutterinfinitelisttutorial">
                     <img src="https://bloclibrary.dev/assets/gifs/flutter_infinite_list.gif" width="200"/>

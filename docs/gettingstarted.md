@@ -44,6 +44,6 @@ For a Flutter application we can import `flutter_bloc`.
 
 [main.dart](_snippets/getting_started/flutter_bloc_main.dart.md ':include')
 
-For an AngularDart application we can import angular_bloc.
+For an AngularDart application we can import `angular_bloc`.
 
 [main.dart](_snippets/getting_started/angular_bloc_main.dart.md ':include')

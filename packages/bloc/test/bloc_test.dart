@@ -277,7 +277,7 @@ void main() {
       test('single Increment event updates state to 1', () {
         final expectedStates = [1, emitsDone];
         final expectedTransitions = [
-          '''Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }'''
+          '''Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }''',
         ];
         final counterBloc = CounterBloc(
           onEventCallback: events.add,
@@ -469,7 +469,7 @@ void main() {
         expect(
           transitions,
           const [
-            '''Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }'''
+            '''Transition { currentState: 0, event: CounterEvent.increment, nextState: 1 }''',
           ],
         );
       });

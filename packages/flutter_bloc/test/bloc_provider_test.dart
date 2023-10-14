@@ -81,7 +81,7 @@ class _MyStatefulAppState extends State<MyStatefulApp> {
                 onPressed: () {
                   setState(() => cubit = CounterCubit());
                 },
-              )
+              ),
             ],
           ),
           body: widget.child,

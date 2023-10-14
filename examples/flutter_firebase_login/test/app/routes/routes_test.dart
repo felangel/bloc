@@ -14,7 +14,7 @@ void main() {
             (p) => p.child,
             'child',
             isA<HomePage>(),
-          )
+          ),
         ],
       );
     });
@@ -27,7 +27,7 @@ void main() {
             (p) => p.child,
             'child',
             isA<LoginPage>(),
-          )
+          ),
         ],
       );
     });

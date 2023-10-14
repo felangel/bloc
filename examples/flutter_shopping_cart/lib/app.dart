@@ -22,7 +22,7 @@ class App extends StatelessWidget {
           create: (_) => CartBloc(
             shoppingRepository: shoppingRepository,
           )..add(CartStarted()),
-        )
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Bloc Shopping Cart',

@@ -33,7 +33,7 @@ class ListCubitMap<T extends ToJsonMap<E>, E> extends HydratedCubit<List<T>> {
                 (x) => x.toJson(),
               ),
             )
-          : state
+          : state,
     };
     return map;
   }
@@ -65,7 +65,7 @@ class ListCubitList<T extends ToJsonList<E>, E> extends HydratedCubit<List<T>> {
                 (x) => x.toJson(),
               ),
             )
-          : state
+          : state,
     };
     return map;
   }

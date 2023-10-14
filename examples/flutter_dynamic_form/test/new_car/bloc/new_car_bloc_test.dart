@@ -149,7 +149,7 @@ void main() {
           models: mockModels,
           model: mockModel,
           years: mockYears,
-        ).copyWith(year: mockYear)
+        ).copyWith(year: mockYear),
       ],
       verify: (_) => verifyInOrder([
         newCarRepository.fetchBrands,
