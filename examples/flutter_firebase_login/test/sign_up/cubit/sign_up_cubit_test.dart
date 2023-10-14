@@ -245,7 +245,7 @@ void main() {
             password: validPassword,
             confirmedPassword: validConfirmedPassword,
             isValid: true,
-          )
+          ),
         ],
       );
 
@@ -283,7 +283,7 @@ void main() {
             password: validPassword,
             confirmedPassword: validConfirmedPassword,
             isValid: true,
-          )
+          ),
         ],
       );
 
@@ -320,7 +320,7 @@ void main() {
             password: validPassword,
             confirmedPassword: validConfirmedPassword,
             isValid: true,
-          )
+          ),
         ],
       );
     });

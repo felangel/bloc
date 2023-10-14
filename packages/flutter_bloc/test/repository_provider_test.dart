@@ -65,7 +65,7 @@ class _MyStatefulAppState extends State<MyStatefulApp> {
                 onPressed: () {
                   setState(() => _repository = const Repository(0));
                 },
-              )
+              ),
             ],
           ),
           body: widget.child,
