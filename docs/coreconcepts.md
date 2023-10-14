@@ -130,7 +130,7 @@ The above snippet would then output:
 
 [script](_snippets/core_concepts/counter_cubit_on_change_usage_output.sh.md ':include')
 
-?> **Note**: The internal `onChange` override is called first, followed by `onChange` in `BlocObserver`.
+?> **Note**: The internal `onChange` override is called first, which calls `super.onChange` notifying the `onChange` in the `BlocObserver`.
 
 ?> 💡 **Tip**: In `BlocObserver` we have access to the `Cubit` instance in addition to the `Change` itself.
 
