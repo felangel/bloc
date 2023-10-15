@@ -1,9 +1,40 @@
 import 'dart:async';
+import 'dart:collection';
+import 'dart:core';
 
 import 'package:bloc/bloc.dart';
 import 'package:diff_match_patch/diff_match_patch.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart' as test;
+
+/// Defines a step of the saga where an event is added or an action is performed
+///
+/// [act] is an optional callback which will be invoked with the `bloc` under
+/// test and should be used to interact with the `bloc`. In case of adding events to a bloc
+/// it's simplier to use [happens], that expect an event. [act] and [happens] are mutually exclusive
+/// but both are optional, a [Step] can be used to only check a state.
+/// [outputs] is a list of callbacks (bool Function(S value)). For every callback a state
+/// is popped out, if the callback result is true the test is passed.
+/// [description] A description for the Step, it will output in message, in case of failure
+/// [wait] the time to wait prior to check every output
+/// [timeOut] the maximum time to wait for states output from the bloc
+class Step<B, S> {
+  Step(
+      {this.act,
+      this.happens,
+      required this.outputs,
+      this.description,
+      this.wait = const Duration(milliseconds: 50),
+      this.timeOut = const Duration(milliseconds: 150)}) {
+    assert(!(happens != null && act != null), "'act' and 'happens' can't be used at the sae time.");
+  }
+  final dynamic Function(B bloc)? act;
+  final Object? happens;
+  final List<bool Function(S value)> outputs;
+  final String? description;
+  final Duration wait;
+  final Duration timeOut;
+}
 
 /// Creates a new `bloc`-specific test case with the given [description].
 /// [blocTest] will handle asserting that the `bloc` emits the [expect]ed
@@ -23,6 +54,8 @@ import 'package:test/test.dart' as test;
 ///
 /// [act] is an optional callback which will be invoked with the `bloc` under
 /// test and should be used to interact with the `bloc`.
+///
+/// [saga] is an optional parameter that can be used to check if a chain of events matches with desidered state changes
 ///
 /// [skip] is an optional `int` which can be used to skip any number of states.
 /// [skip] defaults to 0.
@@ -101,6 +134,33 @@ import 'package:test/test.dart' as test;
 /// );
 /// ```
 ///
+/// [blocTest] can also be used to check if, given a list or event or actions, every step has the desidered output  
+/// by optionally providing a `Saga` to [saga].
+///
+/// ```dart
+/// blocTest(
+///   'CounterBloc emits [1] when increment is added',
+///   build: () => CounterBloc(),
+///   saga: [Step(
+///           description: 'Initial',
+///           outputs: [(state) => state == 0],
+///          ),
+///         Step(
+///           happens: CounterEvent.increment,
+///           description: 'Increment ',
+///           outputs: [(state) => state == 1],
+///         ),
+///         Step(
+///           act: (bloc) => bloc..add(CounterEvent.increment)..add(CounterEvent.increment),
+///           description: 'Double Increment ',
+///           outputs: [(state) => state == 2,
+///                     (state) => state == 3,],
+///           timeOut: Duration(milliseconds: 200),
+///         ),],
+///   wait: const Duration(milliseconds: 300),
+/// );
+/// ```
+///
 /// [blocTest] can also be used to [verify] internal bloc functionality.
 ///
 /// ```dart
@@ -142,6 +202,7 @@ void blocTest<B extends BlocBase<State>, State>(
   FutureOr<void> Function()? setUp,
   State Function()? seed,
   dynamic Function(B bloc)? act,
+  List<Step<B, State>>? saga,
   Duration? wait,
   int skip = 0,
   dynamic Function()? expect,
@@ -158,6 +219,7 @@ void blocTest<B extends BlocBase<State>, State>(
         build: build,
         seed: seed,
         act: act,
+        saga: saga,
         wait: wait,
         skip: skip,
         expect: expect,
@@ -178,6 +240,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
   FutureOr<void> Function()? setUp,
   State Function()? seed,
   dynamic Function(B bloc)? act,
+  List<Step<B, State>>? saga,
   Duration? wait,
   int skip = 0,
   dynamic Function()? expect,
@@ -201,14 +264,33 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       await setUp?.call();
       final states = <State>[];
       final bloc = build();
+      Queue<State>? statesQueue;
       // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
       if (seed != null) bloc.emit(seed());
-      final subscription = bloc.stream.skip(skip).listen(states.add);
+      final subscription = bloc.stream.skip(skip).listen((s) {
+        states.add(s);
+        if (statesQueue != null) {
+          statesQueue.addLast(s);
+        }
+      });
       try {
         await act?.call(bloc);
       } catch (error) {
         if (errors == null) rethrow;
         unhandledErrors.add(error);
+      }
+      if (wait != null) await Future<void>.delayed(wait);
+      await Future<void>.delayed(Duration.zero);
+      if (saga != null && saga.isNotEmpty) {
+        try {
+          statesQueue = Queue<State>();
+          await _runSaga(bloc, saga, statesQueue);
+        } catch (error) {
+          if (errors == null) rethrow;
+          unhandledErrors.add(error);
+        } finally {
+          statesQueue = null;
+        }
       }
       if (wait != null) await Future<void>.delayed(wait);
       await Future<void>.delayed(Duration.zero);
@@ -246,6 +328,37 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
   }
 
   if (errors != null) test.expect(unhandledErrors, test.wrapMatcher(errors()));
+}
+Future<void> _runSaga<B, State>(B bloc, List<Step<B, State>> saga, Queue<State> statesQueue,) async {
+  for (var step in saga) {
+    if (step.happens != null) {
+      (bloc as dynamic).add(step.happens);
+    }
+    if (step.act!=null){
+      await step.act?.call(bloc);
+    }
+    await Future<void>.delayed(Duration.zero);
+    // await step.act.call(bloc);
+    int i = 0;
+    Stopwatch stopwatch = Stopwatch()..start();
+    do {
+      await Future<void>.delayed(step.wait);
+      if (statesQueue.isNotEmpty) {
+        var state = statesQueue.removeFirst();
+        if (!await step.outputs[i](state)) {
+          var message = 'Failed check predicate [$i]';
+          if (step.description != null) message = '$message - ${step.description}';
+          message = '$message - State: $state';
+          throw test.TestFailure(message);
+        }
+        i++;
+      }
+    } while (i < step.outputs.length && stopwatch.elapsed < step.timeOut);
+    if (i < step.outputs.length) {
+      var message = 'Failed checks : received $i states instead of ${step.outputs.length}';
+      if (step.description != null) message = '$message - ${step.description}';
+    }
+  }
 }
 
 Future<void> _runZonedGuarded(Future<void> Function() body) {
