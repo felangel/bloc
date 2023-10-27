@@ -1,3 +1,7 @@
+# 9.1.5
+
+- fix: `blocTest` supports `async` `expect` ([#3976](https://github.com/felangel/bloc/pull/3976))
+
 # 9.1.4
 
 - deps: support `mocktail: ^1.0.0` ([#3917](https://github.com/felangel/bloc/pull/3917))
