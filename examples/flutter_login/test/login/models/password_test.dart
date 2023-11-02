@@ -9,20 +9,20 @@ void main() {
       test('pure creates correct instance', () {
         final password = Password.pure();
         expect(password.value, '');
-        expect(password.pure, true);
+        expect(password.isPure, isTrue);
       });
 
       test('dirty creates correct instance', () {
         final password = Password.dirty(passwordString);
         expect(password.value, passwordString);
-        expect(password.pure, false);
+        expect(password.isPure, isFalse);
       });
     });
 
     group('validator', () {
       test('returns empty error when password is empty', () {
         expect(
-          Password.dirty('').error,
+          Password.dirty().error,
           PasswordValidationError.empty,
         );
       });

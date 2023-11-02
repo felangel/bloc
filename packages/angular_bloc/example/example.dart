@@ -1,7 +1,7 @@
 // This example is one-pager for the [angular_bloc](https://github.com/felangel/bloc/tree/master/examples/angular_counter) example.
 
-import 'package:angular/angular.dart';
 import 'package:angular_bloc/angular_bloc.dart';
+import 'package:ngdart/angular.dart';
 
 @Component(
   selector: 'my-app',
@@ -25,6 +25,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   @override
   void onTransition(Transition<CounterEvent, int> transition) {
     super.onTransition(transition);
+    // ignore: avoid_print
     print(transition);
   }
 }

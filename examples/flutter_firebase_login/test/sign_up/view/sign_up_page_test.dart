@@ -12,7 +12,7 @@ class MockAuthenticationRepository extends Mock
 void main() {
   group('SignUpPage', () {
     test('has a route', () {
-      expect(SignUpPage.route(), isA<MaterialPageRoute>());
+      expect(SignUpPage.route(), isA<MaterialPageRoute<void>>());
     });
 
     testWidgets('renders a SignUpForm', (tester) async {

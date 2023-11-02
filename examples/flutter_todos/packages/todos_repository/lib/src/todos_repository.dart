@@ -1,7 +1,7 @@
 import 'package:todos_api/todos_api.dart';
 
 /// {@template todos_repository}
-/// A repository that handles todo related requests.
+/// A repository that handles `todo` related requests.
 /// {@endtemplate}
 class TodosRepository {
   /// {@macro todos_repository}
@@ -19,9 +19,9 @@ class TodosRepository {
   /// If a [todo] with the same id already exists, it will be replaced.
   Future<void> saveTodo(Todo todo) => _todosApi.saveTodo(todo);
 
-  /// Deletes the todo with the given id.
+  /// Deletes the `todo` with the given id.
   ///
-  /// If no todo with the given id exists, a [TodoNotFoundException] error is
+  /// If no `todo` with the given id exists, a [TodoNotFoundException] error is
   /// thrown.
   Future<void> deleteTodo(String id) => _todosApi.deleteTodo(id);
 

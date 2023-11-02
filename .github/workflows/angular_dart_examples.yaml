@@ -30,13 +30,22 @@ jobs:
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 3.0.0
 
       - name: Install Dependencies
         working-directory: ${{ matrix.folder }}
         run: dart pub get
+
+      - name: Install webdev
+        if: matrix.folder != 'examples/github_search/common_github_search'
+        working-directory: ${{ matrix.folder }}
+        run: |
+          dart pub global activate webdev
+          webdev build
 
       - name: Format
         working-directory: ${{ matrix.folder }}

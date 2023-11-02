@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class MyAppWithNavigation extends MaterialApp {
-  MyAppWithNavigation({Key? key, required Widget child})
+  MyAppWithNavigation({required Widget child, Key? key})
       : super(key: key, home: Scaffold(body: child));
 }
 
@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getProviders() {
+    List<BlocProvider<StateStreamableSource<Object?>>> getProviders() {
       final providers = <BlocProvider>[];
       if (counterCubitValue != null) {
         providers.add(
@@ -90,18 +90,22 @@ class HomePage extends StatelessWidget {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeData>(
       bloc: BlocProvider.of<ThemeCubit>(context),
       builder: (_, theme) {
-        return MaterialApp(home: CounterPage(), theme: theme);
+        return MaterialApp(home: const CounterPage(), theme: theme);
       },
     );
   }
 }
 
 class CounterPage extends StatelessWidget {
+  const CounterPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final counterCubit = BlocProvider.of<CounterCubit>(context);
@@ -161,16 +165,16 @@ void main() {
         MultiBlocProvider(
           providers: [
             BlocProvider<CounterCubit>(create: (_) => CounterCubit()),
-            BlocProvider<ThemeCubit>(create: (_) => ThemeCubit())
+            BlocProvider<ThemeCubit>(create: (_) => ThemeCubit()),
           ],
-          child: MyApp(),
+          child: const MyApp(),
         ),
       );
 
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(materialApp.theme, ThemeData.light());
 
-      final counterFinder = find.byKey((const Key('counter_text')));
+      final counterFinder = find.byKey(const Key('counter_text'));
       expect(counterFinder, findsOneWidget);
 
       final counterText = tester.widget<Text>(counterFinder);
@@ -183,16 +187,16 @@ void main() {
         MultiBlocProvider(
           providers: [
             BlocProvider(create: (_) => CounterCubit()),
-            BlocProvider(create: (_) => ThemeCubit())
+            BlocProvider(create: (_) => ThemeCubit()),
           ],
-          child: MyApp(),
+          child: const MyApp(),
         ),
       );
 
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(materialApp.theme, ThemeData.light());
 
-      final counterFinder = find.byKey((const Key('counter_text')));
+      final counterFinder = find.byKey(const Key('counter_text'));
       expect(counterFinder, findsOneWidget);
 
       final counterText = tester.widget<Text>(counterFinder);
@@ -210,7 +214,7 @@ void main() {
               create: (_) => ThemeCubit()..toggle(),
             ),
           ],
-          child: MyApp(),
+          child: const MyApp(),
         ),
       );
 
@@ -219,7 +223,7 @@ void main() {
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(materialApp.theme, ThemeData.dark());
 
-      final counterFinder = find.byKey((const Key('counter_text')));
+      final counterFinder = find.byKey(const Key('counter_text'));
       expect(counterFinder, findsOneWidget);
 
       final counterText = tester.widget<Text>(counterFinder);

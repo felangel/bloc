@@ -1,6 +1,6 @@
 part of 'new_car_bloc.dart';
 
-class NewCarState extends Equatable {
+final class NewCarState extends Equatable {
   const NewCarState._({
     this.brands = const <String>[],
     this.brand,

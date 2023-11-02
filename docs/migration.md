@@ -2,6 +2,119 @@
 
 ?> 💡 **Tip**: Please refer to the [release log](https://github.com/felangel/bloc/releases) for more information regarding what changed in each release.
 
+## v9.0.0
+
+### package:hydrated_bloc
+
+#### ✨ Reintroduce `HydratedBloc.storage` API
+
+!> In hydrated_bloc v9.0.0, `HydratedBlocOverrides` was removed in favor of the `HydratedBloc.storage` API.
+
+##### Rationale
+
+Refer to the [rationale for reintroducing the Bloc.observer and Bloc.transformer overrides](/migration?id=rationale-1).
+
+**v8.x.x**
+
+```dart
+Future<void> main() async {
+  final storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getTemporaryDirectory(),
+  );
+  HydratedBlocOverrides.runZoned(
+    () => runApp(App()),
+    storage: storage,
+  );
+}
+```
+
+**v9.0.0**
+
+```dart
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getTemporaryDirectory(),
+  );
+  runApp(App());
+}
+```
+
+## v8.1.0
+
+### package:bloc
+
+#### ✨ Reintroduce `Bloc.observer` and `Bloc.transformer` APIs
+
+!> In bloc v8.1.0, `BlocOverrides` was deprecated in favor of the `Bloc.observer` and `Bloc.transformer` APIs.
+
+##### Rationale
+
+The `BlocOverrides` API was introduced in v8.0.0 in an attempt to support scoping bloc-specific configurations such as `BlocObserver`, `EventTransformer`, and `HydratedStorage`. In pure Dart applications, the changes worked well; however, in Flutter applications the new API caused more problems than it solved.
+
+The `BlocOverrides` API was inspired by similar APIs in Flutter/Dart:
+
+- [HttpOverrides](https://api.flutter.dev/flutter/dart-io/HttpOverrides-class.html)
+- [IOOverrides](https://api.flutter.dev/flutter/dart-io/IOOverrides-class.html)
+
+**Problems**
+
+While it wasn't the primary reason for these changes, the `BlocOverrides` API introduced additional complexity for developers. In addition to increasing the amount of nesting and lines of code needed to achieve the same effect, the `BlocOverrides` API required developers to have a solid understanding of [Zones](https://api.dart.dev/stable/2.17.6/dart-async/Zone-class.html) in Dart. `Zones` are not a beginner-friendly concept and failure to understand how Zones work could lead to the introduction of bugs (such as uninitialized observers, transformers, storage instances).
+
+For example, many developers would have something like:
+
+```dart
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  BlocOverrides.runZoned(...);
+}
+```
+
+The above code, while appearing harmless, can actually lead to many difficult to track bugs. Whatever zone `WidgetsFlutterBinding.ensureInitialized` is initially called from will be the zone in which gesture events are handled (e.g. `onTap`, `onPressed` callbacks) due to `GestureBinding.initInstances`. This is just one of many issues caused by using `zoneValues`.
+
+In addition, Flutter does many things behind the scenes which involve forking/manipulating Zones (especially when running tests) which can lead to unexpected behaviors (and in many cases behaviors that are outside the developer's control -- see issues below).
+
+Due to the use of the [runZoned](https://api.flutter.dev/flutter/dart-async/runZoned.html), the transition to the `BlocOverrides` API led to the discovery of several bugs/limitations in Flutter (specifically around Widget and Integration Tests):
+
+- https://github.com/flutter/flutter/issues/96939
+- https://github.com/flutter/flutter/issues/94123
+- https://github.com/flutter/flutter/issues/93676
+
+which affected many developers using the bloc library:
+
+- https://github.com/felangel/bloc/issues/3394
+- https://github.com/felangel/bloc/issues/3350
+- https://github.com/felangel/bloc/issues/3319
+
+**v8.0.x**
+
+```dart
+void main() {
+  BlocOverrides.runZoned(
+    () {
+      // ...
+    },
+    blocObserver: CustomBlocObserver(),
+    eventTransformer: customEventTransformer(),
+  );
+}
+```
+
+**v8.1.0**
+
+```dart
+void main() {
+  Bloc.observer = CustomBlocObserver();
+  Bloc.transformer = customEventTransformer();
+
+  // ...
+}
+```
+
 ## v8.0.0
 
 ### package:bloc

@@ -28,7 +28,10 @@ void main() {
     });
 
     test('is compatible with listen', () {
-      expect(counterBloc.stream.listen((_) {}), isA<StreamSubscription>());
+      expect(
+        counterBloc.stream.listen((_) {}),
+        isA<StreamSubscription<dynamic>>(),
+      );
     });
 
     test('is compatible with add', () {

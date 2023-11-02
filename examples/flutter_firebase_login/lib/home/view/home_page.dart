@@ -4,9 +4,9 @@ import 'package:flutter_firebase_login/app/app.dart';
 import 'package:flutter_firebase_login/home/home.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
-  static Page page() => const MaterialPage<void>(child: HomePage());
+  static Page<void> page() => const MaterialPage<void>(child: HomePage());
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +19,10 @@ class HomePage extends StatelessWidget {
           IconButton(
             key: const Key('homePage_logout_iconButton'),
             icon: const Icon(Icons.exit_to_app),
-            onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
-          )
+            onPressed: () {
+              context.read<AppBloc>().add(const AppLogoutRequested());
+            },
+          ),
         ],
       ),
       body: Align(
@@ -30,9 +32,9 @@ class HomePage extends StatelessWidget {
           children: <Widget>[
             Avatar(photo: user.photo),
             const SizedBox(height: 4),
-            Text(user.email ?? '', style: textTheme.headline6),
+            Text(user.email ?? '', style: textTheme.titleLarge),
             const SizedBox(height: 4),
-            Text(user.name ?? '', style: textTheme.headline5),
+            Text(user.name ?? '', style: textTheme.headlineSmall),
           ],
         ),
       ),

@@ -29,6 +29,7 @@ abstract class Closable {
 }
 
 /// An object that can emit new states.
+// ignore: one_member_abstracts
 abstract class Emittable<State extends Object?> {
   /// Emits a new [state].
   void emit(State state);
@@ -53,10 +54,11 @@ abstract class BlocBase<State>
   /// {@macro bloc_base}
   BlocBase(this._state) {
     // ignore: invalid_use_of_protected_member
-    _blocObserver?.onCreate(this);
+    _blocObserver.onCreate(this);
   }
 
-  final _blocObserver = BlocOverrides.current?.blocObserver;
+  // ignore: deprecated_member_use_from_same_package
+  final _blocObserver = BlocOverrides.current?.blocObserver ?? Bloc.observer;
 
   late final _stateController = StreamController<State>.broadcast();
 
@@ -129,7 +131,7 @@ abstract class BlocBase<State>
   @mustCallSuper
   void onChange(Change<State> change) {
     // ignore: invalid_use_of_protected_member
-    _blocObserver?.onChange(this, change);
+    _blocObserver.onChange(this, change);
   }
 
   /// Reports an [error] which triggers [onError] with an optional [StackTrace].
@@ -157,7 +159,7 @@ abstract class BlocBase<State>
   @mustCallSuper
   void onError(Object error, StackTrace stackTrace) {
     // ignore: invalid_use_of_protected_member
-    _blocObserver?.onError(this, error, stackTrace);
+    _blocObserver.onError(this, error, stackTrace);
   }
 
   /// Closes the instance.
@@ -167,7 +169,7 @@ abstract class BlocBase<State>
   @override
   Future<void> close() async {
     // ignore: invalid_use_of_protected_member
-    _blocObserver?.onClose(this);
+    _blocObserver.onClose(this);
     await _stateController.close();
   }
 }

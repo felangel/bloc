@@ -18,14 +18,6 @@
           <toolTipText value="Bloc name goes here (e.g. Login)"/>
         </properties>
       </component>
-      <component id="7d19b" class="javax.swing.JCheckBox" binding="useEquatableCheckbox">
-        <constraints>
-          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
       <component id="9e8d8" class="javax.swing.JLabel">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -34,14 +26,34 @@
           <text value="Name:"/>
         </properties>
       </component>
-      <component id="b8c83" class="javax.swing.JLabel">
+      <component id="29a5e" class="javax.swing.JComboBox" binding="style">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <model>
+            <item value="Basic"/>
+            <item value="Equatable"/>
+            <item value="Freezed"/>
+          </model>
+        </properties>
+      </component>
+      <component id="ed03a" class="javax.swing.JLabel">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Use Equatable:"/>
+          <text value="Style"/>
         </properties>
       </component>
     </children>
   </grid>
+  <buttonGroups>
+    <group name="radionButtonGroup">
+      <member id="bb6d1"/>
+      <member id="317bf"/>
+      <member id="2b62e"/>
+      <member id="900f4"/>
+    </group>
+  </buttonGroups>
 </form>

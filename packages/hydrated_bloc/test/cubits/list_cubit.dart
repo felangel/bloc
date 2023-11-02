@@ -1,4 +1,5 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:meta/meta.dart';
 
 class ListCubit extends HydratedCubit<List<String>> {
   ListCubit() : super(const <String>[]);
@@ -17,7 +18,7 @@ class ListCubit extends HydratedCubit<List<String>> {
 }
 
 class ListCubitMap<T extends ToJsonMap<E>, E> extends HydratedCubit<List<T>> {
-  ListCubitMap(this._fromJson, [this.explicit = false]) : super(<T>[]);
+  ListCubitMap(this._fromJson, {this.explicit = false}) : super(<T>[]);
   final T Function(Map<String, dynamic> json) _fromJson;
   final bool explicit;
 
@@ -27,10 +28,12 @@ class ListCubitMap<T extends ToJsonMap<E>, E> extends HydratedCubit<List<T>> {
   Map<String, dynamic> toJson(List<T> state) {
     final map = <String, dynamic>{
       'state': explicit
-          ? List<Map<String, E>>.from(state.map<dynamic>(
-              (x) => x.toJson(),
-            ))
-          : state
+          ? List<Map<String, E>>.from(
+              state.map<dynamic>(
+                (x) => x.toJson(),
+              ),
+            )
+          : state,
     };
     return map;
   }
@@ -46,7 +49,7 @@ class ListCubitMap<T extends ToJsonMap<E>, E> extends HydratedCubit<List<T>> {
 }
 
 class ListCubitList<T extends ToJsonList<E>, E> extends HydratedCubit<List<T>> {
-  ListCubitList(this._fromJson, [this.explicit = false]) : super(<T>[]);
+  ListCubitList(this._fromJson, {this.explicit = false}) : super(<T>[]);
   final T Function(List<dynamic> json) _fromJson;
   final bool explicit;
 
@@ -57,10 +60,12 @@ class ListCubitList<T extends ToJsonList<E>, E> extends HydratedCubit<List<T>> {
   Map<String, dynamic> toJson(List<T> state) {
     final map = <String, dynamic>{
       'state': explicit
-          ? List<List<E>>.from(state.map<dynamic>(
-              (x) => x.toJson(),
-            ))
-          : state
+          ? List<List<E>>.from(
+              state.map<dynamic>(
+                (x) => x.toJson(),
+              ),
+            )
+          : state,
     };
     return map;
   }
@@ -79,17 +84,20 @@ mixin ToJsonMap<T> {
   Map<String, T> toJson();
 }
 
+@immutable
 class MapObject with ToJsonMap<int> {
   const MapObject(this.value);
+
+  // ignore: prefer_constructors_over_static_methods
+  static MapObject fromJson(Map<String, dynamic> map) {
+    return MapObject(map['value'] as int);
+  }
+
   final int value;
 
   @override
   Map<String, int> toJson() {
     return <String, int>{'value': value};
-  }
-
-  static MapObject fromJson(Map<String, dynamic> map) {
-    return MapObject(map['value'] as int);
   }
 
   @override
@@ -103,19 +111,24 @@ class MapObject with ToJsonMap<int> {
   int get hashCode => value.hashCode;
 }
 
+@immutable
 class MapCustomObject with ToJsonMap<CustomObject> {
   MapCustomObject(int value) : value = CustomObject(value);
+
+  // ignore: prefer_constructors_over_static_methods
+  static MapCustomObject fromJson(Map<String, dynamic> map) {
+    return MapCustomObject(
+      CustomObject.fromJson(
+        map['value'] as Map<String, dynamic>,
+      ).value,
+    );
+  }
+
   final CustomObject value;
 
   @override
   Map<String, CustomObject> toJson() {
     return <String, CustomObject>{'value': value};
-  }
-
-  static MapCustomObject fromJson(Map<String, dynamic> map) {
-    return MapCustomObject(CustomObject.fromJson(
-      map['value'] as Map<String, dynamic>,
-    ).value);
   }
 
   @override
@@ -133,17 +146,20 @@ mixin ToJsonList<T> {
   List<T> toJson();
 }
 
+@immutable
 class ListObject with ToJsonList<int> {
   const ListObject(this.value);
+
+  // ignore: prefer_constructors_over_static_methods
+  static ListObject fromJson(List<dynamic> list) {
+    return ListObject(list[0] as int);
+  }
+
   final int value;
 
   @override
   List<int> toJson() {
     return <int>[value];
-  }
-
-  static ListObject fromJson(List<dynamic> list) {
-    return ListObject(list[0] as int);
   }
 
   @override
@@ -157,19 +173,22 @@ class ListObject with ToJsonList<int> {
   int get hashCode => value.hashCode;
 }
 
+@immutable
 class ListMapObject with ToJsonList<MapObject> {
   ListMapObject(int value) : value = MapObject(value);
+
+  // ignore: prefer_constructors_over_static_methods
+  static ListMapObject fromJson(List<dynamic> list) {
+    return ListMapObject(
+      MapObject.fromJson(list[0] as Map<String, dynamic>).value,
+    );
+  }
+
   final MapObject value;
 
   @override
   List<MapObject> toJson() {
     return <MapObject>[value];
-  }
-
-  static ListMapObject fromJson(List<dynamic> list) {
-    return ListMapObject(
-      MapObject.fromJson(list[0] as Map<String, dynamic>).value,
-    );
   }
 
   @override
@@ -183,19 +202,22 @@ class ListMapObject with ToJsonList<MapObject> {
   int get hashCode => value.hashCode;
 }
 
+@immutable
 class ListListObject with ToJsonList<ListObject> {
   ListListObject(int value) : value = ListObject(value);
+
+  // ignore: prefer_constructors_over_static_methods
+  static ListListObject fromJson(List<dynamic> list) {
+    return ListListObject(
+      ListObject.fromJson(list[0] as List<dynamic>).value,
+    );
+  }
+
   final ListObject value;
 
   @override
   List<ListObject> toJson() {
     return <ListObject>[value];
-  }
-
-  static ListListObject fromJson(List<dynamic> list) {
-    return ListListObject(
-      ListObject.fromJson(list[0] as List<dynamic>).value,
-    );
   }
 
   @override
@@ -209,19 +231,24 @@ class ListListObject with ToJsonList<ListObject> {
   int get hashCode => value.hashCode;
 }
 
+@immutable
 class ListCustomObject with ToJsonList<CustomObject> {
   ListCustomObject(int value) : value = CustomObject(value);
+
+  // ignore: prefer_constructors_over_static_methods
+  static ListCustomObject fromJson(List<dynamic> list) {
+    return ListCustomObject(
+      CustomObject.fromJson(
+        list[0] as Map<String, dynamic>,
+      ).value,
+    );
+  }
+
   final CustomObject value;
 
   @override
   List<CustomObject> toJson() {
     return <CustomObject>[value];
-  }
-
-  static ListCustomObject fromJson(List<dynamic> list) {
-    return ListCustomObject(CustomObject.fromJson(
-      list[0] as Map<String, dynamic>,
-    ).value);
   }
 
   @override
@@ -235,16 +262,18 @@ class ListCustomObject with ToJsonList<CustomObject> {
   int get hashCode => value.hashCode;
 }
 
+@immutable
 class CustomObject {
-  CustomObject(this.value);
+  const CustomObject(this.value);
+
+  factory CustomObject.fromJson(Map<String, dynamic> json) {
+    return CustomObject(json['value'] as int);
+  }
+
   final int value;
 
   Map<String, dynamic> toJson() {
     return <String, int>{'value': value};
-  }
-
-  static CustomObject fromJson(Map<String, dynamic> json) {
-    return CustomObject(json['value'] as int);
   }
 
   @override

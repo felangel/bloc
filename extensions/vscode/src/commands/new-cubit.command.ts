@@ -32,7 +32,7 @@ export const newCubit = async (uri: Uri) => {
   }
 
   const blocType = await getBlocType(TemplateType.Cubit);
-  const pascalCaseCubitName = changeCase.pascalCase(cubitName.toLowerCase());
+  const pascalCaseCubitName = changeCase.pascalCase(cubitName);
   try {
     await generateCubitCode(cubitName, targetDirectory, blocType);
     window.showInformationMessage(
@@ -84,8 +84,11 @@ async function generateCubitCode(
     await createDirectory(cubitDirectoryPath);
   }
 
+  const useSealedClasses = workspace
+    .getConfiguration("bloc")
+    .get<boolean>("newCubitTemplate.useSealedClasses", true);
   await Promise.all([
-    createCubitStateTemplate(cubitName, cubitDirectoryPath, type),
+    createCubitStateTemplate(cubitName, cubitDirectoryPath, type, useSealedClasses),
     createCubitTemplate(cubitName, cubitDirectoryPath, type),
   ]);
 }
@@ -104,9 +107,10 @@ function createDirectory(targetDirectory: string): Promise<void> {
 function createCubitStateTemplate(
   cubitName: string,
   targetDirectory: string,
-  type: BlocType
+  type: BlocType,
+  useSealedClasses: boolean
 ) {
-  const snakeCaseCubitName = changeCase.snakeCase(cubitName.toLowerCase());
+  const snakeCaseCubitName = changeCase.snakeCase(cubitName);
   const targetPath = `${targetDirectory}/${snakeCaseCubitName}_state.dart`;
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseCubitName}_state.dart already exists`);
@@ -114,7 +118,7 @@ function createCubitStateTemplate(
   return new Promise<void>(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getCubitStateTemplate(cubitName, type),
+      getCubitStateTemplate(cubitName, type, useSealedClasses),
       "utf8",
       (error) => {
         if (error) {
@@ -132,7 +136,7 @@ function createCubitTemplate(
   targetDirectory: string,
   type: BlocType
 ) {
-  const snakeCaseCubitName = changeCase.snakeCase(cubitName.toLowerCase());
+  const snakeCaseCubitName = changeCase.snakeCase(cubitName);
   const targetPath = `${targetDirectory}/${snakeCaseCubitName}_cubit.dart`;
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseCubitName}_cubit.dart already exists`);

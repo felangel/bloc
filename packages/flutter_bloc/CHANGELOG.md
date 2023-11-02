@@ -1,3 +1,31 @@
+# 8.1.3
+
+- docs: remove graphql sample references from README ([#3820](https://github.com/felangel/bloc/pull/3820))
+- docs: upgrade to Dart 3 ([#3809](https://github.com/felangel/bloc/pull/3820))
+- refactor: standardize analysis_options ([#3809](https://github.com/felangel/bloc/pull/3820))
+- refactor: update sdk constraints and fix analysis warnings ([#3809](https://github.com/felangel/bloc/pull/3820))
+
+# 8.1.2
+
+- chore: add screenshots to `pubspec.yaml` ([#3717](https://github.com/felangel/bloc/pull/3717))
+- chore(deps): upgrade to `bloc ^8.1.1` ([#3716](https://github.com/felangel/bloc/pull/3716))
+- chore: update example to Dart 2.19 ([#3715](https://github.com/felangel/bloc/pull/3715))
+- refactor: `BlocObserver` instances to use `const` constructors ([#3713](https://github.com/felangel/bloc/pull/3713))
+- refactor: remove unnecessary single child widget mixins ([#3675](https://github.com/felangel/bloc/pull/3675))
+- refactor: upgrade to Flutter 3.7 ([#3699](https://github.com/felangel/bloc/pull/3699))
+  - remove deprecated `invariant_booleans` lint rule
+
+# 8.1.1
+
+- chore: remove dependency overrides from example to fix pana score
+
+# 8.1.0
+
+- feat: upgrade to `bloc: ^8.1.0`
+- chore: upgrade example to latest bloc and hydrated_bloc ([#3481](https://github.com/felangel/bloc/pull/3481))
+- docs: update GetStream utm tags ([#3136](https://github.com/felangel/bloc/pull/3136))
+- docs: update VGV sponsors logo ([#3125](https://github.com/felangel/bloc/pull/3125))
+
 # 8.0.1
 
 - refactor: use core interfaces from `bloc v8.0.2` ([#3012](https://github.com/felangel/bloc/pull/3012))

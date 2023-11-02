@@ -9,20 +9,20 @@ void main() {
       test('pure creates correct instance', () {
         final username = Username.pure();
         expect(username.value, '');
-        expect(username.pure, true);
+        expect(username.isPure, isTrue);
       });
 
       test('dirty creates correct instance', () {
         final username = Username.dirty(usernameString);
         expect(username.value, usernameString);
-        expect(username.pure, false);
+        expect(username.isPure, isFalse);
       });
     });
 
     group('validator', () {
       test('returns empty error when username is empty', () {
         expect(
-          Username.dirty('').error,
+          Username.dirty().error,
           UsernameValidationError.empty,
         );
       });

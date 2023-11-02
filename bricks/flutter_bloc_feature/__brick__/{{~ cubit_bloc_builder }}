@@ -1,0 +1,6 @@
+    return BlocBuilder<{{name.pascalCase()}}Cubit, {{name.pascalCase()}}State>(
+      builder: (context, state) {
+        // TODO: return correct widget based on the state.
+        return const SizedBox();
+      },
+    );

@@ -1,28 +1,27 @@
 name: bloc_tools
 description: Tools for building applications using the bloc state management library.
-version: 0.1.0-dev.4
+version: 0.1.0-dev.5
 repository: https://github.com/felangel/bloc/tree/master/packages/bloc_tools
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://github.com/felangel/bloc
 documentation: https://bloclibrary.dev
+topics: [bloc, state-management]
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.12.0 <4.0.0"
 
 dependencies:
   args: ^2.1.0
   io: ^1.0.0
-  mason: ^0.1.0-dev.4
-  pub_updater: ^0.2.2
-  universal_io: ^2.0.4
+  mason: ^0.1.0-dev.33
+  pub_updater: ^0.3.0
 
 dev_dependencies:
   build_runner: ^2.0.0
-  build_verify: ^2.0.0
+  build_verify: ^3.0.0
   build_version: ^2.0.0
-  mocktail: ^0.2.0
+  mocktail: ^1.0.0
   test: ^1.17.0
-  very_good_analysis: ^2.4.0
 
 executables:
   bloc:

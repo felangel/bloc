@@ -1,9 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_weather/theme/cubit/theme_cubit.dart';
 import 'package:flutter_weather/weather/weather.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test/test.dart';
 
 import '../../helpers/hydrated_bloc.dart';
 
@@ -18,22 +18,20 @@ class MockWeather extends Mock implements Weather {
 }
 
 void main() {
+  initHydratedStorage();
+
   group('ThemeCubit', () {
     test('initial state is correct', () {
-      mockHydratedStorage(() {
-        expect(ThemeCubit().state, ThemeCubit.defaultColor);
-      });
+      expect(ThemeCubit().state, ThemeCubit.defaultColor);
     });
 
     group('toJson/fromJson', () {
       test('work properly', () {
-        mockHydratedStorage(() {
-          final themeCubit = ThemeCubit();
-          expect(
-            themeCubit.fromJson(themeCubit.toJson(themeCubit.state)),
-            themeCubit.state,
-          );
-        });
+        final themeCubit = ThemeCubit();
+        expect(
+          themeCubit.fromJson(themeCubit.toJson(themeCubit.state)),
+          themeCubit.state,
+        );
       });
     });
 
@@ -46,35 +44,35 @@ void main() {
 
       blocTest<ThemeCubit, Color>(
         'emits correct color for WeatherCondition.clear',
-        build: () => mockHydratedStorage(() => ThemeCubit()),
+        build: ThemeCubit.new,
         act: (cubit) => cubit.updateTheme(clearWeather),
         expect: () => <Color>[Colors.orangeAccent],
       );
 
       blocTest<ThemeCubit, Color>(
         'emits correct color for WeatherCondition.snowy',
-        build: () => mockHydratedStorage(() => ThemeCubit()),
+        build: ThemeCubit.new,
         act: (cubit) => cubit.updateTheme(snowyWeather),
         expect: () => <Color>[Colors.lightBlueAccent],
       );
 
       blocTest<ThemeCubit, Color>(
         'emits correct color for WeatherCondition.cloudy',
-        build: () => mockHydratedStorage(() => ThemeCubit()),
+        build: ThemeCubit.new,
         act: (cubit) => cubit.updateTheme(cloudyWeather),
         expect: () => <Color>[Colors.blueGrey],
       );
 
       blocTest<ThemeCubit, Color>(
         'emits correct color for WeatherCondition.rainy',
-        build: () => mockHydratedStorage(() => ThemeCubit()),
+        build: ThemeCubit.new,
         act: (cubit) => cubit.updateTheme(rainyWeather),
         expect: () => <Color>[Colors.indigoAccent],
       );
 
       blocTest<ThemeCubit, Color>(
         'emits correct color for WeatherCondition.unknown',
-        build: () => mockHydratedStorage(() => ThemeCubit()),
+        build: ThemeCubit.new,
         act: (cubit) => cubit.updateTheme(unknownWeather),
         expect: () => <Color>[ThemeCubit.defaultColor],
       );

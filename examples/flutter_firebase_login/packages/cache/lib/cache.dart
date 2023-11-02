@@ -1,5 +1,3 @@
-library cache;
-
 /// {@template cache_client}
 /// An in-memory cache client.
 /// {@endtemplate}

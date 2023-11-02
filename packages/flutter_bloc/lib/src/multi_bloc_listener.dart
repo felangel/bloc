@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/src/bloc_listener.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 /// {@template multi_bloc_listener}
 /// Merges multiple [BlocListener] widgets into one widget tree.
@@ -50,8 +51,8 @@ import 'package:provider/provider.dart';
 class MultiBlocListener extends MultiProvider {
   /// {@macro multi_bloc_listener}
   MultiBlocListener({
-    Key? key,
-    required List<BlocListenerSingleChildWidget> listeners,
+    required List<SingleChildWidget> listeners,
     required Widget child,
+    Key? key,
   }) : super(key: key, providers: listeners, child: child);
 }

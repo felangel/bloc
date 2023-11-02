@@ -1,3 +1,51 @@
+# 9.1.2
+
+- fix: clear HydratedStorage instance on close ([#3879](https://github.com/felangel/bloc/pull/3879))
+
+# 9.1.1
+
+- docs: upgrade to Dart 3 ([#3809](https://github.com/felangel/bloc/pull/3809))
+- refactor: standardize analysis_options ([#3809](https://github.com/felangel/bloc/pull/3809))
+- refactor: fix `unawaited` sdk constraint ([#3809](https://github.com/felangel/bloc/pull/3809))
+- refactor: update sdk constraints and fix analysis warnings ([#3809](https://github.com/felangel/bloc/pull/3809))
+
+# 9.1.0
+
+- chore: add screenshots to `pubspec.yaml` ([#3721](https://github.com/felangel/bloc/pull/3721))
+- chore: update example to Dart 2.19 ([#3720](https://github.com/felangel/bloc/pull/3720))
+- chore: update to `bloc ^8.1.1` ([#3719](https://github.com/felangel/bloc/pull/3719))
+- feat: add `storage.close` ([#3705](https://github.com/felangel/bloc/pull/3705))
+- docs: updated docs to reflect v9.0.0 changes ([#3701](https://github.com/felangel/bloc/pull/3701))
+- refactor: upgrade to Dart 2.19 ([#3699](https://github.com/felangel/bloc/pull/3699))
+  - remove deprecated `invariant_booleans` lint rule
+
+# 9.0.0
+
+- **BREAKING**: feat!: reintroduce `HydratedBloc.storage` and remove `HydratedBlocOverrides` ([#3479](https://github.com/felangel/bloc/pull/3479))
+  - upgrade to `bloc: ^8.1.0`
+- fix: update `StorageNotFound` implementation for `toString` ([#3314](https://github.com/felangel/bloc/pull/3314))
+- deps: upgrade to `mocktail ^0.3.0`
+
+# 9.0.0-dev.3
+
+- **BREAKING**: feat!: reintroduce `HydratedBloc.storage` and remove `HydratedBlocOverrides` ([#3479](https://github.com/felangel/bloc/pull/3479))
+  - upgrade to `bloc: ^8.1.0`
+
+# 9.0.0-dev.2
+
+- fix: update `StorageNotFound` implementation for `toString` ([#3314](https://github.com/felangel/bloc/pull/3314))
+
+# 9.0.0-dev.1
+
+- **BREAKING**: feat!: add `createStorage` to `HydratedBlocOverrides.runZoned` ([#3240](https://github.com/felangel/bloc/pull/3240))
+  - deprecate `storage` parameter in `HydratedBlocoverrides.runZoned` in favor of `createStorage`
+
+# 8.1.0
+
+- feat: add `storagePrefix` to support obfuscation tolerance ([#3262](https://github.com/felangel/bloc/pull/3262))
+- docs: update GetStream utm tags ([#3136](https://github.com/felangel/bloc/pull/3136))
+- docs: update VGV sponsors logo ([#3125](https://github.com/felangel/bloc/pull/3125))
+
 # 8.0.0
 
 - **BREAKING**: feat: introduce `HydratedBlocOverrides` API ([#2947](https://github.com/felangel/bloc/pull/2947))

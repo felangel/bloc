@@ -3,12 +3,15 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/felangel/bloc/actions"><img src="https://img.shields.io/github/workflow/status/felangel/bloc/build.svg?logo=github" alt="build"></a>
+<a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/workflows/build/badge.svg" alt="build"></a>
 <a href="https://codecov.io/gh/felangel/bloc"><img src="https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg" alt="codecov"></a>
 <a href="https://github.com/felangel/bloc"><img src="https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on Github"></a>
-<a href="https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc"><img src="https://vsmarketplacebadge.apphb.com/version-short/FelixAngelov.bloc.svg" alt="Version"></a>
-<a href="https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc"><img src="https://vsmarketplacebadge.apphb.com/installs-short/FelixAngelov.bloc.svg" alt="Installs"></a>
-<a href="https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc"><img src="https://vsmarketplacebadge.apphb.com/rating-short/FelixAngelov.bloc.svg" alt="Ratings"></a>
+</p>
+<p align="center">
+<a href="https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc"><img src="https://img.shields.io/visual-studio-marketplace/v/FelixAngelov.bloc" alt="Version"></a>
+<a href="https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc"><img src="https://img.shields.io/visual-studio-marketplace/d/FelixAngelov.bloc" alt="Downloads"></a>
+<a href="https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc"><img src="https://img.shields.io/visual-studio-marketplace/i/FelixAngelov.bloc" alt="Installs"></a>
+<a href="https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc"><img src="https://img.shields.io/visual-studio-marketplace/r/FelixAngelov.bloc" alt="Ratings"></a>
 <a href="https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx"><img src="https://img.shields.io/badge/flutter-website-deepskyblue.svg" alt="Flutter Website"></a>
 <a href="https://github.com/Solido/awesome-flutter#standard"><img src="https://img.shields.io/badge/awesome-flutter-blue.svg?longCache=true" alt="Awesome Flutter"></a>
 <a href="http://fluttersamples.com"><img src="https://img.shields.io/badge/flutter-samples-teal.svg?longCache=true" alt="Flutter Samples"></a>
@@ -58,36 +61,41 @@ You can activate the commands by launching the command palette (View -> Command 
 
 ### Bloc
 
-| Shortcut            | Description                                |
-| ------------------- | ------------------------------------------ |
-| `importbloc`        | Imports `package:bloc`                     |
-| `importflutterbloc` | Imports `package:flutter_bloc`             |
-| `importbloctest`    | Imports `package:bloc_test`                |
-| `bloc`              | Creates a bloc class                       |
-| `cubit`             | Creates a cubit class                      |
-| `onevent`           | Register a new `EventHandler`              |
-| `_onevent`          | Define a new `EventHandler`                |
-| `blocobserver`      | Creates a `BlocObserver` class             |
-| `blocprovider`      | Creates a `BlocProvider` widget            |
-| `multiblocprovider` | Creates a `MultiBlocProvider` widget       |
-| `repoprovider`      | Creates a `RepositoryProvider` widget      |
-| `multirepoprovider` | Creates a `MultiRepositoryProvider` widget |
-| `blocbuilder`       | Creates a `BlocBuilder` widget             |
-| `blocselector`      | Creates a `BlocSelector` widget            |
-| `bloclistener`      | Creates a `BlocListener` widget            |
-| `multibloclistener` | Creates a `MultiBlocListener` widget       |
-| `blocconsumer`      | Creates a `BlocConsumer` widget            |
-| `blocof`            | Shortcut for `BlocProvider.of()`           |
-| `repoof`            | Shortcut for `RepositoryProvider.of()`     |
-| `read`              | Shortcut for `context.read()`              |
-| `watch`             | Shortcut for `context.watch()`             |
-| `select`            | Shortcut for `context.select()`            |
-| `blocstate`         | Creates a state class                      |
-| `blocevent`         | Creates an event class                     |
-| `bloctest`          | Creates a `blocTest`                       |
-| `mockbloc`          | Creates a class extenting `MockBloc`       |
-| `mockcubit`         | Creates a class extending `MockCubit`      |
-| `fake`              | Creates a class extending `Fake`           |
+| Shortcut            | Description                                   |
+| ------------------- | --------------------------------------------- |
+| `importbloc`        | Imports `package:bloc`                        |
+| `importflutterbloc` | Imports `package:flutter_bloc`                |
+| `importbloctest`    | Imports `package:bloc_test`                   |
+| `bloc`              | Creates a bloc class                          |
+| `cubit`             | Creates a cubit class                         |
+| `onevent`           | Register a new `EventHandler`                 |
+| `_onevent`          | Define a new `EventHandler`                   |
+| `blocobserver`      | Creates a `BlocObserver` class                |
+| `blocprovider`      | Creates a `BlocProvider` widget               |
+| `multiblocprovider` | Creates a `MultiBlocProvider` widget          |
+| `repoprovider`      | Creates a `RepositoryProvider` widget         |
+| `multirepoprovider` | Creates a `MultiRepositoryProvider` widget    |
+| `blocbuilder`       | Creates a `BlocBuilder` widget                |
+| `blocselector`      | Creates a `BlocSelector` widget               |
+| `bloclistener`      | Creates a `BlocListener` widget               |
+| `multibloclistener` | Creates a `MultiBlocListener` widget          |
+| `blocconsumer`      | Creates a `BlocConsumer` widget               |
+| `blocof`            | Shortcut for `BlocProvider.of()`              |
+| `repoof`            | Shortcut for `RepositoryProvider.of()`        |
+| `read`              | Shortcut for `context.read()`                 |
+| `watch`             | Shortcut for `context.watch()`                |
+| `select`            | Shortcut for `context.select()`               |
+| `blocstate`         | Creates a state class                         |
+| `blocevent`         | Creates an event class                        |
+| `bloctest`          | Creates a `blocTest`                          |
+| `mockbloc`          | Creates a class extending `MockBloc`          |
+| `_mockbloc`         | Creates a private class extending `MockBloc`  |
+| `mockcubit`         | Creates a class extending `MockCubit`         |
+| `_mockcubit`        | Creates a private class extending `MockCubit` |
+| `fake`              | Creates a class extending `Fake`              |
+| `_fake`             | Creates a private class extending `Fake`      |
+| `mock`              | Creates a class extending `Mock`              |
+| `_mock`             | Creates a private class extending `Mock`      |
 
 ### Freezed Bloc
 

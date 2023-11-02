@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cache/cache.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
 
 /// {@template sign_up_with_email_and_password_failure}
-/// Thrown if during the sign up process if a failure occurs.
+/// Thrown during the sign up process if a failure occurs.
 /// {@endtemplate}
 class SignUpWithEmailAndPasswordFailure implements Exception {
   /// {@macro sign_up_with_email_and_password_failure}
@@ -166,7 +165,7 @@ class AuthenticationRepository {
   final GoogleSignIn _googleSignIn;
 
   /// Whether or not the current environment is web
-  /// Should only be overriden for testing purposes. Otherwise,
+  /// Should only be overridden for testing purposes. Otherwise,
   /// defaults to [kIsWeb]
   @visibleForTesting
   bool isWeb = kIsWeb;
@@ -203,7 +202,7 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on FirebaseAuthException catch (e) {
+    } on firebase_auth.FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
       throw const SignUpWithEmailAndPasswordFailure();
@@ -232,7 +231,7 @@ class AuthenticationRepository {
       }
 
       await _firebaseAuth.signInWithCredential(credential);
-    } on FirebaseAuthException catch (e) {
+    } on firebase_auth.FirebaseAuthException catch (e) {
       throw LogInWithGoogleFailure.fromCode(e.code);
     } catch (_) {
       throw const LogInWithGoogleFailure();
@@ -251,7 +250,7 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on FirebaseAuthException catch (e) {
+    } on firebase_auth.FirebaseAuthException catch (e) {
       throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
       throw const LogInWithEmailAndPasswordFailure();
@@ -275,6 +274,7 @@ class AuthenticationRepository {
 }
 
 extension on firebase_auth.User {
+  /// Maps a [firebase_auth.User] into a [User].
   User get toUser {
     return User(id: uid, email: email, name: displayName, photo: photoURL);
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/src/bloc_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 /// {@template multi_bloc_provider}
 /// Merges multiple [BlocProvider] widgets into one widget tree.
@@ -50,8 +51,8 @@ import 'package:provider/provider.dart';
 class MultiBlocProvider extends MultiProvider {
   /// {@macro multi_bloc_provider}
   MultiBlocProvider({
-    Key? key,
-    required List<BlocProviderSingleChildWidget> providers,
+    required List<SingleChildWidget> providers,
     required Widget child,
+    Key? key,
   }) : super(key: key, providers: providers, child: child);
 }

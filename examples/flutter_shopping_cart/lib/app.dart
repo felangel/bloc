@@ -5,7 +5,7 @@ import 'package:flutter_shopping_cart/catalog/catalog.dart';
 import 'package:flutter_shopping_cart/shopping_repository.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key, required this.shoppingRepository}) : super(key: key);
+  const App({required this.shoppingRepository, super.key});
 
   final ShoppingRepository shoppingRepository;
 
@@ -22,14 +22,14 @@ class App extends StatelessWidget {
           create: (_) => CartBloc(
             shoppingRepository: shoppingRepository,
           )..add(CartStarted()),
-        )
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Bloc Shopping Cart',
         initialRoute: '/',
         routes: {
-          '/': (_) => CatalogPage(),
-          '/cart': (_) => CartPage(),
+          '/': (_) => const CatalogPage(),
+          '/cart': (_) => const CartPage(),
         },
       ),
     );

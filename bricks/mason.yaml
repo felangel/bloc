@@ -1,0 +1,15 @@
+bricks:
+  bloc:
+    path: ./bloc
+  cubit:
+    path: ./cubit
+  hydrated_bloc:
+    path: ./hydrated_bloc
+  hydrated_cubit:
+    path: ./hydrated_cubit
+  replay_bloc:
+    path: ./replay_bloc
+  replay_cubit:
+    path: ./replay_cubit
+  flutter_bloc_feature:
+    path: ./flutter_bloc_feature

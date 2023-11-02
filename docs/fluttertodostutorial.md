@@ -13,7 +13,7 @@
 - [BlocObserver](/coreconcepts?id=blocobserver) to observe state changes.
 - [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), a Flutter widget which provides a bloc to its children.
 - [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), a Flutter widget that handles building the widget in response to new states.
-- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget that handlers performing side effects in response to state changes.
+- [BlocListener](/flutterbloccoreconcepts?id=bloclistener), a Flutter widget that handles performing side effects in response to state changes.
 - [RepositoryProvider](/flutterbloccoreconcepts?id=repositoryprovider), a Flutter widget to provide a repository to its children.
 - [Equatable](/faqs?id=when-to-use-equatable) to prevent unnecessary rebuilds.
 - [MultiBlocListener](/flutterbloccoreconcepts?id=multibloclistener), a Flutter widget that reduces nesting when using multiple BlocListeners.
@@ -23,7 +23,7 @@
 We'll start off by creating a brand new Flutter project using the [very_good_cli](https://pub.dev/packages/very_good_cli).
 
 ```sh
-very_good create flutter_todos --desc "An example todos app that showcases bloc state management patterns."
+very_good create flutter_app flutter_todos --desc "An example todos app that showcases bloc state management patterns."
 ```
 
 ?> **💡 Tip**: You can install `very_good_cli` via `dart pub global activate very_good_cli`.
@@ -32,13 +32,13 @@ Next we'll create the `todos_api`, `local_storage_todos_api`, and `todos_reposit
 
 ```sh
 # create package:todos_api under packages/todos_api
-very_good create packages/todos_api -t dart_pkg --desc "The interface and models for an API providing access to todos."
+very_good create dart_package todos_api --desc "The interface and models for an API providing access to todos." -o packages
 
 # create package:local_storage_todos_api under packages/local_storage_todos_api
-very_good create packages/local_storage_todos_api -t flutter_pkg --desc "A Flutter implementation of the TodosApi that uses local storage."
+very_good create flutter_package local_storage_todos_api --desc "A Flutter implementation of the TodosApi that uses local storage." -o packages
 
 # create package:todos_repository under packages/todos_repository
-very_good create packages/todos_repository -t dart_pkg --desc "A repository that handles todo related requests."
+very_good create dart_package todos_repository --desc "A repository that handles todo related requests." -o packages
 ```
 
 We can then replace the contents of `pubspec.yaml` with:
@@ -268,7 +268,6 @@ Let's create `todos_overview/bloc/todos_overview_event.dart` and define the even
 [todos_overview_event.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_event.dart ':include')
 
 - `TodosOverviewSubscriptionRequested`: This is the startup event. In response, the bloc subscribes to the stream of todos from the `TodosRepository`.
-- `TodosOverviewTodoSaved`: This saves a todo.
 - `TodosOverviewTodoDeleted`: This deletes a Todo.
 - `TodosOverviewTodoCompletionToggled`: This toggles a todo's completed status.
 - `TodosOverviewToggleAllRequested`: This toggles completion for all todos.

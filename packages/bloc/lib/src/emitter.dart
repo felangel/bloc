@@ -31,7 +31,7 @@ abstract class Emitter<State> {
     void Function(Object error, StackTrace stackTrace)? onError,
   });
 
-  // Subscribes to the provided [stream] and invokes the [onData] callback
+  /// Subscribes to the provided [stream] and invokes the [onData] callback
   /// when the [stream] emits new data and the result of [onData] is emitted.
   ///
   /// [forEach] completes when the event handler is cancelled or when
@@ -76,7 +76,7 @@ class _Emitter<State> implements Emitter<State> {
     Stream<T> stream, {
     required void Function(T data) onData,
     void Function(Object error, StackTrace stackTrace)? onError,
-  }) async {
+  }) {
     final completer = Completer<void>();
     final subscription = stream.listen(
       onData,
@@ -112,7 +112,9 @@ class _Emitter<State> implements Emitter<State> {
   void call(State state) {
     assert(
       !_isCompleted,
-      '''\n\n
+      '''
+
+
 emit was called after an event handler completed normally.
 This is usually due to an unawaited future in an event handler.
 Please make sure to await all asynchronous operations with event handlers
@@ -146,7 +148,9 @@ ensure the event handler has not completed.
     if (isDone) return;
     assert(
       _disposables.isEmpty,
-      '''\n\n
+      '''
+
+
 An event handler completed but left pending subscriptions behind.
 This is most likely due to an unawaited emit.forEach or emit.onEach. 
 Please make sure to await all asynchronous operations within event handlers.
@@ -176,7 +180,9 @@ Please make sure to await all asynchronous operations within event handlers.
   }
 
   void _close() {
-    for (final disposable in _disposables) disposable.call();
+    for (final disposable in _disposables) {
+      disposable.call();
+    }
     _disposables.clear();
     if (!_completer.isCompleted) _completer.complete();
   }

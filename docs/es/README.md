@@ -3,7 +3,6 @@
 [![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
 [![codecov](https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg)](https://codecov.io/gh/felangel/bloc)
 [![Star on GitHub](https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/felangel/bloc)
-[![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://github.com/tenhobi/effective_dart)
 [![Flutter Website](https://img.shields.io/badge/flutter-website-deepskyblue.svg)](https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx)
 [![Awesome Flutter](https://img.shields.io/badge/awesome-flutter-blue.svg?longCache=true)](https://github.com/Solido/awesome-flutter#standard)
 [![Flutter Samples](https://img.shields.io/badge/flutter-samples-teal.svg?longCache=true)](http://fluttersamples.com)
@@ -12,7 +11,7 @@
 
 ---
 
-Una librería de administración de estado predecible que ayuda a implementar el [patrón de diseño BLoC](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+Una librería de administración de estado predecible que ayuda a implementar el patrón de diseño BLoC.
 
 | Package                                                                            | Pub                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -124,7 +123,6 @@ El objetivo de esta librería es facilitar la separación de la _presentación_ 
 - [Carro de Compras](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - un ejemplo de cómo crear una aplicación de carrito de compras utilizando los paquetes `bloc` y `flutter_bloc` basado en [ejemplos de flutter](https://github.com/flutter/samples/tree/master/provider_shopper).
 - [Formulario Dinámico](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para implementar un formulario dinámico que extrae datos de un repositorio.
 - [Wizard](https://github.com/felangel/bloc/tree/master/examples/flutter_wizard) - Construye un wizard de varios pasos utilizando los paquetes `bloc` y` flutter_bloc`.
-- [GraphQL](https://github.com/felangel/bloc/tree/master/examples/flutter_graphql_jobs) un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` con `graphql` para buscard datos de [api.graphql.jobs](https://api.graphql.jobs)
 - [Fluttersaurus] (https://github.com/felangel/fluttersaurus) - un ejemplo de cómo usar los paquetes `bloc` y `flutter_bloc` para crear una aplicación de tesauro - hecha para el Bytconf Flutter 2020.
 
 ### Web

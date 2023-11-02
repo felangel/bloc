@@ -4,18 +4,16 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.13.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
-  bloc:
-    path: ../../../packages/bloc
-  flutter_bloc:
-    path: ../../../packages/flutter_bloc
-  url_launcher: ^6.0.0
+  bloc: ^8.1.0
   common_github_search:
     path: ../common_github_search
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.1
+  url_launcher: ^6.0.0
 
 dependency_overrides:
   bloc:

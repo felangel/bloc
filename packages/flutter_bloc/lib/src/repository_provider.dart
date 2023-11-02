@@ -1,10 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
-
-/// Mixin which allows `MultiRepositoryProvider` to infer the types
-/// of multiple [RepositoryProvider]s.
-mixin RepositoryProviderSingleChildWidget on SingleChildWidget {}
 
 /// {@template repository_provider}
 /// Takes a [Create] function that is responsible for creating the repository
@@ -30,12 +25,11 @@ mixin RepositoryProviderSingleChildWidget on SingleChildWidget {}
 /// );
 /// ```
 /// {@endtemplate}
-class RepositoryProvider<T> extends Provider<T>
-    with RepositoryProviderSingleChildWidget {
+class RepositoryProvider<T> extends Provider<T> {
   /// {@macro repository_provider}
   RepositoryProvider({
-    Key? key,
     required Create<T> create,
+    Key? key,
     Widget? child,
     bool? lazy,
   }) : super(
@@ -51,8 +45,8 @@ class RepositoryProvider<T> extends Provider<T>
   /// Repositories should always be created using the default constructor
   /// within the [Create] function.
   RepositoryProvider.value({
-    Key? key,
     required T value,
+    Key? key,
     Widget? child,
   }) : super.value(
           key: key,

@@ -19,8 +19,8 @@ void main() {
       var impl1 = HiveImpl()..init(cwd);
       var box1 = await impl1.openBox<dynamic>('impl1');
 
-      var impl2 = HiveImpl()..init(cwd);
-      var box2 = await impl2.openBox<dynamic>('impl2');
+      final impl2 = HiveImpl()..init(cwd);
+      final box2 = await impl2.openBox<dynamic>('impl2');
 
       await impl1.close();
 
@@ -32,6 +32,7 @@ void main() {
 
       Hive.init(cwd);
       await box1.deleteFromDisk();
+      await box2.close();
       await Hive.deleteBoxFromDisk('impl2');
     });
 

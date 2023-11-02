@@ -52,8 +52,6 @@ bloc layer을 유저 인터페이스(presentation layer)와 data layer 사이의
 
 > 모든 bloc은 bloc의 변화에 반응할 수 있게 다른 bloc이 구독할 수 있는 state stream이 있습니다.
 
-Blocs can have dependencies on other blocs in order to react to their state changes. In the following example, `MyBloc` has a dependency on `OtherBloc` and can `add` events in response to state changes in `OtherBloc`. The `StreamSubscription` is closed in the `close` override in `MyBloc` in order to avoid memory leaks.
-
 Bloc은 state 변화에 대응하기 위해 다른 bloc에 의존성을 가지고 있을 수 있습니다. 다음 예시에서는, `MyBloc`은 `OtherBloc`에 의존성을 가지고 있으며 `OtherBloc`에서 발생하는 state 변화에 event를 `추가`할 수 있습니다. `StreamSubscription`는 메모리가 세는 것을 방지하기 위해 `MyBloc` 내의 `close` 함수에서 close가 가능합니다.
 
 [bloc_to_bloc_communication.dart](../_snippets/architecture/bloc_to_bloc_communication.dart.md ':include')

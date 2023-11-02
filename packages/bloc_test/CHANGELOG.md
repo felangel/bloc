@@ -1,3 +1,39 @@
+# 9.1.5
+
+- fix: `blocTest` supports `async` `expect` ([#3976](https://github.com/felangel/bloc/pull/3976))
+
+# 9.1.4
+
+- deps: support `mocktail: ^1.0.0` ([#3917](https://github.com/felangel/bloc/pull/3917))
+- chore: add topics to `pubspec.yaml` ([#3914](https://github.com/felangel/bloc/pull/3914))
+
+# 9.1.3
+
+- fix: test timeouts due to uncaught exceptions which occur with `package:test ^1.22.2` ([#3854](https://github.com/felangel/bloc/pull/3854))
+
+# 9.1.2
+
+- docs: upgrade to Dart 3
+- refactor: standardize analysis_options
+
+# 9.1.1
+
+- chore: upgrade to `bloc ^8.1.1` ([#3723](https://github.com/felangel/bloc/pull/3723))
+  - refactor: `BlocObserver` instances to use `const` constructors ([#3713](https://github.com/felangel/bloc/pull/3713))
+- refactor: upgrade to Dart 2.19 ([#3699](https://github.com/felangel/bloc/pull/3699))
+  - remove deprecated `invariant_booleans` lint rule
+- docs: fix snippet in `README` ([#3552](https://github.com/felangel/bloc/pull/3552))
+
+# 9.1.0
+
+- feat: upgrade to `bloc: ^8.1.0` ([#3502](https://github.com/felangel/bloc/pull/3502))
+
+# 9.0.3
+
+- chore: support for mocktail v0.3.0 ([#3252](https://github.com/felangel/bloc/pull/3252))
+- docs: update GetStream utm tags ([#3136](https://github.com/felangel/bloc/pull/3136))
+- docs: update VGV sponsors logo ([#3125](https://github.com/felangel/bloc/pull/3125))
+
 # 9.0.2
 
 - fix: throw uncaught exceptions ([#3070](https://github.com/felangel/bloc/pull/3070))

@@ -12,20 +12,22 @@ class MockCatalogBloc extends MockBloc<CatalogEvent, CatalogState>
 
 extension PumpApp on WidgetTester {
   Future<void> pumpApp({
+    required Widget child,
     CartBloc? cartBloc,
     CatalogBloc? catalogBloc,
-    required Widget child,
   }) {
     return pumpWidget(
       MaterialApp(
         home: MultiBlocProvider(
           providers: [
-            cartBloc != null
-                ? BlocProvider.value(value: cartBloc)
-                : BlocProvider(create: (_) => MockCartBloc()),
-            catalogBloc != null
-                ? BlocProvider.value(value: catalogBloc)
-                : BlocProvider(create: (_) => MockCatalogBloc()),
+            if (cartBloc != null)
+              BlocProvider.value(value: cartBloc)
+            else
+              BlocProvider(create: (_) => MockCartBloc()),
+            if (catalogBloc != null)
+              BlocProvider.value(value: catalogBloc)
+            else
+              BlocProvider(create: (_) => MockCatalogBloc()),
           ],
           child: child,
         ),

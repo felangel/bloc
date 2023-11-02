@@ -3,11 +3,11 @@ import 'package:flutter_weather/weather/weather.dart';
 
 class WeatherPopulated extends StatelessWidget {
   const WeatherPopulated({
-    Key? key,
     required this.weather,
     required this.units,
     required this.onRefresh,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Weather weather;
   final TemperatureUnits units;
@@ -26,19 +26,18 @@ class WeatherPopulated extends StatelessWidget {
             clipBehavior: Clip.none,
             child: Center(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 48),
                   _WeatherIcon(condition: weather.condition),
                   Text(
                     weather.location,
-                    style: theme.textTheme.headline2?.copyWith(
+                    style: theme.textTheme.displayMedium?.copyWith(
                       fontWeight: FontWeight.w200,
                     ),
                   ),
                   Text(
                     weather.formattedTemperature(units),
-                    style: theme.textTheme.headline3?.copyWith(
+                    style: theme.textTheme.displaySmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -56,9 +55,9 @@ class WeatherPopulated extends StatelessWidget {
 }
 
 class _WeatherIcon extends StatelessWidget {
-  const _WeatherIcon({Key? key, required this.condition}) : super(key: key);
+  const _WeatherIcon({required this.condition});
 
-  static const _iconSize = 100.0;
+  static const _iconSize = 75.0;
 
   final WeatherCondition condition;
 
@@ -83,7 +82,6 @@ extension on WeatherCondition {
       case WeatherCondition.snowy:
         return '🌨️';
       case WeatherCondition.unknown:
-      default:
         return '❓';
     }
   }
@@ -93,18 +91,20 @@ class _WeatherBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).primaryColor;
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: [0.25, 0.75, 0.90, 1.0],
-          colors: [
-            color,
-            color.brighten(10),
-            color.brighten(33),
-            color.brighten(50),
-          ],
+    return SizedBox.expand(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: const [0.25, 0.75, 0.90, 1.0],
+            colors: [
+              color,
+              color.brighten(),
+              color.brighten(33),
+              color.brighten(50),
+            ],
+          ),
         ),
       ),
     );
@@ -113,7 +113,10 @@ class _WeatherBackground extends StatelessWidget {
 
 extension on Color {
   Color brighten([int percent = 10]) {
-    assert(1 <= percent && percent <= 100);
+    assert(
+      1 <= percent && percent <= 100,
+      'percentage must be between 1 and 100',
+    );
     final p = percent / 100;
     return Color.fromARGB(
       alpha,

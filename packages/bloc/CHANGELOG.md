@@ -1,3 +1,30 @@
+# 8.1.2
+
+- docs: upgrade README snippets to Dart 3 ([#3826](https://github.com/felangel/bloc/pull/3826))
+- refactor: standardize analysis options and resolve warnings ([#3826](https://github.com/felangel/bloc/pull/3826))
+- docs: remove superfluous word from inline docs ([#3734](https://github.com/felangel/bloc/pull/3734))
+
+# 8.1.1
+
+- chore: add screenshots to `pubspec.yaml` ([#3708](https://github.com/felangel/bloc/pull/3708))
+- refactor: `const` constructor support for `BlocObserver` ([#3704](https://github.com/felangel/bloc/pull/3704))
+- refactor: upgrade to Dart 2.19 ([#3699](https://github.com/felangel/bloc/pull/3699))
+  - remove deprecated `invariant_booleans` lint rule
+
+# 8.1.0
+
+- feat: reintroduce `Bloc.observer` and `Bloc.transformer` ([#3469](https://github.com/felangel/bloc/pull/3469))
+  - deprecate: `BlocOverrides`
+- fix: remove unnecessary `async` from `Emitter.onEach` ([#3392](https://github.com/felangel/bloc/pull/3392))
+- chore: upgrade to `mocktail ^0.3.0` ([#3477](https://github.com/felangel/bloc/pull/3477))
+
+# 8.0.3
+
+- refactor: resolve analysis warnings ([#3189](https://github.com/felangel/bloc/pull/3189))
+- docs: fix inline doc comment ([#3167](https://github.com/felangel/bloc/pull/3167))
+- docs: update GetStream utm tags ([#3136](https://github.com/felangel/bloc/pull/3136))
+- docs: update VGV sponsors logo ([#3125](https://github.com/felangel/bloc/pull/3125))
+
 # 8.0.2
 
 - fix: make `onChange` and `addError` protected ([#3071](https://github.com/felangel/bloc/pull/3071))

@@ -1,3 +1,15 @@
+# 0.2.2
+
+- docs: upgrade to Dart 3
+- refactor: standardize analysis_options
+
+# 0.2.1
+
+- chore: add screenshots to `pubspec.yaml`
+- refactor: upgrade to Dart 2.19
+  - deps: upgrade to `very_good_analysis 3.1.0`
+- docs: update example to follow naming conventions
+
 # 0.2.0
 
 - feat: upgrade to `bloc: ^8.0.0`

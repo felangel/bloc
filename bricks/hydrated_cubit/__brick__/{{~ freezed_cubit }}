@@ -1,0 +1,19 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+
+part '{{name.snakeCase()}}_state.dart';
+part '{{name.snakeCase()}}_cubit.freezed.dart';
+
+class {{name.pascalCase()}}Cubit extends HydratedCubit<{{name.pascalCase()}}State> {
+  {{name.pascalCase()}}Cubit() : super(const {{name.pascalCase()}}State.initial());
+
+  @override
+  Map<String, dynamic> toJson({{name.pascalCase()}}State state) {
+    // TODO: implement toJson
+  }
+
+  @override
+  {{name.pascalCase()}}State fromJson(Map<String, dynamic> json) {
+    // TODO: implement fromJson
+  }
+}

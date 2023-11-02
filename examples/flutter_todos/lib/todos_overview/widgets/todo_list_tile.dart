@@ -3,12 +3,12 @@ import 'package:todos_repository/todos_repository.dart';
 
 class TodoListTile extends StatelessWidget {
   const TodoListTile({
-    Key? key,
     required this.todo,
+    super.key,
     this.onToggleCompleted,
     this.onDismissed,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final Todo todo;
   final ValueChanged<bool>? onToggleCompleted;
@@ -18,7 +18,7 @@ class TodoListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final captionColor = theme.textTheme.caption?.color;
+    final captionColor = theme.textTheme.bodySmall?.color;
 
     return Dismissible(
       key: Key('todoListTile_dismissible_${todo.id}'),

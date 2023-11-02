@@ -25,6 +25,7 @@ void main() {
       await tester.pumpWidget(MaterialApp(home: Avatar(photo: imageUrl)));
       final avatar = tester.widget<CircleAvatar>(find.byType(CircleAvatar));
       expect(avatar.backgroundImage, isNotNull);
+      await tester.pumpAndSettle();
     });
 
     testWidgets('renders icon if photo is null', (tester) async {

@@ -18,9 +18,9 @@ class GenerateCubitAction : AnAction(), GenerateBlocDialog.Listener {
         dialog.show()
     }
 
-    override fun onGenerateBlocClicked(name: String?, useEquatable: Boolean) {
-        name?.let { name ->
-            val generators = CubitGeneratorFactory.getCubitGenerators(name, useEquatable)
+    override fun onGenerateBlocClicked(name: String?, blocTemplateType: BlocTemplateType) {
+        name?.let {
+            val generators = CubitGeneratorFactory.getCubitGenerators(it, blocTemplateType)
             generate(generators)
         }
     }
@@ -39,12 +39,12 @@ class GenerateCubitAction : AnAction(), GenerateBlocDialog.Listener {
         val directory = view?.orChooseDirectory
         ApplicationManager.getApplication().runWriteAction {
             CommandProcessor.getInstance().executeCommand(
-                project,
-                {
-                    mainSourceGenerators.forEach { createSourceFile(project!!, it, directory!!) }
-                },
-                "Generate a new Cubit",
-                null
+                    project,
+                    {
+                        mainSourceGenerators.forEach { createSourceFile(project!!, it, directory!!) }
+                    },
+                    "Generate a new Cubit",
+                    null
             )
         }
     }
@@ -58,7 +58,7 @@ class GenerateCubitAction : AnAction(), GenerateBlocDialog.Listener {
             return
         }
         val psiFile = PsiFileFactory.getInstance(project)
-            .createFileFromText(fileName, JavaLanguage.INSTANCE, generator.generate())
+                .createFileFromText(fileName, JavaLanguage.INSTANCE, generator.generate())
         directory.add(psiFile)
     }
 }

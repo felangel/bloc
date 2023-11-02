@@ -1,45 +1,63 @@
 import 'dart:async';
 
-import 'package:meta_weather_api/meta_weather_api.dart' hide Weather;
+import 'package:open_meteo_api/open_meteo_api.dart' hide Weather;
 import 'package:weather_repository/weather_repository.dart';
 
-class WeatherFailure implements Exception {}
-
 class WeatherRepository {
-  WeatherRepository({MetaWeatherApiClient? weatherApiClient})
-      : _weatherApiClient = weatherApiClient ?? MetaWeatherApiClient();
+  WeatherRepository({OpenMeteoApiClient? weatherApiClient})
+      : _weatherApiClient = weatherApiClient ?? OpenMeteoApiClient();
 
-  final MetaWeatherApiClient _weatherApiClient;
+  final OpenMeteoApiClient _weatherApiClient;
 
   Future<Weather> getWeather(String city) async {
     final location = await _weatherApiClient.locationSearch(city);
-    final woeid = location.woeid;
-    final weather = await _weatherApiClient.getWeather(woeid);
+    final weather = await _weatherApiClient.getWeather(
+      latitude: location.latitude,
+      longitude: location.longitude,
+    );
     return Weather(
-      temperature: weather.theTemp,
-      location: location.title,
-      condition: weather.weatherStateAbbr.toCondition,
+      temperature: weather.temperature,
+      location: location.name,
+      condition: weather.weatherCode.toInt().toCondition,
     );
   }
 }
 
-extension on WeatherState {
+extension on int {
   WeatherCondition get toCondition {
     switch (this) {
-      case WeatherState.clear:
+      case 0:
         return WeatherCondition.clear;
-      case WeatherState.snow:
-      case WeatherState.sleet:
-      case WeatherState.hail:
-        return WeatherCondition.snowy;
-      case WeatherState.thunderstorm:
-      case WeatherState.heavyRain:
-      case WeatherState.lightRain:
-      case WeatherState.showers:
-        return WeatherCondition.rainy;
-      case WeatherState.heavyCloud:
-      case WeatherState.lightCloud:
+      case 1:
+      case 2:
+      case 3:
+      case 45:
+      case 48:
         return WeatherCondition.cloudy;
+      case 51:
+      case 53:
+      case 55:
+      case 56:
+      case 57:
+      case 61:
+      case 63:
+      case 65:
+      case 66:
+      case 67:
+      case 80:
+      case 81:
+      case 82:
+      case 95:
+      case 96:
+      case 99:
+        return WeatherCondition.rainy;
+      case 71:
+      case 73:
+      case 75:
+      case 77:
+      case 85:
+      case 86:
+        return WeatherCondition.snowy;
       default:
         return WeatherCondition.unknown;
     }

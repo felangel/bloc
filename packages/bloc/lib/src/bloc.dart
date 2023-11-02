@@ -36,12 +36,6 @@ typedef EventTransformer<Event> = Stream<Event> Function(
   EventMapper<Event> mapper,
 );
 
-class _Handler {
-  const _Handler({required this.isType, required this.type});
-  final bool Function(dynamic value) isType;
-  final Type type;
-}
-
 /// {@template bloc}
 /// Takes a `Stream` of `Events` as input
 /// and transforms them into a `Stream` of `States` as output.
@@ -51,12 +45,33 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   /// {@macro bloc}
   Bloc(State initialState) : super(initialState);
 
+  /// The current [BlocObserver] instance.
+  static BlocObserver observer = const _DefaultBlocObserver();
+
+  /// The default [EventTransformer] used for all event handlers.
+  /// By default all events are processed concurrently.
+  ///
+  /// If a custom transformer is specified for a particular event handler,
+  /// it will take precendence over the global transformer.
+  ///
+  /// See also:
+  ///
+  /// * [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
+  /// opinionated set of event transformers.
+  ///
+  static EventTransformer<dynamic> transformer = (events, mapper) {
+    return events
+        .map(mapper)
+        .transform<dynamic>(const _FlatMapStreamTransformer<dynamic>());
+  };
+
   final _eventController = StreamController<Event>.broadcast();
   final _subscriptions = <StreamSubscription<dynamic>>[];
   final _handlers = <_Handler>[];
-  final _emitters = <_Emitter>[];
+  final _emitters = <_Emitter<dynamic>>[];
   final _eventTransformer =
-      BlocOverrides.current?.eventTransformer ?? _defaultEventTransformer;
+      // ignore: deprecated_member_use_from_same_package
+      BlocOverrides.current?.eventTransformer ?? Bloc.transformer;
 
   /// Notifies the [Bloc] of a new [event] which triggers
   /// all corresponding [EventHandler] instances.
@@ -68,6 +83,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   /// [event] will not be processed.
   @override
   void add(Event event) {
+    // ignore: prefer_asserts_with_message
     assert(() {
       final handlerExists = _handlers.any((handler) => handler.isType(event));
       if (!handlerExists) {
@@ -110,7 +126,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   @mustCallSuper
   void onEvent(Event event) {
     // ignore: invalid_use_of_protected_member
-    _blocObserver?.onEvent(this, event);
+    _blocObserver.onEvent(this, event);
   }
 
   /// {@template emit}
@@ -166,6 +182,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
     EventHandler<E, State> handler, {
     EventTransformer<E>? transformer,
   }) {
+    // ignore: prefer_asserts_with_message
     assert(() {
       final handlerExists = _handlers.any((handler) => handler.type == E);
       if (handlerExists) {
@@ -178,18 +195,19 @@ abstract class Bloc<Event, State> extends BlocBase<State>
       return true;
     }());
 
-    final _transformer = transformer ?? _eventTransformer;
-    final subscription = _transformer(
+    final subscription = (transformer ?? _eventTransformer)(
       _eventController.stream.where((event) => event is E).cast<E>(),
       (dynamic event) {
         void onEmit(State state) {
           if (isClosed) return;
           if (this.state == state && _emitted) return;
-          onTransition(Transition(
-            currentState: this.state,
-            event: event as E,
-            nextState: state,
-          ));
+          onTransition(
+            Transition(
+              currentState: this.state,
+              event: event as E,
+              nextState: state,
+            ),
+          );
           emit(state);
         }
 
@@ -199,7 +217,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
           onCancel: emitter.cancel,
         );
 
-        void handleEvent() async {
+        Future<void> handleEvent() async {
           void onDone() {
             emitter.complete();
             _emitters.remove(emitter);
@@ -227,7 +245,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   /// Called whenever a [transition] occurs with the given [transition].
   /// A [transition] occurs when a new `event` is added
   /// and a new state is `emitted` from a corresponding [EventHandler].
-  /// executed.
+  ///
   /// [onTransition] is called before a [Bloc]'s [state] has been updated.
   /// A great spot to add logging/analytics at the individual [Bloc] level.
   ///
@@ -250,7 +268,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   @mustCallSuper
   void onTransition(Transition<Event, State> transition) {
     // ignore: invalid_use_of_protected_member
-    _blocObserver?.onTransition(this, transition);
+    _blocObserver.onTransition(this, transition);
   }
 
   /// Closes the `event` and `state` `Streams`.
@@ -263,9 +281,66 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   @override
   Future<void> close() async {
     await _eventController.close();
-    for (final emitter in _emitters) emitter.cancel();
+    for (final emitter in _emitters) {
+      emitter.cancel();
+    }
     await Future.wait<void>(_emitters.map((e) => e.future));
     await Future.wait<void>(_subscriptions.map((s) => s.cancel()));
     return super.close();
+  }
+}
+
+class _Handler {
+  const _Handler({required this.isType, required this.type});
+  final bool Function(dynamic value) isType;
+  final Type type;
+}
+
+class _DefaultBlocObserver extends BlocObserver {
+  const _DefaultBlocObserver();
+}
+
+class _FlatMapStreamTransformer<T> extends StreamTransformerBase<Stream<T>, T> {
+  const _FlatMapStreamTransformer();
+
+  @override
+  Stream<T> bind(Stream<Stream<T>> stream) {
+    final controller = StreamController<T>.broadcast(sync: true);
+
+    controller.onListen = () {
+      final subscriptions = <StreamSubscription<dynamic>>[];
+
+      final outerSubscription = stream.listen(
+        (inner) {
+          final subscription = inner.listen(
+            controller.add,
+            onError: controller.addError,
+          );
+
+          subscription.onDone(() {
+            subscriptions.remove(subscription);
+            if (subscriptions.isEmpty) controller.close();
+          });
+
+          subscriptions.add(subscription);
+        },
+        onError: controller.addError,
+      );
+
+      outerSubscription.onDone(() {
+        subscriptions.remove(outerSubscription);
+        if (subscriptions.isEmpty) controller.close();
+      });
+
+      subscriptions.add(outerSubscription);
+
+      controller.onCancel = () {
+        if (subscriptions.isEmpty) return null;
+        final cancels = [for (final s in subscriptions) s.cancel()];
+        return Future.wait(cancels).then((_) {});
+      };
+    };
+
+    return controller.stream;
   }
 }

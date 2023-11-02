@@ -2,41 +2,41 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_services_binding/flutter_services_binding.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() async {
-  FlutterServicesBinding.ensureInitialized();
-  final storage = await HydratedStorage.build(
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
         ? HydratedStorage.webStorageDirectory
         : await getTemporaryDirectory(),
   );
-  HydratedBlocOverrides.runZoned(
-    () => runApp(App()),
-    storage: storage,
-  );
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
+  const App({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => BrightnessCubit(),
-      child: AppView(),
+      child: const AppView(),
     );
   }
 }
 
 class AppView extends StatelessWidget {
+  const AppView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BrightnessCubit, Brightness>(
       builder: (context, brightness) {
         return MaterialApp(
           theme: ThemeData(brightness: brightness),
-          home: CounterPage(),
+          home: const CounterPage(),
         );
       },
     );
@@ -44,16 +44,20 @@ class AppView extends StatelessWidget {
 }
 
 class CounterPage extends StatelessWidget {
+  const CounterPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CounterBloc>(
       create: (_) => CounterBloc(),
-      child: CounterView(),
+      child: const CounterView(),
     );
   }
 }
 
 class CounterView extends StatelessWidget {
+  const CounterView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -62,7 +66,7 @@ class CounterView extends StatelessWidget {
       body: Center(
         child: BlocBuilder<CounterBloc, int>(
           builder: (context, state) {
-            return Text('$state', style: textTheme.headline2);
+            return Text('$state', style: textTheme.displayMedium);
           },
         ),
       ),
@@ -91,9 +95,7 @@ class CounterView extends StatelessWidget {
           const SizedBox(height: 4),
           FloatingActionButton(
             child: const Icon(Icons.delete_forever),
-            onPressed: () {
-              HydratedBlocOverrides.current?.storage.clear();
-            },
+            onPressed: () => HydratedBloc.storage.clear(),
           ),
         ],
       ),
@@ -101,11 +103,11 @@ class CounterView extends StatelessWidget {
   }
 }
 
-abstract class CounterEvent {}
+sealed class CounterEvent {}
 
-class CounterIncrementPressed extends CounterEvent {}
+final class CounterIncrementPressed extends CounterEvent {}
 
-class CounterDecrementPressed extends CounterEvent {}
+final class CounterDecrementPressed extends CounterEvent {}
 
 class CounterBloc extends HydratedBloc<CounterEvent, int> {
   CounterBloc() : super(0) {

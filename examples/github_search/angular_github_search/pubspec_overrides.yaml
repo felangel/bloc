@@ -1,0 +1,7 @@
+dependency_overrides:
+  angular_bloc:
+    path: ../../../packages/angular_bloc
+  bloc:
+    path: ../../../packages/bloc
+  build_modules: ^5.0.0
+  build_web_compilers: ^4.0.0

@@ -1,3 +1,21 @@
+# 0.2.4
+
+- docs: upgrade to Dart 3 ([#3825](https://github.com/felangel/bloc/pull/3825))
+- refactor: standardize analysis_options ([#3825](https://github.com/felangel/bloc/pull/3825))
+- chore: update sdk constraints and fix analysis warnings ([#3825](https://github.com/felangel/bloc/pull/3825))
+
+# 0.2.3
+
+- chore: add screenshots to pubspec.yaml ([#3728](https://github.com/felangel/bloc/pull/3728))
+- chore: update example to Dart 2.19 ([#3727](https://github.com/felangel/bloc/pull/3727))
+- chore: upgrade to `bloc ^8.1.1` ([#3726](https://github.com/felangel/bloc/pull/3726))
+- refactor: upgrade to Dart 2.19 ([#3699](https://github.com/felangel/bloc/pull/3699))
+  - remove deprecated `invariant_booleans` lint rule
+
+# 0.2.2
+
+- chore: upgrade to `bloc v8.1.0`
+
 # 0.2.1
 
 - chore: upgrade to `bloc v8.0.1`

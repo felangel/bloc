@@ -9,7 +9,7 @@ extension EditTodoStatusX on EditTodoStatus {
       ].contains(this);
 }
 
-class EditTodoState extends Equatable {
+final class EditTodoState extends Equatable {
   const EditTodoState({
     this.status = EditTodoStatus.initial,
     this.initialTodo,

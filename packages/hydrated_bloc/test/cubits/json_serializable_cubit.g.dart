@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: implicit_dynamic_parameter
+// ignore_for_file: implicit_dynamic_parameter, unnecessary_null_checks
 
 part of 'json_serializable_cubit.dart';
 
@@ -20,7 +20,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'name': instance.name,
       'age': instance.age,
-      'favoriteColor': _$ColorEnumMap[instance.favoriteColor],
+      'favoriteColor': _$ColorEnumMap[instance.favoriteColor]!,
       'todos': instance.todos.map((e) => e.toJson()).toList(),
     };
 

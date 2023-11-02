@@ -1,23 +1,31 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  BlocOverrides.runZoned(
-    () => runApp(const App()),
-    blocObserver: AppBlocObserver(),
-  );
+  Bloc.observer = const AppBlocObserver();
+  runApp(const App());
 }
 
+/// {@template app_bloc_observer}
 /// Custom [BlocObserver] that observes all bloc and cubit state changes.
+/// {@endtemplate}
 class AppBlocObserver extends BlocObserver {
+  /// {@macro app_bloc_observer}
+  const AppBlocObserver();
+
   @override
-  void onChange(BlocBase bloc, Change change) {
+  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
     super.onChange(bloc, change);
     if (bloc is Cubit) print(change);
   }
 
   @override
-  void onTransition(Bloc bloc, Transition transition) {
+  void onTransition(
+    Bloc<dynamic, dynamic> bloc,
+    Transition<dynamic, dynamic> transition,
+  ) {
     super.onTransition(bloc, transition);
     print(transition);
   }
@@ -31,7 +39,7 @@ class AppBlocObserver extends BlocObserver {
 /// {@endtemplate}
 class App extends StatelessWidget {
   /// {@macro app}
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +58,7 @@ class App extends StatelessWidget {
 /// {@endtemplate}
 class AppView extends StatelessWidget {
   /// {@macro app_view}
-  const AppView({Key? key}) : super(key: key);
+  const AppView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +79,7 @@ class AppView extends StatelessWidget {
 /// {@endtemplate}
 class CounterPage extends StatelessWidget {
   /// {@macro counter_page}
-  const CounterPage({Key? key}) : super(key: key);
+  const CounterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +96,7 @@ class CounterPage extends StatelessWidget {
 /// {@endtemplate}
 class CounterView extends StatelessWidget {
   /// {@macro counter_view}
-  const CounterView({Key? key}) : super(key: key);
+  const CounterView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +105,10 @@ class CounterView extends StatelessWidget {
       body: Center(
         child: BlocBuilder<CounterBloc, int>(
           builder: (context, count) {
-            return Text('$count', style: Theme.of(context).textTheme.headline1);
+            return Text(
+              '$count',
+              style: Theme.of(context).textTheme.displayLarge,
+            );
           },
         ),
       ),

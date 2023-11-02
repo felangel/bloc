@@ -16,10 +16,10 @@ class AuthenticationBloc
   })  : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
-    on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
+    on<_AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
-      (status) => add(AuthenticationStatusChanged(status)),
+      (status) => add(_AuthenticationStatusChanged(status)),
     );
   }
 
@@ -31,12 +31,11 @@ class AuthenticationBloc
   @override
   Future<void> close() {
     _authenticationStatusSubscription.cancel();
-    _authenticationRepository.dispose();
     return super.close();
   }
 
-  void _onAuthenticationStatusChanged(
-    AuthenticationStatusChanged event,
+  Future<void> _onAuthenticationStatusChanged(
+    _AuthenticationStatusChanged event,
     Emitter<AuthenticationState> emit,
   ) async {
     switch (event.status) {
@@ -44,10 +43,12 @@ class AuthenticationBloc
         return emit(const AuthenticationState.unauthenticated());
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
-        return emit(user != null
-            ? AuthenticationState.authenticated(user)
-            : const AuthenticationState.unauthenticated());
-      default:
+        return emit(
+          user != null
+              ? AuthenticationState.authenticated(user)
+              : const AuthenticationState.unauthenticated(),
+        );
+      case AuthenticationStatus.unknown:
         return emit(const AuthenticationState.unknown());
     }
   }

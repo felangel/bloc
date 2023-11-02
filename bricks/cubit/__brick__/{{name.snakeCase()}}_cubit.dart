@@ -1,0 +1,1 @@
+{{#use_freezed}}{{> freezed_cubit }}{{/use_freezed}}{{#use_equatable}}{{> equatable_cubit }}{{/use_equatable}}{{#use_basic}}{{> basic_cubit }}{{/use_basic}}

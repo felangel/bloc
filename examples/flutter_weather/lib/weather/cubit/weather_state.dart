@@ -10,7 +10,7 @@ extension WeatherStatusX on WeatherStatus {
 }
 
 @JsonSerializable()
-class WeatherState extends Equatable {
+final class WeatherState extends Equatable {
   WeatherState({
     this.status = WeatherStatus.initial,
     this.temperatureUnits = TemperatureUnits.celsius,

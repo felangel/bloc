@@ -3,10 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
-/// Mixin which allows `MultiBlocProvider` to infer the types
-/// of multiple [BlocProvider]s.
-mixin BlocProviderSingleChildWidget on SingleChildWidget {}
-
 /// {@template bloc_provider}
 /// Takes a [Create] function that is responsible for
 /// creating the [Bloc] or [Cubit] and a [child] which will have access
@@ -35,11 +31,11 @@ mixin BlocProviderSingleChildWidget on SingleChildWidget {}
 ///
 /// {@endtemplate}
 class BlocProvider<T extends StateStreamableSource<Object?>>
-    extends SingleChildStatelessWidget with BlocProviderSingleChildWidget {
+    extends SingleChildStatelessWidget {
   /// {@macro bloc_provider}
   const BlocProvider({
-    Key? key,
     required Create<T> create,
+    Key? key,
     this.child,
     this.lazy = true,
   })  : _create = create,
@@ -64,8 +60,8 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
   /// );
   /// ```
   const BlocProvider.value({
-    Key? key,
     required T value,
+    Key? key,
     this.child,
   })  : _value = value,
         _create = null,
@@ -131,14 +127,14 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
             create: _create,
             dispose: (_, bloc) => bloc.close(),
             startListening: _startListening,
-            child: child,
             lazy: lazy,
+            child: child,
           );
   }
 
   static VoidCallback _startListening(
-    InheritedContext<StateStreamable?> e,
-    StateStreamable value,
+    InheritedContext<StateStreamable<dynamic>?> e,
+    StateStreamable<dynamic> value,
   ) {
     final subscription = value.stream.listen(
       (dynamic _) => e.markNeedsNotifyDependents(),

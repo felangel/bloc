@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:angular/angular.dart' show ChangeDetectorRef, OnDestroy, Pipe;
 import 'package:bloc/bloc.dart';
+import 'package:ngdart/angular.dart' show ChangeDetectorRef, OnDestroy, Pipe;
 
 /// {@template bloc_pipe}
 /// A `pipe` which helps bind [BlocBase] ([Bloc] and [Cubit])
@@ -27,9 +27,9 @@ class BlocPipe implements OnDestroy {
   BlocPipe(this._ref);
 
   final ChangeDetectorRef _ref;
-  BlocBase? _bloc;
+  BlocBase<dynamic>? _bloc;
   Object? _latestValue;
-  StreamSubscription? _subscription;
+  StreamSubscription<dynamic>? _subscription;
 
   @override
   void ngOnDestroy() {
@@ -40,7 +40,7 @@ class BlocPipe implements OnDestroy {
 
   /// Angular invokes the [transform] method with the value of a binding as the
   /// first argument, and any parameters as the second argument in list form.
-  dynamic transform(BlocBase? bloc) {
+  dynamic transform(BlocBase<dynamic>? bloc) {
     if (_bloc == null) {
       if (bloc != null) {
         _subscribe(bloc);
@@ -55,7 +55,7 @@ class BlocPipe implements OnDestroy {
     return _latestValue ?? bloc.state;
   }
 
-  void _subscribe(BlocBase bloc) {
+  void _subscribe(BlocBase<dynamic> bloc) {
     _bloc = bloc;
     _subscription = bloc.stream.listen(
       (dynamic value) => _updateLatestValue(bloc, value),

@@ -6,7 +6,6 @@
   <a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/workflows/build/badge.svg" alt="build"></a>
   <a href="https://codecov.io/gh/felangel/bloc"><img src="https://codecov.io/gh/felangel/bloc/branch/master/graph/badge.svg" alt="codecov"></a>
   <a href="https://github.com/felangel/bloc"><img src="https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on Github"></a>
-  <a href="https://github.com/tenhobi/effective_dart"><img src="https://img.shields.io/badge/style-effective_dart-40c4ff.svg" alt="style: effective dart"></a>
   <a href="https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx"><img src="https://img.shields.io/badge/flutter-website-deepskyblue.svg" alt="Flutter Website"></a>
   <a href="https://github.com/Solido/awesome-flutter#standard"><img src="https://img.shields.io/badge/awesome-flutter-blue.svg?longCache=true" alt="Awesome Flutter"></a>
   <a href="https://fluttersamples.com"><img src="https://img.shields.io/badge/flutter-samples-teal.svg?longCache=true" alt="Flutter Samples"></a>
@@ -38,6 +37,14 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
                 <a href="https://www.miquido.com/flutter-development-company/?utm_source=github&utm_medium=sponsorship&utm_campaign=bloc-silver-tier&utm_term=flutter-development-company&utm_content=miquido-logo"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/miquido_logo.png" width="225"/></a>
             </td>
         </tr>
+        <tr>
+            <td align="center" style="background-color: white">
+                <a href="https://bit.ly/parabeac_flutterbloc"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/parabeac_logo.png" width="225"/></a>
+            </td>
+            <td align="center" style="background-color: white">
+                <a href="https://www.netguru.com/services/flutter-app-development?utm_campaign=%5BS%5D%5BMob%5D%20Flutter&utm_source=github&utm_medium=sponsorship&utm_term=bloclibrary"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/netguru_logo.png" width="225"/></a>
+            </td>
+        </tr>
     </tbody>
 </table>
 
@@ -54,12 +61,10 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 ### Setup `HydratedStorage`
 
 ```dart
-void main() async {
-  final storage = await HydratedStorage.build(storageDirectory: ...);
-  HydratedBlocOverrides.runZoned(
-    () => runApp(App()),
-    storage: storage,
-  );
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(storageDirectory: ...);
+  runApp(App());
 }
 ```
 
@@ -82,8 +87,8 @@ class CounterCubit extends HydratedCubit<int> {
 ### Create a HydratedBloc
 
 ```dart
-abstract class CounterEvent {}
-class CounterIncrementPressed extends CounterEvent {}
+sealed class CounterEvent {}
+final class CounterIncrementPressed extends CounterEvent {}
 
 class CounterBloc extends HydratedBloc<CounterEvent, int> {
   CounterBloc() : super(0) {
@@ -160,11 +165,44 @@ class MyHydratedStorage implements Storage {
 
 ```dart
 // main.dart
+HydratedBloc.storage = MyHydratedStorage();
+runApp(MyApp());
+```
 
-HydratedBlocOverrides.runZoned(
-  () => runApp(MyApp()),
-  storage: MyHydratedStorage(),
-);
+## Testing
+
+When writing unit tests for code that uses `HydratedBloc`, it is recommended to stub the `Storage` implementation using `package:mocktail`.
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockStorage extends Mock implements Storage {}
+
+void main() {
+  late Storage storage;
+
+  setUp(() {
+    storage = MockStorage();
+    when(
+      () => storage.write(any(), any<dynamic>()),
+    ).thenAnswer((_) async {});
+    HydratedBloc.storage = storage;
+  });
+
+  // ...
+}
+```
+
+You can also stub the `storage.read` API in individual tests to return cached state:
+
+```dart
+testWidgets('...', (tester) async {
+  when<dynamic>(() => storage.read('$MyBloc')).thenReturn(MyState().toJson());
+
+  // ...
+});
 ```
 
 ## Dart Versions

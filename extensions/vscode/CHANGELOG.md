@@ -1,3 +1,41 @@
+# 6.6.4
+
+- feat: add `useSealedClasses` to extension settings
+- docs: fix `README` badges
+- deps: upgrade various dependencies
+
+# 6.6.3
+
+- fix: wrap with interpolation
+- deps: upgrade various dependencies
+
+# 6.6.2
+
+- fix: rename element to bloc in `context.select` snippet
+
+# 6.6.1
+
+- fix: bloc and cubit template casing
+
+# 6.6.0
+
+- feat: add private mock snippets
+  - `_mockbloc`
+  - `_mockcubit`
+  - `_fake`
+  - `_mock`
+
+# 6.5.1
+
+- fix: reduce bundle size
+
+# 6.5.0
+
+- fix: update `BlocObserver` snippet to resolve Dart analyzer warning
+- feat: determine versions via `pubspec.lock`
+- feat: add `Mock` snippet
+- chore: upgrade dependencies
+
 # 6.4.0
 
 - feat: add `_onevent` snippet for creating an internal event handler

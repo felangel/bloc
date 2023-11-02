@@ -6,9 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:weather_repository/weather_repository.dart';
 
 class WeatherApp extends StatelessWidget {
-  const WeatherApp({Key? key, required WeatherRepository weatherRepository})
-      : _weatherRepository = weatherRepository,
-        super(key: key);
+  const WeatherApp({required WeatherRepository weatherRepository, super.key})
+      : _weatherRepository = weatherRepository;
 
   final WeatherRepository _weatherRepository;
 
@@ -18,13 +17,15 @@ class WeatherApp extends StatelessWidget {
       value: _weatherRepository,
       child: BlocProvider(
         create: (_) => ThemeCubit(),
-        child: WeatherAppView(),
+        child: const WeatherAppView(),
       ),
     );
   }
 }
 
 class WeatherAppView extends StatelessWidget {
+  const WeatherAppView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -37,10 +38,10 @@ class WeatherAppView extends StatelessWidget {
             appBarTheme: AppBarTheme(
               titleTextStyle: GoogleFonts.rajdhaniTextTheme(textTheme)
                   .apply(bodyColor: Colors.white)
-                  .headline6,
+                  .titleLarge,
             ),
           ),
-          home: WeatherPage(),
+          home: const WeatherPage(),
         );
       },
     );

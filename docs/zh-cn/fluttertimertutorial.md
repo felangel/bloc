@@ -74,7 +74,7 @@
 - TimerPaused：通知TimerBloc暂停。
 - TimerResumed：通知TimerBloc恢复计时。
 - TimerReset：通知TimerBloc重置计时器到原来的状态。
-- TimerTicked：通知TimerBloc一个tick已经发生，需要更新它对应的状态。
+- _TimerTicked：通知TimerBloc一个tick已经发生，需要更新它对应的状态。
 
 如果你没有使用[IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) 或 [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) 插件。我们需要创建`bloc/timer_event.dart`路径下的文件，并且实现这些事件。
 
@@ -102,13 +102,13 @@
 
 [timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_start.dart.md ':include')
 
-如果`TimerBloc`收到`TimerStarted`事件，它会发送一个带有开始时间的`TimerRunInProgress`状态。此外，如果已经打开了`_tickerSubscription`我们需要取消它释放内存。我们也需要在`TimerBloc`中重载`close`方法，当`TimerBloc`被关闭的时候能取消`_tickerSubscription `。最后我们监听`_ticker.tick`流并且在每个触发时间我们添加一个包含剩余时间的`TimerTicked`事件。
+如果`TimerBloc`收到`TimerStarted`事件，它会发送一个带有开始时间的`TimerRunInProgress`状态。此外，如果已经打开了`_tickerSubscription`我们需要取消它释放内存。我们也需要在`TimerBloc`中重载`close`方法，当`TimerBloc`被关闭的时候能取消`_tickerSubscription `。最后我们监听`_ticker.tick`流并且在每个触发时间我们添加一个包含剩余时间的`_TimerTicked`事件。
 
-下一步我们实现`TimerTicked`事件的处理。
+下一步我们实现`_TimerTicked`事件的处理。
 
 [timer_bloc.dart](../_snippets/flutter_timer_tutorial/timer_bloc_tick.dart.md ':include')
 
-每次接收到`TimerTicked`事件，如果剩余时间大于0，我们需要发送一个带有新的剩余时间的`TimerRunInProgress`事件来更新状态。否则，如果剩余时间等于0，那么倒计时已经结束，我们需要发送`TimerRunComplete`状态。
+每次接收到`_TimerTicked`事件，如果剩余时间大于0，我们需要发送一个带有新的剩余时间的`TimerRunInProgress`事件来更新状态。否则，如果剩余时间等于0，那么倒计时已经结束，我们需要发送`TimerRunComplete`状态。
 
 现在让我们实现`TimerPaused`事件的处理。
 

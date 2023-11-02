@@ -5,3 +5,4 @@ targets:
         options:
           ignore_for_file:
             - implicit_dynamic_parameter
+            - unnecessary_null_checks
