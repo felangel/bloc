@@ -141,12 +141,12 @@
         {
           "command": "extension.new-bloc",
           "group": "blocGroup@1",
-          "when": "explorerResourceIsFolder"
+          "when": "bloc:anyBlocProjectLoaded && explorerResourceIsFolder"
         },
         {
           "command": "extension.new-cubit",
           "group": "blocGroup@1",
-          "when": "explorerResourceIsFolder"
+          "when": "bloc:anyBlocProjectLoaded && explorerResourceIsFolder"
         }
       ],
       "commandPalette": [

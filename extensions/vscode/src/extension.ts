@@ -1,7 +1,13 @@
 import * as _ from "lodash";
 
-import { commands, ExtensionContext, languages, workspace } from "vscode";
-import { analyzeDependencies } from "./utils";
+import {
+  commands,
+  ExtensionContext,
+  languages,
+  workspace,
+  window,
+} from "vscode";
+import { analyzeDependencies, hasDependency } from "./utils";
 import {
   newBloc,
   newCubit,
@@ -24,7 +30,11 @@ export function activate(_context: ExtensionContext) {
     analyzeDependencies();
   }
 
+  updateAnyBlocProjectLoaded();
+
   _context.subscriptions.push(
+    window.onDidChangeActiveTextEditor(updateAnyBlocProjectLoaded),
+    workspace.onDidChangeWorkspaceFolders(updateAnyBlocProjectLoaded),
     commands.registerCommand("extension.new-bloc", newBloc),
     commands.registerCommand("extension.new-cubit", newCubit),
     commands.registerCommand(
@@ -64,5 +74,23 @@ export function activate(_context: ExtensionContext) {
       DART_MODE,
       new BlocCodeActionProvider()
     )
+  );
+}
+
+/**
+ * Sets "dart-frog:anyBlocProjectLoaded" context to "true" if a Bloc
+ * project is loaded in the workspace, or "false" otherwise.
+ *
+ * This provides "bloc:anyDartFrogProjectLoaded" as a custom when clause,
+ * to be used in the "package.json" file to enable or disable commands based on
+ * whether a Bloc project is loaded in the workspace.
+ *
+ * @see {@link https://code.visualstudio.com/api/references/when-clause-contexts#add-a-custom-when-clause-context} for further details about custom when clause context.
+ */
+function updateAnyBlocProjectLoaded(): void {
+  commands.executeCommand(
+    "setContext",
+    "bloc:anyBlocProjectLoaded",
+    hasDependency("bloc") || hasDependency("flutter_bloc")
   );
 }
