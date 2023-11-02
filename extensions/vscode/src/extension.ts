@@ -108,7 +108,7 @@ async function updateAnyBlocProjectLoaded(): Promise<void> {
  * Returns true if a Bloc project is loaded in the workspace, or false otherwise.
  *
  * A project is considered a Bloc project if it has either the `bloc` or `flutter_bloc`
- * dependency in at least one `pubspec.yaml` files.
+ * dependency in at least one `pubspec.yaml` .
  *
  * @returns {Promise<boolean>} true if a Bloc project is loaded in the workspace, or
  * false otherwise.
