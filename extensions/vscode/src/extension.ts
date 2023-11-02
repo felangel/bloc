@@ -1,4 +1,5 @@
 import * as _ from "lodash";
+import * as yaml from "js-yaml";
 
 import {
   commands,
@@ -7,7 +8,7 @@ import {
   workspace,
   window,
 } from "vscode";
-import { analyzeDependencies, hasDependency } from "./utils";
+import { analyzeDependencies } from "./utils";
 import {
   newBloc,
   newCubit,
@@ -35,6 +36,14 @@ export function activate(_context: ExtensionContext) {
   _context.subscriptions.push(
     window.onDidChangeActiveTextEditor(updateAnyBlocProjectLoaded),
     workspace.onDidChangeWorkspaceFolders(updateAnyBlocProjectLoaded),
+    workspace.onDidChangeTextDocument((event) => {
+      if (
+        event.document.languageId === "yaml" &&
+        event.document.uri.fsPath.endsWith("pubspec.yaml")
+      ) {
+        updateAnyBlocProjectLoaded();
+      }
+    }),
     commands.registerCommand("extension.new-bloc", newBloc),
     commands.registerCommand("extension.new-cubit", newCubit),
     commands.registerCommand(
@@ -87,10 +96,35 @@ export function activate(_context: ExtensionContext) {
  *
  * @see {@link https://code.visualstudio.com/api/references/when-clause-contexts#add-a-custom-when-clause-context} for further details about custom when clause context.
  */
-function updateAnyBlocProjectLoaded(): void {
+async function updateAnyBlocProjectLoaded(): Promise<void> {
   commands.executeCommand(
     "setContext",
     "bloc:anyBlocProjectLoaded",
-    hasDependency("bloc") || hasDependency("flutter_bloc")
+    await canResolveBlocProject()
   );
+}
+
+/**
+ * Returns true if a Bloc project is loaded in the workspace, or false otherwise.
+ *
+ * A project is considered a Bloc project if it has either the `bloc` or `flutter_bloc`
+ * dependency in at least one `pubspec.yaml` files.
+ *
+ * @returns {Promise<boolean>} true if a Bloc project is loaded in the workspace, or
+ * false otherwise.
+ */
+async function canResolveBlocProject(): Promise<boolean> {
+  const pubspecs = await workspace.findFiles("**/pubspec.yaml");
+  for (const pubspec of pubspecs) {
+    try {
+      const content = await workspace.fs.readFile(pubspec);
+      const yamlContent = yaml.load(content.toString());
+      const dependencies = _.get(yamlContent, "dependencies", {});
+      if (_.has(dependencies, "bloc") || _.has(dependencies, "flutter_bloc")) {
+        return true;
+      }
+    } catch (_) {}
+  }
+
+  return false;
 }
