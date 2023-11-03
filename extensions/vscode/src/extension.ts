@@ -128,7 +128,9 @@ async function updateAnyBlocProjectLoaded(): Promise<void> {
 async function canResolveBlocProject(): Promise<boolean> {
   const pubspecs = await workspace.findFiles("**/pubspec.yaml");
   for (const pubspec of pubspecs) {
-    if (await hasBlocDependency(pubspec)) return true;
+    if (await hasBlocDependency(pubspec)) {
+      return true;
+    }
   }
   return false;
 }
@@ -148,8 +150,6 @@ async function hasBlocDependency(pubspec: Uri): Promise<boolean> {
     const yamlContent = yaml.load(content.toString());
     const dependencies = _.get(yamlContent, "dependencies", {});
     return _.has(dependencies, "bloc") || _.has(dependencies, "flutter_bloc");
-  } catch (_) {
-  } finally {
-    return false;
-  }
+  } catch (_) {}
+  return false;
 }
