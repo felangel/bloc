@@ -136,6 +136,9 @@ async function canResolveBlocProject(): Promise<boolean> {
 /**
  * Whether the given pubspec has a bloc dependency.
  *
+ * A pubspec has a bloc dependency if it has either the `bloc` or `flutter_bloc`
+ * dependency.
+ *
  * @param pubspec The pubspec to check.
  * @returns {Promise<boolean>} true if the pubspec has a bloc dependency, or false otherwise.
  */
