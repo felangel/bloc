@@ -7,6 +7,7 @@ import {
   languages,
   workspace,
   window,
+  Uri,
 } from "vscode";
 import { analyzeDependencies } from "./utils";
 import {
@@ -26,6 +27,10 @@ import { BlocCodeActionProvider } from "./code-actions";
 
 const DART_MODE = { language: "dart", scheme: "file" };
 
+/// The name of the custom when clause context that is set to true if a Bloc
+/// project is loaded in the workspace, or false otherwise.
+const anyBlocProjectLoadedClause = "bloc:anyBlocProjectLoaded";
+
 export function activate(_context: ExtensionContext) {
   if (workspace.getConfiguration("bloc").get<boolean>("checkForUpdates")) {
     analyzeDependencies();
@@ -36,12 +41,14 @@ export function activate(_context: ExtensionContext) {
   _context.subscriptions.push(
     window.onDidChangeActiveTextEditor(updateAnyBlocProjectLoaded),
     workspace.onDidChangeWorkspaceFolders(updateAnyBlocProjectLoaded),
-    workspace.onDidChangeTextDocument((event) => {
+    workspace.onDidChangeTextDocument(async (event) => {
       if (
         event.document.languageId === "yaml" &&
         event.document.uri.fsPath.endsWith("pubspec.yaml")
       ) {
-        updateAnyBlocProjectLoaded();
+        setAnyBlocProjectLoadedContext(
+          await hasBlocDependency(event.document.uri as Uri)
+        );
       }
     }),
     commands.registerCommand("extension.new-bloc", newBloc),
@@ -87,21 +94,26 @@ export function activate(_context: ExtensionContext) {
 }
 
 /**
- * Sets "dart-frog:anyBlocProjectLoaded" context to "true" if a Bloc
- * project is loaded in the workspace, or "false" otherwise.
+ * Sets "bloc:anyBlocProjectLoaded" context value.
  *
- * This provides "bloc:anyDartFrogProjectLoaded" as a custom when clause,
+ * This provides "bloc:anyBlocProjectLoaded" as a custom when clause,
  * to be used in the "package.json" file to enable or disable commands based on
  * whether a Bloc project is loaded in the workspace.
  *
+ * @param value The value to set.
+ *
  * @see {@link https://code.visualstudio.com/api/references/when-clause-contexts#add-a-custom-when-clause-context} for further details about custom when clause context.
  */
+function setAnyBlocProjectLoadedContext(value: boolean) {
+  commands.executeCommand("setContext", anyBlocProjectLoadedClause, value);
+}
+
+/**
+ * Sets "bloc:anyBlocProjectLoaded" context to "true" if a Bloc
+ * project is loaded in the workspace, or "false" otherwise.
+ */
 async function updateAnyBlocProjectLoaded(): Promise<void> {
-  commands.executeCommand(
-    "setContext",
-    "bloc:anyBlocProjectLoaded",
-    await canResolveBlocProject()
-  );
+  setAnyBlocProjectLoadedContext(await canResolveBlocProject());
 }
 
 /**
@@ -116,15 +128,25 @@ async function updateAnyBlocProjectLoaded(): Promise<void> {
 async function canResolveBlocProject(): Promise<boolean> {
   const pubspecs = await workspace.findFiles("**/pubspec.yaml");
   for (const pubspec of pubspecs) {
-    try {
-      const content = await workspace.fs.readFile(pubspec);
-      const yamlContent = yaml.load(content.toString());
-      const dependencies = _.get(yamlContent, "dependencies", {});
-      if (_.has(dependencies, "bloc") || _.has(dependencies, "flutter_bloc")) {
-        return true;
-      }
-    } catch (_) {}
+    if (await hasBlocDependency(pubspec)) return true;
   }
-
   return false;
+}
+
+/**
+ * Whether the given pubspec has a bloc dependency.
+ *
+ * @param pubspec The pubspec to check.
+ * @returns {Promise<boolean>} true if the pubspec has a bloc dependency, or false otherwise.
+ */
+async function hasBlocDependency(pubspec: Uri): Promise<boolean> {
+  try {
+    const content = await workspace.fs.readFile(pubspec);
+    const yamlContent = yaml.load(content.toString());
+    const dependencies = _.get(yamlContent, "dependencies", {});
+    return _.has(dependencies, "bloc") || _.has(dependencies, "flutter_bloc");
+  } catch (_) {
+  } finally {
+    return false;
+  }
 }
