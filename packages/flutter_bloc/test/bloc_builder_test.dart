@@ -120,7 +120,7 @@ class MyCounterAppState extends State<MyCounterApp> {
               key: const Key('myCounterAppIncrementButton'),
               onPressed: _cubit.increment,
               child: const SizedBox(),
-            )
+            ),
           ],
         ),
       ),

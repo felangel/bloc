@@ -20,7 +20,7 @@ class CartPage extends StatelessWidget {
               ),
             ),
             Divider(height: 4, color: Colors.black),
-            CartTotal()
+            CartTotal(),
           ],
         ),
       ),

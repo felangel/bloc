@@ -26,8 +26,8 @@ dev_dependencies:
   bloc_test: ^9.1.0
   flutter_test:
     sdk: flutter
-  mockingjay: ^0.3.0
-  mocktail: ^0.3.0
+  mockingjay: ^0.4.0
+  mocktail: ^1.0.0
 
 flutter:
   uses-material-design: true

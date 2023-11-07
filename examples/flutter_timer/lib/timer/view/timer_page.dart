@@ -108,7 +108,7 @@ class Actions extends StatelessWidget {
                         context.read<TimerBloc>().add(const TimerReset()),
                   ),
                 ]
-            }
+            },
           ],
         );
       },
