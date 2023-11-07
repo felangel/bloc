@@ -89,14 +89,14 @@ async function setShowContextMenu(pubspec?: Uri | undefined): Promise<void> {
     try {
       const content = await workspace.fs.readFile(pubspec);
       const yamlContent = yaml.load(content.toString());
-      const dependencies = _.keys(_.get(yamlContent, "dependencies", {}));
+      const dependencies = _.get(yamlContent, "dependencies", {});
       return [
         "angular_bloc",
         "bloc",
         "flutter_bloc",
         "hydrated_bloc",
         "replay_bloc",
-      ].some((d) => dependencies.includes(d));
+      ].some((d) => dependencies.hasOwnProperty(d));
     } catch (_) {}
     return false;
   }
