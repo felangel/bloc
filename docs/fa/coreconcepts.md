@@ -54,47 +54,47 @@
 
 [counter_cubit.dart](_snippets/core_concepts/counter_cubit.dart.md ':include')
 
-When creating a `Cubit`, we need to define the type of state which the `Cubit` will be managing. In the case of the `CounterCubit` above, the state can be represented via an `int` but in more complex cases it might be necessary to use a `class` instead of a primitive type.
+هنگام ایجاد یک `Cubit`، باید نوع ,وضعیتی را که `Cubit` مدیریت خواهد کرد، تعریف کنیم. در مورد `CounterCubit` بالا، وضعیت را می‌توان از طریق `int` نشان داد، اما در موارد پیچیده‌تر ممکن است به جای یک داده‌ی اولیه(primitive type)، از `class` استفاده شود.
 
-The second thing we need to do when creating a `Cubit` is specify the initial state. We can do this by calling `super` with the value of the initial state. In the snippet above, we are setting the initial state to `0` internally but we can also allow the `Cubit` to be more flexible by accepting an external value:
+دومین کاری که باید هنگام ایجاد یک `Cubit` انجام دهیم، مشخص کردن حالت اولیه(Initial state) است. ما می توانیم این کار را با فراخوانی `super` با مقدار حالت اولیه انجام دهیم. در قطعه کد بالا(Snippet)، حالت اولیه را به صورت داخلی روی `0` تنظیم می‌کنیم، اما همچنین می‌توانیم با پذیرش یک مقدار خارجی، اجازه دهیم `Cubit` انعطاف‌پذیرتر باشد:
 
 [counter_cubit.dart](_snippets/core_concepts/counter_cubit_initial_state.dart.md ':include')
 
-This would allow us to instantiate `CounterCubit` instances with different initial states like:
+این به ما این امکان را می‌دهد که نمونه‌های `CounterCubit` را با وضعیت‌های اولیه(Initial states) متفاوت ایجاد کنیم، مانند:
 
 [main.dart](_snippets/core_concepts/counter_cubit_instantiation.dart.md ':include')
 
-### State Changes
+### تغییرات وضعیت
 
-> Each `Cubit` has the ability to output a new state via `emit`.
+> هر `Cubit` توانایی تولید وضعیت جدید را از طریق `emit` دارد.
 
 [counter_cubit.dart](_snippets/core_concepts/counter_cubit_increment.dart.md ':include')
 
-In the above snippet, the `CounterCubit` is exposing a public method called `increment` which can be called externally to notify the `CounterCubit` to increment its state. When `increment` is called, we can access the current state of the `Cubit` via the `state` getter and `emit` a new state by adding 1 to the current state.
+در تکه کد بالا، `CounterCubit` یک متد عمومی به نام `increment` را ارائه می‌دهد که می‌توان آن را از بیرون صدا زد تا `CounterCubit` را از افزایش وضعیت خود آگاه کند. وقتی `increment` فراخوانی می‌شود، می‌توانیم با استفاده از `state` برای دسترسی به وضعیت فعلی `Cubit` استفاده کرده و با اضافه کردن 1 به وضعیت فعلی، یک وضعیت جدید را با استفاده از `emit` اعلام کنیم.
 
-!> The `emit` method is protected, meaning it should only be used inside of a `Cubit`.
+!> متد `emit` محافظت شده(Protected) است، به این معنی که باید تنها در داخل یک `Cubit` استفاده شود.
 
-### Using a Cubit
+### استفاده از یک Cubit 
 
-We can now take the `CounterCubit` we've implemented and put it to use!
+اکنون می‌توانیم از `CounterCubit` که پیاده‌سازی کرده‌ایم، استفاده کنیم!
 
-#### Basic Usage
+#### استفاده پایه(Basic) 
 
 [main.dart](_snippets/core_concepts/counter_cubit_basic_usage.dart.md ':include')
 
-In the above snippet, we start by creating an instance of the `CounterCubit`. We then print the current state of the cubit which is the initial state (since no new states have been emitted yet). Next, we call the `increment` function to trigger a state change. Finally, we print the state of the `Cubit` again which went from `0` to `1` and call `close` on the `Cubit` to close the internal state stream.
+در تکه کد بالا، ما با شروع ایجاد یک نمونه از `CounterCubit` آغاز می‌کنیم. سپس وضعیت کنونی Cubit که وضعیت اولیه است (زیرا هیچ وضعیت جدیدی هنوز اعلام(Emit) نشده است) را چاپ می‌کنیم. در مرحله بعد، متد `increment` را فراخوانی می‌کنیم تا یک تغییر وضعیت را ایجاد کنیم. در پایان، وضعیت `Cubit` را دوباره چاپ می‌کنیم که از `0` به `1` تغییر کرده است، و متد `close` را بر روی `Cubit` صدا می‌زنیم(Call) تا Stream داخلی وضعیت بسته شود.
 
-#### Stream Usage
+#### استفاده از جریان (Stream) 
 
-`Cubit` exposes a `Stream` which allows us to receive real-time state updates:
+`Cubit` یک `Stream` ارائه می‌دهد که به ما امکان می‌دهد تا به تغییرات وضعیت در لحظه دسترسی داشته باشیم.
 
 [main.dart](_snippets/core_concepts/counter_cubit_stream_usage.dart.md ':include')
 
-In the above snippet, we are subscribing to the `CounterCubit` and calling print on each state change. We are then invoking the `increment` function which will emit a new state. Lastly, we are calling `cancel` on the `subscription` when we no longer want to receive updates and closing the `Cubit`.
+در تکه کد فوق، ما به `CounterCubit` مشترک(Subscribe) می‌شویم(به تغییراتش گوش میدهیم) و در هر تغییر وضعیت، `print` را صدا می‌زنیم. سپس، تابع `increment` را فراخوانی می‌کنیم که یک وضعیت جدید ارسال(Emit) خواهد کرد. در نهایت، وقتی دیگر نمی‌خواهیم به تغییرات گوش دهیم، دستور `cancel` را بر روی `subscription` اجرا کرده و `Cubit` را بسته می‌کنیم.
 
-?> **Note**: `await Future.delayed(Duration.zero)` is added for this example to avoid canceling the subscription immediately.
+?> **توجه**: دستور `await Future.delayed(Duration.zero)` برای این مثال اضافه شده است تا از لغو اشتراک به صورت فوری جلوگیری شود.
 
-!> Only subsequent state changes will be received when calling `listen` on a `Cubit`.
+!> تنها تغییرات وضعیت‌های بعدی در هنگام فراخوانی `listen` بر روی یک `Cubit` دریافت خواهد شد.
 
 ### Observing a Cubit
 
