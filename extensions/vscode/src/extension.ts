@@ -102,12 +102,14 @@ async function setShowContextMenu(pubspec?: Uri | undefined): Promise<void> {
   }
 
   async function workspaceIncludesBloc(): Promise<boolean> {
-    const pubspecs = await workspace.findFiles("**/**/pubspec.yaml");
-    for (const pubspec of pubspecs) {
-      if (await pubspecIncludesBloc(pubspec)) {
-        return true;
+    try {
+      const pubspecs = await workspace.findFiles("**/**/pubspec.yaml");
+      for (const pubspec of pubspecs) {
+        if (await pubspecIncludesBloc(pubspec)) {
+          return true;
+        }
       }
-    }
+    } catch (_) {}
     return false;
   }
 
