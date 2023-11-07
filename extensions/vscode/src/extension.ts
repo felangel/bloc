@@ -26,13 +26,6 @@ import {
 import { BlocCodeActionProvider } from "./code-actions";
 
 const DART_MODE = { language: "dart", scheme: "file" };
-const packagesThatExportBloc = [
-  "angular_bloc",
-  "bloc",
-  "flutter_bloc",
-  "hydrated_bloc",
-  "replay_bloc",
-];
 
 export function activate(_context: ExtensionContext) {
   if (workspace.getConfiguration("bloc").get<boolean>("checkForUpdates")) {
@@ -97,7 +90,13 @@ async function setShowContextMenu(pubspec?: Uri | undefined): Promise<void> {
       const content = await workspace.fs.readFile(pubspec);
       const yamlContent = yaml.load(content.toString());
       const dependencies = _.keys(_.get(yamlContent, "dependencies", {}));
-      return packagesThatExportBloc.some((d) => dependencies.includes(d));
+      return [
+        "angular_bloc",
+        "bloc",
+        "flutter_bloc",
+        "hydrated_bloc",
+        "replay_bloc",
+      ].some((d) => dependencies.includes(d));
     } catch (_) {}
     return false;
   }
