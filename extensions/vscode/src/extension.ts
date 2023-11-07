@@ -26,7 +26,6 @@ import {
 import { BlocCodeActionProvider } from "./code-actions";
 
 const DART_MODE = { language: "dart", scheme: "file" };
-const showContextMenu = "bloc.showContextMenu";
 const packagesThatExportBloc = [
   "angular_bloc",
   "bloc",
@@ -115,7 +114,7 @@ async function setShowContextMenu(pubspec?: Uri | undefined): Promise<void> {
 
   commands.executeCommand(
     "setContext",
-    showContextMenu,
+    "bloc.showContextMenu",
     pubspec
       ? await pubspecIncludesBloc(pubspec)
       : await workspaceIncludesBloc(),
