@@ -151,12 +151,12 @@
         {
           "command": "extension.new-bloc",
           "group": "blocGroup@1",
-          "when": "explorerResourceIsFolder"
+          "when": "explorerResourceIsFolder && bloc.showContextMenu"
         },
         {
           "command": "extension.new-cubit",
           "group": "blocGroup@1",
-          "when": "explorerResourceIsFolder"
+          "when": "explorerResourceIsFolder && bloc.showContextMenu"
         }
       ],
       "commandPalette": [
