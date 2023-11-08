@@ -78,7 +78,7 @@
 
 اکنون می‌توانیم از `CounterCubit` که پیاده‌سازی کرده‌ایم، استفاده کنیم!
 
-#### استفاده پایه(Basic) 
+#### استفاده پایه(Basic)
 
 [main.dart](_snippets/core_concepts/counter_cubit_basic_usage.dart.md ':include')
 
@@ -96,31 +96,31 @@
 
 !> تنها تغییرات وضعیت‌های بعدی در هنگام فراخوانی `listen` بر روی یک `Cubit` دریافت خواهد شد.
 
-### Observing a Cubit
+### مشاهده(Observing) یک Cubit
 
-> When a `Cubit` emits a new state, a `Change` occurs. We can observe all changes for a given `Cubit` by overriding `onChange`.
+> وقتی یک `Cubit` وضعیت جدیدی را انتشار (Emit) می‌دهد، یک `Change` اتفاق می‌افتد. ما می‌توانیم تمام تغییراتی که برای یک `Cubit` خاص رخ می‌دهد را با بازنویسی(Override) متد `onChange` مشاهده کنیم.
 
 [counter_cubit.dart](_snippets/core_concepts/counter_cubit_on_change.dart.md ':include')
 
-We can then interact with the `Cubit` and observe all changes output to the console.
+سپس می‌توانیم با `Cubit` تعامل داشته باشیم و تمام تغییرات خروجی کنسول را مشاهده(Observe) کنیم.
 
 [main.dart](_snippets/core_concepts/counter_cubit_on_change_usage.dart.md ':include')
 
-The above example would output:
+مثال بالا خروجی می دهد:
 
 [script](_snippets/core_concepts/counter_cubit_on_change_output.sh.md ':include')
 
-?> **Note**: A `Change` occurs just before the state of the `Cubit` is updated. A `Change` consists of the `currentState` and the `nextState`.
+?> **توجه**: یک `Change` درست قبل از به‌روزرسانی وضعیت `Cubit` رخ می‌دهد. یک `Change` از `currentState` و `nextState` تشکیل شده است.
 
 #### BlocObserver
 
-One added bonus of using the bloc library is that we can have access to all `Changes` in one place. Even though in this application we only have one `Cubit`, it's fairly common in larger applications to have many `Cubits` managing different parts of the application's state.
+یک مزیت اضافی از استفاده از کتابخانه Bloc این است که می‌توانیم به تمام `Changes` در یک مکان دسترسی داشته باشیم. حتی اگر در این برنامه تنها یک `Cubit` داشته باشیم، در برنامه‌های بزرگ‌تر، داشتن تعداد زیادی `Cubits` که بخش‌های مختلف وضعیت برنامه را مدیریت می‌کنند، نسبتاً معمول است.
 
-If we want to be able to do something in response to all `Changes` we can simply create our own `BlocObserver`.
+اگر می‌خواهیم بتوانیم کاری را در پاسخ به همه `Changes` انجام دهیم، می‌توانیم به سادگی `BlocObserver` خود را ایجاد کنیم.
 
 [simple_bloc_observer_on_change.dart](_snippets/core_concepts/simple_bloc_observer_on_change.dart.md ':include')
 
-?> **Note**: All we need to do is extend `BlocObserver` and override the `onChange` method.
+?> **توجه**: تنها کاری که باید انجام دهیم این است که `BlocObserver` را گسترش داده (Extend کنید) و متد `onChange` را بازنویسی (Override) کنیم.
 
 In order to use the `SimpleBlocObserver`, we just need to tweak the `main` function:
 
