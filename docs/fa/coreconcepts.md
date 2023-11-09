@@ -122,35 +122,35 @@
 
 ?> **توجه**: تنها کاری که باید انجام دهیم این است که `BlocObserver` را گسترش داده (Extend کنید) و متد `onChange` را بازنویسی (Override) کنیم.
 
-In order to use the `SimpleBlocObserver`, we just need to tweak the `main` function:
+برای استفاده از `SimpleBlocObserver`، فقط کافیست تغییراتی در تابع `main` اعمال کنیم.
 
 [main.dart](_snippets/core_concepts/simple_bloc_observer_on_change_usage.dart.md ':include')
 
-The above snippet would then output:
+سپس قطعه کد بالا خروجی زیر را خواهد داشت:
 
 [script](_snippets/core_concepts/counter_cubit_on_change_usage_output.sh.md ':include')
 
-?> **Note**: The internal `onChange` override is called first, followed by `onChange` in `BlocObserver`.
+?> **نکته**: ابتدا `onChange` داخلی بازنویسی شده فراخوانی می‌شود، سپس `onChange` در `BlocObserver` فراخوانی می‌شود.
 
-?> 💡 **Tip**: In `BlocObserver` we have access to the `Cubit` instance in addition to the `Change` itself.
+?> 💡 **نکته**: در `BlocObserver` به علاوه `Change` خود، دسترسی به نمونه `Cubit` نیز داریم.
 
-### Error Handling
+### مدیریت خطا (Error Handling)
 
-> Every `Cubit` has an `addError` method which can be used to indicate that an error has occurred.
+> هر `Cubit` دارای یک متد `addError` است که می‌توان از آن برای نشان دادن رخ داد خطا استفاده شود.
 
 [counter_cubit.dart](_snippets/core_concepts/counter_cubit_on_error.dart.md ':include')
 
-?> **Note**: `onError` can be overridden within the `Cubit` to handle all errors for a specific `Cubit`.
+?> **توجه**: `onError` میتواند در `Cubit` بازنویسی شود تا با تمام خطاهای مربوط به `Cubit` خاصی برخورد کند.
 
-`onError` can also be overridden in `BlocObserver` to handle all reported errors globally.
+`onError` همچنین میتواند در `BlocObserver` بازنویسی شود تا با خطاهای گزارش شده به صورت سراسری برخورد کند.
 
 [simple_bloc_observer.dart](_snippets/core_concepts/simple_bloc_observer_on_error.dart.md ':include')
 
-If we run the same program again we should see the following output:
+اگر برنامه را مجددا اجرا کنیم، باید خروجی زیر را مشاهده کنیم:
 
 [script](_snippets/core_concepts/counter_cubit_on_error_output.sh.md ':include')
 
-?> **Note**: Just as with `onChange`, the internal `onError` override is invoked before the global `BlocObserver` override.
+?> **نکته**: همانند `onChange`، بازنویسی `onError` داخلی قبل از بازنویسی `BlocObserver` سراسری فراخوانی می‌شود.
 
 ## Bloc
 
