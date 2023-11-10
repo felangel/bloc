@@ -33,8 +33,8 @@ import 'package:meta/meta.dart';
 abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
     with HydratedMixin {
   /// {@macro hydrated_bloc}
-  HydratedBloc(State state) : super(state) {
-    hydrate();
+  HydratedBloc(State state, [Storage? storage]) : super(state) {
+    hydrate(storage);
   }
 
   static Storage? _storage;
@@ -75,8 +75,8 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
 abstract class HydratedCubit<State> extends Cubit<State>
     with HydratedMixin<State> {
   /// {@macro hydrated_cubit}
-  HydratedCubit(State state) : super(state) {
-    hydrate();
+  HydratedCubit(State state, [Storage? storage]) : super(state) {
+    hydrate(storage);
   }
 }
 
@@ -116,12 +116,12 @@ mixin HydratedMixin<State> on BlocBase<State> {
   ///  ...
   /// }
   /// ```
-  void hydrate() {
-    final storage = HydratedBloc.storage;
+  void hydrate([Storage? storage]) {
+    _istorage = storage ?? HydratedBloc.storage;
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
-        storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+        _istorage.write(storageToken, stateJson).then((_) {}, onError: onError);
       }
     } catch (error, stackTrace) {
       onError(error, stackTrace);
@@ -130,13 +130,13 @@ mixin HydratedMixin<State> on BlocBase<State> {
   }
 
   State? _state;
+  late Storage _istorage;
 
   @override
   State get state {
-    final storage = HydratedBloc.storage;
     if (_state != null) return _state!;
     try {
-      final stateJson = storage.read(storageToken) as Map<dynamic, dynamic>?;
+      final stateJson = _istorage.read(storageToken) as Map<dynamic, dynamic>?;
       if (stateJson == null) {
         _state = super.state;
         return super.state;
@@ -158,12 +158,11 @@ mixin HydratedMixin<State> on BlocBase<State> {
   @override
   void onChange(Change<State> change) {
     super.onChange(change);
-    final storage = HydratedBloc.storage;
     final state = change.nextState;
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
-        storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+        _istorage.write(storageToken, stateJson).then((_) {}, onError: onError);
       }
     } catch (error, stackTrace) {
       onError(error, stackTrace);
@@ -324,7 +323,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
   /// [clear] is used to wipe or invalidate the cache of a [HydratedBloc].
   /// Calling [clear] will delete the cached state of the bloc
   /// but will not modify the current state of the bloc.
-  Future<void> clear() => HydratedBloc.storage.delete(storageToken);
+  Future<void> clear() => _istorage.delete(storageToken);
 
   /// Responsible for converting the `Map<String, dynamic>` representation
   /// of the bloc state into a concrete instance of the bloc state.
@@ -354,7 +353,7 @@ class HydratedCyclicError extends HydratedUnsupportedError {
 /// ```dart
 /// void main() async {
 ///   WidgetsFlutterBinding.ensureInitialized();
-///   HydratedCubit.storage = await HydratedStorage.build();
+///   HydratedBloc.storage = await HydratedStorage.build();
 ///   runApp(MyApp());
 /// }
 /// ```
