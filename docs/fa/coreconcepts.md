@@ -154,33 +154,33 @@
 
 ## Bloc
 
-> A `Bloc` is a more advanced class which relies on `events` to trigger `state` changes rather than functions. `Bloc` also extends `BlocBase` which means it has a similar public API as `Cubit`. However, rather than calling a `function` on a `Bloc` and directly emitting a new `state`, `Blocs` receive `events` and convert the incoming `events` into outgoing `states`.
+> یک `Bloc` یک کلاس پیشرفته‌تر است که به جای توابع، به `events` برای ایجاد تغییرات `state` متکی است. همچنین، `Bloc` از `BlocBase` ارث‌بری می‌کند که بدان معنی است که دارای یک API عمومی مشابه با `Cubit` است. با این حال، به جای فراخوانی `function` در `Bloc` و `emit` مستقیم یک `state` جدید، `Bloc` ها، `event` ها را دریافت می کنند و `event` های امده را به `state` های خروجی تبدیل می کنند.
 
 ![Bloc Architecture](assets/bloc_architecture_full.png)
 
 ### Creating a Bloc
 
-Creating a `Bloc` is similar to creating a `Cubit` except in addition to defining the state that we'll be managing, we must also define the event that the `Bloc` will be able to process.
+ساختن یک `Bloc` مشابه ساختن یک `Cubit` است، با این تفاوت که علاوه بر تعریف وضعیتی که قصد مدیریت آن را داریم، باید همچنین رویدادی که `Bloc` قابلیت پردازش آن را دارد را نیز تعریف کنیم.
 
-> Events are the input to a Bloc. They are commonly added in response to user interactions such as button presses or lifecycle events like page loads.
+> رویدادها، ورودی‌های یک Bloc هستند. آن‌ها معمولاً به عنوان پاسخ به تعاملات کاربر مانند کلیک روی دکمه‌ها یا رویدادهای چرخه حیات مانند بارگذاری صفحه اضافه می‌شوند.
 
 [counter_bloc.dart](_snippets/core_concepts/counter_bloc.dart.md ':include')
 
-Just like when creating the `CounterCubit`, we must specify an initial state by passing it to the superclass via `super`.
+مانند ایجاد `CounterCubit`, ما باید با ارسال آن به کلاس پدر از طریق `super`، حالت اولیه را مشخص کنیم.
 
 ### State Changes
 
-`Bloc` requires us to register event handlers via the `on<Event>` API, as opposed to functions in `Cubit`. An event handler is responsible for converting any incoming events into zero or more outgoing states.
+`Bloc` نیازمند ثبت کردن (Register) کنترل کننده رویداد (event handler) از طریق واسط `on<Event>` است، بر عکس `Cubit` که توابع را استفاده می‌کند. یک کنترل کننده رویداد مسئول تبدیل هر رویداد ورودی به صفر یا چند وضعیت خروجی است.
 
 [counter_bloc.dart](_snippets/core_concepts/counter_bloc_event_handler.dart.md ':include')
 
-?> 💡 **Tip**: an `EventHandler` has access to the added event as well as an `Emitter` which can be used to emit zero or more states in response to the incoming event.
+?> 💡 **نکته**: یک `EventHandler` دسترسی به رویداد اضافه شده و همچنین یک `Emitter` دارد که می‌تواند در پاسخ به رویداد ورودی، صفر یا چند وضعیت را ارسال (emit) کند. (منظور از صفر یعنی میتواند چیزی emit نکند)
 
-We can then update the `EventHandler` to handle the `CounterIncrementPressed` event:
+سپس می‌توانیم `EventHandler` را بروزرسانی کنیم تا به رویداد `CounterIncrementPressed` پاسخ دهد:
 
 [counter_bloc.dart](_snippets/core_concepts/counter_bloc_increment.dart.md ':include')
 
-In the above snippet, we have registered an `EventHandler` to manage all `CounterIncrementPressed` events. For each incoming `CounterIncrementPressed` event we can access the current state of the bloc via the `state` getter and `emit(state + 1)`.
+در قطعه کد بالا، یک `EventHandler` را ثبت (Register) کرده‌ایم تا به مدیریت تمام رویدادهای `CounterIncrementPressed` بپردازد. برای هر رویداد ورودی `CounterIncrementPressed` می‌توانیم با استفاده از تابع بازگرداننده `state` به وضعیت فعلی بلوک دسترسی پیدا کنیم و با استفاده از `emit(state + 1)` وضعیت را ارسال کنیم. (منظور از تابع بازگرداننده تابع getter است)
 
 ?> **Note**: Since the `Bloc` class extends `BlocBase`, we have access to the current state of the bloc at any point in time via the `state` getter just like in `Cubit`.
 
