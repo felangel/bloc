@@ -43,8 +43,8 @@ CounterBloc Exception: increment error!, #0      new CounterBloc.<anonymous clos
 #19     _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:120:13)
 #20     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:185:5)
 
-Transition { currentState: 0, event: Increment, nextState: 1 }
-CounterBloc Transition { currentState: 0, event: Increment, nextState: 1 }
+Transition { currentState: 0, event: Instance of 'CounterIncrementPressed', nextState: 1 }
+CounterBloc Transition { currentState: 0, event: Instance of 'CounterIncrementPressed', nextState: 1 }
 Change { currentState: 0, nextState: 1 }
 CounterBloc Change { currentState: 0, nextState: 1 }
 ```
