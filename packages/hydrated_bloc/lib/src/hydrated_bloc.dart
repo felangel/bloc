@@ -119,6 +119,14 @@ mixin HydratedMixin<State> on BlocBase<State> {
   void hydrate() {
     final storage = HydratedBloc.storage;
     try {
+      final stateJson = storage.read(storageToken) as Map<dynamic, dynamic>?;
+      _state = stateJson != null ? _fromJson(stateJson) : super.state;
+    } catch (error, stackTrace) {
+      onError(error, stackTrace);
+      _state = super.state;
+    }
+
+    try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
         storage.write(storageToken, stateJson).then((_) {}, onError: onError);
@@ -132,28 +140,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
   State? _state;
 
   @override
-  State get state {
-    final storage = HydratedBloc.storage;
-    if (_state != null) return _state!;
-    try {
-      final stateJson = storage.read(storageToken) as Map<dynamic, dynamic>?;
-      if (stateJson == null) {
-        _state = super.state;
-        return super.state;
-      }
-      final cachedState = _fromJson(stateJson);
-      if (cachedState == null) {
-        _state = super.state;
-        return super.state;
-      }
-      _state = cachedState;
-      return cachedState;
-    } catch (error, stackTrace) {
-      onError(error, stackTrace);
-      _state = super.state;
-      return super.state;
-    }
-  }
+  State get state => _state ?? super.state;
 
   @override
   void onChange(Change<State> change) {
