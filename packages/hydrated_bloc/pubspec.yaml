@@ -7,6 +7,14 @@ homepage: https://bloclibrary.dev
 documentation: https://bloclibrary.dev/#/gettingstarted
 topics: [bloc, cache, state-management]
 
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
+
 environment:
   sdk: ">=2.12.0 <4.0.0"
 
