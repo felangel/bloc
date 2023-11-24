@@ -44,10 +44,6 @@ class EditTodoView extends StatelessWidget {
     final isNewTodo = context.select(
       (EditTodoBloc bloc) => bloc.state.isNewTodo,
     );
-    final theme = Theme.of(context);
-    final floatingActionButtonTheme = theme.floatingActionButtonTheme;
-    final fabBackgroundColor = floatingActionButtonTheme.backgroundColor ??
-        theme.colorScheme.secondary;
 
     return Scaffold(
       appBar: AppBar(
@@ -62,9 +58,6 @@ class EditTodoView extends StatelessWidget {
         shape: const ContinuousRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(32)),
         ),
-        backgroundColor: status.isLoadingOrSuccess
-            ? fabBackgroundColor.withOpacity(0.5)
-            : fabBackgroundColor,
         onPressed: status.isLoadingOrSuccess
             ? null
             : () => context.read<EditTodoBloc>().add(const EditTodoSubmitted()),
