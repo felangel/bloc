@@ -34,7 +34,6 @@ class TickerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Flutter Bloc with Streams')),
       body: Center(
         child: BlocBuilder<TickerBloc, TickerState>(
           builder: (context, state) {
