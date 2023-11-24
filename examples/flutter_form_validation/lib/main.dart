@@ -12,7 +12,6 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: const Text('Flutter Form Validation')),
         body: BlocProvider(
           create: (_) => MyFormBloc(),
           child: const MyForm(),
@@ -76,13 +75,17 @@ class _MyFormState extends State<MyForm> {
         }
       },
       child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: <Widget>[
-            EmailInput(focusNode: _emailFocusNode),
-            PasswordInput(focusNode: _passwordFocusNode),
-            const SubmitButton(),
-          ],
+        padding: const EdgeInsets.all(16),
+        child: Align(
+          alignment: const Alignment(0, -3 / 4),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              EmailInput(focusNode: _emailFocusNode),
+              PasswordInput(focusNode: _passwordFocusNode),
+              const SubmitButton(),
+            ],
+          ),
         ),
       ),
     );
