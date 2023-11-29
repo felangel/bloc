@@ -182,37 +182,37 @@
 
 در قطعه کد بالا، یک `EventHandler` را ثبت (Register) کرده‌ایم تا به مدیریت تمام رویدادهای `CounterIncrementPressed` بپردازد. برای هر رویداد ورودی `CounterIncrementPressed` می‌توانیم با استفاده از تابع بازگرداننده `state` به وضعیت فعلی بلوک دسترسی پیدا کنیم و با استفاده از `emit(state + 1)` وضعیت را ارسال کنیم. (منظور از تابع بازگرداننده تابع getter است)
 
-?> **Note**: Since the `Bloc` class extends `BlocBase`, we have access to the current state of the bloc at any point in time via the `state` getter just like in `Cubit`.
+?> توجه: از آنجایی که کلاس `Bloc` از `BlocBase` گسترش می یابد، ما در هر لحظه از طریق تابع `getter` متغیر  `state` به وضعیت فعلی `Bloc` دسترسی داریم، درست به مانند `Cubit`.
 
-!> Blocs should never directly `emit` new states. Instead every state change must be output in response to an incoming event within an `EventHandler`.
+!> بلوک‌ها هرگز نباید به طور مستقیم وضعیت‌های جدید را `emit` کنند. در عوض، هر تغییر وضعیت، باید به عنوان پاسخ به وقوع یک رویداد ورودی در داخل یک `EventHandler` صورت گیرد.
 
-!> Both blocs and cubits will ignore duplicate states. If we emit `State nextState` where `state == nextState`, then no state change will occur.
+!> هم بلوک‌ها (Blocs) و هم کیوبیت‌ها (Cubits) از وضعیت‌های تکراری چشم‌پوشی می‌کنند. اگر ما `State nextState` را emit کنیم و در واقع `state == nextState` باشد، در این صورت هیچ تغییر وضعیتی رخ نخواهد داد.
 
-### Using a Bloc
+### استفاده از یک Bloc
 
-At this point, we can create an instance of our `CounterBloc` and put it to use!
+در این نقطه، می‌توانیم یک نمونه از `CounterBloc` را ایجاد کنیم و از آن استفاده کنیم!
 
-#### Basic Usage
+#### استفاده پایه
 
 [main.dart](_snippets/core_concepts/counter_bloc_usage.dart.md ':include')
 
-In the above snippet, we start by creating an instance of the `CounterBloc`. We then print the current state of the `Bloc` which is the initial state (since no new states have been emitted yet). Next, we add the `CounterIncrementPressed` event to trigger a state change. Finally, we print the state of the `Bloc` again which went from `0` to `1` and call `close` on the `Bloc` to close the internal state stream.
+در قطعه کد بالا، ابتدا یک نمونه از `CounterBloc` ایجاد می‌کنیم. سپس وضعیت فعلی `Bloc` که وضعیت اولیه است (زیرا هیچ وضعیت جدیدی هنوز ارسال نشده است) را چاپ می‌کنیم. بعد، رویداد `CounterIncrementPressed` را اضافه می‌کنیم تا یک تغییر وضعیت را ایجاد کنیم. در نهایت، وضعیت `Bloc` را دوباره چاپ می‌کنیم که از `0` به `1` تغییر کرده است و تابه `close` را برای بستن جریان وضعیت داخلی `Bloc` صدا میزنیم.
 
-?> **Note**: `await Future.delayed(Duration.zero)` is added to ensure we wait for the next event-loop iteration (allowing the `EventHandler` to process the event).
+?> **توجه**: `await Future.delayed(Duration.zero)` اضافه شده است تا اطمینان حاصل شود که منتظر تکرار بعدی حلقه رویداد (به `EventHandler` اجازه می‌دهد تا رویداد را پردازش کند) می‌مانیم.
 
-#### Stream Usage
+#### استفاده از جریان
 
-Just like with `Cubit`, a `Bloc` is a special type of `Stream`, which means we can also subscribe to a `Bloc` for real-time updates to its state:
+همانند `Cubit`، کلاس `Bloc` نوع خاصی از `Stream` است، به این معنی که می‌توانیم به یک `Bloc` گوش دهیم (Subscribe) تا به‌روزرسانی‌های بلادرنگ وضعیت آن را دریافت کنیم.
 
 [main.dart](_snippets/core_concepts/counter_bloc_stream_usage.dart.md ':include')
 
-In the above snippet, we are subscribing to the `CounterBloc` and calling print on each state change. We are then adding the `CounterIncrementPressed` event which triggers the `on<CounterIncrementPressed>` `EventHandler` and emits a new state. Lastly, we are calling `cancel` on the subscription when we no longer want to receive updates and closing the `Bloc`.
+در قطعه کد بالا، به `CounterBloc` گوش میدهیم (Subscribe) و در هر تغییر وضعیت، تابع `print` را فراخوانی می‌کنیم. سپس رویداد `CounterIncrementPressed` را اضافه می‌کنیم که باعث فعال شدن `EventHandler` `on<CounterIncrementPressed>` و ارسال یک وضعیت جدید می‌شود. در نهایت، با فراخوانی `cancel` روی جریانی که به آن گوش داده ایم (Subscribeَ) و زمانی که دیگر نمی‌خواهیم به‌روزرسانی‌ها را دریافت کنیم، گوش دادن را لغو می‌کنیم (UnSubscribe) و `Bloc` را بسته می‌کنیم.
 
-?> **Note**: `await Future.delayed(Duration.zero)` is added for this example to avoid canceling the subscription immediately.
+?> **توجه**: `await Future.delayed(Duration.zero)` در این مثال اضافه شده است تا از لغو فوری جریان گوش داده شده (Subscribe) جلوگیری شود.
 
-### Observing a Bloc
+### گوش داد (Observe) به یک Bloc
 
-Since `Bloc` extends `BlocBase`, we can observe all state changes for a `Bloc` using `onChange`.
+از آنجا که `Bloc` از `BlocBase` به ارث می‌برد، می‌توانیم با استفاده از `onChange` تمام تغییرات وضعیت یک `Bloc` را مشاهده (Observe) کنیم.
 
 [counter_bloc.dart](_snippets/core_concepts/counter_bloc_on_change.dart.md ':include')
 
