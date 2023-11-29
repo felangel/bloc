@@ -9,7 +9,6 @@ class NewCarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Flutter Dynamic Form')),
       body: BlocProvider(
         create: (_) => NewCarBloc(
           newCarRepository: context.read<NewCarRepository>(),
@@ -25,14 +24,21 @@ class NewCarForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        _BrandDropdownButton(),
-        _ModelDropdownButton(),
-        _YearDropdownButton(),
-        _FormSubmitButton(),
-      ],
+    return const Align(
+      alignment: Alignment(0, -3 / 4),
+      child: Padding(
+        padding: EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            _BrandDropdownButton(),
+            _ModelDropdownButton(),
+            _YearDropdownButton(),
+            _FormSubmitButton(),
+          ],
+        ),
+      ),
     );
   }
 }

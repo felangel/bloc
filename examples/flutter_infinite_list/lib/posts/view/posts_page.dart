@@ -9,7 +9,6 @@ class PostsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Posts')),
       body: BlocProvider(
         create: (_) => PostBloc(httpClient: http.Client())..add(PostFetched()),
         child: const PostsList(),

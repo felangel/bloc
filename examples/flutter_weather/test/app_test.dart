@@ -55,7 +55,7 @@ void main() {
       expect(find.byType(WeatherPage), findsOneWidget);
     });
 
-    testWidgets('has correct theme primary color', (tester) async {
+    testWidgets('has correct theme color scheme', (tester) async {
       const color = Color(0xFFD2D2D2);
       when(() => themeCubit.state).thenReturn(color);
       await tester.pumpWidget(
@@ -68,7 +68,10 @@ void main() {
         ),
       );
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
-      expect(materialApp.theme?.primaryColor, color);
+      expect(
+        materialApp.theme?.colorScheme,
+        ColorScheme.fromSeed(seedColor: color),
+      );
     });
   });
 }

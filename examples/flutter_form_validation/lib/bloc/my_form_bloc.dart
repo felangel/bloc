@@ -23,6 +23,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
       state.copyWith(
         email: email.isValid ? email : Email.pure(event.email),
         isValid: Formz.validate([email, state.password]),
+        status: FormzSubmissionStatus.initial,
       ),
     );
   }
@@ -33,6 +34,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
       state.copyWith(
         password: password.isValid ? password : Password.pure(event.password),
         isValid: Formz.validate([state.email, password]),
+        status: FormzSubmissionStatus.initial,
       ),
     );
   }
@@ -43,6 +45,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
       state.copyWith(
         email: email,
         isValid: Formz.validate([email, state.password]),
+        status: FormzSubmissionStatus.initial,
       ),
     );
   }
@@ -56,6 +59,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
       state.copyWith(
         password: password,
         isValid: Formz.validate([state.email, password]),
+        status: FormzSubmissionStatus.initial,
       ),
     );
   }
@@ -71,6 +75,7 @@ class MyFormBloc extends Bloc<MyFormEvent, MyFormState> {
         email: email,
         password: password,
         isValid: Formz.validate([email, password]),
+        status: FormzSubmissionStatus.initial,
       ),
     );
     if (state.isValid) {

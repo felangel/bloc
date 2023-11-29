@@ -63,7 +63,11 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 ```dart
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  HydratedBloc.storage = await HydratedStorage.build(storageDirectory: ...);
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getApplicationDocumentsDirectory(),
+  );
   runApp(App());
 }
 ```

@@ -1,8 +1,8 @@
 ```sh
-CounterBloc Increment
-Increment
-CounterBloc Transition { currentState: 0, event: Increment, nextState: 1 }
-Transition { currentState: 0, event: Increment, nextState: 1 }
+CounterBloc Instance of 'CounterIncrementPressed'
+Instance of 'CounterIncrementPressed'
+CounterBloc Transition { currentState: 0, event: Instance of 'CounterIncrementPressed', nextState: 1 }
+Transition { currentState: 0, event: Instance of 'CounterIncrementPressed', nextState: 1 }
 CounterBloc Change { currentState: 0, nextState: 1 }
 Change { currentState: 0, nextState: 1 }
 ```

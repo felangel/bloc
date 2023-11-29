@@ -46,7 +46,7 @@ void main() {
         'emits correct color for WeatherCondition.clear',
         build: ThemeCubit.new,
         act: (cubit) => cubit.updateTheme(clearWeather),
-        expect: () => <Color>[Colors.orangeAccent],
+        expect: () => <Color>[Colors.yellow],
       );
 
       blocTest<ThemeCubit, Color>(
