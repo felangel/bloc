@@ -85,7 +85,9 @@ class HydratedStorage implements Storage {
     HydratedCipher? encryptionCipher,
   }) {
     return _lock.synchronized(() async {
-      if (_instance != null) return _instance!;
+      if (_instance != null) {
+        await _instance!.close();
+      }
       // Use HiveImpl directly to avoid conflicts with existing Hive.init
       // https://github.com/hivedb/hive/issues/336
       hive = HiveImpl();
