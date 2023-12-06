@@ -1,0 +1,26 @@
+name: bloc_devtools_extension
+description: The official Devtools extension for the bloc library.
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0-91.0.dev <4.0.0"
+  flutter: ">=3.17.0-0.0.pre"
+
+dependencies:
+  bloc: ^8.0.0
+  bloc_concurrency: ^0.2.0
+  devtools_app_shared: ^0.0.7
+  devtools_extensions: ^0.0.10
+  equatable: ^2.0.5
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc/src/dev_tools.dart';
 import 'package:meta/meta.dart';
 
 part 'bloc_base.dart';
