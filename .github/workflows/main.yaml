@@ -221,6 +221,7 @@ jobs:
       - name: 🎯 Build ${{ matrix.example }}
         uses: ./.github/actions/flutter_package
         with:
+          analyze_directories: lib
           collect_coverage: false
           collect_score: false
           working_directory: examples/${{ matrix.example }}
