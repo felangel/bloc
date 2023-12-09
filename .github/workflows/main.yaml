@@ -1,4 +1,4 @@
-name: ci
+name: build
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -271,7 +271,7 @@ jobs:
           collect_score: false
           working_directory: examples/${{ matrix.example }}
 
-  ci:
+  build:
     needs:
       [
         semantic_pull_request,
