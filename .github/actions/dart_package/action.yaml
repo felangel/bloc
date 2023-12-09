@@ -72,12 +72,19 @@ runs:
         dart pub global activate coverage
         dart test -j ${{inputs.concurrency}} --coverage=coverage --platform=${{inputs.platform}} && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.dart_tool/package_config.json --report-on=${{inputs.report_on}} --check-ignore
 
+    - name: 📦 Detect Package Name
+      env:
+        PACKAGE_PATH: ${{ inputs.working_directory}}
+      id: package
+      shell: ${{ inputs.shell }}
+      run: echo "name=${PACKAGE_PATH##*/}" >> $GITHUB_OUTPUT
+
     - name: ⬆️ Upload Coverage
       uses: codecov/codecov-action@v3
       env:
         PACKAGE_PATH: ${{ inputs.working_directory}}
       with:
-        flags: ${{ ${PACKAGE_PATH##*/} }}
+        flags: ${{ steps.package.outputs.name }}
         token: ${{ inputs.codecov_token }}
 
     - name: 📊 Verify Coverage
