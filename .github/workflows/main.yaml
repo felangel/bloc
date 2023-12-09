@@ -243,6 +243,7 @@ jobs:
       - name: 🎯 Build ${{ matrix.example }}
         uses: ./.github/actions/angular_dart_package
         with:
+          analyze_directories: lib
           working_directory: examples/${{ matrix.example }}
 
   flutter_example_checks:

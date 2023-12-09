@@ -37,10 +37,6 @@ inputs:
     required: false
     default: "lib"
     description: Directories to report on when collecting coverage
-  platform:
-    required: false
-    default: "vm"
-    description: Platform to use when running tests
 
 runs:
   using: "composite"
@@ -70,7 +66,7 @@ runs:
       shell: ${{ inputs.shell }}
       run: |
         dart pub global activate coverage
-        dart test -j ${{inputs.concurrency}} --coverage=coverage --platform=${{inputs.platform}} && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.dart_tool/package_config.json --report-on=${{inputs.report_on}} --check-ignore
+        dart test -j ${{inputs.concurrency}} --coverage=coverage && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.dart_tool/package_config.json --report-on=${{inputs.report_on}} --check-ignore
 
     - name: 📦 Detect Package Name
       env:
