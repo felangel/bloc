@@ -22,6 +22,7 @@ jobs:
     outputs:
       needs_dart_package_checks: ${{ steps.needs_dart_package_checks.outputs.changes }}
       needs_flutter_package_checks: ${{ steps.needs_flutter_package_checks.outputs.changes }}
+      needs_example_checks: ${{ steps.needs_example_checks.outputs.changes }}
 
     name: 👀 Detect Changes
 
@@ -63,18 +64,94 @@ jobs:
             flutter_bloc:
               - ./.github/codecov.yml
               - ./.github/workflows/main.yaml
-              - ./.github/actions/dart_package/action.yaml
+              - ./.github/actions/flutter_package/action.yaml
               - packages/flutter_bloc/**
             replay_bloc:
               - ./.github/codecov.yml
               - ./.github/workflows/main.yaml
-              - ./.github/actions/dart_package/action.yaml
+              - ./.github/actions/flutter_package/action.yaml
               - packages/replay_bloc/**
             hydrated_bloc:
               - ./.github/codecov.yml
               - ./.github/workflows/main.yaml
-              - ./.github/actions/dart_package/action.yaml
+              - ./.github/actions/flutter_package/action.yaml
               - packages/hydrated_bloc/**
+
+      - uses: dorny/paths-filter@v2
+        name: Example Detection
+        id: needs_example_checks
+        with:
+          filters: |
+            flutter_bloc_with_stream:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_bloc_with_stream/**
+            flutter_complex_list:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_complex_list/**
+            flutter_counter:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_counter/**
+            flutter_dynamic_form:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_dynamic_form/**
+            flutter_firebase_login:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_firebase_login/**
+            flutter_form_validation:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_form_validation/**
+            flutter_infinite_list:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_infinite_list/**
+            flutter_login:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_login/**
+            flutter_shopping_cart:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_shopping_cart/**
+            flutter_timer:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_timer/**
+            flutter_todos:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_todos/**
+            flutter_weather:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_weather/**
+            flutter_wizard:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_wizard/**
+            github_search/flutter_github_search:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/github_search/flutter_github_search/**
 
   dart_package_checks:
     needs: changes
@@ -124,8 +201,38 @@ jobs:
           working_directory: packages/${{ matrix.package }}
           min_coverage: 100
 
+  example_checks:
+    needs: changes
+    if: ${{ needs.changes.outputs.needs_example_checks != '[]' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        example: ${{ fromJSON(needs.changes.outputs.needs_example_checks) }}
+
+    runs-on: ubuntu-latest
+
+    name: 🧑‍🎓 ${{ matrix.example }}
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
+
+      - name: 🎯 Build ${{ matrix.example }}
+        uses: ./.github/actions/flutter_package
+        with:
+          collect_coverage: false
+          collect_score: false
+          working_directory: examples/${{ matrix.example }}
+
   ci:
-    needs: [semantic_pull_request, dart_package_checks, flutter_package_checks]
+    needs:
+      [
+        semantic_pull_request,
+        dart_package_checks,
+        flutter_package_checks,
+        example_checks,
+      ]
     if: ${{ always() }}
 
     runs-on: ubuntu-latest
