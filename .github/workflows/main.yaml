@@ -54,11 +54,33 @@ jobs:
               - ./.github/actions/dart_package/action.yaml
               - packages/bloc/**
 
+      - uses: dorny/paths-filter@v2
+        name: Build Detection
+        id: needs_flutter_package_checks
+        with:
+          filters: |
+            flutter_bloc:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - packages/flutter_bloc/**
+            replay_bloc:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - packages/replay_bloc/**
+            hydrated_bloc:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - packages/hydrated_bloc/**
+
   dart_package_checks:
     needs: changes
     if: ${{ needs.changes.outputs.needs_dart_package_checks != '[]' }}
 
     strategy:
+      fail-fast: false
       matrix:
         package: ${{ fromJSON(needs.changes.outputs.needs_dart_package_checks) }}
 
@@ -77,8 +99,32 @@ jobs:
           working_directory: packages/${{ matrix.package }}
           min_coverage: 100
 
+  flutter_package_checks:
+    needs: changes
+    if: ${{ needs.changes.outputs.needs_flutter_package_checks != '[]' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.changes.outputs.needs_flutter_package_checks) }}
+
+    runs-on: ubuntu-latest
+
+    name: 🐦 ${{ matrix.package }}
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
+
+      - name: 🎯 Build ${{ matrix.package }}
+        uses: ./.github/actions/flutter_package
+        with:
+          codecov_token: ${{ secrets.CODECOV_TOKEN }}
+          working_directory: packages/${{ matrix.package }}
+          min_coverage: 100
+
   ci:
-    needs: [semantic_pull_request, dart_package_checks]
+    needs: [semantic_pull_request, dart_package_checks, flutter_package_checks]
     if: ${{ always() }}
 
     runs-on: ubuntu-latest
