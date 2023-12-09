@@ -77,7 +77,7 @@ runs:
       env:
         PACKAGE_PATH: ${{ inputs.working_directory}}
       with:
-        flags: ${{ PACKAGE_PATH##*/ }}
+        flags: ${{ ${PACKAGE_PATH##*/} }}
         token: ${{ inputs.codecov_token }}
 
     - name: 📊 Verify Coverage

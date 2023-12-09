@@ -20,7 +20,7 @@ jobs:
     if: github.event.pull_request.draft == false
 
     outputs:
-      needs_dart_build: ${{ steps.needs_dart_build.outputs.changes }}
+      needs_dart_package_checks: ${{ steps.needs_dart_package_checks.outputs.changes }}
 
     name: 👀 Detect Changes
 
@@ -30,7 +30,7 @@ jobs:
 
       - uses: dorny/paths-filter@v2
         name: Build Detection
-        id: needs_dart_build
+        id: needs_dart_package_checks
         with:
           filters: |
             bloc_concurrency:
@@ -54,17 +54,17 @@ jobs:
               - ./.github/actions/dart_package/action.yaml
               - packages/bloc/**
 
-  build_dart_packages:
+  dart_package_checks:
     needs: changes
-    if: ${{ needs.changes.outputs.needs_dart_build != '[]' }}
+    if: ${{ needs.changes.outputs.needs_dart_package_checks != '[]' }}
 
     strategy:
       matrix:
-        package: ${{ fromJSON(needs.changes.outputs.needs_dart_build) }}
+        package: ${{ fromJSON(needs.changes.outputs.needs_dart_package_checks) }}
 
     runs-on: ubuntu-latest
 
-    name: 🎯 Build ${{ matrix.package }}
+    name: 🎯 ${{ matrix.package }}
 
     steps:
       - name: 📚 Git Checkout
@@ -78,7 +78,7 @@ jobs:
           min_coverage: 100
 
   ci:
-    needs: [semantic_pull_request, build_dart_packages]
+    needs: [semantic_pull_request, dart_package_checks]
     if: ${{ always() }}
 
     runs-on: ubuntu-latest
