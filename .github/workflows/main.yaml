@@ -6,7 +6,6 @@ concurrency:
 
 on:
   pull_request:
-    types: [opened, reopened, review_requested, ready_for_review]
   push:
     branches: [master]
 
@@ -17,6 +16,8 @@ jobs:
 
   changes:
     runs-on: ubuntu-latest
+
+    if: github.event.pull_request.draft == false
 
     outputs:
       needs_dart_build: ${{ steps.needs_dart_build.outputs.changes }}
