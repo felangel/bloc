@@ -20,9 +20,10 @@ jobs:
     if: github.event.pull_request.draft == false
 
     outputs:
+      needs_angular_dart_example_checks: ${{ steps.needs_angular_dart_example_checks.outputs.changes }}
       needs_dart_package_checks: ${{ steps.needs_dart_package_checks.outputs.changes }}
       needs_flutter_package_checks: ${{ steps.needs_flutter_package_checks.outputs.changes }}
-      needs_example_checks: ${{ steps.needs_example_checks.outputs.changes }}
+      needs_flutter_example_checks: ${{ steps.needs_flutter_example_checks.outputs.changes }}
 
     name: 👀 Detect Changes
 
@@ -31,10 +32,31 @@ jobs:
         uses: actions/checkout@v3
 
       - uses: dorny/paths-filter@v2
+        name: Angular Dart Package Detection
+        id: needs_angular_dart_example_checks
+        with:
+          filters: |
+            angular_counter:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/angular_dart_package/action.yaml
+              - examples/angular_counter/**
+            github_search/angular_github_search:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - examples/github_search/angular_github_search/**
+
+      - uses: dorny/paths-filter@v2
         name: Dart Package Detection
         id: needs_dart_package_checks
         with:
           filters: |
+            angular_bloc:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - packages/angular_bloc/**
             bloc_concurrency:
               - ./.github/codecov.yml
               - ./.github/workflows/main.yaml
@@ -79,7 +101,7 @@ jobs:
 
       - uses: dorny/paths-filter@v2
         name: Example Detection
-        id: needs_example_checks
+        id: needs_flutter_example_checks
         with:
           filters: |
             flutter_bloc_with_stream:
@@ -201,14 +223,36 @@ jobs:
           working_directory: packages/${{ matrix.package }}
           min_coverage: 100
 
-  example_checks:
+  angular_dart_example_checks:
     needs: changes
-    if: ${{ needs.changes.outputs.needs_example_checks != '[]' }}
+    if: ${{ needs.changes.outputs.needs_angular_dart_example_checks != '[]' }}
 
     strategy:
       fail-fast: false
       matrix:
-        example: ${{ fromJSON(needs.changes.outputs.needs_example_checks) }}
+        example: ${{ fromJSON(needs.changes.outputs.needs_angular_dart_example_checks) }}
+
+    runs-on: ubuntu-latest
+
+    name: 🛡️ ${{ matrix.example }}
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
+
+      - name: 🎯 Build ${{ matrix.example }}
+        uses: ./.github/actions/angular_dart_package
+        with:
+          working_directory: examples/${{ matrix.example }}
+
+  flutter_example_checks:
+    needs: changes
+    if: ${{ needs.changes.outputs.needs_flutter_example_checks != '[]' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        example: ${{ fromJSON(needs.changes.outputs.needs_flutter_example_checks) }}
 
     runs-on: ubuntu-latest
 
@@ -232,7 +276,8 @@ jobs:
         semantic_pull_request,
         dart_package_checks,
         flutter_package_checks,
-        example_checks,
+        angular_dart_example_checks,
+        flutter_example_checks,
       ]
     if: ${{ always() }}
 
