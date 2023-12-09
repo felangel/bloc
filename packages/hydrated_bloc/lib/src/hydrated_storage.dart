@@ -85,9 +85,6 @@ class HydratedStorage implements Storage {
     HydratedCipher? encryptionCipher,
   }) {
     return _lock.synchronized(() async {
-      if (_instance != null) {
-        await _instance!.close();
-      }
       // Use HiveImpl directly to avoid conflicts with existing Hive.init
       // https://github.com/hivedb/hive/issues/336
       hive = HiveImpl();
@@ -107,7 +104,7 @@ class HydratedStorage implements Storage {
         await _migrate(storageDirectory, box);
       }
 
-      return _instance = HydratedStorage(box);
+      return HydratedStorage(box);
     });
   }
 
@@ -135,7 +132,6 @@ class HydratedStorage implements Storage {
   static late HiveInterface hive;
 
   static final _lock = Lock();
-  static HydratedStorage? _instance;
 
   final Box<dynamic> _box;
 
@@ -159,7 +155,6 @@ class HydratedStorage implements Storage {
   @override
   Future<void> clear() async {
     if (_box.isOpen) {
-      _instance = null;
       return _lock.synchronized(_box.clear);
     }
   }
@@ -167,7 +162,6 @@ class HydratedStorage implements Storage {
   @override
   Future<void> close() async {
     if (_box.isOpen) {
-      _instance = null;
       return _lock.synchronized(_box.close);
     }
   }
