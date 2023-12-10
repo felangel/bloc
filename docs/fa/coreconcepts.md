@@ -206,7 +206,7 @@
 
 [main.dart](_snippets/core_concepts/counter_bloc_stream_usage.dart.md ':include')
 
-در قطعه کد بالا، به `CounterBloc` گوش میدهیم (Subscribe) و در هر تغییر وضعیت، تابع `print` را فراخوانی می‌کنیم. سپس رویداد `CounterIncrementPressed` را اضافه می‌کنیم که باعث فعال شدن `EventHandler` `on<CounterIncrementPressed>` و ارسال یک وضعیت جدید می‌شود. در نهایت، با فراخوانی `cancel` روی جریانی که به آن گوش داده ایم (Subscribeَ) و زمانی که دیگر نمی‌خواهیم به‌روزرسانی‌ها را دریافت کنیم، گوش دادن را لغو می‌کنیم (UnSubscribe) و `Bloc` را بسته می‌کنیم.
+در قطعه کد بالا، به `CounterBloc` گوش میدهیم (Subscribe) و در هر تغییر وضعیت، تابع `print` را فراخوانی می‌کنیم. سپس رویداد `CounterIncrementPressed` را اضافه می‌کنیم که باعث فعال شدن `EventHandler` `on<CounterIncrementPressed>` و ارسال یک وضعیت جدید می‌شود. در نهایت، با فراخوانی `cancel` روی جریانی که به آن گوش داده ایم (Subscribe) و زمانی که دیگر نمی‌خواهیم به‌روزرسانی‌ها را دریافت کنیم، گوش دادن را لغو می‌کنیم (UnSubscribe) و `Bloc` را بسته می‌کنیم.
 
 ?> **توجه**: `await Future.delayed(Duration.zero)` در این مثال اضافه شده است تا از لغو فوری جریان گوش داده شده (Subscribe) جلوگیری شود.
 
@@ -216,57 +216,57 @@
 
 [counter_bloc.dart](_snippets/core_concepts/counter_bloc_on_change.dart.md ':include')
 
-We can then update `main.dart` to:
+سپس می‌توانیم `main.dart` را به این شکل به‌روزرسانی کنیم:
 
 [main.dart](_snippets/core_concepts/counter_bloc_on_change_usage.dart.md ':include')
 
-Now if we run the above snippet, the output will be:
+حالا اگر قطعه کد بالا را اجرا کنیم، خروجی به شکل زیر خواهد بود:
 
 [script](_snippets/core_concepts/counter_bloc_on_change_output.sh.md ':include')
 
-One key differentiating factor between `Bloc` and `Cubit` is that because `Bloc` is event-driven, we are also able to capture information about what triggered the state change.
+یکی از عوامل تمایزدهنده بین `Bloc` و `Cubit` این است که به دلیل اینکه `Bloc` بر اساس رویدادها عمل می‌کند، می‌توانیم اطلاعاتی درباره عاملی که تغییر وضعیت را ایجاد کرد، به دست آوریم.
 
-We can do this by overriding `onTransition`.
+برای این کار می‌توانیم `onTransition` را بازنویسی(Override) کنیم.
 
-> The change from one state to another is called a `Transition`. A `Transition` consists of the current state, the event, and the next state.
+> تغییر از یک وضعیت به وضعیت دیگر را یک `Transition` می‌نامیم. یک `Transition` شامل وضعیت فعلی، رویداد و وضعیت بعدی است.
 
 [counter_bloc.dart](_snippets/core_concepts/counter_bloc_on_transition.dart.md ':include')
 
-If we then rerun the same `main.dart` snippet from before, we should see the following output:
+سپس اگر همان قطعه کد `main.dart` قبلی را دوباره اجرا کنیم، باید خروجی زیر را ببینیم:
 
 [script](_snippets/core_concepts/counter_bloc_on_transition_output.sh.md ':include')
 
-?> **Note**: `onTransition` is invoked before `onChange` and contains the event which triggered the change from `currentState` to `nextState`.
+?> **توجه**: `onTransition` قبل از `onChange` فراخوانی می‌شود و شامل رویدادی است که تغییر از `currentState` به `nextState` را ایجاد کرده است.
 
 #### BlocObserver
 
-Just as before, we can override `onTransition` in a custom `BlocObserver` to observe all transitions that occur from a single place.
+همانند قبل، می‌توانیم `onTransition` را در یک `BlocObserver` سفارشی بازنویسی کنیم تا تمام تغییراتی که از یک مکان واحد اتفاق می‌افتند را مشاهده کنیم.
 
 [simple_bloc_observer.dart](_snippets/core_concepts/simple_bloc_observer_on_transition.dart.md ':include')
 
-We can initialize the `SimpleBlocObserver` just like before:
+می‌توانیم `SimpleBlocObserver` را همانند قبل مقداردهی اولیه کنیم.
 
 [main.dart](_snippets/core_concepts/simple_bloc_observer_on_transition_usage.dart.md ':include')
 
-Now if we run the above snippet, the output should look like:
+حالا اگر قطعه کد بالا را اجرا کنیم، خروجی باید به شکل زیر باشد:
 
 [script](_snippets/core_concepts/simple_bloc_observer_on_transition_output.sh.md ':include')
 
-?> **Note**: `onTransition` is invoked first (local before global) followed by `onChange`.
+?> **توجه**: تابع `onTransition` ابتدا (متغیر محلی قبل از سراسری) و سپس تابع `onChange` در ادامه فراخوانی می‌شود.
 
-Another unique feature of `Bloc` instances is that they allow us to override `onEvent` which is called whenever a new event is added to the `Bloc`. Just like with `onChange` and `onTransition`, `onEvent` can be overridden locally as well as globally.
+یک ویژگی منحصر به فرد دیگر از نمونه‌های (Instances) کلاس `Bloc` این است که ما را قادر می‌سازد `onEvent` را بازنویسی کنیم. این متد هر زمان که یک رویداد جدید به Bloc اضافه می‌شود، فراخوانی شده و همانند `onChange` و `onTransition`، امکان بازنویسی `onEvent` به صورت محلی و یا سراسری وجود دارد.
 
 [counter_bloc.dart](_snippets/core_concepts/counter_bloc_on_event.dart.md ':include')
 
 [simple_bloc_observer.dart](_snippets/core_concepts/simple_bloc_observer_on_event.dart.md ':include')
 
-We can run the same `main.dart` as before and should see the following output:
+ما می‌توانیم همان فایل `main.dart` را که قبلاً داشتیم، اجرا کنیم و باید خروجی زیر را مشاهده کنیم:
 
 [script](_snippets/core_concepts/simple_bloc_observer_on_event_output.sh.md ':include')
 
-?> **Note**: `onEvent` is called as soon as the event is added. The local `onEvent` is invoked before the global `onEvent` in `BlocObserver`.
+?> **توجه**: تابع `onEvent` به محض اضافه شدن رویداد فراخوانی می‌شود. `onEvent` محلی قبل از `onEvent` سراسری در `BlocObserver` فراخوانی می‌شود.
 
-### Error Handling
+### مدیریت خطا(Error Handling)
 
 Just like with `Cubit`, each `Bloc` has an `addError` and `onError` method. We can indicate that an error has occurred by calling `addError` from anywhere inside our `Bloc`. We can then react to all errors by overriding `onError` just as with `Cubit`.
 
