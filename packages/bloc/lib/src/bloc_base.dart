@@ -55,10 +55,11 @@ abstract class BlocBase<State>
   BlocBase(this._state) {
     // ignore: invalid_use_of_protected_member
     _blocObserver.onCreate(this);
-    postBlocOnCreateEvent(this);
+    _devTools.postBlocOnCreateEvent(this);
   }
 
   final _blocObserver = Bloc.observer;
+  static final _devTools = DevTools();
 
   late final _stateController = StreamController<State>.broadcast();
 
@@ -132,7 +133,7 @@ abstract class BlocBase<State>
   void onChange(Change<State> change) {
     // ignore: invalid_use_of_protected_member
     _blocObserver.onChange(this, change);
-    postBlocOnChangeEvent(this, change);
+    _devTools.postBlocOnChangeEvent(this, change);
   }
 
   /// Reports an [error] which triggers [onError] with an optional [StackTrace].
@@ -171,7 +172,7 @@ abstract class BlocBase<State>
   Future<void> close() async {
     // ignore: invalid_use_of_protected_member
     _blocObserver.onClose(this);
-    postBlocOnCloseEvent(this);
+    _devTools.postBlocOnCloseEvent(this);
     await _stateController.close();
   }
 }

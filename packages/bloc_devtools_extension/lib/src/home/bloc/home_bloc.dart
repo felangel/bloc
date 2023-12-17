@@ -10,7 +10,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc(ServiceManager serviceManager)
       : _serviceManager = serviceManager,
         super(const HomeState()) {
-    on<HomeStarted>(_onHomeStarted, transformer: sequential());
+    on<HomeStarted>(_onHomeStarted, transformer: restartable());
   }
 
   final ServiceManager _serviceManager;
@@ -38,6 +38,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       onData: (event) {
         final type = event.extensionKind;
         switch (type) {
+          case 'Flutter.FrameworkInitialization':
+            emit(const HomeState());
+            add(HomeStarted());
           case 'bloc:onCreate':
             final bloc = BlocNode.fromJson(
               event.json!['extensionData'] as Map<String, dynamic>,

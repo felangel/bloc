@@ -28,7 +28,7 @@ class HomeView extends StatelessWidget {
           const AreaPaneHeader(
             roundedTopBorder: false,
             includeTopBorder: false,
-            title: Text('Blocs'),
+            title: Text('List'),
           ),
           Expanded(
             child: BlocBuilder<HomeBloc, HomeState>(
