@@ -14,6 +14,7 @@ class BlocNode extends Equatable {
     required this.name,
     required this.state,
     required this.hash,
+    required this.lastModified,
   });
 
   factory BlocNode.fromJson(Map<String, dynamic> json) {
@@ -21,13 +22,15 @@ class BlocNode extends Equatable {
       name: json['name'] as String? ?? 'Unknown',
       state: json['state'] as String? ?? '--',
       hash: json['hash'] as int? ?? 0,
+      lastModified: DateTime.now(),
     );
   }
 
   final String name;
   final String state;
   final int hash;
+  final DateTime lastModified;
 
   @override
-  List<Object> get props => [name, state, hash];
+  List<Object> get props => [name, state, hash, lastModified];
 }

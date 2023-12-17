@@ -1,3 +1,4 @@
+import 'package:bloc_devtools_extension/src/details/details.dart';
 import 'package:bloc_devtools_extension/src/home/home.dart';
 import 'package:devtools_app_shared/ui.dart';
 import 'package:devtools_extensions/devtools_extensions.dart';
@@ -54,10 +55,19 @@ class _BlocListView extends StatelessWidget {
         return ListTile(
           key: Key('${bloc.name}_${bloc.hashCode}'),
           title: Text(bloc.name),
-          trailing: Text(bloc.state),
+          subtitle: Text(bloc.lastModified.format(context)),
+          onTap: () => Navigator.of(context).push(
+            DetailsPage.route(blocHash: bloc.hash),
+          ),
         );
       },
       itemCount: blocs.length,
     );
+  }
+}
+
+extension on DateTime {
+  String format(BuildContext context) {
+    return 'Last Modified: ${TimeOfDay.fromDateTime(this).format(context)}';
   }
 }
