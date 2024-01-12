@@ -268,31 +268,31 @@
 
 ### مدیریت خطا(Error Handling)
 
-Just like with `Cubit`, each `Bloc` has an `addError` and `onError` method. We can indicate that an error has occurred by calling `addError` from anywhere inside our `Bloc`. We can then react to all errors by overriding `onError` just as with `Cubit`.
+درست مانند `Cubit`، هر `Bloc` دارای متدهای `addError` و `onError` است. می‌توانیم با فراخوانی `addError` از هر نقطه‌ای در داخل `Bloc`، نشان دهیم که یک خطا رخ داده است. سپس با بازنویسی `onError`، می‌توانیم به تمام خطاها واکنش نشان دهیم، همانند `Cubit`.
 
 [counter_bloc.dart](_snippets/core_concepts/counter_bloc_on_error.dart.md ':include')
 
-If we rerun the same `main.dart` as before, we can see what it looks like when an error is reported:
+اگر مجدداً `main.dart` را همانند قبل اجرا کنیم، می‌توانیم ببینیم که وقتی یک خطا گزارش می‌شود، به چه شکلی است.
 
 [script](_snippets/core_concepts/counter_bloc_on_error_output.sh.md ':include')
 
-?> **Note**: The local `onError` is invoked first followed by the global `onError` in `BlocObserver`.
+?> **توجه**: در ابتدا، `onError` محلی فراخوانی می‌شود و سپس `onError` سراسری در `BlocObserver` فراخوانی می‌شود.
 
-?> **Note**: `onError` and `onChange` work the exact same way for both `Bloc` and `Cubit` instances.
+?> **توجه**: `onError` و `onChange` برای هر دو نمونه `Bloc` و `Cubit`به یک شکل کار می کنند.
 
-!> Any unhandled exceptions that occur within an `EventHandler` are also reported to `onError`.
+!> هر استثنای کنترل نشده ای که در یک `EventHandler` رخ می دهد نیز به `onError` گزارش می شود.
 
-## Cubit vs. Bloc
+## Cubit در مقابل Bloc
 
-Now that we've covered the basics of the `Cubit` and `Bloc` classes, you might be wondering when you should use `Cubit` and when you should use `Bloc`.
+حالا که مبانی کلاس‌های `Cubit` و `Bloc` را پوشش دادیم، ممکن است تعجب کنید که چه زمانی باید از `Cubit` و چه زمانی از `Bloc` استفاده کنید.
 
-### Cubit Advantages
+### مزایای Cubit
 
-#### Simplicity
+#### سادگی
 
-One of the biggest advantages of using `Cubit` is simplicity. When creating a `Cubit`, we only have to define the state as well as the functions which we want to expose to change the state. In comparison, when creating a `Bloc`, we have to define the states, events, and the `EventHandler` implementation. This makes `Cubit` easier to understand and there is less code involved.
+یکی از بزرگترین مزیت‌های استفاده از `Cubit`، سادگی آن است. هنگام ایجاد یک `Cubit`، تنها باید وضعیت و توابعی را که می‌خواهیم برای تغییر وضعیت به بیرون (`Cubit`) ارائه دهیم، تعریف کنیم. در مقابل، در ایجاد یک `Bloc`، باید وضعیت‌ها (States)، رویدادها (Events) و پیاده‌سازی `EventHandler` را تعریف کنیم. این (موضوع) باعث می‌شود `Cubit` آسان‌تر قابل درک باشد و کدهای کمتری درگیر شوند.
 
-Now let's take a look at the two counter implementations:
+حالا بیایید به دو پیاده‌سازی شمارنده نگاهی بیندازیم:
 
 ##### CounterCubit
 
@@ -302,11 +302,11 @@ Now let's take a look at the two counter implementations:
 
 [counter_bloc.dart](_snippets/core_concepts/counter_bloc_full.dart.md ':include')
 
-The `Cubit` implementation is more concise and instead of defining events separately, the functions act like events. In addition, when using a `Cubit`, we can simply call `emit` from anywhere in order to trigger a state change.
+پیاده‌سازی `Cubit`  کوتاه تر است و به جای تعریف رویدادها به صورت جداگانه، توابع مانند رویدادها عمل می‌کنند. علاوه بر این، در استفاده از `Cubit`، به راحتی می‌توانیم از هر نقطه‌ای `emit` را فراخوانی کنیم تا تغییر وضعیت را اعمال کنیم.
 
-### Bloc Advantages
+### مزایای Bloc
 
-#### Traceability
+#### قابلیت ردیابی (Traceability)
 
 One of the biggest advantages of using `Bloc` is knowing the sequence of state changes as well as exactly what triggered those changes. For state that is critical to the functionality of an application, it might be very beneficial to use a more event-driven approach in order to capture all events in addition to state changes.
 
