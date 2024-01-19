@@ -1,26 +1,26 @@
-# Why Bloc?
+# چرا Bloc؟
 
-> Bloc makes it easy to separate presentation from business logic, making your code _fast_, _easy to test_, and _reusable_.
+> `Bloc` به شما امکان می‌دهد به راحتی نمایش (Presentation) را از منطق کسب و کار (Business logic) جدا کنید، که این امر باعث می‌شود کد شما قابلیت هایی مانند _سرعت بالا_، _آزمون آسان و _قابل استفاده مجدد_ را داشته باشد.
 
-When building production quality applications, managing state becomes critical.
+وقتی اپلیکیشن‌های با کیفیت تولید می‌شوند، مدیریت وضعیت (state) به مسئله‌ای حیاتی تبدیل می‌شود.
 
-As developers we want to:
+ما به عنوان توسعه دهندگان می خواهیم:
 
-- know what state our application is in at any point in time.
-- easily test every case to make sure our app is responding appropriately.
-- record every single user interaction in our application so that we can make data-driven decisions.
-- work as efficiently as possible and reuse components both within our application and across other applications.
-- have many developers seamlessly working within a single code base following the same patterns and conventions.
-- develop fast and reactive apps.
+- بدانیم درخواست ما در هر مقطع زمانی در چه وضعیتی است.
+- به راحتی هر مورد را آزمایش کنید تا مطمئن شوید برنامه ما به درستی پاسخ می دهد.
+- هر تعامل کاربر را در برنامه خود ثبت کنید تا بتوانیم تصمیمات مبتنی بر داده را اتخاذ کنیم.
+- تا حد امکان کارآمدتر کار کنید و از اجزاء هم در برنامه ما و هم در سایر برنامه ها استفاده مجدد کنید.
+- بسیاری از توسعه دهندگان به طور یکپارچه در یک پایگاه کد واحد و با پیروی از الگوها و قراردادهای یکسان کار می کنند.
+- برنامه های سریع و پاسخگو ایجاد کنید.
 
-Bloc was designed to meet all of these needs and many more.
+بلاک برای برآورده کردن همه این نیازها و بسیاری دیگر طراحی شده است.
 
-There are many state management solutions and deciding which one to use can be a daunting task. There is no one perfect state management solution! What's important is that you pick the one that works best for your team and your project.
+همچنین، راه‌حل‌های مدیریت وضعیت (State management) مختلفی وجود دارد و تصمیم گیری برای استفاده از یکی از آن‌ها ممکن است یک وظیفه سخت باشد. هیچ راه‌حل مدیریت وضعیتی کامل و بی‌نقص وجود ندارد! مهم این است که شما یکی را انتخاب کنید که برای تیم و پروژه شما بهترین عمل کند.
 
-Bloc was designed with three core values in mind:
+بلوک با در نظر گرفتن سه ارزش اصلی طراحی شده است:
 
-- **Simple:** Easy to understand & can be used by developers with varying skill levels.
-- **Powerful:** Help make amazing, complex applications by composing them of smaller components.
-- **Testable:** Easily test every aspect of an application so that we can iterate with confidence.
+- **ساده:** ساده درک شود و می‌تواند و توسط توسعه‌دهندگان با سطوح مهارتی متفاوت استفاده شود.
+- **قدرتمند:** با ترکیب کردن اجزای کوچکتر، به شما کمک می‌کند برنامه‌های شگفت‌انگیز و پیچیده‌ای را ایجاد کنید.
+- **قابل آزمایش:** با امکان تست آسان و سریع هر جنبه‌ای از برنامه، میتوان با اطمینان بیشتری به بهبود و تغییرات نرم‌افزاری پرداخت.
 
-Overall, Bloc attempts to make state changes predictable by regulating when a state change can occur and enforcing a single way to change state throughout an entire application.
+بطور کلی، بلاک سعی می‌کند با تنظیم زمانی که یک تغییر وضعیت می‌تواند رخ دهد و اجرای یک روش یکتا برای تغییر وضعیت در سراسر برنامه، تغییرات وضعیت را قابل پیش‌بینی کند.
