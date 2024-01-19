@@ -308,36 +308,36 @@
 
 #### قابلیت ردیابی (Traceability)
 
-One of the biggest advantages of using `Bloc` is knowing the sequence of state changes as well as exactly what triggered those changes. For state that is critical to the functionality of an application, it might be very beneficial to use a more event-driven approach in order to capture all events in addition to state changes.
+یکی از بزرگترین مزایای استفاده از `Bloc` این است که می‌توانیم دنباله‌ای از تغییرات وضعیت را همراه با دقیقاً آنچه که این تغییرات را تحریک و باعث شده، بدانیم. برای وضعیتی که برای عملکرد یک برنامه بسیار حیاتی است، استفاده از رویکرد مبتنی بر رویداد می‌تواند بسیار مفید باشد تا همه رویدادها را در کنار تغییرات وضعیت (State changes) را ثبت کنیم.
 
-A common use case might be managing `AuthenticationState`. For simplicity, let's say we can represent `AuthenticationState` via an `enum`:
+یکی از موارد استفاده متداول می‌تواند مدیریت `AuthenticationState` باشد. برای سادگی، بگذارید بگوییم که می‌توانیم `AuthenticationState` را از طریق یک `enum` نمایش دهیم:
 
 [authentication_state.dart](_snippets/core_concepts/authentication_state.dart.md ':include')
 
-There could be many reasons as to why the application's state could change from `authenticated` to `unauthenticated`. For example, the user might have tapped a logout button and requested to be signed out of the application. On the other hand, maybe the user's access token was revoked and they were forcefully logged out. When using `Bloc` we can clearly trace how the application state got to a certain state.
+ممکن است دلایل زیادی وجود داشته باشد که چرا وضعیت برنامه می تواند از `authenticated` به `unauthenticated` تغییر کند. به عنوان مثال، کاربر ممکن است دکمه خروج را لمس کرده و درخواست خروج از برنامه را ارسال کند. از طرف دیگر، شاید توکن دسترسی کاربر لغو شده و او به طور اجباری خارج شده باشد. با استفاده از `Bloc`، می‌توانیم به وضوح پیگیری کنیم که وضعیت برنامه چگونه به یک وضعیت خاص رسیده است.
 
 [script](_snippets/core_concepts/authentication_transition.sh.md ':include')
 
-The above `Transition` gives us all the information we need to understand why the state changed. If we had used a `Cubit` to manage the `AuthenticationState`, our logs would look like:
+کلاس `Transition` بالا تمام اطلاعاتی که برای درک دلیل تغییر وضعیت نیاز داریم را به ما می‌دهد. اگر از یک `Cubit` برای مدیریت `AuthenticationState` استفاده کرده بودیم، لاگ‌های ما به شکل زیر خواهند بود:
 
 [script](_snippets/core_concepts/authentication_change.sh.md ':include')
 
-This tells us that the user was logged out but it doesn't explain why which might be critical to debugging and understanding how the state of the application is changing over time.
+در این لاگ، به ما اطلاع می‌دهد که کاربر خارج شده است اما توضیحی درباره دلیل این اتفاق نمی‌دهد, این موضوع ممکن است برای رفع اشکال و درک نحوه تغییر وضعیت برنامه در طول زمان بسیار حیاتی باشد.
 
-#### Advanced Event Transformations
+#### Event Transformations پیشرفته
 
-Another area in which `Bloc` excels over `Cubit` is when we need to take advantage of reactive operators such as `buffer`, `debounceTime`, `throttle`, etc.
+یکی از حوزه‌هایی که `Bloc` نسبت به `Cubit` برتری دارد، زمانی است که نیاز به استفاده از عملگرهای واکنشی مانند `buffer`، `debounceTime`، `throttle` و غیره داریم.
 
-`Bloc` has an event sink that allows us to control and transform the incoming flow of events.
+`Bloc` دارای یک سینک رویداد (Event sink) است که به ما امکان می‌دهد جریان ورودی رویدادها را کنترل و تبدیل کنیم.
 
-For example, if we were building a real-time search, we would probably want to debounce the requests to the backend in order to avoid getting rate-limited as well as to cut down on cost/load on the backend.
+به عنوان مثال، اگر قصد داشته باشیم یک جستجوی زمان واقعی را پیاده سازی کنیم، احتمالاً می‌خواهیم درخواست‌ها را به سمت سرور به تأخیر بیندازیم تا از محدودیت نرخ (Rate limited) استفاده کننده جلوگیری کنیم و همچنین بر روی هزینه و بار سرور صرفه جویی کنیم.
 
-With `Bloc` we can provide a custom `EventTransformer` to change the way incoming events are processed by the `Bloc`.
+با استفاده از `Bloc` می‌توانیم یک `EventTransformer` سفارشی ارائه دهیم تا روش پردازش رویدادهای ورودی توسط `Bloc` را تغییر دهیم.
 
 [counter_bloc.dart](_snippets/core_concepts/debounce_event_transformer.dart.md ':include')
 
-With the above code, we can easily debounce the incoming events with very little additional code.
+با استفاده از کد فوق، می‌توانیم به راحتی رویدادهای ورودی را با کمترین کد اضافی به تأخیر بیندازیم.
 
-?> 💡 **Tip**: Check out [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an opinionated set of event transformers.
+?> 💡 **نکته**: بسته [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) برای  مجموعه از تبدیل‌کننده‌های (Transformers) رویداد با رویکرد و قواعد خاص را بررسی کنید.
 
-?> 💡 **Tip**: If you are still unsure about which to use, start with `Cubit` and you can later refactor or scale-up to a `Bloc` as needed.
+?> 💡 **نکته**: اگر هنوز مطمئن نیستید که از کدام یک استفاده کنید، با `Cubit` شروع کنید و در صورت نیاز می‌توانید در آینده به `Bloc` بروید و کد را بازسازی یا ارتقا دهید.
