@@ -42,4 +42,4 @@
 
 این تمام چیزی است که در آن وجود دارد، آزمایش باید سریع باشد و ما باید هنگام ایجاد تغییرات و بازسازی کد خود احساس اطمینان کنیم.
 
-You can refer to the [Weather App](https://github.com/felangel/bloc/tree/master/examples/flutter_weather) for an example of a fully tested application.
+شما می‌توانید به برنامه [Weather App](https://github.com/felangel/bloc/tree/master/examples/flutter_weather) مراجعه کنید تا یک مثال از یک برنامه کاملاً تست شده را ببینید.
