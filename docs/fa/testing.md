@@ -1,45 +1,45 @@
-# Testing
+# آزمایش کردن (Testing)
 
-> Bloc was designed to be extremely easy to test.
+> Bloc به گونه ای طراحی شده است که آزمایش آن بسیار آسان باشد.
 
-For the sake of simplicity, let's write tests for the `CounterBloc` we created in [Core Concepts](coreconcepts.md).
+به خاطر سادگی، بیایید تست ها را برای `CounterBloc` که در [مفاهیم اصلی](coreconcepts.md) ایجاد کردیم بنویسیم.
 
-To recap, the `CounterBloc` implementation looks like:
+برای مرور مجدد، پیاده سازی `CounterBloc` به شکل زیر است:
 
 [counter_bloc.dart](_snippets/testing/counter_bloc.dart.md ':include')
 
-Before we start writing our tests we're going to need to add a testing framework to our dependencies.
+قبل از اینکه شروع کنیم به نوشتن تست ها، باید یک فریمورک آزمایشی را به وابستگی هایمان اضافه کنیم.
 
-We need to add [test](https://pub.dev/packages/test) and [bloc_test](https://pub.dev/packages/bloc_test) to our `pubspec.yaml`.
+ما باید [test](https://pub.dev/packages/test) و [bloc_test](https://pub.dev/packages/bloc_test) را به `pubspec.yaml` خود اضافه کنیم.
 
 [pubspec.yaml](_snippets/testing/pubspec.yaml.md ':include')
 
-Let's get started by creating the file for our `CounterBloc` Tests, `counter_bloc_test.dart` and importing the test package.
+بیایید با ایجاد فایل برای تست `CounterBloc` شروع کنیم، `counter_bloc_test.dart` را ایجاد کنید و بسته تست را وارد کنید.
 
 [counter_bloc_test.dart](_snippets/testing/counter_bloc_test_imports.dart.md ':include')
 
-Next, we need to create our `main` as well as our test group.
+بعداز آن، باید `main` و گروه تست خود را ایجاد کنیم.
 
 [counter_bloc_test.dart](_snippets/testing/counter_bloc_test_main.dart.md ':include')
 
-?> **Note**: groups are for organizing individual tests as well as for creating a context in which you can share a common `setUp` and `tearDown` across all of the individual tests.
+?> **توجه**: گروه‌ها برای سازماندهی تست‌های فردی (Individual) و همچنین برای ایجاد یک محیط (Context) که در آن می‌توانید یک `setUp` و `tearDown` مشترک را در تمام تست‌های فردی به اشتراک بگذارید، استفاده می‌شوند.
 
-Let's start by creating an instance of our `CounterBloc` which will be used across all of our tests.
+بیایید با ایجاد نمونه‌ای از `CounterBloc` خود که در تمامی تست‌هایمان استفاده خواهد شد، شروع کنیم.
 
 [counter_bloc_test.dart](_snippets/testing/counter_bloc_test_setup.dart.md ':include')
 
-Now we can start writing our individual tests.
+حالا می‌توانیم شروع به نوشتن تست‌های فردی خود کنیم.
 
 [counter_bloc_test.dart](_snippets/testing/counter_bloc_test_initial_state.dart.md ':include')
 
-?> **Note**: We can run all of our tests with the `pub run test` command.
+?> **توجه**: می‌توانیم تمامی تست‌های خود را با استفاده از دستور `pub run test` اجرا کنیم.
 
-At this point we should have our first passing test! Now let's write a more complex test using the [bloc_test](https://pub.dev/packages/bloc_test) package.
+در این نقطه باید تست اولیه ما را پاس کرده باشیم! حالا بیایید یک تست پیچیده‌تر را با استفاده از بسته [bloc_test](https://pub.dev/packages/bloc_test) بنویسیم.
 
 [counter_bloc_test.dart](_snippets/testing/counter_bloc_test_bloc_test.dart.md ':include')
 
-We should be able to run the tests and see that all are passing.
+باید بتوانیم تست‌ها را اجرا کنیم و ببینیم که همه آنها پاس می‌شوند.
 
-That's all there is to it, testing should be a breeze and we should feel confident when making changes and refactoring our code.
+این تمام چیزی است که در آن وجود دارد، آزمایش باید سریع باشد و ما باید هنگام ایجاد تغییرات و بازسازی کد خود احساس اطمینان کنیم.
 
 You can refer to the [Weather App](https://github.com/felangel/bloc/tree/master/examples/flutter_weather) for an example of a fully tested application.
