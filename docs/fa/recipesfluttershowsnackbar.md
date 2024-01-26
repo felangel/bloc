@@ -1,6 +1,6 @@
 # دستورالعمل‌ها: نمایش SnackBar با استفاده از BlocListener
 
-> در این دستورالعمل، قصد داریم نحوه استفاده از `BlocListener` برای نمایش یک `SnackBar` به عنوان پاسخ به تغییر وضعیت در یک bloc را مورد بررسی قرار دهیم.
+> در این دستورالعمل، قصد داریم نحوه استفاده از `BlocListener` برای نمایش یک `SnackBar` به عنوان پاسخ به تغییر وضعیت در یک Bloc را مورد بررسی قرار دهیم.
 
 ![demo](./assets/gifs/recipes_flutter_snack_bar.gif)
 
@@ -10,7 +10,7 @@
 
 ### DataEvent
 
-به سادگی، `DataBloc` ما فقط به یک `DataEvent` به نام `FetchData` پاسخ خواهد داد.
+برای سادگی، `DataBloc` ما فقط به یک `DataEvent` به نام `FetchData` پاسخ خواهد داد.
 
 [data_event.dart](_snippets/recipes_flutter_show_snack_bar/data_event.dart.md ':include')
 
@@ -42,6 +42,6 @@ DataBloc ما باید چیزی شبیه به این باشد:
 
 ?> به منظور **رندر کردن ویجت‌ها (RENDER WIDGETS)** در پاسخ به تغییرات وضعیت در `DataBloc` خود، از ویجت `BlocBuilder` استفاده می‌کنیم.
 
-!> ما **هرگز** "کارهایی (Do things)" را در پاسخ به تغییرات وضعیت در متد `builder` از `BlocBuilder` انجام نمی‌دهیم زیرا این متد ممکن است توسط چارچوب فلاتر بارها فراخوانی شود. متد `builder` باید یک [تابع خالص](https://en.wikipedia.org/wiki/Pure_function) باشد که فقط در پاسخ به وضعیت بلاک، یک ویجت را برگرداند.
+!> ما **هرگز** "کارهایی (Do things)" را در پاسخ به تغییرات وضعیت در متد `builder` از `BlocBuilder` انجام نمی‌دهیم, زیرا این متد ممکن است توسط چارچوب فلاتر بارها فراخوانی شود. متد `builder` باید یک [تابع خالص](https://en.wikipedia.org/wiki/Pure_function) باشد که فقط در پاسخ به وضعیت بلاک، یک ویجت را برگرداند.
 
 منبع کامل این روش را می توانید در [اینجا](https://gist.github.com/felangel/1e5b2c25b263ad1aa7bbed75d8c76c44) بیابید.
