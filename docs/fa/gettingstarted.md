@@ -8,7 +8,7 @@ Bloc از چندین بسته pub تشکیل شده است.
 
 - [bloc](https://pub.dev/packages/bloc) - کتابخانه اصلی Bloc
 - [flutter_bloc](https://pub.dev/packages/flutter_bloc) - ویجت‌های قدرتمند Flutter که برای کار با bloc ساخته شده‌اند تا بتوانید برنامه‌های موبایل پویا و واکنش‌پذیر را ایجاد کنید.
-- [angular_bloc](https://pub.dev/packages/angular_bloc) - ویژگی‌های قدرتمند برای Angular که برای کار با Bloc طراحی شده‌اند تا بتوانید برنامه‌های وب پویا و واکنش‌پذیر را ایجاد کنید.
+- [angular_bloc](https://pub.dev/packages/angular_bloc) - مولفه های قدرتمند برای Angular که برای کار با Bloc طراحی شده‌اند تا بتوانید برنامه‌های وب پویا و واکنش‌پذیر را ایجاد کنید.
 - [hydrated_bloc](https://pub.dev/packages/hydrated_bloc) - یک افزونه برای کتابخانه مدیریت وضعیت Bloc که به طور خودکار وضعیت‌های Bloc را ذخیره و بازیابی می‌کند.
 - [replay_bloc](https://pub.dev/packages/replay_bloc) - یک افزونه برای کتابخانه مدیریت وضعیت Bloc که قابلیت پشتیبانی از عملیات واگرد (Undo) و اَزنو (Redo) را اضافه می‌کند.
 
