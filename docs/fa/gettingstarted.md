@@ -1,49 +1,49 @@
-# Getting Started
+# شروع به کار (Getting Started)
 
-?> In order to start using bloc you must have the [Dart SDK](https://dart.dev/get-dart) installed on your machine.
+?> برای استفاده از Bloc باید [Dart SDK](https://dart.dev/get-dart) را در دستگاه خود نصب کنید.
 
-## Overview
+## بررسی کلی
 
-Bloc consists of several pub packages:
+Bloc از چندین بسته pub تشکیل شده است.
 
-- [bloc](https://pub.dev/packages/bloc) - Core bloc library
-- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - Powerful Flutter Widgets built to work with bloc in order to build fast, reactive mobile applications.
-- [angular_bloc](https://pub.dev/packages/angular_bloc) - Powerful Angular Components built to work with bloc in order to build fast, reactive web applications.
-- [hydrated_bloc](https://pub.dev/packages/hydrated_bloc) - An extension to the bloc state management library which automatically persists and restores bloc states.
-- [replay_bloc](https://pub.dev/packages/replay_bloc) - An extension to the bloc state management library which adds support for undo and redo.
+- [bloc](https://pub.dev/packages/bloc) - کتابخانه اصلی Bloc
+- [flutter_bloc](https://pub.dev/packages/flutter_bloc) - ویجت‌های قدرتمند Flutter که برای کار با bloc ساخته شده‌اند تا بتوانید برنامه‌های موبایل پویا و واکنش‌پذیر را ایجاد کنید.
+- [angular_bloc](https://pub.dev/packages/angular_bloc) - ویژگی‌های قدرتمند برای Angular که برای کار با Bloc طراحی شده‌اند تا بتوانید برنامه‌های وب پویا و واکنش‌پذیر را ایجاد کنید.
+- [hydrated_bloc](https://pub.dev/packages/hydrated_bloc) - یک افزونه برای کتابخانه مدیریت وضعیت Bloc که به طور خودکار وضعیت‌های Bloc را ذخیره و بازیابی می‌کند.
+- [replay_bloc](https://pub.dev/packages/replay_bloc) - یک افزونه برای کتابخانه مدیریت وضعیت Bloc که قابلیت پشتیبانی از عملیات واگرد (Undo) و اَزنو (Redo) را اضافه می‌کند.
 
-## Installation
+## نصب
 
-For a [Dart](https://dart.dev/) application, we need to add the `bloc` package to our `pubspec.yaml` as a dependency.
+برای یک برنامه [Dart](https://dart.dev/)، باید بسته `bloc` را به `pubspec.yaml` به عنوان یک وابستگی اضافه کنیم.
 
 [pubspec.yaml](_snippets/getting_started/bloc_pubspec.yaml.md ':include')
 
-For a [Flutter](https://flutter.dev/) application, we need to add the `flutter_bloc` package to our `pubspec.yaml` as a dependency.
+برای یک برنامه [Flutter](https://flutter.dev/)، باید بسته `flutter_bloc` را به `pubspec.yaml` به عنوان یک وابستگی اضافه کنید.
 
 [pubspec.yaml](_snippets/getting_started/flutter_bloc_pubspec.yaml.md ':include')
 
-For an [AngularDart](https://angulardart.dev/) application, we need to add the `angular_bloc` package to our `pubspec.yaml` as a dependency.
+برای یک برنامه [AngularDart](https://angulardart.dev/)، ما باید بسته `angular_bloc` را به `pubspec.yaml` به عنوان وابستگی اضافه کنیم.
 
 [pubspec.yaml](_snippets/getting_started/angular_bloc_pubspec.yaml.md ':include')
 
-Next we need to install bloc.
+بعداز این کار باید Bloc را نصب کنیم.
 
-!> Make sure to run the following command from the same directory as your `pubspec.yaml` file.
+!> از همان مسیر دایرکتوری که فایل `pubspec.yaml` شما قرار دارد، اطمینان حاصل کنید که دستور زیر را اجرا کرده اید.
 
-- For Dart or AngularDart run `pub get`
+- برای Dart یا AngularDart دستور `pub get` را اجرا کنید
 
-- For Flutter run `flutter packages get`
+- برای فلاتر، `flutter packages get` را اجرا کنید
 
-## Import
+## وارد كردن
 
-Now that we have successfully installed bloc, we can create our `main.dart` and import `bloc`.
+حالا که با موفقیت Bloc را نصب کردیم، می‌توانیم `main.dart` خود را ایجاد کنیم و `bloc` را وارد کنیم.
 
 [main.dart](_snippets/getting_started/bloc_main.dart.md ':include')
 
-For a Flutter application we can import `flutter_bloc`.
+برای یک برنامه فلاتر، می‌توانیم `flutter_bloc` را وارد کنیم.
 
 [main.dart](_snippets/getting_started/flutter_bloc_main.dart.md ':include')
 
-For an AngularDart application we can import angular_bloc.
+برای یک برنامه AngularDart، می‌توانیم `angular_bloc` را وارد کنیم.
 
 [main.dart](_snippets/getting_started/angular_bloc_main.dart.md ':include')
