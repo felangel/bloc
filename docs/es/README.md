@@ -20,7 +20,6 @@ Una librería de administración de estado predecible que ayuda a implementar el
 | [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc) | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc) |
 | [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc) | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc) |
 
-
 ## Patrocinador
 
 ¡Nuestros principales patrocinadores se muestran a continuación! [[Conviértete en patrocinador](https://github.com/sponsors/felangel)]
@@ -29,7 +28,7 @@ Una librería de administración de estado predecible que ayuda a implementar el
     <tbody>
         <tr>
             <td align="center" style="background-color: white">
-                <a href="https://verygood.ventures"><img src="https://raw.githubusercontent.com/VGVentures/very_good_brand/main/styles/README/vgv_logo_black.png" width="225"/></a>
+                <a href="https://www.monterail.com/services/flutter-development/?utm_source=bloc&utm_medium=logo&utm_campaign=flutter"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/monterail_logo.svg" width="225"/></a>
             </td>
             <td align="center" style="background-color: white">
                 <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc" target="_blank"><img width="250px" src="https://stream-blog.s3.amazonaws.com/blog/wp-content/uploads/fc148f0fc75d02841d017bb36e14e388/Stream-logo-with-background-.png"/></a><br/><span><a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc" target="_blank">Try the Flutter Chat Tutorial &nbsp💬</a></span>
@@ -149,7 +148,7 @@ El objetivo de esta librería es facilitar la separación de la _presentación_ 
 
 ## Libros
 
-  - [Flutter Complete Reference](https://fluttercompletereference.com/) - Un libro sobre el lenguaje de programación Dart (versión 2.10, con soporte de seguridad nulo) y el framework Flutter (versión 1.20). Cubre el paquete bloc (versión 6.0.3) en todos los sabores: bloc, flutter_bloc hydrated_bloc, replay_bloc, bloc_test y cubit.
+- [Flutter Complete Reference](https://fluttercompletereference.com/) - Un libro sobre el lenguaje de programación Dart (versión 2.10, con soporte de seguridad nulo) y el framework Flutter (versión 1.20). Cubre el paquete bloc (versión 6.0.3) en todos los sabores: bloc, flutter_bloc hydrated_bloc, replay_bloc, bloc_test y cubit.
 
 ## Extensiones
 

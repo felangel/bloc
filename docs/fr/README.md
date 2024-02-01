@@ -28,7 +28,7 @@ Nos meilleurs sponsors sont indiqués ci-dessous! [[Devenir un sponsor](https://
     <tbody>
         <tr>
             <td align="center" style="background-color: white">
-                <a href="https://verygood.ventures"><img src="https://raw.githubusercontent.com/VGVentures/very_good_brand/main/styles/README/vgv_logo_black.png" width="225"/></a>
+                <a href="https://www.monterail.com/services/flutter-development/?utm_source=bloc&utm_medium=logo&utm_campaign=flutter"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/monterail_logo.svg" width="225"/></a>
             </td>
             <td align="center" style="background-color: white">
                 <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc" target="_blank"><img width="250px" src="https://stream-blog.s3.amazonaws.com/blog/wp-content/uploads/fc148f0fc75d02841d017bb36e14e388/Stream-logo-with-background-.png"/></a><br/><span><a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc" target="_blank">Try the Flutter Chat Tutorial &nbsp💬</a></span>
@@ -121,7 +121,7 @@ Le but de cette architecte est de facilité la séparation entre _présentation_
 
 ### Web
 
-- [Compteur](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - un exemple qui montre comment utiliser un example  `CounterBloc` dans une application AngularDart.
+- [Compteur](https://github.com/felangel/Bloc/tree/master/examples/angular_counter) - un exemple qui montre comment utiliser un example `CounterBloc` dans une application AngularDart.
 - [Recherche Github](https://github.com/felangel/Bloc/tree/master/examples/github_search/angular_github_search) - un exemple qui montre comment créer une Application de recherche Github en utilisant les packages `bloc` et `angular_bloc`.
 
 ### Flutter + Web
