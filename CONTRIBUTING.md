@@ -29,8 +29,8 @@ Before creating a pull request please:
 Pull Requests without 100% test coverage will not be approved.
 1. Ensure the test suite passes.
 1. If you've changed the public API, make sure to update/add documentation.
-1. Format your code (`dartfmt -w .`).
-1. Analyze your code (`dartanalyzer --fatal-infos --fatal-warnings .`).
+1. Format your code (`dart format .`).
+1. Analyze your code (`dart analyze --fatal-infos --fatal-warnings .`).
 1. Create the Pull Request.
 1. Verify that all status checks are passing.
 
@@ -62,7 +62,7 @@ If you want to help maintain translations in the future, add yourself to `.githu
 Here are a few tips when contributing to the documentation:
 - We use [docsify](https://docsify.js.org) for document rendering. Refer to the docsify documentation for more context/examples regarding the syntax, usage, and capabilities.
 - We prefer to reference real files in GitHub rather than creating snippets (some old examples make use of snippets but we are slowly migrating away).
-  This is to keep the docs in sync if we modify the tutorial. 
+  This is to keep the docs in sync if we modify the tutorial.
   - If the code changes but the tutorial doesn't get updated, we also get out of sync. To avoid this, you might add a section linking to a specific commit/version that reflects the state of the tutorial at the time you write the doc.
 
 ## Pull requests
