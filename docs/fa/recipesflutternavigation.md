@@ -1,105 +1,105 @@
-# Recipes: Navigation
+# دستورالعمل ها: ناوبری (Navigation)
 
-> In this recipe, we're going to take a look at how to use `BlocBuilder` and/or `BlocListener` to do navigation. We're going to explore three approaches: Direct Navigation, Route Navigation, and Declarative Navigation using Navigator 2.0.
+> در این دستورالعمل، قصد داریم نحوه استفاده از `BlocBuilder` و یا `BlocListener` برای انجام ناوبری را بررسی کنیم. سه رویکرد را بررسی خواهیم کرد: ناوبری مستقیم (Direct Navigation)، ناوبری با استفاده از روت (Route Navigation) و ناوبری اعلامی (Declarative Navigation) با استفاده از Navigator 2.0.
 
-## Direct Navigation
+## ناوبری مستقیم (Direct Navigation)
 
-> In this example, we're going to take a look at how to use `BlocBuilder` to show a specific page (widget) in response to a state change in a bloc without the use of a route.
+> در این مثال، قصد داریم نحوه استفاده از `BlocBuilder` را برای نمایش یک صفحه (ویجت) خاص در پاسخ به تغییر وضعیتی در بلاک بدون استفاده از یک مسیر (Route) را بررسی کنیم.
 
 ![demo](./assets/gifs/recipes_flutter_navigation_direct.gif)
 
 ### Bloc
 
-Let's build `MyBloc` which will take `MyEvents` and convert them into `MyStates`.
+بیایید `MyBloc` را ایجاد کنیم که `MyEvents` را دریافت می‌کند و آنها را به `MyStates` تبدیل می‌کند.
 
 #### MyEvent
 
-For simplicity, our `MyBloc` will only respond to two `MyEvents`: `EventA` and `EventB`.
+به منظور سادگی، `MyBloc` ما تنها به دو `MyEvents`، یعنی `EventA` و `EventB`، پاسخ می‌دهد.
 
 [my_event.dart](_snippets/recipes_flutter_navigation/my_event.dart.md ':include')
 
 #### MyState
 
-Our `MyBloc` can have one of two different `DataStates`:
+`MyBloc` ما می‌تواند یکی از دو `DataStates` مختلف را داشته باشد:
 
-- `StateA` - the state of the bloc when `PageA` is rendered.
-- `StateB` - the state of the bloc when `PageB` is rendered.
+- `StateA` - وضعیت بلاک هنگامی که `PageA` باید رندر شود.
+- `StateB` - وضعیت بلاک هنگامی که `PageB` باید رندر شود.
 
 [my_state.dart](_snippets/recipes_flutter_navigation/my_state.dart.md ':include')
 
 #### MyBloc
 
-Our `MyBloc` should look something like this:
+`MyBloc` ما باید به شکلی شبیه به این باشد:
 
 [my_bloc.dart](_snippets/recipes_flutter_navigation/my_bloc.dart.md ':include')
 
-### UI Layer
+### لایه رابط کاربری (UI)
 
-Now let's take a look at how to hook up our `MyBloc` to a widget and show a different page based on the bloc state.
+حالا بیایید نگاهی به این بیندازیم که چطور `MyBloc` را به یک ویجت متصل کنیم و بر اساس وضعیت بلاک، یک صفحه متفاوت نمایش دهیم.
 
 [main.dart](_snippets/recipes_flutter_navigation/direct_navigation/main.dart.md ':include')
 
-?> We use the `BlocBuilder` widget in order to render the correct widget in response to state changes in our `MyBloc`.
+?> ما می‌توانیم از ویجت `BlocBuilder` برای رندر کردن ویجت مناسب در پاسخ به تغییرات وضعیت در `MyBloc` استفاده کنیم.
 
-?> We use the `BlocProvider` widget in order to make our instance of `MyBloc` available to the entire widget tree.
+?> ما از ویجت `BlocProvider` استفاده می‌کنیم تا نمونه `MyBloc` را در دسترس کل درخت ویجت (widget tree) قرار دهیم.
 
-The full source for this recipe can be found [here](https://gist.github.com/felangel/386c840aad41c7675ab8695f15c4cb09).
+می‌توانید کد کامل این دستورالعمل را در [اینجا](https://gist.github.com/felangel/386c840aad41c7675ab8695f15c4cb09) پیدا کنید.
 
 ## Route Navigation
 
-> In this example, we're going to take a look at how to use `BlocListener` to navigate to a specific page (widget) in response to a state change in a bloc using a route.
+> در این مثال، قصد داریم بررسی کنیم که چگونه از `BlocListener` برای هدایت به یک صفحه مشخص (ویجت) در پاسخ به تغییر وضعیت در یک بلاک با استفاده از یک مسیر استفاده کنیم.
 
 ![demo](./assets/gifs/recipes_flutter_navigation_routes.gif)
 
 ### Bloc
 
-We're going to reuse the same `MyBloc` from the previous example.
+ما قصد داریم از همان `MyBloc` در مثال قبلی, استفاده مجدد کنیم.
 
-### UI Layer
+### لایه رابط کاربری (UI)
 
-Let's take a look at how to route to a different page based on the state of `MyBloc`.
+بیایید نگاهی به نحوه مسیریابی به صفحه دیگر بر اساس وضعیت `MyBloc` بیندازیم.
 
 [main.dart](_snippets/recipes_flutter_navigation/route_navigation/main.dart.md ':include')
 
-?> We use the `BlocListener` widget in order to push a new route in response to state changes in our `MyBloc`.
+?> ما از ویجت `BlocListener` استفاده می‌کنیم تا در پاسخ به تغییرات وضعیت در `MyBloc`، یک مسیر جدید را ایجاد کنیم.
 
-!> For the sake of this example, we are adding an event just for navigation. In a real application, you should not create explicit navigation events. If there is no "business logic" necessary in order to trigger navigation, you should always directly navigate in response to user input (in the `onPressed` callback, etc...). Only navigate in response to state changes if some "business logic" is required in order to determine where to navigate.
+!> به خاطر این منظور، ما یک رویداد را فقط برای مسیریابی اضافه می‌کنیم. در یک برنامه واقعی، شما باید رویدادهای مسیریابی صریح را ایجاد نکنید. اگر برای ایجاد مسیریابی نیاز به "منطق کسب‌وکار (Business logic)" نباشد، همیشه باید مستقیماً در پاسخ به ورودی کاربر (در تابع `onPressed` و غیره) مسیریابی کنید. تنها در پاسخ به تغییرات وضعیت، اگر برای تعیین مقصد مسیریابی نیاز به "منطق کسب‌وکار" وجود داشته باشد، مسیریابی کنید.
 
-The full source for this recipe can be found [here](https://gist.github.com/felangel/6bcd4be10c046ceb33eecfeb380135dd).
+منبع کامل این روش را می‌توانید در [اینجا](https://gist.github.com/felangel/6bcd4be10c046ceb33eecfeb380135dd) پیدا کنید.
 
 ## Navigation 2.0
 
-> In this example, we're going to take a look at how to use the Navigator 2.0 pages API to handle routing in response to state changes in a bloc.
+> در این مثال، نگاهی به نحوه استفاده از صفحات API Navigator 2.0 برای مدیریت مسیریابی در پاسخ به تغییرات وضعیت در یک بلاک خواهیم داشت.
 
-?> Note: We're going to use [package:flow_builder](https://pub.dev/packages/flow_builder) to make working with the Navigator 2.0 API simpler.
+?> توجه: ما قصد داریم از [پکیج:flow_builder](https://pub.dev/packages/flow_builder) استفاده کنیم تا کار با رابط برنامه‌نویسی Navigator 2.0 را آسان‌تر کنیم.
 
 ### Bloc
 
-For the sake of showcasing Navigator's advantages, we will build a slightly more complex example. 
-Let's build `BookBloc` which will take `BookEvents` and convert them into `BookStates`.
+با هدف نشان دادن مزایای مسیریاب ها (Navigator's)، ما یک مثال کمی پیچیده‌تر را ایجاد خواهیم کرد.
+بیایید `BookBloc` را بسازیم که `BookEvents` را دریافت کرده و آن‌ها را به `BookStates` تبدیل می‌کند.
 
 #### BookEvent
 
-`BookEvent` will respond to two events: selecting a book, and deselecting a book. 
+`BookEvent` به دو رویداد پاسخ خواهد داد: انتخاب یک کتاب و عدم انتخاب یک کتاب.
 
 [book_event.dart](_snippets/recipes_flutter_navigation/navigation2/book_event.dart.md ':include')
 
 #### BookState
 
-`BookState` will contain the list of books and an optional selected book if the user taps a book.
+در وضعیت `BookState`، اگر کاربر بر روی یک کتاب کلیک کند، `BookState` شامل لیستی از کتاب‌ها و یک کتاب انتخاب شده (اختیاری) خواهد بود.
 
 [book_state.dart](_snippets/recipes_flutter_navigation/navigation2/book_state.dart.md ':include')
 
 #### BookBloc
 
-`BookBloc` will handle responding to each `BookEvent` and will emit the appropriate `BookState` in response:
+`BookBloc` به هر `BookEvent` پاسخ داده و در پاسخ، وضعیت `BookState` مناسب را ارسال (`emit`) خواهد کرد.
 
 [book_bloc.dart](_snippets/recipes_flutter_navigation/navigation2/book_bloc.dart.md ':include')
 
-### UI Layer
+### لایه رابط کاربری (UI)
 
-Now let's hook up the bloc to our UI using `FlowBuilder`!
+حالا بیایید با استفاده از `FlowBuilder`، بلاک را به رابط کاربری متصل کنیم!
 
 [main.dart](_snippets/recipes_flutter_navigation/navigation2/main.dart.md ':include')
 
-The full source for this recipe can be found [here](https://gist.github.com/felangel/bd3cf504a10c0763a32f7a94e2649369).
+منبع کامل این روش را می‌توانید در [اینجا](https://gist.github.com/felangel/bd3cf504a10c0763a32f7a94e2649369) پیدا کنید.
