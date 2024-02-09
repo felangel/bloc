@@ -29,9 +29,9 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v3
         name: Angular Dart Package Detection
         id: needs_angular_dart_example_checks
         with:
@@ -47,7 +47,7 @@ jobs:
               - ./.github/actions/dart_package/action.yaml
               - examples/github_search/angular_github_search/**
 
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v3
         name: Dart Package Detection
         id: needs_dart_package_checks
         with:
@@ -78,7 +78,7 @@ jobs:
               - ./.github/actions/dart_package/action.yaml
               - packages/bloc/**
 
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v3
         name: Flutter Package Detection
         id: needs_flutter_package_checks
         with:
@@ -99,7 +99,7 @@ jobs:
               - ./.github/actions/flutter_package/action.yaml
               - packages/hydrated_bloc/**
 
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v3
         name: Example Detection
         id: needs_flutter_example_checks
         with:
@@ -190,7 +190,7 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 🎯 Build ${{ matrix.package }}
         uses: ./.github/actions/dart_package
@@ -214,7 +214,7 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 🎯 Build ${{ matrix.package }}
         uses: ./.github/actions/flutter_package
@@ -238,7 +238,7 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 🎯 Build ${{ matrix.example }}
         uses: ./.github/actions/angular_dart_package
@@ -261,7 +261,7 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 🎯 Build ${{ matrix.example }}
         uses: ./.github/actions/flutter_package
