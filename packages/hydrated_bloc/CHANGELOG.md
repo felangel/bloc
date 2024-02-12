@@ -1,3 +1,7 @@
+# 9.1.4
+
+- chore: update sponsors ([#4054](https://github.com/felangel/bloc/pull/4054))
+
 # 9.1.3
 
 - fix: `fromJson` can safely access `state` ([#4005](https://github.com/felangel/bloc/pull/4005))
