@@ -1,3 +1,7 @@
+# 0.2.6
+
+- chore: update sponsors ([#4054](https://github.com/felangel/bloc/pull/4054))
+
 # 0.2.5
 
 - docs: fix inline doc comment macro ([#4007](https://github.com/felangel/bloc/pull/4007))
