@@ -2,17 +2,6 @@ name: Angular Dart Package Workflow
 description: Build and test Angular Dart packages.
 
 inputs:
-  codecov_token:
-    required: true
-    description: The Codecov token used to upload coverage
-  concurrency:
-    required: false
-    default: "4"
-    description: The value of the concurrency flag (-j) used when running tests
-  coverage_excludes:
-    required: false
-    default: ""
-    description: Globs to exclude from coverage
   dart_sdk:
     required: false
     default: "stable"
@@ -21,26 +10,10 @@ inputs:
     required: false
     default: "."
     description: The working directory for this workflow
-  min_coverage:
-    required: false
-    default: "100"
-    description: The minimum coverage percentage value
-  min_score:
-    required: false
-    default: "120"
-    description: The minimum pana score value
   analyze_directories:
     required: false
     default: "lib test"
     description: Directories to analyze
-  report_on:
-    required: false
-    default: "lib"
-    description: Directories to report on when collecting coverage
-  platform:
-    required: false
-    default: "vm"
-    description: Platform to use when running tests
 
 runs:
   using: "composite"

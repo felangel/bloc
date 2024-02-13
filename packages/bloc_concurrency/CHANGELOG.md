@@ -1,3 +1,7 @@
+# 0.2.4
+
+- chore: update sponsors
+
 # 0.2.3
 
 - chore: fix `require_trailing_commas`
