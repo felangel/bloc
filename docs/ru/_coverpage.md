@@ -25,7 +25,7 @@
 
 <div id="cover-sponsors-grid">
     <div>
-        <a href="https://verygood.ventures"><img src="https://raw.githubusercontent.com/VGVentures/very_good_brand/main/styles/README/vgv_logo_black.png" width="150"/></a>
+        <a href="https://www.monterail.com/services/flutter-development/?utm_source=bloc&utm_medium=logo&utm_campaign=flutter"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/monterail_logo.svg" width="150"/></a>
     </div>
     <div>
         <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc" target="_blank"><img width="120" src="https://stream-blog-v2.imgix.net/blog/wp-content/uploads/bae8c920a484d1c49dbd148306aa1335/stream-bloc-flutter.png?auto=compress&fit=clip&w=120"/></a><br/><span><a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc" target="_blank">Try the Flutter Chat Tutorial &nbsp💬</a></span>
