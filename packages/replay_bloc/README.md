@@ -43,6 +43,9 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
             <td align="center" style="background-color: white">
                 <a href="https://www.netguru.com/services/flutter-app-development?utm_campaign=%5BS%5D%5BMob%5D%20Flutter&utm_source=github&utm_medium=sponsorship&utm_term=bloclibrary"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/netguru_logo.png" width="225"/></a>
             </td>
+            <td align="center" style="background-color: white">
+                <a href="https://www.porada.app/"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/porada_logo.png" width="225"/></a>
+            </td>
         </tr>
     </tbody>
 </table>
