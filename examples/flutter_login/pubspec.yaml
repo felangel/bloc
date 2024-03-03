@@ -18,15 +18,8 @@ dependencies:
   user_repository:
     path: packages/user_repository
 
-dependency_overrides:
-  bloc:
-    path: ../../packages/bloc
-  flutter_bloc:
-    path: ../../packages/flutter_bloc
-
 dev_dependencies:
-  bloc_test:
-    path: ../../packages/bloc_test
+  bloc_test: ^9.0.0
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.0
