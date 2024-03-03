@@ -12,14 +12,6 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.1
 
-dependency_overrides:
-  bloc:
-    path: ../../packages/bloc
-  bloc_test:
-    path: ../../packages/bloc_test
-  flutter_bloc:
-    path: ../../packages/flutter_bloc
-
 dev_dependencies:
   bloc_test: ^9.1.0
   flutter_test:
