@@ -1,0 +1,13 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+void main() {
+  CounterBloc()
+    ..add(CounterIncrementPressed())
+    ..close();
+}
+`;
+---
+
+<Code code={code} lang="dart" title="main.dart" />

@@ -1,0 +1,79 @@
+---
+import { Card as StarlightCard } from '@astrojs/starlight/components';
+export type Props = Parameters<typeof StarlightCard>[0];
+---
+
+<div class="landing-card">
+	<StarlightCard {...Astro.props}><slot /></StarlightCard>
+</div>
+
+<style>
+	.landing-card {
+		--card-bg: rgba(23, 25, 30, 0.8);
+		display: contents;
+		color: var(--sl-color-white);
+	}
+
+	:global(:root[data-theme='light']) .landing-card {
+		--card-bg: rgba(255, 255, 255, 0.4);
+	}
+
+	.landing-card :global(.card) {
+		overflow: hidden;
+		background: var(--card-bg);
+		position: relative;
+	}
+
+	.landing-card :global(.card > *) {
+		z-index: 1;
+	}
+
+	.landing-card :global(.card) {
+		background: var(--card-bg);
+		position: relative;
+	}
+
+	.landing-card :global(.card) {
+		--sl-card-bg: var(--sl-color-blue-low);
+		--sl-card-border: var(--sl-color-blue-high);
+		--landing-card-accent: hsl(185, 90%, 46%);
+	}
+
+	.landing-card:nth-child(2n) :global(.card) {
+		--sl-card-bg: var(--sl-color-green-low);
+		--sl-card-border: var(--sl-color-green-high);
+		--landing-card-accent: var(--sl-color-green);
+	}
+
+	.landing-card :global(.card) {
+		background: var(--card-bg);
+		position: relative;
+	}
+
+	@media screen and (min-width: 50rem) {
+		.landing-card :global(.card::before) {
+			content: '';
+			position: absolute;
+			top: 0;
+			inset-inline-end: 0;
+			width: 6.25rem;
+			height: 6.25rem;
+			background: var(--landing-card-accent, var(--sl-color-accent));
+			border-radius: 100%;
+			filter: blur(7rem);
+			opacity: 0.33;
+		}
+
+		.landing-card :global(.card) {
+			--sl-card-bg: var(--sl-color-blue-low);
+			--sl-card-border: var(--sl-color-blue-high);
+			--landing-card-accent: hsl(185, 90%, 46%);
+		}
+
+		.landing-card:nth-child(2n) :global(.card) {
+			--sl-card-bg: var(--sl-color-green-low);
+			--sl-card-border: var(--sl-color-green-high);
+			--landing-card-accent: var(--sl-color-green);
+		}
+	}
+</style>

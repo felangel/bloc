@@ -1,0 +1,21 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+void main() => runApp(CounterApp());
+
+class CounterApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: BlocProvider(
+        create: (_) => CounterBloc(),
+        child: CounterPage(),
+      ),
+    );
+  }
+}
+`;
+---
+
+<Code code={code} lang="dart" title="main.dart" />

@@ -1,0 +1,13 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+Stream<int> countStream(int max) async* {
+    for (int i = 0; i < max; i++) {
+        yield i;
+    }
+}
+`;
+---
+
+<Code code={code} lang="dart" title="count_stream.dart" />

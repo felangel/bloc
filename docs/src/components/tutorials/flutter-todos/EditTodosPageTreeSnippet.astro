@@ -1,0 +1,15 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+├── BlocProvider<EditTodosBloc>
+│   └── EditTodosPage
+│       └── BlocListener<EditTodosBloc>
+│           └── EditTodosView
+│               ├── TitleField
+│               ├── DescriptionField
+│               └── Floating Action Button
+`;
+---
+
+<Code code={code} />

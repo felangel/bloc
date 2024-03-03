@@ -1,0 +1,15 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+├── TodosOverviewPage
+│   └── BlocProvider<TodosOverviewBloc>
+│       └── TodosOverviewView
+│           ├── BlocListener<TodosOverviewBloc>
+│           └── BlocListener<TodosOverviewBloc>
+│               └── BlocBuilder<TodosOverviewBloc>
+│                   └── ListView
+`;
+---
+
+<Code code={code} />

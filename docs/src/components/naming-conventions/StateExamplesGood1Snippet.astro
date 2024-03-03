@@ -1,0 +1,13 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+sealed class CounterState {}
+final class CounterInitial extends CounterState {}
+final class CounterLoadInProgress extends CounterState {}
+final class CounterLoadSuccess extends CounterState {}
+final class CounterLoadFailure extends CounterState {}
+`;
+---
+
+<Code code={code} lang="dart" title="counter_state.dart" />

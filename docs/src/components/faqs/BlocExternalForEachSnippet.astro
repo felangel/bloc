@@ -1,0 +1,21 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+class MyBloc extends Bloc<MyEvent, MyState> {
+  MyBloc({required UserRepository userRepository})
+    : _userRepository = userRepository, super(...) {
+    on<Started>(_onStarted);
+  }
+
+  Future<void> _onStarted(Started event, Emitter<MyState> emit) {
+    return emit.forEach(
+      _userRepository.user,
+      onData: (user) => MyState(...)
+    );
+  }
+}
+`;
+---
+
+<Code code={code} lang="dart" title="my_bloc.dart" />

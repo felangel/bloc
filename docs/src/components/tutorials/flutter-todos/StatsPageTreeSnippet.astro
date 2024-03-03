@@ -1,0 +1,13 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+├── StatsPage
+│   └── BlocProvider<StatsBloc>
+│       └── StatsView
+│           ├── context.watch<StatsBloc>
+│           └── Column
+`;
+---
+
+<Code code={code} />

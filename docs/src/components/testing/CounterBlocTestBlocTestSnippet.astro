@@ -1,0 +1,21 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+blocTest(
+  'emits [1] when CounterIncrementPressed is added',
+  build: () => counterBloc,
+  act: (bloc) => bloc.add(CounterIncrementPressed()),
+  expect: () => [1],
+);
+
+blocTest(
+  'emits [-1] when CounterDecrementPressed is added',
+  build: () => counterBloc,
+  act: (bloc) => bloc.add(CounterDecrementPressed()),
+  expect: () => [-1],
+);
+`;
+---
+
+<Code code={code} lang="dart" title="counter_bloc_test.dart" />
