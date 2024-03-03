@@ -1,0 +1,15 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+group(CounterBloc, () {
+  late CounterBloc counterBloc;
+
+  setUp(() {
+    counterBloc = CounterBloc();
+  });
+});
+`;
+---
+
+<Code code={code} lang="dart" title="counter_bloc_test.dart" />

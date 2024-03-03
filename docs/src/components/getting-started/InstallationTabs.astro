@@ -1,0 +1,27 @@
+---
+import { Code, Tabs, TabItem } from '@astrojs/starlight/components';
+const installBloc = `
+# Add bloc to your project.
+dart pub add bloc
+`;
+const installFlutterBloc = `
+# Add flutter_bloc to your project.
+dart pub add flutter_bloc
+`;
+const installAngularBloc = `
+# Add angular_bloc to your project.
+dart pub add angular_bloc
+`;
+---
+
+<Tabs>
+	<TabItem label="Dart">
+		<Code code={installBloc} lang="bash" />
+	</TabItem>
+	<TabItem label="Flutter">
+		<Code code={installFlutterBloc} lang="bash" />
+	</TabItem>
+	<TabItem label="Angular Dart">
+		<Code code={installAngularBloc} lang="bash" />
+	</TabItem>
+</Tabs>

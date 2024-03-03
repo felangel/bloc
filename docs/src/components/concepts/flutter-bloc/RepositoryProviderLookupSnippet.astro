@@ -1,0 +1,13 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+// with extensions
+context.read<RepositoryA>();
+
+// without extensions
+RepositoryProvider.of<RepositoryA>(context)
+`;
+---
+
+<Code code={code} lang="dart" />

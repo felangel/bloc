@@ -1,0 +1,11 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+flutter test --coverage
+genhtml coverage/lcov.info -o coverage
+open coverage/index.html
+`;
+---
+
+<Code code={code} lang="sh" />

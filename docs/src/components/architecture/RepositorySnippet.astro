@@ -1,0 +1,20 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+class Repository {
+    final DataProviderA dataProviderA;
+    final DataProviderB dataProviderB;
+
+    Future<Data> getAllDataThatMeetsRequirements() async {
+        final RawDataA dataSetA = await dataProviderA.readData();
+        final RawDataB dataSetB = await dataProviderB.readData();
+
+        final Data filteredData = _filterData(dataSetA, dataSetB);
+        return filteredData;
+    }
+}
+`;
+---
+
+<Code code={code} lang="dart" title="repository.dart" />
