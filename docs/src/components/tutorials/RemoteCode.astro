@@ -1,0 +1,23 @@
+---
+import { Code } from '@astrojs/starlight/components';
+import { z } from 'astro/zod';
+
+interface Props {
+	title: string;
+	url: string;
+}
+
+const propsSchema = z.object({
+	title: z.string(),
+	url: z.string(),
+});
+
+const { url, title } = propsSchema.parse(Astro.props);
+
+const segments = url.split('.');
+const lang = segments[segments.length - 1];
+const response = await fetch(url);
+const code = await response.text();
+---
+
+<Code code={code} lang={lang} title={title} />

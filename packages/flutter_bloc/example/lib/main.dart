@@ -169,19 +169,9 @@ class ThemeCubit extends Cubit<ThemeData> {
   /// {@macro brightness_cubit}
   ThemeCubit() : super(_lightTheme);
 
-  static final _lightTheme = ThemeData(
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      foregroundColor: Colors.white,
-    ),
-    brightness: Brightness.light,
-  );
+  static final _lightTheme = ThemeData.light();
 
-  static final _darkTheme = ThemeData(
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      foregroundColor: Colors.black,
-    ),
-    brightness: Brightness.dark,
-  );
+  static final _darkTheme = ThemeData.dark();
 
   /// Toggles the current brightness between light and dark.
   void toggleTheme() {

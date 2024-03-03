@@ -1,21 +1,33 @@
-name: docs
+name: Deploy Docs to GitHub Pages
 
 on:
   push:
-    branches:
-    - master
-    paths:
-    - '.github/workflows/docs.yaml'
-    - 'README.md'
-    - 'docs/*'
+    branches: [master]
 
-jobs:  
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: JasonEtco/create-an-issue@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Build Site
+        uses: withastro/action@v2
         with:
-          filename: .github/DOCS_ISSUE_TEMPLATE.md
+          path: ./docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

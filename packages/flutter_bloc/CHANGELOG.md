@@ -1,3 +1,10 @@
+# 8.1.4
+
+- chore: update sponsors ([#4054](https://github.com/felangel/bloc/pull/4054))
+- chore: adjust `example` themes
+- chore: fix `require_trailing_commas` ([#3977](https://github.com/felangel/bloc/pull/3977))
+- chore: add `topics` to `pubspec.yaml` ([#3914](https://github.com/felangel/bloc/pull/3914))
+
 # 8.1.3
 
 - docs: remove graphql sample references from README ([#3820](https://github.com/felangel/bloc/pull/3820))

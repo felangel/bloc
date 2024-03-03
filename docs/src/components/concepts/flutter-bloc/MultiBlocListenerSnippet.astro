@@ -1,0 +1,22 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+MultiBlocListener(
+  listeners: [
+    BlocListener<BlocA, BlocAState>(
+      listener: (context, state) {},
+    ),
+    BlocListener<BlocB, BlocBState>(
+      listener: (context, state) {},
+    ),
+    BlocListener<BlocC, BlocCState>(
+      listener: (context, state) {},
+    ),
+  ],
+  child: ChildA(),
+);
+`;
+---
+
+<Code code={code} lang="dart" />

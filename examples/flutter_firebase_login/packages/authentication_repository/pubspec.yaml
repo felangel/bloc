@@ -10,17 +10,17 @@ dependencies:
   cache:
     path: ../cache
   equatable: ^2.0.5
-  firebase_auth: ^4.6.0
-  firebase_core: ^2.12.0
+  firebase_auth: ^4.14.1
+  firebase_core: ^2.23.0
   flutter:
     sdk: flutter
   google_sign_in: ^6.1.0
   meta: ^1.8.0
 
 dev_dependencies:
-  firebase_auth_platform_interface: ^6.15.0
-  firebase_core_platform_interface: ^4.8.0
+  firebase_auth_platform_interface: ^7.0.5
+  firebase_core_platform_interface: ^5.0.0
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.0
-  plugin_platform_interface: ^2.1.4
+  plugin_platform_interface: ^2.1.7

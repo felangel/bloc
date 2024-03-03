@@ -1,0 +1,15 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+├── HomePage
+│   └── BlocProvider<HomeCubit>
+│       └── HomeView
+│           ├── context.select<HomeCubit, HomeTab>
+│           └── BottomAppBar
+│               └── HomeTabButton(s)
+│                   └── context.read<HomeCubit>
+`;
+---
+
+<Code code={code} />

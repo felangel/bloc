@@ -1,0 +1,16 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+on<DataRequested>((event, emit) {
+  try {
+    final data = await _repository.getData();
+    emit(state.copyWith(status: Status.success, data: data));
+  } catch(error) {
+    emit(state.copyWith(status: Status.failure, error: 'Something went wrong!'));
+  }
+});
+`;
+---
+
+<Code code={code} lang="dart" title="my_bloc.dart" />

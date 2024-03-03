@@ -1,0 +1,10 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+CounterCubit Change { currentState: 0, nextState: 1 }
+Change { currentState: 0, nextState: 1 }
+`;
+---
+
+<Code code={code} lang="sh" />

@@ -1,0 +1,14 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+MyBloc() {
+    on<MyEvent>((event, emit) {
+        // always create a new instance of the state you are going to yield
+        emit(state.copyWith(property: event.property));
+    });
+}
+`;
+---
+
+<Code code={code} lang="dart" title="my_bloc.dart" />

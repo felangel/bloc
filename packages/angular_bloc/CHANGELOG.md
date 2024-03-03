@@ -1,3 +1,10 @@
+# 10.0.0-dev.2
+
+- chore(deps): upgrade to `package:ngdart 8.0.0-dev.4`
+- chore: add `topics` to `pubspec.yaml`
+- chore(deps): upgrade to `package:mocktail v1.0.0`
+- chore: update sponsors
+
 # 10.0.0-dev.1
 
 - docs: upgrade to Dart 3

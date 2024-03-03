@@ -26,6 +26,13 @@ class App extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Flutter Bloc Shopping Cart',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+        ),
         initialRoute: '/',
         routes: {
           '/': (_) => const CatalogPage(),

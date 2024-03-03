@@ -1,0 +1,14 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+class Weather {
+  const Weather({required this.temperature, required this.weatherCode});
+
+  final double temperature;
+  final double weatherCode;
+}
+`;
+---
+
+<Code code={code} lang="dart" title="packages/open_meteo_api/lib/src/models/weather.dart" />

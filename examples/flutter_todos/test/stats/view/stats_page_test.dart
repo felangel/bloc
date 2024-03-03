@@ -52,6 +52,7 @@ void main() {
     setUp(() {
       navigator = MockNavigator();
       when(() => navigator.push(any())).thenAnswer((_) async => null);
+      when(() => navigator.canPop()).thenReturn(false);
 
       statsBloc = MockStatsBloc();
       when(() => statsBloc.state).thenReturn(

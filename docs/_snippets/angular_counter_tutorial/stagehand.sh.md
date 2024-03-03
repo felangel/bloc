@@ -1,3 +1,0 @@
-```bash
-stagehand web-angular
-```

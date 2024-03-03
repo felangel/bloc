@@ -1,0 +1,17 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+sealed class MyEvent {}
+
+// \`EventA\` is an external event.
+final class EventA extends MyEvent {}
+
+// \`EventB\` is an internal event.
+// We are explicitly making \`EventB\` private so that it can only be used
+// within the bloc.
+final class _EventB extends MyEvent {}
+`;
+---
+
+<Code code={code} lang="dart" title="my_event.dart" />

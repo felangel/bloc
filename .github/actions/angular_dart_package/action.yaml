@@ -1,0 +1,54 @@
+name: Angular Dart Package Workflow
+description: Build and test Angular Dart packages.
+
+inputs:
+  dart_sdk:
+    required: false
+    default: "stable"
+    description: "The dart sdk version to use"
+  working_directory:
+    required: false
+    default: "."
+    description: The working directory for this workflow
+  analyze_directories:
+    required: false
+    default: "lib test"
+    description: Directories to analyze
+
+runs:
+  using: "composite"
+  steps:
+    - name: 🎯 Setup Dart
+      uses: dart-lang/setup-dart@v1
+      with:
+        sdk: ${{inputs.dart_sdk}}
+
+    - name: 📦 Install Dependencies
+      working-directory: ${{ inputs.working_directory }}
+      shell: ${{ inputs.shell }}
+      run: dart pub get
+
+    - name: 🛠️ Build
+      working-directory: ${{ inputs.working_directory }}
+      shell: ${{ inputs.shell }}
+      run: |
+        dart pub global activate webdev
+        webdev build
+
+    - name: ✨ Format
+      working-directory: ${{ inputs.working_directory }}
+      shell: ${{ inputs.shell }}
+      run: dart format --set-exit-if-changed .
+
+    - name: 🔍 Analyze
+      working-directory: ${{ inputs.working_directory }}
+      shell: ${{ inputs.shell }}
+      run: dart analyze --fatal-warnings ${{inputs.analyze_directories}}
+
+    - name: 🧪 Test
+      working-directory: ${{ inputs.working_directory }}
+      shell: ${{ inputs.shell }}
+      run: |
+        if [ -d "test" ]; then
+          dart run build_runner test --fail-on-severe
+        fi

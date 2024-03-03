@@ -90,7 +90,7 @@ extension on WeatherCondition {
 class _WeatherBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).primaryColor;
+    final color = Theme.of(context).colorScheme.primaryContainer;
     return SizedBox.expand(
       child: DecoratedBox(
         decoration: BoxDecoration(

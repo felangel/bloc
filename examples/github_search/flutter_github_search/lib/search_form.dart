@@ -73,7 +73,7 @@ class _SearchBody extends StatelessWidget {
       builder: (context, state) {
         return switch (state) {
           SearchStateEmpty() => const Text('Please enter a term to begin'),
-          SearchStateLoading() => const CircularProgressIndicator(),
+          SearchStateLoading() => const CircularProgressIndicator.adaptive(),
           SearchStateError() => Text(state.error),
           SearchStateSuccess() => state.items.isEmpty
               ? const Text('No Results')
@@ -112,12 +112,7 @@ class _SearchResultItem extends StatelessWidget {
         child: Image.network(item.owner.avatarUrl),
       ),
       title: Text(item.fullName),
-      onTap: () async {
-        final uri = Uri.parse(item.htmlUrl);
-        if (await canLaunchUrl(uri)) {
-          await launchUrl(uri);
-        }
-      },
+      onTap: () => launchUrl(Uri.parse(item.htmlUrl)),
     );
   }
 }

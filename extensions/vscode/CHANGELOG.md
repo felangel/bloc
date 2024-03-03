@@ -1,3 +1,7 @@
+# 6.6.5
+
+- fix: show context menu conditionally
+
 # 6.6.4
 
 - feat: add `useSealedClasses` to extension settings

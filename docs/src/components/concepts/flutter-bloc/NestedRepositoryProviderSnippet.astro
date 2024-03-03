@@ -1,0 +1,18 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+RepositoryProvider<RepositoryA>(
+  create: (context) => RepositoryA(),
+  child: RepositoryProvider<RepositoryB>(
+    create: (context) => RepositoryB(),
+    child: RepositoryProvider<RepositoryC>(
+      create: (context) => RepositoryC(),
+      child: ChildA(),
+    ),
+  ),
+);
+`;
+---
+
+<Code code={code} lang="dart" />

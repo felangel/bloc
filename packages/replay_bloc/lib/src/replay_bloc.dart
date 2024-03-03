@@ -4,7 +4,7 @@ part of 'replay_cubit.dart';
 /// Base event class for all [ReplayBloc] events.
 /// {@endtemplate}
 abstract class ReplayEvent {
-  /// {@template replay_event}
+  /// {@macro replay_event}
   const ReplayEvent();
 }
 
