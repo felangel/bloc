@@ -92,35 +92,35 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
     <table>
         <tr>
             <td style="text-align: center">
-                <a href="https://bloclibrary.dev/#/fluttercountertutorial">
-                    <img src="https://bloclibrary.dev/assets/gifs/flutter_counter.gif" width="200"/>
+                <a href="https://bloclibrary.dev/tutorials/flutter-counter">
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_counter.gif" width="200"/>
                 </a>
             </td>            
             <td style="text-align: center">
-                <a href="https://bloclibrary.dev/#/flutterinfinitelisttutorial">
-                    <img src="https://bloclibrary.dev/assets/gifs/flutter_infinite_list.gif" width="200"/>
+                <a href="https://bloclibrary.dev/tutorials/flutter-infinite-list">
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_infinite_list.gif" width="200"/>
                 </a>
             </td>
             <td style="text-align: center">
-                <a href="https://bloclibrary.dev/#/flutterfirebaselogintutorial">
-                    <img src="https://bloclibrary.dev/assets/gifs/flutter_firebase_login.gif" width="200" />
+                <a href="https://bloclibrary.dev/tutorials/flutter-login">
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_firebase_login.gif" width="200" />
                 </a>
             </td>
         </tr>
         <tr>
             <td style="text-align: center">
-                <a href="https://bloclibrary.dev/#/flutterangulargithubsearch">
-                    <img src="https://bloclibrary.dev/assets/gifs/flutter_github_search.gif" width="200"/>
+                <a href="https://bloclibrary.dev/tutorials/github-search">
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_github_search.gif" width="200"/>
                 </a>
             </td>
             <td style="text-align: center">
-                <a href="https://bloclibrary.dev/#/flutterweathertutorial">
-                    <img src="https://bloclibrary.dev/assets/gifs/flutter_weather.gif" width="200"/>
+                <a href="https://bloclibrary.dev/tutorials/flutter-weather">
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_weather.gif" width="200"/>
                 </a>
             </td>
             <td style="text-align: center">
-                <a href="https://bloclibrary.dev/#/fluttertodostutorial">
-                    <img src="https://bloclibrary.dev/assets/gifs/flutter_todos.gif" width="200"/>
+                <a href="https://bloclibrary.dev/tutorials/flutter-todos">
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_todos.gif" width="200"/>
                 </a>
             </td>
         </tr>
