@@ -29,9 +29,9 @@ const locales = {
 		label: 'Français',
 		lang: 'fr',
 	},
-	jp: {
+	ja: {
 		label: '日本語',
-		lang: 'jp',
+		lang: 'ja',
 	},
 	ko: {
 		label: '한국인',
