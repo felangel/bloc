@@ -77,11 +77,11 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 ### Cubit
 
-![Cubit Architecture](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/cubit_architecture_full.png)
+![Cubit Architecture](https://raw.githubusercontent.com/felangel/bloc/master/assets/diagrams/cubit_architecture_full.png)
 
 A `Cubit` is class which extends `BlocBase` and can be extended to manage any type of state. `Cubit` requires an initial state which will be the state before `emit` has been called. The current state of a `cubit` can be accessed via the `state` getter and the state of the `cubit` can be updated by calling `emit` with a new `state`.
 
-![Cubit Flow](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/cubit_flow.png)
+![Cubit Flow](https://raw.githubusercontent.com/felangel/bloc/master/assets/diagrams//cubit_flow.png)
 
 State changes in cubit begin with predefined function calls which can use the `emit` method to output new states. `onChange` is called right before a state change occurs and contains the current and next state.
 
@@ -186,11 +186,11 @@ void main() {
 
 ### Bloc
 
-![Bloc Architecture](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture_full.png)
+![Bloc Architecture](https://raw.githubusercontent.com/felangel/bloc/master/assets/diagrams/bloc_architecture_full.png)
 
 A `Bloc` is a more advanced class which relies on `events` to trigger `state` changes rather than functions. `Bloc` also extends `BlocBase` which means it has a similar public API as `Cubit`. However, rather than calling a `function` on a `Bloc` and directly emitting a new `state`, `Blocs` receive `events` and convert the incoming `events` into outgoing `states`.
 
-![Bloc Flow](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_flow.png)
+![Bloc Flow](https://raw.githubusercontent.com/felangel/bloc/master/assets/diagrams/bloc_flow.png)
 
 State changes in bloc begin when events are added which triggers `onEvent`. The events are then funnelled through an `EventTransformer`. By default, each event is processed concurrently but a custom `EventTransformer` can be provided to manipulate the incoming event stream. All registered `EventHandlers` for that event type are then invoked with the incoming event. Each `EventHandler` is responsible for emitting zero or more states in response to the event. Lastly, `onTransition` is called just before the state is updated and contains the current state, event, and next state.
 

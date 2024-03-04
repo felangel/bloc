@@ -66,7 +66,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ## Overview
 
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" width="500" alt="Bloc Architecture"></img>
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/diagrams/bloc_architecture.png" width="500" alt="Bloc Architecture"></img>
 
 The goal of this library is to make it easy to separate _presentation_ from _business logic_, facilitating testability and reusability.
 
