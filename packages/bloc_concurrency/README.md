@@ -58,7 +58,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ## Event Transformers
 
-![Event Transformers](https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_concurrency_diagram.png)
+![Event Transformers](https://raw.githubusercontent.com/felangel/bloc/master/assets/diagrams/bloc_concurrency.png)
 
 `bloc_concurrency` provides an opinionated set of event transformers:
 
