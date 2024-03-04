@@ -93,34 +93,34 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
         <tr>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/tutorials/flutter-counter">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_counter.gif" width="200"/>
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_counter.gif" width="200"/>
                 </a>
             </td>            
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/tutorials/flutter-infinite-list">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_infinite_list.gif" width="200"/>
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_infinite_list.gif" width="200"/>
                 </a>
             </td>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/tutorials/flutter-login">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_firebase_login.gif" width="200" />
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_firebase_login.gif" width="200" />
                 </a>
             </td>
         </tr>
         <tr>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/tutorials/github-search">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_github_search.gif" width="200"/>
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_github_search.gif" width="200"/>
                 </a>
             </td>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/tutorials/flutter-weather">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_weather.gif" width="200"/>
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_weather.gif" width="200"/>
                 </a>
             </td>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/tutorials/flutter-todos">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_todos.gif" width="200"/>
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_todos.gif" width="200"/>
                 </a>
             </td>
         </tr>
