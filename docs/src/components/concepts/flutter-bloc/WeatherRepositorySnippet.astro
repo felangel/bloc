@@ -4,10 +4,10 @@ import { Code } from '@astrojs/starlight/components';
 const code = `
 class WeatherRepository {
   WeatherRepository({
-    MetaWeatherApiClient? weatherApiClient
-  }) : _weatherApiClient = weatherApiClient ?? MetaWeatherApiClient();
+    WeatherApiClient? weatherApiClient
+  }) : _weatherApiClient = weatherApiClient ?? WeatherApiClient();
 
-  final MetaWeatherApiClient _weatherApiClient;
+  final WeatherApiClient _weatherApiClient;
 
   Future<Weather> getWeather(String city) async {
     final location = await _weatherApiClient.locationSearch(city);

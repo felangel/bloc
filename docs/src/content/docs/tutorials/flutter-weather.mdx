@@ -159,7 +159,7 @@ Additionally, we need a way to [make HTTP network requests](https://developer.mo
 
 We will be using the [json_annotation](https://pub.dev/packages/json_annotation), [json_serializable](https://pub.dev/packages/json_serializable), and [build_runner](https://pub.dev/packages/build_runner) packages to generate the `toJson` and `fromJson` implementations for us.
 
-In a later step, we will also use the [http](https://pub.dev/packages/http) package to send network requests to the MetaWeather API so our application can display the current weather data.
+In a later step, we will also use the [http](https://pub.dev/packages/http) package to send network requests to the weather API so our application can display the current weather data.
 
 Let's add these dependencies to the `pubspec.yaml`.
 
@@ -228,7 +228,7 @@ Let's create our API client in `open_meteo_api_client.dart` within the `src` dir
 
 <OpenMeteoApiClientTreeSnippet />
 
-We can now use the [http](https://pub.dev/packages/http) package we added earlier to the `pubspec.yaml` file to make HTTP requests to the Metaweather API and use this information in our application.
+We can now use the [http](https://pub.dev/packages/http) package we added earlier to the `pubspec.yaml` file to make HTTP requests to the weather API and use this information in our application.
 
 Our API client will expose two methods:
 
@@ -308,7 +308,7 @@ Finally, let's gather test coverage to verify that we've covered each line of co
 
 ## Repository Layer
 
-The goal of our repository layer is to abstract our data layer and facilitate communication with the bloc layer. In doing this, the rest of our code base depends only on functions exposed by our repository layer instead of specific data provider implementations. This allows us to change data providers without disrupting any of the application-level code. For example, if we decide to migrate away from metaweather, we should be able to create a new API client and swap it out without having to make changes to the public API of the repository or application layers.
+The goal of our repository layer is to abstract our data layer and facilitate communication with the bloc layer. In doing this, the rest of our code base depends only on functions exposed by our repository layer instead of specific data provider implementations. This allows us to change data providers without disrupting any of the application-level code. For example, if we decide to migrate away from this particular weather API, we should be able to create a new API client and swap it out without having to make changes to the public API of the repository or application layers.
 
 ### Setup
 
@@ -373,7 +373,7 @@ Let's also create a package-level barrel file named `packages/weather_repository
 The main goal of the `WeatherRepository` is to provide an interface which abstracts the data provider. In this case, the `WeatherRepository` will have a dependency on the `WeatherApiClient` and expose a single public method, `getWeather(String city)`.
 
 :::note
-Consumers of the `WeatherRepository` are not privy to the underlying implementation details such as the fact that two network requests are made to the metaweather API. The goal of the `WeatherRepository` is to separate the "what" from the "how" -- in other words, we want to have a way to fetch weather for a given city, but don't care about how or where that data is coming from.
+Consumers of the `WeatherRepository` are not privy to the underlying implementation details such as the fact that two network requests are made to the weather API. The goal of the `WeatherRepository` is to separate the "what" from the "how" -- in other words, we want to have a way to fetch weather for a given city, but don't care about how or where that data is coming from.
 :::
 
 #### Setup
