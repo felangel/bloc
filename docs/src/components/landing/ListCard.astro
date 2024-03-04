@@ -1,0 +1,52 @@
+---
+import Card from './Card.astro';
+export type Props = Parameters<typeof Card>[0];
+---
+
+<Card {...Astro.props}>
+	<div class="link-list">
+		<slot />
+	</div>
+</Card>
+
+<style>
+	.link-list :global(ul) {
+		list-style-type: none;
+		padding: 0;
+	}
+
+	.link-list :global(li) {
+		border-bottom: 1px solid var(--sl-color-gray-6);
+		padding: 0.25rem 0;
+		margin: 0 !important;
+	}
+
+	.link-list :global(li:last-child) {
+		border-bottom: none;
+	}
+
+	.link-list :global(a) {
+		display: flex;
+		gap: 0.5rem;
+		justify-content: space-between;
+		align-items: center;
+		text-decoration: none;
+	}
+
+	/* Add arrow icon to links. */
+	.link-list :global(a::after) {
+		content: '';
+		background-color: currentColor;
+		width: 1rem;
+		height: 1rem;
+		flex-shrink: 0;
+		mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.92 11.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.003 1.003 0 1 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z'%3E%3C/path%3E%3C/svg%3E");
+		-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.92 11.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.003 1.003 0 1 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z'%3E%3C/path%3E%3C/svg%3E");
+		mask-size: 100%;
+		-webkit-mask-size: 100%;
+	}
+	/* Mirror arrow in RTL layouts */
+	:global([dir='rtl']) .link-list :global(a::after:not(:where([dir='rtl'] [dir='ltr'] *))) {
+		transform: matrix(-1, 0, 0, 1, 0, 0);
+	}
+</style>

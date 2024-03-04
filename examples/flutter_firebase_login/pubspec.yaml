@@ -33,11 +33,3 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-
-dependency_overrides:
-  bloc:
-    path: ../../packages/bloc
-  bloc_test:
-    path: ../../packages/bloc_test
-  flutter_bloc:
-    path: ../../packages/flutter_bloc

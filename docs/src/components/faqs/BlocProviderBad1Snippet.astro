@@ -1,0 +1,20 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+@override
+Widget build(BuildContext context) {
+  return BlocProvider(
+    create: (_) => BlocA(),
+    child: ElevatedButton(
+      onPressed: () {
+        final blocA = BlocProvider.of<BlocA>(context);
+        ...
+      }
+    )
+  );
+}
+`;
+---
+
+<Code code={code} lang="dart" title="my_widget.dart" />

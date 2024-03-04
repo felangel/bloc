@@ -20,7 +20,7 @@ interface Action {
 const openBlocMigrationGuide = {
   name: "Open Migration Guide",
   callback: () => {
-    env.openExternal(Uri.parse("https://bloclibrary.dev/#/migration"));
+    env.openExternal(Uri.parse("https://bloclibrary.dev/migration"));
   },
 };
 const openEquatableMigrationGuide = {

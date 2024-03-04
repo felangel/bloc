@@ -1,0 +1,113 @@
+---
+title: AngularDart Counter
+description: An in-depth guide on how to build an AngularDart counter app with bloc.
+sidebar:
+  order: 8
+---
+
+import RemoteCode from '~/components/tutorials/RemoteCode.astro';
+import ActivateStagehandSnippet from '~/components/tutorials/ngdart-counter/ActivateStagehandSnippet.astro';
+import StagehandSnippet from '~/components/tutorials/ngdart-counter/StagehandSnippet.astro';
+import InstallDependenciesSnippet from '~/components/tutorials/ngdart-counter/InstallDependenciesSnippet.astro';
+
+![beginner](https://img.shields.io/badge/level-beginner-green.svg)
+
+In the following tutorial, we're going to build a Counter in AngularDart using the Bloc library.
+
+![demo](~/assets/tutorials/ngdart-counter.gif)
+
+## Setup
+
+We'll start off by creating a brand new AngularDart project with [stagehand](https://github.com/dart-lang/stagehand).
+
+If you don't have stagehand installed, activate it via:
+
+<ActivateStagehandSnippet />
+
+Then generate a new project via:
+
+<StagehandSnippet />
+
+We can then go ahead and replace the contents of `pubspec.yaml` with:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+and then install all of our dependencies
+
+<InstallDependenciesSnippet />
+
+Our counter app is just going to have two buttons to increment/decrement the counter value and an element to display the current value. Let's get started designing the `CounterEvents`.
+
+## Counter Bloc
+
+Since our counter's state can be represented by an integer we don't need to create a custom class and we can co-locate the events and bloc.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_bloc.dart"
+	title="lib/src/counter_page/counter_bloc.dart"
+/>
+
+:::note
+Just from the class declaration we can tell that our `CounterBloc` will be taking `CounterEvents` as input and outputting integers.
+:::
+
+## Counter App
+
+Now that we have our `CounterBloc` fully implemented, we can get started creating our AngularDart App Component.
+
+Our `app.component.dart` should look like:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/app_component.dart"
+	title="lib/app_component.dart"
+/>
+
+and our `app.component.html` should look like:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/app_component.html"
+	title="lib/app_component.html"
+/>
+
+## Counter Page
+
+Finally, all that's left is to build our Counter Page Component.
+
+Our `counter_page_component.dart` should look like:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_page_component.dart"
+	title="lib/src/counter_page/counter_page_component.dart"
+/>
+
+:::note
+We are able to access the `CounterBloc` instance using AngularDart's dependency injection system. Because we have registered it as a `Provider`, AngularDart can properly resolve `CounterBloc`.
+:::
+
+:::note
+We are closing the `CounterBloc` in `ngOnDestroy`.
+:::
+
+:::note
+We are importing the `BlocPipe` so that we can use it in our template.
+:::
+
+Lastly, our `counter_page_component.html` should look like:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_page_component.html"
+	title="lib/src/counter_page/counter_page_component.html"
+/>
+
+:::note
+We are using the `BlocPipe` so that we can display our `CounterBloc` state as it is updated.
+:::
+
+That's it! We've separated our presentation layer from our business logic layer. Our `CounterPageComponent` has no idea what happens when a user presses a button; it just adds an event to notify the `CounterBloc`. Furthermore, our `CounterBloc` has no idea what is happening with the state (counter value); it's simply converting the `CounterEvents` into integers.
+
+We can run our app with `webdev serve` and can view it at [http://localhost:8080](http://localhost:8080).
+
+The full source for this example can be found [here](https://github.com/felangel/bloc/tree/master/examples/angular_counter).

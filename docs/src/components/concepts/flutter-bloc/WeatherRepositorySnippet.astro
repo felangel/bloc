@@ -1,0 +1,26 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+class WeatherRepository {
+  WeatherRepository({
+    WeatherApiClient? weatherApiClient
+  }) : _weatherApiClient = weatherApiClient ?? WeatherApiClient();
+
+  final WeatherApiClient _weatherApiClient;
+
+  Future<Weather> getWeather(String city) async {
+    final location = await _weatherApiClient.locationSearch(city);
+    final woeid = location.woeid;
+    final weather = await _weatherApiClient.getWeather(woeid);
+    return Weather(
+      temperature: weather.theTemp,
+      location: location.title,
+      condition: weather.weatherStateAbbr.toCondition,
+    );
+  }
+}
+`;
+---
+
+<Code code={code} lang="dart" title="weather_repository.dart" />

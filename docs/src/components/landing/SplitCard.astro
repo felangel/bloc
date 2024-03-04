@@ -1,0 +1,56 @@
+---
+import { Card } from '@astrojs/starlight/components';
+
+export type Props = Parameters<typeof Card>[0];
+---
+
+<div class="card--fullwidth">
+	<Card {...Astro.props}>
+		<div class="split">
+			<slot />
+		</div>
+	</Card>
+</div>
+
+<style>
+	.card--fullwidth {
+		--card-bg: rgba(23, 25, 30, 0.8);
+		grid-column: 1 / -1;
+	}
+	:global(:root[data-theme='light']) .card--fullwidth {
+		--card-bg: rgba(255, 255, 255, 0.5);
+	}
+
+	.split {
+		margin-top: 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0 1rem;
+		color: var(--sl-color-white);
+	}
+
+	.card--fullwidth :global(.card) {
+		background: var(--card-bg);
+		position: relative;
+	}
+
+	@media screen and (min-width: 78rem) {
+		.split {
+			flex-direction: row;
+			gap: 2.5rem;
+		}
+		.split > :global(*) {
+			margin-top: 0 !important;
+			flex: 1;
+		}
+	}
+
+	@media screen and (min-width: 50rem) {
+		.card--fullwidth :global(.card) {
+			background:
+				radial-gradient(var(--sl-color-orange-low), transparent 70%) no-repeat 70% -25% / 120% 350%,
+				var(--card-bg);
+			position: relative;
+		}
+	}
+</style>

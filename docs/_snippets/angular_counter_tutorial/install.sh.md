@@ -1,3 +1,0 @@
-```bash
-dart pub get
-```

@@ -4,7 +4,7 @@ version: 10.0.0-dev.2
 repository: https://github.com/felangel/bloc/tree/master/packages/angular_bloc
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://bloclibrary.dev
-documentation: https://bloclibrary.dev/#/gettingstarted
+documentation: https://bloclibrary.dev/getting-started
 topics: [bloc, state-management]
 
 environment:

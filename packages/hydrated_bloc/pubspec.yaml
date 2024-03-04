@@ -4,7 +4,7 @@ version: 9.1.4
 repository: https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://bloclibrary.dev
-documentation: https://bloclibrary.dev/#/gettingstarted
+documentation: https://bloclibrary.dev/getting-started
 topics: [bloc, cache, state-management]
 
 platforms:

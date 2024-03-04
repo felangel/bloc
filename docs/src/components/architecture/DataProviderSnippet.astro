@@ -1,0 +1,13 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+class DataProvider {
+    Future<RawData> readData() async {
+        // Read from DB or make network request etc...
+    }
+}
+`;
+---
+
+<Code code={code} lang="dart" title="data_provider.dart" />

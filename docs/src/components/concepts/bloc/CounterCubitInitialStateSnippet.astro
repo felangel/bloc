@@ -1,0 +1,11 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+class CounterCubit extends Cubit<int> {
+  CounterCubit(int initialState) : super(initialState);
+}
+`;
+---
+
+<Code code={code} lang="dart" title="counter_cubit.dart" />

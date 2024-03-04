@@ -1,0 +1,332 @@
+---
+title: Flutter Firebase Login
+description: An in-depth guide on how to build a Flutter login flow with bloc and Firebase.
+sidebar:
+  order: 7
+---
+
+import RemoteCode from '~/components/tutorials/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-firebase-login/FlutterCreateSnippet.astro';
+import FlutterPackagesGetSnippet from '~/components/tutorials/flutter-firebase-login/FlutterPackagesGetSnippet.astro';
+
+![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+
+In the following tutorial, we're going to build a Firebase Login Flow in Flutter using the Bloc library.
+
+![demo](~/assets/tutorials/flutter-firebase-login.gif)
+
+## Key Topics
+
+- [BlocProvider](/flutter-bloc-concepts#blocprovider), a Flutter widget which provides a bloc to its children.
+- [BlocBuilder](/flutter-bloc-concepts#blocbuilder), a Flutter widget that handles building the widget in response to new states.
+- Using Cubit instead of Bloc. [What's the difference?](/bloc-concepts#cubit-vs-bloc)
+- Adding events with [context.read](/flutter-bloc-concepts#contextread).
+- Prevent unnecessary rebuilds with [Equatable](/faqs#when-to-use-equatable).
+- [RepositoryProvider](/flutter-bloc-concepts#repositoryprovider), a Flutter widget which provides a repository to its children.
+- [BlocListener](/flutter-bloc-concepts#bloclistener), a Flutter widget which invokes the listener code in response to state changes in the bloc.
+- Adding events with [context.read](/flutter-bloc-concepts#contextselect).
+
+## Setup
+
+We'll start off by creating a brand new Flutter project.
+
+<FlutterCreateSnippet />
+
+Just like in the [login tutorial](/tutorials/flutter-login), we're going to create internal packages to better layer our application architecture and maintain clear boundaries and to maximize both reusability as well as improve testability.
+
+In this case, the [firebase_auth](https://pub.dev/packages/firebase_auth) and [google_sign_in](https://pub.dev/packages/google_sign_in) packages are going to be our data layer so we're only going to be creating an `AuthenticationRepository` to compose data from the two API clients.
+
+## Authentication Repository
+
+The `AuthenticationRepository` will be responsible for abstracting the internal implementation details of how we authenticate and fetch user information. In this case, it will be integrating with Firebase but we can always change the internal implementation later on and our application will be unaffected.
+
+### Setup
+
+We'll start by creating `packages/authentication_repository` and a `pubspec.yaml` at the root of the project.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/pubspec.yaml"
+	title="packages/authentication_repository/pubspec.yaml"
+/>
+
+Next, we can install the dependencies by running:
+
+<FlutterPackagesGetSnippet />
+
+in the `authentication_repository` directory.
+
+Just like most packages, the `authentication_repository` will define it's API surface via `packages/authentication_repository/lib/authentication_repository.dart`
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/lib/authentication_repository.dart"
+	title="packages/authentication_repository/lib/authentication_repository.dart"
+/>
+
+:::note
+The `authentication_repository` package will be exposing an `AuthenticationRepository` as well as models.
+:::
+
+Next, let's take a look at the models.
+
+### User
+
+The `User` model will describe a user in the context of the authentication domain. For the purposes of this example, a user will consist of an `email`, `id`, `name`, and `photo`.
+
+:::note
+It's completely up to you to define what a user needs to look like in the context of your domain.
+:::
+
+[user.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/lib/src/models/user.dart ':include')
+
+:::note
+The `User` class is extending [equatable](https://pub.dev/packages/equatable) in order to override equality comparisons so that we can compare different instances of `User` by value.
+:::
+
+:::tip
+It's useful to define a `static` empty `User` so that we don't have to handle `null` Users and can always work with a concrete `User` object.
+:::
+
+### Repository
+
+The `AuthenticationRepository` is responsible for abstracting the underlying implementation of how a user is authenticated, as well as how a user is fetched.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/lib/src/authentication_repository.dart"
+	title="packages/authentication_repository/lib/src/authentication_repository.dart"
+/>
+
+The `AuthenticationRepository` exposes a `Stream<User>` which we can subscribe to in order to be notified of when a `User` changes. In addition, it exposes methods to `signUp`, `logInWithGoogle`, `logInWithEmailAndPassword`, and `logOut`.
+
+:::note
+The `AuthenticationRepository` is also responsible for handling low-level errors that can occur in the data layer and exposes a clean, simple set of errors that align with the domain.
+:::
+
+That's it for the `AuthenticationRepository`. Next, let's take a look at how to integrate it into the Flutter project we created.
+
+## Firebase Setup
+
+We need to follow the [firebase_auth usage instructions](https://pub.dev/packages/firebase_auth#usage) in order to hook up our application to Firebase and enable [google_sign_in](https://pub.dev/packages/google_sign_in).
+
+:::caution
+Remember to update the `google-services.json` on Android and the `GoogleService-Info.plist` & `Info.plist` on iOS, otherwise the application will crash.
+:::
+
+## Project Dependencies
+
+We can replace the generated `pubspec.yaml` at the root of the project with the following:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+Notice that we are specifying an assets directory for all of our applications local assets. Create an `assets` directory in the root of your project and add the [bloc logo](https://github.com/felangel/bloc/blob/master/examples/flutter_firebase_login/lib/assets/bloc_logo_small.png) asset (which we'll use later).
+
+Then install all of the dependencies:
+
+<FlutterPackagesGetSnippet />
+
+:::note
+We are depending on the `authentication_repository` package via path which will allow us to iterate quickly while still maintaining a clear separation.
+:::
+
+## main.dart
+
+The `main.dart` file can be replaced with the following:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/main.dart"
+	title="lib/main.dart"
+/>
+
+It's simply setting up some global configuration for the application and calling `runApp` with an instance of `App`.
+
+:::note
+We're injecting a single instance of `AuthenticationRepository` into the `App` and it is an explicit constructor dependency.
+:::
+
+## App
+
+Just like in the [login tutorial](/tutorials/flutter-login), our `app.dart` will provide an instance of the `AuthenticationRepository` to the application via `RepositoryProvider` and also creates and provides an instance of `AuthenticationBloc`. Then `AppView` consumes the `AuthenticationBloc` and handles updating the current route based on the `AuthenticationState`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/view/app.dart"
+	title="lib/app/view/app.dart"
+/>
+
+## App Bloc
+
+The `AppBloc` is responsible for managing the global state of the application. It has a dependency on the `AuthenticationRepository` and subscribes to the `user` Stream in order to emit new states in response to changes in the current user.
+
+### State
+
+The `AppState` consists of an `AppStatus` and a `User`. Two named constructors are exposed: `unauthenticated` and `authenticated` to make it easier to work with.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/bloc/app_state.dart"
+	title="lib/app/bloc/app_state.dart"
+/>
+
+### Event
+
+The `AppEvent` has two subclasses:
+
+- `AppUserChanged` which notifies the bloc that the current user has changed.
+- `AppLogoutRequested` which notifies the bloc that the current user has requested to be logged out.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/bloc/app_event.dart"
+	title="lib/app/bloc/app_event.dart"
+/>
+
+### Bloc
+
+The `AppBloc` responds to incoming `AppEvents` and transforms them into outgoing `AppStates`. Upon initialization, it immediately subscribes to the `user` stream from the `AuthenticationRepository` and adds an `AuthenticationUserChanged` event internally to process changes in the current user.
+
+:::caution
+`close` is overridden in order to handle cancelling the internal `StreamSubscription`.
+:::
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/bloc/app_bloc.dart"
+	title="lib/app/bloc/app_bloc.dart"
+/>
+
+## Models
+
+An `Email` and `Password` input model are useful for encapsulating the validation logic and will be used in both the `LoginForm` and `SignUpForm` (later in the tutorial).
+
+Both input models are made using the [formz](https://pub.dev/packages/formz) package and allow us to work with a validated object rather than a primitive type like a `String`.
+
+### Email
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/form_inputs/lib/src/email.dart"
+	title="packages/form_inputs/lib/src/email.dart"
+/>
+
+### Password
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/form_inputs/lib/src/password.dart"
+	title="packages/form_inputs/lib/src/password.dart"
+/>
+
+## Login Page
+
+The `LoginPage` is responsible for creating and providing an instance of `LoginCubit` to the `LoginForm`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/view/login_page.dart"
+	title="lib/login/view/login_page.dart"
+/>
+
+:::tip
+It's very important to keep the creation of blocs/cubits separate from where they are consumed. This will allow you to easily inject mock instances and test your view in isolation.
+:::
+
+## Login Cubit
+
+The `LoginCubit` is responsible for managing the `LoginState` of the form. It exposes APIs to `logInWithCredentials`, `logInWithGoogle`, as well as gets notified when the email/password are updated.
+
+### State
+
+The `LoginState` consists of an `Email`, `Password`, and `FormzStatus`. The `Email` and `Password` models extend `FormzInput` from the [formz](https://pub.dev/packages/formz) package.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/cubit/login_state.dart"
+	title="lib/login/cubit/login_state.dart"
+/>
+
+### Cubit
+
+The `LoginCubit` has a dependency on the `AuthenticationRepository` in order to sign the user in either via credentials or via google sign in.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/cubit/login_cubit.dart"
+	title="lib/login/cubit/login_cubit.dart"
+/>
+
+:::note
+We used a `Cubit` instead of a `Bloc` here because the `LoginState` is fairly simple and localized. Even without events, we can still have a fairly good sense of what happened just by looking at the changes from one state to another and our code is a lot simpler and more concise.
+:::
+
+## Login Form
+
+The `LoginForm` is responsible for rendering the form in response to the `LoginState` and invokes methods on the `LoginCubit` in response to user interactions.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/view/login_form.dart"
+	title="lib/login/view/login_form.dart"
+/>
+
+The `LoginForm` also renders a "Create Account" button which navigates to the `SignUpPage` where a user can create a brand new account.
+
+## Sign Up Page
+
+The `SignUp` structure mirrors the `Login` structure and consists of a `SignUpPage`, `SignUpView`, and `SignUpCubit`.
+
+The `SignUpPage` is just responsible for creating and providing an instance of the `SignUpCubit` to the `SignUpForm` (exactly like in `LoginPage`).
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/view/sign_up_page.dart"
+	title="lib/sign_up/view/sign_up_page.dart"
+/>
+
+:::note
+Just as in the `LoginCubit`, the `SignUpCubit` has a dependency on the `AuthenticationRepository` in order to create new user accounts.
+:::
+
+## Sign Up Cubit
+
+The `SignUpCubit` manages the state of the `SignUpForm` and communicates with the `AuthenticationRepository` in order to create new user accounts.
+
+### State
+
+The `SignUpState` reuses the same `Email` and `Password` form input models because the validation logic is the same.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/cubit/sign_up_state.dart"
+	title="lib/sign_up/cubit/sign_up_state.dart"
+/>
+
+### Cubit
+
+The `SignUpCubit` is extremely similar to the `LoginCubit` with the main exception being it exposes an API to submit the form as opposed to login.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/cubit/sign_up_cubit.dart"
+	title="lib/sign_up/cubit/sign_up_cubit.dart"
+/>
+
+## Sign Up Form
+
+The `SignUpForm` is responsible for rendering the form in response to the `SignUpState` and invokes methods on the `SignUpCubit` in response to user interactions.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/view/sign_up_form.dart"
+	title="lib/sign_up/view/sign_up_form.dart"
+/>
+
+## Home Page
+
+After a user either successfully logs in or signs up, the `user` stream will be updated which will trigger a state change in the `AuthenticationBloc` and will result in the `AppView` pushing the `HomePage` route onto the navigation stack.
+
+From the `HomePage`, the user can view their profile information and log out by tapping the exit icon in the `AppBar`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/home/view/home_page.dart"
+	title="lib/home/view/home_page.dart"
+/>
+
+:::note
+A `widgets` directory was created alongside the `view` directory within the `home` feature for reusable components that are specific to that particular feature. In this case a simple `Avatar` widget is exported and used within the `HomePage`.
+:::
+
+:::note
+When the logout `IconButton` is tapped, an `AuthenticationLogoutRequested` event is added to the `AuthenticationBloc` which signs the user out and navigates them back to the `LoginPage`.
+:::
+
+At this point we have a pretty solid login implementation using Firebase and we have decoupled our presentation layer from the business logic layer by using the Bloc Library.
+
+The full source for this example can be found [here](https://github.com/felangel/bloc/tree/master/examples/flutter_firebase_login).

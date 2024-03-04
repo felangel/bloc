@@ -1,0 +1,13 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+// with extensions
+context.read<BlocA>();
+
+// without extensions
+BlocProvider.of<BlocA>(context);
+`;
+---
+
+<Code code={code} lang="dart" />

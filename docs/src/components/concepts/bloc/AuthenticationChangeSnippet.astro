@@ -1,0 +1,12 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+Change {
+  currentState: AuthenticationState.authenticated,
+  nextState: AuthenticationState.unauthenticated
+}
+`;
+---
+
+<Code code={code} lang="sh" />

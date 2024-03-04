@@ -1,0 +1,56 @@
+:root {
+	--green-hsl: 200, 60%, 60%;
+	--overlay-green: hsla(var(--green-hsl), 0.5);
+}
+
+[data-has-hero] .page {
+	background: linear-gradient(
+		to right,
+		#c3fcfc,
+		#c6fbf6,
+		#cafaf0,
+		#cef9eb,
+		#d2f7e6,
+		#d1f6e1,
+		#d1f5dc,
+		#d1f4d7,
+		#ccf3d0,
+		#c8f2c9,
+		#c4f1c1,
+		#c1f0b9
+	);
+}
+
+[data-theme='dark'][data-has-hero] .page {
+	background:
+		linear-gradient(215deg, var(--overlay-green), transparent 40%),
+		radial-gradient(var(--overlay-green), transparent 65%) no-repeat 50% calc(100% + 20rem) / 60rem
+			30rem;
+}
+
+[data-has-hero] header {
+	border-bottom: 1px solid transparent;
+	background-color: transparent;
+	-webkit-backdrop-filter: blur(16px);
+	backdrop-filter: blur(16px);
+}
+
+[data-has-hero] .card {
+	border-radius: 25px;
+	background-color: transparent;
+	border: none;
+}
+
+@media screen and (min-width: 50rem) {
+	[data-has-hero] .hero {
+		padding-block: clamp(2.5rem, calc(1rem + 10vmin), 2.5rem);
+	}
+
+	[data-has-hero] .hero > img {
+		filter: drop-shadow(0 0 5rem #3982bc);
+	}
+
+	[data-theme='dark'][data-has-hero] .hero > img {
+		filter: drop-shadow(0 0 5rem #81d9ef);
+	}
+}

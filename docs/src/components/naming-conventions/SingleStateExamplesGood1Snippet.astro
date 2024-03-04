@@ -1,0 +1,13 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+enum CounterStatus { initial, loading, success, failure }
+final class CounterState {
+  const CounterState({this.status = CounterStatus.initial});
+  final CounterStatus status;
+}
+`;
+---
+
+<Code code={code} lang="dart" title="counter_state.dart" />

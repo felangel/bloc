@@ -1,0 +1,17 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+blocTest(
+    '...',
+    build: () => MyBloc(),
+    act: (bloc) => bloc.add(MyEvent()),
+    expect: [
+        isA<MyStateA>(),
+        isA<MyStateB>(),
+    ],
+);
+`;
+---
+
+<Code code={code} lang="dart" title="my_bloc_test.dart" />

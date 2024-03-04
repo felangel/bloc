@@ -1,0 +1,14 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+void main() {
+  Bloc.observer = SimpleBlocObserver();
+  CounterCubit()
+    ..increment()
+    ..close();  
+}
+`;
+---
+
+<Code code={code} lang="dart" title="main.dart" />

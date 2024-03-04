@@ -1,0 +1,19 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+class PresentationComponent {
+  PresentationComponent({required this.bloc}) {
+    bloc.add(AppStarted());
+  }
+
+  final Bloc bloc;
+
+  build() {
+    // render UI based on bloc state
+  }
+}
+`;
+---
+
+<Code code={code} lang="dart" title="presentation_component.dart" />

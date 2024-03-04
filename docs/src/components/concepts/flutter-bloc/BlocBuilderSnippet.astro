@@ -1,0 +1,13 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+BlocBuilder<BlocA, BlocAState>(
+  builder: (context, state) {
+    // return widget here based on BlocA's state
+  },
+);
+`;
+---
+
+<Code code={code} lang="dart" />
