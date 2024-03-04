@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/replay_bloc_logo_full.png" height="100" alt="ReplayBloc"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/logos/replay_bloc.png" height="100" alt="ReplayBloc"></p>
 
 <p align="center">
   <a href="https://pub.dev/packages/replay_bloc"><img src="https://img.shields.io/pub/v/replay_bloc.svg" alt="Pub"></a>

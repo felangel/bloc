@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/angular_bloc_logo_full.png" height="100" alt="Angular Bloc Package" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/logos/angular_bloc.png" height="100" alt="Angular Bloc Package" />
 </p>
 
 <p align="center">
