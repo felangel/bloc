@@ -46,7 +46,7 @@ const locales = {
 		lang: 'ru',
 	},
 	'zh-cn': {
-		label: '中国人',
+		label: '简体中文',
 		lang: 'zh-CN',
 	},
 };
