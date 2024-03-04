@@ -1,7 +1,5 @@
 part of 'sign_up_cubit.dart';
 
-enum ConfirmPasswordValidationError { invalid }
-
 final class SignUpState extends Equatable {
   const SignUpState({
     this.email = const Email.pure(),
