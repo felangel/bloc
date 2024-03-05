@@ -21,9 +21,11 @@ runs:
 
     - name: ⬇️ Install Dependencies
       run: npm install
+      shell: ${{ inputs.shell }}
 
     - name: ✨ Check Format
       run: npm run format:check
+      shell: ${{ inputs.shell }}
 
     - name: 📦 Build Site
       uses: withastro/action@v2

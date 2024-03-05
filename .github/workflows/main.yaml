@@ -288,7 +288,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    name: 📖 Docs Checks
+    name: 📖 docs
 
     steps:
       - name: 📚 Git Checkout
