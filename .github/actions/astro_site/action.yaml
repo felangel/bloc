@@ -8,7 +8,7 @@ inputs:
     description: The working directory for this workflow
   node_version:
     required: false
-    default: 20
+    default: "20"
     description: The node version to use.
 
 runs:
