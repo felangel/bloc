@@ -17,9 +17,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 📦 Build Site
-        uses: withastro/action@v2
+        uses: ./.github/actions/astro_site
         with:
-          path: ./docs
+          working_directory: ./docs
 
   deploy:
     needs: build
