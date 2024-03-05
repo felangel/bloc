@@ -76,7 +76,7 @@ runs:
       run: echo "name=${PACKAGE_PATH##*/}" >> $GITHUB_OUTPUT
 
     - name: ⬆️ Upload Coverage
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       env:
         PACKAGE_PATH: ${{ inputs.working_directory}}
       with:

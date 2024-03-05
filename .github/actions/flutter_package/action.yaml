@@ -90,7 +90,7 @@ runs:
 
     - name: ⬆️ Upload Coverage
       if: inputs.collect_coverage == 'true'
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       env:
         PACKAGE_PATH: ${{ inputs.working_directory}}
       with:
