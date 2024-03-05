@@ -299,6 +299,21 @@ jobs:
         with:
           working_directory: ./docs
 
+  deploy:
+    needs: docs_checks
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
   build:
     needs:
       [
@@ -309,6 +324,7 @@ jobs:
         flutter_example_checks,
         docs_checks,
       ]
+
     if: ${{ always() }}
 
     runs-on: ubuntu-latest
