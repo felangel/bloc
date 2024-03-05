@@ -9,6 +9,11 @@ on:
   push:
     branches: [master]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   semantic_pull_request:
     name: ✅ Semantic Pull Request
