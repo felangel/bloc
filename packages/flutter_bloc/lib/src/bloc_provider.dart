@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -140,5 +141,11 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
       (dynamic _) => e.markNeedsNotifyDependents(),
     );
     return subscription.cancel;
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<bool>('lazy', lazy));
   }
 }
