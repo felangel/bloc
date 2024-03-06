@@ -49,6 +49,10 @@ const locales = {
 		label: '简体中文',
 		lang: 'zh-CN',
 	},
+	ar: {
+		label: 'العربية',
+		lang: 'ar',
+	},
 };
 
 // https://astro.build/config
