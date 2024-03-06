@@ -46,16 +46,17 @@ please follow the same process for "Creating a Pull Request" and double check
 that your changes look good by running the docs locally.
 
 ```sh
-# change directories into docs
+# Change directories into docs
 cd ./docs
 
-# run a local http server on port 8080
-python3 -m http.server 8080
+# Install dependencies
+npm install
 
-# navigate to http://localhost:8080
+# Start the dev server
+npm start
+
+# Navigate to http://localhost:4321 in your browser
 ```
-
-If you want to help maintain translations in the future, add yourself to `.github/DOCS_ISSUE_TEMPLATE.md`.
 
 ### Tips
 
