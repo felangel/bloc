@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
                 final profile = await Navigator.of(context).push(
                   ProfileWizard.route(),
                 );
-                if (!mounted) return;
+                if (!context.mounted) return;
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(SnackBar(content: Text('$profile')));
