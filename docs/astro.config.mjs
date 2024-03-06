@@ -25,6 +25,10 @@ const locales = {
 		label: 'Español',
 		lang: 'es',
 	},
+	fil: {
+		label: 'Filipino',
+		lang: 'fil',
+	},
 	fr: {
 		label: 'Français',
 		lang: 'fr',
