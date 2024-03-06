@@ -26,7 +26,7 @@ Before creating a pull request please:
 1. Install all dependencies (`flutter packages get` or `pub get`).
 1. Squash your commits and ensure you have a meaningful commit message.
 1. If you’ve fixed a bug or added code that should be tested, add tests!
-Pull Requests without 100% test coverage will not be approved.
+   Pull Requests without 100% test coverage will not be approved.
 1. Ensure the test suite passes.
 1. If you've changed the public API, make sure to update/add documentation.
 1. Format your code (`dart format .`).
@@ -58,9 +58,14 @@ npm start
 # Navigate to http://localhost:4321 in your browser
 ```
 
+If you wish to add translations, ensure the locale is included in the [locales list](https://github.com/felangel/bloc/blob/8a714a6923a6480032319b45f461d1f9ccd025de/docs/astro.config.mjs#L7) and create the translated `mdx` file in the corresponding subdirectory within `docs/src/content/docs/<lang>`.
+
+Refer to [this pull request](https://github.com/felangel/bloc/pull/4084) for an example.
+
 ### Tips
 
 Here are a few tips when contributing to the documentation:
+
 - We use [docsify](https://docsify.js.org) for document rendering. Refer to the docsify documentation for more context/examples regarding the syntax, usage, and capabilities.
 - We prefer to reference real files in GitHub rather than creating snippets (some old examples make use of snippets but we are slowly migrating away).
   This is to keep the docs in sync if we modify the tutorial.
@@ -116,11 +121,12 @@ Examples live in the `examples` folder.
 
 When you're adding an example, make sure to add CI checks for it in
 [main.yaml](https://github.com/felangel/bloc/blob/master/.github/workflows/main.yaml):
+
 - For a Flutter example, add it to the `folder` list in the `examples-flutter`
-step.
+  step.
 - For a web example, add it to the `folder` list in the `examples-web` step.
 - For a pure Dart example, add it to the `folder` list in the `examples-pure`
-step.
+  step.
 
 ## Getting in Touch
 

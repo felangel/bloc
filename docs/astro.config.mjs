@@ -14,7 +14,7 @@ const locales = {
 		lang: 'az',
 	},
 	cs: {
-		label: 'čeština',
+		label: 'Čeština',
 		lang: 'cs',
 	},
 	de: {
