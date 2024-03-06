@@ -1,4 +1,9 @@
 ---
+export type Props = {
+	sponsoredBy: string;
+	becomeASponsor: string;
+};
+
 import { LinkCard } from '@astrojs/starlight/components';
 
 import miquido from '~/assets/sponsors/miquido.png';
@@ -7,6 +12,8 @@ import netguru from '~/assets/sponsors/netguru.png';
 import parabeac from '~/assets/sponsors/parabeac.png';
 import stream from '~/assets/sponsors/stream.png';
 import porada from '~/assets/sponsors/porada.png';
+
+const { sponsoredBy = 'Sponsored with 💖 by', becomeASponsor = 'Become a Sponsor' } = Astro.props;
 
 interface Sponsor {
 	img: ImageMetadata;
@@ -65,7 +72,7 @@ const sponsors: Sponsor[] = [
 </style>
 
 <div class="flex w-full justify-center no-content">
-	<p class="text-xl font-semibold">Sponsored with 💖 by</p>
+	<p class="text-xl font-semibold">{sponsoredBy}</p>
 </div>
 <div class="flex w-full justify-center items-center not-content">
 	<div class="grid grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-6">
@@ -89,5 +96,5 @@ const sponsors: Sponsor[] = [
 </div>
 
 <div class="w-full flex text-center items-center justify-center">
-	<LinkCard title="Become a Sponsor" href="https://github.com/sponsors/felangel" />
+	<LinkCard title={becomeASponsor} href="https://github.com/sponsors/felangel" />
 </div>
