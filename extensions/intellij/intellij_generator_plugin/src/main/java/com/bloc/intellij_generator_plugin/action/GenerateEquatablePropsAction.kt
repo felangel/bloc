@@ -16,7 +16,7 @@ class GenerateEquatablePropsAction : AnAction() {
 
     var propsNullable = false
 
-    override fun update(event: AnActionEvent?) {
+    override fun update(event: AnActionEvent) {
         super.update(event)
         val action = event?.presentation;
         if (action != null) {
