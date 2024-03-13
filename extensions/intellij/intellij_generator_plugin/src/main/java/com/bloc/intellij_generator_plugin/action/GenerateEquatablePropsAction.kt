@@ -18,13 +18,11 @@ class GenerateEquatablePropsAction : AnAction() {
 
     override fun update(event: AnActionEvent) {
         super.update(event)
-        val action = event?.presentation;
-        if (action != null) {
-            val editor = event.getRequiredData(CommonDataKeys.EDITOR)
-            val project = event.project ?: return
-            val currentFile = PsiUtilBase.getPsiFileInEditor(editor, project)
-            action.isEnabledAndVisible = currentFile?.name?.endsWith(".dart") == true
-        }
+        val action = event.presentation;
+        val editor = event.getRequiredData(CommonDataKeys.EDITOR)
+        val project = event.project ?: return
+        val currentFile = PsiUtilBase.getPsiFileInEditor(editor, project)
+        action.isEnabledAndVisible = currentFile?.name?.endsWith(".dart") == true
     }
 
     override fun actionPerformed(event: AnActionEvent) {
