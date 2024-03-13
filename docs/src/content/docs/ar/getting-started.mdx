@@ -1,0 +1,35 @@
+---
+title: دليل البدء
+description: كل ما تحتاجه لبدء الانشاء مع بلوك
+---
+
+import InstallationTabs from '~/components/getting-started/InstallationTabs.astro';
+import ImportTabs from '~/components/getting-started/ImportTabs.astro';
+
+## الباكيتات
+
+بيئة بلوك تتكون من عدة باكيتات مدرجة أدناه
+
+| الباكيتة                                                                                   | الوصف                              | الرابط                                                                                                         |
+| ------------------------------------------------------------------------------------------ | ---------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc)         | مكونات انجيولار                    | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)         |
+| [bloc](https://github.com/felangel/bloc/tree/master/packages/bloc)                         | واجهات برمجة تطبيقات دارت الأساسية | [![pub package](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)                         |
+| [bloc_concurrency](https://github.com/felangel/bloc/tree/master/packages/bloc_concurrency) | محولات الحدث                       | [![pub package](https://img.shields.io/pub/v/bloc_concurrency.svg)](https://pub.dev/packages/bloc_concurrency) |
+| [bloc_test](https://github.com/felangel/bloc/tree/master/packages/bloc_test)               | واجهات برمجة تطبيقات للاختبارات    | [![pub package](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)               |
+| [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc)         | مكونات فلاتار                      | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc)         |
+| [hydrated_bloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc)       | دعم للتخزين المؤقت/الاستمرارية     | [![pub package](https://img.shields.io/pub/v/hydrated_bloc.svg)](https://pub.dev/packages/hydrated_bloc)       |
+| [replay_bloc](https://github.com/felangel/bloc/tree/master/packages/replay_bloc)           | دعم للتراجع/الإعادة                | [![pub package](https://img.shields.io/pub/v/replay_bloc.svg)](https://pub.dev/packages/replay_bloc)           |
+
+## التحميل
+
+<InstallationTabs />
+
+:::note
+من أجل أن تستطيع استخدام بلوك، يجب أن تكون لديك [عدة تطوير برامج دارت](https://dart.dev/get-dart) محملة على جهازك
+:::
+
+## الاستورادات
+
+الآن بعد أن قمنا بتحميل بلوك بنجاح، يمكننا إنشاء `main.dart` الخاص بنا واستيراد باكيتة `bloc` الخاصة بنا
+
+<ImportTabs />
