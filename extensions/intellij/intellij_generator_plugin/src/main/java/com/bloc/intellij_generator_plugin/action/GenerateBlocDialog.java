@@ -13,7 +13,7 @@ public class GenerateBlocDialog extends DialogWrapper {
     private JComboBox<String> style;
 
     public GenerateBlocDialog(final Listener listener) {
-        super(null);
+        super(false);
         this.listener = listener;
         init();
     }
