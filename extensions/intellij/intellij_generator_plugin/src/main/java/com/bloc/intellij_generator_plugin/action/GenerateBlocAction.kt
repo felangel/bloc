@@ -18,7 +18,10 @@ class GenerateBlocAction : AnAction(), GenerateBlocDialog.Listener {
         dialog.show()
     }
 
-    override fun onGenerateBlocClicked(blocName: String?, blocTemplateType: BlocTemplateType) {
+    override fun onGenerateBlocClicked(
+        blocName: String?,
+        blocTemplateType: BlocTemplateType,
+    ) {
         blocName?.let { name ->
             val generators = BlocGeneratorFactory.getBlocGenerators(name, blocTemplateType)
             generate(generators)
@@ -33,18 +36,15 @@ class GenerateBlocAction : AnAction(), GenerateBlocDialog.Listener {
         }
     }
 
-    protected fun generate(mainSourceGenerators: List<BlocGenerator>) {
+    private fun generate(mainSourceGenerators: List<BlocGenerator>) {
         val project = CommonDataKeys.PROJECT.getData(dataContext)
         val view = LangDataKeys.IDE_VIEW.getData(dataContext)
         val directory = view?.orChooseDirectory
         ApplicationManager.getApplication().runWriteAction {
             CommandProcessor.getInstance().executeCommand(
-                    project,
-                    {
-                        mainSourceGenerators.forEach { createSourceFile(project!!, it, directory!!) }
-                    },
-                    "Generate a new Bloc",
-                    null
+                project, {
+                    mainSourceGenerators.forEach { createSourceFile(project!!, it, directory!!) }
+                }, "Generate a new Bloc", null
             )
         }
     }
@@ -58,7 +58,7 @@ class GenerateBlocAction : AnAction(), GenerateBlocDialog.Listener {
             return
         }
         val psiFile = PsiFileFactory.getInstance(project)
-                .createFileFromText(fileName, JavaLanguage.INSTANCE, generator.generate())
+            .createFileFromText(fileName, JavaLanguage.INSTANCE, generator.generate())
         directory.add(psiFile)
     }
 }
