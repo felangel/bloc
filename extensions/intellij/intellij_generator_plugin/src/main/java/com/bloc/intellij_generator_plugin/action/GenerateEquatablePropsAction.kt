@@ -14,7 +14,7 @@ import com.intellij.psi.util.PsiUtilBase
 
 class GenerateEquatablePropsAction : AnAction() {
 
-    var propsNullable = false
+    private var propsNullable = false
 
     override fun update(event: AnActionEvent) {
         super.update(event)
