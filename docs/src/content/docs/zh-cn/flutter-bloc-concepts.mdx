@@ -190,44 +190,51 @@ If the `bloc` parameter is omitted, `BlocSelector` will automatically perform a 
 
 ## RepositoryProvider Usage
 
-We are going to take a look at how to use `RepositoryProvider` within the context of the [`flutter_weather`][flutter_weather_link] example.
+接下來，我們將利用 flutter_weather 範例，來查看如何使用 RepositoryProvider。
 
 <WeatherRepositorySnippet />
 
-Since the app has an explicit dependency on the `WeatherRepository` we inject an instance via constructor. This allows us to inject different instances of `WeatherRepository` based on the build flavor or environment.
+由於應用程式明確依賴於 `WeatherRepository`，我們通過建構函式注入一個實例。這使我們能夠根據構建版本或環境注入不同的 `WeatherRepository` 實例。
 
 <WeatherMainSnippet />
 
-Since we only have one repository in our app, we will inject it into our widget tree via `RepositoryProvider.value`. If you have more than one repository, you can use `MultiRepositoryProvider` to provide multiple repository instances to the subtree.
+由於在這個例子中，我們的應用程序只有一個  repository，我們將通過 `RepositoryProvider.value` 將其注入到我們的 widget tree 中。如果您有多個 repository，則可以使用 `MultiRepositoryProvider` 將多個 repository 實例提供給 subtree。
 
 <WeatherAppSnippet />
 
-In most cases, the root app widget will expose one or more repositories to the subtree via `RepositoryProvider`.
+在大多數情況下，应用程序的顶层 widgets 將透過 `RepositoryProvider` 向 subtree 公開一個或多個repository。
 
 <WeatherPageSnippet />
 
-Now when instantiating a bloc, we can access the instance of a repository via `context.read` and inject the repository into the bloc via constructor.
+在，在实例化一个 bloc 时，我们可以通过 `context.read` 访问存储库的实例，并通过构造函数将存储库注入到 bloc 中。
 
 [flutter_weather_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_weather
 
 ## Extension Methods
 
-[Extension methods](https://dart.dev/guides/language/extension-methods), introduced in Dart 2.7, are a way to add functionality to existing libraries. In this section, we'll take a look at extension methods included in `package:flutter_bloc` and how they can be used.
+[
+Extension methods](https://dart.dev/guides/language/extension-methods)，在 Dart 2.7 中引入，是一种向现有库添加功能的方法。在本节中，我们将看一下 `package:flutter_bloc` 中包含的扩展方法以及它们的使用方式。
 
-`flutter_bloc` has a dependency on [package:provider](https://pub.dev/packages/provider) which simplifies the use of [`InheritedWidget`](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html).
+`flutter_bloc` 依赖于 [package:provider](https://pub.dev/packages/provider)，它简化了对 [`InheritedWidget`](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html) 的使用。
 
-Internally, `package:flutter_bloc` uses `package:provider` to implement: `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` and `MultiRepositoryProvider` widgets. `package:flutter_bloc` exports the `ReadContext`, `WatchContext` and `SelectContext`, extensions from `package:provider`.
+在内部，`package:flutter_bloc` 使用 `package:provider` 实现了 `BlocProvider`、`MultiBlocProvider`、`RepositoryProvider` 和 `MultiRepositoryProvider` widgets。 `package:flutter_bloc` 从 `package:provider` 中导出了 `ReadContext`、`WatchContext` 和 `SelectContext` 扩展。
+
+
 
 :::note
-Learn more about [`package:provider`](https://pub.dev/packages/provider).
+查詢更多關於  [`package:provider`](https://pub.dev/packages/provider).
 :::
 
 ### context.read
 
+`context.read<T>()` 查找最接近的类型为 T 的祖先实例，并在功能上等同于 `BlocProvider.of<T>(context)`。`context.read` 最常用于在 `onPressed` 回调中检索 bloc 实例以添加事件。
+
 `context.read<T>()` looks up the closest ancestor instance of type `T` and is functionally equivalent to `BlocProvider.of<T>(context)`. `context.read` is most commonly used for retrieving a bloc instance in order to add an event within `onPressed` callbacks.
 
 :::note
-`context.read<T>()` does not listen to `T` -- if the provided `Object` of type `T` changes, `context.read` will not trigger a widget rebuild.
+
+`context.read<T>()` 不会监听 `T` —— 如果提供的类型为 `T` 的对象发生变化，`context.read` 不会触发 widget重建。
+
 :::
 
 #### Usage
