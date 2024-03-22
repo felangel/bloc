@@ -1,38 +1,38 @@
-# Flutter Counter Tutorial
+# آموزش شمارنده در فلاتر
 
 ![beginner](https://img.shields.io/badge/level-beginner-green.svg)
 
-> In the following tutorial, we're going to build a Counter in Flutter using the Bloc library.
+> در آموزش زیر، قصد داریم با استفاده از کتابخانه Bloc، یک شمارنده در فلاتر ایجاد کنیم.
 
 ![demo](./assets/gifs/flutter_counter.gif)
 
-## Key Topics
+## موضوعات کلیدی
 
-- Observe state changes with [BlocObserver](/coreconcepts?id=blocobserver).
-- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider), Flutter widget which provides a bloc to its children.
-- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder), Flutter widget that handles building the widget in response to new states.
-- Using Cubit instead of Bloc. [What's the difference?](/coreconcepts?id=cubit-vs-bloc)
-- Adding events with [context.read](/migration?id=❗contextbloc-and-contextrepository-are-deprecated-in-favor-of-contextread-and-contextwatch).⚡
+- مشاهده تغییرات وضعیت با استفاده از [BlocObserver](/coreconcepts?id=blocobserver).
+- [BlocProvider](/flutterbloccoreconcepts?id=blocprovider)، ویجت فلاتری که یک bloc را به فرزندانش ارائه می‌دهد.
+- [BlocBuilder](/flutterbloccoreconcepts?id=blocbuilder)، ویجت فلاتری که به ساخت ویجت در پاسخ به وضعیت‌های جدید می‌پردازد.
+- استفاده از Cubit به جای Bloc. [چه فرقی می کنند؟](/coreconcepts?id=cubit-vs-bloc)
+- اضافه کردن رویدادها با استفاده از [context.read](/migration?id=❗contextbloc-and-contextrepository-are-deprecated-in-favor-of-contextread-and-contextwatch).⚡
 
-## Setup
+## راه اندازی
 
-We'll start off by creating a brand new Flutter project
+ما با ایجاد یک پروژه جدید فلاتر شروع می‌کنیم.
 
 ```sh
 flutter create flutter_counter
 ```
 
-We can then go ahead and replace the contents of `pubspec.yaml` with
+سپس می‌توانیم ادامه دهیم و محتوای `pubspec.yaml` را با موارد زیر جایگزین کنیم
 
 [pubspec.yaml](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/pubspec.yaml ':include')
 
-and then install all of our dependencies
+و سپس تمام وابستگی های ما را نصب کنید
 
 ```sh
 flutter packages get
 ```
 
-## Project Structure
+## ساختار پروژه
 
 ```
 ├── lib
@@ -51,13 +51,13 @@ flutter packages get
 ├── pubspec.yaml
 ```
 
-The application uses a feature-driven directory structure. This project structure enables us to scale the project by having self-contained features. In this example we will only have a single feature (the counter itself) but in more complex applications we can have hundreds of different features.
+این برنامه از یک ساختار ویژگی‌محور (Feature-driven) استفاده می‌کند. این ساختار, پروژه را قابل مقیاس کرده و با داشتن ویژگی های مستقل از هم (Self-contained), قادر به توسعه آن می‌شود. در این مثال، فقط یک قابلیت وجود دارد (خود شمارنده)، اما در برنامه‌های پیچیده‌تر می‌توان صدها قابلیت مختلف داشت.
 
 ## BlocObserver
 
-The first thing we're going to take a look at is how to create a `BlocObserver` which will help us observe all state changes in the application.
+چیزی که اولین بار نگاه می‌کنیم، ایجاد یک `BlocObserver` است که به ما در مشاهده تمام تغییرات وضعیت در برنامه کمک می‌کند.
 
-Let's create `lib/counter_observer.dart`:
+بیایید `lib/counter_observer.dart` را ایجاد کنیم:
 
 [counter_observer.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter_observer.dart ':include')
 
