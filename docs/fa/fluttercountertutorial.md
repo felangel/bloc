@@ -61,43 +61,43 @@ flutter packages get
 
 [counter_observer.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter_observer.dart ':include')
 
-In this case, we're only overriding `onChange` to see all state changes that occur.
+در این حالت، تنها `onChange` را دوباره بازنویسی (Override) می‌کنیم تا تمام تغییرات وضعیتی که رخ می‌دهد را ببینیم.
 
-?> **Note**: `onChange` works the same way for both `Bloc` and `Cubit` instances.
+?> **نکته**: `onChange` برای هر دو نمونه از `Bloc` و `Cubit` به یک شکل عمل می‌کند.
 
 ## main.dart
 
-Next, let's replace the contents of `main.dart` with:
+بعداز آن، بیایید محتوای `main.dart` را با محتوای زیر جایگزین کنیم:
 
 [main.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/main.dart ':include')
 
-We're initializing the `CounterObserver` we just created and calling `runApp` with the `CounterApp` widget which we'll look at next.
+ما `CounterObserver` را که به تازگی ایجاد کرده‌ایم راه اندازی (Initializing) می‌کنیم و `runApp` را با ویجت `CounterApp` فراخوانی می‌کنیم که در ادامه به بررسی آن خواهیم پرداخت.
 
-## Counter App
+## برنامه شمارنده
 
-Let's create `lib/app.dart`:
+بیایید `lib/app.dart` را ایجاد کنیم:
 
-`CounterApp` will be a `MaterialApp` and is specifying the `home` as `CounterPage`.
+`CounterApp` یک `MaterialApp` خواهد بود و `home` را به عنوان `CounterPage` مشخص می‌کند.
 
 [app.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/app.dart ':include')
 
-?> **Note**: We are extending `MaterialApp` because `CounterApp` _is_ a `MaterialApp`. In most cases, we're going to be creating `StatelessWidget` or `StatefulWidget` instances and composing widgets in `build` but in this case there are no widgets to compose so it's simpler to just extend `MaterialApp`.
+?> **توجه**: ما `MaterialApp` را گسترش می‌دهیم زیرا `CounterApp` یک `MaterialApp` است. در بیشتر موارد، ما نمونه‌های `StatelessWidget` یا `StatefulWidget` ایجاد می‌کنیم و ویجت‌ها را در `build` ترکیب می‌کنیم اما در این حالت هیچ ویجتی برای ترکیب وجود ندارد، بنابراین ساده‌تر است که فقط `MaterialApp` را گسترش دهیم.
 
-Let's take a look at `CounterPage` next!
+بیایید نگاهی به `CounterPage` بیندازیم!
 
-## Counter Page
+## صفحه شمارنده
 
-Let's create `lib/counter/view/counter_page.dart`:
+بیایید `lib/counter/view/counter_page.dart` را ایجاد کنیم:
 
-The `CounterPage` widget is responsible for creating a `CounterCubit` (which we will look at next) and providing it to the `CounterView`.
+ویجت `CounterPage` مسئول ایجاد `CounterCubit` است (که در ادامه آن را مشاهده خواهیم کرد) و آن را به `CounterView` ارائه می‌دهد.
 
 [counter_page.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_page.dart ':include')
 
-?> **Note**: It's important to separate or decouple the creation of a `Cubit` from the consumption of a `Cubit` in order to have code that is much more testable and reusable.
+?> **توجه**: مهم است که ایجاد یک `Cubit` را از مصرف یک `Cubit` جدا کنید یا آن را از هم مجزا کنید تا کدی داشته باشید که بسیار قابل تست و قابل استفاده مجدد باشد.
 
-## Counter Cubit
+## شمارنده کوبیت
 
-Let's create `lib/counter/cubit/counter_cubit.dart`:
+بیایید `lib/counter/cubit/counter_cubit.dart` را ایجاد کنیم.
 
 The `CounterCubit` class will expose two methods:
 
