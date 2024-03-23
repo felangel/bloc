@@ -99,48 +99,48 @@ flutter packages get
 
 بیایید `lib/counter/cubit/counter_cubit.dart` را ایجاد کنیم.
 
-The `CounterCubit` class will expose two methods:
+کلاس `CounterCubit` دو متد را ارائه می‌دهد:
 
-- `increment`: adds 1 to the current state
-- `decrement`: subtracts 1 from the current state
+- `افزایش`: یک واحد به وضعیت فعلی اضافه می‌کند.
+- `کاهش`: یک واحد از وضعیت فعلی کم می‌کند.
 
-The type of state the `CounterCubit` is managing is just an `int` and the initial state is `0`.
+نوع وضعیتی که `CounterCubit` در حال مدیریت آن است، فقط یک `int` است و وضعیت اولیه آن `0` است.
 
 [counter_cubit.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/cubit/counter_cubit.dart ':include')
 
-?> **Tip**: Use the [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) or [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) to create new cubits automatically.
+**نکته**: برای ایجاد خودکار cubit جدید، از [افزونه VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) یا [پلاگین IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc) استفاده کنید.
 
-Next, let's take a look at the `CounterView` which will be responsible for consuming the state and interacting with the `CounterCubit`.
+بعداز آن، بیایید به `CounterView` نگاهی بیندازیم که مسئول مصرف وضعیت (تغییرات را مشاهده کرده و بر اساس آن عملی انجام میدهد. مثلا میتواند مقدار وضعیت را نشان دهد) و تعامل با `CounterCubit` خواهد بود.
 
-## Counter View
+## نمای شمارنده
 
-Let's create `lib/counter/view/counter_view.dart`:
+بیایید `lib/counter/view/counter_view.dart` را ایجاد کنیم:
 
-The `CounterView` is responsible for rendering the current count and rendering two FloatingActionButtons to increment/decrement the counter.
+`CounterView` مسئول رندر کردن شمارنده فعلی و نمایش دو دکمه شناور (FloatingActionButtons) برای افزایش/کاهش شمارنده است.
 
 [counter_view.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_view.dart ':include')
 
-A `BlocBuilder` is used to wrap the `Text` widget in order to update the text any time the `CounterCubit` state changes. In addition, `context.read<CounterCubit>()` is used to look-up the closest `CounterCubit` instance.
+یک `BlocBuilder` برای اعمال وضعیت روی ویجت `Text` استفاده می‌شود تا هر بار که وضعیت `CounterCubit` تغییر کند، متن و ویجت به‌روز شود. علاوه بر این، از `context.read<CounterCubit>()` برای جستجو نمونه نزدیکترین `CounterCubit` استفاده می‌شود.
 
-?> **Note**: Only the `Text` widget is wrapped in a `BlocBuilder` because that is the only widget that needs to be rebuilt in response to state changes in the `CounterCubit`. Avoid unnecessarily wrapping widgets that don't need to be rebuilt when a state changes.
+?> **توجه**: فقط ویجت `Text` در `BlocBuilder` قرار داده شده است زیرا تنها ویجتی است که باید در پاسخ به تغییرات وضعیت `CounterCubit` مجدداً ساخته شود. از قرار دادن اضافی ویجت‌ها که نیازی به بازسازی ندارند هنگام تغییر وضعیت اجتناب کنید.
 
 ## Barrel
 
-Create `lib/counter/view/view.dart`:
+ایجاد کنید `lib/counter/view/view.dart`:
 
-Add `view.dart` to export all public facing parts of counter view.
+`view.dart` را اضافه کنید تا همهٔ اجزای واسط کاربری مربوط  به نمایش شمارنده قابل دسترس باشد.
 
 [view.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/view.dart ':include')
 
 
-Let's create `lib/counter/counter.dart`:
+بیایید `lib/counter/counter.dart` را ایجاد کنیم.
 
-Add `counter.dart` to export all the public facing parts of the counter feature.
+`counter.dart` را اضافه کنید تا تمام اجزا و کامپوننت‌های واسط کاربری عمومی مربوط به قابلیت شمارنده در دسترس باشند.
 
 [counter.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/counter.dart ':include')
 
-That's it! We've separated the presentation layer from the business logic layer. The `CounterView` has no idea what happens when a user presses a button; it just notifies the `CounterCubit`. Furthermore, the `CounterCubit` has no idea what is happening with the state (counter value); it's simply emitting new states in response to the methods being called.
+دقیقا! ما لایه‌ی نمایش (Presentation) را از لایه‌ی منطق کسب و کار (Business logic layer) جدا کردیم. `CounterView` هیچ اطلاعی از اتفاقی که هنگام فشردن دکمه توسط کاربر رخ می‌دهد ندارد؛ فقط به `CounterCubit` اطلاع می‌دهد. علاوه بر این، `CounterCubit` هیچ اطلاعی از اتفاقاتی که با وضعیت (مقدار شمارنده) رخ می‌دهد ندارد؛ به سادگی وضعیت‌های جدید را در پاسخ به تماس‌هایی که صدا زده می‌شوند بر می‌گرداند.
 
-We can run our app with `flutter run` and can view it on our device or simulator/emulator.
+می‌توانیم اپلیکیشن خود را با استفاده از `flutter run` اجرا کنیم و آن را در دستگاه یا شبیه‌ساز مشاهده کنیم.
 
-The full source (including unit and widget tests) for this example can be found [here](https://github.com/felangel/Bloc/tree/master/examples/flutter_counter).
+می‌توانید کد منبع کامل (شامل تست‌های واحد و ویجت) این مثال را در [اینجا](https://github.com/felangel/Bloc/tree/master/examples/flutter_counter) پیدا کنید.
