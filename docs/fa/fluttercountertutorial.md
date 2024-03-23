@@ -71,7 +71,7 @@ flutter packages get
 
 [main.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/main.dart ':include')
 
-ما `CounterObserver` را که به تازگی ایجاد کرده‌ایم راه اندازی (Initializing) می‌کنیم و `runApp` را با ویجت `CounterApp` فراخوانی می‌کنیم که در ادامه به بررسی آن خواهیم پرداخت.
+ما `CounterObserver` را که به تازگی ایجاد کرده‌ایم, را راه اندازی (Initializing) می‌کنیم و `runApp` را با ویجت `CounterApp` فراخوانی می‌کنیم که در ادامه به بررسی آن خواهیم پرداخت.
 
 ## برنامه شمارنده
 
@@ -126,7 +126,7 @@ flutter packages get
 
 ## Barrel
 
-ایجاد کنید `lib/counter/view/view.dart`:
+بیایید `lib/counter/view/view.dart` را ایجاد کنیم:
 
 `view.dart` را اضافه کنید تا همهٔ اجزای واسط کاربری مربوط  به نمایش شمارنده قابل دسترس باشد.
 
@@ -139,8 +139,8 @@ flutter packages get
 
 [counter.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/counter.dart ':include')
 
-دقیقا! ما لایه‌ی نمایش (Presentation) را از لایه‌ی منطق کسب و کار (Business logic layer) جدا کردیم. `CounterView` هیچ اطلاعی از اتفاقی که هنگام فشردن دکمه توسط کاربر رخ می‌دهد ندارد؛ فقط به `CounterCubit` اطلاع می‌دهد. علاوه بر این، `CounterCubit` هیچ اطلاعی از اتفاقاتی که با وضعیت (مقدار شمارنده) رخ می‌دهد ندارد؛ به سادگی وضعیت‌های جدید را در پاسخ به تماس‌هایی که صدا زده می‌شوند بر می‌گرداند.
+خودشه! ما لایه‌ی نمایش (Presentation) را از لایه‌ی منطق کسب و کار (Business logic layer) جدا کردیم. `CounterView` هیچ اطلاعی از اتفاقی که هنگام فشردن دکمه توسط کاربر رخ می‌دهد ندارد؛ فقط به `CounterCubit` اطلاع می‌دهد. علاوه بر این، `CounterCubit` هیچ اطلاعی از اتفاقاتی که با وضعیت (مقدار شمارنده) رخ می‌دهد ندارد؛ به سادگی وضعیت‌های جدید را در پاسخ به تماس‌هایی که صدا زده می‌شوند بر می‌گرداند.
 
 می‌توانیم اپلیکیشن خود را با استفاده از `flutter run` اجرا کنیم و آن را در دستگاه یا شبیه‌ساز مشاهده کنیم.
 
-می‌توانید کد منبع کامل (شامل تست‌های واحد و ویجت) این مثال را در [اینجا](https://github.com/felangel/Bloc/tree/master/examples/flutter_counter) پیدا کنید.
+همچنین می‌توانید کد منبع کامل (شامل تست‌های واحد و ویجت) این مثال را در [اینجا](https://github.com/felangel/Bloc/tree/master/examples/flutter_counter) پیدا کنید.
