@@ -1,3 +1,9 @@
+# 0.2.5
+
+- docs: improve diagrams
+- chore: update copyright year
+- chore: update sponsors
+
 # 0.2.4
 
 - chore: update sponsors
