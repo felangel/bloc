@@ -1,3 +1,9 @@
+# 0.2.7
+
+- refactor: use additional lint rules ([#4083](https://github.com/felangel/bloc/pull/4083))
+- chore: update copyright year
+- chore: update sponsors
+
 # 0.2.6
 
 - chore: update sponsors ([#4054](https://github.com/felangel/bloc/pull/4054))
