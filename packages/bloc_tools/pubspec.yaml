@@ -25,3 +25,7 @@ dev_dependencies:
 
 executables:
   bloc:
+
+screenshots:
+  - description: The bloc tools package logo.
+    path: screenshots/logo.png
