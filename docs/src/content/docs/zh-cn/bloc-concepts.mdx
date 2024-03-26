@@ -227,9 +227,7 @@ Extension methods](https://dart.dev/guides/language/extension-methods)，在 Dar
 
 ### context.read
 
-`context.read<T>()` 查找最接近的类型为 T 的祖先实例，并在功能上等同于 `BlocProvider.of<T>(context)`。`context.read` 最常用于在 `onPressed` 回调中检索 bloc 实例以添加事件。
-
-`context.read<T>()` looks up the closest ancestor instance of type `T` and is functionally equivalent to `BlocProvider.of<T>(context)`. `context.read` is most commonly used for retrieving a bloc instance in order to add an event within `onPressed` callbacks.
+`context.read<T>()` 查找最接近的类型为 T 的祖先实例，并在功能上等同于 `BlocProvider.of<T>(context)`。`context.read` 最常用于在 `onPressed` 回调中查找 bloc 实例以添加事件。
 
 :::note
 
@@ -239,7 +237,7 @@ Extension methods](https://dart.dev/guides/language/extension-methods)，在 Dar
 
 #### Usage
 
-✅ **DO** use `context.read` to add events in callbacks.
+✅ **DO** 在回调函数中使用`context.read` 方法来添加事件。
 
 ```dart
 onPressed() {
@@ -247,7 +245,7 @@ onPressed() {
 }
 ```
 
-❌ **AVOID** using `context.read` to retrieve state within a `build` method.
+❌ **AVOID** 在 `build` 方法當中使用`context.read` 查找狀態
 
 ```dart
 @override
@@ -257,10 +255,10 @@ Widget build(BuildContext context) {
 }
 ```
 
-The above usage is error prone because the `Text` widget will not be rebuilt if the state of the bloc changes.
+以上的使用可能會導致UI 不會反應最新的狀態變化的錯誤，因為即使狀態改變了 `Text` widget 並不會被重新建立（rebuild），。
 
 :::caution
-Use `BlocBuilder` or `context.watch` instead in order to rebuild in response to state changes.
+使用 `BlocBuilder` 或者 `context.watch` 以確保當狀態改變時，UI 可以被正確地重新構建。
 :::
 
 ### context.watch
