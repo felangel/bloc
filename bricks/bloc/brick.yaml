@@ -4,7 +4,7 @@ version: 0.3.1
 repository: https://github.com/felangel/bloc/tree/master/bricks/bloc
 
 environment:
-  mason: ">=0.1.0-dev.32 <0.1.0"
+  mason: ">=0.1.0-dev.50 <0.1.0"
 
 vars:
   name:
@@ -21,3 +21,11 @@ vars:
       - basic
       - equatable
       - freezed
+  events:
+    type: list
+    description: The supported bloc events.
+    prompt: What events will the bloc handle (increment, decrement)?
+  states:
+    type: list
+    description: The supported bloc states.
+    prompt: What states will the bloc emit (loading, success, failure)?

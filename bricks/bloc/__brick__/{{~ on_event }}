@@ -1,0 +1,3 @@
+on<{{name.pascalCase()}}Event>((event, emit) {
+      // TODO: implement event handler
+    });

@@ -1,8 +1,13 @@
 part of '{{name.snakeCase()}}_bloc.dart';
 
-class {{name.pascalCase()}}State extends Equatable {
+{{#has_states}}sealed {{/has_states}}class {{name.pascalCase()}}State extends Equatable {
   const {{name.pascalCase()}}State();
 
   @override
   List<Object> get props => [];
 }
+{{#states}}
+final class {{name.pascalCase()}}{{..pascalCase()}} extends {{name.pascalCase()}}State {
+  const {{name.pascalCase()}}{{..pascalCase()}}();
+}
+{{/states}}
