@@ -1,3 +1,8 @@
+# 9.1.5
+
+- chore: update copyright year
+- chore: update sponsors
+
 # 9.1.4
 
 - chore: update sponsors ([#4054](https://github.com/felangel/bloc/pull/4054))

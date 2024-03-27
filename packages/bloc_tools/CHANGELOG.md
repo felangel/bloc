@@ -1,3 +1,11 @@
+# 0.1.0-dev.6
+
+- chore: add screenshot to `pubspec.yaml`
+- chore(deps): upgrade to `mocktail ^1.0.0`
+- chore: add `topics` to `pubspec.yaml`
+- chore: update copyright year
+- chore: update logos
+
 # 0.1.0-dev.5
 
 - refactor: standardize analysis options

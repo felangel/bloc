@@ -1,6 +1,6 @@
 name: bloc_tools
 description: Tools for building applications using the bloc state management library.
-version: 0.1.0-dev.5
+version: 0.1.0-dev.6
 repository: https://github.com/felangel/bloc/tree/master/packages/bloc_tools
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://github.com/felangel/bloc
@@ -25,3 +25,7 @@ dev_dependencies:
 
 executables:
   bloc:
+
+screenshots:
+  - description: The bloc tools package logo.
+    path: screenshots/logo.png
