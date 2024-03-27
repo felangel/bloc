@@ -151,7 +151,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   /// {@endtemplate}
   @visibleForTesting
   @override
-  void emit(State state) => super.emit(state);
+  Emitter<State> get emit => super.emit;
 
   /// Register event handler for an event of type `E`.
   /// There should only ever be one event handler per event type `E`.

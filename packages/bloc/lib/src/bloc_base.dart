@@ -28,11 +28,11 @@ abstract class Closable {
   bool get isClosed;
 }
 
-/// An object that can emit new states.
+/// An object that can emit new states via the [Emitter].
 // ignore: one_member_abstracts
 abstract class Emittable<State extends Object?> {
-  /// Emits a new [state].
-  void emit(State state);
+  /// The emitter.
+  Emitter<State> get emit;
 }
 
 /// A generic destination for errors.
@@ -91,21 +91,21 @@ abstract class BlocBase<State>
   @protected
   @visibleForTesting
   @override
-  void emit(State state) {
-    try {
-      if (isClosed) {
-        throw StateError('Cannot emit new states after calling close');
-      }
-      if (state == _state && _emitted) return;
-      onChange(Change<State>(currentState: this.state, nextState: state));
-      _state = state;
-      _stateController.add(_state);
-      _emitted = true;
-    } catch (error, stackTrace) {
-      onError(error, stackTrace);
-      rethrow;
-    }
-  }
+  Emitter<State> get emit => _Emitter((state) {
+        try {
+          if (isClosed) {
+            throw StateError('Cannot emit new states after calling close');
+          }
+          if (state == _state && _emitted) return;
+          onChange(Change<State>(currentState: this.state, nextState: state));
+          _state = state;
+          _stateController.add(_state);
+          _emitted = true;
+        } catch (error, stackTrace) {
+          onError(error, stackTrace);
+          rethrow;
+        }
+      });
 
   /// Called whenever a [change] occurs with the given [change].
   /// A [change] occurs when a new `state` is emitted.
