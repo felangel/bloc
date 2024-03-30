@@ -48,9 +48,7 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 
 **BlocBuilder** 是一个 Flutter 的 Widget，它需要一个 `Bloc` 和一个 `builder` 函数。`BlocBuilder` 处理于构建响应新状态时构建的 Widget 。`BlocBuilder` 与 `StreamBuilder` 非常相似，但是 `StreamBuilder`具有更简单的 API，以减少所需的样板代码量。`builder` 函数可能会被多次调用，并且必须是一个根据状态返回一个widget的[纯函数](https://en.wikipedia.org/wiki/Pure_function)。
 
-
-如果你希望在状态变化时执行一些操作，比如导航、显示对话框等...，请查看  `BlocListener`
-
+如果你希望在状态变化时执行一些操作，比如导航、显示对话框等...，请查看 `BlocListener`
 
 在BlocBuilder中，如果省略了 `bloc` 参数，则 `BlocBuilder` 会自动通过 `BlocProvider` 和当前的 `BuildContext` 进行查找。
 
@@ -60,7 +58,7 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 
 <BlocBuilderExplicitBlocSnippet />
 
-在使用 BlocBuilder 时，如果要达到更细緻地控制 widget 的更新，可以使用 `buildWhen` 参数来实现何时调用 `builder` 函数。`buildWhen`  接受前一个 bloc 状态和当前 bloc 状态，并返回一个布尔值。如果 `buildWhen` 返回 true，则 `builder` 函数将被调用并使用当前 `state` 进行widget重建。如果 buildWhen 返回 false，则 `builder` 将不会被使用当前 `state` 调用，且不会进行重建。
+在使用 BlocBuilder 时，如果要达到更细緻地控制 widget 的更新，可以使用 `buildWhen` 参数来实现何时调用 `builder` 函数。`buildWhen` 接受前一个 bloc 状态和当前 bloc 状态，并返回一个布尔值。如果 `buildWhen` 返回 true，则 `builder` 函数将被调用并使用当前 `state` 进行widget重建。如果 buildWhen 返回 false，则 `builder` 将不会被使用当前 `state` 调用，且不会进行重建。
 
 <BlocBuilderConditionSnippet />
 
@@ -68,7 +66,7 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 
 **BlocSelector** 是一个 Flutter Widget，类似于 BlocBuilder，但允许开发者通过根据当前 bloc 状态选择新值来过滤更新。如果选择的值不变，则防止不必要的构建。选择的值必须是 immutable 的，以便 BlocSelector 可以准确地确定是否应该再次调用 builder。
 
-如果`bloc` 被省略没有传入， `BlocSelector`  将自动使用 `BlocProvider` 和当前的 `BuildContext` 执行查找。
+如果`bloc` 被省略没有传入， `BlocSelector` 将自动使用 `BlocProvider` 和当前的 `BuildContext` 执行查找。
 
 <BlocSelectorSnippet />
 
@@ -100,7 +98,7 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 
 `MultiBlocProvider` 可以提高代码的可读性，消除了需要嵌套多个 `BlocProvider` 的情况。
 
-通过使用了 `MultiBlocProvider`  我们可以从
+通过使用了 `MultiBlocProvider` 我们可以从
 
 <NestedBlocProviderSnippet />
 
@@ -114,7 +112,7 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 
 与 `BlocBuilder` 中的 `builder` 不同的是，`listener` 对于每个状态变化（初始状态除外）只会被调用一次，并且是一个 `void` 函数。
 
-如果`bloc` 被省略没有传入， `BlocListener`  将自动使用 `BlocProvider` 和当前的 `BuildContext` 执行查找。
+如果`bloc` 被省略没有传入， `BlocListener` 将自动使用 `BlocProvider` 和当前的 `BuildContext` 执行查找。
 
 <BlocListenerSnippet />
 
@@ -140,13 +138,13 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 
 ### BlocConsumer
 
-**BlocConsumer** 提供了 `builder` 和 `listener`，以便对新的状态做出反应。`BlocConsumer` 类似于嵌套的 `BlocListener` 和 `BlocBuilder`，但可以减少所需的样板代码量。只有在需要重建 UI 并执行其他对 `bloc` 状态变化做出反应时，才应该使用 `BlocConsumer`。`BlocConsumer` 接受`BlocWidgetBuilder` (必传参数) 和 `BlocWidgetListener` (必传参数) ，以及 `bloc` (可选参数)、`BlocBuilderCondition`  (可选参数) 和 `BlocListenerCondition` (可选参数)。
+**BlocConsumer** 提供了 `builder` 和 `listener`，以便对新的状态做出反应。`BlocConsumer` 类似于嵌套的 `BlocListener` 和 `BlocBuilder`，但可以减少所需的样板代码量。只有在需要重建 UI 并执行其他对 `bloc` 状态变化做出反应时，才应该使用 `BlocConsumer`。`BlocConsumer` 接受`BlocWidgetBuilder` (必传参数) 和 `BlocWidgetListener` (必传参数) ，以及 `bloc` (可选参数)、`BlocBuilderCondition` (可选参数) 和 `BlocListenerCondition` (可选参数)。
 
-如果`bloc` 被省略没有传入， `BlocConsumer`  将自动使用 `BlocProvider` 和当前的 `BuildContext` 进行查找。
+如果`bloc` 被省略没有传入， `BlocConsumer` 将自动使用 `BlocProvider` 和当前的 `BuildContext` 进行查找。
 
 <BlocConsumerSnippet />
 
-可选参数 `listenWhen` 和 `buildWhen` 可以用来更精细地控制 `listener` 和 `builder` 何时被调用。`listenWhen` 和 `buildWhen` 将在每个 `bloc` 的 `state` 更改时被调用。它们都接受先前的 `state` 和当前的 `state`，且必须返回一个布尔值，用于确定是否调用 `builder` 和/或  `listener` 函数。当 `BlocConsumer` 初始化时，先前的 `state` 将初始化为 `bloc` 的 `state`。由于 `listenWhen` 和 `buildWhen` 是可选的，因此不实现它们时，默认为 `true`。
+可选参数 `listenWhen` 和 `buildWhen` 可以用来更精细地控制 `listener` 和 `builder` 何时被调用。`listenWhen` 和 `buildWhen` 将在每个 `bloc` 的 `state` 更改时被调用。它们都接受先前的 `state` 和当前的 `state`，且必须返回一个布尔值，用于确定是否调用 `builder` 和/或 `listener` 函数。当 `BlocConsumer` 初始化时，先前的 `state` 将初始化为 `bloc` 的 `state`。由于 `listenWhen` 和 `buildWhen` 是可选的，因此不实现它们时，默认为 `true`。
 
 <BlocConsumerConditionSnippet />
 
@@ -176,7 +174,7 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 
 ## BlocProvider Usage
 
-接着来看看如何使用  `BlocProvider`  来提供一个  `CounterBloc` 给一个 `CounterPage` 并且使用`BlocBuilder`  来对状态变化做出反应.
+接着来看看如何使用 `BlocProvider` 来提供一个 `CounterBloc` 给一个 `CounterPage` 并且使用`BlocBuilder` 来对状态变化做出反应.
 
 <CounterBlocSnippet />
 
@@ -196,7 +194,7 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 
 <WeatherMainSnippet />
 
-由于在这个例子中，我们的应用程序只有一个  repository，我们将通过 `RepositoryProvider.value` 将其注入到我们的 widget tree 中。如果您有多个 repository，则可以使用 `MultiRepositoryProvider` 将多个 repository 实例提供给 subtree。
+由于在这个例子中，我们的应用程序只有一个 repository，我们将通过 `RepositoryProvider.value` 将其注入到我们的 widget tree 中。如果您有多个 repository，则可以使用 `MultiRepositoryProvider` 将多个 repository 实例提供给 subtree。
 
 <WeatherAppSnippet />
 
@@ -217,9 +215,8 @@ Extension methods](https://dart.dev/guides/language/extension-methods)，在 Dar
 
 在内部，`package:flutter_bloc` 使用 `package:provider` 实现了 `BlocProvider`、`MultiBlocProvider`、`RepositoryProvider` 和 `MultiRepositoryProvider` widgets。 `package:flutter_bloc` 从 `package:provider` 中导出了 `ReadContext`、`WatchContext` 和 `SelectContext` 扩展。
 
-
 :::note
-查询更多关于  [`package:provider`](https://pub.dev/packages/provider).
+查询更多关于 [`package:provider`](https://pub.dev/packages/provider).
 :::
 
 ### context.read
@@ -320,7 +317,7 @@ Builder(
 );
 ```
 
-❌ **AVOID** 使用 `context.watch` 
+❌ **AVOID** 使用 `context.watch`
 当父 Widget 的 build 方法不依赖于状态
 
 ```dart
