@@ -33,9 +33,9 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
   RestartableStreamBloc(Stream<int> stream) : super(0) {
     on<ForEach>(
       (_, emit) async {
-        await emit.forEach<int>(
+        await emit.forEach(
           stream,
-          onData: (i) => i,
+          onData: (int i) => i,
         );
       },
       transformer: (events, mapper) => events.switchMap(mapper),
@@ -44,9 +44,9 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
     on<ForEachOnError>(
       (_, emit) async {
         try {
-          await emit.forEach<int>(
+          await emit.forEach(
             stream,
-            onData: (i) => i,
+            onData: (int i) => i,
             onError: (_, __) => -1,
           );
         } catch (_) {
@@ -59,9 +59,9 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
     on<ForEachTryCatch>(
       (_, emit) async {
         try {
-          await emit.forEach<int>(
+          await emit.forEach(
             stream,
-            onData: (i) => i,
+            onData: (int i) => i,
           );
         } catch (_) {
           emit(-1);
@@ -72,9 +72,9 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
 
     on<ForEachCatchError>(
       (_, emit) => emit
-          .forEach<int>(
+          .forEach(
             stream,
-            onData: (i) => i,
+            onData: (int i) => i,
           )
           .catchError((dynamic _) => emit(-1)),
       transformer: (events, mapper) => events.switchMap(mapper),
@@ -82,9 +82,9 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
 
     on<UnawaitedForEach>(
       (_, emit) {
-        emit.forEach<int>(
+        emit.forEach(
           stream,
-          onData: (i) => i,
+          onData: (int i) => i,
         );
       },
       transformer: (events, mapper) => events.switchMap(mapper),
@@ -92,9 +92,9 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
 
     on<OnEach>(
       (_, emit) async {
-        await emit.onEach<int>(
+        await emit.onEach(
           stream,
-          onData: (i) => Future<void>.delayed(_delay, () => emit(i)),
+          onData: (int i) => Future<void>.delayed(_delay, () => emit(i)),
         );
       },
       transformer: (events, mapper) => events.switchMap(mapper),
@@ -102,9 +102,9 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
 
     on<OnEachOnError>(
       (_, emit) async {
-        await emit.onEach<int>(
+        await emit.onEach(
           stream,
-          onData: (i) => Future<void>.delayed(_delay, () => emit(i)),
+          onData: (int i) => Future<void>.delayed(_delay, () => emit(i)),
           onError: (_, __) => emit(-1),
         );
       },
@@ -114,9 +114,9 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
     on<OnEachTryCatch>(
       (_, emit) async {
         try {
-          await emit.onEach<int>(
+          await emit.onEach(
             stream,
-            onData: (i) => Future<void>.delayed(_delay, () => emit(i)),
+            onData: (int i) => Future<void>.delayed(_delay, () => emit(i)),
           );
         } catch (_) {
           emit(-1);
@@ -128,9 +128,9 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
     on<OnEachTryCatchAbort>(
       (_, emit) async {
         try {
-          await emit.onEach<int>(
+          await emit.onEach(
             stream,
-            onData: (i) => Future<void>.delayed(_delay, () {
+            onData: (int i) => Future<void>.delayed(_delay, () {
               if (emit.isDone) return;
               emit(i);
             }),
@@ -144,9 +144,9 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
 
     on<OnEachCatchError>(
       (_, emit) => emit
-          .onEach<int>(
+          .onEach(
             stream,
-            onData: (i) => Future<void>.delayed(_delay, () => emit(i)),
+            onData: (int i) => Future<void>.delayed(_delay, () => emit(i)),
           )
           .catchError((dynamic _) => emit(-1)),
       transformer: (events, mapper) => events.switchMap(mapper),
@@ -154,9 +154,9 @@ class RestartableStreamBloc extends Bloc<RestartableStreamEvent, int> {
 
     on<UnawaitedOnEach>(
       (_, emit) {
-        emit.onEach<int>(
+        emit.onEach(
           stream,
-          onData: (i) => Future<void>.delayed(_delay, () => emit(i)),
+          onData: (int i) => Future<void>.delayed(_delay, () => emit(i)),
         );
       },
       transformer: (events, mapper) => events.switchMap(mapper),
