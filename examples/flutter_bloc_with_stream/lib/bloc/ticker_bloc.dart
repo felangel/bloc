@@ -15,9 +15,9 @@ class TickerBloc extends Bloc<TickerEvent, TickerState> {
   TickerBloc(Ticker ticker) : super(TickerInitial()) {
     on<TickerStarted>(
       (event, emit) async {
-        await emit.onEach<int>(
+        await emit.onEach(
           ticker.tick(),
-          onData: (tick) => add(_TickerTicked(tick)),
+          onData: (int tick) => add(_TickerTicked(tick)),
         );
         emit(const TickerComplete());
       },
