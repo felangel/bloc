@@ -1291,6 +1291,268 @@ void main() {
       });
     });
 
+    group('ComplexStreamBloc', () {
+      test('onEach throws TypeError when onError has wrong error type',
+          () async {
+        late final Object blocError;
+        await runZonedGuarded(() async {
+          final error = ComplexException('oops');
+          final expectedStates = [
+            ComplexDataState(1),
+            ComplexDataState(2),
+            ComplexDataState(3),
+          ];
+          final states = <ComplexStreamState>[];
+          final controller = StreamController<int>.broadcast();
+          final bloc = ComplexStreamBloc(controller.stream)
+            ..stream.listen(states.add)
+            ..add(OnEachWrongErrorTypeOnError());
+
+          await tick();
+
+          controller
+            ..add(1)
+            ..add(2)
+            ..add(3);
+
+          await tick();
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+
+          controller.addError(error);
+          await tick();
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+
+          expect(states, equals(expectedStates));
+
+          await bloc.close();
+        }, (error, stackTrace) {
+          blocError = error;
+        });
+
+        expect(
+          blocError,
+          isA<TypeError>().having(
+            (e) => e.toString(),
+            'toString()',
+            contains('is not a subtype of type '),
+          ),
+        );
+      });
+
+      test(
+          'onEach throws correct error without onError handler '
+          'and when generic error type is specified', () async {
+        late final Object blocError;
+        final error = ComplexException('oops');
+        await runZonedGuarded(() async {
+          final expectedStates = [
+            ComplexDataState(1),
+            ComplexDataState(2),
+            ComplexDataState(3),
+          ];
+          final states = <ComplexStreamState>[];
+          final controller = StreamController<int>.broadcast();
+          final bloc = ComplexStreamBloc(controller.stream)
+            ..stream.listen(states.add)
+            ..add(OnEachComplexWithoutOnError());
+
+          await tick();
+
+          controller
+            ..add(1)
+            ..add(2)
+            ..add(3);
+
+          await tick();
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+
+          controller.addError(error);
+          await tick();
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+
+          expect(states, equals(expectedStates));
+
+          await bloc.close();
+        }, (error, stackTrace) {
+          blocError = error;
+        });
+
+        expect(blocError, equals(error));
+      });
+
+      test(
+          'onEach with strongly typed onError handles errors emitted by stream '
+          'and does not cancel subscription', () async {
+        final error = ComplexException('oops');
+        final expectedStates = [
+          ComplexDataState(1),
+          ComplexDataState(2),
+          ComplexDataState(3),
+          ComplexFailureState(error),
+          ComplexDataState(4),
+          ComplexDataState(5),
+          ComplexDataState(6),
+        ];
+        final states = <ComplexStreamState>[];
+        final controller = StreamController<int>.broadcast();
+        final bloc = ComplexStreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(OnEachComplexOnError());
+
+        await tick();
+
+        controller
+          ..add(1)
+          ..add(2)
+          ..add(3);
+
+        await tick();
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        controller
+          ..addError(error)
+          ..add(4)
+          ..add(5)
+          ..add(6);
+        await tick();
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        expect(states, equals(expectedStates));
+
+        await bloc.close();
+      });
+
+      test('forEach throws TypeError when onError has wrong error type',
+          () async {
+        late final Object blocError;
+        await runZonedGuarded(() async {
+          final error = ComplexException('oops');
+          final expectedStates = [
+            ComplexDataState(1),
+            ComplexDataState(2),
+            ComplexDataState(3),
+          ];
+          final states = <ComplexStreamState>[];
+          final controller = StreamController<int>.broadcast();
+          final bloc = ComplexStreamBloc(controller.stream)
+            ..stream.listen(states.add)
+            ..add(ForEachWrongErrorTypeOnError());
+
+          await tick();
+
+          controller
+            ..add(1)
+            ..add(2)
+            ..add(3);
+
+          await tick();
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+
+          controller.addError(error);
+          await tick();
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+
+          expect(states, equals(expectedStates));
+
+          await bloc.close();
+        }, (error, stackTrace) {
+          blocError = error;
+        });
+
+        expect(
+          blocError,
+          isA<TypeError>().having(
+            (e) => e.toString(),
+            'toString()',
+            contains('is not a subtype of type '),
+          ),
+        );
+      });
+
+      test(
+          'forEach throws correct error without onError handler '
+          'and when generic error type is specified', () async {
+        late final Object blocError;
+        final error = ComplexException('oops');
+        await runZonedGuarded(() async {
+          final expectedStates = [
+            ComplexDataState(1),
+            ComplexDataState(2),
+            ComplexDataState(3),
+          ];
+          final states = <ComplexStreamState>[];
+          final controller = StreamController<int>.broadcast();
+          final bloc = ComplexStreamBloc(controller.stream)
+            ..stream.listen(states.add)
+            ..add(ForEachComplexWithoutOnError());
+
+          await tick();
+
+          controller
+            ..add(1)
+            ..add(2)
+            ..add(3);
+
+          await tick();
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+
+          controller.addError(error);
+          await tick();
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+
+          expect(states, equals(expectedStates));
+
+          await bloc.close();
+        }, (error, stackTrace) {
+          blocError = error;
+        });
+
+        expect(blocError, equals(error));
+      });
+
+      test(
+          'forEach with strongly typed onError handles errors emitted by '
+          'stream and does not cancel subscription', () async {
+        final error = ComplexException('oops');
+        final expectedStates = [
+          ComplexDataState(1),
+          ComplexDataState(2),
+          ComplexDataState(3),
+          ComplexFailureState(error),
+          ComplexDataState(4),
+          ComplexDataState(5),
+          ComplexDataState(6),
+        ];
+        final states = <ComplexStreamState>[];
+        final controller = StreamController<int>.broadcast();
+        final bloc = ComplexStreamBloc(controller.stream)
+          ..stream.listen(states.add)
+          ..add(ForEachComplexOnError());
+
+        await tick();
+
+        controller
+          ..add(1)
+          ..add(2)
+          ..add(3);
+
+        await tick();
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        controller
+          ..addError(error)
+          ..add(4)
+          ..add(5)
+          ..add(6);
+        await tick();
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        expect(states, equals(expectedStates));
+
+        await bloc.close();
+      });
+    });
+
     group('UnawaitedBloc', () {
       test(
           'throws AssertionError when emit is called '
