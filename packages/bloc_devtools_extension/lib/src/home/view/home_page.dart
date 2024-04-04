@@ -29,7 +29,7 @@ class HomeView extends StatelessWidget {
           const AreaPaneHeader(
             roundedTopBorder: false,
             includeTopBorder: false,
-            title: Text('List'),
+            title: Text('Blocs'),
           ),
           Expanded(
             child: BlocBuilder<HomeBloc, HomeState>(
@@ -49,13 +49,24 @@ class _BlocListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    final theme = Theme.of(context);
+    final titleStyle = theme.textTheme.bodyLarge?.copyWith(
+      color: theme.colorScheme.primary,
+    );
+    final subtitleStyle = theme.textTheme.bodySmall?.copyWith(
+      color: theme.colorScheme.secondary,
+    );
+    return ListView.separated(
+      separatorBuilder: (context, index) => const Divider(),
       itemBuilder: (context, index) {
         final bloc = blocs[index];
         return ListTile(
           key: Key('${bloc.name}_${bloc.hashCode}'),
-          title: Text(bloc.name),
-          subtitle: Text(bloc.lastModified.format(context)),
+          title: Text(bloc.name, style: titleStyle),
+          subtitle: Text(
+            bloc.lastModified.format(context),
+            style: subtitleStyle,
+          ),
           onTap: () => Navigator.of(context).push(
             DetailsPage.route(blocHash: bloc.hash),
           ),

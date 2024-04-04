@@ -50,7 +50,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             final bloc = BlocNode.fromJson(
               event.json!['extensionData'] as Map<String, dynamic>,
             );
-            emit(HomeState(blocs: [...state.blocs]..remove(bloc)));
+            emit(
+              HomeState(
+                blocs: [...state.blocs]
+                  ..removeWhere((b) => b.hash == bloc.hash),
+              ),
+            );
           case 'bloc:onChange':
             final bloc = BlocNode.fromJson(
               event.json!['extensionData'] as Map<String, dynamic>,

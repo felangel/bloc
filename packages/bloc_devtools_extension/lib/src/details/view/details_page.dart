@@ -30,6 +30,11 @@ class DetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final titleStyle = theme.textTheme.bodyLarge?.copyWith();
+    final subtitleStyle = theme.textTheme.bodyLarge?.copyWith(
+      color: theme.colorScheme.primary,
+    );
     final bloc = context.watch<DetailsBloc>().state.bloc;
     return Scaffold(
       appBar: AppBar(
@@ -38,23 +43,40 @@ class DetailsView extends StatelessWidget {
       ),
       body: RoundedOutlinedBorder(
         clip: true,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const AreaPaneHeader(
-              roundedTopBorder: false,
-              includeTopBorder: false,
-              title: Text('Details'),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text('State: ${bloc?.state ?? '--'}'),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const AreaPaneHeader(
+                roundedTopBorder: false,
+                includeTopBorder: false,
+                title: Text('Details'),
               ),
-            ),
-          ],
+              ListTile(
+                title: Text('Last Modified', style: titleStyle),
+                subtitle: Text(
+                  bloc?.lastModified.format(context) ?? '--',
+                  style: subtitleStyle,
+                ),
+              ),
+              const Divider(),
+              ListTile(
+                title: Text('State', style: titleStyle),
+                subtitle: Text(
+                  bloc?.state ?? '--',
+                  style: subtitleStyle,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+extension on DateTime {
+  String format(BuildContext context) {
+    return TimeOfDay.fromDateTime(this).format(context);
   }
 }

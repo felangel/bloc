@@ -55,7 +55,7 @@ class DevTools {
 extension on BlocBase<dynamic> {
   Map<String, dynamic> toJson({dynamic state}) {
     return {
-      'name': '$runtimeType',
+      'name': runtimeType,
       'state': '${state ?? this.state}',
       'hash': hashCode,
     };
