@@ -58,13 +58,13 @@ abstract class Emitter<State> {
   bool get isDone;
 
   /// Emits the provided [state].
-  void call(State state);
+  void call(State state, {bool force});
 }
 
 class _Emitter<State> implements Emitter<State> {
   _Emitter(this._emit);
 
-  final void Function(State state) _emit;
+  final void Function(State state, {bool force}) _emit;
   final _completer = Completer<void>();
   final _disposables = <FutureOr<void> Function()>[];
 
@@ -109,7 +109,7 @@ class _Emitter<State> implements Emitter<State> {
   }
 
   @override
-  void call(State state) {
+  void call(State state, {bool force = false}) {
     assert(
       !_isCompleted,
       '''
@@ -132,7 +132,7 @@ ensure the event handler has not completed.
   });
 ''',
     );
-    if (!_isCanceled) _emit(state);
+    if (!_isCanceled) _emit(state, force: force);
   }
 
   @override

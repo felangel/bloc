@@ -94,7 +94,7 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
   }
 
   @override
-  void emit(State state) {
+  void emit(State state, {bool force = false}) {
     _changeStack.add(
       _Change<State>(
         this.state,
@@ -110,7 +110,7 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
             ),
           );
           // ignore: invalid_use_of_visible_for_testing_member
-          super.emit(state);
+          super.emit(state, force: force);
         },
         (val) {
           final event = _Undo();
@@ -123,12 +123,12 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
             ),
           );
           // ignore: invalid_use_of_visible_for_testing_member
-          super.emit(val);
+          super.emit(val, force: force);
         },
       ),
     );
     // ignore: invalid_use_of_visible_for_testing_member
-    super.emit(state);
+    super.emit(state, force: force);
   }
 
   /// Undo the last change.
