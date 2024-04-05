@@ -142,6 +142,30 @@ void main() {
       });
     });
 
+    group('Simple Bloc Forcible', () {
+      late SimpleBlocForcible simpleBloc;
+      late MockBlocObserver observer;
+
+      setUp(() {
+        simpleBloc = SimpleBlocForcible();
+        observer = MockBlocObserver();
+        Bloc.observer = observer;
+      });
+
+      test('setting force will emit, even if the state is the same', () {
+        const expectedStates = <String>['data', 'data'];
+
+        expectLater(simpleBloc.stream, emitsInOrder(expectedStates));
+        expectLater(simpleBloc.stream, emitsInOrder(expectedStates));
+        expectLater(simpleBloc.stream, emitsInOrder(expectedStates));
+
+        simpleBloc
+          ..add(false)
+          ..add(true)
+          ..add(false);
+      });
+    });
+
     group('Complex Bloc', () {
       late ComplexBloc complexBloc;
       late MockBlocObserver observer;
