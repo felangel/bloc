@@ -57,6 +57,10 @@ const locales = {
 		label: 'العربية',
 		lang: 'ar',
 	},
+	kg: {
+		label: 'Кыргызча',
+		lang: 'kg',
+	},
 };
 
 // https://astro.build/config
