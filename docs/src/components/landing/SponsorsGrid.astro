@@ -80,7 +80,7 @@ const sponsors: Sponsor[] = [
 			sponsors.map((sponsor) => {
 				return (
 					<div class="flex flex-row justify-center items-center">
-						<a href={sponsor.href} aria-label={sponsor.alt}>
+						<a href={sponsor.href} aria-label={sponsor.alt} target="_blank" rel="noreferrer">
 							<img
 								class={sponsor.invert ? 'invert-logo' : 'logo'}
 								src={sponsor.img.src}
@@ -96,5 +96,10 @@ const sponsors: Sponsor[] = [
 </div>
 
 <div class="w-full flex text-center items-center justify-center">
-	<LinkCard title={becomeASponsor} href="https://github.com/sponsors/felangel" />
+	<LinkCard
+		title={becomeASponsor}
+		href="https://github.com/sponsors/felangel"
+		target="_blank"
+		rel="noreferrer"
+	/>
 </div>
