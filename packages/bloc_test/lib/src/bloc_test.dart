@@ -187,9 +187,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
 }) async {
   var shallowEquality = false;
   final unhandledErrors = <Object>[];
-  final localBlocObserver =
-      // ignore: deprecated_member_use
-      BlocOverrides.current?.blocObserver ?? Bloc.observer;
+  final localBlocObserver = Bloc.observer;
   final testObserver = _TestBlocObserver(
     localBlocObserver,
     unhandledErrors.add,
