@@ -102,6 +102,7 @@ class _Emitter<State> implements Emitter<State> {
       onData: (data) => call(onData(data)),
       onError: onError != null
           ? (Object error, StackTrace stackTrace) {
+              addError(error, stackTrace);
               call(onError(error, stackTrace));
             }
           : null,
