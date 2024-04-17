@@ -99,7 +99,7 @@ runs:
 
     - name: 📊 Verify Coverage
       if: inputs.collect_coverage == 'true'
-      uses: VeryGoodOpenSource/very_good_coverage@v2
+      uses: VeryGoodOpenSource/very_good_coverage@v3
       with:
         path: ${{inputs.working_directory}}/coverage/lcov.info
         exclude: ${{inputs.coverage_excludes}}

@@ -84,7 +84,7 @@ runs:
         token: ${{ inputs.codecov_token }}
 
     - name: 📊 Verify Coverage
-      uses: VeryGoodOpenSource/very_good_coverage@v2
+      uses: VeryGoodOpenSource/very_good_coverage@v3
       with:
         path: ${{inputs.working_directory}}/coverage/lcov.info
         exclude: ${{inputs.coverage_excludes}}
