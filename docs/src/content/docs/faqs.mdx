@@ -21,7 +21,7 @@ import BlocInternalAddEventSnippet from '~/components/faqs/BlocInternalAddEventS
 import BlocInternalEventSnippet from '~/components/faqs/BlocInternalEventSnippet.astro';
 import BlocExternalForEachSnippet from '~/components/faqs/BlocExternalForEachSnippet.astro';
 
-## State Not Updating
+## [State Not Updating](#state-not-updating)
 
 ❔ **Question**: I'm emitting a state in my bloc but the UI is not updating. What
 am I doing wrong?
@@ -84,7 +84,7 @@ like:
 
 <NoEquatableBlocTestSnippet />
 
-## Handling Errors
+## [Handling Errors](#handling-errors)
 
 ❔ **Question**: How can I handle an error while still showing previous data?
 
@@ -102,7 +102,7 @@ when an error has occurred.
 
 <SingleStateUsageSnippet />
 
-## Bloc vs. Redux
+## [Bloc vs. Redux](#bloc-vs-redux)
 
 ❔ **Question**: What's the difference between Bloc and Redux?
 
@@ -137,7 +137,7 @@ across multiple blocs. Furthermore, there is no concept of middleware in bloc
 and bloc is designed to make async state changes very easy, allowing you to emit
 multiple states for a single event.
 
-## Bloc vs. Provider
+## [Bloc vs. Provider](#bloc-vs-provider)
 
 ❔ **Question**: What's the difference between Bloc and Provider?
 
@@ -147,7 +147,7 @@ multiple states for a single event.
 internally to make it easy to provide and access blocs throughout the widget
 tree.
 
-## BlocProvider.of() Fails to Find Bloc
+## [BlocProvider.of() Fails to Find Bloc](#blocproviderof-fails-to-find-bloc)
 
 ❔ **Question**: When using `BlocProvider.of(context)` it cannot find the bloc.
 How can I fix this?
@@ -166,7 +166,7 @@ provided so you must ensure `BlocProvider.of()` is called within a child
 
 <BlocProviderBad1Snippet />
 
-## Project Structure
+## [Project Structure](#project-structure)
 
 ❔ **Question**: How should I structure my project?
 
@@ -180,7 +180,7 @@ recommended references are
 The most important thing is having a **consistent** and **intentional** project
 structure.
 
-## Adding Events within a Bloc
+## [Adding Events within a Bloc](#adding-events-within-a-bloc)
 
 ❔ **Question**: Is it okay to add events within a bloc?
 
@@ -227,7 +227,7 @@ The drawbacks of the above approach are:
 - We need to expose a public `Started` event which must be added externally
 - We cannot use a custom `transformer` to adjust how we react to user updates
 
-## Exposing Public Methods
+## [Exposing Public Methods](#exposing-public-methods)
 
 ❔ **Question**: Is it okay to expose public methods on my bloc and cubit
 instances?

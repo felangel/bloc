@@ -41,6 +41,24 @@
 	border: none;
 }
 
+.sl-markdown-content h4 > a:not(:where(.not-content *)),
+.sl-markdown-content h3 > a:not(:where(.not-content *)),
+.sl-markdown-content h2 > a:not(:where(.not-content *)) {
+	color: var(--sl-color-white);
+	text-decoration: none;
+	position: relative;
+}
+
+@media (hover: hover) {
+	.sl-markdown-content h4 > a:not(:where(.not-content *)):hover::after,
+	.sl-markdown-content h3 > a:not(:where(.not-content *)):hover::after,
+	.sl-markdown-content h2 > a:not(:where(.not-content *)):hover::after {
+		content: '🔗';
+		font-size: 0.7em;
+		margin-inline-start: 0.5rem;
+	}
+}
+
 @media screen and (min-width: 50rem) {
 	[data-has-hero] .hero {
 		padding-block: clamp(2.5rem, calc(1rem + 10vmin), 2.5rem);

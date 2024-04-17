@@ -24,7 +24,7 @@ Using the bloc library allows us to separate our application into three layers:
 
 We're going to start at the lowest level layer (farthest from the user interface) and work our way up to the presentation layer.
 
-## Data Layer
+## [Data Layer](#data-layer)
 
 The data layer's responsibility is to retrieve/manipulate data from one or more sources.
 
@@ -35,7 +35,7 @@ The data layer can be split into two parts:
 
 This layer is the lowest level of the application and interacts with databases, network requests, and other asynchronous data sources.
 
-### Data Provider
+### [Data Provider](#data-provider)
 
 The data provider's responsibility is to provide raw data. The data provider should be generic and versatile.
 
@@ -44,7 +44,7 @@ We might have a `createData`, `readData`, `updateData`, and `deleteData` method 
 
 <DataProviderSnippet />
 
-### Repository
+### [Repository](#repository)
 
 The repository layer is a wrapper around one or more data providers with which the Bloc Layer communicates.
 
@@ -52,7 +52,7 @@ The repository layer is a wrapper around one or more data providers with which t
 
 As you can see, our repository layer can interact with multiple data providers and perform transformations on the data before handing the result to the business logic layer.
 
-## Business Logic Layer
+## [Business Logic Layer](#business-logic-layer)
 
 The business logic layer's responsibility is to respond to input from the presentation layer with new states. This layer can depend on one or more repositories to retrieve data needed to build up the application state.
 
@@ -60,7 +60,7 @@ Think of the business logic layer as the bridge between the user interface (pres
 
 <BusinessLogicComponentSnippet />
 
-### Bloc-to-Bloc Communication
+### [Bloc-to-Bloc Communication](#bloc-to-bloc-communication)
 
 Because blocs expose streams, it may be tempting to make a bloc which listens to another bloc. You should **not** do this. There are better alternatives than resorting to the code below:
 
@@ -76,7 +76,7 @@ A bloc should only receive information through events and from injected reposito
 
 If you're in a situation where a bloc needs to respond to another bloc, you have two other options. You can push the problem up a layer (into the presentation layer), or down a layer (into the domain layer).
 
-#### Connecting Blocs through Presentation
+#### [Connecting Blocs through Presentation](#connecting-blocs-through-presentation)
 
 You can use a `BlocListener` to listen to one bloc and add an event to another bloc whenever the first bloc changes.
 
@@ -86,7 +86,7 @@ The code above prevents `SecondBloc` from needing to know about `FirstBloc`, enc
 
 In some situations, you may not want to couple two blocs in the presentation layer. Instead, it can often make sense for two blocs to share the same source of data and update whenever the data changes.
 
-#### Connecting Blocs through Domain
+#### [Connecting Blocs through Domain](#connecting-blocs-through-domain)
 
 Two blocs can listen to a stream from a repository and update their states independent of each other whenever the repository data changes. Using reactive repositories to keep state synchronized is common in large-scale enterprise applications.
 
@@ -100,7 +100,7 @@ The same repository can be injected into each bloc that needs to react to new ap
 
 For more about using streams with Bloc, see [How to use Bloc with streams and concurrency](https://verygood.ventures/blog/how-to-use-bloc-with-streams-and-concurrency).
 
-## Presentation Layer
+## [Presentation Layer](#presentation-layer)
 
 The presentation layer's responsibility is to figure out how to render itself based on one or more bloc states. In addition, it should handle user input and application lifecycle events.
 

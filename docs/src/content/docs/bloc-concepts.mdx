@@ -56,7 +56,7 @@ There are several core concepts that are critical to understanding how to use th
 
 In the upcoming sections, we're going to discuss each of them in detail as well as work through how they would apply to a counter app.
 
-## Streams
+## [Streams](#streams)
 
 :::note
 Check out the official [Dart Documentation](https://dart.dev/tutorials/language/streams) for more information about `Streams`.
@@ -88,7 +88,7 @@ We can put it all together like so:
 
 Now that we have a basic understanding of how `Streams` work in Dart we're ready to learn about the core component of the bloc package: a `Cubit`.
 
-## Cubit
+## [Cubit](#cubit)
 
 A `Cubit` is a class which extends `BlocBase` and can be extended to manage any type of state.
 
@@ -102,7 +102,7 @@ States are the output of a `Cubit` and represent a part of your application's st
 For more information about the origins of `Cubit` checkout [the following issue](https://github.com/felangel/cubit/issues/69).
 :::
 
-### Creating a Cubit
+### [Creating a Cubit](#creating-a-cubit)
 
 We can create a `CounterCubit` like:
 
@@ -118,7 +118,7 @@ This would allow us to instantiate `CounterCubit` instances with different initi
 
 <CounterCubitInstantiationSnippet />
 
-### Cubit State Changes
+### [Cubit State Changes](#cubit-state-changes)
 
 Each `Cubit` has the ability to output a new state via `emit`.
 
@@ -130,7 +130,7 @@ In the above snippet, the `CounterCubit` is exposing a public method called `inc
 The `emit` method is protected, meaning it should only be used inside of a `Cubit`.
 :::
 
-### Using a Cubit
+### [Using a Cubit](#using-a-cubit)
 
 We can now take the `CounterCubit` we've implemented and put it to use!
 
@@ -140,7 +140,7 @@ We can now take the `CounterCubit` we've implemented and put it to use!
 
 In the above snippet, we start by creating an instance of the `CounterCubit`. We then print the current state of the cubit which is the initial state (since no new states have been emitted yet). Next, we call the `increment` function to trigger a state change. Finally, we print the state of the `Cubit` again which went from `0` to `1` and call `close` on the `Cubit` to close the internal state stream.
 
-#### Stream Usage
+#### [Stream Usage](#stream-usage)
 
 `Cubit` exposes a `Stream` which allows us to receive real-time state updates:
 
@@ -156,7 +156,7 @@ In the above snippet, we are subscribing to the `CounterCubit` and calling print
 Only subsequent state changes will be received when calling `listen` on a `Cubit`.
 :::
 
-### Observing a Cubit
+### [Observing a Cubit](#observing-a-cubit)
 
 When a `Cubit` emits a new state, a `Change` occurs. We can observe all changes for a given `Cubit` by overriding `onChange`.
 
@@ -174,7 +174,7 @@ The above example would output:
 A `Change` occurs just before the state of the `Cubit` is updated. A `Change` consists of the `currentState` and the `nextState`.
 :::
 
-#### BlocObserver
+#### [BlocObserver](#blocobserver)
 
 One added bonus of using the bloc library is that we can have access to all `Changes` in one place. Even though in this application we only have one `Cubit`, it's fairly common in larger applications to have many `Cubits` managing different parts of the application's state.
 
@@ -202,7 +202,7 @@ The internal `onChange` override is called first, which calls `super.onChange` n
 In `BlocObserver` we have access to the `Cubit` instance in addition to the `Change` itself.
 :::
 
-### Cubit Error Handling
+### [Cubit Error Handling](#cubit-error-handling)
 
 Every `Cubit` has an `addError` method which can be used to indicate that an error has occurred.
 
@@ -224,13 +224,13 @@ If we run the same program again we should see the following output:
 Just as with `onChange`, the internal `onError` override is invoked before the global `BlocObserver` override.
 :::
 
-## Bloc
+## [Bloc](#bloc)
 
 A `Bloc` is a more advanced class which relies on `events` to trigger `state` changes rather than functions. `Bloc` also extends `BlocBase` which means it has a similar public API as `Cubit`. However, rather than calling a `function` on a `Bloc` and directly emitting a new `state`, `Blocs` receive `events` and convert the incoming `events` into outgoing `states`.
 
 ![Bloc Architecture](~/assets/concepts/bloc_architecture_full.png)
 
-### Creating a Bloc
+### [Creating a Bloc](#creating-a-bloc)
 
 Creating a `Bloc` is similar to creating a `Cubit` except in addition to defining the state that we'll be managing, we must also define the event that the `Bloc` will be able to process.
 
@@ -240,7 +240,7 @@ Events are the input to a Bloc. They are commonly added in response to user inte
 
 Just like when creating the `CounterCubit`, we must specify an initial state by passing it to the superclass via `super`.
 
-### Bloc State Changes
+### [Bloc State Changes](#bloc-state-changes)
 
 `Bloc` requires us to register event handlers via the `on<Event>` API, as opposed to functions in `Cubit`. An event handler is responsible for converting any incoming events into zero or more outgoing states.
 
@@ -268,11 +268,11 @@ Blocs should never directly `emit` new states. Instead every state change must b
 Both blocs and cubits will ignore duplicate states. If we emit `State nextState` where `state == nextState`, then no state change will occur.
 :::
 
-### Using a Bloc
+### [Using a Bloc](#using-a-bloc)
 
 At this point, we can create an instance of our `CounterBloc` and put it to use!
 
-#### Basic Usage
+#### [Basic Usage](#basic-usage)
 
 <CounterBlocUsageSnippet />
 
@@ -282,7 +282,7 @@ In the above snippet, we start by creating an instance of the `CounterBloc`. We 
 `await Future.delayed(Duration.zero)` is added to ensure we wait for the next event-loop iteration (allowing the `EventHandler` to process the event).
 :::
 
-#### Stream Usage
+#### [Stream Usage](#stream-usage)
 
 Just like with `Cubit`, a `Bloc` is a special type of `Stream`, which means we can also subscribe to a `Bloc` for real-time updates to its state:
 
@@ -294,7 +294,7 @@ In the above snippet, we are subscribing to the `CounterBloc` and calling print 
 `await Future.delayed(Duration.zero)` is added for this example to avoid canceling the subscription immediately.
 :::
 
-### Observing a Bloc
+### [Observing a Bloc](#observing-a-bloc)
 
 Since `Bloc` extends `BlocBase`, we can observe all state changes for a `Bloc` using `onChange`.
 
@@ -324,7 +324,7 @@ If we then rerun the same `main.dart` snippet from before, we should see the fol
 `onTransition` is invoked before `onChange` and contains the event which triggered the change from `currentState` to `nextState`.
 :::
 
-#### BlocObserver
+#### [BlocObserver](#blocobserver)
 
 Just as before, we can override `onTransition` in a custom `BlocObserver` to observe all transitions that occur from a single place.
 
@@ -356,7 +356,7 @@ We can run the same `main.dart` as before and should see the following output:
 `onEvent` is called as soon as the event is added. The local `onEvent` is invoked before the global `onEvent` in `BlocObserver`.
 :::
 
-### Bloc Error Handling
+### [Bloc Error Handling](#bloc-error-handling)
 
 Just like with `Cubit`, each `Bloc` has an `addError` and `onError` method. We can indicate that an error has occurred by calling `addError` from anywhere inside our `Bloc`. We can then react to all errors by overriding `onError` just as with `Cubit`.
 
@@ -378,13 +378,13 @@ The local `onError` is invoked first followed by the global `onError` in `BlocOb
 Any unhandled exceptions that occur within an `EventHandler` are also reported to `onError`.
 :::
 
-## Cubit vs. Bloc
+## [Cubit vs. Bloc](#cubit-vs-bloc)
 
 Now that we've covered the basics of the `Cubit` and `Bloc` classes, you might be wondering when you should use `Cubit` and when you should use `Bloc`.
 
-### Cubit Advantages
+### [Cubit Advantages](#cubit-advantages)
 
-#### Simplicity
+#### [Simplicity](#simplicity)
 
 One of the biggest advantages of using `Cubit` is simplicity. When creating a `Cubit`, we only have to define the state as well as the functions which we want to expose to change the state. In comparison, when creating a `Bloc`, we have to define the states, events, and the `EventHandler` implementation. This makes `Cubit` easier to understand and there is less code involved.
 
@@ -400,9 +400,9 @@ Now let's take a look at the two counter implementations:
 
 The `Cubit` implementation is more concise and instead of defining events separately, the functions act like events. In addition, when using a `Cubit`, we can simply call `emit` from anywhere in order to trigger a state change.
 
-### Bloc Advantages
+### [Bloc Advantages](#bloc-advantages)
 
-#### Traceability
+#### [Traceability](#traceability)
 
 One of the biggest advantages of using `Bloc` is knowing the sequence of state changes as well as exactly what triggered those changes. For state that is critical to the functionality of an application, it might be very beneficial to use a more event-driven approach in order to capture all events in addition to state changes.
 
@@ -420,7 +420,7 @@ The above `Transition` gives us all the information we need to understand why th
 
 This tells us that the user was logged out but it doesn't explain why which might be critical to debugging and understanding how the state of the application is changing over time.
 
-#### Advanced Event Transformations
+#### [Advanced Event Transformations](#advanced-event-transformations)
 
 Another area in which `Bloc` excels over `Cubit` is when we need to take advantage of reactive operators such as `buffer`, `debounceTime`, `throttle`, etc.
 

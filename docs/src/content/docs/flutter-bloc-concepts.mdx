@@ -42,9 +42,9 @@ Please make sure to carefully read the following sections before working with [`
 All widgets exported by the `flutter_bloc` package integrate with both `Cubit` and `Bloc` instances.
 :::
 
-## Bloc Widgets
+## [Bloc Widgets](#bloc-widgets)
 
-### BlocBuilder
+### [BlocBuilder](#blocbuilder)
 
 **BlocBuilder** is a Flutter widget which requires a `Bloc` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed. The `builder` function will potentially be called many times and should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that returns a widget in response to the state.
 
@@ -62,7 +62,7 @@ For fine-grained control over when the `builder` function is called an optional 
 
 <BlocBuilderConditionSnippet />
 
-### BlocSelector
+### [BlocSelector](#blocselector)
 
 **BlocSelector** is a Flutter widget which is analogous to `BlocBuilder` but allows developers to filter updates by selecting a new value based on the current bloc state. Unnecessary builds are prevented if the selected value does not change. The selected value must be immutable in order for `BlocSelector` to accurately determine whether `builder` should be called again.
 
@@ -70,7 +70,7 @@ If the `bloc` parameter is omitted, `BlocSelector` will automatically perform a 
 
 <BlocSelectorSnippet />
 
-### BlocProvider
+### [BlocProvider](#blocprovider)
 
 **BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
 
@@ -92,7 +92,7 @@ then from either `ChildA`, or `ScreenA` we can retrieve `BlocA` with:
 
 <BlocProviderLookupSnippet />
 
-### MultiBlocProvider
+### [MultiBlocProvider](#multiblocprovider)
 
 **MultiBlocProvider** is a Flutter widget that merges multiple `BlocProvider` widgets into one.
 `MultiBlocProvider` improves the readability and eliminates the need to nest multiple `BlocProviders`.
@@ -104,7 +104,7 @@ to:
 
 <MultiBlocProviderSnippet />
 
-### BlocListener
+### [BlocListener](#bloclistener)
 
 **BlocListener** is a Flutter widget which takes a `BlocWidgetListener` and an optional `Bloc` and invokes the `listener` in response to state changes in the bloc. It should be used for functionality that needs to occur once per state change such as navigation, showing a `SnackBar`, showing a `Dialog`, etc...
 
@@ -122,7 +122,7 @@ For fine-grained control over when the `listener` function is called an optional
 
 <BlocListenerConditionSnippet />
 
-### MultiBlocListener
+### [MultiBlocListener](#multibloclistener)
 
 **MultiBlocListener** is a Flutter widget that merges multiple `BlocListener` widgets into one.
 `MultiBlocListener` improves the readability and eliminates the need to nest multiple `BlocListeners`.
@@ -134,7 +134,7 @@ to:
 
 <MultiBlocListenerSnippet />
 
-### BlocConsumer
+### [BlocConsumer](#blocconsumer)
 
 **BlocConsumer** exposes a `builder` and `listener` in order to react to new states. `BlocConsumer` is analogous to a nested `BlocListener` and `BlocBuilder` but reduces the amount of boilerplate needed. `BlocConsumer` should only be used when it is necessary to both rebuild UI and execute other reactions to state changes in the `bloc`. `BlocConsumer` takes a required `BlocWidgetBuilder` and `BlocWidgetListener` and an optional `bloc`, `BlocBuilderCondition`, and `BlocListenerCondition`.
 
@@ -147,7 +147,7 @@ An optional `listenWhen` and `buildWhen` can be implemented for more granular co
 
 <BlocConsumerConditionSnippet />
 
-### RepositoryProvider
+### [RepositoryProvider](#repositoryprovider)
 
 **RepositoryProvider** is a Flutter widget which provides a repository to its children via `RepositoryProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a repository can be provided to multiple widgets within a subtree. `BlocProvider` should be used to provide blocs whereas `RepositoryProvider` should only be used for repositories.
 
@@ -157,7 +157,7 @@ then from `ChildA` we can retrieve the `Repository` instance with:
 
 <RepositoryProviderLookupSnippet />
 
-### MultiRepositoryProvider
+### [MultiRepositoryProvider](#multirepositoryprovider)
 
 **MultiRepositoryProvider** is a Flutter widget that merges multiple `RepositoryProvider` widgets into one.
 `MultiRepositoryProvider` improves the readability and eliminates the need to nest multiple `RepositoryProvider`.
@@ -169,7 +169,7 @@ to:
 
 <MultiRepositoryProviderSnippet />
 
-## BlocProvider Usage
+## [BlocProvider Usage](#blocprovider-usage)
 
 Lets take a look at how to use `BlocProvider` to provide a `CounterBloc` to a `CounterPage` and react to state changes with `BlocBuilder`.
 
@@ -181,7 +181,7 @@ Lets take a look at how to use `BlocProvider` to provide a `CounterBloc` to a `C
 
 At this point we have successfully separated our presentational layer from our business logic layer. Notice that the `CounterPage` widget knows nothing about what happens when a user taps the buttons. The widget simply tells the `CounterBloc` that the user has pressed either the increment or decrement button.
 
-## RepositoryProvider Usage
+## [RepositoryProvider Usage](#repositoryprovider-usage)
 
 We are going to take a look at how to use `RepositoryProvider` within the context of the [`flutter_weather`][flutter_weather_link] example.
 
@@ -203,7 +203,7 @@ Now when instantiating a bloc, we can access the instance of a repository via `c
 
 [flutter_weather_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_weather
 
-## Extension Methods
+## [Extension Methods](#extension-methods)
 
 [Extension methods](https://dart.dev/guides/language/extension-methods), introduced in Dart 2.7, are a way to add functionality to existing libraries. In this section, we'll take a look at extension methods included in `package:flutter_bloc` and how they can be used.
 
@@ -215,7 +215,7 @@ Internally, `package:flutter_bloc` uses `package:provider` to implement: `BlocPr
 Learn more about [`package:provider`](https://pub.dev/packages/provider).
 :::
 
-### context.read
+### [context.read](#contextread)
 
 `context.read<T>()` looks up the closest ancestor instance of type `T` and is functionally equivalent to `BlocProvider.of<T>(context)`. `context.read` is most commonly used for retrieving a bloc instance in order to add an event within `onPressed` callbacks.
 
@@ -249,7 +249,7 @@ The above usage is error prone because the `Text` widget will not be rebuilt if 
 Use `BlocBuilder` or `context.watch` instead in order to rebuild in response to state changes.
 :::
 
-### context.watch
+### [context.watch](#contextwatch)
 
 Like `context.read<T>()`, `context.watch<T>()` provides the closest ancestor instance of type `T`, however it also listens to changes on the instance. It is functionally equivalent to `BlocProvider.of<T>(context, listen: true)`.
 
@@ -331,7 +331,7 @@ Widget build(BuildContext context) {
 Using `context.watch` at the root of the `build` method will result in the entire widget being rebuilt when the bloc state changes.
 :::
 
-### context.select
+### [context.select](#contextselect)
 
 Just like `context.watch<T>()`, `context.select<T, R>(R function(T value))` provides the closest ancestor instance of type `T` and listens to changes on `T`. Unlike `context.watch`, `context.select` allows you listen for changes in a smaller part of a state.
 

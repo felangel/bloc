@@ -11,11 +11,11 @@ import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamp
 
 The following naming conventions are simply recommendations and are completely optional. Feel free to use whatever naming conventions you prefer. You may find some of the examples/documentation do not follow the naming conventions mainly for simplicity/conciseness. These conventions are strongly recommended for large projects with multiple developers.
 
-## Event Conventions
+## [Event Conventions](#event-conventions)
 
 Events should be named in the **past tense** because events are things that have already occurred from the bloc's perspective.
 
-### Anatomy
+### [Anatomy](#anatomy)
 
 `BlocSubject` + `Noun (optional)` + `Verb (event)`
 
@@ -25,7 +25,7 @@ Initial load events should follow the convention: `BlocSubject` + `Started`
 The base event class should be name: `BlocSubject` + `Event`.
 :::
 
-### Examples
+### [Examples](#examples)
 
 ✅ **Good**
 
@@ -35,13 +35,13 @@ The base event class should be name: `BlocSubject` + `Event`.
 
 <EventExamplesBad1 />
 
-## State Conventions
+## [State Conventions](#state-conventions)
 
 States should be nouns because a state is just a snapshot at a particular point in time. There are two common ways to represent state: using subclasses or using a single class.
 
-### Anatomy
+### [Anatomy](#anatomy-1)
 
-#### Subclasses
+#### [Subclasses](#subclasses)
 
 `BlocSubject` + `Verb (action)` + `State`
 
@@ -53,7 +53,7 @@ When representing the state as multiple subclasses `State` should be one of the 
 Initial states should follow the convention: `BlocSubject` + `Initial`.
 :::
 
-#### Single Class
+#### [Single Class](#single-class)
 
 `BlocSubject` + `State`
 
@@ -65,7 +65,7 @@ When representing the state as a single base class an enum named `BlocSubject` +
 The base state class should always be named: `BlocSubject` + `State`.
 :::
 
-### Examples
+### [Examples](#examples-1)
 
 ✅ **Good**
 
