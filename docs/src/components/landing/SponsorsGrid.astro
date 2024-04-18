@@ -4,8 +4,8 @@ export type Props = {
 	becomeASponsor: string;
 };
 
+import { Image } from 'astro:assets';
 import { LinkCard } from '@astrojs/starlight/components';
-import { Image } from "astro:assets";
 
 import miquido from '~/assets/sponsors/miquido.png';
 import monterail from '~/assets/sponsors/monterail.png';
@@ -65,10 +65,10 @@ const sponsors: Sponsor[] = [
 
 <style>
 	:global([data-theme='dark']) .invert-logo {
-		filter: invert() grayscale(0) contrast(200%) saturate(200%);
+		filter: invert() grayscale() contrast(200%) saturate(200%);
 	}
 	:global([data-theme='dark']) .logo {
-		filter: grayscale(0) contrast(200%) saturate(200%);
+		filter: grayscale() contrast(200%) saturate(200%);
 	}
 </style>
 
@@ -80,12 +80,13 @@ const sponsors: Sponsor[] = [
 		{
 			sponsors.map((sponsor) => {
 				return (
-					<div class="flex flex-row justify-center items-center">
+					<div class="flex flex-row justify-center items-center max-w-52">
 						<a href={sponsor.href} aria-label={sponsor.alt} target="_blank" rel="noreferrer">
 							<Image
 								class={sponsor.invert ? 'invert-logo' : 'logo'}
 								src={sponsor.img}
-								width="150"
+								width={300}
+								style="width:150px;height:auto"
 								alt={sponsor.alt}
 							/>
 						</a>

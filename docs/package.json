@@ -26,7 +26,6 @@
     "prettier": "^3.2.5",
     "prettier-plugin-astro": "^0.13.0",
     "prettier-plugin-tailwindcss": "^0.5.11",
-    "starlight-links-validator": "^0.5.3",
-    "@types/node": "^20.11.19"
+    "starlight-links-validator": "^0.5.3"
   }
 }
