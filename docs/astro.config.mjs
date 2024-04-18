@@ -1,4 +1,6 @@
 import { defineConfig } from 'astro/config';
+import rehypeSlug from 'rehype-slug';
+import { rehypeAutolink } from './plugins/rehype-autolink';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import tailwind from '@astrojs/tailwind';
@@ -89,6 +91,9 @@ export default defineConfig({
 				},
 			],
 			customCss: ['src/tailwind.css', 'src/styles/landing.css', '@fontsource-variable/figtree'],
+			components: {
+				MarkdownContent: './src/components/starlight/MarkdownContent.astro',
+			},
 			social: {
 				github: 'https://github.com/felangel/bloc',
 				discord: 'https://discord.gg/bloc',
@@ -199,4 +204,7 @@ export default defineConfig({
 		}),
 		tailwind({ applyBaseStyles: false }),
 	],
+	markdown: {
+		rehypePlugins: [rehypeSlug, ...rehypeAutolink()],
+	},
 });
