@@ -1,8 +1,6 @@
-part of 'stats_bloc.dart';
-
 enum StatsStatus { initial, loading, success, failure }
 
-final class StatsState extends Equatable {
+class StatsState {
   const StatsState({
     this.status = StatsStatus.initial,
     this.completedTodos = 0,
@@ -12,9 +10,6 @@ final class StatsState extends Equatable {
   final StatsStatus status;
   final int completedTodos;
   final int activeTodos;
-
-  @override
-  List<Object> get props => [status, completedTodos, activeTodos];
 
   StatsState copyWith({
     StatsStatus? status,

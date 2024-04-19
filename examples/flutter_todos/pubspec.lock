@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.4.1"
+  analyzer_plugin:
+    dependency: transitive
+    description:
+      name: analyzer_plugin
+      sha256: "9661b30b13a685efaee9f02e5d01ed9f2b423bd889d28a304d02d704aee69161"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.11.3"
   args:
     dependency: transitive
     description:
@@ -34,14 +42,14 @@ packages:
     source: hosted
     version: "2.11.0"
   bloc:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
       path: "../../packages/bloc"
       relative: true
     source: path
     version: "8.1.4"
   bloc_test:
-    dependency: "direct dev"
+    dependency: "direct overridden"
     description:
       path: "../../packages/bloc_test"
       relative: true
@@ -55,6 +63,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  build:
+    dependency: transitive
+    description:
+      name: build
+      sha256: "80184af8b6cb3e5c1c4ec6d8544d27711700bc3e6d2efad04238c7b5290889f0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.1"
+  build_config:
+    dependency: transitive
+    description:
+      name: build_config
+      sha256: bf80fcfb46a29945b423bd9aad884590fb1dc69b330a4d4700cac476af1708d1
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   characters:
     dependency: transitive
     description:
@@ -63,6 +87,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
+  checked_yaml:
+    dependency: transitive
+    description:
+      name: checked_yaml
+      sha256: feb6bed21949061731a7a75fc5d2aa727cf160b91af9a3e464c5e3a32e28b5ff
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3"
   clock:
     dependency: transitive
     description:
@@ -103,6 +135,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  custom_lint_core:
+    dependency: transitive
+    description:
+      name: custom_lint_core
+      sha256: a85e8f78f4c52f6c63cdaf8c872eb573db0231dcdf3c3a5906d493c1f8bc20e6
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.3"
+  dart_style:
+    dependency: transitive
+    description:
+      name: dart_style
+      sha256: "99e066ce75c89d6b29903d788a7bb9369cf754f7b24bf70bf4b6d6d6b26853b9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.6"
   diff_match_patch:
     dependency: transitive
     description:
@@ -149,7 +197,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_bloc:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
       path: "../../packages/flutter_bloc"
       relative: true
@@ -160,6 +208,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_riverpod:
+    dependency: "direct main"
+    description:
+      name: flutter_riverpod
+      sha256: "0f1974eff5bbe774bf1d870e406fc6f29e3d6f1c46bd9c58e7172ff68a785d7d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -170,6 +226,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  freezed_annotation:
+    dependency: transitive
+    description:
+      name: freezed_annotation
+      sha256: c3fd9336eb55a38cc1bbd79ab17573113a8deccd0ecbbf926cca3c62803b5c2d
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.1"
   frontend_server_client:
     dependency: transitive
     description:
@@ -305,16 +369,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  mockingjay:
-    dependency: "direct dev"
-    description:
-      name: mockingjay
-      sha256: "04beab95a415cda5bd4efa2681ee76eb92bb9377acaf1a0c08cd58efbae70d83"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.0"
   mocktail:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: mocktail
       sha256: c4b5007d91ca4f67256e720cb1b6d704e79a510183a12fa551021f652577dce6
@@ -417,6 +473,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  pubspec_parse:
+    dependency: transitive
+    description:
+      name: pubspec_parse
+      sha256: c63b2876e58e194e4b0828fcb080ad0e06d051cb607a6be51a9e084f47cb9367
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.3"
+  riverpod:
+    dependency: "direct main"
+    description:
+      name: riverpod
+      sha256: f21b32ffd26a36555e501b04f4a5dca43ed59e16343f1a30c13632b2351dfa4d
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.1"
+  riverpod_analyzer_utils:
+    dependency: transitive
+    description:
+      name: riverpod_analyzer_utils
+      sha256: "8b71f03fc47ae27d13769496a1746332df4cec43918aeba9aff1e232783a780f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.1"
+  riverpod_annotation:
+    dependency: transitive
+    description:
+      name: riverpod_annotation
+      sha256: e5e796c0eba4030c704e9dae1b834a6541814963292839dcf9638d53eba84f5c
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.5"
+  riverpod_generator:
+    dependency: "direct main"
+    description:
+      name: riverpod_generator
+      sha256: d451608bf17a372025fc36058863737636625dfdb7e3cbf6142e0dfeb366ab22
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.0"
   rxdart:
     dependency: transitive
     description:
@@ -518,6 +614,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  source_gen:
+    dependency: transitive
+    description:
+      name: source_gen
+      sha256: "14658ba5f669685cd3d63701d01b31ea748310f7ab854e471962670abcf57832"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.0"
   source_map_stack_trace:
     dependency: transitive
     description:
@@ -550,6 +654,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.1"
+  state_notifier:
+    dependency: transitive
+    description:
+      name: state_notifier
+      sha256: b8677376aa54f2d7c58280d5a007f9e8774f1968d1fb1c096adcb4792fba29bb
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   stream_channel:
     dependency: transitive
     description:
@@ -621,7 +733,7 @@ packages:
     source: hosted
     version: "1.3.2"
   uuid:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: uuid
       sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"

@@ -1,139 +1,138 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todos/edit_todo/edit_todo.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_todos/bootstrap.dart';
+import 'package:flutter_todos/edit_todo/riverpod/edit_todo_notifier.dart';
+
+import 'package:flutter_todos/edit_todo/riverpod/edit_todo_state.dart';
 import 'package:flutter_todos/l10n/l10n.dart';
 import 'package:todos_repository/todos_repository.dart';
 
-class EditTodoPage extends StatelessWidget {
-  const EditTodoPage({super.key});
+class EditTodoPage extends ConsumerWidget {
+  const EditTodoPage({super.key, this.initialTodo});
 
-  static Route<void> route({Todo? initialTodo}) {
-    return MaterialPageRoute(
-      fullscreenDialog: true,
-      builder: (context) => BlocProvider(
-        create: (context) => EditTodoBloc(
-          todosRepository: context.read<TodosRepository>(),
-          initialTodo: initialTodo,
+  final Todo? initialTodo;
+
+  static Route<void> route({Todo? initialTodo}) => MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => ProviderScope(
+          overrides: [
+            editTodoNotifierProvider.overrideWith(
+              (ref) => EditTodoNotifier(
+                ref.read(todosRepositoryProvider),
+                initialTodo,
+              ),
+            ),
+          ],
+          child: EditTodoPage(initialTodo: initialTodo),
         ),
-        child: const EditTodoPage(),
-      ),
-    );
-  }
+      );
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<EditTodoBloc, EditTodoState>(
-      listenWhen: (previous, current) =>
-          previous.status != current.status &&
-          current.status == EditTodoStatus.success,
-      listener: (context, state) => Navigator.of(context).pop(),
-      child: const EditTodoView(),
-    );
-  }
-}
-
-class EditTodoView extends StatelessWidget {
-  const EditTodoView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final status = context.select((EditTodoBloc bloc) => bloc.state.status);
-    final isNewTodo = context.select(
-      (EditTodoBloc bloc) => bloc.state.isNewTodo,
+    final state = ref.watch(editTodoNotifierProvider);
+
+    ref.listen<EditTodoState>(
+      editTodoNotifierProvider,
+      (previous, state) {
+        if (state.status == EditTodoStatus.success) {
+          Navigator.of(context).pop();
+        } else if (state.status == EditTodoStatus.failure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('failure'),
+              backgroundColor: Color(0xFFF44336),
+            ),
+          );
+        }
+      },
     );
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          isNewTodo
+          state.initialTodo == null
               ? l10n.editTodoAddAppBarTitle
               : l10n.editTodoEditAppBarTitle,
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        tooltip: l10n.editTodoSaveButtonTooltip,
-        shape: const ContinuousRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(32)),
-        ),
-        onPressed: status.isLoadingOrSuccess
+        onPressed: state.status.isLoadingOrSuccess
             ? null
-            : () => context.read<EditTodoBloc>().add(const EditTodoSubmitted()),
-        child: status.isLoadingOrSuccess
-            ? const CupertinoActivityIndicator()
-            : const Icon(Icons.check_rounded),
+            : () => ref.read(editTodoNotifierProvider.notifier).submit(),
+        child: state.status.isLoadingOrSuccess
+            ? const CircularProgressIndicator()
+            : const Icon(Icons.check),
       ),
-      body: const CupertinoScrollbar(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              children: [_TitleField(), _DescriptionField()],
-            ),
-          ),
+      body: EditTodoView(initialTodo: state.initialTodo),
+    );
+  }
+}
+
+class EditTodoView extends ConsumerWidget {
+  const EditTodoView({super.key, this.initialTodo});
+
+  final Todo? initialTodo;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // TODO: Refactor, not efficacious.
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            _TitleField(initialValue: initialTodo?.title ?? ''),
+            const SizedBox(height: 8),
+            _DescriptionField(initialValue: initialTodo?.description ?? ''),
+          ],
         ),
       ),
     );
   }
 }
 
-class _TitleField extends StatelessWidget {
-  const _TitleField();
+class _TitleField extends ConsumerWidget {
+  const _TitleField({required this.initialValue});
+
+  final String initialValue;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final state = context.watch<EditTodoBloc>().state;
-    final hintText = state.initialTodo?.title ?? '';
 
     return TextFormField(
       key: const Key('editTodoView_title_textFormField'),
-      initialValue: state.title,
+      initialValue: initialValue,
       decoration: InputDecoration(
-        enabled: !state.status.isLoadingOrSuccess,
         labelText: l10n.editTodoTitleLabel,
-        hintText: hintText,
       ),
       maxLength: 50,
-      inputFormatters: [
-        LengthLimitingTextInputFormatter(50),
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
-      ],
-      onChanged: (value) {
-        context.read<EditTodoBloc>().add(EditTodoTitleChanged(value));
-      },
+      onChanged: (value) =>
+          ref.read(editTodoNotifierProvider.notifier).titleChanged(value),
     );
   }
 }
 
-class _DescriptionField extends StatelessWidget {
-  const _DescriptionField();
+class _DescriptionField extends ConsumerWidget {
+  const _DescriptionField({required this.initialValue});
+
+  final String initialValue;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-
-    final state = context.watch<EditTodoBloc>().state;
-    final hintText = state.initialTodo?.description ?? '';
 
     return TextFormField(
       key: const Key('editTodoView_description_textFormField'),
-      initialValue: state.description,
+      initialValue: initialValue,
       decoration: InputDecoration(
-        enabled: !state.status.isLoadingOrSuccess,
         labelText: l10n.editTodoDescriptionLabel,
-        hintText: hintText,
       ),
       maxLength: 300,
-      maxLines: 7,
-      inputFormatters: [
-        LengthLimitingTextInputFormatter(300),
-      ],
-      onChanged: (value) {
-        context.read<EditTodoBloc>().add(EditTodoDescriptionChanged(value));
-      },
+      maxLines: 5,
+      onChanged: (value) =>
+          ref.read(editTodoNotifierProvider.notifier).descriptionChanged(value),
     );
   }
 }

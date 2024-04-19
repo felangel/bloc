@@ -1,57 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_todos/l10n/l10n.dart';
-import 'package:flutter_todos/todos_overview/todos_overview.dart';
+import 'package:flutter_todos/todos_overview/riverpod/todos_overview_notifier.dart';
 
-@visibleForTesting
 enum TodosOverviewOption { toggleAll, clearCompleted }
 
-class TodosOverviewOptionsButton extends StatelessWidget {
+class TodosOverviewOptionsButton extends ConsumerWidget {
   const TodosOverviewOptionsButton({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-
-    final todos = context.select((TodosOverviewBloc bloc) => bloc.state.todos);
+    final todosOverviewState = ref.watch(todosOverviewNotifierProvider);
+    final todos = todosOverviewState.todos;
     final hasTodos = todos.isNotEmpty;
     final completedTodosAmount = todos.where((todo) => todo.isCompleted).length;
+    final notifier = ref.read(todosOverviewNotifierProvider.notifier);
 
     return PopupMenuButton<TodosOverviewOption>(
       shape: const ContinuousRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
       tooltip: l10n.todosOverviewOptionsTooltip,
-      onSelected: (options) {
-        switch (options) {
-          case TodosOverviewOption.toggleAll:
-            context
-                .read<TodosOverviewBloc>()
-                .add(const TodosOverviewToggleAllRequested());
-          case TodosOverviewOption.clearCompleted:
-            context
-                .read<TodosOverviewBloc>()
-                .add(const TodosOverviewClearCompletedRequested());
+      onSelected: (option) {
+        if (option == TodosOverviewOption.toggleAll) {
+          notifier.toggleAll();
+        } else if (option == TodosOverviewOption.clearCompleted) {
+          notifier.clearCompleted();
         }
       },
-      itemBuilder: (context) {
-        return [
-          PopupMenuItem(
-            value: TodosOverviewOption.toggleAll,
-            enabled: hasTodos,
-            child: Text(
-              completedTodosAmount == todos.length
-                  ? l10n.todosOverviewOptionsMarkAllIncomplete
-                  : l10n.todosOverviewOptionsMarkAllComplete,
-            ),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: TodosOverviewOption.toggleAll,
+          enabled: hasTodos,
+          child: Text(
+            completedTodosAmount == todos.length
+                ? l10n.todosOverviewOptionsMarkAllIncomplete
+                : l10n.todosOverviewOptionsMarkAllComplete,
           ),
-          PopupMenuItem(
-            value: TodosOverviewOption.clearCompleted,
-            enabled: hasTodos && completedTodosAmount > 0,
-            child: Text(l10n.todosOverviewOptionsClearCompleted),
-          ),
-        ];
-      },
+        ),
+        PopupMenuItem(
+          value: TodosOverviewOption.clearCompleted,
+          enabled: hasTodos && completedTodosAmount > 0,
+          child: Text(l10n.todosOverviewOptionsClearCompleted),
+        ),
+      ],
       icon: const Icon(Icons.more_vert_rounded),
     );
   }

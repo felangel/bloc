@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_todos/edit_todo/edit_todo.dart';
-import 'package:flutter_todos/home/home.dart';
-import 'package:flutter_todos/stats/stats.dart';
-import 'package:flutter_todos/todos_overview/todos_overview.dart';
+import 'package:flutter_todos/home/riverpod/home_notifier.dart';
+import 'package:flutter_todos/home/riverpod/home_state.dart';
+import 'package:flutter_todos/stats/view/stats_page.dart';
+import 'package:flutter_todos/todos_overview/view/todos_overview_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => HomeCubit(),
-      child: const HomeView(),
-    );
-  }
+  Widget build(BuildContext context, WidgetRef ref) => const HomeView();
 }
 
-class HomeView extends StatelessWidget {
+class HomeView extends ConsumerWidget {
   const HomeView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final selectedTab = context.select((HomeCubit cubit) => cubit.state.tab);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedTab = ref.watch(
+      homeNotifierProvider.select((state) => state.tab),
+    );
 
     return Scaffold(
       body: IndexedStack(
@@ -58,7 +56,7 @@ class HomeView extends StatelessWidget {
   }
 }
 
-class _HomeTabButton extends StatelessWidget {
+class _HomeTabButton extends ConsumerWidget {
   const _HomeTabButton({
     required this.groupValue,
     required this.value,
@@ -70,9 +68,9 @@ class _HomeTabButton extends StatelessWidget {
   final Widget icon;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
-      onPressed: () => context.read<HomeCubit>().setTab(value),
+      onPressed: () => ref.read(homeNotifierProvider.notifier).setTab(value),
       iconSize: 32,
       color:
           groupValue != value ? null : Theme.of(context).colorScheme.secondary,

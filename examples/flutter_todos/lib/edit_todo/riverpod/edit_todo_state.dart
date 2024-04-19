@@ -1,15 +1,13 @@
-part of 'edit_todo_bloc.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 enum EditTodoStatus { initial, loading, success, failure }
 
 extension EditTodoStatusX on EditTodoStatus {
-  bool get isLoadingOrSuccess => [
-        EditTodoStatus.loading,
-        EditTodoStatus.success,
-      ].contains(this);
+  bool get isLoadingOrSuccess =>
+      this == EditTodoStatus.loading || this == EditTodoStatus.success;
 }
 
-final class EditTodoState extends Equatable {
+class EditTodoState {
   const EditTodoState({
     this.status = EditTodoStatus.initial,
     this.initialTodo,
@@ -29,15 +27,11 @@ final class EditTodoState extends Equatable {
     Todo? initialTodo,
     String? title,
     String? description,
-  }) {
-    return EditTodoState(
-      status: status ?? this.status,
-      initialTodo: initialTodo ?? this.initialTodo,
-      title: title ?? this.title,
-      description: description ?? this.description,
-    );
-  }
-
-  @override
-  List<Object?> get props => [status, initialTodo, title, description];
+  }) =>
+      EditTodoState(
+        status: status ?? this.status,
+        initialTodo: initialTodo ?? this.initialTodo,
+        title: title ?? this.title,
+        description: description ?? this.description,
+      );
 }
