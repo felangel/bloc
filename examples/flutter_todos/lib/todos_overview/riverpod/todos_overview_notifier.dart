@@ -32,7 +32,7 @@ class TodosOverviewNotifier extends StateNotifier<TodosOverviewState> {
 
   void fetchTodos() => _fetchTodos();
 
-  // ignore: avoid_positional_boolean_parameters
+  
   Future<void> toggleCompletion(Todo todo, bool isCompleted) async {
     final newTodo = todo.copyWith(isCompleted: isCompleted);
     await _todosRepository.saveTodo(newTodo);
