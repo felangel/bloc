@@ -106,39 +106,39 @@ export default defineConfig({
 					items: [
 						{
 							label: 'Getting Started',
-							link: '/getting-started',
+							link: '/getting-started/',
 						},
 						{
 							label: 'Why Bloc?',
-							link: '/why-bloc',
+							link: '/why-bloc/',
 						},
 						{
 							label: 'Bloc Concepts',
-							link: '/bloc-concepts',
+							link: '/bloc-concepts/',
 						},
 						{
 							label: 'Flutter Bloc Concepts',
-							link: '/flutter-bloc-concepts',
+							link: '/flutter-bloc-concepts/',
 						},
 						{
 							label: 'Architecture',
-							link: '/architecture',
+							link: '/architecture/',
 						},
 						{
 							label: 'Testing',
-							link: '/testing',
+							link: '/testing/',
 						},
 						{
 							label: 'Naming Conventions',
-							link: '/naming-conventions',
+							link: '/naming-conventions/',
 						},
 						{
 							label: 'FAQs',
-							link: '/faqs',
+							link: '/faqs/',
 						},
 						{
 							label: 'Migration Guide',
-							link: '/migration',
+							link: '/migration/',
 						},
 					],
 				},
