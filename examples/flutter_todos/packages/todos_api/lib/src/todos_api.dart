@@ -31,7 +31,7 @@ abstract class TodosApi {
   /// Returns the number of updated todos.
   Future<int> completeAll({required bool isCompleted});
 
-  /// Closes the client and cleans up any resources.
+  /// Closes the client and frees up any resources.
   Future<void> close();
 }
 
