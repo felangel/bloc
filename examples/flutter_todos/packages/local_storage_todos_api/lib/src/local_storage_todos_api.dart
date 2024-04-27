@@ -19,7 +19,9 @@ class LocalStorageTodosApi extends TodosApi {
 
   final SharedPreferences _plugin;
 
-  final _todoStreamController = BehaviorSubject<List<Todo>>.seeded(const []);
+  late final _todoStreamController = BehaviorSubject<List<Todo>>.seeded(
+    const [],
+  );
 
   /// The key used for storing the todos locally.
   ///
@@ -97,5 +99,10 @@ class LocalStorageTodosApi extends TodosApi {
     _todoStreamController.add(newTodos);
     await _setValue(kTodosCollectionKey, json.encode(newTodos));
     return changedTodosAmount;
+  }
+
+  @override
+  Future<void> close() {
+    return _todoStreamController.close();
   }
 }

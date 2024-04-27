@@ -30,6 +30,9 @@ abstract class TodosApi {
   ///
   /// Returns the number of updated todos.
   Future<int> completeAll({required bool isCompleted});
+
+  /// Closes the client and cleans up any resources.
+  Future<void> close();
 }
 
 /// Error thrown when a [Todo] with a given id is not found.
