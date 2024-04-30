@@ -82,7 +82,7 @@ Bloc은 events와 종속성 주입된 Repository(즉, 생성자에서 bloc에 �
 
 <BlocLooseCouplingPresentationSnippet />
 
-위의 코드는 `SecondBloc`이 `FirstBloc`에 대해 알 필요가 없도록 하여 느슨한 결합을 유도합니다. [flutter_weather](/tutorials/ko/flutter-weather) 애플리케이션은 [이 기법을 사용하여](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42) 수신된 날씨 정보에 따라 앱 테마를 변경합니다.
+위의 코드는 `SecondBloc`이 `FirstBloc`에 대해 알 필요가 없도록 하여 느슨한 결합을 유도합니다. [flutter_weather](/ko/tutorials/flutter-weather) 애플리케이션은 [이 기법을 사용하여](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42) 수신된 날씨 정보에 따라 앱 테마를 변경합니다.
 
 어떤 상황에서는 Presentation 레이어에서 두 bloc을 연결하고 싶지 않을 수 있습니다. 이런 경우에는 두 bloc이 동일한 데이터 소스를 공유하고 데이터가 변경될 때 마다 업데이트하는 것이 합리적일 수 있습니다.
 
