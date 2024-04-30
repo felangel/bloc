@@ -16,10 +16,10 @@ hero:
     file: ~/assets/bloc.svg
   actions:
     - text: 시작하기
-      link: /getting-started/
+      link: /ko/getting-started/
       variant: primary
       icon: rocket
-    - text: View on GitHub
+    - text: GitHub에서 보기
       link: https://github.com/felangel/bloc
       icon: github
       variant: secondary
@@ -32,7 +32,7 @@ import ListCard from '~/components/landing/ListCard.astro';
 import SplitCard from '~/components/landing/SplitCard.astro';
 import Discord from '~/components/landing/Discord.astro';
 
-<SponsorsGrid />
+<SponsorsGrid sponsoredBy="의 💖으로 후원" becomeASponsor="후원자가 되세요" />
 
 <hr />
 
@@ -49,7 +49,7 @@ import Discord from '~/components/landing/Discord.astro';
 </SplitCard>
 
 <Card title="가이드 둘러보기" icon="star">
-	[공식 튜토리얼](/tutorials/flutter-counter) 을 완료하여 모범 사례를 배우고,
+	[공식 튜토리얼](/tutorials/ko/flutter-counter) 을 완료하여 모범 사례를 배우고,
 	Bloc을 사용하는 다양한 앱을 빌드하세요.
 </Card>
 
@@ -78,4 +78,4 @@ import Discord from '~/components/landing/Discord.astro';
   </ListCard>
 </CardGrid>
 
-<Discord />
+<Discord joinDiscord="Discord에 가입하세요" />
