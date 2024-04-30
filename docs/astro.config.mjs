@@ -40,7 +40,7 @@ const locales = {
 		lang: 'ja',
 	},
 	ko: {
-		label: '한국인',
+		label: '한국어',
 		lang: 'ko',
 	},
 	'pt-br': {

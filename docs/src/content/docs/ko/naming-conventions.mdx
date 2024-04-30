@@ -1,0 +1,82 @@
+---
+title: 작명 규칙
+description: Bloc 사용 시 권장되는 작명 규칙 개요입니다.
+---
+
+import EventExamplesGood1 from '~/components/naming-conventions/EventExamplesGood1Snippet.astro';
+import EventExamplesBad1 from '~/components/naming-conventions/EventExamplesBad1Snippet.astro';
+import StateExamplesGood1Snippet from '~/components/naming-conventions/StateExamplesGood1Snippet.astro';
+import SingleStateExamplesGood1Snippet from '~/components/naming-conventions/SingleStateExamplesGood1Snippet.astro';
+import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamplesBad1Snippet.astro';
+
+다음의 작명 규칙은 단순히 권장 사항일 뿐이며 완진한 선택 사항입니다. 원하는 작명 규칙을 자유롭게 사용하세요. 일부 예제/문서는 주로 단순성/간결성을 위해 작명 규칙을 따르지 않을 수 있습니다. 이러한 규칙은 개발자가 여러 명인 대규모 프로젝트에 강력히 권장됩니다.
+
+## Event 규칙
+
+이벤트는 bloc의 관점에서 이미 발생한 일이므로 **과거형**으로 이름을 지정해야 합니다.
+
+### 해부
+
+`BlocSubject` + `명사 (선택)` + `동사 (event)`
+
+초기 로드 event는 다음의 규칙을 따라야 합니다: `BlocSubject` + `Started`
+
+:::note
+기본이 되는 클래스 이름은 다음과 같아야 합니다: `BlocSubject` + `Event`.
+:::
+
+### 예시
+
+✅ **Good**
+
+<EventExamplesGood1 />
+
+❌ **Bad**
+
+<EventExamplesBad1 />
+
+## State 규칙
+
+State는 특정 시점의 스냅샷일 뿐이므로 state는 명사여야 합니다. State를 나타내는 두 가지 일반적인 방법은 하위 클래스를 사용하거나 단일 클래스를 사용하는 것입니다.
+
+### 해부
+
+#### 하위 클래스
+
+`BlocSubject` + `동사 (동작)` + `State`
+
+State를 여러 하위 클래스로 표현하는 경우 `State`는 다음 중 하나여야 합니다:
+
+`Initial` | `Success` | `Failure` | `InProgress`
+
+:::note
+초기 state는 다음의 규칙을 따라야 합니다: `BlocSubject` + `Initial`.
+:::
+
+#### 단일 클래스
+
+`BlocSubject` + `State`
+
+State를 단일 기본 클래스로 표시할 때 `BlocSubject` + `Status`라는 enum을 사용하여 다음과 같은 상태를 표시해야 합니다:
+
+`initial` | `success` | `failure` | `loading`.
+
+:::note
+기본이 되는 클래스 이름은 항상 다음과 같아야 합니다: `BlocSubject` + `State`.
+:::
+
+### 예시
+
+✅ **Good**
+
+##### 하위 클래스
+
+<StateExamplesGood1Snippet />
+
+##### 단일 클래스
+
+<SingleStateExamplesGood1Snippet />
+
+❌ **Bad**
+
+<StateExamplesBad1Snippet />
