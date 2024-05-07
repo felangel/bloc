@@ -21,4 +21,10 @@ import 'package:bloc/bloc.dart';
 abstract class Cubit<State> extends BlocBase<State> {
   /// {@macro cubit}
   Cubit(State initialState) : super(initialState);
+
+  @override
+  void emit(State state) {
+    if (isClosed) return;
+    super.emit(state);
+  }
 }
