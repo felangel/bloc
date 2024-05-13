@@ -1,4 +1,6 @@
 import { defineConfig } from 'astro/config';
+import rehypeSlug from 'rehype-slug';
+import { rehypeAutolink } from './plugins/rehype-autolink';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import tailwind from '@astrojs/tailwind';
@@ -38,7 +40,7 @@ const locales = {
 		lang: 'ja',
 	},
 	ko: {
-		label: '한국인',
+		label: '한국어',
 		lang: 'ko',
 	},
 	'pt-br': {
@@ -89,6 +91,9 @@ export default defineConfig({
 				},
 			],
 			customCss: ['src/tailwind.css', 'src/styles/landing.css', '@fontsource-variable/figtree'],
+			components: {
+				MarkdownContent: './src/components/starlight/MarkdownContent.astro',
+			},
 			social: {
 				github: 'https://github.com/felangel/bloc',
 				discord: 'https://discord.gg/bloc',
@@ -101,39 +106,39 @@ export default defineConfig({
 					items: [
 						{
 							label: 'Getting Started',
-							link: '/getting-started',
+							link: '/getting-started/',
 						},
 						{
 							label: 'Why Bloc?',
-							link: '/why-bloc',
+							link: '/why-bloc/',
 						},
 						{
 							label: 'Bloc Concepts',
-							link: '/bloc-concepts',
+							link: '/bloc-concepts/',
 						},
 						{
 							label: 'Flutter Bloc Concepts',
-							link: '/flutter-bloc-concepts',
+							link: '/flutter-bloc-concepts/',
 						},
 						{
 							label: 'Architecture',
-							link: '/architecture',
+							link: '/architecture/',
 						},
 						{
 							label: 'Testing',
-							link: '/testing',
+							link: '/testing/',
 						},
 						{
 							label: 'Naming Conventions',
-							link: '/naming-conventions',
+							link: '/naming-conventions/',
 						},
 						{
 							label: 'FAQs',
-							link: '/faqs',
+							link: '/faqs/',
 						},
 						{
 							label: 'Migration Guide',
-							link: '/migration',
+							link: '/migration/',
 						},
 					],
 				},
@@ -199,4 +204,7 @@ export default defineConfig({
 		}),
 		tailwind({ applyBaseStyles: false }),
 	],
+	markdown: {
+		rehypePlugins: [rehypeSlug, ...rehypeAutolink()],
+	},
 });

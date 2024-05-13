@@ -1,0 +1,397 @@
+---
+title: Flutter Bloc 핵심 컨셉
+description: package:flutter_bloc의 핵심 개념에 대한 개요입니다.
+sidebar:
+  order: 2
+---
+
+import BlocBuilderSnippet from '~/components/concepts/flutter-bloc/BlocBuilderSnippet.astro';
+import BlocBuilderExplicitBlocSnippet from '~/components/concepts/flutter-bloc/BlocBuilderExplicitBlocSnippet.astro';
+import BlocBuilderConditionSnippet from '~/components/concepts/flutter-bloc/BlocBuilderConditionSnippet.astro';
+import BlocSelectorSnippet from '~/components/concepts/flutter-bloc/BlocSelectorSnippet.astro';
+import BlocProviderSnippet from '~/components/concepts/flutter-bloc/BlocProviderSnippet.astro';
+import BlocProviderEagerSnippet from '~/components/concepts/flutter-bloc/BlocProviderEagerSnippet.astro';
+import BlocProviderValueSnippet from '~/components/concepts/flutter-bloc/BlocProviderValueSnippet.astro';
+import BlocProviderLookupSnippet from '~/components/concepts/flutter-bloc/BlocProviderLookupSnippet.astro';
+import NestedBlocProviderSnippet from '~/components/concepts/flutter-bloc/NestedBlocProviderSnippet.astro';
+import MultiBlocProviderSnippet from '~/components/concepts/flutter-bloc/MultiBlocProviderSnippet.astro';
+import BlocListenerSnippet from '~/components/concepts/flutter-bloc/BlocListenerSnippet.astro';
+import BlocListenerExplicitBlocSnippet from '~/components/concepts/flutter-bloc/BlocListenerExplicitBlocSnippet.astro';
+import BlocListenerConditionSnippet from '~/components/concepts/flutter-bloc/BlocListenerConditionSnippet.astro';
+import NestedBlocListenerSnippet from '~/components/concepts/flutter-bloc/NestedBlocListenerSnippet.astro';
+import MultiBlocListenerSnippet from '~/components/concepts/flutter-bloc/MultiBlocListenerSnippet.astro';
+import BlocConsumerSnippet from '~/components/concepts/flutter-bloc/BlocConsumerSnippet.astro';
+import BlocConsumerConditionSnippet from '~/components/concepts/flutter-bloc/BlocConsumerConditionSnippet.astro';
+import RepositoryProviderSnippet from '~/components/concepts/flutter-bloc/RepositoryProviderSnippet.astro';
+import RepositoryProviderLookupSnippet from '~/components/concepts/flutter-bloc/RepositoryProviderLookupSnippet.astro';
+import NestedRepositoryProviderSnippet from '~/components/concepts/flutter-bloc/NestedRepositoryProviderSnippet.astro';
+import MultiRepositoryProviderSnippet from '~/components/concepts/flutter-bloc/MultiRepositoryProviderSnippet.astro';
+import CounterBlocSnippet from '~/components/concepts/flutter-bloc/CounterBlocSnippet.astro';
+import CounterMainSnippet from '~/components/concepts/flutter-bloc/CounterMainSnippet.astro';
+import CounterPageSnippet from '~/components/concepts/flutter-bloc/CounterPageSnippet.astro';
+import WeatherRepositorySnippet from '~/components/concepts/flutter-bloc/WeatherRepositorySnippet.astro';
+import WeatherMainSnippet from '~/components/concepts/flutter-bloc/WeatherMainSnippet.astro';
+import WeatherAppSnippet from '~/components/concepts/flutter-bloc/WeatherAppSnippet.astro';
+import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSnippet.astro';
+
+:::note
+[`package:flutter_bloc`](https://pub.dev/packages/flutter_bloc)을 사용하기 전에 다음 섹션을 주의 깊게 읽어주세요.
+:::
+
+:::note
+`flutter_bloc` 패키지에서 export된 모든 위젯은 `Cubit` 및 `Bloc` 인스턴스와 모두 통합됩니다.
+:::
+
+## Bloc Widgets
+
+### BlocBuilder
+
+**BlocBuilder**는 `Bloc` 및 `builder` 함수 기능이 필요한 Flutter 위젯입니다. `BlocBuilder`는 새로운 state에 대한 응답으로 위젯 빌드를 처리합니다. `BlocBuilder`는 `StreamBuilder`와 매우 유사하지만 필요한 보일러플레이트 코드의 양을 줄이기 위해 더 간단한 API를 갖고 있습니다. `builder` 함수는 잠재적으로 여러 번 호출될 수 있으며 state에 응답하여 위젯을 반환하는 [순수 함수](https://en.wikipedia.org/wiki/Pure_function)여야 합니다.
+
+Navigation, Dialog 표시 등과 같은 state 변경에 대한 응답으로 무엇이든 간에 "수행"하려면 `BlocListener`를 참조하세요.
+
+만약 `bloc` 파라미터가 생략되면 `BlocBuilder`는 `BlocProvider`와 현재 `BuildContext`를 사용하여 자동으로 bloc을 조회합니다.
+
+<BlocBuilderSnippet />
+
+단일 위젯으로 범위가 지정되고, 상위 `BlocProvider` 및 현재 `BuildContext`를 통해 접근할 수 없는 bloc을 제공하려는 경우에만 bloc 파라미터를 지정하세요.
+
+<BlocBuilderExplicitBlocSnippet />
+
+`builder` 함수가 호출되는 시점을 세밀하게 제어하기 위해 선택적 `buildWhen` 파라미터가 제공됩니다. `buildWhen`은 이전 bloc state와 현재 bloc state를 가져온 후 boolean을 반환합니다. `buildWhen`이 true를 반환하면 `builder`가 `state`와 함께 호출되고 위젯이 다시 빌드됩니다. `buildWhen`이 false를 반환하면 `builder`는 `state`와 함께 호출되지 않으며 리빌드는 일어나지 않습니다.
+
+<BlocBuilderConditionSnippet />
+
+### BlocSelector
+
+**BlocSelector**는 `BlocBuilder`와 유사하지만 개발자가 현재 bloc state에 따라 새 값을 선택하여 업데이트를 필터링할 수 있는 Flutter 위젯입니다. 선택한 값이 변경되지 않으면 불필요한 빌드가 방지됩니다. `BlocSelector`가 `builder`를 다시 호출해야 하는지 여부를 정확하게 결정하려면 선택한 값을 변경할 수 없어야(immutable) 합니다.
+
+만약 `bloc` 파라미터가 생략되면 `BlocBuilder`는 `BlocProvider`와 현재 `BuildContext`를 사용하여 자동으로 bloc을 조회합니다.
+
+<BlocSelectorSnippet />
+
+### BlocProvider
+
+**BlocProvider**는 `BlocProvider.of<T>(context)`를 통해 child에게 bloc을 제공하는 Flutter 위젯입니다. 이는 bloc의 단일 인스턴스가 하위 트리 내의 여러 위젯에 제공될 수 있도록 종속성 주입(DI) 위젯으로 사용됩니다.
+
+대부분의 경우, `BlocProvider`를 사용하여 나머지 하위 트리에서 사용할 수 있는 새 bloc을 생성해야 합니다. 이 경우 `BlocProvider`가 bloc 생성을 담당하기 때문에 자동으로 bloc을 close하는 것도 처리합니다.
+
+<BlocProviderSnippet />
+
+기본적으로, `BlocProvider`는 bloc을 lazy하게 생성합니다. 즉, `BlocProvider.of<BlocA>(context)`을 통해 bloc을 조회할 때 `create`가 실행된다는 의미입니다.
+
+이 동작을 무시하고 `create`가 즉시 실행되도록 하려면 `lazy`를 `false`로 설정하면 됩니다.
+
+<BlocProviderEagerSnippet />
+
+어떤 경우에는 `BlocProvider`를 사용하여 위젯 트리의 새 부분에 기존 bloc을 제공할 수 잇습니다. 이는 기존 bloc을 새 route에서 사용할 수 있도록 해야 할 때 가장 일반적으로 사용됩니다. 이 경우 `BlocProvider`는 bloc을 생성하지 않았으므로 자동으로 bloc을 close하지 않습니다.
+
+<BlocProviderValueSnippet />
+
+그런 다음 `ChildA` 또는 `ScreenA`애서 다음을 사용하여 `BlocA`를 찾을 수 있습니다:
+
+<BlocProviderLookupSnippet />
+
+### MultiBlocProvider
+
+**MultiBlocProvider**는 여러 `BlocProvider` 위젯을 하나로 병합하는 Flutter 위젯입니다. `MultiBlocProvider`는 가독성을 향상시키고 여러 `BlocProvider`를 중첩할 필요성을 제거합니다. `MultiBlocProvider`를 사용하면 다음과 같던 코드를:
+
+<NestedBlocProviderSnippet />
+
+다음과 같이 변경할 수 있습니다:
+
+<MultiBlocProviderSnippet />
+
+### BlocListener
+
+**BlocListener**는 필수 `BlocWidgetListener`와 선택적 `Bloc` 파라미터를 사용하고 bloc의 state 변경에 대한 응답으로 `listener`를 호출하는 Flutter 위젯입니다. Navigation, `Shackbar` 표시, `Dialog` 표시 등과 같이 state 변경당 한 번 발생해야 하는 기능에 사용해야 합니다.
+
+`listener`는 `BlocBuilder`의 `builder`와 달리 각 state 변경 (초기 state를 포함하지 **않음**)에 대해 한 번만 호출되며 `void` 함수입니다.
+
+만약 `bloc` 파라미터가 생략되면 `BlocBuilder`는 `BlocProvider`와 현재 `BuildContext`를 사용하여 자동으로 bloc을 조회합니다.
+
+<BlocListenerSnippet />
+
+`BlocProvider` 및 현재 `BuildContext`를 통해 접근할 수 없는 bloc을 제공하려는 경우에만 bloc 파라미터를 지정하세요.
+
+<BlocListenerExplicitBlocSnippet />
+
+`listner` 함수가 호출되는 시점을 세밀하게 제어하기 위해 선택적 `listenWhen` 파라미터가 제공됩니다. `listenWhen`은 이전 bloc state와 현재 bloc state를 가져온 후 boolean을 반환합니다. `listenWhen`이 true를 반환하면 `listener`는 `state`와 함께 호출됩니다. `listenWhen`이 false를 반환하면 `listener`는 `state`와 함께 호출되지 않습니다.
+
+<BlocListenerConditionSnippet />
+
+### MultiBlocListener
+
+**MultiBlocListener**는 여러 `BlocListener` 위젯을 하나로 병합하는 Flutter 위젯입니다. `MultiBlocListener`는 가독성을 향상시키고 여러 `BlocListener`를 중첩할 필요성을 제거합니다. `MultiBlocListener`를 사용하면 다음과 같던 코드를:
+
+<NestedBlocListenerSnippet />
+
+다음과 같이 변경할 수 있습니다:
+
+<MultiBlocListenerSnippet />
+
+### BlocConsumer
+
+**BlocConsumer**는 새로운 state에 반응하기 위해 `builder`와 `listener`를 노출합니다. `BlocConsumer`는 중첩된 `BlocListener` 및 `BlocBuilder`와 유사하지만, 필요한 보일러플레이트 코드의 양을 줄입니다. `BlocConsumer`는 UI를 다시 빌드하고 `bloc`의 상태 변경에 대한 다른 반응을 실행해야 하는 경우에만 사용해야 합니다. `BlocConsumer`는 필수 `BlocWidgetBuilder` 및 `BlocWidgetListener`와 선택적인 `bloc`, `BlocBuilderCondition`, `BlocListenerCondition` 파라미터를 사용합니다.
+
+만약 `bloc` 파라미터가 생략되면 `BlocBuilder`는 `BlocProvider`와 현재 `BuildContext`를 사용하여 자동으로 bloc을 조회합니다.
+
+<BlocConsumerSnippet />
+
+선택적 파라미터인 `listenWhen` 및 `buildWhen`을 구현하면 `listener` 및 `builder`가 호출되는 시점을 더욱 세밀하게 제어할 수 있습니다. `listenWhen` 및 `buildWhen`은 각 `bloc` `state` 변경 시 호출됩니다. 이들은 각각 이전 `state`와 현재 `state`를 취하고 `builder` 및/또는 `listener` 함수가 호출되는지 여부를 결정하는 `bool`을 반환해야 합니다. `BlocConsumer`가 초기화되면 이전 `state`는 `bloc`의 `state`로 초기화됩니다. `listenWhen` 및 `buildWhen`은 선택사항이며 구현되지 않은 경우 기본값은 `true` 입니다.
+
+<BlocConsumerConditionSnippet />
+
+### RepositoryProvider
+
+**RepositoryProvider**는 `RepositoryProvider.of<T>(context)`를 통해 child에게 repository을 제공하는 Flutter 위젯입니다. 이는 repository의 단일 인스턴스가 하위 트리 내의 여러 위젯에 제공될 수 있도록 종속성 주입(DI) 위젯으로 사용됩니다. `BlocProvider`는 bloc을 제공하는 데 사용해야 하는 반면, `RepositoryProvider`는 repository를 제공하는 데에만 사용해야 합니다.
+
+<RepositoryProviderSnippet />
+
+그런 다음 `ChildA`에서 다음을 사용하여 `Repository` 인스턴스를 찾을 수 있습니다:
+
+<RepositoryProviderLookupSnippet />
+
+### MultiRepositoryProvider
+
+**MultiRepositoryProvider**는 여러 `RepositoryProvider` 위젯을 하나로 병합하는 Flutter 위젯입니다. `MultiRepositoryProvider`는 가독성을 향상시키고 여러 `RepositoryProvider`를 중첩할 필요성을 제거합니다. `MultiRepositoryProvider`를 사용하면 다음과 같던 코드를:
+
+<NestedRepositoryProviderSnippet />
+
+다음과 같이 변경할 수 있습니다:
+
+<MultiRepositoryProviderSnippet />
+
+## BlocProvider 사용법
+
+`BlocProvider`를 사용하여 `CounterPage`에 `CounterBloc`을 제공하고 `BlocBuilder`를 사용하여 state 변경에 대한 반응을 살펴보겠습니다.
+
+<CounterBlocSnippet />
+
+<CounterMainSnippet />
+
+<CounterPageSnippet />
+
+이 시점에서 우리는 Presentation 레이어를 Business Logic 레이어에서 성공적으로 분리했습니다. `CounterPage` 위젯은 사용자가 버튼을 탭할 때 어떤 일이 발생하는지 전혀 모릅니다. 위젯은 단순히 사용자가 증가 또는 감소 버튼을 눌렀음을 `CounterBloc`에 알려줄 뿐 입니다.
+
+## RepositoryProvider 사용법
+
+[`flutter_weather`][flutter_weather_link] 예시의 맥락에서 `RepositoryProvider`를 사용하는 방법을 살펴보겠습니다.
+
+<WeatherRepositorySnippet />
+
+앱이 `WeatherRepository`에 명시적으로 종속되어 있으므로 생성자를 통해 인스턴스를 주입합니다. 이를 통해 빌드 Flavor나 환경에 따라 `WeatherRepository`의 다양한 인스턴스를 주입할 수 있습니다.
+
+<WeatherMainSnippet />
+
+우리 앱에는 하나의 Repository만 있으므로 `RepositoryProvider.value`를 통해 이를 위젯 트리에 삽입합니다. Repository가 두 개 이상인 경우 `MultiRepositoryProvider`를 사용하여 하위 트리에 여러 repository 인스턴스를 제공할 수 있습니다.
+
+<WeatherAppSnippet />
+
+대부분의 경우, Root 앱 위젯은 `RepositoryProvider`를 통해 하위 트리에 하나 이상의 repository를 노출합니다.
+
+<WeatherPageSnippet />
+
+이제 bloc을 인스턴스화 할 때, `context.read`를 통해 repository의 인스턴스에 접근하고 생성자를 통해 repository를 bloc에 주입할 수 있습니다.
+
+[flutter_weather_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_weather
+
+## Extension Methods
+
+Dart 2.7에 도입된 [Extension methods](https://dart.dev/guides/language/extension-methods)는 기존 라이브러리에 기능을 추가하는 방법입니다. 이번 섹션에서는 `package:flutter_bloc`에 포함된 확장 메서드와 이를 사용하는 방법을 살펴보겠습니다.
+
+`flutter_bloc`은 [`InheritedWidget`](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html)의 사용을 단순화하는 [package:provider](https://pub.dev/packages/provider)에 대한 종속성이 있습니다.
+
+내부적으로, `package:flutter_bloc`은 `package:provider`를 사용하여 `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` 그리고 `MultiRepositoryProvider` 위젯을 구현합니다. `package:flutter_bloc`은 `package:provider`의 확장인 `ReadContext`, `WatchContext` 그리고 `SelectContext`를 export 합니다.
+
+:::note
+[`package:provider`](https://pub.dev/packages/provider)에 대해 자세히 알아보세요.
+:::
+
+### context.read
+
+`context.read<T>()`는 `T`타입에 가장 가까운 상위 인스턴스를 조회하며 기능적으로 `BlocProvider.of<T>(context)`와 동일합니다. `context.read`는 `onPressed` 콜백 내에 event를 추가하기 위해 bloc 인스턴스를 검색하는 데 가장 일반적으로 사용됩니다.
+
+:::note
+`context.read<T>()`는 `T`를 listen하지 않습니다. 제공된 `T` 타입의 `Object`가 변경되면 `context.read`는 위젯 리빌드를 촉발하지 않습니다.
+:::
+
+#### 사용법
+
+✅ **DO** 콜백에 event를 추가하려면 `context.read`를 사용하세요.
+
+```dart
+onPressed() {
+  context.read<CounterBloc>().add(CounterIncrementPressed()),
+}
+```
+
+❌ **AVOID** `context.read`를 사용하여 `build` 메서드 내에서 상태를 찾지 마세요.
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final state = context.read<MyBloc>().state;
+  return Text('$state');
+}
+```
+
+위의 사용법은 bloc의 state가 변경되어도 `Text` 위젯이 다시 리빌드되지 않기 때문에 오류가 발생하기 쉽습니다.
+
+:::caution
+State 변경에 따라 다시 빌드하려면 `BlocBuilder` 또는 `context.watch` 를 대신 사용하세요.
+:::
+
+### context.watch
+
+`context.read<T>()`와 마찬가지로, `context.watch<T>()`는 `T`타입에 가장 가까운 상위 인스턴스를 조회하며 인스턴스의 변경 사항도 listen 합니다. 기능적으로는 `BlocProvider.of<T>(context, listening: true)`와 동일합니다.
+
+제공된 `T` 타입의 `Object`가 변경되면 `context.watch`는 위젯 리빌드를 촉발합니다.
+
+:::caution
+`context.watch`는 `StatelessWidget` 또는 `State` 클래스의 `build` 메서드 내에서만 접근할 수 있습니다.
+:::
+
+#### 사용법
+
+✅ **DO** 명시적으로 리빌드 scope를 지정하려면 `context.watch` 대신 `BlocBuilder`를 사용하세요.
+
+```dart
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: BlocBuilder<MyBloc, MyState>(
+        builder: (context, state) {
+          // Whenever the state changes, only the Text is rebuilt.
+          return Text(state.value);
+        },
+      ),
+    ),
+  );
+}
+```
+
+또는, `Builder`를 사용하여 리빌드 scope를 제한하세요.
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: Builder(
+        builder: (context) {
+          // Whenever the state changes, only the Text is rebuilt.
+          final state = context.watch<MyBloc>().state;
+          return Text(state.value);
+        },
+      ),
+    ),
+  );
+}
+```
+
+✅ **DO** `Builder`와 `context.watch`를 `MultiBlocBuilder`처럼 사용하세요.
+
+```dart
+Builder(
+  builder: (context) {
+    final stateA = context.watch<BlocA>().state;
+    final stateB = context.watch<BlocB>().state;
+    final stateC = context.watch<BlocC>().state;
+
+    // return a Widget which depends on the state of BlocA, BlocB, and BlocC
+  }
+);
+```
+
+❌ **AVOID** `build` 메서드 내의 상위 위젯이 state에 의존하지 않는 경우 `context.watch`를 사용하지 마세요.
+
+```dart
+@override
+Widget build(BuildContext context) {
+  // Whenever the state changes, the MaterialApp is rebuilt
+  // even though it is only used in the Text widget.
+  final state = context.watch<MyBloc>().state;
+  return MaterialApp(
+    home: Scaffold(
+      body: Text(state.value),
+    ),
+  );
+}
+```
+
+:::caution
+`build` 메서드의 root에서 `context.watch`를 사용하면 bloc state가 변경될 때 전체 위젯이 다시 빌드됩니다.
+:::
+
+### context.select
+
+`context.watch<T>()`와 마찬가지로, `context.select<T, R>(R function(T value))`는 `T`타입에 가장 가까운 상위 인스턴스를 조회하며 인스턴스의 변경 사항도 listen 합니다. `context.watch`와 달리 `context.select`를 사용하면 state의 작은 부분(일부)에서의 변경 사항을 listen할 수 있습니다.
+
+```dart
+Widget build(BuildContext context) {
+  final name = context.select((ProfileBloc bloc) => bloc.state.name);
+  return Text(name);
+}
+```
+
+위의 내용은 `ProfileBloc` state의 `name` 프로퍼티가 변경될 때만 위젯을 다시 빌드합니다.
+
+#### 사용법
+
+✅ **DO** 명시적으로 리빌드 scope를 지정하려면 `context.select` 대신 `BlocSelector`를 사용하세요.
+
+```dart
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: BlocSelector<ProfileBloc, ProfileState, String>(
+        selector: (state) => state.name,
+        builder: (context, name) {
+          // Whenever the state.name changes, only the Text is rebuilt.
+          return Text(name);
+        },
+      ),
+    ),
+  );
+}
+```
+
+또는, `Builder`를 사용하여 리빌드 scope를 제한하세요.
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: Builder(
+        builder: (context) {
+          // Whenever state.name changes, only the Text is rebuilt.
+          final name = context.select((ProfileBloc bloc) => bloc.state.name);
+          return Text(name);
+        },
+      ),
+    ),
+  );
+}
+```
+
+❌ **AVOID** `build` 메서드 내의 상위 위젯이 state에 의존하지 않는 경우 `context.select`를 사용하지 마세요.
+
+```dart
+@override
+Widget build(BuildContext context) {
+  // Whenever the state.value changes, the MaterialApp is rebuilt
+  // even though it is only used in the Text widget.
+  final name = context.select((ProfileBloc bloc) => bloc.state.name);
+  return MaterialApp(
+    home: Scaffold(
+      body: Text(name),
+    ),
+  );
+}
+```
+
+:::caution
+`build` 메서드의 root에서 `context.select`를 사용하면 bloc state가 변경될 때 전체 위젯이 다시 빌드됩니다.
+:::

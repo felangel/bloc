@@ -1,0 +1,411 @@
+---
+title: Flutter Bloc 概念
+description: package:flutter_bloc 的核心概念概览
+sidebar:
+  order: 2
+---
+
+import BlocBuilderSnippet from '~/components/concepts/flutter-bloc/BlocBuilderSnippet.astro';
+import BlocBuilderExplicitBlocSnippet from '~/components/concepts/flutter-bloc/BlocBuilderExplicitBlocSnippet.astro';
+import BlocBuilderConditionSnippet from '~/components/concepts/flutter-bloc/BlocBuilderConditionSnippet.astro';
+import BlocSelectorSnippet from '~/components/concepts/flutter-bloc/BlocSelectorSnippet.astro';
+import BlocProviderSnippet from '~/components/concepts/flutter-bloc/BlocProviderSnippet.astro';
+import BlocProviderEagerSnippet from '~/components/concepts/flutter-bloc/BlocProviderEagerSnippet.astro';
+import BlocProviderValueSnippet from '~/components/concepts/flutter-bloc/BlocProviderValueSnippet.astro';
+import BlocProviderLookupSnippet from '~/components/concepts/flutter-bloc/BlocProviderLookupSnippet.astro';
+import NestedBlocProviderSnippet from '~/components/concepts/flutter-bloc/NestedBlocProviderSnippet.astro';
+import MultiBlocProviderSnippet from '~/components/concepts/flutter-bloc/MultiBlocProviderSnippet.astro';
+import BlocListenerSnippet from '~/components/concepts/flutter-bloc/BlocListenerSnippet.astro';
+import BlocListenerExplicitBlocSnippet from '~/components/concepts/flutter-bloc/BlocListenerExplicitBlocSnippet.astro';
+import BlocListenerConditionSnippet from '~/components/concepts/flutter-bloc/BlocListenerConditionSnippet.astro';
+import NestedBlocListenerSnippet from '~/components/concepts/flutter-bloc/NestedBlocListenerSnippet.astro';
+import MultiBlocListenerSnippet from '~/components/concepts/flutter-bloc/MultiBlocListenerSnippet.astro';
+import BlocConsumerSnippet from '~/components/concepts/flutter-bloc/BlocConsumerSnippet.astro';
+import BlocConsumerConditionSnippet from '~/components/concepts/flutter-bloc/BlocConsumerConditionSnippet.astro';
+import RepositoryProviderSnippet from '~/components/concepts/flutter-bloc/RepositoryProviderSnippet.astro';
+import RepositoryProviderLookupSnippet from '~/components/concepts/flutter-bloc/RepositoryProviderLookupSnippet.astro';
+import NestedRepositoryProviderSnippet from '~/components/concepts/flutter-bloc/NestedRepositoryProviderSnippet.astro';
+import MultiRepositoryProviderSnippet from '~/components/concepts/flutter-bloc/MultiRepositoryProviderSnippet.astro';
+import CounterBlocSnippet from '~/components/concepts/flutter-bloc/CounterBlocSnippet.astro';
+import CounterMainSnippet from '~/components/concepts/flutter-bloc/CounterMainSnippet.astro';
+import CounterPageSnippet from '~/components/concepts/flutter-bloc/CounterPageSnippet.astro';
+import WeatherRepositorySnippet from '~/components/concepts/flutter-bloc/WeatherRepositorySnippet.astro';
+import WeatherMainSnippet from '~/components/concepts/flutter-bloc/WeatherMainSnippet.astro';
+import WeatherAppSnippet from '~/components/concepts/flutter-bloc/WeatherAppSnippet.astro';
+import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSnippet.astro';
+
+:::note
+在开始 [`package:flutter_bloc`](https://pub.dev/packages/flutter_bloc) 请详细阅读以下文档
+:::
+
+:::note
+所有 `flutter_bloc` 套件导出的Widget都与 Cubit 和 Bloc 实例集成。
+:::
+
+## Bloc Widgets
+
+### BlocBuilder
+
+**BlocBuilder** 是一个 Flutter 的 Widget，它需要一个 `Bloc` 和一个 `builder` 函数。`BlocBuilder` 处理于构建响应新状态时构建的 Widget 。`BlocBuilder` 与 `StreamBuilder` 非常相似，但是 `StreamBuilder`具有更简单的 API，以减少所需的样板代码量。`builder` 函数可能会被多次调用，并且必须是一个根据状态返回一个widget的[纯函数](https://en.wikipedia.org/wiki/Pure_function)。
+
+如果你希望在状态变化时执行一些操作，比如导航、显示对话框等...，请查看 `BlocListener`
+
+在BlocBuilder中，如果省略了 `bloc` 参数，则 `BlocBuilder` 会自动通过 `BlocProvider` 和当前的 `BuildContext` 进行查找。
+
+<BlocBuilderSnippet />
+
+只有在希望提供一个仅作用于单个 widget 且无法透过父级 `BlocProvider` 和当前的 `BuildContext` 访问的 `bloc` 时，才需要明确指定 `bloc`。
+
+<BlocBuilderExplicitBlocSnippet />
+
+在使用 BlocBuilder 时，如果要达到更细緻地控制 widget 的更新，可以使用 `buildWhen` 参数来实现何时调用 `builder` 函数。`buildWhen` 接受前一个 bloc 状态和当前 bloc 状态，并返回一个布尔值。如果 `buildWhen` 返回 true，则 `builder` 函数将被调用并使用当前 `state` 进行widget重建。如果 buildWhen 返回 false，则 `builder` 将不会被使用当前 `state` 调用，且不会进行重建。
+
+<BlocBuilderConditionSnippet />
+
+### BlocSelector
+
+**BlocSelector** 是一个 Flutter Widget，类似于 BlocBuilder，但允许开发者通过根据当前 bloc 状态选择新值来过滤更新。如果选择的值不变，则防止不必要的构建。选择的值必须是 immutable 的，以便 BlocSelector 可以准确地确定是否应该再次调用 builder。
+
+如果`bloc` 被省略没有传入， `BlocSelector` 将自动使用 `BlocProvider` 和当前的 `BuildContext` 执行查找。
+
+<BlocSelectorSnippet />
+
+### BlocProvider
+
+**BlocProvider** 是一个 Flutter widget ，透过 `BlocProvider.of<T>(context)` 将一个 bloc 提供给它的children。`BlocProvider` 用作于依赖注入（DI）widget ，以便在子树 (subtree) 中可以提供单个 bloc 实例给多个widget 使用。
+
+通常情况下，应该使用 `BlocProvider` 来创建新的 bloc，这样可以使该 bloc 对于子树中的其他 widget 使用。在这种情况下，由于 `BlocProvider` 负责创建 bloc，它将自动处理关闭该 bloc。
+
+<BlocProviderSnippet />
+
+默认情况下，`BlocProvider` 将延迟创建 bloc 实例，这意味着当通过 `BlocProvider.of<BlocA>(context)` 查找该 bloc 时，`create` 方法才会被执行。
+
+为了复盖这种行为并强制立即运行 `create` 方法，可以将 `lazy` 设置为 `false`。
+
+<BlocProviderEagerSnippet />
+
+在某些情况下，可以使用 `BlocProvider` 来将一个已存在的 Bloc 提供给 Widget 树中的新部分。这通常发生在需要将一个已存在的 Bloc 提供给新的路由（route）时。在这种情况下，`BlocProvider` 不会自动关闭 Bloc，因为它并非 Bloc 的创建者。
+
+<BlocProviderValueSnippet />
+
+如此，从 `ChildA` 或者 `ScreenA` 中，我们可以获取 `BlocA`
+
+<BlocProviderLookupSnippet />
+
+### MultiBlocProvider
+
+**MultiBlocProvider** 是一个 Flutter Widget 用来将多个 `BlocProvider` Widgets 合併为一个。
+
+`MultiBlocProvider` 可以提高代码的可读性，消除了需要嵌套多个 `BlocProvider` 的情况。
+
+通过使用了 `MultiBlocProvider` 我们可以从
+
+<NestedBlocProviderSnippet />
+
+转为
+
+<MultiBlocProviderSnippet />
+
+### BlocListener
+
+**BlocListener** 是一个 Flutter Widget，它接受一个 `BlocWidgetListener` 和一个可选的 `Bloc`，并在 bloc 状态发生变化时调用 `listener`。它应该用于需要每个状态变化仅执行一次的功能，例如导航、显示 `SnackBar`、显示 `Dialog` 等等。
+
+与 `BlocBuilder` 中的 `builder` 不同的是，`listener` 对于每个状态变化（初始状态除外）只会被调用一次，并且是一个 `void` 函数。
+
+如果`bloc` 被省略没有传入， `BlocListener` 将自动使用 `BlocProvider` 和当前的 `BuildContext` 执行查找。
+
+<BlocListenerSnippet />
+
+只有在希望提供一个通过 `BlocProvider` 和当前 `BuildContext` 否则无法访问的 bloc 的情况时，才指定 bloc。
+
+<BlocListenerExplicitBlocSnippet />
+
+要对 `listener` 函数何时调用进行更细緻地控制，可以提供一个可选的 `listenWhen`。`listenWhen` 接受先前的 bloc 状态和当前的 bloc 状态，并返回一个布尔值。如果 `listenWhen` 返回 true，则会用 `state` 调用 `listener`。如果 `listenWhen` 返回 false，则不会用 `state` 调用 `listener`。
+
+<BlocListenerConditionSnippet />
+
+### MultiBlocListener
+
+**MultiBlocListener** 是 Flutter 中的一个 Widget，用来将多个 `BlocListener` Widgets 合併为一个。`MultiBlocListener` 可以提高代码的可读性，消除了需要嵌套多个 BlocListener 的情况。
+
+通过使用 `MultiBlocListener`，我们可以从以下代码转变为：
+
+<NestedBlocListenerSnippet />
+
+转为
+
+<MultiBlocListenerSnippet />
+
+### BlocConsumer
+
+**BlocConsumer** 提供了 `builder` 和 `listener`，以便对新的状态做出反应。`BlocConsumer` 类似于嵌套的 `BlocListener` 和 `BlocBuilder`，但可以减少所需的样板代码量。只有在需要重建 UI 并执行其他对 `bloc` 状态变化做出反应时，才应该使用 `BlocConsumer`。`BlocConsumer` 接受`BlocWidgetBuilder` (必传参数) 和 `BlocWidgetListener` (必传参数) ，以及 `bloc` (可选参数)、`BlocBuilderCondition` (可选参数) 和 `BlocListenerCondition` (可选参数)。
+
+如果`bloc` 被省略没有传入， `BlocConsumer` 将自动使用 `BlocProvider` 和当前的 `BuildContext` 进行查找。
+
+<BlocConsumerSnippet />
+
+可选参数 `listenWhen` 和 `buildWhen` 可以用来更精细地控制 `listener` 和 `builder` 何时被调用。`listenWhen` 和 `buildWhen` 将在每个 `bloc` 的 `state` 更改时被调用。它们都接受先前的 `state` 和当前的 `state`，且必须返回一个布尔值，用于确定是否调用 `builder` 和/或 `listener` 函数。当 `BlocConsumer` 初始化时，先前的 `state` 将初始化为 `bloc` 的 `state`。由于 `listenWhen` 和 `buildWhen` 是可选的，因此不实现它们时，默认为 `true`。
+
+<BlocConsumerConditionSnippet />
+
+### RepositoryProvider
+
+**MultiBlocListener** 是 Flutter 中的一个 Widget，透过 `RepositoryProvider.of<T>(context)` 将 repository 提供给其子节点。它被用作依赖注入（DI）小部件，以便在子树中提供一个仓库的单个实例给多个 Widgets。`BlocProvider` 应该用于提供 bloc，而 `RepositoryProvider` 应该只用于提供 repositories。
+
+<RepositoryProviderSnippet />
+
+那么从 `ChildA`，我们可以通过以下代码获取 `Repository` 实例：
+
+<RepositoryProviderLookupSnippet />
+
+### MultiRepositoryProvider
+
+**MultiRepositoryProvider** 是一个 Flutter Widget 用来将多个 `RepositoryProvider` Widgets 合併为一个。
+
+`MultiRepositoryProvider` 可以提高代码的可读性，消除了需要嵌套多个 `RepositoryProvider` 的情况。
+
+通过使用了 `MultiRepositoryProvider` 我们可以从
+
+<NestedRepositoryProviderSnippet />
+
+转为
+
+<MultiRepositoryProviderSnippet />
+
+## BlocProvider Usage
+
+接着来看看如何使用 `BlocProvider` 来提供一个 `CounterBloc` 给一个 `CounterPage` 并且使用`BlocBuilder` 来对状态变化做出反应.
+
+<CounterBlocSnippet />
+
+<CounterMainSnippet />
+
+<CounterPageSnippet />
+
+到目前为止，我们成功地将我们的表示层 ( presentational layer ) 与我们的业务逻辑层 (business logic layer) 分开了。注意，`CounterPage` widget 不知道当用户点击按钮时会发生什么。该 widget 只是告诉 `CounterBloc` 用户按下了增加或减少按钮。
+
+## RepositoryProvider Usage
+
+接下来，我们将利用 flutter_weather 范例，来查看如何使用 RepositoryProvider。
+
+<WeatherRepositorySnippet />
+
+由于应用程式明确依赖于 `WeatherRepository`，我们通过建构函式注入一个实例。这使我们能够根据构建版本或环境注入不同的 `WeatherRepository` 实例。
+
+<WeatherMainSnippet />
+
+由于在这个例子中，我们的应用程序只有一个 repository，我们将通过 `RepositoryProvider.value` 将其注入到我们的 widget tree 中。如果您有多个 repository，则可以使用 `MultiRepositoryProvider` 将多个 repository 实例提供给 subtree。
+
+<WeatherAppSnippet />
+
+在大多数情况下，应用程序的顶层 widgets 将透过 `RepositoryProvider` 向 subtree 公开一个或多个repository。
+
+<WeatherPageSnippet />
+
+在实例化一个 bloc 时，我们可以通过 `context.read` 访问存储库的实例，并通过构造函数将存储库注入到 bloc 中。
+
+[flutter_weather_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_weather
+
+## Extension Methods
+
+[
+Extension methods](https://dart.dev/guides/language/extension-methods)，在 Dart 2.7 中引入，是一种向现有库添加功能的方法。在本节中，我们将看一下 `package:flutter_bloc` 中包含的扩展方法以及它们的使用方式。
+
+`flutter_bloc` 依赖于 [package:provider](https://pub.dev/packages/provider)，它简化了对 [`InheritedWidget`](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html) 的使用。
+
+在内部，`package:flutter_bloc` 使用 `package:provider` 实现了 `BlocProvider`、`MultiBlocProvider`、`RepositoryProvider` 和 `MultiRepositoryProvider` widgets。 `package:flutter_bloc` 从 `package:provider` 中导出了 `ReadContext`、`WatchContext` 和 `SelectContext` 扩展。
+
+:::note
+查询更多关于 [`package:provider`](https://pub.dev/packages/provider).
+:::
+
+### context.read
+
+`context.read<T>()` 查找最接近的类型为 T 的祖先实例，并在功能上等同于 `BlocProvider.of<T>(context)`。`context.read` 最常用于在 `onPressed` 回调中查找 bloc 实例以添加事件。
+
+:::note
+
+`context.read<T>()` 不会监听 `T` —— 如果提供的类型为 `T` 的对象发生变化，`context.read` 不会触发 widget重建。
+
+:::
+
+#### Usage
+
+✅ **DO** 在回调函数中使用`context.read` 方法来添加事件。
+
+```dart
+onPressed() {
+  context.read<CounterBloc>().add(CounterIncrementPressed()),
+}
+```
+
+❌ **AVOID** 在 `build` 方法当中使用`context.read` 查找状态
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final state = context.read<MyBloc>().state;
+  return Text('$state');
+}
+```
+
+以上的使用可能会导致UI 不会反应最新的状态变化的错误，因为即使状态改变了 `Text` widget 并不会被重新建立（rebuild），。
+
+:::caution
+使用 `BlocBuilder` 或者 `context.watch` 以确保当状态改变时，UI 可以被正确地重新构建。
+:::
+
+### context.watch
+
+如同 `context.watch<T>()` , `context.watch<T>()` 提供最接近祖先类型为 `T` 的实例，并且同时还会监听该实例的变化。它的功能等同于 `BlocProvider.of<T>(context, listen: true)`。
+
+如果提供类型 T 的对象发生变化，context.watch 将会触发重新构建（rebuild）。
+
+:::caution
+`context.watch` 只能在 `StatelessWidget` 或 `State` 类的 build 方法内部被访问。
+:::
+
+#### Usage
+
+✅ **DO** 使用 `BlocBuilder` 而不是 `context.watch` 来明确地范围化重新构建。
+
+```dart
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: BlocBuilder<MyBloc, MyState>(
+        builder: (context, state) {
+          // 当状态变化时，只会重新构建 Text。
+          return Text(state.value);
+        },
+      ),
+    ),
+  );
+}
+```
+
+作为选择，建议使用 `Builder`来范围化（或限定）重新构建的范围。
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: Builder(
+        builder: (context) {
+          // 当状态变化时，只会重新构建 Text。
+          final state = context.watch<MyBloc>().state;
+          return Text(state.value);
+        },
+      ),
+    ),
+  );
+}
+```
+
+✅ **DO** 将 `Builder` 和 `context.watch` 一起使用，类似于 `MultiBlocBuilder` 的效果.
+
+```dart
+Builder(
+  builder: (context) {
+    final stateA = context.watch<BlocA>().state;
+    final stateB = context.watch<BlocB>().state;
+    final stateC = context.watch<BlocC>().state;
+
+    // 返回一个依赖于 BlocA 、BlocB, 和 BlocC 状态的 Widget。
+  }
+);
+```
+
+❌ **AVOID** 使用 `context.watch`
+当父 Widget 的 build 方法不依赖于状态
+
+```dart
+@override
+Widget build(BuildContext context) {
+  // 无论状态如何变化，都会重新构建 MaterialApp，
+  // 即使它只用于 Text Widget 中。
+  final state = context.watch<MyBloc>().state;
+  return MaterialApp(
+    home: Scaffold(
+      body: Text(state.value),
+    ),
+  );
+}
+```
+
+:::caution
+如果在 `build` 方法的根部使用 `context.watch` ，当 bloc 的状态发生变化时，整个 Widget 都将被重新构建。
+:::
+
+### context.select
+
+如同 `context.watch<T>()` , `context.select<T, R>(R function(T value))` 提供最接近祖先类型为 `T` 的实例 且同时监听该实例的变化。
+不同于 `context.watch` 的是，`context.select` 允许你监听状态对象中的特定部分
+
+```dart
+Widget build(BuildContext context) {
+  final name = context.select((ProfileBloc bloc) => bloc.state.name);
+  return Text(name);
+}
+```
+
+以上实例将在属性 `ProfileBloc` 内中的 `name` 属性变化时重新构建 Widget。
+
+#### Usage
+
+✅ **DO** 使用 BlocSelector 而不是 context.select，以明确地限定重新构建的范围。
+
+```dart
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: BlocSelector<ProfileBloc, ProfileState, String>(
+        selector: (state) => state.name,
+        builder: (context, name) {
+          // 当 state.name 变化时，只有 Text 会重新构建。
+          return Text(name);
+        },
+      ),
+    ),
+  );
+}
+```
+
+作为选择，建议使用 `Builder`来范围化（或限定）重新构建的范围。
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: Builder(
+        builder: (context) {
+          // 当 state.name 变化时，只有 Text 会重新构建。
+          final name = context.select((ProfileBloc bloc) => bloc.state.name);
+          return Text(name);
+        },
+      ),
+    ),
+  );
+}
+```
+
+❌ **AVOID** 在父 Widget 的 build 方法中使用 context.select，但父 Widget 不依賴於狀態。
+
+```dart
+@override
+Widget build(BuildContext context) {
+  // 当 state.value 变化时，即使它只在 Text widget 中使用，也会重新构建 MaterialApp。
+  final name = context.select((ProfileBloc bloc) => bloc.state.name);
+  return MaterialApp(
+    home: Scaffold(
+      body: Text(name),
+    ),
+  );
+}
+```
+
+:::caution
+在 `build` 方法的根部使用 `context.select` 将导致在选择范围发生变化时重新构建整个 Widget。
+:::

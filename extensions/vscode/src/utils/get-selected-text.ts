@@ -26,7 +26,9 @@ export const getSelectedText = (editor: TextEditor): Selection => {
     const currentChar = lineText.charAt(widgetStartIndex);
     const isBeginningOfWidget =
       currentChar === openBracket ||
-      (currentChar === " " && lineText.charAt(widgetStartIndex - 1) !== ",");
+      (currentChar === " " &&
+        lineText.charAt(widgetStartIndex - 1) !== "," &&
+        lineText.substring(widgetStartIndex - 5, widgetStartIndex) != "const");
     if (isBeginningOfWidget) break;
   }
   widgetStartIndex++;

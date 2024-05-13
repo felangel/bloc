@@ -4,6 +4,7 @@ export type Props = {
 	becomeASponsor: string;
 };
 
+import { Image } from 'astro:assets';
 import { LinkCard } from '@astrojs/starlight/components';
 
 import miquido from '~/assets/sponsors/miquido.png';
@@ -80,11 +81,12 @@ const sponsors: Sponsor[] = [
 			sponsors.map((sponsor) => {
 				return (
 					<div class="flex flex-row justify-center items-center">
-						<a href={sponsor.href} aria-label={sponsor.alt}>
-							<img
+						<a href={sponsor.href} aria-label={sponsor.alt} target="_blank" rel="noreferrer">
+							<Image
 								class={sponsor.invert ? 'invert-logo' : 'logo'}
-								src={sponsor.img.src}
-								width="150"
+								src={sponsor.img}
+								width={300}
+								style="width:150px;height:auto"
 								alt={sponsor.alt}
 							/>
 						</a>
@@ -96,5 +98,10 @@ const sponsors: Sponsor[] = [
 </div>
 
 <div class="w-full flex text-center items-center justify-center">
-	<LinkCard title={becomeASponsor} href="https://github.com/sponsors/felangel" />
+	<LinkCard
+		title={becomeASponsor}
+		href="https://github.com/sponsors/felangel"
+		target="_blank"
+		rel="noreferrer"
+	/>
 </div>

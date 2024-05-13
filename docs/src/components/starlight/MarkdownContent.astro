@@ -1,0 +1,79 @@
+---
+import '@astrojs/starlight/style/markdown.css';
+---
+
+<div class="sl-markdown-content">
+	<slot />
+</div>
+
+<style>
+	/* Custom styles for heading anchor links. */
+	.sl-markdown-content :global(.heading-wrapper) {
+		--icon-size: 0.75em;
+		--icon-spacing: 0.25em;
+		line-height: var(--sl-line-height-headings);
+	}
+
+	/* Headings after non-headings have more spacing. */
+	.sl-markdown-content
+		:global(:not(.heading-wrapper) + :is(.heading-wrapper):not(:where(.not-content *))) {
+		margin-top: 1.5em;
+	}
+
+	/* Set font-size on wrapper element, so line-height, margins etc. match heading size. */
+	.sl-markdown-content :global(.level-h2) {
+		font-size: var(--sl-text-h2);
+	}
+	.sl-markdown-content :global(.level-h3) {
+		font-size: var(--sl-text-h3);
+	}
+	.sl-markdown-content :global(.level-h4) {
+		font-size: var(--sl-text-h4);
+	}
+	.sl-markdown-content :global(.level-h5) {
+		font-size: var(--sl-text-h5);
+	}
+
+	.sl-markdown-content :global(.heading-wrapper > :first-child) {
+		margin-inline-end: calc(var(--icon-size) + var(--icon-spacing));
+		display: inline;
+	}
+
+	.sl-markdown-content :global(.anchor-link) {
+		margin-inline-start: calc(-1 * (var(--icon-size)));
+		color: var(--sl-color-gray-3);
+	}
+	.sl-markdown-content :global(.anchor-link:hover),
+	.sl-markdown-content :global(.anchor-link:focus) {
+		color: var(--sl-color-text-accent);
+	}
+	.sl-markdown-content :global(.heading-wrapper svg) {
+		display: inline;
+		width: var(--icon-size);
+	}
+
+	@media (hover: hover) {
+		.sl-markdown-content :global(.anchor-link) {
+			opacity: 0;
+		}
+	}
+	.sl-markdown-content :global(.heading-wrapper:hover > .anchor-link),
+	.sl-markdown-content :global(.anchor-link:focus) {
+		opacity: 1;
+	}
+
+	/* Float anchor links to the left of headings on larger screens. */
+	@media (min-width: 95em) {
+		.sl-markdown-content :global(.heading-wrapper) {
+			display: flex;
+			flex-direction: row-reverse;
+			justify-content: flex-end;
+			gap: var(--icon-spacing);
+			margin-inline-start: calc(-1 * (var(--icon-size) + var(--icon-spacing)));
+		}
+		.sl-markdown-content :global(.heading-wrapper > :first-child),
+		.sl-markdown-content :global(.anchor-link) {
+			margin: 0;
+		}
+	}
+</style>
