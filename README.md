@@ -79,7 +79,6 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [Angular Bloc Package](https://github.com/felangel/bloc/tree/master/packages/angular_bloc/README.md)
 - [Hydrated Bloc Package](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc/README.md)
 - [Replay Bloc Package](https://github.com/felangel/bloc/tree/master/packages/replay_bloc/README.md)
-- [Sealed Flutter Bloc Package](https://github.com/felangel/sealed_flutter_bloc/blob/master/README.md)
 
 ## Migration
 
