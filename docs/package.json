@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.5.6",
-    "@astrojs/starlight": "^0.21.0",
+    "@astrojs/starlight": "^0.22.4",
     "@astrojs/starlight-tailwind": "^2.0.1",
     "@astrojs/tailwind": "^5.1.0",
     "@fontsource-variable/figtree": "^5.0.19",
