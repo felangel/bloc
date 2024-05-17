@@ -1,0 +1,20 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+sealed class MyState extends Equatable {
+    const MyState();
+}
+
+final class StateA extends MyState {
+    final String property;
+
+    const StateA(this.property);
+
+    @override
+    List<Object> get props => [];
+}
+`;
+---
+
+<Code code={code} lang="dart" title="my_state.dart" />

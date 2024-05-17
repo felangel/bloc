@@ -1,0 +1,107 @@
+---
+export type Props = {
+	sponsoredBy: string;
+	becomeASponsor: string;
+};
+
+import { Image } from 'astro:assets';
+import { LinkCard } from '@astrojs/starlight/components';
+
+import miquido from '~/assets/sponsors/miquido.png';
+import monterail from '~/assets/sponsors/monterail.png';
+import netguru from '~/assets/sponsors/netguru.png';
+import parabeac from '~/assets/sponsors/parabeac.png';
+import stream from '~/assets/sponsors/stream.png';
+import porada from '~/assets/sponsors/porada.png';
+
+const { sponsoredBy = 'Sponsored with 💖 by', becomeASponsor = 'Become a Sponsor' } = Astro.props;
+
+interface Sponsor {
+	img: ImageMetadata;
+	href: string;
+	alt: string;
+	invert: boolean;
+}
+
+const sponsors: Sponsor[] = [
+	{
+		alt: 'Monterail Logo',
+		img: monterail,
+		href: 'https://www.monterail.com/services/flutter-development/?utm_source=bloc&utm_medium=logo&utm_campaign=flutter',
+		invert: true,
+	},
+	{
+		alt: 'Stream Logo',
+		img: stream,
+		href: 'https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc',
+		invert: true,
+	},
+	{
+		alt: 'Miquido Logo',
+		img: miquido,
+		href: 'https://www.miquido.com/flutter-development-company/?utm_source=github&utm_medium=sponsorship&utm_campaign=bloc-silver-tier&utm_term=flutter-development-company&utm_content=miquido-logo',
+		invert: true,
+	},
+	{
+		alt: 'Parabeac Logo',
+		img: parabeac,
+		href: 'https://bit.ly/parabeac_flutterbloc',
+		invert: false,
+	},
+	{
+		alt: 'Netguru Logo',
+		img: netguru,
+		href: 'https://www.netguru.com/services/flutter-app-development?utm_campaign=%5BS%5D%5BMob%5D%20Flutter&utm_source=github&utm_medium=sponsorship&utm_term=bloclibrary',
+		invert: true,
+	},
+	{
+		alt: 'Porada Logo',
+		img: porada,
+		href: 'https://www.porada.app/',
+		invert: false,
+	},
+];
+---
+
+<style>
+	:global([data-theme='dark']) .invert-logo {
+		filter: invert() grayscale() contrast(200%) saturate(200%);
+	}
+	:global([data-theme='dark']) .logo {
+		filter: grayscale() contrast(200%) saturate(200%);
+	}
+</style>
+
+<div class="flex w-full justify-center no-content">
+	<p class="text-xl font-semibold">{sponsoredBy}</p>
+</div>
+<div class="flex w-full justify-center items-center not-content">
+	<div class="grid grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-6">
+		{
+			sponsors.map((sponsor) => {
+				return (
+					<div class="flex flex-row justify-center items-center">
+						<a href={sponsor.href} aria-label={sponsor.alt} target="_blank" rel="noreferrer">
+							<Image
+								class={sponsor.invert ? 'invert-logo' : 'logo'}
+								src={sponsor.img}
+								width={300}
+								style="width:150px;height:auto"
+								alt={sponsor.alt}
+							/>
+						</a>
+					</div>
+				);
+			})
+		}
+	</div>
+</div>
+
+<div class="w-full flex text-center items-center justify-center">
+	<LinkCard
+		title={becomeASponsor}
+		href="https://github.com/sponsors/felangel"
+		target="_blank"
+		rel="noreferrer"
+	/>
+</div>

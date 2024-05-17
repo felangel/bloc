@@ -1,0 +1,18 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+{
+  "results": [
+    {
+      "id": 4887398,
+      "name": "Chicago",
+      "latitude": 41.85003,
+      "longitude": -87.65005
+    }
+  ]
+}
+`;
+---
+
+<Code code={code} lang="json" />

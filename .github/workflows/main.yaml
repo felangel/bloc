@@ -1,0 +1,340 @@
+name: build
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  semantic_pull_request:
+    name: ✅ Semantic Pull Request
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
+
+  changes:
+    runs-on: ubuntu-latest
+
+    if: github.event.pull_request.draft == false
+
+    outputs:
+      needs_angular_dart_example_checks: ${{ steps.needs_angular_dart_example_checks.outputs.changes }}
+      needs_dart_package_checks: ${{ steps.needs_dart_package_checks.outputs.changes }}
+      needs_flutter_package_checks: ${{ steps.needs_flutter_package_checks.outputs.changes }}
+      needs_flutter_example_checks: ${{ steps.needs_flutter_example_checks.outputs.changes }}
+      needs_docs_checks: ${{ steps.needs_docs_checks.outputs.changes }}
+
+    name: 👀 Detect Changes
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        name: Angular Dart Package Detection
+        id: needs_angular_dart_example_checks
+        with:
+          filters: |
+            angular_counter:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/angular_dart_package/action.yaml
+              - examples/angular_counter/**
+            github_search/angular_github_search:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - examples/github_search/angular_github_search/**
+
+      - uses: dorny/paths-filter@v3
+        name: Dart Package Detection
+        id: needs_dart_package_checks
+        with:
+          filters: |
+            angular_bloc:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - packages/angular_bloc/**
+            bloc_concurrency:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - packages/bloc_concurrency/**
+            bloc_test:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - packages/bloc_test/**
+            bloc_tools:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - packages/bloc_tools/**
+            bloc:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - packages/bloc/**
+
+      - uses: dorny/paths-filter@v3
+        name: Flutter Package Detection
+        id: needs_flutter_package_checks
+        with:
+          filters: |
+            flutter_bloc:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - packages/flutter_bloc/**
+            replay_bloc:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - packages/replay_bloc/**
+            hydrated_bloc:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - packages/hydrated_bloc/**
+
+      - uses: dorny/paths-filter@v3
+        name: Example Detection
+        id: needs_flutter_example_checks
+        with:
+          filters: |
+            flutter_bloc_with_stream:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_bloc_with_stream/**
+            flutter_complex_list:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_complex_list/**
+            flutter_counter:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_counter/**
+            flutter_dynamic_form:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_dynamic_form/**
+            flutter_firebase_login:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_firebase_login/**
+            flutter_form_validation:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_form_validation/**
+            flutter_infinite_list:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_infinite_list/**
+            flutter_login:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_login/**
+            flutter_shopping_cart:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_shopping_cart/**
+            flutter_timer:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_timer/**
+            flutter_todos:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_todos/**
+            flutter_weather:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_weather/**
+            flutter_wizard:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/flutter_wizard/**
+            github_search/flutter_github_search:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/github_search/flutter_github_search/**
+
+      - uses: dorny/paths-filter@v3
+        name: Docs Detection
+        id: needs_docs_checks
+        with:
+          filters: |
+            - ./.github/workflows/main.yaml
+            - ./.github/actions/astro_site/action.yaml
+            - examples/**
+            - docs/**
+
+  dart_package_checks:
+    needs: changes
+    if: ${{ needs.changes.outputs.needs_dart_package_checks != '[]' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.changes.outputs.needs_dart_package_checks) }}
+
+    runs-on: ubuntu-latest
+
+    name: 🎯 ${{ matrix.package }}
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
+
+      - name: 🎯 Build ${{ matrix.package }}
+        uses: ./.github/actions/dart_package
+        with:
+          codecov_token: ${{ secrets.CODECOV_TOKEN }}
+          working_directory: packages/${{ matrix.package }}
+          min_coverage: 100
+
+  flutter_package_checks:
+    needs: changes
+    if: ${{ needs.changes.outputs.needs_flutter_package_checks != '[]' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.changes.outputs.needs_flutter_package_checks) }}
+
+    runs-on: ubuntu-latest
+
+    name: 🐦 ${{ matrix.package }}
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
+
+      - name: 🎯 Build ${{ matrix.package }}
+        uses: ./.github/actions/flutter_package
+        with:
+          codecov_token: ${{ secrets.CODECOV_TOKEN }}
+          working_directory: packages/${{ matrix.package }}
+          min_coverage: 100
+
+  angular_dart_example_checks:
+    needs: changes
+    if: ${{ needs.changes.outputs.needs_angular_dart_example_checks != '[]' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        example: ${{ fromJSON(needs.changes.outputs.needs_angular_dart_example_checks) }}
+
+    runs-on: ubuntu-latest
+
+    name: 🛡️ ${{ matrix.example }}
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
+
+      - name: 🎯 Build ${{ matrix.example }}
+        uses: ./.github/actions/angular_dart_package
+        with:
+          analyze_directories: lib
+          working_directory: examples/${{ matrix.example }}
+
+  flutter_example_checks:
+    needs: changes
+    if: ${{ needs.changes.outputs.needs_flutter_example_checks != '[]' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        example: ${{ fromJSON(needs.changes.outputs.needs_flutter_example_checks) }}
+
+    runs-on: ubuntu-latest
+
+    name: 🧑‍🎓 ${{ matrix.example }}
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
+
+      - name: 🎯 Build ${{ matrix.example }}
+        uses: ./.github/actions/flutter_package
+        with:
+          analyze_directories: lib
+          collect_coverage: false
+          collect_score: false
+          working_directory: examples/${{ matrix.example }}
+
+  docs_checks:
+    needs: changes
+    if: ${{ needs.changes.outputs.needs_docs_checks != '[]' }}
+
+    runs-on: ubuntu-latest
+
+    name: 📖 docs
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Build Docs
+        uses: ./.github/actions/astro_site
+        with:
+          working_directory: ./docs
+
+  deploy:
+    needs: docs_checks
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  build:
+    needs:
+      [
+        semantic_pull_request,
+        dart_package_checks,
+        flutter_package_checks,
+        angular_dart_example_checks,
+        flutter_example_checks,
+        docs_checks,
+      ]
+
+    if: ${{ always() }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⛔️ exit(1) on failure
+        if: ${{ contains(join(needs.*.result, ','), 'failure') }}
+        run: exit 1

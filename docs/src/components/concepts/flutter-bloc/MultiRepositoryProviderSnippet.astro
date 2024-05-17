@@ -1,0 +1,22 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+MultiRepositoryProvider(
+  providers: [
+    RepositoryProvider<RepositoryA>(
+      create: (context) => RepositoryA(),
+    ),
+    RepositoryProvider<RepositoryB>(
+      create: (context) => RepositoryB(),
+    ),
+    RepositoryProvider<RepositoryC>(
+      create: (context) => RepositoryC(),
+    ),
+  ],
+  child: ChildA(),
+);
+`;
+---
+
+<Code code={code} lang="dart" />

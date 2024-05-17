@@ -1,0 +1,29 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+enum Status { initial, loading, success, failure }
+
+class MyState {
+  const MyState({
+    this.data = Data.empty,
+    this.error = '',
+    this.status = Status.initial,
+  });
+
+  final Data data;
+  final String error;
+  final Status status;
+
+  MyState copyWith({Data data, String error, Status status}) {
+    return MyState(
+      data: data ?? this.data,
+      error: error ?? this.error,
+      status: status ?? this.status,
+    );
+  }
+}
+`;
+---
+
+<Code code={code} lang="dart" title="my_state.dart" />

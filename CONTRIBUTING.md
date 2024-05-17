@@ -26,11 +26,11 @@ Before creating a pull request please:
 1. Install all dependencies (`flutter packages get` or `pub get`).
 1. Squash your commits and ensure you have a meaningful commit message.
 1. If you’ve fixed a bug or added code that should be tested, add tests!
-Pull Requests without 100% test coverage will not be approved.
+   Pull Requests without 100% test coverage will not be approved.
 1. Ensure the test suite passes.
 1. If you've changed the public API, make sure to update/add documentation.
-1. Format your code (`dartfmt -w .`).
-1. Analyze your code (`dartanalyzer --fatal-infos --fatal-warnings .`).
+1. Format your code (`dart format .`).
+1. Analyze your code (`dart analyze --fatal-infos --fatal-warnings .`).
 1. Create the Pull Request.
 1. Verify that all status checks are passing.
 
@@ -46,23 +46,29 @@ please follow the same process for "Creating a Pull Request" and double check
 that your changes look good by running the docs locally.
 
 ```sh
-# change directories into docs
+# Change directories into docs
 cd ./docs
 
-# run a local http server on port 8080
-python3 -m http.server 8080
+# Install dependencies
+npm install
 
-# navigate to http://localhost:8080
+# Start the dev server
+npm start
+
+# Navigate to http://localhost:4321 in your browser
 ```
 
-If you want to help maintain translations in the future, add yourself to `.github/DOCS_ISSUE_TEMPLATE.md`.
+If you wish to add translations, ensure the locale is included in the [locales list](https://github.com/felangel/bloc/blob/8a714a6923a6480032319b45f461d1f9ccd025de/docs/astro.config.mjs#L7) and create the translated `mdx` file in the corresponding subdirectory within `docs/src/content/docs/<lang>`.
+
+Refer to [this pull request](https://github.com/felangel/bloc/pull/4084) for an example.
 
 ### Tips
 
 Here are a few tips when contributing to the documentation:
+
 - We use [docsify](https://docsify.js.org) for document rendering. Refer to the docsify documentation for more context/examples regarding the syntax, usage, and capabilities.
 - We prefer to reference real files in GitHub rather than creating snippets (some old examples make use of snippets but we are slowly migrating away).
-  This is to keep the docs in sync if we modify the tutorial. 
+  This is to keep the docs in sync if we modify the tutorial.
   - If the code changes but the tutorial doesn't get updated, we also get out of sync. To avoid this, you might add a section linking to a specific commit/version that reflects the state of the tutorial at the time you write the doc.
 
 ## Pull requests
@@ -115,11 +121,12 @@ Examples live in the `examples` folder.
 
 When you're adding an example, make sure to add CI checks for it in
 [main.yaml](https://github.com/felangel/bloc/blob/master/.github/workflows/main.yaml):
+
 - For a Flutter example, add it to the `folder` list in the `examples-flutter`
-step.
+  step.
 - For a web example, add it to the `folder` list in the `examples-web` step.
 - For a pure Dart example, add it to the `folder` list in the `examples-pure`
-step.
+  step.
 
 ## Getting in Touch
 

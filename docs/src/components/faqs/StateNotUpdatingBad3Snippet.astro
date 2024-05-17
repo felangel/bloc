@@ -1,0 +1,16 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+MyBloc() {
+    on<MyEvent>((event, emit) {
+        // never modify/mutate state
+        state.property = event.property;
+        // never emit the same instance of state
+        emit(state);
+    });
+}
+`;
+---
+
+<Code code={code} lang="dart" title="my_bloc.dart" />

@@ -4,7 +4,7 @@ part of 'replay_cubit.dart';
 /// Base event class for all [ReplayBloc] events.
 /// {@endtemplate}
 abstract class ReplayEvent {
-  /// {@template replay_event}
+  /// {@macro replay_event}
   const ReplayEvent();
 }
 
@@ -71,11 +71,9 @@ abstract class ReplayBloc<Event extends ReplayEvent, State>
 /// A mixin which enables `undo` and `redo` operations
 /// for [Bloc] classes.
 mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
-  // ignore: deprecated_member_use
-  late final _blocObserver = BlocOverrides.current?.blocObserver;
   late final _changeStack = _ChangeStack<State>(shouldReplay: shouldReplay);
 
-  BlocObserver get _observer => _blocObserver ?? Bloc.observer;
+  BlocObserver get _observer => Bloc.observer;
 
   /// Sets the internal `undo`/`redo` size limit.
   /// By default there is no limit.

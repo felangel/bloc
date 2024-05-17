@@ -1,3 +1,19 @@
+# 0.2.5
+
+- docs: improve diagrams
+- chore: update copyright year
+- chore: update sponsors
+
+# 0.2.4
+
+- chore: update sponsors
+
+# 0.2.3
+
+- chore: fix `require_trailing_commas`
+- chore(deps): upgrade to `package:mocktail v1.0.0`
+- chore: add `topics` to `pubspec.yaml`
+
 # 0.2.2
 
 - docs: upgrade to Dart 3

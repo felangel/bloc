@@ -29,16 +29,14 @@ class _WeatherViewState extends State<WeatherView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Flutter Weather'),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
               Navigator.of(context).push<void>(
-                SettingsPage.route(
-                  context.read<WeatherCubit>(),
-                ),
+                SettingsPage.route(context.read<WeatherCubit>()),
               );
             },
           ),
@@ -75,7 +73,7 @@ class _WeatherViewState extends State<WeatherView> {
         child: const Icon(Icons.search, semanticLabel: 'Search'),
         onPressed: () async {
           final city = await Navigator.of(context).push(SearchPage.route());
-          if (!mounted) return;
+          if (!context.mounted) return;
           await context.read<WeatherCubit>().fetchWeather(city);
         },
       ),

@@ -1,1 +1,0 @@
-`BlocSubject` + `Noun (optional)` + `Verb (event)`

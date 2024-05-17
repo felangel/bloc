@@ -1,0 +1,19 @@
+---
+import { Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+const dartSnippet = `
+dart pub add dev:test dev:bloc_test
+`;
+const flutterSnippet = `
+flutter pub add dev:test dev:bloc_test
+`;
+---
+
+<Tabs>
+	<TabItem label="Dart">
+		<Code code={dartSnippet} lang="bash" />
+	</TabItem>
+	<TabItem label="Flutter">
+		<Code code={flutterSnippet} lang="bash" />
+	</TabItem>
+</Tabs>

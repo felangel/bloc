@@ -1,0 +1,15 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    print('\${bloc.runtimeType} $change');
+  }
+}
+`;
+---
+
+<Code code={code} lang="dart" title="simple_bloc_observer.dart" />

@@ -1,5 +1,5 @@
 <p align="center">
-<img style="height:100px" src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_logo_full_dark.png" alt="Bloc" />
+<img style="height:100px" src="https://raw.githubusercontent.com/felangel/bloc/master/assets/logos/bloc_dark.png" alt="Bloc" />
 </p>
 
 <p align="center">

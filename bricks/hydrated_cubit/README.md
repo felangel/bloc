@@ -1,5 +1,5 @@
 <p align="center">
-<img style="height:100px" src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/hydrated_cubit_full_dark.png" alt="Hydrated Cubit" />
+<img style="height:100px" src="https://raw.githubusercontent.com/felangel/bloc/master/assets/logos/hydrated_cubit_dark.png" alt="Hydrated Cubit" />
 </p>
 
 <p align="center">

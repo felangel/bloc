@@ -4,6 +4,7 @@ import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Objects;
 
 public class GenerateBlocDialog extends DialogWrapper {
 
@@ -13,7 +14,7 @@ public class GenerateBlocDialog extends DialogWrapper {
     private JComboBox<String> style;
 
     public GenerateBlocDialog(final Listener listener) {
-        super(null);
+        super(false);
         this.listener = listener;
         init();
     }
@@ -28,10 +29,10 @@ public class GenerateBlocDialog extends DialogWrapper {
     protected void doOKAction() {
         super.doOKAction();
         BlocTemplateType blocTemplateType;
-        final String selectedStyle = style.getSelectedItem().toString();
-        if (selectedStyle == "Equatable") {
+        final String selectedStyle = Objects.requireNonNull(style.getSelectedItem()).toString();
+        if (Objects.equals(selectedStyle, "Equatable")) {
             blocTemplateType = BlocTemplateType.EQUATABLE;
-        } else if (selectedStyle == "Freezed") {
+        } else if (Objects.equals(selectedStyle, "Freezed")) {
             blocTemplateType = BlocTemplateType.FREEZED;
         } else {
             blocTemplateType = BlocTemplateType.BASIC;

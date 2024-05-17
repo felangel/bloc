@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -53,6 +54,7 @@ class MyThemeAppState extends State<MyThemeApp> {
                 key: const Key('raised_button_2'),
                 child: const SizedBox(),
                 onPressed: () {
+                  // ignore: no_self_assignments
                   setState(() => _themeCubit = _themeCubit);
                 },
               ),
@@ -74,7 +76,6 @@ class ThemeCubit extends Cubit<ThemeData> {
 class DarkThemeCubit extends Cubit<ThemeData> {
   DarkThemeCubit() : super(ThemeData.dark());
 
-  void setDarkTheme() => emit(ThemeData.dark());
   void setLightTheme() => emit(ThemeData.light());
 }
 
@@ -132,7 +133,6 @@ class CounterCubit extends Cubit<int> {
   CounterCubit({int seed = 0}) : super(seed);
 
   void increment() => emit(state + 1);
-  void decrement() => emit(state - 1);
 }
 
 void main() {
@@ -517,6 +517,30 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Count 101'), findsOneWidget);
+    });
+
+    testWidgets('overrides debugFillProperties', (tester) async {
+      final builder = DiagnosticPropertiesBuilder();
+
+      BlocBuilder(
+        bloc: CounterCubit(),
+        builder: (context, state) => const SizedBox(),
+        buildWhen: (previous, current) => previous != current,
+      ).debugFillProperties(builder);
+
+      final description = builder.properties
+          .where((node) => !node.isFiltered(DiagnosticLevel.info))
+          .map((node) => node.toString())
+          .toList();
+
+      expect(
+        description,
+        <String>[
+          'has buildWhen',
+          "bloc: Instance of 'CounterCubit'",
+          'has builder',
+        ],
+      );
     });
   });
 }

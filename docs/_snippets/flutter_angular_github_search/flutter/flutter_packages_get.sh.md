@@ -1,3 +1,0 @@
-```bash
-flutter packages get
-```

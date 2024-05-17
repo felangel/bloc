@@ -1,0 +1,49 @@
+---
+export type Props = {
+	joinDiscord: string;
+};
+
+import { LinkCard } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import BlocLogo from '~/assets/bloc.svg';
+
+const { joinDiscord = 'Join our Discord' } = Astro.props;
+---
+
+<style>
+	.discord {
+		margin: 0 auto;
+		padding: 4rem 0;
+		text-align: center;
+	}
+
+	.discord h2 {
+		font-size: var(--sl-text-2xl) !important;
+		font-weight: 400;
+	}
+
+	.discord .cta {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.hide {
+		margin-bottom: -1rem;
+		width: 7rem;
+		height: 7rem;
+	}
+
+	@media screen and (min-width: 50rem) {
+		.glow {
+			filter: drop-shadow(0 0 0.5rem #81d9ef);
+		}
+	}
+</style>
+
+<div class="discord">
+	<div class="cta">
+		<Image src={BlocLogo} alt="bloc logo" class="hide glow" />
+		<LinkCard title={joinDiscord} href="https://discord.gg/bloc" />
+	</div>
+</div>

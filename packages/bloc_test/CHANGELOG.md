@@ -1,3 +1,16 @@
+# 9.1.7
+
+- chore: update copyright year
+- chore: update sponsors
+
+# 9.1.6
+
+- chore: update sponsors ([#4054](https://github.com/felangel/bloc/pull/4054))
+
+# 9.1.5
+
+- fix: `blocTest` supports `async` `expect` ([#3976](https://github.com/felangel/bloc/pull/3976))
+
 # 9.1.4
 
 - deps: support `mocktail: ^1.0.0` ([#3917](https://github.com/felangel/bloc/pull/3917))

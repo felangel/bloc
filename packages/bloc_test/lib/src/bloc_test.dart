@@ -187,9 +187,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
 }) async {
   var shallowEquality = false;
   final unhandledErrors = <Object>[];
-  final localBlocObserver =
-      // ignore: deprecated_member_use
-      BlocOverrides.current?.blocObserver ?? Bloc.observer;
+  final localBlocObserver = Bloc.observer;
   final testObserver = _TestBlocObserver(
     localBlocObserver,
     unhandledErrors.add,
@@ -214,7 +212,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       await Future<void>.delayed(Duration.zero);
       await bloc.close();
       if (expect != null) {
-        final dynamic expected = expect();
+        final dynamic expected = await expect();
         shallowEquality = '$states' == '$expected';
         try {
           test.expect(states, test.wrapMatcher(expected));

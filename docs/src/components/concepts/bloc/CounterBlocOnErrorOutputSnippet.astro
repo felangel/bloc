@@ -1,0 +1,60 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+Exception: increment error!
+#0      new CounterBloc.<anonymous closure> (file:///main.dart:10:58)
+#1      Bloc.on.<anonymous closure>.handleEvent (package:bloc/src/bloc.dart:229:26)
+#2      Bloc.on.<anonymous closure> (package:bloc/src/bloc.dart:238:9)
+#3      _MapStream._handleData (dart:async/stream_pipe.dart:213:31)
+#4      _ForwardingStreamSubscription._handleData (dart:async/stream_pipe.dart:153:13)
+#5      _RootZone.runUnaryGuarded (dart:async/zone.dart:1594:10)
+#6      CastStreamSubscription._onData (dart:_internal/async_cast.dart:85:11)
+#7      _RootZone.runUnaryGuarded (dart:async/zone.dart:1594:10)
+#8      _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:339:11)
+#9      _BufferingStreamSubscription._add (dart:async/stream_impl.dart:271:7)
+#10     _ForwardingStreamSubscription._add (dart:async/stream_pipe.dart:123:11)
+#11     _WhereStream._handleData (dart:async/stream_pipe.dart:195:12)
+#12     _ForwardingStreamSubscription._handleData (dart:async/stream_pipe.dart:153:13)
+#13     _RootZone.runUnaryGuarded (dart:async/zone.dart:1594:10)
+#14     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:339:11)
+#15     _DelayedData.perform (dart:async/stream_impl.dart:515:14)
+#16     _PendingEvents.handleNext (dart:async/stream_impl.dart:620:11)
+#17     _PendingEvents.schedule.<anonymous closure> (dart:async/stream_impl.dart:591:7)
+#18     _microtaskLoop (dart:async/schedule_microtask.dart:40:21)
+#19     _startMicrotaskLoop (dart:async/schedule_microtask.dart:49:5)
+#20     _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:118:13)
+#21     _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:185:5)
+
+CounterBloc Exception: increment error!
+#0      new CounterBloc.<anonymous closure> (file:///main.dart:10:58)
+#1      Bloc.on.<anonymous closure>.handleEvent (package:bloc/src/bloc.dart:229:26)
+#2      Bloc.on.<anonymous closure> (package:bloc/src/bloc.dart:238:9)
+#3      _MapStream._handleData (dart:async/stream_pipe.dart:213:31)
+#4      _ForwardingStreamSubscription._handleData (dart:async/stream_pipe.dart:153:13)
+#5      _RootZone.runUnaryGuarded (dart:async/zone.dart:1594:10)
+#6      CastStreamSubscription._onData (dart:_internal/async_cast.dart:85:11)
+#7      _RootZone.runUnaryGuarded (dart:async/zone.dart:1594:10)
+#8      _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:339:11)
+#9      _BufferingStreamSubscription._add (dart:async/stream_impl.dart:271:7)
+#10     _ForwardingStreamSubscription._add (dart:async/stream_pipe.dart:123:11)
+#11     _WhereStream._handleData (dart:async/stream_pipe.dart:195:12)
+#12     _ForwardingStreamSubscription._handleData (dart:async/stream_pipe.dart:153:13)
+#13     _RootZone.runUnaryGuarded (dart:async/zone.dart:1594:10)
+#14     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:339:11)
+#15     _DelayedData.perform (dart:async/stream_impl.dart:515:14)
+#16     _PendingEvents.handleNext (dart:async/stream_impl.dart:620:11)
+#17     _PendingEvents.schedule.<anonymous closure> (dart:async/stream_impl.dart:591:7)
+#18     _microtaskLoop (dart:async/schedule_microtask.dart:40:21)
+#19     _startMicrotaskLoop (dart:async/schedule_microtask.dart:49:5)
+#20     _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:118:13)
+#21     _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:185:5)
+
+Transition { currentState: 0, event: Instance of 'CounterIncrementPressed', nextState: 1 }
+CounterBloc Transition { currentState: 0, event: Instance of 'CounterIncrementPressed', nextState: 1 }
+CounterBloc Change { currentState: 0, nextState: 1 }
+Change { currentState: 0, nextState: 1 }
+`;
+---
+
+<Code code={code} lang="sh" />

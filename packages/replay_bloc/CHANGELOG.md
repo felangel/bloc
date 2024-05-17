@@ -1,3 +1,18 @@
+# 0.2.7
+
+- refactor: use additional lint rules ([#4083](https://github.com/felangel/bloc/pull/4083))
+- chore: update copyright year
+- chore: update sponsors
+
+# 0.2.6
+
+- chore: update sponsors ([#4054](https://github.com/felangel/bloc/pull/4054))
+
+# 0.2.5
+
+- docs: fix inline doc comment macro ([#4007](https://github.com/felangel/bloc/pull/4007))
+- chore: add `topics` to `pubspec.yaml` ([#3914](https://github.com/felangel/bloc/pull/3914))
+
 # 0.2.4
 
 - docs: upgrade to Dart 3 ([#3825](https://github.com/felangel/bloc/pull/3825))

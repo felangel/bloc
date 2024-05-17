@@ -1,23 +1,26 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '0.4.17'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.11'
+    id 'org.jetbrains.intellij' version '1.16.1'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.22'
 }
 
 group 'com.bloc'
-version '3.4.0'
+version '4.0.1'
 
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'idea'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+java {
+    sourceCompatibility = 11
+    targetCompatibility = 11
+}
 
 intellij {
-    version '2017.3'
-    updateSinceUntilBuild false
+    version = '2022.1.1'
+    plugins = ['java']
+    updateSinceUntilBuild.set(false)
 }
 
 repositories {
@@ -25,16 +28,17 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    implementation "com.fleshgrinder.kotlin:case-format:0.2.0"
+    compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    testCompileOnly(group: 'junit', name: 'junit', version: '4.13.2')
+    implementation("com.fleshgrinder.kotlin:case-format:0.2.0")
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "11"
 }
+
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "11"
 }
 
 patchPluginXml {

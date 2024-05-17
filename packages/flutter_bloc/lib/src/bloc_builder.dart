@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -88,6 +89,14 @@ class BlocBuilder<B extends StateStreamable<S>, S>
 
   @override
   Widget build(BuildContext context, S state) => builder(context, state);
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(
+      ObjectFlagProperty<BlocWidgetBuilder<S>>.has('builder', builder),
+    );
+  }
 }
 
 /// {@template bloc_builder_base}
@@ -117,6 +126,19 @@ abstract class BlocBuilderBase<B extends StateStreamable<S>, S>
 
   @override
   State<BlocBuilderBase<B, S>> createState() => _BlocBuilderBaseState<B, S>();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(
+        ObjectFlagProperty<BlocBuilderCondition<S>?>.has(
+          'buildWhen',
+          buildWhen,
+        ),
+      )
+      ..add(DiagnosticsProperty<B?>('bloc', bloc));
+  }
 }
 
 class _BlocBuilderBaseState<B extends StateStreamable<S>, S>

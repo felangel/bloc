@@ -26,7 +26,7 @@ extension on Weather {
   Color get toColor {
     switch (condition) {
       case WeatherCondition.clear:
-        return Colors.orangeAccent;
+        return Colors.yellow;
       case WeatherCondition.snowy:
         return Colors.lightBlueAccent;
       case WeatherCondition.cloudy:

@@ -9,7 +9,6 @@ class ComplexListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Complex List')),
       body: BlocProvider(
         create: (_) => ComplexListCubit(
           repository: context.read<Repository>(),
@@ -45,7 +44,7 @@ class ItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return items.isEmpty
-        ? const Center(child: Text('no content'))
+        ? const Center(child: Text('No Content'))
         : ListView.builder(
             itemBuilder: (BuildContext context, int index) {
               return ItemTile(
@@ -72,14 +71,14 @@ class ItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Material(
       child: ListTile(
-        leading: Text('#${item.id}'),
         title: Text(item.value),
         trailing: item.isDeleting
             ? const CircularProgressIndicator()
             : IconButton(
-                icon: const Icon(Icons.delete, color: Colors.red),
+                icon: Icon(Icons.delete, color: theme.colorScheme.error),
                 onPressed: () => onDeletePressed(item.id),
               ),
       ),

@@ -1,0 +1,13 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+sealed class CounterEvent {}
+final class CounterStarted extends CounterEvent {}
+final class CounterIncrementPressed extends CounterEvent {}
+final class CounterDecrementPressed extends CounterEvent {}
+final class CounterIncrementRetried extends CounterEvent {}
+`;
+---
+
+<Code code={code} lang="dart" title="counter_event.dart" />

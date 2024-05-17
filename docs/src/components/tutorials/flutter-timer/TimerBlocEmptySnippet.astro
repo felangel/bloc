@@ -1,0 +1,19 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+import 'package:bloc/bloc.dart';
+
+part 'timer_event.dart';
+part 'timer_state.dart';
+
+class TimerBloc extends Bloc<TimerEvent, TimerState> {
+  // TODO: set initial state
+  TimerBloc(): super() {
+    // TODO: implement event handlers
+  }
+}
+`;
+---
+
+<Code code={code} lang="dart" title="lib/timer/bloc/timer_bloc.dart" />

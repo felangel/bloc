@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'bloc_base.dart';
-part 'bloc_overrides.dart';
 part 'emitter.dart';
 
 /// An [ErrorSink] that supports adding events.
@@ -69,9 +68,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   final _subscriptions = <StreamSubscription<dynamic>>[];
   final _handlers = <_Handler>[];
   final _emitters = <_Emitter<dynamic>>[];
-  final _eventTransformer =
-      // ignore: deprecated_member_use_from_same_package
-      BlocOverrides.current?.eventTransformer ?? Bloc.transformer;
+  final _eventTransformer = Bloc.transformer;
 
   /// Notifies the [Bloc] of a new [event] which triggers
   /// all corresponding [EventHandler] instances.

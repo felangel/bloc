@@ -1,3 +1,8 @@
+# 0.3.1
+
+- chore: update copyright year
+- chore: update logo image refs
+
 # 0.3.0
 
 - feat: upgrade to Dart 3.0

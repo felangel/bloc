@@ -1,0 +1,119 @@
+name: Flutter Package Workflow
+description: Build and test a Flutter package.
+
+inputs:
+  codecov_token:
+    required: true
+    description: The Codecov token used to upload coverage
+  collect_coverage:
+    required: false
+    default: "true"
+    description: Whether to collect code coverage
+  collect_score:
+    required: false
+    default: "true"
+    description: Whether to collect the pana score
+  concurrency:
+    required: false
+    default: "4"
+    description: The value of the concurrency flag (-j) used when running tests
+  coverage_excludes:
+    required: false
+    default: ""
+    description: Globs to exclude from coverage
+  working_directory:
+    required: false
+    default: "."
+    description: The working directory for this workflow
+  min_coverage:
+    required: false
+    default: "100"
+    description: The minimum coverage percentage value
+  analyze_directories:
+    required: false
+    default: "lib test"
+    description: Directories to analyze
+  report_on:
+    required: false
+    default: "lib"
+    description: Directories to report on when collecting coverage
+  platform:
+    required: false
+    default: "vm"
+    description: Platform to use when running tests
+
+runs:
+  using: "composite"
+  steps:
+    - name: 🐦 Setup Flutter
+      uses: subosito/flutter-action@v2
+
+    - name: 📦 Install Dependencies
+      working-directory: ${{ inputs.working_directory }}
+      shell: ${{ inputs.shell }}
+      run: flutter pub get
+
+    - name: ✨ Format
+      working-directory: ${{ inputs.working_directory }}
+      shell: ${{ inputs.shell }}
+      run: dart format --set-exit-if-changed .
+
+    - name: 🔍 Analyze
+      working-directory: ${{ inputs.working_directory }}
+      shell: ${{ inputs.shell }}
+      run: dart analyze --fatal-warnings ${{inputs.analyze_directories}}
+
+    - name: 🧪 Test
+      working-directory: ${{ inputs.working_directory }}
+      shell: ${{ inputs.shell }}
+      run: |
+        if [ -d "test" ]; then
+          flutter test --no-pub --test-randomize-ordering-seed random --coverage
+        fi
+
+    - name: Exclude Generated Code from Coverage
+      if: ${{ inputs.collect_coverage == 'true' && inputs.coverage_excludes != '' }}
+      working-directory: ${{ inputs.working_directory }}
+      shell: ${{ inputs.shell }}
+      run: |
+        mv coverage/lcov.info coverage/lcov.info.bak
+        sudo apt-get -y install lcov
+        lcov --remove coverage/lcov.info.bak "${{inputs.coverage_excludes}}" -o coverage/lcov.info
+
+    - name: 📦 Detect Package Name
+      if: inputs.collect_coverage == 'true'
+      env:
+        PACKAGE_PATH: ${{ inputs.working_directory}}
+      id: package
+      shell: ${{ inputs.shell }}
+      run: echo "name=${PACKAGE_PATH##*/}" >> $GITHUB_OUTPUT
+
+    - name: ⬆️ Upload Coverage
+      if: inputs.collect_coverage == 'true'
+      uses: codecov/codecov-action@v4
+      env:
+        PACKAGE_PATH: ${{ inputs.working_directory}}
+      with:
+        flags: ${{ steps.package.outputs.name }}
+        token: ${{ inputs.codecov_token }}
+
+    - name: 📊 Verify Coverage
+      if: inputs.collect_coverage == 'true'
+      uses: VeryGoodOpenSource/very_good_coverage@v3
+      with:
+        path: ${{inputs.working_directory}}/coverage/lcov.info
+        exclude: ${{inputs.coverage_excludes}}
+        min_coverage: ${{inputs.min_coverage}}
+
+    - name: 💯 Verify Pub Score
+      if: inputs.collect_score == 'true'
+      working-directory: ${{ inputs.working_directory }}
+      shell: ${{ inputs.shell }}
+      run: |
+        dart pub global activate pana 0.21.45
+        sudo apt-get install webp
+        PANA=$(pana . --no-warning); PANA_SCORE=$(echo $PANA | sed -n "s/.*Points: \([0-9]*\)\/\([0-9]*\)./\1\/\2/p")
+        echo "score: $PANA_SCORE"
+        IFS='/'; read -a SCORE_ARR <<< "$PANA_SCORE"; SCORE=SCORE_ARR[0]; TOTAL=SCORE_ARR[1]
+        if [ -z "$1" ]; then MINIMUM_SCORE=TOTAL; else MINIMUM_SCORE=$1; fi
+        if (( $SCORE < $MINIMUM_SCORE )); then echo "minimum score $MINIMUM_SCORE was not met!"; exit 1; fi

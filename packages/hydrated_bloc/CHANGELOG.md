@@ -1,3 +1,19 @@
+# 9.1.5
+
+- chore: update copyright year
+- chore: update sponsors
+
+# 9.1.4
+
+- chore: update sponsors ([#4054](https://github.com/felangel/bloc/pull/4054))
+
+# 9.1.3
+
+- fix: `fromJson` can safely access `state` ([#4005](https://github.com/felangel/bloc/pull/4005))
+- chore: add `platforms` to `pubspec.yaml` ([#3993](https://github.com/felangel/bloc/pull/3993))
+- chore: upgrade to `package:mocktail` v1.0.0 ([#3919](https://github.com/felangel/bloc/pull/3919))
+- chore: add `topics` to `pubspec.yaml` ([#3914](https://github.com/felangel/bloc/pull/3914))
+
 # 9.1.2
 
 - fix: clear HydratedStorage instance on close ([#3879](https://github.com/felangel/bloc/pull/3879))

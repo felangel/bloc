@@ -1,0 +1,12 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+BlocProvider.value(
+  value: BlocProvider.of<BlocA>(context),
+  child: ScreenA(),
+);
+`;
+---
+
+<Code code={code} lang="dart" />
