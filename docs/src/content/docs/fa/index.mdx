@@ -1,0 +1,85 @@
+---
+template: splash
+title: Bloc State Management Library
+description: Official documentation for the bloc state management library. Support for Dart, Flutter, and AngularDart. Includes examples and tutorials.
+banner:
+  content: |
+    ✨ از
+    <a href="https://shop.bloclibrary.dev">فروشگاه بلوک</a> دیدن کنید✨
+editUrl: false
+lastUpdated: false
+hero:
+  title: Bloc <sup><span style="font-size:0.4em">v8.1.4</span></sup>
+  tagline: یک کتابخانه مدیریت وضعیت قابل پیش بینی برای دارت.
+  image:
+    alt: Bloc logo
+    file: ~/assets/bloc.svg
+  actions:
+    - text: شروع کنید
+      link: /fa/getting-started/
+      variant: primary
+      icon: rocket
+    - text: نمایش در گیت‌هاب
+      link: https://github.com/felangel/bloc
+      icon: github
+      variant: secondary
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import SponsorsGrid from '~/components/landing/SponsorsGrid.astro';
+import Card from '~/components/landing/Card.astro';
+import ListCard from '~/components/landing/ListCard.astro';
+import SplitCard from '~/components/landing/SplitCard.astro';
+import Discord from '~/components/landing/Discord.astro';
+
+<SponsorsGrid
+	sponsoredBy="با 💖 حمایت شده توسط"
+	becomeASponsor="اسپانسر شوید"
+/>
+
+<hr />
+
+<CardGrid>
+
+<SplitCard title="شروع کنید" icon="rocket">
+	```sh
+	# بلوک را به پروژه خود اضافه کنید.
+	dart pub add bloc
+	```
+
+[راهنمای شروع کار](/fa/getting-started) ما, دستورالعمل‌های گام به گامی را برای شروع استفاده از Bloc در عرض چند دقیقه ارائه می‌دهد.
+
+</SplitCard>
+
+<Card title="با یک تور راهنمایی همراه باشید" icon="star">
+	[آموزش های رسمی](/fa/tutorials/flutter-counter) را تکمیل کنید تا بهترین روش ها
+	(Best practices) را بیاموزید و انواع برنامه های مختلف را با پشتیبانی Bloc
+	بسازید.
+</Card>
+
+<Card title="ساخت با بلوک" icon="laptop">
+	[برنامه های نمونه](https://github.com/felangel/bloc/tree/master/examples) با
+	کیفیت بالا و کاملاً آزمایش شده مانند شمارنده، تایمر، لیست بی نهایت، آب و هوا،
+	انجام کار و موارد دیگر را بررسی کنید!
+</Card>
+
+<ListCard title="یادگیری" icon="open-book">
+
+    - [چرا بلوک؟](/fa/why-bloc)
+    - [مفاهیم اصلی](/fa/bloc-concepts)
+    - [معماری](/fa/architecture)
+    - [تست کردن](/fa/testing)
+    - [قراردادهای نامگذاری](/fa/naming-conventions)
+
+</ListCard>
+
+  <ListCard title="یکپارچه سازی ها" icon="puzzle">
+    - [یکپارچگی با VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+    - [یکپارچگی با IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc)
+    - [یکپارچگی با ابزار خط فرمان Mason CLI](https://github.com/felangel/bloc/blob/master/bricks/README.md)
+    - [قالب‌های سفارشی](https://brickhub.dev/search?q=bloc)
+    - [ابزارهای توسعه‌دهندگان](https://github.com/felangel/bloc/issues/2748)
+  </ListCard>
+</CardGrid>
+
+<Discord joinDiscord="به Discord ما بپیوندید" />
