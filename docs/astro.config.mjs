@@ -59,10 +59,10 @@ const locales = {
 		label: 'العربية',
 		lang: 'ar',
 	},
-    fa: {
-        label: 'فارسی',
-        lang: 'fa',
-    },
+	fa: {
+		label: 'فارسی',
+		lang: 'fa',
+	},
 };
 
 // https://astro.build/config
