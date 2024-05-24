@@ -58,10 +58,12 @@ const locales = {
 	ar: {
 		label: 'العربية',
 		lang: 'ar',
+		dir: 'rtl',
 	},
 	fa: {
 		label: 'فارسی',
 		lang: 'fa',
+		dir: 'rtl',
 	},
 };
 
