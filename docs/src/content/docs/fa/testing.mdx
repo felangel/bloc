@@ -1,0 +1,64 @@
+---
+title: آزمایش کردن (Testing)
+description: اصول اولیه نحوه نوشتن تست برای بلوک های خود.
+---
+
+import CounterBlocSnippet from '~/components/testing/CounterBlocSnippet.astro';
+import AddDevDependenciesSnippet from '~/components/testing/AddDevDependenciesSnippet.astro';
+import CounterBlocTestImportsSnippet from '~/components/testing/CounterBlocTestImportsSnippet.astro';
+import CounterBlocTestMainSnippet from '~/components/testing/CounterBlocTestMainSnippet.astro';
+import CounterBlocTestSetupSnippet from '~/components/testing/CounterBlocTestSetupSnippet.astro';
+import CounterBlocTestInitialStateSnippet from '~/components/testing/CounterBlocTestInitialStateSnippet.astro';
+import CounterBlocTestBlocTestSnippet from '~/components/testing/CounterBlocTestBlocTestSnippet.astro';
+
+Bloc به گونه ای طراحی شده است که آزمایش آن بسیار آسان باشد.در این بخش، نحوه تست واحد (Unit Test) یک بلوک را توضیح خواهیم داد.
+
+به خاطر سادگی، بیایید تست ها را برای `CounterBloc` که در [مفاهیم اصلی](/fa/bloc-concepts) ایجاد کردیم بنویسیم.
+
+برای خلاصه‌ی مطلب، پیاده‌سازی `CounterBloc` به شکل زیر است:
+
+<CounterBlocSnippet />
+
+## راه اندازی (Setup)
+
+قبل از شروع نوشتن تست های خود، باید یک چارچوب آزمایشی (Testing Framework) را به وابستگی های خود اضافه کنیم.
+
+ما باید [test](https://pub.dev/packages/test) و [bloc_test](https://pub.dev/packages/bloc_test) را به پروژه خود اضافه کنیم.
+
+<AddDevDependenciesSnippet />
+
+## آزمایش کردن
+
+بیایید با ایجاد فایل تست برای `CounterBloc`، به نام `counter_bloc_test.dart`، شروع کنیم و بسته تست را وارد کنیم.
+
+<CounterBlocTestImportsSnippet />
+
+بعداز آن، باید `main` و گروه تست خود را ایجاد کنیم.
+
+<CounterBlocTestMainSnippet />
+
+:::note
+گروه‌ها برای سازماندهی تست‌های فردی (Individual) و همچنین برای ایجاد یک محیط (Context) که در آن می‌توانید یک `setUp` و `tearDown` مشترک را در تمام تست‌های فردی به اشتراک بگذارید، استفاده می‌شوند.
+:::
+
+بیایید با ایجاد نمونه‌ای از `CounterBloc` خود که در تمامی تست‌هایمان استفاده خواهد شد، شروع کنیم.
+
+<CounterBlocTestSetupSnippet />
+
+حالا می‌توانیم شروع به نوشتن تست‌های فردی خود کنیم.
+
+<CounterBlocTestInitialStateSnippet />
+
+:::note
+می‌توانیم تمامی تست‌های خود را با استفاده از دستور `pub run test` اجرا کنیم.
+:::
+
+در این نقطه باید تست اولیه ما را پاس کرده باشیم! حالا بیایید یک تست پیچیده‌تر را با استفاده از بسته [bloc_test](https://pub.dev/packages/bloc_test) بنویسیم.
+
+<CounterBlocTestBlocTestSnippet />
+
+باید بتوانیم تست‌ها را اجرا کنیم و ببینیم که همه آنها پاس می‌شوند.
+
+این تمام چیزی است که در آن وجود دارد، آزمایش باید سریع باشد و ما باید هنگام ایجاد تغییرات و بازسازی کد خود احساس اطمینان کنیم.
+
+شما می‌توانید به برنامه [Weather App](https://github.com/felangel/bloc/tree/master/examples/flutter_weather) مراجعه کنید تا یک مثال از یک برنامه کاملاً تست شده را ببینید.
