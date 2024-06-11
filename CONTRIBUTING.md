@@ -62,59 +62,6 @@ If you wish to add translations, ensure the locale is included in the [locales l
 
 Refer to [this pull request](https://github.com/felangel/bloc/pull/4084) for an example.
 
-### Tips
-
-Here are a few tips when contributing to the documentation:
-
-- We use [docsify](https://docsify.js.org) for document rendering. Refer to the docsify documentation for more context/examples regarding the syntax, usage, and capabilities.
-- We prefer to reference real files in GitHub rather than creating snippets (some old examples make use of snippets but we are slowly migrating away).
-  This is to keep the docs in sync if we modify the tutorial.
-  - If the code changes but the tutorial doesn't get updated, we also get out of sync. To avoid this, you might add a section linking to a specific commit/version that reflects the state of the tutorial at the time you write the doc.
-
-## Pull requests
-
-To make PRs more readable, please provide this checklist to the PR description
-so other contributors can easily see what's already done.
-
-```text
-- [ ] README
-- [ ] Cover page
-- [ ] Sidebar
-- Introduction
-  - [ ] Getting Started
-  - [ ] Why Bloc?
-- Core Concepts
-  - [ ] bloc
-  - [ ] flutter_bloc
-- [ ] Architecture
-- [ ] Testing
-- [ ] Naming Conventions
-- [ ] FAQs
-- Tutorials
-  - Flutter
-    - [ ] Counter
-    - [ ] Timer
-    - [ ] Infinite List
-    - [ ] Login
-    - [ ] Weather
-    - [ ] Todos
-    - [ ] Firebase Login
-    - [ ] Firestore Todos
-  - AngularDart
-    - [ ] Counter
-  - Flutter + AngularDart
-    - [ ] Github Search
-- Recipes
-  - Flutter
-    - [ ] Show SnackBar
-    - [ ] Navigation
-    - [ ] Bloc Access
-- Tools
-  - Extensions
-    - [ ] IntelliJ
-    - [ ] VSCode
-```
-
 ## Adding an example
 
 Examples live in the `examples` folder.
