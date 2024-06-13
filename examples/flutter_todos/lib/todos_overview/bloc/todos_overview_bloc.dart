@@ -28,9 +28,9 @@ class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
   ) async {
     emit(state.copyWith(status: () => TodosOverviewStatus.loading));
 
-    await emit.forEach<List<Todo>>(
+    await emit.forEach(
       _todosRepository.getTodos(),
-      onData: (todos) => state.copyWith(
+      onData: (List<Todo> todos) => state.copyWith(
         status: () => TodosOverviewStatus.success,
         todos: () => todos,
       ),
