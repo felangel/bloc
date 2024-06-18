@@ -47,6 +47,9 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   /// The current [BlocObserver] instance.
   static BlocObserver observer = const _DefaultBlocObserver();
 
+  /// weather to rethrow any error occured on event, defaults to true
+  static bool rethrowError = true;
+
   /// The default [EventTransformer] used for all event handlers.
   /// By default all events are processed concurrently.
   ///
@@ -97,7 +100,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
       _eventController.add(event);
     } catch (error, stackTrace) {
       onError(error, stackTrace);
-      rethrow;
+      if (rethrowError) rethrow;
     }
   }
 

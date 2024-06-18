@@ -59,6 +59,8 @@ abstract class BlocBase<State>
 
   final _blocObserver = Bloc.observer;
 
+  final _rethrowError = Bloc.rethrowError;
+
   late final _stateController = StreamController<State>.broadcast();
 
   State _state;
@@ -102,7 +104,7 @@ abstract class BlocBase<State>
       _emitted = true;
     } catch (error, stackTrace) {
       onError(error, stackTrace);
-      rethrow;
+      if (_rethrowError) rethrow;
     }
   }
 
