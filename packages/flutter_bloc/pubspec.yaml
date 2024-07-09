@@ -6,6 +6,7 @@ issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://bloclibrary.dev
 documentation: https://bloclibrary.dev/getting-started
 topics: [bloc, state-management]
+funding: [https://github.com/sponsors/felangel]
 
 environment:
   sdk: ">=2.12.0 <4.0.0"
