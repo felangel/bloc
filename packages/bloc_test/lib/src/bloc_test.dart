@@ -184,10 +184,11 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
   dynamic Function(B bloc)? verify,
   dynamic Function()? errors,
   FutureOr<void> Function()? tearDown,
+  BlocObserver? observer,
 }) async {
   var shallowEquality = false;
   final unhandledErrors = <Object>[];
-  final localBlocObserver = Bloc.observer;
+  final localBlocObserver = observer ?? Bloc.observer;
   final testObserver = _TestBlocObserver(
     localBlocObserver,
     unhandledErrors.add,
@@ -202,12 +203,13 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
       if (seed != null) bloc.emit(seed());
       final subscription = bloc.stream.skip(skip).listen(states.add);
-      try {
+      await runZonedGuarded(() async {
         await act?.call(bloc);
-      } catch (error) {
-        if (errors == null) rethrow;
+      }, (error, st) {
+        // ignore: only_throw_errors
+        if (errors == null) throw error;
         unhandledErrors.add(error);
-      }
+      });
       if (wait != null) await Future<void>.delayed(wait);
       await Future<void>.delayed(Duration.zero);
       await bloc.close();
@@ -268,6 +270,37 @@ class _TestBlocObserver extends BlocObserver {
     _localObserver.onError(bloc, error, stackTrace);
     _onError(error);
     super.onError(bloc, error, stackTrace);
+  }
+
+  @override
+  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
+    _localObserver.onChange(bloc, change);
+    super.onChange(bloc, change);
+  }
+
+  @override
+  void onClose(BlocBase<dynamic> bloc) {
+    _localObserver.onClose(bloc);
+    super.onClose(bloc);
+  }
+
+  @override
+  void onCreate(BlocBase<dynamic> bloc) {
+    _localObserver.onCreate(bloc);
+    super.onCreate(bloc);
+  }
+
+  @override
+  void onEvent(Bloc<dynamic, dynamic> bloc, Object? event) {
+    _localObserver.onEvent(bloc, event);
+    super.onEvent(bloc, event);
+  }
+
+  @override
+  void onTransition(
+      Bloc<dynamic, dynamic> bloc, Transition<dynamic, dynamic> transition) {
+    _localObserver.onTransition(bloc, transition);
+    super.onTransition(bloc, transition);
   }
 }
 
