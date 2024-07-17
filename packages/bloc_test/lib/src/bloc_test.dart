@@ -148,6 +148,7 @@ void blocTest<B extends BlocBase<State>, State>(
   dynamic Function(B bloc)? verify,
   dynamic Function()? errors,
   FutureOr<void> Function()? tearDown,
+  BlocObserver? observer,
   dynamic tags,
 }) {
   test.test(
@@ -164,6 +165,7 @@ void blocTest<B extends BlocBase<State>, State>(
         verify: verify,
         errors: errors,
         tearDown: tearDown,
+        observer: observer,
       );
     },
     tags: tags,
@@ -188,6 +190,7 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
 }) async {
   var shallowEquality = false;
   final unhandledErrors = <Object>[];
+  final firstObserver = Bloc.observer;
   final localBlocObserver = observer ?? Bloc.observer;
   final testObserver = _TestBlocObserver(
     localBlocObserver,
@@ -203,13 +206,14 @@ Future<void> testBloc<B extends BlocBase<State>, State>({
       // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
       if (seed != null) bloc.emit(seed());
       final subscription = bloc.stream.skip(skip).listen(states.add);
-      await runZonedGuarded(() async {
+      try {
         await act?.call(bloc);
-      }, (error, st) {
-        // ignore: only_throw_errors
-        if (errors == null) throw error;
-        unhandledErrors.add(error);
-      });
+      } catch (error) {
+        if (errors == null) rethrow;
+        if (!unhandledErrors.contains(error)) {
+          unhandledErrors.add(error);
+        }
+      }
       if (wait != null) await Future<void>.delayed(wait);
       await Future<void>.delayed(Duration.zero);
       await bloc.close();
@@ -243,6 +247,8 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
     if (errors == null || !unhandledErrors.contains(error)) {
       rethrow;
     }
+  } finally {
+    Bloc.observer = firstObserver;
   }
 
   if (errors != null) test.expect(unhandledErrors, test.wrapMatcher(errors()));

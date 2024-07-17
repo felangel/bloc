@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'blocs/blocs.dart';
+import 'blocs/failing_observer.dart';
 
 class MockRepository extends Mock implements Repository {}
 
@@ -661,6 +662,32 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
         expect((actualError as TestFailure).message, expectedError);
       });
     });
+  });
+  group('BlocObservers', () {
+    test(
+      'FailingObserver',
+      () async {
+        Object? actualError;
+        final completer = Completer<void>();
+        await runZonedGuarded(() async {
+          unawaited(
+            testBloc<CounterBloc, int>(
+              build: () => CounterBloc(),
+              act: (bloc) => bloc.add(CounterEvent.increment),
+              errors: () => [isA<StateError>()],
+              observer: FailingObserver(),
+            ).then((_) {
+              completer.complete();
+            }),
+          );
+          await completer.future;
+        }, (Object error, _) {
+          actualError = error;
+          if (!completer.isCompleted) completer.complete();
+        });
+        expect(actualError, isNull);
+      },
+    );
   });
 
   group('tearDown', () {
