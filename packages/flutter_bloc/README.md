@@ -188,6 +188,26 @@ BlocSelector<BlocA, BlocAState, SelectedState>(
 )
 ```
 
+### BlocMuteSelector
+
+**BlocMuteSelector** is a Flutter widget which is analogous to `BlocBuilder` but allows developers to filter updates by selecting and mute a new value based on the current bloc state. Unnecessary builds are prevented using muteWhen. The selected value can be mutable and can mute using the previous value.
+
+If the `bloc` parameter is omitted, `BlocMuteSelector` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
+
+```dart
+BlocMuteSelector<BlocA, BlocAState, MutableSelectedState>(
+   create: (state) {
+     // create the mutable state
+   }
+   muteOrCopy: (prev, state) {
+     // mute the previous `MutableSelectedState` using current `BlocAState`
+   },
+   builder: (context, state) {
+     // return widget here based on the selected state.
+   },
+)
+```
+
 ### BlocProvider
 
 **BlocProvider** is a Flutter widget which provides a bloc to its children via `BlocProvider.of<T>(context)`. It is used as a dependency injection (DI) widget so that a single instance of a bloc can be provided to multiple widgets within a subtree.
