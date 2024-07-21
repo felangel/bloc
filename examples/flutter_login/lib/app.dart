@@ -39,7 +39,9 @@ class _AppState extends State<App> {
         create: (_) => AuthenticationBloc(
           authenticationRepository: _authenticationRepository,
           userRepository: _userRepository,
-        ),
+        )..add(
+            AuthenticationSubscriptionRequested(),
+          ),
         child: const AppView(),
       ),
     );
