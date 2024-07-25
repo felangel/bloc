@@ -44,7 +44,7 @@ class MockBloc<E, S> extends _MockBlocBase<S> implements Bloc<E, S> {}
 ///
 /// **BAD**
 /// ```dart
-/// class MockCounterCubit extends MockBloc implements CounterCubit {}
+/// class MockCounterCubit extends MockCubit implements CounterCubit {}
 /// ```
 /// {@endtemplate}
 class MockCubit<S> extends _MockBlocBase<S> implements Cubit<S> {}
