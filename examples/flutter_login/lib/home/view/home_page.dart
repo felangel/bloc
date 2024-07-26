@@ -15,10 +15,7 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            _UserId(),
-            _LogoutButton(),
-          ],
+          children: [_UserId(), _LogoutButton()],
         ),
       ),
     );
