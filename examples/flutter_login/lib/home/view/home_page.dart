@@ -11,30 +11,40 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Builder(
-              builder: (context) {
-                final userId = context.select(
-                  (AuthenticationBloc bloc) => bloc.state.user.id,
-                );
-                return Text('UserID: $userId');
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Logout'),
-              onPressed: () {
-                context
-                    .read<AuthenticationBloc>()
-                    .add(AuthenticationLogoutRequested());
-              },
-            ),
-          ],
+          children: [_UserId(), _LogoutButton()],
         ),
       ),
     );
+  }
+}
+
+class _LogoutButton extends StatelessWidget {
+  const _LogoutButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      child: const Text('Logout'),
+      onPressed: () {
+        context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
+      },
+    );
+  }
+}
+
+class _UserId extends StatelessWidget {
+  const _UserId();
+
+  @override
+  Widget build(BuildContext context) {
+    final userId = context.select(
+      (AuthenticationBloc bloc) => bloc.state.user.id,
+    );
+
+    return Text('UserID: $userId');
   }
 }
