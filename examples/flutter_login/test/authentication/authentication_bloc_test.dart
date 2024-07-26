@@ -93,7 +93,8 @@ void main() {
           when(
             () => authenticationRepository.status,
           ).thenAnswer(
-              (_) => Stream.value(AuthenticationStatus.unauthenticated));
+            (_) => Stream.value(AuthenticationStatus.unauthenticated),
+          );
         },
         build: buildBloc,
         act: (bloc) => bloc.add(AuthenticationSubscriptionRequested()),
@@ -103,7 +104,8 @@ void main() {
       );
 
       blocTest<AuthenticationBloc, AuthenticationState>(
-        'emits [unauthenticated] when status is authenticated but getUser fails',
+        'emits [unauthenticated] when status is authenticated '
+        'but getUser fails',
         setUp: () {
           when(
             () => authenticationRepository.status,
