@@ -237,7 +237,7 @@ In the `_onSubscriptionRequested` event handler, the `AuthenticationBloc` uses `
 
 `emit.onEach` creates a stream subscription internally and takes care of canceling it when either `AuthenticationBloc` or the `status` stream is closed.
 
-If the `status` stream emits an error, `addError` forwards the error and stackTrace to any `BlocObserver´ listening.
+If the `status` stream emits an error, `addError` forwards the error and stackTrace to any `BlocObserver` listening.
 
 :::caution
 If `onError` is omitted, any errors on the `status` stream are considered unhandled, and will be thrown by `onEach`. As a result, the subscription to the `status` stream will be canceled.
