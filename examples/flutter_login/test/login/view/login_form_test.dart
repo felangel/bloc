@@ -103,6 +103,25 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
+    testWidgets('loading indicator is shown when status is submission success',
+        (tester) async {
+      when(() => loginBloc.state).thenReturn(
+        const LoginState(status: FormzSubmissionStatus.success),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: BlocProvider.value(
+              value: loginBloc,
+              child: LoginForm(),
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(ElevatedButton), findsNothing);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    });
+
     testWidgets('continue button is enabled when status is validated',
         (tester) async {
       when(() => loginBloc.state).thenReturn(const LoginState(isValid: true));

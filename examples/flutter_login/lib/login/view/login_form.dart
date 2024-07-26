@@ -79,11 +79,11 @@ class _PasswordInput extends StatelessWidget {
 class _LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final isInProgress = context.select(
-      (LoginBloc bloc) => bloc.state.status.isInProgress,
+    final isInProgressOrSuccess = context.select(
+      (LoginBloc bloc) => bloc.state.status.isInProgressOrSuccess,
     );
 
-    if (isInProgress) return const CircularProgressIndicator();
+    if (isInProgressOrSuccess) return const CircularProgressIndicator();
 
     final isValid = context.select((LoginBloc bloc) => bloc.state.isValid);
 
