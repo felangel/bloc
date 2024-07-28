@@ -244,7 +244,7 @@ If `onError` is omitted, any errors on the `status` stream are considered unhand
 :::
 
 :::tip
-A [`BlocObserver`](https://bloclibrary.dev/bloc-concepts/#blocobserver-1) is ideal for logging Bloc events, errors and changes and can be useful for analytics and crash reporting.`;
+A [`BlocObserver`](/bloc-concepts/#blocobserver-1) is great for logging Bloc events, errors and state changes especially in the context analytics and crash reporting.;
 :::
 
 When the `status` stream emits `AuthenticationStatus.unknown` or `unauthenticated`, the corresponding `AuthenticationState` is emitted.
@@ -281,7 +281,7 @@ We are injecting a single instance of the `AuthenticationRepository` and `UserRe
 `RepositoryProvider` is used to provide the single instance of `AuthenticationRepository` to the entire application which will come in handy later on.
 :::
 
-By default, `BlocProvider` is lazy and does not call `create` until the first time the Bloc is accessed. Since `AuthenticationBloc` should always subscribe to the `AuthenticationStatus` stream immediately (by adding the `AuthenticationSubscriptionRequested` event), we can explicitly opt out of this behavior by setting `lazy: false`.
+By default, `BlocProvider` is lazy and does not call `create` until the first time the Bloc is accessed. Since `AuthenticationBloc` should always subscribe to the `AuthenticationStatus` stream immediately (via the `AuthenticationSubscriptionRequested` event), we can explicitly opt out of this behavior by setting `lazy: false`.
 
 `AppView` is a `StatefulWidget` because it maintains a `GlobalKey` which is used to access the `NavigatorState`. By default, `AppView` will render the `SplashPage` (which we will see later) and it uses `BlocListener` to navigate to different pages based on changes in the `AuthenticationState`.
 
