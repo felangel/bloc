@@ -25,20 +25,19 @@ class WeatherAppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WeatherCubit, WeatherState>(
-      builder: (context, state) {
-        return MaterialApp(
-          theme: ThemeData(
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-            ),
-            colorScheme: ColorScheme.fromSeed(seedColor: state.weather.toColor),
-            textTheme: GoogleFonts.rajdhaniTextTheme(),
-          ),
-          home: const WeatherPage(),
-        );
-      },
+    final seedColor = context.select(
+      (WeatherCubit cubit) => cubit.state.weather.toColor,
+    );
+    return MaterialApp(
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: seedColor),
+        textTheme: GoogleFonts.rajdhaniTextTheme(),
+      ),
+      home: const WeatherPage(),
     );
   }
 }

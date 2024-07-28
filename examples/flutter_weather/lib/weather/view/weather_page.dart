@@ -24,22 +24,18 @@ class WeatherPage extends StatelessWidget {
       body: Center(
         child: BlocBuilder<WeatherCubit, WeatherState>(
           builder: (context, state) {
-            switch (state.status) {
-              case WeatherStatus.initial:
-                return const WeatherEmpty();
-              case WeatherStatus.loading:
-                return const WeatherLoading();
-              case WeatherStatus.success:
-                return WeatherPopulated(
+            return switch (state.status) {
+              WeatherStatus.initial => const WeatherEmpty(),
+              WeatherStatus.loading => const WeatherLoading(),
+              WeatherStatus.failure => const WeatherError(),
+              WeatherStatus.success => WeatherPopulated(
                   weather: state.weather,
                   units: state.temperatureUnits,
                   onRefresh: () {
                     return context.read<WeatherCubit>().refreshWeather();
                   },
-                );
-              case WeatherStatus.failure:
-                return const WeatherError();
-            }
+                ),
+            };
           },
         ),
       ),
