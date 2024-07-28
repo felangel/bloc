@@ -30,7 +30,7 @@ class _LogoutButton extends StatelessWidget {
     return ElevatedButton(
       child: const Text('Logout'),
       onPressed: () {
-        context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
+        context.read<AuthenticationBloc>().add(AuthenticationLogoutPressed());
       },
     );
   }
