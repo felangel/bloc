@@ -32,10 +32,7 @@ void main() {
 
   group('AuthenticationBloc', () {
     test('initial state is AuthenticationState.unknown', () {
-      final authenticationBloc = AuthenticationBloc(
-        authenticationRepository: authenticationRepository,
-        userRepository: userRepository,
-      );
+      final authenticationBloc = buildBloc();
       expect(authenticationBloc.state, const AuthenticationState.unknown());
       authenticationBloc.close();
     });
@@ -52,9 +49,7 @@ void main() {
         },
         build: buildBloc,
         act: (bloc) => bloc.add(AuthenticationSubscriptionRequested()),
-        expect: () => const [
-          AuthenticationState.unauthenticated(),
-        ],
+        expect: () => const [AuthenticationState.unauthenticated()],
       );
 
       blocTest<AuthenticationBloc, AuthenticationState>(
@@ -67,9 +62,7 @@ void main() {
         },
         build: buildBloc,
         act: (bloc) => bloc.add(AuthenticationSubscriptionRequested()),
-        expect: () => const [
-          AuthenticationState.authenticated(user),
-        ],
+        expect: () => const [AuthenticationState.authenticated(user)],
       );
 
       blocTest<AuthenticationBloc, AuthenticationState>(
@@ -82,25 +75,19 @@ void main() {
         },
         build: buildBloc,
         act: (bloc) => bloc.add(AuthenticationSubscriptionRequested()),
-        expect: () => const [
-          AuthenticationState.authenticated(user),
-        ],
+        expect: () => const [AuthenticationState.authenticated(user)],
       );
 
       blocTest<AuthenticationBloc, AuthenticationState>(
         'emits [unauthenticated] when status is unauthenticated',
         setUp: () {
-          when(
-            () => authenticationRepository.status,
-          ).thenAnswer(
+          when(() => authenticationRepository.status).thenAnswer(
             (_) => Stream.value(AuthenticationStatus.unauthenticated),
           );
         },
         build: buildBloc,
         act: (bloc) => bloc.add(AuthenticationSubscriptionRequested()),
-        expect: () => const [
-          AuthenticationState.unauthenticated(),
-        ],
+        expect: () => const [AuthenticationState.unauthenticated()],
       );
 
       blocTest<AuthenticationBloc, AuthenticationState>(
@@ -114,9 +101,7 @@ void main() {
         },
         build: buildBloc,
         act: (bloc) => bloc.add(AuthenticationSubscriptionRequested()),
-        expect: () => const [
-          AuthenticationState.unauthenticated(),
-        ],
+        expect: () => const [AuthenticationState.unauthenticated()],
       );
 
       blocTest<AuthenticationBloc, AuthenticationState>(
@@ -130,9 +115,7 @@ void main() {
         },
         build: buildBloc,
         act: (bloc) => bloc.add(AuthenticationSubscriptionRequested()),
-        expect: () => const [
-          AuthenticationState.unauthenticated(),
-        ],
+        expect: () => const [AuthenticationState.unauthenticated()],
       );
 
       blocTest<AuthenticationBloc, AuthenticationState>(
@@ -144,9 +127,7 @@ void main() {
         },
         build: buildBloc,
         act: (bloc) => bloc.add(AuthenticationSubscriptionRequested()),
-        expect: () => const [
-          AuthenticationState.unknown(),
-        ],
+        expect: () => const [AuthenticationState.unknown()],
       );
 
       blocTest<AuthenticationBloc, AuthenticationState>(

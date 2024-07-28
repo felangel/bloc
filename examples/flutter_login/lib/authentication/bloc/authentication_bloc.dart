@@ -26,8 +26,8 @@ class AuthenticationBloc
   Future<void> _onSubscriptionRequested(
     AuthenticationSubscriptionRequested event,
     Emitter<AuthenticationState> emit,
-  ) async {
-    await emit.onEach(
+  ) {
+    return emit.onEach(
       _authenticationRepository.status,
       onData: (status) async {
         switch (status) {
