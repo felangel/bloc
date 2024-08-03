@@ -51,7 +51,9 @@ void main() {
     });
 
     testWidgets('navigates to LoginPage when unauthenticated', (tester) async {
-      when(() => appBloc.state).thenReturn(const AppState.unauthenticated());
+      when(() => appBloc.state).thenReturn(
+        const AppState(status: AppStatus.unauthenticated),
+      );
       await tester.pumpWidget(
         RepositoryProvider.value(
           value: authenticationRepository,
@@ -67,7 +69,9 @@ void main() {
     testWidgets('navigates to HomePage when authenticated', (tester) async {
       final user = MockUser();
       when(() => user.email).thenReturn('test@gmail.com');
-      when(() => appBloc.state).thenReturn(AppState.authenticated(user));
+      when(() => appBloc.state).thenReturn(
+        AppState(status: AppStatus.authenticated, user: user),
+      );
       await tester.pumpWidget(
         RepositoryProvider.value(
           value: authenticationRepository,

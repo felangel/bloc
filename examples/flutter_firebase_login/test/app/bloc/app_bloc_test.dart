@@ -11,7 +11,7 @@ class MockAuthenticationRepository extends Mock
 class MockUser extends Mock implements User {}
 
 void main() {
-  group('AppBloc', () {
+  group(AppBloc, () {
     final user = MockUser();
     late AuthenticationRepository authenticationRepository;
 
@@ -23,46 +23,52 @@ void main() {
       when(
         () => authenticationRepository.currentUser,
       ).thenReturn(User.empty);
+      when(() => user.isNotEmpty).thenReturn(false);
     });
 
-    test('initial state is unauthenticated when user is empty', () {
+    AppBloc buildBloc() {
+      return AppBloc(
+        authenticationRepository: authenticationRepository,
+      );
+    }
+
+    test('initial state is $AppState.fromUser', () {
       expect(
-        AppBloc(authenticationRepository: authenticationRepository).state,
-        AppState.unauthenticated(),
+        buildBloc().state,
+        AppState.fromUser(user),
       );
     });
 
-    group('UserChanged', () {
+    group(AppUserSubscriptionRequested, () {
+      final error = Exception('oops');
+
       blocTest<AppBloc, AppState>(
-        'emits authenticated when user is not empty',
+        'emits $AppState.fromUser when user stream emits a new value',
         setUp: () {
           when(() => user.isNotEmpty).thenReturn(true);
           when(() => authenticationRepository.user).thenAnswer(
             (_) => Stream.value(user),
           );
         },
-        build: () => AppBloc(
-          authenticationRepository: authenticationRepository,
-        ),
-        seed: AppState.unauthenticated,
-        expect: () => [AppState.authenticated(user)],
+        build: buildBloc,
+        act: (bloc) => bloc.add(AppUserSubscriptionRequested()),
+        expect: () => [AppState.fromUser(user)],
       );
 
       blocTest<AppBloc, AppState>(
-        'emits unauthenticated when user is empty',
+        'adds error when user stream emits an error',
         setUp: () {
-          when(() => authenticationRepository.user).thenAnswer(
-            (_) => Stream.value(User.empty),
-          );
+          when(
+            () => authenticationRepository.user,
+          ).thenAnswer((_) => Stream.error(error));
         },
-        build: () => AppBloc(
-          authenticationRepository: authenticationRepository,
-        ),
-        expect: () => [AppState.unauthenticated()],
+        build: buildBloc,
+        act: (bloc) => bloc.add(AppUserSubscriptionRequested()),
+        errors: () => [error],
       );
     });
 
-    group('LogoutRequested', () {
+    group(AppLogoutPressed, () {
       blocTest<AppBloc, AppState>(
         'invokes logOut',
         setUp: () {
@@ -70,10 +76,8 @@ void main() {
             () => authenticationRepository.logOut(),
           ).thenAnswer((_) async {});
         },
-        build: () => AppBloc(
-          authenticationRepository: authenticationRepository,
-        ),
-        act: (bloc) => bloc.add(AppLogoutRequested()),
+        build: buildBloc,
+        act: (bloc) => bloc.add(AppLogoutPressed()),
         verify: (_) {
           verify(() => authenticationRepository.logOut()).called(1);
         },

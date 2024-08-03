@@ -6,15 +6,17 @@ enum AppStatus {
 }
 
 final class AppState extends Equatable {
-  const AppState._({
+  @visibleForTesting
+  const AppState({
     required this.status,
     this.user = User.empty,
   });
 
-  const AppState.authenticated(User user)
-      : this._(status: AppStatus.authenticated, user: user);
-
-  const AppState.unauthenticated() : this._(status: AppStatus.unauthenticated);
+  factory AppState.fromUser(User user) {
+    return user.isNotEmpty
+        ? AppState(status: AppStatus.authenticated, user: user)
+        : const AppState(status: AppStatus.unauthenticated);
+  }
 
   final AppStatus status;
   final User user;
