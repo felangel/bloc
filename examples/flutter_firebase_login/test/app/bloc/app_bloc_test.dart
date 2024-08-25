@@ -18,12 +18,11 @@ void main() {
     setUp(() {
       authenticationRepository = MockAuthenticationRepository();
       when(() => authenticationRepository.user).thenAnswer(
-        (_) => Stream.empty(),
+        (_) => const Stream.empty(),
       );
       when(
         () => authenticationRepository.currentUser,
-      ).thenReturn(User.empty);
-      when(() => user.isNotEmpty).thenReturn(false);
+      ).thenReturn(user);
     });
 
     AppBloc buildBloc() {
@@ -32,27 +31,23 @@ void main() {
       );
     }
 
-    test('initial state is $AppState.fromUser', () {
-      expect(
-        buildBloc().state,
-        AppState.fromUser(user),
-      );
+    test('initial state is $AppState', () {
+      expect(buildBloc().state, equals(AppState(user: user)));
     });
 
     group(AppUserSubscriptionRequested, () {
       final error = Exception('oops');
 
       blocTest<AppBloc, AppState>(
-        'emits $AppState.fromUser when user stream emits a new value',
+        'emits $AppState when user stream emits a new value',
         setUp: () {
-          when(() => user.isNotEmpty).thenReturn(true);
           when(() => authenticationRepository.user).thenAnswer(
             (_) => Stream.value(user),
           );
         },
         build: buildBloc,
         act: (bloc) => bloc.add(AppUserSubscriptionRequested()),
-        expect: () => [AppState.fromUser(user)],
+        expect: () => [AppState(user: user)],
       );
 
       blocTest<AppBloc, AppState>(

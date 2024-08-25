@@ -21,9 +21,7 @@ void main() {
       appBloc = MockAppBloc();
       user = MockUser();
       when(() => user.email).thenReturn('test@gmail.com');
-      when(() => appBloc.state).thenReturn(
-        AppState(user: user, status: AppStatus.authenticated),
-      );
+      when(() => appBloc.state).thenReturn(AppState(user: user));
     });
 
     group('calls', () {

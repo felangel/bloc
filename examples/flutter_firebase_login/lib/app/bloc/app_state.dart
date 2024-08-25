@@ -1,22 +1,17 @@
 part of 'app_bloc.dart';
 
-enum AppStatus {
-  authenticated,
-  unauthenticated,
-}
+enum AppStatus { authenticated, unauthenticated }
 
 final class AppState extends Equatable {
-  @visibleForTesting
-  const AppState({
-    required this.status,
-    this.user = User.empty,
-  });
+  const AppState({User user = User.empty})
+      : this._(
+          status: user == User.empty
+              ? AppStatus.unauthenticated
+              : AppStatus.authenticated,
+          user: user,
+        );
 
-  factory AppState.fromUser(User user) {
-    return user.isNotEmpty
-        ? AppState(status: AppStatus.authenticated, user: user)
-        : const AppState(status: AppStatus.unauthenticated);
-  }
+  const AppState._({required this.status, this.user = User.empty});
 
   final AppStatus status;
   final User user;
