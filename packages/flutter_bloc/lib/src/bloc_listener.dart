@@ -211,6 +211,7 @@ class _BlocListenerBaseState<B extends StateStreamable<S>, S>
 
   void _subscribe() {
     _subscription = _bloc.stream.listen((state) {
+      if (!mounted) return;
       if (widget.listenWhen?.call(_previousState, state) ?? true) {
         widget.listener(context, state);
       }
