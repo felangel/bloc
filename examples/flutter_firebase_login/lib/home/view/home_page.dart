@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
             key: const Key('homePage_logout_iconButton'),
             icon: const Icon(Icons.exit_to_app),
             onPressed: () {
-              context.read<AppBloc>().add(const AppLogoutRequested());
+              context.read<AppBloc>().add(const AppLogoutPressed());
             },
           ),
         ],
