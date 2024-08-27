@@ -159,7 +159,7 @@ The `AppBloc` is responsible for managing the global state of the application. I
 
 ### State
 
-The `AppState` consists of an `AppStatus` and a `User`. A factory constructor `fromUser` is exposed which transforms `User` to the corresponding `AuthenticationStatus`.
+The `AppState` consists of an `AppStatus` and a `User`. The default constructor accepts an optional `User` and redirects to the private constructor with the appropriate authentication status.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/bloc/app_state.dart"
