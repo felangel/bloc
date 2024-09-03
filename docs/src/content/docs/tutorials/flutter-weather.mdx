@@ -25,7 +25,6 @@ import FlutterCreateRepositorySnippet from '~/components/tutorials/flutter-weath
 import RepositoryModelsBarrelTreeSnippet from '~/components/tutorials/flutter-weather/RepositoryModelsBarrelTreeSnippet.astro';
 import WeatherRepositoryLibrarySnippet from '~/components/tutorials/flutter-weather/WeatherRepositoryLibrarySnippet.astro';
 import WeatherCubitTreeSnippet from '~/components/tutorials/flutter-weather/WeatherCubitTreeSnippet.astro';
-import ThemeCubitTreeSnippet from '~/components/tutorials/flutter-weather/ThemeCubitTreeSnippet.astro';
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
@@ -516,23 +515,6 @@ Remember to generate the (de)serialization code via:
 <BuildRunnerBuildSnippet />
 :::
 
-### Theme
-
-Next, we'll implement the business logic for the dynamic theming.
-
-#### Theme Cubit
-
-Let's create a `ThemeCubit` to manage the theme of our app. The theme will change based on the current weather conditions.
-
-<ThemeCubitTreeSnippet />
-
-We will expose an `updateTheme` method to update the theme depending on the weather condition.
-
-<RemoteCode
-	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/theme/cubit/theme_cubit.dart"
-	title="lib/theme/cubit/theme_cubit.dart"
-/>
-
 ### Unit Tests
 
 Similar to the data and repository layers, it's critical to unit test the business logic layer to ensure that the feature-level logic behaves as we expect. We will be relying on the [bloc_test](https://pub.dev/packages/bloc_test) in addition to `mocktail` and `test`.
@@ -547,13 +529,6 @@ Let's add the `test`, `bloc_test`, and `mocktail` packages to the `dev_dependenc
 :::note
 The [bloc_test](https://pub.dev/packages/bloc_test) package allows us to easily prepare our blocs for testing, handle state changes, and check results in a consistent way.
 :::
-
-#### Theme Cubit Tests
-
-<RemoteCode
-	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/test/theme/cubit/theme_cubit_test.dart"
-	title="test/theme/cubit/theme_cubit_test.dart"
-/>
 
 #### Weather Cubit Tests
 
@@ -651,7 +626,7 @@ Our `main.dart` file should initialize our `WeatherApp` and `BlocObserver` (for 
 	title="lib/main.dart"
 />
 
-Our `app.dart` widget will handle building the `WeatherPage` view we previously created and use `BlocProvider` to inject our `ThemeCubit` which handles theme data.
+Our `app.dart` widget will handle building the `WeatherPage` view we previously created and use `BlocProvider` to inject our `WeatherCubit`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/app.dart"

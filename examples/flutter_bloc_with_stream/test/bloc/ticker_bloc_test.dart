@@ -6,20 +6,20 @@ import 'package:flutter_bloc_with_stream/ticker/ticker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockTicker extends Mock implements Ticker {}
+class _MockTicker extends Mock implements Ticker {}
 
 void main() {
-  group('TickerBloc', () {
+  group(TickerBloc, () {
     late Ticker ticker;
 
     setUp(() {
-      ticker = MockTicker();
+      ticker = _MockTicker();
       when(ticker.tick).thenAnswer(
         (_) => Stream<int>.fromIterable([1, 2, 3]),
       );
     });
 
-    test('initial state is TickerInitial', () {
+    test('initial state is $TickerInitial', () {
       expect(TickerBloc(ticker).state, TickerInitial());
     });
 
@@ -30,7 +30,7 @@ void main() {
     );
 
     blocTest<TickerBloc, TickerState>(
-      'emits TickerTickSuccess from 1 to 3',
+      'emits $TickerTickSuccess from 1 to 3',
       build: () => TickerBloc(ticker),
       act: (bloc) => bloc.add(TickerStarted()),
       expect: () => <TickerState>[
@@ -42,7 +42,7 @@ void main() {
     );
 
     blocTest<TickerBloc, TickerState>(
-      'emits TickerTickSuccess '
+      'emits $TickerTickSuccess '
       'from 1 to 3 and cancels previous subscription',
       build: () => TickerBloc(ticker),
       act: (bloc) => bloc

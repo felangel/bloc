@@ -7,7 +7,7 @@ import 'package:flutter_counter/counter/counter.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockCounterCubit extends MockCubit<int> implements CounterCubit {}
+class _MockCounterCubit extends MockCubit<int> implements CounterCubit {}
 
 const _incrementButtonKey = Key('counterView_increment_floatingActionButton');
 const _decrementButtonKey = Key('counterView_decrement_floatingActionButton');
@@ -16,11 +16,11 @@ void main() {
   late CounterCubit counterCubit;
 
   setUp(() {
-    counterCubit = MockCounterCubit();
+    counterCubit = _MockCounterCubit();
   });
 
-  group('CounterView', () {
-    testWidgets('renders current CounterCubit state', (tester) async {
+  group(CounterView, () {
+    testWidgets('renders current $CounterCubit state', (tester) async {
       when(() => counterCubit.state).thenReturn(42);
       await tester.pumpWidget(
         MaterialApp(
