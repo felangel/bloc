@@ -21,11 +21,11 @@ void main() {
       appBloc = MockAppBloc();
       user = MockUser();
       when(() => user.email).thenReturn('test@gmail.com');
-      when(() => appBloc.state).thenReturn(AppState.authenticated(user));
+      when(() => appBloc.state).thenReturn(AppState(user: user));
     });
 
     group('calls', () {
-      testWidgets('AppLogoutRequested when logout is pressed', (tester) async {
+      testWidgets('AppLogoutPressed when logout is pressed', (tester) async {
         await tester.pumpWidget(
           BlocProvider.value(
             value: appBloc,
@@ -33,7 +33,7 @@ void main() {
           ),
         );
         await tester.tap(find.byKey(logoutButtonKey));
-        verify(() => appBloc.add(const AppLogoutRequested())).called(1);
+        verify(() => appBloc.add(const AppLogoutPressed())).called(1);
       });
     });
 

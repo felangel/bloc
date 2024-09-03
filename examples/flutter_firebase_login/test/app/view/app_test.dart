@@ -27,8 +27,6 @@ void main() {
         (_) => const Stream.empty(),
       );
       when(() => authenticationRepository.currentUser).thenReturn(user);
-      when(() => user.isNotEmpty).thenReturn(true);
-      when(() => user.isEmpty).thenReturn(false);
       when(() => user.email).thenReturn('test@gmail.com');
     });
 
@@ -51,7 +49,7 @@ void main() {
     });
 
     testWidgets('navigates to LoginPage when unauthenticated', (tester) async {
-      when(() => appBloc.state).thenReturn(const AppState.unauthenticated());
+      when(() => appBloc.state).thenReturn(AppState());
       await tester.pumpWidget(
         RepositoryProvider.value(
           value: authenticationRepository,
@@ -67,7 +65,7 @@ void main() {
     testWidgets('navigates to HomePage when authenticated', (tester) async {
       final user = MockUser();
       when(() => user.email).thenReturn('test@gmail.com');
-      when(() => appBloc.state).thenReturn(AppState.authenticated(user));
+      when(() => appBloc.state).thenReturn(AppState(user: user));
       await tester.pumpWidget(
         RepositoryProvider.value(
           value: authenticationRepository,

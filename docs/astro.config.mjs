@@ -131,6 +131,10 @@ export default defineConfig({
 							link: '/architecture/',
 						},
 						{
+							label: 'Modeling State',
+							link: '/modeling-state/',
+						},
+						{
 							label: 'Testing',
 							link: '/testing/',
 						},
