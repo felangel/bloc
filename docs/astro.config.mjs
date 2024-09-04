@@ -109,22 +109,37 @@ export default defineConfig({
 			sidebar: [
 				{
 					label: 'Introduction',
+					translations: {
+						'zh-CN': '介绍',
+					},
 					items: [
 						{
 							label: 'Getting Started',
 							link: '/getting-started/',
+							translations: {
+								'zh-CN': '快速入门',
+							},
 						},
 						{
 							label: 'Why Bloc?',
 							link: '/why-bloc/',
+							translations: {
+								'zh-CN': '为什么用 Bloc?',
+							},
 						},
 						{
 							label: 'Bloc Concepts',
 							link: '/bloc-concepts/',
+							translations: {
+								'zh-CN': 'Bloc 核心概念',
+							},
 						},
 						{
 							label: 'Flutter Bloc Concepts',
 							link: '/flutter-bloc-concepts/',
+							translations: {
+								'zh-CN': 'Flutter Bloc 核心概念',
+							},
 						},
 						{
 							label: 'Architecture',
