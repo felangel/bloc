@@ -111,6 +111,7 @@ export default defineConfig({
 					label: 'Introduction',
 					translations: {
 						'zh-CN': '介绍',
+						'fa': 'مقدمه',
 					},
 					items: [
 						{
@@ -118,6 +119,7 @@ export default defineConfig({
 							link: '/getting-started/',
 							translations: {
 								'zh-CN': '快速入门',
+								'fa': 'شروع شدن',
 							},
 						},
 						{
@@ -125,6 +127,7 @@ export default defineConfig({
 							link: '/why-bloc/',
 							translations: {
 								'zh-CN': '为什么用 Bloc?',
+								'fa': 'چرا Bloc؟',
 							},
 						},
 						{
@@ -132,6 +135,7 @@ export default defineConfig({
 							link: '/bloc-concepts/',
 							translations: {
 								'zh-CN': 'Bloc 核心概念',
+								'fa': 'مفاهیم Bloc',
 							},
 						},
 						{
@@ -139,55 +143,89 @@ export default defineConfig({
 							link: '/flutter-bloc-concepts/',
 							translations: {
 								'zh-CN': 'Flutter Bloc 核心概念',
+								'fa': 'مفاهیم بلوک فلاتر',
 							},
 						},
 						{
 							label: 'Architecture',
 							link: '/architecture/',
+							translations: {
+								'fa': 'معماری',
+							},
 						},
 						{
 							label: 'Modeling State',
 							link: '/modeling-state/',
+							translations: {
+								'fa': 'وضعیت (State) مدل سازی',
+							},
 						},
 						{
 							label: 'Testing',
 							link: '/testing/',
+							translations: {
+								'fa': 'آزمایش کردن',
+							},
 						},
 						{
 							label: 'Naming Conventions',
 							link: '/naming-conventions/',
+							translations: {
+								'fa': 'قراردادهای نامگذاری',
+							},
 						},
 						{
 							label: 'FAQs',
 							link: '/faqs/',
+							translations: {
+								'fa': 'سوالات متداول',
+							},
 						},
 						{
 							label: 'Migration Guide',
 							link: '/migration/',
+							translations: {
+								'fa': 'راهنمای مهاجرت',
+							},
 						},
 					],
 				},
 				{
 					label: 'Tutorials',
+                    translations: {
+                        'fa': 'آموزش ها',
+                    },
 					autogenerate: {
 						directory: 'tutorials',
 					},
 				},
 				{
 					label: 'Tools',
+                    translations: {
+                        'fa': 'ابزار',
+                    },
 					items: [
 						{
 							label: 'IntelliJ Plugin',
 							link: 'https://plugins.jetbrains.com/plugin/12129-bloc',
+							translations: {
+								'fa': 'پلاگین IntelliJ',
+							},
 						},
 						{
 							label: 'VSCode Extension',
 							link: 'https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc',
+							translations: {
+								'fa': 'پلاگین VSCode',
+							},
 						},
 					],
 				},
 				{
 					label: 'Reference',
+                    translations: {
+                        'fa': 'مرجع',
+                    },
 					items: [
 						{
 							label: 'angular_bloc',
