@@ -192,18 +192,18 @@ export default defineConfig({
 				},
 				{
 					label: 'Tutorials',
-                    translations: {
-                        'fa': 'آموزش ها',
-                    },
+					translations: {
+						'fa': 'آموزش ها',
+					},
 					autogenerate: {
 						directory: 'tutorials',
 					},
 				},
 				{
 					label: 'Tools',
-                    translations: {
-                        'fa': 'ابزار',
-                    },
+					translations: {
+						'fa': 'ابزار',
+					},
 					items: [
 						{
 							label: 'IntelliJ Plugin',
@@ -223,9 +223,9 @@ export default defineConfig({
 				},
 				{
 					label: 'Reference',
-                    translations: {
-                        'fa': 'مرجع',
-                    },
+					translations: {
+						'fa': 'مرجع',
+					},
 					items: [
 						{
 							label: 'angular_bloc',
