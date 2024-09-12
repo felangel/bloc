@@ -7,23 +7,37 @@ export type Props = {
 import { Image } from 'astro:assets';
 import { LinkCard } from '@astrojs/starlight/components';
 
+import shorebirdLight from '~/assets/sponsors/shorebird-light.png';
+import shorebirdDark from '~/assets/sponsors/shorebird-dark.png';
 import miquido from '~/assets/sponsors/miquido.png';
 import monterail from '~/assets/sponsors/monterail.png';
 import netguru from '~/assets/sponsors/netguru.png';
 import parabeac from '~/assets/sponsors/parabeac.png';
 import stream from '~/assets/sponsors/stream.png';
-import porada from '~/assets/sponsors/porada.png';
 
 const { sponsoredBy = 'Sponsored with 💖 by', becomeASponsor = 'Become a Sponsor' } = Astro.props;
 
+interface DynamicImageMetadata {
+	light: ImageMetadata;
+	dark: ImageMetadata;
+}
 interface Sponsor {
-	img: ImageMetadata;
+	img: DynamicImageMetadata | ImageMetadata;
 	href: string;
 	alt: string;
 	invert: boolean;
 }
 
 const sponsors: Sponsor[] = [
+	{
+		alt: 'Shorebird Logo',
+		img: {
+			light: shorebirdLight,
+			dark: shorebirdDark,
+		},
+		href: 'https://shorebird.dev',
+		invert: false,
+	},
 	{
 		alt: 'Monterail Logo',
 		img: monterail,
@@ -54,13 +68,13 @@ const sponsors: Sponsor[] = [
 		href: 'https://www.netguru.com/services/flutter-app-development?utm_campaign=%5BS%5D%5BMob%5D%20Flutter&utm_source=github&utm_medium=sponsorship&utm_term=bloclibrary',
 		invert: true,
 	},
-	{
-		alt: 'Porada Logo',
-		img: porada,
-		href: 'https://www.porada.app/',
-		invert: false,
-	},
 ];
+
+function isDynamicImage(
+	value: DynamicImageMetadata | ImageMetadata
+): value is DynamicImageMetadata {
+	return value.hasOwnProperty('light') && value.hasOwnProperty('dark');
+}
 ---
 
 <style>
@@ -82,14 +96,35 @@ const sponsors: Sponsor[] = [
 				return (
 					<div class="flex flex-row justify-center items-center">
 						<a href={sponsor.href} aria-label={sponsor.alt} target="_blank" rel="noreferrer">
-							<Image
-								class={sponsor.invert ? 'invert-logo' : 'logo'}
-								src={sponsor.img}
-								width={300}
-								style="width:150px;height:auto"
-								alt={sponsor.alt}
-								loading="eager"
-							/>
+							{isDynamicImage(sponsor.img) ? (
+								<>
+									<Image
+										class={`${sponsor.invert ? 'invert-logo' : 'logo'} dark:sl-hidden`}
+										src={sponsor.img.light}
+										width={300}
+										style="width:150px;height:auto"
+										alt={sponsor.alt}
+										loading="eager"
+									/>
+									<Image
+										class={`${sponsor.invert ? 'invert-logo' : 'logo'} light:sl-hidden`}
+										src={sponsor.img.dark}
+										width={300}
+										style="width:150px;height:auto"
+										alt={sponsor.alt}
+										loading="eager"
+									/>
+								</>
+							) : (
+								<Image
+									class={sponsor.invert ? 'invert-logo' : 'logo'}
+									src={sponsor.img}
+									width={300}
+									style="width:150px;height:auto"
+									alt={sponsor.alt}
+									loading="eager"
+								/>
+							)}
 						</a>
 					</div>
 				);
