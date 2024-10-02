@@ -21,7 +21,7 @@
 
 ---
 
-A dart package that helps implement the [BLoC pattern](https://www.didierboelens.com/2018/08/reactive-programming---streams---bloc).
+A predictable state management library that helps implement the BLoC (Business Logic Component) design pattern.
 
 **Learn more at [bloclibrary.dev](https://bloclibrary.dev)!**
 
