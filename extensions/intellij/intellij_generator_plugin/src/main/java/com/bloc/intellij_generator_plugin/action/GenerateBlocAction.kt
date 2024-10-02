@@ -10,6 +10,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.*
 
 class GenerateBlocAction : AnAction(), GenerateBlocDialog.Listener {
+    override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
 
     private lateinit var dataContext: DataContext
 
