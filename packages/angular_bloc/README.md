@@ -17,7 +17,7 @@
 
 ---
 
-A Dart package that helps implement the BLoC pattern in [AngularDart](https://pub.dev/packages/angular). Built to work with [package:bloc](https://pub.dev/packages/bloc).
+A Dart package that helps implement the BLoC pattern in [AngularDart](https://pub.dev/packages/ngdart). Built to work with [package:bloc](https://pub.dev/packages/bloc).
 
 **Learn more at [bloclibrary.dev](https://bloclibrary.dev)!**
 
