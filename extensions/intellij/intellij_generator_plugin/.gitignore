@@ -2,6 +2,7 @@
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
+local.properties
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/
