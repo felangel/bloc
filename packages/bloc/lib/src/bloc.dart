@@ -101,6 +101,27 @@ abstract class Bloc<Event, State> extends BlocBase<State>
     }
   }
 
+  /// Adds an [event] to the [Bloc] if the given [condition] is true.
+  ///
+  /// This method allows conditional event addition, which can be useful
+  /// for scenarios where events should only be added based on certain
+  /// conditions.
+  ///
+  /// ```dart
+  /// bloc.addIf(() => MyEvent(), someCondition);
+  /// ```
+  ///
+  /// * [eventBuilder] - A function that returns the event to be added.
+  /// * [condition] - A boolean that determines whether the event should be added.
+  void addIf<T>(
+    T Function() eventBuilder,
+    bool condition,
+  ) {
+    if (condition) {
+      add(eventBuilder());
+    }
+  }
+
   /// Called whenever an [event] is [add]ed to the [Bloc].
   /// A great spot to add logging/analytics at the individual [Bloc] level.
   ///
