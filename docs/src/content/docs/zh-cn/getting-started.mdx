@@ -1,0 +1,35 @@
+---
+title: 快速入门
+description: 用 Bloc 开始构建的前提
+---
+
+import InstallationTabs from '~/components/getting-started/InstallationTabs.astro';
+import ImportTabs from '~/components/getting-started/ImportTabs.astro';
+
+## Bloc 包
+
+Bloc 生态包括了以下几个包：
+
+| Package                                                                                    | Description        | Link                                                                                                           |
+| ------------------------------------------------------------------------------------------ | ------------------ | -------------------------------------------------------------------------------------------------------------- |
+| [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc)         | AngularDart 组件   | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)         |
+| [bloc](https://github.com/felangel/bloc/tree/master/packages/bloc)                         | 核心 Dart API      | [![pub package](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)                         |
+| [bloc_concurrency](https://github.com/felangel/bloc/tree/master/packages/bloc_concurrency) | 事件转换器         | [![pub package](https://img.shields.io/pub/v/bloc_concurrency.svg)](https://pub.dev/packages/bloc_concurrency) |
+| [bloc_test](https://github.com/felangel/bloc/tree/master/packages/bloc_test)               | 测试 API           | [![pub package](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)               |
+| [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc)         | Flutter 组件       | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc)         |
+| [hydrated_bloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc)       | 缓存/持久化 支持库 | [![pub package](https://img.shields.io/pub/v/hydrated_bloc.svg)](https://pub.dev/packages/hydrated_bloc)       |
+| [replay_bloc](https://github.com/felangel/bloc/tree/master/packages/replay_bloc)           | 撤销/重做 支持库   | [![pub package](https://img.shields.io/pub/v/replay_bloc.svg)](https://pub.dev/packages/replay_bloc)           |
+
+## 安装
+
+<InstallationTabs />
+
+:::note
+在开始使用 bloc 之前请确保你在机器上已经安装了 [Dart SDK](https://dart.dev/get-dart)。
+:::
+
+## 导入
+
+现在我们已经成功安装了 bloc，我们可以创建 `main.dart` 并且导入对应的 `bloc` 包了。
+
+<ImportTabs />

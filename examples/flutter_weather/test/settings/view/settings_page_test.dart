@@ -2,6 +2,7 @@
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_weather/settings/settings.dart';
 import 'package:flutter_weather/weather/weather.dart';
@@ -21,15 +22,18 @@ void main() {
     testWidgets('is routable', (tester) async {
       when(() => weatherCubit.state).thenReturn(WeatherState());
       await tester.pumpWidget(
-        MaterialApp(
-          home: Builder(
-            builder: (context) => Scaffold(
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.of(context).push<void>(
-                    SettingsPage.route(weatherCubit),
-                  );
-                },
+        BlocProvider.value(
+          value: weatherCubit,
+          child: MaterialApp(
+            home: Builder(
+              builder: (context) => Scaffold(
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.of(context).push<void>(
+                      SettingsPage.route(),
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -50,15 +54,18 @@ void main() {
       );
       when(() => weatherCubit.state).thenReturn(WeatherState());
       await tester.pumpWidget(
-        MaterialApp(
-          home: Builder(
-            builder: (context) => Scaffold(
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.of(context).push<void>(
-                    SettingsPage.route(weatherCubit),
-                  );
-                },
+        BlocProvider.value(
+          value: weatherCubit,
+          child: MaterialApp(
+            home: Builder(
+              builder: (context) => Scaffold(
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.of(context).push<void>(
+                      SettingsPage.route(),
+                    );
+                  },
+                ),
               ),
             ),
           ),

@@ -7,22 +7,20 @@ import 'package:mocktail/mocktail.dart';
 class MockUser extends Mock implements User {}
 
 void main() {
-  group('AppState', () {
-    group('unauthenticated', () {
-      test('has correct status', () {
-        final state = AppState.unauthenticated();
-        expect(state.status, AppStatus.unauthenticated);
-        expect(state.user, User.empty);
-      });
+  group(AppState, () {
+    test(
+        'returns state with status unauthenticated '
+        'when user is empty', () {
+      expect(AppState().status, equals(AppStatus.unauthenticated));
     });
 
-    group('authenticated', () {
-      test('has correct status', () {
-        final user = MockUser();
-        final state = AppState.authenticated(user);
-        expect(state.status, AppStatus.authenticated);
-        expect(state.user, user);
-      });
+    test(
+        'returns state with status authenticated and user '
+        'when user is not empty', () {
+      final user = MockUser();
+      final state = AppState(user: user);
+      expect(state.status, equals(AppStatus.authenticated));
+      expect(state.user, equals(user));
     });
   });
 }

@@ -1,0 +1,98 @@
+---
+title: Modeling State
+description: An overview of several ways to model states when using package:bloc.
+---
+
+import ConcreteClassAndStatusEnumSnippet from '~/components/modeling-state/ConcreteClassAndStatusEnumSnippet.astro';
+import SealedClassAndSubclassesSnippet from '~/components/modeling-state/SealedClassAndSubclassesSnippet.astro';
+
+There are many different approaches when it comes to structuring application
+state. Each has its own advantages and drawbacks. In this section, we'll take a
+look at several approaches, their pros and cons, and when to use each one.
+
+The following approaches are simply recommendations and are completely optional.
+Feel free to use whatever approach you prefer. You may find some of the
+examples/documentation do not follow the approaches mainly for
+simplicity/conciseness.
+
+:::tip
+
+The following code snippets are focused on the state structure. In practice, you
+may also want to:
+
+- Extend `Equatable` from [`package:equatable`](https://pub.dev/packages/equatable)
+- Annotate the class with `@Data()` from [`package:data_class`](https://pub.dev/packages/data_class)
+- Annotate the class with **@immutable** from [`package:meta`](https://pub.dev/packages/meta)
+- Implement a `copyWith` method
+- Use the `const` keyword for constructors
+
+:::
+
+## Concrete Class and Status Enum
+
+This approach consists of a **single concrete class** for all states along with
+an `enum` representing different statuses. Properties are made nullable and are
+handled based on the current status. This approach works best for states which
+are not strictly exclusive and/or contain lots of shared properties.
+
+<ConcreteClassAndStatusEnumSnippet />
+
+#### Pros
+
+- **Simple**: Easy to manage a single class and a status enum and all properties are readily accessible.
+- **Concise**: Generally requires fewer lines of code as compared to other approaches.
+
+#### Cons
+
+- **Not Type Safe**: Requires checking the `status` before accessing properties.
+  It's possible to `emit` a malformed state which can lead to bugs. Properties
+  for specific states are nullable, which can be cumbersome to manage and
+  requires either force unwrapping or performing null checks. Some of these cons
+  can be mitigated by writing unit tests and writing specialized, named
+  constructors.
+- **Bloated**: Results in a single state that can become bloated with many
+  properties over time.
+
+#### Verdict
+
+This approach works best for simple states or when the requirements call for
+states that aren't exclusive (e.g. showing a snackbar when an error occurs while
+still showing old data from the last success state). This approach provides
+flexibility and conciseness at the cost of type safety.
+
+## Sealed Class and Subclasses
+
+This approach consists of a **sealed class** that holds any shared properties
+and multiple subclasses for the separate states. This approach is great for
+separate, exclusive states.
+
+<SealedClassAndSubclassesSnippet />
+
+#### Pros
+
+- **Type Safe**: The code is compile-safe and it's not possible to accidentally
+  access an invalid property. Each subclass holds its own properties, making it
+  clear which properties belong to which state.
+- **Explicit:** Separates shared properties from state-specific properties.
+- **Exhaustive**: Using a `switch` statement for exhaustiveness checks
+  to ensure that each state is explicitly handled.
+  - If you don't want [exhaustive
+    switching](https://dart.dev/language/branches#exhaustiveness-checking) or
+    want to be able to add subtypes later without breaking the API, use the
+    [final](https://dart.dev/language/class-modifiers#final) modifier.
+  - See the [sealed class documentation](https://dart.dev/language/class-modifiers#sealed) for more details.
+
+#### Cons
+
+- **Verbose**: Requires more code (one base class and a subclass per state).
+  Also may require duplicate code for shared properties across subclasses.
+- **Complex**: Adding new properties requires updating each subclass and the
+  base class, which can be cumbersome and lead to increases in complexity of the
+  state. In addition, may require unnecessary/excessive type checking to access
+  properties.
+
+#### Verdict
+
+This approach works best for well-defined, exclusive states with unique
+properties. This approach provides type safety & exhaustiveness checks and emphasizes
+safety over conciseness and simplicity.

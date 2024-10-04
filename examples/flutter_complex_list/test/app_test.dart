@@ -14,12 +14,12 @@ void main() {
     repository = MockRepository();
   });
 
-  group('App', () {
-    testWidgets('is a MaterialApp', (tester) async {
+  group(App, () {
+    testWidgets('is a $MaterialApp', (tester) async {
       expect(App(repository: repository), isA<MaterialApp>());
     });
 
-    testWidgets('renders ComplexListPage', (tester) async {
+    testWidgets('renders $ComplexListPage', (tester) async {
       when(repository.fetchItems).thenAnswer((_) async => []);
       await tester.pumpWidget(App(repository: repository));
       expect(find.byType(ComplexListPage), findsOneWidget);

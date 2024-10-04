@@ -4,14 +4,14 @@ import 'package:flutter_bloc_with_stream/bloc/ticker_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('TickerState', () {
-    group('TickerInitial', () {
+  group(TickerState, () {
+    group(TickerInitial, () {
       test('supports value comparison', () {
         expect(TickerInitial(), TickerInitial());
       });
     });
 
-    group('TickerTickSuccess', () {
+    group(TickerTickSuccess, () {
       test('supports value comparison', () {
         expect(TickerTickSuccess(1), TickerTickSuccess(1));
         expect(
@@ -21,7 +21,7 @@ void main() {
       });
     });
 
-    group('TickerComplete', () {
+    group(TickerComplete, () {
       test('supports value comparison', () {
         expect(TickerComplete(), equals(TickerComplete()));
       });
