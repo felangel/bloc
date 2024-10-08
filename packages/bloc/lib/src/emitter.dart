@@ -25,10 +25,10 @@ abstract class Emitter<State> {
   ///
   /// **Note**: The stack trace argument may be [StackTrace.empty]
   /// if the [stream] received an error without a stack trace.
-  Future<void> onEach<T>(
+  Future<void> onEach<T, E extends Object>(
     Stream<T> stream, {
     required void Function(T data) onData,
-    void Function(Object error, StackTrace stackTrace)? onError,
+    void Function(E error, StackTrace stackTrace)? onError,
   });
 
   /// Subscribes to the provided [stream] and invokes the [onData] callback
@@ -47,10 +47,10 @@ abstract class Emitter<State> {
   ///
   /// **Note**: The stack trace argument may be [StackTrace.empty]
   /// if the [stream] received an error without a stack trace.
-  Future<void> forEach<T>(
+  Future<void> forEach<T, E extends Object>(
     Stream<T> stream, {
     required State Function(T data) onData,
-    State Function(Object error, StackTrace stackTrace)? onError,
+    State Function(E error, StackTrace stackTrace)? onError,
   });
 
   /// Whether the [EventHandler] associated with this [Emitter]
@@ -72,16 +72,20 @@ class _Emitter<State> implements Emitter<State> {
   var _isCompleted = false;
 
   @override
-  Future<void> onEach<T>(
+  Future<void> onEach<T, E extends Object>(
     Stream<T> stream, {
     required void Function(T data) onData,
-    void Function(Object error, StackTrace stackTrace)? onError,
+    void Function(E error, StackTrace stackTrace)? onError,
   }) {
     final completer = Completer<void>();
     final subscription = stream.listen(
       onData,
       onDone: completer.complete,
-      onError: onError ?? completer.completeError,
+      onError: (Object error, StackTrace stackTrace) {
+        onError != null
+            ? onError(error as E, stackTrace)
+            : completer.completeError(error as E, stackTrace);
+      },
       cancelOnError: onError == null,
     );
     _disposables.add(subscription.cancel);
@@ -92,17 +96,17 @@ class _Emitter<State> implements Emitter<State> {
   }
 
   @override
-  Future<void> forEach<T>(
+  Future<void> forEach<T, E extends Object>(
     Stream<T> stream, {
     required State Function(T data) onData,
-    State Function(Object error, StackTrace stackTrace)? onError,
+    State Function(E error, StackTrace stackTrace)? onError,
   }) {
-    return onEach<T>(
+    return onEach<T, E>(
       stream,
       onData: (data) => call(onData(data)),
       onError: onError != null
           ? (Object error, StackTrace stackTrace) {
-              call(onError(error, stackTrace));
+              call(onError(error as E, stackTrace));
             }
           : null,
     );
