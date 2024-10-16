@@ -17,7 +17,7 @@
     "@astrojs/starlight-tailwind": "^2.0.1",
     "@astrojs/tailwind": "^5.1.0",
     "@fontsource-variable/figtree": "^5.0.19",
-    "astro": "^4.4.5",
+    "astro": "^4.16.3",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0",
     "sharp": "^0.33.2",
