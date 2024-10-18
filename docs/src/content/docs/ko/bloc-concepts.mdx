@@ -178,7 +178,7 @@ State는 `Cubit`의 출력이며 애플리케이션 state의 일부를 나타냅
 
 Bloc 라이브러리를 사용하면 한 곳에서 모든 `Change`에 접근할 수 있다는 장점이 있습니다. 이 애플리케이션은 하나의 `Cubit`만 있지만, 대규모 애플리케이션에서는 애플리케이션 state의 여러 부분을 관리하는 많은 `Cubit`을 사용하는 것이 일반적입니다.
 
-모든 `Change`에 대응하여 무언가를 할 수 있도록 하여면 자체적으로 `BlocObserver`를 만들면 됩니다.
+모든 `Change`에 대응하여 무언가를 할 수 있도록 하려면 자체적으로 `BlocObserver`를 만들면 됩니다.
 
 <SimpleBlocObserverOnChangeSnippet />
 
@@ -199,7 +199,7 @@ Bloc 라이브러리를 사용하면 한 곳에서 모든 `Change`에 접근할 
 :::
 
 :::tip
-`BlocObserver`에서는 `Change` 그 자체 외에도 `Cubit` 인스턴스에 접근살 수 있습니다.
+`BlocObserver`에서는 `Change` 그 자체 외에도 `Cubit` 인스턴스에 접근할 수 있습니다.
 :::
 
 ### Cubit의 에러 처리
@@ -232,7 +232,7 @@ Bloc 라이브러리를 사용하면 한 곳에서 모든 `Change`에 접근할 
 
 ### Bloc 만들기
 
-`Bloc`을 생성하는 것은 `Cubit`를 생성하는 것과 비슷하지만, 관라할 state를 정의하는 것 외에 `Bloc`이 처리할 event도 정의해야 한다는 점이 다릅니다.
+`Bloc`을 생성하는 것은 `Cubit`를 생성하는 것과 비슷하지만, 관리할 state를 정의하는 것 외에 `Bloc`이 처리할 event도 정의해야 한다는 점이 다릅니다.
 
 Event는 Bloc에 대한 입력입니다. 일반적으로 버튼을 누름과 같은 사용자 상호 작용이나, 페이지 로드와 같은 생명 주기 이벤트에 대한 응답으로 추가됩니다.
 
