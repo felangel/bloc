@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 // ignore: implementation_imports
-import 'package:hive/src/hive_impl.dart';
+import 'package:hive_ce/src/hive_impl.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:path/path.dart' as p;
