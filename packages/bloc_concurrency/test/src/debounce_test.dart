@@ -1,59 +1,59 @@
-import 'dart:async';
-
 import 'package:bloc_concurrency/src/debounce.dart';
 import 'package:test/test.dart';
 
+import 'helpers.dart';
+
 void main() {
-  group(Debounce, () {
-    test('should not debounce first event', () async {
-      final debounce = Debounce<int>((e) => Stream.value(e));
+  group('debounceFirst', () {
+    test('should debounce all events', () async {
+      final states = <int>[];
+      final bloc = CounterBloc(debounce(const Duration(milliseconds: 20)))
+        ..stream.listen(states.add)
+        ..add(Increment())
+        ..add(Increment())
+        ..add(Increment());
 
-      final inputStream = StreamController<int>();
-      final transformedStream = inputStream.stream.transform(debounce);
+      await tick();
 
-      final events = <int>[];
-      final subscription = transformedStream.listen(events.add);
+      expect(
+        bloc.onCalls,
+        equals([]),
+      );
 
-      inputStream.add(1);
+      await wait();
 
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+      expect(
+        bloc.onEmitCalls,
+        equals([]),
+      );
 
-      expect(events, isEmpty);
+      expect(
+        bloc.onCalls,
+        equals([Increment()]),
+      );
 
-      await Future<void>.delayed(const Duration(milliseconds: 400));
+      await wait();
 
-      expect(events.length, 1);
-      expect(events[0], 1);
+      expect(
+        bloc.onEmitCalls,
+        equals([Increment()]),
+      );
 
-      await subscription.cancel();
-      await inputStream.close();
-    });
+      expect(states, equals([1]));
 
-    test('should debounce subsequent events', () async {
-      final debounce = Debounce<int>((e) => Stream.value(e));
+      await bloc.close();
 
-      final inputStream = StreamController<int>();
-      final transformedStream = inputStream.stream.transform(debounce);
+      expect(
+        bloc.onCalls,
+        equals([Increment()]),
+      );
 
-      final events = <int>[];
-      final subscription = transformedStream.listen(events.add);
+      expect(
+        bloc.onEmitCalls,
+        equals([Increment()]),
+      );
 
-      inputStream.add(1);
-      await Future<void>.delayed(const Duration(milliseconds: 50));
-
-      inputStream
-        ..add(2)
-        ..add(3);
-
-      await Future<void>.delayed(const Duration(milliseconds: 400));
-
-      // First event should be emitted immediately,
-      // while the subsequent events are debounced
-      expect(events, hasLength(1));
-      expect(events[0], 3);
-
-      await subscription.cancel();
-      await inputStream.close();
+      expect(states, equals([1]));
     });
   });
 }
